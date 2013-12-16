@@ -389,6 +389,10 @@ gtk_application_window_list_actions (GActionGroup *group)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
 
+  /* may be NULL after dispose has run */
+  if (!window->priv->actions)
+    return g_new0 (char *, 0 + 1);
+
   return g_action_group_list_actions (G_ACTION_GROUP (window->priv->actions));
 }
 
@@ -403,6 +407,9 @@ gtk_application_window_query_action (GActionGroup        *group,
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
 
+  if (!window->priv->actions)
+    return FALSE;
+
   return g_action_group_query_action (G_ACTION_GROUP (window->priv->actions),
                                       action_name, enabled, parameter_type, state_type, state_hint, state);
 }
@@ -414,7 +421,10 @@ gtk_application_window_activate_action (GActionGroup *group,
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
 
-  return g_action_group_activate_action (G_ACTION_GROUP (window->priv->actions), action_name, parameter);
+  if (!window->priv->actions)
+    return;
+
+  g_action_group_activate_action (G_ACTION_GROUP (window->priv->actions), action_name, parameter);
 }
 
 static void
@@ -424,7 +434,10 @@ gtk_application_window_change_action_state (GActionGroup *group,
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
 
-  return g_action_group_change_action_state (G_ACTION_GROUP (window->priv->actions), action_name, state);
+  if (!window->priv->actions)
+    return;
+
+  g_action_group_change_action_state (G_ACTION_GROUP (window->priv->actions), action_name, state);
 }
 
 static GAction *
@@ -432,6 +445,9 @@ gtk_application_window_lookup_action (GActionMap  *action_map,
                                       const gchar *action_name)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
+
+  if (!window->priv->actions)
+    return NULL;
 
   return g_action_map_lookup_action (G_ACTION_MAP (window->priv->actions), action_name);
 }
@@ -442,6 +458,9 @@ gtk_application_window_add_action (GActionMap *action_map,
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
 
+  if (!window->priv->actions)
+    return;
+
   g_action_map_add_action (G_ACTION_MAP (window->priv->actions), action);
 }
 
@@ -450,6 +469,9 @@ gtk_application_window_remove_action (GActionMap  *action_map,
                                       const gchar *action_name)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
+
+  if (!window->priv->actions)
+    return;
 
   g_action_map_remove_action (G_ACTION_MAP (window->priv->actions), action_name);
 }
@@ -740,10 +762,59 @@ gtk_application_window_dispose (GObject *object)
 
   g_clear_object (&window->priv->app_menu_section);
   g_clear_object (&window->priv->menubar_section);
-  g_clear_object (&window->priv->actions);
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)
     ->dispose (object);
+
+  /* We do this below the chain-up above to give us a chance to be
+   * removed from the GtkApplication (which is done in the dispose
+   * handler of GtkWindow).
+   *
+   * That reduces our chances of being watched as a GActionGroup from a
+   * muxer constructed by GtkApplication.  Even still, it's
+   * theoretically possible that someone else could be watching us.
+   * Therefore, we have to take care to ensure that we don't violate our
+   * obligations under the interface of GActionGroup.
+   *
+   * The easiest thing is just for us to act as if all of the actions
+   * suddenly disappeared.
+   */
+  if (window->priv->actions)
+    {
+      gchar **action_names;
+      guint signal;
+      gint i;
+
+      /* Only send the remove signals if someone is listening */
+      signal = g_signal_lookup ("action-removed", G_TYPE_ACTION_GROUP);
+      if (signal && g_signal_has_handler_pending (window, signal, 0, TRUE))
+        /* need to send a removed signal for each action */
+        action_names = g_action_group_list_actions (G_ACTION_GROUP (window->priv->actions));
+      else
+        /* don't need to send signals: nobody is watching */
+        action_names = NULL;
+
+      /* Free the group before sending the signals for two reasons:
+       *
+       *  1) we want any incoming calls to see an empty group
+       *
+       *  2) we don't want signal handlers that trigger in response to
+       *     the action-removed signals that we're firing to attempt to
+       *     modify the action group in a way that may cause it to fire
+       *     additional signals (which we would then propagate)
+       */
+      g_object_unref (window->priv->actions);
+      window->priv->actions = NULL;
+
+      /* It's safe to send the signals now, if we need to. */
+      if (action_names)
+        {
+          for (i = 0; action_names[i]; i++)
+            g_action_group_action_removed (G_ACTION_GROUP (window), action_names[i]);
+
+          g_strfreev (action_names);
+        }
+    }
 }
 
 static void
