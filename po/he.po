@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-11 13:36+0200\n"
-"PO-Revision-Date: 2013-12-11 13:37+0200\n"
+"POT-Creation-Date: 2013-12-16 19:21+0200\n"
+"PO-Revision-Date: 2013-12-16 19:52+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -611,17 +611,17 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_סגירה"
 
-#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkwindow.c:5316
-#: ../gtk/gtkwindow.c:8243
+#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:407
+#: ../gtk/gtkwindow.c:8026
 msgid "Minimize"
 msgstr "מזעור"
 
-#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkwindow.c:5337
-#: ../gtk/gtkwindow.c:8251
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:430
+#: ../gtk/gtkwindow.c:8034
 msgid "Maximize"
 msgstr "הגדלה"
 
-#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkwindow.c:5337
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:430
 msgid "Restore"
 msgstr "שחזור"
 
@@ -1165,7 +1165,7 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:192
 #: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkfilechooserbutton.c:805
-#: ../gtk/gtkfilechooserdefault.c:5431 ../gtk/gtkmessagedialog.c:891
+#: ../gtk/gtkfilechooserdefault.c:5443 ../gtk/gtkmessagedialog.c:891
 #: ../gtk/gtkmessagedialog.c:910 ../gtk/gtkmountoperation.c:529
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:683 ../gtk/gtkappchooserdialog.ui.h:1
@@ -1344,6 +1344,58 @@ msgstr "מידע תו לא צפוי בשורה %d תו %d"
 msgid "Empty"
 msgstr "ריק"
 
+# הערות:
+# הוספת הערה
+#
+# הערות שחולצו:
+# *
+# * SECTION:gtkaboutdialog
+# * @Short_description: Display information about an application
+# * @Title: GtkAboutDialog
+# *
+# * The GtkAboutDialog offers a simple way to display information about
+# * a program like its logo, name, copyright, website and license. It is
+# * also possible to give credits to the authors, documenters, translators
+# * and artists who have worked on the program. An about dialog is typically
+# * opened when the user selects the <literal>About</literal> option from
+# * the <literal>Help</literal> menu. All parts of the dialog are optional.
+# *
+# * About dialog often contain links and email addresses. GtkAboutDialog
+# * displays these as clickable links. By default, it calls gtk_show_uri()
+# * when a user clicks one. The behaviour can be overridden with the
+# * #GtkAboutDialog::activate-link signal.
+# *
+# * To make constructing a GtkAboutDialog as convenient as possible, you can
+# * use the function gtk_show_about_dialog() which constructs and shows a dialog
+# * and keeps it around so that it can be shown again.
+# *
+# * Note that GTK+ sets a default title of <literal>_("About &percnt;s")</literal>
+# * on the dialog window (where &percnt;s is replaced by the name of the
+# * application, but in order to ensure proper translation of the title,
+# * applications should set the title property explicitly when constructing
+# * a GtkAboutDialog, as shown in the following example:
+# * <informalexample><programlisting>
+# * gtk_show_about_dialog (NULL,
+# *                        "program-name", "ExampleCode",
+# *                        "logo", example_logo,
+# *                        "title" _("About ExampleCode"),
+# *                        NULL);
+# * </programlisting></informalexample>
+# *
+# * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
+# * e.g. using gtk_dialog_run(). In this case, you might need to know that
+# * the 'Close' button returns the #GTK_RESPONSE_CANCEL response id.
+#
+# Translators: this is the license preamble; the string at the end
+# * contains the name of the license as link text.
+#
+#
+#
+# מבנה:
+# C
+#
+# נתיבים:
+# ../gtk/gtkaboutdialog.c:99
 #. *
 #. * SECTION:gtkaboutdialog
 #. * @Short_description: Display information about an application
@@ -1383,51 +1435,99 @@ msgstr "ריק"
 #. * the 'Close' button returns the #GTK_RESPONSE_CANCEL response id.
 #.
 #. Translators: this is the license preamble; the string at the end
-#. * contains the URL of the license.
+#. * contains the name of the license as link text.
 #.
 #: ../gtk/gtkaboutdialog.c:99
 #, c-format
 msgid ""
-"This program comes with ABSOLUTELY NO WARRANTY;\n"
-"for details, visit <a href=\"%s\">%s</a>"
+"This program comes with ABSOLUTELY NO WARRANTY.\n"
+"See the <a href=\"%s\">%s</a> for details."
 msgstr ""
 "תכנית זו מופצת ללא שום אחריות;\n"
-"לפרטים ניתן לבקר בכתובת <a href=\"%s\">%s</a>"
+"ניתן לבקר בכתובת <a href=\"%s\">%s</a> לפרטים."
 
-#: ../gtk/gtkaboutdialog.c:369
+#: ../gtk/gtkaboutdialog.c:109 ../gtk/gtkaboutdialog.c:375
 msgid "License"
 msgstr "רישיון"
 
-#: ../gtk/gtkaboutdialog.c:370
+#: ../gtk/gtkaboutdialog.c:110
+msgid "Custom License"
+msgstr "רישיון מותאם"
+
+#: ../gtk/gtkaboutdialog.c:111
+msgid "GNU General Public License, version 2 or later"
+msgstr "הרישיון הציבורי הכללי של גנו, גרסה 2 או כל גרסה מאוחרת יותר"
+
+#: ../gtk/gtkaboutdialog.c:112
+msgid "GNU General Public License, version 3 or later"
+msgstr "הרישיון הציבורי הכללי של גנו, גרסה 3 או כל גרסה מאוחרת יותר"
+
+#: ../gtk/gtkaboutdialog.c:113
+msgid "GNU Lesser General Public License, version 2.1 or later"
+msgstr "הרישיון הציבורי הכללי המוקטן של גנו, גרסה 2.1 או כל גרסה מאוחרת יותר"
+
+#: ../gtk/gtkaboutdialog.c:114
+msgid "GNU Lesser General Public License, version 3 or later"
+msgstr "הרישיון הציבורי הכללי המוקטן של גנו, גרסה 3 או כל גרסה מאוחרת יותר"
+
+#: ../gtk/gtkaboutdialog.c:115
+msgid "BSD 2-Clause License"
+msgstr "רשיון BSD דו־סעיפי"
+
+#: ../gtk/gtkaboutdialog.c:116
+msgid "The MIT License (MIT)"
+msgstr "רישיון MIT ‏(MIT)"
+
+#: ../gtk/gtkaboutdialog.c:117
+msgid "Artistic License 2.0"
+msgstr "רישיון אמנותי 2.0"
+
+#: ../gtk/gtkaboutdialog.c:118
+msgid "GNU General Public License, version 2 only"
+msgstr "הרישיון הציבורי הכללי של גנו, גרסה 2 בלבד"
+
+#: ../gtk/gtkaboutdialog.c:119
+msgid "GNU General Public License, version 3 only"
+msgstr "הרישיון הציבורי הכללי של גנו, גרסה 3 בלבד"
+
+#: ../gtk/gtkaboutdialog.c:120
+msgid "GNU Lesser General Public License, version 2.1 only"
+msgstr "הרישיון הציבורי הכללי המוקטן של גנו, גרסה 2.1 בלבד"
+
+#: ../gtk/gtkaboutdialog.c:121
+msgid "GNU Lesser General Public License, version 3 only"
+msgstr "הרישיון הציבורי הכללי המוקטן של גנו, גרסה 3 בלבד"
+
+#: ../gtk/gtkaboutdialog.c:376
 msgid "The license of the program"
 msgstr "רישיון השימוש בתכנה"
 
-#: ../gtk/gtkaboutdialog.c:918
+#: ../gtk/gtkaboutdialog.c:924
 msgid "Could not show link"
 msgstr "לא ניתן להציג את הקישור"
 
-#: ../gtk/gtkaboutdialog.c:955
+#: ../gtk/gtkaboutdialog.c:961
 msgid "Website"
 msgstr "אתר אינטרנט"
 
-#: ../gtk/gtkaboutdialog.c:1009
+#: ../gtk/gtkaboutdialog.c:1015
 #, c-format
 msgid "About %s"
 msgstr "על אודות %s"
 
-#: ../gtk/gtkaboutdialog.c:2281
+#: ../gtk/gtkaboutdialog.c:2287
 msgid "Created by"
 msgstr "נוצר על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2284
+#: ../gtk/gtkaboutdialog.c:2290
 msgid "Documented by"
 msgstr "תועד על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2294
+#: ../gtk/gtkaboutdialog.c:2300
 msgid "Translated by"
 msgstr "תורגם על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2299
+#: ../gtk/gtkaboutdialog.c:2305
 msgid "Artwork by"
 msgstr "אומנות על ידי"
 
@@ -2224,58 +2324,58 @@ msgstr "שמירה בתיקייה:"
 msgid "Create in folder:"
 msgstr "יצירה בתיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:3825
+#: ../gtk/gtkfilechooserdefault.c:3837
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "לא ניתן לקרוא את התוכן של %s"
 
-#: ../gtk/gtkfilechooserdefault.c:3829
+#: ../gtk/gtkfilechooserdefault.c:3841
 msgid "Could not read the contents of the folder"
 msgstr "לא ניתן לקרוא את תכני התיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:3926 ../gtk/gtkfilechooserdefault.c:3994
-#: ../gtk/gtkfilechooserdefault.c:4175
+#: ../gtk/gtkfilechooserdefault.c:3938 ../gtk/gtkfilechooserdefault.c:4006
+#: ../gtk/gtkfilechooserdefault.c:4187
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../gtk/gtkfilechooserdefault.c:3941
+#: ../gtk/gtkfilechooserdefault.c:3953
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:3943
+#: ../gtk/gtkfilechooserdefault.c:3955
 msgid "Yesterday at %H:%M"
 msgstr "אתמול ב־%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:4640
+#: ../gtk/gtkfilechooserdefault.c:4652
 msgid "Cannot change to folder because it is not local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: ../gtk/gtkfilechooserdefault.c:5424 ../gtk/gtkprintunixdialog.c:674
+#: ../gtk/gtkfilechooserdefault.c:5436 ../gtk/gtkprintunixdialog.c:674
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "כבר קיים קובץ בשם „%s“. האם להחליפו?"
 
-#: ../gtk/gtkfilechooserdefault.c:5427 ../gtk/gtkprintunixdialog.c:678
+#: ../gtk/gtkfilechooserdefault.c:5439 ../gtk/gtkprintunixdialog.c:678
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים תחת „%s“. החלפתו תגרום לאיבוד תוכנו."
 
-#: ../gtk/gtkfilechooserdefault.c:5432 ../gtk/gtkprintunixdialog.c:685
+#: ../gtk/gtkfilechooserdefault.c:5444 ../gtk/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: ../gtk/gtkfilechooserdefault.c:6249
+#: ../gtk/gtkfilechooserdefault.c:6261
 msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:6250
+#: ../gtk/gtkfilechooserdefault.c:6262
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "התכנית לא הצליחה ליצור חיבור אל סוכן האינדקס. יש לוודא כי הוא פעיל."
 
-#: ../gtk/gtkfilechooserdefault.c:6264
+#: ../gtk/gtkfilechooserdefault.c:6276
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
 
@@ -2307,13 +2407,13 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "בחירת גופן"
 
-#: ../gtk/gtkheaderbar.c:233 ../gtk/gtkwindow.c:5355 ../gtk/gtkwindow.c:8348
-msgid "Close"
-msgstr "סגירה"
-
-#: ../gtk/gtkheaderbar.c:309 ../gtk/gtkwindow.c:5298
+#: ../gtk/gtkheaderbar.c:386
 msgid "Application menu"
 msgstr "תפריט יישום"
+
+#: ../gtk/gtkheaderbar.c:449 ../gtk/gtkwindow.c:8131
+msgid "Close"
+msgstr "סגירה"
 
 #: ../gtk/gtkicontheme.c:2124 ../gtk/gtkicontheme.c:2187
 #, c-format
@@ -3369,35 +3469,35 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8251
+#: ../gtk/gtkwindow.c:8034
 msgid "Unmaximize"
 msgstr "ביטול המזעור"
 
-#: ../gtk/gtkwindow.c:8260
+#: ../gtk/gtkwindow.c:8043
 msgid "Always on Top"
 msgstr "תמיד עליון"
 
-#: ../gtk/gtkwindow.c:8272
+#: ../gtk/gtkwindow.c:8055
 msgid "Always on Visible Workspace"
 msgstr "הצגה בכל מרחבי העבודה"
 
-#: ../gtk/gtkwindow.c:8280
+#: ../gtk/gtkwindow.c:8063
 msgid "Only on This Workspace"
 msgstr "רק במרחב עבודה זה"
 
-#: ../gtk/gtkwindow.c:8297
+#: ../gtk/gtkwindow.c:8080
 msgid "Move to Workspace Up"
 msgstr "הזזת החלון למרחב העבודה שלמעלה"
 
-#: ../gtk/gtkwindow.c:8306
+#: ../gtk/gtkwindow.c:8089
 msgid "Move to Workspace Down"
 msgstr "הזזת החלון למרחב העבודה שלמטה"
 
-#: ../gtk/gtkwindow.c:8320
+#: ../gtk/gtkwindow.c:8103
 msgid "Move to Another Workspace"
 msgstr "הזזת החלון למרחב עבודה אחר"
 
-#: ../gtk/gtkwindow.c:8328
+#: ../gtk/gtkwindow.c:8111
 #, c-format
 msgid "Workspace %d"
 msgstr "מרחב עבודה %d"
