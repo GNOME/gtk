@@ -5267,7 +5267,7 @@ gdk_window_add_update_window (GdkWindow *window)
 	      prev = tmp;
 	    }
 	  /* here, tmp got advanced past all lower stacked siblings */
-	  tmp = g_slist_prepend (tmp, window);
+	  tmp = g_slist_prepend (tmp, g_object_ref (window));
 	  if (prev)
 	    prev->next = tmp;
 	  else
@@ -5280,7 +5280,7 @@ gdk_window_add_update_window (GdkWindow *window)
        */
       if (has_ancestor_in_list && gdk_window_is_ancestor (tmp->data, window))
 	{
-	  tmp = g_slist_prepend (tmp, window);
+	  tmp = g_slist_prepend (tmp, g_object_ref (window));
 
 	  if (prev)
 	    prev->next = tmp;
@@ -5294,7 +5294,7 @@ gdk_window_add_update_window (GdkWindow *window)
        */
       if (! tmp->next && has_ancestor_in_list)
 	{
-	  tmp = g_slist_append (tmp, window);
+	  tmp = g_slist_append (tmp, g_object_ref (window));
 	  return;
 	}
 
@@ -5305,13 +5305,20 @@ gdk_window_add_update_window (GdkWindow *window)
    *  hierarchy than what is already in the list) or the list is
    *  empty, prepend
    */
-  update_windows = g_slist_prepend (update_windows, window);
+  update_windows = g_slist_prepend (update_windows, g_object_ref (window));
 }
 
 static void
 gdk_window_remove_update_window (GdkWindow *window)
 {
-  update_windows = g_slist_remove (update_windows, window);
+  GSList *link;
+
+  link = g_slist_find (update_windows, window);
+  if (link != NULL)
+    {
+      update_windows = g_slist_delete_link (update_windows, link);
+      g_object_unref (window);
+    }
 }
 
 static gboolean
@@ -5686,8 +5693,6 @@ gdk_window_process_all_updates (void)
   update_idle = 0;
 
   _gdk_windowing_before_process_all_updates ();
-
-  g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
 
   while (tmp_list)
     {
