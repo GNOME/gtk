@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtkbuilder.h"
 #import <Cocoa/Cocoa.h>
 
 typedef struct
@@ -88,6 +89,8 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
                                      gboolean            register_session)
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
+  GSimpleActionGroup *gtkinternal;
+  GMenuModel *app_menu;
 
   if (register_session)
     [NSApp setDelegate: [[GtkApplicationQuartzDelegate alloc] initWithImpl:quartz]];
@@ -95,10 +98,30 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   quartz->muxer = gtk_action_muxer_new ();
   gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
 
-  /* app menu must come first so that we always see index '0' in
-   * 'combined' as being the app menu.
-   */
-  gtk_application_impl_set_app_menu (impl, gtk_application_get_app_menu (impl->application));
+  /* Add the default accels */
+  gtk_application_add_accelerator (impl->application, "<Primary>comma", "app.preferences", NULL);
+  gtk_application_add_accelerator (impl->application, "<Primary><Alt>h", "gtkinternal.hide-others", NULL);
+  gtk_application_add_accelerator (impl->application, "<Primary>h", "gtkinternal.hide", NULL);
+  gtk_application_add_accelerator (impl->application, "<Primary>q", "app.quit", NULL);
+
+  app_menu = gtk_application_get_app_menu (impl->application);
+  if (app_menu == NULL)
+    {
+      GtkBuilder *builder;
+
+      /* If the user didn't fill in their own menu yet, add ours.
+       *
+       * The fact that we do this here ensures that we will always have the
+       * app menu at index 0 in 'combined'.
+       */
+      builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/gtkapplication-quartz.ui");
+      gtk_application_set_app_menu (impl->application, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+      g_object_unref (builder);
+    }
+  else
+    gtk_application_impl_set_app_menu (impl, app_menu);
+
+  /* This may or may not add an item to 'combined' */
   gtk_application_impl_set_menubar (impl, gtk_application_get_menubar (impl->application));
 
   /* OK.  Now put it in the menu. */

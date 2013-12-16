@@ -1,0 +1,45 @@
+<interface>
+  <menu id='app-menu'>
+    <section>
+      <item>
+        <attribute name='label' translatable='yes'>About `gtk-private-appname`</attribute>
+        <attribute name='action'>app.about</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name='label' translatable='yes'>Preferences</attribute>
+        <attribute name='action'>app.preferences</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name='label' translatable='yes'>Services</attribute>
+        <attribute name='gtk-private-special'>services-submenu</attribute>
+      </submenu>
+    </section>
+    <section>
+      <item>
+        <attribute name='label' translatable='yes'>Hide `gtk-private-appname`</attribute>
+        <attribute name='gtk-private-special'>hide-this</attribute>
+        <attribute name='action'>gtkinternal.hide</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>Hide Others</attribute>
+        <attribute name='gtk-private-special'>hide-others</attribute>
+        <attribute name='action'>gtkinternal.hide-others</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>Show All</attribute>
+        <attribute name='gtk-private-special'>show-all</attribute>
+        <attribute name='action'>gtkinternal.show-all</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name='label' translatable='yes'>Quit `gtk-private-appname`</attribute>
+        <attribute name='action'>app.quit</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
