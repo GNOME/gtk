@@ -22,8 +22,6 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtkmodelmenu-quartz.h"
-#include "gtkmessagedialog.h"
-#include <glib/gi18n-lib.h>
 #import <Cocoa/Cocoa.h>
 
 typedef struct
@@ -55,62 +53,33 @@ typedef struct
 
 G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_APPLICATION_IMPL)
 
-/* OS X implementation copied from EggSMClient, but simplified since
- * it doesn't need to interact with the user.
- */
-
-static gboolean
-idle_will_quit (gpointer user_data)
+@interface GtkApplicationQuartzDelegate : NSObject
 {
-  GtkApplicationImplQuartz *quartz = user_data;
-
-  if (quartz->quit_inhibit == 0)
-    g_application_quit (G_APPLICATION (quartz->impl.application));
-  else
-    {
-      GtkApplicationQuartzInhibitor *inhibitor;
-      GSList *iter;
-      GtkWidget *dialog;
-
-      for (iter = quartz->inhibitors; iter; iter = iter->next)
-       {
-         inhibitor = iter->data;
-         if (inhibitor->flags & GTK_APPLICATION_INHIBIT_LOGOUT)
-           break;
-        }
-      g_assert (inhibitor != NULL);
-
-      dialog = gtk_message_dialog_new (inhibitor->window,
-                                      GTK_DIALOG_MODAL,
-                                      GTK_MESSAGE_ERROR,
-                                      GTK_BUTTONS_OK,
-                                      _("%s cannot quit at this time:\n\n%s"),
-                                      g_get_application_name (),
-                                      inhibitor->reason);
-      g_signal_connect_swapped (dialog,
-                                "response",
-                                G_CALLBACK (gtk_widget_destroy),
-                                dialog);
-      gtk_widget_show_all (dialog);
-    }
-
-  return G_SOURCE_REMOVE;
+  GtkApplicationImplQuartz *quartz;
 }
 
-static pascal OSErr
-quit_requested (const AppleEvent *aevt,
-                AppleEvent       *reply,
-                long              refcon)
-{
-  GtkApplicationImplQuartz *quartz = GSIZE_TO_POINTER ((gsize)refcon);
+- (id)initWithImpl:(GtkApplicationImplQuartz*)impl;
+- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender;
+@end
 
-  /* Don't emit the "quit" signal immediately, since we're
-   * called from a weird point in the guts of gdkeventloop-quartz.c
+@implementation GtkApplicationQuartzDelegate
+-(id)initWithImpl:(GtkApplicationImplQuartz*)impl
+{
+  quartz = impl;
+  return self;
+}
+
+-(NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender
+{
+  /* We have no way to give our message other than to pop up a dialog
+   * ourselves, which we should not do since the OS will already show
+   * one when we return NSTerminateNow.
+   *
+   * Just let the OS show the generic message...
    */
-  g_idle_add_full (G_PRIORITY_DEFAULT, idle_will_quit, quartz, NULL);
-
-  return quartz->quit_inhibit == 0 ? noErr : userCanceledErr;
+  return quartz->quit_inhibit == 0 ? NSTerminateNow : NSTerminateCancel;
 }
+@end
 
 static void
 gtk_application_impl_quartz_menu_changed (GtkApplicationImplQuartz *quartz)
@@ -133,9 +102,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
 
   if (register_session)
-    AEInstallEventHandler (kCoreEventClass, kAEQuitApplication,
-                           NewAEEventHandlerUPP (quit_requested),
-                           (long)GPOINTER_TO_SIZE (quartz), false);
+    [NSApp setDelegate: [[GtkApplicationQuartzDelegate alloc] initWithImpl:quartz]];
 
   gtk_application_impl_quartz_menu_changed (quartz);
 
