@@ -876,6 +876,9 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 								(GdkRectangle *) background_area,
 								(GdkRectangle *) cell_area,
 								flags);
+  if (editable == NULL)
+    return NULL;
+
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (editable)),
                                GTK_STYLE_CLASS_CELL);
 
