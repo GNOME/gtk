@@ -339,7 +339,25 @@ tracker_item_changed (GObject    *object,
                             action:@selector(didSelectItem:)
                      keyEquivalent:@""]) != nil)
     {
-      [self setTarget:self];
+      const gchar *special = gtk_menu_tracker_item_get_special (aTrackerItem);
+
+      if (special && g_str_equal (special, "hide-this"))
+        {
+          [self setAction:@selector(hide:)];
+          [self setTarget:NSApp];
+        }
+      else if (special && g_str_equal (special, "hide-others"))
+        {
+          [self setAction:@selector(hideOtherApplications:)];
+          [self setTarget:NSApp];
+        }
+      else if (special && g_str_equal (special, "show-all"))
+        {
+          [self setAction:@selector(unhideAllApplications:)];
+          [self setTarget:NSApp];
+        }
+      else
+        [self setTarget:self];
 
       trackerItem = g_object_ref (aTrackerItem);
       trackerItemChangedHandler = g_signal_connect (trackerItem, "notify", G_CALLBACK (tracker_item_changed), self);
@@ -351,7 +369,12 @@ tracker_item_changed (GObject    *object,
       [self didChangeAccel];
 
       if (gtk_menu_tracker_item_get_has_submenu (trackerItem))
-        [self setSubmenu:[[[GNSMenu alloc] initWithTitle:[self title] trackerItem:trackerItem] autorelease]];
+        {
+          [self setSubmenu:[[[GNSMenu alloc] initWithTitle:[self title] trackerItem:trackerItem] autorelease]];
+
+          if (special && g_str_equal (special, "services-submenu"))
+            [NSApp setServicesMenu:[self submenu]];
+        }
     }
 
   return self;
