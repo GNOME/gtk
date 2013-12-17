@@ -1,3 +1,75 @@
+Overview of Changes in GTK+ 3.11.1 to 3.11.3
+============================================
+
+* gtk3-demo has received some updates
+
+  - Uses GtkHeaderBar now
+
+  - New header bar demo
+
+  - New event details demo
+
+* Wayland is now using the xdg-shell
+
+* Client-side decorations are more compatible with
+  traditional desktops now
+
+* Bugs:
+ 386569 GtkFileChooser enters first file name into the entry...
+ 415415 tree lines drawn in black
+ 679563 Properly annotate the GtkRadio* widgets
+ 691974 ComboBox only scrolls the first time
+ 694859 Can not scroll down list in Combobox the first time ...
+ 702663 GtkComboBox::appears-as-list does not respect scrolling
+ 705203 Natural scroll doesn't work immediately
+ 708907 Strings not extracted
+ 709027 List mode has black background
+ 709716 gdk_x11_screen_lookup_visual segfault on multiple X ...
+ 710510 gtkimcontextsimpleseqs.h can be updated.
+ 711552 Crash when processing list of GdkWindows
+ 711715 gtk object tests: run under local environment
+ 712302 GtkPlacesSideBar showing "Desktop" or not shouldn't ...
+ 712536 Themes with specified gap_file, gap_start_file or ga...
+ 712632 infobar and revealer not respecting enable-animation...
+ 712751 Don't wake up Avahi printers unnecessarily
+ 712760 Clang static analysis fixes
+ 712799 Memory leak when listing Avahi printers
+ 713044 build: bump requirement on gobject-introspection to ...
+ 715029 Ensure GdkScreen::monitors-changed gets emitted afte...
+ 719314 gdk_property_change segfault on multiple X protocol ...
+ 719460 value argument to GtkTreeModelFilterModifyFunc needs...
+ 719469 Alternative for deprecated function in gtkstyle.h is...
+ 719486 Visual issue in GtkButton when it has been disabled ...
+ 719505 Wrong icon for desktop entry in FileChooser dialog
+ 719510 Infobar always visible on gtk 3.10.5 with enable-ani...
+ 719568 Search bar area is still visible when switched off
+ 719595 Toolbar style context is created before style class ...
+ 719713 toolbar: draw a full box for separators
+ 719762 translate_crossing_mode() assertion error since rece...
+ 719861 Menu separators aren't selectable independently from...
+ 719977 Can not use GtkFileChooserDialog: assertion failure
+ 719987 Add demo for advanced event management
+ 720067 header bar title not updated by gtk_window_set_title
+ 720096 New function to set the default direction of the locale.
+ 720233 Make GtkHeaderBar support all kinds of CSD content, ...
+ 720256 GtkScaleButton popup appears positioned randomly on ...
+ 720293 GtkFileChooserDefault: Remove unused struct field
+ 720296 testtitlebar: Fix -Wunused-variable warning
+ 720338 Crash when closing http connection to CUPS
+ 720342 gdkwindow: Use GdkWindowHints instead of guint for flags
+ 720374 Windows with shadows cannot be moved to the top of t...
+ 720410 GPL license link doesn't specify "or later"
+ 720550 Refactor GtkApplication 
+
+* Translations:
+ Galician
+ Hebrew
+ Italian
+ Spanish
+ Tajik
+ Tamil
+
+
 Overview of Changes in GTK+ 3.11.0 to 3.11.1
 ============================================
 
