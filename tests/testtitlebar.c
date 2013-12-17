@@ -54,6 +54,8 @@ activate (GApplication *gapp)
   gtk_application_set_app_menu (app, menu);
 
   header = gtk_header_bar_new ();
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header), gtk_button_new_with_label ("Start"));
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header), gtk_button_new_with_label ("End"));
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
   provider = gtk_css_provider_new ();
