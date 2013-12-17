@@ -1107,8 +1107,8 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
       if (left)
         child_allocation.x = allocation->x + css_borders.left;
       else
-        child_allocation.x = allocation->x + allocation->width - css_borders.right - start_width;
-      child_allocation.width = start_width;
+        child_allocation.x = allocation->x + allocation->width - css_borders.right - start_width + priv->spacing;
+      child_allocation.width = start_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_start_box, &child_allocation);
     }
 
@@ -1118,8 +1118,8 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
       if (left)
         child_allocation.x = allocation->x + css_borders.left;
       else
-        child_allocation.x = allocation->x + allocation->width - css_borders.right - end_width;
-      child_allocation.width = end_width;
+        child_allocation.x = allocation->x + allocation->width - css_borders.right - end_width + priv->spacing;
+      child_allocation.width = end_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_end_box, &child_allocation);
     }
 }
