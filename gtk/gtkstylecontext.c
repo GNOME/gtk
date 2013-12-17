@@ -3373,7 +3373,7 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
       priv->pending_changes |= change;
       gtk_style_context_set_invalid (context, TRUE);
     }
-  else if (priv->widget_path == NULL)
+  else if (priv->widget_path != NULL)
     {
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_style_context_invalidate (context);
