@@ -273,7 +273,7 @@ See the GNU General Public License, version 3 or later for details.
             <AtkText>
             text: This program comes with ABSOLUTELY NO WARRANTY.
 See the GNU General Public License, version 3 or later for details.
-            character count: 103
+            character count: 115
             caret offset: 0
             default attributes: bg-color: <omitted>
                                 bg-full-height: 0
