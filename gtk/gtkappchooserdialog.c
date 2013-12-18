@@ -55,6 +55,10 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
+#ifdef HAVE_GIO_UNIX
+#include <gio/gdesktopappinfo.h>
+#endif
+
 #define sure_string(s) ((const char *) ((s) != NULL ? (s) : ""))
 
 struct _GtkAppChooserDialogPrivate {
@@ -64,6 +68,7 @@ struct _GtkAppChooserDialogPrivate {
 
   GtkWidget *label;
   GtkWidget *button;
+  GtkWidget *software_button;
   GtkWidget *inner_box;
 
   GtkWidget *open_label;
@@ -220,7 +225,7 @@ set_dialog_properties (GtkAppChooserDialog *self)
   default_text = g_strdup_printf ("<big><b>%s</b></big>\n%s",
                                   string,
                                   _("Click \"Show other applications\", for more options, or "
-                                    "\"Find applications online\" to install a new application"));
+                                    "\"Software\" to install a new application"));
 
   gtk_app_chooser_widget_set_default_text (GTK_APP_CHOOSER_WIDGET (self->priv->app_chooser_widget),
                                            default_text);
@@ -346,7 +351,7 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
 
 static void
 set_gfile_and_content_type (GtkAppChooserDialog *self,
-                            GFile *file)
+                            GFile               *file)
 {
   GFileInfo *info;
 
@@ -379,6 +384,78 @@ gtk_app_chooser_dialog_refresh (GtkAppChooser *object)
 }
 
 static void
+show_error_dialog (const gchar *primary,
+                   const gchar *secondary,
+                   GtkWindow   *parent)
+{
+  GtkWidget *message_dialog;
+
+  message_dialog = gtk_message_dialog_new (parent, 0,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_OK,
+                                           NULL);
+  g_object_set (message_dialog,
+                "text", primary,
+                "secondary-text", secondary,
+                NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (message_dialog), GTK_RESPONSE_OK);
+
+  gtk_widget_show (message_dialog);
+
+  g_signal_connect (message_dialog, "response",
+                    G_CALLBACK (gtk_widget_destroy), NULL);
+}
+
+static void
+software_button_clicked_cb (GtkButton           *button,
+                            GtkAppChooserDialog *self)
+{
+  GSubprocess *process;
+  GError *error = NULL;
+  gchar *option;
+
+  if (self->priv->content_type)
+    option = g_strconcat ("--search=", self->priv->content_type, NULL);
+  else
+    option = g_strdup ("--mode=overview");
+
+  process = g_subprocess_new (0, &error, "gnome-software", option, NULL);
+  if (!process)
+    {
+      show_error_dialog (_("Failed to start GNOME Software"),
+                         error->message, GTK_WINDOW (self));
+      g_error_free (error);
+    }
+  else
+    g_object_unref (process);
+
+  g_free (option);
+}
+
+static void
+ensure_software_button (GtkAppChooserDialog *self)
+{
+  if (g_find_program_in_path ("gnome-software"))
+    {
+      GtkWidget *action_area;
+
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (self));
+      self->priv->software_button = gtk_button_new_with_mnemonic (_("Software"));
+      gtk_button_set_always_show_image (GTK_BUTTON (self->priv->software_button), TRUE);
+      gtk_button_set_image (GTK_BUTTON (self->priv->software_button), gtk_image_new_from_icon_name ("gnome-software", GTK_ICON_SIZE_BUTTON));
+
+      gtk_box_pack_start (GTK_BOX (action_area), self->priv->software_button,
+                          FALSE, FALSE, 0);
+      gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), self->priv->software_button,
+                                          TRUE);
+      g_signal_connect (self->priv->software_button, "clicked",
+                        G_CALLBACK (software_button_clicked_cb), self);
+
+      gtk_widget_show (self->priv->software_button);
+    }
+}
+
+static void
 gtk_app_chooser_dialog_constructed (GObject *object)
 {
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
@@ -388,6 +465,7 @@ gtk_app_chooser_dialog_constructed (GObject *object)
 
   construct_appchooser_widget (self);
   set_dialog_properties (self);
+  ensure_software_button (self);
 }
 
 static void
