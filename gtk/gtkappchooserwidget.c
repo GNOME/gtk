@@ -87,6 +87,8 @@ struct _GtkAppChooserWidgetPrivate {
   GtkCellRenderer *secondary_padding;
 
   GAppInfoMonitor *monitor;
+
+  GtkWidget *popup_menu;
 };
 
 enum {
@@ -204,6 +206,15 @@ get_app_info_for_event (GtkAppChooserWidget *self,
   return info;
 }
 
+static void
+popup_menu_detach (GtkWidget *attach_widget,
+                   GtkMenu   *menu)
+{
+  GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (attach_widget);
+
+  self->priv->popup_menu = NULL;
+}
+
 static gboolean
 widget_button_press_event_cb (GtkWidget      *widget,
                               GdkEventButton *event,
@@ -223,10 +234,13 @@ widget_button_press_event_cb (GtkWidget      *widget,
       if (info == NULL)
         return FALSE;
 
-      menu = gtk_menu_new ();
+      if (self->priv->popup_menu)
+        gtk_widget_destroy (self->priv->popup_menu);
 
-      g_signal_emit (self, signals[SIGNAL_POPULATE_POPUP], 0,
-                     menu, info);
+      self->priv->popup_menu = menu = gtk_menu_new ();
+      gtk_menu_attach_to_widget (GTK_MENU (menu), self, popup_menu_detach);
+
+      g_signal_emit (self, signals[SIGNAL_POPULATE_POPUP], 0, menu, info);
 
       g_object_unref (info);
 
@@ -235,12 +249,9 @@ widget_button_press_event_cb (GtkWidget      *widget,
       n_children = g_list_length (children);
 
       if (n_children > 0)
-        {
-          /* actually popup the menu */
-          gtk_menu_attach_to_widget (GTK_MENU (menu), self->priv->program_list, NULL);
-          gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-                          event->button, event->time);
-        }
+        /* actually popup the menu */
+        gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                        event->button, event->time);
 
       g_list_free (children);
     }
