@@ -85,6 +85,8 @@ struct _GtkAppChooserWidgetPrivate {
   GtkTreeViewColumn *column;
   GtkCellRenderer *padding_renderer;
   GtkCellRenderer *secondary_padding;
+
+  GAppInfoMonitor *monitor;
 };
 
 enum {
@@ -811,6 +813,13 @@ gtk_app_chooser_widget_initialize_items (GtkAppChooserWidget *self)
 }
 
 static void
+app_info_changed (GAppInfoMonitor     *monitor,
+                  GtkAppChooserWidget *self)
+{
+  gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
+}
+
+static void
 gtk_app_chooser_widget_set_property (GObject      *object,
                                      guint         property_id,
                                      const GValue *value,
@@ -902,6 +911,8 @@ gtk_app_chooser_widget_finalize (GObject *object)
 
   g_free (self->priv->content_type);
   g_free (self->priv->default_text);
+  g_signal_handlers_disconnect_by_func (self->priv->monitor, app_info_changed, self);
+  g_object_unref (self->priv->monitor);
 
   G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->finalize (object);
 }
@@ -1128,6 +1139,10 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
 					   self->priv->secondary_padding,
                                            padding_cell_renderer_func,
                                            NULL, NULL);
+
+  self->priv->monitor = g_app_info_monitor_get ();
+  g_signal_connect (self->priv->monitor, "changed",
+		    G_CALLBACK (app_info_changed), self);
 }
 
 static GAppInfo *
