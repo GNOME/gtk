@@ -3227,6 +3227,15 @@ gdk_window_add_update_window (GdkWindow *window)
   GSList *prev = NULL;
   gboolean has_ancestor_in_list = FALSE;
 
+  /*  Check whether "window" is already in "update_windows" list.
+   *  It could be added during execution of gtk_widget_destroy() when
+   *  setting focus widget to NULL and redrawing old focus widget.
+   *  See bug 711552.
+   */
+  tmp = g_slist_find (update_windows, window);
+  if (tmp != NULL)
+    return;
+
   for (tmp = update_windows; tmp; tmp = tmp->next)
     {
       GdkWindow *parent = window->parent;
