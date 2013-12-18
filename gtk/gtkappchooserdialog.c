@@ -55,10 +55,6 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
-#ifdef HAVE_GIO_UNIX
-#include <gio/gdesktopappinfo.h>
-#endif
-
 #define sure_string(s) ((const char *) ((s) != NULL ? (s) : ""))
 
 struct _GtkAppChooserDialogPrivate {
