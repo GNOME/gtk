@@ -1574,37 +1574,6 @@ GLIB_GSETTINGS
 GOBJECT_INTROSPECTION_CHECK(introspection_required_version)
 
 ##################################################
-# Packagekit module
-#################################################
-
-AC_ARG_ENABLE(packagekit,
-              [AS_HELP_STRING([--enable-packagekit=@<:@yes/no/auto@:>@],
-                              [build PackageKit open-with module [default=auto]])],
-              [enable_packagekit="$enableval"],
-              [enable_packagekit=auto])
-if test "$enable_packagekit" = "auto"; then
-  if test "$os_win32" = "yes"; then
-    enable_packagekit=no
-  else
-    enable_packagekit=yes
-  fi
-fi
-
-AC_MSG_CHECKING([whether to use PackageKit])
-build_packagekit=no
-if test "x$enable_packagekit" != "xno"; then
-  if test "$os_win32" != "yes"; then
-    build_packagekit=yes
-    AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
-  else
-    AC_MSG_ERROR([packagekit support is not available on win32])
-  fi
-fi
-AC_MSG_RESULT([$build_packagekit])
-
-AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$build_packagekit" = "xyes")
-
-##################################################
 # colord module
 #################################################
 
@@ -1899,7 +1868,6 @@ fi
 echo "        Print backends:       $PRINT_BACKENDS"
 echo "        Dynamic modules:      $build_dynamic_modules"
 echo "        Included immodules:   $included_immodules"
-echo "        PackageKit support:   $build_packagekit"
 echo "        colord support:       $have_colord"
 echo "        Introspection:        $found_introspection"
 echo "        Debugging:            $enable_debug"

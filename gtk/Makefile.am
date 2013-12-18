@@ -388,16 +388,6 @@ endif
 gtk_semi_private_h_sources = \
 	gtktextlayout.h
 
-if ENABLE_PACKAGEKIT
-gtk_appchooser_impl_h_sources = \
-	gtkappchooseronlinepk.h
-endif
-
-if ENABLE_PACKAGEKIT
-gtk_appchooser_impl_c_sources = \
-	gtkappchooseronlinepk.c
-endif
-
 gtk_private_type_h_sources =	\
 	gtkcsstypesprivate.h	\
 	gtktexthandleprivate.h
@@ -414,8 +404,6 @@ gtk_private_h_sources =		\
 	gtkactionhelper.h	\
 	gtkallocatedbitmaskprivate.h	\
 	gtkappchooserprivate.h	\
-	gtkappchoosermodule.h	\
-	gtkappchooseronline.h	\
 	gtkbindingsprivate.h	\
 	gtkbitmaskprivate.h	\
 	gtkbitmaskprivateimpl.h	\
@@ -561,8 +549,7 @@ gtk_private_h_sources =		\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\
 	$(gtk_private_type_h_sources) \
-	$(gtk_clipboard_dnd_h_sources) \
-	$(gtk_appchooser_impl_h_sources)
+	$(gtk_clipboard_dnd_h_sources)
 
 # GTK+ C sources to build the library from
 deprecated_c_sources = 			\
@@ -625,8 +612,6 @@ gtk_base_c_sources = 		\
 	gtkappchooserwidget.c	\
 	gtkappchooserbutton.c	\
 	gtkappchooserdialog.c	\
-	gtkappchoosermodule.c	\
-	gtkappchooseronline.c	\
 	gtkapplication.c	\
 	gtkapplicationimpl.c	\
 	gtkapplicationwindow.c	\
@@ -904,8 +889,7 @@ gtk_base_c_sources = 		\
 	gtkwidgetpath.c		\
 	gtkwindow.c		\
 	gtkwin32theme.c		\
-	$(gtk_clipboard_dnd_c_sources) \
-	$(gtk_appchooser_impl_c_sources)
+	$(gtk_clipboard_dnd_c_sources)
 
 nodist_gtk_c_sources =
 gtk_c_sources = $(gtk_base_c_sources)

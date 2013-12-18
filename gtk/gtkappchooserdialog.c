@@ -43,8 +43,6 @@
 
 #include "gtkintl.h"
 #include "gtkappchooser.h"
-#include "gtkappchooseronline.h"
-#include "gtkappchooserprivate.h"
 #include "gtkappchooserprivate.h"
 
 #include "gtkmessagedialog.h"
@@ -66,16 +64,12 @@ struct _GtkAppChooserDialogPrivate {
 
   GtkWidget *label;
   GtkWidget *button;
-  GtkWidget *online_button;
   GtkWidget *inner_box;
 
   GtkWidget *open_label;
 
   GtkWidget *app_chooser_widget;
   GtkWidget *show_more_button;
-
-  GtkAppChooserOnline *online;
-  GCancellable *online_cancellable;
 
   gboolean show_more_clicked;
   gboolean dismissed;
@@ -93,125 +87,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkAppChooserDialog, gtk_app_chooser_dialog, GTK_TYPE_D
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
                                                 gtk_app_chooser_dialog_iface_init));
 
-static void
-show_error_dialog (const gchar *primary,
-                   const gchar *secondary,
-                   GtkWindow   *parent)
-{
-  GtkWidget *message_dialog;
-
-  message_dialog = gtk_message_dialog_new (parent, 0,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_OK,
-                                           NULL);
-  g_object_set (message_dialog,
-                "text", primary,
-                "secondary-text", secondary,
-                NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (message_dialog), GTK_RESPONSE_OK);
-
-  gtk_widget_show (message_dialog);
-
-  g_signal_connect (message_dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy), NULL);
-}
-
-static void
-search_for_mimetype_ready_cb (GObject      *source,
-                              GAsyncResult *res,
-                              gpointer      user_data)
-{
-  GtkAppChooserOnline *online = GTK_APP_CHOOSER_ONLINE (source);
-  GtkAppChooserDialog *self = user_data;
-  GError *error = NULL;
-
-  gdk_threads_enter ();
-
-  _gtk_app_chooser_online_search_for_mimetype_finish (online, res, &error);
-
-  if (self->priv->dismissed)
-    goto out;
-
-  if (error != NULL &&
-      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    {
-      show_error_dialog (_("Failed to look for applications online"),
-                         error->message, GTK_WINDOW (self));
-    }
-  else
-    {
-      gtk_widget_set_sensitive (self->priv->online_button, TRUE);
-      gtk_app_chooser_refresh (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
-    }
-
- out:
-  g_clear_object (&self->priv->online_cancellable);
-  g_clear_error (&error);
-  g_object_unref (self);
-
-  gdk_threads_leave ();
-}
-
-static void
-online_button_clicked_cb (GtkButton *b,
-                          gpointer   user_data)
-{
-  GtkAppChooserDialog *self = user_data;
-
-  self->priv->online_cancellable = g_cancellable_new ();
-  gtk_widget_set_sensitive (self->priv->online_button, FALSE);
-
-  _gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
-						     self->priv->content_type,
-						     GTK_WINDOW (self),
-                                                     self->priv->online_cancellable,
-						     search_for_mimetype_ready_cb,
-						     g_object_ref (self));
-}
-
-static void
-app_chooser_online_get_default_ready_cb (GObject *source,
-                                         GAsyncResult *res,
-                                         gpointer user_data)
-{
-  GtkAppChooserDialog *self = user_data;
-
-  gdk_threads_enter ();
-
-  self->priv->online = _gtk_app_chooser_online_get_default_finish (source, res);
-
-  if (self->priv->online != NULL &&
-      !self->priv->dismissed)
-    {
-      GtkWidget *action_area;
-
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (self));
-      self->priv->online_button = gtk_button_new_with_mnemonic (_("_Find applications online"));
-      gtk_box_pack_start (GTK_BOX (action_area), self->priv->online_button,
-                          FALSE, FALSE, 0);
-      gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), self->priv->online_button,
-                                          TRUE);
-      g_signal_connect (self->priv->online_button, "clicked",
-                        G_CALLBACK (online_button_clicked_cb), self);
-
-
-      if (!self->priv->content_type)
-	gtk_widget_set_sensitive (self->priv->online_button, FALSE);
-
-      gtk_widget_show (self->priv->online_button);
-    }
-
-  g_object_unref (self);
-
-  gdk_threads_leave ();
-}
-
-static void
-ensure_online_button (GtkAppChooserDialog *self)
-{
-  _gtk_app_chooser_online_get_default_async (app_chooser_online_get_default_ready_cb,
-                                             g_object_ref (self));
-}
 
 static void
 add_or_find_application (GtkAppChooserDialog *self)
@@ -232,16 +107,6 @@ add_or_find_application (GtkAppChooserDialog *self)
 }
 
 static void
-cancel_and_clear_cancellable (GtkAppChooserDialog *self)
-{                                                               
-  if (self->priv->online_cancellable != NULL)
-    {
-      g_cancellable_cancel (self->priv->online_cancellable);
-      g_clear_object (&self->priv->online_cancellable);
-    }
-}
-
-static void
 gtk_app_chooser_dialog_response (GtkDialog *dialog,
                                  gint       response_id,
                                  gpointer   user_data)
@@ -255,7 +120,6 @@ gtk_app_chooser_dialog_response (GtkDialog *dialog,
       break;
     case GTK_RESPONSE_CANCEL:
     case GTK_RESPONSE_DELETE_EVENT:
-      cancel_and_clear_cancellable (self);
       self->priv->dismissed = TRUE;
     default :
       break;
@@ -524,7 +388,6 @@ gtk_app_chooser_dialog_constructed (GObject *object)
 
   construct_appchooser_widget (self);
   set_dialog_properties (self);
-  ensure_online_button (self);
 }
 
 static void
@@ -533,8 +396,6 @@ gtk_app_chooser_dialog_dispose (GObject *object)
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
   
   g_clear_object (&self->priv->gfile);
-  cancel_and_clear_cancellable (self);
-  g_clear_object (&self->priv->online);
 
   self->priv->dismissed = TRUE;
 
