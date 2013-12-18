@@ -1485,6 +1485,7 @@ do_popup (GtkColorSelection *colorsel,
                      colorsel);
 
   menu = gtk_menu_new ();
+  g_signal_connect (menu, "hide", G_CALLBACK (gtk_widget_destroy), NULL);
 
   mi = gtk_menu_item_new_with_mnemonic (_("_Save color here"));
 
