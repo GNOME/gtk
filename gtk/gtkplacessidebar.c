@@ -1415,7 +1415,7 @@ compute_drop_position (GtkTreeView              *tree_view,
                           PLACES_SIDEBAR_COLUMN_URI, &uri,
                           -1);
 
-      if (strcmp (uri, "recent:///") == 0)
+      if (g_strcmp0 (uri, "recent:///") == 0)
         drop_possible = FALSE;
 
       g_free (uri);
