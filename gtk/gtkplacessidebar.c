@@ -838,14 +838,17 @@ update_places (GtkPlacesSidebar *sidebar)
   if (sidebar->show_desktop)
     {
       mount_uri = get_desktop_directory_uri ();
-      icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_DESKTOP);
-      add_place (sidebar, PLACES_BUILT_IN,
-                 SECTION_COMPUTER,
-                 _("Desktop"), icon, mount_uri,
-                 NULL, NULL, NULL, 0,
-                 _("Open the contents of your desktop in a folder"));
-      g_object_unref (icon);
-      g_free (mount_uri);
+      if (mount_uri)
+        {
+          icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_DESKTOP);
+          add_place (sidebar, PLACES_BUILT_IN,
+                     SECTION_COMPUTER,
+                     _("Desktop"), icon, mount_uri,
+                     NULL, NULL, NULL, 0,
+                     _("Open the contents of your desktop in a folder"));
+          g_object_unref (icon);
+          g_free (mount_uri);
+        }
     }
 
   /* XDG directories */
