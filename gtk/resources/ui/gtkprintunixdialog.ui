@@ -93,7 +93,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="model">printer_list_filter</property>
-                                <property name="search_column">1</property>
                                 <signal name="row-activated" handler="emit_ok_response" swapped="no"/>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection1">
