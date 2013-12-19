@@ -208,6 +208,11 @@ static gboolean set_active_printer                 (GtkPrintUnixDialog *dialog,
                                                     const gchar        *printer_name);
 static void redraw_page_layout_preview             (GtkPrintUnixDialog *dialog);
 static void load_print_backends                    (GtkPrintUnixDialog *dialog);
+static gboolean printer_compare                    (GtkTreeModel       *model,
+                                                    gint                column,
+                                                    const gchar        *key,
+                                                    GtkTreeIter        *iter,
+                                                    gpointer            search_data);
 
 /* GtkBuildable */
 static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableIface *iface);
@@ -759,6 +764,9 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   gtk_tree_sortable_set_sort_column_id (sort,
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
                                         GTK_SORT_ASCENDING);
+
+  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (priv->printer_treeview),
+                                       printer_compare, NULL, NULL);
 
   gtk_tree_view_column_set_cell_data_func (priv->printer_icon_column,
 					   priv->printer_icon_renderer,
@@ -2081,6 +2089,85 @@ selected_printer_changed (GtkTreeSelection   *selection,
   priv->internal_page_setup_change = FALSE;
 
   g_object_notify ( G_OBJECT(dialog), "selected-printer");
+}
+
+static gboolean
+printer_compare (GtkTreeModel *model,
+                 gint          column,
+                 const gchar  *key,
+                 GtkTreeIter  *iter,
+                 gpointer      search_data)
+{
+  gboolean matches = FALSE;
+
+  if (key != NULL)
+    {
+      gchar  *name = NULL;
+      gchar  *location = NULL;
+      gchar  *casefold_key = NULL;
+      gchar  *casefold_name = NULL;
+      gchar  *casefold_location = NULL;
+      gchar **keys;
+      gchar  *tmp1, *tmp2;
+      gint    i;
+
+      gtk_tree_model_get (model, iter,
+                          PRINTER_LIST_COL_NAME, &name,
+                          PRINTER_LIST_COL_LOCATION, &location,
+                          -1);
+
+      casefold_key = g_utf8_casefold (key, -1);
+
+      if (name != NULL)
+        {
+          casefold_name = g_utf8_casefold (name, -1);
+          g_free (name);
+        }
+
+      if (location != NULL)
+        {
+          casefold_location = g_utf8_casefold (location, -1);
+          g_free (location);
+        }
+
+      if (casefold_name != NULL ||
+          casefold_location != NULL)
+        {
+          keys = g_strsplit_set (casefold_key, " \t", 0);
+          if (keys != NULL)
+            {
+              matches = TRUE;
+
+              for (i = 0; keys[i] != NULL; i++)
+                {
+                  if (keys[i][0] != '\0')
+                    {
+                      tmp1 = tmp2 = NULL;
+
+                      if (casefold_name != NULL)
+                        tmp1 = g_strstr_len (casefold_name, -1, keys[i]);
+
+                      if (casefold_location != NULL)
+                        tmp2 = g_strstr_len (casefold_location, -1, keys[i]);
+
+                      if (tmp1 == NULL && tmp2 == NULL)
+                        {
+                          matches = FALSE;
+                          break;
+                        }
+                    }
+                }
+
+              g_strfreev (keys);
+            }
+        }
+
+      g_free (casefold_location);
+      g_free (casefold_name);
+      g_free (casefold_key);
+    }
+
+  return !matches;
 }
 
 static void
