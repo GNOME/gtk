@@ -356,7 +356,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               GtkWidget *image = NULL;
               AtkObject *accessible;
 
-              if (strcmp (t[j], "icon") == 0)
+              if (strcmp (t[j], "icon") == 0 &&
+                  gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   button = gtk_image_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -371,7 +372,9 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                       button = NULL;
                     }
                 }
-              else if (strcmp (t[j], "menu") == 0 && menu != NULL)
+              else if (strcmp (t[j], "menu") == 0 &&
+                       menu != NULL &&
+                       gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   button = gtk_menu_button_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -431,8 +434,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   priv->titlebar_max_button = button;
                 }
               else if (strcmp (t[j], "close") == 0 &&
-                       gtk_window_get_deletable (window) &&
-                       gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
+                       gtk_window_get_deletable (window))
                 {
                   button = gtk_button_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
