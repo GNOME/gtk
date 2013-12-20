@@ -149,6 +149,7 @@
 #include "gtkwindow.h"
 #include "gtkmain.h"
 #include "gtkaccessible.h"
+#include "a11y/gtkmenubuttonaccessible.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -562,6 +563,8 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                       GTK_TYPE_ARROW_TYPE,
                                                       GTK_ARROW_DOWN,
                                                       G_PARAM_READWRITE));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_BUTTON_ACCESSIBLE);
 }
 
 static void

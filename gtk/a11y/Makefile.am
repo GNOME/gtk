@@ -31,6 +31,7 @@ gtka11y_c_sources =			\
 	gtklistboxrowaccessible.c	\
 	gtklockbuttonaccessible.c	\
 	gtkmenuaccessible.c		\
+	gtkmenubuttonaccessible.c	\
 	gtkmenushellaccessible.c	\
 	gtkmenuitemaccessible.c		\
 	gtknotebookaccessible.c		\
@@ -82,6 +83,7 @@ gtka11yinclude_HEADERS =		\
 	gtklistboxrowaccessible.h	\
 	gtklockbuttonaccessible.h	\
 	gtkmenuaccessible.h		\
+	gtkmenubuttonaccessible.h	\
 	gtkmenuitemaccessible.h		\
 	gtkmenushellaccessible.h	\
 	gtknotebookaccessible.h		\

@@ -22,3 +22,18 @@ window1
     <AtkAction>
     action 0 name: click
     action 0 description: Clicks the button
+    imagemenuitem
+      "menu item"
+      parent: menu
+      index: 0
+      name: New
+      state: enabled selectable sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: popup
+      alpha: 1
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the menuitem
+      action 0 keybinding: n;;
+      <AtkSelection>

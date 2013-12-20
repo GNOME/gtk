@@ -52,6 +52,7 @@
 #include <gtk/a11y/gtklistboxrowaccessible.h>
 #include <gtk/a11y/gtklockbuttonaccessible.h>
 #include <gtk/a11y/gtkmenuaccessible.h>
+#include <gtk/a11y/gtkmenubuttonaccessible.h>
 #include <gtk/a11y/gtkmenuitemaccessible.h>
 #include <gtk/a11y/gtkmenushellaccessible.h>
 #include <gtk/a11y/gtknotebookaccessible.h>
