@@ -72,6 +72,7 @@ testdata = \
 	scale-drawvalue.ui scale-drawvalue.txt \
 	placeholder-text.ui placeholder-text.txt \
 	menu.ui menu.txt \
+	menubutton.ui menubutton.txt \
 	combos.ui combos.txt \
 	listbox.ui listbox.txt \
 	stack.ui stack.txt \
