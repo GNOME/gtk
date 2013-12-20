@@ -41,7 +41,7 @@ gtk_menu_button_accessible_get_n_children (AtkObject* obj)
   if (widget == NULL)
     return count;
 
-  submenu = gtk_menu_button_get_popup (GTK_MENU_BUTTON (widget));
+  submenu = GTK_WIDGET (gtk_menu_button_get_popup (GTK_MENU_BUTTON (widget)));
   if (submenu)
     {
       GList *children;
@@ -57,7 +57,7 @@ static AtkObject *
 gtk_menu_button_accessible_ref_child (AtkObject *obj,
                                       gint       i)
 {
-  AtkObject  *accessible;
+  AtkObject *accessible = NULL;
   GtkWidget *widget;
   GtkWidget *submenu;
 
@@ -65,7 +65,7 @@ gtk_menu_button_accessible_ref_child (AtkObject *obj,
   if (widget == NULL)
     return NULL;
 
-  submenu = gtk_menu_button_get_popup (GTK_MENU_BUTTON (widget));
+  submenu = GTK_WIDGET (gtk_menu_button_get_popup (GTK_MENU_BUTTON (widget)));
   if (submenu)
     {
       GList *children;
