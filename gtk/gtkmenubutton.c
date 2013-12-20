@@ -148,6 +148,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"
+#include "gtkaccessible.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -578,6 +579,7 @@ static void
 gtk_menu_button_init (GtkMenuButton *menu_button)
 {
   GtkMenuButtonPrivate *priv;
+  AtkObject *accessible;
 
   priv = gtk_menu_button_get_instance_private (menu_button);
   menu_button->priv = priv;
@@ -586,6 +588,10 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
   add_arrow (menu_button);
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button), FALSE);
+
+  accessible = gtk_widget_get_accessible (GTK_WIDGET (menu_button));
+  if (GTK_IS_ACCESSIBLE (accessible))
+    atk_object_set_name (accessible, _("Menu"));
 }
 
 /**
