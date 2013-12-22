@@ -92,6 +92,7 @@ testsuite/a11y/headerbar.ui
 testsuite/a11y/hello-world.ui
 testsuite/a11y/infobar.ui
 testsuite/a11y/link.ui
+testsuite/a11y/menubutton.ui
 testsuite/a11y/menus.ui
 testsuite/a11y/menu.ui
 testsuite/a11y/messagedialog.ui
