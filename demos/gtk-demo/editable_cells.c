@@ -142,8 +142,11 @@ static void
 add_item (GtkWidget *button, gpointer data)
 {
   Item foo;
-  GtkTreeIter iter;
-  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreeIter current, iter;
+  GtkTreePath *path;
+  GtkTreeModel *model;
+  GtkTreeViewColumn *column;
+  GtkTreeView *treeview = (GtkTreeView *)data;
 
   g_return_if_fail (articles != NULL);
 
@@ -152,12 +155,26 @@ add_item (GtkWidget *button, gpointer data)
   foo.yummy = 50;
   g_array_append_vals (articles, &foo, 1);
 
-  gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+  /* Insert a new row below the current one */
+  gtk_tree_view_get_cursor (treeview, &path, NULL);
+  model = gtk_tree_view_get_model (treeview);
+  gtk_tree_model_get_iter (model, &current, path);
+  gtk_tree_path_free (path);
+
+  /* Set the data for the new row */
+  gtk_list_store_insert_after (GTK_LIST_STORE (model), &iter, &current);
   gtk_list_store_set (GTK_LIST_STORE (model), &iter,
                       COLUMN_ITEM_NUMBER, foo.number,
                       COLUMN_ITEM_PRODUCT, foo.product,
                       COLUMN_ITEM_YUMMY, foo.yummy,
                       -1);
+
+  /* Move focus to the new row */
+  path = gtk_tree_model_get_path (model, &iter);
+  column = gtk_tree_view_get_column (treeview, 0);
+  gtk_tree_view_set_cursor (treeview, path, column, FALSE);
+
+  gtk_tree_path_free (path);
 }
 
 static void
@@ -368,7 +385,7 @@ do_editable_cells (GtkWidget *do_widget)
 
       button = gtk_button_new_with_label ("Add item");
       g_signal_connect (button, "clicked",
-                        G_CALLBACK (add_item), items_model);
+                        G_CALLBACK (add_item), treeview);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Remove item");
