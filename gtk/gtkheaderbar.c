@@ -37,11 +37,17 @@
  * @Title: GtkHeaderBar
  * @See_also: #GtkBox
  *
- * GtkHeaderBar is similar to a horizontal #GtkBox, it allows
- * to place children at the start or the end. In addition,
- * it allows a title to be displayed. The title will be
- * centered with respect to the width of the box, even if the children
- * at either side take up different amounts of space.
+ * GtkHeaderBar is similar to a horizontal #GtkBox, it allows to place
+ * children at the start or the end. In addition, it allows a title and
+ * subtitle to be displayed. The title will be centered with respect to
+ * the width of the box, even if the children at either side take up
+ * different amounts of space. The height of the titlebar will be
+ * set to provide sufficient space for the subtitle, even if none is
+ * currently set. If a subtitle is not needed, the space reservation
+ * can be turned off with gtk_header_bar_set_has_subtitle().
+ *
+ * GtkHeaderBar can add typical window frame controls, such as minimize,
+ * maximize and close buttons, or the window icon.
  */
 
 #define DEFAULT_SPACING 6
@@ -62,6 +68,8 @@ struct _GtkHeaderBarPrivate
   GList *children;
 
   gboolean shows_wm_decorations;
+  gchar *decoration_layout;
+  gboolean decoration_layout_set;
 
   GtkWidget *titlebar_start_box;
   GtkWidget *titlebar_end_box;
@@ -88,6 +96,8 @@ enum {
   PROP_CUSTOM_TITLE,
   PROP_SPACING,
   PROP_SHOW_CLOSE_BUTTON,
+  PROP_DECORATION_LAYOUT,
+  PROP_DECORATION_LAYOUT_SET
 };
 
 enum {
@@ -265,6 +275,7 @@ void
 _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+  GtkWidget *widget = GTK_WIDGET (bar);
   GtkWindow *window;
   GtkTextDirection direction;
   gchar *layout_desc;
@@ -272,13 +283,10 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   gint i, j;
   GMenuModel *menu;
   gboolean shown_by_shell;
+  GdkWindowTypeHint type_hint;
 
-  if (!gtk_widget_get_realized (GTK_WIDGET (bar)))
+  if (!gtk_widget_get_realized (widget))
     return;
-
-  window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (bar)));
-
-  direction = gtk_widget_get_direction (GTK_WIDGET (window));
 
   if (priv->titlebar_icon)
     {
@@ -319,17 +327,27 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   if (!priv->shows_wm_decorations)
     return;
 
-  gtk_widget_style_get (GTK_WIDGET (window),
-                        "decoration-button-layout", &layout_desc,
-                        NULL);
+  direction = gtk_widget_get_direction (widget);
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                "gtk-shell-shows-app-menu", &shown_by_shell, NULL);
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-shell-shows-app-menu", &shown_by_shell,
+                "gtk-decoration-layout", &layout_desc,
+                NULL);
+
+  if (priv->decoration_layout_set)
+    {
+      g_free (layout_desc);
+      layout_desc = g_strdup (priv->decoration_layout);
+    }
+
+  window = GTK_WINDOW (gtk_widget_get_toplevel (widget));
 
   if (!shown_by_shell && gtk_window_get_application (window))
     menu = gtk_application_get_app_menu (gtk_window_get_application (window));
   else
     menu = NULL;
+
+  type_hint = gtk_window_get_type_hint (window);
 
   tokens = g_strsplit (layout_desc, ":", 2);
   if (tokens)
@@ -357,7 +375,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               AtkObject *accessible;
 
               if (strcmp (t[j], "icon") == 0 &&
-                  gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
+                  type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   button = gtk_image_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -374,7 +392,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                 }
               else if (strcmp (t[j], "menu") == 0 &&
                        menu != NULL &&
-                       gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
+                       type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   button = gtk_menu_button_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -393,7 +411,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                     gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "process-stop-symbolic", GTK_ICON_SIZE_MENU);
                 }
               else if (strcmp (t[j], "minimize") == 0 &&
-                       gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
+                       type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   button = gtk_button_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -412,7 +430,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                 }
               else if (strcmp (t[j], "maximize") == 0 &&
                        gtk_window_get_resizable (window) &&
-                       gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
+                       type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   const gchar *icon_name;
                   gboolean maximized = _gtk_window_get_maximized (window);
@@ -541,6 +559,8 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->children = NULL;
   priv->spacing = DEFAULT_SPACING;
   priv->has_subtitle = TRUE;
+  priv->decoration_layout = NULL;
+  priv->decoration_layout_set = FALSE;
 
   init_sizing_box (bar);
   construct_label_box (bar);
@@ -1341,6 +1361,7 @@ gtk_header_bar_finalize (GObject *object)
 
   g_free (priv->title);
   g_free (priv->subtitle);
+  g_free (priv->decoration_layout);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->finalize (object);
 }
@@ -1378,6 +1399,14 @@ gtk_header_bar_get_property (GObject    *object,
 
     case PROP_HAS_SUBTITLE:
       g_value_set_boolean (value, gtk_header_bar_get_has_subtitle (bar));
+      break;
+
+    case PROP_DECORATION_LAYOUT:
+      g_value_set_string (value, gtk_header_bar_get_decoration_layout (bar));
+      break;
+
+    case PROP_DECORATION_LAYOUT_SET:
+      g_value_set_boolean (value, priv->decoration_layout_set);
       break;
 
     default:
@@ -1420,6 +1449,14 @@ gtk_header_bar_set_property (GObject      *object,
 
     case PROP_HAS_SUBTITLE:
       gtk_header_bar_set_has_subtitle (bar, g_value_get_boolean (value));
+      break;
+
+    case PROP_DECORATION_LAYOUT:
+      gtk_header_bar_set_decoration_layout (bar, g_value_get_string (value));
+      break;
+
+    case PROP_DECORATION_LAYOUT_SET:
+      priv->decoration_layout_set = g_value_get_boolean (value);
       break;
 
     default:
@@ -1779,11 +1816,56 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                      DEFAULT_SPACING,
                                                      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkHeaderBar:show-close-button:
+   *
+   * Whether to show window decorations.
+   *
+   * Which buttons are actually shown and where is determined
+   * by the #GtkHeaderBar:decoration-layout property, and by
+   * the state of the window (e.g. a close button will not be
+   * shown if the window can't be closed).
+   */
   g_object_class_install_property (object_class,
                                    PROP_SHOW_CLOSE_BUTTON,
                                    g_param_spec_boolean ("show-close-button",
                                                          P_("Show decorations"),
                                                          P_("Whether to show window decorations"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkHeaderBar:decoration-layout:
+   * 
+   * The decoration layout for buttons. If this property is
+   * not set, the #GtkSettings:gtk-decoration-layout setting
+   * is used.
+   *
+   * See gtk_header_bar_set_decoration_layout() for information
+   * about the format of this string.
+   *
+   * Since: 3.12
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_DECORATION_LAYOUT,
+                                   g_param_spec_string ("decoration-layout",
+                                                        P_("Decoration Layout"),
+                                                        P_("The layout for window decorations"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkHeaderBar:decoration-layout-set:
+   *
+   * Set to %TRUE if #GtkHeaderBar:decoration-layout is set.
+   *
+   * Since: 3.12
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_DECORATION_LAYOUT_SET,
+                                   g_param_spec_boolean ("decoration-layout-set",
+                                                         P_("Decoration Layout Set"),
+                                                         P_("Whether the decoration-layout property has been set"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
@@ -1980,4 +2062,72 @@ gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar)
   priv = gtk_header_bar_get_instance_private (bar);
 
   return priv->has_subtitle;
+}
+
+/**
+ * gtk_header_bar_set_decoration_layout:
+ * @bar: a #GtkHeaderBar
+ * @layout: (allow-none): a decoration layout, or %NULL to
+ *     unset the layout
+ *
+ * Sets the decoration layout for this header bar, overriding
+ * the #GtkSettings:gtk-decoration-layout setting. 
+ *
+ * There can be valid reasons for overriding the setting, such
+ * as a header bar design that does not allow for buttons to take
+ * room on the right, or only offers room for a single close button.
+ * Split header bars are another example for overriding the
+ * setting.
+ *
+ * The format of the string is button names, separated by commas.
+ * A colon separates the buttons that should appear on the left
+ * from those on the right. Recognized button names are minimize,
+ * maximize, close, icon (the window icon) and menu (a menu button
+ * for the fallback app menu).
+ *
+ * For example, "menu:minimize,maximize,close" specifies a menu
+ * on the left, and minimize, maximize and close buttons on the right.
+ *
+ * Since: 3.12
+ */
+void
+gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
+                                      const gchar  *layout)
+{
+  GtkHeaderBarPrivate *priv;
+
+  g_return_if_fail (GTK_IS_HEADER_BAR (bar));
+
+  priv = gtk_header_bar_get_instance_private (bar);
+
+  priv->decoration_layout = g_strdup (layout);
+  priv->decoration_layout_set = (layout != NULL);
+
+  _gtk_header_bar_update_window_buttons (bar);
+
+  g_object_notify (G_OBJECT (bar), "decoration-layout");
+  g_object_notify (G_OBJECT (bar), "decoration-layout-set");
+}
+
+/**
+ * gtk_header_bar_get_decoration_layout:
+ * @bar: a #GtkHeaderBar
+ *
+ * Gets the decoration layout set with
+ * gtk_header_bar_set_decoration_layout().
+ *
+ * Returns: the decoration layout
+ *
+ * Since: 3.12 
+ */
+const gchar *
+gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
+
+  priv = gtk_header_bar_get_instance_private (bar);
+
+  return priv->decoration_layout;
 }

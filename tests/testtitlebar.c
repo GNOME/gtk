@@ -3,19 +3,13 @@
 static void
 on_text_changed (GtkEntry       *entry,
                  GParamSpec     *pspec,
-                 GtkCssProvider *provider)
+                 GtkHeaderBar   *bar)
 {
   const gchar *layout;
-  gchar *css;
 
   layout = gtk_entry_get_text (entry);
 
-  css = g_strdup_printf ("GtkWindow {\n"
-                         "  -GtkWindow-decoration-button-layout: '%s';\n"
-                         "}", layout);
-
-  gtk_css_provider_load_from_data (provider, css, -1, NULL);
-  g_free (css);
+  gtk_header_bar_set_decoration_layout (bar, layout);
 }
 
 static void
@@ -30,7 +24,6 @@ activate (GApplication *gapp)
   GtkWidget *check;
   GtkBuilder *builder;
   GMenuModel *menu;
-  GtkCssProvider *provider;
   gchar *layout;
 
   g_action_map_add_action (G_ACTION_MAP (gapp), G_ACTION (g_simple_action_new ("test", NULL)));
@@ -57,11 +50,6 @@ activate (GApplication *gapp)
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header), gtk_button_new_with_label ("Start"));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header), gtk_button_new_with_label ("End"));
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
-
-  provider = gtk_css_provider_new ();
-
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (provider), 600);
 
   grid = gtk_grid_new ();
   g_object_set (grid,
@@ -93,16 +81,16 @@ activate (GApplication *gapp)
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   entry = gtk_entry_new ();
 
-  gtk_widget_style_get (window, "decoration-button-layout", &layout, NULL);
+  g_object_get (gtk_widget_get_settings (window), "gtk-decoration-layout", &layout, NULL);
   gtk_entry_set_text (GTK_ENTRY (entry), layout);
   g_free (layout);
 
   g_signal_connect (entry, "notify::text",
-                    G_CALLBACK (on_text_changed), provider);
+                    G_CALLBACK (on_text_changed), header);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 2, 1, 1);
 
-  label = gtk_label_new ("Close Button");
+  label = gtk_label_new ("Decorations");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   check = gtk_check_button_new ();
   g_object_bind_property (header, "show-close-button",

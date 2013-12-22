@@ -214,6 +214,7 @@ enum {
   PROP_SHELL_SHOWS_APP_MENU,
   PROP_SHELL_SHOWS_MENUBAR,
   PROP_SHELL_SHOWS_DESKTOP,
+  PROP_DECORATION_LAYOUT,
   PROP_ENABLE_PRIMARY_PASTE,
   PROP_RECENT_FILES_ENABLED
 };
@@ -1539,6 +1540,40 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    TRUE, GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SHELL_SHOWS_DESKTOP);
+
+  /**
+   * GtkSettings:gtk-decoration-layout:
+   *
+   * This setting determines which buttons should be put in the
+   * titlebar of client-side decorated windows, and whether they
+   * should be placed at the left of right.
+   *
+   * The format of the string is button names, separated by commas.
+   * A colon separates the buttons that should appear on the left
+   * from those on the right. Recognized button names are minimize,
+   * maximize, close, icon (the window icon) and menu (a menu button
+   * for the fallback app menu).
+   *
+   * For example, "menu:minimize,maximize,close" specifies a menu
+   * on the left, and minimize, maximize and close buttons on the right.
+   *
+   * Note that buttons will only be shown when they are meaningful.
+   * E.g. a menu button only appears when the desktop shell does not
+   * show the app menu, and a close button only appears on a window
+   * that can be closed.
+   *
+   * Also note that the setting can be overridden with the
+   * #GtkHeaderBar:decoration-layout property.
+   *
+   * Since: 3.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-decoration-layout",
+                                                                  P_("Decoration Layout"),
+                                                                   P_("The layout for window decorations"),
+                                                                   "menu:close", GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_DECORATION_LAYOUT);
 
   /**
    * GtkSettings:gtk-enable-primary-paste:

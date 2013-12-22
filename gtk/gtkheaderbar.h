@@ -96,6 +96,12 @@ void         gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
 GDK_AVAILABLE_IN_3_12
 gboolean     gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar);
 
+GDK_AVAILABLE_IN_3_12
+void         gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
+                                                   const gchar  *layout);
+GDK_AVAILABLE_IN_3_12
+const gchar *gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar);
+
 G_END_DECLS
 
 #endif /* __GTK_HEADER_BAR_H__ */
