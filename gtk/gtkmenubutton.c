@@ -255,13 +255,12 @@ menu_position_up_down_func (GtkMenu       *menu,
   GtkMenuButtonPrivate *priv = menu_button->priv;
   GtkWidget *widget = GTK_WIDGET (menu_button);
   GtkWidget *toplevel;
-  GtkRequisition menu_req;
   GtkTextDirection direction;
   GdkRectangle monitor;
   gint monitor_num;
   GdkScreen *screen;
   GdkWindow *window;
-  GtkAllocation allocation, arrow_allocation;
+  GtkAllocation menu_allocation, allocation, arrow_allocation;
   GtkAlign align;
 
   /* In the common case the menu button is showing a dropdown menu, set the
@@ -273,9 +272,6 @@ menu_position_up_down_func (GtkMenu       *menu,
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (priv->popup));
       gtk_window_set_type_hint (GTK_WINDOW (toplevel), GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU);
     }
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (priv->popup),
-                                 &menu_req, NULL);
 
   align = gtk_widget_get_halign (GTK_WIDGET (priv->popup));
   direction = gtk_widget_get_direction (widget);
@@ -289,6 +285,7 @@ menu_position_up_down_func (GtkMenu       *menu,
 
   gtk_widget_get_allocation (priv->align_widget ? priv->align_widget : widget, &allocation);
   gtk_widget_get_allocation (widget, &arrow_allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (priv->popup), &menu_allocation);
 
   gdk_window_get_origin (window, x, y);
   *x += allocation.x;
@@ -299,27 +296,27 @@ menu_position_up_down_func (GtkMenu       *menu,
     align = GTK_ALIGN_START;
 
   if (align == GTK_ALIGN_CENTER)
-    *x -= (menu_req.width - allocation.width) / 2;
+    *x -= (menu_allocation.width - allocation.width) / 2;
   else if ((align == GTK_ALIGN_START && direction == GTK_TEXT_DIR_LTR) ||
            (align == GTK_ALIGN_END && direction == GTK_TEXT_DIR_RTL))
-    *x += MAX (allocation.width - menu_req.width, 0);
-  else if (menu_req.width > allocation.width)
-    *x -= menu_req.width - allocation.width;
+    *x += MAX (allocation.width - menu_allocation.width, 0);
+  else if (menu_allocation.width > allocation.width)
+    *x -= menu_allocation.width - allocation.width;
 
-  if (priv->arrow_type == GTK_ARROW_UP && *y - menu_req.height >= monitor.y)
+  if (priv->arrow_type == GTK_ARROW_UP && *y - menu_allocation.height >= monitor.y)
     {
-      *y -= menu_req.height;
+      *y -= menu_allocation.height;
     }
   else
     {
-      if ((*y + arrow_allocation.height + menu_req.height) <= monitor.y + monitor.height)
+      if ((*y + arrow_allocation.height + menu_allocation.height) <= monitor.y + monitor.height)
         *y += arrow_allocation.height;
-      else if ((*y - menu_req.height) >= monitor.y)
-        *y -= menu_req.height;
+      else if ((*y - menu_allocation.height) >= monitor.y)
+        *y -= menu_allocation.height;
       else if (monitor.y + monitor.height - (*y + arrow_allocation.height) > *y)
         *y += arrow_allocation.height;
       else
-        *y -= menu_req.height;
+        *y -= menu_allocation.height;
     }
 
   *push_in = FALSE;
@@ -334,17 +331,14 @@ menu_position_side_func (GtkMenu       *menu,
 {
   GtkMenuButtonPrivate *priv = menu_button->priv;
   GtkAllocation allocation;
+  GtkAllocation menu_allocation;
   GtkWidget *widget = GTK_WIDGET (menu_button);
-  GtkRequisition menu_req;
   GdkRectangle monitor;
   gint monitor_num;
   GdkScreen *screen;
   GdkWindow *window;
   GtkAlign align;
   GtkTextDirection direction;
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (priv->popup),
-                                 &menu_req, NULL);
 
   window = gtk_widget_get_window (widget);
 
@@ -359,20 +353,21 @@ menu_position_side_func (GtkMenu       *menu,
   gdk_window_get_origin (gtk_button_get_event_window (GTK_BUTTON (menu_button)), x, y);
 
   gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (priv->popup), &menu_allocation);
 
   if ((priv->arrow_type == GTK_ARROW_RIGHT && direction == GTK_TEXT_DIR_LTR) ||
       (priv->arrow_type == GTK_ARROW_LEFT && direction == GTK_TEXT_DIR_RTL))
 
     {
-      if (*x + allocation.width + menu_req.width <= monitor.x + monitor.width)
+      if (*x + allocation.width + menu_allocation.width <= monitor.x + monitor.width)
         *x += allocation.width;
       else
-        *x -= menu_req.width;
+        *x -= menu_allocation.width;
     }
   else
     {
-      if (*x - menu_req.width >= monitor.x)
-        *x -= menu_req.width;
+      if (*x - menu_allocation.width >= monitor.x)
+        *x -= menu_allocation.width;
       else
         *x += allocation.width;
     }
@@ -382,9 +377,9 @@ menu_position_side_func (GtkMenu       *menu,
     align = GTK_ALIGN_START;
 
   if (align == GTK_ALIGN_CENTER)
-    *y -= (menu_req.height - allocation.height) / 2;
+    *y -= (menu_allocation.height - allocation.height) / 2;
   else if (align == GTK_ALIGN_END)
-    *y -= menu_req.height - allocation.height;
+    *y -= menu_allocation.height - allocation.height;
 
   *push_in = FALSE;
 }
