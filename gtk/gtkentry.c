@@ -3209,7 +3209,6 @@ gtk_entry_realize (GtkWidget *widget)
 
   gtk_entry_adjust_scroll (entry);
   gtk_entry_update_primary_selection (entry);
-  _gtk_text_handle_set_relative_to (priv->text_handle, priv->text_area);
 
   /* If the icon positions are already setup, create their windows.
    * Otherwise if they don't exist yet, then construct_icon_info()
@@ -3237,7 +3236,6 @@ gtk_entry_unrealize (GtkWidget *widget)
   gtk_entry_reset_layout (entry);
   
   gtk_im_context_set_client_window (priv->im_context, NULL);
-  _gtk_text_handle_set_relative_to (priv->text_handle, NULL);
 
   clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY);
   if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
@@ -4062,12 +4060,21 @@ gtk_entry_move_handle (GtkEntry              *entry,
     }
   else
     {
+      GtkAllocation primary, secondary;
       GdkRectangle rect;
+      gint win_x, win_y;
 
-      rect.x = CLAMP (x, 0, gdk_window_get_width (priv->text_area));
-      rect.y = y;
+      get_icon_allocations (entry, &primary, &secondary);
+      gtk_entry_get_text_area_size (entry, &win_x, &win_y, NULL, NULL);
+      rect.x = CLAMP (x, 0, gdk_window_get_width (priv->text_area)) + win_x;
+      rect.y = y + win_y;
       rect.width = 1;
       rect.height = height;
+
+      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+        rect.x += secondary.width;
+      else
+        rect.x += primary.width;
 
       _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
       _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
