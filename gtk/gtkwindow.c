@@ -131,6 +131,7 @@ struct _GtkWindowPopover
   GdkWindow *window;
   GtkPositionType pos;
   cairo_rectangle_int_t rect;
+  gulong unmap_id;
 };
 
 struct _GtkWindowPrivate
@@ -1332,6 +1333,12 @@ gtk_window_close (GtkWindow *window)
 static void
 popover_destroy (GtkWindowPopover *popover)
 {
+  if (popover->unmap_id)
+    {
+      g_signal_handler_disconnect (popover->widget, popover->unmap_id);
+      popover->unmap_id = 0;
+    }
+
   if (popover->widget && gtk_widget_get_parent (popover->widget))
     gtk_widget_unparent (popover->widget);
 
@@ -5426,6 +5433,24 @@ gtk_window_hide (GtkWidget *widget)
 }
 
 static void
+popover_unmap (GtkWidget        *widget,
+               GtkWindowPopover *popover)
+{
+  if (popover->window)
+    {
+      if (gtk_widget_is_visible (popover->widget))
+        gtk_widget_unmap (popover->widget);
+      gdk_window_hide (popover->window);
+    }
+
+  if (popover->unmap_id)
+    {
+      g_signal_handler_disconnect (widget, popover->unmap_id);
+      popover->unmap_id = 0;
+    }
+}
+
+static void
 popover_map (GtkWidget        *widget,
              GtkWindowPopover *popover)
 {
@@ -5434,7 +5459,11 @@ popover_map (GtkWidget        *widget,
       gdk_window_show (popover->window);
 
       if (gtk_widget_get_visible (popover->widget))
-        gtk_widget_map (popover->widget);
+        {
+          gtk_widget_map (popover->widget);
+          popover->unmap_id = g_signal_connect (popover->widget, "unmap",
+                                                G_CALLBACK (popover_unmap), popover);
+        }
     }
 }
 
@@ -5571,18 +5600,6 @@ gtk_window_map_event (GtkWidget   *widget,
       gdk_window_hide (gtk_widget_get_window (widget));
     }
   return FALSE;
-}
-
-static void
-popover_unmap (GtkWidget        *widget,
-               GtkWindowPopover *popover)
-{
-  if (popover->window)
-    {
-      if (gtk_widget_is_visible (popover->widget))
-        gtk_widget_unmap (popover->widget);
-      gdk_window_hide (popover->window);
-    }
 }
 
 static void
