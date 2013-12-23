@@ -35,8 +35,7 @@ enum {
 
 enum {
   PROP_0,
-  PROP_PARENT,
-  PROP_RELATIVE_TO
+  PROP_PARENT
 };
 
 struct _HandleWindow
@@ -55,7 +54,6 @@ struct _GtkTextHandlePrivate
 {
   HandleWindow windows[2];
   GtkWidget *parent;
-  GdkWindow *relative_to;
   guint mode : 2;
 };
 
@@ -306,9 +304,6 @@ gtk_text_handle_finalize (GObject *object)
 
   priv = GTK_TEXT_HANDLE (object)->priv;
 
-  if (priv->relative_to)
-    g_object_unref (priv->relative_to);
-
   if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget)
     gtk_widget_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
 
@@ -335,10 +330,6 @@ gtk_text_handle_set_property (GObject      *object,
     case PROP_PARENT:
       priv->parent = g_value_get_object (value);
       break;
-    case PROP_RELATIVE_TO:
-      _gtk_text_handle_set_relative_to (handle,
-                                        g_value_get_object (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -358,9 +349,6 @@ gtk_text_handle_get_property (GObject    *object,
     {
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
-      break;
-    case PROP_RELATIVE_TO:
-      g_value_set_object (value, priv->relative_to);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -403,13 +391,6 @@ _gtk_text_handle_class_init (GtkTextHandleClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class,
-                                   PROP_RELATIVE_TO,
-                                   g_param_spec_object ("relative-to",
-                                                        P_("Window"),
-                                                        P_("Window the coordinates are based upon"),
-                                                        GDK_TYPE_WINDOW,
-                                                        GTK_PARAM_READWRITE));
 }
 
 static void
@@ -424,27 +405,6 @@ _gtk_text_handle_new (GtkWidget *parent)
   return g_object_new (GTK_TYPE_TEXT_HANDLE,
                        "parent", parent,
                        NULL);
-}
-
-void
-_gtk_text_handle_set_relative_to (GtkTextHandle *handle,
-                                  GdkWindow     *window)
-{
-  GtkTextHandlePrivate *priv;
-
-  g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
-  g_return_if_fail (!window || GDK_IS_WINDOW (window));
-
-  priv = handle->priv;
-
-  if (priv->relative_to)
-    g_object_unref (priv->relative_to);
-
-  if (window)
-    g_object_ref (window);
-
-  priv->relative_to = window;
-  g_object_notify (G_OBJECT (handle), "relative-to");
 }
 
 void

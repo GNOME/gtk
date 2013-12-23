@@ -4251,8 +4251,6 @@ gtk_text_view_realize (GtkWidget *widget)
 
   /* Ensure updating the spot location. */
   gtk_text_view_update_im_spot_location (text_view);
-
-  _gtk_text_handle_set_relative_to (priv->text_handle, priv->text_window->window);
 }
 
 static void
@@ -4292,8 +4290,6 @@ gtk_text_view_unrealize (GtkWidget *widget)
 
   if (priv->bottom_window)
     text_window_unrealize (priv->bottom_window);
-
-  _gtk_text_handle_set_relative_to (priv->text_handle, NULL);
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
 }
