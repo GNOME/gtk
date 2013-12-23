@@ -12031,3 +12031,44 @@ gtk_window_set_popover_position (GtkWindow                   *window,
 
   gtk_widget_queue_resize (popover);
 }
+
+/**
+ * gtk_window_get_popover_position:
+ * @window: a #GtkWindow
+ * @popover: a #GtkWidget acting as popover
+ * @pos: return value for the position of @popover relative to @rect
+ * @rect: return value for the disclosure rectangle
+ *
+ * Returns the positioning details of @popover, relative to @window.
+ *
+ * Since: 3.12
+ **/
+void
+gtk_window_get_popover_position (GtkWindow             *window,
+                                 GtkWidget             *popover,
+                                 GtkPositionType       *pos,
+                                 cairo_rectangle_int_t *rect)
+{
+  GtkWindowPopover *data;
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_IS_WIDGET (popover));
+
+  priv = window->priv;
+  data = g_hash_table_lookup (priv->popovers, popover);
+
+  if (!data)
+    {
+      g_warning ("Widget %s(%p) is not a popover of window %s",
+                 gtk_widget_get_name (popover), popover,
+                 gtk_widget_get_name (GTK_WIDGET (window)));
+      return;
+    }
+
+  if (pos)
+    *pos = data->pos;
+
+  if (rect)
+    *rect = data->rect;
+}

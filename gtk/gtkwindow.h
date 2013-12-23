@@ -481,6 +481,11 @@ void     gtk_window_set_popover_position   (GtkWindow                   *window,
                                             GtkWidget                   *popover,
                                             GtkPositionType              pos,
                                             const cairo_rectangle_int_t *rect);
+GDK_AVAILABLE_IN_3_12
+void     gtk_window_get_popover_position   (GtkWindow                   *window,
+                                            GtkWidget                   *popover,
+                                            GtkPositionType             *pos,
+                                            cairo_rectangle_int_t       *rect);
 
 G_END_DECLS
 
