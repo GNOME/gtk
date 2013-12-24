@@ -19,16 +19,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-12-04 09:42+0000\n"
-"PO-Revision-Date: 2013-12-04 18:41+0300\n"
-"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
+"PO-Revision-Date: 2013-12-24 22:23+0400\n"
+"Last-Translator: Yuri Myasoedov <ymyasoedov@yandex.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:139
 #: ../gdk/gdkdevicemanager.c:170
@@ -635,7 +635,7 @@ msgstr "Расстояние между соседними столбцами"
 #: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:258 ../gtk/gtkstack.c:358
 #: ../gtk/gtktoolbar.c:563 ../gtk/gtktoolitemgroup.c:1646
 msgid "Homogeneous"
-msgstr "Гомогенность"
+msgstr "Однородный размер"
 
 #: ../gtk/deprecated/gtktable.c:228
 msgid "If TRUE, the table cells are all the same width/height"
@@ -969,7 +969,7 @@ msgid ""
 "right aligned"
 msgstr ""
 "Горизонтальное расположение вложенного элемента в доступном пространстве. "
-"0.0 -- выровнен по левому краю, 1.0 -- выровнен по правому краю"
+"«0.0» – выровнить по левому краю; «1.0» – выровнить по правому краю"
 
 #: ../gtk/gtkalignment.c:152
 msgid "Vertical alignment"
@@ -980,8 +980,8 @@ msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
-"Вертикальное расположение вложенного элемента в доступном пространстве. 0.0 "
-"-- выровнен по верхнему краю, 1.0 -- выровнен по нижнему краю"
+"Вертикальное расположение вложенного элемента в доступном пространстве. "
+"«0.0» – выровнить по верхнему краю; «1.0» – выровнить по нижнему краю"
 
 #: ../gtk/gtkalignment.c:161
 msgid "Horizontal scale"
@@ -1043,7 +1043,7 @@ msgstr "Пространство, добавляемое к элементу у�
 
 #: ../gtk/gtkappchooserbutton.c:615
 msgid "Include an 'Other…' item"
-msgstr "Включить элемент 'Другой...'"
+msgstr "Включить элемент «Другой…»"
 
 #: ../gtk/gtkappchooserbutton.c:616
 msgid ""
@@ -1977,7 +1977,8 @@ msgstr "Имеет запись"
 #: ../gtk/gtkcellrenderercombo.c:170
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
 msgstr ""
-"Если не установлено, не позволять вводить строки, отличные от выбранных"
+"Если не установлено, не позволять вводить строки, которые отличаются от "
+"выбранных"
 
 #: ../gtk/gtkcellrendererpixbuf.c:150
 msgid "Pixbuf Object"
@@ -2054,7 +2055,7 @@ msgstr "Значок"
 
 #: ../gtk/gtkcellrendererprogress.c:138
 msgid "Value of the progress bar"
-msgstr "Значение индикатора хода процесса"
+msgstr "Значение индикатора выполнения"
 
 #: ../gtk/gtkcellrendererprogress.c:155 ../gtk/gtkcellrenderertext.c:253
 #: ../gtk/gtkentrybuffer.c:348 ../gtk/gtkentry.c:860
@@ -2065,7 +2066,7 @@ msgstr "Текст"
 
 #: ../gtk/gtkcellrendererprogress.c:156
 msgid "Text on the progress bar"
-msgstr "Текст на индикаторе хода процесса"
+msgstr "Текст на индикаторе выполнения"
 
 #: ../gtk/gtkcellrendererprogress.c:179 ../gtk/gtkcellrendererspinner.c:143
 msgid "Pulse"
@@ -2076,8 +2077,8 @@ msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
 msgstr ""
-"Установите это свойство в положительное значение, чтобы показать, что "
-"продвижение в работе достигнуто но количественно его оценить невозможно"
+"Установите это свойство в положительное значение, чтобы показать ход "
+"выполнения некоторого процесса, который невозможно оценить количественно."
 
 #: ../gtk/gtkcellrendererprogress.c:196
 msgid "Text x alignment"
@@ -2088,8 +2089,8 @@ msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
-"Горизонтальное выравнивание от 0 (влево) до 1 (вправо). Инвертируется для "
-"раскладки RTL"
+"Горизонтальное выравнивание текста: от «0» (слева) до «1» (справа). "
+"Инвертируется для правосторонних раскладок."
 
 #: ../gtk/gtkcellrendererprogress.c:213
 msgid "Text y alignment"
@@ -2097,7 +2098,7 @@ msgstr "Выравнивание текста по Y"
 
 #: ../gtk/gtkcellrendererprogress.c:214
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
-msgstr "Вертикальное выравнивание от 0 (вверх) до 1 (вниз)."
+msgstr "Вертикальное выравнивание: от «0» (сверху) до «1» (снизу)."
 
 #: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtklevelbar.c:994
 #: ../gtk/gtkprogressbar.c:150 ../gtk/gtkrange.c:443
@@ -2136,11 +2137,12 @@ msgstr "Количество отображаемых десятичных ра�
 
 #: ../gtk/gtkcellrendererspinner.c:126
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr "Активна ли вертушка (то есть отображается) в ячейке"
+msgstr "Включён ли (отображается) волчок в ячейке"
 
+# Под вращением (пульсацией) подразумевается смена кадров, которая создаёт эффект вращения
 #: ../gtk/gtkcellrendererspinner.c:144
 msgid "Pulse of the spinner"
-msgstr "Пульсация вертушки"
+msgstr "Вращение волчка"
 
 #: ../gtk/gtkcellrendererspinner.c:158
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
@@ -2734,11 +2736,11 @@ msgstr "Выделяемый"
 
 #: ../gtk/gtkcolorswatch.c:782
 msgid "Whether the swatch is selectable"
-msgstr "Можно ли выделить образец"
+msgstr "Можно ли выделить экземпляр"
 
 #: ../gtk/gtkcombobox.c:730
 msgid "ComboBox model"
-msgstr "Модель элемента ComboBox"
+msgstr "Модель ComboBox"
 
 #: ../gtk/gtkcombobox.c:731
 msgid "The model for the combo box"
@@ -2782,7 +2784,7 @@ msgstr "Имеет рамку"
 
 #: ../gtk/gtkcombobox.c:853
 msgid "Whether the combo box draws a frame around the child"
-msgstr "Имеет ли выпадающее меню рамку вокруг дочернего элемента"
+msgstr "Имеет ли выпадающий список рамку вокруг дочернего элемента"
 
 #: ../gtk/gtkcombobox.c:861
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
@@ -2790,7 +2792,7 @@ msgstr "Перехватывает ли выпадающее меню фокус
 
 #: ../gtk/gtkcombobox.c:878 ../gtk/gtkmenu.c:620
 msgid "Tearoff Title"
-msgstr "Заголовок отделённого меню"
+msgstr "Заголовок отрывного меню"
 
 #: ../gtk/gtkcombobox.c:879
 msgid ""
@@ -3117,15 +3119,15 @@ msgstr "Содержимое поля ввода"
 
 #: ../gtk/gtkentry.c:876 ../gtk/gtkmisc.c:103
 msgid "X align"
-msgstr "Выравнивание по X"
+msgstr "Выравнивание по оси X"
 
 #: ../gtk/gtkentry.c:877 ../gtk/gtkmisc.c:104
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
-"Горизонтальное выравнивание от 0 (влево) до 1 (вправо). Инвертируется для "
-"формата RTL."
+"Горизонтальное выравнивание: от «0» (слева) до «1» (справа). Инвертируется "
+"для правосторонних раскладок."
 
 #: ../gtk/gtkentry.c:893
 msgid "Truncate multiline"
@@ -3780,7 +3782,7 @@ msgstr "Виджет, который будет отображаться вме�
 
 #: ../gtk/gtkgrid.c:1729
 msgid "Row Homogeneous"
-msgstr "Гомогенность строки"
+msgstr "Однородные строки"
 
 #: ../gtk/gtkgrid.c:1730
 msgid "If TRUE, the rows are all the same height"
@@ -3788,7 +3790,7 @@ msgstr "Если установлено, то строки имеют одина
 
 #: ../gtk/gtkgrid.c:1736
 msgid "Column Homogeneous"
-msgstr "Гомогенность столбца"
+msgstr "Однородные столбцы"
 
 #: ../gtk/gtkgrid.c:1737
 msgid "If TRUE, the columns are all the same width"
@@ -4172,7 +4174,7 @@ msgstr ""
 
 #: ../gtk/gtklabel.c:800
 msgid "Whether the label text can be selected with the mouse"
-msgstr "Может ли текст метки быть выделен с помощью мыши"
+msgstr "Можно ли выделить текст метки с помощью мыши"
 
 #: ../gtk/gtklabel.c:806
 msgid "Mnemonic key"
@@ -4390,7 +4392,7 @@ msgstr "Пространство между тенью панели меню и 
 
 #: ../gtk/gtkmenubutton.c:513
 msgid "popup"
-msgstr "всплывающее меню"
+msgstr "Всплывающее меню"
 
 #: ../gtk/gtkmenubutton.c:514
 msgid "The dropdown menu."
@@ -4398,7 +4400,7 @@ msgstr "Выпадающее меню."
 
 #: ../gtk/gtkmenubutton.c:530
 msgid "menu-model"
-msgstr "модель меню"
+msgstr "Модель меню"
 
 #: ../gtk/gtkmenubutton.c:531
 msgid "The dropdown menu's model."
@@ -4406,19 +4408,19 @@ msgstr "Модель выпадающего меню."
 
 #: ../gtk/gtkmenubutton.c:544
 msgid "align-widget"
-msgstr "виджет-выравниватель"
+msgstr "Выравнивающий виджет"
 
 #: ../gtk/gtkmenubutton.c:545
 msgid "The parent widget which the menu should align with."
-msgstr "Родительский виджет, с помощью которого должны быть выровнено меню."
+msgstr "Родительский виджет, с помощью которого должно быть выровнено меню."
 
 #: ../gtk/gtkmenubutton.c:559
 msgid "direction"
-msgstr "направление"
+msgstr "Направление"
 
 #: ../gtk/gtkmenubutton.c:560
 msgid "The direction the arrow should point."
-msgstr "Направление, в котором указывает стрелка."
+msgstr "Направление, на которое указывает стрелка."
 
 #: ../gtk/gtkmenu.c:558
 msgid "The currently selected menu item"
@@ -4736,15 +4738,15 @@ msgstr "Индекс текущей страницы"
 
 #: ../gtk/gtknotebook.c:707
 msgid "Tab Position"
-msgstr "Размещение вкладки"
+msgstr "Размещение вкладок"
 
 #: ../gtk/gtknotebook.c:708
 msgid "Which side of the notebook holds the tabs"
-msgstr "На какой стороне блокнота помещаются вкладки"
+msgstr "На какой стороне блокнота находятся вкладки"
 
 #: ../gtk/gtknotebook.c:715
 msgid "Show Tabs"
-msgstr "Показать вкладки"
+msgstr "Показывать вкладки"
 
 #: ../gtk/gtknotebook.c:716
 msgid "Whether tabs should be shown"
@@ -4756,38 +4758,37 @@ msgstr "Показывать границу"
 
 #: ../gtk/gtknotebook.c:723
 msgid "Whether the border should be shown"
-msgstr "Будет ли отображаться граница"
+msgstr "Показывать ли границу"
 
 #: ../gtk/gtknotebook.c:729
 msgid "Scrollable"
-msgstr "Прокручиваемый"
+msgstr "С прокруткой"
 
 #: ../gtk/gtknotebook.c:730
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
-"Если установлено, то стрелки прокрутки будут добавлены, если есть слишком "
-"много вкладок, чтобы поместиться в окне"
+"Если установлено, то при наличии большого количества вкладок добавляются "
+"стрелки прокрутки"
 
 #: ../gtk/gtknotebook.c:736
 msgid "Enable Popup"
-msgstr "Включить всплывающие меню"
+msgstr "Всплывающие меню"
 
 #: ../gtk/gtknotebook.c:737
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
-"Если установлено, то при нажатии правой клавиши мыши в области блокнота "
-"появится всплывающее меню, которое можно использовать для перемещения по "
-"страницам"
+"Если установлено, то нажатие правой кнопки мыши в области блокнота открывает "
+"всплывающее меню для перемещения по страницам"
 
 #: ../gtk/gtknotebook.c:751
 msgid "Group Name"
-msgstr "Имя группы"
+msgstr "Название группы"
 
 #: ../gtk/gtknotebook.c:752
 msgid "Group name for tab drag and drop"
-msgstr "Имя группы для отсоединения и переноса вкладки"
+msgstr "Название группы для перетаскивания вкладок"
 
 #: ../gtk/gtknotebook.c:759
 msgid "Tab label"
@@ -4960,16 +4961,16 @@ msgstr "Ориентация элемента"
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
-"Позиция разделителя в пикселях (0 означает все пространство до левого "
-"верхнего угла)"
+"Положение разделителя в пикселах («0» – всё пространство до левой или "
+"верхней границы)"
 
 #: ../gtk/gtkpaned.c:360
 msgid "Position Set"
-msgstr "Задавать положение"
+msgstr "Установленное положение"
 
 #: ../gtk/gtkpaned.c:361
 msgid "TRUE if the Position property should be used"
-msgstr "Если установлено, то будет использоваться параметр «Position»"
+msgstr "Если установлено, то будет использоваться свойство «Положение»"
 
 #: ../gtk/gtkpaned.c:367
 msgid "Handle Size"
@@ -4981,19 +4982,19 @@ msgstr "Ширина элемента"
 
 #: ../gtk/gtkpaned.c:384
 msgid "Minimal Position"
-msgstr "Минимальная позиция"
+msgstr "Минимальное положение"
 
 #: ../gtk/gtkpaned.c:385
 msgid "Smallest possible value for the \"position\" property"
-msgstr "Наименьшее возможное значение для параметра «position»"
+msgstr "Наименьшее возможное значение для свойства «положение»"
 
 #: ../gtk/gtkpaned.c:402
 msgid "Maximal Position"
-msgstr "Максимальная позиция"
+msgstr "Максимальное положение"
 
 #: ../gtk/gtkpaned.c:403
 msgid "Largest possible value for the \"position\" property"
-msgstr "Наибольшее возможное значение для параметра «position»"
+msgstr "Наибольшее возможное значение для свойства «положение»"
 
 #: ../gtk/gtkpaned.c:420
 msgid "Resize"
@@ -7386,7 +7387,8 @@ msgstr "Расширяются ли элементы при увеличении
 
 #: ../gtk/gtktoolbar.c:564 ../gtk/gtktoolitemgroup.c:1647
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr "Имеют ли все гомогенные элементы одинаковый размер"
+msgstr ""
+"Должен ли элемент иметь такой же размер, как и другие однородные элементы"
 
 #: ../gtk/gtktoolbar.c:571
 msgid "Spacer size"
@@ -7864,9 +7866,10 @@ msgstr "Образец штрихов для отображения линии, 
 msgid "Whether to display the column"
 msgstr "Отображать ли столбец"
 
+# Окно или столбец GtkTreeView
 #: ../gtk/gtktreeviewcolumn.c:254 ../gtk/gtkwindow.c:727
 msgid "Resizable"
-msgstr "С изменяемым размером"
+msgstr "Может изменять размер"
 
 #: ../gtk/gtktreeviewcolumn.c:255
 msgid "Column is user-resizable"
@@ -8054,11 +8057,11 @@ msgstr "Получает ли виджет фокус ввода в окне"
 
 #: ../gtk/gtkwidget.c:1226
 msgid "Can default"
-msgstr "Выбирается по умолчанию"
+msgstr "Может выбираться по умолчанию"
 
 #: ../gtk/gtkwidget.c:1227
 msgid "Whether the widget can be the default widget"
-msgstr "Может ли виджет быть «элементом по умолчанию»"
+msgstr "Может ли виджет быть виджетом по умолчанию"
 
 #: ../gtk/gtkwidget.c:1233
 msgid "Has default"
@@ -8066,7 +8069,7 @@ msgstr "Выбран по умолчанию"
 
 #: ../gtk/gtkwidget.c:1234
 msgid "Whether the widget is the default widget"
-msgstr "Является ли виджет «исходным виджетом»"
+msgstr "Является ли виджет виджетом по умолчанию"
 
 #: ../gtk/gtkwidget.c:1240
 msgid "Receives default"
@@ -8124,11 +8127,11 @@ msgstr "Окно виджета, если виджет размещён на э�
 
 #: ../gtk/gtkwidget.c:1370
 msgid "Double Buffered"
-msgstr "Дважды буферизован"
+msgstr "Двойная буферизация"
 
 #: ../gtk/gtkwidget.c:1371
 msgid "Whether the widget is double buffered"
-msgstr "Должен ли виджет дважды буферизовываться"
+msgstr "Должен ли виджет использовать двойную буферизацию"
 
 #: ../gtk/gtkwidget.c:1386
 msgid "How to position in extra horizontal space"
@@ -8423,11 +8426,11 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:743
 msgid "Window Position"
-msgstr "Позиция окна"
+msgstr "Положение окна"
 
 #: ../gtk/gtkwindow.c:744
 msgid "The initial position of the window"
-msgstr "Начальная позиция окна"
+msgstr "Исходное положение окна"
 
 #: ../gtk/gtkwindow.c:752
 msgid "Default Width"
@@ -8488,17 +8491,18 @@ msgstr "Будут ли видимы фокусные прямоугольник
 msgid "Name of the themed icon for this window"
 msgstr "Имя значка из темы для окна"
 
+# Окно
 #: ../gtk/gtkwindow.c:863
 msgid "Is Active"
-msgstr "Активный"
+msgstr "Активное"
 
 #: ../gtk/gtkwindow.c:864
 msgid "Whether the toplevel is the current active window"
-msgstr "Является ли окно активным"
+msgstr "Является ли окно текущим активным окном"
 
 #: ../gtk/gtkwindow.c:871
 msgid "Focus in Toplevel"
-msgstr "/Фокус находится в окне"
+msgstr "Фокус находится в окне"
 
 #: ../gtk/gtkwindow.c:872
 msgid "Whether the input focus is within this GtkWindow"
@@ -8513,29 +8517,30 @@ msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
-"Подсказка (hint), позволяющая оконному окружению понять, к какому типу "
-"относится данное окно и как с ним обходиться."
+"Подсказка, позволяющая окружению рабочего стола понять, к какому типу "
+"относится данное окно и как им управлять."
 
 #: ../gtk/gtkwindow.c:888
 msgid "Skip taskbar"
-msgstr "Скрыть из переключателя задач"
+msgstr "Убрать из панели задач"
 
 #: ../gtk/gtkwindow.c:889
 msgid "TRUE if the window should not be in the task bar."
-msgstr "Установлено, если окно не должно быть видимо в переключателе задач."
+msgstr "Установлено, если окно не должно показываться в панели задач."
 
 #: ../gtk/gtkwindow.c:896
 msgid "Skip pager"
-msgstr "Скрыть из переключателя рабочих мест"
+msgstr "Убрать из переключателя рабочих мест"
 
 #: ../gtk/gtkwindow.c:897
 msgid "TRUE if the window should not be in the pager."
 msgstr ""
-"Установлено, если окно не должно быть видимо в переключателе рабочих мест."
+"Установлено, если окно не должно показываться в переключателе рабочих мест."
 
+# Окно
 #: ../gtk/gtkwindow.c:904
 msgid "Urgent"
-msgstr "Срочно"
+msgstr "Безотлагательное"
 
 #: ../gtk/gtkwindow.c:905
 msgid "TRUE if the window should be brought to the user's attention."
@@ -8549,25 +8554,27 @@ msgstr "Принимать фокус"
 msgid "TRUE if the window should receive the input focus."
 msgstr "Если установлено, окно должно принимать фокус ввода."
 
+# Об отображении см. http://tronche.com/gui/x/xlib/window/map.html
 #: ../gtk/gtkwindow.c:934
 msgid "Focus on map"
 msgstr "Фокус при отображении"
 
+# Об отображении см. http://tronche.com/gui/x/xlib/window/map.html
 #: ../gtk/gtkwindow.c:935
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "Если установлено, окно должно принимать фокус ввода при отображении."
 
 #: ../gtk/gtkwindow.c:949
 msgid "Decorated"
-msgstr "Отделан"
+msgstr "Декорированное"
 
 #: ../gtk/gtkwindow.c:950
 msgid "Whether the window should be decorated by the window manager"
-msgstr "Должно ли окно отделываться диспетчером окон"
+msgstr "Должно ли окно декорироваться диспетчером окон"
 
 #: ../gtk/gtkwindow.c:964
 msgid "Deletable"
-msgstr "Выделяемый"
+msgstr "Удаляемое"
 
 #: ../gtk/gtkwindow.c:965
 msgid "Whether the window frame should have a close button"
@@ -8579,15 +8586,15 @@ msgstr "Уголок изменения размера"
 
 #: ../gtk/gtkwindow.c:985
 msgid "Specifies whether the window should have a resize grip"
-msgstr "Определяет, должно ли окно иметь уголок изменения размера"
+msgstr "Имеет ли окно уголок для изменения размера"
 
 #: ../gtk/gtkwindow.c:999
 msgid "Resize grip is visible"
-msgstr "Уголок изменения размера видим"
+msgstr "Показывать уголок изменения размера"
 
 #: ../gtk/gtkwindow.c:1000
 msgid "Specifies whether the window's resize grip is visible."
-msgstr "Определяет, видим ли уголок изменения размера у окна"
+msgstr "Показывать ли уголок изменения размера у окна."
 
 #: ../gtk/gtkwindow.c:1016
 msgid "Gravity"
@@ -8595,7 +8602,7 @@ msgstr "Притяжение"
 
 #: ../gtk/gtkwindow.c:1017
 msgid "The window gravity of the window"
-msgstr "Притяжение окна к окнам"
+msgstr "Притяжение окна"
 
 #: ../gtk/gtkwindow.c:1034
 msgid "Transient for Window"
