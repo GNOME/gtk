@@ -54,6 +54,7 @@
 #include "gtkpopover.h"
 #include "gtktoolbar.h"
 #include "gtkpixelcacheprivate.h"
+#include "gtkmagnifierprivate.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -139,6 +140,9 @@ struct _GtkTextViewPrivate
   GtkTextHandle *text_handle;
   GtkWidget *selection_bubble;
   guint selection_bubble_timeout_id;
+
+  GtkWidget *magnifier_popover;
+  GtkWidget *magnifier;
 
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;
@@ -1542,6 +1546,15 @@ gtk_text_view_init (GtkTextView *text_view)
                     G_CALLBACK (gtk_text_view_handle_dragged), text_view);
   g_signal_connect (priv->text_handle, "drag-finished",
                     G_CALLBACK (gtk_text_view_handle_drag_finished), text_view);
+
+  priv->magnifier = _gtk_magnifier_new (widget);
+  gtk_widget_set_size_request (priv->magnifier, 100, 60);
+  _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
+  priv->magnifier_popover = gtk_popover_new (widget);
+  gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
+                     priv->magnifier);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->magnifier_popover), 4);
+  gtk_widget_show (priv->magnifier);
 }
 
 /**
@@ -3215,6 +3228,7 @@ gtk_text_view_finalize (GObject *object)
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
+  gtk_widget_destroy (priv->magnifier_popover);
   g_object_unref (priv->text_handle);
   g_object_unref (priv->im_context);
 
@@ -4589,6 +4603,30 @@ gtk_text_view_set_handle_position (GtkTextView           *text_view,
 }
 
 static void
+gtk_text_view_show_magnifier (GtkTextView *text_view,
+                              gint         x,
+                              gint         y)
+{
+  cairo_rectangle_int_t rect;
+  GtkTextViewPrivate *priv;
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (GTK_WIDGET (text_view), &allocation);
+
+  priv = text_view->priv;
+  x = CLAMP (x, 0, allocation.width);
+  y = CLAMP (y, 0, allocation.height);
+  rect.x = x;
+  rect.y = y;
+  rect.width = rect.height = 1;
+
+  _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), x, y);
+  gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
+                               &rect);
+  gtk_widget_show (priv->magnifier_popover);
+}
+
+static void
 gtk_text_view_handle_dragged (GtkTextHandle         *handle,
                               GtkTextHandlePosition  pos,
                               gint                   x,
@@ -4672,6 +4710,8 @@ gtk_text_view_handle_dragged (GtkTextHandle         *handle,
         gtk_text_view_scroll_mark_onscreen (text_view,
                                             gtk_text_buffer_get_selection_bound (buffer));
     }
+
+  gtk_text_view_show_magnifier (text_view, x, y);
 }
 
 static void
@@ -4680,6 +4720,7 @@ gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
                                     GtkTextView           *text_view)
 {
   gtk_text_view_selection_bubble_popup_set (text_view);
+  gtk_widget_hide (text_view->priv->magnifier_popover);
 }
 
 static void
@@ -6948,7 +6989,10 @@ selection_motion_event_handler (GtkTextView    *text_view,
   g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk+] selection_scan_timeout");
 
   if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
-    gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
+    {
+      gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
+      gtk_text_view_show_magnifier (text_view, event->x, event->y);
+    }
 
   return TRUE;
 }
@@ -7067,6 +7111,8 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view)
   gtk_device_grab_remove (GTK_WIDGET (text_view),
                           priv->grab_device);
   priv->grab_device = NULL;
+
+  gtk_widget_hide (priv->magnifier_popover);
 
   return TRUE;
 }
