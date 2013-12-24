@@ -65,6 +65,7 @@
 #include "gtktexthandleprivate.h"
 #include "gtkpopover.h"
 #include "gtktoolbar.h"
+#include "gtkmagnifierprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -162,6 +163,9 @@ struct _GtkEntryPrivate
   GtkTextHandle *text_handle;
   GtkWidget     *selection_bubble;
   guint          selection_bubble_timeout_id;
+
+  GtkWidget     *magnifier_popover;
+  GtkWidget     *magnifier;
 
   gfloat        xalign;
 
@@ -2665,6 +2669,15 @@ gtk_entry_init (GtkEntry *entry)
                     G_CALLBACK (gtk_entry_handle_dragged), entry);
   g_signal_connect (priv->text_handle, "drag-finished",
                     G_CALLBACK (gtk_entry_handle_drag_finished), entry);
+
+  priv->magnifier = _gtk_magnifier_new (GTK_WIDGET (entry));
+  gtk_widget_set_size_request (priv->magnifier, 100, 60);
+  _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
+  priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (entry));
+  gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
+                     priv->magnifier);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->magnifier_popover), 4);
+  gtk_widget_show (priv->magnifier);
 }
 
 static void
@@ -2904,6 +2917,7 @@ gtk_entry_finalize (GObject *object)
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
+  gtk_widget_destroy (priv->magnifier_popover);
   g_object_unref (priv->text_handle);
   g_free (priv->placeholder_text);
   g_free (priv->im_module);
@@ -4419,7 +4433,10 @@ gtk_entry_button_release (GtkWidget      *widget,
       priv->in_drag = 0;
     }
   else if (is_touchscreen)
-    gtk_entry_selection_bubble_popup_set (entry);
+    {
+      gtk_entry_selection_bubble_popup_set (entry);
+      gtk_widget_hide (priv->magnifier_popover);
+    }
 
   priv->button = 0;
   priv->device = NULL;
@@ -4440,6 +4457,34 @@ _gtk_entry_get_selected_text (GtkEntry *entry)
     text = gtk_editable_get_chars (editable, start_text, end_text);
 
   return text;
+}
+
+static void
+gtk_entry_show_magnifier (GtkEntry *entry,
+                          gint      x,
+                          gint      y)
+{
+  GtkAllocation allocation, primary, secondary;
+  cairo_rectangle_int_t rect;
+  GtkEntryPrivate *priv;
+
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+  get_icon_allocations (entry, &primary, &secondary);
+
+  priv = entry->priv;
+  rect.x = CLAMP (x, 0, allocation.width);
+  rect.y = CLAMP (y, 0, allocation.height);
+  rect.width = rect.height = 1;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+    rect.x += secondary.width;
+  else
+    rect.x += primary.width;
+
+  _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), rect.x, rect.y);
+  gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
+                               &rect);
+  gtk_widget_show (priv->magnifier_popover);
 }
 
 static gint
@@ -4610,10 +4655,19 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 
       /* Update touch handles' position */
       if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
-        gtk_entry_update_handles (entry,
-                                  (priv->current_pos == priv->selection_bound) ?
-                                  GTK_TEXT_HANDLE_MODE_CURSOR :
-                                  GTK_TEXT_HANDLE_MODE_SELECTION);
+        {
+          gint x, y;
+
+          gtk_entry_update_handles (entry,
+                                    (priv->current_pos == priv->selection_bound) ?
+                                    GTK_TEXT_HANDLE_MODE_CURSOR :
+                                    GTK_TEXT_HANDLE_MODE_SELECTION);
+
+          gtk_entry_get_text_area_size (entry, &x, &y, NULL, NULL);
+          x += event->x;
+          y += event->y;
+          gtk_entry_show_magnifier (entry, x, y);
+        }
     }
 
   return TRUE;
@@ -6465,6 +6519,8 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
 
       gtk_entry_update_handles (entry, mode);
     }
+
+  gtk_entry_show_magnifier (entry, x, y);
 }
 
 static void
@@ -6473,6 +6529,7 @@ gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
                                 GtkEntry              *entry)
 {
   gtk_entry_selection_bubble_popup_set (entry);
+  gtk_widget_hide (entry->priv->magnifier_popover);
 }
 
 
