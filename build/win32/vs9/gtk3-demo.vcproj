@@ -179,8 +179,10 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\editable_cells.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\entry_buffer.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\entry_completion.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\event_axes.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\expander.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\flowbox.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\headerbar.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\hypertext.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\iconview.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\iconview_edit.c" />

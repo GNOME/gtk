@@ -188,8 +188,10 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\editable_cells.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\entry_buffer.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\entry_completion.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\event_axes.c" />	
     <ClCompile Include="..\..\..\demos\gtk-demo\expander.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\flowbox.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\headerbar.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\hypertext.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\iconview.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\iconview_edit.c" />

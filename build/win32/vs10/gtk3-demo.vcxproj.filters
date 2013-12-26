@@ -30,8 +30,10 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\editable_cells.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\entry_buffer.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\entry_completion.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\event_axes.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\expander.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\flowbox.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\headerbar.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\hypertext.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\iconview.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\iconview_edit.c"><Filter>Source Files</Filter></ClCompile>
