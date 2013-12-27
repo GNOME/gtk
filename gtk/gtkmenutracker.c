@@ -141,8 +141,8 @@ gtk_menu_tracker_section_find_model (GtkMenuTrackerSection *section,
  *
  * could_have_separator is true in two situations:
  *
- *  - our parent section had with_separators defined and we are not the
- *    first section (ie: we should add a separator if we have content in
+ *  - our parent section had with_separators defined and there are items
+ *    before us (ie: we should add a separator if we have content in
  *    order to divide us from the items above)
  *
  *  - if we had a 'label' attribute set for this section
@@ -177,7 +177,7 @@ gtk_menu_tracker_section_sync_separators (GtkMenuTrackerSection *section,
         {
           gboolean could_have_separator;
 
-          could_have_separator = (section->with_separators && i > 0) ||
+          could_have_separator = (section->with_separators && n_items > 0) ||
                                  g_menu_model_get_item_attribute (section->model, i, "label", "s", NULL);
 
           n_items += gtk_menu_tracker_section_sync_separators (subsection, tracker, offset + n_items,
