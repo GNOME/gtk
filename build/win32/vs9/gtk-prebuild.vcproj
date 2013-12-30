@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9.00"
+	Name="gtk-prebuild"
+	ProjectGUID="{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FF}"
+	RootNamespace="gtkprebuild"
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-gen-srcs.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-gen-srcs.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			>
+		</Configuration>
+		<Configuration
+			Name="Debug_Broadway|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-gen-srcs.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			>
+		</Configuration>
+		<Configuration
+			Name="Debug_Broadway|x64"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-gen-srcs.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-gen-srcs.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			WholeProgramOptimization="1"
+			>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-gen-srcs.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			WholeProgramOptimization="1"
+			>
+		</Configuration>
+		<Configuration
+			Name="Release_Broadway|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-gen-srcs.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			WholeProgramOptimization="1"
+			>
+		</Configuration>
+		<Configuration
+			Name="Release_Broadway|x64"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-gen-srcs.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			WholeProgramOptimization="1"
+			>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
+			<File RelativePath="..\..\..\config.h.win32">
+				<FileConfiguration Name="Debug|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying config.h from config.h.win32..."
+						CommandLine="$(GenConfigH)"
+						Outputs="..\..\..\config.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying config.h from config.h.win32..."
+						CommandLine="$(GenConfigH)"
+						Outputs="..\..\..\config.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying config.h from config.h.win32..."
+						CommandLine="$(GenConfigH)"
+						Outputs="..\..\..\config.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying config.h from config.h.win32..."
+						CommandLine="$(GenConfigH)"
+						Outputs="..\..\..\config.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying config.h from config.h.win32..."
+						CommandLine="$(GenConfigH)"
+						Outputs="..\..\..\config.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying config.h from config.h.win32..."
+						CommandLine="$(GenConfigH)"
+						Outputs="..\..\..\config.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying config.h from config.h.win32..."
+						CommandLine="$(GenConfigH)"
+						Outputs="..\..\..\config.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying config.h from config.h.win32..."
+						CommandLine="$(GenConfigH)"
+						Outputs="..\..\..\config.h"
+					/>
+				</FileConfiguration>
+			</File>
+			<File RelativePath="..\..\..\gdk\gdkconfig.h.win32">
+				<FileConfiguration Name="Debug|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying gdkconfig.h from gdkconfig.h.win32..."
+						CommandLine="$(GenGdkConfigHWin32)"
+						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(ConfigurationName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying gdkconfig.h from gdkconfig.h.win32..."
+						CommandLine="$(GenGdkConfigHWin32)"
+						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(ConfigurationName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying gdkconfig.h from gdkconfig.h.win32..."
+						CommandLine="$(GenGdkConfigHWin32)"
+						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(ConfigurationName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying gdkconfig.h from gdkconfig.h.win32..."
+						CommandLine="$(GenGdkConfigHWin32)"
+						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(ConfigurationName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File RelativePath="..\..\..\gdk\gdkconfig.h.win32_broadway">
+				<FileConfiguration Name="Debug_Broadway|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying gdkconfig.h from gdkconfig.h.win32_broadway..."
+						CommandLine="$(GenGdkConfigHBroadway)"
+						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(ConfigurationName)_Broadway"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying gdkconfig.h from gdkconfig.h.win32_broadway..."
+						CommandLine="$(GenGdkConfigHBroadway)"
+						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(ConfigurationName)_Broadway"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying gdkconfig.h from gdkconfig.h.win32_broadway..."
+						CommandLine="$(GenGdkConfigHBroadway)"
+						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(ConfigurationName)_Broadway"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying gdkconfig.h from gdkconfig.h.win32_broadway..."
+						CommandLine="$(GenGdkConfigHBroadway)"
+						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(ConfigurationName)_Broadway"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

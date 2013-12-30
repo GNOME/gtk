@@ -3,12 +3,11 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="gtkcopygdkbroadwayprops"
+	InheritedPropertySheets=".\gtk-build-defines.vsprops"
 	>
 	<Tool
 		Name="VCPostBuildEventTool"
 		CommandLine="
-if &quot;$(ConfigurationName)&quot; == &quot;Release&quot; goto END&#x0D;&#x0A;
-if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; goto END&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; goto DoRelease&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; goto DoDebug&#x0D;&#x0A;
 

@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="gtkignorebroadwayprops"
+	InheritedPropertySheets=".\gtk-build-defines.vsprops"
 	>
 	<Tool
 		Name="VCLinkerTool"

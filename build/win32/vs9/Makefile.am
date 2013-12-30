@@ -3,6 +3,7 @@ include $(top_srcdir)/Makefile.decl
 EXTRA_DIST +=	\
 	README.txt	\
 	gtk+.sln	\
+	gdk-prebuild.vcproj	\
 	gdk-win32.vcproj	\
 	gdk.vcproj	\
 	gdk.vcprojin	\
@@ -18,14 +19,11 @@ EXTRA_DIST +=	\
 	broadwayd.vcproj	\
 	gdk-broadway.vcproj	\
 	gtk-build-defines.vsprops	\
+	gtk-copy-gdk-broadway.vsprops	\
+	gtk-gen-srcs.vsprops	\
 	gtk-gengir.vsprops	\
 	gtk-ignore-broadway.vsprops	\
-	gtk-install-bin.vsprops	\
-	gtk-install-headers-data.vsprops	\
-	gtk-version-paths.vsprops	\
-	gtkprebuild.vsprops	\
-	gtkprebuild-broadway.vsprops	\
-	gtk-copy-gdk-broadway.vsprops	\
-	gtk-gen-sources.vsprops
+	gtk-install.vsprops	\
+	gtk-version-paths.vsprops
 
 -include $(top_srcdir)/git.mk

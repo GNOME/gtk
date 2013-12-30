@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug_Broadway|Win32"
-			InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild-broadway.vsprops"
+			InheritedPropertySheets=".\gtk-build-defines.vsprops"
 			ConfigurationType="1"
 			CharacterSet="2"
 			>
@@ -51,7 +51,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release_Broadway|Win32"
-			InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild-broadway.vsprops"
+			InheritedPropertySheets=".\gtk-build-defines.vsprops"
 			ConfigurationType="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -84,7 +84,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug_Broadway|x64"
-			InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild-broadway.vsprops"
+			InheritedPropertySheets=".\gtk-build-defines.vsprops"
 			ConfigurationType="1"
 			CharacterSet="2"
 			>
@@ -115,7 +115,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release_Broadway|x64"
-			InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild-broadway.vsprops"
+			InheritedPropertySheets=".\gtk-build-defines.vsprops"
 			ConfigurationType="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
