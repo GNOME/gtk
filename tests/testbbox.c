@@ -23,8 +23,7 @@
 GtkWidget *bbox = NULL;
 GtkWidget *hbbox = NULL, *vbbox = NULL;
 
-static const char* styles[] = { "GTK_BUTTONBOX_DEFAULT_STYLE",
-				"GTK_BUTTONBOX_SPREAD",
+static const char* styles[] = { "GTK_BUTTONBOX_SPREAD",
 				"GTK_BUTTONBOX_EDGE",
 				"GTK_BUTTONBOX_START",
 				"GTK_BUTTONBOX_END",
@@ -51,16 +50,10 @@ static void
 combo_changed_cb (GtkComboBoxText *combo,
 		  gpointer user_data)
 {
-  char *text;
-  int i;
-  
-  text = gtk_combo_box_text_get_active_text (combo);
-  
-  for (i = 0; styles[i]; i++) {
-    if (g_str_equal (text, styles[i])) {
-      gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), (GtkButtonBoxStyle)i);
-    }
-  }
+  gint active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox),
+			     (GtkButtonBoxStyle) (active + 1));
 }
 
 static void
@@ -82,19 +75,19 @@ combo_types_changed_cb (GtkComboBoxText *combo,
   char *text;
   GtkWidget *old_parent, *new_parent;
   GtkButtonBoxStyle style;
-  
-  text = gtk_combo_box_text_get_active_text (combo);
-  
-  if (g_str_equal (text, "GtkHButtonBox")) {
+
+  gint active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+
+  if (active == GTK_ORIENTATION_HORIZONTAL) {
     old_parent = vbbox;
     new_parent = hbbox;
   } else {
     old_parent = hbbox;
     new_parent = vbbox;
   }
-  
+
   bbox = new_parent;
-  
+
   for (i = 0; i < N_BUTTONS; i++) {
     reparent_widget (buttons[i], old_parent, new_parent);
   }
@@ -144,6 +137,8 @@ main (int    argc,
   }
   
   bbox = hbbox;
+
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (hbbox), GTK_BUTTONBOX_SPREAD);
   
   /* GtkVButtonBox */
   vbbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);

@@ -155,7 +155,6 @@ typedef enum
 
 /**
  * GtkButtonBoxStyle:
- * @GTK_BUTTONBOX_DEFAULT_STYLE: Default packing.
  * @GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the box.
  * @GTK_BUTTONBOX_EDGE: Buttons are placed at the edges of the box.
  * @GTK_BUTTONBOX_START: Buttons are grouped towards the start of the box,
