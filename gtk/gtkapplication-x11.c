@@ -79,6 +79,20 @@ gtk_application_impl_x11_init (GtkApplicationImplX11 *x11)
 }
 
 static void
+gtk_application_impl_x11_before_emit (GtkApplicationImpl *impl,
+                                      GVariant           *platform_data)
+{
+  const char *startup_notification_id;
+
+  if (g_variant_lookup (platform_data, "desktop-startup-id",
+                        "&s", &startup_notification_id))
+    {
+      gdk_x11_display_set_startup_notification_id (gdk_display_get_default (),
+                                                   startup_notification_id);
+    }
+}
+
+static void
 gtk_application_impl_x11_class_init (GtkApplicationImplX11Class *class)
 {
   GtkApplicationImplDBusClass *dbus_class = GTK_APPLICATION_IMPL_DBUS_CLASS (class);
@@ -86,4 +100,5 @@ gtk_application_impl_x11_class_init (GtkApplicationImplX11Class *class)
 
   impl_class->handle_window_realize = gtk_application_impl_x11_handle_window_realize;
   dbus_class->get_window_system_id = gtk_application_impl_x11_get_window_system_id;
+  impl_class->before_emit = gtk_application_impl_x11_before_emit;
 }
