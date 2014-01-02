@@ -123,6 +123,19 @@ m4_define([gail_lt_current_minus_age],[m4_eval(gail_lt_current - gail_lt_age)])
 AC_SUBST([GAIL_LT_VERSION_INFO],[gail_lt_version_info])
 AC_SUBST([GAIL_LT_CURRENT_MINUS_AGE],[gail_lt_current_minus_age])
 
+# Workaround for https://bugzilla.gnome.org/show_bug.cgi?id=721346 until fixed upstream in autoconf-archive
+if test "$cross_compiling" = "no"; then
+  if test -n "$CFLAGS"; then
+    CFLAGS_FOR_BUILD=$CFLAGS
+  fi
+  if test -n "$CPPFLAGS"; then
+    CPPFLAGS_FOR_BUILD=$CPPFLAGS
+  fi
+  if test -n "$LDFLAGS"; then
+    LDFLAGS_FOR_BUILD=$LDFLAGS
+  fi
+fi
+
 # Checks for programs.
 AC_PROG_CC
 AX_PROG_CC_FOR_BUILD
