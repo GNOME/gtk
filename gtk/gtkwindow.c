@@ -1118,6 +1118,16 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         GTK_TYPE_APPLICATION,
                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkWindow:set-focus:
+   * @window: the window which received the signal
+   * @widget: the newly focused widget (or %NULL for no focus)
+   *
+   * This signal is emitted whenever the currently focused widget in
+   * this window changes.
+   *
+   * Since: 2.24
+   */
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
