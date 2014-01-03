@@ -1073,7 +1073,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                                 P_("Decorated button layout"),
                                                                 P_("Decorated button layout"),
                                                                 "menu:close",
-                                                                GTK_PARAM_READABLE));
+                                                                GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("decoration-resize-handle",
