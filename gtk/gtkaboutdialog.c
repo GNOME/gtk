@@ -2261,6 +2261,8 @@ add_credits_section (GtkAboutDialog *about,
 
       label = gtk_label_new (str->str);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      g_signal_connect_swapped (label, "activate-link",
+                                G_CALLBACK (emit_activate_link), about);
       g_string_free (str, TRUE);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
