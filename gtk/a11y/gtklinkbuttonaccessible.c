@@ -93,20 +93,6 @@ gtk_link_button_accessible_link_get_object (AtkHyperlink *atk_link,
   return ATK_OBJECT (l->button);
 }
 
-static gint
-gtk_link_button_accessible_link_get_start_index (AtkHyperlink *atk_link)
-{
-  return 0;
-}
-
-static gint
-gtk_link_button_accessible_link_get_end_index (AtkHyperlink *atk_link)
-{
-  GtkLinkButtonAccessibleLink *l = (GtkLinkButtonAccessibleLink *)atk_link;
-
-  return atk_text_get_character_count (ATK_TEXT (l->button));
-}
-
 static void
 _gtk_link_button_accessible_link_init (GtkLinkButtonAccessibleLink *l)
 {
@@ -121,8 +107,6 @@ _gtk_link_button_accessible_link_class_init (GtkLinkButtonAccessibleLinkClass *c
   atk_link_class->get_n_anchors = gtk_link_button_accessible_link_get_n_anchors;
   atk_link_class->is_valid = gtk_link_button_accessible_link_is_valid;
   atk_link_class->get_object = gtk_link_button_accessible_link_get_object;
-  atk_link_class->get_start_index = gtk_link_button_accessible_link_get_start_index;
-  atk_link_class->get_end_index = gtk_link_button_accessible_link_get_end_index;
 }
 
 static gboolean
