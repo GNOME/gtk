@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkpango.h>
 #include "gtkwidgetprivate.h"
+#include "gtklabelprivate.h"
 #include "gtklabelaccessible.h"
 
 struct _GtkLabelAccessiblePrivate

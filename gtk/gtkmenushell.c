@@ -77,6 +77,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkmodelmenuitem.h"
 #include "gtkwidgetprivate.h"
+#include "gtklabelprivate.h"
 
 #include "deprecated/gtktearoffmenuitem.h"
 

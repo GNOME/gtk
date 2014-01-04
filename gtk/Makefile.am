@@ -486,6 +486,7 @@ gtk_private_h_sources =		\
 	gtkimcontextsimpleseqs.h \
 	gtkintl.h		\
 	gtkkeyhash.h		\
+	gtklabelprivate.h	\
 	gtklockbuttonprivate.h	\
 	gtkmenubuttonprivate.h	\
 	gtkmenuprivate.h	\
