@@ -308,6 +308,17 @@ GtkSpinButton.button:hover {
   border-color: shade (@bg_color, 0.8);
 }
 
+.scale.slider.fine-tune:active,
+.scale.slider.fine-tune:active:hover,
+.scale.slider.fine-tune.horizontal:active,
+.scale.slider.fine-tune.horizontal:active:hover {
+  border-width: 5px;
+}
+
+.scrollbar.slider.fine-tune {
+  border-width: 5px;
+}
+
 GtkSwitch.trough:active {
   background-color: @selected_bg_color;
   color: @selected_fg_color;
