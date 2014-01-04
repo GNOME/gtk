@@ -353,31 +353,31 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
                                       const gchar         *action_name)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
+  gboolean was_sensitive, was_toggled;
+  GtkMenuTrackerItemRole old_role;
 
   if (!self->can_activate)
     return;
 
+  was_sensitive = self->sensitive;
+  was_toggled = self->toggled;
+  old_role = self->role;
+
   self->can_activate = FALSE;
+  self->sensitive = FALSE;
+  self->toggled = FALSE;
+  self->role = GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (self->sensitive)
-    {
-      self->sensitive = FALSE;
-      g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_SENSITIVE]);
-    }
+  if (was_sensitive)
+    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_SENSITIVE]);
 
-  if (self->toggled)
-    {
-      self->toggled = FALSE;
-      g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
-    }
+  if (was_toggled)
+    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
 
-  if (self->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
-    {
-      self->role = GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
-      g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
-    }
+  if (old_role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
