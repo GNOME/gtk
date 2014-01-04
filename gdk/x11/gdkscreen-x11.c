@@ -359,6 +359,8 @@ get_work_area (GdkScreen    *screen,
     goto out;
 
   desktop = get_current_desktop (screen);
+  if (desktop + 1 > num / 4) /* fvwm gets this wrong */
+    goto out;
 
   workareas = (long *) ret_workarea;
   area->x = workareas[desktop * 4];
