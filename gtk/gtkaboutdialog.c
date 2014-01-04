@@ -66,7 +66,7 @@
  * opened when the user selects the <literal>About</literal> option from
  * the <literal>Help</literal> menu. All parts of the dialog are optional.
  *
- * About dialog often contain links and email addresses. GtkAboutDialog
+ * About dialogs often contain links and email addresses. GtkAboutDialog
  * displays these as clickable links. By default, it calls gtk_show_uri()
  * when a user clicks one. The behaviour can be overridden with the
  * #GtkAboutDialog::activate-link signal.
