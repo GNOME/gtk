@@ -142,6 +142,8 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 
   widget_class->realize = gtk_drawing_area_realize;
   widget_class->size_allocate = gtk_drawing_area_size_allocate;
+
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 }
 
 static void

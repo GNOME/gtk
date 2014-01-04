@@ -88,7 +88,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-7
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkContainerAccessible-6
                   index: 0
                   description: The previously-selected color, for comparison to the color you're selecting now.
@@ -98,7 +98,7 @@ window1
                   layer: widget
                   alpha: 1
                 unnamed-GtkWidgetAccessible-8
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkContainerAccessible-6
                   index: 1
                   description: The color you've chosen.
@@ -942,7 +942,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-18
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-17
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -961,7 +961,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-20
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-19
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -980,7 +980,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-22
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-21
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -999,7 +999,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-24
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-23
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1018,7 +1018,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-26
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-25
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1037,7 +1037,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-28
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-27
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1056,7 +1056,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-30
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-29
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1075,7 +1075,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-32
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-31
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1094,7 +1094,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-34
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-33
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1113,7 +1113,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-36
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-35
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1132,7 +1132,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-38
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-37
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1151,7 +1151,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-40
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-39
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1170,7 +1170,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-42
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-41
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1189,7 +1189,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-44
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-43
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1208,7 +1208,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-46
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-45
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1227,7 +1227,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-48
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-47
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1246,7 +1246,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-50
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-49
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1265,7 +1265,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-52
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-51
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1284,7 +1284,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-54
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-53
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
@@ -1303,7 +1303,7 @@ window1
                 layer: widget
                 alpha: 1
                 unnamed-GtkWidgetAccessible-15
-                  "unknown"
+                  "drawing area"
                   parent: unnamed-GtkFrameAccessible-55
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
