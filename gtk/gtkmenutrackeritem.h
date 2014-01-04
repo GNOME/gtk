@@ -72,6 +72,10 @@ GMenuModel *           _gtk_menu_tracker_item_get_submenu               (GtkMenu
 
 gchar *                _gtk_menu_tracker_item_get_submenu_namespace     (GtkMenuTrackerItem *self);
 
+gboolean               _gtk_menu_tracker_item_may_disappear             (GtkMenuTrackerItem *self);
+
+gboolean               _gtk_menu_tracker_item_is_visible                (GtkMenuTrackerItem *self);
+
 gboolean                gtk_menu_tracker_item_get_should_request_show   (GtkMenuTrackerItem *self);
 
 void                    gtk_menu_tracker_item_activated                 (GtkMenuTrackerItem *self);
