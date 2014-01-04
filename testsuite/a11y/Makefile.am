@@ -60,6 +60,7 @@ testdata = \
 	expander.ui expander.txt \
 	assistant.ui assistant.txt \
 	pickers.ui pickers.txt \
+	label.ui label.txt \
 	lockbutton.ui lockbutton.txt \
 	spinner.ui spinner.txt \
 	progress.ui progress.txt \

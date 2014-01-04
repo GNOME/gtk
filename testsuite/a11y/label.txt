@@ -1,0 +1,74 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  label1
+    "label"
+    parent: window1
+    index: 0
+    name: Go to the GTK+ website or >google it
+    state: enabled focusable multi-line sensitive
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkText>
+    text: Go to the GTK+ website or >google it
+    character count: 36
+    caret offset: 0
+    default attributes: bg-color: <omitted>
+                        bg-full-height: 0
+                        direction: <omitted>
+                        editable: false
+                        family-name: <omitted>
+                        fg-color: <omitted>
+                        indent: 0
+                        invisible: false
+                        justification: left
+                        language: <omitted>
+                        left-margin: 0
+                        pixels-above-lines: 0
+                        pixels-below-lines: 0
+                        pixels-inside-wrap: 0
+                        right-margin: 0
+                        rise: 0
+                        scale: 1
+                        size: <omitted>
+                        stretch: <omitted>
+                        strikethrough: false
+                        style: <omitted>
+                        underline: none
+                        variant: <omitted>
+                        weight: <omitted>
+                        wrap-mode: word
+    <AtkHypertext>
+      <AtkHyperlink>
+      start index: 10
+      end index: 22
+      anchors: http://www.gtk.org
+      <AtkHyperlink>
+      start index: 27
+      end index: 36
+      anchors: http://www.google.com
+    unnamed-GtkLabelAccessibleLinkImpl-0
+      "link"
+      parent: label1
+      state: enabled focusable multi-line sensitive
+      <AtkHyperlinkImpl>
+        <AtkHyperlink>
+        start index: 10
+        end index: 22
+        anchors: http://www.gtk.org
+    unnamed-GtkLabelAccessibleLinkImpl-1
+      "link"
+      parent: label1
+      state: enabled focusable multi-line sensitive
+      <AtkHyperlinkImpl>
+        <AtkHyperlink>
+        start index: 27
+        end index: 36
+        anchors: http://www.google.com

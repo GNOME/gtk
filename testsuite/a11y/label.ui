@@ -1,0 +1,14 @@
+
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkLabel" id="label1">
+        <property name="label">Go to the &lt;a href="http://www.gtk.org" title="&lt;i&gt;Our&lt;/i&gt; website"&gt;GTK+ website&lt;/a&gt; or &lt;small&gt;&gt;&lt;a href="http://www.google.com"&gt;google it&lt;/a&gt;&lt;/small&gt;</property>
+        <property name="use-markup">True</property>
+      </object>
+    </child>
+  </object>
+</interface>
