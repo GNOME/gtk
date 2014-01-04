@@ -73,6 +73,7 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
+          <AtkHypertext>
       unnamed-GtkListBoxRowAccessible-1
         "list item"
         parent: listbox1
@@ -121,6 +122,7 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
+          <AtkHypertext>
     listbox2
       "list box"
       parent: box1
@@ -179,3 +181,4 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
+          <AtkHypertext>

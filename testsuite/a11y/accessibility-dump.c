@@ -519,7 +519,6 @@ dump_atk_hypertext (AtkHypertext *hypertext,
     {
       link = atk_hypertext_get_link (hypertext, i);
       dump_atk_hyperlink (link, depth + DEPTH_INCREMENT, string);
-      g_object_unref (link);
     }
 }
 

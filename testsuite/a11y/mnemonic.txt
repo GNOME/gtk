@@ -55,6 +55,7 @@ window1
                           variant: <omitted>
                           weight: <omitted>
                           wrap-mode: word
+      <AtkHypertext>
     entry1
       "text"
       parent: box1

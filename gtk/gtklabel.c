@@ -2529,6 +2529,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
     {
       gtk_label_ensure_select_info (label);
       priv->select_info->links = g_list_reverse (links);
+      _gtk_label_accessible_update_links (label);
       gtk_label_ensure_has_tooltip (label);
     }
 
@@ -6287,6 +6288,8 @@ gtk_label_clear_links (GtkLabel *label)
   g_list_free_full (priv->select_info->links, (GDestroyNotify) link_free);
   priv->select_info->links = NULL;
   priv->select_info->active_link = NULL;
+
+  _gtk_label_accessible_update_links (label);
 }
 
 static gboolean

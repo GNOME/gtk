@@ -55,6 +55,7 @@ window1
                           variant: <omitted>
                           weight: <omitted>
                           wrap-mode: word
+      <AtkHypertext>
     label2
       "label"
       parent: box1
@@ -95,6 +96,7 @@ window1
                           variant: <omitted>
                           weight: <omitted>
                           wrap-mode: word
+      <AtkHypertext>
     label3
       "label"
       parent: box1
@@ -135,6 +137,7 @@ window1
                           variant: <omitted>
                           weight: <omitted>
                           wrap-mode: word
+      <AtkHypertext>
     entry1
       "text"
       parent: box1

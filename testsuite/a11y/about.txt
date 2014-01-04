@@ -76,6 +76,7 @@ window1
                             variant: <omitted>
                             weight: <omitted>
                             wrap-mode: word
+        <AtkHypertext>
       stack
         "panel"
         parent: box
@@ -133,6 +134,7 @@ window1
                                 variant: <omitted>
                                 weight: <omitted>
                                 wrap-mode: word
+            <AtkHypertext>
           comments_label
             "label"
             parent: page_vbox
@@ -172,6 +174,7 @@ window1
                                 variant: <omitted>
                                 weight: <omitted>
                                 wrap-mode: word
+            <AtkHypertext>
           hbox
             "filler"
             parent: page_vbox
@@ -220,6 +223,20 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
+                <AtkHyperlink>
+                start index: 0
+                end index: 7
+                anchors: http://www.gtk.org
+              unnamed-GtkLabelAccessibleLinkImpl-0
+                "link"
+                parent: website_label
+                state: enabled focusable focused multi-line sensitive showing visible
+                <AtkHyperlinkImpl>
+                  <AtkHyperlink>
+                  start index: 0
+                  end index: 7
+                  anchors: http://www.gtk.org
           copyright_label
             "label"
             parent: page_vbox
@@ -259,6 +276,7 @@ window1
                                 variant: <omitted>
                                 weight: <omitted>
                                 wrap-mode: word
+            <AtkHypertext>
           license_label
             "label"
             parent: page_vbox
@@ -300,6 +318,20 @@ See the GNU General Public License, version 3 or later for details.
                                 variant: <omitted>
                                 weight: <omitted>
                                 wrap-mode: word
+            <AtkHypertext>
+              <AtkHyperlink>
+              start index: 56
+              end index: 102
+              anchors: http://www.gnu.org/licenses/gpl.html
+            unnamed-GtkLabelAccessibleLinkImpl-1
+              "link"
+              parent: license_label
+              state: enabled focusable multi-line sensitive showing visible
+              <AtkHyperlinkImpl>
+                <AtkHyperlink>
+                start index: 56
+                end index: 102
+                anchors: http://www.gnu.org/licenses/gpl.html
         credits_page
           "filler"
           parent: stack
@@ -336,7 +368,7 @@ See the GNU General Public License, version 3 or later for details.
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-            unnamed-GtkRangeAccessible-0
+            unnamed-GtkRangeAccessible-2
               "scroll bar"
               parent: scrolledwindow1
               state: enabled horizontal sensitive visible
@@ -348,7 +380,7 @@ See the GNU General Public License, version 3 or later for details.
               minimum value: 0.000000
               maximum value: 9.000000
               current value: 0.000000
-            unnamed-GtkRangeAccessible-1
+            unnamed-GtkRangeAccessible-3
               "scroll bar"
               parent: scrolledwindow1
               state: enabled sensitive vertical visible
@@ -418,7 +450,7 @@ See the GNU General Public License, version 3 or later for details.
                                   wrap-mode: none
               <AtkStreamableContent>
               mime types: application/x-gtk-text-buffer-rich-text text/plain
-            unnamed-GtkRangeAccessible-2
+            unnamed-GtkRangeAccessible-4
               "scroll bar"
               parent: scrolledwindow2
               state: enabled horizontal sensitive visible
@@ -430,7 +462,7 @@ See the GNU General Public License, version 3 or later for details.
               minimum value: 0.000000
               maximum value: 0.000000
               current value: 0.000000
-            unnamed-GtkRangeAccessible-3
+            unnamed-GtkRangeAccessible-5
               "scroll bar"
               parent: scrolledwindow2
               state: enabled sensitive vertical visible

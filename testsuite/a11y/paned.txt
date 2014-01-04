@@ -58,6 +58,7 @@ window1
                           variant: <omitted>
                           weight: <omitted>
                           wrap-mode: word
+      <AtkHypertext>
     label2
       "label"
       parent: paned1
@@ -97,3 +98,4 @@ window1
                           variant: <omitted>
                           weight: <omitted>
                           wrap-mode: word
+      <AtkHypertext>

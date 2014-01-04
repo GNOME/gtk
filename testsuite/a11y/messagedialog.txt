@@ -86,6 +86,7 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
+          <AtkHypertext>
         secondary_label
           "label"
           parent: message_area
@@ -125,6 +126,7 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
+          <AtkHypertext>
     dialog-action_area1
       "filler"
       parent: dialog-vbox1

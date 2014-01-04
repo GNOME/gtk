@@ -58,3 +58,4 @@ window1
                           variant: <omitted>
                           weight: <omitted>
                           wrap-mode: word
+      <AtkHypertext>

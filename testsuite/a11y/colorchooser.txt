@@ -225,6 +225,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
             255
               "text"
               parent: unnamed-GtkContainerAccessible-11
@@ -322,6 +323,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
             unnamed-GtkWidgetAccessible-13
               "separator"
               parent: unnamed-GtkContainerAccessible-11
@@ -420,6 +422,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
             255
               "spin button"
               parent: unnamed-GtkContainerAccessible-11
@@ -509,6 +512,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
             255
               "spin button"
               parent: unnamed-GtkContainerAccessible-11
@@ -598,6 +602,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
             100
               "spin button"
               parent: unnamed-GtkContainerAccessible-11
@@ -687,6 +692,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
             0
               "spin button"
               parent: unnamed-GtkContainerAccessible-11
@@ -776,6 +782,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
             0
               "spin button"
               parent: unnamed-GtkContainerAccessible-11
@@ -865,6 +872,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
           unnamed-GtkContainerAccessible-14
             "filler"
             parent: unnamed-GtkContainerAccessible-10
@@ -914,6 +922,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
+              <AtkHypertext>
             unnamed-GtkContainerAccessible-16
               "panel"
               parent: unnamed-GtkContainerAccessible-14

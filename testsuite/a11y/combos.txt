@@ -55,6 +55,7 @@ window1
                           variant: <omitted>
                           weight: <omitted>
                           wrap-mode: word
+      <AtkHypertext>
     combo1
       "combo box"
       parent: box1
