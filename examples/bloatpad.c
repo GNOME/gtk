@@ -151,9 +151,13 @@ activate_clear_all (GSimpleAction *action,
 
 static void
 text_buffer_changed_cb (GtkTextBuffer *buffer,
-                        BloatPad      *app)
+                        gpointer       user_data)
 {
+  GtkWindow *window = user_data;
+  BloatPad *app;
   gint old_n, n;
+
+  app = (BloatPad *) gtk_window_get_application (window);
 
   n = gtk_text_buffer_get_char_count (buffer);
   if (n > 0)
@@ -172,6 +176,17 @@ text_buffer_changed_cb (GtkTextBuffer *buffer,
           app->quit_inhibit = 0;
         }
     }
+
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (g_action_map_lookup_action (G_ACTION_MAP (window), "clear")), n > 0);
+
+  if (n > 0)
+    {
+      GSimpleAction *spellcheck;
+      spellcheck = g_simple_action_new ("spell-check", NULL);
+      g_action_map_add_action (G_ACTION_MAP (window), G_ACTION (spellcheck));
+    }
+  else
+    g_action_map_remove_action (G_ACTION_MAP (window), "spell-check");
 
   old_n = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (buffer), "line-count"));
   n = gtk_text_buffer_get_line_count (buffer);
@@ -274,7 +289,8 @@ new_window (GApplication *app,
         }
     }
   g_signal_connect (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)), "changed",
-                    G_CALLBACK (text_buffer_changed_cb), app);
+                    G_CALLBACK (text_buffer_changed_cb), window);
+  text_buffer_changed_cb (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)), window);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 }
@@ -541,6 +557,24 @@ bloat_pad_startup (GApplication *application)
                                "        <item>"
                                "          <attribute name='label' translatable='yes'>_Paste</attribute>"
                                "          <attribute name='action'>win.paste</attribute>"
+                               "        </item>"
+                               "      </section>"
+                               "      <section>"
+                               "        <item>"
+                               "          <attribute name='label'>Clear (always shown)</attribute>"
+                               "          <attribute name='action'>win.clear</attribute>"
+                                                   /* action should never be missing (so always shown) */
+                               "          <attribute name='hidden-when'>action-missing</attribute>"
+                               "        </item>"
+                               "        <item>"
+                               "          <attribute name='label'>Clear (hidden when no text)</attribute>"
+                               "          <attribute name='hidden-when'>action-disabled</attribute>"
+                               "          <attribute name='action'>win.clear</attribute>"
+                               "        </item>"
+                               "        <item>"
+                               "          <attribute name='label'>Spell check (does nothing, hides)</attribute>"
+                               "          <attribute name='hidden-when'>action-missing</attribute>"
+                               "          <attribute name='action'>win.spell-check</attribute>"
                                "        </item>"
                                "      </section>"
                                "      <section>"
