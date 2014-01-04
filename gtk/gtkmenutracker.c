@@ -71,7 +71,7 @@ struct _GtkMenuTracker
 
 struct _GtkMenuTrackerSection
 {
-  GMenuModel *model;
+  gpointer    model;   /* may be a GtkMenuTrackerItem or a GMenuModel */
   GSList     *items;
   gchar      *action_namespace;
 
@@ -92,7 +92,7 @@ static void                    gtk_menu_tracker_section_free    (GtkMenuTrackerS
 
 static GtkMenuTrackerSection *
 gtk_menu_tracker_section_find_model (GtkMenuTrackerSection *section,
-                                     GMenuModel            *model,
+                                     gpointer               model,
                                      gint                  *offset)
 {
   GSList *item;
@@ -218,6 +218,38 @@ gtk_menu_tracker_section_sync_separators (GtkMenuTrackerSection *section,
   return n_items;
 }
 
+static void
+gtk_menu_tracker_item_visibility_changed (GtkMenuTrackerItem *item,
+                                          gboolean            is_now_visible,
+                                          gpointer            user_data)
+{
+  GtkMenuTracker *tracker = user_data;
+  GtkMenuTrackerSection *section;
+  gboolean was_visible;
+  gint offset = 0;
+
+  /* remember: the item is our model */
+  section = gtk_menu_tracker_section_find_model (tracker->toplevel, item, &offset);
+
+  was_visible = section->items != NULL;
+
+  if (is_now_visible == was_visible)
+    return;
+
+  if (is_now_visible)
+    {
+      section->items = g_slist_prepend (NULL, NULL);
+      (* tracker->insert_func) (section->model, offset, tracker->user_data);
+    }
+  else
+    {
+      section->items = g_slist_delete_link (section->items, section->items);
+      (* tracker->remove_func) (offset, tracker->user_data);
+    }
+
+  gtk_menu_tracker_section_sync_separators (tracker->toplevel, tracker, 0, FALSE, NULL, 0);
+}
+
 static gint
 gtk_menu_tracker_section_measure (GtkMenuTrackerSection *section)
 {
@@ -310,10 +342,69 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
 
           item = _gtk_menu_tracker_item_new (tracker->observable, model, position + n_items,
                                              section->action_namespace, FALSE);
-          (* tracker->insert_func) (item, offset, tracker->user_data);
-          g_object_unref (item);
 
-          *change_point = g_slist_prepend (*change_point, NULL);
+          /* In the case that the item may disappear we handle that by
+           * treating the item that we just created as being its own
+           * subsection.  This happens as so:
+           *
+           *  - the subsection is created without the possibility of
+           *    showing a separator
+           *
+           *  - the subsection will have either 0 or 1 item in it at all
+           *    times: either the shown item or not (in the case it is
+           *    hidden)
+           *
+           *  - the created item acts as the "model" for this section
+           *    and we use its "visiblity-changed" signal in the same
+           *    way that we use the "items-changed" signal from a real
+           *    GMenuModel
+           *
+           * We almost never use the '->model' stored in the section for
+           * anything other than lookups and for dropped the ref and
+           * disconnecting the signal when we destroy the menu, and we
+           * need to do exactly those things in this case as well.
+           *
+           * The only other thing that '->model' is used for is in the
+           * case that we want to show a separator, but we will never do
+           * that because separators are not shown for this fake section.
+           *
+           * Because of the game we play where the menu item is
+           * essentially its own section, it is possible that the menu
+           * item itself could get added as its own separator label in
+           * the case that the item is inside of a with_separators
+           * section, but this should never happen -- the user should
+           * always have the menu item inside of a <section>, never at
+           * the toplevel.  It would be easy to add an extra boolean to
+           * check for that, but we already have a lot of those...
+           */
+          if (_gtk_menu_tracker_item_may_disappear (item))
+            {
+              GtkMenuTrackerSection *fake_section;
+
+              fake_section = g_slice_new0 (GtkMenuTrackerSection);
+              fake_section->model = g_object_ref (item);
+              fake_section->handler = g_signal_connect (item, "visibility-changed",
+                                                        G_CALLBACK (gtk_menu_tracker_item_visibility_changed),
+                                                        tracker);
+              *change_point = g_slist_prepend (*change_point, fake_section);
+
+              if (_gtk_menu_tracker_item_is_visible (item))
+                {
+                  (* tracker->insert_func) (item, offset, tracker->user_data);
+                  fake_section->items = g_slist_prepend (NULL, NULL);
+                }
+            }
+          else
+            {
+              /* In the normal case, we store NULL in the linked list.
+               * The measurement and lookup code count NULL always as
+               * exactly 1: an item that will always be there.
+               */
+              (* tracker->insert_func) (item, offset, tracker->user_data);
+              *change_point = g_slist_prepend (*change_point, NULL);
+            }
+
+          g_object_unref (item);
         }
     }
 }
