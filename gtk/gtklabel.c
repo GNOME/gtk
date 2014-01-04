@@ -6581,3 +6581,156 @@ gtk_label_get_lines (GtkLabel *label)
 
   return label->priv->lines;
 }
+
+gint
+_gtk_label_get_n_links (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+
+  if (priv->select_info)
+    return g_list_length (priv->select_info->links);
+
+  return 0;
+}
+
+const gchar *
+_gtk_label_get_link_uri (GtkLabel *label,
+                         gint      idx)
+{
+  GtkLabelPrivate *priv = label->priv;
+  gint i;
+  GList *l;
+  GtkLabelLink *link;
+
+  if (priv->select_info)
+    for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
+      {
+        if (i == idx)
+          {
+            link = l->data;
+            return link->uri;
+          }
+      }
+
+  return NULL;
+}
+
+void
+_gtk_label_get_link_extent (GtkLabel *label,
+                            gint      idx,
+                            gint     *start,
+                            gint     *end)
+{
+  GtkLabelPrivate *priv = label->priv;
+  gint i;
+  GList *l;
+  GtkLabelLink *link;
+
+  if (priv->select_info)
+    for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
+      {
+        if (i == idx)
+          {
+            link = l->data;
+            *start = link->start;
+            *end = link->end;
+            return;
+          }
+      }
+
+  *start = -1;
+  *end = -1;
+}
+
+gint
+_gtk_label_get_link_at (GtkLabel *label, 
+                        gint      pos)
+{
+  GtkLabelPrivate *priv = label->priv;
+  gint i;
+  GList *l;
+  GtkLabelLink *link;
+
+  if (priv->select_info)
+    for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
+      {
+        link = l->data;
+        if (link->start <= pos && pos < link->end)
+          return i;
+      }
+
+  return -1;
+}
+
+void
+_gtk_label_activate_link (GtkLabel *label, 
+                          gint      idx)
+{
+  GtkLabelPrivate *priv = label->priv;
+  gint i;
+  GList *l;
+  GtkLabelLink *link;
+
+  if (priv->select_info)
+    for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
+      {
+        if (i == idx)
+          {
+            link = l->data;
+            emit_activate_link (label, link);
+            return;
+          }
+      }
+}
+
+gboolean
+_gtk_label_get_link_visited (GtkLabel *label,
+                             gint      idx)
+{
+  GtkLabelPrivate *priv = label->priv;
+  gint i;
+  GList *l;
+  GtkLabelLink *link;
+
+  if (priv->select_info)
+    for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
+      {
+        if (i == idx)
+          {
+            link = l->data;
+            return link->visited;
+          }
+      }
+
+  return FALSE;
+}
+
+gboolean
+_gtk_label_get_link_focused (GtkLabel *label,
+                             gint      idx)
+{
+  GtkLabelPrivate *priv = label->priv;
+  gint i;
+  GList *l;
+  GtkLabelLink *link;
+  GtkLabelSelectionInfo *info = priv->select_info;
+
+  if (!info)
+    return FALSE;
+
+  if (info->selection_anchor != info->selection_end)
+    return FALSE;
+
+  for (l = info->links, i = 0; l; l = l->next, i++)
+    {
+      if (i == idx)
+        {
+          link = l->data;
+          if (link->start <= info->selection_anchor &&
+              info->selection_anchor <= link->end)
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
