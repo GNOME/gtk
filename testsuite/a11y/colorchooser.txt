@@ -1,13 +1,13 @@
 window1
-  "color chooser"
+  "dialog"
   index: 0
-  name: Color Selection
+  name: Select a Color
   state: enabled resizable sensitive showing visible
   toolkit: gtk
   <AtkComponent>
   layer: window
   alpha: 1
-  vbox
+  dialog-vbox1
     "filler"
     parent: window1
     index: 0
@@ -16,1318 +16,1316 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkContainerAccessible-0
-      "color chooser"
-      parent: vbox
+    chooser
+      "filler"
+      parent: dialog-vbox1
       index: 0
       state: enabled sensitive showing vertical visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkContainerAccessible-1
+      unnamed-GtkContainerAccessible-0
         "filler"
-        parent: unnamed-GtkContainerAccessible-0
+        parent: chooser
         index: 0
-        state: enabled horizontal sensitive showing visible
+        state: enabled sensitive showing vertical visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkContainerAccessible-2
-          "filler"
-          parent: unnamed-GtkContainerAccessible-1
+        unnamed-GtkContainerAccessible-1
+          "panel"
+          parent: unnamed-GtkContainerAccessible-0
           index: 0
-          state: enabled sensitive showing vertical visible
+          state: enabled horizontal sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GtkWidgetAccessible-3
-            "color chooser"
-            parent: unnamed-GtkContainerAccessible-2
+          unnamed-GtkColorSwatchAccessible-2
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
             index: 0
-            name: Color Wheel
-            description: Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle.
-            controlled-by: 0
-                           0
-                           100
-                           255
-                           255
-                           255
+            description: Dark Aluminum 2
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-          unnamed-GtkContainerAccessible-4
-            "filler"
-            parent: unnamed-GtkContainerAccessible-2
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-3
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
             index: 1
-            state: enabled horizontal sensitive showing visible
+            description: Aluminum 2
+            state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            unnamed-GtkFrameAccessible-5
-              "panel"
-              parent: unnamed-GtkContainerAccessible-4
-              index: 0
-              state: enabled sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              unnamed-GtkContainerAccessible-6
-                "filler"
-                parent: unnamed-GtkFrameAccessible-5
-                index: 0
-                state: enabled horizontal sensitive showing visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-7
-                  "drawing area"
-                  parent: unnamed-GtkContainerAccessible-6
-                  index: 0
-                  description: The previously-selected color, for comparison to the color you're selecting now.
-                  state: enabled sensitive showing visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                unnamed-GtkWidgetAccessible-8
-                  "drawing area"
-                  parent: unnamed-GtkContainerAccessible-6
-                  index: 1
-                  description: The color you've chosen.
-                  state: enabled sensitive showing visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-            unnamed-GtkButtonAccessible-9
-              "push button"
-              parent: unnamed-GtkContainerAccessible-4
-              index: 1
-              description: Click the eyedropper, then click a color anywhere on your screen to select that color.
-              state: enabled focusable sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkImage>
-              image size: -1 x -1
-              image description: (null)
-              <AtkAction>
-              action 0 name: click
-              action 0 description: Clicks the button
-        unnamed-GtkContainerAccessible-10
-          "filler"
-          parent: unnamed-GtkContainerAccessible-1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-4
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 2
+            description: Light Aluminum 2
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-5
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 3
+            description: Dark Aluminum 1
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-6
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 4
+            description: Aluminum 1
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-7
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 5
+            description: Light Aluminum 1
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-8
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 6
+            description: Dark Chocolate
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-9
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 7
+            description: Chocolate
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-10
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 8
+            description: Light Chocolate
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-11
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 9
+            description: Dark Plum
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-12
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 10
+            description: Plum
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-13
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 11
+            description: Light Plum
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-14
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 12
+            description: Dark Sky Blue
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-15
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 13
+            description: Sky Blue
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-16
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 14
+            description: Light Sky Blue
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-17
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 15
+            description: Dark Chameleon
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-18
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 16
+            description: Chameleon
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-19
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 17
+            description: Light Chameleon
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-20
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 18
+            description: Dark Butter
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-21
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 19
+            description: Butter
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-22
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 20
+            description: Light Butter
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-23
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 21
+            description: Dark Orange
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-24
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 22
+            description: Orange
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-25
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 23
+            description: Light Orange
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-26
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 24
+            description: Dark Scarlet Red
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-27
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 25
+            description: Scarlet Red
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-28
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-1
+            index: 26
+            description: Light Scarlet Red
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+        unnamed-GtkContainerAccessible-29
+          "panel"
+          parent: unnamed-GtkContainerAccessible-0
           index: 1
-          state: enabled sensitive showing vertical visible
+          state: enabled horizontal sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GtkContainerAccessible-11
-            "panel"
-            parent: unnamed-GtkContainerAccessible-10
+          unnamed-GtkColorSwatchAccessible-30
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
             index: 0
-            state: enabled horizontal sensitive showing visible
+            description: White
+            state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            #FFFFFF
-              "text"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 0
-              description: You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry.
-              labelled-by: Color name:
-              state: editable enabled focusable sensitive showing single-line visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: #FFFFFF
-              character count: 7
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkAction>
-              action 0 name: activate
-              action 0 description: Activates the entry
-              action 0 keybinding: <Alt>n
-            Color name:
-              "label"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 1
-              name: Color name:
-              label-for: #FFFFFF
-              state: enabled multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Color name:
-              character count: 11
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-            255
-              "text"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 2
-              description: Transparency of the color.
-              state: editable enabled focusable sensitive single-line
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: 255
-              character count: 3
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkAction>
-              action 0 name: activate
-              action 0 description: Activates the entry
-            unnamed-GtkScaleAccessible-12
-              "slider"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 3
-              description: Transparency of the color.
-              labelled-by: Opacity:
-              state: enabled focusable horizontal sensitive
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkValue>
-              minimum value: 0.000000
-              maximum value: 255.000000
-              current value: 255.000000
-            Opacity:
-              "label"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 4
-              name: Opacity:
-              label-for: unnamed-GtkScaleAccessible-12
-              state: enabled multi-line sensitive
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Opacity:
-              character count: 8
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-            unnamed-GtkWidgetAccessible-13
-              "separator"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 5
-              state: enabled horizontal sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-            255
-              "spin button"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 6
-              description: Amount of blue light in the color.
-              controller-for: unnamed-GtkWidgetAccessible-3
-              labelled-by: Blue:
-              state: editable enabled focusable horizontal sensitive showing single-line visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: 255
-              character count: 3
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkAction>
-              action 0 name: activate
-              action 0 description: Activates the entry
-              action 0 keybinding: <Alt>b
-              <AtkValue>
-              minimum value: 0.000000
-              maximum value: 255.000000
-              current value: 255.000000
-            Blue:
-              "label"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 7
-              name: Blue:
-              label-for: 255
-              state: enabled multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Blue:
-              character count: 5
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-            255
-              "spin button"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 8
-              description: Amount of green light in the color.
-              controller-for: unnamed-GtkWidgetAccessible-3
-              labelled-by: Green:
-              state: editable enabled focusable horizontal sensitive showing single-line visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: 255
-              character count: 3
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkAction>
-              action 0 name: activate
-              action 0 description: Activates the entry
-              action 0 keybinding: <Alt>g
-              <AtkValue>
-              minimum value: 0.000000
-              maximum value: 255.000000
-              current value: 255.000000
-            Green:
-              "label"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 9
-              name: Green:
-              label-for: 255
-              state: enabled multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Green:
-              character count: 6
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-            255
-              "spin button"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 10
-              description: Amount of red light in the color.
-              controller-for: unnamed-GtkWidgetAccessible-3
-              labelled-by: Red:
-              state: editable enabled focusable horizontal sensitive showing single-line visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: 255
-              character count: 3
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkAction>
-              action 0 name: activate
-              action 0 description: Activates the entry
-              action 0 keybinding: <Alt>r
-              <AtkValue>
-              minimum value: 0.000000
-              maximum value: 255.000000
-              current value: 255.000000
-            Red:
-              "label"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 11
-              name: Red:
-              label-for: 255
-              state: enabled multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Red:
-              character count: 4
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-            100
-              "spin button"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 12
-              description: Brightness of the color.
-              controller-for: unnamed-GtkWidgetAccessible-3
-              labelled-by: Value:
-              state: editable enabled focusable horizontal sensitive showing single-line visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: 100
-              character count: 3
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkAction>
-              action 0 name: activate
-              action 0 description: Activates the entry
-              action 0 keybinding: <Alt>v
-              <AtkValue>
-              minimum value: 0.000000
-              maximum value: 100.000000
-              current value: 100.000000
-            Value:
-              "label"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 13
-              name: Value:
-              label-for: 100
-              state: enabled multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Value:
-              character count: 6
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-            0
-              "spin button"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 14
-              description: Intensity of the color.
-              controller-for: unnamed-GtkWidgetAccessible-3
-              labelled-by: Saturation:
-              state: editable enabled focusable horizontal sensitive showing single-line visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: 0
-              character count: 1
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkAction>
-              action 0 name: activate
-              action 0 description: Activates the entry
-              action 0 keybinding: <Alt>a
-              <AtkValue>
-              minimum value: 0.000000
-              maximum value: 100.000000
-              current value: 0.000000
-            Saturation:
-              "label"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 15
-              name: Saturation:
-              label-for: 0
-              state: enabled multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Saturation:
-              character count: 11
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-            0
-              "spin button"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 16
-              description: Position on the color wheel.
-              controller-for: unnamed-GtkWidgetAccessible-3
-              labelled-by: Hue:
-              state: editable enabled focusable horizontal sensitive showing single-line visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: 0
-              character count: 1
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkAction>
-              action 0 name: activate
-              action 0 description: Activates the entry
-              action 0 keybinding: <Alt>h
-              <AtkValue>
-              minimum value: 0.000000
-              maximum value: 360.000000
-              current value: 0.000000
-            Hue:
-              "label"
-              parent: unnamed-GtkContainerAccessible-11
-              index: 17
-              name: Hue:
-              label-for: 0
-              state: enabled multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Hue:
-              character count: 4
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-          unnamed-GtkContainerAccessible-14
-            "filler"
-            parent: unnamed-GtkContainerAccessible-10
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-31
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
             index: 1
-            state: enabled sensitive vertical
+            description: Very Light Gray
+            state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            Palette:
-              "label"
-              parent: unnamed-GtkContainerAccessible-14
-              index: 0
-              name: Palette:
-              label-for: unnamed-GtkWidgetAccessible-15
-              state: enabled multi-line sensitive visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Palette:
-              character count: 8
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
-            unnamed-GtkContainerAccessible-16
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-32
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
+            index: 2
+            description: Lighter Gray
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-33
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
+            index: 3
+            description: Light Gray
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-34
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
+            index: 4
+            description: Medium Gray
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-35
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
+            index: 5
+            description: Dark Gray
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-36
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
+            index: 6
+            description: Darker Gray
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-37
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
+            index: 7
+            description: Very Dark Gray
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-38
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-29
+            index: 8
+            description: Black
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+        Custom
+          "label"
+          parent: unnamed-GtkContainerAccessible-0
+          index: 2
+          name: Custom
+          state: enabled multi-line sensitive showing visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Custom
+          character count: 6
+          caret offset: 0
+          default attributes: bg-color: <omitted>
+                              bg-full-height: 0
+                              direction: <omitted>
+                              editable: false
+                              family-name: <omitted>
+                              fg-color: <omitted>
+                              indent: 0
+                              invisible: false
+                              justification: left
+                              language: <omitted>
+                              left-margin: 0
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              right-margin: 0
+                              rise: 0
+                              scale: 1
+                              size: <omitted>
+                              stretch: <omitted>
+                              strikethrough: false
+                              style: <omitted>
+                              underline: none
+                              variant: <omitted>
+                              weight: <omitted>
+                              wrap-mode: word
+          <AtkHypertext>
+        unnamed-GtkContainerAccessible-39
+          "filler"
+          parent: unnamed-GtkContainerAccessible-0
+          index: 3
+          state: enabled horizontal sensitive showing visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          unnamed-GtkColorSwatchAccessible-40
+            "push button"
+            parent: unnamed-GtkContainerAccessible-39
+            index: 0
+            description: Create custom color
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-41
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-39
+            index: 1
+            description: Custom color 1: Red 75%, Green 81%, Blue 87%
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-42
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-39
+            index: 2
+            description: Custom color 2: Red 0%, Green 0%, Blue 100%
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+          unnamed-GtkColorSwatchAccessible-43
+            "radio button"
+            parent: unnamed-GtkContainerAccessible-39
+            index: 3
+            description: Custom color 3: Red 19%, Green 41%, Blue 63%
+            state: enabled focusable sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkAction>
+            action 0 name: select
+            action 0 description: Selects the color
+            action 1 name: activate
+            action 1 description: Activates the color
+            action 2 name: customize
+            action 2 description: Customizes the color
+      unnamed-GtkContainerAccessible-44
+        "filler"
+        parent: chooser
+        index: 1
+        state: enabled horizontal sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        GtkColorEditor
+          "filler"
+          parent: unnamed-GtkContainerAccessible-44
+          index: 0
+          state: enabled horizontal sensitive
+          toolkit: gtk
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          overlay
+            "panel"
+            parent: GtkColorEditor
+            index: 0
+            state: enabled sensitive visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            grid
               "panel"
-              parent: unnamed-GtkContainerAccessible-14
-              index: 1
+              parent: overlay
+              index: 0
               state: enabled horizontal sensitive visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              unnamed-GtkFrameAccessible-17
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
+              sv_plane
+                "color chooser"
+                parent: grid
                 index: 0
-                state: enabled sensitive visible
+                name: Color Plane
+                state: enabled focusable sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-18
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-17
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-19
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
+              a_slider
+                "color chooser"
+                parent: grid
                 index: 1
-                state: enabled sensitive visible
+                name: Alpha
+                state: enabled focusable horizontal sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-20
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-19
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-21
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 1.000000
+                current value: 0.000000
+              h_slider
+                "color chooser"
+                parent: grid
                 index: 2
-                state: enabled sensitive visible
+                name: Hue
+                state: enabled focusable sensitive vertical visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-22
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-21
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-23
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 1.000000
+                current value: 0.000000
+              entry
+                "text"
+                parent: grid
                 index: 3
-                state: enabled sensitive visible
+                name: Color Name
+                state: editable enabled focusable sensitive single-line visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-24
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-23
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-25
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
+                <AtkText>
+                text: 
+                character count: 0
+                caret offset: 0
+                default attributes: bg-color: <omitted>
+                                    bg-full-height: 0
+                                    direction: <omitted>
+                                    editable: false
+                                    family-name: <omitted>
+                                    fg-color: <omitted>
+                                    indent: 0
+                                    invisible: false
+                                    justification: left
+                                    language: <omitted>
+                                    left-margin: 0
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    right-margin: 0
+                                    rise: 0
+                                    scale: 1
+                                    size: <omitted>
+                                    stretch: <omitted>
+                                    strikethrough: false
+                                    style: <omitted>
+                                    underline: none
+                                    variant: <omitted>
+                                    weight: <omitted>
+                                    wrap-mode: word
+                <AtkAction>
+                action 0 name: activate
+                action 0 description: Activates the entry
+              swatch
+                "radio button"
+                parent: grid
                 index: 4
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-26
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-25
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-27
+                <AtkAction>
+                action 0 name: select
+                action 0 description: Selects the color
+                action 1 name: activate
+                action 1 description: Activates the color
+                action 2 name: customize
+                action 2 description: Customizes the color
+            sv_popup
+              "filler"
+              parent: overlay
+              index: 1
+              state: enabled horizontal sensitive
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              grid2
                 "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 5
-                state: enabled sensitive visible
+                parent: sv_popup
+                index: 0
+                state: enabled horizontal sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-28
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-27
+                v_entry
+                  "spin button"
+                  parent: grid2
                   index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
+                  name: Value
+                  state: editable enabled focusable horizontal sensitive single-line visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-29
+                  <AtkText>
+                  text: 0
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: Activates the entry
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
+                s_entry
+                  "spin button"
+                  parent: grid2
+                  index: 1
+                  name: Saturation
+                  state: editable enabled focusable horizontal sensitive single-line visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: 0
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: Activates the entry
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
+                label2
+                  "label"
+                  parent: grid2
+                  index: 2
+                  name: V
+                  state: enabled multi-line sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: V
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkHypertext>
+                label1
+                  "label"
+                  parent: grid2
+                  index: 3
+                  name: S
+                  state: enabled multi-line sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: S
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkHypertext>
+            h_popup
+              "filler"
+              parent: overlay
+              index: 2
+              state: enabled horizontal sensitive
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              grid3
                 "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 6
-                state: enabled sensitive visible
+                parent: h_popup
+                index: 0
+                state: enabled horizontal sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-30
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-29
+                h_entry
+                  "spin button"
+                  parent: grid3
                   index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
+                  name: Hue
+                  state: editable enabled focusable horizontal sensitive single-line visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-31
+                  <AtkText>
+                  text: 0
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: Activates the entry
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
+                label3
+                  "label"
+                  parent: grid3
+                  index: 1
+                  name: H
+                  state: enabled multi-line sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: H
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkHypertext>
+            a_popup
+              "filler"
+              parent: overlay
+              index: 3
+              state: enabled horizontal sensitive
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              grid4
                 "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 7
-                state: enabled sensitive visible
+                parent: a_popup
+                index: 0
+                state: enabled horizontal sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-32
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-31
+                a_entry
+                  "spin button"
+                  parent: grid4
                   index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
+                  name: Alpha
+                  state: editable enabled focusable horizontal sensitive single-line visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-33
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 8
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-34
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-33
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
+                  <AtkText>
+                  text: 0
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: Activates the entry
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
+                label4
+                  "label"
+                  parent: grid4
+                  index: 1
+                  name: A
+                  state: enabled multi-line sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-35
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 9
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-36
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-35
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-37
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 10
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-38
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-37
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-39
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 11
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-40
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-39
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-41
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 12
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-42
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-41
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-43
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 13
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-44
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-43
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-45
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 14
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-46
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-45
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-47
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 15
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-48
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-47
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-49
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 16
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-50
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-49
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-51
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 17
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-52
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-51
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-53
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 18
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-54
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-53
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkFrameAccessible-55
-                "panel"
-                parent: unnamed-GtkContainerAccessible-16
-                index: 19
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                unnamed-GtkWidgetAccessible-15
-                  "drawing area"
-                  parent: unnamed-GtkFrameAccessible-55
-                  index: 0
-                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
-                  labelled-by: Palette:
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-    action_area
+                  <AtkText>
+                  text: A
+                  character count: 1
+                  caret offset: 0
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkHypertext>
+    dialog-action_area1
       "filler"
-      parent: vbox
+      parent: dialog-vbox1
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkButtonAccessible-56
+      cancel_button
         "push button"
-        parent: action_area
+        parent: dialog-action_area1
         index: 0
-        name: Help
-        state: enabled focusable sensitive
+        name: Cancel
+        state: enabled focusable sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -1338,10 +1336,10 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the button
-        action 0 keybinding: <Alt>h
-      unnamed-GtkButtonAccessible-57
+        action 0 keybinding: <Alt>c
+      select_button
         "push button"
-        parent: action_area
+        parent: dialog-action_area1
         index: 1
         name: Select
         state: enabled focusable sensitive showing visible default
@@ -1356,20 +1354,3 @@ window1
         action 0 name: click
         action 0 description: Clicks the button
         action 0 keybinding: <Alt>s
-      unnamed-GtkButtonAccessible-58
-        "push button"
-        parent: action_area
-        index: 2
-        name: Cancel
-        state: enabled focusable sensitive showing visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: -1 x -1
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
-        action 0 keybinding: <Alt>c

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkColorSelectionDialog" id="window1">
+  <object class="GtkColorChooserDialog" id="window1">
   </object>
 </interface>

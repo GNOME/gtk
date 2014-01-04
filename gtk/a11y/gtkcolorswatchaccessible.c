@@ -27,8 +27,20 @@ G_DEFINE_TYPE_WITH_CODE (GtkColorSwatchAccessible, _gtk_color_swatch_accessible,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static void
+gtk_color_swatch_accessible_initialize (AtkObject *obj,
+                                        gpointer   data)
+{
+  ATK_OBJECT_CLASS (_gtk_color_swatch_accessible_parent_class)->initialize (obj, data);
+
+  atk_object_set_role (obj, ATK_ROLE_RADIO_BUTTON);
+}
+
+static void
 _gtk_color_swatch_accessible_class_init (GtkColorSwatchAccessibleClass *klass)
 {
+  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
+
+  atk_class->initialize = gtk_color_swatch_accessible_initialize;
 }
 
 static void
