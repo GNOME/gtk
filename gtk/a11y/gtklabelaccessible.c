@@ -41,6 +41,7 @@ struct _GtkLabelAccessibleLink
   
   GtkLabelAccessible *label;
   gint index;
+  gboolean focused;
 };
 
 struct _GtkLabelAccessibleLinkClass
@@ -109,11 +110,40 @@ gtk_label_accessible_link_impl_get_hyperlink (AtkHyperlinkImpl *atk_impl)
   return g_object_ref (impl->link);
 }
 
-
 static void
 atk_hyperlink_impl_interface_init (AtkHyperlinkImplIface *iface)
 {
   iface->get_hyperlink = gtk_label_accessible_link_impl_get_hyperlink;
+}
+
+static AtkStateSet *
+gtk_label_accessible_link_impl_ref_state_set (AtkObject *obj)
+{
+  AtkStateSet *state_set;
+  GtkLabelAccessibleLink *link;
+  GtkWidget *widget;
+
+  link = ((GtkLabelAccessibleLinkImpl *)obj)->link;
+
+  state_set = atk_object_ref_state_set (atk_object_get_parent (obj));
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_object_get_parent (obj)));
+  if (widget)
+    {
+      if (gtk_widget_get_can_focus (widget))
+        {
+          atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
+          if (_gtk_label_get_link_focused (GTK_LABEL (widget), link->index))
+            atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
+          else
+            atk_state_set_remove_state (state_set, ATK_STATE_FOCUSED);
+        }
+
+      if (_gtk_label_get_link_visited (GTK_LABEL (widget), link->index))
+        atk_state_set_add_state (state_set, ATK_STATE_VISITED);
+    }
+
+  return state_set;
 }
 
 static void
@@ -136,8 +166,10 @@ static void
 _gtk_label_accessible_link_impl_class_init (GtkLabelAccessibleLinkImplClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  AtkObjectClass *atk_obj_class = ATK_OBJECT_CLASS (class);
 
   object_class->finalize = _gtk_label_accessible_link_impl_finalize;
+  atk_obj_class->ref_state_set = gtk_label_accessible_link_impl_ref_state_set;
 }
 
 static gchar *
@@ -1108,6 +1140,33 @@ _gtk_label_accessible_update_links (GtkLabel *label)
 
   clear_links (GTK_LABEL_ACCESSIBLE (obj));
   create_links (GTK_LABEL_ACCESSIBLE (obj));
+}
+
+void
+_gtk_label_accessible_focus_link_changed (GtkLabel *label)
+{
+  AtkObject *obj;
+  GtkLabelAccessible *accessible;
+  GList *l;
+  GtkLabelAccessibleLinkImpl *impl;
+  gboolean focused;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (label));
+  if (obj == NULL)
+    return;
+
+  accessible = GTK_LABEL_ACCESSIBLE (obj);
+
+  for (l = accessible->priv->links; l; l = l->next)
+    {
+      impl = l->data;
+      focused = _gtk_label_get_link_focused (label, impl->link->index);
+      if (impl->link->focused != focused)
+        {
+          impl->link->focused = focused;
+          atk_object_notify_state_change (ATK_OBJECT (impl), ATK_STATE_FOCUSED, focused);
+        }
+    }
 }
 
 static AtkHyperlink *

@@ -4514,6 +4514,7 @@ gtk_label_grab_focus (GtkWidget *widget)
           link = priv->select_info->links->data;
           priv->select_info->selection_anchor = link->start;
           priv->select_info->selection_end = link->start;
+          _gtk_label_accessible_focus_link_changed (label);
         }
     }
 }
@@ -4540,6 +4541,7 @@ gtk_label_focus (GtkWidget        *widget,
               focus_link = l->data;
               info->selection_anchor = focus_link->start;
               info->selection_end = focus_link->start;
+              _gtk_label_accessible_focus_link_changed (label);
             }
         }
 
@@ -4566,6 +4568,7 @@ gtk_label_focus (GtkWidget        *widget,
             if (link->start > index)
               {
                 gtk_label_select_region_index (label, link->start, link->start);
+                _gtk_label_accessible_focus_link_changed (label);
                 return TRUE;
               }
           }
@@ -4577,6 +4580,7 @@ gtk_label_focus (GtkWidget        *widget,
             if (link->end < index)
               {
                 gtk_label_select_region_index (label, link->start, link->start);
+                _gtk_label_accessible_focus_link_changed (label);
                 return TRUE;
               }
           }
@@ -4617,6 +4621,7 @@ gtk_label_focus (GtkWidget        *widget,
           focus_link = l->data;
           info->selection_anchor = focus_link->start;
           info->selection_end = focus_link->start;
+          _gtk_label_accessible_focus_link_changed (label);
           gtk_widget_queue_draw (widget);
 
           return TRUE;
