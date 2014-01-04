@@ -273,6 +273,17 @@ GtkRadioButton:selected {
   border-width: 1px;
 }
 
+.notebook tab {
+  border-style: solid;
+  border-width: 1px;
+  padding: 0;
+}
+
+.notebook .active-page {
+  color: @selected_fg_color;
+  background-color: darker (@bg_color);
+}
+
 .frame {
   border-style: inset;
   border-width: 1px;
