@@ -74,7 +74,7 @@ gtk_paned_accessible_get_current_value (AtkValue *obj,
   current_value = gtk_paned_get_position (GTK_PANED (widget));
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_INT);
-  g_value_set_int (value,current_value);
+  g_value_set_int (value, current_value);
 }
 
 static void
