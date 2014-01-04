@@ -2926,6 +2926,15 @@ gtk_scrolled_window_add (GtkContainer *container,
   scrolled_window = GTK_SCROLLED_WINDOW (container);
   priv = scrolled_window->priv;
 
+  /* gtk_scrolled_window_set_[hv]adjustment have the side-effect
+   * of creating the scrollbars
+   */
+  if (!priv->hscrollbar)
+    gtk_scrolled_window_set_hadjustment (scrolled_window, NULL);
+
+  if (!priv->vscrollbar)
+    gtk_scrolled_window_set_vadjustment (scrolled_window, NULL);
+
   hadj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   vadj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
 
