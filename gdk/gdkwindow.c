@@ -5783,7 +5783,7 @@ gdk_window_set_background_rgba (GdkWindow     *window,
  * Sets the background of @window.
  *
  * A background of %NULL means that the window will inherit its
- * background form its parent window.
+ * background from its parent window.
  *
  * The windowing system will normally fill a window with its background
  * when the window is obscured then exposed.
