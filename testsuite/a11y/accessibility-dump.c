@@ -468,30 +468,59 @@ dump_atk_value (AtkValue *atk_value,
 }
 
 static void
+dump_atk_hyperlink (AtkHyperlink *link,
+                    guint         depth,
+                    GString      *string)
+{
+  gint i;
+
+  g_string_append_printf (string, "%*s<AtkHyperlink>\n", depth, "");
+  g_string_append_printf (string, "%*sstart index: %d\n", depth, "", atk_hyperlink_get_start_index (link));
+  g_string_append_printf (string, "%*send index: %d\n", depth, "", atk_hyperlink_get_end_index (link));
+  g_string_append_printf (string, "%*sanchors:", depth, "");
+
+  for (i = 0; i < atk_hyperlink_get_n_anchors (link); i++)
+    {
+      gchar *uri;
+
+      uri = atk_hyperlink_get_uri (link, i);
+      g_string_append_printf (string, " %s", uri);
+      g_free (uri);
+    }
+
+  g_string_append_c (string, '\n');
+}
+
+static void
 dump_atk_hyperlink_impl (AtkHyperlinkImpl *impl,
                          guint             depth,
                          GString          *string)
 {
-  AtkHyperlink *atk_link;
-  gint i;
+  AtkHyperlink *link;
 
   g_string_append_printf (string, "%*s<AtkHyperlinkImpl>\n", depth, "");
 
-  atk_link = atk_hyperlink_impl_get_hyperlink (impl);
+  link = atk_hyperlink_impl_get_hyperlink (impl);
+  dump_atk_hyperlink (link, depth + DEPTH_INCREMENT, string);
+  g_object_unref (link);
+}
 
-  g_string_append_printf (string, "%*sanchors:", depth, "");
+static void
+dump_atk_hypertext (AtkHypertext *hypertext,
+                    guint         depth,
+                    GString      *string)
+{
+  gint i;
+  AtkHyperlink *link;
 
-  for (i = 0; i < atk_hyperlink_get_n_anchors (atk_link); i++)
+  g_string_append_printf (string, "%*s<AtkHypertext>\n", depth, "");
+
+  for (i = 0; i < atk_hypertext_get_n_links (hypertext); i++)
     {
-      gchar *uri;
-
-      uri = atk_hyperlink_get_uri (atk_link, i);
-      g_string_append_printf (string, " %s", uri);
-      g_free (uri);
+      link = atk_hypertext_get_link (hypertext, i);
+      dump_atk_hyperlink (link, depth + DEPTH_INCREMENT, string);
+      g_object_unref (link);
     }
-  g_string_append_c (string, '\n');
-
-  g_object_unref (atk_link);
 }
 
 static void
@@ -640,6 +669,9 @@ dump_accessible (AtkObject     *accessible,
 
   if (ATK_IS_HYPERLINK_IMPL (accessible))
     dump_atk_hyperlink_impl (ATK_HYPERLINK_IMPL (accessible), depth, string);
+
+  if (ATK_IS_HYPERTEXT (accessible))
+    dump_atk_hypertext (ATK_HYPERTEXT (accessible), depth, string);
 
   if (ATK_IS_STREAMABLE_CONTENT (accessible))
     dump_atk_streamable_content (ATK_STREAMABLE_CONTENT (accessible), depth, string);

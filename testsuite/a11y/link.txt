@@ -23,4 +23,7 @@ window1
     action 0 name: click
     action 0 description: Clicks the button
     <AtkHyperlinkImpl>
-    anchors: http://www.gtk.org
+      <AtkHyperlink>
+      start index: 0
+      end index: 0
+      anchors: http://www.gtk.org
