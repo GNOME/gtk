@@ -72,7 +72,6 @@ combo_types_changed_cb (GtkComboBoxText *combo,
 			GtkWidget **buttons)
 {
   int i;
-  char *text;
   GtkWidget *old_parent, *new_parent;
   GtkButtonBoxStyle style;
 
