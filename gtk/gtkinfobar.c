@@ -1184,7 +1184,7 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
         {
           const char *name = NULL;
 
-          atk_object_set_role (atk_obj, ATK_ROLE_ALERT);
+          atk_object_set_role (atk_obj, ATK_ROLE_INFO_BAR);
 
           switch (message_type)
             {
@@ -1213,9 +1213,7 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
             }
 
           if (name)
-            {
-              atk_object_set_name (atk_obj, name);
-            }
+            atk_object_set_name (atk_obj, name);
         }
 
       if (type_class[priv->message_type])
