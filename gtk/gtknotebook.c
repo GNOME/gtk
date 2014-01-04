@@ -7805,6 +7805,10 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
                         G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
                         notebook);
 
+  if (priv->cur_page == page)
+    gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
+				 "active-page");
+
   if (priv->show_tabs && gtk_widget_get_visible (child))
     {
       gtk_widget_show (page->tab_label);
