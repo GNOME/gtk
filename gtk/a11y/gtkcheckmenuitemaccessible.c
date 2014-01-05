@@ -84,10 +84,12 @@ gtk_check_menu_item_accessible_notify_gtk (GObject    *obj,
   AtkObject *atk_obj;
   gboolean sensitive;
   gboolean inconsistent;
+  gboolean active;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (check_menu_item));
   sensitive = gtk_widget_get_sensitive (GTK_WIDGET (check_menu_item));
   inconsistent = gtk_check_menu_item_get_inconsistent (check_menu_item);
+  active = gtk_check_menu_item_get_active (check_menu_item);
 
   if (strcmp (pspec->name, "inconsistent") == 0)
     {
@@ -99,6 +101,10 @@ gtk_check_menu_item_accessible_notify_gtk (GObject    *obj,
       /* Need to override gailwidget behavior of notifying for ENABLED */
       atk_object_notify_state_change (atk_obj, ATK_STATE_SENSITIVE, sensitive);
       atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, (sensitive && !inconsistent));
+    }
+  else if (strcmp (pspec->name, "active") == 0)
+    {
+      atk_object_notify_state_change (atk_obj, ATK_STATE_CHECKED, active);
     }
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (gtk_check_menu_item_accessible_parent_class)->notify_gtk (obj, pspec);
