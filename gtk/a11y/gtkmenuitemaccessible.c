@@ -462,6 +462,33 @@ find_accel_by_closure (GtkAccelKey *key,
   return data == (gpointer) closure;
 }
 
+static GtkWidget *
+find_item_label (GtkWidget *item)
+{
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (item));
+  if (GTK_IS_CONTAINER (child))
+    {
+      GList *children, *l;
+      children = gtk_container_get_children (GTK_CONTAINER (child));
+      for (l = children; l; l = l->next)
+        {
+          if (GTK_IS_LABEL (l->data))
+            {
+              child = l->data;
+              break;
+            }
+        }
+      g_list_free (children);
+    }
+
+  if (GTK_IS_LABEL (child))
+    return child;
+
+  return NULL;
+}
+
 /* This function returns a string of the form A;B;C where A is
  * the keybinding for the widget; B is the keybinding to traverse
  * from the menubar and C is the accelerator. The items in the
@@ -494,8 +521,7 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
       guint key_val;
       gchar *key, *temp_keybinding;
 
-      child = gtk_bin_get_child (GTK_BIN (temp_item));
-      if (child == NULL)
+      if (gtk_bin_get_child (GTK_BIN (temp_item)) == NULL)
         return NULL;
 
       parent = gtk_widget_get_parent (temp_item);
@@ -513,6 +539,7 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
               gtk_window_get_mnemonic_modifier (GTK_WINDOW (toplevel));
         }
 
+      child = find_item_label (temp_item);
       if (GTK_IS_LABEL (child))
         {
           key_val = gtk_label_get_mnemonic_keyval (GTK_LABEL (child));
@@ -560,17 +587,27 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
   parent = gtk_widget_get_parent (item);
   if (GTK_IS_MENU (parent))
     {
-      GtkAccelGroup *group;
-      GtkAccelKey *key;
-
-      group = gtk_menu_get_accel_group (GTK_MENU (parent));
-      if (group)
-        key = gtk_accel_group_find (group, find_accel_by_widget, item);
-      else
+      child = find_item_label (item);
+      if (GTK_IS_ACCEL_LABEL (child))
         {
-          key = NULL;
-          child = gtk_bin_get_child (GTK_BIN (item));
-          if (GTK_IS_ACCEL_LABEL (child))
+          guint accel_key;
+          GdkModifierType accel_mods;
+
+          gtk_accel_label_get_accel (GTK_ACCEL_LABEL (child), &accel_key, &accel_mods);
+
+          if (accel_key)
+            accelerator = gtk_accelerator_name (accel_key, accel_mods);
+        }
+        
+      if (!accelerator)
+        {
+          GtkAccelGroup *group;
+          GtkAccelKey *key = NULL;
+
+          group = gtk_menu_get_accel_group (GTK_MENU (parent));
+          if (group)
+            key = gtk_accel_group_find (group, find_accel_by_widget, item);
+          else if (GTK_IS_ACCEL_LABEL (child))
             {
               GtkAccelLabel *accel_label;
               GClosure      *accel_closure;
@@ -585,10 +622,10 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
                   g_closure_unref (accel_closure);
                 }
             }
-        }
 
-     if (key)
-       accelerator = gtk_accelerator_name (key->accel_key, key->accel_mods);
+         if (key)
+           accelerator = gtk_accelerator_name (key->accel_key, key->accel_mods);
+        }
    }
 
   /* Concatenate the bindings */
