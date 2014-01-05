@@ -354,8 +354,8 @@ add_palette (GtkColorChooserWidget  *cc,
       atk_obj = gtk_widget_get_accessible (p);
       if (names)
         {
-          atk_object_set_description (atk_obj,
-                                      g_dpgettext2 (GETTEXT_PACKAGE, "Color name", names[i]));
+          atk_object_set_name (atk_obj,
+                               g_dpgettext2 (GETTEXT_PACKAGE, "Color name", names[i]));
         }
       else
         {
@@ -363,7 +363,7 @@ add_palette (GtkColorChooserWidget  *cc,
 
           name = accessible_color_name (&colors[i]);
           text = g_strdup_printf (_("Color: %s"), name);
-          atk_object_set_description (atk_obj, text);
+          atk_object_set_name (atk_obj, text);
           g_free (text);
           g_free (name);
         }
