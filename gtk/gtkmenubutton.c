@@ -512,7 +512,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_POPUP,
                                    g_param_spec_object ("popup",
-                                                        P_("popup"),
+                                                        P_("Popup"),
                                                         P_("The dropdown menu."),
                                                         GTK_TYPE_MENU,
                                                         G_PARAM_READWRITE));
@@ -529,7 +529,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_MODEL,
                                    g_param_spec_object ("menu-model",
-                                                        P_("menu-model"),
+                                                        P_("Menu model"),
                                                         P_("The dropdown menu's model."),
                                                         G_TYPE_MENU_MODEL,
                                                         G_PARAM_READWRITE));
@@ -543,7 +543,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_ALIGN_WIDGET,
                                    g_param_spec_object ("align-widget",
-                                                        P_("align-widget"),
+                                                        P_("Align with"),
                                                         P_("The parent widget which the menu should align with."),
                                                         GTK_TYPE_CONTAINER,
                                                         G_PARAM_READWRITE));
@@ -558,7 +558,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_DIRECTION,
                                    g_param_spec_enum ("direction",
-                                                      P_("direction"),
+                                                      P_("Direction"),
                                                       P_("The direction the arrow should point."),
                                                       GTK_TYPE_ARROW_TYPE,
                                                       GTK_ARROW_DOWN,
