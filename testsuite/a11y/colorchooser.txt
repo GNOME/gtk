@@ -717,7 +717,8 @@ window1
             "push button"
             parent: unnamed-GtkContainerAccessible-39
             index: 0
-            description: Create custom color
+            name: Custom color
+            description: Create a custom color
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
