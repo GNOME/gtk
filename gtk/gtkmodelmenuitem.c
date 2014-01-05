@@ -308,6 +308,7 @@ gtk_model_menu_item_set_property (GObject *object, guint prop_id,
 
     case PROP_TOGGLED:
       _gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), g_value_get_boolean (value));
+      g_object_notify (object, "active");
       break;
 
     case PROP_ACCEL:
