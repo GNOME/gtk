@@ -516,7 +516,7 @@ window1
             parent: unnamed-GtkContainerAccessible-29
             index: 0
             name: White
-            state: enabled focusable sensitive showing visible
+            state: checked enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget

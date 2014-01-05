@@ -525,11 +525,11 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   cc->priv->button = button = gtk_color_swatch_new ();
   gtk_widget_set_name (button, "add-color-button");
   atk_obj = gtk_widget_get_accessible (button);
-  atk_object_set_role (atk_obj, ATK_ROLE_PUSH_BUTTON);
   atk_object_set_name (atk_obj, _("Custom color"));
   atk_object_set_description (atk_obj, _("Create a custom color"));
   connect_button_signals (button, cc);
   gtk_color_swatch_set_icon (GTK_COLOR_SWATCH (button), "list-add-symbolic");
+  gtk_color_swatch_set_selectable (GTK_COLOR_SWATCH (button), FALSE);
   gtk_container_add (GTK_CONTAINER (box), button);
 
   cc->priv->settings = g_settings_new ("org.gtk.Settings.ColorChooser");
@@ -546,7 +546,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
       atk_obj = gtk_widget_get_accessible (p);
       name = accessible_color_name (&color);
       text = g_strdup_printf (_("Custom color %d: %s"), i, name);
-      atk_object_set_description (atk_obj, text);
+      atk_object_set_name (atk_obj, text);
       g_free (text);
       g_free (name);
       connect_custom_signals (p, cc);
