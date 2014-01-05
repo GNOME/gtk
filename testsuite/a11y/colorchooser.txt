@@ -47,7 +47,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 0
-            description: Dark Aluminum 2
+            name: Dark Aluminum 2
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -64,7 +64,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 1
-            description: Aluminum 2
+            name: Aluminum 2
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -81,7 +81,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 2
-            description: Light Aluminum 2
+            name: Light Aluminum 2
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -98,7 +98,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 3
-            description: Dark Aluminum 1
+            name: Dark Aluminum 1
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -115,7 +115,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 4
-            description: Aluminum 1
+            name: Aluminum 1
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -132,7 +132,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 5
-            description: Light Aluminum 1
+            name: Light Aluminum 1
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -149,7 +149,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 6
-            description: Dark Chocolate
+            name: Dark Chocolate
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -166,7 +166,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 7
-            description: Chocolate
+            name: Chocolate
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -183,7 +183,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 8
-            description: Light Chocolate
+            name: Light Chocolate
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -200,7 +200,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 9
-            description: Dark Plum
+            name: Dark Plum
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -217,7 +217,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 10
-            description: Plum
+            name: Plum
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -234,7 +234,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 11
-            description: Light Plum
+            name: Light Plum
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -251,7 +251,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 12
-            description: Dark Sky Blue
+            name: Dark Sky Blue
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -268,7 +268,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 13
-            description: Sky Blue
+            name: Sky Blue
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -285,7 +285,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 14
-            description: Light Sky Blue
+            name: Light Sky Blue
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -302,7 +302,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 15
-            description: Dark Chameleon
+            name: Dark Chameleon
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -319,7 +319,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 16
-            description: Chameleon
+            name: Chameleon
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -336,7 +336,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 17
-            description: Light Chameleon
+            name: Light Chameleon
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -353,7 +353,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 18
-            description: Dark Butter
+            name: Dark Butter
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -370,7 +370,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 19
-            description: Butter
+            name: Butter
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -387,7 +387,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 20
-            description: Light Butter
+            name: Light Butter
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -404,7 +404,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 21
-            description: Dark Orange
+            name: Dark Orange
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -421,7 +421,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 22
-            description: Orange
+            name: Orange
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -438,7 +438,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 23
-            description: Light Orange
+            name: Light Orange
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -455,7 +455,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 24
-            description: Dark Scarlet Red
+            name: Dark Scarlet Red
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -472,7 +472,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 25
-            description: Scarlet Red
+            name: Scarlet Red
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -489,7 +489,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-1
             index: 26
-            description: Light Scarlet Red
+            name: Light Scarlet Red
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -515,7 +515,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 0
-            description: White
+            name: White
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -532,7 +532,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 1
-            description: Very Light Gray
+            name: Very Light Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -549,7 +549,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 2
-            description: Lighter Gray
+            name: Lighter Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -566,7 +566,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 3
-            description: Light Gray
+            name: Light Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -583,7 +583,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 4
-            description: Medium Gray
+            name: Medium Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -600,7 +600,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 5
-            description: Dark Gray
+            name: Dark Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -617,7 +617,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 6
-            description: Darker Gray
+            name: Darker Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -634,7 +634,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 7
-            description: Very Dark Gray
+            name: Very Dark Gray
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
@@ -651,7 +651,7 @@ window1
             "radio button"
             parent: unnamed-GtkContainerAccessible-29
             index: 8
-            description: Black
+            name: Black
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
