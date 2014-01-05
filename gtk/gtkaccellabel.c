@@ -981,8 +981,32 @@ gtk_accel_label_set_accel (GtkAccelLabel   *accel_label,
                            guint            accelerator_key,
                            GdkModifierType  accelerator_mods)
 {
+  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+
   accel_label->priv->accel_key = accelerator_key;
   accel_label->priv->accel_mods = accelerator_mods;
 
   gtk_accel_label_reset (accel_label);
+}
+
+/**
+ * gtk_accel_label_get_accel:
+ * @accel_label: a #GtkAccelLabel
+ * @accelerator_key: return location for the keyval
+ * @accelerator_mods: return location for the modifier mask
+ *
+ * Returns the keyval and modifier mask set with
+ * gtk_accel_label_set_accel().
+ *
+ * Since: 3.12
+ */
+void
+gtk_accel_label_get_accel (GtkAccelLabel   *accel_label,
+                           guint           *accelerator_key,
+                           GdkModifierType *accelerator_mods)
+{
+  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+
+  *accelerator_key = accel_label->priv->accel_key;
+  *accelerator_mods = accel_label->priv->accel_mods;
 }

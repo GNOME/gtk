@@ -101,6 +101,10 @@ GDK_AVAILABLE_IN_3_6
 void       gtk_accel_label_set_accel         (GtkAccelLabel   *accel_label,
                                               guint            accelerator_key,
                                               GdkModifierType  accelerator_mods);
+GDK_AVAILABLE_IN_3_12
+void       gtk_accel_label_get_accel         (GtkAccelLabel   *accel_label,
+                                              guint           *accelerator_key,
+                                              GdkModifierType *accelerator_mods);
 
 /* private */
 gchar *    _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
