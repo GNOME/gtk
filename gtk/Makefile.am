@@ -184,6 +184,7 @@ gtk_public_h_sources = 		\
 	gtkaccelmap.h		\
 	gtkaccessible.h		\
 	gtkactionable.h		\
+	gtkactionbar.h		\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkappchooser.h		\
@@ -605,6 +606,7 @@ gtk_base_c_sources = 		\
 	gtkaccellabel.c		\
 	gtkaccelmap.c		\
 	gtkaccessible.c		\
+	gtkactionbar.c		\
 	gtkactionhelper.c	\
 	gtkadjustment.c		\
 	gtkalignment.c		\

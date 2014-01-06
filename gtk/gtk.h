@@ -34,6 +34,7 @@
 #include <gtk/gtkaccelmap.h>
 #include <gtk/gtkaccessible.h>
 #include <gtk/gtkactionable.h>
+#include <gtk/gtkactionbar.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtkappchooser.h>
