@@ -44,35 +44,70 @@
     </key>
     <key name='location-mode' enum='org.gtk.Settings.FileChooser.LocationMode'>
       <default>'path-bar'</default>
+      <description>
+	Controls whether the file chooser
+	shows just a path bar, or a visible entry for the filename as well, for the
+	benefit of typing-oriented users.  The possible values for these modes
+	are "path-bar" and "filename-entry".
+      </description>
     </key>
     <key name='show-hidden' type='b'>
       <default>false</default>
       <summary>Whether to show hidden files</summary>
-      <description>If set to true, then hidden files are shown by default.  Hidden files are either dotfiles, listed in the folder's .hidden file or backup files ending with a tilde (~).</description>
+      <description>
+	Controls whether the file chooser shows hidden files or not.
+      </description>
     </key>
     <key name='expand-folders' type='b'>
       <default>false</default>
+      <description>This key is deprecated; do not use it.</description>
     </key>
     <key name='show-size-column' type='b'>
       <default>true</default>
+      <description>
+	Controls whether the file chooser shows a column with file
+	sizes.
+      </description>
     </key>
     <key name='sort-column' enum='org.gtk.Settings.FileChooser.SortColumn'>
       <default>'name'</default>
+      <description>
+	Can be one of "name", "modified", or "size".  It controls
+	which of the columns in the file chooser is used for sorting
+	the list of files.
+      </description>
     </key>
     <key name='sort-order' enum='org.gtk.Settings.FileChooser.SortOrder'>
       <default>'ascending'</default>
+      <description>
+	Can be one of the strings "ascending" or "descending".
+      </description>
     </key>
     <key name='window-position' type='(ii)'>
       <default>(-1, -1)</default>
+      <description>
+	Coordinates (x, y) of the upper-left corner of the GtkFileChooserDialog's window.
+      </description>
     </key>
     <key name='window-size' type='(ii)'>
       <default>(-1, -1)</default>
+      <description>
+	Size in pixels (width, height) of the GtkFileChooserDialog's window.
+      </description>
     </key>
     <key name='startup-mode' enum='org.gtk.Settings.FileChooser.StartupMode'>
       <default>'recent'</default>
+      <description>
+	Either "recent" or "cwd"; controls whether the file chooser
+	starts up showing the list of recently-used files, or the
+	contents of the current working directory.
+      </description>
     </key>
     <key name='sidebar-width' type='i'>
       <default>148</default>
+      <description>
+	Width in pixels of the file chooser's places sidebar.
+      </description>
     </key>
   </schema>
 
