@@ -140,6 +140,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	teststack			\
 	testrevealer			\
 	testtitlebar			\
+	testsplitheaders		\
 	testwindowsize
 
 if USE_X11
@@ -515,6 +516,7 @@ EXTRA_DIST += 			\
 	merge-2.ui		\
 	merge-3.ui		\
 	gnome-textfile.png	\
+	testsplitheaders.ui	\
 	makefile.msc
 
 
