@@ -1837,10 +1837,15 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkStackSwitcher" id="switcher">
+                      <object class="GtkActionBar" id="actionbar1">
                         <property name="visible">True</property>
-                        <property name="stack">stack</property>
-                        <property name="halign">center</property>
+                        <child type="center">
+                          <object class="GtkStackSwitcher" id="switcher">
+                            <property name="visible">True</property>
+                            <property name="stack">stack</property>
+                            <property name="halign">center</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
