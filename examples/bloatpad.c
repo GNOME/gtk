@@ -138,6 +138,18 @@ activate_clear (GSimpleAction *action,
 }
 
 static void
+activate_clear_all (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  GtkApplication *app = GTK_APPLICATION (user_data);
+  GList *iter;
+
+  for (iter = gtk_application_get_windows (app); iter; iter = iter->next)
+    g_action_group_activate_action (iter->data, "clear", NULL);
+}
+
+static void
 text_buffer_changed_cb (GtkTextBuffer *buffer,
                         BloatPad      *app)
 {
@@ -170,7 +182,7 @@ text_buffer_changed_cb (GtkTextBuffer *buffer,
       GNotification *n;
       n = g_notification_new ("Three lines of text");
       g_notification_set_body (n, "Keep up the good work!");
-      g_notification_add_button (n, "Start over", "app.clear");
+      g_notification_add_button (n, "Start over", "app.clear-all");
       g_application_send_notification (G_APPLICATION (app), "three-lines", n);
       g_object_unref (n);
     }
@@ -450,7 +462,8 @@ static GActionEntry app_entries[] = {
   { "about", about_activated, NULL, NULL, NULL },
   { "quit", quit_activated, NULL, NULL, NULL },
   { "edit-accels", edit_accels },
-  { "time-active", NULL, NULL, "false", time_active_changed }
+  { "time-active", NULL, NULL, "false", time_active_changed },
+  { "clear-all", activate_clear_all }
 };
 
 static void
