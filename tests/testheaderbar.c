@@ -38,22 +38,6 @@ on_bookmark_clicked (GtkButton *button, gpointer data)
   gtk_widget_show (chooser);
 }
 
-static void
-change_title (GtkButton *button, gpointer data)
-{
-  GtkWidget *header = GTK_WIDGET (data);
-
-  if (gtk_header_bar_get_custom_title (GTK_HEADER_BAR (header)) == NULL)
-    {
-      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), gtk_check_button_new_with_label ("Middle"));
-    }
-  else
-    {
-      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), NULL);
-      gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Middle");
-    }
-}
-
 static GtkWidget *header;
 
 static void
@@ -166,20 +150,16 @@ main (int argc, char *argv[])
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
 
-  footer = gtk_header_bar_new ();
-  button = gtk_button_new_with_label ("Title");
-  g_signal_connect (button, "clicked", G_CALLBACK (change_title), footer);
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (footer), button);
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (footer), gtk_check_button_new_with_label ("Middle"));
+  footer = gtk_action_bar_new ();
+  gtk_action_bar_set_center_widget (GTK_ACTION_BAR (footer), gtk_check_button_new_with_label ("Middle"));
   button = gtk_toggle_button_new_with_label ("Custom");
   g_signal_connect (button, "clicked", G_CALLBACK (change_header), window);
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (footer), button);
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (footer), gtk_check_button_new_with_label ("Middle"));
+  gtk_action_bar_pack_start (GTK_ACTION_BAR (footer), button);
   button = gtk_button_new_with_label ("Subtitle");
   g_signal_connect (button, "clicked", G_CALLBACK (change_subtitle), NULL);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), button);
+  gtk_action_bar_pack_end (GTK_ACTION_BAR (footer), button);
   button = gtk_button_new_with_label ("Fullscreen");
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), button);
+  gtk_action_bar_pack_end (GTK_ACTION_BAR (footer), button);
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_fullscreen), window);
   gtk_box_pack_end (GTK_BOX (box), footer, FALSE, FALSE, 0);
 
