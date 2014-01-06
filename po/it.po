@@ -1,17 +1,17 @@
 # This is the Italian locale definition for Gtk+.
-# Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Free Software Foundation, Inc.
+# Copyright (C) 1998, 1999, 2000 - 2010, 2011, 2012, 2013, 2014 Free Software Foundation, Inc.
 # Tristan Tarrant <ttarrant@etnoteam.it>, 1999.
 # Christopher Gabriel <cgabriel@gnu.org>, 2000, 2001, 2002.
 # Alessio Dessì <alessiodessi@tiscali.it>, 2003, 2004, 2005, 2006, 2007.
 # Luca Ferretti <lferrett@gnome.org>, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
-# Milo Casagrande <milo@ubuntu.com>, 2013.
+# Milo Casagrande <milo@ubuntu.com>, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-24 08:56+0100\n"
-"PO-Revision-Date: 2013-12-24 09:01+0100\n"
+"POT-Creation-Date: 2014-01-06 09:23+0100\n"
+"PO-Revision-Date: 2014-01-06 09:24+0100\n"
 "Last-Translator: Milo Casagrande <milo@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -516,7 +516,7 @@ msgid "Toggle"
 msgstr "Commuta"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
-#: ../gtk/a11y/gtkmenuitemaccessible.c:433
+#: ../gtk/a11y/gtkmenuitemaccessible.c:435
 msgctxt "Action name"
 msgid "Click"
 msgstr "Clic"
@@ -537,7 +537,7 @@ msgid "Edit"
 msgstr "Modifica"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:72
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:149
 #: ../gtk/a11y/gtkentryaccessible.c:1554
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
@@ -560,27 +560,27 @@ msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "Attiva la cella"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:71
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:148
 msgctxt "Action name"
 msgid "Select"
 msgstr "Seleziona"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:73
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:150
 msgctxt "Action name"
 msgid "Customize"
 msgstr "Personalizza"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:84
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:161
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "Seleziona una colore"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:85
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:162
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "Attiva il colore"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:86
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:163
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Personalizza il colore"
@@ -640,12 +640,12 @@ msgid "_Close"
 msgstr "_Chiudi"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:428
-#: ../gtk/gtkwindow.c:8032
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "Minimizza"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:451
-#: ../gtk/gtkwindow.c:8040
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "Massimizza"
 
@@ -1023,7 +1023,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Rid_uci ingrandimento"
 
-#: ../gtk/a11y/gtkmenuitemaccessible.c:442
+#: ../gtk/a11y/gtkmenuitemaccessible.c:444
 msgctxt "Action description"
 msgid "Clicks the menuitem"
 msgstr "Esegue il clic sulla voce di menu"
@@ -1400,7 +1400,7 @@ msgstr "Vuoto"
 #. * opened when the user selects the <literal>About</literal> option from
 #. * the <literal>Help</literal> menu. All parts of the dialog are optional.
 #. *
-#. * About dialog often contain links and email addresses. GtkAboutDialog
+#. * About dialogs often contain links and email addresses. GtkAboutDialog
 #. * displays these as clickable links. By default, it calls gtk_show_uri()
 #. * when a user clicks one. The behaviour can be overridden with the
 #. * #GtkAboutDialog::activate-link signal.
@@ -1507,19 +1507,19 @@ msgstr "Sito web"
 msgid "About %s"
 msgstr "Informazioni su %s"
 
-#: ../gtk/gtkaboutdialog.c:2287
+#: ../gtk/gtkaboutdialog.c:2289
 msgid "Created by"
 msgstr "Creato da"
 
-#: ../gtk/gtkaboutdialog.c:2290
+#: ../gtk/gtkaboutdialog.c:2292
 msgid "Documented by"
 msgstr "Documentato da"
 
-#: ../gtk/gtkaboutdialog.c:2300
+#: ../gtk/gtkaboutdialog.c:2302
 msgid "Translated by"
 msgstr "Tradotto da"
 
-#: ../gtk/gtkaboutdialog.c:2305
+#: ../gtk/gtkaboutdialog.c:2307
 msgid "Artwork by"
 msgstr "Grafica di"
 
@@ -2035,11 +2035,15 @@ msgstr "Bianco"
 msgid "Custom"
 msgstr "Personalizzato"
 
-#: ../gtk/gtkcolorchooserwidget.c:529
-msgid "Create custom color"
-msgstr "Crea colore personalizzato"
+#: ../gtk/gtkcolorchooserwidget.c:528
+msgid "Custom color"
+msgstr "Colore personalizzato"
 
-#: ../gtk/gtkcolorchooserwidget.c:547
+#: ../gtk/gtkcolorchooserwidget.c:529
+msgid "Create a custom color"
+msgstr "Crea un colore personalizzato"
+
+#: ../gtk/gtkcolorchooserwidget.c:548
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Colore personalizzato %d: %s"
@@ -2131,26 +2135,26 @@ msgstr "_Destro:"
 msgid "Paper Margins"
 msgstr "Margini carta"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6243
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6250
 #: ../gtk/gtktextview.c:8708 ../gtk/gtktextview.c:8891
 msgid "Cu_t"
 msgstr "_Taglia"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6244
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6251
 #: ../gtk/gtktextview.c:8712 ../gtk/gtktextview.c:8895
 msgid "_Copy"
 msgstr "_Copia"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6245
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6252
 #: ../gtk/gtktextview.c:8714 ../gtk/gtktextview.c:8897
 msgid "_Paste"
 msgstr "_Incolla"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6247 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8717
 msgid "_Delete"
 msgstr "Eli_mina"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6256 ../gtk/gtktextview.c:8731
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8731
 msgid "Select _All"
 msgstr "_Seleziona tutto"
 
@@ -2428,7 +2432,7 @@ msgstr "Selezione tipo di carattere"
 msgid "Application menu"
 msgstr "Menù applicazione"
 
-#: ../gtk/gtkheaderbar.c:469 ../gtk/gtkwindow.c:8137
+#: ../gtk/gtkheaderbar.c:469 ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "Chiudi"
 
@@ -2478,12 +2482,12 @@ msgid "Error"
 msgstr "Errore"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6226
+#: ../gtk/gtklabel.c:6233
 msgid "_Open Link"
 msgstr "_Apri collegamento"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6234
+#: ../gtk/gtklabel.c:6241
 msgid "Copy _Link Address"
 msgstr "_Copia indirizzo collegamento"
 
@@ -3511,35 +3515,35 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: ../gtk/gtkwindow.c:8040
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "Demassimizza"
 
-#: ../gtk/gtkwindow.c:8049
+#: ../gtk/gtkwindow.c:8059
 msgid "Always on Top"
 msgstr "Sempre in primo piano"
 
-#: ../gtk/gtkwindow.c:8061
+#: ../gtk/gtkwindow.c:8071
 msgid "Always on Visible Workspace"
 msgstr "Sempre su spazio di lavoro visibile"
 
-#: ../gtk/gtkwindow.c:8069
+#: ../gtk/gtkwindow.c:8079
 msgid "Only on This Workspace"
 msgstr "Solo su questo spazio di lavoro"
 
-#: ../gtk/gtkwindow.c:8086
+#: ../gtk/gtkwindow.c:8096
 msgid "Move to Workspace Up"
 msgstr "Sposta su spazio di lavoro in alto"
 
-#: ../gtk/gtkwindow.c:8095
+#: ../gtk/gtkwindow.c:8105
 msgid "Move to Workspace Down"
 msgstr "Sposta su spazio di lavoro in basso"
 
-#: ../gtk/gtkwindow.c:8109
+#: ../gtk/gtkwindow.c:8119
 msgid "Move to Another Workspace"
 msgstr "Sposta su altro spazio di lavoro"
 
-#: ../gtk/gtkwindow.c:8117
+#: ../gtk/gtkwindow.c:8127
 #, c-format
 msgid "Workspace %d"
 msgstr "Spazio di lavoro %d"
