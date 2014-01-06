@@ -60,11 +60,13 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
   GtkWidget *menu;
 
   ATK_OBJECT_CLASS (gtk_menu_item_accessible_parent_class)->initialize (obj, data);
-
   g_signal_connect (data, "select", G_CALLBACK (menu_item_select), NULL);
   g_signal_connect (data, "deselect", G_CALLBACK (menu_item_deselect), NULL);
 
   widget = GTK_WIDGET (data);
+  if ((gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT) != 0)
+    GTK_MENU_ITEM_ACCESSIBLE (obj)->priv->selected = TRUE;
+
   parent = gtk_widget_get_parent (widget);
   if (GTK_IS_MENU (parent))
     {
