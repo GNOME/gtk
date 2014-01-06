@@ -359,7 +359,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           int n_children = 0;
 
           if (tokens[i] == NULL)
-            continue;
+            break;
 
           t = g_strsplit (tokens[i], ",", -1);
 
