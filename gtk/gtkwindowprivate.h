@@ -75,6 +75,8 @@ void _gtk_window_keys_foreach (GtkWindow               *window,
                                GtkWindowKeysForeachFunc func,
                                gpointer                 func_data);
 
+gboolean _gtk_window_check_handle_wm_event (GdkEvent  *event);
+
 /* --- internal (GtkAcceleratable) --- */
 gboolean        _gtk_window_query_nonaccels     (GtkWindow      *window,
                                                  guint           accel_key,
