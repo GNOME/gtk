@@ -13,6 +13,62 @@ on_text_changed (GtkEntry       *entry,
 }
 
 static void
+create_widgets (GtkHeaderBar *bar,
+                GtkPackType   pack_type,
+                gint          n)
+{
+  GList *children, *l;
+  GtkWidget *child;
+  gint i;
+  gchar *label;
+
+  children = gtk_container_get_children (GTK_CONTAINER (bar));
+  for (l = children; l; l = l->next)
+    {
+      GtkPackType type;
+
+      child = l->data;
+      gtk_container_child_get (GTK_CONTAINER (bar), child, "pack-type", &type, NULL);
+      if (type == pack_type)
+        gtk_container_remove (GTK_CONTAINER (bar), child);
+    }
+  g_list_free (children);
+
+  for (i = 0; i < n; i++)
+    {
+      label = g_strdup_printf ("%d", i);
+      child = gtk_button_new_with_label (label);
+      g_free (label);
+
+      gtk_widget_show (child);
+      if (pack_type == GTK_PACK_START)
+        gtk_header_bar_pack_start (bar, child);
+      else
+        gtk_header_bar_pack_end (bar, child);
+    }
+}
+
+static void
+change_start (GtkSpinButton *button,
+              GParamSpec    *pspec,
+              GtkHeaderBar  *bar)
+{
+  create_widgets (bar,
+                  GTK_PACK_START,
+                  gtk_spin_button_get_value_as_int (button));
+}
+
+static void
+change_end (GtkSpinButton *button,
+            GParamSpec    *pspec,
+            GtkHeaderBar  *bar)
+{
+  create_widgets (bar,
+                  GTK_PACK_END,
+                  gtk_spin_button_get_value_as_int (button));
+}
+
+static void
 activate (GApplication *gapp)
 {
   GtkApplication *app = GTK_APPLICATION (gapp);
@@ -22,6 +78,7 @@ activate (GApplication *gapp)
   GtkWidget *label;
   GtkWidget *entry;
   GtkWidget *check;
+  GtkWidget *spin;
   GtkBuilder *builder;
   GMenuModel *menu;
   gchar *layout;
@@ -47,8 +104,6 @@ activate (GApplication *gapp)
   gtk_application_set_app_menu (app, menu);
 
   header = gtk_header_bar_new ();
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (header), gtk_button_new_with_label ("Start"));
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header), gtk_button_new_with_label ("End"));
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
   grid = gtk_grid_new ();
@@ -117,6 +172,18 @@ activate (GApplication *gapp)
   gtk_grid_attach (GTK_GRID (grid), label, 2, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), check, 3, 2, 1, 1);
 
+  label = gtk_label_new ("Custom");
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  spin = gtk_spin_button_new_with_range (0, 10, 1);
+  g_signal_connect (spin, "notify::value",
+                    G_CALLBACK (change_start), header);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), spin, 1, 3, 1, 1);
+  spin = gtk_spin_button_new_with_range (0, 10, 1);
+  g_signal_connect (spin, "notify::value",
+                    G_CALLBACK (change_end), header);
+  gtk_grid_attach (GTK_GRID (grid), spin, 2, 3, 2, 1);
+  
   gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_widget_show_all (window);
 }
