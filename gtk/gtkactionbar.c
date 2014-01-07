@@ -509,18 +509,9 @@ gtk_action_bar_size_allocate (GtkWidget     *widget,
       else
         x = allocation->x + allocation->width - end_width - css_borders.right;
 
-      if (packing == GTK_PACK_START)
-        {
-          l = priv->children;
-          i = 0;
-        }
-      else
-        {
-          l = g_list_last (priv->children);
-          i = nvis_children - 1;
-        }
+      i = 0;
 
-      for (; l != NULL; (packing == GTK_PACK_START) ? (l = l->next) : (l = l->prev))
+      for (l = priv->children; l != NULL; l = l->next)
         {
           child = l->data;
           if (!gtk_widget_get_visible (child->widget))
@@ -554,10 +545,7 @@ gtk_action_bar_size_allocate (GtkWidget     *widget,
           gtk_widget_size_allocate (child->widget, &child_allocation);
 
         next:
-          if (packing == GTK_PACK_START)
-            i++;
-          else
-            i--;
+          i++;
         }
     }
 
