@@ -82,6 +82,11 @@ Release notes for 3.12
   GdStack is using it, so applications should be ported from GdStack
   to GtkStack in 3.12.
 
+* GtkHeaderBar in 3.10 was not ordering its pack-end children in
+  the right way. This has been fixed in 3.12. Applications which
+  pack multiple widgets at the end of a headerbar will have to
+  be updated.
+
 Release notes for 3.10
 ======================
 
