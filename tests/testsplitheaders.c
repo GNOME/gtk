@@ -16,8 +16,12 @@ split_decorations (GtkSettings *settings,
 
   p = g_strsplit (layout, ":", -1);
 
-  p1 = g_strconcat (p[0], ":", NULL);
-  p2 = g_strconcat (":", p[1], NULL);
+  p1 = g_strconcat ("", p[0], ":", NULL);
+
+  if (g_strv_length (p) >= 2)
+    p2 = g_strconcat (":", p[1], NULL);
+  else
+    p2 = g_strdup ("");
 
   gtk_header_bar_set_decoration_layout (GTK_HEADER_BAR (sheader), p1);
   gtk_header_bar_set_decoration_layout (GTK_HEADER_BAR (mheader), p2);
