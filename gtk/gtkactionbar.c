@@ -100,19 +100,6 @@ get_css_padding_and_border (GtkWidget *widget,
 }
 
 static void
-construct_center_widget (GtkActionBar *bar)
-{
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (bar);
-
-  g_assert (priv->center_widget == NULL);
-
-  priv->center_widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_valign (priv->center_widget, GTK_ALIGN_CENTER);
-  gtk_widget_show (priv->center_widget);
-  gtk_widget_set_parent (priv->center_widget, GTK_WIDGET (bar));
-}
-
-static void
 gtk_action_bar_init (GtkActionBar *bar)
 {
   GtkStyleContext *context;
@@ -126,8 +113,6 @@ gtk_action_bar_init (GtkActionBar *bar)
   priv->center_widget = NULL;
   priv->children = NULL;
   priv->spacing = DEFAULT_SPACING;
-
-  construct_center_widget (bar);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (bar));
   gtk_style_context_add_class (context, "action-bar");
@@ -617,10 +602,6 @@ gtk_action_bar_set_center_widget (GtkActionBar *bar,
       gtk_widget_set_parent (priv->center_widget, GTK_WIDGET (bar));
       gtk_widget_set_valign (priv->center_widget, GTK_ALIGN_CENTER);
       gtk_widget_show (center_widget);
-    }
-  else
-    {
-      construct_center_widget (bar);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
