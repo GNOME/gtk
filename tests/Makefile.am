@@ -141,6 +141,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testrevealer			\
 	testtitlebar			\
 	testsplitheaders		\
+	testactionbar			\
 	testwindowsize
 
 if USE_X11
