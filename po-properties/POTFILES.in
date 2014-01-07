@@ -52,6 +52,7 @@ gtk/gtkaccellabel.c
 gtk/gtkaccelmap.c
 gtk/gtkaccessible.c
 gtk/gtkactionable.c
+gtk/gtkactionbar.c
 gtk/gtkadjustment.c
 gtk/gtkalignment.c
 gtk/gtkappchooserbutton.c
