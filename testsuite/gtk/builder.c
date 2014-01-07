@@ -26,14 +26,14 @@
 #include <gdk/gdkkeysyms.h>
 
 /* exported for GtkBuilder */
-void signal_normal (GtkWindow *window, GParamSpec spec);
-void signal_after (GtkWindow *window, GParamSpec spec);
-void signal_object (GtkButton *button, GParamSpec spec);
-void signal_object_after (GtkButton *button, GParamSpec spec);
-void signal_first (GtkButton *button, GParamSpec spec);
-void signal_second (GtkButton *button, GParamSpec spec);
-void signal_extra (GtkButton *button, GParamSpec spec);
-void signal_extra2 (GtkButton *button, GParamSpec spec);
+void signal_normal (GtkWindow *window, GParamSpec *spec);
+void signal_after (GtkWindow *window, GParamSpec *spec);
+void signal_object (GtkButton *button, GParamSpec *spec);
+void signal_object_after (GtkButton *button, GParamSpec *spec);
+void signal_first (GtkButton *button, GParamSpec *spec);
+void signal_second (GtkButton *button, GParamSpec *spec);
+void signal_extra (GtkButton *button, GParamSpec *spec);
+void signal_extra2 (GtkButton *button, GParamSpec *spec);
 
 /* Copied from gtkiconfactory.c; keep in sync! */
 struct _GtkIconSet
@@ -140,7 +140,7 @@ static int object = 0;
 static int object_after = 0;
 
 void /* exported for GtkBuilder */
-signal_normal (GtkWindow *window, GParamSpec spec)
+signal_normal (GtkWindow *window, GParamSpec *spec)
 {
   g_assert (GTK_IS_WINDOW (window));
   g_assert (normal == 0);
@@ -150,7 +150,7 @@ signal_normal (GtkWindow *window, GParamSpec spec)
 }
 
 void /* exported for GtkBuilder */
-signal_after (GtkWindow *window, GParamSpec spec)
+signal_after (GtkWindow *window, GParamSpec *spec)
 {
   g_assert (GTK_IS_WINDOW (window));
   g_assert (normal == 1);
@@ -160,7 +160,7 @@ signal_after (GtkWindow *window, GParamSpec spec)
 }
 
 void /* exported for GtkBuilder */
-signal_object (GtkButton *button, GParamSpec spec)
+signal_object (GtkButton *button, GParamSpec *spec)
 {
   g_assert (GTK_IS_BUTTON (button));
   g_assert (object == 0);
@@ -170,7 +170,7 @@ signal_object (GtkButton *button, GParamSpec spec)
 }
 
 void /* exported for GtkBuilder */
-signal_object_after (GtkButton *button, GParamSpec spec)
+signal_object_after (GtkButton *button, GParamSpec *spec)
 {
   g_assert (GTK_IS_BUTTON (button));
   g_assert (object == 1);
@@ -180,28 +180,28 @@ signal_object_after (GtkButton *button, GParamSpec spec)
 }
 
 void /* exported for GtkBuilder */
-signal_first (GtkButton *button, GParamSpec spec)
+signal_first (GtkButton *button, GParamSpec *spec)
 {
   g_assert (normal == 0);
   normal = 10;
 }
 
 void /* exported for GtkBuilder */
-signal_second (GtkButton *button, GParamSpec spec)
+signal_second (GtkButton *button, GParamSpec *spec)
 {
   g_assert (normal == 10);
   normal = 20;
 }
 
 void /* exported for GtkBuilder */
-signal_extra (GtkButton *button, GParamSpec spec)
+signal_extra (GtkButton *button, GParamSpec *spec)
 {
   g_assert (normal == 20);
   normal = 30;
 }
 
 void /* exported for GtkBuilder */
-signal_extra2 (GtkButton *button, GParamSpec spec)
+signal_extra2 (GtkButton *button, GParamSpec *spec)
 {
   g_assert (normal == 30);
   normal = 40;
