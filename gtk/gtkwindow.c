@@ -7697,6 +7697,27 @@ gtk_window_button_press_event (GtkWidget      *widget,
   return FALSE;
 }
 
+gboolean
+_gtk_window_check_handle_wm_event (GdkEvent *event)
+{
+  GtkWidget *widget;
+
+  widget = gtk_get_event_widget (event);
+
+  if (!GTK_IS_WINDOW (widget))
+    return FALSE;
+
+  if (event->type == GDK_BUTTON_PRESS ||
+      event->type == GDK_2BUTTON_PRESS)
+    return gtk_window_button_press_event (widget, &event->button);
+  else if (event->type == GDK_BUTTON_RELEASE)
+    gtk_window_button_release_event (widget, &event->button);
+  else if (event->type == GDK_MOTION_NOTIFY)
+    return gtk_window_motion_notify_event (widget, &event->motion);
+  else
+    return FALSE;
+}
+
 static void
 gtk_window_real_activate_default (GtkWindow *window)
 {
