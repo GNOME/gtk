@@ -28,6 +28,7 @@ struct _GtkTextCellAccessiblePrivate
   gchar *cell_text;
   gint caret_pos;
   gint cell_length;
+  PangoLayout *layout;
 };
 
 static const gchar* gtk_text_cell_accessible_get_name    (AtkObject      *atk_obj);
@@ -112,6 +113,9 @@ gtk_text_cell_accessible_finalize (GObject *object)
 
   g_free (text_cell->priv->cell_text);
 
+  if (text_cell->priv->layout)
+    g_object_unref (text_cell->priv->layout);
+
   G_OBJECT_CLASS (gtk_text_cell_accessible_parent_class)->finalize (object);
 }
 
@@ -135,6 +139,10 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
   gint temp_length;
   gchar *text;
   GtkCellRenderer *renderer;
+
+  if (text_cell->priv->layout)
+    g_object_unref (text_cell->priv->layout);
+  text_cell->priv->layout = create_pango_layout (text_cell);
 
   g_object_get (cell, "renderer", &renderer, NULL);
   g_object_get (renderer, "text", &text, NULL);
@@ -226,12 +234,10 @@ gtk_text_cell_accessible_get_text_before_offset (AtkText         *atk_text,
                                                  gint            *start_offset,
                                                  gint            *end_offset)
 {
-  PangoLayout *layout;
+  GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (atk_text);
   gchar *text;
 
-  layout = create_pango_layout (GTK_TEXT_CELL_ACCESSIBLE (atk_text));
-  text = _gtk_pango_get_text_before (layout, boundary_type, offset, start_offset, end_offset);
-  g_object_unref (layout);
+  text = _gtk_pango_get_text_before (text_cell->priv->layout, boundary_type, offset, start_offset, end_offset);
 
   return text;
 }
@@ -243,12 +249,10 @@ gtk_text_cell_accessible_get_text_at_offset (AtkText         *atk_text,
                                              gint            *start_offset,
                                              gint            *end_offset)
 {
-  PangoLayout *layout;
+  GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (atk_text);
   gchar *text;
 
-  layout = create_pango_layout (GTK_TEXT_CELL_ACCESSIBLE (atk_text));
-  text = _gtk_pango_get_text_at (layout, boundary_type, offset, start_offset, end_offset);
-  g_object_unref (layout);
+  text = _gtk_pango_get_text_at (text_cell->priv->layout, boundary_type, offset, start_offset, end_offset);
 
   return text;
 }
@@ -260,12 +264,10 @@ gtk_text_cell_accessible_get_text_after_offset (AtkText         *atk_text,
                                                 gint            *start_offset,
                                                 gint            *end_offset)
 {
-  PangoLayout *layout;
+  GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (atk_text);
   gchar *text;
 
-  layout = create_pango_layout (GTK_TEXT_CELL_ACCESSIBLE (atk_text));
-  text = _gtk_pango_get_text_after (layout, boundary_type, offset, start_offset, end_offset);
-  g_object_unref (layout);
+  text = _gtk_pango_get_text_after (text_cell->priv->layout, boundary_type, offset, start_offset, end_offset);
 
   return text;
 }
@@ -318,11 +320,9 @@ gtk_text_cell_accessible_get_run_attributes (AtkText *text,
                                              gint    *end_offset)
 {
   AtkAttributeSet *attrib_set = NULL;
-  PangoLayout *layout;
+  GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
 
-  layout = create_pango_layout (GTK_TEXT_CELL_ACCESSIBLE (text));
-  attrib_set = _gtk_pango_get_run_attributes  (NULL, layout, offset, start_offset, end_offset);
-  g_object_unref (G_OBJECT (layout));
+  attrib_set = _gtk_pango_get_run_attributes  (NULL, text_cell->priv->layout, offset, start_offset, end_offset);
 
   return attrib_set;
 }
@@ -345,22 +345,19 @@ static AtkAttributeSet *
 gtk_text_cell_accessible_get_default_attributes (AtkText *text)
 {
   AtkAttributeSet *attrib_set = NULL;
-  PangoLayout *layout;
+  GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
   GtkWidget *widget;
 
-  layout = create_pango_layout (GTK_TEXT_CELL_ACCESSIBLE (text));
   widget = get_widget (GTK_TEXT_CELL_ACCESSIBLE (text));
 
   attrib_set = add_attribute (attrib_set, ATK_TEXT_ATTR_DIRECTION,
                    atk_text_attribute_get_value (ATK_TEXT_ATTR_DIRECTION,
                                                  gtk_widget_get_direction (widget)));
-  attrib_set = _gtk_pango_get_default_attributes (NULL, layout);
+  attrib_set = _gtk_pango_get_default_attributes (NULL, text_cell->priv->layout);
 
   attrib_set = _gtk_style_context_get_attributes (attrib_set,
                                                   gtk_widget_get_style_context (widget),
                                                   gtk_widget_get_state_flags (widget));
-
-  g_object_unref (G_OBJECT (layout));
 
   return attrib_set;
 }
@@ -529,7 +526,7 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   GtkWidget *widget;
   AtkObject *parent;
   PangoRectangle char_rect;
-  PangoLayout *layout;
+  GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
   gchar *renderer_text;
   gfloat xalign, yalign;
   gint x_offset, y_offset, index;
@@ -574,10 +571,8 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   x_offset = MAX (0, xalign * (rendered_rect.width - min_size.width));
   y_offset = MAX (0, yalign * (rendered_rect.height - min_size.height));
 
-  layout = create_pango_layout (GTK_TEXT_CELL_ACCESSIBLE (text));
-
   index = g_utf8_offset_to_pointer (renderer_text, offset) - renderer_text;
-  pango_layout_index_to_pos (layout, index, &char_rect);
+  pango_layout_index_to_pos (text_cell->priv->layout, index, &char_rect);
 
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (gtk_renderer), &xpad, &ypad);
 
@@ -602,7 +597,6 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
     }
 
   g_free (renderer_text);
-  g_object_unref (layout);
   g_object_unref (gtk_renderer);
 }
 
@@ -618,7 +612,7 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
   GtkRequisition min_size;
   GtkWidget *widget;
   GdkRectangle rendered_rect;
-  PangoLayout *layout;
+  GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
   gchar *renderer_text;
   gfloat xalign, yalign;
   gint x_offset, y_offset, index;
@@ -661,8 +655,6 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
   x_offset = MAX (0, xalign * (rendered_rect.width - min_size.width));
   y_offset = MAX (0, yalign * (rendered_rect.height - min_size.height));
 
-  layout = create_pango_layout (GTK_TEXT_CELL_ACCESSIBLE (text));
-
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (gtk_renderer), &xpad, &ypad);
 
   get_origins (widget, &x_window, &y_window, &x_toplevel, &y_toplevel);
@@ -677,7 +669,7 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
   else if (coords != ATK_XY_SCREEN)
     index = -1;
 
-  ret = pango_layout_xy_to_index (layout,
+  ret = pango_layout_xy_to_index (text_cell->priv->layout,
                                   x_temp * PANGO_SCALE,
                                   y_temp * PANGO_SCALE,
                                   &index, NULL);
@@ -689,7 +681,6 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
         index = -1;
     }
 
-  g_object_unref (layout);
   g_object_unref (gtk_renderer);
 
   if (index == -1)
