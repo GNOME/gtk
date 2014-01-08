@@ -340,12 +340,13 @@ _gtk_pixel_cache_repaint (GtkPixelCache *cache,
       cairo_translate (backing_cr,
 		       -cache->surface_x - canvas_rect->x - view_rect->x,
 		       -cache->surface_y - canvas_rect->y - view_rect->y);
+
+      cairo_save (backing_cr);
       cairo_set_source_rgba (backing_cr,
 			     0.0, 0, 0, 0.0);
       cairo_set_operator (backing_cr, CAIRO_OPERATOR_SOURCE);
       cairo_paint (backing_cr);
-
-      cairo_set_operator (backing_cr, CAIRO_OPERATOR_OVER);
+      cairo_restore (backing_cr);
 
       cairo_save (backing_cr);
       draw (backing_cr, user_data);
