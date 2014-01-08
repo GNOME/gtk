@@ -78,6 +78,7 @@ struct _GtkMenuTrackerSection
   guint       separator_label : 1;
   guint       with_separators : 1;
   guint       has_separator   : 1;
+  guint       is_fake         : 1;
 
   gulong      handler;
 };
@@ -193,7 +194,7 @@ gtk_menu_tracker_section_sync_separators (GtkMenuTrackerSection *section,
       i++;
     }
 
-  should_have_separator = could_have_separator && n_items != 0;
+  should_have_separator = !section->is_fake && could_have_separator && n_items != 0;
 
   if (should_have_separator > section->has_separator)
     {
@@ -367,21 +368,13 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
            * The only other thing that '->model' is used for is in the
            * case that we want to show a separator, but we will never do
            * that because separators are not shown for this fake section.
-           *
-           * Because of the game we play where the menu item is
-           * essentially its own section, it is possible that the menu
-           * item itself could get added as its own separator label in
-           * the case that the item is inside of a with_separators
-           * section, but this should never happen -- the user should
-           * always have the menu item inside of a <section>, never at
-           * the toplevel.  It would be easy to add an extra boolean to
-           * check for that, but we already have a lot of those...
            */
           if (_gtk_menu_tracker_item_may_disappear (item))
             {
               GtkMenuTrackerSection *fake_section;
 
               fake_section = g_slice_new0 (GtkMenuTrackerSection);
+              fake_section->is_fake = TRUE;
               fake_section->model = g_object_ref (item);
               fake_section->handler = g_signal_connect (item, "visibility-changed",
                                                         G_CALLBACK (gtk_menu_tracker_item_visibility_changed),
