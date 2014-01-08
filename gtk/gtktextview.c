@@ -3683,6 +3683,15 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
           allocation.x = child->x;
           allocation.y = child->y;
 
+          if (child->type == GTK_TEXT_WINDOW_TEXT ||
+              child->type == GTK_TEXT_WINDOW_LEFT ||
+              child->type == GTK_TEXT_WINDOW_RIGHT)
+            allocation.y -= text_view->priv->yoffset;
+          if (child->type == GTK_TEXT_WINDOW_TEXT ||
+              child->type == GTK_TEXT_WINDOW_TOP ||
+              child->type == GTK_TEXT_WINDOW_BOTTOM)
+            allocation.x -= text_view->priv->xoffset;
+
           gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
 
           allocation.width = child_req.width;
@@ -8159,10 +8168,28 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
       while (tmp_list != NULL)
         {
           GtkTextViewChild *child = tmp_list->data;
-          
+          gint child_dx = 0, child_dy = 0;
+
           if (child->anchor)
-            adjust_allocation (child->widget, dx, dy);
-          
+            {
+              child_dx = dx;
+              child_dy = dy;
+            }
+          else
+            {
+              if (child->type == GTK_TEXT_WINDOW_TEXT ||
+                  child->type == GTK_TEXT_WINDOW_LEFT ||
+                  child->type == GTK_TEXT_WINDOW_RIGHT)
+                child_dy = dy;
+              if (child->type == GTK_TEXT_WINDOW_TEXT ||
+                  child->type == GTK_TEXT_WINDOW_TOP ||
+                  child->type == GTK_TEXT_WINDOW_BOTTOM)
+                child_dx = dx;
+            }
+
+          if (child_dx != 0 || child_dy != 0)
+            adjust_allocation (child->widget, child_dx, child_dy);
+
           tmp_list = g_slist_next (tmp_list);
         }
     }
@@ -10070,15 +10097,11 @@ gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
  *
  * The window must have nonzero size (see
  * gtk_text_view_set_border_window_size()). Note that the child
- * coordinates are given relative to the #GdkWindow in question, and
- * that these coordinates have no sane relationship to scrolling. When
+ * coordinates are given relative to scrolling. When
  * placing a child in #GTK_TEXT_WINDOW_WIDGET, scrolling is
  * irrelevant, the child floats above all scrollable areas. But when
  * placing a child in one of the scrollable windows (border windows or
- * text window), you'll need to compute the child's correct position
- * in buffer coordinates any time scrolling occurs or buffer changes
- * occur, and then call gtk_text_view_move_child() to update the
- * child's position.
+ * text window) it will move with the scrolling as needed.
  */
 void
 gtk_text_view_add_child_in_window (GtkTextView       *text_view,
