@@ -31,8 +31,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-31 18:04+0100\n"
-"PO-Revision-Date: 2013-12-31 18:08+0100\n"
+"POT-Creation-Date: 2014-01-08 23:25+0100\n"
+"PO-Revision-Date: 2014-01-08 23:26+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -506,7 +506,7 @@ msgid "Toggle"
 msgstr "Umschalten"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
-#: ../gtk/a11y/gtkmenuitemaccessible.c:433
+#: ../gtk/a11y/gtkmenuitemaccessible.c:435
 msgctxt "Action name"
 msgid "Click"
 msgstr "Klicken"
@@ -527,7 +527,7 @@ msgid "Edit"
 msgstr "Bearbeiten"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:72
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:149
 #: ../gtk/a11y/gtkentryaccessible.c:1554
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
@@ -551,27 +551,27 @@ msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "Aktiviert das Feld"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:71
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:148
 msgctxt "Action name"
 msgid "Select"
 msgstr "Auswählen"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:73
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:150
 msgctxt "Action name"
 msgid "Customize"
 msgstr "Anpassen"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:84
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:161
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "Farbe auswählen"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:85
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:162
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "Aktiviert die Farbe"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:86
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:163
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Passt die Farbe an"
@@ -632,12 +632,12 @@ msgid "_Close"
 msgstr "S_chließen"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:428
-#: ../gtk/gtkwindow.c:8032
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "Minimieren"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:451
-#: ../gtk/gtkwindow.c:8040
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "Maximieren"
 
@@ -1016,7 +1016,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_Wegzoomen"
 
-#: ../gtk/a11y/gtkmenuitemaccessible.c:442
+#: ../gtk/a11y/gtkmenuitemaccessible.c:444
 msgctxt "Action description"
 msgid "Clicks the menuitem"
 msgstr "Klickt das Menüelement an"
@@ -1383,7 +1383,7 @@ msgstr "Leer"
 #. * opened when the user selects the <literal>About</literal> option from
 #. * the <literal>Help</literal> menu. All parts of the dialog are optional.
 #. *
-#. * About dialog often contain links and email addresses. GtkAboutDialog
+#. * About dialogs often contain links and email addresses. GtkAboutDialog
 #. * displays these as clickable links. By default, it calls gtk_show_uri()
 #. * when a user clicks one. The behaviour can be overridden with the
 #. * #GtkAboutDialog::activate-link signal.
@@ -1467,11 +1467,11 @@ msgstr "GNU General Public License, nur Version 3"
 
 #: ../gtk/gtkaboutdialog.c:120
 msgid "GNU Lesser General Public License, version 2.1 only"
-msgstr ""
+msgstr "GNU Lesser General Public License, nur Version 2.1"
 
 #: ../gtk/gtkaboutdialog.c:121
 msgid "GNU Lesser General Public License, version 3 only"
-msgstr ""
+msgstr "GNU Lesser General Public License, nur Version 3"
 
 #: ../gtk/gtkaboutdialog.c:376
 msgid "The license of the program"
@@ -1490,19 +1490,19 @@ msgstr "Webseite"
 msgid "About %s"
 msgstr "Info zu %s"
 
-#: ../gtk/gtkaboutdialog.c:2287
+#: ../gtk/gtkaboutdialog.c:2289
 msgid "Created by"
 msgstr "Erstellt von"
 
-#: ../gtk/gtkaboutdialog.c:2290
+#: ../gtk/gtkaboutdialog.c:2292
 msgid "Documented by"
 msgstr "Dokumentation von"
 
-#: ../gtk/gtkaboutdialog.c:2300
+#: ../gtk/gtkaboutdialog.c:2302
 msgid "Translated by"
 msgstr "Übersetzung von"
 
-#: ../gtk/gtkaboutdialog.c:2305
+#: ../gtk/gtkaboutdialog.c:2307
 msgid "Artwork by"
 msgstr "Künstlerische Darstellung von"
 
@@ -1616,7 +1616,7 @@ msgstr "Zuordnung aufheben"
 
 #: ../gtk/gtkappchooserdialog.c:421
 msgid "Failed to start GNOME Software"
-msgstr ""
+msgstr "Starten von GNOME Software schlug fehl"
 
 #: ../gtk/gtkappchooserdialog.c:439
 msgid "Software"
@@ -1637,17 +1637,6 @@ msgstr "Zugehörige Anwendungen"
 #: ../gtk/gtkappchooserwidget.c:786
 msgid "Other Applications"
 msgstr "Weitere Anwendungen"
-
-#: ../gtk/gtkapplication-quartz.c:87
-#, c-format
-msgid ""
-"%s cannot quit at this time:\n"
-"\n"
-"%s"
-msgstr ""
-"%s kann derzeit nicht beendet werden:\n"
-"\n"
-"%s"
 
 #: ../gtk/gtkapplicationwindow.c:326 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1447
@@ -2013,11 +2002,15 @@ msgstr "Weiß"
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
+#: ../gtk/gtkcolorchooserwidget.c:528
+msgid "Custom color"
+msgstr "Benutzerdefinierte Farbe"
+
 #: ../gtk/gtkcolorchooserwidget.c:529
-msgid "Create custom color"
+msgid "Create a custom color"
 msgstr "Benutzerdefinierte Farbe anlegen"
 
-#: ../gtk/gtkcolorchooserwidget.c:547
+#: ../gtk/gtkcolorchooserwidget.c:548
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Benutzerdefinierte Farbe %d: %s"
@@ -2112,26 +2105,26 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papierränder"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6243
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6250
 #: ../gtk/gtktextview.c:8708 ../gtk/gtktextview.c:8891
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6244
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6251
 #: ../gtk/gtktextview.c:8712 ../gtk/gtktextview.c:8895
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6245
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6252
 #: ../gtk/gtktextview.c:8714 ../gtk/gtktextview.c:8897
 msgid "_Paste"
 msgstr "_Einfügen"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6247 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8717
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6256 ../gtk/gtktextview.c:8731
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8731
 msgid "Select _All"
 msgstr "_Alles auswählen"
 
@@ -2300,7 +2293,7 @@ msgstr "Suchen:"
 
 #: ../gtk/gtkfilechooserdefault.c:2679
 msgid "Save in folder:"
-msgstr "In _Ordner speichern:"
+msgstr "In Ordner speichern:"
 
 #: ../gtk/gtkfilechooserdefault.c:2681
 msgid "Create in folder:"
@@ -2397,7 +2390,7 @@ msgstr "Wählen Sie eine Schrift"
 msgid "Application menu"
 msgstr "Anwendungsmenü"
 
-#: ../gtk/gtkheaderbar.c:469 ../gtk/gtkwindow.c:8137
+#: ../gtk/gtkheaderbar.c:469 ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "Schließen"
 
@@ -2406,7 +2399,7 @@ msgstr "Schließen"
 msgid "Icon '%s' not present in theme"
 msgstr "Symbol »%s« nicht im Thema vorhanden"
 
-#: ../gtk/gtkicontheme.c:3893
+#: ../gtk/gtkicontheme.c:3923
 msgid "Failed to load icon"
 msgstr "Symbol konnte nicht geladen werden"
 
@@ -2447,12 +2440,12 @@ msgid "Error"
 msgstr "Fehler"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6226
+#: ../gtk/gtklabel.c:6233
 msgid "_Open Link"
 msgstr "Link ö_ffnen"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6234
+#: ../gtk/gtklabel.c:6241
 msgid "Copy _Link Address"
 msgstr "Link-Adresse _kopieren"
 
@@ -2598,7 +2591,7 @@ msgstr "GTK+-Optionen anzeigen"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmenubutton.c:597
+#: ../gtk/gtkmenubutton.c:592
 msgid "Menu"
 msgstr "Menü"
 
@@ -3472,35 +3465,35 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8040
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "Wiederherstellen"
 
-#: ../gtk/gtkwindow.c:8049
+#: ../gtk/gtkwindow.c:8059
 msgid "Always on Top"
 msgstr "Immer im Vordergrund"
 
-#: ../gtk/gtkwindow.c:8061
+#: ../gtk/gtkwindow.c:8071
 msgid "Always on Visible Workspace"
 msgstr "Immer auf der sichtbaren Arbeitsfläche"
 
-#: ../gtk/gtkwindow.c:8069
+#: ../gtk/gtkwindow.c:8079
 msgid "Only on This Workspace"
 msgstr "Nur auf dieser Arbeitsfläche"
 
-#: ../gtk/gtkwindow.c:8086
+#: ../gtk/gtkwindow.c:8096
 msgid "Move to Workspace Up"
 msgstr "Auf Arbeitsfläche darüber verschieben"
 
-#: ../gtk/gtkwindow.c:8095
+#: ../gtk/gtkwindow.c:8105
 msgid "Move to Workspace Down"
 msgstr "Auf Arbeitsfläche darunter verschieben"
 
-#: ../gtk/gtkwindow.c:8109
+#: ../gtk/gtkwindow.c:8119
 msgid "Move to Another Workspace"
 msgstr "Auf andere Arbeitsfläche verschieben"
 
-#: ../gtk/gtkwindow.c:8117
+#: ../gtk/gtkwindow.c:8127
 #, c-format
 msgid "Workspace %d"
 msgstr "Arbeitsfläche %d"
@@ -5364,6 +5357,15 @@ msgstr "Leiser"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Verringert die Lautstärke"
+
+#~ msgid ""
+#~ "%s cannot quit at this time:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "%s kann derzeit nicht beendet werden:\n"
+#~ "\n"
+#~ "%s"
 
 #~ msgid "Failed to look for applications online"
 #~ msgstr "Online-Suche nach Anwendungen ist fehlgeschlagen"
