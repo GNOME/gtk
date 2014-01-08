@@ -31,12 +31,13 @@ create_tags (GtkTextBuffer *buffer)
 }
 
 
-static void
+static GtkTextChildAnchor *
 insert_text (GtkTextBuffer *buffer)
 {
   GtkTextIter  iter;
   GtkTextIter  start, end;
   GtkTextMark *para_start;
+  GtkTextChildAnchor *anchor;
 
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.
@@ -64,6 +65,8 @@ insert_text (GtkTextBuffer *buffer)
 					    "x-large",
 					    NULL);
   gtk_text_buffer_insert (buffer, &iter, ".\n\n", -1);
+
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
 
   /* Store the beginning of the other paragraph */
   para_start = gtk_text_buffer_create_mark (buffer, "para_start", &iter, TRUE);
@@ -99,6 +102,8 @@ insert_text (GtkTextBuffer *buffer)
   /* Apply word_wrap tag to whole buffer */
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (buffer, "word_wrap", &start, &end);
+
+  return anchor;
 }
 
 
@@ -153,26 +158,45 @@ draw_background (GtkWidget *widget, cairo_t *cr)
 int
 main (int argc, char **argv)
 {
-  GtkWidget *window, *textview;
+  GtkWidget *window, *textview, *sw, *button, *button2;
   GtkTextBuffer *buffer;
+  GtkTextChildAnchor *anchor;
 
   gtk_init (&argc, &argv);
 
   window   = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  sw       = gtk_scrolled_window_new (NULL, NULL);
   textview = gtk_text_view_new ();
   buffer   = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+  button   = gtk_button_new_with_label ("Fixed Child");
+  button2   = gtk_button_new_with_label ("Flowed Child");
 
-  gtk_window_set_default_size (GTK_WINDOW (window), 400, -1);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+
+  gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
   create_tags (buffer);
-  insert_text (buffer);
-  
+  anchor = insert_text (buffer);
+
+  gtk_widget_show (button);
+  gtk_widget_show (button2);
   gtk_widget_show (textview);
-  gtk_container_add (GTK_CONTAINER (window), textview);
+  gtk_widget_show (sw);
+
+  gtk_container_add (GTK_CONTAINER (window), sw);
+  gtk_container_add (GTK_CONTAINER (sw), textview);
+  gtk_text_view_add_child_in_window (GTK_TEXT_VIEW (textview),
+                                     button,
+                                     GTK_TEXT_WINDOW_TEXT,
+                                     50, 150);
+
+  gtk_text_view_add_child_at_anchor (GTK_TEXT_VIEW (textview),
+                                     button2, anchor);
 
   g_signal_connect (textview, "draw",
 		    G_CALLBACK (draw_background), NULL);
-
 
   gtk_widget_show (window);
 
