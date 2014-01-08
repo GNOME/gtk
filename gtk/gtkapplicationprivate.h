@@ -208,4 +208,8 @@ G_GNUC_INTERNAL
 gchar *                 gtk_application_impl_dbus_get_window_path       (GtkApplicationImplDBus      *dbus,
                                                                          GtkWindow                   *window);
 
+G_GNUC_INTERNAL
+void                    gtk_application_impl_quartz_setup_menu          (GMenuModel                  *model,
+                                                                         GtkActionMuxer              *muxer);
+
 #endif /* __GTK_APPLICATION_PRIVATE_H__ */

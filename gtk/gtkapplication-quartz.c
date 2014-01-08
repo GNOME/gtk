@@ -21,7 +21,6 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
-#include "gtkmodelmenu-quartz.h"
 #import <Cocoa/Cocoa.h>
 
 typedef struct
@@ -45,6 +44,9 @@ typedef GtkApplicationImplClass GtkApplicationImplQuartzClass;
 typedef struct
 {
   GtkApplicationImpl impl;
+
+  GtkActionMuxer *muxer;
+  GMenu *combined;
 
   GSList *inhibitors;
   gint quit_inhibit;
@@ -84,20 +86,6 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 @end
 
 static void
-gtk_application_impl_quartz_menu_changed (GtkApplicationImplQuartz *quartz)
-{
-  GMenu *combined;
-
-  combined = g_menu_new ();
-  g_menu_append_submenu (combined, "Application", gtk_application_get_app_menu (quartz->impl.application));
-  g_menu_append_section (combined, NULL, gtk_application_get_menubar (quartz->impl.application));
-
-  gtk_quartz_set_main_menu (G_MENU_MODEL (combined), quartz->impl.application);
-
-  g_object_unref (combined);
-}
-
-static void
 gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
                                      gboolean            register_session)
 {
@@ -109,7 +97,17 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
       [NSApp setDelegate: quartz->delegate];
     }
 
-  gtk_application_impl_quartz_menu_changed (quartz);
+  quartz->muxer = gtk_action_muxer_new ();
+  gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
+
+  /* app menu must come first so that we always see index '0' in
+   * 'combined' as being the app menu.
+   */
+  gtk_application_impl_set_app_menu (impl, gtk_application_get_app_menu (impl->application));
+  gtk_application_impl_set_menubar (impl, gtk_application_get_menubar (impl->application));
+
+  /* OK.  Now put it in the menu. */
+  gtk_application_impl_quartz_setup_menu (G_MENU_MODEL (quartz->combined), quartz->muxer);
 
   [NSApp finishLaunching];
 }
@@ -119,7 +117,8 @@ gtk_application_impl_quartz_shutdown (GtkApplicationImpl *impl)
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
 
-  gtk_quartz_clear_main_menu ();
+  /* destroy our custom menubar */
+  [NSApp setMainMenu:[[[NSMenu alloc] init] autorelease]];
 
   if (quartz->delegate)
     {
@@ -132,12 +131,38 @@ gtk_application_impl_quartz_shutdown (GtkApplicationImpl *impl)
 }
 
 static void
+gtk_application_impl_quartz_active_window_changed (GtkApplicationImpl *impl,
+                                                   GtkWindow          *window)
+{
+  GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
+
+  gtk_action_muxer_remove (quartz->muxer, "win");
+
+  if (G_IS_ACTION_GROUP (window))
+    gtk_action_muxer_insert (quartz->muxer, "win", G_ACTION_GROUP (window));
+}
+
+static void
 gtk_application_impl_quartz_set_app_menu (GtkApplicationImpl *impl,
                                           GMenuModel         *app_menu)
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
 
-  gtk_application_impl_quartz_menu_changed (quartz);
+  /* If there are any items at all, then the first one is the app menu */
+  if (g_menu_model_get_n_items (G_MENU_MODEL (quartz->combined)))
+    g_menu_remove (quartz->combined, 0);
+
+  if (app_menu)
+    g_menu_prepend_submenu (quartz->combined, "Application", app_menu);
+  else
+    {
+      GMenu *empty;
+
+      /* We must preserve the rule that index 0 is the app menu */
+      empty = g_menu_new ();
+      g_menu_prepend_submenu (quartz->combined, "Application", G_MENU_MODEL (empty));
+      g_object_unref (empty);
+    }
 }
 
 static void
@@ -146,7 +171,12 @@ gtk_application_impl_quartz_set_menubar (GtkApplicationImpl *impl,
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
 
-  gtk_application_impl_quartz_menu_changed (quartz);
+  /* If we have the menubar, it is a section at index '1' */
+  if (g_menu_model_get_n_items (G_MENU_MODEL (quartz->combined)) > 1)
+    g_menu_remove (quartz->combined, 1);
+
+  if (menubar)
+    g_menu_append_section (quartz->combined, NULL, menubar);
 }
 
 static guint
@@ -211,6 +241,7 @@ gtk_application_impl_quartz_is_inhibited (GtkApplicationImpl         *impl,
 static void
 gtk_application_impl_quartz_init (GtkApplicationImplQuartz *quartz)
 {
+  quartz->combined = g_menu_new ();
 }
 
 static void
@@ -218,7 +249,7 @@ gtk_application_impl_quartz_finalize (GObject *object)
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) object;
 
-  g_slist_free_full (quartz->inhibitors, (GDestroyNotify) gtk_application_quartz_inhibitor_free);
+  g_clear_object (&quartz->combined);
 
   G_OBJECT_CLASS (gtk_application_impl_quartz_parent_class)->finalize (object);
 }
@@ -230,6 +261,7 @@ gtk_application_impl_quartz_class_init (GtkApplicationImplClass *class)
 
   class->startup = gtk_application_impl_quartz_startup;
   class->shutdown = gtk_application_impl_quartz_shutdown;
+  class->active_window_changed = gtk_application_impl_quartz_active_window_changed;
   class->set_app_menu = gtk_application_impl_quartz_set_app_menu;
   class->set_menubar = gtk_application_impl_quartz_set_menubar;
   class->inhibit = gtk_application_impl_quartz_inhibit;
