@@ -39,6 +39,7 @@ TEST_PROGS += 			\
 	floating		\
 	grid			\
 	gtkmenu			\
+	gtkapplicationwindow	\
 	keyhash			\
 	listbox			\
 	no-gtk-init		\
