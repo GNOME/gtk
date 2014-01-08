@@ -31,6 +31,8 @@ EXTRA_DIST += \
 	$(NULL)
 
 testdata = \
+	actionbar.ref.ui \
+	actionbar.ui \
 	alignment-props.css \
 	alignment-props.ref.ui \
 	alignment-props.ui \
