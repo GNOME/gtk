@@ -30,10 +30,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-12-19 19:14+0000\n"
-"PO-Revision-Date: 2013-12-20 10:00+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-08 23:28+0100\n"
+"PO-Revision-Date: 2014-01-08 23:28+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -2224,7 +2223,7 @@ msgstr "Suchen:"
 
 #: ../gtk/gtkfilechooserdefault.c:2739
 msgid "Save in folder:"
-msgstr "In _Ordner speichern:"
+msgstr "In Ordner speichern:"
 
 #: ../gtk/gtkfilechooserdefault.c:2741
 msgid "Create in folder:"
