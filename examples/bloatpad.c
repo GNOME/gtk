@@ -493,6 +493,14 @@ bloat_pad_startup (GApplication *application)
 {
   BloatPad *bloatpad = (BloatPad*) application;
   GtkBuilder *builder;
+  GMenu *menu;
+  GMenuItem *item;
+  GIcon *icon;
+  GIcon *icon2;
+  GEmblem *emblem;
+  GFile *file;
+  gchar *data;
+  gsize size;
 
   G_APPLICATION_CLASS (bloat_pad_parent_class)
     ->startup (application);
@@ -555,6 +563,9 @@ bloat_pad_startup (GApplication *application)
                                "        </item>"
                                "      </section>"
                                "    </submenu>"
+                               "    <submenu id='icon-menu'>"
+                               "      <attribute name='label' translatable='yes'>_Icons</attribute>"
+                               "    </submenu>"
                                "    <submenu id='time-menu'>"
                                "      <attribute name='label' translatable='yes'>Time</attribute>"
                                "      <attribute name='submenu-action'>app.time-active</attribute>"
@@ -570,6 +581,67 @@ bloat_pad_startup (GApplication *application)
   gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>l", "win.justify", g_variant_new_string ("left"));
   gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>m", "win.justify", g_variant_new_string ("center"));
   gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>r", "win.justify", g_variant_new_string ("right"));
+
+  menu = G_MENU (gtk_builder_get_object (builder, "icon-menu"));
+
+  file = g_file_new_for_path (SRCDIR "/../gtk/stock-icons/16/help-about.png");
+  icon = g_file_icon_new (file);
+  item = g_menu_item_new ("File Icon", NULL);
+  g_menu_item_set_icon (item, icon);
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+  g_object_unref (icon);
+  g_object_unref (file);
+
+  icon = g_themed_icon_new ("edit-find");
+  item = g_menu_item_new ("Themed Icon", NULL);
+  g_menu_item_set_icon (item, icon);
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+  g_object_unref (icon);
+
+  if (g_file_get_contents (SRCDIR "/../gtk/stock-icons/16/list-add.png", &data, &size, NULL))
+    {
+      GBytes *bytes = g_bytes_new_take (data, size);
+      icon = g_bytes_icon_new (bytes);
+      item = g_menu_item_new ("Bytes Icon", NULL);
+      g_menu_item_set_icon (item, icon);
+      g_menu_append_item (menu, item);
+      g_object_unref (item);
+      g_object_unref (icon);
+      g_bytes_unref (bytes);
+    }
+
+  icon = G_ICON (gdk_pixbuf_new_from_file (SRCDIR "/../gtk/stock-icons/16/gtk-preferences.png", NULL));
+  item = g_menu_item_new ("Pixbuf", NULL);
+  g_menu_item_set_icon (item, icon);
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+  g_object_unref (icon);
+
+  file = g_file_new_for_path (SRCDIR "/../gtk/stock-icons/16/edit-paste.png");
+  icon = g_file_icon_new (file);
+  emblem = g_emblem_new (icon);
+  g_object_unref (icon);
+  g_object_unref (file);
+  file = g_file_new_for_path (SRCDIR "/../gtk/stock-icons/16/edit-copy.png");
+  icon2 = g_file_icon_new (file);
+  icon = g_emblemed_icon_new (icon2, emblem);
+  item = g_menu_item_new ("Emblemed Icon", NULL);
+  g_menu_item_set_icon (item, icon);
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+  g_object_unref (icon);
+  g_object_unref (icon2);
+  g_object_unref (file);
+  g_object_unref (emblem);
+
+  icon = g_themed_icon_new ("weather-severe-alert-symbolic");
+  item = g_menu_item_new ("Symbolic Icon", NULL);
+  g_menu_item_set_icon (item, icon);
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+  g_object_unref (icon);
 
   const gchar *new_accels[] = { "<Primary>n", "<Primary>t", NULL };
   gtk_application_set_accels_for_action (GTK_APPLICATION (application), "app.new", new_accels);
