@@ -31,21 +31,11 @@
 
 typedef struct _GtkActionHelper                             GtkActionHelper;
 
-typedef enum
-{
-  GTK_ACTION_HELPER_ROLE_NORMAL,
-  GTK_ACTION_HELPER_ROLE_TOGGLE,
-  GTK_ACTION_HELPER_ROLE_RADIO
-} GtkActionHelperRole;
-
 G_GNUC_INTERNAL
 GType                   gtk_action_helper_get_type                      (void);
 
 G_GNUC_INTERNAL
 GtkActionHelper *       gtk_action_helper_new                           (GtkActionable   *widget);
-
-G_GNUC_INTERNAL
-GtkActionHelper *       gtk_action_helper_new_with_application          (GtkApplication  *application);
 
 G_GNUC_INTERNAL
 void                    gtk_action_helper_set_action_name               (GtkActionHelper *helper,
@@ -58,8 +48,6 @@ const gchar *           gtk_action_helper_get_action_name               (GtkActi
 G_GNUC_INTERNAL
 GVariant *              gtk_action_helper_get_action_target_value       (GtkActionHelper *helper);
 
-G_GNUC_INTERNAL
-GtkActionHelperRole     gtk_action_helper_get_role                      (GtkActionHelper *helper);
 G_GNUC_INTERNAL
 gboolean                gtk_action_helper_get_enabled                   (GtkActionHelper *helper);
 G_GNUC_INTERNAL
