@@ -567,6 +567,7 @@ dialog_response (GtkDialog *dialog,
 
       gtk_widget_queue_draw (button->priv->draw_area);
 
+      g_object_ref (button);
       g_signal_emit (button, color_button_signals[COLOR_SET], 0);
 
       g_object_freeze_notify (G_OBJECT (button));
@@ -574,6 +575,7 @@ dialog_response (GtkDialog *dialog,
       g_object_notify (G_OBJECT (button), "alpha");
       g_object_notify (G_OBJECT (button), "rgba");
       g_object_thaw_notify (G_OBJECT (button));
+      g_object_unref (button);
     }
 }
 
