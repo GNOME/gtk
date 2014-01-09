@@ -1352,7 +1352,7 @@ gdk_x11_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
 /**
  * gdk_x11_keymap_get_group_for_state:
- * @keymap: a #GdkX11Keymap
+ * @keymap: (type GdkX11Keymap): a #GdkX11Keymap
  * @state: raw state returned from X
  *
  * Extracts the group from the state field sent in an X Key event.
@@ -1440,7 +1440,7 @@ gdk_x11_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 
 /**
  * gdk_x11_keymap_key_is_modifier:
- * @keymap: a #GdkX11Keymap
+ * @keymap: (type GdkX11Keymap): a #GdkX11Keymap
  * @keycode: the hardware keycode from a key event
  *
  * Determines whether a particular key code represents a key that

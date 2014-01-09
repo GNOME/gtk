@@ -79,12 +79,12 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
 
 /**
  * gdk_x11_device_manager_lookup:
- * @device_manager: a #GdkDeviceManager
+ * @device_manager: (type GdkX11DeviceManagerCore): a #GdkDeviceManager
  * @device_id: a device ID, as understood by the XInput2 protocol
  *
  * Returns the #GdkDevice that wraps the given device ID.
  *
- * Returns: (transfer none): (allow-none): The #GdkDevice wrapping the device ID,
+ * Returns: (transfer none) (allow-none) (type GdkX11DeviceCore): The #GdkDevice wrapping the device ID,
  *          or %NULL if the given ID doesn't currently represent a device.
  *
  * Since: 3.2
@@ -120,7 +120,7 @@ gdk_x11_device_manager_lookup (GdkDeviceManager *device_manager,
 
 /**
  * gdk_x11_device_get_id:
- * @device: a #GdkDevice
+ * @device: (type GdkX11DeviceCore): a #GdkDevice
  *
  * Returns the device ID as seen by XInput2.
  *

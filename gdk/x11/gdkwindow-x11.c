@@ -1172,7 +1172,7 @@ x_event_mask_to_gdk_event_mask (long mask)
 
 /**
  * gdk_x11_window_foreign_new_for_display:
- * @display: the #GdkDisplay where the window handle comes from.
+ * @display: (type GdkX11Display): the #GdkDisplay where the window handle comes from.
  * @window: an XLib <type>Window</type>
  *
  * Wraps a native window in a #GdkWindow. The function will try to
@@ -2168,7 +2168,7 @@ get_netwm_cardinal_property (GdkWindow   *window,
 
 /**
  * gdk_x11_window_get_desktop:
- * @window: a #GdkWindow
+ * @window: (type GdkX11Window): a #GdkWindow
  *
  * Gets the number of the workspace @window is on.
  *
@@ -2186,7 +2186,7 @@ gdk_x11_window_get_desktop (GdkWindow *window)
 
 /**
  * gdk_x11_window_move_to_desktop:
- * @window: a #GdkWindow
+ * @window: (type GdkX11Window): a #GdkWindow
  * @desktop: the number of the workspace to move the window to
  *
  * Moves the window to the given workspace when running unde a

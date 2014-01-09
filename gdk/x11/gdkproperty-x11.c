@@ -168,7 +168,7 @@ lookup_cached_xatom (GdkDisplay *display,
 
 /**
  * gdk_x11_atom_to_xatom_for_display:
- * @display: A #GdkDisplay
+ * @display: (type GdkX11Display): A #GdkDisplay
  * @atom: A #GdkAtom, or %GDK_NONE
  *
  * Converts from a #GdkAtom to the X atom for a #GdkDisplay
@@ -264,7 +264,7 @@ gdk_x11_atom_to_xatom (GdkAtom atom)
 
 /**
  * gdk_x11_xatom_to_atom_for_display:
- * @display: A #GdkDisplay
+ * @display: (type GdkX11Display): A #GdkDisplay
  * @xatom: an X atom 
  * 
  * Convert from an X atom for a #GdkDisplay to the corresponding
@@ -339,7 +339,7 @@ gdk_x11_xatom_to_atom (Atom xatom)
 
 /**
  * gdk_x11_get_xatom_by_name_for_display:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * @atom_name: a string
  * 
  * Returns the X atom for a #GdkDisplay corresponding to @atom_name.
@@ -398,7 +398,7 @@ gdk_x11_get_xatom_by_name (const gchar *atom_name)
 
 /**
  * gdk_x11_get_xatom_name_for_display:
- * @display: the #GdkDisplay where @xatom is defined
+ * @display: (type GdkX11Display): the #GdkDisplay where @xatom is defined
  * @xatom: an X atom 
  * 
  * Returns the name of an X atom for its display. This

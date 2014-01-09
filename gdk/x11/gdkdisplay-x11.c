@@ -1949,7 +1949,7 @@ gdk_x11_display_finalize (GObject *object)
  * 
  * Find the #GdkDisplay corresponding to @display, if any exists.
  * 
- * Return value: (transfer none): the #GdkDisplay, if found, otherwise %NULL.
+ * Return value: (transfer none) (type GdkX11Display): the #GdkDisplay, if found, otherwise %NULL.
  *
  * Since: 2.2
  **/
@@ -2436,7 +2436,7 @@ gdk_x11_display_list_devices (GdkDisplay *display)
 
 /**
  * gdk_x11_register_standard_event_type:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * @event_base: first event type code to register
  * @n_events: number of event type codes to register
  *
