@@ -773,6 +773,46 @@ gtk_popover_key_press (GtkWidget   *widget,
 }
 
 static void
+gtk_popover_grab_focus (GtkWidget *widget)
+{
+  /* Focus the first natural child */
+  gtk_widget_child_focus (gtk_bin_get_child (GTK_BIN (widget)),
+                          GTK_DIR_TAB_FORWARD);
+}
+
+static gboolean
+gtk_popover_focus (GtkWidget        *widget,
+                   GtkDirectionType  direction)
+{
+  GtkPopoverPrivate *priv;
+
+  priv = gtk_popover_get_instance_private (GTK_POPOVER (widget));
+
+  if (!GTK_WIDGET_CLASS (gtk_popover_parent_class)->focus (widget, direction))
+    {
+      GtkWidget *focus;
+
+      focus = gtk_window_get_focus (priv->window);
+      focus = gtk_widget_get_parent (focus);
+
+      /* Unset focus child through children, so it is next stepped from
+       * scratch.
+       */
+      while (focus && focus != widget)
+        {
+          gtk_container_set_focus_child (GTK_CONTAINER (focus), NULL);
+          focus = gtk_widget_get_parent (focus);
+        }
+
+      return gtk_widget_child_focus (gtk_bin_get_child (GTK_BIN (widget)),
+                                     direction);
+    }
+
+  return TRUE;
+}
+
+
+static void
 gtk_popover_class_init (GtkPopoverClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -792,6 +832,8 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->draw = gtk_popover_draw;
   widget_class->button_press_event = gtk_popover_button_press;
   widget_class->key_press_event = gtk_popover_key_press;
+  widget_class->grab_focus = gtk_popover_grab_focus;
+  widget_class->focus = gtk_popover_focus;
 
   /**
    * GtkPopover:relative-to:
