@@ -565,7 +565,7 @@ gtk_application_window_real_get_preferred_width (GtkWidget *widget,
       gtk_widget_get_preferred_width (window->priv->menubar, &menubar_min_width, &menubar_nat_width);
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-      _gtk_window_get_decoration_size (GTK_WINDOW (widget), &border);
+      _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
 
       menubar_min_width += 2 * border_width + border.left + border.right;
       menubar_nat_width += 2 * border_width + border.left + border.right;
@@ -601,7 +601,7 @@ gtk_application_window_real_get_preferred_width_for_height (GtkWidget *widget,
       gtk_widget_get_preferred_width_for_height (window->priv->menubar, menubar_height, &menubar_min_width, &menubar_nat_width);
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-      _gtk_window_get_decoration_size (GTK_WINDOW (widget), &border);
+      _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
 
       menubar_min_width += 2 * border_width + border.left + border.right;
       menubar_nat_width += 2 * border_width + border.left + border.right;
