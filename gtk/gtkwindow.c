@@ -6140,10 +6140,9 @@ update_window_style_classes (GtkWindow *window)
 }
 
 static void
-get_shadow_width (GtkWidget *widget,
-                  GtkBorder *shadow_width)
+get_shadow_width_internal (GtkWidget *widget,
+                           GtkBorder *shadow_width)
 {
-  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkBorder border = { 0 };
   GtkBorder d = { 0 };
   GtkBorder margin;
@@ -6153,14 +6152,6 @@ get_shadow_width (GtkWidget *widget,
   gint i;
 
   *shadow_width = border;
-
-  if (!priv->client_decorated)
-    return;
-
-  if (priv->maximized ||
-      priv->fullscreen ||
-      priv->tiled)
-    return;
 
   state = gtk_widget_get_state_flags (widget);
   context = gtk_widget_get_style_context (widget);
@@ -6198,6 +6189,26 @@ get_shadow_width (GtkWidget *widget,
     }
 
   gtk_style_context_restore (context);
+}
+
+static void
+get_shadow_width (GtkWidget *widget,
+                  GtkBorder *shadow_width)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+  GtkBorder nothing = { 0 };
+
+  *shadow_width = nothing;
+
+  if (!priv->client_decorated)
+    return;
+
+  if (priv->maximized ||
+      priv->fullscreen ||
+      priv->tiled)
+    return;
+
+  get_shadow_width_internal (widget, shadow_width);
 }
 
 /* We're placing 8 input-only windows around
@@ -6438,19 +6449,27 @@ update_border_windows (GtkWindow *window)
 }
 
 static void
-update_shadow_width (GtkWindow *window,
-                     GtkBorder *border)
+update_shadow_width (GtkWindow *window)
 {
+  GtkWidget *widget = GTK_WIDGET (window);
+  GtkWindowPrivate *priv = window->priv;
   GdkWindow *gdk_window;
+  GtkBorder border;
 
-  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+  if (!priv->client_decorated)
+    return;
 
-  if (gdk_window)
-    gdk_window_set_shadow_width (gdk_window,
-                                 border->left,
-                                 border->right,
-                                 border->top,
-                                 border->bottom);
+  gdk_window = gtk_widget_get_window (widget);
+
+  if (gdk_window == NULL)
+    return;
+
+  get_shadow_width_internal (widget, &border);
+  gdk_window_set_shadow_width (gdk_window,
+                               border.left,
+                               border.right,
+                               border.top,
+                               border.bottom);
 }
 
 static void
@@ -6583,9 +6602,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
   child_allocation.height = allocation->height;
 
   priv->title_height = 0;
-
-  if (priv->client_decorated)
-    update_shadow_width (window, &window_border);
 
   update_opaque_region (window, &window_border, &child_allocation);
 
@@ -6821,6 +6837,7 @@ gtk_window_style_updated (GtkWidget *widget)
       gdk_window_set_background_rgba (gtk_widget_get_window (widget),
                                       &transparent);
       gtk_widget_queue_resize (widget);
+      update_shadow_width (window);
     }
 }
 
