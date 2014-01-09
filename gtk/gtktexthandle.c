@@ -204,7 +204,8 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
 }
 
 static void
-gtk_text_handle_widget_style_updated (GtkTextHandle *handle)
+gtk_text_handle_widget_style_updated (GtkWidget     *widget,
+                                      GtkTextHandle *handle)
 {
   _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
   _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
