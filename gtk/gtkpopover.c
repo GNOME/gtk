@@ -70,6 +70,8 @@ struct _GtkPopoverPrivate
   guint current_position   : 2;
 };
 
+static GQuark quark_widget_popovers = 0;
+
 static void gtk_popover_update_position    (GtkPopover *popover);
 static void gtk_popover_update_relative_to (GtkPopover *popover,
                                             GtkWidget  *relative_to);
@@ -163,6 +165,7 @@ gtk_popover_dispose (GObject *object)
   if (priv->widget)
     gtk_popover_update_relative_to (popover, NULL);
 
+  gtk_widget_set_visible (GTK_WIDGET (object), FALSE);
   G_OBJECT_CLASS (gtk_popover_parent_class)->dispose (object);
 }
 
@@ -877,6 +880,8 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                                                       P_("Position to place the bubble window"),
                                                       GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
                                                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+
+  quark_widget_popovers = g_quark_from_static_string ("gtk-quark-widget-popovers");
 }
 
 static void
@@ -913,12 +918,7 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
     gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
 
   if (new_window)
-    {
-      gtk_window_add_popover (new_window, GTK_WIDGET (popover));
-      g_object_unref (popover);
-    }
-  else
-    g_object_force_floating (G_OBJECT (popover));
+    gtk_window_add_popover (new_window, GTK_WIDGET (popover));
 
   priv->window = new_window;
 
@@ -929,6 +929,8 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
 
   if (gtk_widget_is_visible (GTK_WIDGET (popover)))
     gtk_widget_queue_resize (GTK_WIDGET (popover));
+
+  g_object_unref (popover);
 }
 
 static void
@@ -947,6 +949,40 @@ _gtk_popover_parent_size_allocate (GtkWidget     *widget,
 }
 
 static void
+widget_manage_popover (GtkWidget  *widget,
+                       GtkPopover *popover)
+{
+  GHashTable *popovers;
+
+  popovers = g_object_get_qdata (G_OBJECT (widget), quark_widget_popovers);
+
+  if (G_UNLIKELY (!popovers))
+    {
+      popovers = g_hash_table_new_full (NULL, NULL,
+                                        (GDestroyNotify) g_object_unref, NULL);
+      g_object_set_qdata_full (G_OBJECT (widget),
+                               quark_widget_popovers, popovers,
+                               (GDestroyNotify) g_hash_table_unref);
+    }
+
+  g_hash_table_add (popovers, g_object_ref_sink (popover));
+}
+
+static void
+widget_unmanage_popover (GtkWidget  *widget,
+                         GtkPopover *popover)
+{
+  GHashTable *popovers;
+
+  popovers = g_object_get_qdata (G_OBJECT (widget), quark_widget_popovers);
+
+  if (G_UNLIKELY (!popovers))
+    return;
+
+  g_hash_table_remove (popovers, popover);
+}
+
+static void
 gtk_popover_update_relative_to (GtkPopover *popover,
                                 GtkWidget  *relative_to)
 {
@@ -956,6 +992,8 @@ gtk_popover_update_relative_to (GtkPopover *popover,
 
   if (priv->widget == relative_to)
     return;
+
+  g_object_ref (popover);
 
   if (priv->window)
     {
@@ -971,6 +1009,8 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         g_signal_handler_disconnect (priv->widget, priv->size_allocate_id);
       if (g_signal_handler_is_connected (priv->widget, priv->unmap_id))
         g_signal_handler_disconnect (priv->widget, priv->unmap_id);
+
+      widget_unmanage_popover (priv->widget, popover);
     }
 
   priv->widget = relative_to;
@@ -993,12 +1033,16 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         g_signal_connect (priv->widget, "unmap",
                           G_CALLBACK (_gtk_popover_parent_unmap),
                           popover);
+
+      /* Give ownership of the popover to widget */
+      widget_manage_popover (priv->widget, popover);
     }
 
   if (priv->window)
     gtk_window_add_popover (priv->window, GTK_WIDGET (popover));
 
   _gtk_popover_update_context_parent (popover);
+  g_object_unref (popover);
 }
 
 static void

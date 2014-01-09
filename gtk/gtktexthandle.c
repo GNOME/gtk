@@ -237,7 +237,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
                         G_CALLBACK (gtk_text_handle_widget_style_updated),
                         handle);
 
-      priv->windows[pos].widget = widget;
+      priv->windows[pos].widget = g_object_ref_sink (widget);
       window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
       gtk_window_add_popover (GTK_WINDOW (window), widget);
     }
@@ -305,11 +305,12 @@ gtk_text_handle_finalize (GObject *object)
 
   priv = GTK_TEXT_HANDLE (object)->priv;
 
+  /* We sank the references, unref here */
   if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget)
-    gtk_widget_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
+    g_object_unref (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
 
   if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget)
-    gtk_widget_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
+    g_object_unref (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
 
   G_OBJECT_CLASS (_gtk_text_handle_parent_class)->finalize (object);
 }
