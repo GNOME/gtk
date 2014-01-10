@@ -51,6 +51,7 @@
  */
 
 #define DEFAULT_SPACING 6
+#define MIN_TITLE_CHARS 20
 
 struct _GtkHeaderBarPrivate
 {
@@ -155,6 +156,7 @@ init_sizing_box (GtkHeaderBar *bar)
   gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (GTK_LABEL (w), MIN_TITLE_CHARS);
 
   w = gtk_label_new (NULL);
   context = gtk_widget_get_style_context (w);
@@ -191,6 +193,7 @@ create_title_box (const char *title,
   gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
   gtk_box_pack_start (GTK_BOX (label_box), title_label, FALSE, FALSE, 0);
   gtk_widget_show (title_label);
+  gtk_label_set_width_chars (GTK_LABEL (title_label), MIN_TITLE_CHARS);
 
   subtitle_label = gtk_label_new (subtitle);
   context = gtk_widget_get_style_context (subtitle_label);
