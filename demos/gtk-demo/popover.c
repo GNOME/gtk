@@ -35,14 +35,17 @@ static GtkWidget *
 create_complex_popover (GtkWidget       *parent,
                         GtkPositionType  pos)
 {
-  GtkWidget *popover, *content;
+  GtkWidget *popover, *window, *content;
   GtkBuilder *builder;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, "/popover/popover.ui", NULL);
-  content = GTK_WIDGET (gtk_builder_get_object (builder, "box"));
+  window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+  content = gtk_bin_get_child (GTK_BIN (window));
   g_object_ref (content);
-  gtk_widget_unparent (content);
+  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (content)),
+                        content);
+  gtk_widget_destroy (window);
   g_object_unref (builder);
 
   popover = create_popover (parent, content, GTK_POS_BOTTOM);
