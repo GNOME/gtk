@@ -730,6 +730,50 @@ gtk_popover_get_preferred_width (GtkWidget *widget,
 }
 
 static void
+gtk_popover_get_preferred_width_for_height (GtkWidget *widget,
+                                            gint       height,
+                                            gint      *minimum_width,
+                                            gint      *natural_width)
+{
+  GtkPopoverPrivate *priv;
+  GtkWidget *child;
+  gint min, nat;
+  gint child_height;
+  GtkBorder border;
+
+  priv = GTK_POPOVER (widget)->priv;
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  min = nat = 0;
+
+  child_height = height;
+
+  if (POS_IS_VERTICAL (priv->preferred_position))
+    child_height -= TAIL_HEIGHT;
+
+  get_padding_and_border (widget, &border);
+  child_height -= border.top + border.bottom;
+
+  if (child)
+    gtk_widget_get_preferred_width_for_height (child, child_height, &min, &nat);
+
+  get_padding_and_border (widget, &border);
+  min += border.left + border.right;
+  nat += border.left + border.right;
+
+  if (!POS_IS_VERTICAL (priv->preferred_position))
+    {
+      min += TAIL_HEIGHT;
+      nat += TAIL_HEIGHT;
+    }
+
+  if (minimum_width)
+    *minimum_width = MAX (min, TAIL_GAP_WIDTH);
+
+  if (natural_width)
+    *natural_width = MAX (nat, TAIL_GAP_WIDTH);
+}
+
+static void
 gtk_popover_get_preferred_height (GtkWidget *widget,
                                   gint      *minimum_height,
                                   gint      *natural_height)
@@ -764,6 +808,49 @@ gtk_popover_get_preferred_height (GtkWidget *widget,
 }
 
 static void
+gtk_popover_get_preferred_height_for_width (GtkWidget *widget,
+                                            gint       width,
+                                            gint      *minimum_height,
+                                            gint      *natural_height)
+{
+  GtkPopoverPrivate *priv;
+  GtkWidget *child;
+  gint min, nat;
+  gint child_width;
+  GtkBorder border;
+
+  priv = GTK_POPOVER (widget)->priv;
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  min = nat = 0;
+
+  child_width = width;
+
+  if (!POS_IS_VERTICAL (priv->preferred_position))
+    child_width -= TAIL_HEIGHT;
+
+  get_padding_and_border (widget, &border);
+  child_width -= border.left + border.right;
+
+  if (child)
+    gtk_widget_get_preferred_height_for_width (child, child_width, &min, &nat);
+
+  min += border.top + border.bottom;
+  nat += border.top + border.bottom;
+
+  if (POS_IS_VERTICAL (priv->preferred_position))
+    {
+      min += TAIL_HEIGHT;
+      nat += TAIL_HEIGHT;
+    }
+
+  if (minimum_height)
+    *minimum_height = MAX (min, TAIL_GAP_WIDTH);
+
+  if (natural_height)
+    *natural_height = MAX (nat, TAIL_GAP_WIDTH);
+}
+
+static void
 gtk_popover_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
@@ -771,7 +858,6 @@ gtk_popover_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
   child = gtk_bin_get_child (GTK_BIN (widget));
-
   if (child)
     {
       GtkAllocation child_alloc;
@@ -892,6 +978,8 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->unmap = gtk_popover_unmap;
   widget_class->get_preferred_width = gtk_popover_get_preferred_width;
   widget_class->get_preferred_height = gtk_popover_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_popover_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_popover_get_preferred_height_for_width;
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->draw = gtk_popover_draw;
   widget_class->button_press_event = gtk_popover_button_press;
