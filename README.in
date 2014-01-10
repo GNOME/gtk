@@ -87,6 +87,11 @@ Release notes for 3.12
   pack multiple widgets at the end of a headerbar will have to
   be updated.
 
+* gtk_text_view_add_child_in_window has changed behaviour a bit.
+  It now always positions the child in buffer coordinates, where
+  it used to inconsistently scroll with the buffer but then go
+  reposition to a window-relative position on redraw.
+
 Release notes for 3.10
 ======================
 
