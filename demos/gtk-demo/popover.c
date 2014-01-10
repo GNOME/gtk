@@ -92,7 +92,6 @@ entry_icon_press_cb (GtkEntry             *entry,
   gtk_entry_get_icon_area (entry, icon_pos, &rect);
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
   gtk_widget_show (popover);
-  gtk_grab_add (popover);
 
   g_object_set_data (G_OBJECT (entry), "popover-icon-pos",
                      GUINT_TO_POINTER (icon_pos));
@@ -126,7 +125,6 @@ day_selected_cb (GtkCalendar *calendar,
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
 
   gtk_widget_show (popover);
-  gtk_grab_add (popover);
 
   gdk_event_free (event);
 }
@@ -151,6 +149,7 @@ do_popover (GtkWidget *do_widget)
       popover = create_popover (widget,
                                 gtk_label_new ("This popover does not grab input"),
                                 GTK_POS_TOP);
+      gtk_popover_set_modal (GTK_POPOVER (popover), FALSE);
       g_signal_connect (widget, "toggled",
                         G_CALLBACK (toggle_changed_cb), popover);
       gtk_container_add (GTK_CONTAINER (box), widget);

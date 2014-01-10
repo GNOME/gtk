@@ -53,7 +53,8 @@ typedef struct _GtkPopoverPrivate GtkPopoverPrivate;
 enum {
   PROP_RELATIVE_TO = 1,
   PROP_POINTING_TO,
-  PROP_POSITION
+  PROP_POSITION,
+  PROP_MODAL
 };
 
 struct _GtkPopoverPrivate
@@ -68,6 +69,7 @@ struct _GtkPopoverPrivate
   guint preferred_position : 2;
   guint final_position     : 2;
   guint current_position   : 2;
+  guint modal              : 1;
 };
 
 static GQuark quark_widget_popovers = 0;
@@ -81,13 +83,15 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkPopover, gtk_popover, GTK_TYPE_BIN)
 static void
 gtk_popover_init (GtkPopover *popover)
 {
+  GtkPopoverPrivate *priv;
   GtkWidget *widget;
 
   widget = GTK_WIDGET (popover);
   gtk_widget_set_has_window (widget, TRUE);
-  popover->priv = gtk_popover_get_instance_private (popover);
+  popover->priv = priv = gtk_popover_get_instance_private (popover);
   gtk_style_context_add_class (gtk_widget_get_style_context (widget),
                                GTK_STYLE_CLASS_OSD);
+  priv->modal = TRUE;
 }
 
 static void
@@ -109,6 +113,10 @@ gtk_popover_set_property (GObject      *object,
     case PROP_POSITION:
       gtk_popover_set_position (GTK_POPOVER (object),
                                 g_value_get_enum (value));
+      break;
+    case PROP_MODAL:
+      gtk_popover_set_modal (GTK_POPOVER (object),
+                             g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -133,6 +141,9 @@ gtk_popover_get_property (GObject    *object,
       break;
     case PROP_POSITION:
       g_value_set_enum (value, priv->preferred_position);
+      break;
+    case PROP_MODAL:
+      g_value_set_boolean (value, priv->modal);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -206,9 +217,18 @@ gtk_popover_realize (GtkWidget *widget)
 static void
 gtk_popover_map (GtkWidget *widget)
 {
+  GtkPopoverPrivate *priv;
+
+  priv = GTK_POPOVER (widget)->priv;
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->map (widget);
   gdk_window_show (gtk_widget_get_window (widget));
   gtk_popover_update_position (GTK_POPOVER (widget));
+
+  if (priv->modal)
+    {
+      gtk_grab_add (widget);
+      gtk_widget_grab_focus (widget);
+    }
 }
 
 static void
@@ -881,6 +901,22 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                                                       GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
                                                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
+  /**
+   * GtkPopover:modal
+   *
+   * Sets whether the popover is modal (so other elements in the window are
+   * not usable while the popover is visible).
+   *
+   * Since: 3.12
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_MODAL,
+                                   g_param_spec_boolean ("modal",
+                                                         P_("Modal"),
+                                                         P_("Whether the popover is modal"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
+
   quark_widget_popovers = g_quark_from_static_string ("gtk-quark-widget-popovers");
 }
 
@@ -1239,4 +1275,68 @@ gtk_popover_get_position (GtkPopover *popover)
   priv = popover->priv;
 
   return priv->preferred_position;
+}
+
+/**
+ * gtk_popover_set_modal:
+ * @popover: a #GtkPopover
+ * @modal: #TRUE to make popover claim all input within the toplevel
+ *
+ * Sets whether @popover is modal, a modal popover will grab all input
+ * within the toplevel and grab the keyboard focus on it when being
+ * displayed. Clicking outside the popover area or pressing Esc will
+ * dismiss the popover and ungrab input.
+ *
+ * Since: 3.12
+ **/
+void
+gtk_popover_set_modal (GtkPopover *popover,
+                       gboolean    modal)
+{
+  GtkPopoverPrivate *priv;
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  priv = popover->priv;
+
+  if ((priv->modal == TRUE) == (modal == TRUE))
+    return;
+
+  priv->modal = (modal != FALSE);
+
+  if (gtk_widget_is_visible (GTK_WIDGET (popover)))
+    {
+      if (priv->modal)
+        {
+          gtk_grab_add (GTK_WIDGET (popover));
+          gtk_widget_grab_focus (GTK_WIDGET (popover));
+        }
+      else
+        gtk_grab_remove (GTK_WIDGET (popover));
+    }
+
+  g_object_notify (G_OBJECT (popover), "modal");
+}
+
+/**
+ * gtk_popover_get_modal:
+ * @popover: a #GtkPopover
+ *
+ * Returns whether the popover is modal, see gtk_popover_set_modal to
+ * see the implications of this.
+ *
+ * Returns: #TRUE if @popover is modal
+ *
+ * Since: 3.12
+ **/
+gboolean
+gtk_popover_get_modal (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
+
+  priv = popover->priv;
+
+  return priv->modal;
 }
