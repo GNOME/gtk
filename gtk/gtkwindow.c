@@ -3615,7 +3615,7 @@ on_titlebar_title_notify (GtkHeaderBar *titlebar,
 /**
  * gtk_window_set_titlebar:
  * @window: a #GtkWindow
- * @titlebar: the widget to use as titlebar
+ * @titlebar: (allow-none): the widget to use as titlebar
  *
  * Sets a custom titlebar for @window.
  *
@@ -3638,6 +3638,13 @@ gtk_window_set_titlebar (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   unset_titlebar (window);
+
+  if (titlebar == NULL)
+    {
+      priv->custom_title = FALSE;
+      priv->client_decorated = FALSE;
+      return;
+    }
 
   if (gdk_window_supports_csd (window))
     gdk_window_enable_csd (window);
