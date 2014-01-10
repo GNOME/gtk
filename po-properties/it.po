@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-06 09:25+0100\n"
-"PO-Revision-Date: 2014-01-06 09:25+0100\n"
+"POT-Creation-Date: 2014-01-10 09:08+0100\n"
+"PO-Revision-Date: 2014-01-10 09:07+0100\n"
 "Last-Translator: Milo Casagrande <milo@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -945,6 +945,47 @@ msgstr "Valore target per l'azione"
 msgid "The parameter for action invocations"
 msgstr "Il parametro per le invocazioni dell'azione"
 
+#: ../gtk/gtkactionbar.c:961 ../gtk/gtkbox.c:326 ../gtk/gtkheaderbar.c:1761
+msgid "Pack type"
+msgstr "Tipo inserimento"
+
+#: ../gtk/gtkactionbar.c:962 ../gtk/gtkbox.c:327 ../gtk/gtkheaderbar.c:1762
+msgid ""
+"A GtkPackType indicating whether the child is packed with reference to the "
+"start or end of the parent"
+msgstr ""
+"Un GtkPackType che indica se il widget è inserito all'inizio o alla fine del "
+"widget genitore"
+
+#: ../gtk/gtkactionbar.c:968 ../gtk/gtkbox.c:333 ../gtk/gtkbubblewindow.c:864
+#: ../gtk/gtkheaderbar.c:1768 ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:350
+#: ../gtk/gtkstack.c:432 ../gtk/gtktoolitemgroup.c:1674
+msgid "Position"
+msgstr "Posizione"
+
+#: ../gtk/gtkactionbar.c:969 ../gtk/gtkbox.c:334 ../gtk/gtkheaderbar.c:1769
+#: ../gtk/gtknotebook.c:775 ../gtk/gtkstack.c:433
+msgid "The index of the child in the parent"
+msgstr "La posizione del widget figlio nel widget genitore"
+
+#: ../gtk/gtkactionbar.c:976 ../gtk/gtkbox.c:251 ../gtk/gtkcellareabox.c:310
+#: ../gtk/gtkexpander.c:312 ../gtk/gtkheaderbar.c:1802
+#: ../gtk/gtkiconview.c:515 ../gtk/gtktreeviewcolumn.c:281
+msgid "Spacing"
+msgstr "Spaziatura"
+
+#: ../gtk/gtkactionbar.c:977 ../gtk/gtkbox.c:252 ../gtk/gtkheaderbar.c:1803
+msgid "The amount of space between children"
+msgstr "La quantità di spazio tra i widget figli"
+
+#: ../gtk/gtkactionbar.c:985
+msgid "Center Widget"
+msgstr "Widget centrale"
+
+#: ../gtk/gtkactionbar.c:986
+msgid "Widget to display in center"
+msgstr "Widget da visualizzare nel centro"
+
 #: ../gtk/gtkadjustment.c:121 ../gtk/gtkcellrendererprogress.c:137
 #: ../gtk/gtkscalebutton.c:228 ../gtk/gtkspinbutton.c:410
 msgid "Value"
@@ -1199,11 +1240,11 @@ msgstr "Finestra attiva"
 msgid "The window which most recently had focus"
 msgstr "La finestra che ha avuto il focus più recentemente"
 
-#: ../gtk/gtkapplicationwindow.c:806
+#: ../gtk/gtkapplicationwindow.c:877
 msgid "Show a menubar"
 msgstr "Mostra una barra dei menù"
 
-#: ../gtk/gtkapplicationwindow.c:807
+#: ../gtk/gtkapplicationwindow.c:878
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr ""
 "Se VERO, viene mostrata la barra dei menù nella parte superiore delle "
@@ -1398,16 +1439,6 @@ msgstr "Non-omogeneo"
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Se VERO, il figlio non è vincolato a un dimensionamento omogeneo"
 
-#: ../gtk/gtkbox.c:251 ../gtk/gtkcellareabox.c:310 ../gtk/gtkexpander.c:312
-#: ../gtk/gtkheaderbar.c:1813 ../gtk/gtkiconview.c:515
-#: ../gtk/gtktreeviewcolumn.c:281
-msgid "Spacing"
-msgstr "Spaziatura"
-
-#: ../gtk/gtkbox.c:252 ../gtk/gtkheaderbar.c:1814
-msgid "The amount of space between children"
-msgstr "La quantità di spazio tra i widget figli"
-
 #: ../gtk/gtkbox.c:262 ../gtk/gtkflowbox.c:3684
 msgid "Whether the children should all be the same size"
 msgstr "Indica se i widget figli devono avere tutti la stessa dimensione"
@@ -1455,29 +1486,6 @@ msgstr "Riempimento"
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
 "Spazio aggiuntivo, in pixel, da inserire tra i widget figlio e i suoi vicini"
-
-#: ../gtk/gtkbox.c:326 ../gtk/gtkheaderbar.c:1772
-msgid "Pack type"
-msgstr "Tipo inserimento"
-
-#: ../gtk/gtkbox.c:327 ../gtk/gtkheaderbar.c:1773
-msgid ""
-"A GtkPackType indicating whether the child is packed with reference to the "
-"start or end of the parent"
-msgstr ""
-"Un GtkPackType che indica se il widget è inserito all'inizio o alla fine del "
-"widget genitore"
-
-#: ../gtk/gtkbox.c:333 ../gtk/gtkbubblewindow.c:864 ../gtk/gtkheaderbar.c:1779
-#: ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:350 ../gtk/gtkstack.c:432
-#: ../gtk/gtktoolitemgroup.c:1674
-msgid "Position"
-msgstr "Posizione"
-
-#: ../gtk/gtkbox.c:334 ../gtk/gtkheaderbar.c:1780 ../gtk/gtknotebook.c:775
-#: ../gtk/gtkstack.c:433
-msgid "The index of the child in the parent"
-msgstr "La posizione del widget figlio nel widget genitore"
 
 #: ../gtk/gtkbubblewindow.c:850
 msgid "Relative to"
@@ -2738,7 +2746,7 @@ msgid "Whether to give the color an alpha value"
 msgstr "Indica se dare al colore un valore alfa"
 
 #: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:449
-#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkheaderbar.c:1787
+#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkheaderbar.c:1776
 #: ../gtk/gtkprintjob.c:134 ../gtk/gtkstack.c:418 ../gtk/gtkstatusicon.c:430
 #: ../gtk/gtktreeviewcolumn.c:329
 msgid "Title"
@@ -3994,55 +4002,55 @@ msgstr "Altezza"
 msgid "The number of rows that a child spans"
 msgstr "Il numero di righe di estensione di un figlio"
 
-#: ../gtk/gtkheaderbar.c:1788
+#: ../gtk/gtkheaderbar.c:1777
 msgid "The title to display"
 msgstr "Il titolo di visualizzare"
 
-#: ../gtk/gtkheaderbar.c:1795
+#: ../gtk/gtkheaderbar.c:1784
 msgid "Subtitle"
 msgstr "Sottotitolo"
 
-#: ../gtk/gtkheaderbar.c:1796
+#: ../gtk/gtkheaderbar.c:1785
 msgid "The subtitle to display"
 msgstr "Il sottotitolo da visualizzare"
 
-#: ../gtk/gtkheaderbar.c:1803
+#: ../gtk/gtkheaderbar.c:1792
 msgid "Custom Title"
 msgstr "Titolo personalizzato"
 
-#: ../gtk/gtkheaderbar.c:1804
+#: ../gtk/gtkheaderbar.c:1793
 msgid "Custom title widget to display"
 msgstr "Titolo personalizzato del widget da visualizzare"
 
-#: ../gtk/gtkheaderbar.c:1832
+#: ../gtk/gtkheaderbar.c:1821
 msgid "Show decorations"
 msgstr "Mostra decorazioni"
 
-#: ../gtk/gtkheaderbar.c:1833
+#: ../gtk/gtkheaderbar.c:1822
 msgid "Whether to show window decorations"
 msgstr "Indica se mostrare o meno le decorazioni della finestra"
 
-#: ../gtk/gtkheaderbar.c:1852 ../gtk/gtksettings.c:1572
+#: ../gtk/gtkheaderbar.c:1841 ../gtk/gtksettings.c:1572
 msgid "Decoration Layout"
 msgstr "Disposizione decorazione"
 
-#: ../gtk/gtkheaderbar.c:1853 ../gtk/gtksettings.c:1573
+#: ../gtk/gtkheaderbar.c:1842 ../gtk/gtksettings.c:1573
 msgid "The layout for window decorations"
 msgstr "La disposizione delle decorazioni della finestra"
 
-#: ../gtk/gtkheaderbar.c:1867
+#: ../gtk/gtkheaderbar.c:1856
 msgid "Decoration Layout Set"
 msgstr "Disposizione decorazione impostata"
 
-#: ../gtk/gtkheaderbar.c:1868
+#: ../gtk/gtkheaderbar.c:1857
 msgid "Whether the decoration-layout property has been set"
 msgstr "Indica se la proprietà «decoration-layout» è stata impostata"
 
-#: ../gtk/gtkheaderbar.c:1883
+#: ../gtk/gtkheaderbar.c:1872
 msgid "Has Subtitle"
 msgstr "Usa un sottotitolo"
 
-#: ../gtk/gtkheaderbar.c:1884
+#: ../gtk/gtkheaderbar.c:1873
 msgid "Whether to reserve space for a subtitle"
 msgstr "Indica se richiedere abbastanza spazio per un sottotitolo"
 
@@ -4579,36 +4587,36 @@ msgstr ""
 "La quantità di spazio di contorno tra l'ombra della barra del menù e le voci "
 "del menù"
 
-#: ../gtk/gtkmenubutton.c:515
+#: ../gtk/gtkmenubutton.c:510
 msgid "Popup"
 msgstr "Pop-up"
 
-#: ../gtk/gtkmenubutton.c:516
+#: ../gtk/gtkmenubutton.c:511
 msgid "The dropdown menu."
 msgstr "Il menù a comparsa"
 
-#: ../gtk/gtkmenubutton.c:532
+#: ../gtk/gtkmenubutton.c:527
 msgid "Menu model"
 msgstr "Modello menù"
 
-#: ../gtk/gtkmenubutton.c:533
+#: ../gtk/gtkmenubutton.c:528
 msgid "The dropdown menu's model."
 msgstr "Il modello del menù a comparsa"
 
 #
-#: ../gtk/gtkmenubutton.c:546
+#: ../gtk/gtkmenubutton.c:541
 msgid "Align with"
 msgstr "Allinea con"
 
-#: ../gtk/gtkmenubutton.c:547
+#: ../gtk/gtkmenubutton.c:542
 msgid "The parent widget which the menu should align with."
 msgstr "Il widget genitore a cui il menù dovrebbe allinearsi"
 
-#: ../gtk/gtkmenubutton.c:561 ../gtk/gtkstylecontext.c:458
+#: ../gtk/gtkmenubutton.c:556 ../gtk/gtkstylecontext.c:458
 msgid "Direction"
 msgstr "Direzione"
 
-#: ../gtk/gtkmenubutton.c:562
+#: ../gtk/gtkmenubutton.c:557
 msgid "The direction the arrow should point."
 msgstr "La direzione verso cui la freccia dovrebbe puntare"
 
