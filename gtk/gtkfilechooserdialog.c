@@ -29,6 +29,8 @@
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
+#include "gtksettings.h"
+#include "gtkdialogprivate.h"
 
 #include <stdarg.h>
 
@@ -262,6 +264,7 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   dialog->priv->response_requested = FALSE;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
+  gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
 
   _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (dialog),
 				  GTK_FILE_CHOOSER (dialog->priv->widget));
