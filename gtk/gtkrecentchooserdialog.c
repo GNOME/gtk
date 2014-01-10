@@ -23,6 +23,8 @@
 #include "gtkrecentchooserutils.h"
 #include "gtkrecentmanager.h"
 #include "gtktypebuiltins.h"
+#include "gtksettings.h"
+#include "gtkdialogprivate.h"
 
 #include <stdarg.h>
 
@@ -127,6 +129,7 @@ gtk_recent_chooser_dialog_init (GtkRecentChooserDialog *dialog)
 
   priv = gtk_recent_chooser_dialog_get_instance_private (dialog);
   dialog->priv = priv;
+  gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
 
   content_area = gtk_dialog_get_content_area (rc_dialog);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -136,7 +139,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_container_set_border_width (GTK_CONTAINER (rc_dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
-
 }
 
 /* we intercept the GtkRecentChooser::item_activated signal and try to
@@ -278,7 +280,7 @@ gtk_recent_chooser_dialog_new_valist (const gchar      *title,
   GtkWidget *result;
   const char *button_text = first_button_text;
   gint response_id;
-  
+
   result = g_object_new (GTK_TYPE_RECENT_CHOOSER_DIALOG,
                          "title", title,
                          "recent-manager", manager,
