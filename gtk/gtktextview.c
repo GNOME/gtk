@@ -1551,6 +1551,7 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_widget_set_size_request (priv->magnifier, 100, 60);
   _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
   priv->magnifier_popover = gtk_popover_new (widget);
+  gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
   gtk_container_set_border_width (GTK_CONTAINER (priv->magnifier_popover), 4);
@@ -8947,6 +8948,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (text_view));
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble),
                             GTK_POS_TOP);
+  gtk_popover_set_modal (GTK_POPOVER (priv->selection_bubble), FALSE);
 
   toolbar = GTK_WIDGET (gtk_toolbar_new ());
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);

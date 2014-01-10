@@ -73,6 +73,12 @@ void            gtk_popover_set_position    (GtkPopover            *popover,
 GDK_AVAILABLE_IN_3_12
 GtkPositionType gtk_popover_get_position    (GtkPopover            *popover);
 
+GDK_AVAILABLE_IN_3_12
+void            gtk_popover_set_modal       (GtkPopover            *popover,
+                                             gboolean               modal);
+GDK_AVAILABLE_IN_3_12
+gboolean        gtk_popover_get_modal       (GtkPopover            *popover);
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_H__ */
