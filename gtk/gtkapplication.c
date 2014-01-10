@@ -1480,7 +1480,7 @@ normalise_detailed_name (const gchar *detailed_action_name)
  * @application: a #GtkApplication
  * @detailed_action_name: a detailed action name, specifying and action
  *     and target to associate accelerators with
- * @accels: a list of accelerators in the format understood by
+ * @accels: (array zero-terminated=1): a list of accelerators in the format understood by
  *     gtk_accelerator_parse()
  *
  * Sets one or more keyboard accelerator that will trigger the
