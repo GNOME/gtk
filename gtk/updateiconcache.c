@@ -46,7 +46,7 @@
 static gboolean force_update = FALSE;
 static gboolean ignore_theme_index = FALSE;
 static gboolean quiet = FALSE;
-static gboolean index_only = FALSE;
+static gboolean index_only = TRUE;
 static gboolean validate = FALSE;
 static gchar *var_name = "-";
 
