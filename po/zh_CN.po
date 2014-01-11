@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-01-03 01:05+0000\n"
-"PO-Revision-Date: 2014-01-04 17:11+0800\n"
+"POT-Creation-Date: 2014-01-10 11:06+0000\n"
+"PO-Revision-Date: 2014-01-06 17:39+0800\n"
 "Last-Translator: Tong Hui <tonghuix@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -495,7 +495,7 @@ msgid "Toggle"
 msgstr "开关"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
-#: ../gtk/a11y/gtkmenuitemaccessible.c:433
+#: ../gtk/a11y/gtkmenuitemaccessible.c:435
 msgctxt "Action name"
 msgid "Click"
 msgstr "点击"
@@ -516,7 +516,7 @@ msgid "Edit"
 msgstr "编辑(_E)"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:72
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:149
 #: ../gtk/a11y/gtkentryaccessible.c:1554
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
@@ -538,27 +538,27 @@ msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "激活该单元"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:71
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:148
 msgctxt "Action name"
 msgid "Select"
 msgstr "选择(_S)"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:73
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:150
 msgctxt "Action name"
 msgid "Customize"
 msgstr "自定义(_C)"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:84
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:161
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "选择颜色"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:85
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:162
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "激活该颜色"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:86
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:163
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "自定义颜色"
@@ -997,7 +997,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "缩小(_O)"
 
-#: ../gtk/a11y/gtkmenuitemaccessible.c:442
+#: ../gtk/a11y/gtkmenuitemaccessible.c:444
 msgctxt "Action description"
 msgid "Clicks the menuitem"
 msgstr "点击菜单项"
@@ -1353,7 +1353,7 @@ msgstr "空"
 #. * opened when the user selects the <literal>About</literal> option from
 #. * the <literal>Help</literal> menu. All parts of the dialog are optional.
 #. *
-#. * About dialog often contain links and email addresses. GtkAboutDialog
+#. * About dialogs often contain links and email addresses. GtkAboutDialog
 #. * displays these as clickable links. By default, it calls gtk_show_uri()
 #. * when a user clicks one. The behaviour can be overridden with the
 #. * #GtkAboutDialog::activate-link signal.
@@ -1460,19 +1460,19 @@ msgstr "网站"
 msgid "About %s"
 msgstr "关于 %s"
 
-#: ../gtk/gtkaboutdialog.c:2287
+#: ../gtk/gtkaboutdialog.c:2289
 msgid "Created by"
 msgstr "作者："
 
-#: ../gtk/gtkaboutdialog.c:2290
+#: ../gtk/gtkaboutdialog.c:2292
 msgid "Documented by"
 msgstr "文档："
 
-#: ../gtk/gtkaboutdialog.c:2300
+#: ../gtk/gtkaboutdialog.c:2302
 msgid "Translated by"
 msgstr "翻译："
 
-#: ../gtk/gtkaboutdialog.c:2305
+#: ../gtk/gtkaboutdialog.c:2307
 msgid "Artwork by"
 msgstr "美工："
 
@@ -1576,8 +1576,7 @@ msgstr "没有可用于打开“%s”文件的应用程序"
 msgid ""
 "Click \"Show other applications\", for more options, or \"Software\" to "
 "install a new application"
-msgstr ""
-"点击“显示其他应用程序”了解更多选项，或点击“软件”安装新的应用程序"
+msgstr "点击“显示其他应用程序”了解更多选项，或点击“软件”安装新的应用程序"
 
 #: ../gtk/gtkappchooserdialog.c:293
 msgid "Forget association"
@@ -1606,17 +1605,6 @@ msgstr "相关应用程序"
 #: ../gtk/gtkappchooserwidget.c:786
 msgid "Other Applications"
 msgstr "其他应用程序"
-
-#: ../gtk/gtkapplication-quartz.c:87
-#, c-format
-msgid ""
-"%s cannot quit at this time:\n"
-"\n"
-"%s"
-msgstr ""
-"%s 无法在此时退出：\n"
-"\n"
-"%s"
 
 #: ../gtk/gtkapplicationwindow.c:326 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1447
@@ -1982,11 +1970,15 @@ msgstr "白色"
 msgid "Custom"
 msgstr "自定义"
 
+#: ../gtk/gtkcolorchooserwidget.c:528
+msgid "Custom color"
+msgstr "自定义颜色"
+
 #: ../gtk/gtkcolorchooserwidget.c:529
-msgid "Create custom color"
+msgid "Create a custom color"
 msgstr "创建自定义颜色"
 
-#: ../gtk/gtkcolorchooserwidget.c:547
+#: ../gtk/gtkcolorchooserwidget.c:548
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "自定义颜色 %d：%s"
@@ -2078,26 +2070,26 @@ msgstr "右(_R)："
 msgid "Paper Margins"
 msgstr "纸张边距"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6243
-#: ../gtk/gtktextview.c:8708 ../gtk/gtktextview.c:8891
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6250
+#: ../gtk/gtktextview.c:8735 ../gtk/gtktextview.c:8918
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6244
-#: ../gtk/gtktextview.c:8712 ../gtk/gtktextview.c:8895
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6251
+#: ../gtk/gtktextview.c:8739 ../gtk/gtktextview.c:8922
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6245
-#: ../gtk/gtktextview.c:8714 ../gtk/gtktextview.c:8897
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6252
+#: ../gtk/gtktextview.c:8741 ../gtk/gtktextview.c:8924
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6247 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8744
 msgid "_Delete"
 msgstr "删除(_D)"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6256 ../gtk/gtktextview.c:8731
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8758
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -2362,7 +2354,7 @@ msgstr "关闭"
 msgid "Icon '%s' not present in theme"
 msgstr "图标“%s”未在主题中"
 
-#: ../gtk/gtkicontheme.c:3893
+#: ../gtk/gtkicontheme.c:3923
 msgid "Failed to load icon"
 msgstr "图标加载失败"
 
@@ -2403,12 +2395,12 @@ msgid "Error"
 msgstr "错误"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6226
+#: ../gtk/gtklabel.c:6233
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6234
+#: ../gtk/gtklabel.c:6241
 msgid "Copy _Link Address"
 msgstr "复制链接地址(_L)"
 
@@ -2549,7 +2541,7 @@ msgstr "显示 GTK+ 选项"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmenubutton.c:597
+#: ../gtk/gtkmenubutton.c:592
 msgid "Menu"
 msgstr "菜单"
 
@@ -5285,6 +5277,15 @@ msgstr "降低音量"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "减少音量"
+
+#~ msgid ""
+#~ "%s cannot quit at this time:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "%s 无法在此时退出：\n"
+#~ "\n"
+#~ "%s"
 
 #~ msgctxt "light switch widget"
 #~ msgid "Switch"
