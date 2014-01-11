@@ -129,6 +129,7 @@ struct _GtkNotebookPrivate
   GtkNotebookDragOperation   operation;
   GtkNotebookPage           *cur_page;
   GtkNotebookPage           *detached_tab;
+  GtkNotebookPage           *prelight_tab;
   GtkTargetList             *source_targets;
   GtkWidget                 *action_widget[N_ACTION_WIDGETS];
   GtkWidget                 *dnd_window;
@@ -353,6 +354,8 @@ static gboolean gtk_notebook_button_press    (GtkWidget        *widget,
 static gboolean gtk_notebook_button_release  (GtkWidget        *widget,
                                               GdkEventButton   *event);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
+static gboolean gtk_notebook_enter_notify    (GtkWidget        *widget,
+                                              GdkEventCrossing *event);
 static gboolean gtk_notebook_leave_notify    (GtkWidget        *widget,
                                               GdkEventCrossing *event);
 static gboolean gtk_notebook_motion_notify   (GtkWidget        *widget,
@@ -656,6 +659,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->button_press_event = gtk_notebook_button_press;
   widget_class->button_release_event = gtk_notebook_button_release;
   widget_class->popup_menu = gtk_notebook_popup_menu;
+  widget_class->enter_notify_event = gtk_notebook_enter_notify;
   widget_class->leave_notify_event = gtk_notebook_leave_notify;
   widget_class->motion_notify_event = gtk_notebook_motion_notify;
   widget_class->grab_notify = gtk_notebook_grab_notify;
@@ -1672,6 +1676,7 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_button_press
  * gtk_notebook_button_release
  * gtk_notebook_popup_menu
+ * gtk_notebook_enter_notify
  * gtk_notebook_leave_notify
  * gtk_notebook_motion_notify
  * gtk_notebook_focus_in
@@ -1913,7 +1918,7 @@ gtk_notebook_realize (GtkWidget *widget)
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
                             GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK |
-                            GDK_POINTER_MOTION_MASK | GDK_LEAVE_NOTIFY_MASK);
+                            GDK_POINTER_MOTION_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
@@ -1996,9 +2001,13 @@ notebook_tab_prepare_style_context (GtkNotebook *notebook,
   GtkRegionFlags flags = 0;
   GtkStateFlags state = gtk_style_context_get_state (context);
 
-  if (page != NULL &&
-      page == notebook->priv->cur_page)
-    state |= GTK_STATE_FLAG_ACTIVE;
+  if (page != NULL)
+    {
+      if (page == notebook->priv->cur_page)
+        state |= GTK_STATE_FLAG_ACTIVE;
+      if (page == notebook->priv->prelight_tab)
+        state |= GTK_STATE_FLAG_PRELIGHT;
+    }
 
   gtk_style_context_set_state (context, state);
 
@@ -3257,16 +3266,48 @@ gtk_notebook_button_release (GtkWidget      *widget,
     return FALSE;
 }
 
+static void
+tab_prelight (GtkNotebook *notebook,
+              GdkEvent    *event)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+  GList *tab;
+  gint x, y;
+
+  if (get_widget_coordinates (GTK_WIDGET (notebook), (GdkEvent *)event, &x, &y))
+    {
+      tab = get_tab_at_pos (notebook, x, y);
+      if ((tab == NULL && priv->prelight_tab != NULL) ||
+          (tab != NULL && tab->data != priv->prelight_tab))
+        {
+          priv->prelight_tab = tab == NULL ? NULL : tab->data;
+          gtk_notebook_redraw_tabs (notebook);
+       }
+    }
+}
+
+static gboolean
+gtk_notebook_enter_notify (GtkWidget        *widget,
+                           GdkEventCrossing *event)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+
+  tab_prelight (notebook, (GdkEvent *)event);
+
+  return FALSE;
+}
+
 static gboolean
 gtk_notebook_leave_notify (GtkWidget        *widget,
                            GdkEventCrossing *event)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  gint x, y;
 
-  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
-    return FALSE;
+  if (priv->prelight_tab != NULL)
+    {
+      tab_prelight (notebook, (GdkEvent *)event);
+    }
 
   if (priv->in_child)
     {
@@ -3410,6 +3451,8 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
     return FALSE;
 
   priv->timestamp = event->time;
+
+  tab_prelight (notebook, (GdkEvent *)event);
 
   /* While animating the move, event->x is relative to the flying tab
    * (priv->drag_window has a pointer grab), but we need coordinates relative to
@@ -4986,6 +5029,8 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
   if (priv->detached_tab == list->data)
     priv->detached_tab = NULL;
+  if (priv->prelight_tab == list->data)
+    priv->prelight_tab = NULL;
   if (priv->switch_tab == list)
     priv->switch_tab = NULL;
 
