@@ -31,8 +31,8 @@
     </columns>
   </object>
   <object class="GtkApplicationWindow" id="window">
-    <property name="width_request">800</property>
-    <property name="height_request">600</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
     <property name="can_focus">False</property>
     <property name="title">GTK+ Demo</property>
     <signal name="delete-event" handler="gtk_false" swapped="no"/>
@@ -123,7 +123,6 @@
               <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkTextView" id="info-textview">
