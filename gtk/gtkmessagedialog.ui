@@ -29,7 +29,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage" id="image">
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">start</property>
@@ -48,7 +48,8 @@
               <object class="GtkBox" id="message_area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_end">20</property>
+                <property name="margin_start">30</property>
+                <property name="margin_end">30</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
