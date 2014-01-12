@@ -110,7 +110,6 @@ struct _GdkDisplay
    * is part of a double-click or triple-click
    */
   GHashTable *multiple_click_info;
-  guint double_click_time;  /* Maximum time between clicks in msecs */
   GdkDevice *core_pointer;  /* Core pointer device */
 
   guint event_pause_count;       /* How many times events are blocked */
@@ -125,6 +124,7 @@ struct _GdkDisplay
   GHashTable *pointers_info;  /* GdkPointerWindowInfo for each device */
   guint32 last_event_time;    /* Last reported event time from server */
 
+  guint double_click_time;  /* Maximum time between clicks in msecs */
   guint double_click_distance;   /* Maximum distance between clicks in pixels */
 };
 
