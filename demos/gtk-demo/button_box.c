@@ -90,6 +90,14 @@ do_button_box (GtkWidget *do_widget)
                         create_bbox (TRUE, "End", 40, GTK_BUTTONBOX_END),
                         TRUE, TRUE, 5);
 
+    gtk_box_pack_start (GTK_BOX (vbox),
+                        create_bbox (TRUE, "Center", 40, GTK_BUTTONBOX_CENTER),
+                        TRUE, TRUE, 5);
+
+    gtk_box_pack_start (GTK_BOX (vbox),
+                        create_bbox (TRUE, "Expand", 40, GTK_BUTTONBOX_EXPAND),
+                        TRUE, TRUE, 5);
+
     frame_vert = gtk_frame_new ("Vertical Button Boxes");
     gtk_box_pack_start (GTK_BOX (main_vbox), frame_vert, TRUE, TRUE, 10);
 
@@ -98,19 +106,25 @@ do_button_box (GtkWidget *do_widget)
     gtk_container_add (GTK_CONTAINER (frame_vert), hbox);
 
     gtk_box_pack_start (GTK_BOX (hbox),
-                        create_bbox (FALSE, "Spread", 30, GTK_BUTTONBOX_SPREAD),
+                        create_bbox (FALSE, "Spread", 10, GTK_BUTTONBOX_SPREAD),
                         TRUE, TRUE, 0);
 
     gtk_box_pack_start (GTK_BOX (hbox),
-                        create_bbox (FALSE, "Edge", 30, GTK_BUTTONBOX_EDGE),
+                        create_bbox (FALSE, "Edge", 10, GTK_BUTTONBOX_EDGE),
                         TRUE, TRUE, 5);
 
     gtk_box_pack_start (GTK_BOX (hbox),
-                        create_bbox (FALSE, "Start", 30, GTK_BUTTONBOX_START),
+                        create_bbox (FALSE, "Start", 10, GTK_BUTTONBOX_START),
                         TRUE, TRUE, 5);
 
     gtk_box_pack_start (GTK_BOX (hbox),
-                        create_bbox (FALSE, "End", 30, GTK_BUTTONBOX_END),
+                        create_bbox (FALSE, "End", 10, GTK_BUTTONBOX_END),
+                        TRUE, TRUE, 5);
+    gtk_box_pack_start (GTK_BOX (hbox),
+                        create_bbox (FALSE, "Center", 10, GTK_BUTTONBOX_CENTER),
+                        TRUE, TRUE, 5);
+    gtk_box_pack_start (GTK_BOX (hbox),
+                        create_bbox (FALSE, "Expand", 10, GTK_BUTTONBOX_EXPAND),
                         TRUE, TRUE, 5);
   }
 
