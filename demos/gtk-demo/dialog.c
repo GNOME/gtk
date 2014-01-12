@@ -20,7 +20,7 @@ message_dialog_clicked (GtkButton *button,
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,
-                                   GTK_BUTTONS_OK,
+                                   GTK_BUTTONS_OK_CANCEL,
                                    "This message box has been popped up the following\n"
                                    "number of times:");
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
