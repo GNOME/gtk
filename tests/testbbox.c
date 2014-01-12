@@ -28,6 +28,7 @@ static const char* styles[] = { "GTK_BUTTONBOX_SPREAD",
 				"GTK_BUTTONBOX_START",
 				"GTK_BUTTONBOX_END",
 				"GTK_BUTTONBOX_CENTER",
+				"GTK_BUTTONBOX_EXPAND",
 				NULL};
 
 static const char* types[] = { "GtkHButtonBox",
