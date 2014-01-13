@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-01-06 23:36+0000\n"
-"PO-Revision-Date: 2014-01-07 12:35+0100\n"
+"POT-Creation-Date: 2014-01-13 03:26+0000\n"
+"PO-Revision-Date: 2014-01-13 14:11+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -615,12 +615,12 @@ msgid "_Close"
 msgstr "_Cerrar"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:428
-#: ../gtk/gtkwindow.c:8042
+#: ../gtk/gtkwindow.c:8167
 msgid "Minimize"
 msgstr "Minimizar"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:451
-#: ../gtk/gtkwindow.c:8050
+#: ../gtk/gtkwindow.c:8175
 msgid "Maximize"
 msgstr "Maximizar"
 
@@ -1622,28 +1622,17 @@ msgstr "Aplicaciones relacionadas"
 msgid "Other Applications"
 msgstr "Otras aplicaciones"
 
-#: ../gtk/gtkapplication-quartz.c:87
-#, c-format
-msgid ""
-"%s cannot quit at this time:\n"
-"\n"
-"%s"
-msgstr ""
-"%s no se puede cancelar en este momento:\n"
-"\n"
-"%s"
-
 #: ../gtk/gtkapplicationwindow.c:326 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Aplicación"
 
-#: ../gtk/gtkbookmarksmanager.c:50
+#: ../gtk/gtkbookmarksmanager.c:49
 #, c-format
 msgid "%s does not exist in the bookmarks list"
 msgstr "%s no existe en la lista de marcadores"
 
-#: ../gtk/gtkbookmarksmanager.c:367
+#: ../gtk/gtkbookmarksmanager.c:366
 #, c-format
 msgid "%s already exists in the bookmarks list"
 msgstr "%s ya existe en la lista de marcadores"
@@ -1999,13 +1988,11 @@ msgid "Custom"
 msgstr "Personalizada"
 
 #: ../gtk/gtkcolorchooserwidget.c:528
-#| msgid "Custom color %d: %s"
 msgid "Custom color"
 msgstr "Color personalizado"
 
 # C en conflicto con Cancelar
 #: ../gtk/gtkcolorchooserwidget.c:529
-#| msgid "Create custom color"
 msgid "Create a custom color"
 msgstr "Crear un color personalizado"
 
@@ -2102,25 +2089,25 @@ msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
 #: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6250
-#: ../gtk/gtktextview.c:8708 ../gtk/gtktextview.c:8891
+#: ../gtk/gtktextview.c:8735 ../gtk/gtktextview.c:8918
 msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6251
-#: ../gtk/gtktextview.c:8712 ../gtk/gtktextview.c:8895
+#: ../gtk/gtktextview.c:8739 ../gtk/gtktextview.c:8922
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6252
-#: ../gtk/gtktextview.c:8714 ../gtk/gtktextview.c:8897
+#: ../gtk/gtktextview.c:8741 ../gtk/gtktextview.c:8924
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8744
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8731
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8758
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2383,7 +2370,7 @@ msgstr "Escoja una tipografía"
 msgid "Application menu"
 msgstr "Menú de la aplicación"
 
-#: ../gtk/gtkheaderbar.c:469 ../gtk/gtkwindow.c:8147
+#: ../gtk/gtkheaderbar.c:469 ../gtk/gtkwindow.c:8286
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2392,7 +2379,7 @@ msgstr "Cerrar"
 msgid "Icon '%s' not present in theme"
 msgstr "El icono «%s» no está presente en el tema"
 
-#: ../gtk/gtkicontheme.c:3893
+#: ../gtk/gtkicontheme.c:3923
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
@@ -3447,35 +3434,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8050
+#: ../gtk/gtkwindow.c:8175
 msgid "Unmaximize"
 msgstr "Desmaximizar"
 
-#: ../gtk/gtkwindow.c:8059
+#: ../gtk/gtkwindow.c:8184
+msgid "Move"
+msgstr "Mover"
+
+#: ../gtk/gtkwindow.c:8190
+msgid "Resize"
+msgstr "Redimensionar"
+
+#: ../gtk/gtkwindow.c:8198
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: ../gtk/gtkwindow.c:8071
+#: ../gtk/gtkwindow.c:8210
 msgid "Always on Visible Workspace"
 msgstr "Siempre en el área de trabajo visible"
 
-#: ../gtk/gtkwindow.c:8079
+#: ../gtk/gtkwindow.c:8218
 msgid "Only on This Workspace"
 msgstr "Sólo en este área de trabajo"
 
-#: ../gtk/gtkwindow.c:8096
+#: ../gtk/gtkwindow.c:8235
 msgid "Move to Workspace Up"
 msgstr "Subir a un área de trabajo"
 
-#: ../gtk/gtkwindow.c:8105
+#: ../gtk/gtkwindow.c:8244
 msgid "Move to Workspace Down"
 msgstr "Bajar a un área de trabajo"
 
-#: ../gtk/gtkwindow.c:8119
+#: ../gtk/gtkwindow.c:8258
 msgid "Move to Another Workspace"
 msgstr "Mover a otro área de trabajo"
 
-#: ../gtk/gtkwindow.c:8127
+#: ../gtk/gtkwindow.c:8266
 #, c-format
 msgid "Workspace %d"
 msgstr "Área de trabajo %d"
@@ -5332,6 +5327,15 @@ msgstr "Bajar volumen"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Disminuye el volumen"
+
+#~ msgid ""
+#~ "%s cannot quit at this time:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "%s no se puede cancelar en este momento:\n"
+#~ "\n"
+#~ "%s"
 
 #~ msgid "Failed to look for applications online"
 #~ msgstr "Falló al buscar aplicaciones en línea"
