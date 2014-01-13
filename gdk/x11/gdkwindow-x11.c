@@ -4757,8 +4757,8 @@ wmspec_moveresize (GdkWindow *window,
 {
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
 
-  /* Release passive grab */
-  gdk_device_ungrab (device, timestamp);
+  if (button != 0)
+    gdk_device_ungrab (device, timestamp); /* Release passive grab */
   GDK_X11_DISPLAY (display)->wm_moveresize_button = button;
 
   wmspec_send_message (display, window, root_x, root_y, direction, button);
@@ -4775,48 +4775,51 @@ wmspec_resize_drag (GdkWindow     *window,
 {
   gint direction;
   
-  /* Let the compiler turn a switch into a table, instead
-   * of doing the table manually, this way is easier to verify.
-   */
-  switch (edge)
-    {
-    case GDK_WINDOW_EDGE_NORTH_WEST:
-      direction = _NET_WM_MOVERESIZE_SIZE_TOPLEFT;
-      break;
+  if (button == 0)
+    direction = _NET_WM_MOVERESIZE_SIZE_KEYBOARD;
+  else
+    switch (edge)
+      {
+      /* Let the compiler turn a switch into a table, instead
+       * of doing the table manually, this way is easier to verify.
+       */
+      case GDK_WINDOW_EDGE_NORTH_WEST:
+        direction = _NET_WM_MOVERESIZE_SIZE_TOPLEFT;
+        break;
 
-    case GDK_WINDOW_EDGE_NORTH:
-      direction = _NET_WM_MOVERESIZE_SIZE_TOP;
-      break;
+      case GDK_WINDOW_EDGE_NORTH:
+        direction = _NET_WM_MOVERESIZE_SIZE_TOP;
+        break;
 
-    case GDK_WINDOW_EDGE_NORTH_EAST:
-      direction = _NET_WM_MOVERESIZE_SIZE_TOPRIGHT;
-      break;
+      case GDK_WINDOW_EDGE_NORTH_EAST:
+        direction = _NET_WM_MOVERESIZE_SIZE_TOPRIGHT;
+        break;
 
-    case GDK_WINDOW_EDGE_WEST:
-      direction = _NET_WM_MOVERESIZE_SIZE_LEFT;
-      break;
+      case GDK_WINDOW_EDGE_WEST:
+        direction = _NET_WM_MOVERESIZE_SIZE_LEFT;
+        break;
 
-    case GDK_WINDOW_EDGE_EAST:
-      direction = _NET_WM_MOVERESIZE_SIZE_RIGHT;
-      break;
+      case GDK_WINDOW_EDGE_EAST:
+        direction = _NET_WM_MOVERESIZE_SIZE_RIGHT;
+        break;
 
-    case GDK_WINDOW_EDGE_SOUTH_WEST:
-      direction = _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT;
-      break;
+      case GDK_WINDOW_EDGE_SOUTH_WEST:
+        direction = _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT;
+        break;
 
-    case GDK_WINDOW_EDGE_SOUTH:
-      direction = _NET_WM_MOVERESIZE_SIZE_BOTTOM;
-      break;
+      case GDK_WINDOW_EDGE_SOUTH:
+        direction = _NET_WM_MOVERESIZE_SIZE_BOTTOM;
+        break;
 
-    case GDK_WINDOW_EDGE_SOUTH_EAST:
-      direction = _NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT;
-      break;
+      case GDK_WINDOW_EDGE_SOUTH_EAST:
+        direction = _NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT;
+        break;
 
-    default:
-      g_warning ("gdk_window_begin_resize_drag: bad resize edge %d!",
-                 edge);
-      return;
-    }
+      default:
+        g_warning ("gdk_window_begin_resize_drag: bad resize edge %d!",
+                   edge);
+        return;
+      }
   
   wmspec_moveresize (window, direction, device, button, root_x, root_y, timestamp);
 }
@@ -5033,7 +5036,8 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
 
   impl = GDK_WINDOW_IMPL_X11 (mv_resize->moveresize_window->impl);
 
-  button_mask = GDK_BUTTON1_MASK << (mv_resize->moveresize_button - 1);
+  if (mv_resize->moveresize_button != 0)
+    button_mask = GDK_BUTTON1_MASK << (mv_resize->moveresize_button - 1);
 
   switch (event->xany.type)
     {
@@ -5327,14 +5331,19 @@ gdk_x11_window_begin_move_drag (GdkWindow *window,
 				gint       root_y,
 				guint32    timestamp)
 {
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+  gint direction;
+
+  if (GDK_WINDOW_DESTROYED (window) || !WINDOW_IS_TOPLEVEL (window))
     return;
+
+  if (button == 0)
+    direction = _NET_WM_MOVERESIZE_MOVE_KEYBOARD;
+  else
+    direction = _NET_WM_MOVERESIZE_MOVE;
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
-    wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE,
-                       device, button, root_x, root_y, timestamp);
+    wmspec_moveresize (window, direction, device, button, root_x, root_y, timestamp);
   else
     emulate_move_drag (window, device, button, root_x, root_y, timestamp);
 }
