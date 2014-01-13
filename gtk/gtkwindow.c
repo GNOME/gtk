@@ -221,6 +221,11 @@ struct _GtkWindowPrivate
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
 
+  guint    drag_possible             : 1;
+
+  gint     button_press_x;
+  gint     button_press_y;
+  guint32  button_press_time;
 };
 
 enum {
@@ -389,6 +394,10 @@ static gint gtk_window_key_release_event  (GtkWidget         *widget,
 					   GdkEventKey       *event);
 static gint gtk_window_button_press_event (GtkWidget         *widget,
                                            GdkEventButton    *event);
+static gint gtk_window_button_release_event (GtkWidget         *widget,
+                                             GdkEventButton    *event);
+static gint gtk_window_motion_notify_event (GtkWidget         *widget,
+                                            GdkEventMotion    *event);
 static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
@@ -663,6 +672,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->key_release_event = gtk_window_key_release_event;
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->button_press_event = gtk_window_button_press_event;
+  widget_class->button_release_event = gtk_window_button_release_event;
+  widget_class->motion_notify_event = gtk_window_motion_notify_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
@@ -5738,6 +5749,8 @@ gtk_window_realize (GtkWidget *widget)
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_BUTTON_PRESS_MASK |
+			    GDK_BUTTON_RELEASE_MASK |
+			    GDK_BUTTON_MOTION_MASK |
 			    GDK_KEY_PRESS_MASK |
 			    GDK_KEY_RELEASE_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
@@ -7233,6 +7246,78 @@ get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
   return GTK_WINDOW_REGION_CONTENT;
 }
 
+static inline gboolean
+in_double_click_range (GtkWidget      *widget,
+                       GdkEventButton *event)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+  gint double_click_time;
+  gint double_click_distance;
+
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-double-click-time", &double_click_time,
+                "gtk-double-click-distance", &double_click_distance,
+                NULL);
+
+  if (event->time < priv->button_press_time + double_click_time &&
+      ABS (event->x_root - priv->button_press_x) <= double_click_distance &&
+      ABS (event->y_root - priv->button_press_y) <= double_click_distance)
+    return TRUE;
+
+  return FALSE;
+}
+
+static gint
+gtk_window_motion_notify_event (GtkWidget      *widget,
+                                GdkEventMotion *event)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+  GtkWidget *src;
+  gboolean window_drag;
+
+  if (!priv->drag_possible)
+    return FALSE;
+
+  gdk_window_get_user_data (event->window, (gpointer *)&src);
+  if (src && src != widget)
+    {
+      gtk_widget_style_get (GTK_WIDGET (src),
+                            "window-dragging", &window_drag,
+                            NULL);
+      if (!window_drag)
+        {
+          priv->drag_possible = FALSE;
+          return FALSE;
+        }
+    }
+
+  if (!in_double_click_range (widget, (GdkEventButton *)event))
+    {
+      gdk_window_begin_move_drag_for_device (gtk_widget_get_window (widget),
+                                             gdk_event_get_device ((GdkEvent *)event),
+                                             GDK_BUTTON_PRIMARY,
+                                             event->x_root,
+                                             event->y_root,
+                                             event->time);
+      priv->drag_possible = FALSE;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gint
+gtk_window_button_release_event (GtkWidget      *widget,
+                                 GdkEventButton *event)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
+
+  priv->drag_possible = FALSE;
+
+  return FALSE;
+}
+
 static gint
 gtk_window_button_press_event (GtkWidget      *widget,
                                GdkEventButton *event)
@@ -7241,8 +7326,21 @@ gtk_window_button_press_event (GtkWidget      *widget,
   GtkWindowPrivate *priv = window->priv;
   GdkWindowEdge edge;
   GdkWindow *gdk_window;
+  gint x, y;
+  GtkWidget *src;
+  GtkWindowRegion region;
+  gboolean window_drag = FALSE;
 
   gdk_window = gtk_widget_get_window (widget);
+
+  /* We do our own double-click detection, so we ignore
+   * GDK_2BUTTON_PRESS and GDK_3BUTTON_PRESS events
+   */
+  if (event->type != GDK_BUTTON_PRESS)
+    return FALSE;
+
+  if (priv->fullscreen)
+    return FALSE;
 
   if (event->window == priv->grip_window)
     {
@@ -7257,82 +7355,87 @@ gtk_window_button_press_event (GtkWidget      *widget,
 
       return TRUE;
     }
-  else if (!priv->fullscreen)
-    {
-      gint x, y;
-      GtkWidget *src;
-      GtkWindowRegion region;
 
-      gdk_window_get_user_data (event->window, (gpointer *)&src);
-      if (src && src != widget)
+  gdk_window_get_user_data (event->window, (gpointer *)&src);
+  if (src && src != widget)
+    {
+      gtk_widget_style_get (GTK_WIDGET (src),
+                            "window-dragging", &window_drag,
+                            NULL);
+      gtk_widget_translate_coordinates (src, widget, event->x, event->y, &x, &y);
+    }
+  else
+    {
+      x = event->x;
+      y = event->y;
+    }
+
+  region = get_active_region_type (window, (GdkEventAny*)event, x, y);
+
+  if (event->button == GDK_BUTTON_PRIMARY)
+    {
+      if (in_double_click_range (widget, event))
         {
-          gtk_widget_translate_coordinates (src, widget, event->x, event->y, &x, &y);
+          switch (region)
+            {
+            case GTK_WINDOW_REGION_CONTENT:
+              if (!window_drag) /* do nothing */
+                break;
+              /* fall thru */
+            case GTK_WINDOW_REGION_TITLE:
+              _gtk_window_toggle_maximized (window);
+              return TRUE;
+            default:
+              break;
+            }
         }
       else
         {
-          x = event->x;
-          y = event->y;
-        }
-      region = get_active_region_type (window, (GdkEventAny*)event, x, y);
+          switch (region)
+            {
+            case GTK_WINDOW_REGION_CONTENT:
+              if (!window_drag)
+                break;
+              /* fall thru */
 
-      if (event->type == GDK_BUTTON_PRESS)
-        {
-          if (event->button == GDK_BUTTON_PRIMARY)
-            {
-              switch (region)
-                {
-                case GTK_WINDOW_REGION_CONTENT:
-                  /* do nothing */
-                  break;
-                case GTK_WINDOW_REGION_TITLE:
-                case GTK_WINDOW_REGION_EDGE:
-                   gdk_window_begin_move_drag_for_device (gdk_window,
-                                                          gdk_event_get_device ((GdkEvent *) event),
-                                                          event->button,
-                                                          event->x_root,
-                                                          event->y_root,
-                                                          event->time);
-                  return TRUE;
-
-                default:
-                  if (!priv->maximized)
-                    {
-                      gdk_window_begin_resize_drag_for_device (gdk_window,
-                                                               (GdkWindowEdge)region,
-                                                               gdk_event_get_device ((GdkEvent *) event),
-                                                               event->button,
-                                                               event->x_root,
-                                                               event->y_root,
-                                                               event->time);
-                      return TRUE;
-                    }
-                  break;
-                }
-            }
-          else if (event->button == GDK_BUTTON_SECONDARY)
-            {
-              if (region == GTK_WINDOW_REGION_TITLE)
-                {
-                  gtk_window_do_popup (window, event);
-                  return TRUE;
-                }
-            }
-          else if (event->button == GDK_BUTTON_MIDDLE)
-            {
-              if (region == GTK_WINDOW_REGION_TITLE)
-                {
-                  gdk_window_lower (gdk_window);
-                  return TRUE;
-                }
-            }
-        }
-      else if (event->type == GDK_2BUTTON_PRESS)
-        {
-          if (region == GTK_WINDOW_REGION_TITLE)
-            {
-              _gtk_window_toggle_maximized (window);
+            case GTK_WINDOW_REGION_TITLE:
+            case GTK_WINDOW_REGION_EDGE:
+              priv->drag_possible = TRUE;
+              priv->button_press_x = event->x_root;
+              priv->button_press_y = event->y_root;
+              priv->button_press_time = event->time;
               return TRUE;
+
+            default:
+              if (!priv->maximized)
+                {
+                  gdk_window_begin_resize_drag_for_device (gdk_window,
+                                                           (GdkWindowEdge)region,
+                                                           gdk_event_get_device ((GdkEvent *) event),
+                                                           event->button,
+                                                           event->x_root,
+                                                           event->y_root,
+                                                           event->time);
+                  return TRUE;
+                }
+              break;
             }
+        }
+    }
+  else if (event->button == GDK_BUTTON_SECONDARY)
+    {
+      if (region == GTK_WINDOW_REGION_TITLE)
+        {
+          gtk_window_do_popup (window, event);
+          return TRUE;
+        }
+    }
+  else if (event->button == GDK_BUTTON_MIDDLE)
+    {
+      if (region == GTK_WINDOW_REGION_TITLE)
+        {
+          gdk_window_lower (gdk_window);
+          return TRUE;
         }
     }
 
@@ -11516,46 +11619,6 @@ ensure_state_flag_backdrop (GtkWidget *widget)
     gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
 
   gtk_widget_queue_draw (widget);
-}
-
-gboolean
-_gtk_window_handle_button_press_for_widget (GtkWidget      *widget,
-                                            GdkEventButton *event)
-{
-  gboolean window_drag = FALSE;
-  GtkWindow *window;
-
-  gtk_widget_style_get (GTK_WIDGET (widget),
-                        "window-dragging", &window_drag,
-                        NULL);
-
-  if (!window_drag)
-    return FALSE;
-
-  if (event->button != GDK_BUTTON_PRIMARY)
-    return FALSE;
-
-  window = GTK_WINDOW (gtk_widget_get_toplevel (widget));
-
-  switch (event->type)
-    {
-    case GDK_BUTTON_PRESS:
-      gtk_window_begin_move_drag (window,
-                                  event->button,
-                                  event->x_root,
-                                  event->y_root,
-                                  event->time);
-      return TRUE;
-
-    case GDK_2BUTTON_PRESS:
-      _gtk_window_toggle_maximized (window);
-      return TRUE;
-
-    default:
-      break;
-    }
-
-  return FALSE;
 }
 
 void

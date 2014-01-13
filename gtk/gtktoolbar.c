@@ -833,6 +833,7 @@ gtk_toolbar_realize (GtkWidget *widget)
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
+			    GDK_POINTER_MOTION_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK);
 
@@ -2692,7 +2693,7 @@ gtk_toolbar_button_press (GtkWidget      *toolbar,
       return return_value;
     }
 
-  return _gtk_window_handle_button_press_for_widget (toolbar, event);
+  return FALSE;
 }
 
 static gboolean

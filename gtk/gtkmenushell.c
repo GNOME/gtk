@@ -605,6 +605,7 @@ gtk_menu_shell_realize (GtkWidget *widget)
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
                             GDK_BUTTON_PRESS_MASK |
                             GDK_BUTTON_RELEASE_MASK |
+                            GDK_POINTER_MOTION_MASK |
                             GDK_KEY_PRESS_MASK |
                             GDK_ENTER_NOTIFY_MASK |
                             GDK_LEAVE_NOTIFY_MASK);
@@ -647,9 +648,6 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
   GtkMenuShellPrivate *priv;
   GtkWidget *menu_item;
   GtkWidget *parent;
-
-  if (event->type == GDK_2BUTTON_PRESS)
-    return _gtk_window_handle_button_press_for_widget (widget, event);
 
   if (event->type != GDK_BUTTON_PRESS)
     return FALSE;
@@ -706,8 +704,8 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
         {
           if (!initially_active)
             {
-              if (_gtk_window_handle_button_press_for_widget (widget, event))
-                gtk_menu_shell_deactivate (menu_shell);
+              gtk_menu_shell_deactivate (menu_shell);
+              return FALSE;
             }
         }
     }
