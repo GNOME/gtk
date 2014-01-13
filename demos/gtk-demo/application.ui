@@ -6,6 +6,9 @@
         <property name="orientation">horizontal</property>
         <property name="halign">fill</property>
         <property name="hexpand">True</property>
+        <style>
+          <class name="primary-toolbar"/>
+        </style>
         <child>
           <object class="GtkMenuToolButton" id="menutool">
             <property name="icon-name">document-open</property>
