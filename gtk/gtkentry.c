@@ -4473,16 +4473,18 @@ gtk_entry_show_magnifier (GtkEntry *entry,
   get_icon_allocations (entry, &primary, &secondary);
 
   priv = entry->priv;
-  rect.x = CLAMP (x, 0, allocation.width);
-  rect.y = CLAMP (y, 0, allocation.height);
-  rect.width = rect.height = 1;
+  rect.x = CLAMP (x, 0, allocation.width - primary.width - secondary.width);
+  rect.width = 1;
+  rect.y = 0;
+  rect.height = allocation.height;
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
     rect.x += secondary.width;
   else
     rect.x += primary.width;
 
-  _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), rect.x, rect.y);
+  _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), rect.x,
+                             rect.y + allocation.height / 2);
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
                                &rect);
   gtk_widget_show (priv->magnifier_popover);
@@ -6465,6 +6467,7 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
 {
   gint cursor_pos, selection_bound_pos, tmp_pos;
   GtkEntryPrivate *priv = entry->priv;
+  GtkAllocation primary, secondary;
   GtkTextHandleMode mode;
   gint *min, *max;
 
@@ -6473,6 +6476,14 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
   cursor_pos = priv->current_pos;
   selection_bound_pos = priv->selection_bound;
   mode = _gtk_text_handle_get_mode (handle);
+
+  get_icon_allocations (entry, &primary, &secondary);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+    x -= secondary.width;
+  else
+    x -= primary.width;
+
   tmp_pos = gtk_entry_find_position (entry, x + priv->scroll_offset);
 
   if (mode == GTK_TEXT_HANDLE_MODE_CURSOR ||
