@@ -8125,6 +8125,28 @@ close_window_clicked (GtkMenuItem *menuitem,
 }
 
 static void
+move_window_clicked (GtkMenuItem *menuitem,
+                     gpointer     user_data)
+{
+  GtkWidget *widget = (GtkWidget *)user_data;
+
+  gdk_window_begin_move_drag (gtk_widget_get_window (widget),
+                              0, 0, 0,
+                              gtk_get_current_event_time ());
+}
+
+static void
+resize_window_clicked (GtkMenuItem *menuitem,
+                       gpointer     user_data)
+{
+  GtkWidget *widget = (GtkWidget *)user_data;
+
+  gdk_window_begin_resize_drag (gtk_widget_get_window (widget),
+                                0, 0, 0, 0,
+                                gtk_get_current_event_time ());
+}
+
+static void
 gtk_window_do_popup (GtkWindow      *window,
                      GdkEventButton *event)
 {
@@ -8157,6 +8179,20 @@ gtk_window_do_popup (GtkWindow      *window,
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect_swapped (G_OBJECT (menuitem), "activate",
                             G_CALLBACK (_gtk_window_toggle_maximized), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (_("Move"));
+  gtk_widget_show (menuitem);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (move_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (_("Resize"));
+  gtk_widget_show (menuitem);
+  if (!priv->resizable || priv->maximized)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (resize_window_clicked), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
   menuitem = gtk_check_menu_item_new_with_label (_("Always on Top"));
