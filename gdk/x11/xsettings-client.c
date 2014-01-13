@@ -360,6 +360,7 @@ parse_settings (unsigned char *data,
       if (gdk_name == NULL)
         {
           GDK_NOTE(SETTINGS, g_print("    ==> unknown to GTK\n"));
+          free_value (value);
         }
       else
         {
