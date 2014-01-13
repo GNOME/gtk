@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
 EXTRA_DIST +=	\
 	README.txt	\
 	gtk+.sln	\
-	gdk-prebuild.vcproj	\
+	gtk-prebuild.vcproj	\
 	gdk-win32.vcproj	\
 	gdk.vcproj	\
 	gdk.vcprojin	\
