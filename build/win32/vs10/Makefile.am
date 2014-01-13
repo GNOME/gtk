@@ -24,7 +24,6 @@ EXTRA_DIST +=	\
 	gtka11y.vcxproj.filtersin	\
 	gailutil.vcxproj	\
 	gailutil.vcxproj.filters	\
-	gengir.vcxproj	\
 	install.vcxproj	\
 	broadwayd.vcxproj	\
 	broadwayd.vcxproj.filters	\
@@ -33,7 +32,6 @@ EXTRA_DIST +=	\
 	gtk-build-defines.props	\
 	gtk-copy-gdk-broadway.props	\
 	gtk-gen-srcs.props	\
-	gtk-gengir.props	\
 	gtk-ignore-broadway.props	\
 	gtk-install.props	\
 	gtk-version-paths.props

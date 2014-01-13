@@ -14,14 +14,12 @@ EXTRA_DIST +=	\
 	gtka11y.vcproj	\
 	gtka11y.vcprojin	\
 	gailutil.vcproj	\
-	gengir.vcproj	\
 	install.vcproj	\
 	broadwayd.vcproj	\
 	gdk-broadway.vcproj	\
 	gtk-build-defines.vsprops	\
 	gtk-copy-gdk-broadway.vsprops	\
 	gtk-gen-srcs.vsprops	\
-	gtk-gengir.vsprops	\
 	gtk-ignore-broadway.vsprops	\
 	gtk-install.vsprops	\
 	gtk-version-paths.vsprops
