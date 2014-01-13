@@ -2664,12 +2664,12 @@ gtk_window_dispose (GObject *object)
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = window->priv;
 
+  g_hash_table_remove_all (priv->popovers);
+
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
   unset_titlebar (window);
   remove_attach_widget (window);
-
-  g_hash_table_remove_all (priv->popovers);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
 }
