@@ -6,7 +6,7 @@ SUBDIRS = \
 EXTRA_DIST +=	\
 	msvcfiles.py	\
 	gen-file-list-gtk.py	\
-	testsrules_msvc.mak	\
+	detectenv_msvc.mak	\
 	introspection-msvc.mak	\
 	gtk-introspection-msvc.mak
 

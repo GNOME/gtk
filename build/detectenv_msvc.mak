@@ -63,10 +63,3 @@ LDFLAGS_ARCH = /machine:x64
 !else
 LDFLAGS_ARCH = /machine:x86
 !endif
-
-LD = link.exe
-LD_CFLAGS = /link
-EXEEXT = .exe
-GLIB_LIBS = gobject-2.0.lib gmodule-2.0.lib glib-2.0.lib
-
-ATK_API_VERSION = 1.0

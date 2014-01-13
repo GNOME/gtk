@@ -6,7 +6,7 @@ GTK_DLLNAME = gtk-3-vs$(VSVER)
 
 # Please do not change anything after this line
 
-!include testsrules_msvc.mak
+!include detectenv_msvc.mak
 
 APIVERSION = 3.0
 
