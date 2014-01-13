@@ -8195,6 +8195,10 @@ gtk_window_do_popup (GtkWindow      *window,
                     G_CALLBACK (resize_window_clicked), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
   menuitem = gtk_check_menu_item_new_with_label (_("Always on Top"));
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), priv->above_initially);
   if (priv->maximized)
