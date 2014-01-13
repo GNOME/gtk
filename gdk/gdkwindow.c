@@ -10205,7 +10205,7 @@ gdk_window_set_functions (GdkWindow    *window,
  * @window: a toplevel #GdkWindow
  * @edge: the edge or corner from which the drag is started
  * @device: the device used for the operation
- * @button: the button being used to drag
+ * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @root_x: root window X coordinate of mouse click that began the drag
  * @root_y: root window Y coordinate of mouse click that began the drag
  * @timestamp: timestamp of mouse click that began the drag (use gdk_event_get_time())
@@ -10234,7 +10234,7 @@ gdk_window_begin_resize_drag_for_device (GdkWindow     *window,
  * gdk_window_begin_resize_drag:
  * @window: a toplevel #GdkWindow
  * @edge: the edge or corner from which the drag is started
- * @button: the button being used to drag
+ * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @root_x: root window X coordinate of mouse click that began the drag
  * @root_y: root window Y coordinate of mouse click that began the drag
  * @timestamp: timestamp of mouse click that began the drag (use gdk_event_get_time())
@@ -10266,7 +10266,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
  * gdk_window_begin_move_drag_for_device:
  * @window: a toplevel #GdkWindow
  * @device: the device used for the operation
- * @button: the button being used to drag
+ * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @root_x: root window X coordinate of mouse click that began the drag
  * @root_y: root window Y coordinate of mouse click that began the drag
  * @timestamp: timestamp of mouse click that began the drag
@@ -10295,7 +10295,7 @@ gdk_window_begin_move_drag_for_device (GdkWindow *window,
 /**
  * gdk_window_begin_move_drag:
  * @window: a toplevel #GdkWindow
- * @button: the button being used to drag
+ * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @root_x: root window X coordinate of mouse click that began the drag
  * @root_y: root window Y coordinate of mouse click that began the drag
  * @timestamp: timestamp of mouse click that began the drag
