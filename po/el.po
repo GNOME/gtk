@@ -12,22 +12,22 @@
 # Bakaoukas Nikolaos <nikolaos.x1@gmail.com>, 2010.
 # Michael Kotsarinis <mk73628@gmail.com>, 2011.
 # Dimitris Spingos (Δημήτρης  Σπίγγος) <dmtrs32@gmail.com>, 2012.
-# Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>, 2013.
+# Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-12-19 19:11+0000\n"
-"PO-Revision-Date: 2013-12-20 11:25+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-01-13 03:26+0000\n"
+"PO-Revision-Date: 2014-01-13 09:47+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
-"Language-Team: team@lists.gnome.gr\n"
+"Language-Team: team@gnome.gr\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.0\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:141
@@ -494,7 +494,7 @@ msgid "Toggle"
 msgstr "Εναλλαγή"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
-#: ../gtk/a11y/gtkmenuitemaccessible.c:433
+#: ../gtk/a11y/gtkmenuitemaccessible.c:435
 msgctxt "Action name"
 msgid "Click"
 msgstr "Πάτημα"
@@ -515,7 +515,7 @@ msgid "Edit"
 msgstr "Επεξεργασία"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:72
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:149
 #: ../gtk/a11y/gtkentryaccessible.c:1554
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
@@ -541,27 +541,27 @@ msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "Ενεργοποιεί το κελί"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:71
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:148
 msgctxt "Action name"
 msgid "Select"
 msgstr "Επιλέξτε"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:73
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:150
 msgctxt "Action name"
 msgid "Customize"
 msgstr "Προσαρμογή"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:84
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:161
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "Επιλογή του χρώματος"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:85
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:162
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "Ενεργοποιεί το χρώμα"
 
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:86
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:163
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Προσαρμόζει το χρώμα"
@@ -619,17 +619,17 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Κλείσιμο"
 
-#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:407
-#: ../gtk/gtkwindow.c:8032
+#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:428
+#: ../gtk/gtkwindow.c:8167
 msgid "Minimize"
 msgstr "Ελαχιστοποίηση"
 
-#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:430
-#: ../gtk/gtkwindow.c:8040
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:451
+#: ../gtk/gtkwindow.c:8175
 msgid "Maximize"
 msgstr "Μεγιστοποίηση"
 
-#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:430
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:451
 msgid "Restore"
 msgstr "Επαναφορά"
 
@@ -1000,7 +1000,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Σμίκρ_υνση"
 
-#: ../gtk/a11y/gtkmenuitemaccessible.c:442
+#: ../gtk/a11y/gtkmenuitemaccessible.c:444
 msgctxt "Action description"
 msgid "Clicks the menuitem"
 msgstr "Πατά στο στοιχείο μενού"
@@ -1365,7 +1365,7 @@ msgstr "Κενό"
 #. * opened when the user selects the <literal>About</literal> option from
 #. * the <literal>Help</literal> menu. All parts of the dialog are optional.
 #. *
-#. * About dialog often contain links and email addresses. GtkAboutDialog
+#. * About dialogs often contain links and email addresses. GtkAboutDialog
 #. * displays these as clickable links. By default, it calls gtk_show_uri()
 #. * when a user clicks one. The behaviour can be overridden with the
 #. * #GtkAboutDialog::activate-link signal.
@@ -1472,19 +1472,19 @@ msgstr "Ιστότοπος"
 msgid "About %s"
 msgstr "Περί %s"
 
-#: ../gtk/gtkaboutdialog.c:2287
+#: ../gtk/gtkaboutdialog.c:2289
 msgid "Created by"
 msgstr "Δημιουργήθηκε από"
 
-#: ../gtk/gtkaboutdialog.c:2290
+#: ../gtk/gtkaboutdialog.c:2292
 msgid "Documented by"
 msgstr "Τεκμηρίωση από"
 
-#: ../gtk/gtkaboutdialog.c:2300
+#: ../gtk/gtkaboutdialog.c:2302
 msgid "Translated by"
 msgstr "Μετάφραση από"
 
-#: ../gtk/gtkaboutdialog.c:2305
+#: ../gtk/gtkaboutdialog.c:2307
 msgid "Artwork by"
 msgstr "Γραφικά από"
 
@@ -1620,28 +1620,17 @@ msgstr "Σχετικές εφαρμογές"
 msgid "Other Applications"
 msgstr "Άλλες εφαρμογές"
 
-#: ../gtk/gtkapplication-quartz.c:87
-#, c-format
-msgid ""
-"%s cannot quit at this time:\n"
-"\n"
-"%s"
-msgstr ""
-"%s αδυναμία εξόδου αυτή τη φορά:\n"
-"\n"
-"%s"
-
 #: ../gtk/gtkapplicationwindow.c:326 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Εφαρμογή"
 
-#: ../gtk/gtkbookmarksmanager.c:50
+#: ../gtk/gtkbookmarksmanager.c:49
 #, c-format
 msgid "%s does not exist in the bookmarks list"
 msgstr "το %s δεν υπάρχει στον κατάλογο σελιδοδεικτών"
 
-#: ../gtk/gtkbookmarksmanager.c:367
+#: ../gtk/gtkbookmarksmanager.c:366
 #, c-format
 msgid "%s already exists in the bookmarks list"
 msgstr "το %s υπάρχει ήδη στον κατάλογο σελιδοδεικτών"
@@ -1997,11 +1986,15 @@ msgstr "Άσπρο"
 msgid "Custom"
 msgstr "Προσαρμογή"
 
+#: ../gtk/gtkcolorchooserwidget.c:528
+msgid "Custom color"
+msgstr "Προσαρμοσμένο χρώμα"
+
 #: ../gtk/gtkcolorchooserwidget.c:529
-msgid "Create custom color"
+msgid "Create a custom color"
 msgstr "Δημιουργία προσαρμοσμένου χρώματος"
 
-#: ../gtk/gtkcolorchooserwidget.c:547
+#: ../gtk/gtkcolorchooserwidget.c:548
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Προσαρμοσμένο χρώμα %d: %s"
@@ -2093,26 +2086,26 @@ msgstr "_Δεξιά:"
 msgid "Paper Margins"
 msgstr "Περιθώρια χαρτιού"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6243
-#: ../gtk/gtktextview.c:8708 ../gtk/gtktextview.c:8891
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6250
+#: ../gtk/gtktextview.c:8735 ../gtk/gtktextview.c:8918
 msgid "Cu_t"
 msgstr "Αποκο_πή"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6244
-#: ../gtk/gtktextview.c:8712 ../gtk/gtktextview.c:8895
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6251
+#: ../gtk/gtktextview.c:8739 ../gtk/gtktextview.c:8922
 msgid "_Copy"
 msgstr "_Αντιγραφή"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6245
-#: ../gtk/gtktextview.c:8714 ../gtk/gtktextview.c:8897
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6252
+#: ../gtk/gtktextview.c:8741 ../gtk/gtktextview.c:8924
 msgid "_Paste"
 msgstr "_Επικόλληση"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6247 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8744
 msgid "_Delete"
 msgstr "_Διαγραφή"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6256 ../gtk/gtktextview.c:8731
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8758
 msgid "Select _All"
 msgstr "Επιλογή ό_λων"
 
@@ -2371,11 +2364,11 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Επιλογή γραμματοσειράς"
 
-#: ../gtk/gtkheaderbar.c:386
+#: ../gtk/gtkheaderbar.c:407
 msgid "Application menu"
 msgstr "Μενού εφαρμογής"
 
-#: ../gtk/gtkheaderbar.c:449 ../gtk/gtkwindow.c:8137
+#: ../gtk/gtkheaderbar.c:469 ../gtk/gtkwindow.c:8286
 msgid "Close"
 msgstr "Κλείσιμο"
 
@@ -2384,7 +2377,7 @@ msgstr "Κλείσιμο"
 msgid "Icon '%s' not present in theme"
 msgstr "Το εικονίδιο '%s' δεν περιέχεται στο θέμα"
 
-#: ../gtk/gtkicontheme.c:3893
+#: ../gtk/gtkicontheme.c:3923
 msgid "Failed to load icon"
 msgstr "Αποτυχία φόρτωσης εικονιδίου"
 
@@ -2425,12 +2418,12 @@ msgid "Error"
 msgstr "Σφάλμα"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6226
+#: ../gtk/gtklabel.c:6233
 msgid "_Open Link"
 msgstr "Άν_οιγμα συνδέσμου"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6234
+#: ../gtk/gtklabel.c:6241
 msgid "Copy _Link Address"
 msgstr "Αντιγραφή διεύθυνσης _συνδέσμου"
 
@@ -2573,6 +2566,10 @@ msgstr "Εμφάνιση επιλογών GTK+"
 #: ../gtk/gtkmain.c:1142
 msgid "default:LTR"
 msgstr "default:LTR"
+
+#: ../gtk/gtkmenubutton.c:592
+msgid "Menu"
+msgstr "Μενού"
 
 #: ../gtk/gtkmessagedialog.c:897
 msgid "_No"
@@ -3442,35 +3439,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8040
+#: ../gtk/gtkwindow.c:8175
 msgid "Unmaximize"
 msgstr "Aπομεγιστοποίηση"
 
-#: ../gtk/gtkwindow.c:8049
+#: ../gtk/gtkwindow.c:8184
+msgid "Move"
+msgstr "Μετακίνηση"
+
+#: ../gtk/gtkwindow.c:8190
+msgid "Resize"
+msgstr "Αυξομείωση"
+
+#: ../gtk/gtkwindow.c:8198
 msgid "Always on Top"
 msgstr "Πάντα στην κορυφή"
 
-#: ../gtk/gtkwindow.c:8061
+#: ../gtk/gtkwindow.c:8210
 msgid "Always on Visible Workspace"
 msgstr "Πάντοτε σε ορατό χώρο εργασίας"
 
-#: ../gtk/gtkwindow.c:8069
+#: ../gtk/gtkwindow.c:8218
 msgid "Only on This Workspace"
 msgstr "Μόνο σε αυτόν τον χώρο εργασίας"
 
-#: ../gtk/gtkwindow.c:8086
+#: ../gtk/gtkwindow.c:8235
 msgid "Move to Workspace Up"
 msgstr "Μετακίνηση σε χώρο εργασίας προς τα πάνω"
 
-#: ../gtk/gtkwindow.c:8095
+#: ../gtk/gtkwindow.c:8244
 msgid "Move to Workspace Down"
 msgstr "Μετακίνηση σε χώρο εργασίας προς τα κάτω"
 
-#: ../gtk/gtkwindow.c:8109
+#: ../gtk/gtkwindow.c:8258
 msgid "Move to Another Workspace"
 msgstr "Μετακίνηση σε άλλο χώρο εργασίας"
 
-#: ../gtk/gtkwindow.c:8117
+#: ../gtk/gtkwindow.c:8266
 #, c-format
 msgid "Workspace %d"
 msgstr "Χώρος εργασίας %d"
@@ -5322,6 +5327,15 @@ msgstr "Μείωση έντασης"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Μειώνει την ένταση του ήχου"
+
+#~ msgid ""
+#~ "%s cannot quit at this time:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "%s αδυναμία εξόδου αυτή τη φορά:\n"
+#~ "\n"
+#~ "%s"
 
 #~ msgid "Failed to look for applications online"
 #~ msgstr "Αδυναμία αναζήτησης εφαρμογών στο διαδίκτυο"
