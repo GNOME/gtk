@@ -24,9 +24,9 @@ window1
     column 0 description: Test
     column 0 header: unnamed-GtkButtonAccessible-0
     table indexes:
-      ??tv
-      ??tv
-      ??tv
+      ✓✓tv
+      ✓✓tv
+      ✓✓tv
     unnamed-GtkButtonAccessible-0
       "table column header"
       parent: tv
