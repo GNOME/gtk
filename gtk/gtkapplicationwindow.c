@@ -771,50 +771,9 @@ gtk_application_window_dispose (GObject *object)
    * handler of GtkWindow).
    *
    * That reduces our chances of being watched as a GActionGroup from a
-   * muxer constructed by GtkApplication.  Even still, it's
-   * theoretically possible that someone else could be watching us.
-   * Therefore, we have to take care to ensure that we don't violate our
-   * obligations under the interface of GActionGroup.
-   *
-   * The easiest thing is just for us to act as if all of the actions
-   * suddenly disappeared.
+   * muxer constructed by GtkApplication.
    */
-  if (window->priv->actions)
-    {
-      gchar **action_names;
-      guint signal;
-      gint i;
-
-      /* Only send the remove signals if someone is listening */
-      signal = g_signal_lookup ("action-removed", G_TYPE_ACTION_GROUP);
-      if (signal && g_signal_has_handler_pending (window, signal, 0, TRUE))
-        /* need to send a removed signal for each action */
-        action_names = g_action_group_list_actions (G_ACTION_GROUP (window->priv->actions));
-      else
-        /* don't need to send signals: nobody is watching */
-        action_names = NULL;
-
-      /* Free the group before sending the signals for two reasons:
-       *
-       *  1) we want any incoming calls to see an empty group
-       *
-       *  2) we don't want signal handlers that trigger in response to
-       *     the action-removed signals that we're firing to attempt to
-       *     modify the action group in a way that may cause it to fire
-       *     additional signals (which we would then propagate)
-       */
-      g_object_unref (window->priv->actions);
-      window->priv->actions = NULL;
-
-      /* It's safe to send the signals now, if we need to. */
-      if (action_names)
-        {
-          for (i = 0; action_names[i]; i++)
-            g_action_group_action_removed (G_ACTION_GROUP (window), action_names[i]);
-
-          g_strfreev (action_names);
-        }
-    }
+  g_clear_object (&window->priv->actions);
 }
 
 static void
