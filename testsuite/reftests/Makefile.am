@@ -34,6 +34,7 @@ testdata = \
 	721800-0px-dotted-border.css \
 	721800-0px-dotted-border.ref.ui \
 	721800-0px-dotted-border.ui \
+	actionbar.css \
 	actionbar.ref.ui \
 	actionbar.ui \
 	alignment-props.css \
