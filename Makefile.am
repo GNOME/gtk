@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 include $(top_srcdir)/Makefile.decl
 
-SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples
+SRC_SUBDIRS = gdk gsk gtk libgail-util modules demos tests testsuite examples
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
@@ -45,7 +45,7 @@ gdk-x11-3.0.pc gdk-win32-3.0.pc gdk-quartz-3.0.pc gdk-broadway-3.0.pc gdk-waylan
 	cp gdk-3.0.pc $@
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = gdk-3.0.pc gtk+-3.0.pc gail-3.0.pc
+pkgconfig_DATA = gdk-3.0.pc gsk-3.0.pc gtk+-3.0.pc gail-3.0.pc
 pkgconfig_DATA += ${GDK_BACKENDS:%=gtk+-%-3.0.pc}
 pkgconfig_DATA += ${GDK_BACKENDS:%=gdk-%-3.0.pc}
 
@@ -62,6 +62,7 @@ DISTCLEANFILES = \
 	gtk+-broadway-3.0.pc		\
 	gtk+-wayland-3.0.pc		\
 	gtk+-mir-3.0.pc			\
+	gsk-3.0.pc			\
 	gdk-3.0.pc			\
 	gdk-x11-3.0.pc			\
 	gdk-win32-3.0.pc		\
