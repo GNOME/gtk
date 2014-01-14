@@ -3305,21 +3305,21 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
   GtkNotebookPrivate *priv = notebook->priv;
   gint x, y;
 
-  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
-    return FALSE;
-
-  if (priv->prelight_tab != NULL)
+  if (get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
     {
-      tab_prelight (notebook, (GdkEvent *)event);
+      if (priv->prelight_tab != NULL)
+        {
+          tab_prelight (notebook, (GdkEvent *)event);
+        }
+
+      if (priv->in_child)
+        {
+          priv->in_child = 0;
+          gtk_notebook_redraw_arrows (notebook);
+        }
     }
 
-  if (priv->in_child)
-    {
-      priv->in_child = 0;
-      gtk_notebook_redraw_arrows (notebook);
-    }
-
-  return TRUE;
+  return FALSE;
 }
 
 static GtkNotebookPointerPosition
