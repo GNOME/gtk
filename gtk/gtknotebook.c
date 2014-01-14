@@ -3303,6 +3303,10 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
+  gint x, y;
+
+  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
+    return FALSE;
 
   if (priv->prelight_tab != NULL)
     {
