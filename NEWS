@@ -1,3 +1,90 @@
+Overview of Changes in GTK+ 3.11.3 to 3.11.4
+============================================
+
+* GtkActionBar: A new container, which has a centered
+  child like GtkHeaderBar. It can be used in places
+  where header bar theming is not suitable
+
+* GtkAppChooser: The online support has been simplified
+  and modernized 
+
+* GtkHeaderBar button theming has been changed to be
+  more flexible. There is now a gtk-decoraton-layout
+  setting and a decoration-layout property.
+
+* Accessibility:
+  - Links in labels are now accessible
+  - Model-based menus are accessible
+  - Accessible roles of several widgets have been fixed
+  - GtkColorChooser accessibility is improved
+
+* Theming: The Raleigh theme has been updated for
+  several new features, including client-side decorations
+
+* Model-based menus now support a hidden-when attribute
+  on items that allows them to be hidden on various
+  conditions
+
+* Bugs fixed:
+ 688421 GMenuModel menus should have a hint to hide items
+ 698248 race in placement for popup-menu/tooltip-window
+ 698786 window: add a maximized property to GtkWindow
+ 706119 Add introspection friendly version of gtk_tree_path_new...
+ 707729 orca speaks wrong label when using flat review on GtkTree
+ 709491 dark theme setting not propagated to vertical spinbutto...
+ 710315 Revert "treeview: Store editable position differently"
+ 710351 Migrate Mac OS menu backend to use GtkMenuTracker
+ 711552 Crash when processing list of GdkWindows
+ 711826 gtk_text_view_add_child_in_window not scrolling
+ 720264 Hovering item over sidebar "desktop"-entry crashes appl...
+ 720357 csd not working on Mac OS
+ 720401 gtk_menu_popup() doesn't destroy the menu after it is c...
+ 720535 CUPS backend leaks http connection to CUPS
+ 720551 improve/simplify quartz inhibit code
+ 720554 cell-renderer: Check for NULL return in vfunc start_edi...
+ 720939 GtkMenuButton direction = up isn't aligned correctly
+ 720945 Make nick names for properties "popup", "menu-model", ...
+ 720983 Objects of ATK_ROLE_CHECK_MENU_ITEM fail to emit object...
+ 721045 The accessible role of GtkColorSwatch should not be ATK...
+ 721048 GtkColorSwatch fails to emit an accessible object:state...
+ 721086 Accessible keybindings/mnemonics missing from certain m...
+ 721119 GtkMenuTracker: tweak separator logic
+ 721304 GtkApplicationX11: read the startup ID from the platfor...
+ 721317 Fix crash in testbbox and update gtkenum docs
+ 721346 non-standard CFLAGS_FOR_BUILD, CPPFLAGS_FOR_BUILD, LDFL...
+ 721406 Accessible object:state-changed:focused events missing ...
+ 721407 Criticals on GtkScrolledWindow composite widget
+ 721410 GtkLabels containing links should expose accessible chi...
+ 721421 Links within a GtkLabel should expose their URIs via ATK
+ 721480 3.8->3.10 scrolled window is empty
+ 721530 License text contains obsolete FSF postal address
+ 721633 bloatpad: fix the action associated with the notification
+ 721665 Provide a better way to display contextual actions
+ 721700 invalid callback prototypes leads to test issues
+ 721800 using border-style: dotted seems to freak out all drawing
+ 721836 Simplify GtkActionHelper
+ 722029 Memory leak in gtkplacessidebar.c
+ 722030 Memory leak when scrolling through GtkTreeView
+ 722070 gdk: Don't leak GValue when xsetting is unknown
+ 722076 Add separator before "Always on Top" to the CSD window
+ 722106 By clicking "Menu key" you can open as many menus as yo...
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ Galician
+ German
+ Greek
+ Hebrew
+ Hungarian
+ Italian
+ Kazakh
+ Russian
+ Simplified Chinese
+ Spanish
+ Tajik
+
+
 Overview of Changes in GTK+ 3.11.1 to 3.11.3
 ============================================
 
