@@ -102,6 +102,8 @@ testsuite/a11y/paned.ui
 testsuite/a11y/placeholder-text.ui
 testsuite/a11y/stack.ui
 testsuite/gtk/filechooser.c
+testsuite/reftests/721800-0px-dotted-border.ref.ui
+testsuite/reftests/721800-0px-dotted-border.ui
 testsuite/reftests/background-color-transparent.ref.ui
 testsuite/reftests/background-color-transparent.ui
 testsuite/reftests/background-size-keywords.ref.ui
