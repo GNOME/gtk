@@ -78,6 +78,7 @@ testdata = \
 	listbox.ui listbox.txt \
 	stack.ui stack.txt \
 	headerbar.ui headerbar.txt \
+	tree.ui tree.txt \
 	$(NULL)
 
 test_in_files = \

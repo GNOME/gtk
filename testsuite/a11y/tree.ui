@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkListStore" id="store">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row><col id="0">One</col><col id="1">234</col></row>
+      <row><col id="0">Two</col><col id="1">567</col></row>
+      <row><col id="0">40.000</col><col id="1">999999</col></row>
+    </data>
+  </object>
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkTreeView" id="tv">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="model">store</property>
+        <child>
+          <object class="GtkTreeViewColumn" id="col">
+            <property name="title">Test</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkCellRendererText" id="cell1">
+                <property name="visible">True</property>
+              </object>
+              <attributes>
+                <attribute name="text">0</attribute>
+              </attributes>
+            </child>
+            <child>
+              <object class="GtkCellRendererText" id="cell2">
+                <property name="visible">True</property>
+              </object>
+              <attributes>
+                <attribute name="text">1</attribute>
+              </attributes>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
