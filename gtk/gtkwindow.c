@@ -479,7 +479,6 @@ static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
 #endif
 static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 
-static gboolean    gtk_window_popup_menu       (GtkWidget      *widget);
 static void        gtk_window_do_popup         (GtkWindow      *window,
                                                 GdkEventButton *event);
 
@@ -663,7 +662,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->direction_changed = gtk_window_direction_changed;
   widget_class->state_changed = gtk_window_state_changed;
   widget_class->style_updated = gtk_window_style_updated;
-  widget_class->popup_menu = gtk_window_popup_menu;
   widget_class->get_preferred_width = gtk_window_get_preferred_width;
   widget_class->get_preferred_width_for_height = gtk_window_get_preferred_width_for_height;
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
@@ -8292,14 +8290,6 @@ gtk_window_do_popup (GtkWindow      *window,
                     NULL, NULL,
                     popup_position_func, window,
                     0, gtk_get_current_event_time ());
-}
-
-static gboolean
-gtk_window_popup_menu (GtkWidget *widget)
-{
-  gtk_window_do_popup (GTK_WINDOW (widget), NULL);
-
-  return TRUE;
 }
 
 /*********************************
