@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+targets=@GDK_BACKENDS@
+
+Name: GSK
+Description: GTK+ Scene Graph Kit
+Version: @VERSION@
+Requires: gdk-@GTK_API_VERSION@ @GSK_PACKAGES@
+Requires.private: @GSK_PRIVATE_PACKAGES@
+Libs: -L${libdir} -lgsk-3 @GSK_EXTRA_LIBS@
+Cflags: -I${includedir}/gsk-@GTK_API_VERSION@ @GSK_EXTRA_CFLAGS@
