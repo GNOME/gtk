@@ -90,8 +90,6 @@ gtk_popover_init (GtkPopover *popover)
   widget = GTK_WIDGET (popover);
   gtk_widget_set_has_window (widget, TRUE);
   popover->priv = priv = gtk_popover_get_instance_private (popover);
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget),
-                               GTK_STYLE_CLASS_OSD);
   priv->modal = TRUE;
 }
 
