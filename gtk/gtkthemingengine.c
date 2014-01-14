@@ -1591,6 +1591,13 @@ render_border (cairo_t       *cr,
       if (hidden_side & (1 << i))
         continue;
 
+      /* NB: code below divides by this value */
+      /* a border smaller than this will not noticably modify
+       * pixels on screen, and since we don't compare with 0,
+       * we'll use this value */
+      if (border_width[i] < 1.0 / 1024)
+        continue;
+
       switch (border_style[i])
         {
         case GTK_BORDER_STYLE_NONE:
