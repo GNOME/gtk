@@ -83,7 +83,7 @@
  * last row removed), the node's visibility should be updated.
  *
  * This introduces a dependency from the node on its child nodes. In order
- * to accommodate this, #GtkTreeModelFilter must make sure the necesary
+ * to accommodate this, #GtkTreeModelFilter must make sure the necessary
  * signals are received from the child model. This is achieved by building,
  * for all nodes which are exposed as visible nodes to #GtkTreeModelFilter's
  * clients, the child level (if any) and take a reference on the first node
