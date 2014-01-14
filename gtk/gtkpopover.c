@@ -296,6 +296,21 @@ gtk_popover_get_pointed_to_coords (GtkPopover            *popover,
   *rect_out = rect;
 }
 
+static GtkPositionType
+get_effective_position (GtkPopover      *popover,
+                        GtkPositionType  pos)
+{
+  if (gtk_widget_get_direction (GTK_WIDGET (popover)) == GTK_TEXT_DIR_RTL)
+    {
+      if (pos == GTK_POS_LEFT)
+        pos = GTK_POS_RIGHT;
+      else if (pos == GTK_POS_RIGHT)
+        pos = GTK_POS_LEFT;
+    }
+
+  return pos;
+}
+
 static void
 gtk_popover_get_gap_coords (GtkPopover      *popover,
                             gint            *initial_x_out,
@@ -313,7 +328,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   gint initial_x, initial_y;
   gint tip_x, tip_y;
   gint final_x, final_y;
-  GtkPositionType gap_side;
+  GtkPositionType gap_side, pos;
   GtkAllocation allocation;
   gint border_radius;
 
@@ -333,21 +348,21 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
                          gtk_widget_get_state_flags (GTK_WIDGET (popover)),
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);
+  pos = get_effective_position (popover, priv->final_position);
 
-  if (priv->final_position == GTK_POS_BOTTOM ||
-      priv->final_position == GTK_POS_RIGHT)
+  if (pos == GTK_POS_BOTTOM || pos == GTK_POS_RIGHT)
     {
       base = TAIL_HEIGHT;
       tip = 0;
       gap_side = (priv->final_position == GTK_POS_BOTTOM) ? GTK_POS_TOP : GTK_POS_LEFT;
     }
-  else if (priv->final_position == GTK_POS_TOP)
+  else if (pos == GTK_POS_TOP)
     {
       base = allocation.height - TAIL_HEIGHT;
       tip = allocation.height;
       gap_side = GTK_POS_BOTTOM;
     }
-  else if (priv->final_position == GTK_POS_LEFT)
+  else if (pos == GTK_POS_LEFT)
     {
       base = allocation.width - TAIL_HEIGHT;
       tip = allocation.width;
@@ -356,7 +371,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   else
     g_assert_not_reached ();
 
-  if (POS_IS_VERTICAL (priv->final_position))
+  if (POS_IS_VERTICAL (pos))
     {
       tip_pos = rect.x + (rect.width / 2);
       initial_x = CLAMP (tip_pos - TAIL_GAP_WIDTH / 2,
@@ -415,6 +430,7 @@ gtk_popover_get_rect_coords (GtkPopover *popover,
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkPopoverPrivate *priv = popover->priv;
   GtkAllocation allocation;
+  GtkPositionType pos;
   gint x1, x2, y1, y2;
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -430,13 +446,15 @@ gtk_popover_get_rect_coords (GtkPopover *popover,
   y2 = allocation.height -
     gtk_widget_get_margin_bottom (widget) + y1;
 
-  if (priv->final_position == GTK_POS_TOP)
+  pos = get_effective_position (popover, priv->final_position);
+
+  if (pos == GTK_POS_TOP)
     y2 -= TAIL_HEIGHT;
-  else if (priv->final_position == GTK_POS_BOTTOM)
+  else if (pos == GTK_POS_BOTTOM)
     y1 += TAIL_HEIGHT;
-  else if (priv->final_position == GTK_POS_LEFT)
+  else if (pos == GTK_POS_LEFT)
     x2 -= TAIL_HEIGHT;
-  else if (priv->final_position == GTK_POS_RIGHT)
+  else if (pos == GTK_POS_RIGHT)
     x1 += TAIL_HEIGHT;
 
   if (x1_out)
@@ -547,6 +565,7 @@ gtk_popover_update_position (GtkPopover *popover)
   GtkAllocation window_alloc;
   cairo_rectangle_int_t rect;
   GtkPopoverPrivate *priv;
+  GtkPositionType pos;
   GtkRequisition req;
 
   priv = popover->priv;
@@ -559,20 +578,19 @@ gtk_popover_update_position (GtkPopover *popover)
   priv->final_position = priv->preferred_position;
 
   gtk_popover_get_pointed_to_coords (popover, &rect);
+  pos = get_effective_position (popover, priv->preferred_position);
 
   /* Check whether there's enough room on the
    * preferred side, move to the opposite one if not.
    */
-  if (priv->preferred_position == GTK_POS_TOP && rect.y < req.height)
+  if (pos == GTK_POS_TOP && rect.y < req.height)
     priv->final_position = GTK_POS_BOTTOM;
-  else if (priv->preferred_position == GTK_POS_BOTTOM &&
-           rect.y > window_alloc.height - req.height)
+  else if (pos == GTK_POS_BOTTOM && rect.y > window_alloc.height - req.height)
     priv->final_position = GTK_POS_TOP;
-  else if (priv->preferred_position == GTK_POS_LEFT && rect.x < req.width)
-    priv->final_position = GTK_POS_RIGHT;
-  else if (priv->preferred_position == GTK_POS_RIGHT &&
-           rect.x > window_alloc.width - req.width)
-    priv->final_position = GTK_POS_LEFT;
+  else if (pos == GTK_POS_LEFT && rect.x < req.width)
+    priv->final_position = get_effective_position (popover, GTK_POS_RIGHT);
+  else if (pos == GTK_POS_RIGHT && rect.x > window_alloc.width - req.width)
+    priv->final_position = get_effective_position (popover, GTK_POS_LEFT);
 
   gtk_window_set_popover_position (priv->window, GTK_WIDGET (popover),
                                    priv->final_position, &rect);

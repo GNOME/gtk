@@ -5776,7 +5776,8 @@ popover_get_rect (GtkWindowPopover      *popover,
         rect->y = CLAMP (popover->rect.y + (popover->rect.height / 2) -
                          (req.height / 2), 0, win_alloc.height - req.height);
 
-      if (popover->pos == GTK_POS_LEFT)
+      if ((popover->pos == GTK_POS_LEFT) ==
+          (gtk_widget_get_direction (popover->widget) == GTK_TEXT_DIR_LTR))
         {
           rect->x = popover->rect.x - req.width;
 
