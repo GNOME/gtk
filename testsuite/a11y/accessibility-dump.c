@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <locale.h>
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -873,6 +874,12 @@ parse_command_line (int *argc, char ***argv)
     }
 
   gtk_test_init (argc, argv);
+
+  /* gtk_test_init does not call setlocale(), so do it ourselves,
+   * since running in the C locale breaks some our fancy
+   * utf8 output.
+   */
+  setlocale (LC_ALL, "en_US.utf8");
 
   return TRUE;
 }
