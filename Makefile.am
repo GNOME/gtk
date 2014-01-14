@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 include $(top_srcdir)/Makefile.decl
 
-SRC_SUBDIRS = gdk gtk modules demos tests testsuite examples
+SRC_SUBDIRS = gdk gsk gtk modules demos tests testsuite examples
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs build
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
@@ -45,7 +45,7 @@ gdk-x11-4.0.pc gdk-win32-4.0.pc gdk-quartz-4.0.pc gdk-broadway-4.0.pc gdk-waylan
 	cp gdk-4.0.pc $@
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = gdk-4.0.pc gtk+-4.0.pc gail-4.0.pc
+pkgconfig_DATA = gdk-4.0.pc gsk-4.0.pc gtk+-4.0.pc gail-4.0.pc
 pkgconfig_DATA += ${GDK_BACKENDS:%=gtk+-%-4.0.pc}
 pkgconfig_DATA += ${GDK_BACKENDS:%=gdk-%-4.0.pc}
 
@@ -62,6 +62,7 @@ DISTCLEANFILES = \
 	gtk+-broadway-4.0.pc		\
 	gtk+-wayland-4.0.pc		\
 	gtk+-mir-4.0.pc			\
+	gsk-4.0.pc			\
 	gdk-4.0.pc			\
 	gdk-x11-4.0.pc			\
 	gdk-win32-4.0.pc		\
