@@ -3870,6 +3870,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   target_list = gtk_target_list_new  (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
   gtk_target_list_add_uri_targets (target_list, TEXT_URI_LIST);
   gtk_drag_dest_set_target_list (GTK_WIDGET (tree_view), target_list);
+  gtk_target_list_unref (target_list);
 
   g_signal_connect (tree_view, "key-press-event",
                     G_CALLBACK (bookmarks_key_press_event_cb), sidebar);
