@@ -36,6 +36,7 @@ start_element_handler (GMarkupParseContext  *contexts,
   ParserData *data = user_data;
 
   if (g_str_equal (element_name, "property") ||
+      g_str_equal (element_name, "attribute") ||
       g_str_equal (element_name, "item"))
     {
       gboolean translatable;
@@ -47,6 +48,7 @@ start_element_handler (GMarkupParseContext  *contexts,
                                    attribute_values,
                                    error,
                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "name", NULL,
+                                   G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "value", NULL,
                                    G_MARKUP_COLLECT_TRISTATE, "translatable", &translatable,
                                    G_MARKUP_COLLECT_STRDUP|G_MARKUP_COLLECT_OPTIONAL, "context", &context,
                                    G_MARKUP_COLLECT_STRDUP|G_MARKUP_COLLECT_OPTIONAL, "comments", &comments,
