@@ -53,6 +53,10 @@ void                    gtk_application_foreach_accel_keys              (GtkAppl
                                                                          gpointer                  user_data);
 G_GNUC_INTERNAL
 GtkActionMuxer *        gtk_application_get_action_muxer                (GtkApplication           *application);
+G_GNUC_INTERNAL
+void                    gtk_application_insert_action_group             (GtkApplication           *application,
+                                                                         const gchar              *name,
+                                                                         GActionGroup             *action_group);
 
 
 #define GTK_TYPE_APPLICATION_IMPL                           (gtk_application_impl_get_type ())

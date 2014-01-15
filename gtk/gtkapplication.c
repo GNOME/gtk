@@ -1546,6 +1546,14 @@ gtk_application_get_action_muxer (GtkApplication *application)
 }
 
 void
+gtk_application_insert_action_group (GtkApplication *application,
+                                     const gchar    *name,
+                                     GActionGroup   *action_group)
+{
+  gtk_action_muxer_insert (application->priv->muxer, name, action_group);
+}
+
+void
 gtk_application_handle_window_realize (GtkApplication *application,
                                        GtkWindow      *window)
 {
