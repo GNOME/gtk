@@ -59,6 +59,7 @@ static const struct {
   {"Gtk/ShellShowsMenubar",   "gtk-shell-shows-menubar"},
   {"Gtk/ShellShowsDesktop",   "gtk-shell-shows-desktop"},
   {"Gtk/DecorationLayout",    "gtk-decoration-layout"},
+  {"Gtk/DialogsUseHeader",    "gtk-dialogs-use-header"},
   {"Gtk/EnablePrimaryPaste",  "gtk-enable-primary-paste"},
   {"Gtk/RecentFilesMaxAge",   "gtk-recent-files-max-age"},
   {"Gtk/RecentFilesEnabled",  "gtk-recent-files-enabled"},

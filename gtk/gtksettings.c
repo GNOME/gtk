@@ -215,6 +215,7 @@ enum {
   PROP_SHELL_SHOWS_MENUBAR,
   PROP_SHELL_SHOWS_DESKTOP,
   PROP_DECORATION_LAYOUT,
+  PROP_DIALOGS_USE_HEADER,
   PROP_ENABLE_PRIMARY_PASTE,
   PROP_RECENT_FILES_ENABLED
 };
@@ -1574,6 +1575,27 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    "menu:close", GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DECORATION_LAYOUT);
+
+  /**
+   * GtkSettings:gtk-dialogs-use-header:
+   *
+   * Whether builtin GTK+ dialogs such as the file chooser, the
+   * color chooser or the font chooser will use a header bar at
+   * the top to show action widgets, or an action area at the bottom.
+   *
+   * This setting does not affect custom dialogs using GtkDialog
+   * directly, or message dialogs.
+   *
+   * Since: 3.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-dialogs-use-header",
+                                                                   P_("Dialogs use header bar"),
+                                                                   P_("Whether builtin GTK+ dialogs should use a header bar instead of an action area."),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_DIALOGS_USE_HEADER);
 
   /**
    * GtkSettings:gtk-enable-primary-paste:
