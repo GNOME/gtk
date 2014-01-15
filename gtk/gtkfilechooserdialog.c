@@ -267,6 +267,28 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
 				  GTK_FILE_CHOOSER (dialog->priv->widget));
 }
 
+static GtkWidget *
+get_accept_action_widget (GtkDialog *dialog)
+{
+  gint response[] = {
+    GTK_RESPONSE_ACCEPT,
+    GTK_RESPONSE_OK,
+    GTK_RESPONSE_YES,
+    GTK_RESPONSE_APPLY
+  };
+  gint i;
+  GtkWidget *widget;
+
+  for (i = 0; i < G_N_ELEMENTS (response); i++)
+    {
+      widget = gtk_dialog_get_widget_for_response (dialog, response[i]);
+      if (widget && gtk_widget_is_sensitive (widget))
+	return widget;
+    }
+
+  return NULL;
+}
+
 static gboolean
 is_stock_accept_response_id (int response_id)
 {
@@ -281,9 +303,7 @@ static void
 file_chooser_widget_file_activated (GtkFileChooser       *chooser,
 				    GtkFileChooserDialog *dialog)
 {
-  GtkDialog *fc_dialog = GTK_DIALOG (dialog);
-  GtkWidget *action_area;
-  GList *children, *l;
+  GtkWidget *widget;
 
   if (gtk_window_activate_default (GTK_WINDOW (dialog)))
     return;
@@ -291,27 +311,9 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  action_area = gtk_dialog_get_action_area (fc_dialog);
-G_GNUC_END_IGNORE_DEPRECATIONS
-  children = gtk_container_get_children (GTK_CONTAINER (action_area));
-
-  for (l = children; l; l = l->next)
-    {
-      GtkWidget *widget;
-      int response_id;
-
-      widget = GTK_WIDGET (l->data);
-      response_id = gtk_dialog_get_response_for_widget (fc_dialog, widget);
-      if (gtk_widget_is_sensitive (widget) &&
-          is_stock_accept_response_id (response_id))
-	{
-	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
-	  break;
-	}
-    }
-
-  g_list_free (children);
+  widget = get_accept_action_widget (GTK_DIALOG (dialog));
+  if (widget)
+    gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
 }
 
 #if 0
@@ -383,9 +385,7 @@ static void
 file_chooser_widget_response_requested (GtkWidget            *widget,
 					GtkFileChooserDialog *dialog)
 {
-  GtkDialog *fc_dialog = GTK_DIALOG (dialog);
-  GtkWidget *action_area;
-  GList *children, *l;
+  GtkWidget *button;
 
   dialog->priv->response_requested = TRUE;
 
@@ -395,30 +395,14 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  action_area = gtk_dialog_get_action_area (fc_dialog);
-G_GNUC_END_IGNORE_DEPRECATIONS
-  children = gtk_container_get_children (GTK_CONTAINER (action_area));
-
-  for (l = children; l; l = l->next)
+  button = get_accept_action_widget (GTK_DIALOG (dialog));
+  if (button)
     {
-      GtkWidget *widget;
-      int response_id;
-
-      widget = GTK_WIDGET (l->data);
-      response_id = gtk_dialog_get_response_for_widget (fc_dialog, widget);
-      if (gtk_widget_is_sensitive (widget) &&
-          is_stock_accept_response_id (response_id))
-	{
-	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
-	  break;
-	}
+      gtk_widget_activate (button);
+      return;
     }
 
-  if (l == NULL)
-    dialog->priv->response_requested = FALSE;
-
-  g_list_free (children);
+  dialog->priv->response_requested = FALSE;
 }
 
 static void
@@ -454,28 +438,13 @@ gtk_file_chooser_dialog_get_property (GObject         *object,
 }
 
 static void
-foreach_ensure_default_response_cb (GtkWidget *widget,
-				    gpointer   data)
-{
-  GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (data);
-  int response_id;
-
-  response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
-  if (is_stock_accept_response_id (response_id))
-    gtk_dialog_set_default_response (GTK_DIALOG (dialog), response_id);
-}
-
-static void
 ensure_default_response (GtkFileChooserDialog *dialog)
 {
-  GtkWidget *action_area;
+  GtkWidget *widget;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
-G_GNUC_END_IGNORE_DEPRECATIONS
-  gtk_container_foreach (GTK_CONTAINER (action_area),
-			 foreach_ensure_default_response_cb,
-			 dialog);
+  widget = get_accept_action_widget (GTK_DIALOG (dialog));
+  if (widget)
+    gtk_widget_grab_default (widget); 
 }
 
 /* GtkWidget::map handler */
