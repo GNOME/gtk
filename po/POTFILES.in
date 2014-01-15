@@ -291,6 +291,7 @@ modules/printbackends/test/gtkprintbackendtest.c
 gtk/gtkaboutdialog.ui.h
 gtk/gtkappchooserdialog.ui.h
 gtk/gtkappchooserwidget.ui.h
+gtk/gtkapplication-quartz.ui.h
 gtk/gtkassistant.ui.h
 gtk/gtkcolorchooserdialog.ui.h
 gtk/gtkcoloreditor.ui.h

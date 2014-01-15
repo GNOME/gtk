@@ -35,5 +35,6 @@
     <file compressed="true">gtkscalebutton.ui</file>
     <file compressed="true">gtkstatusbar.ui</file>
     <file compressed="true">gtkvolumebutton.ui</file>
+    <file compressed="true">gtkapplication-quartz.ui</file>
   </gresource>
 </gresources>

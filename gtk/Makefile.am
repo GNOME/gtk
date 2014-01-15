@@ -1119,6 +1119,7 @@ DND_CURSORS = \
 	cursor_dnd_none.png
 
 COMPOSITE_TEMPLATES =			\
+	gtkapplication-quartz.ui	\
 	gtkaboutdialog.ui		\
 	gtkappchooserdialog.ui		\
 	gtkappchooserwidget.ui		\
