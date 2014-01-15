@@ -65,12 +65,12 @@
 
 - (void)didChangeLabel;
 - (void)didChangeIcon;
-- (void)didChangeSensitive;
 - (void)didChangeVisible;
 - (void)didChangeToggled;
 - (void)didChangeAccel;
 
 - (void)didSelectItem:(id)sender;
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 
 @end
 
@@ -126,6 +126,11 @@ icon_loaded (GObject      *object,
 
 @implementation GNSMenuItem
 
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+  return gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO;
+}
+
 - (id)initWithTrackerItem:(GtkMenuTrackerItem *)aTrackerItem
 {
   self = [super initWithTitle:@""
@@ -141,7 +146,6 @@ icon_loaded (GObject      *object,
 
       [self didChangeLabel];
       [self didChangeIcon];
-      [self didChangeSensitive];
       [self didChangeVisible];
       [self didChangeToggled];
       [self didChangeAccel];
@@ -224,11 +228,6 @@ icon_loaded (GObject      *object,
     }
 
   [self setImage:nil];
-}
-
-- (void)didChangeSensitive
-{
-  [self setEnabled:gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO];
 }
 
 - (void)didChangeVisible
@@ -321,8 +320,6 @@ menu_item_removed (gint     position,
 
   if (self != nil)
     {
-      [self setAutoenablesItems:NO];
-
       tracker = gtk_menu_tracker_new (observable,
                                       model,
                                       NO,
@@ -341,8 +338,6 @@ menu_item_removed (gint     position,
 
   if (self != nil)
     {
-      [self setAutoenablesItems:NO];
-
       tracker = gtk_menu_tracker_new_for_item_submenu (trackerItem,
                                                        menu_item_inserted,
                                                        menu_item_removed,
