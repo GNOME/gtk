@@ -2697,7 +2697,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       GtkTreePath *real_path;
 
       real_path = gtk_tree_model_filter_remove_root (c_path,
-                                                     filter->priv->root);
+                                                     filter->priv->virtual_root);
       if (real_path)
         {
           gtk_tree_model_filter_check_ancestors (filter, real_path);
