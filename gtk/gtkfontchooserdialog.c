@@ -151,11 +151,12 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
   priv = fontchooserdiag->priv;
 
   gtk_widget_init_template (GTK_WIDGET (fontchooserdiag));
-
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontchooserdiag),
                                            GTK_RESPONSE_OK,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   _gtk_font_chooser_set_delegate (GTK_FONT_CHOOSER (fontchooserdiag),
                                   GTK_FONT_CHOOSER (priv->fontchooser));

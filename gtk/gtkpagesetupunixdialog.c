@@ -213,11 +213,12 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   /* Load data */
   _gtk_print_load_custom_papers (priv->custom_paper_list);
   load_print_backends (dialog);
-
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
                                            GTK_RESPONSE_OK,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

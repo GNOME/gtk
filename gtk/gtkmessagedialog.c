@@ -899,10 +899,12 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
       gtk_dialog_add_button (dialog,
                              _("_Yes"),
                              GTK_RESPONSE_YES);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
 					       GTK_RESPONSE_YES,
 					       GTK_RESPONSE_NO,
 					       -1);
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
 
     case GTK_BUTTONS_OK_CANCEL:
@@ -912,10 +914,12 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
       gtk_dialog_add_button (dialog,
                              _("_OK"),
                              GTK_RESPONSE_OK);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
 					       GTK_RESPONSE_OK,
 					       GTK_RESPONSE_CANCEL,
 					       -1);
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
       
     default:
