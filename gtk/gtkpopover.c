@@ -40,6 +40,7 @@
 #include "gtkpopover.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
+#include "gtkwindowprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -168,7 +169,7 @@ gtk_popover_dispose (GObject *object)
   GtkPopoverPrivate *priv = popover->priv;
 
   if (priv->window)
-    gtk_window_remove_popover (priv->window, GTK_WIDGET (object));
+    _gtk_window_remove_popover (priv->window, GTK_WIDGET (object));
 
   priv->window = NULL;
 
@@ -619,8 +620,8 @@ gtk_popover_update_position (GtkPopover *popover)
   else if (pos == GTK_POS_RIGHT && rect.x > window_alloc.width - req.width)
     priv->final_position = get_effective_position (popover, GTK_POS_LEFT);
 
-  gtk_window_set_popover_position (priv->window, GTK_WIDGET (popover),
-                                   priv->final_position, &rect);
+  _gtk_window_set_popover_position (priv->window, GTK_WIDGET (popover),
+                                    priv->final_position, &rect);
 
   if (priv->final_position != priv->current_position)
     {
@@ -1157,10 +1158,10 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
   g_object_ref (popover);
 
   if (priv->window)
-    gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
+    _gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
 
   if (new_window)
-    gtk_window_add_popover (new_window, GTK_WIDGET (popover));
+    _gtk_window_add_popover (new_window, GTK_WIDGET (popover));
 
   priv->window = new_window;
 
@@ -1239,7 +1240,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
 
   if (priv->window)
     {
-      gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
+      _gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
       priv->window = NULL;
     }
 
@@ -1281,7 +1282,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
     }
 
   if (priv->window)
-    gtk_window_add_popover (priv->window, GTK_WIDGET (popover));
+    _gtk_window_add_popover (priv->window, GTK_WIDGET (popover));
 
   _gtk_popover_update_context_parent (popover);
   g_object_unref (popover);
