@@ -3,38 +3,29 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkMessageDialog" parent="GtkDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">0</property>
     <property name="title"> </property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
+    <child internal-child="headerbar">
+      <object class="GtkHeaderBar" id="headerbar1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="show-close-button">False</property>
+      </object>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="border_width">0</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">14</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="spacing">20</property>
         <child>
           <object class="GtkBox" id="box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">5</property>
+            <property name="border_width">0</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage" id="image">
@@ -45,7 +36,7 @@
                 <property name="stock">gtk-missing-image</property>
                 <property name="use_fallback">True</property>
                 <property name="icon_size">6</property>
-                <property name="xpad">6</property>
+                <property name="xpad">12</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -57,6 +48,7 @@
               <object class="GtkBox" id="message_area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_end">20</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
@@ -106,7 +98,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>
