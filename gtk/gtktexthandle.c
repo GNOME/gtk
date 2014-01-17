@@ -239,7 +239,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
 
       priv->windows[pos].widget = g_object_ref_sink (widget);
       window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
-      gtk_window_add_popover (GTK_WINDOW (window), widget);
+      _gtk_window_add_popover (GTK_WINDOW (window), widget);
     }
 
   return priv->windows[pos].widget;
@@ -290,9 +290,9 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
 
       gtk_widget_set_size_request (handle_window->widget, width, height);
       gtk_widget_show (handle_window->widget);
-      gtk_window_set_popover_position (GTK_WINDOW (window),
-                                       handle_window->widget,
-                                       handle_pos, &rect);
+      _gtk_window_set_popover_position (GTK_WINDOW (window),
+                                        handle_window->widget,
+                                        handle_pos, &rect);
     }
   else if (handle_window->widget)
     gtk_widget_hide (handle_window->widget);
