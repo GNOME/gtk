@@ -1261,46 +1261,55 @@ window1
                                       weight: <omitted>
                                       wrap-mode: word
                   <AtkHypertext>
-    dialog-action_area1
+    action_area
       "filler"
       parent: dialog-vbox1
       index: 1
-      state: enabled horizontal sensitive showing visible
+      state: enabled horizontal sensitive
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      cancel_button
-        "push button"
-        parent: dialog-action_area1
-        index: 0
-        name: Cancel
-        state: enabled focusable sensitive showing visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: -1 x -1
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
-        action 0 keybinding: <Alt>c
-      select_button
-        "push button"
-        parent: dialog-action_area1
-        index: 1
-        name: Select
-        state: enabled focusable sensitive showing visible default
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: -1 x -1
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
-        action 0 keybinding: <Alt>s
+  headerbar
+    "panel"
+    parent: window1
+    index: 1
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    unnamed-GtkButtonAccessible-42
+      "push button"
+      parent: headerbar
+      index: 0
+      name: Cancel
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+      action 0 keybinding: <Alt>c
+    unnamed-GtkButtonAccessible-43
+      "push button"
+      parent: headerbar
+      index: 1
+      name: Select
+      state: enabled focusable sensitive showing visible default
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+      action 0 keybinding: <Alt>s
