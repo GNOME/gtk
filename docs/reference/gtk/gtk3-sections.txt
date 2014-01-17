@@ -5692,10 +5692,6 @@ gtk_window_get_application
 gtk_window_set_application
 gtk_window_set_has_user_ref_count
 gtk_window_set_titlebar
-gtk_window_add_popover
-gtk_window_remove_popover
-gtk_window_set_popover_position
-gtk_window_get_popover_position
 
 <SUBSECTION Standard>
 GTK_WINDOW

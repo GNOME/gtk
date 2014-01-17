@@ -93,6 +93,20 @@ void            _gtk_window_get_shadow_width (GtkWindow *window,
 
 void            _gtk_window_toggle_maximized (GtkWindow *window);
 
+/* Popovers */
+void    _gtk_window_add_popover          (GtkWindow                   *window,
+                                          GtkWidget                   *popover);
+void    _gtk_window_remove_popover       (GtkWindow                   *window,
+                                          GtkWidget                   *popover);
+void    _gtk_window_set_popover_position (GtkWindow                   *window,
+                                          GtkWidget                   *popover,
+                                          GtkPositionType              pos,
+                                          const cairo_rectangle_int_t *rect);
+void    _gtk_window_get_popover_position (GtkWindow                   *window,
+                                          GtkWidget                   *popover,
+                                          GtkPositionType             *pos,
+                                          cairo_rectangle_int_t       *rect);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */

@@ -7935,7 +7935,7 @@ gtk_window_remove (GtkContainer *container,
   if (widget == window->priv->title_box)
     unset_titlebar (window);
   else if (_gtk_window_has_popover (window, widget))
-    gtk_window_remove_popover (window, widget);
+    _gtk_window_remove_popover (window, widget);
   else
     GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, widget);
 }
@@ -12028,19 +12028,9 @@ _gtk_window_get_shadow_width (GtkWindow *window,
   get_shadow_width (GTK_WIDGET (window), border);
 }
 
-/**
- * gtk_window_add_popover:
- * @window: a #GtkWindow
- * @popover: a #GtkWidget to be added as a popover of @window
- *
- * Adds a widget so it acts as a popover within @window, it can
- * be later positioned through gtk_window_set_popover_position().
- *
- * Since: 3.12
- **/
 void
-gtk_window_add_popover (GtkWindow *window,
-                        GtkWidget *popover)
+_gtk_window_add_popover (GtkWindow *window,
+                         GtkWidget *popover)
 {
   GtkWindowPrivate *priv;
   GtkWindowPopover *data;
@@ -12064,18 +12054,9 @@ gtk_window_add_popover (GtkWindow *window,
   gtk_widget_set_parent (popover, GTK_WIDGET (window));
 }
 
-/**
- * gtk_window_remove_popover:
- * @window: a #GtkWindow
- * @popover: a #GtkWidget acting as a popover on @window
- *
- * Removes @popover from being a popover of @window.
- *
- * Since: 3.12
- **/
 void
-gtk_window_remove_popover (GtkWindow *window,
-                           GtkWidget *popover)
+_gtk_window_remove_popover (GtkWindow *window,
+                            GtkWidget *popover)
 {
   GtkWindowPrivate *priv;
   GtkWindowPopover *data;
@@ -12094,25 +12075,11 @@ gtk_window_remove_popover (GtkWindow *window,
   popover_destroy (data);
 }
 
-/**
- * gtk_window_set_popover_position:
- * @window: a #GtkWindow
- * @popover: #GtkWidget to be positioned on top of window contents
- * @pos: Position of the popover, relative of the contents it's related to
- * @rect: Disclosure rectangle, in @window coordinates
- *
- * Positions @popover so it is at the side given by @pos of the rectangle @rect.
- * If @popover is set to expand horizontally or vertically, the position given
- * by @pos will be used to determine how the popover is allowed to expand
- * without covering the content it's logically attached to.
- *
- * Since: 3.12
- **/
 void
-gtk_window_set_popover_position (GtkWindow                   *window,
-                                 GtkWidget                   *popover,
-                                 GtkPositionType              pos,
-                                 const cairo_rectangle_int_t *rect)
+_gtk_window_set_popover_position (GtkWindow                   *window,
+                                  GtkWidget                   *popover,
+                                  GtkPositionType              pos,
+                                  const cairo_rectangle_int_t *rect)
 {
   GtkWindowPopover *data;
 
@@ -12152,22 +12119,11 @@ gtk_window_set_popover_position (GtkWindow                   *window,
   gtk_widget_queue_resize (popover);
 }
 
-/**
- * gtk_window_get_popover_position:
- * @window: a #GtkWindow
- * @popover: a #GtkWidget acting as popover
- * @pos: return value for the position of @popover relative to @rect
- * @rect: return value for the disclosure rectangle
- *
- * Returns the positioning details of @popover, relative to @window.
- *
- * Since: 3.12
- **/
 void
-gtk_window_get_popover_position (GtkWindow             *window,
-                                 GtkWidget             *popover,
-                                 GtkPositionType       *pos,
-                                 cairo_rectangle_int_t *rect)
+_gtk_window_get_popover_position (GtkWindow             *window,
+                                  GtkWidget             *popover,
+                                  GtkPositionType       *pos,
+                                  cairo_rectangle_int_t *rect)
 {
   GtkWindowPopover *data;
 
