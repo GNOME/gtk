@@ -17,13 +17,20 @@
       <object class="GtkBox" id="vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="border_width">0</property>
         <property name="orientation">vertical</property>
+        <style>
+          <class name="dialog-vbox"/>
+        </style>
         <child>
           <object class="GtkButtonBox" id="action_area">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
-          </object>
+            <style>
+              <class name="dialog-action-area"/>
+            </style>
+           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
