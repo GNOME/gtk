@@ -30,7 +30,7 @@ window1
         parent: box
         index: 0
         name: Information
-        state: enabled sensitive showing visible
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -127,7 +127,7 @@ window1
                               weight: <omitted>
                               wrap-mode: word
           <AtkHypertext>
-    dialog-action_area1
+    action_area
       "filler"
       parent: dialog-vbox1
       index: 1
