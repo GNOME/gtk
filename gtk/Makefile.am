@@ -467,6 +467,7 @@ gtk_private_h_sources =		\
 	gtkcsstypedvalueprivate.h	\
 	gtkcssvalueprivate.h	\
 	gtkcustompaperunixdialog.h \
+	gtkdialogprivate.h 	\
 	gtkentryprivate.h	\
 	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
