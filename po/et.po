@@ -16,15 +16,16 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-01-19 19:42+0000\n"
-"PO-Revision-Date: 2013-02-27 10:22+0300\n"
-"Last-Translator: Priit Laes <plaes+gi18n@plaes.org>\n"
+"POT-Creation-Date: 2013-03-12 11:47+0000\n"
+"PO-Revision-Date: 2013-09-20 18:29+0300\n"
+"Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #, c-format
 msgid "Error parsing option --gdk-debug"
@@ -236,107 +237,107 @@ msgstr "Delete"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 msgctxt "keyboard label"
-msgid "MonBrightnessUp"
+msgid "XF86MonBrightnessUp"
 msgstr "Kuvari heledust vähemaks"
 
 msgctxt "keyboard label"
-msgid "MonBrightnessDown"
+msgid "XF86MonBrightnessDown"
 msgstr "Kuvari heledust juurde"
 
 msgctxt "keyboard label"
-msgid "AudioMute"
+msgid "XF86AudioMute"
 msgstr "Heli tummaks"
 
 msgctxt "keyboard label"
-msgid "AudioLowerVolume"
+msgid "XF86AudioLowerVolume"
 msgstr "Heli vaiksemaks"
 
 msgctxt "keyboard label"
-msgid "AudioRaiseVolume"
+msgid "XF86AudioRaiseVolume"
 msgstr "Heli valjemaks"
 
 msgctxt "keyboard label"
-msgid "AudioPlay"
+msgid "XF86AudioPlay"
 msgstr "Heli - esitamine"
 
 msgctxt "keyboard label"
-msgid "AudioStop"
+msgid "XF86AudioStop"
 msgstr "Heli - stopp"
 
 msgctxt "keyboard label"
-msgid "AudioNext"
+msgid "XF86AudioNext"
 msgstr "Heli - järgmine"
 
 msgctxt "keyboard label"
-msgid "AudioPrev"
+msgid "XF86AudioPrev"
 msgstr "Heli - eelmine"
 
 msgctxt "keyboard label"
-msgid "AudioRecord"
+msgid "XF86AudioRecord"
 msgstr "Heli - lindistamine"
 
 msgctxt "keyboard label"
-msgid "AudioPause"
+msgid "XF86AudioPause"
 msgstr "Heli - paus"
 
 msgctxt "keyboard label"
-msgid "AudioRewind"
+msgid "XF86AudioRewind"
 msgstr "Heli - tagasi kerimine"
 
 msgctxt "keyboard label"
-msgid "AudioMedia"
+msgid "XF86AudioMedia"
 msgstr "Heli - meedianupp"
 
 msgctxt "keyboard label"
-msgid "ScreenSaver"
+msgid "XF86ScreenSaver"
 msgstr "Ekraanisäästja"
 
 msgctxt "keyboard label"
-msgid "Battery"
+msgid "XF86Battery"
 msgstr "Aku"
 
 msgctxt "keyboard label"
-msgid "Launch1"
+msgid "XF86Launch1"
 msgstr "Käivitaja 1"
 
 msgctxt "keyboard label"
-msgid "Forward"
+msgid "XF86Forward"
 msgstr "Edasi"
 
 msgctxt "keyboard label"
-msgid "Back"
+msgid "XF86Back"
 msgstr "Tagasi"
 
 msgctxt "keyboard label"
-msgid "Sleep"
+msgid "XF86Sleep"
 msgstr "Uinak"
 
 msgctxt "keyboard label"
-msgid "Hibernate"
+msgid "XF86Hibernate"
 msgstr "Talveuni"
 
 msgctxt "keyboard label"
-msgid "WLAN"
+msgid "XF86WLAN"
 msgstr "Juhtmeta võrk"
 
 msgctxt "keyboard label"
-msgid "WebCam"
+msgid "XF86WebCam"
 msgstr "Veebikaamera"
 
 msgctxt "keyboard label"
-msgid "Display"
+msgid "XF86Display"
 msgstr "Kuva"
 
 msgctxt "keyboard label"
-msgid "TouchpadToggle"
+msgid "XF86TouchpadToggle"
 msgstr "Puuteplaadi lüliti"
 
 msgctxt "keyboard label"
-msgid "WakeUp"
+msgid "XF86WakeUp"
 msgstr "Üles äratamine"
 
 msgctxt "keyboard label"
-msgid "Suspend"
+msgid "XF86Suspend"
 msgstr "Arvuti peatamine"
 
 #. Description of --sync in --help output
@@ -1607,7 +1608,7 @@ msgstr "_Lõpeta protsess"
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
-"Protsessi PID-iga %d pole võimalik kõrvaldada. Toiming pole implementeeritud."
+"Protsessi PID-iga %d pole võimalik tappa. Toiming pole implementeeritud."
 
 #. translators: this string is a name for the 'less' command
 msgid "Terminal Pager"
@@ -3620,7 +3621,7 @@ msgid "There is a problem on printer '%s'."
 msgstr "Printeriga '%s on probleem."
 
 #. Translators: this is a printer status.
-msgid "Paused; Rejecting Jobs"
+msgid "Paused ; Rejecting Jobs"
 msgstr "Pausitud, printimistööde tagasilükkamine"
 
 #. Translators: this is a printer status.
