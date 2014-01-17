@@ -501,18 +501,7 @@ dialog_find_button (GtkDialog *dialog,
 static void
 gtk_dialog_close (GtkDialog *dialog)
 {
-  /* Synthesize delete_event to close dialog. */
-
-  GtkWidget *widget = GTK_WIDGET (dialog);
-  GdkEvent *event;
-
-  event = gdk_event_new (GDK_DELETE);
-
-  event->any.window = g_object_ref (gtk_widget_get_window (widget));
-  event->any.send_event = TRUE;
-
-  gtk_main_do_event (event);
-  gdk_event_free (event);
+  gtk_window_close (GTK_WINDOW (dialog));
 }
 
 /**
