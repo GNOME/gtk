@@ -1015,7 +1015,9 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkStyleContext *context;
 
   content_area = gtk_dialog_get_content_area (cpu_dialog);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (cpu_dialog);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */

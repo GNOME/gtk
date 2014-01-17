@@ -435,7 +435,9 @@ ensure_software_button (GtkAppChooserDialog *self)
     {
       GtkWidget *action_area;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       action_area = gtk_dialog_get_action_area (GTK_DIALOG (self));
+G_GNUC_END_IGNORE_DEPRECATIONS
       self->priv->software_button = gtk_button_new_with_mnemonic (_("Software"));
       gtk_button_set_always_show_image (GTK_BUTTON (self->priv->software_button), TRUE);
       gtk_button_set_image (GTK_BUTTON (self->priv->software_button), gtk_image_new_from_icon_name ("gnome-software", GTK_ICON_SIZE_BUTTON));

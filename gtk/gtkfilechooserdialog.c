@@ -291,7 +291,9 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (fc_dialog);
+G_GNUC_END_IGNORE_DEPRECATIONS
   children = gtk_container_get_children (GTK_CONTAINER (action_area));
 
   for (l = children; l; l = l->next)
@@ -393,7 +395,9 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (fc_dialog);
+G_GNUC_END_IGNORE_DEPRECATIONS
   children = gtk_container_get_children (GTK_CONTAINER (action_area));
 
   for (l = children; l; l = l->next)
@@ -466,7 +470,9 @@ ensure_default_response (GtkFileChooserDialog *dialog)
 {
   GtkWidget *action_area;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_container_foreach (GTK_CONTAINER (action_area),
 			 foreach_ensure_default_response_cb,
 			 dialog);
