@@ -60,12 +60,19 @@ struct _GtkActionGroup
   GtkActionGroupPrivate *priv;
 };
 
+/**
+ * GtkActionGroupClass:
+ * @parent_class: The parent class.
+ * @get_action: Looks up an action in the action group by name.
+ */
 struct _GtkActionGroupClass
 {
   GObjectClass parent_class;
 
   GtkAction *(* get_action) (GtkActionGroup *action_group,
                              const gchar    *action_name);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

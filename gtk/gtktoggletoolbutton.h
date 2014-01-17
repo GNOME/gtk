@@ -48,12 +48,21 @@ struct _GtkToggleToolButton
   GtkToggleToolButtonPrivate *priv;
 };
 
+/**
+ * GtkToggleToolButtonClass:
+ * @parent_class: The parent class.
+ * @toggled: Signal emitted whenever the toggle tool button changes state.
+ */
 struct _GtkToggleToolButtonClass
 {
   GtkToolButtonClass parent_class;
 
+  /*< public >*/
+
   /* signal */
   void (* toggled) (GtkToggleToolButton *button);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (* _gtk_reserved1) (void);

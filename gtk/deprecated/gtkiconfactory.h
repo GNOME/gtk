@@ -57,9 +57,15 @@ struct _GtkIconFactory
   GtkIconFactoryPrivate *priv;
 };
 
+/**
+ * GtkIconFactoryClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkIconFactoryClass
 {
   GObjectClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

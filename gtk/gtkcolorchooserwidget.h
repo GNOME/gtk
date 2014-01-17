@@ -45,9 +45,15 @@ struct _GtkColorChooserWidget
   GtkColorChooserWidgetPrivate *priv;
 };
 
+/**
+ * GtkColorChooserWidgetClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkColorChooserWidgetClass
 {
   GtkBoxClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

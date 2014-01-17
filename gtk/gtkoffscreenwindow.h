@@ -42,9 +42,15 @@ struct _GtkOffscreenWindow
   GtkWindow parent_object;
 };
 
+/**
+ * GtkOffscreenWindowClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkOffscreenWindowClass
 {
   GtkWindowClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

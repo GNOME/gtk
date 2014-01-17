@@ -56,12 +56,21 @@ struct _GtkAction
   GtkActionPrivate *private_data;
 };
 
+/**
+ * GtkActionClass:
+ * @parent_class: The parent class.
+ * @activate: Signal emitted when the action is activated.
+ */
 struct _GtkActionClass
 {
   GObjectClass parent_class;
 
+  /*< public >*/
+
   /* activation signal */
   void       (* activate)           (GtkAction    *action);
+
+  /*< private >*/
 
   GType      menu_item_type;
   GType      toolbar_item_type;

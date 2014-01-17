@@ -54,9 +54,15 @@ struct _GtkMountOperation
   GtkMountOperationPrivate *priv;
 };
 
+/**
+ * GtkMountOperationClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkMountOperationClass
 {
   GMountOperationClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

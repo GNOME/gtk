@@ -50,6 +50,10 @@ struct _GtkRevealer {
   GtkBin parent_instance;
 };
 
+/**
+ * GtkRevealerClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkRevealerClass {
   GtkBinClass parent_class;
 };

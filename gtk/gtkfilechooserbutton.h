@@ -47,12 +47,20 @@ struct _GtkFileChooserButton
   GtkFileChooserButtonPrivate *priv;
 };
 
+/**
+ * GtkFileChooserButtonClass:
+ * @parent_class: The parent class.
+ * @file_set: Signal emitted when the user selects a file.
+ */
 struct _GtkFileChooserButtonClass
 {
-  /*< private >*/
   GtkBoxClass parent_class;
 
+  /*< public >*/
+
   void (* file_set) (GtkFileChooserButton *fc);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*__gtk_reserved1);

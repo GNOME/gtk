@@ -55,17 +55,33 @@ struct _GtkButton
   GtkButtonPrivate *priv;
 };
 
+/**
+ * GtkButtonClass:
+ * @parent_class: The parent class.
+ * @pressed: Signal emitted when the button is pressed. Deprecated: 2.8.
+ * @released: Signal emitted when the button is released. Deprecated: 2.8.
+ * @clicked: Signal emitted when the button has been activated (pressed and released).
+ * @enter: Signal emitted when the pointer enters the button. Deprecated: 2.8.
+ * @leave: Signal emitted when the pointer leaves the button. Deprecated: 2.8.
+ * @activate: Signal that causes the button to animate press then
+ *    release. Applications should never connect to this signal, but use
+ *    the @clicked signal.
+ */
 struct _GtkButtonClass
 {
   GtkBinClass        parent_class;
-  
+
+  /*< public >*/
+
   void (* pressed)  (GtkButton *button);
   void (* released) (GtkButton *button);
   void (* clicked)  (GtkButton *button);
   void (* enter)    (GtkButton *button);
   void (* leave)    (GtkButton *button);
   void (* activate) (GtkButton *button);
-  
+
+  /*< private >*/
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);

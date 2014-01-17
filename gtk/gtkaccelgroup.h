@@ -88,15 +88,25 @@ struct _GtkAccelGroup
   GtkAccelGroupPrivate *priv;
 };
 
+/**
+ * GtkAccelGroupClass:
+ * @parent_class: The parent class.
+ * @accel_changed: Signal emitted when an entry is added to or removed
+ *    from the accel group.
+ */
 struct _GtkAccelGroupClass
 {
   GObjectClass parent_class;
+
+  /*< public >*/
 
   void	(*accel_changed)	(GtkAccelGroup	*accel_group,
 				 guint           keyval,
 				 GdkModifierType modifier,
 				 GClosure       *accel_closure);
-  
+
+  /*< private >*/
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);

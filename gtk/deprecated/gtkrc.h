@@ -100,9 +100,20 @@ struct _GtkRcStyle
   guint engine_specified : 1;   /* The RC file specified the engine */
 };
 
+/**
+ * GtkRcStyleClass:
+ * @parent_class: The parent class.
+ * @create_rc_style: 
+ * @parse: 
+ * @merge: 
+ * @create_style: 
+ * @create_style: 
+ */
 struct _GtkRcStyleClass
 {
   GObjectClass parent_class;
+
+  /*< public >*/
 
   /* Create an empty RC style of the same type as this RC style.
    * The default implementation, which does
@@ -128,6 +139,8 @@ struct _GtkRcStyleClass
   /* Create an empty style suitable to this RC style
    */
   GtkStyle * (*create_style) (GtkRcStyle *rc_style);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

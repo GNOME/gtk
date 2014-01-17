@@ -114,15 +114,25 @@ struct _GtkDialog
   GtkDialogPrivate *priv;
 };
 
+/**
+ * GtkDialogClass:
+ * @parent_class: The parent class.
+ * @response: Signal emitted when an action widget is activated.
+ * @close: Signal emitted when the user uses a keybinding to close the dialog.
+ */
 struct _GtkDialogClass
 {
   GtkWindowClass parent_class;
+
+  /*< public >*/
 
   void (* response) (GtkDialog *dialog, gint response_id);
 
   /* Keybinding signals */
 
   void (* close)    (GtkDialog *dialog);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

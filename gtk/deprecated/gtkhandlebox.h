@@ -57,6 +57,14 @@ struct _GtkHandleBox
   GtkHandleBoxPrivate *priv;
 };
 
+/**
+ * GtkHandleBoxClass:
+ * @parent_class: The parent class.
+ * @child_attached: Signal emitted when the contents of the handlebox
+ *    are reattached to the main window. Deprecated: 3.4.
+ * @child_detached: Signal emitted when the contents of the handlebox
+ *    are detached from the main window. Deprecated: 3.4.
+ */
 struct _GtkHandleBoxClass
 {
   GtkBinClass parent_class;
@@ -65,6 +73,8 @@ struct _GtkHandleBoxClass
 				 GtkWidget	*child);
   void	(*child_detached)	(GtkHandleBox	*handle_box,
 				 GtkWidget	*child);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

@@ -67,9 +67,15 @@ struct _GtkToolPalette
   GtkToolPalettePrivate *priv;
 };
 
+/**
+ * GtkToolPaletteClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkToolPaletteClass
 {
   GtkContainerClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

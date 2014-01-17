@@ -45,9 +45,15 @@ struct _GtkFontChooserDialog
   GtkFontChooserDialogPrivate *priv;
 };
 
+/**
+ * GtkFontChooserDialogClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkFontChooserDialogClass
 {
   GtkDialogClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

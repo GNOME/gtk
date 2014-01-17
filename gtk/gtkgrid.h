@@ -49,9 +49,15 @@ struct _GtkGrid
   GtkGridPrivate *priv;
 };
 
+/**
+ * GtkGridClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkGridClass
 {
   GtkContainerClass parent_class;
+
+  /*< private >*/
 
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);

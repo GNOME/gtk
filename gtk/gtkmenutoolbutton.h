@@ -48,11 +48,20 @@ struct _GtkMenuToolButton
   GtkMenuToolButtonPrivate *priv;
 };
 
+/**
+ * GtkMenuToolButtonClass:
+ * @parent_class: The parent class.
+ * @show_menu: Signal emitted before the menu is shown.
+ */
 struct _GtkMenuToolButtonClass
 {
   GtkToolButtonClass parent_class;
 
+  /*< public >*/
+
   void (*show_menu) (GtkMenuToolButton *button);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

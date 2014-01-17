@@ -53,8 +53,20 @@ struct _GtkAppChooserWidget {
   GtkAppChooserWidgetPrivate *priv;
 };
 
+/**
+ * GtkAppChooserWidgetClass:
+ * @parent_class: The parent class.
+ * @application_selected: Signal emitted when an application item is
+ *    selected from the widget's list.
+ * @application_activated: Signal emitted when an application item is
+ *    activated from the widget's list.
+ * @populate_popup: Signal emitted when a context menu is about to
+ *    popup over an application item.
+ */
 struct _GtkAppChooserWidgetClass {
   GtkBoxClass parent_class;
+
+  /*< public >*/
 
   void (* application_selected)  (GtkAppChooserWidget *self,
                                   GAppInfo            *app_info);
@@ -65,6 +77,8 @@ struct _GtkAppChooserWidgetClass {
   void (* populate_popup)        (GtkAppChooserWidget *self,
                                   GtkMenu             *menu,
                                   GAppInfo            *app_info);
+
+  /*< private >*/
 
   /* padding for future class expansion */
   gpointer padding[16];

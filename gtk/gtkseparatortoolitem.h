@@ -47,9 +47,15 @@ struct _GtkSeparatorToolItem
   GtkSeparatorToolItemPrivate *priv;
 };
 
+/**
+ * GtkSeparatorToolItemClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkSeparatorToolItemClass
 {
   GtkToolItemClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (* _gtk_reserved1) (void);

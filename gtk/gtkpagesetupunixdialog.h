@@ -45,9 +45,15 @@ struct _GtkPageSetupUnixDialog
   GtkPageSetupUnixDialogPrivate *priv;
 };
 
+/**
+ * GtkPageSetupUnixDialogClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkPageSetupUnixDialogClass
 {
   GtkDialogClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

@@ -47,14 +47,25 @@ struct _GtkComboBox
   GtkComboBoxPrivate *priv;
 };
 
+/**
+ * GtkComboBoxClass:
+ * @parent_class: The parent class.
+ * @changed: Signal is emitted when the active item is changed.
+ * @format_entry_text: Signal which allows you to change how the text
+ *    displayed in a combo box's entry is displayed.
+ */
 struct _GtkComboBoxClass
 {
   GtkBinClass parent_class;
+
+  /*< public >*/
 
   /* signals */
   void     (* changed)           (GtkComboBox *combo_box);
   gchar   *(* format_entry_text) (GtkComboBox *combo_box,
 				  const gchar *path);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

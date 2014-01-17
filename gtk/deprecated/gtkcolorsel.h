@@ -70,11 +70,18 @@ struct _GtkColorSelection
   GtkColorSelectionPrivate *private_data;
 };
 
+/**
+ * GtkColorSelectionClass:
+ * @parent_class: The parent class.
+ * @color_changed:
+ */
 struct _GtkColorSelectionClass
 {
   GtkBoxClass parent_class;
 
   void (*color_changed)	(GtkColorSelection *color_selection);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

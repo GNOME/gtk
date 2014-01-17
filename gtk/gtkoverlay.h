@@ -47,13 +47,23 @@ struct _GtkOverlay
   GtkOverlayPrivate *priv;
 };
 
+/**
+ * GtkOverlayClass:
+ * @parent_class: The parent class.
+ * @get_child_position: Signal emitted to determine the position and
+ *    size of any overlay child widgets.
+ */
 struct _GtkOverlayClass
 {
   GtkBinClass parent_class;
 
+  /*< public >*/
+
   gboolean (*get_child_position) (GtkOverlay    *overlay,
                                   GtkWidget     *widget,
                                   GtkAllocation *allocation);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

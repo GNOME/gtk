@@ -54,9 +54,15 @@ struct _GtkButtonBox
   GtkButtonBoxPrivate *priv;
 };
 
+/**
+ * GtkButtonBoxClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkButtonBoxClass
 {
   GtkBoxClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

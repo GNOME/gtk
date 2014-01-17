@@ -80,11 +80,20 @@ struct _GtkTreeSelection
   GtkTreeSelectionPrivate *priv;
 };
 
+/**
+ * GtkTreeSelectionClass:
+ * @parent_class: The parent class.
+ * @changed: Signal emitted whenever the selection has (possibly) changed.
+ */
 struct _GtkTreeSelectionClass
 {
   GObjectClass parent_class;
 
+  /*< public >*/
+
   void (* changed) (GtkTreeSelection *selection);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

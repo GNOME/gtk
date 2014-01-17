@@ -49,9 +49,15 @@ struct _GtkCellView
   GtkCellViewPrivate *priv;
 };
 
+/**
+ * GtkCellViewClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkCellViewClass
 {
   GtkWidgetClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

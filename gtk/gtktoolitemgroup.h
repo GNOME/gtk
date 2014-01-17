@@ -52,9 +52,15 @@ struct _GtkToolItemGroup
   GtkToolItemGroupPrivate *priv;
 };
 
+/**
+ * GtkToolItemGroupClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkToolItemGroupClass
 {
   GtkContainerClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

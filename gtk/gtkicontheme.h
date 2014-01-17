@@ -73,11 +73,22 @@ struct _GtkIconTheme
   GtkIconThemePrivate *priv;
 };
 
+/**
+ * GtkIconThemeClass:
+ * @parent_class: The parent class.
+ * @changed: Signal emitted when the current icon theme is switched or
+ *    GTK+ detects that a change has occurred in the contents of the
+ *    current icon theme.
+ */
 struct _GtkIconThemeClass
 {
   GObjectClass parent_class;
 
+  /*< public >*/
+
   void (* changed)  (GtkIconTheme *icon_theme);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

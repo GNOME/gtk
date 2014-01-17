@@ -56,9 +56,15 @@ struct _GtkBox
   GtkBoxPrivate *priv;
 };
 
+/**
+ * GtkBoxClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkBoxClass
 {
   GtkContainerClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

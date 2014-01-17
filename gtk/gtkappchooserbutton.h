@@ -49,11 +49,22 @@ struct _GtkAppChooserButton {
   GtkAppChooserButtonPrivate *priv;
 };
 
+/**
+ * GtkAppChooserButtonClass:
+ * @parent_class: The parent class.
+ * @custom_item_activated: Signal emitted when a custom item,
+ *    previously added with gtk_app_chooser_button_append_custom_item(),
+ *    is activated from the dropdown menu.
+ */
 struct _GtkAppChooserButtonClass {
   GtkComboBoxClass parent_class;
 
+  /*< public >*/
+
   void (* custom_item_activated) (GtkAppChooserButton *self,
                                   const gchar *item_name);
+
+  /*< private >*/
 
   /* padding for future class expansion */
   gpointer padding[16];

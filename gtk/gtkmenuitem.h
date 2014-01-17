@@ -54,9 +54,24 @@ struct _GtkMenuItem
   GtkMenuItemPrivate *priv;
 };
 
+/**
+ * GtkMenuItemClass:
+ * @parent_class: The parent class.
+ * @activate: Signal emitted when the item is activated.
+ * @activate_item: Signal emitted when the item is activated, but also
+ *    if the menu item has a submenu.
+ * @toggle_size_request: 
+ * @toggle_size_allocate: 
+ * @set_label: Sets @text on the #GtkMenuItem label
+ * @get_label: Gets @text from the #GtkMenuItem label
+ * @select: Signal emitted when the item is selected.
+ * @deselect: Signal emitted when the item is deselected.
+ */
 struct _GtkMenuItemClass
 {
   GtkBinClass parent_class;
+
+  /*< public >*/
 
   /* If the following flag is true, then we should always
    * hide the menu when the MenuItem is activated. Otherwise,
@@ -78,6 +93,8 @@ struct _GtkMenuItemClass
 
   void (* select)               (GtkMenuItem *menu_item);
   void (* deselect)             (GtkMenuItem *menu_item);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

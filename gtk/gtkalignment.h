@@ -55,9 +55,15 @@ struct _GtkAlignment
   GtkAlignmentPrivate *priv;
 };
 
+/**
+ * GtkAlignmentClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkAlignmentClass
 {
   GtkBinClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

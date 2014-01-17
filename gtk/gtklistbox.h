@@ -49,9 +49,20 @@ struct _GtkListBox
   GtkContainer parent_instance;
 };
 
+/**
+ * GtkListBoxClass:
+ * @parent_class: The parent class.
+ * @row_selected: Signal emitted when a new row is selected.
+ * @row_activated: Signal emitted when a row has been activated by the user.
+ * @activate_cursor_row: 
+ * @toggle_cursor_row: 
+ * @move_cursor: 
+ */
 struct _GtkListBoxClass
 {
   GtkContainerClass parent_class;
+
+  /*< public >*/
 
   void (*row_selected)        (GtkListBox      *list_box,
                                GtkListBoxRow   *row);
@@ -62,6 +73,8 @@ struct _GtkListBoxClass
   void (*move_cursor)         (GtkListBox      *list_box,
                                GtkMovementStep  step,
                                gint             count);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -84,11 +97,20 @@ struct _GtkListBoxRow
   GtkBin parent_instance;
 };
 
+/**
+ * GtkListBoxRowClass:
+ * @parent_class: The parent class.
+ * @activate: 
+ */
 struct _GtkListBoxRowClass
 {
   GtkBinClass parent_class;
 
+  /*< public >*/
+
   void (* activate) (GtkListBoxRow *row);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

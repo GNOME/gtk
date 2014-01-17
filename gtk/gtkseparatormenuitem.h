@@ -51,9 +51,15 @@ struct _GtkSeparatorMenuItem
   GtkMenuItem menu_item;
 };
 
+/**
+ * GtkSeparatorMenuItemClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkSeparatorMenuItemClass
 {
   GtkMenuItemClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

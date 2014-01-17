@@ -55,9 +55,15 @@ struct _GtkBin
   GtkBinPrivate *priv;
 };
 
+/**
+ * GtkBinClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkBinClass
 {
   GtkContainerClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

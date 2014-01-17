@@ -56,9 +56,15 @@ struct _GtkViewport
   GtkViewportPrivate *priv;
 };
 
+/**
+ * GtkViewportClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkViewportClass
 {
   GtkBinClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

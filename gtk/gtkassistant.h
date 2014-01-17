@@ -89,14 +89,26 @@ struct _GtkAssistant
   GtkAssistantPrivate *priv;
 };
 
+/**
+ * GtkAssistantClass:
+ * @parent_class: The parent class.
+ * @prepare: Signal emitted when a new page is set as the assistant's current page, before making the new page visible.
+ * @apply: Signal emitted when the apply button is clicked.
+ * @close: Signal emitted either when the close button or last page apply button is clicked.
+ * @cancel: Signal emitted when the cancel button is clicked.
+ */
 struct _GtkAssistantClass
 {
   GtkWindowClass parent_class;
+
+  /*< public >*/
 
   void (* prepare) (GtkAssistant *assistant, GtkWidget *page);
   void (* apply)   (GtkAssistant *assistant);
   void (* close)   (GtkAssistant *assistant);
   void (* cancel)  (GtkAssistant *assistant);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

@@ -55,9 +55,27 @@ struct _GtkContainer
   GtkContainerPrivate *priv;
 };
 
+/**
+ * GtkContainerClass:
+ * @parent_class: The parent class.
+ * @add: Signal emitted when a widget is added to container.
+ * @remove: Signal emitted when a widget is removed from container.
+ * @check_resize: Signal emitted when a size recalculation is needed.
+ * @forall: Invokes callback on each child of container.
+ * @set_focus_child: Sets the focused child of container.
+ * @child_type: Returns the type of the children supported by the container.
+ * @composite_name: Gets a widget's composite name. Deprecated: 3.10.
+ * @set_child_property: Set a property on a child of container.
+ * @get_path_for_child: Get path representing entire widget hierarchy
+ *    from the toplevel down to and including @child.
+ *
+ * Base class for containers.
+ */
 struct _GtkContainerClass
 {
   GtkWidgetClass parent_class;
+
+  /*< public >*/
 
   void    (*add)       		(GtkContainer	 *container,
 				 GtkWidget	 *widget);

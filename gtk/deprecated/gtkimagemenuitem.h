@@ -55,9 +55,15 @@ struct _GtkImageMenuItem
   GtkImageMenuItemPrivate *priv;
 };
 
+/**
+ * GtkImageMenuItemClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkImageMenuItemClass
 {
   GtkMenuItemClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

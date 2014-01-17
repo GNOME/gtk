@@ -48,14 +48,23 @@ struct _GtkExpander
   GtkExpanderPrivate *priv;
 };
 
+/**
+ * GtkExpanderClass:
+ * @parent_class: The parent class.
+ * @activate: Keybinding signal is emitted when the user hits the Enter key.
+ */
 struct _GtkExpanderClass
 {
   GtkBinClass    parent_class;
+
+  /*< public >*/
 
   /* Key binding signal; to get notification on the expansion
    * state connect to notify:expanded.
    */
   void        (* activate) (GtkExpander *expander);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

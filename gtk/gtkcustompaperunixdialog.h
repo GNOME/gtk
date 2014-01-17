@@ -41,9 +41,15 @@ struct _GtkCustomPaperUnixDialog
   GtkCustomPaperUnixDialogPrivate *priv;
 };
 
+/**
+ * GtkCustomPaperUnixDialogClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkCustomPaperUnixDialogClass
 {
   GtkDialogClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

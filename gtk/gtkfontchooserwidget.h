@@ -45,9 +45,15 @@ struct _GtkFontChooserWidget
   GtkFontChooserWidgetPrivate *priv;
 };
 
+/**
+ * GtkFontChooserWidgetClass:
+ * @parent_class: The parent class.
+ */
 struct _GtkFontChooserWidgetClass
 {
   GtkBoxClass parent_class;
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

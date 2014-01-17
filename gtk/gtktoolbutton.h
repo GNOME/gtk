@@ -48,14 +48,25 @@ struct _GtkToolButton
   GtkToolButtonPrivate *priv;
 };
 
+/**
+ * GtkToolButtonClass:
+ * @parent_class: The parent class.
+ * @button_type: 
+ * @clicked: Signal emitted when the tool button is clicked with the
+ *    mouse or activated with the keyboard.
+ */
 struct _GtkToolButtonClass
 {
   GtkToolItemClass parent_class;
 
   GType button_type;
 
+  /*< public >*/
+
   /* signal */
   void       (* clicked)             (GtkToolButton    *tool_item);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   void (* _gtk_reserved1) (void);
