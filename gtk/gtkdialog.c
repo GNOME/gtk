@@ -1524,10 +1524,13 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
  *
  * Returns the action area of @dialog.
  *
- * Returns: (transfer none): the action area.
+ * Returns: (transfer none): the action area
  *
  * Since: 2.14
- **/
+ *
+ * Deprecated:3.12: Direct access to the action area
+ *   is discouraged; use gtk_dialog_add_button(), etc.
+ */
 GtkWidget *
 gtk_dialog_get_action_area (GtkDialog *dialog)
 {
