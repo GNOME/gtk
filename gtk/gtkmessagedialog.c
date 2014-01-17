@@ -549,6 +549,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
   widget = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
+			 "use-header-bar", FALSE,
 			 "message-type", type,
 			 "buttons", buttons,
 			 NULL);
