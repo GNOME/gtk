@@ -1384,6 +1384,12 @@ _gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
   menu_item->priv->submenu_placement = placement;
 }
 
+/**
+ * gtk_menu_item_select:
+ * @menu_item: the menu item
+ *
+ * Emits the #GtkMenuItem::select signal on the given item.
+ */
 void
 gtk_menu_item_select (GtkMenuItem *menu_item)
 {
@@ -1396,8 +1402,7 @@ gtk_menu_item_select (GtkMenuItem *menu_item)
  * gtk_menu_item_deselect:
  * @menu_item: the menu item
  *
- * Emits the #GtkMenuItem::deselect signal on the given item. Behaves
- * exactly like #gtk_item_deselect.
+ * Emits the #GtkMenuItem::deselect signal on the given item.
  */
 void
 gtk_menu_item_deselect (GtkMenuItem *menu_item)
@@ -1729,13 +1734,6 @@ gtk_menu_item_draw (GtkWidget *widget,
   return FALSE;
 }
 
-/**
- * gtk_menu_item_select:
- * @menu_item: the menu item
- *
- * Emits the #GtkMenuItem::select signal on the given item. Behaves
- * exactly like #gtk_item_select.
- */
 static void
 gtk_real_menu_item_select (GtkMenuItem *menu_item)
 {
