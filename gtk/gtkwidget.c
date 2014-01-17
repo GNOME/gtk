@@ -14063,6 +14063,8 @@ gtk_widget_set_valign (GtkWidget *widget,
  *
  * Returns: The left margin of @widget
  *
+ * Deprecated: 3.12: Use gtk_widget_get_margin_start() instead.
+ *
  * Since: 3.0
  */
 gint
@@ -14080,6 +14082,8 @@ gtk_widget_get_margin_left (GtkWidget *widget)
  *
  * Sets the left margin of @widget.
  * See the #GtkWidget:margin-left property.
+ *
+ * Deprecated: 3.12: Use gtk_widget_set_margin_start() instead.
  *
  * Since: 3.0
  */
@@ -14114,6 +14118,8 @@ gtk_widget_set_margin_left (GtkWidget *widget,
  *
  * Returns: The right margin of @widget
  *
+ * Deprecated: 3.12: Use gtk_widget_get_margin_end() instead.
+ *
  * Since: 3.0
  */
 gint
@@ -14131,6 +14137,8 @@ gtk_widget_get_margin_right (GtkWidget *widget)
  *
  * Sets the right margin of @widget.
  * See the #GtkWidget:margin-right property.
+ *
+ * Deprecated: 3.12: Use gtk_widget_set_margin_end() instead.
  *
  * Since: 3.0
  */
