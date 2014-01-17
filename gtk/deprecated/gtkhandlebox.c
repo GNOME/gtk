@@ -55,7 +55,7 @@
  * When reattaching, the ghost and float window, must be aligned
  * along one of the edges, the <firstterm>snap edge</firstterm>.
  * This either can be specified by the application programmer
- * explicitely, or GTK+ will pick a reasonable default based
+ * explicitly, or GTK+ will pick a reasonable default based
  * on the handle position.
  *
  * To make detaching and reattaching the handlebox as minimally confusing

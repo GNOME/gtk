@@ -1702,7 +1702,7 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
    * the queue still got processed. we better just ignore such case
-   * than trying to explicitely work around them with some extra flags,
+   * than trying to explicitly work around them with some extra flags,
    * since it doesn't cause any actual harm.
    */
   if (container->priv->resize_pending)

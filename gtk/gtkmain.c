@@ -910,7 +910,7 @@ gtk_init_with_args (gint                 *argc,
  * Any arguments used by GTK+ or GDK are removed from the array and
  * @argc and @argv are updated accordingly.
  *
- * There is no need to call this function explicitely if you are using
+ * There is no need to call this function explicitly if you are using
  * gtk_init(), or gtk_init_check().
  *
  * Return value: %TRUE if initialization succeeded, otherwise %FALSE

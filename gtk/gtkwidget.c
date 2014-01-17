@@ -11187,7 +11187,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
  * so that correct localization into languages with right-to-left
  * reading directions can be done. Generally, applications will
  * let the default reading direction present, except for containers
- * where the containers are arranged in an order that is explicitely
+ * where the containers are arranged in an order that is explicitly
  * visual rather than logical (such as buttons for text justification).
  *
  * If the direction is set to %GTK_TEXT_DIR_NONE, then the value

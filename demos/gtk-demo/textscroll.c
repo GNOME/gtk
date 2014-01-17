@@ -116,7 +116,7 @@ setup_scroll (GtkTextView *textview,
     {
       /* If we want to scroll to the end, including horizontal scrolling,
        * then we just create a mark with right gravity at the end of the
-       * buffer. It will stay at the end unless explicitely moved with
+       * buffer. It will stay at the end unless explicitly moved with
        * gtk_text_buffer_move_mark.
        */
       gtk_text_buffer_create_mark (buffer, "end", &iter, FALSE);
@@ -129,7 +129,7 @@ setup_scroll (GtkTextView *textview,
       /* If we want to scroll to the bottom, but not scroll horizontally,
        * then an end mark won't do the job. Just create a mark so we can
        * use it with gtk_text_view_scroll_mark_onscreen, we'll position it
-       * explicitely when needed. Use left gravity so the mark stays where
+       * explicitly when needed. Use left gravity so the mark stays where
        * we put it after inserting new text.
        */
       gtk_text_buffer_create_mark (buffer, "scroll", &iter, TRUE);

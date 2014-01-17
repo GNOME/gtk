@@ -1405,7 +1405,7 @@ gtk_rc_style_real_create_style (GtkRcStyle *rc_style)
  * both redraw and recompute any cached information about its
  * appearance. As an example, it is used when the default font size
  * set by the operating system changes. Note that this function
- * doesn't affect widgets that have a style set explicitely on them
+ * doesn't affect widgets that have a style set explicitly on them
  * with gtk_widget_set_style().
  *
  * Since: 2.4

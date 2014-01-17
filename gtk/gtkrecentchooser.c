@@ -84,7 +84,7 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * This signal is emitted when there is a change in the set of
    * selected recently used resources.  This can happen when a user
    * modifies the selection with the mouse or the keyboard, or when
-   * explicitely calling functions to change the selection.
+   * explicitly calling functions to change the selection.
    *
    * Since: 2.10
    */

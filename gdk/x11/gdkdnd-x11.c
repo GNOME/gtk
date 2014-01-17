@@ -2052,7 +2052,7 @@ gdk_x11_drag_context_find_window (GdkDragContext  *context,
       /* There is some ugliness here. We actually need to pass
        * _three_ pieces of information to drag_motion - dest_window,
        * protocol, and the XID of the unproxied window. The first
-       * two are passed explicitely, the third implicitly through
+       * two are passed explicitly, the third implicitly through
        * protocol->dest_xid.
        */
       recipient = _gdk_x11_display_get_drag_protocol (display,

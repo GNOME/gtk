@@ -820,7 +820,7 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
                     }
 
                   /* Only close the submenu on click if we opened the
-                   * menu explicitely (usec_since_popup == 0) or
+                   * menu explicitly (usec_since_popup == 0) or
                    * enough time has passed since it was opened by
                    * GtkMenuItem's timeout (usec_since_popup > delay).
                    */
@@ -1911,7 +1911,7 @@ gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell)
  * don't have to worry about recursively setting it for your entire
  * menu hierarchy. Only when programmatically picking a submenu and
  * popping it up manually, the @take_focus property of the submenu
- * needs to be set explicitely.
+ * needs to be set explicitly.
  *
  * Note that setting it to %FALSE has side-effects:
  *

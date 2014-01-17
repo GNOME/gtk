@@ -1059,7 +1059,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * <note><para>
  * If you are adding an object that depends on an object that is not 
  * its child (for instance a #GtkTreeView that depends on its
- * #GtkTreeModel), you have to explicitely list all of them in @object_ids. 
+ * #GtkTreeModel), you have to explicitly list all of them in @object_ids. 
  * </para></note>
  *
  * Returns: A positive value on success, 0 if an error occurred
@@ -1247,7 +1247,7 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  * <note><para>
  * If you are adding an object that depends on an object that is not
  * its child (for instance a #GtkTreeView that depends on its
- * #GtkTreeModel), you have to explicitely list all of them in @object_ids.
+ * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  * </para></note>
  *
  * Returns: A positive value on success, 0 if an error occurred
@@ -1382,7 +1382,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * <note><para>
  * If you are adding an object that depends on an object that is not 
  * its child (for instance a #GtkTreeView that depends on its
- * #GtkTreeModel), you have to explicitely list all of them in @object_ids. 
+ * #GtkTreeModel), you have to explicitly list all of them in @object_ids. 
  * </para></note>
  *
  * Returns: A positive value on success, 0 if an error occurred

@@ -1887,7 +1887,7 @@ gtk_window_set_title (GtkWindow   *window,
  * Retrieves the title of the window. See gtk_window_set_title().
  *
  * Return value: the title of the window, or %NULL if none has
- *    been set explicitely. The returned string is owned by the widget
+ *    been set explicitly. The returned string is owned by the widget
  *    and must not be modified or freed.
  **/
 const gchar *

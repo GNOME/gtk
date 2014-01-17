@@ -4193,7 +4193,7 @@ gtk_widget_get_style (GtkWidget *widget)
  *
  * Modifications made using this technique take precedence over
  * style values set via an RC file, however, they will be overridden
- * if a style is explicitely set on the widget using gtk_widget_set_style().
+ * if a style is explicitly set on the widget using gtk_widget_set_style().
  * The #GtkRcStyle structure is designed so each field can either be
  * set or unset, so it is possible, using this function, to modify some
  * style values and leave the others unchanged.

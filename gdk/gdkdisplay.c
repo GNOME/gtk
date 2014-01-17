@@ -1533,7 +1533,7 @@ gdk_display_sync (GdkDisplay *display)
  * Flushes any requests queued for the windowing system; this happens automatically
  * when the main loop blocks waiting for new events, but if your application
  * is drawing without returning control to the main loop, you may need
- * to call this function explicitely. A common case where this function
+ * to call this function explicitly. A common case where this function
  * needs to be called is when an application is executing drawing commands
  * from a thread other than the thread where the main loop is running.
  *
