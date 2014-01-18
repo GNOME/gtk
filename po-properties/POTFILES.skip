@@ -52,6 +52,8 @@ gtk/gtkaboutdialog.ui
 gtk/gtkaboutdialog.ui.h
 gtk/gtkappchooserdialog.ui
 gtk/gtkappchooserdialog.ui.h
+gtk/gtkapplication-quartz.ui
+gtk/gtkapplication-quartz.ui.h
 gtk/gtkassistant.ui
 gtk/gtkassistant.ui.h
 gtk/gtkcolorchooserdialog.ui
