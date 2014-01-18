@@ -535,7 +535,7 @@
  * In GTK+ 2.x, the file chooser saves its state and configuration options in a
  * <filename>gtk-2.0/gtkfilechooser.ini</filename> file under the directory that
  * g_get_user_config_dir() returns.  (On Unix, this usually resolves to
- * <filename>$HOME/username/.config/gtk-2.0/gtkfilechooser.ini.)  While some of
+ * <filename>$HOME/username/.config/gtk-2.0/gtkfilechooser.ini</filename>.)  While some of
  * the available options can be changed directly through the file chooser's user
  * interface, a couple are only editable by hand or by third-party tools (such
  * as <ulink
@@ -567,7 +567,7 @@
  * The <literal>LocationMode</literal> key controls whether the file chooser
  * shows just a path bar, or a visible entry for the filename as well, for the
  * benefit of typing-oriented users.  The possible string values for these modes
- * are <literal>path-bar<literal> and <literal>filename-entry</literal>,
+ * are <literal>path-bar</literal> and <literal>filename-entry</literal>,
  * respectively.
  * </para>
  * </refsect3>
@@ -594,6 +594,7 @@
  * <literal>GeometryWidth</literal>, <literal>GeometryHeight</literal> save the
  * position and dimensions of the #GtkFileChooserDialog's window.
  * </para>
+ * </refsect3>
  * <refsect3 id="gtkfilechooser-settings-sort-column">
  * <title>SortColumn key</title>
  * <para>
@@ -606,7 +607,7 @@
  * <refsect3 id="gtkfilechooser-settings-sort-order">
  * <title>SortOrder key</title>
  * <para>
- * The <literal>SortOrder<literal> key can be one of the strings
+ * The <literal>SortOrder</literal> key can be one of the strings
  * <literal>ascending</literal> or <literal>descending</literal>.
  * </para>
  * </refsect3>
