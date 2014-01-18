@@ -884,11 +884,25 @@ parse_command_line (int *argc, char ***argv)
   return TRUE;
 }
 
+static void
+fix_settings (void)
+{
+  /* Some settings can affect the output of the accessibility tests,
+   * so we take some steps to isolate us from the ambient environment.
+   */
+
+  g_object_set (gtk_settings_get_default (),
+                "gtk-dialogs-use-header", TRUE,
+                NULL);
+}
+
 int
 main (int argc, char **argv)
 {
   if (!parse_command_line (&argc, &argv))
     return 1;
+
+  fix_settings ();
 
   if (argc < 2)
     {
