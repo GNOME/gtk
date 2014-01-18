@@ -50,6 +50,7 @@ examples/bloatpad.c
 examples/plugman.c
 gtk/gtkaboutdialog.ui
 gtk/gtkappchooserdialog.ui
+gtk/gtkapplication-quartz.ui
 gtk/gtkassistant.ui
 gtk/gtkcolorchooserdialog.ui
 gtk/gtkcoloreditor.ui
