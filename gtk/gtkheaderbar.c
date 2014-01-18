@@ -727,8 +727,7 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
         }
     }
 
-  if (priv->label_box != NULL &&
-      gtk_widget_get_visible (priv->label_box))
+  if (priv->label_box != NULL)
     {
       gtk_widget_get_preferred_width (priv->label_sizing_box,
                                       &child_size, &child_natural);
@@ -862,8 +861,7 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
       i += 1;
     }
 
-  if (priv->label_box != NULL &&
-      gtk_widget_get_visible (priv->label_box))
+  if (priv->label_box != NULL)
     {
       gtk_widget_get_preferred_height (priv->label_sizing_box,
                                        &child_minimum, &child_natural);
@@ -990,14 +988,16 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
       i++;
     }
 
-  if (priv->custom_title)
+  if (priv->custom_title &&
+      gtk_widget_get_visible (priv->custom_title))
     {
       gtk_widget_get_preferred_width_for_height (priv->custom_title,
                                                  height,
                                                  &title_minimum_size,
                                                  &title_natural_size);
     }
-  else
+
+  if (priv->label_box != NULL)
     {
       gtk_widget_get_preferred_width_for_height (priv->label_box,
                                                  height,
@@ -1105,9 +1105,11 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
   if (direction == GTK_TEXT_DIR_RTL)
     child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
-  if (priv->custom_title)
+  if (priv->custom_title != NULL &&
+      gtk_widget_get_visible (priv->custom_title))
     gtk_widget_size_allocate (priv->custom_title, &child_allocation);
-  else
+
+  if (priv->label_box != NULL)
     gtk_widget_size_allocate (priv->label_box, &child_allocation);
 
   if (priv->titlebar_start_box)
@@ -1295,7 +1297,6 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
 
       gtk_widget_set_parent (priv->custom_title, GTK_WIDGET (bar));
       gtk_widget_set_valign (priv->custom_title, GTK_ALIGN_CENTER);
-      gtk_widget_show (title_widget);
 
       if (priv->label_box != NULL)
         {
