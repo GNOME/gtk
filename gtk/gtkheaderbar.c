@@ -991,6 +991,9 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
       i++;
     }
 
+  title_minimum_size = 0;
+  title_natural_size = 0;
+
   if (priv->custom_title &&
       gtk_widget_get_visible (priv->custom_title))
     {
