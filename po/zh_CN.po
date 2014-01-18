@@ -14,15 +14,15 @@
 # YunQiang Su <wzssyqa@gmail.com>, 2011.
 # Aron Xu <aronxu@gnome.org>, 2010, 2012.
 # keyring <keyrings@163.com>, 2013.
-# Tong Hui <tonghuix@gmail.com>, 2013.
+# Tong Hui <tonghuix@gmail.com>, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-01-10 11:06+0000\n"
-"PO-Revision-Date: 2014-01-06 17:39+0800\n"
+"POT-Creation-Date: 2014-01-18 04:15+0000\n"
+"PO-Revision-Date: 2014-01-18 16:57+0800\n"
 "Last-Translator: Tong Hui <tonghuix@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -616,17 +616,17 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "关闭(_C)"
 
-#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:428
-#: ../gtk/gtkwindow.c:8042
+#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:431
+#: ../gtk/gtkwindow.c:8204
 msgid "Minimize"
 msgstr "最小化"
 
-#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:451
-#: ../gtk/gtkwindow.c:8050
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:454
+#: ../gtk/gtkwindow.c:8212
 msgid "Maximize"
 msgstr "最大化"
 
-#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:451
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:454
 msgid "Restore"
 msgstr "还原"
 
@@ -1161,20 +1161,20 @@ msgstr ""
 "标右键单击之，然后选择“在此保存颜色”。"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:192
-#: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkfilechooserbutton.c:805
-#: ../gtk/gtkfilechooserdefault.c:5443 ../gtk/gtkmessagedialog.c:891
-#: ../gtk/gtkmessagedialog.c:910 ../gtk/gtkmountoperation.c:529
+#: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkappchooserdialog.c:626
+#: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:805
+#: ../gtk/gtkfilechooserdefault.c:5443 ../gtk/gtkfontchooserdialog.c:156
+#: ../gtk/gtkmessagedialog.c:894 ../gtk/gtkmessagedialog.c:907
+#: ../gtk/gtkmountoperation.c:538 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
-#: ../gtk/gtkprintunixdialog.c:683 ../gtk/gtkappchooserdialog.ui.h:1
-#: ../gtk/gtkassistant.ui.h:5 ../gtk/gtkcolorchooserdialog.ui.h:2
-#: ../gtk/gtkfontchooserdialog.ui.h:2 ../gtk/gtkpagesetupunixdialog.ui.h:1
-#: ../gtk/gtkprintunixdialog.ui.h:2
+#: ../gtk/gtkprintunixdialog.c:686 ../gtk/gtkprintunixdialog.c:752
+#: ../gtk/gtkassistant.ui.h:5
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:196
-#: ../gtk/gtkprinteroptionwidget.c:546 ../gtk/gtkappchooserdialog.ui.h:2
-#: ../gtk/gtkcolorchooserdialog.ui.h:3 ../gtk/gtkfontchooserdialog.ui.h:3
+#: ../gtk/deprecated/gtkcolorseldialog.c:196 ../gtk/gtkappchooserdialog.c:627
+#: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:157
+#: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
 msgstr "选择(_S)"
 
@@ -1209,17 +1209,17 @@ msgstr "大小(_Z)："
 msgid "_Preview:"
 msgstr "预览(_P)："
 
-#: ../gtk/deprecated/gtkfontsel.c:1694 ../gtk/gtkassistant.ui.h:1
-#: ../gtk/gtkpagesetupunixdialog.ui.h:2
+#: ../gtk/deprecated/gtkfontsel.c:1694 ../gtk/gtkpagesetupunixdialog.c:197
+#: ../gtk/gtkassistant.ui.h:1
 msgid "_Apply"
 msgstr "应用(_A)"
 
-#: ../gtk/deprecated/gtkfontsel.c:1699 ../gtk/gtkmessagedialog.c:879
-#: ../gtk/gtkmessagedialog.c:913 ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1699 ../gtk/gtkmessagedialog.c:886
+#: ../gtk/gtkmessagedialog.c:908 ../gtk/gtkprintbackend.c:748
 msgid "_OK"
 msgstr "确定(_O)"
 
-#: ../gtk/deprecated/gtkfontsel.c:1710 ../gtk/gtkfontchooserdialog.ui.h:1
+#: ../gtk/deprecated/gtkfontsel.c:1710
 msgid "Font Selection"
 msgstr "字体选择"
 
@@ -1382,7 +1382,7 @@ msgstr "空"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: ../gtk/gtkaboutdialog.c:99
+#: ../gtk/gtkaboutdialog.c:103
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
@@ -1391,88 +1391,89 @@ msgstr ""
 "本程序无任何担保。\n"
 "详情见 <a href=\"%s\">%s</a>。"
 
-#: ../gtk/gtkaboutdialog.c:109 ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:113 ../gtk/gtkaboutdialog.c:402
+#: ../gtk/gtkaboutdialog.ui.h:3
 msgid "License"
 msgstr "许可"
 
-#: ../gtk/gtkaboutdialog.c:110
+#: ../gtk/gtkaboutdialog.c:114
 msgid "Custom License"
 msgstr "自定义许可证"
 
-#: ../gtk/gtkaboutdialog.c:111
+#: ../gtk/gtkaboutdialog.c:115
 msgid "GNU General Public License, version 2 or later"
 msgstr "GNU 通用公共许可证，第2版以上"
 
-#: ../gtk/gtkaboutdialog.c:112
+#: ../gtk/gtkaboutdialog.c:116
 msgid "GNU General Public License, version 3 or later"
 msgstr "GNU 通用公共许可证，第3版以上"
 
-#: ../gtk/gtkaboutdialog.c:113
+#: ../gtk/gtkaboutdialog.c:117
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "GNU 宽通用公共许可证，2.1版以上"
 
-#: ../gtk/gtkaboutdialog.c:114
+#: ../gtk/gtkaboutdialog.c:118
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "GNU 宽通用公共许可证，第3版以上"
 
-#: ../gtk/gtkaboutdialog.c:115
+#: ../gtk/gtkaboutdialog.c:119
 msgid "BSD 2-Clause License"
 msgstr "BSD 许可证"
 
-#: ../gtk/gtkaboutdialog.c:116
+#: ../gtk/gtkaboutdialog.c:120
 msgid "The MIT License (MIT)"
 msgstr "MIT 许可证"
 
-#: ../gtk/gtkaboutdialog.c:117
+#: ../gtk/gtkaboutdialog.c:121
 msgid "Artistic License 2.0"
 msgstr "艺术许可证 2.0"
 
-#: ../gtk/gtkaboutdialog.c:118
+#: ../gtk/gtkaboutdialog.c:122
 msgid "GNU General Public License, version 2 only"
 msgstr "GNU 通用公共许可证，仅限第2版"
 
-#: ../gtk/gtkaboutdialog.c:119
+#: ../gtk/gtkaboutdialog.c:123
 msgid "GNU General Public License, version 3 only"
 msgstr "GNU 通用公共许可证，仅限第3版"
 
-#: ../gtk/gtkaboutdialog.c:120
+#: ../gtk/gtkaboutdialog.c:124
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "GNU 宽通用公共许可证，仅限2.1版"
 
-#: ../gtk/gtkaboutdialog.c:121
+#: ../gtk/gtkaboutdialog.c:125
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU 宽通用公共许可证，仅限第3版"
 
-#: ../gtk/gtkaboutdialog.c:376
+#: ../gtk/gtkaboutdialog.c:403
 msgid "The license of the program"
 msgstr "程序的许可协议"
 
-#: ../gtk/gtkaboutdialog.c:924
+#: ../gtk/gtkaboutdialog.c:908
 msgid "Could not show link"
 msgstr "无法显示链接"
 
-#: ../gtk/gtkaboutdialog.c:961
+#: ../gtk/gtkaboutdialog.c:945
 msgid "Website"
 msgstr "网站"
 
-#: ../gtk/gtkaboutdialog.c:1015
+#: ../gtk/gtkaboutdialog.c:999 ../gtk/gtkapplication-quartz.ui.h:1
 #, c-format
 msgid "About %s"
 msgstr "关于 %s"
 
-#: ../gtk/gtkaboutdialog.c:2289
+#: ../gtk/gtkaboutdialog.c:2273
 msgid "Created by"
 msgstr "作者："
 
-#: ../gtk/gtkaboutdialog.c:2292
+#: ../gtk/gtkaboutdialog.c:2276
 msgid "Documented by"
 msgstr "文档："
 
-#: ../gtk/gtkaboutdialog.c:2302
+#: ../gtk/gtkaboutdialog.c:2286
 msgid "Translated by"
 msgstr "翻译："
 
-#: ../gtk/gtkaboutdialog.c:2307
+#: ../gtk/gtkaboutdialog.c:2291
 msgid "Artwork by"
 msgstr "美工："
 
@@ -1551,42 +1552,42 @@ msgid "Other application…"
 msgstr "其他应用程序..."
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:198
+#: ../gtk/gtkappchooserdialog.c:200
 #, c-format
 msgid "Select an application to open “%s”"
 msgstr "选择用来打开“%s”的应用程序"
 
-#: ../gtk/gtkappchooserdialog.c:199 ../gtk/gtkappchooserwidget.c:670
+#: ../gtk/gtkappchooserdialog.c:201 ../gtk/gtkappchooserwidget.c:670
 #, c-format
 msgid "No applications available to open “%s”"
 msgstr "没有可用于打开“%s”的应用程序"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:205
+#: ../gtk/gtkappchooserdialog.c:207
 #, c-format
 msgid "Select an application for “%s” files"
 msgstr "选择处理“%s”类型文件的应用程序"
 
-#: ../gtk/gtkappchooserdialog.c:207
+#: ../gtk/gtkappchooserdialog.c:209
 #, c-format
 msgid "No applications available to open “%s” files"
 msgstr "没有可用于打开“%s”文件的应用程序"
 
-#: ../gtk/gtkappchooserdialog.c:223
+#: ../gtk/gtkappchooserdialog.c:225
 msgid ""
 "Click \"Show other applications\", for more options, or \"Software\" to "
 "install a new application"
 msgstr "点击“显示其他应用程序”了解更多选项，或点击“软件”安装新的应用程序"
 
-#: ../gtk/gtkappchooserdialog.c:293
+#: ../gtk/gtkappchooserdialog.c:295
 msgid "Forget association"
 msgstr "忘记关联"
 
-#: ../gtk/gtkappchooserdialog.c:421
+#: ../gtk/gtkappchooserdialog.c:423
 msgid "Failed to start GNOME Software"
 msgstr "打开 GNOME 软件失败"
 
-#: ../gtk/gtkappchooserdialog.c:439
+#: ../gtk/gtkappchooserdialog.c:441
 msgid "Software"
 msgstr "软件"
 
@@ -1611,12 +1612,12 @@ msgstr "其他应用程序"
 msgid "Application"
 msgstr "应用程序"
 
-#: ../gtk/gtkbookmarksmanager.c:50
+#: ../gtk/gtkbookmarksmanager.c:49
 #, c-format
 msgid "%s does not exist in the bookmarks list"
 msgstr "书签列表里没有 %s"
 
-#: ../gtk/gtkbookmarksmanager.c:367
+#: ../gtk/gtkbookmarksmanager.c:366
 #, c-format
 msgid "%s already exists in the bookmarks list"
 msgstr "%s 已在书签列表里"
@@ -2007,66 +2008,66 @@ msgstr "自定义(_C)"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkcustompaperunixdialog.c:115
+#: ../gtk/gtkcustompaperunixdialog.c:119
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:311 ../gtk/gtkmessagedialog.c:885
-#: ../gtk/gtkaboutdialog.ui.h:3 ../gtk/gtkassistant.ui.h:6
+#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:890
+#: ../gtk/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "关闭(_C)"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3203
+#: ../gtk/gtkcustompaperunixdialog.c:412 ../gtk/gtkprintunixdialog.c:3240
 msgid "Manage Custom Sizes"
 msgstr "管理自定义大小"
 
-#: ../gtk/gtkcustompaperunixdialog.c:550 ../gtk/gtkpagesetupunixdialog.c:806
+#: ../gtk/gtkcustompaperunixdialog.c:573 ../gtk/gtkpagesetupunixdialog.c:815
 msgid "inch"
 msgstr "英寸"
 
-#: ../gtk/gtkcustompaperunixdialog.c:552 ../gtk/gtkpagesetupunixdialog.c:804
+#: ../gtk/gtkcustompaperunixdialog.c:575 ../gtk/gtkpagesetupunixdialog.c:813
 msgid "mm"
 msgstr "毫米"
 
-#: ../gtk/gtkcustompaperunixdialog.c:597
+#: ../gtk/gtkcustompaperunixdialog.c:620
 msgid "Margins from Printer…"
 msgstr "打印机边距..."
 
-#: ../gtk/gtkcustompaperunixdialog.c:763
+#: ../gtk/gtkcustompaperunixdialog.c:786
 #, c-format
 msgid "Custom Size %d"
 msgstr "自定义大小 %d"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1101
+#: ../gtk/gtkcustompaperunixdialog.c:1125
 msgid "_Width:"
 msgstr "宽度(_W)："
 
-#: ../gtk/gtkcustompaperunixdialog.c:1112
+#: ../gtk/gtkcustompaperunixdialog.c:1136
 msgid "_Height:"
 msgstr "高度(_H)："
 
-#: ../gtk/gtkcustompaperunixdialog.c:1123
+#: ../gtk/gtkcustompaperunixdialog.c:1147
 msgid "Paper Size"
 msgstr "纸张大小"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1132
+#: ../gtk/gtkcustompaperunixdialog.c:1156
 msgid "_Top:"
 msgstr "上(_T)："
 
-#: ../gtk/gtkcustompaperunixdialog.c:1143
+#: ../gtk/gtkcustompaperunixdialog.c:1167
 msgid "_Bottom:"
 msgstr "下(_B)："
 
-#: ../gtk/gtkcustompaperunixdialog.c:1154
+#: ../gtk/gtkcustompaperunixdialog.c:1178
 msgid "_Left:"
 msgstr "左(_L)："
 
-#: ../gtk/gtkcustompaperunixdialog.c:1165
+#: ../gtk/gtkcustompaperunixdialog.c:1189
 msgid "_Right:"
 msgstr "右(_R)："
 
-#: ../gtk/gtkcustompaperunixdialog.c:1204
+#: ../gtk/gtkcustompaperunixdialog.c:1228
 msgid "Paper Margins"
 msgstr "纸张边距"
 
@@ -2154,7 +2155,7 @@ msgstr "(无)"
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: ../gtk/gtkfilechooserbutton.c:2152
+#: ../gtk/gtkfilechooserbutton.c:2154
 msgid "Other…"
 msgstr "其它..."
 
@@ -2286,32 +2287,32 @@ msgstr "昨天于 %H:%M"
 msgid "Cannot change to folder because it is not local"
 msgstr "无法更改为文件夹，因为该文件夹并非本地"
 
-#: ../gtk/gtkfilechooserdefault.c:5436 ../gtk/gtkprintunixdialog.c:674
+#: ../gtk/gtkfilechooserdefault.c:5436 ../gtk/gtkprintunixdialog.c:677
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "已经存在名为“%s”的文件。您想要替换它吗？"
 
-#: ../gtk/gtkfilechooserdefault.c:5439 ../gtk/gtkprintunixdialog.c:678
+#: ../gtk/gtkfilechooserdefault.c:5439 ../gtk/gtkprintunixdialog.c:681
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "文件已经在“%s”中了。替换该文件将覆盖它的内容。"
 
-#: ../gtk/gtkfilechooserdefault.c:5444 ../gtk/gtkprintunixdialog.c:685
+#: ../gtk/gtkfilechooserdefault.c:5444 ../gtk/gtkprintunixdialog.c:688
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:6261
+#: ../gtk/gtkfilechooserdefault.c:6263
 msgid "Could not start the search process"
 msgstr "无法开启搜索进程"
 
-#: ../gtk/gtkfilechooserdefault.c:6262
+#: ../gtk/gtkfilechooserdefault.c:6264
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "程序无法连接到索引守护进程。请确保它在运行。"
 
-#: ../gtk/gtkfilechooserdefault.c:6276
+#: ../gtk/gtkfilechooserdefault.c:6278
 msgid "Could not send the search request"
 msgstr "无法发送搜索请求"
 
@@ -2341,11 +2342,11 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "选择字体"
 
-#: ../gtk/gtkheaderbar.c:407
+#: ../gtk/gtkheaderbar.c:410
 msgid "Application menu"
 msgstr "应用程序菜单"
 
-#: ../gtk/gtkheaderbar.c:469 ../gtk/gtkwindow.c:8147
+#: ../gtk/gtkheaderbar.c:472 ../gtk/gtkwindow.c:8327
 msgid "Close"
 msgstr "关闭"
 
@@ -2378,19 +2379,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "系统(%s)"
 
-#: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:366
+#: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:372
 msgid "Information"
 msgstr "信息"
 
-#: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:371
+#: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:377
 msgid "Question"
 msgstr "问题"
 
-#: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:376
+#: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:382
 msgid "Warning"
 msgstr "警告"
 
-#: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:381
+#: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:387
 msgid "Error"
 msgstr "错误"
 
@@ -2545,64 +2546,64 @@ msgstr "default:LTR"
 msgid "Menu"
 msgstr "菜单"
 
-#: ../gtk/gtkmessagedialog.c:897
+#: ../gtk/gtkmessagedialog.c:898
 msgid "_No"
 msgstr "否(_N)"
 
-#: ../gtk/gtkmessagedialog.c:900
+#: ../gtk/gtkmessagedialog.c:899
 msgid "_Yes"
 msgstr "是(_Y)"
 
-#: ../gtk/gtkmountoperation.c:530
+#: ../gtk/gtkmountoperation.c:539
 msgid "Co_nnect"
 msgstr "连接(_N)"
 
-#: ../gtk/gtkmountoperation.c:604
+#: ../gtk/gtkmountoperation.c:615
 msgid "Connect As"
 msgstr "连接方式"
 
-#: ../gtk/gtkmountoperation.c:613
+#: ../gtk/gtkmountoperation.c:624
 msgid "_Anonymous"
 msgstr "匿名(_A)"
 
-#: ../gtk/gtkmountoperation.c:622
+#: ../gtk/gtkmountoperation.c:633
 msgid "Registered U_ser"
 msgstr "已注册用户(_S)"
 
-#: ../gtk/gtkmountoperation.c:633
+#: ../gtk/gtkmountoperation.c:644
 msgid "_Username"
 msgstr "用户名(_U)："
 
-#: ../gtk/gtkmountoperation.c:638
+#: ../gtk/gtkmountoperation.c:649
 msgid "_Domain"
 msgstr "域(_D)："
 
-#: ../gtk/gtkmountoperation.c:644
+#: ../gtk/gtkmountoperation.c:655
 msgid "_Password"
 msgstr "密码(_P)："
 
-#: ../gtk/gtkmountoperation.c:666
+#: ../gtk/gtkmountoperation.c:677
 msgid "Forget password _immediately"
 msgstr "立即忘记密码(_I)"
 
-#: ../gtk/gtkmountoperation.c:676
+#: ../gtk/gtkmountoperation.c:687
 msgid "Remember password until you _logout"
 msgstr "记到注销之前(_L)"
 
-#: ../gtk/gtkmountoperation.c:686
+#: ../gtk/gtkmountoperation.c:697
 msgid "Remember _forever"
 msgstr "永远记住(_F)"
 
-#: ../gtk/gtkmountoperation.c:1075
+#: ../gtk/gtkmountoperation.c:1086
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "未知应用程序(PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1258
+#: ../gtk/gtkmountoperation.c:1269
 msgid "Unable to end process"
 msgstr "无法结束进程"
 
-#: ../gtk/gtkmountoperation.c:1297
+#: ../gtk/gtkmountoperation.c:1308
 msgid "_End Process"
 msgstr "结束进程(_E)"
 
@@ -2637,7 +2638,7 @@ msgstr "Z Shell (zsh)"
 msgid "Cannot end process with PID %d: %s"
 msgstr "无法结束 PID %d 的进程：%s"
 
-#: ../gtk/gtknotebook.c:5061 ../gtk/gtknotebook.c:7794
+#: ../gtk/gtknotebook.c:5110 ../gtk/gtknotebook.c:7843
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 页"
@@ -2656,15 +2657,15 @@ msgstr "%d"
 msgid "Not a valid page setup file"
 msgstr "非法的页面设置文件"
 
-#: ../gtk/gtkpagesetupunixdialog.c:196
+#: ../gtk/gtkpagesetupunixdialog.c:210
 msgid "Any Printer"
 msgstr "任意打印机"
 
-#: ../gtk/gtkpagesetupunixdialog.c:196
+#: ../gtk/gtkpagesetupunixdialog.c:210
 msgid "For portable documents"
 msgstr "用于便携文档"
 
-#: ../gtk/gtkpagesetupunixdialog.c:824
+#: ../gtk/gtkpagesetupunixdialog.c:833
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2679,11 +2680,12 @@ msgstr ""
 " 上：%s %s\n"
 " 下：%s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3257
+#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3294
 msgid "Manage Custom Sizes…"
 msgstr "管理自定义大小"
 
-#: ../gtk/gtkpagesetupunixdialog.c:895 ../gtk/gtkprintunixdialog.ui.h:47
+#: ../gtk/gtkpagesetupunixdialog.c:904 ../gtk/gtkpagesetupunixdialog.ui.h:1
+#: ../gtk/gtkprintunixdialog.ui.h:44
 msgid "Page Setup"
 msgstr "页面设置"
 
@@ -2876,7 +2878,7 @@ msgstr "弹出(E)"
 msgid "_Detect Media"
 msgstr "检测媒体(_D)"
 
-#: ../gtk/gtkplacessidebar.c:3895
+#: ../gtk/gtkplacessidebar.c:3896
 msgid "Computer"
 msgstr "计算机"
 
@@ -3027,11 +3029,19 @@ msgstr "PrintDlgEx 的句柄无效"
 msgid "Unspecified error"
 msgstr "未指定错误"
 
-#: ../gtk/gtkprintunixdialog.c:819
+#: ../gtk/gtkprintunixdialog.c:751
+msgid "Pre_view"
+msgstr "预览(_V)："
+
+#: ../gtk/gtkprintunixdialog.c:753
+msgid "_Print"
+msgstr "打印(_P)"
+
+#: ../gtk/gtkprintunixdialog.c:857
 msgid "Getting printer information failed"
 msgstr "获取打印机信息失败"
 
-#: ../gtk/gtkprintunixdialog.c:2019
+#: ../gtk/gtkprintunixdialog.c:2056
 msgid "Getting printer information…"
 msgstr "正在获取打印机信息..."
 
@@ -3041,42 +3051,42 @@ msgstr "正在获取打印机信息..."
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:2986
+#: ../gtk/gtkprintunixdialog.c:3023
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Left to right, top to bottom"
 msgstr "从左到右，从上到下"
 
-#: ../gtk/gtkprintunixdialog.c:2986
+#: ../gtk/gtkprintunixdialog.c:3023
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Left to right, bottom to top"
 msgstr "从左到右，从下到上"
 
-#: ../gtk/gtkprintunixdialog.c:2987
+#: ../gtk/gtkprintunixdialog.c:3024
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgid "Right to left, top to bottom"
 msgstr "从右到左，从上到下"
 
-#: ../gtk/gtkprintunixdialog.c:2987
+#: ../gtk/gtkprintunixdialog.c:3024
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgid "Right to left, bottom to top"
 msgstr "从右到左，从下到上"
 
-#: ../gtk/gtkprintunixdialog.c:2988
+#: ../gtk/gtkprintunixdialog.c:3025
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
 msgid "Top to bottom, left to right"
 msgstr "从上到下，从左到右"
 
-#: ../gtk/gtkprintunixdialog.c:2988
+#: ../gtk/gtkprintunixdialog.c:3025
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
 msgid "Top to bottom, right to left"
 msgstr "从上到下，从右到左"
 
-#: ../gtk/gtkprintunixdialog.c:2989
+#: ../gtk/gtkprintunixdialog.c:3026
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgid "Bottom to top, left to right"
 msgstr "从下到上，从左到右"
 
-#: ../gtk/gtkprintunixdialog.c:2989
+#: ../gtk/gtkprintunixdialog.c:3026
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgid "Bottom to top, right to left"
 msgstr "从下到上，从右到左"
@@ -3084,28 +3094,28 @@ msgstr "从下到上，从右到左"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:2993 ../gtk/gtkprintunixdialog.c:3006
+#: ../gtk/gtkprintunixdialog.c:3030 ../gtk/gtkprintunixdialog.c:3043
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4860
 msgid "Page Ordering"
 msgstr "页面顺序"
 
-#: ../gtk/gtkprintunixdialog.c:3022
+#: ../gtk/gtkprintunixdialog.c:3059
 msgid "Left to right"
 msgstr "从左至右"
 
-#: ../gtk/gtkprintunixdialog.c:3023
+#: ../gtk/gtkprintunixdialog.c:3060
 msgid "Right to left"
 msgstr "从右至左"
 
-#: ../gtk/gtkprintunixdialog.c:3035
+#: ../gtk/gtkprintunixdialog.c:3072
 msgid "Top to bottom"
 msgstr "自顶到底"
 
-#: ../gtk/gtkprintunixdialog.c:3036
+#: ../gtk/gtkprintunixdialog.c:3073
 msgid "Bottom to top"
 msgstr "自底至顶"
 
-#: ../gtk/gtkprintunixdialog.c:3279
+#: ../gtk/gtkprintunixdialog.c:3316
 msgid "Print"
 msgstr "打印"
 
@@ -3401,35 +3411,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8050
+#: ../gtk/gtkwindow.c:8212
 msgid "Unmaximize"
 msgstr "取消最大化"
 
-#: ../gtk/gtkwindow.c:8059
+#: ../gtk/gtkwindow.c:8221
+msgid "Move"
+msgstr "移动"
+
+#: ../gtk/gtkwindow.c:8227
+msgid "Resize"
+msgstr "改变大小"
+
+#: ../gtk/gtkwindow.c:8239
 msgid "Always on Top"
 msgstr "常居顶端"
 
-#: ../gtk/gtkwindow.c:8071
+#: ../gtk/gtkwindow.c:8251
 msgid "Always on Visible Workspace"
 msgstr "总在可见工作区"
 
-#: ../gtk/gtkwindow.c:8079
+#: ../gtk/gtkwindow.c:8259
 msgid "Only on This Workspace"
 msgstr "只在此工作区可见"
 
-#: ../gtk/gtkwindow.c:8096
+#: ../gtk/gtkwindow.c:8276
 msgid "Move to Workspace Up"
 msgstr "移到上面的工作区"
 
-#: ../gtk/gtkwindow.c:8105
+#: ../gtk/gtkwindow.c:8285
 msgid "Move to Workspace Down"
 msgstr "移到下面的工作区"
 
-#: ../gtk/gtkwindow.c:8119
+#: ../gtk/gtkwindow.c:8299
 msgid "Move to Another Workspace"
 msgstr "移到另一工作区"
 
-#: ../gtk/gtkwindow.c:8127
+#: ../gtk/gtkwindow.c:8307
 #, c-format
 msgid "Workspace %d"
 msgstr "工作区 %d"
@@ -4864,20 +4882,58 @@ msgid "Print to Test Printer"
 msgstr "打印到测试打印机"
 
 #: ../gtk/gtkaboutdialog.ui.h:1
-msgid "C_redits"
-msgstr "鸣谢(_R)"
+#| msgctxt "Stock label"
+#| msgid "_About"
+msgid "About"
+msgstr "关于"
 
 #: ../gtk/gtkaboutdialog.ui.h:2
-msgid "_License"
-msgstr "许可(_L)"
+#| msgid "C_redits"
+msgid "Credits"
+msgstr "鸣谢"
 
-#: ../gtk/gtkappchooserdialog.ui.h:3
+#: ../gtk/gtkappchooserdialog.ui.h:1
+#| msgid "Default Application"
+msgid "Select Application"
+msgstr "选择应用程序"
+
+#: ../gtk/gtkappchooserdialog.ui.h:2
 msgid "label"
 msgstr "标签"
 
-#: ../gtk/gtkappchooserdialog.ui.h:4
+#: ../gtk/gtkappchooserdialog.ui.h:3
 msgid "Show Other Applications"
 msgstr "显示其他应用程序"
+
+#: ../gtk/gtkapplication-quartz.ui.h:2
+#| msgctxt "Stock label"
+#| msgid "_Preferences"
+msgid "Preferences"
+msgstr "首选项"
+
+#: ../gtk/gtkapplication-quartz.ui.h:3
+#| msgid "Devices"
+msgid "Services"
+msgstr "设备"
+
+#: ../gtk/gtkapplication-quartz.ui.h:4
+#, c-format
+msgid "Hide %s"
+msgstr "隐藏 %s"
+
+#: ../gtk/gtkapplication-quartz.ui.h:5
+msgid "Hide Others"
+msgstr "隐藏其他"
+
+#: ../gtk/gtkapplication-quartz.ui.h:6
+msgid "Show All"
+msgstr "显示全部"
+
+#: ../gtk/gtkapplication-quartz.ui.h:7
+#, c-format
+#| msgid "About %s"
+msgid "Quit %s"
+msgstr "退出 %s"
 
 #: ../gtk/gtkassistant.ui.h:2
 msgid "C_ontinue"
@@ -4971,6 +5027,11 @@ msgstr "选择要显示的文件类型"
 msgid "Font"
 msgstr "字体"
 
+#: ../gtk/gtkfontchooserdialog.ui.h:1
+#| msgid "Se_lection"
+msgid "Select Font"
+msgstr "选择字体"
+
 #: ../gtk/gtkfontchooserwidget.ui.h:1
 msgid "Search font name"
 msgstr "搜索字体名"
@@ -4983,31 +5044,31 @@ msgstr "字体族"
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr "搜索不到匹配的字体。您可以调整搜索并重试。"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:3
+#: ../gtk/gtkpagesetupunixdialog.ui.h:2
 msgid "_Format for:"
 msgstr "格式(_F)："
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:4 ../gtk/gtkprintunixdialog.ui.h:41
+#: ../gtk/gtkpagesetupunixdialog.ui.h:3 ../gtk/gtkprintunixdialog.ui.h:38
 msgid "_Paper size:"
 msgstr "纸张大小(_P)："
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:5
+#: ../gtk/gtkpagesetupunixdialog.ui.h:4
 msgid "_Orientation:"
 msgstr "方向(_O)："
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:6 ../gtk/gtkprintunixdialog.ui.h:43
+#: ../gtk/gtkpagesetupunixdialog.ui.h:5 ../gtk/gtkprintunixdialog.ui.h:40
 msgid "Portrait"
 msgstr "纵向"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:7 ../gtk/gtkprintunixdialog.ui.h:45
+#: ../gtk/gtkpagesetupunixdialog.ui.h:6 ../gtk/gtkprintunixdialog.ui.h:42
 msgid "Reverse portrait"
 msgstr "纵向翻转"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:8 ../gtk/gtkprintunixdialog.ui.h:44
+#: ../gtk/gtkpagesetupunixdialog.ui.h:7 ../gtk/gtkprintunixdialog.ui.h:41
 msgid "Landscape"
 msgstr "横向"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:9 ../gtk/gtkprintunixdialog.ui.h:46
+#: ../gtk/gtkpagesetupunixdialog.ui.h:8 ../gtk/gtkprintunixdialog.ui.h:43
 msgid "Reverse landscape"
 msgstr "横向翻转"
 
@@ -5020,49 +5081,41 @@ msgid "Up Path"
 msgstr "上级路径"
 
 #: ../gtk/gtkprintunixdialog.ui.h:1
-msgid "Pre_view"
-msgstr "预览(_V)："
-
-#: ../gtk/gtkprintunixdialog.ui.h:3
-msgid "_Print"
-msgstr "打印(_P)"
-
-#: ../gtk/gtkprintunixdialog.ui.h:4
 msgid "Printer"
 msgstr "打印机"
 
 #. this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.ui.h:7
+#: ../gtk/gtkprintunixdialog.ui.h:4
 msgid "Location"
 msgstr "位置"
 
 #. this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.ui.h:10
+#: ../gtk/gtkprintunixdialog.ui.h:7
 msgid "Status"
 msgstr "状态"
 
-#: ../gtk/gtkprintunixdialog.ui.h:11
+#: ../gtk/gtkprintunixdialog.ui.h:8
 msgid "Range"
 msgstr "范围"
 
-#: ../gtk/gtkprintunixdialog.ui.h:12
+#: ../gtk/gtkprintunixdialog.ui.h:9
 msgid "_All Pages"
 msgstr "所有页面(_A)"
 
-#: ../gtk/gtkprintunixdialog.ui.h:13
+#: ../gtk/gtkprintunixdialog.ui.h:10
 msgid "C_urrent Page"
 msgstr "当前页(_U)"
 
-#: ../gtk/gtkprintunixdialog.ui.h:14
+#: ../gtk/gtkprintunixdialog.ui.h:11
 msgid "Se_lection"
 msgstr "选择(_S)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:15
+#: ../gtk/gtkprintunixdialog.ui.h:12
 msgid "Pag_es:"
 msgstr "页面(_E)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:16 ../gtk/gtkprintunixdialog.ui.h:18
-#: ../gtk/gtkprintunixdialog.ui.h:21
+#: ../gtk/gtkprintunixdialog.ui.h:13 ../gtk/gtkprintunixdialog.ui.h:15
+#: ../gtk/gtkprintunixdialog.ui.h:18
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -5070,116 +5123,116 @@ msgstr ""
 "指定一个或多个页面范围，\n"
 "如：1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.ui.h:20
+#: ../gtk/gtkprintunixdialog.ui.h:17
 msgid "Pages"
 msgstr "页面"
 
-#: ../gtk/gtkprintunixdialog.ui.h:23
+#: ../gtk/gtkprintunixdialog.ui.h:20
 msgid "Copies"
 msgstr "副本"
 
-#: ../gtk/gtkprintunixdialog.ui.h:24
+#: ../gtk/gtkprintunixdialog.ui.h:21
 msgid "Copie_s:"
 msgstr "副本数(_S)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:25
+#: ../gtk/gtkprintunixdialog.ui.h:22
 msgid "C_ollate"
 msgstr "逐份(_O)"
 
-#: ../gtk/gtkprintunixdialog.ui.h:26
+#: ../gtk/gtkprintunixdialog.ui.h:23
 msgid "_Reverse"
 msgstr "逆序(_R)"
 
-#: ../gtk/gtkprintunixdialog.ui.h:27
+#: ../gtk/gtkprintunixdialog.ui.h:24
 msgid "General"
 msgstr "常规"
 
-#: ../gtk/gtkprintunixdialog.ui.h:28
+#: ../gtk/gtkprintunixdialog.ui.h:25
 msgid "Layout"
 msgstr "布局"
 
-#: ../gtk/gtkprintunixdialog.ui.h:29
+#: ../gtk/gtkprintunixdialog.ui.h:26
 msgid "T_wo-sided:"
 msgstr "双面(_W)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:30
+#: ../gtk/gtkprintunixdialog.ui.h:27
 msgid "Pages per _side:"
 msgstr "每面页数(_S)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:31
+#: ../gtk/gtkprintunixdialog.ui.h:28
 msgid "Page or_dering:"
 msgstr "页面顺序(_D)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:32
+#: ../gtk/gtkprintunixdialog.ui.h:29
 msgid "_Only print:"
 msgstr "打印(_O)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:33
+#: ../gtk/gtkprintunixdialog.ui.h:30
 msgid "All sheets"
 msgstr "全面页面"
 
-#: ../gtk/gtkprintunixdialog.ui.h:34
+#: ../gtk/gtkprintunixdialog.ui.h:31
 msgid "Even sheets"
 msgstr "偶数页"
 
-#: ../gtk/gtkprintunixdialog.ui.h:35
+#: ../gtk/gtkprintunixdialog.ui.h:32
 msgid "Odd sheets"
 msgstr "奇数页"
 
-#: ../gtk/gtkprintunixdialog.ui.h:36
+#: ../gtk/gtkprintunixdialog.ui.h:33
 msgid "Sc_ale:"
 msgstr "缩放(_A)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:37
+#: ../gtk/gtkprintunixdialog.ui.h:34
 msgid "Paper"
 msgstr "纸张"
 
-#: ../gtk/gtkprintunixdialog.ui.h:38
+#: ../gtk/gtkprintunixdialog.ui.h:35
 msgid "Paper _type:"
 msgstr "纸张类型(_T)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:39
+#: ../gtk/gtkprintunixdialog.ui.h:36
 msgid "Paper _source:"
 msgstr "纸张来源(_S)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:40
+#: ../gtk/gtkprintunixdialog.ui.h:37
 msgid "Output t_ray:"
 msgstr "出纸器(_R)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:42
+#: ../gtk/gtkprintunixdialog.ui.h:39
 msgid "Or_ientation:"
 msgstr "方向(_I)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:48
+#: ../gtk/gtkprintunixdialog.ui.h:45
 msgid "Job Details"
 msgstr "任务细节"
 
-#: ../gtk/gtkprintunixdialog.ui.h:49
+#: ../gtk/gtkprintunixdialog.ui.h:46
 msgid "Pri_ority:"
 msgstr "优先级(_O)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:50
+#: ../gtk/gtkprintunixdialog.ui.h:47
 msgid "_Billing info:"
 msgstr "计费信息(_B)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:51
+#: ../gtk/gtkprintunixdialog.ui.h:48
 msgid "Print Document"
 msgstr "打印文档"
 
 #. this is one of the choices for the print at option in the print dialog
-#: ../gtk/gtkprintunixdialog.ui.h:54
+#: ../gtk/gtkprintunixdialog.ui.h:51
 msgid "_Now"
 msgstr "立即(_N)"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: ../gtk/gtkprintunixdialog.ui.h:57
+#: ../gtk/gtkprintunixdialog.ui.h:54
 msgid "A_t:"
 msgstr "于(_T)："
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: ../gtk/gtkprintunixdialog.ui.h:58 ../gtk/gtkprintunixdialog.ui.h:62
-#: ../gtk/gtkprintunixdialog.ui.h:64 ../gtk/gtkprintunixdialog.ui.h:68
-#: ../gtk/gtkprintunixdialog.ui.h:71
+#: ../gtk/gtkprintunixdialog.ui.h:55 ../gtk/gtkprintunixdialog.ui.h:59
+#: ../gtk/gtkprintunixdialog.ui.h:61 ../gtk/gtkprintunixdialog.ui.h:65
+#: ../gtk/gtkprintunixdialog.ui.h:68
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -5187,58 +5240,58 @@ msgstr ""
 "指定打印时间，\n"
 "例如 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: ../gtk/gtkprintunixdialog.ui.h:70
+#: ../gtk/gtkprintunixdialog.ui.h:67
 msgid "Time of print"
 msgstr "打印时间"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: ../gtk/gtkprintunixdialog.ui.h:75
+#: ../gtk/gtkprintunixdialog.ui.h:72
 msgid "On _hold"
 msgstr "等待(_H)"
 
-#: ../gtk/gtkprintunixdialog.ui.h:76 ../gtk/gtkprintunixdialog.ui.h:77
+#: ../gtk/gtkprintunixdialog.ui.h:73 ../gtk/gtkprintunixdialog.ui.h:74
 msgid "Hold the job until it is explicitly released"
 msgstr "保持任务直到其被显式释放"
 
-#: ../gtk/gtkprintunixdialog.ui.h:78
+#: ../gtk/gtkprintunixdialog.ui.h:75
 msgid "Add Cover Page"
 msgstr "添加封面页"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: ../gtk/gtkprintunixdialog.ui.h:81
+#: ../gtk/gtkprintunixdialog.ui.h:78
 msgid "Be_fore:"
 msgstr "封面(_F)："
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: ../gtk/gtkprintunixdialog.ui.h:84
+#: ../gtk/gtkprintunixdialog.ui.h:81
 msgid "_After:"
 msgstr "封底(_A)："
 
-#: ../gtk/gtkprintunixdialog.ui.h:85
+#: ../gtk/gtkprintunixdialog.ui.h:82
 msgid "Job"
 msgstr "任务"
 
 #. This will appear as a tab label in the print dialog.
-#: ../gtk/gtkprintunixdialog.ui.h:88
+#: ../gtk/gtkprintunixdialog.ui.h:85
 msgid "Image Quality"
 msgstr "图像质量"
 
 #. This will appear as a tab label in the print dialog.
-#: ../gtk/gtkprintunixdialog.ui.h:91
+#: ../gtk/gtkprintunixdialog.ui.h:88
 msgid "Color"
 msgstr "颜色"
 
 #. This will appear as a tab label in the print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.ui.h:95
+#: ../gtk/gtkprintunixdialog.ui.h:92
 msgid "Finishing"
 msgstr "完成"
 
-#: ../gtk/gtkprintunixdialog.ui.h:96
+#: ../gtk/gtkprintunixdialog.ui.h:93
 msgid "Advanced"
 msgstr "高级"
 
-#: ../gtk/gtkprintunixdialog.ui.h:97
+#: ../gtk/gtkprintunixdialog.ui.h:94
 msgid "Some of the settings in the dialog conflict"
 msgstr "对话框中的某些设置冲突"
 
@@ -5277,6 +5330,9 @@ msgstr "降低音量"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "减少音量"
+
+#~ msgid "_License"
+#~ msgstr "许可(_L)"
 
 #~ msgid ""
 #~ "%s cannot quit at this time:\n"
