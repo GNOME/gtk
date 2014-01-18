@@ -371,7 +371,7 @@ gtk_path_bar_get_preferred_width (GtkWidget *widget,
         }
 
       *minimum = MAX (*minimum, child_min);
-      *natural = MAX (*natural, child_nat);
+      *natural = *natural + child_nat;
     }
 
   /* Add space for slider, if we have more than one path */
