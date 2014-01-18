@@ -336,7 +336,7 @@ See the GNU General Public License, version 3 or later for details.
           "filler"
           parent: stack
           index: 1
-          state: enabled sensitive vertical visible
+          state: enabled sensitive vertical
           toolkit: gtk
           <AtkComponent>
           layer: widget
@@ -396,7 +396,7 @@ See the GNU General Public License, version 3 or later for details.
           "filler"
           parent: stack
           index: 2
-          state: enabled sensitive vertical visible
+          state: enabled sensitive vertical
           toolkit: gtk
           <AtkComponent>
           layer: widget
@@ -474,7 +474,7 @@ See the GNU General Public License, version 3 or later for details.
               minimum value: 0.000000
               maximum value: 0.000000
               current value: 0.000000
-    dialog-action_area1
+    action_area
       "filler"
       parent: dialog-vbox1
       index: 1
@@ -483,54 +483,3 @@ See the GNU General Public License, version 3 or later for details.
       <AtkComponent>
       layer: widget
       alpha: 1
-      close_button
-        "push button"
-        parent: dialog-action_area1
-        index: 0
-        name: Close
-        state: enabled focusable sensitive showing visible default
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: -1 x -1
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
-        action 0 keybinding: <Alt>c
-      license_button
-        "toggle button"
-        parent: dialog-action_area1
-        index: 1
-        name: License
-        state: enabled focusable sensitive
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: -1 x -1
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
-        action 0 keybinding: <Alt>l
-      credits_button
-        "toggle button"
-        parent: dialog-action_area1
-        index: 2
-        name: Credits
-        state: enabled focusable sensitive
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: 20 x 20
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
-        action 0 keybinding: <Alt>r
