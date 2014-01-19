@@ -278,6 +278,37 @@ stack_visible_child_notify (GtkStack       *stack,
   return FALSE;
 }
 
+static GObject *
+gtk_about_dialog_constructor (GType type,
+                              guint n_construct_properties,
+                              GObjectConstructParam *construct_params)
+{
+  GObject *object;
+  guint idx;
+  GParamSpec *pspec;
+  GValue *value;
+
+  for (idx = 0; idx < n_construct_properties; idx++)
+    {
+      pspec = construct_params[idx].pspec;
+      if (g_strcmp0 (pspec->name, "use-header-bar") != 0)
+        continue;
+
+      /* GtkDialog uses "-1" to imply an unset value for this property */
+      value = construct_params[idx].value;
+      if (g_value_get_int (value) == -1)
+        g_value_set_int (value, 1);
+
+      break;
+    }
+
+  object = G_OBJECT_CLASS (gtk_about_dialog_parent_class)->constructor (type,
+                                                                        n_construct_properties,
+                                                                        construct_params);
+
+  return object;
+}
+
 static void
 gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 {
@@ -290,6 +321,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->set_property = gtk_about_dialog_set_property;
   object_class->get_property = gtk_about_dialog_get_property;
 
+  object_class->constructor = gtk_about_dialog_constructor;
   object_class->finalize = gtk_about_dialog_finalize;
 
   widget_class->show = gtk_about_dialog_show;
@@ -2329,13 +2361,7 @@ populate_license_page (GtkAboutDialog *about)
 GtkWidget *
 gtk_about_dialog_new (void)
 {
-  GtkAboutDialog *dialog;
-
-  dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
-                         "use-header-bar", TRUE,
-                         NULL);
-
-  return GTK_WIDGET (dialog);
+  return g_object_new (GTK_TYPE_ABOUT_DIALOG, NULL);
 }
 
 static void
