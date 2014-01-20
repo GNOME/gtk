@@ -448,7 +448,7 @@ update_cursor (gpointer data,
  *
  * If the windowing system supports it, existing cursors created
  * with gdk_cursor_new(), gdk_cursor_new_for_display() and
- * gdk_cursor_new_for_name() are updated to reflect the theme
+ * gdk_cursor_new_from_name() are updated to reflect the theme
  * change. Custom cursors constructed with
  * gdk_cursor_new_from_pixbuf() will have to be handled
  * by the application (GTK+ applications can learn about
