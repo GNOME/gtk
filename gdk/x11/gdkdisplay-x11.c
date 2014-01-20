@@ -1947,7 +1947,7 @@ gdk_x11_display_finalize (GObject *object)
  * gdk_x11_lookup_xdisplay:
  * @xdisplay: a pointer to an X Display
  * 
- * Find the #GdkDisplay corresponding to @display, if any exists.
+ * Find the #GdkDisplay corresponding to @xdisplay, if any exists.
  * 
  * Return value: (transfer none) (type GdkX11Display): the #GdkDisplay, if found, otherwise %NULL.
  *
