@@ -37,6 +37,7 @@ G_BEGIN_DECLS
 
 struct _GtkSelectionData
 {
+  /*< private >*/
   GdkAtom       selection;
   GdkAtom       target;
   GdkAtom       type;
@@ -48,18 +49,10 @@ struct _GtkSelectionData
 
 struct _GtkTargetList
 {
+  /*< private >*/
   GList *list;
   guint ref_count;
  };
-
-typedef struct _GtkTargetPair GtkTargetPair;
-struct _GtkTargetPair
-{
-  GdkAtom   target;
-  guint     flags;
-  guint     info;
-};
-
 
 gboolean _gtk_selection_clear           (GtkWidget         *widget,
                                          GdkEventSelection *event);
