@@ -89,6 +89,15 @@
  */
 
 /**
+ * GDK_WINDOWING_WAYLAND:
+ *
+ * The #GDK_WINDOWING_WAYLAND macro is defined if the Wayland backend
+ * is supported.
+ *
+ * Use this macro to guard code that is specific to the Wayland backend.
+ */
+
+/**
  * GDK_DISABLE_DEPRECATION_WARNINGS:
  *
  * A macro that should be defined before including the gdk.h header.
