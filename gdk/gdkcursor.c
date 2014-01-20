@@ -336,7 +336,7 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
  *
  * If @x or @y are <literal>-1</literal>, the pixbuf must have
  * options named "x_hot" and "y_hot", resp., containing
- * integer values between %0 and the width resp. height of
+ * integer values between <literal>0</literal> and the width resp. height of
  * the pixbuf. (Since: 3.0)
  *
  * On the X backend, support for RGBA cursors requires a
