@@ -271,8 +271,8 @@ typedef enum
  * @GDK_MODIFIER_INTENT_SHIFT_GROUP: the modifier that switches between keyboard
  *  groups (AltGr on X11/Windows and Option/Alt on OS X).
  *
- * This enum is used with gdk_keymap_get_modifier_mask() and
- * gdk_get_modifier_mask() in order to determine what modifiers the
+ * This enum is used with gdk_keymap_get_modifier_mask()
+ * in order to determine what modifiers the
  * currently used windowing system backend uses for particular
  * purposes. For example, on X11/Windows, the Control key is used for
  * invoking menu shortcuts (accelerators), whereas on Apple computers
