@@ -5967,7 +5967,7 @@ gdk_window_get_device_cursor (GdkWindow *window,
 
 /**
  * gdk_window_set_device_cursor:
- * @window: a #Gdkwindow
+ * @window: a #GdkWindow
  * @device: a master, pointer #GdkDevice
  * @cursor: a #GdkCursor
  *
