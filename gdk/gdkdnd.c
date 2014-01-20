@@ -400,7 +400,7 @@ gdk_drop_reply (GdkDragContext *context,
 
 /**
  * gdk_drop_finish:
- * @context: a #GtkDragContext
+ * @context: a #GdkDragContext
  * @success: %TRUE if the data was successfully received
  * @time_: the timestamp for this operation
  *
