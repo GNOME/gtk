@@ -460,7 +460,7 @@ typedef enum
  * @GDK_WINDOW_STATE_ABOVE: the window is kept above other windows.
  * @GDK_WINDOW_STATE_BELOW: the window is kept below other windows.
  * @GDK_WINDOW_STATE_FOCUSED: the window is presented as focused (with active decorations).
- * @GDK_WINDOW_TILED: the window is in a tiled state, see
+ * @GDK_WINDOW_STATE_TILED: the window is in a tiled state, see
  *   gdk_window_get_tiled_edges() for more details. Since 3.10
  *
  * Specifies the state of a toplevel window.
