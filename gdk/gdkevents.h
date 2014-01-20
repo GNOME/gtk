@@ -1132,6 +1132,26 @@ struct _GdkEventDND {
 
 /**
  * GdkEvent:
+ * @type: the #GdkEventType
+ * @any: a #GdkEventAny
+ * @expose: a #GdkEventExpose
+ * @visibility: a #GdkEventVisibility
+ * @motion: a #GdkEventMotion
+ * @button: a #GdkEventButton
+ * @touch: a #GdkEventTouch
+ * @scroll: a #GdkEventScroll
+ * @key: a #GdkEventKey
+ * @crossing: a #GdkEventCrossing
+ * @focus_change: a #GdkEventFocus
+ * @configure: a #GdkEventConfigure
+ * @property: a #GdkEventProperty
+ * @selection: a #GdkEventSelection
+ * @owner_change: a #GdkEventOwnerChange
+ * @proximity: a #GdkEventProximity
+ * @dnd: a #GdkEventDND
+ * @window_state: a #GdkEventWindowState
+ * @setting: a #GdkEventSetting
+ * @grab_broken: a #GdkEventGrabBroken
  *
  * The #GdkEvent struct contains a union of all of the event structs,
  * and allows access to the data fields in a number of ways.
