@@ -57,7 +57,7 @@ typedef struct _GdkFrameClockClass         GdkFrameClockClass;
  *
  * #GdkFrameClockPhase is used to represent the different paint clock
  * phases that can be requested. The elements of the enumeration
- * correspond to the signals of #GdkPaintClock.
+ * correspond to the signals of #GdkFrameClock.
  *
  * Since: 3.8
  **/
