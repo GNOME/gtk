@@ -574,7 +574,7 @@ maybe_cache_icon_data (Image       *image,
     }
 }
 
-/**
+/*
  * Finds all dir separators and replaces them with '/'.
  * This makes sure that only /-separated paths are written in cache files,
  * maintaining compatibility with theme index files that use slashes as

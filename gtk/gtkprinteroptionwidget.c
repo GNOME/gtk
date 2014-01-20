@@ -891,7 +891,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
   gtk_box_pack_start (GTK_BOX (widget), priv->image, FALSE, FALSE, 0);
 }
 
-/**
+/*
  * If the filename exceeds FILENAME_LENGTH_MAX, then trim it and replace
  * the first three letters with three dots.
  */
