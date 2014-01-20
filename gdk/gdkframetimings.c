@@ -115,7 +115,7 @@ gdk_frame_timings_get_frame_counter (GdkFrameTimings *timings)
  * accessor functions for #GdkFrameTimings can return 0 to
  * indicate an unavailable value for two reasons: either because
  * the information is not yet available, or because it isn't
- * available at all. Once gdk_frame_timings_complete() returns
+ * available at all. Once gdk_frame_timings_get_complete() returns
  * %TRUE for a frame, you can be certain that no further values
  * will become available and be stored in the #GdkFrameTimings.
  *
