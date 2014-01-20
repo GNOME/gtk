@@ -381,7 +381,7 @@ gdk_keymap_get_modifier_state (GdkKeymap *keymap)
 /**
  * gdk_keymap_get_entries_for_keyval:
  * @keymap: a #GdkKeymap
- * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
+ * @keyval: a keyval, such as %GDK_KEY_a, %GDK_KEY_Up, %GDK_KEY_Return, etc.
  * @keys: (out) (array length=n_keys) (transfer full): return location
  *     for an array of #GdkKeymapKey
  * @n_keys: return location for number of elements in returned array
