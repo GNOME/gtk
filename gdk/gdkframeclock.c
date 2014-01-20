@@ -380,7 +380,7 @@ gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
  * gdk_frame_clock_get_history_start:
  * @frame_clock: a #GdkFrameClock
  *
- * #GdkFrameClock internally keeps a history of #GdkFrameTiming
+ * #GdkFrameClock internally keeps a history of #GdkFrameTimings
  * objects for recent frames that can be retrieved with
  * gdk_frame_clock_get_timings(). The set of stored frames
  * is the set from the counter values given by
