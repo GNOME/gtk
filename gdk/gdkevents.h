@@ -761,6 +761,8 @@ struct _GdkEventTouch
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen.
+ * @delta_x: the x coordinate of the scroll delta
+ * @delta_y: the y coordinate of the scroll delta
  *
  * Generated from button presses for the buttons 4 to 7. Wheel mice are
  * usually configured to generate button press events for buttons 4 and 5
