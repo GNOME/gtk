@@ -2219,7 +2219,7 @@ from_embedder (GdkWindow *window,
  * Checks whether the window has a native window or not. Note that
  * you can use gdk_window_ensure_native() if a native window is needed.
  *
- * Returns: %TRUE if the %window has a native window, %FALSE otherwise.
+ * Returns: %TRUE if the @window has a native window, %FALSE otherwise.
  *
  * Since: 2.22
  */
