@@ -50,7 +50,7 @@ struct wl_display      *gdk_wayland_display_get_wl_display      (GdkDisplay *dis
 GDK_AVAILABLE_IN_ALL
 struct wl_compositor   *gdk_wayland_display_get_wl_compositor   (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
-struct wl_shell        *gdk_wayland_display_get_wl_shell        (GdkDisplay *display);
+struct xdg_shell       *gdk_wayland_display_get_xdg_shell       (GdkDisplay *display);
 GDK_AVAILABLE_IN_3_10
 void                    gdk_wayland_display_set_cursor_theme    (GdkDisplay  *display,
                                                                  const gchar *theme,

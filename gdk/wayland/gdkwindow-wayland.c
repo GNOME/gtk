@@ -2266,7 +2266,7 @@ gdk_wayland_window_get_wl_surface (GdkWindow *window)
  *
  * A good example would be writing a panel or on-screen-keyboard as an
  * out-of-process helper - as opposed to having those in the compositor
- * process. In this case the underlying surface isn't a wl_shell
+ * process. In this case the underlying surface isn't an xdg_shell
  * surface and the panel or OSK client need to identify the wl_surface
  * as a panel or OSK to the compositor. The assumption is that the
  * compositor will expose a private interface to the special client
