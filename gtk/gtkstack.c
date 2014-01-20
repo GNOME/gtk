@@ -1134,6 +1134,40 @@ gtk_stack_remove (GtkContainer *container,
 }
 
 /**
+ * gtk_stack_get_child_by_name:
+ * @stack: a #GtkStack
+ * @name: the name of the child to find
+ *
+ * Finds the child of the #GtkStack with the name given as
+ * the argument. Returns %NULL if there is no child with this
+ * name.
+ *
+ * Return value: (transfer none): the requested child of the #GtkStack
+ *
+ * Since: 3.12
+ */
+GtkWidget *
+gtk_stack_get_child_by_name (GtkStack    *stack,
+                             const gchar *name)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkStackChildInfo *info;
+  GList *l;
+
+  g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  for (l = priv->children; l != NULL; l = l->next)
+    {
+      info = l->data;
+      if (info->name && strcmp (info->name, name) == 0)
+        return info->widget;
+    }
+
+  return NULL;
+}
+
+/**
  * gtk_stack_set_homogeneous:
  * @stack: a #GtkStack
  * @homogeneous: %TRUE to make @stack homogeneous

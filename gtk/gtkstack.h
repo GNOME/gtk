@@ -79,6 +79,9 @@ void                   gtk_stack_add_titled              (GtkStack              
                                                           GtkWidget              *child,
                                                           const gchar            *name,
                                                           const gchar            *title);
+GDK_AVAILABLE_IN_3_12
+GtkWidget *            gtk_stack_get_child_by_name       (GtkStack               *stack,
+                                                          const gchar            *name);
 GDK_AVAILABLE_IN_3_10
 void                   gtk_stack_set_visible_child       (GtkStack               *stack,
                                                           GtkWidget              *child);
