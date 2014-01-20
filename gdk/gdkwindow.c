@@ -363,7 +363,7 @@ gdk_window_class_init (GdkWindowClass *klass)
    * The ::to-embedder signal is emitted to translate coordinates
    * in an offscreen window to its embedder.
    *
-   * See also #GtkWindow::from-embedder.
+   * See also #GdkWindow::from-embedder.
    *
    * Since: 2.18
    */
@@ -394,7 +394,7 @@ gdk_window_class_init (GdkWindowClass *klass)
    * The ::from-embedder signal is emitted to translate coordinates
    * in the embedder of an offscreen window to the offscreen window.
    *
-   * See also #GtkWindow::to-embedder.
+   * See also #GdkWindow::to-embedder.
    *
    * Since: 2.18
    */
