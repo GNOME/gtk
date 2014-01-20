@@ -607,19 +607,6 @@ set_busy_cursor (GtkPrintUnixDialog *dialog,
     g_object_unref (cursor);
 }
 
-static void
-add_custom_button_to_dialog (GtkDialog   *dialog,
-                             const gchar *mnemonic_label,
-                             gint         response_id)
-{
-  GtkWidget *button = NULL;
-
-  button = gtk_button_new_with_mnemonic (mnemonic_label);
-  gtk_widget_set_can_default (button, TRUE);
-
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
-}
-
 /* This function handles error messages before printing.
  */
 static gboolean
@@ -683,10 +670,11 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
                                                                 dirname);
 
                       gtk_dialog_add_button (GTK_DIALOG (dialog),
-                                             _("_Cancel"), GTK_RESPONSE_CANCEL);
-                      add_custom_button_to_dialog (GTK_DIALOG (dialog),
-                                                   _("_Replace"),
-                                                   GTK_RESPONSE_ACCEPT);
+                                             _("_Cancel"),
+                                             GTK_RESPONSE_CANCEL);
+                      gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                             _("_Replace"),
+                                             GTK_RESPONSE_ACCEPT);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                       gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
                                                                GTK_RESPONSE_ACCEPT,
