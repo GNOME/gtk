@@ -6657,8 +6657,7 @@ gdk_window_get_composited (GdkWindow *window)
  * and an expose event is emitted on the parent of the composited
  * window. It is the responsibility of the parent's expose handler
  * to manually merge the off-screen content onto the screen in
- * whatever way it sees fit. See <xref linkend="composited-window-example"/>
- * for an example.
+ * whatever way it sees fit.
  *
  * It only makes sense for child windows to be composited; see
  * gdk_window_set_opacity() if you need translucent toplevel
