@@ -463,6 +463,7 @@ gdk_window_get_pointer
 gdk_window_get_device_position
 gdk_window_get_device_position_double
 GdkModifierType
+GdkModifierIntent
 gdk_window_get_parent
 gdk_window_get_toplevel
 gdk_window_get_children
