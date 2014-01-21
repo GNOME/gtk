@@ -99,15 +99,15 @@ struct _GtkIconThemeClass
 
 /**
  * GtkIconLookupFlags:
- * @GTK_ICON_LOOKUP_NO_SVG: Never return SVG icons, even if gdk-pixbuf
+ * @GTK_ICON_LOOKUP_NO_SVG: Never get SVG icons, even if gdk-pixbuf
  *   supports them. Cannot be used together with %GTK_ICON_LOOKUP_FORCE_SVG.
- * @GTK_ICON_LOOKUP_FORCE_SVG: Return SVG icons, even if gdk-pixbuf
+ * @GTK_ICON_LOOKUP_FORCE_SVG: Get SVG icons, even if gdk-pixbuf
  *   doesn't support them.
  *   Cannot be used together with %GTK_ICON_LOOKUP_NO_SVG.
  * @GTK_ICON_LOOKUP_USE_BUILTIN: When passed to
  *   gtk_icon_theme_lookup_icon() includes builtin icons
  *   as well as files. For a builtin icon, gtk_icon_info_get_filename()
- *   returns %NULL and you need to call gtk_icon_info_get_builtin_pixbuf().
+ *   is %NULL and you need to call gtk_icon_info_get_builtin_pixbuf().
  * @GTK_ICON_LOOKUP_GENERIC_FALLBACK: Try to shorten icon name at '-'
  *   characters before looking at inherited themes. For more general
  *   fallback, see gtk_icon_theme_choose_icon(). Since 2.12.
