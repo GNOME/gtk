@@ -1750,7 +1750,7 @@ gtk_rc_parse_state (GScanner	 *scanner,
 
 /**
  * gtk_rc_parse_priority:
- * @scanner: a #GtkScanner (must be initialized for parsing an RC file)
+ * @scanner: a #GScanner (must be initialized for parsing an RC file)
  * @priority: A pointer to #GtkPathPriorityType variable in which
  *  to store the result.
  *
