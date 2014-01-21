@@ -151,7 +151,7 @@
  *
  * Height for width requests are generally implemented in terms of a virtual allocation
  * of widgets in the input orientation. Assuming an height-for-width request mode, a container
- * would implement the <function>get_preferred_height_for_width()</function> virtual function by first calling
+ * would implement the <function>get_preferred_height_for_width(<!-- -->)</function> virtual function by first calling
  * gtk_widget_get_preferred_width() for each of its children.
  *
  * For each potential group of children that are lined up horizontally, the values returned by
