@@ -1774,7 +1774,7 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
  *
  * Returns the header bar of @dialog. Note that the
  * headerbar is only used by the dialog if the
- * #GtkDialog::use-header-bar property is %TRUE.
+ * #GtkDialog:use-header-bar property is %TRUE.
  *
  * Returns: (transfer none): the header bar
  *
