@@ -1465,7 +1465,7 @@ gtk_accelerator_parse (const gchar     *accelerator,
  * @accelerator_mods: accelerator modifier mask
  *
  * Converts an accelerator keyval and modifier mask
- * into a string parseable by gtk_accelerator_parse_full(),
+ * into a string parseable by gtk_accelerator_parse_with_keycode(),
  * similarly to gtk_accelerator_name() but handling keycodes.
  * This is only useful for system-level components, applications
  * should use gtk_accelerator_parse() instead.
