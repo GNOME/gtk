@@ -48,6 +48,13 @@ G_BEGIN_DECLS
 #define GTK_IS_TOOLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLBAR))
 #define GTK_TOOLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOOLBAR, GtkToolbarClass))
 
+/**
+ * GtkToolbarSpaceStyle:
+ * @GTK_TOOLBAR_SPACE_EMPTY: Use blank spacers.
+ * @GTK_TOOLBAR_SPACE_LINE: Use vertical lines for spacers.
+ *
+ * Whether spacers are vertical lines or just blank.
+ */
 typedef enum
 {
   GTK_TOOLBAR_SPACE_EMPTY,
