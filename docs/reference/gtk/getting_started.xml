@@ -863,8 +863,8 @@ example_app_window_init (ExampleAppWindow *win)
         <programlisting><xi:include href="../../../../examples/application8/gears-menu.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
-      <para>To connect the menuitem to the show-words setting,
-      we use a #GSettingsAction.</para>
+      <para>To connect the menuitem to the show-words setting, we use
+      a #GAction corresponding to the given #GSettings key.</para>
 
       <informalexample>
         <programlisting><![CDATA[
