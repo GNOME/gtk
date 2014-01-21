@@ -7865,7 +7865,7 @@ gtk_entry_get_has_frame (GtkEntry *entry)
  * @entry: a #GtkEntry
  * @border: (allow-none): a #GtkBorder, or %NULL
  *
- * Sets %entry's inner-border property to %border, or clears it if %NULL
+ * Sets %entry's inner-border property to @border, or clears it if %NULL
  * is passed. The inner-border is the area around the entry's text, but
  * inside its frame.
  *
