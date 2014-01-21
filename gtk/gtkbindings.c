@@ -57,7 +57,7 @@
  * in the #GtkCssProvider documentation. Inside the binding set definition,
  * key combinations are bound to one or more specific signal emissions on
  * the target widget. Key combinations are strings consisting of an optional
- * #GdkModifierType name and <link linkend="gdk-Keyboard-Handling">key names</link>
+ * #GdkModifierType name and <link linkend="gdk3-Keyboard-Handling">key names</link>
  * such as those defined in <filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
  * or returned from gdk_keyval_name(), they have to be parsable by
  * gtk_accelerator_parse(). Specifications of signal emissions consist
