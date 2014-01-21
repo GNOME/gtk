@@ -285,7 +285,7 @@ gtk_box_class_init (GtkBoxClass *class)
    * and #GtkWidget:vexpand properties are the preferred way to influence
    * child size allocation in containers.
    *
-   * In contrast to #GtkWidget::hexpand, the expand child property does
+   * In contrast to #GtkWidget:hexpand, the expand child property does
    * not cause the box to expand itself.
    */
   gtk_container_class_install_child_property (container_class,
