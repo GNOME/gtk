@@ -143,7 +143,7 @@
     </para>
 
     <para>
-      The detail string available in #GtkStyle-based engines has been
+      The detail string available in #GtkStyle<!-- -->-based engines has been
       replaced by widget regions and style classes. Regions are a way for
       complex widgets to associate different styles with different areas,
       such as even and odd rows in a treeview. Style classes allow sharing
@@ -162,7 +162,7 @@
     <title>Extending the CSS parser</title>
 
     <para>
-      In #GtkStyle-based engines, #GtkRCStyle provided ways to extend the
+      In #GtkStyle<!-- -->-based engines, #GtkRCStyle provided ways to extend the
       gtkrc parser with engine-specific extensions. This has been replaced
       by gtk_theming_engine_register_property(), which lets a theme engine
       register new properties with an arbitrary type. While there is built-in
