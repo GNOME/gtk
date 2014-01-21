@@ -54,16 +54,16 @@ typedef enum
 
 /**
  * GtkRcStyle:
- * @name:
- * @bg_pixmap_name:
- * @font_desc:
- * @color_flags:
- * @fg:
- * @bg:
- * @text:
- * @base:
- * @xthickness:
- * @ythickness:
+ * @name: Name
+ * @bg_pixmap_name: Pixmap name
+ * @font_desc: A #PangoFontDescription
+ * @color_flags: #GtkRcFlags
+ * @fg: Foreground colors
+ * @bg: Background colors
+ * @text: Text colors
+ * @base: Base colors
+ * @xthickness: X thickness
+ * @ythickness: Y thickness
  *
  * The #GtkRcStyle structure is used to represent a set
  * of information about the appearance of a widget.
