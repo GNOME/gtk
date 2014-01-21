@@ -720,6 +720,17 @@ typedef enum
 } GtkSortType;
 
 /* Style for gtk input method preedit/status */
+/**
+ * GtkIMPreeditStyle:
+ * @GTK_IM_PREEDIT_NOTHING: Deprecated
+ * @GTK_IM_PREEDIT_CALLBACK: Deprecated
+ * @GTK_IM_PREEDIT_NONE: Deprecated
+ *
+ * Style for input method preedit. See also
+ * #GtkSettings:gtk-im-preedit-style
+ *
+ * Deprecated: 3.10
+ */
 typedef enum
 {
   GTK_IM_PREEDIT_NOTHING,
@@ -727,6 +738,17 @@ typedef enum
   GTK_IM_PREEDIT_NONE
 } GtkIMPreeditStyle;
 
+/**
+ * GtkIMStatusStyle:
+ * @GTK_IM_STATUS_NOTHING: Deprecated
+ * @GTK_IM_STATUS_CALLBACK: Deprecated
+ * @GTK_IM_STATUS_NONE: Deprecated
+ *
+ * Style for input method status. See also
+ * #GtkSettings:gtk-im-status-style
+ *
+ * Deprecated: 3.10
+ */
 typedef enum
 {
   GTK_IM_STATUS_NOTHING,
