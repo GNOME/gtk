@@ -57,6 +57,9 @@ struct _GtkMenuItem
 /**
  * GtkMenuItemClass:
  * @parent_class: The parent class.
+ * @hide_on_activate: If %TRUE, then we should always
+ *    hide the menu when the %GtkMenuItem is activated. Otherwise,
+ *    it is up to the caller.
  * @activate: Signal emitted when the item is activated.
  * @activate_item: Signal emitted when the item is activated, but also
  *    if the menu item has a submenu.
