@@ -8796,7 +8796,7 @@ gtk_entry_set_icon_drag_source (GtkEntry             *entry,
 
 /**
  * gtk_entry_get_current_icon_drag_source:
- * @entry: a #GtkIconEntry
+ * @entry: a #GtkEntry
  *
  * Returns the index of the icon which is the source of the current
  * DND operation, or -1.
