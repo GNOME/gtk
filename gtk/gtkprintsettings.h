@@ -38,6 +38,13 @@ typedef void  (*GtkPrintSettingsFunc)  (const gchar *key,
 					gpointer     user_data);
 
 typedef struct _GtkPageRange GtkPageRange;
+/**
+ * GtkPageRange:
+ * @start: start of page range.
+ * @end: end of page range.
+ *
+ * See also gtk_print_settings_set_page_ranges().
+ */
 struct _GtkPageRange
 {
   gint start;
