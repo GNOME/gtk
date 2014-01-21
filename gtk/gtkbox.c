@@ -1898,13 +1898,13 @@ gtk_box_reorder_child (GtkBox    *box,
  * gtk_box_query_child_packing:
  * @box: a #GtkBox
  * @child: the #GtkWidget of the child to query
- * @expand: (out): pointer to return location for #GtkBox:expand child
+ * @expand: (out): pointer to return location for expand child
  *     property
- * @fill: (out): pointer to return location for #GtkBox:fill child
+ * @fill: (out): pointer to return location for fill child
  *     property
- * @padding: (out): pointer to return location for #GtkBox:padding
+ * @padding: (out): pointer to return location for padding
  *     child property
- * @pack_type: (out): pointer to return location for #GtkBox:pack-type
+ * @pack_type: (out): pointer to return location for pack-type
  *     child property
  *
  * Obtains information about how @child is packed into @box.
