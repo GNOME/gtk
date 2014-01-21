@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Tajik Gnome\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-01-05 14:12+0000\n"
-"PO-Revision-Date: 2014-01-06 13:36+0500\n"
+"POT-Creation-Date: 2014-01-19 22:02+0000\n"
+"PO-Revision-Date: 2014-01-21 11:24+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: tg\n"
@@ -227,7 +227,7 @@ msgstr "GIcon , ки намоиш дода мешавад"
 
 #: ../gtk/deprecated/gtkaction.c:360 ../gtk/gtkcellrendererpixbuf.c:222
 #: ../gtk/gtkimage.c:326 ../gtk/gtkprinter.c:170 ../gtk/gtkstatusicon.c:251
-#: ../gtk/gtkwindow.c:856
+#: ../gtk/gtkwindow.c:867
 msgid "Icon Name"
 msgstr "Номи нишона"
 
@@ -615,7 +615,7 @@ msgid "The amount of space between two consecutive columns"
 msgstr "Миқдори фосила байни ду сутуни паёпай"
 
 #: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:261
-#: ../gtk/gtkflowbox.c:3683 ../gtk/gtkstack.c:375 ../gtk/gtktoolbar.c:564
+#: ../gtk/gtkflowbox.c:3681 ../gtk/gtkstack.c:375 ../gtk/gtktoolbar.c:564
 #: ../gtk/gtktoolitemgroup.c:1646
 msgid "Homogeneous"
 msgstr "Якхела"
@@ -731,11 +731,11 @@ msgstr "Мазмуни UI-и муттаҳидшуда"
 msgid "An XML string describing the merged UI"
 msgstr "Сатри XML барои шарҳи UI-и муттаҳидшуда"
 
-#: ../gtk/gtkaboutdialog.c:305
+#: ../gtk/gtkaboutdialog.c:332
 msgid "Program name"
 msgstr "Номи барнома"
 
-#: ../gtk/gtkaboutdialog.c:306
+#: ../gtk/gtkaboutdialog.c:333
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -743,92 +743,92 @@ msgstr ""
 "Номи барнома. Агар танзим нашуда бошад, он ба g_get_application_name() "
 "пешфарз мешавад"
 
-#: ../gtk/gtkaboutdialog.c:320
+#: ../gtk/gtkaboutdialog.c:347
 msgid "Program version"
 msgstr "Версияи барномавӣ"
 
-#: ../gtk/gtkaboutdialog.c:321
+#: ../gtk/gtkaboutdialog.c:348
 msgid "The version of the program"
 msgstr "Версияи барнома"
 
-#: ../gtk/gtkaboutdialog.c:335
+#: ../gtk/gtkaboutdialog.c:362
 msgid "Copyright string"
 msgstr "Сатри ҳуқуқи муаллиф"
 
-#: ../gtk/gtkaboutdialog.c:336
+#: ../gtk/gtkaboutdialog.c:363
 msgid "Copyright information for the program"
 msgstr "Иттилооти ҳуқуқи муаллиф барои барнома"
 
-#: ../gtk/gtkaboutdialog.c:353
+#: ../gtk/gtkaboutdialog.c:380
 msgid "Comments string"
 msgstr "Сатри шарҳҳо"
 
-#: ../gtk/gtkaboutdialog.c:354
+#: ../gtk/gtkaboutdialog.c:381
 msgid "Comments about the program"
 msgstr "Шарҳҳо дар бораи барнома"
 
-#: ../gtk/gtkaboutdialog.c:404
+#: ../gtk/gtkaboutdialog.c:431
 msgid "License Type"
 msgstr "Намуди иҷозатнома"
 
-#: ../gtk/gtkaboutdialog.c:405
+#: ../gtk/gtkaboutdialog.c:432
 msgid "The license type of the program"
 msgstr "Намуди иҷозатномаи барнома"
 
-#: ../gtk/gtkaboutdialog.c:421
+#: ../gtk/gtkaboutdialog.c:448
 msgid "Website URL"
 msgstr "URL-и вебсайт"
 
-#: ../gtk/gtkaboutdialog.c:422
+#: ../gtk/gtkaboutdialog.c:449
 msgid "The URL for the link to the website of the program"
 msgstr "URL барои пайвастшавӣ ба вебсайти барнома"
 
-#: ../gtk/gtkaboutdialog.c:436
+#: ../gtk/gtkaboutdialog.c:463
 msgid "Website label"
 msgstr "Барчаспи вебсайт"
 
-#: ../gtk/gtkaboutdialog.c:437
+#: ../gtk/gtkaboutdialog.c:464
 msgid "The label for the link to the website of the program"
 msgstr "Барчасп барои пайвастшавӣ ба вебсайти барнома"
 
-#: ../gtk/gtkaboutdialog.c:453
+#: ../gtk/gtkaboutdialog.c:480
 msgid "Authors"
 msgstr "Муаллифон"
 
-#: ../gtk/gtkaboutdialog.c:454
+#: ../gtk/gtkaboutdialog.c:481
 msgid "List of authors of the program"
 msgstr "Рӯйхати муаллифҳои барнома"
 
-#: ../gtk/gtkaboutdialog.c:470
+#: ../gtk/gtkaboutdialog.c:497
 msgid "Documenters"
 msgstr "Ҳуҷҷатгузорҳо"
 
-#: ../gtk/gtkaboutdialog.c:471
+#: ../gtk/gtkaboutdialog.c:498
 msgid "List of people documenting the program"
 msgstr "Рӯйхати шахсони ҳуҷҷатгузори барнома"
 
-#: ../gtk/gtkaboutdialog.c:487
+#: ../gtk/gtkaboutdialog.c:514
 msgid "Artists"
 msgstr "Ҳунармандон"
 
-#: ../gtk/gtkaboutdialog.c:488
+#: ../gtk/gtkaboutdialog.c:515
 msgid "List of people who have contributed artwork to the program"
 msgstr "Рӯйхати шахсоне, ки дар ороиши барнома саҳм доштанд"
 
-#: ../gtk/gtkaboutdialog.c:505
+#: ../gtk/gtkaboutdialog.c:532
 msgid "Translator credits"
 msgstr "Эътибори тарҷумон"
 
-#: ../gtk/gtkaboutdialog.c:506
+#: ../gtk/gtkaboutdialog.c:533
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Эътибор ба тарҷумон. Сатри мазкур бояд тарҷумашаванда ҳисобида шавад"
 
-#: ../gtk/gtkaboutdialog.c:521
+#: ../gtk/gtkaboutdialog.c:548
 msgid "Logo"
 msgstr "Тамға"
 
-#: ../gtk/gtkaboutdialog.c:522
+#: ../gtk/gtkaboutdialog.c:549
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -836,20 +836,20 @@ msgstr ""
 "Тамға барои дар бораи қуттӣ. Агар он танзим нашуда бошад, он ба "
 "gtk_window_get_default_icon_list() пешфарз мешавад"
 
-#: ../gtk/gtkaboutdialog.c:537
+#: ../gtk/gtkaboutdialog.c:564
 msgid "Logo Icon Name"
 msgstr "Номи нишонаи тамға"
 
-#: ../gtk/gtkaboutdialog.c:538
+#: ../gtk/gtkaboutdialog.c:565
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Нишонаи номбаршуда барои истифодабарӣ ҳамчун тамға барои дар бораи қуттӣ."
 
-#: ../gtk/gtkaboutdialog.c:551
+#: ../gtk/gtkaboutdialog.c:578
 msgid "Wrap license"
 msgstr "Иҷозатномаи печондан"
 
-#: ../gtk/gtkaboutdialog.c:552
+#: ../gtk/gtkaboutdialog.c:579
 msgid "Whether to wrap the license text."
 msgstr "Оё матни иҷозатнома печонда мешавад ё на."
 
@@ -892,6 +892,49 @@ msgstr "қимати ҳадафи фаъолият"
 #: ../gtk/gtkactionable.c:76
 msgid "The parameter for action invocations"
 msgstr "Параметри даъват ба амал"
+
+#: ../gtk/gtkactionbar.c:961 ../gtk/gtkbox.c:326 ../gtk/gtkheaderbar.c:1768
+msgid "Pack type"
+msgstr "Намуди баста"
+
+#: ../gtk/gtkactionbar.c:962 ../gtk/gtkbox.c:327 ../gtk/gtkheaderbar.c:1769
+msgid ""
+"A GtkPackType indicating whether the child is packed with reference to the "
+"start or end of the parent"
+msgstr ""
+"GtkPackType муайян мекунад, ки оё объекти иловагӣ барои оғоз ё анҷоми "
+"объекти асосӣ бо истинод бастабандӣ мешавад ё на"
+
+#: ../gtk/gtkactionbar.c:968 ../gtk/gtkbox.c:333 ../gtk/gtkbubblewindow.c:864
+#: ../gtk/gtkheaderbar.c:1775 ../gtk/gtknotebook.c:778 ../gtk/gtkpaned.c:350
+#: ../gtk/gtkstack.c:432 ../gtk/gtktoolitemgroup.c:1674
+msgid "Position"
+msgstr "Ҷойгиршавӣ"
+
+#: ../gtk/gtkactionbar.c:969 ../gtk/gtkbox.c:334 ../gtk/gtkheaderbar.c:1776
+#: ../gtk/gtknotebook.c:779 ../gtk/gtkstack.c:433
+msgid "The index of the child in the parent"
+msgstr "Индекси объекти иловагӣ дар объекти асосӣ"
+
+#: ../gtk/gtkactionbar.c:976 ../gtk/gtkbox.c:251 ../gtk/gtkcellareabox.c:310
+#: ../gtk/gtkexpander.c:312 ../gtk/gtkheaderbar.c:1809
+#: ../gtk/gtkiconview.c:515 ../gtk/gtktreeviewcolumn.c:281
+msgid "Spacing"
+msgstr "Фосилагузорӣ"
+
+#: ../gtk/gtkactionbar.c:977 ../gtk/gtkbox.c:252 ../gtk/gtkheaderbar.c:1810
+msgid "The amount of space between children"
+msgstr "Миқдори фосила байни объектҳои иловагӣ"
+
+#: ../gtk/gtkactionbar.c:985
+#| msgid "Parent widget"
+msgid "Center Widget"
+msgstr "Виҷети марказӣ"
+
+#: ../gtk/gtkactionbar.c:986
+#| msgid "Icon widget to display in the item"
+msgid "Widget to display in center"
+msgstr "Виҷет барои намоиш додан дар марказ"
 
 #: ../gtk/gtkadjustment.c:121 ../gtk/gtkcellrendererprogress.c:137
 #: ../gtk/gtkscalebutton.c:228 ../gtk/gtkspinbutton.c:410
@@ -1043,11 +1086,11 @@ msgid "Whether the combobox should show the default application on top"
 msgstr ""
 "Новобаста ба он, ки combobox барномаи пешфарзро бояд дар боло нишон диҳад"
 
-#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:587
+#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:600
 msgid "Heading"
 msgstr "Сарлавҳа"
 
-#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:588
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:601
 msgid "The text to show at the top of the dialog"
 msgstr "Матн барои нишон додан дар болои равзанаи гуфтугӯ"
 
@@ -1059,11 +1102,11 @@ msgstr "Намуди мӯҳтаво"
 msgid "The content type used by the open with object"
 msgstr "Навъи мӯҳтавое, ки бо кушодан бо объект истифода шудааст "
 
-#: ../gtk/gtkappchooserdialog.c:573
+#: ../gtk/gtkappchooserdialog.c:586
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/gtkappchooserdialog.c:587
 msgid "The GFile used by the app chooser dialog"
 msgstr "GFile бо равзанаи гуфтугӯи интихобкунандаи барнома истифода мешавад "
 
@@ -1147,11 +1190,11 @@ msgstr "Равзанаи фаъол"
 msgid "The window which most recently had focus"
 msgstr "Равзанае, ки ба вақтҳои охир фокус дошт"
 
-#: ../gtk/gtkapplicationwindow.c:806
+#: ../gtk/gtkapplicationwindow.c:836
 msgid "Show a menubar"
 msgstr "Намоиш додани навори меню"
 
-#: ../gtk/gtkapplicationwindow.c:807
+#: ../gtk/gtkapplicationwindow.c:837
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "ДУРУСТ агар панҷара лавҳаи менюро дар болои панҷара нишон диҳад"
 
@@ -1268,53 +1311,53 @@ msgstr "Охири саҳифа"
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Оё ҳамаи майдонҳои зарурӣ дар саҳифа пур шудаанд"
 
-#: ../gtk/gtkbbox.c:166
+#: ../gtk/gtkbbox.c:174
 msgid "Minimum child width"
 msgstr "Бари ҳадди ақали илова"
 
-#: ../gtk/gtkbbox.c:167
+#: ../gtk/gtkbbox.c:175
 msgid "Minimum width of buttons inside the box"
 msgstr "Бари ҳадди ақали тугмаҳо дар дохили қуттӣ"
 
-#: ../gtk/gtkbbox.c:175
+#: ../gtk/gtkbbox.c:183
 msgid "Minimum child height"
 msgstr "Баландии ҳадди ақали илова"
 
-#: ../gtk/gtkbbox.c:176
+#: ../gtk/gtkbbox.c:184
 msgid "Minimum height of buttons inside the box"
 msgstr "Баландии ҳадди ақали тугмаҳо дар дохили қуттӣ"
 
-#: ../gtk/gtkbbox.c:184
+#: ../gtk/gtkbbox.c:192
 msgid "Child internal width padding"
 msgstr "Фосиласозии бари дохилии илова"
 
-#: ../gtk/gtkbbox.c:185
+#: ../gtk/gtkbbox.c:193
 msgid "Amount to increase child's size on either side"
 msgstr "Миқдори зиёдкунии андозаи илова дар ҳарду тараф"
 
-#: ../gtk/gtkbbox.c:193
+#: ../gtk/gtkbbox.c:201
 msgid "Child internal height padding"
 msgstr "Фосиласозии баландии дохилии илова"
 
-#: ../gtk/gtkbbox.c:194
+#: ../gtk/gtkbbox.c:202
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "Миқдори зиёдкунии андозаи илова дар боло ва поён"
 
-#: ../gtk/gtkbbox.c:202
+#: ../gtk/gtkbbox.c:210
 msgid "Layout style"
 msgstr "Сабки тарҳбандӣ"
 
-#: ../gtk/gtkbbox.c:203
+#: ../gtk/gtkbbox.c:211
 msgid ""
 "How to lay out the buttons in the box. Possible values are: spread, edge, "
 "start and end"
 msgstr "Тарзи гузоштани тугмаҳо дар қуттӣ. Арзишҳои эҳтимолӣ"
 
-#: ../gtk/gtkbbox.c:211
+#: ../gtk/gtkbbox.c:219
 msgid "Secondary"
 msgstr "Ёридиҳанда"
 
-#: ../gtk/gtkbbox.c:212
+#: ../gtk/gtkbbox.c:220
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -1322,26 +1365,16 @@ msgstr ""
 "Агар TRUE бошад, объекти иловагӣ дар гурӯҳи объектҳои иловагии дуюмдараҷа "
 "пайдо мешаванд, масалан тугмаҳои кӯмак"
 
-#: ../gtk/gtkbbox.c:219
+#: ../gtk/gtkbbox.c:227
 msgid "Non-Homogeneous"
 msgstr "Ғайригомогенӣ"
 
-#: ../gtk/gtkbbox.c:220
+#: ../gtk/gtkbbox.c:228
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr ""
 "Агар TRUE бошад, объекти иловагӣ ба андозагирии якхела татбиқ намешавад  "
 
-#: ../gtk/gtkbox.c:251 ../gtk/gtkcellareabox.c:310 ../gtk/gtkexpander.c:312
-#: ../gtk/gtkheaderbar.c:1813 ../gtk/gtkiconview.c:515
-#: ../gtk/gtktreeviewcolumn.c:281
-msgid "Spacing"
-msgstr "Фосилагузорӣ"
-
-#: ../gtk/gtkbox.c:252 ../gtk/gtkheaderbar.c:1814
-msgid "The amount of space between children"
-msgstr "Миқдори фосила байни объектҳои иловагӣ"
-
-#: ../gtk/gtkbox.c:262 ../gtk/gtkflowbox.c:3684
+#: ../gtk/gtkbox.c:262 ../gtk/gtkflowbox.c:3682
 msgid "Whether the children should all be the same size"
 msgstr "Оё ҳамаи объектҳои иловагӣ бояд андозаи якхела дошта бошанд ё на"
 
@@ -1387,29 +1420,6 @@ msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
 "Фазои иловагӣ барои гузоштан дар байни объекти иловагӣ ва ҳамсояҳои он, бо "
 "пиксел"
-
-#: ../gtk/gtkbox.c:326 ../gtk/gtkheaderbar.c:1772
-msgid "Pack type"
-msgstr "Намуди баста"
-
-#: ../gtk/gtkbox.c:327 ../gtk/gtkheaderbar.c:1773
-msgid ""
-"A GtkPackType indicating whether the child is packed with reference to the "
-"start or end of the parent"
-msgstr ""
-"GtkPackType муайян мекунад, ки оё объекти иловагӣ барои оғоз ё анҷоми "
-"объекти асосӣ бо истинод бастабандӣ мешавад ё на"
-
-#: ../gtk/gtkbox.c:333 ../gtk/gtkbubblewindow.c:864 ../gtk/gtkheaderbar.c:1779
-#: ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:350 ../gtk/gtkstack.c:432
-#: ../gtk/gtktoolitemgroup.c:1674
-msgid "Position"
-msgstr "Ҷойгиршавӣ"
-
-#: ../gtk/gtkbox.c:334 ../gtk/gtkheaderbar.c:1780 ../gtk/gtknotebook.c:775
-#: ../gtk/gtkstack.c:433
-msgid "The index of the child in the parent"
-msgstr "Индекси объекти иловагӣ дар объекти асосӣ"
 
 #: ../gtk/gtkbubblewindow.c:850
 msgid "Relative to"
@@ -2025,7 +2035,7 @@ msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Оё вобаста ба вазъият pixbuf -и ҷуброншуда бояд ранга бошад ё не"
 
 #: ../gtk/gtkcellrendererpixbuf.c:256 ../gtk/gtkimage.c:343
-#: ../gtk/gtkwindow.c:804
+#: ../gtk/gtkwindow.c:815
 msgid "Icon"
 msgstr "Нишона"
 
@@ -2035,7 +2045,7 @@ msgstr "Арзиши лавҳаи густариш"
 
 #: ../gtk/gtkcellrendererprogress.c:155 ../gtk/gtkcellrenderertext.c:253
 #: ../gtk/gtkentrybuffer.c:348 ../gtk/gtkentry.c:860
-#: ../gtk/gtkmessagedialog.c:212 ../gtk/gtkprogressbar.c:179
+#: ../gtk/gtkmessagedialog.c:213 ../gtk/gtkprogressbar.c:179
 #: ../gtk/gtktextbuffer.c:219
 msgid "Text"
 msgstr "Матн"
@@ -2647,7 +2657,7 @@ msgid "Whether to give the color an alpha value"
 msgstr "Оё ба қимати алфа ранг дода шавад "
 
 #: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:449
-#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkheaderbar.c:1787
+#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkheaderbar.c:1783
 #: ../gtk/gtkprintjob.c:134 ../gtk/gtkstack.c:418 ../gtk/gtkstatusicon.c:430
 #: ../gtk/gtktreeviewcolumn.c:329
 msgid "Title"
@@ -2685,7 +2695,7 @@ msgstr "Ранги ҷорӣ, мисли GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Оё алфа бояд нишон дода шавад"
 
-#: ../gtk/gtkcolorchooserdialog.c:198 ../gtk/gtkcolorchooserwidget.c:679
+#: ../gtk/gtkcolorchooserdialog.c:215 ../gtk/gtkcolorchooserwidget.c:680
 msgid "Show editor"
 msgstr "Намоиш додани муҳаррир"
 
@@ -2940,37 +2950,46 @@ msgstr "Қимати ибтидоӣ"
 msgid "The initial specified value used for this property"
 msgstr "Қимати махсуси ибтидоӣ, ки барои ин хусусият истифода мешавад"
 
-#: ../gtk/gtkdialog.c:287 ../gtk/gtkinfobar.c:517
+#: ../gtk/gtkdialog.c:524 ../gtk/gtkinfobar.c:517
 msgid "Content area border"
 msgstr "Марзи минтақаи мӯҳтаво"
 
-#: ../gtk/gtkdialog.c:288
+#: ../gtk/gtkdialog.c:525
 msgid "Width of border around the main dialog area"
 msgstr "Бари марз дар атрофи минтақаи гуфтугӯи асосӣ"
 
-#: ../gtk/gtkdialog.c:305 ../gtk/gtkinfobar.c:535
+#: ../gtk/gtkdialog.c:542 ../gtk/gtkinfobar.c:535
 msgid "Content area spacing"
 msgstr "Фосилагузории минтақаи мӯҳтаво"
 
-#: ../gtk/gtkdialog.c:306
+#: ../gtk/gtkdialog.c:543
 msgid "Spacing between elements of the main dialog area"
 msgstr "Фосилагузорӣ байни унсурҳои минтақаи гуфтугӯи асосӣ"
 
-#: ../gtk/gtkdialog.c:313 ../gtk/gtkinfobar.c:552
+#: ../gtk/gtkdialog.c:550 ../gtk/gtkinfobar.c:552
 msgid "Button spacing"
 msgstr "Фосилагузории тугмаҳо"
 
-#: ../gtk/gtkdialog.c:314 ../gtk/gtkinfobar.c:553
+#: ../gtk/gtkdialog.c:551 ../gtk/gtkinfobar.c:553
 msgid "Spacing between buttons"
 msgstr "Фосилагузорӣ байни тугмаҳо"
 
-#: ../gtk/gtkdialog.c:322 ../gtk/gtkinfobar.c:569
+#: ../gtk/gtkdialog.c:559 ../gtk/gtkinfobar.c:569
 msgid "Action area border"
 msgstr "Марзи ноҳияи фаъолият"
 
-#: ../gtk/gtkdialog.c:323
+#: ../gtk/gtkdialog.c:560
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Бари марз дар атрофи минтақаи тугма дар поёни равзанаи гуфтугӯ"
+
+#: ../gtk/gtkdialog.c:580
+#| msgid "Header image"
+msgid "Use Header Bar"
+msgstr "Истифодаи лавҳаи сарварақ"
+
+#: ../gtk/gtkdialog.c:581
+msgid "Use Header Bar for actions."
+msgstr "Истифодаи лавҳаи сарварақ барои амалҳо"
 
 #: ../gtk/gtkentrybuffer.c:349
 msgid "The contents of the buffer"
@@ -3561,7 +3580,7 @@ msgstr "Филтр"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Филтери ҷорӣ барои интихоби файлзоее, ки намоиш дода шудаанд"
 
-#: ../gtk/gtkfilechooser.c:757 ../gtk/gtkplacessidebar.c:4294
+#: ../gtk/gtkfilechooser.c:757 ../gtk/gtkplacessidebar.c:4295
 msgid "Local Only"
 msgstr "Танҳо маҳаллӣ"
 
@@ -3661,59 +3680,59 @@ msgstr "Ҷойгиршавии Y"
 msgid "Y position of child widget"
 msgstr "Вазъияти Y-и виҷети иловагӣ "
 
-#: ../gtk/gtkflowbox.c:3654 ../gtk/gtkiconview.c:399 ../gtk/gtklistbox.c:357
+#: ../gtk/gtkflowbox.c:3652 ../gtk/gtkiconview.c:399 ../gtk/gtklistbox.c:357
 #: ../gtk/gtktreeselection.c:130
 msgid "Selection mode"
 msgstr "Ҳолати интихоб"
 
-#: ../gtk/gtkflowbox.c:3655 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:358
+#: ../gtk/gtkflowbox.c:3653 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:358
 msgid "The selection mode"
 msgstr "Ҳолати интихоб"
 
-#: ../gtk/gtkflowbox.c:3669 ../gtk/gtkiconview.c:656 ../gtk/gtklistbox.c:365
+#: ../gtk/gtkflowbox.c:3667 ../gtk/gtkiconview.c:656 ../gtk/gtklistbox.c:365
 #: ../gtk/gtktreeview.c:1198
 msgid "Activate on Single Click"
 msgstr "Бо як зер кардан фаъол кунед"
 
-#: ../gtk/gtkflowbox.c:3670 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:366
+#: ../gtk/gtkflowbox.c:3668 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:366
 #: ../gtk/gtktreeview.c:1199
 msgid "Activate row on a single click"
 msgstr "Фаъол кардани сатр бо як зеркунӣ"
 
-#: ../gtk/gtkflowbox.c:3701
+#: ../gtk/gtkflowbox.c:3699
 msgid "Minimum Children Per Line"
 msgstr "Меъёри ақали иловаҳо дар ҳар як сатр"
 
-#: ../gtk/gtkflowbox.c:3702
+#: ../gtk/gtkflowbox.c:3700
 msgid ""
 "The minimum number of children to allocate consecutively in the given "
 "orientation."
 msgstr "Меъёри ақали иловаҳо барои ҷойгиркунии тартиб дар самти додашуда."
 
-#: ../gtk/gtkflowbox.c:3718
+#: ../gtk/gtkflowbox.c:3716
 msgid "Maximum Children Per Line"
 msgstr "Меъёри аксари иловаҳо дар ҳар як сатр"
 
-#: ../gtk/gtkflowbox.c:3719
+#: ../gtk/gtkflowbox.c:3717
 msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
 msgstr ""
 "Меъёри аксари иловаҳо барои дархости фосилаи тартиб дар самти додашуда."
 
-#: ../gtk/gtkflowbox.c:3734
+#: ../gtk/gtkflowbox.c:3732
 msgid "Vertical spacing"
 msgstr "Фосилагузории амудӣ"
 
-#: ../gtk/gtkflowbox.c:3735
+#: ../gtk/gtkflowbox.c:3733
 msgid "The amount of vertical space between two children"
 msgstr "Меъёри фазои амудӣ байни ду иловаҳо"
 
-#: ../gtk/gtkflowbox.c:3749
+#: ../gtk/gtkflowbox.c:3747
 msgid "Horizontal spacing"
 msgstr "Фосилагузории уфуқӣ"
 
-#: ../gtk/gtkflowbox.c:3750
+#: ../gtk/gtkflowbox.c:3748
 msgid "The amount of horizontal space between two children"
 msgstr "Меъёри фазои уфуқӣ байни ду иловаҳо"
 
@@ -3850,64 +3869,55 @@ msgstr "Баландӣ"
 msgid "The number of rows that a child spans"
 msgstr "Шумораи сатрҳое, ки иловагӣ мепӯшонад"
 
-#: ../gtk/gtkheaderbar.c:1788
+#: ../gtk/gtkheaderbar.c:1784
 msgid "The title to display"
 msgstr "Унвон барои намоиш"
 
-#: ../gtk/gtkheaderbar.c:1795
-#| msgid "Subitle"
+#: ../gtk/gtkheaderbar.c:1791
 msgid "Subtitle"
 msgstr "Зерунвон"
 
-#: ../gtk/gtkheaderbar.c:1796
+#: ../gtk/gtkheaderbar.c:1792
 msgid "The subtitle to display"
 msgstr "Зерунвон барои намоиш"
 
-#: ../gtk/gtkheaderbar.c:1803
+#: ../gtk/gtkheaderbar.c:1799
 msgid "Custom Title"
 msgstr "Унвони фармоишӣ"
 
-#: ../gtk/gtkheaderbar.c:1804
+#: ../gtk/gtkheaderbar.c:1800
 msgid "Custom title widget to display"
 msgstr "Виҷети унвони фармоишӣ барои намоиш"
 
-#: ../gtk/gtkheaderbar.c:1832
-#| msgid "Show Icons"
+#: ../gtk/gtkheaderbar.c:1828
 msgid "Show decorations"
 msgstr "Намоиш додани ороишҳо"
 
-#: ../gtk/gtkheaderbar.c:1833
-#| msgid "Whether to show a window close button"
+#: ../gtk/gtkheaderbar.c:1829
 msgid "Whether to show window decorations"
 msgstr "Интихоби намоиши ороишҳои равзана"
 
-#: ../gtk/gtkheaderbar.c:1852 ../gtk/gtksettings.c:1572
-#| msgid "Decorated button layout"
+#: ../gtk/gtkheaderbar.c:1848 ../gtk/gtksettings.c:1573
 msgid "Decoration Layout"
 msgstr "Тарҳбандии ороишӣ"
 
-#: ../gtk/gtkheaderbar.c:1853 ../gtk/gtksettings.c:1573
-#| msgid "The parameter for action invocations"
+#: ../gtk/gtkheaderbar.c:1849 ../gtk/gtksettings.c:1574
 msgid "The layout for window decorations"
 msgstr "Тарҳбандӣ барои ороиши равзана"
 
-#: ../gtk/gtkheaderbar.c:1867
-#| msgid "Decorated button layout"
+#: ../gtk/gtkheaderbar.c:1863
 msgid "Decoration Layout Set"
 msgstr "Маҷмӯи тарҳбандиҳои ороишӣ"
 
-#: ../gtk/gtkheaderbar.c:1868
-#| msgid "Whether the icon-size property has been set"
+#: ../gtk/gtkheaderbar.c:1864
 msgid "Whether the decoration-layout property has been set"
 msgstr "Интихоби танзими хусусияти тарҳбандии ороиш"
 
-#: ../gtk/gtkheaderbar.c:1883
-#| msgid "Subitle"
+#: ../gtk/gtkheaderbar.c:1879
 msgid "Has Subtitle"
 msgstr "Зерунвон дорад"
 
-#: ../gtk/gtkheaderbar.c:1884
-#| msgid "Whether to request enough space for every row in the model"
+#: ../gtk/gtkheaderbar.c:1880
 msgid "Whether to reserve space for a subtitle"
 msgstr "Интихоби фосилаи эҳтиёти барои зерунвон"
 
@@ -4123,11 +4133,11 @@ msgstr "Истифодабарии беасаркунӣ"
 msgid "Whether to use icon names fallback"
 msgstr "Оё номи аломати беасаркунӣ истифода шавад ё не"
 
-#: ../gtk/gtkinfobar.c:446 ../gtk/gtkmessagedialog.c:187
+#: ../gtk/gtkinfobar.c:446 ../gtk/gtkmessagedialog.c:188
 msgid "Message Type"
 msgstr "Намуди паём"
 
-#: ../gtk/gtkinfobar.c:447 ../gtk/gtkmessagedialog.c:188
+#: ../gtk/gtkinfobar.c:447 ../gtk/gtkmessagedialog.c:189
 msgid "The type of message"
 msgstr "Намуди паём"
 
@@ -4151,13 +4161,13 @@ msgstr "Фосилагузорӣ дар байни унсурҳои минтақ
 msgid "Width of border around the action area"
 msgstr "Бари марз дар атрофи минтақаи амал"
 
-#: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:176
+#: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:177
 #: ../gtk/gtkstatusicon.c:294 ../gtk/gtkstylecontext.c:444
-#: ../gtk/gtkwindow.c:864
+#: ../gtk/gtkwindow.c:875
 msgid "Screen"
 msgstr "Экран"
 
-#: ../gtk/gtkinvisible.c:102 ../gtk/gtkwindow.c:865
+#: ../gtk/gtkinvisible.c:102 ../gtk/gtkwindow.c:876
 msgid "The screen where this window will be displayed"
 msgstr "Экране, ки дар он равзана намоиш дода мешавад"
 
@@ -4427,38 +4437,35 @@ msgstr "Фосиласозии дохилӣ"
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Миқдори фазои марзи байни сояи навори меню ва объектҳои меню"
 
-#: ../gtk/gtkmenubutton.c:515
-#| msgid "popup"
+#: ../gtk/gtkmenubutton.c:510
 msgid "Popup"
 msgstr "Пайдошаванда"
 
-#: ../gtk/gtkmenubutton.c:516
+#: ../gtk/gtkmenubutton.c:511
 msgid "The dropdown menu."
 msgstr "Менюи зоҳиршаванда"
 
-#: ../gtk/gtkmenubutton.c:532
-#| msgid "TreeMenu model"
+#: ../gtk/gtkmenubutton.c:527
 msgid "Menu model"
 msgstr "Модели меню"
 
-#: ../gtk/gtkmenubutton.c:533
+#: ../gtk/gtkmenubutton.c:528
 msgid "The dropdown menu's model."
 msgstr "Модели менюҳои зоҳиршаванда"
 
-#: ../gtk/gtkmenubutton.c:546
-#| msgid "Align set"
+#: ../gtk/gtkmenubutton.c:541
 msgid "Align with"
 msgstr "Мос кардан бо"
 
-#: ../gtk/gtkmenubutton.c:547
+#: ../gtk/gtkmenubutton.c:542
 msgid "The parent widget which the menu should align with."
 msgstr "Виҷети асосе, ки виҷет бояд бо он мос шавад"
 
-#: ../gtk/gtkmenubutton.c:561 ../gtk/gtkstylecontext.c:458
+#: ../gtk/gtkmenubutton.c:556 ../gtk/gtkstylecontext.c:458
 msgid "Direction"
 msgstr "Самт"
 
-#: ../gtk/gtkmenubutton.c:562
+#: ../gtk/gtkmenubutton.c:557
 msgid "The direction the arrow should point."
 msgstr "Самти тир бояд нишон дода шавад"
 
@@ -4667,63 +4674,63 @@ msgstr "Меню"
 msgid "The dropdown menu"
 msgstr "Менюи зоҳиршаванда"
 
-#: ../gtk/gtkmessagedialog.c:170
+#: ../gtk/gtkmessagedialog.c:171
 msgid "Image/label border"
 msgstr "Марзи тасвир/барчасп"
 
-#: ../gtk/gtkmessagedialog.c:171
+#: ../gtk/gtkmessagedialog.c:172
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Бари марзи атрофи барчасп ва тасвир дар гуфтугӯи паём"
 
-#: ../gtk/gtkmessagedialog.c:195
+#: ../gtk/gtkmessagedialog.c:196
 msgid "Message Buttons"
 msgstr "Тугмаҳои паём"
 
-#: ../gtk/gtkmessagedialog.c:196
+#: ../gtk/gtkmessagedialog.c:197
 msgid "The buttons shown in the message dialog"
 msgstr "Тугмаҳои нишондодашуда дар гуфтугӯи паём"
 
-#: ../gtk/gtkmessagedialog.c:213
+#: ../gtk/gtkmessagedialog.c:214
 msgid "The primary text of the message dialog"
 msgstr "Матни ибтидоии гуфтугӯи паём"
 
-#: ../gtk/gtkmessagedialog.c:228
+#: ../gtk/gtkmessagedialog.c:229
 msgid "Use Markup"
 msgstr "Истифодабарии қайдҳо"
 
-#: ../gtk/gtkmessagedialog.c:229
+#: ../gtk/gtkmessagedialog.c:230
 msgid "The primary text of the title includes Pango markup."
 msgstr "Матни ибтидоии унвон қайди Pango дорад"
 
-#: ../gtk/gtkmessagedialog.c:243
+#: ../gtk/gtkmessagedialog.c:244
 msgid "Secondary Text"
 msgstr "Матни дуюмдараҷа"
 
-#: ../gtk/gtkmessagedialog.c:244
+#: ../gtk/gtkmessagedialog.c:245
 msgid "The secondary text of the message dialog"
 msgstr "Матни дуюмдараҷаи гуфтугӯи паём"
 
-#: ../gtk/gtkmessagedialog.c:259
+#: ../gtk/gtkmessagedialog.c:260
 msgid "Use Markup in secondary"
 msgstr "Истифодабарии қайд дар дуюмдараҷа"
 
-#: ../gtk/gtkmessagedialog.c:260
+#: ../gtk/gtkmessagedialog.c:261
 msgid "The secondary text includes Pango markup."
 msgstr "Матни дуюмдараҷа қайди Pango дорад"
 
-#: ../gtk/gtkmessagedialog.c:274
+#: ../gtk/gtkmessagedialog.c:275
 msgid "Image"
 msgstr "Тасвир"
 
-#: ../gtk/gtkmessagedialog.c:275
+#: ../gtk/gtkmessagedialog.c:276
 msgid "The image"
 msgstr "Тасвир"
 
-#: ../gtk/gtkmessagedialog.c:291
+#: ../gtk/gtkmessagedialog.c:292
 msgid "Message area"
 msgstr "Ноҳияи паём"
 
-#: ../gtk/gtkmessagedialog.c:292
+#: ../gtk/gtkmessagedialog.c:293
 msgid "GtkVBox that holds the dialog's primary and secondary labels"
 msgstr "GtkVBox, ки барчаспҳои ибтидоӣ ва дуюмдараҷаи гуфтугӯро нигоҳ медорад"
 
@@ -4755,73 +4762,73 @@ msgid ""
 msgstr ""
 "Миқдори фазо барои илова кардан дар тарафи боло ва поёни виҷет, бо пиксел"
 
-#: ../gtk/gtkmountoperation.c:160 ../gtk/gtkstylecontext.c:474
+#: ../gtk/gtkmountoperation.c:161 ../gtk/gtkstylecontext.c:474
 msgid "Parent"
 msgstr "Асосӣ"
 
-#: ../gtk/gtkmountoperation.c:161
+#: ../gtk/gtkmountoperation.c:162
 msgid "The parent window"
 msgstr "Равзанаи асосӣ"
 
-#: ../gtk/gtkmountoperation.c:168
+#: ../gtk/gtkmountoperation.c:169
 msgid "Is Showing"
 msgstr "Нишон медиҳад"
 
-#: ../gtk/gtkmountoperation.c:169
+#: ../gtk/gtkmountoperation.c:170
 msgid "Are we showing a dialog"
 msgstr "Гуфтугӯро нишоон дода истодаанд"
 
-#: ../gtk/gtkmountoperation.c:177
+#: ../gtk/gtkmountoperation.c:178
 msgid "The screen where this window will be displayed."
 msgstr "Экране, ки ин равзана намоиш дода мешавад."
 
-#: ../gtk/gtknotebook.c:699
+#: ../gtk/gtknotebook.c:703
 msgid "Page"
 msgstr "Саҳифа"
 
-#: ../gtk/gtknotebook.c:700
+#: ../gtk/gtknotebook.c:704
 msgid "The index of the current page"
 msgstr "Индекси саҳифаи ҷорӣ"
 
-#: ../gtk/gtknotebook.c:708
+#: ../gtk/gtknotebook.c:712
 msgid "Tab Position"
 msgstr "Вазъияти варақа"
 
-#: ../gtk/gtknotebook.c:709
+#: ../gtk/gtknotebook.c:713
 msgid "Which side of the notebook holds the tabs"
 msgstr "Кадом тарафи ноутбук варақаҳоро нигоҳ медорад"
 
-#: ../gtk/gtknotebook.c:716
+#: ../gtk/gtknotebook.c:720
 msgid "Show Tabs"
 msgstr "Намоиш додани варақаҳо"
 
-#: ../gtk/gtknotebook.c:717
+#: ../gtk/gtknotebook.c:721
 msgid "Whether tabs should be shown"
 msgstr "Оё варақаҳо бояд нишон дода шаванд ё не"
 
-#: ../gtk/gtknotebook.c:723
+#: ../gtk/gtknotebook.c:727
 msgid "Show Border"
 msgstr "Намоиш додани марзҳо"
 
-#: ../gtk/gtknotebook.c:724
+#: ../gtk/gtknotebook.c:728
 msgid "Whether the border should be shown"
 msgstr "Оё марз бояд нишон дода шавад ё не"
 
-#: ../gtk/gtknotebook.c:730
+#: ../gtk/gtknotebook.c:734
 msgid "Scrollable"
 msgstr "Ҷобаҷошаванда"
 
-#: ../gtk/gtknotebook.c:731
+#: ../gtk/gtknotebook.c:735
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Агар TRUE бошад, ва агар варақаҳо барои часпонидан хеле зиёд бошанд, тирҳои "
 "ҷобаҷошаванда илова мешаванд"
 
-#: ../gtk/gtknotebook.c:737
+#: ../gtk/gtknotebook.c:741
 msgid "Enable Popup"
 msgstr "Фаъол кардани равзанаҳои пайдошаванда"
 
-#: ../gtk/gtknotebook.c:738
+#: ../gtk/gtknotebook.c:742
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -4829,135 +4836,135 @@ msgstr ""
 "Агар TRUE бошад, зер кардани тугмаи рости муш дар ноутбук менюеро зоҳир "
 "мекунад, ки шумо барои гузаштан ба ягон саҳифа истифода мебаред"
 
-#: ../gtk/gtknotebook.c:752
+#: ../gtk/gtknotebook.c:756
 msgid "Group Name"
 msgstr "Номи гурӯҳ"
 
-#: ../gtk/gtknotebook.c:753
+#: ../gtk/gtknotebook.c:757
 msgid "Group name for tab drag and drop"
 msgstr "Номи гурӯҳ барои кашидан ва дур кардани варақа"
 
-#: ../gtk/gtknotebook.c:760
+#: ../gtk/gtknotebook.c:764
 msgid "Tab label"
 msgstr "Барчаспи варақа"
 
-#: ../gtk/gtknotebook.c:761
+#: ../gtk/gtknotebook.c:765
 msgid "The string displayed on the child's tab label"
 msgstr "Сатри намоишӣ дар барчаспи варақаи иловагӣ"
 
-#: ../gtk/gtknotebook.c:767
+#: ../gtk/gtknotebook.c:771
 msgid "Menu label"
 msgstr "Барчаспи меню"
 
-#: ../gtk/gtknotebook.c:768
+#: ../gtk/gtknotebook.c:772
 msgid "The string displayed in the child's menu entry"
 msgstr "Сатри намоишӣ дар вурудии менюи иловагӣ"
 
-#: ../gtk/gtknotebook.c:781
+#: ../gtk/gtknotebook.c:785
 msgid "Tab expand"
 msgstr "Густариши варақа"
 
-#: ../gtk/gtknotebook.c:782
+#: ../gtk/gtknotebook.c:786
 msgid "Whether to expand the child's tab"
 msgstr "Оё варақаи иловагӣ густариш ёбад ё не"
 
-#: ../gtk/gtknotebook.c:788
+#: ../gtk/gtknotebook.c:792
 msgid "Tab fill"
 msgstr "Пуркунии варақа"
 
-#: ../gtk/gtknotebook.c:789
+#: ../gtk/gtknotebook.c:793
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "Оё варақаи иловагӣ бояд минтақаи пешбинишударо пур кунад ё не"
 
-#: ../gtk/gtknotebook.c:796
+#: ../gtk/gtknotebook.c:800
 msgid "Tab reorderable"
 msgstr "Варақаи қобили фармоиш"
 
-#: ../gtk/gtknotebook.c:797
+#: ../gtk/gtknotebook.c:801
 msgid "Whether the tab is reorderable by user action"
 msgstr "Оё варақа бо амали корбар қобили фармоиш мешавад ё не"
 
-#: ../gtk/gtknotebook.c:803
+#: ../gtk/gtknotebook.c:807
 msgid "Tab detachable"
 msgstr "Варақаи ҷудошаванда"
 
-#: ../gtk/gtknotebook.c:804
+#: ../gtk/gtknotebook.c:808
 msgid "Whether the tab is detachable"
 msgstr "Оё варақа ҷудошаванда ҳаст ё не"
 
-#: ../gtk/gtknotebook.c:819 ../gtk/gtkscrollbar.c:100
+#: ../gtk/gtknotebook.c:823 ../gtk/gtkscrollbar.c:100
 msgid "Secondary backward stepper"
 msgstr "Қадамгузори ба самти ақиби дуюмдараҷа "
 
-#: ../gtk/gtknotebook.c:820
+#: ../gtk/gtknotebook.c:824
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Намоишии тугмаи дуюми тир ба самти ақиб дар охири баръакси минтақаи варақа"
 
-#: ../gtk/gtknotebook.c:835 ../gtk/gtkscrollbar.c:107
+#: ../gtk/gtknotebook.c:839 ../gtk/gtkscrollbar.c:107
 msgid "Secondary forward stepper"
 msgstr "Қадамгузори ба самти пеши дуюмдараҷа "
 
-#: ../gtk/gtknotebook.c:836
+#: ../gtk/gtknotebook.c:840
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Намоиши тугмаи дуюми тир ба самти пеш дар охири баръакси минтақаи варақа "
 
-#: ../gtk/gtknotebook.c:850 ../gtk/gtkscrollbar.c:86
+#: ../gtk/gtknotebook.c:854 ../gtk/gtkscrollbar.c:86
 msgid "Backward stepper"
 msgstr "Қадамгузор ба самти ақиб"
 
-#: ../gtk/gtknotebook.c:851 ../gtk/gtkscrollbar.c:87
+#: ../gtk/gtknotebook.c:855 ../gtk/gtkscrollbar.c:87
 msgid "Display the standard backward arrow button"
 msgstr "Намоиши тугмаи стандартии тири самти ақиб"
 
-#: ../gtk/gtknotebook.c:865 ../gtk/gtkscrollbar.c:93
+#: ../gtk/gtknotebook.c:869 ../gtk/gtkscrollbar.c:93
 msgid "Forward stepper"
 msgstr "Қадамгузор ба самти пеш"
 
-#: ../gtk/gtknotebook.c:866 ../gtk/gtkscrollbar.c:94
+#: ../gtk/gtknotebook.c:870 ../gtk/gtkscrollbar.c:94
 msgid "Display the standard forward arrow button"
 msgstr "Намоиши тугмаи стандартии тир ба самти пеш"
 
-#: ../gtk/gtknotebook.c:880
+#: ../gtk/gtknotebook.c:884
 msgid "Tab overlap"
 msgstr "Варақаи ҳампӯшонӣ"
 
-#: ../gtk/gtknotebook.c:881
+#: ../gtk/gtknotebook.c:885
 msgid "Size of tab overlap area"
 msgstr "Андозаи минтақаи варақаи ҳампӯшонӣ"
 
-#: ../gtk/gtknotebook.c:896
+#: ../gtk/gtknotebook.c:900
 msgid "Tab curvature"
 msgstr "Каҷии варақа"
 
-#: ../gtk/gtknotebook.c:897
+#: ../gtk/gtknotebook.c:901
 msgid "Size of tab curvature"
 msgstr "Андозаи каҷии варақа"
 
-#: ../gtk/gtknotebook.c:913
+#: ../gtk/gtknotebook.c:917
 msgid "Arrow spacing"
 msgstr "Фосилагузории тирча"
 
-#: ../gtk/gtknotebook.c:914
+#: ../gtk/gtknotebook.c:918
 msgid "Scroll arrow spacing"
 msgstr "Фосилагузории тири ҳаракатӣ"
 
-#: ../gtk/gtknotebook.c:930
+#: ../gtk/gtknotebook.c:934
 msgid "Initial gap"
 msgstr "Холигии ибтидоӣ"
 
-#: ../gtk/gtknotebook.c:931
+#: ../gtk/gtknotebook.c:935
 msgid "Initial gap before the first tab"
 msgstr "Холигии ибтидоӣ пеш аз варақаи якум"
 
-#: ../gtk/gtknotebook.c:949
+#: ../gtk/gtknotebook.c:953
 msgid "Tab gap"
 msgstr "Фосилаи варақа"
 
-#: ../gtk/gtknotebook.c:950
+#: ../gtk/gtknotebook.c:954
 msgid "Active tab is drawn with a gap at the bottom"
 msgstr "Варақаи фаъол дар поён бо фосила кашида мешавад"
 
@@ -5066,19 +5073,19 @@ msgstr "Кучак кардан"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Агар TRUE бошад, иловагӣ аз дархосташ хурдтар мешавад"
 
-#: ../gtk/gtkplacessidebar.c:4269
+#: ../gtk/gtkplacessidebar.c:4270
 msgid "Location to Select"
 msgstr "Ҷойгиршавӣ барои интихоб"
 
-#: ../gtk/gtkplacessidebar.c:4270
+#: ../gtk/gtkplacessidebar.c:4271
 msgid "The location to highlight in the sidebar"
 msgstr "Ҷойгиршавӣ барои ҷудо кардани навори ҷонибӣ"
 
-#: ../gtk/gtkplacessidebar.c:4275
+#: ../gtk/gtkplacessidebar.c:4276
 msgid "Open Flags"
 msgstr "Байрақчаҳои кушода"
 
-#: ../gtk/gtkplacessidebar.c:4276
+#: ../gtk/gtkplacessidebar.c:4277
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5086,21 +5093,21 @@ msgstr ""
 "Моделҳое, ки дар онҳо барномаҳои занг ҷойгиравшии интихобшударо дар навори "
 "ҷонибӣ кушода метавонад"
 
-#: ../gtk/gtkplacessidebar.c:4282
+#: ../gtk/gtkplacessidebar.c:4283
 msgid "Show 'Desktop'"
 msgstr "Намоиш додани 'Мизи корӣ'"
 
-#: ../gtk/gtkplacessidebar.c:4283
+#: ../gtk/gtkplacessidebar.c:4284
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Оё навори ҷонибӣ миёнбури дарунсохт барои ҷузвдони мизи кориро дар бар "
 "мегирад ё не"
 
-#: ../gtk/gtkplacessidebar.c:4288
+#: ../gtk/gtkplacessidebar.c:4289
 msgid "Show 'Connect to Server'"
 msgstr "Нишондиҳии \"Пайвастшавӣ ба сервер\""
 
-#: ../gtk/gtkplacessidebar.c:4289
+#: ../gtk/gtkplacessidebar.c:4290
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5108,7 +5115,7 @@ msgstr ""
 "Оё навори ҷонибӣ миёнбури дарунсохт ба равзанаи гуфтугӯи  'Пайвастшавӣ ба "
 "сервер' дар бар мегирад ё не"
 
-#: ../gtk/gtkplacessidebar.c:4295
+#: ../gtk/gtkplacessidebar.c:4296
 msgid "Whether the sidebar only includes local files"
 msgstr "Интихоби намоиши танҳо файлҳои маҳаллӣ дар навори ҷонибӣ"
 
@@ -5261,7 +5268,7 @@ msgid "Printer settings"
 msgstr "Танзимоти принтер"
 
 #: ../gtk/gtkprintjob.c:161 ../gtk/gtkprintjob.c:162
-#: ../gtk/gtkprintunixdialog.c:413
+#: ../gtk/gtkprintunixdialog.c:417
 msgid "Page Setup"
 msgstr "Танзими саҳифа"
 
@@ -5285,11 +5292,11 @@ msgstr "Барпосозии саҳифаи пешфарз"
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup истифодашуда аз ҷониби пешфарз"
 
-#: ../gtk/gtkprintoperation.c:1103 ../gtk/gtkprintunixdialog.c:431
+#: ../gtk/gtkprintoperation.c:1103 ../gtk/gtkprintunixdialog.c:435
 msgid "Print Settings"
 msgstr "Танзимоти чопкунӣ"
 
-#: ../gtk/gtkprintoperation.c:1104 ../gtk/gtkprintunixdialog.c:432
+#: ../gtk/gtkprintoperation.c:1104 ../gtk/gtkprintunixdialog.c:436
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings истифодашуда барои омода кардани равзанаи гуфтугӯ"
 
@@ -5309,11 +5316,11 @@ msgstr "Миқдори саҳифаҳо"
 msgid "The number of pages in the document."
 msgstr "Миқдори саҳифаҳо дар ҳуҷҷат"
 
-#: ../gtk/gtkprintoperation.c:1169 ../gtk/gtkprintunixdialog.c:421
+#: ../gtk/gtkprintoperation.c:1169 ../gtk/gtkprintunixdialog.c:425
 msgid "Current Page"
 msgstr "Саҳифаи ҷорӣ"
 
-#: ../gtk/gtkprintoperation.c:1170 ../gtk/gtkprintunixdialog.c:422
+#: ../gtk/gtkprintoperation.c:1170 ../gtk/gtkprintunixdialog.c:426
 msgid "The current page in the document"
 msgstr "Саҳифаи ҷорӣ дар ҳуҷҷат"
 
@@ -5390,7 +5397,7 @@ msgstr "Барчаспи ватақаи фармоишӣ"
 msgid "Label for the tab containing custom widgets."
 msgstr "Барчасп барои виҷетҳои фармоишие, ки варақа доранд."
 
-#: ../gtk/gtkprintoperation.c:1366 ../gtk/gtkprintunixdialog.c:456
+#: ../gtk/gtkprintoperation.c:1366 ../gtk/gtkprintunixdialog.c:460
 msgid "Support Selection"
 msgstr "Интихоби дастгирӣ"
 
@@ -5398,7 +5405,7 @@ msgstr "Интихоби дастгирӣ"
 msgid "TRUE if the print operation will support print of selection."
 msgstr "ДУРУСТ агар кори чоп чопи интихобро дастгирӣ намояд."
 
-#: ../gtk/gtkprintoperation.c:1383 ../gtk/gtkprintunixdialog.c:464
+#: ../gtk/gtkprintoperation.c:1383 ../gtk/gtkprintunixdialog.c:468
 msgid "Has Selection"
 msgstr "Интихоб дорад"
 
@@ -5406,11 +5413,11 @@ msgstr "Интихоб дорад"
 msgid "TRUE if a selection exists."
 msgstr "ДУРУСТ агар интихоб мавҷуд бошад"
 
-#: ../gtk/gtkprintoperation.c:1399 ../gtk/gtkprintunixdialog.c:472
+#: ../gtk/gtkprintoperation.c:1399 ../gtk/gtkprintunixdialog.c:476
 msgid "Embed Page Setup"
 msgstr "Танзими саҳифаи дарунсохт"
 
-#: ../gtk/gtkprintoperation.c:1400 ../gtk/gtkprintunixdialog.c:473
+#: ../gtk/gtkprintoperation.c:1400 ../gtk/gtkprintunixdialog.c:477
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
 "ДУРУСТ агар маҷмӯи танзимоти саҳифа дар GtkPrintUnixDialog ҷойгир шуда бошад"
@@ -5423,31 +5430,31 @@ msgstr "Миқдори саҳифаҳо барои чопкунӣ"
 msgid "The number of pages that will be printed."
 msgstr "Миқдори саҳифаҳое, ки чоп мешаванд."
 
-#: ../gtk/gtkprintunixdialog.c:414
+#: ../gtk/gtkprintunixdialog.c:418
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup барои истифода"
 
-#: ../gtk/gtkprintunixdialog.c:439
+#: ../gtk/gtkprintunixdialog.c:443
 msgid "Selected Printer"
 msgstr "Принтери интихобшуда"
 
-#: ../gtk/gtkprintunixdialog.c:440
+#: ../gtk/gtkprintunixdialog.c:444
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter, ки интихоб шудааст"
 
-#: ../gtk/gtkprintunixdialog.c:447
+#: ../gtk/gtkprintunixdialog.c:451
 msgid "Manual Capabilities"
 msgstr "Қобилиятҳои дастурӣ"
 
-#: ../gtk/gtkprintunixdialog.c:448
+#: ../gtk/gtkprintunixdialog.c:452
 msgid "Capabilities the application can handle"
 msgstr "Қобилиятҳои барнома санҷида мешавад"
 
-#: ../gtk/gtkprintunixdialog.c:457
+#: ../gtk/gtkprintunixdialog.c:461
 msgid "Whether the dialog supports selection"
 msgstr "Оё равзанаи гуфтугӯ интихобро дастгирӣ мекунад ё не"
 
-#: ../gtk/gtkprintunixdialog.c:465
+#: ../gtk/gtkprintunixdialog.c:469
 msgid "Whether the application has a selection"
 msgstr "Оё барнома интихоб дорад ё не"
 
@@ -6056,11 +6063,11 @@ msgstr "Кашидан"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Оё ҷудокунанда кашида шудааст, ё танҳо холӣ аст"
 
-#: ../gtk/gtksettings.c:363
+#: ../gtk/gtksettings.c:364
 msgid "Double Click Time"
 msgstr "Замони ду бор зер кардан"
 
-#: ../gtk/gtksettings.c:364
+#: ../gtk/gtksettings.c:365
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -6068,11 +6075,11 @@ msgstr ""
 "Замони ҳадди ақали имконпазир байни ду зеркунӣ барои ҳамчун ду бор зеркунӣ "
 "ҳисоб пешбинӣ шудани онҳо (бо миллисония)"
 
-#: ../gtk/gtksettings.c:371
+#: ../gtk/gtksettings.c:372
 msgid "Double Click Distance"
 msgstr "Фосилаи ду бор зуркунӣ"
 
-#: ../gtk/gtksettings.c:372
+#: ../gtk/gtksettings.c:373
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -6080,35 +6087,35 @@ msgstr ""
 "Фосилаи ҳадди аксари имконпазир байни ду зеркунӣ барои ҳамчун ду бор зеркунӣ "
 "ҳисоб пешбинӣ шудани онҳо (бо пиксел)"
 
-#: ../gtk/gtksettings.c:388
+#: ../gtk/gtksettings.c:389
 msgid "Cursor Blink"
 msgstr "Мижазании курсор"
 
-#: ../gtk/gtksettings.c:389
+#: ../gtk/gtksettings.c:390
 msgid "Whether the cursor should blink"
 msgstr "Оё курсор бояд фурӯзон шавад"
 
-#: ../gtk/gtksettings.c:396
+#: ../gtk/gtksettings.c:397
 msgid "Cursor Blink Time"
 msgstr "Вақти мижазании курсор"
 
-#: ../gtk/gtksettings.c:397
+#: ../gtk/gtksettings.c:398
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Дарозии давраи фурӯзонии курсор, бо миллисония"
 
-#: ../gtk/gtksettings.c:416
+#: ../gtk/gtksettings.c:417
 msgid "Cursor Blink Timeout"
 msgstr "Анҷоми вақти мижазании курсор"
 
-#: ../gtk/gtksettings.c:417
+#: ../gtk/gtksettings.c:418
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Замони баъд аз қатъи фурӯзонии курсор, бо сония"
 
-#: ../gtk/gtksettings.c:424
+#: ../gtk/gtksettings.c:425
 msgid "Split Cursor"
 msgstr "Курсори ҷудокунанда"
 
-#: ../gtk/gtksettings.c:425
+#: ../gtk/gtksettings.c:426
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -6116,154 +6123,154 @@ msgstr ""
 "Оё барои матни омехтаи чап-ба-рост ва рост-ба-чап ду курсор намоиш дода "
 "шаванд"
 
-#: ../gtk/gtksettings.c:432
+#: ../gtk/gtksettings.c:433
 msgid "Theme Name"
 msgstr "Номи мавзӯъ"
 
-#: ../gtk/gtksettings.c:433
+#: ../gtk/gtksettings.c:434
 msgid "Name of theme to load"
 msgstr "Номи мавзӯъ барои боргирӣ"
 
-#: ../gtk/gtksettings.c:445
+#: ../gtk/gtksettings.c:446
 msgid "Icon Theme Name"
 msgstr "Номи мавзӯи нишона"
 
-#: ../gtk/gtksettings.c:446
+#: ../gtk/gtksettings.c:447
 msgid "Name of icon theme to use"
 msgstr "Номи мавзӯи нишона барои истифодабарӣ"
 
-#: ../gtk/gtksettings.c:461
+#: ../gtk/gtksettings.c:462
 msgid "Fallback Icon Theme Name"
 msgstr "Номи мавзӯи нишонаи бозгашт"
 
-#: ../gtk/gtksettings.c:462
+#: ../gtk/gtksettings.c:463
 msgid "Name of a icon theme to fall back to"
 msgstr "Номи мавзӯи нишона барои бозгашт ба"
 
-#: ../gtk/gtksettings.c:470
+#: ../gtk/gtksettings.c:471
 msgid "Key Theme Name"
 msgstr "Номи мавзӯи калидӣ"
 
-#: ../gtk/gtksettings.c:471
+#: ../gtk/gtksettings.c:472
 msgid "Name of key theme to load"
 msgstr "Номи мавзӯи калидӣ барои боргирӣ"
 
-#: ../gtk/gtksettings.c:486
+#: ../gtk/gtksettings.c:487
 msgid "Menu bar accelerator"
 msgstr "Шитобдиҳандаи панели меню"
 
-#: ../gtk/gtksettings.c:487
+#: ../gtk/gtksettings.c:488
 msgid "Keybinding to activate the menu bar"
 msgstr "Тугмабандӣ барои фаъол кардани панели меню"
 
-#: ../gtk/gtksettings.c:495
+#: ../gtk/gtksettings.c:496
 msgid "Drag threshold"
 msgstr "Ҳадди кашидашавӣ"
 
-#: ../gtk/gtksettings.c:496
+#: ../gtk/gtksettings.c:497
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Миқдори пикселҳое, ки курсор пеш аз кашидашавӣ ҳаракат дода метавонад"
 
-#: ../gtk/gtksettings.c:504
+#: ../gtk/gtksettings.c:505
 msgid "Font Name"
 msgstr "Номи шрифт"
 
-#: ../gtk/gtksettings.c:505
+#: ../gtk/gtksettings.c:506
 msgid "Name of default font to use"
 msgstr "Номи шрифти пешфарз барои истифода"
 
-#: ../gtk/gtksettings.c:529
+#: ../gtk/gtksettings.c:530
 msgid "Icon Sizes"
 msgstr "Андозаҳои нишонаҳо"
 
-#: ../gtk/gtksettings.c:530
+#: ../gtk/gtksettings.c:531
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Рӯйхати андозаҳои нишона (gtk-menu=16,16:gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:538
+#: ../gtk/gtksettings.c:539
 msgid "GTK Modules"
 msgstr "Модулҳои GTK"
 
-#: ../gtk/gtksettings.c:539
+#: ../gtk/gtksettings.c:540
 msgid "List of currently active GTK modules"
 msgstr "Рӯйхати модулҳои ҷории фаъоли GTK"
 
-#: ../gtk/gtksettings.c:547
+#: ../gtk/gtksettings.c:548
 msgid "Xft Antialias"
 msgstr "Xft ҳамворкунӣ"
 
-#: ../gtk/gtksettings.c:548
+#: ../gtk/gtksettings.c:549
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Оё шрифтҳои Xft ҳамвор карда шаванд, 0=не, 1=ҳа, -1=пешфарз"
 
-#: ../gtk/gtksettings.c:557
+#: ../gtk/gtksettings.c:558
 msgid "Xft Hinting"
 msgstr "Ишоракунии Xft"
 
-#: ../gtk/gtksettings.c:558
+#: ../gtk/gtksettings.c:559
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Оё шрифтҳои Xft ишора карда шаванд, 0=не, 1=ҳа, -1=пешфарз"
 
-#: ../gtk/gtksettings.c:567
+#: ../gtk/gtksettings.c:568
 msgid "Xft Hint Style"
 msgstr "Сабки ишораи Xft"
 
-#: ../gtk/gtksettings.c:568
+#: ../gtk/gtksettings.c:569
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Кадом сатҳи ишоракунӣ истифода шавад; беишора; ишораи кам; ишораи миёна; ё "
 "ишораи пурра"
 
-#: ../gtk/gtksettings.c:577
+#: ../gtk/gtksettings.c:578
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: ../gtk/gtksettings.c:578
+#: ../gtk/gtksettings.c:579
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Намуди ҳамворкунии субпикселӣ; none, rgb, bgr, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:587
+#: ../gtk/gtksettings.c:588
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: ../gtk/gtksettings.c:588
+#: ../gtk/gtksettings.c:589
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Возеҳӣ барои Xft, дар 1024 * нуқта/дюйм -1 барои истифодаи қимати пешфарз"
 
-#: ../gtk/gtksettings.c:597
+#: ../gtk/gtksettings.c:598
 msgid "Cursor theme name"
 msgstr "Номи мавзӯи курсор"
 
-#: ../gtk/gtksettings.c:598
+#: ../gtk/gtksettings.c:599
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr ""
 "Номи мавзӯи курсор барои истифода, ё NULL барои истифодаи мавзӯи пешфарз"
 
-#: ../gtk/gtksettings.c:606
+#: ../gtk/gtksettings.c:607
 msgid "Cursor theme size"
 msgstr "Андозаи мавзӯи курсор"
 
-#: ../gtk/gtksettings.c:607
+#: ../gtk/gtksettings.c:608
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Андоза барои истифодаи курсорҳо, ё 0 барои истифода андозаи пешфарз"
 
-#: ../gtk/gtksettings.c:616
+#: ../gtk/gtksettings.c:617
 msgid "Alternative button order"
 msgstr "Тартиби иловагии тугмаҳо"
 
-#: ../gtk/gtksettings.c:617
+#: ../gtk/gtksettings.c:618
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 "Оё тугмаҳо дар равзанаҳои гуфтугӯ бояд тартиби тугмаҳои иловагиро истифода "
 "баранд"
 
-#: ../gtk/gtksettings.c:634
+#: ../gtk/gtksettings.c:635
 msgid "Alternative sort indicator direction"
 msgstr "Самти иловагии нишондиҳандаи мураттабсозӣ"
 
-#: ../gtk/gtksettings.c:635
+#: ../gtk/gtksettings.c:636
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -6271,11 +6278,11 @@ msgstr ""
 "Оё самти индикатори сифат дар рӯйхат ва намоиши дарахт нисбат ба пешфарз "
 "баръакс шудааст (ки поён маънои афзояндаро дорад)"
 
-#: ../gtk/gtksettings.c:648
+#: ../gtk/gtksettings.c:649
 msgid "Show the 'Input Methods' menu"
 msgstr "нишон додани менюи 'Тарзи вуруд'"
 
-#: ../gtk/gtksettings.c:649
+#: ../gtk/gtksettings.c:650
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -6283,11 +6290,11 @@ msgstr ""
 "Оё менюҳои мӯҳтавои вурудиҳо ва намоиши матн бояд ҳатман тарзи вурудро "
 "тағйир диҳанд"
 
-#: ../gtk/gtksettings.c:662
+#: ../gtk/gtksettings.c:663
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Намоиши менюи 'дарҷ кардани аломати назорати юникод'"
 
-#: ../gtk/gtksettings.c:663
+#: ../gtk/gtksettings.c:664
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -6295,246 +6302,246 @@ msgstr ""
 "Оё Оё менюҳои мӯҳтавои вурудиҳо ва намоиши матн бояд ҳатман аломатҳои "
 "наҳоратиро дарҷ кунанд"
 
-#: ../gtk/gtksettings.c:676
+#: ../gtk/gtksettings.c:677
 msgid "Start timeout"
 msgstr "Оғози хотимаи вақт"
 
-#: ../gtk/gtksettings.c:677
+#: ../gtk/gtksettings.c:678
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Қимати ибтидоӣ барои хотимаи вақт, ҳангоми зер кардани тугма"
 
-#: ../gtk/gtksettings.c:691
+#: ../gtk/gtksettings.c:692
 msgid "Repeat timeout"
 msgstr "Такрори хотимаи вақт"
 
-#: ../gtk/gtksettings.c:692
+#: ../gtk/gtksettings.c:693
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Такрори қимат барои хотимаи вақт, ҳангоми зер кардани тугма"
 
-#: ../gtk/gtksettings.c:706
+#: ../gtk/gtksettings.c:707
 msgid "Expand timeout"
 msgstr "Густариш додани хотимаи вақт"
 
-#: ../gtk/gtksettings.c:707
+#: ../gtk/gtksettings.c:708
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 "Густариш додани қимат барои хотимаи вақт, вақте ки як виҷет минтақаи наверо "
 "густариш медиҳад"
 
-#: ../gtk/gtksettings.c:745
+#: ../gtk/gtksettings.c:746
 msgid "Color scheme"
 msgstr "Нақшаи ранг"
 
-#: ../gtk/gtksettings.c:746
+#: ../gtk/gtksettings.c:747
 msgid "A palette of named colors for use in themes"
 msgstr "Маҷмӯи рагҳои номбаршуда барои истифода дар мавзӯҳо"
 
-#: ../gtk/gtksettings.c:755
+#: ../gtk/gtksettings.c:756
 msgid "Enable Animations"
 msgstr "Фаъол кардани аниматсияҳо"
 
-#: ../gtk/gtksettings.c:756
+#: ../gtk/gtksettings.c:757
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Оё аниматсияҳои маҷмӯи абзорҳои васеъ фаъол шаванд."
 
-#: ../gtk/gtksettings.c:777
+#: ../gtk/gtksettings.c:778
 msgid "Enable Touchscreen Mode"
 msgstr "Фаъол кардани реҷаи экрани ламсӣ"
 
-#: ../gtk/gtksettings.c:778
+#: ../gtk/gtksettings.c:779
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 "Вақте ки TRUE аст, ҳеҷгуна ҳаракати огоҳкунандаи ҳодисаҳои рухдода дар ин "
 "экран вуҷуд надорад"
 
-#: ../gtk/gtksettings.c:797
+#: ../gtk/gtksettings.c:798
 msgid "Tooltip timeout"
 msgstr "Анҷоми вақти маслиҳатҳои система"
 
-#: ../gtk/gtksettings.c:798
+#: ../gtk/gtksettings.c:799
 msgid "Timeout before tooltip is shown"
 msgstr "Хотимаи вақт пеш аз намоиш додани маслиҳати абзор"
 
-#: ../gtk/gtksettings.c:825
+#: ../gtk/gtksettings.c:826
 msgid "Tooltip browse timeout"
 msgstr "Маслиҳати абзор хотимаи вақтро мурур мекунад"
 
-#: ../gtk/gtksettings.c:826
+#: ../gtk/gtksettings.c:827
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 "Хотимаи вақт пеш аз намоиши маслиҳати абзор ҳангоми фаъол будани ҳолати мурур"
 
-#: ../gtk/gtksettings.c:849
+#: ../gtk/gtksettings.c:850
 msgid "Tooltip browse mode timeout"
 msgstr "Маслиҳати абзор ҳолати хотимаи вақтро мурур мекунад"
 
-#: ../gtk/gtksettings.c:850
+#: ../gtk/gtksettings.c:851
 msgid "Timeout after which browse mode is disabled"
 msgstr "Хотимаи вақт пас аз ғайрифаъол шудани ҳолати мурур"
 
-#: ../gtk/gtksettings.c:872
+#: ../gtk/gtksettings.c:873
 msgid "Keynav Cursor Only"
 msgstr "Танҳо курсори идоракунӣ бо тугмаҳо"
 
-#: ../gtk/gtksettings.c:873
+#: ../gtk/gtksettings.c:874
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 "Вақте ки TRUE аст, танҳо калидҳои курсор барои идоракунии виҷетҳо мавҷуданд"
 
-#: ../gtk/gtksettings.c:892
+#: ../gtk/gtksettings.c:893
 msgid "Keynav Wrap Around"
 msgstr "Бастабандии даврии идоракунӣ бо тугмаҳо "
 
-#: ../gtk/gtksettings.c:893
+#: ../gtk/gtksettings.c:894
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Оё ҳангоми виҷетҳои идоракунии клавиатура атрофи он бастабандӣ мешавад"
 
-#: ../gtk/gtksettings.c:913
+#: ../gtk/gtksettings.c:914
 msgid "Error Bell"
 msgstr "Занги хато"
 
-#: ../gtk/gtksettings.c:914
+#: ../gtk/gtksettings.c:915
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Вақте ки TRUE аст, идоракунии клавиатура ва дигар хатоҳо сигнал мебароранд"
 
-#: ../gtk/gtksettings.c:933
+#: ../gtk/gtksettings.c:934
 msgid "Color Hash"
 msgstr "Омехтаи ранг"
 
-#: ../gtk/gtksettings.c:934
+#: ../gtk/gtksettings.c:935
 msgid "A hash table representation of the color scheme."
 msgstr "Намоиши мизи омехтаи схемаи ранг."
 
-#: ../gtk/gtksettings.c:949
+#: ../gtk/gtksettings.c:950
 msgid "Default file chooser backend"
 msgstr "Интиҳои интихобкунандаи файли пешфарз"
 
-#: ../gtk/gtksettings.c:950
+#: ../gtk/gtksettings.c:951
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Номи интиҳои GtkFileChooser барои истифодаи пешфарз"
 
-#: ../gtk/gtksettings.c:967
+#: ../gtk/gtksettings.c:968
 msgid "Default print backend"
 msgstr "Интиҳои чопи пешфарз"
 
-#: ../gtk/gtksettings.c:968
+#: ../gtk/gtksettings.c:969
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Рӯйхати интиҳои GtkPrintBackend барои истифодаи пешфарз"
 
-#: ../gtk/gtksettings.c:991
+#: ../gtk/gtksettings.c:992
 msgid "Default command to run when displaying a print preview"
 msgstr "Фармони пешфарз барои иҷро ҳангоми намоиши пешнамоиши чоп"
 
-#: ../gtk/gtksettings.c:992
+#: ../gtk/gtksettings.c:993
 msgid "Command to run when displaying a print preview"
 msgstr "Фармон барои иҷро ҳангоми намоиши пешнамоиши чоп"
 
-#: ../gtk/gtksettings.c:1010
+#: ../gtk/gtksettings.c:1011
 msgid "Enable Mnemonics"
 msgstr "Фаъол кардани мнемоника"
 
-#: ../gtk/gtksettings.c:1011
+#: ../gtk/gtksettings.c:1012
 msgid "Whether labels should have mnemonics"
 msgstr "Оё барчаспҳо бояд барои ҳисоб содда бошанд"
 
-#: ../gtk/gtksettings.c:1027
+#: ../gtk/gtksettings.c:1028
 msgid "Enable Accelerators"
 msgstr "Фаъол кардани шитобдиҳанда"
 
-#: ../gtk/gtksettings.c:1028
+#: ../gtk/gtksettings.c:1029
 msgid "Whether menu items should have accelerators"
 msgstr "Оё объектҳои меню бояд шитобдиҳанда дошта бошанд"
 
-#: ../gtk/gtksettings.c:1047
+#: ../gtk/gtksettings.c:1048
 msgid "Recent Files Limit"
 msgstr "Маҳдудияти файлҳои ҷорӣ"
 
-#: ../gtk/gtksettings.c:1048
+#: ../gtk/gtksettings.c:1049
 msgid "Number of recently used files"
 msgstr "Рақами файлҳои маротибаи охирин истифодашуда"
 
-#: ../gtk/gtksettings.c:1068
+#: ../gtk/gtksettings.c:1069
 msgid "Default IM module"
 msgstr "Модули IM-и пешфарз"
 
-#: ../gtk/gtksettings.c:1069
+#: ../gtk/gtksettings.c:1070
 msgid "Which IM module should be used by default"
 msgstr "Кадом модули IM бояд тавассути пешфарз истифода шавад"
 
-#: ../gtk/gtksettings.c:1087
+#: ../gtk/gtksettings.c:1088
 msgid "Recent Files Max Age"
 msgstr "Синни ҳадди аксари файлҳои охирин"
 
-#: ../gtk/gtksettings.c:1088
+#: ../gtk/gtksettings.c:1089
 msgid "Maximum age of recently used files, in days"
 msgstr "Синни ҳадди ақали файлҳои ба қарибӣ истифодашуда, бо рӯз"
 
-#: ../gtk/gtksettings.c:1097
+#: ../gtk/gtksettings.c:1098
 msgid "Fontconfig configuration timestamp"
 msgstr "Вақти конфигуратсияи шрифт"
 
-#: ../gtk/gtksettings.c:1098
+#: ../gtk/gtksettings.c:1099
 msgid "Timestamp of current fontconfig configuration"
 msgstr "Вақти кофигуратсияи ҷории шрифт"
 
-#: ../gtk/gtksettings.c:1120
+#: ../gtk/gtksettings.c:1121
 msgid "Sound Theme Name"
 msgstr "Номи мавзӯи овоздор"
 
-#: ../gtk/gtksettings.c:1121
+#: ../gtk/gtksettings.c:1122
 msgid "XDG sound theme name"
 msgstr "Номи мавзӯи овозии XDG"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: ../gtk/gtksettings.c:1143
+#: ../gtk/gtksettings.c:1144
 msgid "Audible Input Feedback"
 msgstr "Натиҷаи вуруди шунаво"
 
-#: ../gtk/gtksettings.c:1144
+#: ../gtk/gtksettings.c:1145
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "Оё садоҳои ҳодиса ҳамчун бозгашти вурудии корбар пахш шавад"
 
-#: ../gtk/gtksettings.c:1165
+#: ../gtk/gtksettings.c:1166
 msgid "Enable Event Sounds"
 msgstr "Фаъол кардани садоҳои рӯйдодҳо"
 
-#: ../gtk/gtksettings.c:1166
+#: ../gtk/gtksettings.c:1167
 msgid "Whether to play any event sounds at all"
 msgstr "Оё ягон садои ҳодисае пахш шавад ё не"
 
-#: ../gtk/gtksettings.c:1183
+#: ../gtk/gtksettings.c:1184
 msgid "Enable Tooltips"
 msgstr "Фаъол кардани маслиҳатҳои система"
 
-#: ../gtk/gtksettings.c:1184
+#: ../gtk/gtksettings.c:1185
 msgid "Whether tooltips should be shown on widgets"
 msgstr "ОЁ маслиҳати абзор дар виҷетҳо намоиш дода шавад"
 
-#: ../gtk/gtksettings.c:1199
+#: ../gtk/gtksettings.c:1200
 msgid "Toolbar style"
 msgstr "Сабки навори абзор"
 
-#: ../gtk/gtksettings.c:1200
+#: ../gtk/gtksettings.c:1201
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Оё наворҳои абзори пешфарз танҳо матн, матн ва нишонаҳо, танҳо нишонаҳо ва "
 "ғайра доранд ё не."
 
-#: ../gtk/gtksettings.c:1216
+#: ../gtk/gtksettings.c:1217
 msgid "Toolbar Icon Size"
 msgstr "Андозаи нишонаҳои навори абзор"
 
-#: ../gtk/gtksettings.c:1217
+#: ../gtk/gtksettings.c:1218
 msgid "The size of icons in default toolbars."
 msgstr "Андозаи нионаҳо дар наворҳои абзори пешфарз"
 
-#: ../gtk/gtksettings.c:1236
+#: ../gtk/gtksettings.c:1237
 msgid "Auto Mnemonics"
 msgstr "Хотиравии худкор"
 
-#: ../gtk/gtksettings.c:1237
+#: ../gtk/gtksettings.c:1238
 msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
 "presses the mnemonic activator."
@@ -6542,22 +6549,22 @@ msgstr ""
 "Оё ҳангоми фаъолкунандаи хотиравиро зер кардани корбар хотиравӣ бояд ба "
 "таври худкор нишон дода ё пинҳон карда шавад."
 
-#: ../gtk/gtksettings.c:1253
+#: ../gtk/gtksettings.c:1254
 msgid "Primary button warps slider"
 msgstr "Тугмаи ибтидоӣ василаи лағжандаро тағйир медиҳад"
 
-#: ../gtk/gtksettings.c:1254
+#: ../gtk/gtksettings.c:1255
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
 msgstr ""
 "Оё зеркунии ибтидоӣ ба рӯи новадон бояд восилаи лағжандаро ба ҳолаташ "
 "баргардонад"
 
-#: ../gtk/gtksettings.c:1272
+#: ../gtk/gtksettings.c:1273
 msgid "Visible Focus"
 msgstr "Фокуси аён"
 
-#: ../gtk/gtksettings.c:1273
+#: ../gtk/gtksettings.c:1274
 msgid ""
 "Whether 'focus rectangles' should be hidden until the user starts to use the "
 "keyboard."
@@ -6565,60 +6572,60 @@ msgstr ""
 "Оё то замоне, ки корбар истифодабарии клваиатураро сар мекунад 'росткунҷаҳои "
 "фокус' бояд пинҳон карда шаванд "
 
-#: ../gtk/gtksettings.c:1299
+#: ../gtk/gtksettings.c:1300
 msgid "Application prefers a dark theme"
 msgstr "Барнома мавзӯи торикро беҳтар мешуморад"
 
-#: ../gtk/gtksettings.c:1300
+#: ../gtk/gtksettings.c:1301
 msgid "Whether the application prefers to have a dark theme."
 msgstr "Оё барнома мавзӯи торик доштанро беҳтар мешуморад."
 
-#: ../gtk/gtksettings.c:1317
+#: ../gtk/gtksettings.c:1318
 msgid "Show button images"
 msgstr "Намоиш додани тасвирҳои тугмаҳо"
 
-#: ../gtk/gtksettings.c:1318
+#: ../gtk/gtksettings.c:1319
 msgid "Whether images should be shown on buttons"
 msgstr "Оё тасвирҳо бояд дар тугмаҳо нишон дода шаванд"
 
-#: ../gtk/gtksettings.c:1326 ../gtk/gtksettings.c:1457
+#: ../gtk/gtksettings.c:1327 ../gtk/gtksettings.c:1458
 msgid "Select on focus"
 msgstr "Дар фокус интихоб кунед"
 
-#: ../gtk/gtksettings.c:1327
+#: ../gtk/gtksettings.c:1328
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Оё мӯҳтавои вурудӣ ҳангоми фокус шудани он интихоб шавад "
 
-#: ../gtk/gtksettings.c:1344
+#: ../gtk/gtksettings.c:1345
 msgid "Password Hint Timeout"
 msgstr "Хотимаи вақти ишораи парол"
 
-#: ../gtk/gtksettings.c:1345
+#: ../gtk/gtksettings.c:1346
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "То кай аломати воридшудаи охирин дар вурудиҳои пинҳоншуда нишон дода шавад"
 
-#: ../gtk/gtksettings.c:1361
+#: ../gtk/gtksettings.c:1362
 msgid "Show menu images"
 msgstr "Намоиш додани тасвирҳои меню"
 
-#: ../gtk/gtksettings.c:1362
+#: ../gtk/gtksettings.c:1363
 msgid "Whether images should be shown in menus"
 msgstr "Оё тасвирҳо бояд дар менюҳо нишон дода шаванд"
 
-#: ../gtk/gtksettings.c:1377
+#: ../gtk/gtksettings.c:1378
 msgid "Delay before drop down menus appear"
 msgstr "Таъхир пеш аз пайдошавии менюҳои фаровардану поён"
 
-#: ../gtk/gtksettings.c:1378
+#: ../gtk/gtksettings.c:1379
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Таъхир пеш аз пайдошавии зерменюҳои навори меню"
 
-#: ../gtk/gtksettings.c:1397
+#: ../gtk/gtksettings.c:1398
 msgid "Scrolled Window Placement"
 msgstr "Ҷойгиркунии равзанаи ҳаракаткунанда"
 
-#: ../gtk/gtksettings.c:1398
+#: ../gtk/gtksettings.c:1399
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
@@ -6627,33 +6634,33 @@ msgstr ""
 "куҷо ҷойгиранд, агар бо ҷойгиршавии равзанаҳои ҳаракаткунандаи худӣ бекор "
 "карда нашуда бошанд."
 
-#: ../gtk/gtksettings.c:1414
+#: ../gtk/gtksettings.c:1415
 msgid "Can change accelerators"
 msgstr "Метавонад шитобдиҳандаҳоро тағйир диҳад"
 
-#: ../gtk/gtksettings.c:1415
+#: ../gtk/gtksettings.c:1416
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Оё шитобдиҳандаҳои меню бо зер кардани як калид дар болои объекти меню "
 "тағйир дода мешаванд"
 
-#: ../gtk/gtksettings.c:1430
+#: ../gtk/gtksettings.c:1431
 msgid "Delay before submenus appear"
 msgstr "Таъхир пеш аз пайдошавии зерменю"
 
-#: ../gtk/gtksettings.c:1431
+#: ../gtk/gtksettings.c:1432
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Ҳадди ақал замоне, ки ишорагар бояд пеш аз пайдошавии зерменю дар болои "
 "объекти меню боқӣ монад"
 
-#: ../gtk/gtksettings.c:1447
+#: ../gtk/gtksettings.c:1448
 msgid "Delay before hiding a submenu"
 msgstr "Таъхир пеш аз пинҳоншавии зерменю"
 
-#: ../gtk/gtksettings.c:1448
+#: ../gtk/gtksettings.c:1449
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -6661,41 +6668,41 @@ msgstr ""
 "Ҳадди ақал замони пеш аз пинҳоншавии зерменю ҳангоми ҳаракати ишорагар ба "
 "тарафи зерменю "
 
-#: ../gtk/gtksettings.c:1458
+#: ../gtk/gtksettings.c:1459
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
 "Оё мӯҳтавои барчаспи интихобшаванда ҳангоми фукус будани он интихоб шавад ё "
 "не"
 
-#: ../gtk/gtksettings.c:1473
+#: ../gtk/gtksettings.c:1474
 msgid "Custom palette"
 msgstr "Лавҳаи рангҳои фармоишӣ"
 
-#: ../gtk/gtksettings.c:1474
+#: ../gtk/gtksettings.c:1475
 msgid "Palette to use in the color selector"
 msgstr "Лавҳаи рагомезӣ барои истифода дар интихобгари ранг"
 
-#: ../gtk/gtksettings.c:1489
+#: ../gtk/gtksettings.c:1490
 msgid "IM Preedit style"
 msgstr "Сабки пешвироиши IM"
 
-#: ../gtk/gtksettings.c:1490
+#: ../gtk/gtksettings.c:1491
 msgid "How to draw the input method preedit string"
 msgstr "Тарзи кашидани равиши вуруди сатри пешвироиш"
 
-#: ../gtk/gtksettings.c:1506
+#: ../gtk/gtksettings.c:1507
 msgid "IM Status style"
 msgstr "Сабки вазъияти IM"
 
-#: ../gtk/gtksettings.c:1507
+#: ../gtk/gtksettings.c:1508
 msgid "How to draw the input method statusbar"
 msgstr "Тарзи кашидани навори ҳолати равиши вуруд"
 
-#: ../gtk/gtksettings.c:1516
+#: ../gtk/gtksettings.c:1517
 msgid "Desktop shell shows app menu"
 msgstr "Воситаи мизи корӣ менюи барномаро нишон медиҳад"
 
-#: ../gtk/gtksettings.c:1517
+#: ../gtk/gtksettings.c:1518
 msgid ""
 "Set to TRUE if the desktop environment is displaying the app menu, FALSE if "
 "the app should display it itself."
@@ -6703,11 +6710,11 @@ msgstr ""
 "Агар муҳити мизи корӣ менюи барномаҳоро намоиш диҳад ба TRUE, ва агар "
 "барнома бояд худашро намоиш диҳад, ба FALSE танзим кунед"
 
-#: ../gtk/gtksettings.c:1526
+#: ../gtk/gtksettings.c:1527
 msgid "Desktop shell shows the menubar"
 msgstr "Воситаи мизи корӣ навори менюро нишон медиҳад"
 
-#: ../gtk/gtksettings.c:1527
+#: ../gtk/gtksettings.c:1528
 msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
@@ -6715,11 +6722,11 @@ msgstr ""
 "Агар муҳити мизи корӣ навори барномаҳоро намоиш диҳад ба TRUE, ва агар "
 "барнома бояд худашро намоиш диҳад, ба FALSE танзим кунед"
 
-#: ../gtk/gtksettings.c:1536
+#: ../gtk/gtksettings.c:1537
 msgid "Desktop environment shows the desktop folder"
 msgstr "Муҳити мизи корӣ ҷузвдони мизи кориро намоиш медиҳад"
 
-#: ../gtk/gtksettings.c:1537
+#: ../gtk/gtksettings.c:1538
 msgid ""
 "Set to TRUE if the desktop environment is displaying the desktop folder, "
 "FALSE if not."
@@ -6727,11 +6734,24 @@ msgstr ""
 "Агар муҳити мизи корӣ ҷузвдони мизи кориро намоиш диҳад, қимати TRUE-ро "
 "танзим кунед, агар намоиш надиҳад, қимати FALSE-ро танзим кунед."
 
-#: ../gtk/gtksettings.c:1588
+#: ../gtk/gtksettings.c:1593
+msgid "Dialogs use header bar"
+msgstr "Равзанаҳои гуфтугӯ лавҳаи сарварақро истифода баранд"
+
+#: ../gtk/gtksettings.c:1594
+#| msgid "Whether buttons in dialogs should use the alternative button order"
+msgid ""
+"Whether builtin GTK+ dialogs should use a header bar instead of an action "
+"area."
+msgstr ""
+"Интихоби истифодаи лавҳаи сарварақ ба ҷои ноҳияи амалҳо дар равзанаҳои "
+"гуфтугӯи дарунсохти GTK+."
+
+#: ../gtk/gtksettings.c:1610
 msgid "Enable primary paste"
 msgstr "Фаъол кардани гузоштани аввалӣ"
 
-#: ../gtk/gtksettings.c:1589
+#: ../gtk/gtksettings.c:1611
 msgid ""
 "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard "
 "content at the cursor location."
@@ -6739,11 +6759,11 @@ msgstr ""
 "Оё тугмаи миёнаи муш бояд мӯҳтавои ҳофизаи муваққатии 'ИБТИДОӢ'-ро дар "
 "ҷойгиршавии курсор гузорад."
 
-#: ../gtk/gtksettings.c:1605
+#: ../gtk/gtksettings.c:1627
 msgid "Recent Files Enabled"
 msgstr "Файлҳои охирин фаъол шудаанд+"
 
-#: ../gtk/gtksettings.c:1606
+#: ../gtk/gtksettings.c:1628
 msgid "Whether GTK+ remembers recent files"
 msgstr "Оё GTK+ файлҳои охиринро ёдовар мешавад"
 
@@ -7924,7 +7944,7 @@ msgstr "Шаклвораи тиреи истифодашуда барои каш
 msgid "Whether to display the column"
 msgstr "Оё сутун намоиш дода шавад"
 
-#: ../gtk/gtktreeviewcolumn.c:254 ../gtk/gtkwindow.c:736
+#: ../gtk/gtktreeviewcolumn.c:254 ../gtk/gtkwindow.c:747
 msgid "Resizable"
 msgstr "Бо андозаи тағйирёбанда"
 
@@ -8448,51 +8468,51 @@ msgstr "Бари матни дастаҳои интихоби матн"
 msgid "Height of text selection handles"
 msgstr "Баландии дастаҳои интихоби матн"
 
-#: ../gtk/gtkwindow.c:694
+#: ../gtk/gtkwindow.c:705
 msgid "Window Type"
 msgstr "Намуди равзана"
 
-#: ../gtk/gtkwindow.c:695
+#: ../gtk/gtkwindow.c:706
 msgid "The type of the window"
 msgstr "Намуди равзана"
 
-#: ../gtk/gtkwindow.c:703
+#: ../gtk/gtkwindow.c:714
 msgid "Window Title"
 msgstr "Унвони равзана"
 
-#: ../gtk/gtkwindow.c:704
+#: ../gtk/gtkwindow.c:715
 msgid "The title of the window"
 msgstr "Унвони равзана"
 
-#: ../gtk/gtkwindow.c:711
+#: ../gtk/gtkwindow.c:722
 msgid "Window Role"
 msgstr "Нақши равзана"
 
-#: ../gtk/gtkwindow.c:712
+#: ../gtk/gtkwindow.c:723
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 "Идентификатори ягона барои равзана барои истифода ҳангоми барқарор кардани "
 "сессия"
 
-#: ../gtk/gtkwindow.c:728
+#: ../gtk/gtkwindow.c:739
 msgid "Startup ID"
 msgstr "ID-и оғози кор"
 
-#: ../gtk/gtkwindow.c:729
+#: ../gtk/gtkwindow.c:740
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "идентификатори ягонаи оғози кор барои равзанаи истифодашуда бо огоҳии оғози "
 "кор"
 
-#: ../gtk/gtkwindow.c:737
+#: ../gtk/gtkwindow.c:748
 msgid "If TRUE, users can resize the window"
 msgstr "Агар TRUE бошад, корбар андозаи равзанаро тағйир дода метавонад"
 
-#: ../gtk/gtkwindow.c:744
+#: ../gtk/gtkwindow.c:755
 msgid "Modal"
 msgstr "Модалӣ"
 
-#: ../gtk/gtkwindow.c:745
+#: ../gtk/gtkwindow.c:756
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -8500,98 +8520,98 @@ msgstr ""
 "Агар TRUE бошад, равзана модалӣ аст (вақте ин кушода аст, дигар равзанаҳо "
 "истифода намешаванд)"
 
-#: ../gtk/gtkwindow.c:752
+#: ../gtk/gtkwindow.c:763
 msgid "Window Position"
 msgstr "Ҷойгиршавии равзана"
 
-#: ../gtk/gtkwindow.c:753
+#: ../gtk/gtkwindow.c:764
 msgid "The initial position of the window"
 msgstr "Мавқеияти ибтидоии равзана"
 
-#: ../gtk/gtkwindow.c:761
+#: ../gtk/gtkwindow.c:772
 msgid "Default Width"
 msgstr "Бари пешфарз"
 
-#: ../gtk/gtkwindow.c:762
+#: ../gtk/gtkwindow.c:773
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Бари пешфарзи равзанаи истифодашуда ҳангоми ба таври ибтидоӣ намоиш додани "
 "равзана "
 
-#: ../gtk/gtkwindow.c:771
+#: ../gtk/gtkwindow.c:782
 msgid "Default Height"
 msgstr "Баландии пешфарз"
 
-#: ../gtk/gtkwindow.c:772
+#: ../gtk/gtkwindow.c:783
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Баландии пешфарзи равзанаи истифодашуда ҳангоми ба таври ибтидоӣ намоиш "
 "додани равзана "
 
-#: ../gtk/gtkwindow.c:781
+#: ../gtk/gtkwindow.c:792
 msgid "Destroy with Parent"
 msgstr "Хароб кардан бо асосӣ"
 
-#: ../gtk/gtkwindow.c:782
+#: ../gtk/gtkwindow.c:793
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Агар асосӣ хароб шуда бошад, ин равзана бояд хароб карда шавад"
 
-#: ../gtk/gtkwindow.c:796
+#: ../gtk/gtkwindow.c:807
 msgid "Hide the titlebar during maximization"
 msgstr "Пинҳон кардани лавҳаи унвон ҳангоми аз ҳад зиёдшавӣ"
 
-#: ../gtk/gtkwindow.c:797
+#: ../gtk/gtkwindow.c:808
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr ""
 "Ҳангоми ҳадди аксар шудани равзана лавҳаи унвони равзана бояд пинҳон карда "
 "шавад"
 
-#: ../gtk/gtkwindow.c:805
+#: ../gtk/gtkwindow.c:816
 msgid "Icon for this window"
 msgstr "Нишона барои ин равзана"
 
-#: ../gtk/gtkwindow.c:822
+#: ../gtk/gtkwindow.c:833
 msgid "Mnemonics Visible"
 msgstr "Мнемоникаи аён"
 
-#: ../gtk/gtkwindow.c:823
+#: ../gtk/gtkwindow.c:834
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Оё мнемоникаҳо ҳоло дар ин равзана аён ҳастанд"
 
-#: ../gtk/gtkwindow.c:840
+#: ../gtk/gtkwindow.c:851
 msgid "Focus Visible"
 msgstr "Фокуси аён"
 
-#: ../gtk/gtkwindow.c:841
+#: ../gtk/gtkwindow.c:852
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Оё росткунҷаҳои фокус ҳоло дар ин равзана аён ҳастанд"
 
-#: ../gtk/gtkwindow.c:857
+#: ../gtk/gtkwindow.c:868
 msgid "Name of the themed icon for this window"
 msgstr "Номи нишонаи унвонӣ барои ин равзана"
 
-#: ../gtk/gtkwindow.c:872
+#: ../gtk/gtkwindow.c:883
 msgid "Is Active"
 msgstr "Фаъол аст"
 
-#: ../gtk/gtkwindow.c:873
+#: ../gtk/gtkwindow.c:884
 msgid "Whether the toplevel is the current active window"
 msgstr "Оё сатҳи олӣ ҳоло раванаи фаъоли ҷорӣ аст"
 
-#: ../gtk/gtkwindow.c:880
+#: ../gtk/gtkwindow.c:891
 msgid "Focus in Toplevel"
 msgstr "Фокус дар сатҳи олӣ"
 
-#: ../gtk/gtkwindow.c:881
+#: ../gtk/gtkwindow.c:892
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Оё фокуси вуруд дар дохили GtkWindow аст"
 
-#: ../gtk/gtkwindow.c:888
+#: ../gtk/gtkwindow.c:899
 msgid "Type hint"
 msgstr "Навъи ишора"
 
-#: ../gtk/gtkwindow.c:889
+#: ../gtk/gtkwindow.c:900
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -8599,124 +8619,133 @@ msgstr ""
 "Ишора барои кӯмак ба муҳити мизи корӣ барои фаҳмидани кадом намуди равзана "
 "будани ин ва тарзи кор бо он."
 
-#: ../gtk/gtkwindow.c:897
+#: ../gtk/gtkwindow.c:908
 msgid "Skip taskbar"
 msgstr "Париши навори вазифа"
 
-#: ../gtk/gtkwindow.c:898
+#: ../gtk/gtkwindow.c:909
 msgid "TRUE if the window should not be in the task bar."
 msgstr "ДУРУСТ агар равзана набояд дар навори вазифа бошад"
 
-#: ../gtk/gtkwindow.c:905
+#: ../gtk/gtkwindow.c:916
 msgid "Skip pager"
 msgstr "Нодида гирифтани қоғаз"
 
-#: ../gtk/gtkwindow.c:906
+#: ../gtk/gtkwindow.c:917
 msgid "TRUE if the window should not be in the pager."
 msgstr "ДУРУСТ агар равзана набояд дар пейҷер бошад"
 
-#: ../gtk/gtkwindow.c:913
+#: ../gtk/gtkwindow.c:924
 msgid "Urgent"
 msgstr "Фаврӣ"
 
-#: ../gtk/gtkwindow.c:914
+#: ../gtk/gtkwindow.c:925
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "ДУРУСТ агар равзана диққати корбарро ҷалб намояд"
 
-#: ../gtk/gtkwindow.c:928
+#: ../gtk/gtkwindow.c:939
 msgid "Accept focus"
 msgstr "Қабул кардани фокус"
 
-#: ../gtk/gtkwindow.c:929
+#: ../gtk/gtkwindow.c:940
 msgid "TRUE if the window should receive the input focus."
 msgstr "ДУРУСТ агар равзана бояд фокуси вурудро дарёфт намояд"
 
-#: ../gtk/gtkwindow.c:943
+#: ../gtk/gtkwindow.c:954
 msgid "Focus on map"
 msgstr "Фокус ба муқоиса"
 
-#: ../gtk/gtkwindow.c:944
+#: ../gtk/gtkwindow.c:955
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr ""
 "ДУРУСТ агар равзана бояд фокуси вурудро ҳангоми муқоисашавӣ дарёфт кунад"
 
-#: ../gtk/gtkwindow.c:958
+#: ../gtk/gtkwindow.c:969
 msgid "Decorated"
 msgstr "Ороишӣ"
 
-#: ../gtk/gtkwindow.c:959
+#: ../gtk/gtkwindow.c:970
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Оё равзана бояд тавассути мудири равзана бояд ороишҳ дода шавад"
 
-#: ../gtk/gtkwindow.c:973
+#: ../gtk/gtkwindow.c:984
 msgid "Deletable"
 msgstr "Нестшаванда"
 
-#: ../gtk/gtkwindow.c:974
+#: ../gtk/gtkwindow.c:985
 msgid "Whether the window frame should have a close button"
 msgstr "Оё чорчӯбаи равзана бояд тугмаи пӯшонидан дошта бошад"
 
-#: ../gtk/gtkwindow.c:993
+#: ../gtk/gtkwindow.c:1004
 msgid "Resize grip"
 msgstr "Чангоми тағйири андоза"
 
-#: ../gtk/gtkwindow.c:994
+#: ../gtk/gtkwindow.c:1005
 msgid "Specifies whether the window should have a resize grip"
 msgstr "Муайян мекунад, ки оё равзана чанголи тағйири андоза дорад ё не"
 
-#: ../gtk/gtkwindow.c:1008
+#: ../gtk/gtkwindow.c:1019
 msgid "Resize grip is visible"
 msgstr "Чангоми тағйири андоза аён аст"
 
-#: ../gtk/gtkwindow.c:1009
+#: ../gtk/gtkwindow.c:1020
 msgid "Specifies whether the window's resize grip is visible."
 msgstr "Муайян менамояд, ки оё чанголи тағйири андозаи равзана аён аст ё не."
 
-#: ../gtk/gtkwindow.c:1025
+#: ../gtk/gtkwindow.c:1036
 msgid "Gravity"
 msgstr "Кашиш"
 
-#: ../gtk/gtkwindow.c:1026
+#: ../gtk/gtkwindow.c:1037
 msgid "The window gravity of the window"
 msgstr "Кашиши равзанаи равзана"
 
-#: ../gtk/gtkwindow.c:1043
+#: ../gtk/gtkwindow.c:1054
 msgid "Transient for Window"
 msgstr "Кӯтоҳмуддат барои равзана"
 
-#: ../gtk/gtkwindow.c:1044
+#: ../gtk/gtkwindow.c:1055
 msgid "The transient parent of the dialog"
 msgstr "Асосии кӯтоҳмуддати равзанаи гуфтӯгӯ"
 
-#: ../gtk/gtkwindow.c:1064
+#: ../gtk/gtkwindow.c:1075
 msgid "Attached to Widget"
 msgstr "Замимашуда ба виҷет"
 
-#: ../gtk/gtkwindow.c:1065
+#: ../gtk/gtkwindow.c:1076
 msgid "The widget where the window is attached"
 msgstr "Виҷете, ки дар он равзана замима шудааст"
 
-#: ../gtk/gtkwindow.c:1073 ../gtk/gtkwindow.c:1074
+#: ../gtk/gtkwindow.c:1083
+msgid "Is maximized"
+msgstr "Дар ҳадди аксар"
+
+#: ../gtk/gtkwindow.c:1084
+#| msgid "Whether the widget is visible"
+msgid "Whether the window is maximized"
+msgstr "Интихоби ҳолати равзана дар ҳадди аксар"
+
+#: ../gtk/gtkwindow.c:1092 ../gtk/gtkwindow.c:1093
 msgid "Decorated button layout"
 msgstr "тарҳбандии тугмаи ороишӣ"
 
-#: ../gtk/gtkwindow.c:1080 ../gtk/gtkwindow.c:1081
+#: ../gtk/gtkwindow.c:1099 ../gtk/gtkwindow.c:1100
 msgid "Decoration resize handle size"
 msgstr "Андозаи дастаи тағйири андозаи ороиш"
 
-#: ../gtk/gtkwindow.c:1087 ../gtk/gtkwindow.c:1088
+#: ../gtk/gtkwindow.c:1106 ../gtk/gtkwindow.c:1107
 msgid "Width of resize grip"
 msgstr "Бари чанголи тағйири андоза"
 
-#: ../gtk/gtkwindow.c:1093 ../gtk/gtkwindow.c:1094
+#: ../gtk/gtkwindow.c:1112 ../gtk/gtkwindow.c:1113
 msgid "Height of resize grip"
 msgstr "Баландии чанголи тағйири андоза"
 
-#: ../gtk/gtkwindow.c:1116
+#: ../gtk/gtkwindow.c:1135
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: ../gtk/gtkwindow.c:1117
+#: ../gtk/gtkwindow.c:1136
 msgid "The GtkApplication for the window"
 msgstr "GtkApplication барои равзана"
 
