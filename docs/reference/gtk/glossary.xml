@@ -196,9 +196,7 @@
 	A widget that does not have a GdkWindow of its own on which to
 	draw its contents, but rather shares its <glossterm
 	linkend="parent">parent's</glossterm>.  This can be tested with
-	the gtk_widget_get_has_window() function.  See
-	<xref linkend="window-no-window-widgets"/> for a detailed
-	description of this flag.
+	the gtk_widget_get_has_window() function.
       </para>
     </glossdef>
   </glossentry>
