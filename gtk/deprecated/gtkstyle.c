@@ -3976,7 +3976,7 @@ gtk_paint_resize_grip (GtkStyle           *style,
  * @state_type: a state
  * @widget: (allow-none): the widget (may be %NULL)
  * @detail: (allow-none): a style detail (may be %NULL)
- * @step: the nth step, a value between 0 and #GtkSpinner:num-steps
+ * @step: the nth step
  * @x: the x origin of the rectangle in which to draw the spinner
  * @y: the y origin of the rectangle in which to draw the spinner
  * @width: the width of the rectangle in which to draw the spinner
