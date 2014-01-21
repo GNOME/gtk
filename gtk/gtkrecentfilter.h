@@ -76,6 +76,16 @@ typedef gboolean (*GtkRecentFilterFunc) (const GtkRecentFilterInfo *filter_info,
 
 /**
  * GtkRecentFilterInfo:
+ * @contains: #GtkRecentFilterFlags to indicate which fields are set.
+ * @uri: The URI of the file being tested.
+ * @display_name: The string that will be used to display the file in
+ *    the recent chooser.
+ * @mime_type: MIME type of the file.
+ * @applications: The list of applications that have registered the
+ *    file.
+ * @groups: The groups to which the file belongs to.
+ * @age: The number of days elapsed since the file has been
+ *    registered.
  *
  * A GtkRecentFilterInfo struct is used
  * to pass information about the tested file to gtk_recent_filter_filter().
