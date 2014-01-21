@@ -251,7 +251,7 @@
  * <structname>GtkWidget</structname> introduces <firstterm>style
  * properties</firstterm> - these are basically object properties that are stored
  * not on the object, but in the style object associated to the widget. Style
- * properties are set in <link linkend="gtk-Resource-Files">resource files</link>.
+ * properties are set in <link linkend="gtk3-Resource-Files">resource files</link>.
  * This mechanism is used for configuring such things as the location of the
  * scrollbar arrows through the theme, giving theme authors more control over the
  * look of applications without the need to write a theme engine in C.
