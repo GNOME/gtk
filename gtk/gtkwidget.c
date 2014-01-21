@@ -10770,8 +10770,8 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  * inside a #GtkSocket within the same application.
  *
  * To reliably find the toplevel #GtkWindow, use
- * gtk_widget_get_toplevel() and check if the %TOPLEVEL flags
- * is set on the result.
+ * gtk_widget_get_toplevel() and call gtk_widget_is_toplevel()
+ * on the result.
  * |[
  *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
  *  if (gtk_widget_is_toplevel (toplevel))
