@@ -992,10 +992,10 @@ gtk_accel_label_set_accel (GtkAccelLabel   *accel_label,
 /**
  * gtk_accel_label_get_accel:
  * @accel_label: a #GtkAccelLabel
- * @accelerator_key: return location for the keyval
- * @accelerator_mods: return location for the modifier mask
+ * @accelerator_key: (out): return location for the keyval
+ * @accelerator_mods: (out): return location for the modifier mask
  *
- * Returns the keyval and modifier mask set with
+ * Gets the keyval and modifier mask set with
  * gtk_accel_label_set_accel().
  *
  * Since: 3.12
