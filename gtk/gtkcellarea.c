@@ -102,14 +102,14 @@
  * exceedingly large amount of rows. The #GtkCellLayout widget in
  * that case would calculate the required width of the rows in an
  * idle or timeout source (see g_timeout_add()) and when the widget
- * is requested its actual width in #GtkWidgetClass.get_preferred_width()
+ * is requested its actual width in #GtkWidgetClass.get_preferred_width(<!-- -->)
  * it can simply consult the width accumulated so far in the
  * #GtkCellAreaContext object.
  *
  * A simple example where rows are rendered from top to bottom and
  * take up the full width of the layouting widget would look like:
  * <example>
- *   <title>A typical get_preferred_width() implementation</title>
+ *   <title>A typical get_preferred_width(<!-- -->) implementation</title>
  *   <programlisting>
  * static void
  * foo_get_preferred_width (GtkWidget       *widget,
@@ -180,7 +180,7 @@
  * synchronously. The reasoning here is that any layouting widget is
  * at least capable of synchronously calculating enough height to fill
  * the screen height (or scrolled window height) in response to a single
- * call to #GtkWidgetClass.get_preferred_height_for_width(). Returning
+ * call to #GtkWidgetClass.get_preferred_height_for_width(<!-- -->). Returning
  * a perfect height for width that is larger than the screen area is
  * inconsequential since after the layouting receives an allocation
  * from a scrolled window it simply continues to drive the scrollbar

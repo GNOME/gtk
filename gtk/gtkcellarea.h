@@ -46,13 +46,13 @@ typedef struct _GtkCellAreaContext       GtkCellAreaContext;
 
 /**
  * GTK_CELL_AREA_WARN_INVALID_CELL_PROPERTY_ID:
- * @object: the #GObject on which set_cell_property() or get_get_property()
+ * @object: the #GObject on which set_cell_property(<!-- -->) or get_cell_property(<!-- -->)
  *     was called
  * @property_id: the numeric id of the property
  * @pspec: the #GParamSpec of the property
  *
  * This macro should be used to emit a standard warning about unexpected
- * properties in set_cell_property() and get_cell_property() implementations.
+ * properties in set_cell_property(<!-- -->) and get_cell_property(<!-- -->) implementations.
  */
 #define GTK_CELL_AREA_WARN_INVALID_CELL_PROPERTY_ID(object, property_id, pspec) \
   G_OBJECT_WARN_INVALID_PSPEC ((object), "cell property id", (property_id), (pspec))
