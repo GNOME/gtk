@@ -774,6 +774,15 @@ typedef enum
   GTK_PACK_DIRECTION_BTT
 } GtkPackDirection;
 
+/**
+ * GtkPrintPages:
+ * @GTK_PRINT_PAGES_ALL: All pages.
+ * @GTK_PRINT_PAGES_CURRENT: Current page.
+ * @GTK_PRINT_PAGES_RANGES: Range of pages.
+ * @GTK_PRINT_PAGES_SELECTION: Selected pages.
+ *
+ * See also gtk_print_job_set_pages()
+ */
 typedef enum
 {
   GTK_PRINT_PAGES_ALL,
@@ -782,6 +791,14 @@ typedef enum
   GTK_PRINT_PAGES_SELECTION
 } GtkPrintPages;
 
+/**
+ * GtkPageSet:
+ * @GTK_PAGE_SET_ALL: All pages.
+ * @GTK_PAGE_SET_EVEN: Even pages.
+ * @GTK_PAGE_SET_ODD: Odd pages.
+ *
+ * See also gtk_print_job_set_page_set().
+ */
 typedef enum
 {
   GTK_PAGE_SET_ALL,
