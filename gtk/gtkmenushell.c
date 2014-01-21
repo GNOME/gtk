@@ -2156,7 +2156,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
  * For most cases you are probably better off using
  * gtk_menu_new_from_model() or gtk_menu_bar_new_from_model() or just
  * directly passing the #GMenuModel to gtk_application_set_app_menu() or
- * gtk_application_set_menu_bar().
+ * gtk_application_set_menubar().
  *
  * Since: 3.6
  */
