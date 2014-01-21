@@ -522,7 +522,7 @@ macro ?
 <answer>
 <para>
 The <literal>GTK_TYPE_BLAH</literal> macros are defined as calls to
-<literal>gtk_blah_get_type(<!-- -->)</literal>, and the <literal>_get_type(<!-- -->)</literal> i
+<literal>gtk_blah_get_type(<!-- -->)</literal>, and the <literal>_get_type(<!-- -->)</literal>
 functions are declared as %G_GNUC_CONST which allows the compiler to optimize
 the call away if it appears that the value is not being used.
 </para>
