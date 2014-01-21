@@ -2167,7 +2167,7 @@ gtk_icon_source_get_icon_name (const GtkIconSource *source)
  * In addition, if a filename source is in use, this
  * function in some cases will return the pixbuf from
  * loaded from the filename. This is, for example, true
- * for the GtkIconSource passed to the GtkStyle::render_icon()
+ * for the GtkIconSource passed to the #GtkStyle render_icon(<!-- -->)
  * virtual function. The reference count on the pixbuf is
  * not incremented.
  *
