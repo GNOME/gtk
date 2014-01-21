@@ -43,11 +43,18 @@ G_BEGIN_DECLS
  * GtkTextBTree is the PRIVATE internal representation of it.
  */
 
-/* these values are used as "info" for the targets contained in the
- * lists returned by gtk_text_buffer_get_copy,paste_target_list()
+/**
+ * GtkTextBufferTargetInfo:
+ * @GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS: Buffer contents
+ * @GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT: Rich text
+ * @GTK_TEXT_BUFFER_TARGET_INFO_TEXT: Text
  *
- * the enum counts down from G_MAXUINT to avoid clashes with application
- * added drag destinations which usually start at 0.
+ * These values are used as "info" for the targets contained in the
+ * lists returned by gtk_text_buffer_get_copy_target_list() and
+ * gtk_text_buffer_get_paste_target_list().
+ *
+ * The values counts down from <literal>-1</literal> to avoid clashes
+ * with application added drag destinations which usually start at 0.
  */
 typedef enum
 {
