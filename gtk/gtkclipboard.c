@@ -49,7 +49,7 @@
  * SECTION:gtkclipboard
  * @Short_description: Storing data on clipboards
  * @Title: Clipboards
- * @See_also: #GtkSelection
+ * @See_also: #GtkSelectionData
  *
  * The #GtkClipboard object represents a clipboard of data shared
  * between different processes or between different widgets in
