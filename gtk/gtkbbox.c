@@ -41,7 +41,7 @@
  * 'outliers' to keep their own larger size.
  *
  * To excempt individual children from homogeneous sizing regardless of their
- * 'outlier' status, you can set the #GtkButtonBox:non-homogeneous child
+ * 'outlier' status, you can set the non-homogeneous child
  * property.
  */
 
