@@ -41,11 +41,13 @@ typedef struct _GtkActionBarClass         GtkActionBarClass;
 
 struct _GtkActionBar
 {
+  /*< private >*/
   GtkContainer container;
 };
 
 struct _GtkActionBarClass
 {
+  /*< private >*/
   GtkContainerClass parent_class;
 
   /* Padding for future expansion */
