@@ -1141,7 +1141,7 @@ gtk_arrow_draw (GtkWidget *widget,
       by the #GtkScrollable interface which must be implemented by a widget
       that wants to be placed in a #GtkScrolledWindow. Instead of emitting
       ::set-scroll-adjustments, the scrolled window simply sets the
-      #GtkScrollable::hadjustment and #GtkScrollable::vadjustment properties.
+      #GtkScrollable:hadjustment and #GtkScrollable:vadjustment properties.
     </para>
   </section>
 
