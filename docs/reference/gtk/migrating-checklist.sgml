@@ -142,7 +142,7 @@ my_widget_popup_menu_handler (GtkWidget *widget)
         able to take the keyboard focus.  In general, widgets should
         be fully usable through the keyboard and not just the mouse.
         The very first step of this is to ensure that your widget
-        turns on the %GTK_CAN_FOCUS <link linkend="gtkwidgetflags">flag</link>.
+        can receive focus, using gtk_widget_set_can_focus().
       </para>
     </note>
   </section>
