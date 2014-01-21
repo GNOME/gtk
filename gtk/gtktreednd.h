@@ -35,9 +35,21 @@ G_BEGIN_DECLS
 typedef struct _GtkTreeDragSource      GtkTreeDragSource; /* Dummy typedef */
 typedef struct _GtkTreeDragSourceIface GtkTreeDragSourceIface;
 
+/**
+ * GtkTreeDragSourceIface:
+ * @row_draggable: Asks the #GtkTreeDragSource whether a particular
+ *    row can be used as the source of a DND operation.
+ * @drag_data_get: Asks the #GtkTreeDragSource to fill in
+ *    selection_data with a representation of the row at path.
+ * @drag_data_delete: Asks the #GtkTreeDragSource to delete the row at
+ *    path, because it was moved somewhere else via drag-and-drop.
+ */
 struct _GtkTreeDragSourceIface
 {
+  /*< private >*/
   GTypeInterface g_iface;
+
+  /*< public >*/
 
   /* VTable - not signals */
 
