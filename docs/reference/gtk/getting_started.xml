@@ -720,7 +720,7 @@ example_app_window_init (ExampleAppWindow *win)
         <programlisting><xi:include href="../../../../examples/application6/exampleappprefs.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
-      <para>Now we revisit the preferences_activated() function in our
+      <para>Now we revisit the <literal>preferences_activated()</literal> function in our
       application class, and make it open a new preference dialog.</para>
 
       <informalexample>
