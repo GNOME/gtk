@@ -116,6 +116,25 @@ struct _GtkTextAppearance
 
 /**
  * GtkTextAttributes:
+ * @appearance: #GtkTextAppearance for text.
+ * @justification: #GtkJustification for text.
+ * @direction: #GtkTextDirection for text.
+ * @font: #PangoFontDescription for text.
+ * @font_scale: Font scale factor.
+ * @left_margin: Width of the left margin in pixels.
+ * @right_margin: Width of the right margin in pixels.
+ * @indent: Amount to indent the paragraph, in pixels.
+ * @pixels_above_lines: Pixels of blank space above paragraphs.
+ * @pixels_below_lines: Pixels of blank space below paragraphs.
+ * @pixels_inside_wrap: Pixels of blank space between wrapped lines in
+ *   a paragraph.
+ * @tabs: Custom #PangoTabArray for this text.
+ * @wrap_mode: #GtkWrapMode for text.
+ * @language: #PangoLanguage for text.
+ * @invisible: Hide the text.
+ * @bg_full_height: Background is fit to full line height rather than
+ *    baseline +/- ascent/descent (font height).
+ * @editable: Can edit this text.
  *
  * Using #GtkTextAttributes directly should rarely be necessary.
  * It's primarily useful with gtk_text_iter_get_attributes().
