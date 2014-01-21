@@ -38,6 +38,13 @@
 G_BEGIN_DECLS
 
 /* Kinds of widget-specific help */
+/**
+ * GtkWidgetHelpType:
+ * @GTK_WIDGET_HELP_TOOLTIP: Tooltip.
+ * @GTK_WIDGET_HELP_WHATS_THIS: What's this.
+ *
+ * Kinds of widget-specific help. Used by the ::show-help signal.
+ */
 typedef enum
 {
   GTK_WIDGET_HELP_TOOLTIP,
