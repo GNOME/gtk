@@ -113,8 +113,8 @@
  * There are some additional restrictions beyond those specified in the
  * DTD, e.g. every toolitem must have a toolbar in its anchestry and
  * every menuitem must have a menubar or popup in its anchestry. Since
- * a #GMarkup parser is used to parse the UI description, it must not only
- * be valid XML, but valid #GMarkup.
+ * a #GMarkupParser is used to parse the UI description, it must not only
+ * be valid XML, but valid markup.
  *
  * If a name is not specified, it defaults to the action. If an action is
  * not specified either, the element name is used. The name and action
