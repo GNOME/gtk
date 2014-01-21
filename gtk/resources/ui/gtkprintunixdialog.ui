@@ -762,7 +762,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">start</property>
+                                    <property name="valign">center</property>
                                     <property name="label" translatable="yes">Paper _type:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">paper_type</property>
@@ -794,7 +794,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">start</property>
+                                    <property name="valign">center</property>
                                     <property name="label" translatable="yes">Paper _source:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">paper_source</property>
@@ -826,7 +826,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">start</property>
+                                    <property name="valign">center</property>
                                     <property name="label" translatable="yes">Output t_ray:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">output_tray</property>
@@ -858,7 +858,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">start</property>
+                                    <property name="valign">center</property>
                                     <property name="label" translatable="yes">_Paper size:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">paper_size_combo</property>
@@ -892,7 +892,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">start</property>
+                                    <property name="valign">center</property>
                                     <property name="label" translatable="yes">Or_ientation:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">orientation_combo</property>
