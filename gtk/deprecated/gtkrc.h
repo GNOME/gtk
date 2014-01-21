@@ -116,7 +116,6 @@ struct _GtkRcStyle
  * @parse: 
  * @merge: 
  * @create_style: 
- * @create_style: 
  */
 struct _GtkRcStyleClass
 {
