@@ -5222,7 +5222,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  * Looks up an icon and returns a structure containing
  * information such as the filename of the icon.
  * The icon can then be rendered into a pixbuf using
- * gtk_icon_info_load_icon_for_scale ().
+ * gtk_icon_info_load_icon().
  *
  * Return value: (transfer full): a #GtkIconInfo structure containing
  *     information about the icon, or %NULL if the icon
