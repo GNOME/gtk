@@ -96,7 +96,7 @@ main (int argc, char *argv[])
 </example>
   <section><title>Uniqueness</title>
     <para>
-      Instead of creating a #UniqueApp with unique_app_new(), create
+      Instead of creating a UniqueApp with unique_app_new(<!-- -->), create
       a #GApplication with g_application_new() or a #GtkApplication
       with gtk_application_new(). The @name that was used with
       unique_app_new() is very likely usable as the @application_id for
@@ -116,12 +116,12 @@ main (int argc, char *argv[])
   <section><title>Commands and Messages</title>
     <para>
       libunique lets you send messages with commands to a running
-      instance using unique_app_send_message(). The commands can be either
+      instance using unique_app_send_message(<!-- -->). The commands can be either
       predefined or custom. Some of the predefined libunique commands have
-      equivalents in GApplication. Instead of sending the %UNIQUE_ACTIVATE
+      equivalents in GApplication. Instead of sending the UNIQUE_ACTIVATE
       command, call g_application_activate(), instead of sending the
-      %UNIQUE_OPEN command, call g_application_open(). The
-      %UNIQUE_NEW and %UNIQUE_CLOSE and user-defined commands don't
+      UNIQUE_OPEN command, call g_application_open(). The
+      UNIQUE_NEW and UNIQUE_CLOSE and user-defined commands don't
       have direct replacement at this time.
     </para>
 
