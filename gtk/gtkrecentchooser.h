@@ -96,9 +96,36 @@ GDK_AVAILABLE_IN_ALL
 GQuark  gtk_recent_chooser_error_quark (void);
 
 
+/**
+ * GtkRecentChooserIface:
+ * @set_current_uri: Sets uri as the current URI for chooser.
+ * @get_current_uri: Gets the URI currently selected by chooser.
+ * @select_uri: Selects uri inside chooser.
+ * @unselect_uri: Unselects uri inside chooser.
+ * @select_all: Selects all the items inside chooser, if the chooser
+ *    supports multiple selection.
+ * @unselect_all: Unselects all the items inside chooser.
+ * @get_items: Gets the list of recently used resources in form of
+ *    #GtkRecentInfo objects.
+ * @get_recent_manager: Gets the #GtkRecentManager used by chooser.
+ * @add_filter: Adds filter to the list of #GtkRecentFilter objects
+ *    held by chooser.
+ * @remove_filter: Removes filter from the list of #GtkRecentFilter
+ *    objects held by chooser.
+ * @list_filters: Gets the #GtkRecentFilter objects held by chooser.
+ * @set_sort_func: Sets the comparison function used when sorting to
+ *    be sort_func.
+ * @item_activated: Signal emitted when the user "activates" a recent
+ *    item in the recent chooser.
+ * @selection_changed: Signal emitted when there is a change in the
+ *    set of selected recently used resources.
+ */
 struct _GtkRecentChooserIface
 {
+  /*< private >*/
   GTypeInterface base_iface;
+
+  /*< public >*/
 
   /*
    * Methods
