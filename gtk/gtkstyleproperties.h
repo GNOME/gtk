@@ -44,12 +44,14 @@ typedef struct _GtkGradient GtkGradient;
 
 struct _GtkStyleProperties
 {
+  /*< private >*/
   GObject parent_object;
   GtkStylePropertiesPrivate *priv;
 };
 
 struct _GtkStylePropertiesClass
 {
+  /*< private >*/
   GObjectClass parent_class;
 
   /* Padding for future expansion */
