@@ -32,6 +32,17 @@ G_BEGIN_DECLS
 
 #define GTK_CSS_PROVIDER_ERROR (gtk_css_provider_error_quark ())
 
+/**
+ * GtkCssProviderError:
+ * @GTK_CSS_PROVIDER_ERROR_FAILED: Failed.
+ * @GTK_CSS_PROVIDER_ERROR_SYNTAX: Syntax error.
+ * @GTK_CSS_PROVIDER_ERROR_IMPORT: Import error.
+ * @GTK_CSS_PROVIDER_ERROR_NAME: Name error.
+ * @GTK_CSS_PROVIDER_ERROR_DEPRECATED: Deprecation error.
+ * @GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE: Unknown value.
+ *
+ * Deprecated.
+ */
 typedef enum
 {
   GTK_CSS_PROVIDER_ERROR_FAILED,
