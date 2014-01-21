@@ -54,7 +54,10 @@ typedef struct _GtkActivatableIface GtkActivatableIface;
 
 struct _GtkActivatableIface
 {
+  /*< private >*/
   GTypeInterface g_iface;
+
+  /*< public >*/
 
   /* virtual table */
   void   (* update)                   (GtkActivatable *activatable,
