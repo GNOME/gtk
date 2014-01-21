@@ -2273,7 +2273,7 @@ gdk_wayland_window_get_wl_surface (GdkWindow *window)
  * that lets the client identify the wl_surface as a panel or such.
  *
  * This function should be called before a #GdkWindow is shown. This is
- * best done by connecting to the #GtkWidget::realized signal:
+ * best done by connecting to the #GtkWidget::realize signal:
  *
  * <informalexample>
  * <programlisting>
