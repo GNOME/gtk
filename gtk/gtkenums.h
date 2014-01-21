@@ -895,6 +895,15 @@ typedef enum
   GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT  /*< nick=btrl >*/
 } GtkNumberUpLayout;
 
+/**
+ * GtkPageOrientation:
+ * @GTK_PAGE_ORIENTATION_PORTRAIT: Portrait mode.
+ * @GTK_PAGE_ORIENTATION_LANDSCAPE: Landscape mode.
+ * @GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT: Reverse portrait mode.
+ * @GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE: Reverse landscape mode.
+ *
+ * See also gtk_print_settings_set_orientation().
+ */
 typedef enum
 {
   GTK_PAGE_ORIENTATION_PORTRAIT,
@@ -903,6 +912,15 @@ typedef enum
   GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE
 } GtkPageOrientation;
 
+/**
+ * GtkPrintQuality:
+ * @GTK_PRINT_QUALITY_LOW: Low quality.
+ * @GTK_PRINT_QUALITY_NORMAL: Normal quality.
+ * @GTK_PRINT_QUALITY_HIGH: High quality.
+ * @GTK_PRINT_QUALITY_DRAFT: Draft quality.
+ *
+ * See also gtk_print_settings_set_quality().
+ */
 typedef enum
 {
   GTK_PRINT_QUALITY_LOW,
@@ -911,6 +929,14 @@ typedef enum
   GTK_PRINT_QUALITY_DRAFT
 } GtkPrintQuality;
 
+/**
+ * GtkPrintDuplex:
+ * @GTK_PRINT_DUPLEX_SIMPLEX: No duplex.
+ * @GTK_PRINT_DUPLEX_HORIZONTAL: Horizontal duplex.
+ * @GTK_PRINT_DUPLEX_VERTICAL: Vertical duplex.
+ *
+ * See also gtk_print_settings_set_duplex().
+ */
 typedef enum
 {
   GTK_PRINT_DUPLEX_SIMPLEX,
@@ -919,6 +945,15 @@ typedef enum
 } GtkPrintDuplex;
 
 
+/**
+ * GtkUnit:
+ * @GTK_UNIT_NONE: No units.
+ * @GTK_UNIT_POINTS: Dimensions in points.
+ * @GTK_UNIT_INCH: Dimensions in inches.
+ * @GTK_UNIT_MM: Dimensions in millimeters
+ *
+ * See also gtk_print_settings_set_paper_width().
+ */
 typedef enum
 {
   GTK_UNIT_NONE,
