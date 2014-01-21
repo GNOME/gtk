@@ -44,6 +44,15 @@ typedef struct _GtkRcStyleClass GtkRcStyleClass;
 #define GTK_IS_RC_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RC_STYLE))
 #define GTK_RC_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RC_STYLE, GtkRcStyleClass))
 
+/**
+ * GtkRcFlags:
+ * @GTK_RC_FG :Deprecated
+ * @GTK_RC_BG: Deprecated
+ * @GTK_RC_TEXT: Deprecated
+ * @GTK_RC_BASE: Deprecated
+ *
+ * Deprecated
+ */
 typedef enum
 {
   GTK_RC_FG             = 1 << 0,
