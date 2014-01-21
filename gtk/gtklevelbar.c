@@ -962,7 +962,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   /**
    * GtkLevelBar:mode:
    *
-   * The #GtkLevelBar:bar-mode property determines the way #GtkLevelBar
+   * The #GtkLevelBar:mode property determines the way #GtkLevelBar
    * interprets the value properties to draw the level fill area.
    * Specifically, when the value is #GTK_LEVEL_BAR_MODE_CONTINUOUS,
    * #GtkLevelBar will draw a single block representing the current value in
