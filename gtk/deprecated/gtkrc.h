@@ -210,46 +210,46 @@ gchar*      gtk_rc_get_im_module_file  (void);
 
 /**
  * GtkRcTokenType:
- * @GTK_RC_TOKEN_INVALID:
- * @GTK_RC_TOKEN_INCLUDE:
- * @GTK_RC_TOKEN_NORMAL:
- * @GTK_RC_TOKEN_ACTIVE:
- * @GTK_RC_TOKEN_PRELIGHT:
- * @GTK_RC_TOKEN_SELECTED:
- * @GTK_RC_TOKEN_INSENSITIVE:
- * @GTK_RC_TOKEN_FG:
- * @GTK_RC_TOKEN_BG:
- * @GTK_RC_TOKEN_TEXT:
- * @GTK_RC_TOKEN_BASE:
- * @GTK_RC_TOKEN_XTHICKNESS:
- * @GTK_RC_TOKEN_YTHICKNESS:
- * @GTK_RC_TOKEN_FONT:
- * @GTK_RC_TOKEN_FONTSET:
- * @GTK_RC_TOKEN_FONT_NAME:
- * @GTK_RC_TOKEN_BG_PIXMAP:
- * @GTK_RC_TOKEN_PIXMAP_PATH:
- * @GTK_RC_TOKEN_STYLE:
- * @GTK_RC_TOKEN_BINDING:
- * @GTK_RC_TOKEN_BIND:
- * @GTK_RC_TOKEN_WIDGET:
- * @GTK_RC_TOKEN_WIDGET_CLASS:
- * @GTK_RC_TOKEN_CLASS:
- * @GTK_RC_TOKEN_LOWEST:
- * @GTK_RC_TOKEN_GTK:
- * @GTK_RC_TOKEN_APPLICATION:
- * @GTK_RC_TOKEN_THEME:
- * @GTK_RC_TOKEN_RC:
- * @GTK_RC_TOKEN_HIGHEST:
- * @GTK_RC_TOKEN_ENGINE:
- * @GTK_RC_TOKEN_MODULE_PATH:
- * @GTK_RC_TOKEN_IM_MODULE_PATH:
- * @GTK_RC_TOKEN_IM_MODULE_FILE:
- * @GTK_RC_TOKEN_STOCK:
- * @GTK_RC_TOKEN_LTR:
- * @GTK_RC_TOKEN_RTL:
- * @GTK_RC_TOKEN_COLOR:
- * @GTK_RC_TOKEN_UNBIND:
- * @GTK_RC_TOKEN_LAST:
+ * @GTK_RC_TOKEN_INVALID: Deprecated
+ * @GTK_RC_TOKEN_INCLUDE: Deprecated
+ * @GTK_RC_TOKEN_NORMAL: Deprecated
+ * @GTK_RC_TOKEN_ACTIVE: Deprecated
+ * @GTK_RC_TOKEN_PRELIGHT: Deprecated
+ * @GTK_RC_TOKEN_SELECTED: Deprecated
+ * @GTK_RC_TOKEN_INSENSITIVE: Deprecated
+ * @GTK_RC_TOKEN_FG: Deprecated
+ * @GTK_RC_TOKEN_BG: Deprecated
+ * @GTK_RC_TOKEN_TEXT: Deprecated
+ * @GTK_RC_TOKEN_BASE: Deprecated
+ * @GTK_RC_TOKEN_XTHICKNESS: Deprecated
+ * @GTK_RC_TOKEN_YTHICKNESS: Deprecated
+ * @GTK_RC_TOKEN_FONT: Deprecated
+ * @GTK_RC_TOKEN_FONTSET: Deprecated
+ * @GTK_RC_TOKEN_FONT_NAME: Deprecated
+ * @GTK_RC_TOKEN_BG_PIXMAP: Deprecated
+ * @GTK_RC_TOKEN_PIXMAP_PATH: Deprecated
+ * @GTK_RC_TOKEN_STYLE: Deprecated
+ * @GTK_RC_TOKEN_BINDING: Deprecated
+ * @GTK_RC_TOKEN_BIND: Deprecated
+ * @GTK_RC_TOKEN_WIDGET: Deprecated
+ * @GTK_RC_TOKEN_WIDGET_CLASS: Deprecated
+ * @GTK_RC_TOKEN_CLASS: Deprecated
+ * @GTK_RC_TOKEN_LOWEST: Deprecated
+ * @GTK_RC_TOKEN_GTK: Deprecated
+ * @GTK_RC_TOKEN_APPLICATION: Deprecated
+ * @GTK_RC_TOKEN_THEME: Deprecated
+ * @GTK_RC_TOKEN_RC: Deprecated
+ * @GTK_RC_TOKEN_HIGHEST: Deprecated
+ * @GTK_RC_TOKEN_ENGINE: Deprecated
+ * @GTK_RC_TOKEN_MODULE_PATH: Deprecated
+ * @GTK_RC_TOKEN_IM_MODULE_PATH: Deprecated
+ * @GTK_RC_TOKEN_IM_MODULE_FILE: Deprecated
+ * @GTK_RC_TOKEN_STOCK: Deprecated
+ * @GTK_RC_TOKEN_LTR: Deprecated
+ * @GTK_RC_TOKEN_RTL: Deprecated
+ * @GTK_RC_TOKEN_COLOR: Deprecated
+ * @GTK_RC_TOKEN_UNBIND: Deprecated
+ * @GTK_RC_TOKEN_LAST: Deprecated
  *
  * The #GtkRcTokenType enumeration represents the tokens
  * in the RC file. It is exposed so that theme engines
