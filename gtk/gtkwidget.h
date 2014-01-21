@@ -600,6 +600,15 @@ struct _GtkWidgetClass
   void (*_gtk_reserved7) (void);
 };
 
+/**
+ * GtkWidgetAuxInfo:
+ * @width: the widget's width
+ * @height: the widget's height
+ * @halign: the widget's horizontal alignment
+ * @valign: the widget's horizontal alignment
+ * @margin: the widget's #GtkBorder margins
+ *
+ */
 struct _GtkWidgetAuxInfo
 {
   gint width;
