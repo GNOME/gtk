@@ -52,6 +52,16 @@ typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
 
 typedef struct _GtkStockItem GtkStockItem;
 
+/**
+ * GtkStockItem:
+ * @stock_id: Identifier.
+ * @label: User visible label.
+ * @modifier: Modifier type for keyboard accelerator
+ * @keyval: Keyboard accelerator
+ * @translation_domain: Translation domain of the menu or toolbar item
+ *
+ * Deprecated: 3.10
+ */
 struct _GtkStockItem
 {
   gchar *stock_id;
