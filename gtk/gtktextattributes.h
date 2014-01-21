@@ -67,6 +67,25 @@ typedef struct _GtkTextAttributes GtkTextAttributes;
 
 typedef struct _GtkTextAppearance GtkTextAppearance;
 
+/**
+ * GtkTextAppearance:
+ * @bg_color: Background #GdkColor.
+ * @fg_color: Foreground #GdkColor.
+ * @rise: Super/subscript rise, can be negative.
+ * @underline: #PangoUnderline
+ * @strikethrough: Strikethrough style
+ * @draw_bg: Whether to use background-related values; this is
+ *   irrelevant for the values struct when in a tag, but is used for
+ *   the composite values struct; it's true if any of the tags being
+ *   composited had background stuff set.
+ * @inside_selection: This are only used when we are actually laying
+ *   out and rendering a paragraph; not when a #GtkTextAppearance is
+ *   part of a #GtkTextAttributes.
+ * @is_text: This are only used when we are actually laying
+ *   out and rendering a paragraph; not when a #GtkTextAppearance is
+ *   part of a #GtkTextAttributes.
+ * @rgba: #GdkRGBA
+ */
 struct _GtkTextAppearance
 {
   /*< public >*/
@@ -76,7 +95,6 @@ struct _GtkTextAppearance
   /* super/subscript rise, can be negative */
   gint rise;
 
-  /*< public >*/
   guint underline : 4;          /* PangoUnderline */
   guint strikethrough : 1;
 
@@ -103,12 +121,14 @@ struct _GtkTextAppearance
    */
   union {
     GdkRGBA *rgba[2];
+    /*< private >*/
     guint padding[4];
   };
 #else
   GdkRGBA *rgba[2];
 #if (defined(__SIZEOF_INT__) && defined(__SIZEOF_POINTER__)) && (__SIZEOF_INT__ == __SIZEOF_POINTER__)
   /* unusable, just for ABI compat */
+  /*< private >*/
   guint padding[2];
 #endif
 #endif
