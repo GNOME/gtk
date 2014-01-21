@@ -61,7 +61,7 @@
  *
  * As well as the functions listed here, applications
  * may need to use some facilities provided for
- * <link linkend="gtk-Selections">Selections</link>.
+ * <link linkend="gtk3-Selections">Selections</link>.
  * Also, the Drag and Drop API makes use of signals
  * in the #GtkWidget class.
  */
