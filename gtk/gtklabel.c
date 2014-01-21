@@ -844,7 +844,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * %PANGO_ELLIPSIZE_NONE has the side-effect that the label requests 
    * only enough space to display the ellipsis "...". In particular, this 
    * means that ellipsizing labels do not work well in notebook tabs, unless 
-   * the tab's #GtkNotebook:tab-expand property is set to %TRUE. Other ways
+   * the #GtkNotebook tab-expand child property is set to %TRUE. Other ways
    * to set a label's width are gtk_widget_set_size_request() and
    * gtk_label_set_width_chars().
    *
