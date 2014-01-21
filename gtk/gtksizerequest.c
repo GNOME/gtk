@@ -735,7 +735,7 @@ _gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
  * height for the natural width is generally smaller than the required height for
  * the minimum width.</para></note>
  *
- * Use gtk_widget_get_preferred_size_and_baseline() if you want to support
+ * Use gtk_widget_get_preferred_height_and_baseline_for_width() if you want to support
  * baseline alignment.
  *
  * Since: 3.0
