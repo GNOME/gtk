@@ -235,8 +235,7 @@
       </para>
 
       <para>
-	Note that when a widget creates a window in its <link
-	linkend="gtkwidget-realize"><methodname>::realize()</methodname></link>
+	Note that when a #GtkWidget creates a window in its #GtkWidget::realize
 	handler, it does not actually show the window.  That is, the
 	window's structure is just created in memory.  The widget
 	actually shows the window when it gets <glossterm
