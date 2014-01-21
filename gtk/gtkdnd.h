@@ -78,7 +78,7 @@ typedef enum {
  *   for drags withing a single widget.
  *
  * The #GtkTargetFlags enumeration is used to specify
- * constraints on an entry in a #GtkTargetTable.
+ * constraints on a #GtkTargetEntry.
  */
 typedef enum {
   GTK_TARGET_SAME_APP = 1 << 0,    /*< nick=same-app >*/
