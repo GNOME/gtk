@@ -71,9 +71,27 @@ typedef gint (* GtkTreeIterCompareFunc) (GtkTreeModel *model,
 					 gpointer      user_data);
 
 
+/**
+ * GtkTreeSortableIface:
+ * @sort_column_changed: Signal emitted when the sort column or sort
+ *    order of sortable is changed.
+ * @get_sort_column_id: Fills in sort_column_id and order with the
+ *    current sort column and the order.
+ * @set_sort_column_id: Sets the current sort column to be
+ *    sort_column_id.
+ * @set_sort_func: Sets the comparison function used when sorting to
+ *    be sort_func.
+ * @set_default_sort_func: Sets the default comparison function used
+ *    when sorting to be sort_func.
+ * @has_default_sort_func: %TRUE if the model has a default sort
+ * function.
+ */
 struct _GtkTreeSortableIface
 {
+  /*< private >*/
   GTypeInterface g_iface;
+
+  /*< public >*/
 
   /* signals */
   void     (* sort_column_changed)   (GtkTreeSortable        *sortable);
