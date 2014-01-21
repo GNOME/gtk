@@ -320,6 +320,16 @@ guint     gtk_rc_parse_priority (GScanner            *scanner,
 /* rc properties
  * (structure forward declared in gtkstyle.h)
  */
+/**
+ * GtkRcProperty:
+ * @type_name: quark-ified type identifier
+ * @property_name: quark-ified property identifier like
+ *   "GtkScrollbar::spacing"
+ * @origin: field similar to one found in #GtkSettingsValue
+ * @value:field similar to one found in #GtkSettingsValue
+ *
+ * Deprecated
+ */
 struct _GtkRcProperty
 {
   /* quark-ified property identifier like "GtkScrollbar::spacing" */
