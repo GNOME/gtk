@@ -1091,7 +1091,7 @@ gtk_table_set_homogeneous (GtkTable *table,
  * @table: a #GtkTable
  *
  * Returns whether the table cells are all constrained to the same
- * width and height. (See gtk_table_set_homogenous ())
+ * width and height. (See gtk_table_set_homogeneous ())
  *
  * Return value: %TRUE if the cells are all constrained to the same size
  *
