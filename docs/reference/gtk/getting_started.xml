@@ -419,7 +419,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
         <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application2/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
-      <para>You may have noticed that we used the _from_resource() variant
+      <para>You may have noticed that we used the <literal>_from_resource()</literal> variant
       of the function that sets a template. Now we need to use GLib's resource
       functionality to include the ui file in the binary. This is commonly
       done by listing all resources in a .gresource.xml file, such as this:
