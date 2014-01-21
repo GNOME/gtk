@@ -115,7 +115,7 @@ struct _GtkIconThemeClass
  *   requested size. Since 2.14.
  * 
  * Used to specify options for gtk_icon_theme_lookup_icon()
- **/
+ */
 typedef enum
 {
   GTK_ICON_LOOKUP_NO_SVG           = 1 << 0,
