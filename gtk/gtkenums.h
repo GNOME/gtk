@@ -376,6 +376,15 @@ typedef enum
   GTK_MOVEMENT_HORIZONTAL_PAGES
 } GtkMovementStep;
 
+/**
+ * GtkScrollStep:
+ * @GTK_SCROLL_STEPS: Scroll in steps.
+ * @GTK_SCROLL_PAGES: Scroll by pages.
+ * @GTK_SCROLL_ENDS: Scroll to ends.
+ * @GTK_SCROLL_HORIZONTAL_STEPS: Scroll in horizontal steps.
+ * @GTK_SCROLL_HORIZONTAL_PAGES: Scroll by horizontal pages.
+ * @GTK_SCROLL_HORIZONTAL_ENDS: Scroll to the horizontal ends.
+ */
 typedef enum
 {
   GTK_SCROLL_STEPS,
@@ -543,7 +552,27 @@ typedef enum
   GTK_RESIZE_IMMEDIATE
 } GtkResizeMode;
 
-/* scrolling types */
+/**
+ * GtkScrollType:
+ * @GTK_SCROLL_NONE: No scrolling.
+ * @GTK_SCROLL_JUMP: Jump to new location.
+ * @GTK_SCROLL_STEP_BACKWARD: Step backward.
+ * @GTK_SCROLL_STEP_FORWARD: Step forward.
+ * @GTK_SCROLL_PAGE_BACKWARD: Page backward.
+ * @GTK_SCROLL_PAGE_FORWARD: Page forward.
+ * @GTK_SCROLL_STEP_UP: Step up.
+ * @GTK_SCROLL_STEP_DOWN: Step down.
+ * @GTK_SCROLL_PAGE_UP: Page up.
+ * @GTK_SCROLL_PAGE_DOWN: Page down.
+ * @GTK_SCROLL_STEP_LEFT: Step to the left.
+ * @GTK_SCROLL_STEP_RIGHT: Step to the right.
+ * @GTK_SCROLL_PAGE_LEFT: Page to the left.
+ * @GTK_SCROLL_PAGE_RIGHT: Page to the right.
+ * @GTK_SCROLL_START: Scroll to start.
+ * @GTK_SCROLL_END: Scroll to end.
+ *
+ * Scrolling types.
+ */
 typedef enum
 {
   GTK_SCROLL_NONE,
