@@ -186,9 +186,9 @@ or Linux system with gettext installed, type <literal>info gettext</literal>
 to read the documentation.
 </para>
 <para>
-The short checklist on how to use gettext is: call <literal>bindtextdomain()</literal> so
+The short checklist on how to use gettext is: call <literal>bindtextdomain(<!-- -->)</literal> so
 gettext can find the files containing your translations, call textdomain()
-to set the default translation domain, call <literal>bind_textdomain_codeset()</literal> to
+to set the default translation domain, call <literal>bind_textdomain_codeset(<!-- -->)</literal> to
 request that all translated strings are returned in UTF-8, then call
 gettext() to look up each string to be translated in the default domain.
 </para>
@@ -360,7 +360,7 @@ g_free (text);
 </para>
 <para>
 If you are using gettext() to localize your application, you need to
-call bind_textdomain_codeset() to ensure that translated strings are
+call <literal>bind_textdomain_codeset(<!-- -->)</literal> to ensure that translated strings are
 returned in UTF-8 encoding.
 </para>
 </answer>
@@ -522,7 +522,7 @@ macro ?
 <answer>
 <para>
 The <literal>GTK_TYPE_BLAH</literal> macros are defined as calls to
-<literal>gtk_blah_get_type()</literal>, and the <literal>_get_type()</literal> i
+<literal>gtk_blah_get_type(<!-- -->)</literal>, and the <literal>_get_type(<!-- -->)</literal> i
 functions are declared as %G_GNUC_CONST which allows the compiler to optimize
 the call away if it appears that the value is not being used.
 </para>
