@@ -10513,9 +10513,10 @@ _gtk_widget_restore_size_request (GtkWidget *widget,
  * so be careful. This function must be called while a widget is
  * unrealized. Consider gtk_widget_add_events() for widgets that are
  * already realized, or if you want to preserve the existing event
- * mask. This function can't be used with #GTK_NO_WINDOW widgets;
- * to get events on those widgets, place them inside a #GtkEventBox
- * and receive events on the event box.
+ * mask. This function can't be used with widgets that have no window.
+ * (See gtk_widget_get_has_window()).  To get events on those widgets,
+ * place them inside a #GtkEventBox and receive events on the event
+ * box.
  **/
 void
 gtk_widget_set_events (GtkWidget *widget,
