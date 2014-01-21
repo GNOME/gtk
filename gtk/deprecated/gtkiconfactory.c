@@ -50,9 +50,8 @@
  * @Short_description: Manipulating stock icons
  * @Title: Themeable Stock Images
  *
- * Browse the available stock icons in the list of stock IDs found <link
- * linkend="gtk-Stock-Items">here</link>. You can also use
- * the <application>gtk-demo</application> application for this purpose.
+ * Browse the available stock icons using
+ * the <application>gtk3-demo</application> application.
  *
  * An icon factory manages a collection of #GtkIconSet; a #GtkIconSet manages a
  * set of variants of a particular icon (i.e. a #GtkIconSet contains variants for
