@@ -55,7 +55,7 @@ typedef struct _GtkRcProperty  GtkRcProperty;
  * GTK_STYLE_ATTACHED:
  * @style: a #GtkStyle.
  *
- * Returns whether the style is attached to a window.
+ * Returns: whether the style is attached to a window.
  */
 #define GTK_STYLE_ATTACHED(style)       (GTK_STYLE (style)->attach_count > 0)
 

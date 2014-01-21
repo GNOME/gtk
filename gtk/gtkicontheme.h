@@ -111,7 +111,7 @@ struct _GtkIconThemeClass
  * @GTK_ICON_LOOKUP_GENERIC_FALLBACK: Try to shorten icon name at '-'
  *   characters before looking at inherited themes. For more general
  *   fallback, see gtk_icon_theme_choose_icon(). Since 2.12.
- * @GTK_ICON_LOOKUP_FORCE_SIZE: Always return the icon scaled to the
+ * @GTK_ICON_LOOKUP_FORCE_SIZE: Always get the icon scaled to the
  *   requested size. Since 2.14.
  * 
  * Used to specify options for gtk_icon_theme_lookup_icon()

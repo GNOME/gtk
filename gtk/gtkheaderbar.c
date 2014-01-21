@@ -2043,7 +2043,7 @@ gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
  * gtk_header_bar_get_has_subtitle:
  * @bar: a #GtkHeaderBar
  *
- * Returns whether the header bar reserves space
+ * Returns: %TRUE if the header bar reserves space
  * for a subtitle.
  *
  * Since: 3.12
