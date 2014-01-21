@@ -3549,7 +3549,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * GtkWidget:separator-width:
    *
    * The "separator-width" style property defines the width of separators.
-   * This property only takes effect if #GtkWidget:wide-separators is %TRUE.
+   * This property only takes effect if the "wide-separators" style property is %TRUE.
    *
    * Since: 2.10
    */
@@ -3564,7 +3564,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * GtkWidget:separator-height:
    *
    * The "separator-height" style property defines the height of separators.
-   * This property only takes effect if #GtkWidget:wide-separators is %TRUE.
+   * This property only takes effect if the "wide-separators" style property is %TRUE.
    *
    * Since: 2.10
    */
