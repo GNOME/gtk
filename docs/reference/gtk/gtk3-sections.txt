@@ -5416,7 +5416,6 @@ gtk_widget_get_display
 gtk_widget_get_root_window
 gtk_widget_get_screen
 gtk_widget_has_screen
-gtk_widget_get_scale_factor
 gtk_widget_get_size_request
 gtk_widget_set_child_visible
 gtk_widget_set_size_request
@@ -5485,9 +5484,6 @@ gtk_widget_get_requisition
 gtk_widget_device_is_shadowed
 gtk_widget_get_modifier_mask
 gtk_widget_insert_action_group
-gtk_widget_add_tick_callback
-gtk_widget_remove_tick_callback
-gtk_widget_get_frame_clock
 gtk_widget_get_opacity
 gtk_widget_set_opacity
 
