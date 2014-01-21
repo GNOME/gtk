@@ -1121,7 +1121,7 @@ gtk_arrow_draw (GtkWidget *widget,
     </para>
     <para>
       If you experience sizing problems with widgets in ported code,
-      carefully check the #GtkBox::expand and #GtkBox::fill flags of your
+      carefully check the #GtkBox expand and #GtkBox fill child properties of your
       boxes.
     </para>
   </section>
