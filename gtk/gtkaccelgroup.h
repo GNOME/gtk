@@ -46,6 +46,14 @@ G_BEGIN_DECLS
 
 
 /* --- accel flags --- */
+/**
+ * GtkAccelFlags:
+ * @GTK_ACCEL_VISIBLE: Accelerator is visible
+ * @GTK_ACCEL_LOCKED: Accelerator not removable
+ * @GTK_ACCEL_MASK: Mask
+ *
+ * Accelerator flags used with gtk_accel_group_connect().
+ */
 typedef enum
 {
   GTK_ACCEL_VISIBLE        = 1 << 0,	/* display in GtkAccelLabel? */
