@@ -456,7 +456,7 @@ gtk_search_bar_init (GtkSearchBar *bar)
  *
  * Creates a #GtkSearchBar. You will need to tell it about
  * which widget is going to be your text entry using
- * gtk_search_bar_set_entry().
+ * gtk_search_bar_connect_entry().
  *
  * Return value: a new #GtkSearchBar
  *
