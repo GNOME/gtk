@@ -28,7 +28,7 @@
     <para>
       The #GtkWidget::popup-menu signal instructs the widget for which
       it is emitted to create a context-sensitive popup menu. By default,
-      the <link linkend="gtk-bindings">key binding mechanism</link> is set to
+      the <link linkend="gtk-bindings-install">key binding mechanism</link> is set to
       emit this signal when the
       <keycombo><keycap>Shift</keycap><keycap>F10</keycap></keycombo>
       or <keycap>Menu</keycap> keys are pressed while a widget has the
