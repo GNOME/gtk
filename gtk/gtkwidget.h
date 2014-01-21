@@ -160,7 +160,7 @@ struct _GtkWidget
  *   means that either it or any of its parents up to the toplevel
  *   widget have been set as hidden.
  * @realize: Signal emitted when widget is associated with a
- *   #GdkWindow, which means that gtk_wiget_realize() has been called or
+ *   #GdkWindow, which means that gtk_widget_realize() has been called or
  *   the widget has been mapped (that is, it is going to be drawn).
  * @unrealize: Signal emitted when the GdkWindow associated with
  *   widget is destroyed, which means that gtk_widget_unrealize() has

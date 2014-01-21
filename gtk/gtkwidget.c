@@ -1763,7 +1763,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * @widget: the object which received the signal.
    *
    * The ::realize signal is emitted when @widget is associated with a
-   * #GdkWindow, which means that gtk_wiget_realize() has been called or the
+   * #GdkWindow, which means that gtk_widget_realize() has been called or the
    * widget has been mapped (that is, it is going to be drawn).
    */
   widget_signals[REALIZE] =
