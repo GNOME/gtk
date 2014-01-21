@@ -66,6 +66,7 @@ struct _GtkContainer
  * @child_type: Returns the type of the children supported by the container.
  * @composite_name: Gets a widget's composite name. Deprecated: 3.10.
  * @set_child_property: Set a property on a child of container.
+ * @get_child_property: Get a property from a child of container.
  * @get_path_for_child: Get path representing entire widget hierarchy
  *    from the toplevel down to and including @child.
  *
