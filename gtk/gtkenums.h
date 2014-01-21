@@ -437,7 +437,20 @@ typedef enum
   GTK_PACK_END
 } GtkPackType;
 
-/* priorities for path lookups */
+/**
+ * GtkPathPriorityType:
+ * @GTK_PATH_PRIO_LOWEST: Deprecated
+ * @GTK_PATH_PRIO_GTK: Deprecated
+ * @GTK_PATH_PRIO_APPLICATION: Deprecated
+ * @GTK_PATH_PRIO_THEME: Deprecated
+ * @GTK_PATH_PRIO_RC: Deprecated
+ * @GTK_PATH_PRIO_HIGHEST: Deprecated
+ *
+ * Priorities for path lookups.
+ * See also gtk_binding_set_add_path().
+ *
+ * Deprecated: 3.0
+ */
 typedef enum
 {
   GTK_PATH_PRIO_LOWEST      = 0,
@@ -449,7 +462,17 @@ typedef enum
 } GtkPathPriorityType;
 #define GTK_PATH_PRIO_MASK 0x0f
 
-/* widget path types */
+/**
+ * GtkPathType:
+ * @GTK_PATH_WIDGET: Deprecated
+ * @GTK_PATH_WIDGET_CLASS: Deprecated
+ * @GTK_PATH_CLASS: Deprecated
+ *
+ * Widget path types.
+ * See also gtk_binding_set_add_path().
+ *
+ * Deprecated: 3.0
+ */
 typedef enum
 {
   GTK_PATH_WIDGET,
