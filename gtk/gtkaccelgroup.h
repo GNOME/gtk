@@ -114,6 +114,12 @@ struct _GtkAccelGroupClass
   void (*_gtk_reserved4) (void);
 };
 
+/**
+ * GtkAccelKey:
+ * @accel_key: The accelerator keyval
+ * @accel_mods:The accelerator modifiers
+ * @accel_flags: The accelerator flags
+ */
 struct _GtkAccelKey
 {
   guint           accel_key;
