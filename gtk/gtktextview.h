@@ -43,9 +43,22 @@ G_BEGIN_DECLS
 #define GTK_IS_TEXT_VIEW_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_VIEW))
 #define GTK_TEXT_VIEW_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_VIEW, GtkTextViewClass))
 
+/**
+ * GtkTextWindowType:
+ * @GTK_TEXT_WINDOW_WIDGET: Window that floats over scrolling areas.
+ * @GTK_TEXT_WINDOW_TEXT: Scrollable text window.
+ * @GTK_TEXT_WINDOW_LEFT: Left side border window.
+ * @GTK_TEXT_WINDOW_RIGHT: Right side border window.
+ * @GTK_TEXT_WINDOW_TOP: Top border window.
+ * @GTK_TEXT_WINDOW_BOTTOM: Bottom border window.
+ *
+ * Used to reference the parts of #GtkTextView.
+ */
 typedef enum
 {
+  /*< private >*/
   GTK_TEXT_WINDOW_PRIVATE,
+  /*< public >*/
   GTK_TEXT_WINDOW_WIDGET,
   GTK_TEXT_WINDOW_TEXT,
   GTK_TEXT_WINDOW_LEFT,
