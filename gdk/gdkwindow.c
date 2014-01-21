@@ -10867,7 +10867,7 @@ gdk_window_get_scale_factor (GdkWindow *window)
  * GTK+ will automatically update this property automatically if
  * the @window background is opaque, as we know where the opaque regions
  * are. If your window background is not opaque, please update this
- * property in your #GtkWindow::style_updated handler.
+ * property in your #GtkWidget::style-updated handler.
  *
  * Since: 3.10
  */
