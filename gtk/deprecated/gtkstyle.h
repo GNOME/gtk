@@ -59,8 +59,26 @@ typedef struct _GtkRcProperty  GtkRcProperty;
  */
 #define GTK_STYLE_ATTACHED(style)       (GTK_STYLE (style)->attach_count > 0)
 
+/**
+ * GtkStyle:
+ * @fg: Set of foreground #GdkColor
+ * @bg: Set of background #GdkColor
+ * @light: Set of light #GdkColor
+ * @dark: Set of dark #GdkColor
+ * @mid: Set of mid #GdkColor
+ * @text: Set of text #GdkColor
+ * @base: Set of base #GdkColor
+ * @text_aa: Color halfway between text/base
+ * @black: #GdkColor to use for black
+ * @white: #GdkColor to use for white
+ * @font_desc: #PangoFontDescription
+ * @xthickness: Thickness in X direction
+ * @ythickness: Thickness in Y direction
+ * @background: Set of background #cairo_pattern_t
+ */
 struct _GtkStyle
 {
+  /*< private >*/
   GObject parent_instance;
 
   /*< public >*/
