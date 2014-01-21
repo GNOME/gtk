@@ -223,36 +223,6 @@ struct _GtkWidget
  *   contextual width to request height for. By implementing this virtual
  *   method it is possible for a #GtkLabel to tell its parent how much height
  *   would be required if the label were to be allocated a said width.
- * @adjust_size_request: Convert an initial size request from a widget's
- *   #GtkSizeRequestMode virtual method implementations into a size request to
- *   be used by parent containers in laying out the widget.
- *   adjust_size_request adjusts <emphasis>from</emphasis> a child widget's
- *   original request <emphasis>to</emphasis> what a parent container should
- *   use for layout. The @for_size argument will be -1 if the request should
- *   not be for a particular size in the opposing orientation, i.e. if the
- *   request is not height-for-width or width-for-height. If @for_size is
- *   greater than -1, it is the proposed allocation in the opposing
- *   orientation that we need the request for. Implementations of
- *   adjust_size_request should chain up to the default implementation,
- *   which applies #GtkWidget's margin properties and imposes any values
- *   from gtk_widget_set_size_request(). Chaining up should be last,
- *   <emphasis>after</emphasis> your subclass adjusts the request, so
- *   #GtkWidget can apply constraints and add the margin properly.
- * @adjust_size_allocation: Convert an initial size allocation assigned
- *   by a #GtkContainer using gtk_widget_size_allocate(), into an actual
- *   size allocation to be used by the widget. adjust_size_allocation
- *   adjusts <emphasis>to</emphasis> a child widget's actual allocation
- *   <emphasis>from</emphasis> what a parent container computed for the
- *   child. The adjusted allocation must be entirely within the original
- *   allocation. In any custom implementation, chain up to the default
- *   #GtkWidget implementation of this method, which applies the margin
- *   and alignment properties of #GtkWidget. Chain up
- *   <emphasis>before</emphasis> performing your own adjustments so your
- *   own adjustments remove more allocation after the #GtkWidget base
- *   class has already removed margin and alignment. The natural size
- *   passed in should be adjusted in the same way as the allocated size,
- *   which allows adjustments to perform alignments or other changes
- *   based on natural size.
  * @mnemonic_activate: Activates the @widget if @group_cycling is
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the
@@ -346,8 +316,36 @@ struct _GtkWidget
  *   widget; or emitted when widget got focus in keyboard mode.
  * @compute_expand: Computes whether a container should give this
  *   widget extra space when possible.
- * @adjust_size_request:
- * @adjust_size_allocation:
+ * @adjust_size_request: Convert an initial size request from a widget's
+ *   #GtkSizeRequestMode virtual method implementations into a size request to
+ *   be used by parent containers in laying out the widget.
+ *   adjust_size_request adjusts <emphasis>from</emphasis> a child widget's
+ *   original request <emphasis>to</emphasis> what a parent container should
+ *   use for layout. The @for_size argument will be -1 if the request should
+ *   not be for a particular size in the opposing orientation, i.e. if the
+ *   request is not height-for-width or width-for-height. If @for_size is
+ *   greater than -1, it is the proposed allocation in the opposing
+ *   orientation that we need the request for. Implementations of
+ *   adjust_size_request should chain up to the default implementation,
+ *   which applies #GtkWidget's margin properties and imposes any values
+ *   from gtk_widget_set_size_request(). Chaining up should be last,
+ *   <emphasis>after</emphasis> your subclass adjusts the request, so
+ *   #GtkWidget can apply constraints and add the margin properly.
+ * @adjust_size_allocation: Convert an initial size allocation assigned
+ *   by a #GtkContainer using gtk_widget_size_allocate(), into an actual
+ *   size allocation to be used by the widget. adjust_size_allocation
+ *   adjusts <emphasis>to</emphasis> a child widget's actual allocation
+ *   <emphasis>from</emphasis> what a parent container computed for the
+ *   child. The adjusted allocation must be entirely within the original
+ *   allocation. In any custom implementation, chain up to the default
+ *   #GtkWidget implementation of this method, which applies the margin
+ *   and alignment properties of #GtkWidget. Chain up
+ *   <emphasis>before</emphasis> performing your own adjustments so your
+ *   own adjustments remove more allocation after the #GtkWidget base
+ *   class has already removed margin and alignment. The natural size
+ *   passed in should be adjusted in the same way as the allocated size,
+ *   which allows adjustments to perform alignments or other changes
+ *   based on natural size.
  * @style_updated: Signal emitted when the GtkStyleContext of a widget
  *   is changed.
  * @touch_event:
