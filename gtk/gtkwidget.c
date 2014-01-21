@@ -16156,7 +16156,7 @@ gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
  * implemented by the #GtkWidget class so there is no need to implement it manually.
  *
  * The wrapper macros gtk_widget_class_bind_template_child(), gtk_widget_class_bind_template_child_internal(),
- * gtk_widget_class_bind_template_child_private() and gtk_widget_class_bind_private_template_child_internal()
+ * gtk_widget_class_bind_template_child_private() and gtk_widget_class_bind_template_child_internal_private()
  * might be more convenient to use.
  *
  * <note><para>This must be called from a composite widget classes class
@@ -16191,7 +16191,9 @@ gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
  *
  * Fetch an object build from the template XML for @widget_type in this @widget instance.
  *
- * This will only report children which were previously declared with gtk_widget_class_bind_template_child_private_full() or one of its variants.
+ * This will only report children which were previously declared with
+ * gtk_widget_class_bind_template_child_full() or one of its
+ * variants.
  *
  * This function is only meant to be called for code which is private to the @widget_type which
  * declared the child and is meant for language bindings which cannot easily make use
