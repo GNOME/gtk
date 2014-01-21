@@ -163,7 +163,7 @@
                       <object class="GtkImage" id="image1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-orientation-portrait</property>
+                        <property name="icon_name">gtk-orientation-portrait</property>
                         <property name="icon_size">3</property>
                       </object>
                       <packing>
@@ -213,7 +213,7 @@
                       <object class="GtkImage" id="image2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-orientation-reverse-portrait</property>
+                        <property name="icon_name">gtk-orientation-reverse-portrait</property>
                         <property name="icon_size">3</property>
                       </object>
                       <packing>
@@ -263,7 +263,7 @@
                       <object class="GtkImage" id="image3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-orientation-landscape</property>
+                        <property name="icon_name">gtk-orientation-landscape</property>
                         <property name="icon_size">3</property>
                       </object>
                       <packing>
@@ -312,7 +312,7 @@
                       <object class="GtkImage" id="image4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-orientation-reverse-landscape</property>
+                        <property name="icon_name">gtk-orientation-reverse-landscape</property>
                         <property name="icon_size">3</property>
                       </object>
                       <packing>

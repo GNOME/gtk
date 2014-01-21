@@ -5,7 +5,7 @@
   <object class="GtkImage" id="location_button_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-edit</property>
+    <property name="icon_name">gtk-edit</property>
   </object>
   <template class="GtkFileChooserDefault" parent="GtkBox">
     <property name="can_focus">False</property>
@@ -100,7 +100,7 @@
                           <object class="GtkImage" id="browse_select_a_folder_icon">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-directory</property>
+                            <property name="icon_name">folder</property>
                             <property name="icon_size">1</property>
                           </object>
                           <packing>
@@ -142,7 +142,7 @@
                 <child>
                   <object class="GtkImage" id="browse_special_mode_icon">
                     <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="icon_name">image-missing</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
