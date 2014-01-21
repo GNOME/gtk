@@ -62,7 +62,7 @@ typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
  * screen using gtk_icon_theme_get_for_screen() and it
  * will contain information about current icon theme for
  * that screen, but you can also create a new #GtkIconTheme
- * object and set the icon theme name explicitely using
+ * object and set the icon theme name explicitly using
  * gtk_icon_theme_set_custom_theme().
  */
 struct _GtkIconTheme
