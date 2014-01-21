@@ -899,7 +899,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
 
 /**
  * gtk_selection_add_target:
- * @widget:  a #GtkTarget
+ * @widget:  a #GtkWidget
  * @selection: the selection
  * @target: target to add.
  * @info: A unsigned integer which will be passed back to the application.
