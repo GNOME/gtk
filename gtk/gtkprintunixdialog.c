@@ -68,7 +68,7 @@
  * which don't provide a native print dialog, like Unix. It can
  * be used very much like any other GTK+ dialog, at the cost of
  * the portability offered by the
- * <link linkend="gtk-High-level-Printing-API">high-level printing API</link>
+ * <link linkend="gtk3-High-level-Printing-API">high-level printing API</link>
  *
  * In order to print something with #GtkPrintUnixDialog, you need
  * to use gtk_print_unix_dialog_get_selected_printer() to obtain

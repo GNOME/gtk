@@ -54,7 +54,7 @@
  * which don't provide a native page setup dialog, like Unix. It can
  * be used very much like any other GTK+ dialog, at the cost of
  * the portability offered by the <link
- * linkend="gtk-High-level-Printing-API">high-level printing API</link>
+ * linkend="gtk3-High-level-Printing-API">high-level printing API</link>
  *
  * Printing support was added in GTK+ 2.10.
  */
