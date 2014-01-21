@@ -7851,8 +7851,8 @@ gtk_widget_has_visible_focus (GtkWidget *widget)
  * @widget: a #GtkWidget
  *
  * Determines if the widget is the focus widget within its
- * toplevel. (This does not mean that the %HAS_FOCUS flag is
- * necessarily set; %HAS_FOCUS will only be set if the
+ * toplevel. (This does not mean that the #GtkWidget:has-focus property is
+ * necessarily set; #GtkWidget:has-focus will only be set if the
  * toplevel widget additionally has the global input focus.)
  *
  * Return value: %TRUE if the widget is the focus widget.
