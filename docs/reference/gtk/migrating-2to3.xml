@@ -1001,7 +1001,7 @@ AM_CONDITIONAL(BUILD_x11, [test "x$have_x11" = "xyes"])
       The widget is expected to draw itself with its allocated size, which
       is available via the new gtk_widget_get_allocated_width() and
       gtk_widget_get_allocated_height() functions. It is not necessary to
-      check for GTK_WIDGET_IS_DRAWABLE(), since GTK+ already does this check
+      check for gtk_widget_is_drawable(), since GTK+ already does this check
       before emitting the #GtkWidget::draw signal.
     </para>
     <para>
