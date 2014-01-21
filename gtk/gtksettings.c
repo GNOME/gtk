@@ -976,8 +976,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-print-preview-command:
    *
    * A command to run for displaying the print preview. The command
-   * should contain a %f placeholder, which will get replaced by
-   * the path to the pdf file. The command may also contain a %s
+   * should contain a <literal>&percnt;f</literal> placeholder, which will get replaced by
+   * the path to the pdf file. The command may also contain a <literal>&percnt;s</literal>
    * placeholder, which will get replaced by the path to a file
    * containing the print settings in the format produced by
    * gtk_print_settings_to_file().
@@ -2336,8 +2336,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * A #GtkRcPropertyParser for use with gtk_settings_install_property_parser()
  * or gtk_widget_class_install_style_property_parser() which parses a
  * color given either by its name or in the form
- * <literal>{ red, green, blue }</literal> where %red, %green and
- * %blue are integers between 0 and 65535 or floating-point numbers
+ * <literal>{ red, green, blue }</literal> where red, green and
+ * blue are integers between 0 and 65535 or floating-point numbers
  * between 0 and 1.
  *
  * Return value: %TRUE if @gstring could be parsed and @property_value
@@ -2623,7 +2623,7 @@ gtk_rc_property_parse_requisition  (const GParamSpec *pspec,
  * or gtk_widget_class_install_style_property_parser() which parses
  * borders in the form
  * <literal>"{ left, right, top, bottom }"</literal> for integers
- * %left, %right, %top and %bottom.
+ * left, right, top and bottom.
  *
  * Return value: %TRUE if @gstring could be parsed and @property_value
  * has been set to the resulting #GtkBorder.
