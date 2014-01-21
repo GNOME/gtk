@@ -2440,7 +2440,7 @@ gtk_builder_lookup_callback_symbol (GtkBuilder    *builder,
  * the program will be aborted.  You should only ever attempt to parse
  * user interface descriptions that are shipped as part of your program.
  *
- * Returns: a #Gtkbuilder containing the described interface
+ * Returns: a #GtkBuilder containing the described interface
  *
  * Since: 3.10
  **/
@@ -2467,7 +2467,7 @@ gtk_builder_new_from_file (const gchar *filename)
  * If there is an error locating the resurce or parsing the description
  * then the program will be aborted.
  *
- * Returns: a #Gtkbuilder containing the described interface
+ * Returns: a #GtkBuilder containing the described interface
  *
  * Since: 3.10
  **/
@@ -2499,7 +2499,7 @@ gtk_builder_new_from_resource (const gchar *resource_path)
  * aborted.  You should not attempt to parse user interface description
  * from untrusted sources.
  *
- * Returns: a #Gtkbuilder containing the interface described by @string
+ * Returns: a #GtkBuilder containing the interface described by @string
  *
  * Since: 3.10
  **/
