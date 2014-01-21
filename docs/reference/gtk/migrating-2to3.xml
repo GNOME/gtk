@@ -935,7 +935,7 @@ gdk_window_add_filter (NULL, message_filter, NULL);
       In GTK+ 3, GDK can be built with multiple backends, and currently
       used backend has to be determined at runtime, typically using
       type-check macros on a #GdkDisplay or #GdkWindow. You still need
-      to use the #GDK_WINDOWING macros to only compile code referring
+      to use the GDK_WINDOWING macros to only compile code referring
       to supported backends:
       <informalexample><programlisting>
 #ifdef GDK_WINDOWING_X11
