@@ -93,9 +93,20 @@ gboolean gtk_tree_drag_source_drag_data_get    (GtkTreeDragSource *drag_source,
 typedef struct _GtkTreeDragDest      GtkTreeDragDest; /* Dummy typedef */
 typedef struct _GtkTreeDragDestIface GtkTreeDragDestIface;
 
+/**
+ * GtkTreeDragDestIface:
+ * @drag_data_received: Asks the #GtkTreeDragDest to insert a row
+ *    before the path dest, deriving the contents of the row from
+ *    selection_data.
+ * @row_drop_possible: Determines whether a drop is possible before
+ *    the given dest_path, at the same depth as dest_path.
+ */
 struct _GtkTreeDragDestIface
 {
+  /*< private >*/
   GTypeInterface g_iface;
+
+  /*< public >*/
 
   /* VTable - not signals */
 
