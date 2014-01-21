@@ -41,7 +41,7 @@
  * The style of transition can be controlled with
  * gtk_revealer_set_transition_type().
  *
- * These animations respect the #GtkSettings::gtk-enable-animations
+ * These animations respect the #GtkSettings:gtk-enable-animations
  * setting.
  *
  * The GtkRevealer widget was added in GTK+ 3.10.
