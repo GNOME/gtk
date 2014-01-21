@@ -9189,7 +9189,7 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
  *     calls to of gtk_widget_override_cursor().
  *
  * Sets the cursor color to use in a widget, overriding the
- * #GtkWidget:cursor-color and #GtkWidget:secondary-cursor-color
+ * cursor-color and secondary-cursor-color
  * style properties. All other style values are left untouched.
  * See also gtk_widget_modify_style().
  *
