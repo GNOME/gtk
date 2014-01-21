@@ -35,9 +35,20 @@ G_BEGIN_DECLS
 typedef struct _GtkCellEditable      GtkCellEditable; /* Dummy typedef */
 typedef struct _GtkCellEditableIface GtkCellEditableIface;
 
+/**
+ * GtkCellEditableIface:
+ * @editing_done: Signal is a sign for the cell renderer to update its
+ *    value from the cell_editable.
+ * @remove_widget: Signal is meant to indicate that the cell is
+ *    finished editing, and the widget may now be destroyed.
+ * @start_editing: Begins editing on a cell_editable.
+ */
 struct _GtkCellEditableIface
 {
+  /*< private >*/
   GTypeInterface g_iface;
+
+  /*< public >*/
 
   /* signals */
   void (* editing_done)  (GtkCellEditable *cell_editable);
