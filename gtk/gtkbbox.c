@@ -38,9 +38,7 @@
  *
  * The main purpose of GtkButtonBox is to make sure the children have all the
  * same size. GtkButtonBox gives all children the same size, but it does allow
- * 'outliers' to keep their own larger size. To force all children to be
- * strictly the same size without exceptions, you can set the
- * #GtkButtonBox:homogeneous property to %TRUE.
+ * 'outliers' to keep their own larger size.
  *
  * To excempt individual children from homogeneous sizing regardless of their
  * 'outlier' status, you can set the #GtkButtonBox:non-homogeneous child
