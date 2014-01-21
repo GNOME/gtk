@@ -230,7 +230,7 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * A unique name for the action.
    *
-   * Deprecated: 3.10: Use #GAction::name instead
+   * Deprecated: 3.10: Use #GAction:name instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
@@ -452,7 +452,7 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Whether the action is enabled.
    *
-   * Deprecated: 3.10: Use #GAction::enabled and #GSimpleAction::enabled
+   * Deprecated: 3.10: Use #GAction:enabled and #GSimpleAction:enabled
    * instead
    */
   g_object_class_install_property (gobject_class,
@@ -1192,7 +1192,7 @@ gtk_action_get_sensitive (GtkAction *action)
  * @action: the action object
  * @sensitive: %TRUE to make the action sensitive
  * 
- * Sets the ::sensitive property of the action to @sensitive. Note that 
+ * Sets the :sensitive property of the action to @sensitive. Note that 
  * this doesn't necessarily mean effective sensitivity. See 
  * gtk_action_is_sensitive() 
  * for that.
@@ -1272,7 +1272,7 @@ gtk_action_get_visible (GtkAction *action)
  * @action: the action object
  * @visible: %TRUE to make the action visible
  * 
- * Sets the ::visible property of the action to @visible. Note that 
+ * Sets the :visible property of the action to @visible. Note that 
  * this doesn't necessarily mean effective visibility. See 
  * gtk_action_is_visible() 
  * for that.
@@ -1640,7 +1640,7 @@ gtk_action_get_visible_vertical (GtkAction *action)
  * Since: 2.16
  *
  * Deprecated: 3.10: Use #GAction instead, and set tooltips on associated
- * #GActionable widgets with gtk_widget_set_tooltip_text()
+ * #GtkActionable widgets with gtk_widget_set_tooltip_text()
  */
 void 
 gtk_action_set_tooltip (GtkAction   *action,
