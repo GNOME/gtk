@@ -1149,7 +1149,7 @@ gtk_action_get_name (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10: Use g_simple_action_get_enabled() on a #GSimpleAction
+ * Deprecated: 3.10: Use g_action_get_enabled() on a #GAction
  * instead
  **/
 gboolean
@@ -1176,7 +1176,7 @@ gtk_action_is_sensitive (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10: Use g_simple_action_get_enabled() on a #GSimpleAction
+ * Deprecated: 3.10: Use g_action_get_enabled() on a #GAction
  * instead
  **/
 gboolean
