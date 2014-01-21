@@ -456,10 +456,10 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 
       <para>To this end, we add a private struct to our application
       window subclass and keep a reference to the #GtkStack there.
-      The gtk_widget_class_bind_child() function arranges things so
-      that after instantiating the template, the @stack member of
-      the private struct will point to the widget of the same name
-      from the template.</para>
+      The gtk_widget_class_bind_template_child_private() function
+      arranges things so that after instantiating the template, the
+      @stack member of the private struct will point to the widget of
+      the same name from the template.</para>
 
       <informalexample>
         <programlisting><![CDATA[
