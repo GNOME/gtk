@@ -250,6 +250,14 @@ typedef enum
 } GtkSensitivityType;
 
 /* Reading directions for text */
+/**
+ * GtkTextDirection:
+ * @GTK_TEXT_DIR_NONE: No direction.
+ * @GTK_TEXT_DIR_LTR: Left to right text direction.
+ * @GTK_TEXT_DIR_RTL: Right to left text direction.
+ *
+ * Reading directions for text.
+ */
 typedef enum
 {
   GTK_TEXT_DIR_NONE,
