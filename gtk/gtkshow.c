@@ -46,9 +46,6 @@
  * the gtk_show_uri() call. If timestamp is not known you can take
  * %GDK_CURRENT_TIME.
  *
- * This function can be used as a replacement for gnome_vfs_url_show()
- * and gnome_url_show().
- *
  * Returns: %TRUE on success, %FALSE on error
  *
  * Since: 2.14
