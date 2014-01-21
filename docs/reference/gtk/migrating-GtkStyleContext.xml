@@ -186,7 +186,7 @@
 
     <para>
       Widget style properties also follow a similar syntax, with the widget
-      type name used as a prefix. For example, the #GtkWidget:focus-line-width
+      type name used as a prefix. For example, the #GtkWidget focus-line-width
       style property can be modified in CSS as
       <literal>-GtkWidget-focus-line-width</literal>.
     </para>
