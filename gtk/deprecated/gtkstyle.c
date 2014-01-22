@@ -4510,8 +4510,8 @@ gtk_widget_modify_base (GtkWidget      *widget,
  *     allocated), or %NULL to undo the effect of previous calls to
  *     of gtk_widget_modify_cursor().
  *
- * Sets the cursor color to use in a widget, overriding the
- * #GtkWidget:cursor-color and #GtkWidget:secondary-cursor-color
+ * Sets the cursor color to use in a widget, overriding the #GtkWidget
+ * cursor-color and secondary-cursor-color
  * style properties.
  *
  * All other style values are left untouched.
