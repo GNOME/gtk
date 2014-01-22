@@ -21,7 +21,7 @@
 
 #include "gtkmenutracker.h"
 
-/**
+/*< private >
  * SECTION:gtkmenutracker
  * @Title: GtkMenuTracker
  * @Short_description: A helper class for interpreting #GMenuModel

@@ -26,7 +26,7 @@
 
 #include <string.h>
 
-/**
+/*< private >
  * SECTION:gtkmenutrackeritem
  * @Title: GtkMenuTrackerItem
  * @Short_description: Small helper for model menu items
@@ -542,7 +542,7 @@ _gtk_menu_tracker_item_get_observable (GtkMenuTrackerItem *self)
   return self->observable;
 }
 
-/**
+/*< private >
  * gtk_menu_tracker_item_get_is_separator:
  * @self: A #GtkMenuTrackerItem instance
  *
@@ -556,7 +556,7 @@ gtk_menu_tracker_item_get_is_separator (GtkMenuTrackerItem *self)
   return self->is_separator;
 }
 
-/**
+/*< private >
  * gtk_menu_tracker_item_get_has_submenu:
  * @self: A #GtkMenuTrackerItem instance
  *
@@ -590,7 +590,7 @@ gtk_menu_tracker_item_get_label (GtkMenuTrackerItem *self)
   return label;
 }
 
-/**
+/*< private >
  * gtk_menu_tracker_item_get_icon:
  *
  * Returns: (transfer full):
