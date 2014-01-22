@@ -70,7 +70,6 @@ gtk/gtkbin.c
 gtk/gtkbindings.c
 gtk/gtkbookmarksmanager.c
 gtk/gtkbox.c
-gtk/gtkbubblewindow.c
 gtk/gtkbuildable.c
 gtk/gtkbuilder.c
 gtk/gtkbuilder-menus.c
@@ -158,6 +157,7 @@ gtk/gtklinkbutton.c
 gtk/gtklistbox.c
 gtk/gtkliststore.c
 gtk/gtklockbutton.c
+gtk/gtkmagnifier.c
 gtk/gtkmain.c
 gtk/gtkmenubar.c
 gtk/gtkmenubutton.c
@@ -183,6 +183,7 @@ gtk/gtkpapersize.c
 gtk/gtkpathbar.c
 gtk/gtkplacessidebar.c
 gtk/gtkplug.c
+gtk/gtkpopover.c
 gtk/gtkpressandhold.c
 gtk/gtkprintbackend.c
 gtk/gtkprinter.c
