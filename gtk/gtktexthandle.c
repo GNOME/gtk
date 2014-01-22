@@ -20,6 +20,7 @@
 #include "gtktexthandleprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkwindowprivate.h"
 #include "gtkintl.h"
 
 #include <gtk/gtk.h>
@@ -54,6 +55,7 @@ struct _GtkTextHandlePrivate
 {
   HandleWindow windows[2];
   GtkWidget *parent;
+  guint hierarchy_changed_id;
   guint mode : 2;
 };
 
@@ -299,11 +301,70 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
 }
 
 static void
+_gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
+                                           GtkWindow     *previous_toplevel,
+                                           GtkTextHandle *handle)
+{
+  GtkWidget *toplevel;
+  GtkTextHandlePrivate *priv;
+
+  priv = handle->priv;
+  toplevel = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
+
+  if (previous_toplevel && !toplevel)
+    {
+      if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget)
+        {
+          _gtk_window_remove_popover (GTK_WINDOW (previous_toplevel),
+                                      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
+          g_object_unref (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
+          priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget = NULL;
+        }
+
+      if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget)
+        {
+          _gtk_window_remove_popover (GTK_WINDOW (previous_toplevel),
+                                      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
+          g_object_unref (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
+          priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget = NULL;
+        }
+    }
+}
+
+static void
+_gtk_text_handle_set_parent (GtkTextHandle *handle,
+                             GtkWidget     *parent)
+{
+  GtkTextHandlePrivate *priv;
+
+  priv = handle->priv;
+
+  if (priv->parent == parent)
+    return;
+
+  if (priv->parent && priv->hierarchy_changed_id &&
+      g_signal_handler_is_connected (priv->parent, priv->hierarchy_changed_id))
+    g_signal_handler_disconnect (priv->parent, priv->hierarchy_changed_id);
+
+  priv->parent = parent;
+
+  if (parent)
+    {
+      priv->hierarchy_changed_id =
+        g_signal_connect (parent, "hierarchy-changed",
+                          G_CALLBACK (_gtk_text_handle_parent_hierarchy_changed),
+                          handle);
+    }
+}
+
+static void
 gtk_text_handle_finalize (GObject *object)
 {
   GtkTextHandlePrivate *priv;
 
   priv = GTK_TEXT_HANDLE (object)->priv;
+
+  _gtk_text_handle_set_parent (GTK_TEXT_HANDLE (object), NULL);
 
   /* We sank the references, unref here */
   if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget)
@@ -321,16 +382,14 @@ gtk_text_handle_set_property (GObject      *object,
                               const GValue *value,
                               GParamSpec   *pspec)
 {
-  GtkTextHandlePrivate *priv;
   GtkTextHandle *handle;
 
   handle = GTK_TEXT_HANDLE (object);
-  priv = handle->priv;
 
   switch (prop_id)
     {
     case PROP_PARENT:
-      priv->parent = g_value_get_object (value);
+      _gtk_text_handle_set_parent (handle, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
