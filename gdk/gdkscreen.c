@@ -913,6 +913,36 @@ gdk_screen_get_rgba_visual (GdkScreen *screen)
 }
 
 /**
+ * gdk_screen_get_preferred_visual:
+ * @screen: a #GdkScreen
+ *
+ * Returns the visual that is preferred when creating windows.
+ *
+ * This will be the visual returned by gdk_screen_get_rgba_visual()
+ * unless that is not available, or unless the environment
+ * variable <envar>GDK_RGBA</envar> is set to 0.
+ *
+ * Return value: (transfer none): the preferred visual to use
+ *     for windows
+ *
+ * Since: 3.12
+ */
+GdkVisual *
+gdk_screen_get_preferred_visual (GdkScreen *screen)
+{
+  GdkVisual *visual;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  visual = gdk_screen_get_rgba_visual (screen);
+
+  if (visual == NULL || g_strcmp0 (g_getenv ("GDK_RGBA"), "0") == 0)
+    visual = gdk_screen_get_system_visual (screen);
+
+  return visual;
+}
+
+/**
  * gdk_screen_is_composited:
  * @screen: a #GdkScreen
  *

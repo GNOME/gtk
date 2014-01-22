@@ -66,6 +66,7 @@ struct _GdkScreenClass
   GList *      (* list_visuals)          (GdkScreen *screen);
   GdkVisual *  (* get_system_visual)     (GdkScreen *screen);
   GdkVisual *  (* get_rgba_visual)       (GdkScreen *screen);
+  GdkVisual *  (* get_preferred_visual)  (GdkScreen *screen);
   gboolean     (* is_composited)         (GdkScreen *screen);
   gchar *      (* make_display_name)     (GdkScreen *screen);
   GdkWindow *  (* get_active_window)     (GdkScreen *screen);
