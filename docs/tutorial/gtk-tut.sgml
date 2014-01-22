@@ -12721,18 +12721,20 @@ relevant portions onto the screen.</para>
 <para>To create an offscreen pixmap, we call the function:</para>
 
 <programlisting role="C">
-GdkPixmap* gdk_pixmap_new               (GdkWindow  *window,
-					 gint        width,
-					 gint        height,
-					 gint        depth);
+GdkPixmap* gdk_pixmap_new               (GdkDrawable *drawable,
+					 gint         width,
+					 gint         height,
+					 gint         depth);
 </programlisting>
 
-<para>The <literal>window</literal> parameter specifies a GDK window that this pixmap
-takes some of its properties from. <literal>width</literal> and <literal>height</literal>
-specify the size of the pixmap. <literal>depth</literal> specifies the <emphasis>color
-depth</emphasis>, that is the number of bits per pixel, for the new window.
-If the depth is specified as <literal>-1</literal>, it will match the depth
-of <literal>window</literal>.</para>
+<para>The <literal>drawable</literal> parameter specifies a GDK
+drawable (such as a GdkWindow) that this pixmap takes some of its
+properties from. <literal>width</literal>
+and <literal>height</literal> specify the size of the
+pixmap. <literal>depth</literal> specifies the <emphasis>color
+depth</emphasis>, that is the number of bits per pixel, for the new
+window.  If the depth is specified as <literal>-1</literal>, it will
+match the depth of <literal>drawable</literal>.</para>
 
 <para>We create the pixmap in our "configure_event" handler. This event
 is generated whenever the window changes size, including when it
