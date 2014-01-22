@@ -55,7 +55,11 @@ struct _GtkTextHandlePrivate
 {
   HandleWindow windows[2];
   GtkWidget *parent;
+  GtkScrollable *parent_scrollable;
+  GtkAdjustment *vadj;
+  GtkAdjustment *hadj;
   guint hierarchy_changed_id;
+  guint scrollable_notify_id;
   guint mode : 2;
 };
 
@@ -301,11 +305,106 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
 }
 
 static void
+adjustment_changed_cb (GtkAdjustment *adjustment,
+                       GtkTextHandle *handle)
+{
+  _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
+  _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
+}
+
+static void
+_gtk_text_handle_set_scrollable (GtkTextHandle *handle,
+                                 GtkScrollable *scrollable)
+{
+  GtkTextHandlePrivate *priv;
+
+  priv = handle->priv;
+
+  if (priv->parent_scrollable)
+    {
+      if (priv->vadj)
+        {
+          g_signal_handlers_disconnect_by_data (priv->vadj, handle);
+          g_object_unref (priv->vadj);
+          priv->vadj = NULL;
+        }
+
+      if (priv->hadj)
+        {
+          g_signal_handlers_disconnect_by_data (priv->hadj, handle);
+          g_object_unref (priv->hadj);
+          priv->hadj = NULL;
+        }
+    }
+
+  priv->parent_scrollable = scrollable;
+
+  if (scrollable)
+    {
+      priv->vadj = gtk_scrollable_get_vadjustment (scrollable);
+      priv->hadj = gtk_scrollable_get_hadjustment (scrollable);
+
+      if (priv->vadj)
+        {
+          g_object_ref (priv->vadj);
+          g_signal_connect (priv->vadj, "changed",
+                            G_CALLBACK (adjustment_changed_cb), handle);
+          g_signal_connect (priv->vadj, "value-changed",
+                            G_CALLBACK (adjustment_changed_cb), handle);
+        }
+
+      if (priv->hadj)
+        {
+          g_object_ref (priv->hadj);
+          g_signal_connect (priv->hadj, "changed",
+                            G_CALLBACK (adjustment_changed_cb), handle);
+          g_signal_connect (priv->hadj, "value-changed",
+                            G_CALLBACK (adjustment_changed_cb), handle);
+        }
+    }
+}
+
+static void
+_gtk_text_handle_scrollable_notify (GObject       *object,
+                                    GParamSpec    *pspec,
+                                    GtkTextHandle *handle)
+{
+  if (pspec->value_type == GTK_TYPE_ADJUSTMENT)
+    _gtk_text_handle_set_scrollable (handle, GTK_SCROLLABLE (object));
+}
+
+static void
+_gtk_text_handle_update_scrollable (GtkTextHandle *handle,
+                                    GtkScrollable *scrollable)
+{
+  GtkTextHandlePrivate *priv;
+
+  priv = handle->priv;
+
+  if (priv->parent_scrollable == scrollable)
+    return;
+
+  if (priv->parent_scrollable && priv->scrollable_notify_id &&
+      g_signal_handler_is_connected (priv->parent_scrollable,
+                                     priv->scrollable_notify_id))
+    g_signal_handler_disconnect (priv->parent_scrollable,
+                                 priv->scrollable_notify_id);
+
+  _gtk_text_handle_set_scrollable (handle, scrollable);
+
+  if (priv->parent_scrollable)
+    priv->scrollable_notify_id =
+      g_signal_connect (priv->parent_scrollable, "notify",
+                        G_CALLBACK (_gtk_text_handle_scrollable_notify),
+                        handle);
+}
+
+static void
 _gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
                                            GtkWindow     *previous_toplevel,
                                            GtkTextHandle *handle)
 {
-  GtkWidget *toplevel;
+  GtkWidget *toplevel, *scrollable;
   GtkTextHandlePrivate *priv;
 
   priv = handle->priv;
@@ -329,6 +428,9 @@ _gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
           priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget = NULL;
         }
     }
+
+  scrollable = gtk_widget_get_ancestor (widget, GTK_TYPE_SCROLLABLE);
+  _gtk_text_handle_update_scrollable (handle, GTK_SCROLLABLE (scrollable));
 }
 
 static void
@@ -336,6 +438,7 @@ _gtk_text_handle_set_parent (GtkTextHandle *handle,
                              GtkWidget     *parent)
 {
   GtkTextHandlePrivate *priv;
+  GtkWidget *scrollable = NULL;
 
   priv = handle->priv;
 
@@ -354,7 +457,11 @@ _gtk_text_handle_set_parent (GtkTextHandle *handle,
         g_signal_connect (parent, "hierarchy-changed",
                           G_CALLBACK (_gtk_text_handle_parent_hierarchy_changed),
                           handle);
+
+      scrollable = gtk_widget_get_ancestor (parent, GTK_TYPE_SCROLLABLE);
     }
+
+  _gtk_text_handle_update_scrollable (handle, GTK_SCROLLABLE (scrollable));
 }
 
 static void
