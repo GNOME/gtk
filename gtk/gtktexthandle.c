@@ -252,6 +252,40 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
 }
 
 static void
+_handle_update_child_visible (GtkTextHandle         *handle,
+                              GtkTextHandlePosition  pos)
+{
+  HandleWindow *handle_window;
+  GtkTextHandlePrivate *priv;
+  cairo_rectangle_int_t rect;
+  GtkAllocation allocation;
+  GtkWidget *parent;
+
+  priv = handle->priv;
+  handle_window = &priv->windows[pos];
+
+  if (!priv->parent_scrollable)
+    {
+      gtk_widget_set_child_visible (handle_window->widget, TRUE);
+      return;
+    }
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (priv->parent_scrollable));
+  rect = handle_window->pointing_to;
+
+  gtk_widget_translate_coordinates (priv->parent, parent,
+                                    rect.x, rect.y, &rect.x, &rect.y);
+
+  gtk_widget_get_allocation (GTK_WIDGET (parent), &allocation);
+
+  if (rect.x < 0 || rect.x + rect.width > allocation.width ||
+      rect.y < 0 || rect.y + rect.height > allocation.height)
+    gtk_widget_set_child_visible (handle_window->widget, FALSE);
+  else
+    gtk_widget_set_child_visible (handle_window->widget, TRUE);
+}
+
+static void
 _gtk_text_handle_update (GtkTextHandle         *handle,
                          GtkTextHandlePosition  pos)
 {
@@ -273,9 +307,13 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       GtkWidget *window;
 
       _gtk_text_handle_ensure_widget (handle, pos);
+      _gtk_text_handle_get_size (handle, &width, &height);
       rect.x = handle_window->pointing_to.x;
       rect.y = handle_window->pointing_to.y;
-      _gtk_text_handle_get_size (handle, &width, &height);
+      rect.width = width;
+      rect.height = 0;
+
+      _handle_update_child_visible (handle, pos);
 
       window = gtk_widget_get_parent (handle_window->widget);
       gtk_widget_translate_coordinates (priv->parent, window,
@@ -290,8 +328,6 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
         }
 
       height += handle_window->pointing_to.height;
-      rect.width = width;
-      rect.height = 0;
       rect.x -= rect.width / 2;
 
       gtk_widget_set_size_request (handle_window->widget, width, height);
