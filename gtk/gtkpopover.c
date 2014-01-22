@@ -30,8 +30,14 @@
  * The position of a popover relative to the widget it is attached to
  * can also be changed through gtk_popover_set_position().
  *
- * By default, no grabs are performed on #GtkPopover<!-- -->s, if a
- * modal behavior is desired, a GTK+ grab can be added with gtk_grab_add()
+ * By default, #GtkPopover performs a GTK+ grab, in order to ensure
+ * input events get redirected to it while it is shown, and also so
+ * the popover is dismissed on the expected situations (clicks outside
+ * the popover, or the Esc key being pressed). If no such modal behavior
+ * is desired on a popover, gtk_popover_set_modal() may be called on it
+ * to tweak its behavior.
+ *
+ * Since: 3.12
  */
 
 #include "config.h"
