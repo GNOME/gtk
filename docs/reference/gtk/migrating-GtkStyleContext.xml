@@ -633,7 +633,7 @@
       <listitem>
         <para>
           If your container renders child widgets within different regions,
-          make it implement #GtkContainer get_path_for_child(). This function
+          make it implement #GtkContainer get_path_for_child(<!-- -->). This function
           lets containers assign a special #GtkWidgetPath to child widgets
           depending on their role/region. This is necessary to extend the
           concept above throughout the widget hierarchy.
