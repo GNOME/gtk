@@ -184,7 +184,7 @@
       you construct it. This property specifies the space that
       separates the children from each other. Additionally, you
       can specify extra space to put around each child individually,
-      using the #GtkBox:padding child property.
+      using the #GtkBox padding child property.
     </para>
 
     <para>
