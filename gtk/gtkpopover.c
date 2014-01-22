@@ -47,6 +47,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 #include "gtkwindowprivate.h"
+#include "gtkscrollable.h"
+#include "gtkadjustment.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -69,10 +71,14 @@ struct _GtkPopoverPrivate
   GtkWidget *widget;
   GtkWindow *window;
   GtkWidget *prev_focus_widget;
+  GtkScrollable *parent_scrollable;
+  GtkAdjustment *vadj;
+  GtkAdjustment *hadj;
   cairo_rectangle_int_t pointing_to;
   guint hierarchy_changed_id;
   guint size_allocate_id;
   guint unmap_id;
+  guint scrollable_notify_id;
   guint has_pointing_to    : 1;
   guint preferred_position : 2;
   guint final_position     : 2;
@@ -1232,9 +1238,78 @@ widget_unmanage_popover (GtkWidget  *widget,
 }
 
 static void
+adjustment_changed_cb (GtkAdjustment *adjustment,
+                       GtkPopover    *popover)
+{
+  gtk_popover_update_position (popover);
+}
+
+static void
+_gtk_popover_set_scrollable (GtkPopover    *popover,
+                             GtkScrollable *scrollable)
+{
+  GtkPopoverPrivate *priv;
+
+  priv = popover->priv;
+
+  if (priv->parent_scrollable)
+    {
+      if (priv->vadj)
+        {
+          g_signal_handlers_disconnect_by_data (priv->vadj, popover);
+          g_object_unref (priv->vadj);
+          priv->vadj = NULL;
+        }
+
+      if (priv->hadj)
+        {
+          g_signal_handlers_disconnect_by_data (priv->hadj, popover);
+          g_object_unref (priv->hadj);
+          priv->hadj = NULL;
+        }
+    }
+
+  priv->parent_scrollable = scrollable;
+
+  if (scrollable)
+    {
+      priv->vadj = gtk_scrollable_get_vadjustment (scrollable);
+      priv->hadj = gtk_scrollable_get_hadjustment (scrollable);
+
+      if (priv->vadj)
+        {
+          g_object_ref (priv->vadj);
+          g_signal_connect (priv->vadj, "changed",
+                            G_CALLBACK (adjustment_changed_cb), popover);
+          g_signal_connect (priv->vadj, "value-changed",
+                            G_CALLBACK (adjustment_changed_cb), popover);
+        }
+
+      if (priv->hadj)
+        {
+          g_object_ref (priv->hadj);
+          g_signal_connect (priv->hadj, "changed",
+                            G_CALLBACK (adjustment_changed_cb), popover);
+          g_signal_connect (priv->hadj, "value-changed",
+                            G_CALLBACK (adjustment_changed_cb), popover);
+        }
+    }
+}
+
+static void
+scrollable_notify_cb (GObject    *object,
+                      GParamSpec *pspec,
+                      GtkPopover *popover)
+{
+  if (pspec->value_type == GTK_TYPE_ADJUSTMENT)
+    _gtk_popover_set_scrollable (popover, GTK_SCROLLABLE (object));
+}
+
+static void
 gtk_popover_update_relative_to (GtkPopover *popover,
                                 GtkWidget  *relative_to)
 {
+  GtkScrollable *scrollable = NULL;
   GtkPopoverPrivate *priv;
 
   priv = popover->priv;
@@ -1260,6 +1335,13 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         g_signal_handler_disconnect (priv->widget, priv->unmap_id);
 
       widget_unmanage_popover (priv->widget, popover);
+    }
+
+  if (priv->parent_scrollable)
+    {
+      if (g_signal_handler_is_connected (priv->parent_scrollable, priv->scrollable_notify_id))
+        g_signal_handler_disconnect (priv->parent_scrollable, priv->scrollable_notify_id);
+      _gtk_popover_set_scrollable (popover, NULL);
     }
 
   priv->widget = relative_to;
@@ -1289,6 +1371,18 @@ gtk_popover_update_relative_to (GtkPopover *popover,
 
   if (priv->window)
     _gtk_window_add_popover (priv->window, GTK_WIDGET (popover));
+
+  if (relative_to)
+    scrollable = GTK_SCROLLABLE (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_SCROLLABLE));
+
+  if (scrollable)
+    {
+      _gtk_popover_set_scrollable (popover, scrollable);
+
+      priv->scrollable_notify_id =
+        g_signal_connect (priv->parent_scrollable, "notify",
+                          G_CALLBACK (scrollable_notify_cb), popover);
+    }
 
   _gtk_popover_update_context_parent (popover);
   g_object_unref (popover);
