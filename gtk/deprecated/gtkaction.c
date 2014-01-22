@@ -1668,7 +1668,7 @@ gtk_action_set_tooltip (GtkAction   *action,
  * Since: 2.16
  *
  * Deprecated: 3.10: Use #GAction instead, and get tooltips from associated
- * #GActionable widgets with gtk_widget_get_tooltip_text()
+ * #GtkActionable widgets with gtk_widget_get_tooltip_text()
  */
 const gchar *
 gtk_action_get_tooltip (GtkAction *action)
