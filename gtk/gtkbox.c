@@ -50,7 +50,7 @@
  *
  * Because GtkBox is a #GtkContainer, you may also use gtk_container_add()
  * to insert widgets into the box, and they will be packed with the default
- * values for #GtkBox:expand and #GtkBox:fill. Use gtk_container_remove()
+ * values for expand and fill child properties. Use gtk_container_remove()
  * to remove widgets from the GtkBox.
  *
  * Use gtk_box_set_homogeneous() to specify whether or not all children
@@ -65,8 +65,8 @@
  * Use gtk_box_reorder_child() to move a GtkBox child to a different
  * place in the box.
  *
- * Use gtk_box_set_child_packing() to reset the #GtkBox:expand,
- * #GtkBox:fill and #GtkBox:padding child properties.
+ * Use gtk_box_set_child_packing() to reset the expand,
+ * fill and padding child properties.
  * Use gtk_box_query_child_packing() to query these fields.
  *
  * <note><para>
@@ -1953,10 +1953,10 @@ gtk_box_query_child_packing (GtkBox      *box,
  * gtk_box_set_child_packing:
  * @box: a #GtkBox
  * @child: the #GtkWidget of the child to set
- * @expand: the new value of the #GtkBox:expand child property
- * @fill: the new value of the #GtkBox:fill child property
- * @padding: the new value of the #GtkBox:padding child property
- * @pack_type: the new value of the #GtkBox:pack-type child property
+ * @expand: the new value of the expand child property
+ * @fill: the new value of the fill child property
+ * @padding: the new value of the padding child property
+ * @pack_type: the new value of the pack-type child property
  *
  * Sets the way @child is packed into @box.
  */
