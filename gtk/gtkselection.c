@@ -345,7 +345,7 @@ init_atoms (void)
  * @list: a #GtkTargetList
  * @info: an ID that will be passed back to the application
  * 
- * Appends the text targets supported by #GtkSelection to
+ * Appends the text targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
  * 
  * Since: 2.6
@@ -416,7 +416,7 @@ gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
  * @writable: whether to add only targets for which GTK+ knows
  *   how to convert a pixbuf into the format
  * 
- * Appends the image targets supported by #GtkSelection to
+ * Appends the image targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
  * 
  * Since: 2.6
@@ -478,7 +478,7 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
  * @list: a #GtkTargetList
  * @info: an ID that will be passed back to the application
  * 
- * Appends the URI targets supported by #GtkSelection to
+ * Appends the URI targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
  * 
  * Since: 2.6
