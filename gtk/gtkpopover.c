@@ -354,7 +354,9 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   GtkPositionType gap_side, pos;
   GtkAllocation allocation;
   gint border_radius;
-  GtkBorder margin;
+  GtkStateFlags state;
+  GtkStyleContext *context;
+  GtkBorder margin, border;
 
   gtk_popover_get_pointing_to (popover, &rect);
   gtk_widget_get_allocation (widget, &allocation);
@@ -369,27 +371,30 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 
   rect.y += gtk_widget_get_margin_top (widget);
 
-  gtk_style_context_get (gtk_widget_get_style_context (GTK_WIDGET (popover)),
-                         gtk_widget_get_state_flags (GTK_WIDGET (popover)),
+  context = gtk_widget_get_style_context (GTK_WIDGET (popover));
+  state = gtk_widget_get_state_flags (GTK_WIDGET (popover));
+
+  gtk_style_context_get_border (context, state, &border);
+  gtk_style_context_get (context, state,
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);
   pos = get_effective_position (popover, priv->final_position);
 
   if (pos == GTK_POS_BOTTOM || pos == GTK_POS_RIGHT)
     {
-      base = TAIL_HEIGHT;
+      base = TAIL_HEIGHT + ((pos == GTK_POS_BOTTOM) ? border.top : border.left);
       tip = 0;
       gap_side = (priv->final_position == GTK_POS_BOTTOM) ? GTK_POS_TOP : GTK_POS_LEFT;
     }
   else if (pos == GTK_POS_TOP)
     {
-      base = allocation.height - TAIL_HEIGHT;
+      base = allocation.height - TAIL_HEIGHT - border.bottom;
       tip = allocation.height;
       gap_side = GTK_POS_BOTTOM;
     }
   else if (pos == GTK_POS_LEFT)
     {
-      base = allocation.width - TAIL_HEIGHT;
+      base = allocation.width - TAIL_HEIGHT - border.right;
       tip = allocation.width;
       gap_side = GTK_POS_RIGHT;
     }
@@ -696,14 +701,16 @@ gtk_popover_draw (GtkWidget *widget,
   state = gtk_widget_get_state_flags (widget);
   gtk_widget_get_allocation (widget, &allocation);
 
+  gtk_style_context_get_border (context, state, &border);
   gtk_popover_get_rect_coords (GTK_POPOVER (widget),
                                &rect_x1, &rect_y1,
                                &rect_x2, &rect_y2);
 
   /* Render the rect background */
   gtk_render_background (context, cr,
-                         rect_x1, rect_y1,
-                         rect_x2 - rect_x1, rect_y2 - rect_y1);
+                         rect_x1 + border.left, rect_y1 + border.top,
+                         rect_x2 - rect_x1 - border.left - border.right,
+                         rect_y2 - rect_y1 - border.top - border.bottom);
 
   gtk_popover_get_gap_coords (GTK_POPOVER (widget),
                               &initial_x, &initial_y,
@@ -741,8 +748,6 @@ gtk_popover_draw (GtkWidget *widget,
                          allocation.width, allocation.height);
 
   /* Render the border of the arrow tip */
-  gtk_style_context_get_border (context, state, &border);
-
   if (border.bottom > 0)
     {
       gtk_style_context_get_border_color (context, state, &border_color);
