@@ -524,7 +524,7 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Since: 2.4
    *
-   * Deprecated: 3.10: Use #GSimpleAction:activate instead
+   * Deprecated: 3.10: Use #GSimpleAction::activate instead
    */
   action_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
