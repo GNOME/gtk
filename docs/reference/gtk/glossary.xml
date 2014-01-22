@@ -283,7 +283,7 @@
       <para>
         A style encapsulates what GTK+ needs to know in order to draw
         a widget. Styles can be modified with 
-        <link linkend="gtk-Resource-Files">resource files</link>.
+        <link linkend="gtk3-Resource-Files">resource files</link>.
       </para>
     </glossdef>
   </glossentry>
