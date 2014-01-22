@@ -43,6 +43,7 @@ G_BEGIN_DECLS
  *
  * See also gtk_tree_sortable_set_sort_column_id()
  */
+#define GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID (-1)
 
 /**
  * GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID:
@@ -52,11 +53,7 @@ G_BEGIN_DECLS
  *
  * See also gtk_tree_sortable_set_sort_column_id()
  */
-
-enum {
-  GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID = -1,
-  GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID = -2
-};
+#define GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID (-2)
 
 typedef struct _GtkTreeSortable      GtkTreeSortable; /* Dummy typedef */
 typedef struct _GtkTreeSortableIface GtkTreeSortableIface;
