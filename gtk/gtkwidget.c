@@ -8788,13 +8788,14 @@ gtk_widget_get_double_buffered (GtkWidget *widget)
  * leaves the upper left unchanged when made bigger, turning this
  * setting off will improve performance.
 
- * Note that for %NO_WINDOW widgets setting this flag to %FALSE turns
- * off all allocation on resizing: the widget will not even redraw if
- * its position changes; this is to allow containers that don't draw
- * anything to avoid excess invalidations. If you set this flag on a
- * %NO_WINDOW widget that <emphasis>does</emphasis> draw on @widget->window,
- * you are responsible for invalidating both the old and new allocation
- * of the widget when the widget is moved and responsible for invalidating
+ * Note that for widgets where gtk_widget_get_has_window() is %FALSE
+ * setting this flag to %FALSE turns off all allocation on resizing:
+ * the widget will not even redraw if its position changes; this is to
+ * allow containers that don't draw anything to avoid excess
+ * invalidations. If you set this flag on a widget with no window that
+ * <emphasis>does</emphasis> draw on @widget->window, you are
+ * responsible for invalidating both the old and new allocation of the
+ * widget when the widget is moved and responsible for invalidating
  * regions newly when the widget increases size.
  **/
 void
