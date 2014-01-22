@@ -16141,7 +16141,7 @@ gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
  *                 where the automated child pointer should be set, or 0 to not assign the pointer.
  *
  * Automatically assign an object declared in the class template XML to be set to a location
- * on a freshly built instance's private data, or alternatively accessible via gtk_widget_get_automated_child().
+ * on a freshly built instance's private data, or alternatively accessible via gtk_widget_get_template_child().
  *
  * The struct can point either into the public instance, then you should use G_STRUCT_OFFSET(WidgetType, member)
  * for @struct_offset,  or in the private struct, then you should use G_PRIVATE_OFFSET(WidgetType, member).
