@@ -876,7 +876,7 @@ gtk_application_class_init (GtkApplicationClass *class)
  *
  * Concretely, gtk_init() is called in the default handler for the
  * #GApplication::startup signal. Therefore, #GtkApplication subclasses should
- * chain up in their #GApplication:startup handler before using any GTK+ API.
+ * chain up in their #GApplication::startup handler before using any GTK+ API.
  *
  * Note that commandline arguments are not passed to gtk_init().
  * All GTK+ functionality that is available via commandline arguments
@@ -1139,7 +1139,7 @@ gtk_application_remove_accelerator (GtkApplication *application,
  * Sets or unsets the application menu for @application.
  *
  * This can only be done in the primary instance of the application,
- * after it has been registered.  #GApplication:startup is a good place
+ * after it has been registered.  #GApplication::startup is a good place
  * to call this.
  *
  * The application menu is a single menu containing items that typically
@@ -1212,7 +1212,7 @@ gtk_application_get_app_menu (GtkApplication *application)
  * This is a menubar in the traditional sense.
  *
  * This can only be done in the primary instance of the application,
- * after it has been registered.  #GApplication:startup is a good place
+ * after it has been registered.  #GApplication::startup is a good place
  * to call this.
  *
  * Depending on the desktop environment, this may appear at the top of
