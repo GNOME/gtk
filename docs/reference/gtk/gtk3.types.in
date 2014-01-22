@@ -126,6 +126,7 @@ gtk_paned_get_type
 gtk_paper_size_get_type
 gtk_places_sidebar_get_type
 @ENABLE_ON_X11@gtk_plug_get_type
+gtk_popover_get_type
 @DISABLE_ON_W32@gtk_printer_get_type
 gtk_print_context_get_type
 @DISABLE_ON_W32@gtk_print_job_get_type

@@ -63,8 +63,9 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
-#include "gtkbubblewindowprivate.h"
+#include "gtkpopover.h"
 #include "gtktoolbar.h"
+#include "gtkmagnifierprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -158,10 +159,13 @@ struct _GtkEntryPrivate
 
   gchar        *placeholder_text;
 
-  GtkBubbleWindow *bubble_window;
+  GtkWidget     *bubble_window;
   GtkTextHandle *text_handle;
   GtkWidget     *selection_bubble;
   guint          selection_bubble_timeout_id;
+
+  GtkWidget     *magnifier_popover;
+  GtkWidget     *magnifier;
 
   gfloat        xalign;
 
@@ -2665,6 +2669,18 @@ gtk_entry_init (GtkEntry *entry)
                     G_CALLBACK (gtk_entry_handle_dragged), entry);
   g_signal_connect (priv->text_handle, "drag-finished",
                     G_CALLBACK (gtk_entry_handle_drag_finished), entry);
+
+  priv->magnifier = _gtk_magnifier_new (GTK_WIDGET (entry));
+  gtk_widget_set_size_request (priv->magnifier, 100, 60);
+  _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
+  priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (entry));
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
+                               GTK_STYLE_CLASS_OSD);
+  gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
+  gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
+                     priv->magnifier);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->magnifier_popover), 4);
+  gtk_widget_show (priv->magnifier);
 }
 
 static void
@@ -2904,6 +2920,7 @@ gtk_entry_finalize (GObject *object)
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
+  gtk_widget_destroy (priv->magnifier_popover);
   g_object_unref (priv->text_handle);
   g_free (priv->placeholder_text);
   g_free (priv->im_module);
@@ -3209,7 +3226,6 @@ gtk_entry_realize (GtkWidget *widget)
 
   gtk_entry_adjust_scroll (entry);
   gtk_entry_update_primary_selection (entry);
-  _gtk_text_handle_set_relative_to (priv->text_handle, priv->text_area);
 
   /* If the icon positions are already setup, create their windows.
    * Otherwise if they don't exist yet, then construct_icon_info()
@@ -3237,7 +3253,6 @@ gtk_entry_unrealize (GtkWidget *widget)
   gtk_entry_reset_layout (entry);
   
   gtk_im_context_set_client_window (priv->im_context, NULL);
-  _gtk_text_handle_set_relative_to (priv->text_handle, NULL);
 
   clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY);
   if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
@@ -4062,12 +4077,21 @@ gtk_entry_move_handle (GtkEntry              *entry,
     }
   else
     {
+      GtkAllocation primary, secondary;
       GdkRectangle rect;
+      gint win_x, win_y;
 
-      rect.x = CLAMP (x, 0, gdk_window_get_width (priv->text_area));
-      rect.y = y;
+      get_icon_allocations (entry, &primary, &secondary);
+      gtk_entry_get_text_area_size (entry, &win_x, &win_y, NULL, NULL);
+      rect.x = CLAMP (x, 0, gdk_window_get_width (priv->text_area)) + win_x;
+      rect.y = y + win_y;
       rect.width = 1;
       rect.height = height;
+
+      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+        rect.x += secondary.width;
+      else
+        rect.x += primary.width;
 
       _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
       _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
@@ -4412,7 +4436,10 @@ gtk_entry_button_release (GtkWidget      *widget,
       priv->in_drag = 0;
     }
   else if (is_touchscreen)
-    gtk_entry_selection_bubble_popup_set (entry);
+    {
+      gtk_entry_selection_bubble_popup_set (entry);
+      gtk_widget_hide (priv->magnifier_popover);
+    }
 
   priv->button = 0;
   priv->device = NULL;
@@ -4433,6 +4460,36 @@ _gtk_entry_get_selected_text (GtkEntry *entry)
     text = gtk_editable_get_chars (editable, start_text, end_text);
 
   return text;
+}
+
+static void
+gtk_entry_show_magnifier (GtkEntry *entry,
+                          gint      x,
+                          gint      y)
+{
+  GtkAllocation allocation, primary, secondary;
+  cairo_rectangle_int_t rect;
+  GtkEntryPrivate *priv;
+
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+  get_icon_allocations (entry, &primary, &secondary);
+
+  priv = entry->priv;
+  rect.x = CLAMP (x, 0, allocation.width - primary.width - secondary.width);
+  rect.width = 1;
+  rect.y = 0;
+  rect.height = allocation.height;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+    rect.x += secondary.width;
+  else
+    rect.x += primary.width;
+
+  _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), rect.x,
+                             rect.y + allocation.height / 2);
+  gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
+                               &rect);
+  gtk_widget_show (priv->magnifier_popover);
 }
 
 static gint
@@ -4603,10 +4660,19 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 
       /* Update touch handles' position */
       if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
-        gtk_entry_update_handles (entry,
-                                  (priv->current_pos == priv->selection_bound) ?
-                                  GTK_TEXT_HANDLE_MODE_CURSOR :
-                                  GTK_TEXT_HANDLE_MODE_SELECTION);
+        {
+          gint x, y;
+
+          gtk_entry_update_handles (entry,
+                                    (priv->current_pos == priv->selection_bound) ?
+                                    GTK_TEXT_HANDLE_MODE_CURSOR :
+                                    GTK_TEXT_HANDLE_MODE_SELECTION);
+
+          gtk_entry_get_text_area_size (entry, &x, &y, NULL, NULL);
+          x += event->x;
+          y += event->y;
+          gtk_entry_show_magnifier (entry, x, y);
+        }
     }
 
   return TRUE;
@@ -6403,6 +6469,7 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
 {
   gint cursor_pos, selection_bound_pos, tmp_pos;
   GtkEntryPrivate *priv = entry->priv;
+  GtkAllocation primary, secondary;
   GtkTextHandleMode mode;
   gint *min, *max;
 
@@ -6411,6 +6478,14 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
   cursor_pos = priv->current_pos;
   selection_bound_pos = priv->selection_bound;
   mode = _gtk_text_handle_get_mode (handle);
+
+  get_icon_allocations (entry, &primary, &secondary);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+    x -= secondary.width;
+  else
+    x -= primary.width;
+
   tmp_pos = gtk_entry_find_position (entry, x + priv->scroll_offset);
 
   if (mode == GTK_TEXT_HANDLE_MODE_CURSOR ||
@@ -6458,6 +6533,8 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
 
       gtk_entry_update_handles (entry, mode);
     }
+
+  gtk_entry_show_magnifier (entry, x, y);
 }
 
 static void
@@ -6466,6 +6543,7 @@ gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
                                 GtkEntry              *entry)
 {
   gtk_entry_selection_bubble_popup_set (entry);
+  gtk_widget_hide (entry->priv->magnifier_popover);
 }
 
 
@@ -9361,7 +9439,7 @@ activate_bubble_cb (GtkWidget *item,
 {
   const gchar *signal = g_object_get_data (G_OBJECT (item), "gtk-signal");
   g_signal_emit_by_name (entry, signal);
-  _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (entry->priv->selection_bubble));
+  gtk_widget_hide (entry->priv->selection_bubble);
 }
 
 static void
@@ -9372,6 +9450,7 @@ append_bubble_action (GtkEntry     *entry,
                       gboolean      sensitive)
 {
   GtkToolItem *item = gtk_tool_button_new (NULL, label);
+  gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (item), TRUE);
   g_object_set_data (G_OBJECT (item), I_("gtk-signal"), (char *)signal);
   g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), entry);
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
@@ -9387,7 +9466,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   GtkEntry *entry = user_data;
   GtkEntryPrivate *priv = entry->priv;
   cairo_rectangle_int_t rect;
-  GtkAllocation allocation;
+  GtkAllocation allocation, primary, secondary;
   gint start_x, end_x;
   gboolean has_selection;
   gboolean has_clipboard;
@@ -9405,7 +9484,13 @@ bubble_targets_received (GtkClipboard     *clipboard,
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
-  priv->selection_bubble = _gtk_bubble_window_new ();
+  priv->selection_bubble = gtk_popover_new (GTK_WIDGET (entry));
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
+                               GTK_STYLE_CLASS_OSD);
+  gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble),
+                            GTK_POS_TOP);
+  gtk_popover_set_modal (GTK_POPOVER (priv->selection_bubble), FALSE);
+
   toolbar = GTK_WIDGET (gtk_toolbar_new ());
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
@@ -9434,7 +9519,9 @@ bubble_targets_received (GtkClipboard     *clipboard,
   start_x -= priv->scroll_offset;
   start_x = CLAMP (start_x, 0, gdk_window_get_width (priv->text_area));
 
-  rect.y = 0;
+  gtk_entry_get_text_area_size (entry, &rect.x, &rect.y, NULL, NULL);
+  get_icon_allocations (entry, &primary, &secondary);
+  rect.x += primary.width;
   rect.height = gdk_window_get_height (priv->text_area);
 
   if (has_selection)
@@ -9442,17 +9529,17 @@ bubble_targets_received (GtkClipboard     *clipboard,
       end_x = gtk_entry_get_selection_bound_location (entry) - priv->scroll_offset;
       end_x = CLAMP (end_x, 0, gdk_window_get_width (priv->text_area));
 
-      rect.x = MIN (start_x, end_x);
-      rect.width = MAX (start_x, end_x) - rect.x;
+      rect.x += MIN (start_x, end_x);
+      rect.width = MAX (start_x, end_x) - MIN (start_x, end_x);
     }
   else
     {
-      rect.x = start_x;
+      rect.x += start_x;
       rect.width = 0;
     }
 
-  _gtk_bubble_window_popup (GTK_BUBBLE_WINDOW (priv->selection_bubble),
-                            priv->text_area, &rect, GTK_POS_TOP);
+  gtk_popover_set_pointing_to (GTK_POPOVER (priv->selection_bubble), &rect);
+  gtk_widget_show (priv->selection_bubble);
 
   priv->selection_bubble_timeout_id = 0;
 }
@@ -9477,7 +9564,7 @@ gtk_entry_selection_bubble_popup_unset (GtkEntry *entry)
   priv = entry->priv;
 
   if (priv->selection_bubble)
-    _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
+    gtk_widget_hide (priv->selection_bubble);
 
   if (priv->selection_bubble_timeout_id)
     {

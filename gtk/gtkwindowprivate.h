@@ -75,6 +75,8 @@ void _gtk_window_keys_foreach (GtkWindow               *window,
                                GtkWindowKeysForeachFunc func,
                                gpointer                 func_data);
 
+gboolean _gtk_window_check_handle_wm_event (GdkEvent  *event);
+
 /* --- internal (GtkAcceleratable) --- */
 gboolean        _gtk_window_query_nonaccels     (GtkWindow      *window,
                                                  guint           accel_key,
@@ -90,6 +92,20 @@ void            _gtk_window_get_shadow_width (GtkWindow *window,
                                               GtkBorder *border);
 
 void            _gtk_window_toggle_maximized (GtkWindow *window);
+
+/* Popovers */
+void    _gtk_window_add_popover          (GtkWindow                   *window,
+                                          GtkWidget                   *popover);
+void    _gtk_window_remove_popover       (GtkWindow                   *window,
+                                          GtkWidget                   *popover);
+void    _gtk_window_set_popover_position (GtkWindow                   *window,
+                                          GtkWidget                   *popover,
+                                          GtkPositionType              pos,
+                                          const cairo_rectangle_int_t *rect);
+void    _gtk_window_get_popover_position (GtkWindow                   *window,
+                                          GtkWidget                   *popover,
+                                          GtkPositionType             *pos,
+                                          cairo_rectangle_int_t       *rect);
 
 G_END_DECLS
 
