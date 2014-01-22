@@ -450,7 +450,8 @@ gtk_tree_model_base_init (gpointer g_class)
        * @tree_model: the #GtkTreeModel on which the signal is emitted
        * @path: a #GtkTreePath identifying the tree node whose children
        *     have been reordered
-       * @iter: a valid #GtkTreeIter pointing to the node whose
+       * @iter: a valid #GtkTreeIter pointing to the node whose children
+       *     have been reordered, or %NULL if the depth of @path is 0
        * @new_order: an array of integers mapping the current position
        *     of each child to its old position before the re-ordering,
        *     i.e. @new_order<literal>[newpos] = oldpos</literal>
