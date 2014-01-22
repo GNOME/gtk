@@ -42,7 +42,7 @@
  *
  * Transitions between pages can be animated as slides or
  * fades. This can be controlled with gtk_stack_set_transition_type().
- * These animations respect the #GtkSettings::gtk-enable-animations
+ * These animations respect the #GtkSettings:gtk-enable-animations
  * setting.
  *
  * The GtkStack widget was added in GTK+ 3.10.
