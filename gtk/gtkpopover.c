@@ -600,6 +600,37 @@ gtk_popover_update_shape (GtkPopover *popover)
 }
 
 static void
+_gtk_popover_update_child_visible (GtkPopover *popover)
+{
+  cairo_rectangle_int_t rect;
+  GtkAllocation allocation;
+  GtkPopoverPrivate *priv;
+  GtkWidget *parent;
+
+  priv = popover->priv;
+
+  if (!priv->parent_scrollable)
+    {
+      gtk_widget_set_child_visible (GTK_WIDGET (popover), TRUE);
+      return;
+    }
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (priv->parent_scrollable));
+  rect = priv->pointing_to;
+
+  gtk_widget_translate_coordinates (priv->widget, parent,
+                                    rect.x, rect.y, &rect.x, &rect.y);
+
+  gtk_widget_get_allocation (GTK_WIDGET (parent), &allocation);
+
+  if (rect.x < 0 || rect.x + rect.width > allocation.width ||
+      rect.y < 0 || rect.y + rect.height > allocation.height)
+    gtk_widget_set_child_visible (GTK_WIDGET (popover), FALSE);
+  else
+    gtk_widget_set_child_visible (GTK_WIDGET (popover), TRUE);
+}
+
+static void
 gtk_popover_update_position (GtkPopover *popover)
 {
   GtkAllocation window_alloc;
@@ -642,6 +673,8 @@ gtk_popover_update_position (GtkPopover *popover)
 
       priv->current_position = priv->final_position;
     }
+
+  _gtk_popover_update_child_visible (popover);
 }
 
 static gboolean
