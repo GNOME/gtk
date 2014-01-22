@@ -192,7 +192,8 @@ gtk_action_bar_get_size (GtkWidget      *widget,
         nvis_children += 1;
     }
 
-  if (priv->center_widget != NULL)
+  if (priv->center_widget != NULL &&
+      gtk_widget_get_visible (priv->center_widget))
     {
       if (add_child_size (priv->center_widget, orientation, &minimum, &natural))
         nvis_children += 1;
@@ -430,8 +431,6 @@ gtk_action_bar_size_allocate (GtkWidget     *widget,
   GtkRequestedSize *sizes;
   gint width, height;
   gint nvis_children;
-  gint center_minimum_size;
-  gint center_natural_size;
   gint start_width, end_width;
   gint side[2];
   GList *l;
@@ -443,6 +442,8 @@ gtk_action_bar_size_allocate (GtkWidget     *widget,
   gint child_size;
   GtkTextDirection direction;
   GtkBorder css_borders;
+  gint center_minimum_size;
+  gint center_natural_size;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -469,15 +470,20 @@ gtk_action_bar_size_allocate (GtkWidget     *widget,
       i++;
     }
 
-  if (priv->center_widget)
+  if (priv->center_widget != NULL &&
+      gtk_widget_get_visible (priv->center_widget))
     {
       gtk_widget_get_preferred_width_for_height (priv->center_widget,
                                                  height,
                                                  &center_minimum_size,
                                                  &center_natural_size);
+      width -= center_natural_size;
     }
-
-  width -= center_natural_size;
+  else
+    {
+      center_minimum_size = 0;
+      center_natural_size = 0;
+    }
 
   start_width = 0;
   end_width = 0;
@@ -560,7 +566,8 @@ gtk_action_bar_size_allocate (GtkWidget     *widget,
   if (direction == GTK_TEXT_DIR_RTL)
     child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
-  if (priv->center_widget)
+  if (priv->center_widget &&
+      gtk_widget_get_visible (priv->center_widget))
     gtk_widget_size_allocate (priv->center_widget, &child_allocation);
 }
 
@@ -601,7 +608,6 @@ gtk_action_bar_set_center_widget (GtkActionBar *bar,
 
       gtk_widget_set_parent (priv->center_widget, GTK_WIDGET (bar));
       gtk_widget_set_valign (priv->center_widget, GTK_ALIGN_CENTER);
-      gtk_widget_show (center_widget);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
