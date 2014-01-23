@@ -33,7 +33,7 @@
 
 
 /**
- * SECTION:gtkenum
+ * SECTION:gtkenums
  * @Short_description: Public enumerated types used throughout GTK+
  * @Title: Standard Enumerations
  */
