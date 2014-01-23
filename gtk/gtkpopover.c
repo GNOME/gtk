@@ -32,7 +32,7 @@
  *
  * By default, #GtkPopover performs a GTK+ grab, in order to ensure
  * input events get redirected to it while it is shown, and also so
- * the popover is dismissed on the expected situations (clicks outside
+ * the popover is dismissed in the expected situations (clicks outside
  * the popover, or the Esc key being pressed). If no such modal behavior
  * is desired on a popover, gtk_popover_set_modal() may be called on it
  * to tweak its behavior.
@@ -1161,8 +1161,8 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   /**
    * GtkPopover:modal
    *
-   * Sets whether the popover is modal (so other elements in the window are
-   * not usable while the popover is visible).
+   * Sets whether the popover is modal (so other elements in the window do not
+   * receive input while the popover is visible).
    *
    * Since: 3.12
    */
