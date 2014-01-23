@@ -35,7 +35,7 @@
  * SECTION:gtkheaderbar
  * @Short_description: A box with a centered child
  * @Title: GtkHeaderBar
- * @See_also: #GtkBox
+ * @See_also: #GtkBox, #GtkActionBar
  *
  * GtkHeaderBar is similar to a horizontal #GtkBox, it allows to place
  * children at the start or the end. In addition, it allows a title and
