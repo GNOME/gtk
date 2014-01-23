@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
@@ -13,16 +14,27 @@
    height="16"
    id="svg4908"
    sodipodi:version="0.32"
-   inkscape:version="0.45+devel"
+   inkscape:version="0.48.4 r9939"
    version="1.0"
-   sodipodi:docname="gtk-quit.svg"
-   sodipodi:docbase="/home/andreas/project/gtk/16"
+   sodipodi:docname="application-exit.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/andreas/project/gtk/16/gtk-exit.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
      id="defs4910">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient6943">
+      <stop
+         style="stop-color:#2e3436;stop-opacity:1;"
+         offset="0"
+         id="stop6945" />
+      <stop
+         style="stop-color:#888a85;stop-opacity:1"
+         offset="1"
+         id="stop6947" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient5943">
@@ -181,6 +193,15 @@
        x2="8.9743614"
        y2="8.0312497"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6943"
+       id="linearGradient6949"
+       x1="8.6002092"
+       y1="12.713611"
+       x2="6.2105632"
+       y2="14.569766"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -190,20 +211,21 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="12.062335"
-     inkscape:cy="12.9155"
+     inkscape:cx="3.5608864"
+     inkscape:cy="7.5519452"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      width="16px"
      height="16px"
-     inkscape:window-width="1003"
-     inkscape:window-height="941"
-     inkscape:window-x="341"
-     inkscape:window-y="31"
+     inkscape:window-width="2560"
+     inkscape:window-height="1374"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:showpageshadow="false"
-     borderlayer="true" />
+     borderlayer="true"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata4913">
     <rdf:RDF>
@@ -220,7 +242,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
     <rect
-       style="opacity:1;fill:url(#linearGradient5946);fill-opacity:1;stroke:#2e3436;stroke-width:1.00000012;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:url(#linearGradient5946);fill-opacity:1;stroke:#888a85;stroke-width:1.00000011999999994;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4923"
        width="9"
        height="13"
@@ -240,7 +262,7 @@
        x="6"
        y="2" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#2e3436;stroke-width:0.99999988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:url(#linearGradient6949);stroke-width:0.99999987999999995px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 5.9624229,14.562499 L 11.5,12.472771 L 11.5,1.9374999"
        id="path5972"
        sodipodi:nodetypes="ccc" />
