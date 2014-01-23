@@ -47,6 +47,7 @@ m4_define([atk_required_version], [2.7.5])
 m4_define([cairo_required_version], [1.12.0])
 m4_define([gdk_pixbuf_required_version], [2.27.1])
 m4_define([introspection_required_version], [1.39.0])
+m4_define([wayland_required_version], [1.3.90])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
 ATK_REQUIRED_VERSION=atk_required_version
@@ -413,7 +414,7 @@ fi
 
 PKG_PROG_PKG_CONFIG
 
-WAYLAND_DEPENDENCIES="wayland-client >= 1.2.0 xkbcommon >= 0.2.0 wayland-cursor"
+WAYLAND_DEPENDENCIES="wayland-client >= wayland_required_version xkbcommon >= 0.2.0 wayland-cursor >= wayland_required_version"
 if test "$enable_wayland_backend" = "maybe" ; then
   AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
   PKG_CHECK_EXISTS($WAYLAND_DEPENDENCIES, [have_wayland_deps=yes], [have_wayland_deps=no])
@@ -1265,11 +1266,11 @@ fi
 
 # Check for gio-unix
 if test "$have_gio_unix" = "yes"; then
-  GDK_GIO_PACKAGE=gio-unix-2.0
+  GDK_GIO_PACKAGE="gio-unix-2.0 >= glib_required_version"
   AC_DEFINE([HAVE_GIO_UNIX], [1],
             [Define if gio-unix is available])
 else
-  GDK_GIO_PACKAGE=gio-2.0
+  GDK_GIO_PACKAGE="gio-2.0 >= glib_required_version"
 fi
 
 # Check for Pango flags
@@ -1314,7 +1315,7 @@ LIBS="$gtk_save_LIBS"
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0 cairo cairo-gobject"
+GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0 >= gdk_pixbuf_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version"
 GDK_PRIVATE_PACKAGES="$GDK_GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES $cairo_backends"
 if test "x$enable_x11_backend" = xyes; then
   GDK_PRIVATE_PACKAGES="$GDK_PRIVATE_PACKAGES pangoft2"
@@ -1351,13 +1352,13 @@ fi
 
 PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
 
-GTK_PACKAGES="atk cairo cairo-gobject gdk-pixbuf-2.0 gio-2.0"
+GTK_PACKAGES="atk >= atk_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version gdk-pixbuf-2.0 >= gdk_pixbuf_required_version gio-2.0 >= glib_required_version"
 GTK_PRIVATE_PACKAGES="$ATK_PACKAGES"
 if test "x$enable_x11_backend" = xyes; then
   GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
 fi
 if test "$have_gio_unix" = "yes"; then
-  GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES gio-unix-2.0"
+  GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES gio-unix-2.0 >= glib_required_version"
 fi
 GTK_EXTRA_LIBS=
 
