@@ -430,7 +430,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkassistant.ui");
+					       "/org/gtk/libgtk/ui/gtkassistant.ui");
 
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkAssistant, action_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, content);

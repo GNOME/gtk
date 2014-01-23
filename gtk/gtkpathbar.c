@@ -259,7 +259,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkpathbar.ui");
+					       "/org/gtk/libgtk/ui/gtkpathbar.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkPathBar, up_slider_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPathBar, down_slider_button);

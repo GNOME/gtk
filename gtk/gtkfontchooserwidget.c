@@ -490,7 +490,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
 
   /* Bind class to template */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkfontchooserwidget.ui");
+					       "/org/gtk/libgtk/ui/gtkfontchooserwidget.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, family_face_list);

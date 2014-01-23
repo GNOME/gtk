@@ -358,7 +358,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkscalebutton.ui");
+					       "/org/gtk/libgtk/ui/gtkscalebutton.ui");
 
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkScaleButton, plus_button);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkScaleButton, minus_button);

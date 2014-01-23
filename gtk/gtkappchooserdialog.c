@@ -608,7 +608,7 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkappchooserdialog.ui");
+					       "/org/gtk/libgtk/ui/gtkappchooserdialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, show_more_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, inner_box);

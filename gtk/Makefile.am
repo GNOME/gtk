@@ -1082,10 +1082,6 @@ gtk_extra_sources =				\
 	paper_names_offsets.c			\
 	gen-paper-names.c			\
 	gtkstatusicon-quartz.c			\
-	gtk-win32-base.css			\
-	gtk-win32.css				\
-	gtk-win32-xp.css			\
-	gtk-win32-classic.css			\
 	gtkversion.h.in				\
 	gtkmarshalers.list			\
 	fallback-c89.c
@@ -1113,44 +1109,38 @@ pkgdata_DATA = gtkbuilder.rng
 
 EXTRA_DIST += gtkbuilder.rnc gtkbuilder.rng
 
-DND_CURSORS = \
-	cursor_dnd_ask.png				\
-	cursor_dnd_copy.png				\
-	cursor_dnd_link.png				\
-	cursor_dnd_move.png				\
-	cursor_dnd_none.png
-
-COMPOSITE_TEMPLATES =			\
-	gtkapplication-quartz.ui	\
-	gtkaboutdialog.ui		\
-	gtkappchooserdialog.ui		\
-	gtkappchooserwidget.ui		\
-	gtkassistant.ui			\
-	gtkcolorchooserdialog.ui	\
-	gtkcoloreditor.ui		\
-	gtkdialog.ui			\
-	gtkfilechooserbutton.ui		\
-	gtkfilechooserdefault.ui	\
-	gtkfilechooserdialog.ui		\
-	gtkfontbutton.ui		\
-	gtkfontchooserdialog.ui		\
-	gtkfontchooserwidget.ui		\
-	gtkinfobar.ui			\
-	gtklockbutton.ui		\
-	gtkmessagedialog.ui		\
-	gtkpagesetupunixdialog.ui	\
-	gtkpathbar.ui			\
-	gtkprintunixdialog.ui		\
-	gtkrecentchooserdefault.ui	\
-	gtksearchbar.ui			\
-	gtkscalebutton.ui		\
-	gtkstatusbar.ui			\
-	gtkvolumebutton.ui
+COMPOSITE_TEMPLATES =				\
+	resources/ui/gtkapplication-quartz.ui	\
+	resources/ui/gtkaboutdialog.ui		\
+	resources/ui/gtkappchooserdialog.ui	\
+	resources/ui/gtkappchooserwidget.ui	\
+	resources/ui/gtkassistant.ui		\
+	resources/ui/gtkcolorchooserdialog.ui	\
+	resources/ui/gtkcoloreditor.ui		\
+	resources/ui/gtkdialog.ui		\
+	resources/ui/gtkfilechooserbutton.ui	\
+	resources/ui/gtkfilechooserdefault.ui	\
+	resources/ui/gtkfilechooserdialog.ui	\
+	resources/ui/gtkfontbutton.ui		\
+	resources/ui/gtkfontchooserdialog.ui	\
+	resources/ui/gtkfontchooserwidget.ui	\
+	resources/ui/gtkinfobar.ui		\
+	resources/ui/gtklockbutton.ui		\
+	resources/ui/gtkmessagedialog.ui	\
+	resources/ui/gtkpagesetupunixdialog.ui	\
+	resources/ui/gtkpathbar.ui		\
+	resources/ui/gtkprintunixdialog.ui	\
+	resources/ui/gtkrecentchooserdefault.ui	\
+	resources/ui/gtksearchbar.ui		\
+	resources/ui/gtkscalebutton.ui		\
+	resources/ui/gtkstatusbar.ui		\
+	resources/ui/gtkvolumebutton.ui
 
 template_headers = $(COMPOSITE_TEMPLATES:.ui=.ui.h)
 
 %.ui.h: %.ui extract-strings$(BUILD_EXEEXT)
-	$(AM_V_GEN) ./extract-strings$(BUILD_EXEEXT) $< > $@
+	$(AM_V_GEN) mkdir -p $(dir $@) \
+	&& ./extract-strings$(BUILD_EXEEXT) $< > $@
 
 #
 # rules to generate built sources
@@ -1196,12 +1186,13 @@ gtktypebuiltins.c: $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuilti
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(srcdir)/gtk.gresource.xml)
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
-		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
-gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css gtk-win32-xp.css gtk-win32-base.css gtk-win32-classic.css $(DND_CURSORS) $(COMPOSITE_TEMPLATES) $(template_headers)
+		--target=$@ --sourcedir=$(srcdir)/resources --c-name _gtk --generate-header --manual-register
+gtkresources.c: gtk.gresource.xml $(resource_files) $(template_headers)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
-		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
+		--target=$@ --sourcedir=$(srcdir)/resources --c-name _gtk --generate-source --manual-register
 
 gtkprivatetypebuiltins.h: stamp-gtkprivatetypebuiltins.h
 	@true
@@ -1772,9 +1763,8 @@ endif
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
 
 EXTRA_DIST +=                   \
+	$(resource_files)	\
 	$(STOCK_ICONS)		\
-	$(COMPOSITE_TEMPLATES)	\
-	$(DND_CURSORS)		\
 	$(GENERATED_ICONS)	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
@@ -1786,7 +1776,6 @@ EXTRA_DIST +=                   \
 	gtksearchenginequartz.h \
 	gtk.gresource.xml	\
 	gtkdbusinterfaces.xml	\
-	gtk-default.css		\
 	gtk-keys.css.default	\
 	gtk-keys.css.emacs	\
 	gtk-keys.css.mac	\

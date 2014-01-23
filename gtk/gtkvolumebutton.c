@@ -160,7 +160,7 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
 
   /* Bind class to template
    */
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkvolumebutton.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkvolumebutton.ui");
   gtk_widget_class_bind_template_callback (widget_class, cb_query_tooltip);
   gtk_widget_class_bind_template_callback (widget_class, cb_value_changed);
 }

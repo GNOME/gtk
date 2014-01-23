@@ -1104,7 +1104,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    */
   widget_class = GTK_WIDGET_CLASS (klass);
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkappchooserwidget.ui");
+					       "/org/gtk/libgtk/ui/gtkappchooserwidget.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, program_list);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, program_list_store);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, column);

@@ -179,7 +179,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 
   /* Bind class to template
    */
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkstatusbar.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkstatusbar.ui");
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkStatusbar, message_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkStatusbar, frame);
   gtk_widget_class_bind_template_child_private (widget_class, GtkStatusbar, label);

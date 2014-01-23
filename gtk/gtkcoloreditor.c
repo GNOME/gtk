@@ -462,7 +462,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkcoloreditor.ui");
+					       "/org/gtk/libgtk/ui/gtkcoloreditor.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, overlay);
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, grid);

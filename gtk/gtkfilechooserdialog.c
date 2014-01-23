@@ -248,7 +248,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkfilechooserdialog.ui");
+					       "/org/gtk/libgtk/ui/gtkfilechooserdialog.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, widget);
   gtk_widget_class_bind_template_callback (widget_class, response_cb);

@@ -346,7 +346,7 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkrecentchooserdefault.ui");
+					       "/org/gtk/libgtk/ui/gtkrecentchooserdefault.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkRecentChooserDefault, filter_combo_hbox);
   gtk_widget_class_bind_template_child_private (widget_class, GtkRecentChooserDefault, filter_combo);

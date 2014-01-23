@@ -306,7 +306,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
 
   /* Bind class to template
    */
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtklockbutton.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtklockbutton.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, image);
   gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, label_lock);

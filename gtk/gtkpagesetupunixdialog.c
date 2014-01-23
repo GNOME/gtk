@@ -161,7 +161,7 @@ gtk_page_setup_unix_dialog_class_init (GtkPageSetupUnixDialogClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkpagesetupunixdialog.ui");
+					       "/org/gtk/libgtk/ui/gtkpagesetupunixdialog.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkPageSetupUnixDialog, printer_list);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPageSetupUnixDialog, page_setup_list);

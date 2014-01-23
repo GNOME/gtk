@@ -158,7 +158,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
        * The fact that we do this here ensures that we will always have the
        * app menu at index 0 in 'combined'.
        */
-      builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/gtkapplication-quartz.ui");
+      builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/ui/gtkapplication-quartz.ui");
       gtk_application_set_app_menu (impl->application, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
       g_object_unref (builder);
     }

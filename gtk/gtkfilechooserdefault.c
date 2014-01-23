@@ -7421,7 +7421,7 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 
   /* Bind class to template */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkfilechooserdefault.ui");
+					       "/org/gtk/libgtk/ui/gtkfilechooserdefault.ui");
 
   /* A *lot* of widgets that we need to handle .... */
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDefault, browse_widgets_box);

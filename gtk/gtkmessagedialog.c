@@ -295,7 +295,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 							GTK_PARAM_READABLE));
 
   /* Setup Composite data */
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkmessagedialog.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkmessagedialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, image);
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, secondary_label);

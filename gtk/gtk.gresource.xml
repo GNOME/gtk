@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gtk/libgtk">
-    <file alias="Raleigh.css">gtk-default.css</file>
-    <file>gtk-win32.css</file>
-    <file>gtk-win32-xp.css</file>
-    <file>gtk-win32-base.css</file>
-    <file>gtk-win32-classic.css</file>
-    <file alias="cursor/dnd-ask.png">cursor_dnd_ask.png</file>
-    <file alias="cursor/dnd-link.png">cursor_dnd_link.png</file>
-    <file alias="cursor/dnd-none.png">cursor_dnd_none.png</file>
-    <file alias="cursor/dnd-move.png">cursor_dnd_move.png</file>
-    <file alias="cursor/dnd-copy.png">cursor_dnd_copy.png</file>
-    <file compressed="true">gtkaboutdialog.ui</file>
-    <file compressed="true">gtkappchooserdialog.ui</file>
-    <file compressed="true">gtkappchooserwidget.ui</file>
-    <file compressed="true">gtkassistant.ui</file>
-    <file compressed="true">gtkcolorchooserdialog.ui</file>
-    <file compressed="true">gtkcoloreditor.ui</file>
-    <file compressed="true">gtkdialog.ui</file>
-    <file compressed="true">gtkfilechooserbutton.ui</file>
-    <file compressed="true">gtkfilechooserdefault.ui</file>
-    <file compressed="true">gtkfilechooserdialog.ui</file>
-    <file compressed="true">gtkfontbutton.ui</file>
-    <file compressed="true">gtkfontchooserdialog.ui</file>
-    <file compressed="true">gtkfontchooserwidget.ui</file>
-    <file compressed="true">gtkinfobar.ui</file>
-    <file compressed="true">gtklockbutton.ui</file>
-    <file compressed="true">gtkmessagedialog.ui</file>
-    <file compressed="true">gtkpagesetupunixdialog.ui</file>
-    <file compressed="true">gtkpathbar.ui</file>
-    <file compressed="true">gtkprintunixdialog.ui</file>
-    <file compressed="true">gtkrecentchooserdefault.ui</file>
-    <file compressed="true">gtksearchbar.ui</file>
-    <file compressed="true">gtkscalebutton.ui</file>
-    <file compressed="true">gtkstatusbar.ui</file>
-    <file compressed="true">gtkvolumebutton.ui</file>
-    <file compressed="true">gtkapplication-quartz.ui</file>
+    <file alias="theme/Raleigh.css">theme/gtk-default.css</file>
+    <file>theme/gtk-win32.css</file>
+    <file>theme/gtk-win32-xp.css</file>
+    <file>theme/gtk-win32-base.css</file>
+    <file>theme/gtk-win32-classic.css</file>
+    <file alias="cursor/dnd-ask.png">cursor/cursor_dnd_ask.png</file>
+    <file alias="cursor/dnd-link.png">cursor/cursor_dnd_link.png</file>
+    <file alias="cursor/dnd-none.png">cursor/cursor_dnd_none.png</file>
+    <file alias="cursor/dnd-move.png">cursor/cursor_dnd_move.png</file>
+    <file alias="cursor/dnd-copy.png">cursor/cursor_dnd_copy.png</file>
+    <file compressed="true">ui/gtkaboutdialog.ui</file>
+    <file compressed="true">ui/gtkappchooserdialog.ui</file>
+    <file compressed="true">ui/gtkappchooserwidget.ui</file>
+    <file compressed="true">ui/gtkassistant.ui</file>
+    <file compressed="true">ui/gtkcolorchooserdialog.ui</file>
+    <file compressed="true">ui/gtkcoloreditor.ui</file>
+    <file compressed="true">ui/gtkdialog.ui</file>
+    <file compressed="true">ui/gtkfilechooserbutton.ui</file>
+    <file compressed="true">ui/gtkfilechooserdefault.ui</file>
+    <file compressed="true">ui/gtkfilechooserdialog.ui</file>
+    <file compressed="true">ui/gtkfontbutton.ui</file>
+    <file compressed="true">ui/gtkfontchooserdialog.ui</file>
+    <file compressed="true">ui/gtkfontchooserwidget.ui</file>
+    <file compressed="true">ui/gtkinfobar.ui</file>
+    <file compressed="true">ui/gtklockbutton.ui</file>
+    <file compressed="true">ui/gtkmessagedialog.ui</file>
+    <file compressed="true">ui/gtkpagesetupunixdialog.ui</file>
+    <file compressed="true">ui/gtkpathbar.ui</file>
+    <file compressed="true">ui/gtkprintunixdialog.ui</file>
+    <file compressed="true">ui/gtkrecentchooserdefault.ui</file>
+    <file compressed="true">ui/gtksearchbar.ui</file>
+    <file compressed="true">ui/gtkscalebutton.ui</file>
+    <file compressed="true">ui/gtkstatusbar.ui</file>
+    <file compressed="true">ui/gtkvolumebutton.ui</file>
+    <file compressed="true">ui/gtkapplication-quartz.ui</file>
   </gresource>
 </gresources>

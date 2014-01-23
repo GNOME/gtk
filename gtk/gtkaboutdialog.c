@@ -583,7 +583,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/gtkaboutdialog.ui");
+					       "/org/gtk/libgtk/ui/gtkaboutdialog.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, stack_switcher);
