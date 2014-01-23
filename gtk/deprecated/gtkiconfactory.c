@@ -697,13 +697,13 @@ init_icon_sizes (void)
 
       icon_sizes[GTK_ICON_SIZE_BUTTON].size = GTK_ICON_SIZE_BUTTON;
       icon_sizes[GTK_ICON_SIZE_BUTTON].name = "gtk-button";
-      icon_sizes[GTK_ICON_SIZE_BUTTON].width = 20;
-      icon_sizes[GTK_ICON_SIZE_BUTTON].height = 20;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].width = 16;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].height = 16;
 
       icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].size = GTK_ICON_SIZE_SMALL_TOOLBAR;
       icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].name = "gtk-small-toolbar";
-      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].width = 18;
-      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].height = 18;
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].width = 16;
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].height = 16;
 
       icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].size = GTK_ICON_SIZE_LARGE_TOOLBAR;
       icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].name = "gtk-large-toolbar";
