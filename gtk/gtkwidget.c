@@ -3467,7 +3467,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_string ("focus-line-pattern",
 								P_("Focus line dash pattern"),
-								P_("Dash pattern used to draw the focus indicator"),
+								P_("Dash pattern used to draw the focus indicator. The character values are interpreted as pixel widths of alternating on and off segments of the line."),
 								"\1\1",
 								GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
