@@ -112,6 +112,7 @@ AM_CPPFLAGS = \
 	-I$(top_builddir) 	\
 	-I$(top_builddir)/gdk	\
 	-DGTK_ENABLE_BROKEN	\
+	-Wno-deprecated-declarations \
 	$(GTK_DEBUG_FLAGS)	\
 	$(GTK_DEP_CFLAGS)
 
