@@ -2007,6 +2007,8 @@ notebook_tab_prepare_style_context (GtkNotebook *notebook,
         state |= GTK_STATE_FLAG_ACTIVE;
       if (page == notebook->priv->prelight_tab)
         state |= GTK_STATE_FLAG_PRELIGHT;
+      if (page->reorderable)
+        gtk_style_context_add_class (context, "reorderable-page");
     }
 
   gtk_style_context_set_state (context, state);
@@ -2015,9 +2017,6 @@ notebook_tab_prepare_style_context (GtkNotebook *notebook,
     flags = _gtk_notebook_get_tab_flags (notebook, page);
 
   gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, flags);
-
-  if (page->reorderable)
-    gtk_style_context_add_class (context, "reorderable-page");
 
   switch (tab_pos)
     {
