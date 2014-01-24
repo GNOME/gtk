@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gtk/libgtk">
-    <file alias="theme/Raleigh.css">theme/gtk-default.css</file>
+    <file alias="theme/gtk-default.css">theme/Raleigh.css</file>
     <file>theme/gtk-win32.css</file>
     <file>theme/gtk-win32-xp.css</file>
     <file>theme/gtk-win32-base.css</file>
