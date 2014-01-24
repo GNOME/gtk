@@ -2016,6 +2016,9 @@ notebook_tab_prepare_style_context (GtkNotebook *notebook,
 
   gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, flags);
 
+  if (page->reorderable)
+    gtk_style_context_add_class (context, "reorderable-page");
+
   switch (tab_pos)
     {
     case GTK_POS_TOP:
