@@ -438,13 +438,15 @@ GtkButton.check:active:prelight {
 }
 
 .scale.trough {
+    margin: 8px 0;
     border-style: none;
     border-width: 0;
-    background-image: -gtk-win32-theme-part(trackbar, 1 1, margins (2 0 2 0));
+    background-image: -gtk-win32-theme-part(trackbar, 1 1);
 }
 
 .scale.trough.vertical {
-    background-image: -gtk-win32-theme-part(trackbar, 1 1, margins (0 2 0 2));
+    margin: 0 8px;
+    background-image: -gtk-win32-theme-part(trackbar, 1 1);
 }
 
 .scale.slider {
