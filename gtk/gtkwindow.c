@@ -4019,6 +4019,73 @@ gtk_window_realize_icon (GtkWindow *window)
     }
 }
 
+static GdkPixbuf *
+icon_from_list (GList *list,
+                gint   size)
+{
+  GdkPixbuf *best;
+  GdkPixbuf *pixbuf;
+  GList *l;
+
+  best = NULL;
+  for (l = list; l; l = l->next)
+    {
+      pixbuf = list->data;
+      if (gdk_pixbuf_get_width (pixbuf) <= size)
+        {
+          best = g_object_ref (pixbuf);
+          break;
+        }
+    }
+
+  if (best == NULL)
+    best = gdk_pixbuf_scale_simple (GDK_PIXBUF (list->data), size, size, GDK_INTERP_BILINEAR);
+
+  return best;
+}
+
+static GdkPixbuf *
+icon_from_name (const gchar *name,
+                gint         size)
+{
+  return gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                   name, size,
+                                   GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+}
+
+GdkPixbuf *
+gtk_window_get_icon_for_size (GtkWindow *window,
+                              gint       size)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GtkWindowIconInfo *info;
+  const gchar *name;
+
+  info = ensure_icon_info (window);
+
+  if (info->icon_list != NULL)
+    return icon_from_list (info->icon_list, size);
+
+  name = gtk_window_get_icon_name (window);
+  if (name != NULL)
+    return icon_from_name (name, size);
+
+  if (priv->transient_parent != NULL)
+    {
+      info = ensure_icon_info (priv->transient_parent);
+      if (info->icon_list)
+        return icon_from_list (info->icon_list, size);
+    }
+
+  if (default_icon_list != NULL)
+    return icon_from_list (default_icon_list, size);
+
+  if (default_icon_name != NULL)
+    return icon_from_name (default_icon_name, size);
+
+  return NULL;
+}
+
 static void
 gtk_window_unrealize_icon (GtkWindow *window)
 {

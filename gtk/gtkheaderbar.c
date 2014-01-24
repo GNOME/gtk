@@ -218,54 +218,20 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
                                     GtkWindow    *window)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  gint size;
-  GList *list;
-  const gchar *name;
-  GdkPixbuf *best = NULL;
+  GdkPixbuf *pixbuf;
 
   if (priv->titlebar_icon == NULL)
     return FALSE;
 
   if (GTK_IS_BUTTON (gtk_widget_get_parent (priv->titlebar_icon)))
-    size = 16;
+    pixbuf = gtk_window_get_icon_for_size (window, 16);
   else
-    size = 20;
+    pixbuf = gtk_window_get_icon_for_size (window, 20);
 
-  list = gtk_window_get_icon_list (window);
-
-  if (list != NULL)
+  if (pixbuf)
     {
-      GdkPixbuf *pixbuf;
-      GList *l;
-
-      best = NULL;
-      for (l = list; l; l = l->next)
-        {
-          pixbuf = list->data;
-          if (gdk_pixbuf_get_width (pixbuf) <= size)
-            {
-              best = g_object_ref (pixbuf);
-              break;
-            }
-        }
-
-      if (best == NULL)
-        best = gdk_pixbuf_scale_simple (GDK_PIXBUF (list->data), size, size, GDK_INTERP_BILINEAR);
-
-      g_list_free (list);
-    }
-  else
-    {
-      name = gtk_window_get_icon_name (window);
-      if (name != NULL)
-        best = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                         name, size, GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
-    }
-
-  if (best)
-    {
-      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->titlebar_icon), best);
-      g_object_unref (best);
+      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->titlebar_icon), pixbuf);
+      g_object_unref (pixbuf);
       gtk_widget_show (priv->titlebar_icon);
 
       return TRUE;

@@ -107,6 +107,9 @@ void    _gtk_window_get_popover_position (GtkWindow                   *window,
                                           GtkPositionType             *pos,
                                           cairo_rectangle_int_t       *rect);
 
+GdkPixbuf *gtk_window_get_icon_for_size (GtkWindow *window,
+                                         gint       size);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */
