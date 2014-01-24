@@ -3682,8 +3682,13 @@ gtk_window_set_titlebar (GtkWindow *window,
   GtkWidget *widget = GTK_WIDGET (window);
   GtkWindowPrivate *priv = window->priv;
   GdkVisual *visual;
+  gboolean was_mapped;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
+
+  was_mapped = gtk_widget_get_mapped (widget);
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_unrealize (widget);
 
   unset_titlebar (window);
 
@@ -3715,7 +3720,8 @@ gtk_window_set_titlebar (GtkWindow *window,
   gtk_style_context_add_class (gtk_widget_get_style_context (titlebar),
                                GTK_STYLE_CLASS_TITLEBAR);
 
-  gtk_widget_queue_resize (widget);
+  if (was_mapped)
+    gtk_widget_map (widget);
 }
 
 gboolean
