@@ -3907,22 +3907,31 @@ stop_loading_and_clear_list_model (GtkFileChooserDefault *impl,
 }
 
 static char *
-my_g_format_time_for_display (glong secs)
+my_g_format_time_for_display (GtkFileChooserDefault *impl,
+                              glong secs)
 {
   GDateTime *now, *time;
   GTimeSpan time_diff;
+  gchar *clock_format;
+  gboolean use_24 = TRUE;
   const gchar *format;
   gchar *date_str;
+  GSettings *settings;
 
   now = g_date_time_new_now_local ();
   time = g_date_time_new_from_unix_local (secs);
   time_diff = g_date_time_difference (now, time);
 
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
+  clock_format = g_settings_get_string (settings, "clock-format");
+  use_24 = g_strcmp0 (clock_format, "24h") == 0;
+  g_free (clock_format);
+
   /* Translators: see g_date_time_format() for details on the format */
   if (time_diff >= 0 && time_diff < G_TIME_SPAN_DAY)
-    format = _("%H:%M");
+    format = use_24 ? _("%H:%M") : _("%-I:%M %P");
   else if (time_diff >= 0 && time_diff < 2 * G_TIME_SPAN_DAY)
-    format = _("Yesterday at %H:%M");
+    format = use_24 ? _("Yesterday at %H:%M") : _("Yesterday at %-I:%M %P");
   else if (time_diff >= 0 && time_diff < 7 * G_TIME_SPAN_DAY)
     format = "%A"; /* Days from last week */
   else
@@ -4113,7 +4122,7 @@ file_system_model_set (GtkFileSystemModel *model,
         else if (tv.tv_sec == 0)
           g_value_set_static_string (value, _("Unknown"));
         else
-          g_value_take_string (value, my_g_format_time_for_display (tv.tv_sec));
+          g_value_take_string (value, my_g_format_time_for_display (impl, tv.tv_sec));
         break;
       }
     case MODEL_COL_ELLIPSIZE:
@@ -7495,6 +7504,10 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   gtk_widget_set_size_request (priv->browse_files_tree_view, 280, -1);
 
   set_file_system_backend (impl);
+
+  if (g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
+                                       "org.gnome.desktop.interface",
+                                       TRUE) != NULL)
 
   priv->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
 

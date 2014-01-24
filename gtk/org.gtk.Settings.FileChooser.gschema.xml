@@ -38,6 +38,11 @@
     <value nick='cwd' value='1'/>
   </enum>
 
+  <enum id='org.gtk.Settings.FileChooser.ClockFormat'>
+    <value nick='24h' value='0'/>
+    <value nick='12h' value='1'/>
+  </enum>
+
   <schema id='org.gtk.Settings.FileChooser' path='/org/gtk/settings/file-chooser/'>
     <key name='last-folder-uri' type='s'>
       <default>""</default>
@@ -112,6 +117,12 @@
       <default>148</default>
       <description>
 	Width in pixels of the file chooser's places sidebar.
+      </description>
+    </key>
+    <key name="clock-format" enum="org.gtk.Settings.FileChooser.ClockFormat">
+      <default>'24h'</default>
+      <description>
+        Whether the time is shown in 24h or 12h format.
       </description>
     </key>
   </schema>
