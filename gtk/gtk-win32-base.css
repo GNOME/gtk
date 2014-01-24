@@ -432,7 +432,7 @@ GtkButton.check:active:prelight {
 .scale {
     background-color: transparent;
     -GtkScale-value-spacing: 0;
-    -GtkScale-slider-length: 9;
+    -GtkScale-slider-length: 12;
     -GtkRange-slider-width: 20;
     -GtkRange-trough-border: 0;
 }
