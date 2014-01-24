@@ -449,6 +449,11 @@ GtkButton.check:active:prelight {
     background-image: -gtk-win32-theme-part(trackbar, 1 1);
 }
 
+.scale.mark.separator {
+    /* defines the color of the actuall marks on the scale */
+    color: shade(@bg_color, 0.6);
+}
+
 .scale.slider {
     background-color: transparent;
     border-width: 0;
