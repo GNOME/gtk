@@ -34,6 +34,7 @@
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstylefuncsprivate.h"
+#include "gtksettingsprivate.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkstylepropertiesprivate.h"
@@ -2838,9 +2839,9 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
         }
       else
         {
-          /* Worst case, fall back to Raleigh */
-          g_return_if_fail (!g_str_equal (name, "Raleigh")); /* infloop protection */
-          _gtk_css_provider_load_named (provider, "Raleigh", NULL);
+          /* Worst case, fall back to the default */
+          g_return_if_fail (!g_str_equal (name, DEFAULT_THEME_NAME)); /* infloop protection */
+          _gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, NULL);
         }
     }
 }

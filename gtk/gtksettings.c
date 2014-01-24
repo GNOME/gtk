@@ -435,7 +435,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 #ifdef G_OS_WIN32
 								  _gtk_win32_theme_get_default (),
 #else
-                                                                  "Raleigh",
+                                                                  DEFAULT_THEME_NAME,
 #endif
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
@@ -2984,7 +2984,7 @@ get_theme_name (GtkSettings *settings)
     return theme_name;
 
   g_free (theme_name);
-  return g_strdup ("Raleigh");
+  return g_strdup (DEFAULT_THEME_NAME);
 }
 
 static void
