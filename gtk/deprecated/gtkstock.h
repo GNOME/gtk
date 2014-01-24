@@ -106,6 +106,8 @@ G_DEPRECATED
 #endif
 typedef char * GtkStock;
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 /* Stock IDs (not all are stock items; some are images only) */
 /**
  * GTK_STOCK_ABOUT:
@@ -1260,6 +1262,8 @@ typedef char * GtkStock;
  * Deprecated: 3.10: Use named icon &quot;zoom-out&quot; or the label &quot;Zoom _Out&quot;.
  */
 #define GTK_STOCK_ZOOM_OUT         ((GtkStock)"gtk-zoom-out")
+
+#endif
 
 G_END_DECLS
 
