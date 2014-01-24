@@ -261,6 +261,7 @@ copy ..\..\..\gtk\gtkpaned.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A
 copy ..\..\..\gtk\gtkpapersize.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkplacessidebar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkplug.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkpopover.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintcontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintoperation.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintoperationpreview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;

@@ -182,15 +182,13 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\css_multiplebgs.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\css_pixbufs.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\css_shadows.c" />
-    <ClCompile Include="..\..\..\demos\gtk-demo\demo_resources.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\dialog.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\drawingarea.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\editable_cells.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\entry_buffer.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\entry_completion.c" />
-    <ClCompile Include="..\..\..\demos\gtk-demo\event_axes.c" />	
+    <ClCompile Include="..\..\..\demos\gtk-demo\event_axes.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\expander.c" />
-    <ClCompile Include="..\..\..\demos\gtk-demo\flowbox.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\headerbar.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\hypertext.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\iconview.c" />
@@ -199,8 +197,8 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\infobar.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\links.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\listbox.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\flowbox.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\list_store.c" />
-    <ClCompile Include="..\..\..\demos\gtk-demo\main.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\menus.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\offscreen_window.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\offscreen_window2.c" />
@@ -208,6 +206,7 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\panes.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\pickers.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\pixbufs.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\popover.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\printing.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\revealer.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\rotated_text.c" />
@@ -216,12 +215,14 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\sizegroup.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\spinner.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\stack.c" />
-    <ClCompile Include="..\..\..\demos\gtk-demo\textscroll.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\textview.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\textscroll.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\theming_style_classes.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\toolpalette.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\transparent.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\tree_store.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\demo_resources.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\main.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk.vcxproj">

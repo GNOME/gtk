@@ -170,10 +170,9 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\combobox.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_accordion.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_basics.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\css_multiplebgs.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_pixbufs.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_shadows.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\css_multiplebgs.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\demo_resources.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\dialog.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\drawingarea.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\editable_cells.c" />
@@ -181,7 +180,6 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\entry_completion.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\event_axes.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\expander.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\flowbox.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\headerbar.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\hypertext.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\iconview.c" />
@@ -190,15 +188,16 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\infobar.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\links.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\listbox.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\flowbox.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\list_store.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\main.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\menus.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\overlay.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\offscreen_window.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\offscreen_window2.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\overlay.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\panes.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\pickers.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\pixbufs.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\popover.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\printing.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\revealer.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\rotated_text.c" />
@@ -207,12 +206,14 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\sizegroup.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\spinner.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\stack.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textview.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\theming_style_classes.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\toolpalette.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\transparent.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\tree_store.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\demo_resources.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\main.c" />
 		</Filter>
 		<Filter
 			Name="Header Files"

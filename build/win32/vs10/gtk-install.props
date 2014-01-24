@@ -494,6 +494,8 @@ copy ..\..\..\gtk\gtkplacessidebar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkplug.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
+copy ..\..\..\gtk\gtkpopover.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
 copy ..\..\..\gtk\gtkprintcontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkprintoperation.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
