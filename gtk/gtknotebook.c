@@ -3267,6 +3267,26 @@ gtk_notebook_button_release (GtkWidget      *widget,
 }
 
 static void
+update_prelight_tab (GtkNotebook     *notebook,
+                     GtkNotebookPage *page)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  if (priv->prelight_tab == page)
+    return;
+
+  if (priv->prelight_tab && priv->prelight_tab->tab_label)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (priv->prelight_tab->tab_label),
+                                    "prelight-page");
+
+  if (page && page->tab_label)
+    gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
+                                 "prelight-page");
+
+  priv->prelight_tab = page;
+}
+
+static void
 tab_prelight (GtkNotebook *notebook,
               GdkEvent    *event)
 {
@@ -3280,7 +3300,7 @@ tab_prelight (GtkNotebook *notebook,
       if ((tab == NULL && priv->prelight_tab != NULL) ||
           (tab != NULL && tab->data != priv->prelight_tab))
         {
-          priv->prelight_tab = tab == NULL ? NULL : tab->data;
+          update_prelight_tab (notebook, tab == NULL ? NULL : tab->data);
           gtk_notebook_redraw_tabs (notebook);
        }
     }
@@ -5034,7 +5054,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   if (priv->detached_tab == list->data)
     priv->detached_tab = NULL;
   if (priv->prelight_tab == list->data)
-    priv->prelight_tab = NULL;
+    update_prelight_tab (notebook, NULL);
   if (priv->switch_tab == list)
     priv->switch_tab = NULL;
 
@@ -7857,6 +7877,10 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
   if (priv->cur_page == page)
     gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
 				 "active-page");
+
+  if (priv->prelight_tab == page)
+    gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
+                                 "prelight-page");
 
   if (priv->show_tabs && gtk_widget_get_visible (child))
     {
