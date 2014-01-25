@@ -218,7 +218,7 @@ gtk_mirror_bin_realize (GtkWidget *widget)
       attributes.width = child_allocation.width;
       attributes.height = child_allocation.height;
     }
-  bin->offscreen_window = gdk_window_new (gtk_widget_get_root_window (widget),
+  bin->offscreen_window = gdk_window_new (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
                                           &attributes, attributes_mask);
   gdk_window_set_user_data (bin->offscreen_window, widget);
   if (bin->child)
