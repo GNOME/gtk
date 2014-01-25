@@ -137,6 +137,10 @@ test_type (gconstpointer data)
 	  (strcmp (pspec->name, "use-header-bar") == 0))
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
+	  (strcmp (pspec->name, "pointing-to") == 0))
+	continue;
+
       if (g_type_is_a (type, GDK_TYPE_DISPLAY_MANAGER) &&
 	  (strcmp (pspec->name, "default-display") == 0))
 	continue;
