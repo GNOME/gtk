@@ -542,7 +542,7 @@ gtk_handle_box_realize (GtkWidget *widget)
                            | GDK_STRUCTURE_MASK);
   attributes.type_hint = GDK_WINDOW_TYPE_HINT_TOOLBAR;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
-  priv->float_window = gdk_window_new (gtk_widget_get_root_window (widget),
+  priv->float_window = gdk_window_new (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
                                        &attributes, attributes_mask);
   gdk_window_set_user_data (priv->float_window, widget);
   gdk_window_set_decorations (priv->float_window, 0);

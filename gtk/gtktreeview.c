@@ -3938,7 +3938,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           attributes.y = y;
 	  attributes.width = width;
 	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (gtk_widget_get_root_window (widget),
+	  tree_view->priv->drag_highlight_window = gdk_window_new (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
 								   &attributes, attributes_mask);
 	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
@@ -4019,7 +4019,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           attributes.y = y;
 	  attributes.width = width;
 	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (gtk_widget_get_root_window (widget), &attributes, attributes_mask);
+	  tree_view->priv->drag_highlight_window = gdk_window_new (gdk_screen_get_root_window (gtk_widget_get_screen (widget)), &attributes, attributes_mask);
 	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);

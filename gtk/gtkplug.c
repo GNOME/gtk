@@ -481,6 +481,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   GtkPlugPrivate *priv;
   GtkWidget *widget;
   GdkWindow *window;
+  GdkWindow *root_window;
   gboolean result;
   gboolean widget_was_visible;
 
@@ -499,12 +500,11 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 
   widget_was_visible = gtk_widget_get_visible (widget);
   window = gtk_widget_get_window (widget);
+  root_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
   gdk_window_hide (window);
   _gtk_widget_set_in_reparent (widget, TRUE);
-  gdk_window_reparent (window,
-		       gtk_widget_get_root_window (widget),
-		       0, 0);
+  gdk_window_reparent (window, root_window, 0, 0);
   gtk_widget_unparent (GTK_WIDGET (plug));
   _gtk_widget_set_in_reparent (widget, FALSE);
   
@@ -1048,14 +1048,17 @@ gtk_plug_realize (GtkWidget *widget)
 
   if (gtk_widget_is_toplevel (widget))
     {
+      GdkWindow *root_window;
       attributes.window_type = GDK_WINDOW_TOPLEVEL;
+
+      root_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
       gdk_error_trap_push ();
       if (priv->socket_window)
         gdk_window = gdk_window_new (priv->socket_window,
                                      &attributes, attributes_mask);
       else /* If it's a passive plug, we use the root window */
-        gdk_window = gdk_window_new (gtk_widget_get_root_window (widget),
+        gdk_window = gdk_window_new (root_window,
                                      &attributes, attributes_mask);
       /* Because the window isn't known to the window manager,
        * frame sync won't work. In theory, XEMBED could be extended
@@ -1072,8 +1075,8 @@ gtk_plug_realize (GtkWidget *widget)
 	  gdk_error_trap_push ();
 	  gdk_window_destroy (gdk_window);
 	  gdk_error_trap_pop_ignored ();
-	  gdk_window = gdk_window_new (gtk_widget_get_root_window (widget),
-                                   &attributes, attributes_mask);
+	  gdk_window = gdk_window_new (root_window,
+                                       &attributes, attributes_mask);
           gtk_widget_set_window (widget, gdk_window);
 	}
 

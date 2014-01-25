@@ -4292,7 +4292,7 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
        */
 
       send_event = gdk_event_new (GDK_BUTTON_RELEASE);
-      send_event->button.window = g_object_ref (gtk_widget_get_root_window (source_widget));
+      send_event->button.window = g_object_ref (gdk_screen_get_root_window (gtk_widget_get_screen (source_widget)));
       send_event->button.send_event = TRUE;
       send_event->button.time = time;
       send_event->button.x = 0;
@@ -4440,7 +4440,7 @@ gtk_drag_key_cb (GtkWidget         *widget,
    * to query it here. We could use XGetModifierMapping, but
    * that would be overkill.
    */
-  root_window = gtk_widget_get_root_window (widget);
+  root_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
   gdk_window_get_device_position (root_window, pointer, NULL, NULL, &state);
   event->state = state;
 

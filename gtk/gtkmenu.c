@@ -2647,6 +2647,7 @@ menu_grab_transfer_window_get (GtkMenu *menu)
     {
       GdkWindowAttr attributes;
       gint attributes_mask;
+      GdkWindow *parent;
 
       attributes.x = -100;
       attributes.y = -100;
@@ -2659,7 +2660,8 @@ menu_grab_transfer_window_get (GtkMenu *menu)
 
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
 
-      window = gdk_window_new (gtk_widget_get_root_window (GTK_WIDGET (menu)),
+      parent = gdk_screen_get_root_window (gtk_widget_get_screen (GTK_WIDGET (menu)));
+      window = gdk_window_new (parent,
                                &attributes, attributes_mask);
       gtk_widget_register_window (GTK_WIDGET (menu), window);
 

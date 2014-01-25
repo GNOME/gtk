@@ -6052,7 +6052,7 @@ gtk_window_realize (GtkWidget *widget)
   attributes.visual = gtk_widget_get_visual (widget);
 
   attributes_mask = 0;
-  parent_window = gtk_widget_get_root_window (widget);
+  parent_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
   gtk_widget_get_allocation (widget, &allocation);
   attributes.width = allocation.width;
