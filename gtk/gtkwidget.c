@@ -10177,7 +10177,9 @@ gtk_widget_get_display (GtkWidget *widget)
  * Return value: (transfer none): the #GdkWindow root window for the toplevel for this widget.
  *
  * Since: 2.2
- **/
+ *
+ * Deprecated: 3.12: Use gdk_screen_get_root_window() instead
+ */
 GdkWindow*
 gtk_widget_get_root_window (GtkWidget *widget)
 {
