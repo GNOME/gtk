@@ -43,21 +43,6 @@ static GOptionEntry entries[] = {
 
 static gchar *gtk_src_dir = NULL;
 
-
-static void
-win_style_set_cb (GtkWidget *win)
-{
-  GtkWidget *content_area, *action_area;
-
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (win));
-  action_area = gtk_dialog_get_action_area (GTK_DIALOG (win));
-
-  gtk_container_set_border_width (GTK_CONTAINER (content_area), 12);
-  gtk_box_set_spacing (GTK_BOX (content_area), 24);
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 0);
-  gtk_box_set_spacing (GTK_BOX (action_area), 6);
-}
-
 static gboolean
 delete_event_cb (GtkWidget *editor,
 		 gint       response,
@@ -286,10 +271,10 @@ main (int   argc,
 
   win = gtk_dialog_new_with_buttons ("TestFileChooserButton", NULL, 0,
 				     "_Quit", GTK_RESPONSE_CLOSE, NULL);
-  g_signal_connect (win, "style-set", G_CALLBACK (win_style_set_cb), NULL);
   g_signal_connect (win, "response", G_CALLBACK (gtk_main_quit), NULL);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
+  g_object_set (vbox, "margin", 6, NULL);
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (win))), vbox);
 
   frame = gtk_frame_new ("<b>GtkFileChooserButton</b>");
