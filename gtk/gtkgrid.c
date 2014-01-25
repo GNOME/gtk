@@ -146,13 +146,13 @@ struct _GtkGridRequest
 enum
 {
   PROP_0,
-  PROP_ORIENTATION,
   PROP_ROW_SPACING,
   PROP_COLUMN_SPACING,
   PROP_ROW_HOMOGENEOUS,
   PROP_COLUMN_HOMOGENEOUS,
   PROP_BASELINE_ROW,
-  N_PROPERTIES
+  N_PROPERTIES,
+  PROP_ORIENTATION
 };
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
@@ -1730,44 +1730,44 @@ gtk_grid_class_init (GtkGridClass *class)
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
-  obj_properties [PROP_ROW_SPACING] =
+  obj_properties[PROP_ROW_SPACING] =
     g_param_spec_int ("row-spacing",
                       P_("Row spacing"),
                       P_("The amount of space between two consecutive rows"),
                       0, G_MAXINT16, 0,
                       GTK_PARAM_READWRITE);
 
-  obj_properties [PROP_COLUMN_SPACING] =
+  obj_properties[PROP_COLUMN_SPACING] =
     g_param_spec_int ("column-spacing",
                       P_("Column spacing"),
                       P_("The amount of space between two consecutive columns"),
                       0, G_MAXINT16, 0,
                       GTK_PARAM_READWRITE);
 
-  obj_properties [PROP_ROW_HOMOGENEOUS] =
+  obj_properties[PROP_ROW_HOMOGENEOUS] =
     g_param_spec_boolean ("row-homogeneous",
                           P_("Row Homogeneous"),
                           P_("If TRUE, the rows are all the same height"),
                           FALSE,
                           GTK_PARAM_READWRITE);
 
-  obj_properties [PROP_COLUMN_HOMOGENEOUS] =
+  obj_properties[PROP_COLUMN_HOMOGENEOUS] =
     g_param_spec_boolean ("column-homogeneous",
                           P_("Column Homogeneous"),
                           P_("If TRUE, the columns are all the same width"),
                           FALSE,
                           GTK_PARAM_READWRITE);
 
-  g_object_class_install_properties (object_class,
-                                     N_PROPERTIES,
-                                     obj_properties);
-
-  g_object_class_install_property (object_class, PROP_BASELINE_ROW,
+  obj_properties[PROP_BASELINE_ROW] =
     g_param_spec_int ("baseline-row",
                       P_("Baseline Row"),
                       P_("The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"),
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE));
+                      GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class,
+                                     N_PROPERTIES,
+                                     obj_properties);
 
   gtk_container_class_install_child_property (container_class, CHILD_PROP_LEFT_ATTACH,
     g_param_spec_int ("left-attach",
