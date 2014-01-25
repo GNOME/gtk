@@ -35,7 +35,7 @@ window1
         layer: widget
         alpha: 1
         <AtkImage>
-        image size: 20 x 20
+        image size: 16 x 16
         image description: (null)
       name_label
         "label"
@@ -478,8 +478,83 @@ See the GNU General Public License, version 3 or later for details.
       "filler"
       parent: dialog-vbox1
       index: 1
-      state: enabled horizontal sensitive showing visible
+      state: enabled horizontal sensitive
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
+  headerbar1
+    "panel"
+    parent: window1
+    index: 1
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    stack_switcher
+      "filler"
+      parent: headerbar1
+      index: 0
+      state: enabled horizontal sensitive
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GtkRadioButtonAccessible-6
+        "radio button"
+        parent: stack_switcher
+        index: 0
+        name: About
+        member-of: unnamed-GtkRadioButtonAccessible-7
+                   unnamed-GtkRadioButtonAccessible-8
+                   unnamed-GtkRadioButtonAccessible-6
+        state: armed checked enabled focusable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+      unnamed-GtkRadioButtonAccessible-8
+        "radio button"
+        parent: stack_switcher
+        index: 1
+        name: Credits
+        member-of: unnamed-GtkRadioButtonAccessible-7
+                   unnamed-GtkRadioButtonAccessible-8
+                   unnamed-GtkRadioButtonAccessible-6
+        state: enabled focusable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+      unnamed-GtkRadioButtonAccessible-7
+        "radio button"
+        parent: stack_switcher
+        index: 2
+        name: License
+        member-of: unnamed-GtkRadioButtonAccessible-7
+                   unnamed-GtkRadioButtonAccessible-8
+                   unnamed-GtkRadioButtonAccessible-6
+        state: enabled focusable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
