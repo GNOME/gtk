@@ -428,7 +428,10 @@ add_action_widgets (GtkDialog *dialog)
           g_object_unref (child);
 
           if (has_default)
-            gtk_widget_grab_default (child);
+            {
+              gtk_widget_grab_default (child);
+              gtk_style_context_add_class (gtk_widget_get_style_context (child), "suggested-action");
+            }
         }
       g_list_free (children);
     }
@@ -1104,7 +1107,11 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
       ResponseData *rd = get_response_data (widget, FALSE);
 
       if (rd && rd->response_id == response_id)
-	gtk_widget_grab_default (widget);
+        {
+	  gtk_widget_grab_default (widget);
+          if (dialog->priv->constructed && dialog->priv->use_header_bar == 1)
+            gtk_style_context_add_class (gtk_widget_get_style_context (widget), "suggested-action");
+        }
 
       tmp_list = g_list_next (tmp_list);
     }
