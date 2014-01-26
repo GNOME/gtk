@@ -143,7 +143,9 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtitlebar			\
 	testsplitheaders		\
 	testactionbar			\
-	testwindowsize
+	testwindowsize			\
+	testpopover			\
+	$(NULL)
 
 if USE_X11
 noinst_PROGRAMS += testerrors

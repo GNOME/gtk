@@ -1,0 +1,118 @@
+<interface>
+  <menu id="menu">
+    <section>
+      <item>
+        <attribute name="label">No action</attribute>
+        <attribute name="action">action1</attribute>
+      </item>
+      <item>
+        <attribute name="label">Toggle</attribute>
+        <attribute name="action">top.action2</attribute>
+        <attribute name="hidden-when">action-missing</attribute>
+      </item>
+      <item>
+        <attribute name="label">Another Toggle</attribute>
+        <attribute name="action">top.action2a</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="label">Middle Section</attribute>
+      <item>
+        <attribute name="label">Radio 1</attribute>
+        <attribute name="action">top.action3</attribute>
+        <attribute name="target">three</attribute>
+      </item>
+      <item>
+        <attribute name="label">Radio 2</attribute>
+        <attribute name="action">top.action3</attribute>
+        <attribute name="target">four</attribute>
+      </item>
+    </section>
+    <submenu>
+      <attribute name="label">Submenu 1</attribute>
+      <section>
+        <attribute name="label">5555</attribute>
+        <item>
+          <attribute name="label">Item 5</attribute>
+          <attribute name="action">top.action5</attribute>
+        </item>
+        <item>
+          <attribute name="label">Item 5a</attribute>
+          <attribute name="action">top.action5</attribute>
+        </item>
+        <item>
+          <attribute name="label">Item 5b</attribute>
+          <attribute name="action">top.action5</attribute>
+        </item>
+        <item>
+          <attribute name="label">Item 5c</attribute>
+          <attribute name="action">top.action5</attribute>
+        </item>
+        <item>
+          <attribute name="label">Item 5d</attribute>
+          <attribute name="action">top.action5</attribute>
+        </item>
+      </section>
+      <section>
+        <attribute name="label">6666</attribute>
+        <item>
+          <attribute name="label">Item 6</attribute>
+          <attribute name="action">top.action6</attribute>
+        </item>
+        <item>
+          <attribute name="label">Item 6a</attribute>
+          <attribute name="action">top.action6</attribute>
+        </item>
+        <item>
+          <attribute name="label">Item 6b</attribute>
+          <attribute name="action">top.action6</attribute>
+        </item>
+        <item>
+          <attribute name="label">Item 6c</attribute>
+          <attribute name="action">top.action6</attribute>
+        </item>
+        <item>
+          <attribute name="label">Item 6d</attribute>
+          <attribute name="action">top.action6</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label">Submenu 2</attribute>
+      <item>
+        <attribute name="label">Item 7</attribute>
+        <attribute name="action">top.action7</attribute>
+      </item>
+      <submenu>
+        <attribute name="label">Subsubmenu</attribute>
+        <attribute name="icon">preferences-desktop-font</attribute>
+        <item>
+          <attribute name="label">Item 8</attribute>
+          <attribute name="action">action8</attribute>
+        </item>
+        <section>
+          <item>
+            <attribute name="label">Item 9</attribute>
+            <attribute name="action">top.action9</attribute>
+          </item>
+          <item>
+            <attribute name="label">Item 10</attribute>
+            <attribute name="action">top.action10</attribute>
+          </item>
+        </section>
+      </submenu>
+    </submenu>
+    <section>
+      <attribute name="label">End Section</attribute>
+      <item>
+        <attribute name="label">Another Item 9</attribute>
+        <attribute name="action">top.action9</attribute>
+        <attribute name="icon">preferences-desktop-font</attribute>
+      </item>
+      <item>
+        <attribute name="label">Another Item 10</attribute>
+        <attribute name="action">top.action10</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
