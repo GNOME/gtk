@@ -1,3 +1,16 @@
+Overview of Changes in GTK+ 3.8.9
+=================================
+
+* Bugs fixed:
+ 719762 translate_crossing_mode() assertion error sinc...
+        win32: add more width to the slider to not cut...
+        win32: add margin to scale trough
+        win32: set color for scale marks
+        win32: actually match the separator
+        win32: scale slider with marks was off by 2 pixels
+        win32: handle again gtk-font-name
+
+
 Overview of Changes in GTK+ 3.8.8
 =================================
 
