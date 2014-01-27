@@ -90,7 +90,7 @@
  * <example><title>A rule set with two selectors</title>
  * |[
  * GtkButton, GtkEntry {
- *     color: &num;ff00ea;
+ *     color: #ff00ea;
  *     font: Comic Sans 12
  * }
  * ]|
@@ -129,12 +129,12 @@
  * |[
  * /&ast; Theme labels that are descendants of a window &ast;/
  * GtkWindow GtkLabel {
- *     background-color: &num;898989
+ *     background-color: #898989
  * }
  *
  * /&ast; Theme notebooks, and anything that's within these &ast;/
  * GtkNotebook {
- *     background-color: &num;a939f0
+ *     background-color: #a939f0
  * }
  *
  * /&ast; Theme combo boxes, and entries that
@@ -142,7 +142,7 @@
  * GtkComboBox,
  * GtkNotebook > GtkEntry {
  *     color: @fg_color;
- *     background-color: &num;1209a2
+ *     background-color: #1209a2
  * }
  *
  * /&ast; Theme any widget within a GtkBin &ast;/
@@ -151,13 +151,13 @@
  * }
  *
  * /&ast; Theme a label named title-label &ast;/
- * GtkLabel&num;title-label {
+ * GtkLabel#title-label {
  *     font: Sans 15
  * }
  *
  * /&ast; Theme any widget named main-entry &ast;/
- * &num;main-entry {
- *     background-color: &num;f0a810
+ * #main-entry {
+ *     background-color: #f0a810
  * }
  * ]|
  * </example>
@@ -182,12 +182,12 @@
  * |[
  * /&ast; Theme all widgets defining the class entry &ast;/
  * .entry {
- *     color: &num;39f1f9;
+ *     color: #39f1f9;
  * }
  *
  * /&ast; Theme spinbuttons' entry &ast;/
  * GtkSpinButton.entry {
- *     color: &num;900185
+ *     color: #900185
  * }
  * ]|
  * </example>
@@ -216,19 +216,19 @@
  * |[
  * /&ast; Theme any label within a notebook &ast;/
  * GtkNotebook GtkLabel {
- *     color: &num;f90192;
+ *     color: #f90192;
  * }
  *
  * /&ast; Theme labels within notebook tabs &ast;/
  * GtkNotebook tab GtkLabel {
- *     color: &num;703910;
+ *     color: #703910;
  * }
  *
  * /&ast; Theme labels in the any first notebook
  *  tab, both selectors are equivalent &ast;/
  * GtkNotebook tab:nth-child(first) GtkLabel,
  * GtkNotebook tab:first-child GtkLabel {
- *     color: &num;89d012;
+ *     color: #89d012;
  * }
  * ]|
  * </example>
@@ -244,35 +244,35 @@
  * |[
  * /&ast; Theme active (pressed) buttons &ast;/
  * GtkButton:active {
- *     background-color: &num;0274d9;
+ *     background-color: #0274d9;
  * }
  *
  * /&ast; Theme buttons with the mouse pointer on it,
  *    both are equivalent &ast;/
  * GtkButton:hover,
  * GtkButton:prelight {
- *     background-color: &num;3085a9;
+ *     background-color: #3085a9;
  * }
  *
  * /&ast; Theme insensitive widgets, both are equivalent &ast;/
  * :insensitive,
  * *:insensitive {
- *     background-color: &num;320a91;
+ *     background-color: #320a91;
  * }
  *
  * /&ast; Theme selection colors in entries &ast;/
  * GtkEntry:selected {
- *     background-color: &num;56f9a0;
+ *     background-color: #56f9a0;
  * }
  *
  * /&ast; Theme focused labels &ast;/
  * GtkLabel:focused {
- *     background-color: &num;b4940f;
+ *     background-color: #b4940f;
  * }
  *
  * /&ast; Theme inconsistent checkbuttons &ast;/
  * GtkCheckButton:inconsistent {
- *     background-color: &num;20395a;
+ *     background-color: #20395a;
  * }
  * ]|
  * </example>
@@ -296,7 +296,7 @@
  * <example>
  * <title>Using the &commat;import rule</title>
  * |[
- * &commat;import url ("path/to/common.css");
+ * @import url ("path/to/common.css");
  * ]|
  * </example>
  * <para id="css-binding-set">
@@ -315,14 +315,14 @@
  * <example>
  * <title>Using the &commat;binding rule</title>
  * |[
- * &commat;binding-set binding-set1 {
- *   bind "&lt;alt&gt;Left" { "move-cursor" (visual-positions, -3, 0) };
+ * @binding-set binding-set1 {
+ *   bind "<alt>Left" { "move-cursor" (visual-positions, -3, 0) };
  *   unbind "End";
  * };
  *
- * &commat;binding-set binding-set2 {
- *   bind "&lt;alt&gt;Right" { "move-cursor" (visual-positions, 3, 0) };
- *   bind "&lt;alt&gt;KP_space" { "delete-from-cursor" (whitespace, 1)
+ * @binding-set binding-set2 {
+ *   bind "<alt>Right" { "move-cursor" (visual-positions, 3, 0) };
+ *   bind "<alt>KP_space" { "delete-from-cursor" (whitespace, 1)
  *                          "insert-at-cursor" (" ") };
  * };
  *
@@ -340,10 +340,10 @@
  * <example>
  * <title>Defining colors</title>
  * |[
- * &commat;define-color bg_color &num;f9a039;
+ * @define-color bg_color #f9a039;
  *
- * &ast; {
- *     background-color: &commat;bg_color;
+ * * {
+ *     background-color: @bg_color;
  * }
  * ]|
  * </example>
@@ -359,15 +359,15 @@
  * <example>
  * <title>Using symbolic colors</title>
  * |[
- * &commat;define-color entry-color shade (&commat;bg_color, 0.7);
+ * @define-color entry-color shade (@bg_color, 0.7);
  *
  * GtkEntry {
  *     background-color: @entry-color;
  * }
  *
  * GtkEntry:focused {
- *     background-color: mix (&commat;entry-color,
- *                            shade (&num;fff, 0.5),
+ *     background-color: mix (@entry-color,
+ *                            shade (#fff, 0.5),
  *                            0.8);
  * }
  * ]|

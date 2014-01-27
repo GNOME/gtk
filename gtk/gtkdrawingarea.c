@@ -93,8 +93,8 @@
  *
  *   gtk_style_context_get_color (gtk_widget_get_style_context (widget),
  *                                0,
- *                                &amp;color);
- *   gdk_cairo_set_source_rgba (cr, &amp;color);
+ *                                &color);
+ *   gdk_cairo_set_source_rgba (cr, &color);
  *
  *   cairo_fill (cr);
  *

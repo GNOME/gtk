@@ -59,10 +59,10 @@
  * GError *error = NULL;
  *
  * manager = gtk_recent_manager_get_default ();
- * info = gtk_recent_manager_lookup_item (manager, file_uri, &amp;error);
+ * info = gtk_recent_manager_lookup_item (manager, file_uri, &error);
  * if (error)
  *   {
- *     g_warning ("Could not find the file: &percnt;s", error-&gt;message);
+ *     g_warning ("Could not find the file: %s", error->message);
  *     g_error_free (error);
  *   }
  * else

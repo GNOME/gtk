@@ -123,19 +123,19 @@
  * GtkTreeIter parent_iter;
  *
  * /&ast; get the iterator from a string &ast;/
- * gtk_tree_model_get_iter_from_string (model, &amp;iter, "3:2:5");
+ * gtk_tree_model_get_iter_from_string (model, &iter, "3:2:5");
  *
  * /&ast; get the iterator from a path &ast;/
  * path = gtk_tree_path_new_from_string ("3:2:5");
- * gtk_tree_model_get_iter (model, &amp;iter, path);
+ * gtk_tree_model_get_iter (model, &iter, path);
  * gtk_tree_path_free (path);
  *
  * /&ast; walk the tree to find the iterator &ast;/
- * gtk_tree_model_iter_nth_child (model, &amp;iter, NULL, 3);
+ * gtk_tree_model_iter_nth_child (model, &iter, NULL, 3);
  * parent_iter = iter;
- * gtk_tree_model_iter_nth_child (model, &amp;iter, &amp;parent_iter, 2);
+ * gtk_tree_model_iter_nth_child (model, &iter, &parent_iter, 2);
  * parent_iter = iter;
- * gtk_tree_model_iter_nth_child (model, &amp;iter, &amp;parent_iter, 5);
+ * gtk_tree_model_iter_nth_child (model, &iter, &parent_iter, 5);
  * ]|
  * </example>
  *
@@ -170,9 +170,9 @@
  *
  * /&ast; Get the first iter in the list, check it is valid and walk
  *  &ast; through the list, reading each row. &ast;/
- * for (valid = gtk_tree_model_get_iter_first (list_store, &amp;iter);
+ * for (valid = gtk_tree_model_get_iter_first (list_store, &iter);
  *      valid;
- *      valid = gtk_tree_model_iter_next (list_store, &amp;iter))
+ *      valid = gtk_tree_model_iter_next (list_store, &iter))
  *  {
  *    gchar *str_data;
  *    gint   int_data;
@@ -180,9 +180,9 @@
  *    /&ast; Make sure you terminate calls to gtk_tree_model_get()
  *     &ast; with a '-1' value
  *     &ast;/
- *    gtk_tree_model_get (list_store, &amp;iter,
- *                        STRING_COLUMN, &amp;str_data,
- *                        INT_COLUMN, &amp;int_data,
+ *    gtk_tree_model_get (list_store, &iter,
+ *                        STRING_COLUMN, &str_data,
+ *                        INT_COLUMN, &int_data,
  *                        -1);
  *
  *    /&ast; Do something with the data &ast;/

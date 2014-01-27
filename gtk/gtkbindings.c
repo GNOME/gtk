@@ -71,8 +71,8 @@
  * |[
  * @binding-set MoveCursor3
  * {
- *   bind "&lt;Control&gt;Right" { "move-cursor" (visual-positions, 3, 0) };
- *   bind "&lt;Control&gt;Left" { "move-cursor" (visual-positions, -3, 0) };
+ *   bind "<Control>Right" { "move-cursor" (visual-positions, 3, 0) };
+ *   bind "<Control>Left" { "move-cursor" (visual-positions, -3, 0) };
  * }
  * GtkEntry
  * {
@@ -94,8 +94,8 @@
  * |[
  * @binding-set MoveCursor3
  * {
- *   bind "&lt;Control&gt;Right" {  };
- *   bind "&lt;Control&gt;Left" {  };
+ *   bind "<Control>Right" {  };
+ *   bind "<Control>Left" {  };
  * }
  * GtkEntry
  * {
@@ -115,8 +115,8 @@
  * |[
  * @binding-set MoveCursor3
  * {
- *   unbind "&lt;Control&gt;Right";
- *   unbind "&lt;Control&gt;Left";
+ *   unbind "<Control>Right";
+ *   unbind "<Control>Left";
  * }
  * GtkEntry
  * {

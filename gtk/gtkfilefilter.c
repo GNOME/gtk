@@ -53,7 +53,7 @@
  * <object class="GtkFileFilter">
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>
- *     <mime-type>image/&ast;</mime-type>
+ *     <mime-type>image/*</mime-type>
  *   </mime-types>
  *   <patterns>
  *     <pattern>*.txt</pattern>

@@ -11384,7 +11384,7 @@ gtk_XParseGeometry (const char   *string,
  * 				    GDK_HINT_BASE_SIZE | 
  * 				    GDK_HINT_RESIZE_INC);
  *   
- *   if (argc &gt; 1)
+ *   if (argc > 1)
  *     {
  *       if (!gtk_window_parse_geometry (GTK_WINDOW (window), argv[1]))
  *         fprintf (stderr, "Failed to parse '%s'\n", argv[1]);

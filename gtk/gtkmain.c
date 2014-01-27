@@ -1829,14 +1829,14 @@ gtk_main_do_event (GdkEvent *event)
  * <example>
  * <title>A persistent window</title>
  * |[<!-- language="C" -->
- * #include &lt;gtk/gtk.h>&lt;
+ * #include <gtk/gtk.h>
  *
  * int
  * main (int argc, char **argv)
  * {
  *   GtkWidget *win, *but;
  *
- *   gtk_init (&amp;argc, &amp;argv);
+ *   gtk_init (&argc, &argv);
  *
  *   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *   g_signal_connect (win, "delete-event",

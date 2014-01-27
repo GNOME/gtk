@@ -2951,11 +2951,11 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  * Can be handled in the CSS file like this:
  * |[
  * GtkButton {
- *     background-color: &num;f00
+ *     background-color: #f00
  * }
  *
  * GtkButton:hover {
- *     background-color: &num;fff;
+ *     background-color: #fff;
  *     transition: 200ms linear
  * }
  * ]|
