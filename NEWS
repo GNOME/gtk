@@ -1,3 +1,44 @@
+Overview of Changes in GTK+ 3.6.5
+=================================
+
+* Bug fixes:
+ 669808 fullscreen/unscreen was broken for Quartz on OS X
+ 672271 File chooser seems over-enthusiastic about using sub...
+ 687066 gtk 3.6.1 fails to build for win32
+ 688534 gdk 3.6.2 does not build with mesa 9.0.1
+ 691426 get_current_desktop does not interpret property data...
+ 691515 Insufficient checks for EWMH support
+ 691572 Touch: strengthen synthesized touch crossing events...
+ 694742 Fix possible memory leak when GlobalAlloc() fails
+ 694755 When clicking Activities, sometimes gnome-shell cras...
+ 695278 Avoid passing a NULL title to setTitle
+ 695312 Initial 'text' set in the non-numeric-only GtkSpinBu...
+ 696171 GtkAssistant highlighted font unreadable
+ 696202 Add GtkSpinner animation back to Win32 theme 
+        win32: add more width to the slider to not cut it wh...
+        win32: add margin to scale trough
+        win32: set color for scale marks
+        win32: scale slider with marks was off by 2 pixels
+        win32: handle again gtk-font-name
+
+
+* Translation updates:
+ Brazlian Portuguese
+ Catalan
+ Czech
+ French
+ Galician
+ German
+ Hungarian
+ Indonesian
+ Interlingua
+ Lithuanian
+ Polish
+ Serbian
+ Slovenian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.6.4
 =================================
 
