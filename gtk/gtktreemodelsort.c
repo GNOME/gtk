@@ -52,7 +52,7 @@
  *
  * <example>
  * <title>Using a #GtkTreeModelSort</title>
- * |[
+ * |[<!-- language="C" -->
  * {
  *   GtkTreeView *tree_view1;
  *   GtkTreeView *tree_view2;
@@ -88,7 +88,7 @@
  *
  * <example>
  * <title>Accessing the child model of in a selection changed callback</title>
- * |[
+ * |[<!-- language="C" -->
  * void
  * selection_changed (GtkTreeSelection *selection, gpointer data)
  * {

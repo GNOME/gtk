@@ -58,7 +58,7 @@
  * implements a subclass of #GtkIMContext or #GtkIMContextSimple and exports
  * these four functions:
  *
- * |[
+ * |[<!-- language="C" -->
  * void im_module_init(#GTypeModule *module);
  * ]|
  * This function should register the #GType of the #GtkIMContext subclass which
@@ -66,12 +66,12 @@
  * that g_type_register_static() cannot be used as the type needs to be
  * registered dynamically.
  *
- * |[
+ * |[<!-- language="C" -->
  * void im_module_exit(void);
  * ]|
  * Here goes any cleanup code your input method might require on module unload.
  *
- * |[
+ * |[<!-- language="C" -->
  * void im_module_list(const #GtkIMContextInfo ***contexts, int *n_contexts)
  * {
  *   *contexts = info_list;
@@ -83,7 +83,7 @@
  * pointer to statically defined array of #GtkIMContextInfo items for each
  * provided input method.
  *
- * |[
+ * |[<!-- language="C" -->
  * #GtkIMContext * im_module_create(const #gchar *context_id);
  * ]|
  * This function should return a pointer to a newly created instance of the

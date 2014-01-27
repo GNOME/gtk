@@ -43,7 +43,7 @@
  * its expansion state. You should watch this property with a signal
  * connection as follows:
  * </para>
- * |[
+ * |[<!-- language="C" -->
  * expander = gtk_expander_new_with_mnemonic ("_More Options");
  * g_signal_connect (expander, "notify::expanded",
  *                   G_CALLBACK (expander_callback), NULL);

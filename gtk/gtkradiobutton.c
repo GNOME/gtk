@@ -70,7 +70,7 @@
  *
  * <example>
  * <title>How to create a group of two radio buttons.</title>
- * |[
+ * |[<!-- language="C" -->
  * void create_radio_buttons (void) {
  *
  *    GtkWidget *window, *radio1, *radio2, *box, *entry;
@@ -355,7 +355,7 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
  * and gtk_radio_button_set_group() methods
  *
  * A common way to set up a group of radio buttons is the following:
- * |[
+ * |[<!-- language="C" -->
  *   GtkRadioButton *radio_button;
  *   GtkRadioButton *last_button;
  *

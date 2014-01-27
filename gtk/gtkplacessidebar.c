@@ -4790,7 +4790,7 @@ gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar,
  *     A #GSList of #GFile of the locations that have been added as
  *     application-specific shortcuts with gtk_places_sidebar_add_shortcut().
  * To free this list, you can use
- * |[
+ * |[<!-- language="C" -->
  * g_slist_free_full (list, (GDestroyNotify) g_object_unref);
  * ]|
  *

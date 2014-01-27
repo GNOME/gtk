@@ -483,7 +483,7 @@ static const GtkStockItem builtin_items [] =
  * the correct domain when calling dgettext(). This can be useful, e.g.
  * when dealing with message contexts:
  *
- * |[
+ * |[<!-- language="C" -->
  * GtkStockItem items[] = { 
  *  { MY_ITEM1, NC_("odd items", "Item 1"), 0, 0, "odd-item-domain" },
  *  { MY_ITEM2, NC_("even items", "Item 2"), 0, 0, "even-item-domain" },

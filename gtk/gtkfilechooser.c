@@ -111,7 +111,7 @@
  * </para>
  * <example id="example-gtkfilechooser-preview">
  * <title>Sample Usage</title>
- * |[
+ * |[<!-- language="C" -->
  * {
  *   GtkImage *preview;
  *
@@ -160,7 +160,7 @@
  * </para>
  * <example id="example-gtkfilechooser-extra">
  * <title>Sample Usage</title>
- * |[
+ * |[<!-- language="C" -->
  *
  *   GtkWidget *toggle;
  *
@@ -347,7 +347,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * illustrates this.
    * <example id="gtkfilechooser-confirmation">
    * <title>Custom confirmation</title>
-   * |[
+   * |[<!-- language="C" -->
    * static GtkFileChooserConfirmation
    * confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
    * {
@@ -742,7 +742,7 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * a modified version.  If you don't have a file name already &mdash; for
  * example, if the user just created a new file and is saving it for the first
  * time, do not call this function.  Instead, use something similar to this:
- * |[
+ * |[<!-- language="C" -->
  * if (document_is_new)
  *   {
  *     /&ast; the user just created a new document &ast;/
@@ -1094,7 +1094,7 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * modified version.  If you don't have a file name already &mdash; for example,
  * if the user just created a new file and is saving it for the first time, do
  * not call this function.  Instead, use something similar to this:
- * |[
+ * |[<!-- language="C" -->
  * if (document_is_new)
  *   {
  *     /&ast; the user just created a new document &ast;/
@@ -1460,7 +1460,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * a file name already &mdash; for example, if the user just created a new
  * file and is saving it for the first time, do not call this function.
  * Instead, use something similar to this:
- * |[
+ * |[<!-- language="C" -->
  * if (document_is_new)
  *   {
  *     /&ast; the user just created a new document &ast;/

@@ -39,7 +39,7 @@
  *
  * <example>
  * <title>Forcing entry to uppercase.</title>
- * |[
+ * |[<!-- language="C" -->
  * #include &lt;ctype.h&gt;
  *
  * void

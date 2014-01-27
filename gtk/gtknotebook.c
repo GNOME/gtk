@@ -8399,7 +8399,7 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  * destination and accept the target "GTK_NOTEBOOK_TAB". The notebook
  * will fill the selection with a GtkWidget** pointing to the child
  * widget that corresponds to the dropped tab.
- * |[
+ * |[<!-- language="C" -->
  *  static void
  *  on_drop_zone_drag_data_received (GtkWidget        *widget,
  *                                   GdkDragContext   *context,

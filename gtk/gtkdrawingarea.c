@@ -77,7 +77,7 @@
  *
  * <example>
  * <title>Simple GtkDrawingArea usage</title>
- * |[
+ * |[<!-- language="C" -->
  * gboolean
  * draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
  * {

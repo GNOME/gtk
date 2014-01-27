@@ -1676,7 +1676,7 @@ gdk_event_get_source_device (const GdkEvent *event)
  * core pointer. Coordinate extraction, processing and requesting more
  * motion events from a %GDK_MOTION_NOTIFY event usually works like this:
  *
- * |[
+ * |[<!-- language="C" -->
  * {
  *   /&ast; motion_event handler &ast;/
  *   x = motion_event->x;

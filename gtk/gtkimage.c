@@ -52,7 +52,7 @@
  * #GdkPixbuf ("pixel buffer") from a file, and then display that.
  * There's a convenience function to do this, gtk_image_new_from_file(),
  * used as follows:
- * |[
+ * |[<!-- language="C" -->
  *   GtkWidget *image;
  *   image = gtk_image_new_from_file ("myfile.png");
  * ]|
@@ -76,7 +76,7 @@
  * #GtkEventBox, then connect to the event signals on the event box.
  * <example>
  * <title>Handling button press events on a #GtkImage.</title>
- * |[
+ * |[<!-- language="C" -->
  *   static gboolean
  *   button_press_callback (GtkWidget      *event_box,
  *                          GdkEventButton *event,

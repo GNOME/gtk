@@ -37,7 +37,7 @@
  *
  * <example>
  * <title>Using GtkPrintContext in a #GtkPrintOperation::draw-page callback</title>
- * |[
+ * |[<!-- language="C" -->
  * static void
  * draw_page (GtkPrintOperation *operation,
  * 	   GtkPrintContext   *context,

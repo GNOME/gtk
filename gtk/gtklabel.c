@@ -109,7 +109,7 @@
  * using gtk_label_set_mnemonic_widget(). Here's a simple example where
  * the label is inside a button:
  *
- * |[
+ * |[<!-- language="C" -->
  *   // Pressing Alt+H will activate this button
  *   button = gtk_button_new (<!-- -->);
  *   label = gtk_label_new_with_mnemonic ("_Hello");
@@ -119,7 +119,7 @@
  * There's a convenience function to create buttons with a mnemonic label
  * already inside:
  *
- * |[
+ * |[<!-- language="C" -->
  *   // Pressing Alt+H will activate this button
  *   button = gtk_button_new_with_mnemonic ("_Hello");
  * ]|
@@ -128,7 +128,7 @@
  * #GtkEntry, you have to point the label at the entry with
  * gtk_label_set_mnemonic_widget():
  *
- * |[
+ * |[<!-- language="C" -->
  *   // Pressing Alt+H will focus the entry
  *   entry = gtk_entry_new (<!-- -->);
  *   label = gtk_label_new_with_mnemonic ("_Hello");
@@ -144,7 +144,7 @@
  * linkend="PangoMarkupFormat">markup format</link>.
  * Here's how to create a label with a small font:
  *
- * |[
+ * |[<!-- language="C" -->
  *   label = gtk_label_new (NULL);
  *   gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
  * ]|
@@ -216,7 +216,7 @@
  * way they appear in web browsers, with colored, underlined text. The title
  * attribute is displayed as a tooltip on the link. An example looks like this:
  *
- * |[
+ * |[<!-- language="C" -->
  * gtk_label_set_markup (label, "Go to the <a href="http://www.gtk.org" title="&lt;i&gt;Our&lt;/i&gt; website">GTK+ website</a> for more...");
  * ]|
  *
@@ -2612,7 +2612,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
  * label's text and attribute list based on the parse results. If the @str is
  * external data, you may need to escape it with g_markup_escape_text() or
  * g_markup_printf_escaped()<!-- -->:
- * |[
+ * |[<!-- language="C" -->
  * char *markup;
  *
  * markup = g_markup_printf_escaped ("&lt;span style=\"italic\"&gt;&percnt;s&lt;/span&gt;", str);

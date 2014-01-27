@@ -40,7 +40,7 @@
  *
  * Adding a new recently used file is as simple as:
  *
- * |[
+ * |[<!-- language="C" -->
  * GtkRecentManager *manager;
  *
  * manager = gtk_recent_manager_get_default ();
@@ -53,7 +53,7 @@
  * Looking up the meta-data associated with a recently used file
  * given its URI requires calling gtk_recent_manager_lookup_item():
  *
- * |[
+ * |[<!-- language="C" -->
  * GtkRecentManager *manager;
  * GtkRecentInfo *info;
  * GError *error = NULL;

@@ -607,7 +607,7 @@
  * <literal>*</literal>. So for example, the following specifies different icons to
  * use for left-to-right and right-to-left languages:
  *
- * |[
+ * |[<!-- language="C" -->
  * stock["my-stock-item"] =
  * {
  *   { "itemltr.png", LTR, *, * },
@@ -617,7 +617,7 @@
  *
  * This could be abbreviated as follows:
  *
- * |[
+ * |[<!-- language="C" -->
  * stock["my-stock-item"] =
  * {
  *   { "itemltr.png", LTR },
@@ -627,7 +627,7 @@
  *
  * You can specify custom icons for specific sizes, as follows:
  *
- * |[
+ * |[<!-- language="C" -->
  * stock["my-stock-item"] =
  * {
  *   { "itemmenusize.png", *, *, "gtk-menu" },
@@ -643,7 +643,7 @@
  *
  * It's also possible to use custom icons for a given state, for example:
  *
- * |[
+ * |[<!-- language="C" -->
  * stock["my-stock-item"] =
  * {
  *   { "itemprelight.png", *, PRELIGHT },
@@ -1499,7 +1499,7 @@ gtk_rc_get_style (GtkWidget *widget)
  * would be items inside a GNOME canvas widget.
  *
  * The action of gtk_rc_get_style() is similar to:
- * |[
+ * |[<!-- language="C" -->
  *  gtk_widget_path (widget, NULL, &path, NULL);
  *  gtk_widget_class_path (widget, NULL, &class_path, NULL);
  *  gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget),

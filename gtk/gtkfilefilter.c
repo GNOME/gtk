@@ -351,7 +351,7 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
  * gtk_file_filter_add_mime_type(), gtk_file_filter_add_pattern(),
  * or gtk_file_filter_add_custom(). To create a filter
  * that accepts any file, use:
- * |[
+ * |[<!-- language="C" -->
  * GtkFileFilter *filter = gtk_file_filter_new ();
  * gtk_file_filter_add_pattern (filter, "*");
  * ]|

@@ -41,7 +41,7 @@
  * </para>
  * <example>
  * <title>A class fragment implementing #GtkActivatable</title>
- * |[
+ * |[<!-- language="C" -->
  *
  * enum {
  * ...

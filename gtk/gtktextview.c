@@ -7385,7 +7385,7 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
  * you need to insert your own key handling between the input method
  * and the default key event handling of the #GtkTextView.
  *
- * |[
+ * |[<!-- language="C" -->
  * static gboolean
  * gtk_foo_bar_key_press_event (GtkWidget   *widget,
  *                              GdkEventKey *event)

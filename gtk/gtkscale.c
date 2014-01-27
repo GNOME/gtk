@@ -281,7 +281,7 @@ gtk_scale_class_init (GtkScaleClass *class)
    *
    * Here's an example signal handler which displays a value 1.0 as
    * with "--&gt;1.0&lt;--".
-   * |[
+   * |[<!-- language="C" -->
    * static gchar*
    * format_value_callback (GtkScale *scale,
    *                        gdouble   value)

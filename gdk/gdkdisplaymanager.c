@@ -87,7 +87,7 @@
  *
  * <example id="backend-specific">
  * <title>Backend-specific code</title>
- * |[
+ * |[<!-- language="C" -->
  * #ifdef GDK_WINDOWING_X11
  *   if (GDK_IS_X11_DISPLAY (display))
  *     {
@@ -225,7 +225,7 @@ static const gchar *allowed_backends;
  * By default, GDK tries all included backends.
  *
  * For example,
- * |[
+ * |[<!-- language="C" -->
  * gdk_set_allowed_backends ("wayland,quartz,*");
  * ]|
  * instructs GDK to try the Wayland backend first,

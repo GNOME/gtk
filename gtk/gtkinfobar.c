@@ -74,7 +74,7 @@
  *
  * <example>
  * <title>Simple GtkInfoBar usage.</title>
- * |[
+ * |[<!-- language="C" -->
  * /&ast; set up info bar &ast;/
  * info_bar = gtk_info_bar_new ();
  * gtk_widget_set_no_show_all (info_bar, TRUE);

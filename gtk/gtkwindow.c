@@ -11351,7 +11351,7 @@ gtk_XParseGeometry (const char   *string,
  * to be called when the window has its "final" size, i.e. after calling
  * gtk_widget_show_all() on the contents and gtk_window_set_geometry_hints()
  * on the window.
- * |[
+ * |[<!-- language="C" -->
  * #include <gtk/gtk.h>
  *    
  * static void

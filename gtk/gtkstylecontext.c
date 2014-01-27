@@ -101,7 +101,7 @@
  * </para>
  * <example>
  * <title>Using an enumeration to identify  animatable regions</title>
- * |[
+ * |[<!-- language="C" -->
  * enum {
  *   REGION_ENTRY,
  *   REGION_BUTTON_UP,
@@ -138,7 +138,7 @@
  * </para>
  * <example>
  * <title>Using struct pointers to identify animatable regions</title>
- * |[
+ * |[<!-- language="C" -->
  * void
  * notebook_draw_tab (GtkWidget    *widget,
  *                    NotebookPage *page,
@@ -156,7 +156,7 @@
  * </para>
  * <example>
  * <title>Triggering a state change animation on a region</title>
- * |[
+ * |[<!-- language="C" -->
  * gboolean
  * notebook_motion_notify (GtkWidget      *widget,
  *                         GdkEventMotion *event)
@@ -2940,7 +2940,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  *
  * As a practical example, a #GtkButton notifying a state transition on
  * the prelight state:
- * |[
+ * |[<!-- language="C" -->
  * gtk_style_context_notify_state_change (context,
  *                                        gtk_widget_get_window (widget),
  *                                        NULL,

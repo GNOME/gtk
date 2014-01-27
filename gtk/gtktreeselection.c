@@ -542,7 +542,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * To do this, you can use gtk_tree_row_reference_new().
  *
  * To free the return value, use:
- * |[
+ * |[<!-- language="C" -->
  * g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
  * ]|
  *

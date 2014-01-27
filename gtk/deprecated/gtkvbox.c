@@ -51,7 +51,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * from #GtkBox, and set the #GtkOrientable:orientation property to
  * %GTK_ORIENTATION_VERTICAL in your instance init function, with a
  * call like:
- * |[
+ * |[<!-- language="C" -->
  *   gtk_orientable_set_orientation (GTK_ORIENTABLE (object),
  *                                   GTK_ORIENTATION_VERTICAL);
  * ]|

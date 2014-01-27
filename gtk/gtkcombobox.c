@@ -623,7 +623,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    *
    * Here's an example signal handler which fetches data from the model and
    * displays it in the entry.
-   * |[
+   * |[<!-- language="C" -->
    * static gchar*
    * format_entry_text_callback (GtkComboBox *combo,
    *                             const gchar *path,

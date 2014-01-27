@@ -50,7 +50,7 @@
  *
  * <example>
  * <title>A page setup dialog</title>
- * |[
+ * |[<!-- language="C" -->
  * static GtkPrintSettings *settings = NULL;
  * static GtkPageSetup *page_setup = NULL;
  *

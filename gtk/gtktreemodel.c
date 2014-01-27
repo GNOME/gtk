@@ -116,7 +116,7 @@
  *
  * <example>
  * <title>Acquiring a #GtkTreeIter-struct</title>
- * |[
+ * |[<!-- language="C" -->
  *  /&ast; Three ways of getting the iter pointing to the location &ast;/
  * GtkTreePath *path;
  * GtkTreeIter iter;
@@ -147,7 +147,7 @@
  *
  * <example>
  * <title>Reading data from a #GtkTreeModel</title>
- * |[
+ * |[<!-- language="C" -->
  * enum
  * {
  *   STRING_COLUMN,

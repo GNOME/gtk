@@ -60,7 +60,7 @@
  *
  * <example>
  * <title>Creating two #GtkToggleButton widgets.</title>
- * |[
+ * |[<!-- language="C" -->
  * void make_toggles (void) {
  *    GtkWidget *dialog, *toggle1, *toggle2;
  *

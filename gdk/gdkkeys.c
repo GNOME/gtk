@@ -503,7 +503,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * <literal>&lt;Control&gt;plus</literal> accelerator &lt;Shift&gt; should
  * be masked out.
  * </para>
- * |[
+ * |[<!-- language="C" -->
  * &sol;* We want to ignore irrelevant modifiers like ScrollLock *&sol;
  * &num;define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
  * gdk_keymap_translate_keyboard_state (keymap, event->hardware_keycode,
@@ -518,7 +518,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * all modifiers that might affect the translation of the key;
  * this allowed accelerators to be stored with irrelevant consumed
  * modifiers, by doing:</para>
- * |[
+ * |[<!-- language="C" -->
  * &sol;* XXX Don't do this XXX *&sol;
  * if (keyval == accel_keyval &&
  *     (event->state &amp; ~consumed &amp; ALL_ACCELS_MASK) == (accel_mods &amp; ~consumed))

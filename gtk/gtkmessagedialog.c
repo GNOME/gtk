@@ -59,7 +59,7 @@
  * returns when any dialog button is clicked.
  * <example>
  * <title>A modal dialog.</title>
- * |[
+ * |[<!-- language="C" -->
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
  *                                   GTK_MESSAGE_ERROR,
@@ -73,7 +73,7 @@
  * You might do a non-modal #GtkMessageDialog as follows:
  * <example>
  * <title>A non-modal dialog.</title>
- * |[
+ * |[<!-- language="C" -->
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
  *                                   GTK_MESSAGE_ERROR,
@@ -610,7 +610,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * instead, since you can't pass the markup string either
  * as the format (it might contain '%' characters) or as a string
  * argument.
- * |[
+ * |[<!-- language="C" -->
  *  GtkWidget *dialog;
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -800,7 +800,7 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  * may contain special XML characters, you should use g_markup_printf_escaped()
  * to escape it.
 
- * |[
+ * |[<!-- language="C" -->
  * gchar *msg;
  *
  * msg = g_markup_printf_escaped (message_format, ...);

@@ -421,7 +421,7 @@ struct _GdkWindowAttr
  * Here's an example of how the terminal example would be implemented, assuming
  * a terminal area widget called "terminal" and a toplevel window "toplevel":
  *
- * |[
+ * |[<!-- language="C" -->
  * 	GdkGeometry hints;
  *
  * 	hints.base_width = terminal->char_width;

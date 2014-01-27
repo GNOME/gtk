@@ -1498,7 +1498,7 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
  * Calling
  * <literal>gtk_tree_store_insert_with_values (tree_store, iter, position, ...)</literal>
  * has the same effect as calling
- * |[
+ * |[<!-- language="C" -->
  * gtk_tree_store_insert (tree_store, iter, position);
  * gtk_tree_store_set (tree_store, iter, ...);
  * ]|

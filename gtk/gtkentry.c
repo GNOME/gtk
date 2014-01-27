@@ -7709,7 +7709,7 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  *
  * This is equivalent to:
  *
- * |[
+ * |[<!-- language="C" -->
  * gtk_entry_buffer_get_text (gtk_entry_get_buffer (entry));
  * ]|
  *
@@ -7739,7 +7739,7 @@ gtk_entry_get_text (GtkEntry *entry)
  *
  * This is equivalent to:
  *
- * |[
+ * |[<!-- language="C" -->
  * gtk_entry_buffer_set_max_length (gtk_entry_get_buffer (entry), max);
  * ]|
  **/
@@ -7760,7 +7760,7 @@ gtk_entry_set_max_length (GtkEntry     *entry,
  *
  * This is equivalent to:
  *
- * |[
+ * |[<!-- language="C" -->
  * gtk_entry_buffer_get_max_length (gtk_entry_get_buffer (entry));
  * ]|
  *
@@ -7784,7 +7784,7 @@ gtk_entry_get_max_length (GtkEntry *entry)
  *
  * This is equivalent to:
  *
- * |[
+ * |[<!-- language="C" -->
  * gtk_entry_buffer_get_length (gtk_entry_get_buffer (entry));
  * ]|
  *

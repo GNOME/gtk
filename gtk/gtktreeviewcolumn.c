@@ -1653,7 +1653,7 @@ gtk_tree_view_column_new_with_area (GtkCellArea *area)
  * gtk_tree_view_column_set_attributes() on the newly created #GtkTreeViewColumn.
  *
  * Here's a simple example:
- * |[
+ * |[<!-- language="C" -->
  *  enum { TEXT_COLUMN, COLOR_COLUMN, N_COLUMNS };
  *  ...
  *  {

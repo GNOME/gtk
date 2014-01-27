@@ -90,7 +90,7 @@
  * to the fact that these widgets internally use a #GtkCellArea.
  * The cell area is exposed as a construct-only property by these
  * widgets. This means that it is possible to e.g. do
- * |[
+ * |[<!-- language="C" -->
  * combo = g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", my_cell_area, NULL);
  * ]|
  * to use a custom cell area with a combo box. But construct properties
@@ -100,7 +100,7 @@
  * cause the default cell area to be instantiated. In this case, a provided
  * construct property value will be ignored (with a warning, to alert
  * you to the problem).
- * |[
+ * |[<!-- language="C" -->
  * static void
  * my_combo_box_init (MyComboBox *b)
  * {

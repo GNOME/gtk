@@ -1375,7 +1375,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * There's no way to set a default action here, you can use the
  * #GtkWidget::drag-motion callback for that. Here's an example which selects
  * the action to use depending on whether the control key is pressed or not:
- * |[
+ * |[<!-- language="C" -->
  * static void
  * drag_motion (GtkWidget *widget,
  *              GdkDragContext *context,

@@ -79,7 +79,7 @@
  * using gtk_header_bar_set_show_close_button().
  *
  * <example><title>A GtkApplicationWindow with a menubar</title>
- * |[
+ * |[<!-- language="C" -->
  * app = gtk_application_new ();
  *
  * builder = gtk_builder_new ();
@@ -103,7 +103,7 @@
  * </example>
  *
  * <example><title>Handling fallback yourself</title>
- * |[
+ * |[<!-- language="C" -->
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/sunny.c">
  *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>

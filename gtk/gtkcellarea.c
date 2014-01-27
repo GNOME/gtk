@@ -74,7 +74,7 @@
  * of a #GtkTreeModel one would do the following:
  * <example>
  *   <title>Requesting the width of a handful of GtkTreeModel rows</title>
- *   |[
+ *   |[<!-- language="C" -->
  * GtkTreeIter iter;
  * gint        minimum_width;
  * gint        natural_width;
@@ -110,7 +110,7 @@
  * take up the full width of the layouting widget would look like:
  * <example>
  *   <title>A typical get_preferred_width(<!-- -->) implementation</title>
- *   |[
+ *   |[<!-- language="C" -->
  * static void
  * foo_get_preferred_width (GtkWidget       *widget,
  *                          gint            *minimum_size,
@@ -142,7 +142,7 @@
  * root level of a #GtkTreeModel one would do the following:
  * <example>
  *   <title>Requesting the height for width of a handful of GtkTreeModel rows</title>
- *   |[
+ *   |[<!-- language="C" -->
  * GtkTreeIter iter;
  * gint        minimum_height;
  * gint        natural_height;
@@ -199,7 +199,7 @@
  * runs as follows:
  * <example>
  *   <title>Requesting the width of a handful of GtkTreeModel rows</title>
- *   |[
+ *   |[<!-- language="C" -->
  * GtkAllocation allocation;
  * GdkRectangle  cell_area = { 0, };
  * GtkTreeIter   iter;
@@ -264,7 +264,7 @@
  * should be implemented:
  * <example>
  *   <title>Implementing keyboard focus navigation</title>
- *   |[
+ *   |[<!-- language="C" -->
  * static gboolean
  * foo_focus (GtkWidget       *widget,
  *            GtkDirectionType direction)

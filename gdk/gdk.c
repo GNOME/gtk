@@ -502,7 +502,7 @@ gdk_init (int *argc, char ***argv)
  *
  * A minimal main program for a threaded GTK+ application
  * looks like:
- * |[
+ * |[<!-- language="C" -->
  * int
  * main (int argc, char *argv[])
  * {
@@ -532,7 +532,7 @@ gdk_init (int *argc, char ***argv)
  *
  * Erik Mouw contributed the following code example to
  * illustrate how to use threads within GTK+ programs.
- * |[
+ * |[<!-- language="C" -->
  * /<!---->*-------------------------------------------------------------------------
  *  * Filename:      gtk-thread.c
  *  * Version:       0.99.1
@@ -843,7 +843,7 @@ gdk_threads_dispatch_free (gpointer data)
  * running in thread A and accessing @self after it has been finalized
  * in thread B:
  *
- * |[
+ * |[<!-- language="C" -->
  * static gboolean
  * idle_callback (gpointer data)
  * {
@@ -949,7 +949,7 @@ gdk_threads_add_idle (GSourceFunc    function,
  * This variant of g_timeout_add_full() can be thought of a MT-safe version 
  * for GTK+ widgets for the following use case:
  *
- * |[
+ * |[<!-- language="C" -->
  * static gboolean timeout_callback (gpointer data)
  * {
  *    SomeWidget *self = data;

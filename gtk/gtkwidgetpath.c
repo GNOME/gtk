@@ -42,7 +42,7 @@
  * The widget path generation is generally simple:
  * <example>
  * <title>Defining a button within a window</title>
- * |[
+ * |[<!-- language="C" -->
  * {
  *   GtkWidgetPath *path;
  *
@@ -59,7 +59,7 @@
  *
  * <example>
  * <title>Defining the first tab widget in a notebook</title>
- * |[
+ * |[<!-- language="C" -->
  * {
  *   GtkWidgetPath *path;
  *   guint pos;

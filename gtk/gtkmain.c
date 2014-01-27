@@ -55,7 +55,7 @@
  * </para>
  * <example>
  * <title>Typical main() function for a GTK+ application</title>
- * |[
+ * |[<!-- language="C" -->
  * int
  * main (int argc, char **argv)
  * {
@@ -1121,7 +1121,7 @@ gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof
  * changed after GTK+ has already been initialized. In this case,
  * you can use it to update the default text direction as follows:
  *
- * |[
+ * |[<!-- language="C" -->
  * setlocale (LC_ALL, new_locale);
  * direction = gtk_get_locale_direction ();
  * gtk_widget_set_default_direction (direction);
@@ -1253,7 +1253,7 @@ gtk_main_quit (void)
  *
  * <example>
  * <title>Updating the UI during a long computation</title>
- * |[
+ * |[<!-- language="C" -->
  *  /&ast; computation going on... &ast;/
  *
  *  while (gtk_events_pending ())
@@ -1828,7 +1828,7 @@ gtk_main_do_event (GdkEvent *event)
  *
  * <example>
  * <title>A persistent window</title>
- * |[
+ * |[<!-- language="C" -->
  * #include &lt;gtk/gtk.h>&lt;
  *
  * int

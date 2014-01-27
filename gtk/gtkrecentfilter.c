@@ -406,7 +406,7 @@ gtk_recent_filter_buildable_custom_tag_end (GtkBuildable *buildable,
  * gtk_recent_filter_add_pattern(), gtk_recent_filter_add_mime_type(),
  * gtk_recent_filter_add_application(), gtk_recent_filter_add_age().
  * To create a filter that accepts any recently used resource, use:
- * |[
+ * |[<!-- language="C" -->
  * GtkRecentFilter *filter = gtk_recent_filter_new ();
  * gtk_recent_filter_add_pattern (filter, "*");
  * ]|

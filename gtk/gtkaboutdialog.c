@@ -84,7 +84,7 @@
  * application, but in order to ensure proper translation of the title,
  * applications should set the title property explicitly when constructing
  * a GtkAboutDialog, as shown in the following example:
- * |[
+ * |[<!-- language="C" -->
  * gtk_show_about_dialog (NULL,
  *                        "program-name", "ExampleCode",
  *                        "logo", example_logo,
@@ -1653,7 +1653,7 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
  * of the language which is currently used in the user interface.
  * Using gettext(), a simple way to achieve that is to mark the
  * string for translation:
- * |[
+ * |[<!-- language="C" -->
  *  gtk_about_dialog_set_translator_credits (about, _("translator-credits"));
  * ]|
  * It is a good idea to use the customary msgid "translator-credits" for this

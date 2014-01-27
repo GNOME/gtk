@@ -35,7 +35,7 @@
  *
  * <example>
  * <title>Adding a custom offset on the bar</title>
- * |[
+ * |[<!-- language="C" -->
  *
  * static GtkWidget *
  * create_level_bar (void)

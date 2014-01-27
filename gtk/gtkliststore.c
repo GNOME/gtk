@@ -55,7 +55,7 @@
  *
  * <example>
  * <title>Creating a simple list store.</title>
- * |[
+ * |[<!-- language="C" -->
  * enum {
  *   COLUMN_STRING,
  *   COLUMN_INT,
@@ -157,7 +157,7 @@
  *
  * <example>
  * <title>A UI Definition fragment for a list store</title>
- * |[
+ * |[<!-- language="C" -->
  * <object class="GtkListStore">
  *   <columns>
  *     <column type="gchararray"/>
@@ -2174,7 +2174,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * Calling
  * <literal>gtk_list_store_insert_with_values (list_store, iter, position...)</literal>
  * has the same effect as calling
- * |[
+ * |[<!-- language="C" -->
  * gtk_list_store_insert (list_store, iter, position);
  * gtk_list_store_set (list_store, iter, ...);
  * ]|

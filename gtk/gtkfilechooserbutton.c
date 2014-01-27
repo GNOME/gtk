@@ -72,7 +72,7 @@
  *
  * <example>
  * <title>Create a button to let the user select a file in /etc</title>
- * |[
+ * |[<!-- language="C" -->
  * {
  *   GtkWidget *button;
  *

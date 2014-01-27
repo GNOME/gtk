@@ -108,7 +108,7 @@
  * the container must return the height for its minimum width. This is easily achieved by
  * simply calling the reverse apis implemented for itself as follows:
  *
- * |[
+ * |[<!-- language="C" -->
  * static void
  * foo_container_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
  * {
@@ -132,7 +132,7 @@
  * Similarly, when gtk_widget_get_preferred_width_for_height() is called for a container or widget
  * that is height-for-width, it then only needs to return the base minimum width like so:
  *
- * |[
+ * |[<!-- language="C" -->
  * static void
  * foo_container_get_preferred_width_for_height (GtkWidget *widget, gint for_height,
  *                                               gint *min_width, gint *nat_width)

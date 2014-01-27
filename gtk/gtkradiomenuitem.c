@@ -48,7 +48,7 @@
  *
  * <example>
  * <title>How to create a group of radio menu items.</title>
- * |[
+ * |[<!-- language="C" -->
  * GSList *group = NULL;
  * GtkWidget *item;
  * gint i;

@@ -36,7 +36,7 @@
  * screen or workspace.
  * <example>
  * <title>Launching an application</title>
- * |[
+ * |[<!-- language="C" -->
  * GdkAppLaunchContext *context;
  *
  * context = gdk_display_get_app_launch_context (display);

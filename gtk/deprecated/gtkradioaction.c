@@ -402,7 +402,7 @@ create_menu_item (GtkAction *action)
  * to the group. 
  *
  * A common way to set up a group of radio group is the following:
- * |[
+ * |[<!-- language="C" -->
  *   GSList *group = NULL;
  *   GtkRadioAction *action;
  *  
@@ -492,7 +492,7 @@ gtk_radio_action_set_group (GtkRadioAction *action,
  * and gtk_radio_action_set_group() methods
  *
  * A common way to set up a group of radio actions is the following:
- * |[
+ * |[<!-- language="C" -->
  *   GtkRadioAction *action;
  *   GtkRadioAction *last_action;
  *  

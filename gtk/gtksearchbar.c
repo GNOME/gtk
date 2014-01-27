@@ -56,7 +56,7 @@
  *
  * <example>
  * <title>Creating a search bar</title>
- * |[
+ * |[<!-- language="C" -->
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/search-bar.c">
  *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
@@ -168,7 +168,7 @@ preedit_changed_cb (GtkEntry  *entry,
  *
  * <example>
  * <title>Showing the search bar on key presses</title>
- * |[
+ * |[<!-- language="C" -->
  * static gboolean
  * window_key_press_event_cb (GtkWidget *widget,
  *                            GdkEvent  *event,

@@ -155,7 +155,7 @@
  * Here are some examples of how a %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH widget
  * generally deals with width-for-height requests, for #GtkWidgetClass.get_preferred_height()
  * it will do:
- * |[
+ * |[<!-- language="C" -->
  * static void
  * foo_widget_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
  * {
@@ -178,7 +178,7 @@
  * And in #GtkWidgetClass.get_preferred_width_for_height() it will simply return
  * the minimum and natural width:
  *
- * |[
+ * |[<!-- language="C" -->
  * static void
  * foo_widget_get_preferred_width_for_height (GtkWidget *widget, gint for_height,
  *                                            gint *min_width, gint *nat_width)
@@ -203,7 +203,7 @@
  * be careful to call its virtual methods directly, like this:
  * <example>
  *   <title>Widget calling its own size request method.</title>
- *   |[
+ *   |[<!-- language="C" -->
  * GTK_WIDGET_GET_CLASS(widget)-&gt;get_preferred_width (widget),
  *                                  &min, &natural);
  *   ]|
@@ -2958,7 +2958,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * last #GtkWidget::drag-leave and if not, treat the drag-motion signal as
    * an "enter" signal. Upon an "enter", the handler will typically highlight
    * the drop site with gtk_drag_highlight().
-   * |[
+   * |[<!-- language="C" -->
    * static void
    * drag_motion (GtkWidget      *widget,
    *              GdkDragContext *context,
@@ -3126,7 +3126,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * gdk_drag_context_get_selected_action() before calling
    * gtk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as
    * shown in the following example:
-   * |[
+   * |[<!-- language="C" -->
    * void
    * drag_data_received (GtkWidget          *widget,
    *                     GdkDragContext     *context,
@@ -10781,7 +10781,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  * To reliably find the toplevel #GtkWindow, use
  * gtk_widget_get_toplevel() and call gtk_widget_is_toplevel()
  * on the result.
- * |[
+ * |[<!-- language="C" -->
  *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
  *  if (gtk_widget_is_toplevel (toplevel))
  *    {
@@ -11117,7 +11117,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  * builders might want to treat them in a different way.
  *
  * Here is a simple example:
- * |[
+ * |[<!-- language="C" -->
  *   gtk_widget_push_composite_child ();
  *   scrolled_window->hscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
  *   gtk_widget_set_composite_name (scrolled_window->hscrollbar, "hscrollbar");
@@ -15312,7 +15312,7 @@ _gtk_widget_set_has_focus (GtkWidget *widget,
  *
  * An example of its usage is:
  *
- * |[
+ * |[<!-- language="C" -->
  *   GdkEvent *fevent = gdk_event_new (GDK_FOCUS_CHANGE);
  *
  *   fevent->focus_change.type = GDK_FOCUS_CHANGE;

@@ -61,7 +61,7 @@
  *
  * <example>
  * <title>The high-level printing API</title>
- * |[
+ * |[<!-- language="C" -->
  * static GtkPrintSettings *settings = NULL;
  *
  * static void
@@ -853,7 +853,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Emitted for every page that is printed. The signal handler
    * must render the @page_nr's page onto the cairo context obtained
    * from @context using gtk_print_context_get_cairo_context().
-   * |[
+   * |[<!-- language="C" -->
    * static void
    * draw_page (GtkPrintOperation *operation,
    *            GtkPrintContext   *context,
@@ -3117,7 +3117,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * #GtkPrintOperation::done signal will be emitted with the result of the 
  * operation when the it is done (i.e. when the dialog is canceled, or when 
  * the print succeeds or fails).
- * |[
+ * |[<!-- language="C" -->
  * if (settings != NULL)
  *   gtk_print_operation_set_print_settings (print, settings);
  *   

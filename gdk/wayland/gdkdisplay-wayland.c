@@ -49,7 +49,7 @@
  * calls by an ifdef as follows. Since GDK may be built with multiple
  * backends, you should also check for the backend that is in use (e.g. by
  * using the GDK_IS_WAYLAND_DISPLAY() macro).
- * |[
+ * |[<!-- language="C" -->
  * #ifdef GDK_WINDOWING_WAYLAND
  *   if (GDK_IS_WAYLAND_DISPLAY (display))
  *     {

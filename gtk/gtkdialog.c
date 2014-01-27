@@ -98,7 +98,7 @@
  * in the dialog.
  * <example>
  * <title>Simple GtkDialog usage</title>
- * |[
+ * |[<!-- language="C" -->
  * /&ast; Function to open a dialog box displaying the message provided. &ast;/
  * void
  * quick_message (gchar *message)
@@ -848,7 +848,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * so the first button in the list will be the leftmost button in the dialog.
  *
  * Here's a simple example:
- * |[
+ * |[<!-- language="C" -->
  *  GtkWidget *dialog = gtk_dialog_new_with_buttons ("My dialog",
  *                                                   main_app_window,
  *                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1227,7 +1227,7 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  * destroying the dialog if you wish to do so.
  *
  * Typical usage of this function might be:
- * |[
+ * |[<!-- language="C" -->
  *   gint result = gtk_dialog_run (GTK_DIALOG (dialog));
  *   switch (result)
  *     {
@@ -1471,7 +1471,7 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
  *
  * Use this function after adding all the buttons to your dialog, as the
  * following example shows:
- * |[
+ * |[<!-- language="C" -->
  * cancel_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
  *                                        _("_Cancel"),
  *                                        GTK_RESPONSE_CANCEL);

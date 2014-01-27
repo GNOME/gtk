@@ -67,7 +67,7 @@
  * though it is almost always used to display just one accelerator key.
  * <example>
  * <title>Creating a simple menu item with an accelerator key.</title>
- * |[
+ * |[<!-- language="C" -->
  *   GtkWidget *save_item;
  *   GtkAccelGroup *accel_group;
  *

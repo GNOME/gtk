@@ -53,7 +53,7 @@
  * to a #GtkToolPalette. To add a #GtkToolItemGroup to a #GtkToolPalette,
  * use gtk_container_add().
  *
- * |[
+ * |[<!-- language="C" -->
  * GtkWidget *palette, *group;
  * GtkToolItem *item;
  *
@@ -72,7 +72,7 @@
  * can be used to get the dragged item in the #GtkWidget::drag-data-received
  * signal handler of the drag target.
  *
- * |[
+ * |[<!-- language="C" -->
  * static void
  * passive_canvas_drag_data_received (GtkWidget        *widget,
  *                                    GdkDragContext   *context,

@@ -86,7 +86,7 @@
  * need to be aware that settings that are specific to individual widgets
  * may not be available before the widget type has been realized at least
  * once. The following example demonstrates a way to do this:
- * |[
+ * |[<!-- language="C" -->
  *   gtk_init (&argc, &argv);
  *
  *   /&ast; make sure the type is realized &ast;/
