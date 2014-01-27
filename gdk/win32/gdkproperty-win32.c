@@ -406,7 +406,6 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
-#if 0
   /*
    * With 'MS Sans Serif' as windows menu font (default on win98se) you'll get a 
    * bunch of :
@@ -423,7 +422,7 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
           /* Pango finally uses GetDeviceCaps to scale, we use simple
 	   * approximation here.
 	   */
-          int nHeight = (0 > ncm.lfMenuFont.lfHeight ? -3*ncm.lfMenuFont.lfHeight/4 : 10);
+          int nHeight = (0 > ncm.lfMenuFont.lfHeight ? - 3 * ncm.lfMenuFont.lfHeight / 4 : 10);
           if (OUT_STRING_PRECIS == ncm.lfMenuFont.lfOutPrecision)
             GDK_NOTE(MISC, g_print("gdk_screen_get_setting(%s) : ignoring bitmap font '%s'\n", 
                                    name, ncm.lfMenuFont.lfFaceName));
@@ -431,7 +430,7 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
                    /* Avoid issues like those described in bug #135098 */
                    g_utf8_validate (ncm.lfMenuFont.lfFaceName, -1, NULL))
             {
-              char* s = g_strdup_printf ("%s %d", ncm.lfMenuFont.lfFaceName, nHeight);
+              char *s = g_strdup_printf ("%s %d", ncm.lfMenuFont.lfFaceName, nHeight);
               GDK_NOTE(MISC, g_print("gdk_screen_get_setting(%s) : %s\n", name, s));
               g_value_set_string (value, s);
 
@@ -440,7 +439,6 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
             }
         }
     }
-#endif
 
   return FALSE;
 }
