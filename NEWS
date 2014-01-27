@@ -1,3 +1,31 @@
+Overview of Changes in GTK+ 3.10.6 to 3.10.7
+============================================
+
+* Bugs fixed:
+ 386569 GtkFileChooser enters first file name into the entry...
+ 709491 dark theme setting not propagated to vertical spinbu...
+ 711298 "Edit Scheduled Transaction" window way too modal
+ 719314 gdk_property_change segfault on multiple X protocol...
+ 719970 Fails to build: gdkevents-quartz.c:1692:58: error: ...
+ 719977 Can not use GtkFileChooserDialog: assertion failure
+ 721700 invalid callback prototypes leads to test issues 
+        win32: add more width to the slider to not cut it w...
+        win32: add margin to scale trough
+        win32: set color for scale marks
+        win32: scale slider with marks was off by 2 pixels
+        win32: handle again gtk-font-name
+
+* Translation updates:
+ Czech
+ German
+ Greek
+ Hungarian
+ Punjabi
+ Russian
+ Simplified Chinese
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.10.5 to 3.10.6
 ============================================
 
