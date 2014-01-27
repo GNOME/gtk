@@ -1586,7 +1586,7 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
 /**
  * gtk_builder_connect_signals:
  * @builder: a #GtkBuilder
- * @user_data: a pointer to a structure sent in as user data to all signals
+ * @user_data: user data to pass back with all signals
  *
  * This method is a simpler variation of gtk_builder_connect_signals_full().
  * It uses symbols explicitly added to @builder with prior calls to

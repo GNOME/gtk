@@ -84,7 +84,7 @@ typedef enum
  * @user_data2: model-specific data
  * @user_data3: model-specific data
  *
- * The <structname>GtkTreeIter</structname> is the primary structure
+ * The #GtkTreeIter is the primary structure
  * for accessing a #GtkTreeModel. Models are expected to put a unique
  * integer in the <structfield>stamp</structfield> member, and put
  * model-specific data in the three <structfield>user_data</structfield>

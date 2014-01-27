@@ -99,7 +99,7 @@
  * @notebook internal children with the name "notebook".
  *
  * <example>
- * <title>A <structname>GtkPrintUnixDialog</structname> UI definition fragment.</title>
+ * <title>A #GtkPrintUnixDialog UI definition fragment.</title>
  * <programlisting><![CDATA[
  * <object class="GtkPrintUnixDialog" id="dialog1">
  *   <child internal-child="notebook">

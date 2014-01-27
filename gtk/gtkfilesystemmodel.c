@@ -1646,13 +1646,13 @@ _gtk_file_system_model_iter_is_filtered_out (GtkFileSystemModel *model,
  * @model: a #GtkFileSystemModel
  * @iter: a #GtkTreeIter pointing to a row of @model
  * 
- * Gets the #GFileInfo structure for a particular row
+ * Gets the #GFileInfo-struct for a particular row
  * of @model.
  * 
- * Return value: a #GFileInfo structure. This structure
+ * Return value: a #GFileInfo-struct. This value
  *   is owned by @model and must not be modified or freed.
  *   If you want to keep the information for later use,
- *   you must take a reference, since the structure may be
+ *   you must take a reference, since the #GFileInfo-struct may be
  *   freed on later changes to the file system.  If you have
  *   called _gtk_file_system_model_add_editable() and the @iter
  *   corresponds to the row that this function returned, the

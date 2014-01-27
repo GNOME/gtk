@@ -142,7 +142,7 @@
  * is the id of widget (which should be a child of the dialogs @action_area).
  * </para>
  * <example>
- * <title>A <structname>GtkDialog</structname> UI definition fragment.</title>
+ * <title>A #GtkDialog UI definition fragment.</title>
  * <programlisting><![CDATA[
  * <object class="GtkDialog" id="dialog1">
  *   <child internal-child="vbox">"

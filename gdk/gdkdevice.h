@@ -134,7 +134,7 @@ typedef enum {
  * @time: The timestamp for this event.
  * @axes: the values of the device's axes.
  *
- * The #GdkTimeCoord structure stores a single event in a motion history.
+ * A #GdkTimeCoord stores a single event in a motion history.
  */
 struct _GdkTimeCoord
 {

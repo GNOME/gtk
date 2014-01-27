@@ -54,13 +54,13 @@
  * Cursors by themselves are not very interesting, they must be be
  * bound to a window for users to see them. This is done with
  * gdk_window_set_cursor() or by setting the cursor member of the
- * #GdkWindowAttr struct passed to gdk_window_new().
+ * #GdkWindowAttr passed to gdk_window_new().
  */
 
 /**
  * GdkCursor:
  *
- * The #GdkCursor structure represents a cursor. Its contents are private.
+ * A #GdkCursor represents a cursor. Its contents are private.
  */
 
 enum {

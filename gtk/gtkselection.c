@@ -68,7 +68,7 @@
  *
  * Some of the datatypes defined this section are used in
  * the #GtkClipboard and drag-and-drop API's as well. The
- * #GtkTargetEntry structure and #GtkTargetList objects represent
+ * #GtkTargetEntry and #GtkTargetList objects represent
  * lists of data types that are supported when sending or
  * receiving data. The #GtkSelectionData object is used to
  * store a chunk of data along with the data type and other
@@ -1141,7 +1141,7 @@ gtk_selection_convert (GtkWidget *widget,
 
 /**
  * gtk_selection_data_get_selection:
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  *
  * Retrieves the selection #GdkAtom of the selection data.
  *
@@ -1159,7 +1159,7 @@ gtk_selection_data_get_selection (const GtkSelectionData *selection_data)
 
 /**
  * gtk_selection_data_get_target:
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  *
  * Retrieves the target of the selection.
  *
@@ -1177,7 +1177,7 @@ gtk_selection_data_get_target (const GtkSelectionData *selection_data)
 
 /**
  * gtk_selection_data_get_data_type:
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  *
  * Retrieves the data type of the selection.
  *
@@ -1195,7 +1195,7 @@ gtk_selection_data_get_data_type (const GtkSelectionData *selection_data)
 
 /**
  * gtk_selection_data_get_format:
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  *
  * Retrieves the format of the selection.
  *
@@ -1213,7 +1213,7 @@ gtk_selection_data_get_format (const GtkSelectionData *selection_data)
 
 /**
  * gtk_selection_data_get_data: (skip)
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  *
  * Retrieves the raw data of the selection.
  *
@@ -1231,7 +1231,7 @@ gtk_selection_data_get_data (const GtkSelectionData *selection_data)
 
 /**
  * gtk_selection_data_get_length:
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  *
  * Retrieves the length of the raw data of the selection.
  *
@@ -1249,7 +1249,7 @@ gtk_selection_data_get_length (const GtkSelectionData *selection_data)
 
 /**
  * gtk_selection_data_get_data_with_length: (rename-to gtk_selection_data_get_data)
- * @selection_data: a pointer to a #GtkSelectionData structure
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  * @length: (out): return location for length of the data segment
  *
  * Retrieves the raw data of the selection along with its length.
@@ -1271,7 +1271,7 @@ gtk_selection_data_get_data_with_length (const GtkSelectionData *selection_data,
 
 /**
  * gtk_selection_data_get_display:
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  *
  * Retrieves the display of the selection.
  *
@@ -1289,7 +1289,7 @@ gtk_selection_data_get_display (const GtkSelectionData *selection_data)
 
 /**
  * gtk_selection_data_set:
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @selection_data: a pointer to a #GtkSelectionData-struct.
  * @type: the type of selection data
  * @format: format (number of bits in a unit)
  * @data: (array length=length): pointer to the data (will be copied)
@@ -3128,9 +3128,9 @@ gtk_selection_default_handler (GtkWidget	*widget,
 
 /**
  * gtk_selection_data_copy:
- * @data: a pointer to a #GtkSelectionData structure.
+ * @data: a pointer to a #GtkSelectionData-struct.
  * 
- * Makes a copy of a #GtkSelectionData structure and its data.
+ * Makes a copy of a #GtkSelectionData-struct and its data.
  * 
  * Return value: a pointer to a copy of @data.
  **/
@@ -3155,9 +3155,9 @@ gtk_selection_data_copy (const GtkSelectionData *data)
 
 /**
  * gtk_selection_data_free:
- * @data: a pointer to a #GtkSelectionData structure.
+ * @data: a pointer to a #GtkSelectionData-struct.
  * 
- * Frees a #GtkSelectionData structure returned from
+ * Frees a #GtkSelectionData-struct returned from
  * gtk_selection_data_copy().
  **/
 void
@@ -3176,9 +3176,9 @@ gtk_selection_data_free (GtkSelectionData *data)
  * @flags: Set of flags, see #GtkTargetFlags
  * @info: an ID that will be passed back to the application
  *
- * Makes a new #GtkTargetEntry structure.
+ * Makes a new #GtkTargetEntry.
  *
- * Return value: a pointer to a new GtkTargetEntry structure.
+ * Return value: a pointer to a new #GtkTargetEntry.
  *     Free with gtk_target_entry_free()
  **/
 GtkTargetEntry *
@@ -3192,9 +3192,9 @@ gtk_target_entry_new (const char *target,
 
 /**
  * gtk_target_entry_copy:
- * @data: a pointer to a #GtkTargetEntry structure.
+ * @data: a pointer to a #GtkTargetEntry
  *
- * Makes a copy of a #GtkTargetEntry structure and its data.
+ * Makes a copy of a #GtkTargetEntry and its data.
  *
  * Return value: a pointer to a copy of @data.
  *     Free with gtk_target_entry_free()
@@ -3216,9 +3216,9 @@ gtk_target_entry_copy (GtkTargetEntry *data)
 
 /**
  * gtk_target_entry_free:
- * @data: a pointer to a #GtkTargetEntry structure.
+ * @data: a pointer to a #GtkTargetEntry.
  *
- * Frees a #GtkTargetEntry structure returned from
+ * Frees a #GtkTargetEntry returned from
  * gtk_target_entry_new() or gtk_target_entry_copy().
  **/
 void

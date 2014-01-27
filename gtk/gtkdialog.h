@@ -103,7 +103,7 @@ typedef struct _GtkDialogClass         GtkDialogClass;
 /**
  * GtkDialog:
  *
- * The GtkDialog struct contains only private fields
+ * The #GtkDialog-struct contains only private fields
  * and should not be directly accessed.
  */
 struct _GtkDialog

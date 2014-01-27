@@ -63,7 +63,7 @@ typedef struct _GtkBuildableIface GtkBuildableIface;
  *  constructed object is returned and becomes owned by the caller.
  * @custom_tag_start: Implement this if the buildable needs to parse
  *  content below &lt;child&gt;. To handle an element, the implementation
- *  must fill in the @parser structure and @user_data and return %TRUE.
+ *  must fill in the @parser and @user_data and return %TRUE.
  *  #GtkWidget implements this to parse keyboard accelerators specified
  *  in &lt;accelerator&gt; elements. #GtkContainer implements it to map
  *  properties defined via &lt;packing&gt; elements to child properties.
@@ -82,9 +82,9 @@ typedef struct _GtkBuildableIface GtkBuildableIface;
  *  Implement this if the buildable has internal children that may
  *  need to be accessed from a UI definition.
  *
- * The GtkBuildableIface interface contains method that are
+ * The #GtkBuildableIface interface contains method that are
  * necessary to allow #GtkBuilder to construct an object from
- * a GtkBuilder UI definition.
+ * a #GtkBuilder UI definition.
  */
 struct _GtkBuildableIface
 {

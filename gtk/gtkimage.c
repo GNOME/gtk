@@ -75,8 +75,7 @@
  * on the image, such as button clicks, place the image inside a
  * #GtkEventBox, then connect to the event signals on the event box.
  * <example>
- * <title>Handling button press events on a
- * <structname>GtkImage</structname>.</title>
+ * <title>Handling button press events on a #GtkImage.</title>
  * <programlisting>
  *   static gboolean
  *   button_press_callback (GtkWidget      *event_box,

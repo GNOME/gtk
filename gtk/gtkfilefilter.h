@@ -77,7 +77,7 @@ typedef gboolean (*GtkFileFilterFunc) (const GtkFileFilterInfo *filter_info,
  *   in the file chooser
  * @mime_type: the mime type of the file
  *
- * A #GtkFileFilterInfo struct is used to pass information about the
+ * A #GtkFileFilterInfo-struct is used to pass information about the
  * tested file to gtk_file_filter_filter().
  */
 struct _GtkFileFilterInfo

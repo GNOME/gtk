@@ -83,7 +83,7 @@ struct _GtkRecentData
 /**
  * GtkRecentManager:
  *
- * #GtkRecentManager contains only private data
+ * #GtkRecentManager-struct contains only private data
  * and should be accessed using the provided API.
  *
  * Since: 2.10

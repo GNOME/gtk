@@ -45,7 +45,7 @@ typedef struct _GtkTargetPair GtkTargetPair;
  *     signal. It allows the application to identify the target
  *     type without extensive string compares.
  *
- * A #GtkTargetPair structure is used to represent the same
+ * A #GtkTargetPair is used to represent the same
  * information as a table of #GtkTargetEntry, but in
  * an efficient form.
  */
@@ -59,8 +59,8 @@ struct _GtkTargetPair
 /**
  * GtkTargetList:
  *
- * A #GtkTargetList structure is a reference counted list
- * of #GtkTargetPair. This structure should be treated as
+ * A #GtkTargetList-struct is a reference counted list
+ * of #GtkTargetPair and should be treated as
  * opaque.
  */
 typedef struct _GtkTargetList  GtkTargetList;
@@ -78,7 +78,7 @@ typedef struct _GtkTargetEntry GtkTargetEntry;
  *     signal. It allows the application to identify the target
  *     type without extensive string compares.
  *
- * A #GtkTargetEntry structure represents a single type of
+ * A #GtkTargetEntry represents a single type of
  * data than can be supplied for by a widget for a selection
  * or for supplied or received during drag-and-drop.
  */

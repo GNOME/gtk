@@ -537,7 +537,7 @@ gtk_file_filter_add_custom (GtkFileFilter         *filter,
  * gtk_file_filter_get_needed:
  * @filter: a #GtkFileFilter
  * 
- * Gets the fields that need to be filled in for the structure
+ * Gets the fields that need to be filled in for the #GtkFileFilterInfo
  * passed to gtk_file_filter_filter()
  * 
  * This function will not typically be used by applications; it
@@ -558,11 +558,11 @@ gtk_file_filter_get_needed (GtkFileFilter *filter)
 /**
  * gtk_file_filter_filter:
  * @filter: a #GtkFileFilter
- * @filter_info: a #GtkFileFilterInfo structure containing information
+ * @filter_info: a #GtkFileFilterInfo containing information
  *  about a file.
  * 
  * Tests whether a file should be displayed according to @filter.
- * The #GtkFileFilterInfo structure @filter_info should include
+ * The #GtkFileFilterInfo @filter_info should include
  * the fields returned from gtk_file_filter_get_needed().
  *
  * This function will not typically be used by applications; it

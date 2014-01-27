@@ -89,7 +89,7 @@ typedef enum {
 /**
  * GtkAboutDialog:
  *
- * The <structname>GtkAboutDialog</structname> struct contains
+ * The #GtkAboutDialog-struct contains
  * only private fields and should not be directly accessed.
  */
 struct _GtkAboutDialog

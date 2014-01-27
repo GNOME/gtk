@@ -74,10 +74,10 @@ typedef enum
  * @xthickness: X thickness
  * @ythickness: Y thickness
  *
- * The #GtkRcStyle structure is used to represent a set
+ * The #GtkRcStyle-struct is used to represent a set
  * of information about the appearance of a widget.
  * This can later be composited together with other
- * #GtkRcStyle structures to form a #GtkStyle.
+ * #GtkRcStyle-struct<!-- -->s to form a #GtkStyle.
  */
 struct _GtkRcStyle
 {

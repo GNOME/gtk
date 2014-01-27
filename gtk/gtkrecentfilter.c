@@ -468,7 +468,7 @@ gtk_recent_filter_get_name (GtkRecentFilter *filter)
  * gtk_recent_filter_get_needed:
  * @filter: a #GtkRecentFilter
  *
- * Gets the fields that need to be filled in for the structure
+ * Gets the fields that need to be filled in for the #GtkRecentFilterInfo
  * passed to gtk_recent_filter_filter()
  * 
  * This function will not typically be used by applications; it
@@ -695,11 +695,11 @@ gtk_recent_filter_add_custom (GtkRecentFilter      *filter,
 /**
  * gtk_recent_filter_filter:
  * @filter: a #GtkRecentFilter
- * @filter_info: a #GtkRecentFilterInfo structure containing information
+ * @filter_info: a #GtkRecentFilterInfo containing information
  *   about a recently used resource
  *
  * Tests whether a file should be displayed according to @filter.
- * The #GtkRecentFilterInfo structure @filter_info should include
+ * The #GtkRecentFilterInfo @filter_info should include
  * the fields returned from gtk_recent_filter_get_needed().
  *
  * This function will not typically be used by applications; it

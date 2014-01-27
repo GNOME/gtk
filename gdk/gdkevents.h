@@ -43,7 +43,7 @@ G_BEGIN_DECLS
  * @Short_description: Data structures specific to each type of event
  * @Title: Event Structures
  *
- * The event structs contain data specific to each type of event in GDK.
+ * The event structures contain data specific to each type of event in GDK.
  *
  * <note>
  * <para>
@@ -1154,10 +1154,10 @@ struct _GdkEventDND {
  * @setting: a #GdkEventSetting
  * @grab_broken: a #GdkEventGrabBroken
  *
- * The #GdkEvent struct contains a union of all of the event structs,
+ * A #GdkEvent contains a union of all of the event types,
  * and allows access to the data fields in a number of ways.
  *
- * The event type is always the first field in all of the event structs, and
+ * The event type is always the first field in all of the event types, and
  * can always be accessed with the following code, no matter what type of
  * event it is:
  * <informalexample>
@@ -1169,8 +1169,8 @@ struct _GdkEventDND {
  * </programlisting>
  * </informalexample>
  *
- * To access other fields of the event structs, the pointer to the event
- * can be cast to the appropriate event struct pointer, or the union member
+ * To access other fields of the event, the pointer to the event
+ * can be cast to the appropriate event type, or the union member
  * name can be used. For example if the event type is %GDK_BUTTON_PRESS
  * then the x coordinate of the button press can be accessed with:
  * <informalexample>

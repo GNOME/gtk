@@ -103,7 +103,7 @@ typedef struct _GtkSpinButtonClass         GtkSpinButtonClass;
 /**
  * GtkSpinButton:
  *
- * The #GtkSpinButton struct contains only private data and should
+ * The #GtkSpinButton-struct contains only private data and should
  * not be directly modified.
  */
 struct _GtkSpinButton

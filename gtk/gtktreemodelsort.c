@@ -51,7 +51,7 @@
  * sort the second.
  *
  * <example>
- * <title>Using a <structname>GtkTreeModelSort</structname></title>
+ * <title>Using a #GtkTreeModelSort</title>
  * <programlisting>
  * {
  *   GtkTreeView *tree_view1;

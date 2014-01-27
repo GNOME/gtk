@@ -248,7 +248,7 @@
  * <refsect2 id="style-properties">
  * <title>Style Properties</title>
  * <para>
- * <structname>GtkWidget</structname> introduces <firstterm>style
+ * #GtkWidget introduces <firstterm>style
  * properties</firstterm> - these are basically object properties that are stored
  * not on the object, but in the style object associated to the widget. Style
  * properties are set in <link linkend="gtk3-Resource-Files">resource files</link>.
@@ -280,10 +280,10 @@
  * ]]></programlisting>
  * </example>
  * <para>
- * In addition to accelerators, <structname>GtkWidget</structname> also support a
+ * In addition to accelerators, #GtkWidget also support a
  * custom &lt;accessible&gt; element, which supports actions and relations.
  * Properties on the accessible implementation of an object can be set by accessing the
- * internal child "accessible" of a <structname>GtkWidget</structname>.
+ * internal child "accessible" of a #GtkWidget.
  * </para>
  * <example>
  * <title>A UI definition fragment specifying an accessible</title>
@@ -12214,11 +12214,11 @@ static const GtkWidgetAuxInfo default_aux_info = {
 /*
  * gtk_widget_get_aux_info:
  * @widget: a #GtkWidget
- * @create: if %TRUE, create the structure if it doesn't exist
+ * @create: if %TRUE, create the #GtkWidgetAuxInfo-struct if it doesn't exist
  *
- * Get the #GtkWidgetAuxInfo structure for the widget.
+ * Get the #GtkWidgetAuxInfo-struct for the widget.
  *
- * Return value: the #GtkAuxInfo structure for the widget, or
+ * Return value: the #GtkWidgetAuxInfo-struct for the widget, or
  *    %NULL if @create is %FALSE and one doesn't already exist.
  */
 static GtkWidgetAuxInfo *
@@ -12621,7 +12621,7 @@ gtk_widget_style_get (GtkWidget   *widget,
 /**
  * gtk_requisition_new:
  *
- * Allocates a new #GtkRequisition structure and initializes its elements to zero.
+ * Allocates a new #GtkRequisition-struct and initializes its elements to zero.
  *
  * Returns: a new empty #GtkRequisition. The newly allocated #GtkRequisition should
  *   be freed with gtk_requisition_free().

@@ -53,7 +53,7 @@ typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 /**
  * GtkAccelLabel:
  *
- * The #GtkAccelLabel-struct struct contains private data only, and
+ * The #GtkAccelLabel-struct contains private data only, and
  * should be accessed using the functions below.
  */
 struct _GtkAccelLabel

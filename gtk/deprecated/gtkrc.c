@@ -1815,7 +1815,7 @@ gtk_rc_parse_priority (GScanner	           *scanner,
 /**
  * gtk_rc_parse_color:
  * @scanner: a #GScanner
- * @color: (out): a pointer to a #GdkColor structure in which to store
+ * @color: (out): a pointer to a #GdkColor in which to store
  *     the result
  *
  * Parses a color in the format expected
@@ -1840,7 +1840,7 @@ gtk_rc_parse_color (GScanner *scanner,
  * gtk_rc_parse_color_full:
  * @scanner: a #GScanner
  * @style: (allow-none): a #GtkRcStyle, or %NULL
- * @color: (out): a pointer to a #GdkColor structure in which to store
+ * @color: (out): a pointer to a #GdkColor in which to store
  *     the result
  *
  * Parses a color in the format expected

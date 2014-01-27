@@ -46,7 +46,7 @@ G_BEGIN_DECLS
  * @green: The green component of the color
  * @blue: The blue component of the color
  *
- * The #GdkColor structure is used to describe a color,
+ * A #GdkColor is used to describe a color,
  * similar to the XColor struct used in the X11 drawing API.
  */
 struct _GdkColor

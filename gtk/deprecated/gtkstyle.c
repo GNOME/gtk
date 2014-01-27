@@ -4187,14 +4187,14 @@ gtk_widget_get_style (GtkWidget *widget)
 /**
  * gtk_widget_modify_style:
  * @widget: a #GtkWidget
- * @style: the #GtkRcStyle holding the style modifications
+ * @style: the #GtkRcStyle-struct holding the style modifications
  *
  * Modifies style values on the widget.
  *
  * Modifications made using this technique take precedence over
  * style values set via an RC file, however, they will be overridden
  * if a style is explicitly set on the widget using gtk_widget_set_style().
- * The #GtkRcStyle structure is designed so each field can either be
+ * The #GtkRcStyle-struct is designed so each field can either be
  * set or unset, so it is possible, using this function, to modify some
  * style values and leave the others unchanged.
  *

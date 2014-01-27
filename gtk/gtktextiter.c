@@ -3607,7 +3607,7 @@ is_cursor_pos_func (const PangoLogAttr *attrs,
  * the equivalent of say the letter "a" with an accent mark will be
  * represented as two characters, first the letter then a "combining
  * mark" that causes the accent to be rendered; so the cursor can't go
- * between those two characters. See also the #PangoLogAttr structure and
+ * between those two characters. See also the #PangoLogAttr-struct and
  * pango_break() function.
  * 
  * Return value: %TRUE if we moved and the new position is dereferenceable

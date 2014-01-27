@@ -36,9 +36,9 @@
  * and sets of pixels on the screen. Together with Cairo's #cairo_region_t data
  * type, they make up the central types for representing graphical data.
  *
- * #GdkPoint is a simple structure containing an x and y coordinate of a point.
+ * A #GdkPoint represents an x and y coordinate of a point.
  *
- * #GdkRectangle is a structure holding the position and size of a rectangle.
+ * A #GdkRectangle represents the position and size of a rectangle.
  * The intersection of two rectangles can be computed with
  * gdk_rectangle_intersect(). To find the union of two rectangles use
  * gdk_rectangle_union().
