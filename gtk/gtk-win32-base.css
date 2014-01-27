@@ -500,89 +500,89 @@ GtkButton.check:active:prelight {
 }
 
 .scale.slider.scale-has-marks-below {
-    background-image: -gtk-win32-theme-part(trackbar, 4 1);
+    background-image: -gtk-win32-theme-part(trackbar, 4 1, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-below:prelight {
-    background-image: -gtk-win32-theme-part(trackbar, 4 2);
+    background-image: -gtk-win32-theme-part(trackbar, 4 2, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-below:active,
 .scale.slider.scale-has-marks-below:prelight:active {
-    background-image: -gtk-win32-theme-part(trackbar, 4 3);
+    background-image: -gtk-win32-theme-part(trackbar, 4 3, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-below:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 4 4);
+    background-image: -gtk-win32-theme-part(trackbar, 4 4, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-below:insensitive {
-    background-image: -gtk-win32-theme-part(trackbar, 4 5);
+    background-image: -gtk-win32-theme-part(trackbar, 4 5, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-below.vertical {
-    background-image: -gtk-win32-theme-part(trackbar, 8 1);
+    background-image: -gtk-win32-theme-part(trackbar, 8 1, margins(0 0 -2 0));
 }
 
 .scale.slider.scale-has-marks-below.vertical:prelight {
-    background-image: -gtk-win32-theme-part(trackbar, 8 2);
+    background-image: -gtk-win32-theme-part(trackbar, 8 2, margins(0 0 -2 0));
 }
 
 .scale.slider.scale-has-marks-below.vertical:active,
 .scale.slider.scale-has-marks-below.vertical:prelight:active {
-    background-image: -gtk-win32-theme-part(trackbar, 8 3);
+    background-image: -gtk-win32-theme-part(trackbar, 8 3, margins(0 0 -2 0));
 }
 
 .scale.slider.scale-has-marks-below.vertical:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 8 4);
+    background-image: -gtk-win32-theme-part(trackbar, 8 4, margins(0 0 -2 0));
 }
 
 .scale.slider.scale-has-marks-below.vertical:insensitive {
-    background-image: -gtk-win32-theme-part(trackbar, 8 5);
+    background-image: -gtk-win32-theme-part(trackbar, 8 5, margins(0 0 -2 0));
 }
 
 
 
 .scale.slider.scale-has-marks-above {
-    background-image: -gtk-win32-theme-part(trackbar, 5 1);
+    background-image: -gtk-win32-theme-part(trackbar, 5 1, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-above:prelight {
-    background-image: -gtk-win32-theme-part(trackbar, 5 2);
+    background-image: -gtk-win32-theme-part(trackbar, 5 2, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-above:active,
 .scale.slider.scale-has-marks-above:prelight:active {
-    background-image: -gtk-win32-theme-part(trackbar, 5 3);
+    background-image: -gtk-win32-theme-part(trackbar, 5 3, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-above:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 5 4);
+    background-image: -gtk-win32-theme-part(trackbar, 5 4, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-above:insensitive {
-    background-image: -gtk-win32-theme-part(trackbar, 5 5);
+    background-image: -gtk-win32-theme-part(trackbar, 5 5, margins(0 -2 0 0));
 }
 
 .scale.slider.scale-has-marks-above.vertical {
-    background-image: -gtk-win32-theme-part(trackbar, 7 1);
+    background-image: -gtk-win32-theme-part(trackbar, 7 1, margins(0 0 -2 0));
 }
 
 .scale.slider.scale-has-marks-above.vertical:prelight {
-    background-image: -gtk-win32-theme-part(trackbar, 7 2);
+    background-image: -gtk-win32-theme-part(trackbar, 7 2, margins(0 0 -2 0));
 }
 
 .scale.slider.scale-has-marks-above.vertical:active,
 .scale.slider.scale-has-marks-above.vertical:prelight:active {
-    background-image: -gtk-win32-theme-part(trackbar, 7 3);
+    background-image: -gtk-win32-theme-part(trackbar, 7 3, margins(0 0 -2 0));
 }
 
 .scale.slider.scale-has-marks-above.vertical:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 7 4);
+    background-image: -gtk-win32-theme-part(trackbar, 7 4, margins(0 0 -2 0));
 }
 
 .scale.slider.scale-has-marks-above.vertical:insensitive {
-    background-image: -gtk-win32-theme-part(trackbar, 7 5);
+    background-image: -gtk-win32-theme-part(trackbar, 7 5, margins(0 0 -2 0));
 }
 
 /* Progress bars */
