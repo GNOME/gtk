@@ -138,9 +138,7 @@ parse_rgb_value (const gchar  *str,
  * @spec: the string specifying the color
  *
  * Parses a textual representation of a color, filling in
- * the <structfield>red</structfield>, <structfield>green</structfield>,
- * <structfield>blue</structfield> and <structfield>alpha</structfield>
- * fields of the @rgba #GdkRGBA.
+ * the @red, @green, @blue and @alpha fields of the @rgba #GdkRGBA.
  *
  * The string can be either one of:
  * <itemizedlist>

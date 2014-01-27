@@ -128,8 +128,7 @@ G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
  * @color: (out): the #GdkColor to fill in
  *
  * Parses a textual specification of a color and fill in the
- * <structfield>red</structfield>, <structfield>green</structfield>,
- * and <structfield>blue</structfield> fields of a #GdkColor.
+ * @red, @green, and @blue fields of a #GdkColor.
  *
  * The string can either one of a large set of standard names
  * (taken from the X11 <filename>rgb.txt</filename> file), or

@@ -1833,8 +1833,7 @@ _gtk_box_get_spacing_set (GtkBox *box)
  *   the list
  *
  * Moves @child to a new @position in the list of @box children.
- * The list is the <structfield>children</structfield> field of
- * #GtkBox-struct, and contains both widgets packed #GTK_PACK_START
+ * The list contains widgets packed #GTK_PACK_START
  * as well as widgets packed #GTK_PACK_END, in the order that these
  * widgets were added to @box.
  *
