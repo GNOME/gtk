@@ -504,14 +504,14 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * be masked out.
  * </para>
  * |[<!-- language="C" -->
- * &sol;* We want to ignore irrelevant modifiers like ScrollLock *&sol;
- * &num;define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
+ * /&ast; We want to ignore irrelevant modifiers like ScrollLock &ast;/;
+ * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
  * gdk_keymap_translate_keyboard_state (keymap, event->hardware_keycode,
  *                                      event->state, event->group,
- *                                      &amp;keyval, NULL, NULL, &amp;consumed);
+ *                                      &keyval, NULL, NULL, &consumed);
  * if (keyval == GDK_PLUS &&
- *     (event->state &amp; ~consumed &amp; ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
- *   &sol;* Control was pressed *&sol;
+ *     (event->state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
+ *   /&ast; Control was pressed &ast;/
  * ]|
  * <para>
  * An older interpretation @consumed_modifiers was that it contained
@@ -519,10 +519,10 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * this allowed accelerators to be stored with irrelevant consumed
  * modifiers, by doing:</para>
  * |[<!-- language="C" -->
- * &sol;* XXX Don't do this XXX *&sol;
+ * /&ast; XXX Don't do this XXX &ast;/
  * if (keyval == accel_keyval &&
- *     (event->state &amp; ~consumed &amp; ALL_ACCELS_MASK) == (accel_mods &amp; ~consumed))
- *   &sol;* Accelerator was pressed *&sol;
+ *     (event->state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
+ *   /&ast; Accelerator was pressed &ast;/
  * ]|
  * <para>
  * However, this did not work if multi-modifier combinations were
