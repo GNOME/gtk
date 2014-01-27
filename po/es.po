@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-01-19 22:01+0000\n"
-"PO-Revision-Date: 2014-01-20 12:32+0100\n"
+"POT-Creation-Date: 2014-01-27 08:55+0000\n"
+"PO-Revision-Date: 2014-01-27 13:46+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -33,48 +33,48 @@ msgstr ""
 msgid "broadway display type not supported '%s'"
 msgstr "tipo de pantalla «broadway %s» no soportado"
 
-#: ../gdk/gdk.c:158
+#: ../gdk/gdk.c:167
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Error al analizar la opción --gdk-debug"
 
-#: ../gdk/gdk.c:178
+#: ../gdk/gdk.c:187
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Error al analizar la opción --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:215
 msgid "Program class as used by the window manager"
 msgstr "Clase del programa tal como la usa el gestor de ventanas"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:216
 msgid "CLASS"
 msgstr "CLASE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:209
+#: ../gdk/gdk.c:218
 msgid "Program name as used by the window manager"
 msgstr "Nombre del programa tal como lo usa el gestor de ventanas"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:210
+#: ../gdk/gdk.c:219
 msgid "NAME"
 msgstr "NOMBRE"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:212
+#: ../gdk/gdk.c:221
 msgid "X display to use"
 msgstr "Visor [display] X que usar"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:213
+#: ../gdk/gdk.c:222
 msgid "DISPLAY"
 msgstr "VISOR"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:216
+#: ../gdk/gdk.c:225
 msgid "GDK debugging flags to set"
 msgstr "Opciones de depuración GTK+ que establecer"
 
@@ -82,12 +82,12 @@ msgstr "Opciones de depuración GTK+ que establecer"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:455 ../gtk/gtkmain.c:458
+#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:455 ../gtk/gtkmain.c:458
 msgid "FLAGS"
 msgstr "OPCIONES"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:219
+#: ../gdk/gdk.c:228
 msgid "GDK debugging flags to unset"
 msgstr "Opciones de depuración GTK+ que quitar"
 
@@ -614,17 +614,17 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:431
-#: ../gtk/gtkwindow.c:8204
+#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:397
+#: ../gtk/gtkwindow.c:8594
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:454
-#: ../gtk/gtkwindow.c:8212
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:420
+#: ../gtk/gtkwindow.c:8602
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:454
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:420
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1175,12 +1175,12 @@ msgstr ""
 #: ../gtk/deprecated/gtkcolorseldialog.c:192
 #: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkappchooserdialog.c:626
 #: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:805
-#: ../gtk/gtkfilechooserdefault.c:5443 ../gtk/gtkfontchooserdialog.c:156
+#: ../gtk/gtkfilechooserdefault.c:5379 ../gtk/gtkfontchooserdialog.c:156
 #: ../gtk/gtkmessagedialog.c:894 ../gtk/gtkmessagedialog.c:907
 #: ../gtk/gtkmountoperation.c:538 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:686 ../gtk/gtkprintunixdialog.c:752
-#: ../gtk/gtkassistant.ui.h:5
+#: ../gtk/resources/ui/gtkassistant.ui.h:5
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1224,7 +1224,7 @@ msgid "_Preview:"
 msgstr "_Vista previa:"
 
 #: ../gtk/deprecated/gtkfontsel.c:1694 ../gtk/gtkpagesetupunixdialog.c:197
-#: ../gtk/gtkassistant.ui.h:1
+#: ../gtk/resources/ui/gtkassistant.ui.h:1
 msgid "_Apply"
 msgstr "_Aplicar"
 
@@ -1405,8 +1405,8 @@ msgstr ""
 "Este programa viene SIN NINGUNA GARANTÍA;\n"
 "para obtener más detalles visite <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:113 ../gtk/gtkaboutdialog.c:402
-#: ../gtk/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:113 ../gtk/gtkaboutdialog.c:434
+#: ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
 msgstr "Licencia"
 
@@ -1458,36 +1458,37 @@ msgstr "Licencia Pública General Reducida de GNU, sólo versión 2.1"
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "Licencia Pública General Reducida de GNU, sólo versión 3"
 
-#: ../gtk/gtkaboutdialog.c:403
+#: ../gtk/gtkaboutdialog.c:435
 msgid "The license of the program"
 msgstr "La licencia del programa"
 
-#: ../gtk/gtkaboutdialog.c:908
+#: ../gtk/gtkaboutdialog.c:940
 msgid "Could not show link"
 msgstr "No se pudo mostrar el enlace"
 
-#: ../gtk/gtkaboutdialog.c:945
+#: ../gtk/gtkaboutdialog.c:977
 msgid "Website"
 msgstr "Página web"
 
-#: ../gtk/gtkaboutdialog.c:999 ../gtk/gtkapplication-quartz.ui.h:1
+#: ../gtk/gtkaboutdialog.c:1031
+#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:1
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../gtk/gtkaboutdialog.c:2273
+#: ../gtk/gtkaboutdialog.c:2305
 msgid "Created by"
 msgstr "Creado por"
 
-#: ../gtk/gtkaboutdialog.c:2276
+#: ../gtk/gtkaboutdialog.c:2308
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2286
+#: ../gtk/gtkaboutdialog.c:2318
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2291
+#: ../gtk/gtkaboutdialog.c:2323
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -2031,7 +2032,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:890
-#: ../gtk/gtkassistant.ui.h:6
+#: ../gtk/resources/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "_Cerrar"
 
@@ -2089,30 +2090,30 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6250
-#: ../gtk/gtktextview.c:8735 ../gtk/gtktextview.c:8918
+#: ../gtk/gtkentry.c:9350 ../gtk/gtkentry.c:9503 ../gtk/gtklabel.c:6250
+#: ../gtk/gtktextview.c:8780 ../gtk/gtktextview.c:8968
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6251
-#: ../gtk/gtktextview.c:8739 ../gtk/gtktextview.c:8922
+#: ../gtk/gtkentry.c:9354 ../gtk/gtkentry.c:9506 ../gtk/gtklabel.c:6251
+#: ../gtk/gtktextview.c:8784 ../gtk/gtktextview.c:8972
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6252
-#: ../gtk/gtktextview.c:8741 ../gtk/gtktextview.c:8924
+#: ../gtk/gtkentry.c:9358 ../gtk/gtkentry.c:9509 ../gtk/gtklabel.c:6252
+#: ../gtk/gtktextview.c:8786 ../gtk/gtktextview.c:8974
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8744
+#: ../gtk/gtkentry.c:9361 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8789
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8758
+#: ../gtk/gtkentry.c:9372 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8803
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: ../gtk/gtkentry.c:10387
+#: ../gtk/gtkentry.c:10474
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -2166,7 +2167,8 @@ msgid "Desktop"
 msgstr "Escritorio"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: ../gtk/gtkfilechooserbutton.c:106 ../gtk/gtkfilechooserbutton.ui.h:1
+#: ../gtk/gtkfilechooserbutton.c:106
+#: ../gtk/resources/ui/gtkfilechooserbutton.ui.h:1
 msgid "(None)"
 msgstr "(Ninguno)"
 
@@ -2292,44 +2294,52 @@ msgstr "No se pudo leer el contenido de %s"
 msgid "Could not read the contents of the folder"
 msgstr "No se pudo leer el contenido del la carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:3938 ../gtk/gtkfilechooserdefault.c:4006
-#: ../gtk/gtkfilechooserdefault.c:4187
-msgid "Unknown"
-msgstr "Desconocido"
-
-#: ../gtk/gtkfilechooserdefault.c:3953
+#: ../gtk/gtkfilechooserdefault.c:3932
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:3955
+#: ../gtk/gtkfilechooserdefault.c:3932
+msgid "%-I:%M %P"
+msgstr "%-I:%M %P"
+
+#: ../gtk/gtkfilechooserdefault.c:3934
 msgid "Yesterday at %H:%M"
 msgstr "Ayer a las %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:4652
+#: ../gtk/gtkfilechooserdefault.c:3934
+#| msgid "Yesterday at %H:%M"
+msgid "Yesterday at %-I:%M %P"
+msgstr "Ayer a las %-I:%M %P"
+
+#: ../gtk/gtkfilechooserdefault.c:4123
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: ../gtk/gtkfilechooserdefault.c:4588
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:5436 ../gtk/gtkprintunixdialog.c:677
+#: ../gtk/gtkfilechooserdefault.c:5372 ../gtk/gtkprintunixdialog.c:677
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:5439 ../gtk/gtkprintunixdialog.c:681
+#: ../gtk/gtkfilechooserdefault.c:5375 ../gtk/gtkprintunixdialog.c:681
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
 
-#: ../gtk/gtkfilechooserdefault.c:5444 ../gtk/gtkprintunixdialog.c:688
+#: ../gtk/gtkfilechooserdefault.c:5380 ../gtk/gtkprintunixdialog.c:688
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserdefault.c:6263
+#: ../gtk/gtkfilechooserdefault.c:6199
 msgid "Could not start the search process"
 msgstr "No se ha podido iniciar el proceso de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:6264
+#: ../gtk/gtkfilechooserdefault.c:6200
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -2337,7 +2347,7 @@ msgstr ""
 "El programa no fue capaz de crear una conexión con el demonio indexador. Por "
 "favor asegúrese de que se está ejecutando."
 
-#: ../gtk/gtkfilechooserdefault.c:6278
+#: ../gtk/gtkfilechooserdefault.c:6214
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
@@ -2367,11 +2377,11 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Escoja una tipografía"
 
-#: ../gtk/gtkheaderbar.c:410
+#: ../gtk/gtkheaderbar.c:376
 msgid "Application menu"
 msgstr "Menú de la aplicación"
 
-#: ../gtk/gtkheaderbar.c:472 ../gtk/gtkwindow.c:8327
+#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8717
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2489,11 +2499,11 @@ msgstr "Copiar URL"
 msgid "Invalid URI"
 msgstr "URI no válida"
 
-#: ../gtk/gtklockbutton.c:266 ../gtk/gtklockbutton.ui.h:1
+#: ../gtk/gtklockbutton.c:266 ../gtk/resources/ui/gtklockbutton.ui.h:1
 msgid "Lock"
 msgstr "Bloquear"
 
-#: ../gtk/gtklockbutton.c:275 ../gtk/gtklockbutton.ui.h:2
+#: ../gtk/gtklockbutton.c:275 ../gtk/resources/ui/gtklockbutton.ui.h:2
 msgid "Unlock"
 msgstr "Desbloquear"
 
@@ -2665,7 +2675,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "No se puede finalizar el proceso con PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5110 ../gtk/gtknotebook.c:7843
+#: ../gtk/gtknotebook.c:5132 ../gtk/gtknotebook.c:7865
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2711,8 +2721,9 @@ msgstr ""
 msgid "Manage Custom Sizes…"
 msgstr "Gestionar tamaños personalizados…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:904 ../gtk/gtkpagesetupunixdialog.ui.h:1
-#: ../gtk/gtkprintunixdialog.ui.h:44
+#: ../gtk/gtkpagesetupunixdialog.c:904
+#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:1
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:44
 msgid "Page Setup"
 msgstr "Configuración de página"
 
@@ -3444,43 +3455,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8212
+#: ../gtk/gtkwindow.c:8602
 msgid "Unmaximize"
 msgstr "Desmaximizar"
 
-#: ../gtk/gtkwindow.c:8221
+#: ../gtk/gtkwindow.c:8611
 msgid "Move"
 msgstr "Mover"
 
-#: ../gtk/gtkwindow.c:8227
+#: ../gtk/gtkwindow.c:8617
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: ../gtk/gtkwindow.c:8239
+#: ../gtk/gtkwindow.c:8629
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: ../gtk/gtkwindow.c:8251
+#: ../gtk/gtkwindow.c:8641
 msgid "Always on Visible Workspace"
 msgstr "Siempre en el área de trabajo visible"
 
-#: ../gtk/gtkwindow.c:8259
+#: ../gtk/gtkwindow.c:8649
 msgid "Only on This Workspace"
 msgstr "Sólo en este área de trabajo"
 
-#: ../gtk/gtkwindow.c:8276
+#: ../gtk/gtkwindow.c:8666
 msgid "Move to Workspace Up"
 msgstr "Subir a un área de trabajo"
 
-#: ../gtk/gtkwindow.c:8285
+#: ../gtk/gtkwindow.c:8675
 msgid "Move to Workspace Down"
 msgstr "Bajar a un área de trabajo"
 
-#: ../gtk/gtkwindow.c:8299
+#: ../gtk/gtkwindow.c:8689
 msgid "Move to Another Workspace"
 msgstr "Mover a otro área de trabajo"
 
-#: ../gtk/gtkwindow.c:8307
+#: ../gtk/gtkwindow.c:8697
 #, c-format
 msgid "Workspace %d"
 msgstr "Área de trabajo %d"
@@ -4920,243 +4931,242 @@ msgstr "salida-de-prueba.%s"
 msgid "Print to Test Printer"
 msgstr "Imprimir a la impresora de prueba"
 
-#: ../gtk/gtkaboutdialog.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_About"
+#: ../gtk/resources/ui/gtkaboutdialog.ui.h:1
 msgid "About"
 msgstr "Acerca de"
 
-#: ../gtk/gtkaboutdialog.ui.h:2
+#: ../gtk/resources/ui/gtkaboutdialog.ui.h:2
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../gtk/gtkappchooserdialog.ui.h:1
-#| msgid "Default Application"
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
 msgid "Select Application"
 msgstr "Seleccionar aplicación"
 
-#: ../gtk/gtkappchooserdialog.ui.h:2
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 msgid "label"
 msgstr "etiqueta"
 
-#: ../gtk/gtkappchooserdialog.ui.h:3
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
 msgid "Show Other Applications"
 msgstr "Mostrar otras aplicaciones"
 
-#: ../gtk/gtkapplication-quartz.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Preferences"
+#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:2
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../gtk/gtkapplication-quartz.ui.h:3
-#| msgid "Devices"
+#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:3
 msgid "Services"
 msgstr "Servicios"
 
-#: ../gtk/gtkapplication-quartz.ui.h:4
+#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:4
 #, c-format
 msgid "Hide %s"
 msgstr "Ocultar %s"
 
-#: ../gtk/gtkapplication-quartz.ui.h:5
+#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:5
 msgid "Hide Others"
 msgstr "Ocultar otros"
 
-#: ../gtk/gtkapplication-quartz.ui.h:6
+#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:6
 msgid "Show All"
 msgstr "Mostrar todo"
 
-#: ../gtk/gtkapplication-quartz.ui.h:7
+#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:7
 #, c-format
-#| msgid "About %s"
 msgid "Quit %s"
 msgstr "Salir de %s"
 
-#: ../gtk/gtkassistant.ui.h:2
+#: ../gtk/resources/ui/gtkassistant.ui.h:2
 msgid "C_ontinue"
 msgstr "C_ontinuar"
 
-#: ../gtk/gtkassistant.ui.h:3
+#: ../gtk/resources/ui/gtkassistant.ui.h:3
 msgid "Go _Back"
 msgstr "A_trás"
 
-#: ../gtk/gtkassistant.ui.h:4
+#: ../gtk/resources/ui/gtkassistant.ui.h:4
 msgid "_Finish"
 msgstr "_Terminar"
 
-#: ../gtk/gtkcolorchooserdialog.ui.h:1
+#: ../gtk/resources/ui/gtkcolorchooserdialog.ui.h:1
 msgid "Select a Color"
 msgstr "Seleccionar un color"
 
-#: ../gtk/gtkcoloreditor.ui.h:1
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:1
 msgid "Color Name"
 msgstr "Nombre del color"
 
-#: ../gtk/gtkcoloreditor.ui.h:2
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:2
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: ../gtk/gtkcoloreditor.ui.h:3
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:3
 msgid "Alpha"
 msgstr "Alfa"
 
-#: ../gtk/gtkcoloreditor.ui.h:4
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:4
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: ../gtk/gtkcoloreditor.ui.h:5
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:5
 msgid "Hue"
 msgstr "Tono"
 
-#: ../gtk/gtkcoloreditor.ui.h:6
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:6
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: ../gtk/gtkcoloreditor.ui.h:7
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:7
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
-#: ../gtk/gtkcoloreditor.ui.h:8
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:8
 msgid "Saturation"
 msgstr "Saturación"
 
-#: ../gtk/gtkcoloreditor.ui.h:9
+#: ../gtk/resources/ui/gtkcoloreditor.ui.h:9
 msgid "Value"
 msgstr "Valor"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:1
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:1
 msgid "_Location:"
 msgstr "_Lugar:"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:2 ../gtk/gtkfilechooserdefault.ui.h:3
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:2
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:3
 msgid "Type a file name"
 msgstr "Teclee un nombre de archivo"
 
 # C en conflicto con Cancelar
-#: ../gtk/gtkfilechooserdefault.ui.h:4
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:4
 msgid "Create Fo_lder"
 msgstr "Crear car_peta"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:5
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:5
 msgid "Files"
 msgstr "Archivos"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:6
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:6
 msgid "Name"
 msgstr "Nombre"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:7
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:7
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:8
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:8
 msgid "Modified"
 msgstr "Modificado"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:9
+#: ../gtk/resources/ui/gtkfilechooserdefault.ui.h:9
 msgid "Select which types of files are shown"
 msgstr "Seleccionar qué tipos de archivos se muestran"
 
-#: ../gtk/gtkfontbutton.ui.h:1
+#: ../gtk/resources/ui/gtkfontbutton.ui.h:1
 msgid "Font"
 msgstr "Tipografía"
 
-#: ../gtk/gtkfontchooserdialog.ui.h:1
-#| msgid "Se_lection"
+#: ../gtk/resources/ui/gtkfontchooserdialog.ui.h:1
 msgid "Select Font"
 msgstr "Seleccionar tipografía"
 
-#: ../gtk/gtkfontchooserwidget.ui.h:1
+#: ../gtk/resources/ui/gtkfontchooserwidget.ui.h:1
 msgid "Search font name"
 msgstr "Buscar nombre de tipografía"
 
-#: ../gtk/gtkfontchooserwidget.ui.h:2
+#: ../gtk/resources/ui/gtkfontchooserwidget.ui.h:2
 msgid "Font Family"
 msgstr "Familia tipográfica"
 
-#: ../gtk/gtkfontchooserwidget.ui.h:3
+#: ../gtk/resources/ui/gtkfontchooserwidget.ui.h:3
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "Ninguna tipografía coincide con su búsqueda. Puede revisar su búsqueda e "
 "intentarlo de nuevo."
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:2
+#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:2
 msgid "_Format for:"
 msgstr "_Formato para:"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:3 ../gtk/gtkprintunixdialog.ui.h:38
+#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:3
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:38
 msgid "_Paper size:"
 msgstr "Tamaño del _papel:"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:4
+#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:4
 msgid "_Orientation:"
 msgstr "_Orientación:"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:5 ../gtk/gtkprintunixdialog.ui.h:40
+#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:5
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:40
 msgid "Portrait"
 msgstr "Retrato"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:6 ../gtk/gtkprintunixdialog.ui.h:42
+#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:6
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:42
 msgid "Reverse portrait"
 msgstr "Retrato invertido"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:7 ../gtk/gtkprintunixdialog.ui.h:41
+#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:7
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:41
 msgid "Landscape"
 msgstr "Paisaje"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:8 ../gtk/gtkprintunixdialog.ui.h:43
+#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:8
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:43
 msgid "Reverse landscape"
 msgstr "Paisaje invertido"
 
-#: ../gtk/gtkpathbar.ui.h:1
+#: ../gtk/resources/ui/gtkpathbar.ui.h:1
 msgid "Down Path"
 msgstr "Ruta inferior"
 
-#: ../gtk/gtkpathbar.ui.h:2
+#: ../gtk/resources/ui/gtkpathbar.ui.h:2
 msgid "Up Path"
 msgstr "Ruta superior"
 
-#: ../gtk/gtkprintunixdialog.ui.h:1
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:1
 msgid "Printer"
 msgstr "Impresora"
 
 #. this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.ui.h:4
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:4
 msgid "Location"
 msgstr "Lugar"
 
 #. this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.ui.h:7
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:7
 msgid "Status"
 msgstr "Estado"
 
-#: ../gtk/gtkprintunixdialog.ui.h:8
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:8
 msgid "Range"
 msgstr "Rango"
 
-#: ../gtk/gtkprintunixdialog.ui.h:9
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:9
 msgid "_All Pages"
 msgstr "_Todas las páginas"
 
-#: ../gtk/gtkprintunixdialog.ui.h:10
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:10
 msgid "C_urrent Page"
 msgstr "Página a_ctual"
 
-#: ../gtk/gtkprintunixdialog.ui.h:11
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:11
 msgid "Se_lection"
 msgstr "Se_lección"
 
-#: ../gtk/gtkprintunixdialog.ui.h:12
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:12
 msgid "Pag_es:"
 msgstr "Págin_as:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:13 ../gtk/gtkprintunixdialog.ui.h:15
-#: ../gtk/gtkprintunixdialog.ui.h:18
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:13
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:15
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:18
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -5164,116 +5174,118 @@ msgstr ""
 "Especifique uno o más rangos de páginas,\n"
 "ej. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.ui.h:17
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:17
 msgid "Pages"
 msgstr "Páginas"
 
-#: ../gtk/gtkprintunixdialog.ui.h:20
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:20
 msgid "Copies"
 msgstr "Copias"
 
-#: ../gtk/gtkprintunixdialog.ui.h:21
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:21
 msgid "Copie_s:"
 msgstr "_Copias:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:22
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:22
 msgid "C_ollate"
 msgstr "_Intercalar"
 
-#: ../gtk/gtkprintunixdialog.ui.h:23
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:23
 msgid "_Reverse"
 msgstr "In_vertir"
 
-#: ../gtk/gtkprintunixdialog.ui.h:24
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
 msgid "General"
 msgstr "General"
 
-#: ../gtk/gtkprintunixdialog.ui.h:25
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:25
 msgid "Layout"
 msgstr "Disposición"
 
-#: ../gtk/gtkprintunixdialog.ui.h:26
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:26
 msgid "T_wo-sided:"
 msgstr "Por las _dos caras:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:27
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:27
 msgid "Pages per _side:"
 msgstr "Páginas por _hoja:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:28
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:28
 msgid "Page or_dering:"
 msgstr "Or_den de páginas:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:29
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:29
 msgid "_Only print:"
 msgstr "_Sólo imprimir:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:30
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:30
 msgid "All sheets"
 msgstr "Todas las hojas"
 
-#: ../gtk/gtkprintunixdialog.ui.h:31
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:31
 msgid "Even sheets"
 msgstr "Hojas pares"
 
-#: ../gtk/gtkprintunixdialog.ui.h:32
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:32
 msgid "Odd sheets"
 msgstr "Hojas impares"
 
-#: ../gtk/gtkprintunixdialog.ui.h:33
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:33
 msgid "Sc_ale:"
 msgstr "_Escala:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:34
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:34
 msgid "Paper"
 msgstr "Papel"
 
-#: ../gtk/gtkprintunixdialog.ui.h:35
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:35
 msgid "Paper _type:"
 msgstr "_Tipo de papel:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:36
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:36
 msgid "Paper _source:"
 msgstr "_Fuente del papel:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:37
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:37
 msgid "Output t_ray:"
 msgstr "_Bandeja de salida:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:39
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:39
 msgid "Or_ientation:"
 msgstr "Or_ientación:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:45
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:45
 msgid "Job Details"
 msgstr "Detalles de la tarea"
 
-#: ../gtk/gtkprintunixdialog.ui.h:46
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:46
 msgid "Pri_ority:"
 msgstr "_Prioridad:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:47
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:47
 msgid "_Billing info:"
 msgstr "Info de _facturación:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:48
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:48
 msgid "Print Document"
 msgstr "Imprimir documento"
 
 #. this is one of the choices for the print at option in the print dialog
-#: ../gtk/gtkprintunixdialog.ui.h:51
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:51
 msgid "_Now"
 msgstr "_Ahora"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: ../gtk/gtkprintunixdialog.ui.h:54
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:54
 msgid "A_t:"
 msgstr "_En:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: ../gtk/gtkprintunixdialog.ui.h:55 ../gtk/gtkprintunixdialog.ui.h:59
-#: ../gtk/gtkprintunixdialog.ui.h:61 ../gtk/gtkprintunixdialog.ui.h:65
-#: ../gtk/gtkprintunixdialog.ui.h:68
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:55
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:59
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:61
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:65
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:68
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -5281,94 +5293,97 @@ msgstr ""
 "Especifique la hora de impresión,\n"
 "ej. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: ../gtk/gtkprintunixdialog.ui.h:67
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:67
 msgid "Time of print"
 msgstr "Hora de la impresión"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: ../gtk/gtkprintunixdialog.ui.h:72
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:72
 msgid "On _hold"
 msgstr "En _espera"
 
-#: ../gtk/gtkprintunixdialog.ui.h:73 ../gtk/gtkprintunixdialog.ui.h:74
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:73
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:74
 msgid "Hold the job until it is explicitly released"
 msgstr "Retener el trabajo hasta que se libere explícitamente"
 
-#: ../gtk/gtkprintunixdialog.ui.h:75
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:75
 msgid "Add Cover Page"
 msgstr "Añadir página de cubierta"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: ../gtk/gtkprintunixdialog.ui.h:78
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:78
 msgid "Be_fore:"
 msgstr "An_tes:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: ../gtk/gtkprintunixdialog.ui.h:81
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:81
 msgid "_After:"
 msgstr "_Después:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:82
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:82
 msgid "Job"
 msgstr "Tarea"
 
 #. This will appear as a tab label in the print dialog.
-#: ../gtk/gtkprintunixdialog.ui.h:85
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:85
 msgid "Image Quality"
 msgstr "Calidad de imagen"
 
 #. This will appear as a tab label in the print dialog.
-#: ../gtk/gtkprintunixdialog.ui.h:88
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:88
 msgid "Color"
 msgstr "Color"
 
 #. This will appear as a tab label in the print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.ui.h:92
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:92
 msgid "Finishing"
 msgstr "Terminando"
 
-#: ../gtk/gtkprintunixdialog.ui.h:93
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:93
 msgid "Advanced"
 msgstr "Avanzadas"
 
-#: ../gtk/gtkprintunixdialog.ui.h:94
+#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:94
 msgid "Some of the settings in the dialog conflict"
 msgstr "Algunos de los ajustes del diálogo están en conflicto"
 
-#: ../gtk/gtkrecentchooserdefault.ui.h:1
+#: ../gtk/resources/ui/gtkrecentchooserdefault.ui.h:1
 msgid "Select which type of documents are shown"
 msgstr "Seleccionar qué tipos de documentos se muestran"
 
-#: ../gtk/gtkvolumebutton.ui.h:1
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:1
 msgid "Volume"
 msgstr "Volumen"
 
-#: ../gtk/gtkvolumebutton.ui.h:2
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:2
 msgid "Turns volume up or down"
 msgstr "Sube o baja el volumen"
 
-#: ../gtk/gtkvolumebutton.ui.h:3
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:3
 msgid "+"
 msgstr "+"
 
-#: ../gtk/gtkvolumebutton.ui.h:4 ../gtk/gtkvolumebutton.ui.h:5
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:4
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:5
 msgid "Volume Up"
 msgstr "Subir volumen"
 
-#: ../gtk/gtkvolumebutton.ui.h:6
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:6
 msgid "Increases the volume"
 msgstr "Aumenta el volumen"
 
-#: ../gtk/gtkvolumebutton.ui.h:7
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:7
 msgid "-"
 msgstr "-"
 
-#: ../gtk/gtkvolumebutton.ui.h:8 ../gtk/gtkvolumebutton.ui.h:9
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:8
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:9
 msgid "Volume Down"
 msgstr "Bajar volumen"
 
-#: ../gtk/gtkvolumebutton.ui.h:10
+#: ../gtk/resources/ui/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Disminuye el volumen"
 
