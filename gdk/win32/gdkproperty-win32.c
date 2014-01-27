@@ -395,13 +395,6 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
-  /*
-   * With 'MS Sans Serif' as windows menu font (default on win98se) you'll get a 
-   * bunch of :
-   *   WARNING **: Couldn't load font "MS Sans Serif 8" falling back to "Sans 8"
-   * at least with testfilechooser (regardless of the bitmap check below)
-   * so just disabling this code seems to be the best we can do --hb
-   */
   else if (strcmp ("gtk-font-name", name) == 0)
     {
       NONCLIENTMETRICS ncm;
