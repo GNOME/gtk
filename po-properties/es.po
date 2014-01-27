@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-01-22 18:42+0000\n"
-"PO-Revision-Date: 2014-01-23 10:47+0100\n"
+"POT-Creation-Date: 2014-01-27 08:55+0000\n"
+"PO-Revision-Date: 2014-01-27 13:48+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -624,19 +624,19 @@ msgstr "Columnas"
 msgid "The number of columns in the table"
 msgstr "El número de columnas en la tabla"
 
-#: ../gtk/deprecated/gtktable.c:209 ../gtk/gtkgrid.c:1732
+#: ../gtk/deprecated/gtktable.c:209 ../gtk/gtkgrid.c:1735
 msgid "Row spacing"
 msgstr "Espaciado entre filas"
 
-#: ../gtk/deprecated/gtktable.c:210 ../gtk/gtkgrid.c:1733
+#: ../gtk/deprecated/gtktable.c:210 ../gtk/gtkgrid.c:1736
 msgid "The amount of space between two consecutive rows"
 msgstr "La cantidad de espacio entre dos filas consecutivas"
 
-#: ../gtk/deprecated/gtktable.c:218 ../gtk/gtkgrid.c:1739
+#: ../gtk/deprecated/gtktable.c:218 ../gtk/gtkgrid.c:1742
 msgid "Column spacing"
 msgstr "Espaciado de la columna"
 
-#: ../gtk/deprecated/gtktable.c:219 ../gtk/gtkgrid.c:1740
+#: ../gtk/deprecated/gtktable.c:219 ../gtk/gtkgrid.c:1743
 msgid "The amount of space between two consecutive columns"
 msgstr "La cantidad de espacio entre dos columnas consecutivas"
 
@@ -651,11 +651,11 @@ msgid "If TRUE, the table cells are all the same width/height"
 msgstr ""
 "Si es TRUE, las celdas de la tabla tienen todas de la misma anchura/altura"
 
-#: ../gtk/deprecated/gtktable.c:235 ../gtk/gtkgrid.c:1767
+#: ../gtk/deprecated/gtktable.c:235 ../gtk/gtkgrid.c:1774
 msgid "Left attachment"
 msgstr "Acoplado izquierdo"
 
-#: ../gtk/deprecated/gtktable.c:236 ../gtk/gtkgrid.c:1768 ../gtk/gtkmenu.c:760
+#: ../gtk/deprecated/gtktable.c:236 ../gtk/gtkgrid.c:1775 ../gtk/gtkmenu.c:760
 msgid "The column number to attach the left side of the child to"
 msgstr "El número de columnas que acoplar al lado izquierdo del hijo"
 
@@ -668,7 +668,7 @@ msgid "The column number to attach the right side of a child widget to"
 msgstr ""
 "El número de columnas que acoplar hacia el lado derecho de un widget hijo"
 
-#: ../gtk/deprecated/gtktable.c:249 ../gtk/gtkgrid.c:1774
+#: ../gtk/deprecated/gtktable.c:249 ../gtk/gtkgrid.c:1781
 msgid "Top attachment"
 msgstr "Acoplado superior"
 
@@ -761,11 +761,11 @@ msgstr "Definición del IU combinado"
 msgid "An XML string describing the merged UI"
 msgstr "Una cadena XML describiendo el IU combinado"
 
-#: ../gtk/gtkaboutdialog.c:332
+#: ../gtk/gtkaboutdialog.c:364
 msgid "Program name"
 msgstr "Nombre del programa"
 
-#: ../gtk/gtkaboutdialog.c:333
+#: ../gtk/gtkaboutdialog.c:365
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -773,93 +773,93 @@ msgstr ""
 "El nombre del programa. Si no estuviese establecido, se usará por omisión "
 "g_get_application_name()"
 
-#: ../gtk/gtkaboutdialog.c:347
+#: ../gtk/gtkaboutdialog.c:379
 msgid "Program version"
 msgstr "Versión del programa"
 
-#: ../gtk/gtkaboutdialog.c:348
+#: ../gtk/gtkaboutdialog.c:380
 msgid "The version of the program"
 msgstr "La versión del programa"
 
-#: ../gtk/gtkaboutdialog.c:362
+#: ../gtk/gtkaboutdialog.c:394
 msgid "Copyright string"
 msgstr "Cadena del copyright"
 
-#: ../gtk/gtkaboutdialog.c:363
+#: ../gtk/gtkaboutdialog.c:395
 msgid "Copyright information for the program"
 msgstr "Información de copyright del programa"
 
-#: ../gtk/gtkaboutdialog.c:380
+#: ../gtk/gtkaboutdialog.c:412
 msgid "Comments string"
 msgstr "Cadena de comentarios"
 
-#: ../gtk/gtkaboutdialog.c:381
+#: ../gtk/gtkaboutdialog.c:413
 msgid "Comments about the program"
 msgstr "Comentarios acerca del programa"
 
-#: ../gtk/gtkaboutdialog.c:431
+#: ../gtk/gtkaboutdialog.c:463
 msgid "License Type"
 msgstr "Tipo de licencia"
 
-#: ../gtk/gtkaboutdialog.c:432
+#: ../gtk/gtkaboutdialog.c:464
 msgid "The license type of the program"
 msgstr "El tipo de licencia del programa"
 
-#: ../gtk/gtkaboutdialog.c:448
+#: ../gtk/gtkaboutdialog.c:480
 msgid "Website URL"
 msgstr "URL del sitio web"
 
-#: ../gtk/gtkaboutdialog.c:449
+#: ../gtk/gtkaboutdialog.c:481
 msgid "The URL for the link to the website of the program"
 msgstr "El URL para el enlace al sitio web del programa"
 
-#: ../gtk/gtkaboutdialog.c:463
+#: ../gtk/gtkaboutdialog.c:495
 msgid "Website label"
 msgstr "Etiqueta del sitio web"
 
-#: ../gtk/gtkaboutdialog.c:464
+#: ../gtk/gtkaboutdialog.c:496
 msgid "The label for the link to the website of the program"
 msgstr "La etiqueta para el enlace al sitio web del programa"
 
-#: ../gtk/gtkaboutdialog.c:480
+#: ../gtk/gtkaboutdialog.c:512
 msgid "Authors"
 msgstr "Autores"
 
-#: ../gtk/gtkaboutdialog.c:481
+#: ../gtk/gtkaboutdialog.c:513
 msgid "List of authors of the program"
 msgstr "Lista de autores del programa"
 
-#: ../gtk/gtkaboutdialog.c:497
+#: ../gtk/gtkaboutdialog.c:529
 msgid "Documenters"
 msgstr "Documentadores"
 
-#: ../gtk/gtkaboutdialog.c:498
+#: ../gtk/gtkaboutdialog.c:530
 msgid "List of people documenting the program"
 msgstr "Lista de personas documentando el programa"
 
-#: ../gtk/gtkaboutdialog.c:514
+#: ../gtk/gtkaboutdialog.c:546
 msgid "Artists"
 msgstr "Artistas"
 
-#: ../gtk/gtkaboutdialog.c:515
+#: ../gtk/gtkaboutdialog.c:547
 msgid "List of people who have contributed artwork to the program"
 msgstr "Lista de gente que ha contribuido con trabajo artístico al programa"
 
-#: ../gtk/gtkaboutdialog.c:532
+#: ../gtk/gtkaboutdialog.c:564
 msgid "Translator credits"
 msgstr "Créditos de traducción"
 
-#: ../gtk/gtkaboutdialog.c:533
+#: ../gtk/gtkaboutdialog.c:565
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Créditos a los traductores. Esta cadena debe etiquetarse como traducible"
 
-#: ../gtk/gtkaboutdialog.c:548
+#: ../gtk/gtkaboutdialog.c:580
 msgid "Logo"
 msgstr "Logotipo"
 
-#: ../gtk/gtkaboutdialog.c:549
+#: ../gtk/gtkaboutdialog.c:581
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -867,20 +867,20 @@ msgstr ""
 "Un logotipo para la caja «acerca de». Si no se establece, lo predeterminado "
 "es gtk_window_get_default_icon_list()"
 
-#: ../gtk/gtkaboutdialog.c:564
+#: ../gtk/gtkaboutdialog.c:596
 msgid "Logo Icon Name"
 msgstr "Nombre del icono del logotipo"
 
-#: ../gtk/gtkaboutdialog.c:565
+#: ../gtk/gtkaboutdialog.c:597
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Un icono con nombre para usar como el logotipo para la caja «Acerca de»."
 
-#: ../gtk/gtkaboutdialog.c:578
+#: ../gtk/gtkaboutdialog.c:610
 msgid "Wrap license"
 msgstr "Ajustar licencia"
 
-#: ../gtk/gtkaboutdialog.c:579
+#: ../gtk/gtkaboutdialog.c:611
 msgid "Whether to wrap the license text."
 msgstr "Indica si se debe ajustar el texto de la licencia."
 
@@ -924,11 +924,11 @@ msgstr "acción del valor objetivo"
 msgid "The parameter for action invocations"
 msgstr "El parámetro para acciones de invocación"
 
-#: ../gtk/gtkactionbar.c:967 ../gtk/gtkbox.c:326 ../gtk/gtkheaderbar.c:1768
+#: ../gtk/gtkactionbar.c:967 ../gtk/gtkbox.c:326 ../gtk/gtkheaderbar.c:1734
 msgid "Pack type"
 msgstr "Tipo de empaquetado"
 
-#: ../gtk/gtkactionbar.c:968 ../gtk/gtkbox.c:327 ../gtk/gtkheaderbar.c:1769
+#: ../gtk/gtkactionbar.c:968 ../gtk/gtkbox.c:327 ../gtk/gtkheaderbar.c:1735
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -936,24 +936,24 @@ msgstr ""
 "Un GtkPackType que indica si el hijo está empaquetado con referencia al "
 "inicio o el final del padre"
 
-#: ../gtk/gtkactionbar.c:974 ../gtk/gtkbox.c:333 ../gtk/gtkheaderbar.c:1775
+#: ../gtk/gtkactionbar.c:974 ../gtk/gtkbox.c:333 ../gtk/gtkheaderbar.c:1741
 #: ../gtk/gtknotebook.c:778 ../gtk/gtkpaned.c:350 ../gtk/gtkpopover.c:1156
 #: ../gtk/gtkstack.c:432 ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
 msgstr "Posición"
 
-#: ../gtk/gtkactionbar.c:975 ../gtk/gtkbox.c:334 ../gtk/gtkheaderbar.c:1776
+#: ../gtk/gtkactionbar.c:975 ../gtk/gtkbox.c:334 ../gtk/gtkheaderbar.c:1742
 #: ../gtk/gtknotebook.c:779 ../gtk/gtkstack.c:433
 msgid "The index of the child in the parent"
 msgstr "El índice del hijo en el padre"
 
 #: ../gtk/gtkactionbar.c:982 ../gtk/gtkbox.c:251 ../gtk/gtkcellareabox.c:310
-#: ../gtk/gtkexpander.c:312 ../gtk/gtkheaderbar.c:1809
+#: ../gtk/gtkexpander.c:312 ../gtk/gtkheaderbar.c:1775
 #: ../gtk/gtkiconview.c:515 ../gtk/gtktreeviewcolumn.c:282
 msgid "Spacing"
 msgstr "Espaciado"
 
-#: ../gtk/gtkactionbar.c:983 ../gtk/gtkbox.c:252 ../gtk/gtkheaderbar.c:1810
+#: ../gtk/gtkactionbar.c:983 ../gtk/gtkbox.c:252 ../gtk/gtkheaderbar.c:1776
 msgid "The amount of space between children"
 msgstr "La cantidad de espacio entre hijos"
 
@@ -2678,7 +2678,7 @@ msgstr "Indica si se debe dar un valor alfa al color"
 
 # components/music/nautilus-music-view.c:198
 #: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:449
-#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkheaderbar.c:1783
+#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkheaderbar.c:1749
 #: ../gtk/gtkprintjob.c:134 ../gtk/gtkstack.c:418 ../gtk/gtkstatusicon.c:430
 #: ../gtk/gtktreeviewcolumn.c:330
 msgid "Title"
@@ -2973,45 +2973,45 @@ msgstr "Valor inicial"
 msgid "The initial specified value used for this property"
 msgstr "El valor inicial especificado para esta propiedad"
 
-#: ../gtk/gtkdialog.c:524 ../gtk/gtkinfobar.c:517
+#: ../gtk/gtkdialog.c:527 ../gtk/gtkinfobar.c:517
 msgid "Content area border"
 msgstr "Borde del área de contenidos"
 
-#: ../gtk/gtkdialog.c:525
+#: ../gtk/gtkdialog.c:528
 msgid "Width of border around the main dialog area"
 msgstr "Anchura del borde alrededor del área principal del diálogo"
 
-#: ../gtk/gtkdialog.c:542 ../gtk/gtkinfobar.c:535
+#: ../gtk/gtkdialog.c:545 ../gtk/gtkinfobar.c:535
 msgid "Content area spacing"
 msgstr "Separación del área de contenido"
 
-#: ../gtk/gtkdialog.c:543
+#: ../gtk/gtkdialog.c:546
 msgid "Spacing between elements of the main dialog area"
 msgstr "Espacio entre los elementos del área del diálogo principal"
 
-#: ../gtk/gtkdialog.c:550 ../gtk/gtkinfobar.c:552
+#: ../gtk/gtkdialog.c:553 ../gtk/gtkinfobar.c:552
 msgid "Button spacing"
 msgstr "Espaciado de los botones"
 
-#: ../gtk/gtkdialog.c:551 ../gtk/gtkinfobar.c:553
+#: ../gtk/gtkdialog.c:554 ../gtk/gtkinfobar.c:553
 msgid "Spacing between buttons"
 msgstr "Espaciado entre los botones"
 
-#: ../gtk/gtkdialog.c:559 ../gtk/gtkinfobar.c:569
+#: ../gtk/gtkdialog.c:562 ../gtk/gtkinfobar.c:569
 msgid "Action area border"
 msgstr "Borde del área de acción"
 
-#: ../gtk/gtkdialog.c:560
+#: ../gtk/gtkdialog.c:563
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Anchura del borde alrededor del área del botón en la parte inferior del "
 "diálogo"
 
-#: ../gtk/gtkdialog.c:580
+#: ../gtk/gtkdialog.c:583
 msgid "Use Header Bar"
 msgstr "Usar barra de cabecera"
 
-#: ../gtk/gtkdialog.c:581
+#: ../gtk/gtkdialog.c:584
 msgid "Use Header Bar for actions."
 msgstr "Usar barra de cabecera para las acciones."
 
@@ -3865,102 +3865,102 @@ msgstr "Apariencia del borde del marco"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Un widget a mostrar en lugar de la usual etiqueta del marco"
 
-#: ../gtk/gtkgrid.c:1746
+#: ../gtk/gtkgrid.c:1749
 msgid "Row Homogeneous"
 msgstr "Fila homogénea"
 
-#: ../gtk/gtkgrid.c:1747
+#: ../gtk/gtkgrid.c:1750
 msgid "If TRUE, the rows are all the same height"
 msgstr "Si es cierto, las filas tienen todas la misma altura"
 
-#: ../gtk/gtkgrid.c:1753
+#: ../gtk/gtkgrid.c:1756
 msgid "Column Homogeneous"
 msgstr "Columna homogénea"
 
-#: ../gtk/gtkgrid.c:1754
+#: ../gtk/gtkgrid.c:1757
 msgid "If TRUE, the columns are all the same width"
 msgstr "Si es cierto, las columnas tienen todas la misma altura"
 
-#: ../gtk/gtkgrid.c:1760
+#: ../gtk/gtkgrid.c:1763
 msgid "Baseline Row"
 msgstr "Fila de la línea base"
 
-#: ../gtk/gtkgrid.c:1761
+#: ../gtk/gtkgrid.c:1764
 msgid "The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"
 msgstr ""
 "La fila que alinear a la línea base cuando valign es GTK_ALIGN_BASELINE"
 
-#: ../gtk/gtkgrid.c:1775
+#: ../gtk/gtkgrid.c:1782
 msgid "The row number to attach the top side of a child widget to"
 msgstr "El número de fila que acoplar a la parte superior de un widget hijo"
 
-#: ../gtk/gtkgrid.c:1781 ../gtk/gtklayout.c:673 ../gtk/gtktreeviewcolumn.c:273
+#: ../gtk/gtkgrid.c:1788 ../gtk/gtklayout.c:673 ../gtk/gtktreeviewcolumn.c:273
 msgid "Width"
 msgstr "Anchura"
 
-#: ../gtk/gtkgrid.c:1782
+#: ../gtk/gtkgrid.c:1789
 msgid "The number of columns that a child spans"
 msgstr "El número de columnas que un hijo engendra"
 
-#: ../gtk/gtkgrid.c:1788 ../gtk/gtklayout.c:682
+#: ../gtk/gtkgrid.c:1795 ../gtk/gtklayout.c:682
 msgid "Height"
 msgstr "Altura"
 
-#: ../gtk/gtkgrid.c:1789
+#: ../gtk/gtkgrid.c:1796
 msgid "The number of rows that a child spans"
 msgstr "El número de filas que un hijo engendra"
 
-#: ../gtk/gtkheaderbar.c:1784
+#: ../gtk/gtkheaderbar.c:1750
 msgid "The title to display"
 msgstr "El título que mostrar"
 
 # components/music/nautilus-music-view.c:198
-#: ../gtk/gtkheaderbar.c:1791
+#: ../gtk/gtkheaderbar.c:1757
 msgid "Subtitle"
 msgstr "Subtítulo"
 
-#: ../gtk/gtkheaderbar.c:1792
+#: ../gtk/gtkheaderbar.c:1758
 msgid "The subtitle to display"
 msgstr "El subtítulo que mostrar"
 
-#: ../gtk/gtkheaderbar.c:1799
+#: ../gtk/gtkheaderbar.c:1765
 msgid "Custom Title"
 msgstr "Título personalizado"
 
-#: ../gtk/gtkheaderbar.c:1800
+#: ../gtk/gtkheaderbar.c:1766
 msgid "Custom title widget to display"
 msgstr "Título personalizado del widget que mostrar"
 
-#: ../gtk/gtkheaderbar.c:1828
+#: ../gtk/gtkheaderbar.c:1794
 msgid "Show decorations"
 msgstr "Mostrar decoraciones"
 
-#: ../gtk/gtkheaderbar.c:1829
+#: ../gtk/gtkheaderbar.c:1795
 msgid "Whether to show window decorations"
 msgstr "Indica si se deben mostrar las decoraciones de la ventana"
 
-#: ../gtk/gtkheaderbar.c:1848 ../gtk/gtksettings.c:1573
+#: ../gtk/gtkheaderbar.c:1814 ../gtk/gtksettings.c:1573
 msgid "Decoration Layout"
 msgstr "Distribución la decoración"
 
-#: ../gtk/gtkheaderbar.c:1849 ../gtk/gtksettings.c:1574
+#: ../gtk/gtkheaderbar.c:1815 ../gtk/gtksettings.c:1574
 msgid "The layout for window decorations"
 msgstr "La distribución par ala decoración de las ventanas"
 
-#: ../gtk/gtkheaderbar.c:1863
+#: ../gtk/gtkheaderbar.c:1829
 msgid "Decoration Layout Set"
 msgstr "Distribución la decoración establecida"
 
-#: ../gtk/gtkheaderbar.c:1864
+#: ../gtk/gtkheaderbar.c:1830
 msgid "Whether the decoration-layout property has been set"
 msgstr "Indica si se ha establecido la decoración de la distribución"
 
 # components/music/nautilus-music-view.c:198
-#: ../gtk/gtkheaderbar.c:1879
+#: ../gtk/gtkheaderbar.c:1845
 msgid "Has Subtitle"
 msgstr "Tiene subtítulo"
 
-#: ../gtk/gtkheaderbar.c:1880
+#: ../gtk/gtkheaderbar.c:1846
 msgid "Whether to reserve space for a subtitle"
 msgstr "Indica si se debe reservar espacio para un subtítulo"
 
@@ -4464,13 +4464,11 @@ msgid "Inspected"
 msgstr "Inspeccionado"
 
 #: ../gtk/gtkmagnifier.c:133
-#| msgid "Icon widget"
 msgid "Inspected widget"
 msgstr "Widget inspeccionado"
 
 #: ../gtk/gtkmagnifier.c:138 ../gtk/gtkmagnifier.c:139
 #: ../gtk/gtkmagnifier.c:140
-#| msgid "Justification"
 msgid "magnification"
 msgstr "ampliación"
 
@@ -5209,7 +5207,6 @@ msgid "Relative to"
 msgstr "Relativo a"
 
 #: ../gtk/gtkpopover.c:1129
-#| msgid "Window the bubble window points to"
 msgid "Widget the bubble window points to"
 msgstr "Widget al que apunta la ventana de burbuja"
 
@@ -5230,7 +5227,6 @@ msgid "Modal"
 msgstr "Modal"
 
 #: ../gtk/gtkpopover.c:1173
-#| msgid "Whether the spinner is active"
 msgid "Whether the popover is modal"
 msgstr "Indica si la ventana emergente es modal"
 
@@ -8509,8 +8505,13 @@ msgid "Focus line dash pattern"
 msgstr "Dar foco a la línea con patrón punteado"
 
 #: ../gtk/gtkwidget.c:3470
-msgid "Dash pattern used to draw the focus indicator"
-msgstr "Patrón punteado utilizado para dibujar el indicador de foco"
+msgid ""
+"Dash pattern used to draw the focus indicator. The character values are "
+"interpreted as pixel widths of alternating on and off segments of the line."
+msgstr ""
+"Patrón de tablero usado para dibujar el indicador del foco. Los valores de "
+"los caracteres se interpretan como anchuras de píxeles de segmentos dentro y "
+"fuera de la línea."
 
 #: ../gtk/gtkwidget.c:3475
 msgid "Focus padding"
@@ -8907,6 +8908,9 @@ msgstr "Título del perfil de color"
 #: ../modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "El título del perfil de color que usar"
+
+#~ msgid "Dash pattern used to draw the focus indicator"
+#~ msgstr "Patrón punteado utilizado para dibujar el indicador de foco"
 
 #~ msgid "Window the coordinates are based upon"
 #~ msgstr "Ventana en la que se basan las coordenadas"
