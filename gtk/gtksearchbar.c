@@ -56,11 +56,11 @@
  *
  * <example>
  * <title>Creating a search bar</title>
- * <programlisting>
+ * |[
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/search-bar.c">
  *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
- * </programlisting>
+ * ]|
  * </example>
  *
  * Since: 3.10
@@ -168,7 +168,7 @@ preedit_changed_cb (GtkEntry  *entry,
  *
  * <example>
  * <title>Showing the search bar on key presses</title>
- * <programlisting><![CDATA[
+ * |[
  * static gboolean
  * window_key_press_event_cb (GtkWidget *widget,
  *                            GdkEvent  *event,
@@ -179,7 +179,7 @@ preedit_changed_cb (GtkEntry  *entry,
  *
  * g_signal_connect (window, "key-press-event",
  *                   G_CALLBACK (window_key_press_event_cb), search_bar);
- * ]]></programlisting>
+ * ]|
  * </example>
  *
  * Return value: %GDK_EVENT_STOP if the key press event resulted

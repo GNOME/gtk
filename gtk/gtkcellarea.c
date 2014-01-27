@@ -74,7 +74,7 @@
  * of a #GtkTreeModel one would do the following:
  * <example>
  *   <title>Requesting the width of a handful of GtkTreeModel rows</title>
- *   <programlisting>
+ *   |[
  * GtkTreeIter iter;
  * gint        minimum_width;
  * gint        natural_width;
@@ -88,7 +88,7 @@
  *     valid = gtk_tree_model_iter_next (model, &iter);
  *   }
  * gtk_cell_area_context_get_preferred_width (context, &minimum_width, &natural_width);
- *   </programlisting>
+ *   ]|
  * </example>
  * Note that in this example it's not important to observe the
  * returned minimum and natural width of the area for each row
@@ -110,7 +110,7 @@
  * take up the full width of the layouting widget would look like:
  * <example>
  *   <title>A typical get_preferred_width(<!-- -->) implementation</title>
- *   <programlisting>
+ *   |[
  * static void
  * foo_get_preferred_width (GtkWidget       *widget,
  *                          gint            *minimum_size,
@@ -123,7 +123,7 @@
  *
  *   gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
  * }
- *   </programlisting>
+ *   ]|
  * </example>
  * In the above example the Foo widget has to make sure that some
  * row sizes have been calculated (the amount of rows that Foo judged
@@ -142,7 +142,7 @@
  * root level of a #GtkTreeModel one would do the following:
  * <example>
  *   <title>Requesting the height for width of a handful of GtkTreeModel rows</title>
- *   <programlisting>
+ *   |[
  * GtkTreeIter iter;
  * gint        minimum_height;
  * gint        natural_height;
@@ -164,7 +164,7 @@
  *
  *     valid = gtk_tree_model_iter_next (model, &iter);
  *   }
- *   </programlisting>
+ *   ]|
  * </example>
  * Note that in the above example we would need to cache the heights
  * returned for each row so that we would know what sizes to render the
@@ -199,7 +199,7 @@
  * runs as follows:
  * <example>
  *   <title>Requesting the width of a handful of GtkTreeModel rows</title>
- *   <programlisting>
+ *   |[
  * GtkAllocation allocation;
  * GdkRectangle  cell_area = { 0, };
  * GtkTreeIter   iter;
@@ -222,7 +222,7 @@
  *
  *     valid = gtk_tree_model_iter_next (model, &iter);
  *   }
- *   </programlisting>
+ *   ]|
  * </example>
  * Note that the cached height in this example really depends on how
  * the layouting widget works. The layouting widget might decide to
@@ -264,7 +264,7 @@
  * should be implemented:
  * <example>
  *   <title>Implementing keyboard focus navigation</title>
- *   <programlisting>
+ *   |[
  * static gboolean
  * foo_focus (GtkWidget       *widget,
  *            GtkDirectionType direction)
@@ -320,7 +320,7 @@
  *     }
  *     return have_focus;
  * }
- *   </programlisting>
+ *   ]|
  * </example>
  * Note that the layouting widget is responsible for matching the
  * GtkDirectionType values to the way it lays out its cells.

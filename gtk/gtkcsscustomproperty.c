@@ -202,12 +202,12 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
  * the CSS file, make sure the engine is loaded first by specifying
  * the engine property, either in a previous rule or within the same
  * one.
- * <programlisting>
+ * |[
  * &ast; {
  *     engine: someengine;
  *     -SomeEngine-custom-property: 2;
  * }
- * </programlisting>
+ * ]|
  * </note>
  *
  * Since: 3.0

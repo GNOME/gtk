@@ -70,7 +70,7 @@
  *
  * <example>
  * <title>How to create a group of two radio buttons.</title>
- * <programlisting>
+ * |[
  * void create_radio_buttons (void) {
  *
  *    GtkWidget *window, *radio1, *radio2, *box, *entry;
@@ -95,7 +95,7 @@
  *    gtk_widget_show_all (window);
  *    return;
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * When an unselected button in the group is clicked the clicked button

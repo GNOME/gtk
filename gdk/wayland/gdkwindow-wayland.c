@@ -2275,8 +2275,7 @@ gdk_wayland_window_get_wl_surface (GdkWindow *window)
  * This function should be called before a #GdkWindow is shown. This is
  * best done by connecting to the #GtkWidget::realize signal:
  *
- * <informalexample>
- * <programlisting>
+ * |[
  *   static void
  *   widget_realize_cb (GtkWidget *widget)
  *   {
@@ -2297,8 +2296,7 @@ gdk_wayland_window_get_wl_surface (GdkWindow *window)
  *   {
  *     g_signal_connect (window, "realize", G_CALLBACK (widget_realize_cb), NULL);
  *   }
- * </programlisting>
- * </informalexample>
+ * ]|
  *
  * Since: 3.10
  */

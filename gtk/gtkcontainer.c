@@ -108,7 +108,7 @@
  * the container must return the height for its minimum width. This is easily achieved by
  * simply calling the reverse apis implemented for itself as follows:
  *
- * <programlisting><![CDATA[
+ * |[
  * static void
  * foo_container_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
  * {
@@ -127,12 +127,12 @@
  *        stacked vertically (or whatever is appropriate for this container) ...
  *      }
  * }
- * ]]></programlisting>
+ * ]|
  *
  * Similarly, when gtk_widget_get_preferred_width_for_height() is called for a container or widget
  * that is height-for-width, it then only needs to return the base minimum width like so:
  *
- * <programlisting><![CDATA[
+ * |[
  * static void
  * foo_container_get_preferred_width_for_height (GtkWidget *widget, gint for_height,
  *                                               gint *min_width, gint *nat_width)
@@ -147,7 +147,7 @@
  *        of the children collectively if the container were to be allocated the said height ...
  *      }
  * }
- * ]]></programlisting>
+ * ]|
  *
  * Height for width requests are generally implemented in terms of a virtual allocation
  * of widgets in the input orientation. Assuming an height-for-width request mode, a container
@@ -213,7 +213,7 @@
  * child properties for the child.
  * <example>
  * <title>Child properties in UI definitions</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkVBox">
  *   <child>
  *     <object class="GtkLabel"/>
@@ -222,7 +222,7 @@
  *     </packing>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * Since 2.16, child properties can also be marked as translatable using
  * the same "translatable", "comments" and "context" attributes that are used

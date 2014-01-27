@@ -117,7 +117,7 @@
  * internal #GtkTreeSelection in UI definitions.
  * <example>
  * <title>A UI definition fragment with GtkTreeView</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkTreeView" id="treeview">
  *   <property name="model">liststore1</property>
  *   <child>
@@ -137,7 +137,7 @@
  *     </object>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </refsect2>
  */

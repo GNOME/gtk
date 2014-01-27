@@ -729,13 +729,13 @@ gtk_table_resize (GtkTable *table,
  * and row numbers of the table. (Columns and rows are indexed from zero).
  *
  * To make a button occupy the lower right cell of a 2x2 table, use
- * <informalexample><programlisting>
+ * |[
  * gtk_table_attach (table, button,
  *                   1, 2, // left, right attach
  *                   1, 2, // top, bottom attach
  *                   xoptions, yoptions,
  *                   xpadding, ypadding);
- * </programlisting></informalexample>
+ * ]|
  * If you want to make the button span the entire bottom row, use @left_attach == 0 and @right_attach = 2 instead.
  *
  * Deprecated: 3.4: Use gtk_grid_attach() with #GtkGrid. Note that the attach

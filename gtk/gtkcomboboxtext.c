@@ -64,7 +64,7 @@
  *
  * <example>
  * <title>A UI definition fragment specifying GtkComboBoxText items</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkComboBoxText">
  *   <items>
  *     <item translatable="yes" id="factory">Factory</item>
@@ -72,7 +72,7 @@
  *     <item translatable="yes" id="subway">Subway</item>
  *   </items>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

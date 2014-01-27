@@ -75,7 +75,7 @@
  *
  * <example>
  * <title>Creating a paned widget with minimum sizes.</title>
- * <programlisting>
+ * |[
  * GtkWidget *hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
  * GtkWidget *frame1 = gtk_frame_new (NULL);
  * GtkWidget *frame2 = gtk_frame_new (NULL);
@@ -89,7 +89,7 @@
  *
  * gtk_paned_pack2 (GTK_PANED (hpaned), frame2, FALSE, FALSE);
  * gtk_widget_set_size_request (frame2, 50, -1);
- * </programlisting>
+ * ]|
  * </example>
  */
 

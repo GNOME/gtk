@@ -41,7 +41,7 @@
  * </para>
  * <example>
  * <title>A class fragment implementing #GtkActivatable</title>
- * <programlisting><![CDATA[
+ * |[
  *
  * enum {
  * ...
@@ -253,7 +253,7 @@
  *     foo_bar_set_label (button, gtk_action_get_label (action));
  * 
  *   ...
- * }]]></programlisting>
+ * }]|
  * </example>
  * </refsect2>
  */

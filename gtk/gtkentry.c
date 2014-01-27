@@ -7709,9 +7709,9 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  *
  * This is equivalent to:
  *
- * <informalexample><programlisting>
+ * |[
  * gtk_entry_buffer_get_text (gtk_entry_get_buffer (entry));
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: a pointer to the contents of the widget as a
  *      string. This string points to internally allocated
@@ -7739,9 +7739,9 @@ gtk_entry_get_text (GtkEntry *entry)
  *
  * This is equivalent to:
  *
- * <informalexample><programlisting>
+ * |[
  * gtk_entry_buffer_set_max_length (gtk_entry_get_buffer (entry), max);
- * </programlisting></informalexample>
+ * ]|
  **/
 void
 gtk_entry_set_max_length (GtkEntry     *entry,
@@ -7760,9 +7760,9 @@ gtk_entry_set_max_length (GtkEntry     *entry,
  *
  * This is equivalent to:
  *
- * <informalexample><programlisting>
+ * |[
  * gtk_entry_buffer_get_max_length (gtk_entry_get_buffer (entry));
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: the maximum allowed number of characters
  *               in #GtkEntry, or 0 if there is no maximum.
@@ -7784,9 +7784,9 @@ gtk_entry_get_max_length (GtkEntry *entry)
  *
  * This is equivalent to:
  *
- * <informalexample><programlisting>
+ * |[
  * gtk_entry_buffer_get_length (gtk_entry_get_buffer (entry));
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: the current number of characters
  *               in #GtkEntry, or 0 if there are none.

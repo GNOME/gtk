@@ -3828,7 +3828,7 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  * empty. The visible function should therefore take special care of empty
  * rows, like in the example below.
  *
- * <informalexample><programlisting>
+ * |[
  * static gboolean
  * visible_func (GtkTreeModel *model,
  *               GtkTreeIter  *iter,
@@ -3845,7 +3845,7 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  *
  *   return visible;
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * Since: 2.4
  */

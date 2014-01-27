@@ -116,9 +116,9 @@
  * and <literal>class</literal> declarations. As an example
  * of such a statement:
  *
- * <informalexample><programlisting>
+ * |[
  * widget "mywindow.*.GtkEntry" style "my-entry-class"
- * </programlisting></informalexample>
+ * ]|
  *
  * attaches the style <literal>"my-entry-class"</literal> to all
  * widgets  whose <firstterm>widget path</firstterm> matches the
@@ -141,9 +141,9 @@
  * Since GTK+ 2.10, <literal>widget_class</literal> paths can also contain
  * <literal>&lt;classname&gt;</literal> substrings, which are matching
  * the class with the given name and any derived classes. For instance,
- * <informalexample><programlisting>
+ * |[
  * widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
- * </programlisting></informalexample>
+ * ]|
  * will match #GtkLabel widgets which are contained in any kind of menu item.
  *
  * So, if you have a #GtkEntry named <literal>"myentry"</literal>, inside of a
@@ -154,9 +154,9 @@
  * Matching against class is a little different. The pattern match is done
  * against all class names in the widgets class hierarchy (not the layout
  * hierarchy) in sequence, so the pattern:
- * <informalexample><programlisting>
+ * |[
  * class "GtkButton" style "my-style"
- * </programlisting></informalexample>
+ * ]|
  * will match not just #GtkButton widgets, but also #GtkToggleButton and
  * #GtkCheckButton widgets, since those classes derive from #GtkButton.
  *
@@ -221,17 +221,17 @@
  *   </para></listitem>
  *   <listitem><para>
  *   Merge multiple styles which use the same matching rule, for instance:
- *   <informalexample><programlisting>
+ *   |[
  *      style "Foo" { foo_content }
  *      class "X" style "Foo"
  *      style "Bar" { bar_content }
  *      class "X" style "Bar"
- *   </programlisting></informalexample>
+ *   ]|
  *   is faster to match as:
- *   <informalexample><programlisting>
+ *   |[
  *      style "FooBar" { foo_content bar_content }
  *      class "X" style "FooBar"
- *   </programlisting></informalexample>
+ *   ]|
  *   </para></listitem>
  *   <listitem><para>
  *   Use of wildcards should be avoided, this can reduce the individual RC style
@@ -589,11 +589,11 @@
  *
  * Here are some examples of color expressions:
  *
- * <informalexample><programlisting>
+ * |[
  *  mix (0.5, "red", "blue")
  *  shade (1.5, mix (0.3, "#0abbc0", { 0.3, 0.5, 0.9 }))
  *  lighter (@<!-- -->foreground)
- * </programlisting></informalexample>
+ * ]|
  *
  * In a <literal>stock</literal> definition, icon sources are specified as a
  * 4-tuple of image filename or icon name, text direction, widget state, and size, in that
@@ -607,34 +607,34 @@
  * <literal>*</literal>. So for example, the following specifies different icons to
  * use for left-to-right and right-to-left languages:
  *
- * <informalexample><programlisting>
+ * |[
  * stock["my-stock-item"] =
  * {
  *   { "itemltr.png", LTR, *, * },
  *   { "itemrtl.png", RTL, *, * }
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * This could be abbreviated as follows:
  *
- * <informalexample><programlisting>
+ * |[
  * stock["my-stock-item"] =
  * {
  *   { "itemltr.png", LTR },
  *   { "itemrtl.png", RTL }
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * You can specify custom icons for specific sizes, as follows:
  *
- * <informalexample><programlisting>
+ * |[
  * stock["my-stock-item"] =
  * {
  *   { "itemmenusize.png", *, *, "gtk-menu" },
  *   { "itemtoolbarsize.png", *, *, "gtk-large-toolbar" }
  *   { "itemgeneric.png" } // implicit *, *, * as a fallback
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * The sizes that come with GTK+ itself are <literal>"gtk-menu"</literal>,
  * <literal>"gtk-small-toolbar"</literal>, <literal>"gtk-large-toolbar"</literal>,
@@ -643,14 +643,14 @@
  *
  * It's also possible to use custom icons for a given state, for example:
  *
- * <informalexample><programlisting>
+ * |[
  * stock["my-stock-item"] =
  * {
  *   { "itemprelight.png", *, PRELIGHT },
  *   { "iteminsensitive.png", *, INSENSITIVE },
  *   { "itemgeneric.png" } // implicit *, *, * as a fallback
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * When selecting an icon source to use, GTK+ will consider text direction most
  * important, state second, and size third. It will select the best match based on
@@ -667,7 +667,7 @@
  * taken on particular key presses. The form of a binding
  * set declaration is:
  *
- * <informalexample><programlisting>
+ * |[
  * binding <replaceable>name</replaceable> {
  *   bind <replaceable>key</replaceable> {
  *     <replaceable>signalname</replaceable> (<replaceable>param</replaceable>, ...)
@@ -675,7 +675,7 @@
  *   }
  *   ...
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * <replaceable>key</replaceable> is a string consisting of a
  * series of modifiers followed by the name of a key. The

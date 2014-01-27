@@ -72,7 +72,7 @@
  *
  * <example>
  * <title>Create a button to let the user select a file in /etc</title>
- * <programlisting>
+ * |[
  * {
  *   GtkWidget *button;
  *
@@ -81,7 +81,7 @@
  *   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button),
  *                                        "/etc");
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * The #GtkFileChooserButton supports the #GtkFileChooserAction<!-- -->s

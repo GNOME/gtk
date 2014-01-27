@@ -80,7 +80,7 @@
  *
  * <example>
  * <title>Using a GtkSpinButton to get an integer</title>
- * <programlisting>
+ * |[
  * /&ast; Provides a function to retrieve an integer value from a
  *  &ast; GtkSpinButton and creates a spin button to model percentage
  *  &ast; values.
@@ -111,12 +111,12 @@
  *
  *   gtk_widget_show_all (window);
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * <example>
  * <title>Using a GtkSpinButton to get a floating point value</title>
- * <programlisting>
+ * |[
  * /&ast; Provides a function to retrieve a floating point value from a
  *  &ast; GtkSpinButton, and creates a high precision spin button.
  *  &ast;/
@@ -145,7 +145,7 @@
  *
  *   gtk_widget_show_all (window);
  * }
- * </programlisting>
+ * ]|
  * </example>
  */
 

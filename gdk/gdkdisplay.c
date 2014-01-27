@@ -2115,7 +2115,7 @@ static GQueue gdk_error_traps = G_QUEUE_INIT;
  *
 * <example>
  * <title>Trapping an X error</title>
- * <programlisting>
+ * |[
  * gdk_error_trap_push (<!-- -->);
  *
  *  // ... Call the X function which may cause an error here ...
@@ -2125,7 +2125,7 @@ static GQueue gdk_error_traps = G_QUEUE_INIT;
  *  {
  *    // ... Handle the error here ...
  *  }
- * </programlisting>
+ * ]|
  * </example>
  */
 void

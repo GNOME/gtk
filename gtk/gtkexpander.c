@@ -43,8 +43,7 @@
  * its expansion state. You should watch this property with a signal
  * connection as follows:
  * </para>
- * <informalexample>
- * <programlisting id="expander-callback-example">
+ * |[
  * expander = gtk_expander_new_with_mnemonic ("_More Options");
  * g_signal_connect (expander, "notify::expanded",
  *                   G_CALLBACK (expander_callback), NULL);
@@ -69,8 +68,7 @@
  *       /&ast; Hide or destroy widgets &ast;/
  *     }
  * }
- * </programlisting>
- * </informalexample>
+ * ]|
  * </refsect2>
  * <refsect2 id="GtkExpander-BUILDER-UI">
  * <title>GtkExpander as GtkBuildable</title>
@@ -83,7 +81,7 @@
  * </para>
  * <example>
  * <title>A UI definition fragment with GtkExpander</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkExpander">
  *   <child type="label">
  *     <object class="GtkLabel" id="expander-label"/>
@@ -92,7 +90,7 @@
  *     <object class="GtkEntry" id="expander-content"/>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </refsect2>
  *

@@ -79,7 +79,7 @@
  * using gtk_header_bar_set_show_close_button().
  *
  * <example><title>A GtkApplicationWindow with a menubar</title>
- * <programlisting><![CDATA[
+ * |[
  * app = gtk_application_new ();
  *
  * builder = gtk_builder_new ();
@@ -99,16 +99,15 @@
  * ...
  *
  * window = gtk_application_window_new (app);
- * ]]>
- * </programlisting>
+ * ]|
  * </example>
  *
  * <example><title>Handling fallback yourself</title>
- * <programlisting>
+ * |[
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/sunny.c">
  *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
- * </programlisting>
+ * ]|
  * </example>
  *
  * The XML format understood by #GtkBuilder for #GMenuModel consists

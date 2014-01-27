@@ -84,13 +84,13 @@
  * application, but in order to ensure proper translation of the title,
  * applications should set the title property explicitly when constructing
  * a GtkAboutDialog, as shown in the following example:
- * <informalexample><programlisting>
+ * |[
  * gtk_show_about_dialog (NULL,
  *                        "program-name", "ExampleCode",
  *                        "logo", example_logo,
  *                        "title" _("About ExampleCode"),
  *                        NULL);
- * </programlisting></informalexample>
+ * ]|
  *
  * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
  * e.g. using gtk_dialog_run(). In this case, you might need to know that

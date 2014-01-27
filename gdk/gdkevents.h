@@ -1142,36 +1142,30 @@ struct _GdkEventDND {
  * The event type is always the first field in all of the event types, and
  * can always be accessed with the following code, no matter what type of
  * event it is:
- * <informalexample>
- * <programlisting>
+ * |[
  *   GdkEvent *event;
  *   GdkEventType type;
  *
  *   type = event->type;
- * </programlisting>
- * </informalexample>
+ * ]|
  *
  * To access other fields of the event, the pointer to the event
  * can be cast to the appropriate event type, or the union member
  * name can be used. For example if the event type is %GDK_BUTTON_PRESS
  * then the x coordinate of the button press can be accessed with:
- * <informalexample>
- * <programlisting>
+ * |[
  *   GdkEvent *event;
  *   gdouble x;
  *
  *   x = ((GdkEventButton*)event)->x;
- * </programlisting>
- * </informalexample>
+ * ]|
  * or:
- * <informalexample>
- * <programlisting>
+ * |[
  *   GdkEvent *event;
  *   gdouble x;
  *
  *   x = event->button.x;
- * </programlisting>
- * </informalexample>
+ * ]|
  */
 union _GdkEvent
 {

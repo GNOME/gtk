@@ -57,13 +57,13 @@
  *
  * <example>
  * <title>A UI definition fragment with menus</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkMenuToolButton">
  *   <child type="menu">
  *     <object class="GtkMenu"/>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

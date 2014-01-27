@@ -48,7 +48,7 @@
  *
  * <example>
  * <title>How to create a group of radio menu items.</title>
- * <programlisting>
+ * |[
  * GSList *group = NULL;
  * GtkWidget *item;
  * gint i;
@@ -60,7 +60,7 @@
  *   if (i == 1)
  *     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
  * }
- * </programlisting>
+ * ]|
  * </example>
  */
 

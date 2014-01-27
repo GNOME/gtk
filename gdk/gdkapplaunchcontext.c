@@ -36,8 +36,7 @@
  * screen or workspace.
  * <example>
  * <title>Launching an application</title>
- * <informalexample>
- * <programlisting>
+ * |[
  * GdkAppLaunchContext *context;
  *
  * context = gdk_display_get_app_launch_context (display);
@@ -49,8 +48,7 @@
  *   g_warning ("Launching failed: %s\n", error->message);
  *
  * g_object_unref (context);
- * </programlisting>
- * </informalexample>
+ * ]|
  * </example>
  */
 

@@ -111,7 +111,7 @@
  * </para>
  * <example id="example-gtkfilechooser-preview">
  * <title>Sample Usage</title>
- * <programlisting>
+ * |[
  * {
  *   GtkImage *preview;
  *
@@ -145,7 +145,7 @@
  *
  *   gtk_file_chooser_set_preview_widget_active (file_chooser, have_preview);
  * }
- * </programlisting>
+ * ]|
  * </example>
  * </refsect2>
  * <refsect2 id="gtkfilechooser-extra">
@@ -160,7 +160,7 @@
  * </para>
  * <example id="example-gtkfilechooser-extra">
  * <title>Sample Usage</title>
- * <programlisting>
+ * |[
  *
  *   GtkWidget *toggle;
  *
@@ -170,7 +170,7 @@
  *   gtk_widget_show (toggle);
  *   gtk_file_chooser_set_extra_widget (my_file_chooser, toggle);
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <note>
  *    If you want to set more than one extra widget in the file
@@ -347,7 +347,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * illustrates this.
    * <example id="gtkfilechooser-confirmation">
    * <title>Custom confirmation</title>
-   * <programlisting>
+   * |[
    * static GtkFileChooserConfirmation
    * confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
    * {
@@ -377,7 +377,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    *         save_to_file (gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
    *
    * gtk_widget_destroy (chooser);
-   * </programlisting>
+   * ]|
    * </example>
    *
    * Returns: a #GtkFileChooserConfirmation value that indicates which

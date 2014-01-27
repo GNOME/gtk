@@ -116,7 +116,7 @@
  *
  * <example>
  * <title>Acquiring a #GtkTreeIter-struct</title>
- * <programlisting>
+ * |[
  *  /&ast; Three ways of getting the iter pointing to the location &ast;/
  * GtkTreePath *path;
  * GtkTreeIter iter;
@@ -136,7 +136,7 @@
  * gtk_tree_model_iter_nth_child (model, &amp;iter, &amp;parent_iter, 2);
  * parent_iter = iter;
  * gtk_tree_model_iter_nth_child (model, &amp;iter, &amp;parent_iter, 5);
- * </programlisting>
+ * ]|
  * </example>
  *
  * This second example shows a quick way of iterating through a list
@@ -147,7 +147,7 @@
  *
  * <example>
  * <title>Reading data from a #GtkTreeModel</title>
- * <programlisting>
+ * |[
  * enum
  * {
  *   STRING_COLUMN,
@@ -191,7 +191,7 @@
  *
  *    row_count++;
  *  }
- * </programlisting>
+ * ]|
  * </example>
  *
  * The #GtkTreeModel interface contains two methods for reference

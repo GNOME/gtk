@@ -56,7 +56,7 @@
  * </para>
  * <example>
  * <title>A UI definition fragment with GtkFrame</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkFrame">
  *   <child type="label">
  *     <object class="GtkLabel" id="frame-label"/>
@@ -65,7 +65,7 @@
  *     <object class="GtkEntry" id="frame-content"/>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </refsect2>
  */

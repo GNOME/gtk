@@ -49,7 +49,7 @@
  * column. The "type" attribute specifies the data type for the column.
  * <example>
  * <title>A UI Definition fragment for a tree store</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkTreeStore">
  *   <columns>
  *     <column type="gchararray"/>
@@ -57,7 +57,7 @@
  *     <column type="gint"/>
  *   </columns>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </refsect2>
  */

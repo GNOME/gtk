@@ -59,7 +59,7 @@
  * returns when any dialog button is clicked.
  * <example>
  * <title>A modal dialog.</title>
- * <programlisting>
+ * |[
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
  *                                   GTK_MESSAGE_ERROR,
@@ -68,12 +68,12 @@
  *                                   filename, g_strerror (errno));
  *  gtk_dialog_run (GTK_DIALOG (dialog));
  *  gtk_widget_destroy (dialog);
- * </programlisting>
+ * ]|
  * </example>
  * You might do a non-modal #GtkMessageDialog as follows:
  * <example>
  * <title>A non-modal dialog.</title>
- * <programlisting>
+ * |[
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
  *                                   GTK_MESSAGE_ERROR,
@@ -85,7 +85,7 @@
  *  g_signal_connect_swapped (dialog, "response",
  *                            G_CALLBACK (gtk_widget_destroy),
  *                            dialog);
- * </programlisting>
+ * ]|
  * </example>
  *
  * <refsect2 id="GtkMessageDialog-BUILDER-UI">
@@ -800,13 +800,13 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  * may contain special XML characters, you should use g_markup_printf_escaped()
  * to escape it.
 
- * <informalexample><programlisting>
+ * |[
  * gchar *msg;
  *
  * msg = g_markup_printf_escaped (message_format, ...);
  * gtk_message_dialog_format_secondary_markup (message_dialog, "&percnt;s", msg);
  * g_free (msg);
- * </programlisting></informalexample>
+ * ]|
  *
  * Since: 2.6
  */

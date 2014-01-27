@@ -72,8 +72,7 @@
  * Definitions</link>.
  * </para></note>
  *
- * <programlisting>
- * <![CDATA[
+ * |[
  * <!ELEMENT ui          (menubar|toolbar|popup|accelerator)* >
  * <!ELEMENT menubar     (menuitem|separator|placeholder|menu)* >
  * <!ELEMENT menu        (menuitem|separator|placeholder|menu)* >
@@ -108,8 +107,7 @@
  *                        position     (top|bot)    #IMPLIED >
  * <!ATTLIST accelerator  name                      #IMPLIED
  *                        action                    #REQUIRED >
- * ]]>
- * </programlisting>
+ * ]|
  * There are some additional restrictions beyond those specified in the
  * DTD, e.g. every toolitem must have a toolbar in its anchestry and
  * every menuitem must have a menubar or popup in its anchestry. Since
@@ -125,7 +123,7 @@
  *
  * <example>
  * <title>A UI definition</title>
- * <programlisting><![CDATA[
+ * |[
  * <ui>
  *   <menubar>
  *     <menu name="FileMenu" action="FileMenuAction">
@@ -150,7 +148,7 @@
  *     </placeholder>
  *   </toolbar>
  * </ui>
- * ]]></programlisting>
+ * ]|
  * </example>
  *
  * The constructed widget hierarchy is very similar to the element tree
@@ -273,7 +271,7 @@
  *
  * <example>
  * <title>An embedded GtkUIManager UI definition</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkUIManager" id="uiman">
  *   <child>
  *     <object class="GtkActionGroup" id="actiongroup">
@@ -296,7 +294,7 @@
  *     <object class="GtkMenuBar" id="menubar1" constructor="uiman"/>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

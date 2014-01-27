@@ -48,7 +48,7 @@
  * <title>Typical usage</title>
  * In the simplest of cases, you can use the following code to use
  * a #GtkRecentChooserDialog to select a recently used file:
- * <programlisting>
+ * |[
  * GtkWidget *dialog;
  *
  * dialog = gtk_recent_chooser_dialog_new ("Recent Documents",
@@ -67,7 +67,7 @@
  *   }
  *
  * gtk_widget_destroy (dialog);
- * </programlisting>
+ * ]|
  * </example>
  *
  * Recently used files are supported since GTK+ 2.10.

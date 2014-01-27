@@ -80,7 +80,7 @@
  * </para>
  * <example>
  * <title>A UI definition fragment with GtkNotebook</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkNotebook">
  *   <child>
  *     <object class="GtkLabel" id="notebook-content">
@@ -93,7 +93,7 @@
  *     </object>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </refsect2>
  */

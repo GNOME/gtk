@@ -66,11 +66,11 @@
  *
  * <example>
  * <title>Setting markup and accelerator on a MenuItem</title>
- * <programlisting><![CDATA[
+ * |[
  * GtkWidget *child = gtk_bin_get_child (GTK_BIN (menu_item));
  * gtk_label_set_markup (GTK_LABEL (child), "<i>new label</i> with <b>markup</b>");
  * gtk_accel_label_set_accel (GTK_ACCEL_LABEL (child), GDK_KEY_1, 0);
- * ]]></programlisting>
+ * ]|
  * </example>
  *
  * <refsect2 id="GtkMenuItem-BUILDER-UI">
@@ -80,13 +80,13 @@
  * attribute of a &lt;child&gt; element.
  * <example>
  * <title>A UI definition fragment with submenus</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkMenuItem">
  *   <child type="submenu">
  *     <object class="GtkMenu"/>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </refsect2>
  */

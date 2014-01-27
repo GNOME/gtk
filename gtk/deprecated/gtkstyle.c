@@ -4067,9 +4067,9 @@ gtk_widget_get_default_style (void)
  * This function attaches the widget's #GtkStyle to the widget's
  * #GdkWindow. It is a replacement for
  *
- * <programlisting>
+ * |[
  * widget->style = gtk_style_attach (widget->style, widget->window);
- * </programlisting>
+ * ]|
  *
  * and should only ever be called in a derived widget's "realize"
  * implementation which does not chain up to its parent class'

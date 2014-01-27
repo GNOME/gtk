@@ -60,7 +60,7 @@
  *
  * <example>
  * <title>Creating two #GtkToggleButton widgets.</title>
- * <programlisting>
+ * |[
  * void make_toggles (void) {
  *    GtkWidget *dialog, *toggle1, *toggle2;
  *
@@ -84,7 +84,7 @@
  *
  *    gtk_widget_show_all (dialog);
  * }
- * </programlisting>
+ * ]|
  * </example>
  */
 

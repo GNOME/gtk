@@ -100,7 +100,7 @@
  *
  * <example>
  * <title>A #GtkPrintUnixDialog UI definition fragment.</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkPrintUnixDialog" id="dialog1">
  *   <child internal-child="notebook">
  *     <object class="GtkNotebook" id="notebook">
@@ -121,7 +121,7 @@
  *     </object>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

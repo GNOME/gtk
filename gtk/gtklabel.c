@@ -77,14 +77,14 @@
  *
  * <example>
  * <title>A UI definition fragment specifying Pango attributes</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkLabel">
  *   <attributes>
  *     <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
  *     <attribute name="background" value="red" start="5" end="10"/>"
  *   </attributes>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * The start and end attributes specify the range of characters to which the
  * Pango attribute applies. If start and end are not specified, the attribute is
@@ -109,37 +109,31 @@
  * using gtk_label_set_mnemonic_widget(). Here's a simple example where
  * the label is inside a button:
  *
- * <informalexample>
- * <programlisting>
+ * |[
  *   // Pressing Alt+H will activate this button
  *   button = gtk_button_new (<!-- -->);
  *   label = gtk_label_new_with_mnemonic ("_Hello");
  *   gtk_container_add (GTK_CONTAINER (button), label);
- * </programlisting>
- * </informalexample>
+ * ]|
  *
  * There's a convenience function to create buttons with a mnemonic label
  * already inside:
  *
- * <informalexample>
- * <programlisting>
+ * |[
  *   // Pressing Alt+H will activate this button
  *   button = gtk_button_new_with_mnemonic ("_Hello");
- * </programlisting>
- * </informalexample>
+ * ]|
  *
  * To create a mnemonic for a widget alongside the label, such as a
  * #GtkEntry, you have to point the label at the entry with
  * gtk_label_set_mnemonic_widget():
  *
- * <informalexample>
- * <programlisting>
+ * |[
  *   // Pressing Alt+H will focus the entry
  *   entry = gtk_entry_new (<!-- -->);
  *   label = gtk_label_new_with_mnemonic ("_Hello");
  *   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
- * </programlisting>
- * </informalexample>
+ * ]|
  * </para>
  * </refsect2>
  * <refsect2>
@@ -150,12 +144,10 @@
  * linkend="PangoMarkupFormat">markup format</link>.
  * Here's how to create a label with a small font:
  *
- * <informalexample>
- * <programlisting>
+ * |[
  *   label = gtk_label_new (NULL);
  *   gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
- * </programlisting>
- * </informalexample>
+ * ]|
  *
  * (See <link
  * linkend="PangoMarkupFormat">complete documentation</link> of available
@@ -224,9 +216,9 @@
  * way they appear in web browsers, with colored, underlined text. The title
  * attribute is displayed as a tooltip on the link. An example looks like this:
  *
- * <informalexample><programlisting>
+ * |[
  * gtk_label_set_markup (label, "Go to the <a href="http://www.gtk.org" title="&lt;i&gt;Our&lt;/i&gt; website">GTK+ website</a> for more...");
- * </programlisting></informalexample>
+ * ]|
  *
  * It is possible to implement custom handling for links and their tooltips with
  * the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function.

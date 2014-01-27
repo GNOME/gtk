@@ -70,7 +70,7 @@
  *
  * <example>
  * <title>Obtaining the window ID of a socket.</title>
- * <programlisting>
+ * |[
  * GtkWidget *socket = gtk_socket_new (<!-- -->);
  * gtk_widget_show (socket);
  * gtk_container_add (GTK_CONTAINER (parent), socket);
@@ -81,7 +81,7 @@
  * gtk_widget_realize (socket);
  * g_print ("The ID of the sockets window is %#x\n",
  *          gtk_socket_get_id (socket));
- * </programlisting>
+ * ]|
  * </example>
  *
  * Note that if you pass the window ID of the socket to another

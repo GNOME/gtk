@@ -250,9 +250,9 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
    * custom properties, for a theming engine named "Clearlooks" registering
    * a "glossy" custom property, it could be referenced in the CSS file as
    *
-   * <programlisting>
+   * |[
    * -Clearlooks-glossy: true;
-   * </programlisting>
+   * ]|
    *
    * Since: 3.0
    */

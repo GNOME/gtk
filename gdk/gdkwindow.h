@@ -421,7 +421,7 @@ struct _GdkWindowAttr
  * Here's an example of how the terminal example would be implemented, assuming
  * a terminal area widget called "terminal" and a toplevel window "toplevel":
  *
- * <informalexample><programlisting><![CDATA[
+ * |[
  * 	GdkGeometry hints;
  *
  * 	hints.base_width = terminal->char_width;
@@ -437,7 +437,7 @@ struct _GdkWindowAttr
  *                                 GDK_HINT_RESIZE_INC |
  *                                 GDK_HINT_MIN_SIZE |
  *                                 GDK_HINT_BASE_SIZE);
- * ]]></programlisting></informalexample>
+ * ]|
  *
  * The other useful fields are the @min_aspect and @max_aspect fields; these
  * contain a width/height ratio as a floating point number. If a geometry widget

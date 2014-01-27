@@ -68,7 +68,7 @@
  * For example for binding Control and the left or right cursor keys
  * of a #GtkEntry widget to the #GtkEntry::move-cursor signal (so movement
  * occurs in 3-character steps), the following binding can be used:
- * <informalexample><programlisting>
+ * |[
  * @binding-set MoveCursor3
  * {
  *   bind "&lt;Control&gt;Right" { "move-cursor" (visual-positions, 3, 0) };
@@ -78,7 +78,7 @@
  * {
  *   gtk-key-bindings: MoveCursor3;
  * }
- * </programlisting></informalexample>
+ * ]|
  * </para>
  * </refsect2>
  * <refsect2 id="gtk-bindings-unbind">
@@ -91,7 +91,7 @@
  * <link linkend="gtk-bindings-install">Installing a key binding</link>
  * works as expected. The same mechanism can not be used to "unbind"
  * existing bindings, however.
- * <informalexample><programlisting>
+ * |[
  * @binding-set MoveCursor3
  * {
  *   bind "&lt;Control&gt;Right" {  };
@@ -101,7 +101,7 @@
  * {
  *   gtk-key-bindings: MoveCursor3;
  * }
- * </programlisting></informalexample>
+ * ]|
  * The above example will not have the desired effect of causing
  * "&lt;Control&gt;Right" and "&lt;Control&gt;Left" key presses to
  * be ignored by GTK+. Instead, it just causes any existing bindings
@@ -112,7 +112,7 @@
  * eventually lookup and find the default GTK+ bindings for entries which
  * implement word movement. To keep GTK+ from activating its default
  * bindings, the "unbind" keyword can be used like this:
- * <informalexample><programlisting>
+ * |[
  * @binding-set MoveCursor3
  * {
  *   unbind "&lt;Control&gt;Right";
@@ -122,7 +122,7 @@
  * {
  *   gtk-key-bindings: MoveCursor3;
  * }
- * </programlisting></informalexample>
+ * ]|
  * Now, GTK+ will find a match when looking up "&lt;Control&gt;Right"
  * and "&lt;Control&gt;Left" key presses before it resorts to its default
  * bindings, and the match instructs it to abort ("unbind") the search,
@@ -1357,17 +1357,17 @@ create_signal_scanner (void)
  *
  * Signal descriptions may either bind a key combination to
  * one or more signals:
- * <informalexample><programlisting>
+ * |[
  *   bind "key" {
  *     "signalname" (param, ...)
  *     ...
  *   }
- * </programlisting></informalexample>
+ * ]|
  *
  * Or they may also unbind a key combination:
- * <informalexample><programlisting>
+ * |[
  *   unbind "key"
- * </programlisting></informalexample>
+ * ]|
  *
  * Key combinations must be in a format that can be parsed by
  * gtk_accelerator_parse().

@@ -39,7 +39,7 @@
  *
  * <example>
  * <title>Forcing entry to uppercase.</title>
- * <programlisting>
+ * |[
  * #include &lt;ctype.h&gt;
  *
  * void
@@ -61,7 +61,7 @@
  *
  *   g_free (result);
  * }
- * </programlisting>
+ * ]|
  * </example>
  */
 

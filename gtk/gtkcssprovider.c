@@ -88,12 +88,12 @@
  * front of the block, separated by commas.
  * </para>
  * <example><title>A rule set with two selectors</title>
- * <programlisting language="text">
+ * |[
  * GtkButton, GtkEntry {
  *     color: &num;ff00ea;
  *     font: Comic Sans 12
  * }
- * </programlisting>
+ * ]|
  * </example>
  * </refsect2>
  * <refsect2 id="gtkcssprovider-selectors">
@@ -126,7 +126,7 @@
  * </para>
  * <example>
  * <title>Widget classes and names in selectors</title>
- * <programlisting language="text">
+ * |[
  * /&ast; Theme labels that are descendants of a window &ast;/
  * GtkWindow GtkLabel {
  *     background-color: &num;898989
@@ -159,7 +159,7 @@
  * &num;main-entry {
  *     background-color: &num;f0a810
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * Widgets may also define style classes, which can be used for matching.
@@ -179,7 +179,7 @@
  * </para>
  * <example>
  * <title>Style classes in selectors</title>
- * <programlisting language="text">
+ * |[
  * /&ast; Theme all widgets defining the class entry &ast;/
  * .entry {
  *     color: &num;39f1f9;
@@ -189,7 +189,7 @@
  * GtkSpinButton.entry {
  *     color: &num;900185
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * In complicated widgets like e.g. a GtkNotebook, it may be desirable
@@ -213,7 +213,7 @@
  * </para>
  * <example>
  * <title>Regions in selectors</title>
- * <programlisting language="text">
+ * |[
  * /&ast; Theme any label within a notebook &ast;/
  * GtkNotebook GtkLabel {
  *     color: &num;f90192;
@@ -230,7 +230,7 @@
  * GtkNotebook tab:first-child GtkLabel {
  *     color: &num;89d012;
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * Another use of pseudo-classes is to match widgets depending on their
@@ -241,7 +241,7 @@
  * </para>
  * <example>
  * <title>Styling specific widget states</title>
- * <programlisting language="text">
+ * |[
  * /&ast; Theme active (pressed) buttons &ast;/
  * GtkButton:active {
  *     background-color: &num;0274d9;
@@ -274,7 +274,7 @@
  * GtkCheckButton:inconsistent {
  *     background-color: &num;20395a;
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * Widget state pseudoclasses may only apply to the last element
@@ -295,9 +295,9 @@
  * </para>
  * <example>
  * <title>Using the &commat;import rule</title>
- * <programlisting language="text">
+ * |[
  * &commat;import url ("path/to/common.css");
- * </programlisting>
+ * ]|
  * </example>
  * <para id="css-binding-set">
  * In order to extend key bindings affecting different widgets, GTK+
@@ -314,7 +314,7 @@
  * </para>
  * <example>
  * <title>Using the &commat;binding rule</title>
- * <programlisting language="text">
+ * |[
  * &commat;binding-set binding-set1 {
  *   bind "&lt;alt&gt;Left" { "move-cursor" (visual-positions, -3, 0) };
  *   unbind "End";
@@ -329,7 +329,7 @@
  * GtkEntry {
  *   gtk-key-bindings: binding-set1, binding-set2;
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * GTK+ also supports an additional &commat;define-color rule, in order
@@ -339,13 +339,13 @@
  * </para>
  * <example>
  * <title>Defining colors</title>
- * <programlisting language="text">
+ * |[
  * &commat;define-color bg_color &num;f9a039;
  *
  * &ast; {
  *     background-color: &commat;bg_color;
  * }
- * </programlisting>
+ * ]|
  * </example>
  * </refsect2>
  * <refsect2 id="gtkcssprovider-symbolic-colors">
@@ -358,7 +358,7 @@
  * </para>
  * <example>
  * <title>Using symbolic colors</title>
- * <programlisting language="text">
+ * |[
  * &commat;define-color entry-color shade (&commat;bg_color, 0.7);
  *
  * GtkEntry {
@@ -370,7 +370,7 @@
  *                            shade (&num;fff, 0.5),
  *                            0.8);
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  *   The various ways to express colors in GTK+ CSS are:
@@ -965,14 +965,14 @@
  * </para>
  * <example>
  * <title>Using engine-specific style properties</title>
- * <programlisting>
+ * |[
  * * {
  *     engine: clearlooks;
  *     border-radius: 4;
  *     -GtkPaned-handle-size: 6;
  *     -clearlooks-colorize-scrollbar: false;
  * }
- * </programlisting>
+ * ]|
  * </example>
  * </refsect2>
  */

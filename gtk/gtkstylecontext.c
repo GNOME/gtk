@@ -101,7 +101,7 @@
  * </para>
  * <example>
  * <title>Using an enumeration to identify  animatable regions</title>
- * <programlisting>
+ * |[
  * enum {
  *   REGION_ENTRY,
  *   REGION_BUTTON_UP,
@@ -128,7 +128,7 @@
  *
  *   ...
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * For complex widgets with an arbitrary number of animatable regions, it
@@ -138,7 +138,7 @@
  * </para>
  * <example>
  * <title>Using struct pointers to identify animatable regions</title>
- * <programlisting>
+ * |[
  * void
  * notebook_draw_tab (GtkWidget    *widget,
  *                    NotebookPage *page,
@@ -148,7 +148,7 @@
  *   gtk_render_extension (cr, page->x, page->y, page->width, page->height);
  *   gtk_style_context_pop_animatable_region (context);
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * The widget also needs to notify the style context about a state change
@@ -156,7 +156,7 @@
  * </para>
  * <example>
  * <title>Triggering a state change animation on a region</title>
- * <programlisting>
+ * |[
  * gboolean
  * notebook_motion_notify (GtkWidget      *widget,
  *                         GdkEventMotion *event)
@@ -173,7 +173,7 @@
  *                                          TRUE);
  *   ...
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * gtk_style_context_notify_state_change() accepts %NULL region IDs as a
@@ -1890,15 +1890,15 @@ region_find (GArray *array,
  * In the CSS file format, a #GtkEntry defining an "entry"
  * class, would be matched by:
  *
- * <programlisting>
+ * |[
  * GtkEntry.entry { ... }
- * </programlisting>
+ * ]|
  *
  * While any widget defining an "entry" class would be
  * matched by:
- * <programlisting>
+ * |[
  * .entry { ... }
- * </programlisting>
+ * ]|
  *
  * Since: 3.0
  **/
@@ -2115,16 +2115,16 @@ _gtk_style_context_check_region_name (const gchar *str)
  * In the CSS file format, a #GtkTreeView defining a "row"
  * region, would be matched by:
  *
- * <programlisting>
+ * |[
  * GtkTreeView row { ... }
- * </programlisting>
+ * ]|
  *
  * Pseudo-classes are used for matching @flags, so the two
  * following rules:
- * <programlisting>
+ * |[
  * GtkTreeView row:nth-child(even) { ... }
  * GtkTreeView row:nth-child(odd) { ... }
- * </programlisting>
+ * ]|
  *
  * would apply to even and odd rows, respectively.
  *
@@ -2940,16 +2940,16 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  *
  * As a practical example, a #GtkButton notifying a state transition on
  * the prelight state:
- * <programlisting>
+ * |[
  * gtk_style_context_notify_state_change (context,
  *                                        gtk_widget_get_window (widget),
  *                                        NULL,
  *                                        GTK_STATE_PRELIGHT,
  *                                        button->in_button);
- * </programlisting>
+ * ]|
  *
  * Can be handled in the CSS file like this:
- * <programlisting>
+ * |[
  * GtkButton {
  *     background-color: &num;f00
  * }
@@ -2958,7 +2958,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  *     background-color: &num;fff;
  *     transition: 200ms linear
  * }
- * </programlisting>
+ * ]|
  *
  * This combination will animate the button background from red to white
  * if a pointer enters the button, and back to red if the pointer leaves

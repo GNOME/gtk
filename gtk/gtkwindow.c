@@ -100,7 +100,7 @@
  * </para>
  * <example>
  * <title>A UI definition fragment with accel groups</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkWindow">
  *   <accel-groups>
  *     <group name="accelgroup1"/>
@@ -110,7 +110,7 @@
  * ...
  * <!-- -->
  * <object class="GtkAccelGroup" id="accelgroup1"/>
- * ]]></programlisting>
+ * ]|
  * </example>
  * <para>
  * The GtkWindow implementation of the GtkBuildable interface

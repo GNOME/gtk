@@ -502,8 +502,7 @@ gdk_init (int *argc, char ***argv)
  *
  * A minimal main program for a threaded GTK+ application
  * looks like:
- * <informalexample>
- * <programlisting role="C">
+ * |[
  * int
  * main (int argc, char *argv[])
  * {
@@ -522,8 +521,7 @@ gdk_init (int *argc, char ***argv)
  *
  *   return 0;
  * }
- * </programlisting>
- * </informalexample>
+ * ]|
  *
  * Callbacks require a bit of attention. Callbacks from GTK+ signals
  * are made within the GTK+ lock. However callbacks from GLib (timeouts,
@@ -534,8 +532,7 @@ gdk_init (int *argc, char ***argv)
  *
  * Erik Mouw contributed the following code example to
  * illustrate how to use threads within GTK+ programs.
- * <informalexample>
- * <programlisting role="C">
+ * |[
  * /<!---->*-------------------------------------------------------------------------
  *  * Filename:      gtk-thread.c
  *  * Version:       0.99.1
@@ -672,8 +669,7 @@ gdk_init (int *argc, char ***argv)
  *
  *   return 0;
  * }
- * </programlisting>
- * </informalexample>
+ * ]|
  *
  * Unfortunately, all of the above documentation holds with the X11
  * backend only. With the Win32 or Quartz backends, GDK and GTK+ calls

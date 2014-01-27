@@ -67,7 +67,7 @@
  * though it is almost always used to display just one accelerator key.
  * <example>
  * <title>Creating a simple menu item with an accelerator key.</title>
- * <programlisting>
+ * |[
  *   GtkWidget *save_item;
  *   GtkAccelGroup *accel_group;
  *
@@ -86,7 +86,7 @@
  *      accelerators. We just need to make sure we use GTK_ACCEL_VISIBLE here. *<!---->/
  *   gtk_widget_add_accelerator (save_item, "activate", accel_group,
  *                               GDK_KEY_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
- * </programlisting>
+ * ]|
  * </example>
  */
 

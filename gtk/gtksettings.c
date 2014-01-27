@@ -86,14 +86,14 @@
  * need to be aware that settings that are specific to individual widgets
  * may not be available before the widget type has been realized at least
  * once. The following example demonstrates a way to do this:
- * <informalexample><programlisting>
+ * |[
  *   gtk_init (&argc, &argv);
  *
  *   /&ast; make sure the type is realized &ast;/
  *   g_type_class_unref (g_type_class_ref (GTK_TYPE_IMAGE_MENU_ITEM));
  *
  *   g_object_set (gtk_settings_get_default (), "gtk-enable-animations", FALSE, NULL);
- * </programlisting></informalexample>
+ * ]|
  *
  * There is one GtkSettings instance per screen. It can be obtained with
  * gtk_settings_get_for_screen(), but in many cases, it is more convenient
@@ -716,11 +716,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-color-scheme:
    *
    * A palette of named colors for use in themes. The format of the string is
-   * <programlisting>
+   * |[
    * name1: color1
    * name2: color2
    * ...
-   * </programlisting>
+   * ]|
    * Color names must be acceptable as identifiers in the
    * <link linkend="gtk3-Resource-Files">gtkrc</link> syntax, and
    * color specifications must be in the format accepted by
@@ -732,9 +732,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Starting with GTK+ 2.12, the entries can alternatively be separated
    * by ';' instead of newlines:
-   * <programlisting>
+   * |[
    * name1: color1; name2: color2; ...
-   * </programlisting>
+   * ]|
    *
    * Since: 2.10
    *

@@ -155,7 +155,7 @@
  * Here are some examples of how a %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH widget
  * generally deals with width-for-height requests, for #GtkWidgetClass.get_preferred_height()
  * it will do:
- * <programlisting><![CDATA[
+ * |[
  * static void
  * foo_widget_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
  * {
@@ -173,12 +173,12 @@
  *         it will return the minimum and natural height for the rotated label here.
  *      }
  * }
- * ]]></programlisting>
+ * ]|
  *
  * And in #GtkWidgetClass.get_preferred_width_for_height() it will simply return
  * the minimum and natural width:
  *
- * <programlisting><![CDATA[
+ * |[
  * static void
  * foo_widget_get_preferred_width_for_height (GtkWidget *widget, gint for_height,
  *                                            gint *min_width, gint *nat_width)
@@ -194,7 +194,7 @@
  *         height calculation here.
  *      }
  * }
- * ]]></programlisting>
+ * ]|
  *
  * Often a widget needs to get its own request during size request or
  * allocation. For example, when computing height it may need to also
@@ -203,10 +203,10 @@
  * be careful to call its virtual methods directly, like this:
  * <example>
  *   <title>Widget calling its own size request method.</title>
- *   <programlisting>
+ *   |[
  * GTK_WIDGET_GET_CLASS(widget)-&gt;get_preferred_width (widget),
  *                                  &min, &natural);
- *   </programlisting>
+ *   ]|
  * </example>
  *
  * It will not work to use the wrapper functions, such as
@@ -273,11 +273,11 @@
  * </para>
  * <example>
  * <title>A UI definition fragment specifying an accelerator</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkButton">
  *   <accelerator key="q" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * <para>
  * In addition to accelerators, #GtkWidget also support a
@@ -287,7 +287,7 @@
  * </para>
  * <example>
  * <title>A UI definition fragment specifying an accessible</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkButton" id="label1"/>
  *   <property name="label">I am a Label for a Button</property>
  * </object>
@@ -302,21 +302,21 @@
  *     </object>
  *   </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * <para>
  * Finally, GtkWidget allows style information such as style classes to
  * be associated with widgets, using the custom &lt;style&gt; element:
  * <example>
  * <title>A UI definition fragment specifying an style class</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkButton" id="button1">
  *   <style>
  *     <class name="my-special-button-class"/>
  *     <class name="dark-button"/>
  *   </style>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>
@@ -362,7 +362,7 @@
  * <para>
  * <example>
  * <title>A GtkBuilder Template Definition</title>
- * <programlisting><![CDATA[
+ * |[
  * <interface>
  *   <template class="FooWidget" parent="GtkBox">
  *     <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
@@ -379,7 +379,7 @@
  *     </child>
  *   </template>
  * </interface>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

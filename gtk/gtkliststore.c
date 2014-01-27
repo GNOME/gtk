@@ -55,7 +55,7 @@
  *
  * <example>
  * <title>Creating a simple list store.</title>
- * <programlisting>
+ * |[
  * enum {
  *   COLUMN_STRING,
  *   COLUMN_INT,
@@ -104,7 +104,7 @@
  *                       COLUMN_BOOLEAN, TRUE,
  *                       -1);
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * <refsect2>
@@ -157,7 +157,7 @@
  *
  * <example>
  * <title>A UI Definition fragment for a list store</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkListStore">
  *   <columns>
  *     <column type="gchararray"/>
@@ -177,7 +177,7 @@
  *     </row>
  *   </data>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

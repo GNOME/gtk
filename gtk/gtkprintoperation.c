@@ -61,7 +61,7 @@
  *
  * <example>
  * <title>The high-level printing API</title>
- * <programlisting>
+ * |[
  * static GtkPrintSettings *settings = NULL;
  *
  * static void
@@ -90,7 +90,7 @@
  *
  *   g_object_unref (print);
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * By default GtkPrintOperation uses an external application to do

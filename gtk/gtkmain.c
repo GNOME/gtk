@@ -55,7 +55,7 @@
  * </para>
  * <example>
  * <title>Typical main() function for a GTK+ application</title>
- * <programlisting>
+ * |[
  * int
  * main (int argc, char **argv)
  * {
@@ -80,7 +80,7 @@
  *   /&ast; The user lost interest &ast;/
  *   return 0;
  * }
- * </programlisting>
+ * ]|
  * </example>
  * <para>
  * It's OK to use the GLib main loop directly instead of gtk_main(), though it
@@ -1253,14 +1253,14 @@ gtk_main_quit (void)
  *
  * <example>
  * <title>Updating the UI during a long computation</title>
- * <programlisting>
+ * |[
  *  /&ast; computation going on... &ast;/
  *
  *  while (gtk_events_pending ())
  *    gtk_main_iteration ();
  *
  *  /&ast; ...computation continued &ast;/
- * </programlisting>
+ * ]|
  * </example>
  *
  * Returns: %TRUE if any events are pending, %FALSE otherwise
@@ -1828,7 +1828,7 @@ gtk_main_do_event (GdkEvent *event)
  *
  * <example>
  * <title>A persistent window</title>
- * <programlisting>
+ * |[
  * #include &lt;gtk/gtk.h>&lt;
  *
  * int
@@ -1855,7 +1855,7 @@ gtk_main_do_event (GdkEvent *event)
  *
  *   return 0;
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * Returns: %TRUE

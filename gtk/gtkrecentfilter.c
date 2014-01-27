@@ -52,7 +52,7 @@
  *
  * <example>
  * <title>A UI definition fragment specifying GtkRecentFilter rules</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkRecentFilter">
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>
@@ -68,7 +68,7 @@
  *     <application>glade</application>
  *   </applications>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

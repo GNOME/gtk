@@ -42,7 +42,7 @@
  * The widget path generation is generally simple:
  * <example>
  * <title>Defining a button within a window</title>
- * <programlisting>
+ * |[
  * {
  *   GtkWidgetPath *path;
  *
@@ -50,7 +50,7 @@
  *   gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
  *   gtk_widget_path_append_type (path, GTK_TYPE_BUTTON);
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * Although more complex information, such as widget names, or
@@ -59,7 +59,7 @@
  *
  * <example>
  * <title>Defining the first tab widget in a notebook</title>
- * <programlisting>
+ * |[
  * {
  *   GtkWidgetPath *path;
  *   guint pos;
@@ -72,7 +72,7 @@
  *   pos = gtk_widget_path_append_type (path, GTK_TYPE_LABEL);
  *   gtk_widget_path_iter_set_name (path, pos, "first tab label");
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * All this information will be used to match the style information

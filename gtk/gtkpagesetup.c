@@ -50,7 +50,7 @@
  *
  * <example>
  * <title>A page setup dialog</title>
- * <programlisting>
+ * |[
  * static GtkPrintSettings *settings = NULL;
  * static GtkPageSetup *page_setup = NULL;
  *
@@ -70,7 +70,7 @@
  *
  *   page_setup = new_page_setup;
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * Printing support was added in GTK+ 2.10.

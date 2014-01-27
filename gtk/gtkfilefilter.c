@@ -49,7 +49,7 @@
  *
  * <example>
  * <title>A UI definition fragment specifying GtkFileFilter rules</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkFileFilter">
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>
@@ -60,7 +60,7 @@
  *     <pattern>*.png</pattern>
  *   </patterns>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

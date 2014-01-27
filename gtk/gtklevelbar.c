@@ -35,7 +35,7 @@
  *
  * <example>
  * <title>Adding a custom offset on the bar</title>
- * <programlisting>
+ * |[
  *
  * static GtkWidget *
  * create_level_bar (void)
@@ -65,7 +65,7 @@
  *
  *   return level_bar;
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * The default interval of values is between zero and one, but it's possible to

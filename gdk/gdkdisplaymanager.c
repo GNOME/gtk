@@ -87,7 +87,7 @@
  *
  * <example id="backend-specific">
  * <title>Backend-specific code</title>
- * <programlisting>
+ * |[
  * #ifdef GDK_WINDOWING_X11
  *   if (GDK_IS_X11_DISPLAY (display))
  *     {
@@ -103,7 +103,7 @@
  *   else
  * #endif
  *   g_error ("Unsupported GDK backend");
- * </programlisting>
+ * ]|
  * </example>
  */
 
@@ -225,9 +225,9 @@ static const gchar *allowed_backends;
  * By default, GDK tries all included backends.
  *
  * For example,
- * <programlisting>
+ * |[
  * gdk_set_allowed_backends ("wayland,quartz,*");
- * </programlisting>
+ * ]|
  * instructs GDK to try the Wayland backend first,
  * followed by the Quartz backend, and then all
  * others.

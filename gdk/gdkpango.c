@@ -53,7 +53,7 @@
  * <title>Draw transformed text with Pango and cairo</title>
  * <!-- Note that this example is basically the same as
  *      demos/gtk-demo/rotated_text.c -->
- * <programlisting>
+ * |[
  * #define RADIUS 100
  * #define N_WORDS 10
  * #define FONT "Sans Bold 18"
@@ -116,7 +116,7 @@
  *
  * g_object_unref (layout);
  * g_object_unref (context);
- * </programlisting>
+ * ]|
  * </example>
  * <figure>
  *   <title>Output of <xref linkend="rotated-example"/></title>

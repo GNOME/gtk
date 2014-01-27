@@ -98,7 +98,7 @@
  * in the dialog.
  * <example>
  * <title>Simple GtkDialog usage</title>
- * <programlisting>
+ * |[
  * /&ast; Function to open a dialog box displaying the message provided. &ast;/
  * void
  * quick_message (gchar *message)
@@ -126,7 +126,7 @@
  *    gtk_container_add (GTK_CONTAINER (content_area), label);
  *    gtk_widget_show_all (dialog);
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * <refsect2 id="GtkDialog-BUILDER-UI"><title>GtkDialog as GtkBuildable</title>
@@ -143,7 +143,7 @@
  * </para>
  * <example>
  * <title>A #GtkDialog UI definition fragment.</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkDialog" id="dialog1">
  *   <child internal-child="vbox">
  *     <object class="GtkVBox" id="vbox">
@@ -164,7 +164,7 @@
  *     <action-widget response="cancel">button_cancel</action-widget>
  *   </action-widgets>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </refsect2>
  */

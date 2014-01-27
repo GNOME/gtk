@@ -52,7 +52,7 @@
  *
  * <example>
  * <title>Using a #GtkTreeModelSort</title>
- * <programlisting>
+ * |[
  * {
  *   GtkTreeView *tree_view1;
  *   GtkTreeView *tree_view2;
@@ -77,7 +77,7 @@
  *   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model2),
  *                                         COLUMN_1, GTK_SORT_DESCENDING);
  * }
- * </programlisting>
+ * ]|
  * </example>
  *
  * To demonstrate how to access the underlying child model from the sort
@@ -88,7 +88,7 @@
  *
  * <example>
  * <title>Accessing the child model of in a selection changed callback</title>
- * <programlisting>
+ * |[
  * void
  * selection_changed (GtkTreeSelection *selection, gpointer data)
  * {
@@ -130,7 +130,7 @@
  *                       -1);
  *   g_free (modified_data);
  * }
- * </programlisting>
+ * ]|
  * </example>
  */
 

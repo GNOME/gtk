@@ -53,13 +53,13 @@
  *
  * <example>
  * <title>A UI definition fragment specifying tags</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkTextTagTable">
  *  <child type="tag">
  *    <object class="GtkTextTag"/>
  *  </child>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

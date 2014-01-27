@@ -77,7 +77,7 @@
  *
  * <example>
  * <title>Simple GtkDrawingArea usage</title>
- * <programlisting>
+ * |[
  * gboolean
  * draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
  * {
@@ -105,7 +105,7 @@
  *   gtk_widget_set_size_request (drawing_area, 100, 100);
  *   g_signal_connect (G_OBJECT (drawing_area), "draw",
  *                     G_CALLBACK (draw_callback), NULL);
- * </programlisting>
+ * ]|
  * </example>
  *
  * Draw signals are normally delivered when a drawing area first comes

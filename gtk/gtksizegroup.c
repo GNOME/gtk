@@ -94,7 +94,7 @@
  *
  * <example>
  * <title>A UI definition fragment with GtkSizeGroup</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkSizeGroup">
  *   <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
  *   <widgets>
@@ -102,7 +102,7 @@
  *     <widget name="radio2"/>
  *   </widgets>
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>

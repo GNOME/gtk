@@ -48,7 +48,7 @@
  *
  * <example>
  * <title>A UI definition fragment specifying attributes</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkCellView">
  *   <child>
  *     <object class="GtkCellRendererText"/>
@@ -57,7 +57,7 @@
  *     </attributes>
  *   </child>"
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  *
  * Furthermore for implementations of GtkCellLayout that use a #GtkCellArea
@@ -67,7 +67,7 @@
  * can contain multiple &lt;property&gt; elements defined in the normal way.
  * <example>
  * <title>A UI definition fragment specifying cell properties</title>
- * <programlisting><![CDATA[
+ * |[
  * <object class="GtkTreeViewColumn">
  *   <child>
  *     <object class="GtkCellRendererText"/>
@@ -77,7 +77,7 @@
  *     </cell-packing>
  *   </child>"
  * </object>
- * ]]></programlisting>
+ * ]|
  * </example>
  * </para>
  * </refsect2>
@@ -90,9 +90,9 @@
  * to the fact that these widgets internally use a #GtkCellArea.
  * The cell area is exposed as a construct-only property by these
  * widgets. This means that it is possible to e.g. do
- * <informalexample><programlisting>
+ * |[
  * combo = g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", my_cell_area, NULL);
- * </programlisting></informalexample>
+ * ]|
  * to use a custom cell area with a combo box. But construct properties
  * are only initialized after instance init()
  * functions have run, which means that using functions which rely on
@@ -100,7 +100,7 @@
  * cause the default cell area to be instantiated. In this case, a provided
  * construct property value will be ignored (with a warning, to alert
  * you to the problem).
- * <informalexample><programlisting>
+ * |[
  * static void
  * my_combo_box_init (MyComboBox *b)
  * {
@@ -122,7 +122,7 @@
  *    &ast;/
  *   return g_object_new (MY_TYPE_COMBO_BOX, "cell-area", area, NULL);
  * }
- * </programlisting></informalexample>
+ * ]|
  * If supporting alternative cell areas with your derived widget is
  * not important, then this does not have to concern you. If you want
  * to support alternative cell areas, you can do so by moving the

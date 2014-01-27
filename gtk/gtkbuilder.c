@@ -67,11 +67,11 @@
  * <link linkend="XML-UI">GtkUIManager UI Definitions</link>, which are more
  * limited in scope. It is common to use <filename>.ui</filename> as the filename extension for files containing GtkBuilder UI definitions.
  * </para>
- * <programlisting>
+ * |[
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gtk/gtkbuilder.rnc">
  *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
- * </programlisting>
+ * ]|
  * <para>
  * The toplevel element is &lt;interface&gt;. It optionally takes a "domain"
  * attribute, which will make the builder look for translated strings using
@@ -158,7 +158,7 @@
  * </para>
  * <example>
  * <title>A GtkBuilder UI Definition</title>
- * <programlisting><![CDATA[
+ * |[
  * <interface>
  *   <object class="GtkDialog" id="dialog1">
  *     <child internal-child="vbox">
@@ -180,7 +180,7 @@
  *     </child>
  *   </object>
  * </interface>
- * ]]></programlisting>
+ * ]|
  * </example>
  * <para>
  * Beyond this general structure, several object classes define their own XML

@@ -57,7 +57,7 @@
  * In the simplest of cases, you can the following code to use
  * #GtkFileChooserDialog to select a file for opening:
  * <para>
- * <informalexample><programlisting>
+ * |[
  * GtkWidget *dialog;
  *
  * dialog = gtk_file_chooser_dialog_new ("Open File",
@@ -77,11 +77,11 @@
  *   }
  *
  * gtk_widget_destroy (dialog);
- * </programlisting></informalexample>
+ * ]|
  * </para>
  * To use a dialog for saving, you can use this:
  * <para>
- * <informalexample><programlisting>
+ * |[
  * GtkWidget *dialog;
  *
  * dialog = gtk_file_chooser_dialog_new ("Save File",
@@ -107,7 +107,7 @@
  *   }
  *
  * gtk_widget_destroy (dialog);
- * </programlisting></informalexample>
+ * ]|
  * </para>
  * </example>
  * <section id="gtkfilechooserdialog-setting-up">
@@ -149,7 +149,7 @@
  * #GTK_RESPONSE_ACCEPT and #GTK_RESPONSE_CANCEL.  For example, you
  * could call gtk_file_chooser_dialog_new() as follows:
  * <para>
- * <informalexample><programlisting>
+ * |[
  * GtkWidget *dialog;
  *
  * dialog = gtk_file_chooser_dialog_new ("Open File",
@@ -158,7 +158,7 @@
  *                                       _("_Cancel"), GTK_RESPONSE_CANCEL,
  *                                       _("_Open"), GTK_RESPONSE_ACCEPT,
  *                                       NULL);
- * </programlisting></informalexample>
+ * ]|
  * </para>
  * This will create buttons for "Cancel" and "Open" that use stock
  * response identifiers from #GtkResponseType.  For most dialog
