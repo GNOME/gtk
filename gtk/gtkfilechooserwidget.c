@@ -7156,6 +7156,34 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
   widget_class->screen_changed = gtk_file_chooser_widget_screen_changed;
 
+  /*
+   * Signals
+   */
+
+  /**
+   * GtkFileChooserWidget::location-popup:
+   * @widget: the object which received the signal.
+   * @path: a string that gets put in the text entry for the file
+   * name.
+   *
+   * The ::location-popup signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser show a "Location"
+   * prompt which the user can use to manually type the name of
+   * the file he wishes to select.
+   *
+   * The default bindings for this signal are
+   * <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>
+   * with a @path string of "" (the empty
+   * string).  It is also bound to <keycap>/</keycap> with a
+   * @path string of "<literal>/</literal>"
+   * (a slash):  this lets you type <keycap>/</keycap> and
+   * immediately type a path name.  On Unix systems, this is bound to
+   * <keycap>~</keycap> (tilde) with a <parameter>path</parameter> string
+   * of "~" itself for access to home directories.
+   */
   signals[LOCATION_POPUP] =
     g_signal_new_class_handler (I_("location-popup"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7165,6 +7193,20 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__STRING,
                                 G_TYPE_NONE, 1, G_TYPE_STRING);
 
+  /**
+   * GtkFileChooserWidget::location-popup-on-paste:
+   * @widget: the object which received the signal.
+   *
+   * The ::location-popup-on-paste signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser show a "Location"
+   * prompt when the user pastes #GtkFileChooserWidget.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>.
+   */
   signals[LOCATION_POPUP_ON_PASTE] =
     g_signal_new_class_handler (I_("location-popup-on-paste"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7174,6 +7216,21 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::location-toggle-popup:
+   * @widget: the object which received the signal.
+   *
+   * The ::location-toggle-popup signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to toggle the visibility of a "Location"
+   * prompt which the user can use to manually type the name of
+   * the file he wishes to select.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>.
+   */
   signals[LOCATION_TOGGLE_POPUP] =
     g_signal_new_class_handler (I_("location-toggle-popup"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7183,6 +7240,20 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::up-folder:
+   * @widget: the object which received the signal.
+   *
+   * The ::up-folder signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser go to the parent of
+   * the current folder in the file hierarchy.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>.
+   */
   signals[UP_FOLDER] =
     g_signal_new_class_handler (I_("up-folder"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7192,6 +7263,24 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::down-folder:
+   * @widget: the object which received the signal.
+   *
+   * The ::down-folder signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser go to a child of the
+   * current folder in the file hierarchy.  The subfolder that
+   * will be used is displayed in the path bar widget of the file
+   * chooser.  For example, if the path bar is showing
+   * "/foo/bar/baz", with bar currently displayed, then this will cause
+   * the file chooser to switch to the "baz" subfolder.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>.
+   */
   signals[DOWN_FOLDER] =
     g_signal_new_class_handler (I_("down-folder"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7201,6 +7290,20 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::home-folder:
+   * @widget: the object which received the signal.
+   *
+   * The ::home-folder signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser show the user's home
+   * folder in the file list.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Alt</keycap><keycap>Home</keycap></keycombo>.
+   */
   signals[HOME_FOLDER] =
     g_signal_new_class_handler (I_("home-folder"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7210,6 +7313,20 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::desktop-folder:
+   * @widget: the object which received the signal.
+   *
+   * The ::desktop-folder signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser show the user's Desktop
+   * folder in the file list.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Alt</keycap><keycap>D</keycap></keycombo>.
+   */
   signals[DESKTOP_FOLDER] =
     g_signal_new_class_handler (I_("desktop-folder"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7219,6 +7336,32 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::quick-bookmark:
+   * @widget: the object which received the signal.
+   * @bookmark_index: the number of the bookmark to switch to
+   *
+   * The ::quick-bookmark signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser switch to the bookmark
+   * specified in the @bookmark_index parameter.
+   * For example, if you have three bookmarks, you can pass 0, 1, 2 to
+   * this signal to switch to each of them, respectively.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Alt</keycap><keycap>1</keycap></keycombo>,
+   * <keycombo><keycap>Alt</keycap><keycap>2</keycap></keycombo>,
+   * etc. until
+   * <keycombo><keycap>Alt</keycap><keycap>0</keycap></keycombo>.  Note
+   * that in the default binding,
+   * that <keycombo><keycap>Alt</keycap><keycap>1</keycap></keycombo> is
+   * actually defined to switch to the bookmark at index 0, and so on
+   * successively;
+   * <keycombo><keycap>Alt</keycap><keycap>0</keycap></keycombo> is
+   * defined to switch to the bookmark at index 10.
+   */
   signals[QUICK_BOOKMARK] =
     g_signal_new_class_handler (I_("quick-bookmark"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7228,6 +7371,19 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__INT,
                                 G_TYPE_NONE, 1, G_TYPE_INT);
 
+  /**
+   * GtkFileChooserWidget::show-hidden:
+   * @widget: the object which received the signal.
+   *
+   * The ::show-hidden signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser display hidden files.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Control</keycap><keycap>H</keycap></keycombo>.
+   */
   signals[SHOW_HIDDEN] =
     g_signal_new_class_handler (I_("show-hidden"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7237,6 +7393,19 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::search-shortcut:
+   * @widget: the object which received the signal.
+   *
+   * The ::search-shortcut signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser show the search entry.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Alt</keycap><keycap>S</keycap></keycombo>.
+   */
   signals[SEARCH_SHORTCUT] =
     g_signal_new_class_handler (I_("search-shortcut"),
                                 G_OBJECT_CLASS_TYPE (class),
@@ -7246,6 +7415,19 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::recent-shortcut:
+   * @widget: the object which received the signal.
+   *
+   * The ::recent-shortcut signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to make the file chooser show the Recent location.
+   *
+   * The default binding for this signal is
+   * <keycombo><keycap>Alt</keycap><keycap>R</keycap></keycombo>.
+   */
   signals[RECENT_SHORTCUT] =
     g_signal_new_class_handler (I_("recent-shortcut"),
                                 G_OBJECT_CLASS_TYPE (class),
