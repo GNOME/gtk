@@ -84,6 +84,7 @@ struct _GtkPopoverPrivate
   guint final_position     : 2;
   guint current_position   : 2;
   guint modal              : 1;
+  guint button_pressed     : 1;
 };
 
 static GQuark quark_widget_popovers = 0;
@@ -283,6 +284,7 @@ gtk_popover_unmap (GtkWidget *widget)
   GtkPopoverPrivate *priv;
 
   priv = GTK_POPOVER (widget)->priv;
+  priv->button_pressed = FALSE;
 
   if (priv->modal)
     gtk_popover_apply_modality (GTK_POPOVER (widget), FALSE);
@@ -1015,9 +1017,29 @@ static gboolean
 gtk_popover_button_press (GtkWidget      *widget,
                           GdkEventButton *event)
 {
+  GtkPopoverPrivate *priv;
+
+  if (event->type != GDK_BUTTON_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
+  priv = gtk_popover_get_instance_private (GTK_POPOVER (widget));
+  priv->button_pressed = TRUE;
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+gtk_popover_button_release (GtkWidget      *widget,
+			    GdkEventButton *event)
+{
+  GtkPopoverPrivate *priv;
   GtkWidget *child;
 
+  priv = gtk_popover_get_instance_private (GTK_POPOVER (widget));
   child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (!priv->button_pressed)
+    return GDK_EVENT_PROPAGATE;
 
   if (child && event->window == gtk_widget_get_window (widget))
     {
@@ -1111,6 +1133,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->draw = gtk_popover_draw;
   widget_class->button_press_event = gtk_popover_button_press;
+  widget_class->button_release_event = gtk_popover_button_release;
   widget_class->key_press_event = gtk_popover_key_press;
   widget_class->grab_focus = gtk_popover_grab_focus;
   widget_class->focus = gtk_popover_focus;
