@@ -7759,7 +7759,7 @@ _gtk_window_check_handle_wm_event (GdkEvent *event)
       event->type == GDK_2BUTTON_PRESS)
     return gtk_window_button_press_event (widget, &event->button);
   else if (event->type == GDK_BUTTON_RELEASE)
-    gtk_window_button_release_event (widget, &event->button);
+    return gtk_window_button_release_event (widget, &event->button);
   else if (event->type == GDK_MOTION_NOTIFY)
     return gtk_window_motion_notify_event (widget, &event->motion);
   else
