@@ -19,7 +19,7 @@
     <file compressed="true">ui/gtkcoloreditor.ui</file>
     <file compressed="true">ui/gtkdialog.ui</file>
     <file compressed="true">ui/gtkfilechooserbutton.ui</file>
-    <file compressed="true">ui/gtkfilechooserdefault.ui</file>
+    <file compressed="true">ui/gtkfilechooserwidget.ui</file>
     <file compressed="true">ui/gtkfilechooserdialog.ui</file>
     <file compressed="true">ui/gtkfontbutton.ui</file>
     <file compressed="true">ui/gtkfontchooserdialog.ui</file>

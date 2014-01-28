@@ -662,7 +662,7 @@ get_selected_file (GtkFileChooserButton *button)
   else if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (priv->dialog)) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       /* If there is no "real" selection in SELECT_FOLDER mode, then we'll just return
-       * the current folder, since that is what GtkFileChooserDefault would do.
+       * the current folder, since that is what GtkFileChooserWidget would do.
        */
       if (priv->current_folder_while_inactive)
 	retval = priv->current_folder_while_inactive;

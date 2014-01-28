@@ -1891,14 +1891,13 @@ has_action (const GtkFileChooserAction *actions,
   return FALSE;
 }
 
-static GtkFileChooserDefault *
-get_impl_from_dialog (GtkWidget *dialog)
+static GtkFileChooserWidgetPrivate *
+get_widget_priv_from_dialog (GtkWidget *dialog)
 {
   GtkFileChooserDialog *d;
   GtkFileChooserDialogPrivate *dialog_priv;
   GtkFileChooserWidget *chooser_widget;
   GtkFileChooserWidgetPrivate *widget_priv;
-  GtkFileChooserDefault *impl;
 
   d = GTK_FILE_CHOOSER_DIALOG (dialog);
   dialog_priv = d->priv;
@@ -1907,59 +1906,56 @@ get_impl_from_dialog (GtkWidget *dialog)
     g_error ("BUG: dialog_priv->widget is not a GtkFileChooserWidget");
 
   widget_priv = chooser_widget->priv;
-  impl = (GtkFileChooserDefault *) (widget_priv->impl);
-  if (!impl)
-    g_error ("BUG: widget_priv->impl is not a GtkFileChooserDefault");
 
-  return impl;
+  return widget_priv;
 }
 
 static gboolean
 test_widgets_for_current_action (GtkFileChooserDialog *dialog,
 				 GtkFileChooserAction  expected_action)
 {
-  GtkFileChooserDefault *impl;
+  GtkFileChooserWidgetPrivate *priv;
   gboolean passed;
 
   if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog)) != expected_action)
     return FALSE;
 
-  impl = get_impl_from_dialog (GTK_WIDGET (dialog));
+  priv = get_widget_priv_from_dialog (GTK_WIDGET (dialog));
 
-  g_assert (impl->action == expected_action);
+  g_assert (priv->action == expected_action);
 
   passed = TRUE;
 
   /* OPEN implies that the "new folder" button is hidden; otherwise it is shown */
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
-    passed = passed && !gtk_widget_get_visible (impl->browse_new_folder_button);
+  if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    passed = passed && !gtk_widget_get_visible (priv->browse_new_folder_button);
   else
-    passed = passed && gtk_widget_get_visible (impl->browse_new_folder_button);
+    passed = passed && gtk_widget_get_visible (priv->browse_new_folder_button);
 
   /* Check that the widgets are present/visible or not */
-  if (has_action (open_actions, G_N_ELEMENTS (open_actions), impl->action))
+  if (has_action (open_actions, G_N_ELEMENTS (open_actions), priv->action))
     {
-      passed = passed && (impl->save_widgets == NULL
-			  && (impl->location_mode == LOCATION_MODE_PATH_BAR
-			      ? impl->location_entry == NULL
-			      : impl->location_entry != NULL)
-			  && impl->save_folder_label == NULL
-			  && impl->save_folder_combo == NULL
-			  && impl->save_expander == NULL
-			  && GTK_IS_CONTAINER (impl->browse_widgets) && gtk_widget_is_drawable (impl->browse_widgets));
+      passed = passed && (priv->save_widgets == NULL
+			  && (priv->location_mode == LOCATION_MODE_PATH_BAR
+			      ? priv->location_entry == NULL
+			      : priv->location_entry != NULL)
+			  && priv->save_folder_label == NULL
+			  && priv->save_folder_combo == NULL
+			  && priv->save_expander == NULL
+			  && GTK_IS_CONTAINER (priv->browse_widgets) && gtk_widget_is_drawable (priv->browse_widgets));
     }
-  else if (has_action (save_actions, G_N_ELEMENTS (save_actions), impl->action))
+  else if (has_action (save_actions, G_N_ELEMENTS (save_actions), priv->action))
     {
       /* FIXME: we can't use GTK_IS_FILE_CHOOSER_ENTRY() because it uses
        * _gtk_file_chooser_entry_get_type(), which is a non-exported symbol.
-       * So, we just test impl->location_entry for being non-NULL
+       * So, we just test priv->location_entry for being non-NULL
        */
-      passed = passed && (GTK_IS_CONTAINER (impl->save_widgets) && gtk_widget_is_drawable (impl->save_widgets)
-			  && impl->location_entry != NULL && gtk_widget_is_drawable (impl->location_entry)
-			  && GTK_IS_LABEL (impl->save_folder_label) && gtk_widget_is_drawable (impl->save_folder_label)
-			  && GTK_IS_COMBO_BOX (impl->save_folder_combo) && gtk_widget_is_drawable (impl->save_folder_combo)
-			  && GTK_IS_EXPANDER (impl->save_expander) && gtk_widget_is_drawable (impl->save_expander)
-			  && GTK_IS_CONTAINER (impl->browse_widgets));
+      passed = passed && (GTK_IS_CONTAINER (priv->save_widgets) && gtk_widget_is_drawable (priv->save_widgets)
+			  && priv->location_entry != NULL && gtk_widget_is_drawable (priv->location_entry)
+			  && GTK_IS_LABEL (priv->save_folder_label) && gtk_widget_is_drawable (priv->save_folder_label)
+			  && GTK_IS_COMBO_BOX (priv->save_folder_combo) && gtk_widget_is_drawable (priv->save_folder_combo)
+			  && GTK_IS_EXPANDER (priv->save_expander) && gtk_widget_is_drawable (priv->save_expander)
+			  && GTK_IS_CONTAINER (priv->browse_widgets));
 
       /* FIXME: we are in a SAVE mode; test the visibility and sensitivity of
        * the children that change depending on the state of the expander.
@@ -1967,7 +1963,7 @@ test_widgets_for_current_action (GtkFileChooserDialog *dialog,
     }
   else
     {
-      g_error ("BAD TEST: test_widgets_for_current_action() doesn't know about %s", get_action_name (impl->action));
+      g_error ("BAD TEST: test_widgets_for_current_action() doesn't know about %s", get_action_name (priv->action));
       passed = FALSE;
     }
 
@@ -2085,7 +2081,7 @@ static gboolean
 test_reload_sequence (gboolean set_folder_before_map)
 {
   GtkWidget *dialog;
-  GtkFileChooserDefault *impl;
+  GtkFileChooserWidgetPrivate *priv;
   gboolean passed;
   char *folder;
   char *current_working_dir;
@@ -2102,7 +2098,7 @@ test_reload_sequence (gboolean set_folder_before_map)
 					_("_OK"),
 					GTK_RESPONSE_ACCEPT,
 					NULL);
-  impl = get_impl_from_dialog (dialog);
+  priv = get_widget_priv_from_dialog (dialog);
 
   if (set_folder_before_map)
     {
@@ -2110,13 +2106,13 @@ test_reload_sequence (gboolean set_folder_before_map)
 
       wait_for_idle ();
 
-      passed = passed && (impl->current_folder != NULL
-			  && impl->browse_files_model != NULL
-			  && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-			  && impl->reload_state == RELOAD_HAS_FOLDER
-			  && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
-			  && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-			      ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+      passed = passed && (priv->current_folder != NULL
+			  && priv->browse_files_model != NULL
+			  && (priv->load_state == LOAD_PRELOAD || priv->load_state == LOAD_LOADING || priv->load_state == LOAD_FINISHED)
+			  && priv->reload_state == RELOAD_HAS_FOLDER
+			  && (priv->load_state == LOAD_PRELOAD ? (priv->load_timeout_id != 0) : TRUE)
+			  && ((priv->load_state == LOAD_LOADING || priv->load_state == LOAD_FINISHED)
+			      ? (priv->load_timeout_id == 0 && priv->sort_model != NULL)
 			      : TRUE));
 
       wait_for_idle ();
@@ -2128,12 +2124,12 @@ test_reload_sequence (gboolean set_folder_before_map)
   else
     {
       /* Initially, no folder is not loaded or pending */
-      passed = passed && (impl->current_folder == NULL
-			  && impl->sort_model == NULL
-			  && impl->browse_files_model == NULL
-			  && impl->load_state == LOAD_EMPTY
-			  && impl->reload_state == RELOAD_EMPTY
-			  && impl->load_timeout_id == 0);
+      passed = passed && (priv->current_folder == NULL
+			  && priv->sort_model == NULL
+			  && priv->browse_files_model == NULL
+			  && priv->load_state == LOAD_EMPTY
+			  && priv->reload_state == RELOAD_EMPTY
+			  && priv->load_timeout_id == 0);
 
       wait_for_idle ();
 
@@ -2149,13 +2145,13 @@ test_reload_sequence (gboolean set_folder_before_map)
 
   wait_for_idle ();
 
-  passed = passed && (impl->current_folder != NULL
-		      && impl->browse_files_model != NULL
-		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		      && impl->reload_state == RELOAD_HAS_FOLDER
-		      && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
-		      && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-			  ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+  passed = passed && (priv->current_folder != NULL
+		      && priv->browse_files_model != NULL
+		      && (priv->load_state == LOAD_PRELOAD || priv->load_state == LOAD_LOADING || priv->load_state == LOAD_FINISHED)
+		      && priv->reload_state == RELOAD_HAS_FOLDER
+		      && (priv->load_state == LOAD_PRELOAD ? (priv->load_timeout_id != 0) : TRUE)
+		      && ((priv->load_state == LOAD_LOADING || priv->load_state == LOAD_FINISHED)
+			  ? (priv->load_timeout_id == 0 && priv->sort_model != NULL)
 			  : TRUE));
 
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
@@ -2174,12 +2170,12 @@ test_reload_sequence (gboolean set_folder_before_map)
 
   wait_for_idle ();
 
-  passed = passed && (impl->current_folder != NULL
-		      && impl->browse_files_model != NULL
-		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		      && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
-		      && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-			  ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+  passed = passed && (priv->current_folder != NULL
+		      && priv->browse_files_model != NULL
+		      && (priv->load_state == LOAD_PRELOAD || priv->load_state == LOAD_LOADING || priv->load_state == LOAD_FINISHED)
+		      && (priv->load_state == LOAD_PRELOAD ? (priv->load_timeout_id != 0) : TRUE)
+		      && ((priv->load_state == LOAD_LOADING || priv->load_state == LOAD_FINISHED)
+			  ? (priv->load_timeout_id == 0 && priv->sort_model != NULL)
 			  : TRUE));
 
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
@@ -2198,13 +2194,13 @@ test_reload_sequence (gboolean set_folder_before_map)
 
   wait_for_idle ();
 
-  passed = passed && (impl->current_folder != NULL
-		      && impl->browse_files_model != NULL
-		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		      && impl->reload_state == RELOAD_HAS_FOLDER
-		      && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
-		      && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-			  ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+  passed = passed && (priv->current_folder != NULL
+		      && priv->browse_files_model != NULL
+		      && (priv->load_state == LOAD_PRELOAD || priv->load_state == LOAD_LOADING || priv->load_state == LOAD_FINISHED)
+		      && priv->reload_state == RELOAD_HAS_FOLDER
+		      && (priv->load_state == LOAD_PRELOAD ? (priv->load_timeout_id != 0) : TRUE)
+		      && ((priv->load_state == LOAD_LOADING || priv->load_state == LOAD_FINISHED)
+			  ? (priv->load_timeout_id == 0 && priv->sort_model != NULL)
 			  : TRUE));
 
   folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
@@ -2390,7 +2386,7 @@ test_folder_switch_and_filters (void)
   GtkWidget *dialog;
   GtkFileFilter *all_filter;
   GtkFileFilter *txt_filter;
-  GtkFileChooserDefault *impl;
+  GtkFileChooserWidgetPrivate *priv;
 
   passed = TRUE;
 
@@ -2401,7 +2397,7 @@ test_folder_switch_and_filters (void)
 					_("_Cancel"), GTK_RESPONSE_CANCEL,
 					_("_OK"), GTK_RESPONSE_ACCEPT,
 					NULL);
-  impl = get_impl_from_dialog (dialog);
+  priv = get_widget_priv_from_dialog (dialog);
 
   cwd_file = g_file_new_for_path (cwd);
   base_dir_file = g_file_new_for_path (base_dir);
@@ -2445,7 +2441,7 @@ test_folder_switch_and_filters (void)
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), base_dir);
   sleep_in_main_loop ();
 
-  g_signal_emit_by_name (impl->browse_path_bar, "path-clicked",
+  g_signal_emit_by_name (priv->browse_path_bar, "path-clicked",
 			 cwd_file,
 			 base_dir_file,
 			 FALSE);

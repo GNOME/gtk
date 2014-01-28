@@ -211,7 +211,7 @@ test_file_chooser_widget_basic (void)
   /* XXX BUG:
    *
    * Spin the mainloop for a bit, this allows the file operations
-   * to complete, GtkFileChooserDefault has a bug where it leaks
+   * to complete, GtkFileChooserWidget has a bug where it leaks
    * GtkTreeRowReferences to the internal shortcuts_model
    *
    * Since we assert all automated children are finalized we

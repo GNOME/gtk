@@ -7,7 +7,7 @@
     <property name="can_focus">False</property>
     <property name="icon_name">gtk-edit</property>
   </object>
-  <template class="GtkFileChooserDefault" parent="GtkBox">
+  <template class="GtkFileChooserWidget" parent="GtkBox">
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>

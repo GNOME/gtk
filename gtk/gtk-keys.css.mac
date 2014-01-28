@@ -196,7 +196,7 @@ GtkLabel {
   gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-label;
 }
 
-GtkFileChooserDefault {
+GtkFileChooserWidget {
   gtk-key-bindings: gtk-mac-file-chooser;
 }
 

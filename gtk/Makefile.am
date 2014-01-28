@@ -469,7 +469,6 @@ gtk_private_h_sources =		\
 	gtkcustompaperunixdialog.h \
 	gtkdialogprivate.h 	\
 	gtkentryprivate.h	\
-	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
 	gtkfilechooserprivate.h	\
@@ -722,7 +721,6 @@ gtk_base_c_sources = 		\
 	gtkexpander.c		\
 	gtkfilechooser.c	\
 	gtkfilechooserbutton.c	\
-	gtkfilechooserdefault.c	\
 	gtkfilechooserdialog.c	\
 	gtkfilechooserembed.c	\
 	gtkfilechooserentry.c	\
@@ -1119,7 +1117,7 @@ COMPOSITE_TEMPLATES =				\
 	resources/ui/gtkcoloreditor.ui		\
 	resources/ui/gtkdialog.ui		\
 	resources/ui/gtkfilechooserbutton.ui	\
-	resources/ui/gtkfilechooserdefault.ui	\
+	resources/ui/gtkfilechooserwidget.ui	\
 	resources/ui/gtkfilechooserdialog.ui	\
 	resources/ui/gtkfontbutton.ui		\
 	resources/ui/gtkfontchooserdialog.ui	\
