@@ -1682,7 +1682,7 @@ gtk_text_buffer_delete (GtkTextBuffer *buffer,
  * @end_iter: end of range
  * @default_editable: whether the buffer is editable by default
  *
- * Deletes all <emphasis>editable</emphasis> text in the given range.
+ * Deletes all editable text in the given range.
  * Calls gtk_text_buffer_delete() for each editable sub-range of
  * [@start,@end). @start and @end are revalidated to point to
  * the location of the last deleted range, or left untouched if
@@ -1830,7 +1830,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
  * text (text marked with tags that set the invisibility attribute) if
  * @include_hidden_chars is %FALSE. Does not include characters
  * representing embedded images, so byte and character indexes into
- * the returned string do <emphasis>not</emphasis> correspond to byte
+ * the returned string do not correspond to byte
  * and character indexes into the buffer. Contrast with
  * gtk_text_buffer_get_slice().
  *
@@ -1866,7 +1866,7 @@ gtk_text_buffer_get_text (GtkTextBuffer     *buffer,
  * @include_hidden_chars is %FALSE. The returned string includes a
  * 0xFFFC character whenever the buffer contains
  * embedded images, so byte and character indexes into
- * the returned string <emphasis>do</emphasis> correspond to byte
+ * the returned string do correspond to byte
  * and character indexes into the buffer. Contrast with
  * gtk_text_buffer_get_text(). Note that 0xFFFC can occur in normal
  * text as well, so it is not a reliable indicator that a pixbuf or
@@ -2106,7 +2106,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
  * with right gravity (when you type, the cursor stays on the right
  * side of the text you're typing).
  *
- * The caller of this function does <emphasis>not</emphasis> own a 
+ * The caller of this function does not own a 
  * reference to the returned #GtkTextMark, so you can ignore the 
  * return value if you like. Marks are owned by the buffer and go 
  * away when the buffer does.
@@ -2865,7 +2865,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
  *
  * Obtains an iterator pointing to @char_offset within the given
  * line. The @char_offset must exist, offsets off the end of the line
- * are not allowed. Note <emphasis>characters</emphasis>, not bytes;
+ * are not allowed. Note characters, not bytes;
  * UTF-8 may encode one character as multiple bytes.
  **/
 void
@@ -2890,7 +2890,7 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
  *
  * Obtains an iterator pointing to @byte_index within the given line.
  * @byte_index must be the start of a UTF-8 character, and must not be
- * beyond the end of the line.  Note <emphasis>bytes</emphasis>, not
+ * beyond the end of the line.  Note bytes, not
  * characters; UTF-8 may encode one character as multiple bytes.
  **/
 void

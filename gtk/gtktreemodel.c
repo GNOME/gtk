@@ -459,7 +459,7 @@ gtk_tree_model_base_init (gpointer g_class)
        * This signal is emitted when the children of a node in the
        * #GtkTreeModel have been reordered.
        *
-       * Note that this signal is <emphasis>not</emphasis> emitted
+       * Note that this signal is not emitted
        * when rows are reordered by DND, since this is implemented
        * by removing and then reinserting the row.
        */

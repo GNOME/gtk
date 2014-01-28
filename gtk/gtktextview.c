@@ -1881,7 +1881,7 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  * gtk_text_view_window_to_buffer_coords().
  *
  * Note that this is different from gtk_text_view_get_iter_at_location(),
- * which returns cursor locations, i.e. positions <emphasis>between</emphasis>
+ * which returns cursor locations, i.e. positions between
  * characters.
  *
  * Since: 2.6

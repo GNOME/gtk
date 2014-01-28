@@ -137,7 +137,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    * combo box. 
    *
    * Note that this refers to the model specified in the model property, 
-   * <emphasis>not</emphasis> the model backing the tree view to which 
+   * not the model backing the tree view to which 
    * this cell renderer is attached.
    * 
    * #GtkCellRendererCombo automatically adds a text cell renderer for 

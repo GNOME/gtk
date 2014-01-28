@@ -151,7 +151,7 @@
  * Note that it is probably more common to define your models
  * in the code, and one might consider it a layering violation
  * to specify the content of a list store in a UI definition,
- * <emphasis>data</emphasis>, not <emphasis>presentation</emphasis>,
+ * data, not presentation,
  * and common wisdom is to separate the two, as far as possible.
  * <!-- FIXME a bit inconclusive -->
  *

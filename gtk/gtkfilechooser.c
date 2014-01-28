@@ -75,7 +75,7 @@
  * #GtkFileChooser, your program can get the selected names
  * either as filenames or as URIs.  For URIs, the normal escaping
  * rules are applied if the URI contains non-ASCII characters.
- * However, filenames are <emphasis>always</emphasis> returned in
+ * However, filenames are always returned in
  * the character set specified by the
  * <envar>G_FILENAME_ENCODING</envar> environment variable.
  * Please see the GLib documentation for more details about this
@@ -944,7 +944,7 @@ gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
  * See gtk_file_chooser_set_current_folder().
  *
  * Note that this is the folder that the file chooser is currently displaying
- * (e.g. "/home/username/Documents"), which is <emphasis>not the same</emphasis>
+ * (e.g. "/home/username/Documents"), which is not the same
  * as the currently-selected folder if the chooser is in
  * %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER mode
  * (e.g. "/home/username/Documents/selected-folder/".  To get the
@@ -1290,7 +1290,7 @@ gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
  * See gtk_file_chooser_set_current_folder_uri().
  *
  * Note that this is the folder that the file chooser is currently displaying
- * (e.g. "file:///home/username/Documents"), which is <emphasis>not the same</emphasis>
+ * (e.g. "file:///home/username/Documents"), which is not the same
  * as the currently-selected folder if the chooser is in
  * %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER mode
  * (e.g. "file:///home/username/Documents/selected-folder/".  To get the

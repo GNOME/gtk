@@ -44,7 +44,7 @@
  * if they are of different endianesses it will be byteswapped
  * as necessary according to the format of the property.
  * Note that on the client side, properties of format 32
- * will be stored with one unit per <emphasis>long</emphasis>,
+ * will be stored with one unit per long,
  * even if a long integer has more than 32 bits on the platform.
  * (This decision was apparently made for Xlib to maintain
  * compatibility with programs that assumed longs were 32
@@ -208,7 +208,7 @@ gdk_atom_intern (const gchar *atom_name,
  * Note that this function is identical to gdk_atom_intern() except
  * that if a new #GdkAtom is created the string itself is used rather
  * than a copy. This saves memory, but can only be used if the string
- * will <emphasis>always</emphasis> exist. It can be used with statically
+ * will always exist. It can be used with statically
  * allocated strings in the main program, but not with statically
  * allocated memory in dynamically loaded modules, if you expect to
  * ever unload the module again (e.g. do not use this function in

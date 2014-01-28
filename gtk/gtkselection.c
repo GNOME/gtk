@@ -1296,7 +1296,7 @@ gtk_selection_data_get_display (const GtkSelectionData *selection_data)
  * @length: length of the data
  * 
  * Stores new data into a #GtkSelectionData object. Should
- * <emphasis>only</emphasis> be called from a selection handler callback.
+ * only be called from a selection handler callback.
  * Zero-terminates the stored data.
  **/
 void 

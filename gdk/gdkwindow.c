@@ -6021,7 +6021,7 @@ gdk_window_set_device_cursor (GdkWindow *window,
  * position from the most recent configure event.
  *
  * <note>
- * If @window is not a toplevel, it is <emphasis>much</emphasis> better
+ * If @window is not a toplevel, it is much better
  * to call gdk_window_get_position(), gdk_window_get_width() and
  * gdk_window_get_height() instead, because it avoids the roundtrip to
  * the X server and because these functions support the full 32-bit
@@ -9455,7 +9455,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
  * Toggles whether a window should appear in a task list or window
  * list. If a window's semantic type as specified with
  * gdk_window_set_type_hint() already fully describes the window, this
- * function should <emphasis>not</emphasis> be called in addition,
+ * function should not be called in addition,
  * instead you should allow the window to be treated according to
  * standard policy for its semantic type.
  *
@@ -9478,7 +9478,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
  * thumbnail representation of the windows on the desktop). If a
  * window's semantic type as specified with gdk_window_set_type_hint()
  * already fully describes the window, this function should
- * <emphasis>not</emphasis> be called in addition, instead you should
+ * not be called in addition, instead you should
  * allow the window to be treated according to standard policy for
  * its semantic type.
  *

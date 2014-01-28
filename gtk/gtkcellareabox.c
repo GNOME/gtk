@@ -29,10 +29,10 @@
  * The #GtkCellAreaBox renders cell renderers into a row or a column
  * depending on its #GtkOrientation.
  *
- * GtkCellAreaBox uses a notion of <emphasis>packing</emphasis>. Packing
+ * GtkCellAreaBox uses a notion of packing. Packing
  * refers to adding cell renderers with reference to a particular position
  * in a #GtkCellAreaBox. There are two reference positions: the
- * <emphasis>start</emphasis> and the <emphasis>end</emphasis> of the box.
+ * start and the end of the box.
  * When the #GtkCellAreaBox is oriented in the %GTK_ORIENTATION_VERTICAL
  * orientation, the start is defined as the top of the box and the end is
  * defined as the bottom. In the %GTK_ORIENTATION_HORIZONTAL orientation

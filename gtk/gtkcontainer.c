@@ -67,13 +67,13 @@
  * of the abstract GtkContainer base class.
  *
  * The first type of container widget has a single child widget and derives
- * from #GtkBin. These containers are <emphasis>decorators</emphasis>, which
+ * from #GtkBin. These containers are decorators, which
  * add some kind of functionality to the child. For example, a #GtkButton makes
  * its child into a clickable button; a #GtkFrame draws a frame around its child
  * and a #GtkWindow places its child widget inside a top-level window.
  *
  * The second type of container can have more than one child; its purpose is to
- * manage <emphasis>layout</emphasis>. This means that these containers assign
+ * manage layout. This means that these containers assign
  * sizes and positions to their children. For example, a #GtkHBox arranges its
  * children in a horizontal row, and a #GtkGrid arranges the widgets it contains
  * in a two-dimensional grid.
@@ -185,7 +185,7 @@
  * <refsect2 id="child-properties">
  * <title>Child properties</title>
  * <para>
- * GtkContainer introduces <emphasis>child properties</emphasis>.
+ * GtkContainer introduces child properties.
  * These are object properties that are not specific
  * to either the container or the contained widget, but rather to their relation.
  * Typical examples of child properties are the position or pack-type of a widget
@@ -1458,7 +1458,7 @@ gtk_container_get_property (GObject         *object,
 /**
  * gtk_container_set_border_width:
  * @container: a #GtkContainer
- * @border_width: amount of blank space to leave <emphasis>outside</emphasis>
+ * @border_width: amount of blank space to leave outside
  *   the container. Valid values are in the range 0-65535 pixels.
  *
  * Sets the border width of the container.

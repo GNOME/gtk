@@ -1009,7 +1009,7 @@ gtk_init_check (int    *argc,
  * if you are calling gtk_parse_args(), gtk_init_check(),
  * gtk_init_with_args() or g_option_context_parse() with
  * the option group returned by gtk_get_option_group(),
- * you <emphasis>don't</emphasis> have to call gtk_init().
+ * you don't have to call gtk_init().
  *
  * <note><para>
  * This function will terminate your program if it was unable to

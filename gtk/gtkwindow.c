@@ -2633,7 +2633,7 @@ gtk_window_get_modal (GtkWindow *window)
  * Returns a list of all existing toplevel windows. The widgets
  * in the list are not individually referenced. If you want
  * to iterate through the list and perform actions involving
- * callbacks that might destroy the widgets, you <emphasis>must</emphasis> call
+ * callbacks that might destroy the widgets, you must call
  * <literal>g_list_foreach (result, (GFunc)g_object_ref, NULL)</literal> first, and
  * then unref all the widgets afterwards.
  *
@@ -4845,7 +4845,7 @@ gtk_window_resize_to_geometry (GtkWindow *window,
  * "configure-event" on the window and adjust your size-dependent
  * state to match the size delivered in the #GdkEventConfigure.
  *
- * Note 2: The returned size does <emphasis>not</emphasis> include the
+ * Note 2: The returned size does not include the
  * size of the window manager decorations (aka the window frame or
  * border). Those are not drawn by GTK+ and GTK+ has no reliable
  * method of determining their size.
@@ -4865,7 +4865,7 @@ gtk_window_resize_to_geometry (GtkWindow *window,
  * application cannot.
  *
  * In any case, if you insist on application-specified window
- * positioning, there's <emphasis>still</emphasis> a better way than
+ * positioning, there's still a better way than
  * doing it yourself - gtk_window_set_position() will frequently
  * handle the details for you.
  * 

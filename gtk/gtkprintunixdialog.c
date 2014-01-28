@@ -3645,7 +3645,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
  *
  * Gets a new #GtkPrintSettings object that represents the
  * current values in the print dialog. Note that this creates a
- * <emphasis>new object</emphasis>, and you need to unref it
+ * new object, and you need to unref it
  * if don't want to keep it.
  *
  * Returns: a new #GtkPrintSettings object with the values from @dialog

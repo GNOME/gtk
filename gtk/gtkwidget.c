@@ -219,8 +219,8 @@
  * to do it.
  *
  * Of course if you are getting the size request for
- * <emphasis>another</emphasis> widget, such as a child of a
- * container, you <emphasis>must</emphasis> use the wrapper APIs.
+ * another widget, such as a child of a
+ * container, you must use the wrapper APIs.
  * Otherwise, you would not properly consider widget margins,
  * #GtkSizeGroup, and so forth.
  *
@@ -3112,7 +3112,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * The ::drag-data-received signal is emitted on the drop site when the
    * dragged data has been received. If the data was received in order to
    * determine whether the drop will be accepted, the handler is expected
-   * to call gdk_drag_status() and <emphasis>not</emphasis> finish the drag.
+   * to call gdk_drag_status() and not finish the drag.
    * If the data was received in response to a #GtkWidget::drag-drop signal
    * (and this is the last target to be received), the handler for this
    * signal is expected to process the received data and then call
@@ -8793,7 +8793,7 @@ gtk_widget_get_double_buffered (GtkWidget *widget)
  * the widget will not even redraw if its position changes; this is to
  * allow containers that don't draw anything to avoid excess
  * invalidations. If you set this flag on a widget with no window that
- * <emphasis>does</emphasis> draw on @widget->window, you are
+ * does draw on @widget->window, you are
  * responsible for invalidating both the old and new allocation of the
  * widget when the widget is moved and responsible for invalidating
  * regions newly when the widget increases size.
@@ -14440,7 +14440,7 @@ gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
  * The widgets in the list are not individually referenced. If you
  * want to iterate through the list and perform actions involving
  * callbacks that might destroy the widgets, you
- * <emphasis>must</emphasis> call <literal>g_list_foreach (result,
+ * must call <literal>g_list_foreach (result,
  * (GFunc)g_object_ref, NULL)</literal> first, and then unref all the
  * widgets afterwards.
 

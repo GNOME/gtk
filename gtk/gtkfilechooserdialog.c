@@ -141,7 +141,7 @@
  * should only cause the file chooser to show a specific folder
  * when it is appropriate to use gtk_file_chooser_set_filename(),
  * i.e. when you are doing a <guimenuitem>File/Save
- * As</guimenuitem> command <emphasis>and</emphasis> you already
+ * As</guimenuitem> command and you already
  * have a file saved somewhere.
  * </para>
  * </note>
@@ -169,7 +169,7 @@
  * boxes you can use your own custom response codes rather than the
  * ones in #GtkResponseType, but #GtkFileChooserDialog assumes that
  * its "accept"-type action, e.g. an "Open" or "Save" button,
- * <emphasis>will</emphasis> have one of the following response
+ * will have one of the following response
  * codes:
  * <para>
  * <simplelist id="gtkfilechooserdialog-responses">

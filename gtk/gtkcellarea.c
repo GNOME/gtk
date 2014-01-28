@@ -329,7 +329,7 @@
  * <refsect2 id="cell-properties">
  * <title>Cell Properties</title>
  * <para>
- * The #GtkCellArea introduces <emphasis>cell properties</emphasis>
+ * The #GtkCellArea introduces cell properties
  * for #GtkCellRenderers in very much the same way that #GtkContainer
  * introduces <link linkend="child-properties">child properties</link>
  * for #GtkWidgets. This provides some general interfaces for defining

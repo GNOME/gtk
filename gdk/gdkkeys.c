@@ -529,7 +529,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * used in the keymap, since, for instance, <literal>&lt;Control&gt;</literal>
  * would be masked out even if only <literal>&lt;Control&gt;&lt;Alt&gt;</literal>
  * was used in the keymap. To support this usage as well as well as
- * possible, all <emphasis>single modifier</emphasis> combinations
+ * possible, all single modifier combinations
  * that could affect the key for any combination of modifiers will
  * be returned in @consumed_modifiers; multi-modifier combinations
  * are returned only when actually found in @state. When you store

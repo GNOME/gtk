@@ -486,7 +486,7 @@ gdk_init (int *argc, char ***argv)
  * like #GtkWidget::button-press-event, do not need thread protection.
  *
  * In particular, this means, if you are writing widgets that might
- * be used in threaded programs, you <emphasis>must</emphasis> surround
+ * be used in threaded programs, you must surround
  * timeouts and idle functions in this matter.
  *
  * As always, you must also surround any calls to GTK+ not made within

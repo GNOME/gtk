@@ -25,7 +25,7 @@
  * attributes and data funcs.
  *
  * One of the notable features provided by implementations of GtkCellLayout
- * are <emphasis>attributes</emphasis>. Attributes let you set the properties
+ * are attributes. Attributes let you set the properties
  * in flexible ways. They can just be set to constant values like regular
  * properties. But they can also be mapped to a column of the underlying
  * tree model with gtk_cell_layout_set_attributes(), which means that the value
@@ -94,7 +94,7 @@
  * combo = g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", my_cell_area, NULL);
  * </programlisting></informalexample>
  * to use a custom cell area with a combo box. But construct properties
- * are only initialized <emphasis>after</emphasis> instance init()
+ * are only initialized after instance init()
  * functions have run, which means that using functions which rely on
  * the existence of the cell area in your subclass' init() function will
  * cause the default cell area to be instantiated. In this case, a provided

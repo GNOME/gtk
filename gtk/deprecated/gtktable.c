@@ -51,11 +51,11 @@
  *
  * To alter the space next to a specific row, use gtk_table_set_row_spacing(),
  * and for a column, gtk_table_set_col_spacing().
- * The gaps between <emphasis>all</emphasis> rows or columns can be changed by
+ * The gaps between all rows or columns can be changed by
  * calling gtk_table_set_row_spacings() or gtk_table_set_col_spacings()
- * respectively. Note that spacing is added <emphasis>between</emphasis> the
- * children, while padding added by gtk_table_attach() is added <emphasis>on
- * either side</emphasis> of the widget it belongs to.
+ * respectively. Note that spacing is added between the
+ * children, while padding added by gtk_table_attach() is added on
+ * either side of the widget it belongs to.
  *
  * gtk_table_set_homogeneous(), can be used to set whether all cells in the
  * table will resize themselves to the size of the largest widget in the table.
@@ -628,7 +628,7 @@ gtk_table_new (guint	rows,
  * @rows: The new number of rows.
  * @columns: The new number of columns.
  *
- * If you need to change a table's size <emphasis>after</emphasis>
+ * If you need to change a table's size after
  * it has been created, this function allows you to do so.
  *
  * Deprecated: 3.4: #GtkGrid resizes automatically.

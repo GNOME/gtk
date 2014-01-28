@@ -918,7 +918,7 @@ gtk_text_iter_get_slice       (const GtkTextIter *start,
  * @start: iterator at start of a range
  * @end: iterator at end of a range
  *
- * Returns <emphasis>text</emphasis> in the given range.  If the range
+ * Returns text in the given range.  If the range
  * contains non-text elements such as images, the character and byte
  * offsets in the returned string will not correspond to character and
  * byte offsets in the buffer. If you want offsets to correspond, see
@@ -1101,7 +1101,7 @@ gtk_text_iter_get_marks (const GtkTextIter *iter)
  * toggled on.) If a tag is toggled on at @iter, then some non-empty
  * range of characters following @iter has that tag applied to it.  If
  * a tag is toggled off, then some non-empty range following @iter
- * does <emphasis>not</emphasis> have the tag applied to it.
+ * does not have the tag applied to it.
  *
  * Return value: (element-type GtkTextTag) (transfer container): tags toggled at this point
  **/
@@ -1159,7 +1159,7 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
  *
  * Note that if gtk_text_iter_begins_tag() returns %TRUE, it means that @iter is
  * at the beginning of the tagged range, and that the
- * <emphasis>character</emphasis> at @iter is inside the tagged range. In other
+ * character at @iter is inside the tagged range. In other
  * words, unlike gtk_text_iter_ends_tag(), if gtk_text_iter_begins_tag() returns
  * %TRUE, gtk_text_iter_has_tag() will also return %TRUE for the same
  * parameters.
@@ -1207,8 +1207,8 @@ gtk_text_iter_begins_tag    (const GtkTextIter  *iter,
  * is %NULL, returns %TRUE if any tag is toggled off at this point.
  *
  * Note that if gtk_text_iter_ends_tag() returns %TRUE, it means that @iter is
- * at the end of the tagged range, but that the <emphasis>character</emphasis>
- * at @iter is <emphasis>outside</emphasis> the tagged range. In other words,
+ * at the end of the tagged range, but that the character
+ * at @iter is outside the tagged range. In other words,
  * unlike gtk_text_iter_begins_tag(), if gtk_text_iter_ends_tag() returns %TRUE,
  * gtk_text_iter_has_tag() will return %FALSE for the same parameters.
  *
@@ -1253,7 +1253,7 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
  *
  * This is equivalent to (gtk_text_iter_begins_tag () ||
  * gtk_text_iter_ends_tag ()), i.e. it tells you whether a range with
- * @tag applied to it begins <emphasis>or</emphasis> ends at @iter.
+ * @tag applied to it begins or ends at @iter.
  *
  * Return value: whether @tag is toggled on or off at @iter
  **/
@@ -3766,7 +3766,7 @@ gtk_text_iter_is_cursor_position (const GtkTextIter *iter)
  * @iter: a #GtkTextIter 
  * @char_on_line: a character offset relative to the start of @iter's current line
  * 
- * Moves @iter within a line, to a new <emphasis>character</emphasis>
+ * Moves @iter within a line, to a new character
  * (not byte) offset. The given character offset must be less than or
  * equal to the number of characters in the line; if equal, @iter
  * moves to the start of the next line. See
@@ -3808,7 +3808,7 @@ gtk_text_iter_set_line_offset (GtkTextIter *iter,
  * @byte_on_line: a byte index relative to the start of @iter's current line
  *
  * Same as gtk_text_iter_set_line_offset(), but works with a
- * <emphasis>byte</emphasis> index. The given byte index must be at
+ * byte index. The given byte index must be at
  * the start of a character, it can't be in the middle of a UTF-8
  * encoded character.
  * 

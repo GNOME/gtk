@@ -528,7 +528,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * When handling this signal, use gtk_font_button_get_font_name() 
    * to find out which font was just selected.
    *
-   * Note that this signal is only emitted when the <emphasis>user</emphasis>
+   * Note that this signal is only emitted when the user
    * changes the font. If you need to react to programmatic font changes
    * as well, use the notify::font-name signal.
    *

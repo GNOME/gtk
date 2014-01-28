@@ -3878,7 +3878,7 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
  * With the @n_columns and @types parameters, you give an array of column
  * types for this model (which will be exposed to the parent model/view).
  * The @func, @data and @destroy parameters are for specifying the modify
- * function. The modify function will get called for <emphasis>each</emphasis>
+ * function. The modify function will get called for each
  * data access, the goal of the modify function is to return the data which 
  * should be displayed at the location specified using the parameters of the 
  * modify function.

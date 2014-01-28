@@ -1129,7 +1129,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * The number of pages in the document. 
    *
-   * This <emphasis>must</emphasis> be set to a positive number
+   * This must be set to a positive number
    * before the rendering starts. It may be set in a 
    * #GtkPrintOperation::begin-print signal hander.
    *
@@ -1600,7 +1600,7 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
  * 
  * Sets the number of pages in the document. 
  *
- * This <emphasis>must</emphasis> be set to a positive number
+ * This must be set to a positive number
  * before the rendering starts. It may be set in a 
  * #GtkPrintOperation::begin-print signal hander.
  *

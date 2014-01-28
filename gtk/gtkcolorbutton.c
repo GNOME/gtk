@@ -245,7 +245,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * When handling this signal, use gtk_color_button_get_rgba() to
    * find out which color was just selected.
    *
-   * Note that this signal is only emitted when the <emphasis>user</emphasis>
+   * Note that this signal is only emitted when the user
    * changes the color. If you need to react to programmatic color changes
    * as well, use the notify::color signal.
    *

@@ -2149,7 +2149,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
  * 
  * Sets the double click time (two clicks within this time interval
  * count as a double click and result in a #GDK_2BUTTON_PRESS event).
- * Applications should <emphasis>not</emphasis> set this, it is a global 
+ * Applications should not set this, it is a global 
  * user-configured setting.
  *
  * Since: 2.2
@@ -2168,7 +2168,7 @@ gdk_display_set_double_click_time (GdkDisplay *display,
  * Set the double click time for the default display. See
  * gdk_display_set_double_click_time(). 
  * See also gdk_display_set_double_click_distance().
- * Applications should <emphasis>not</emphasis> set this, it is a 
+ * Applications should not set this, it is a 
  * global user-configured setting.
  **/
 void
@@ -2185,7 +2185,7 @@ gdk_set_double_click_time (guint msec)
  * Sets the double click distance (two clicks within this distance
  * count as a double click and result in a #GDK_2BUTTON_PRESS event).
  * See also gdk_display_set_double_click_time().
- * Applications should <emphasis>not</emphasis> set this, it is a global 
+ * Applications should not set this, it is a global 
  * user-configured setting.
  *
  * Since: 2.4
