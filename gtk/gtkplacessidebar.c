@@ -2859,7 +2859,7 @@ drive_poll_for_media_cb (GObject      *source_object,
       g_error_free (error);
     }
 
-  /* FIXME: drive_stop_cb() gets a reffed sidebar, and unrefs it.  Do we need to do the same here? */
+  g_object_unref (sidebar);
 }
 
 static void
@@ -2878,7 +2878,7 @@ rescan_shortcut_cb (GtkMenuItem      *item,
 
   if (drive != NULL)
     {
-      g_drive_poll_for_media (drive, NULL, drive_poll_for_media_cb, sidebar);
+      g_drive_poll_for_media (drive, NULL, drive_poll_for_media_cb, g_object_ref (sidebar));
       g_object_unref (drive);
     }
 }
@@ -2909,7 +2909,7 @@ drive_start_cb (GObject      *source_object,
       g_error_free (error);
     }
 
-  /* FIXME: drive_stop_cb() gets a reffed sidebar, and unrefs it.  Do we need to do the same here? */
+  g_object_unref (sidebar);
 }
 
 static void
@@ -2932,7 +2932,7 @@ start_shortcut_cb (GtkMenuItem      *item,
 
       mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
 
-      g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_cb, sidebar);
+      g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_cb, g_object_ref (sidebar));
 
       g_object_unref (mount_op);
       g_object_unref (drive);
