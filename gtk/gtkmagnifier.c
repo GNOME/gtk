@@ -186,7 +186,7 @@ _gtk_magnifier_set_inspected (GtkMagnifier *magnifier,
 {
   GtkMagnifierPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_MAGNIFIER (magnifier), NULL);
+  g_return_if_fail (GTK_IS_MAGNIFIER (magnifier));
 
   priv = _gtk_magnifier_get_instance_private (magnifier);
 
