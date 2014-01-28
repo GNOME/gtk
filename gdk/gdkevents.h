@@ -165,8 +165,8 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
 /**
  * GdkXEvent:
  *
- * Used to represent native events (<type>XEvent</type>s for the X11
- * backend, <type>MSG</type>s for Win32).
+ * Used to represent native events (XEvents for the X11
+ * backend, MSGs for Win32).
  */
 typedef void GdkXEvent;	  /* Can be cast to window system specific
 			   * even type, XEvent on X11, MSG on Win32.
@@ -391,7 +391,7 @@ typedef enum
  *
  * Specifies the kind of crossing for #GdkEventCrossing.
  *
- * See the X11 protocol specification of <type>LeaveNotify</type> for
+ * See the X11 protocol specification of LeaveNotify for
  * full details of crossing event generation.
  */
 typedef enum

@@ -1733,7 +1733,7 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
  * retrieved.  The list is terminated by a -1. For example, to get a
  * value from column 0 with type %G_TYPE_STRING, you would
  * write: <literal>gtk_tree_model_get (model, iter, 0, &amp;place_string_here, -1)</literal>,
- * where <literal>place_string_here</literal> is a <type>gchar*</type>
+ * where <literal>place_string_here</literal> is a #gchararray
  * to be filled with the string.
  *
  * Returned values with type %G_TYPE_OBJECT have to be unreferenced,
@@ -1759,9 +1759,9 @@ gtk_tree_model_get (GtkTreeModel *tree_model,
  * gtk_tree_model_get_valist:
  * @tree_model: a #GtkTreeModel
  * @iter: a row in @tree_model
- * @var_args: <type>va_list</type> of column/return location pairs
+ * @var_args: va_list of column/return location pairs
  *
- * See gtk_tree_model_get(), this version takes a <type>va_list</type>
+ * See gtk_tree_model_get(), this version takes a va_list
  * for language bindings to use.
  */
 void

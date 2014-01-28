@@ -308,7 +308,7 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
  *
  * As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
  * GDK_TYPE_PIXBUF);</literal> will create a new #GtkTreeStore with three columns, of type
- * <type>int</type>, <type>string</type> and #GdkPixbuf respectively.
+ * #gint, #gchararray, and #GdkPixbuf respectively.
  *
  * Return value: a new #GtkTreeStore
  **/
@@ -1125,9 +1125,9 @@ gtk_tree_store_set_valuesv (GtkTreeStore *tree_store,
  * gtk_tree_store_set_valist:
  * @tree_store: A #GtkTreeStore
  * @iter: A valid #GtkTreeIter for the row being modified
- * @var_args: <type>va_list</type> of column/value pairs
+ * @var_args: va_list of column/value pairs
  *
- * See gtk_tree_store_set(); this version takes a <type>va_list</type> for
+ * See gtk_tree_store_set(); this version takes a va_list for
  * use by language bindings.
  *
  **/

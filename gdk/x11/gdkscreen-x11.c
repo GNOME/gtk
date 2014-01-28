@@ -424,7 +424,7 @@ gdk_x11_screen_get_rgba_visual (GdkScreen *screen)
  *
  * Returns the screen of a #GdkScreen.
  *
- * Returns: (transfer none): an Xlib <type>Screen*</type>
+ * Returns: (transfer none): an Xlib Screen*
  *
  * Since: 2.2
  */

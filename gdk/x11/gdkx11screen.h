@@ -72,7 +72,7 @@ gint     gdk_x11_get_default_screen       (void);
  *
  * Returns the display of a X11 #GdkScreen.
  *
- * Returns: an Xlib <type>Display*</type>
+ * Returns: an Xlib Display*.
  */
 #define GDK_SCREEN_XDISPLAY(screen) (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
 
@@ -82,7 +82,7 @@ gint     gdk_x11_get_default_screen       (void);
  *
  * Returns the screen of a X11 #GdkScreen.
  *
- * Returns: an Xlib <type>Screen*</type>
+ * Returns: an Xlib Screen*
  */
 #define GDK_SCREEN_XSCREEN(screen) (gdk_x11_screen_get_xscreen (screen))
 

@@ -64,7 +64,7 @@ Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
  *
  * Returns the display of a #GdkCursor.
  *
- * Returns: an Xlib <type>Display*</type>.
+ * Returns: an Xlib Display*.
  */
 #define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
 
@@ -74,7 +74,7 @@ Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
  *
  * Returns the X cursor belonging to a #GdkCursor.
  *
- * Returns: an Xlib <type>Cursor</type>.
+ * Returns: an Xlib Cursor.
  */
 #define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
 

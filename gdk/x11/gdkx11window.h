@@ -93,7 +93,7 @@ void     gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
  *
  * Returns the display of a #GdkWindow.
  *
- * Returns: an Xlib <type>Display*</type>.
+ * Returns: an Xlib Display*.
  */
 #define GDK_WINDOW_XDISPLAY(win)      (GDK_DISPLAY_XDISPLAY (gdk_window_get_display (win)))
 
@@ -103,7 +103,7 @@ void     gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
  *
  * Returns the X window belonging to a #GdkWindow.
  *
- * Returns: the Xlib <type>Window</type> of @win.
+ * Returns: the Xlib Window of @win.
  */
 #define GDK_WINDOW_XID(win)           (gdk_x11_window_get_xid (win))
 
