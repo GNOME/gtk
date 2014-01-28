@@ -1735,7 +1735,7 @@ gtk_box_get_spacing (GtkBox *box)
  *
  * Sets the baseline position of a box. This affects
  * only horizontal boxes with at least one baseline aligned
- * child. If there is more vertical space availible than requested,
+ * child. If there is more vertical space available than requested,
  * and the baseline is not allocated by the parent then
  * @position is used to allocate the baseline wrt the
  * extra space available.
