@@ -524,9 +524,11 @@ gail_focus_notify (GtkWidget *widget)
       /*
        * Do not report focus on redundant object
        */
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (atk_obj &&
 	  (atk_object_get_role(atk_obj) != ATK_ROLE_REDUNDANT_OBJECT))
 	  atk_focus_tracker_notify (atk_obj);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       if (atk_obj && transient)
         g_object_unref (atk_obj);
       if (subsequent_focus_widget)
@@ -976,8 +978,10 @@ _gtk_accessibility_init (void)
   initialized = TRUE;
   quark_focus_object = g_quark_from_static_string ("gail-focus-object");
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   atk_focus_tracker_init (gail_focus_tracker_init);
   focus_tracker_id = atk_add_focus_tracker (gail_focus_tracker);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   _gtk_accessibility_override_atk_util ();
   do_window_event_initialization ();
