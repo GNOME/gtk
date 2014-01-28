@@ -706,9 +706,9 @@
  *       </row>
  *       <row>
  *         <entry>background-color</entry>
- *         <entry morerows="2">color (see above)</entry>
- *         <entry morerows="7">#GdkRGBA</entry>
- *         <entry morerows="7"><literallayout>background-color: &num;fff;
+ *         <entry morerows="1">color (see above)</entry>
+ *         <entry morerows="6">#GdkRGBA</entry>
+ *         <entry morerows="6"><literallayout>background-color: &num;fff;
  * color: &amp;color1;
  * background-color: shade (&amp;color1, 0.5);
  * color: mix (&amp;color1, &num;f0f, 0.8);</literallayout>
@@ -719,7 +719,7 @@
  *       </row>
  *       <row>
  *         <entry>border-top-color</entry>
- *         <entry morerows="4">transparent|color (see above)</entry>
+ *         <entry morerows="3">transparent|color (see above)</entry>
  *       </row>
  *       <row>
  *         <entry>border-right-color</entry>
@@ -796,13 +796,13 @@
  *       </row>
  *       <row>
  *         <entry>margin</entry>
- *         <entry morerows="1"><literallayout>@width
+ *         <entry><literallayout>@width
  * @vertical_width @horizontal_width
  * @top_width @horizontal_width @bottom_width
  * @top_width @right_width @bottom_width @left_width</literallayout>
  *         </entry>
- *         <entry morerows="1">#GtkBorder</entry>
- *         <entry morerows="1"><literallayout>margin: 5;
+ *         <entry>#GtkBorder</entry>
+ *         <entry><literallayout>margin: 5;
  * margin: 5 10;
  * margin: 5 10 3;
  * margin: 5 10 3 5;</literallayout>
@@ -834,6 +834,17 @@
  *       </row>
  *       <row>
  *         <entry>padding</entry>
+ *         <entry><literallayout>@width
+ * @vertical_width @horizontal_width
+ * @top_width @horizontal_width @bottom_width
+ * @top_width @right_width @bottom_width @left_width</literallayout>
+ *         </entry>
+ *         <entry>#GtkBorder</entry>
+ *         <entry><literallayout>padding: 5;
+ * padding: 5 10;
+ * padding: 5 10 3;
+ * padding: 5 10 3 5;</literallayout>
+ *         </entry>
  *       </row>
  *       <row>
  *         <entry>background-image</entry>
@@ -891,8 +902,8 @@
  *       </row>
  *       <row>
  *         <entry>border-width</entry>
- *         <entry morerows="1">#GtkBorder</entry>
- *         <entry morerows="1"><literallayout>border-width: 1;
+ *         <entry>#GtkBorder</entry>
+ *         <entry><literallayout>border-width: 1;
  * border-width: 1 2;
  * border-width: 1 2 3;
  * border-width: 1 2 3 5;</literallayout>
