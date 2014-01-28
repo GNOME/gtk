@@ -735,10 +735,10 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * Note that the file must exist, or nothing will be done except
  * for the directory change.
  *
- * You should use this function only when implementing a <guimenuitem>File/Save
- * As...</guimenuitem> dialog for which you already have a file name to which
+ * You should use this function only when implementing a save
+ * dialog for which you already have a file name to which
  * the user may save.  For example, when the user opens an existing file and
- * then does <guimenuitem>File/Save As...</guimenuitem> on it to save a copy or
+ * then does Save As... to save a copy or
  * a modified version.  If you don't have a file name already &mdash; for
  * example, if the user just created a new file and is saving it for the first
  * time, do not call this function.  Instead, use something similar to this:
@@ -1087,10 +1087,10 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * Note that the URI must exist, or nothing will be done except for the 
  * directory change.
  *
- * You should use this function only when implementing a <guimenuitem>File/Save
- * As...</guimenuitem> dialog for which you already have a file name to which
- * the user may save.  For example, whenthe user opens an existing file and then
- * does <guimenuitem>File/Save As...</guimenuitem> on it to save a copy or a
+ * You should use this function only when implementing a save
+ * dialog for which you already have a file name to which
+ * the user may save.  For example, when the user opens an existing file and then
+ * does Save As... to save a copy or a
  * modified version.  If you don't have a file name already &mdash; for example,
  * if the user just created a new file and is saving it for the first time, do
  * not call this function.  Instead, use something similar to this:
@@ -1453,10 +1453,10 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * Note that the file must exist, or nothing will be done except
  * for the directory change.
  *
- * If you are implementing a <guimenuitem>File/Save As...</guimenuitem> dialog,
+ * If you are implementing a save dialog,
  * you should use this function if you already have a file name to which the
  * user may save; for example, when the user opens an existing file and then
- * does <guimenuitem>File/Save As...</guimenuitem> on it.  If you don't have
+ * does Save As...  If you don't have
  * a file name already &mdash; for example, if the user just created a new
  * file and is saving it for the first time, do not call this function.
  * Instead, use something similar to this:
