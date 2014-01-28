@@ -64,8 +64,8 @@
  * query for the value of a model at a certain node and a certain
  * column on that node. There are two structures used to reference
  * a particular node in a model. They are the #GtkTreePath-struct and the
- * #GtkTreeIter-struct<footnote><para>Here, <abbrev>iter</abbrev> is short
- * for <quote>iterator</quote></para></footnote>. Most of the interface
+ * #GtkTreeIter-struct (<abbrev>iter</abbrev> is short
+ * for <quote>iterator</quote>). Most of the interface
  * consists of operations on a #GtkTreeIter-struct.
  *
  * A path is essentially a potential node. It is a location on a model
