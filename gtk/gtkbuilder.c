@@ -91,10 +91,10 @@
  *
  * Typically, the specific kind of object represented by an &lt;object&gt;
  * element is specified by the "class" attribute. If the type has not been
- * loaded yet, GTK+ tries to find the <function>_get_type(<!-- -->)</function> from the
+ * loaded yet, GTK+ tries to find the _get_type(<!-- -->) from the
  * class name by applying heuristics. This works in most cases, but if
  * necessary, it is possible to specify the name of the
- * <function>_get_type(<!-- -->)</function> explictly with the "type-func" attribute.
+ * _get_type(<!-- -->) explictly with the "type-func" attribute.
  * As a special case, GtkBuilder allows to use an object that has been
  * constructed by a #GtkUIManager in another part of the UI definition by
  * specifying the id of the #GtkUIManager in the "constructor" attribute and the

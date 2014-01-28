@@ -54,7 +54,7 @@
  * main loop and await more user input.
  * </para>
  * <example>
- * <title>Typical <function>main()</function> function for a GTK+ application</title>
+ * <title>Typical main() function for a GTK+ application</title>
  * <programlisting>
  * int
  * main (int argc, char **argv)

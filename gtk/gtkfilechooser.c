@@ -83,8 +83,7 @@
  * <note>
  *    This means that while you can pass the result of
  *    gtk_file_chooser_get_filename() to
- *    <function>open(2)</function> or
- *    <function>fopen(3)</function>, you may not be able to
+ *    open(2) or fopen(3), you may not be able to
  *    directly set it as the text of a #GtkLabel widget unless you
  *    convert it first to UTF-8, which all GTK+ widgets expect.
  *    You should use g_filename_to_utf8() to convert filenames

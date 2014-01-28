@@ -141,7 +141,7 @@
  *
  * This second example shows a quick way of iterating through a list
  * and getting a string and an integer from each row. The
- * <function>populate_model</function> function used below is not
+ * populate_model() function used below is not
  * shown, as it is specific to the #GtkListStore. For information on
  * how to write such a function, see the #GtkListStore documentation.
  *

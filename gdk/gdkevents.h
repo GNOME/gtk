@@ -512,8 +512,7 @@ typedef enum
  * GdkEventAny:
  * @type: the type of the event.
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  *
  * Contains the fields which are common to all event structs.
  * Any event pointer can safely be cast to a pointer to a #GdkEventAny to
@@ -530,8 +529,7 @@ struct _GdkEventAny
  * GdkEventExpose:
  * @type: the type of the event (%GDK_EXPOSE or %GDK_DAMAGE).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @area: bounding box of @region.
  * @region: the region that needs to be redrawn.
  * @count: the number of contiguous %GDK_EXPOSE events following this one.
@@ -556,8 +554,7 @@ struct _GdkEventExpose
  * GdkEventVisibility:
  * @type: the type of the event (%GDK_VISIBILITY_NOTIFY).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @state: the new visibility state (%GDK_VISIBILITY_FULLY_OBSCURED,
  *   %GDK_VISIBILITY_PARTIAL or %GDK_VISIBILITY_UNOBSCURED).
  *
@@ -575,8 +572,7 @@ struct _GdkEventVisibility
  * GdkEventMotion:
  * @type: the type of the event.
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @time: the time of the event in milliseconds.
  * @x: the x coordinate of the pointer relative to the window.
  * @y: the y coordinate of the pointer relative to the window.
@@ -616,8 +612,7 @@ struct _GdkEventMotion
  * @type: the type of the event (%GDK_BUTTON_PRESS, %GDK_2BUTTON_PRESS,
  *   %GDK_3BUTTON_PRESS or %GDK_BUTTON_RELEASE).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @time: the time of the event in milliseconds.
  * @x: the x coordinate of the pointer relative to the window.
  * @y: the y coordinate of the pointer relative to the window.
@@ -692,8 +687,7 @@ struct _GdkEventButton
  * @type: the type of the event (%GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
  *   %GDK_TOUCH_END, %GDK_TOUCH_CANCEL)
  * @window: the window which received the event
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>)
+ * @send_event: %TRUE if the event was sent explicitly.
  * @time: the time of the event in milliseconds.
  * @x: the x coordinate of the pointer relative to the window
  * @y: the y coordinate of the pointer relative to the window
@@ -743,8 +737,7 @@ struct _GdkEventTouch
  * GdkEventScroll:
  * @type: the type of the event (%GDK_SCROLL).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @time: the time of the event in milliseconds.
  * @x: the x coordinate of the pointer relative to the window.
  * @y: the y coordinate of the pointer relative to the window.
@@ -792,8 +785,7 @@ struct _GdkEventScroll
  * GdkEventKey:
  * @type: the type of the event (%GDK_KEY_PRESS or %GDK_KEY_RELEASE).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @time: the time of the event in milliseconds.
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
@@ -839,8 +831,7 @@ struct _GdkEventKey
  * GdkEventCrossing:
  * @type: the type of the event (%GDK_ENTER_NOTIFY or %GDK_LEAVE_NOTIFY).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *  <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @subwindow: the window that was entered or left.
  * @time: the time of the event in milliseconds.
  * @x: the x coordinate of the pointer relative to the window.
@@ -883,8 +874,7 @@ struct _GdkEventCrossing
  * GdkEventFocus:
  * @type: the type of the event (%GDK_FOCUS_CHANGE).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @in: %TRUE if the window has gained the keyboard focus, %FALSE if
  *   it has lost the focus.
  *
@@ -902,8 +892,7 @@ struct _GdkEventFocus
  * GdkEventConfigure:
  * @type: the type of the event (%GDK_CONFIGURE).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @x: the new x coordinate of the window, relative to its parent.
  * @y: the new y coordinate of the window, relative to its parent.
  * @width: the new width of the window.
@@ -925,8 +914,7 @@ struct _GdkEventConfigure
  * GdkEventProperty:
  * @type: the type of the event (%GDK_PROPERTY_NOTIFY).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @atom: the property that was changed.
  * @time: the time of the event in milliseconds.
  * @state: (type GdkPropertyState): whether the property was changed
@@ -949,8 +937,7 @@ struct _GdkEventProperty
  * @type: the type of the event (%GDK_SELECTION_CLEAR,
  *   %GDK_SELECTION_NOTIFY or %GDK_SELECTION_REQUEST).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @selection: the selection.
  * @target: the target to which the selection should be converted.
  * @property: the property in which to place the result of the conversion.
@@ -976,8 +963,7 @@ struct _GdkEventSelection
  * GdkEventOwnerChange:
  * @type: the type of the event (%GDK_OWNER_CHANGE).
  * @window: the window which received the event
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>)
+ * @send_event: %TRUE if the event was sent explicitly.
  * @owner: the new owner of the selection, or %NULL if there is none
  * @reason: the reason for the ownership change as a #GdkOwnerChange value
  * @selection: the atom identifying the selection
@@ -1007,7 +993,7 @@ struct _GdkEventOwnerChange
  * GdkEventProximity:
  * @type: the type of the event (%GDK_PROXIMITY_IN or %GDK_PROXIMITY_OUT).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @time: the time of the event in milliseconds.
  * @device: the master device that the event originated from. Use
  * gdk_event_get_source_device() to get the slave device.
@@ -1035,8 +1021,7 @@ struct _GdkEventProximity
  * GdkEventSetting:
  * @type: the type of the event (%GDK_SETTING).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @action: what happened to the setting (%GDK_SETTING_ACTION_NEW,
  *   %GDK_SETTING_ACTION_CHANGED or %GDK_SETTING_ACTION_DELETED).
  * @name: the name of the setting.
@@ -1056,8 +1041,7 @@ struct _GdkEventSetting
  * GdkEventWindowState:
  * @type: the type of the event (%GDK_WINDOW_STATE).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @changed_mask: mask specifying what flags have changed.
  * @new_window_state: the new window state, a combination of
  *   #GdkWindowState bits.
@@ -1078,8 +1062,7 @@ struct _GdkEventWindowState
  * @type: the type of the event (%GDK_GRAB_BROKEN)
  * @window: the window which received the event, i.e. the window
  *   that previously owned the grab
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @keyboard: %TRUE if a keyboard grab was broken, %FALSE if a pointer
  *   grab was broken
  * @implicit: %TRUE if the broken grab was implicit
@@ -1110,8 +1093,7 @@ struct _GdkEventGrabBroken {
  *   %GDK_DRAG_MOTION, %GDK_DRAG_STATUS, %GDK_DROP_START or
  *   %GDK_DROP_FINISHED).
  * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ * @send_event: %TRUE if the event was sent explicitly.
  * @context: the #GdkDragContext for the current DND operation.
  * @time: the time of the event in milliseconds.
  * @x_root: the x coordinate of the pointer relative to the root of the

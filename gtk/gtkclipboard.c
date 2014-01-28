@@ -821,7 +821,7 @@ text_clear_func (GtkClipboard *clipboard,
  * @clipboard: a #GtkClipboard object
  * @text:      a UTF-8 string.
  * @len:       length of @text, in bytes, or -1, in which case
- *             the length will be determined with <function>strlen()</function>.
+ *             the length will be determined with strlen().
  * 
  * Sets the contents of the clipboard to the given UTF-8 string. GTK+ will
  * make a copy of the text and take responsibility for responding

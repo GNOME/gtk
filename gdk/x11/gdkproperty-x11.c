@@ -426,7 +426,7 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
  * 
  * Returns the name of an X atom for GDK's default display. This
  * function is meant mainly for debugging, so for convenience, unlike
- * <function>XAtomName()</function> and gdk_atom_name(), the result 
+ * XAtomName() and gdk_atom_name(), the result 
  * doesn't need to be freed. Also, this function will never return %NULL, 
  * even if @xatom is invalid.
  * 
