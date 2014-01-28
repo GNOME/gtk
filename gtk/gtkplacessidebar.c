@@ -2636,6 +2636,35 @@ unmount_shortcut_cb (GtkMenuItem      *item,
 }
 
 static void
+drive_stop_cb (GObject      *source_object,
+               GAsyncResult *res,
+               gpointer      user_data)
+{
+  GtkPlacesSidebar *sidebar;
+  GError *error;
+  gchar *primary;
+  gchar *name;
+
+  sidebar = user_data;
+
+  error = NULL;
+  if (!g_drive_stop_finish (G_DRIVE (source_object), res, &error))
+    {
+      if (error->code != G_IO_ERROR_FAILED_HANDLED)
+        {
+          name = g_drive_get_name (G_DRIVE (source_object));
+          primary = g_strdup_printf (_("Unable to stop %s"), name);
+          g_free (name);
+          emit_show_error_message (sidebar, primary, error->message);
+          g_free (primary);
+        }
+      g_error_free (error);
+    }
+
+  g_object_unref (sidebar);
+}
+
+static void
 drive_eject_cb (GObject      *source_object,
                 GAsyncResult *res,
                 gpointer      user_data)
@@ -2738,8 +2767,14 @@ do_eject (GMount           *mount,
     g_volume_eject_with_operation (volume, 0, mount_op, NULL, volume_eject_cb,
                                    g_object_ref (sidebar));
   else if (drive != NULL)
-    g_drive_eject_with_operation (drive, 0, mount_op, NULL, drive_eject_cb,
-                                  g_object_ref (sidebar));
+    {
+      if (g_drive_can_stop (drive))
+        g_drive_stop (drive, 0, mount_op, NULL, drive_stop_cb,
+                      g_object_ref (sidebar));
+      else
+        g_drive_eject_with_operation (drive, 0, mount_op, NULL, drive_eject_cb,
+                                      g_object_ref (sidebar));
+    }
   g_object_unref (mount_op);
 }
 
@@ -2937,35 +2972,6 @@ start_shortcut_cb (GtkMenuItem      *item,
       g_object_unref (mount_op);
       g_object_unref (drive);
     }
-}
-
-static void
-drive_stop_cb (GObject      *source_object,
-               GAsyncResult *res,
-               gpointer      user_data)
-{
-  GtkPlacesSidebar *sidebar;
-  GError *error;
-  gchar *primary;
-  gchar *name;
-
-  sidebar = user_data;
-
-  error = NULL;
-  if (!g_drive_stop_finish (G_DRIVE (source_object), res, &error))
-    {
-      if (error->code != G_IO_ERROR_FAILED_HANDLED)
-        {
-          name = g_drive_get_name (G_DRIVE (source_object));
-          primary = g_strdup_printf (_("Unable to stop %s"), name);
-          g_free (name);
-          emit_show_error_message (sidebar, primary, error->message);
-          g_free (primary);
-        }
-      g_error_free (error);
-    }
-
-  g_object_unref (sidebar);
 }
 
 static void
