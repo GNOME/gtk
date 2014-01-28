@@ -2896,7 +2896,7 @@ drive_start_cb (GObject      *source_object,
   sidebar = GTK_PLACES_SIDEBAR (user_data);
 
   error = NULL;
-  if (!g_drive_poll_for_media_finish (G_DRIVE (source_object), res, &error))
+  if (!g_drive_start_finish (G_DRIVE (source_object), res, &error))
     {
       if (error->code != G_IO_ERROR_FAILED_HANDLED)
         {
@@ -2952,7 +2952,7 @@ drive_stop_cb (GObject      *source_object,
   sidebar = user_data;
 
   error = NULL;
-  if (!g_drive_poll_for_media_finish (G_DRIVE (source_object), res, &error))
+  if (!g_drive_stop_finish (G_DRIVE (source_object), res, &error))
     {
       if (error->code != G_IO_ERROR_FAILED_HANDLED)
         {
