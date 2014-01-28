@@ -3285,7 +3285,9 @@ _gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
 
   if (item_obj != NULL)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       atk_focus_tracker_notify (item_obj);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       atk_object_notify_state_change (item_obj, ATK_STATE_FOCUSED, TRUE);
       g_object_unref (item_obj); 
     }
