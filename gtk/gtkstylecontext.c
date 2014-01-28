@@ -355,8 +355,8 @@ struct _GtkStyleContextPrivate
 {
   GdkScreen *screen;
 
+  guint cascade_changed_id;
   GtkStyleCascade *cascade;
-
   GtkStyleContext *parent;
   GSList *children;
   GtkWidget *widget;
@@ -684,21 +684,20 @@ gtk_style_context_set_cascade (GtkStyleContext *context,
   if (priv->cascade == cascade)
     return;
 
+  if (priv->cascade)
+    {
+      g_signal_handler_disconnect (priv->cascade, priv->cascade_changed_id);
+      priv->cascade_changed_id = 0;
+      g_object_unref (priv->cascade);
+    }
+
   if (cascade)
     {
       g_object_ref (cascade);
-      g_signal_connect (cascade,
-                        "-gtk-private-changed",
-                        G_CALLBACK (gtk_style_context_cascade_changed),
-                        context);
-    }
-
-  if (priv->cascade)
-    {
-      g_signal_handlers_disconnect_by_func (priv->cascade, 
-                                            gtk_style_context_cascade_changed,
-                                            context);
-      g_object_unref (priv->cascade);
+      priv->cascade_changed_id = g_signal_connect (cascade,
+                                                   "-gtk-private-changed",
+                                                   G_CALLBACK (gtk_style_context_cascade_changed),
+                                                   context);
     }
 
   priv->cascade = cascade;
