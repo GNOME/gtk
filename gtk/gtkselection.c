@@ -2294,7 +2294,7 @@ _gtk_selection_request (GtkWidget *widget,
   gulong selection_max_size;
 
   if (event->requestor == NULL)
-    return;
+    return FALSE;
 
   if (initialize)
     gtk_selection_init ();
