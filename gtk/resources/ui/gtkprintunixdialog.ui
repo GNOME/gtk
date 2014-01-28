@@ -526,7 +526,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">T_wo-sided:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">duplex</property>
@@ -542,6 +542,7 @@
                                   <object class="GtkPrinterOptionWidget" id="duplex">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="valign">baseline</property>
                                     <child>
                                       <placeholder/>
                                     </child>
@@ -558,7 +559,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">Pages per _side:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">pages_per_sheet</property>
@@ -574,6 +575,7 @@
                                   <object class="GtkPrinterOptionWidget" id="pages_per_sheet">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="valign">baseline</property>
                                     <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <signal name="changed" handler="update_number_up_layout" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <child>
@@ -592,7 +594,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">Page or_dering:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">number_up_layout</property>
@@ -608,6 +610,7 @@
                                   <object class="GtkPrinterOptionWidget" id="number_up_layout">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="valign">baseline</property>
                                     <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <child>
                                       <placeholder/>
@@ -625,7 +628,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">_Only print:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">page_set_combo</property>
@@ -641,6 +644,7 @@
                                   <object class="GtkComboBoxText" id="page_set_combo">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="valign">baseline</property>
                                     <property name="active">0</property>
                                     <property name="entry_text_column">0</property>
                                     <property name="id_column">1</property>
@@ -662,7 +666,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">Sc_ale:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">scale_spin</property>
@@ -682,6 +686,7 @@
                                     <child>
                                       <object class="GtkSpinButton" id="scale_spin">
                                         <property name="visible">True</property>
+                                        <property name="valign">baseline</property>
                                         <property name="can_focus">True</property>
                                         <property name="invisible_char">•</property>
                                         <property name="adjustment">scale_spin_adjustment</property>
@@ -697,6 +702,7 @@
                                       <object class="GtkLabel" id="label10">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="valign">baseline</property>
                                         <property name="label">%</property>
                                       </object>
                                       <packing>
@@ -762,7 +768,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">Paper _type:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">paper_type</property>
@@ -778,6 +784,7 @@
                                   <object class="GtkPrinterOptionWidget" id="paper_type">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="valign">baseline</property>
                                     <child>
                                       <placeholder/>
                                     </child>
@@ -794,7 +801,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">Paper _source:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">paper_source</property>
@@ -810,6 +817,7 @@
                                   <object class="GtkPrinterOptionWidget" id="paper_source">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="valign">baseline</property>
                                     <child>
                                       <placeholder/>
                                     </child>
@@ -826,7 +834,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">Output t_ray:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">output_tray</property>
@@ -842,6 +850,7 @@
                                   <object class="GtkPrinterOptionWidget" id="output_tray">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="valign">baseline</property>
                                     <child>
                                       <placeholder/>
                                     </child>
@@ -858,7 +867,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">_Paper size:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">paper_size_combo</property>
@@ -876,6 +885,7 @@
                                     <property name="sensitive">False</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">page_setup_list</property>
+                                    <property name="valign">baseline</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="paper_size_renderer"/>
                                     </child>
@@ -892,7 +902,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">Or_ientation:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">orientation_combo</property>
@@ -911,6 +921,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="active">0</property>
                                     <property name="entry_text_column">0</property>
+                                    <property name="valign">baseline</property>
                                     <property name="id_column">1</property>
                                     <items>
                                       <item translatable="yes">Portrait</item>
