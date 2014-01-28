@@ -1252,6 +1252,7 @@ gtk_list_box_button_press_event (GtkWidget      *widget,
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
+  gboolean retval = GDK_EVENT_PROPAGATE;
   gboolean ctrl_pressed;
   GdkWindow *window;
   double x, y;
@@ -1301,13 +1302,14 @@ gtk_list_box_button_press_event (GtkWidget      *widget,
               gtk_widget_queue_draw (GTK_WIDGET (list_box));
             }
 
+          retval = GDK_EVENT_STOP;
         }
       /* TODO:
          Should mark as active while down,
          and handle grab breaks */
     }
 
-  return FALSE;
+  return retval;
 }
 
 static gboolean
@@ -1316,6 +1318,7 @@ gtk_list_box_button_release_event (GtkWidget      *widget,
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
+  gboolean retval = GDK_EVENT_PROPAGATE;
 
   /* Take a ref to protect against reentrancy (i.e. the activation may destroy the widget) */
   g_object_ref (list_box);
@@ -1333,6 +1336,7 @@ gtk_list_box_button_release_event (GtkWidget      *widget,
           else
             gtk_list_box_update_selected (list_box, priv->active_row);
 
+          retval = GDK_EVENT_STOP;
         }
       priv->active_row = NULL;
       priv->active_row_active = FALSE;
@@ -1341,7 +1345,7 @@ gtk_list_box_button_release_event (GtkWidget      *widget,
 
   g_object_unref (list_box);
 
-  return FALSE;
+  return retval;
 }
 
 static void
