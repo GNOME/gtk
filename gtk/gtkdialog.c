@@ -145,7 +145,7 @@
  * <title>A #GtkDialog UI definition fragment.</title>
  * <programlisting><![CDATA[
  * <object class="GtkDialog" id="dialog1">
- *   <child internal-child="vbox">"
+ *   <child internal-child="vbox">
  *     <object class="GtkVBox" id="vbox">
  *       <child internal-child="action_area">
  *         <object class="GtkHButtonBox" id="button_box">
