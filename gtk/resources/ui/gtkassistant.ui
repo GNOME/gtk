@@ -104,7 +104,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="forward">
-                    <property name="label" translatable="yes">C_ontinue</property>
+                    <property name="label" translatable="yes">_Next</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
@@ -122,7 +122,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="back">
-                    <property name="label" translatable="yes">Go _Back</property>
+                    <property name="label" translatable="yes">_Back</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
