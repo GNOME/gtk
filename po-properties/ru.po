@@ -11,24 +11,24 @@
 #
 # Dmitriy S. Seregin <dseregin@59.ru>, 2013.
 # Yuri Myasoedov <omerta13@yandex.ru>, 2012, 2013.
-# Stas Solovey <whats_up@tut.by>, 2013.
+# Stas Solovey <whats_up@tut.by>, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-12-04 09:42+0000\n"
-"PO-Revision-Date: 2013-12-24 22:23+0400\n"
-"Last-Translator: Yuri Myasoedov <ymyasoedov@yandex.ru>\n"
+"POT-Creation-Date: 2014-01-28 15:51+0000\n"
+"PO-Revision-Date: 2014-01-28 13:52+0300\n"
+"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.5.7\n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:139
 #: ../gdk/gdkdevicemanager.c:170
@@ -969,7 +969,7 @@ msgid ""
 "right aligned"
 msgstr ""
 "Горизонтальное расположение вложенного элемента в доступном пространстве. "
-"«0.0» – выровнить по левому краю; «1.0» – выровнить по правому краю"
+"«0.0» – выровнять по левому краю; «1.0» – выровнять по правому краю"
 
 #: ../gtk/gtkalignment.c:152
 msgid "Vertical alignment"
@@ -981,7 +981,7 @@ msgid ""
 "bottom aligned"
 msgstr ""
 "Вертикальное расположение вложенного элемента в доступном пространстве. "
-"«0.0» – выровнить по верхнему краю; «1.0» – выровнить по нижнему краю"
+"«0.0» – выровнять по верхнему краю; «1.0» – выровнять по нижнему краю"
 
 #: ../gtk/gtkalignment.c:161
 msgid "Horizontal scale"
@@ -3595,7 +3595,7 @@ msgstr "Фильтр"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Текущий фильтр для выбора отображаемых файлов"
 
-#: ../gtk/gtkfilechooser.c:757 ../gtk/gtkplacessidebar.c:4294
+#: ../gtk/gtkfilechooser.c:757 ../gtk/gtkplacessidebar.c:4300
 msgid "Local Only"
 msgstr "Только локальные"
 
@@ -5015,19 +5015,19 @@ msgstr ""
 "Если установлено, то дочерний элемент может быть сжат относительно "
 "запрошенных размеров"
 
-#: ../gtk/gtkplacessidebar.c:4269
+#: ../gtk/gtkplacessidebar.c:4275
 msgid "Location to Select"
 msgstr "Выбор местоположения"
 
-#: ../gtk/gtkplacessidebar.c:4270
+#: ../gtk/gtkplacessidebar.c:4276
 msgid "The location to highlight in the sidebar"
 msgstr "Подсвечиваемое местоположение в боковой панели"
 
-#: ../gtk/gtkplacessidebar.c:4275
+#: ../gtk/gtkplacessidebar.c:4281
 msgid "Open Flags"
 msgstr "Флаги открытия"
 
-#: ../gtk/gtkplacessidebar.c:4276
+#: ../gtk/gtkplacessidebar.c:4282
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5035,20 +5035,20 @@ msgstr ""
 "Режимы, в которых вызывающее приложение может открывать адреса, выбранные в "
 "боковой панели"
 
-#: ../gtk/gtkplacessidebar.c:4282
+#: ../gtk/gtkplacessidebar.c:4288
 msgid "Show 'Desktop'"
 msgstr "Показывать «Рабочий стол»"
 
-#: ../gtk/gtkplacessidebar.c:4283
+#: ../gtk/gtkplacessidebar.c:4289
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Должна ли боковая панель содержать встроенный ярлык к папке рабочего стола"
 
-#: ../gtk/gtkplacessidebar.c:4288
+#: ../gtk/gtkplacessidebar.c:4294
 msgid "Show 'Connect to Server'"
 msgstr "Показывать «Подключиться к серверу»"
 
-#: ../gtk/gtkplacessidebar.c:4289
+#: ../gtk/gtkplacessidebar.c:4295
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5056,7 +5056,7 @@ msgstr ""
 "Должна ли боковая панель содержать встроенный ярлык к диалоговому окну "
 "«Подключиться к серверу»"
 
-#: ../gtk/gtkplacessidebar.c:4295
+#: ../gtk/gtkplacessidebar.c:4301
 msgid "Whether the sidebar only includes local files"
 msgstr "Должна ли боковая панель содержать только локальные файлы"
 
