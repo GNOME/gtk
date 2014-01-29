@@ -93,6 +93,9 @@
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
                     <signal name="clicked" handler="on_assistant_apply" swapped="no"/>
                   </object>
                   <packing>
@@ -111,6 +114,9 @@
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
                     <signal name="clicked" handler="on_assistant_forward" swapped="no"/>
                   </object>
                   <packing>
@@ -128,6 +134,9 @@
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
                     <signal name="clicked" handler="on_assistant_back" swapped="no"/>
                   </object>
                   <packing>
@@ -144,6 +153,9 @@
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
                     <signal name="clicked" handler="on_assistant_last" swapped="no"/>
                   </object>
                   <packing>
@@ -161,6 +173,9 @@
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
                     <signal name="clicked" handler="on_assistant_cancel" swapped="no"/>
                   </object>
                   <packing>
@@ -178,6 +193,9 @@
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
                     <signal name="clicked" handler="on_assistant_close" swapped="no"/>
                   </object>
                   <packing>
