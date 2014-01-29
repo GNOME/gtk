@@ -950,6 +950,8 @@ set_current_page (GtkAssistant *assistant,
 
   update_title_state (assistant);
 
+  gtk_window_set_title (GTK_WINDOW (assistant), priv->current_page->title);
+
   gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->content), page_num);
 
   /* update buttons state, flow may have changed */
