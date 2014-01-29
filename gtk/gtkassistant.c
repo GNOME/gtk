@@ -109,6 +109,9 @@ struct _GtkAssistantPrivate
   GtkWidget *sidebar_frame;
   GtkWidget *content;
   GtkWidget *action_area;
+  GtkWidget *headerbar;
+  gint use_header_bar;
+  gboolean constructed;
 
   GList     *pages;
   GSList    *visited_pages;
@@ -210,6 +213,11 @@ enum
   LAST_SIGNAL
 };
 
+enum {
+  PROP_0,
+  PROP_USE_HEADER_BAR
+};
+
 static guint signals [LAST_SIGNAL] = { 0 };
 
 
@@ -218,6 +226,156 @@ G_DEFINE_TYPE_WITH_CODE (GtkAssistant, gtk_assistant, GTK_TYPE_WINDOW,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_assistant_buildable_interface_init))
 
+static void
+set_use_header_bar (GtkAssistant *assistant,
+                    gint          use_header_bar)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  if (use_header_bar == -1)
+    return;
+
+  priv->use_header_bar = use_header_bar;
+}
+
+static void
+gtk_assistant_set_property (GObject      *object,
+                            guint         prop_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
+{
+  GtkAssistant *assistant = GTK_ASSISTANT (object);
+
+  switch (prop_id)
+    {
+    case PROP_USE_HEADER_BAR:
+      set_use_header_bar (assistant, g_value_get_int (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_assistant_get_property (GObject      *object,
+                            guint         prop_id,
+                            GValue       *value,
+                            GParamSpec   *pspec)
+{
+  GtkAssistant *assistant = GTK_ASSISTANT (object);
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  switch (prop_id)
+    {
+    case PROP_USE_HEADER_BAR:
+      g_value_set_int (value, priv->use_header_bar);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+add_cb (GtkContainer *container,
+        GtkWidget    *widget,
+        GtkAssistant *assistant)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  if (priv->use_header_bar)
+    g_warning ("Content added to the action area of a assistant using header bars");
+
+  gtk_widget_show (GTK_WIDGET (container));
+}
+
+static void
+apply_use_header_bar (GtkAssistant *assistant)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  gtk_widget_set_visible (priv->action_area, !priv->use_header_bar);
+  gtk_widget_set_visible (priv->headerbar, priv->use_header_bar);
+  if (!priv->use_header_bar)
+    gtk_window_set_titlebar (GTK_WINDOW (assistant), NULL);
+  if (priv->use_header_bar)
+    g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), assistant);
+}
+
+static void
+add_to_header_bar (GtkAssistant *assistant,
+                   GtkWidget    *child)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
+
+  if (child == priv->back || child == priv->cancel)
+    gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->headerbar), child);
+  else
+    gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->headerbar), child);
+}
+
+static void
+add_action_widgets (GtkAssistant *assistant)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+  GList *children;
+  GList *l;
+
+  if (priv->use_header_bar)
+    {
+      children = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
+      for (l = children; l != NULL; l = l->next)
+        {
+          GtkWidget *child = l->data;
+          gboolean has_default;
+
+          has_default = gtk_widget_has_default (child);
+
+          g_object_ref (child);
+          gtk_container_remove (GTK_CONTAINER (priv->action_area), child);
+          add_to_header_bar (assistant, child);
+          g_object_unref (child);
+
+          if (has_default)
+            {
+              gtk_widget_grab_default (child);
+              gtk_style_context_add_class (gtk_widget_get_style_context (child), "suggested-action");
+            }
+        }
+      g_list_free (children);
+    }
+}
+
+static GObject *
+gtk_assistant_constructor (GType                  type,
+                           guint                  n_construct_properties,
+                           GObjectConstructParam *construct_params)
+{
+  GObject *object;
+  GtkAssistant *assistant;
+  GtkAssistantPrivate *priv;
+
+  object = G_OBJECT_CLASS (gtk_assistant_parent_class)->constructor (type,
+                                                                     n_construct_properties,
+                                                                     construct_params);
+
+  assistant = GTK_ASSISTANT (object);
+  priv = assistant->priv;
+
+  priv->constructed = TRUE;
+  if (priv->use_header_bar == -1)
+    priv->use_header_bar = FALSE;
+
+  add_action_widgets (assistant);
+  apply_use_header_bar (assistant);
+
+  return object;
+}
 
 static void
 gtk_assistant_class_init (GtkAssistantClass *class)
@@ -229,6 +387,10 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   gobject_class   = (GObjectClass *) class;
   widget_class    = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
+
+  gobject_class->constructor  = gtk_assistant_constructor;
+  gobject_class->set_property = gtk_assistant_set_property;
+  gobject_class->get_property = gtk_assistant_get_property;
 
   widget_class->destroy = gtk_assistant_destroy;
   widget_class->map = gtk_assistant_map;
@@ -326,6 +488,25 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkAssistant:use-header-bar:
+   *
+   * %TRUE if the assistant uses a #GtkHeaderBar for action buttons
+   * instead of the action-area.
+   *
+   * For technical reasons, this property is declared as an integer
+   * property, but you should only set it to %TRUE or %FALSE.
+   *
+   * Since: 3.12
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_USE_HEADER_BAR,
+                                   g_param_spec_int ("use-header-bar",
+                                                     P_("Use Header Bar"),
+                                                     P_("Use Header Bar for actions."),
+                                                     -1, 1, -1,
+                                                     GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("header-padding",
@@ -433,6 +614,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 					       "/org/gtk/libgtk/ui/gtkassistant.ui");
 
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkAssistant, action_area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkAssistant, headerbar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, content);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, cancel);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, forward);
@@ -1006,6 +1188,10 @@ gtk_assistant_init (GtkAssistant *assistant)
   priv->forward_function = default_forward_function;
   priv->forward_function_data = assistant;
   priv->forward_data_destroy = NULL;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (assistant)),
+                "gtk-dialogs-use-header", &priv->use_header_bar,
+                NULL);
 
   gtk_widget_init_template (GTK_WIDGET (assistant));
 
@@ -1691,6 +1877,17 @@ gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
     update_buttons_state (assistant);
 }
 
+static void
+add_to_action_area (GtkAssistant *assistant,
+                    GtkWidget    *child)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+
+  gtk_box_pack_end (GTK_BOX (priv->action_area), child, FALSE, FALSE, 0);
+}
+
 /**
  * gtk_assistant_add_action_widget:
  * @assistant: a #GtkAssistant
@@ -1719,7 +1916,10 @@ gtk_assistant_add_action_widget (GtkAssistant *assistant,
         update_actions_size (assistant);
     }
 
-  gtk_box_pack_end (GTK_BOX (priv->action_area), child, FALSE, FALSE, 0);
+  if (priv->constructed && priv->use_header_bar)
+    add_to_header_bar (assistant, child);
+  else
+    add_to_action_area (assistant, child);
 }
 
 /**
