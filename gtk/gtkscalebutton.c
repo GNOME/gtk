@@ -3,6 +3,7 @@
  * Copyright (C) 2006, 2007 Christian Persch
  * Copyright (C) 2006 Jan Arne Petersen
  * Copyright (C) 2005-2007 Red Hat, Inc.
+ * Copyright (C) 2014 Red Hat, Inc.
  *
  * Authors:
  * - Ronald S. Bultje <rbultje@ronald.bitfreak.net>
@@ -48,6 +49,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
+#include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkscale.h"
 #include "gtkbox.h"
@@ -99,20 +101,14 @@ struct _GtkScaleButtonPrivate
   GtkWidget *box;
   GtkWidget *scale;
   GtkWidget *image;
+  GtkWidget *active_button;
 
   GtkIconSize size;
   GtkOrientation orientation;
 
   guint click_id;
-  gint click_timeout;
-  guint timeout : 1;
-  gdouble direction;
-  guint32 pop_time;
 
   gchar **icon_list;
-
-  GdkDevice *grab_pointer;
-  GdkDevice *grab_keyboard;
 
   GtkAdjustment *adjustment; /* needed because it must be settable in init() */
 };
@@ -134,37 +130,22 @@ static void gtk_scale_button_set_orientation_private (GtkScaleButton *button,
                                                       GtkOrientation  orientation);
 static gboolean	gtk_scale_button_scroll		(GtkWidget           *widget,
 						 GdkEventScroll      *event);
-static void gtk_scale_button_screen_changed	(GtkWidget           *widget,
-						 GdkScreen           *previous_screen);
-static gboolean	gtk_scale_button_press		(GtkWidget           *widget,
-						 GdkEventButton      *event);
-static gboolean gtk_scale_button_key_release	(GtkWidget           *widget,
-    						 GdkEventKey         *event);
+static void     gtk_scale_button_clicked        (GtkButton           *button);
 static void     gtk_scale_button_popup          (GtkWidget           *widget);
 static void     gtk_scale_button_popdown        (GtkWidget           *widget);
-static gboolean cb_dock_button_press		(GtkWidget           *widget,
-						 GdkEventButton      *event,
-						 gpointer             user_data);
-static gboolean cb_dock_key_release		(GtkWidget           *widget,
-						 GdkEventKey         *event,
-						 gpointer             user_data);
 static gboolean cb_button_press			(GtkWidget           *widget,
 						 GdkEventButton      *event,
 						 gpointer             user_data);
 static gboolean cb_button_release		(GtkWidget           *widget,
 						 GdkEventButton      *event,
 						 gpointer             user_data);
-static void cb_dock_grab_notify			(GtkWidget           *widget,
-						 gboolean             was_grabbed,
-						 gpointer             user_data);
-static gboolean cb_dock_grab_broken_event	(GtkWidget           *widget,
-						 gboolean             was_grabbed,
-						 gpointer             user_data);
-static void cb_scale_grab_notify		(GtkWidget           *widget,
-						 gboolean             was_grabbed,
-						 gpointer             user_data);
-static void gtk_scale_button_update_icon	(GtkScaleButton      *button);
-static void gtk_scale_button_scale_value_changed(GtkRange            *range);
+static void     cb_button_clicked               (GtkWidget           *button,
+                                                 gpointer             user_data);
+static void     gtk_scale_button_update_icon    (GtkScaleButton      *button);
+static void     cb_scale_value_changed          (GtkRange            *range,
+                                                 gpointer             user_data);
+static void     cb_popup_mapped                 (GtkWidget           *popup,
+                                                 gpointer             user_data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON,
                          G_ADD_PRIVATE (GtkScaleButton)
@@ -173,26 +154,12 @@ G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON,
 
 static guint signals[LAST_SIGNAL] = { 0, };
 
-/*
- * ScaleButtonScale forward declarations
- */
-#define GTK_TYPE_SCALE_BUTTON_SCALE    (_gtk_scale_button_scale_get_type ())
-#define GTK_SCALE_BUTTON_SCALE(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCALE_BUTTON_SCALE, GtkScaleButtonScale))
-#define GTK_IS_SCALE_BUTTON_SCALE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCALE_BUTTON_SCALE))
-GType _gtk_scale_button_scale_get_type (void);
-
-typedef struct _GtkScaleButtonScale
-{
-  GtkScale parent_instance;
-  GtkScaleButton *button;
-} GtkScaleButtonScale;
-
-
 static void
 gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
   GtkBindingSet *binding_set;
 
   gobject_class->constructor = gtk_scale_button_constructor;
@@ -201,10 +168,9 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gobject_class->set_property = gtk_scale_button_set_property;
   gobject_class->get_property = gtk_scale_button_get_property;
 
-  widget_class->button_press_event = gtk_scale_button_press;
-  widget_class->key_release_event = gtk_scale_button_key_release;
   widget_class->scroll_event = gtk_scale_button_scroll;
-  widget_class->screen_changed = gtk_scale_button_screen_changed;
+
+  button_class->clicked = gtk_scale_button_clicked;
 
   /**
    * GtkScaleButton:orientation:
@@ -368,13 +334,11 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, image);
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, adjustment);
 
-  gtk_widget_class_bind_template_callback (widget_class, cb_dock_button_press);
-  gtk_widget_class_bind_template_callback (widget_class, cb_dock_key_release);
-  gtk_widget_class_bind_template_callback (widget_class, cb_dock_grab_notify);
-  gtk_widget_class_bind_template_callback (widget_class, cb_dock_grab_broken_event);
   gtk_widget_class_bind_template_callback (widget_class, cb_button_press);
   gtk_widget_class_bind_template_callback (widget_class, cb_button_release);
-  gtk_widget_class_bind_template_callback (widget_class, cb_scale_grab_notify);
+  gtk_widget_class_bind_template_callback (widget_class, cb_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, cb_scale_value_changed);
+  gtk_widget_class_bind_template_callback (widget_class, cb_popup_mapped);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_BUTTON_ACCESSIBLE);
 }
@@ -386,18 +350,11 @@ gtk_scale_button_init (GtkScaleButton *button)
 
   button->priv = priv = gtk_scale_button_get_instance_private (button);
 
-  priv->timeout = FALSE;
   priv->click_id = 0;
-  priv->click_timeout = CLICK_TIMEOUT;
   priv->orientation = GTK_ORIENTATION_VERTICAL;
 
-  g_type_ensure (GTK_TYPE_SCALE_BUTTON_SCALE);
   gtk_widget_init_template (GTK_WIDGET (button));
-
-  /* Assign GtkScaleButtonScale pointer back to 'button',
-   * since there's no property for that we can't do it in the template
-   */
-  GTK_SCALE_BUTTON_SCALE (priv->scale)->button = button;
+  gtk_popover_set_relative_to (GTK_POPOVER (priv->dock), GTK_WIDGET (button));
 
   /* Need a local reference to the adjustment */
   g_object_ref (priv->adjustment);
@@ -805,11 +762,6 @@ gtk_scale_button_set_orientation_private (GtkScaleButton *button,
           gtk_range_set_inverted (GTK_RANGE (priv->scale), FALSE);
         }
 
-      /* FIXME: without this, the popup window appears as a square
-       * after changing the orientation
-       */
-      gtk_window_resize (GTK_WINDOW (priv->dock), 1, 1);
-
       g_object_notify (G_OBJECT (button), "orientation");
     }
 }
@@ -852,361 +804,84 @@ gtk_scale_button_scroll (GtkWidget      *widget,
   return TRUE;
 }
 
-static void
-gtk_scale_button_screen_changed (GtkWidget *widget,
-				 GdkScreen *previous_screen)
-{
-  GtkScaleButton *button = (GtkScaleButton *) widget;
-  GtkScaleButtonPrivate *priv;
-  GdkScreen *screen;
-  GValue value = G_VALUE_INIT;
-
-  if (gtk_widget_has_screen (widget) == FALSE)
-    return;
-
-  priv = button->priv;
-
-  screen = gtk_widget_get_screen (widget);
-  g_value_init (&value, G_TYPE_INT);
-  if (gdk_screen_get_setting (screen,
-			      "gtk-double-click-time",
-			      &value) == FALSE)
-    {
-      priv->click_timeout = CLICK_TIMEOUT;
-      return;
-    }
-
-  priv->click_timeout = g_value_get_int (&value);
-}
-
 static gboolean
-gtk_scale_popup (GtkWidget *widget,
-		 GdkEvent  *event,
-		 guint32    time)
+gtk_scale_popup (GtkWidget *widget)
 {
-  GtkAllocation allocation, dock_allocation, scale_allocation;
-  GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
-  GtkAdjustment *adjustment;
-  gint x, y, m, dx, dy, sx, sy, startoff;
-  gint min_slider_size;
-  gdouble v;
-  GdkScreen *screen;
-  gboolean is_moved;
-  GdkDevice *device, *keyboard, *pointer;
+  GtkScaleButton *button = GTK_SCALE_BUTTON (widget);
+  GtkScaleButtonPrivate *priv = button->priv;
 
-  is_moved = FALSE;
-  button = GTK_SCALE_BUTTON (widget);
-  priv = button->priv;
-  adjustment = priv->adjustment;
-
-  screen = gtk_widget_get_screen (widget);
-  gtk_widget_get_allocation (widget, &allocation);
-
-  /* position roughly */
-  gtk_window_set_screen (GTK_WINDOW (priv->dock), screen);
-
-  gdk_window_get_origin (gtk_widget_get_window (widget),
-                         &x, &y);
-  x += allocation.x;
-  y += allocation.y;
-
-  gtk_window_set_transient_for (GTK_WINDOW (priv->dock),
-                                GTK_WINDOW (gtk_widget_get_toplevel (widget)));
-
-  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_window_move (GTK_WINDOW (priv->dock), x, y - (SCALE_SIZE / 2));
-  else
-    gtk_window_move (GTK_WINDOW (priv->dock), x - (SCALE_SIZE / 2), y);
-
-  gtk_widget_show_all (priv->dock);
-
-  gdk_window_get_origin (gtk_widget_get_window (priv->dock),
-                         &dx, &dy);
-  gtk_widget_get_allocation (priv->dock, &dock_allocation);
-  dx += dock_allocation.x;
-  dy += dock_allocation.y;
-
-
-  gdk_window_get_origin (gtk_widget_get_window (priv->scale),
-                         &sx, &sy);
-  gtk_widget_get_allocation (priv->scale, &scale_allocation);
-  sx += scale_allocation.x;
-  sy += scale_allocation.y;
-
-  priv->timeout = TRUE;
-
-  /* position (needs widget to be shown already) */
-  v = gtk_scale_button_get_value (button) / (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment));
-  min_slider_size = gtk_range_get_min_slider_size (GTK_RANGE (priv->scale));
-
-  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      startoff = sy - dy;
-
-      x += (allocation.width - dock_allocation.width) / 2;
-      y -= startoff;
-      y -= min_slider_size / 2;
-      m = scale_allocation.height - min_slider_size;
-      y -= m * (1.0 - v);
-    }
-  else
-    {
-      startoff = sx - dx;
-
-      x -= startoff;
-      y += (allocation.height - dock_allocation.height) / 2;
-      x -= min_slider_size / 2;
-      m = scale_allocation.width - min_slider_size;
-      x -= m * v;
-    }
-
-  /* Make sure the dock stays inside the monitor */
-  if (event->type == GDK_BUTTON_PRESS)
-    {
-      GtkAllocation d_allocation;
-      int monitor;
-      GdkEventButton *button_event = (GdkEventButton *) event;
-      GdkRectangle rect;
-      GtkWidget *d;
-
-      d = GTK_WIDGET (priv->dock);
-      monitor = gdk_screen_get_monitor_at_point (screen,
-						 button_event->x_root,
-						 button_event->y_root);
-      gdk_screen_get_monitor_workarea (screen, monitor, &rect);
-
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        y += button_event->y;
-      else
-        x += button_event->x;
-
-      /* Move the dock, but set is_moved so we
-       * don't forward the first click later on,
-       * as it could make the scale go to the bottom */
-      gtk_widget_get_allocation (d, &d_allocation);
-      if (y < rect.y)
-        {
-          y = rect.y;
-          is_moved = TRUE;
-        }
-      else if (y + d_allocation.height > rect.height + rect.y)
-        {
-          y = rect.y + rect.height - d_allocation.height;
-          is_moved = TRUE;
-        }
-
-      if (x < rect.x)
-        {
-          x = rect.x;
-          is_moved = TRUE;
-        }
-      else if (x + d_allocation.width > rect.width + rect.x)
-        {
-          x = rect.x + rect.width - d_allocation.width;
-          is_moved = TRUE;
-        }
-    }
-
-  gtk_window_move (GTK_WINDOW (priv->dock), x, y);
-
-  if (event->type == GDK_BUTTON_PRESS)
-    GTK_WIDGET_CLASS (gtk_scale_button_parent_class)->button_press_event (widget, (GdkEventButton *) event);
-
-  device = gdk_event_get_device (event);
-
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      keyboard = device;
-      pointer = gdk_device_get_associated_device (device);
-    }
-  else
-    {
-      pointer = device;
-      keyboard = gdk_device_get_associated_device (device);
-    }
-
-  /* grab focus */
-  gtk_device_grab_add (priv->dock, pointer, TRUE);
-
-  if (gdk_device_grab (pointer, gtk_widget_get_window (priv->dock),
-                       GDK_OWNERSHIP_WINDOW, TRUE,
-                       GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                       GDK_POINTER_MOTION_MASK, NULL, time) != GDK_GRAB_SUCCESS)
-    {
-      gtk_device_grab_remove (priv->dock, pointer);
-      gtk_widget_hide (priv->dock);
-      return FALSE;
-    }
-
-  if (gdk_device_grab (keyboard, gtk_widget_get_window (priv->dock),
-                       GDK_OWNERSHIP_WINDOW, TRUE,
-                       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-                       NULL, time) != GDK_GRAB_SUCCESS)
-    {
-      gdk_device_ungrab (pointer, time);
-      gtk_device_grab_remove (priv->dock, pointer);
-      gtk_widget_hide (priv->dock);
-      return FALSE;
-    }
-
-  gtk_widget_grab_focus (priv->dock);
-  priv->grab_keyboard = keyboard;
-  priv->grab_pointer = pointer;
-
-  if (event->type == GDK_BUTTON_PRESS && !is_moved)
-    {
-      GdkEventButton *e;
-      GdkEventButton *button_event = (GdkEventButton *) event;
-
-      /* forward event to the slider */
-      e = (GdkEventButton *) gdk_event_copy ((GdkEvent *) event);
-      e->window = gtk_widget_get_window (priv->scale);
-
-      /* position: the X position isn't relevant, halfway will work just fine.
-       * The vertical position should be *exactly* in the middle of the slider
-       * of the scale; if we don't do that correctly, it'll move from its current
-       * position, which means a position change on-click, which is bad.
-       */
-      gtk_widget_get_allocation (priv->scale, &scale_allocation);
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        {
-          e->x = scale_allocation.width / 2;
-          m = scale_allocation.height - min_slider_size;
-          e->y = ((1.0 - v) * m) + min_slider_size / 2;
-        }
-      else
-        {
-          e->y = scale_allocation.height / 2;
-          m = scale_allocation.width - min_slider_size;
-          e->x = (v * m) + min_slider_size / 2;
-        }
-
-      gtk_widget_event (priv->scale, (GdkEvent *) e);
-      e->window = button_event->window;
-      gdk_event_free ((GdkEvent *) e);
-    }
-
-  gtk_widget_grab_focus (priv->scale);
-
-  priv->pop_time = time;
+  gtk_widget_show (priv->dock);
 
   return TRUE;
 }
 
-static gboolean
-gtk_scale_button_press (GtkWidget      *widget,
-			GdkEventButton *event)
+static void
+gtk_scale_button_popdown (GtkWidget *widget)
 {
-  return gtk_scale_popup (widget, (GdkEvent *) event, event->time);
+  GtkScaleButton *button = GTK_SCALE_BUTTON (widget);
+  GtkScaleButtonPrivate *priv = button->priv;
+
+  gtk_widget_hide (priv->dock);
+}
+
+static void
+gtk_scale_button_clicked (GtkButton *button)
+{
+  gtk_scale_popup (GTK_WIDGET (button));
 }
 
 static void
 gtk_scale_button_popup (GtkWidget *widget)
 {
-  GdkEvent *ev;
-
-  /* This is a callback for a keybinding signal,
-   * current event should  be the key event that
-   * triggered it.
-   */
-  ev = gtk_get_current_event ();
-
-  if (ev->type != GDK_KEY_PRESS &&
-      ev->type != GDK_KEY_RELEASE)
-    {
-      gdk_event_free (ev);
-      ev = gdk_event_new (GDK_KEY_RELEASE);
-      ev->key.time = GDK_CURRENT_TIME;
-    }
-
-  gtk_scale_popup (widget, ev, ev->key.time);
-  gdk_event_free (ev);
-}
-
-static gboolean
-gtk_scale_button_key_release (GtkWidget   *widget,
-			      GdkEventKey *event)
-{
-  return gtk_bindings_activate_event (G_OBJECT (widget), event);
-}
-
-/* This is called when the grab is broken for
- * either the dock, or the scale itself */
-static void
-gtk_scale_button_grab_notify (GtkScaleButton *button,
-                              gboolean        was_grabbed)
-{
-  GtkScaleButtonPrivate *priv;
-  GtkWidget *toplevel, *grab_widget;
-  GtkWindowGroup *group;
-
-  priv = button->priv;
-
-  if (!priv->grab_pointer ||
-      !gtk_widget_device_is_shadowed (GTK_WIDGET (button), priv->grab_pointer))
-    return;
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
-
-  if (GTK_IS_WINDOW (toplevel))
-    group = gtk_window_get_group (GTK_WINDOW (toplevel));
-  else
-    group = gtk_window_get_group (NULL);
-
-  grab_widget = gtk_window_group_get_current_device_grab (group, priv->grab_pointer);
-
-  if (grab_widget &&
-      gtk_widget_is_ancestor (grab_widget, priv->dock))
-    return;
-
-  gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
-  gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
-  gtk_device_grab_remove (priv->dock, priv->grab_pointer);
-
-  priv->grab_keyboard = NULL;
-  priv->grab_pointer = NULL;
-
-  /* hide again */
-  gtk_widget_hide (priv->dock);
-  priv->timeout = FALSE;
+  gtk_scale_popup (widget);
 }
 
 /*
  * +/- button callbacks.
  */
-
 static gboolean
-cb_button_timeout (gpointer user_data)
+button_click (GtkScaleButton *button,
+              GtkWidget      *active)
 {
-  GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
-  GtkAdjustment *adjustment;
+  GtkScaleButtonPrivate *priv = button->priv;
+  GtkAdjustment *adjustment = priv->adjustment;
+  gboolean can_continue = TRUE;
   gdouble val;
-  gboolean res = TRUE;
-
-  button = GTK_SCALE_BUTTON (user_data);
-  priv = button->priv;
-
-  if (priv->click_id == 0)
-    return FALSE;
-
-  adjustment = priv->adjustment;
 
   val = gtk_scale_button_get_value (button);
-  val += priv->direction;
+
+  if (active == priv->plus_button)
+    val += gtk_adjustment_get_page_increment (adjustment);
+  else
+    val -= gtk_adjustment_get_page_increment (adjustment);
+
   if (val <= gtk_adjustment_get_lower (adjustment))
     {
-      res = FALSE;
+      can_continue = FALSE;
       val = gtk_adjustment_get_lower (adjustment);
     }
   else if (val > gtk_adjustment_get_upper (adjustment))
     {
-      res = FALSE;
+      can_continue = FALSE;
       val = gtk_adjustment_get_upper (adjustment);
     }
+
   gtk_scale_button_set_value (button, val);
 
+  return can_continue;
+}
+
+static gboolean
+cb_button_timeout (gpointer user_data)
+{
+  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
+  GtkScaleButtonPrivate *priv = button->priv;
+  gboolean res;
+
+  if (priv->click_id == 0)
+    return G_SOURCE_REMOVE;
+
+  res = button_click (button, priv->active_button);
   if (!res)
     {
       g_source_remove (priv->click_id);
@@ -1221,23 +896,19 @@ cb_button_press (GtkWidget      *widget,
 		 GdkEventButton *event,
 		 gpointer        user_data)
 {
-  GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
-  GtkAdjustment *adjustment;
-
-  button = GTK_SCALE_BUTTON (user_data);
-  priv = button->priv;
-  adjustment = priv->adjustment;
+  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
+  GtkScaleButtonPrivate *priv = button->priv;
+  gint double_click_time;
 
   if (priv->click_id != 0)
     g_source_remove (priv->click_id);
 
-  if (widget == priv->plus_button)
-    priv->direction = fabs (gtk_adjustment_get_page_increment (adjustment));
-  else
-    priv->direction = - fabs (gtk_adjustment_get_page_increment (adjustment));
+  priv->active_button = widget;
 
-  priv->click_id = gdk_threads_add_timeout (priv->click_timeout,
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-double-click-time", &double_click_time,
+                NULL);
+  priv->click_id = gdk_threads_add_timeout (double_click_time,
                                             cb_button_timeout,
                                             button);
   g_source_set_name_by_id (priv->click_id, "[gtk+] cb_button_timeout");
@@ -1251,11 +922,8 @@ cb_button_release (GtkWidget      *widget,
 		   GdkEventButton *event,
 		   gpointer        user_data)
 {
-  GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
-
-  button = GTK_SCALE_BUTTON (user_data);
-  priv = button->priv;
+  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
+  GtkScaleButtonPrivate *priv = button->priv;
 
   if (priv->click_id != 0)
     {
@@ -1267,230 +935,26 @@ cb_button_release (GtkWidget      *widget,
 }
 
 static void
-cb_dock_grab_notify (GtkWidget *widget,
-		     gboolean   was_grabbed,
-		     gpointer   user_data)
-{
-  GtkScaleButton *button = (GtkScaleButton *) user_data;
-
-  gtk_scale_button_grab_notify (button, was_grabbed);
-}
-
-static gboolean
-cb_dock_grab_broken_event (GtkWidget *widget,
-                           gboolean   was_grabbed,
-			   gpointer   user_data)
-{
-  GtkScaleButton *button = (GtkScaleButton *) user_data;
-
-  gtk_scale_button_grab_notify (button, FALSE);
-
-  return FALSE;
-}
-
-/* Scale callbacks  */
-
-static void
-gtk_scale_button_release_grab (GtkScaleButton *button,
-                               GdkEventButton *event)
-{
-  GdkEventButton *e;
-  GtkScaleButtonPrivate *priv;
-
-  priv = button->priv;
-
-  /* ungrab focus */
-  gdk_device_ungrab (priv->grab_keyboard, event->time);
-  gdk_device_ungrab (priv->grab_pointer, event->time);
-  gtk_device_grab_remove (priv->dock, priv->grab_pointer);
-
-  priv->grab_keyboard = NULL;
-  priv->grab_pointer = NULL;
-
-  /* hide again */
-  gtk_widget_hide (priv->dock);
-  priv->timeout = FALSE;
-
-  e = (GdkEventButton *) gdk_event_copy ((GdkEvent *) event);
-  e->window = gtk_widget_get_window (GTK_WIDGET (button));
-  e->type = GDK_BUTTON_RELEASE;
-  gtk_widget_event (GTK_WIDGET (button), (GdkEvent *) e);
-  e->window = event->window;
-  gdk_event_free ((GdkEvent *) e);
-}
-
-static gboolean
-cb_dock_button_press (GtkWidget      *widget,
-		      GdkEventButton *event,
-		      gpointer        user_data)
+cb_button_clicked (GtkWidget *widget,
+                   gpointer   user_data)
 {
   GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
+  GtkScaleButtonPrivate *priv = button->priv;
 
-  if (event->type == GDK_BUTTON_PRESS)
-    {
-      gtk_scale_button_release_grab (button, event);
-      return TRUE;
-    }
+  if (priv->click_id != 0)
+    return;
 
-  return FALSE;
-}
-
-static void
-gtk_scale_button_popdown (GtkWidget *widget)
-{
-  GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
-
-  button = GTK_SCALE_BUTTON (widget);
-  priv = button->priv;
-
-  /* ungrab focus */
-  gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
-  gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
-  gtk_device_grab_remove (priv->dock, priv->grab_pointer);
-
-  priv->grab_keyboard = NULL;
-  priv->grab_pointer = NULL;
-
-  /* hide again */
-  gtk_widget_hide (priv->dock);
-  priv->timeout = FALSE;
-}
-
-static gboolean
-cb_dock_key_release (GtkWidget   *widget,
-		     GdkEventKey *event,
-		     gpointer     user_data)
-{
-  if (event->keyval == GDK_KEY_Escape)
-    {
-      gtk_scale_button_popdown (GTK_WIDGET (user_data));
-      return TRUE;
-    }
-
-  if (!gtk_bindings_activate_event (G_OBJECT (widget), event))
-    {
-      /* The popup hasn't managed the event, pass onto the button */
-      gtk_bindings_activate_event (G_OBJECT (user_data), event);
-    }
-
-  return TRUE;
-}
-
-static void
-cb_scale_grab_notify (GtkWidget *widget,
-		      gboolean   was_grabbed,
-		      gpointer   user_data)
-{
-  GtkScaleButton *button = (GtkScaleButton *) user_data;
-
-  gtk_scale_button_grab_notify (button, was_grabbed);
-}
-
-/*
- * Scale stuff.
- */
-typedef struct _GtkScaleButtonScaleClass
-{
-  GtkScaleClass parent_class;
-} GtkScaleButtonScaleClass;
-
-static gboolean	gtk_scale_button_scale_press   (GtkWidget      *widget,
-                                                GdkEventButton *event);
-static gboolean gtk_scale_button_scale_release (GtkWidget      *widget,
-                                                GdkEventButton *event);
-
-G_DEFINE_TYPE (GtkScaleButtonScale, _gtk_scale_button_scale, GTK_TYPE_SCALE)
-
-static void
-_gtk_scale_button_scale_class_init (GtkScaleButtonScaleClass *klass)
-{
-  GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS (klass);
-  GtkRangeClass *gtkrange_class = GTK_RANGE_CLASS (klass);
-
-  gtkwidget_class->button_press_event = gtk_scale_button_scale_press;
-  gtkwidget_class->button_release_event = gtk_scale_button_scale_release;
-  gtkrange_class->value_changed = gtk_scale_button_scale_value_changed;
-}
-
-static void
-_gtk_scale_button_scale_init (GtkScaleButtonScale *scale)
-{
-}
-
-static gboolean
-gtk_scale_button_scale_press (GtkWidget      *widget,
-			      GdkEventButton *event)
-{
-  GtkScaleButtonPrivate *priv;
-
-  /* Avoid a crash when using a GtkScaleButtonScale without a GtkScaleButton,
-   * this can happen while editing gtkscalebutton.ui in Glade
-   */
-  if (!GTK_SCALE_BUTTON_SCALE (widget)->button)
-    return GTK_WIDGET_CLASS (_gtk_scale_button_scale_parent_class)->button_release_event (widget, event);
-
-  priv = GTK_SCALE_BUTTON_SCALE (widget)->button->priv;
-
-  /* the scale will grab input; if we have input grabbed, all goes
-   * horribly wrong, so let's not do that.
-   */
-  gtk_device_grab_remove (priv->dock, event->device);
-
-  return GTK_WIDGET_CLASS (_gtk_scale_button_scale_parent_class)->button_press_event (widget, event);
-}
-
-static gboolean
-gtk_scale_button_scale_release (GtkWidget      *widget,
-				GdkEventButton *event)
-{
-  GtkScaleButton *button = GTK_SCALE_BUTTON_SCALE (widget)->button;
-  gboolean res;
-
-  /* Avoid a crash when using a GtkScaleButtonScale without a GtkScaleButton,
-   * this can happen while editing gtkscalebutton.ui in Glade
-   */
-  if (!button)
-    return GTK_WIDGET_CLASS (_gtk_scale_button_scale_parent_class)->button_release_event (widget, event);
-
-  if (button->priv->timeout)
-    {
-      /* if we did a quick click, leave the window open; else, hide it */
-      if (event->time > button->priv->pop_time + button->priv->click_timeout)
-        {
-
-	  gtk_scale_button_release_grab (button, event);
-	  GTK_WIDGET_CLASS (_gtk_scale_button_scale_parent_class)->button_release_event (widget, event);
-
-	  return TRUE;
-	}
-
-      button->priv->timeout = FALSE;
-    }
-
-  res = GTK_WIDGET_CLASS (_gtk_scale_button_scale_parent_class)->button_release_event (widget, event);
-
-  /* the scale will release input; right after that, we *have to* grab
-   * it back so we can catch out-of-scale clicks and hide the popup,
-   * so I basically want a g_signal_connect_after_always(), but I can't
-   * find that, so we do this complex 'first-call-parent-then-do-actual-
-   * action' thingy...
-   */
-  gtk_device_grab_add (button->priv->dock, event->device, TRUE);
-
-  return res;
+  button_click (button, widget);
 }
 
 static void
 gtk_scale_button_update_icon (GtkScaleButton *button)
 {
-  GtkScaleButtonPrivate *priv;
+  GtkScaleButtonPrivate *priv = button->priv;
   GtkAdjustment *adjustment;
   gdouble value;
   const gchar *name;
   guint num_icons;
-
-  priv = button->priv;
 
   if (!priv->icon_list || priv->icon_list[0] == '\0')
     {
@@ -1545,8 +1009,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
       gdouble step;
       guint i;
 
-      step = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) / (num_icons - 2);
-      i = (guint) ((value - gtk_adjustment_get_lower (adjustment)) / step) + 2;
+      step = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) / (num_icons - 2); i = (guint) ((value - gtk_adjustment_get_lower (adjustment)) / step) + 2;
       g_assert (i < num_icons);
       name = priv->icon_list[i];
     }
@@ -1557,16 +1020,11 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 }
 
 static void
-gtk_scale_button_scale_value_changed (GtkRange *range)
+cb_scale_value_changed (GtkRange *range,
+                        gpointer  user_data)
 {
-  GtkScaleButton *button = GTK_SCALE_BUTTON_SCALE (range)->button;
+  GtkScaleButton *button = user_data;
   gdouble value;
-
-  /* Avoid a crash when using a GtkScaleButtonScale without a GtkScaleButton,
-   * this can happen while editing gtkscalebutton.ui in Glade
-   */
-  if (!button)
-    return;
 
   value = gtk_range_get_value (range);
 
@@ -1574,4 +1032,14 @@ gtk_scale_button_scale_value_changed (GtkRange *range)
 
   g_signal_emit (button, signals[VALUE_CHANGED], 0, value);
   g_object_notify (G_OBJECT (button), "value");
+}
+
+static void
+cb_popup_mapped (GtkWidget *popup,
+                 gpointer   user_data)
+{
+  GtkScaleButton *button = user_data;
+  GtkScaleButtonPrivate *priv = button->priv;
+
+  gtk_widget_grab_focus (priv->scale);
 }

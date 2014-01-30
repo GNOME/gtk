@@ -31,9 +31,6 @@
 #  include "gtkprinteroptionwidget.h"
 #endif
 
-/* Some forward declarations of internal types */
-GType _gtk_scale_button_scale_get_type (void);
-
 /* This function is referred to in gtk/glade/gtk-private-widgets.xml
  * and is used to ensure the private types for use in Glade while
  * editing UI files that define GTK+'s various composite widget classes.
@@ -45,7 +42,6 @@ gtk_glade_catalog_init (const gchar *catalog_name)
   g_type_ensure (GTK_TYPE_COLOR_SWATCH);
   g_type_ensure (GTK_TYPE_COLOR_PLANE);
   g_type_ensure (GTK_TYPE_COLOR_SCALE);
-  g_type_ensure (_gtk_scale_button_scale_get_type ());
 
 #ifdef G_OS_UNIX
   g_type_ensure (GTK_TYPE_PRINTER_OPTION_WIDGET);

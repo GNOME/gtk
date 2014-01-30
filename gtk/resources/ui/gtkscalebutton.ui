@@ -20,80 +20,88 @@
     <property name="step_increment">2</property>
     <property name="page_increment">20</property>
   </object>
-  <object class="GtkWindow" id="dock">
-    <property name="name">gtk-scalebutton-popup-window</property>
-    <property name="can_focus">False</property>
-    <property name="type">popup</property>
-    <property name="decorated">False</property>
-    <signal name="button-press-event" handler="cb_dock_button_press" swapped="no"/>
-    <signal name="grab-broken-event" handler="cb_dock_grab_broken_event" swapped="no"/>
-    <signal name="grab-notify" handler="cb_dock_grab_notify" swapped="no"/>
-    <signal name="key-release-event" handler="cb_dock_key_release" swapped="no"/>
+  <object class="GtkPopover" id="dock">
+    <signal name="map" handler="cb_popup_mapped" swapped="no"/>
     <child>
-      <object class="GtkFrame" id="frame1">
+      <object class="GtkBox" id="box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">out</property>
+        <property name="orientation">vertical</property>
+        <property name="margin">4</property>
+        <property name="spacing">4</property>
         <child>
-          <object class="GtkBox" id="box">
+          <object class="GtkButton" id="plus_button">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="relief">none</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="image-button"/>
+            </style>
             <child>
-              <object class="GtkButton" id="plus_button">
-                <property name="label">+</property>
+              <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
-                <signal name="button-release-event" handler="cb_button_release" swapped="no"/>
+                <property name="icon-name">list-add-symbolic</property>
+                <property name="icon-size">0</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
-            <child>
-              <object class="GtkScaleButtonScale" id="scale">
-                <property name="height_request">100</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="orientation">vertical</property>
-                <property name="adjustment">adjustment</property>
-                <property name="inverted">True</property>
-                <property name="round_digits">1</property>
-                <property name="draw_value">False</property>
-                <signal name="grab-notify" handler="cb_scale_grab_notify" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="minus_button">
-                <property name="label">-</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
-                <signal name="button-release-event" handler="cb_button_release" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
+            <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
+            <signal name="button-release-event" handler="cb_button_release" swapped="no"/>
+            <signal name="clicked" handler="cb_button_clicked" swapped="no"/>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
         </child>
-        <child type="label_item">
-          <placeholder/>
+        <child>
+          <object class="GtkScale" id="scale">
+            <property name="height_request">100</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="orientation">vertical</property>
+            <property name="adjustment">adjustment</property>
+            <property name="inverted">True</property>
+            <property name="round_digits">1</property>
+            <property name="draw_value">False</property>
+            <signal name="value-changed" handler="cb_scale_value_changed" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="minus_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="relief">none</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">list-remove-symbolic</property>
+                <property name="icon-size">0</property>
+              </object>
+            </child>
+            <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
+            <signal name="button-release-event" handler="cb_button_release" swapped="no"/>
+            <signal name="clicked" handler="cb_button_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
         </child>
       </object>
     </child>
