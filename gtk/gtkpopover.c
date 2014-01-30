@@ -246,7 +246,9 @@ gtk_popover_apply_modality (GtkPopover *popover,
       GtkWidget *prev_focus;
 
       prev_focus = gtk_window_get_focus (priv->window);
-      priv->prev_focus_widget = g_object_ref (prev_focus);
+      priv->prev_focus_widget = prev_focus;
+      if (priv->prev_focus_widget)
+        g_object_ref (prev_focus);
       gtk_grab_add (GTK_WIDGET (popover));
       gtk_widget_grab_focus (GTK_WIDGET (popover));
     }
