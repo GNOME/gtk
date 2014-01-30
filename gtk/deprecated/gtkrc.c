@@ -76,9 +76,8 @@
  * by CSS-like style sheets, which are understood by #GtkCssProvider.
  * </warning>
  *
- * <refsect2>
- * <title>Default files</title>
- * <para>
+ * # Default files #
+ *
  * An application can cause GTK+ to parse a specific RC
  * file by calling gtk_rc_parse(). In addition to this,
  * certain files will be read at the end of gtk_init().
@@ -97,19 +96,17 @@
  * Additionally, the <envar>GTK2_RC_FILES</envar> environment variable
  * can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
  * in order to overwrite the set of default files at runtime.
- * <para><anchor id="locale-specific-rc"/>
+
+ * <anchor id="locale-specific-rc"/>
  * For each RC file, in addition to the file itself, GTK+ will look for
  * a locale-specific file that will be parsed after the main file.
  * For instance, if <envar>LANG</envar> is set to <literal>ja_JP.ujis</literal>,
  * when loading the default file <filename>~/.gtkrc</filename> then GTK+ looks
  * for <filename>~/.gtkrc.ja_JP</filename> and <filename>~/.gtkrc.ja</filename>,
- * and parses the first of those that exists.</para>
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Pathnames and patterns</title>
- * <anchor id="gtkrc-pathnames-and-patterns"/>
- * <para>
+ * and parses the first of those that exists.
+ *
+ * # Pathnames and patterns #
+ *
  * A resource file defines a number of styles and key bindings and
  * attaches them to particular widgets. The attachment is done
  * by the <literal>widget</literal>, <literal>widget_class</literal>,
@@ -164,14 +161,14 @@
  * override other styles first by priority, then by pattern type and then
  * by order of specification (later overrides earlier). The priorities
  * that can be specified are (highest to lowest):
- * <simplelist>
- * <member><literal>highest</literal></member>
- * <member><literal>rc</literal></member>
- * <member><literal>theme</literal></member>
- * <member><literal>application</literal></member>
- * <member><literal>gtk</literal></member>
- * <member><literal>lowest</literal></member>
- * </simplelist>
+ *
+ * - <literal>highest</literal>
+ * - <literal>rc</literal>
+ * - <literal>theme</literal>
+ * - <literal>application</literal>
+ * - <literal>gtk</literal>
+ * - <literal>lowest</literal>
+ *
  * <literal>rc</literal> is the default for styles
  * read from an RC file, <literal>theme</literal>
  * is the default for styles read from theme RC files,
@@ -179,12 +176,9 @@
  * should be used for styles an application sets
  * up, and <literal>gtk</literal> is used for styles
  * that GTK+ creates internally.
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Theme gtkrc files</title>
- * <anchor id="theme-gtkrc-files"/>
- * <para>
+ *
+ * # Theme gtkrc files #
+ *
  * Theme RC files are loaded first from under the <filename>~/.themes/</filename>,
  * then from the directory from gtk_rc_get_theme_dir(). The files looked at will
  * be <filename>gtk-3.0/gtkrc</filename>.
@@ -193,12 +187,9 @@
  * (see the #GtkSettings:gtk-application-prefer-dark-theme property for details),
  * <filename>gtk-3.0/gtkrc-dark</filename> will be loaded first, and if not present
  * <filename>gtk-3.0/gtkrc</filename> will be loaded.
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Optimizing RC Style Matches</title>
- * <anchor id="optimizing-rc-style-matches"/>
- * <para>
+ *
+ * # Optimizing RC Style Matches #
+ *
  * Everytime a widget is created and added to the layout hierarchy of a #GtkWindow
  * ("anchored" to be exact), a list of matching RC styles out of all RC styles read
  * in so far is composed.
@@ -211,16 +202,13 @@
  * effectiveness) to reduce the performance overhead associated with RC style
  * matches:
  *
- * <orderedlist>
- *   <listitem><para>
- *   Move RC styles for specific applications into RC files dedicated to those
+ * 1. Move RC styles for specific applications into RC files dedicated to those
  *   applications and parse application specific RC files only from
  *   applications that are affected by them.
  *   This reduces the overall amount of RC styles that have to be considered
  *   for a match across a group of applications.
- *   </para></listitem>
- *   <listitem><para>
- *   Merge multiple styles which use the same matching rule, for instance:
+
+ * 2.  Merge multiple styles which use the same matching rule, for instance:
  *   |[
  *      style "Foo" { foo_content }
  *      class "X" style "Foo"
@@ -232,40 +220,31 @@
  *      style "FooBar" { foo_content bar_content }
  *      class "X" style "FooBar"
  *   ]|
- *   </para></listitem>
- *   <listitem><para>
- *   Use of wildcards should be avoided, this can reduce the individual RC style
+ *
+ * 3. Use of wildcards should be avoided, this can reduce the individual RC style
  *   match to a single integer comparison in most cases.
- *   </para></listitem>
- *   <listitem><para>
- *   To avoid complex recursive matching, specification of full class names
+ *
+ * 4. To avoid complex recursive matching, specification of full class names
  *   (for <literal>class</literal> matches) or full path names (for
  *   <literal>widget</literal> and <literal>widget_class</literal> matches)
  *   is to be preferred over shortened names
  *   containing <literal>"*"</literal> or <literal>"?"</literal>.
- *   </para></listitem>
- *   <listitem><para>
- *   If at all necessary, wildcards should only be used at the tail or head
+ *
+ * 5. If at all necessary, wildcards should only be used at the tail or head
  *   of a pattern. This reduces the match complexity to a string comparison
  *   per RC style.
- *   </para></listitem>
- *   <listitem><para>
- *   When using wildcards, use of <literal>"?"</literal> should be preferred
+ *
+ * 6. When using wildcards, use of <literal>"?"</literal> should be preferred
  *   over <literal>"*"</literal>. This can reduce the matching complexity from
  *   O(n^2) to O(n). For example <literal>"Gtk*Box"</literal> can be turned into
  *   <literal>"Gtk?Box"</literal> and will still match #GtkHBox and #GtkVBox.
- *   </para></listitem>
- *  <listitem><para>
- *   The use of <literal>"*"</literal> wildcards should be restricted as much
+ *
+ * 7. The use of <literal>"*"</literal> wildcards should be restricted as much
  *   as possible, because matching <literal>"A*B*C*RestString"</literal> can
  *   result in matching complexities of O(n^2) worst case.
- *   </para></listitem>
- * </orderedlist>
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Toplevel declarations</title>
- * <para>
+ *
+ * # Toplevel declarations #
+ *
  * An RC file is a text file which is composed of a sequence
  * of declarations. <literal>'#'</literal> characters delimit comments and
  * the portion of a line after a <literal>'#'</literal> is ignored when parsing
@@ -273,97 +252,73 @@
  *
  * The possible toplevel declarations are:
  *
- * <variablelist>
- *   <varlistentry>
- *     <term><literal>binding <replaceable>name</replaceable>
- *      { ... }</literal></term>
- *     <listitem>
- *       <para>Declares a binding set.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>class <replaceable>pattern</replaceable>
+ * * <literal>binding <replaceable>name</replaceable>
+ *      { ... }</literal>
+ *
+ *    Declares a binding set.
+ *
+ * * <literal>class <replaceable>pattern</replaceable>
  *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable></literal></term>
- *     <listitem>
- *      <para>Specifies a style or binding set for a particular
- *      branch of the inheritance hierarchy.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>include <replaceable>filename</replaceable></literal></term>
- *     <listitem>
- *       <para>Parses another file at this point. If
+ *           <replaceable>name</replaceable></literal>
+ *
+ *    Specifies a style or binding set for a particular
+ *      branch of the inheritance hierarchy.
+ *
+ * * <literal>include <replaceable>filename</replaceable></literal>
+ *
+ *    Parses another file at this point. If
  *         <replaceable>filename</replaceable> is not an absolute filename,
- *         it is searched in the directories of the currently open RC files.</para>
- *       <para>GTK+ also tries to load a
+ *         it is searched in the directories of the currently open RC files.
+ *
+ *    GTK+ also tries to load a
  *         <link linkend="locale-specific-rc">locale-specific variant</link> of
- *         the included file.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>module_path <replaceable>path</replaceable></literal></term>
- *     <listitem>
- *       <para>Sets a path (a list of directories separated
+ *         the included file.
+ *
+ * * <literal>module_path <replaceable>path</replaceable></literal>
+ *
+ *    Sets a path (a list of directories separated
  *       by colons) that will be searched for theme engines referenced in
- *       RC files.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>pixmap_path <replaceable>path</replaceable></literal></term>
- *     <listitem>
- *       <para>Sets a path (a list of directories separated
+ *       RC files.
+ *
+ * * <literal>pixmap_path <replaceable>path</replaceable></literal>
+ *
+ *    Sets a path (a list of directories separated
  *       by colons) that will be searched for pixmaps referenced in
- *       RC files.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>im_module_file <replaceable>pathname</replaceable></literal></term>
- *     <listitem>
- *       <para>Sets the pathname for the IM modules file. Setting this from RC files
+ *       RC files.
+ *
+ * * <literal>im_module_file <replaceable>pathname</replaceable></literal>
+ *
+ *    Sets the pathname for the IM modules file. Setting this from RC files
  *       is deprecated; you should use the environment variable <envar>GTK_IM_MODULE_FILE</envar>
- *       instead.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>style <replaceable>name</replaceable> [ =
- *     <replaceable>parent</replaceable> ] { ... }</literal></term>
- *     <listitem>
- *       <para>Declares a style.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>widget <replaceable>pattern</replaceable>
+ *       instead.
+ *
+ * * <literal>style <replaceable>name</replaceable> [ =
+ *     <replaceable>parent</replaceable> ] { ... }</literal>
+ *
+ *    Declares a style.
+ *
+ * * <literal>widget <replaceable>pattern</replaceable>
  *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable></literal></term>
- *     <listitem>
- *      <para>Specifies a style or binding set for a particular
- *      group of widgets by matching on the widget pathname.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>widget_class <replaceable>pattern</replaceable>
+ *           <replaceable>name</replaceable></literal>
+ *
+ *      Specifies a style or binding set for a particular
+ *      group of widgets by matching on the widget pathname.
+ *
+ * * <literal>widget_class <replaceable>pattern</replaceable>
  *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable></literal></term>
- *     <listitem>
- *      <para>Specifies a style or binding set for a particular
- *      group of widgets by matching on the class pathname.</para>
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><replaceable>setting</replaceable> = <replaceable>value</replaceable></term>
- *     <listitem>
- *       <para>Specifies a value for a <link linkend="GtkSettings">setting</link>.
+ *           <replaceable>name</replaceable></literal>
+ *
+ *      Specifies a style or binding set for a particular
+ *      group of widgets by matching on the class pathname.
+ *
+ * * <replaceable>setting</replaceable> = <replaceable>value</replaceable>
+ *
+ *    Specifies a value for a <link linkend="GtkSettings">setting</link>.
  *         Note that settings in RC files are overwritten by system-wide settings
- *         (which are managed by an XSettings manager on X11).</para>
- *     </listitem>
- *   </varlistentry>
- * </variablelist>
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Styles</title>
- * <para>
+ *         (which are managed by an XSettings manager on X11).
+ *
+ * # Styles #
+ *
  * A RC style is specified by a <literal>style</literal>
  * declaration in a RC file, and then bound to widgets
  * with a <literal>widget</literal>, <literal>widget_class</literal>,
@@ -378,163 +333,116 @@
  * Within a <literal>style</literal> declaration, the possible
  * elements are:
  *
- * <variablelist>
- *   <varlistentry>
- *     <term><literal>bg[<replaceable>state</replaceable>] =
- *       <replaceable>color</replaceable></literal></term>
- *      <listitem>
- *          Sets the color used for the background of most widgets.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>fg[<replaceable>state</replaceable>] =
- *       <replaceable>color</replaceable></literal></term>
- *      <listitem>
- *          Sets the color used for the foreground of most widgets.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>base[<replaceable>state</replaceable>] =
- *       <replaceable>color</replaceable></literal></term>
- *      <listitem>
+ * * <literal>bg[<replaceable>state</replaceable>] = <replaceable>color</replaceable></literal>
+ *
+ *   Sets the color used for the background of most widgets.
+ *
+ * * <literal>fg[<replaceable>state</replaceable>] = <replaceable>color</replaceable></literal>
+ *
+ *   Sets the color used for the foreground of most widgets.
+ *
+ * * <literal>base[<replaceable>state</replaceable>] = <replaceable>color</replaceable></literal>
+ *
  *          Sets the color used for the background of widgets displaying
  *          editable text. This color is used for the background
  *          of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkCList.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>text[<replaceable>state</replaceable>] =
- *       <replaceable>color</replaceable></literal></term>
- *      <listitem>
+ *
+ * * <literal>text[<replaceable>state</replaceable>] =
+ *       <replaceable>color</replaceable></literal>
+ *
  *          Sets the color used for foreground of widgets using
  *          <literal>base</literal> for the background color.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>xthickness =
- *       <replaceable>number</replaceable></literal></term>
- *      <listitem>
+ *
+ * * <literal>xthickness =
+ *       <replaceable>number</replaceable></literal>
+ *
  *          Sets the xthickness, which is used for various horizontal padding
  *          values in GTK+.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>ythickness =
- *       <replaceable>number</replaceable></literal></term>
- *      <listitem>
+ *
+ * * <literal>ythickness =
+ *       <replaceable>number</replaceable></literal>
+ *
  *          Sets the ythickness, which is used for various vertical padding
  *          values in GTK+.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>bg_pixmap[<replaceable>state</replaceable>] =
- *       <replaceable>pixmap</replaceable></literal></term>
- *      <listitem>
+ *
+ * * <literal>bg_pixmap[<replaceable>state</replaceable>] =
+ *       <replaceable>pixmap</replaceable></literal>
+ *
  *          Sets a background pixmap to be used in place of
  *          the <literal>bg</literal> color (or for #GtkText,
  *          in place of the <literal>base</literal> color. The special
  *          value <literal>"&lt;parent&gt;"</literal> may be used to indicate that the widget should
  *          use the same background pixmap as its parent. The special value
  *          <literal>"&lt;none&gt;"</literal> may be used to indicate no background pixmap.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>font = <replaceable>font</replaceable></literal></term>
- *      <listitem>
+
+ * * <literal>font = <replaceable>font</replaceable></literal>
+ *
  *          Starting with GTK+ 2.0, the "font" and "fontset"
  *          declarations are ignored; use "font_name" declarations instead.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>fontset = <replaceable>font</replaceable></literal></term>
- *      <listitem>
+ *
+ * * <literal>fontset = <replaceable>font</replaceable></literal>
+ *
  *          Starting with GTK+ 2.0, the "font" and "fontset"
  *          declarations are ignored; use "font_name" declarations instead.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>font_name = <replaceable>font</replaceable></literal></term>
- *      <listitem>
+ *
+ * * <literal>font_name = <replaceable>font</replaceable></literal>
+ *
  *          Sets the font for a widget. <replaceable>font</replaceable> must be
  *          a Pango font name, e.g. <literal>"Sans Italic 10"</literal>.
  *          For details about Pango font names, see
  *          pango_font_description_from_string().
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }</literal></term>
- *      <listitem>
+ *
+ * * <literal>stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }</literal>
+ *
  *         Defines the icon for a stock item.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>color[<replaceable>"color-name"</replaceable>] = <replaceable>color specification</replaceable></literal></term>
- *      <listitem>
+ *
+ * * <literal>color[<replaceable>"color-name"</replaceable>] = <replaceable>color specification</replaceable></literal>
+ *
  *         Since 2.10, this element can be used to defines symbolic colors. See below for
  *         the syntax of color specifications.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>engine <replaceable>"engine"</replaceable> { <replaceable>engine-specific
- * settings</replaceable> }</literal></term>
- *      <listitem>
+ *
+ * * <literal>engine <replaceable>"engine"</replaceable> { <replaceable>engine-specific
+ * settings</replaceable> }</literal>
+ *
  *         Defines the engine to be used when drawing with this style.
- *      </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal><replaceable>class</replaceable>::<replaceable>property</replaceable> = <replaceable>value</replaceable></literal></term>
- *      <listitem>
+ *
+ * * <literal><replaceable>class</replaceable>::<replaceable>property</replaceable> = <replaceable>value</replaceable></literal>
+ *
  *         Sets a <link linkend="style-properties">style property</link> for a widget class.
- *      </listitem>
- *   </varlistentry>
- * </variablelist>
  *
  * The colors and background pixmaps are specified as a function of the
  * state of the widget. The states are:
  *
- * <variablelist>
- *   <varlistentry>
- *     <term><literal>NORMAL</literal></term>
- *     <listitem>
+ * * <literal>NORMAL</literal>
+ *
  *         A color used for a widget in its normal state.
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>ACTIVE</literal></term>
- *     <listitem>
+ *
+ * * <literal>ACTIVE</literal>
+ *
  *         A variant of the <literal>NORMAL</literal> color used when the
  *         widget is in the %GTK_STATE_ACTIVE state, and also for
  *         the trough of a ScrollBar, tabs of a NoteBook
  *         other than the current tab and similar areas.
  *         Frequently, this should be a darker variant
  *         of the <literal>NORMAL</literal> color.
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>PRELIGHT</literal></term>
- *     <listitem>
+ *
+ * * <literal>PRELIGHT</literal>
+ *
  *         A color used for widgets in the %GTK_STATE_PRELIGHT state. This
  *         state is the used for Buttons and MenuItems
  *         that have the mouse cursor over them, and for
  *         their children.
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>SELECTED</literal></term>
- *     <listitem>
+ *
+ * * <literal>SELECTED</literal>
+ *
  *         A color used to highlight data selected by the user.
  *         for instance, the selected items in a list widget, and the
  *         selection in an editable widget.
- *     </listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term><literal>INSENSITIVE</literal></term>
- *     <listitem>
+ *
+ * * <literal>INSENSITIVE</literal>
+ *
  *         A color used for the background of widgets that have
  *         been set insensitive with gtk_widget_set_sensitive().
- *     </listitem>
- *   </varlistentry>
- * </variablelist>
  *
  * <anchor id="color-format"/>
  * Colors can be specified as a string containing a color name (GTK+ knows
@@ -552,40 +460,30 @@
  * Since 2.10, colors can also be specified by refering to a symbolic color, as
  * follows: <literal>@<!-- -->color-name</literal>, or by using expressions to combine
  * colors. The following expressions are currently supported:
- *   <variablelist>
- *     <varlistentry>
- *       <term>mix (<replaceable>factor</replaceable>, <replaceable>color1</replaceable>, <replaceable>color2</replaceable>)</term>
- *       <listitem><para>
+ *
+ * * mix (<replaceable>factor</replaceable>, <replaceable>color1</replaceable>, <replaceable>color2</replaceable>)
+ *
  *         Computes a new color by mixing <replaceable>color1</replaceable> and
  *         <replaceable>color2</replaceable>. The <replaceable>factor</replaceable>
  *         determines how close the new color is to <replaceable>color1</replaceable>.
  *         A factor of 1.0 gives pure <replaceable>color1</replaceable>, a factor of
  *         0.0 gives pure <replaceable>color2</replaceable>.
- *       </para></listitem>
- *     </varlistentry>
- *     <varlistentry>
- *       <term>shade (<replaceable>factor</replaceable>, <replaceable>color</replaceable>)</term>
- *       <listitem><para>
+ *
+ * * shade (<replaceable>factor</replaceable>, <replaceable>color</replaceable>)
+ *
  *         Computes a lighter or darker variant of <replaceable>color</replaceable>.
  *         A <replaceable>factor</replaceable> of 1.0 leaves the color unchanged, smaller
  *         factors yield darker colors, larger factors yield lighter colors.
- *       </para></listitem>
- *     </varlistentry>
- *     <varlistentry>
- *       <term>lighter (<replaceable>color</replaceable>)</term>
- *       <listitem><para>
+ *
+ * * lighter (<replaceable>color</replaceable>)
+ *
  *         This is an abbreviation for
  *         <literal>shade (1.3, <replaceable>color</replaceable>)</literal>.
- *       </para></listitem>
- *     </varlistentry>
- *     <varlistentry>
- *       <term>darker (<replaceable>color</replaceable>)</term>
- *       <listitem><para>
+ *
+ * * darker (<replaceable>color</replaceable>)
+ *
  *         This is an abbreviation for
  *         <literal>shade (0.7, <replaceable>color</replaceable>)</literal>.
- *       </para></listitem>
- *     </varlistentry>
- *   </variablelist>
  *
  * Here are some examples of color expressions:
  *
@@ -658,11 +556,9 @@
  * <literal>PRELIGHT</literal> or specified the size), GTK+ won't modify the image;
  * if the attribute matches with a wildcard, GTK+ will scale or modify the image to
  * match the state and size the user requested.
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Key bindings</title>
- * <para>
+ *
+ * # Key bindings #
+ *
  * Key bindings allow the user to specify actions to be
  * taken on particular key presses. The form of a binding
  * set declaration is:
@@ -680,22 +576,22 @@
  * <replaceable>key</replaceable> is a string consisting of a
  * series of modifiers followed by the name of a key. The
  * modifiers can be:
- * <simplelist>
- * <member><literal>&lt;alt&gt;</literal></member>
- * <member><literal>&lt;ctl&gt;</literal></member>
- * <member><literal>&lt;control&gt;</literal></member>
- * <member><literal>&lt;meta&gt;</literal></member>
- * <member><literal>&lt;hyper&gt;</literal></member>
- * <member><literal>&lt;super&gt;</literal></member>
- * <member><literal>&lt;mod1&gt;</literal></member>
- * <member><literal>&lt;mod2&gt;</literal></member>
- * <member><literal>&lt;mod3&gt;</literal></member>
- * <member><literal>&lt;mod4&gt;</literal></member>
- * <member><literal>&lt;mod5&gt;</literal></member>
- * <member><literal>&lt;release&gt;</literal></member>
- * <member><literal>&lt;shft&gt;</literal></member>
- * <member><literal>&lt;shift&gt;</literal></member>
- * </simplelist>
+ *
+ * - <literal>&lt;alt&gt;</literal>
+ * - <literal>&lt;ctl&gt;</literal>
+ * - <literal>&lt;control&gt;</literal>
+ * - <literal>&lt;meta&gt;</literal>
+ * - <literal>&lt;hyper&gt;</literal>
+ * - <literal>&lt;super&gt;</literal>
+ * - <literal>&lt;mod1&gt;</literal>
+ * - <literal>&lt;mod2&gt;</literal>
+ * - <literal>&lt;mod3&gt;</literal>
+ * - <literal>&lt;mod4&gt;</literal>
+ * - <literal>&lt;mod5&gt;</literal>
+ * - <literal>&lt;release&gt;</literal>
+ * - <literal>&lt;shft&gt;</literal>
+ * - <literal>&lt;shift&gt;</literal>
+ *
  * <literal>&lt;shft&gt;</literal> is an alias for
  * <literal>&lt;shift&gt;</literal>,
  * <literal>&lt;ctl&gt;</literal> is an alias for
@@ -718,8 +614,6 @@
  * by pattern type, then by priority and then by order of specification.
  * The priorities that can be specified and their default values are the
  * same as for styles.
- * </para>
- * </refsect2>
  */
 
 
