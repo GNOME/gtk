@@ -45,7 +45,8 @@
  * supports adding rules using the &lt;mime-types&gt;, &lt;patterns&gt; and
  * &lt;applications&gt; elements and listing the rules within. Specifying
  * a &lt;mime-type&gt; or &lt;pattern&gt; is the same
- * as calling gtk_recent_filter_add_mime_type() or gtk_recent_filter_add_pattern()
+ * as calling gtk_recent_filter_add_mime_type()
+ * or gtk_recent_filter_add_pattern().
  *
  * <example>
  * <title>A UI definition fragment specifying GtkFileFilter rules</title>
@@ -53,7 +54,7 @@
  * <object class="GtkFileFilter">
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>
- *     <mime-type>image/*</mime-type>
+ *     <mime-type>image/&ast;</mime-type>
  *   </mime-types>
  *   <patterns>
  *     <pattern>*.txt</pattern>
