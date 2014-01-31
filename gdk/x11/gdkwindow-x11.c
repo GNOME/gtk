@@ -820,7 +820,7 @@ create_focus_window (GdkDisplay *display,
   GdkEventMask event_mask;
   Display *xdisplay;
   Window focus_window;
-  XWindowAttributes xwa;
+  XSetWindowAttributes attrs;
 
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
   display_x11 = GDK_X11_DISPLAY (display);
@@ -830,7 +830,7 @@ create_focus_window (GdkDisplay *display,
                                 0, /* depth */
                                 InputOnly,
                                 CopyFromParent,
-                                0, &xwa);
+                                0, &attrs);
 
   event_mask = (GDK_KEY_PRESS_MASK |
                 GDK_KEY_RELEASE_MASK |
