@@ -151,6 +151,7 @@
     </object>
     <object class="GtkAboutDialog" id="aboutdialog1">
         <property name="program-name" translatable="yes">GtkBuilder demo</property>
+        <property name="logo-icon-name" translatable="yes">gtk3-demo</property>
          <accessibility>
 	     <relation target="window1" type="subwindow-of"/>
 	 </accessibility>
@@ -243,9 +244,6 @@
                           </child>
                         </object>
                       </child>
-		    <accessibility>
-		      	<action action_name="move-cursor" description="Move the cursor to select another person."/>
-		    </accessibility>
                     </object>
                     <packing>
                         <property name="position">2</property>
