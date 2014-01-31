@@ -3440,13 +3440,18 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
  *
  * If @setting is %TRUE, then @window will request that it's titlebar
  * should be hidden when maximized.
+ *
  * This is useful for windows that don't convey any information other
  * than the application name in the titlebar, to put the available
  * screen space to better use. If the underlying window system does not
  * support the request, the setting will not have any effect.
  *
+ * Note that custom titlebars set with gtk_window_set_titlebar() are
+ * not affected by this. The application is in full control of their
+ * content and visibility anyway.
+ * 
  * Since: 3.4
- **/
+ */
 void
 gtk_window_set_hide_titlebar_when_maximized (GtkWindow *window,
                                              gboolean   setting)
@@ -5299,27 +5304,10 @@ get_default_title (void)
   return title;
 }
 
-static gboolean
-update_csd_visibility (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = window->priv;
-  gboolean visible;
-
-  if (priv->title_box == NULL)
-    return FALSE;
-
-  visible = !priv->fullscreen && !(priv->maximized && priv->hide_titlebar_when_maximized);
-  gtk_widget_set_child_visible (priv->title_box, visible);
-  return visible;
-}
-
 static void
 update_window_buttons (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
-
-  if (!update_csd_visibility (window))
-    return;
 
   if (GTK_IS_HEADER_BAR (priv->title_box))
     _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (priv->title_box));
