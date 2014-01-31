@@ -50,9 +50,10 @@
  * The selected date can be retrieved from a #GtkCalendar using
  * gtk_calendar_get_date().
  *
- * Users should be aware that, although the Gregorian calendar is the legal
- * calendar in most countries, it was adopted progressively between 1582 and
- * 1929. Display before these dates is likely to be historically incorrect.
+ * Users should be aware that, although the Gregorian calendar is the
+ * legal calendar in most countries, it was adopted progressively
+ * between 1582 and 1929. Display before these dates is likely to be
+ * historically incorrect.
  */
 
 #include "config.h"

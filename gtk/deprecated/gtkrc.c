@@ -163,10 +163,15 @@
  * that can be specified are (highest to lowest):
  *
  * - <literal>highest</literal>
+ *
  * - <literal>rc</literal>
+ *
  * - <literal>theme</literal>
+ *
  * - <literal>application</literal>
+ *
  * - <literal>gtk</literal>
+ *
  * - <literal>lowest</literal>
  *
  * <literal>rc</literal> is the default for styles
@@ -207,7 +212,7 @@
  *   applications that are affected by them.
  *   This reduces the overall amount of RC styles that have to be considered
  *   for a match across a group of applications.
-
+ *
  * 2.  Merge multiple styles which use the same matching rule, for instance:
  *   |[
  *      style "Foo" { foo_content }
@@ -578,18 +583,31 @@
  * modifiers can be:
  *
  * - <literal>&lt;alt&gt;</literal>
+ *
  * - <literal>&lt;ctl&gt;</literal>
+ *
  * - <literal>&lt;control&gt;</literal>
+ *
  * - <literal>&lt;meta&gt;</literal>
+ *
  * - <literal>&lt;hyper&gt;</literal>
+ *
  * - <literal>&lt;super&gt;</literal>
+ *
  * - <literal>&lt;mod1&gt;</literal>
+ *
  * - <literal>&lt;mod2&gt;</literal>
+ *
  * - <literal>&lt;mod3&gt;</literal>
+ *
  * - <literal>&lt;mod4&gt;</literal>
+ *
  * - <literal>&lt;mod5&gt;</literal>
+ *
  * - <literal>&lt;release&gt;</literal>
+ *
  * - <literal>&lt;shft&gt;</literal>
+ *
  * - <literal>&lt;shift&gt;</literal>
  *
  * <literal>&lt;shft&gt;</literal> is an alias for

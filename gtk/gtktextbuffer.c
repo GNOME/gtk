@@ -2974,8 +2974,8 @@ gtk_text_buffer_get_start_iter (GtkTextBuffer *buffer,
  *
  * Initializes @iter with the "end iterator," one past the last valid
  * character in the text buffer. If dereferenced with
- * gtk_text_iter_get_char(), the end iterator has a character value of
- * 0. The entire buffer lies in the range from the first position in
+ * gtk_text_iter_get_char(), the end iterator has a character value of 0.
+ * The entire buffer lies in the range from the first position in
  * the buffer (call gtk_text_buffer_get_start_iter() to get
  * character position 0) to the end iterator.
  **/
