@@ -315,6 +315,10 @@ frame_callback (void               *data,
   GdkFrameTimings *timings;
 
   wl_callback_destroy (callback);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
   _gdk_frame_clock_thaw (clock);
 
   timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
@@ -403,10 +407,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
     return;
 
   impl->pending_commit = FALSE;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
 
   callback = wl_surface_frame (impl->surface);
