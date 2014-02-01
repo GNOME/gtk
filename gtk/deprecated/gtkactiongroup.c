@@ -43,7 +43,7 @@
  * actions that act on that document (eg. save, cut/copy/paste, etc). Each
  * window's menus would be constructed from a combination of two action
  * groups.
- * </para>
+ *
  * <para id="Action-Accel">
  * Accelerators are handled by the GTK+ accelerator map. All actions are
  * assigned an accelerator path (which normally has the form
@@ -52,6 +52,7 @@
  * and toolitems take on this accelerator path. The GTK+ accelerator map
  * code makes sure that the correct shortcut is displayed next to the menu
  * item.
+ * </para>
  *
  * <refsect2 id="GtkActionGroup-BUILDER-UI">
  * <title>GtkActionGroup as GtkBuildable</title>

@@ -52,7 +52,7 @@
  * example, when an Open button is clicked you might display a
  * #GtkFileChooserDialog. After a callback finishes, GTK+ will return to the
  * main loop and await more user input.
- * </para>
+ *
  * <example>
  * <title>Typical main() function for a GTK+ application</title>
  * |[<!-- language="C" -->
@@ -82,7 +82,7 @@
  * }
  * ]|
  * </example>
- * <para>
+ *
  * It's OK to use the GLib main loop directly instead of gtk_main(), though it
  * involves slightly more typing. See #GMainLoop in the GLib documentation.
  */
