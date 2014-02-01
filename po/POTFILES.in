@@ -297,8 +297,8 @@ gtk/resources/ui/gtkcolorchooserdialog.ui.h
 gtk/resources/ui/gtkcoloreditor.ui.h
 gtk/resources/ui/gtkdialog.ui.h
 gtk/resources/ui/gtkfilechooserbutton.ui.h
-gtk/resources/ui/gtkfilechooserwidget.ui
 gtk/resources/ui/gtkfilechooserdialog.ui.h
+gtk/resources/ui/gtkfilechooserwidget.ui.h
 gtk/resources/ui/gtkfontbutton.ui.h
 gtk/resources/ui/gtkfontchooserdialog.ui.h
 gtk/resources/ui/gtkfontchooserwidget.ui.h
