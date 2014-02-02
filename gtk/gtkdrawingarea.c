@@ -38,34 +38,19 @@
  * elements. It's essentially a blank widget; you can draw on it. After
  * creating a drawing area, the application may want to connect to:
  *
- * <itemizedlist>
- *   <listitem>
- *     <para>
- *     Mouse and button press signals to respond to input from
- *     the user. (Use gtk_widget_add_events() to enable events
- *     you wish to receive.)
- *     </para>
- *   </listitem>
- *   <listitem>
- *     <para>
- *     The #GtkWidget::realize signal to take any necessary actions
- *     when the widget is instantiated on a particular display.
- *     (Create GDK resources in response to this signal.)
- *     </para>
- *   </listitem>
- *   <listitem>
- *     <para>
- *     The #GtkWidget::configure-event signal to take any necessary
- *     actions when the widget changes size.
- *     </para>
- *   </listitem>
- *   <listitem>
- *     <para>
- *     The #GtkWidget::draw signal to handle redrawing the
- *     contents of the widget.
- *     </para>
- *   </listitem>
- * </itemizedlist>
+ * - Mouse and button press signals to respond to input from
+ *   the user. (Use gtk_widget_add_events() to enable events
+ *   you wish to receive.)
+ *
+ * - The #GtkWidget::realize signal to take any necessary actions
+ *   when the widget is instantiated on a particular display.
+ *   (Create GDK resources in response to this signal.)
+ * 
+ * - The #GtkWidget::configure-event signal to take any necessary
+ *   actions when the widget changes size.
+ *
+ * - The #GtkWidget::draw signal to handle redrawing the
+ *   contents of the widget.
  *
  * The following code portion demonstrates using a drawing
  * area to display a circle in the normal widget foreground

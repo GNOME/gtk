@@ -141,22 +141,12 @@ parse_rgb_value (const gchar  *str,
  * the @red, @green, @blue and @alpha fields of the @rgba #GdkRGBA.
  *
  * The string can be either one of:
- * <itemizedlist>
- * <listitem>
- * A standard name (Taken from the X11 rgb.txt file).
- * </listitem>
- * <listitem>
- * A hex value in the form '&num;rgb' '&num;rrggbb' '&num;rrrgggbbb'
- * or '&num;rrrrggggbbbb'
- * </listitem>
- * <listitem>
- * A RGB color in the form 'rgb(r,g,b)' (In this case the color will
- * have full opacity)
- * </listitem>
- * <listitem>
- * A RGBA color in the form 'rgba(r,g,b,a)'
- * </listitem>
- * </itemizedlist>
+ * - A standard name (Taken from the X11 rgb.txt file).
+ * - A hex value in the form '&num;rgb' '&num;rrggbb' '&num;rrrgggbbb'
+ *   or '&num;rrrrggggbbbb'
+ * - A RGB color in the form 'rgb(r,g,b)' (In this case the color will
+ *   have full opacity)
+ * - A RGBA color in the form 'rgba(r,g,b,a)'
  *
  * Where 'r', 'g', 'b' and 'a' are respectively the red, green, blue and
  * alpha color values. In the last two cases, r g and b are either integers

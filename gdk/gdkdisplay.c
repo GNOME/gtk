@@ -44,15 +44,10 @@
  * @Title: GdkDisplay
  *
  * #GdkDisplay objects purpose are two fold:
- * <itemizedlist>
- * <listitem>
- *   To manage and provide information about input devices (pointers
- *   and keyboards)
- * </listitem>
- * <listitem>
- *   To manage and provide information about the available #GdkScreens
- * </listitem>
- * </itemizedlist>
+ *
+ * - To manage and provide information about input devices (pointers and keyboards)
+ *
+ * - To manage and provide information about the available #GdkScreens
  *
  * GdkDisplay objects are the GDK representation of an X Display,
  * which can be described as a workstation consisting of

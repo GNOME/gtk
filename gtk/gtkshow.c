@@ -37,11 +37,9 @@
  * need to install gvfs to get support for uri schemes such as http://
  * or ftp://, as only local files are handled by GIO itself).
  * Typical examples are
- * <simplelist>
- *   <member><filename>file:///home/gnome/pict.jpg</filename></member>
- *   <member><filename>http://www.gnome.org</filename></member>
- *   <member><filename>mailto:me&commat;gnome.org</filename></member>
- * </simplelist>
+ * - <filename>file:///home/gnome/pict.jpg</filename>
+ * - <filename>http://www.gnome.org</filename>
+ * - <filename>mailto:me&commat;gnome.org</filename>
  * Ideally the timestamp is taken from the event triggering
  * the gtk_show_uri() call. If timestamp is not known you can take
  * %GDK_CURRENT_TIME.

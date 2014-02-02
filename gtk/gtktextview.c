@@ -940,13 +940,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * the variant with the Shift modifier extends the selection,
    * the variant without the Shift modifer does not.
    * There are too many key combinations to list them all here.
-   * <itemizedlist>
-   * <listitem>Arrow keys move by individual characters/lines</listitem>
-   * <listitem>Ctrl-arrow key combinations move by words/paragraphs</listitem>
-   * <listitem>Home/End keys move to the ends of the buffer</listitem>
-   * <listitem>PageUp/PageDown keys move vertically by pages</listitem>
-   * <listitem>Ctrl-PageUp/PageDown keys move horizontally by pages</listitem>
-   * </itemizedlist>
+   * - Arrow keys move by individual characters/lines
+   * - Ctrl-arrow key combinations move by words/paragraphs
+   * - Home/End keys move to the ends of the buffer
+   * - PageUp/PageDown keys move vertically by pages
+   * - Ctrl-PageUp/PageDown keys move horizontally by pages
    */
   signals[MOVE_CURSOR] = 
     g_signal_new (I_("move-cursor"),

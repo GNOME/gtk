@@ -3841,11 +3841,9 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * the variant with the Shift modifier extends the selection,
    * the variant without the Shift modifer does not.
    * There are too many key combinations to list them all here.
-   * <itemizedlist>
-   * <listitem>Arrow keys move by individual children</listitem>
-   * <listitem>Home/End keys move to the ends of the box</listitem>
-   * <listitem>PageUp/PageDown keys move vertically by pages</listitem>
-   * </itemizedlist>
+   * - Arrow keys move by individual children
+   * - Home/End keys move to the ends of the box
+   * - PageUp/PageDown keys move vertically by pages
    */
   signals[MOVE_CURSOR] = g_signal_new ("move-cursor",
                                        GTK_TYPE_FLOW_BOX,

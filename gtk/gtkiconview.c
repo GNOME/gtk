@@ -849,12 +849,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * programmatically.
    *
    * The default bindings for this signal include
-   * <itemizedlist>
-   * <listitem>Arrow keys which move by individual steps</listitem>
-   * <listitem>Home/End keys which move to the first/last item</listitem>
-   * <listitem>PageUp/PageDown which move by "pages"</listitem>
-   * </itemizedlist>
-   *
+   * - Arrow keys which move by individual steps
+   * - Home/End keys which move to the first/last item
+   * - PageUp/PageDown which move by "pages"
    * All of these will extend the selection when combined with
    * the Shift modifier.
    */

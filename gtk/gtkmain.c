@@ -1467,51 +1467,33 @@ rewrite_event_for_grabs (GdkEvent *event)
  * know how exactly events are handled. So here is what this function
  * does with the event:
  *
- * <orderedlist>
- * <listitem><para>
- *   Compress enter/leave notify events. If the event passed build an
- *   enter/leave pair together with the next event (peeked from GDK), both
- *   events are thrown away. This is to avoid a backlog of (de-)highlighting
- *   widgets crossed by the pointer.
- * </para></listitem>
- * <listitem><para>
- *   Find the widget which got the event. If the widget can't be determined
- *   the event is thrown away unless it belongs to a INCR transaction.
- * </para></listitem>
- * <listitem><para>
- *   Then the event is pushed onto a stack so you can query the currently
- *   handled event with gtk_get_current_event().
- * </para></listitem>
- * <listitem><para>
- *   The event is sent to a widget. If a grab is active all events for widgets
- *   that are not in the contained in the grab widget are sent to the latter
- *   with a few exceptions:
- *   <itemizedlist>
- *   <listitem><para>
- *     Deletion and destruction events are still sent to the event widget for
- *     obvious reasons.
- *   </para></listitem>
- *   <listitem><para>
- *     Events which directly relate to the visual representation of the event
- *     widget.
- *   </para></listitem>
- *   <listitem><para>
- *     Leave events are delivered to the event widget if there was an enter
- *     event delivered to it before without the paired leave event.
- *   </para></listitem>
- *   <listitem><para>
- *     Drag events are not redirected because it is unclear what the semantics
- *     of that would be.
- *   </para></listitem>
- *   </itemizedlist>
- *   Another point of interest might be that all key events are first passed
- *   through the key snooper functions if there are any. Read the description
- *   of gtk_key_snooper_install() if you need this feature.
- * </para></listitem>
- * <listitem><para>
- *   After finishing the delivery the event is popped from the event stack.
- * </para></listitem>
- * </orderedlist>
+ * 1. Compress enter/leave notify events. If the event passed build an
+ *    enter/leave pair together with the next event (peeked from GDK), both
+ *    events are thrown away. This is to avoid a backlog of (de-)highlighting
+ *    widgets crossed by the pointer.
+ * 
+ * 2. Find the widget which got the event. If the widget can't be determined
+ *    the event is thrown away unless it belongs to a INCR transaction.
+ *
+ * 3. Then the event is pushed onto a stack so you can query the currently
+ *    handled event with gtk_get_current_event().
+ * 
+ * 4. The event is sent to a widget. If a grab is active all events for widgets
+ *    that are not in the contained in the grab widget are sent to the latter
+ *    with a few exceptions:
+ *    - Deletion and destruction events are still sent to the event widget for
+ *      obvious reasons.
+ *    - Events which directly relate to the visual representation of the event
+ *      widget.
+ *    - Leave events are delivered to the event widget if there was an enter
+ *      event delivered to it before without the paired leave event.
+ *    - Drag events are not redirected because it is unclear what the semantics
+ *      of that would be.
+ *    Another point of interest might be that all key events are first passed
+ *    through the key snooper functions if there are any. Read the description
+ *    of gtk_key_snooper_install() if you need this feature.
+ * 
+ * 5. After finishing the delivery the event is popped from the event stack.
  */
 void
 gtk_main_do_event (GdkEvent *event)

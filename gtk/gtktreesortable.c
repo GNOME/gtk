@@ -147,16 +147,11 @@ gtk_tree_sortable_get_sort_column_id (GtkTreeSortable  *sortable,
  * resort itself to reflect this change, after emitting a
  * #GtkTreeSortable::sort-column-changed signal. @sort_column_id may either be
  * a regular column id, or one of the following special values:
- * <variablelist>
- * <varlistentry>
- *   <term>%GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID</term>
- *   <listitem>the default sort function will be used, if it is set</listitem>
- * </varlistentry>
- * <varlistentry>
- *   <term>%GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID</term>
- *   <listitem>no sorting will occur</listitem>
- * </varlistentry>
- * </variablelist>
+ * 
+ * - %GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID: the default sort function
+ *   will be used, if it is set
+ * 
+ * - %GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID: no sorting will occur
  */
 void
 gtk_tree_sortable_set_sort_column_id (GtkTreeSortable  *sortable,

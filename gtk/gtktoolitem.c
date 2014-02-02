@@ -37,22 +37,7 @@
  * SECTION:gtktoolitem
  * @short_description: The base class of widgets that can be added to GtkToolShell
  * @Title: GtkToolItem
- * @see_also: <variablelist>
- *   <varlistentry>
- *     <term>#GtkToolbar</term>
- *     <listitem><para>The toolbar widget</para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>#GtkToolButton</term>
- *     <listitem><para>A subclass of #GtkToolItem that displays buttons on
- *         the toolbar</para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>#GtkSeparatorToolItem</term>
- *     <listitem><para>A subclass of #GtkToolItem that separates groups of
- *         items on a toolbar</para></listitem>
- *   </varlistentry>
- * </variablelist>
+ * @see_also: #GtkToolbar, #GtkToolButton, #GtkSeparatorToolItem
  *
  * #GtkToolItem<!-- -->s are widgets that can appear on a toolbar. To
  * create a toolbar item that contain something else than a button, use
@@ -221,20 +206,17 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * This signal is emitted when the toolbar needs information from @tool_item
  * about whether the item should appear in the toolbar overflow menu. In
  * response the tool item should either
- * <itemizedlist>
- * <listitem>call gtk_tool_item_set_proxy_menu_item() with a %NULL
- * pointer and return %TRUE to indicate that the item should not appear
- * in the overflow menu
- * </listitem>
- * <listitem> call gtk_tool_item_set_proxy_menu_item() with a new menu
- * item and return %TRUE, or 
- * </listitem>
- * <listitem> return %FALSE to indicate that the signal was not
- * handled by the item. This means that
- * the item will not appear in the overflow menu unless a later handler
- * installs a menu item.
- * </listitem>
- * </itemizedlist>
+ * 
+ * - call gtk_tool_item_set_proxy_menu_item() with a %NULL
+ *   pointer and return %TRUE to indicate that the item should not appear
+ *   in the overflow menu
+ * 
+ * - call gtk_tool_item_set_proxy_menu_item() with a new menu
+ *   item and return %TRUE, or 
+ *
+ * - return %FALSE to indicate that the signal was not handled by the item.
+ *   This means that the item will not appear in the overflow menu unless
+ *   a later handler installs a menu item.
  *
  * The toolbar may cache the result of this signal. When the tool item changes
  * how it will respond to this signal it must call gtk_tool_item_rebuild_menu()
@@ -259,12 +241,10 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * This signal is emitted when some property of the toolbar that the
  * item is a child of changes. For custom subclasses of #GtkToolItem,
  * the default handler of this signal use the functions
- * <itemizedlist>
- * <listitem>gtk_tool_shell_get_orientation()</listitem>
- * <listitem>gtk_tool_shell_get_style()</listitem>
- * <listitem>gtk_tool_shell_get_icon_size()</listitem>
- * <listitem>gtk_tool_shell_get_relief_style()</listitem>
- * </itemizedlist>
+ * - gtk_tool_shell_get_orientation()
+ * - gtk_tool_shell_get_style()
+ * - gtk_tool_shell_get_icon_size()
+ * - gtk_tool_shell_get_relief_style()
  * to find out what the toolbar should look like and change
  * themselves accordingly.
  **/
@@ -796,16 +776,12 @@ gtk_tool_item_get_orientation (GtkToolItem *tool_item)
  * the toolbar is displayed and change themselves accordingly 
  *
  * Possibilities are:
- * <itemizedlist>
- * <listitem> GTK_TOOLBAR_BOTH, meaning the tool item should show
- * both an icon and a label, stacked vertically </listitem>
- * <listitem> GTK_TOOLBAR_ICONS, meaning the toolbar shows
- * only icons </listitem>
- * <listitem> GTK_TOOLBAR_TEXT, meaning the tool item should only
- * show text</listitem>
- * <listitem> GTK_TOOLBAR_BOTH_HORIZ, meaning the tool item should show
- * both an icon and a label, arranged horizontally</listitem>
- * </itemizedlist>
+ * - %GTK_TOOLBAR_BOTH, meaning the tool item should show
+ *   both an icon and a label, stacked vertically
+ * - %GTK_TOOLBAR_ICONS, meaning the toolbar shows only icons
+ * - %GTK_TOOLBAR_TEXT, meaning the tool item should only show text
+ * - %GTK_TOOLBAR_BOTH_HORIZ, meaning the tool item should show
+ *   both an icon and a label, arranged horizontally
  * 
  * Return value: A #GtkToolbarStyle indicating the toolbar style used
  * for @tool_item.

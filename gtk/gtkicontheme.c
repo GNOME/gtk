@@ -80,27 +80,23 @@
  * Named icons are similar to the <xref linkend="gtk3-Themeable-Stock-Images"/>
  * facility, and the distinction between the two may be a bit confusing.
  * A few things to keep in mind:
- * <itemizedlist>
- * <listitem>
- * Stock images usually are used in conjunction with
- * <xref linkend="gtk3-Stock-Items"/>, such as %GTK_STOCK_OK or
- * %GTK_STOCK_OPEN. Named icons are easier to set up and therefore
- * are more useful for new icons that an application wants to
- * add, such as application icons or window icons.
- * </listitem>
- * <listitem>
- * Stock images can only be loaded at the symbolic sizes defined
- * by the #GtkIconSize enumeration, or by custom sizes defined
- * by gtk_icon_size_register(), while named icons are more flexible
- * and any pixel size can be specified.
- * </listitem>
- * <listitem>
- * Because stock images are closely tied to stock items, and thus
- * to actions in the user interface, stock images may come in
- * multiple variants for different widget states or writing
- * directions.
- * </listitem>
- * </itemizedlist>
+ * 
+ * - Stock images usually are used in conjunction with
+ *   <xref linkend="gtk3-Stock-Items"/>, such as %GTK_STOCK_OK or
+ *   %GTK_STOCK_OPEN. Named icons are easier to set up and therefore
+ *   are more useful for new icons that an application wants to
+ *   add, such as application icons or window icons.
+ * 
+ * - Stock images can only be loaded at the symbolic sizes defined
+ *   by the #GtkIconSize enumeration, or by custom sizes defined
+ *   by gtk_icon_size_register(), while named icons are more flexible
+ *   and any pixel size can be specified.
+ * 
+ * - Because stock images are closely tied to stock items, and thus
+ *   to actions in the user interface, stock images may come in
+ *   multiple variants for different widget states or writing
+ *   directions.
+ *
  * A good rule of thumb is that if there is a stock image for what
  * you want to use, use it, otherwise use a named icon. It turns
  * out that internally stock images are generally defined in
