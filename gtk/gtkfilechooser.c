@@ -43,34 +43,20 @@
  * In the default implementation these are displayed in the left pane. It
  * may be a bit confusing at first that these shortcuts come from various
  * sources and in various flavours, so lets explain the terminology here:
- * <variablelist>
- *    <varlistentry>
- *       <term>Bookmarks</term>
- *       <listitem>
- *          are created by the user, by dragging folders from the
- *          right pane to the left pane, or by using the "Add". Bookmarks
- *          can be renamed and deleted by the user.
- *       </listitem>
- *    </varlistentry>
- *    <varlistentry>
- *       <term>Shortcuts</term>
- *       <listitem>
- *          can be provided by the application.  For example, a Paint program may
- *          want to add a shortcut for a Clipart folder.  Shortcuts cannot be modified by the
- *          user.
- *       </listitem>
- *    </varlistentry>
- *    <varlistentry>
- *       <term>Volumes</term>
- *       <listitem>
- *          are provided by the underlying filesystem abstraction. They are
- *          the "roots" of the filesystem.
- *       </listitem>
- *    </varlistentry>
- * </variablelist>
  *
- * <refsect2 id="gtkfilechooser-encodings">
- * <title>File Names and Encodings</title>
+ * - Bookmarks: are created by the user, by dragging folders from the
+ *   right pane to the left pane, or by using the "Add". Bookmarks
+ *   can be renamed and deleted by the user.
+ *
+ * - Shortcuts: can be provided by the application. For example, a Paint
+ *   program may want to add a shortcut for a Clipart folder. Shortcuts
+ *   cannot be modified by the user.
+ *
+ * - Volumes: are provided by the underlying filesystem abstraction. They are
+ *   the "roots" of the filesystem.
+ *
+ * ## File Names and Encodings
+ *
  * When the user is finished selecting files in a
  * #GtkFileChooser, your program can get the selected names
  * either as filenames or as URIs.  For URIs, the normal escaping
@@ -80,27 +66,24 @@
  * <envar>G_FILENAME_ENCODING</envar> environment variable.
  * Please see the GLib documentation for more details about this
  * variable.
- * <note>
- *    This means that while you can pass the result of
- *    gtk_file_chooser_get_filename() to
- *    open(2) or fopen(3), you may not be able to
- *    directly set it as the text of a #GtkLabel widget unless you
- *    convert it first to UTF-8, which all GTK+ widgets expect.
- *    You should use g_filename_to_utf8() to convert filenames
- *    into strings that can be passed to GTK+ widgets.
- * </note>
- * </refsect2>
- * <refsect2 id="gtkfilechooser-preview">
- * <title>Adding a Preview Widget</title>
- * <para>
+ *
+ * This means that while you can pass the result of
+ * gtk_file_chooser_get_filename() to open() or fopen(),
+ * you may not be able to directly set it as the text of a
+ * #GtkLabel widget unless you convert it first to UTF-8,
+ * which all GTK+ widgets expect. You should use g_filename_to_utf8()
+ * to convert filenames into strings that can be passed to GTK+
+ * widgets.
+ *
+ * ## Adding a Preview Widget
+ *
  * You can add a custom preview widget to a file chooser and then
  * get notification about when the preview needs to be updated.
  * To install a preview widget, use
  * gtk_file_chooser_set_preview_widget().  Then, connect to the
  * #GtkFileChooser::update-preview signal to get notified when
  * you need to update the contents of the preview.
- * </para>
- * <para>
+ *
  * Your callback should use
  * gtk_file_chooser_get_preview_filename() to see what needs
  * previewing.  Once you have generated the preview for the
@@ -108,9 +91,8 @@
  * gtk_file_chooser_set_preview_widget_active() with a boolean
  * flag that indicates whether your callback could successfully
  * generate a preview.
- * </para>
- * <example id="example-gtkfilechooser-preview">
- * <title>Sample Usage</title>
+ * 
+ * <para id="gtkfilechooser-preview">An example for using a  preview widget:</para>
  * |[<!-- language="C" -->
  * {
  *   GtkImage *preview;
@@ -146,20 +128,17 @@
  *   gtk_file_chooser_set_preview_widget_active (file_chooser, have_preview);
  * }
  * ]|
- * </example>
- * </refsect2>
- * <refsect2 id="gtkfilechooser-extra">
- * <title>Adding Extra Widgets</title>
- * <para>
+ *
+ * ## Adding Extra Widgets
+ *
  * You can add extra widgets to a file chooser to provide options
  * that are not present in the default design.  For example, you
  * can add a toggle button to give the user the option to open a
  * file in read-only mode.  You can use
  * gtk_file_chooser_set_extra_widget() to insert additional
  * widgets in a file chooser.
- * </para>
- * <example id="example-gtkfilechooser-extra">
- * <title>Sample Usage</title>
+ *
+ * An example for adding extra widgets:
  * |[<!-- language="C" -->
  *
  *   GtkWidget *toggle;
@@ -171,14 +150,11 @@
  *   gtk_file_chooser_set_extra_widget (my_file_chooser, toggle);
  * }
  * ]|
- * </example>
- * <note>
- *    If you want to set more than one extra widget in the file
- *    chooser, you can a container such as a #GtkBox or a #GtkGrid
- *    and include your widgets in it.  Then, set the container as
- *    the whole extra widget.
- * </note>
- * </refsect2>
+ * 
+ * If you want to set more than one extra widget in the file
+ * chooser, you can a container such as a #GtkBox or a #GtkGrid
+ * and include your widgets in it.  Then, set the container as
+ * the whole extra widget.
  */
 
 

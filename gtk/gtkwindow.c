@@ -89,35 +89,30 @@
  * control whether a window has a resize grip, use
  * gtk_window_set_has_resize_grip().
  *
- * <refsect2 id="GtkWindow-BUILDER-UI">
- * <title>GtkWindow as GtkBuildable</title>
- * <para>
+ * ## GtkWindow as GtkBuildable
+ *
  * The GtkWindow implementation of the GtkBuildable interface supports a
  * custom <tag class="starttag">accel-groups</tag> element, which supports
  * any number of <tag class="starttag">group</tag> elements representing the
  * #GtkAccelGroup objects you want to add to your window (synonymous with
  * gtk_window_add_accel_group().
- * </para>
- * <example>
- * <title>A UI definition fragment with accel groups</title>
+ *
+ * An example of a UI definition fragment with accel groups:
  * |[
  * <object class="GtkWindow">
  *   <accel-groups>
  *     <group name="accelgroup1"/>
  *   </accel-groups>
  * </object>
- * <!-- -->
+ * 
  * ...
- * <!-- -->
+ * 
  * <object class="GtkAccelGroup" id="accelgroup1"/>
  * ]|
- * </example>
- * <para>
+ * 
  * The GtkWindow implementation of the GtkBuildable interface
  * supports setting a child as the titlebar by specifying "titlebar" as
  * the "type" attribute of a <tag class="starttag">child</tag> element.
- * </para>
- * </refsect2>
  */
 
 #define MNEMONICS_DELAY 300 /* ms */

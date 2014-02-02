@@ -26,44 +26,27 @@
  * To implement this interface you should override the
  * #GtkScrollable:hadjustment and #GtkScrollable:vadjustment properties.
  *
- * <refsect2>
- * <title>Creating a scrollable widget</title>
- * <para>
+ * ## Creating a scrollable widget
+ *
  * All scrollable widgets should do the following.
  *
- * <orderedlist>
- *   <listitem>
- *     <para>
- *       When a parent widget sets the scrollable child widget's adjustments, the widget should populate the adjustments'
- *       #GtkAdjustment:lower, #GtkAdjustment:upper,
- *       #GtkAdjustment:step-increment, #GtkAdjustment:page-increment and
- *       #GtkAdjustment:page-size properties and connect to the
- *       #GtkAdjustment::value-changed signal.
- *     </para>
- *   </listitem>
- *   <listitem>
- *     <para>
- *       Because its preferred size is the size for a fully expanded widget,
- *       the scrollable widget must be able to cope with underallocations.
- *       This means that it must accept any value passed to its
- *       #GtkWidgetClass.size_allocate() function.
- *     </para>
- *   </listitem>
- *   <listitem>
- *     <para>
- *       When the parent allocates space to the scrollable child widget, the widget should update
- *       the adjustments' properties with new values.
- *     </para>
- *   </listitem>
- *   <listitem>
- *     <para>
- *       When any of the adjustments emits the #GtkAdjustment::value-changed signal,
- *       the scrollable widget should scroll its contents.
- *     </para>
- *   </listitem>
- * </orderedlist>
- * </para>
- * </refsect2>
+ * - When a parent widget sets the scrollable child widget's adjustments,
+ *   the widget should populate the adjustments'
+ *   #GtkAdjustment:lower, #GtkAdjustment:upper,
+ *   #GtkAdjustment:step-increment, #GtkAdjustment:page-increment and
+ *   #GtkAdjustment:page-size properties and connect to the
+ *   #GtkAdjustment::value-changed signal.
+ *
+ * - Because its preferred size is the size for a fully expanded widget,
+ *   the scrollable widget must be able to cope with underallocations.
+ *   This means that it must accept any value passed to its
+ *   #GtkWidgetClass.size_allocate() function.
+ *
+ * - When the parent allocates space to the scrollable child widget,
+ *   the widget should update the adjustments' properties with new values.
+ *
+ * - When any of the adjustments emits the #GtkAdjustment::value-changed signal,
+ *   the scrollable widget should scroll its contents.
  */
 
 #include "config.h"

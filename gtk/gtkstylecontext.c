@@ -75,21 +75,18 @@
  * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
  * widget.
  *
- * <refsect2 id="gtkstylecontext-animations">
- * <title>Transition animations</title>
- * <para>
+ * ## Transition animations
+ *
  * #GtkStyleContext has built-in support for state change transitions.
  * Note that these animations respect the #GtkSettings:gtk-enable-animations
  * setting.
- * </para>
- * <para>
+ *
  * For simple widgets where state changes affect the whole widget area,
  * calling gtk_style_context_notify_state_change() with a %NULL region
  * is sufficient to trigger the transition animation. And GTK+ already
  * does that when gtk_widget_set_state() or gtk_widget_set_state_flags()
  * are called.
- * </para>
- * <para>
+ *
  * If a widget needs to declare several animatable regions (i.e. not
  * affecting the whole widget area), its #GtkWidget::draw signal handler
  * needs to wrap the render operations for the different regions with
@@ -98,9 +95,8 @@
  * identifier for the region which must be unique within the style context.
  * For simple widgets with a fixed set of animatable regions, using an
  * enumeration works well:
- * </para>
- * <example>
- * <title>Using an enumeration to identify  animatable regions</title>
+ *
+ * An example for Using an enumeration to identify animatable regions:
  * |[<!-- language="C" -->
  * enum {
  *   REGION_ENTRY,
@@ -129,15 +125,13 @@
  *   ...
  * }
  * ]|
- * </example>
- * <para>
+ *
  * For complex widgets with an arbitrary number of animatable regions, it
  * is up to the implementation to come up with a way to uniquely identify
  * each animatable region. Using pointers to internal structs is one way
  * to achieve this:
- * </para>
- * <example>
- * <title>Using struct pointers to identify animatable regions</title>
+ *
+ * An example for using struct pointers to identify animatable regions:
  * |[<!-- language="C" -->
  * void
  * notebook_draw_tab (GtkWidget    *widget,
@@ -149,13 +143,11 @@
  *   gtk_style_context_pop_animatable_region (context);
  * }
  * ]|
- * </example>
- * <para>
+ *
  * The widget also needs to notify the style context about a state change
  * for a given animatable region so the animation is triggered.
- * </para>
- * <example>
- * <title>Triggering a state change animation on a region</title>
+ *
+ * An example for triggering a state change animation on a region:
  * |[<!-- language="C" -->
  * gboolean
  * notebook_motion_notify (GtkWidget      *widget,
@@ -174,70 +166,17 @@
  *   ...
  * }
  * ]|
- * </example>
- * <para>
+ *
  * gtk_style_context_notify_state_change() accepts %NULL region IDs as a
  * special value, in this case, the whole widget area will be updated
  * by the animation.
- * </para>
- * </refsect2>
- * <refsect2 id="gtkstylecontext-classes">
- * <title>Style classes and regions</title>
- * <para>
- * Widgets can add style classes to their context, which can be used
- * to associate different styles by class (see <xref linkend="gtkcssprovider-selectors"/>). Theme engines can also use style classes to vary their
- * rendering. GTK+ has a number of predefined style classes:
- * #GTK_STYLE_CLASS_CELL,
- * #GTK_STYLE_CLASS_ENTRY,
- * #GTK_STYLE_CLASS_BUTTON,
- * #GTK_STYLE_CLASS_COMBOBOX_ENTRY,
- * #GTK_STYLE_CLASS_CALENDAR,
- * #GTK_STYLE_CLASS_SLIDER,
- * #GTK_STYLE_CLASS_BACKGROUND,
- * #GTK_STYLE_CLASS_RUBBERBAND,
- * #GTK_STYLE_CLASS_TOOLTIP,
- * #GTK_STYLE_CLASS_MENU,
- * #GTK_STYLE_CLASS_MENUBAR,
- * #GTK_STYLE_CLASS_MENUITEM,
- * #GTK_STYLE_CLASS_TOOLBAR,
- * #GTK_STYLE_CLASS_PRIMARY_TOOLBAR,
- * #GTK_STYLE_CLASS_INLINE_TOOLBAR,
- * #GTK_STYLE_CLASS_RADIO,
- * #GTK_STYLE_CLASS_CHECK,
- * #GTK_STYLE_CLASS_TROUGH,
- * #GTK_STYLE_CLASS_SCROLLBAR,
- * #GTK_STYLE_CLASS_SCALE,
- * #GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE,
- * #GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW,
- * #GTK_STYLE_CLASS_HEADER,
- * #GTK_STYLE_CLASS_ACCELERATOR,
- * #GTK_STYLE_CLASS_GRIP,
- * #GTK_STYLE_CLASS_DOCK,
- * #GTK_STYLE_CLASS_PROGRESSBAR,
- * #GTK_STYLE_CLASS_SPINNER,
- * #GTK_STYLE_CLASS_EXPANDER,
- * #GTK_STYLE_CLASS_SPINBUTTON,
- * #GTK_STYLE_CLASS_NOTEBOOK,
- * #GTK_STYLE_CLASS_VIEW,
- * #GTK_STYLE_CLASS_SIDEBAR,
- * #GTK_STYLE_CLASS_IMAGE,
- * #GTK_STYLE_CLASS_HIGHLIGHT,
- * #GTK_STYLE_CLASS_FRAME,
- * #GTK_STYLE_CLASS_DND,
- * #GTK_STYLE_CLASS_PANE_SEPARATOR,
- * #GTK_STYLE_CLASS_SEPARATOR,
- * #GTK_STYLE_CLASS_INFO,
- * #GTK_STYLE_CLASS_WARNING,
- * #GTK_STYLE_CLASS_QUESTION,
- * #GTK_STYLE_CLASS_ERROR,
- * #GTK_STYLE_CLASS_HORIZONTAL,
- * #GTK_STYLE_CLASS_VERTICAL,
- * #GTK_STYLE_CLASS_TOP,
- * #GTK_STYLE_CLASS_BOTTOM,
- * #GTK_STYLE_CLASS_LEFT,
- * #GTK_STYLE_CLASS_RIGHT,
- * </para>
- * <para>
+ *
+ * ## Style classes and regions
+ *
+ * <para id="gtkstylecontext-classes">Widgets can add style classes to their context, which can be used
+ * to associate different styles by class (see <xref linkend="gtkcssprovider-selectors"/>).
+ * Theme engines can also use style classes to vary their rendering.</para>
+ *
  * Widgets can also add regions with flags to their context.
  * The regions used by GTK+ widgets are:
  * <informaltable>
@@ -278,19 +217,16 @@
  *     </tbody>
  *   </tgroup>
  * </informaltable>
- * </para>
- * </refsect2>
- * <refsect2 id="gtkstylecontext-custom-styling">
- * <title>Custom styling in UI libraries and applications</title>
- * <para>
+ *
+ * ## Custom styling in UI libraries and applications
+ *
  * If you are developing a library with custom #GtkWidget<!-- -->s that
  * render differently than standard components, you may need to add a
  * #GtkStyleProvider yourself with the %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK
  * priority, either a #GtkCssProvider or a custom object implementing the
  * #GtkStyleProvider interface. This way theming engines may still attempt
  * to style your UI elements in a different way if needed so.
- * </para>
- * <para>
+ *
  * If you are using custom styling on an applications, you probably want then
  * to make your style information prevail to the theme's, so you must use
  * a #GtkStyleProvider with the %GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
@@ -298,14 +234,11 @@
  * <filename><replaceable>XDG_CONFIG_HOME</replaceable>/gtk-3.0/gtk.css</filename> will
  * still take precedence over your changes, as it uses the
  * %GTK_STYLE_PROVIDER_PRIORITY_USER priority.
- * </para>
- * <para>
+ *
  * If a custom theming engine is needed, you probably want to implement a
  * #GtkStyleProvider yourself so it points to your #GtkThemingEngine
  * implementation, as #GtkCssProvider uses gtk_theming_engine_load()
  * which loads the theming engine module from the standard paths.
- * </para>
- * </refsect2>
  */
 
 /* When these change we do a full restyling. Otherwise we try to figure out

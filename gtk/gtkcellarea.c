@@ -35,9 +35,8 @@
  * Usually users dont have to interact with the #GtkCellArea directly
  * unless they are implementing a cell-layouting widget themselves.
  *
- * <refsect2 id="cell-area-geometry-management">
- * <title>Requesting area sizes</title>
- * <para>
+ * ## Requesting area sizes
+ * 
  * As outlined in <link linkend="geometry-management">GtkWidget's
  * geometry management section</link>, GTK+ uses a height-for-width
  * geometry management system to compute the sizes of widgets and user
@@ -72,9 +71,7 @@
  *
  * In order to request the width of all the rows at the root level
  * of a #GtkTreeModel one would do the following:
- * <example>
- *   <title>Requesting the width of a handful of GtkTreeModel rows</title>
- *   |[<!-- language="C" -->
+ * |[<!-- language="C" -->
  * GtkTreeIter iter;
  * gint        minimum_width;
  * gint        natural_width;
@@ -88,8 +85,7 @@
  *     valid = gtk_tree_model_iter_next (model, &iter);
  *   }
  * gtk_cell_area_context_get_preferred_width (context, &minimum_width, &natural_width);
- *   ]|
- * </example>
+ * ]|
  * Note that in this example it's not important to observe the
  * returned minimum and natural width of the area for each row
  * unless the cell-layouting object is actually interested in the
@@ -102,15 +98,13 @@
  * exceedingly large amount of rows. The #GtkCellLayout widget in
  * that case would calculate the required width of the rows in an
  * idle or timeout source (see g_timeout_add()) and when the widget
- * is requested its actual width in #GtkWidgetClass.get_preferred_width(<!-- -->)
+ * is requested its actual width in #GtkWidgetClass.get_preferred_width()
  * it can simply consult the width accumulated so far in the
  * #GtkCellAreaContext object.
  *
  * A simple example where rows are rendered from top to bottom and
  * take up the full width of the layouting widget would look like:
- * <example>
- *   <title>A typical get_preferred_width(<!-- -->) implementation</title>
- *   |[<!-- language="C" -->
+ * |[<!-- language="C" -->
  * static void
  * foo_get_preferred_width (GtkWidget       *widget,
  *                          gint            *minimum_size,
@@ -123,8 +117,7 @@
  *
  *   gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
  * }
- *   ]|
- * </example>
+ * ]|
  * In the above example the Foo widget has to make sure that some
  * row sizes have been calculated (the amount of rows that Foo judged
  * was appropriate to request space for in a single timeout iteration)
@@ -140,9 +133,7 @@
  *
  * In order to request the height for width of all the rows at the
  * root level of a #GtkTreeModel one would do the following:
- * <example>
- *   <title>Requesting the height for width of a handful of GtkTreeModel rows</title>
- *   |[<!-- language="C" -->
+ * |[<!-- language="C" -->
  * GtkTreeIter iter;
  * gint        minimum_height;
  * gint        natural_height;
@@ -164,8 +155,7 @@
  *
  *     valid = gtk_tree_model_iter_next (model, &iter);
  *   }
- *   ]|
- * </example>
+ * ]|
  * Note that in the above example we would need to cache the heights
  * returned for each row so that we would know what sizes to render the
  * areas for each row. However we would only want to really cache the
@@ -180,26 +170,22 @@
  * synchronously. The reasoning here is that any layouting widget is
  * at least capable of synchronously calculating enough height to fill
  * the screen height (or scrolled window height) in response to a single
- * call to #GtkWidgetClass.get_preferred_height_for_width(<!-- -->). Returning
+ * call to #GtkWidgetClass.get_preferred_height_for_width(). Returning
  * a perfect height for width that is larger than the screen area is
  * inconsequential since after the layouting receives an allocation
  * from a scrolled window it simply continues to drive the scrollbar
  * values while more and more height is required for the row heights
  * that are calculated in the background.
- * </para>
- * </refsect2>
- * <refsect2 id="cell-area-rendering">
- * <title>Rendering Areas</title>
- * <para>
+ * 
+ * ## Rendering Areas
+ *
  * Once area sizes have been aquired at least for the rows in the
  * visible area of the layouting widget they can be rendered at
  * #GtkWidgetClass.draw() time.
  *
  * A crude example of how to render all the rows at the root level
  * runs as follows:
- * <example>
- *   <title>Requesting the width of a handful of GtkTreeModel rows</title>
- *   |[<!-- language="C" -->
+ * |[<!-- language="C" -->
  * GtkAllocation allocation;
  * GdkRectangle  cell_area = { 0, };
  * GtkTreeIter   iter;
@@ -222,19 +208,16 @@
  *
  *     valid = gtk_tree_model_iter_next (model, &iter);
  *   }
- *   ]|
- * </example>
+ * ]|
  * Note that the cached height in this example really depends on how
  * the layouting widget works. The layouting widget might decide to
  * give every row its minimum or natural height or, if the model content
  * is expected to fit inside the layouting widget without scrolling, it
  * would make sense to calculate the allocation for each row at
  * #GtkWidget::size-allocate time using gtk_distribute_natural_allocation().
- * </para>
- * </refsect2>
- * <refsect2 id="cell-area-events-and-focus">
- * <title>Handling Events and Driving Keyboard Focus</title>
- * <para>
+ *
+ * ## Handling Events and Driving Keyboard Focus
+ *
  * Passing events to the area is as simple as handling events on any
  * normal widget and then passing them to the gtk_cell_area_event()
  * API as they come in. Usually #GtkCellArea is only interested in
@@ -262,9 +245,7 @@
  *
  * A basic example of how the #GtkWidgetClass.focus() virtual method
  * should be implemented:
- * <example>
- *   <title>Implementing keyboard focus navigation</title>
- *   |[<!-- language="C" -->
+ * |[<!-- language="C" -->
  * static gboolean
  * foo_focus (GtkWidget       *widget,
  *            GtkDirectionType direction)
@@ -320,18 +301,15 @@
  *     }
  *     return have_focus;
  * }
- *   ]|
- * </example>
+ * ]|
  * Note that the layouting widget is responsible for matching the
  * GtkDirectionType values to the way it lays out its cells.
- * </para>
- * </refsect2>
- * <refsect2 id="cell-properties">
- * <title>Cell Properties</title>
- * <para>
- * The #GtkCellArea introduces cell properties
- * for #GtkCellRenderers in very much the same way that #GtkContainer
- * introduces <link linkend="child-properties">child properties</link>
+ *
+ * ## Cell Properties
+ *
+ * The #GtkCellArea introduces cell properties for #GtkCellRenderers
+ * in very much the same way that #GtkContainer introduces
+ * <link linkend="child-properties">child properties</link>
  * for #GtkWidgets. This provides some general interfaces for defining
  * the relationship cell areas have with their cells. For instance in a
  * #GtkCellAreaBox a cell might "expand" and receive extra space when
@@ -348,8 +326,6 @@
  * gtk_cell_area_cell_set() or gtk_cell_area_cell_set_valist(). To obtain
  * the value of a cell property, use gtk_cell_area_cell_get_property(),
  * gtk_cell_area_cell_get() or gtk_cell_area_cell_get_valist().
- * </para>
- * </refsect2>
  */
 
 #include "config.h"

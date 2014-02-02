@@ -47,27 +47,27 @@
  * with high key  binding configurability which requires no application
  * or toolkit side changes.
  *
- * <refsect2 id="gtk-bindings-install">
- * <title>Installing a key binding</title>
- * <para>
+ * ## Installing a key binding
+ *
  * A CSS file binding consists of a 'binding-set' definition and a match
  * statement to apply the binding set to specific widget types. Details
  * on the matching mechanism are described under
  * <link linkend="gtkcssprovider-selectors">Selectors</link>
- * in the #GtkCssProvider documentation. Inside the binding set definition,
- * key combinations are bound to one or more specific signal emissions on
- * the target widget. Key combinations are strings consisting of an optional
- * #GdkModifierType name and <link linkend="gdk3-Keyboard-Handling">key names</link>
+ * in the #GtkCssProvider documentation. Inside the binding set
+ * definition, key combinations are bound to one or more specific
+ * signal emissions on the target widget. Key combinations are strings
+ * consisting of an optional #GdkModifierType name and
+ * <link linkend="gdk3-Keyboard-Handling">key names</link>
  * such as those defined in <filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
  * or returned from gdk_keyval_name(), they have to be parsable by
  * gtk_accelerator_parse(). Specifications of signal emissions consist
  * of a string identifying the signal name, and a list of signal specific
  * arguments in parenthesis.
- * </para>
- * <para>
+ *
  * For example for binding Control and the left or right cursor keys
- * of a #GtkEntry widget to the #GtkEntry::move-cursor signal (so movement
- * occurs in 3-character steps), the following binding can be used:
+ * of a #GtkEntry widget to the #GtkEntry::move-cursor signal (so
+ * movement occurs in 3-character steps), the following binding can be
+ * used:
  * |[
  * @binding-set MoveCursor3
  * {
@@ -79,11 +79,9 @@
  *   gtk-key-bindings: MoveCursor3;
  * }
  * ]|
- * </para>
- * </refsect2>
- * <refsect2 id="gtk-bindings-unbind">
- * <title>Unbinding existing key bindings</title>
- * <para>
+ *
+ * ## Unbinding existing key bindings
+ *
  * GTK+ already defines a number of useful bindings for the widgets
  * it provides. Because custom bindings set up in CSS files take
  * precedence over the default bindings shipped with GTK+, overriding
@@ -108,10 +106,10 @@
  * from the bindings set "MoveCursor3" to be deleted, so when
  * "&lt;Control&gt;Right" or "&lt;Control&gt;Left" are pressed, no
  * binding for these keys is found in binding set "MoveCursor3".
- * GTK+ will thus continue to search for matching key bindings, and will
- * eventually lookup and find the default GTK+ bindings for entries which
- * implement word movement. To keep GTK+ from activating its default
- * bindings, the "unbind" keyword can be used like this:
+ * GTK+ will thus continue to search for matching key bindings, and
+ * will eventually lookup and find the default GTK+ bindings for
+ * entries which implement word movement. To keep GTK+ from activating
+ * its default bindings, the "unbind" keyword can be used like this:
  * |[
  * @binding-set MoveCursor3
  * {
@@ -129,8 +127,6 @@
  * so the key presses are not consumed by this widget. As usual, further
  * processing of the key presses, e.g. by an entry's parent widget, is
  * now possible.
- * </para>
- * </refsect2>
  */
 
 /* --- defines --- */

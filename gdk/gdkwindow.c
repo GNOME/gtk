@@ -56,40 +56,36 @@
  * A #GdkWindow is a (usually) rectangular region on the screen.
  * It's a low-level object, used to implement high-level objects such as
  * #GtkWidget and #GtkWindow on the GTK+ level. A #GtkWindow is a toplevel
- * window, the thing a user might think of as a "window" with a titlebar and
- * so on; a #GtkWindow may contain many #GdkWindows. For example, each
- * #GtkButton has a #GdkWindow associated with it.
+ * window, the thing a user might think of as a "window" with a titlebar
+ * and so on; a #GtkWindow may contain many #GdkWindows. For example,
+ * each #GtkButton has a #GdkWindow associated with it.
  *
- * <refsect2 id="COMPOSITED-WINDOWS">
- * <title>Composited Windows</title>
- * <para>
- * Normally, the windowing system takes care of rendering the contents of a
- * child window onto its parent window. This mechanism can be intercepted by
- * calling gdk_window_set_composited() on the child window. For a
- * <firstterm>composited</firstterm> window it is the responsibility of the
- * application to render the window contents at the right spot.
- * </para>
- * </refsect2>
- * <refsect2 id="OFFSCREEN-WINDOWS">
- * <title>Offscreen Windows</title>
- * <para>
- * Offscreen windows are more general than composited windows, since they allow
- * not only to modify the rendering of the child window onto its parent, but
- * also to apply coordinate transformations.
+ * ## Composited Windows
  *
- * To integrate an offscreen window into a window hierarchy, one has to call
- * gdk_offscreen_window_set_embedder() and handle a number of signals. The
- * #GdkWindow::pick-embedded-child signal on the embedder window is used to
- * select an offscreen child at given coordinates, and the
- * #GdkWindow::to-embedder and #GdkWindow::from-embedder signals on the
- * offscreen window are used to translate coordinates between the embedder and
- * the offscreen window.
+ * <para id="COMPOSITED-WINDOWS">Normally, the windowing system takes care of rendering the contents
+ * of a child window onto its parent window. This mechanism can be
+ * intercepted by calling gdk_window_set_composited() on the child
+ * window. For a <firstterm>composited</firstterm> window it is the
+ * responsibility of the application to render the window contents at
+ * the right spot.</para>
  *
- * For rendering an offscreen window onto its embedder, the contents of the
- * offscreen window are available as a surface, via
+ * ## Offscreen Windows
+ *
+ * <para id="OFFSCREEN-WINDOWS">Offscreen windows are more general than composited windows, since
+ * they allow not only to modify the rendering of the child window onto
+ * its parent, but also to apply coordinate transformations.</para>
+ *
+ * To integrate an offscreen window into a window hierarchy, one has
+ * to call gdk_offscreen_window_set_embedder() and handle a number of
+ * signals. The #GdkWindow::pick-embedded-child signal on the embedder
+ * window is used to select an offscreen child at given coordinates,
+ * and the #GdkWindow::to-embedder and #GdkWindow::from-embedder signals
+ * on the offscreen window are used to translate coordinates between
+ * the embedder and the offscreen window.
+ *
+ * For rendering an offscreen window onto its embedder, the contents
+ * of the offscreen window are available as a surface, via
  * gdk_offscreen_window_get_surface().
- * </para>
- * </refsect2>
  */
 
 

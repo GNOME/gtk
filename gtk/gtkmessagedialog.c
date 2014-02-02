@@ -57,28 +57,28 @@
  * you can also pass in the %GTK_DIALOG_MODAL flag, gtk_dialog_run() automatically
  * makes the dialog modal and waits for the user to respond to it. gtk_dialog_run()
  * returns when any dialog button is clicked.
- * <example>
- * <title>A modal dialog.</title>
+ *
+ * An example for using a modal dialog:
  * |[<!-- language="C" -->
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
  *                                   GTK_MESSAGE_ERROR,
  *                                   GTK_BUTTONS_CLOSE,
- *                                   "Error loading file '&percnt;s': &percnt;s",
+ *                                   "Error loading file '%s': %s",
  *                                   filename, g_strerror (errno));
  *  gtk_dialog_run (GTK_DIALOG (dialog));
  *  gtk_widget_destroy (dialog);
  * ]|
- * </example>
+ *
  * You might do a non-modal #GtkMessageDialog as follows:
- * <example>
- * <title>A non-modal dialog.</title>
+ *
+ * An example for a non-modal dialog:
  * |[<!-- language="C" -->
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
  *                                   GTK_MESSAGE_ERROR,
  *                                   GTK_BUTTONS_CLOSE,
- *                                   "Error loading file '&percnt;s': &percnt;s",
+ *                                   "Error loading file '%s': %s",
  *                                   filename, g_strerror (errno));
  *
  *  /&ast; Destroy the dialog when the user responds to it (e.g. clicks a button) &ast;/
@@ -86,15 +86,11 @@
  *                            G_CALLBACK (gtk_widget_destroy),
  *                            dialog);
  * ]|
- * </example>
  *
- * <refsect2 id="GtkMessageDialog-BUILDER-UI">
- * <title>GtkMessageDialog as GtkBuildable</title>
- * <para>
+ * ## GtkMessageDialog as GtkBuildable
+ *
  * The GtkMessageDialog implementation of the GtkBuildable interface exposes
  * the message area as an internal child with the name "message_area".
- * </para>
- * </refsect2>
  */
 
 struct _GtkMessageDialogPrivate

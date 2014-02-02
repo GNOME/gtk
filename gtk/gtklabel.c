@@ -67,16 +67,14 @@
  * implies, most labels are used to label another widget such as a
  * #GtkButton, a #GtkMenuItem, or a #GtkComboBox.
  *
- * <refsect2 id="GtkLabel-BUILDER-UI">
- * <title>GtkLabel as GtkBuildable</title>
- * <para>
+ * ## GtkLabel as GtkBuildable
+ *
  * The GtkLabel implementation of the GtkBuildable interface supports a
  * custom &lt;attributes&gt; element, which supports any number of &lt;attribute&gt;
  * elements. the &lt;attribute&gt; element has attributes named name, value,
  * start and end and allows you to specify #PangoAttribute values for this label.
  *
- * <example>
- * <title>A UI definition fragment specifying Pango attributes</title>
+ * An example of a UI definition fragment specifying Pango attributes:
  * |[
  * <object class="GtkLabel">
  *   <attributes>
@@ -85,17 +83,15 @@
  *   </attributes>
  * </object>
  * ]|
- * </example>
+ *
  * The start and end attributes specify the range of characters to which the
  * Pango attribute applies. If start and end are not specified, the attribute is
  * applied to the whole text. Note that specifying ranges does not make much
  * sense with translatable attributes. Use markup embedded in the translatable
  * content instead.
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Mnemonics</title>
- * <para>
+ *
+ * ## Mnemonics
+ *
  * Labels may contain <firstterm>mnemonics</firstterm>. Mnemonics are
  * underlined characters in the label, used for keyboard navigation.
  * Mnemonics are created by providing a string with an underscore before
@@ -110,8 +106,8 @@
  * the label is inside a button:
  *
  * |[<!-- language="C" -->
- *   // Pressing Alt+H will activate this button
- *   button = gtk_button_new (<!-- -->);
+ *   /&ast; Pressing Alt+H will activate this button &ast;/
+ *   button = gtk_button_new ();
  *   label = gtk_label_new_with_mnemonic ("_Hello");
  *   gtk_container_add (GTK_CONTAINER (button), label);
  * ]|
@@ -120,7 +116,7 @@
  * already inside:
  *
  * |[<!-- language="C" -->
- *   // Pressing Alt+H will activate this button
+ *   /&ast; Pressing Alt+H will activate this button &ast;/
  *   button = gtk_button_new_with_mnemonic ("_Hello");
  * ]|
  *
@@ -129,21 +125,19 @@
  * gtk_label_set_mnemonic_widget():
  *
  * |[<!-- language="C" -->
- *   // Pressing Alt+H will focus the entry
- *   entry = gtk_entry_new (<!-- -->);
+ *   /&ast; Pressing Alt+H will focus the entry &ast;/
+ *   entry = gtk_entry_new ();
  *   label = gtk_label_new_with_mnemonic ("_Hello");
  *   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
  * ]|
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Markup (styled text)</title>
- * <para>
- * To make it easy to format text in a label (changing colors, fonts,
- * etc.), label text can be provided in a simple <link
- * linkend="PangoMarkupFormat">markup format</link>.
- * Here's how to create a label with a small font:
  *
+ * ## Markup (styled text)
+ *
+ * To make it easy to format text in a label (changing colors,
+ * fonts, etc.), label text can be provided in a simple <link
+ * linkend="PangoMarkupFormat">markup format</link>.
+ *
+ * Here's how to create a label with a small font:
  * |[<!-- language="C" -->
  *   label = gtk_label_new (NULL);
  *   gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
@@ -167,18 +161,16 @@
  * to [0, %G_MAXINT)). The reason is that specifying the start_index and
  * end_index for a #PangoAttribute requires knowledge of the exact string
  * being displayed, so translations will cause problems.
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Selectable labels</title>
+ *
+ * ## Selectable labels
+ *
  * Labels can be made selectable with gtk_label_set_selectable().
  * Selectable labels allow the user to copy the label contents to
  * the clipboard. Only labels that contain useful-to-copy information
  * &mdash; such as error messages &mdash; should be made selectable.
- * </refsect2>
- * <refsect2 id="label-text-layout">
- * <title>Text layout</title>
- * <para>
+ *
+ * ## Text layout
+ *
  * A label can contain any number of paragraphs, but will have
  * performance problems if it contains more than a small number.
  * Paragraphs are separated by newlines or other paragraph separators
@@ -200,30 +192,25 @@
  * is used as the natural width. Even if max-width-chars specified, wrapping
  * labels will be rewrapped to use all of the available width.
  *
- * <note><para>
  * Note that the interpretation of #GtkLabel:width-chars and
  * #GtkLabel:max-width-chars has changed a bit with the introduction of
  * <link linkend="geometry-management">width-for-height geometry management.</link>
- * </para></note>
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Links</title>
- * <para>
+ *
+ * ## Links
+ *
  * Since 2.18, GTK+ supports markup for clickable hyperlinks in addition
  * to regular Pango markup. The markup for links is borrowed from HTML, using the
  * <tag>a</tag> with href and title attributes. GTK+ renders links similar to the
  * way they appear in web browsers, with colored, underlined text. The title
- * attribute is displayed as a tooltip on the link. An example looks like this:
+ * attribute is displayed as a tooltip on the link.
  *
+ * An example looks like this:
  * |[<!-- language="C" -->
  * gtk_label_set_markup (label, "Go to the <a href="http://www.gtk.org" title="&lt;i&gt;Our&lt;/i&gt; website">GTK+ website</a> for more...");
  * ]|
  *
  * It is possible to implement custom handling for links and their tooltips with
  * the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function.
- * </para>
- * </refsect2>
  */
 
 struct _GtkLabelPrivate

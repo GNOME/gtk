@@ -48,15 +48,13 @@
  * Use gtk_menu_tool_button_new() to create a new
  * #GtkMenuToolButton.
  *
- * <refsect2 id="GtkMenuToolButton-BUILDER-UI">
- * <title>GtkMenuToolButton as GtkBuildable</title>
- * <para>
+ * ## GtkMenuToolButton as GtkBuildable
+ *
  * The GtkMenuToolButton implementation of the GtkBuildable interface
  * supports adding a menu by specifying "menu" as the "type"
  * attribute of a &lt;child&gt; element.
  *
- * <example>
- * <title>A UI definition fragment with menus</title>
+ * An example for a UI definition fragment with menus:
  * |[
  * <object class="GtkMenuToolButton">
  *   <child type="menu">
@@ -64,9 +62,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 

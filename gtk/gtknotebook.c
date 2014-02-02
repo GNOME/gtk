@@ -64,9 +64,8 @@
  * will be a popup menu allowing the users to switch pages.
  * (see gtk_notebook_popup_enable(), gtk_notebook_popup_disable())
  *
- * <refsect2 id="GtkNotebook-BUILDER-UI">
- * <title>GtkNotebook as GtkBuildable</title>
- * <para>
+ * ## GtkNotebook as GtkBuildable
+ * 
  * The GtkNotebook implementation of the #GtkBuildable interface
  * supports placing children into tabs by specifying "tab" as the
  * "type" attribute of a &lt;child&gt; element. Note that the content
@@ -77,9 +76,8 @@
  * To add a child widget in the notebooks action area, specify
  * "action-start" or "action-end" as the "type" attribute of the &lt;child&gt;
  * element.
- * </para>
- * <example>
- * <title>A UI definition fragment with GtkNotebook</title>
+ *
+ * An example of a UI definition fragment with GtkNotebook:
  * |[
  * <object class="GtkNotebook">
  *   <child>
@@ -94,8 +92,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </refsect2>
  */
 
 

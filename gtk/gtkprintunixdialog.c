@@ -76,30 +76,18 @@
  * gtk_print_job_new().
  *
  * #GtkPrintUnixDialog uses the following response values:
- * <variablelist>
- *   <varlistentry><term>%GTK_RESPONSE_OK</term>
- *     <listitem><para>for the "Print" button</para></listitem>
- *   </varlistentry>
- *   <varlistentry><term>%GTK_RESPONSE_APPLY</term>
- *     <listitem><para>for the "Preview" button</para></listitem>
- *   </varlistentry>
- *   <varlistentry><term>%GTK_RESPONSE_CANCEL</term>
- *     <listitem><para>for the "Cancel" button</para></listitem>
- *   </varlistentry>
- * </variablelist>
- *
- * <!-- FIXME example here -->
+ * - %GTK_RESPONSE_OK: for the "Print" button
+ * - %GTK_RESPONSE_APPLY: for the "Preview" button
+ * - %GTK_RESPONSE_CANCEL: for the "Cancel" button
  *
  * Printing support was added in GTK+ 2.10.
  *
- * <refsect2 id="GtkPrintUnixDialog-BUILDER-UI">
- * <title>GtkPrintUnixDialog as GtkBuildable</title>
- * <para>
+ * ## GtkPrintUnixDialog as GtkBuildable
+ *
  * The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
  * @notebook internal children with the name "notebook".
  *
- * <example>
- * <title>A #GtkPrintUnixDialog UI definition fragment.</title>
+ * An example of a #GtkPrintUnixDialog UI definition fragment:
  * |[
  * <object class="GtkPrintUnixDialog" id="dialog1">
  *   <child internal-child="notebook">
@@ -122,9 +110,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 

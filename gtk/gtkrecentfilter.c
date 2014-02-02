@@ -40,9 +40,8 @@
  *
  * Recently used files are supported since GTK+ 2.10.
  *
- * <refsect2 id="GtkRecentFilter-BUILDER-UI">
- * <title>GtkRecentFilter as GtkBuildable</title>
- * <para>
+ * ## GtkRecentFilter as GtkBuildable
+ *
  * The GtkRecentFilter implementation of the GtkBuildable interface
  * supports adding rules using the &lt;mime-types&gt;, &lt;patterns&gt; and
  * &lt;applications&gt; elements and listing the rules within. Specifying
@@ -50,8 +49,7 @@
  * as calling gtk_recent_filter_add_mime_type(), gtk_recent_filter_add_pattern()
  * or gtk_recent_filter_add_application().
  *
- * <example>
- * <title>A UI definition fragment specifying GtkRecentFilter rules</title>
+ * An example of a UI definition fragment specifying GtkRecentFilter rules:
  * |[
  * <object class="GtkRecentFilter">
  *   <mime-types>
@@ -69,9 +67,6 @@
  *   </applications>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 #include "config.h"

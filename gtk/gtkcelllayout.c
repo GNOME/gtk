@@ -21,22 +21,21 @@
  * @Title: GtkCellLayout
  *
  * #GtkCellLayout is an interface to be implemented by all objects which
- * want to provide a #GtkTreeViewColumn<!-- -->-like API for packing cells, setting
- * attributes and data funcs.
+ * want to provide a #GtkTreeViewColumn like API for packing cells,
+ * setting attributes and data funcs.
  *
- * One of the notable features provided by implementations of GtkCellLayout
- * are attributes. Attributes let you set the properties
+ * One of the notable features provided by implementations of 
+ * GtkCellLayout are attributes. Attributes let you set the properties
  * in flexible ways. They can just be set to constant values like regular
  * properties. But they can also be mapped to a column of the underlying
  * tree model with gtk_cell_layout_set_attributes(), which means that the value
- * of the attribute can change from cell to cell as they are rendered by the
- * cell renderer. Finally, it is possible to specify a function with
- * gtk_cell_layout_set_cell_data_func() that is called to determine the value
- * of the attribute for each cell that is rendered.
+ * of the attribute can change from cell to cell as they are rendered by
+ * the cell renderer. Finally, it is possible to specify a function with
+ * gtk_cell_layout_set_cell_data_func() that is called to determine the
+ * value of the attribute for each cell that is rendered.
  *
- * <refsect2 id="GtkCellLayout-BUILDER-UI">
- * <title>GtkCellLayouts as GtkBuildable</title>
- * <para>
+ * ## GtkCellLayouts as GtkBuildable
+ *
  * Implementations of GtkCellLayout which also implement the GtkBuildable
  * interface (#GtkCellView, #GtkIconView, #GtkComboBox,
  * #GtkEntryCompletion, #GtkTreeViewColumn) accept GtkCellRenderer objects
@@ -46,8 +45,7 @@
  * a name attribute which specifies a property of the cell renderer; the
  * content of the element is the attribute value.
  *
- * <example>
- * <title>A UI definition fragment specifying attributes</title>
+ * This is an example of a UI definition fragment specifying attributes:
  * |[
  * <object class="GtkCellView">
  *   <child>
@@ -58,15 +56,15 @@
  *   </child>"
  * </object>
  * ]|
- * </example>
  *
- * Furthermore for implementations of GtkCellLayout that use a #GtkCellArea
- * to lay out cells (all GtkCellLayouts in GTK+ use a GtkCellArea)
- * <link linkend="cell-properties">cell properties</link> can also be defined
- * in the format by specifying the custom &lt;cell-packing&gt; attribute which
- * can contain multiple &lt;property&gt; elements defined in the normal way.
- * <example>
- * <title>A UI definition fragment specifying cell properties</title>
+ * Furthermore for implementations of GtkCellLayout that use a
+ * #GtkCellArea to lay out cells (all GtkCellLayouts in GTK+ use
+ * a GtkCellArea) <link linkend="cell-properties">cell properties</link>
+ * can also be defined in the format by specifying the custom
+ * &lt;cell-packing&gt; attribute which can contain multiple
+ * &lt;property&gt; elements defined in the normal way.
+ *
+ * Here is a UI definition fragment specifying cell properties:
  * |[
  * <object class="GtkTreeViewColumn">
  *   <child>
@@ -78,13 +76,9 @@
  *   </child>"
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  *
- * <refsect2>
- * <title>Subclassing GtkCellLayout implementations</title>
- * <para>
+ * ## Subclassing GtkCellLayout implementations
+ *
  * When subclassing a widget that implements #GtkCellLayout like
  * #GtkIconView or #GtkComboBox, there are some considerations related
  * to the fact that these widgets internally use a #GtkCellArea.
@@ -128,8 +122,6 @@
  * to support alternative cell areas, you can do so by moving the
  * problematic calls out of init() and into a constructor()
  * for your class.
- * </para>
- * </refsect2>
  */
 
 #include "config.h"

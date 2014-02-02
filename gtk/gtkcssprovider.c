@@ -55,9 +55,8 @@
  * It is able to parse <ulink url="http://www.w3.org/TR/CSS2">CSS</ulink>-like
  * input in order to style widgets.
  *
- * <refsect2 id="gtkcssprovider-files">
- * <title>Default files</title>
- * <para>
+ * ## Default files
+ *
  * An application can cause GTK+ to parse a specific CSS style sheet by
  * calling gtk_css_provider_load_from_file() and adding the provider with
  * gtk_style_context_add_provider() or gtk_style_context_add_provider_for_screen().
@@ -71,61 +70,52 @@
  * (see the #GtkSettings:gtk-theme-name setting) and <replaceable>datadir</replaceable>
  * is the prefix configured when GTK+ was compiled, unless overridden by the
  * <envar>GTK_DATA_PREFIX</envar> environment variable.
- * </para>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-stylesheets">
- * <title>Style sheets</title>
- * <para>
+ * 
+ * ## Style sheets
+ *
  * The basic structure of the style sheets understood by this provider is
  * a series of statements, which are either rule sets or '@-rules', separated
  * by whitespace.
- * </para>
- * <para>
+ *
  * A rule set consists of a selector and a declaration block, which is
  * a series of declarations enclosed in curly braces ({ and }). The
  * declarations are separated by semicolons (;). Multiple selectors can
  * share the same declaration block, by putting all the separators in
  * front of the block, separated by commas.
- * </para>
- * <example><title>A rule set with two selectors</title>
+ *
+ * An example of a rule set with two selectors:
  * |[
  * GtkButton, GtkEntry {
  *     color: #ff00ea;
  *     font: Comic Sans 12
  * }
  * ]|
- * </example>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-selectors">
- * <title>Selectors</title>
- * <para>
- * Selectors work very similar to the way they do in CSS, with widget class
+ *
+ * ## Selectors
+ *
+ * <para id="gtkcssprovider-selectors">Selectors work very similar to the way they do in CSS, with widget class
  * names taking the role of element names, and widget names taking the role
  * of IDs. When used in a selector, widget names must be prefixed with a
  * '&num;' character. The '*' character represents the so-called universal
- * selector, which matches any widget.
- * </para>
- * <para>
+ * selector, which matches any widget.</para>
+ *
  * To express more complicated situations, selectors can be combined in
  * various ways:
- * <itemizedlist>
- * <listitem><para>To require that a widget satisfies several conditions,
+ * - To require that a widget satisfies several conditions,
  *   combine several selectors into one by concatenating them. E.g.
  *   <literal>GtkButton&num;button1</literal> matches a GtkButton widget
- *   with the name button1.</para></listitem>
- * <listitem><para>To only match a widget when it occurs inside some other
+ *   with the name button1.
+ * - To only match a widget when it occurs inside some other
  *   widget, write the two selectors after each other, separated by whitespace.
  *   E.g. <literal>GtkToolBar GtkButton</literal> matches GtkButton widgets
- *   that occur inside a GtkToolBar.</para></listitem>
- * <listitem><para>In the previous example, the GtkButton is matched even
+ *   that occur inside a GtkToolBar.
+ * - In the previous example, the GtkButton is matched even
  *   if it occurs deeply nested inside the toolbar. To restrict the match
  *   to direct children of the parent widget, insert a '>' character between
  *   the two selectors. E.g. <literal>GtkNotebook > GtkLabel</literal> matches
- *   GtkLabel widgets that are direct children of a GtkNotebook.</para></listitem>
- * </itemizedlist>
- * </para>
- * <example>
- * <title>Widget classes and names in selectors</title>
+ *   GtkLabel widgets that are direct children of a GtkNotebook.
+ *
+ * An example of widget classes and names in selectors:
  * |[
  * /&ast; Theme labels that are descendants of a window &ast;/
  * GtkWindow GtkLabel {
@@ -160,25 +150,21 @@
  *     background-color: #f0a810
  * }
  * ]|
- * </example>
- * <para>
+ *
  * Widgets may also define style classes, which can be used for matching.
  * When used in a selector, style classes must be prefixed with a '.'
  * character.
- * </para>
- * <para>
+ *
  * Refer to the documentation of individual widgets to learn which
  * style classes they define and see <xref linkend="gtkstylecontext-classes"/>
  * for a list of all style classes used by GTK+ widgets.
- * </para>
- * <para>
+ *
  * Note that there is some ambiguity in the selector syntax when it comes
  * to differentiation widget class names from regions. GTK+ currently treats
  * a string as a widget class name if it contains any uppercase characters
  * (which should work for more widgets with names like GtkLabel).
- * </para>
- * <example>
- * <title>Style classes in selectors</title>
+ *
+ * An example for style classes in selectors:
  * |[
  * /&ast; Theme all widgets defining the class entry &ast;/
  * .entry {
@@ -190,29 +176,25 @@
  *     color: #900185
  * }
  * ]|
- * </example>
- * <para>
+ *
  * In complicated widgets like e.g. a GtkNotebook, it may be desirable
  * to style different parts of the widget differently. To make this
  * possible, container widgets may define regions, whose names
  * may be used for matching in selectors.
- * </para>
- * <para>
+ *
  * Some containers allow to further differentiate between regions by
  * applying so-called pseudo-classes to the region. For example, the
  * tab region in GtkNotebook allows to single out the first or last
  * tab by using the :first-child or :last-child pseudo-class.
  * When used in selectors, pseudo-classes must be prefixed with a
  * ':' character.
- * </para>
- * <para>
+ *
  * Refer to the documentation of individual widgets to learn which
  * regions and pseudo-classes they define and see
  * <xref linkend="gtkstylecontext-classes"/> for a list of all regions
  * used by GTK+ widgets.
- * </para>
- * <example>
- * <title>Regions in selectors</title>
+ *
+ * An example for regions in selectors:
  * |[
  * /&ast; Theme any label within a notebook &ast;/
  * GtkNotebook GtkLabel {
@@ -231,16 +213,14 @@
  *     color: #89d012;
  * }
  * ]|
- * </example>
- * <para>
+ *
  * Another use of pseudo-classes is to match widgets depending on their
  * state. This is conceptually similar to the :hover, :active or :focus
  * pseudo-classes in CSS. The available pseudo-classes for widget states
  * are :active, :prelight (or :hover), :insensitive, :selected, :focused
  * and :inconsistent.
- * </para>
- * <example>
- * <title>Styling specific widget states</title>
+ * 
+ * And example for styling specific widget states:
  * |[
  * /&ast; Theme active (pressed) buttons &ast;/
  * GtkButton:active {
@@ -275,45 +255,37 @@
  *     background-color: #20395a;
  * }
  * ]|
- * </example>
- * <para>
+ *
  * Widget state pseudoclasses may only apply to the last element
  * in a selector.
- * </para>
- * <para>
+ *
  * To determine the effective style for a widget, all the matching rule
  * sets are merged. As in CSS, rules apply by specificity, so the rules
  * whose selectors more closely match a widget path will take precedence
  * over the others.
- * </para>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-rules">
- * <title>&commat; Rules</title>
- * <para>
+ * 
+ * ## &commat; Rules
+ *
  * GTK+'s CSS supports the &commat;import rule, in order to load another
  * CSS style sheet in addition to the currently parsed one.
- * </para>
- * <example>
- * <title>Using the &commat;import rule</title>
+ *
+ * An example for using the &commat;import rule:
  * |[
  * @import url ("path/to/common.css");
  * ]|
- * </example>
- * <para id="css-binding-set">
+ * 
  * In order to extend key bindings affecting different widgets, GTK+
  * supports the &commat;binding-set rule to parse a set of bind/unbind
  * directives, see #GtkBindingSet for the supported syntax. Note that
  * the binding sets defined in this way must be associated with rule sets
  * by setting the gtk-key-bindings style property.
- * </para>
- * <para>
+ *
  * Customized key bindings are typically defined in a separate
  * <filename>gtk-keys.css</filename> CSS file and GTK+ loads this file
  * according to the current key theme, which is defined by the
  * #GtkSettings:gtk-key-theme-name setting.
- * </para>
- * <example>
- * <title>Using the &commat;binding rule</title>
+ *
+ * An example for using the &commat;binding rule:
  * |[
  * @binding-set binding-set1 {
  *   bind "<alt>Left" { "move-cursor" (visual-positions, -3, 0) };
@@ -330,15 +302,13 @@
  *   gtk-key-bindings: binding-set1, binding-set2;
  * }
  * ]|
- * </example>
- * <para>
+ *
  * GTK+ also supports an additional &commat;define-color rule, in order
  * to define a color name which may be used instead of color numeric
  * representations. Also see the #GtkSettings:gtk-color-scheme setting
  * for a way to override the values of these named colors.
- * </para>
- * <example>
- * <title>Defining colors</title>
+ *
+ * An example for defining colors:
  * |[
  * @define-color bg_color #f9a039;
  *
@@ -346,18 +316,15 @@
  *     background-color: @bg_color;
  * }
  * ]|
- * </example>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-symbolic-colors">
- * <title>Symbolic colors</title>
- * <para>
+ *
+ * ## Symbolic colors
+ *
  * Besides being able to define color names, the CSS parser is also able
  * to read different color expressions, which can also be nested, providing
  * a rich language to define colors which are derived from a set of base
  * colors.
- * </para>
- * <example>
- * <title>Using symbolic colors</title>
+ *
+ * An example for using symbolic colors:
  * |[
  * @define-color entry-color shade (@bg_color, 0.7);
  *
@@ -371,10 +338,8 @@
  *                            0.8);
  * }
  * ]|
- * </example>
- * <para>
- *   The various ways to express colors in GTK+ CSS are:
- * </para>
+ * 
+ * The various ways to express colors in GTK+ CSS are:
  * <informaltable>
  *   <tgroup cols="3">
  *     <thead>
@@ -445,13 +410,11 @@
  *     </tbody>
  *   </tgroup>
  * </informaltable>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-gradients">
- * <title>Gradients</title>
- * <para>
+ *
+ * ## Gradients
+ *
  * Linear or radial Gradients can be used as background images.
- * </para>
- * <para>
+ *
  * A linear gradient along the line from (@start_x, @start_y) to
  * (@end_x, @end_y) is specified using the syntax
  * <literallayout>-gtk-gradient (linear,
@@ -466,26 +429,23 @@
  * The color-stop can be repeated multiple times to add more than one color
  * stop. 'from (@color)' and 'to (@color)' can be used as abbreviations for
  * color stops with position 0 and 1, respectively.
- * </para>
- * <example>
- * <title>A linear gradient</title>
+ *
+ * An example for a linear gradient:
  * <inlinegraphic fileref="gradient1.png" format="PNG"/>
- * <para>This gradient was specified with
+ * This gradient was specified with
  * <literallayout>-gtk-gradient (linear,
  *                left top, right bottom,
- *                from(&commat;yellow), to(&commat;blue))</literallayout></para>
- * </example>
- * <example>
- * <title>Another linear gradient</title>
+ *                from(&commat;yellow), to(&commat;blue))</literallayout>
+ *
+ * Another example for a linear gradient:
  * <inlinegraphic fileref="gradient2.png" format="PNG"/>
- * <para>This gradient was specified with
+ * This gradient was specified with
  * <literallayout>-gtk-gradient (linear,
  *                0 0, 0 1,
  *                color-stop(0, &commat;yellow),
  *                color-stop(0.2, &commat;blue),
- *                color-stop(1, &num;0f0))</literallayout></para>
- * </example>
- * <para>
+ *                color-stop(1, &num;0f0))</literallayout>
+ *
  * A radial gradient along the two circles defined by (@start_x, @start_y,
  * @start_radius) and (@end_x, @end_y, @end_radius) is specified using the
  * syntax
@@ -496,63 +456,53 @@
  *                ...)</literallayout>
  * where @start_radius and @end_radius are floating point numbers and
  * the other parameters are as before.
- * </para>
- * <example>
- * <title>A radial gradient</title>
+ *
+ * An example of a radial gradient:
  * <inlinegraphic fileref="gradient3.png" format="PNG"/>
- * <para>This gradient was specified with
+ * This gradient was specified with
  * <literallayout>-gtk-gradient (radial,
  *                center center, 0,
  *                center center, 1,
- *                from(&commat;yellow), to(&commat;green))</literallayout></para>
- * </example>
- * <example>
- * <title>Another radial gradient</title>
+ *                from(&commat;yellow), to(&commat;green))</literallayout>
+ *
+ * Another example of a radial gradient:
  * <inlinegraphic fileref="gradient4.png" format="PNG"/>
- * <para>This gradient was specified with
+ * This gradient was specified with
  * <literallayout>-gtk-gradient (radial,
  *                0.4 0.4, 0.1,
  *                0.6 0.6, 0.7,
  *                color-stop (0, &num;f00),
  *                color-stop (0.1, &num;a0f),
  *                color-stop (0.2, &commat;yellow),
- *                color-stop (1, &commat;green))</literallayout></para>
- * </example>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-shadows">
- * <title>Text shadow</title>
- * <para>
+ *                color-stop (1, &commat;green))</literallayout>
+ *
+ * ## Text shadow
+ *
  * A shadow list can be applied to text or symbolic icons, using the CSS3
  * text-shadow syntax, as defined in
  * <ulink url="http://www.w3.org/TR/css3-text/#text-shadow">the CSS3 specification</ulink>.
- * </para>
- * <para>
+ *
  * A text shadow is specified using the syntax
  * <literallayout>text-shadow: @horizontal_offset @vertical_offset [ @blur_radius ] @color</literallayout>
  * The offset of the shadow is specified with the @horizontal_offset and @vertical_offset
  * parameters. The optional blur radius is parsed, but it is currently not rendered by
  * the GTK+ theming engine.
- * </para>
- * <para>
+ *
  * To set a shadow on an icon, use the icon-shadow property instead,
  * with the same syntax.
- * </para>
- * <para>
+ *
  * To set multiple shadows on an element, you can specify a comma-separated list
  * of shadow elements in the text-shadow or icon-shadow property. Shadows are
  * always rendered front-back, i.e. the first shadow specified is on top of the
  * others. Shadows can thus overlay each other, but they can never overlay the
  * text or icon itself, which is always rendered on top of the shadow layer.
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Box shadow</title>
- * <para>
+ * 
+ * ## Box shadow
+ *
  * Themes can apply shadows on framed elements using the CSS3 box-shadow syntax,
  * as defined in 
  * <ulink url="http://www.w3.org/TR/css3-background/#the-box-shadow">the CSS3 specification</ulink>.
- * </para>
- * <para>
+ *
  * A box shadow is specified using the syntax
  * <literallayout>box-shadow: [ @inset ] @horizontal_offset @vertical_offset [ @blur_radius ] [ @spread ] @color</literallayout>
  * A positive offset will draw a shadow that is offset to the right (down) of the box,
@@ -562,51 +512,44 @@
  * the GTK+ theming engine.
  * The inset parameter defines whether the drop shadow should be rendered inside or outside
  * the box canvas.
- * </para>
- * <para>
+ *
  * To set multiple box-shadows on an element, you can specify a comma-separated list
  * of shadow elements in the box-shadow property. Shadows are always rendered
  * front-back, i.e. the first shadow specified is on top of the others, so they may
  * overlap other boxes or other shadows.
- * </para>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-border-image">
- * <title>Border images</title>
- * <para>
+ * 
+ * ## Border images
+ *
  * Images and gradients can also be used in slices for the purpose of creating
  * scalable borders.
  * For more information, see the CSS3 documentation for the border-image property,
  * which can be found <ulink url="http://www.w3.org/TR/css3-background/#border-images">here</ulink>.
- * </para>
+ *
  * <inlinegraphic fileref="slices.png" format="PNG"/>
- * <para>
+ *
  * The parameters of the slicing process are controlled by
  * four separate properties. Note that you can use the
  * <literallayout>border-image</literallayout> shorthand property
  * to set values for the three properties at the same time.
- * </para>
- * <para>
+ *
  * <literallayout>border-image-source: url(@path)
  * (or border-image-source: -gtk-gradient(...))</literallayout>:
  * Specifies the source of the border image, and it can either
  * be an URL or a gradient (see above).
- * </para>
- * <para>
+ *
  * <literallayout>border-image-slice: @top @right @bottom @left</literallayout>
  * The sizes specified by the @top, @right, @bottom and @left parameters
  * are the offsets, in pixels, from the relevant edge where the image
  * should be "cut off" to build the slices used for the rendering
  * of the border.
- * </para>
- * <para>
+ *
  * <literallayout>border-image-width: @top @right @bottom @left</literallayout>
  * The sizes specified by the @top, @right, @bottom and @left parameters
  * are inward distances from the border box edge, used to specify the
  * rendered size of each slice determined by border-image-slice.
  * If this property is not specified, the values of border-width will
  * be used as a fallback.
- * </para>
- * <para>
+ *
  * <literallayout>border-image-repeat: [stretch|repeat|round|space] ? 
  * [stretch|repeat|round|space]</literallayout>
  * Specifies how the image slices should be rendered in the area
@@ -625,31 +568,25 @@
  * If two options are specified, the first one affects
  * the horizontal behaviour and the second one the vertical behaviour.
  * If only one option is specified, it affects both.
- * </para>
- * <example>
- * <title>A border image</title>
+ *
+ * An example of a border image:
  * <inlinegraphic fileref="border1.png" format="PNG"/>
- * <para>This border image was specified with
+ * This border image was specified with
  * <literallayout>url("gradient1.png") 10 10 10 10</literallayout>
- * </para>
- * </example>
- * <example>
- * <title>A repeating border image</title>
+ *
+ * An example of a repeating border image:
  * <inlinegraphic fileref="border2.png" format="PNG"/>
- * <para>This border image was specified with
+ * This border image was specified with
  * <literallayout>url("gradient1.png") 10 10 10 10 repeat</literallayout>
- * </para>
- * </example>
- * <example>
- * <title>A stretched border image</title>
+ *
+ * An example of a stretched border image:
  * <inlinegraphic fileref="border3.png" format="PNG"/>
- * <para>This border image was specified with
+ * This border image was specified with
  * <literallayout>url("gradient1.png") 10 10 10 10 stretch</literallayout>
- * </para>
- * </example>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-transitions">
- * <para>Styles can specify transitions that will be used to create a gradual
+ *
+ * ## Transitions
+ *
+ * Styles can specify transitions that will be used to create a gradual
  * change in the appearance when a widget state changes. The following
  * syntax is used to specify transitions:
  * <literallayout>@duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?</literallayout>
@@ -673,19 +610,15 @@
  * <figure><title>Ease-out transition</title>
  * <graphic fileref="ease-out.png" format="PNG"/>
  * </figure>
- * </para>
- * </refsect2>
- * <refsect2 id="gtkcssprovider-properties">
- * <title>Supported properties</title>
- * <para>
+ *
+ * ## Supported properties
+ *
  * Properties are the part that differ the most to common CSS,
  * not all properties are supported (some are planned to be
  * supported eventually, some others are meaningless or don't
  * map intuitively in a widget based environment).
- * </para>
- * <para>
+ * 
  * The currently supported properties are:
- * </para>
  * <informaltable>
  *   <tgroup cols="4">
  *     <thead>
@@ -953,7 +886,7 @@
  *     </tbody>
  *   </tgroup>
  * </informaltable>
- * <para>
+ *
  * GtkThemingEngines can register their own, engine-specific style properties
  * with the function gtk_theming_engine_register_property(). These properties
  * can be set in CSS like other properties, using a name of the form
@@ -962,9 +895,8 @@
  * name of the property. Style properties that have been registered by widgets
  * using gtk_widget_class_install_style_property() can also be set in this
  * way, using the widget class name for <replaceable>namespace</replaceable>.
- * </para>
- * <example>
- * <title>Using engine-specific style properties</title>
+ *
+ * An example for using engine-specific style properties:
  * |[
  * * {
  *     engine: clearlooks;
@@ -973,8 +905,6 @@
  *     -clearlooks-colorize-scrollbar: false;
  * }
  * ]|
- * </example>
- * </refsect2>
  */
 
 typedef struct GtkCssRuleset GtkCssRuleset;

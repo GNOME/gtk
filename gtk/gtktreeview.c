@@ -78,30 +78,15 @@
  * These are:
  *
  * <inlinegraphic fileref="tree-view-coordinates.png" format="PNG"></inlinegraphic>
- * <variablelist><title>Coordinate systems in GtkTreeView API</title>
- * <varlistentry><term>Widget coordinates</term>
- * <listitem>
- * <para>
- * Coordinates relative to the widget (usually <literal>widget->window</literal>).
- * </para>
- * </listitem>
- * </varlistentry>
- * <varlistentry><term>Bin window coordinates</term>
- * <listitem>
- * <para>
- * Coordinates relative to the window that GtkTreeView renders to.
- * </para>
- * </listitem>
- * </varlistentry>
- * <varlistentry><term>Tree coordinates</term>
- * <listitem>
- * <para>
- * Coordinates relative to the entire scrollable area of GtkTreeView. These
- * coordinates start at (0, 0) for row 0 of the tree.
- * </para>
- * </listitem>
- * </varlistentry>
- * </variablelist>
+ *
+ * Coordinate systems in GtkTreeView API:
+ *
+ * - Widget coordinates: Coordinates relative to the widget (usually <literal>widget->window</literal>).
+ *
+ * - Bin window coordinates: Coordinates relative to the window that GtkTreeView renders to.
+ *
+ * - Tree coordinates: Coordinates relative to the entire scrollable area of GtkTreeView. These
+ *   coordinates start at (0, 0) for row 0 of the tree.
  *
  * Several functions are available for converting between the different
  * coordinate systems.  The most common translations are between widget and bin
@@ -110,13 +95,13 @@
  * (and vice versa), for the latter gtk_tree_view_convert_bin_window_to_tree_coords()
  * (and vice versa).
  *
- * <refsect2 id="GtkTreeView-BUILDER-UI">
- * <title>GtkTreeView as GtkBuildable</title>
+ * ## GtkTreeView as GtkBuildable
+ *
  * The GtkTreeView implementation of the GtkBuildable interface accepts
  * #GtkTreeViewColumn objects as &lt;child&gt; elements and exposes the
  * internal #GtkTreeSelection in UI definitions.
- * <example>
- * <title>A UI definition fragment with GtkTreeView</title>
+ *
+ * An example of a UI definition fragment with GtkTreeView:
  * |[
  * <object class="GtkTreeView" id="treeview">
  *   <property name="model">liststore1</property>
@@ -138,8 +123,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </refsect2>
  */
 
 enum

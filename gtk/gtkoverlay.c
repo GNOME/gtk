@@ -46,14 +46,11 @@
  * More complicated placement of overlays is possible by connecting
  * to the #GtkOverlay::get-child-position signal.
  *
- * <refsect2 id="GtkOverlay-BUILDER-UI">
- * <title>GtkOverlay as GtkBuildable</title>
- * <para>
+ * ## GtkOverlay as GtkBuildable
+ *
  * The GtkOverlay implementation of the GtkBuildable interface
  * supports placing a child as an overlay by specifying "overlay" as
  * the "type" attribute of a <tag class="starttag">child</tag> element.
- * </para>
- * </refsect2>
  */
 
 struct _GtkOverlayPrivate

@@ -35,9 +35,8 @@
  * user to perform application functions. A #GtkMenuItem can have a
  * submenu associated with it, allowing for nested hierarchical menus.
  *
- * <refsect2 id="GtkMenuShell-Terminology">
- * <title>Terminology</title>
- * <para>
+ * ## Terminology
+ *
  * A menu item can be "selected", this means that it is displayed
  * in the prelight state, and if it has a submenu, that submenu
  * will be popped up.
@@ -55,8 +54,6 @@
  * a selected menu item.) The current menu is the menu that
  * contains the current menu item. It will always have a GTK
  * grab and receive all key presses.
- * </para>
- * </refsect2>
  */
 #include "config.h"
 

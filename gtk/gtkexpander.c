@@ -32,9 +32,8 @@
  * to add it to the expander. When the expander is toggled, it will take
  * care of showing and hiding the child automatically.
  *
- * <refsect2 id="expander-special-usage">
- * <title>Special Usage</title>
- * <para>
+ * ## Special Usage
+ *
  * There are situations in which you may prefer to show and hide the
  * expanded widget yourself, such as when you want to actually create
  * the widget at expansion time. In this case, create a #GtkExpander
@@ -42,7 +41,7 @@
  * #GtkExpander:expanded property which can be used to monitor
  * its expansion state. You should watch this property with a signal
  * connection as follows:
- * </para>
+ *
  * |[<!-- language="C" -->
  * expander = gtk_expander_new_with_mnemonic ("_More Options");
  * g_signal_connect (expander, "notify::expanded",
@@ -69,18 +68,16 @@
  *     }
  * }
  * ]|
- * </refsect2>
- * <refsect2 id="GtkExpander-BUILDER-UI">
- * <title>GtkExpander as GtkBuildable</title>
- * <para>
+ *
+ * ## GtkExpander as GtkBuildable
+ *
  * The GtkExpander implementation of the GtkBuildable interface
  * supports placing a child in the label position by specifying
  * "label" as the "type" attribute of a &lt;child&gt; element.
  * A normal content child can be specified without specifying
  * a &lt;child&gt; type attribute.
- * </para>
- * <example>
- * <title>A UI definition fragment with GtkExpander</title>
+ *
+ * An example of a UI definition fragment with GtkExpander:
  * |[
  * <object class="GtkExpander">
  *   <child type="label">
@@ -91,9 +88,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </refsect2>
- *
  */
 
 #include "config.h"

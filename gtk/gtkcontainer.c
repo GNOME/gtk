@@ -78,9 +78,8 @@
  * children in a horizontal row, and a #GtkGrid arranges the widgets it contains
  * in a two-dimensional grid.
  *
- * <refsect2 id="container-geometry-management">
- * <title>Height for width geometry management</title>
- * <para>
+ * ## Height for width geometry management
+ *
  * GTK+ uses a height-for-width (and width-for-height) geometry management system.
  * Height-for-width means that a widget can change how much vertical space it needs,
  * depending on the amount of horizontal space that it is given (and similar for
@@ -151,7 +150,7 @@
  *
  * Height for width requests are generally implemented in terms of a virtual allocation
  * of widgets in the input orientation. Assuming an height-for-width request mode, a container
- * would implement the get_preferred_height_for_width(<!-- -->) virtual function by first calling
+ * would implement the get_preferred_height_for_width() virtual function by first calling
  * gtk_widget_get_preferred_width() for each of its children.
  *
  * For each potential group of children that are lined up horizontally, the values returned by
@@ -180,11 +179,9 @@
  *
  * See <link linkend="geometry-management">GtkWidget's geometry management section</link>
  * to learn more about implementing height-for-width geometry management for widgets.
- * </para>
- * </refsect2>
- * <refsect2 id="child-properties">
- * <title>Child properties</title>
- * <para>
+ *
+ * ## Child properties
+ *
  * GtkContainer introduces child properties.
  * These are object properties that are not specific
  * to either the container or the contained widget, but rather to their relation.
@@ -202,17 +199,15 @@
  * gtk_container_child_get_property(), gtk_container_child_get() or
  * gtk_container_child_get_valist(). To emit notification about child property
  * changes, use gtk_widget_child_notify().
- * </para>
- * </refsect2>
- * <refsect2 id="GtkContainer-BUILDER-UI">
- * <title>GtkContainer as GtkBuildable</title>
- * <para>
+ *
+ * ## GtkContainer as GtkBuildable
+ *
  * The GtkContainer implementation of the GtkBuildable interface
  * supports a &lt;packing&gt; element for children, which can
  * contain multiple &lt;property&gt; elements that specify
  * child properties for the child.
- * <example>
- * <title>Child properties in UI definitions</title>
+ * 
+ * An example of child properties in UI definitions:
  * |[
  * <object class="GtkVBox">
  *   <child>
@@ -223,12 +218,10 @@
  *   </child>
  * </object>
  * ]|
- * </example>
+ *
  * Since 2.16, child properties can also be marked as translatable using
  * the same "translatable", "comments" and "context" attributes that are used
  * for regular properties.
- * </para>
- * </refsect2>
  */
 
 

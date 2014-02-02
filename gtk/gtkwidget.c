@@ -77,26 +77,23 @@
  * GtkWidget is the base class all widgets in GTK+ derive from. It manages the
  * widget lifecycle, states and style.
  *
- * <refsect2 id="geometry-management">
- * <title>Height-for-width Geometry Management</title>
- * <para>
- * GTK+ uses a height-for-width (and width-for-height) geometry management
+ * ## Height-for-width Geometry Management
+ *
+ * <para id="geometry-management">GTK+ uses a height-for-width (and width-for-height) geometry management
  * system. Height-for-width means that a widget can change how much
  * vertical space it needs, depending on the amount of horizontal space
  * that it is given (and similar for width-for-height). The most common
  * example is a label that reflows to fill up the available width, wraps
- * to fewer lines, and therefore needs less height.
+ * to fewer lines, and therefore needs less height.</para>
  *
  * Height-for-width geometry management is implemented in GTK+ by way
  * of five virtual methods:
- * <itemizedlist>
- *   <listitem>#GtkWidgetClass.get_request_mode()</listitem>
- *   <listitem>#GtkWidgetClass.get_preferred_width()</listitem>
- *   <listitem>#GtkWidgetClass.get_preferred_height()</listitem>
- *   <listitem>#GtkWidgetClass.get_preferred_height_for_width()</listitem>
- *   <listitem>#GtkWidgetClass.get_preferred_width_for_height()</listitem>
- *   <listitem>#GtkWidgetClass.get_preferred_height_and_baseline_for_width()</listitem>
- * </itemizedlist>
+ * - #GtkWidgetClass.get_request_mode()
+ * - #GtkWidgetClass.get_preferred_width()
+ * - #GtkWidgetClass.get_preferred_height()
+ * - #GtkWidgetClass.get_preferred_height_for_width()
+ * - #GtkWidgetClass.get_preferred_width_for_height()
+ * - #GtkWidgetClass.get_preferred_height_and_baseline_for_width()
  *
  * There are some important things to keep in mind when implementing
  * height-for-width and when using it in container implementations.
@@ -177,7 +174,6 @@
  *
  * And in #GtkWidgetClass.get_preferred_width_for_height() it will simply return
  * the minimum and natural width:
- *
  * |[<!-- language="C" -->
  * static void
  * foo_widget_get_preferred_width_for_height (GtkWidget *widget, gint for_height,
@@ -201,13 +197,10 @@
  * compute width. Or when deciding how to use an allocation, the widget
  * may need to know its natural size. In these cases, the widget should
  * be careful to call its virtual methods directly, like this:
- * <example>
- *   <title>Widget calling its own size request method.</title>
- *   |[<!-- language="C" -->
+ * |[<!-- language="C" -->
  * GTK_WIDGET_GET_CLASS(widget)-&gt;get_preferred_width (widget),
  *                                  &min, &natural);
- *   ]|
- * </example>
+ * ]|
  *
  * It will not work to use the wrapper functions, such as
  * gtk_widget_get_preferred_width() inside your own size request
@@ -243,11 +236,8 @@
  * If this has a value other than -1 you need to align the widget such that the baseline
  * appears at the position.
  *
- * </para>
- * </refsect2>
- * <refsect2 id="style-properties">
- * <title>Style Properties</title>
- * <para>
+ * ## Style Properties
+ *
  * #GtkWidget introduces <firstterm>style
  * properties</firstterm> - these are basically object properties that are stored
  * not on the object, but in the style object associated to the widget. Style
@@ -255,38 +245,32 @@
  * This mechanism is used for configuring such things as the location of the
  * scrollbar arrows through the theme, giving theme authors more control over the
  * look of applications without the need to write a theme engine in C.
- * </para>
- * <para>
+ *
  * Use gtk_widget_class_install_style_property() to install style properties for
  * a widget class, gtk_widget_class_find_style_property() or
  * gtk_widget_class_list_style_properties() to get information about existing
  * style properties and gtk_widget_style_get_property(), gtk_widget_style_get() or
  * gtk_widget_style_get_valist() to obtain the value of a style property.
- * </para>
- * </refsect2>
- * <refsect2 id="GtkWidget-BUILDER-UI">
- * <title>GtkWidget as GtkBuildable</title>
- * <para>
+ *
+ * ## GtkWidget as GtkBuildable
+ *
  * The GtkWidget implementation of the GtkBuildable interface supports a
  * custom &lt;accelerator&gt; element, which has attributes named key,
  * modifiers and signal and allows to specify accelerators.
- * </para>
- * <example>
- * <title>A UI definition fragment specifying an accelerator</title>
+ *
+ * An example of a UI definition fragment specifying an accelerator:
  * |[
  * <object class="GtkButton">
  *   <accelerator key="q" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
  * </object>
  * ]|
- * </example>
- * <para>
+ *
  * In addition to accelerators, #GtkWidget also support a
  * custom &lt;accessible&gt; element, which supports actions and relations.
  * Properties on the accessible implementation of an object can be set by accessing the
  * internal child "accessible" of a #GtkWidget.
- * </para>
- * <example>
- * <title>A UI definition fragment specifying an accessible</title>
+ *
+ * An example of a UI definition fragment specifying an accessible:
  * |[
  * <object class="GtkButton" id="label1"/>
  *   <property name="label">I am a Label for a Button</property>
@@ -303,12 +287,9 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * <para>
+ *
  * Finally, GtkWidget allows style information such as style classes to
  * be associated with widgets, using the custom &lt;style&gt; element:
- * <example>
- * <title>A UI definition fragment specifying an style class</title>
  * |[
  * <object class="GtkButton" id="button1">
  *   <style>
@@ -317,26 +298,20 @@
  *   </style>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
- * <refsect2 id="GtkWidget-BUILDER-TEMPLATES">
- * <title>Building composite widgets from template XML</title>
- * <para>
+ *
+ * ## Building composite widgets from template XML
+ *
  * GtkWidget exposes some facilities to automate the proceedure
  * of creating composite widgets using #GtkBuilder interface description
  * language.
- * </para>
- * <para>
+ *
  * To create composite widgets with #GtkBuilder XML, one must associate
  * the interface description with the widget class at class initialization
  * time using gtk_widget_class_set_template().
- * </para>
- * <para>
+ *
  * The interface description semantics expected in composite template descriptions
  * is slightly different from regulare #GtkBuilder XML.
- * </para>
- * <para>
+ *
  * Unlike regular interface descriptions, gtk_widget_class_set_template() will expect a
  * &lt;template&gt; tag as a direct child of the toplevel &lt;interface&gt;
  * tag. The &lt;template&gt; tag must specify the "class" attribute which
@@ -345,23 +320,19 @@
  * is ignored by the GtkBuilder but required for Glade to introspect what kind
  * of properties and internal children exist for a given type when the actual
  * type does not exist.
- * </para>
- * <para>
+ *
  * The XML which is contained inside the &lt;template&gt; tag behaves as if
  * it were added to the &lt;object&gt; tag defining @widget itself. You may set
  * properties on @widget by inserting &lt;property&gt; tags into the &lt;template&gt; 
  * tag, and also add &lt;child&gt; tags to add children and extend @widget in the
  * normal way you would with &lt;object&gt; tags.
- * </para>
- * <para>
+ *
  * Additionally, &lt;object&gt; tags can also be added before and
  * after the initial &lt;template&gt; tag in the normal way, allowing
  * one to define auxilary objects which might be referenced by other
  * widgets declared as children of the &lt;template&gt; tag.
- * </para>
- * <para>
- * <example>
- * <title>A GtkBuilder Template Definition</title>
+ *
+ * An example of a GtkBuilder Template Definition:
  * |[
  * <interface>
  *   <template class="FooWidget" parent="GtkBox">
@@ -380,9 +351,6 @@
  *   </template>
  * </interface>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 #define GTK_STATE_FLAGS_DO_PROPAGATE (GTK_STATE_FLAG_INSENSITIVE|GTK_STATE_FLAG_BACKDROP)

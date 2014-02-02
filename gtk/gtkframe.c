@@ -45,17 +45,15 @@
  * top side of the frame. The position of the
  * label can be controlled with gtk_frame_set_label_align().
  *
- * <refsect2 id="GtkFrame-BUILDER-UI">
- * <title>GtkFrame as GtkBuildable</title>
- * <para>
+ * ## GtkFrame as GtkBuildable
+ *
  * The GtkFrame implementation of the GtkBuildable interface
  * supports placing a child in the label position by specifying
  * "label" as the "type" attribute of a &lt;child&gt; element.
  * A normal content child can be specified without specifying
  * a &lt;child&gt; type attribute.
- * </para>
- * <example>
- * <title>A UI definition fragment with GtkFrame</title>
+ *
+ * An example of a UI definition fragment with GtkFrame:
  * |[
  * <object class="GtkFrame">
  *   <child type="label">
@@ -66,8 +64,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </refsect2>
  */
 
 

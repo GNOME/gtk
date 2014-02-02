@@ -82,9 +82,8 @@
  * by way of #GtkLabel:width-chars for instance. Widgets with static sizes as well
  * as widgets that grow (such as ellipsizing text) need no such considerations.
  *
- * <refsect2 id="GtkSizeGroup-BUILDER-UI">
- * <title>GtkSizeGroup as GtkBuildable</title>
- * <para>
+ * ## GtkSizeGroup as GtkBuildable
+ *
  * Size groups can be specified in a UI definition by placing an
  * &lt;object&gt; element with <literal>class="GtkSizeGroup"</literal>
  * somewhere in the UI definition. The widgets that belong to the
@@ -92,8 +91,7 @@
  * contain multiple &lt;widget&gt; elements, one for each member
  * of the size group. The name attribute gives the id of the widget.
  *
- * <example>
- * <title>A UI definition fragment with GtkSizeGroup</title>
+ * An example of a UI definition fragment with GtkSizeGroup:
  * |[
  * <object class="GtkSizeGroup">
  *   <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
@@ -103,9 +101,6 @@
  *   </widgets>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 

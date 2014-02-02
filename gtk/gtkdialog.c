@@ -63,8 +63,8 @@
  *
  * #GtkDialog boxes are created with a call to gtk_dialog_new() or
  * gtk_dialog_new_with_buttons(). gtk_dialog_new_with_buttons() is
- * recommended; it allows you to set the dialog title, some convenient flags,
- * and add simple buttons.
+ * recommended; it allows you to set the dialog title, some convenient
+ * flags, and add simple buttons.
  *
  * If 'dialog' is a newly created dialog, the two primary areas of the
  * window can be accessed through gtk_dialog_get_content_area() and
@@ -96,8 +96,8 @@
  * use #GtkMessageDialog to save yourself some effort. But you'd need to
  * create the dialog contents manually if you had more than a simple message
  * in the dialog.
- * <example>
- * <title>Simple GtkDialog usage</title>
+ *
+ * An example for simple GtkDialog usage:
  * |[<!-- language="C" -->
  * /&ast; Function to open a dialog box displaying the message provided. &ast;/
  * void
@@ -127,22 +127,19 @@
  *    gtk_widget_show_all (dialog);
  * }
  * ]|
- * </example>
  *
- * <refsect2 id="GtkDialog-BUILDER-UI"><title>GtkDialog as GtkBuildable</title>
- * <para>
+ * ## GtkDialog as GtkBuildable
+ *
  * The GtkDialog implementation of the #GtkBuildable interface exposes the
  * @vbox and @action_area as internal children with the names "vbox" and
  * "action_area".
- * </para>
- * <para>
+ *
  * GtkDialog supports a custom &lt;action-widgets&gt; element, which
  * can contain multiple &lt;action-widget&gt; elements. The "response"
  * attribute specifies a numeric response, and the content of the element
  * is the id of widget (which should be a child of the dialogs @action_area).
- * </para>
- * <example>
- * <title>A #GtkDialog UI definition fragment.</title>
+ *
+ * An example of a #GtkDialog UI definition fragment:
  * |[
  * <object class="GtkDialog" id="dialog1">
  *   <child internal-child="vbox">
@@ -165,8 +162,6 @@
  *   </action-widgets>
  * </object>
  * ]|
- * </example>
- * </refsect2>
  */
 
 struct _GtkDialogPrivate

@@ -41,14 +41,14 @@
  * <link linkend="gtk3-GtkTreeView-drag-and-drop">drag and drop</link>
  * interfaces.
  *
- * <refsect2 id="GtkTreeStore-BUILDER-UI">
- * <title>GtkTreeStore as GtkBuildable</title>
+ * ## GtkTreeStore as GtkBuildable
+ *
  * The GtkTreeStore implementation of the #GtkBuildable interface allows
  * to specify the model columns with a &lt;columns&gt; element that may
  * contain multiple &lt;column&gt; elements, each specifying one model
  * column. The "type" attribute specifies the data type for the column.
- * <example>
- * <title>A UI Definition fragment for a tree store</title>
+ *
+ * An example of a UI Definition fragment for a tree store:
  * |[
  * <object class="GtkTreeStore">
  *   <columns>
@@ -58,8 +58,6 @@
  *   </columns>
  * </object>
  * ]|
- * </example>
- * </refsect2>
  */
 
 struct _GtkTreeStorePrivate

@@ -52,9 +52,8 @@
  * You should not call gtk_combo_box_set_model() or attempt to pack more cells
  * into this combo box via its GtkCellLayout interface.
  *
- * <refsect2 id="GtkComboBoxText-BUILDER-UI">
- * <title>GtkComboBoxText as GtkBuildable</title>
- * <para>
+ * ## GtkComboBoxText as GtkBuildable
+ *
  * The GtkComboBoxText implementation of the GtkBuildable interface
  * supports adding items directly using the &lt;items&gt; element
  * and specifying &lt;item&gt; elements for each item. Each &lt;item&gt;
@@ -62,8 +61,7 @@
  * also supports the regular translation attributes "translatable",
  * "context" and "comments".
  *
- * <example>
- * <title>A UI definition fragment specifying GtkComboBoxText items</title>
+ * Here is a a UI definition fragment specifying GtkComboBoxText items:
  * |[
  * <object class="GtkComboBoxText">
  *   <items>
@@ -73,9 +71,6 @@
  *   </items>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 static void     gtk_combo_box_text_buildable_interface_init     (GtkBuildableIface *iface);

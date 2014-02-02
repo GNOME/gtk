@@ -64,22 +64,20 @@
  * GtkMenuItem has direct functions to set the label and its mnemonic.
  * For more advanced label settings, you can fetch the child widget from the GtkBin.
  *
- * <example>
- * <title>Setting markup and accelerator on a MenuItem</title>
+ * An example for setting markup and accelerator on a MenuItem:
  * |[<!-- language="C" -->
  * GtkWidget *child = gtk_bin_get_child (GTK_BIN (menu_item));
  * gtk_label_set_markup (GTK_LABEL (child), "<i>new label</i> with <b>markup</b>");
  * gtk_accel_label_set_accel (GTK_ACCEL_LABEL (child), GDK_KEY_1, 0);
  * ]|
- * </example>
  *
- * <refsect2 id="GtkMenuItem-BUILDER-UI">
- * <title>GtkMenuItem as GtkBuildable</title>
+ * ## GtkMenuItem as GtkBuildable
+ *
  * The GtkMenuItem implementation of the #GtkBuildable interface
  * supports adding a submenu by specifying "submenu" as the "type"
  * attribute of a &lt;child&gt; element.
- * <example>
- * <title>A UI definition fragment with submenus</title>
+ *
+ * An example of UI definition fragment with submenus:
  * |[
  * <object class="GtkMenuItem">
  *   <child type="submenu">
@@ -87,8 +85,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </refsect2>
  */
 
 

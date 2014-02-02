@@ -38,18 +38,17 @@
  * see gtk_file_chooser_add_filter(), but it is also possible
  * to manually use a filter on a file with gtk_file_filter_filter().
  *
- * <refsect2 id="GtkFileFilter-BUILDER-UI">
- * <title>GtkFileFilter as GtkBuildable</title>
- * <para>
+ * ## GtkFileFilter as GtkBuildable
+ *
  * The GtkFileFilter implementation of the GtkBuildable interface
- * supports adding rules using the &lt;mime-types&gt;, &lt;patterns&gt; and
- * &lt;applications&gt; elements and listing the rules within. Specifying
- * a &lt;mime-type&gt; or &lt;pattern&gt; is the same
+ * supports adding rules using the &lt;mime-types&gt;, &lt;patterns&gt;
+ * and &lt;applications&gt; elements and listing the rules within.
+ * Specifying a &lt;mime-type&gt; or &lt;pattern&gt; is the same
  * as calling gtk_recent_filter_add_mime_type()
  * or gtk_recent_filter_add_pattern().
  *
- * <example>
- * <title>A UI definition fragment specifying GtkFileFilter rules</title>
+ * An example of a UI definition fragment specifying GtkFileFilter
+ * rules:
  * |[
  * <object class="GtkFileFilter">
  *   <mime-types>
@@ -62,9 +61,6 @@
  *   </patterns>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 #include "config.h"
