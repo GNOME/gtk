@@ -978,8 +978,8 @@ gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
  * the hierarchy defined in @path. See
  * gtk_style_context_add_region().
  *
- * <note><para>Region names must only contain lowercase letters
- * and '-', starting always with a lowercase letter.</para></note>
+ * Region names must only contain lowercase letters
+ * and '-', starting always with a lowercase letter.
  *
  * Since: 3.0
  **/

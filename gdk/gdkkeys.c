@@ -495,14 +495,13 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * @state. For convenience, #GdkEventKey already contains the translated
  * keyval, so this function isn't as useful as you might think.
  *
- * <note><para>
  * @consumed_modifiers gives modifiers that should be masked out
  * from @state when comparing this key press to a hot key. For
  * instance, on a US keyboard, the <literal>plus</literal>
  * symbol is shifted, so when comparing a key press to a
  * <literal>&lt;Control&gt;plus</literal> accelerator &lt;Shift&gt; should
  * be masked out.
- * </para>
+ *
  * |[<!-- language="C" -->
  * /&ast; We want to ignore irrelevant modifiers like ScrollLock &ast;/;
  * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
@@ -513,18 +512,18 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  *     (event->state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
  *   /&ast; Control was pressed &ast;/
  * ]|
- * <para>
+ * 
  * An older interpretation @consumed_modifiers was that it contained
  * all modifiers that might affect the translation of the key;
  * this allowed accelerators to be stored with irrelevant consumed
- * modifiers, by doing:</para>
+ * modifiers, by doing:
  * |[<!-- language="C" -->
  * /&ast; XXX Don't do this XXX &ast;/
  * if (keyval == accel_keyval &&
  *     (event->state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
  *   /&ast; Accelerator was pressed &ast;/
  * ]|
- * <para>
+ *
  * However, this did not work if multi-modifier combinations were
  * used in the keymap, since, for instance, <literal>&lt;Control&gt;</literal>
  * would be masked out even if only <literal>&lt;Control&gt;&lt;Alt&gt;</literal>
@@ -536,7 +535,6 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * accelerators, you should always store them with consumed modifiers
  * removed. Store <literal>&lt;Control&gt;plus</literal>,
  * not <literal>&lt;Control&gt;&lt;Shift&gt;plus</literal>,
- * </para></note>
  *
  * Return value: %TRUE if there was a keyval bound to the keycode/state/group
  **/

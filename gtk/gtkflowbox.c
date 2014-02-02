@@ -3689,9 +3689,9 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * The minimum number of children to allocate consecutively
    * in the given orientation.
    *
-   * <note><para>Setting the minimum children per line ensures
+   * Setting the minimum children per line ensures
    * that a reasonably small height will be requested
-   * for the overall minimum width of the box.</para></note>
+   * for the overall minimum width of the box.
    */
   g_object_class_install_property (object_class,
                                    PROP_MIN_CHILDREN_PER_LINE,

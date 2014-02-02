@@ -2130,12 +2130,12 @@ gtk_label_set_text (GtkLabel    *label,
  * Sets a #PangoAttrList; the attributes in the list are applied to the
  * label text. 
  *
- * <note><para>The attributes set with this function will be applied
+ * The attributes set with this function will be applied
  * and merged with any other attributes previously effected by way
  * of the #GtkLabel:use-underline or #GtkLabel:use-markup properties.
  * While it is not recommended to mix markup strings with manually set
  * attributes, if you must; know that the attributes will be applied
- * to the label after the markup string is parsed.</para></note>
+ * to the label after the markup string is parsed.
  **/
 void
 gtk_label_set_attributes (GtkLabel         *label,

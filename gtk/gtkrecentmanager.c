@@ -32,7 +32,7 @@
  * should be displayed only by the applications that have
  * registered it.
  *
- * <note><para>The recently used files list is per user.</para></note>
+ * The recently used files list is per user.
  *
  * The #GtkRecentManager acts like a database of all the recently
  * used files. You can create new #GtkRecentManager objects, but
@@ -78,9 +78,9 @@
  * A #GtkRecentManager is the model used to populate the contents of
  * one, or more #GtkRecentChooser implementations.
  *
- * <note><para>The maximum age of the recently used files list is
+ * Note that the maximum age of the recently used files list is
  * controllable through the #GtkSettings:gtk-recent-files-max-age
- * property.</para></note>
+ * property.
  *
  * Recently used files are supported since GTK+ 2.10.
  */

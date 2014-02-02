@@ -107,13 +107,11 @@
  * integration when embedding a <application>Qt</application> widget
  * in GTK or vice versa.
  *
- * <note>
  * The #GtkPlug and #GtkSocket widgets are only available when GTK+
  * is compiled for the X11 platform and %GDK_WINDOWING_X11 is defined.
  * They can only be used on a #GdkX11Display. To use #GtkPlug and
  * #GtkSocket, you need to include the <filename>gtk/gtkx.h</filename>
  * header.
- * </note>
  */
 
 /* Forward declararations */

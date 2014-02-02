@@ -1650,11 +1650,9 @@ gtk_popover_get_pointing_to (GtkPopover            *popover,
  * Sets the preferred position for @popover to appear. If the @popover
  * is currently visible, it will be immediately updated.
  *
- * <note>
- *   This preference will be respected where possible, although
- *   on lack of space (eg. if close to the window edges), the
- *   #GtkPopover may choose to appear on the opposite side
- * </note>
+ * This preference will be respected where possible, although
+ * on lack of space (eg. if close to the window edges), the
+ * #GtkPopover may choose to appear on the opposite side
  *
  * Since: 3.12
  **/

@@ -3152,10 +3152,8 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
  * 
  * Creates a Cairo context for drawing to @window.
  *
- * <note><warning>
  * Note that calling cairo_reset_clip() on the resulting #cairo_t will
  * produce undefined results, so avoid it at all costs.
- * </warning></note>
  *
  * Return value: A newly created Cairo context. Free with
  *  cairo_destroy() when you are done drawing.
@@ -6016,15 +6014,13 @@ gdk_window_set_device_cursor (GdkWindow *window,
  * #GdkEventConfigure. gdk_window_get_position() in contrast gets the
  * position from the most recent configure event.
  *
- * <note>
- * If @window is not a toplevel, it is much better
+ * Note: If @window is not a toplevel, it is much better
  * to call gdk_window_get_position(), gdk_window_get_width() and
  * gdk_window_get_height() instead, because it avoids the roundtrip to
  * the X server and because these functions support the full 32-bit
  * coordinate space, whereas gdk_window_get_geometry() is restricted to
  * the 16-bit coordinates of X11.
- *</note>
- **/
+ */
 void
 gdk_window_get_geometry (GdkWindow *window,
 			 gint      *x,
@@ -10616,8 +10612,6 @@ gdk_test_simulate_button (GdkWindow      *window,
  * property does not exist, then the function returns %FALSE,
  * and %GDK_NONE will be stored in @actual_property_type.
  *
- * <note>
- * <para>
  * The XGetWindowProperty() function that gdk_property_get()
  * uses has a very confusing and complicated set of semantics.
  * Unfortunately, gdk_property_get() makes the situation
@@ -10625,10 +10619,7 @@ gdk_test_simulate_button (GdkWindow      *window,
  * undefined), and also prints warnings to stderr in cases where it
  * should return a useful error to the program. You are advised to use
  * XGetWindowProperty() directly until a replacement function for
- * gdk_property_get()
- * is provided.
- * </para>
- * </note>
+ * gdk_property_get() is provided.
  *
  * Returns: %TRUE if data was successfully received and stored
  *   in @data, otherwise %FALSE.

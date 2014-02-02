@@ -45,11 +45,9 @@
  * a container in such a way that it expands automatically to fill its
  * allocated area, the alignment settings will not alter the widgets position.
  *
- * <note>
  * Note that the desired effect can in most cases be achieved by using the
  * #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties
  * on the child widget, so GtkMisc should not be used in new code.
- * </note>
  */
 
 

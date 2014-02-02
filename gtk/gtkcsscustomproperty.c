@@ -190,14 +190,11 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
  * builtin parsing support, so %NULL may be provided for these
  * cases.
  *
- * <note>
  * Engines must ensure property registration happens exactly once,
  * usually GTK+ deals with theming engines as singletons, so this
  * should be guaranteed to happen once, but bear this in mind
  * when creating #GtkThemeEngine<!-- -->s yourself.
- * </note>
  *
- * <note>
  * In order to make use of the custom registered properties in
  * the CSS file, make sure the engine is loaded first by specifying
  * the engine property, either in a previous rule or within the same
@@ -208,7 +205,6 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
  *     -SomeEngine-custom-property: 2;
  * }
  * ]|
- * </note>
  *
  * Since: 3.0
  *

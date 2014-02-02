@@ -1025,11 +1025,9 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
  * domain.
  *
- * <note><para>
  * If you are adding an object that depends on an object that is not 
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids. 
- * </para></note>
  *
  * Returns: A positive value on success, 0 if an error occurred
  *
@@ -1213,11 +1211,9 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_RESOURCE_ERROR
  * domain.
  *
- * <note><para>
  * If you are adding an object that depends on an object that is not
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
- * </para></note>
  *
  * Returns: A positive value on success, 0 if an error occurred
  *
@@ -1348,11 +1344,9 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * Upon errors 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
  * 
- * <note><para>
  * If you are adding an object that depends on an object that is not 
  * its child (for instance a #GtkTreeView that depends on its
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids. 
- * </para></note>
  *
  * Returns: A positive value on success, 0 if an error occurred
  *

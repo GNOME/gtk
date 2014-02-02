@@ -5219,10 +5219,10 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * For example, when you change the text in a #GtkLabel, #GtkLabel
  * queues a resize to ensure there's enough space for the new text.
  *
- * <note><para>You cannot call gtk_widget_queue_resize() on a widget
+ * Note that you cannot call gtk_widget_queue_resize() on a widget
  * from inside its implementation of the GtkWidgetClass::size_allocate 
  * virtual method. Calls to gtk_widget_queue_resize() from inside
- * GtkWidgetClass::size_allocate will be silently ignored.</para></note>
+ * GtkWidgetClass::size_allocate will be silently ignored.
  **/
 void
 gtk_widget_queue_resize (GtkWidget *widget)
@@ -6701,9 +6701,9 @@ _gtk_widget_draw (GtkWidget *widget,
  * is fine to modify the context with cairo_save() and
  * cairo_push_group() prior to calling this function.
  *
- * <note><para>Special purpose widgets may contain special code for
+ * Note that special-purpose widgets may contain special code for
  * rendering to the screen and might appear differently on screen
- * and when rendered using gtk_widget_draw().</para></note>
+ * and when rendered using gtk_widget_draw().
  *
  * Since: 3.0
  **/
@@ -9037,26 +9037,23 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
  * you may not think of as containers, for instance #GtkButton<!-- -->s,
  * are actually containers.
  *
- * <note><para>
  * This API is mostly meant as a quick way for applications to
  * change a widget appearance. If you are developing a widgets
  * library and intend this change to be themeable, it is better
  * done by setting meaningful CSS classes and regions in your
  * widget/container implementation through gtk_style_context_add_class()
  * and gtk_style_context_add_region().
- * </para><para>
+ *
  * This way, your widget library can install a #GtkCssProvider
  * with the %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK priority in order
  * to provide a default styling for those widgets that need so, and
  * this theming may fully overridden by the user's theme.
- * </para></note>
- * <note><para>
+ *
  * Note that for complex widgets this may bring in undesired
  * results (such as uniform background color everywhere), in
  * these cases it is better to fully style such widgets through a
  * #GtkCssProvider with the %GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
  * priority.
- * </para></note>
  *
  * Since: 3.0
  */
@@ -9826,19 +9823,16 @@ gtk_widget_render_icon_pixbuf (GtkWidget   *widget,
  *
  * Sets a non default parent window for @widget.
  *
- * For GtkWindow classes, setting a @parent_window effects whether
+ * For #GtkWindow classes, setting a @parent_window effects whether
  * the window is a toplevel window or can be embedded into other
  * widgets.
  *
- * <note><para>
- * For GtkWindow classes, this needs to be called before the
+ * For #GtkWindow classes, this needs to be called before the
  * window is realized.
- * </para></note>
- * 
- **/
+ */
 void
-gtk_widget_set_parent_window   (GtkWidget           *widget,
-				GdkWindow           *parent_window)
+gtk_widget_set_parent_window (GtkWidget *widget,
+                              GdkWindow *parent_window)
 {
   GdkWindow *old_parent_window;
 
@@ -14997,7 +14991,7 @@ gtk_widget_get_requisition (GtkWidget      *widget,
  * by calling gtk_widget_set_has_window(). This is usually done in the
  * widget's init() function.
  *
- * <note><para>This function does not add any reference to @window.</para></note>
+ * Note that this function does not add any reference to @window.
  *
  * Since: 2.18
  */
@@ -15988,8 +15982,8 @@ gtk_widget_init_template (GtkWidget *widget)
  *
  * For convenience, gtk_widget_class_set_template_from_resource() is also provided.
  *
- * <note><para>Any class that installs templates must call gtk_widget_init_template()
- * in the widget's instance initializer</para></note>
+ * Note that any class that installs templates must call gtk_widget_init_template()
+ * in the widget's instance initializer.
  *
  * Since: 3.10
  */
@@ -16012,8 +16006,8 @@ gtk_widget_class_set_template (GtkWidgetClass    *widget_class,
  *
  * A convenience function to call gtk_widget_class_set_template().
  *
- * <note><para>Any class that installs templates must call gtk_widget_init_template()
- * in the widget's instance initializer</para></note>
+ * Note that any class that installs templates must call gtk_widget_init_template()
+ * in the widget's instance initializer.
  *
  * Since: 3.10
  */
@@ -16057,8 +16051,8 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
  * Declares a @callback_symbol to handle @callback_name from the template XML
  * defined for @widget_type. See gtk_builder_add_callback_symbol().
  *
- * <note><para>This must be called from a composite widget classes class
- * initializer after calling gtk_widget_class_set_template()</para></note>
+ * Note that this must be called from a composite widget classes class
+ * initializer after calling gtk_widget_class_set_template().
  *
  * Since: 3.10
  */
@@ -16089,8 +16083,8 @@ gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
  * For use in lanuage bindings, this will override the default #GtkBuilderConnectFunc to be
  * used when parsing GtkBuilder xml from this class's template data.
  *
- * <note><para>This must be called from a composite widget classes class
- * initializer after calling gtk_widget_class_set_template()</para></note>
+ * Note that this must be called from a composite widget classes class
+ * initializer after calling gtk_widget_class_set_template().
  *
  * Since: 3.10
  */
@@ -16142,8 +16136,8 @@ gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
  * gtk_widget_class_bind_template_child_private() and gtk_widget_class_bind_template_child_internal_private()
  * might be more convenient to use.
  *
- * <note><para>This must be called from a composite widget classes class
- * initializer after calling gtk_widget_class_set_template()</para></note>
+ * Note that this must be called from a composite widget classes class
+ * initializer after calling gtk_widget_class_set_template().
  *
  * Since: 3.10
  */

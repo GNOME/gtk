@@ -1046,12 +1046,10 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
  * won't be attached to any widget, so you may want
  * to call gtk_style_context_set_path() yourself.
  *
- * <note>
  * This function is only useful when using the theming layer
  * separated from GTK+, if you are using #GtkStyleContext to
  * theme #GtkWidget<!-- -->s, use gtk_widget_get_style_context()
  * in order to get a style context ready to theme the widget.
- * </note>
  *
  * Returns: A newly created #GtkStyleContext.
  **/
@@ -1091,9 +1089,9 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
  * to affect the style of all widgets, use
  * gtk_style_context_add_provider_for_screen().
  *
- * <note><para>If both priorities are the same, A #GtkStyleProvider
+ * Note: If both priorities are the same, a #GtkStyleProvider
  * added through this function takes precedence over another added
- * through gtk_style_context_add_provider_for_screen().</para></note>
+ * through gtk_style_context_add_provider_for_screen().
  *
  * Since: 3.0
  **/
@@ -1201,9 +1199,9 @@ gtk_style_context_reset_widgets (GdkScreen *screen)
  * GTK+ uses this to make styling information from #GtkSettings
  * available.
  *
- * <note><para>If both priorities are the same, A #GtkStyleProvider
+ * Note: If both priorities are the same, A #GtkStyleProvider
  * added through gtk_style_context_add_provider() takes precedence
- * over another added through this function.</para></note>
+ * over another added through this function.
  *
  * Since: 3.0
  **/
@@ -2060,8 +2058,8 @@ _gtk_style_context_check_region_name (const gchar *str)
  *
  * would apply to even and odd rows, respectively.
  *
- * <note><para>Region names must only contain lowercase letters
- * and '-', starting always with a lowercase letter.</para></note>
+ * Region names must only contain lowercase letters
+ * and '-', starting always with a lowercase letter.
  *
  * Since: 3.0
  **/

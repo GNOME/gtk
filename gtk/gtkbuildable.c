@@ -31,8 +31,8 @@
  * main user of this interface is #GtkBuilder. There should be
  * very little need for applications to call any of these functions directly.
  *
- * <note><para>An object only needs to implement this interface if it needs
- * to extend the #GtkBuilder format or run any extra routines at deserialization time</para></note>
+ * An object only needs to implement this interface if it needs to extend the
+ * #GtkBuilder format or run any extra routines at deserialization time.
  */
 
 #include "config.h"

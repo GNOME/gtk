@@ -1011,21 +1011,17 @@ gtk_init_check (int    *argc,
  * the option group returned by gtk_get_option_group(),
  * you don't have to call gtk_init().
  *
- * <note><para>
  * This function will terminate your program if it was unable to
  * initialize the windowing system for some reason. If you want
  * your program to fall back to a textual interface you want to
  * call gtk_init_check() instead.
- * </para></note>
  *
- * <note><para>
  * Since 2.18, GTK+ calls <literal>signal (SIGPIPE, SIG_IGN)</literal>
  * during initialization, to ignore SIGPIPE signals, since these are
  * almost never wanted in graphical applications. If you do need to
  * handle SIGPIPE for some reason, reset the handler after gtk_init(),
  * but notice that other libraries (e.g. libdbus or gvfs) might do
  * similar things.
- * </para></note>
  */
 void
 gtk_init (int *argc, char ***argv)
