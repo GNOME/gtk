@@ -1643,8 +1643,8 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
  *
  * Issues a request to the clipboard manager to store the
  * clipboard data. On X11, this is a special program that works
- * according to the freedesktop clipboard specification, available at
- * [http://www.freedesktop.org/Standards/clipboard-manager-spec](http://www.freedesktop.org/Standards/clipboard-manager-spec).
+ * according to the
+ * [FreeDesktop Clipboard Specification](http://www.freedesktop.org/Standards/clipboard-manager-spec).
  *
  * Since: 2.6
  */

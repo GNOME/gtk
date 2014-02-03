@@ -42,83 +42,83 @@ G_BEGIN_DECLS
 
 /**
  * GdkCursorType:
- * @GDK_X_CURSOR: <inlinegraphic format="PNG" fileref="X_cursor.png"></inlinegraphic>
- * @GDK_ARROW: <inlinegraphic format="PNG" fileref="arrow.png"></inlinegraphic>
- * @GDK_BASED_ARROW_DOWN: <inlinegraphic format="PNG" fileref="based_arrow_down.png"></inlinegraphic>
- * @GDK_BASED_ARROW_UP: <inlinegraphic format="PNG" fileref="based_arrow_up.png"></inlinegraphic>
- * @GDK_BOAT: <inlinegraphic format="PNG" fileref="boat.png"></inlinegraphic>
- * @GDK_BOGOSITY: <inlinegraphic format="PNG" fileref="bogosity.png"></inlinegraphic>
- * @GDK_BOTTOM_LEFT_CORNER: <inlinegraphic format="PNG" fileref="bottom_left_corner.png"></inlinegraphic>
- * @GDK_BOTTOM_RIGHT_CORNER: <inlinegraphic format="PNG" fileref="bottom_right_corner.png"></inlinegraphic>
- * @GDK_BOTTOM_SIDE: <inlinegraphic format="PNG" fileref="bottom_side.png"></inlinegraphic>
- * @GDK_BOTTOM_TEE: <inlinegraphic format="PNG" fileref="bottom_tee.png"></inlinegraphic>
- * @GDK_BOX_SPIRAL: <inlinegraphic format="PNG" fileref="box_spiral.png"></inlinegraphic>
- * @GDK_CENTER_PTR: <inlinegraphic format="PNG" fileref="center_ptr.png"></inlinegraphic>
- * @GDK_CIRCLE: <inlinegraphic format="PNG" fileref="circle.png"></inlinegraphic>
- * @GDK_CLOCK: <inlinegraphic format="PNG" fileref="clock.png"></inlinegraphic>
- * @GDK_COFFEE_MUG: <inlinegraphic format="PNG" fileref="coffee_mug.png"></inlinegraphic>
- * @GDK_CROSS: <inlinegraphic format="PNG" fileref="cross.png"></inlinegraphic>
- * @GDK_CROSS_REVERSE: <inlinegraphic format="PNG" fileref="cross_reverse.png"></inlinegraphic>
- * @GDK_CROSSHAIR: <inlinegraphic format="PNG" fileref="crosshair.png"></inlinegraphic>
- * @GDK_DIAMOND_CROSS: <inlinegraphic format="PNG" fileref="diamond_cross.png"></inlinegraphic>
- * @GDK_DOT: <inlinegraphic format="PNG" fileref="dot.png"></inlinegraphic>
- * @GDK_DOTBOX: <inlinegraphic format="PNG" fileref="dotbox.png"></inlinegraphic>
- * @GDK_DOUBLE_ARROW: <inlinegraphic format="PNG" fileref="double_arrow.png"></inlinegraphic>
- * @GDK_DRAFT_LARGE: <inlinegraphic format="PNG" fileref="draft_large.png"></inlinegraphic>
- * @GDK_DRAFT_SMALL: <inlinegraphic format="PNG" fileref="draft_small.png"></inlinegraphic>
- * @GDK_DRAPED_BOX: <inlinegraphic format="PNG" fileref="draped_box.png"></inlinegraphic>
- * @GDK_EXCHANGE: <inlinegraphic format="PNG" fileref="exchange.png"></inlinegraphic>
- * @GDK_FLEUR: <inlinegraphic format="PNG" fileref="fleur.png"></inlinegraphic>
- * @GDK_GOBBLER: <inlinegraphic format="PNG" fileref="gobbler.png"></inlinegraphic>
- * @GDK_GUMBY: <inlinegraphic format="PNG" fileref="gumby.png"></inlinegraphic>
- * @GDK_HAND1: <inlinegraphic format="PNG" fileref="hand1.png"></inlinegraphic>
- * @GDK_HAND2: <inlinegraphic format="PNG" fileref="hand2.png"></inlinegraphic>
- * @GDK_HEART: <inlinegraphic format="PNG" fileref="heart.png"></inlinegraphic>
- * @GDK_ICON: <inlinegraphic format="PNG" fileref="icon.png"></inlinegraphic>
- * @GDK_IRON_CROSS: <inlinegraphic format="PNG" fileref="iron_cross.png"></inlinegraphic>
- * @GDK_LEFT_PTR: <inlinegraphic format="PNG" fileref="left_ptr.png"></inlinegraphic>
- * @GDK_LEFT_SIDE: <inlinegraphic format="PNG" fileref="left_side.png"></inlinegraphic>
- * @GDK_LEFT_TEE: <inlinegraphic format="PNG" fileref="left_tee.png"></inlinegraphic>
- * @GDK_LEFTBUTTON: <inlinegraphic format="PNG" fileref="leftbutton.png"></inlinegraphic>
- * @GDK_LL_ANGLE: <inlinegraphic format="PNG" fileref="ll_angle.png"></inlinegraphic>
- * @GDK_LR_ANGLE: <inlinegraphic format="PNG" fileref="lr_angle.png"></inlinegraphic>
- * @GDK_MAN: <inlinegraphic format="PNG" fileref="man.png"></inlinegraphic>
- * @GDK_MIDDLEBUTTON: <inlinegraphic format="PNG" fileref="middlebutton.png"></inlinegraphic>
- * @GDK_MOUSE: <inlinegraphic format="PNG" fileref="mouse.png"></inlinegraphic>
- * @GDK_PENCIL: <inlinegraphic format="PNG" fileref="pencil.png"></inlinegraphic>
- * @GDK_PIRATE: <inlinegraphic format="PNG" fileref="pirate.png"></inlinegraphic>
- * @GDK_PLUS: <inlinegraphic format="PNG" fileref="plus.png"></inlinegraphic>
- * @GDK_QUESTION_ARROW: <inlinegraphic format="PNG" fileref="question_arrow.png"></inlinegraphic>
- * @GDK_RIGHT_PTR: <inlinegraphic format="PNG" fileref="right_ptr.png"></inlinegraphic>
- * @GDK_RIGHT_SIDE: <inlinegraphic format="PNG" fileref="right_side.png"></inlinegraphic>
- * @GDK_RIGHT_TEE: <inlinegraphic format="PNG" fileref="right_tee.png"></inlinegraphic>
- * @GDK_RIGHTBUTTON: <inlinegraphic format="PNG" fileref="rightbutton.png"></inlinegraphic>
- * @GDK_RTL_LOGO: <inlinegraphic format="PNG" fileref="rtl_logo.png"></inlinegraphic>
- * @GDK_SAILBOAT: <inlinegraphic format="PNG" fileref="sailboat.png"></inlinegraphic>
- * @GDK_SB_DOWN_ARROW: <inlinegraphic format="PNG" fileref="sb_down_arrow.png"></inlinegraphic>
- * @GDK_SB_H_DOUBLE_ARROW: <inlinegraphic format="PNG" fileref="sb_h_double_arrow.png"></inlinegraphic>
- * @GDK_SB_LEFT_ARROW: <inlinegraphic format="PNG" fileref="sb_left_arrow.png"></inlinegraphic>
- * @GDK_SB_RIGHT_ARROW: <inlinegraphic format="PNG" fileref="sb_right_arrow.png"></inlinegraphic>
- * @GDK_SB_UP_ARROW: <inlinegraphic format="PNG" fileref="sb_up_arrow.png"></inlinegraphic>
- * @GDK_SB_V_DOUBLE_ARROW: <inlinegraphic format="PNG" fileref="sb_v_double_arrow.png"></inlinegraphic>
- * @GDK_SHUTTLE: <inlinegraphic format="PNG" fileref="shuttle.png"></inlinegraphic>
- * @GDK_SIZING: <inlinegraphic format="PNG" fileref="sizing.png"></inlinegraphic>
- * @GDK_SPIDER: <inlinegraphic format="PNG" fileref="spider.png"></inlinegraphic>
- * @GDK_SPRAYCAN: <inlinegraphic format="PNG" fileref="spraycan.png"></inlinegraphic>
- * @GDK_STAR: <inlinegraphic format="PNG" fileref="star.png"></inlinegraphic>
- * @GDK_TARGET: <inlinegraphic format="PNG" fileref="target.png"></inlinegraphic>
- * @GDK_TCROSS: <inlinegraphic format="PNG" fileref="tcross.png"></inlinegraphic>
- * @GDK_TOP_LEFT_ARROW: <inlinegraphic format="PNG" fileref="top_left_arrow.png"></inlinegraphic>
- * @GDK_TOP_LEFT_CORNER: <inlinegraphic format="PNG" fileref="top_left_corner.png"></inlinegraphic>
- * @GDK_TOP_RIGHT_CORNER: <inlinegraphic format="PNG" fileref="top_right_corner.png"></inlinegraphic>
- * @GDK_TOP_SIDE: <inlinegraphic format="PNG" fileref="top_side.png"></inlinegraphic>
- * @GDK_TOP_TEE: <inlinegraphic format="PNG" fileref="top_tee.png"></inlinegraphic>
- * @GDK_TREK: <inlinegraphic format="PNG" fileref="trek.png"></inlinegraphic>
- * @GDK_UL_ANGLE: <inlinegraphic format="PNG" fileref="ul_angle.png"></inlinegraphic>
- * @GDK_UMBRELLA: <inlinegraphic format="PNG" fileref="umbrella.png"></inlinegraphic>
- * @GDK_UR_ANGLE: <inlinegraphic format="PNG" fileref="ur_angle.png"></inlinegraphic>
- * @GDK_WATCH: <inlinegraphic format="PNG" fileref="watch.png"></inlinegraphic>
- * @GDK_XTERM: <inlinegraphic format="PNG" fileref="xterm.png"></inlinegraphic>
+ * @GDK_X_CURSOR: ![](X_cursor.png)
+ * @GDK_ARROW: ![](arrow.png)
+ * @GDK_BASED_ARROW_DOWN: ![](based_arrow_down.png)
+ * @GDK_BASED_ARROW_UP: ![](based_arrow_up.png)
+ * @GDK_BOAT: ![](boat.png)
+ * @GDK_BOGOSITY: ![](bogosity.png)
+ * @GDK_BOTTOM_LEFT_CORNER: ![](bottom_left_corner.png)
+ * @GDK_BOTTOM_RIGHT_CORNER: ![](bottom_right_corner.png)
+ * @GDK_BOTTOM_SIDE: ![](bottom_side.png)
+ * @GDK_BOTTOM_TEE: ![](bottom_tee.png)
+ * @GDK_BOX_SPIRAL: ![](box_spiral.png)
+ * @GDK_CENTER_PTR: ![](center_ptr.png)
+ * @GDK_CIRCLE: ![](circle.png)
+ * @GDK_CLOCK: ![](clock.png)
+ * @GDK_COFFEE_MUG: ![](coffee_mug.png)
+ * @GDK_CROSS: ![](cross.png)
+ * @GDK_CROSS_REVERSE: ![](cross_reverse.png)
+ * @GDK_CROSSHAIR: ![](crosshair.png)
+ * @GDK_DIAMOND_CROSS: ![](diamond_cross.png)
+ * @GDK_DOT: ![](dot.png)
+ * @GDK_DOTBOX: ![](dotbox.png)
+ * @GDK_DOUBLE_ARROW: ![](double_arrow.png)
+ * @GDK_DRAFT_LARGE: ![](draft_large.png)
+ * @GDK_DRAFT_SMALL: ![](draft_small.png)
+ * @GDK_DRAPED_BOX: ![](draped_box.png)
+ * @GDK_EXCHANGE: ![](exchange.png)
+ * @GDK_FLEUR: ![](fleur.png)
+ * @GDK_GOBBLER: ![](gobbler.png)
+ * @GDK_GUMBY: ![](gumby.png)
+ * @GDK_HAND1: ![](hand1.png)
+ * @GDK_HAND2: ![](hand2.png)
+ * @GDK_HEART: ![](heart.png)
+ * @GDK_ICON: ![](icon.png)
+ * @GDK_IRON_CROSS: ![](iron_cross.png)
+ * @GDK_LEFT_PTR: ![](left_ptr.png)
+ * @GDK_LEFT_SIDE: ![](left_side.png)
+ * @GDK_LEFT_TEE: ![](left_tee.png)
+ * @GDK_LEFTBUTTON: ![](leftbutton.png)
+ * @GDK_LL_ANGLE: ![](ll_angle.png)
+ * @GDK_LR_ANGLE: ![](lr_angle.png)
+ * @GDK_MAN: ![](man.png)
+ * @GDK_MIDDLEBUTTON: ![](middlebutton.png)
+ * @GDK_MOUSE: ![](mouse.png)
+ * @GDK_PENCIL: ![](pencil.png)
+ * @GDK_PIRATE: ![](pirate.png)
+ * @GDK_PLUS: ![](plus.png)
+ * @GDK_QUESTION_ARROW: ![](question_arrow.png)
+ * @GDK_RIGHT_PTR: ![](right_ptr.png)
+ * @GDK_RIGHT_SIDE: ![](right_side.png)
+ * @GDK_RIGHT_TEE: ![](right_tee.png)
+ * @GDK_RIGHTBUTTON: ![](rightbutton.png)
+ * @GDK_RTL_LOGO: ![](rtl_logo.png)
+ * @GDK_SAILBOAT: ![](sailboat.png)
+ * @GDK_SB_DOWN_ARROW: ![](sb_down_arrow.png)
+ * @GDK_SB_H_DOUBLE_ARROW: ![](sb_h_double_arrow.png)
+ * @GDK_SB_LEFT_ARROW: ![](sb_left_arrow.png)
+ * @GDK_SB_RIGHT_ARROW: ![](sb_right_arrow.png)
+ * @GDK_SB_UP_ARROW: ![](sb_up_arrow.png)
+ * @GDK_SB_V_DOUBLE_ARROW: ![](sb_v_double_arrow.png)
+ * @GDK_SHUTTLE: ![](shuttle.png)
+ * @GDK_SIZING: ![](sizing.png)
+ * @GDK_SPIDER: ![](spider.png)
+ * @GDK_SPRAYCAN: ![](spraycan.png)
+ * @GDK_STAR: ![](star.png)
+ * @GDK_TARGET: ![](target.png)
+ * @GDK_TCROSS: ![](tcross.png)
+ * @GDK_TOP_LEFT_ARROW: ![](top_left_arrow.png)
+ * @GDK_TOP_LEFT_CORNER: ![](top_left_corner.png)
+ * @GDK_TOP_RIGHT_CORNER: ![](top_right_corner.png)
+ * @GDK_TOP_SIDE: ![](top_side.png)
+ * @GDK_TOP_TEE: ![](top_tee.png)
+ * @GDK_TREK: ![](trek.png)
+ * @GDK_UL_ANGLE: ![](ul_angle.png)
+ * @GDK_UMBRELLA: ![](umbrella.png)
+ * @GDK_UR_ANGLE: ![](ur_angle.png)
+ * @GDK_WATCH: ![](watch.png)
+ * @GDK_XTERM: ![](xterm.png)
  * @GDK_LAST_CURSOR: last cursor type
  * @GDK_BLANK_CURSOR: Blank cursor. Since 2.16
  * @GDK_CURSOR_IS_PIXMAP: type of cursors constructed with

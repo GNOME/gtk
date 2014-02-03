@@ -32,11 +32,9 @@
  * from a provided #GtkStyleContext; see
  * gtk_numerable_icon_set_style_context().
  *
- * <example>
- * <title>Typical numerable icons</title>
- * <inlinegraphic fileref="numerableicon.png" format="PNG"/>
- * <inlinegraphic fileref="numerableicon2.png" format="PNG"/>
- * </example>
+ * Typical numerable icons:
+ * ![](numerableicon.png)
+ * ![](numerableicon2.png)
  */
 #include <config.h>
 

@@ -871,14 +871,14 @@ typedef enum
 
 /**
  * GtkNumberUpLayout:
- * @GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM: <inlinegraphic valign="middle" fileref="layout-lrtb.png" format="PNG"></inlinegraphic>
- * @GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP: <inlinegraphic valign="middle" fileref="layout-lrbt.png" format="PNG"></inlinegraphic>
- * @GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM: <inlinegraphic valign="middle" fileref="layout-rltb.png" format="PNG"></inlinegraphic>
- * @GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP: <inlinegraphic valign="middle" fileref="layout-rlbt.png" format="PNG"></inlinegraphic>
- * @GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT: <inlinegraphic valign="middle" fileref="layout-tblr.png" format="PNG"></inlinegraphic>
- * @GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT: <inlinegraphic valign="middle" fileref="layout-tbrl.png" format="PNG"></inlinegraphic>
- * @GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT: <inlinegraphic valign="middle" fileref="layout-btlr.png" format="PNG"></inlinegraphic>
- * @GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT: <inlinegraphic valign="middle" fileref="layout-btrl.png" format="PNG"></inlinegraphic>
+ * @GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM: ![](layout-lrtb.png)
+ * @GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP: ![](layout-lrbt.png)
+ * @GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM: ![](layout-rltb.png)
+ * @GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP: ![](layout-rlbt.png)
+ * @GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT: ![](layout-tblr.png)
+ * @GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT: ![](layout-tbrl.png)
+ * @GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT: ![](layout-btlr.png)
+ * @GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT: ![](layout-btrl.png)
  *
  * Used to determine the layout of pages on a sheet when printing
  * multiple pages per sheet.

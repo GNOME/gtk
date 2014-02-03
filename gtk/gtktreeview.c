@@ -77,7 +77,7 @@
  * Several different coordinate systems are exposed in the GtkTreeView API.
  * These are:
  *
- * <inlinegraphic fileref="tree-view-coordinates.png" format="PNG"></inlinegraphic>
+ * ![](tree-view-coordinates.png)
  *
  * Coordinate systems in GtkTreeView API:
  *

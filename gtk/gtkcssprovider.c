@@ -431,14 +431,14 @@
  * color stops with position 0 and 1, respectively.
  *
  * An example for a linear gradient:
- * <inlinegraphic fileref="gradient1.png" format="PNG"/>
+ * ![](gradient1.png)
  * This gradient was specified with
  * <literallayout>-gtk-gradient (linear,
  *                left top, right bottom,
  *                from(&commat;yellow), to(&commat;blue))</literallayout>
  *
  * Another example for a linear gradient:
- * <inlinegraphic fileref="gradient2.png" format="PNG"/>
+ * ![](gradient2.png)
  * This gradient was specified with
  * <literallayout>-gtk-gradient (linear,
  *                0 0, 0 1,
@@ -458,7 +458,7 @@
  * the other parameters are as before.
  *
  * An example of a radial gradient:
- * <inlinegraphic fileref="gradient3.png" format="PNG"/>
+ * ![](gradient3.png)
  * This gradient was specified with
  * <literallayout>-gtk-gradient (radial,
  *                center center, 0,
@@ -466,7 +466,7 @@
  *                from(&commat;yellow), to(&commat;green))</literallayout>
  *
  * Another example of a radial gradient:
- * <inlinegraphic fileref="gradient4.png" format="PNG"/>
+ * ![](gradient4.png)
  * This gradient was specified with
  * <literallayout>-gtk-gradient (radial,
  *                0.4 0.4, 0.1,
@@ -525,7 +525,7 @@
  * For more information, see the CSS3 documentation for the border-image property,
  * which can be found <ulink url="http://www.w3.org/TR/css3-background/#border-images">here</ulink>.
  *
- * <inlinegraphic fileref="slices.png" format="PNG"/>
+ * ![](slices.png)
  *
  * The parameters of the slicing process are controlled by
  * four separate properties. Note that you can use the
@@ -570,17 +570,17 @@
  * If only one option is specified, it affects both.
  *
  * An example of a border image:
- * <inlinegraphic fileref="border1.png" format="PNG"/>
+ * ![](border1.png)
  * This border image was specified with
  * <literallayout>url("gradient1.png") 10 10 10 10</literallayout>
  *
  * An example of a repeating border image:
- * <inlinegraphic fileref="border2.png" format="PNG"/>
+ * ![](border2.png)
  * This border image was specified with
  * <literallayout>url("gradient1.png") 10 10 10 10 repeat</literallayout>
  *
  * An example of a stretched border image:
- * <inlinegraphic fileref="border3.png" format="PNG"/>
+ * ![](border3.png)
  * This border image was specified with
  * <literallayout>url("gradient1.png") 10 10 10 10 stretch</literallayout>
  *

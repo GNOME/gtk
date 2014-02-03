@@ -3708,7 +3708,7 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
  *
  * <example>
  * <title>Typical checkmark rendering</title>
- * <inlinegraphic fileref="checks.png" format="PNG"/>
+ * ![](checks.png)
  * </example>
  *
  * Since: 3.0
@@ -3759,7 +3759,7 @@ gtk_render_check (GtkStyleContext *context,
  *
  * <example>
  * <title>Typical option mark rendering</title>
- * <inlinegraphic fileref="options.png" format="PNG"/>
+ * ![](options.png)
  * </example>
  *
  * Since: 3.0
@@ -3807,7 +3807,7 @@ gtk_render_option (GtkStyleContext *context,
  *
  * <example>
  * <title>Typical arrow rendering at 0, 1&solidus;2 &pi;, &pi; and 3&solidus;2 &pi;</title>
- * <inlinegraphic fileref="arrows.png" format="PNG"/>
+ * ![](arrows.png)
  * </example>
  *
  * Since: 3.0
@@ -3862,7 +3862,7 @@ gtk_render_arrow (GtkStyleContext *context,
  * <parameter>background-image</parameter>,
  * <parameter>border-width</parameter> and
  * <parameter>border-radius</parameter></title>
- * <inlinegraphic fileref="background.png" format="PNG"/>
+ * ![](background.png)
  * </example>
  *
  * Since: 3.0.
@@ -3914,7 +3914,7 @@ gtk_render_background (GtkStyleContext *context,
  * <parameter>border-width</parameter>,
  * <parameter>border-radius</parameter> and
  * junctions</title>
- * <inlinegraphic fileref="frames.png" format="PNG"/>
+ * ![](frames.png)
  * </example>
  *
  * Since: 3.0
@@ -3963,7 +3963,7 @@ gtk_render_frame (GtkStyleContext *context,
  *
  * <example>
  * <title>Typical expander rendering</title>
- * <inlinegraphic fileref="expanders.png" format="PNG"/>
+ * ![](expanders.png)
  * </example>
  *
  * Since: 3.0
@@ -4009,7 +4009,7 @@ gtk_render_expander (GtkStyleContext *context,
  * Renders a focus indicator on the rectangle determined by @x, @y, @width, @height.
  * <example>
  * <title>Typical focus rendering</title>
- * <inlinegraphic fileref="focus.png" format="PNG"/>
+ * ![](focus.png)
  * </example>
  *
  * Since: 3.0
@@ -4136,7 +4136,7 @@ gtk_render_line (GtkStyleContext *context,
  *
  * <example>
  * <title>Typical slider rendering</title>
- * <inlinegraphic fileref="sliders.png" format="PNG"/>
+ * ![](sliders.png)
  * </example>
  *
  * Since: 3.0
@@ -4190,7 +4190,7 @@ gtk_render_slider (GtkStyleContext *context,
  *
  * <example>
  * <title>Typical rendering of a frame with a gap</title>
- * <inlinegraphic fileref="frame-gap.png" format="PNG"/>
+ * ![](frame-gap.png)
  * </example>
  *
  * Since: 3.0
@@ -4253,7 +4253,7 @@ gtk_render_frame_gap (GtkStyleContext *context,
  *
  * <example>
  * <title>Typical extension rendering</title>
- * <inlinegraphic fileref="extensions.png" format="PNG"/>
+ * ![](extensions.png)
  * </example>
  *
  * Since: 3.0
@@ -4303,7 +4303,7 @@ gtk_render_extension (GtkStyleContext *context,
  *
  * <example>
  * <title>Handles rendered for the paned and grip classes</title>
- * <inlinegraphic fileref="handles.png" format="PNG"/>
+ * ![](handles.png)
  * </example>
  *
  * Since: 3.0
