@@ -46,6 +46,7 @@
 #include <unistd.h>
 
 #include <X11/Xatom.h>
+#include <X11/Xlibint.h>
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
@@ -2472,6 +2473,27 @@ gdk_x11_register_standard_event_type (GdkDisplay *display,
   display_x11->event_types = g_slist_prepend (display_x11->event_types, event_type);
 }
 
+/* look up the extension name for a given major opcode.  grubs around in
+ * xlib to do it since a) it's already cached there b) XQueryExtension
+ * emits protocol so we can't use it in an error handler.
+ */
+static const char *
+_gdk_x11_decode_request_code(Display *dpy, int code)
+{
+  _XExtension *ext;
+
+  if (code < 128)
+    return "core protocol";
+
+  for (ext = dpy->ext_procs; ext; ext = ext->next)
+    {
+      if (ext->codes.major_opcode == code)
+        return ext->name;
+    }
+
+  return "unknown";
+}
+
 /* compare X sequence numbers handling wraparound */
 #define SEQUENCE_COMPARE(a,op,b) (((long) (a) - (long) (b)) op 0)
 
@@ -2516,7 +2538,7 @@ _gdk_x11_display_error_event (GdkDisplay  *display,
         g_strdup_printf ("The program '%s' received an X Window System error.\n"
                          "This probably reflects a bug in the program.\n"
                          "The error was '%s'.\n"
-                         "  (Details: serial %ld error_code %d request_code %d minor_code %d)\n"
+                         "  (Details: serial %ld error_code %d request_code %d (%s) minor_code %d)\n"
                          "  (Note to programmers: normally, X errors are reported asynchronously;\n"
                          "   that is, you will receive the error a while after causing it.\n"
                          "   To debug your program, run it with the GDK_SYNCHRONIZE environment\n"
@@ -2527,6 +2549,8 @@ _gdk_x11_display_error_event (GdkDisplay  *display,
                          error->serial,
                          error->error_code,
                          error->request_code,
+                         _gdk_x11_decode_request_code(display_x11->xdisplay,
+                                                      error->request_code),
                          error->minor_code);
 
 #ifdef G_ENABLE_DEBUG
