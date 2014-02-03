@@ -596,7 +596,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * - Arrow keys move by individual characters/lines
    * - Ctrl-arrow key combinations move by words/paragraphs
    * - Home/End keys move to the ends of the buffer
-   * </itemizedlist>
    */
   signals[MOVE_CURSOR] = 
     g_signal_new (I_("move-cursor"),
