@@ -92,6 +92,11 @@ Release notes for 3.12
   it used to inconsistently scroll with the buffer but then go
   reposition to a window-relative position on redraw.
 
+* A number of container widgets have been made more compliant with
+  the uniform CSS rendering model by making them render backgrounds
+  and borders. This may require some adjustments in applications that
+  were making assumptions about containers never rendering backgrounds.
+
 Release notes for 3.10
 ======================
 
