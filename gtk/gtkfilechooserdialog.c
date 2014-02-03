@@ -136,7 +136,8 @@
  * when it is appropriate to use gtk_file_chooser_set_filename(),
  * i.e. when you are doing a Save As command and you already
  * have a file saved somewhere.
- *
+ * </para>
+
  * ## Response Codes
  *
  * <para id="gtkfilechooserdialog-response-codes">
