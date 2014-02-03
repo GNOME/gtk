@@ -2147,10 +2147,9 @@ broadcast_xmessage (GdkDisplay *display,
  *
  * This is a convenience function for use by code that implements the
  * freedesktop startup notification specification. Applications should
- * not normally need to call it directly. See the <ulink
- * url="http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">Startup
- * Notification Protocol specification</ulink> for
- * definitions of the message types and keys that can be used.
+ * not normally need to call it directly. See the
+ * [Startup Notification Protocol specification](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt)
+ * for definitions of the message types and keys that can be used.
  *
  * Since: 2.12
  **/

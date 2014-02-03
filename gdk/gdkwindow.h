@@ -177,10 +177,8 @@ typedef enum
  * the window has. The window manager can use this when determining decoration
  * and behaviour of the window. The hint must be set before mapping the window.
  *
- * See the
- * <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended
- * Window Manager Hints</ulink> specification for more details about
- * window types.
+ * See the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
+ * specification for more details about window types.
  */
 typedef enum
 {
@@ -274,8 +272,8 @@ typedef enum
  * Defines the reference point of a window and the meaning of coordinates
  * passed to gtk_window_move(). See gtk_window_move() and the "implementation
  * notes" section of the
- * <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended
- * Window Manager Hints</ulink> specification for more details.
+ * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
+ * specification for more details.
  */
 typedef enum
 {

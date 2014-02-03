@@ -2103,9 +2103,8 @@ gdk_window_x11_lower (GdkWindow *window)
  * 
  * Moves the window to the correct workspace when running under a 
  * window manager that supports multiple workspaces, as described
- * in the <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
- * Window Manager Hints</ulink>.  Will not do anything if the
- * window is already on all workspaces.
+ * in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
+ * Will not do anything if the window is already on all workspaces.
  * 
  * Since: 2.8
  */
@@ -2193,8 +2192,7 @@ gdk_x11_window_get_desktop (GdkWindow *window)
  *
  * Moves the window to the given workspace when running unde a
  * window manager that supports multiple workspaces, as described
- * in the <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
- * Window Manager Hints</ulink>.
+ * in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
  *
  * Since: 3.10
  */
