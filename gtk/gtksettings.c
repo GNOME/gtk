@@ -71,13 +71,13 @@
  * manager that is usually part of the desktop environment, along with
  * utilities that let the user change these settings. In the absence of
  * an Xsettings manager, GTK+ reads default values for settings from
- * <filename>settings.ini</filename> files in
- * <filename>/etc/gtk-3.0</filename>, <filename>$XDG_CONFIG_DIRS/gtk-3.0</filename>
- * and <filename>$XDG_CONFIG_HOME/gtk-3.0</filename>.
+ * `settings.ini` files in
+ * `/etc/gtk-3.0`, `$XDG_CONFIG_DIRS/gtk-3.0`
+ * and `$XDG_CONFIG_HOME/gtk-3.0`.
  * These files must be valid key files (see #GKeyFile), and have
  * a section called Settings. Themes can also provide default values
- * for settings by installing a <filename>settings.ini</filename> file
- * next to their <filename>gtk.css</filename> file.
+ * for settings by installing a `settings.ini` file
+ * next to their `gtk.css` file.
  *
  * Applications can override system-wide settings with
  * gtk_settings_set_string_property(), gtk_settings_set_long_property(),

@@ -82,10 +82,10 @@
  * file by calling gtk_rc_parse(). In addition to this,
  * certain files will be read at the end of gtk_init().
  * Unless modified, the files looked for will be
- * <filename>&lt;SYSCONFDIR&gt;/gtk-2.0/gtkrc</filename>
- * and <filename>.gtkrc-3.0</filename> in the users home directory.
- * (<filename>&lt;SYSCONFDIR&gt;</filename> defaults to
- * <filename>/usr/local/etc</filename>. It can be changed with the
+ * `SYSCONFDIR/gtk-2.0/gtkrc`
+ * and `.gtkrc-3.0` in the users home directory.
+ * (`SYSCONFDIR` defaults to
+ * `/usr/local/etc`. It can be changed with the
  * <option>--prefix</option> or <option>--sysconfdir</option> options when
  * configuring GTK+.)
  *
@@ -101,8 +101,8 @@
  * For each RC file, in addition to the file itself, GTK+ will look for
  * a locale-specific file that will be parsed after the main file.
  * For instance, if `LANG` is set to <literal>ja_JP.ujis</literal>,
- * when loading the default file <filename>~/.gtkrc</filename> then GTK+ looks
- * for <filename>~/.gtkrc.ja_JP</filename> and <filename>~/.gtkrc.ja</filename>,
+ * when loading the default file `~/.gtkrc` then GTK+ looks
+ * for `~/.gtkrc.ja_JP` and `~/.gtkrc.ja`,
  * and parses the first of those that exists.
  *
  * # Pathnames and patterns #
@@ -184,14 +184,14 @@
  *
  * # Theme gtkrc files #
  *
- * Theme RC files are loaded first from under the <filename>~/.themes/</filename>,
+ * Theme RC files are loaded first from under the `~/.themes/`,
  * then from the directory from gtk_rc_get_theme_dir(). The files looked at will
- * be <filename>gtk-3.0/gtkrc</filename>.
+ * be `gtk-3.0/gtkrc`.
  *
  * When the application prefers dark themes
  * (see the #GtkSettings:gtk-application-prefer-dark-theme property for details),
- * <filename>gtk-3.0/gtkrc-dark</filename> will be loaded first, and if not present
- * <filename>gtk-3.0/gtkrc</filename> will be loaded.
+ * `gtk-3.0/gtkrc-dark` will be loaded first, and if not present
+ * `gtk-3.0/gtkrc` will be loaded.
  *
  * # Optimizing RC Style Matches #
  *
@@ -451,7 +451,7 @@
  *
  * <anchor id="color-format"/>
  * Colors can be specified as a string containing a color name (GTK+ knows
- * all names from the X color database <filename>/usr/lib/X11/rgb.txt</filename>),
+ * all names from the X color database `/usr/lib/X11/rgb.txt`),
  * in one of the hexadecimal forms <literal>#rrrrggggbbbb</literal>,
  * <literal>#rrrgggbbb</literal>, <literal>#rrggbb</literal>,
  * or <literal>#rgb</literal>, where <literal>r</literal>,

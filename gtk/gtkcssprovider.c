@@ -281,7 +281,7 @@
  * by setting the gtk-key-bindings style property.
  *
  * Customized key bindings are typically defined in a separate
- * <filename>gtk-keys.css</filename> CSS file and GTK+ loads this file
+ * `gtk-keys.css` CSS file and GTK+ loads this file
  * according to the current key theme, which is defined by the
  * #GtkSettings:gtk-key-theme-name setting.
  *

@@ -131,7 +131,7 @@ G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
  * @red, @green, and @blue fields of a #GdkColor.
  *
  * The string can either one of a large set of standard names
- * (taken from the X11 <filename>rgb.txt</filename> file), or
+ * (taken from the X11 `rgb.txt` file), or
  * it can be a hex value in the form '&num;rgb' '&num;rrggbb'
  * '&num;rrrgggbbb' or '&num;rrrrggggbbbb' where 'r', 'g' and
  * 'b' are hex digits of the red, green, and blue components

@@ -58,7 +58,7 @@
  * signal emissions on the target widget. Key combinations are strings
  * consisting of an optional #GdkModifierType name and
  * <link linkend="gdk3-Keyboard-Handling">key names</link>
- * such as those defined in <filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
+ * such as those defined in `gdk/gdkkeysyms.h`
  * or returned from gdk_keyval_name(), they have to be parsable by
  * gtk_accelerator_parse(). Specifications of signal emissions consist
  * of a string identifying the signal name, and a list of signal specific

@@ -791,7 +791,7 @@ struct _GdkEventScroll
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
  * @keyval: the key that was pressed or released. See the
- *   <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file for a
+ *   `gdk/gdkkeysyms.h` header file for a
  *   complete list of GDK key codes.
  * @length: the length of @string.
  * @string: a string containing an approximation of the text that

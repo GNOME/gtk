@@ -40,7 +40,7 @@
  * #GdkEventKey structure, which is passed to signal handlers for the
  * #GtkWidget::key-press-event and #GtkWidget::key-release-event signals.
  * The complete list of key values can be found in the
- * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file.
+ * `gdk/gdkkeysyms.h` header file.
  *
  * Key values are regularly updated from the upstream X.org X11 implementation,
  * so new values are added regularly. They will be prefixed with GDK_KEY_ rather
@@ -681,7 +681,7 @@ gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
  * Converts a key value into a symbolic name.
  *
  * The names are the same as those in the
- * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
+ * `gdk/gdkkeysyms.h` header file
  * but without the leading "GDK_KEY_".
  *
  * Return value: (transfer none): a string containing the name of the key,
@@ -701,7 +701,7 @@ gdk_keyval_name (guint keyval)
  * Converts a key name to a key value.
  *
  * The names are the same as those in the
- * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
+ * `gdk/gdkkeysyms.h` header file
  * but without the leading "GDK_KEY_".
  *
  * Returns: the corresponding key value, or %GDK_KEY_VoidSymbol
