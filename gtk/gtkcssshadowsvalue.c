@@ -21,6 +21,7 @@
 
 #include "gtkcssshadowsvalueprivate.h"
 
+#include "gtkcairoblurprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 
 #include <string.h>
@@ -309,7 +310,7 @@ _gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
   guint i;
   GtkBorder b = { 0 };
   const GtkCssValue *shadow;
-  gdouble hoffset, voffset, spread, radius;
+  gdouble hoffset, voffset, spread, radius, clip_radius;
 
   g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
 
@@ -323,11 +324,12 @@ _gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
       _gtk_css_shadow_value_get_geometry (shadow,
                                           &hoffset, &voffset,
                                           &radius, &spread);
+      clip_radius = _gtk_cairo_blur_compute_pixels (radius);
 
-      b.top = MAX (0, radius + spread - voffset);
-      b.right = MAX (0, radius + spread + hoffset);
-      b.bottom = MAX (0, radius + spread + voffset);
-      b.left = MAX (0, radius + spread - hoffset);
+      b.top = MAX (0, clip_radius + spread - voffset);
+      b.right = MAX (0, clip_radius + spread + hoffset);
+      b.bottom = MAX (0, clip_radius + spread + voffset);
+      b.left = MAX (0, clip_radius + spread - hoffset);
 
       border->top = MAX (border->top, b.top);
       border->right = MAX (border->right, b.right);

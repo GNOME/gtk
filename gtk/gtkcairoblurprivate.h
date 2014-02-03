@@ -29,8 +29,9 @@
 
 G_BEGIN_DECLS
 
-void            _gtk_cairo_blur_surface (cairo_surface_t *surface,
-                                         double           radius);
+void            _gtk_cairo_blur_surface         (cairo_surface_t *surface,
+                                                 double           radius);
+int             _gtk_cairo_blur_compute_pixels  (double           radius);
 
 G_END_DECLS
 

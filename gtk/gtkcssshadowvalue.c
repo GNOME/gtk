@@ -31,10 +31,6 @@
 
 #include <math.h>
 
-/* The blur of _gtk_cairo_blur_surface only approximately ends at radius,
-   so we add an extra pixel to make the clips less dramatic */
-#define CLIP_RADIUS_EXTRA 4
-
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
   guint inset :1;
@@ -327,7 +323,7 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
 
   gdk_cairo_get_clip_rectangle (cr, &clip_rect);
 
-  clip_radius = radius + CLIP_RADIUS_EXTRA;
+  clip_radius = _gtk_cairo_blur_compute_pixels (radius);
 
   /* Create a larger surface to center the blur. */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
@@ -534,7 +530,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 
   spread = _gtk_css_number_value_get (shadow->spread, 0);
   radius = _gtk_css_number_value_get (shadow->radius, 0);
-  clip_radius = radius + CLIP_RADIUS_EXTRA;
+  clip_radius = _gtk_cairo_blur_compute_pixels (radius);
   x = _gtk_css_number_value_get (shadow->hoffset, 0);
   y = _gtk_css_number_value_get (shadow->voffset, 0);
 
