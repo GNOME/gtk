@@ -63,7 +63,7 @@
  * rules are applied if the URI contains non-ASCII characters.
  * However, filenames are always returned in
  * the character set specified by the
- * <envar>G_FILENAME_ENCODING</envar> environment variable.
+ * `G_FILENAME_ENCODING` environment variable.
  * Please see the GLib documentation for more details about this
  * variable.
  *

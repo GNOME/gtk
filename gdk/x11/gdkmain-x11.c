@@ -454,7 +454,7 @@ gdk_x11_get_default_root_xwindow (void)
  * 
  * Return value: (transfer none): the Xlib Display* for
  * the display specified in the <option>--display</option> command
- * line option or the <envar>DISPLAY</envar> environment variable.
+ * line option or the `DISPLAY` environment variable.
  **/
 Display *
 gdk_x11_get_default_xdisplay (void)

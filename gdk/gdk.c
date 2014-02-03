@@ -339,7 +339,7 @@ gdk_parse_args (int    *argc,
  * gdk_get_display:
  *
  * Gets the name of the display, which usually comes from the
- * <envar>DISPLAY</envar> environment variable or the
+ * `DISPLAY` environment variable or the
  * <option>--display</option> command line option.
  *
  * Returns: the name of the display.

@@ -93,14 +93,14 @@
  * can be retrieved with gtk_rc_get_default_files()
  * and modified with gtk_rc_add_default_file() and
  * gtk_rc_set_default_files().
- * Additionally, the <envar>GTK2_RC_FILES</envar> environment variable
+ * Additionally, the `GTK2_RC_FILES` environment variable
  * can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
  * in order to overwrite the set of default files at runtime.
 
  * <anchor id="locale-specific-rc"/>
  * For each RC file, in addition to the file itself, GTK+ will look for
  * a locale-specific file that will be parsed after the main file.
- * For instance, if <envar>LANG</envar> is set to <literal>ja_JP.ujis</literal>,
+ * For instance, if `LANG` is set to <literal>ja_JP.ujis</literal>,
  * when loading the default file <filename>~/.gtkrc</filename> then GTK+ looks
  * for <filename>~/.gtkrc.ja_JP</filename> and <filename>~/.gtkrc.ja</filename>,
  * and parses the first of those that exists.
@@ -294,7 +294,7 @@
  * * <literal>im_module_file <replaceable>pathname</replaceable></literal>
  *
  *    Sets the pathname for the IM modules file. Setting this from RC files
- *       is deprecated; you should use the environment variable <envar>GTK_IM_MODULE_FILE</envar>
+ *       is deprecated; you should use the environment variable `GTK_IM_MODULE_FILE`
  *       instead.
  *
  * * <literal>style <replaceable>name</replaceable> [ =
@@ -825,7 +825,7 @@ gtk_rc_make_default_dir (const gchar *type)
  * gtk_rc_get_im_module_path:
  *
  * Obtains the path in which to look for IM modules. See the documentation
- * of the <envar>GTK_PATH</envar>
+ * of the `GTK_PATH`
  * environment variable for more details about looking up modules. This
  * function is useful solely for utilities supplied with GTK+ and should
  * not be used by applications under normal circumstances.
@@ -849,7 +849,7 @@ gtk_rc_get_im_module_path (void)
  * gtk_rc_get_im_module_file:
  *
  * Obtains the path to the IM modules file. See the documentation
- * of the <envar>GTK_IM_MODULE_FILE</envar>
+ * of the `GTK_IM_MODULE_FILE`
  * environment variable for more details.
  *
  * Returns: (type filename): a newly-allocated string containing the
@@ -909,7 +909,7 @@ gtk_rc_get_theme_dir (void)
  *
  * Returns a directory in which GTK+ looks for theme engines.
  * For full information about the search for theme engines,
- * see the docs for <envar>GTK_PATH</envar> in
+ * see the docs for `GTK_PATH` in
  * <xref linkend="gtk-running"/>.
  *
  * return value: (type filename): the directory. (Must be freed with g_free())

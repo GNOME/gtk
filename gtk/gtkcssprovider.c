@@ -61,15 +61,15 @@
  * calling gtk_css_provider_load_from_file() and adding the provider with
  * gtk_style_context_add_provider() or gtk_style_context_add_provider_for_screen().
  * In addition, certain files will be read when GTK+ is initialized. First,
- * the file <filename><envar>$XDG_CONFIG_HOME</envar>/gtk-3.0/gtk.css</filename>
+ * the file `$XDG_CONFIG_HOME/gtk-3.0/gtk.css`
  * is loaded if it exists. Then, GTK+ tries to load
- * <filename><envar>$HOME</envar>/.themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css</filename>,
+ * `$HOME/.themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css`,
  * falling back to
- * <filename><replaceable>datadir</replaceable>/share/themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css</filename>,
+ * `<replaceable>datadir</replaceable>/share/themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css`,
  * where <replaceable>theme-name</replaceable> is the name of the current theme
  * (see the #GtkSettings:gtk-theme-name setting) and <replaceable>datadir</replaceable>
  * is the prefix configured when GTK+ was compiled, unless overridden by the
- * <envar>GTK_DATA_PREFIX</envar> environment variable.
+ * `GTK_DATA_PREFIX` environment variable.
  * 
  * ## Style sheets
  *
