@@ -417,7 +417,11 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 
   data = cairo_surface_get_user_data (impl->cairo_surface,
                                       &gdk_wayland_cairo_key);
-  data->busy = TRUE;
+  if (!data->busy)
+    {
+      data->busy = TRUE;
+      cairo_surface_reference (impl->cairo_surface);
+    }
 }
 
 static void
@@ -610,7 +614,6 @@ gdk_wayland_cairo_surface_destroy (void *p)
   g_free (data);
 }
 
-
 struct wl_shm_pool *
 _create_shm_pool (struct wl_shm  *shm,
                   int             width,
@@ -667,9 +670,11 @@ static void
 buffer_release_callback (void             *_data,
                          struct wl_buffer *wl_buffer)
 {
-  GdkWaylandCairoSurfaceData *data = _data;
+  cairo_surface_t *surface = _data;
+  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
 
   data->busy = FALSE;
+  cairo_surface_destroy (surface);
 }
 
 static const struct wl_buffer_listener buffer_listener = {
@@ -702,16 +707,16 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
                                  &data->buf_length,
                                  &data->buf);
 
-  data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
-                                            width*scale, height*scale,
-                                            stride*scale, WL_SHM_FORMAT_ARGB8888);
-  wl_buffer_add_listener (data->buffer, &buffer_listener, data);
-
   surface = cairo_image_surface_create_for_data (data->buf,
                                                  CAIRO_FORMAT_ARGB32,
                                                  width*scale,
                                                  height*scale,
                                                  stride*scale);
+
+  data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
+                                            width*scale, height*scale,
+                                            stride*scale, WL_SHM_FORMAT_ARGB8888);
+  wl_buffer_add_listener (data->buffer, &buffer_listener, surface);
 
   cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
                                data, gdk_wayland_cairo_surface_destroy);
