@@ -251,3 +251,29 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   /* Inform cairo we altered the surfaces contents. */
   cairo_surface_mark_dirty (surface);
 }
+
+/**
+ * _gtk_cairo_blur_compute_pixels:
+ * @radius: the radius to compute the pixels for
+ *
+ * Computes the number of pixels necessary to extend an image in one
+ * direction to hold the image with shadow.
+ *
+ * This is just the number of pixels added by the blur radius, shadow
+ * offset and spread are not included.
+ * 
+ * Much of this, the 3 * sqrt(2 * pi) / 4, is the known value for
+ * approximating a Gaussian using box blurs.  This yields quite a good
+ * approximation for a Gaussian.  Then we multiply this by 1.5 since our
+ * code wants the radius of the entire triple-box-blur kernel instead of
+ * the diameter of an individual box blur.  For more details, see:
+ * http://www.w3.org/TR/SVG11/filters.html#feGaussianBlurElement
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=590039#c19
+ */
+#define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2 * G_PI) / 4) * 1.5)
+
+int
+_gtk_cairo_blur_compute_pixels (double radius)
+{
+  return floor (radius * GAUSSIAN_SCALE_FACTOR + 0.5);
+}
