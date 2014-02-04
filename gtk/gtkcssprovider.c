@@ -52,7 +52,7 @@
  * @See_also: #GtkStyleContext, #GtkStyleProvider
  *
  * GtkCssProvider is an object implementing the #GtkStyleProvider interface.
- * It is able to parse <ulink url="http://www.w3.org/TR/CSS2">CSS</ulink>-like
+ * It is able to parse [CSS-like](http://www.w3.org/TR/CSS2)
  * input in order to style widgets.
  *
  * ## Default files
@@ -479,8 +479,8 @@
  * ## Text shadow
  *
  * A shadow list can be applied to text or symbolic icons, using the CSS3
- * text-shadow syntax, as defined in
- * <ulink url="http://www.w3.org/TR/css3-text/#text-shadow">the CSS3 specification</ulink>.
+ * text-shadow syntax, as defined in the
+ * [CSS3 Specification](http://www.w3.org/TR/css3-text/#text-shadow).
  *
  * A text shadow is specified using the syntax
  * <literallayout>text-shadow: @horizontal_offset @vertical_offset [ @blur_radius ] @color</literallayout>
@@ -500,8 +500,8 @@
  * ## Box shadow
  *
  * Themes can apply shadows on framed elements using the CSS3 box-shadow syntax,
- * as defined in 
- * <ulink url="http://www.w3.org/TR/css3-background/#the-box-shadow">the CSS3 specification</ulink>.
+ * as defined in the
+ * [CSS3 Specification](http://www.w3.org/TR/css3-background/#the-box-shadow).
  *
  * A box shadow is specified using the syntax
  * <literallayout>box-shadow: [ @inset ] @horizontal_offset @vertical_offset [ @blur_radius ] [ @spread ] @color</literallayout>
@@ -522,8 +522,7 @@
  *
  * Images and gradients can also be used in slices for the purpose of creating
  * scalable borders.
- * For more information, see the CSS3 documentation for the border-image property,
- * which can be found <ulink url="http://www.w3.org/TR/css3-background/#border-images">here</ulink>.
+ * For more information, see the [CSS3 documentation for the border-image property](http://www.w3.org/TR/css3-background/#border-images).
  *
  * ![](slices.png)
  *

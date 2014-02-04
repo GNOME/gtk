@@ -70,9 +70,8 @@
  * providing a filename is to allow different icons to be used
  * depending on what “icon theme” is selected
  * by the user. The operation of icon themes on Linux and Unix
- * follows the <ulink
- * url="http://www.freedesktop.org/Standards/icon-theme-spec">Icon
- * Theme Specification</ulink>. There is a default icon theme,
+ * follows the [Icon Theme Specification](http://www.freedesktop.org/Standards/icon-theme-spec)
+ * There is a default icon theme,
  * named `hicolor` where applications should install
  * their icons, but more additional application themes can be
  * installed as operating system vendors and users choose.
@@ -4321,7 +4320,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
  * and use the 'fg', 'success', 'warning' and 'error' CSS styles in the
  * SVG file itself.
  *
- * See the <ulink url="http://www.freedesktop.org/wiki/SymbolicIcons">Symbolic Icons spec</ulink>
+ * See the [Symbolic Icons Specification](http://www.freedesktop.org/wiki/SymbolicIcons)
  * for more information about symbolic icons.
  *
  * Return value: (transfer full): a #GdkPixbuf representing the loaded icon

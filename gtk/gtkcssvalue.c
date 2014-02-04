@@ -78,9 +78,8 @@ _gtk_css_value_unref (GtkCssValue *value)
  *
  * Converts the specified @value into the computed value for the CSS
  * property given by @property_id using the information in @context.
- * This step is explained in detail in
- * <ulink url="http://www.w3.org/TR/css3-cascade/#computed>
- * the CSS documentation</ulink>.
+ * This step is explained in detail in the
+ * [CSS Documentation](http://www.w3.org/TR/css3-cascade/#computed).
  *
  * Returns: the computed value
  **/

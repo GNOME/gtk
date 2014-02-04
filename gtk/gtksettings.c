@@ -67,7 +67,7 @@
  * applications.
  *
  * On the X window system, this sharing is realized by an
- * <ulink url="http://www.freedesktop.org/wiki/Specifications/xsettings-spec">XSettings</ulink>
+ * [XSettings](http://www.freedesktop.org/wiki/Specifications/xsettings-spec)
  * manager that is usually part of the desktop environment, along with
  * utilities that let the user change these settings. In the absence of
  * an Xsettings manager, GTK+ reads default values for settings from
@@ -1108,7 +1108,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * The XDG sound theme to use for event sounds.
    *
-   * See the <ulink url="http://www.freedesktop.org/wiki/Specifications/sound-theme-spec">Sound Theme spec</ulink>
+   * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
    * GTK+ itself does not support event sounds, you have to use a loadable
@@ -1130,7 +1130,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether to play event sounds as feedback to user input.
    *
-   * See the <ulink url="http://www.freedesktop.org/wiki/Specifications/sound-theme-spec">Sound Theme spec</ulink>
+   * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
    * GTK+ itself does not support event sounds, you have to use a loadable
@@ -1153,7 +1153,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether to play any event sounds at all.
    *
-   * See the <ulink url="http://www.freedesktop.org/wiki/Specifications/sound-theme-spec">Sound Theme spec</ulink>
+   * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
    * GTK+ itself does not support event sounds, you have to use a loadable

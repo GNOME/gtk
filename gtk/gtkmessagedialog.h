@@ -80,7 +80,7 @@ struct _GtkMessageDialogClass
  * <note>
  *  Please note that %GTK_BUTTONS_OK, %GTK_BUTTONS_YES_NO
  *  and %GTK_BUTTONS_OK_CANCEL are discouraged by the
- *  <ulink url="http://library.gnome.org/devel/hig-book/stable/">GNOME HIG</ulink>.
+ *  [GNOME Human Interface Guidelines](http://library.gnome.org/devel/hig-book/stable/).
  * </note>
  */
 typedef enum

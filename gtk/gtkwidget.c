@@ -12730,7 +12730,7 @@ _gtk_widget_peek_accessible (GtkWidget *widget)
  * class for which such an implementation is defined.
  *
  * The documentation of the
- * <ulink url="http://developer.gnome.org/atk/stable/">ATK</ulink>
+ * [ATK](http://developer.gnome.org/atk/stable/)
  * library contains more information about accessible objects and their uses.
  *
  * Returns: (transfer none): the #AtkObject associated with @widget

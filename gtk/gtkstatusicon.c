@@ -73,8 +73,8 @@
  * visible (e.g. when the user doesn't have a notification area on his panel).
  * This can be checked with gtk_status_icon_is_embedded().
  *
- * On X11, the implementation follows the freedesktop.org "System Tray"
- * <ulink url="http://www.freedesktop.org/wiki/Specifications/systemtray-spec">specification</ulink>.
+ * On X11, the implementation follows the
+ * [FreeDesktop System Tray Specification](http://www.freedesktop.org/wiki/Specifications/systemtray-spec).
  * Implementations of the "tray" side of this specification can
  * be found e.g. in the GNOME 2 and KDE panel applications.
  *

@@ -45,7 +45,7 @@
  * @See_also:#GtkPageSetup
  *
  * GtkPaperSize handles paper sizes. It uses the standard called
- * <ulink url="http://www.pwg.org/standards.html">"PWG 5101.1-2002 PWG: Standard for Media Standardized Names"</ulink>
+ * [PWG 5101.1-2002 PWG: Standard for Media Standardized Names](http://www.pwg.org/standards.html)
  * to name the paper sizes (and to get the data for the page sizes).
  * In addition to standard paper sizes, GtkPaperSize allows to
  * construct custom paper sizes with arbitrary dimensions.
@@ -209,7 +209,7 @@ gtk_paper_size_new_from_info (const PaperInfo *info)
  * @name: (allow-none): a paper size name, or %NULL
  *
  * Creates a new #GtkPaperSize object by parsing a
- * <ulink url="ftp://ftp.pwg.org/pub/pwg/candidates/cs-pwgmsn10-20020226-5101.1.pdf">PWG 5101.1-2002</ulink>
+ * [PWG 5101.1-2002](ftp://ftp.pwg.org/pub/pwg/candidates/cs-pwgmsn10-20020226-5101.1.pdf)
  * paper name.
  *
  * If @name is %NULL, the default paper size is returned,

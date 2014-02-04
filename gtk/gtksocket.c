@@ -55,7 +55,7 @@
  * @Short_description: Container for widgets from other processes
  * @Title: GtkSocket
  * @include: gtk/gtkx.h
- * @See_also: #GtkPlug, <ulink url="http://www.freedesktop.org/Standards/xembed-spec">XEmbed</ulink>
+ * @See_also: #GtkPlug, [XEmbed Protocol](http://www.freedesktop.org/Standards/xembed-spec)
  *
  * Together with #GtkPlug, #GtkSocket provides the ability to embed
  * widgets from one process into another process in a fashion that
@@ -100,8 +100,8 @@
  * happening, you can connect to the #GtkSocket::plug-removed signal.
  *
  * The communication between a #GtkSocket and a #GtkPlug follows the
- * <ulink url="http://www.freedesktop.org/Standards/xembed-spec">XEmbed</ulink>
- * protocol. This protocol has also been implemented in other toolkits,
+ * [XEmbed Protocol](http://www.freedesktop.org/Standards/xembed-spec).
+ * This protocol has also been implemented in other toolkits,
  * e.g. Qt, allowing the same level of
  * integration when embedding a Qt widget
  * in GTK or vice versa.
