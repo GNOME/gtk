@@ -2273,7 +2273,7 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
   g_object_notify (G_OBJECT (tree_column), "min-width");
   g_object_thaw_notify (G_OBJECT (tree_column));
 
-  if (priv->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
+  if (priv->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE && priv->tree_view)
     _gtk_tree_view_column_autosize (GTK_TREE_VIEW (priv->tree_view),
 				    tree_column);
 }
@@ -2337,7 +2337,7 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
   g_object_notify (G_OBJECT (tree_column), "max-width");
   g_object_thaw_notify (G_OBJECT (tree_column));
 
-  if (priv->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
+  if (priv->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE && priv->tree_view)
     _gtk_tree_view_column_autosize (GTK_TREE_VIEW (priv->tree_view),
 				    tree_column);
 }
