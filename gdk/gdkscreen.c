@@ -920,7 +920,7 @@ gdk_screen_get_rgba_visual (GdkScreen *screen)
  *
  * This will be the visual returned by gdk_screen_get_rgba_visual()
  * unless that is not available, or unless the environment
- * variable <envar>GDK_RGBA</envar> is set to 0.
+ * variable `GDK_RGBA` is set to `0`.
  *
  * Return value: (transfer none): the preferred visual to use
  *     for windows
