@@ -85,6 +85,7 @@ struct _GtkPopoverPrivate
   guint current_position   : 2;
   guint modal              : 1;
   guint button_pressed     : 1;
+  guint apply_shape        : 1;
 };
 
 static GQuark quark_widget_popovers = 0;
@@ -524,6 +525,7 @@ gtk_popover_apply_tail_path (GtkPopover *popover,
   gint tip_x, tip_y;
   gint final_x, final_y;
 
+  cairo_set_line_width (cr, 1);
   gtk_popover_get_gap_coords (popover,
                               &initial_x, &initial_y,
                               &tip_x, &tip_y,
@@ -536,49 +538,23 @@ gtk_popover_apply_tail_path (GtkPopover *popover,
 }
 
 static void
-gtk_popover_apply_border_path (GtkPopover *popover,
-                               cairo_t    *cr)
+gtk_popover_fill_border_path (GtkPopover *popover,
+                              cairo_t    *cr)
 {
-  GtkPopoverPrivate *priv;
   GtkAllocation allocation;
+  GtkStyleContext *context;
   gint x1, y1, x2, y2;
 
-  priv = popover->priv;
+  context = gtk_widget_get_style_context (GTK_WIDGET (popover));
   gtk_widget_get_allocation (GTK_WIDGET (popover), &allocation);
 
   gtk_popover_apply_tail_path (popover, cr);
-  gtk_popover_get_rect_coords (popover, &x1, &y1, &x2, &y2);
-
-  if (priv->final_position == GTK_POS_TOP)
-    {
-      cairo_line_to (cr, x2, y2);
-      cairo_line_to (cr, x2, y1);
-      cairo_line_to (cr, x1, y1);
-      cairo_line_to (cr, x1, y2);
-    }
-  else if (priv->final_position == GTK_POS_BOTTOM)
-    {
-      cairo_line_to (cr, x2, y1);
-      cairo_line_to (cr, x2, y2);
-      cairo_line_to (cr, x1, y2);
-      cairo_line_to (cr, x1, y1);
-    }
-  else if (priv->final_position == GTK_POS_LEFT)
-    {
-      cairo_line_to (cr, x2, y2);
-      cairo_line_to (cr, x1, y2);
-      cairo_line_to (cr, x1, y1);
-      cairo_line_to (cr, x2, y1);
-    }
-  else if (priv->final_position == GTK_POS_RIGHT)
-    {
-      cairo_line_to (cr, x1, y1);
-      cairo_line_to (cr, x2, y1);
-      cairo_line_to (cr, x2, y2);
-      cairo_line_to (cr, x1, y2);
-    }
-
   cairo_close_path (cr);
+  cairo_fill (cr);
+
+  gtk_popover_get_rect_coords (popover, &x1, &y1, &x2, &y2);
+  gtk_render_frame (context, cr, x1, y1, x2 - x1, y2 - y1);
+  gtk_render_background (context, cr, x1, y1, x2 - x1, y2 - y1);
 }
 
 static void
@@ -597,8 +573,7 @@ gtk_popover_update_shape (GtkPopover *popover)
                                        gdk_window_get_height (win));
 
   cr = cairo_create (surface);
-  gtk_popover_apply_border_path (popover, cr);
-  cairo_fill (cr);
+  gtk_popover_fill_border_path (popover, cr);
   cairo_destroy (cr);
 
   region = gdk_cairo_region_create_from_surface (surface);
@@ -679,7 +654,8 @@ gtk_popover_update_position (GtkPopover *popover)
 
   if (priv->final_position != priv->current_position)
     {
-      if (gtk_widget_is_drawable (GTK_WIDGET (popover)))
+      if (priv->apply_shape &&
+          gtk_widget_is_drawable (GTK_WIDGET (popover)))
         gtk_popover_update_shape (popover);
 
       priv->current_position = priv->final_position;
@@ -704,6 +680,8 @@ gtk_popover_draw (GtkWidget *widget,
   GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+
   state = gtk_widget_get_state_flags (widget);
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -771,6 +749,8 @@ gtk_popover_draw (GtkWidget *widget,
 
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
+
+  gtk_style_context_restore (context);
 
   return TRUE;
 }
@@ -1030,8 +1010,10 @@ static void
 gtk_popover_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
+  GtkPopoverPrivate *priv;
   GtkWidget *child;
 
+  priv = gtk_popover_get_instance_private (GTK_POPOVER (widget));
   gtk_widget_set_allocation (widget, allocation);
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
@@ -1055,7 +1037,8 @@ gtk_popover_size_allocate (GtkWidget     *widget,
     {
       gdk_window_move_resize (gtk_widget_get_window (widget),
                               0, 0, allocation->width, allocation->height);
-      gtk_popover_update_shape (GTK_POPOVER (widget));
+      if (priv->apply_shape)
+        gtk_popover_update_shape (GTK_POPOVER (widget));
     }
 }
 
@@ -1743,4 +1726,22 @@ gtk_popover_get_modal (GtkPopover *popover)
   priv = popover->priv;
 
   return priv->modal;
+}
+
+void
+_gtk_popover_set_apply_shape (GtkPopover *popover,
+                              gboolean    apply_shape)
+{
+  GtkPopoverPrivate *priv;
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  priv = gtk_popover_get_instance_private (popover);
+
+  if ((priv->apply_shape == TRUE) == (apply_shape == TRUE))
+    return;
+
+  priv->apply_shape = apply_shape;
+  gtk_popover_update_position (popover);
+  gtk_widget_queue_draw (GTK_WIDGET (popover));
 }
