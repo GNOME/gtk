@@ -10863,14 +10863,9 @@ gtk_widget_get_visual (GtkWidget *widget)
           g_warning ("Ignoring visual set on widget `%s' that is not on the correct screen.",
                      gtk_widget_get_name (widget));
         }
+    }
 
-  visual = gdk_screen_get_rgba_visual (screen);
-
-  if (visual == NULL ||
-      g_strcmp0 (g_getenv ("GDK_RGBA"), "0") != 0)
-    visual = gdk_screen_get_system_visual (screen);
-
-  return visual;
+  return gdk_screen_get_preferred_visual (screen);
 }
 
 /**
