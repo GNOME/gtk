@@ -57,7 +57,7 @@
  * GTK+ treats a dialog as a window split vertically. The top section is a
  * #GtkVBox, and is where widgets such as a #GtkLabel or a #GtkEntry should
  * be packed. The bottom area is known as the
- * <quote>action_area</quote>. This is generally used for
+ * “action area”. This is generally used for
  * packing buttons into the dialog which may perform functions such as
  * cancel, ok, or apply.
  *

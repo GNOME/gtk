@@ -62,19 +62,18 @@
  *
  * Models are accessed on a node/column level of granularity. One can
  * query for the value of a model at a certain node and a certain
- * column on that node. There are two structures used to reference
- * a particular node in a model. They are the #GtkTreePath-struct and the
- * #GtkTreeIter-struct (<abbrev>iter</abbrev> is short
- * for <quote>iterator</quote>). Most of the interface
- * consists of operations on a #GtkTreeIter-struct.
+ * column on that node. There are two structures used to reference a
+ * particular node in a model. They are the #GtkTreePath-struct and
+ * the #GtkTreeIter-struct (“iter” is short for iterator). Most of the
+ * interface consists of operations on a #GtkTreeIter-struct.
  *
  * A path is essentially a potential node. It is a location on a model
  * that may or may not actually correspond to a node on a specific
  * model. The #GtkTreePath-struct can be converted into either an
  * array of unsigned integers or a string. The string form is a list
  * of numbers separated by a colon. Each number refers to the offset
- * at that level. Thus, the path <quote>0</quote> refers to the root
- * node and the path <quote>2:4</quote> refers to the fifth child of
+ * at that level. Thus, the path `0` refers to the root
+ * node and the path `2:4` refers to the fifth child of
  * the third node.
  *
  * By contrast, a #GtkTreeIter-struct is a reference to a specific node on
@@ -110,7 +109,7 @@
  *
  * To help show some common operation of a model, some examples are
  * provided. The first example shows three ways of getting the iter at
- * the location <quote>3:2:5</quote>. While the first method shown is
+ * the location `3:2:5`. While the first method shown is
  * easier, the second is much more common, as you often get paths from
  * callbacks.
  *
