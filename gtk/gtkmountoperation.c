@@ -194,7 +194,12 @@ gtk_mount_operation_finalize (GObject *object)
   GtkMountOperationPrivate *priv = operation->priv;
 
   if (priv->parent_window)
-    g_object_unref (priv->parent_window);
+    {
+      g_signal_handlers_disconnect_by_func (priv->parent_window,
+                                            gtk_widget_destroyed,
+                                            &priv->parent_window);
+      g_object_unref (priv->parent_window);
+    }
 
   if (priv->screen)
     g_object_unref (priv->screen);
@@ -1425,20 +1430,19 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
       g_signal_handlers_disconnect_by_func (priv->parent_window,
                                             gtk_widget_destroyed,
                                             &priv->parent_window);
-      priv->parent_window = NULL;
+      g_object_unref (priv->parent_window);
     }
-
-  if (parent)
+  priv->parent_window = parent;
+  if (priv->parent_window)
     {
-      priv->parent_window = g_object_ref (parent);
-
-      g_signal_connect (parent, "destroy",
+      g_object_ref (priv->parent_window);
+      g_signal_connect (priv->parent_window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed),
                         &priv->parent_window);
-
-      if (priv->dialog)
-        gtk_window_set_transient_for (GTK_WINDOW (priv->dialog), parent);
     }
+
+  if (priv->dialog)
+    gtk_window_set_transient_for (GTK_WINDOW (priv->dialog), priv->parent_window);
 
   g_object_notify (G_OBJECT (op), "parent");
 }
