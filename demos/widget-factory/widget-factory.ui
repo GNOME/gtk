@@ -139,7 +139,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="border-width">10</property>
         <child>
           <object class="GtkStack" id="toplevel_stack">
             <property name="visible">True</property>
@@ -147,6 +146,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkBox" id="page1">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <property name="border-width">10</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkBox" id="box2">
@@ -1750,7 +1750,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkFrame" id="page2frame">
                         <property name="visible">True</property>
-                        <property name="margin-top">2</property>
+                        <style>
+                          <class name="app-notification"/>
+                        </style>
                         <child>
                           <object class="GtkBox" id="page2box">
                             <property name="visible">True</property>
@@ -1770,6 +1772,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <child>
                               <object class="GtkButton" id="page2dismiss">
                                 <property name="visible">True</property>
+                                <property name="relief">none</property>
                                 <child>
                                   <object class="GtkImage" id="page2dismissi">
                                     <property name="visible">True</property>
@@ -1791,7 +1794,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="column-homogeneous">True</property>
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">6</property>
-                    <property name="border-width">6</property>
+                    <property name="border-width">16</property>
                     <child>
                       <object class="GtkBox" id="page2box1">
                         <property name="visible">True</property>
