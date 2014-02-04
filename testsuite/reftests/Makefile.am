@@ -29,7 +29,6 @@ clean-local:
 
 EXTRA_DIST += \
 	align-expand.sh \
-	border-image-repeat.sh \
 	$(NULL)
 
 testdata = \
@@ -102,9 +101,6 @@ testdata = \
 	border-image-gradient.css \
 	border-image-gradient.ref.ui \
 	border-image-gradient.ui \
-	border-image-repeat.css \
-	border-image-repeat.ref.ui \
-	border-image-repeat.ui \
 	border-image-url-scaled.css \
 	border-image-url-scaled.ref.ui \
 	border-image-url-scaled.ui \
