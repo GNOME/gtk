@@ -109,7 +109,6 @@
  *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * ]|
- * </example>
  *
  * The XML format understood by #GtkBuilder for #GMenuModel consists
  * of a toplevel <tag class="starttag">menu</tag> element, which contains
