@@ -92,8 +92,8 @@
  * ## GtkWindow as GtkBuildable
  *
  * The GtkWindow implementation of the GtkBuildable interface supports a
- * custom <tag class="starttag">accel-groups</tag> element, which supports
- * any number of <tag class="starttag">group</tag> elements representing the
+ * custom `&lt;accel-groups&gt;` element, which supports
+ * any number of `&lt;group&gt;` elements representing the
  * #GtkAccelGroup objects you want to add to your window (synonymous with
  * gtk_window_add_accel_group().
  *
@@ -112,7 +112,7 @@
  * 
  * The GtkWindow implementation of the GtkBuildable interface
  * supports setting a child as the titlebar by specifying "titlebar" as
- * the "type" attribute of a <tag class="starttag">child</tag> element.
+ * the "type" attribute of a `&lt;child&gt;` element.
  */
 
 #define MNEMONICS_DELAY 300 /* ms */

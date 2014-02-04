@@ -111,16 +111,16 @@
  * ]|
  *
  * The XML format understood by #GtkBuilder for #GMenuModel consists
- * of a toplevel <tag class="starttag">menu</tag> element, which contains
- * one or more <tag class="starttag">item</tag> elements. Each
- * <tag class="starttag">item</tag> element contains
- * <tag class="starttag">attribute</tag> and <tag class="starttag">link</tag>
+ * of a toplevel `&lt;menu&gt;` element, which contains
+ * one or more `&lt;item&gt;` elements. Each
+ * `&lt;item&gt;` element contains
+ * `&lt;attribute&gt;` and `&lt;link&gt;`
  * elements with a mandatory name attribute.
- * <tag class="starttag">link</tag> elements have the same content
- * model as <tag class="starttag">menu</tag>.
+ * `&lt;link&gt;` elements have the same content
+ * model as `&lt;menu&gt;`.
  *
  * Attribute values can be translated using gettext, like other #GtkBuilder
- * content. <tag class="starttag">attribute</tag> elements can be marked for
+ * content. `&lt;attribute&gt;` elements can be marked for
  * translation with a <literal>translatable="yes"</literal> attribute.
  * It is also possible to specify message context and translator comments,
  * using the context and comments attributes. To make use of this, the

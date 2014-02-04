@@ -200,11 +200,12 @@
  *
  * Since 2.18, GTK+ supports markup for clickable hyperlinks in addition
  * to regular Pango markup. The markup for links is borrowed from HTML, using the
- * <tag>a</tag> with href and title attributes. GTK+ renders links similar to the
+ * `&lt;a&gt;` with href and title attributes. GTK+ renders links similar to the
  * way they appear in web browsers, with colored, underlined text. The title
  * attribute is displayed as a tooltip on the link.
  *
  * An example looks like this:
+ *
  * |[<!-- language="C" -->
  * gtk_label_set_markup (label, "Go to the <a href="http://www.gtk.org" title="&lt;i&gt;Our&lt;/i&gt; website">GTK+ website</a> for more...");
  * ]|
