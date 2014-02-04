@@ -6415,6 +6415,8 @@ do_child_shapes (GdkWindow *window,
   if (merge && window->shape)
     cairo_region_subtract (region, window->shape);
 
+  cairo_region_xor_rectangle (region, &r);
+
   gdk_window_shape_combine_region (window, region, 0, 0);
 }
 
@@ -6535,6 +6537,8 @@ do_child_input_shapes (GdkWindow *window,
     cairo_region_subtract (region, window->shape);
   if (merge && window->input_shape)
     cairo_region_subtract (region, window->input_shape);
+
+  cairo_region_xor_rectangle (region, &r);
 
   gdk_window_input_shape_combine_region (window, region, 0, 0);
 }
