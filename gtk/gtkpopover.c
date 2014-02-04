@@ -606,6 +606,8 @@ gtk_popover_update_shape (GtkPopover *popover)
 
   gtk_widget_shape_combine_region (GTK_WIDGET (popover), region);
   cairo_region_destroy (region);
+
+  gdk_window_set_child_shapes (gtk_widget_get_parent_window (GTK_WIDGET (popover)));
 }
 
 static void
