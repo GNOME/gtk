@@ -51,7 +51,7 @@
  * @Title: Themeable Stock Images
  *
  * Browse the available stock icons using
- * the <application>gtk3-demo</application> application.
+ * the “gtk3-demo” application.
  *
  * An icon factory manages a collection of #GtkIconSet; a #GtkIconSet manages a
  * set of variants of a particular icon (i.e. a #GtkIconSet contains variants for

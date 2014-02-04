@@ -57,8 +57,8 @@
  * The communication between a #GtkSocket and a #GtkPlug follows the
  * <ulink url="http://www.freedesktop.org/Standards/xembed-spec">XEmbed</ulink>
  * protocol. This protocol has also been implemented in other toolkits,
- * e.g. <application>Qt</application>, allowing the same level of
- * integration when embedding a <application>Qt</application> widget
+ * e.g. Qt, allowing the same level of
+ * integration when embedding a Qt widget
  * in GTK+ or vice versa.
  *
  * The #GtkPlug and #GtkSocket widgets are only available when GTK+

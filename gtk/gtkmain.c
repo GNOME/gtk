@@ -243,9 +243,9 @@ gtk_get_micro_version (void)
 /**
  * gtk_get_binary_age:
  *
- * Returns the binary age as passed to <application>libtool</application>
+ * Returns the binary age as passed to `libtool`
  * when building the GTK+ library the process is running against.
- * If <application>libtool</application> means nothing to you, don't
+ * If `libtool` means nothing to you, don't
  * worry about it.
  *
  * Returns: the binary age of the GTK+ library
@@ -261,9 +261,9 @@ gtk_get_binary_age (void)
 /**
  * gtk_get_interface_age:
  *
- * Returns the interface age as passed to <application>libtool</application>
+ * Returns the interface age as passed to `libtool`
  * when building the GTK+ library the process is running against.
- * If <application>libtool</application> means nothing to you, don't
+ * If `libtool` means nothing to you, don't
  * worry about it.
  *
  * Returns: the interface age of the GTK+ library

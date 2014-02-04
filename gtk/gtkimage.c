@@ -124,7 +124,7 @@
  *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. GTK+ comes with a program to avoid this,
- * called <application>gdk-pixbuf-csource</application>. This library
+ * called “gdk-pixbuf-csource”. This library
  * allows you to convert an image into a C variable declaration, which
  * can then be loaded into a #GdkPixbuf using
  * gdk_pixbuf_new_from_inline().
