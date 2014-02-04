@@ -1,6 +1,7 @@
 window1
   "window"
   index: 0
+  name: Page 1
   state: enabled resizable sensitive showing visible
   toolkit: gtk
   <AtkComponent>
@@ -40,110 +41,8 @@ window1
     "filler"
     parent: content_box
     index: 1
-    state: enabled horizontal sensitive showing visible
+    state: enabled horizontal sensitive
     toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
-    close
-      "push button"
-      parent: action_area
-      index: 0
-      name: Close
-      state: enabled focusable sensitive
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-      action 0 keybinding: <Alt>c
-    cancel
-      "push button"
-      parent: action_area
-      index: 1
-      name: Cancel
-      state: enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-      action 0 keybinding: <Alt>c
-    last
-      "push button"
-      parent: action_area
-      index: 2
-      name: Finish
-      state: focusable
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-      action 0 keybinding: <Alt>f
-    back
-      "push button"
-      parent: action_area
-      index: 3
-      name: Go Back
-      state: enabled focusable sensitive
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-      action 0 keybinding: <Alt>b
-    forward
-      "push button"
-      parent: action_area
-      index: 4
-      name: Continue
-      state: focusable showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-      action 0 keybinding: <Alt>o
-    apply
-      "push button"
-      parent: action_area
-      index: 5
-      name: Apply
-      state: enabled focusable sensitive
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-      action 0 keybinding: <Alt>a
