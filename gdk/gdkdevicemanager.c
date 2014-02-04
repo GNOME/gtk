@@ -58,7 +58,7 @@
  * Otherwise either the core or XInput 1 implementations will be used.
  *
  * For simple applications that don't have any special interest in
- * input devices, the so-called <firstterm>client pointer</firstterm>
+ * input devices, the so-called “client pointer”
  * provides a reasonable approximation to a simple setup with a single
  * pointer and keyboard. The device that has been set as the client
  * pointer can be accessed via gdk_device_manager_get_client_pointer().
@@ -124,7 +124,7 @@
  * changes, the #GdkDevice:n-axes property will be notified, and
  * gdk_device_list_axes() will return the new device axes.
  *
- * Devices may also have associated <firstterm>keys</firstterm> or
+ * Devices may also have associated “keys” or
  * macro buttons. Such keys can be globally set to map into normal X
  * keyboard events. The mapping is set using gdk_device_set_key().
  */

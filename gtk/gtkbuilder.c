@@ -61,8 +61,8 @@
  * GtkBuilder parses textual descriptions of user interfaces which are
  * specified in an XML format which can be roughly described by the
  * RELAX NG schema below. We refer to these descriptions as
- * <firstterm>GtkBuilder UI definitions</firstterm> or just
- * <firstterm>UI definitions</firstterm> if the context is clear.
+ * “GtkBuilder UI definitions” or just
+ * “UI definitions” if the context is clear.
  * Do not confuse GtkBuilder UI Definitions with
  * <link linkend="XML-UI">GtkUIManager UI Definitions</link>, which
  * are more limited in scope. It is common to use `.ui`

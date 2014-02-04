@@ -53,9 +53,9 @@
  *
  * Beyond merely rendering a cell, cell renderers can optionally
  * provide active user interface elements. A cell renderer can be
- * <firstterm>activatable</firstterm> like #GtkCellRendererToggle,
+ * “activatable” like #GtkCellRendererToggle,
  * which toggles when it gets activated by a mouse click, or it can be
- * <firstterm>editable</firstterm> like #GtkCellRendererText, which
+ * “editable” like #GtkCellRendererText, which
  * allows the user to edit the text using a #GtkEntry.
  * To make a cell renderer activatable or editable, you have to
  * implement the #GtkCellRendererClass.activate or

@@ -89,7 +89,7 @@
  * `--prefix` or `--sysconfdir` options when
  * configuring GTK+.)
  *
- * The set of these <firstterm>default</firstterm> files
+ * The set of these “default” files
  * can be retrieved with gtk_rc_get_default_files()
  * and modified with gtk_rc_add_default_file() and
  * gtk_rc_set_default_files().
@@ -118,8 +118,8 @@
  * ]|
  *
  * attaches the style <literal>"my-entry-class"</literal> to all
- * widgets  whose <firstterm>widget path</firstterm> matches the
- * <firstterm>pattern</firstterm> <literal>"mywindow.*.GtkEntry"</literal>.
+ * widgets  whose “widget path” matches the
+ * “pattern” <literal>"mywindow.*.GtkEntry"</literal>.
  * That is, all #GtkEntry widgets which are part of a #GtkWindow named
  * <literal>"mywindow"</literal>.
  *
@@ -127,7 +127,7 @@
  * The <literal>"?"</literal> wildcard matches any character, while
  * <literal>"*"</literal> matches zero or more of any character.
  * The three types of matching are against the widget path, the
- * <firstterm>class path</firstterm> and the class hierarchy. Both the
+ * “class path” and the class hierarchy. Both the
  * widget path and the class path consist of a <literal>"."</literal>
  * separated list of all the parents of the widget and the widget itself
  * from outermost to innermost. The difference is that in the widget path,

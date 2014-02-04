@@ -46,14 +46,14 @@
  *
  * The #GtkHandleBox widget allows a portion of a window to be "torn
  * off". It is a bin widget which displays its child and a handle that
- * the user can drag to tear off a separate window (the <firstterm>float
- * window</firstterm>) containing the child widget. A thin
- * <firstterm>ghost</firstterm> is drawn in the original location of the
+ * the user can drag to tear off a separate window (the “float
+ * window”) containing the child widget. A thin
+ * “ghost” is drawn in the original location of the
  * handlebox. By dragging the separate window back to its original
  * location, it can be reattached.
  *
  * When reattaching, the ghost and float window, must be aligned
- * along one of the edges, the <firstterm>snap edge</firstterm>.
+ * along one of the edges, the “snap edge”.
  * This either can be specified by the application programmer
  * explicitly, or GTK+ will pick a reasonable default based
  * on the handle position.

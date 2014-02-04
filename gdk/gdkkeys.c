@@ -65,7 +65,7 @@
  * as a representation of a symbol printed on a physical keyboard key. That is, it
  * contains three pieces of information. First, it contains the hardware keycode;
  * this is an identifying number for a physical key. Second, it contains the
- * <firstterm>level</firstterm> of the key. The level indicates which symbol on the
+ * “level” of the key. The level indicates which symbol on the
  * key will be used, in a vertical direction. So on a standard US keyboard, the key
  * with the number "1" on it also has the exclamation point ("!") character on
  * it. The level indicates whether to use the "1" or the "!" symbol.  The letter

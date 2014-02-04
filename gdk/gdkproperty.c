@@ -28,16 +28,16 @@
  * @Title: Properties and Atoms
  *
  * Each window under X can have any number of associated
- * <firstterm>properties</firstterm> attached to it.
+ * “properties” attached to it.
  * Properties are arbitrary chunks of data identified by
- * <firstterm>atom</firstterm>s. (An <firstterm>atom</firstterm>
+ * “atom”s. (An “atom”
  * is a numeric index into a string table on the X server. They are used
  * to transfer strings efficiently between clients without
  * having to transfer the entire string.) A property
  * has an associated type, which is also identified
  * using an atom.
  *
- * A property has an associated <firstterm>format</firstterm>,
+ * A property has an associated “format”,
  * an integer describing how many bits are in each unit
  * of data inside the property. It must be 8, 16, or 32.
  * When data is transferred between the server and client,

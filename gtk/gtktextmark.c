@@ -69,9 +69,9 @@
  * buffer mutations, because their behavior is defined when text is inserted or
  * deleted. When text containing a mark is deleted, the mark remains in the
  * position originally occupied by the deleted text. When text is inserted at a
- * mark, a mark with <firstterm>left gravity</firstterm> will be moved to the
- * beginning of the newly-inserted text, and a mark with <firstterm>right
- * gravity</firstterm> will be moved to the end.
+ * mark, a mark with “left gravity” will be moved to the
+ * beginning of the newly-inserted text, and a mark with “right
+ * gravity” will be moved to the end.
  *
  * Note that "left" and "right" here refer to logical direction (left
  * is the toward the start of the buffer); in some languages such as

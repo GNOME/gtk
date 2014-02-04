@@ -238,8 +238,8 @@
  *
  * ## Style Properties
  *
- * #GtkWidget introduces <firstterm>style
- * properties</firstterm> - these are basically object properties that are stored
+ * #GtkWidget introduces “style
+ * properties” - these are basically object properties that are stored
  * not on the object, but in the style object associated to the widget. Style
  * properties are set in <link linkend="gtk3-Resource-Files">resource files</link>.
  * This mechanism is used for configuring such things as the location of the
@@ -1843,7 +1843,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * The ::hierarchy-changed signal is emitted when the
    * anchored state of a widget changes. A widget is
-   * <firstterm>anchored</firstterm> when its toplevel
+   * “anchored” when its toplevel
    * ancestor is a #GtkWindow. This signal is emitted when
    * a widget changes from un-anchored to anchored or vice-versa.
    */

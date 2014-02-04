@@ -36,14 +36,14 @@
  * @Title: Selections
  *
  * The X selection mechanism provides a way to transfer arbitrary chunks of
- * data between programs. A <firstterm>selection</firstterm> is a essentially
+ * data between programs. A “selection” is a essentially
  * a named clipboard, identified by a string interned as a #GdkAtom. By
  * claiming ownership of a selection, an application indicates that it will
  * be responsible for supplying its contents. The most common selections are
  * <literal>PRIMARY</literal> and <literal>CLIPBOARD</literal>.
  *
  * The contents of a selection can be represented in a number of formats,
- * called <firstterm>targets</firstterm>. Each target is identified by an atom.
+ * called “targets”. Each target is identified by an atom.
  * A list of all possible targets supported by the selection owner can be
  * retrieved by requesting the special target <literal>TARGETS</literal>. When
  * a selection is retrieved, the data is accompanied by a type (an atom), and

@@ -49,8 +49,8 @@
  * automatically sets up the accelerators for your menus in the ui
  * manager's #GtkAccelGroup.
  *
- * Note that <firstterm>accelerators</firstterm> are different from
- * <firstterm>mnemonics</firstterm>. Accelerators are shortcuts for
+ * Note that “accelerators” are different from
+ * “mnemonics”. Accelerators are shortcuts for
  * activating a menu item; they appear alongside the menu item they're a
  * shortcut for. For example "Ctrl+Q" might appear alongside the "Quit"
  * menu item. Mnemonics are shortcuts for GUI elements such as text

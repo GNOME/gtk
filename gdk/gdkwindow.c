@@ -65,7 +65,7 @@
  * <para id="COMPOSITED-WINDOWS">Normally, the windowing system takes care of rendering the contents
  * of a child window onto its parent window. This mechanism can be
  * intercepted by calling gdk_window_set_composited() on the child
- * window. For a <firstterm>composited</firstterm> window it is the
+ * window. For a “composited” window it is the
  * responsibility of the application to render the window contents at
  * the right spot.</para>
  *
