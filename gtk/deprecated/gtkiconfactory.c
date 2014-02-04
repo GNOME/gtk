@@ -70,12 +70,12 @@
  * gtk_widget_render_icon(). These functions take the theme into account when
  * looking up the icon to use for a given stock ID.
  *
- * <refsect2 id="GtkIconFactory-BUILDER-UI">
- * <title>GtkIconFactory as GtkBuildable</title>
- * <para>
+ * # GtkIconFactory as GtkBuildable # {#GtkIconFactory-BUILDER-UI}
+ *
  * GtkIconFactory supports a custom &lt;sources&gt; element, which can contain
  * multiple &lt;source&gt; elements.
  * The following attributes are allowed:
+ *
  * <variablelist>
  * <varlistentry>
  * <term>stock-id</term>
@@ -120,8 +120,9 @@
  * </para></listitem>
  * </varlistentry>
  * </variablelist>
- * <example>
- * <title>A #GtkIconFactory UI definition fragment.</title>
+ *
+ * ## A #GtkIconFactory UI definition fragment. ##
+ *
  * |[
  * <object class="GtkIconFactory" id="iconfactory1">
  *   <sources>
@@ -137,9 +138,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 

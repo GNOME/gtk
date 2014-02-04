@@ -25,9 +25,8 @@
  * through its action, as they are responsible for activating their
  * related actions.
  *
- * <refsect2>
- * <title>Implementing GtkActivatable</title>
- * <para>
+ * # Implementing GtkActivatable
+ *
  * When extending a class that is already #GtkActivatable; it is only
  * necessary to implement the #GtkActivatable->sync_action_properties()
  * and #GtkActivatable->update() methods and chain up to the parent
@@ -38,9 +37,9 @@
  * the action pointer and boolean flag on your instance, and calling
  * gtk_activatable_do_set_related_action() and
  * gtk_activatable_sync_action_properties() at the appropriate times.
- * </para>
- * <example>
- * <title>A class fragment implementing #GtkActivatable</title>
+ *
+ * ## A class fragment implementing #GtkActivatable
+ *
  * |[<!-- language="C" -->
  *
  * enum {
@@ -253,9 +252,8 @@
  *     foo_bar_set_label (button, gtk_action_get_label (action));
  * 
  *   ...
- * }]|
- * </example>
- * </refsect2>
+ * }
+ * ]|
  */
 
 #include "config.h"

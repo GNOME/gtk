@@ -44,7 +44,8 @@
  * window's menus would be constructed from a combination of two action
  * groups.
  *
- * <para id="Action-Accel">
+ * ## Accelerators ## {#Action-Accel}
+ *
  * Accelerators are handled by the GTK+ accelerator map. All actions are
  * assigned an accelerator path (which normally has the form
  * <literal>&lt;Actions&gt;/group-name/action-name</literal>)
@@ -52,11 +53,9 @@
  * and toolitems take on this accelerator path. The GTK+ accelerator map
  * code makes sure that the correct shortcut is displayed next to the menu
  * item.
- * </para>
  *
- * <refsect2 id="GtkActionGroup-BUILDER-UI">
- * <title>GtkActionGroup as GtkBuildable</title>
- * <para>
+ * # GtkActionGroup as GtkBuildable # {#GtkActionGroup-BUILDER-UI}
+ *
  * The #GtkActionGroup implementation of the #GtkBuildable interface accepts
  * #GtkAction objects as &lt;child&gt; elements in UI definitions.
  *
@@ -68,9 +67,8 @@
  * modifiers and allows to specify accelerators. This is similar to the
  * &lt;accelerator&gt; element of #GtkWidget, the main difference is that
  * it doesn't allow you to specify a signal.
- * </para>
- * <example>
- * <title>A #GtkDialog UI definition fragment.</title>
+ *
+ * ## A #GtkDialog UI definition fragment. ##
  * |[
  * <object class="GtkActionGroup" id="actiongroup">
  *   <child>
@@ -83,8 +81,7 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </refsect2>
+ *
  */
 
 #include "config.h"

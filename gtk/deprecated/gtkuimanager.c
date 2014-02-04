@@ -60,9 +60,8 @@
  * one or more UI definitions, which reference actions from one or more
  * action groups.
  *
- * <refsect2 id="XML-UI">
- * <title>UI Definitions</title>
- * <para>
+ * # UI Definitions # {#XML-UI}
+ *
  * The UI definitions are specified in an XML format which can be
  * roughly described by the following DTD.
  *
@@ -108,6 +107,7 @@
  * <!ATTLIST accelerator  name                      #IMPLIED
  *                        action                    #REQUIRED >
  * ]|
+ *
  * There are some additional restrictions beyond those specified in the
  * DTD, e.g. every toolitem must have a toolbar in its anchestry and
  * every menuitem must have a menubar or popup in its anchestry. Since
@@ -121,8 +121,8 @@
  * enclosed in doublequotes, thus they must not '"' characters or references
  * to the &quot; entity.
  *
- * <example>
- * <title>A UI definition</title>
+ * ## A UI definition ##
+ *
  * |[
  * <ui>
  *   <menubar>
@@ -149,12 +149,12 @@
  *   </toolbar>
  * </ui>
  * ]|
- * </example>
  *
  * The constructed widget hierarchy is very similar to the element tree
  * of the XML, with the exception that placeholders are merged into their
  * parents. The correspondence of XML elements to widgets should be
  * almost obvious:
+ *
  * <variablelist>
  * <varlistentry>
  * <term>menubar</term>
@@ -197,11 +197,9 @@
  * The "position" attribute determines where a constructed widget is positioned
  * wrt. to its siblings in the partially constructed tree. If it is
  * "top", the widget is prepended, otherwise it is appended.
- * </para>
- * </refsect2>
- * <refsect2 id="UI-Merging">
- * <title>UI Merging</title>
- * <para>
+ *
+ * # UI Merging # {#UI-Merging}
+ *
  * The most remarkable feature of #GtkUIManager is that it can overlay a set
  * of menuitems and toolitems over another one, and demerge them later.
  *
@@ -211,20 +209,16 @@
  * has the path <literal>/ui/menubar/JustifyMenu/Left</literal> and the
  * toolitem with the same name has path
  * <literal>/ui/toolbar1/JustifyToolItems/Left</literal>.
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Accelerators</title>
- * <para>
+ *
+ * # Accelerators #
+ *
  * Every action has an accelerator path. Accelerators are installed together with
  * menuitem proxies, but they can also be explicitly added with &lt;accelerator&gt;
  * elements in the UI definition. This makes it possible to have accelerators for
  * actions even if they have no visible proxies.
- * </para>
- * </refsect2>
- * <refsect2 id="Smart-Separators">
- * <title>Smart Separators</title>
- * <para>
+ *
+ * # Smart Separators # {#Smart-Separators}
+ *
  * The separators created by #GtkUIManager are "smart", i.e. they do not show up
  * in the UI unless they end up between two visible menu or tool items. Separators
  * which are located at the very beginning or end of the menu or toolbar
@@ -236,14 +230,13 @@
  * For separators in toolbars, you can set <literal>expand="true"</literal> to
  * turn them from a small, visible separator to an expanding, invisible one.
  * Toolitems following an expanding separator are effectively right-aligned.
- * </para>
- * </refsect2>
- * <refsect2>
- * <title>Empty Menus</title>
- * <para>
+ *
+ * # Empty Menus
+ *
  * Submenus pose similar problems to separators inconnection with merging. It is
  * impossible to know in advance whether they will end up empty after merging.
  * #GtkUIManager offers two ways to treat empty submenus:
+ *
  * <itemizedlist>
  * <listitem>
  * <para>make them disappear by hiding the menu item they're attached to</para>
@@ -252,13 +245,12 @@
  * <para>add an insensitive "Empty" item</para>
  * </listitem>
  * </itemizedlist>
+ *
  * The behaviour is chosen based on the "hide_if_empty" property of the action
  * to which the submenu is associated.
- * </para>
- * </refsect2>
- * <refsect2 id="GtkUIManager-BUILDER-UI">
- * <title>GtkUIManager as GtkBuildable</title>
- * <para>
+ *
+ * # GtkUIManager as GtkBuildable # {#GtkUIManager-BUILDER-UI}
+ *
  * The GtkUIManager implementation of the GtkBuildable interface accepts
  * GtkActionGroup objects as &lt;child&gt; elements in UI definitions.
  *
@@ -269,8 +261,8 @@
  * other parts of the constructed user interface with the help of the
  * "constructor" attribute. See the example below.
  *
- * <example>
- * <title>An embedded GtkUIManager UI definition</title>
+ * ## An embedded GtkUIManager UI definition
+ *
  * |[
  * <object class="GtkUIManager" id="uiman">
  *   <child>
@@ -295,9 +287,6 @@
  *   </child>
  * </object>
  * ]|
- * </example>
- * </para>
- * </refsect2>
  */
 
 
