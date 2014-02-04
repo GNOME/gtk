@@ -97,6 +97,11 @@ Release notes for 3.12
   and borders. This may require some adjustments in applications that
   were making assumptions about containers never rendering backgrounds.
 
+* GTK+ is now choosing an RGBA visual for its windows by default if
+  one is available. This can cause problems for applications which make
+  assumptions about the default visual. You can set GDK_RGBA=0 in the
+  environment to force GTK+ to use the default X11 visual, as before.
+
 Release notes for 3.10
 ======================
 
