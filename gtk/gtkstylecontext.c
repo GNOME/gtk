@@ -3855,9 +3855,7 @@ gtk_render_arrow (GtkStyleContext *context,
  * Renders the background of an element.
  *
  * Typical background rendering, showing the effect of
- * <parameter>background-image</parameter>,
- * <parameter>border-width</parameter> and
- * <parameter>border-radius</parameter>:
+ * `background-image`, `border-width` and `border-radius`:
  *
  * ![](background.png)
  *
@@ -3903,11 +3901,8 @@ gtk_render_background (GtkStyleContext *context,
  *
  * Renders a frame around the rectangle defined by @x, @y, @width, @height.
  *
- * Examples of frame rendering, showing the effect of
- * <parameter>border-image</parameter>,
- * <parameter>border-color</parameter>,
- * <parameter>border-width</parameter>,
- * <parameter>border-radius</parameter> and junctions:
+ * Examples of frame rendering, showing the effect of `border-image`,
+ * `border-color`, `border-width`, `border-radius` and junctions:
  *
  * ![](frames.png)
  *

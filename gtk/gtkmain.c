@@ -833,11 +833,11 @@ gtk_get_option_group (gboolean open_default_display)
 
 /**
  * gtk_init_with_args:
- * @argc: (inout): Address of the <parameter>argc</parameter> parameter of
+ * @argc: (inout): Address of the `argc` parameter of
  *     your main() function (or 0 if @argv is %NULL). This will be changed if 
  *     any arguments were handled.
  * @argv: (array length=argc) (inout) (allow-none): Address of the
- *     <parameter>argv</parameter> parameter of main(), or %NULL. Any options
+ *     `argv` parameter of main(), or %NULL. Any options
  *     understood by GTK+ are stripped before return.
  * @parameter_string: (allow-none): a string which is displayed in
  *    the first line of `--help` output, after
@@ -952,11 +952,11 @@ gtk_parse_args (int    *argc,
 
 /**
  * gtk_init_check:
- * @argc: (inout): Address of the <parameter>argc</parameter> parameter of
+ * @argc: (inout): Address of the `argc` parameter of
  *     your main() function (or 0 if @argv is %NULL). This will be changed if 
  *     any arguments were handled.
  * @argv: (array length=argc) (inout) (allow-none): Address of the
- *     <parameter>argv</parameter> parameter of main(), or %NULL. Any options
+ *     `argv` parameter of main(), or %NULL. Any options
  *     understood by GTK+ are stripped before return.
  *
  * This function does the same work as gtk_init() with only a single
@@ -986,11 +986,11 @@ gtk_init_check (int    *argc,
 
 /**
  * gtk_init:
- * @argc: (inout): Address of the <parameter>argc</parameter> parameter of
+ * @argc: (inout): Address of the `argc` parameter of
  *     your main() function (or 0 if @argv is %NULL). This will be changed if 
  *     any arguments were handled.
  * @argv: (array length=argc) (inout) (allow-none): Address of the
- *     <parameter>argv</parameter> parameter of main(), or %NULL. Any options
+ *     `argv` parameter of main(), or %NULL. Any options
  *     understood by GTK+ are stripped before return.
  *
  * Call this function before using any other GTK+ functions in your GUI

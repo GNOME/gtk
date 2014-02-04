@@ -7181,7 +7181,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @path string of "`/`"
    * (a slash):  this lets you type <keycap>/</keycap> and
    * immediately type a path name.  On Unix systems, this is bound to
-   * <keycap>~</keycap> (tilde) with a <parameter>path</parameter> string
+   * <keycap>~</keycap> (tilde) with a @path string
    * of "~" itself for access to home directories.
    */
   signals[LOCATION_POPUP] =

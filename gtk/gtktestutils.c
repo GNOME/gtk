@@ -41,10 +41,10 @@
 
 /**
  * gtk_test_init:
- * @argcp: Address of the <parameter>argc</parameter> parameter of the
+ * @argcp: Address of the `argc` parameter of the
  *        main() function. Changed if any arguments were handled.
  * @argvp: (inout) (array length=argcp): Address of the 
- *        <parameter>argv</parameter> parameter of main().
+ *        `argv` parameter of main().
  *        Any parameters understood by g_test_init() or gtk_init() are
  *        stripped before return.
  * @...: currently unused
