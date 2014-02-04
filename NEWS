@@ -1,3 +1,81 @@
+Overview of Changes in GTK+ 3.11.4 to 3.11.5
+============================================
+
+* GtkPopover: A new widget that is can be used for transient
+  views, as an alternative to menus or dialogs.
+
+* Dialogs:
+ - Dialogs have been modernized, can use a header bar now
+ - Built-in dialogs react to a setting, gtk-dialogs-use-header
+   for this, dialogs derived from GtkDialog: default to no headerbar
+ - GtkAssistant also respects the setting
+
+* OS X:
+ - Better menu integration. Items such as 'Hide', 'Hide Others'
+   and 'Show All' are now handled specially
+ - GTK+ provides a default application menu now
+
+* Theming:
+ - GTK+ now uses RGBA visuals by default
+ - Notebook tabs now support a prelight state
+ - Reorderable notebook tabs can be themed differently
+
+* Documentation:
+ - The API documentation has seen numerous fixes and improvements
+ - Docbook markup is being phased out in favor of markdown
+
+* Bugs fixed:
+ 350190 Need specific icon for GTK_ICON_SIZE_SMALL_TOOLBAR for...
+ 566945 gtk_widget_override_color() documentation should menti...
+ 630217 RGBA visual by default
+ 634793 Use g_object_notify_by_pspec() / g_object_class_instal...
+ 636594 The default value of the property 'logo' in GtkAboutDi...
+ 665928 GtkWindow: Add comment about floating reference
+ 692931 The list of printers should be searchable/sortable
+ 699224 file chooser does not respect 12/24-hour clock setting
+ 704456 Synthesized crossing events don't have correct device ...
+ 711298 "Edit Scheduled Transaction" window way too modal
+ 720059 use headerbars in dialogs
+ 720552 Provide a more "native" Mac OS application menu
+ 721895 Remove GtkIconCache
+ 722429 docs/comments: Fix spelling of 'explicitly'
+ 722515 csd menu icon should use default window icon if per-wi...
+ 722574 GtkAboutDialog doesn't get headerbars when used from JS
+ 722588 GtkStack: add gtk_stack_get_child_by_name()
+ 722638 Version the gio-2.0 and wayland-client requirements (g...
+ 722642 Use symbolic icon for file chooser
+ 722722 Fix vertical alignment of labels in "Paper" section of...
+ 722919 Setting custom titlebar on realized window looks weird
+ 723119 docs: use |[ ]| instead of <programlisting></programli...
+ 723121 GtkPlacesSidebar: pressing "eject" icon does not power...
+ 723157 Merge GtkFileChooserWidget and GtkFileChooserDefault
+ 723159 CSD shadows are clipped
+ 723181 Use GtkPopover for GtkScaleButton
+ 723183 GtkStyleContext: don't use disconnect_by_func()
+ 723212 Use headerbar in GtkAssistant
+ 723366 GtkFileChooser crashes due to a signal connection left...
+ 723390 gdkwindow: Use an InputOnly window for focus_window
+ 723402 widget: Fix set_focus_child handling during focus changes
+ 723555 Decode extension names in X11 error handler
+
+* Translation updates:
+ Aragonese
+ Brazilian Portuguese
+ Estonian
+ Galician
+ Greek
+ Hebrew
+ Indonesian
+ Kazakh
+ Lithuanian
+ Scottish Gaelic
+ Simplified Chinese
+ Spanish
+ Tajik
+ Traditional Chinese
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.11.3 to 3.11.4
 ============================================
 
