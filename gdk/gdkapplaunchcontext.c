@@ -34,8 +34,9 @@
  * handles launching an application in a graphical context. It provides
  * startup notification and allows to launch applications on a specific
  * screen or workspace.
- * <example>
- * <title>Launching an application</title>
+ *
+ * ## Launching an application
+ *
  * |[<!-- language="C" -->
  * GdkAppLaunchContext *context;
  *
@@ -49,7 +50,6 @@
  *
  * g_object_unref (context);
  * ]|
- * </example>
  */
 
 

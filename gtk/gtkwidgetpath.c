@@ -40,8 +40,9 @@
  * updated on widget hierarchy changes.
  *
  * The widget path generation is generally simple:
- * <example>
- * <title>Defining a button within a window</title>
+ *
+ * ## Defining a button within a window
+ *
  * |[<!-- language="C" -->
  * {
  *   GtkWidgetPath *path;
@@ -51,14 +52,13 @@
  *   gtk_widget_path_append_type (path, GTK_TYPE_BUTTON);
  * }
  * ]|
- * </example>
  *
  * Although more complex information, such as widget names, or
  * different classes (property that may be used by other widget
  * types) and intermediate regions may be included:
  *
- * <example>
- * <title>Defining the first tab widget in a notebook</title>
+ * ## Defining the first tab widget in a notebook
+ *
  * |[<!-- language="C" -->
  * {
  *   GtkWidgetPath *path;
@@ -73,7 +73,6 @@
  *   gtk_widget_path_iter_set_name (path, pos, "first tab label");
  * }
  * ]|
- * </example>
  *
  * All this information will be used to match the style information
  * that applies to the described widget.

@@ -74,8 +74,9 @@
  * so by default does not receive events. If you want to receive events
  * on the image, such as button clicks, place the image inside a
  * #GtkEventBox, then connect to the event signals on the event box.
- * <example>
- * <title>Handling button press events on a #GtkImage.</title>
+ *
+ * ## Handling button press events on a #GtkImage.
+ *
  * |[<!-- language="C" -->
  *   static gboolean
  *   button_press_callback (GtkWidget      *event_box,
@@ -113,7 +114,6 @@
  *     return image;
  *   }
  * ]|
- * </example>
  *
  * When handling events on the event box, keep in mind that coordinates
  * in the image may be different from event box coordinates due to

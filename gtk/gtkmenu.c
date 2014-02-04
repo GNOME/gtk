@@ -43,17 +43,16 @@
  * gtk_menu_popup() function.  The example below shows how an application
  * can pop up a menu when the 3rd mouse button is pressed.  
  *
- * <example>
- * <title>Connecting the popup signal handler.</title>
+ * ## Connecting the popup signal handler.
+ *
  * |[<!-- language="C" -->
  *   /<!---->* connect our handler which will popup the menu *<!---->/
  *   g_signal_connect_swapped (window, "button_press_event",
  *	G_CALLBACK (my_popup_handler), menu);
  * ]|
- * </example>
  *
- * <example>
- * <title>Signal handler which displays a popup menu.</title>
+ * ## Signal handler which displays a popup menu.
+ *
  * |[<!-- language="C" -->
  * static gint
  * my_popup_handler (GtkWidget *widget, GdkEvent *event)
@@ -80,11 +79,10 @@
  *           return TRUE;
  *         }
  *     }
- * 
+ *
  *   return FALSE;
  * }
  * ]|
- * </example>
  */
 
 #include "config.h"

@@ -60,8 +60,8 @@
  * background color before sending the expose event, and that
  * drawing is implicitly clipped to the exposed area.
  *
- * <example>
- * <title>Simple GtkDrawingArea usage</title>
+ * ## Simple GtkDrawingArea usage
+ *
  * |[<!-- language="C" -->
  * gboolean
  * draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
@@ -91,7 +91,6 @@
  *   g_signal_connect (G_OBJECT (drawing_area), "draw",
  *                     G_CALLBACK (draw_callback), NULL);
  * ]|
- * </example>
  *
  * Draw signals are normally delivered when a drawing area first comes
  * onscreen, or when it's covered by another window and then uncovered.

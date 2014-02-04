@@ -73,8 +73,8 @@
  * The application can set the position of the slider as if it were set
  * by the user, by calling gtk_paned_set_position().
  *
- * <example>
- * <title>Creating a paned widget with minimum sizes.</title>
+ * ## Creating a paned widget with minimum sizes.
+ *
  * |[<!-- language="C" -->
  * GtkWidget *hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
  * GtkWidget *frame1 = gtk_frame_new (NULL);
@@ -90,7 +90,6 @@
  * gtk_paned_pack2 (GTK_PANED (hpaned), frame2, FALSE, FALSE);
  * gtk_widget_set_size_request (frame2, 50, -1);
  * ]|
- * </example>
  */
 
 enum {

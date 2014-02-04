@@ -49,8 +49,9 @@
  *
  * Rendering a Pango layout is done most simply with pango_cairo_show_layout();
  * you can also draw pieces of the layout with pango_cairo_show_layout_line().
- * <example id="rotated-example">
- * <title>Draw transformed text with Pango and cairo</title>
+ *
+ * ## Draw transformed text with Pango and cairo ## {#rotated-example}
+ *
  * <!-- Note that this example is basically the same as
  *      demos/gtk-demo/rotated_text.c -->
  * |[<!-- language="C" -->
@@ -117,7 +118,7 @@
  * g_object_unref (layout);
  * g_object_unref (context);
  * ]|
- * </example>
+ *
  * <figure>
  *   <title>Output of <xref linkend="rotated-example"/></title>
  *   <graphic fileref="rotated-text.png" format="PNG"/>

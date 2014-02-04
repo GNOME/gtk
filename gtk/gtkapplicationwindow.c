@@ -78,7 +78,8 @@
  * also be shown as part of client-side window decorations, e.g. by
  * using gtk_header_bar_set_show_close_button().
  *
- * <example><title>A GtkApplicationWindow with a menubar</title>
+ * ## A GtkApplicationWindow with a menubar
+ *
  * |[<!-- language="C" -->
  * app = gtk_application_new ();
  *
@@ -100,9 +101,9 @@
  *
  * window = gtk_application_window_new (app);
  * ]|
- * </example>
  *
- * <example><title>Handling fallback yourself</title>
+ * ## Handling fallback yourself
+ *
  * |[<!-- language="C" -->
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/sunny.c">
  *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>

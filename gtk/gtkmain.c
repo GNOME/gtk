@@ -53,8 +53,8 @@
  * #GtkFileChooserDialog. After a callback finishes, GTK+ will return to the
  * main loop and await more user input.
  *
- * <example>
- * <title>Typical main() function for a GTK+ application</title>
+ * ## Typical main() function for a GTK+ application
+ *
  * |[<!-- language="C" -->
  * int
  * main (int argc, char **argv)
@@ -81,7 +81,6 @@
  *   return 0;
  * }
  * ]|
- * </example>
  *
  * It's OK to use the GLib main loop directly instead of gtk_main(), though it
  * involves slightly more typing. See #GMainLoop in the GLib documentation.
@@ -1247,8 +1246,8 @@ gtk_main_quit (void)
  * This can be used to update the UI and invoke timeouts etc.
  * while doing some time intensive computation.
  *
- * <example>
- * <title>Updating the UI during a long computation</title>
+ * ## Updating the UI during a long computation
+ *
  * |[<!-- language="C" -->
  *  /&ast; computation going on... &ast;/
  *
@@ -1257,7 +1256,6 @@ gtk_main_quit (void)
  *
  *  /&ast; ...computation continued &ast;/
  * ]|
- * </example>
  *
  * Returns: %TRUE if any events are pending, %FALSE otherwise
  */
@@ -1804,8 +1802,8 @@ gtk_main_do_event (GdkEvent *event)
  * of a window. Of course you should not do this as the user expects
  * a reaction from clicking the close icon of the window...
  *
- * <example>
- * <title>A persistent window</title>
+ * ## A persistent window
+ *
  * |[<!-- language="C" -->
  * #include <gtk/gtk.h>
  *
@@ -1834,7 +1832,6 @@ gtk_main_do_event (GdkEvent *event)
  *   return 0;
  * }
  * ]|
- * </example>
  *
  * Returns: %TRUE
  */

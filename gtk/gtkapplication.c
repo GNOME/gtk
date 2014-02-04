@@ -93,13 +93,13 @@
  * <graphic fileref="bloatpad-xfce.png" format="PNG"/>
  * </figure>
  *
- * <example id="gtkapplication"><title>A simple application</title>
+ * ## A simple application ## {#gtkapplication}
+ *
  * |[<!-- language="C" -->
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/bloatpad.c">
  *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * ]|
- * </example>
  *
  * GtkApplication optionally registers with a session manager
  * of the users session (if you set the #GtkApplication:register-session

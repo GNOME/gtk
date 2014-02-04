@@ -33,8 +33,8 @@
  * by default on the level bar: #GTK_LEVEL_BAR_OFFSET_LOW and
  * #GTK_LEVEL_BAR_OFFSET_HIGH, with values 0.25 and 0.75 respectively.
  *
- * <example>
- * <title>Adding a custom offset on the bar</title>
+ * ## Adding a custom offset on the bar
+ *
  * |[<!-- language="C" -->
  *
  * static GtkWidget *
@@ -66,7 +66,6 @@
  *   return level_bar;
  * }
  * ]|
- * </example>
  *
  * The default interval of values is between zero and one, but it's possible to
  * modify the interval using gtk_level_bar_set_min_value() and

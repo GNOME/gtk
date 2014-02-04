@@ -114,8 +114,8 @@
  * easier, the second is much more common, as you often get paths from
  * callbacks.
  *
- * <example>
- * <title>Acquiring a #GtkTreeIter-struct</title>
+ * ## Acquiring a #GtkTreeIter-struct
+ *
  * |[<!-- language="C" -->
  *  /&ast; Three ways of getting the iter pointing to the location &ast;/
  * GtkTreePath *path;
@@ -137,7 +137,6 @@
  * parent_iter = iter;
  * gtk_tree_model_iter_nth_child (model, &iter, &parent_iter, 5);
  * ]|
- * </example>
  *
  * This second example shows a quick way of iterating through a list
  * and getting a string and an integer from each row. The
@@ -145,8 +144,8 @@
  * shown, as it is specific to the #GtkListStore. For information on
  * how to write such a function, see the #GtkListStore documentation.
  *
- * <example>
- * <title>Reading data from a #GtkTreeModel</title>
+ * ## Reading data from a #GtkTreeModel
+ *
  * |[<!-- language="C" -->
  * enum
  * {
@@ -192,7 +191,6 @@
  *    row_count++;
  *  }
  * ]|
- * </example>
  *
  * The #GtkTreeModel interface contains two methods for reference
  * counting: gtk_tree_model_ref_node() and gtk_tree_model_unref_node().

@@ -85,8 +85,8 @@
  * you are building your application against. At runtime, use type-check
  * macros like GDK_IS_X11_DISPLAY() to find out which backend is in use:
  *
- * <example id="backend-specific">
- * <title>Backend-specific code</title>
+ * ## Backend-specific code ## {#backend-specific}
+ *
  * |[<!-- language="C" -->
  * #ifdef GDK_WINDOWING_X11
  *   if (GDK_IS_X11_DISPLAY (display))
@@ -104,7 +104,6 @@
  * #endif
  *   g_error ("Unsupported GDK backend");
  * ]|
- * </example>
  */
 
 

@@ -46,8 +46,8 @@
  * The correct way to create a group of radio menu items is approximatively
  * this:
  *
- * <example>
- * <title>How to create a group of radio menu items.</title>
+ * ## How to create a group of radio menu items.
+ *
  * |[<!-- language="C" -->
  * GSList *group = NULL;
  * GtkWidget *item;
@@ -61,9 +61,7 @@
  *     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
  * }
  * ]|
- * </example>
  */
-
 
 struct _GtkRadioMenuItemPrivate
 {

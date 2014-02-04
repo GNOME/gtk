@@ -70,8 +70,8 @@
  * that button.  This widget does not support setting the
  * #GtkFileChooser:select-multiple property to %TRUE.
  *
- * <example>
- * <title>Create a button to let the user select a file in /etc</title>
+ * ## Create a button to let the user select a file in /etc
+ *
  * |[<!-- language="C" -->
  * {
  *   GtkWidget *button;
@@ -82,7 +82,6 @@
  *                                        "/etc");
  * }
  * ]|
- * </example>
  *
  * The #GtkFileChooserButton supports the #GtkFileChooserAction<!-- -->s
  * %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.

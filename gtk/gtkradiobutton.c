@@ -68,8 +68,8 @@
  * The group list does not need to be freed, as each #GtkRadioButton will remove
  * itself and its list item when it is destroyed.
  *
- * <example>
- * <title>How to create a group of two radio buttons.</title>
+ * ## How to create a group of two radio buttons.
+ *
  * |[<!-- language="C" -->
  * void create_radio_buttons (void) {
  *
@@ -96,7 +96,6 @@
  *    return;
  * }
  * ]|
- * </example>
  *
  * When an unselected button in the group is clicked the clicked button
  * receives the #GtkToggleButton::toggled signal, as does the previously

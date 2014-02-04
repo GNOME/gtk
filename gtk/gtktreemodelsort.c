@@ -50,8 +50,8 @@
  * simply put the same model in each widget, then sorting the first would
  * sort the second.
  *
- * <example>
- * <title>Using a #GtkTreeModelSort</title>
+ * ## Using a #GtkTreeModelSort
+ *
  * |[<!-- language="C" -->
  * {
  *   GtkTreeView *tree_view1;
@@ -78,7 +78,6 @@
  *                                         COLUMN_1, GTK_SORT_DESCENDING);
  * }
  * ]|
- * </example>
  *
  * To demonstrate how to access the underlying child model from the sort
  * model, the next example will be a callback for the #GtkTreeSelection
@@ -86,8 +85,8 @@
  * from COLUMN_1 of the model.  We then modify the string, find the same
  * selected row on the child model, and change the row there.
  *
- * <example>
- * <title>Accessing the child model of in a selection changed callback</title>
+ * ## Accessing the child model of in a selection changed callback
+ *
  * |[<!-- language="C" -->
  * void
  * selection_changed (GtkTreeSelection *selection, gpointer data)
@@ -131,7 +130,6 @@
  *   g_free (modified_data);
  * }
  * ]|
- * </example>
  */
 
 

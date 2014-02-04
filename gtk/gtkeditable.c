@@ -37,8 +37,8 @@
  * the following handler to #GtkEditable::insert-text, an application
  * can convert all entry into a widget into uppercase.
  *
- * <example>
- * <title>Forcing entry to uppercase.</title>
+ * ## Forcing entry to uppercase.
+ *
  * |[<!-- language="C" -->
  * #include <ctype.h>;
  *
@@ -62,7 +62,6 @@
  *   g_free (result);
  * }
  * ]|
- * </example>
  */
 
 #include "config.h"

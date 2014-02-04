@@ -3706,10 +3706,9 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
  * on or off, and %GTK_STATE_FLAG_INCONSISTENT determines whether it
  * should be marked as undefined.
  *
- * <example>
- * <title>Typical checkmark rendering</title>
+ * Typical checkmark rendering:
+ *
  * ![](checks.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -3757,10 +3756,9 @@ gtk_render_check (GtkStyleContext *context,
  * state will determine whether the option is on or off, and
  * %GTK_STATE_FLAG_INCONSISTENT whether it should be marked as undefined.
  *
- * <example>
- * <title>Typical option mark rendering</title>
+ * Typical option mark rendering:
+ *
  * ![](options.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -3805,10 +3803,9 @@ gtk_render_option (GtkStyleContext *context,
  *
  * Renders an arrow pointing to @angle.
  *
- * <example>
- * <title>Typical arrow rendering at 0, 1&solidus;2 &pi;, &pi; and 3&solidus;2 &pi;</title>
+ * Typical arrow rendering at 0, 1&solidus;2 &pi;, &pi; and 3&solidus;2 &pi;:
+ *
  * ![](arrows.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -3857,13 +3854,12 @@ gtk_render_arrow (GtkStyleContext *context,
  *
  * Renders the background of an element.
  *
- * <example>
- * <title>Typical background rendering, showing the effect of
+ * Typical background rendering, showing the effect of
  * <parameter>background-image</parameter>,
  * <parameter>border-width</parameter> and
- * <parameter>border-radius</parameter></title>
+ * <parameter>border-radius</parameter>:
+ *
  * ![](background.png)
- * </example>
  *
  * Since: 3.0.
  **/
@@ -3907,15 +3903,13 @@ gtk_render_background (GtkStyleContext *context,
  *
  * Renders a frame around the rectangle defined by @x, @y, @width, @height.
  *
- * <example>
- * <title>Examples of frame rendering, showing the effect of
+ * Examples of frame rendering, showing the effect of
  * <parameter>border-image</parameter>,
  * <parameter>border-color</parameter>,
  * <parameter>border-width</parameter>,
- * <parameter>border-radius</parameter> and
- * junctions</title>
+ * <parameter>border-radius</parameter> and junctions:
+ *
  * ![](frames.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -3961,10 +3955,9 @@ gtk_render_frame (GtkStyleContext *context,
  * defined by @x, @y, @width, @height. The state %GTK_STATE_FLAG_ACTIVE
  * determines whether the expander is collapsed or expanded.
  *
- * <example>
- * <title>Typical expander rendering</title>
+ * Typical expander rendering:
+ *
  * ![](expanders.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -4007,10 +4000,10 @@ gtk_render_expander (GtkStyleContext *context,
  * @height: rectangle height
  *
  * Renders a focus indicator on the rectangle determined by @x, @y, @width, @height.
- * <example>
- * <title>Typical focus rendering</title>
+ *
+ * Typical focus rendering:
+ *
  * ![](focus.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -4134,10 +4127,9 @@ gtk_render_line (GtkStyleContext *context,
  * @width, @height. @orientation defines whether the slider is vertical
  * or horizontal.
  *
- * <example>
- * <title>Typical slider rendering</title>
+ * Typical slider rendering:
+ *
  * ![](sliders.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -4188,10 +4180,9 @@ gtk_render_slider (GtkStyleContext *context,
  * for %GTK_POS_TOP and %GTK_POS_BOTTOM gap sides, and Y coordinates for
  * %GTK_POS_LEFT and %GTK_POS_RIGHT.
  *
- * <example>
- * <title>Typical rendering of a frame with a gap</title>
+ * Typical rendering of a frame with a gap:
+ *
  * ![](frame-gap.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -4251,10 +4242,9 @@ gtk_render_frame_gap (GtkStyleContext *context,
  * defined by @x, @y, @width, @height. The side where the extension
  * connects to is defined by @gap_side.
  *
- * <example>
- * <title>Typical extension rendering</title>
+ * Typical extension rendering:
+ *
  * ![](extensions.png)
- * </example>
  *
  * Since: 3.0
  **/
@@ -4301,10 +4291,9 @@ gtk_render_extension (GtkStyleContext *context,
  * #GtkWindow<!-- -->'s resize grip), in the rectangle
  * determined by @x, @y, @width, @height.
  *
- * <example>
- * <title>Handles rendered for the paned and grip classes</title>
+ * Handles rendered for the paned and grip classes:
+ *
  * ![](handles.png)
- * </example>
  *
  * Since: 3.0
  **/

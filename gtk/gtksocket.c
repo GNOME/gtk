@@ -68,8 +68,8 @@
  * Before using this function, the socket must have been realized,
  * and for hence, have been added to its parent.
  *
- * <example>
- * <title>Obtaining the window ID of a socket.</title>
+ * ## Obtaining the window ID of a socket.
+ *
  * |[<!-- language="C" -->
  * GtkWidget *socket = gtk_socket_new (<!-- -->);
  * gtk_widget_show (socket);
@@ -82,7 +82,6 @@
  * g_print ("The ID of the sockets window is %#x\n",
  *          gtk_socket_get_id (socket));
  * ]|
- * </example>
  *
  * Note that if you pass the window ID of the socket to another
  * process that will create a plug in the socket, you must make

@@ -58,8 +58,8 @@
  *
  * To simply switch the state of a toggle button, use gtk_toggle_button_toggled().
  *
- * <example>
- * <title>Creating two #GtkToggleButton widgets.</title>
+ * ## Creating two #GtkToggleButton widgets.
+ *
  * |[<!-- language="C" -->
  * void make_toggles (void) {
  *    GtkWidget *dialog, *toggle1, *toggle2;
@@ -85,7 +85,6 @@
  *    gtk_widget_show_all (dialog);
  * }
  * ]|
- * </example>
  */
 
 

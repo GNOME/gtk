@@ -52,11 +52,11 @@
  * own.  Instead, you should use the functions that work on a
  * #GtkFileChooser.
  *
- * <example id="gtkfilechooser-typical-usage">
- * <title>Typical usage</title>
+ * ## Typical usage ## {#gtkfilechooser-typical-usage}
+ *
  * In the simplest of cases, you can the following code to use
  * #GtkFileChooserDialog to select a file for opening:
- * <para>
+ *
  * |[
  * GtkWidget *dialog;
  *
@@ -78,9 +78,9 @@
  *
  * gtk_widget_destroy (dialog);
  * ]|
- * </para>
+ *
  * To use a dialog for saving, you can use this:
- * <para>
+ *
  * |[
  * GtkWidget *dialog;
  *
@@ -108,14 +108,10 @@
  *
  * gtk_widget_destroy (dialog);
  * ]|
- * </para>
- * </example>
  *
- * ## Setting up a file chooser dialog
+ * ## Setting up a file chooser dialog ## {#gtkfilechooserdialog-setting-up}
  *
- * <para id="gtkfilechooserdialog-setting-up">
  * There are various cases in which you may need to use a #GtkFileChooserDialog:
- * </para>
  *
  * - To select a file for opening. Use #GTK_FILE_CHOOSER_ACTION_OPEN.
  *
@@ -138,13 +134,13 @@
  * i.e. when you are doing a Save As command and you already
  * have a file saved somewhere.
 
- * ## Response Codes
+ * ## Response Codes ## {#gtkfilechooserdialog-responses}
  *
- * <para id="gtkfilechooserdialog-response-codes">
  * #GtkFileChooserDialog inherits from #GtkDialog, so buttons that
  * go in its action area have response codes such as
  * #GTK_RESPONSE_ACCEPT and #GTK_RESPONSE_CANCEL.  For example, you
  * could call gtk_file_chooser_dialog_new() as follows:
+ *
  * |[
  * GtkWidget *dialog;
  *
@@ -155,16 +151,14 @@
  *                                       _("_Open"), GTK_RESPONSE_ACCEPT,
  *                                       NULL);
  * ]|
- * </para>
  *
- * <para id="gtkfilechooserdialog-responses">
  * This will create buttons for "Cancel" and "Open" that use stock
  * response identifiers from #GtkResponseType.  For most dialog
  * boxes you can use your own custom response codes rather than the
  * ones in #GtkResponseType, but #GtkFileChooserDialog assumes that
  * its "accept"-type action, e.g. an "Open" or "Save" button,
  * will have one of the following response codes:
- * </para>
+ *
  * - #GTK_RESPONSE_ACCEPT
  * - #GTK_RESPONSE_OK
  * - #GTK_RESPONSE_YES

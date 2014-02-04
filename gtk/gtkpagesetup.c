@@ -48,8 +48,8 @@
  * or use gtk_print_run_page_setup_dialog() to show the page setup dialog
  * and receive the resulting page setup.
  *
- * <example>
- * <title>A page setup dialog</title>
+ * ## A page setup dialog
+ *
  * |[<!-- language="C" -->
  * static GtkPrintSettings *settings = NULL;
  * static GtkPageSetup *page_setup = NULL;
@@ -71,7 +71,6 @@
  *   page_setup = new_page_setup;
  * }
  * ]|
- * </example>
  *
  * Printing support was added in GTK+ 2.10.
  */

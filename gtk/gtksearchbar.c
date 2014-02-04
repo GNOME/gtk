@@ -54,14 +54,13 @@
  * The following example shows you how to create a more complex search
  * entry.
  *
- * <example>
- * <title>Creating a search bar</title>
+ * ## Creating a search bar
+ *
  * |[<!-- language="C" -->
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/search-bar.c">
  *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * ]|
- * </example>
  *
  * Since: 3.10
  */
@@ -166,8 +165,8 @@ preedit_changed_cb (GtkEntry  *entry,
  * gtk_search_bar_connect_entry(), this function will return
  * immediately with a warning.
  *
- * <example>
- * <title>Showing the search bar on key presses</title>
+ * ## Showing the search bar on key presses
+ *
  * |[<!-- language="C" -->
  * static gboolean
  * window_key_press_event_cb (GtkWidget *widget,
@@ -180,7 +179,6 @@ preedit_changed_cb (GtkEntry  *entry,
  * g_signal_connect (window, "key-press-event",
  *                   G_CALLBACK (window_key_press_event_cb), search_bar);
  * ]|
- * </example>
  *
  * Return value: %GDK_EVENT_STOP if the key press event resulted
  *     in text being entered in the search entry (and revealing

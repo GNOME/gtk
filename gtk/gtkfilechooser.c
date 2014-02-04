@@ -321,8 +321,9 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * dialog should be used, it should return
    * %GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM. The following example
    * illustrates this.
-   * <example id="gtkfilechooser-confirmation">
-   * <title>Custom confirmation</title>
+   *
+   * ## Custom confirmation ## {#gtkfilechooser-confirmation}
+   *
    * |[<!-- language="C" -->
    * static GtkFileChooserConfirmation
    * confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
@@ -354,7 +355,6 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    *
    * gtk_widget_destroy (chooser);
    * ]|
-   * </example>
    *
    * Returns: a #GtkFileChooserConfirmation value that indicates which
    *  action to take after emitting the signal.

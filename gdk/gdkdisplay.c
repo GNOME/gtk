@@ -2107,8 +2107,8 @@ static GQueue gdk_error_traps = G_QUEUE_INIT;
  * You can use gdk_x11_display_error_trap_push() to ignore errors
  * on only a single display.
  *
-* <example>
- * <title>Trapping an X error</title>
+ * ## Trapping an X error
+ *
  * |[<!-- language="C" -->
  * gdk_error_trap_push (<!-- -->);
  *
@@ -2120,7 +2120,6 @@ static GQueue gdk_error_traps = G_QUEUE_INIT;
  *    // ... Handle the error here ...
  *  }
  * ]|
- * </example>
  */
 void
 gdk_error_trap_push (void)

@@ -59,8 +59,8 @@
  * #GtkPrintOperation::draw-page, which you are supposed to catch
  * and render the page on the provided #GtkPrintContext using Cairo.
  *
- * <example>
- * <title>The high-level printing API</title>
+ * ## The high-level printing API
+ *
  * |[<!-- language="C" -->
  * static GtkPrintSettings *settings = NULL;
  *
@@ -91,7 +91,6 @@
  *   g_object_unref (print);
  * }
  * ]|
- * </example>
  *
  * By default GtkPrintOperation uses an external application to do
  * print preview. To implement a custom print preview, an application
