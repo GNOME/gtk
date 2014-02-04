@@ -3686,9 +3686,17 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  was_mapped = gtk_widget_get_mapped (widget);
-  if (gtk_widget_get_realized (widget))
-    gtk_widget_unrealize (widget);
+  if ((!priv->title_box && titlebar) || (priv->title_box && !titlebar))
+    {
+      was_mapped = gtk_widget_get_mapped (widget);
+      if (gtk_widget_get_realized (widget))
+        {
+          g_warning ("gtk_window_set_titlebar() called on a realized window");
+          gtk_widget_unrealize (widget);
+        }
+    }
+  else
+    was_mapped = FALSE;
 
   unset_titlebar (window);
 
