@@ -115,6 +115,7 @@
  *
  * <para id="gtkfilechooserdialog-setting-up">
  * There are various cases in which you may need to use a #GtkFileChooserDialog:
+ * </para>
  *
  * - To select a file for opening. Use #GTK_FILE_CHOOSER_ACTION_OPEN.
  *
@@ -136,7 +137,6 @@
  * when it is appropriate to use gtk_file_chooser_set_filename(),
  * i.e. when you are doing a Save As command and you already
  * have a file saved somewhere.
- * </para>
 
  * ## Response Codes
  *
@@ -163,13 +163,12 @@
  * boxes you can use your own custom response codes rather than the
  * ones in #GtkResponseType, but #GtkFileChooserDialog assumes that
  * its "accept"-type action, e.g. an "Open" or "Save" button,
- * will have one of the following response
- * codes:
+ * will have one of the following response codes:
+ * </para>
  * - #GTK_RESPONSE_ACCEPT
  * - #GTK_RESPONSE_OK
  * - #GTK_RESPONSE_YES
  * - #GTK_RESPONSE_APPLY
- * </para>
  *
  * This is because #GtkFileChooserDialog must intercept responses
  * and switch to folders if appropriate, rather than letting the
