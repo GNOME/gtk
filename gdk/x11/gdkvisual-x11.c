@@ -285,14 +285,6 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
         }
     }
 
-  /* prefer the RGBA visual unless GDK_RGBA=0 */
-  if (x11_screen->rgba_visual)
-    {
-      const gchar *csd_env = g_getenv ("GDK_RGBA");
-      if (g_strcmp0 (csd_env, "0") != 0)
-          x11_screen->system_visual = x11_screen->rgba_visual;
-    }
-
 #ifdef G_ENABLE_DEBUG
   if (_gdk_debug_flags & GDK_DEBUG_MISC)
     {
