@@ -73,7 +73,7 @@
  * follows the <ulink
  * url="http://www.freedesktop.org/Standards/icon-theme-spec">Icon
  * Theme Specification</ulink>. There is a default icon theme,
- * named <literal>hicolor</literal> where applications should install
+ * named `hicolor` where applications should install
  * their icons, but more additional application themes can be
  * installed as operating system vendors and users choose.
  *

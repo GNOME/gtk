@@ -228,8 +228,8 @@ gtk_actionable_set_action_target (GtkActionable *actionable,
  * the target is string-valued.
  *
  * @detailed_action_name is a string of the form
- * <literal>"action::target"</literal> where <literal>action</literal>
- * is the action name and <literal>target</literal> is the string to use
+ * `"action::target"` where `action`
+ * is the action name and `target` is the string to use
  * as the target.
  *
  * Since: 3.4

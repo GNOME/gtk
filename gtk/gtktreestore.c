@@ -304,8 +304,8 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
  * in.  Note that only types derived from standard GObject fundamental types
  * are supported.
  *
- * As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_PIXBUF);</literal> will create a new #GtkTreeStore with three columns, of type
+ * As an example, `gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * GDK_TYPE_PIXBUF);` will create a new #GtkTreeStore with three columns, of type
  * #gint, #gchararray, and #GdkPixbuf respectively.
  *
  * Return value: a new #GtkTreeStore
@@ -1170,7 +1170,7 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
  * each column number followed by the value to be set.
  * The list is terminated by a -1. For example, to set column 0 with type
  * %G_TYPE_STRING to "Foo", you would write
- * <literal>gtk_tree_store_set (store, iter, 0, "Foo", -1)</literal>.
+ * `gtk_tree_store_set (store, iter, 0, "Foo", -1)`.
  *
  * The value will be referenced by the store if it is a %G_TYPE_OBJECT, and it
  * will be copied if it is a %G_TYPE_STRING or %G_TYPE_BOXED.
@@ -1494,7 +1494,7 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
  * the values given to this function.
  *
  * Calling
- * <literal>gtk_tree_store_insert_with_values (tree_store, iter, position, ...)</literal>
+ * `gtk_tree_store_insert_with_values (tree_store, iter, position, ...)`
  * has the same effect as calling
  * |[<!-- language="C" -->
  * gtk_tree_store_insert (tree_store, iter, position);
@@ -2252,7 +2252,7 @@ gtk_tree_store_reorder_func (gconstpointer a,
  * @parent: A #GtkTreeIter.
  * @new_order: (array): an array of integers mapping the new position of each child
  *      to its old position before the re-ordering,
- *      i.e. @new_order<literal>[newpos] = oldpos</literal>.
+ *      i.e. @new_order`[newpos] = oldpos`.
  *
  * Reorders the children of @parent in @tree_store to follow the order
  * indicated by @new_order. Note that this function only works with

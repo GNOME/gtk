@@ -434,7 +434,7 @@ gdk_init_check (int    *argc,
  *
  * Initializes the GDK library and connects to the windowing system.
  * If initialization fails, a warning message is output and the application
- * terminates with a call to <literal>exit(1)</literal>.
+ * terminates with a call to `exit(1)`.
  *
  * Any arguments used by GDK are removed from the array and @argc and @argv
  * are updated accordingly.
@@ -1115,7 +1115,7 @@ gdk_get_program_class (void)
  * @program_class: a string.
  *
  * Sets the program class. The X11 backend uses the program class to set
- * the class name part of the <literal>WM_CLASS</literal> property on
+ * the class name part of the `WM_CLASS` property on
  * toplevel windows; see the ICCCM.
  */
 void

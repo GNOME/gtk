@@ -1896,7 +1896,7 @@ gtk_paned_new (GtkOrientation orientation)
  *
  * Adds a child to the top or left pane with default parameters. This is
  * equivalent to
- * <literal>gtk_paned_pack1 (paned, child, FALSE, TRUE)</literal>.
+ * `gtk_paned_pack1 (paned, child, FALSE, TRUE)`.
  */
 void
 gtk_paned_add1 (GtkPaned  *paned,
@@ -1912,7 +1912,7 @@ gtk_paned_add1 (GtkPaned  *paned,
  *
  * Adds a child to the bottom or right pane with default parameters. This
  * is equivalent to
- * <literal>gtk_paned_pack2 (paned, child, TRUE, TRUE)</literal>.
+ * `gtk_paned_pack2 (paned, child, TRUE, TRUE)`.
  */
 void
 gtk_paned_add2 (GtkPaned  *paned,

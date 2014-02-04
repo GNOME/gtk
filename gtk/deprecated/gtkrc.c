@@ -100,7 +100,7 @@
  * <anchor id="locale-specific-rc"/>
  * For each RC file, in addition to the file itself, GTK+ will look for
  * a locale-specific file that will be parsed after the main file.
- * For instance, if `LANG` is set to <literal>ja_JP.ujis</literal>,
+ * For instance, if `LANG` is set to `ja_JP.ujis`,
  * when loading the default file `~/.gtkrc` then GTK+ looks
  * for `~/.gtkrc.ja_JP` and `~/.gtkrc.ja`,
  * and parses the first of those that exists.
@@ -109,44 +109,44 @@
  *
  * A resource file defines a number of styles and key bindings and
  * attaches them to particular widgets. The attachment is done
- * by the <literal>widget</literal>, <literal>widget_class</literal>,
- * and <literal>class</literal> declarations. As an example
+ * by the `widget`, `widget_class`,
+ * and `class` declarations. As an example
  * of such a statement:
  *
  * |[
  * widget "mywindow.*.GtkEntry" style "my-entry-class"
  * ]|
  *
- * attaches the style <literal>"my-entry-class"</literal> to all
+ * attaches the style `"my-entry-class"` to all
  * widgets  whose “widget path” matches the
- * “pattern” <literal>"mywindow.*.GtkEntry"</literal>.
+ * “pattern” `"mywindow.*.GtkEntry"`.
  * That is, all #GtkEntry widgets which are part of a #GtkWindow named
- * <literal>"mywindow"</literal>.
+ * `"mywindow"`.
  *
  * The patterns here are given in the standard shell glob syntax.
- * The <literal>"?"</literal> wildcard matches any character, while
- * <literal>"*"</literal> matches zero or more of any character.
+ * The `"?"` wildcard matches any character, while
+ * `"*"` matches zero or more of any character.
  * The three types of matching are against the widget path, the
  * “class path” and the class hierarchy. Both the
- * widget path and the class path consist of a <literal>"."</literal>
+ * widget path and the class path consist of a `"."`
  * separated list of all the parents of the widget and the widget itself
  * from outermost to innermost. The difference is that in the widget path,
  * the name assigned by gtk_widget_set_name() is used if present, otherwise
  * the class name of the widget, while for the class path, the class name is
  * always used.
  *
- * Since GTK+ 2.10, <literal>widget_class</literal> paths can also contain
- * <literal>&lt;classname&gt;</literal> substrings, which are matching
+ * Since GTK+ 2.10, `widget_class` paths can also contain
+ * `&lt;classname&gt;` substrings, which are matching
  * the class with the given name and any derived classes. For instance,
  * |[
  * widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
  * ]|
  * will match #GtkLabel widgets which are contained in any kind of menu item.
  *
- * So, if you have a #GtkEntry named <literal>"myentry"</literal>, inside of a
- * horizontal box in a window named <literal>"mywindow"</literal>, then the
- * widget path is: <literal>"mywindow.GtkHBox.myentry"</literal>
- * while the class path is: <literal>"GtkWindow.GtkHBox.GtkEntry"</literal>.
+ * So, if you have a #GtkEntry named `"myentry"`, inside of a
+ * horizontal box in a window named `"mywindow"`, then the
+ * widget path is: `"mywindow.GtkHBox.myentry"`
+ * while the class path is: `"GtkWindow.GtkHBox.GtkEntry"`.
  *
  * Matching against class is a little different. The pattern match is done
  * against all class names in the widgets class hierarchy (not the layout
@@ -162,24 +162,24 @@
  * by order of specification (later overrides earlier). The priorities
  * that can be specified are (highest to lowest):
  *
- * - <literal>highest</literal>
+ * - `highest`
  *
- * - <literal>rc</literal>
+ * - `rc`
  *
- * - <literal>theme</literal>
+ * - `theme`
  *
- * - <literal>application</literal>
+ * - `application`
  *
- * - <literal>gtk</literal>
+ * - `gtk`
  *
- * - <literal>lowest</literal>
+ * - `lowest`
  *
- * <literal>rc</literal> is the default for styles
- * read from an RC file, <literal>theme</literal>
+ * `rc` is the default for styles
+ * read from an RC file, `theme`
  * is the default for styles read from theme RC files,
- * <literal>application</literal>
+ * `application`
  * should be used for styles an application sets
- * up, and <literal>gtk</literal> is used for styles
+ * up, and `gtk` is used for styles
  * that GTK+ creates internally.
  *
  * # Theme gtkrc files #
@@ -230,46 +230,46 @@
  *   match to a single integer comparison in most cases.
  *
  * 4. To avoid complex recursive matching, specification of full class names
- *   (for <literal>class</literal> matches) or full path names (for
- *   <literal>widget</literal> and <literal>widget_class</literal> matches)
+ *   (for `class` matches) or full path names (for
+ *   `widget` and `widget_class` matches)
  *   is to be preferred over shortened names
- *   containing <literal>"*"</literal> or <literal>"?"</literal>.
+ *   containing `"*"` or `"?"`.
  *
  * 5. If at all necessary, wildcards should only be used at the tail or head
  *   of a pattern. This reduces the match complexity to a string comparison
  *   per RC style.
  *
- * 6. When using wildcards, use of <literal>"?"</literal> should be preferred
- *   over <literal>"*"</literal>. This can reduce the matching complexity from
- *   O(n^2) to O(n). For example <literal>"Gtk*Box"</literal> can be turned into
- *   <literal>"Gtk?Box"</literal> and will still match #GtkHBox and #GtkVBox.
+ * 6. When using wildcards, use of `"?"` should be preferred
+ *   over `"*"`. This can reduce the matching complexity from
+ *   O(n^2) to O(n). For example `"Gtk*Box"` can be turned into
+ *   `"Gtk?Box"` and will still match #GtkHBox and #GtkVBox.
  *
- * 7. The use of <literal>"*"</literal> wildcards should be restricted as much
- *   as possible, because matching <literal>"A*B*C*RestString"</literal> can
+ * 7. The use of `"*"` wildcards should be restricted as much
+ *   as possible, because matching `"A*B*C*RestString"` can
  *   result in matching complexities of O(n^2) worst case.
  *
  * # Toplevel declarations #
  *
  * An RC file is a text file which is composed of a sequence
- * of declarations. <literal>'#'</literal> characters delimit comments and
- * the portion of a line after a <literal>'#'</literal> is ignored when parsing
+ * of declarations. `'#'` characters delimit comments and
+ * the portion of a line after a `'#'` is ignored when parsing
  * an RC file.
  *
  * The possible toplevel declarations are:
  *
- * * <literal>binding <replaceable>name</replaceable>
- *      { ... }</literal>
+ * * `binding <replaceable>name</replaceable>
+ *      { ... }`
  *
  *    Declares a binding set.
  *
- * * <literal>class <replaceable>pattern</replaceable>
+ * * `class <replaceable>pattern</replaceable>
  *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable></literal>
+ *           <replaceable>name</replaceable>`
  *
  *    Specifies a style or binding set for a particular
  *      branch of the inheritance hierarchy.
  *
- * * <literal>include <replaceable>filename</replaceable></literal>
+ * * `include <replaceable>filename</replaceable>`
  *
  *    Parses another file at this point. If
  *         <replaceable>filename</replaceable> is not an absolute filename,
@@ -279,39 +279,39 @@
  *         <link linkend="locale-specific-rc">locale-specific variant</link> of
  *         the included file.
  *
- * * <literal>module_path <replaceable>path</replaceable></literal>
+ * * `module_path <replaceable>path</replaceable>`
  *
  *    Sets a path (a list of directories separated
  *       by colons) that will be searched for theme engines referenced in
  *       RC files.
  *
- * * <literal>pixmap_path <replaceable>path</replaceable></literal>
+ * * `pixmap_path <replaceable>path</replaceable>`
  *
  *    Sets a path (a list of directories separated
  *       by colons) that will be searched for pixmaps referenced in
  *       RC files.
  *
- * * <literal>im_module_file <replaceable>pathname</replaceable></literal>
+ * * `im_module_file <replaceable>pathname</replaceable>`
  *
  *    Sets the pathname for the IM modules file. Setting this from RC files
  *       is deprecated; you should use the environment variable `GTK_IM_MODULE_FILE`
  *       instead.
  *
- * * <literal>style <replaceable>name</replaceable> [ =
- *     <replaceable>parent</replaceable> ] { ... }</literal>
+ * * `style <replaceable>name</replaceable> [ =
+ *     <replaceable>parent</replaceable> ] { ... }`
  *
  *    Declares a style.
  *
- * * <literal>widget <replaceable>pattern</replaceable>
+ * * `widget <replaceable>pattern</replaceable>
  *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable></literal>
+ *           <replaceable>name</replaceable>`
  *
  *      Specifies a style or binding set for a particular
  *      group of widgets by matching on the widget pathname.
  *
- * * <literal>widget_class <replaceable>pattern</replaceable>
+ * * `widget_class <replaceable>pattern</replaceable>
  *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable></literal>
+ *           <replaceable>name</replaceable>`
  *
  *      Specifies a style or binding set for a particular
  *      group of widgets by matching on the class pathname.
@@ -324,127 +324,127 @@
  *
  * # Styles #
  *
- * A RC style is specified by a <literal>style</literal>
+ * A RC style is specified by a `style`
  * declaration in a RC file, and then bound to widgets
- * with a <literal>widget</literal>, <literal>widget_class</literal>,
- * or <literal>class</literal> declaration. All styles
+ * with a `widget`, `widget_class`,
+ * or `class` declaration. All styles
  * applying to a particular widget are composited together
- * with <literal>widget</literal> declarations overriding
- * <literal>widget_class</literal> declarations which, in
- * turn, override <literal>class</literal> declarations.
+ * with `widget` declarations overriding
+ * `widget_class` declarations which, in
+ * turn, override `class` declarations.
  * Within each type of declaration, later declarations override
  * earlier ones.
  *
- * Within a <literal>style</literal> declaration, the possible
+ * Within a `style` declaration, the possible
  * elements are:
  *
- * * <literal>bg[<replaceable>state</replaceable>] = <replaceable>color</replaceable></literal>
+ * * `bg[<replaceable>state</replaceable>] = <replaceable>color</replaceable>`
  *
  *   Sets the color used for the background of most widgets.
  *
- * * <literal>fg[<replaceable>state</replaceable>] = <replaceable>color</replaceable></literal>
+ * * `fg[<replaceable>state</replaceable>] = <replaceable>color</replaceable>`
  *
  *   Sets the color used for the foreground of most widgets.
  *
- * * <literal>base[<replaceable>state</replaceable>] = <replaceable>color</replaceable></literal>
+ * * `base[<replaceable>state</replaceable>] = <replaceable>color</replaceable>`
  *
  *          Sets the color used for the background of widgets displaying
  *          editable text. This color is used for the background
  *          of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkCList.
  *
- * * <literal>text[<replaceable>state</replaceable>] =
- *       <replaceable>color</replaceable></literal>
+ * * `text[<replaceable>state</replaceable>] =
+ *       <replaceable>color</replaceable>`
  *
  *          Sets the color used for foreground of widgets using
- *          <literal>base</literal> for the background color.
+ *          `base` for the background color.
  *
- * * <literal>xthickness =
- *       <replaceable>number</replaceable></literal>
+ * * `xthickness =
+ *       <replaceable>number</replaceable>`
  *
  *          Sets the xthickness, which is used for various horizontal padding
  *          values in GTK+.
  *
- * * <literal>ythickness =
- *       <replaceable>number</replaceable></literal>
+ * * `ythickness =
+ *       <replaceable>number</replaceable>`
  *
  *          Sets the ythickness, which is used for various vertical padding
  *          values in GTK+.
  *
- * * <literal>bg_pixmap[<replaceable>state</replaceable>] =
- *       <replaceable>pixmap</replaceable></literal>
+ * * `bg_pixmap[<replaceable>state</replaceable>] =
+ *       <replaceable>pixmap</replaceable>`
  *
  *          Sets a background pixmap to be used in place of
- *          the <literal>bg</literal> color (or for #GtkText,
- *          in place of the <literal>base</literal> color. The special
- *          value <literal>"&lt;parent&gt;"</literal> may be used to indicate that the widget should
+ *          the `bg` color (or for #GtkText,
+ *          in place of the `base` color. The special
+ *          value `"&lt;parent&gt;"` may be used to indicate that the widget should
  *          use the same background pixmap as its parent. The special value
- *          <literal>"&lt;none&gt;"</literal> may be used to indicate no background pixmap.
+ *          `"&lt;none&gt;"` may be used to indicate no background pixmap.
 
- * * <literal>font = <replaceable>font</replaceable></literal>
+ * * `font = <replaceable>font</replaceable>`
  *
  *          Starting with GTK+ 2.0, the "font" and "fontset"
  *          declarations are ignored; use "font_name" declarations instead.
  *
- * * <literal>fontset = <replaceable>font</replaceable></literal>
+ * * `fontset = <replaceable>font</replaceable>`
  *
  *          Starting with GTK+ 2.0, the "font" and "fontset"
  *          declarations are ignored; use "font_name" declarations instead.
  *
- * * <literal>font_name = <replaceable>font</replaceable></literal>
+ * * `font_name = <replaceable>font</replaceable>`
  *
  *          Sets the font for a widget. <replaceable>font</replaceable> must be
- *          a Pango font name, e.g. <literal>"Sans Italic 10"</literal>.
+ *          a Pango font name, e.g. `"Sans Italic 10"`.
  *          For details about Pango font names, see
  *          pango_font_description_from_string().
  *
- * * <literal>stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }</literal>
+ * * `stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }`
  *
  *         Defines the icon for a stock item.
  *
- * * <literal>color[<replaceable>"color-name"</replaceable>] = <replaceable>color specification</replaceable></literal>
+ * * `color[<replaceable>"color-name"</replaceable>] = <replaceable>color specification</replaceable>`
  *
  *         Since 2.10, this element can be used to defines symbolic colors. See below for
  *         the syntax of color specifications.
  *
- * * <literal>engine <replaceable>"engine"</replaceable> { <replaceable>engine-specific
- * settings</replaceable> }</literal>
+ * * `engine <replaceable>"engine"</replaceable> { <replaceable>engine-specific
+ * settings</replaceable> }`
  *
  *         Defines the engine to be used when drawing with this style.
  *
- * * <literal><replaceable>class</replaceable>::<replaceable>property</replaceable> = <replaceable>value</replaceable></literal>
+ * * `<replaceable>class</replaceable>::<replaceable>property</replaceable> = <replaceable>value</replaceable>`
  *
  *         Sets a <link linkend="style-properties">style property</link> for a widget class.
  *
  * The colors and background pixmaps are specified as a function of the
  * state of the widget. The states are:
  *
- * * <literal>NORMAL</literal>
+ * * `NORMAL`
  *
  *         A color used for a widget in its normal state.
  *
- * * <literal>ACTIVE</literal>
+ * * `ACTIVE`
  *
- *         A variant of the <literal>NORMAL</literal> color used when the
+ *         A variant of the `NORMAL` color used when the
  *         widget is in the %GTK_STATE_ACTIVE state, and also for
  *         the trough of a ScrollBar, tabs of a NoteBook
  *         other than the current tab and similar areas.
  *         Frequently, this should be a darker variant
- *         of the <literal>NORMAL</literal> color.
+ *         of the `NORMAL` color.
  *
- * * <literal>PRELIGHT</literal>
+ * * `PRELIGHT`
  *
  *         A color used for widgets in the %GTK_STATE_PRELIGHT state. This
  *         state is the used for Buttons and MenuItems
  *         that have the mouse cursor over them, and for
  *         their children.
  *
- * * <literal>SELECTED</literal>
+ * * `SELECTED`
  *
  *         A color used to highlight data selected by the user.
  *         for instance, the selected items in a list widget, and the
  *         selection in an editable widget.
  *
- * * <literal>INSENSITIVE</literal>
+ * * `INSENSITIVE`
  *
  *         A color used for the background of widgets that have
  *         been set insensitive with gtk_widget_set_sensitive().
@@ -452,18 +452,18 @@
  * <anchor id="color-format"/>
  * Colors can be specified as a string containing a color name (GTK+ knows
  * all names from the X color database `/usr/lib/X11/rgb.txt`),
- * in one of the hexadecimal forms <literal>#rrrrggggbbbb</literal>,
- * <literal>#rrrgggbbb</literal>, <literal>#rrggbb</literal>,
- * or <literal>#rgb</literal>, where <literal>r</literal>,
- * <literal>g</literal> and <literal>b</literal> are
+ * in one of the hexadecimal forms `#rrrrggggbbbb`,
+ * `#rrrgggbbb`, `#rrggbb`,
+ * or `#rgb`, where `r`,
+ * `g` and `b` are
  * hex digits, or they can be specified as a triplet
- * <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
- * <replaceable>b</replaceable>}</literal>, where <literal>r</literal>,
- * <literal>g</literal> and <literal>b</literal> are either integers in
+ * `{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
+ * <replaceable>b</replaceable>}`, where `r`,
+ * `g` and `b` are either integers in
  * the range 0-65535 or floats in the range 0.0-1.0.
  *
  * Since 2.10, colors can also be specified by refering to a symbolic color, as
- * follows: <literal>@<!-- -->color-name</literal>, or by using expressions to combine
+ * follows: `@<!-- -->color-name`, or by using expressions to combine
  * colors. The following expressions are currently supported:
  *
  * * mix (<replaceable>factor</replaceable>, <replaceable>color1</replaceable>, <replaceable>color2</replaceable>)
@@ -483,12 +483,12 @@
  * * lighter (<replaceable>color</replaceable>)
  *
  *         This is an abbreviation for
- *         <literal>shade (1.3, <replaceable>color</replaceable>)</literal>.
+ *         `shade (1.3, <replaceable>color</replaceable>)`.
  *
  * * darker (<replaceable>color</replaceable>)
  *
  *         This is an abbreviation for
- *         <literal>shade (0.7, <replaceable>color</replaceable>)</literal>.
+ *         `shade (0.7, <replaceable>color</replaceable>)`.
  *
  * Here are some examples of color expressions:
  *
@@ -498,16 +498,16 @@
  *  lighter (@<!-- -->foreground)
  * ]|
  *
- * In a <literal>stock</literal> definition, icon sources are specified as a
+ * In a `stock` definition, icon sources are specified as a
  * 4-tuple of image filename or icon name, text direction, widget state, and size, in that
  * order.  Each icon source specifies an image filename or icon name to use with a given
  * direction, state, and size. Filenames are specified as a string such
- * as <literal>"itemltr.png"</literal>, while icon names (looked up
+ * as `"itemltr.png"`, while icon names (looked up
  * in the current icon theme), are specified with a leading
- * <literal>@</literal>, such as <literal>@"item-ltr"</literal>.
- * The <literal>*</literal> character can be used as a
+ * `@`, such as `@"item-ltr"`.
+ * The `*` character can be used as a
  * wildcard, and if direction/state/size are omitted they default to
- * <literal>*</literal>. So for example, the following specifies different icons to
+ * `*`. So for example, the following specifies different icons to
  * use for left-to-right and right-to-left languages:
  *
  * |[<!-- language="C" -->
@@ -539,9 +539,9 @@
  * }
  * ]|
  *
- * The sizes that come with GTK+ itself are <literal>"gtk-menu"</literal>,
- * <literal>"gtk-small-toolbar"</literal>, <literal>"gtk-large-toolbar"</literal>,
- * <literal>"gtk-button"</literal>, <literal>"gtk-dialog"</literal>. Applications
+ * The sizes that come with GTK+ itself are `"gtk-menu"`,
+ * `"gtk-small-toolbar"`, `"gtk-large-toolbar"`,
+ * `"gtk-button"`, `"gtk-dialog"`. Applications
  * can define other sizes.
  *
  * It's also possible to use custom icons for a given state, for example:
@@ -558,7 +558,7 @@
  * When selecting an icon source to use, GTK+ will consider text direction most
  * important, state second, and size third. It will select the best match based on
  * those criteria. If an attribute matches exactly (e.g. you specified
- * <literal>PRELIGHT</literal> or specified the size), GTK+ won't modify the image;
+ * `PRELIGHT` or specified the size), GTK+ won't modify the image;
  * if the attribute matches with a wildcard, GTK+ will scale or modify the image to
  * match the state and size the user requested.
  *
@@ -582,41 +582,41 @@
  * series of modifiers followed by the name of a key. The
  * modifiers can be:
  *
- * - <literal>&lt;alt&gt;</literal>
+ * - `&lt;alt&gt;`
  *
- * - <literal>&lt;ctl&gt;</literal>
+ * - `&lt;ctl&gt;`
  *
- * - <literal>&lt;control&gt;</literal>
+ * - `&lt;control&gt;`
  *
- * - <literal>&lt;meta&gt;</literal>
+ * - `&lt;meta&gt;`
  *
- * - <literal>&lt;hyper&gt;</literal>
+ * - `&lt;hyper&gt;`
  *
- * - <literal>&lt;super&gt;</literal>
+ * - `&lt;super&gt;`
  *
- * - <literal>&lt;mod1&gt;</literal>
+ * - `&lt;mod1&gt;`
  *
- * - <literal>&lt;mod2&gt;</literal>
+ * - `&lt;mod2&gt;`
  *
- * - <literal>&lt;mod3&gt;</literal>
+ * - `&lt;mod3&gt;`
  *
- * - <literal>&lt;mod4&gt;</literal>
+ * - `&lt;mod4&gt;`
  *
- * - <literal>&lt;mod5&gt;</literal>
+ * - `&lt;mod5&gt;`
  *
- * - <literal>&lt;release&gt;</literal>
+ * - `&lt;release&gt;`
  *
- * - <literal>&lt;shft&gt;</literal>
+ * - `&lt;shft&gt;`
  *
- * - <literal>&lt;shift&gt;</literal>
+ * - `&lt;shift&gt;`
  *
- * <literal>&lt;shft&gt;</literal> is an alias for
- * <literal>&lt;shift&gt;</literal>,
- * <literal>&lt;ctl&gt;</literal> is an alias for
- * <literal>&lt;control&gt;</literal>,
+ * `&lt;shft&gt;` is an alias for
+ * `&lt;shift&gt;`,
+ * `&lt;ctl&gt;` is an alias for
+ * `&lt;control&gt;`,
  *  and
- * <literal>&lt;alt&gt;</literal> is an alias for
- * <literal>&lt;mod1&gt;</literal>.
+ * `&lt;alt&gt;` is an alias for
+ * `&lt;mod1&gt;`.
  *
  * The action that is bound to the key is a sequence
  * of signal names (strings) followed by parameters for

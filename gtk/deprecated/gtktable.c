@@ -805,7 +805,7 @@ gtk_table_attach (GtkTable	  *table,
  * As there are many options associated with gtk_table_attach(), this convenience
  * function provides the programmer with a means to add children to a table with
  * identical padding and expansion options. The values used for the #GtkAttachOptions
- * are <literal>GTK_EXPAND | GTK_FILL</literal>, and the padding is set to 0.
+ * are `GTK_EXPAND | GTK_FILL`, and the padding is set to 0.
  *
  * Deprecated: 3.4: Use gtk_grid_attach() with #GtkGrid. Note that the attach
  *     arguments differ between those two functions.

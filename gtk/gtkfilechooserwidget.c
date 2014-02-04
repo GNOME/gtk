@@ -7178,7 +7178,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>
    * with a @path string of "" (the empty
    * string).  It is also bound to <keycap>/</keycap> with a
-   * @path string of "<literal>/</literal>"
+   * @path string of "`/`"
    * (a slash):  this lets you type <keycap>/</keycap> and
    * immediately type a path name.  On Unix systems, this is bound to
    * <keycap>~</keycap> (tilde) with a <parameter>path</parameter> string

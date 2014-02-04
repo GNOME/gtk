@@ -2187,8 +2187,8 @@ gtk_icon_view_remove_editable (GtkCellArea            *area,
  * it. Additionally, if @start_editing is %TRUE, then editing should be 
  * started in the specified cell.  
  *
- * This function is often followed by <literal>gtk_widget_grab_focus 
- * (icon_view)</literal> in order to give keyboard focus to the widget.  
+ * This function is often followed by `gtk_widget_grab_focus 
+ * (icon_view)` in order to give keyboard focus to the widget.  
  * Please note that editing can only happen when the widget is realized.
  *
  * Since: 2.8

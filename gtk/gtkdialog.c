@@ -1044,7 +1044,7 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
  * @response_id: a response ID
  * @setting: %TRUE for sensitive
  *
- * Calls <literal>gtk_widget_set_sensitive (widget, @setting)</literal>
+ * Calls `gtk_widget_set_sensitive (widget, @setting)`
  * for each widget in the dialog's action area with the given @response_id.
  * A convenient way to sensitize/desensitize dialog buttons.
  **/

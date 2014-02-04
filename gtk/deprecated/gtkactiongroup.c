@@ -48,7 +48,7 @@
  *
  * Accelerators are handled by the GTK+ accelerator map. All actions are
  * assigned an accelerator path (which normally has the form
- * <literal>&lt;Actions&gt;/group-name/action-name</literal>)
+ * `&lt;Actions&gt;/group-name/action-name`)
  * and a shortcut is associated with this accelerator path. All menuitems
  * and toolitems take on this accelerator path. The GTK+ accelerator map
  * code makes sure that the correct shortcut is displayed next to the menu
@@ -918,7 +918,7 @@ check_unique_action (GtkActionGroup *action_group,
  * if a user tries to modify the accelerator of a menuitem associated with
  * the action. Therefore you must either set the accel path yourself with
  * gtk_action_set_accel_path(), or use 
- * <literal>gtk_action_group_add_action_with_accel (..., NULL)</literal>.
+ * `gtk_action_group_add_action_with_accel (..., NULL)`.
  *
  * Since: 2.4
  *
@@ -965,7 +965,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
  * with the stock_id of the action. 
  *
  * Accel paths are set to
- * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.
+ * `&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable>`.
  *
  * Since: 2.4
  *
@@ -1110,7 +1110,7 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  *
  * The "activate" signals of the actions are connected to the callbacks and 
  * their accel paths are set to 
- * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
+ * `&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable>`.  
  * 
  * Since: 2.4
  *
@@ -1245,7 +1245,7 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
  *
  * The "activate" signals of the actions are connected to the callbacks and 
  * their accel paths are set to 
- * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
+ * `&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable>`.  
  * 
  * Since: 2.4
  *
@@ -1365,7 +1365,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
  *
  * The "changed" signal of the first radio action is connected to the 
  * @on_change callback and the accel paths of the actions are set to 
- * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
+ * `&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable>`.  
  * 
  * Since: 2.4
  *

@@ -121,7 +121,7 @@
  *
  * Attribute values can be translated using gettext, like other #GtkBuilder
  * content. `&lt;attribute&gt;` elements can be marked for
- * translation with a <literal>translatable="yes"</literal> attribute.
+ * translation with a `translatable="yes"` attribute.
  * It is also possible to specify message context and translator comments,
  * using the context and comments attributes. To make use of this, the
  * #GtkBuilder must have been given the gettext domain to use.
@@ -909,9 +909,9 @@ gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
  * @window: a #GtkApplicationWindow
  *
  * Returns the unique ID of the window. If the window has not yet been added to
- * a #GtkApplication, returns <literal>0</literal>.
+ * a #GtkApplication, returns `0`.
  *
- * Returns: the unique ID for @window, or <literal>0</literal> if the window
+ * Returns: the unique ID for @window, or `0` if the window
  *   has not yet been added to a #GtkApplication
  *
  * Since: 3.6

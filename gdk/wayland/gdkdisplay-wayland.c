@@ -40,10 +40,10 @@
  * @Title: Wayland Interaction
  *
  * The functions in this section are specific to the GDK Wayland backend.
- * To use them, you need to include the <literal>&lt;gdk/gdkwayland.h&gt;</literal>
+ * To use them, you need to include the `&lt;gdk/gdkwayland.h&gt;`
  * header and use the Wayland-specific pkg-config files to build your
- * application (either <literal>gdk-wayland-3.0</literal> or
- * <literal>gtk+-wayland-3.0</literal>).
+ * application (either `gdk-wayland-3.0` or
+ * `gtk+-wayland-3.0`).
  *
  * To make your code compile with other GDK backends, guard backend-specific
  * calls by an ifdef as follows. Since GDK may be built with multiple

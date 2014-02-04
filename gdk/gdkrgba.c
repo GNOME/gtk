@@ -330,8 +330,8 @@ gdk_rgba_equal (gconstpointer p1,
  * @rgba: a #GdkRGBA
  *
  * Returns a textual specification of @rgba in the form
- * <literal>rgb (r, g, b)</literal> or
- * <literal>rgba (r, g, b, a)</literal>,
+ * `rgb (r, g, b)` or
+ * `rgba (r, g, b, a)`,
  * where 'r', 'g', 'b' and 'a' represent the red, green,
  * blue and alpha values respectively. r, g, and b are
  * represented as integers in the range 0 to 255, and a

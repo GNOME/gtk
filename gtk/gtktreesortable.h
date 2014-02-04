@@ -75,7 +75,7 @@ typedef struct _GtkTreeSortableIface GtkTreeSortableIface;
  *
  * For example, if @model is a product catalogue, then a compare function
  * for the "price" column could be one which returns
- * <literal>price_of(@a) - price_of(@b)</literal>.
+ * `price_of(@a) - price_of(@b)`.
  *
  * Returns: a negative integer, zero or a positive integer depending on whether
  *   @a sorts before, with or after @b

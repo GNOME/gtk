@@ -103,16 +103,16 @@
  * various ways:
  * - To require that a widget satisfies several conditions,
  *   combine several selectors into one by concatenating them. E.g.
- *   <literal>GtkButton&num;button1</literal> matches a GtkButton widget
+ *   `GtkButton&num;button1` matches a GtkButton widget
  *   with the name button1.
  * - To only match a widget when it occurs inside some other
  *   widget, write the two selectors after each other, separated by whitespace.
- *   E.g. <literal>GtkToolBar GtkButton</literal> matches GtkButton widgets
+ *   E.g. `GtkToolBar GtkButton` matches GtkButton widgets
  *   that occur inside a GtkToolBar.
  * - In the previous example, the GtkButton is matched even
  *   if it occurs deeply nested inside the toolbar. To restrict the match
  *   to direct children of the parent widget, insert a '>' character between
- *   the two selectors. E.g. <literal>GtkNotebook > GtkLabel</literal> matches
+ *   the two selectors. E.g. `GtkNotebook > GtkLabel` matches
  *   GtkLabel widgets that are direct children of a GtkNotebook.
  *
  * An example of widget classes and names in selectors:

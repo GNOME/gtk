@@ -176,7 +176,7 @@ typedef void GdkXEvent;	  /* Can be cast to window system specific
  * GdkFilterReturn:
  * @GDK_FILTER_CONTINUE: event not handled, continue processing.
  * @GDK_FILTER_TRANSLATE: native event translated into a GDK event and stored
- *  in the <literal>event</literal> structure that was passed in.
+ *  in the `event` structure that was passed in.
  * @GDK_FILTER_REMOVE: event handled, terminate processing.
  *
  * Specifies the result of applying a #GdkFilterFunc to a native event.
@@ -199,7 +199,7 @@ typedef enum {
  * converted to GDK events.
  *
  * When a filter is called, @event is unpopulated, except for
- * <literal>event->window</literal>. The filter may translate the native
+ * `event->window`. The filter may translate the native
  * event to a GDK event and store the result in @event, or handle it without
  * translation. If the filter translates the event and processing should
  * continue, it should return %GDK_FILTER_TRANSLATE.
@@ -285,7 +285,7 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *
  * In some language bindings, the values %GDK_2BUTTON_PRESS and
  * %GDK_3BUTTON_PRESS would translate into something syntactically
- * invalid (eg <literal>Gdk.EventType.2ButtonPress</literal>, where a
+ * invalid (eg `Gdk.EventType.2ButtonPress`, where a
  * symbol is not allowed to start with a number). In that case, the
  * aliases %GDK_DOUBLE_BUTTON_PRESS and %GDK_TRIPLE_BUTTON_PRESS can
  * be used instead.

@@ -81,7 +81,7 @@
  *
  * Coordinate systems in GtkTreeView API:
  *
- * - Widget coordinates: Coordinates relative to the widget (usually <literal>widget->window</literal>).
+ * - Widget coordinates: Coordinates relative to the widget (usually `widget->window`).
  *
  * - Bin window coordinates: Coordinates relative to the window that GtkTreeView renders to.
  *
@@ -13325,7 +13325,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
  * @tree_view: A #GtkTreeView
  *
  * Returns the window that @tree_view renders to.
- * This is used primarily to compare to <literal>event->window</literal>
+ * This is used primarily to compare to `event->window`
  * to confirm that the event on @tree_view is on the right window.
  *
  * Return value: (transfer none): A #GdkWindow, or %NULL when @tree_view
@@ -13352,8 +13352,8 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * Finds the path at the point (@x, @y), relative to bin_window coordinates
  * (please see gtk_tree_view_get_bin_window()).
  * That is, @x and @y are relative to an events coordinates. @x and @y must
- * come from an event on the @tree_view only where <literal>event->window ==
- * gtk_tree_view_get_bin_window (<!-- -->)</literal>. It is primarily for
+ * come from an event on the @tree_view only where `event->window ==
+ * gtk_tree_view_get_bin_window (<!-- -->)`. It is primarily for
  * things like popup menus. If @path is non-%NULL, then it will be filled
  * with the #GtkTreePath at that point.  This path should be freed with
  * gtk_tree_path_free().  If @column is non-%NULL, then it will be filled
@@ -13992,7 +13992,7 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
  *
  * The @x and @y coordinate that are provided must be relative to bin_window
  * coordinates.  That is, @x and @y must come from an event on @tree_view
- * where <literal>event->window == gtk_tree_view_get_bin_window (<!-- -->)</literal>.
+ * where `event->window == gtk_tree_view_get_bin_window (<!-- -->)`.
  *
  * For converting widget coordinates (eg. the ones you get from
  * GtkWidget::query-tooltip), please see

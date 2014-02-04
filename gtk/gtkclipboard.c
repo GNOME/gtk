@@ -328,8 +328,8 @@ clipboard_display_closed (GdkDisplay   *display,
  * to the default clipboard, i.e. they copy the selection to what the
  * user sees as the clipboard.
  *
- * (Passing #GDK_NONE is the same as using <literal>gdk_atom_intern
- * ("CLIPBOARD", FALSE)</literal>. See <ulink
+ * (Passing #GDK_NONE is the same as using `gdk_atom_intern
+ * ("CLIPBOARD", FALSE)`. See <ulink
  * url="http://www.freedesktop.org/Standards/clipboards-spec">
  * http://www.freedesktop.org/Standards/clipboards-spec</ulink>
  * for a detailed discussion of the "CLIPBOARD" vs. "PRIMARY"

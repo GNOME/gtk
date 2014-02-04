@@ -206,9 +206,9 @@
  * Merging is done based on the names of the XML elements. Each element is
  * identified by a path which consists of the names of its anchestors, separated
  * by slashes. For example, the menuitem named "Left" in the example above
- * has the path <literal>/ui/menubar/JustifyMenu/Left</literal> and the
+ * has the path `/ui/menubar/JustifyMenu/Left` and the
  * toolitem with the same name has path
- * <literal>/ui/toolbar1/JustifyToolItems/Left</literal>.
+ * `/ui/toolbar1/JustifyToolItems/Left`.
  *
  * # Accelerators #
  *
@@ -227,7 +227,7 @@
  * can make it hard or impossible to determine in advance whether a separator
  * will end up in such an unfortunate position.
  *
- * For separators in toolbars, you can set <literal>expand="true"</literal> to
+ * For separators in toolbars, you can set `expand="true"` to
  * turn them from a small, visible separator to an expanding, invisible one.
  * Toolitems following an expanding separator are effectively right-aligned.
  *

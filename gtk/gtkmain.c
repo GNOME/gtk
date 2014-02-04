@@ -381,7 +381,7 @@ static gboolean do_setlocale = TRUE;
  * 
  * Prevents gtk_init(), gtk_init_check(), gtk_init_with_args() and
  * gtk_parse_args() from automatically
- * calling <literal>setlocale (LC_ALL, "")</literal>. You would
+ * calling `setlocale (LC_ALL, "")`. You would
  * want to use this function if you wanted to set the locale for
  * your program to something other than the user's locale, or if
  * you wanted to set different values for different locale categories.
@@ -841,7 +841,7 @@ gtk_get_option_group (gboolean open_default_display)
  *     understood by GTK+ are stripped before return.
  * @parameter_string: (allow-none): a string which is displayed in
  *    the first line of `--help` output, after
- *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
+ *    `<replaceable>programname</replaceable> [OPTION...]`
  * @entries: (array zero-terminated=1): a %NULL-terminated array
  *    of #GOptionEntrys describing the options of your program
  * @translation_domain: a translation domain to use for translating
@@ -1015,7 +1015,7 @@ gtk_init_check (int    *argc,
  * your program to fall back to a textual interface you want to
  * call gtk_init_check() instead.
  *
- * Since 2.18, GTK+ calls <literal>signal (SIGPIPE, SIG_IGN)</literal>
+ * Since 2.18, GTK+ calls `signal (SIGPIPE, SIG_IGN)`
  * during initialization, to ignore SIGPIPE signals, since these are
  * almost never wanted in graphical applications. If you do need to
  * handle SIGPIPE for some reason, reset the handler after gtk_init(),

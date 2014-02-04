@@ -918,7 +918,7 @@ gtk_style_has_context (GtkStyle *style)
  *
  * Since this function may return a new object, you have to use it
  * in the following way:
- * <literal>style = gtk_style_attach (style, window)</literal>
+ * `style = gtk_style_attach (style, window)`
  *
  * Returns: Either @style, or a newly-created #GtkStyle.
  *   If the style is newly created, the style parameter

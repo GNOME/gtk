@@ -9502,7 +9502,7 @@ gtk_text_view_get_window (GtkTextView *text_view,
  *
  * Usually used to find out which window an event corresponds to.
  * If you connect to an event signal on @text_view, this function
- * should be called on <literal>event-&gt;window</literal> to
+ * should be called on `event-&gt;window` to
  * see which window it was.
  *
  * Return value: the window type.

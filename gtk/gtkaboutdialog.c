@@ -67,8 +67,8 @@
  * a program like its logo, name, copyright, website and license. It is
  * also possible to give credits to the authors, documenters, translators
  * and artists who have worked on the program. An about dialog is typically
- * opened when the user selects the <literal>About</literal> option from
- * the <literal>Help</literal> menu. All parts of the dialog are optional.
+ * opened when the user selects the `About` option from
+ * the `Help` menu. All parts of the dialog are optional.
  *
  * About dialogs often contain links and email addresses. GtkAboutDialog
  * displays these as clickable links. By default, it calls gtk_show_uri()
@@ -79,7 +79,7 @@
  * use the function gtk_show_about_dialog() which constructs and shows a dialog
  * and keeps it around so that it can be shown again.
  *
- * Note that GTK+ sets a default title of <literal>_("About &percnt;s")</literal>
+ * Note that GTK+ sets a default title of `_("About &percnt;s")`
  * on the dialog window (where &percnt;s is replaced by the name of the
  * application, but in order to ensure proper translation of the title,
  * applications should set the title property explicitly when constructing

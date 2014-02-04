@@ -1367,7 +1367,7 @@ gtk_level_bar_remove_offset_value (GtkLevelBar *self,
  * Adds a new offset marker on @self at the position specified by @value.
  * When the bar value is in the interval topped by @value (or between @value
  * and #GtkLevelBar:max-value in case the offset is the last one on the bar)
- * a style class named <literal>level-</literal>@name will be applied
+ * a style class named `level-`@name will be applied
  * when rendering the level bar fill.
  * If another offset marker named @name exists, its value will be
  * replaced by @value.

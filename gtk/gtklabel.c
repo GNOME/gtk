@@ -95,7 +95,7 @@
  * Labels may contain “mnemonics”. Mnemonics are
  * underlined characters in the label, used for keyboard navigation.
  * Mnemonics are created by providing a string with an underscore before
- * the mnemonic character, such as <literal>"_File"</literal>, to the
+ * the mnemonic character, such as `"_File"`, to the
  * functions gtk_label_new_with_mnemonic() or
  * gtk_label_set_text_with_mnemonic().
  *

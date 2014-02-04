@@ -328,8 +328,8 @@ gdk_display_manager_get_default_display (GdkDisplayManager *manager)
  * gdk_display_get_default:
  *
  * Gets the default #GdkDisplay. This is a convenience
- * function for
- * <literal>gdk_display_manager_get_default_display (gdk_display_manager_get ())</literal>.
+ * function for:
+ * `gdk_display_manager_get_default_display (gdk_display_manager_get ())`.
  *
  * Returns: (transfer none): a #GdkDisplay, or %NULL if there is no default
  *   display.

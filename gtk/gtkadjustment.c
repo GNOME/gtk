@@ -147,7 +147,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * 
    * The maximum value of the adjustment. 
    * Note that values will be restricted by 
-   * <literal>upper - page-size</literal> if the page-size 
+   * `upper - page-size` if the page-size 
    * property is nonzero.
    *
    * Since: 2.4
@@ -515,7 +515,7 @@ gtk_adjustment_get_upper (GtkAdjustment *adjustment)
  * Sets the maximum value of the adjustment.
  *
  * Note that values will be restricted by
- * <literal>upper - page-size</literal> if the page-size
+ * `upper - page-size` if the page-size
  * property is nonzero.
  *
  * See gtk_adjustment_set_lower() about how to compress multiple

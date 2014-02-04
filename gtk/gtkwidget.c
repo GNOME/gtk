@@ -4114,8 +4114,8 @@ gtk_widget_thaw_child_notify (GtkWidget *widget)
  *
  * This is a convenience function for creating a widget and setting
  * its properties in one go. For example you might write:
- * <literal>gtk_widget_new (GTK_TYPE_LABEL, "label", "Hello World", "xalign",
- * 0.0, NULL)</literal> to create a left-aligned label. Equivalent to
+ * `gtk_widget_new (GTK_TYPE_LABEL, "label", "Hello World", "xalign",
+ * 0.0, NULL)` to create a left-aligned label. Equivalent to
  * g_object_new(), but returns a widget so you don't have to
  * cast the object yourself.
  *
@@ -10734,7 +10734,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  * returned widget; it should not be unreferenced.
  *
  * Note the difference in behavior vs. gtk_widget_get_ancestor();
- * <literal>gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW)</literal>
+ * `gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW)`
  * would return
  * %NULL if @widget wasn't inside a toplevel window, and if the
  * window was inside a #GtkWindow<!-- -->-derived widget which was in turn
@@ -10773,7 +10773,7 @@ gtk_widget_get_toplevel (GtkWidget *widget)
  * @widget_type: ancestor type
  *
  * Gets the first ancestor of @widget with type @widget_type. For example,
- * <literal>gtk_widget_get_ancestor (widget, GTK_TYPE_BOX)</literal> gets
+ * `gtk_widget_get_ancestor (widget, GTK_TYPE_BOX)` gets
  * the first #GtkBox that's an ancestor of @widget. No reference will be
  * added to the returned widget; it should not be unreferenced. See note
  * about checking for a toplevel #GtkWindow in the docs for
@@ -14409,8 +14409,8 @@ gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
  * The widgets in the list are not individually referenced. If you
  * want to iterate through the list and perform actions involving
  * callbacks that might destroy the widgets, you
- * must call <literal>g_list_foreach (result,
- * (GFunc)g_object_ref, NULL)</literal> first, and then unref all the
+ * must call `g_list_foreach (result,
+ * (GFunc)g_object_ref, NULL)` first, and then unref all the
  * widgets afterwards.
 
  * Return value: (element-type GtkWidget) (transfer container): the list of

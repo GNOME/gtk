@@ -2441,7 +2441,7 @@ gdk_x11_display_list_devices (GdkDisplay *display)
  * @n_events: number of event type codes to register
  *
  * Registers interest in receiving extension events with type codes
- * between @event_base and <literal>event_base + n_events - 1</literal>.
+ * between @event_base and `event_base + n_events - 1`.
  * The registered events must have the window field in the same place
  * as core X events (this is not the case for e.g. XKB extension events).
  *
@@ -2788,7 +2788,7 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
  * @sm_client_id: the client id assigned by the session manager when the
  *    connection was opened, or %NULL to remove the property.
  *
- * Sets the <literal>SM_CLIENT_ID</literal> property on the application's leader window so that
+ * Sets the `SM_CLIENT_ID` property on the application's leader window so that
  * the window manager can save the application's state using the X11R6 ICCCM
  * session management protocol.
  *

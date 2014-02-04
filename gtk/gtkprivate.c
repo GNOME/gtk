@@ -71,7 +71,7 @@ _gtk_get_data_prefix (void)
  *
  * Return the Unix-style locale string for the language currently in
  * effect. On Unix systems, this is the return value from
- * <literal>setlocale(LC_CTYPE, NULL)</literal>, and the user can
+ * `setlocale(LC_CTYPE, NULL)`, and the user can
  * affect this through the environment variables LC_ALL, LC_CTYPE or
  * LANG (checked in that order). The locale strings typically is in
  * the form lang_COUNTRY, where lang is an ISO-639 language code, and

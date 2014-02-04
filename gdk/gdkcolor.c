@@ -164,8 +164,8 @@ gdk_color_parse (const gchar *spec,
  * @color: a #GdkColor
  *
  * Returns a textual specification of @color in the hexadecimal form
- * <literal>&num;rrrrggggbbbb</literal>, where <literal>r</literal>,
- * <literal>g</literal> and <literal>b</literal> are hex digits
+ * `&num;rrrrggggbbbb`, where `r`,
+ * `g` and `b` are hex digits
  * representing the red, green and blue components respectively.
  *
  * The returned string can be parsed by gdk_color_parse().

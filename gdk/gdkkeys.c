@@ -497,9 +497,9 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  *
  * @consumed_modifiers gives modifiers that should be masked out
  * from @state when comparing this key press to a hot key. For
- * instance, on a US keyboard, the <literal>plus</literal>
+ * instance, on a US keyboard, the `plus`
  * symbol is shifted, so when comparing a key press to a
- * <literal>&lt;Control&gt;plus</literal> accelerator &lt;Shift&gt; should
+ * `&lt;Control&gt;plus` accelerator &lt;Shift&gt; should
  * be masked out.
  *
  * |[<!-- language="C" -->
@@ -525,16 +525,16 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * ]|
  *
  * However, this did not work if multi-modifier combinations were
- * used in the keymap, since, for instance, <literal>&lt;Control&gt;</literal>
- * would be masked out even if only <literal>&lt;Control&gt;&lt;Alt&gt;</literal>
+ * used in the keymap, since, for instance, `&lt;Control&gt;`
+ * would be masked out even if only `&lt;Control&gt;&lt;Alt&gt;`
  * was used in the keymap. To support this usage as well as well as
  * possible, all single modifier combinations
  * that could affect the key for any combination of modifiers will
  * be returned in @consumed_modifiers; multi-modifier combinations
  * are returned only when actually found in @state. When you store
  * accelerators, you should always store them with consumed modifiers
- * removed. Store <literal>&lt;Control&gt;plus</literal>,
- * not <literal>&lt;Control&gt;&lt;Shift&gt;plus</literal>,
+ * removed. Store `&lt;Control&gt;plus`,
+ * not `&lt;Control&gt;&lt;Shift&gt;plus`,
  *
  * Return value: %TRUE if there was a keyval bound to the keycode/state/group
  **/

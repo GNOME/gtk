@@ -52,10 +52,10 @@
  * @Title: X Window System Interaction
  *
  * The functions in this section are specific to the GDK X11 backend.
- * To use them, you need to include the <literal>&lt;gdk/gdkx.h&gt;</literal>
+ * To use them, you need to include the `&lt;gdk/gdkx.h&gt;`
  * header and use the X11-specific pkg-config files to build your
- * application (either <literal>gdk-x11-3.0</literal> or
- * <literal>gtk+-x11-3.0</literal>).
+ * application (either `gdk-x11-3.0` or
+ * `gtk+-x11-3.0`).
  *
  * To make your code compile with other GDK backends, guard backend-specific
  * calls by an ifdef as follows. Since GDK may be built with multiple

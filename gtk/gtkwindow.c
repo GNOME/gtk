@@ -2511,7 +2511,7 @@ gtk_window_activate_focus (GtkWindow *window)
  * Retrieves the current focused widget within the window.
  * Note that this is the widget that would have the focus
  * if the toplevel window focused; if the toplevel window
- * is not focused then  <literal>gtk_widget_has_focus (widget)</literal> will
+ * is not focused then  `gtk_widget_has_focus (widget)` will
  * not be %TRUE for the widget.
  *
  * Return value: (transfer none): the currently focused widget, or %NULL if there is none.
@@ -2629,7 +2629,7 @@ gtk_window_get_modal (GtkWindow *window)
  * in the list are not individually referenced. If you want
  * to iterate through the list and perform actions involving
  * callbacks that might destroy the widgets, you must call
- * <literal>g_list_foreach (result, (GFunc)g_object_ref, NULL)</literal> first, and
+ * `g_list_foreach (result, (GFunc)g_object_ref, NULL)` first, and
  * then unref all the widgets afterwards.
  *
  * Return value: (element-type GtkWidget) (transfer container): list of toplevel widgets
@@ -4949,8 +4949,8 @@ gtk_window_get_size (GtkWindow *window,
  * the bottom-right corner of the window border will be placed at that
  * reference point. So, to place a window in the bottom right corner
  * you would first set gravity to south east, then write:
- * <literal>gtk_window_move (window, gdk_screen_width () - window_width,
- * gdk_screen_height () - window_height)</literal> (note that this
+ * `gtk_window_move (window, gdk_screen_width () - window_width,
+ * gdk_screen_height () - window_height)` (note that this
  * example does not take multi-head scenarios into account).
  *
  * The Extended Window Manager Hints specification at <ulink

@@ -53,7 +53,7 @@ G_BEGIN_DECLS
  * lists returned by gtk_text_buffer_get_copy_target_list() and
  * gtk_text_buffer_get_paste_target_list().
  *
- * The values counts down from <literal>-1</literal> to avoid clashes
+ * The values counts down from `-1` to avoid clashes
  * with application added drag destinations which usually start at 0.
  */
 typedef enum

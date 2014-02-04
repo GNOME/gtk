@@ -406,7 +406,7 @@ gtk_text_iter_get_buffer (const GtkTextIter *iter)
  *
  * Creates a dynamically-allocated copy of an iterator. This function
  * is not useful in applications, because iterators can be copied with a
- * simple assignment (<literal>GtkTextIter i = j;</literal>). The
+ * simple assignment (`GtkTextIter i = j;`). The
  * function is used by language bindings.
  *
  * Return value: a copy of the @iter, free with gtk_text_iter_free ()
@@ -449,7 +449,7 @@ gtk_text_iter_free (GtkTextIter *iter)
  *
  * Assigns the value of @other to @iter.  This function
  * is not useful in applications, because iterators can be assigned
- * with <literal>GtkTextIter i = j;</literal>. The
+ * with `GtkTextIter i = j;`. The
  * function is used by language bindings.
  *
  * Since: 3.2

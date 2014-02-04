@@ -450,7 +450,7 @@ gtk_tree_model_base_init (gpointer g_class)
        *     have been reordered, or %NULL if the depth of @path is 0
        * @new_order: an array of integers mapping the current position
        *     of each child to its old position before the re-ordering,
-       *     i.e. @new_order<literal>[newpos] = oldpos</literal>
+       *     i.e. @new_order`[newpos] = oldpos`
        *
        * This signal is emitted when the children of a node in the
        * #GtkTreeModel have been reordered.
@@ -1122,7 +1122,7 @@ gtk_tree_path_down (GtkTreePath *path)
  *
  * This function is not intended for use in applications,
  * because you can just copy the structs by value
- * (<literal>GtkTreeIter new_iter = iter;</literal>).
+ * (`GtkTreeIter new_iter = iter;`).
  * You must free this iter with gtk_tree_iter_free().
  *
  * Return value: a newly-allocated copy of @iter
@@ -1509,7 +1509,7 @@ gtk_tree_model_iter_previous (GtkTreeModel *tree_model,
  * function has been called.
  *
  * If @parent is %NULL returns the first node, equivalent to
- * <literal>gtk_tree_model_get_iter_first (tree_model, iter);</literal>
+ * `gtk_tree_model_get_iter_first (tree_model, iter);`
  *
  * Return value: %TRUE, if @child has been set to the first child
  */
@@ -1728,8 +1728,8 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
  * each column number followed by a place to store the value being
  * retrieved.  The list is terminated by a -1. For example, to get a
  * value from column 0 with type %G_TYPE_STRING, you would
- * write: <literal>gtk_tree_model_get (model, iter, 0, &amp;place_string_here, -1)</literal>,
- * where <literal>place_string_here</literal> is a #gchararray
+ * write: `gtk_tree_model_get (model, iter, 0, &amp;place_string_here, -1)`,
+ * where `place_string_here` is a #gchararray
  * to be filled with the string.
  *
  * Returned values with type %G_TYPE_OBJECT have to be unreferenced,
@@ -1899,7 +1899,7 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
  *     have been reordered, or %NULL if the depth of @path is 0
  * @new_order: an array of integers mapping the current position of
  *     each child to its old position before the re-ordering,
- *     i.e. @new_order<literal>[newpos] = oldpos</literal>
+ *     i.e. @new_order`[newpos] = oldpos`
  *
  * Emits the #GtkTreeModel::rows-reordered signal on @tree_model.
  *
@@ -1929,7 +1929,7 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
  * @new_order: (array length=length): an array of integers
  *     mapping the current position of each child to its old
  *     position before the re-ordering,
- *     i.e. @new_order<literal>[newpos] = oldpos</literal>
+ *     i.e. @new_order`[newpos] = oldpos`
  * @length: length of @new_order array
  *
  * Emits the #GtkTreeModel::rows-reordered signal on @tree_model.

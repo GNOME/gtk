@@ -304,7 +304,7 @@ gtk_socket_new (void)
  * client may be in the same process or in a different process. 
  * 
  * To embed a #GtkPlug in a #GtkSocket, you can either create the
- * #GtkPlug with <literal>gtk_plug_new (0)</literal>, call 
+ * #GtkPlug with `gtk_plug_new (0)`, call 
  * gtk_plug_get_id() to get the window ID of the plug, and then pass that to the
  * gtk_socket_add_id(), or you can call gtk_socket_get_id() to get the
  * window ID for the socket, and call gtk_plug_new() passing in that

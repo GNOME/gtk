@@ -40,12 +40,12 @@
  * a named clipboard, identified by a string interned as a #GdkAtom. By
  * claiming ownership of a selection, an application indicates that it will
  * be responsible for supplying its contents. The most common selections are
- * <literal>PRIMARY</literal> and <literal>CLIPBOARD</literal>.
+ * `PRIMARY` and `CLIPBOARD`.
  *
  * The contents of a selection can be represented in a number of formats,
  * called “targets”. Each target is identified by an atom.
  * A list of all possible targets supported by the selection owner can be
- * retrieved by requesting the special target <literal>TARGETS</literal>. When
+ * retrieved by requesting the special target `TARGETS`. When
  * a selection is retrieved, the data is accompanied by a type (an atom), and
  * a format (an integer, representing the number of bits per item).
  * See <link linkend="gdk3-Properties-and-Atoms">Properties and Atoms</link>
@@ -54,7 +54,7 @@
  * The functions in this section only contain the lowlevel parts of the
  * selection protocol. A considerably more complicated implementation is needed
  * on top of this. GTK+ contains such an implementation in the functions in
- * <literal>gtkselection.h</literal> and programmers should use those functions
+ * `gtkselection.h` and programmers should use those functions
  * instead of the ones presented here. If you plan to implement selection
  * handling directly on top of the functions here, you should refer to the
  * X Inter-client Communication Conventions Manual (ICCCM).

@@ -409,8 +409,8 @@ iter_is_valid (GtkTreeIter  *iter,
  * in.  Note that only types derived from standard GObject fundamental types
  * are supported.
  *
- * As an example, <literal>gtk_list_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_PIXBUF);</literal> will create a new #GtkListStore with three columns, of type
+ * As an example, `gtk_list_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * GDK_TYPE_PIXBUF);` will create a new #GtkListStore with three columns, of type
  * int, string and #GdkPixbuf respectively.
  *
  * Return value: a new #GtkListStore
@@ -1166,8 +1166,8 @@ gtk_list_store_set_valist (GtkListStore *list_store,
  * The variable argument list should contain integer column numbers,
  * each column number followed by the value to be set.
  * The list is terminated by a -1. For example, to set column 0 with type
- * %G_TYPE_STRING to "Foo", you would write <literal>gtk_list_store_set (store, iter,
- * 0, "Foo", -1)</literal>.
+ * %G_TYPE_STRING to "Foo", you would write `gtk_list_store_set (store, iter,
+ * 0, "Foo", -1)`.
  *
  * The value will be referenced by the store if it is a %G_TYPE_OBJECT, and it
  * will be copied if it is a %G_TYPE_STRING or %G_TYPE_BOXED.
@@ -1679,7 +1679,7 @@ gtk_list_store_reorder_func (GSequenceIter *a,
  * @store: A #GtkListStore.
  * @new_order: (array zero-terminated=1): an array of integers mapping the new
  *      position of each child to its old position before the re-ordering,
- *      i.e. @new_order<literal>[newpos] = oldpos</literal>. It must have
+ *      i.e. @new_order`[newpos] = oldpos`. It must have
  *      exactly as many items as the list store's length.
  *
  * Reorders @store to follow the order indicated by @new_order. Note that
@@ -2165,7 +2165,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * values given to this function.
  *
  * Calling
- * <literal>gtk_list_store_insert_with_values (list_store, iter, position...)</literal>
+ * `gtk_list_store_insert_with_values (list_store, iter, position...)`
  * has the same effect as calling
  * |[<!-- language="C" -->
  * gtk_list_store_insert (list_store, iter, position);

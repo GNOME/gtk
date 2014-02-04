@@ -803,8 +803,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * The item which is currently active. If the model is a non-flat treemodel,
    * and the active item is not an immediate child of the root of the tree,
    * this property has the value
-   * <literal>gtk_tree_path_get_indices (path)[0]</literal>,
-   * where <literal>path</literal> is the #GtkTreePath of the active item.
+   * `gtk_tree_path_get_indices (path)[0]`,
+   * where `path` is the #GtkTreePath of the active item.
    *
    * Since: 2.4
    */
@@ -4258,8 +4258,8 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
  * Returns the index of the currently active item, or -1 if there's no
  * active item. If the model is a non-flat treemodel, and the active item
  * is not an immediate child of the root of the tree, this function returns
- * <literal>gtk_tree_path_get_indices (path)[0]</literal>, where
- * <literal>path</literal> is the #GtkTreePath of the active item.
+ * `gtk_tree_path_get_indices (path)[0]`, where
+ * `path` is the #GtkTreePath of the active item.
  *
  * Return value: An integer which is the index of the currently active item,
  *     or -1 if there's no active item.
