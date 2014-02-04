@@ -340,7 +340,7 @@ gdk_parse_args (int    *argc,
  *
  * Gets the name of the display, which usually comes from the
  * `DISPLAY` environment variable or the
- * <option>--display</option> command line option.
+ * `--display` command line option.
  *
  * Returns: the name of the display.
  *
@@ -1098,7 +1098,7 @@ gdk_threads_add_timeout_seconds (guint       interval,
  * gdk_get_program_class:
  *
  * Gets the program class. Unless the program class has explicitly
- * been set with gdk_set_program_class() or with the <option>--class</option>
+ * been set with gdk_set_program_class() or with the `--class`
  * commandline option, the default value is the program name (determined
  * with g_get_prgname()) with the first character converted to uppercase.
  *

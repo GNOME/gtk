@@ -840,19 +840,19 @@ gtk_get_option_group (gboolean open_default_display)
  *     <parameter>argv</parameter> parameter of main(), or %NULL. Any options
  *     understood by GTK+ are stripped before return.
  * @parameter_string: (allow-none): a string which is displayed in
- *    the first line of <option>--help</option> output, after
+ *    the first line of `--help` output, after
  *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
  * @entries: (array zero-terminated=1): a %NULL-terminated array
  *    of #GOptionEntrys describing the options of your program
  * @translation_domain: a translation domain to use for translating
- *    the <option>--help</option> output for the options in @entries
+ *    the `--help` output for the options in @entries
  *    and the @parameter_string with gettext(), or %NULL
  * @error: a return location for errors
  *
  * This function does the same work as gtk_init_check().
  * Additionally, it allows you to add your own commandline options,
  * and it automatically generates nicely formatted
- * <option>--help</option> output. Note that your program will
+ * `--help` output. Note that your program will
  * be terminated after writing out the help output.
  *
  * Returns: %TRUE if the windowing system has been successfully

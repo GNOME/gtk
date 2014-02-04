@@ -86,7 +86,7 @@
  * and `.gtkrc-3.0` in the users home directory.
  * (`SYSCONFDIR` defaults to
  * `/usr/local/etc`. It can be changed with the
- * <option>--prefix</option> or <option>--sysconfdir</option> options when
+ * `--prefix` or `--sysconfdir` options when
  * configuring GTK+.)
  *
  * The set of these <firstterm>default</firstterm> files

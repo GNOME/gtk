@@ -1975,7 +1975,7 @@ gdk_event_get_event_sequence (const GdkEvent *event)
  * 
  * Sets whether a trace of received events is output.
  * Note that GTK+ must be compiled with debugging (that is,
- * configured using the <option>--enable-debug</option> option)
+ * configured using the `--enable-debug` option)
  * to use this option.
  **/
 void
