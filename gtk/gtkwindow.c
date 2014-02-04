@@ -3440,6 +3440,10 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
  * screen space to better use. If the underlying window system does not
  * support the request, the setting will not have any effect.
  *
+ * Note that custom titlebars set with gtk_window_set_titlebar() are
+ * not affected by this. The application is in full control of their
+ * content and visibility anyway.
+ * 
  * Since: 3.4
  **/
 void
@@ -5317,8 +5321,12 @@ update_csd_visibility (GtkWindow *window)
   if (priv->title_box == NULL)
     return FALSE;
 
-  visible = !priv->fullscreen && !(priv->maximized && priv->hide_titlebar_when_maximized);
+  visible = !priv->fullscreen &&
+            !(priv->titlebar == priv->title_box &&
+              priv->maximized &&
+              priv->hide_titlebar_when_maximized);
   gtk_widget_set_child_visible (priv->title_box, visible);
+
   return visible;
 }
 
@@ -6959,6 +6967,8 @@ _gtk_window_set_allocation (GtkWindow           *window,
   update_opaque_region (window, &window_border, &child_allocation);
 
   if (priv->title_box != NULL &&
+      gtk_widget_get_visible (priv->title_box) &&
+      gtk_widget_get_child_visible (priv->title_box) &&
       priv->decorated &&
       !priv->fullscreen)
     {
@@ -8268,7 +8278,9 @@ gtk_window_get_preferred_width (GtkWidget *widget,
     {
       get_shadow_width (widget, &window_border);
 
-      if (priv->title_box != NULL)
+      if (priv->title_box != NULL &&
+          gtk_widget_get_visible (priv->title_box) &&
+          gtk_widget_get_child_visible (priv->title_box))
         gtk_widget_get_preferred_width (priv->title_box,
                                         &title_min, &title_nat);
 
@@ -8319,7 +8331,9 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
     {
       get_shadow_width (widget, &window_border);
 
-      if (priv->title_box != NULL)
+      if (priv->title_box != NULL &&
+          gtk_widget_get_visible (priv->title_box) &&
+          gtk_widget_get_child_visible (priv->title_box))
         gtk_widget_get_preferred_width_for_height (priv->title_box,
                                                    height,
                                                    &title_min, &title_nat);
@@ -8372,7 +8386,9 @@ gtk_window_get_preferred_height (GtkWidget *widget,
     {
       get_shadow_width (widget, &window_border);
 
-      if (priv->title_box != NULL)
+      if (priv->title_box != NULL &&
+          gtk_widget_get_visible (priv->title_box) &&
+          gtk_widget_get_child_visible (priv->title_box))
         gtk_widget_get_preferred_height (priv->title_box,
                                          &title_min,
                                          &title_height);
@@ -8425,7 +8441,9 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
     {
       get_shadow_width (widget, &window_border);
 
-      if (priv->title_box != NULL)
+      if (priv->title_box != NULL &&
+          gtk_widget_get_visible (priv->title_box) &&
+          gtk_widget_get_child_visible (priv->title_box))
         gtk_widget_get_preferred_height_for_width (priv->title_box,
                                                    width,
                                                    &title_min,
