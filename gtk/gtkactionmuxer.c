@@ -650,8 +650,8 @@ gtk_action_muxer_class_init (GObjectClass *class)
  *
  * Adds the actions in @action_group to the list of actions provided by
  * @muxer.  @prefix is prefixed to each action name, such that for each
- * action <varname>x</varname> in @action_group, there is an equivalent
- * action @prefix`.`<varname>x</varname> in @muxer.
+ * action `x` in @action_group, there is an equivalent
+ * action @prefix`.x` in @muxer.
  *
  * For example, if @prefix is "`app`" and @action_group
  * contains an action called "`quit`", then @muxer will
