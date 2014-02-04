@@ -90,7 +90,7 @@ struct _GtkPopoverPrivate
   GtkAdjustment *vadj;
   GtkAdjustment *hadj;
   GtkMenuTracker *tracker;
-  cairo_rectangle_int_t pointing_to;
+  GdkRectangle pointing_to;
   guint hierarchy_changed_id;
   guint size_allocate_id;
   guint unmap_id;
@@ -320,11 +320,11 @@ gtk_popover_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_popover_get_pointed_to_coords (GtkPopover            *popover,
-                                   cairo_rectangle_int_t *rect_out)
+gtk_popover_get_pointed_to_coords (GtkPopover   *popover,
+                                   GdkRectangle *rect_out)
 {
   GtkPopoverPrivate *priv = popover->priv;
-  cairo_rectangle_int_t rect;
+  GdkRectangle rect;
 
   if (!rect_out)
     return;
@@ -374,7 +374,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 {
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkPopoverPrivate *priv = popover->priv;
-  cairo_rectangle_int_t rect;
+  GdkRectangle rect;
   gint base, tip, tip_pos;
   gint initial_x, initial_y;
   gint tip_x, tip_y;
@@ -611,7 +611,7 @@ gtk_popover_update_shape (GtkPopover *popover)
 static void
 _gtk_popover_update_child_visible (GtkPopover *popover)
 {
-  cairo_rectangle_int_t rect;
+  GdkRectangle rect;
   GtkAllocation allocation;
   GtkPopoverPrivate *priv;
   GtkWidget *parent;
@@ -643,7 +643,7 @@ static void
 gtk_popover_update_position (GtkPopover *popover)
 {
   GtkAllocation window_alloc;
-  cairo_rectangle_int_t rect;
+  GdkRectangle rect;
   GtkPopoverPrivate *priv;
   GtkPositionType pos;
   GtkRequisition req;
@@ -1566,8 +1566,8 @@ gtk_popover_update_relative_to (GtkPopover *popover,
 }
 
 static void
-gtk_popover_update_pointing_to (GtkPopover            *popover,
-                                cairo_rectangle_int_t *pointing_to)
+gtk_popover_update_pointing_to (GtkPopover         *popover,
+                                const GdkRectangle *pointing_to)
 {
   GtkPopoverPrivate *priv;
 
@@ -1669,7 +1669,7 @@ gtk_popover_get_relative_to (GtkPopover *popover)
  **/
 void
 gtk_popover_set_pointing_to (GtkPopover            *popover,
-                             cairo_rectangle_int_t *rect)
+                             const GdkRectangle *rect)
 {
   g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (rect != NULL);
@@ -1691,8 +1691,8 @@ gtk_popover_set_pointing_to (GtkPopover            *popover,
  * Returns: %TRUE if a rectangle to point to was set.
  **/
 gboolean
-gtk_popover_get_pointing_to (GtkPopover            *popover,
-                             cairo_rectangle_int_t *rect)
+gtk_popover_get_pointing_to (GtkPopover   *popover,
+                             GdkRectangle *rect)
 {
   GtkPopoverPrivate *priv;
 
