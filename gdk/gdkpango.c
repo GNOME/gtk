@@ -119,10 +119,9 @@
  * g_object_unref (context);
  * ]|
  *
- * <figure>
- *   <title>Output of <xref linkend="rotated-example"/></title>
- *   <graphic fileref="rotated-text.png" format="PNG"/>
- * </figure>
+ * ## Output of <xref linkend="rotated-example"/>
+ *
+ * ![](rotated-text.png)
  */
 
 /* Get a clip region to draw only part of a layout. index_ranges

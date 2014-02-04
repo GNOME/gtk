@@ -595,21 +595,26 @@
  * animation will be repated until the state changes again.
  * The option after the duration determines the transition function from a
  * small set of predefined functions.
- * <figure><title>Linear transition</title>
- * <graphic fileref="linear.png" format="PNG"/>
- * </figure>
- * <figure><title>Ease transition</title>
- * <graphic fileref="ease.png" format="PNG"/>
- * </figure>
- * <figure><title>Ease-in-out transition</title>
- * <graphic fileref="ease-in-out.png" format="PNG"/>
- * </figure>
- * <figure><title>Ease-in transition</title>
- * <graphic fileref="ease-in.png" format="PNG"/>
- * </figure>
- * <figure><title>Ease-out transition</title>
- * <graphic fileref="ease-out.png" format="PNG"/>
- * </figure>
+ *
+ * ## Linear transition
+ *
+ * ![](linear.png)
+ *
+ * ## Ease transition
+ *
+ * ![](ease.png)
+ *
+ * ## Ease-in-out transition
+ *
+ * ![](ease-in-out.png)
+ *
+ * ## Ease-in transition
+ *
+ * ![](ease-in.png)
+ *
+ * ## Ease-out transition
+ *
+ * ![](ease-out.png)
  *
  * ## Supported properties
  *

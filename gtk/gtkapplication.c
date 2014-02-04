@@ -81,17 +81,17 @@
  * GTK+ displays these menus as expected, depending on the platform
  * the application is running on.
  *
- * <figure label="Menu integration in OS X">
- * <graphic fileref="bloatpad-osx.png" format="PNG"/>
- * </figure>
+ * ## Menu integration in OS X
  *
- * <figure label="Menu integration in GNOME">
- * <graphic fileref="bloatpad-gnome.png" format="PNG"/>
- * </figure>
+ * ![](bloatpad-osx.png)
  *
- * <figure label="Menu integration in Xfce">
- * <graphic fileref="bloatpad-xfce.png" format="PNG"/>
- * </figure>
+ * ## Menu integration in GNOME
+ *
+ * ![](bloatpad-gnome.png)
+ *
+ * ## Menu integration in Xfce
+ *
+ * ![](bloatpad-xfce.png)
  *
  * ## A simple application ## {#gtkapplication}
  *
