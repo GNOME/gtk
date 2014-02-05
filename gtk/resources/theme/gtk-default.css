@@ -32,6 +32,13 @@ GtkWindow, .button, .slider {
   background-color: @bg_color;
 }
 
+GtkPopover {
+  background-color: @bg_color;
+  border-color: darker(@bg_color);
+  border-width: 1px;
+  border-style: solid;
+}
+
 .expander, GtkTreeView.view.expander {
   color: #fff;
 }
