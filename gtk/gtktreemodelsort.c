@@ -2769,9 +2769,8 @@ gtk_tree_model_sort_iter_is_valid_helper (GtkTreeIter *iter,
  * @tree_model_sort: A #GtkTreeModelSort.
  * @iter: A #GtkTreeIter.
  *
- * <warning><para>
- * This function is slow. Only use it for debugging and/or testing purposes.
- * </para></warning>
+ * > This function is slow. Only use it for debugging and/or testing
+ * > purposes.
  *
  * Checks if the given iter is a valid iter for this #GtkTreeModelSort.
  *
