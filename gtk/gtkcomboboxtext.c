@@ -52,7 +52,7 @@
  * You should not call gtk_combo_box_set_model() or attempt to pack more cells
  * into this combo box via its GtkCellLayout interface.
  *
- * ## GtkComboBoxText as GtkBuildable
+ * # GtkComboBoxText as GtkBuildable
  *
  * The GtkComboBoxText implementation of the GtkBuildable interface
  * supports adding items directly using the &lt;items&gt; element

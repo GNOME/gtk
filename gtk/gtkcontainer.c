@@ -78,7 +78,7 @@
  * children in a horizontal row, and a #GtkGrid arranges the widgets it contains
  * in a two-dimensional grid.
  *
- * ## Height for width geometry management
+ * # Height for width geometry management
  *
  * GTK+ uses a height-for-width (and width-for-height) geometry management system.
  * Height-for-width means that a widget can change how much vertical space it needs,
@@ -180,7 +180,7 @@
  * See <link linkend="geometry-management">GtkWidget's geometry management section</link>
  * to learn more about implementing height-for-width geometry management for widgets.
  *
- * ## Child properties
+ * # Child properties
  *
  * GtkContainer introduces child properties.
  * These are object properties that are not specific
@@ -200,7 +200,7 @@
  * gtk_container_child_get_valist(). To emit notification about child property
  * changes, use gtk_widget_child_notify().
  *
- * ## GtkContainer as GtkBuildable
+ * # GtkContainer as GtkBuildable
  *
  * The GtkContainer implementation of the GtkBuildable interface
  * supports a &lt;packing&gt; element for children, which can

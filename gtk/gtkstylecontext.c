@@ -219,7 +219,7 @@
  *   </tgroup>
  * </informaltable>
  *
- * ## Custom styling in UI libraries and applications
+ * # Custom styling in UI libraries and applications
  *
  * If you are developing a library with custom #GtkWidget<!-- -->s that
  * render differently than standard components, you may need to add a

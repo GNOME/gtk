@@ -61,7 +61,7 @@
  * applications that want to show an undeterminate value on the scale, without
  * changing the layout of the application (such as movie or music players).
  *
- * ## GtkScale as GtkBuildable
+ * # GtkScale as GtkBuildable
  *
  * GtkScale supports a custom &lt;marks&gt; element, which
  * can contain multiple &lt;mark&gt; elements. The "value" and "position"

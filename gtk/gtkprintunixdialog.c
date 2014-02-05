@@ -82,7 +82,7 @@
  *
  * Printing support was added in GTK+ 2.10.
  *
- * ## GtkPrintUnixDialog as GtkBuildable
+ * # GtkPrintUnixDialog as GtkBuildable
  *
  * The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
  * @notebook internal children with the name "notebook".

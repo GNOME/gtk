@@ -70,8 +70,8 @@
  * (see the #GtkSettings:gtk-theme-name setting) and datadir
  * is the prefix configured when GTK+ was compiled, unless overridden by the
  * `GTK_DATA_PREFIX` environment variable.
- * 
- * ## Style sheets
+ *
+ * # Style sheets
  *
  * The basic structure of the style sheets understood by this provider is
  * a series of statements, which are either rule sets or '@-rules', separated
@@ -116,6 +116,7 @@
  *   GtkLabel widgets that are direct children of a GtkNotebook.
  *
  * An example of widget classes and names in selectors:
+ *
  * |[
  * /&ast; Theme labels that are descendants of a window &ast;/
  * GtkWindow GtkLabel {
@@ -219,7 +220,7 @@
  * pseudo-classes in CSS. The available pseudo-classes for widget states
  * are :active, :prelight (or :hover), :insensitive, :selected, :focused
  * and :inconsistent.
- * 
+ *
  * And example for styling specific widget states:
  * |[
  * /&ast; Theme active (pressed) buttons &ast;/
@@ -263,8 +264,8 @@
  * sets are merged. As in CSS, rules apply by specificity, so the rules
  * whose selectors more closely match a widget path will take precedence
  * over the others.
- * 
- * ## &commat; Rules
+ *
+ * # &commat; Rules
  *
  * GTK+'s CSS supports the &commat;import rule, in order to load another
  * CSS style sheet in addition to the currently parsed one.
@@ -317,7 +318,7 @@
  * }
  * ]|
  *
- * ## Symbolic colors
+ * # Symbolic colors
  *
  * Besides being able to define color names, the CSS parser is also able
  * to read different color expressions, which can also be nested, providing
@@ -411,7 +412,7 @@
  *   </tgroup>
  * </informaltable>
  *
- * ## Gradients
+ * # Gradients
  *
  * Linear or radial Gradients can be used as background images.
  *
@@ -476,7 +477,7 @@
  *                color-stop (0.2, &commat;yellow),
  *                color-stop (1, &commat;green))</literallayout>
  *
- * ## Text shadow
+ * # Text shadow
  *
  * A shadow list can be applied to text or symbolic icons, using the CSS3
  * text-shadow syntax, as defined in the
@@ -496,8 +497,8 @@
  * always rendered front-back, i.e. the first shadow specified is on top of the
  * others. Shadows can thus overlay each other, but they can never overlay the
  * text or icon itself, which is always rendered on top of the shadow layer.
- * 
- * ## Box shadow
+ *
+ * # Box shadow
  *
  * Themes can apply shadows on framed elements using the CSS3 box-shadow syntax,
  * as defined in the
@@ -517,8 +518,8 @@
  * of shadow elements in the box-shadow property. Shadows are always rendered
  * front-back, i.e. the first shadow specified is on top of the others, so they may
  * overlap other boxes or other shadows.
- * 
- * ## Border images
+ *
+ * # Border images
  *
  * Images and gradients can also be used in slices for the purpose of creating
  * scalable borders.
@@ -583,7 +584,7 @@
  * This border image was specified with
  * <literallayout>url("gradient1.png") 10 10 10 10 stretch</literallayout>
  *
- * ## Transitions
+ * # Transitions
  *
  * Styles can specify transitions that will be used to create a gradual
  * change in the appearance when a widget state changes. The following
@@ -595,7 +596,7 @@
  * The option after the duration determines the transition function from a
  * small set of predefined functions.
  *
- * ## Linear transition
+ * # Linear transition
  *
  * ![](linear.png)
  *
@@ -615,13 +616,13 @@
  *
  * ![](ease-out.png)
  *
- * ## Supported properties
+ * # Supported properties
  *
  * Properties are the part that differ the most to common CSS,
  * not all properties are supported (some are planned to be
  * supported eventually, some others are meaningless or don't
  * map intuitively in a widget based environment).
- * 
+ *
  * The currently supported properties are:
  * <informaltable>
  *   <tgroup cols="4">

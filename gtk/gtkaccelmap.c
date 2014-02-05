@@ -69,7 +69,7 @@
  * linkend="monitoring-changes">Monitoring changes</link> for additional
  * details.
  *
- * ## Manipulating accelerators
+ * # Manipulating accelerators
  *
  * New accelerators can be added using gtk_accel_map_add_entry().
  * To search for specific accelerator, use gtk_accel_map_lookup_entry().
@@ -80,7 +80,7 @@
  * locked using gtk_accel_map_lock_path(). Unlocking is done using
  * gtk_accel_map_unlock_path().
  *
- * ## Saving and loading accelerator maps
+ * # Saving and loading accelerator maps
  *
  * Accelerator maps can be saved to and loaded from some external
  * resource. For simple saving and loading from file,
@@ -88,7 +88,7 @@
  * Saving and loading can also be done by providing file descriptor
  * to gtk_accel_map_save_fd() and gtk_accel_map_load_fd().
  *
- * ## Monitoring changes
+ * # Monitoring changes
  *
  * #GtkAccelMap object is only useful for monitoring changes of
  * accelerators. By connecting to #GtkAccelMap::changed signal, one

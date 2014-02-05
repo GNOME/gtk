@@ -32,7 +32,7 @@
  * to add it to the expander. When the expander is toggled, it will take
  * care of showing and hiding the child automatically.
  *
- * ## Special Usage
+ * # Special Usage
  *
  * There are situations in which you may prefer to show and hide the
  * expanded widget yourself, such as when you want to actually create
@@ -69,7 +69,7 @@
  * }
  * ]|
  *
- * ## GtkExpander as GtkBuildable
+ * # GtkExpander as GtkBuildable
  *
  * The GtkExpander implementation of the GtkBuildable interface
  * supports placing a child in the label position by specifying

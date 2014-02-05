@@ -67,7 +67,7 @@
  * implies, most labels are used to label another widget such as a
  * #GtkButton, a #GtkMenuItem, or a #GtkComboBox.
  *
- * ## GtkLabel as GtkBuildable
+ * # GtkLabel as GtkBuildable
  *
  * The GtkLabel implementation of the GtkBuildable interface supports a
  * custom &lt;attributes&gt; element, which supports any number of &lt;attribute&gt;
@@ -90,7 +90,7 @@
  * sense with translatable attributes. Use markup embedded in the translatable
  * content instead.
  *
- * ## Mnemonics
+ * # Mnemonics
  *
  * Labels may contain “mnemonics”. Mnemonics are
  * underlined characters in the label, used for keyboard navigation.
@@ -131,7 +131,7 @@
  *   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
  * ]|
  *
- * ## Markup (styled text)
+ * # Markup (styled text)
  *
  * To make it easy to format text in a label (changing colors,
  * fonts, etc.), label text can be provided in a simple <link
@@ -162,14 +162,14 @@
  * end_index for a #PangoAttribute requires knowledge of the exact string
  * being displayed, so translations will cause problems.
  *
- * ## Selectable labels
+ * # Selectable labels
  *
  * Labels can be made selectable with gtk_label_set_selectable().
  * Selectable labels allow the user to copy the label contents to
  * the clipboard. Only labels that contain useful-to-copy information
  * &mdash; such as error messages &mdash; should be made selectable.
  *
- * ## Text layout
+ * # Text layout
  *
  * A label can contain any number of paragraphs, but will have
  * performance problems if it contains more than a small number.
@@ -196,7 +196,7 @@
  * #GtkLabel:max-width-chars has changed a bit with the introduction of
  * <link linkend="geometry-management">width-for-height geometry management.</link>
  *
- * ## Links
+ * # Links
  *
  * Since 2.18, GTK+ supports markup for clickable hyperlinks in addition
  * to regular Pango markup. The markup for links is borrowed from HTML, using the

@@ -48,7 +48,7 @@
  * Use gtk_menu_tool_button_new() to create a new
  * #GtkMenuToolButton.
  *
- * ## GtkMenuToolButton as GtkBuildable
+ * # GtkMenuToolButton as GtkBuildable
  *
  * The GtkMenuToolButton implementation of the GtkBuildable interface
  * supports adding a menu by specifying "menu" as the "type"

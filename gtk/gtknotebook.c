@@ -64,7 +64,7 @@
  * will be a popup menu allowing the users to switch pages.
  * (see gtk_notebook_popup_enable(), gtk_notebook_popup_disable())
  *
- * ## GtkNotebook as GtkBuildable
+ * # GtkNotebook as GtkBuildable
  * 
  * The GtkNotebook implementation of the #GtkBuildable interface
  * supports placing children into tabs by specifying "tab" as the

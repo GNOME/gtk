@@ -45,7 +45,7 @@
  * - The #GtkWidget::realize signal to take any necessary actions
  *   when the widget is instantiated on a particular display.
  *   (Create GDK resources in response to this signal.)
- * 
+ *
  * - The #GtkWidget::configure-event signal to take any necessary
  *   actions when the widget changes size.
  *

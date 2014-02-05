@@ -55,7 +55,7 @@
  * - Volumes: are provided by the underlying filesystem abstraction. They are
  *   the "roots" of the filesystem.
  *
- * ## File Names and Encodings
+ * # File Names and Encodings
  *
  * When the user is finished selecting files in a
  * #GtkFileChooser, your program can get the selected names
@@ -75,7 +75,7 @@
  * to convert filenames into strings that can be passed to GTK+
  * widgets.
  *
- * ## Adding a Preview Widget
+ * # Adding a Preview Widget
  *
  * You can add a custom preview widget to a file chooser and then
  * get notification about when the preview needs to be updated.
@@ -129,7 +129,7 @@
  * }
  * ]|
  *
- * ## Adding Extra Widgets
+ * # Adding Extra Widgets
  *
  * You can add extra widgets to a file chooser to provide options
  * that are not present in the default design.  For example, you
@@ -150,7 +150,7 @@
  *   gtk_file_chooser_set_extra_widget (my_file_chooser, toggle);
  * }
  * ]|
- * 
+ *
  * If you want to set more than one extra widget in the file
  * chooser, you can a container such as a #GtkBox or a #GtkGrid
  * and include your widgets in it.  Then, set the container as

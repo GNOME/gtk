@@ -239,7 +239,7 @@
  * If this has a value other than -1 you need to align the widget such that the baseline
  * appears at the position.
  *
- * ## Style Properties
+ * # Style Properties
  *
  * #GtkWidget introduces “style
  * properties” - these are basically object properties that are stored
@@ -255,7 +255,7 @@
  * style properties and gtk_widget_style_get_property(), gtk_widget_style_get() or
  * gtk_widget_style_get_valist() to obtain the value of a style property.
  *
- * ## GtkWidget as GtkBuildable
+ * # GtkWidget as GtkBuildable
  *
  * The GtkWidget implementation of the GtkBuildable interface supports a
  * custom &lt;accelerator&gt; element, which has attributes named key,
@@ -302,7 +302,7 @@
  * </object>
  * ]|
  *
- * ## Building composite widgets from template XML
+ * # Building composite widgets from template XML
  *
  * GtkWidget exposes some facilities to automate the proceedure
  * of creating composite widgets using #GtkBuilder interface description

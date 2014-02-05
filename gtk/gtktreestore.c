@@ -41,7 +41,7 @@
  * <link linkend="gtk3-GtkTreeView-drag-and-drop">drag and drop</link>
  * interfaces.
  *
- * ## GtkTreeStore as GtkBuildable
+ * # GtkTreeStore as GtkBuildable
  *
  * The GtkTreeStore implementation of the #GtkBuildable interface allows
  * to specify the model columns with a &lt;columns&gt; element that may

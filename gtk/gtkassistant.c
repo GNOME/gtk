@@ -41,7 +41,7 @@
  * handling buttons, you can use the #GTK_ASSISTANT_PAGE_CUSTOM page
  * type and handle buttons yourself.
  *
- * ## GtkAssistant as GtkBuildable
+ * # GtkAssistant as GtkBuildable
  *
  * The GtkAssistant implementation of the #GtkBuildable interface
  * exposes the @action_area as internal children with the name

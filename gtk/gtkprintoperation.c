@@ -59,7 +59,7 @@
  * #GtkPrintOperation::draw-page, which you are supposed to catch
  * and render the page on the provided #GtkPrintContext using Cairo.
  *
- * ## The high-level printing API
+ * # The high-level printing API
  *
  * |[<!-- language="C" -->
  * static GtkPrintSettings *settings = NULL;

@@ -38,7 +38,7 @@
  * see gtk_file_chooser_add_filter(), but it is also possible
  * to manually use a filter on a file with gtk_file_filter_filter().
  *
- * ## GtkFileFilter as GtkBuildable
+ * # GtkFileFilter as GtkBuildable
  *
  * The GtkFileFilter implementation of the GtkBuildable interface
  * supports adding rules using the &lt;mime-types&gt;, &lt;patterns&gt;

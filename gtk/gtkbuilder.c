@@ -56,7 +56,7 @@
  * The function gtk_builder_connect_signals() and variants thereof can be
  * used to connect handlers to the named signals in the description.
  *
- * ## GtkBuilder UI Definitions
+ * # GtkBuilder UI Definitions
  *
  * GtkBuilder parses textual descriptions of user interfaces which are
  * specified in an XML format which can be roughly described by the
@@ -68,11 +68,13 @@
  * are more limited in scope. It is common to use `.ui`
  * as the filename extension for files containing GtkBuilder UI
  * definitions.
+ *
  * |[
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gtk/gtkbuilder.rnc">
  *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * ]|
+ *
  * The toplevel element is &lt;interface&gt;. It optionally takes a
  * "domain" attribute, which will make the builder look for translated
  * strings using dgettext() in the domain specified. This can also be
@@ -163,7 +165,7 @@
  * The possible values for the "type" attribute are described in the
  * sections describing the widget-specific portions of UI definitions.
  *
- * ## A GtkBuilder UI Definition
+ * # A GtkBuilder UI Definition
  *
  * |[
  * <interface>

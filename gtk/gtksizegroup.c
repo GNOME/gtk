@@ -82,7 +82,7 @@
  * by way of #GtkLabel:width-chars for instance. Widgets with static sizes as well
  * as widgets that grow (such as ellipsizing text) need no such considerations.
  *
- * ## GtkSizeGroup as GtkBuildable
+ * # GtkSizeGroup as GtkBuildable
  *
  * Size groups can be specified in a UI definition by placing an
  * &lt;object&gt; element with `class="GtkSizeGroup"`

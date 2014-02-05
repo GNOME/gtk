@@ -71,7 +71,7 @@
  * gtk_accel_label_set_accel (GTK_ACCEL_LABEL (child), GDK_KEY_1, 0);
  * ]|
  *
- * ## GtkMenuItem as GtkBuildable
+ * # GtkMenuItem as GtkBuildable
  *
  * The GtkMenuItem implementation of the #GtkBuildable interface
  * supports adding a submenu by specifying "submenu" as the "type"

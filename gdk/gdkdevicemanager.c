@@ -77,7 +77,7 @@
  * be controlling each of these virtual devices. Physical devices may also
  * be "floating", which means they are not attached to any virtual device.
  *
- * ## Master and slave devices
+ * # Master and slave devices
  *
  * |[
  * carlos@sacarino:~$ xinput list

@@ -87,7 +87,7 @@
  *                            dialog);
  * ]|
  *
- * ## GtkMessageDialog as GtkBuildable
+ * # GtkMessageDialog as GtkBuildable
  *
  * The GtkMessageDialog implementation of the GtkBuildable interface exposes
  * the message area as an internal child with the name "message_area".

@@ -47,7 +47,7 @@
  * with high key  binding configurability which requires no application
  * or toolkit side changes.
  *
- * ## Installing a key binding
+ * # Installing a key binding
  *
  * A CSS file binding consists of a 'binding-set' definition and a match
  * statement to apply the binding set to specific widget types. Details
@@ -68,6 +68,7 @@
  * of a #GtkEntry widget to the #GtkEntry::move-cursor signal (so
  * movement occurs in 3-character steps), the following binding can be
  * used:
+ *
  * |[
  * @binding-set MoveCursor3
  * {
@@ -80,7 +81,7 @@
  * }
  * ]|
  *
- * ## Unbinding existing key bindings
+ * # Unbinding existing key bindings
  *
  * GTK+ already defines a number of useful bindings for the widgets
  * it provides. Because custom bindings set up in CSS files take
@@ -89,6 +90,7 @@
  * <link linkend="gtk-bindings-install">Installing a key binding</link>
  * works as expected. The same mechanism can not be used to "unbind"
  * existing bindings, however.
+ *
  * |[
  * @binding-set MoveCursor3
  * {
@@ -100,6 +102,7 @@
  *   gtk-key-bindings: MoveCursor3;
  * }
  * ]|
+ *
  * The above example will not have the desired effect of causing
  * "&lt;Control&gt;Right" and "&lt;Control&gt;Left" key presses to
  * be ignored by GTK+. Instead, it just causes any existing bindings
@@ -110,6 +113,7 @@
  * will eventually lookup and find the default GTK+ bindings for
  * entries which implement word movement. To keep GTK+ from activating
  * its default bindings, the "unbind" keyword can be used like this:
+ *
  * |[
  * @binding-set MoveCursor3
  * {
@@ -121,6 +125,7 @@
  *   gtk-key-bindings: MoveCursor3;
  * }
  * ]|
+ *
  * Now, GTK+ will find a match when looking up "&lt;Control&gt;Right"
  * and "&lt;Control&gt;Left" key presses before it resorts to its default
  * bindings, and the match instructs it to abort ("unbind") the search,

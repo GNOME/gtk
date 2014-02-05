@@ -45,7 +45,7 @@
  * top side of the frame. The position of the
  * label can be controlled with gtk_frame_set_label_align().
  *
- * ## GtkFrame as GtkBuildable
+ * # GtkFrame as GtkBuildable
  *
  * The GtkFrame implementation of the GtkBuildable interface
  * supports placing a child in the label position by specifying

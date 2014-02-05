@@ -35,8 +35,8 @@
  * Usually users dont have to interact with the #GtkCellArea directly
  * unless they are implementing a cell-layouting widget themselves.
  *
- * ## Requesting area sizes
- * 
+ * # Requesting area sizes
+ *
  * As outlined in <link linkend="geometry-management">GtkWidget's
  * geometry management section</link>, GTK+ uses a height-for-width
  * geometry management system to compute the sizes of widgets and user
@@ -71,6 +71,7 @@
  *
  * In order to request the width of all the rows at the root level
  * of a #GtkTreeModel one would do the following:
+ *
  * |[<!-- language="C" -->
  * GtkTreeIter iter;
  * gint        minimum_width;
@@ -86,6 +87,7 @@
  *   }
  * gtk_cell_area_context_get_preferred_width (context, &minimum_width, &natural_width);
  * ]|
+ *
  * Note that in this example it's not important to observe the
  * returned minimum and natural width of the area for each row
  * unless the cell-layouting object is actually interested in the
@@ -104,6 +106,7 @@
  *
  * A simple example where rows are rendered from top to bottom and
  * take up the full width of the layouting widget would look like:
+ *
  * |[<!-- language="C" -->
  * static void
  * foo_get_preferred_width (GtkWidget       *widget,
@@ -118,6 +121,7 @@
  *   gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
  * }
  * ]|
+ *
  * In the above example the Foo widget has to make sure that some
  * row sizes have been calculated (the amount of rows that Foo judged
  * was appropriate to request space for in a single timeout iteration)
@@ -133,6 +137,7 @@
  *
  * In order to request the height for width of all the rows at the
  * root level of a #GtkTreeModel one would do the following:
+ *
  * |[<!-- language="C" -->
  * GtkTreeIter iter;
  * gint        minimum_height;
@@ -156,6 +161,7 @@
  *     valid = gtk_tree_model_iter_next (model, &iter);
  *   }
  * ]|
+ *
  * Note that in the above example we would need to cache the heights
  * returned for each row so that we would know what sizes to render the
  * areas for each row. However we would only want to really cache the
@@ -176,8 +182,8 @@
  * from a scrolled window it simply continues to drive the scrollbar
  * values while more and more height is required for the row heights
  * that are calculated in the background.
- * 
- * ## Rendering Areas
+ *
+ * # Rendering Areas
  *
  * Once area sizes have been aquired at least for the rows in the
  * visible area of the layouting widget they can be rendered at
@@ -185,6 +191,7 @@
  *
  * A crude example of how to render all the rows at the root level
  * runs as follows:
+ *
  * |[<!-- language="C" -->
  * GtkAllocation allocation;
  * GdkRectangle  cell_area = { 0, };
@@ -209,6 +216,7 @@
  *     valid = gtk_tree_model_iter_next (model, &iter);
  *   }
  * ]|
+ *
  * Note that the cached height in this example really depends on how
  * the layouting widget works. The layouting widget might decide to
  * give every row its minimum or natural height or, if the model content
@@ -216,7 +224,7 @@
  * would make sense to calculate the allocation for each row at
  * #GtkWidget::size-allocate time using gtk_distribute_natural_allocation().
  *
- * ## Handling Events and Driving Keyboard Focus
+ * # Handling Events and Driving Keyboard Focus
  *
  * Passing events to the area is as simple as handling events on any
  * normal widget and then passing them to the gtk_cell_area_event()
@@ -245,6 +253,7 @@
  *
  * A basic example of how the #GtkWidgetClass.focus() virtual method
  * should be implemented:
+ *
  * |[<!-- language="C" -->
  * static gboolean
  * foo_focus (GtkWidget       *widget,
@@ -302,10 +311,11 @@
  *     return have_focus;
  * }
  * ]|
+ *
  * Note that the layouting widget is responsible for matching the
  * GtkDirectionType values to the way it lays out its cells.
  *
- * ## Cell Properties
+ * # Cell Properties
  *
  * The #GtkCellArea introduces cell properties for #GtkCellRenderers
  * in very much the same way that #GtkContainer introduces

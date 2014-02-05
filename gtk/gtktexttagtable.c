@@ -44,7 +44,7 @@
  * conceptual overview</link> which gives an overview of all the objects and
  * data types related to the text widget and how they work together.
  *
- * ## GtkTextTagTables as GtkBuildable
+ * # GtkTextTagTables as GtkBuildable
  *
  * The GtkTextTagTable implementation of the GtkBuildable interface
  * supports adding tags by specifying "tag" as the "type"

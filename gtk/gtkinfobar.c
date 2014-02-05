@@ -98,7 +98,7 @@
  * gtk_widget_show (info_bar);
  * ]|
  *
- * ## GtkInfoBar as GtkBuildable
+ * # GtkInfoBar as GtkBuildable
  *
  * The GtkInfoBar implementation of the GtkBuildable interface exposes
  * the content area and action area as internal children with the names

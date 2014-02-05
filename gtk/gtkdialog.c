@@ -128,7 +128,7 @@
  * }
  * ]|
  *
- * ## GtkDialog as GtkBuildable
+ * # GtkDialog as GtkBuildable
  *
  * The GtkDialog implementation of the #GtkBuildable interface exposes the
  * @vbox and @action_area as internal children with the names "vbox" and

@@ -89,7 +89,7 @@
  * control whether a window has a resize grip, use
  * gtk_window_set_has_resize_grip().
  *
- * ## GtkWindow as GtkBuildable
+ * # GtkWindow as GtkBuildable
  *
  * The GtkWindow implementation of the GtkBuildable interface supports a
  * custom `&lt;accel-groups&gt;` element, which supports

@@ -95,7 +95,7 @@
  * (and vice versa), for the latter gtk_tree_view_convert_bin_window_to_tree_coords()
  * (and vice versa).
  *
- * ## GtkTreeView as GtkBuildable
+ * # GtkTreeView as GtkBuildable
  *
  * The GtkTreeView implementation of the GtkBuildable interface accepts
  * #GtkTreeViewColumn objects as &lt;child&gt; elements and exposes the

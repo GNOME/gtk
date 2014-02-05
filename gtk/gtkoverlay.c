@@ -46,7 +46,7 @@
  * More complicated placement of overlays is possible by connecting
  * to the #GtkOverlay::get-child-position signal.
  *
- * ## GtkOverlay as GtkBuildable
+ * # GtkOverlay as GtkBuildable
  *
  * The GtkOverlay implementation of the GtkBuildable interface
  * supports placing a child as an overlay by specifying "overlay" as

@@ -105,7 +105,7 @@
  * }
  * ]|
  *
- * ## Performance Considerations
+ * # Performance Considerations
  *
  * Internally, the #GtkListStore was implemented with a linked list with
  * a tail pointer prior to GTK+ 2.6.  As a result, it was fast at data
@@ -115,7 +115,7 @@
  * access to a particular row is needed often and your code is expected to
  * run on older versions of GTK+, it is worth keeping the iter around.
  *
- * ## Atomic Operations
+ * # Atomic Operations
  *
  * It is important to note that only the methods
  * gtk_list_store_insert_with_values() and gtk_list_store_insert_with_valuesv()
@@ -132,7 +132,7 @@
  * #GtkTreeModelFilterVisibleFunc to be visited with an empty row first; the
  * function must be prepared for that.
  *
- * ## GtkListStore as GtkBuildable
+ * # GtkListStore as GtkBuildable
  *
  * The GtkListStore implementation of the GtkBuildable interface allows
  * to specify the model columns with a &lt;columns&gt; element that may

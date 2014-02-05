@@ -35,7 +35,7 @@
  * user to perform application functions. A #GtkMenuItem can have a
  * submenu associated with it, allowing for nested hierarchical menus.
  *
- * ## Terminology
+ * # Terminology
  *
  * A menu item can be "selected", this means that it is displayed
  * in the prelight state, and if it has a submenu, that submenu
