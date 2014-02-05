@@ -57,7 +57,8 @@
  * When it makes sense, key values can be converted to and from
  * Unicode characters with gdk_keyval_to_unicode() and gdk_unicode_to_keyval().
  *
- * <para id="key-group-explanation">
+ * # Groups # {#key-group-explanation}
+ *
  * One #GdkKeymap object exists for each user display. gdk_keymap_get_default()
  * returns the #GdkKeymap for the default display; to obtain keymaps for other
  * displays, use gdk_keymap_get_for_display(). A keymap
@@ -78,7 +79,6 @@
  * group 0, a key might have two English characters, and in group 1 it might have
  * two Hebrew characters. The Hebrew characters will be printed on the key next to
  * the English characters.
- * </para>
  *
  * In order to use a keymap to interpret a key event, it's necessary to first
  * convert the keyboard state into an effective group and level. This is done via a

@@ -60,20 +60,20 @@
  * and so on; a #GtkWindow may contain many #GdkWindows. For example,
  * each #GtkButton has a #GdkWindow associated with it.
  *
- * ## Composited Windows
+ * # Composited Windows # {#COMPOSITED-WINDOWS}
  *
- * <para id="COMPOSITED-WINDOWS">Normally, the windowing system takes care of rendering the contents
+ * Normally, the windowing system takes care of rendering the contents
  * of a child window onto its parent window. This mechanism can be
  * intercepted by calling gdk_window_set_composited() on the child
  * window. For a “composited” window it is the
  * responsibility of the application to render the window contents at
- * the right spot.</para>
+ * the right spot.
  *
- * ## Offscreen Windows
+ * # Offscreen Windows # {#OFFSCREEN-WINDOWS}
  *
- * <para id="OFFSCREEN-WINDOWS">Offscreen windows are more general than composited windows, since
+ * Offscreen windows are more general than composited windows, since
  * they allow not only to modify the rendering of the child window onto
- * its parent, but also to apply coordinate transformations.</para>
+ * its parent, but also to apply coordinate transformations.
  *
  * To integrate an offscreen window into a window hierarchy, one has
  * to call gdk_offscreen_window_set_embedder() and handle a number of

@@ -36,13 +36,12 @@
  * these affect the actual layout of the page, and thus need to be set
  * long before user prints.
  *
- * <para id="print-margins">
+ * ## Margins ## {#print-margins}
  * The margins specified in this object are the "print margins", i.e. the
  * parts of the page that the printer cannot print on. These are different
  * from the layout margins that a word processor uses; they are typically
  * used to determine the minimal size for the layout
  * margins.
- * </para>
  *
  * To obtain a #GtkPageSetup use gtk_page_setup_new() to get the defaults,
  * or use gtk_print_run_page_setup_dialog() to show the page setup dialog

@@ -75,7 +75,7 @@
  * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
  * widget.
  *
- * ## Transition animations
+ * # Transition animations
  *
  * #GtkStyleContext has built-in support for state change transitions.
  * Note that these animations respect the #GtkSettings:gtk-enable-animations
@@ -97,6 +97,7 @@
  * enumeration works well:
  *
  * An example for Using an enumeration to identify animatable regions:
+ *
  * |[<!-- language="C" -->
  * enum {
  *   REGION_ENTRY,
@@ -171,11 +172,11 @@
  * special value, in this case, the whole widget area will be updated
  * by the animation.
  *
- * ## Style classes and regions
+ * # Style classes and regions # {#gtkstylecontext-classes}
  *
- * <para id="gtkstylecontext-classes">Widgets can add style classes to their context, which can be used
+ * Widgets can add style classes to their context, which can be used
  * to associate different styles by class (see <xref linkend="gtkcssprovider-selectors"/>).
- * Theme engines can also use style classes to vary their rendering.</para>
+ * Theme engines can also use style classes to vary their rendering.
  *
  * Widgets can also add regions with flags to their context.
  * The regions used by GTK+ widgets are:

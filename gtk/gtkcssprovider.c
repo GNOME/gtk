@@ -91,13 +91,13 @@
  * }
  * ]|
  *
- * ## Selectors
+ * # Selectors # {#gtkcssprovider-selectors}
  *
- * <para id="gtkcssprovider-selectors">Selectors work very similar to the way they do in CSS, with widget class
+ * Selectors work very similar to the way they do in CSS, with widget class
  * names taking the role of element names, and widget names taking the role
  * of IDs. When used in a selector, widget names must be prefixed with a
  * '&num;' character. The '*' character represents the so-called universal
- * selector, which matches any widget.</para>
+ * selector, which matches any widget.
  *
  * To express more complicated situations, selectors can be combined in
  * various ways:

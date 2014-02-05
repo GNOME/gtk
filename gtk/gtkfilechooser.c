@@ -91,8 +91,8 @@
  * gtk_file_chooser_set_preview_widget_active() with a boolean
  * flag that indicates whether your callback could successfully
  * generate a preview.
- * 
- * <para id="gtkfilechooser-preview">An example for using a  preview widget:</para>
+ *
+ * ## An example for using a preview widget ## {#gtkfilechooser-preview}
  * |[<!-- language="C" -->
  * {
  *   GtkImage *preview;

@@ -77,17 +77,18 @@
  * GtkWidget is the base class all widgets in GTK+ derive from. It manages the
  * widget lifecycle, states and style.
  *
- * ## Height-for-width Geometry Management
+ * # Height-for-width Geometry Management # {#geometry-management}
  *
- * <para id="geometry-management">GTK+ uses a height-for-width (and width-for-height) geometry management
+ * GTK+ uses a height-for-width (and width-for-height) geometry management
  * system. Height-for-width means that a widget can change how much
  * vertical space it needs, depending on the amount of horizontal space
  * that it is given (and similar for width-for-height). The most common
  * example is a label that reflows to fill up the available width, wraps
- * to fewer lines, and therefore needs less height.</para>
+ * to fewer lines, and therefore needs less height.
  *
  * Height-for-width geometry management is implemented in GTK+ by way
  * of five virtual methods:
+ *
  * - #GtkWidgetClass.get_request_mode()
  * - #GtkWidgetClass.get_preferred_width()
  * - #GtkWidgetClass.get_preferred_height()
@@ -152,6 +153,7 @@
  * Here are some examples of how a %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH widget
  * generally deals with width-for-height requests, for #GtkWidgetClass.get_preferred_height()
  * it will do:
+ *
  * |[<!-- language="C" -->
  * static void
  * foo_widget_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
@@ -197,6 +199,7 @@
  * compute width. Or when deciding how to use an allocation, the widget
  * may need to know its natural size. In these cases, the widget should
  * be careful to call its virtual methods directly, like this:
+ *
  * |[<!-- language="C" -->
  * GTK_WIDGET_GET_CLASS(widget)-&gt;get_preferred_width (widget),
  *                                  &min, &natural);
