@@ -76,16 +76,16 @@
  * gtk_print_job_new().
  *
  * #GtkPrintUnixDialog uses the following response values:
- * - %GTK_RESPONSE_OK: for the "Print" button
- * - %GTK_RESPONSE_APPLY: for the "Preview" button
- * - %GTK_RESPONSE_CANCEL: for the "Cancel" button
+ * - %GTK_RESPONSE_OK: for the “Print” button
+ * - %GTK_RESPONSE_APPLY: for the “Preview” button
+ * - %GTK_RESPONSE_CANCEL: for the “Cancel” button
  *
  * Printing support was added in GTK+ 2.10.
  *
  * # GtkPrintUnixDialog as GtkBuildable
  *
  * The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
- * @notebook internal children with the name "notebook".
+ * @notebook internal children with the name “notebook”.
  *
  * An example of a #GtkPrintUnixDialog UI definition fragment:
  * |[

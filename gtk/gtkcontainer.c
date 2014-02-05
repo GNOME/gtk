@@ -220,7 +220,7 @@
  * ]|
  *
  * Since 2.16, child properties can also be marked as translatable using
- * the same "translatable", "comments" and "context" attributes that are used
+ * the same “translatable”, “comments” and “context” attributes that are used
  * for regular properties.
  */
 
@@ -1831,7 +1831,7 @@ _gtk_container_queue_restyle (GtkContainer *container)
  * _gtk_container_queue_resize:
  * @container: a #GtkContainer
  *
- * Determines the "resize container" in the hierarchy above this container
+ * Determines the “resize container” in the hierarchy above this container
  * (typically the toplevel, but other containers can be set as resize
  * containers with gtk_container_set_resize_mode()), marks the container
  * and all parents up to and including the resize container as needing
@@ -2094,7 +2094,7 @@ gtk_container_get_request_mode (GtkWidget *widget)
  *
  * gtk_container_class_handle_border_width() is necessary because it
  * would break API too badly to make this behavior the default. So
- * subclasses must "opt in" to the parent class handling border_width
+ * subclasses must “opt in” to the parent class handling border_width
  * for them.
  */
 void
@@ -2112,8 +2112,8 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
  * @callback_data: callback user data
  *
  * Invokes @callback on each child of @container, including children
- * that are considered "internal" (implementation details of the
- * container). "Internal" children generally weren't added by the user
+ * that are considered “internal” (implementation details of the
+ * container). “Internal” children generally weren't added by the user
  * of the container, but were added by the container implementation
  * itself.  Most applications should use gtk_container_foreach(),
  * rather than gtk_container_forall().
@@ -2142,7 +2142,7 @@ gtk_container_forall (GtkContainer *container,
  *
  * Invokes @callback on each non-internal child of @container. See
  * gtk_container_forall() for details on what constitutes an
- * "internal" child.  Most applications should use
+ * “internal” child.  Most applications should use
  * gtk_container_foreach(), rather than gtk_container_forall().
  **/
 void

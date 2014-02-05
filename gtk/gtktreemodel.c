@@ -597,7 +597,7 @@ gtk_tree_path_new (void)
  * Creates a new #GtkTreePath-struct initialized to @path.
  *
  * @path is expected to be a colon separated list of numbers.
- * For example, the string "10:4:0" would create a path of depth
+ * For example, the string “10:4:0” would create a path of depth
  * 3 pointing to the 11th child of the root node, the 5th
  * child of that 11th child, and the 1st child of that 5th child.
  * If an invalid path string is passed in, %NULL is returned.
@@ -713,7 +713,7 @@ gtk_tree_path_new_from_indicesv (gint *indices,
  * Generates a string representation of the path.
  *
  * This string is a ':' separated list of numbers.
- * For example, "4:10:0:3" would be an acceptable
+ * For example, “4:10:0:3” would be an acceptable
  * return value for this string.
  *
  * Return value: A newly-allocated string.
@@ -752,7 +752,7 @@ gtk_tree_path_to_string (GtkTreePath *path)
  *
  * Creates a new #GtkTreePath-struct.
  *
- * The string representation of this path is "0".
+ * The string representation of this path is “0”.
  *
  * Return value: A new #GtkTreePath-struct
  */
@@ -1302,7 +1302,7 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
  * Generates a string representation of the iter.
  *
  * This string is a ':' separated list of numbers.
- * For example, "4:10:0:3" would be an acceptable
+ * For example, “4:10:0:3” would be an acceptable
  * return value for this string.
  *
  * Return value: a newly-allocated string.

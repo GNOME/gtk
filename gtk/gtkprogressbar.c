@@ -1055,7 +1055,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
  * @pbar: a #GtkProgressBar
  * @fraction: fraction of the task that's been completed
  *
- * Causes the progress bar to "fill in" the given fraction
+ * Causes the progress bar to “fill in” the given fraction
  * of the bar. The fraction should be between 0.0 and 1.0,
  * inclusive.
  */
@@ -1090,7 +1090,7 @@ gtk_progress_bar_update_pulse (GtkProgressBar *pbar)
  * @pbar: a #GtkProgressBar
  *
  * Indicates that some progress has been made, but you don't know how much.
- * Causes the progress bar to enter "activity mode," where a block
+ * Causes the progress bar to enter “activity mode,” where a block
  * bounces back and forth. Each call to gtk_progress_bar_pulse()
  * causes the block to move by a little bit (the amount of movement
  * per pulse is determined by gtk_progress_bar_set_pulse_step()).

@@ -519,8 +519,8 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
  * If the user has selected a range of elements (such as some text or
  * spreadsheet cells) that are affected by a toggle button, and the
  * current values in that range are inconsistent, you may want to
- * display the toggle in an "in between" state. This function turns on
- * "in between" display.  Normally you would turn off the inconsistent
+ * display the toggle in an “in between” state. This function turns on
+ * “in between” display.  Normally you would turn off the inconsistent
  * state again if the user toggles the toggle button. This has to be
  * done manually, gtk_toggle_button_set_inconsistent() only affects
  * visual appearance, it doesn't affect the semantics of the button.

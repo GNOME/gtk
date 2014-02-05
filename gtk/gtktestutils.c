@@ -53,7 +53,7 @@
  *
  * It will in turn call g_test_init() and gtk_init() to properly
  * initialize the testing framework and graphical toolkit. It'll 
- * also set the program's locale to "C" and prevent loading of rc 
+ * also set the program's locale to “C” and prevent loading of rc 
  * files and Gtk+ modules. This is done to make tets program
  * environments as deterministic as possible.
  *
@@ -130,7 +130,7 @@ quit_main_loop_callback (GtkWidget     *widget,
  * gtk_test_widget_wait_for_draw:
  * @widget: the widget to wait for
  *
- * Enters the main loop and waits for @widget to be "drawn". In this
+ * Enters the main loop and waits for @widget to be “drawn”. In this
  * context that means it waits for the frame clock of @widget to have
  * run a full styling, layout and drawing cycle.
  *
@@ -272,7 +272,7 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
  * widget with a text string matching @label_pattern.
  * The @label_pattern may contain asterisks '*' and question marks '?' as
  * placeholders, g_pattern_match() is used for the matching.
- * Note that locales other than "C" tend to alter (translate" label strings,
+ * Note that locales other than "C“ tend to alter (translate” label strings,
  * so this function is genrally only useful in test programs with
  * predetermined locales, see gtk_test_init() for more details.
  *
@@ -375,7 +375,7 @@ widget_geo_cmp (gconstpointer a,
  * ancestors for all widgets matching @widget_type.
  * Of the matching widgets, the one that is geometrically closest to
  * @base_widget will be returned.
- * The general purpose of this function is to find the most likely "action"
+ * The general purpose of this function is to find the most likely “action”
  * widget, relative to another labeling widget. Such as finding a
  * button or text entry widget, given its corresponding label widget.
  *
@@ -416,7 +416,7 @@ gtk_test_find_sibling (GtkWidget *base_widget,
  * This function will search the descendants of @widget for a widget
  * of type @widget_type that has a label matching @label_pattern next
  * to it. This is most useful for automated GUI testing, e.g. to find
- * the "OK" button in a dialog and synthesize clicks on it.
+ * the “OK” button in a dialog and synthesize clicks on it.
  * However see gtk_test_find_label(), gtk_test_find_sibling() and
  * gtk_test_widget_click() for possible caveats involving the search of
  * such widgets and synthesizing widget events.

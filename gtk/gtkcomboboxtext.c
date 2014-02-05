@@ -57,9 +57,9 @@
  * The GtkComboBoxText implementation of the GtkBuildable interface
  * supports adding items directly using the &lt;items&gt; element
  * and specifying &lt;item&gt; elements for each item. Each &lt;item&gt;
- * element can specify the "id" corresponding to the appended text and
- * also supports the regular translation attributes "translatable",
- * "context" and "comments".
+ * element can specify the “id” corresponding to the appended text and
+ * also supports the regular translation attributes “translatable”,
+ * “context” and “comments”.
  *
  * Here is a a UI definition fragment specifying GtkComboBoxText items:
  * |[

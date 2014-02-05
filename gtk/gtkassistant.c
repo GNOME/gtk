@@ -45,7 +45,7 @@
  *
  * The GtkAssistant implementation of the #GtkBuildable interface
  * exposes the @action_area as internal children with the name
- * "action_area".
+ * “action_area”.
  *
  * To add pages to an assistant in #GtkBuilder, simply add it as a
  * child to the GtkAssistant object, and set its child properties

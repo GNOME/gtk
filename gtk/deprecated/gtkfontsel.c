@@ -1380,8 +1380,8 @@ gtk_font_selection_get_size (GtkFontSelection *fontsel)
  * Note that this can be a different string than what you set with 
  * gtk_font_selection_set_font_name(), as the font selection widget may 
  * normalize font names and thus return a string with a different structure. 
- * For example, "Helvetica Italic Bold 12" could be normalized to 
- * "Helvetica Bold Italic 12". Use pango_font_description_equal()
+ * For example, “Helvetica Italic Bold 12” could be normalized to 
+ * “Helvetica Bold Italic 12”. Use pango_font_description_equal()
  * if you want to compare two font descriptions.
  * 
  * Return value: A string with the name of the current font, or %NULL if 
@@ -1510,7 +1510,7 @@ gtk_font_selection_select_font_desc (GtkFontSelection      *fontsel,
 /**
  * gtk_font_selection_set_font_name:
  * @fontsel: a #GtkFontSelection
- * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
+ * @fontname: a font name like “Helvetica 12” or “Times Bold 18”
  * 
  * Sets the currently-selected font. 
  *
@@ -1630,8 +1630,8 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
  *
  * The GtkFontSelectionDialog implementation of the GtkBuildable interface
  * exposes the embedded #GtkFontSelection as internal child with the
- * name "font_selection". It also exposes the buttons with the names
- * "ok_button", "cancel_button" and "apply_button".
+ * name “font_selection”. It also exposes the buttons with the names
+ * “ok_button”, “cancel_button” and “apply_button”.
  */
 
 static void gtk_font_selection_dialog_buildable_interface_init     (GtkBuildableIface *iface);
@@ -1834,8 +1834,8 @@ gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
  * Note that this can be a different string than what you set with 
  * gtk_font_selection_dialog_set_font_name(), as the font selection widget
  * may normalize font names and thus return a string with a different 
- * structure. For example, "Helvetica Italic Bold 12" could be normalized 
- * to "Helvetica Bold Italic 12".  Use pango_font_description_equal()
+ * structure. For example, “Helvetica Italic Bold 12” could be normalized 
+ * to “Helvetica Bold Italic 12”.  Use pango_font_description_equal()
  * if you want to compare two font descriptions.
  * 
  * Return value: A string with the name of the current font, or %NULL if no 
@@ -1858,7 +1858,7 @@ gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
 /**
  * gtk_font_selection_dialog_set_font_name:
  * @fsd: a #GtkFontSelectionDialog
- * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
+ * @fontname: a font name like “Helvetica 12” or “Times Bold 18”
  *
  * Sets the currently selected font. 
  * 

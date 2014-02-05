@@ -1741,7 +1741,7 @@ gtk_drag_source_set_icon_name (GtkWidget   *widget,
  * 
  * Changes the icon for a widget to a given widget. GTK+
  * will not destroy the icon, so if you don't want
- * it to persist, you should connect to the "drag-end" 
+ * it to persist, you should connect to the “drag-end” 
  * signal and destroy it yourself.
  **/
 void 

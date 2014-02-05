@@ -62,8 +62,8 @@
  * gtk_text_buffer_create_tag() is the best way to create tags.
  * See “gtk3-demo” for numerous examples.
  *
- * For each property of #GtkTextTag, there is a "set" property, e.g.
- * "font-set" corresponds to "font". These "set" properties reflect
+ * For each property of #GtkTextTag, there is a “set” property, e.g.
+ * “font-set” corresponds to “font”. These “set” properties reflect
  * whether a property has been set or not.
  * They are maintained by GTK+ and you should not set them independently.
  */
@@ -1913,7 +1913,7 @@ gtk_text_tag_get_priority (GtkTextTag *tag)
  * Each tag in a table has a unique priority; setting the priority
  * of one tag shifts the priorities of all the other tags in the
  * table to maintain a unique priority for each tag. Higher priority
- * tags "win" if two tags both set the same text attribute. When adding
+ * tags “win” if two tags both set the same text attribute. When adding
  * a tag to a tag table, it will be assigned the highest priority in
  * the table by default; so normally the precedence of a set of tags
  * is the order in which they were added to the table, or created with
@@ -1965,7 +1965,7 @@ gtk_text_tag_set_priority (GtkTextTag *tag,
  * @event: the event
  * @iter: location where the event was received
  * 
- * Emits the "event" signal on the #GtkTextTag.
+ * Emits the “event” signal on the #GtkTextTag.
  * 
  * Return value: result of signal emission (whether the event was handled)
  **/

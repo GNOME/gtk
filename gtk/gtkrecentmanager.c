@@ -707,7 +707,7 @@ build_recent_items_list (GtkRecentManager *manager)
  * 
  * Creates a new recent manager object.  Recent manager objects are used to
  * handle the list of recently used resources.  A #GtkRecentManager object
- * monitors the recently used resources list, and emits the "changed" signal
+ * monitors the recently used resources list, and emits the “changed” signal
  * each time something inside the list changes.
  *
  * #GtkRecentManager objects are expensive: be sure to create them only when
@@ -1701,7 +1701,7 @@ gtk_recent_info_get_visited (GtkRecentInfo *info)
  * gtk_recent_info_get_private_hint:
  * @info: a #GtkRecentInfo
  *
- * Gets the value of the "private" flag.  Resources in the recently used
+ * Gets the value of the “private” flag.  Resources in the recently used
  * list that have this flag set to %TRUE should only be displayed by the
  * applications that have registered them.
  *
@@ -2237,7 +2237,7 @@ get_uri_shortname_for_display (const gchar *uri)
  *
  * Computes a valid UTF-8 string that can be used as the name of the item in a
  * menu or list.  For example, calling this function on an item that refers to
- * "file:///foo/bar.txt" will yield "bar.txt".
+ * “file:///foo/bar.txt” will yield “bar.txt”.
  *
  * Return value: A newly-allocated string in UTF-8 encoding; free it with
  *   g_free().

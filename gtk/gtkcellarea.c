@@ -53,7 +53,7 @@
  *
  * It's also important for areas to maintain some cell
  * alignments with areas rendered for adjacent rows (cells can
- * appear "columnized" inside an area even when the size of
+ * appear “columnized” inside an area even when the size of
  * cells are different in each row). For this reason the #GtkCellArea
  * uses a #GtkCellAreaContext object to store the alignments
  * and sizes along the way (as well as the overall largest minimum
@@ -322,9 +322,9 @@
  * <link linkend="child-properties">child properties</link>
  * for #GtkWidgets. This provides some general interfaces for defining
  * the relationship cell areas have with their cells. For instance in a
- * #GtkCellAreaBox a cell might "expand" and receive extra space when
+ * #GtkCellAreaBox a cell might “expand” and receive extra space when
  * the area is allocated more than its full natural request, or a cell
- * might be configured to "align" with adjacent rows which were requested
+ * might be configured to “align” with adjacent rows which were requested
  * and rendered with the same #GtkCellAreaContext.
  *
  * Use gtk_cell_area_class_install_cell_property() to install cell

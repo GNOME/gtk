@@ -3197,7 +3197,7 @@ gtk_drag_set_icon_window (GdkDragContext *context,
  * 
  * Changes the icon for a widget to a given widget. GTK+
  * will not destroy the icon, so if you don't want
- * it to persist, you should connect to the "drag-end" 
+ * it to persist, you should connect to the “drag-end” 
  * signal and destroy it yourself.
  **/
 void 
@@ -4329,7 +4329,7 @@ gtk_drag_cancel (GtkDragSourceInfo *info, GtkDragResult result, guint32 time)
 
 /*************************************************************
  * gtk_drag_motion_cb:
- *     "motion-notify-event" callback during drag.
+ *     “motion-notify-event” callback during drag.
  *   arguments:
  *     
  *   results:
@@ -4362,7 +4362,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
 
 /*************************************************************
  * gtk_drag_key_cb:
- *     "key-press/release-event" callback during drag.
+ *     “key-press/release-event” callback during drag.
  *   arguments:
  *     
  *   results:
@@ -4501,7 +4501,7 @@ gtk_drag_grab_notify_cb (GtkWidget        *widget,
 
 /*************************************************************
  * gtk_drag_button_release_cb:
- *     "button-release-event" callback during drag.
+ *     “button-release-event” callback during drag.
  *   arguments:
  *     
  *   results:

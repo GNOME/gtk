@@ -39,7 +39,7 @@
  *
  *   2. The caller populates the model by hand, with files not necessarily in the same folder.  This happens
  *      if you use _gtk_file_system_model_new() and then _gtk_file_system_model_add_and_query_file().  This is
- *      the special kind of usage for "search" and "recent-files", where the file chooser gives the model the
+ *      the special kind of usage for “search” and “recent-files”, where the file chooser gives the model the
  *      files to be displayed.
  *
  * Internal data structure
@@ -70,7 +70,7 @@
  * Each FileModelNode has a node->visible field, which indicates whether the node is visible in the GtkTreeView.
  * A node may be invisible if, for example, it corresponds to a hidden file and the file chooser is not showing
  * hidden files.  Also, a file filter may be explicitly set onto the model, for example, to only show files that
- * match "*.jpg".  In this case, node->filtered_out says whether the node failed the filter.  The ultimate
+ * match “*.jpg”.  In this case, node->filtered_out says whether the node failed the filter.  The ultimate
  * decision on whether a node is visible or not in the treeview is distilled into the node->visible field.
  * The reason for having a separate node->filtered_out field is so that the file chooser can query whether
  * a (filtered-out) folder should be made sensitive in the GUI.
@@ -82,12 +82,12 @@
  * the treeview to array indexes in our array of files.  And thus we introduce a bit of terminology:
  *
  *   index - An index in the model->files array.  All variables/fields that represent indexes are either called
- *   "index" or "i_*", or simply "i" for things like loop counters.
+ *   “index” or “i_*”, or simply “i” for things like loop counters.
  *
  *   row - An index in the GtkTreeView, i.e. the index of a row within the outward-facing API of the
  *   GtkFileSystemModel.  However, note that our rows are 1-based, not 0-based, for the reason explained in the
- *   following paragraph.  Variables/fields that represent visible rows are called "row", or "r_*", or simply
- *   "r".
+ *   following paragraph.  Variables/fields that represent visible rows are called “row”, or “r_*”, or simply
+ *   “r”.
  *
  * Each FileModelNode has a node->row field which is the number of visible rows in the treeview, *before and
  * including* that node.  This means that node->row is 1-based, instead of 0-based --- this makes some code
@@ -95,7 +95,7 @@
  * turn the 0-based treepath into a 1-based row for our purposes.  If a node is not visible, it will have the
  * same row number as its closest preceding visible node.
  *
- * We try to compute the node->row fields lazily.  A node is said to be "valid" if its node->row is accurate.
+ * We try to compute the node->row fields lazily.  A node is said to be “valid” if its node->row is accurate.
  * For this, the model keeps a model->n_nodes_valid field which is the count of valid nodes starting from the
  * beginning of the model->files array.  When a node changes its information, or when a node gets deleted, that
  * node and the following ones get invalidated by simply setting model->n_nodes_valid to the array index of the
@@ -244,7 +244,7 @@ static void remove_file (GtkFileSystemModel *model,
  *
  * If you want to validate up to an index or up to a row, specify the index or
  * the row you want and specify G_MAXUINT for the other argument.  Pass
- * G_MAXUINT for both arguments for "validate everything".
+ * G_MAXUINT for both arguments for “validate everything”.
  */
 static void
 node_validate_rows (GtkFileSystemModel *model, guint up_to_index, guint up_to_row)
@@ -1995,7 +1995,7 @@ _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
  * @model: a #GtkFileSystemModel
  * @iter: Location to return the iter corresponding to the editable row
  * 
- * Adds an "empty" row at the beginning of the model.  This does not refer to
+ * Adds an “empty” row at the beginning of the model.  This does not refer to
  * any file, but is a temporary placeholder for a file name that the user will
  * type when a corresponding cell is made editable.  When your code is done
  * using this temporary row, call _gtk_file_system_model_remove_editable().
@@ -2014,7 +2014,7 @@ _gtk_file_system_model_add_editable (GtkFileSystemModel *model, GtkTreeIter *ite
  * _gtk_file_system_model_remove_editable:
  * @model: a #GtkFileSystemModel
  * 
- * Removes the "empty" row at the beginning of the model that was
+ * Removes the “empty” row at the beginning of the model that was
  * created with _gtk_file_system_model_add_editable().  You should call
  * this function when your code is finished editing this temporary row.
  **/

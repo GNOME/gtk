@@ -481,7 +481,7 @@ gtk_cell_layout_set_attributes (GtkCellLayout   *cell_layout,
  * The @column is the column of the model to get a value from, and the
  * @attribute is the parameter on @cell to be set from the value. So for
  * example if column 2 of the model contains strings, you could have the
- * "text" attribute of a #GtkCellRendererText get its values from column 2.
+ * “text” attribute of a #GtkCellRendererText get its values from column 2.
  *
  * Since: 2.4
  */

@@ -3853,8 +3853,8 @@ gtk_paint_handle (GtkStyle           *style,
  *
  * Draws an expander as used in #GtkTreeView. @x and @y specify the
  * center the expander. The size of the expander is determined by the
- * "expander-size" style property of @widget.  (If widget is not
- * specified or doesn't have an "expander-size" property, an
+ * “expander-size” style property of @widget.  (If widget is not
+ * specified or doesn't have an “expander-size” property, an
  * unspecified default size will be used, since the caller doesn't
  * have sufficient information to position the expander, this is
  * likely not useful.) The expander is expander_size pixels tall
@@ -4071,9 +4071,9 @@ gtk_widget_get_default_style (void)
  * widget->style = gtk_style_attach (widget->style, widget->window);
  * ]|
  *
- * and should only ever be called in a derived widget's "realize"
+ * and should only ever be called in a derived widget's “realize”
  * implementation which does not chain up to its parent class'
- * "realize" implementation, because one of the parent classes
+ * “realize” implementation, because one of the parent classes
  * (finally #GtkWidget) would attach the style itself.
  *
  * Since: 2.20
@@ -4376,7 +4376,7 @@ gtk_widget_modify_fg (GtkWidget      *widget,
  * See also gtk_widget_modify_style().
  *
  * <note><para>
- * Note that "no window" widgets (which have the %GTK_NO_WINDOW
+ * Note that “no window” widgets (which have the %GTK_NO_WINDOW
  * flag set) draw on their parent container's window and thus may
  * not draw any background themselves. This is the case for e.g.
  * #GtkLabel.
@@ -4476,7 +4476,7 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * and #GtkTextView. See also gtk_widget_modify_style().
  *
  * <note><para>
- * Note that "no window" widgets (which have the %GTK_NO_WINDOW
+ * Note that “no window” widgets (which have the %GTK_NO_WINDOW
  * flag set) draw on their parent container's window and thus may
  * not draw any background themselves. This is the case for e.g.
  * #GtkLabel.
@@ -4600,7 +4600,7 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
  * periods. The name of a widget comes from
  * gtk_widget_get_name(). Paths are used to apply styles to a widget
  * in gtkrc configuration files. Widget names are the type of the
- * widget by default (e.g. "GtkButton") or can be set to an
+ * widget by default (e.g. “GtkButton”) or can be set to an
  * application-specific value with gtk_widget_set_name(). By setting
  * the name of a widget, you allow users or theme authors to apply
  * styles to that specific widget in their gtkrc

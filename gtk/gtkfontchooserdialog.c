@@ -57,8 +57,8 @@ struct _GtkFontChooserDialogPrivate
  * # GtkFontChooserDialog as GtkBuildable
  *
  * The GtkFontChooserDialog implementation of the #GtkBuildable
- * interface exposes the buttons with the names "select_button"
- * and "cancel_button".
+ * interface exposes the buttons with the names “select_button”
+ * and “cancel_button”.
  *
  * Since: 3.2
  */

@@ -102,7 +102,7 @@
  * terms of one or more named icons. (An example of the
  * more than one case is icons that depend on writing direction;
  * %GTK_STOCK_GO_FORWARD uses the two themed icons
- * "gtk-stock-go-forward-ltr" and "gtk-stock-go-forward-rtl".)
+ * “gtk-stock-go-forward-ltr” and “gtk-stock-go-forward-rtl”.)
  *
  * In many cases, named themes are used indirectly, via #GtkImage
  * or stock items, rather than directly, but looking up icons
@@ -2381,8 +2381,8 @@ add_key_to_list (gpointer  key,
  * Lists the icons in the current icon theme. Only a subset
  * of the icons can be listed by providing a context string.
  * The set of values for the context string is system dependent,
- * but will typically include such values as "Applications" and
- * "MimeTypes".
+ * but will typically include such values as “Applications” and
+ * “MimeTypes”.
  *
  * Return value: (element-type utf8) (transfer full): a #GList list
  *  holding the names of all the icons in the theme. You must first
@@ -4316,7 +4316,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
  * g_themed_icon_new_with_default_fallbacks() to load the icon.
  *
  * As implementation details, the icon loaded needs to be of SVG type,
- * contain the "symbolic" term as the last component of the icon name,
+ * contain the “symbolic” term as the last component of the icon name,
  * and use the 'fg', 'success', 'warning' and 'error' CSS styles in the
  * SVG file itself.
  *
@@ -4370,7 +4370,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
  * success, warning and error colors provided. If the icon is not a symbolic
  * one, the function will return the result from gtk_icon_info_load_icon().
  * This function uses the regular foreground color and the symbolic colors
- * with the names "success_color", "warning_color" and "error_color" from
+ * with the names “success_color”, “warning_color” and “error_color” from
  * the context.
  *
  * This allows loading symbolic icons that will match the system theme.
@@ -5089,7 +5089,7 @@ gtk_icon_theme_add_builtin_icon (const gchar *icon_name,
 /* Look up a builtin icon; the min_difference_p and
  * has_larger_p out parameters allow us to combine
  * this lookup with searching through the actual directories
- * of the "hicolor" icon theme. See theme_lookup_icon()
+ * of the “hicolor” icon theme. See theme_lookup_icon()
  * for how they are used.
  */
 static BuiltinIcon *

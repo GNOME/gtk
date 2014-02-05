@@ -94,7 +94,7 @@
  *
  * Draw signals are normally delivered when a drawing area first comes
  * onscreen, or when it's covered by another window and then uncovered.
- * You can also force an expose event by adding to the "damage region"
+ * You can also force an expose event by adding to the “damage region”
  * of the drawing area's window; gtk_widget_queue_draw_area() and
  * gdk_window_invalidate_rect() are equally good ways to do this.
  * You'll then get a draw signal for the invalid region.
@@ -105,7 +105,7 @@
  *
  * To receive mouse events on a drawing area, you will need to enable
  * them with gtk_widget_add_events(). To receive keyboard events, you
- * will need to set the "can-focus" property on the drawing area, and you
+ * will need to set the “can-focus” property on the drawing area, and you
  * should probably draw some user-visible indication that the drawing
  * area is focused. Use gtk_widget_has_focus() in your expose event
  * handler to decide whether to draw the focus indicator. See

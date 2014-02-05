@@ -56,7 +56,7 @@ G_BEGIN_DECLS
  * Controls how a widget deals with extra space in a single (x or y)
  * dimension.
  *
- * Alignment only matters if the widget receives a "too large" allocation,
+ * Alignment only matters if the widget receives a “too large” allocation,
  * for example if you packed the widget with the #GtkWidget:expand
  * flag inside a #GtkBox, then the widget might get extra space.  If
  * you have for example a 16x16 icon inside a 32x32 space, the icon
@@ -730,7 +730,7 @@ typedef enum
  * @GTK_WINDOW_POPUP: A special window such as a tooltip.
  *
  * A #GtkWindow can be one of these types. Most things you'd consider a
- * "window" should have type #GTK_WINDOW_TOPLEVEL; windows with this type
+ * “window” should have type #GTK_WINDOW_TOPLEVEL; windows with this type
  * are managed by the window manager and have a frame by default (call
  * gtk_window_set_decorated() to toggle the frame).  Windows with type
  * #GTK_WINDOW_POPUP are ignored by the window manager; window manager

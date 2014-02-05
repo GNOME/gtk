@@ -224,7 +224,7 @@
  * means that widgets are positioned such that the typographical baseline of
  * widgets in the same row are aligned. This happens if a widget supports baselines,
  * has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside a container
- * that supports baselines and has a natural "row" that it aligns to the baseline,
+ * that supports baselines and has a natural “row” that it aligns to the baseline,
  * or a baseline assigned to it by the grandparent.
  *
  * Baseline alignment support for a widget is done by the #GtkWidgetClass.get_preferred_height_and_baseline_for_width()
@@ -271,7 +271,7 @@
  * In addition to accelerators, #GtkWidget also support a
  * custom &lt;accessible&gt; element, which supports actions and relations.
  * Properties on the accessible implementation of an object can be set by accessing the
- * internal child "accessible" of a #GtkWidget.
+ * internal child “accessible” of a #GtkWidget.
  *
  * An example of a UI definition fragment specifying an accessible:
  * |[
@@ -317,8 +317,8 @@
  *
  * Unlike regular interface descriptions, gtk_widget_class_set_template() will expect a
  * &lt;template&gt; tag as a direct child of the toplevel &lt;interface&gt;
- * tag. The &lt;template&gt; tag must specify the "class" attribute which
- * must be the type name of the widget. Optionally, the "parent" attribute
+ * tag. The &lt;template&gt; tag must specify the “class” attribute which
+ * must be the type name of the widget. Optionally, the “parent” attribute
  * may be specified to specify the direct parent type of the widget type, this
  * is ignored by the GtkBuilder but required for Glade to introspect what kind
  * of properties and internal children exist for a given type when the actual
@@ -4307,7 +4307,7 @@ gtk_widget_destroy (GtkWidget *widget)
  *
  * This function sets *@widget_pointer to %NULL if @widget_pointer !=
  * %NULL.  It's intended to be used as a callback connected to the
- * "destroy" signal of a widget. You connect gtk_widget_destroyed()
+ * “destroy” signal of a widget. You connect gtk_widget_destroyed()
  * as a signal handler, and pass the address of your widget variable
  * as user data. Then when the widget is destroyed, the variable will
  * be set to %NULL. Useful for example to avoid multiple copies
@@ -5260,7 +5260,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  * @widget: a #GtkWidget
  *
  * Obtains the frame clock for a widget. The frame clock is a global
- * "ticker" that can be used to drive animations and repaints.  The
+ * “ticker” that can be used to drive animations and repaints.  The
  * most common reason to get the frame clock is to call
  * gdk_frame_clock_get_frame_time(), in order to get a time to use for
  * animating. For example you might record the start of the animation
@@ -5356,7 +5356,7 @@ gtk_widget_size_request (GtkWidget	*widget,
  * on @widget to compute the size request and fill in @widget->requisition,
  * and only then returns @widget->requisition.
  *
- * Because this function does not call the "size_request" method, it
+ * Because this function does not call the “size_request” method, it
  * can only be used when you know that @widget->requisition is
  * up-to-date, that is, gtk_widget_size_request() has been called
  * since the last time a resize was queued. In general, only container
@@ -6406,7 +6406,7 @@ gtk_cairo_set_event (cairo_t        *cr,
  * that when the drawing was not initiated by the windowing
  * system this function will return %TRUE for all windows, so
  * you need to draw the bottommost window first. Also, do not
- * use "else if" statements to check which window should be drawn.
+ * use “else if” statements to check which window should be drawn.
  *
  * Returns: %TRUE if @window should be drawn
  *
@@ -7212,7 +7212,7 @@ gtk_widget_event_internal (GtkWidget *widget,
  * gtk_widget_activate:
  * @widget: a #GtkWidget that's activatable
  *
- * For widgets that can be "activated" (buttons, menu items, etc.)
+ * For widgets that can be “activated” (buttons, menu items, etc.)
  * this function activates them. Activation is what happens when you
  * press Enter on a widget during key navigation. If @widget isn't
  * activatable, the function returns %FALSE.
@@ -7852,7 +7852,7 @@ gtk_widget_is_focus (GtkWidget *widget)
  *
  * Specifies whether @widget can be a default widget. See
  * gtk_widget_grab_default() for details about the meaning of
- * "default".
+ * “default”.
  *
  * Since: 2.18
  **/
@@ -7936,7 +7936,7 @@ _gtk_widget_set_has_default (GtkWidget *widget,
  * The default widget is activated when
  * the user presses Enter in a window. Default widgets must be
  * activatable, that is, gtk_widget_activate() should affect them. Note
- * that #GtkEntry widgets require the "activates-default" property
+ * that #GtkEntry widgets require the “activates-default” property
  * set to %TRUE before they activate the default widget when Enter
  * is pressed and the #GtkEntry is focused.
  **/
@@ -7966,7 +7966,7 @@ gtk_widget_grab_default (GtkWidget *widget)
  * is the default.
  *
  * See gtk_widget_grab_default() for details about the meaning of
- * "default".
+ * “default”.
  *
  * Since: 2.18
  **/
@@ -8461,7 +8461,7 @@ gtk_widget_is_visible (GtkWidget *widget)
  * @has_window: whether or not @widget has a window.
  *
  * Specifies whether @widget has a #GdkWindow of its own. Note that
- * all realized widgets have a non-%NULL "window" pointer
+ * all realized widgets have a non-%NULL “window” pointer
  * (gtk_widget_get_window() never returns a %NULL window when a widget
  * is realized), but for many of them it's actually the #GdkWindow of
  * one of its parent widgets. Widgets that do not create a %window for
@@ -8576,7 +8576,7 @@ gtk_widget_get_realized (GtkWidget *widget)
  * Marks the widget as being realized.
  *
  * This function should only ever be called in a derived widget's
- * "realize" or "unrealize" implementation.
+ * “realize” or “unrealize” implementation.
  *
  * Since: 2.20
  */
@@ -8615,7 +8615,7 @@ gtk_widget_get_mapped (GtkWidget *widget)
  * Marks the widget as being realized.
  *
  * This function should only ever be called in a derived widget's
- * "map" or "unmap" implementation.
+ * “map” or “unmap” implementation.
  *
  * Since: 2.20
  */
@@ -8691,7 +8691,7 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * @double_buffered: %TRUE to double-buffer a widget
  *
  * Widgets are double buffered by default; you can use this function
- * to turn off the buffering. "Double buffered" simply means that
+ * to turn off the buffering. “Double buffered” simply means that
  * gdk_window_begin_paint_region() and gdk_window_end_paint() are called
  * automatically around expose events sent to the
  * widget. gdk_window_begin_paint_region() diverts all drawing to a widget's
@@ -8786,9 +8786,9 @@ gtk_widget_set_redraw_on_allocate (GtkWidget *widget,
  * @sensitive: %TRUE to make the widget sensitive
  *
  * Sets the sensitivity of a widget. A widget is sensitive if the user
- * can interact with it. Insensitive widgets are "grayed out" and the
+ * can interact with it. Insensitive widgets are “grayed out” and the
  * user can't interact with them. Insensitive widgets are known as
- * "inactive", "disabled", or "ghosted" in some other toolkits.
+ * “inactive”, “disabled”, or “ghosted” in some other toolkits.
  **/
 void
 gtk_widget_set_sensitive (GtkWidget *widget,
@@ -10373,7 +10373,7 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
  * space than it requested.
  *
  * If the size request in a given direction is -1 (unset), then
- * the "natural" size request of the widget will be used instead.
+ * the “natural” size request of the widget will be used instead.
  *
  * The size request set here does not include any margin from the
  * #GtkWidget properties margin-left, margin-right, margin-top, and
@@ -14504,7 +14504,7 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
  * which determines whether calls to gtk_widget_show_all()
  * will affect this widget.
  *
- * Return value: the current value of the "no-show-all" property.
+ * Return value: the current value of the “no-show-all” property.
  *
  * Since: 2.4
  **/
@@ -14519,7 +14519,7 @@ gtk_widget_get_no_show_all (GtkWidget *widget)
 /**
  * gtk_widget_set_no_show_all:
  * @widget: a #GtkWidget
- * @no_show_all: the new value for the "no-show-all" property
+ * @no_show_all: the new value for the “no-show-all” property
  *
  * Sets the #GtkWidget:no-show-all property, which determines whether
  * calls to gtk_widget_show_all() will affect this widget.
@@ -14594,7 +14594,7 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
  * tooltip window will be used.
  *
  * If the custom window should have the default theming it needs to
- * have the name "gtk-tooltip", see gtk_widget_set_name().
+ * have the name “gtk-tooltip”, see gtk_widget_set_name().
  *
  * Since: 2.12
  */
@@ -14832,7 +14832,7 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
  * Retrieves the widget's allocation.
  *
  * Note, when implementing a #GtkContainer: a widget's allocation will
- * be its "adjusted" allocation, that is, the widget's parent
+ * be its “adjusted” allocation, that is, the widget's parent
  * container typically calls gtk_widget_size_allocate() with an
  * allocation, and that allocation is then adjusted (to handle margin
  * and alignment for example) before assignment to the widget.
@@ -14870,7 +14870,7 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  * Sets the widget's allocation.  This should not be used
  * directly, but from within a widget's size_allocate method.
  *
- * The allocation set should be the "adjusted" or actual
+ * The allocation set should be the “adjusted” or actual
  * allocation. If you're implementing a #GtkContainer, you want to use
  * gtk_widget_size_allocate() instead of gtk_widget_set_allocation().
  * The GtkWidgetClass::adjust_size_allocation virtual method adjusts the
@@ -16115,8 +16115,8 @@ gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
 /**
  * gtk_widget_class_bind_template_child_full:
  * @widget_class: A #GtkWidgetClass
- * @name: The "id" of the child defined in the template XML
- * @internal_child: Whether the child should be accessible as an "internal-child"
+ * @name: The “id” of the child defined in the template XML
+ * @internal_child: Whether the child should be accessible as an “internal-child”
  *                  when this class is used in GtkBuilder XML
  * @struct_offset: The structure offset into the composite widget's instance public or private structure
  *                 where the automated child pointer should be set, or 0 to not assign the pointer.
@@ -16169,7 +16169,7 @@ gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
  * gtk_widget_get_template_child:
  * @widget: A #GtkWidget
  * @widget_type: The #GType to get a template child for
- * @name: The "id" of the child defined in the template XML
+ * @name: The “id” of the child defined in the template XML
  *
  * Fetch an object build from the template XML for @widget_type in this @widget instance.
  *

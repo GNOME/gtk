@@ -25,7 +25,7 @@
 
 /**
  * SECTION:gtkswitch
- * @Short_Description: A "light switch" style toggle
+ * @Short_Description: A “light switch” style toggle
  * @Title: GtkSwitch
  * @See_Also: #GtkToggleButton
  *
@@ -974,7 +974,7 @@ gtk_switch_set_active (GtkSwitch *sw,
  * gtk_switch_get_active:
  * @sw: a #GtkSwitch
  *
- * Gets whether the #GtkSwitch is in its "on" or "off" state.
+ * Gets whether the #GtkSwitch is in its “on” or “off” state.
  *
  * Return value: %TRUE if the #GtkSwitch is active, and %FALSE otherwise
  *

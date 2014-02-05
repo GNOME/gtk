@@ -1899,7 +1899,7 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
  * _gtk_path_bar_up:
  * @path_bar: a #GtkPathBar
  * 
- * If the selected button in the pathbar is not the furthest button "up" (in the
+ * If the selected button in the pathbar is not the furthest button “up” (in the
  * root direction), act as if the user clicked on the next button up.
  **/
 void
@@ -1926,7 +1926,7 @@ _gtk_path_bar_up (GtkPathBar *path_bar)
  * _gtk_path_bar_down:
  * @path_bar: a #GtkPathBar
  * 
- * If the selected button in the pathbar is not the furthest button "down" (in the
+ * If the selected button in the pathbar is not the furthest button “down” (in the
  * leaf direction), act as if the user clicked on the next button down.
  **/
 void

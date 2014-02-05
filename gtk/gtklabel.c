@@ -1898,7 +1898,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
  * If the label has been set so that it has an mnemonic key (using
  * i.e. gtk_label_set_markup_with_mnemonic(),
  * gtk_label_set_text_with_mnemonic(), gtk_label_new_with_mnemonic()
- * or the "use_underline" property) the label can be associated with a
+ * or the “use_underline” property) the label can be associated with a
  * widget that is the target of the mnemonic. When the label is inside
  * a widget (like a #GtkButton or a #GtkNotebook tab) it is
  * automatically associated with the correct widget, but sometimes
@@ -2756,8 +2756,8 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
  *
  * The pattern of underlines you want under the existing text within the
  * #GtkLabel widget.  For example if the current text of the label says
- * "FooBarBaz" passing a pattern of "___   ___" will underline
- * "Foo" and "Baz" but not "Bar".
+ * “FooBarBaz” passing a pattern of “___   ___” will underline
+ * “Foo” and “Baz” but not “Bar”.
  */
 void
 gtk_label_set_pattern (GtkLabel	   *label,

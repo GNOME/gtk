@@ -107,7 +107,7 @@
  *   G_OBJECT_CLASS (foo_bar_parent_class)->dispose (object);
  * }
  * 
- * ... Handle the "related-action" and "use-action-appearance" properties ...
+ * ... Handle the “related-action” and “use-action-appearance” properties ...
  *
  * static void
  * foo_bar_set_property (GObject         *object,

@@ -933,7 +933,7 @@ gtk_text_buffer_emit_insert (GtkTextBuffer *buffer,
  *
  * Inserts @len bytes of @text at position @iter.  If @len is -1,
  * @text must be nul-terminated and will be inserted in its
- * entirety. Emits the "insert-text" signal; insertion actually occurs
+ * entirety. Emits the “insert-text” signal; insertion actually occurs
  * in the default handler for the signal. @iter is invalidated when
  * insertion occurs (because the buffer contents change), but the
  * default signal handler revalidates it to point to the end of the
@@ -1655,7 +1655,7 @@ gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
  *
  * Deletes text between @start and @end. The order of @start and @end
  * is not actually relevant; gtk_text_buffer_delete() will reorder
- * them. This function actually emits the "delete-range" signal, and
+ * them. This function actually emits the “delete-range” signal, and
  * the default handler of that signal deletes the text. Because the
  * buffer is modified, all outstanding iterators become invalid after
  * calling this function; however, the @start and @end will be
@@ -1915,9 +1915,9 @@ gtk_text_buffer_real_insert_pixbuf (GtkTextBuffer *buffer,
  * Inserts an image into the text buffer at @iter. The image will be
  * counted as one character in character counts, and when obtaining
  * the buffer contents as a string, will be represented by the Unicode
- * "object replacement character" 0xFFFC. Note that the "slice"
+ * “object replacement character” 0xFFFC. Note that the “slice”
  * variants for obtaining portions of the buffer as a string include
- * this character for pixbufs, but the "text" variants do
+ * this character for pixbufs, but the “text” variants do
  * not. e.g. see gtk_text_buffer_get_slice() and
  * gtk_text_buffer_get_text().
  **/
@@ -1959,9 +1959,9 @@ gtk_text_buffer_real_insert_anchor (GtkTextBuffer      *buffer,
  * Inserts a child widget anchor into the text buffer at @iter. The
  * anchor will be counted as one character in character counts, and
  * when obtaining the buffer contents as a string, will be represented
- * by the Unicode "object replacement character" 0xFFFC. Note that the
- * "slice" variants for obtaining portions of the buffer as a string
- * include this character for child anchors, but the "text" variants do
+ * by the Unicode “object replacement character” 0xFFFC. Note that the
+ * “slice” variants for obtaining portions of the buffer as a string
+ * include this character for child anchors, but the “text” variants do
  * not. E.g. see gtk_text_buffer_get_slice() and
  * gtk_text_buffer_get_text(). Consider
  * gtk_text_buffer_create_child_anchor() as a more convenient
@@ -2335,7 +2335,7 @@ gtk_text_buffer_delete_mark_by_name (GtkTextBuffer *buffer,
  *
  * Returns the mark that represents the cursor (insertion point).
  * Equivalent to calling gtk_text_buffer_get_mark() to get the mark
- * named "insert", but very slightly more efficient, and involves less
+ * named “insert”, but very slightly more efficient, and involves less
  * typing.
  *
  * Return value: (transfer none): insertion point mark
@@ -2354,12 +2354,12 @@ gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
  *
  * Returns the mark that represents the selection bound.  Equivalent
  * to calling gtk_text_buffer_get_mark() to get the mark named
- * "selection_bound", but very slightly more efficient, and involves
+ * “selection_bound”, but very slightly more efficient, and involves
  * less typing.
  *
  * The currently-selected text in @buffer is the region between the
- * "selection_bound" and "insert" marks. If "selection_bound" and
- * "insert" are in the same place, then there is no current selection.
+ * “selection_bound” and “insert” marks. If “selection_bound” and
+ * “insert” are in the same place, then there is no current selection.
  * gtk_text_buffer_get_selection_bounds() is another convenient function
  * for handling the selection, if you just want to know whether there's a
  * selection and what its bounds are.
@@ -2402,7 +2402,7 @@ gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
  * @buffer: a #GtkTextBuffer
  * @where: where to put the cursor
  *
- * This function moves the "insert" and "selection_bound" marks
+ * This function moves the “insert” and “selection_bound” marks
  * simultaneously.  If you move them to the same place in two steps
  * with gtk_text_buffer_move_mark(), you will temporarily select a
  * region in between their old and new locations, which can be pretty
@@ -2420,10 +2420,10 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
 /**
  * gtk_text_buffer_select_range:
  * @buffer: a #GtkTextBuffer
- * @ins: where to put the "insert" mark
- * @bound: where to put the "selection_bound" mark
+ * @ins: where to put the “insert” mark
+ * @bound: where to put the “selection_bound” mark
  *
- * This function moves the "insert" and "selection_bound" marks
+ * This function moves the “insert” and “selection_bound” marks
  * simultaneously.  If you move them in two steps
  * with gtk_text_buffer_move_mark(), you will temporarily select a
  * region in between their old and new locations, which can be pretty
@@ -2603,7 +2603,7 @@ gtk_text_buffer_emit_tag (GtkTextBuffer     *buffer,
  * @start: one bound of range to be tagged
  * @end: other bound of range to be tagged
  *
- * Emits the "apply-tag" signal on @buffer. The default
+ * Emits the “apply-tag” signal on @buffer. The default
  * handler for the signal applies @tag to the given range.
  * @start and @end do not have to be in order.
  **/
@@ -2631,7 +2631,7 @@ gtk_text_buffer_apply_tag (GtkTextBuffer     *buffer,
  * @start: one bound of range to be untagged
  * @end: other bound of range to be untagged
  *
- * Emits the "remove-tag" signal. The default handler for the signal
+ * Emits the “remove-tag” signal. The default handler for the signal
  * removes all occurrences of @tag from the given range. @start and
  * @end don't have to be in order.
  **/
@@ -2972,7 +2972,7 @@ gtk_text_buffer_get_start_iter (GtkTextBuffer *buffer,
  * @buffer: a #GtkTextBuffer 
  * @iter: (out): iterator to initialize
  *
- * Initializes @iter with the "end iterator," one past the last valid
+ * Initializes @iter with the “end iterator,” one past the last valid
  * character in the text buffer. If dereferenced with
  * gtk_text_iter_get_char(), the end iterator has a character value of 0.
  * The entire buffer lies in the range from the first position in
@@ -3021,7 +3021,7 @@ gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
  * 
  * Indicates whether the buffer has been modified since the last call
  * to gtk_text_buffer_set_modified() set the modification flag to
- * %FALSE. Used for example to enable a "save" function in a text
+ * %FALSE. Used for example to enable a “save” function in a text
  * editor.
  * 
  * Return value: %TRUE if the buffer has been modified
@@ -3819,7 +3819,7 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
  * @interactive: whether the deletion is caused by user interaction
  * @default_editable: whether the buffer is editable by default
  *
- * Deletes the range between the "insert" and "selection_bound" marks,
+ * Deletes the range between the “insert” and “selection_bound” marks,
  * that is, the currently-selected text. If @interactive is %TRUE,
  * the editability of the selection will be considered (users can't delete
  * uneditable text).
@@ -4090,11 +4090,11 @@ gtk_text_buffer_get_selection_bounds (GtkTextBuffer *buffer,
  * an undo stack. #GtkTextBuffer maintains a count of calls to
  * gtk_text_buffer_begin_user_action() that have not been closed with
  * a call to gtk_text_buffer_end_user_action(), and emits the 
- * "begin-user-action" and "end-user-action" signals only for the 
+ * “begin-user-action” and “end-user-action” signals only for the 
  * outermost pair of calls. This allows you to build user actions 
  * from other user actions.
  *
- * The "interactive" buffer mutation functions, such as
+ * The “interactive” buffer mutation functions, such as
  * gtk_text_buffer_insert_interactive(), automatically call begin/end
  * user action around the buffer operations they perform, so there's
  * no need to add extra calls if you user action consists solely of a

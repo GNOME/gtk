@@ -57,7 +57,7 @@
  *   image = gtk_image_new_from_file ("myfile.png");
  * ]|
  * If the file isn't loaded successfully, the image will contain a
- * "broken image" icon similar to that used in many web browsers.
+ * “broken image” icon similar to that used in many web browsers.
  * If you want to handle errors in loading the file yourself,
  * for example by displaying an error message, then load the image with
  * gdk_pixbuf_new_from_file(), then create the #GtkImage with
@@ -70,7 +70,7 @@
  * align it (center, left, right) and add padding to it, using
  * #GtkMisc methods.
  *
- * #GtkImage is a "no window" widget (has no #GdkWindow of its own),
+ * #GtkImage is a “no window” widget (has no #GdkWindow of its own),
  * so by default does not receive events. If you want to receive events
  * on the image, such as button clicks, place the image inside a
  * #GtkEventBox, then connect to the event signals on the event box.
@@ -551,7 +551,7 @@ gtk_image_get_property (GObject     *object,
  * 
  * Creates a new #GtkImage displaying the file @filename. If the file
  * isn't found or can't be loaded, the resulting #GtkImage will
- * display a "broken image" icon. This function never returns %NULL,
+ * display a “broken image” icon. This function never returns %NULL,
  * it always returns a valid #GtkImage widget.
  *
  * If the file contains an animation, the image will contain an
@@ -586,7 +586,7 @@ gtk_image_new_from_file   (const gchar *filename)
  *
  * Creates a new #GtkImage displaying the resource file @resource_path. If the file
  * isn't found or can't be loaded, the resulting #GtkImage will
- * display a "broken image" icon. This function never returns %NULL,
+ * display a “broken image” icon. This function never returns %NULL,
  * it always returns a valid #GtkImage widget.
  *
  * If the file contains an animation, the image will contain an
@@ -772,7 +772,7 @@ gtk_image_new_from_animation (GdkPixbufAnimation *animation)
  * @size: (type int): a stock icon size
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
- * If the icon name isn't known, a "broken image" icon will be
+ * If the icon name isn't known, a “broken image” icon will be
  * displayed instead.  If the current icon theme is changed, the icon
  * will be updated appropriately.
  * 
@@ -799,7 +799,7 @@ gtk_image_new_from_icon_name (const gchar    *icon_name,
  * @size: (type int): a stock icon size
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
- * If the icon name isn't known, a "broken image" icon will be
+ * If the icon name isn't known, a “broken image” icon will be
  * displayed instead.  If the current icon theme is changed, the icon
  * will be updated appropriately.
  * 

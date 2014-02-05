@@ -1233,7 +1233,7 @@ gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
  * The title should help a user identify the current view. This
  * supersedes any title set by gtk_header_bar_set_title() or
  * gtk_header_bar_set_subtitle(). To achieve the same style as
- * the builtin title and subtitle, use the "title" and "subtitle"
+ * the builtin title and subtitle, use the “title” and “subtitle”
  * style classes.
  *
  * You should set the custom title to %NULL, for the header title
@@ -2047,7 +2047,7 @@ gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar)
  * maximize, close, icon (the window icon) and menu (a menu button
  * for the fallback app menu).
  *
- * For example, "menu:minimize,maximize,close" specifies a menu
+ * For example, “menu:minimize,maximize,close” specifies a menu
  * on the left, and minimize, maximize and close buttons on the right.
  *
  * Since: 3.12

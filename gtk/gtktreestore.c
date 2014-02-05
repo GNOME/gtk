@@ -46,7 +46,7 @@
  * The GtkTreeStore implementation of the #GtkBuildable interface allows
  * to specify the model columns with a &lt;columns&gt; element that may
  * contain multiple &lt;column&gt; elements, each specifying one model
- * column. The "type" attribute specifies the data type for the column.
+ * column. The “type” attribute specifies the data type for the column.
  *
  * An example of a UI Definition fragment for a tree store:
  * |[
@@ -495,7 +495,7 @@ gtk_tree_store_finalize (GObject *object)
 
 /* fulfill the GtkTreeModel requirements */
 /* NOTE: GtkTreeStore::root is a GNode, that acts as the parent node.  However,
- * it is not visible to the tree or to the user., and the path "0" refers to the
+ * it is not visible to the tree or to the user., and the path “0” refers to the
  * first child of GtkTreeStore::root.
  */
 
@@ -1169,7 +1169,7 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
  * The variable argument list should contain integer column numbers,
  * each column number followed by the value to be set.
  * The list is terminated by a -1. For example, to set column 0 with type
- * %G_TYPE_STRING to "Foo", you would write
+ * %G_TYPE_STRING to “Foo”, you would write
  * `gtk_tree_store_set (store, iter, 0, "Foo", -1)`.
  *
  * The value will be referenced by the store if it is a %G_TYPE_OBJECT, and it

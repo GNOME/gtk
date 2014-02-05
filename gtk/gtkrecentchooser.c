@@ -824,8 +824,8 @@ gtk_recent_chooser_unselect_all (GtkRecentChooser *chooser)
  *
  * Gets the list of recently used resources in form of #GtkRecentInfo objects.
  *
- * The return value of this function is affected by the "sort-type" and
- * "limit" properties of @chooser.
+ * The return value of this function is affected by the “sort-type” and
+ * “limit” properties of @chooser.
  *
  * Return value:  (element-type GtkRecentInfo) (transfer full): A newly allocated
  *   list of #GtkRecentInfo objects.  You should
@@ -850,7 +850,7 @@ gtk_recent_chooser_get_items (GtkRecentChooser *chooser)
  *
  * Gets the URI of the recently used resources.
  *
- * The return value of this function is affected by the "sort-type" and "limit"
+ * The return value of this function is affected by the “sort-type” and “limit”
  * properties of @chooser.
  *
  * Since the returned array is %NULL terminated, @length may be %NULL.

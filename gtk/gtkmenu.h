@@ -61,7 +61,7 @@ typedef struct _GtkMenuPrivate GtkMenuPrivate;
  *     into the visible area, effectively modifying the popup
  *     position.  Note that moving and possibly resizing the menu
  *     around will alter the scroll position to keep the menu items
- *     "in place", i.e. at the same monitor position they would have
+ *     “in place”, i.e. at the same monitor position they would have
  *     been without resizing.  In practice, this behavior is only
  *     useful for combobox popups or option menus and cannot be used
  *     to simply confine a menu to monitor boundaries.  In that case,

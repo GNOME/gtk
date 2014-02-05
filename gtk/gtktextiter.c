@@ -713,7 +713,7 @@ gtk_text_iter_get_line_index (const GtkTextIter *iter)
  * 
  * Returns the offset in characters from the start of the
  * line to the given @iter, not counting characters that
- * are invisible due to tags with the "invisible" flag
+ * are invisible due to tags with the “invisible” flag
  * toggled on.
  * 
  * Return value: offset in visible characters from the start of the line 
@@ -778,7 +778,7 @@ gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
  * 
  * Returns the number of bytes from the start of the
  * line to the given @iter, not counting bytes that
- * are invisible due to tags with the "invisible" flag
+ * are invisible due to tags with the “invisible” flag
  * toggled on.
  * 
  * Return value: byte index of @iter with respect to the start of the line
@@ -847,7 +847,7 @@ gtk_text_iter_get_visible_line_index (const GtkTextIter *iter)
  * The Unicode character at this iterator is returned.  (Equivalent to
  * operator* on a C++ iterator.)  If the element at this iterator is a
  * non-character element, such as an image embedded in the buffer, the
- * Unicode "unknown" character 0xFFFC is returned. If invoked on
+ * Unicode “unknown” character 0xFFFC is returned. If invoked on
  * the end iterator, zero is returned; zero is not a valid Unicode character.
  * So you can write a loop which ends when gtk_text_iter_get_char()
  * returns 0.
@@ -889,8 +889,8 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
  * @start: iterator at start of a range
  * @end: iterator at end of a range
  *
- * Returns the text in the given range. A "slice" is an array of
- * characters encoded in UTF-8 format, including the Unicode "unknown"
+ * Returns the text in the given range. A “slice” is an array of
+ * characters encoded in UTF-8 format, including the Unicode “unknown”
  * character 0xFFFC for iterable non-character elements in the buffer,
  * such as images.  Because images are encoded in the slice, byte and
  * character offsets in the returned array will correspond to byte
@@ -946,7 +946,7 @@ gtk_text_iter_get_text       (const GtkTextIter *start,
  *
  * Like gtk_text_iter_get_slice (), but invisible text is not included.
  * Invisible text is usually invisible because a #GtkTextTag with the
- * "invisible" attribute turned on has been applied to it.
+ * “invisible” attribute turned on has been applied to it.
  *
  * Return value: slice of text from the buffer
  **/
@@ -970,7 +970,7 @@ gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
  *
  * Like gtk_text_iter_get_text (), but invisible text is not included.
  * Invisible text is usually invisible because a #GtkTextTag with the
- * "invisible" attribute turned on has been applied to it.
+ * “invisible” attribute turned on has been applied to it.
  *
  * Return value: string containing visible text in the range
  **/
@@ -1379,7 +1379,7 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
  * @default_setting: %TRUE if text is editable by default
  *
  * Returns whether the character at @iter is within an editable region
- * of text.  Non-editable text is "locked" and can't be changed by the
+ * of text.  Non-editable text is “locked” and can't be changed by the
  * user via #GtkTextView. This function is simply a convenience
  * wrapper around gtk_text_iter_get_attributes (). If no tags applied
  * to this text affect editability, @default_setting will be returned.
@@ -3604,7 +3604,7 @@ is_cursor_pos_func (const PangoLogAttr *attrs,
  * surprisingly, there may not be a cursor position between all
  * characters. The most common example for European languages would be
  * a carriage return/newline sequence. For some Unicode characters,
- * the equivalent of say the letter "a" with an accent mark will be
+ * the equivalent of say the letter “a” with an accent mark will be
  * represented as two characters, first the letter then a "combining
  * mark" that causes the accent to be rendered; so the cursor can't go
  * between those two characters. See also the #PangoLogAttr-struct and
@@ -4034,7 +4034,7 @@ gtk_text_iter_set_offset (GtkTextIter *iter,
  * gtk_text_iter_forward_to_end:
  * @iter: a #GtkTextIter
  *
- * Moves @iter forward to the "end iterator," which points one past the last
+ * Moves @iter forward to the “end iterator,” which points one past the last
  * valid character in the buffer. gtk_text_iter_get_char() called on the
  * end iterator returns 0, which is convenient for writing loops.
  **/

@@ -16,7 +16,7 @@
  */
 
 /*
- * This is an implementation of the freedesktop.org "system tray" spec,
+ * This is an implementation of the freedesktop.org “system tray” spec,
  * http://www.freedesktop.org/wiki/Standards/systemtray-spec
  */
 

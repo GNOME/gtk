@@ -320,7 +320,7 @@ gtk_invisible_get_property  (GObject      *object,
 }
 
 /* We use a constructor here so that we can realize the invisible on
- * the correct screen after the "screen" property has been set
+ * the correct screen after the “screen” property has been set
  */
 static GObject*
 gtk_invisible_constructor (GType                  type,

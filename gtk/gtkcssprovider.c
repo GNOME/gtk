@@ -540,7 +540,7 @@
  * <literallayout>border-image-slice: @top @right @bottom @left</literallayout>
  * The sizes specified by the @top, @right, @bottom and @left parameters
  * are the offsets, in pixels, from the relevant edge where the image
- * should be "cut off" to build the slices used for the rendering
+ * should be “cut off” to build the slices used for the rendering
  * of the border.
  *
  * <literallayout>border-image-width: @top @right @bottom @left</literallayout>

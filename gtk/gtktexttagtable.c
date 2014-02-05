@@ -47,7 +47,7 @@
  * # GtkTextTagTables as GtkBuildable
  *
  * The GtkTextTagTable implementation of the GtkBuildable interface
- * supports adding tags by specifying "tag" as the "type"
+ * supports adding tags by specifying “tag” as the “type”
  * attribute of a &lt;child&gt; element.
  *
  * An example of a UI definition fragment specifying tags:

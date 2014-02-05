@@ -11827,8 +11827,8 @@ gtk_tree_view_get_activate_on_single_click (GtkTreeView *tree_view)
  * @tree_view: A #GtkTreeView.
  * @column: The #GtkTreeViewColumn to add.
  *
- * Appends @column to the list of columns. If @tree_view has "fixed_height"
- * mode enabled, then @column must have its "sizing" property set to be
+ * Appends @column to the list of columns. If @tree_view has “fixed_height”
+ * mode enabled, then @column must have its “sizing” property set to be
  * GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: The number of columns in @tree_view after appending.
@@ -11948,7 +11948,7 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
  *
  * This inserts the @column into the @tree_view at @position.  If @position is
  * -1, then the column is inserted at the end. If @tree_view has
- * "fixed_height" mode enabled, then @column must have its "sizing" property
+ * “fixed_height” mode enabled, then @column must have its “sizing” property
  * set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: The number of columns in @tree_view after insertion.
@@ -12022,7 +12022,7 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
  * Creates a new #GtkTreeViewColumn and inserts it into the @tree_view at
  * @position.  If @position is -1, then the newly created column is inserted at
  * the end.  The column is initialized with the attributes given. If @tree_view
- * has "fixed_height" mode enabled, then the new column will have its sizing
+ * has “fixed_height” mode enabled, then the new column will have its sizing
  * property set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: The number of columns in @tree_view after insertion.
@@ -12078,8 +12078,8 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
  * with the given cell renderer and a #GtkTreeCellDataFunc to set cell renderer
  * attributes (normally using data from the model). See also
  * gtk_tree_view_column_set_cell_data_func(), gtk_tree_view_column_pack_start().
- * If @tree_view has "fixed_height" mode enabled, then the new column will have its
- * "sizing" property set to be GTK_TREE_VIEW_COLUMN_FIXED.
+ * If @tree_view has “fixed_height” mode enabled, then the new column will have its
+ * “sizing” property set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: number of columns in the tree view post-insert
  **/
@@ -14665,7 +14665,7 @@ gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
  * the tree interactively (this is sometimes called "typeahead find").
  * 
  * Note that even if this is %FALSE, the user can still initiate a search 
- * using the "start-interactive-search" key binding.
+ * using the “start-interactive-search” key binding.
  */
 void
 gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
@@ -14724,7 +14724,7 @@ gtk_tree_view_get_search_column (GtkTreeView *tree_view)
  * Sets @column as the column where the interactive search code should
  * search in for the current model. 
  * 
- * If the search column is set, users can use the "start-interactive-search"
+ * If the search column is set, users can use the “start-interactive-search”
  * key binding to bring up search popup. The enable-search property controls
  * whether simply typing text will also start an interactive search.
  *

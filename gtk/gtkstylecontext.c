@@ -1818,14 +1818,14 @@ region_find (GArray *array,
  * gtk_style_context_get() or any of the gtk_render_*()
  * functions will make use of this new class for styling.
  *
- * In the CSS file format, a #GtkEntry defining an "entry"
+ * In the CSS file format, a #GtkEntry defining an “entry”
  * class, would be matched by:
  *
  * |[
  * GtkEntry.entry { ... }
  * ]|
  *
- * While any widget defining an "entry" class would be
+ * While any widget defining an “entry” class would be
  * matched by:
  * |[
  * .entry { ... }
@@ -2043,7 +2043,7 @@ _gtk_style_context_check_region_name (const gchar *str)
  * gtk_style_context_get() or any of the gtk_render_*()
  * functions will make use of this new region for styling.
  *
- * In the CSS file format, a #GtkTreeView defining a "row"
+ * In the CSS file format, a #GtkTreeView defining a “row”
  * region, would be matched by:
  *
  * |[

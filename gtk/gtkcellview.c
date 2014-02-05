@@ -1173,7 +1173,7 @@ gtk_cell_view_get_model (GtkCellView *cell_view)
  *
  * Sets the row of the model that is currently displayed
  * by the #GtkCellView. If the path is unset, then the
- * contents of the cellview "stick" at their last value;
+ * contents of the cellview “stick” at their last value;
  * this is not normally a desired result, but may be
  * a needed intermediate state if say, the model for
  * the #GtkCellView becomes temporarily empty.

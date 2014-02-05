@@ -31,10 +31,10 @@
 
 /* Terminology note: when not otherwise specified, the term "incr" below
  * refers to the _sending_ part of the INCR protocol. The receiving
- * portion is referred to just as "retrieval". (Terminology borrowed
- * from Tk, because there is no good opposite to "retrieval" in English.
- * "send" can't be made into a noun gracefully and we're already using
- * "emission" for something else ....)
+ * portion is referred to just as “retrieval”. (Terminology borrowed
+ * from Tk, because there is no good opposite to “retrieval” in English.
+ * “send” can't be made into a noun gracefully and we're already using
+ * “emission” for something else ....)
  */
 
 /* The MOTIF entry widget seems to ask for the TARGETS target, then
@@ -1035,7 +1035,7 @@ gtk_selection_remove_all (GtkWidget *widget)
        In emergency, you could use #GDK_CURRENT_TIME
  * 
  * Requests the contents of a selection. When received, 
- * a "selection-received" signal will be generated.
+ * a “selection-received” signal will be generated.
  * 
  * Return value: %TRUE if requested succeeded. %FALSE if we could not process
  *          request. (e.g., there was already a request in process for
@@ -2277,7 +2277,7 @@ _gtk_selection_clear (GtkWidget         *widget,
 
 /*************************************************************
  * _gtk_selection_request:
- *     Handler for "selection_request_event" 
+ *     Handler for “selection_request_event” 
  *   arguments:
  *     widget:
  *     event:
@@ -2713,7 +2713,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
 
 /*************************************************************
  * _gtk_selection_notify:
- *     Handler for "selection-notify-event" signals on windows
+ *     Handler for “selection-notify-event” signals on windows
  *     where a retrieval is currently in process. The selection
  *     owner has responded to our conversion request.
  *   arguments:
@@ -2805,7 +2805,7 @@ _gtk_selection_notify (GtkWidget	 *widget,
 
 /*************************************************************
  * _gtk_selection_property_notify:
- *     Handler for "property-notify-event" signals on windows
+ *     Handler for “property-notify-event” signals on windows
  *     where a retrieval is currently in process. The selection
  *     owner has added more data.
  *   arguments:
@@ -2962,7 +2962,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
 
 /*************************************************************
  * gtk_selection_retrieval_report:
- *     Emits a "selection-received" signal.
+ *     Emits a “selection-received” signal.
  *   arguments:
  *     info:	  information about the retrieval that completed
  *     buffer:	  buffer containing data (NULL => errror)

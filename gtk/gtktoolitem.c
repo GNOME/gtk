@@ -1031,8 +1031,8 @@ gtk_tool_item_get_is_important (GtkToolItem *tool_item)
  * Sets whether @tool_item should be considered important. The #GtkToolButton
  * class uses this property to determine whether to show or hide its label
  * when the toolbar style is %GTK_TOOLBAR_BOTH_HORIZ. The result is that
- * only tool buttons with the "is_important" property set have labels, an
- * effect known as "priority text"
+ * only tool buttons with the “is_important” property set have labels, an
+ * effect known as “priority text”
  * 
  * Since: 2.4
  **/

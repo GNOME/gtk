@@ -115,7 +115,7 @@ GQuark  gtk_recent_chooser_error_quark (void);
  * @list_filters: Gets the #GtkRecentFilter objects held by chooser.
  * @set_sort_func: Sets the comparison function used when sorting to
  *    be sort_func.
- * @item_activated: Signal emitted when the user "activates" a recent
+ * @item_activated: Signal emitted when the user “activates” a recent
  *    item in the recent chooser.
  * @selection_changed: Signal emitted when there is a change in the
  *    set of selected recently used resources.

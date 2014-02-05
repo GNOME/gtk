@@ -60,13 +60,13 @@
  * @Short_description: Display an icon in the system tray
  * @Title: GtkStatusIcon
  *
- * The "system tray" or notification area is normally used for transient icons
+ * The “system tray” or notification area is normally used for transient icons
  * that indicate some special state. For example, a system tray icon might
  * appear to tell the user that they have new mail, or have an incoming instant
  * message, or something along those lines. The basic idea is that creating an
  * icon in the notification area is less annoying than popping up a dialog.
  *
- * A #GtkStatusIcon object can be used to display an icon in a "system tray".
+ * A #GtkStatusIcon object can be used to display an icon in a “system tray”.
  * The icon can have a tooltip, and the user can interact with it by
  * activating it or popping up a context menu. Critical information should
  * not solely be displayed in a #GtkStatusIcon, since it may not be
@@ -75,7 +75,7 @@
  *
  * On X11, the implementation follows the
  * [FreeDesktop System Tray Specification](http://www.freedesktop.org/wiki/Specifications/systemtray-spec).
- * Implementations of the "tray" side of this specification can
+ * Implementations of the “tray” side of this specification can
  * be found e.g. in the GNOME 2 and KDE panel applications.
  *
  * Note that a GtkStatusIcon is not a widget, but just

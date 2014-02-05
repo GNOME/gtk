@@ -1198,7 +1198,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * If %TRUE, the print operation will try to continue report on 
    * the status of the print job in the printer queues and printer. 
-   * This can allow your application to show things like "out of paper" 
+   * This can allow your application to show things like “out of paper” 
    * issues, and when the print job actually reaches the printer. 
    * However, this is often implemented using polling, and should 
    * not be enabled unless needed.
@@ -1280,10 +1280,10 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Currently, PDF is the only supported format.
    *
    * The intended use of this property is for implementing 
-   * "Export to PDF" actions.
+   * “Export to PDF” actions.
    *
-   * "Print to PDF" support is independent of this and is done
-   * by letting the user pick the "Print to PDF" item from the 
+   * “Print to PDF” support is independent of this and is done
+   * by letting the user pick the “Print to PDF” item from the 
    * list of printers in the print dialog.
    *
    * Since: 2.10
@@ -1737,7 +1737,7 @@ gtk_print_operation_set_unit (GtkPrintOperation *op,
  * 
  * If track_status is %TRUE, the print operation will try to continue report
  * on the status of the print job in the printer queues and printer. This
- * can allow your application to show things like "out of paper" issues,
+ * can allow your application to show things like “out of paper” issues,
  * and when the print job actually reaches the printer.
  * 
  * This function is often implemented using some form of polling, so it should
@@ -1970,11 +1970,11 @@ gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
  * 
  * Sets up the #GtkPrintOperation to generate a file instead
  * of showing the print dialog. The indended use of this function
- * is for implementing "Export to PDF" actions. Currently, PDF
+ * is for implementing “Export to PDF” actions. Currently, PDF
  * is the only supported format.
  *
- * "Print to PDF" support is independent of this and is done
- * by letting the user pick the "Print to PDF" item from the list
+ * “Print to PDF” support is independent of this and is done
+ * by letting the user pick the “Print to PDF” item from the list
  * of printers in the print dialog.
  *
  * Since: 2.10
@@ -2365,7 +2365,7 @@ update_progress (PrintPagesData *data)
  * gtk_print_operation_draw_page_finish() from application. It can
  * be used for drawing page in another thread.
  *
- * This function must be called in the callback of "draw-page" signal.
+ * This function must be called in the callback of “draw-page” signal.
  *
  * Since: 2.16
  **/

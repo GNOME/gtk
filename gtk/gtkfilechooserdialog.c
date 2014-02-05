@@ -37,12 +37,12 @@
 
 /**
  * SECTION:gtkfilechooserdialog
- * @Short_description: A file chooser dialog, suitable for "File/Open" or "File/Save" commands
+ * @Short_description: A file chooser dialog, suitable for “File/Open” or “File/Save” commands
  * @Title: GtkFileChooserDialog
  * @See_also: #GtkFileChooser, #GtkDialog
  *
  * #GtkFileChooserDialog is a dialog box suitable for use with
- * "File/Open" or "File/Save as" commands.  This widget works by
+ * “File/Open” or “File/Save as” commands.  This widget works by
  * putting a #GtkFileChooserWidget inside a #GtkDialog.  It exposes
  * the #GtkFileChooser interface, so you can use all of the
  * #GtkFileChooser functions on the file chooser dialog as well as
@@ -116,7 +116,7 @@
  * - To select a file for opening. Use #GTK_FILE_CHOOSER_ACTION_OPEN.
  *
  * - To save a file for the first time. Use #GTK_FILE_CHOOSER_ACTION_SAVE,
- *   and suggest a name such as "Untitled" with gtk_file_chooser_set_current_name().
+ *   and suggest a name such as “Untitled” with gtk_file_chooser_set_current_name().
  * 
  * - To save a file under a different name. Use #GTK_FILE_CHOOSER_ACTION_SAVE,
  *   and set the existing filename with gtk_file_chooser_set_filename().
@@ -152,11 +152,11 @@
  *                                       NULL);
  * ]|
  *
- * This will create buttons for "Cancel" and "Open" that use stock
+ * This will create buttons for “Cancel” and “Open” that use stock
  * response identifiers from #GtkResponseType.  For most dialog
  * boxes you can use your own custom response codes rather than the
  * ones in #GtkResponseType, but #GtkFileChooserDialog assumes that
- * its "accept"-type action, e.g. an "Open" or "Save" button,
+ * its “accept”-type action, e.g. an “Open” or “Save” button,
  * will have one of the following response codes:
  *
  * - #GTK_RESPONSE_ACCEPT

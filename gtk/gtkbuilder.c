@@ -72,7 +72,7 @@
  * [RELAX NG Compact Syntax](https://git.gnome.org/browse/gtk+/tree/gtk/gtkbuilder.rnc)
  *
  * The toplevel element is &lt;interface&gt;. It optionally takes a
- * "domain" attribute, which will make the builder look for translated
+ * “domain” attribute, which will make the builder look for translated
  * strings using dgettext() in the domain specified. This can also be
  * done by calling gtk_builder_set_translation_domain() on the builder.
  * Objects are described by &lt;object&gt; elements, which can contain
@@ -82,33 +82,33 @@
  * also e.g. actions in an action group, or columns in a tree model).
  * A &lt;child&gt; element contains an &lt;object&gt; element which
  * describes the child object. The target toolkit version(s) are
- * described by &lt;requires&gt; elements, the "lib" attribute specifies
+ * described by &lt;requires&gt; elements, the “lib” attribute specifies
  * the widget library in question (currently the only supported value 
- * s "gtk+") and the "version" attribute specifies the target version
- * in the form "&lt;major&gt;.&lt;minor&gt;". The builder will error
+ * s “gtk+”) and the “version” attribute specifies the target version
+ * in the form “&lt;major&gt;.&lt;minor&gt;”. The builder will error
  * out if the version requirements are not met.
  *
  * Typically, the specific kind of object represented by an &lt;object&gt;
- * element is specified by the "class" attribute. If the type has not been
+ * element is specified by the “class” attribute. If the type has not been
  * loaded yet, GTK+ tries to find the get_type() function from the
  * class name by applying heuristics. This works in most cases, but
  * if necessary, it is possible to specify the name of the
  * get_type() function explictly with the "type-func" attribute.
  * As a special case, GtkBuilder allows to use an object that has been
  * constructed by a #GtkUIManager in another part of the UI definition
- * by specifying the id of the #GtkUIManager in the "constructor"
- * attribute and the name of the object in the "id" attribute.
+ * by specifying the id of the #GtkUIManager in the “constructor”
+ * attribute and the name of the object in the “id” attribute.
  *
- * Objects may be given a name with the "id" attribute, which allows the
+ * Objects may be given a name with the “id” attribute, which allows the
  * application to retrieve them from the builder with gtk_builder_get_object().
  * An id is also necessary to use the object as property value in other
  * parts of the UI definition. GTK+ reserves ids starting and ending
  * with ___ (3 underscores) for its own purposes.
  *
  * Setting properties of objects is pretty straightforward with the
- * &lt;property&gt; element: the "name" attribute specifies the name
+ * &lt;property&gt; element: the “name” attribute specifies the name
  * of the property, and the content of the element specifies the value.
- * If the "translatable" attribute is set to a true value, GTK+ uses
+ * If the “translatable” attribute is set to a true value, GTK+ uses
  * gettext() (or dgettext() if the builder has a translation domain set)
  * to find a translation for the value. This happens before the value
  * is parsed, so it can be used for properties of any type, but it is
@@ -118,11 +118,11 @@
  *
  * GtkBuilder can parse textual representations for the most common
  * property types: characters, strings, integers, floating-point numbers,
- * booleans (strings like "TRUE", "t", "yes", "y", "1" are interpreted
- * as %TRUE, strings like "FALSE", "f", "no", "n", "0" are interpreted
+ * booleans (strings like “TRUE”, “t”, “yes”, “y”, “1” are interpreted
+ * as %TRUE, strings like “FALSE”, “f”, “no”, “n”, “0” are interpreted
  * as %FALSE), enumerations (can be specified by their name, nick or
  * integer value), flags (can be specified by their name, nick, integer
- * value, optionally combined with "|", e.g. "GTK_VISIBLE|GTK_REALIZED")
+ * value, optionally combined with “|”, e.g. “GTK_VISIBLE|GTK_REALIZED”)
  * and colors (in a format understood by gdk_color_parse()). Pixbufs can
  * be specified as a filename of an image file to load. Objects can be
  * referred to by their name and by default refer to objects declared
@@ -136,29 +136,29 @@
  * a construct-only property.
  *
  * Signal handlers are set up with the &lt;signal&gt; element. The
- * "name" attribute specifies the name of the signal, and the "handler"
+ * “name” attribute specifies the name of the signal, and the “handler”
  * attribute specifies the function to connect to the signal. By default,
  * GTK+ tries to find the handler using g_module_symbol(), but this can
  * be changed by passing a custom #GtkBuilderConnectFunc to
- * gtk_builder_connect_signals_full(). The remaining attributes, "after",
- * "swapped" and "object", have the same meaning as the corresponding
+ * gtk_builder_connect_signals_full(). The remaining attributes, “after”,
+ * “swapped” and “object”, have the same meaning as the corresponding
  * parameters of the g_signal_connect_object() or
- * g_signal_connect_data() functions. A "last_modification_time"
+ * g_signal_connect_data() functions. A “last_modification_time”
  * attribute is also allowed, but it does not have a meaning to the
  * builder.
  *
  * Sometimes it is necessary to refer to widgets which have implicitly
  * been constructed by GTK+ as part of a composite widget, to set
  * properties on them or to add further children (e.g. the @vbox of
- * a #GtkDialog). This can be achieved by setting the "internal-child"
+ * a #GtkDialog). This can be achieved by setting the “internal-child”
  * propery of the &lt;child&gt; element to a true value. Note that
  * GtkBuilder still requires an &lt;object&gt; element for the internal
  * child, even if it has already been constructed.
  *
  * A number of widgets have different places where a child can be added
  * (e.g. tabs vs. page content in notebooks). This can be reflected in
- * a UI definition by specifying the "type" attribute on a &lt;child&gt;.
- * The possible values for the "type" attribute are described in the
+ * a UI definition by specifying the “type” attribute on a &lt;child&gt;.
+ * The possible values for the “type” attribute are described in the
  * sections describing the widget-specific portions of UI definitions.
  *
  * # A GtkBuilder UI Definition

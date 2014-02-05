@@ -1549,7 +1549,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
  * object properties. Object properties can be
  * set globally (with g_object_set()). Also, with #GtkTreeViewColumn,
  * you can bind a property to a value in a #GtkTreeModel. For example,
- * you can bind the "text" property on the cell renderer to a string
+ * you can bind the “text” property on the cell renderer to a string
  * value in the model, thus rendering a different string in each row
  * of the #GtkTreeView
  * 
@@ -2086,8 +2086,8 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
  * @renderer: A #GtkCellRendererText
  * @number_of_rows: Number of rows of text each cell renderer is allocated, or -1
  * 
- * Sets the height of a renderer to explicitly be determined by the "font" and
- * "y_pad" property set on it.  Further changes in these properties do not
+ * Sets the height of a renderer to explicitly be determined by the “font” and
+ * “y_pad” property set on it.  Further changes in these properties do not
  * affect the height, so they must be accompanied by a subsequent call to this
  * function.  Using this function is unflexible, and should really only be used
  * if calculating the size of a cell is too slow (ie, a massive number of cells

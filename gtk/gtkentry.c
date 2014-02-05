@@ -82,7 +82,7 @@
  * position is visible.
  *
  * When using an entry for passwords and other sensitive information,
- * it can be put into "password mode" using gtk_entry_set_visibility().
+ * it can be put into “password mode” using gtk_entry_set_visibility().
  * In this mode, entered text is displayed using a 'invisible' character.
  * By default, GTK+ picks the best invisible character that is available
  * in the current font, but it can be changed with
@@ -7571,7 +7571,7 @@ gtk_entry_get_visibility (GtkEntry *entry)
  * 
  * Sets the character to use in place of the actual text when
  * gtk_entry_set_visibility() has been called to set text visibility
- * to %FALSE. i.e. this is the character used in "password mode" to
+ * to %FALSE. i.e. this is the character used in “password mode” to
  * show the user how many characters have been typed. By default, GTK+
  * picks the best invisible char available in the current font. If you
  * set the invisible char to 0, then the user will get no feedback
@@ -8109,7 +8109,7 @@ gtk_entry_text_index_to_layout_index (GtkEntry *entry,
  * is clicked.
  * 
  * Note that as the user scrolls around in the entry the offsets will
- * change; you'll need to connect to the "notify::scroll-offset"
+ * change; you'll need to connect to the “notify::scroll-offset”
  * signal to track this. Remember when using the #PangoLayout
  * functions you need to convert to and from pixels using
  * PANGO_PIXELS() or #PANGO_SCALE.
@@ -8335,7 +8335,7 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
  *
- * If the icon name isn't known, a "broken image" icon will be displayed
+ * If the icon name isn't known, a “broken image” icon will be displayed
  * instead.
  *
  * If @icon_name is %NULL, no icon will be shown in the specified position.
@@ -8401,7 +8401,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
  *
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
- * If the icon isn't known, a "broken image" icon will be displayed
+ * If the icon isn't known, a “broken image” icon will be displayed
  * instead.
  *
  * If @icon is %NULL, no icon will be shown in the specified position.
@@ -10193,7 +10193,7 @@ gtk_entry_get_cursor_hadjustment (GtkEntry *entry)
  * @entry: a #GtkEntry
  * @fraction: fraction of the task that's been completed
  *
- * Causes the entry's progress indicator to "fill in" the given
+ * Causes the entry's progress indicator to “fill in” the given
  * fraction of the bar. The fraction should be between 0.0 and 1.0,
  * inclusive.
  *
@@ -10314,7 +10314,7 @@ gtk_entry_get_progress_pulse_step (GtkEntry *entry)
  * @entry: a #GtkEntry
  *
  * Indicates that some progress is made, but you don't know how much.
- * Causes the entry's progress indicator to enter "activity mode,"
+ * Causes the entry's progress indicator to enter “activity mode,”
  * where a block bounces back and forth. Each call to
  * gtk_entry_progress_pulse() causes the block to move by a little bit
  * (the amount of movement per pulse is determined by

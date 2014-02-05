@@ -110,7 +110,7 @@ gtk_actionable_get_action_name (GtkActionable *actionable)
  * Usually this function is used when the widget is located (or will be
  * located) within the hierarchy of a #GtkApplicationWindow.
  *
- * Names are of the form "win.save" or "app.quit" for actions on the
+ * Names are of the form “win.save” or “app.quit” for actions on the
  * containing #GtkApplicationWindow or its associated #GtkApplication,
  * respectively.  This is the same form used for actions in the #GMenu
  * associated with the window.
@@ -160,11 +160,11 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
  * The target value has two purposes.  First, it is used as the
  * parameter to activation of the action associated with the
  * #GtkActionable widget. Second, it is used to determine if the widget
- * should be rendered as "active" - the widget is active if the state
+ * should be rendered as “active” - the widget is active if the state
  * is equal to the given target.
  *
  * Consider the example of associating a set of buttons with a #GAction
- * with string state in a typical "radio button" situation.  Each button
+ * with string state in a typical “radio button” situation.  Each button
  * will be associated with the same action, but with a different target
  * value for that action.  Clicking on a particular button will activate
  * the action with the target of that button, which will typically cause

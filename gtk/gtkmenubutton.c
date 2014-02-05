@@ -592,7 +592,7 @@ menu_detacher (GtkWidget *widget,
 }
 
 /* This function is used in GtkMenuToolButton, the call back will
- * be called when GtkMenuToolButton would have emitted the "show-menu"
+ * be called when GtkMenuToolButton would have emitted the “show-menu”
  * signal.
  */
 void

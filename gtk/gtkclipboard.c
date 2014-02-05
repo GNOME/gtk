@@ -56,8 +56,8 @@
  * the same process. Each clipboard is identified by a name encoded as a
  * #GdkAtom. (Conversion to and from strings can be done with
  * gdk_atom_intern() and gdk_atom_name().) The default clipboard
- * corresponds to the "CLIPBOARD" atom; another commonly used clipboard
- * is the "PRIMARY" clipboard, which, in X, traditionally contains
+ * corresponds to the “CLIPBOARD” atom; another commonly used clipboard
+ * is the “PRIMARY” clipboard, which, in X, traditionally contains
  * the currently selected text.
  *
  * To support having a number of different formats on the clipboard
@@ -333,7 +333,7 @@ clipboard_display_closed (GdkDisplay   *display,
  *
  * See the
  * [FreeDesktop Clipboard Specification](http://www.freedesktop.org/Standards/clipboards-spec)
- * for a detailed discussion of the "CLIPBOARD" vs. "PRIMARY"
+ * for a detailed discussion of the “CLIPBOARD” vs. “PRIMARY”
  * selections under the X window system. On Win32 the
  * #GDK_SELECTION_PRIMARY clipboard is essentially ignored.)
  *
@@ -341,8 +341,8 @@ clipboard_display_closed (GdkDisplay   *display,
  * new clipboards, you should prefix the selection name with an
  * underscore (because the ICCCM requires that nonstandard atoms are
  * underscore-prefixed), and namespace it as well. For example,
- * if your application called "Foo" has a special-purpose
- * clipboard, you might call it "_FOO_SPECIAL_CLIPBOARD".
+ * if your application called “Foo” has a special-purpose
+ * clipboard, you might call it “_FOO_SPECIAL_CLIPBOARD”.
  *
  * Return value: (transfer none): the appropriate clipboard object. If no
  *   clipboard already exists, a new one will be created. Once a clipboard
@@ -674,7 +674,7 @@ gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
  * @clear_func: (scope async): when the clipboard contents are set again,
  *     this function will be called, and @get_func will not be subsequently
  *     called
- * @owner: an object that "owns" the data. This object will be passed
+ * @owner: an object that “owns” the data. This object will be passed
  *     to the callbacks when called
  *
  * Virtually sets the contents of the specified clipboard by providing
@@ -1957,7 +1957,7 @@ gtk_clipboard_owner_change (GtkClipboard        *clipboard,
  * @target:    A #GdkAtom indicating which target to look for.
  *
  * Checks if a clipboard supports pasting data of a given type. This
- * function can be used to determine if a "Paste" menu item should be
+ * function can be used to determine if a “Paste” menu item should be
  * insensitive or not.
  *
  * If you want to see if there's text available on the clipboard, use

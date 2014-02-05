@@ -1134,10 +1134,10 @@ gtk_tool_button_new (GtkWidget	 *icon_widget,
  * @button: a #GtkToolButton
  * @label: (allow-none): a string that will be used as label, or %NULL.
  *
- * Sets @label as the label used for the tool button. The "label" property
- * only has an effect if not overridden by a non-%NULL "label_widget" property.
- * If both the "label_widget" and "label" properties are %NULL, the label
- * is determined by the "stock_id" property. If the "stock_id" property is also
+ * Sets @label as the label used for the tool button. The “label” property
+ * only has an effect if not overridden by a non-%NULL “label_widget” property.
+ * If both the “label_widget” and “label” properties are %NULL, the label
+ * is determined by the “stock_id” property. If the “stock_id” property is also
  * %NULL, @button will not have a label.
  * 
  * Since: 2.4
@@ -1193,12 +1193,12 @@ gtk_tool_button_get_label (GtkToolButton *button)
 /**
  * gtk_tool_button_set_use_underline:
  * @button: a #GtkToolButton
- * @use_underline: whether the button label has the form "_Open"
+ * @use_underline: whether the button label has the form “_Open”
  *
  * If set, an underline in the label property indicates that the next character
  * should be used for the mnemonic accelerator key in the overflow menu. For
- * example, if the label property is "_Open" and @use_underline is %TRUE,
- * the label on the tool button will be "Open" and the item on the overflow
+ * example, if the label property is “_Open” and @use_underline is %TRUE,
+ * the label on the tool button will be “Open” and the item on the overflow
  * menu will have an underlined 'O'.
  * 
  * Labels shown on tool buttons never have mnemonics on them; this property
@@ -1250,7 +1250,7 @@ gtk_tool_button_get_use_underline (GtkToolButton *button)
  *
  * Sets the name of the stock item. See gtk_tool_button_new_from_stock().
  * The stock_id property only has an effect if not
- * overridden by non-%NULL "label" and "icon_widget" properties.
+ * overridden by non-%NULL “label” and “icon_widget” properties.
  * 
  * Since: 2.4
  *
@@ -1302,8 +1302,8 @@ gtk_tool_button_get_stock_id (GtkToolButton *button)
  *
  * Sets the icon for the tool button from a named themed icon.
  * See the docs for #GtkIconTheme for more details.
- * The "icon_name" property only has an effect if not
- * overridden by non-%NULL "label", "icon_widget" and "stock_id"
+ * The “icon_name” property only has an effect if not
+ * overridden by non-%NULL “label”, “icon_widget” and “stock_id”
  * properties.
  * 
  * Since: 2.8
@@ -1352,8 +1352,8 @@ gtk_tool_button_get_icon_name (GtkToolButton *button)
  * @icon_widget: (allow-none): the widget used as icon, or %NULL
  *
  * Sets @icon as the widget used as icon on @button. If @icon_widget is
- * %NULL the icon is determined by the "stock_id" property. If the
- * "stock_id" property is also %NULL, @button will not have an icon.
+ * %NULL the icon is determined by the “stock_id” property. If the
+ * “stock_id” property is also %NULL, @button will not have an icon.
  * 
  * Since: 2.4
  **/
@@ -1394,10 +1394,10 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
  * @label_widget: (allow-none): the widget used as label, or %NULL
  *
  * Sets @label_widget as the widget that will be used as the label
- * for @button. If @label_widget is %NULL the "label" property is used
- * as label. If "label" is also %NULL, the label in the stock item
- * determined by the "stock_id" property is used as label. If
- * "stock_id" is also %NULL, @button does not have a label.
+ * for @button. If @label_widget is %NULL the “label” property is used
+ * as label. If “label” is also %NULL, the label in the stock item
+ * determined by the “stock_id” property is used as label. If
+ * “stock_id” is also %NULL, @button does not have a label.
  * 
  * Since: 2.4
  **/

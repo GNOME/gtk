@@ -50,7 +50,7 @@
  *
  * The idea of @with_separators is for special cases where menu models may
  * be tracked in places where separators are not available, like in toplevel
- * "File", "Edit" menu bars. Ignoring separator items is wrong, as #GtkMenuTracker
+ * "File", “Edit” menu bars. Ignoring separator items is wrong, as #GtkMenuTracker
  * expects the position to change, so we must tell #GtkMenuTracker to ignore
  * separators itself.
  */
@@ -520,7 +520,7 @@ gtk_menu_tracker_section_new (GtkMenuTracker *tracker,
  * information about the menu item to insert.  @action_namespace is the
  * action namespace that actions referred to from that item should place
  * themselves in.  Note that if the item is a submenu and the
- * "action-namespace" attribute is defined on the item, it will _not_ be
+ * “action-namespace” attribute is defined on the item, it will _not_ be
  * applied to the @action_namespace argument as it is meant for the
  * items inside of the submenu, not the submenu item itself.
  *
@@ -528,7 +528,7 @@ gtk_menu_tracker_section_new (GtkMenuTracker *tracker,
  * separator.  @model and @item_index will still be meaningfully set in
  * this case -- to the section menu item corresponding to the separator.
  * This is useful if the section specifies a label, for example.  If
- * there is an "action-namespace" attribute on this menu item then it
+ * there is an “action-namespace” attribute on this menu item then it
  * should be ignored by the consumer because #GtkMenuTracker has already
  * handled it.
  *

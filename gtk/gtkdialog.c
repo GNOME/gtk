@@ -131,11 +131,11 @@
  * # GtkDialog as GtkBuildable
  *
  * The GtkDialog implementation of the #GtkBuildable interface exposes the
- * @vbox and @action_area as internal children with the names "vbox" and
- * "action_area".
+ * @vbox and @action_area as internal children with the names “vbox” and
+ * “action_area”.
  *
  * GtkDialog supports a custom &lt;action-widgets&gt; element, which
- * can contain multiple &lt;action-widget&gt; elements. The "response"
+ * can contain multiple &lt;action-widget&gt; elements. The “response”
  * attribute specifies a numeric response, and the content of the element
  * is the id of widget (which should be a child of the dialogs @action_area).
  *
@@ -1081,7 +1081,7 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
  * @response_id: a response ID
  *
  * Sets the last widget in the dialog's action area with the given @response_id
- * as the default widget for the dialog. Pressing "Enter" normally activates
+ * as the default widget for the dialog. Pressing “Enter” normally activates
  * the default widget.
  **/
 void

@@ -2775,7 +2775,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 
 /* Calback for the "notify::popup-shown" signal on the combo box.
  * When the combo is popped up, we don't want the ROW_TYPE_EMPTY_SELECTION to be visible
- * at all; otherwise we would be showing a "(None)" item in the combo box's popup.
+ * at all; otherwise we would be showing a “(None)” item in the combo box's popup.
  *
  * However, when the combo box is *not* popped up, we want the empty-selection row
  * to be visible depending on the selection.

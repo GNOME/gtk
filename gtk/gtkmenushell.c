@@ -37,11 +37,11 @@
  *
  * # Terminology
  *
- * A menu item can be "selected", this means that it is displayed
+ * A menu item can be “selected”, this means that it is displayed
  * in the prelight state, and if it has a submenu, that submenu
  * will be popped up.
  *
- * A menu is "active" when it is visible onscreen and the user
+ * A menu is “active” when it is visible onscreen and the user
  * is selecting from it. A menubar is not active until the user
  * clicks on one of its menuitems. When a menu is active,
  * passing the mouse over a submenu will pop it up.
@@ -2136,18 +2136,18 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
  *
  * If @action_namespace is non-%NULL then the effect is as if all
  * actions mentioned in the @model have their names prefixed with the
- * namespace, plus a dot.  For example, if the action "quit" is
- * mentioned and @action_namespace is "app" then the effective action
- * name is "app.quit".
+ * namespace, plus a dot.  For example, if the action “quit” is
+ * mentioned and @action_namespace is “app” then the effective action
+ * name is “app.quit”.
  *
  * This function uses #GtkActionable to define the action name and
  * target values on the created menu items.  If you want to use an
- * action group other than "app" and "win", or if you want to use a
+ * action group other than “app” and “win”, or if you want to use a
  * #GtkMenuShell outside of a #GtkApplicationWindow, then you will need
  * to attach your own action group to the widget hierarchy using
  * gtk_widget_insert_action_group().  As an example, if you created a
- * group with a "quit" action and inserted it with the name "mygroup"
- * then you would use the action name "mygroup.quit" in your
+ * group with a “quit” action and inserted it with the name “mygroup”
+ * then you would use the action name “mygroup.quit” in your
  * #GMenuModel.
  *
  * For most cases you are probably better off using

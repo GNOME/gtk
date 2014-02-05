@@ -494,7 +494,7 @@ find_item_label (GtkWidget *item)
 /* This function returns a string of the form A;B;C where A is
  * the keybinding for the widget; B is the keybinding to traverse
  * from the menubar and C is the accelerator. The items in the
- * keybinding to traverse from the menubar are separated by ":".
+ * keybinding to traverse from the menubar are separated by “:”.
  */
 static const gchar *
 gtk_menu_item_accessible_get_keybinding (AtkAction *action,

@@ -1108,7 +1108,7 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  * This is a convenience function to create a number of actions and add them 
  * to the action group.
  *
- * The "activate" signals of the actions are connected to the callbacks and 
+ * The “activate” signals of the actions are connected to the callbacks and
  * their accel paths are set to 
  * `&lt;Actions&gt;/group-name/action-name`.  
  * 
@@ -1243,7 +1243,7 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
  * This is a convenience function to create a number of toggle actions and add them 
  * to the action group.
  *
- * The "activate" signals of the actions are connected to the callbacks and 
+ * The “activate” signals of the actions are connected to the callbacks and
  * their accel paths are set to 
  * `&lt;Actions&gt;/group-name/action-name`.  
  * 
@@ -1363,7 +1363,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
  * This is a convenience routine to create a group of radio actions and
  * add them to the action group. 
  *
- * The "changed" signal of the first radio action is connected to the 
+ * The “changed” signal of the first radio action is connected to the 
  * @on_change callback and the accel paths of the actions are set to 
  * `&lt;Actions&gt;/group-name/action-name`.  
  * 

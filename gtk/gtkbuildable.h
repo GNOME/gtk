@@ -42,7 +42,7 @@ typedef struct _GtkBuildableIface GtkBuildableIface;
  * @g_iface: the parent class
  * @set_name: Stores the name attribute given in the GtkBuilder UI definition.
  *  #GtkWidget stores the name as object data. Implement this method if your
- *  object has some notion of "name" and it makes sense to map the XML name
+ *  object has some notion of “name” and it makes sense to map the XML name
  *  attribute to it.
  * @get_name: The getter corresponding to @set_name. Implement this
  *  if you implement @set_name.
@@ -57,7 +57,7 @@ typedef struct _GtkBuildableIface GtkBuildableIface;
  *  (i.e. setting the #GtkWidget:visible property) until the whole interface
  *  is created.
  * @construct_child: Constructs a child of a buildable that has been
- *  specified as "constructor" in the UI definition. #GtkUIManager implements
+ *  specified as “constructor” in the UI definition. #GtkUIManager implements
  *  this to reference to a widget created in a &lt;ui&gt; tag which is outside
  *  of the normal GtkBuilder UI definition hierarchy.  A reference to the
  *  constructed object is returned and becomes owned by the caller.

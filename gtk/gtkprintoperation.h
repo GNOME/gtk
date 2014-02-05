@@ -132,7 +132,7 @@ struct _GtkPrintOperation
  *    doing everything required for printing.
  * @begin_print: Signal emitted after the user has finished changing
  *    print settings in the dialog, before the actual rendering starts.
- * @paginate: Signal emitted after the "begin-print" signal, but
+ * @paginate: Signal emitted after the “begin-print” signal, but
  *    before the actual rendering starts.
  * @request_page_setup: Emitted once for every page that is printed,
  *    to give the application a chance to modify the page setup.
@@ -141,8 +141,8 @@ struct _GtkPrintOperation
  * @status_changed: Emitted at between the various phases of the print
  *    operation.
  * @create_custom_widget: Signal emitted when displaying the print dialog.
- * @custom_widget_apply: Signal emitted right before "begin-print" if
- *    you added a custom widget in the "create-custom-widget" handler.
+ * @custom_widget_apply: Signal emitted right before “begin-print” if
+ *    you added a custom widget in the “create-custom-widget” handler.
  * @preview: Signal emitted when a preview is requested from the
  *    native dialog.
  * @update_custom_widget: Emitted after change of selected printer.

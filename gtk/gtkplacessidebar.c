@@ -4413,19 +4413,19 @@ shortcuts_model_new (GtkPlacesSidebar *sidebar)
  *
  * Sets the way in which the calling application can open new locations from
  * the places sidebar.  For example, some applications only open locations
- * "directly" into their main view, while others may support opening locations
+ * “directly” into their main view, while others may support opening locations
  * in a new notebook tab or a new window.
  *
  * This function is used to tell the places @sidebar about the ways in which the
  * application can open new locations, so that the sidebar can display (or not)
- * the "Open in new tab" and "Open in new window" menu items as appropriate.
+ * the “Open in new tab” and “Open in new window” menu items as appropriate.
  *
  * When the #GtkPlacesSidebar::open-location signal is emitted, its flags
  * argument will be set to one of the @flags that was passed in
  * gtk_places_sidebar_set_open_flags().
  *
  * Passing 0 for @flags will cause #GTK_PLACES_OPEN_NORMAL to always be sent
- * to callbacks for the "open-location" signal.
+ * to callbacks for the “open-location” signal.
  *
  * Since: 3.10
  */
@@ -4645,7 +4645,7 @@ gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar,
  *
  * Returns the value previously set with gtk_places_sidebar_set_show_connect_to_server()
  *
- * Return value: %TRUE if the sidebar will display a "Connect to Server" item.
+ * Return value: %TRUE if the sidebar will display a “Connect to Server” item.
  *
  * Since: 3.10
  */
@@ -4724,8 +4724,8 @@ find_shortcut_link (GtkPlacesSidebar *sidebar,
  *
  * Applications may want to present some folders in the places sidebar if
  * they could be immediately useful to users.  For example, a drawing
- * program could add a "/usr/share/clipart" location when the sidebar is
- * being used in an "Insert Clipart" dialog box.
+ * program could add a “/usr/share/clipart” location when the sidebar is
+ * being used in an “Insert Clipart” dialog box.
  *
  * This function adds the specified @location to a special place for immutable
  * shortcuts.  The shortcuts are application-specific; they are not shared
@@ -4811,11 +4811,11 @@ gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
  *
  * This function queries the bookmarks added by the user to the places sidebar,
  * and returns one of them.  This function is used by #GtkFileChooser to implement
- * the "Alt-1", "Alt-2", etc. shortcuts, which activate the cooresponding bookmark.
+ * the “Alt-1”, “Alt-2”, etc. shortcuts, which activate the cooresponding bookmark.
  *
  * Return value: (transfer full): The bookmark specified by the index @n, or
  * #NULL if no such index exist.  Note that the indices start at 0, even though
- * the file chooser starts them with the keyboard shortcut "Alt-1".
+ * the file chooser starts them with the keyboard shortcut “Alt-1”.
  *
  * Since: 3.10
  */

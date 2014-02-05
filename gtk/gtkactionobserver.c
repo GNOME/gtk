@@ -163,7 +163,7 @@ gtk_action_observer_action_removed (GtkActionObserver   *observer,
  * @observer: a #GtkActionObserver
  * @observable: the source of the event
  * @action_name: the name of the action
- * @action_and_target: detailed action of the changed accel, in "action and target" format
+ * @action_and_target: detailed action of the changed accel, in “action and target” format
  *
  * This function is called when an action that the observer is
  * registered to receive events for has one of its accelerators changed.

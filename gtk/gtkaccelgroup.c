@@ -52,7 +52,7 @@
  * Note that “accelerators” are different from
  * “mnemonics”. Accelerators are shortcuts for
  * activating a menu item; they appear alongside the menu item they're a
- * shortcut for. For example "Ctrl+Q" might appear alongside the "Quit"
+ * shortcut for. For example “Ctrl+Q” might appear alongside the “Quit”
  * menu item. Mnemonics are shortcuts for GUI elements such as text
  * entries or buttons; they appear as underlined characters. See
  * gtk_label_new_with_mnemonic(). Menu items can have both accelerators
@@ -964,7 +964,7 @@ gtk_accel_groups_activate (GObject         *object,
  *
  * Determines whether a given keyval and modifier mask constitute
  * a valid keyboard accelerator. For example, the #GDK_KEY_a keyval
- * plus #GDK_CONTROL_MASK is valid - this is a "Ctrl+a" accelerator.
+ * plus #GDK_CONTROL_MASK is valid - this is a “Ctrl+a” accelerator.
  * But, you can't, for instance, use the #GDK_KEY_Control_L keyval
  * as an accelerator.
  *
@@ -1442,14 +1442,14 @@ out:
  *     modifier mask, %NULL
  *
  * Parses a string representing an accelerator. The
- * format looks like "&lt;Control&gt;a" or "&lt;Shift&gt;&lt;Alt&gt;F1"
- * or "&lt;Release&gt;z" (the last one is for key release).
+ * format looks like “&lt;Control&gt;a” or “&lt;Shift&gt;&lt;Alt&gt;F1”
+ * or “&lt;Release&gt;z” (the last one is for key release).
  *
  * The parser is fairly liberal and allows lower or upper case,
- * and also abbreviations such as "&lt;Ctl&gt;" and "&lt;Ctrl&gt;".
+ * and also abbreviations such as “&lt;Ctl&gt;” and “&lt;Ctrl&gt;”.
  * Key names are parsed using gdk_keyval_from_name(). For character
  * keys the name is not the symbol, but the lowercase name, e.g. one
- * would use "&lt;Ctrl&gt;minus" instead of "&lt;Ctrl&gt;-".
+ * would use “&lt;Ctrl&gt;minus” instead of “&lt;Ctrl&gt;-”.
  *
  * If the parse fails, @accelerator_key and @accelerator_mods will
  * be set to 0 (zero).
@@ -1512,7 +1512,7 @@ gtk_accelerator_name_with_keycode (GdkDisplay      *display,
  * Converts an accelerator keyval and modifier mask
  * into a string parseable by gtk_accelerator_parse().
  * For example, if you pass in #GDK_KEY_q and #GDK_CONTROL_MASK,
- * this function returns "&lt;Control&gt;q".
+ * this function returns “&lt;Control&gt;q”.
  *
  * If you need to display accelerators in the user interface,
  * see gtk_accelerator_get_label().

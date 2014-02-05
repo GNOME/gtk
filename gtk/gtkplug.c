@@ -620,7 +620,7 @@ gtk_plug_construct_for_display (GtkPlug    *plug,
  * @socket_id:  the window ID of the socket, or 0.
  * 
  * Creates a new plug widget inside the #GtkSocket identified
- * by @socket_id. If @socket_id is 0, the plug is left "unplugged" and
+ * by @socket_id. If @socket_id is 0, the plug is left “unplugged” and
  * can later be plugged into a #GtkSocket by  gtk_socket_add_id().
  * 
  * Return value: the new #GtkPlug widget.

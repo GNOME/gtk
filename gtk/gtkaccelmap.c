@@ -45,7 +45,7 @@
  * Accelerator maps are used to define runtime configurable accelerators.
  * Functions for manipulating them are are usually used by higher level
  * convenience mechanisms like #GtkUIManager and are thus considered
- * "low-level". You'll want to use them if you're manually creating menus that
+ * “low-level”. You'll want to use them if you're manually creating menus that
  * should have user-configurable accelerators.
  *
  * An accelerator is uniquely defined by:
@@ -54,15 +54,15 @@
  * - accelerator modifiers
  *
  * The accelerator path must consist of
- * "&lt;WINDOWTYPE&gt;/Category1/Category2/.../Action", where WINDOWTYPE
+ * “&lt;WINDOWTYPE&gt;/Category1/Category2/.../Action”, where WINDOWTYPE
  * should be a unique application-specific identifier that corresponds
  * to the kind of window the accelerator is being used in, e.g.
- * "Gimp-Image", "Abiword-Document" or "Gnumeric-Settings".
- * The "Category1/.../Action" portion is most appropriately chosen by
+ * “Gimp-Image”, “Abiword-Document” or “Gnumeric-Settings”.
+ * The “Category1/.../Action” portion is most appropriately chosen by
  * the action the accelerator triggers, i.e. for accelerators on menu
- * items, choose the item's menu path, e.g. "File/Save As",
- * "Image/View/Zoom" or "Edit/Select All". So a full valid accelerator
- * path may look like: "&lt;Gimp-Toolbox&gt;/File/Dialogs/Tool Options...".
+ * items, choose the item's menu path, e.g. “File/Save As”,
+ * “Image/View/Zoom” or “Edit/Select All”. So a full valid accelerator
+ * path may look like: “&lt;Gimp-Toolbox&gt;/File/Dialogs/Tool Options...”.
  *
  * All accelerators are stored inside one global #GtkAccelMap that can
  * be obtained using gtk_accel_map_get(). See <link

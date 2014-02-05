@@ -2034,7 +2034,7 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
  * each menu item of this menu, that contains a label describing its
  * purpose, automatically gets an accel path assigned.
  *
- * For example, a menu containing menu items "New" and "Exit", will, after
+ * For example, a menu containing menu items “New” and “Exit”, will, after
  * `gtk_menu_set_accel_path (menu, "&lt;Gnumeric-Sheet&gt;/File");`
  * has been called, assign its items the accel paths:
  * `"&lt;Gnumeric-Sheet&gt;/File/New"` and `"&lt;Gnumeric-Sheet&gt;/File/Exit"`.
@@ -2635,7 +2635,7 @@ gtk_menu_focus (GtkWidget       *widget,
 }
 
 /* See notes in gtk_menu_popup() for information
- * about the "grab transfer window"
+ * about the “grab transfer window”
  */
 static GdkWindow *
 menu_grab_transfer_window_get (GtkMenu *menu)

@@ -33,18 +33,18 @@
  * A #GtkTreeModelFilter is a tree model which wraps another tree model,
  * and can do the following things:
  * 
- * - Filter specific rows, based on data from a "visible column", a column
+ * - Filter specific rows, based on data from a “visible column”, a column
  *   storing booleans indicating whether the row should be filtered or not,
- *   or based on the return value of a "visible function", which gets a
+ *   or based on the return value of a “visible function”, which gets a
  *   model, iter and user_data and returns a boolean indicating whether the
  *   row should be filtered or not.
  * 
- * - Modify the "appearance" of the model, using a modify function.
+ * - Modify the “appearance” of the model, using a modify function.
  *   This is extremely powerful and allows for just changing some
  *   values and also for creating a completely different model based
  *   on the given child model.
  *
- * - Set a different root node, also known as a "virtual root". You can pass
+ * - Set a different root node, also known as a “virtual root”. You can pass
  *   in a #GtkTreePath indicating the root node for the filter at construction
  *   time.
  *
@@ -134,7 +134,7 @@
  * Internal data structure
  * -----------------------
  *
- * Using FilterLevel and FilterElt, GtkTreeModelFilter maintains a "cache"
+ * Using FilterLevel and FilterElt, GtkTreeModelFilter maintains a “cache”
  * of the mapping from GtkTreeModelFilter nodes to nodes in the child model.
  * This is to avoid re-creating a level each time (which involves computing
  * visibility for each node in that level) an operation is requested on
@@ -142,10 +142,10 @@
  *
  * A FilterElt corresponds to a single node. The FilterElt can either be
  * visible or invisible in the model that is exposed to the clients of this
- * GtkTreeModelFilter. The visibility state is stored in the "visible_siter"
+ * GtkTreeModelFilter. The visibility state is stored in the “visible_siter”
  * field, which is NULL when the node is not visible. The FilterLevel keeps
  * a reference to the parent FilterElt and its FilterLevel (if any). The
- * FilterElt can have a "children" pointer set, which points at a child
+ * FilterElt can have a “children” pointer set, which points at a child
  * level (a sub level).
  *
  * In a FilterLevel, two separate GSequences are maintained. One contains
@@ -160,7 +160,7 @@
  *       nodes are stored in the *visible* GSequence is the order in
  *       which the nodes are exposed to clients of the GtkTreeModelFilter.
  *   II. The mapping from this model to its child model. Each FilterElt
- *       contains an "offset" field which is the offset of the
+ *       contains an “offset” field which is the offset of the
  *       corresponding node in the child model.
  *
  * Throughout the code, two kinds of paths relative to the GtkTreeModelFilter
@@ -177,10 +177,10 @@
  * to the corresponding node in the child model. In addition,
  * GtkTreeModelFilter will also add references of its own. The full reference
  * count of each node (i.e. all forwarded references and these by the
- * filter model) is maintained internally in the "ref_count" fields in
+ * filter model) is maintained internally in the “ref_count” fields in
  * FilterElt and FilterLevel. Because there is a need to determine whether
  * a node should be visible for the client, the reference count of only
- * the forwarded references is maintained as well, in the "ext_ref_count"
+ * the forwarded references is maintained as well, in the “ext_ref_count”
  * fields.
  *
  * In a few cases, GtkTreeModelFilter takes additional references on
@@ -208,7 +208,7 @@
  *
  * When a level has an *external* reference count of zero (which means that
  * none of the nodes in the level is referenced by the clients), the level
- * has a "zero ref count" on all its parents. As soon as the level reaches
+ * has a “zero ref count” on all its parents. As soon as the level reaches
  * an *external* reference count of zero, the zero ref count value is
  * incremented by one for all parents of this level. Due to the additional
  * references taken by the filter model, it is important to base the
@@ -1028,7 +1028,7 @@ gtk_tree_model_filter_free_level (GtkTreeModelFilter *filter,
  * freed, the level is pruned to a level with only the first node used
  * for monitoring.  For now it is only being called from
  * gtk_tree_model_filter_remove_elt_from_level(), which is the reason
- * this function is lacking a "gboolean unref" argument.
+ * this function is lacking a “gboolean unref” argument.
  */
 static void
 gtk_tree_model_filter_prune_level (GtkTreeModelFilter *filter,
@@ -3830,7 +3830,7 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  *               GtkTreeIter  *iter,
  *               gpointer      data)
  * {
- *   /&ast; Visible if row is non-empty and first column is "HI" &ast;/
+ *   /&ast; Visible if row is non-empty and first column is “HI” &ast;/
  *   gchar *str;
  *   gboolean visible = FALSE;
  *

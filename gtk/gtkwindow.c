@@ -111,8 +111,8 @@
  * ]|
  * 
  * The GtkWindow implementation of the GtkBuildable interface
- * supports setting a child as the titlebar by specifying "titlebar" as
- * the "type" attribute of a `&lt;child&gt;` element.
+ * supports setting a child as the titlebar by specifying “titlebar” as
+ * the “type” attribute of a `&lt;child&gt;` element.
  */
 
 #define MNEMONICS_DELAY 300 /* ms */
@@ -1825,7 +1825,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
  * be #GTK_WINDOW_TOPLEVEL. If you're implementing something like a
  * popup menu from scratch (which is a bad idea, just use #GtkMenu),
  * you might use #GTK_WINDOW_POPUP. #GTK_WINDOW_POPUP is not for
- * dialogs, though in some other toolkits dialogs are called "popups".
+ * dialogs, though in some other toolkits dialogs are called “popups”.
  * In GTK+, #GTK_WINDOW_POPUP means a pop-up menu or pop-up tooltip.
  * On X11, popup windows are not controlled by the <link
  * linkend="gtk-X11-arch">window manager</link>.
@@ -1937,8 +1937,8 @@ gtk_window_get_title (GtkWindow *window)
  * @wmclass_name: window name hint
  * @wmclass_class: window class hint
  *
- * Don't use this function. It sets the X Window System "class" and
- * "name" hints for a window.  According to the ICCCM, you should
+ * Don't use this function. It sets the X Window System “class” and
+ * “name” hints for a window.  According to the ICCCM, you should
  * always set these to the same value for all windows in an
  * application, and GTK+ sets them to that value by default, so calling
  * this function is sort of pointless. However, you may want to call
@@ -1978,7 +1978,7 @@ gtk_window_set_wmclass (GtkWindow *window,
  * In combination with the window title, the window role allows a
  * <link linkend="gtk-X11-arch">window manager</link> to identify "the
  * same" window when an application is restarted. So for example you
- * might set the "toolbox" role on your app's toolbox window, so that
+ * might set the “toolbox” role on your app's toolbox window, so that
  * when the user restarts their session, the window manager can put
  * the toolbox back in the same place.
  *
@@ -4665,7 +4665,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * @width: width in pixels, or -1 to unset the default width
  * @height: height in pixels, or -1 to unset the default height
  *
- * Sets the default size of a window. If the window's "natural" size
+ * Sets the default size of a window. If the window's “natural” size
  * (its size request) is larger than the default, the default will be
  * ignored. More generally, if the default size does not obey the
  * geometry hints for the window (gtk_window_set_geometry_hints() can
@@ -4677,7 +4677,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * function only sets the initial size, just as if the user had
  * resized the window themselves. Users can still shrink the window
  * again as they normally would. Setting a default size of -1 means to
- * use the "natural" default size (the size request of the window).
+ * use the “natural” default size (the size request of the window).
  *
  * For more control over a window's initial size and how resizing works,
  * investigate gtk_window_set_geometry_hints().
@@ -4738,7 +4738,7 @@ gtk_window_set_default_geometry (GtkWindow *window,
  *
  * Gets the default size of the window. A value of -1 for the width or
  * height indicates that a default size has not been explicitly set
- * for that dimension, so the "natural" size of the window will be
+ * for that dimension, so the “natural” size of the window will be
  * used.
  * 
  **/
@@ -4855,7 +4855,7 @@ gtk_window_resize_to_geometry (GtkWindow *window,
  * because the size of the window may change between the time that you
  * get the size and the time that you perform some action assuming
  * that size is the current size. To avoid race conditions, connect to
- * "configure-event" on the window and adjust your size-dependent
+ * “configure-event” on the window and adjust your size-dependent
  * state to match the size delivered in the #GdkEventConfigure.
  *
  * Note 2: The returned size does not include the
@@ -4954,7 +4954,7 @@ gtk_window_get_size (GtkWindow *window,
  * example does not take multi-head scenarios into account).
  *
  * The [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec)
- * has a nice table of gravities in the "implementation notes" section.
+ * has a nice table of gravities in the “implementation notes” section.
  *
  * The gtk_window_get_position() documentation may also be relevant.
  */
@@ -5038,7 +5038,7 @@ gtk_window_move (GtkWindow *window,
  * gtk_window_get_position() is not 100% reliable because the X Window System
  * does not specify a way to obtain the geometry of the
  * decorations placed on a window by the window manager.
- * Thus GTK+ is using a "best guess" that works with most
+ * Thus GTK+ is using a “best guess” that works with most
  * window managers.
  *
  * Moreover, nearly all window managers are historically broken with
@@ -5058,7 +5058,7 @@ gtk_window_move (GtkWindow *window,
  * do this without getting it somewhat wrong because applications do
  * not have sufficient knowledge of window manager state. The Correct
  * Mechanism is to support the session management protocol (see the
- * "GnomeClient" object in the GNOME libraries for example) and allow
+ * “GnomeClient” object in the GNOME libraries for example) and allow
  * the window manager to save your window sizes and positions.
  * 
  **/
@@ -10018,7 +10018,7 @@ gtk_window_present_with_time (GtkWindow *window,
  * in which case the window will be iconified before it ever appears
  * onscreen.
  *
- * You can track iconification via the "window-state-event" signal
+ * You can track iconification via the “window-state-event” signal
  * on #GtkWidget.
  * 
  **/
@@ -10052,7 +10052,7 @@ gtk_window_iconify (GtkWindow *window)
  * linkend="gtk-X11-arch">window manager</link>) could iconify it
  * again before your code which assumes deiconification gets to run.
  *
- * You can track iconification via the "window-state-event" signal
+ * You can track iconification via the “window-state-event” signal
  * on #GtkWidget.
  **/
 void
@@ -10089,7 +10089,7 @@ gtk_window_deiconify (GtkWindow *window)
  *
  * It's permitted to call this function before showing a window.
  *
- * You can track stickiness via the "window-state-event" signal
+ * You can track stickiness via the “window-state-event” signal
  * on #GtkWidget.
  * 
  **/
@@ -10124,7 +10124,7 @@ gtk_window_stick (GtkWindow *window)
  * manager</link>) could stick it again. But normally the window will
  * end up stuck. Just don't write code that crashes if not.
  *
- * You can track stickiness via the "window-state-event" signal
+ * You can track stickiness via the “window-state-event” signal
  * on #GtkWidget.
  * 
  **/
@@ -10164,7 +10164,7 @@ gtk_window_unstick (GtkWindow *window)
  * in which case the window will be maximized when it appears onscreen
  * initially.
  *
- * You can track maximization via the "window-state-event" signal
+ * You can track maximization via the “window-state-event” signal
  * on #GtkWidget, or by listening to notifications on the
  * #GtkWindow:is-maximized property.
  *
@@ -10200,7 +10200,7 @@ gtk_window_maximize (GtkWindow *window)
  * managers honor requests to unmaximize. But normally the window will
  * end up unmaximized. Just don't write code that crashes if not.
  *
- * You can track maximization via the "window-state-event" signal
+ * You can track maximization via the “window-state-event” signal
  * on #GtkWidget.
  * 
  **/
@@ -10236,7 +10236,7 @@ gtk_window_unmaximize (GtkWindow *window)
  * windows. But normally the window will end up fullscreen. Just
  * don't write code that crashes if not.
  *
- * You can track the fullscreen state via the "window-state-event" signal
+ * You can track the fullscreen state via the “window-state-event” signal
  * on #GtkWidget.
  * 
  * Since: 2.2
@@ -10273,7 +10273,7 @@ gtk_window_fullscreen (GtkWindow *window)
  * windows. But normally the window will end up restored to its normal
  * state. Just don't write code that crashes if not.
  *
- * You can track the fullscreen state via the "window-state-event" signal
+ * You can track the fullscreen state via the “window-state-event” signal
  * on #GtkWidget.
  * 
  * Since: 2.2
@@ -10315,7 +10315,7 @@ gtk_window_unfullscreen (GtkWindow *window)
  * in which case the window will be kept above when it appears onscreen
  * initially.
  *
- * You can track the above state via the "window-state-event" signal
+ * You can track the above state via the “window-state-event” signal
  * on #GtkWidget.
  *
  * Note that, according to the
@@ -10366,7 +10366,7 @@ gtk_window_set_keep_above (GtkWindow *window,
  * in which case the window will be kept below when it appears onscreen
  * initially.
  *
- * You can track the below state via the "window-state-event" signal
+ * You can track the below state via the “window-state-event” signal
  * on #GtkWidget.
  *
  * Note that, according to the
@@ -10459,7 +10459,7 @@ gtk_window_get_resizable (GtkWindow *window)
  * more details.
  *
  * The default window gravity is #GDK_GRAVITY_NORTH_WEST which will
- * typically "do what you mean."
+ * typically “do what you mean.”
  *
  **/
 void
@@ -11198,7 +11198,7 @@ _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
  *    XParseGeometry parses strings of the form
  *   "=<width>x<height>{+-}<xoffset>{+-}<yoffset>", where
  *   width, height, xoffset, and yoffset are unsigned integers.
- *   Example:  "=80x24+300-49"
+ *   Example:  “=80x24+300-49”
  *   The equal sign is optional.
  *   It returns a bitmask that indicates which of the four values
  *   were actually found in the string.  For each value found,
@@ -11373,7 +11373,7 @@ gtk_XParseGeometry (const char   *string,
  * managers to honor the geometry.
  *
  * Note that for gtk_window_parse_geometry() to work as expected, it has
- * to be called when the window has its "final" size, i.e. after calling
+ * to be called when the window has its “final” size, i.e. after calling
  * gtk_widget_show_all() on the contents and gtk_window_set_geometry_hints()
  * on the window.
  * |[<!-- language="C" -->

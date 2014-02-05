@@ -241,7 +241,7 @@ gtk_print_settings_has_key (GtkPrintSettings *settings,
  * Returns the boolean represented by the value
  * that is associated with @key. 
  *
- * The string "true" represents %TRUE, any other 
+ * The string “true” represents %TRUE, any other 
  * string %FALSE.
  *
  * Return value: %TRUE, if @key maps to a true value.
@@ -271,8 +271,8 @@ gtk_print_settings_get_bool (GtkPrintSettings *settings,
  * that is associated with @key, or @default_val
  * if the value does not represent a boolean.
  *
- * The string "true" represents %TRUE, the string
- * "false" represents %FALSE.
+ * The string “true” represents %TRUE, the string
+ * “false” represents %FALSE.
  *
  * Return value: the boolean value associated with @key
  * 
@@ -1765,7 +1765,7 @@ gtk_print_settings_new_from_file (const gchar  *file_name,
  * @settings: a #GtkPrintSettings
  * @key_file: the #GKeyFile to retrieve the settings from
  * @group_name: (allow-none): the name of the group to use, or %NULL to use the default
- *     "Print Settings"
+ *     “Print Settings”
  * @error: (allow-none): return location for errors, or %NULL
  * 
  * Reads the print settings from the group @group_name in @key_file. If the
@@ -1826,7 +1826,7 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings,
  * gtk_print_settings_new_from_key_file:
  * @key_file: the #GKeyFile to retrieve the settings from
  * @group_name: (allow-none): the name of the group to use, or %NULL to use
- *     the default "Print Settings"
+ *     the default “Print Settings”
  * @error: (allow-none): return location for errors, or %NULL
  *
  * Reads the print settings from the group @group_name in @key_file.  Returns a
@@ -1920,7 +1920,7 @@ add_value_to_key_file (const gchar  *key,
  * @settings: a #GtkPrintSettings
  * @key_file: the #GKeyFile to save the print settings to
  * @group_name: the group to add the settings to in @key_file, or 
- *     %NULL to use the default "Print Settings"
+ *     %NULL to use the default “Print Settings”
  *
  * This function adds the print settings from @settings to @key_file.
  * 

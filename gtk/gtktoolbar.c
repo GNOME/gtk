@@ -74,7 +74,7 @@
  *
  * Toolbar items can be visually grouped by adding instances of
  * #GtkSeparatorToolItem to the toolbar. If the GtkToolbar child property
- * "expand" is #TRUE and the property #GtkSeparatorToolItem:draw is set to
+ * “expand” is #TRUE and the property #GtkSeparatorToolItem:draw is set to
  * #FALSE, the effect is to force all following items to the end of the toolbar.
  *
  * Creating a context menu for the toolbar can be done by connecting to

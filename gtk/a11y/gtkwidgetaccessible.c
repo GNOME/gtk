@@ -456,7 +456,7 @@ gtk_widget_accessible_get_index_in_parent (AtkObject *accessible)
 /* This function is the default implementation for the notify_gtk
  * vfunc which gets called when a property changes value on the
  * GtkWidget associated with a GtkWidgetAccessible. It constructs
- * an AtkPropertyValues structure and emits a "property_changed"
+ * an AtkPropertyValues structure and emits a “property_changed”
  * signal which causes the user specified AtkPropertyChangeHandler
  * to be called.
  */

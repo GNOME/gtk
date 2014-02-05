@@ -311,8 +311,8 @@ struct _GtkWidget
  *   an accelerator can be activated.
  * @composited_changed: Signal emitted when the composited status of
  *   widgets screen changes. See gdk_screen_is_composited().
- * @query_tooltip: Signal emitted when "has-tooltip" is %TRUE and the
- *   hover timeout has expired with the cursor hovering "above"
+ * @query_tooltip: Signal emitted when “has-tooltip” is %TRUE and the
+ *   hover timeout has expired with the cursor hovering “above”
  *   widget; or emitted when widget got focus in keyboard mode.
  * @compute_expand: Computes whether a container should give this
  *   widget extra space when possible.

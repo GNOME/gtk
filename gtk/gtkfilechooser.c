@@ -45,7 +45,7 @@
  * sources and in various flavours, so lets explain the terminology here:
  *
  * - Bookmarks: are created by the user, by dragging folders from the
- *   right pane to the left pane, or by using the "Add". Bookmarks
+ *   right pane to the left pane, or by using the “Add”. Bookmarks
  *   can be renamed and deleted by the user.
  *
  * - Shortcuts: can be provided by the application. For example, a Paint
@@ -53,7 +53,7 @@
  *   cannot be modified by the user.
  *
  * - Volumes: are provided by the underlying filesystem abstraction. They are
- *   the "roots" of the filesystem.
+ *   the “roots” of the filesystem.
  *
  * # File Names and Encodings
  *
@@ -962,8 +962,8 @@ gtk_file_chooser_get_current_folder (GtkFileChooser *chooser)
  * Sets the current name in the file selector, as if entered
  * by the user. Note that the name passed in here is a UTF-8
  * string rather than a filename. This function is meant for
- * such uses as a suggested name in a "Save As..." dialog.  You can
- * pass "Untitled.doc" or a similarly suitable suggestion for the @name.
+ * such uses as a suggested name in a “Save As...” dialog.  You can
+ * pass “Untitled.doc” or a similarly suitable suggestion for the @name.
  *
  * If you want to preselect a particular existing file, you should use
  * gtk_file_chooser_set_filename() or gtk_file_chooser_set_uri() instead.
@@ -987,15 +987,15 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
  * @chooser: a #GtkFileChooser
  *
  * Gets the current name in the file selector, as entered by the user in the
- * text entry for "Name".
+ * text entry for “Name”.
  *
  * This is meant to be used in save dialogs, to get the currently typed filename
  * when the file itself does not exist yet.  For example, an application that
- * adds a custom extra widget to the file chooser for "file format" may want to
+ * adds a custom extra widget to the file chooser for “file format” may want to
  * change the extension of the typed filename based on the chosen format, say,
- * from ".jpg" to ".png".
+ * from “.jpg” to “.png”.
  *
- * Returns: The raw text from the file chooser's "Name" entry.  Free this with
+ * Returns: The raw text from the file chooser's “Name” entry.  Free this with
  * g_free().  Note that this string is not a full pathname or URI; it is
  * whatever the contents of the entry are.  Note also that this string is in
  * UTF-8 encoding, which is not necessarily the system's encoding for filenames.
@@ -1980,7 +1980,7 @@ gtk_file_chooser_get_filter (GtkFileChooser *chooser)
  * Adds a folder to be displayed with the shortcut folders in a file chooser.
  * Note that shortcut folders do not get saved, as they are provided by the
  * application.  For example, you can use this to add a
- * "/usr/share/mydrawprogram/Clipart" folder to the volume list.
+ * “/usr/share/mydrawprogram/Clipart” folder to the volume list.
  * 
  * Return value: %TRUE if the folder could be added successfully, %FALSE
  * otherwise.  In the latter case, the @error will be set as appropriate.
@@ -2078,7 +2078,7 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
  * Adds a folder URI to be displayed with the shortcut folders in a file
  * chooser.  Note that shortcut folders do not get saved, as they are provided
  * by the application.  For example, you can use this to add a
- * "file:///usr/share/mydrawprogram/Clipart" folder to the volume list.
+ * “file:///usr/share/mydrawprogram/Clipart” folder to the volume list.
  * 
  * Return value: %TRUE if the folder could be added successfully, %FALSE
  * otherwise.  In the latter case, the @error will be set as appropriate.

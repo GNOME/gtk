@@ -1656,9 +1656,9 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
  * |[<!-- language="C" -->
  *  gtk_about_dialog_set_translator_credits (about, _("translator-credits"));
  * ]|
- * It is a good idea to use the customary msgid "translator-credits" for this
+ * It is a good idea to use the customary msgid “translator-credits” for this
  * purpose, since translators will already know the purpose of that msgid, and
- * since #GtkAboutDialog will detect if "translator-credits" is untranslated
+ * since #GtkAboutDialog will detect if “translator-credits” is untranslated
  * and hide the tab.
  *
  * Since: 2.6

@@ -40,7 +40,7 @@ Prebuilt common menu/toolbar items and corresponding icons
  * @Title: Stock Items
  *
  * Stock items represent commonly-used menu or toolbar items such as
- * "Open" or "Exit". Each stock item is identified by a stock ID;
+ * “Open” or “Exit”. Each stock item is identified by a stock ID;
  * stock IDs are just strings, but macros such as #GTK_STOCK_OPEN are
  * provided to avoid typing mistakes in the strings.
  * Applications can register their own stock items in addition to those

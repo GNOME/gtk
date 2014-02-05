@@ -48,7 +48,7 @@
  * may provide feedback about this process by displaying the intermediate
  * composition states as preedit text. For instance, the default GTK+ input
  * method implements the input of arbitrary Unicode code points by holding down
- * the Control and Shift keys and then typing "U" followed by the hexadecimal
+ * the Control and Shift keys and then typing “U” followed by the hexadecimal
  * digits of the code point.  When releasing the Control and Shift keys,
  * preediting ends and the character is inserted as text. Ctrl+Shift+u20AC for
  * example results in the € sign.

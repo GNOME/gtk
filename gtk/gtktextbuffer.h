@@ -49,7 +49,7 @@ G_BEGIN_DECLS
  * @GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT: Rich text
  * @GTK_TEXT_BUFFER_TARGET_INFO_TEXT: Text
  *
- * These values are used as "info" for the targets contained in the
+ * These values are used as “info” for the targets contained in the
  * lists returned by gtk_text_buffer_get_copy_target_list() and
  * gtk_text_buffer_get_paste_target_list().
  *

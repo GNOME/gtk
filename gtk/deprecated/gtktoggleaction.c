@@ -44,7 +44,7 @@
  * @Title: GtkToggleAction
  *
  * A #GtkToggleAction corresponds roughly to a #GtkCheckMenuItem. It has an
- * "active" state specifying whether the action has been checked or not.
+ * “active” state specifying whether the action has been checked or not.
  */
 
 struct _GtkToggleActionPrivate
@@ -264,7 +264,7 @@ gtk_toggle_action_activate (GtkAction *action)
  * gtk_toggle_action_toggled:
  * @action: the action object
  *
- * Emits the "toggled" signal on the toggle action.
+ * Emits the “toggled” signal on the toggle action.
  *
  * Since: 2.4
  *

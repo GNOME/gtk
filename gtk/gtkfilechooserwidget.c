@@ -2421,7 +2421,7 @@ save_path_bar (GtkFileChooserWidget *impl)
 }
 
 /* Reparents the path bar and the "Create folder" button to the right place:
- * Above the file list in Open mode, or to the right of the "Save in folder:"
+ * Above the file list in Open mode, or to the right of the “Save in folder:”
  * label in Save mode.  The save_path_bar() function must be called before this
  * one.
  */
@@ -3012,7 +3012,7 @@ toplevel_set_focus_cb (GtkWindow             *window,
 }
 
 /* We monitor the focus widget on our toplevel to be able to know which widget
- * was last focused at the time our "should_respond" method gets called.
+ * was last focused at the time our “should_respond” method gets called.
  */
 static void
 gtk_file_chooser_widget_hierarchy_changed (GtkWidget *widget,
@@ -4787,7 +4787,7 @@ gtk_file_chooser_widget_unselect_all (GtkFileChooser *chooser)
  * is_empty_ret - whether the file entry is totally empty
  *
  * is_file_part_empty_ret - whether the file part is empty (will be if user types "foobar/", and
- *                          the path will be "$cwd/foobar")
+ *                          the path will be “$cwd/foobar”)
  */
 static void
 check_save_entry (GtkFileChooserWidget *impl,
@@ -5386,7 +5386,7 @@ struct GetDisplayNameData
 };
 
 /* Every time we request a response explicitly, we need to save the selection to the recently-used list,
- * as requesting a response means, "the dialog is confirmed".
+ * as requesting a response means, “the dialog is confirmed”.
  */
 static void
 request_response_and_add_to_recent_list (GtkFileChooserWidget *impl)

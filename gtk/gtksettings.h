@@ -65,8 +65,8 @@ struct _GtkSettingsClass
 
 /**
  * GtkSettingsValue:
- * @origin: Origin should be something like "filename:linenumber" for
- *    rc files, or e.g. "XProperty" for other sources.
+ * @origin: Origin should be something like “filename:linenumber” for
+ *    rc files, or e.g. “XProperty” for other sources.
  * @value: Valid types are LONG, DOUBLE and STRING corresponding to
  *    the token parsed, or a GSTRING holding an unparsed statement
  */

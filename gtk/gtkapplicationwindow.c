@@ -47,8 +47,8 @@
  * This class implements the #GActionGroup and #GActionMap interfaces,
  * to let you add window-specific actions that will be exported by the
  * associated #GtkApplication, together with its application-wide
- * actions.  Window-specific actions are prefixed with the "win."
- * prefix and application-wide actions are prefixed with the "app."
+ * actions.  Window-specific actions are prefixed with the “win.”
+ * prefix and application-wide actions are prefixed with the “app.”
  * prefix.  Actions must be addressed with the prefixed name when
  * referring to them from a #GMenuModel.
  *

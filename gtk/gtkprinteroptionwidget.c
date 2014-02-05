@@ -41,7 +41,7 @@
 /* This defines the max file length that the file chooser
  * button should display. The total length will be
  * FILENAME_LENGTH_MAX+3 because the truncated name is prefixed
- * with "...".
+ * with “...”.
  */
 #define FILENAME_LENGTH_MAX 27
 

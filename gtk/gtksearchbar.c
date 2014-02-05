@@ -565,7 +565,7 @@ gtk_search_bar_get_show_close_button (GtkSearchBar *bar)
  * @visible: whether the close button will be shown or not
  *
  * Shows or hides the close button. Applications that
- * already have a "search" toggle button should not show a close
+ * already have a “search” toggle button should not show a close
  * button in their search bar, as it duplicates the role of the
  * toggle button.
  *

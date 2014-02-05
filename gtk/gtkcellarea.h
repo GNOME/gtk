@@ -159,7 +159,7 @@ struct _GtkCellArea
  *     focus from cell to cell inside the area and return %FALSE if focus
  *     logically leaves the area with the following exceptions: When the
  *     area contains no activatable cells, the entire area recieves focus.
- *     Focus should not be given to cells that are actually "focus siblings"
+ *     Focus should not be given to cells that are actually “focus siblings”
  *     of other sibling cells (see gtk_cell_area_get_focus_from_sibling()).
  *     Focus is set by calling gtk_cell_area_set_focus_cell().
  * @is_activatable: Returns whether the #GtkCellArea can respond to

@@ -111,8 +111,8 @@ gtk_text_buffer_register_serialize_format (GtkTextBuffer              *buffer,
  *
  * This function is just a wrapper around
  * gtk_text_buffer_register_serialize_format(). The mime type used
- * for registering is "application/x-gtk-text-buffer-rich-text", or
- * "application/x-gtk-text-buffer-rich-text;format=@tagset_name" if a
+ * for registering is “application/x-gtk-text-buffer-rich-text”, or
+ * “application/x-gtk-text-buffer-rich-text;format=@tagset_name” if a
  * @tagset_name was passed.
  *
  * The @tagset_name can be used to restrict the transfer of rich text

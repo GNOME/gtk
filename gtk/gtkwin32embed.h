@@ -31,8 +31,8 @@ G_BEGIN_DECLS
  * registered window messages. The name passed to
  * RegisterWindowMessage() is gtk-win32-embed:%d, with %d being the
  * numeric value of an GtkWin32EmbedMessageType enum. Each message
- * carries the message type enum value and two integers, the "wparam"
- * and "lparam", like all window messages.
+ * carries the message type enum value and two integers, the “wparam”
+ * and “lparam”, like all window messages.
  *
  * So far all the window messages are posted to the other
  * process. Maybe some later enhancement will add also messages that

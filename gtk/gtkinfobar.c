@@ -102,10 +102,10 @@
  *
  * The GtkInfoBar implementation of the GtkBuildable interface exposes
  * the content area and action area as internal children with the names
- * "content_area" and "action_area".
+ * “content_area” and “action_area”.
  *
  * GtkInfoBar supports a custom &lt;action-widgets&gt; element, which
- * can contain multiple &lt;action-widget&gt; elements. The "response"
+ * can contain multiple &lt;action-widget&gt; elements. The “response”
  * attribute specifies a numeric response, and the content of the element
  * is the id of widget (which should be a child of the dialogs @action_area).
  */
@@ -736,7 +736,7 @@ gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
  * @response_id: response ID for the button
  *
  * Adds a button with the given text and sets things up so that
- * clicking the button will emit the "response" signal with the given
+ * clicking the button will emit the “response” signal with the given
  * response_id. The button is appended to the end of the info bars's
  * action area. The button widget is returned, but usually you don't
  * need it.
@@ -859,7 +859,7 @@ gtk_info_bar_new (void)
  * some arbitrary text. A response ID can be any positive number,
  * or one of the values in the #GtkResponseType enumeration. If the
  * user clicks one of these dialog buttons, GtkInfoBar will emit
- * the "response" signal with the corresponding response ID.
+ * the “response” signal with the corresponding response ID.
  *
  * Returns: a new #GtkInfoBar
  */
@@ -921,7 +921,7 @@ gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
  *
  * Sets the last widget in the info bar's action area with
  * the given response_id as the default widget for the dialog.
- * Pressing "Enter" normally activates the default widget.
+ * Pressing “Enter” normally activates the default widget.
  *
  * Note that this function currently requires @info_bar to
  * be added to a widget hierarchy. 

@@ -332,7 +332,7 @@ guint     gtk_rc_parse_priority (GScanner            *scanner,
  * GtkRcProperty:
  * @type_name: quark-ified type identifier
  * @property_name: quark-ified property identifier like
- *   "GtkScrollbar::spacing"
+ *   “GtkScrollbar::spacing”
  * @origin: field similar to one found in #GtkSettingsValue
  * @value:field similar to one found in #GtkSettingsValue
  *
@@ -340,7 +340,7 @@ guint     gtk_rc_parse_priority (GScanner            *scanner,
  */
 struct _GtkRcProperty
 {
-  /* quark-ified property identifier like "GtkScrollbar::spacing" */
+  /* quark-ified property identifier like “GtkScrollbar::spacing” */
   GQuark type_name;
   GQuark property_name;
 

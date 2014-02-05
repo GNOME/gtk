@@ -271,7 +271,7 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
  * parameters using object properties. Object properties can be set
  * globally (with g_object_set()). Also, with #GtkTreeViewColumn, you
  * can bind a property to a value in a #GtkTreeModel. For example, you
- * can bind the "active" property on the cell renderer to a boolean value
+ * can bind the “active” property on the cell renderer to a boolean value
  * in the model, thus causing the check button to reflect the state of
  * the model.
  *

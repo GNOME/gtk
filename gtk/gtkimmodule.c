@@ -73,7 +73,7 @@
  * @domain: Translation domain to be used with dgettext()
  * @domain_dirname: Name of locale directory for use with bindtextdomain()
  * @default_locales: A colon-separated list of locales where this input method
- *   should be the default. The asterisk "*" sets the default for all locales.
+ *   should be the default. The asterisk “*” sets the default for all locales.
  *
  * Bookkeeping information about a loadable input method.
  */

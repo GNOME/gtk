@@ -68,11 +68,11 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
  * @lookup: the lookup
  * @id: id of the property to set, see _gtk_style_property_get_id()
  * @section: (allow-none): The @section the value was defined in or %NULL
- * @value: the "cascading value" to use
+ * @value: the “cascading value” to use
  *
  * Sets the @value for a given @id. No value may have been set for @id
  * before. See _gtk_css_lookup_is_missing(). This function is used to
- * set the "winning declaration" of a lookup. Note that for performance
+ * set the “winning declaration” of a lookup. Note that for performance
  * reasons @value and @section are not copied. It is your responsibility
  * to ensure they are kept alive until _gtk_css_lookup_free() is called.
  **/
@@ -96,11 +96,11 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
  * @lookup: the lookup
  * @id: id of the property to set, see _gtk_style_property_get_id()
  * @section: (allow-none): The @section the value was defined in or %NULL
- * @value: the "computed value" to use
+ * @value: the “computed value” to use
  *
  * Sets the @value for a given @id. No value may have been set for @id
  * before. See _gtk_css_lookup_is_missing(). This function is used to
- * set the "winning declaration" of a lookup. Note that for performance
+ * set the “winning declaration” of a lookup. Note that for performance
  * reasons @value and @section are not copied. It is your responsibility
  * to ensure they are kept alive until _gtk_css_lookup_free() is called.
  *
@@ -132,9 +132,9 @@ _gtk_css_lookup_set_computed (GtkCssLookup  *lookup,
  * @values: a new #GtkCssComputedValues to be filled with the new properties
  *
  * Resolves the current lookup into a styleproperties object. This is done
- * by converting from the "winning declaration" to the "computed value".
+ * by converting from the “winning declaration” to the “computed value”.
  *
- * XXX: This bypasses the notion of "specified value". If this ever becomes
+ * XXX: This bypasses the notion of “specified value”. If this ever becomes
  * an issue, go fix it.
  **/
 void

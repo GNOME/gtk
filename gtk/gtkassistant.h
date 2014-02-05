@@ -64,7 +64,7 @@ G_BEGIN_DECLS
  * %GTK_ASSISTANT_PAGE_CONFIRM, %GTK_ASSISTANT_PAGE_SUMMARY or
  * %GTK_ASSISTANT_PAGE_PROGRESS to be correct.
  *
- * The Cancel button will only be shown if the page isn't "committed".
+ * The Cancel button will only be shown if the page isn't “committed”.
  * See gtk_assistant_commit() for details.
  */
 typedef enum
@@ -125,8 +125,8 @@ struct _GtkAssistantClass
  *
  * A function used by gtk_assistant_set_forward_page_func() to know which
  * is the next page given a current one. It's called both for computing the
- * next page when the user presses the "forward" button and for handling
- * the behavior of the "last" button.
+ * next page when the user presses the “forward” button and for handling
+ * the behavior of the “last” button.
  *
  * Returns: The next page number.
  */

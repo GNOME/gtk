@@ -540,7 +540,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
  * 
  * If track_status is %TRUE, the print job will try to continue report
  * on the status of the print job in the printer queues and printer. This
- * can allow your application to show things like "out of paper" issues,
+ * can allow your application to show things like “out of paper” issues,
  * and when the print job actually reaches the printer.
  * 
  * This function is often implemented using some form of polling, so it should

@@ -38,7 +38,7 @@
  * drawing a small preview of a larger image. #GtkAspectFrame
  * derives from #GtkFrame, so it can draw a label and
  * a frame around the child. The frame will be
- * "shrink-wrapped" to the size of the child.
+ * “shrink-wrapped” to the size of the child.
  */
 
 #include "config.h"

@@ -55,8 +55,8 @@
  *
  * The GtkColorSelectionDialog implementation of the GtkBuildable interface
  * exposes the embedded #GtkColorSelection as internal child with the
- * name "color_selection". It also exposes the buttons with the names
- * "ok_button", "cancel_button" and "help_button".
+ * name “color_selection”. It also exposes the buttons with the names
+ * “ok_button”, “cancel_button” and “help_button”.
  */
 
 

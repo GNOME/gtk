@@ -284,7 +284,7 @@ gtk_icon_factory_new (void)
  *
  * Adds the given @icon_set to the icon factory, under the name
  * @stock_id.  @stock_id should be namespaced for your application,
- * e.g. "myapp-whatever-icon".  Normally applications create a
+ * e.g. “myapp-whatever-icon”.  Normally applications create a
  * #GtkIconFactory, then add it to the list of default factories with
  * gtk_icon_factory_add_default(). Then they pass the @stock_id to
  * widgets such as #GtkImage to display the icon. Themes can provide
@@ -1695,7 +1695,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 /* Order sources by their "wildness", so that "wilder" sources are
- * greater than "specific" sources; for determining ordering,
+ * greater than “specific” sources; for determining ordering,
  * direction beats state beats size.
  */
 
@@ -1743,7 +1743,7 @@ icon_source_compare (gconstpointer ap, gconstpointer bp)
  * icons). So a single icon set would contain all those variants of
  * the icon, and you might add a separate source for each one.
  *
- * You should nearly always add a "default" icon source with all
+ * You should nearly always add a “default” icon source with all
  * fields wildcarded, which will be used as a fallback if no more
  * specific source matches. #GtkIconSet always prefers more specific
  * icon sources to more generic icon sources. The order in which you
@@ -1861,10 +1861,10 @@ gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
  * image filename) that serves as the base image for one or more of the
  * icons in a #GtkIconSet, along with a specification for which icons in the
  * icon set will be based on that pixbuf or image file. An icon set contains
- * a set of icons that represent "the same" logical concept in different states,
+ * a set of icons that represent “the same” logical concept in different states,
  * different global text directions, and different sizes.
  *
- * So for example a web browser's "Back to Previous Page" icon might
+ * So for example a web browser's “Back to Previous Page” icon might
  * point in a different direction in Hebrew and in English; it might
  * look different when insensitive; and it might change size depending
  * on toolbar mode (small/large icons). So a single icon set would

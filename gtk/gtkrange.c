@@ -54,8 +54,8 @@
  *
  * Apart from signals for monitoring the parameters of the adjustment,
  * #GtkRange provides properties and methods for influencing the sensitivity
- * of the "steppers". It also provides properties and methods for setting a
- * "fill level" on range widgets. See gtk_range_set_fill_level().
+ * of the “steppers”. It also provides properties and methods for setting a
+ * “fill level” on range widgets. See gtk_range_set_fill_level().
  */
 
 
@@ -758,7 +758,7 @@ gtk_range_init (GtkRange *range)
  * gtk_range_get_adjustment:
  * @range: a #GtkRange
  * 
- * Get the #GtkAdjustment which is the "model" object for #GtkRange.
+ * Get the #GtkAdjustment which is the “model” object for #GtkRange.
  * See gtk_range_set_adjustment() for details.
  * The return value does not have a reference added, so should not
  * be unreferenced.
@@ -785,7 +785,7 @@ gtk_range_get_adjustment (GtkRange *range)
  * @range: a #GtkRange
  * @adjustment: a #GtkAdjustment
  *
- * Sets the adjustment to be used as the "model" object for this range
+ * Sets the adjustment to be used as the “model” object for this range
  * widget. The adjustment indicates the current range value, the
  * minimum and maximum range values, the step/page increments used
  * for keybindings and scrolling, and the page size. The page size
@@ -1426,7 +1426,7 @@ gtk_range_get_restrict_to_fill_level (GtkRange *range)
  *
  * Set the new position of the fill level indicator.
  *
- * The "fill level" is probably best described by its most prominent
+ * The “fill level” is probably best described by its most prominent
  * use case, which is an indicator for the amount of pre-buffering in
  * a streaming media player. In that use case, the value of the range
  * would indicate the current play position, and the fill level would

@@ -1022,7 +1022,7 @@ gtk_application_get_window_by_id (GtkApplication *application,
  * gtk_application_get_active_window:
  * @application: a #GtkApplication
  *
- * Gets the "active" window for the application.
+ * Gets the “active” window for the application.
  *
  * The active window is the one that was most recently focused (within
  * the application).  This window may not have the focus at the moment
@@ -1064,12 +1064,12 @@ gtk_application_update_accels (GtkApplication *application)
  *
  * @accelerator must be a string that can be parsed by
  * gtk_accelerator_parse(), e.g. "&lt;Primary&gt;q" or
- * "&lt;Control&gt;&lt;Alt&gt;p".
+ * “&lt;Control&gt;&lt;Alt&gt;p”.
  *
  * @action_name must be the name of an action as it would be used
  * in the app menu, i.e. actions that have been added to the application
- * are referred to with an "app." prefix, and window-specific actions
- * with a "win." prefix.
+ * are referred to with an “app.” prefix, and window-specific actions
+ * with a “win.” prefix.
  *
  * GtkApplication also extracts accelerators out of 'accel' attributes
  * in the #GMenuModels passed to gtk_application_set_app_menu() and
@@ -1141,8 +1141,8 @@ gtk_application_remove_accelerator (GtkApplication *application,
  * The application menu is a single menu containing items that typically
  * impact the application as a whole, rather than acting on a specific
  * window or document.  For example, you would expect to see
- * "Preferences" or "Quit" in an application menu, but not "Save" or
- * "Print".
+ * “Preferences” or “Quit” in an application menu, but not “Save” or
+ * “Print”.
  *
  * If supported, the application menu will be rendered by the desktop
  * environment.

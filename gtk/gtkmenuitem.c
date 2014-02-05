@@ -74,7 +74,7 @@
  * # GtkMenuItem as GtkBuildable
  *
  * The GtkMenuItem implementation of the #GtkBuildable interface
- * supports adding a submenu by specifying "submenu" as the "type"
+ * supports adding a submenu by specifying “submenu” as the “type”
  * attribute of a &lt;child&gt; element.
  *
  * An example of UI definition fragment with submenus:
@@ -1132,7 +1132,7 @@ activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
  * @menu: (allow-none): a #GtkMenu or %NULL
  * 
  * Determines whether @menu is empty. A menu is considered empty if it
- * the only visible children are tearoff menu items or "filler" menu 
+ * the only visible children are tearoff menu items or “filler” menu 
  * items which were inserted to mark the menu as empty.
  * 
  * This function is used by #GtkAction.
@@ -2238,7 +2238,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
  *   far right if added to a menu bar
  *
  * Sets whether the menu item appears justified at the right
- * side of a menu bar. This was traditionally done for "Help"
+ * side of a menu bar. This was traditionally done for “Help”
  * menu items, but is now considered a bad idea. (If the widget
  * layout is reversed for a right-to-left language like Hebrew
  * or Arabic, right-justified-menu-items appear at the left.)

@@ -202,7 +202,7 @@ gtk_buildable_parser_finished (GtkBuildable *buildable,
  *
  * Constructs a child of @buildable with the name @name.
  *
- * #GtkBuilder calls this function if a "constructor" has been
+ * #GtkBuilder calls this function if a “constructor” has been
  * specified in the UI definition.
  *
  * Returns: (transfer full): the constructed child

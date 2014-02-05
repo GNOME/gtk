@@ -73,7 +73,7 @@
  * beginning of the newly-inserted text, and a mark with “right
  * gravity” will be moved to the end.
  *
- * Note that "left" and "right" here refer to logical direction (left
+ * Note that “left” and “right” here refer to logical direction (left
  * is the toward the start of the buffer); in some languages such as
  * Hebrew the logically-leftmost text is not actually on the left when
  * displayed.

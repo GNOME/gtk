@@ -68,7 +68,7 @@
  * Apart from regular actions, there are <link linkend="GtkToggleAction">toggle
  * actions</link>, which can be toggled between two states and <link
  * linkend="GtkRadioAction">radio actions</link>, of which only one in a group
- * can be in the "active" state. Other actions can be implemented as #GtkAction
+ * can be in the “active” state. Other actions can be implemented as #GtkAction
  * subclasses.
  *
  * Each action can have one or more proxy widgets. To act as an action proxy,
@@ -862,7 +862,7 @@ disconnect_proxy (GtkAction *action,
 
  * - if @action is invisible, @proxy is too
  *
- * - if @empty is %TRUE, hide @proxy unless the "hide-if-empty" 
+ * - if @empty is %TRUE, hide @proxy unless the “hide-if-empty”
  *   property of @action indicates otherwise
  *
  * This function is used in the implementation of #GtkUIManager.
@@ -922,7 +922,7 @@ _gtk_action_emit_activate (GtkAction *action)
  * gtk_action_activate:
  * @action: the action object
  *
- * Emits the "activate" signal on the specified action, if it isn't 
+ * Emits the “activate” signal on the specified action, if it isn't
  * insensitive. This gets called by the proxy widgets when they get 
  * activated.
  *

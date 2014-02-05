@@ -1749,7 +1749,7 @@ gtk_tree_view_column_clear (GtkTreeViewColumn *tree_column)
  * column of the model to get a value from, and the @attribute is the
  * parameter on @cell_renderer to be set from the value. So for example
  * if column 2 of the model contains strings, you could have the
- * "text" attribute of a #GtkCellRendererText get its values from
+ * “text” attribute of a #GtkCellRendererText get its values from
  * column 2.
  **/
 void
@@ -2184,13 +2184,13 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
  * If @fixed_width is not -1, sets the fixed width of @tree_column; otherwise
  * unsets it.  The effective value of @fixed_width is clamped between the
  * minumum and maximum width of the column; however, the value stored in the
- * "fixed-width" property is not clamped.  If the column sizing is 
+ * “fixed-width” property is not clamped.  If the column sizing is 
  * #GTK_TREE_VIEW_COLUMN_GROW_ONLY or #GTK_TREE_VIEW_COLUMN_AUTOSIZE, setting a
  * fixed width overrides the automatically calculated width.  Note that
  * @fixed_width is only a hint to GTK+; the width actually allocated to the
  * column may be greater or less than requested.
  *
- * Along with "expand", the "fixed-width" property changes when the column is
+ * Along with “expand”, the “fixed-width” property changes when the column is
  * resized by the user.
  **/
 void
@@ -2363,7 +2363,7 @@ gtk_tree_view_column_get_max_width (GtkTreeViewColumn *tree_column)
  * gtk_tree_view_column_clicked:
  * @tree_column: a #GtkTreeViewColumn
  * 
- * Emits the "clicked" signal on the column.  This function will only work if
+ * Emits the “clicked” signal on the column.  This function will only work if
  * @tree_column is clickable.
  **/
 void
@@ -2435,7 +2435,7 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
  * option set, then the last column gets all extra space.  By default, every
  * column is created with this %FALSE.
  *
- * Along with "fixed-width", the "expand" property changes when the column is
+ * Along with “fixed-width”, the “expand” property changes when the column is
  * resized by the user.
  *
  * Since: 2.4

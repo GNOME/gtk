@@ -159,7 +159,7 @@
  * Internal data structure
  * -----------------------
  *
- * Using SortLevel and SortElt, GtkTreeModelSort maintains a "cache" of
+ * Using SortLevel and SortElt, GtkTreeModelSort maintains a “cache” of
  * the mapping from GtkTreeModelSort nodes to nodes in the child model.
  * This is to avoid sorting a level each time an operation is requested
  * on GtkTreeModelSort, such as get iter, get path, get value.
@@ -179,7 +179,7 @@
  *       nodes are stored in the GSequence is the order in which the
  *       nodes are exposed to clients of the GtkTreeModelSort.
  *   II. The mapping from this model to its child model. Each SortElt
- *       contains an "offset" field which is the offset of the
+ *       contains an “offset” field which is the offset of the
  *       corresponding node in the child model.
  *
  * Reference counting
@@ -187,9 +187,9 @@
  *
  * GtkTreeModelSort forwards all reference and unreference operations
  * to the corresponding node in the child model. The reference count
- * of each node is also maintained internally, in the "ref_count"
+ * of each node is also maintained internally, in the “ref_count”
  * fields in SortElt and SortLevel. For each ref and unref operation on
- * a SortElt, the "ref_count" of the SortLevel is updated accordingly.
+ * a SortElt, the “ref_count” of the SortLevel is updated accordingly.
  * In addition, if a SortLevel has a parent, a reference is taken on
  * this parent. This happens in gtk_tree_model_sort_build_level() and
  * the reference is released again in gtk_tree_model_sort_free_level().
@@ -200,7 +200,7 @@
  *
  * When a level has a reference count of zero, which means that
  * none of the nodes in the level is referenced, the level has
- * a "zero ref count" on all its parents. As soon as the level
+ * a “zero ref count” on all its parents. As soon as the level
  * reaches a reference count of zero, the zero ref count value is
  * incremented by one on all parents of this level. Similarly, as
  * soon as the reference count of a level changes from zero, the

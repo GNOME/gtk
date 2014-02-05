@@ -145,7 +145,7 @@ enum {
  *    of the drag offset by the distance that the cursor
  *    has moved.
  *
- * 2) These rectangles must have one edge, the "snap_edge"
+ * 2) These rectangles must have one edge, the “snap_edge”
  *    of the handlebox, aligned within TOLERANCE.
  * 
  * 3) On the other dimension, the extents of one rectangle
@@ -999,7 +999,7 @@ gtk_handle_box_get_handle_position (GtkHandleBox *handle_box)
  *
  * Sets the snap edge of a handlebox. The snap edge is
  * the edge of the detached child that must be aligned
- * with the corresponding edge of the "ghost" left
+ * with the corresponding edge of the “ghost” left
  * behind when the child was detached to reattach
  * the torn-off window. Usually, the snap edge should
  * be chosen so that it stays in the same place on

@@ -83,7 +83,7 @@
  *   - validate the lines that were moved onscreen
  *   - gdk_window_process_updates() to handle the exposes immediately
  *
- * The second way is that you get the "invalidated" signal from the layout,
+ * The second way is that you get the “invalidated” signal from the layout,
  * indicating that lines have become invalid. This code path begins in
  * invalidated_handler() and goes like this:
  *   - install high-priority idle which does the rest of the steps
@@ -1608,7 +1608,7 @@ gtk_text_view_new_with_buffer (GtkTextBuffer *buffer)
  * buffer displayed by the text view is unreferenced, and a reference is
  * added to @buffer. If you owned a reference to @buffer before passing it
  * to this function, you must remove that reference yourself; #GtkTextView
- * will not "adopt" it.
+ * will not “adopt” it.
  **/
 void
 gtk_text_view_set_buffer (GtkTextView   *text_view,
@@ -2589,7 +2589,7 @@ gtk_text_view_get_wrap_mode (GtkTextView *text_view)
  * @setting: whether it's editable
  *
  * Sets the default editability of the #GtkTextView. You can override
- * this default setting with tags in the buffer, using the "editable"
+ * this default setting with tags in the buffer, using the “editable”
  * attribute of tags.
  **/
 void
@@ -3032,10 +3032,10 @@ gtk_text_view_set_tabs (GtkTextView   *text_view,
  * 
  * Gets the default tabs for @text_view. Tags in the buffer may
  * override the defaults. The returned array will be %NULL if
- * "standard" (8-space) tabs are used. Free the return value
+ * “standard” (8-space) tabs are used. Free the return value
  * with pango_tab_array_free().
  * 
- * Return value: copy of default tab array, or %NULL if "standard" 
+ * Return value: copy of default tab array, or %NULL if “standard” 
  *    tabs are used; must be freed with pango_tab_array_free().
  **/
 PangoTabArray*
@@ -8044,7 +8044,7 @@ gtk_text_view_set_vadjustment_values (GtkTextView *text_view)
 
 
 /* FIXME this adjust_allocation is a big cut-and-paste from
- * GtkCList, needs to be some "official" way to do this
+ * GtkCList, needs to be some “official” way to do this
  * factored out.
  */
 typedef struct
@@ -9904,7 +9904,7 @@ set_window_height (GtkTextView      *text_view,
  * or the height of %GTK_TEXT_WINDOW_TOP or %GTK_TEXT_WINDOW_BOTTOM.
  * Automatically destroys the corresponding window if the size is set
  * to 0, and creates the window if the size is set to non-zero.  This
- * function can only be used for the "border windows," it doesn't work
+ * function can only be used for the “border windows,” it doesn't work
  * with #GTK_TEXT_WINDOW_WIDGET, #GTK_TEXT_WINDOW_TEXT, or
  * #GTK_TEXT_WINDOW_PRIVATE.
  **/

@@ -73,7 +73,7 @@
  *
  * The GtkExpander implementation of the GtkBuildable interface
  * supports placing a child in the label position by specifying
- * "label" as the "type" attribute of a &lt;child&gt; element.
+ * “label” as the “type” attribute of a &lt;child&gt; element.
  * A normal content child can be specified without specifying
  * a &lt;child&gt; type attribute.
  *
@@ -2114,7 +2114,7 @@ gtk_expander_set_resize_toplevel (GtkExpander *expander,
  * Returns whether the expander will resize the toplevel widget
  * containing the expander upon resizing and collpasing.
  *
- * Return value: the "resize toplevel" setting.
+ * Return value: the “resize toplevel” setting.
  *
  * Since: 3.2
  */

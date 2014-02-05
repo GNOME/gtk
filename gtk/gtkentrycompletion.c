@@ -25,7 +25,7 @@
  * #GtkCellLayout interface, to allow the user to add extra cells to the
  * #GtkTreeView with completion matches.
  *
- * "Completion functionality" means that when the user modifies the text
+ * “Completion functionality” means that when the user modifies the text
  * in the entry, #GtkEntryCompletion checks which rows in the model match
  * the current content of the entry, and displays a list of matches.
  * By default, the matching is done by comparing the entry text
@@ -44,7 +44,7 @@
  *
  * In addition to regular completion matches, which will be inserted into the
  * entry when they are selected, #GtkEntryCompletion also allows to display
- * "actions" in the popup window. Their appearance is similar to menuitems,
+ * “actions” in the popup window. Their appearance is similar to menuitems,
  * to differentiate them clearly from completion strings. When an action is
  * selected, the #GtkEntryCompletion::action-activated signal is emitted.
  *

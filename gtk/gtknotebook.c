@@ -67,14 +67,14 @@
  * # GtkNotebook as GtkBuildable
  * 
  * The GtkNotebook implementation of the #GtkBuildable interface
- * supports placing children into tabs by specifying "tab" as the
- * "type" attribute of a &lt;child&gt; element. Note that the content
+ * supports placing children into tabs by specifying “tab” as the
+ * “type” attribute of a &lt;child&gt; element. Note that the content
  * of the tab must be created before the tab can be filled.
  * A tab child can be specified without specifying a &lt;child&gt;
  * type attribute.
  *
  * To add a child widget in the notebooks action area, specify
- * "action-start" or "action-end" as the "type" attribute of the &lt;child&gt;
+ * "action-start" or “action-end” as the “type” attribute of the &lt;child&gt;
  * element.
  *
  * An example of a UI definition fragment with GtkNotebook:
@@ -808,7 +808,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 /**
  * GtkNotebook:has-secondary-backward-stepper:
  *
- * The "has-secondary-backward-stepper" property determines whether
+ * The “has-secondary-backward-stepper” property determines whether
  * a second backward arrow button is displayed on the opposite end
  * of the tab area.
  *
@@ -824,7 +824,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 /**
  * GtkNotebook:has-secondary-forward-stepper:
  *
- * The "has-secondary-forward-stepper" property determines whether
+ * The “has-secondary-forward-stepper” property determines whether
  * a second forward arrow button is displayed on the opposite end
  * of the tab area.
  *
@@ -840,7 +840,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 /**
  * GtkNotebook:has-backward-stepper:
  *
- * The "has-backward-stepper" property determines whether
+ * The “has-backward-stepper” property determines whether
  * the standard backward arrow button is displayed.
  *
  * Since: 2.4
@@ -855,7 +855,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 /**
  * GtkNotebook:has-forward-stepper:
  *
- * The "has-forward-stepper" property determines whether
+ * The “has-forward-stepper” property determines whether
  * the standard forward arrow button is displayed.
  *
  * Since: 2.4
@@ -870,7 +870,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 /**
  * GtkNotebook:tab-overlap:
  *
- * The "tab-overlap" property defines size of tab overlap
+ * The “tab-overlap” property defines size of tab overlap
  * area.
  *
  * Since: 2.10
@@ -887,7 +887,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 /**
  * GtkNotebook:tab-curvature:
  *
- * The "tab-curvature" property defines size of tab curvature.
+ * The “tab-curvature” property defines size of tab curvature.
  *
  * Since: 2.10
  */
@@ -8392,7 +8392,7 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *
  * If you want a widget to interact with a notebook through DnD
  * (i.e.: accept dragged tabs from it) it must be set as a drop
- * destination and accept the target "GTK_NOTEBOOK_TAB". The notebook
+ * destination and accept the target “GTK_NOTEBOOK_TAB”. The notebook
  * will fill the selection with a GtkWidget** pointing to the child
  * widget that corresponds to the dropped tab.
  * |[<!-- language="C" -->
@@ -8476,7 +8476,7 @@ gtk_notebook_get_action_widget (GtkNotebook *notebook,
  * the widget will be placed before or after the tabs. You can use
  * a #GtkBox if you need to pack more than one widget on the same side.
  *
- * Note that action widgets are "internal" children of the notebook and thus
+ * Note that action widgets are “internal” children of the notebook and thus
  * not included in the list returned from gtk_container_foreach().
  *
  * Since: 2.20

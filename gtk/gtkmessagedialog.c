@@ -90,7 +90,7 @@
  * # GtkMessageDialog as GtkBuildable
  *
  * The GtkMessageDialog implementation of the GtkBuildable interface exposes
- * the message area as an internal child with the name "message_area".
+ * the message area as an internal child with the name “message_area”.
  */
 
 struct _GtkMessageDialogPrivate
@@ -529,7 +529,7 @@ gtk_message_dialog_get_property (GObject     *object,
  *
  * Creates a new message dialog, which is a simple dialog with an icon
  * indicating the dialog type (error, warning, etc.) and some text the
- * user may want to see. When the user clicks a button a "response"
+ * user may want to see. When the user clicks a button a “response”
  * signal is emitted with response IDs from #GtkResponseType. See
  * #GtkDialog for more details.
  *
@@ -594,7 +594,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * Creates a new message dialog, which is a simple dialog with an icon
  * indicating the dialog type (error, warning, etc.) and some text which
  * is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
- * When the user clicks a button a "response" signal is emitted with
+ * When the user clicks a button a “response” signal is emitted with
  * response IDs from #GtkResponseType. See #GtkDialog for more details.
  *
  * Special XML characters in the printf() arguments passed to this
@@ -604,7 +604,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * Pango markup string that you want to use literally as the
  * label, then you need to use gtk_message_dialog_set_markup()
  * instead, since you can't pass the markup string either
- * as the format (it might contain '%' characters) or as a string
+ * as the format (it might contain “%” characters) or as a string
  * argument.
  * |[<!-- language="C" -->
  *  GtkWidget *dialog;
@@ -853,7 +853,7 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  * function in the parent #GtkDialog.
  *
  * Return value: (transfer none): A #GtkVBox corresponding to the
- *     "message area" in the @message_dialog.
+ *     “message area” in the @message_dialog.
  *
  * Since: 2.22
  **/

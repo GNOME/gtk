@@ -42,14 +42,14 @@
  * application (such as 'fullscreen').
  *
  * In this case, each of these action groups could be added to a
- * #GtkActionMuxer with the prefixes "app" and "win", respectively.  This
- * would expose the actions as "app.quit" and "win.fullscreen" on the
+ * #GtkActionMuxer with the prefixes “app” and “win”, respectively.  This
+ * would expose the actions as “app.quit” and “win.fullscreen” on the
  * #GActionGroup interface presented by the #GtkActionMuxer.
  *
  * Activations and state change requests on the #GtkActionMuxer are wired
  * through to the underlying action group in the expected way.
  *
- * This class is typically only used at the site of "consumption" of
+ * This class is typically only used at the site of “consumption” of
  * actions (eg: when displaying a menu that contains many actions on
  * different objects).
  */
@@ -653,12 +653,12 @@ gtk_action_muxer_class_init (GObjectClass *class)
  * action `x` in @action_group, there is an equivalent
  * action @prefix`.x` in @muxer.
  *
- * For example, if @prefix is "`app`" and @action_group
- * contains an action called "`quit`", then @muxer will
- * now contain an action called "`app.quit`".
+ * For example, if @prefix is “`app`” and @action_group
+ * contains an action called “`quit`”, then @muxer will
+ * now contain an action called “`app.quit`”.
  *
  * If any #GtkActionObservers are registered for actions in the group,
- * "action_added" notifications will be emitted, as appropriate.
+ * “action_added” notifications will be emitted, as appropriate.
  *
  * @prefix must not contain a dot ('.').
  */
@@ -704,7 +704,7 @@ gtk_action_muxer_insert (GtkActionMuxer *muxer,
  * Removes a #GActionGroup from the #GtkActionMuxer.
  *
  * If any #GtkActionObservers are registered for actions in the group,
- * "action_removed" notifications will be emitted, as appropriate.
+ * “action_removed” notifications will be emitted, as appropriate.
  */
 void
 gtk_action_muxer_remove (GtkActionMuxer *muxer,

@@ -382,18 +382,18 @@
 
  * * `font = font`
  *
- *          Starting with GTK+ 2.0, the "font" and "fontset"
- *          declarations are ignored; use "font_name" declarations instead.
+ *          Starting with GTK+ 2.0, the “font”  and “fontset” 
+ *          declarations are ignored; use “font_name”  declarations instead.
  *
  * * `fontset = font`
  *
- *          Starting with GTK+ 2.0, the "font" and "fontset"
- *          declarations are ignored; use "font_name" declarations instead.
+ *          Starting with GTK+ 2.0, the “font”  and “fontset” 
+ *          declarations are ignored; use “font_name”  declarations instead.
  *
  * * `font_name = font`
  *
  *          Sets the font for a widget. font must be
- *          a Pango font name, e.g. `"Sans Italic 10"`.
+ *          a Pango font name, e.g. “Sans Italic 10” .
  *          For details about Pango font names, see
  *          pango_font_description_from_string().
  *

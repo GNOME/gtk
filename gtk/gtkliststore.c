@@ -137,7 +137,7 @@
  * The GtkListStore implementation of the GtkBuildable interface allows
  * to specify the model columns with a &lt;columns&gt; element that may
  * contain multiple &lt;column&gt; elements, each specifying one model
- * column. The "type" attribute specifies the data type for the column.
+ * column. The “type” attribute specifies the data type for the column.
  *
  * Additionally, it is possible to specify content for the list store
  * in the UI definition, with the &lt;data&gt; element. It can contain
@@ -1166,7 +1166,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
  * The variable argument list should contain integer column numbers,
  * each column number followed by the value to be set.
  * The list is terminated by a -1. For example, to set column 0 with type
- * %G_TYPE_STRING to "Foo", you would write `gtk_list_store_set (store, iter,
+ * %G_TYPE_STRING to “Foo”, you would write `gtk_list_store_set (store, iter,
  * 0, "Foo", -1)`.
  *
  * The value will be referenced by the store if it is a %G_TYPE_OBJECT, and it

@@ -74,7 +74,7 @@ typedef struct _GtkTreeSortableIface GtkTreeSortableIface;
  * the model, i.e. it must be reflexive, antisymmetric and transitive.
  *
  * For example, if @model is a product catalogue, then a compare function
- * for the "price" column could be one which returns
+ * for the “price” column could be one which returns
  * `price_of(@a) - price_of(@b)`.
  *
  * Returns: a negative integer, zero or a positive integer depending on whether

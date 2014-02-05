@@ -201,8 +201,8 @@ gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
  * Note that this can be a different string than what you set with
  * gtk_font_chooser_set_font(), as the font chooser widget may
  * normalize font names and thus return a string with a different
- * structure. For example, "Helvetica Italic Bold 12" could be
- * normalized to "Helvetica Bold Italic 12".
+ * structure. For example, “Helvetica Italic Bold 12” could be
+ * normalized to “Helvetica Bold Italic 12”.
  *
  * Use pango_font_description_equal() if you want to compare two
  * font descriptions.
@@ -229,7 +229,7 @@ gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
 /**
  * gtk_font_chooser_set_font:
  * @fontchooser: a #GtkFontChooser
- * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
+ * @fontname: a font name like “Helvetica 12” or “Times Bold 18”
  *
  * Sets the currently-selected font.
  *
@@ -254,8 +254,8 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
  * Note that this can be a different string than what you set with
  * gtk_font_chooser_set_font(), as the font chooser widget may
  * normalize font names and thus return a string with a different
- * structure. For example, "Helvetica Italic Bold 12" could be
- * normalized to "Helvetica Bold Italic 12".
+ * structure. For example, “Helvetica Italic Bold 12” could be
+ * normalized to “Helvetica Bold Italic 12”.
  *
  * Use pango_font_description_equal() if you want to compare two
  * font descriptions.
