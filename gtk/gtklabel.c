@@ -3285,22 +3285,93 @@ gtk_label_update_layout_width (GtkLabel *label)
 }
 
 static void
+gtk_label_update_layout_attributes (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+  GtkWidget *widget = GTK_WIDGET (label);
+  GtkStyleContext *context;
+  PangoAttrList *attrs;
+
+  if (priv->layout == NULL)
+    return;
+
+  context = gtk_widget_get_style_context (widget);
+
+  if (priv->select_info && priv->select_info->links)
+    {
+      GdkRGBA link_color;
+      PangoAttribute *attribute;
+      GList *list;
+
+      attrs = pango_attr_list_new ();
+
+      for (list = priv->select_info->links; list; list = list->next)
+        {
+          GtkLabelLink *link = list->data;
+          GtkStateFlags state;
+
+          attribute = pango_attr_underline_new (TRUE);
+          attribute->start_index = link->start;
+          attribute->end_index = link->end;
+          pango_attr_list_insert (attrs, attribute);
+
+          state = gtk_widget_get_state_flags (widget);
+          if (link->visited)
+            state |= GTK_STATE_FLAG_VISITED;
+          else
+            state |= GTK_STATE_FLAG_LINK;
+
+          gtk_style_context_get_color (context, state, &link_color);
+
+          attribute = pango_attr_foreground_new (link_color.red * 65535,
+                                                 link_color.green * 65535,
+                                                 link_color.blue * 65535);
+          attribute->start_index = link->start;
+          attribute->end_index = link->end;
+          pango_attr_list_insert (attrs, attribute);
+        }
+    }
+  else if (priv->markup_attrs && priv->attrs)
+    attrs = pango_attr_list_new ();
+  else
+    attrs = NULL;
+
+  if (priv->markup_attrs)
+    {
+      if (attrs)
+        my_pango_attr_list_merge (attrs, priv->markup_attrs);
+      else
+        attrs = pango_attr_list_ref (priv->markup_attrs);
+    }
+
+  if (priv->attrs)
+    {
+      if (attrs)
+        my_pango_attr_list_merge (attrs, priv->attrs);
+      else
+        attrs = pango_attr_list_ref (priv->attrs);
+    }
+
+  pango_layout_set_attributes (priv->layout, attrs);
+
+  if (attrs)
+    pango_attr_list_unref (attrs);
+}
+
+static void
 gtk_label_ensure_layout (GtkLabel *label)
 {
   GtkLabelPrivate *priv = label->priv;
   GtkWidget *widget;
   gboolean rtl;
-  GtkStyleContext *context;
 
   widget = GTK_WIDGET (label);
-  context = gtk_widget_get_style_context (widget);
 
   rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (!priv->layout)
     {
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
-      PangoAttrList *attrs;
       gdouble angle = gtk_label_get_angle (label);
 
       if (angle != 0.0 && !priv->select_info)
@@ -3327,66 +3398,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 
       priv->layout = gtk_widget_create_pango_layout (widget, priv->text);
 
-      if (priv->select_info && priv->select_info->links)
-        {
-          GdkRGBA link_color;
-          PangoAttribute *attribute;
-          GList *list;
-          
-          attrs = pango_attr_list_new ();
-
-          for (list = priv->select_info->links; list; list = list->next)
-            {
-              GtkLabelLink *link = list->data;
-              GtkStateFlags state;
-
-              attribute = pango_attr_underline_new (TRUE);
-              attribute->start_index = link->start;
-              attribute->end_index = link->end;
-              pango_attr_list_insert (attrs, attribute);
-
-              state = gtk_widget_get_state_flags (widget);
-              if (link->visited)
-                state |= GTK_STATE_FLAG_VISITED;
-              else
-                state |= GTK_STATE_FLAG_LINK;
-
-              gtk_style_context_get_color (context, state, &link_color);
-
-              attribute = pango_attr_foreground_new (link_color.red * 65535,
-                                                     link_color.green * 65535,
-                                                     link_color.blue * 65535);
-              attribute->start_index = link->start;
-              attribute->end_index = link->end;
-              pango_attr_list_insert (attrs, attribute);
-            }
-        }
-      else if (priv->markup_attrs && priv->attrs)
-        attrs = pango_attr_list_new ();
-      else
-        attrs = NULL;
-
-      if (priv->markup_attrs)
-        {
-          if (attrs)
-            my_pango_attr_list_merge (attrs, priv->markup_attrs);
-          else
-            attrs = pango_attr_list_ref (priv->markup_attrs);
-        }
-	  
-      if (priv->attrs)
-        {
-          if (attrs)
-            my_pango_attr_list_merge (attrs, priv->attrs);
-          else
-            attrs = pango_attr_list_ref (priv->attrs);
-        }
-	  
-      if (attrs)
-        {
-          pango_layout_set_attributes (priv->layout, attrs);
-          pango_attr_list_unref (attrs);
-        }
+      gtk_label_update_layout_attributes (label);
 
       switch (priv->jtype)
 	{
