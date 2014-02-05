@@ -56,7 +56,7 @@
  * The function gtk_builder_connect_signals() and variants thereof can be
  * used to connect handlers to the named signals in the description.
  *
- * # GtkBuilder UI Definitions
+ * # GtkBuilder UI Definitions # {#BUILDER-UI}
  *
  * GtkBuilder parses textual descriptions of user interfaces which are
  * specified in an XML format which can be roughly described by the

@@ -121,7 +121,7 @@
  * enclosed in doublequotes, thus they must not '"' characters or references
  * to the &quot; entity.
  *
- * ## A UI definition ##
+ * # A UI definition #
  *
  * |[
  * <ui>
