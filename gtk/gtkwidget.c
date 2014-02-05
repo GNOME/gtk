@@ -1434,7 +1434,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * Since: 3.12
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN_LEFT,
+                                   PROP_MARGIN_START,
                                    g_param_spec_int ("margin-start",
                                                      P_("Margin on Start"),
                                                      P_("Pixels of extra space on the start"),
@@ -1455,7 +1455,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * Since: 3.12
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN_RIGHT,
+                                   PROP_MARGIN_END,
                                    g_param_spec_int ("margin-end",
                                                      P_("Margin on End"),
                                                      P_("Pixels of extra space on the end"),
