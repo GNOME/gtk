@@ -63,11 +63,11 @@
  * In addition, certain files will be read when GTK+ is initialized. First,
  * the file `$XDG_CONFIG_HOME/gtk-3.0/gtk.css`
  * is loaded if it exists. Then, GTK+ tries to load
- * `$HOME/.themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css`,
+ * `$HOME/.themes/theme-name/gtk-3.0/gtk.css`,
  * falling back to
- * `<replaceable>datadir</replaceable>/share/themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css`,
- * where <replaceable>theme-name</replaceable> is the name of the current theme
- * (see the #GtkSettings:gtk-theme-name setting) and <replaceable>datadir</replaceable>
+ * `datadir/share/themes/theme-name/gtk-3.0/gtk.css`,
+ * where theme-name is the name of the current theme
+ * (see the #GtkSettings:gtk-theme-name setting) and datadir
  * is the prefix configured when GTK+ was compiled, unless overridden by the
  * `GTK_DATA_PREFIX` environment variable.
  * 
@@ -894,11 +894,11 @@
  * GtkThemingEngines can register their own, engine-specific style properties
  * with the function gtk_theming_engine_register_property(). These properties
  * can be set in CSS like other properties, using a name of the form
- * <literallayout>-<replaceable>namespace</replaceable>-<replaceable>name</replaceable></literallayout>, where <replaceable>namespace</replaceable> is typically
- * the name of the theming engine, and <replaceable>name</replaceable> is the
+ * <literallayout>-namespace-name</literallayout>, where namespace is typically
+ * the name of the theming engine, and name is the
  * name of the property. Style properties that have been registered by widgets
  * using gtk_widget_class_install_style_property() can also be set in this
- * way, using the widget class name for <replaceable>namespace</replaceable>.
+ * way, using the widget class name for namespace.
  *
  * An example for using engine-specific style properties:
  * |[

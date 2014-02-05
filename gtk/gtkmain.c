@@ -841,7 +841,7 @@ gtk_get_option_group (gboolean open_default_display)
  *     understood by GTK+ are stripped before return.
  * @parameter_string: (allow-none): a string which is displayed in
  *    the first line of `--help` output, after
- *    `<replaceable>programname</replaceable> [OPTION...]`
+ *    `programname [OPTION...]`
  * @entries: (array zero-terminated=1): a %NULL-terminated array
  *    of #GOptionEntrys describing the options of your program
  * @translation_domain: a translation domain to use for translating

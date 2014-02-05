@@ -15703,7 +15703,7 @@ _gtk_widget_get_action_muxer (GtkWidget *widget)
  * Inserts @group into @widget. Children of @widget that implement
  * #GtkActionable can then be associated with actions in @group by
  * setting their 'action-name' to
- * @prefix.<replaceable>action-name</replaceable>.
+ * @prefix.`action-name`.
  *
  * If @group is %NULL, a previously inserted group for @name is removed
  * from @widget.

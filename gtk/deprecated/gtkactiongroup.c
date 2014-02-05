@@ -965,7 +965,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
  * with the stock_id of the action. 
  *
  * Accel paths are set to
- * `&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable>`.
+ * `&lt;Actions&gt;/group-name/action-name`.
  *
  * Since: 2.4
  *
@@ -1110,7 +1110,7 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  *
  * The "activate" signals of the actions are connected to the callbacks and 
  * their accel paths are set to 
- * `&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable>`.  
+ * `&lt;Actions&gt;/group-name/action-name`.  
  * 
  * Since: 2.4
  *
@@ -1245,7 +1245,7 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
  *
  * The "activate" signals of the actions are connected to the callbacks and 
  * their accel paths are set to 
- * `&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable>`.  
+ * `&lt;Actions&gt;/group-name/action-name`.  
  * 
  * Since: 2.4
  *
@@ -1365,7 +1365,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
  *
  * The "changed" signal of the first radio action is connected to the 
  * @on_change callback and the accel paths of the actions are set to 
- * `&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable>`.  
+ * `&lt;Actions&gt;/group-name/action-name`.  
  * 
  * Since: 2.4
  *

@@ -257,66 +257,66 @@
  *
  * The possible toplevel declarations are:
  *
- * * `binding <replaceable>name</replaceable>
+ * * `binding name
  *      { ... }`
  *
  *    Declares a binding set.
  *
- * * `class <replaceable>pattern</replaceable>
- *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable>`
+ * * `class pattern
+ *           [ style | binding ][ : priority ]
+ *           name`
  *
  *    Specifies a style or binding set for a particular
  *      branch of the inheritance hierarchy.
  *
- * * `include <replaceable>filename</replaceable>`
+ * * `include filename`
  *
  *    Parses another file at this point. If
- *         <replaceable>filename</replaceable> is not an absolute filename,
+ *         filename is not an absolute filename,
  *         it is searched in the directories of the currently open RC files.
  *
  *    GTK+ also tries to load a
  *         <link linkend="locale-specific-rc">locale-specific variant</link> of
  *         the included file.
  *
- * * `module_path <replaceable>path</replaceable>`
+ * * `module_path path`
  *
  *    Sets a path (a list of directories separated
  *       by colons) that will be searched for theme engines referenced in
  *       RC files.
  *
- * * `pixmap_path <replaceable>path</replaceable>`
+ * * `pixmap_path path`
  *
  *    Sets a path (a list of directories separated
  *       by colons) that will be searched for pixmaps referenced in
  *       RC files.
  *
- * * `im_module_file <replaceable>pathname</replaceable>`
+ * * `im_module_file pathname`
  *
  *    Sets the pathname for the IM modules file. Setting this from RC files
  *       is deprecated; you should use the environment variable `GTK_IM_MODULE_FILE`
  *       instead.
  *
- * * `style <replaceable>name</replaceable> [ =
- *     <replaceable>parent</replaceable> ] { ... }`
+ * * `style name [ =
+ *     parent ] { ... }`
  *
  *    Declares a style.
  *
- * * `widget <replaceable>pattern</replaceable>
- *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable>`
+ * * `widget pattern
+ *           [ style | binding ][ : priority ]
+ *           name`
  *
  *      Specifies a style or binding set for a particular
  *      group of widgets by matching on the widget pathname.
  *
- * * `widget_class <replaceable>pattern</replaceable>
- *           [ style | binding ][ : <replaceable>priority</replaceable> ]
- *           <replaceable>name</replaceable>`
+ * * `widget_class pattern
+ *           [ style | binding ][ : priority ]
+ *           name`
  *
  *      Specifies a style or binding set for a particular
  *      group of widgets by matching on the class pathname.
  *
- * * <replaceable>setting</replaceable> = <replaceable>value</replaceable>
+ * * setting = value
  *
  *    Specifies a value for a <link linkend="GtkSettings">setting</link>.
  *         Note that settings in RC files are overwritten by system-wide settings
@@ -338,40 +338,40 @@
  * Within a `style` declaration, the possible
  * elements are:
  *
- * * `bg[<replaceable>state</replaceable>] = <replaceable>color</replaceable>`
+ * * `bg[state] = color`
  *
  *   Sets the color used for the background of most widgets.
  *
- * * `fg[<replaceable>state</replaceable>] = <replaceable>color</replaceable>`
+ * * `fg[state] = color`
  *
  *   Sets the color used for the foreground of most widgets.
  *
- * * `base[<replaceable>state</replaceable>] = <replaceable>color</replaceable>`
+ * * `base[state] = color`
  *
  *          Sets the color used for the background of widgets displaying
  *          editable text. This color is used for the background
  *          of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkCList.
  *
- * * `text[<replaceable>state</replaceable>] =
- *       <replaceable>color</replaceable>`
+ * * `text[state] =
+ *       color`
  *
  *          Sets the color used for foreground of widgets using
  *          `base` for the background color.
  *
  * * `xthickness =
- *       <replaceable>number</replaceable>`
+ *       number`
  *
  *          Sets the xthickness, which is used for various horizontal padding
  *          values in GTK+.
  *
  * * `ythickness =
- *       <replaceable>number</replaceable>`
+ *       number`
  *
  *          Sets the ythickness, which is used for various vertical padding
  *          values in GTK+.
  *
- * * `bg_pixmap[<replaceable>state</replaceable>] =
- *       <replaceable>pixmap</replaceable>`
+ * * `bg_pixmap[state] =
+ *       pixmap`
  *
  *          Sets a background pixmap to be used in place of
  *          the `bg` color (or for #GtkText,
@@ -380,38 +380,38 @@
  *          use the same background pixmap as its parent. The special value
  *          `"&lt;none&gt;"` may be used to indicate no background pixmap.
 
- * * `font = <replaceable>font</replaceable>`
+ * * `font = font`
  *
  *          Starting with GTK+ 2.0, the "font" and "fontset"
  *          declarations are ignored; use "font_name" declarations instead.
  *
- * * `fontset = <replaceable>font</replaceable>`
+ * * `fontset = font`
  *
  *          Starting with GTK+ 2.0, the "font" and "fontset"
  *          declarations are ignored; use "font_name" declarations instead.
  *
- * * `font_name = <replaceable>font</replaceable>`
+ * * `font_name = font`
  *
- *          Sets the font for a widget. <replaceable>font</replaceable> must be
+ *          Sets the font for a widget. font must be
  *          a Pango font name, e.g. `"Sans Italic 10"`.
  *          For details about Pango font names, see
  *          pango_font_description_from_string().
  *
- * * `stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }`
+ * * `stock["stock-id"] = { icon source specifications }`
  *
  *         Defines the icon for a stock item.
  *
- * * `color[<replaceable>"color-name"</replaceable>] = <replaceable>color specification</replaceable>`
+ * * `color["color-name"] = color specification`
  *
  *         Since 2.10, this element can be used to defines symbolic colors. See below for
  *         the syntax of color specifications.
  *
- * * `engine <replaceable>"engine"</replaceable> { <replaceable>engine-specific
- * settings</replaceable> }`
+ * * `engine "engine" { engine-specific
+ * settings }`
  *
  *         Defines the engine to be used when drawing with this style.
  *
- * * `<replaceable>class</replaceable>::<replaceable>property</replaceable> = <replaceable>value</replaceable>`
+ * * `class::property = value`
  *
  *         Sets a <link linkend="style-properties">style property</link> for a widget class.
  *
@@ -457,8 +457,8 @@
  * or `#rgb`, where `r`,
  * `g` and `b` are
  * hex digits, or they can be specified as a triplet
- * `{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
- * <replaceable>b</replaceable>}`, where `r`,
+ * `{ r, g,
+ * b}`, where `r`,
  * `g` and `b` are either integers in
  * the range 0-65535 or floats in the range 0.0-1.0.
  *
@@ -466,29 +466,29 @@
  * follows: `@<!-- -->color-name`, or by using expressions to combine
  * colors. The following expressions are currently supported:
  *
- * * mix (<replaceable>factor</replaceable>, <replaceable>color1</replaceable>, <replaceable>color2</replaceable>)
+ * * mix (factor, color1, color2)
  *
- *         Computes a new color by mixing <replaceable>color1</replaceable> and
- *         <replaceable>color2</replaceable>. The <replaceable>factor</replaceable>
- *         determines how close the new color is to <replaceable>color1</replaceable>.
- *         A factor of 1.0 gives pure <replaceable>color1</replaceable>, a factor of
- *         0.0 gives pure <replaceable>color2</replaceable>.
+ *         Computes a new color by mixing color1 and
+ *         color2. The factor
+ *         determines how close the new color is to color1.
+ *         A factor of 1.0 gives pure color1, a factor of
+ *         0.0 gives pure color2.
  *
- * * shade (<replaceable>factor</replaceable>, <replaceable>color</replaceable>)
+ * * shade (factor, color)
  *
- *         Computes a lighter or darker variant of <replaceable>color</replaceable>.
- *         A <replaceable>factor</replaceable> of 1.0 leaves the color unchanged, smaller
+ *         Computes a lighter or darker variant of color.
+ *         A factor of 1.0 leaves the color unchanged, smaller
  *         factors yield darker colors, larger factors yield lighter colors.
  *
- * * lighter (<replaceable>color</replaceable>)
+ * * lighter (color)
  *
  *         This is an abbreviation for
- *         `shade (1.3, <replaceable>color</replaceable>)`.
+ *         `shade (1.3, color)`.
  *
- * * darker (<replaceable>color</replaceable>)
+ * * darker (color)
  *
  *         This is an abbreviation for
- *         `shade (0.7, <replaceable>color</replaceable>)`.
+ *         `shade (0.7, color)`.
  *
  * Here are some examples of color expressions:
  *
@@ -569,16 +569,16 @@
  * set declaration is:
  *
  * |[
- * binding <replaceable>name</replaceable> {
- *   bind <replaceable>key</replaceable> {
- *     <replaceable>signalname</replaceable> (<replaceable>param</replaceable>, ...)
+ * binding name {
+ *   bind key {
+ *     signalname (param, ...)
  *     ...
  *   }
  *   ...
  * }
  * ]|
  *
- * <replaceable>key</replaceable> is a string consisting of a
+ * `key` is a string consisting of a
  * series of modifiers followed by the name of a key. The
  * modifiers can be:
  *

@@ -1005,7 +1005,7 @@ gtk_accel_map_class_init (GtkAccelMapClass *accel_map_class)
    * Notifies of a change in the global accelerator map.
    * The path is also used as the detail for the signal,
    * so it is possible to connect to
-   * changed::<replaceable>accel_path</replaceable>.
+   * changed::`accel_path`.
    *
    * Since: 2.4
    */

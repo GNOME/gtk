@@ -515,7 +515,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * A list of icon sizes. The list is separated by colons, and
    * item has the form:
    *
-   * <replaceable>size-name</replaceable> = <replaceable>width</replaceable> , <replaceable>height</replaceable>
+   * `size-name` = `width` , `height`
    *
    * E.g. "gtk-menu=16,16:gtk-button=20,20:gtk-dialog=48,48".
    * GTK+ itself use the following named icon sizes: gtk-menu,
