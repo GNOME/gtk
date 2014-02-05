@@ -203,7 +203,7 @@ gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings)
  *
  * Gets the natural interval between presentation times for
  * the display that this frame was displayed on. Frame presentation
- * usually happens during the "vertical blanking interval".
+ * usually happens during the “vertical blanking interval”.
  *
  * Returns: the refresh interval of the display, in microseconds,
  *  or 0 if the refresh interval is not available.

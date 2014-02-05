@@ -56,7 +56,7 @@
  * A #GdkWindow is a (usually) rectangular region on the screen.
  * It's a low-level object, used to implement high-level objects such as
  * #GtkWidget and #GtkWindow on the GTK+ level. A #GtkWindow is a toplevel
- * window, the thing a user might think of as a "window" with a titlebar
+ * window, the thing a user might think of as a “window” with a titlebar
  * and so on; a #GtkWindow may contain many #GdkWindows. For example,
  * each #GtkButton has a #GdkWindow associated with it.
  *
@@ -93,15 +93,15 @@
  * be it a toplevel window or a child window. In this setup the
  * GdkWindow (and other GdkDrawables) were platform independent classes,
  * and the actual platform specific implementation was in a delegate
- * object available as "impl" in the window object.
+ * object available as “impl” in the window object.
  *
  * With the addition of client side windows and offscreen windows this
  * changes a bit. The application-visible GdkWindow object behaves as
  * it did before, but not all such windows now have a corresponding native
- * window. Instead windows that are "client side" are emulated by the gdk
+ * window. Instead windows that are “client side” are emulated by the gdk
  * code such that clipping, drawing, moving, events etc work as expected.
  *
- * For GdkWindows that have a native window the "impl" object is the
+ * For GdkWindows that have a native window the “impl” object is the
  * same as before. However, for all client side windows the impl object
  * is shared with its parent (i.e. all client windows descendants of one
  * native window has the same impl.
@@ -112,8 +112,8 @@
  * windows). Such windows work by allocating a #cairo_surface_t as the backing
  * store for drawing operations, which is resized with the window.
  *
- * GdkWindows have a pointer to the "impl window" they are in, i.e.
- * the topmost GdkWindow which have the same "impl" value. This is stored
+ * GdkWindows have a pointer to the “impl window” they are in, i.e.
+ * the topmost GdkWindow which have the same “impl” value. This is stored
  * in impl_window, which is different from the window itself only for client
  * side windows.
  * All GdkWindows (native or not) track the position of the window in the parent
@@ -1052,7 +1052,7 @@ _gdk_window_update_size (GdkWindow *window)
 }
 
 /* Find the native window that would be just above "child"
- * in the native stacking order if "child" was a native window
+ * in the native stacking order if “child” was a native window
  * (it doesn't have to be native). If there is no such native
  * window inside this native parent then NULL is returned.
  * If child is NULL, find lowest native window in parent.
@@ -3948,7 +3948,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  * @user_data: data passed to @child_func
  *
  * Adds @region to the update area for @window. The update area is the
- * region that needs to be redrawn, or "dirty region." The call
+ * region that needs to be redrawn, or “dirty region.” The call
  * gdk_window_process_updates() sends one or more expose events to the
  * window, which together cover the entire update area. An
  * application would normally redraw the contents of @window in
@@ -3999,7 +3999,7 @@ gdk_window_invalidate_region_full (GdkWindow       *window,
  * @invalidate_children: %TRUE to also invalidate child windows
  *
  * Adds @region to the update area for @window. The update area is the
- * region that needs to be redrawn, or "dirty region." The call
+ * region that needs to be redrawn, or “dirty region.” The call
  * gdk_window_process_updates() sends one or more expose events to the
  * window, which together cover the entire update area. An
  * application would normally redraw the contents of @window in
@@ -4033,7 +4033,7 @@ gdk_window_invalidate_region (GdkWindow       *window,
  * @region: a #cairo_region_t
  *
  * Adds @region to the update area for @window. The update area is the
- * region that needs to be redrawn, or "dirty region." The call
+ * region that needs to be redrawn, or “dirty region.” The call
  * gdk_window_process_updates() sends one or more expose events to the
  * window, which together cover the entire update area. An
  * application would normally redraw the contents of @window in
@@ -5062,7 +5062,7 @@ gdk_window_restack (GdkWindow     *window,
  * is gdk_window_hide().
  *
  * When implementing a #GtkWidget, you should call this function on the widget's
- * #GdkWindow as part of the "map" method.
+ * #GdkWindow as part of the “map” method.
  */
 void
 gdk_window_show (GdkWindow *window)
@@ -6480,7 +6480,7 @@ gdk_window_merge_child_shapes (GdkWindow *window)
  * The alpha channel of the window defines which pixels are
  * invisible and allows for nicely antialiased borders,
  * and the input shape controls where the window is
- * "clickable".
+ * “clickable”.
  *
  * On the X11 platform, this requires version 1.1 of the
  * shape extension.
@@ -9245,7 +9245,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
  * with it.
  *
  * This function always returns a valid pointer, but it will return a
- * pointer to a "nil" surface if @other is already in an error state
+ * pointer to a “nil” surface if @other is already in an error state
  * or any other error occurs.
  *
  * Since: 2.22
@@ -9320,7 +9320,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
  * with it.
  *
  * This function always returns a valid pointer, but it will return a
- * pointer to a "nil" surface if @other is already in an error state
+ * pointer to a “nil” surface if @other is already in an error state
  * or any other error occurs.
  *
  * Since: 3.10
@@ -9850,7 +9850,7 @@ gdk_window_deiconify (GdkWindow *window)
  * gdk_window_stick:
  * @window: a toplevel #GdkWindow
  *
- * "Pins" a window such that it's on all workspaces and does not scroll
+ * “Pins” a window such that it's on all workspaces and does not scroll
  * with viewports, for window managers that have scrollable viewports.
  * (When using #GtkWindow, gtk_window_stick() may be more useful.)
  *
@@ -9891,7 +9891,7 @@ gdk_window_unstick (GdkWindow *window)
  * On X11, asks the window manager to maximize @window, if the window
  * manager supports this operation. Not all window managers support
  * this, and some deliberately ignore it or don't have a concept of
- * "maximized"; so you can't rely on the maximization actually
+ * “maximized”; so you can't rely on the maximization actually
  * happening. But it will happen with most standard window managers,
  * and GDK makes a best effort to get it to happen.
  *
@@ -9914,7 +9914,7 @@ gdk_window_maximize (GdkWindow *window)
  * On X11, asks the window manager to unmaximize @window, if the
  * window manager supports this operation. Not all window managers
  * support this, and some deliberately ignore it or don't have a
- * concept of "maximized"; so you can't rely on the unmaximization
+ * concept of “maximized”; so you can't rely on the unmaximization
  * actually happening. But it will happen with most standard window
  * managers, and GDK makes a best effort to get it to happen.
  *
@@ -9940,7 +9940,7 @@ gdk_window_unmaximize (GdkWindow *window)
  * On X11, asks the window manager to put @window in a fullscreen
  * state, if the window manager supports this operation. Not all
  * window managers support this, and some deliberately ignore it or
- * don't have a concept of "fullscreen"; so you can't rely on the
+ * don't have a concept of “fullscreen”; so you can't rely on the
  * fullscreenification actually happening. But it will happen with
  * most standard window managers, and GDK makes a best effort to get
  * it to happen.
@@ -10024,7 +10024,7 @@ gdk_window_get_fullscreen_mode (GdkWindow *window)
  * On X11, asks the window manager to move @window out of the fullscreen
  * state, if the window manager supports this operation. Not all
  * window managers support this, and some deliberately ignore it or
- * don't have a concept of "fullscreen"; so you can't rely on the
+ * don't have a concept of “fullscreen”; so you can't rely on the
  * unfullscreenification actually happening. But it will happen with
  * most standard window managers, and GDK makes a best effort to get
  * it to happen.
@@ -10048,7 +10048,7 @@ gdk_window_unfullscreen (GdkWindow *window)
  * On X11, asks the window manager to keep @window above, if the window
  * manager supports this operation. Not all window managers support
  * this, and some deliberately ignore it or don't have a concept of
- * "keep above"; so you can't rely on the window being kept above.
+ * “keep above”; so you can't rely on the window being kept above.
  * But it will happen with most standard window managers,
  * and GDK makes a best effort to get it to happen.
  *
@@ -10072,7 +10072,7 @@ gdk_window_set_keep_above (GdkWindow *window,
  * On X11, asks the window manager to keep @window below, if the window
  * manager supports this operation. Not all window managers support
  * this, and some deliberately ignore it or don't have a concept of
- * "keep below"; so you can't rely on the window being kept below.
+ * “keep below”; so you can't rely on the window being kept below.
  * But it will happen with most standard window managers,
  * and GDK makes a best effort to get it to happen.
  *
@@ -10128,7 +10128,7 @@ gdk_window_set_group (GdkWindow *window,
  * @window: a toplevel #GdkWindow
  * @decorations: decoration hint mask
  *
- * "Decorations" are the features the window manager adds to a toplevel #GdkWindow.
+ * “Decorations” are the features the window manager adds to a toplevel #GdkWindow.
  * This function sets the traditional Motif window manager hints that tell the
  * window manager which decorations you would like your window to have.
  * Usually you should use gtk_window_set_decorated() on a #GtkWindow instead of
@@ -10206,7 +10206,7 @@ gdk_window_set_functions (GdkWindow    *window,
  * @timestamp: timestamp of mouse click that began the drag (use gdk_event_get_time())
  *
  * Begins a window resize operation (for a toplevel window).
- * You might use this function to implement a "window resize grip," for
+ * You might use this function to implement a “window resize grip,” for
  * example; in fact #GtkStatusbar uses it. The function works best
  * with window managers that support the
  * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
@@ -10268,7 +10268,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
  * @timestamp: timestamp of mouse click that began the drag
  *
  * Begins a window move operation (for a toplevel window).
- * You might use this function to implement a "window move grip," for
+ * You might use this function to implement a “window move grip,” for
  * example. The function works best with window managers that support the
  * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
  * but has a fallback implementation for other window managers.

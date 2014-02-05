@@ -911,7 +911,7 @@ gdk_event_get_time (const GdkEvent *event)
  * @event: a #GdkEvent or NULL
  * @state: (out): return location for state
  * 
- * If the event contains a "state" field, puts that field in @state. Otherwise
+ * If the event contains a “state” field, puts that field in @state. Otherwise
  * stores an empty state (0). Returns %TRUE if there was a state field
  * in the event. @event may be %NULL, in which case it's treated
  * as if the event had no state field.
@@ -1506,7 +1506,7 @@ gdk_event_set_device (GdkEvent  *event,
  * gdk_event_get_device:
  * @event: a #GdkEvent.
  *
- * If the event contains a "device" field, this function will return
+ * If the event contains a “device” field, this function will return
  * it, else it will return %NULL.
  *
  * Returns: (transfer none): a #GdkDevice, or %NULL.

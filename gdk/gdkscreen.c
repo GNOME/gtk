@@ -443,7 +443,7 @@ gdk_screen_get_font_options (GdkScreen *screen)
 /**
  * gdk_screen_set_resolution:
  * @screen: a #GdkScreen
- * @dpi: the resolution in "dots per inch". (Physical inches aren't actually
+ * @dpi: the resolution in “dots per inch”. (Physical inches aren't actually
  *   involved; the terminology is conventional.)
  
  * Sets the resolution for font handling on the screen. This is a
@@ -814,7 +814,7 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
  *     the monitor workarea
  *
  * Retrieves the #GdkRectangle representing the size and position of
- * the "work area" on a monitor within the entire screen area.
+ * the “work area” on a monitor within the entire screen area.
  *
  * The work area should be considered when positioning menus and
  * similar popups, to avoid placing them below panels, docks or other

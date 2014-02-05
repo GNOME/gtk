@@ -533,7 +533,7 @@ struct _GdkEventAny
  * @area: bounding box of @region.
  * @region: the region that needs to be redrawn.
  * @count: the number of contiguous %GDK_EXPOSE events following this one.
- *   The only use for this is "exposure compression", i.e. handling all
+ *   The only use for this is “exposure compression”, i.e. handling all
  *   contiguous %GDK_EXPOSE events in one go, though GDK performs some
  *   exposure compression so this is not normally needed.
  *

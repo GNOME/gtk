@@ -93,8 +93,8 @@ typedef enum
  * @GDK_WA_TYPE_HINT: Honor the type_hint field
  *
  * Used to indicate which fields in the #GdkWindowAttr struct should be honored.
- * For example, if you filled in the "cursor" and "x" fields of #GdkWindowAttr,
- * pass "@GDK_WA_X | @GDK_WA_CURSOR" to gdk_window_new(). Fields in
+ * For example, if you filled in the “cursor” and “x” fields of #GdkWindowAttr,
+ * pass “@GDK_WA_X | @GDK_WA_CURSOR” to gdk_window_new(). Fields in
  * #GdkWindowAttr not covered by a bit in this enum are required; for example,
  * the @width/@height, @wclass, and @window_type fields are required, they have
  * no corresponding flag in #GdkWindowAttributesType.
@@ -168,7 +168,7 @@ typedef enum
  * @GDK_WINDOW_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar,
  *  e.g. a context menu.
  * @GDK_WINDOW_TYPE_HINT_TOOLTIP: A tooltip.
- * @GDK_WINDOW_TYPE_HINT_NOTIFICATION: A notification - typically a "bubble"
+ * @GDK_WINDOW_TYPE_HINT_NOTIFICATION: A notification - typically a “bubble”
  *  that belongs to a status icon.
  * @GDK_WINDOW_TYPE_HINT_COMBO: A popup from a combo box.
  * @GDK_WINDOW_TYPE_HINT_DND: A window that is used to implement a DND cursor.
@@ -414,10 +414,10 @@ struct _GdkWindowAttr
  * size of one character in the terminal. Finally, the base size should be set
  * to the size of one character. The net effect is that the minimum size of the
  * terminal will have a 1x1 character terminal area, and only terminal sizes on
- * the "character grid" will be allowed.
+ * the “character grid” will be allowed.
  *
  * Here's an example of how the terminal example would be implemented, assuming
- * a terminal area widget called "terminal" and a toplevel window "toplevel":
+ * a terminal area widget called “terminal” and a toplevel window “toplevel”:
  *
  * |[<!-- language="C" -->
  * 	GdkGeometry hints;

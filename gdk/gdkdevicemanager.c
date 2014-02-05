@@ -75,7 +75,7 @@
  *
  * There may be several virtual devices, and several physical devices could
  * be controlling each of these virtual devices. Physical devices may also
- * be "floating", which means they are not attached to any virtual device.
+ * be “floating”, which means they are not attached to any virtual device.
  *
  * # Master and slave devices
  *

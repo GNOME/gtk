@@ -60,7 +60,7 @@
  * as g_get_monotonic_time(). The frame time does not advance during
  * the time a frame is being painted, and outside of a frame, an attempt
  * is made so that all calls to gdk_frame_clock_get_frame_time() that
- * are called at a "similar" time get the same value. This means that
+ * are called at a “similar” time get the same value. This means that
  * if different animations are timed by looking at the difference in
  * time between an initial value from gdk_frame_clock_get_frame_time()
  * and the value inside the #GdkFrameClock::update signal of the clock,
@@ -254,7 +254,7 @@ gdk_frame_clock_init (GdkFrameClock *clock)
  * Gets the time that should currently be used for animations.  Inside
  * the processing of a frame, it's the time used to compute the
  * animation position of everything in a frame. Outside of a frame, it's
- * the time of the conceptual "previous frame," which may be either
+ * the time of the conceptual “previous frame,” which may be either
  * the actual previous frame time, or if that's too old, an updated
  * time.
  *

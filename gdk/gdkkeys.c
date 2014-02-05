@@ -68,8 +68,8 @@
  * this is an identifying number for a physical key. Second, it contains the
  * “level” of the key. The level indicates which symbol on the
  * key will be used, in a vertical direction. So on a standard US keyboard, the key
- * with the number "1" on it also has the exclamation point ("!") character on
- * it. The level indicates whether to use the "1" or the "!" symbol.  The letter
+ * with the number “1“ on it also has the exclamation point (”!”) character on
+ * it. The level indicates whether to use the “1” or the “!” symbol.  The letter
  * keys are considered to have a lowercase letter at level 0, and an uppercase
  * letter at level 1, though only the uppercase letter is printed.  Third, the
  * #GdkKeymapKey contains a group; groups are not used on standard US keyboards,
@@ -87,7 +87,7 @@
  * keyboard state -- consisting of hardware keycode pressed, active modifiers, and
  * active group -- applies the appropriate rules, and returns the group/level to be
  * used to index the keymap, along with the modifiers which did not affect the
- * group and level. i.e. it returns "unconsumed modifiers." The keyboard group may
+ * group and level. i.e. it returns “unconsumed modifiers.” The keyboard group may
  * differ from the effective group used for keymap lookups because some keys don't
  * have multiple groups - e.g. the Enter key is always in group 0 regardless of
  * keyboard state.
@@ -682,7 +682,7 @@ gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
  *
  * The names are the same as those in the
  * `gdk/gdkkeysyms.h` header file
- * but without the leading "GDK_KEY_".
+ * but without the leading “GDK_KEY_”.
  *
  * Return value: (transfer none): a string containing the name of the key,
  *     or %NULL if @keyval is not a valid key. The string should not be
@@ -702,7 +702,7 @@ gdk_keyval_name (guint keyval)
  *
  * The names are the same as those in the
  * `gdk/gdkkeysyms.h` header file
- * but without the leading "GDK_KEY_".
+ * but without the leading “GDK_KEY_”.
  *
  * Returns: the corresponding key value, or %GDK_KEY_VoidSymbol
  *     if the key name is not a valid key

@@ -468,7 +468,7 @@ gdk_init (int *argc, char ***argv)
  * locked for performance reasons. So e.g. you must coordinate
  * accesses to the same #GHashTable from multiple threads.
  *
- * GTK+ is "thread aware" but not thread safe &mdash; it provides a
+ * GTK+ is “thread aware” but not thread safe &mdash; it provides a
  * global lock controlled by gdk_threads_enter()/gdk_threads_leave()
  * which protects all use of GTK+. That is, only one thread can use GTK+
  * at any given time.

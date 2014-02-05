@@ -36,13 +36,13 @@
  * the way the bits are stored in memory. For example, a piece of display
  * hardware might support 24-bit color, 16-bit color, or 8-bit color;
  * meaning 24/16/8-bit pixel sizes. For a given pixel size, pixels can
- * be in different formats; for example the "red" element of an RGB pixel
+ * be in different formats; for example the “red” element of an RGB pixel
  * may be in the top 8 bits of the pixel, or may be in the lower 4 bits.
  *
  * There are several standard visuals. The visual returned by
  * gdk_screen_get_system_visual() is the system's default visual.
  *
- * A number of functions are provided for determining the "best" available
+ * A number of functions are provided for determining the “best” available
  * visual. For the purposes of making this determination, higher bit depths
  * are considered better, and for visuals of the same bit depth,
  * %GDK_VISUAL_PSEUDO_COLOR is preferred at 8bpp, otherwise, the visual
@@ -111,8 +111,8 @@ gdk_visual_get_system (void)
 /**
  * gdk_visual_get_best_depth:
  *
- * Get the best available depth for the default GDK screen.  "Best"
- * means "largest," i.e. 32 preferred over 24 preferred over 8 bits
+ * Get the best available depth for the default GDK screen.  “Best”
+ * means “largest,” i.e. 32 preferred over 24 preferred over 8 bits
  * per pixel.
  *
  * Return value: best available depth
@@ -357,8 +357,8 @@ gdk_visual_get_bits_per_rgb (GdkVisual *visual)
  * @precision: (out) (allow-none): A pointer to a #gint to be filled in, or %NULL
  *
  * Obtains values that are needed to calculate red pixel values in TrueColor
- * and DirectColor. The "mask" is the significant bits within the pixel.
- * The "shift" is the number of bits left we must shift a primary for it
+ * and DirectColor. The “mask” is the significant bits within the pixel.
+ * The “shift” is the number of bits left we must shift a primary for it
  * to be in position (according to the "mask"). Finally, "precision" refers
  * to how much precision the pixel value contains for a particular primary.
  *
@@ -390,8 +390,8 @@ gdk_visual_get_red_pixel_details (GdkVisual *visual,
  * @precision: (out) (allow-none): A pointer to a #gint to be filled in, or %NULL
  *
  * Obtains values that are needed to calculate green pixel values in TrueColor
- * and DirectColor. The "mask" is the significant bits within the pixel.
- * The "shift" is the number of bits left we must shift a primary for it
+ * and DirectColor. The “mask” is the significant bits within the pixel.
+ * The “shift” is the number of bits left we must shift a primary for it
  * to be in position (according to the "mask"). Finally, "precision" refers
  * to how much precision the pixel value contains for a particular primary.
  *
@@ -423,8 +423,8 @@ gdk_visual_get_green_pixel_details (GdkVisual *visual,
  * @precision: (out) (allow-none): A pointer to a #gint to be filled in, or %NULL
  *
  * Obtains values that are needed to calculate blue pixel values in TrueColor
- * and DirectColor. The "mask" is the significant bits within the pixel.
- * The "shift" is the number of bits left we must shift a primary for it
+ * and DirectColor. The “mask” is the significant bits within the pixel.
+ * The “shift” is the number of bits left we must shift a primary for it
  * to be in position (according to the "mask"). Finally, "precision" refers
  * to how much precision the pixel value contains for a particular primary.
  *

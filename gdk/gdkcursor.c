@@ -297,7 +297,7 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
  * cursor sizes.
  *
  * If @x or @y are `-1`, the pixbuf must have
- * options named "x_hot" and "y_hot", resp., containing
+ * options named “x_hot” and “y_hot”, resp., containing
  * integer values between `0` and the width resp. height of
  * the pixbuf. (Since: 3.0)
  *
