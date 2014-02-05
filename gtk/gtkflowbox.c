@@ -3766,7 +3766,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                            NULL, NULL,
                                            g_cclosure_marshal_VOID__OBJECT,
                                            G_TYPE_NONE, 1,
-                                           GTK_TYPE_WIDGET);
+                                           GTK_TYPE_FLOW_BOX_CHILD);
 
   /**
    * GtkFlowBox::selected-children-changed:
