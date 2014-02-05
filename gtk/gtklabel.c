@@ -362,6 +362,7 @@ static void gtk_label_size_allocate     (GtkWidget        *widget,
                                          GtkAllocation    *allocation);
 static void gtk_label_state_flags_changed   (GtkWidget        *widget,
                                              GtkStateFlags     prev_state);
+static void gtk_label_style_updated     (GtkWidget        *widget);
 static gboolean gtk_label_draw          (GtkWidget        *widget,
                                          cairo_t          *cr);
 static gboolean gtk_label_focus         (GtkWidget         *widget,
@@ -545,6 +546,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->destroy = gtk_label_destroy;
   widget_class->size_allocate = gtk_label_size_allocate;
   widget_class->state_flags_changed = gtk_label_state_flags_changed;
+  widget_class->style_updated = gtk_label_style_updated;
   widget_class->query_tooltip = gtk_label_query_tooltip;
   widget_class->draw = gtk_label_draw;
   widget_class->realize = gtk_label_realize;
@@ -3878,6 +3880,18 @@ gtk_label_state_flags_changed (GtkWidget     *widget,
 
   if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed)
     GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed (widget, prev_state);
+}
+
+static void 
+gtk_label_style_updated (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = label->priv;
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->style_updated (widget);
+
+  if (priv->select_info && priv->select_info->links)
+    gtk_label_update_layout_attributes (label);
 }
 
 static void
