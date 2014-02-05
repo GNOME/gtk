@@ -40,104 +40,62 @@
  * the button instead. If the alignment would move part of the menu offscreen,
  * it is 'pushed in'.
  *
- * <informaltable>
- *   <tgroup cols="4">
- *     <tbody>
- *       <row>
- *         <entry></entry>
- *         <entry>halign = start</entry>
- *         <entry>halign = center</entry>
- *         <entry>halign = end</entry>
- *       </row>
- *     <row>
- *       <entry>direction = down</entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="down-start.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="down-center.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="down-end.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *     </row>
- *     <row>
- *       <entry>direction = up</entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="up-start.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="up-center.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="up-end.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *      </row>
- *     </tbody>
- *   </tgroup>
- * </informaltable>
- * <informaltable>
- *   <tgroup cols="3">
- *     <tbody>
- *       <row>
- *         <entry></entry>
- *         <entry>direction = left</entry>
- *         <entry>direction = right</entry>
- *       </row>
- *     <row>
- *       <entry>valign = start</entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="left-start.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="right-start.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *     </row>
- *     <row>
- *       <entry>valign = center</entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="left-center.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="right-center.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *     </row>
- *     <row>
- *       <entry>valign = end</entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="left-end.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *       <entry>
- *         <inlinemediaobject>
- *           <imageobject><imagedata fileref="right-end.png" format="PNG"/></imageobject>
- *         </inlinemediaobject>
- *       </entry>
- *      </row>
- *     </tbody>
- *   </tgroup>
- * </informaltable>
+ * ## Direction = Down
+ *
+ * - halign = start
+ *
+ *     ![](down-start.png)
+ *
+ * - halign = center
+ *
+ *     ![](down-center.png)
+ *
+ * - halign = end
+ *
+ *     ![](down-end.png)
+ *
+ * ## Direction = Up
+ *
+ * - halign = start
+ *
+ *     ![](up-start.png)
+ *
+ * - halign = center
+ *
+ *     ![](up-center.png)
+ *
+ * - halign = end
+ *
+ *     ![](up-end.png)
+ *
+ * ## Direction = Left
+ *
+ * - valign = start
+ *
+ *     ![](left-start.png)
+ *
+ * - valign = center
+ *
+ *     ![](left-center.png)
+ *
+ * - valign = end
+ *
+ *     ![](left-end.png)
+ *
+ * ## Direction = Right
+ *
+ * - valign = start
+ *
+ *     ![](right-start.png)
+ *
+ * - valign = center
+ *
+ *     ![](right-center.png)
+ *
+ * - valign = end
+ *
+ *     ![](right-end.png)
+ *
  */
 
 #include "config.h"
