@@ -638,13 +638,13 @@ struct _GdkEventMotion
  *
  * Double and triple-clicks result in a sequence of events being received.
  * For double-clicks the order of events will be:
- * <orderedlist>
- * <listitem><para>%GDK_BUTTON_PRESS</para></listitem>
- * <listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
- * <listitem><para>%GDK_BUTTON_PRESS</para></listitem>
- * <listitem><para>%GDK_2BUTTON_PRESS</para></listitem>
- * <listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
- * </orderedlist>
+ *
+ * - %GDK_BUTTON_PRESS
+ * - %GDK_BUTTON_RELEASE
+ * - %GDK_BUTTON_PRESS
+ * - %GDK_2BUTTON_PRESS
+ * - %GDK_BUTTON_RELEASE
+ *
  * Note that the first click is received just like a normal
  * button press, while the second click results in a %GDK_2BUTTON_PRESS
  * being received just after the %GDK_BUTTON_PRESS.
@@ -652,16 +652,15 @@ struct _GdkEventMotion
  * Triple-clicks are very similar to double-clicks, except that
  * %GDK_3BUTTON_PRESS is inserted after the third click. The order of the
  * events is:
- * <orderedlist>
- * <listitem><para>%GDK_BUTTON_PRESS</para></listitem>
- * <listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
- * <listitem><para>%GDK_BUTTON_PRESS</para></listitem>
- * <listitem><para>%GDK_2BUTTON_PRESS</para></listitem>
- * <listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
- * <listitem><para>%GDK_BUTTON_PRESS</para></listitem>
- * <listitem><para>%GDK_3BUTTON_PRESS</para></listitem>
- * <listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
- * </orderedlist>
+ *
+ * - %GDK_BUTTON_PRESS
+ * - %GDK_BUTTON_RELEASE
+ * - %GDK_BUTTON_PRESS
+ * - %GDK_2BUTTON_PRESS
+ * - %GDK_BUTTON_RELEASE
+ * - %GDK_BUTTON_PRESS
+ * - %GDK_3BUTTON_PRESS
+ * - %GDK_BUTTON_RELEASE
  *
  * For a double click to occur, the second button press must occur within
  * 1/4 of a second of the first. For a triple click to occur, the third
