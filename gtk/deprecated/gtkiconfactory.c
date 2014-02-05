@@ -76,50 +76,36 @@
  * multiple &lt;source&gt; elements.
  * The following attributes are allowed:
  *
- * <variablelist>
- * <varlistentry>
- * <term>stock-id</term>
- * <listitem><para>
- * The stock id of the source, a string.
- * This attribute is mandatory
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>filename</term>
- * <listitem><para>
- * The filename of the source, a string.
- * This attribute is optional
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>icon-name</term>
- * <listitem><para>
- * The icon name for the source, a string.
- * This attribute is optional.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>size</term>
- * <listitem><para>
- * Size of the icon, a #GtkIconSize enum value.
- * This attribute is optional.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>direction</term>
- * <listitem><para>
- * Direction of the source, a #GtkTextDirection enum value.
- * This attribute is optional.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>state</term>
- * <listitem><para>
- * State of the source, a #GtkStateType enum value.
- * This attribute is optional.
- * </para></listitem>
- * </varlistentry>
- * </variablelist>
+ * - stock-id
+ *
+ *     The stock id of the source, a string. This attribute is
+ *     mandatory
+ *
+ * - filename
+ *
+ *     The filename of the source, a string.  This attribute is
+ *     optional
+ *
+ * - icon-name
+ *
+ *     The icon name for the source, a string.  This attribute is
+ *     optional.
+ *
+ * - size
+ *
+ *     Size of the icon, a #GtkIconSize enum value.  This attribute is
+ *     optional.
+ *
+ * - direction
+ *
+ *     Direction of the source, a #GtkTextDirection enum value.  This
+ *     attribute is optional.
+ *
+ * - state
+ *
+ *     State of the source, a #GtkStateType enum value.  This
+ *     attribute is optional.
+ *
  *
  * ## A #GtkIconFactory UI definition fragment. ##
  *

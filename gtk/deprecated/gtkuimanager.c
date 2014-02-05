@@ -155,44 +155,40 @@
  * parents. The correspondence of XML elements to widgets should be
  * almost obvious:
  *
- * <variablelist>
- * <varlistentry>
- * <term>menubar</term>
- * <listitem><para>a #GtkMenuBar</para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>toolbar</term>
- * <listitem><para>a #GtkToolbar</para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>popup</term>
- * <listitem><para>a toplevel #GtkMenu</para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>menu</term>
- * <listitem><para>a #GtkMenu attached to a menuitem</para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>menuitem</term>
- * <listitem><para>a #GtkMenuItem subclass, the exact type depends on the
- * action</para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>toolitem</term>
- * <listitem><para>a #GtkToolItem subclass, the exact type depends on the
- * action. Note that toolitem elements may contain a menu element, but only
- * if their associated action specifies a #GtkMenuToolButton as proxy.</para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>separator</term>
- * <listitem><para>a #GtkSeparatorMenuItem or
- * #GtkSeparatorToolItem</para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>accelerator</term>
- * <listitem><para>a keyboard accelerator</para></listitem>
- * </varlistentry>
- * </variablelist>
+ * - menubar
+ *
+ *    a #GtkMenuBar
+ *
+ * - toolbar
+ *
+ *    a #GtkToolbar
+ *
+ * - popup
+ *
+ *    a toplevel #GtkMenu
+ *
+ * - menu
+ *
+ *    a #GtkMenu attached to a menuitem
+ *
+ * - menuitem
+ *
+ *    a #GtkMenuItem subclass, the exact type depends on the action
+ *
+ * - toolitem
+ *
+ *    a #GtkToolItem subclass, the exact type depends on the
+ *    action. Note that toolitem elements may contain a menu element,
+ *    but only if their associated action specifies a
+ *    #GtkMenuToolButton as proxy.
+ *
+ * - separator
+ *
+ *    a #GtkSeparatorMenuItem or #GtkSeparatorToolItem
+ *
+ * - accelerator
+ *
+ *    a keyboard accelerator
  *
  * The "position" attribute determines where a constructed widget is positioned
  * wrt. to its siblings in the partially constructed tree. If it is
