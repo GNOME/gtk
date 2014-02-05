@@ -51,8 +51,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * the tearoff menu can be reattached.  Activating it will erase the tearoff
  * menu window.
  *
- * <note>#GtkTearoffMenuItem is deprecated and should not be used in newly
- * written code. Menus are not meant to be torn around.</note>
+ * > #GtkTearoffMenuItem is deprecated and should not be used in newly
+ * > written code. Menus are not meant to be torn around.
  */
 
 

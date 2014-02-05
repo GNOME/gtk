@@ -45,12 +45,8 @@ G_BEGIN_DECLS
  *
  * The event structures contain data specific to each type of event in GDK.
  *
- * <note>
- * <para>
- * A common mistake is to forget to set the event mask of a widget so that
- * the required events are received. See gtk_widget_set_events().
- * </para>
- * </note>
+ * > A common mistake is to forget to set the event mask of a widget so that
+ * > the required events are received. See gtk_widget_set_events().
  */
 
 

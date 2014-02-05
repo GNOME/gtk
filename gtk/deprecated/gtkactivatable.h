@@ -44,8 +44,9 @@ typedef struct _GtkActivatableIface GtkActivatableIface;
  * properties that are meant to effect the appearance accordingly.
  * @sync_action_properties: Called to update the activatable completely, this is called internally when
  * #GtkActivatable:related-action property is set or unset and by the implementor when
- * #GtkActivatable:use-action-appearance changes.<note><para>This method can be called
- * with a %NULL action at times</para></note>
+ * #GtkActivatable:use-action-appearance changes.
+ *
+ * > This method can be called with a %NULL action at times.
  *
  * Since: 2.16
  *

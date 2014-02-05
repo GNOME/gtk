@@ -60,11 +60,9 @@
  * gtk_table_set_homogeneous(), can be used to set whether all cells in the
  * table will resize themselves to the size of the largest widget in the table.
  *
- * <note>
- * #GtkTable has been deprecated. Use #GtkGrid instead. It provides the same
- * capabilities as GtkTable for arranging widgets in a rectangular grid, but
- * does support height-for-width geometry management.
- * </note>
+ * > #GtkTable has been deprecated. Use #GtkGrid instead. It provides the same
+ * > capabilities as GtkTable for arranging widgets in a rectangular grid, but
+ * > does support height-for-width geometry management.
  */
 
 

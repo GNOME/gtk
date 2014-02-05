@@ -77,11 +77,10 @@ struct _GtkMessageDialogClass
  * Prebuilt sets of buttons for the dialog. If
  * none of these choices are appropriate, simply use %GTK_BUTTONS_NONE
  * then call gtk_dialog_add_buttons().
- * <note>
- *  Please note that %GTK_BUTTONS_OK, %GTK_BUTTONS_YES_NO
- *  and %GTK_BUTTONS_OK_CANCEL are discouraged by the
- *  [GNOME Human Interface Guidelines](http://library.gnome.org/devel/hig-book/stable/).
- * </note>
+ *
+ * > Please note that %GTK_BUTTONS_OK, %GTK_BUTTONS_YES_NO
+ * > and %GTK_BUTTONS_OK_CANCEL are discouraged by the
+ * > [GNOME Human Interface Guidelines](http://library.gnome.org/devel/hig-book/stable/).
  */
 typedef enum
 {

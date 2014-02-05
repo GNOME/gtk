@@ -66,11 +66,9 @@
  * allocation will remain fixed as the height of the handlebox shrinks,
  * so the snap edge should be set to %GTK_POS_BOTTOM.
  *
- * <note>
- * #GtkHandleBox has been deprecated. It is very specialized, lacks features
- * to make it useful and most importantly does not fit well into modern
- * application design. Do not use it. There is no replacement.
- * </note>
+ * > #GtkHandleBox has been deprecated. It is very specialized, lacks features
+ * > to make it useful and most importantly does not fit well into modern
+ * > application design. Do not use it. There is no replacement.
  */
 
 

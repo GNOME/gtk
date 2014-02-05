@@ -65,11 +65,9 @@
  * The UI definitions are specified in an XML format which can be
  * roughly described by the following DTD.
  *
- * <note><para>
- * Do not confuse the GtkUIManager UI Definitions described here with
- * the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
- * Definitions</link>.
- * </para></note>
+ * > Do not confuse the GtkUIManager UI Definitions described here with
+ * > the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
+ * > Definitions</link>.
  *
  * |[
  * <!ELEMENT ui          (menubar|toolbar|popup|accelerator)* >

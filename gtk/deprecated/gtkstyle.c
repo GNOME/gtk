@@ -4375,17 +4375,15 @@ gtk_widget_modify_fg (GtkWidget      *widget,
  * All other style values are left untouched.
  * See also gtk_widget_modify_style().
  *
- * <note><para>
- * Note that “no window” widgets (which have the %GTK_NO_WINDOW
- * flag set) draw on their parent container's window and thus may
- * not draw any background themselves. This is the case for e.g.
- * #GtkLabel.
- * </para><para>
- * To modify the background of such widgets, you have to set the
- * background color on their parent; if you want to set the background
- * of a rectangular area around a label, try placing the label in
- * a #GtkEventBox widget and setting the background color on that.
- * </para></note>
+ * > Note that “no window” widgets (which have the %GTK_NO_WINDOW
+ * > flag set) draw on their parent container's window and thus may
+ * > not draw any background themselves. This is the case for e.g.
+ * > #GtkLabel.
+ * >
+ * > To modify the background of such widgets, you have to set the
+ * > background color on their parent; if you want to set the background
+ * > of a rectangular area around a label, try placing the label in
+ * > a #GtkEventBox widget and setting the background color on that.
  *
  * Deprecated:3.0: Use gtk_widget_override_background_color() instead
  */
@@ -4475,17 +4473,15 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * (see gtk_widget_modify_text()) for widgets such as #GtkEntry
  * and #GtkTextView. See also gtk_widget_modify_style().
  *
- * <note><para>
- * Note that “no window” widgets (which have the %GTK_NO_WINDOW
- * flag set) draw on their parent container's window and thus may
- * not draw any background themselves. This is the case for e.g.
- * #GtkLabel.
- * </para><para>
- * To modify the background of such widgets, you have to set the
- * base color on their parent; if you want to set the background
- * of a rectangular area around a label, try placing the label in
- * a #GtkEventBox widget and setting the base color on that.
- * </para></note>
+ * > Note that “no window” widgets (which have the %GTK_NO_WINDOW
+ * > flag set) draw on their parent container's window and thus may
+ * > not draw any background themselves. This is the case for e.g.
+ * > #GtkLabel.
+ * >
+ * > To modify the background of such widgets, you have to set the
+ * > base color on their parent; if you want to set the background
+ * > of a rectangular area around a label, try placing the label in
+ * > a #GtkEventBox widget and setting the base color on that.
  *
  * Deprecated:3.0: Use gtk_widget_override_background_color() instead
  */

@@ -274,12 +274,12 @@ gtk_activatable_default_init (GtkActivatableInterface *iface)
 {
   /**
    * GtkActivatable:related-action:
-   * 
+   *
    * The action that this activatable will activate and receive
    * updates from for various states and possibly appearance.
    *
-   * <note><para>#GtkActivatable implementors need to handle the this property and 
-   * call gtk_activatable_do_set_related_action() when it changes.</para></note>
+   * > #GtkActivatable implementors need to handle the this property and
+   * > call gtk_activatable_do_set_related_action() when it changes.
    *
    * Since: 2.16
    *
@@ -294,7 +294,7 @@ gtk_activatable_default_init (GtkActivatableInterface *iface)
 
   /**
    * GtkActivatable:use-action-appearance:
-   * 
+   *
    * Whether this activatable should reset its layout
    * and appearance when setting the related action or when
    * the action changes appearance.
@@ -302,9 +302,9 @@ gtk_activatable_default_init (GtkActivatableInterface *iface)
    * See the #GtkAction documentation directly to find which properties
    * should be ignored by the #GtkActivatable when this property is %FALSE.
    *
-   * <note><para>#GtkActivatable implementors need to handle this property
-   * and call gtk_activatable_sync_action_properties() on the activatable
-   * widget when it changes.</para></note>
+   * > #GtkActivatable implementors need to handle this property
+   * > and call gtk_activatable_sync_action_properties() on the activatable
+   * > widget when it changes.
    *
    * Since: 2.16
    *
@@ -375,8 +375,8 @@ gtk_activatable_sync_action_properties (GtkActivatable *activatable,
  *
  * Sets the related action on the @activatable object.
  *
- * <note><para>#GtkActivatable implementors need to handle the #GtkActivatable:related-action
- * property and call gtk_activatable_do_set_related_action() when it changes.</para></note>
+ * > #GtkActivatable implementors need to handle the #GtkActivatable:related-action
+ * > property and call gtk_activatable_do_set_related_action() when it changes.
  *
  * Since: 2.16
  *
@@ -416,10 +416,10 @@ gtk_activatable_action_notify (GtkAction      *action,
  * method is called when the related #GtkAction properties change
  * and registers to the action's proxy list.
  *
- * <note><para>Be careful to call this before setting the local
- * copy of the #GtkAction property, since this function uses 
- * gtk_activatable_get_related_action() to retrieve the
- * previous action</para></note>
+ * > Be careful to call this before setting the local
+ * > copy of the #GtkAction property, since this function uses 
+ * > gtk_activatable_get_related_action() to retrieve the
+ * > previous action.
  *
  * Since: 2.16
  *
@@ -517,10 +517,10 @@ gtk_activatable_get_related_action (GtkActivatable *activatable)
  * Sets whether this activatable should reset its layout and appearance
  * when setting the related action or when the action changes appearance
  *
- * <note><para>#GtkActivatable implementors need to handle the
- * #GtkActivatable:use-action-appearance property and call
- * gtk_activatable_sync_action_properties() to update @activatable
- * if needed.</para></note>
+ * > #GtkActivatable implementors need to handle the
+ * > #GtkActivatable:use-action-appearance property and call
+ * > gtk_activatable_sync_action_properties() to update @activatable
+ * > if needed.
  *
  * Since: 2.16
   *
