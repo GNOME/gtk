@@ -237,14 +237,9 @@
  * impossible to know in advance whether they will end up empty after merging.
  * #GtkUIManager offers two ways to treat empty submenus:
  *
- * <itemizedlist>
- * <listitem>
- * <para>make them disappear by hiding the menu item they're attached to</para>
- * </listitem>
- * <listitem>
- * <para>add an insensitive "Empty" item</para>
- * </listitem>
- * </itemizedlist>
+ * - make them disappear by hiding the menu item they're attached to
+ *
+ * - add an insensitive "Empty" item
  *
  * The behaviour is chosen based on the "hide_if_empty" property of the action
  * to which the submenu is associated.

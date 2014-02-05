@@ -45,19 +45,26 @@
  *
  * As well as the callback that is called when the action gets activated,
  * the following also gets associated with the action:
- * <itemizedlist>
- *   <listitem><para>a name (not translated, for path lookup)</para></listitem>
- *   <listitem><para>a label (translated, for display)</para></listitem>
- *   <listitem><para>an accelerator</para></listitem>
- *   <listitem><para>whether label indicates a stock id</para></listitem>
- *   <listitem><para>a tooltip (optional, translated)</para></listitem>
- *   <listitem><para>a toolbar label (optional, shorter than label)</para></listitem>
- * </itemizedlist>
+ *
+ * - a name (not translated, for path lookup)
+ *
+ * - a label (translated, for display)
+ *
+ * - an accelerator
+ *
+ * - whether label indicates a stock id
+ *
+ * - a tooltip (optional, translated)
+ *
+ * - a toolbar label (optional, shorter than label)
+ *
+ *
  * The action will also have some state information:
- * <itemizedlist>
- *   <listitem><para>visible (shown/hidden)</para></listitem>
- *   <listitem><para>sensitive (enabled/disabled)</para></listitem>
- * </itemizedlist>
+ *
+ * - visible (shown/hidden)
+ *
+ * - sensitive (enabled/disabled)
+ *
  * Apart from regular actions, there are <link linkend="GtkToggleAction">toggle
  * actions</link>, which can be toggled between two states and <link
  * linkend="GtkRadioAction">radio actions</link>, of which only one in a group
@@ -852,14 +859,12 @@ disconnect_proxy (GtkAction *action,
  * 
  * Updates the visibility of @proxy from the visibility of @action
  * according to the following rules:
- * <itemizedlist>
- * <listitem><para>if @action is invisible, @proxy is too
- * </para></listitem>
- * <listitem><para>if @empty is %TRUE, hide @proxy unless the "hide-if-empty" 
+
+ * - if @action is invisible, @proxy is too
+ *
+ * - if @empty is %TRUE, hide @proxy unless the "hide-if-empty" 
  *   property of @action indicates otherwise
- * </para></listitem>
- * </itemizedlist>
- * 
+ *
  * This function is used in the implementation of #GtkUIManager.
  *
  * Deprecated: 3.10
