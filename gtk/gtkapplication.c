@@ -95,11 +95,7 @@
  *
  * ## A simple application ## {#gtkapplication}
  *
- * |[<!-- language="C" -->
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/bloatpad.c">
- *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * ]|
+ * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/bloatpad.c)
  *
  * GtkApplication optionally registers with a session manager
  * of the users session (if you set the #GtkApplication:register-session

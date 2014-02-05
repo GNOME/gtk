@@ -104,11 +104,7 @@
  *
  * ## Handling fallback yourself
  *
- * |[<!-- language="C" -->
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/sunny.c">
- *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * ]|
+ * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/sunny.c)
  *
  * The XML format understood by #GtkBuilder for #GMenuModel consists
  * of a toplevel `&lt;menu&gt;` element, which contains

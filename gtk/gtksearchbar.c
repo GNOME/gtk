@@ -56,11 +56,7 @@
  *
  * ## Creating a search bar
  *
- * |[<!-- language="C" -->
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/search-bar.c">
- *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * ]|
+ * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/search-bar.c)
  *
  * Since: 3.10
  */

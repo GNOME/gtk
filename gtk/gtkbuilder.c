@@ -69,11 +69,7 @@
  * as the filename extension for files containing GtkBuilder UI
  * definitions.
  *
- * |[
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gtk/gtkbuilder.rnc">
- *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * ]|
+ * [RELAX NG Compact Syntax](https://git.gnome.org/browse/gtk+/tree/gtk/gtkbuilder.rnc)
  *
  * The toplevel element is &lt;interface&gt;. It optionally takes a
  * "domain" attribute, which will make the builder look for translated
