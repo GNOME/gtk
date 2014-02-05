@@ -7175,13 +7175,13 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * the file he wishes to select.
    *
    * The default bindings for this signal are
-   * <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>
+   * `Control + L`
    * with a @path string of "" (the empty
-   * string).  It is also bound to <keycap>/</keycap> with a
+   * string).  It is also bound to `/` with a
    * @path string of "`/`"
-   * (a slash):  this lets you type <keycap>/</keycap> and
+   * (a slash):  this lets you type `/` and
    * immediately type a path name.  On Unix systems, this is bound to
-   * <keycap>~</keycap> (tilde) with a @path string
+   * `~` (tilde) with a @path string
    * of "~" itself for access to home directories.
    */
   signals[LOCATION_POPUP] =
@@ -7204,8 +7204,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * This is used to make the file chooser show a "Location"
    * prompt when the user pastes #GtkFileChooserWidget.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>.
+   * The default binding for this signal is `Control + V`.
    */
   signals[LOCATION_POPUP_ON_PASTE] =
     g_signal_new_class_handler (I_("location-popup-on-paste"),
@@ -7228,8 +7227,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * prompt which the user can use to manually type the name of
    * the file he wishes to select.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>.
+   * The default binding for this signal is `Control + L`.
    */
   signals[LOCATION_TOGGLE_POPUP] =
     g_signal_new_class_handler (I_("location-toggle-popup"),
@@ -7251,8 +7249,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * This is used to make the file chooser go to the parent of
    * the current folder in the file hierarchy.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>.
+   * The default binding for this signal is `Alt + Up`.
    */
   signals[UP_FOLDER] =
     g_signal_new_class_handler (I_("up-folder"),
@@ -7278,8 +7275,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * "/foo/bar/baz", with bar currently displayed, then this will cause
    * the file chooser to switch to the "baz" subfolder.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>.
+   * The default binding for this signal is `Alt + Down`.
    */
   signals[DOWN_FOLDER] =
     g_signal_new_class_handler (I_("down-folder"),
@@ -7301,8 +7297,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * This is used to make the file chooser show the user's home
    * folder in the file list.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Alt</keycap><keycap>Home</keycap></keycombo>.
+   * The default binding for this signal is `Alt + Home`.
    */
   signals[HOME_FOLDER] =
     g_signal_new_class_handler (I_("home-folder"),
@@ -7324,8 +7319,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * This is used to make the file chooser show the user's Desktop
    * folder in the file list.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Alt</keycap><keycap>D</keycap></keycombo>.
+   * The default binding for this signal is `Alt + D`.
    */
   signals[DESKTOP_FOLDER] =
     g_signal_new_class_handler (I_("desktop-folder"),
@@ -7350,17 +7344,11 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * For example, if you have three bookmarks, you can pass 0, 1, 2 to
    * this signal to switch to each of them, respectively.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Alt</keycap><keycap>1</keycap></keycombo>,
-   * <keycombo><keycap>Alt</keycap><keycap>2</keycap></keycombo>,
-   * etc. until
-   * <keycombo><keycap>Alt</keycap><keycap>0</keycap></keycombo>.  Note
-   * that in the default binding,
-   * that <keycombo><keycap>Alt</keycap><keycap>1</keycap></keycombo> is
-   * actually defined to switch to the bookmark at index 0, and so on
-   * successively;
-   * <keycombo><keycap>Alt</keycap><keycap>0</keycap></keycombo> is
-   * defined to switch to the bookmark at index 10.
+   * The default binding for this signal is `Alt + 1`, `Alt + 2`,
+   * etc. until `Alt + 0`.  Note that in the default binding, that
+   * `Alt + 1` is actually defined to switch to the bookmark at index
+   * 0, and so on successively; `Alt + 0` is defined to switch to the
+   * bookmark at index 10.
    */
   signals[QUICK_BOOKMARK] =
     g_signal_new_class_handler (I_("quick-bookmark"),
@@ -7381,8 +7369,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    *
    * This is used to make the file chooser display hidden files.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Control</keycap><keycap>H</keycap></keycombo>.
+   * The default binding for this signal is `Control + H`.
    */
   signals[SHOW_HIDDEN] =
     g_signal_new_class_handler (I_("show-hidden"),
@@ -7403,8 +7390,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    *
    * This is used to make the file chooser show the search entry.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Alt</keycap><keycap>S</keycap></keycombo>.
+   * The default binding for this signal is `Alt + S`.
    */
   signals[SEARCH_SHORTCUT] =
     g_signal_new_class_handler (I_("search-shortcut"),
@@ -7425,8 +7411,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    *
    * This is used to make the file chooser show the Recent location.
    *
-   * The default binding for this signal is
-   * <keycombo><keycap>Alt</keycap><keycap>R</keycap></keycombo>.
+   * The default binding for this signal is `Alt + R`.
    */
   signals[RECENT_SHORTCUT] =
     g_signal_new_class_handler (I_("recent-shortcut"),

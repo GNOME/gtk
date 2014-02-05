@@ -104,7 +104,7 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * This signal is emitted when the user "activates" a recent item
    * in the recent chooser.  This can happen by double-clicking on an item
    * in the recently used resources list, or by pressing
-   * <keycap>Enter</keycap>.
+   * `Enter`.
    *
    * Since: 2.10
    */

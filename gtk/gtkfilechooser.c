@@ -275,7 +275,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    *
    * This signal is emitted when the user "activates" a file in the file
    * chooser.  This can happen by double-clicking on a file in the file list, or
-   * by pressing <keycap>Enter</keycap>.
+   * by pressing `Enter`.
    *
    * Normally you do not need to connect to this signal.  It is used internally
    * by #GtkFileChooserDialog to know when to activate the default button in the

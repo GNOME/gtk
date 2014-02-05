@@ -520,16 +520,13 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * @direction_type: either %GTK_DIR_TAB_FORWARD or
    *   %GTK_DIR_TAB_BACKWARD
    *
-   * The ::move-focus-out signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
-   * which gets emitted when focus is moved away from the scrolled
-   * window by a keybinding.
-   * The #GtkWidget::move-focus signal is emitted with @direction_type
-   * on this scrolled windows toplevel parent in the container hierarchy.
-   * The default bindings for this signal are
-   * <keycombo><keycap>Tab</keycap><keycap>Ctrl</keycap></keycombo>
-   * and
-   * <keycombo><keycap>Tab</keycap><keycap>Ctrl</keycap><keycap>Shift</keycap></keycombo>.
+   * The ::move-focus-out signal is a <link
+   * linkend="keybinding-signals">keybinding signal</link> which gets
+   * emitted when focus is moved away from the scrolled window by a
+   * keybinding.  The #GtkWidget::move-focus signal is emitted with
+   * @direction_type on this scrolled windows toplevel parent in the
+   * container hierarchy.  The default bindings for this signal are
+   * `Tab + Ctrl` and `Tab + Ctrl + Shift`.
    */
   signals[MOVE_FOCUS_OUT] =
     g_signal_new (I_("move-focus-out"),

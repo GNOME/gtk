@@ -36,7 +36,7 @@
  * @Title: GtkCellRendererAccel
  *
  * #GtkCellRendererAccel displays a keyboard accelerator (i.e. a
- * key combination like <keycombo><keycap>Control</keycap><keycap>a</keycap></keycombo>.
+ * key combination like `Control + a`.
  * If the cell renderer is editable, the accelerator can be changed by
  * simply typing the new combination.
  *

@@ -50,7 +50,7 @@
  * scrollable area. The #GtkAdjustment:step-increment and
  * #GtkAdjustment:page-increment fields are properties when the user asks to
  * step down (using the small stepper arrows) or page down (using for
- * example the <keycap>PageDown</keycap> key).
+ * example the `Page Down` key).
  */
 
 
