@@ -119,7 +119,7 @@
  * GtkBuilder can parse textual representations for the most common
  * property types: characters, strings, integers, floating-point numbers,
  * booleans (strings like "TRUE", "t", "yes", "y", "1" are interpreted
- * as %TRUE, strings like "FALSE, "f", "no", "n", "0" are interpreted
+ * as %TRUE, strings like "FALSE", "f", "no", "n", "0" are interpreted
  * as %FALSE), enumerations (can be specified by their name, nick or
  * integer value), flags (can be specified by their name, nick, integer
  * value, optionally combined with "|", e.g. "GTK_VISIBLE|GTK_REALIZED")
