@@ -1443,8 +1443,8 @@ gtk_list_store_clear (GtkListStore *list_store)
  * @list_store: A #GtkListStore.
  * @iter: A #GtkTreeIter.
  *
- * <warning>This function is slow. Only use it for debugging and/or testing
- * purposes.</warning>
+ * > This function is slow. Only use it for debugging and/or testing
+ * > purposes.
  *
  * Checks if the given iter is a valid iter for this #GtkListStore.
  *

@@ -71,10 +71,8 @@
  * various aspects of the operation of a GTK+ program
  * at runtime.
  *
- * <warning>
- * In GTK+ 3.0, resource files have been deprecated and replaced
- * by CSS-like style sheets, which are understood by #GtkCssProvider.
- * </warning>
+ * > In GTK+ 3.0, resource files have been deprecated and replaced by
+ * > CSS-like style sheets, which are understood by #GtkCssProvider.
  *
  * # Default files #
  *

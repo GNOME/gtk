@@ -32,11 +32,9 @@
  * @Title: GtkAction
  * @See_also: #GtkActionGroup, #GtkUIManager, #GtkActivatable
  *
- * <warning>
- * In GTK+ 3.10, GtkAction has been deprecated. Use #GAction instead, and
- * associate actions with #GtkActionable widgets. Use #GMenuModel for creating
- * menus with gtk_menu_new_from_model().
- * </warning>
+ * > In GTK+ 3.10, GtkAction has been deprecated. Use #GAction
+ * > instead, and associate actions with #GtkActionable widgets. Use
+ * > #GMenuModel for creating menus with gtk_menu_new_from_model().
  *
  * Actions represent operations that the user can be perform, along with
  * some information how it should be presented in the interface. Each action

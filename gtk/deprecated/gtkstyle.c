@@ -54,9 +54,8 @@
  * A #GtkStyle object encapsulates the information that provides the look and
  * feel for a widget.
  *
- * <warning>
- * In GTK+ 3.0, GtkStyle has been deprecated and replaced by #GtkStyleContext.
- * </warning>
+ * > In GTK+ 3.0, GtkStyle has been deprecated and replaced by
+ * > #GtkStyleContext.
  *
  * Each #GtkWidget has an associated #GtkStyle object that is used when
  * rendering that widget. Also, a #GtkStyle holds information for the five
