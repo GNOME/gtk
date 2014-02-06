@@ -207,7 +207,7 @@
  * An example looks like this:
  *
  * |[<!-- language="C" -->
- * gtk_label_set_markup (label, "Go to the <a href="http://www.gtk.org" title="&lt;i&gt;Our&lt;/i&gt; website">GTK+ website</a> for more...");
+ * gtk_label_set_markup (label, "Go to the <a href=\"http://www.gtk.org title="&lt;i&gt;Our&lt;/i&gt; website\">GTK+ website</a> for more...");
  * ]|
  *
  * It is possible to implement custom handling for links and their tooltips with
