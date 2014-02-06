@@ -139,6 +139,7 @@ struct _GtkWindowPrivate
   gchar   *wm_role;
 
   guint    keys_changed_handler;
+  guint    delete_event_handler;
 
   guint32  initial_timestamp;
 
@@ -1240,6 +1241,8 @@ static gboolean
 send_delete_event (gpointer data)
 {
   GtkWidget *window = data;
+  GtkWindowPrivate *priv = GTK_WINDOW (window)->priv;
+
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DELETE);
@@ -1249,6 +1252,8 @@ send_delete_event (gpointer data)
 
   gtk_main_do_event (event);
   gdk_event_free (event);
+
+  priv->delete_event_handler = 0;
 
   return G_SOURCE_REMOVE;
 }
@@ -1271,7 +1276,7 @@ gtk_window_close (GtkWindow *window)
   if (!gtk_widget_get_realized (GTK_WIDGET (window)))
     return;
 
-  gdk_threads_add_idle (send_delete_event, window);
+  window->priv->delete_event_handler = gdk_threads_add_idle (send_delete_event, window);
 }
 
 static void
@@ -5087,6 +5092,12 @@ gtk_window_finalize (GObject *object)
       priv->keys_changed_handler = 0;
     }
 
+  if (priv->delete_event_handler)
+    {
+      g_source_remove (priv->delete_event_handler);
+      priv->delete_event_handler = 0;
+    }
+
   if (priv->screen)
     {
       g_signal_handlers_disconnect_by_func (priv->screen,
@@ -8136,7 +8147,8 @@ close_window_clicked (GtkMenuItem *menuitem,
 {
   GtkWindow *window = (GtkWindow *)user_data;
 
-  send_delete_event (window);
+  if (window->priv->delete_event_handler == 0)
+    send_delete_event (window);
 }
 
 static void
