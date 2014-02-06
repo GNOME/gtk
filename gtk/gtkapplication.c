@@ -546,6 +546,16 @@ gtk_application_shutdown (GApplication *g_application)
     ->shutdown (g_application);
 }
 
+static gboolean
+gtk_application_local_command_line (GApplication   *application,
+                                    gchar        ***arguments,
+                                    gint           *exit_status)
+{
+  g_application_add_option_group (application, gtk_get_option_group (FALSE));
+
+  return G_APPLICATION_CLASS (gtk_application_parent_class)->local_command_line (application, arguments, exit_status);
+}
+
 static void
 gtk_application_add_platform_data (GApplication    *application,
                                    GVariantBuilder *builder)
@@ -780,6 +790,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   object_class->set_property = gtk_application_set_property;
   object_class->finalize = gtk_application_finalize;
 
+  application_class->local_command_line = gtk_application_local_command_line;
   application_class->add_platform_data = gtk_application_add_platform_data;
   application_class->before_emit = gtk_application_before_emit;
   application_class->after_emit = gtk_application_after_emit;
