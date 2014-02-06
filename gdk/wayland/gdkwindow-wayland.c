@@ -963,22 +963,6 @@ xdg_surface_configure (void               *data,
 }
 
 static void
-xdg_surface_focused_set (void *data,
-                         struct xdg_surface *xdg_surface)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
-}
-
-static void
-xdg_surface_focused_unset (void *data,
-                           struct xdg_surface *xdg_surface)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
-}
-
-static void
 xdg_surface_request_set_fullscreen (void *data,
                                     struct xdg_surface *xdg_surface)
 {
@@ -1008,6 +992,22 @@ xdg_surface_request_unset_maximized (void *data,
 {
   GdkWindow *window = GDK_WINDOW (data);
   gdk_window_unmaximize (window);
+}
+
+static void
+xdg_surface_focused_set (void *data,
+                         struct xdg_surface *xdg_surface)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
+}
+
+static void
+xdg_surface_focused_unset (void *data,
+                           struct xdg_surface *xdg_surface)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
 }
 
 static const struct xdg_surface_listener xdg_surface_listener = {
