@@ -295,13 +295,13 @@ gtk_popover_unmap (GtkWidget *widget)
   priv = GTK_POPOVER (widget)->priv;
   priv->button_pressed = FALSE;
 
-  g_signal_emit (widget, signals[CLOSED], 0);
-
   if (priv->modal)
     gtk_popover_apply_modality (GTK_POPOVER (widget), FALSE);
 
   gdk_window_hide (gtk_widget_get_window (widget));
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
+
+  g_signal_emit (widget, signals[CLOSED], 0);
 }
 
 static void
