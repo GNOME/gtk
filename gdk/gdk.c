@@ -468,223 +468,49 @@ gdk_init (int *argc, char ***argv)
  * locked for performance reasons. So e.g. you must coordinate
  * accesses to the same #GHashTable from multiple threads.
  *
- * GTK+ is “thread aware” but not thread safe &mdash; it provides a
- * global lock controlled by gdk_threads_enter()/gdk_threads_leave()
- * which protects all use of GTK+. That is, only one thread can use GTK+
- * at any given time.
+ * GTK+, however, is not thread safe. You should only use GTK+ and GDK
+ * from the thread gtk_init() and gtk_main() were called on.
+ * This is usually referred to as the “main thread”.
  *
- * You must call gdk_threads_init() before executing any other GTK+ or
- * GDK functions in a threaded GTK+ program.
+ * Signals on GTK+ and GDK types, as well as non-signal callbacks, are
+ * emitted in the main thread.
  *
- * Idles, timeouts, and input functions from GLib, such as g_idle_add(),
- * are executed outside of the main GTK+ lock. So, if you need to call
- * GTK+ inside of such a callback, you must surround the callback with
- * a gdk_threads_enter()/gdk_threads_leave() pair or use
- * gdk_threads_add_idle_full() which does this for you.
- * However, event dispatching from the mainloop is still executed within
- * the main GTK+ lock, so callback functions connected to event signals
- * like #GtkWidget::button-press-event, do not need thread protection.
+ * You can schedule work in the main thread safely from other threads
+ * by using gdk_threads_add_idle() and gdk_threads_add_timeout():
  *
- * In particular, this means, if you are writing widgets that might
- * be used in threaded programs, you must surround
- * timeouts and idle functions in this matter.
- *
- * As always, you must also surround any calls to GTK+ not made within
- * a signal handler with a gdk_threads_enter()/gdk_threads_leave() pair.
- *
- * Before calling gdk_threads_leave() from a thread other
- * than your main thread, you probably want to call gdk_flush()
- * to send all pending commands to the windowing system.
- * (The reason you don’t need to do this from the main thread
- * is that GDK always automatically flushes pending commands
- * when it runs out of incoming events to process and has
- * to sleep while waiting for more events.)
- *
- * A minimal main program for a threaded GTK+ application
- * looks like:
  * |[<!-- language="C" -->
- * int
- * main (int argc, char *argv[])
+ * static void
+ * worker_thread (void)
  * {
- *   GtkWidget *window;
+ *   ExpensiveData *expensive_data = do_expensive_computation ();
  *
- *   gdk_threads_init (<!-- -->);
- *   gdk_threads_enter (<!-- -->);
+ *   gdk_threads_add_idle (got_value, expensive_data);
+ * }
  *
- *   gtk_init (&argc, &argv);
+ * static gboolean
+ * got_value (gpointer user_data)
+ * {
+ *   ExpensiveData *expensive_data = user_data;
  *
- *   window = create_window (<!-- -->);
- *   gtk_widget_show (window);
+ *   my_app->expensive_data = expensive_data;
+ *   gtk_button_set_sensitive (my_app->button, TRUE);
+ *   gtk_button_set_label (my_app->button, expensive_data->result_label);
  *
- *   gtk_main (<!-- -->);
- *   gdk_threads_leave (<!-- -->);
- *
- *   return 0;
+ *   return G_SOURCE_REMOVE;
  * }
  * ]|
  *
- * Callbacks require a bit of attention. Callbacks from GTK+ signals
- * are made within the GTK+ lock. However callbacks from GLib (timeouts,
- * IO callbacks, and idle functions) are made outside of the GTK+
- * lock. So, within a signal handler you do not need to call
- * gdk_threads_enter(), but within the other types of callbacks, you
- * do.
+ * You should use gdk_threads_add_idle() and gdk_threads_add_timeout()
+ * instead of g_idle_add() and g_timeout_add() since libraries not under
+ * your control might be using the deprecated GDK locking mechanism.
+ * If you are sure that none of the code in your application and libraries
+ * use the deprecated gdk_threads_enter() or gdk_threads_leave() methods,
+ * then you can safely use g_idle_add() and g_timeout_add().
  *
- * Erik Mouw contributed the following code example to
- * illustrate how to use threads within GTK+ programs.
- * |[<!-- language="C" -->
- * /<!---->*-------------------------------------------------------------------------
- *  * Filename:      gtk-thread.c
- *  * Version:       0.99.1
- *  * Copyright:     Copyright (C) 1999, Erik Mouw
- *  * Author:        Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
- *  * Description:   GTK threads example.
- *  * Created at:    Sun Oct 17 21:27:09 1999
- *  * Modified by:   Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
- *  * Modified at:   Sun Oct 24 17:21:41 1999
- *  *-----------------------------------------------------------------------*<!---->/
- * /<!---->*
- *  * Compile with:
- *  *
- *  * cc -o gtk-thread gtk-thread.c `gtk-config --cflags --libs gthread`
- *  *
- *  * Thanks to Sebastian Wilhelmi and Owen Taylor for pointing out some
- *  * bugs.
- *  *
- *  *<!---->/
- *
- * #include <stdio.h>
- * #include <stdlib.h>
- * #include <unistd.h>
- * #include <time.h>
- * #include <gtk/gtk.h>
- * #include <glib.h>
- * #include <pthread.h>
- *
- * #define YES_IT_IS    (1)
- * #define NO_IT_IS_NOT (0)
- *
- * typedef struct
- * {
- *   GtkWidget *label;
- *   int what;
- * } yes_or_no_args;
- *
- * G_LOCK_DEFINE_STATIC (yes_or_no);
- * static volatile int yes_or_no = YES_IT_IS;
- *
- * void destroy (GtkWidget *widget, gpointer data)
- * {
- *   gtk_main_quit (<!-- -->);
- * }
- *
- * void *argument_thread (void *args)
- * {
- *   yes_or_no_args *data = (yes_or_no_args *)args;
- *   gboolean say_something;
- *
- *   for (;;)
- *     {
- *       /<!---->* sleep a while *<!---->/
- *       sleep(rand(<!-- -->) / (RAND_MAX / 3) + 1);
- *
- *       /<!---->* lock the yes_or_no_variable *<!---->/
- *       G_LOCK(yes_or_no);
- *
- *       /<!---->* do we have to say something? *<!---->/
- *       say_something = (yes_or_no != data->what);
- *
- *       if(say_something)
- *      {
- *        /<!---->* set the variable *<!---->/
- *        yes_or_no = data->what;
- *      }
- *
- *       /<!---->* Unlock the yes_or_no variable *<!---->/
- *       G_UNLOCK (yes_or_no);
- *
- *       if (say_something)
- *      {
- *        /<!---->* get GTK thread lock *<!---->/
- *        gdk_threads_enter (<!-- -->);
- *
- *        /<!---->* set label text *<!---->/
- *        if(data->what == YES_IT_IS)
- *          gtk_label_set_text (GTK_LABEL (data->label), "O yes, it is!");
- *        else
- *          gtk_label_set_text (GTK_LABEL (data->label), "O no, it isn't!");
- *
- *        /<!---->* release GTK thread lock *<!---->/
- *        gdk_threads_leave (<!-- -->);
- *      }
- *     }
- *
- *   return NULL;
- * }
- *
- * int main (int argc, char *argv[])
- * {
- *   GtkWidget *window;
- *   GtkWidget *label;
- *   yes_or_no_args yes_args, no_args;
- *   pthread_t no_tid, yes_tid;
- *
- *   /<!---->* init threads *<!---->/
- *   gdk_threads_init (<!-- -->);
- *   gdk_threads_enter (<!-- -->);
- *
- *   /<!---->* init gtk *<!---->/
- *   gtk_init(&argc, &argv);
- *
- *   /<!---->* init random number generator *<!---->/
- *   srand ((unsigned int) time (NULL));
- *
- *   /<!---->* create a window *<!---->/
- *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
- *
- *   g_signal_connect (window, "destroy", G_CALLBACK (destroy), NULL);
- *
- *   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
- *
- *   /<!---->* create a label *<!---->/
- *   label = gtk_label_new ("And now for something completely different ...");
- *   gtk_container_add (GTK_CONTAINER (window), label);
- *
- *   /<!---->* show everything *<!---->/
- *   gtk_widget_show (label);
- *   gtk_widget_show (window);
- *
- *   /<!---->* create the threads *<!---->/
- *   yes_args.label = label;
- *   yes_args.what = YES_IT_IS;
- *   pthread_create (&yes_tid, NULL, argument_thread, &yes_args);
- *
- *   no_args.label = label;
- *   no_args.what = NO_IT_IS_NOT;
- *   pthread_create (&no_tid, NULL, argument_thread, &no_args);
- *
- *   /<!---->* enter the GTK main loop *<!---->/
- *   gtk_main (<!-- -->);
- *   gdk_threads_leave (<!-- -->);
- *
- *   return 0;
- * }
- * ]|
- *
- * Unfortunately, all of the above documentation holds with the X11
- * backend only. With the Win32 or Quartz backends, GDK and GTK+ calls
- * must occur only in the main thread (see below). When using Python,
- * even on X11 combining the GDK lock with other locks such as the
- * Python global interpreter lock can be complicated.
- *
- * For these reasons, the threading support has been deprecated in
- * GTK+ 3.6. Instead of calling GTK+ directly from multiple threads,
- * it is recommended to use g_idle_add(), g_main_context_invoke()
- * and similar functions to make these calls from the main thread
- * instead. The main thread is the thread which has called gtk_init()
- * and is running the GTK+ mainloop. GTK+ itself will continue to
- * use the GDK lock internally as long as the deprecated functionality
- * is still available, and other libraries should probably do the same.
+ * For more information on this "worker thread" pattern, you should
+ * also look at #GTask, which gives you high-level tools to perform
+ * expensive tasks from worker threads, and will handle thread
+ * management for you.
  */
 
 
