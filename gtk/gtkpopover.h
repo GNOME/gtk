@@ -47,6 +47,9 @@ struct _GtkPopover
 struct _GtkPopoverClass
 {
   GtkBinClass parent_class;
+
+  /* Padding for future expansion */
+  gpointer reserved[10];
 };
 
 GDK_AVAILABLE_IN_3_12
