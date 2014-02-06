@@ -48,6 +48,8 @@ struct _GtkPopoverClass
 {
   GtkBinClass parent_class;
 
+  void (* closed) (GtkPopover *popover);
+
   /* Padding for future expansion */
   gpointer reserved[10];
 };

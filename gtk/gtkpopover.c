@@ -66,6 +66,11 @@ enum {
   PROP_MODAL
 };
 
+enum {
+  CLOSED,
+  N_SIGNALS
+};
+
 struct _GtkPopoverPrivate
 {
   GtkWidget *widget;
@@ -89,6 +94,7 @@ struct _GtkPopoverPrivate
 };
 
 static GQuark quark_widget_popovers = 0;
+static guint signals[N_SIGNALS] = { 0 };
 
 static void gtk_popover_update_position    (GtkPopover *popover);
 static void gtk_popover_update_relative_to (GtkPopover *popover,
@@ -288,6 +294,8 @@ gtk_popover_unmap (GtkWidget *widget)
 
   priv = GTK_POPOVER (widget)->priv;
   priv->button_pressed = FALSE;
+
+  g_signal_emit (widget, signals[CLOSED], 0);
 
   if (priv->modal)
     gtk_popover_apply_modality (GTK_POPOVER (widget), FALSE);
@@ -1225,6 +1233,14 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                                                          P_("Whether the popover is modal"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
+
+  signals[CLOSED] =
+    g_signal_new (I_("closed"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkPopoverClass, closed),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 
   quark_widget_popovers = g_quark_from_static_string ("gtk-quark-widget-popovers");
 }
