@@ -50,7 +50,7 @@
  * and doesn’t do anything but paint a blank background by default. It's
  * different in that it supports scrolling natively (you can add it to a
  * #GtkScrolledWindow), and it can contain child widgets, since it’s a
- * #GtkContainer. However if you're just going to draw, a #GtkDrawingArea
+ * #GtkContainer. However if you’re just going to draw, a #GtkDrawingArea
  * is a better choice since it has lower overhead.
  *
  * When handling expose events on a #GtkLayout, you must draw to

@@ -7368,7 +7368,7 @@ gtk_widget_reparent (GtkWidget *widget,
  *
  * Computes the intersection of a @widget’s area and @area, storing
  * the intersection in @intersection, and returns %TRUE if there was
- * an intersection.  @intersection may be %NULL if you're only
+ * an intersection.  @intersection may be %NULL if you’re only
  * interested in whether there was an intersection.
  *
  * Return value: %TRUE if there was an intersection
@@ -9451,7 +9451,7 @@ gtk_widget_reset_style (GtkWidget *widget)
 #ifdef G_ENABLE_DEBUG
 
 /* Verify invariants, see docs/widget_system.txt for notes on much of
- * this.  Invariants may be temporarily broken while we're in the
+ * this.  Invariants may be temporarily broken while we’re in the
  * process of updating state, of course, so you can only
  * verify_invariants() after a given operation is complete.
  * Use push/pop_verify_invariants to help with that.
@@ -9584,7 +9584,7 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 }
 
 /* The point of this push/pop is that invariants may not hold while
- * we're busy making changes. So we only check at the outermost call
+ * we’re busy making changes. So we only check at the outermost call
  * on the call stack, after we finish updating everything.
  */
 static void
@@ -14880,7 +14880,7 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  * directly, but from within a widget’s size_allocate method.
  *
  * The allocation set should be the “adjusted” or actual
- * allocation. If you're implementing a #GtkContainer, you want to use
+ * allocation. If you’re implementing a #GtkContainer, you want to use
  * gtk_widget_size_allocate() instead of gtk_widget_set_allocation().
  * The GtkWidgetClass::adjust_size_allocation virtual method adjusts the
  * allocation inside gtk_widget_size_allocate() to create an adjusted

@@ -182,7 +182,7 @@ typedef enum
  * GtkDeleteType:
  * @GTK_DELETE_CHARS: Delete characters.
  * @GTK_DELETE_WORD_ENDS: Delete only the portion of the word to the
- *   left/right of cursor if we're in the middle of a word.
+ *   left/right of cursor if we’re in the middle of a word.
  * @GTK_DELETE_WORDS: Delete words.
  * @GTK_DELETE_DISPLAY_LINES: Delete display-lines. Display-lines
  *   refers to the visible lines, with respect to to the current line

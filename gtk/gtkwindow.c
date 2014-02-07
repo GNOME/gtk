@@ -1827,7 +1827,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
  * 
  * Creates a new #GtkWindow, which is a toplevel window that can
  * contain other widgets. Nearly always, the type of the window should
- * be #GTK_WINDOW_TOPLEVEL. If you're implementing something like a
+ * be #GTK_WINDOW_TOPLEVEL. If you’re implementing something like a
  * popup menu from scratch (which is a bad idea, just use #GtkMenu),
  * you might use #GTK_WINDOW_POPUP. #GTK_WINDOW_POPUP is not for
  * dialogs, though in some other toolkits dialogs are called “popups”.

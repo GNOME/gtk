@@ -64,7 +64,7 @@
  * obscured/offscreen regions to be placed in the pixbuf. The contents of
  * portions of the pixbuf corresponding to the offscreen region are undefined.
  *
- * If the window you're obtaining data from is partially obscured by
+ * If the window you’re obtaining data from is partially obscured by
  * other windows, then the contents of the pixbuf areas corresponding
  * to the obscured regions are undefined.
  *

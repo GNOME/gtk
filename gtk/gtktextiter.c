@@ -2069,7 +2069,7 @@ at_last_indexable_segment (GtkTextRealIter *real)
 }
 
 /* Goes back to the start of the next segment, even if
- * we're not at the start of the current segment (always
+ * we’re not at the start of the current segment (always
  * ends up on a different segment if it returns TRUE)
  */
 gboolean
@@ -5377,7 +5377,7 @@ gtk_text_iter_equal (const GtkTextIter *lhs,
  * @rhs: another #GtkTextIter
  * 
  * A qsort()-style function that returns negative if @lhs is less than
- * @rhs, positive if @lhs is greater than @rhs, and 0 if they're equal.
+ * @rhs, positive if @lhs is greater than @rhs, and 0 if they’re equal.
  * Ordering is in character offset order, i.e. the first character in the buffer
  * is less than the second character in the buffer.
  * 

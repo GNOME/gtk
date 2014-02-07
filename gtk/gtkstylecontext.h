@@ -373,7 +373,7 @@ struct _GtkStyleContextClass
  * GTK_STYLE_CLASS_SCROLLBARS_JUNCTION:
  *
  * A CSS class to match the junction area between an horizontal
- * and vertical scrollbar, when they're both shown.
+ * and vertical scrollbar, when they’re both shown.
  * 
  * This is used in #GtkScrolledWindow.
  */

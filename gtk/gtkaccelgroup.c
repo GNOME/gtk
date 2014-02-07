@@ -51,7 +51,7 @@
  *
  * Note that “accelerators” are different from
  * “mnemonics”. Accelerators are shortcuts for
- * activating a menu item; they appear alongside the menu item they're a
+ * activating a menu item; they appear alongside the menu item they’re a
  * shortcut for. For example “Ctrl+Q” might appear alongside the “Quit”
  * menu item. Mnemonics are shortcuts for GUI elements such as text
  * entries or buttons; they appear as underlined characters. See

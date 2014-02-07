@@ -1483,7 +1483,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
  * Sets a function to be used for translating the @label and @tooltip of 
  * #GtkActionEntry<!-- -->s added by gtk_action_group_add_actions().
  *
- * If you're using gettext(), it is enough to set the translation domain
+ * If you’re using gettext(), it is enough to set the translation domain
  * with gtk_action_group_set_translation_domain().
  *
  * Since: 2.4 
@@ -1531,7 +1531,7 @@ dgettext_swapped (const gchar *msgid,
  * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
  * gtk_action_group_add_actions().
  *
- * If you're not using gettext() for localization, see 
+ * If you’re not using gettext() for localization, see 
  * gtk_action_group_set_translate_func().
  *
  * Since: 2.4

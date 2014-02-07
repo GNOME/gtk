@@ -2261,7 +2261,7 @@ gdk_window_get_position (GdkWindow *window,
  *
  * Obtains the parent of @window, as known to GDK. Does not query the
  * X server; thus this returns the parent as passed to gdk_window_new(),
- * not the actual parent. This should never matter unless you're using
+ * not the actual parent. This should never matter unless you’re using
  * Xlib calls mixed with GDK calls on the X11 platform. It may also
  * matter for toplevel windows, because the window manager may choose
  * to reparent them.
@@ -2726,7 +2726,7 @@ gdk_window_begin_paint_rect (GdkWindow          *window,
  *
  * When using GTK+, the widget system automatically places calls to
  * gdk_window_begin_paint_region() and gdk_window_end_paint() around
- * emissions of the expose_event signal. That is, if you're writing an
+ * emissions of the expose_event signal. That is, if you’re writing an
  * expose event handler, you can assume that the exposed area in
  * #GdkEventExpose has already been cleared to the window background,
  * is already set as the clip region, and already has a backing store.
@@ -3790,7 +3790,7 @@ gdk_window_invalidate_rect (GdkWindow          *window,
  * This can be used to record the invalidated region, which is
  * useful if you are keeping an offscreen copy of some region
  * and want to keep it up to date. You can also modify the
- * invalidated region in case you're doing some effect where
+ * invalidated region in case you’re doing some effect where
  * e.g. a child widget appears in multiple places.
  *
  * Since: 3.10
@@ -5556,7 +5556,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
  * anyway, instead of using GDK functions. For child windows,
  * the move will reliably succeed.
  *
- * If you're also planning to resize the window, use gdk_window_move_resize()
+ * If you’re also planning to resize the window, use gdk_window_move_resize()
  * to both move and resize simultaneously, for a nicer visual effect.
  **/
 void
@@ -5579,7 +5579,7 @@ gdk_window_move (GdkWindow *window,
  *
  * Windows may not be resized below 1x1.
  *
- * If you're also planning to move the window, use gdk_window_move_resize()
+ * If you’re also planning to move the window, use gdk_window_move_resize()
  * to both move and resize simultaneously, for a nicer visual effect.
  **/
 void
@@ -5718,7 +5718,7 @@ gdk_window_move_region (GdkWindow       *window,
  *
  * Sets the background color of @window. (However, when using GTK+,
  * set the background of a widget with gtk_widget_modify_bg() - if
- * you're an application - or gtk_style_set_background() - if you're
+ * you’re an application - or gtk_style_set_background() - if you're
  * implementing a custom widget.)
  *
  * See also gdk_window_set_background_pattern().
@@ -9613,7 +9613,7 @@ gdk_window_set_startup_id (GdkWindow   *window,
  * window manager to do things like center @window on @parent and
  * keep @window above @parent.
  *
- * See gtk_window_set_transient_for() if you're using #GtkWindow or
+ * See gtk_window_set_transient_for() if you’re using #GtkWindow or
  * #GtkDialog.
  **/
 void

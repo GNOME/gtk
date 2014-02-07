@@ -230,7 +230,7 @@
  * impossible to know in advance whether they will end up empty after merging.
  * #GtkUIManager offers two ways to treat empty submenus:
  *
- * - make them disappear by hiding the menu item they're attached to
+ * - make them disappear by hiding the menu item they’re attached to
  *
  * - add an insensitive “Empty” item
  *

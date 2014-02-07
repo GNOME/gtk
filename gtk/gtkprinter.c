@@ -1021,7 +1021,7 @@ gtk_printer_get_hard_margins (GtkPrinter *printer,
  * 
  * Returns the printer’s capabilities.
  *
- * This is useful when you're using #GtkPrintUnixDialog’s manual-capabilities 
+ * This is useful when you’re using #GtkPrintUnixDialog’s manual-capabilities 
  * setting and need to know which settings the printer can handle and which 
  * you must handle yourself.
  *

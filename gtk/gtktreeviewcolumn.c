@@ -1788,7 +1788,7 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_set_attributes:
  * @tree_column: A #GtkTreeViewColumn
- * @cell_renderer: the #GtkCellRenderer we're setting the attributes of
+ * @cell_renderer: the #GtkCellRenderer we’re setting the attributes of
  * @...: A %NULL-terminated list of attributes
  *
  * Sets the attributes in the list as the attributes of @tree_column.

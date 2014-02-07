@@ -2105,7 +2105,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
  * (@left_gravity = %FALSE), the mark will end up on the right of
  * newly-inserted text. The standard left-to-right cursor is a mark
  * with right gravity (when you type, the cursor stays on the right
- * side of the text you're typing).
+ * side of the text you’re typing).
  *
  * The caller of this function does not own a 
  * reference to the returned #GtkTextMark, so you can ignore the 
@@ -2748,7 +2748,7 @@ pointer_cmp (gconstpointer a,
  * 
  * Removes all tags in the range between @start and @end.  Be careful
  * with this function; it could remove tags added in code unrelated to
- * the code you're currently writing. That is, using this function is
+ * the code you’re currently writing. That is, using this function is
  * probably a bad idea if you have two or more unrelated code sections
  * that add tags.
  **/

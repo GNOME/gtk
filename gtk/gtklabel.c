@@ -155,7 +155,7 @@
  * Markup strings are just a convenient way to set the #PangoAttrList on
  * a label; gtk_label_set_attributes() may be a simpler way to set
  * attributes in some cases. Be careful though; #PangoAttrList tends to
- * cause internationalization problems, unless you're applying attributes
+ * cause internationalization problems, unless you’re applying attributes
  * to the entire string (i.e. unless you set the range of each attribute
  * to [0, %G_MAXINT)). The reason is that specifying the start_index and
  * end_index for a #PangoAttribute requires knowledge of the exact string

@@ -846,7 +846,7 @@ gdk_screen_get_monitor_workarea (GdkScreen    *screen,
  * For example, a visual might support 24-bit color, or 8-bit color,
  * and might expect pixels to be in a certain format.
  *
- * Call g_list_free() on the return value when you're finished with it.
+ * Call g_list_free() on the return value when you’re finished with it.
  *
  * Return value: (transfer container) (element-type GdkVisual):
  *     a list of visuals; the list must be freed, but not its contents
@@ -1089,7 +1089,7 @@ gdk_screen_get_setting (GdkScreen   *screen,
  * on very high density outputs this can be a higher value (often 2).
  *
  * This can be used if you want to create pixel based data for a
- * particula monitor, but most of the time you're drawing to a window
+ * particula monitor, but most of the time you’re drawing to a window
  * where it is better to use gdk_window_get_scale_factor() instead.
  *
  * Since: 3.10

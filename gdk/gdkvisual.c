@@ -82,7 +82,7 @@ gdk_visual_class_init (GdkVisualClass *visual_class)
  * For example, a visual might support 24-bit color, or 8-bit color,
  * and might expect pixels to be in a certain format.
  *
- * Call g_list_free() on the return value when you're finished with it.
+ * Call g_list_free() on the return value when you’re finished with it.
  *
  * Return value: (transfer container) (element-type GdkVisual):
  *     a list of visuals; the list must be freed, but not its contents

@@ -504,7 +504,7 @@ toggle_segment_delete_func (GtkTextLineSegment *segPtr, GtkTextLine *line, int t
  *
  * Side effects:
  *      Toggle counts in the GtkTextBTreeNodes above the new line will be
- *      updated if they're not already.  Toggles may be collapsed
+ *      updated if they’re not already.  Toggles may be collapsed
  *      if there are duplicate toggles at the same position.
  *
  *--------------------------------------------------------------

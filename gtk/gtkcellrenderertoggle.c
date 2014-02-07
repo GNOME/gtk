@@ -456,9 +456,9 @@ gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
  * gtk_cell_renderer_toggle_get_radio:
  * @toggle: a #GtkCellRendererToggle
  *
- * Returns whether we're rendering radio toggles rather than checkboxes. 
+ * Returns whether we’re rendering radio toggles rather than checkboxes. 
  * 
- * Return value: %TRUE if we're rendering radio toggles rather than checkboxes
+ * Return value: %TRUE if we’re rendering radio toggles rather than checkboxes
  **/
 gboolean
 gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle)

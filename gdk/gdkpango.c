@@ -305,7 +305,7 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
  * 
  * Creates a #PangoContext for the default GDK screen.
  *
- * The context must be freed when you're finished with it.
+ * The context must be freed when you’re finished with it.
  * 
  * When using GTK+, normally you should use gtk_widget_get_pango_context()
  * instead of this function, to get the appropriate context for
@@ -331,7 +331,7 @@ gdk_pango_context_get (void)
  * 
  * Creates a #PangoContext for @screen.
  *
- * The context must be freed when you're finished with it.
+ * The context must be freed when you’re finished with it.
  * 
  * When using GTK+, normally you should use gtk_widget_get_pango_context()
  * instead of this function, to get the appropriate context for

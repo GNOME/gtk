@@ -236,7 +236,7 @@ gtk_text_mark_get_property (GObject    *object,
  * right gravity (@left_gravity = %FALSE), the mark will end up on the 
  * right of newly-inserted text. The standard left-to-right cursor is a 
  * mark with right gravity (when you type, the cursor stays on the right
- * side of the text you're typing).
+ * side of the text you’re typing).
  *
  * Return value: new #GtkTextMark
  *

@@ -33,7 +33,7 @@
  * refers to the _sending_ part of the INCR protocol. The receiving
  * portion is referred to just as “retrieval”. (Terminology borrowed
  * from Tk, because there is no good opposite to “retrieval” in English.
- * “send” can’t be made into a noun gracefully and we're already using
+ * “send” can’t be made into a noun gracefully and we’re already using
  * “emission” for something else ....)
  */
 
