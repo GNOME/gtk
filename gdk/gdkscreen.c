@@ -687,7 +687,7 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
  * @screen: a #GdkScreen.
  *
  * Gets the primary monitor for @screen.  The primary monitor
- * is considered the monitor where the 'main desktop' lives.
+ * is considered the monitor where the “main desktop” lives.
  * While normal application windows typically allow the window
  * manager to place the windows, specialized desktop applications
  * such as panels should place themselves on the primary monitor.

@@ -1152,7 +1152,7 @@ key_is_left_or_right (GdkEventKey *event)
 }
 
 /* Handles key press events on the file list, so that we can trap Enter to
- * activate the default button on our own.  Also, checks to see if '/' has been
+ * activate the default button on our own.  Also, checks to see if “/” has been
  * pressed.
  */
 static gboolean

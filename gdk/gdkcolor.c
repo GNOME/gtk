@@ -132,12 +132,12 @@ G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
  *
  * The string can either one of a large set of standard names
  * (taken from the X11 `rgb.txt` file), or
- * it can be a hex value in the form '&num;rgb' '&num;rrggbb'
- * '&num;rrrgggbbb' or '&num;rrrrggggbbbb' where 'r', 'g' and
- * 'b' are hex digits of the red, green, and blue components
+ * it can be a hex value in the form “&num;rgb” “&num;rrggbb”
+ * “&num;rrrgggbbb” or “&num;rrrrggggbbbb” where “r”, “g” and
+ * “b” are hex digits of the red, green, and blue components
  * of the color, respectively. (White in the four forms is
- * '&num;fff', '&num;ffffff', '&num;fffffffff' and
- * '&num;ffffffffffff').
+ * “&num;fff”, “&num;ffffff”, “&num;fffffffff” and
+ * “&num;ffffffffffff”).
  *
  * Return value: %TRUE if the parsing succeeded
  */

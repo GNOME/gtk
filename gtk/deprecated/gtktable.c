@@ -721,7 +721,7 @@ gtk_table_resize (GtkTable *table,
  * @xpadding: An integer value specifying the padding on the left and right of the widget being added to the table.
  * @ypadding: The amount of padding above and below the child widget.
  *
- * Adds a widget to a table. The number of 'cells' that a widget will occupy is
+ * Adds a widget to a table. The number of “cells” that a widget will occupy is
  * specified by @left_attach, @right_attach, @top_attach and @bottom_attach.
  * These each represent the leftmost, rightmost, uppermost and lowest column
  * and row numbers of the table. (Columns and rows are indexed from zero).

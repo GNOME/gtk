@@ -755,7 +755,7 @@ struct _GdkEventTouch
  * usually configured to generate button press events for buttons 4 and 5
  * when the wheel is turned.
  *
- * Some GDK backends can also generate 'smooth' scroll events, which
+ * Some GDK backends can also generate “smooth” scroll events, which
  * can be recognized by the %GDK_SCROLL_SMOOTH scroll direction. For
  * these, the scroll deltas can be obtained with
  * gdk_event_get_scroll_deltas().

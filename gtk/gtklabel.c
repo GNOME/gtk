@@ -254,7 +254,7 @@ struct _GtkLabelPrivate
  * There are some new fields for links. The links field contains the list
  * of GtkLabelLink structs that describe the links which are embedded in
  * the label. The active_link field points to the link under the mouse
- * pointer. For keyboard navigation, the 'focus' link is determined by
+ * pointer. For keyboard navigation, the “focus” link is determined by
  * finding the link which contains the selection_anchor position.
  * The link_clicked field is used with button press and release events
  * to ensure that pressing inside a link and releasing outside of it

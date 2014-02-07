@@ -4317,7 +4317,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
  *
  * As implementation details, the icon loaded needs to be of SVG type,
  * contain the “symbolic” term as the last component of the icon name,
- * and use the 'fg', 'success', 'warning' and 'error' CSS styles in the
+ * and use the “fg”, “success”, “warning” and “error” CSS styles in the
  * SVG file itself.
  *
  * See the [Symbolic Icons Specification](http://www.freedesktop.org/wiki/SymbolicIcons)
@@ -4853,7 +4853,7 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
  * icons, they are in a 1000x1000 coordinate space that is scaled
  * to the final size of the icon.  You can determine if the icon is an SVG
  * icon by using gtk_icon_info_get_filename(), and seeing if it is non-%NULL
- * and ends in '.svg'.
+ * and ends in “.svg”.
  *
  * This function is provided primarily to allow compatibility wrappers
  * for older API's, and is not expected to be useful for applications.

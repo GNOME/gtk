@@ -282,8 +282,8 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
  * gdk_cursor_new_from_pixbuf:
  * @display: the #GdkDisplay for which the cursor will be created
  * @pixbuf: the #GdkPixbuf containing the cursor image
- * @x: the horizontal offset of the 'hotspot' of the cursor.
- * @y: the vertical offset of the 'hotspot' of the cursor.
+ * @x: the horizontal offset of the “hotspot” of the cursor.
+ * @y: the vertical offset of the “hotspot” of the cursor.
  *
  * Creates a new cursor from a pixbuf.
  *
@@ -353,8 +353,8 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
  * gdk_cursor_new_from_surface:
  * @display: the #GdkDisplay for which the cursor will be created
  * @surface: the cairo image surface containing the cursor pixel data
- * @x: the horizontal offset of the 'hotspot' of the cursor
- * @y: the vertical offset of the 'hotspot' of the cursor
+ * @x: the horizontal offset of the “hotspot” of the cursor
+ * @y: the vertical offset of the “hotspot” of the cursor
  *
  * Creates a new cursor from a cairo image surface.
  *

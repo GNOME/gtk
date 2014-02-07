@@ -83,7 +83,7 @@
  *
  * When using an entry for passwords and other sensitive information,
  * it can be put into “password mode” using gtk_entry_set_visibility().
- * In this mode, entered text is displayed using a 'invisible' character.
+ * In this mode, entered text is displayed using a “invisible” character.
  * By default, GTK+ picks the best invisible character that is available
  * in the current font, but it can be changed with
  * gtk_entry_set_invisible_char(). Since 2.16, GTK+ displays a warning

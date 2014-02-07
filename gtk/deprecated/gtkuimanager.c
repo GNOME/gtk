@@ -113,9 +113,9 @@
  *
  * If a name is not specified, it defaults to the action. If an action is
  * not specified either, the element name is used. The name and action
- * attributes must not contain '/' characters after parsing (since that
+ * attributes must not contain “/” characters after parsing (since that
  * would mess up path lookup) and must be usable as XML attributes when
- * enclosed in doublequotes, thus they must not '"' characters or references
+ * enclosed in doublequotes, thus they must not “"” characters or references
  * to the &quot; entity.
  *
  * # A UI definition #
@@ -1092,7 +1092,7 @@ gtk_ui_manager_get_accel_group (GtkUIManager *manager)
  * 
  * Looks up a widget by following a path. 
  * The path consists of the names specified in the XML description of the UI. 
- * separated by '/'. Elements which don’t have a name or action attribute in 
+ * separated by “/”. Elements which don’t have a name or action attribute in 
  * the XML (e.g. &lt;popup&gt;) can be addressed by their XML element name 
  * (e.g. "popup"). The root element ("/ui") can be omitted in the path.
  *

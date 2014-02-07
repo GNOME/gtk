@@ -11370,7 +11370,7 @@ gtk_XParseGeometry (const char   *string,
  * @geometry: geometry string
  * 
  * Parses a standard X Window System geometry string - see the
- * manual page for X (type 'man X') for details on this.
+ * manual page for X (type “man X”) for details on this.
  * gtk_window_parse_geometry() does work on all GTK+ ports
  * including Win32 but is primarily intended for an X environment.
  *
@@ -11425,7 +11425,7 @@ gtk_XParseGeometry (const char   *string,
  *   if (argc > 1)
  *     {
  *       if (!gtk_window_parse_geometry (GTK_WINDOW (window), argv[1]))
- *         fprintf (stderr, "Failed to parse '%s'\n", argv[1]);
+ *         fprintf (stderr, "Failed to parse “%s”\n", argv[1]);
  *     }
  *    
  *   gtk_widget_show_all (window);
@@ -12040,7 +12040,7 @@ _gtk_window_schedule_mnemonics_visible (GtkWindow *window)
  *
  * Gets the value of the #GtkWindow:focus-visible property.
  *
- * Returns: %TRUE if 'focus rectangles' are supposed to be visible
+ * Returns: %TRUE if “focus rectangles” are supposed to be visible
  *     in this window.
  *
  * Since: 3.2

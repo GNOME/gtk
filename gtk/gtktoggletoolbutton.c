@@ -438,7 +438,7 @@ gtk_toggle_tool_button_new_from_stock (const gchar *stock_id)
  * @is_active: whether @button should be active
  * 
  * Sets the status of the toggle tool button. Set to %TRUE if you
- * want the GtkToggleButton to be 'pressed in', and %FALSE to raise it.
+ * want the GtkToggleButton to be “pressed in”, and %FALSE to raise it.
  * This action causes the toggled signal to be emitted.
  * 
  * Since: 2.4

@@ -955,7 +955,7 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
  * @info_bar: a #GtkInfoBar
  * @response_id: a response ID
  *
- * Emits the 'response' signal with the given @response_id.
+ * Emits the “response” signal with the given @response_id.
  *
  * Since: 2.18
  */

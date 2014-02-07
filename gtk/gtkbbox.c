@@ -29,7 +29,7 @@
  *
  * A button box should be used to provide a consistent layout of buttons
  * throughout your application. The layout/spacing can be altered by the
- * programmer, or if desired, by the user to alter the 'feel' of a
+ * programmer, or if desired, by the user to alter the “feel” of a
  * program to a small degree.
  *
  * gtk_button_box_get_layout() and gtk_button_box_set_layout() retrieve and

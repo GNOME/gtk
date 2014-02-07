@@ -270,7 +270,7 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
  *
  * This function will search @widget and all its descendants for a GtkLabel
  * widget with a text string matching @label_pattern.
- * The @label_pattern may contain asterisks '*' and question marks '?' as
+ * The @label_pattern may contain asterisks “*” and question marks “?” as
  * placeholders, g_pattern_match() is used for the matching.
  * Note that locales other than "C“ tend to alter (translate” label strings,
  * so this function is genrally only useful in test programs with

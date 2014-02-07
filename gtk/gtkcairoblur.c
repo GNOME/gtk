@@ -165,8 +165,8 @@ _blurcol (guchar* pixels,
  * @aprec: precision of alpha parameter in fixed-point format 0.aprec
  * @zprec: precision of state parameters zR,zG,zB and zA in fp format 8.zprec
  *
- * Performs an in-place blur of image data 'pixels'
- * with kernel of approximate radius 'radius'.
+ * Performs an in-place blur of image data “pixels”
+ * with kernel of approximate radius “radius”.
  *
  * Blurs with two sided exponential impulse response.
  *

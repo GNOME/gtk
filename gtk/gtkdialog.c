@@ -66,11 +66,11 @@
  * recommended; it allows you to set the dialog title, some convenient
  * flags, and add simple buttons.
  *
- * If 'dialog' is a newly created dialog, the two primary areas of the
+ * If “dialog” is a newly created dialog, the two primary areas of the
  * window can be accessed through gtk_dialog_get_content_area() and
  * gtk_dialog_get_action_area(), as can be seen from the example below.
  *
- * A 'modal' dialog (that is, one which freezes the rest of the application
+ * A “modal” dialog (that is, one which freezes the rest of the application
  * from user input), can be created by calling gtk_window_set_modal() on the
  * dialog. Use the GTK_WINDOW() macro to cast the widget returned from
  * gtk_dialog_new() into a #GtkWindow. When using gtk_dialog_new_with_buttons()

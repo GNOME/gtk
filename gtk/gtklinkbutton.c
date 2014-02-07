@@ -679,7 +679,7 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
  * @uri: a valid URI
  *
  * Sets @uri as the URI where the #GtkLinkButton points. As a side-effect
- * this unsets the 'visited' state of the button.
+ * this unsets the “visited” state of the button.
  *
  * Since: 2.10
  */
@@ -724,9 +724,9 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
 /**
  * gtk_link_button_set_visited:
  * @link_button: a #GtkLinkButton
- * @visited: the new 'visited' state
+ * @visited: the new “visited” state
  *
- * Sets the 'visited' state of the URI where the #GtkLinkButton
+ * Sets the “visited” state of the URI where the #GtkLinkButton
  * points.  See gtk_link_button_get_visited() for more details.
  *
  * Since: 2.14
@@ -762,9 +762,9 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
  * gtk_link_button_get_visited:
  * @link_button: a #GtkLinkButton
  *
- * Retrieves the 'visited' state of the URI where the #GtkLinkButton
+ * Retrieves the “visited” state of the URI where the #GtkLinkButton
  * points. The button becomes visited when it is clicked. If the URI
- * is changed on the button, the 'visited' state is unset again.
+ * is changed on the button, the “visited” state is unset again.
  *
  * The state may also be changed using gtk_link_button_set_visited().
  *

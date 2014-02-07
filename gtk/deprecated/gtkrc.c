@@ -249,8 +249,8 @@
  * # Toplevel declarations #
  *
  * An RC file is a text file which is composed of a sequence
- * of declarations. `'#'` characters delimit comments and
- * the portion of a line after a `'#'` is ignored when parsing
+ * of declarations. `“#”` characters delimit comments and
+ * the portion of a line after a `“#”` is ignored when parsing
  * an RC file.
  *
  * The possible toplevel declarations are:

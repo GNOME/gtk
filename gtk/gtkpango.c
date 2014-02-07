@@ -358,7 +358,7 @@ _gtk_pango_get_default_attributes (AtkAttributeSet *attributes,
  * @end_offset: return location for the ending offset of the
  *    current run
  *
- * Finds the 'run' around index (i.e. the maximal range of characters
+ * Finds the “run” around index (i.e. the maximal range of characters
  * where the set of applicable attributes remains constant) and
  * returns the starting and ending offsets for it.
  *

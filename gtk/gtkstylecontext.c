@@ -2061,7 +2061,7 @@ _gtk_style_context_check_region_name (const gchar *str)
  * would apply to even and odd rows, respectively.
  *
  * Region names must only contain lowercase letters
- * and '-', starting always with a lowercase letter.
+ * and “-”, starting always with a lowercase letter.
  *
  * Since: 3.0
  **/
@@ -2552,7 +2552,7 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
  *
  * Attaches @context to the given screen.
  *
- * The screen is used to add style information from 'global' style
+ * The screen is used to add style information from “global” style
  * providers, such as the screens #GtkSettings instance.
  *
  * If you are using a #GtkStyleContext returned from

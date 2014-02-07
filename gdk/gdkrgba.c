@@ -99,7 +99,7 @@ gdk_rgba_free (GdkRGBA *rgba)
  *  - For non-percentage values, we accept floats in the range 0-255
  *    not just [0-9]+ integers
  *  - For percentage values we accept any float, not just
- *     [ 0-9]+ | [0-9]* '.' [0-9]+
+ *     [ 0-9]+ | [0-9]* “.” [0-9]+
  *  - We accept mixed percentages and non-percentages in a single
  *    rgb() or rgba() specification.
  */
@@ -142,13 +142,13 @@ parse_rgb_value (const gchar  *str,
  *
  * The string can be either one of:
  * - A standard name (Taken from the X11 rgb.txt file).
- * - A hex value in the form '&num;rgb' '&num;rrggbb' '&num;rrrgggbbb'
- *   or '&num;rrrrggggbbbb'
- * - A RGB color in the form 'rgb(r,g,b)' (In this case the color will
+ * - A hex value in the form “&num;rgb” “&num;rrggbb” “&num;rrrgggbbb”
+ *   or “&num;rrrrggggbbbb”
+ * - A RGB color in the form “rgb(r,g,b)” (In this case the color will
  *   have full opacity)
- * - A RGBA color in the form 'rgba(r,g,b,a)'
+ * - A RGBA color in the form “rgba(r,g,b,a)”
  *
- * Where 'r', 'g', 'b' and 'a' are respectively the red, green, blue and
+ * Where “r”, “g”, “b” and “a” are respectively the red, green, blue and
  * alpha color values. In the last two cases, r g and b are either integers
  * in the range 0 to 255 or precentage values in the range 0% to 100%, and
  * a is a floating point value in the range 0 to 1.
@@ -332,7 +332,7 @@ gdk_rgba_equal (gconstpointer p1,
  * Returns a textual specification of @rgba in the form
  * `rgb (r, g, b)` or
  * `rgba (r, g, b, a)`,
- * where 'r', 'g', 'b' and 'a' represent the red, green,
+ * where “r”, “g”, “b” and “a” represent the red, green,
  * blue and alpha values respectively. r, g, and b are
  * represented as integers in the range 0 to 255, and a
  * is represented as floating point value in the range 0 to 1.

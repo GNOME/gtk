@@ -2691,10 +2691,10 @@ gtk_tree_model_sort_clear_cache_helper (GtkTreeModelSort *tree_model_sort,
  * gtk_tree_model_sort_reset_default_sort_func:
  * @tree_model_sort: A #GtkTreeModelSort
  * 
- * This resets the default sort function to be in the 'unsorted' state.  That
+ * This resets the default sort function to be in the “unsorted” state.  That
  * is, it is in the same order as the child model. It will re-sort the model
  * to be in the same order as the child model only if the #GtkTreeModelSort
- * is in 'unsorted' state.
+ * is in “unsorted” state.
  **/
 void
 gtk_tree_model_sort_reset_default_sort_func (GtkTreeModelSort *tree_model_sort)

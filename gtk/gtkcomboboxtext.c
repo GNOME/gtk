@@ -44,7 +44,7 @@
  * or gtk_combo_box_text_prepend_text() and remove options with
  * gtk_combo_box_text_remove().
  *
- * If the GtkComboBoxText contains an entry (via the 'has-entry' property),
+ * If the GtkComboBoxText contains an entry (via the “has-entry” property),
  * its contents can be retrieved using gtk_combo_box_text_get_active_text().
  * The entry itself can be accessed by calling gtk_bin_get_child() on the
  * combo box.

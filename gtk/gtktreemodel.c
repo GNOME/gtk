@@ -176,7 +176,7 @@
  *    gint   int_data;
  *
  *    /&ast; Make sure you terminate calls to gtk_tree_model_get()
- *     &ast; with a '-1' value
+ *     &ast; with a “-1” value
  *     &ast;/
  *    gtk_tree_model_get (list_store, &iter,
  *                        STRING_COLUMN, &str_data,
@@ -712,7 +712,7 @@ gtk_tree_path_new_from_indicesv (gint *indices,
  *
  * Generates a string representation of the path.
  *
- * This string is a ':' separated list of numbers.
+ * This string is a “:” separated list of numbers.
  * For example, “4:10:0:3” would be an acceptable
  * return value for this string.
  *
@@ -1301,7 +1301,7 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
  *
  * Generates a string representation of the iter.
  *
- * This string is a ':' separated list of numbers.
+ * This string is a “:” separated list of numbers.
  * For example, “4:10:0:3” would be an acceptable
  * return value for this string.
  *

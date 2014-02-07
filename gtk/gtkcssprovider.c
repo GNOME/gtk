@@ -74,7 +74,7 @@
  * # Style sheets
  *
  * The basic structure of the style sheets understood by this provider is
- * a series of statements, which are either rule sets or '@-rules', separated
+ * a series of statements, which are either rule sets or “@-rules”, separated
  * by whitespace.
  *
  * A rule set consists of a selector and a declaration block, which is
@@ -96,7 +96,7 @@
  * Selectors work very similar to the way they do in CSS, with widget class
  * names taking the role of element names, and widget names taking the role
  * of IDs. When used in a selector, widget names must be prefixed with a
- * '&num;' character. The '*' character represents the so-called universal
+ * '&num;' character. The “*” character represents the so-called universal
  * selector, which matches any widget.
  *
  * To express more complicated situations, selectors can be combined in
@@ -111,7 +111,7 @@
  *   that occur inside a GtkToolBar.
  * - In the previous example, the GtkButton is matched even
  *   if it occurs deeply nested inside the toolbar. To restrict the match
- *   to direct children of the parent widget, insert a '>' character between
+ *   to direct children of the parent widget, insert a “>” character between
  *   the two selectors. E.g. `GtkNotebook > GtkLabel` matches
  *   GtkLabel widgets that are direct children of a GtkNotebook.
  *
@@ -153,7 +153,7 @@
  * ]|
  *
  * Widgets may also define style classes, which can be used for matching.
- * When used in a selector, style classes must be prefixed with a '.'
+ * When used in a selector, style classes must be prefixed with a “.”
  * character.
  *
  * Refer to the documentation of individual widgets to learn which
@@ -425,12 +425,12 @@
  *               color-stop (@position, @color),
  *               ...)</literallayout>
  * where @start_x and @end_x can be either a floating point number between
- * 0 and 1 or one of the special values 'left', 'right' or 'center', @start_y
+ * 0 and 1 or one of the special values “left”, “right” or “center”, @start_y
  * and @end_y can be either a floating point number between 0 and 1 or one
- * of the special values 'top', 'bottom' or 'center', @position is a floating
+ * of the special values “top”, “bottom” or “center”, @position is a floating
  * point number between 0 and 1 and @color is a color expression (see above).
  * The color-stop can be repeated multiple times to add more than one color
- * stop. 'from (@color)' and 'to (@color)' can be used as abbreviations for
+ * stop. “from (@color)” and “to (@color)” can be used as abbreviations for
  * color stops with position 0 and 1, respectively.
  *
  * An example for a linear gradient:
@@ -558,12 +558,12 @@
  * outlined by border-width.
  * The default (stretch) is to resize the slice to fill in the whole 
  * allocated area.
- * If the value of this property is 'repeat', the image slice
+ * If the value of this property is “repeat”, the image slice
  * will be tiled to fill the area.
- * If the value of this property is 'round', the image slice will
+ * If the value of this property is “round”, the image slice will
  * be tiled to fill the area, and scaled to fit it exactly
  * a whole number of times.
- * If the value of this property is 'space', the image slice will
+ * If the value of this property is “space”, the image slice will
  * be tiled to fill the area, and if it doesn’t fit it exactly a whole
  * number of times, the extra space is distributed as padding around 
  * the slices.
@@ -803,7 +803,7 @@
  *                center center, 0.8,
  *                color-stop (0.0, &num;fff),
  *                color-stop (1.0, &num;000));
- * url ('background.png');</literallayout>
+ * url ("background.png");</literallayout>
  *         </entry>
  *       </row>
  *       <row>

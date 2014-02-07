@@ -1207,10 +1207,10 @@ G_END_DECLS
  * The difference between @GTK_INPUT_PURPOSE_DIGITS and
  * @GTK_INPUT_PURPOSE_NUMBER is that the former accepts only digits
  * while the latter also some punctuation (like commas or points, plus,
- * minus) and 'e' or 'E' as in 3.14E+000.
+ * minus) and “e” or “E” as in 3.14E+000.
  *
  * This enumeration may be extended in the future; input methods should
- * interpret unknown values as 'free form'.
+ * interpret unknown values as “free form”.
  *
  * Since: 3.6
  */

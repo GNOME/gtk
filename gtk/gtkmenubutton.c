@@ -38,7 +38,7 @@
  * text direction) of the menu aligned with the starting edge of the button.
  * If there is not enough space below the button, the menu is popped up above
  * the button instead. If the alignment would move part of the menu offscreen,
- * it is 'pushed in'.
+ * it is “pushed in”.
  *
  * ## Direction = Down
  *

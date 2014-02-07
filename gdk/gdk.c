@@ -944,7 +944,7 @@ gdk_threads_add_idle (GSourceFunc    function,
  * event sources. Thus they should not be relied on for precise timing.
  * After each call to the timeout function, the time of the next
  * timeout is recalculated based on the current time and the given interval
- * (it does not try to 'catch up' time lost in delays).
+ * (it does not try to “catch up” time lost in delays).
  *
  * This variant of g_timeout_add_full() can be thought of a MT-safe version 
  * for GTK+ widgets for the following use case:

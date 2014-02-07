@@ -37,9 +37,9 @@
  * particular context into a single action group, with namespacing.
  *
  * Consider the case of two action groups -- one containing actions
- * applicable to an entire application (such as 'quit') and one
+ * applicable to an entire application (such as “quit”) and one
  * containing actions applicable to a particular window in the
- * application (such as 'fullscreen').
+ * application (such as “fullscreen”).
  *
  * In this case, each of these action groups could be added to a
  * #GtkActionMuxer with the prefixes “app” and “win”, respectively.  This

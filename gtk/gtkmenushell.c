@@ -1549,7 +1549,7 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell *menu_shell)
  * menubars working, if submenu_placement is different for
  * the menu and its MenuShell then the following apply:
  *
- * - For 'parent' the current menu is not just moved to
+ * - For “parent” the current menu is not just moved to
  *   the parent, but moved to the previous entry in the parent
  * - For 'child', if there is no child, then current is
  *   moved to the next item in the parent.

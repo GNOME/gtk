@@ -146,7 +146,7 @@ gtk_menu_tracker_section_find_model (GtkMenuTrackerSection *section,
  *    before us (ie: we should add a separator if we have content in
  *    order to divide us from the items above)
  *
- *  - if we had a 'label' attribute set for this section
+ *  - if we had a “label” attribute set for this section
  *
  * parent_model and parent_index are passed in so that we can give them
  * to the insertion callback so that it can see the label (and anything

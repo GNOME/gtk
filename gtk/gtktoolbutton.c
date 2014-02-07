@@ -1199,7 +1199,7 @@ gtk_tool_button_get_label (GtkToolButton *button)
  * should be used for the mnemonic accelerator key in the overflow menu. For
  * example, if the label property is “_Open” and @use_underline is %TRUE,
  * the label on the tool button will be “Open” and the item on the overflow
- * menu will have an underlined 'O'.
+ * menu will have an underlined “O”.
  * 
  * Labels shown on tool buttons never have mnemonics on them; this property
  * only affects the menu item on the overflow menu.

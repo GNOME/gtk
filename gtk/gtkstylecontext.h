@@ -307,7 +307,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match primary toolbars.
  *
- * This should be used for the 'main' toolbar of an application,
+ * This should be used for the “main” toolbar of an application,
  * right below its menubar.
  */
 #define GTK_STYLE_CLASS_PRIMARY_TOOLBAR "primary-toolbar"
@@ -473,7 +473,7 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_CLASS_SPINNER:
  *
- * A CSS class to use when rendering activity as a 'spinner'.
+ * A CSS class to use when rendering activity as a “spinner”.
  *
  * This is used by #GtkSpinner and #GtkCellRendererSpinner.
  */

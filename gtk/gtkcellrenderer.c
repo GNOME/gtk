@@ -1394,7 +1394,7 @@ gtk_cell_renderer_real_get_aligned_area (GtkCellRenderer         *cell,
  * cell alignment in a target allocation (used to draw focus and align
  * cells in the icon view).
  *
- * Note this is only a trivial 'align * (allocation - request)' operation.
+ * Note this is only a trivial “align * (allocation - request)” operation.
  */
 void
 _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,

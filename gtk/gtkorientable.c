@@ -37,7 +37,7 @@
  * realized as subclasses of a common base class (e.g #GtkBox/#GtkHBox/#GtkVBox
  * or #GtkScale/#GtkHScale/#GtkVScale). #GtkOrientable is more flexible in that
  * it allows the orientation to be changed at runtime, allowing the widgets
- * to 'flip'.
+ * to “flip”.
  *
  * #GtkOrientable was introduced in GTK+ 2.16.
  */

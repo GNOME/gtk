@@ -38,7 +38,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * A button box should be used to provide a consistent layout of buttons
  * throughout your application. The layout/spacing can be altered by the
- * programmer, or if desired, by the user to alter the 'feel' of a
+ * programmer, or if desired, by the user to alter the “feel” of a
  * program to a small degree.
  *
  * A #GtkVButtonBox is created with gtk_vbutton_box_new(). Buttons are

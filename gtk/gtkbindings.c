@@ -49,7 +49,7 @@
  *
  * # Installing a key binding
  *
- * A CSS file binding consists of a 'binding-set' definition and a match
+ * A CSS file binding consists of a “binding-set” definition and a match
  * statement to apply the binding set to specific widget types. Details
  * on the matching mechanism are described under
  * [Selectors][gtkcssprovider-selectors]

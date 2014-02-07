@@ -52,7 +52,7 @@ typedef enum
 } GtkWidgetHelpType;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
- * Macros for testing whether `widget' or `klass' are of type GTK_TYPE_WIDGET.
+ * Macros for testing whether widget or klass are of type GTK_TYPE_WIDGET.
  */
 #define GTK_TYPE_WIDGET			  (gtk_widget_get_type ())
 #define GTK_WIDGET(widget)		  (G_TYPE_CHECK_INSTANCE_CAST ((widget), GTK_TYPE_WIDGET, GtkWidget))

@@ -639,10 +639,10 @@ _gtk_im_module_create (const gchar *context_id)
 
 /* Match @locale against @against.
  * 
- * 'en_US' against 'en_US'       => 4
- * 'en_US' against 'en'          => 3
- * 'en', 'en_UK' against 'en_US' => 2
- *  all locales, against '*' 	 => 1
+ * 'en_US' against “en_US”       => 4
+ * 'en_US' against “en”          => 3
+ * 'en', “en_UK” against “en_US” => 2
+ *  all locales, against “*” 	 => 1
  */
 static gint
 match_locale (const gchar *locale,

@@ -43,7 +43,7 @@
  * @Title: GtkToggleButton
  * @See_also: #GtkButton, #GtkCheckButton, #GtkCheckMenuItem
  *
- * A #GtkToggleButton is a #GtkButton which will remain 'pressed-in' when
+ * A #GtkToggleButton is a #GtkButton which will remain “pressed-in” when
  * clicked. Clicking again will cause the toggle button to return to its
  * normal state.
  *
@@ -451,7 +451,7 @@ gtk_toggle_button_get_mode (GtkToggleButton *toggle_button)
  * @is_active: %TRUE or %FALSE.
  *
  * Sets the status of the toggle button. Set to %TRUE if you want the
- * GtkToggleButton to be 'pressed in', and %FALSE to raise it.
+ * GtkToggleButton to be “pressed in”, and %FALSE to raise it.
  * This action causes the #GtkToggleButton::toggled signal and the
  * #GtkButton::clicked signal to be emitted.
  */

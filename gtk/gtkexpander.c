@@ -1648,7 +1648,7 @@ gtk_expander_new (const gchar *label)
  *
  * Creates a new expander using @label as the text of the label.
  * If characters in @label are preceded by an underscore, they are underlined.
- * If you need a literal underscore character in a label, use '__' (two
+ * If you need a literal underscore character in a label, use “__” (two
  * underscores). The first underlined character represents a keyboard
  * accelerator called a mnemonic.
  * Pressing Alt and that key activates the button.

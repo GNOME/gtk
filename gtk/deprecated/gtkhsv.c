@@ -44,11 +44,11 @@
 
 /**
  * SECTION:gtkhsv
- * @Short_description: A 'color wheel' widget
+ * @Short_description: A “color wheel” widget
  * @Title: GtkHSV
  * @See_also: #GtkColorSelection, #GtkColorSelectionDialog
  *
- * #GtkHSV is the 'color wheel' part of a complete color selector widget.
+ * #GtkHSV is the “color wheel” part of a complete color selector widget.
  * It allows to select a color by determining its HSV components in an
  * intuitive way. Moving the selection around the outer ring changes the hue,
  * and moving the selection point inside the inner triangle changes value and

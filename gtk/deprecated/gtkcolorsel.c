@@ -2630,7 +2630,7 @@ gtk_color_selection_get_current_alpha (GtkColorSelection *colorsel)
  * @colorsel: a #GtkColorSelection
  * @color: a #GdkColor to set the previous color with
  *
- * Sets the 'previous' color to be @color.
+ * Sets the “previous” color to be @color.
  *
  * This function should be called with some hesitations,
  * as it might seem confusing to have that color change.
@@ -2669,7 +2669,7 @@ gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
  * @colorsel: a #GtkColorSelection
  * @alpha: an integer between 0 and 65535
  *
- * Sets the 'previous' alpha to be @alpha.
+ * Sets the “previous” alpha to be @alpha.
  *
  * This function should be called with some hesitations,
  * as it might seem confusing to have that alpha change.
@@ -2811,7 +2811,7 @@ gtk_color_selection_get_current_rgba (GtkColorSelection *colorsel,
  * @colorsel: a #GtkColorSelection
  * @rgba: a #GdkRGBA to set the previous color with
  *
- * Sets the 'previous' color to be @rgba.
+ * Sets the “previous” color to be @rgba.
  *
  * This function should be called with some hesitations,
  * as it might seem confusing to have that color change.

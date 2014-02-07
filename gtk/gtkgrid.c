@@ -1823,7 +1823,7 @@ gtk_grid_new (void)
  * Adds a widget to the grid.
  *
  * The position of @child is determined by @left and @top. The
- * number of 'cells' that @child will occupy is determined by
+ * number of “cells” that @child will occupy is determined by
  * @width and @height.
  */
 void

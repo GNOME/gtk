@@ -1468,7 +1468,7 @@ _gtk_tree_selection_row_is_selectable (GtkTreeSelection *selection,
  */
 
 /*
- * docs about the 'override_browse_mode', we set this flag when we want to
+ * docs about the “override_browse_mode”, we set this flag when we want to
  * unset select the node and override the select browse mode behaviour (that is
  * 'one node should *always* be selected').
  */

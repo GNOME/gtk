@@ -1206,7 +1206,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
  * @fontsel: a #GtkFontSelection
  *
  * This returns the #GtkTreeView that lists font families, for
- * example, 'Sans', 'Serif', etc.
+ * example, “Sans”, “Serif”, etc.
  *
  * Return value: (transfer none): A #GtkWidget that is part of @fontsel
  *
@@ -1227,7 +1227,7 @@ gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
  * @fontsel: a #GtkFontSelection
  *
  * This returns the #GtkTreeView which lists all styles available for
- * the selected font. For example, 'Regular', 'Bold', etc.
+ * the selected font. For example, “Regular”, “Bold”, etc.
  * 
  * Return value: (transfer none): A #GtkWidget that is part of @fontsel
  *
@@ -1759,10 +1759,10 @@ gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd)
  * gtk_font_selection_dialog_get_ok_button:
  * @fsd: a #GtkFontSelectionDialog
  *
- * Gets the 'OK' button.
+ * Gets the “OK” button.
  *
  * Return value: (transfer none): the #GtkWidget used in the dialog
- *     for the 'OK' button.
+ *     for the “OK” button.
  *
  * Since: 2.14
  *
@@ -1780,10 +1780,10 @@ gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
  * gtk_font_selection_dialog_get_cancel_button:
  * @fsd: a #GtkFontSelectionDialog
  *
- * Gets the 'Cancel' button.
+ * Gets the “Cancel” button.
  *
  * Return value: (transfer none): the #GtkWidget used in the dialog
- *     for the 'Cancel' button.
+ *     for the “Cancel” button.
  *
  * Since: 2.14
  *

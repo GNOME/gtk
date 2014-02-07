@@ -185,7 +185,7 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
  * be the theme engine name.
  *
  * For any type a @parse_func may be provided, being this function
- * used for turning any property value (between ':' and ';') in
+ * used for turning any property value (between “:” and “;”) in
  * CSS to the #GValue needed. For basic types there is already
  * builtin parsing support, so %NULL may be provided for these
  * cases.

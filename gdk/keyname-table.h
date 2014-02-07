@@ -6830,11 +6830,11 @@ static const gdk_key gdk_keys_by_name[] = {
 #if 0
 
 /*
- * Translators, the strings in the 'keyboard label' context are
+ * Translators, the strings in the “keyboard label” context are
  * display names for keyboard keys. Some of them have prefixes like
  * XF86 or ISO_ - these should be removed in the translation. Similarly,
- * underscores should be replaced by spaces. The prefix 'KP_' stands
- * for 'key pad' and you may want to include that in your translation.
+ * underscores should be replaced by spaces. The prefix “KP_” stands
+ * for “key pad” and you may want to include that in your translation.
  * Here are some examples of English translations:
  * XF86AudioMute - Audio mute
  * Scroll_lock   - Scroll lock

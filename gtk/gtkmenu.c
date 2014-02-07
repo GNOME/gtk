@@ -5075,7 +5075,7 @@ gtk_menu_set_screen (GtkMenu   *menu,
  * @top_attach: The row number to attach the top of the item to
  * @bottom_attach: The row number to attach the bottom of the item to
  *
- * Adds a new #GtkMenuItem to a (table) menu. The number of 'cells' that
+ * Adds a new #GtkMenuItem to a (table) menu. The number of “cells” that
  * an item will occupy is specified by @left_attach, @right_attach,
  * @top_attach and @bottom_attach. These each represent the leftmost,
  * rightmost, uppermost and lower column and row numbers of the table.

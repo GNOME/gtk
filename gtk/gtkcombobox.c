@@ -80,7 +80,7 @@
  * not restricted to a flat list, it can be a real tree, and the popup will
  * reflect the tree structure.
  *
- * To allow the user to enter values not in the model, the 'has-entry'
+ * To allow the user to enter values not in the model, the “has-entry”
  * property allows the GtkComboBox to contain a #GtkEntry. This entry
  * can be accessed by calling gtk_bin_get_child() on the combo box.
  *

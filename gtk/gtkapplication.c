@@ -67,7 +67,7 @@
  * actions invoked in a predictable context it is therefore recommended
  * that the GDK lock be held while invoking actions locally with
  * g_action_group_activate_action().  The same applies to actions
- * associated with #GtkApplicationWindow and to the 'activate' and
+ * associated with #GtkApplicationWindow and to the “activate” and
  * 'open' #GApplication methods.
  *
  * To set an application menu for a GtkApplication, use
@@ -1082,7 +1082,7 @@ gtk_application_update_accels (GtkApplication *application)
  * are referred to with an “app.” prefix, and window-specific actions
  * with a “win.” prefix.
  *
- * GtkApplication also extracts accelerators out of 'accel' attributes
+ * GtkApplication also extracts accelerators out of “accel” attributes
  * in the #GMenuModels passed to gtk_application_set_app_menu() and
  * gtk_application_set_menubar(), which is usually more convenient
  * than calling this function for each accelerator.

@@ -7792,7 +7792,7 @@ gtk_widget_has_focus (GtkWidget *widget)
  * To find out if the widget has the global input focus, use
  * gtk_widget_has_focus().
  *
- * Return value: %TRUE if the widget should display a 'focus rectangle'
+ * Return value: %TRUE if the widget should display a “focus rectangle”
  *
  * Since: 3.2
  */
@@ -15714,7 +15714,7 @@ _gtk_widget_get_action_muxer (GtkWidget *widget)
  *
  * Inserts @group into @widget. Children of @widget that implement
  * #GtkActionable can then be associated with actions in @group by
- * setting their 'action-name' to
+ * setting their “action-name” to
  * @prefix.`action-name`.
  *
  * If @group is %NULL, a previously inserted group for @name is removed
