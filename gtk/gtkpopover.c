@@ -85,6 +85,7 @@ struct _GtkPopoverPrivate
   guint unmap_id;
   guint scrollable_notify_id;
   guint grab_notify_id;
+  guint state_changed_id;
   guint has_pointing_to    : 1;
   guint preferred_position : 2;
   guint final_position     : 2;
@@ -1296,6 +1297,35 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
 }
 
 static void
+_popover_propagate_state (GtkPopover    *popover,
+                          GtkStateFlags  state,
+                          GtkStateFlags  old_state,
+                          GtkStateFlags  flag)
+{
+  if ((state & flag) != (old_state & flag))
+    {
+      if ((state & flag) == flag)
+        gtk_widget_set_state_flags (GTK_WIDGET (popover), flag, FALSE);
+      else
+        gtk_widget_unset_state_flags (GTK_WIDGET (popover), flag);
+    }
+}
+
+static void
+_gtk_popover_parent_state_changed (GtkWidget     *widget,
+                                   GtkStateFlags  old_state,
+                                   GtkPopover    *popover)
+{
+  guint state;
+
+  state = gtk_widget_get_state_flags (widget);
+  _popover_propagate_state (popover, state, old_state,
+                            GTK_STATE_FLAG_INSENSITIVE);
+  _popover_propagate_state (popover, state, old_state,
+                            GTK_STATE_FLAG_BACKDROP);
+}
+
+static void
 _gtk_popover_parent_grab_notify (GtkWidget  *widget,
                                  gboolean    was_shadowed,
                                  GtkPopover *popover)
@@ -1455,6 +1485,8 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         g_signal_handler_disconnect (priv->widget, priv->size_allocate_id);
       if (g_signal_handler_is_connected (priv->widget, priv->unmap_id))
         g_signal_handler_disconnect (priv->widget, priv->unmap_id);
+      if (g_signal_handler_is_connected (priv->widget, priv->state_changed_id))
+        g_signal_handler_disconnect (priv->widget, priv->state_changed_id);
       if (g_signal_handler_is_connected (priv->widget, priv->grab_notify_id))
         g_signal_handler_disconnect (priv->widget, priv->grab_notify_id);
 
@@ -1487,6 +1519,10 @@ gtk_popover_update_relative_to (GtkPopover *popover,
       priv->unmap_id =
         g_signal_connect (priv->widget, "unmap",
                           G_CALLBACK (_gtk_popover_parent_unmap),
+                          popover);
+      priv->state_changed_id =
+        g_signal_connect (priv->widget, "state-flags-changed",
+                          G_CALLBACK (_gtk_popover_parent_state_changed),
                           popover);
       priv->grab_notify_id =
         g_signal_connect (priv->widget, "grab-notify",
