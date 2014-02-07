@@ -802,7 +802,7 @@ gtk_accel_map_save (const gchar *file_name)
  *                map entry which is not filtered out
  *
  * Loops over the entries in the accelerator map whose accel path 
- * doesn't match any of the filters added with gtk_accel_map_add_filter(), 
+ * doesn’t match any of the filters added with gtk_accel_map_add_filter(), 
  * and execute @foreach_func on each. The signature of @foreach_func is 
  * that of #GtkAccelMapForeach, the @changed parameter indicates whether
  * this accelerator was changed during runtime (thus, would need
@@ -873,7 +873,7 @@ gtk_accel_map_foreach_unfiltered (gpointer           data,
  * are skipped by gtk_accel_map_foreach().
  *
  * This function is intended for GTK+ modules that create their own
- * menus, but don't want them to be saved into the applications accelerator
+ * menus, but don’t want them to be saved into the applications accelerator
  * map dump.
  */
 void
@@ -930,7 +930,7 @@ _gtk_accel_map_remove_group (const gchar   *accel_path,
  * gtk_accel_map_lock_path:
  * @accel_path: a valid accelerator path
  * 
- * Locks the given accelerator path. If the accelerator map doesn't yet contain
+ * Locks the given accelerator path. If the accelerator map doesn’t yet contain
  * an entry for @accel_path, a new one is created.
  *
  * Locking an accelerator path prevents its accelerator from being changed 
@@ -1029,7 +1029,7 @@ gtk_accel_map_init (GtkAccelMap *accel_map)
  * 
  * Gets the singleton global #GtkAccelMap object. This object
  * is useful only for notification of changes to the accelerator
- * map via the ::changed signal; it isn't a parameter to the
+ * map via the ::changed signal; it isn’t a parameter to the
  * other accelerator map functions.
  * 
  * Return value: (transfer none): the global #GtkAccelMap object

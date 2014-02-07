@@ -48,7 +48,7 @@ typedef struct _GdkWindowRedirect    GdkWindowRedirect;
  * @GDK_INPUT_OUTPUT windows are the standard kind of window you might expect.
  * Such windows receive events and are also displayed on screen.
  * @GDK_INPUT_ONLY windows are invisible; they are usually placed above other
- * windows in order to trap or filter the events. You can't draw on
+ * windows in order to trap or filter the events. You can’t draw on
  * @GDK_INPUT_ONLY windows.
  */
 typedef enum
@@ -344,8 +344,8 @@ typedef enum
  * @visual: #GdkVisual for window
  * @window_type: type of window
  * @cursor: cursor for the window (see gdk_window_set_cursor())
- * @wmclass_name: don't use (see gtk_window_set_wmclass())
- * @wmclass_class: don't use (see gtk_window_set_wmclass())
+ * @wmclass_name: don’t use (see gtk_window_set_wmclass())
+ * @wmclass_class: don’t use (see gtk_window_set_wmclass())
  * @override_redirect: %TRUE to bypass the window manager
  * @type_hint: a hint of the function of the window
  *

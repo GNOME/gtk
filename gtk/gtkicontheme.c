@@ -126,7 +126,7 @@
  *                                    &error);
  * if (!pixbuf)
  *   {
- *     g_warning ("Couldn't load icon: &percnt;s", error->message);
+ *     g_warning ("Couldn’t load icon: &percnt;s", error->message);
  *     g_error_free (error);
  *   }
  * else
@@ -893,7 +893,7 @@ gtk_icon_theme_finalize (GObject *object)
  * are combined to allow themes to be extended by adding icons
  * in the user’s home directory.)
  *
- * In addition if an icon found isn't found either in the current
+ * In addition if an icon found isn’t found either in the current
  * icon theme or the default icon theme, and an image file with
  * the right name is found directly in one of the elements of
  * @path, then that image will be used for the icon name.
@@ -1813,7 +1813,7 @@ choose_icon (GtkIconTheme       *icon_theme,
  * combines these two steps if all you need is the pixbuf.)
  * 
  * Return value: (transfer full): a #GtkIconInfo object containing information
- * about the icon, or %NULL if the icon wasn't found.
+ * about the icon, or %NULL if the icon wasn’t found.
  *
  * Since: 2.4
  */
@@ -1850,7 +1850,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
  * these two steps if all you need is the pixbuf.)
  *
  * Return value: (transfer full): a #GtkIconInfo object containing
- * information about the icon, or %NULL if the icon wasn't found.
+ * information about the icon, or %NULL if the icon wasn’t found.
  *
  * Since: 3.10
  */
@@ -1954,7 +1954,7 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
  * inherited icon themes.
  * 
  * Return value: (transfer full): a #GtkIconInfo object containing information
- * about the icon, or %NULL if the icon wasn't found.
+ * about the icon, or %NULL if the icon wasn’t found.
  *
  * Since: 2.12
  */
@@ -1992,7 +1992,7 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *icon_theme,
  * inherited icon themes.
  * 
  * Return value: (transfer full): a #GtkIconInfo object containing information
- * about the icon, or %NULL if the icon wasn't found.
+ * about the icon, or %NULL if the icon wasn’t found.
  *
  * Since: 3.10
  */
@@ -2046,7 +2046,7 @@ gtk_icon_theme_error_quark (void)
  * Return value: (transfer full): the rendered icon; this may be a
  *     newly created icon or a new reference to an internal icon, so
  *     you must not modify the icon. Use g_object_unref() to release
- *     your reference to the icon. %NULL if the icon isn't found.
+ *     your reference to the icon. %NULL if the icon isn’t found.
  *
  * Since: 2.4
  **/
@@ -2095,7 +2095,7 @@ gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
  * Return value: (transfer full): the rendered icon; this may be a
  *     newly created icon or a new reference to an internal icon, so
  *     you must not modify the icon. Use g_object_unref() to release
- *     your reference to the icon. %NULL if the icon isn't found.
+ *     your reference to the icon. %NULL if the icon isn’t found.
  *
  * Since: 3.10
  **/
@@ -2157,7 +2157,7 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
  * Return value: (transfer full): the rendered icon; this may be a
  *     newly created icon or a new reference to an internal icon, so
  *     you must not modify the icon. Use cairo_surface_destroy() to release
- *     your reference to the icon. %NULL if the icon isn't found.
+ *     your reference to the icon. %NULL if the icon isn’t found.
  *
  * Since: 3.10
  **/
@@ -5009,7 +5009,7 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
  * visible context like a list of icons.
  * 
  * Return value: the display name for the icon or %NULL, if
- *  the icon doesn't have a specified display name. This value
+ *  the icon doesn’t have a specified display name. This value
  *  is owned @icon_info and must not be modified or free.
  *
  * Since: 2.4
@@ -5173,7 +5173,7 @@ find_builtin_icon (const gchar *icon_name,
  *
  * Return value: (transfer full): a #GtkIconInfo containing 
  *     information about the icon, or %NULL if the icon 
- *     wasn't found. Unref with g_object_unref()
+ *     wasn’t found. Unref with g_object_unref()
  *
  * Since: 2.14
  */
@@ -5203,7 +5203,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  *
  * Return value: (transfer full): a #GtkIconInfo containing
  *     information about the icon, or %NULL if the icon
- *     wasn't found. Unref with g_object_unref()
+ *     wasn’t found. Unref with g_object_unref()
  *
  * Since: 3.10
  */

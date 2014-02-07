@@ -1546,7 +1546,7 @@ fetch_net_wm_check_window (GdkScreen *screen)
  * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
  *
  * When using this function, keep in mind that the window manager
- * can change over time; so you shouldn't use this function in
+ * can change over time; so you shouldn’t use this function in
  * a way that impacts persistent application state. A common bug
  * is that your application can start up before the window manager
  * does when the user logs in, and before the window manager starts

@@ -50,10 +50,10 @@
  *   display of non-English text will use a different font in many
  *   cases.
  *
- * In addition, the fixed widget can't properly be mirrored in
+ * In addition, the fixed widget can’t properly be mirrored in
  * right-to-left languages such as Hebrew and Arabic. i.e. normally
  * GTK+ will flip the interface to put labels to the right of the
- * thing they label, but it can't do that with #GtkFixed. So your
+ * thing they label, but it can’t do that with #GtkFixed. So your
  * application will not be usable in right-to-left languages.
  *
  * Finally, fixed positioning makes it kind of annoying to add/remove

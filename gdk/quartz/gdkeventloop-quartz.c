@@ -32,7 +32,7 @@
  * stages of the GLib main loop (prepare, check, dispatch), and make the
  * appropriate calls into GLib.
  *
- * Both cases share a single problem: the OS X API’s don't allow us to
+ * Both cases share a single problem: the OS X API’s don’t allow us to
  * wait simultaneously for file descriptors and for events. So when we
  * need to do a blocking wait that includes file descriptor activity, we
  * push the actual work of calling select() to a helper thread (the
@@ -53,7 +53,7 @@
 static int current_loop_level = 0;
 
 /* Run loop level at which we acquired ownership of the GLib main
- * loop. See note in run_loop_entry(). -1 means that we don't have
+ * loop. See note in run_loop_entry(). -1 means that we don’t have
  * ownership
  */ 
 static int acquired_loop_level = -1;
@@ -96,7 +96,7 @@ static GPollFD event_poll_fd;
 /* Current NSEvents that we've gotten from Cocoa but haven't yet converted
  * to GdkEvents. We wait until our dispatch() function to do the conversion
  * since the conversion can conceivably cause signals to be emmitted
- * or other things that shouldn't happen inside a poll function.
+ * or other things that shouldn’t happen inside a poll function.
  */
 static GQueue *current_events;
 

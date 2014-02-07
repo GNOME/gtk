@@ -299,7 +299,7 @@ gdk_pre_parse_libgtk_only (void)
  * Any arguments used by GDK are removed from the array and @argc and @argv are
  * updated accordingly.
  *
- * You shouldn't call this function explicitly if you are using
+ * You shouldn’t call this function explicitly if you are using
  * gtk_init(), gtk_init_check(), gdk_init(), or gdk_init_check().
  *
  * Since: 2.2
@@ -495,7 +495,7 @@ gdk_init (int *argc, char ***argv)
  * Before calling gdk_threads_leave() from a thread other
  * than your main thread, you probably want to call gdk_flush()
  * to send all pending commands to the windowing system.
- * (The reason you don't need to do this from the main thread
+ * (The reason you don’t need to do this from the main thread
  * is that GDK always automatically flushes pending commands
  * when it runs out of incoming events to process and has
  * to sleep while waiting for more events.)
@@ -776,7 +776,7 @@ gdk_threads_init (void)
  * the GTK+ lock when entering a recursive main loop, the application
  * must temporarily release its lock as well.
  *
- * Most threaded GTK+ apps won't need to use this method.
+ * Most threaded GTK+ apps won’t need to use this method.
  *
  * This method must be called before gdk_threads_init(), and cannot
  * be called multiple times.
@@ -1041,7 +1041,7 @@ gdk_threads_add_timeout (guint       interval,
  *
  * A variant of gdk_threads_add_timeout_full() with second-granularity.
  * See g_timeout_add_seconds_full() for a discussion of why it is
- * a good idea to use this function if you don't need finer granularity.
+ * a good idea to use this function if you don’t need finer granularity.
  *
  * Return value: the ID (greater than 0) of the event source.
  * 
@@ -1133,10 +1133,10 @@ gdk_set_program_class (const char *program_class)
  * to gdk_display_open(), gtk_init(), gtk_init_with_args() or
  * gtk_init_check() in order to take effect.
  *
- * Most common GTK+ applications won't ever need to call this. Only
+ * Most common GTK+ applications won’t ever need to call this. Only
  * applications that do mixed GDK/Xlib calls could want to disable
  * multidevice support if such Xlib code deals with input devices in
- * any way and doesn't observe the presence of XInput 2.
+ * any way and doesn’t observe the presence of XInput 2.
  *
  * Since: 3.0
  */

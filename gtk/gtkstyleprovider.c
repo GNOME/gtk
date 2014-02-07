@@ -60,7 +60,7 @@ gtk_style_provider_iface_init (gpointer g_iface)
  * @path: #GtkWidgetPath to query
  *
  * Returns the style settings affecting a widget defined by @path, or %NULL if
- * @provider doesn't contemplate styling @path.
+ * @provider doesn’t contemplate styling @path.
  *
  * Returns: (transfer full): a #GtkStyleProperties containing the
  * style settings affecting @path

@@ -161,7 +161,7 @@ _gdk_event_queue_append (GdkDisplay *display,
  * @sibling: Append after this event.
  * @event: Event to append.
  *
- * Appends an event after the specified event, or if it isn't in
+ * Appends an event after the specified event, or if it isn’t in
  * the queue, onto the tail of the event queue.
  *
  * Returns: the newly appended list node.
@@ -189,7 +189,7 @@ _gdk_event_queue_insert_after (GdkDisplay *display,
  * @sibling: Append before this event
  * @event: Event to prepend
  *
- * Prepends an event before the specified event, or if it isn't in
+ * Prepends an event before the specified event, or if it isn’t in
  * the queue, onto the head of the event queue.
  *
  * Returns: the newly prepended list node.
@@ -1633,7 +1633,7 @@ gdk_event_set_source_device (GdkEvent  *event,
  *
  * This function returns the hardware (slave) #GdkDevice that has
  * triggered the event, falling back to the virtual (master) device
- * (as in gdk_event_get_device()) if the event wasn't caused by
+ * (as in gdk_event_get_device()) if the event wasn’t caused by
  * interaction with a hardware device. This may happen for example
  * in synthesized crossing events after a #GdkWindow updates its
  * geometry or a grab is acquired/released.

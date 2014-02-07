@@ -1053,7 +1053,7 @@ gtk_text_iter_get_child_anchor (const GtkTextIter *iter)
  * @iter: an iterator
  *
  * Returns a list of all #GtkTextMark at this location. Because marks
- * are not iterable (they don't take up any "space" in the buffer,
+ * are not iterable (they don’t take up any "space" in the buffer,
  * they are just marks in between iterable locations), multiple marks
  * can exist in the same place. The returned list is not in any
  * meaningful order.
@@ -1334,7 +1334,7 @@ gtk_text_iter_has_tag (const GtkTextIter   *iter,
  * 
  * Returns a list of tags that apply to @iter, in ascending order of
  * priority (highest-priority tags are last). The #GtkTextTag in the
- * list don't have a reference added, but you have to free the list
+ * list don’t have a reference added, but you have to free the list
  * itself.
  *
  * Return value: (element-type GtkTextTag) (transfer container): list of #GtkTextTag
@@ -1380,13 +1380,13 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
  * @default_setting: %TRUE if text is editable by default
  *
  * Returns whether the character at @iter is within an editable region
- * of text.  Non-editable text is “locked” and can't be changed by the
+ * of text.  Non-editable text is “locked” and can’t be changed by the
  * user via #GtkTextView. This function is simply a convenience
  * wrapper around gtk_text_iter_get_attributes (). If no tags applied
  * to this text affect editability, @default_setting will be returned.
  *
- * You don't want to use this function to decide whether text can be
- * inserted at @iter, because for insertion you don't want to know
+ * You don’t want to use this function to decide whether text can be
+ * inserted at @iter, because for insertion you don’t want to know
  * whether the char at @iter is inside an editable range, you want to
  * know whether a new character inserted at @iter would be inside an
  * editable range. Use gtk_text_iter_can_insert() to handle this
@@ -1491,7 +1491,7 @@ gtk_text_iter_get_language (const GtkTextIter *iter)
  * Returns %TRUE if @iter begins a paragraph,
  * i.e. if gtk_text_iter_get_line_offset () would return 0.
  * However this function is potentially more efficient than
- * gtk_text_iter_get_line_offset () because it doesn't have to compute
+ * gtk_text_iter_get_line_offset () because it doesn’t have to compute
  * the offset, it just has to see whether it’s 0.
  *
  * Return value: whether @iter begins a line
@@ -1793,7 +1793,7 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
  *
  * This function will not change the iterator if
  * it’s already on the last (end iter) line, i.e. it
- * won't move to the end of the last line.
+ * won’t move to the end of the last line.
  */
 static gboolean
 forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
@@ -2349,7 +2349,7 @@ gtk_text_iter_forward_chars (GtkTextIter *iter, gint count)
  * Moves @count characters backward, if possible (if @count would move
  * past the start or end of the buffer, moves to the start or end of
  * the buffer).  The return value indicates whether the iterator moved
- * onto a dereferenceable position; if the iterator didn't move, or
+ * onto a dereferenceable position; if the iterator didn’t move, or
  * moved onto the end iterator, then %FALSE is returned. If @count is 0,
  * the function does nothing and returns %FALSE.
  *
@@ -2631,7 +2631,7 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
  * Moves @count lines forward, if possible (if @count would move
  * past the start or end of the buffer, moves to the start or end of
  * the buffer).  The return value indicates whether the iterator moved
- * onto a dereferenceable position; if the iterator didn't move, or
+ * onto a dereferenceable position; if the iterator didn’t move, or
  * moved onto the end iterator, then %FALSE is returned. If @count is 0,
  * the function does nothing and returns %FALSE. If @count is negative,
  * moves backward by 0 - @count lines.
@@ -2682,7 +2682,7 @@ gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
  * Moves @count lines backward, if possible (if @count would move
  * past the start or end of the buffer, moves to the start or end of
  * the buffer).  The return value indicates whether the iterator moved
- * onto a dereferenceable position; if the iterator didn't move, or
+ * onto a dereferenceable position; if the iterator didn’t move, or
  * moved onto the end iterator, then %FALSE is returned. If @count is 0,
  * the function does nothing and returns %FALSE. If @count is negative,
  * moves forward by 0 - @count lines.
@@ -2799,7 +2799,7 @@ gtk_text_iter_backward_visible_line (GtkTextIter *iter)
  * Moves @count visible lines forward, if possible (if @count would move
  * past the start or end of the buffer, moves to the start or end of
  * the buffer).  The return value indicates whether the iterator moved
- * onto a dereferenceable position; if the iterator didn't move, or
+ * onto a dereferenceable position; if the iterator didn’t move, or
  * moved onto the end iterator, then %FALSE is returned. If @count is 0,
  * the function does nothing and returns %FALSE. If @count is negative,
  * moves backward by 0 - @count lines.
@@ -2839,7 +2839,7 @@ gtk_text_iter_forward_visible_lines (GtkTextIter *iter,
  * Moves @count visible lines backward, if possible (if @count would move
  * past the start or end of the buffer, moves to the start or end of
  * the buffer).  The return value indicates whether the iterator moved
- * onto a dereferenceable position; if the iterator didn't move, or
+ * onto a dereferenceable position; if the iterator didn’t move, or
  * moved onto the end iterator, then %FALSE is returned. If @count is 0,
  * the function does nothing and returns %FALSE. If @count is negative,
  * moves forward by 0 - @count lines.
@@ -3607,7 +3607,7 @@ is_cursor_pos_func (const PangoLogAttr *attrs,
  * a carriage return/newline sequence. For some Unicode characters,
  * the equivalent of say the letter “a” with an accent mark will be
  * represented as two characters, first the letter then a "combining
- * mark" that causes the accent to be rendered; so the cursor can't go
+ * mark" that causes the accent to be rendered; so the cursor can’t go
  * between those two characters. See also the #PangoLogAttr-struct and
  * pango_break() function.
  * 
@@ -3810,7 +3810,7 @@ gtk_text_iter_set_line_offset (GtkTextIter *iter,
  *
  * Same as gtk_text_iter_set_line_offset(), but works with a
  * byte index. The given byte index must be at
- * the start of a character, it can't be in the middle of a UTF-8
+ * the start of a character, it can’t be in the middle of a UTF-8
  * encoded character.
  * 
  **/

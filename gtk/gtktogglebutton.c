@@ -523,7 +523,7 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
  * “in between” display.  Normally you would turn off the inconsistent
  * state again if the user toggles the toggle button. This has to be
  * done manually, gtk_toggle_button_set_inconsistent() only affects
- * visual appearance, it doesn't affect the semantics of the button.
+ * visual appearance, it doesn’t affect the semantics of the button.
  * 
  **/
 void

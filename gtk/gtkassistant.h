@@ -64,7 +64,7 @@ G_BEGIN_DECLS
  * %GTK_ASSISTANT_PAGE_CONFIRM, %GTK_ASSISTANT_PAGE_SUMMARY or
  * %GTK_ASSISTANT_PAGE_PROGRESS to be correct.
  *
- * The Cancel button will only be shown if the page isn't “committed”.
+ * The Cancel button will only be shown if the page isn’t “committed”.
  * See gtk_assistant_commit() for details.
  */
 typedef enum

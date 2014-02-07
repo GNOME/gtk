@@ -1092,7 +1092,7 @@ gtk_ui_manager_get_accel_group (GtkUIManager *manager)
  * 
  * Looks up a widget by following a path. 
  * The path consists of the names specified in the XML description of the UI. 
- * separated by '/'. Elements which don't have a name or action attribute in 
+ * separated by '/'. Elements which don’t have a name or action attribute in 
  * the XML (e.g. &lt;popup&gt;) can be addressed by their XML element name 
  * (e.g. "popup"). The root element ("/ui") can be omitted in the path.
  *

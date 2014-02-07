@@ -946,7 +946,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * clicking the button will emit the #GtkDialog::response signal with
  * the given @response_id. The button is appended to the end of the
  * dialog’s action area. The button widget is returned, but usually
- * you don't need it.
+ * you don’t need it.
  *
  * Return value: (transfer none): the #GtkButton widget that was added
  **/
@@ -1216,7 +1216,7 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  * will be modal. You can force gtk_dialog_run() to return at any time by
  * calling gtk_dialog_response() to emit the ::response signal. Destroying
  * the dialog during gtk_dialog_run() is a very bad idea, because your
- * post-run code won't know whether the dialog was destroyed or not.
+ * post-run code won’t know whether the dialog was destroyed or not.
  *
  * After gtk_dialog_run() returns, you are responsible for hiding or
  * destroying the dialog if you wish to do so.
@@ -1368,7 +1368,7 @@ gtk_dialog_get_widget_for_response (GtkDialog *dialog,
  * of a dialog.
  *
  * Returns: the response id of @widget, or %GTK_RESPONSE_NONE
- *  if @widget doesn't have a response id set.
+ *  if @widget doesn’t have a response id set.
  *
  * Since: 2.8
  */

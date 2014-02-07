@@ -93,7 +93,7 @@
  * may take some time. To avoid blocking the user interface, the call
  * to request the selection, gtk_clipboard_request_contents() takes a
  * callback that will be called when the contents are received (or
- * when the request fails.) If you don't want to deal with providing
+ * when the request fails.) If you don’t want to deal with providing
  * a separate callback, you can also use gtk_clipboard_wait_for_contents().
  * What this does is run the GLib main loop recursively waiting for
  * the contents. This can simplify the code flow, but you still have
@@ -459,7 +459,7 @@ get_clipboard_widget (GdkDisplay *display)
  * but actually retrieve the actual timestamp from the server.
  * This is a little slower but allows us to make the guarantee
  * that the times used by this application will always ascend
- * and we won't get selections being rejected just because
+ * and we won’t get selections being rejected just because
  * we are using a correct timestamp from an event, but used
  * CurrentTime previously.
  */
@@ -1683,7 +1683,7 @@ gtk_clipboard_get_display (GtkClipboard *clipboard)
  * timeouts, etc, may be dispatched during the wait.
  *
  * This function is a little faster than calling
- * gtk_clipboard_wait_for_text() since it doesn't need to retrieve
+ * gtk_clipboard_wait_for_text() since it doesn’t need to retrieve
  * the actual text.
  * 
  * Return value: %TRUE is there is text available, %FALSE otherwise.
@@ -1716,7 +1716,7 @@ gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
  * timeouts, etc, may be dispatched during the wait.
  *
  * This function is a little faster than calling
- * gtk_clipboard_wait_for_rich_text() since it doesn't need to retrieve
+ * gtk_clipboard_wait_for_rich_text() since it doesn’t need to retrieve
  * the actual text.
  *
  * Return value: %TRUE is there is rich text available, %FALSE otherwise.
@@ -1754,7 +1754,7 @@ gtk_clipboard_wait_is_rich_text_available (GtkClipboard  *clipboard,
  * timeouts, etc, may be dispatched during the wait.
  *
  * This function is a little faster than calling
- * gtk_clipboard_wait_for_image() since it doesn't need to retrieve
+ * gtk_clipboard_wait_for_image() since it doesn’t need to retrieve
  * the actual image data.
  * 
  * Return value: %TRUE is there is an image available, %FALSE otherwise.
@@ -1789,7 +1789,7 @@ gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard)
  * timeouts, etc, may be dispatched during the wait.
  *
  * This function is a little faster than calling
- * gtk_clipboard_wait_for_uris() since it doesn't need to retrieve
+ * gtk_clipboard_wait_for_uris() since it doesn’t need to retrieve
  * the actual URI data.
  * 
  * Return value: %TRUE is there is an URI list available, %FALSE otherwise.
@@ -1822,7 +1822,7 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
  * @n_targets: (out): location to store number of items in @targets.
  *
  * Returns a list of targets that are present on the clipboard, or %NULL
- * if there aren't any targets available. The returned list must be
+ * if there aren’t any targets available. The returned list must be
  * freed with g_free().
  * This function waits for the data to be received using the main
  * loop, so events, timeouts, etc, may be dispatched during the wait.

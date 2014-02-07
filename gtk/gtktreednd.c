@@ -105,7 +105,7 @@ gtk_tree_drag_dest_get_type (void)
  * @path: row on which user is initiating a drag
  * 
  * Asks the #GtkTreeDragSource whether a particular row can be used as
- * the source of a DND operation. If the source doesn't implement
+ * the source of a DND operation. If the source doesn’t implement
  * this interface, the row is assumed draggable.
  *
  * Return value: %TRUE if the row can be dragged
@@ -221,7 +221,7 @@ gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
  * at the same depth as @dest_path. i.e., can we drop the data in
  * @selection_data at that location. @dest_path does not have to
  * exist; the return value will almost certainly be %FALSE if the
- * parent of @dest_path doesn't exist, though.
+ * parent of @dest_path doesn’t exist, though.
  * 
  * Return value: %TRUE if a drop is possible before @dest_path
  **/
@@ -312,7 +312,7 @@ gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
  * %GTK_TREE_MODEL_ROW. Normally called from a drag_data_received handler.
  * This function can only be used if @selection_data originates from the same
  * process that’s calling this function, because a pointer to the tree model
- * is being passed around. If you aren't in the same process, then you'll
+ * is being passed around. If you aren’t in the same process, then you'll
  * get memory corruption. In the #GtkTreeDragDest drag_data_received handler,
  * you can assume that selection data of type %GTK_TREE_MODEL_ROW is
  * in from the current process. The returned path must be freed with

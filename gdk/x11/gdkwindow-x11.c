@@ -1187,7 +1187,7 @@ x_event_mask_to_gdk_event_mask (long mask)
  *
  * Return value: (transfer full): a #GdkWindow wrapper for the native
  *   window, or %NULL if the window has been destroyed. The wrapper
- *   will be newly created, if one doesn't exist already.
+ *   will be newly created, if one doesn’t exist already.
  *
  * Since: 2.24
  */

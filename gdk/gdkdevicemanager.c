@@ -57,7 +57,7 @@
  * #GdkDeviceManager implementation will be used as the input source.
  * Otherwise either the core or XInput 1 implementations will be used.
  *
- * For simple applications that don't have any special interest in
+ * For simple applications that don’t have any special interest in
  * input devices, the so-called “client pointer”
  * provides a reasonable approximation to a simple setup with a single
  * pointer and keyboard. The device that has been set as the client
@@ -330,8 +330,8 @@ gdk_device_manager_list_devices (GdkDeviceManager *device_manager,
  * for this application. In X11, window managers may change this depending on the interaction
  * pattern under the presence of several pointers.
  *
- * You should use this function seldomly, only in code that isn't triggered by a #GdkEvent
- * and there aren't other means to get a meaningful #GdkDevice to operate on.
+ * You should use this function seldomly, only in code that isn’t triggered by a #GdkEvent
+ * and there aren’t other means to get a meaningful #GdkDevice to operate on.
  *
  * Returns: (transfer none): The client pointer. This memory is
  *          owned by GDK and must not be freed or unreferenced.

@@ -1089,7 +1089,7 @@ gtk_progress_bar_update_pulse (GtkProgressBar *pbar)
  * gtk_progress_bar_pulse:
  * @pbar: a #GtkProgressBar
  *
- * Indicates that some progress has been made, but you don't know how much.
+ * Indicates that some progress has been made, but you don’t know how much.
  * Causes the progress bar to enter “activity mode,” where a block
  * bounces back and forth. Each call to gtk_progress_bar_pulse()
  * causes the block to move by a little bit (the amount of movement

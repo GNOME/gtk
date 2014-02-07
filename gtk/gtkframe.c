@@ -520,7 +520,7 @@ gtk_frame_get_label_widget (GtkFrame *frame)
  *   1.0 represents right alignment.
  * @yalign: The y alignment of the label. A value of 0.0 aligns under 
  *   the frame; 1.0 aligns above the frame. If the values are exactly
- *   0.0 or 1.0 the gap in the frame won't be painted because the label
+ *   0.0 or 1.0 the gap in the frame won’t be painted because the label
  *   will be completely above or below the frame.
  * 
  * Sets the alignment of the frame widget’s label. The

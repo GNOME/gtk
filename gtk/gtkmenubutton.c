@@ -828,7 +828,7 @@ gtk_menu_button_get_align_widget (GtkMenuButton *menu_button)
  * we will do our best to keep it inside the screen and fully visible.
  *
  * If you pass %GTK_ARROW_NONE for a @direction, the menu will behave
- * as if you passed %GTK_ARROW_DOWN (although you won't see any arrows).
+ * as if you passed %GTK_ARROW_DOWN (although you won’t see any arrows).
  *
  * Since: 3.6
  */

@@ -443,7 +443,7 @@ _gtk_css_style_property_affects_size (GtkCssStyleProperty *property)
  *
  * Queries if the given @property affects the default font. This is
  * used for optimizations inside GTK, where clearing pango
- * layouts can be avoided if the font doesn't change.
+ * layouts can be avoided if the font doesn’t change.
  *
  * Returns: %TRUE if the property affects the font.
  **/

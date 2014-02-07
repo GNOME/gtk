@@ -1171,7 +1171,7 @@ gtk_action_is_sensitive (GtkAction *action)
  * gtk_action_get_sensitive:
  * @action: the action object
  * 
- * Returns whether the action itself is sensitive. Note that this doesn't 
+ * Returns whether the action itself is sensitive. Note that this doesn’t 
  * necessarily mean effective sensitivity. See gtk_action_is_sensitive() 
  * for that.
  *
@@ -1196,7 +1196,7 @@ gtk_action_get_sensitive (GtkAction *action)
  * @sensitive: %TRUE to make the action sensitive
  * 
  * Sets the :sensitive property of the action to @sensitive. Note that 
- * this doesn't necessarily mean effective sensitivity. See 
+ * this doesn’t necessarily mean effective sensitivity. See 
  * gtk_action_is_sensitive() 
  * for that.
  *
@@ -1251,7 +1251,7 @@ gtk_action_is_visible (GtkAction *action)
  * gtk_action_get_visible:
  * @action: the action object
  * 
- * Returns whether the action itself is visible. Note that this doesn't 
+ * Returns whether the action itself is visible. Note that this doesn’t 
  * necessarily mean effective visibility. See gtk_action_is_sensitive() 
  * for that.
  *
@@ -1276,7 +1276,7 @@ gtk_action_get_visible (GtkAction *action)
  * @visible: %TRUE to make the action visible
  * 
  * Sets the :visible property of the action to @visible. Note that 
- * this doesn't necessarily mean effective visibility. See 
+ * this doesn’t necessarily mean effective visibility. See 
  * gtk_action_is_visible() 
  * for that.
  *
@@ -1995,7 +1995,7 @@ gtk_action_set_accel_group (GtkAction     *action,
  *
  * Since multiple proxies may independently trigger the installation
  * of the accelerator, the @action counts the number of times this
- * function has been called and doesn't remove the accelerator until
+ * function has been called and doesn’t remove the accelerator until
  * gtk_action_disconnect_accelerator() has been called as many times.
  *
  * Since: 2.4

@@ -309,7 +309,7 @@ gtk_text_tag_table_lookup (GtkTextTagTable *table,
  *
  * Remove a tag from the table. If a #GtkTextBuffer has @table as its tag table,
  * the tag is removed from the buffer. The table’s reference to the tag is
- * removed, so the tag will end up destroyed if you don't have a reference to
+ * removed, so the tag will end up destroyed if you don’t have a reference to
  * it.
  **/
 void
@@ -386,7 +386,7 @@ list_foreach (gpointer data, gpointer user_data)
  *
  * Calls @func on each tag in @table, with user data @data.
  * Note that the table may not be modified while iterating 
- * over it (you can't add/remove tags).
+ * over it (you can’t add/remove tags).
  **/
 void
 gtk_text_tag_table_foreach (GtkTextTagTable       *table,

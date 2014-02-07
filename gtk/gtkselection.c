@@ -20,7 +20,7 @@
  * of John Ousterhout’s Tk toolkit, and does many things in much the 
  * same way.
  *
- * The one thing in the ICCCM that isn't fully supported here (or in Tk)
+ * The one thing in the ICCCM that isn’t fully supported here (or in Tk)
  * is side effects targets. For these to be handled properly, MULTIPLE
  * targets need to be done in the order specified. This cannot be
  * guaranteed with the way we do things, since if we are doing INCR
@@ -33,7 +33,7 @@
  * refers to the _sending_ part of the INCR protocol. The receiving
  * portion is referred to just as “retrieval”. (Terminology borrowed
  * from Tk, because there is no good opposite to “retrieval” in English.
- * “send” can't be made into a noun gracefully and we're already using
+ * “send” can’t be made into a noun gracefully and we're already using
  * “emission” for something else ....)
  */
 
@@ -3035,8 +3035,8 @@ gtk_selection_invoke_handler (GtkWidget	       *widget,
 /*************************************************************
  * gtk_selection_default_handler:
  *     Handles some default targets that exist for any widget
- *     If it can't fit results into buffer, returns -1. This
- *     won't happen in any conceivable case, since it would
+ *     If it can’t fit results into buffer, returns -1. This
+ *     won’t happen in any conceivable case, since it would
  *     require 1000 selection targets!
  *
  *   arguments:

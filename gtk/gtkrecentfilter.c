@@ -660,7 +660,7 @@ gtk_recent_filter_add_age (GtkRecentFilter *filter,
  * function. The bitfield @needed which is passed in provides information
  * about what sorts of information that the filter function needs;
  * this allows GTK+ to avoid retrieving expensive information when
- * it isn't needed by the filter.
+ * it isn’t needed by the filter.
  * 
  * Since: 2.10
  **/

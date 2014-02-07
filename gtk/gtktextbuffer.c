@@ -1411,7 +1411,7 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
  * @end: another position in the same buffer as @start
  *
  * Copies text, tags, and pixbufs between @start and @end (the order
- * of @start and @end doesn't matter) and inserts the copy at @iter.
+ * of @start and @end doesn’t matter) and inserts the copy at @iter.
  * Used instead of simply getting/inserting text because it preserves
  * images and tags. If @start and @end are in a different buffer from
  * @buffer, the two buffers must share the same tag table.
@@ -1447,7 +1447,7 @@ gtk_text_buffer_insert_range (GtkTextBuffer     *buffer,
  * @default_editable: default editability of the buffer
  *
  * Same as gtk_text_buffer_insert_range(), but does nothing if the
- * insertion point isn't editable. The @default_editable parameter
+ * insertion point isn’t editable. The @default_editable parameter
  * indicates whether the text is editable at @iter if no tags
  * enclosing @iter affect editability. Typically the result of
  * gtk_text_view_get_editable() is appropriate here.
@@ -2217,8 +2217,8 @@ gtk_text_buffer_get_iter_at_mark (GtkTextBuffer *buffer,
  *
  * Deletes @mark, so that it’s no longer located anywhere in the
  * buffer. Removes the reference the buffer holds to the mark, so if
- * you haven't called g_object_ref() on the mark, it will be freed. Even
- * if the mark isn't freed, most operations on @mark become
+ * you haven’t called g_object_ref() on the mark, it will be freed. Even
+ * if the mark isn’t freed, most operations on @mark become
  * invalid, until it gets added to a buffer again with 
  * gtk_text_buffer_add_mark(). Use gtk_text_mark_get_deleted() to  
  * find out if a mark has been removed from its buffer.
@@ -2634,7 +2634,7 @@ gtk_text_buffer_apply_tag (GtkTextBuffer     *buffer,
  *
  * Emits the “remove-tag” signal. The default handler for the signal
  * removes all occurrences of @tag from the given range. @start and
- * @end don't have to be in order.
+ * @end don’t have to be in order.
  **/
 void
 gtk_text_buffer_remove_tag (GtkTextBuffer     *buffer,
@@ -3110,7 +3110,7 @@ gtk_text_buffer_get_line_count (GtkTextBuffer *buffer)
  * @buffer: a #GtkTextBuffer 
  * 
  * Gets the number of characters in the buffer; note that characters
- * and bytes are not the same, you can't e.g. expect the contents of
+ * and bytes are not the same, you can’t e.g. expect the contents of
  * the buffer in string form to be this many bytes long. The character
  * count is cached, so this function is very fast.
  * 
@@ -3822,7 +3822,7 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
  *
  * Deletes the range between the “insert” and “selection_bound” marks,
  * that is, the currently-selected text. If @interactive is %TRUE,
- * the editability of the selection will be considered (users can't delete
+ * the editability of the selection will be considered (users can’t delete
  * uneditable text).
  * 
  * Return value: whether there was a non-empty selection to delete

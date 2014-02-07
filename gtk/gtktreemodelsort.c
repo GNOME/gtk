@@ -2287,7 +2287,7 @@ gtk_real_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_mode
  * 
  * Converts @child_path to a path relative to @tree_model_sort.  That is,
  * @child_path points to a path in the child model.  The returned path will
- * point to the same row in the sorted model.  If @child_path isn't a valid 
+ * point to the same row in the sorted model.  If @child_path isn’t a valid 
  * path on the child model, then %NULL is returned.
  * 
  * Return value: A newly allocated #GtkTreePath, or %NULL
@@ -2725,9 +2725,9 @@ gtk_tree_model_sort_reset_default_sort_func (GtkTreeModelSort *tree_model_sort)
  * @tree_model_sort: A #GtkTreeModelSort
  * 
  * This function should almost never be called.  It clears the @tree_model_sort
- * of any cached iterators that haven't been reffed with
+ * of any cached iterators that haven’t been reffed with
  * gtk_tree_model_ref_node().  This might be useful if the child model being
- * sorted is static (and doesn't change often) and there has been a lot of
+ * sorted is static (and doesn’t change often) and there has been a lot of
  * unreffed access to nodes.  As a side effect of this function, all unreffed
  * iters will be invalid.
  **/

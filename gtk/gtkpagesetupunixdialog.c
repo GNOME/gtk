@@ -51,7 +51,7 @@
  * @Title: GtkPageSetupUnixDialog
  *
  * #GtkPageSetupUnixDialog implements a page setup dialog for platforms
- * which don't provide a native page setup dialog, like Unix. It can
+ * which don’t provide a native page setup dialog, like Unix. It can
  * be used very much like any other GTK+ dialog, at the cost of
  * the portability offered by the
  * [high-level printing API][gtk3-High-level-Printing-API]

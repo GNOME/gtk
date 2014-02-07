@@ -57,7 +57,7 @@
  * will generally take the filter model as argument. As long as you are
  * only calling gtk_tree_model_get(), this will make no difference to
  * you. If for some reason, you need the original model, use
- * gtk_tree_model_filter_get_model(). Don't forget to use
+ * gtk_tree_model_filter_get_model(). Don’t forget to use
  * gtk_tree_model_filter_convert_iter_to_child_iter() to obtain a
  * matching iter.
  */

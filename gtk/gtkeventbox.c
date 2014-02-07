@@ -247,12 +247,12 @@ gtk_event_box_get_visible_window (GtkEventBox *event_box)
  * window below the child. (See gtk_event_box_set_above_child().)
  * Since the input-only window is not an ancestor window of any windows
  * that descendent widgets of the event box create, events on these
- * windows aren't propagated up by the windowing system, but only by GTK+.
- * The practical effect of this is if an event isn't in the event
+ * windows aren’t propagated up by the windowing system, but only by GTK+.
+ * The practical effect of this is if an event isn’t in the event
  * mask for the descendant window (see gtk_widget_add_events()),
- * it won't be received by the event box.
+ * it won’t be received by the event box.
  * 
- * This problem doesn't occur for visible event boxes, because in
+ * This problem doesn’t occur for visible event boxes, because in
  * that case, the event box window is actually the ancestor of the
  * descendant windows, not just at the same place on the screen.
  *

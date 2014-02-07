@@ -1470,7 +1470,7 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
 
 /* We have to make sure that the XdndActionList we keep internally
  * is up to date with the XdndActionList on the source window
- * because we get no notification, because Xdnd wasn't meant
+ * because we get no notification, because Xdnd wasn’t meant
  * to continually send actions. So we select on PropertyChangeMask
  * and add this filter.
  */

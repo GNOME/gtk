@@ -403,11 +403,11 @@ gdk_x11_get_xatom_by_name (const gchar *atom_name)
  * 
  * Returns the name of an X atom for its display. This
  * function is meant mainly for debugging, so for convenience, unlike
- * XAtomName() and gdk_atom_name(), the result doesn't need to
+ * XAtomName() and gdk_atom_name(), the result doesn’t need to
  * be freed. 
  *
  * Return value: name of the X atom; this string is owned by GDK,
- *   so it shouldn't be modifed or freed. 
+ *   so it shouldn’t be modifed or freed. 
  *
  * Since: 2.2
  **/
@@ -427,11 +427,11 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
  * Returns the name of an X atom for GDK’s default display. This
  * function is meant mainly for debugging, so for convenience, unlike
  * XAtomName() and gdk_atom_name(), the result 
- * doesn't need to be freed. Also, this function will never return %NULL, 
+ * doesn’t need to be freed. Also, this function will never return %NULL, 
  * even if @xatom is invalid.
  * 
  * Return value: name of the X atom; this string is owned by GTK+,
- *   so it shouldn't be modifed or freed. 
+ *   so it shouldn’t be modifed or freed. 
  **/
 const gchar *
 gdk_x11_get_xatom_name (Atom xatom)

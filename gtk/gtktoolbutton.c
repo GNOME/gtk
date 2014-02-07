@@ -1175,7 +1175,7 @@ gtk_tool_button_set_label (GtkToolButton *button,
  * @button: a #GtkToolButton
  * 
  * Returns the label used by the tool button, or %NULL if the tool button
- * doesn't have a label. or uses a the label from a stock item. The returned
+ * doesn’t have a label. or uses a the label from a stock item. The returned
  * string is owned by GTK+, and must not be modified or freed.
  * 
  * Return value: The label, or %NULL

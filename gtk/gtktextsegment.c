@@ -391,7 +391,7 @@ char_segment_delete_func (GtkTextLineSegment *segPtr, GtkTextLine *line, int tre
  *      None.
  *
  * Side effects:
- *      If the segment isn't inconsistent then the procedure
+ *      If the segment isn’t inconsistent then the procedure
  *      g_errors.
  *
  *--------------------------------------------------------------

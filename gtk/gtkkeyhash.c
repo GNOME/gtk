@@ -370,7 +370,7 @@ keyval_in_group (GdkKeymap  *keymap,
  * does not). As long there are any exact matches, only exact matches
  * are returned. If there are no exact matches, fuzzy matches will be
  * returned, as long as they are not shadowing a possible exact match.
- * This means that fuzzy matches won't be considered if their keyval is 
+ * This means that fuzzy matches won’t be considered if their keyval is 
  * present in the current group.
  * 
  * Return value: A newly-allocated #GSList of matching entries.

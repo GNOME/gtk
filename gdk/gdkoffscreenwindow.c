@@ -34,7 +34,7 @@
 
 /* LIMITATIONS:
  *
- * Offscreen windows can't be the child of a foreign window,
+ * Offscreen windows can’t be the child of a foreign window,
  *   nor contain foreign windows
  * GDK_POINTER_MOTION_HINT_MASK isn't effective
  */

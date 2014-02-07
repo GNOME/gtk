@@ -65,7 +65,7 @@
  * @See_also: #GtkPageSetupUnixDialog, #GtkPrinter, #GtkPrintJob
  *
  * GtkPrintUnixDialog implements a print dialog for platforms
- * which don't provide a native print dialog, like Unix. It can
+ * which don’t provide a native print dialog, like Unix. It can
  * be used very much like any other GTK+ dialog, at the cost of
  * the portability offered by the
  * [high-level printing API][gtk3-High-level-Printing-API]
@@ -3631,7 +3631,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
  * Gets a new #GtkPrintSettings object that represents the
  * current values in the print dialog. Note that this creates a
  * new object, and you need to unref it
- * if don't want to keep it.
+ * if don’t want to keep it.
  *
  * Returns: a new #GtkPrintSettings object with the values from @dialog
  *
@@ -3723,7 +3723,7 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
  *
  * This lets you specify the printing capabilities your application
  * supports. For instance, if you can handle scaling the output then
- * you pass #GTK_PRINT_CAPABILITY_SCALE. If you don't pass that, then
+ * you pass #GTK_PRINT_CAPABILITY_SCALE. If you don’t pass that, then
  * the dialog will only let you select the scale if the printing
  * system automatically handles scaling.
  *

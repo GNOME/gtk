@@ -71,7 +71,7 @@
  * If the window is not mapped (typically because it’s iconified/minimized
  * or not on the current workspace), then %NULL will be returned.
  *
- * If memory can't be allocated for the return value, %NULL will be returned
+ * If memory can’t be allocated for the return value, %NULL will be returned
  * instead.
  *
  * (In short, there are several ways this function can fail, and if it fails

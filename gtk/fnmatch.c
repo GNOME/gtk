@@ -240,7 +240,7 @@ gtk_fnmatch_intern (const char *pattern,
  *  it matches, nonzero if not.
  *
  * GTK+ used to use a old version of GNU fnmatch() that was buggy
- * in various ways and didn't handle UTF-8. The following is
+ * in various ways and didn’t handle UTF-8. The following is
  * converted to UTF-8. To simplify the process of making it
  * correct, this is special-cased to the combinations of flags
  * that gtkfilesel.c uses.

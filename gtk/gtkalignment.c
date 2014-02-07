@@ -32,7 +32,7 @@
  *
  * The scale settings are used to specify how much the child widget should
  * expand to fill the space allocated to the #GtkAlignment.
- * The values can range from 0 (meaning the child doesn't expand at all) to
+ * The values can range from 0 (meaning the child doesn’t expand at all) to
  * 1 (meaning the child expands to fill all of the available space).
  *
  * The align settings are used to place the child widget within the available

@@ -1562,7 +1562,7 @@ gtk_text_view_init (GtkTextView *text_view)
 /**
  * gtk_text_view_new:
  *
- * Creates a new #GtkTextView. If you don't call gtk_text_view_set_buffer()
+ * Creates a new #GtkTextView. If you don’t call gtk_text_view_set_buffer()
  * before using the text view, an empty default buffer will be created
  * for you. Get the buffer with gtk_text_view_get_buffer(). If you want
  * to specify your own buffer, consider gtk_text_view_new_with_buffer().
@@ -1766,7 +1766,7 @@ get_buffer (GtkTextView *text_view)
  *
  * Returns the #GtkTextBuffer being displayed by this text view.
  * The reference count on the buffer is not incremented; the caller
- * of this function won't own a new reference.
+ * of this function won’t own a new reference.
  *
  * Return value: (transfer none): a #GtkTextBuffer
  **/
@@ -2481,7 +2481,7 @@ clamp_iter_onscreen (GtkTextView *text_view, GtkTextIter *iter)
  * Moves a mark within the buffer so that it's
  * located within the currently-visible text area.
  *
- * Return value: %TRUE if the mark moved (wasn't already onscreen)
+ * Return value: %TRUE if the mark moved (wasn’t already onscreen)
  **/
 gboolean
 gtk_text_view_move_mark_onscreen (GtkTextView *text_view,
@@ -3059,7 +3059,7 @@ gtk_text_view_toggle_cursor_visible (GtkTextView *text_view)
  * @setting: whether to show the insertion cursor
  *
  * Toggles whether the insertion point is displayed. A buffer with no editable
- * text probably shouldn't have a visible cursor, so you may want to turn
+ * text probably shouldn’t have a visible cursor, so you may want to turn
  * the cursor off.
  **/
 void
@@ -3112,7 +3112,7 @@ gtk_text_view_get_cursor_visible (GtkTextView *text_view)
  * @text_view: a #GtkTextView
  *
  * Moves the cursor to the currently visible region of the
- * buffer, it it isn't there already.
+ * buffer, it it isn’t there already.
  *
  * Return value: %TRUE if the cursor had to be moved.
  **/
@@ -9605,7 +9605,7 @@ buffer_to_text_window (GtkTextView   *text_view,
  * Converts coordinate (@buffer_x, @buffer_y) to coordinates for the window
  * @win, and stores the result in (@window_x, @window_y). 
  *
- * Note that you can't convert coordinates for a nonexisting window (see 
+ * Note that you can’t convert coordinates for a nonexisting window (see 
  * gtk_text_view_set_border_window_size()).
  **/
 void
@@ -9749,7 +9749,7 @@ text_window_to_buffer (GtkTextView   *text_view,
  * Converts coordinates on the window identified by @win to buffer
  * coordinates, storing the result in (@buffer_x,@buffer_y).
  *
- * Note that you can't convert coordinates for a nonexisting window (see 
+ * Note that you can’t convert coordinates for a nonexisting window (see 
  * gtk_text_view_set_border_window_size()).
  **/
 void
@@ -9905,7 +9905,7 @@ set_window_height (GtkTextView      *text_view,
  * or the height of %GTK_TEXT_WINDOW_TOP or %GTK_TEXT_WINDOW_BOTTOM.
  * Automatically destroys the corresponding window if the size is set
  * to 0, and creates the window if the size is set to non-zero.  This
- * function can only be used for the “border windows,” it doesn't work
+ * function can only be used for the “border windows,” it doesn’t work
  * with #GTK_TEXT_WINDOW_WIDGET, #GTK_TEXT_WINDOW_TEXT, or
  * #GTK_TEXT_WINDOW_PRIVATE.
  **/

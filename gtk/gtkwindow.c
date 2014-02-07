@@ -1259,7 +1259,7 @@ gtk_window_class_init (GtkWindowClass *klass)
  *
  * Note that since maximization is ultimately handled by the window
  * manager and happens asynchronously to an application request, you
- * shouldn't assume the return value of this function changing
+ * shouldn’t assume the return value of this function changing
  * immediately (or at all), as an effect of calling
  * gtk_window_maximize() or gtk_window_unmaximize().
  *
@@ -1836,7 +1836,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
  * [window manager][gtk-X11-arch].
  *
  * If you simply want an undecorated window (no window borders), use
- * gtk_window_set_decorated(), don't use #GTK_WINDOW_POPUP.
+ * gtk_window_set_decorated(), don’t use #GTK_WINDOW_POPUP.
  *
  * All top-level windows created by gtk_window_new() are stored in
  * an internal top-level window list.  This list can be obtained from
@@ -1942,7 +1942,7 @@ gtk_window_get_title (GtkWindow *window)
  * @wmclass_name: window name hint
  * @wmclass_class: window class hint
  *
- * Don't use this function. It sets the X Window System “class” and
+ * Don’t use this function. It sets the X Window System “class” and
  * “name” hints for a window.  According to the ICCCM, you should
  * always set these to the same value for all windows in an
  * application, and GTK+ sets them to that value by default, so calling
@@ -1987,7 +1987,7 @@ gtk_window_set_wmclass (GtkWindow *window,
  * when the user restarts their session, the window manager can put
  * the toolbox back in the same place.
  *
- * If a window already has a unique title, you don't need to set the
+ * If a window already has a unique title, you don’t need to set the
  * role, since the WM can use the title to identify the window when
  * restoring the session.
  * 
@@ -3162,7 +3162,7 @@ gtk_window_set_skip_taskbar_hint (GtkWindow *window,
  * 
  * Gets the value set by gtk_window_set_skip_taskbar_hint()
  * 
- * Return value: %TRUE if window shouldn't be in taskbar
+ * Return value: %TRUE if window shouldn’t be in taskbar
  * 
  * Since: 2.2
  **/
@@ -3215,7 +3215,7 @@ gtk_window_set_skip_pager_hint (GtkWindow *window,
  * 
  * Gets the value set by gtk_window_set_skip_pager_hint().
  * 
- * Return value: %TRUE if window shouldn't be in pager
+ * Return value: %TRUE if window shouldn’t be in pager
  * 
  * Since: 2.2
  **/
@@ -3386,7 +3386,7 @@ gtk_window_get_focus_on_map (GtkWindow *window)
  * 
  * If @setting is %TRUE, then destroying the transient parent of @window
  * will also destroy @window itself. This is useful for dialogs that
- * shouldn't persist beyond the lifetime of the main window they're
+ * shouldn’t persist beyond the lifetime of the main window they're
  * associated with, for example.
  **/
 void
@@ -3440,7 +3440,7 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
  *
  * If @setting is %TRUE, then @window will request that it’s titlebar
  * should be hidden when maximized.
- * This is useful for windows that don't convey any information other
+ * This is useful for windows that don’t convey any information other
  * than the application name in the titlebar, to put the available
  * screen space to better use. If the underlying window system does not
  * support the request, the setting will not have any effect.
@@ -4151,7 +4151,7 @@ gtk_window_unrealize_icon (GtkWindow *window)
  *
  * gtk_window_set_icon_list() allows you to pass in the same icon in
  * several hand-drawn sizes. The list should contain the natural sizes
- * your icon is available in; that is, don't scale the image before
+ * your icon is available in; that is, don’t scale the image before
  * passing it to GTK+. Scaling is postponed until the last minute,
  * when the desired final size is known, to allow best quality.
  *
@@ -4208,7 +4208,7 @@ gtk_window_set_icon_list (GtkWindow  *window,
  * 
  * Retrieves the list of icons set by gtk_window_set_icon_list().
  * The list is copied, but the reference count on each
- * member won't be incremented.
+ * member won’t be incremented.
  *
  * Return value: (element-type GdkPixbuf) (transfer container): copy of window’s icon list
  **/
@@ -4238,7 +4238,7 @@ gtk_window_get_icon_list (GtkWindow  *window)
  * frame, or display it in other contexts.
  *
  * The icon should be provided in whatever size it was naturally
- * drawn; that is, don't scale the image before passing it to
+ * drawn; that is, don’t scale the image before passing it to
  * GTK+. Scaling is postponed until the last minute, when the desired
  * final size is known, to allow best quality.
  *
@@ -4696,7 +4696,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * shown; if a window is hidden and re-shown, it will remember the size
  * it had prior to hiding, rather than using the default size.
  *
- * Windows can't actually be 0x0 in size, they must be at least 1x1, but
+ * Windows can’t actually be 0x0 in size, they must be at least 1x1, but
  * passing 0 for @width and @height is OK, resulting in a 1x1 default size.
  **/
 void       
@@ -4852,7 +4852,7 @@ gtk_window_resize_to_geometry (GtkWindow *window,
  * #GdkEventConfigure, that is, GTK+ uses its locally-stored size,
  * rather than querying the X server for the size. As a result, if you
  * call gtk_window_resize() then immediately call
- * gtk_window_get_size(), the size won't have taken effect yet. After
+ * gtk_window_get_size(), the size won’t have taken effect yet. After
  * the window manager processes the resize request, GTK+ receives
  * notification that the size has changed via a configure event, and
  * the size of the window gets updated.
@@ -5035,7 +5035,7 @@ gtk_window_move (GtkWindow *window,
  * This means that the meaning of the returned value varies with
  * window gravity. See gtk_window_move() for more details.
  *
- * If you haven't changed the window gravity, its gravity will be
+ * If you haven’t changed the window gravity, its gravity will be
  * #GDK_GRAVITY_NORTH_WEST. This means that gtk_window_get_position()
  * gets the position of the top-left corner of the window manager
  * frame for the window. gtk_window_move() sets the position of this
@@ -5055,7 +5055,7 @@ gtk_window_move (GtkWindow *window,
  *
  * If a window has gravity #GDK_GRAVITY_STATIC the window manager
  * frame is not relevant, and thus gtk_window_get_position() will
- * always produce accurate results. However you can't use static
+ * always produce accurate results. However you can’t use static
  * gravity to do things like place a window in a corner of the screen,
  * because static gravity ignores the window manager decorations.
  *
@@ -5786,7 +5786,7 @@ gtk_window_unmap (GtkWidget *widget)
  * should hold (in order of importance):
  * - the size is not below the minimum size
  *   Windows cannot be resized below their minimum size, so we must
- *   ensure we don't do that either.
+ *   ensure we don’t do that either.
  * - the size is not above the natural size
  *   It seems weird to allocate more than this in an initial guess.
  * - the size does not exceed that of a maximized window
@@ -10020,12 +10020,12 @@ gtk_window_present_with_time (GtkWindow *window,
  * @window: a #GtkWindow
  *
  * Asks to iconify (i.e. minimize) the specified @window. Note that
- * you shouldn't assume the window is definitely iconified afterward,
+ * you shouldn’t assume the window is definitely iconified afterward,
  * because other entities (e.g. the user or
  * [window manager][gtk-X11-arch]) could deiconify it
  * again, or there may not be a window manager in which case
- * iconification isn't possible, etc. But normally the window will end
- * up iconified. Just don't write code that crashes if not.
+ * iconification isn’t possible, etc. But normally the window will end
+ * up iconified. Just don’t write code that crashes if not.
  *
  * It’s permitted to call this function before showing a window,
  * in which case the window will be iconified before it ever appears
@@ -10060,7 +10060,7 @@ gtk_window_iconify (GtkWindow *window)
  * @window: a #GtkWindow
  *
  * Asks to deiconify (i.e. unminimize) the specified @window. Note
- * that you shouldn't assume the window is definitely deiconified
+ * that you shouldn’t assume the window is definitely deiconified
  * afterward, because other entities (e.g. the user or
  * [window manager][gtk-X11-arch])) could iconify it
  * again before your code which assumes deiconification gets to run.
@@ -10093,7 +10093,7 @@ gtk_window_deiconify (GtkWindow *window)
  * @window: a #GtkWindow
  *
  * Asks to stick @window, which means that it will appear on all user
- * desktops. Note that you shouldn't assume the window is definitely
+ * desktops. Note that you shouldn’t assume the window is definitely
  * stuck afterward, because other entities (e.g. the user or
  * [window manager][gtk-X11-arch] could unstick it
  * again, and some window managers do not support sticking
@@ -10131,11 +10131,11 @@ gtk_window_stick (GtkWindow *window)
  * @window: a #GtkWindow
  *
  * Asks to unstick @window, which means that it will appear on only
- * one of the user’s desktops. Note that you shouldn't assume the
+ * one of the user’s desktops. Note that you shouldn’t assume the
  * window is definitely unstuck afterward, because other entities
  * (e.g. the user or [window manager][gtk-X11-arch]) could
  * stick it again. But normally the window will
- * end up stuck. Just don't write code that crashes if not.
+ * end up stuck. Just don’t write code that crashes if not.
  *
  * You can track stickiness via the “window-state-event” signal
  * on #GtkWidget.
@@ -10166,11 +10166,11 @@ gtk_window_unstick (GtkWindow *window)
  * @window: a #GtkWindow
  *
  * Asks to maximize @window, so that it becomes full-screen. Note that
- * you shouldn't assume the window is definitely maximized afterward,
+ * you shouldn’t assume the window is definitely maximized afterward,
  * because other entities (e.g. the user or
  * [window manager][gtk-X11-arch]) could unmaximize it
  * again, and not all window managers support maximization. But
- * normally the window will end up maximized. Just don't write code
+ * normally the window will end up maximized. Just don’t write code
  * that crashes if not.
  *
  * It’s permitted to call this function before showing a window,
@@ -10206,12 +10206,12 @@ gtk_window_maximize (GtkWindow *window)
  * gtk_window_unmaximize:
  * @window: a #GtkWindow
  *
- * Asks to unmaximize @window. Note that you shouldn't assume the
+ * Asks to unmaximize @window. Note that you shouldn’t assume the
  * window is definitely unmaximized afterward, because other entities
  * (e.g. the user or [window manager][gtk-X11-arch])
  * could maximize it again, and not all window
  * managers honor requests to unmaximize. But normally the window will
- * end up unmaximized. Just don't write code that crashes if not.
+ * end up unmaximized. Just don’t write code that crashes if not.
  *
  * You can track maximization via the “window-state-event” signal
  * on #GtkWidget.
@@ -10242,12 +10242,12 @@ gtk_window_unmaximize (GtkWindow *window)
  * @window: a #GtkWindow
  *
  * Asks to place @window in the fullscreen state. Note that you
- * shouldn't assume the window is definitely full screen afterward,
+ * shouldn’t assume the window is definitely full screen afterward,
  * because other entities (e.g. the user or
  * [window manager][gtk-X11-arch]) could unfullscreen it
  * again, and not all window managers honor requests to fullscreen
  * windows. But normally the window will end up fullscreen. Just
- * don't write code that crashes if not.
+ * don’t write code that crashes if not.
  *
  * You can track the fullscreen state via the “window-state-event” signal
  * on #GtkWidget.
@@ -10279,12 +10279,12 @@ gtk_window_fullscreen (GtkWindow *window)
  * @window: a #GtkWindow
  *
  * Asks to toggle off the fullscreen state for @window. Note that you
- * shouldn't assume the window is definitely not full screen
+ * shouldn’t assume the window is definitely not full screen
  * afterward, because other entities (e.g. the user or
  * [window manager][gtk-X11-arch]) could fullscreen it
  * again, and not all window managers honor requests to unfullscreen
  * windows. But normally the window will end up restored to its normal
- * state. Just don't write code that crashes if not.
+ * state. Just don’t write code that crashes if not.
  *
  * You can track the fullscreen state via the “window-state-event” signal
  * on #GtkWidget.
@@ -10317,11 +10317,11 @@ gtk_window_unfullscreen (GtkWindow *window)
  * @setting: whether to keep @window above other windows
  *
  * Asks to keep @window above, so that it stays on top. Note that
- * you shouldn't assume the window is definitely above afterward,
+ * you shouldn’t assume the window is definitely above afterward,
  * because other entities (e.g. the user or
  * [window manager][gtk-X11-arch]) could not keep it above,
  * and not all window managers support keeping windows above. But
- * normally the window will end kept above. Just don't write code
+ * normally the window will end kept above. Just don’t write code
  * that crashes if not.
  *
  * It’s permitted to call this function before showing a window,
@@ -10368,11 +10368,11 @@ gtk_window_set_keep_above (GtkWindow *window,
  * @setting: whether to keep @window below other windows
  *
  * Asks to keep @window below, so that it stays in bottom. Note that
- * you shouldn't assume the window is definitely below afterward,
+ * you shouldn’t assume the window is definitely below afterward,
  * because other entities (e.g. the user or
  * [window manager][gtk-X11-arch]) could not keep it below,
  * and not all window managers support putting windows below. But
- * normally the window will be kept below. Just don't write code
+ * normally the window will be kept below. Just don’t write code
  * that crashes if not.
  *
  * It’s permitted to call this function before showing a window,
@@ -11220,7 +11220,7 @@ _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
  */
 
 /* The following code is from Xlib, and is minimally modified, so we
- * can track any upstream changes if required.  Don't change this
+ * can track any upstream changes if required.  Don’t change this
  * code. Or if you do, put in a huge comment marking which thing
  * changed.
  */

@@ -676,7 +676,7 @@ check_algorithmically (GtkIMContextSimple *context_simple,
 /* In addition to the table-driven sequences, we allow Unicode hex
  * codes to be entered. The method chosen here is similar to the
  * one recommended in ISO 14755, but not exactly the same, since we
- * don't want to steal 16 valuable key combinations.
+ * don’t want to steal 16 valuable key combinations.
  *
  * A hex Unicode sequence must be started with Ctrl-Shift-U, followed
  * by a sequence of hex digits entered with Ctrl-Shift still held.

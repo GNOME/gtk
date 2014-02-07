@@ -556,7 +556,7 @@
  * When selecting an icon source to use, GTK+ will consider text direction most
  * important, state second, and size third. It will select the best match based on
  * those criteria. If an attribute matches exactly (e.g. you specified
- * `PRELIGHT` or specified the size), GTK+ won't modify the image;
+ * `PRELIGHT` or specified the size), GTK+ won’t modify the image;
  * if the attribute matches with a wildcard, GTK+ will scale or modify the image to
  * match the state and size the user requested.
  *
@@ -1314,7 +1314,7 @@ gtk_rc_style_real_create_style (GtkRcStyle *rc_style)
  * both redraw and recompute any cached information about its
  * appearance. As an example, it is used when the default font size
  * set by the operating system changes. Note that this function
- * doesn't affect widgets that have a style set explicitly on them
+ * doesn’t affect widgets that have a style set explicitly on them
  * with gtk_widget_set_style().
  *
  * Since: 2.4
@@ -1404,7 +1404,7 @@ gtk_rc_get_style (GtkWidget *widget)
  * Creates up a #GtkStyle from styles defined in a RC file by providing
  * the raw components used in matching. This function may be useful
  * when creating pseudo-widgets that should be themed like widgets but
- * don't actually have corresponding GTK+ widgets. An example of this
+ * don’t actually have corresponding GTK+ widgets. An example of this
  * would be items inside a GNOME canvas widget.
  *
  * The action of gtk_rc_get_style() is similar to:

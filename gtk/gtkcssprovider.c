@@ -564,7 +564,7 @@
  * be tiled to fill the area, and scaled to fit it exactly
  * a whole number of times.
  * If the value of this property is 'space', the image slice will
- * be tiled to fill the area, and if it doesn't fit it exactly a whole
+ * be tiled to fill the area, and if it doesn’t fit it exactly a whole
  * number of times, the extra space is distributed as padding around 
  * the slices.
  * If two options are specified, the first one affects
@@ -811,7 +811,7 @@
  *         <entry>[repeat|no-repeat]</entry>
  *         <entry>internal</entry>
  *         <entry><literallayout>background-repeat: no-repeat;</literallayout>
- *                If not specified, the style doesn't respect the CSS3
+ *                If not specified, the style doesn’t respect the CSS3
  *                specification, since the background will be
  *                stretched to fill the area.
  *         </entry>

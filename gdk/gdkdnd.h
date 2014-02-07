@@ -47,7 +47,7 @@ G_BEGIN_DECLS
  * @GDK_ACTION_LINK: Add a link to the data. Note that this is only
  *  useful if source and destination agree on what it means.
  * @GDK_ACTION_PRIVATE: Special action which tells the source that the
- *  destination will do something that the source doesn't understand.
+ *  destination will do something that the source doesn’t understand.
  * @GDK_ACTION_ASK: Ask the user what to do with the data.
  *
  * Used in #GdkDragContext to indicate what the destination

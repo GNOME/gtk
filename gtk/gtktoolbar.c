@@ -2892,7 +2892,7 @@ gtk_toolbar_get_n_items (GtkToolbar *toolbar)
  * toolbar does not contain an @n<!-- -->'th item.
  *
  * Return value: (transfer none): The @n<!-- -->'th #GtkToolItem on @toolbar,
- *     or %NULL if there isn't an @n<!-- -->'th item.
+ *     or %NULL if there isn’t an @n<!-- -->'th item.
  *
  * Since: 2.4
  **/
@@ -2962,7 +2962,7 @@ gtk_toolbar_get_relief_style (GtkToolbar *toolbar)
  * @show_arrow: Whether to show an overflow menu
  * 
  * Sets whether to show an overflow menu when
- * @toolbar doesn't have room for all items on it. If %TRUE,
+ * @toolbar doesn’t have room for all items on it. If %TRUE,
  * items that there are not room are available through an
  * overflow menu.
  * 

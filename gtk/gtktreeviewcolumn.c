@@ -2735,7 +2735,7 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
  * See gtk_tree_view_column_set_sort_column_id().
  *
  * Return value: the current @sort_column_id for this column, or -1 if
- *               this column can't be used for sorting.
+ *               this column can’t be used for sorting.
  **/
 gint
 gtk_tree_view_column_get_sort_column_id (GtkTreeViewColumn *tree_column)

@@ -5473,7 +5473,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
  *
  * This function should be called from a #GtkMenuPositionFunc
  * if the menu should not appear on the same monitor as the pointer.
- * This information can't be reliably inferred from the coordinates
+ * This information can’t be reliably inferred from the coordinates
  * returned by a #GtkMenuPositionFunc, since, for very long menus,
  * these coordinates may extend beyond the monitor boundaries or even
  * the screen boundaries.

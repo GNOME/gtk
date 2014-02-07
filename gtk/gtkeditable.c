@@ -341,7 +341,7 @@ gtk_editable_get_selection_bounds (GtkEditable *editable,
  * @editable: a #GtkEditable
  *
  * Deletes the currently selected text of the editable.
- * This call doesn't do anything if there is no selected text.
+ * This call doesn’t do anything if there is no selected text.
  */
 void
 gtk_editable_delete_selection (GtkEditable *editable)

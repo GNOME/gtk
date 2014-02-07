@@ -47,7 +47,7 @@
  * @See_also: #GtkDrawingArea, #GtkScrolledWindow
  *
  * #GtkLayout is similar to #GtkDrawingArea in that it’s a “blank slate”
- * and doesn't do anything but paint a blank background by default. It's
+ * and doesn’t do anything but paint a blank background by default. It's
  * different in that it supports scrolling natively (you can add it to a
  * #GtkScrolledWindow), and it can contain child widgets, since it’s a
  * #GtkContainer. However if you're just going to draw, a #GtkDrawingArea

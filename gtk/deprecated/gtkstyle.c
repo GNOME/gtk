@@ -1282,7 +1282,7 @@ gtk_style_real_set_background (GtkStyle    *style,
  * @state: a state
  * @size: (type int): the size to render the icon at. A size of
  *     (GtkIconSize)-1 means render at the size of the source and
- *     don't scale.
+ *     don’t scale.
  * @widget: (allow-none): the widget
  * @detail: (allow-none): a style detail
  *
@@ -3853,7 +3853,7 @@ gtk_paint_handle (GtkStyle           *style,
  * Draws an expander as used in #GtkTreeView. @x and @y specify the
  * center the expander. The size of the expander is determined by the
  * “expander-size” style property of @widget.  (If widget is not
- * specified or doesn't have an “expander-size” property, an
+ * specified or doesn’t have an “expander-size” property, an
  * unspecified default size will be used, since the caller doesn't
  * have sufficient information to position the expander, this is
  * likely not useful.) The expander is expander_size pixels tall
@@ -4733,7 +4733,7 @@ gtk_widget_class_path (GtkWidget *widget,
  * @widget: a #GtkWidget
  * @stock_id: a stock ID
  * @size: (type int): a stock size. A size of (GtkIconSize)-1 means
- *     render at the size of the source and don't scale (if there are
+ *     render at the size of the source and don’t scale (if there are
  *     multiple source sizes, GTK+ picks one of the available sizes).
  * @detail: (allow-none): render detail to pass to theme engine
  *
@@ -4750,7 +4750,7 @@ gtk_widget_class_path (GtkWidget *widget,
  * freed after use with g_object_unref().
  *
  * Return value: (transfer full): a new pixbuf, or %NULL if the
- *     stock ID wasn't known
+ *     stock ID wasn’t known
  *
  * Deprecated: 3.0: Use gtk_widget_render_icon_pixbuf() instead.
  **/

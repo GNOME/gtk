@@ -44,7 +44,7 @@
  * interfaces.
  *
  * The #GtkListStore can accept most GObject types as a column type, though
- * it can't accept all custom types.  Internally, it will keep a copy of
+ * it can’t accept all custom types.  Internally, it will keep a copy of
  * data passed in (such as a string or a boxed pointer).  Columns that
  * accept #GObjects are handled a little differently.  The
  * #GtkListStore will keep a reference to the object instead of copying the

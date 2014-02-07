@@ -1317,7 +1317,7 @@ gtk_button_new_with_label (const gchar *label)
  *
  * Creates a new button containing an icon from the current icon theme.
  *
- * If the icon name isn't known, a “broken image” icon will be
+ * If the icon name isn’t known, a “broken image” icon will be
  * displayed instead. If the current icon theme is changed, the icon
  * will be updated appropriately.
  *
@@ -2463,7 +2463,7 @@ gtk_button_get_use_stock (GtkButton *button)
  *
  * Sets whether the button will grab focus when it is clicked with the mouse.
  * Making mouse clicks not grab focus is useful in places like toolbars where
- * you don't want the keyboard focus removed from the main area of the
+ * you don’t want the keyboard focus removed from the main area of the
  * application.
  *
  * Since: 2.4
@@ -2731,7 +2731,7 @@ gtk_button_grab_notify (GtkWidget *widget,
  *
  * Set the image of @button to the given widget. The image will be
  * displayed if the label text is %NULL or if
- * #GtkButton:always-show-image is %TRUE. You don't have to call
+ * #GtkButton:always-show-image is %TRUE. You don’t have to call
  * gtk_widget_show() on @image yourself.
  *
  * Since: 2.6

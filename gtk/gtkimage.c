@@ -56,7 +56,7 @@
  *   GtkWidget *image;
  *   image = gtk_image_new_from_file ("myfile.png");
  * ]|
- * If the file isn't loaded successfully, the image will contain a
+ * If the file isn’t loaded successfully, the image will contain a
  * “broken image” icon similar to that used in many web browsers.
  * If you want to handle errors in loading the file yourself,
  * for example by displaying an error message, then load the image with
@@ -87,7 +87,7 @@
  *              event->x, event->y);
  *
  *     /<!---->* Returning TRUE means we handled the event, so the signal
- *      * emission should be stopped (don't call any further
+ *      * emission should be stopped (don’t call any further
  *      * callbacks that may be connected). Return FALSE
  *      * to continue invoking callbacks.
  *      *<!---->/
@@ -550,7 +550,7 @@ gtk_image_get_property (GObject     *object,
  * @filename: (type filename): a filename
  * 
  * Creates a new #GtkImage displaying the file @filename. If the file
- * isn't found or can't be loaded, the resulting #GtkImage will
+ * isn’t found or can’t be loaded, the resulting #GtkImage will
  * display a “broken image” icon. This function never returns %NULL,
  * it always returns a valid #GtkImage widget.
  *
@@ -585,7 +585,7 @@ gtk_image_new_from_file   (const gchar *filename)
  * @resource_path: a resource path
  *
  * Creates a new #GtkImage displaying the resource file @resource_path. If the file
- * isn't found or can't be loaded, the resulting #GtkImage will
+ * isn’t found or can’t be loaded, the resulting #GtkImage will
  * display a “broken image” icon. This function never returns %NULL,
  * it always returns a valid #GtkImage widget.
  *
@@ -675,7 +675,7 @@ gtk_image_new_from_surface (cairo_surface_t *surface)
  * Creates a #GtkImage displaying a stock icon. Sample stock icon
  * names are #GTK_STOCK_OPEN, #GTK_STOCK_QUIT. Sample stock sizes
  * are #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_SMALL_TOOLBAR. If the stock
- * icon name isn't known, the image will be empty.
+ * icon name isn’t known, the image will be empty.
  * You can register your own stock icon names, see
  * gtk_icon_factory_add_default() and gtk_icon_factory_add().
  * 
@@ -772,7 +772,7 @@ gtk_image_new_from_animation (GdkPixbufAnimation *animation)
  * @size: (type int): a stock icon size
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
- * If the icon name isn't known, a “broken image” icon will be
+ * If the icon name isn’t known, a “broken image” icon will be
  * displayed instead.  If the current icon theme is changed, the icon
  * will be updated appropriately.
  * 
@@ -799,7 +799,7 @@ gtk_image_new_from_icon_name (const gchar    *icon_name,
  * @size: (type int): a stock icon size
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
- * If the icon name isn't known, a “broken image” icon will be
+ * If the icon name isn’t known, a “broken image” icon will be
  * displayed instead.  If the current icon theme is changed, the icon
  * will be updated appropriately.
  * 

@@ -2989,7 +2989,7 @@ gtk_label_get_max_width_chars (GtkLabel *label)
  *
  * Note that setting line wrapping to %TRUE does not make the label
  * wrap at its parent container’s width, because GTK+ widgets
- * conceptually can't make their requisition depend on the parent
+ * conceptually can’t make their requisition depend on the parent
  * container’s size. For a label that wraps at a specific position,
  * set the label’s width using gtk_widget_set_size_request().
  **/
@@ -6551,7 +6551,7 @@ _gtk_label_get_selection_bound (GtkLabel *label)
  *
  * Sets the number of lines to which an ellipsized, wrapping label
  * should be limited. This has no effect if the label is not wrapping
- * or ellipsized. Set this to -1 if you don't want to limit the
+ * or ellipsized. Set this to -1 if you don’t want to limit the
  * number of lines.
  *
  * Since: 3.10

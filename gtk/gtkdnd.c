@@ -3196,7 +3196,7 @@ gtk_drag_set_icon_window (GdkDragContext *context,
  * @hot_y: the Y offset within @widget of the hotspot.
  * 
  * Changes the icon for a widget to a given widget. GTK+
- * will not destroy the icon, so if you don't want
+ * will not destroy the icon, so if you don’t want
  * it to persist, you should connect to the “drag-end” 
  * signal and destroy it yourself.
  **/

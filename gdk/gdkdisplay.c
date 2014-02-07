@@ -2097,7 +2097,7 @@ static GQueue gdk_error_traps = G_QUEUE_INIT;
  * behavior of exiting the application. It should only be used if it
  * is not possible to avoid the X error in any other way. Errors are
  * ignored on all #GdkDisplay currently known to the
- * #GdkDisplayManager. If you don't care which error happens and just
+ * #GdkDisplayManager. If you don’t care which error happens and just
  * want to ignore everything, pop with gdk_error_trap_pop_ignored().
  * If you need the error code, use gdk_error_trap_pop() which may have
  * to block and wait for the error to arrive from the X server.
@@ -2206,7 +2206,7 @@ gdk_error_trap_pop_ignored (void)
  * Removes an error trap pushed with gdk_error_trap_push().
  * May block until an error has been definitively received
  * or not received from the X server. gdk_error_trap_pop_ignored()
- * is preferred if you don't need to know whether an error
+ * is preferred if you don’t need to know whether an error
  * occurred, because it never has to block. If you don't
  * need the return value of gdk_error_trap_pop(), use
  * gdk_error_trap_pop_ignored().

@@ -48,8 +48,8 @@
  *
  * As such, the data type conversion from gdk selection targets to OLE2 CF_* data
  * type specifiers is partially hardwired. Fixing this is complicated by (a) the
- * fact that the widget’s declared selection types aren't accessible in calls here
- * that need to declare the corresponding OLE2 data types, and (b) there isn't a
+ * fact that the widget’s declared selection types aren’t accessible in calls here
+ * that need to declare the corresponding OLE2 data types, and (b) there isn’t a
  * 1-1 correspondence between gdk target types and OLE2 types. The former needs
  * some redesign in gtk dnd (something a gdk/gtk expert should do; I have tried
  * and failed!). As an example of the latter: gdk STRING, TEXT, COMPOUND_TEXT map
@@ -62,7 +62,7 @@
  * Note that in combination with another hack originated by Archaeopteryx
  * Software, the text conversions here may go to utf-8 unicode as the standard
  * within-gtk target or to single-byte ascii when the USE_ACP_TEXT compilation
- * flag is TRUE. This mode was added to support applications that aren't using
+ * flag is TRUE. This mode was added to support applications that aren’t using
  * utf-8 across the gtk/gdk API but instead use single-byte ascii according to
  * the current Windows code page. See gdkim-win32.c for more info on that.
  *

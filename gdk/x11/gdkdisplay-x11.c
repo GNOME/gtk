@@ -2474,7 +2474,7 @@ gdk_x11_register_standard_event_type (GdkDisplay *display,
 
 /* look up the extension name for a given major opcode.  grubs around in
  * xlib to do it since a) it’s already cached there b) XQueryExtension
- * emits protocol so we can't use it in an error handler.
+ * emits protocol so we can’t use it in an error handler.
  */
 static const char *
 _gdk_x11_decode_request_code(Display *dpy, int code)
@@ -2743,7 +2743,7 @@ gdk_x11_display_set_window_scale (GdkDisplay *display,
  * the error is known to have occurred or not occurred,
  * so the error code can be returned.
  *
- * If you don't need to use the return value,
+ * If you don’t need to use the return value,
  * gdk_x11_display_error_trap_pop_ignored() would be more efficient.
  *
  * See gdk_error_trap_pop() for the all-displays-at-once

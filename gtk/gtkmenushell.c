@@ -1440,12 +1440,12 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
  * @menu_shell: a #GtkMenuShell
  * @search_sensitive: if %TRUE, search for the first selectable
  *                    menu item, otherwise select nothing if
- *                    the first item isn't sensitive. This
+ *                    the first item isn’t sensitive. This
  *                    should be %FALSE if the menu is being
  *                    popped up initially.
  *
  * Select the first visible or selectable child of the menu shell;
- * don't select tearoff items unless the only item is a tearoff
+ * don’t select tearoff items unless the only item is a tearoff
  * item.
  *
  * Since: 2.2
@@ -1905,7 +1905,7 @@ gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell)
  *
  * The @take_focus state of a menu or menu bar is automatically
  * propagated to submenus whenever a submenu is popped up, so you
- * don't have to worry about recursively setting it for your entire
+ * don’t have to worry about recursively setting it for your entire
  * menu hierarchy. Only when programmatically picking a submenu and
  * popping it up manually, the @take_focus property of the submenu
  * needs to be set explicitly.
@@ -1913,7 +1913,7 @@ gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell)
  * Note that setting it to %FALSE has side-effects:
  *
  * If the focus is in some other app, it keeps the focus and keynav in
- * the menu doesn't work. Consequently, keynav on the menu will only
+ * the menu doesn’t work. Consequently, keynav on the menu will only
  * work if the focus is on some toplevel owned by the onscreen keyboard.
  *
  * To avoid confusing the user, menus with @take_focus set to %FALSE
@@ -2132,7 +2132,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
  *
  * @with_separators determines if toplevel items (eg: sections) have
  * separators inserted between them.  This is typically desired for
- * menus but doesn't make sense for menubars.
+ * menus but doesn’t make sense for menubars.
  *
  * If @action_namespace is non-%NULL then the effect is as if all
  * actions mentioned in the @model have their names prefixed with the

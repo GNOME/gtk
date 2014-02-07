@@ -5592,7 +5592,7 @@ gtk_text_btree_node_get_size (GtkTextBTreeNode *node, gpointer view_id,
 }
 
 /* Find the closest common ancestor of the two nodes. FIXME: The interface
- * here isn't quite right, since for a lot of operations we want to
+ * here isn’t quite right, since for a lot of operations we want to
  * know which children of the common parent correspond to the two nodes
  * (e.g., when computing the order of two iters)
  */

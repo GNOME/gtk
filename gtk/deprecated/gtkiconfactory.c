@@ -58,7 +58,7 @@
  * different sizes and widget states). Icons in an icon factory are named by a
  * stock ID, which is a simple string identifying the icon. Each #GtkStyle has a
  * list of #GtkIconFactory derived from the current theme; those icon factories
- * are consulted first when searching for an icon. If the theme doesn't set a
+ * are consulted first when searching for an icon. If the theme doesn’t set a
  * particular icon, GTK+ looks for the icon in a list of default icon factories,
  * maintained by gtk_icon_factory_add_default() and
  * gtk_icon_factory_remove_default(). Applications with icons should add a default
@@ -259,7 +259,7 @@ gtk_icon_factory_finalize (GObject *object)
  * stock ID, which is a simple string identifying the icon. Each
  * #GtkStyle has a list of #GtkIconFactory<!-- -->s derived from the current
  * theme; those icon factories are consulted first when searching for
- * an icon. If the theme doesn't set a particular icon, GTK+ looks for
+ * an icon. If the theme doesn’t set a particular icon, GTK+ looks for
  * the icon in a list of default icon factories, maintained by
  * gtk_icon_factory_add_default() and
  * gtk_icon_factory_remove_default(). Applications with icons should
@@ -755,7 +755,7 @@ icon_size_lookup_intern (GtkIconSize  size,
  * modified by user preferences for a particular
  * #GtkSettings. Normally @size would be
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
- * isn't normally needed, gtk_widget_render_icon_pixbuf() is the usual
+ * isn’t normally needed, gtk_widget_render_icon_pixbuf() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
  * the width/height returned by gtk_icon_size_lookup(), because themes
@@ -787,7 +787,7 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
  *
  * Obtains the pixel size of a semantic icon size @size:
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
- * isn't normally needed, gtk_icon_theme_load_icon() is the usual
+ * isn’t normally needed, gtk_icon_theme_load_icon() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
  * the width/height returned by gtk_icon_size_lookup(), because themes
@@ -1055,7 +1055,7 @@ gtk_icon_set_new (void)
  * @pixbuf: a #GdkPixbuf
  *
  * Creates a new #GtkIconSet with @pixbuf as the default/fallback
- * source image. If you don't add any additional #GtkIconSource to the
+ * source image. If you don’t add any additional #GtkIconSource to the
  * icon set, all variants of the icon will be created from @pixbuf,
  * using scaling, pixelation, etc. as required to adjust the icon size
  * or make the icon look insensitive/prelighted.
@@ -1542,12 +1542,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
  * @icon_set: a #GtkIconSet
  * @context: a #GtkStyleContext
  * @size: (type int): icon size. A size of (GtkIconSize)-1
- *        means render at the size of the source and don't scale.
+ *        means render at the size of the source and don’t scale.
  *
  * Renders an icon using gtk_render_icon_pixbuf(). In most cases,
  * gtk_widget_render_icon_pixbuf() is better, since it automatically provides
  * most of the arguments from the current widget settings.  This
- * function never returns %NULL; if the icon can't be rendered
+ * function never returns %NULL; if the icon can’t be rendered
  * (perhaps because an image file fails to load), a default "missing
  * image" icon will be returned instead.
  *
@@ -1573,14 +1573,14 @@ gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
  * @icon_set: a #GtkIconSet
  * @context: a #GtkStyleContext
  * @size: (type int): icon size. A size of (GtkIconSize)-1
- *        means render at the size of the source and don't scale.
+ *        means render at the size of the source and don’t scale.
  * @scale: the window scale to render for
  * @for_window: (allow-none): #GdkWindow to optimize drawing for, or %NULL
  *
  * Renders an icon using gtk_render_icon_pixbuf() and converts it to a
  * cairo surface. 
  *
- * This function never returns %NULL; if the icon can't be rendered
+ * This function never returns %NULL; if the icon can’t be rendered
  * (perhaps because an image file fails to load), a default "missing
  * image" icon will be returned instead.
  *
@@ -1615,7 +1615,7 @@ gtk_icon_set_render_icon_surface  (GtkIconSet      *icon_set,
  * @direction: text direction
  * @state: widget state
  * @size: (type int): icon size. A size of (GtkIconSize)-1
- *        means render at the size of the source and don't scale.
+ *        means render at the size of the source and don’t scale.
  * @widget: (allow-none): widget that will display the icon, or %NULL.
  *          The only use that is typically made of this
  *          is to determine the appropriate #GdkScreen.
@@ -1626,7 +1626,7 @@ gtk_icon_set_render_icon_surface  (GtkIconSet      *icon_set,
  * Renders an icon using gtk_style_render_icon(). In most cases,
  * gtk_widget_render_icon() is better, since it automatically provides
  * most of the arguments from the current widget settings.  This
- * function never returns %NULL; if the icon can't be rendered
+ * function never returns %NULL; if the icon can’t be rendered
  * (perhaps because an image file fails to load), a default "missing
  * image" icon will be returned instead.
  *
@@ -2720,7 +2720,7 @@ _gtk_icon_set_invalidate_caches (void)
  * _gtk_icon_factory_list_ids:
  *
  * Gets all known IDs stored in an existing icon factory.
- * The strings in the returned list aren't copied.
+ * The strings in the returned list aren’t copied.
  * The list itself should be freed.
  *
  * Return value: List of ids in icon factories

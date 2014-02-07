@@ -2983,7 +2983,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
 }
 
 /* We override show-all since we have internal widgets that
- * shouldn't be shown when you call show_all(), like the filter
+ * shouldn’t be shown when you call show_all(), like the filter
  * combo box.
  */
 static void
@@ -6172,7 +6172,7 @@ search_engine_finished_cb (GtkSearchEngine *engine,
 
 /* Displays a generic error when we cannot create a GtkSearchEngine.  
  * It would be better if _gtk_search_engine_new() gave us a GError 
- * with a better message, but it doesn't do that right now.
+ * with a better message, but it doesn’t do that right now.
  */
 static void
 search_error_could_not_create_client (GtkFileChooserWidget *impl)

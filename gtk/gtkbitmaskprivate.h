@@ -58,7 +58,7 @@ static inline gboolean          _gtk_bitmask_intersects           (const GtkBitm
 
 
 /* This is the actual implementation of the functions declared above.
- * We put it in a separate file so people don't get scared from looking at this
+ * We put it in a separate file so people don’t get scared from looking at this
  * file when reading source code.
  */
 #include "gtkbitmaskprivateimpl.h"

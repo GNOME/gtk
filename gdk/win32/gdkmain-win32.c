@@ -157,9 +157,9 @@ _gdk_other_api_failed (const gchar *where,
  * Like g_strdup_printf, but to a static buffer. Return value does not
  * have to be g_free()d. The buffer is of bounded size and reused
  * cyclically. Thus the return value is valid only until that part of
- * the buffer happens to get reused. This doesn't matter as this
+ * the buffer happens to get reused. This doesn’t matter as this
  * function’s return value is used in debugging output right after the call,
- * and the return value isn't used after that.
+ * and the return value isn’t used after that.
  */
 static gchar *
 static_printf (const gchar *format,

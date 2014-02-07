@@ -40,7 +40,7 @@
  *
  * GtkPrintOperation is the high-level, portable printing API.
  * It looks a bit different than other GTK+ dialogs such as the
- * #GtkFileChooser, since some platforms don't expose enough
+ * #GtkFileChooser, since some platforms don’t expose enough
  * infrastructure to implement a good print dialog. On such
  * platforms, GtkPrintOperation uses the native print dialog.
  * On platforms which do not provide a native print dialog, GTK+
@@ -1570,7 +1570,7 @@ gtk_print_operation_get_print_settings (GtkPrintOperation *op)
  * Sets the name of the print job. The name is used to identify 
  * the job (e.g. in monitoring applications like eggcups). 
  * 
- * If you don't set a job name, GTK+ picks a default one by 
+ * If you don’t set a job name, GTK+ picks a default one by 
  * numbering successive print jobs.
  *
  * Since: 2.10

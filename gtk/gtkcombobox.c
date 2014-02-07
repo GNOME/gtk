@@ -5398,7 +5398,7 @@ gtk_combo_box_get_entry_text_column (GtkComboBox *combo_box)
  *
  * Sets whether the combo box will grab focus when it is clicked with
  * the mouse. Making mouse clicks not grab focus is useful in places
- * like toolbars where you don't want the keyboard focus removed from
+ * like toolbars where you don’t want the keyboard focus removed from
  * the main area of the application.
  *
  * Since: 2.6

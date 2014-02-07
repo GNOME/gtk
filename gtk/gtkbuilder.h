@@ -42,19 +42,19 @@ typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
 
 /**
  * GtkBuilderError:
- * @GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION: A type-func attribute didn't name
+ * @GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION: A type-func attribute didn’t name
  *  a function that returns a #GType.
  * @GTK_BUILDER_ERROR_UNHANDLED_TAG: The input contained a tag that #GtkBuilder
- *  can't handle.
+ *  can’t handle.
  * @GTK_BUILDER_ERROR_MISSING_ATTRIBUTE: An attribute that is required by
  *  #GtkBuilder was missing.
  * @GTK_BUILDER_ERROR_INVALID_ATTRIBUTE: #GtkBuilder found an attribute that
- *  it doesn't understand.
+ *  it doesn’t understand.
  * @GTK_BUILDER_ERROR_INVALID_TAG: #GtkBuilder found a tag that
- *  it doesn't understand.
+ *  it doesn’t understand.
  * @GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE: A required property value was
  *  missing.
- * @GTK_BUILDER_ERROR_INVALID_VALUE: #GtkBuilder couldn't parse
+ * @GTK_BUILDER_ERROR_INVALID_VALUE: #GtkBuilder couldn’t parse
  *  some attribute value.
  * @GTK_BUILDER_ERROR_VERSION_MISMATCH: The input file requires a newer version
  *  of GTK+.

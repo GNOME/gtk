@@ -216,7 +216,7 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
  * this function.
  *
  * If @sort_func is %NULL, then there will be no default comparison function.
- * This means that once the model  has been sorted, it can't go back to the
+ * This means that once the model  has been sorted, it can’t go back to the
  * default state. In this case, when the current sort column id of @sortable 
  * is %GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, the model will be unsorted.
  */

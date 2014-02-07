@@ -26,7 +26,7 @@
  *
  * Use gtk_print_job_get_surface() to obtain the cairo surface
  * onto which the pages must be drawn. Use gtk_print_job_send()
- * to send the finished job to the printer. If you don't use cairo
+ * to send the finished job to the printer. If you don’t use cairo
  * #GtkPrintJob also supports printing of manually generated postscript,
  * via gtk_print_job_set_source_file().
  */

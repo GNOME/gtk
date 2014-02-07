@@ -698,7 +698,7 @@ gtk_flow_box_child_is_selected (GtkFlowBoxChild *child)
  * must only read the new data for the first of the two changed
  * children, otherwise the resorting of the children will be wrong.
  *
- * This generally means that if you don't fully control the data
+ * This generally means that if you don’t fully control the data
  * model, you have to duplicate the data that affects the sorting
  * and filtering functions into the widgets themselves. Another
  * alternative is to call gtk_flow_box_invalidate_sort() on any

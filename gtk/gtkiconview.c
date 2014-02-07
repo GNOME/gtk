@@ -2240,7 +2240,7 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
  *        focus cell, or %NULL
  *
  * Fills in @path and @cell with the current cursor path and cell. 
- * If the cursor isn't currently set, then *@path will be %NULL.  
+ * If the cursor isn’t currently set, then *@path will be %NULL.  
  * If no cell currently has focus, then *@cell will be %NULL.
  *
  * The returned #GtkTreePath must be freed with gtk_tree_path_free().
@@ -6056,7 +6056,7 @@ gtk_icon_view_get_item_padding (GtkIconView *icon_view)
 
 /* Get/set whether drag_motion requested the drag data and
  * drag_data_received should thus not actually insert the data,
- * since the data doesn't result from a drop.
+ * since the data doesn’t result from a drop.
  */
 static void
 set_status_pending (GdkDragContext *context,

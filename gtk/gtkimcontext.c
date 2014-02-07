@@ -175,7 +175,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   consumed by the input method. In that case, the #GtkIMContext::commit
  *   signal should be emitted upon completion of a key sequence to pass the
  *   resulting text back to the input widget. Alternatively, %FALSE may be
- *   returned to indicate that the event wasn't handled by the input method.
+ *   returned to indicate that the event wasn’t handled by the input method.
  *   If a builtin mapping exists for the key, it is used to produce a
  *   character.
  * @focus_in: Called via gtk_im_context_focus_in() when the input widget

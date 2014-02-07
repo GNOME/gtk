@@ -7160,7 +7160,7 @@ get_dest_row (GdkDragContext *context,
 
 /* Get/set whether drag_motion requested the drag data and
  * drag_data_received should thus not actually insert the data,
- * since the data doesn't result from a drop.
+ * since the data doesn’t result from a drop.
  */
 static void
 set_status_pending (GdkDragContext *context,
@@ -12325,7 +12325,7 @@ gtk_tree_view_set_column_drag_function (GtkTreeView               *tree_view,
  * this function is called.  If it isn't, you probably want to be
  * using gtk_tree_view_scroll_to_cell().
  *
- * If either @tree_x or @tree_y are -1, then that direction isn't scrolled.
+ * If either @tree_x or @tree_y are -1, then that direction isn’t scrolled.
  **/
 void
 gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
@@ -13191,7 +13191,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
  * @focus_column: (out) (transfer none) (allow-none): A pointer to be filled with the current focus column, or %NULL
  *
  * Fills in @path and @focus_column with the current path and focus column.  If
- * the cursor isn't currently set, then *@path will be %NULL.  If no column
+ * the cursor isn’t currently set, then *@path will be %NULL.  If no column
  * currently has focus, then *@focus_column will be %NULL.
  *
  * The returned #GtkTreePath must be freed with gtk_tree_path_free() when
@@ -13331,7 +13331,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
  * to confirm that the event on @tree_view is on the right window.
  *
  * Return value: (transfer none): A #GdkWindow, or %NULL when @tree_view
- *     hasn't been realized yet
+ *     hasn’t been realized yet
  **/
 GdkWindow *
 gtk_tree_view_get_bin_window (GtkTreeView *tree_view)

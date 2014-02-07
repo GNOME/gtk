@@ -277,8 +277,8 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
  *
  * If @color is resolvable, @resolved_color will be filled in
  * with the resolved color, and %TRUE will be returned. Generally,
- * if @color can't be resolved, it is due to it being defined on
- * top of a named color that doesn't exist in @props.
+ * if @color can’t be resolved, it is due to it being defined on
+ * top of a named color that doesn’t exist in @props.
  *
  * When @props is %NULL, resolving of named colors will fail, so if
  * your @color is or references such a color, this function will

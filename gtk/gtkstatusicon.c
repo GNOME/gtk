@@ -70,7 +70,7 @@
  * The icon can have a tooltip, and the user can interact with it by
  * activating it or popping up a context menu. Critical information should
  * not solely be displayed in a #GtkStatusIcon, since it may not be
- * visible (e.g. when the user doesn't have a notification area on his panel).
+ * visible (e.g. when the user doesn’t have a notification area on his panel).
  * This can be checked with gtk_status_icon_is_embedded().
  *
  * On X11, the implementation follows the
@@ -80,7 +80,7 @@
  *
  * Note that a GtkStatusIcon is not a widget, but just
  * a #GObject. Making it a widget would be impractical, since the system tray
- * on Win32 doesn't allow to embed arbitrary widgets.
+ * on Win32 doesn’t allow to embed arbitrary widgets.
  */
 
 

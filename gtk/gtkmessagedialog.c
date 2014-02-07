@@ -603,7 +603,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * Usually this is what you want, but if you have an existing
  * Pango markup string that you want to use literally as the
  * label, then you need to use gtk_message_dialog_set_markup()
- * instead, since you can't pass the markup string either
+ * instead, since you can’t pass the markup string either
  * as the format (it might contain “%” characters) or as a string
  * argument.
  * |[<!-- language="C" -->

@@ -95,7 +95,7 @@
  * Note that gdk_keymap_translate_keyboard_state() also returns the keyval, i.e. it
  * goes ahead and performs the keymap lookup in addition to telling you which
  * effective group/level values were used for the lookup. #GdkEventKey already
- * contains this keyval, however, so you don't normally need to call
+ * contains this keyval, however, so you don’t normally need to call
  * gdk_keymap_translate_keyboard_state() just to get the keyval.
  */
 
@@ -493,7 +493,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from
  * @state. For convenience, #GdkEventKey already contains the translated
- * keyval, so this function isn't as useful as you might think.
+ * keyval, so this function isn’t as useful as you might think.
  *
  * @consumed_modifiers gives modifiers that should be masked out
  * from @state when comparing this key press to a hot key. For
@@ -518,7 +518,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * this allowed accelerators to be stored with irrelevant consumed
  * modifiers, by doing:
  * |[<!-- language="C" -->
- * /&ast; XXX Don't do this XXX &ast;/
+ * /&ast; XXX Don’t do this XXX &ast;/
  * if (keyval == accel_keyval &&
  *     (event->state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
  *   /&ast; Accelerator was pressed &ast;/

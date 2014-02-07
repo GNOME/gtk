@@ -154,7 +154,7 @@ struct encoder {
  *
  *  - all 1 pixel colors are encoded literally
  *
- *  - We don't need to support colors with alpha 0 and non-zero
+ *  - We don’t need to support colors with alpha 0 and non-zero
  *    color components, as they mean the same on the canvas anyway.
  *    So we use these as special codes:
  *

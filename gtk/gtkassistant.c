@@ -37,7 +37,7 @@
  * [completion][gtk-assistant-set-page-complete]
  * and [committed][gtk-assistant-commit] status.
  *
- * If you have a case that doesn't quite fit in #GtkAssistants way of
+ * If you have a case that doesn’t quite fit in #GtkAssistants way of
  * handling buttons, you can use the #GTK_ASSISTANT_PAGE_CUSTOM page
  * type and handle buttons yourself.
  *

@@ -1025,10 +1025,10 @@ recompute_visible_regions_internal (GdkWindow *private,
  *
  * It will recalculate abs_x/y and the clip regions
  *
- * Unless the window didn't change stacking order or size/pos, pass in TRUE
+ * Unless the window didn’t change stacking order or size/pos, pass in TRUE
  * for recalculate_siblings. (Mostly used internally for the recursion)
  *
- * If a child window was removed (and you can't use that child for
+ * If a child window was removed (and you can’t use that child for
  * recompute_visible_regions), pass in TRUE for recalculate_children on the parent
  */
 static void
@@ -1053,7 +1053,7 @@ _gdk_window_update_size (GdkWindow *window)
 
 /* Find the native window that would be just above "child"
  * in the native stacking order if “child” was a native window
- * (it doesn't have to be native). If there is no such native
+ * (it doesn’t have to be native). If there is no such native
  * window inside this native parent then NULL is returned.
  * If child is NULL, find lowest native window in parent.
  */
@@ -2943,7 +2943,7 @@ gdk_window_free_paint_stack (GdkWindow *window)
  * Normally this should be completely invisible to applications, as
  * we automatically flush the windows when required, but this might
  * be needed if you for instance mix direct native drawing with
- * gdk drawing. For Gtk widgets that don't use double buffering this
+ * gdk drawing. For Gtk widgets that don’t use double buffering this
  * will be called automatically before sending the expose event.
  *
  * Since: 2.18
@@ -4152,7 +4152,7 @@ _gdk_window_clear_update_area (GdkWindow *window)
  * gdk_window_freeze_updates:
  * @window: a #GdkWindow
  *
- * Temporarily freezes a window such that it won't receive expose
+ * Temporarily freezes a window such that it won’t receive expose
  * events.  The window will begin receiving expose events again when
  * gdk_window_thaw_updates() is called. If gdk_window_freeze_updates()
  * has been called more than once, gdk_window_thaw_updates() must be called
@@ -4414,7 +4414,7 @@ gdk_window_constrain_size (GdkGeometry    *geometry,
  *
  * Return value: (transfer none): the window containing the pointer (as with
  * gdk_window_at_pointer()), or %NULL if the window containing the
- * pointer isn't known to GDK
+ * pointer isn’t known to GDK
  *
  * Deprecated: 3.0: Use gdk_window_get_device_position() instead.
  **/
@@ -4783,7 +4783,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
  *
  * On the X11 platform, in Xlib terms, this function calls
  * XMapWindow() (it also updates some internal GDK state, which means
- * that you can't really use XMapWindow() directly on a GDK window).
+ * that you can’t really use XMapWindow() directly on a GDK window).
  */
 void
 gdk_window_show_unraised (GdkWindow *window)
@@ -4919,7 +4919,7 @@ gdk_window_invalidate_in_parent (GdkWindow *private)
  * request to move the window in the Z-order, gdk_window_lower() only
  * requests the restack, does not guarantee it.
  *
- * Note that gdk_window_show() raises the window again, so don't call this
+ * Note that gdk_window_show() raises the window again, so don’t call this
  * function before gdk_window_show(). (Try gdk_window_show_unraised().)
  */
 void
@@ -5076,7 +5076,7 @@ gdk_window_show (GdkWindow *window)
  *
  * For toplevel windows, withdraws them, so they will no longer be
  * known to the window manager; for all windows, unmaps them, so
- * they won't be displayed. Normally done automatically as
+ * they won’t be displayed. Normally done automatically as
  * part of gtk_widget_hide().
  */
 void
@@ -5602,7 +5602,7 @@ gdk_window_resize (GdkWindow *window,
  * Equivalent to calling gdk_window_move() and gdk_window_resize(),
  * except that both operations are performed at once, avoiding strange
  * visual effects. (i.e. the user may be able to see the window first
- * move, then resize, if you don't use gdk_window_move_resize().)
+ * move, then resize, if you don’t use gdk_window_move_resize().)
  **/
 void
 gdk_window_move_resize (GdkWindow *window,
@@ -6001,7 +6001,7 @@ gdk_window_set_device_cursor (GdkWindow *window,
  * @height: (out) (allow-none): return location for height of window
  *
  * Any of the return location arguments to this function may be %NULL,
- * if you aren't interested in getting the value of that field.
+ * if you aren’t interested in getting the value of that field.
  *
  * The X and Y coordinates returned are relative to the parent window
  * of @window, which for toplevels usually means relative to the
@@ -6601,7 +6601,7 @@ gdk_window_merge_child_input_shapes (GdkWindow *window)
  * Set the bit gravity of the given window to static, and flag it so
  * all children get static subwindow gravity. This is used if you are
  * implementing scary features that involve deep knowledge of the
- * windowing system. Don't worry about it unless you have to.
+ * windowing system. Don’t worry about it unless you have to.
  *
  * Return value: %TRUE if the server supports static gravity
  */
@@ -7792,7 +7792,7 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
  *          for @window is used for all other windows.
  * @time_: the timestamp of the event which led to this pointer grab. This usually
  *         comes from a #GdkEventButton struct, though %GDK_CURRENT_TIME can be used if
- *         the time isn't known.
+ *         the time isn’t known.
  *
  * Grabs the pointer (usually a mouse) so that all events are passed to this
  * application until the pointer is ungrabbed with gdk_pointer_ungrab(), or
@@ -9527,7 +9527,7 @@ gdk_window_set_urgency_hint (GdkWindow *window,
  * has been turned on via gdk_window_set_override_redirect()
  * since these windows are not resizable by the user.
  *
- * Since you can't count on the windowing system doing the
+ * Since you can’t count on the windowing system doing the
  * constraints for programmatic resizes, you should generally
  * call gdk_window_constrain_size() yourself to determine
  * appropriate sizes.
@@ -9547,7 +9547,7 @@ gdk_window_set_geometry_hints (GdkWindow         *window,
  * @title: title of @window
  *
  * Sets the title of a toplevel window, to be displayed in the titlebar.
- * If you haven't explicitly set the icon name for the window
+ * If you haven’t explicitly set the icon name for the window
  * (using gdk_window_set_icon_name()), the icon name will be set to
  * @title as well. @title must be in UTF-8 encoding (as with all
  * user-readable strings in GDK/GTK+). @title may not be %NULL.
@@ -9573,7 +9573,7 @@ gdk_window_set_title (GdkWindow   *window,
  * session, all windows with the same title and role are treated as
  * interchangeable.  So if you have two windows with the same title
  * that should be distinguished for session management purposes, you
- * should set the role on those windows. It doesn't matter what string
+ * should set the role on those windows. It doesn’t matter what string
  * you use for the role, as long as you have a different role for each
  * non-interchangeable kind of window.
  *
@@ -9665,9 +9665,9 @@ gdk_window_get_frame_extents (GdkWindow    *window,
  * @override_redirect: %TRUE if window should be override redirect
  *
  * An override redirect window is not under the control of the window manager.
- * This means it won't have a titlebar, won't be minimizable, etc. - it will
+ * This means it won’t have a titlebar, won’t be minimizable, etc. - it will
  * be entirely under the control of the application. The window manager
- * can't see the override redirect window at all.
+ * can’t see the override redirect window at all.
  *
  * Override redirect should only be used for short-lived temporary
  * windows, such as popup menus. #GtkMenu uses an override redirect
@@ -9687,7 +9687,7 @@ gdk_window_set_override_redirect (GdkWindow *window,
  * @accept_focus: %TRUE if the window should receive input focus
  *
  * Setting @accept_focus to %FALSE hints the desktop environment that the
- * window doesn't want to receive input focus.
+ * window doesn’t want to receive input focus.
  *
  * On X, it is the responsibility of the window manager to interpret this
  * hint. ICCCM-compliant window manager usually respect it.
@@ -9707,8 +9707,8 @@ gdk_window_set_accept_focus (GdkWindow *window,
  * @focus_on_map: %TRUE if the window should receive input focus when mapped
  *
  * Setting @focus_on_map to %FALSE hints the desktop environment that the
- * window doesn't want to receive input focus when it is mapped.
- * focus_on_map should be turned off for windows that aren't triggered
+ * window doesn’t want to receive input focus when it is mapped.
+ * focus_on_map should be turned off for windows that aren’t triggered
  * interactively (such as popups from network activity).
  *
  * On X, it is the responsibility of the window manager to interpret
@@ -9857,7 +9857,7 @@ gdk_window_deiconify (GdkWindow *window)
  * On the X11 platform, this function depends on window manager
  * support, so may have no effect with many window managers. However,
  * GDK will do the best it can to convince the window manager to stick
- * the window. For window managers that don't support this operation,
+ * the window. For window managers that don’t support this operation,
  * there’s nothing you can do to force it to happen.
  *
  **/
@@ -9890,8 +9890,8 @@ gdk_window_unstick (GdkWindow *window)
  *
  * On X11, asks the window manager to maximize @window, if the window
  * manager supports this operation. Not all window managers support
- * this, and some deliberately ignore it or don't have a concept of
- * “maximized”; so you can't rely on the maximization actually
+ * this, and some deliberately ignore it or don’t have a concept of
+ * “maximized”; so you can’t rely on the maximization actually
  * happening. But it will happen with most standard window managers,
  * and GDK makes a best effort to get it to happen.
  *
@@ -9908,13 +9908,13 @@ gdk_window_maximize (GdkWindow *window)
  * gdk_window_unmaximize:
  * @window: a toplevel #GdkWindow
  *
- * Unmaximizes the window. If the window wasn't maximized, then this
+ * Unmaximizes the window. If the window wasn’t maximized, then this
  * function does nothing.
  *
  * On X11, asks the window manager to unmaximize @window, if the
  * window manager supports this operation. Not all window managers
- * support this, and some deliberately ignore it or don't have a
- * concept of “maximized”; so you can't rely on the unmaximization
+ * support this, and some deliberately ignore it or don’t have a
+ * concept of “maximized”; so you can’t rely on the unmaximization
  * actually happening. But it will happen with most standard window
  * managers, and GDK makes a best effort to get it to happen.
  *
@@ -9940,7 +9940,7 @@ gdk_window_unmaximize (GdkWindow *window)
  * On X11, asks the window manager to put @window in a fullscreen
  * state, if the window manager supports this operation. Not all
  * window managers support this, and some deliberately ignore it or
- * don't have a concept of “fullscreen”; so you can't rely on the
+ * don’t have a concept of “fullscreen”; so you can’t rely on the
  * fullscreenification actually happening. But it will happen with
  * most standard window managers, and GDK makes a best effort to get
  * it to happen.
@@ -9972,7 +9972,7 @@ gdk_window_fullscreen (GdkWindow *window)
  * If the XINERAMA extension is not available or not usable, this function
  * has no effect.
  *
- * Not all window managers support this, so you can't rely on the fullscreen
+ * Not all window managers support this, so you can’t rely on the fullscreen
  * window to span over the multiple monitors when #GDK_FULLSCREEN_ON_ALL_MONITORS
  * is specified.
  *
@@ -10024,7 +10024,7 @@ gdk_window_get_fullscreen_mode (GdkWindow *window)
  * On X11, asks the window manager to move @window out of the fullscreen
  * state, if the window manager supports this operation. Not all
  * window managers support this, and some deliberately ignore it or
- * don't have a concept of “fullscreen”; so you can't rely on the
+ * don’t have a concept of “fullscreen”; so you can’t rely on the
  * unfullscreenification actually happening. But it will happen with
  * most standard window managers, and GDK makes a best effort to get
  * it to happen.
@@ -10047,8 +10047,8 @@ gdk_window_unfullscreen (GdkWindow *window)
  *
  * On X11, asks the window manager to keep @window above, if the window
  * manager supports this operation. Not all window managers support
- * this, and some deliberately ignore it or don't have a concept of
- * “keep above”; so you can't rely on the window being kept above.
+ * this, and some deliberately ignore it or don’t have a concept of
+ * “keep above”; so you can’t rely on the window being kept above.
  * But it will happen with most standard window managers,
  * and GDK makes a best effort to get it to happen.
  *
@@ -10071,8 +10071,8 @@ gdk_window_set_keep_above (GdkWindow *window,
  *
  * On X11, asks the window manager to keep @window below, if the window
  * manager supports this operation. Not all window managers support
- * this, and some deliberately ignore it or don't have a concept of
- * “keep below”; so you can't rely on the window being kept below.
+ * this, and some deliberately ignore it or don’t have a concept of
+ * “keep below”; so you can’t rely on the window being kept below.
  * But it will happen with most standard window managers,
  * and GDK makes a best effort to get it to happen.
  *
@@ -10184,7 +10184,7 @@ gdk_window_get_decorations(GdkWindow       *window,
  * The @functions argument is the logical OR of values from the
  * #GdkWMFunction enumeration. If the bitmask includes #GDK_FUNC_ALL,
  * then the other bits indicate which functions to disable; if
- * it doesn't include #GDK_FUNC_ALL, it indicates which functions to
+ * it doesn’t include #GDK_FUNC_ALL, it indicates which functions to
  * enable.
  *
  **/
@@ -10889,7 +10889,7 @@ gdk_window_set_opaque_region (GdkWindow      *window,
  * around their frames for effects like shadows and invisible borders.
  * Window managers that want to maximize windows or snap to edges need
  * to know where the extents of the actual frame lie, so that users
- * don't feel like windows are snapping against random invisible edges.
+ * don’t feel like windows are snapping against random invisible edges.
  *
  * Note that this property is automatically updated by GTK+, so this
  * function should only be used by applications which do not use GTK+

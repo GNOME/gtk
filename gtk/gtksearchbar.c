@@ -469,7 +469,7 @@ gtk_search_bar_new (void)
  *
  * Connects the #GtkEntry widget passed as the one to be used in
  * this search bar. The entry should be a descendant of the search bar.
- * This is only required if the entry isn't the direct child of the
+ * This is only required if the entry isn’t the direct child of the
  * search bar (as in our main example).
  *
  * Since: 3.10

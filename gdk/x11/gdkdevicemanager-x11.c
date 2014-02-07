@@ -85,7 +85,7 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
  * Returns the #GdkDevice that wraps the given device ID.
  *
  * Returns: (transfer none) (allow-none) (type GdkX11DeviceCore): The #GdkDevice wrapping the device ID,
- *          or %NULL if the given ID doesn't currently represent a device.
+ *          or %NULL if the given ID doesn’t currently represent a device.
  *
  * Since: 3.2
  **/

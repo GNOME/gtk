@@ -1519,7 +1519,7 @@ gtk_font_selection_select_font_desc (GtkFontSelection      *fontsel,
  * @fontsel is inserted in a toplevel window before you call this function.
  * 
  * Return value: %TRUE if the font could be set successfully; %FALSE if no 
- *     such font exists or if the @fontsel doesn't belong to a particular 
+ *     such font exists or if the @fontsel doesn’t belong to a particular 
  *     screen yet.
  *
  * Deprecated: 3.2: Use #GtkFontChooser

@@ -96,7 +96,7 @@
  *
  * The lifecycle of an iterator can be a little confusing at first.
  * Iterators are expected to always be valid for as long as the model
- * is unchanged (and doesn't emit a signal). The model is considered
+ * is unchanged (and doesn’t emit a signal). The model is considered
  * to own all outstanding iterators and nothing needs to be done to
  * free them from the user’s point of view. Additionally, some models
  * guarantee that an iterator is valid for as long as the node it refers
@@ -1626,7 +1626,7 @@ gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
  *
  * Sets @iter to be the parent of @child.
  *
- * If @child is at the toplevel, and doesn't have a parent, then
+ * If @child is at the toplevel, and doesn’t have a parent, then
  * @iter is set to an invalid iterator and %FALSE is returned.
  * @child will remain a valid node after this function has been
  * called.
@@ -2266,7 +2266,7 @@ gtk_tree_row_reference_unref_path (GtkTreePath  *path,
  * This reference will keep pointing to the node pointed to
  * by @path, so long as it exists. Any changes that occur on @model are
  * propagated, and the path is updated appropriately. If
- * @path isn't a valid path in @model, then %NULL is returned.
+ * @path isn’t a valid path in @model, then %NULL is returned.
  *
  * Return value: a newly allocated #GtkTreeRowReference, or %NULL
  */
@@ -2295,7 +2295,7 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
  * Creates a row reference based on @path.
  *
  * This reference will keep pointing to the node pointed to
- * by @path, so long as it exists. If @path isn't a valid
+ * by @path, so long as it exists. If @path isn’t a valid
  * path in @model, then %NULL is returned. However, unlike
  * references created with gtk_tree_row_reference_new(), it
  * does not listen to the model for changes. The creator of
@@ -2309,7 +2309,7 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
  * objects like #GtkTreeView already use this mechanism internally,
  * using them as the proxy object will produce unpredictable results.
  * Further more, passing the same object as @model and @proxy
- * doesn't work for reasons of internal implementation.
+ * doesn’t work for reasons of internal implementation.
  *
  * This type of row reference is primarily meant by structures that
  * need to carefully monitor exactly when a row reference updates

@@ -2773,7 +2773,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 }
 
 /* Calback for the "notify::popup-shown" signal on the combo box.
- * When the combo is popped up, we don't want the ROW_TYPE_EMPTY_SELECTION to be visible
+ * When the combo is popped up, we don’t want the ROW_TYPE_EMPTY_SELECTION to be visible
  * at all; otherwise we would be showing a “(None)” item in the combo box’s popup.
  *
  * However, when the combo box is *not* popped up, we want the empty-selection row
@@ -3063,7 +3063,7 @@ gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,
  *
  * Sets whether the button will grab focus when it is clicked with the mouse.
  * Making mouse clicks not grab focus is useful in places like toolbars where
- * you don't want the keyboard focus removed from the main area of the
+ * you don’t want the keyboard focus removed from the main area of the
  * application.
  *
  * Since: 2.10

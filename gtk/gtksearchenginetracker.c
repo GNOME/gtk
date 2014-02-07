@@ -47,7 +47,7 @@
 
 /* If defined, we use fts:match, this has to be enabled in Tracker to
  * work which it usually is. The alternative is to undefine it and
- * use filename matching instead. This doesn't use the content of the
+ * use filename matching instead. This doesn’t use the content of the
  * file however.
  */
 #undef FTS_MATCHING

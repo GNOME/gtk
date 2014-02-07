@@ -716,7 +716,7 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * dialog for which you already have a file name to which
  * the user may save.  For example, when the user opens an existing file and
  * then does Save As... to save a copy or
- * a modified version.  If you don't have a file name already &mdash; for
+ * a modified version.  If you don’t have a file name already &mdash; for
  * example, if the user just created a new file and is saving it for the first
  * time, do not call this function.  Instead, use something similar to this:
  * |[<!-- language="C" -->
@@ -755,7 +755,7 @@ gtk_file_chooser_set_filename (GtkFileChooser *chooser,
  * @chooser: a #GtkFileChooser
  * @filename: (type filename): the filename to select
  * 
- * Selects a filename. If the file name isn't in the current
+ * Selects a filename. If the file name isn’t in the current
  * folder of @chooser, then the current folder of @chooser will
  * be changed to the folder containing @filename.
  *
@@ -1068,7 +1068,7 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * dialog for which you already have a file name to which
  * the user may save.  For example, when the user opens an existing file and then
  * does Save As... to save a copy or a
- * modified version.  If you don't have a file name already &mdash; for example,
+ * modified version.  If you don’t have a file name already &mdash; for example,
  * if the user just created a new file and is saving it for the first time, do
  * not call this function.  Instead, use something similar to this:
  * |[<!-- language="C" -->
@@ -1108,7 +1108,7 @@ gtk_file_chooser_set_uri (GtkFileChooser *chooser,
  * @chooser: a #GtkFileChooser
  * @uri: the URI to select
  * 
- * Selects the file to by @uri. If the URI doesn't refer to a
+ * Selects the file to by @uri. If the URI doesn’t refer to a
  * file in the current folder of @chooser, then the current folder of
  * @chooser will be changed to the folder containing @filename.
  *
@@ -1422,7 +1422,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * the @chooser is in %GTK_FILE_CHOOSER_ACTION_SAVE mode, the file’s base name
  * will also appear in the dialog’s file name entry.
  *
- * If the file name isn't in the current folder of @chooser, then the current
+ * If the file name isn’t in the current folder of @chooser, then the current
  * folder of @chooser will be changed to the folder containing @filename. This
  * is equivalent to a sequence of gtk_file_chooser_unselect_all() followed by
  * gtk_file_chooser_select_filename().
@@ -1433,7 +1433,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * If you are implementing a save dialog,
  * you should use this function if you already have a file name to which the
  * user may save; for example, when the user opens an existing file and then
- * does Save As...  If you don't have
+ * does Save As...  If you don’t have
  * a file name already &mdash; for example, if the user just created a new
  * file and is saving it for the first time, do not call this function.
  * Instead, use something similar to this:

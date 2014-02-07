@@ -331,10 +331,10 @@ gtk_recent_chooser_get_show_private (GtkRecentChooser *chooser)
 /**
  * gtk_recent_chooser_set_show_not_found:
  * @chooser: a #GtkRecentChooser
- * @show_not_found: whether to show the local items we didn't find
+ * @show_not_found: whether to show the local items we didn’t find
  *
  * Sets whether @chooser should display the recently used resources that
- * it didn't find.  This only applies to local resources.
+ * it didn’t find.  This only applies to local resources.
  *
  * Since: 2.10
  */

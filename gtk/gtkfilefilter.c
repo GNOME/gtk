@@ -343,7 +343,7 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
  * gtk_file_filter_new:
  * 
  * Creates a new #GtkFileFilter with no rules added to it.
- * Such a filter doesn't accept any files, so is not
+ * Such a filter doesn’t accept any files, so is not
  * particularly useful until you add rules with
  * gtk_file_filter_add_mime_type(), gtk_file_filter_add_pattern(),
  * or gtk_file_filter_add_custom(). To create a filter
@@ -504,7 +504,7 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
  * function. The bitfield @needed which is passed in provides information
  * about what sorts of information that the filter function needs;
  * this allows GTK+ to avoid retrieving expensive information when
- * it isn't needed by the filter.
+ * it isn’t needed by the filter.
  * 
  * Since: 2.4
  **/

@@ -159,7 +159,7 @@ gtk_stock_add (const GtkStockItem *items,
  * @items: (array length=n_items): a #GtkStockItem or array of #GtkStockItem
  * @n_items: number of items
  *
- * Same as gtk_stock_add(), but doesn't copy @items, so
+ * Same as gtk_stock_add(), but doesn’t copy @items, so
  * @items must persist until application exit.
  *
  * Deprecated: 3.10

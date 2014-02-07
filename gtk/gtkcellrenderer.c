@@ -33,13 +33,13 @@
  *
  * The #GtkCellRenderer is a base class of a set of objects used for
  * rendering a cell to a #cairo_t.  These objects are used primarily by
- * the #GtkTreeView widget, though they aren't tied to them in any
+ * the #GtkTreeView widget, though they aren’t tied to them in any
  * specific way.  It is worth noting that #GtkCellRenderer is not a
  * #GtkWidget and cannot be treated as such.
  *
  * The primary use of a #GtkCellRenderer is for drawing a certain graphical
  * elements on a #cairo_t. Typically, one cell renderer is used to
- * draw many cells on the screen.  To this extent, it isn't expected that a
+ * draw many cells on the screen.  To this extent, it isn’t expected that a
  * CellRenderer keep any permanent state around.  Instead, any state is set
  * just prior to use using #GObjects property system.  Then, the
  * cell is measured using gtk_cell_renderer_get_size(). Finally, the cell

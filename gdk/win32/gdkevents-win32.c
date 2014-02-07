@@ -26,7 +26,7 @@
  */
 
 /* Cannot use TrackMouseEvent, as the stupid WM_MOUSELEAVE message
- * doesn't tell us where the mouse has gone. Thus we cannot use it to
+ * doesn’t tell us where the mouse has gone. Thus we cannot use it to
  * generate a correct GdkNotifyType. Pity, as using TrackMouseEvent
  * otherwise would make it possible to reliably generate
  * GDK_LEAVE_NOTIFY events, which would help get rid of those pesky
@@ -1014,7 +1014,7 @@ apply_event_filters (GdkWindow  *window,
  * with this one.  And etc, up the chain until we hit an ancestor that has no
  * transient owner.
  *
- * It would be a good idea if applications don't chain transient windows
+ * It would be a good idea if applications don’t chain transient windows
  * together.  There’s a limit to how much evil GTK can try to shield you
  * from.
  */

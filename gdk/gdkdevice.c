@@ -1226,8 +1226,8 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  * gdk_device_grab:
  * @device: a #GdkDevice. To get the device you can use gtk_get_current_event_device()
  *   or gdk_event_get_device() if the grab is in reaction to an event. Also, you can use
- *   gdk_device_manager_get_client_pointer() but only in code that isn't triggered by a
- *   #GdkEvent and there aren't other means to get a meaningful #GdkDevice to operate on.
+ *   gdk_device_manager_get_client_pointer() but only in code that isn’t triggered by a
+ *   #GdkEvent and there aren’t other means to get a meaningful #GdkDevice to operate on.
  * @window: the #GdkWindow which will own the grab (the grab window)
  * @grab_ownership: specifies the grab ownership.
  * @owner_events: if %FALSE then all device events are reported with respect to
@@ -1244,7 +1244,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  *          elsewhere.
  * @time_: the timestamp of the event which led to this pointer grab. This
  *         usually comes from the #GdkEvent struct, though %GDK_CURRENT_TIME
- *         can be used if the time isn't known.
+ *         can be used if the time isn’t known.
  *
  * Grabs the device so that all events coming from this device are passed to
  * this application until the device is ungrabbed with gdk_device_ungrab(),

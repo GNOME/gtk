@@ -8333,7 +8333,7 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
  *
- * If the icon name isn't known, a “broken image” icon will be displayed
+ * If the icon name isn’t known, a “broken image” icon will be displayed
  * instead.
  *
  * If @icon_name is %NULL, no icon will be shown in the specified position.
@@ -8399,7 +8399,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
  *
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
- * If the icon isn't known, a “broken image” icon will be displayed
+ * If the icon isn’t known, a “broken image” icon will be displayed
  * instead.
  *
  * If @icon is %NULL, no icon will be shown in the specified position.
@@ -8611,7 +8611,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
  * pixbuf, icon name or gicon).
  *
  * Returns: A stock id, or %NULL if no icon is set or if the icon
- *          wasn't set from a stock id
+ *          wasn’t set from a stock id
  *
  * Since: 2.16
  *
@@ -8646,7 +8646,7 @@ gtk_entry_get_icon_stock (GtkEntry             *entry,
  * pixbuf, stock or gicon).
  *
  * Returns: An icon name, or %NULL if no icon is set or if the icon
- *          wasn't set from an icon name
+ *          wasn’t set from an icon name
  *
  * Since: 2.16
  */
@@ -8783,7 +8783,7 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
  *
  * Finds the icon at the given position and return its index. The
  * position’s coordinates are relative to the @entry’s top left corner.
- * If @x, @y doesn't lie inside an icon, -1 is returned.
+ * If @x, @y doesn’t lie inside an icon, -1 is returned.
  * This function is intended for use in a #GtkWidget::query-tooltip
  * signal handler.
  *
@@ -10311,7 +10311,7 @@ gtk_entry_get_progress_pulse_step (GtkEntry *entry)
  * gtk_entry_progress_pulse:
  * @entry: a #GtkEntry
  *
- * Indicates that some progress is made, but you don't know how much.
+ * Indicates that some progress is made, but you don’t know how much.
  * Causes the entry’s progress indicator to enter “activity mode,”
  * where a block bounces back and forth. Each call to
  * gtk_entry_progress_pulse() causes the block to move by a little bit

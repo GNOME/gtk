@@ -79,8 +79,8 @@ _gtk_get_data_prefix (void)
  * Swedish as written in Finland or pt_BR for Portuguese as written in
  * Brazil.
  *
- * On Windows, the C library doesn't use any such environment
- * variables, and setting them won't affect the behaviour of functions
+ * On Windows, the C library doesn’t use any such environment
+ * variables, and setting them won’t affect the behaviour of functions
  * like ctime(). The user sets the locale through the Regional Options
  * in the Control Panel. The C library (in the setlocale() function)
  * does not use country and language codes, but country and language

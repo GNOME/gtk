@@ -68,7 +68,7 @@
  * #GtkScrolledWindow with gtk_container_add(). If a widget does not, you
  * must first add the widget to a #GtkViewport, then add the #GtkViewport
  * to the scrolled window. gtk_container_add() will do this for you for
- * widgets that don't implement #GtkScrollable natively, so you can
+ * widgets that don’t implement #GtkScrollable natively, so you can
  * ignore the presence of the viewport.
  *
  * The position of the scrollbars is controlled by the scroll
@@ -81,8 +81,8 @@
  * asks to step down (using the small stepper arrows) or page down (using
  * for example the PageDown key).
  *
- * If a #GtkScrolledWindow doesn't behave quite as you would like, or
- * doesn't have exactly the right layout, it’s very possible to set up
+ * If a #GtkScrolledWindow doesn’t behave quite as you would like, or
+ * doesn’t have exactly the right layout, it’s very possible to set up
  * your own scrolling with #GtkScrollbar and for example a #GtkGrid.
  */
 
@@ -112,7 +112,7 @@
  *      child would have allocated without the scrolled window.
  *
  * conclusions:
- * A) from 1) follows: the scrolled window shouldn't request more space for a
+ * A) from 1) follows: the scrolled window shouldn’t request more space for a
  *    specifc dimension than is required at minimum.
  * B) from 1.1) follows: the requisition may be overidden by usize of the scrolled
  *    window (done automatically) or by usize of the child (needs to be checked).
@@ -2996,7 +2996,7 @@ gtk_scrolled_window_remove (GtkContainer *container,
  * #GtkScrollable interface.
  *
  * Deprecated: 3.8: gtk_container_add() will now automatically add
- * a #GtkViewport if the child doesn't implement #GtkScrollable.
+ * a #GtkViewport if the child doesn’t implement #GtkScrollable.
  */
 void
 gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,

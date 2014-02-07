@@ -1181,7 +1181,7 @@ gtk_drag_begin_idle (gpointer arg)
   return G_SOURCE_REMOVE;
 }
 /* Fake protocol to let us call GdkNSView gdkWindow without including
- * gdk/GdkNSView.h (which we can't because it pulls in the internal-only
+ * gdk/GdkNSView.h (which we can’t because it pulls in the internal-only
  * gdkwindow.h).
  */
 @protocol GdkNSView
@@ -1740,7 +1740,7 @@ gtk_drag_source_set_icon_name (GtkWidget   *widget,
  * @hot_y: the Y offset within @widget of the hotspot.
  * 
  * Changes the icon for a widget to a given widget. GTK+
- * will not destroy the icon, so if you don't want
+ * will not destroy the icon, so if you don’t want
  * it to persist, you should connect to the “drag-end” 
  * signal and destroy it yourself.
  **/

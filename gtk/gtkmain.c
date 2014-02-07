@@ -298,9 +298,9 @@ gtk_get_interface_age (void)
  * (same major version.)
  *
  * This function is primarily for GTK+ modules; the module
- * can call this function to check that it wasn't loaded
+ * can call this function to check that it wasn’t loaded
  * into an incompatible version of GTK+. However, such a
- * check isn't completely reliable, since the module may be
+ * check isn’t completely reliable, since the module may be
  * linked against an old version of GTK+ and calling the
  * old version of gtk_check_version(), but still get loaded
  * into an application using a newer version of GTK+.
@@ -330,11 +330,11 @@ gtk_check_version (guint required_major,
 }
 
 /* This checks to see if the process is running suid or sgid
- * at the current time. If so, we don't allow GTK+ to be initialized.
+ * at the current time. If so, we don’t allow GTK+ to be initialized.
  * This is meant to be a mild check - we only error out if we
  * can prove the programmer is doing something wrong, not if
  * they could be doing something wrong. For this reason, we
- * don't use issetugid() on BSD or prctl (PR_GET_DUMPABLE).
+ * don’t use issetugid() on BSD or prctl (PR_GET_DUMPABLE).
  */
 static gboolean
 check_setugid (void)
@@ -961,7 +961,7 @@ gtk_parse_args (int    *argc,
  *
  * This function does the same work as gtk_init() with only a single
  * change: It does not terminate the program if the windowing system
- * can't be initialized. Instead it returns %FALSE on failure.
+ * can’t be initialized. Instead it returns %FALSE on failure.
  *
  * This way the application can fall back to some other means of
  * communication with the user - for example a curses or command line
@@ -1008,7 +1008,7 @@ gtk_init_check (int    *argc,
  * if you are calling gtk_parse_args(), gtk_init_check(),
  * gtk_init_with_args() or g_option_context_parse() with
  * the option group returned by gtk_get_option_group(),
- * you don't have to call gtk_init().
+ * you don’t have to call gtk_init().
  *
  * This function will terminate your program if it was unable to
  * initialize the windowing system for some reason. If you want
@@ -1058,7 +1058,7 @@ check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
 
 /* In GTK+ 2.0 the GtkWindow struct actually is the same size in
  * gcc-compiled code on Win32 whether compiled with -fnative-struct or
- * not. Unfortunately this wan't noticed until after GTK+ 2.0.1. So,
+ * not. Unfortunately this wan’t noticed until after GTK+ 2.0.1. So,
  * from GTK+ 2.0.2 on, check some other struct, too, where the use of
  * -fnative-struct still matters. GtkBox is one such.
  */
@@ -1277,7 +1277,7 @@ gtk_events_pending (void)
  * Runs a single iteration of the mainloop.
  *
  * If no events are waiting to be processed GTK+ will block
- * until the next event is noticed. If you don't want to block
+ * until the next event is noticed. If you don’t want to block
  * look at gtk_main_iteration_do() or check if any events are
  * pending with gtk_events_pending() first.
  *
@@ -1466,7 +1466,7 @@ rewrite_event_for_grabs (GdkEvent *event)
  *    events are thrown away. This is to avoid a backlog of (de-)highlighting
  *    widgets crossed by the pointer.
  * 
- * 2. Find the widget which got the event. If the widget can't be determined
+ * 2. Find the widget which got the event. If the widget can’t be determined
  *    the event is thrown away unless it belongs to a INCR transaction.
  *
  * 3. Then the event is pushed onto a stack so you can query the currently
@@ -2536,7 +2536,7 @@ propagate_event (GtkWidget *widget,
  * event-specific signal on a widget. gtk_propagate_event() is a bit
  * higher-level, and gtk_main_do_event() is the highest level.
  *
- * All that said, you most likely don't want to use any of these
+ * All that said, you most likely don’t want to use any of these
  * functions; synthesizing events is rarely needed. There are almost
  * certainly better ways to achieve your goals. For example, use
  * gdk_window_invalidate_rect() or gtk_widget_queue_draw() instead

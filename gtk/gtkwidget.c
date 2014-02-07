@@ -232,7 +232,7 @@
  * minimum and natural height. If there is no baseline you can return -1 to indicate
  * this. The default implementation of this virtual function calls into the
  * #GtkWidgetClass.get_preferred_height() and #GtkWidgetClass.get_preferred_height_for_width(),
- * so if baselines are not supported it doesn't need to be implemented.
+ * so if baselines are not supported it doesn’t need to be implemented.
  *
  * If a widget ends up baseline aligned it will be allocated all the space in the parent
  * as if it was %GTK_ALIGN_FILL, but the selected baseline can be found via gtk_widget_get_allocated_baseline().
@@ -4120,7 +4120,7 @@ gtk_widget_thaw_child_notify (GtkWidget *widget)
  * its properties in one go. For example you might write:
  * `gtk_widget_new (GTK_TYPE_LABEL, "label", "Hello World", "xalign",
  * 0.0, NULL)` to create a left-aligned label. Equivalent to
- * g_object_new(), but returns a widget so you don't have to
+ * g_object_new(), but returns a widget so you don’t have to
  * cast the object yourself.
  *
  * Return value: a new #GtkWidget of type @widget_type
@@ -4330,7 +4330,7 @@ gtk_widget_destroyed (GtkWidget      *widget,
  * gtk_widget_show:
  * @widget: a #GtkWidget
  *
- * Flags a widget to be displayed. Any widget that isn't shown will
+ * Flags a widget to be displayed. Any widget that isn’t shown will
  * not appear on the screen. If you want to show all the widgets in a
  * container, it’s easier to call gtk_widget_show_all() on the
  * container, instead of individually showing the widgets.
@@ -4538,7 +4538,7 @@ gtk_widget_show_all (GtkWidget *widget)
  * @widget: a #GtkWidget
  *
  * This function is only for use in widget implementations. Causes
- * a widget to be mapped if it isn't already.
+ * a widget to be mapped if it isn’t already.
  **/
 void
 gtk_widget_map (GtkWidget *widget)
@@ -4836,7 +4836,7 @@ static guint tick_callback_id;
  * slower). For this reason, is most suitable for handling graphics
  * that change every frame or every few frames. The tick callback does
  * not automatically imply a relayout or repaint. If you want a
- * repaint or relayout, and aren't changing widget properties that
+ * repaint or relayout, and aren’t changing widget properties that
  * would trigger that (for example, changing the text of a #GtkLabel),
  * then you will have to call gtk_widget_queue_resize() or
  * gtk_widget_queue_draw_area() yourself.
@@ -4981,7 +4981,7 @@ gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
  * when you realize it, bad things will happen.
  *
  * This function is primarily used in widget implementations, and
- * isn't very useful otherwise. Many times when you think you might
+ * isn’t very useful otherwise. Many times when you think you might
  * need it, a better approach is to connect to a signal that will be
  * called after the widget is realized automatically, such as
  * #GtkWidget::draw. Or simply g_signal_connect () to the
@@ -5270,7 +5270,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  * gdk_frame_clock_get_frame_time() again during each repaint.
  *
  * gdk_frame_clock_request_phase() will result in a new frame on the
- * clock, but won't necessarily repaint any widgets. To repaint a
+ * clock, but won’t necessarily repaint any widgets. To repaint a
  * widget, you have to use gtk_widget_queue_draw() which invalidates
  * the widget (thus scheduling it to receive a draw on the next
  * frame). gtk_widget_queue_draw() will also end up requesting a frame
@@ -5983,7 +5983,7 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
  * Determines whether an accelerator that activates the signal
  * identified by @signal_id can currently be activated.
  * This is done by emitting the #GtkWidget::can-activate-accel
- * signal on @widget; if the signal isn't overridden by a
+ * signal on @widget; if the signal isn’t overridden by a
  * handler or in a derived widget, then the default check is
  * that the widget must be sensitive, and the widget and all
  * its ancestors mapped.
@@ -6254,7 +6254,7 @@ destroy_accel_path (gpointer data)
  * use #GtkUIManager, setting up accelerator paths will be done
  * automatically.
  *
- * Even when you you aren't using #GtkUIManager, if you only want to
+ * Even when you you aren’t using #GtkUIManager, if you only want to
  * set up accelerators on menu items gtk_menu_item_set_accel_path()
  * provides a somewhat more convenient interface.
  *
@@ -6835,9 +6835,9 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
  * Rarely-used function. This function is used to emit
  * the event signals on a widget (those signals should never
  * be emitted without using this function to do so).
- * If you want to synthesize an event though, don't use this function;
+ * If you want to synthesize an event though, don’t use this function;
  * instead, use gtk_main_do_event() so the event will behave as if
- * it were in the event queue. Don't synthesize expose events; instead,
+ * it were in the event queue. Don’t synthesize expose events; instead,
  * use gdk_window_invalidate_rect() to invalidate a region of the
  * window.
  *
@@ -7462,7 +7462,7 @@ _gtk_widget_grab_notify (GtkWidget *widget,
  *
  * Causes @widget to have the keyboard focus for the #GtkWindow it's
  * inside. @widget must be a focusable widget, such as a #GtkEntry;
- * something like #GtkFrame won't work.
+ * something like #GtkFrame won’t work.
  *
  * More precisely, it must have the %GTK_CAN_FOCUS flag set. Use
  * gtk_widget_set_can_focus() to modify that flag.
@@ -8366,7 +8366,7 @@ gtk_widget_get_state (GtkWidget *widget)
  * @visible: whether the widget should be shown or not
  *
  * Sets the visibility state of @widget. Note that setting this to
- * %TRUE doesn't mean the widget is actually viewable, see
+ * %TRUE doesn’t mean the widget is actually viewable, see
  * gtk_widget_get_visible().
  *
  * This function simply calls gtk_widget_show() or gtk_widget_hide()
@@ -8706,10 +8706,10 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * widget. gdk_window_begin_paint_region() diverts all drawing to a widget's
  * window to an offscreen buffer, and gdk_window_end_paint() draws the
  * buffer to the screen. The result is that users see the window
- * update in one smooth step, and don't see individual graphics
+ * update in one smooth step, and don’t see individual graphics
  * primitives being rendered.
  *
- * In very simple terms, double buffered widgets don't flicker,
+ * In very simple terms, double buffered widgets don’t flicker,
  * so you would only use this function to turn off double buffering
  * if you had special needs and really knew what you were doing.
  *
@@ -8773,7 +8773,7 @@ gtk_widget_get_double_buffered (GtkWidget *widget)
  * Note that for widgets where gtk_widget_get_has_window() is %FALSE
  * setting this flag to %FALSE turns off all allocation on resizing:
  * the widget will not even redraw if its position changes; this is to
- * allow containers that don't draw anything to avoid excess
+ * allow containers that don’t draw anything to avoid excess
  * invalidations. If you set this flag on a widget with no window that
  * does draw on @widget->window, you are
  * responsible for invalidating both the old and new allocation of the
@@ -8796,7 +8796,7 @@ gtk_widget_set_redraw_on_allocate (GtkWidget *widget,
  *
  * Sets the sensitivity of a widget. A widget is sensitive if the user
  * can interact with it. Insensitive widgets are “grayed out” and the
- * user can't interact with them. Insensitive widgets are known as
+ * user can’t interact with them. Insensitive widgets are known as
  * “inactive”, “disabled”, or “ghosted” in some other toolkits.
  **/
 void
@@ -9787,7 +9787,7 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * @widget: a #GtkWidget
  * @stock_id: a stock ID
  * @size: (type int): a stock size. A size of (GtkIconSize)-1 means
- *     render at the size of the source and don't scale (if there are
+ *     render at the size of the source and don’t scale (if there are
  *     multiple source sizes, GTK+ picks one of the available sizes).
  *
  * A convenience function that uses the theme engine and style
@@ -9801,7 +9801,7 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * after use with g_object_unref().
  *
  * Return value: (transfer full): a new pixbuf, or %NULL if the
- *     stock ID wasn't known
+ *     stock ID wasn’t known
  *
  * Since: 3.0
  *
@@ -10192,7 +10192,7 @@ gtk_widget_get_root_window (GtkWidget *widget)
  * that widget, and %FALSE if moving in @direction moved the focus
  * outside the widget. If returning %TRUE, widgets normally
  * call gtk_widget_grab_focus() to place the focus accordingly;
- * if returning %FALSE, they don't modify the current focus location.
+ * if returning %FALSE, they don’t modify the current focus location.
  *
  * Return value: %TRUE if focus ended up inside @widget
  **/
@@ -10497,7 +10497,7 @@ _gtk_widget_restore_size_request (GtkWidget *widget,
  * so be careful. This function must be called while a widget is
  * unrealized. Consider gtk_widget_add_events() for widgets that are
  * already realized, or if you want to preserve the existing event
- * mask. This function can't be used with widgets that have no window.
+ * mask. This function can’t be used with widgets that have no window.
  * (See gtk_widget_get_has_window()).  To get events on those widgets,
  * place them inside a #GtkEventBox and receive events on the event
  * box.
@@ -10527,7 +10527,7 @@ gtk_widget_set_events (GtkWidget *widget,
  * so be careful. This function must be called while a widget is
  * unrealized. Consider gtk_widget_add_device_events() for widgets that are
  * already realized, or if you want to preserve the existing event
- * mask. This function can't be used with #GTK_NO_WINDOW widgets;
+ * mask. This function can’t be used with #GTK_NO_WINDOW widgets;
  * to get events on those widgets, place them inside a #GtkEventBox
  * and receive events on the event box.
  *
@@ -10748,7 +10748,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  * Note the difference in behavior vs. gtk_widget_get_ancestor();
  * `gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW)`
  * would return
- * %NULL if @widget wasn't inside a toplevel window, and if the
+ * %NULL if @widget wasn’t inside a toplevel window, and if the
  * window was inside a #GtkWindow<!-- -->-derived widget which was in turn
  * inside the toplevel #GtkWindow. While the second case may
  * seem unlikely, it actually happens when a #GtkPlug is embedded
@@ -11033,7 +11033,7 @@ static GQuark quark_composite_name = 0;
  * Sets a widgets composite name. The widget must be
  * a composite child of its parent; see gtk_widget_push_composite_child().
  *
- * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don't use this API at all.
+ * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don’t use this API at all.
  **/
 void
 gtk_widget_set_composite_name (GtkWidget   *widget,
@@ -11062,7 +11062,7 @@ gtk_widget_set_composite_name (GtkWidget   *widget,
  *   a composite child. The string should be freed when it is no
  *   longer needed.
  *
- * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don't use this API at all.
+ * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don’t use this API at all.
  **/
 gchar*
 gtk_widget_get_composite_name (GtkWidget *widget)
@@ -11088,7 +11088,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  *
  * A composite child is a child that’s an implementation detail of the
  * container it’s inside and should not be visible to people using the
- * container. Composite children aren't treated differently by GTK (but
+ * container. Composite children aren’t treated differently by GTK (but
  * see gtk_container_foreach() vs. gtk_container_forall()), but e.g. GUI
  * builders might want to treat them in a different way.
  *
@@ -11117,7 +11117,7 @@ gtk_widget_push_composite_child (void)
  *
  * Cancels the effect of a previous call to gtk_widget_push_composite_child().
  *
- * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don't use this API at all.
+ * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don’t use this API at all.
  **/
 void
 gtk_widget_pop_composite_child (void)
@@ -11907,7 +11907,7 @@ synth_crossing (GtkWidget       *widget,
  * Generate crossing event(s) on widget state (sensitivity) or GTK+ grab change.
  *
  * The real pointer window is the window that most recently received an enter notify
- * event.  Windows that don't select for crossing events can't become the real
+ * event.  Windows that don’t select for crossing events can’t become the real
  * poiner window.  The real pointer widget that owns the real pointer window.  The
  * effective pointer window is the same as the real pointer window unless the real
  * pointer widget is either insensitive or there is a grab on a widget that is not
@@ -12195,12 +12195,12 @@ static const GtkWidgetAuxInfo default_aux_info = {
 /*
  * gtk_widget_get_aux_info:
  * @widget: a #GtkWidget
- * @create: if %TRUE, create the #GtkWidgetAuxInfo-struct if it doesn't exist
+ * @create: if %TRUE, create the #GtkWidgetAuxInfo-struct if it doesn’t exist
  *
  * Get the #GtkWidgetAuxInfo-struct for the widget.
  *
  * Return value: the #GtkWidgetAuxInfo-struct for the widget, or
- *    %NULL if @create is %FALSE and one doesn't already exist.
+ *    %NULL if @create is %FALSE and one doesn’t already exist.
  */
 static GtkWidgetAuxInfo *
 gtk_widget_get_aux_info (GtkWidget *widget,
@@ -14852,7 +14852,7 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
  * is guaranteed that its children stay inside the assigned bounds,
  * but not that they have exactly the bounds the container assigned.
  * There is no way to get the original allocation assigned by
- * gtk_widget_size_allocate(), since it isn't stored; if a container
+ * gtk_widget_size_allocate(), since it isn’t stored; if a container
  * implementation needs that information it will have to track it itself.
  *
  * Since: 2.18
@@ -15213,7 +15213,7 @@ gtk_widget_update_alpha (GtkWidget *widget)
  * always, although setting a window’s opacity after the window has been
  * shown causes it to flicker once on Windows.
  *
- * For child widgets it doesn't work if any affected widget has a native window, or
+ * For child widgets it doesn’t work if any affected widget has a native window, or
  * disables double buffering.
  *
  * Since: 3.8

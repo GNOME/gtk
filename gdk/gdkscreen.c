@@ -195,7 +195,7 @@ _gdk_screen_close (GdkScreen *screen)
 }
 
 /* Fallback used when the monitor "at" a point or window
- * doesn't exist.
+ * doesn’t exist.
  */
 static gint
 get_nearest_monitor (GdkScreen *screen,
@@ -443,7 +443,7 @@ gdk_screen_get_font_options (GdkScreen *screen)
 /**
  * gdk_screen_set_resolution:
  * @screen: a #GdkScreen
- * @dpi: the resolution in “dots per inch”. (Physical inches aren't actually
+ * @dpi: the resolution in “dots per inch”. (Physical inches aren’t actually
  *   involved; the terminology is conventional.)
  
  * Sets the resolution for font handling on the screen. This is a
@@ -889,7 +889,7 @@ gdk_screen_get_system_visual (GdkScreen * screen)
  * The windowing system on which GTK+ is running
  * may not support this capability, in which case %NULL will
  * be returned. Even if a non-%NULL value is returned, its
- * possible that the window’s alpha channel won't be honored
+ * possible that the window’s alpha channel won’t be honored
  * when displaying the window on the screen: in particular, for
  * X an appropriate windowing manager and compositing manager
  * must be running to provide appropriate display.

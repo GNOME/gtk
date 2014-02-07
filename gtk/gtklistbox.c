@@ -587,7 +587,7 @@ gtk_list_box_select_row (GtkListBox    *list_box,
  * @placeholder: (allow-none): a #GtkWidget or %NULL
  *
  * Sets the placeholder widget that is shown in the list when
- * it doesn't display any visible children.
+ * it doesn’t display any visible children.
  *
  * Since: 3.10
  */
@@ -805,7 +805,7 @@ gtk_list_box_set_filter_func (GtkListBox           *list_box,
  * gtk_list_box_row_set_header(). If no header is needed, set the header to %NULL.
  *
  * Note that you may get many calls @update_header to this for a particular row when e.g.
- * changing things that don't affect the header. In this case it is important for performance
+ * changing things that don’t affect the header. In this case it is important for performance
  * to not blindly replace an exisiting header widh an identical one.
  *
  * The @update_header function will be called for each row after the call, and it will
@@ -2715,7 +2715,7 @@ gtk_list_box_row_size_allocate (GtkWidget     *widget,
  * for the first of the two changed rows, otherwise the resorting
  * of the rows will be wrong.
  *
- * This generally means that if you don't fully control the data
+ * This generally means that if you don’t fully control the data
  * model you have to duplicate the data that affects the listbox
  * row functions into the row widgets themselves. Another alternative
  * is to call gtk_list_box_invalidate_sort() on any model change,

@@ -390,7 +390,7 @@ gtk_check_menu_item_toggled (GtkCheckMenuItem *check_menu_item)
  * “in between” display.  Normally you would turn off the inconsistent
  * state again if the user explicitly selects a setting. This has to be
  * done manually, gtk_check_menu_item_set_inconsistent() only affects
- * visual appearance, it doesn't affect the semantics of the widget.
+ * visual appearance, it doesn’t affect the semantics of the widget.
  * 
  **/
 void

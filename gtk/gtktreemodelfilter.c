@@ -166,7 +166,7 @@
  * Throughout the code, two kinds of paths relative to the GtkTreeModelFilter
  * (those generated from the sequence positions) are used. There are paths
  * which take non-visible nodes into account (generated from the full
- * sequences) and paths which don't (generated from the visible sequences).
+ * sequences) and paths which don’t (generated from the visible sequences).
  * Paths which have been generated from the full sequences should only be
  * used internally and NEVER be passed along with a signal emisson.
  *
@@ -4126,7 +4126,7 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
  *
  * Converts @child_path to a path relative to @filter. That is, @child_path
  * points to a path in the child model. The rerturned path will point to the
- * same row in the filtered model. If @child_path isn't a valid path on the
+ * same row in the filtered model. If @child_path isn’t a valid path on the
  * child model or points to a row which is not visible in @filter, then %NULL
  * is returned.
  *
@@ -4276,9 +4276,9 @@ gtk_tree_model_filter_refilter (GtkTreeModelFilter *filter)
  * @filter: A #GtkTreeModelFilter.
  *
  * This function should almost never be called. It clears the @filter
- * of any cached iterators that haven't been reffed with
+ * of any cached iterators that haven’t been reffed with
  * gtk_tree_model_ref_node(). This might be useful if the child model
- * being filtered is static (and doesn't change often) and there has been
+ * being filtered is static (and doesn’t change often) and there has been
  * a lot of unreffed access to nodes. As a side effect of this function,
  * all unreffed iters will be invalid.
  *

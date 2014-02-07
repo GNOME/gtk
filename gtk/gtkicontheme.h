@@ -102,7 +102,7 @@ struct _GtkIconThemeClass
  * @GTK_ICON_LOOKUP_NO_SVG: Never get SVG icons, even if gdk-pixbuf
  *   supports them. Cannot be used together with %GTK_ICON_LOOKUP_FORCE_SVG.
  * @GTK_ICON_LOOKUP_FORCE_SVG: Get SVG icons, even if gdk-pixbuf
- *   doesn't support them.
+ *   doesn’t support them.
  *   Cannot be used together with %GTK_ICON_LOOKUP_NO_SVG.
  * @GTK_ICON_LOOKUP_USE_BUILTIN: When passed to
  *   gtk_icon_theme_lookup_icon() includes builtin icons

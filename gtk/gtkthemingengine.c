@@ -958,7 +958,7 @@ gtk_theming_module_init (GtkThemingModule *module)
  * standard directories.
  *
  * Returns: (transfer none): A theming engine, or %NULL if
- * the engine @name doesn't exist.
+ * the engine @name doesn’t exist.
  **/
 GtkThemingEngine *
 gtk_theming_engine_load (const gchar *name)

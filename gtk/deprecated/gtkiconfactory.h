@@ -96,7 +96,7 @@ GDK_DEPRECATED_IN_3_10
 GtkIconSet* gtk_icon_factory_lookup_default  (const gchar     *stock_id);
 
 /* Get preferred real size from registered semantic size.  Note that
- * themes SHOULD use this size, but they aren't required to; for size
+ * themes SHOULD use this size, but they aren’t required to; for size
  * requests and such, you should get the actual pixbuf from the icon
  * set and see what size was rendered.
  *

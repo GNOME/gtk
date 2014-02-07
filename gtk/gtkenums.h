@@ -347,7 +347,7 @@ typedef enum
  * @GTK_MESSAGE_WARNING: Non-fatal warning message
  * @GTK_MESSAGE_QUESTION: Question requiring a choice
  * @GTK_MESSAGE_ERROR: Fatal error message
- * @GTK_MESSAGE_OTHER: None of the above, doesn't get an icon
+ * @GTK_MESSAGE_OTHER: None of the above, doesn’t get an icon
  *
  * The type of message being displayed in the dialog.
  */
@@ -612,7 +612,7 @@ typedef enum
  *     In some circumstances, such as initially or during a search
  *     operation, it’s possible for no element to be selected with
  *     %GTK_SELECTION_BROWSE. What is really enforced is that the user
- *     can't deselect a currently selected element except by selecting
+ *     can’t deselect a currently selected element except by selecting
  *     another element.
  * @GTK_SELECTION_MULTIPLE: Any number of elements may be selected.
  *      The Ctrl key may be used to enlarge the selection, and Shift
@@ -660,7 +660,7 @@ typedef enum
  * @GTK_STATE_INSENSITIVE: State indicating that the widget is
  *                         unresponsive to user actions.
  * @GTK_STATE_INCONSISTENT: The widget is inconsistent, such as checkbuttons
- *                          or radiobuttons that aren't either set to %TRUE nor %FALSE,
+ *                          or radiobuttons that aren’t either set to %TRUE nor %FALSE,
  *                          or buttons requiring the user attention.
  * @GTK_STATE_FOCUSED: The widget has the keyboard focus.
  *
@@ -713,7 +713,7 @@ typedef enum
  *
  * Window placement can be influenced using this enumeration. Note that
  * using #GTK_WIN_POS_CENTER_ALWAYS is almost always a bad idea.
- * It won't necessarily work well with all window managers or on all windowing systems.
+ * It won’t necessarily work well with all window managers or on all windowing systems.
  */
 typedef enum
 {
@@ -734,11 +734,11 @@ typedef enum
  * are managed by the window manager and have a frame by default (call
  * gtk_window_set_decorated() to toggle the frame).  Windows with type
  * #GTK_WINDOW_POPUP are ignored by the window manager; window manager
- * keybindings won't work on them, the window manager won't decorate the
+ * keybindings won’t work on them, the window manager won’t decorate the
  * window with a frame, many GTK+ features that rely on the window
  * manager will not work (e.g. resize grips and
  * maximization/minimization). #GTK_WINDOW_POPUP is used to implement
- * widgets such as #GtkMenu or tooltips that you normally don't think of
+ * widgets such as #GtkMenu or tooltips that you normally don’t think of
  * as windows per se. Nearly all windows should be #GTK_WINDOW_TOPLEVEL.
  * In particular, do not use #GTK_WINDOW_POPUP just to turn off
  * the window borders; use gtk_window_set_decorated() for that.
@@ -1027,7 +1027,7 @@ typedef enum {
  * GtkSizeRequestMode:
  * @GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH: Prefer height-for-width geometry management
  * @GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT: Prefer width-for-height geometry management
- * @GTK_SIZE_REQUEST_CONSTANT_SIZE: Don't trade height-for-width or width-for-height
+ * @GTK_SIZE_REQUEST_CONSTANT_SIZE: Don’t trade height-for-width or width-for-height
  * 
  * Specifies a preference for height-for-width or
  * width-for-height geometry management.

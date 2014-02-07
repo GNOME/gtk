@@ -103,7 +103,7 @@ _gtk_font_chooser_delegate_get_quark (void)
  * #GtkFontChooser. A #GtkParamSpecOverride property is installed
  * for each property, using the values from the #GtkFontChooserProp
  * enumeration. The caller must make sure itself that the enumeration
- * values don't collide with some other property values they
+ * values don’t collide with some other property values they
  * are using.
  */
 void

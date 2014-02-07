@@ -727,7 +727,7 @@ gtk_color_selection_unrealize (GtkWidget *widget)
 }
 
 /* We override show-all since we have internal widgets that
- * shouldn't be shown when you call show_all(), like the
+ * shouldn’t be shown when you call show_all(), like the
  * palette and opacity sliders.
  */
 static void

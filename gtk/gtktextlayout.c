@@ -769,7 +769,7 @@ invalidate_cached_style (GtkTextLayout *layout)
 }
 
 /* These should be called around a loop which wraps a CONTIGUOUS bunch
- * of display lines. If the lines aren't contiguous you can't call
+ * of display lines. If the lines aren’t contiguous you can’t call
  * these.
  */
 void

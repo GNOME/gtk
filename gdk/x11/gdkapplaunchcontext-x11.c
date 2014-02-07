@@ -116,15 +116,15 @@ end_startup_notification (GdkDisplay *display,
 
 
 /* This should be fairly long, as it's confusing to users if a startup
- * ends when it shouldn't (it appears that the startup failed, and
+ * ends when it shouldn’t (it appears that the startup failed, and
  * they have to relaunch the app). Also the timeout only matters when
- * there are bugs and apps don't end their own startup sequence.
+ * there are bugs and apps don’t end their own startup sequence.
  *
  * This timeout is a "last resort" timeout that ignores whether the
  * startup sequence has shown activity or not.  Metacity and the
  * tasklist have smarter, and correspondingly able-to-be-shorter
- * timeouts. The reason our timeout is dumb is that we don't monitor
- * the sequence (don't use an SnMonitorContext)
+ * timeouts. The reason our timeout is dumb is that we don’t monitor
+ * the sequence (don’t use an SnMonitorContext)
  */
 #define STARTUP_TIMEOUT_LENGTH_SECONDS 30
 #define STARTUP_TIMEOUT_LENGTH (STARTUP_TIMEOUT_LENGTH_SECONDS * 1000)

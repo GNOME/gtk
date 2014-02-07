@@ -66,7 +66,7 @@
  * a custom &lt;accelerator&gt; element, which has attributes named key and
  * modifiers and allows to specify accelerators. This is similar to the
  * &lt;accelerator&gt; element of #GtkWidget, the main difference is that
- * it doesn't allow you to specify a signal.
+ * it doesn’t allow you to specify a signal.
  *
  * ## A #GtkDialog UI definition fragment. ##
  * |[

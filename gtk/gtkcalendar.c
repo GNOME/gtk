@@ -3379,7 +3379,7 @@ gtk_calendar_drag_data_get (GtkWidget        *widget,
 
 /* Get/set whether drag_motion requested the drag data and
  * drag_data_received should thus not actually insert the data,
- * since the data doesn't result from a drop.
+ * since the data doesn’t result from a drop.
  */
 static void
 set_status_pending (GdkDragContext *context,

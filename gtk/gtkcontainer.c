@@ -1458,7 +1458,7 @@ gtk_container_get_property (GObject         *object,
  *
  * The border width of a container is the amount of space to leave
  * around the outside of the container. The only exception to this is
- * #GtkWindow; because toplevel windows can't leave space outside,
+ * #GtkWindow; because toplevel windows can’t leave space outside,
  * they leave the space inside. The border is added on all sides of
  * the container. To add space to only one side, one approach is to
  * create a #GtkAlignment widget, call gtk_widget_set_size_request()
@@ -1514,7 +1514,7 @@ gtk_container_get_border_width (GtkContainer *container)
  * consider functions such as gtk_box_pack_start() and
  * gtk_grid_attach() as an alternative to gtk_container_add() in
  * those cases. A widget may be added to only one container at a time;
- * you can't place the same widget inside two different containers.
+ * you can’t place the same widget inside two different containers.
  *
  * Note that some containers, such as #GtkScrolledWindow or #GtkListBox,
  * may add intermediate children between the added widget and the
@@ -1555,7 +1555,7 @@ gtk_container_add (GtkContainer *container,
  * may be the last reference held; so removing a widget from its
  * container can destroy that widget. If you want to use @widget
  * again, you need to add a reference to it while it’s not inside
- * a container, using g_object_ref(). If you don't want to use @widget
+ * a container, using g_object_ref(). If you don’t want to use @widget
  * again it’s usually more efficient to simply destroy it directly
  * using gtk_widget_destroy() since this will remove it from the
  * container and help break any circular reference count cycles.
@@ -1591,7 +1591,7 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
  * will be passed to the container’s parent, queued for later execution
  * or executed immediately.
  *
- * Deprecated: 3.12: Resize modes are deprecated. They aren't necessary
+ * Deprecated: 3.12: Resize modes are deprecated. They aren’t necessary
  *     anymore since frame clocks and might introduce obscure bugs if
  *     used.
  **/
@@ -1630,7 +1630,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
  *
  * Return value: the current resize mode
  *
- * Deprecated: 3.12: Resize modes are deprecated. They aren't necessary
+ * Deprecated: 3.12: Resize modes are deprecated. They aren’t necessary
  *     anymore since frame clocks and might introduce obscure bugs if
  *     used.
  **/
@@ -2113,7 +2113,7 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
  *
  * Invokes @callback on each child of @container, including children
  * that are considered “internal” (implementation details of the
- * container). “Internal” children generally weren't added by the user
+ * container). “Internal” children generally weren’t added by the user
  * of the container, but were added by the container implementation
  * itself.  Most applications should use gtk_container_foreach(),
  * rather than gtk_container_forall().
@@ -2914,7 +2914,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
  * @direction: focus direction
  * @old_focus: (allow-none): widget to use for the starting position, or %NULL
  *             to determine this automatically.
- *             (Note, this argument isn't used for GTK_DIR_TAB_*,
+ *             (Note, this argument isn’t used for GTK_DIR_TAB_*,
  *              which is the only @direction we use currently,
  *              so perhaps this argument should be removed)
  *
@@ -2922,7 +2922,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
  * direction type @direction.
  *
  * Return value: a copy of @children, sorted in correct focusing order,
- *   with children that aren't suitable for focusing in this direction
+ *   with children that aren’t suitable for focusing in this direction
  *   removed.
  **/
 GList *
@@ -3043,7 +3043,7 @@ chain_widget_destroyed (GtkWidget *widget,
  * In principle each widget in the chain should be a descendant of the
  * container, but this is not enforced by this method, since it’s allowed
  * to set the focus chain before you pack the widgets, or have a widget
- * in the chain that isn't always packed. The necessary checks are done
+ * in the chain that isn’t always packed. The necessary checks are done
  * when the focus chain is actually traversed.
  **/
 void
@@ -3459,7 +3459,7 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
  *   cairo_restore() before calling this function.
  *
  * When a container receives a call to the draw function, it must send
- * synthetic #GtkWidget::draw calls to all children that don't have their
+ * synthetic #GtkWidget::draw calls to all children that don’t have their
  * own #GdkWindows. This function provides a convenient way of doing this.
  * A container, when it receives a call to its #GtkWidget::draw function,
  * calls gtk_container_propagate_draw() once for each child, passing in

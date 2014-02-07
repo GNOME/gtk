@@ -415,7 +415,7 @@ typedef enum
  *   this event is synthetic as the pointer might have not left the window.
  * @GDK_CROSSING_DEVICE_SWITCH: crossing because of a device switch (i.e.
  *   a mouse taking control of the pointer after a touch device), this event
- *   is synthetic as the pointer didn't leave the window.
+ *   is synthetic as the pointer didn’t leave the window.
  *
  * Specifies the crossing mode for #GdkEventCrossing.
  */
