@@ -8187,6 +8187,10 @@ gtk_widget_update_state_flags (GtkWidget     *widget,
  * This function is for use in widget implementations. Turns on flag
  * values in the current widget state (insensitive, prelighted, etc.).
  *
+ * This function accepts the values %GTK_STATE_FLAG_DIR_LTR and
+ * %GTK_STATE_FLAG_DIR_RTL but ignores them. If you want to set the widget's
+ * direction, use gtk_widget_set_direction().
+ *
  * It is worth mentioning that any other state than %GTK_STATE_FLAG_INSENSITIVE,
  * will be propagated down to all non-internal children if @widget is a
  * #GtkContainer, while %GTK_STATE_FLAG_INSENSITIVE itself will be propagated
@@ -8201,6 +8205,8 @@ gtk_widget_set_state_flags (GtkWidget     *widget,
                             GtkStateFlags  flags,
                             gboolean       clear)
 {
+#define ALLOWED_FLAGS (~(GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL))
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if ((!clear && (widget->priv->state_flags & flags) == flags) ||
@@ -8208,9 +8214,11 @@ gtk_widget_set_state_flags (GtkWidget     *widget,
     return;
 
   if (clear)
-    gtk_widget_update_state_flags (widget, flags, ~(flags ^ (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)));
+    gtk_widget_update_state_flags (widget, flags & ALLOWED_FLAGS, ~flags & ALLOWED_FLAGS);
   else
-    gtk_widget_update_state_flags (widget, flags, 0);
+    gtk_widget_update_state_flags (widget, flags & ALLOWED_FLAGS, 0);
+
+#undef ALLOWED_FLAGS
 }
 
 /**
