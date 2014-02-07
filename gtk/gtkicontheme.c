@@ -76,12 +76,12 @@
  * their icons, but more additional application themes can be
  * installed as operating system vendors and users choose.
  *
- * Named icons are similar to the <xref linkend="gtk3-Themeable-Stock-Images"/>
- * facility, and the distinction between the two may be a bit confusing.
+ * Named icons are similar to the deprecated [Stock Items][gtkstock],
+ * and the distinction between the two may be a bit confusing.
  * A few things to keep in mind:
  * 
  * - Stock images usually are used in conjunction with
- *   <xref linkend="gtk3-Stock-Items"/>, such as %GTK_STOCK_OK or
+ *   [Stock Items][gtkstock], such as %GTK_STOCK_OK or
  *   %GTK_STOCK_OPEN. Named icons are easier to set up and therefore
  *   are more useful for new icons that an application wants to
  *   add, such as application icons or window icons.

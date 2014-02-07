@@ -67,7 +67,7 @@ typedef enum
  *  #GtkMenu)
  * @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
  * @GDK_WINDOW_OFFSCREEN: offscreen window (see
- *  <xref linkend="OFFSCREEN-WINDOWS"/>). Since 2.18
+ *  [Offscreen Windows][OFFSCREEN-WINDOWS]). Since 2.18
  *
  * Describes the kind of window.
  */

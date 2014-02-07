@@ -3312,7 +3312,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * menu. This usually happens through the standard key binding mechanism;
    * by pressing a certain key while a widget is focused, the user can cause
    * the widget to pop up a menu.  For example, the #GtkEntry widget creates
-   * a menu with clipboard commands. See <xref linkend="checklist-popup-menu"/>
+   * a menu with clipboard commands. See the
+   * [Popup Menu Migration Checklist][checklist-popup-menu]
    * for an example of how to use this signal.
    *
    * Returns: %TRUE if a menu was activated

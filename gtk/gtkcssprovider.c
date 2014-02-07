@@ -157,7 +157,8 @@
  * character.
  *
  * Refer to the documentation of individual widgets to learn which
- * style classes they define and see <xref linkend="gtkstylecontext-classes"/>
+ * style classes they define and see
+ * [Style Classes and Regions][gtkstylecontext-classes]
  * for a list of all style classes used by GTK+ widgets.
  *
  * Note that there is some ambiguity in the selector syntax when it comes
@@ -192,7 +193,8 @@
  *
  * Refer to the documentation of individual widgets to learn which
  * regions and pseudo-classes they define and see
- * <xref linkend="gtkstylecontext-classes"/> for a list of all regions
+ * [Style Classes and Regions][gtkstylecontext-classes]
+ * for a list of all regions
  * used by GTK+ widgets.
  *
  * An example for regions in selectors:

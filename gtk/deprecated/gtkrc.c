@@ -907,8 +907,7 @@ gtk_rc_get_theme_dir (void)
  *
  * Returns a directory in which GTK+ looks for theme engines.
  * For full information about the search for theme engines,
- * see the docs for `GTK_PATH` in
- * <xref linkend="gtk-running"/>.
+ * see the docs for `GTK_PATH` in [Running GTK+ Applications][gtk-running].
  *
  * return value: (type filename): the directory. (Must be freed with g_free())
  *

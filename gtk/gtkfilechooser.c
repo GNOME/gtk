@@ -92,7 +92,7 @@
  * flag that indicates whether your callback could successfully
  * generate a preview.
  *
- * ## An example for using a preview widget ## {#gtkfilechooser-preview}
+ * ## Example: Using a Preview Widget ## {#gtkfilechooser-preview}
  * |[<!-- language="C" -->
  * {
  *   GtkImage *preview;
@@ -253,7 +253,8 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * must call gtk_file_chooser_set_preview_widget_active() to inform the file
    * chooser about whether the preview was generated successfully or not.
    *
-   * Please see the example code in <xref linkend="gtkfilechooser-preview"/>.
+   * Please see the example code in
+   * [Using a Preview Widget][gtkfilechooser-preview].
    *
    * See also: gtk_file_chooser_set_preview_widget(),
    * gtk_file_chooser_set_preview_widget_active(),

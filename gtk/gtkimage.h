@@ -52,8 +52,7 @@ typedef struct _GtkImageClass         GtkImageClass;
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
  * @GTK_IMAGE_PIXBUF: the widget contains a #GdkPixbuf
- * @GTK_IMAGE_STOCK: the widget contains a stock icon name (see
- *  <xref linkend="gtk3-Stock-Items"/>)
+ * @GTK_IMAGE_STOCK: the widget contains a [stock item name][gtkstock]
  * @GTK_IMAGE_ICON_SET: the widget contains a #GtkIconSet
  * @GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
  * @GTK_IMAGE_ICON_NAME: the widget contains a named icon.

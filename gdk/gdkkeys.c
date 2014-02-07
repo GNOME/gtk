@@ -488,7 +488,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * group, and level. Modifiers that affected the translation and
  * are thus unavailable for application use are returned in
  * @consumed_modifiers.
- * See <xref linkend="key-group-explanation"/> for an explanation of
+ * See [Groups][key-group-explanation] for an explanation of
  * groups and levels. The @effective_group is the group that was
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from

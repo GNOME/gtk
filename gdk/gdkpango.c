@@ -119,7 +119,7 @@
  * g_object_unref (context);
  * ]|
  *
- * ## Output of <xref linkend="rotated-example"/>
+ * ## Output of the [example][rotated-example] above.
  *
  * ![](rotated-text.png)
  */

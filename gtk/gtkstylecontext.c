@@ -75,7 +75,7 @@
  * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
  * widget.
  *
- * # Transition animations
+ * # Transition Animations
  *
  * #GtkStyleContext has built-in support for state change transitions.
  * Note that these animations respect the #GtkSettings:gtk-enable-animations
@@ -172,10 +172,11 @@
  * special value, in this case, the whole widget area will be updated
  * by the animation.
  *
- * # Style classes and regions # {#gtkstylecontext-classes}
+ * # Style Classes and Regions # {#gtkstylecontext-classes}
  *
  * Widgets can add style classes to their context, which can be used
- * to associate different styles by class (see <xref linkend="gtkcssprovider-selectors"/>).
+ * to associate different styles by class
+ * (see [Selectors][gtkcssprovider-selectors]).
  * Theme engines can also use style classes to vary their rendering.
  *
  * Widgets can also add regions with flags to their context.

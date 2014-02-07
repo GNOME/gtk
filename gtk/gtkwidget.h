@@ -77,7 +77,8 @@ typedef struct _GtkWidgetAuxInfo       GtkWidgetAuxInfo;
  *
  * A #GtkAllocation-struct of a widget represents region
  * which has been allocated to the widget by its parent. It is a subregion
- * of its parents allocation. See <xref linkend="geometry-management"/> for
+ * of its parents allocation. See
+ * [GtkWidget's geometry management section][geometry-management] for
  * more information.
  */
 typedef 	GdkRectangle	   GtkAllocation;
@@ -116,7 +117,8 @@ typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
  * @height: the widget's desired height
  *
  * A #GtkRequisition-struct represents the desired size of a widget. See
- * <xref linkend="geometry-management"/> for more information.
+ * [GtkWidget's geometry management section][geometry-management] for
+ * more information.
  */
 struct _GtkRequisition
 {

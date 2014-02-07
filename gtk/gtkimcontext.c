@@ -35,7 +35,8 @@
  *
  * The default input method can be set programmatically via the 
  * #GtkSettings:gtk-im-module GtkSettings property. Alternatively, you may set 
- * the GTK_IM_MODULE environment variable as documented in #gtk-running.
+ * the GTK_IM_MODULE environment variable as documented in
+ * [Running GTK+ Applications][gtk-running].
  *
  * The #GtkEntry #GtkEntry:im-module and #GtkTextView #GtkTextView:im-module 
  * properties may also be used to set input methods for specific widget 
