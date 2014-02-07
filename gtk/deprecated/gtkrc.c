@@ -74,7 +74,7 @@
  * > In GTK+ 3.0, resource files have been deprecated and replaced by
  * > CSS-like style sheets, which are understood by #GtkCssProvider.
  *
- * # Default files #
+ * # Default Files #
  *
  * An application can cause GTK+ to parse a specific RC
  * file by calling gtk_rc_parse(). In addition to this,
@@ -94,8 +94,9 @@
  * Additionally, the `GTK2_RC_FILES` environment variable
  * can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
  * in order to overwrite the set of default files at runtime.
-
- * <anchor id="locale-specific-rc"/>
+ *
+ * # Locale Specific Files # {#locale-specific-rc}
+ *
  * For each RC file, in addition to the file itself, GTK+ will look for
  * a locale-specific file that will be parsed after the main file.
  * For instance, if `LANG` is set to `ja_JP.ujis`,
@@ -103,7 +104,7 @@
  * for `~/.gtkrc.ja_JP` and `~/.gtkrc.ja`,
  * and parses the first of those that exists.
  *
- * # Pathnames and patterns #
+ * # Pathnames and Patterns #
  *
  * A resource file defines a number of styles and key bindings and
  * attaches them to particular widgets. The attachment is done
@@ -180,7 +181,7 @@
  * up, and `gtk` is used for styles
  * that GTK+ creates internally.
  *
- * # Theme gtkrc files #
+ * # Theme gtkrc Files #
  *
  * Theme RC files are loaded first from under the `~/.themes/`,
  * then from the directory from gtk_rc_get_theme_dir(). The files looked at will
@@ -246,7 +247,7 @@
  *   as possible, because matching `"A*B*C*RestString"` can
  *   result in matching complexities of O(n^2) worst case.
  *
- * # Toplevel declarations #
+ * # Toplevel Declarations #
  *
  * An RC file is a text file which is composed of a sequence
  * of declarations. `“#”` characters delimit comments and
@@ -447,7 +448,8 @@
  *         A color used for the background of widgets that have
  *         been set insensitive with gtk_widget_set_sensitive().
  *
- * <anchor id="color-format"/>
+ * ## Color Format ## {#color-format}
+ *
  * Colors can be specified as a string containing a color name (GTK+ knows
  * all names from the X color database `/usr/lib/X11/rgb.txt`),
  * in one of the hexadecimal forms `#rrrrggggbbbb`,

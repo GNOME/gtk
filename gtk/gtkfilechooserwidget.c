@@ -7167,7 +7167,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * name.
    *
    * The ::location-popup signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser show a "Location"
@@ -7198,7 +7198,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::location-popup-on-paste signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser show a "Location"
@@ -7220,7 +7220,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::location-toggle-popup signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to toggle the visibility of a "Location"
@@ -7243,7 +7243,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::up-folder signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser go to the parent of
@@ -7265,7 +7265,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::down-folder signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser go to a child of the
@@ -7291,7 +7291,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::home-folder signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser show the user's home
@@ -7313,7 +7313,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::desktop-folder signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser show the user's Desktop
@@ -7336,7 +7336,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @bookmark_index: the number of the bookmark to switch to
    *
    * The ::quick-bookmark signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser switch to the bookmark
@@ -7364,7 +7364,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::show-hidden signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser display hidden files.
@@ -7385,7 +7385,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::search-shortcut signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser show the search entry.
@@ -7406,7 +7406,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * @widget: the object which received the signal.
    *
    * The ::recent-shortcut signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser show the Recent location.

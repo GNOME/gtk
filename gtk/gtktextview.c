@@ -928,7 +928,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @extend_selection: %TRUE if the move should extend the selection
    *  
    * The ::move-cursor signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted when the user initiates a cursor movement. 
    * If the cursor is not visible in @text_view, this signal causes
    * the viewport to be moved instead.
@@ -966,7 +966,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @count: the number of @step units to move
    *
    * The ::move-viewport signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which can be bound to key combinations to allow the user
    * to move the viewport, i.e. change what part of the text view
    * is visible in a containing scrolled window.
@@ -989,7 +989,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @text_view: the object which received the signal
    *
    * The ::set-anchor signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user initiates setting the "anchor" 
    * mark. The "anchor" mark gets placed at the same position as the
    * "insert" mark.
@@ -1011,7 +1011,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @string: the string to insert
    *
    * The ::insert-at-cursor signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user initiates the insertion of a 
    * fixed string at the cursor.
    *
@@ -1034,7 +1034,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @count: the number of @type units to delete
    *
    * The ::delete-from-cursor signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted when the user initiates a text deletion.
    *
    * If the @type is %GTK_DELETE_CHARS, GTK+ deletes the selection
@@ -1062,7 +1062,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @text_view: the object which received the signal
    *
    * The ::backspace signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted when the user asks for it.
    * 
    * The default bindings for this signal are
@@ -1082,7 +1082,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @text_view: the object which received the signal
    *
    * The ::cut-clipboard signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted to cut the selection to the clipboard.
    * 
    * The default bindings for this signal are
@@ -1102,7 +1102,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @text_view: the object which received the signal
    *
    * The ::copy-clipboard signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted to copy the selection to the clipboard.
    * 
    * The default bindings for this signal are
@@ -1122,7 +1122,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @text_view: the object which received the signal
    *
    * The ::paste-clipboard signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted to paste the contents of the clipboard 
    * into the text view.
    * 
@@ -1143,7 +1143,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @text_view: the object which received the signal
    *
    * The ::toggle-overwrite signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted to toggle the overwrite mode of the text view.
    * 
    * The default bindings for this signal is Insert.
@@ -1193,7 +1193,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @select: %TRUE to select, %FALSE to unselect
    *
    * The ::select-all signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted to select or unselect the complete
    * contents of the text view.
    *
@@ -1214,7 +1214,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @text_view: the object which received the signal
    *
    * The ::toggle-cursor-visible signal is a 
-   * [keybinding signal][keybinding-signals] 
+   * [keybinding signal][GtkBindingSignal] 
    * which gets emitted to toggle the visibility of the cursor.
    *
    * The default binding for this signal is F7.

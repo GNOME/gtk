@@ -1170,7 +1170,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * @window: the window which received the signal
    *
    * The ::activate-focus signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user activates the currently
    * focused widget of @window.
    */
@@ -1189,7 +1189,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * @window: the window which received the signal
    *
    * The ::activate-default signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user activates the default widget
    * of @window.
    */

@@ -502,7 +502,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
    * GtkDialog::close:
    *
    * The ::close signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user uses a keybinding to close
    * the dialog.
    *

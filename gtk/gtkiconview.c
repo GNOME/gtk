@@ -724,7 +724,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * GtkIconView::select-all:
    * @iconview: the object on which the signal is emitted
    *
-   * A [keybinding signal][keybinding-signals]
+   * A [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user selects all items.
    *
    * Applications should not connect to it, but may emit it with
@@ -746,7 +746,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * GtkIconView::unselect-all:
    * @iconview: the object on which the signal is emitted
    *
-   * A [keybinding signal][keybinding-signals]
+   * A [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user unselects all items.
    *
    * Applications should not connect to it, but may emit it with
@@ -768,7 +768,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * GtkIconView::select-cursor-item:
    * @iconview: the object on which the signal is emitted
    *
-   * A [keybinding signal][keybinding-signals]
+   * A [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user selects the item that is currently
    * focused.
    *
@@ -791,7 +791,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * GtkIconView::toggle-cursor-item:
    * @iconview: the object on which the signal is emitted
    *
-   * A [keybinding signal][keybinding-signals]
+   * A [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user toggles whether the currently
    * focused item is selected or not. The exact effect of this 
    * depend on the selection mode.
@@ -815,7 +815,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * GtkIconView::activate-cursor-item:
    * @iconview: the object on which the signal is emitted
    *
-   * A [keybinding signal][keybinding-signals]
+   * A [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user activates the currently 
    * focused item. 
    *
@@ -841,7 +841,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * @count: the number of @step units to move
    *
    * The ::move-cursor signal is a
-   * [keybinding signal][keybinding-signals]
+   * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user initiates a cursor movement.
    *
    * Applications should not connect to it, but may emit it with
