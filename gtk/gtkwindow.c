@@ -7498,7 +7498,7 @@ gtk_window_get_resize_grip_area (GtkWindow    *window,
 }
 
 /* the accel_key and accel_mods fields of the key have to be setup
- * upon calling this function. it'll then return whether that key
+ * upon calling this function. it’ll then return whether that key
  * is at all used as accelerator, and if so will OR in the
  * accel_flags member of the key.
  */

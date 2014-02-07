@@ -52,7 +52,7 @@
  * This function is used to initialize a GTK+ test program.
  *
  * It will in turn call g_test_init() and gtk_init() to properly
- * initialize the testing framework and graphical toolkit. It'll 
+ * initialize the testing framework and graphical toolkit. It’ll 
  * also set the program’s locale to “C” and prevent loading of rc 
  * files and Gtk+ modules. This is done to make tets program
  * environments as deterministic as possible.
@@ -444,7 +444,7 @@ gtk_test_find_widget (GtkWidget    *widget,
  * @percentage: value between 0 and 100.
  *
  * This function will adjust the slider position of all GtkRange
- * based widgets, such as scrollbars or scales, it'll also adjust
+ * based widgets, such as scrollbars or scales, it’ll also adjust
  * spin buttons. The adjustment value of these widgets is set to
  * a value between the lower and upper limits, according to the
  * @percentage argument.
@@ -562,7 +562,7 @@ gtk_test_text_get (GtkWidget *widget)
  *    name-value pairs, terminated by %NULL
  *
  * This function wraps g_object_new() for widget types.
- * It'll automatically show all created non window widgets, also
+ * It’ll automatically show all created non window widgets, also
  * g_object_ref_sink() them (to keep them alive across a running test)
  * and set them up for destruction during the next test teardown phase.
  *

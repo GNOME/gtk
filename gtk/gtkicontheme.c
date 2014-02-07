@@ -435,7 +435,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
  * 
  * Creates a new icon theme object. Icon theme objects are used
  * to lookup up an icon by name in a particular icon theme.
- * Usually, you'll want to use gtk_icon_theme_get_default()
+ * Usually, you’ll want to use gtk_icon_theme_get_default()
  * or gtk_icon_theme_get_for_screen() rather than creating
  * a new icon theme object for scratch.
  * 

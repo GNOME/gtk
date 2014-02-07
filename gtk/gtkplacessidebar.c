@@ -103,7 +103,7 @@
 
 /* These are used when a destination-side DND operation is taking place.
  * Normally, when a file is being hovered directly over a bookmark,
- * we'll be in DROP_STATE_NORMAL.
+ * we’ll be in DROP_STATE_NORMAL.
  *
  * But when a file is being hovered between bookmarks, this means the user
  * may want to create a new bookmark for that file between those bookmarks.

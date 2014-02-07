@@ -5812,7 +5812,7 @@ gdk_window_set_background_pattern (GdkWindow *window,
  *
  * Gets the pattern used to clear the background on @window. If @window
  * does not have its own background and reuses the parent's, %NULL is
- * returned and you'll have to query it yourself.
+ * returned and you’ll have to query it yourself.
  *
  * Returns: (transfer none): The pattern to use for the background or
  *     %NULL to use the parent’s background.

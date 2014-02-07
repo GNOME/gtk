@@ -23,7 +23,7 @@
  * ignored. This structure has object semantics - no fields should be
  * modified directly, they should not be created directly, and
  * pointers to them should not be stored beyond the duration of a
- * callback. (If the last is changed, we'll need to add reference
+ * callback. (If the last is changed, we’ll need to add reference
  * counting.) The time field gives the timestamp at which the data was
  * sent.
  */

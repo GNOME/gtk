@@ -41,7 +41,7 @@
 
 /* The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
  * really pointers to GDrive, GVolume or GMount objects.  We need an extra
- * token for the fake “File System” volume.  So, we'll return a pointer to
+ * token for the fake “File System” volume.  So, we’ll return a pointer to
  * this particular string.
  */
 static const gchar *root_volume_token = N_("File System");

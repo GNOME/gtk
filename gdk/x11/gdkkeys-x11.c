@@ -236,7 +236,7 @@ get_xkb (GdkX11Keymap *keymap_x11)
 #endif /* HAVE_XKB */
 
 /* Whether we were able to turn on detectable-autorepeat using
- * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
+ * XkbSetDetectableAutorepeat. If FALSE, we’ll fall back
  * to checking the next event with XPending().
  */
 

@@ -97,7 +97,7 @@
  * You can also force an expose event by adding to the “damage region”
  * of the drawing area’s window; gtk_widget_queue_draw_area() and
  * gdk_window_invalidate_rect() are equally good ways to do this.
- * You'll then get a draw signal for the invalid region.
+ * You’ll then get a draw signal for the invalid region.
  *
  * The available routines for drawing are documented on the
  * [GDK Drawing Primitives][gdk3-Cairo-Interaction] page

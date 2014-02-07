@@ -1879,7 +1879,7 @@ gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
  *
  * If you want to use a different base pixbuf for different icon
  * variants, you create multiple icon sources, mark which variants
- * they'll be used to create, and add them to the icon set with
+ * they’ll be used to create, and add them to the icon set with
  * gtk_icon_set_add_source().
  *
  * By default, the icon source has all parameters wildcarded. That is,

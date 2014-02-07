@@ -3772,7 +3772,7 @@ remove_all_selection_clipboards (GtkTextBuffer *buffer)
  * pasted text will be inserted at the cursor position, or the buffer selection
  * will be replaced if the selection is non-empty.
  *
- * Note: pasting is asynchronous, that is, we'll ask for the paste data and
+ * Note: pasting is asynchronous, that is, we’ll ask for the paste data and
  * return, and at some point later after the main loop runs, the paste data will
  * be inserted.
  **/

@@ -149,7 +149,7 @@
  * The markup passed to gtk_label_set_markup() must be valid; for example,
  * literal &lt;, &gt; and &amp; characters must be escaped as \&lt;,
  * \gt;, and \&amp;. If you pass text obtained from the user, file,
- * or a network to gtk_label_set_markup(), you'll want to escape it with
+ * or a network to gtk_label_set_markup(), you’ll want to escape it with
  * g_markup_escape_text() or g_markup_printf_escaped().
  *
  * Markup strings are just a convenient way to set the #PangoAttrList on
