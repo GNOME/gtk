@@ -319,8 +319,8 @@ struct _GtkWidget
  * @adjust_size_request: Convert an initial size request from a widget's
  *   #GtkSizeRequestMode virtual method implementations into a size request to
  *   be used by parent containers in laying out the widget.
- *   adjust_size_request adjusts <emphasis>from</emphasis> a child widget's
- *   original request <emphasis>to</emphasis> what a parent container should
+ *   adjust_size_request adjusts from a child widget's
+ *   original request to what a parent container should
  *   use for layout. The @for_size argument will be -1 if the request should
  *   not be for a particular size in the opposing orientation, i.e. if the
  *   request is not height-for-width or width-for-height. If @for_size is
@@ -329,18 +329,18 @@ struct _GtkWidget
  *   adjust_size_request should chain up to the default implementation,
  *   which applies #GtkWidget's margin properties and imposes any values
  *   from gtk_widget_set_size_request(). Chaining up should be last,
- *   <emphasis>after</emphasis> your subclass adjusts the request, so
+ *   after your subclass adjusts the request, so
  *   #GtkWidget can apply constraints and add the margin properly.
  * @adjust_size_allocation: Convert an initial size allocation assigned
  *   by a #GtkContainer using gtk_widget_size_allocate(), into an actual
  *   size allocation to be used by the widget. adjust_size_allocation
- *   adjusts <emphasis>to</emphasis> a child widget's actual allocation
- *   <emphasis>from</emphasis> what a parent container computed for the
+ *   adjusts to a child widget's actual allocation
+ *   from what a parent container computed for the
  *   child. The adjusted allocation must be entirely within the original
  *   allocation. In any custom implementation, chain up to the default
  *   #GtkWidget implementation of this method, which applies the margin
  *   and alignment properties of #GtkWidget. Chain up
- *   <emphasis>before</emphasis> performing your own adjustments so your
+ *   before performing your own adjustments so your
  *   own adjustments remove more allocation after the #GtkWidget base
  *   class has already removed margin and alignment. The natural size
  *   passed in should be adjusted in the same way as the allocated size,
