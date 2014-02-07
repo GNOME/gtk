@@ -84,6 +84,7 @@ struct _GtkPopoverPrivate
   guint size_allocate_id;
   guint unmap_id;
   guint scrollable_notify_id;
+  guint grab_notify_id;
   guint has_pointing_to    : 1;
   guint preferred_position : 2;
   guint final_position     : 2;
@@ -1295,6 +1296,21 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
 }
 
 static void
+_gtk_popover_parent_grab_notify (GtkWidget  *widget,
+                                 gboolean    was_shadowed,
+                                 GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv;
+
+  priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->modal &&
+      gtk_widget_is_visible (GTK_WIDGET (popover)) &&
+      !gtk_widget_has_grab (GTK_WIDGET (popover)))
+    gtk_widget_hide (GTK_WIDGET (popover));
+}
+
+static void
 _gtk_popover_parent_unmap (GtkWidget *widget,
                            GtkPopover *popover)
 {
@@ -1439,6 +1455,8 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         g_signal_handler_disconnect (priv->widget, priv->size_allocate_id);
       if (g_signal_handler_is_connected (priv->widget, priv->unmap_id))
         g_signal_handler_disconnect (priv->widget, priv->unmap_id);
+      if (g_signal_handler_is_connected (priv->widget, priv->grab_notify_id))
+        g_signal_handler_disconnect (priv->widget, priv->grab_notify_id);
 
       widget_unmanage_popover (priv->widget, popover);
     }
@@ -1469,6 +1487,10 @@ gtk_popover_update_relative_to (GtkPopover *popover,
       priv->unmap_id =
         g_signal_connect (priv->widget, "unmap",
                           G_CALLBACK (_gtk_popover_parent_unmap),
+                          popover);
+      priv->grab_notify_id =
+        g_signal_connect (priv->widget, "grab-notify",
+                          G_CALLBACK (_gtk_popover_parent_grab_notify),
                           popover);
 
       /* Give ownership of the popover to widget */
