@@ -7859,6 +7859,7 @@ gtk_flow_box_child_changed
 <TITLE>GtkPopover</TITLE>
 GtkPopover
 gtk_popover_new
+gtk_popover_new_from_model
 gtk_popover_set_relative_to
 gtk_popover_get_relative_to
 gtk_popover_set_pointing_to

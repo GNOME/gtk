@@ -61,6 +61,10 @@ GDK_AVAILABLE_IN_3_12
 GtkWidget *     gtk_popover_new             (GtkWidget             *relative_to);
 
 GDK_AVAILABLE_IN_3_12
+GtkWidget *     gtk_popover_new_from_model  (GtkWidget             *relative_to,
+                                             GMenuModel            *model);
+
+GDK_AVAILABLE_IN_3_12
 void            gtk_popover_set_relative_to (GtkPopover            *popover,
                                              GtkWidget             *relative_to);
 GDK_AVAILABLE_IN_3_12

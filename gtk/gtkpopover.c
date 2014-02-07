@@ -51,6 +51,16 @@
 #include "gtkadjustment.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkbox.h"
+#include "gtkbutton.h"
+#include "gtkseparator.h"
+#include "gtkmodelbutton.h"
+#include "gtkwidgetprivate.h"
+#include "gtkactionmuxer.h"
+#include "gtkmenutracker.h"
+#include "gtkstack.h"
+#include "gtksizegroup.h"
 
 #define TAIL_GAP_WIDTH 24
 #define TAIL_HEIGHT    12
@@ -79,6 +89,7 @@ struct _GtkPopoverPrivate
   GtkScrollable *parent_scrollable;
   GtkAdjustment *vadj;
   GtkAdjustment *hadj;
+  GtkMenuTracker *tracker;
   cairo_rectangle_int_t pointing_to;
   guint hierarchy_changed_id;
   guint size_allocate_id;
@@ -189,6 +200,8 @@ gtk_popover_dispose (GObject *object)
 {
   GtkPopover *popover = GTK_POPOVER (object);
   GtkPopoverPrivate *priv = popover->priv;
+
+  g_clear_pointer (&priv->tracker, gtk_menu_tracker_free);
 
   if (priv->window)
     _gtk_window_remove_popover (priv->window, GTK_WIDGET (object));
@@ -1818,4 +1831,319 @@ _gtk_popover_set_apply_shape (GtkPopover *popover,
   priv->apply_shape = apply_shape;
   gtk_popover_update_position (popover);
   gtk_widget_queue_draw (GTK_WIDGET (popover));
+}
+
+static void
+gtk_popover_tracker_remove_func (gint     position,
+                                 gpointer user_data)
+{
+  GtkWidget *box = user_data;
+  GList *children;
+  GtkWidget *child;
+
+  g_assert (GTK_IS_BOX (box));
+
+  children = gtk_container_get_children (GTK_CONTAINER (box));
+  child = g_list_nth_data (children, position);
+  g_list_free (children);
+
+  gtk_widget_destroy (child);
+}
+
+static void
+gtk_popover_item_activate (GtkWidget *button,
+                           gpointer   user_data)
+{
+  GtkMenuTrackerItem *item = user_data;
+
+  gtk_menu_tracker_item_activated (item);
+
+  if (gtk_menu_tracker_item_get_role (item) == GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+    gtk_widget_hide (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER));
+}
+
+static gboolean
+get_ancestors (GtkWidget  *widget,
+               GType       widget_type,
+               GtkWidget **ancestor,
+               GtkWidget **below)
+{
+  GtkWidget *a, *b;
+
+  a = NULL;
+  b = widget;
+  while (b != NULL)
+    {
+      a = gtk_widget_get_parent (b);
+      if (!a)
+        return FALSE;
+      if (g_type_is_a (G_OBJECT_TYPE (a), widget_type))
+        break;
+      b = a;
+    }
+
+  *below = b;
+  *ancestor = a;
+
+  return TRUE;
+}
+
+static void
+close_submenu (GtkWidget *button,
+               gpointer   data)
+{
+  GtkMenuTrackerItem *item = data;
+  GtkWidget *stack;
+  GtkWidget *parent;
+  GtkWidget *focus;
+ 
+  if (gtk_menu_tracker_item_get_should_request_show (item))
+    gtk_menu_tracker_item_request_submenu_shown (item, FALSE);
+
+  focus = GTK_WIDGET (g_object_get_data (G_OBJECT (button), "focus"));
+
+  get_ancestors (focus, GTK_TYPE_STACK, &stack, &parent);
+  gtk_stack_set_visible_child (GTK_STACK (stack), parent);
+  gtk_widget_grab_focus (focus);
+}
+
+static void
+open_submenu (GtkWidget *button,
+              gpointer   data)
+{
+  GtkMenuTrackerItem *item = data;
+  GtkWidget *stack;
+  GtkWidget *child;
+  GtkWidget *focus;
+ 
+  if (gtk_menu_tracker_item_get_should_request_show (item))
+    gtk_menu_tracker_item_request_submenu_shown (item, TRUE);
+
+  focus = GTK_WIDGET (g_object_get_data (G_OBJECT (button), "focus"));
+  get_ancestors (focus, GTK_TYPE_STACK, &stack, &child);
+  gtk_stack_set_visible_child (GTK_STACK (stack), child);
+  gtk_widget_grab_focus (focus);
+}
+
+static void
+gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
+                                 gint                position,
+                                 gpointer            user_data)
+{
+  GtkWidget *box = user_data;
+  GtkWidget *stack;
+  GtkWidget *widget;
+  GtkSizeGroup *group;
+
+  stack = gtk_widget_get_ancestor (box, GTK_TYPE_STACK);
+  group = g_object_get_data (G_OBJECT (stack), "size-group");
+
+  if (gtk_menu_tracker_item_get_is_separator (item))
+    {
+      GtkWidget *separator;
+      const gchar *label;
+
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+ 
+      label = gtk_menu_tracker_item_get_label (item);
+
+      if (label != NULL)
+        {
+          GtkWidget *title;
+
+          title = gtk_label_new (label);
+          g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
+          gtk_style_context_add_class (gtk_widget_get_style_context (title), GTK_STYLE_CLASS_SEPARATOR);
+          gtk_widget_set_halign (title, GTK_ALIGN_START);
+          widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+          g_object_set (widget,
+                        "margin-start", 12,
+                        "margin-end", 12,
+                        "margin-top", 6,
+                        "margin-bottom", 3,
+                        NULL);
+          gtk_container_add (GTK_CONTAINER (widget), title);
+          gtk_container_add (GTK_CONTAINER (widget), separator);
+          gtk_widget_show_all (widget);
+        }
+      else
+        {
+          widget = separator;
+          g_object_set (widget,
+                        "margin-start", 12,
+                        "margin-end", 12,
+                        "margin-top", 3,
+                        "margin-bottom", 3,
+                        NULL);
+          gtk_widget_show (widget);
+        }
+    }
+  else if (gtk_menu_tracker_item_get_has_submenu (item))
+    {
+      GtkMenuTracker *tracker;
+      GtkWidget *child;
+      GtkWidget *button;
+      GtkWidget *content;
+      GtkWidget *parent;
+
+      child = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      g_object_set (child, "margin", 10, NULL);
+
+      button = (GtkWidget *) g_object_new (GTK_TYPE_MODEL_BUTTON,
+                                           "has-submenu", TRUE,
+                                           "inverted", TRUE,
+                                           "centered", TRUE,
+                                           NULL);
+      g_object_bind_property (item, "label", button, "text", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "icon", button, "icon", G_BINDING_SYNC_CREATE);
+
+      gtk_container_add (GTK_CONTAINER (child), button);
+      gtk_widget_show_all (child);
+
+      g_signal_connect (button, "clicked", G_CALLBACK (close_submenu), item);  
+
+      gtk_stack_add_named (GTK_STACK (stack), child, 
+                           gtk_menu_tracker_item_get_label (item));
+      gtk_size_group_add_widget (group, child);
+
+      widget = (GtkWidget *) g_object_new (GTK_TYPE_MODEL_BUTTON,
+                                           "has-submenu", TRUE,
+                                           NULL);
+      g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "visible", widget, "visible", G_BINDING_SYNC_CREATE);
+      gtk_widget_show (widget);
+
+      g_signal_connect (widget, "clicked", G_CALLBACK (open_submenu), item);  
+
+      g_object_set_data (G_OBJECT (widget), "focus", button);
+      g_object_set_data (G_OBJECT (button), "focus", widget);
+
+      content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_widget_set_halign (content, GTK_ALIGN_FILL);
+      gtk_widget_show (content);
+      gtk_container_add (GTK_CONTAINER (child), content);
+      tracker = gtk_menu_tracker_new_for_item_submenu (item, gtk_popover_tracker_insert_func, gtk_popover_tracker_remove_func, content);
+
+      g_object_set_data_full (G_OBJECT (widget), "submenutracker", tracker, (GDestroyNotify)gtk_menu_tracker_free);
+
+      gtk_widget_show (widget);
+    }
+  else
+    {
+      widget = gtk_model_button_new ();
+      g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "visible", widget, "visible", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "role", widget, "action-role", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "toggled", widget, "toggled", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "accel", widget, "accel", G_BINDING_SYNC_CREATE);
+
+      g_signal_connect (widget, "clicked", G_CALLBACK (gtk_popover_item_activate), item);
+    }
+
+  g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
+
+  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_reorder_child (GTK_BOX (box), widget, position);
+}
+
+static void
+back_to_main (GtkWidget *popover)
+{
+  GtkWidget *stack;
+
+  stack = gtk_bin_get_child (GTK_BIN (popover));
+  gtk_stack_set_visible_child_name (GTK_STACK (stack), "main");
+}
+
+static void
+gtk_popover_bind_model (GtkPopover  *popover,
+                        GMenuModel  *model,
+                        const gchar *action_namespace,
+                        gboolean     with_separators)
+{
+  GtkActionMuxer *muxer;
+  GtkWidget *child;
+  GtkWidget *stack;
+  GtkWidget *box;
+  GtkPopoverPrivate *priv;
+  GtkSizeGroup *group;
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+  g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
+
+  priv = popover->priv;
+
+  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (popover));
+
+  g_clear_pointer (&priv->tracker, gtk_menu_tracker_free);
+
+  child = gtk_bin_get_child (GTK_BIN (popover));
+  if (child)
+    gtk_container_remove (GTK_CONTAINER (popover), child);
+  
+  if (model)
+    {
+      stack = gtk_stack_new ();
+      group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      g_object_set_data_full (G_OBJECT (stack), "size-group", group, g_object_unref);
+      gtk_stack_set_homogeneous (GTK_STACK (stack), FALSE);
+      gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
+      gtk_widget_show (stack);
+      gtk_container_add (GTK_CONTAINER (popover), stack);
+
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      g_object_set (box, "margin", 10, NULL);
+      gtk_widget_show (box);
+      gtk_stack_add_named (GTK_STACK (stack), box, "main");
+      gtk_size_group_add_widget (group, box);
+
+      g_signal_connect (popover, "unmap", G_CALLBACK (back_to_main), NULL);
+      g_signal_connect (popover, "map", G_CALLBACK (back_to_main), NULL);
+
+      priv->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
+                                            model,
+                                            with_separators,
+                                            action_namespace,
+                                            gtk_popover_tracker_insert_func,
+                                            gtk_popover_tracker_remove_func,
+                                            box);
+    }
+}
+
+/**
+ * gtk_popover_new_from_model:
+ * @relative_to: #GtkWidget the popover is related to
+ * @model: a #GMenuModel
+ *
+ * Creates a #GtkPopover and populates it according to
+ * @model. The popover is pointed to the @relative_to wideget.
+ *
+ * The created buttons are connected to actions found in the
+ * #GtkApplicationWindow to which the popover belongs - typically
+ * by means of being attached to a widget that is contained within
+ * the #GtkApplicationWindows widget hierarchy.
+ *
+ * Actions can also be added using gtk_widget_insert_action_group()
+ * on the menus attach widget or on any of its parent widgets.
+ *
+ * Return value: the new #GtkPopover
+ *
+ * Since: 3.12
+ */
+GtkWidget *
+gtk_popover_new_from_model (GtkWidget  *relative_to,
+                            GMenuModel *model)
+{
+  GtkWidget *popover;
+
+  g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
+
+  popover = gtk_popover_new (relative_to);
+  gtk_popover_bind_model (GTK_POPOVER (popover), model, NULL, TRUE);
+
+  return popover;
 }
