@@ -65,7 +65,7 @@
  *    GtkWidget *dialog, *toggle1, *toggle2;
  *
  *    dialog = gtk_dialog_new (<!-- -->);
- *    toggle1 = gtk_toggle_button_new_with_label ("Hi, i'm a toggle button.");
+ *    toggle1 = gtk_toggle_button_new_with_label ("Hi, i’m a toggle button.");
  *
  *    // Makes this toggle button invisible
  *    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle1), TRUE);
@@ -75,7 +75,7 @@
  *    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
  *                        toggle1, FALSE, FALSE, 2);
  *
- *    toggle2 = gtk_toggle_button_new_with_label ("Hi, i'm another toggle button.");
+ *    toggle2 = gtk_toggle_button_new_with_label ("Hi, i’m another toggle button.");
  *    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle2), FALSE);
  *    g_signal_connect (toggle2, "toggled",
  *                      G_CALLBACK (output_state), NULL);

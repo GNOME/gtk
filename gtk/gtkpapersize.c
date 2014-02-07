@@ -709,7 +709,7 @@ gtk_paper_size_get_default (void)
  * the imageble area on any printer.
  *
  * I’ve taken the actual values used from the OSX page setup dialog.
- * I'm not sure exactly where they got these values for, but might
+ * I’m not sure exactly where they got these values for, but might
  * correspond to this (from ghostscript docs):
  *
  * All DeskJets have 0.5 inches (1.27cm) of unprintable bottom margin,

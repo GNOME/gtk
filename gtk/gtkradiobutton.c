@@ -86,7 +86,7 @@
  *
  *    /&ast; Create a radio button with a label &ast;/
  *    radio2 = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio1),
- *                                                          "I'm the second radio button.");
+ *                                                          "I’m the second radio button.");
  *
  *    /&ast; Pack them into a box, then show all the widgets &ast;/
  *    gtk_box_pack_start (GTK_BOX (box), radio1, TRUE, TRUE, 2);
