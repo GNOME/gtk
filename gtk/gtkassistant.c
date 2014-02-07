@@ -32,10 +32,10 @@
  *
  * The design of GtkAssistant is that it controls what buttons to show
  * and to make sensitive, based on what it knows about the page sequence
- * and the <link linkend="GtkAssistantPageType">type</link> of each page,
+ * and the [type][GtkAssistantPageType] of each page,
  * in addition to state information like the page
- * <link linkend="gtk-assistant-set-page-complete">completion</link>
- * and <link linkend="gtk-assistant-commit">committed</link> status.
+ * [completion][gtk-assistant-set-page-complete]
+ * and [committed][gtk-assistant-commit] status.
  *
  * If you have a case that doesn't quite fit in #GtkAssistants way of
  * handling buttons, you can use the #GTK_ASSISTANT_PAGE_CUSTOM page

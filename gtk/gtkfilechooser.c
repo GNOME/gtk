@@ -887,9 +887,9 @@ gtk_file_chooser_get_filenames (GtkFileChooser *chooser)
  * The user will be shown the full contents of the current folder,
  * plus user interface elements for navigating to other folders.
  *
- * In general, you should not use this function.  See the <link
- * linkend="gtkfilechooserdialog-setting-up">section on setting up a file
- * chooser dialog</link> for the rationale behind this.
+ * In general, you should not use this function.  See the
+ * [section on setting up a file chooser dialog][gtkfilechooserdialog-setting-up]
+ * for the rationale behind this.
  *
  * Return value: Not useful.
  *
@@ -1232,9 +1232,9 @@ gtk_file_chooser_get_uris (GtkFileChooser *chooser)
  * The user will be shown the full contents of the current folder,
  * plus user interface elements for navigating to other folders.
  *
- * In general, you should not use this function.  See the <link
- * linkend="gtkfilechooserdialog-setting-up">section on setting up a file
- * chooser dialog</link> for the rationale behind this.
+ * In general, you should not use this function.  See the
+ * [section on setting up a file chooser dialog][gtkfilechooserdialog-setting-up]
+ * for the rationale behind this.
  *
  * Return value: %TRUE if the folder could be changed successfully, %FALSE
  * otherwise.

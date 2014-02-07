@@ -1313,8 +1313,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:primary-icon-tooltip-markup:
    * 
    * The contents of the tooltip on the primary icon, which is marked up
-   * with the <link linkend="PangoMarkupFormat">Pango text markup 
-   * language</link>.
+   * with the [Pango text markup language][PangoMarkupFormat].
    *
    * Also see gtk_entry_set_icon_tooltip_markup().
    *
@@ -1332,8 +1331,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:secondary-icon-tooltip-markup:
    * 
    * The contents of the tooltip on the secondary icon, which is marked up
-   * with the <link linkend="PangoMarkupFormat">Pango text markup 
-   * language</link>.
+   * with the [Pango text markup language][PangoMarkupFormat].
    *
    * Also see gtk_entry_set_icon_tooltip_markup().
    *
@@ -1562,7 +1560,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * the Enter key.
    *
    * While this signal is used as a
-   * <link linkend="keybinding-signals">keybinding signal</link>,
+   * [keybinding signal][keybinding-signals],
    * it is also commonly used by applications to intercept
    * activation of entries.
    *
@@ -1586,7 +1584,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @extend_selection: %TRUE if the move should extend the selection
    *
    * The ::move-cursor signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when the user initiates a cursor movement.
    * If the cursor is not visible in @entry, this signal causes
    * the viewport to be moved instead.
@@ -1621,7 +1619,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @string: the string to insert
    *
    * The ::insert-at-cursor signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when the user initiates the insertion of a
    * fixed string at the cursor.
    *
@@ -1644,7 +1642,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @count: the number of @type units to delete
    *
    * The ::delete-from-cursor signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when the user initiates a text deletion.
    *
    * If the @type is %GTK_DELETE_CHARS, GTK+ deletes the selection
@@ -1671,7 +1669,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @entry: the object which received the signal
    *
    * The ::backspace signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when the user asks for it.
    *
    * The default bindings for this signal are
@@ -1691,7 +1689,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @entry: the object which received the signal
    *
    * The ::cut-clipboard signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to cut the selection to the clipboard.
    *
    * The default bindings for this signal are
@@ -1711,7 +1709,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @entry: the object which received the signal
    *
    * The ::copy-clipboard signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to copy the selection to the clipboard.
    *
    * The default bindings for this signal are
@@ -1731,7 +1729,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @entry: the object which received the signal
    *
    * The ::paste-clipboard signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to paste the contents of the clipboard
    * into the text view.
    *
@@ -1752,7 +1750,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @entry: the object which received the signal
    *
    * The ::toggle-overwrite signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to toggle the overwrite mode of the entry.
    *
    * The default bindings for this signal is Insert.
@@ -9114,7 +9112,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
  *
  * Sets @tooltip as the contents of the tooltip for the icon at
  * the specified position. @tooltip is assumed to be marked up with
- * the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ * the [Pango text markup language][PangoMarkupFormat].
  *
  * Use %NULL for @tooltip to remove an existing tooltip.
  *

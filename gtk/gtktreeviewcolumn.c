@@ -45,13 +45,13 @@
  * @See_also: #GtkTreeView, #GtkTreeSelection, #GtkTreeModel, #GtkTreeSortable,
  *   #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable,
  *   #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle,
- *   <link linkend="gtk3-GtkTreeView-drag-and-drop">GtkTreeView drag-and-drop</link>
+ *   [GtkTreeView drag-and-drop][gtk3-GtkTreeView-drag-and-drop]
  *
  * The GtkTreeViewColumn object represents a visible column in a #GtkTreeView widget.
  * It allows to set properties of the column header, and functions as a holding pen for
  * the cell renderers which determine how the data in the column is displayed.
  *
- * Please refer to the <link linkend="TreeWidget">tree widget conceptual overview</link>
+ * Please refer to the [tree widget conceptual overview][TreeWidget]
  * for an overview of all the objects and data types related to the tree widget and how
  * they work together.
  */

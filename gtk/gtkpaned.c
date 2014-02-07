@@ -443,7 +443,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * @reversed: whether cycling backward or forward
    *
    * The ::cycle-child-focus signal is a 
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to cycle the focus between the children of the paned.
    *
    * The default binding is f6.
@@ -465,7 +465,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * @widget: the object that received the signal
    *
    * The ::toggle-handle-focus is a 
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to accept the current position of the handle and then 
    * move focus to the next widget in the focus chain.
    *
@@ -488,7 +488,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * @scroll_type: a #GtkScrollType
    *
    * The ::move-handle signal is a 
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to move the handle when the user is using key bindings 
    * to move it.
    *
@@ -510,7 +510,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * @reversed: whether cycling backward or forward
    *
    * The ::cycle-handle-focus signal is a 
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to cycle whether the paned should grab focus to allow
    * the user to change position of the handle by using key bindings.
    *
@@ -533,7 +533,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * @widget: the object that received the signal
    *
    * The ::accept-position signal is a 
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to accept the current position of the handle when 
    * moving it using key bindings.
    *
@@ -555,7 +555,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * @widget: the object that received the signal
    *
    * The ::cancel-position signal is a 
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to cancel moving the position of the handle using key 
    * bindings. The position of the handle will be reset to the value prior to 
    * moving it.

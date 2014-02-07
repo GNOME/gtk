@@ -63,15 +63,16 @@
  * @Short_description: A widget for displaying both trees and lists
  * @Title: GtkTreeView
  * @See_also: #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeModel,
- *   <link linkend="gtk3-GtkTreeView-drag-and-drop">GtkTreeView drag-and-drop</link>,
+ *   [GtkTreeView drag-and-drop][gtk3-GtkTreeView-drag-and-drop],
  *   #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore,
  *   #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf,
  *   #GtkCellRendererText, #GtkCellRendererToggle
  *
  * Widget that displays any object that implements the #GtkTreeModel interface.
  *
- * Please refer to the <link linkend="TreeWidget">tree widget conceptual
- * overview</link> for an overview of all the objects and data types related
+ * Please refer to the
+ * [tree widget conceptual overview][TreeWidget]
+ * for an overview of all the objects and data types related
  * to the tree widget and how they work together.
  *
  * Several different coordinate systems are exposed in the GtkTreeView API.
@@ -1285,9 +1286,10 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * the "activate-on-single-click" property set to %TRUE. It is also
    * emitted when a non-editable row is selected and one of the keys:
    * Space, Shift+Space, Return or Enter is pressed.
-   * 
-   * For selection handling refer to the <link linkend="TreeWidget">tree 
-   * widget conceptual overview</link> as well as #GtkTreeSelection.
+   *
+   * For selection handling refer to the
+   * [tree widget conceptual overview][TreeWidget]
+   * as well as #GtkTreeSelection.
    */
   tree_view_signals[ROW_ACTIVATED] =
     g_signal_new (I_("row-activated"),

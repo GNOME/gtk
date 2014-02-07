@@ -481,7 +481,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * GtkInfoBar::close:
    *
    * The ::close signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when the user uses a keybinding to dismiss
    * the info bar.
    *

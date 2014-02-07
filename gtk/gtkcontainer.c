@@ -177,7 +177,7 @@
  * that the container adds. Then vertical expand space should be added where appropriate and available
  * and the container should go on to actually allocating the child widgets.
  *
- * See <link linkend="geometry-management">GtkWidget's geometry management section</link>
+ * See [GtkWidget's geometry management section][geometry-management]
  * to learn more about implementing height-for-width geometry management for widgets.
  *
  * # Child properties
@@ -802,7 +802,7 @@ gtk_container_child_type (GtkContainer *container)
  *     the class of @container
  *
  * Emits a #GtkWidget::child-notify signal for the
- * <link linkend="child-properties">child property</link>
+ * [child property][child-properties]
  * @child_property on widget.
  *
  * This is an analogue of g_object_notify() for child properties.

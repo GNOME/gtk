@@ -36,7 +36,7 @@
  *
  * GtkSymbolicColor is a boxed type that represents a symbolic color.
  * It is the result of parsing a
- * <link linkend="gtkcssprovider-symbolic-colors">color expression</link>.
+ * [color expression][gtkcssprovider-symbolic-colors].
  * To obtain the color represented by a GtkSymbolicColor, it has to
  * be resolved with gtk_symbolic_color_resolve(), which replaces all
  * symbolic color references by the colors they refer to (in a given

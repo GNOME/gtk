@@ -593,7 +593,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  *
  * Creates a new message dialog, which is a simple dialog with an icon
  * indicating the dialog type (error, warning, etc.) and some text which
- * is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ * is marked up with the [Pango text markup language][PangoMarkupFormat].
  * When the user clicks a button a “response” signal is emitted with
  * response IDs from #GtkResponseType. See #GtkDialog for more details.
  *
@@ -712,11 +712,10 @@ gtk_message_dialog_get_image (GtkMessageDialog *dialog)
 /**
  * gtk_message_dialog_set_markup:
  * @message_dialog: a #GtkMessageDialog
- * @str: markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
+ * @str: markup string (see [Pango markup format][PangoMarkupFormat])
  * 
  * Sets the text of the message dialog to be @str, which is marked
- * up with the <link linkend="PangoMarkupFormat">Pango text markup
- * language</link>.
+ * up with the [Pango text markup language][PangoMarkupFormat].
  *
  * Since: 2.4
  **/
@@ -784,12 +783,12 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  * gtk_message_dialog_format_secondary_markup:
  * @message_dialog: a #GtkMessageDialog
  * @message_format: printf()-style markup string (see
-     <link linkend="PangoMarkupFormat">Pango markup format</link>), or %NULL
+     [Pango markup format][PangoMarkupFormat]), or %NULL
  * @...: arguments for @message_format
  *
  * Sets the secondary text of the message dialog to be @message_format (with
  * printf()-style), which is marked up with the
- * <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ * [Pango text markup language][PangoMarkupFormat].
  *
  * Due to an oversight, this function does not escape special XML characters
  * like gtk_message_dialog_new_with_markup() does. Thus, if the arguments

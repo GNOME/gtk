@@ -269,7 +269,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * @button: the object which received the signal
    *
    * The ::popup signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to popup the scale widget.
    *
    * The default bindings for this signal are Space, Enter and Return.
@@ -290,7 +290,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * @button: the object which received the signal
    *
    * The ::popdown signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to popdown the scale widget.
    *
    * The default binding for this signal is Escape.

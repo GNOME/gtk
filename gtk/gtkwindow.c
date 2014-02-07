@@ -1170,7 +1170,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * @window: the window which received the signal
    *
    * The ::activate-focus signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when the user activates the currently
    * focused widget of @window.
    */
@@ -1189,7 +1189,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * @window: the window which received the signal
    *
    * The ::activate-default signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when the user activates the default widget
    * of @window.
    */
@@ -1832,8 +1832,8 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
  * you might use #GTK_WINDOW_POPUP. #GTK_WINDOW_POPUP is not for
  * dialogs, though in some other toolkits dialogs are called “popups”.
  * In GTK+, #GTK_WINDOW_POPUP means a pop-up menu or pop-up tooltip.
- * On X11, popup windows are not controlled by the <link
- * linkend="gtk-X11-arch">window manager</link>.
+ * On X11, popup windows are not controlled by the
+ * [window manager][gtk-X11-arch].
  *
  * If you simply want an undecorated window (no window borders), use
  * gtk_window_set_decorated(), don't use #GTK_WINDOW_POPUP.
@@ -1901,8 +1901,8 @@ gtk_window_set_title_internal (GtkWindow   *window,
  * 
  * Sets the title of the #GtkWindow. The title of a window will be
  * displayed in its title bar; on the X Window System, the title bar
- * is rendered by the <link linkend="gtk-X11-arch">window
- * manager</link>, so exactly how the title appears to users may vary
+ * is rendered by the [window manager][gtk-X11-arch],
+ * so exactly how the title appears to users may vary
  * according to a user's exact configuration. The title should help a
  * user distinguish this window from other windows they may have
  * open. A good title might include the application name and current
@@ -1981,7 +1981,7 @@ gtk_window_set_wmclass (GtkWindow *window,
  * This function is only useful on X11, not with other GTK+ targets.
  * 
  * In combination with the window title, the window role allows a
- * <link linkend="gtk-X11-arch">window manager</link> to identify "the
+ * [window manager][gtk-X11-arch] to identify "the
  * same" window when an application is restarted. So for example you
  * might set the “toolbox” role on your app's toolbox window, so that
  * when the user restarts their session, the window manager can put
@@ -2567,7 +2567,7 @@ gtk_window_activate_default (GtkWindow *window)
  * with other windows in the same application. To keep modal dialogs
  * on top of main application windows, use
  * gtk_window_set_transient_for() to make the dialog transient for the
- * parent; most <link linkend="gtk-X11-arch">window managers</link>
+ * parent; most [window managers][gtk-X11-arch]
  * will then disallow lowering the dialog below the parent.
  * 
  * 
@@ -2786,8 +2786,8 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  * @parent: (allow-none): parent window, or %NULL
  *
  * Dialog windows should be set transient for the main application
- * window they were spawned from. This allows <link
- * linkend="gtk-X11-arch">window managers</link> to e.g. keep the
+ * window they were spawned from. This allows
+ * [window managers][gtk-X11-arch] to e.g. keep the
  * dialog on top of the main window, or center the dialog over the
  * main window. gtk_dialog_new_with_buttons() and other convenience
  * functions in GTK+ will sometimes call
@@ -3753,8 +3753,8 @@ _gtk_window_titlebar_shows_app_menu (GtkWindow *window)
  * @setting: %TRUE to decorate the window
  *
  * By default, windows are decorated with a title bar, resize
- * controls, etc.  Some <link linkend="gtk-X11-arch">window
- * managers</link> allow GTK+ to disable these decorations, creating a
+ * controls, etc.  Some [window managers][gtk-X11-arch]
+ * allow GTK+ to disable these decorations, creating a
  * borderless window. If you set the decorated property to %FALSE
  * using this function, GTK+ will do its best to convince the window
  * manager not to decorate the window. Depending on the system, this
@@ -3828,7 +3828,7 @@ gtk_window_get_decorated (GtkWindow *window)
  * @setting: %TRUE to decorate the window as deletable
  *
  * By default, windows have a close button in the window frame. Some 
- * <link linkend="gtk-X11-arch">window managers</link> allow GTK+ to 
+ * [window managers][gtk-X11-arch] allow GTK+ to 
  * disable this button. If you set the deletable property to %FALSE
  * using this function, GTK+ will do its best to convince the window
  * manager not to show a close button. Depending on the system, this
@@ -4843,8 +4843,9 @@ gtk_window_resize_to_geometry (GtkWindow *window,
  * @height: (out) (allow-none): return location for height, or %NULL
  *
  * Obtains the current size of @window. If @window is not onscreen,
- * it returns the size GTK+ will suggest to the <link
- * linkend="gtk-X11-arch">window manager</link> for the initial window
+ * it returns the size GTK+ will suggest to the
+ * [window manager][gtk-X11-arch]
+ * for the initial window
  * size (but this is not reliably the same as the size the window
  * manager will actually select). The size obtained by
  * gtk_window_get_size() is the last size received in a
@@ -4929,7 +4930,7 @@ gtk_window_get_size (GtkWindow *window,
  * @x: X coordinate to move window to
  * @y: Y coordinate to move window to
  *
- * Asks the <link linkend="gtk-X11-arch">window manager</link> to move
+ * Asks the [window manager][gtk-X11-arch] to move
  * @window to the given position.  Window managers are free to ignore
  * this; most window managers ignore requests for initial window
  * positions (instead using a user-defined placement algorithm) and
@@ -10020,8 +10021,8 @@ gtk_window_present_with_time (GtkWindow *window,
  *
  * Asks to iconify (i.e. minimize) the specified @window. Note that
  * you shouldn't assume the window is definitely iconified afterward,
- * because other entities (e.g. the user or <link
- * linkend="gtk-X11-arch">window manager</link>) could deiconify it
+ * because other entities (e.g. the user or
+ * [window manager][gtk-X11-arch]) could deiconify it
  * again, or there may not be a window manager in which case
  * iconification isn't possible, etc. But normally the window will end
  * up iconified. Just don't write code that crashes if not.
@@ -10060,8 +10061,8 @@ gtk_window_iconify (GtkWindow *window)
  *
  * Asks to deiconify (i.e. unminimize) the specified @window. Note
  * that you shouldn't assume the window is definitely deiconified
- * afterward, because other entities (e.g. the user or <link
- * linkend="gtk-X11-arch">window manager</link>) could iconify it
+ * afterward, because other entities (e.g. the user or
+ * [window manager][gtk-X11-arch])) could iconify it
  * again before your code which assumes deiconification gets to run.
  *
  * You can track iconification via the “window-state-event” signal
@@ -10093,8 +10094,8 @@ gtk_window_deiconify (GtkWindow *window)
  *
  * Asks to stick @window, which means that it will appear on all user
  * desktops. Note that you shouldn't assume the window is definitely
- * stuck afterward, because other entities (e.g. the user or <link
- * linkend="gtk-X11-arch">window manager</link>) could unstick it
+ * stuck afterward, because other entities (e.g. the user or
+ * [window manager][gtk-X11-arch] could unstick it
  * again, and some window managers do not support sticking
  * windows. But normally the window will end up stuck. Just don't
  * write code that crashes if not.
@@ -10132,8 +10133,8 @@ gtk_window_stick (GtkWindow *window)
  * Asks to unstick @window, which means that it will appear on only
  * one of the user's desktops. Note that you shouldn't assume the
  * window is definitely unstuck afterward, because other entities
- * (e.g. the user or <link linkend="gtk-X11-arch">window
- * manager</link>) could stick it again. But normally the window will
+ * (e.g. the user or [window manager][gtk-X11-arch]) could
+ * stick it again. But normally the window will
  * end up stuck. Just don't write code that crashes if not.
  *
  * You can track stickiness via the “window-state-event” signal
@@ -10166,8 +10167,8 @@ gtk_window_unstick (GtkWindow *window)
  *
  * Asks to maximize @window, so that it becomes full-screen. Note that
  * you shouldn't assume the window is definitely maximized afterward,
- * because other entities (e.g. the user or <link
- * linkend="gtk-X11-arch">window manager</link>) could unmaximize it
+ * because other entities (e.g. the user or
+ * [window manager][gtk-X11-arch]) could unmaximize it
  * again, and not all window managers support maximization. But
  * normally the window will end up maximized. Just don't write code
  * that crashes if not.
@@ -10207,8 +10208,8 @@ gtk_window_maximize (GtkWindow *window)
  *
  * Asks to unmaximize @window. Note that you shouldn't assume the
  * window is definitely unmaximized afterward, because other entities
- * (e.g. the user or <link linkend="gtk-X11-arch">window
- * manager</link>) could maximize it again, and not all window
+ * (e.g. the user or [window manager][gtk-X11-arch])
+ * could maximize it again, and not all window
  * managers honor requests to unmaximize. But normally the window will
  * end up unmaximized. Just don't write code that crashes if not.
  *
@@ -10242,8 +10243,8 @@ gtk_window_unmaximize (GtkWindow *window)
  *
  * Asks to place @window in the fullscreen state. Note that you
  * shouldn't assume the window is definitely full screen afterward,
- * because other entities (e.g. the user or <link
- * linkend="gtk-X11-arch">window manager</link>) could unfullscreen it
+ * because other entities (e.g. the user or
+ * [window manager][gtk-X11-arch]) could unfullscreen it
  * again, and not all window managers honor requests to fullscreen
  * windows. But normally the window will end up fullscreen. Just
  * don't write code that crashes if not.
@@ -10279,8 +10280,8 @@ gtk_window_fullscreen (GtkWindow *window)
  *
  * Asks to toggle off the fullscreen state for @window. Note that you
  * shouldn't assume the window is definitely not full screen
- * afterward, because other entities (e.g. the user or <link
- * linkend="gtk-X11-arch">window manager</link>) could fullscreen it
+ * afterward, because other entities (e.g. the user or
+ * [window manager][gtk-X11-arch]) could fullscreen it
  * again, and not all window managers honor requests to unfullscreen
  * windows. But normally the window will end up restored to its normal
  * state. Just don't write code that crashes if not.
@@ -10317,8 +10318,8 @@ gtk_window_unfullscreen (GtkWindow *window)
  *
  * Asks to keep @window above, so that it stays on top. Note that
  * you shouldn't assume the window is definitely above afterward,
- * because other entities (e.g. the user or <link
- * linkend="gtk-X11-arch">window manager</link>) could not keep it above,
+ * because other entities (e.g. the user or
+ * [window manager][gtk-X11-arch]) could not keep it above,
  * and not all window managers support keeping windows above. But
  * normally the window will end kept above. Just don't write code
  * that crashes if not.
@@ -10368,8 +10369,8 @@ gtk_window_set_keep_above (GtkWindow *window,
  *
  * Asks to keep @window below, so that it stays in bottom. Note that
  * you shouldn't assume the window is definitely below afterward,
- * because other entities (e.g. the user or <link
- * linkend="gtk-X11-arch">window manager</link>) could not keep it below,
+ * because other entities (e.g. the user or
+ * [window manager][gtk-X11-arch]) could not keep it below,
  * and not all window managers support putting windows below. But
  * normally the window will be kept below. Just don't write code
  * that crashes if not.
@@ -10523,8 +10524,8 @@ gtk_window_get_gravity (GtkWindow *window)
  *
  * Starts resizing a window. This function is used if an application
  * has window resizing controls. When GDK can support it, the resize
- * will be done using the standard mechanism for the <link
- * linkend="gtk-X11-arch">window manager</link> or windowing
+ * will be done using the standard mechanism for the
+ * [window manager][gtk-X11-arch] or windowing
  * system. Otherwise, GDK will try to emulate window resizing,
  * potentially not all that well, depending on the windowing system.
  */
@@ -10561,8 +10562,8 @@ gtk_window_begin_resize_drag  (GtkWindow     *window,
  *
  * Starts moving a window. This function is used if an application has
  * window movement grips. When GDK can support it, the window movement
- * will be done using the standard mechanism for the <link
- * linkend="gtk-X11-arch">window manager</link> or windowing
+ * will be done using the standard mechanism for the
+ * [window manager][gtk-X11-arch] or windowing
  * system. Otherwise, GDK will try to emulate window movement,
  * potentially not all that well, depending on the windowing system.
  */

@@ -38,8 +38,9 @@
  * @Short_description: Text buffer iterator
  * @Title: GtkTextIter
  *
- * You may wish to begin by reading the <link linkend="TextWidget">text widget
- * conceptual overview</link> which gives an overview of all the objects and data
+ * You may wish to begin by reading the
+ * [text widget conceptual overview][TextWidget]
+ * which gives an overview of all the objects and data
  * types related to the text widget and how they work together.
  */
 

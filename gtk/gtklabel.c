@@ -134,8 +134,8 @@
  * # Markup (styled text)
  *
  * To make it easy to format text in a label (changing colors,
- * fonts, etc.), label text can be provided in a simple <link
- * linkend="PangoMarkupFormat">markup format</link>.
+ * fonts, etc.), label text can be provided in a simple
+ * [markup format][PangoMarkupFormat].
  *
  * Here's how to create a label with a small font:
  * |[<!-- language="C" -->
@@ -143,8 +143,7 @@
  *   gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
  * ]|
  *
- * (See <link
- * linkend="PangoMarkupFormat">complete documentation</link> of available
+ * (See [complete documentation][PangoMarkupFormat] of available
  * tags in the Pango manual.)
  *
  * The markup passed to gtk_label_set_markup() must be valid; for example,
@@ -194,7 +193,7 @@
  *
  * Note that the interpretation of #GtkLabel:width-chars and
  * #GtkLabel:max-width-chars has changed a bit with the introduction of
- * <link linkend="geometry-management">width-for-height geometry management.</link>
+ * [width-for-height geometry management.][geometry-management]
  *
  * # Links
  *
@@ -583,7 +582,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * @extend_selection: %TRUE if the move should extend the selection
    *
    * The ::move-cursor signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when the user initiates a cursor movement.
    * If the cursor is not visible in @entry, this signal causes
    * the viewport to be moved instead.
@@ -617,7 +616,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * @label: the object which received the signal
    *
    * The ::copy-clipboard signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted to copy the selection to the clipboard.
    *
    * The default binding for this signal is Ctrl-c.
@@ -657,7 +656,7 @@ gtk_label_class_init (GtkLabelClass *class)
      * GtkLabel::activate-current-link:
      * @label: The label on which the signal was emitted
      *
-     * A <link linkend="keybinding-signals">keybinding signal</link>
+     * A [keybinding signal][keybinding-signals]
      * which gets emitted when the user activates a link in the label.
      *
      * Applications may also emit the signal with g_signal_emit_by_name()
@@ -845,7 +844,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * The desired width of the label, in characters. If this property is set to
    * -1, the width will be calculated automatically.
    *
-   * See the section on <link linkend="label-text-layout">text layout</link>
+   * See the section on [text layout][label-text-layout]
    * for details of how #GtkLabel:width-chars and #GtkLabel:max-width-chars
    * determine the width of ellipsized and wrapped labels.
    *
@@ -906,7 +905,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * The desired maximum width of the label, in characters. If this property 
    * is set to -1, the width will be calculated automatically.
    *
-   * See the section on <link linkend="label-text-layout">text layout</link>
+   * See the section on [text layout][label-text-layout]
    * for details of how #GtkLabel:width-chars and #GtkLabel:max-width-chars
    * determine the width of ellipsized and wrapped labels.
    *
@@ -2593,10 +2592,10 @@ gtk_label_set_markup_internal (GtkLabel    *label,
 /**
  * gtk_label_set_markup:
  * @label: a #GtkLabel
- * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
- * 
- * Parses @str which is marked up with the <link
- * linkend="PangoMarkupFormat">Pango text markup language</link>, setting the
+ * @str: a markup string (see [Pango markup format][PangoMarkupFormat])
+ *
+ * Parses @str which is marked up with the
+ * [Pango text markup language][PangoMarkupFormat], setting the
  * label's text and attribute list based on the parse results. If the @str is
  * external data, you may need to escape it with g_markup_escape_text() or
  * g_markup_printf_escaped()<!-- -->:
@@ -2629,10 +2628,10 @@ gtk_label_set_markup (GtkLabel    *label,
  * gtk_label_set_markup_with_mnemonic:
  * @label: a #GtkLabel
  * @str: a markup string (see
- *     <link linkend="PangoMarkupFormat">Pango markup format</link>)
+ *     [Pango markup format][PangoMarkupFormat])
  *
  * Parses @str which is marked up with the
- * <link linkend="PangoMarkupFormat">Pango text markup language</link>,
+ * [Pango text markup language][PangoMarkupFormat],
  * setting the label's text and attribute list based on the parse results.
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
@@ -5574,9 +5573,9 @@ gtk_label_get_layout_offsets (GtkLabel *label,
  * @label: a #GtkLabel
  * @setting: %TRUE if the label's text should be parsed for markup.
  *
- * Sets whether the text of the label contains markup in <link
- * linkend="PangoMarkupFormat">Pango's text markup
- * language</link>. See gtk_label_set_markup().
+ * Sets whether the text of the label contains markup in
+ * [Pango's text markup language][PangoMarkupFormat].
+ * See gtk_label_set_markup().
  **/
 void
 gtk_label_set_use_markup (GtkLabel *label,
@@ -5597,8 +5596,8 @@ gtk_label_set_use_markup (GtkLabel *label,
  * @label: a #GtkLabel
  *
  * Returns whether the label's text is interpreted as marked up with
- * the <link linkend="PangoMarkupFormat">Pango text markup
- * language</link>. See gtk_label_set_use_markup ().
+ * the [Pango text markup language][PangoMarkupFormat].
+ * See gtk_label_set_use_markup ().
  *
  * Return value: %TRUE if the label's text will be parsed for markup.
  **/

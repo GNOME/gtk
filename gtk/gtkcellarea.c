@@ -37,8 +37,9 @@
  *
  * # Requesting area sizes
  *
- * As outlined in <link linkend="geometry-management">GtkWidget's
- * geometry management section</link>, GTK+ uses a height-for-width
+ * As outlined in
+ * [GtkWidget's geometry management section][geometry-management],
+ * GTK+ uses a height-for-width
  * geometry management system to compute the sizes of widgets and user
  * interfaces. #GtkCellArea uses the same semantics to calculate the
  * size of an area for an arbitrary number of #GtkTreeModel rows.
@@ -319,7 +320,7 @@
  *
  * The #GtkCellArea introduces cell properties for #GtkCellRenderers
  * in very much the same way that #GtkContainer introduces
- * <link linkend="child-properties">child properties</link>
+ * [child properties][child-properties]
  * for #GtkWidgets. This provides some general interfaces for defining
  * the relationship cell areas have with their cells. For instance in a
  * #GtkCellAreaBox a cell might “expand” and receive extra space when

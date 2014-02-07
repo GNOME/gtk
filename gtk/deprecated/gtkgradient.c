@@ -33,7 +33,7 @@
  *
  * GtkGradient is a boxed type that represents a gradient.
  * It is the result of parsing a
- * <link linkend="gtkcssprovider-gradients">gradient expression</link>.
+ * [gradient expression][gtkcssprovider-gradients].
  * To obtain the gradient represented by a GtkGradient, it has to
  * be resolved with gtk_gradient_resolve(), which replaces all
  * symbolic color references by the colors they refer to (in a given

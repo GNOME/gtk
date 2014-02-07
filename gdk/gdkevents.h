@@ -56,7 +56,7 @@ G_BEGIN_DECLS
  * GDK_PRIORITY_EVENTS:
  *
  * This is the priority that events from the X server are given in the
- * <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
+ * [GLib Main Loop][glib-The-Main-Event-Loop].
  */
 #define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
 
@@ -65,7 +65,7 @@ G_BEGIN_DECLS
  *
  * This is the priority that the idle handler processing window updates
  * is given in the
- * <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
+ * [GLib Main Loop][glib-The-Main-Event-Loop].
  */
 #define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
 

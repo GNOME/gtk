@@ -1580,7 +1580,7 @@ gtk_scale_clear_marks (GtkScale *scale)
  *   and %GTK_POS_LEFT are drawn above the scale, anything else below.
  *   For a vertical scale, #GTK_POS_LEFT and %GTK_POS_TOP are drawn to
  *   the left of the scale, anything else to the right.
- * @markup: (allow-none): Text to be shown at the mark, using <link linkend="PangoMarkupFormat">Pango markup</link>, or %NULL
+ * @markup: (allow-none): Text to be shown at the mark, using [Pango markup][PangoMarkupFormat], or %NULL
  *
  *
  * Adds a mark at @value.

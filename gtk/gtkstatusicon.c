@@ -393,8 +393,8 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * GtkStatusIcon:tooltip-markup:
    *
    * Sets the text of tooltip to be the given string, which is marked up
-   * with the <link linkend="PangoMarkupFormat">Pango text markup 
-   * language</link>. Also see gtk_tooltip_set_markup().
+   * with the [Pango text markup language][PangoMarkupFormat].
+   * Also see gtk_tooltip_set_markup().
    *
    * This is a convenience property which will take care of getting the
    * tooltip shown if the given string is not %NULL.
@@ -2530,7 +2530,7 @@ gtk_status_icon_get_tooltip_text (GtkStatusIcon *status_icon)
  * @markup: (allow-none): the contents of the tooltip for @status_icon, or %NULL
  *
  * Sets @markup as the contents of the tooltip, which is marked up with
- *  the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ *  the [Pango text markup language][PangoMarkupFormat].
  *
  * This function will take care of setting #GtkStatusIcon:has-tooltip to %TRUE
  * and of the default handler for the #GtkStatusIcon::query-tooltip signal.

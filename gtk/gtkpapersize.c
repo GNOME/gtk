@@ -52,7 +52,7 @@
  *
  * The #GtkPaperSize object stores not only the dimensions (width
  * and height) of a paper size and its name, it also provides
- * default <link linkend="print-margins">print margins</link>.
+ * default [print margins][print-margins].
  *
  * Printing support has been added in GTK+ 2.10.
  */

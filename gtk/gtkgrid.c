@@ -38,7 +38,7 @@
  * rows and columns. It is a very similar to #GtkTable and #GtkBox,
  * but it consistently uses #GtkWidget's #GtkWidget:margin and #GtkWidget:expand
  * properties instead of custom child properties, and it fully supports
- * <link linkend="geometry-management">height-for-width geometry management</link>.
+ * [height-for-width geometry management][geometry-management].
  *
  * Children are added using gtk_grid_attach(). They can span multiple
  * rows or columns. It is also possible to add a child next to an

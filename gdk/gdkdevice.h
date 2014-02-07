@@ -115,7 +115,7 @@ typedef enum
  * @GDK_DEVICE_TYPE_FLOATING: Device is a physical device, currently not attached to
  *                            any virtual device.
  *
- * Indicates the device type. See <link linkend="GdkDeviceManager.description">above</link>
+ * Indicates the device type. See [above][GdkDeviceManager.description]
  * for more information about the meaning of these device types.
  */
 typedef enum {

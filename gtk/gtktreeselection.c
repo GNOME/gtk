@@ -33,7 +33,7 @@
  * @See_also: #GtkTreeView, #GtkTreeViewColumn, #GtkTreeModel,
  *   #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore,
  *   #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf,
- *   #GtkCellRendererText, #GtkCellRendererToggle, <link linkend="gtk3-GtkTreeView-drag-and-drop">GtkTreeView drag-and-drop</link>
+ *   #GtkCellRendererText, #GtkCellRendererToggle, [GtkTreeView drag-and-drop][gtk3-GtkTreeView-drag-and-drop]
  *
  * The #GtkTreeSelection object is a helper object to manage the selection
  * for a #GtkTreeView widget.  The #GtkTreeSelection object is

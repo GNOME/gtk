@@ -415,8 +415,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Determines whether the completions popup window will shown
    * for a single possible completion. You probably want to set
    * this to %FALSE if you are using
-   * <link linkend="GtkEntryCompletion--inline-completion">inline
-   * completion</link>.
+   * [inline completion][GtkEntryCompletion--inline-completion].
    *
    * Since: 2.8
    */
@@ -2161,8 +2160,7 @@ gtk_entry_completion_get_popup_set_width (GtkEntryCompletion *completion)
  *
  * Sets whether the completion popup window will appear even if there is
  * only a single match. You may want to set this to %FALSE if you
- * are using <link linkend="GtkEntryCompletion--inline-completion">inline
- * completion</link>.
+ * are using [inline completion][GtkEntryCompletion--inline-completion].
  *
  * Since: 2.8
  */

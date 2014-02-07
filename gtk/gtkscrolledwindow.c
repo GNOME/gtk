@@ -498,7 +498,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    *   horizontally or not
    *
    * The ::scroll-child signal is a
-   * <link linkend="keybinding-signals">keybinding signal</link>
+   * [keybinding signal][keybinding-signals]
    * which gets emitted when a keybinding that scrolls is pressed.
    * The horizontal or vertical adjustment is updated which triggers a
    * signal that the scrolled windows child may listen to and scroll itself.
@@ -520,8 +520,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * @direction_type: either %GTK_DIR_TAB_FORWARD or
    *   %GTK_DIR_TAB_BACKWARD
    *
-   * The ::move-focus-out signal is a <link
-   * linkend="keybinding-signals">keybinding signal</link> which gets
+   * The ::move-focus-out signal is a
+   * [keybinding signal][keybinding-signals] which gets
    * emitted when focus is moved away from the scrolled window by a
    * keybinding.  The #GtkWidget::move-focus signal is emitted with
    * @direction_type on this scrolled windows toplevel parent in the

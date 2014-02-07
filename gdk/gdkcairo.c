@@ -28,7 +28,7 @@
  * @Short_description: Functions to support using cairo
  * @Title: Cairo Interaction
  *
- * <link href="http://cairographics.org">Cairo</link> is a graphics
+ * [Cairo](http://cairographics.org) is a graphics
  * library that supports vector graphics and image compositing that
  * can be used with GDK. GTK+ does all of its drawing using cairo.
  *

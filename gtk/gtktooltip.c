@@ -277,11 +277,10 @@ gtk_tooltip_dispose (GObject *object)
 /**
  * gtk_tooltip_set_markup:
  * @tooltip: a #GtkTooltip
- * @markup: (allow-none): a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>) or %NULL
+ * @markup: (allow-none): a markup string (see [Pango markup format][PangoMarkupFormat]) or %NULL
  *
  * Sets the text of the tooltip to be @markup, which is marked up
- * with the <link
- * linkend="PangoMarkupFormat">Pango text markup language</link>.
+ * with the [Pango text markup language][PangoMarkupFormat].
  * If @markup is %NULL, the label will be hidden.
  *
  * Since: 2.12

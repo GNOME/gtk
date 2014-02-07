@@ -523,7 +523,7 @@ gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
  * @name: the name of the action group.
  *
  * Creates a new #GtkActionGroup object. The name of the action group
- * is used when associating <link linkend="Action-Accel">keybindings</link> 
+ * is used when associating [keybindings][Action-Accel] 
  * with the actions.
  *
  * Returns: the new #GtkActionGroup

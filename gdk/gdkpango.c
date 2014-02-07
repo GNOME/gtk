@@ -44,8 +44,8 @@
  * can set the text and attributes of it with Pango functions like
  * pango_layout_set_text() and get its size with pango_layout_get_size().
  * (Note that Pango uses a fixed point system internally, so converting
- * between Pango units and pixels using <link
- * linkend="PANGO-SCALE-CAPS">PANGO_SCALE</link> or the PANGO_PIXELS() macro.)
+ * between Pango units and pixels using [PANGO_SCALE][PANGO-SCALE-CAPS]
+ * or the PANGO_PIXELS() macro.)
  *
  * Rendering a Pango layout is done most simply with pango_cairo_show_layout();
  * you can also draw pieces of the layout with pango_cairo_show_layout_line().

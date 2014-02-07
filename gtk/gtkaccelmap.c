@@ -65,8 +65,8 @@
  * path may look like: “&lt;Gimp-Toolbox&gt;/File/Dialogs/Tool Options...”.
  *
  * All accelerators are stored inside one global #GtkAccelMap that can
- * be obtained using gtk_accel_map_get(). See <link
- * linkend="monitoring-changes">Monitoring changes</link> for additional
+ * be obtained using gtk_accel_map_get(). See
+ * [Monitoring changes][monitoring-changes] for additional
  * details.
  *
  * # Manipulating accelerators

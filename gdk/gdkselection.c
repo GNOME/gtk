@@ -48,7 +48,7 @@
  * retrieved by requesting the special target `TARGETS`. When
  * a selection is retrieved, the data is accompanied by a type (an atom), and
  * a format (an integer, representing the number of bits per item).
- * See <link linkend="gdk3-Properties-and-Atoms">Properties and Atoms</link>
+ * See [Properties and Atoms][gdk3-Properties-and-Atoms]
  * for more information.
  *
  * The functions in this section only contain the lowlevel parts of the

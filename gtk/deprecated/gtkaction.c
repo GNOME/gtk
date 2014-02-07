@@ -63,9 +63,9 @@
  *
  * - sensitive (enabled/disabled)
  *
- * Apart from regular actions, there are <link linkend="GtkToggleAction">toggle
- * actions</link>, which can be toggled between two states and <link
- * linkend="GtkRadioAction">radio actions</link>, of which only one in a group
+ * Apart from regular actions, there are [toggle actions][GtkToggleAction],
+ * which can be toggled between two states and
+ * [radio actions][GtkRadioAction], of which only one in a group
  * can be in the “active” state. Other actions can be implemented as #GtkAction
  * subclasses.
  *

@@ -132,8 +132,8 @@
  * requested. For this reason, #GtkWidget caches a  small number of results
  * to avoid re-querying for the same sizes in one allocation cycle.
  *
- * See <link linkend="container-geometry-management">GtkContainer's
- * geometry management section</link>
+ * See
+ * [GtkContainer's geometry management section][container-geometry-management]
  * to learn more about how height-for-width allocations are performed
  * by container widgets.
  *
@@ -244,7 +244,7 @@
  * #GtkWidget introduces “style
  * properties” - these are basically object properties that are stored
  * not on the object, but in the style object associated to the widget. Style
- * properties are set in <link linkend="gtk3-Resource-Files">resource files</link>.
+ * properties are set in [resource files][gtk3-Resource-Files].
  * This mechanism is used for configuring such things as the location of the
  * scrollbar arrows through the theme, giving theme authors more control over the
  * look of applications without the need to write a theme engine in C.
@@ -1296,7 +1296,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * GtkWidget:tooltip-markup:
    *
    * Sets the text of tooltip to be the given string, which is marked up
-   * with the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+   * with the [Pango text markup language][PangoMarkupFormat].
    * Also see gtk_tooltip_set_markup().
    *
    * This is a convenience property which will take care of getting the
@@ -1959,7 +1959,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * @child_property: the #GParamSpec of the changed child property
    *
    * The ::child-notify signal is emitted for each
-   * <link linkend="child-properties">child property</link>  that has
+   * [child property][child-properties]  that has
    * changed on an object. The signal's detail holds the property name.
    */
   widget_signals[CHILD_NOTIFY] =
@@ -4062,7 +4062,7 @@ gtk_widget_freeze_child_notify (GtkWidget *widget)
  *                  class of @widget<!-- -->'s parent
  *
  * Emits a #GtkWidget::child-notify signal for the
- * <link linkend="child-properties">child property</link> @child_property
+ * [child property][child-properties] @child_property
  * on @widget.
  *
  * This is the analogue of g_object_notify() for child properties.
@@ -14748,7 +14748,7 @@ gtk_widget_get_tooltip_text (GtkWidget *widget)
  * @markup: (allow-none): the contents of the tooltip for @widget, or %NULL
  *
  * Sets @markup as the contents of the tooltip, which is marked up with
- *  the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ *  the [Pango text markup language][PangoMarkupFormat].
  *
  * This function will take care of setting #GtkWidget:has-tooltip to %TRUE
  * and of the default handler for the #GtkWidget::query-tooltip signal.

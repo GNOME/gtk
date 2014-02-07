@@ -171,7 +171,7 @@
  * appropriate.
  *
  * To summarize, make sure you use a
- * <link linkend="gtkfilechooserdialog-responses">stock response code</link>
+ * [stock response code][gtkfilechooserdialog-responses]
  * when you use #GtkFileChooserDialog to ensure proper operation.
  */
 

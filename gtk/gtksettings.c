@@ -722,7 +722,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * ...
    * ]|
    * Color names must be acceptable as identifiers in the
-   * <link linkend="gtk3-Resource-Files">gtkrc</link> syntax, and
+   * [gtkrc][gtk3-Resource-Files] syntax, and
    * color specifications must be in the format accepted by
    * gdk_color_parse().
    *

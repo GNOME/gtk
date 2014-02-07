@@ -64,7 +64,7 @@
  * “GtkBuilder UI definitions” or just
  * “UI definitions” if the context is clear.
  * Do not confuse GtkBuilder UI Definitions with
- * <link linkend="XML-UI">GtkUIManager UI Definitions</link>, which
+ * [GtkUIManager UI Definitions][XML-UI], which
  * are more limited in scope. It is common to use `.ui`
  * as the filename extension for files containing GtkBuilder UI
  * definitions.
@@ -946,11 +946,11 @@ gtk_builder_new (void)
  * @filename: the name of the file to parse
  * @error: (allow-none): return location for an error, or %NULL
  *
- * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
- * UI definition</link> and merges it with the current contents of @builder.
+ * Parses a file containing a [GtkBuilder UI definition][BUILDER-UI]
+ * and merges it with the current contents of @builder.
  *
  * Most users will probably want to use gtk_builder_new_from_file().
- * 
+ *
  * Upon errors 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
  * domain.
@@ -1015,9 +1015,9 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
  * @error: (allow-none): return location for an error, or %NULL
  *
- * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
- * UI definition</link> building only the requested objects and merges
- * them with the current contents of @builder. 
+ * Parses a file containing a [GtkBuilder UI definition][BUILDER-UI]
+ * building only the requested objects and merges
+ * them with the current contents of @builder.
  *
  * Upon errors 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
@@ -1123,8 +1123,8 @@ _gtk_builder_extend_with_template (GtkBuilder    *builder,
  * @resource_path: the path of the resource file to parse
  * @error: (allow-none): return location for an error, or %NULL
  *
- * Parses a resource file containing a <link linkend="BUILDER-UI">GtkBuilder
- * UI definition</link> and merges it with the current contents of @builder.
+ * Parses a resource file containing a [GtkBuilder UI definition][BUILDER-UI]
+ * and merges it with the current contents of @builder.
  *
  * Most users will probably want to use gtk_builder_new_from_resource().
  *
@@ -1201,8 +1201,8 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
  * @error: (allow-none): return location for an error, or %NULL
  *
- * Parses a resource file containing a <link linkend="BUILDER-UI">GtkBuilder
- * UI definition</link> building only the requested objects and merges
+ * Parses a resource file containing a [GtkBuilder UI definition][BUILDER-UI]
+ * building only the requested objects and merges
  * them with the current contents of @builder.
  *
  * Upon errors 0 will be returned and @error will be assigned a
@@ -1279,8 +1279,8 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @error: (allow-none): return location for an error, or %NULL
  *
- * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
- * UI definition</link> and merges it with the current contents of @builder. 
+ * Parses a string containing a [GtkBuilder UI definition][BUILDER-UI]
+ * and merges it with the current contents of @builder.
  *
  * Most users will probably want to use gtk_builder_new_from_string().
  *
@@ -1335,8 +1335,8 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
  * @error: (allow-none): return location for an error, or %NULL
  *
- * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
- * UI definition</link> building only the requested objects and merges
+ * Parses a string containing a [GtkBuilder UI definition][BUILDER-UI]
+ * building only the requested objects and merges
  * them with the current contents of @builder. 
  *
  * Upon errors 0 will be returned and @error will be assigned a
@@ -2394,7 +2394,7 @@ gtk_builder_lookup_callback_symbol (GtkBuilder    *builder,
  * gtk_builder_new_from_file:
  * @filename: filename of user interface description file
  *
- * Builds the <link linkend="BUILDER-UI">GtkBuilder UI definition</link>
+ * Builds the [GtkBuilder UI definition][BUILDER-UI]
  * in the file @filename.
  *
  * If there is an error opening the file or parsing the description then
@@ -2422,7 +2422,7 @@ gtk_builder_new_from_file (const gchar *filename)
  * gtk_builder_new_from_resource:
  * @resource_path: a #GResource resource path
  *
- * Builds the <link linkend="BUILDER-UI">GtkBuilder UI definition</link>
+ * Builds the [GtkBuilder UI definition][BUILDER-UI]
  * at @resource_path.
  *
  * If there is an error locating the resurce or parsing the description
@@ -2450,8 +2450,8 @@ gtk_builder_new_from_resource (const gchar *resource_path)
  * @string: a user interface (XML) description
  * @length: the length of @string, or -1
  *
- * Builds the user interface described by @string (in the <link
- * linkend="BUILDER-UI">GtkBuilder UI definition</link> format).
+ * Builds the user interface described by @string (in the
+ * [GtkBuilder UI definition][BUILDER-UI] format).
  *
  * If @string is %NULL-terminated then @length should be -1.  If @length
  * is not -1 then it is the length of @string.

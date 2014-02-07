@@ -22,7 +22,7 @@
  * @Title: GtkBuildable
  *
  * GtkBuildable allows objects to extend and customize their deserialization
- * from <link linkend="BUILDER-UI">GtkBuilder UI descriptions</link>.
+ * from [GtkBuilder UI descriptions][BUILDER-UI].
  * The interface includes methods for setting names and properties of objects, 
  * parsing custom tags and constructing child objects.
  *
@@ -84,7 +84,7 @@ gtk_buildable_set_name (GtkBuildable *buildable,
  * Gets the name of the @buildable object. 
  * 
  * #GtkBuilder sets the name based on the
- * <link linkend="BUILDER-UI">GtkBuilder UI definition</link> 
+ * [GtkBuilder UI definition][BUILDER-UI] 
  * used to construct the @buildable.
  *
  * Returns: the name set with gtk_buildable_set_name()
@@ -173,7 +173,7 @@ gtk_buildable_set_buildable_property (GtkBuildable *buildable,
  * @builder: a #GtkBuilder
  *
  * Called when the builder finishes the parsing of a 
- * <link linkend="BUILDER-UI">GtkBuilder UI definition</link>. 
+ * [GtkBuilder UI definition][BUILDER-UI]. 
  * Note that this will be called once for each time 
  * gtk_builder_add_from_file() or gtk_builder_add_from_string() 
  * is called on a builder.

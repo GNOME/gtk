@@ -52,12 +52,12 @@
  * A CSS file binding consists of a 'binding-set' definition and a match
  * statement to apply the binding set to specific widget types. Details
  * on the matching mechanism are described under
- * <link linkend="gtkcssprovider-selectors">Selectors</link>
+ * [Selectors][gtkcssprovider-selectors]
  * in the #GtkCssProvider documentation. Inside the binding set
  * definition, key combinations are bound to one or more specific
  * signal emissions on the target widget. Key combinations are strings
  * consisting of an optional #GdkModifierType name and
- * <link linkend="gdk3-Keyboard-Handling">key names</link>
+ * [key names][gdk3-Keyboard-Handling]
  * such as those defined in `gdk/gdkkeysyms.h`
  * or returned from gdk_keyval_name(), they have to be parsable by
  * gtk_accelerator_parse(). Specifications of signal emissions consist
@@ -87,7 +87,7 @@
  * it provides. Because custom bindings set up in CSS files take
  * precedence over the default bindings shipped with GTK+, overriding
  * existing bindings as demonstrated in
- * <link linkend="gtk-bindings-install">Installing a key binding</link>
+ * [Installing a key binding][gtk-bindings-install]
  * works as expected. The same mechanism can not be used to “unbind”
  * existing bindings, however.
  *

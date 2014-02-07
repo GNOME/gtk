@@ -66,8 +66,7 @@
  * roughly described by the following DTD.
  *
  * > Do not confuse the GtkUIManager UI Definitions described here with
- * > the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
- * > Definitions</link>.
+ * > the similarly named [GtkBuilder UI Definitions][BUILDER-UI].
  *
  * |[
  * <!ELEMENT ui          (menubar|toolbar|popup|accelerator)* >
@@ -1933,7 +1932,7 @@ add_ui_from_string (GtkUIManager *manager,
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @error: return location for an error
  * 
- * Parses a string containing a <link linkend="XML-UI">UI definition</link> and 
+ * Parses a string containing a [UI definition][XML-UI] and 
  * merges it with the current contents of @manager. An enclosing &lt;ui&gt; 
  * element is added if it is missing.
  * 
@@ -1978,7 +1977,7 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *manager,
  * @filename: (type filename): the name of the file to parse 
  * @error: return location for an error
  * 
- * Parses a file containing a <link linkend="XML-UI">UI definition</link> and 
+ * Parses a file containing a [UI definition][XML-UI] and 
  * merges it with the current contents of @manager. 
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
@@ -2015,7 +2014,7 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *manager,
  * @resource_path: the resource path of the file to parse
  * @error: return location for an error
  *
- * Parses a resource file containing a <link linkend="XML-UI">UI definition</link> and
+ * Parses a resource file containing a [UI definition][XML-UI] and
  * merges it with the current contents of @manager.
  *
  * Return value: The merge id for the merged UI. The merge id can be used
@@ -3341,7 +3340,7 @@ gtk_ui_manager_buildable_custom_tag_end (GtkBuildable *buildable,
  * gtk_ui_manager_get_ui:
  * @manager: a #GtkUIManager
  * 
- * Creates a <link linkend="XML-UI">UI definition</link> of the merged UI.
+ * Creates a [UI definition][XML-UI] of the merged UI.
  * 
  * Return value: A newly allocated string containing an XML representation of 
  * the merged UI.

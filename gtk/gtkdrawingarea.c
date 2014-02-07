@@ -99,8 +99,8 @@
  * gdk_window_invalidate_rect() are equally good ways to do this.
  * You'll then get a draw signal for the invalid region.
  *
- * The available routines for drawing are documented on the <link
- * linkend="gdk3-Cairo-Interaction">GDK Drawing Primitives</link> page
+ * The available routines for drawing are documented on the
+ * [GDK Drawing Primitives][gdk3-Cairo-Interaction] page
  * and the cairo documentation.
  *
  * To receive mouse events on a drawing area, you will need to enable

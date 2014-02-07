@@ -274,7 +274,7 @@
  *         it is searched in the directories of the currently open RC files.
  *
  *    GTK+ also tries to load a
- *         <link linkend="locale-specific-rc">locale-specific variant</link> of
+ *         [locale-specific variant][locale-specific-rc] of
  *         the included file.
  *
  * * `module_path path`
@@ -316,7 +316,7 @@
  *
  * * setting = value
  *
- *    Specifies a value for a <link linkend="GtkSettings">setting</link>.
+ *    Specifies a value for a [setting][GtkSettings].
  *         Note that settings in RC files are overwritten by system-wide settings
  *         (which are managed by an XSettings manager on X11).
  *
@@ -411,7 +411,7 @@
  *
  * * `class::property = value`
  *
- *         Sets a <link linkend="style-properties">style property</link> for a widget class.
+ *         Sets a [style property][style-properties] for a widget class.
  *
  * The colors and background pixmaps are specified as a function of the
  * state of the widget. The states are:
