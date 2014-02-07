@@ -149,8 +149,7 @@ struct _GdkWindowImplWaylandClass
 
 static void gdk_wayland_window_configure (GdkWindow *window,
                                           int        width,
-                                          int        height,
-                                          int        edges);
+                                          int        height);
 
 G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_IMPL)
 
@@ -170,8 +169,7 @@ _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 static void
 gdk_wayland_window_update_size (GdkWindow *window,
                                 int32_t    width,
-                                int32_t    height,
-                                uint32_t   edges)
+                                int32_t    height)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkRectangle area;
@@ -185,7 +183,6 @@ gdk_wayland_window_update_size (GdkWindow *window,
 
   window->width = width;
   window->height = height;
-  impl->resize_edges = edges;
 
   area.x = 0;
   area.y = 0;
@@ -458,7 +455,7 @@ window_update_scale (GdkWindow *window)
       impl->scale = scale;
 
       /* Notify app that scale changed */
-      gdk_wayland_window_configure (window, window->width, window->height, impl->resize_edges);
+      gdk_wayland_window_configure (window, window->width, window->height);
     }
 }
 
@@ -813,8 +810,7 @@ gdk_window_impl_wayland_finalize (GObject *object)
 static void
 gdk_wayland_window_configure (GdkWindow *window,
                               int        width,
-                              int        height,
-                              int        edges)
+                              int        height)
 {
   GdkDisplay *display;
   GdkEvent *event;
@@ -830,7 +826,7 @@ gdk_wayland_window_configure (GdkWindow *window,
   event->configure.width = width;
   event->configure.height = height;
 
-  gdk_wayland_window_update_size (window, width, height, edges);
+  gdk_wayland_window_update_size (window, width, height);
   _gdk_window_update_size (window);
 
   g_object_ref(window);
@@ -945,7 +941,6 @@ xdg_surface_ping (void               *data,
 static void
 xdg_surface_configure (void               *data,
                        struct xdg_surface *xdg_surface,
-                       uint32_t            edges,
                        int32_t             width,
                        int32_t             height)
 {
@@ -959,7 +954,7 @@ xdg_surface_configure (void               *data,
                              &width,
                              &height);
 
-  gdk_wayland_window_configure (window, width, height, edges);
+  gdk_wayland_window_configure (window, width, height);
 }
 
 static void
@@ -1314,7 +1309,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
    * just move the window - don't update its size
    */
   if (width > 0 && height > 0)
-    gdk_wayland_window_configure (window, width, height, 0);
+    gdk_wayland_window_configure (window, width, height);
 }
 
 static void
@@ -1876,7 +1871,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
 
-  uint32_t grab_type;
+  uint32_t resize_edges;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -1885,35 +1880,35 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   switch (edge)
     {
     case GDK_WINDOW_EDGE_NORTH_WEST:
-      grab_type = XDG_SURFACE_RESIZE_EDGE_TOP_LEFT;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_TOP_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_NORTH:
-      grab_type = XDG_SURFACE_RESIZE_EDGE_TOP;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_TOP;
       break;
 
     case GDK_WINDOW_EDGE_NORTH_EAST:
-      grab_type = XDG_SURFACE_RESIZE_EDGE_RIGHT;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_WEST:
-      grab_type = XDG_SURFACE_RESIZE_EDGE_LEFT;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_EAST:
-      grab_type = XDG_SURFACE_RESIZE_EDGE_RIGHT;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH_WEST:
-      grab_type = XDG_SURFACE_RESIZE_EDGE_BOTTOM_LEFT;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_BOTTOM_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH:
-      grab_type = XDG_SURFACE_RESIZE_EDGE_BOTTOM;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_BOTTOM;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH_EAST:
-      grab_type = XDG_SURFACE_RESIZE_EDGE_BOTTOM_RIGHT;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_BOTTOM_RIGHT;
       break;
 
     default:
@@ -1926,10 +1921,11 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   if (!impl->xdg_surface)
     return;
 
+  impl->resize_edges = resize_edges;
   xdg_surface_resize (impl->xdg_surface,
                       gdk_wayland_device_get_wl_seat (device),
                       _gdk_wayland_display_get_serial (wayland_display),
-                      grab_type);
+                      resize_edges);
 
   /* This is needed since Wayland will absorb all the pointer events after the
    * above function - FIXME: Is this always safe..?

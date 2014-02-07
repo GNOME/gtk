@@ -230,7 +230,6 @@
 	in surface local coordinates.
       </description>
 
-      <arg name="edges" type="uint"/>
       <arg name="width" type="int"/>
       <arg name="height" type="int"/>
     </event>
