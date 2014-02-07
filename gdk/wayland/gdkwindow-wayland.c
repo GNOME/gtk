@@ -2148,6 +2148,23 @@ gdk_wayland_window_set_opaque_region (GdkWindow      *window,
     wl_region_destroy (wl_region);
 }
 
+static void
+gdk_wayland_window_set_shadow_width (GdkWindow *window,
+                                     int        left,
+                                     int        right,
+                                     int        top,
+                                     int        bottom)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (!impl->xdg_surface)
+    return;
+
+  xdg_surface_set_margin (impl->xdg_surface, left, right, top, bottom);
+}
 
 static void
 _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
@@ -2238,8 +2255,8 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->delete_property = gdk_wayland_window_delete_property;
   impl_class->get_scale_factor = gdk_wayland_window_get_scale_factor;
   impl_class->set_opaque_region = gdk_wayland_window_set_opaque_region;
+  impl_class->set_shadow_width = gdk_wayland_window_set_shadow_width;
 }
-
 
 void
 _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,

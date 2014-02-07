@@ -124,6 +124,32 @@
       <arg name="parent" type="object" interface="wl_surface" allow-null="true"/>
     </request>
 
+    <request name="set_margin">
+      <description summary="set the visible frame boundaries">
+        This tells the compositor what the visible size of the window
+        should be, so it can use it to determine what borders to use for
+        constrainment and alignment.
+
+        CSD often has invisible areas for decoration purposes, like drop
+        shadows. These "shadow" drawings need to be subtracted out of the
+        normal boundaries of the window when computing where to place
+        windows (e.g. to set this window so it's centered on top of another,
+        or to put it to the left or right of the screen.)
+
+        This value should change as little as possible at runtime, to
+        prevent flicker.
+
+        This value is also ignored when the window is maximized or
+        fullscreen, and assumed to be 0.
+
+        If never called, this value is assumed to be 0.
+      </description>
+      <arg name="left_margin" type="int"/>
+      <arg name="right_margin" type="int"/>
+      <arg name="top_margin" type="int"/>
+      <arg name="bottom_margin" type="int"/>
+    </request>
+
     <request name="set_title">
       <description summary="set surface title">
 	Set a short title for the surface.
