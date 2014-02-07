@@ -604,21 +604,6 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
     }
 }
 
-static void
-gtk_widget_accessible_get_size (AtkComponent *component,
-                                gint         *width,
-                                gint         *height)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
-  if (widget == NULL)
-    return;
-
-  *width = gtk_widget_get_allocated_width (widget);
-  *height = gtk_widget_get_allocated_height (widget);
-}
-
 static AtkLayer
 gtk_widget_accessible_get_layer (AtkComponent *component)
 {
@@ -760,7 +745,6 @@ static void
 atk_component_interface_init (AtkComponentIface *iface)
 {
   iface->get_extents = gtk_widget_accessible_get_extents;
-  iface->get_size = gtk_widget_accessible_get_size;
   iface->get_layer = gtk_widget_accessible_get_layer;
   iface->grab_focus = gtk_widget_accessible_grab_focus;
   iface->set_extents = gtk_widget_accessible_set_extents;
