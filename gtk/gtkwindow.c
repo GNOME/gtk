@@ -2176,7 +2176,7 @@ _gtk_window_internal_set_focus (GtkWindow *window,
  * (rather than unsetting) the default widget it’s generally easier to
  * call gtk_widget_grab_focus() on the widget. Before making a widget
  * the default widget, you must call gtk_widget_set_can_default() on the
- * widget you'd like to make the default.
+ * widget you’d like to make the default.
  **/
 void
 gtk_window_set_default (GtkWindow *window,

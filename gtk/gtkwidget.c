@@ -10175,7 +10175,7 @@ gtk_widget_get_root_window (GtkWidget *widget)
  * @direction: direction of focus movement
  *
  * This function is used by custom widget implementations; if you're
- * writing an app, you'd use gtk_widget_grab_focus() to move the focus
+ * writing an app, you’d use gtk_widget_grab_focus() to move the focus
  * to a particular widget, and gtk_container_set_focus_chain() to
  * change the focus tab order. So you may want to investigate those
  * functions instead.

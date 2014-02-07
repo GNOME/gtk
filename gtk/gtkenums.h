@@ -729,7 +729,7 @@ typedef enum
  * @GTK_WINDOW_TOPLEVEL: A regular window, such as a dialog.
  * @GTK_WINDOW_POPUP: A special window such as a tooltip.
  *
- * A #GtkWindow can be one of these types. Most things you'd consider a
+ * A #GtkWindow can be one of these types. Most things you’d consider a
  * “window” should have type #GTK_WINDOW_TOPLEVEL; windows with this type
  * are managed by the window manager and have a frame by default (call
  * gtk_window_set_decorated() to toggle the frame).  Windows with type

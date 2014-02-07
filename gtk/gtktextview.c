@@ -7286,7 +7286,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
  * 
  * Obtains a copy of the default text attributes. These are the
  * attributes used for text unless a tag overrides them.
- * You'd typically pass the default attributes in to
+ * You’d typically pass the default attributes in to
  * gtk_text_iter_get_attributes() in order to get the
  * attributes in effect at a given text position.
  *

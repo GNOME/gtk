@@ -1026,7 +1026,7 @@ static guint cache_serial = 0;
  * some of the rendered #GdkPixbuf objects.
  *
  * Normally you would use gtk_widget_render_icon_pixbuf() instead of
- * using #GtkIconSet directly. The one case where you'd use
+ * using #GtkIconSet directly. The one case where you’d use
  * #GtkIconSet is to create application-specific icon sets to place in
  * a #GtkIconFactory.
  *
@@ -1736,7 +1736,7 @@ icon_source_compare (gconstpointer ap, gconstpointer bp)
  * This function copies @source, so you can reuse the same source immediately
  * without affecting the icon set.
  *
- * An example of when you'd use this function: a web browser’s "Back
+ * An example of when you’d use this function: a web browser’s "Back
  * to Previous Page" icon might point in a different direction in
  * Hebrew and in English; it might look different when insensitive;
  * and it might change size depending on toolbar mode (small/large

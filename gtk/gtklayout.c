@@ -172,7 +172,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkLayout, gtk_layout, GTK_TYPE_CONTAINER,
  * @vadjustment: (allow-none): vertical scroll adjustment, or %NULL
  * 
  * Creates a new #GtkLayout. Unless you have a specific adjustment
- * you'd like the layout to use for scrolling, pass %NULL for
+ * you’d like the layout to use for scrolling, pass %NULL for
  * @hadjustment and @vadjustment.
  * 
  * Return value: a new #GtkLayout

@@ -92,8 +92,8 @@
  * dialog, returning the response ID corresponding to the button the user
  * clicked.
  *
- * For the simple dialog in the following example, in reality you'd probably
- * use #GtkMessageDialog to save yourself some effort. But you'd need to
+ * For the simple dialog in the following example, in reality you’d probably
+ * use #GtkMessageDialog to save yourself some effort. But you’d need to
  * create the dialog contents manually if you had more than a simple message
  * in the dialog.
  *
