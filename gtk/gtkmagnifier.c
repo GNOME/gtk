@@ -128,14 +128,14 @@ _gtk_magnifier_class_init (GtkMagnifierClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_INSPECTED,
-                                   g_param_spec_object (P_("inspected"),
+                                   g_param_spec_object ("inspected",
                                                         P_("Inspected"),
                                                         P_("Inspected widget"),
                                                         GTK_TYPE_WIDGET,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    PROP_MAGNIFICATION,
-                                   g_param_spec_double (P_("magnification"),
+                                   g_param_spec_double ("magnification",
                                                         P_("magnification"),
                                                         P_("magnification"),
                                                         1, G_MAXDOUBLE, 1,
