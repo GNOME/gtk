@@ -342,7 +342,7 @@ add_action_widgets (GtkAssistant *assistant)
           if (has_default)
             {
               gtk_widget_grab_default (child);
-              gtk_style_context_add_class (gtk_widget_get_style_context (child), "suggested-action");
+              gtk_style_context_add_class (gtk_widget_get_style_context (child), GTK_STYLE_CLASS_SUGGESTED_ACTION);
             }
         }
       g_list_free (children);

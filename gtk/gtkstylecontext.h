@@ -765,6 +765,16 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_NEEDS_ATTENTION "needs-attention"
 
+/**
+ * GTK_STYLE_CLASS_SUGGESTED_ACTION:
+ *
+ * A CSS class used when an action (usually a button) is the
+ * primary suggested action in a specific context.
+ *
+ * Since: 3.12
+ */
+#define GTK_STYLE_CLASS_SUGGESTED_ACTION "suggested-action"
+
 /* Predefined set of widget regions */
 
 /**

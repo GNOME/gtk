@@ -425,7 +425,7 @@ add_action_widgets (GtkDialog *dialog)
           if (has_default)
             {
               gtk_widget_grab_default (child);
-              gtk_style_context_add_class (gtk_widget_get_style_context (child), "suggested-action");
+              gtk_style_context_add_class (gtk_widget_get_style_context (child), GTK_STYLE_CLASS_SUGGESTED_ACTION);
             }
         }
       g_list_free (children);
@@ -1105,7 +1105,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
         {
 	  gtk_widget_grab_default (widget);
           if (dialog->priv->constructed && dialog->priv->use_header_bar == 1)
-            gtk_style_context_add_class (gtk_widget_get_style_context (widget), "suggested-action");
+            gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_SUGGESTED_ACTION);
         }
 
       tmp_list = g_list_next (tmp_list);
