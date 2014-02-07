@@ -93,7 +93,7 @@
  * to use a custom cell area with a combo box. But construct properties
  * are only initialized after instance init()
  * functions have run, which means that using functions which rely on
- * the existence of the cell area in your subclass' init() function will
+ * the existence of the cell area in your subclass’ init() function will
  * cause the default cell area to be instantiated. In this case, a provided
  * construct property value will be ignored (with a warning, to alert
  * you to the problem).
@@ -510,7 +510,7 @@ gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
  * Sets the #GtkCellLayoutDataFunc to use for @cell_layout.
  *
  * This function is used instead of the standard attributes mapping
- * for setting the column value, and should set the value of @cell_layout's
+ * for setting the column value, and should set the value of @cell_layout’s
  * cell renderer(s) as appropriate.
  *
  * @func may be %NULL to remove a previously set function.

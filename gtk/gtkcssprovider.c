@@ -173,7 +173,7 @@
  *     color: #39f1f9;
  * }
  *
- * /&ast; Theme spinbuttons' entry &ast;/
+ * /&ast; Theme spinbuttons’ entry &ast;/
  * GtkSpinButton.entry {
  *     color: #900185
  * }

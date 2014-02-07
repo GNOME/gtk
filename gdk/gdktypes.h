@@ -324,9 +324,9 @@ typedef enum
 
 /**
  * GdkGrabOwnership:
- * @GDK_OWNERSHIP_NONE: All other devices' events are allowed.
- * @GDK_OWNERSHIP_WINDOW: Other devices' events are blocked for the grab window.
- * @GDK_OWNERSHIP_APPLICATION: Other devices' events are blocked for the whole application.
+ * @GDK_OWNERSHIP_NONE: All other devices’ events are allowed.
+ * @GDK_OWNERSHIP_WINDOW: Other devices’ events are blocked for the grab window.
+ * @GDK_OWNERSHIP_APPLICATION: Other devices’ events are blocked for the whole application.
  *
  * Defines how device grabs interact with other devices.
  */

@@ -103,7 +103,7 @@ struct _GtkUIManagerClass {
  * @GTK_UI_MANAGER_SEPARATOR: Create a separator.
  * @GTK_UI_MANAGER_ACCELERATOR: Install an accelerator.
  * @GTK_UI_MANAGER_POPUP_WITH_ACCELS: Same as %GTK_UI_MANAGER_POPUP, but the
- *   actions' accelerators are shown.
+ *   actions’ accelerators are shown.
  *
  * These enumeration values are used by gtk_ui_manager_add_ui() to determine
  * what UI element to create.

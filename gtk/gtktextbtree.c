@@ -6167,7 +6167,7 @@ recompute_level_nonzero_counts (GtkTextBTreeNode *node)
  * Side effects:
  *      The tag counts for node are modified to reflect its current
  *      child structure, as are its num_children, num_lines, num_chars fields.
- *      Also, all of the childrens' parent fields are made to point
+ *      Also, all of the childrens’ parent fields are made to point
  *      to node.
  *
  *----------------------------------------------------------------------
@@ -6180,7 +6180,7 @@ recompute_node_counts (GtkTextBTree *tree, GtkTextBTreeNode *node)
   Summary *summary, *summary2;
 
   /*
-   * Zero out all the existing counts for the GtkTextBTreeNode, but don't delete
+   * Zero out all the existing counts for the GtkTextBTreeNode, but don’t delete
    * the existing Summary records (most of them will probably be reused).
    */
 
@@ -6196,8 +6196,8 @@ recompute_node_counts (GtkTextBTree *tree, GtkTextBTreeNode *node)
   node->num_chars = 0;
 
   /*
-   * Scan through the children, adding the childrens' tag counts into
-   * the GtkTextBTreeNode's tag counts and adding new Summary structures if
+   * Scan through the children, adding the childrens’ tag counts into
+   * the GtkTextBTreeNode’s tag counts and adding new Summary structures if
    * necessary.
    */
 
@@ -6214,7 +6214,7 @@ recompute_node_counts (GtkTextBTree *tree, GtkTextBTreeNode *node)
     }
   
   /*
-   * Scan through the GtkTextBTreeNode's tag records again and delete any Summary
+   * Scan through the GtkTextBTreeNode’s tag records again and delete any Summary
    * records that still have a zero count, or that have all the toggles.
    * The GtkTextBTreeNode with the children that account for all the tags toggles
    * have no summary information, and they become the tag_root for the tag.
@@ -6229,7 +6229,7 @@ recompute_node_counts (GtkTextBTree *tree, GtkTextBTreeNode *node)
           if (node->level == summary->info->tag_root->level)
             {
               /*
-               * The tag's root GtkTextBTreeNode split and some toggles left.
+               * The tag’s root GtkTextBTreeNode split and some toggles left.
                * The tag root must move up a level.
                */
               summary->info->tag_root = node->parent;
@@ -6287,14 +6287,14 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
 
   /*
    * Iterate over the GtkTextBTreeNode and its ancestors up to the tag root, adjusting
-   * summary counts at each GtkTextBTreeNode and moving the tag's root upwards if
+   * summary counts at each GtkTextBTreeNode and moving the tag’s root upwards if
    * necessary.
    */
 
   for ( ; node != info->tag_root; node = node->parent)
     {
       /*
-       * See if there's already an entry for this tag for this GtkTextBTreeNode.  If so,
+       * See if there’s already an entry for this tag for this GtkTextBTreeNode.  If so,
        * perhaps all we have to do is adjust its count.
        */
 
@@ -6319,7 +6319,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
             {
               /*
                * Should never find a GtkTextBTreeNode with max toggle count at this
-               * point (there shouldn't have been a summary entry in the
+               * point (there shouldn’t have been a summary entry in the
                * first place).
                */
 
@@ -6344,7 +6344,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
       else
         {
           /*
-           * This tag isn't currently in the summary information list.
+           * This tag isn’t currently in the summary information list.
            */
 
           if (rootLevel == node->level)
@@ -6352,9 +6352,9 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
 
               /*
                * The old tag root is at the same level in the tree as this
-               * GtkTextBTreeNode, but it isn't at this GtkTextBTreeNode.  Move the tag root up
+               * GtkTextBTreeNode, but it isn’t at this GtkTextBTreeNode.  Move the tag root up
                * a level, in the hopes that it will now cover this GtkTextBTreeNode
-               * as well as the old root (if not, we'll move it up again
+               * as well as the old root (if not, we’ll move it up again
                * the next time through the loop).  To push it up one level
                * we copy the original toggle count into the summary
                * information at the old root and change the root to its
@@ -6380,7 +6380,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
     }
 
   /*
-   * If we've decremented the toggle count, then it may be necessary
+   * If we’ve decremented the toggle count, then it may be necessary
    * to push the tag root down one or more levels.
    */
 
@@ -6397,7 +6397,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
   while (node->level > 0)
     {
       /*
-       * See if a single child GtkTextBTreeNode accounts for all of the tag's
+       * See if a single child GtkTextBTreeNode accounts for all of the tag’s
        * toggles.  If so, push the root down one level.
        */
 
@@ -6454,7 +6454,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
  *
  *      This is a utility procedure used by _gtk_text_btree_get_tags.  It
  *      increments the count for a particular tag, adding a new
- *      entry for that tag if there wasn't one previously.
+ *      entry for that tag if there wasn’t one previously.
  *
  * Results:
  *      None.
@@ -6483,7 +6483,7 @@ inc_count (GtkTextTag *tag, int inc, TagInfo *tagInfoPtr)
     }
 
   /*
-   * There isn't currently an entry for this tag, so we have to
+   * There isn’t currently an entry for this tag, so we have to
    * make a new one.  If the arrays are full, then enlarge the
    * arrays first.
    */
@@ -6667,7 +6667,7 @@ gtk_text_btree_node_view_check_consistency (GtkTextBTree     *tree,
    * nodes.
    *
    * The guarantee is that if there are invalid lines the node is
-   * invalid - we don't guarantee that if the node is invalid there
+   * invalid - we don’t guarantee that if the node is invalid there
    * are invalid lines.
    */
   
@@ -6740,7 +6740,7 @@ gtk_text_btree_node_check_consistency (GtkTextBTree     *tree,
           ld = line->views;
           while (ld != NULL)
             {
-              /* Just ensuring we don't segv while doing this loop */
+              /* Just ensuring we don’t segv while doing this loop */
 
               ld = ld->next;
             }
@@ -7054,8 +7054,8 @@ _gtk_text_btree_check (GtkTextBTree *tree)
          || (seg->type == &gtk_text_left_mark_type))
     {
       /*
-       * It's OK to toggle a tag off in the last line, but
-       * not to start a new range.  It's also OK to have marks
+       * It’s OK to toggle a tag off in the last line, but
+       * not to start a new range.  It’s also OK to have marks
        * in the last line.
        */
 

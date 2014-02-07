@@ -60,7 +60,7 @@
  * can be either attached explicitly to the context through
  * gtk_style_context_add_provider(), or to the screen through
  * gtk_style_context_add_provider_for_screen(). The resulting style is a
- * combination of all providers' information in priority order.
+ * combination of all providers’ information in priority order.
  *
  * For GTK+ widgets, any #GtkStyleContext returned by
  * gtk_widget_get_style_context() will already have a #GtkWidgetPath, a
@@ -230,7 +230,7 @@
  * to style your UI elements in a different way if needed so.
  *
  * If you are using custom styling on an applications, you probably want then
- * to make your style information prevail to the theme's, so you must use
+ * to make your style information prevail to the theme’s, so you must use
  * a #GtkStyleProvider with the %GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
  * priority, keep in mind that the user settings in
  * `XDG_CONFIG_HOME/gtk-3.0/gtk.css` will
@@ -246,7 +246,7 @@
 /* When these change we do a full restyling. Otherwise we try to figure out
  * if we need to change things. */
 #define GTK_STYLE_CONTEXT_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE)
-/* When these change we don't clear the cache. This takes more memory but makes
+/* When these change we don’t clear the cache. This takes more memory but makes
  * things go faster. */
 #define GTK_STYLE_CONTEXT_CACHED_CHANGE (GTK_CSS_CHANGE_STATE)
 
@@ -398,7 +398,7 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   /**
    * GtkStyleContext:parent:
    *
-   * Sets or gets the style context's parent. See gtk_style_context_set_parent()
+   * Sets or gets the style context’s parent. See gtk_style_context_set_parent()
    * for details.
    *
    * Since: 3.4
@@ -1012,9 +1012,9 @@ gtk_style_context_set_invalid (GtkStyleContext *context,
     }
 }
 
-/* returns TRUE if someone called gtk_style_context_save() but hasn't
+/* returns TRUE if someone called gtk_style_context_save() but hasn’t
  * called gtk_style_context_restore() yet.
- * In those situations we don't invalidate the context when somebody
+ * In those situations we don’t invalidate the context when somebody
  * changes state/regions/classes.
  */
 static gboolean
@@ -1045,7 +1045,7 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
  * gtk_style_context_new:
  *
  * Creates a standalone #GtkStyleContext, this style context
- * won't be attached to any widget, so you may want
+ * won’t be attached to any widget, so you may want
  * to call gtk_style_context_set_path() yourself.
  *
  * This function is only useful when using the theming layer
@@ -4372,7 +4372,7 @@ gtk_render_activity (GtkStyleContext *context,
  * @context: a #GtkStyleContext
  * @source: the #GtkIconSource specifying the icon to render
  * @size: (type int): the size to render the icon at. A size of (GtkIconSize) -1
- *        means render at the size of the source and don't scale.
+ *        means render at the size of the source and don’t scale.
  *
  * Renders the icon specified by @source at the given @size, returning the result
  * in a pixbuf.
