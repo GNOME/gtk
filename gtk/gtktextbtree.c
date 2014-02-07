@@ -6159,7 +6159,7 @@ recompute_level_nonzero_counts (GtkTextBTreeNode *node)
  *      This procedure is called to recompute all the counts in a GtkTextBTreeNode
  *      (tags, child information, etc.) by scanning the information in
  *      its descendants.  This procedure is called during rebalancing
- *      when a GtkTextBTreeNode's child structure has changed.
+ *      when a GtkTextBTreeNode’s child structure has changed.
  *
  * Results:
  *      None.

@@ -49,7 +49,7 @@
  * @Title: GtkScrolledWindow
  * @See_also: #GtkScrollable, #GtkViewport, #GtkAdjustment
  *
- * #GtkScrolledWindow is a #GtkBin subclass: it's a container
+ * #GtkScrolledWindow is a #GtkBin subclass: it’s a container
  * the accepts a single child widget. #GtkScrolledWindow adds scrollbars
  * to the child widget and optionally draws a beveled frame around the
  * child widget.
@@ -82,7 +82,7 @@
  * for example the PageDown key).
  *
  * If a #GtkScrolledWindow doesn't behave quite as you would like, or
- * doesn't have exactly the right layout, it's very possible to set up
+ * doesn't have exactly the right layout, it’s very possible to set up
  * your own scrolling with #GtkScrollbar and for example a #GtkGrid.
  */
 
@@ -117,8 +117,8 @@
  * B) from 1.1) follows: the requisition may be overidden by usize of the scrolled
  *    window (done automatically) or by usize of the child (needs to be checked).
  * C) from 2) follows: for POLICY_NEVER, the scrolled window simply reports the
- *    child's dimension.
- * D) from 3) follows: the scrolled window child's minimum width and minimum height
+ *    child’s dimension.
+ * D) from 3) follows: the scrolled window child’s minimum width and minimum height
  *    under A) at least correspond to the space taken up by its scrollbars.
  */
 
@@ -594,7 +594,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
  *
  * Creates a new scrolled window.
  *
- * The two arguments are the scrolled window's adjustments; these will be
+ * The two arguments are the scrolled window’s adjustments; these will be
  * shared with the scrollbars and the child widget to keep the bars in sync 
  * with the child. Usually you want to pass %NULL for the adjustments, which 
  * will cause the scrolled window to create them for you.
@@ -755,8 +755,8 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
  * gtk_scrolled_window_get_hadjustment:
  * @scrolled_window: a #GtkScrolledWindow
  *
- * Returns the horizontal scrollbar's adjustment, used to connect the
- * horizontal scrollbar to the child widget's horizontal scroll
+ * Returns the horizontal scrollbar’s adjustment, used to connect the
+ * horizontal scrollbar to the child widget’s horizontal scroll
  * functionality.
  *
  * Returns: (transfer none): the horizontal #GtkAdjustment
@@ -779,8 +779,8 @@ gtk_scrolled_window_get_hadjustment (GtkScrolledWindow *scrolled_window)
  * gtk_scrolled_window_get_vadjustment:
  * @scrolled_window: a #GtkScrolledWindow
  * 
- * Returns the vertical scrollbar's adjustment, used to connect the
- * vertical scrollbar to the child widget's vertical scroll functionality.
+ * Returns the vertical scrollbar’s adjustment, used to connect the
+ * vertical scrollbar to the child widget’s vertical scroll functionality.
  * 
  * Returns: (transfer none): the vertical #GtkAdjustment
  */
@@ -3040,7 +3040,7 @@ gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
  * _gtk_scrolled_window_get_spacing:
  * @scrolled_window: a scrolled window
  * 
- * Gets the spacing between the scrolled window's scrollbars and
+ * Gets the spacing between the scrolled window’s scrollbars and
  * the scrolled widget. Used by GtkCombo
  * 
  * Return value: the spacing, in pixels.

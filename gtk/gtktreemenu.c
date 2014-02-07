@@ -1644,7 +1644,7 @@ _gtk_tree_menu_set_model (GtkTreeMenu  *menu,
  * Gets the @model currently used for the menu heirarhcy.
  *
  * Return value: (transfer none): the #GtkTreeModel which is used
- * for @menu's hierarchy.
+ * for @menu’s hierarchy.
  *
  * Since: 3.0
  */
@@ -1665,7 +1665,7 @@ _gtk_tree_menu_get_model (GtkTreeMenu *menu)
  * @menu: a #GtkTreeMenu
  * @path: (allow-none): the #GtkTreePath which is the root of @menu, or %NULL.
  *
- * Sets the root of a @menu's hierarchy to be @path. @menu must already
+ * Sets the root of a @menu’s hierarchy to be @path. @menu must already
  * have a model set and @path must point to a valid path inside the model.
  *
  * Since: 3.0
@@ -1696,7 +1696,7 @@ _gtk_tree_menu_set_root (GtkTreeMenu *menu,
  * _gtk_tree_menu_get_root:
  * @menu: a #GtkTreeMenu
  *
- * Gets the @root path for @menu's hierarchy, or returns %NULL if @menu
+ * Gets the @root path for @menu’s hierarchy, or returns %NULL if @menu
  * has no model or is building a heirarchy for the entire model. *
  *
  * Return value: (transfer full) (allow-none): A newly created #GtkTreePath
@@ -1832,7 +1832,7 @@ _gtk_tree_menu_set_wrap_width (GtkTreeMenu *menu,
  * The row span column contains integers which indicate how many rows
  * a menu item should span.
  *
- * Return value: the column in @menu's model containing row span information, or -1.
+ * Return value: the column in @menu’s model containing row span information, or -1.
  *
  * Since: 3.0
  */
@@ -1888,7 +1888,7 @@ _gtk_tree_menu_set_row_span_column (GtkTreeMenu *menu,
  * The column span column contains integers which indicate how many columns
  * a menu item should span.
  *
- * Return value: the column in @menu's model containing column span information, or -1.
+ * Return value: the column in @menu’s model containing column span information, or -1.
  *
  * Since: 3.0
  */

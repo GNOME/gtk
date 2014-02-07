@@ -421,7 +421,7 @@ gtk_frame_set_label (GtkFrame *frame,
  * gtk_frame_get_label:
  * @frame: a #GtkFrame
  * 
- * If the frame's label widget is a #GtkLabel, returns the
+ * If the frame’s label widget is a #GtkLabel, returns the
  * text in the label widget. (The frame will have a #GtkLabel
  * for the label widget if a non-%NULL argument was passed
  * to gtk_frame_new().)
@@ -523,7 +523,7 @@ gtk_frame_get_label_widget (GtkFrame *frame)
  *   0.0 or 1.0 the gap in the frame won't be painted because the label
  *   will be completely above or below the frame.
  * 
- * Sets the alignment of the frame widget's label. The
+ * Sets the alignment of the frame widget’s label. The
  * default values for a newly created frame are 0.0 and 0.5.
  **/
 void
@@ -561,11 +561,11 @@ gtk_frame_set_label_align (GtkFrame *frame,
  * gtk_frame_get_label_align:
  * @frame: a #GtkFrame
  * @xalign: (out) (allow-none): location to store X alignment of
- *     frame's label, or %NULL
+ *     frame’s label, or %NULL
  * @yalign: (out) (allow-none): location to store X alignment of
- *     frame's label, or %NULL
+ *     frame’s label, or %NULL
  * 
- * Retrieves the X and Y alignment of the frame's label. See
+ * Retrieves the X and Y alignment of the frame’s label. See
  * gtk_frame_set_label_align().
  **/
 void

@@ -468,7 +468,7 @@ gtk_adjustment_get_lower (GtkAdjustment *adjustment)
  * When setting multiple adjustment properties via their individual
  * setters, multiple #GtkAdjustment::changed signals will be emitted. However, since
  * the emission of the #GtkAdjustment::changed signal is tied to the emission of the
- * #GObject::notify signals of the changed properties, it's possible
+ * #GObject::notify signals of the changed properties, it’s possible
  * to compress the #GtkAdjustment::changed signals into one by calling
  * g_object_freeze_notify() and g_object_thaw_notify() around the
  * calls to the individual setters.

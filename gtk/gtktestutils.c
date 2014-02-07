@@ -53,7 +53,7 @@
  *
  * It will in turn call g_test_init() and gtk_init() to properly
  * initialize the testing framework and graphical toolkit. It'll 
- * also set the program's locale to “C” and prevent loading of rc 
+ * also set the program’s locale to “C” and prevent loading of rc 
  * files and Gtk+ modules. This is done to make tets program
  * environments as deterministic as possible.
  *
@@ -236,7 +236,7 @@ gtk_test_widget_click (GtkWidget      *widget,
  *
  * This function will generate a @button click in the upwards or downwards
  * spin button arrow areas, usually leading to an increase or decrease of
- * spin button's value.
+ * spin button’s value.
  *
  * Returns: whether all actions neccessary for the button click simulation were carried out successfully.
  *

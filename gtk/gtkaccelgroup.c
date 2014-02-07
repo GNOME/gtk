@@ -47,7 +47,7 @@
  * gtk_window_add_accel_group()). Usually you won't need to create a
  * #GtkAccelGroup directly; instead, when using #GtkUIManager, GTK+
  * automatically sets up the accelerators for your menus in the ui
- * manager's #GtkAccelGroup.
+ * manager’s #GtkAccelGroup.
  *
  * Note that “accelerators” are different from
  * “mnemonics”. Accelerators are shortcuts for

@@ -61,7 +61,7 @@ typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
  * @GTK_BUILDER_ERROR_DUPLICATE_ID: An object id occurred twice.
  * @GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED: A specified object type is of the same type or
  *  derived from the type of the composite class being extended with builder XML.
- * @GTK_BUILDER_ERROR_TEMPLATE_MISMATCH: The wrong type was specified in a composite class's template XML
+ * @GTK_BUILDER_ERROR_TEMPLATE_MISMATCH: The wrong type was specified in a composite class’s template XML
  *
  * Error codes that identify various errors that can occur while using
  * #GtkBuilder.

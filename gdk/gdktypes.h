@@ -276,7 +276,7 @@ typedef enum
  * currently used windowing system backend uses for particular
  * purposes. For example, on X11/Windows, the Control key is used for
  * invoking menu shortcuts (accelerators), whereas on Apple computers
- * it's the Command key (which correspond to %GDK_CONTROL_MASK and
+ * it’s the Command key (which correspond to %GDK_CONTROL_MASK and
  * %GDK_MOD2_MASK, respectively).
  *
  * Since: 3.4

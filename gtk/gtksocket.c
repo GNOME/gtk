@@ -60,11 +60,11 @@
  * Together with #GtkPlug, #GtkSocket provides the ability to embed
  * widgets from one process into another process in a fashion that
  * is transparent to the user. One process creates a #GtkSocket widget
- * and passes that widget's window ID to the other process, which then
+ * and passes that widget’s window ID to the other process, which then
  * creates a #GtkPlug with that window ID. Any widgets contained in the
- * #GtkPlug then will appear inside the first application's window.
+ * #GtkPlug then will appear inside the first application’s window.
  *
- * The socket's window ID is obtained by using gtk_socket_get_id().
+ * The socket’s window ID is obtained by using gtk_socket_get_id().
  * Before using this function, the socket must have been realized,
  * and for hence, have been added to its parent.
  *
@@ -1002,7 +1002,7 @@ gtk_socket_forall (GtkContainer *container,
  * gtk_socket_add_window:
  * @socket: a #GtkSocket
  * @xid: the native identifier for a window
- * @need_reparent: whether the socket's plug's window needs to be
+ * @need_reparent: whether the socket’s plug’s window needs to be
  *                 reparented to the socket
  *
  * Adds a window to a GtkSocket.

@@ -52,7 +52,7 @@ struct _GtkComboBox
  * @parent_class: The parent class.
  * @changed: Signal is emitted when the active item is changed.
  * @format_entry_text: Signal which allows you to change how the text
- *    displayed in a combo box's entry is displayed.
+ *    displayed in a combo box’s entry is displayed.
  */
 struct _GtkComboBoxClass
 {

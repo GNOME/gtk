@@ -48,7 +48,7 @@
  *
  * As such, the data type conversion from gdk selection targets to OLE2 CF_* data
  * type specifiers is partially hardwired. Fixing this is complicated by (a) the
- * fact that the widget's declared selection types aren't accessible in calls here
+ * fact that the widget’s declared selection types aren't accessible in calls here
  * that need to declare the corresponding OLE2 data types, and (b) there isn't a
  * 1-1 correspondence between gdk target types and OLE2 types. The former needs
  * some redesign in gtk dnd (something a gdk/gtk expert should do; I have tried
@@ -375,7 +375,7 @@ get_suggested_action (DWORD grfKeyState)
 }
 
 /* Process pending events -- we don't want to service non-GUI events
- * forever so do one iteration and then do more only if there's a
+ * forever so do one iteration and then do more only if there’s a
  * pending GDK event.
  */
 static void

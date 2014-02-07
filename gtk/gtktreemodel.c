@@ -98,7 +98,7 @@
  * Iterators are expected to always be valid for as long as the model
  * is unchanged (and doesn't emit a signal). The model is considered
  * to own all outstanding iterators and nothing needs to be done to
- * free them from the user's point of view. Additionally, some models
+ * free them from the user’s point of view. Additionally, some models
  * guarantee that an iterator is valid for as long as the node it refers
  * to is valid (most notably the #GtkTreeStore and #GtkListStore).
  * Although generally uninteresting, as one always has to allow for
@@ -2456,7 +2456,7 @@ gtk_tree_row_reference_copy (GtkTreeRowReference *reference)
  * gtk_tree_row_reference_free:
  * @reference: (allow-none): a #GtkTreeRowReference, or %NULL
  *
- * Free's @reference. @reference may be %NULL
+ * Free’s @reference. @reference may be %NULL
  */
 void
 gtk_tree_row_reference_free (GtkTreeRowReference *reference)

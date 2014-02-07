@@ -149,7 +149,7 @@ typedef gboolean (* GtkTreeViewColumnDropFunc) (GtkTreeView             *tree_vi
 /**
  * GtkTreeViewMappingFunc:
  * @tree_view: A #GtkTreeView
- * @path: The path that's expanded
+ * @path: The path that’s expanded
  * @user_data: user data
  *
  * Function used for gtk_tree_view_map_expanded_rows().

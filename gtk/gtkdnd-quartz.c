@@ -597,7 +597,7 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
 
 /**
  * gtk_drag_dest_set_target_list: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  * @target_list: (allow-none): list of droppable targets, or %NULL for none
  */
 void
@@ -630,7 +630,7 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
 
 /**
  * gtk_drag_dest_add_text_targets: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  */
 void
 gtk_drag_dest_add_text_targets (GtkWidget *widget)
@@ -650,7 +650,7 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_dest_add_image_targets: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  */
 void
 gtk_drag_dest_add_image_targets (GtkWidget *widget)
@@ -669,7 +669,7 @@ gtk_drag_dest_add_image_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_dest_add_uri_targets: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  */
 void
 gtk_drag_dest_add_uri_targets (GtkWidget *widget)
@@ -940,7 +940,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 
 /**
  * gtk_drag_dest_set_track_motion: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  * @track_motion: whether to accept all targets
  */
 void
@@ -960,7 +960,7 @@ gtk_drag_dest_set_track_motion (GtkWidget *widget,
 
 /**
  * gtk_drag_dest_get_track_motion: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  */
 gboolean
 gtk_drag_dest_get_track_motion (GtkWidget *widget)
@@ -1524,7 +1524,7 @@ gtk_drag_source_get_target_list (GtkWidget *widget)
 
 /**
  * gtk_drag_source_set_target_list: (method)
- * @widget: a #GtkWidget that's a drag source
+ * @widget: a #GtkWidget that’s a drag source
  * @target_list: (allow-none): list of draggable targets, or %NULL for none
  */
 void
@@ -1554,7 +1554,7 @@ gtk_drag_source_set_target_list (GtkWidget     *widget,
 
 /**
  * gtk_drag_source_add_text_targets:
- * @widget: a #GtkWidget that's is a drag source
+ * @widget: a #GtkWidget that’s is a drag source
  *
  * Add the text targets supported by #GtkSelection to
  * the target list of the drag source.  The targets
@@ -1581,7 +1581,7 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_source_add_image_targets: (method)
- * @widget: a #GtkWidget that's is a drag source
+ * @widget: a #GtkWidget that’s is a drag source
  */
 void
 gtk_drag_source_add_image_targets (GtkWidget *widget)
@@ -1600,7 +1600,7 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_source_add_uri_targets: (method)
- * @widget: a #GtkWidget that's is a drag source
+ * @widget: a #GtkWidget that’s is a drag source
  */
 void
 gtk_drag_source_add_uri_targets (GtkWidget *widget)

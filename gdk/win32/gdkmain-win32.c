@@ -158,7 +158,7 @@ _gdk_other_api_failed (const gchar *where,
  * have to be g_free()d. The buffer is of bounded size and reused
  * cyclically. Thus the return value is valid only until that part of
  * the buffer happens to get reused. This doesn't matter as this
- * function's return value is used in debugging output right after the call,
+ * function’s return value is used in debugging output right after the call,
  * and the return value isn't used after that.
  */
 static gchar *

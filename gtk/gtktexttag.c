@@ -1894,7 +1894,7 @@ delta_priority_foreach (GtkTextTag *tag, gpointer user_data)
  * 
  * Get the tag priority.
  * 
- * Return value: The tag's priority.
+ * Return value: The tag’s priority.
  **/
 gint
 gtk_text_tag_get_priority (GtkTextTag *tag)
@@ -1918,7 +1918,7 @@ gtk_text_tag_get_priority (GtkTextTag *tag)
  * a tag to a tag table, it will be assigned the highest priority in
  * the table by default; so normally the precedence of a set of tags
  * is the order in which they were added to the table, or created with
- * gtk_text_buffer_create_tag(), which adds the tag to the buffer's table
+ * gtk_text_buffer_create_tag(), which adds the tag to the buffer’s table
  * automatically.
  **/
 void

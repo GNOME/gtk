@@ -62,7 +62,7 @@
  *   to the signal handler is a GtkTooltip object. This is the object that we
  *   are about to display as a tooltip, and can be manipulated in your callback
  *   using functions like gtk_tooltip_set_icon(). There are functions for setting
- *   the tooltip's markup, setting an image from a named icon, or even putting in
+ *   the tooltip’s markup, setting an image from a named icon, or even putting in
  *   a custom widget.
  *
  *   Return %TRUE from your query-tooltip handler. This causes the tooltip to be

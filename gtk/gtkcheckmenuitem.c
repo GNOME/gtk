@@ -314,7 +314,7 @@ gtk_check_menu_item_new_with_mnemonic (const gchar *label)
  * @check_menu_item: a #GtkCheckMenuItem.
  * @is_active: boolean value indicating whether the check box is active.
  *
- * Sets the active state of the menu item's check box.
+ * Sets the active state of the menu item’s check box.
  */
 void
 gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,

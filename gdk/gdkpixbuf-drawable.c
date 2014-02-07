@@ -68,7 +68,7 @@
  * other windows, then the contents of the pixbuf areas corresponding
  * to the obscured regions are undefined.
  *
- * If the window is not mapped (typically because it's iconified/minimized
+ * If the window is not mapped (typically because it’s iconified/minimized
  * or not on the current workspace), then %NULL will be returned.
  *
  * If memory can't be allocated for the return value, %NULL will be returned

@@ -2155,7 +2155,7 @@ gtk_spin_button_new_with_range (gdouble min,
 }
 
 /* Callback used when the spin button's adjustment changes.
- * We need to redraw the arrows when the adjustment's range
+ * We need to redraw the arrows when the adjustment’s range
  * changes, and reevaluate our size request.
  */
 static void
@@ -2235,7 +2235,7 @@ gtk_spin_button_get_adjustment (GtkSpinButton *spin_button)
 /**
  * gtk_spin_button_set_digits:
  * @spin_button: a #GtkSpinButton
- * @digits: the number of digits after the decimal point to be displayed for the spin button's value
+ * @digits: the number of digits after the decimal point to be displayed for the spin button’s value
  *
  * Set the precision to be displayed by @spin_button. Up to 20 digit precision
  * is allowed.
@@ -2284,7 +2284,7 @@ gtk_spin_button_get_digits (GtkSpinButton *spin_button)
  * @page: increment applied for a button 2 press.
  *
  * Sets the step and page increments for spin_button.  This affects how
- * quickly the value changes when the spin button's arrows are activated.
+ * quickly the value changes when the spin button’s arrows are activated.
  **/
 void
 gtk_spin_button_set_increments (GtkSpinButton *spin_button,
@@ -2578,7 +2578,7 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
  * gtk_spin_button_get_wrap:
  * @spin_button: a #GtkSpinButton
  *
- * Returns whether the spin button's value wraps around to the
+ * Returns whether the spin button’s value wraps around to the
  * opposite limit when the upper or lower limit of the range is
  * exceeded. See gtk_spin_button_set_wrap().
  *
@@ -2647,7 +2647,7 @@ gtk_spin_button_get_snap_to_ticks (GtkSpinButton *spin_button)
  * @direction: a #GtkSpinType indicating the direction to spin
  * @increment: step increment to apply in the specified direction
  *
- * Increment or decrement a spin button's value in a specified
+ * Increment or decrement a spin button’s value in a specified
  * direction by a specified amount.
  */
 void

@@ -1801,7 +1801,7 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
  * Note that if @iter happens to be the actual cursor position, and
  * there is currently an IM preedit sequence being entered, the
  * returned locations will be adjusted to account for the preedit
- * cursor's offset within the preedit sequence.
+ * cursor’s offset within the preedit sequence.
  *
  * The rectangle position is in buffer coordinates; use
  * gtk_text_view_buffer_to_window_coords() to convert these
@@ -2002,7 +2002,7 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
  *
  * Note that this function uses the currently-computed height of the
  * lines in the text buffer. Line heights are computed in an idle 
- * handler; so this function may not have the desired effect if it's 
+ * handler; so this function may not have the desired effect if it’s 
  * called before the height computations. To avoid oddness, consider 
  * using gtk_text_view_scroll_to_mark() which saves a point to be 
  * scrolled to after line validation.
@@ -2587,7 +2587,7 @@ gtk_text_view_get_wrap_mode (GtkTextView *text_view)
 /**
  * gtk_text_view_set_editable:
  * @text_view: a #GtkTextView
- * @setting: whether it's editable
+ * @setting: whether it’s editable
  *
  * Sets the default editability of the #GtkTextView. You can override
  * this default setting with tags in the buffer, using the “editable”
@@ -2702,7 +2702,7 @@ gtk_text_view_get_pixels_above_lines (GtkTextView *text_view)
  *
  * Sets the default number of pixels of blank space
  * to put below paragraphs in @text_view. May be overridden
- * by tags applied to @text_view's buffer. 
+ * by tags applied to @text_view’s buffer. 
  **/
 void
 gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
@@ -2751,7 +2751,7 @@ gtk_text_view_get_pixels_below_lines (GtkTextView *text_view)
  *
  * Sets the default number of pixels of blank space to leave between
  * display/wrapped lines within a paragraph. May be overridden by
- * tags in @text_view's buffer.
+ * tags in @text_view’s buffer.
  **/
 void
 gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
@@ -2799,7 +2799,7 @@ gtk_text_view_get_pixels_inside_wrap (GtkTextView *text_view)
  * @justification: justification
  *
  * Sets the default justification of text in @text_view.
- * Tags in the view's buffer may override the default.
+ * Tags in the view’s buffer may override the default.
  * 
  **/
 void
@@ -2976,7 +2976,7 @@ gtk_text_view_set_indent (GtkTextView *text_view,
  * @text_view: a #GtkTextView
  * 
  * Gets the default indentation of paragraphs in @text_view.
- * Tags in the view's buffer may override the default.
+ * Tags in the view’s buffer may override the default.
  * The indentation may be negative.
  * 
  * Return value: number of pixels of indentation
@@ -10227,7 +10227,7 @@ gtk_text_view_move_child (GtkTextView *text_view,
  * Display lines are created by line-wrapping a paragraph. If
  * wrapping is turned off, display lines and paragraphs will be the
  * same. Display lines are divided differently for each view, since
- * they depend on the view's width; paragraphs are the same in all
+ * they depend on the view’s width; paragraphs are the same in all
  * views, since they depend on the contents of the #GtkTextBuffer.
  * 
  * Return value: %TRUE if @iter was moved and is not on the end iterator
@@ -10255,7 +10255,7 @@ gtk_text_view_forward_display_line (GtkTextView *text_view,
  * Display lines are created by line-wrapping a paragraph. If
  * wrapping is turned off, display lines and paragraphs will be the
  * same. Display lines are divided differently for each view, since
- * they depend on the view's width; paragraphs are the same in all
+ * they depend on the view’s width; paragraphs are the same in all
  * views, since they depend on the contents of the #GtkTextBuffer.
  * 
  * Return value: %TRUE if @iter was moved and is not on the end iterator
@@ -10283,7 +10283,7 @@ gtk_text_view_backward_display_line (GtkTextView *text_view,
  * Display lines are created by line-wrapping a paragraph. If
  * wrapping is turned off, display lines and paragraphs will be the
  * same. Display lines are divided differently for each view, since
- * they depend on the view's width; paragraphs are the same in all
+ * they depend on the view’s width; paragraphs are the same in all
  * views, since they depend on the contents of the #GtkTextBuffer.
  * 
  * Return value: %TRUE if @iter was moved and is not on the end iterator
@@ -10311,7 +10311,7 @@ gtk_text_view_forward_display_line_end (GtkTextView *text_view,
  * Display lines are created by line-wrapping a paragraph. If
  * wrapping is turned off, display lines and paragraphs will be the
  * same. Display lines are divided differently for each view, since
- * they depend on the view's width; paragraphs are the same in all
+ * they depend on the view’s width; paragraphs are the same in all
  * views, since they depend on the contents of the #GtkTextBuffer.
  * 
  * Return value: %TRUE if @iter was moved and is not on the end iterator

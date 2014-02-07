@@ -567,7 +567,7 @@ gtk_scale_get_property (GObject      *object,
 
 /**
  * gtk_scale_new:
- * @orientation: the scale's orientation.
+ * @orientation: the scale’s orientation.
  * @adjustment: (allow-none): the #GtkAdjustment which sets the range
  *              of the scale, or %NULL to create a new adjustment.
  *
@@ -592,14 +592,14 @@ gtk_scale_new (GtkOrientation  orientation,
 
 /**
  * gtk_scale_new_with_range:
- * @orientation: the scale's orientation.
+ * @orientation: the scale’s orientation.
  * @min: minimum value
  * @max: maximum value
  * @step: step increment (tick size) used with keyboard shortcuts
  *
  * Creates a new scale widget with the given orientation that lets the
  * user input a number between @min and @max (including @min and @max)
- * with the increment @step.  @step must be nonzero; it's the distance
+ * with the increment @step.  @step must be nonzero; it’s the distance
  * the slider moves when using the arrow keys to adjust the scale
  * value.
  *

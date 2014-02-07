@@ -288,7 +288,7 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
 
 /* Bundle-based functions for various directories. These almost work
  * even when the application isn't in a bundle, becuase mainBundle
- * paths point to the bin directory in that case. It's a simple matter
+ * paths point to the bin directory in that case. It’s a simple matter
  * to test for that and remove the last element.
  */
 

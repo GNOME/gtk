@@ -1903,7 +1903,7 @@ gtk_window_set_title_internal (GtkWindow   *window,
  * displayed in its title bar; on the X Window System, the title bar
  * is rendered by the [window manager][gtk-X11-arch],
  * so exactly how the title appears to users may vary
- * according to a user's exact configuration. The title should help a
+ * according to a user’s exact configuration. The title should help a
  * user distinguish this window from other windows they may have
  * open. A good title might include the application name and current
  * document filename, for example.
@@ -1983,7 +1983,7 @@ gtk_window_set_wmclass (GtkWindow *window,
  * In combination with the window title, the window role allows a
  * [window manager][gtk-X11-arch] to identify "the
  * same" window when an application is restarted. So for example you
- * might set the “toolbox” role on your app's toolbox window, so that
+ * might set the “toolbox” role on your app’s toolbox window, so that
  * when the user restarts their session, the window manager can put
  * the toolbox back in the same place.
  *
@@ -2170,10 +2170,10 @@ _gtk_window_internal_set_focus (GtkWindow *window,
  * @default_widget: (allow-none): widget to be the default, or %NULL to unset the
  *                  default widget for the toplevel.
  *
- * The default widget is the widget that's activated when the user
+ * The default widget is the widget that’s activated when the user
  * presses Enter in a dialog (for example). This function sets or
  * unsets the default widget for a #GtkWindow about. When setting
- * (rather than unsetting) the default widget it's generally easier to
+ * (rather than unsetting) the default widget it’s generally easier to
  * call gtk_widget_grab_focus() on the widget. Before making a widget
  * the default widget, you must call gtk_widget_set_can_default() on the
  * widget you'd like to make the default.
@@ -2962,7 +2962,7 @@ gtk_window_get_attached_to (GtkWindow *window)
  * running. See gtk_widget_is_composited(). On Windows it should work
  * always.
  * 
- * Note that setting a window's opacity after the window has been
+ * Note that setting a window’s opacity after the window has been
  * shown causes it to flicker once on Windows.
  *
  * Since: 2.12
@@ -3438,7 +3438,7 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
  * @window: a #GtkWindow
  * @setting: whether to hide the titlebar when @window is maximized
  *
- * If @setting is %TRUE, then @window will request that it's titlebar
+ * If @setting is %TRUE, then @window will request that it’s titlebar
  * should be hidden when maximized.
  * This is useful for windows that don't convey any information other
  * than the application name in the titlebar, to put the available
@@ -3761,7 +3761,7 @@ _gtk_window_titlebar_shows_app_menu (GtkWindow *window)
  * function may not have any effect when called on a window that is
  * already visible, so you should call it before calling gtk_widget_show().
  *
- * On Windows, this function always works, since there's no window manager
+ * On Windows, this function always works, since there’s no window manager
  * policy involved.
  * 
  **/
@@ -3835,7 +3835,7 @@ gtk_window_get_decorated (GtkWindow *window)
  * function may not have any effect when called on a window that is
  * already visible, so you should call it before calling gtk_widget_show().
  *
- * On Windows, this function always works, since there's no window manager
+ * On Windows, this function always works, since there’s no window manager
  * policy involved.
  *
  * Since: 2.10
@@ -4166,7 +4166,7 @@ gtk_window_unrealize_icon (GtkWindow *window)
  *
  * Note that transient windows (those who have been set transient for another
  * window using gtk_window_set_transient_for()) will inherit their
- * icon from their transient parent. So there's no need to explicitly
+ * icon from their transient parent. So there’s no need to explicitly
  * set the icon on transient windows.
  **/
 void
@@ -4210,7 +4210,7 @@ gtk_window_set_icon_list (GtkWindow  *window,
  * The list is copied, but the reference count on each
  * member won't be incremented.
  *
- * Return value: (element-type GdkPixbuf) (transfer container): copy of window's icon list
+ * Return value: (element-type GdkPixbuf) (transfer container): copy of window’s icon list
  **/
 GList*
 gtk_window_get_icon_list (GtkWindow  *window)
@@ -4670,7 +4670,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * @width: width in pixels, or -1 to unset the default width
  * @height: height in pixels, or -1 to unset the default height
  *
- * Sets the default size of a window. If the window's “natural” size
+ * Sets the default size of a window. If the window’s “natural” size
  * (its size request) is larger than the default, the default will be
  * ignored. More generally, if the default size does not obey the
  * geometry hints for the window (gtk_window_set_geometry_hints() can
@@ -4684,7 +4684,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * again as they normally would. Setting a default size of -1 means to
  * use the “natural” default size (the size request of the window).
  *
- * For more control over a window's initial size and how resizing works,
+ * For more control over a window’s initial size and how resizing works,
  * investigate gtk_window_set_geometry_hints().
  *
  * For some uses, gtk_window_resize() is a more appropriate function.
@@ -4871,7 +4871,7 @@ gtk_window_resize_to_geometry (GtkWindow *window,
  *
  * Note 3: If you are getting a window size in order to position
  * the window onscreen, there may be a better way. The preferred
- * way is to simply set the window's semantic type with
+ * way is to simply set the window’s semantic type with
  * gtk_window_set_type_hint(), which allows the window manager to
  * e.g. center dialogs. Also, if you set the transient parent of
  * dialogs with gtk_window_set_transient_for() window managers
@@ -4884,7 +4884,7 @@ gtk_window_resize_to_geometry (GtkWindow *window,
  * application cannot.
  *
  * In any case, if you insist on application-specified window
- * positioning, there's still a better way than
+ * positioning, there’s still a better way than
  * doing it yourself - gtk_window_set_position() will frequently
  * handle the details for you.
  * 
@@ -5059,8 +5059,8 @@ gtk_window_move (GtkWindow *window,
  * gravity to do things like place a window in a corner of the screen,
  * because static gravity ignores the window manager decorations.
  *
- * If you are saving and restoring your application's window
- * positions, you should know that it's impossible for applications to
+ * If you are saving and restoring your application’s window
+ * positions, you should know that it’s impossible for applications to
  * do this without getting it somewhat wrong because applications do
  * not have sufficient knowledge of window manager state. The Correct
  * Mechanism is to support the session management protocol (see the
@@ -7449,7 +7449,7 @@ gtk_window_get_has_resize_grip (GtkWindow *window)
  * If a window has a resize grip, this will retrieve the grip
  * position, width and height into the specified #GdkRectangle.
  *
- * Returns: %TRUE if the resize grip's area was retrieved
+ * Returns: %TRUE if the resize grip’s area was retrieved
  *
  * Since: 3.0
  */
@@ -9936,13 +9936,13 @@ gtk_window_draw (GtkWidget *widget,
  * Presents a window to the user. This may mean raising the window
  * in the stacking order, deiconifying it, moving it to the current
  * desktop, and/or giving it the keyboard focus, possibly dependent
- * on the user's platform, window manager, and preferences.
+ * on the user’s platform, window manager, and preferences.
  *
  * If @window is hidden, this function calls gtk_widget_show()
  * as well.
  * 
  * This function should be used when the user tries to open a window
- * that's already open. Say for example the preferences dialog is
+ * that’s already open. Say for example the preferences dialog is
  * currently open, and the user chooses Preferences from the menu
  * a second time; use gtk_window_present() to move the already-open dialog
  * where the user can see it.
@@ -10027,7 +10027,7 @@ gtk_window_present_with_time (GtkWindow *window,
  * iconification isn't possible, etc. But normally the window will end
  * up iconified. Just don't write code that crashes if not.
  *
- * It's permitted to call this function before showing a window,
+ * It’s permitted to call this function before showing a window,
  * in which case the window will be iconified before it ever appears
  * onscreen.
  *
@@ -10100,7 +10100,7 @@ gtk_window_deiconify (GtkWindow *window)
  * windows. But normally the window will end up stuck. Just don't
  * write code that crashes if not.
  *
- * It's permitted to call this function before showing a window.
+ * It’s permitted to call this function before showing a window.
  *
  * You can track stickiness via the “window-state-event” signal
  * on #GtkWidget.
@@ -10131,7 +10131,7 @@ gtk_window_stick (GtkWindow *window)
  * @window: a #GtkWindow
  *
  * Asks to unstick @window, which means that it will appear on only
- * one of the user's desktops. Note that you shouldn't assume the
+ * one of the user’s desktops. Note that you shouldn't assume the
  * window is definitely unstuck afterward, because other entities
  * (e.g. the user or [window manager][gtk-X11-arch]) could
  * stick it again. But normally the window will
@@ -10173,7 +10173,7 @@ gtk_window_unstick (GtkWindow *window)
  * normally the window will end up maximized. Just don't write code
  * that crashes if not.
  *
- * It's permitted to call this function before showing a window,
+ * It’s permitted to call this function before showing a window,
  * in which case the window will be maximized when it appears onscreen
  * initially.
  *
@@ -10324,7 +10324,7 @@ gtk_window_unfullscreen (GtkWindow *window)
  * normally the window will end kept above. Just don't write code
  * that crashes if not.
  *
- * It's permitted to call this function before showing a window,
+ * It’s permitted to call this function before showing a window,
  * in which case the window will be kept above when it appears onscreen
  * initially.
  *
@@ -10375,7 +10375,7 @@ gtk_window_set_keep_above (GtkWindow *window,
  * normally the window will be kept below. Just don't write code
  * that crashes if not.
  *
- * It's permitted to call this function before showing a window,
+ * It’s permitted to call this function before showing a window,
  * in which case the window will be kept below when it appears onscreen
  * initially.
  *
@@ -11821,7 +11821,7 @@ _gtk_window_set_is_active (GtkWindow *window,
  * in-process, parented GtkPlug)
  *
  * Internal function used by #GtkPlug when it gets parented/unparented by a
- * #GtkSocket.  This keeps the @window's #GTK_WINDOW_TOPLEVEL flag in sync
+ * #GtkSocket.  This keeps the @window’s #GTK_WINDOW_TOPLEVEL flag in sync
  * with the global list of toplevel windows.
  */
 void

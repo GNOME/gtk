@@ -1805,7 +1805,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
  * @page_num: the index of a page in the @assistant,
  *     or -1 to remove the last page
  *
- * Removes the @page_num's page from @assistant.
+ * Removes the @page_num’s page from @assistant.
  *
  * Since: 3.2
  */
@@ -2164,7 +2164,7 @@ gtk_assistant_do_set_page_header_image (GtkAssistant *assistant,
  * Gets the header image for @page.
  *
  * Return value: (transfer none): the header image for @page,
- *     or %NULL if there's no header image for the page
+ *     or %NULL if there’s no header image for the page
  *
  * Since: 2.10
  *
@@ -2255,7 +2255,7 @@ gtk_assistant_do_set_page_side_image (GtkAssistant *assistant,
  * Gets the side image for @page.
  *
  * Return value: (transfer none): the side image for @page,
- *     or %NULL if there's no side image for the page
+ *     or %NULL if there’s no side image for the page
  *
  * Since: 2.10
  *

@@ -231,7 +231,7 @@ gtk_text_mark_get_property (GObject    *object,
  * Creates a text mark. Add it to a buffer using gtk_text_buffer_add_mark().
  * If @name is %NULL, the mark is anonymous; otherwise, the mark can be 
  * retrieved by name using gtk_text_buffer_get_mark(). If a mark has left 
- * gravity, and text is inserted at the mark's current location, the mark 
+ * gravity, and text is inserted at the mark’s current location, the mark 
  * will be moved to the left of the newly-inserted text. If the mark has 
  * right gravity (@left_gravity = %FALSE), the mark will end up on the 
  * right of newly-inserted text. The standard left-to-right cursor is a 
@@ -321,7 +321,7 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
  * Gets the buffer this mark is located inside,
  * or %NULL if the mark is deleted.
  *
- * Return value: (transfer none): the mark's #GtkTextBuffer
+ * Return value: (transfer none): the mark’s #GtkTextBuffer
  **/
 GtkTextBuffer*
 gtk_text_mark_get_buffer (GtkTextMark *mark)

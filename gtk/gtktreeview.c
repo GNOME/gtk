@@ -4759,7 +4759,7 @@ gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
  * Modify at your own risk
  *
  * KEEP IN SYNC WITH gtk_tree_view_create_row_drag_icon()!
- * FIXME: It's not...
+ * FIXME: It’s not...
  */
 static gboolean
 gtk_tree_view_bin_draw (GtkWidget      *widget,
@@ -6934,7 +6934,7 @@ gtk_tree_view_set_top_row (GtkTreeView *tree_view,
 }
 
 /* Always call this iff dy is in the visible range.  If the tree is empty, then
- * it's set to be NULL, and top_row_dy is 0;
+ * it’s set to be NULL, and top_row_dy is 0;
  */
 static void
 gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view)
@@ -8412,7 +8412,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 }
 
 /* This function returns in 'path' the first focusable path, if the given path
- * is already focusable, it's the returned one.
+ * is already focusable, it’s the returned one.
  */
 static gboolean
 search_first_focusable_path (GtkTreeView  *tree_view,
@@ -9534,7 +9534,7 @@ _gtk_tree_path_new_from_rbtree (GtkRBTree   *tree,
 }
 
 /* Returns TRUE if we ran out of tree before finding the path.  If the path is
- * invalid (ie. points to a node that's not in the tree), *tree and *node are
+ * invalid (ie. points to a node that’s not in the tree), *tree and *node are
  * both set to NULL.
  */
 gboolean
@@ -11734,7 +11734,7 @@ gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view)
  * application requires users to read across tree rows and associate
  * cells with one another. By default, GTK+ will then render the tree
  * with alternating row colors. Do not use it
- * just because you prefer the appearance of the ruled tree; that's a
+ * just because you prefer the appearance of the ruled tree; that’s a
  * question for the theme. Some themes will draw tree rows in
  * alternating colors even when rules are turned off, and users who
  * prefer that appearance all the time can choose those themes. You
@@ -13052,7 +13052,7 @@ gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
  * #GtkTreeDragDestIface.  Both #GtkTreeStore and #GtkListStore support
  * these.  If @reorderable is %TRUE, then the user can reorder the
  * model by dragging and dropping rows. The developer can listen to
- * these changes by connecting to the model's row_inserted and
+ * these changes by connecting to the model’s row_inserted and
  * row_deleted signals. The reordering is implemented by setting up
  * the tree view as a drag source and destination. Therefore, drag and
  * drop can not be used in a reorderable view for any other purpose.
@@ -13227,7 +13227,7 @@ gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
  * @start_editing: %TRUE if the specified cell should start being edited.
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
- * useful when you want to focus the user's attention on a particular row.  If
+ * useful when you want to focus the user’s attention on a particular row.  If
  * @focus_column is not %NULL, then focus is given to the column specified by 
  * it. Additionally, if @focus_column is specified, and @start_editing is 
  * %TRUE, then editing should be started in the specified cell.  
@@ -13257,7 +13257,7 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
  * @start_editing: %TRUE if the specified cell should start being edited.
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
- * useful when you want to focus the user's attention on a particular row.  If
+ * useful when you want to focus the user’s attention on a particular row.  If
  * @focus_column is not %NULL, then focus is given to the column specified by
  * it. If @focus_column and @focus_cell are not %NULL, and @focus_column
  * contains 2 or more editable or activatable cells, then focus is given to
@@ -16246,7 +16246,7 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
  * tooltips the row returned will be the cursor row.  When %TRUE, then any of
  * @model, @path and @iter which have been provided will be set to point to
  * that row and the corresponding model.  @x and @y will always be converted
- * to be relative to @tree_view's bin_window if @keyboard_tooltip is %FALSE.
+ * to be relative to @tree_view’s bin_window if @keyboard_tooltip is %FALSE.
  *
  * Return value: whether or not the given tooltip context points to a row.
  *
@@ -16355,11 +16355,11 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
 /**
  * gtk_tree_view_set_tooltip_column:
  * @tree_view: a #GtkTreeView
- * @column: an integer, which is a valid column number for @tree_view's model
+ * @column: an integer, which is a valid column number for @tree_view’s model
  *
  * If you only plan to have simple (text-only) tooltips on full rows, you
  * can use this function to have #GtkTreeView handle these automatically
- * for you. @column should be set to the column in @tree_view's model
+ * for you. @column should be set to the column in @tree_view’s model
  * containing the tooltip texts, or -1 to disable this feature.
  *
  * When enabled, #GtkWidget:has-tooltip will be set to %TRUE and
@@ -16404,8 +16404,8 @@ gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
  * gtk_tree_view_get_tooltip_column:
  * @tree_view: a #GtkTreeView
  *
- * Returns the column of @tree_view's model which is being used for
- * displaying tooltips on @tree_view's rows.
+ * Returns the column of @tree_view’s model which is being used for
+ * displaying tooltips on @tree_view’s rows.
  *
  * Return value: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.

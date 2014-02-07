@@ -33,7 +33,7 @@
  * @Title: Points and Rectangles
  *
  * GDK provides the #GdkPoint and #GdkRectangle data types for representing pixels
- * and sets of pixels on the screen. Together with Cairo's #cairo_region_t data
+ * and sets of pixels on the screen. Together with Cairo’s #cairo_region_t data
  * type, they make up the central types for representing graphical data.
  *
  * A #GdkPoint represents an x and y coordinate of a point.
@@ -86,7 +86,7 @@ gdk_rectangle_union (const GdkRectangle *src1,
  *
  * Calculates the intersection of two rectangles. It is allowed for
  * @dest to be the same as either @src1 or @src2. If the rectangles 
- * do not intersect, @dest's width and height is set to 0 and its x 
+ * do not intersect, @dest’s width and height is set to 0 and its x 
  * and y values are undefined. If you are only interested in whether
  * the rectangles intersect, but not in the intersecting area itself,
  * pass %NULL for @dest.

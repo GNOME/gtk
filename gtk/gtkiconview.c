@@ -61,7 +61,7 @@
  * Note that if the tree model is backed by an actual tree store (as
  * opposed to a flat list where the mapping to icons is obvious),
  * #GtkIconView will only display the first level of the tree and
- * ignore the tree's branches.
+ * ignore the tree’s branches.
  */
 
 #define SCROLL_EDGE_SIZE 15
@@ -1451,7 +1451,7 @@ adjust_wrap_width (GtkIconView *icon_view)
  * * padded size
  *   This is the cell size plus the item padding on each side.
  * * spaced size
- *   This is the padded size plus the spacing. This is what's used for most
+ *   This is the padded size plus the spacing. This is what’s used for most
  *   calculations because it can (ab)use the following formula:
  *   iconview_size = 2 * margin + n_items * spaced_size - spacing
  * So when reading this code and fixing my bugs where I confuse these two, be
@@ -2182,7 +2182,7 @@ gtk_icon_view_remove_editable (GtkCellArea            *area,
  * @start_editing: %TRUE if the specified cell should start being edited.
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
- * useful when you want to focus the user's attention on a particular item.
+ * useful when you want to focus the user’s attention on a particular item.
  * If @cell is not %NULL, then focus is given to the cell specified by 
  * it. Additionally, if @start_editing is %TRUE, then editing should be 
  * started in the specified cell.  
@@ -4668,7 +4668,7 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
  * tooltips the item returned will be the cursor item. When %TRUE, then any of
  * @model, @path and @iter which have been provided will be set to point to
  * that row and the corresponding model. @x and @y will always be converted
- * to be relative to @icon_view's bin_window if @keyboard_tooltip is %FALSE.
+ * to be relative to @icon_view’s bin_window if @keyboard_tooltip is %FALSE.
  *
  * Return value: whether or not the given tooltip context points to a item
  *
@@ -4761,11 +4761,11 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
 /**
  * gtk_icon_view_set_tooltip_column:
  * @icon_view: a #GtkIconView
- * @column: an integer, which is a valid column number for @icon_view's model
+ * @column: an integer, which is a valid column number for @icon_view’s model
  *
  * If you only plan to have simple (text-only) tooltips on full items, you
  * can use this function to have #GtkIconView handle these automatically
- * for you. @column should be set to the column in @icon_view's model
+ * for you. @column should be set to the column in @icon_view’s model
  * containing the tooltip texts, or -1 to disable this feature.
  *
  * When enabled, #GtkWidget:has-tooltip will be set to %TRUE and
@@ -4810,8 +4810,8 @@ gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
  * gtk_icon_view_get_tooltip_column:
  * @icon_view: a #GtkIconView
  *
- * Returns the column of @icon_view's model which is being used for
- * displaying tooltips on @icon_view's rows.
+ * Returns the column of @icon_view’s model which is being used for
+ * displaying tooltips on @icon_view’s rows.
  *
  * Return value: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.
@@ -5254,7 +5254,7 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
  *
  * Returns the column with text for @icon_view.
  *
- * Returns: the text column, or -1 if it's unset.
+ * Returns: the text column, or -1 if it’s unset.
  *
  * Since: 2.6
  */
@@ -5317,7 +5317,7 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
  *
  * Returns the column with markup text for @icon_view.
  *
- * Returns: the markup column, or -1 if it's unset.
+ * Returns: the markup column, or -1 if it’s unset.
  *
  * Since: 2.6
  */
@@ -5379,7 +5379,7 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
  *
  * Returns the column with pixbufs for @icon_view.
  *
- * Returns: the pixbuf column, or -1 if it's unset.
+ * Returns: the pixbuf column, or -1 if it’s unset.
  *
  * Since: 2.6
  */
@@ -6013,7 +6013,7 @@ gtk_icon_view_get_margin (GtkIconView *icon_view)
  * @item_padding: the item padding
  *
  * Sets the #GtkIconView:item-padding property which specifies the padding
- * around each of the icon view's items.
+ * around each of the icon view’s items.
  *
  * Since: 2.18
  */

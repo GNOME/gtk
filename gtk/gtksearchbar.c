@@ -41,7 +41,7 @@
  * #GtkSearchBar is a container made to have a search entry (possibly
  * with additional connex widgets, such as drop-down menus, or buttons)
  * built-in. The search bar would appear when a search is started through
- * typing on the keyboard, or the application's search mode is toggled on.
+ * typing on the keyboard, or the application’s search mode is toggled on.
  *
  * For keyboard presses to start a search, events will need to be
  * forwarded from the top-level window that contains the search bar.

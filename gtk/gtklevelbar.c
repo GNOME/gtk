@@ -67,7 +67,7 @@
  * }
  * ]|
  *
- * The default interval of values is between zero and one, but it's possible to
+ * The default interval of values is between zero and one, but it’s possible to
  * modify the interval using gtk_level_bar_set_min_value() and
  * gtk_level_bar_set_max_value(). The value will be always drawn in proportion to
  * the admissible interval, i.e. a value of 15 with a specified interval between
@@ -76,7 +76,7 @@
  * as a finite and number of separated blocks instead of a single one. The number
  * of blocks that will be rendered is equal to the number of units specified by
  * the admissible interval.
- * For instance, to build a bar rendered with five blocks, it's sufficient to
+ * For instance, to build a bar rendered with five blocks, it’s sufficient to
  * set the minimum value to 0 and the maximum value to 5 after changing the indicator
  * mode to discrete.
  *

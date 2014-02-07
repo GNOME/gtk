@@ -37,7 +37,7 @@ G_BEGIN_DECLS
  * So far all the window messages are posted to the other
  * process. Maybe some later enhancement will add also messages that
  * are sent, i.e. where the sending process waits for the receiving
- * process's window procedure to handle the message.
+ * process’s window procedure to handle the message.
  */
 
 typedef enum {					/* send or post? */

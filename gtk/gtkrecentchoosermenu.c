@@ -1305,7 +1305,7 @@ gtk_recent_chooser_menu_get_show_numbers (GtkRecentChooserMenu *menu)
  *
  * Sets whether a number should be added to the items of @menu.  The
  * numbers are shown to provide a unique character for a mnemonic to
- * be used inside ten menu item's label.  Only the first the items
+ * be used inside ten menu item’s label.  Only the first the items
  * get a number to avoid clashes.
  *
  * Since: 2.10

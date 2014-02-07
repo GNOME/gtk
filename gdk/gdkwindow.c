@@ -54,7 +54,7 @@
  * @Title: Windows
  *
  * A #GdkWindow is a (usually) rectangular region on the screen.
- * It's a low-level object, used to implement high-level objects such as
+ * It’s a low-level object, used to implement high-level objects such as
  * #GtkWidget and #GtkWindow on the GTK+ level. A #GtkWindow is a toplevel
  * window, the thing a user might think of as a “window” with a titlebar
  * and so on; a #GtkWindow may contain many #GdkWindows. For example,
@@ -2045,7 +2045,7 @@ _gdk_window_destroy (GdkWindow *window,
  *
  * Destroys the window system resources associated with @window and decrements @window's
  * reference count. The window system resources for all children of @window are also
- * destroyed, but the children's reference counts are not decremented.
+ * destroyed, but the children’s reference counts are not decremented.
  *
  * Note that a window will not be destroyed automatically when its reference count
  * reaches zero. You must call this function yourself before that happens.
@@ -2239,7 +2239,7 @@ gdk_window_has_native (GdkWindow *window)
  * current window position, regardless of which events have been
  * received or processed.
  *
- * The position coordinates are relative to the window's parent window.
+ * The position coordinates are relative to the window’s parent window.
  *
  **/
 void
@@ -2287,7 +2287,7 @@ gdk_window_get_parent (GdkWindow *window)
  *
  * Obtains the parent of @window, as known to GDK. Works like
  * gdk_window_get_parent() for normal windows, but returns the
- * window's embedder for offscreen windows.
+ * window’s embedder for offscreen windows.
  *
  * See also: gdk_offscreen_window_get_embedder()
  *
@@ -2310,14 +2310,14 @@ gdk_window_get_effective_parent (GdkWindow *window)
  * gdk_window_get_toplevel:
  * @window: a #GdkWindow
  *
- * Gets the toplevel window that's an ancestor of @window.
+ * Gets the toplevel window that’s an ancestor of @window.
  *
  * Any window type but %GDK_WINDOW_CHILD is considered a
  * toplevel window, as is a %GDK_WINDOW_CHILD window that
  * has a root window as parent.
  *
  * Note that you should use gdk_window_get_effective_toplevel() when
- * you want to get to a window's toplevel as seen on screen, because
+ * you want to get to a window’s toplevel as seen on screen, because
  * gdk_window_get_toplevel() will most likely not do what you expect
  * if there are offscreen windows in the hierarchy.
  *
@@ -2342,7 +2342,7 @@ gdk_window_get_toplevel (GdkWindow *window)
  * gdk_window_get_effective_toplevel:
  * @window: a #GdkWindow
  *
- * Gets the toplevel window that's an ancestor of @window.
+ * Gets the toplevel window that’s an ancestor of @window.
  *
  * Works like gdk_window_get_toplevel(), but treats an offscreen window's
  * embedder as its parent, using gdk_window_get_effective_parent().
@@ -2373,7 +2373,7 @@ gdk_window_get_effective_toplevel (GdkWindow *window)
  *
  * Gets the list of children of @window known to GDK.
  * This function only returns children created via GDK,
- * so for example it's useless when used with the root window;
+ * so for example it’s useless when used with the root window;
  * it only returns windows an application created itself.
  *
  * The returned list must be freed, but the elements in the
@@ -3710,7 +3710,7 @@ gdk_window_process_updates_with_mode (GdkWindow     *window,
  * Sends one or more expose events to @window. The areas in each
  * expose event will cover the entire update area for the window (see
  * gdk_window_invalidate_region() for details). Normally GDK calls
- * gdk_window_process_all_updates() on your behalf, so there's no
+ * gdk_window_process_all_updates() on your behalf, so there’s no
  * need to call this function unless you want to force expose events
  * to be delivered immediately and synchronously (vs. the usual
  * case, where GDK delivers them in an idle handler). Occasionally
@@ -3956,7 +3956,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  *
  * GDK will call gdk_window_process_all_updates() on your behalf
  * whenever your program returns to the main loop and becomes idle, so
- * normally there's no need to do that manually, you just need to
+ * normally there’s no need to do that manually, you just need to
  * invalidate regions that you know should be redrawn.
  *
  * The @child_func parameter controls whether the region of
@@ -4007,7 +4007,7 @@ gdk_window_invalidate_region_full (GdkWindow       *window,
  *
  * GDK will call gdk_window_process_all_updates() on your behalf
  * whenever your program returns to the main loop and becomes idle, so
- * normally there's no need to do that manually, you just need to
+ * normally there’s no need to do that manually, you just need to
  * invalidate regions that you know should be redrawn.
  *
  * The @invalidate_children parameter controls whether the region of
@@ -4041,7 +4041,7 @@ gdk_window_invalidate_region (GdkWindow       *window,
  *
  * GDK will call gdk_window_process_all_updates() on your behalf
  * whenever your program returns to the main loop and becomes idle, so
- * normally there's no need to do that manually, you just need to
+ * normally there’s no need to do that manually, you just need to
  * invalidate regions that you know should be redrawn.
  *
  * This version of invalidation is used when you recieve expose events
@@ -4068,7 +4068,7 @@ _gdk_window_invalidate_for_expose (GdkWindow       *window,
  * no longer have an invalid/dirty region; the update area is removed
  * from @window and handed to you. If a window has no update area,
  * gdk_window_get_update_area() returns %NULL. You are responsible for
- * calling cairo_region_destroy() on the returned region if it's non-%NULL.
+ * calling cairo_region_destroy() on the returned region if it’s non-%NULL.
  *
  * Return value: the update area for @window
  **/
@@ -4254,7 +4254,7 @@ gdk_window_thaw_toplevel_updates_libgtk_only (GdkWindow *window)
  * if you are redrawing the same region 400 times you may never
  * notice, aside from noticing a speed problem. Enabling update
  * debugging causes GTK to flicker slowly and noticeably, so you can
- * see exactly what's being redrawn when, in what order.
+ * see exactly what’s being redrawn when, in what order.
  *
  * The --gtk-debug=updates command line option passed to GTK+ programs
  * enables this debug option at application startup time. That's
@@ -5058,7 +5058,7 @@ gdk_window_restack (GdkWindow     *window,
  * top of the window stack (moves the window to the front of the
  * Z-order).
  *
- * This function maps a window so it's visible onscreen. Its opposite
+ * This function maps a window so it’s visible onscreen. Its opposite
  * is gdk_window_hide().
  *
  * When implementing a #GtkWidget, you should call this function on the widget's
@@ -5547,8 +5547,8 @@ gdk_window_move_resize_internal (GdkWindow *window,
 /**
  * gdk_window_move:
  * @window: a #GdkWindow
- * @x: X coordinate relative to window's parent
- * @y: Y coordinate relative to window's parent
+ * @x: X coordinate relative to window’s parent
+ * @y: Y coordinate relative to window’s parent
  *
  * Repositions a window relative to its parent window.
  * For toplevel windows, window managers may ignore or modify the move;
@@ -5594,8 +5594,8 @@ gdk_window_resize (GdkWindow *window,
 /**
  * gdk_window_move_resize:
  * @window: a #GdkWindow
- * @x: new X position relative to window's parent
- * @y: new Y position relative to window's parent
+ * @x: new X position relative to window’s parent
+ * @y: new Y position relative to window’s parent
  * @width: new width
  * @height: new height
  *
@@ -5628,7 +5628,7 @@ gdk_window_move_resize (GdkWindow *window,
  * strictly be necessary.
  *
  * For X11, a minimum area will be invalidated if the window has no
- * subwindows, or if the edges of the window's parent do not extend
+ * subwindows, or if the edges of the window’s parent do not extend
  * beyond the edges of the window. In other cases, a multi-step process
  * is used to scroll the window which may produce temporary visual
  * artifacts and unnecessary invalidations.
@@ -5815,7 +5815,7 @@ gdk_window_set_background_pattern (GdkWindow *window,
  * returned and you'll have to query it yourself.
  *
  * Returns: (transfer none): The pattern to use for the background or
- *     %NULL to use the parent's background.
+ *     %NULL to use the parent’s background.
  *
  * Since: 2.22
  **/
@@ -6200,12 +6200,12 @@ gdk_window_get_root_coords (GdkWindow *window,
 /**
  * gdk_window_coords_to_parent:
  * @window: a child window
- * @x: X coordinate in child's coordinate system
- * @y: Y coordinate in child's coordinate system
+ * @x: X coordinate in child’s coordinate system
+ * @y: Y coordinate in child’s coordinate system
  * @parent_x: (out) (allow-none): return location for X coordinate
- * in parent's coordinate system, or %NULL
+ * in parent’s coordinate system, or %NULL
  * @parent_y: (out) (allow-none): return location for Y coordinate
- * in parent's coordinate system, or %NULL
+ * in parent’s coordinate system, or %NULL
  *
  * Transforms window coordinates from a child window to its parent
  * window, where the parent window is the normal parent as returned by
@@ -6260,10 +6260,10 @@ gdk_window_coords_to_parent (GdkWindow *window,
 /**
  * gdk_window_coords_from_parent:
  * @window: a child window
- * @parent_x: X coordinate in parent's coordinate system
- * @parent_y: Y coordinate in parent's coordinate system
- * @x: (out) (allow-none): return location for X coordinate in child's coordinate system
- * @y: (out) (allow-none): return location for Y coordinate in child's coordinate system
+ * @parent_x: X coordinate in parent’s coordinate system
+ * @parent_y: Y coordinate in parent’s coordinate system
+ * @x: (out) (allow-none): return location for X coordinate in child’s coordinate system
+ * @y: (out) (allow-none): return location for Y coordinate in child’s coordinate system
  *
  * Transforms window coordinates from a parent window to a child
  * window, where the parent window is the normal parent as returned by
@@ -6453,7 +6453,7 @@ gdk_window_set_child_shapes (GdkWindow *window)
  * for @window. See gdk_window_shape_combine_region().
  *
  * This function is distinct from gdk_window_set_child_shapes()
- * because it includes @window's shape mask in the set of shapes to
+ * because it includes @window’s shape mask in the set of shapes to
  * be merged.
  */
 void
@@ -6579,7 +6579,7 @@ gdk_window_set_child_input_shapes (GdkWindow *window)
  * for @window. See gdk_window_input_shape_combine_region().
  *
  * This function is distinct from gdk_window_set_child_input_shapes()
- * because it includes @window's input shape mask in the set of
+ * because it includes @window’s input shape mask in the set of
  * shapes to be merged.
  *
  * Since: 2.10
@@ -6651,7 +6651,7 @@ gdk_window_get_composited (GdkWindow *window)
  * windows do not automatically have their contents drawn to
  * the screen. Drawing is redirected to an offscreen buffer
  * and an expose event is emitted on the parent of the composited
- * window. It is the responsibility of the parent's expose handler
+ * window. It is the responsibility of the parent’s expose handler
  * to manually merge the off-screen content onto the screen in
  * whatever way it sees fit.
  *
@@ -9449,7 +9449,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
  * @skips_taskbar: %TRUE to skip the taskbar
  *
  * Toggles whether a window should appear in a task list or window
- * list. If a window's semantic type as specified with
+ * list. If a window’s semantic type as specified with
  * gdk_window_set_type_hint() already fully describes the window, this
  * function should not be called in addition,
  * instead you should allow the window to be treated according to
@@ -9472,7 +9472,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
  * Toggles whether a window should appear in a pager (workspace
  * switcher, or other desktop utility program that displays a small
  * thumbnail representation of the windows on the desktop). If a
- * window's semantic type as specified with gdk_window_set_type_hint()
+ * window’s semantic type as specified with gdk_window_set_type_hint()
  * already fully describes the window, this function should
  * not be called in addition, instead you should
  * allow the window to be treated according to standard policy for
@@ -9567,7 +9567,7 @@ gdk_window_set_title (GdkWindow   *window,
  * When using GTK+, typically you should use gtk_window_set_role() instead
  * of this low-level function.
  *
- * The window manager and session manager use a window's role to
+ * The window manager and session manager use a window’s role to
  * distinguish it from other kinds of window in the same application.
  * When an application is restarted after being saved in a previous
  * session, all windows with the same title and role are treated as
@@ -9850,7 +9850,7 @@ gdk_window_deiconify (GdkWindow *window)
  * gdk_window_stick:
  * @window: a toplevel #GdkWindow
  *
- * “Pins” a window such that it's on all workspaces and does not scroll
+ * “Pins” a window such that it’s on all workspaces and does not scroll
  * with viewports, for window managers that have scrollable viewports.
  * (When using #GtkWindow, gtk_window_stick() may be more useful.)
  *
@@ -9858,7 +9858,7 @@ gdk_window_deiconify (GdkWindow *window)
  * support, so may have no effect with many window managers. However,
  * GDK will do the best it can to convince the window manager to stick
  * the window. For window managers that don't support this operation,
- * there's nothing you can do to force it to happen.
+ * there’s nothing you can do to force it to happen.
  *
  **/
 void

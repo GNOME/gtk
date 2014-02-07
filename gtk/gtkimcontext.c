@@ -194,7 +194,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   other means if turned off.
  * @set_surrounding: Called via gtk_im_context_set_surrounding() in response
  *   to signal #GtkIMContext::retrieve-surrounding to update the input
- *   method's idea of the context around the cursor. It is not necessary to
+ *   method’s idea of the context around the cursor. It is not necessary to
  *   override this method even with input methods which implement
  *   context-dependent behavior. The base implementation is sufficient for
  *   gtk_im_context_get_surrounding() to work.

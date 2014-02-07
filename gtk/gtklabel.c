@@ -101,8 +101,8 @@
  *
  * Mnemonics automatically activate any activatable widget the label is
  * inside, such as a #GtkButton; if the label is not inside the
- * mnemonic's target widget, you have to tell the label about the target
- * using gtk_label_set_mnemonic_widget(). Here's a simple example where
+ * mnemonic’s target widget, you have to tell the label about the target
+ * using gtk_label_set_mnemonic_widget(). Here’s a simple example where
  * the label is inside a button:
  *
  * |[<!-- language="C" -->
@@ -112,7 +112,7 @@
  *   gtk_container_add (GTK_CONTAINER (button), label);
  * ]|
  *
- * There's a convenience function to create buttons with a mnemonic label
+ * There’s a convenience function to create buttons with a mnemonic label
  * already inside:
  *
  * |[<!-- language="C" -->
@@ -137,7 +137,7 @@
  * fonts, etc.), label text can be provided in a simple
  * [markup format][PangoMarkupFormat].
  *
- * Here's how to create a label with a small font:
+ * Here’s how to create a label with a small font:
  * |[<!-- language="C" -->
  *   label = gtk_label_new (NULL);
  *   gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
@@ -1948,7 +1948,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
  * Retrieves the target of the mnemonic (keyboard shortcut) of this
  * label. See gtk_label_set_mnemonic_widget().
  *
- * Return value: (transfer none): the target of the label's mnemonic,
+ * Return value: (transfer none): the target of the label’s mnemonic,
  *     or %NULL if none has been set and the default algorithm will be used.
  **/
 GtkWidget *
@@ -2596,7 +2596,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
  *
  * Parses @str which is marked up with the
  * [Pango text markup language][PangoMarkupFormat], setting the
- * label's text and attribute list based on the parse results. If the @str is
+ * label’s text and attribute list based on the parse results. If the @str is
  * external data, you may need to escape it with g_markup_escape_text() or
  * g_markup_printf_escaped()<!-- -->:
  * |[<!-- language="C" -->
@@ -2632,7 +2632,7 @@ gtk_label_set_markup (GtkLabel    *label,
  *
  * Parses @str which is marked up with the
  * [Pango text markup language][PangoMarkupFormat],
- * setting the label's text and attribute list based on the parse results.
+ * setting the label’s text and attribute list based on the parse results.
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  *
@@ -2984,14 +2984,14 @@ gtk_label_get_max_width_chars (GtkLabel *label)
  * @wrap: the setting
  *
  * Toggles line wrapping within the #GtkLabel widget. %TRUE makes it break
- * lines if text exceeds the widget's size. %FALSE lets the text get cut off
+ * lines if text exceeds the widget’s size. %FALSE lets the text get cut off
  * by the edge of the widget if it exceeds the widget size.
  *
  * Note that setting line wrapping to %TRUE does not make the label
- * wrap at its parent container's width, because GTK+ widgets
+ * wrap at its parent container’s width, because GTK+ widgets
  * conceptually can't make their requisition depend on the parent
- * container's size. For a label that wraps at a specific position,
- * set the label's width using gtk_widget_set_size_request().
+ * container’s size. For a label that wraps at a specific position,
+ * set the label’s width using gtk_widget_set_size_request().
  **/
 void
 gtk_label_set_line_wrap (GtkLabel *label,
@@ -3133,8 +3133,8 @@ gtk_label_clear_layout (GtkLabel *label)
  * @width: the width to measure with in pango units, or -1 for infinite
  *
  * Gets a layout that can be used for measuring sizes. The returned
- * layout will be identical to the label's layout except for the
- * layout's width, which will be set to @width. Do not modify the returned
+ * layout will be identical to the label’s layout except for the
+ * layout’s width, which will be set to @width. Do not modify the returned
  * layout.
  *
  * Returns: a new reference to a pango layout
@@ -4300,7 +4300,7 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
  * @label: a #GtkLabel
  * @str: a string
  * 
- * Sets the label's text from the string @str.
+ * Sets the label’s text from the string @str.
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  * The mnemonic key can be used to activate another widget, chosen 
@@ -5449,7 +5449,7 @@ gtk_label_select_region  (GtkLabel *label,
  * @end: (out): return location for end of selection, as a character offset
  * 
  * Gets the selected range of characters in the label, returning %TRUE
- * if there's a selection.
+ * if there’s a selection.
  * 
  * Return value: %TRUE if selection is non-empty
  **/
@@ -5571,10 +5571,10 @@ gtk_label_get_layout_offsets (GtkLabel *label,
 /**
  * gtk_label_set_use_markup:
  * @label: a #GtkLabel
- * @setting: %TRUE if the label's text should be parsed for markup.
+ * @setting: %TRUE if the label’s text should be parsed for markup.
  *
  * Sets whether the text of the label contains markup in
- * [Pango's text markup language][PangoMarkupFormat].
+ * [Pango’s text markup language][PangoMarkupFormat].
  * See gtk_label_set_markup().
  **/
 void
@@ -5595,11 +5595,11 @@ gtk_label_set_use_markup (GtkLabel *label,
  * gtk_label_get_use_markup:
  * @label: a #GtkLabel
  *
- * Returns whether the label's text is interpreted as marked up with
+ * Returns whether the label’s text is interpreted as marked up with
  * the [Pango text markup language][PangoMarkupFormat].
  * See gtk_label_set_use_markup ().
  *
- * Return value: %TRUE if the label's text will be parsed for markup.
+ * Return value: %TRUE if the label’s text will be parsed for markup.
  **/
 gboolean
 gtk_label_get_use_markup (GtkLabel *label)

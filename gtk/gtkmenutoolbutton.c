@@ -448,7 +448,7 @@ gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
 /**
  * gtk_menu_tool_button_set_arrow_tooltip_text:
  * @button: a #GtkMenuToolButton
- * @text: text to be used as tooltip text for button's arrow button
+ * @text: text to be used as tooltip text for button’s arrow button
  *
  * Sets the tooltip text to be used as tooltip for the arrow button which
  * pops up the menu.  See gtk_tool_item_set_tooltip_text() for setting a tooltip
@@ -468,7 +468,7 @@ gtk_menu_tool_button_set_arrow_tooltip_text (GtkMenuToolButton *button,
 /**
  * gtk_menu_tool_button_set_arrow_tooltip_markup:
  * @button: a #GtkMenuToolButton
- * @markup: markup text to be used as tooltip text for button's arrow button
+ * @markup: markup text to be used as tooltip text for button’s arrow button
  *
  * Sets the tooltip markup text to be used as tooltip for the arrow button
  * which pops up the menu.  See gtk_tool_item_set_tooltip_text() for setting

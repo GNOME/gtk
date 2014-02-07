@@ -1009,13 +1009,13 @@ apply_event_filters (GdkWindow  *window,
  * On Windows, transient windows will not have their own taskbar entries.
  * Because of this, we must hide and restore groups of transients in both
  * directions.  That is, all transient children must be hidden or restored
- * with this window, but if this window's transient owner also has a
- * transient owner then this window's transient owner must be hidden/restored
+ * with this window, but if this window’s transient owner also has a
+ * transient owner then this window’s transient owner must be hidden/restored
  * with this one.  And etc, up the chain until we hit an ancestor that has no
  * transient owner.
  *
  * It would be a good idea if applications don't chain transient windows
- * together.  There's a limit to how much evil GTK can try to shield you
+ * together.  There’s a limit to how much evil GTK can try to shield you
  * from.
  */
 static void

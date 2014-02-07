@@ -1652,7 +1652,7 @@ gtk_tree_view_column_new_with_area (GtkCellArea *area)
  * gtk_tree_view_column_pack_start(), and
  * gtk_tree_view_column_set_attributes() on the newly created #GtkTreeViewColumn.
  *
- * Here's a simple example:
+ * Here’s a simple example:
  * |[<!-- language="C" -->
  *  enum { TEXT_COLUMN, COLOR_COLUMN, N_COLUMNS };
  *  ...
@@ -2302,7 +2302,7 @@ gtk_tree_view_column_get_min_width (GtkTreeViewColumn *tree_column)
  * 
  * Sets the maximum width of the @tree_column.  If @max_width is -1, then the
  * maximum width is unset.  Note, the column can actually be wider than max
- * width if it's the last column in a view.  In this case, the column expands to
+ * width if it’s the last column in a view.  In this case, the column expands to
  * fill any extra space.
  **/
 void
@@ -2839,7 +2839,7 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
  * gtk_tree_view_column_cell_set_cell_data:
  * @tree_column: A #GtkTreeViewColumn.
  * @tree_model: The #GtkTreeModel to to get the cell renderers attributes from.
- * @iter: The #GtkTreeIter to to get the cell renderer's attributes from.
+ * @iter: The #GtkTreeIter to to get the cell renderer’s attributes from.
  * @is_expander: %TRUE, if the row has children
  * @is_expanded: %TRUE, if the row has visible children
  * 

@@ -36,7 +36,7 @@
  *
  * GtkGrid is a container which arranges its child widgets in
  * rows and columns. It is a very similar to #GtkTable and #GtkBox,
- * but it consistently uses #GtkWidget's #GtkWidget:margin and #GtkWidget:expand
+ * but it consistently uses #GtkWidget’s #GtkWidget:margin and #GtkWidget:expand
  * properties instead of custom child properties, and it fully supports
  * [height-for-width geometry management][geometry-management].
  *

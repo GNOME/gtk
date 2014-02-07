@@ -363,7 +363,7 @@ _gtk_css_style_property_get_n_properties (void)
  * @id: the id of the property
  *
  * Gets the style property with the given id. All style properties (but not
- * shorthand properties) are indexable by id so that it's easy to use arrays
+ * shorthand properties) are indexable by id so that it’s easy to use arrays
  * when doing style lookups.
  *
  * Returns: (transfer none): The style property with the given id

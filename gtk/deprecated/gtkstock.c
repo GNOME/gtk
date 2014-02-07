@@ -51,7 +51,7 @@ Prebuilt common menu/toolbar items and corresponding icons
  * of the menu or toolbar item; and/or with an icon stored in a
  * #GtkIconFactory. The connection between a
  * #GtkStockItem and stock icons is purely conventional (by virtue of
- * using the same stock ID); it's possible to register a stock item but
+ * using the same stock ID); it’s possible to register a stock item but
  * no icon, and vice versa. Stock icons may have a RTL variant which gets
  * used for right-to-left locales.
  */

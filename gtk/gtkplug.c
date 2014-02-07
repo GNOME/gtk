@@ -49,10 +49,10 @@
  * Together with #GtkSocket, #GtkPlug provides the ability to embed
  * widgets from one process into another process in a fashion that is
  * transparent to the user. One process creates a #GtkSocket widget
- * and passes the ID of that widget's window to the other process,
+ * and passes the ID of that widget’s window to the other process,
  * which then creates a #GtkPlug with that window ID. Any widgets
  * contained in the #GtkPlug then will appear inside the first
- * application's window.
+ * application’s window.
  *
  * The communication between a #GtkSocket and a #GtkPlug follows the
  * [XEmbed Protocol](http://www.freedesktop.org/Standards/xembed-spec).
@@ -541,7 +541,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 /**
  * gtk_plug_construct:
  * @plug: a #GtkPlug.
- * @socket_id: the XID of the socket's window.
+ * @socket_id: the XID of the socket’s window.
  *
  * Finish the initialization of @plug for a given #GtkSocket identified by
  * @socket_id. This function will generally only be used by classes deriving from #GtkPlug.
@@ -556,9 +556,9 @@ gtk_plug_construct (GtkPlug *plug,
 /**
  * gtk_plug_construct_for_display:
  * @plug: a #GtkPlug.
- * @display: the #GdkDisplay associated with @socket_id's 
+ * @display: the #GdkDisplay associated with @socket_id’s 
  *	     #GtkSocket.
- * @socket_id: the XID of the socket's window.
+ * @socket_id: the XID of the socket’s window.
  *
  * Finish the initialization of @plug for a given #GtkSocket identified by
  * @socket_id which is currently displayed on @display.
@@ -634,7 +634,7 @@ gtk_plug_new (Window socket_id)
 /**
  * gtk_plug_new_for_display:
  * @display: the #GdkDisplay on which @socket_id is displayed
- * @socket_id: the XID of the socket's window.
+ * @socket_id: the XID of the socket’s window.
  * 
  * Create a new plug widget inside the #GtkSocket identified by socket_id.
  *

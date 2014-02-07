@@ -62,7 +62,7 @@ typedef gboolean (* GtkTreeModelFilterVisibleFunc) (GtkTreeModel *model,
  * It must fill @value with the display value for the column @column in the
  * row indicated by @iter.
  *
- * Since this function is called for each data access, it's not a
+ * Since this function is called for each data access, it’s not a
  * particularly efficient operation.
  */
 

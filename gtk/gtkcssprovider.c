@@ -123,7 +123,7 @@
  *     background-color: #898989
  * }
  *
- * /&ast; Theme notebooks, and anything that's within these &ast;/
+ * /&ast; Theme notebooks, and anything that’s within these &ast;/
  * GtkNotebook {
  *     background-color: #a939f0
  * }
@@ -269,7 +269,7 @@
  *
  * # &commat; Rules
  *
- * GTK+'s CSS supports the &commat;import rule, in order to load another
+ * GTK+’s CSS supports the &commat;import rule, in order to load another
  * CSS style sheet in addition to the currently parsed one.
  *
  * An example for using the &commat;import rule:
@@ -404,7 +404,7 @@
  *       </row>
  *       <row>
  *         <entry>alpha(@color, @f)</entry>
- *         <entry>Modifies passed color's alpha by a factor @f. @f is a
+ *         <entry>Modifies passed color’s alpha by a factor @f. @f is a
  *                floating point number. @f < 1.0 results in a more transparent
  *                color while @f > 1.0 results in a more opaque color.
  *         </entry>

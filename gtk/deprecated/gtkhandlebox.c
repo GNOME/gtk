@@ -1057,7 +1057,7 @@ gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
  * gtk_handle_box_get_child_detached:
  * @handle_box: a #GtkHandleBox
  *
- * Whether the handlebox's child is currently detached.
+ * Whether the handlebox’s child is currently detached.
  *
  * Return value: %TRUE if the child is currently detached, otherwise %FALSE
  *

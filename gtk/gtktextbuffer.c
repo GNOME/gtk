@@ -837,7 +837,7 @@ _gtk_text_buffer_get_btree (GtkTextBuffer *buffer)
  *
  * Get the #GtkTextTagTable associated with this buffer.
  *
- * Return value: (transfer none): the buffer's tag table
+ * Return value: (transfer none): the buffer’s tag table
  **/
 GtkTextTagTable*
 gtk_text_buffer_get_tag_table (GtkTextBuffer *buffer)
@@ -2100,7 +2100,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
  * Creates a mark at position @where. If @mark_name is %NULL, the mark
  * is anonymous; otherwise, the mark can be retrieved by name using
  * gtk_text_buffer_get_mark(). If a mark has left gravity, and text is
- * inserted at the mark's current location, the mark will be moved to
+ * inserted at the mark’s current location, the mark will be moved to
  * the left of the newly-inserted text. If the mark has right gravity
  * (@left_gravity = %FALSE), the mark will end up on the right of
  * newly-inserted text. The standard left-to-right cursor is a mark
@@ -2215,7 +2215,7 @@ gtk_text_buffer_get_iter_at_mark (GtkTextBuffer *buffer,
  * @buffer: a #GtkTextBuffer
  * @mark: a #GtkTextMark in @buffer
  *
- * Deletes @mark, so that it's no longer located anywhere in the
+ * Deletes @mark, so that it’s no longer located anywhere in the
  * buffer. Removes the reference the buffer holds to the mark, so if
  * you haven't called g_object_ref() on the mark, it will be freed. Even
  * if the mark isn't freed, most operations on @mark become
@@ -2362,7 +2362,7 @@ gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
  * “selection_bound” and “insert” marks. If “selection_bound” and
  * “insert” are in the same place, then there is no current selection.
  * gtk_text_buffer_get_selection_bounds() is another convenient function
- * for handling the selection, if you just want to know whether there's a
+ * for handling the selection, if you just want to know whether there’s a
  * selection and what its bounds are.
  *
  * Return value: (transfer none): selection bound mark
@@ -2467,8 +2467,8 @@ gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
  *
  * Creates a tag and adds it to the tag table for @buffer.
  * Equivalent to calling gtk_text_tag_new() and then adding the
- * tag to the buffer's tag table. The returned tag is owned by
- * the buffer's tag table, so the ref count will be equal to one.
+ * tag to the buffer’s tag table. The returned tag is owned by
+ * the buffer’s tag table, so the ref count will be equal to one.
  *
  * If @tag_name is %NULL, the tag is anonymous.
  *
@@ -2661,7 +2661,7 @@ gtk_text_buffer_remove_tag (GtkTextBuffer     *buffer,
  * @start: one bound of range to be tagged
  * @end: other bound of range to be tagged
  *
- * Calls gtk_text_tag_table_lookup() on the buffer's tag table to
+ * Calls gtk_text_tag_table_lookup() on the buffer’s tag table to
  * get a #GtkTextTag, then calls gtk_text_buffer_apply_tag().
  **/
 void
@@ -2698,7 +2698,7 @@ gtk_text_buffer_apply_tag_by_name (GtkTextBuffer     *buffer,
  * @start: one bound of range to be untagged
  * @end: other bound of range to be untagged
  *
- * Calls gtk_text_tag_table_lookup() on the buffer's tag table to
+ * Calls gtk_text_tag_table_lookup() on the buffer’s tag table to
  * get a #GtkTextTag, then calls gtk_text_buffer_remove_tag().
  **/
 void
@@ -4028,7 +4028,7 @@ cut_or_copy (GtkTextBuffer *buffer,
  * @default_editable: default editability of the buffer
  *
  * Copies the currently-selected text to a clipboard, then deletes
- * said text if it's editable.
+ * said text if it’s editable.
  **/
 void
 gtk_text_buffer_cut_clipboard (GtkTextBuffer *buffer,

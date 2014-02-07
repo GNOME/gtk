@@ -2385,7 +2385,7 @@ gtk_menu_get_tearoff_state (GtkMenu *menu)
  * The title is displayed when the menu is shown as a tearoff
  * menu. If @title is %NULL, the menu will see if it is attached
  * to a parent menu item, and if so it will try to use the same
- * text as that menu item's label.
+ * text as that menu item’s label.
  *
  * Deprecated: 3.10
  */

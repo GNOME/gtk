@@ -274,7 +274,7 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
  *
  * If a widget is activated and the state of the tool button is the same as
  * the new state of the activated widget, then the other widget was the one
- * that was activated by the user and updated the tool button's state.
+ * that was activated by the user and updated the tool button’s state.
  *
  * If the state of the tool button is not the same as the new state of the
  * activated widget, then the activation was activated by the user, and the

@@ -41,7 +41,7 @@
  * application that can edit multiple documents, one group holding global
  * actions (e.g. quit, about, new), and one group per document holding
  * actions that act on that document (eg. save, cut/copy/paste, etc). Each
- * window's menus would be constructed from a combination of two action
+ * window’s menus would be constructed from a combination of two action
  * groups.
  *
  * ## Accelerators ## {#Action-Accel}

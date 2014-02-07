@@ -1903,10 +1903,10 @@ gtk_expander_get_use_underline (GtkExpander *expander)
 /**
  * gtk_expander_set_use_markup:
  * @expander: a #GtkExpander
- * @use_markup: %TRUE if the label's text should be parsed for markup
+ * @use_markup: %TRUE if the label’s text should be parsed for markup
  *
  * Sets whether the text of the label contains markup in
- * [Pango's text markup language][PangoMarkupFormat].
+ * [Pango’s text markup language][PangoMarkupFormat].
  * See gtk_label_set_markup().
  *
  * Since: 2.4
@@ -1938,11 +1938,11 @@ gtk_expander_set_use_markup (GtkExpander *expander,
  * gtk_expander_get_use_markup:
  * @expander: a #GtkExpander
  *
- * Returns whether the label's text is interpreted as marked up with
+ * Returns whether the label’s text is interpreted as marked up with
  * the [Pango text markup language][PangoMarkupFormat].
  * See gtk_expander_set_use_markup().
  *
- * Return value: %TRUE if the label's text will be parsed for markup
+ * Return value: %TRUE if the label’s text will be parsed for markup
  *
  * Since: 2.4
  */

@@ -112,7 +112,7 @@ struct _GtkCellArea
  * @event: Handle an event in the area, this is generally used to activate
  *     a cell at the event location for button events but can also be used
  *     to generically pass events to #GtkWidgets drawn onto the area.
- * @render: Actually render the area's cells to the specified rectangle,
+ * @render: Actually render the area’s cells to the specified rectangle,
  *     @background_area should be correctly distributed to the cells
  *     corresponding background areas.
  * @apply_attributes: Apply the cell attributes to the cells. This is

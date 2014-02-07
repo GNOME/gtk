@@ -2378,7 +2378,7 @@ close_cb (GtkAboutDialog *about)
  * @first_property_name: the name of the first property
  * @...: value of first property, followed by more properties, %NULL-terminated
  *
- * This is a convenience function for showing an application's about box.
+ * This is a convenience function for showing an application’s about box.
  * The constructed dialog is associated with the parent window and
  * reused for future invocations of this function.
  *

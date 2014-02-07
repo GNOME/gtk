@@ -450,7 +450,7 @@ _gtk_toggle_segment_new (GtkTextTagInfo *info, gboolean on)
  *      unless the entire B-tree is going away.
  *
  * Side effects:
- *      If the tree is going away then the toggle's memory is
+ *      If the tree is going away then the toggle’s memory is
  *      freed;  otherwise the toggle counts in GtkTextBTreeNodes above the
  *      segment get updated.
  *
@@ -489,7 +489,7 @@ toggle_segment_delete_func (GtkTextLineSegment *segPtr, GtkTextLine *line, int t
  * toggle_segment_cleanup_func --
  *
  *      This procedure is called when a toggle is part of a line that's
- *      been modified in some way.  It's invoked after the
+ *      been modified in some way.  It’s invoked after the
  *      modifications are complete.
  *
  * Arguments:

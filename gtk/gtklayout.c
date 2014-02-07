@@ -46,10 +46,10 @@
  * @Title: GtkLayout
  * @See_also: #GtkDrawingArea, #GtkScrolledWindow
  *
- * #GtkLayout is similar to #GtkDrawingArea in that it's a “blank slate”
+ * #GtkLayout is similar to #GtkDrawingArea in that it’s a “blank slate”
  * and doesn't do anything but paint a blank background by default. It's
  * different in that it supports scrolling natively (you can add it to a
- * #GtkScrolledWindow), and it can contain child widgets, since it's a
+ * #GtkScrolledWindow), and it can contain child widgets, since it’s a
  * #GtkContainer. However if you're just going to draw, a #GtkDrawingArea
  * is a better choice since it has lower overhead.
  *
@@ -601,7 +601,7 @@ gtk_layout_set_size (GtkLayout     *layout,
  *     @layout, or %NULL
  *
  * Gets the size that has been set on the layout, and that determines
- * the total extents of the layout's scrollbar area. See
+ * the total extents of the layout’s scrollbar area. See
  * gtk_layout_set_size ().
  **/
 void

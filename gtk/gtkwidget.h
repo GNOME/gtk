@@ -41,7 +41,7 @@ G_BEGIN_DECLS
 /**
  * GtkWidgetHelpType:
  * @GTK_WIDGET_HELP_TOOLTIP: Tooltip.
- * @GTK_WIDGET_HELP_WHATS_THIS: What's this.
+ * @GTK_WIDGET_HELP_WHATS_THIS: What’s this.
  *
  * Kinds of widget-specific help. Used by the ::show-help signal.
  */
@@ -70,15 +70,15 @@ typedef struct _GtkWidgetAuxInfo       GtkWidgetAuxInfo;
 
 /**
  * GtkAllocation:
- * @x: the X position of the widget's area relative to its parents allocation.
- * @y: the Y position of the widget's area relative to its parents allocation.
- * @width: the width of the widget's allocated area.
- * @height: the height of the widget's allocated area.
+ * @x: the X position of the widget’s area relative to its parents allocation.
+ * @y: the Y position of the widget’s area relative to its parents allocation.
+ * @width: the width of the widget’s allocated area.
+ * @height: the height of the widget’s allocated area.
  *
  * A #GtkAllocation-struct of a widget represents region
  * which has been allocated to the widget by its parent. It is a subregion
  * of its parents allocation. See
- * [GtkWidget's geometry management section][geometry-management] for
+ * [GtkWidget’s geometry management section][geometry-management] for
  * more information.
  */
 typedef 	GdkRectangle	   GtkAllocation;
@@ -113,11 +113,11 @@ typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
 
 /**
  * GtkRequisition:
- * @width: the widget's desired width
- * @height: the widget's desired height
+ * @width: the widget’s desired width
+ * @height: the widget’s desired height
  *
  * A #GtkRequisition-struct represents the desired size of a widget. See
- * [GtkWidget's geometry management section][geometry-management] for
+ * [GtkWidget’s geometry management section][geometry-management] for
  * more information.
  */
 struct _GtkRequisition
@@ -196,7 +196,7 @@ struct _GtkWidget
  *   %GTK_SIZE_REQUEST_CONSTANT_SIZE disables any height-for-width or
  *   width-for-height geometry management for a said widget and is the
  *   default return.
- *   It's important to note (as described below) that any widget
+ *   It’s important to note (as described below) that any widget
  *   which trades height-for-width or width-for-height must respond properly 
  *   to both of the virtual methods #GtkWidgetClass.get_preferred_height_for_width()
  *   and #GtkWidgetClass.get_preferred_width_for_height() since it might be 
@@ -208,14 +208,14 @@ struct _GtkWidget
  *   #GtkWidgetClass.get_preferred_height()).
  * @get_preferred_width_for_height: This is analogous to
  *   #GtkWidgetClass.get_preferred_height_for_width() except that it
- *   operates in the oposite orientation. It's rare that a widget actually
+ *   operates in the oposite orientation. It’s rare that a widget actually
  *   does %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT requests but this can happen
  *   when, for example, a widget or container gets additional columns to
  *   compensate for a smaller allocated height.
  * @get_preferred_width: This is called by containers to obtain the minimum
  *   and natural width of a widget. A widget will never be allocated a width
  *   less than its minimum and will only ever be allocated a width greater
- *   than the natural width once all of the said widget's siblings have
+ *   than the natural width once all of the said widget’s siblings have
  *   received their natural widths.
  *   Furthermore, a widget will only ever be allocated a width greater than
  *   its natural width if it was configured to receive extra expand space
@@ -228,7 +228,7 @@ struct _GtkWidget
  * @mnemonic_activate: Activates the @widget if @group_cycling is
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the
- *   #GtkWindow it's inside.
+ *   #GtkWindow it’s inside.
  * @focus:
  * @move_focus: Signal emitted when a change of focus is requested
  * @keynav_failed: Signal emitted if keyboard navigation fails.
@@ -244,36 +244,36 @@ struct _GtkWidget
  * @scroll_event: Signal emitted when a button in the 4 to 7 range is
  *   pressed.
  * @motion_notify_event: Signal emitted when the pointer moves over
- *   the widget's #GdkWindow.
+ *   the widget’s #GdkWindow.
  * @delete_event: Signal emitted if a user requests that a toplevel
  *   window is closed.
  * @destroy_event: Signal is emitted when a #GdkWindow is destroyed.
  * @key_press_event: Signal emitted when a key is pressed.
  * @key_release_event: Signal is emitted when a key is released.
  * @enter_notify_event: Signal event will be emitted when the pointer
- *   enters the widget's window.
+ *   enters the widget’s window.
  * @leave_notify_event: Will be emitted when the pointer leaves the
- *   widget's window.
+ *   widget’s window.
  * @configure_event: Signal will be emitted when the size, position or
- *   stacking of the widget's window has changed.
+ *   stacking of the widget’s window has changed.
  * @focus_in_event: Signal emitted when the keyboard focus enters the
- * widget's window.
+ * widget’s window.
  * @focus_out_event: Signal emitted when the keyboard focus leaves the
- * widget's window.
- * @map_event: Signal emitted when the widget's window is mapped.
- * @unmap_event: Signal will be emitted when the widget's window is
+ * widget’s window.
+ * @map_event: Signal emitted when the widget’s window is mapped.
+ * @unmap_event: Signal will be emitted when the widget’s window is
  *   unmapped.
  * @property_notify_event: Signal will be emitted when a property on
- *   the widget's window has been changed or deleted.
+ *   the widget’s window has been changed or deleted.
  * @selection_clear_event: Signal will be emitted when the the
- *   widget's window has lost ownership of a selection.
+ *   widget’s window has lost ownership of a selection.
  * @selection_request_event: Signal will be emitted when another
  *   client requests ownership of the selection owned by the widget's
  *   window.
  * @selection_notify_event:
  * @proximity_in_event:
  * @proximity_out_event:
- * @visibility_notify_event: Signal emitted when the widget's window is
+ * @visibility_notify_event: Signal emitted when the widget’s window is
  *   obscured or unobscured.
  * @window_state_event: Signal emitted when the state of the toplevel
  *   window associated to the widget changes.
@@ -329,14 +329,14 @@ struct _GtkWidget
  *   greater than -1, it is the proposed allocation in the opposing
  *   orientation that we need the request for. Implementations of
  *   adjust_size_request should chain up to the default implementation,
- *   which applies #GtkWidget's margin properties and imposes any values
+ *   which applies #GtkWidget’s margin properties and imposes any values
  *   from gtk_widget_set_size_request(). Chaining up should be last,
  *   after your subclass adjusts the request, so
  *   #GtkWidget can apply constraints and add the margin properly.
  * @adjust_size_allocation: Convert an initial size allocation assigned
  *   by a #GtkContainer using gtk_widget_size_allocate(), into an actual
  *   size allocation to be used by the widget. adjust_size_allocation
- *   adjusts to a child widget's actual allocation
+ *   adjusts to a child widget’s actual allocation
  *   from what a parent container computed for the
  *   child. The adjusted allocation must be entirely within the original
  *   allocation. In any custom implementation, chain up to the default
@@ -609,11 +609,11 @@ struct _GtkWidgetClass
 
 /**
  * GtkWidgetAuxInfo:
- * @width: the widget's width
- * @height: the widget's height
- * @halign: the widget's horizontal alignment
- * @valign: the widget's horizontal alignment
- * @margin: the widget's #GtkBorder margins
+ * @width: the widget’s width
+ * @height: the widget’s height
+ * @halign: the widget’s horizontal alignment
+ * @valign: the widget’s horizontal alignment
+ * @margin: the widget’s #GtkBorder margins
  *
  */
 struct _GtkWidgetAuxInfo

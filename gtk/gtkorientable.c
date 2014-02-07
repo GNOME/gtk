@@ -68,7 +68,7 @@ gtk_orientable_default_init (GtkOrientableInterface *iface)
 /**
  * gtk_orientable_set_orientation:
  * @orientable: a #GtkOrientable
- * @orientation: the orientable's new orientation.
+ * @orientation: the orientable’s new orientation.
  *
  * Sets the orientation of the @orientable.
  *

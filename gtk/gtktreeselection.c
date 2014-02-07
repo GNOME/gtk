@@ -377,7 +377,7 @@ gtk_tree_selection_get_mode (GtkTreeSelection *selection)
  * gtk_tree_selection_set_select_function:
  * @selection: A #GtkTreeSelection.
  * @func: The selection function. May be %NULL
- * @data: The selection function's data. May be %NULL
+ * @data: The selection function’s data. May be %NULL
  * @destroy: The destroy function for user data.  May be %NULL
  *
  * Sets the selection function.

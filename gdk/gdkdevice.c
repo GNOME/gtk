@@ -388,7 +388,7 @@ gdk_device_get_property (GObject    *object,
  * @mask: location to store the modifiers, or %NULL.
  *
  * Gets the current state of a pointer device relative to @window. As a slave
- * device's coordinates are those of its master pointer, this
+ * device’s coordinates are those of its master pointer, this
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them. See gdk_device_grab().
  */
@@ -740,7 +740,7 @@ gdk_device_get_mode (GdkDevice *device)
  * @mode: the input mode.
  *
  * Sets a the mode of an input device. The mode controls if the
- * device is active and whether the device's range is mapped to the
+ * device is active and whether the device’s range is mapped to the
  * entire screen or to a single window.
  *
  * Returns: %TRUE if the mode was successfully changed.

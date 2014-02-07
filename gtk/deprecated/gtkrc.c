@@ -542,7 +542,7 @@
  * `"gtk-button"`, `"gtk-dialog"`. Applications
  * can define other sizes.
  *
- * It's also possible to use custom icons for a given state, for example:
+ * It’s also possible to use custom icons for a given state, for example:
  *
  * |[<!-- language="C" -->
  * stock["my-stock-item"] =

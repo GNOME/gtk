@@ -50,7 +50,7 @@
  * The #GtkImage widget displays an image. Various kinds of object
  * can be displayed as an image; most typically, you would load a
  * #GdkPixbuf ("pixel buffer") from a file, and then display that.
- * There's a convenience function to do this, gtk_image_new_from_file(),
+ * There’s a convenience function to do this, gtk_image_new_from_file(),
  * used as follows:
  * |[<!-- language="C" -->
  *   GtkWidget *image;
@@ -705,7 +705,7 @@ gtk_image_new_from_stock (const gchar    *stock_id,
  *
  * Creates a #GtkImage displaying an icon set. Sample stock sizes are
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_SMALL_TOOLBAR. Instead of using
- * this function, usually it's better to create a #GtkIconFactory, put
+ * this function, usually it’s better to create a #GtkIconFactory, put
  * your icon sets in the icon factory, add the icon factory to the
  * list of default factories with gtk_icon_factory_add_default(), and
  * then use gtk_image_new_from_stock(). This will allow themes to

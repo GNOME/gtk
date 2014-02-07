@@ -30,7 +30,7 @@
  *
  * All scrollable widgets should do the following.
  *
- * - When a parent widget sets the scrollable child widget's adjustments,
+ * - When a parent widget sets the scrollable child widget’s adjustments,
  *   the widget should populate the adjustments'
  *   #GtkAdjustment:lower, #GtkAdjustment:upper,
  *   #GtkAdjustment:step-increment, #GtkAdjustment:page-increment and

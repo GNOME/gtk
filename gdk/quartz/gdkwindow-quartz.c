@@ -253,7 +253,7 @@ gdk_window_impl_quartz_finalize (GObject *object)
  * a view) too often. We do this by limiting the manual flushing done
  * outside of expose calls to less than some frequency when measured over
  * the last 4 flushes. This is a bit arbitray, but seems to make it possible
- * for some quick manual flushes (such as gtkruler or gimp's marching ants)
+ * for some quick manual flushes (such as gtkruler or gimp’s marching ants)
  * without hitting the max flush frequency.
  *
  * If drawable NULL, no flushing is done, only registering that a flush was
@@ -1509,7 +1509,7 @@ gdk_window_quartz_reparent (GdkWindow *window,
 }
 
 /* Get the toplevel ordering from NSApp and update our own list. We do
- * this on demand since the NSApp's list is not up to date directly
+ * this on demand since the NSApp’s list is not up to date directly
  * after we get windowDidBecomeMain.
  */
 static void

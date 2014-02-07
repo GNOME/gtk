@@ -43,7 +43,7 @@
  * since they are mostly used behind the scenes by #GtkStyleContext and
  * #GtkCssProvider.
  *
- * #GtkGradient is deprecated. It was used internally by GTK's CSS engine
+ * #GtkGradient is deprecated. It was used internally by GTK’s CSS engine
  * to represent gradients. As its handling is not conforming to modern
  * web standards, it is not used anymore. If you want to use gradients in
  * your own code, please use Cairo directly.

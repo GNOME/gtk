@@ -383,11 +383,11 @@ _gdk_x11_get_xatom_for_display_printf (GdkDisplay    *display,
  * gdk_x11_get_xatom_by_name:
  * @atom_name: a string
  * 
- * Returns the X atom for GDK's default display corresponding to @atom_name.
+ * Returns the X atom for GDK’s default display corresponding to @atom_name.
  * This function caches the result, so if called repeatedly it is much
  * faster than XInternAtom(), which is a round trip to the server each time.
  * 
- * Return value: a X atom for GDK's default display.
+ * Return value: a X atom for GDK’s default display.
  **/
 Atom
 gdk_x11_get_xatom_by_name (const gchar *atom_name)
@@ -422,9 +422,9 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
 
 /**
  * gdk_x11_get_xatom_name:
- * @xatom: an X atom for GDK's default display
+ * @xatom: an X atom for GDK’s default display
  * 
- * Returns the name of an X atom for GDK's default display. This
+ * Returns the name of an X atom for GDK’s default display. This
  * function is meant mainly for debugging, so for convenience, unlike
  * XAtomName() and gdk_atom_name(), the result 
  * doesn't need to be freed. Also, this function will never return %NULL, 

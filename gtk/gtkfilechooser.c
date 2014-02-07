@@ -704,10 +704,10 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * @filename: (type filename): the filename to set as current
  * 
  * Sets @filename as the current filename for the file chooser, by changing to
- * the file's parent folder and actually selecting the file in list; all other
+ * the file’s parent folder and actually selecting the file in list; all other
  * files will be unselected.  If the @chooser is in
- * %GTK_FILE_CHOOSER_ACTION_SAVE mode, the file's base name will also appear in
- * the dialog's file name entry.
+ * %GTK_FILE_CHOOSER_ACTION_SAVE mode, the file’s base name will also appear in
+ * the dialog’s file name entry.
  *
  * Note that the file must exist, or nothing will be done except
  * for the directory change.
@@ -733,7 +733,7 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * ]|
  *
  * In the first case, the file chooser will present the user with useful suggestions
- * as to where to save his new file.  In the second case, the file's existing location
+ * as to where to save his new file.  In the second case, the file’s existing location
  * is already known, so the file chooser will use it.
  * 
  * Return value: Not useful.
@@ -996,10 +996,10 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
  * change the extension of the typed filename based on the chosen format, say,
  * from “.jpg” to “.png”.
  *
- * Returns: The raw text from the file chooser's “Name” entry.  Free this with
+ * Returns: The raw text from the file chooser’s “Name” entry.  Free this with
  * g_free().  Note that this string is not a full pathname or URI; it is
  * whatever the contents of the entry are.  Note also that this string is in
- * UTF-8 encoding, which is not necessarily the system's encoding for filenames.
+ * UTF-8 encoding, which is not necessarily the system’s encoding for filenames.
  *
  * Since: 3.10
  **/
@@ -1057,9 +1057,9 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * @uri: the URI to set as current
  * 
  * Sets the file referred to by @uri as the current file for the file chooser,
- * by changing to the URI's parent folder and actually selecting the URI in the
- * list.  If the @chooser is %GTK_FILE_CHOOSER_ACTION_SAVE mode, the URI's base
- * name will also appear in the dialog's file name entry.
+ * by changing to the URI’s parent folder and actually selecting the URI in the
+ * list.  If the @chooser is %GTK_FILE_CHOOSER_ACTION_SAVE mode, the URI’s base
+ * name will also appear in the dialog’s file name entry.
  *
  * Note that the URI must exist, or nothing will be done except for the 
  * directory change.
@@ -1086,7 +1086,7 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  *
  *
  * In the first case, the file chooser will present the user with useful suggestions
- * as to where to save his new file.  In the second case, the file's existing location
+ * as to where to save his new file.  In the second case, the file’s existing location
  * is already known, so the file chooser will use it.
  * 
  * Return value: Not useful.
@@ -1418,9 +1418,9 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * @error: (allow-none): location to store the error, or %NULL to ignore errors.
  *
  * Sets @file as the current filename for the file chooser, by changing
- * to the file's parent folder and actually selecting the file in list.  If
- * the @chooser is in %GTK_FILE_CHOOSER_ACTION_SAVE mode, the file's base name
- * will also appear in the dialog's file name entry.
+ * to the file’s parent folder and actually selecting the file in list.  If
+ * the @chooser is in %GTK_FILE_CHOOSER_ACTION_SAVE mode, the file’s base name
+ * will also appear in the dialog’s file name entry.
  *
  * If the file name isn't in the current folder of @chooser, then the current
  * folder of @chooser will be changed to the folder containing @filename. This
@@ -2012,7 +2012,7 @@ gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
  * @folder: (type filename): filename of the folder to remove
  * @error: (allow-none): location to store error, or %NULL
  * 
- * Removes a folder from a file chooser's list of shortcut folders.
+ * Removes a folder from a file chooser’s list of shortcut folders.
  * 
  * Return value: %TRUE if the operation succeeds, %FALSE otherwise.  
  * In the latter case, the @error will be set as appropriate.
@@ -2110,7 +2110,7 @@ gtk_file_chooser_add_shortcut_folder_uri (GtkFileChooser    *chooser,
  * @uri: URI of the folder to remove
  * @error: (allow-none): location to store error, or %NULL
  * 
- * Removes a folder URI from a file chooser's list of shortcut folders.
+ * Removes a folder URI from a file chooser’s list of shortcut folders.
  * 
  * Return value: %TRUE if the operation succeeds, %FALSE otherwise.  
  * In the latter case, the @error will be set as appropriate.

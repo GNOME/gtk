@@ -25,11 +25,11 @@
  * @Title: Frame timings
  *
  * A #GdkFrameTimings object holds timing information for a single frame
- * of the application's displays. To retrieve #GdkFrameTimings objects,
+ * of the application’s displays. To retrieve #GdkFrameTimings objects,
  * use gdk_frame_clock_get_timings() or gdk_frame_clock_get_current_timings().
  * The information in #GdkFrameTimings is useful for precise synchronization
  * of video with the event or audio streams, and for measuring
- * quality metrics for the application's display, such as latency and jitter.
+ * quality metrics for the application’s display, such as latency and jitter.
  */
 
 G_DEFINE_BOXED_TYPE (GdkFrameTimings, gdk_frame_timings,

@@ -44,7 +44,7 @@ G_BEGIN_DECLS
  *   Animations](http://dev.w3.org/csswg/css3-animations/#keyframes) for details. Since 3.6
  *
  * The different types of sections indicate parts of a CSS document as
- * parsed by GTK's CSS parser. They are oriented towards the
+ * parsed by GTK’s CSS parser. They are oriented towards the
  * [CSS Grammar](http://www.w3.org/TR/CSS21/grammar.html),
  * but may contain extensions.
  *

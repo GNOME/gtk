@@ -84,7 +84,7 @@ typedef GtkTextLineSegment* (*GtkTextSegCleanupFunc)    (GtkTextLineSegment *seg
 
 /* Called when a segment moves from one line to another. CleanupFunc is also
  * called in that case, so many segments just use CleanupFunc, I'm not sure
- * what's up with that (this function may not be needed...)
+ * what’s up with that (this function may not be needed...)
  */
 typedef void                (*GtkTextSegLineChangeFunc) (GtkTextLineSegment *seg,
                                                          GtkTextLine        *line);

@@ -1873,7 +1873,7 @@ gtk_paned_motion (GtkWidget      *widget,
 
 /**
  * gtk_paned_new:
- * @orientation: the paned's orientation.
+ * @orientation: the paned’s orientation.
  *
  * Creates a new #GtkPaned widget.
  *
@@ -2832,7 +2832,7 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
  * enables the callback to distinguish between the window
  * of the paned, a child and the handle.
  *
- * Return value: (transfer none): the paned's handle window.
+ * Return value: (transfer none): the paned’s handle window.
  *
  * Since: 2.20
  **/

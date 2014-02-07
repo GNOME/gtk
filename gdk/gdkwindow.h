@@ -122,9 +122,9 @@ typedef enum
  * @GDK_HINT_ASPECT: aspect ratio fields are set
  * @GDK_HINT_RESIZE_INC: resize increment fields are set
  * @GDK_HINT_WIN_GRAVITY: window gravity field is set
- * @GDK_HINT_USER_POS: indicates that the window's position was explicitly set
+ * @GDK_HINT_USER_POS: indicates that the window’s position was explicitly set
  *  by the user
- * @GDK_HINT_USER_SIZE: indicates that the window's size was explicitly set by
+ * @GDK_HINT_USER_SIZE: indicates that the window’s size was explicitly set by
  *  the user
  *
  * Used to indicate which fields of a #GdkGeometry struct should be paid
@@ -389,7 +389,7 @@ struct _GdkWindowAttr
  * @win_gravity: window gravity, see gtk_window_set_gravity()
  *
  * The #GdkGeometry struct gives the window manager information about
- * a window's geometry constraints. Normally you would set these on
+ * a window’s geometry constraints. Normally you would set these on
  * the GTK+ level using gtk_window_set_geometry_hints(). #GtkWindow
  * then sets the hints on the #GdkWindow it creates.
  *
@@ -416,7 +416,7 @@ struct _GdkWindowAttr
  * terminal will have a 1x1 character terminal area, and only terminal sizes on
  * the “character grid” will be allowed.
  *
- * Here's an example of how the terminal example would be implemented, assuming
+ * Here’s an example of how the terminal example would be implemented, assuming
  * a terminal area widget called “terminal” and a toplevel window “toplevel”:
  *
  * |[<!-- language="C" -->
@@ -631,7 +631,7 @@ void gdk_window_set_composited   (GdkWindow *window,
 
 /*
  * This routine allows you to merge (ie ADD) child shapes to your
- * own window's shape keeping its current shape and ADDING the child
+ * own window’s shape keeping its current shape and ADDING the child
  * shapes to it.
  * 
  * - Raster

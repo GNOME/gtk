@@ -886,7 +886,7 @@ gtk_info_bar_new_with_buttons (const gchar *first_button_text,
  * @setting: TRUE for sensitive
  *
  * Calls gtk_widget_set_sensitive (widget, setting) for each
- * widget in the info bars's action area with the given response_id.
+ * widget in the info bars’s action area with the given response_id.
  * A convenient way to sensitize/desensitize dialog buttons.
  *
  * Since: 2.18
@@ -919,7 +919,7 @@ gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
  * @info_bar: a #GtkInfoBar
  * @response_id: a response ID
  *
- * Sets the last widget in the info bar's action area with
+ * Sets the last widget in the info bar’s action area with
  * the given response_id as the default widget for the dialog.
  * Pressing “Enter” normally activates the default widget.
  *

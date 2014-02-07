@@ -1325,7 +1325,7 @@ gtk_tree_store_insert (GtkTreeStore *tree_store,
  * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
  *
  * Inserts a new row before @sibling.  If @sibling is %NULL, then the row will
- * be appended to @parent 's children.  If @parent and @sibling are %NULL, then
+ * be appended to @parent ’s children.  If @parent and @sibling are %NULL, then
  * the row will be appended to the toplevel.  If both @sibling and @parent are
  * set, then @parent must be the parent of @sibling.  When @sibling is set,
  * @parent is optional.
@@ -1406,7 +1406,7 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
  * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
  *
  * Inserts a new row after @sibling.  If @sibling is %NULL, then the row will be
- * prepended to @parent 's children.  If @parent and @sibling are %NULL, then
+ * prepended to @parent ’s children.  If @parent and @sibling are %NULL, then
  * the row will be prepended to the toplevel.  If both @sibling and @parent are
  * set, then @parent must be the parent of @sibling.  When @sibling is set,
  * @parent is optional.

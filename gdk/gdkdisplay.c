@@ -326,7 +326,7 @@ gdk_display_get_event (GdkDisplay *display)
  * gdk_display_peek_event:
  * @display: a #GdkDisplay 
  * 
- * Gets a copy of the first #GdkEvent in the @display's event queue, without
+ * Gets a copy of the first #GdkEvent in the @display’s event queue, without
  * removing the event from the queue.  (Note that this function will
  * not get more events from the windowing system.  It only checks the events
  * that have already been moved to the GDK event queue.)
@@ -1615,7 +1615,7 @@ gdk_display_request_selection_notification (GdkDisplay *display,
  * @display: a #GdkDisplay
  *
  * Returns whether the speicifed display supports clipboard
- * persistance; i.e. if it's possible to store the clipboard data after an
+ * persistance; i.e. if it’s possible to store the clipboard data after an
  * application has quit. On X11 this checks if a clipboard daemon is
  * running.
  *
@@ -1945,7 +1945,7 @@ _gdk_display_get_next_serial (GdkDisplay *display)
  *
  * Indicates to the GUI environment that the application has finished
  * loading. If the applications opens windows, this function is
- * normally called after opening the application's initial set of
+ * normally called after opening the application’s initial set of
  * windows.
  *
  * GTK+ will call this function automatically after opening the first

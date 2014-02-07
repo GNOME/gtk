@@ -534,7 +534,7 @@ gtk_menu_shell_prepend (GtkMenuShell *menu_shell,
  * @position: The position in the item list where @child
  *     is added. Positions are numbered from 0 to n-1
  *
- * Adds a new #GtkMenuItem to the menu shell's item list
+ * Adds a new #GtkMenuItem to the menu shell’s item list
  * at the position indicated by @position.
  */
 void

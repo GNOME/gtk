@@ -946,7 +946,7 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
  * @printer: a #GtkPrinter
  * 
  * Lists all the paper sizes @printer supports.
- * This will return and empty list unless the printer's details are 
+ * This will return and empty list unless the printer’s details are 
  * available, see gtk_printer_has_details() and gtk_printer_request_details().
  *
  * Return value: (element-type GtkPageSetup) (transfer full): a newly allocated list of newly allocated #GtkPageSetup s.
@@ -996,7 +996,7 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
  * Retrieve the hard margins of @printer, i.e. the margins that define
  * the area at the borders of the paper that the printer cannot print to.
  *
- * Note: This will not succeed unless the printer's details are available,
+ * Note: This will not succeed unless the printer’s details are available,
  * see gtk_printer_has_details() and gtk_printer_request_details().
  *
  * Return value: %TRUE iff the hard margins were retrieved
@@ -1019,16 +1019,16 @@ gtk_printer_get_hard_margins (GtkPrinter *printer,
  * gtk_printer_get_capabilities:
  * @printer: a #GtkPrinter
  * 
- * Returns the printer's capabilities.
+ * Returns the printer’s capabilities.
  *
- * This is useful when you're using #GtkPrintUnixDialog's manual-capabilities 
+ * This is useful when you're using #GtkPrintUnixDialog’s manual-capabilities 
  * setting and need to know which settings the printer can handle and which 
  * you must handle yourself.
  *
- * This will return 0 unless the printer's details are available, see
+ * This will return 0 unless the printer’s details are available, see
  * gtk_printer_has_details() and gtk_printer_request_details().
  *
- * Return value: the printer's capabilities
+ * Return value: the printer’s capabilities
  *
  * Since: 2.12
  */

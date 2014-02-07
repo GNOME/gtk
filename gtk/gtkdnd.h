@@ -40,14 +40,14 @@ G_BEGIN_DECLS
 /**
  * GtkDestDefaults:
  * @GTK_DEST_DEFAULT_MOTION: If set for a widget, GTK+, during a drag over this
- *   widget will check if the drag matches this widget's list of possible targets
+ *   widget will check if the drag matches this widget’s list of possible targets
  *   and actions.
  *   GTK+ will then call gdk_drag_status() as appropriate.
  * @GTK_DEST_DEFAULT_HIGHLIGHT: If set for a widget, GTK+ will draw a highlight on
  *   this widget as long as a drag is over this widget and the widget drag format
  *   and action are acceptable.
  * @GTK_DEST_DEFAULT_DROP: If set for a widget, when a drop occurs, GTK+ will
- *   will check if the drag matches this widget's list of possible targets and
+ *   will check if the drag matches this widget’s list of possible targets and
  *   actions. If so, GTK+ will call gtk_drag_get_data() on behalf of the widget.
  *   Whether or not the drop is successful, GTK+ will call gtk_drag_finish(). If
  *   the action was a move, then if the drag was successful, then %TRUE will be

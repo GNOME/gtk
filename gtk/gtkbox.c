@@ -1571,7 +1571,7 @@ gtk_box_get_preferred_height_for_width (GtkWidget *widget,
 
 /**
  * gtk_box_new:
- * @orientation: the box's orientation.
+ * @orientation: the box’s orientation.
  * @spacing: the number of pixels to place by default between children.
  *
  * Creates a new #GtkBox.
@@ -1835,7 +1835,7 @@ _gtk_box_get_spacing_set (GtkBox *box)
  * as well as widgets packed #GTK_PACK_END, in the order that these
  * widgets were added to @box.
  *
- * A widget's position in the @box children list determines where
+ * A widget’s position in the @box children list determines where
  * the widget is packed into @box.  A child widget at some position
  * in the list will be packed just after all other widgets of the
  * same packing type that appear earlier in the list.

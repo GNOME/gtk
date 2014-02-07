@@ -812,7 +812,7 @@ gtk_numerable_icon_set_count (GtkNumerableIcon *self,
  * @self: a #GtkNumerableIcon
  *
  * Returns the #GtkStyleContext used by the icon for theming,
- * or %NULL if there's none.
+ * or %NULL if there’s none.
  *
  * Returns: (transfer none): a #GtkStyleContext, or %NULL.
  *     This object is internal to GTK+ and should not be unreffed.
@@ -903,7 +903,7 @@ gtk_numerable_icon_set_background_gicon (GtkNumerableIcon *self,
  * @self: a #GtkNumerableIcon
  *
  * Returns the #GIcon that was set as the base background image, or
- * %NULL if there's none. The caller of this function does not own
+ * %NULL if there’s none. The caller of this function does not own
  * a reference to the returned #GIcon.
  *
  * Returns: (transfer none): a #GIcon, or %NULL
@@ -973,7 +973,7 @@ gtk_numerable_icon_set_background_icon_name (GtkNumerableIcon *self,
  * @self: a #GtkNumerableIcon
  *
  * Returns the icon name used as the base background image,
- * or %NULL if there's none.
+ * or %NULL if there’s none.
  *
  * Returns: an icon name, or %NULL
  *

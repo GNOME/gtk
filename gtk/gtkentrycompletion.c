@@ -1403,7 +1403,7 @@ gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
  * @index_: the index of the item to insert
  * @text: text of the item to insert
  *
- * Inserts an action in @completion's action item list at position @index_
+ * Inserts an action in @completion’s action item list at position @index_
  * with text @text. If you want the action item to have markup, use
  * gtk_entry_completion_insert_action_markup().
  *
@@ -1426,7 +1426,7 @@ gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
  * @index_: the index of the item to insert
  * @markup: markup of the item to insert
  *
- * Inserts an action in @completion's action item list at position @index_
+ * Inserts an action in @completion’s action item list at position @index_
  * with markup @markup.
  *
  * Since: 2.4
@@ -1447,7 +1447,7 @@ gtk_entry_completion_insert_action_markup (GtkEntryCompletion *completion,
  * @completion: a #GtkEntryCompletion
  * @index_: the index of the item to delete
  *
- * Deletes the action at @index_ from @completion's action list.
+ * Deletes the action at @index_ from @completion’s action list.
  *
  * Since: 2.4
  */
@@ -1921,7 +1921,7 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
  * @completion: a #GtkEntryCompletion
  *
  * Get the original text entered by the user that triggered
- * the completion or %NULL if there's no completion ongoing.
+ * the completion or %NULL if there’s no completion ongoing.
  *
  * Returns: the prefix for the current completion
  *

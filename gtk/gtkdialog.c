@@ -52,7 +52,7 @@
  *
  * Dialog boxes are a convenient way to prompt the user for a small amount
  * of input, e.g. to display a message, ask a question, or anything else
- * that does not require extensive effort on the user's part.
+ * that does not require extensive effort on the user’s part.
  *
  * GTK+ treats a dialog as a window split vertically. The top section is a
  * #GtkVBox, and is where widgets such as a #GtkLabel or a #GtkEntry should
@@ -842,7 +842,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * #GTK_DIALOG_DESTROY_WITH_PARENT flag. Buttons are from left to right,
  * so the first button in the list will be the leftmost button in the dialog.
  *
- * Here's a simple example:
+ * Here’s a simple example:
  * |[<!-- language="C" -->
  *  GtkWidget *dialog = gtk_dialog_new_with_buttons ("My dialog",
  *                                                   main_app_window,
@@ -914,7 +914,7 @@ get_response_data (GtkWidget *widget,
  * Adds an activatable widget to the action area of a #GtkDialog,
  * connecting a signal handler that will emit the #GtkDialog::response
  * signal on the dialog when the widget is activated. The widget is
- * appended to the end of the dialog's action area. If you want to add a
+ * appended to the end of the dialog’s action area. If you want to add a
  * non-activatable widget, simply pack it into the @action_area field
  * of the #GtkDialog struct.
  **/
@@ -945,7 +945,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * Adds a button with the given text and sets things up so that
  * clicking the button will emit the #GtkDialog::response signal with
  * the given @response_id. The button is appended to the end of the
- * dialog's action area. The button widget is returned, but usually
+ * dialog’s action area. The button widget is returned, but usually
  * you don't need it.
  *
  * Return value: (transfer none): the #GtkButton widget that was added
@@ -1045,7 +1045,7 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
  * @setting: %TRUE for sensitive
  *
  * Calls `gtk_widget_set_sensitive (widget, @setting)`
- * for each widget in the dialog's action area with the given @response_id.
+ * for each widget in the dialog’s action area with the given @response_id.
  * A convenient way to sensitize/desensitize dialog buttons.
  **/
 void
@@ -1080,7 +1080,7 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
  * @dialog: a #GtkDialog
  * @response_id: a response ID
  *
- * Sets the last widget in the dialog's action area with the given @response_id
+ * Sets the last widget in the dialog’s action area with the given @response_id
  * as the default widget for the dialog. Pressing “Enter” normally activates
  * the default widget.
  **/
@@ -1449,8 +1449,8 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
 /**
  * gtk_dialog_set_alternative_button_order:
  * @dialog: a #GtkDialog
- * @first_response_id: a response id used by one @dialog's buttons
- * @...: a list of more response ids of @dialog's buttons, terminated by -1
+ * @first_response_id: a response id used by one @dialog’s buttons
+ * @...: a list of more response ids of @dialog’s buttons, terminated by -1
  *
  * Sets an alternative button order. If the
  * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE,
@@ -1520,7 +1520,7 @@ gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
  * @dialog: a #GtkDialog
  * @n_params: the number of response ids in @new_order
  * @new_order: (array length=n_params): an array of response ids of
- *     @dialog's buttons
+ *     @dialog’s buttons
  *
  * Sets an alternative button order. If the
  * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE,

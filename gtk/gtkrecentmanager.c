@@ -640,7 +640,7 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
 
 /* reads the recently used resources file and builds the items list.
  * we keep the items list inside the parser object, and build the
- * RecentInfo object only on user's demand to avoid useless replication.
+ * RecentInfo object only on user’s demand to avoid useless replication.
  * this function resets the dirty bit of the manager.
  */
 static void
@@ -1641,10 +1641,10 @@ gtk_recent_info_get_mime_type (GtkRecentInfo *info)
  * gtk_recent_info_get_added:
  * @info: a #GtkRecentInfo
  *
- * Gets the timestamp (seconds from system's Epoch) when the resource
+ * Gets the timestamp (seconds from system’s Epoch) when the resource
  * was added to the recently used resources list.
  *
- * Return value: the number of seconds elapsed from system's Epoch when
+ * Return value: the number of seconds elapsed from system’s Epoch when
  *   the resource was added to the list, or -1 on failure.
  *
  * Since: 2.10
@@ -1661,10 +1661,10 @@ gtk_recent_info_get_added (GtkRecentInfo *info)
  * gtk_recent_info_get_modified:
  * @info: a #GtkRecentInfo
  *
- * Gets the timestamp (seconds from system's Epoch) when the meta-data
+ * Gets the timestamp (seconds from system’s Epoch) when the meta-data
  * for the resource was last modified.
  *
- * Return value: the number of seconds elapsed from system's Epoch when
+ * Return value: the number of seconds elapsed from system’s Epoch when
  *   the resource was last modified, or -1 on failure.
  *
  * Since: 2.10
@@ -1681,10 +1681,10 @@ gtk_recent_info_get_modified (GtkRecentInfo *info)
  * gtk_recent_info_get_visited:
  * @info: a #GtkRecentInfo
  *
- * Gets the timestamp (seconds from system's Epoch) when the meta-data
+ * Gets the timestamp (seconds from system’s Epoch) when the meta-data
  * for the resource was last visited.
  *
- * Return value: the number of seconds elapsed from system's Epoch when
+ * Return value: the number of seconds elapsed from system’s Epoch when
  *   the resource was last visited, or -1 on failure.
  *
  * Since: 2.10
@@ -2263,12 +2263,12 @@ gtk_recent_info_get_short_name (GtkRecentInfo *info)
  * gtk_recent_info_get_uri_display:
  * @info: a #GtkRecentInfo
  *
- * Gets a displayable version of the resource's URI.  If the resource
+ * Gets a displayable version of the resource’s URI.  If the resource
  * is local, it returns a local path; if the resource is not local,
  * it returns the UTF-8 encoded content of gtk_recent_info_get_uri().
  *
  * Return value: a newly allocated UTF-8 string containing the
- *   resource's URI or %NULL. Use g_free() when done using it.
+ *   resource’s URI or %NULL. Use g_free() when done using it.
  *
  * Since: 2.10
  */

@@ -4255,14 +4255,14 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
  * gtk_combo_box_get_active:
  * @combo_box: A #GtkComboBox
  *
- * Returns the index of the currently active item, or -1 if there's no
+ * Returns the index of the currently active item, or -1 if there’s no
  * active item. If the model is a non-flat treemodel, and the active item
  * is not an immediate child of the root of the tree, this function returns
  * `gtk_tree_path_get_indices (path)[0]`, where
  * `path` is the #GtkTreePath of the active item.
  *
  * Return value: An integer which is the index of the currently active item,
- *     or -1 if there's no active item.
+ *     or -1 if there’s no active item.
  *
  * Since: 2.4
  */
@@ -5067,7 +5067,7 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
  * Gets the current title of the menu in tearoff mode. See
  * gtk_combo_box_set_add_tearoffs().
  *
- * Returns: the menu's title in tearoff mode. This is an internal copy of the
+ * Returns: the menu’s title in tearoff mode. This is an internal copy of the
  * string which must not be freed.
  *
  * Since: 2.10
@@ -5100,7 +5100,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
  * @combo_box: a #GtkComboBox
  * @title: a title for the menu in tearoff mode
  *
- * Sets the menu's title in tearoff mode.
+ * Sets the menu’s title in tearoff mode.
  *
  * Since: 2.10
  *
@@ -5134,7 +5134,7 @@ gtk_combo_box_set_title (GtkComboBox *combo_box,
  * @combo_box: a #GtkComboBox
  * @fixed: whether to use a fixed popup width
  *
- * Specifies whether the popup's width should be a fixed width
+ * Specifies whether the popup’s width should be a fixed width
  * matching the allocated width of the combo box.
  *
  * Since: 3.0
@@ -5177,13 +5177,13 @@ gtk_combo_box_get_popup_fixed_width (GtkComboBox *combo_box)
  * gtk_combo_box_get_popup_accessible:
  * @combo_box: a #GtkComboBox
  *
- * Gets the accessible object corresponding to the combo box's popup.
+ * Gets the accessible object corresponding to the combo box’s popup.
  *
  * This function is mostly intended for use by accessibility technologies;
  * applications should have little use for it.
  *
  * Returns: (transfer none): the accessible object corresponding
- *     to the combo box's popup.
+ *     to the combo box’s popup.
  *
  * Since: 2.6
  */

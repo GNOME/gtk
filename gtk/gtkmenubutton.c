@@ -821,7 +821,7 @@ gtk_menu_button_get_align_widget (GtkMenuButton *menu_button)
  * @direction: a #GtkArrowType
  *
  * Sets the direction in which the menu will be popped up, as
- * well as changing the arrow's direction. The child will not
+ * well as changing the arrow’s direction. The child will not
  * be changed to an arrow if it was customized.
  *
  * If the menu when popped out would have collided with screen edges,

@@ -80,7 +80,7 @@
 
 /* This is a "semi-private" header; it is intended for
  * use by the text widget, and the text canvas item,
- * but that's all. We may have to install it so the
+ * but that’s all. We may have to install it so the
  * canvas item can use it, but users are not supposed
  * to use it.
  */

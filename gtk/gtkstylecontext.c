@@ -1511,9 +1511,9 @@ gtk_style_context_get_scale (GtkStyleContext *context)
  *
  * If @progress is not %NULL, the animation progress will be returned
  * there, 0.0 means the state is closest to being unset, while 1.0 means
- * it's closest to being set. This means transition animation will
+ * it’s closest to being set. This means transition animation will
  * run from 0 to 1 when @state is being set and from 1 to 0 when
- * it's being unset.
+ * it’s being unset.
  *
  * Returns: %TRUE if there is a running transition animation for @state.
  *
@@ -4285,7 +4285,7 @@ gtk_render_extension (GtkStyleContext *context,
  * @height: rectangle height
  *
  * Renders a handle (as in #GtkHandleBox, #GtkPaned and
- * #GtkWindow<!-- -->'s resize grip), in the rectangle
+ * #GtkWindow<!-- -->’s resize grip), in the rectangle
  * determined by @x, @y, @width, @height.
  *
  * Handles rendered for the paned and grip classes:

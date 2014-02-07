@@ -45,7 +45,7 @@
  * @See_also:#GtkDialog
  *
  * #GtkMessageDialog presents a dialog with an image representing the type of
- * message (Error, Question, etc.) alongside some message text. It's simply a
+ * message (Error, Question, etc.) alongside some message text. It’s simply a
  * convenience widget; you could construct the equivalent of #GtkMessageDialog
  * from #GtkDialog without too much effort, but #GtkMessageDialog saves typing.
  *
@@ -656,7 +656,7 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
  * @dialog: a #GtkMessageDialog
  * @image: the image
  * 
- * Sets the dialog's image to @image.
+ * Sets the dialog’s image to @image.
  *
  * Since: 2.10
  **/
@@ -695,9 +695,9 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
  * gtk_message_dialog_get_image:
  * @dialog: a #GtkMessageDialog
  *
- * Gets the dialog's image.
+ * Gets the dialog’s image.
  *
- * Return value: (transfer none): the dialog's image
+ * Return value: (transfer none): the dialog’s image
  *
  * Since: 2.14
  **/
@@ -845,9 +845,9 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  * @message_dialog: a #GtkMessageDialog
  *
  * Returns the message area of the dialog. This is the box where the
- * dialog's primary and secondary labels are packed. You can add your
+ * dialog’s primary and secondary labels are packed. You can add your
  * own extra content to that box and it will appear below those labels,
- * on the right side of the dialog's image (or on the left for right-to-left
+ * on the right side of the dialog’s image (or on the left for right-to-left
  * languages).  See gtk_dialog_get_content_area() for the corresponding
  * function in the parent #GtkDialog.
  *

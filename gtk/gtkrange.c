@@ -937,8 +937,8 @@ gtk_range_get_flippable (GtkRange *range)
  * @range: a #GtkRange
  * @size_fixed: %TRUE to make the slider size constant
  *
- * Sets whether the range's slider has a fixed size, or a size that
- * depends on its adjustment's page size.
+ * Sets whether the range’s slider has a fixed size, or a size that
+ * depends on its adjustment’s page size.
  *
  * This function is useful mainly for #GtkRange subclasses.
  *
@@ -975,7 +975,7 @@ gtk_range_set_slider_size_fixed (GtkRange *range,
  *
  * See gtk_range_set_slider_size_fixed().
  *
- * Return value: whether the range's slider has a fixed size.
+ * Return value: whether the range’s slider has a fixed size.
  *
  * Since: 2.20
  **/
@@ -990,9 +990,9 @@ gtk_range_get_slider_size_fixed (GtkRange *range)
 /**
  * gtk_range_set_min_slider_size:
  * @range: a #GtkRange
- * @min_size: The slider's minimum size
+ * @min_size: The slider’s minimum size
  *
- * Sets the minimum size of the range's slider.
+ * Sets the minimum size of the range’s slider.
  *
  * This function is useful mainly for #GtkRange subclasses.
  *
@@ -1030,7 +1030,7 @@ gtk_range_set_min_slider_size (GtkRange *range,
  *
  * See gtk_range_set_min_slider_size().
  *
- * Return value: The minimum size of the range's slider.
+ * Return value: The minimum size of the range’s slider.
  *
  * Since: 2.20
  **/
@@ -1047,7 +1047,7 @@ gtk_range_get_min_slider_size (GtkRange *range)
  * @range: a #GtkRange
  * @range_rect: (out): return location for the range rectangle
  *
- * This function returns the area that contains the range's trough
+ * This function returns the area that contains the range’s trough
  * and its steppers, in widget->window coordinates.
  *
  * This function is useful mainly for #GtkRange subclasses.
@@ -1108,10 +1108,10 @@ gtk_range_get_slider_range (GtkRange *range,
 /**
  * gtk_range_set_lower_stepper_sensitivity:
  * @range:       a #GtkRange
- * @sensitivity: the lower stepper's sensitivity policy.
+ * @sensitivity: the lower stepper’s sensitivity policy.
  *
  * Sets the sensitivity policy for the stepper that points to the
- * 'lower' end of the GtkRange's adjustment.
+ * 'lower' end of the GtkRange’s adjustment.
  *
  * Since: 2.10
  **/
@@ -1142,9 +1142,9 @@ gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
  * @range: a #GtkRange
  *
  * Gets the sensitivity policy for the stepper that points to the
- * 'lower' end of the GtkRange's adjustment.
+ * 'lower' end of the GtkRange’s adjustment.
  *
- * Return value: The lower stepper's sensitivity policy.
+ * Return value: The lower stepper’s sensitivity policy.
  *
  * Since: 2.10
  **/
@@ -1159,10 +1159,10 @@ gtk_range_get_lower_stepper_sensitivity (GtkRange *range)
 /**
  * gtk_range_set_upper_stepper_sensitivity:
  * @range:       a #GtkRange
- * @sensitivity: the upper stepper's sensitivity policy.
+ * @sensitivity: the upper stepper’s sensitivity policy.
  *
  * Sets the sensitivity policy for the stepper that points to the
- * 'upper' end of the GtkRange's adjustment.
+ * 'upper' end of the GtkRange’s adjustment.
  *
  * Since: 2.10
  **/
@@ -1193,9 +1193,9 @@ gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
  * @range: a #GtkRange
  *
  * Gets the sensitivity policy for the stepper that points to the
- * 'upper' end of the GtkRange's adjustment.
+ * 'upper' end of the GtkRange’s adjustment.
  *
- * Return value: The upper stepper's sensitivity policy.
+ * Return value: The upper stepper’s sensitivity policy.
  *
  * Since: 2.10
  **/
@@ -1432,12 +1432,12 @@ gtk_range_get_restrict_to_fill_level (GtkRange *range)
  * would indicate the current play position, and the fill level would
  * be the position up to which the file/stream has been downloaded.
  *
- * This amount of prebuffering can be displayed on the range's trough
+ * This amount of prebuffering can be displayed on the range’s trough
  * and is themeable separately from the trough. To enable fill level
  * display, use gtk_range_set_show_fill_level(). The range defaults
  * to not showing the fill level.
  *
- * Additionally, it's possible to restrict the range's slider position
+ * Additionally, it’s possible to restrict the range’s slider position
  * to values which are smaller than the fill level. This is controller
  * by gtk_range_set_restrict_to_fill_level() and is by default
  * enabled.

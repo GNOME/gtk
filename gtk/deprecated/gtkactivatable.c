@@ -414,7 +414,7 @@ gtk_activatable_action_notify (GtkAction      *action,
  * This function adds a reference to the currently set related
  * action for you, it also makes sure the #GtkActivatable->update()
  * method is called when the related #GtkAction properties change
- * and registers to the action's proxy list.
+ * and registers to the action’s proxy list.
  *
  * > Be careful to call this before setting the local
  * > copy of the #GtkAction property, since this function uses 

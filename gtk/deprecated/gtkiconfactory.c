@@ -289,7 +289,7 @@ gtk_icon_factory_new (void)
  * gtk_icon_factory_add_default(). Then they pass the @stock_id to
  * widgets such as #GtkImage to display the icon. Themes can provide
  * an icon with the same name (such as "myapp-whatever-icon") to
- * override your application's default icons. If an icon already
+ * override your application’s default icons. If an icon already
  * existed in @factory for @stock_id, it is unreferenced and replaced
  * with the new @icon_set.
  *
@@ -1736,7 +1736,7 @@ icon_source_compare (gconstpointer ap, gconstpointer bp)
  * This function copies @source, so you can reuse the same source immediately
  * without affecting the icon set.
  *
- * An example of when you'd use this function: a web browser's "Back
+ * An example of when you'd use this function: a web browser’s "Back
  * to Previous Page" icon might point in a different direction in
  * Hebrew and in English; it might look different when insensitive;
  * and it might change size depending on toolbar mode (small/large
@@ -1864,7 +1864,7 @@ gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
  * a set of icons that represent “the same” logical concept in different states,
  * different global text directions, and different sizes.
  *
- * So for example a web browser's “Back to Previous Page” icon might
+ * So for example a web browser’s “Back to Previous Page” icon might
  * point in a different direction in Hebrew and in English; it might
  * look different when insensitive; and it might change size depending
  * on toolbar mode (small/large icons). So a single icon set would

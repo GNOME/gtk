@@ -2463,8 +2463,8 @@ put_recent_folder_in_pathbar (GtkFileChooserWidget *impl, GtkTreeIter *iter)
 }
 
 /* Sets the pathbar in the appropriate mode according to the current operation mode and action.  This is the central function for
- * dealing with the pathbar's widgets; as long as impl->action and impl->operation_mode are set correctly, then calling this
- * function will update all the pathbar's widgets.
+ * dealing with the pathbar’s widgets; as long as impl->action and impl->operation_mode are set correctly, then calling this
+ * function will update all the pathbar’s widgets.
  */
 static void
 path_bar_update (GtkFileChooserWidget *impl)
@@ -3265,7 +3265,7 @@ switch_to_cwd (GtkFileChooserWidget *impl)
 }
 
 /* Sets the file chooser to showing Recent Files or $CWD, depending on the
- * user's settings.
+ * user’s settings.
  */
 static void
 set_startup_mode (GtkFileChooserWidget *impl)

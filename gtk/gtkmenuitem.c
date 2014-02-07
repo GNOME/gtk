@@ -1319,7 +1319,7 @@ gtk_menu_item_set_use_action_appearance (GtkMenuItem *menu_item,
  * @menu_item: a #GtkMenuItem
  * @submenu: (allow-none): the submenu, or %NULL
  *
- * Sets or replaces the menu item's submenu, or removes it when a %NULL
+ * Sets or replaces the menu item’s submenu, or removes it when a %NULL
  * submenu is passed.
  */
 void
@@ -2397,10 +2397,10 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
  * gtk_menu_item_set_accel_path:
  * @menu_item:  a valid #GtkMenuItem
  * @accel_path: (allow-none): accelerator path, corresponding to this menu
- *     item's functionality, or %NULL to unset the current path.
+ *     item’s functionality, or %NULL to unset the current path.
  *
  * Set the accelerator path on @menu_item, through which runtime
- * changes of the menu item's accelerator caused by the user can be
+ * changes of the menu item’s accelerator caused by the user can be
  * identified and saved to persistent storage (see gtk_accel_map_save()
  * on this). To set up a default accelerator for this menu item, call
  * gtk_accel_map_add_entry() with the same @accel_path. See also
@@ -2462,7 +2462,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
  * See gtk_menu_item_set_accel_path() for details.
  *
  * Returns: the accelerator path corresponding to this menu
- *     item's functionality, or %NULL if not set
+ *     item’s functionality, or %NULL if not set
  *
  * Since: 2.14
  */

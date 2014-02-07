@@ -127,7 +127,7 @@ gtk_menu_tracker_section_find_model (GtkMenuTrackerSection *section,
  *
  * we only ever show separators if we have _actual_ children (ie: we do
  * not show a separator if the section contains only empty child
- * sections).  it's difficult to determine this on-the-fly, so we have
+ * sections).  it’s difficult to determine this on-the-fly, so we have
  * this separate function to come back later and figure it out.
  *
  * 'section' is that section.

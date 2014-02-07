@@ -82,7 +82,7 @@
  * }
  * ]|
  *
- * It's OK to use the GLib main loop directly instead of gtk_main(), though it
+ * It’s OK to use the GLib main loop directly instead of gtk_main(), though it
  * involves slightly more typing. See #GMainLoop in the GLib documentation.
  */
 
@@ -383,7 +383,7 @@ static gboolean do_setlocale = TRUE;
  * gtk_parse_args() from automatically
  * calling `setlocale (LC_ALL, "")`. You would
  * want to use this function if you wanted to set the locale for
- * your program to something other than the user's locale, or if
+ * your program to something other than the user’s locale, or if
  * you wanted to set different values for different locale categories.
  *
  * Most programs should not need to call this function.

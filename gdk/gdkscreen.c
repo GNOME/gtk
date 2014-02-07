@@ -394,7 +394,7 @@ gdk_screen_height_mm (void)
  *   previously set default font options.
  *
  * Sets the default font options for the screen. These
- * options will be set on any #PangoContext's newly created
+ * options will be set on any #PangoContext’s newly created
  * with gdk_pango_context_get_for_screen(). Changing the
  * default set of font options does not affect contexts that
  * have already been created.
@@ -865,7 +865,7 @@ gdk_screen_list_visuals (GdkScreen *screen)
  * gdk_screen_get_system_visual:
  * @screen: a #GdkScreen.
  *
- * Get the system's default visual for @screen.
+ * Get the system’s default visual for @screen.
  * This is the visual for the root window of the display.
  * The return value should not be freed.
  *
@@ -889,7 +889,7 @@ gdk_screen_get_system_visual (GdkScreen * screen)
  * The windowing system on which GTK+ is running
  * may not support this capability, in which case %NULL will
  * be returned. Even if a non-%NULL value is returned, its
- * possible that the window's alpha channel won't be honored
+ * possible that the window’s alpha channel won't be honored
  * when displaying the window on the screen: in particular, for
  * X an appropriate windowing manager and compositing manager
  * must be running to provide appropriate display.
@@ -989,7 +989,7 @@ gdk_screen_make_display_name (GdkScreen *screen)
  * gdk_screen_get_active_window:
  * @screen: a #GdkScreen
  *
- * Returns the screen's currently active window.
+ * Returns the screen’s currently active window.
  *
  * On X11, this is done by inspecting the _NET_ACTIVE_WINDOW property
  * on the root window, as described in the

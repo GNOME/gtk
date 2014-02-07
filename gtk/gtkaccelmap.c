@@ -60,7 +60,7 @@
  * “Gimp-Image”, “Abiword-Document” or “Gnumeric-Settings”.
  * The “Category1/.../Action” portion is most appropriately chosen by
  * the action the accelerator triggers, i.e. for accelerators on menu
- * items, choose the item's menu path, e.g. “File/Save As”,
+ * items, choose the item’s menu path, e.g. “File/Save As”,
  * “Image/View/Zoom” or “Edit/Select All”. So a full valid accelerator
  * path may look like: “&lt;Gimp-Toolbox&gt;/File/Dialogs/Tool Options...”.
  *

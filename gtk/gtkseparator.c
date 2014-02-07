@@ -250,7 +250,7 @@ gtk_separator_draw (GtkWidget *widget,
 
 /**
  * gtk_separator_new:
- * @orientation: the separator's orientation.
+ * @orientation: the separator’s orientation.
  *
  * Creates a new #GtkSeparator with the given orientation.
  *

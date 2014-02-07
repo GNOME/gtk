@@ -2895,10 +2895,10 @@ gtk_button_get_always_show_image (GtkButton *button)
  * gtk_button_get_event_window:
  * @button: a #GtkButton
  *
- * Returns the button's event window if it is realized, %NULL otherwise.
+ * Returns the button’s event window if it is realized, %NULL otherwise.
  * This function should be rarely needed.
  *
- * Return value: (transfer none): @button's event window.
+ * Return value: (transfer none): @button’s event window.
  *
  * Since: 2.22
  */

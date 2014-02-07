@@ -1492,7 +1492,7 @@ gtk_text_iter_get_language (const GtkTextIter *iter)
  * i.e. if gtk_text_iter_get_line_offset () would return 0.
  * However this function is potentially more efficient than
  * gtk_text_iter_get_line_offset () because it doesn't have to compute
- * the offset, it just has to see whether it's 0.
+ * the offset, it just has to see whether it’s 0.
  *
  * Return value: whether @iter begins a line
  **/
@@ -1792,7 +1792,7 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
  * (MOVEMENT OCCURRED && NEW ITER IS DEREFERENCEABLE)
  *
  * This function will not change the iterator if
- * it's already on the last (end iter) line, i.e. it
+ * it’s already on the last (end iter) line, i.e. it
  * won't move to the end of the last line.
  */
 static gboolean
@@ -1840,7 +1840,7 @@ forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
  * (MOVEMENT OCCURRED && NEW ITER IS DEREFERENCEABLE)
  *
  * This function is currently unused, thus it is #if-0-ed. It is
- * left here, since it's non-trivial code that might be useful in
+ * left here, since it’s non-trivial code that might be useful in
  * the future.
  */
 static gboolean
@@ -2452,7 +2452,7 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
 #if 0
 
 /* These two can't be implemented efficiently (always have to use
- * a linear scan, since that's the only way to find all the non-text
+ * a linear scan, since that’s the only way to find all the non-text
  * segments)
  */
 
@@ -3765,7 +3765,7 @@ gtk_text_iter_is_cursor_position (const GtkTextIter *iter)
 /**
  * gtk_text_iter_set_line_offset:
  * @iter: a #GtkTextIter 
- * @char_on_line: a character offset relative to the start of @iter's current line
+ * @char_on_line: a character offset relative to the start of @iter’s current line
  * 
  * Moves @iter within a line, to a new character
  * (not byte) offset. The given character offset must be less than or
@@ -3806,7 +3806,7 @@ gtk_text_iter_set_line_offset (GtkTextIter *iter,
 /**
  * gtk_text_iter_set_line_index:
  * @iter: a #GtkTextIter
- * @byte_on_line: a byte index relative to the start of @iter's current line
+ * @byte_on_line: a byte index relative to the start of @iter’s current line
  *
  * Same as gtk_text_iter_set_line_offset(), but works with a
  * byte index. The given byte index must be at
@@ -5338,7 +5338,7 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
  * Tests whether two iterators are equal, using the fastest possible
  * mechanism. This function is very fast; you can expect it to perform
  * better than e.g. getting the character offset for each iterator and
- * comparing the offsets yourself. Also, it's a bit faster than
+ * comparing the offsets yourself. Also, it’s a bit faster than
  * gtk_text_iter_compare().
  * 
  * Return value: %TRUE if the iterators point to the same place in the buffer
@@ -5475,7 +5475,7 @@ gtk_text_iter_in_range (const GtkTextIter *iter,
  * Swaps the value of @first and @second if @second comes before
  * @first in the buffer. That is, ensures that @first and @second are
  * in sequence. Most text buffer functions that take a range call this
- * automatically on your behalf, so there's no real reason to call it yourself
+ * automatically on your behalf, so there’s no real reason to call it yourself
  * in those cases. There are some exceptions, such as gtk_text_iter_in_range(),
  * that expect a pre-sorted range.
  * 

@@ -56,16 +56,16 @@ static GQuark    deserialize_quark (void);
 /**
  * gtk_text_buffer_register_serialize_format:
  * @buffer: a #GtkTextBuffer
- * @mime_type: the format's mime-type
+ * @mime_type: the format’s mime-type
  * @function: the serialize function to register
- * @user_data: @function's user_data
+ * @user_data: @function’s user_data
  * @user_data_destroy: a function to call when @user_data is no longer needed
  *
  * This function registers a rich text serialization @function along with
  * its @mime_type with the passed @buffer.
  *
  * Return value: (transfer none): the #GdkAtom that corresponds to the
- *               newly registered format's mime-type.
+ *               newly registered format’s mime-type.
  *
  * Since: 2.10
  **/
@@ -103,10 +103,10 @@ gtk_text_buffer_register_serialize_format (GtkTextBuffer              *buffer,
  * @buffer: a #GtkTextBuffer
  * @tagset_name: (allow-none): an optional tagset name, on %NULL
  *
- * This function registers GTK+'s internal rich text serialization
+ * This function registers GTK+’s internal rich text serialization
  * format with the passed @buffer. The internal format does not comply
  * to any standard rich text format and only works between #GtkTextBuffer
- * instances. It is capable of serializing all of a text buffer's tags
+ * instances. It is capable of serializing all of a text buffer’s tags
  * and embedded pixbufs.
  *
  * This function is just a wrapper around
@@ -122,7 +122,7 @@ gtk_text_buffer_register_serialize_format (GtkTextBuffer              *buffer,
  * receiving buffer to deal with with pasting of arbitrary tags.
  *
  * Return value: (transfer none): the #GdkAtom that corresponds to the
- *               newly registered format's mime-type.
+ *               newly registered format’s mime-type.
  *
  * Since: 2.10
  **/
@@ -154,16 +154,16 @@ gtk_text_buffer_register_serialize_tagset (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_register_deserialize_format:
  * @buffer: a #GtkTextBuffer
- * @mime_type: the format's mime-type
+ * @mime_type: the format’s mime-type
  * @function: the deserialize function to register
- * @user_data: @function's user_data
+ * @user_data: @function’s user_data
  * @user_data_destroy: a function to call when @user_data is no longer needed
  *
  * This function registers a rich text deserialization @function along with
  * its @mime_type with the passed @buffer.
  *
  * Return value: (transfer none): the #GdkAtom that corresponds to the
- *               newly registered format's mime-type.
+ *               newly registered format’s mime-type.
  *
  * Since: 2.10
  **/
@@ -201,12 +201,12 @@ gtk_text_buffer_register_deserialize_format (GtkTextBuffer                *buffe
  * @buffer: a #GtkTextBuffer
  * @tagset_name: (allow-none): an optional tagset name, on %NULL
  *
- * This function registers GTK+'s internal rich text serialization
+ * This function registers GTK+’s internal rich text serialization
  * format with the passed @buffer. See
  * gtk_text_buffer_register_serialize_tagset() for details.
  *
  * Return value: (transfer none): the #GdkAtom that corresponds to the
- *               newly registered format's mime-type.
+ *               newly registered format’s mime-type.
  *
  * Since: 2.10
  **/
@@ -315,7 +315,7 @@ gtk_text_buffer_unregister_deserialize_format (GtkTextBuffer *buffer,
  *
  * You should allow creation of tags only if you know what you are
  * doing, e.g. if you defined a tagset name for your application
- * suite's text buffers and you know that it's fine to receive new
+ * suite’s text buffers and you know that it’s fine to receive new
  * tags from these buffers, because you know that your application can
  * handle the newly created tags.
  *

@@ -200,7 +200,7 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
  * Obtains a clip region which contains the areas where the given
  * ranges of text would be drawn. @x_origin and @y_origin are the top left
  * position of the layout. @index_ranges
- * should contain ranges of bytes in the layout's text. The clip
+ * should contain ranges of bytes in the layout’s text. The clip
  * region will include space to the left or right of the line (to the
  * layout bounding box) if you have indexes above or below the indexes
  * contained inside the line. This is to draw the selection all the way
@@ -249,7 +249,7 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
  * Obtains a clip region which contains the areas where the given ranges
  * of text would be drawn. @x_origin and @y_origin are the top left point
  * to center the layout. @index_ranges should contain
- * ranges of bytes in the layout's text.
+ * ranges of bytes in the layout’s text.
  * 
  * Note that the regions returned correspond to logical extents of the text
  * ranges, not ink extents. So the drawn layout may in fact touch areas out of
@@ -315,7 +315,7 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
  * #cairo_font_options_t) for the default screen; if these options
  * change it will not be updated. Using gtk_widget_get_pango_context()
  * is more convenient if you want to keep a context around and track
- * changes to the screen's font rendering settings.
+ * changes to the screen’s font rendering settings.
  *
  * Return value: (transfer full): a new #PangoContext for the default display
  **/
@@ -341,7 +341,7 @@ gdk_pango_context_get (void)
  * (see #cairo_font_options_t) for the screen; if these options
  * change it will not be updated. Using gtk_widget_get_pango_context()
  * is more convenient if you want to keep a context around and track
- * changes to the screen's font rendering settings.
+ * changes to the screen’s font rendering settings.
  * 
  * Return value: (transfer full): a new #PangoContext for @screen
  *

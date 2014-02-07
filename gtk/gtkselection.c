@@ -17,7 +17,7 @@
 
 /* This file implements most of the work of the ICCCM selection protocol.
  * The code was written after an intensive study of the equivalent part
- * of John Ousterhout's Tk toolkit, and does many things in much the 
+ * of John Ousterhout’s Tk toolkit, and does many things in much the 
  * same way.
  *
  * The one thing in the ICCCM that isn't fully supported here (or in Tk)
@@ -67,7 +67,7 @@
  * #GtkClipboard provides a nicer interface to the same functionality.
  *
  * Some of the datatypes defined this section are used in
- * the #GtkClipboard and drag-and-drop API's as well. The
+ * the #GtkClipboard and drag-and-drop API’s as well. The
  * #GtkTargetEntry and #GtkTargetList objects represent
  * lists of data types that are supported when sending or
  * receiving data. The #GtkSelectionData object is used to

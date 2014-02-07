@@ -86,8 +86,8 @@
  * width-for-height).
  *
  * There are some things to keep in mind when implementing container widgets
- * that make use of GTK+'s height for width geometry management system. First,
- * it's important to note that a container must prioritize one of its
+ * that make use of GTK+’s height for width geometry management system. First,
+ * it’s important to note that a container must prioritize one of its
  * dimensions, that is to say that a widget or container can only have a
  * #GtkSizeRequestMode that is %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or
  * %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT. However, every widget and container
@@ -161,7 +161,7 @@
  * The container will then move on to request the preferred height for each child by using
  * gtk_widget_get_preferred_height_for_width() and using the sizes stored in the #GtkRequestedSize array.
  *
- * To allocate a height-for-width container, it's again important
+ * To allocate a height-for-width container, it’s again important
  * to consider that a container must prioritize one dimension over the other. So if
  * a container is a height-for-width container it must first allocate all widgets horizontally
  * using a #GtkRequestedSize array and gtk_distribute_natural_allocation() and then add any
@@ -177,7 +177,7 @@
  * that the container adds. Then vertical expand space should be added where appropriate and available
  * and the container should go on to actually allocating the child widgets.
  *
- * See [GtkWidget's geometry management section][geometry-management]
+ * See [GtkWidget’s geometry management section][geometry-management]
  * to learn more about implementing height-for-width geometry management for widgets.
  *
  * # Child properties
@@ -1554,9 +1554,9 @@ gtk_container_add (GtkContainer *container,
  * Note that @container will own a reference to @widget, and that this
  * may be the last reference held; so removing a widget from its
  * container can destroy that widget. If you want to use @widget
- * again, you need to add a reference to it while it's not inside
+ * again, you need to add a reference to it while it’s not inside
  * a container, using g_object_ref(). If you don't want to use @widget
- * again it's usually more efficient to simply destroy it directly
+ * again it’s usually more efficient to simply destroy it directly
  * using gtk_widget_destroy() since this will remove it from the
  * container and help break any circular reference count cycles.
  **/
@@ -1588,7 +1588,7 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
  * Sets the resize mode for the container.
  *
  * The resize mode of a container determines whether a resize request
- * will be passed to the container's parent, queued for later execution
+ * will be passed to the container’s parent, queued for later execution
  * or executed immediately.
  *
  * Deprecated: 3.12: Resize modes are deprecated. They aren't necessary
@@ -1645,7 +1645,7 @@ gtk_container_get_resize_mode (GtkContainer *container)
 /**
  * gtk_container_set_reallocate_redraws:
  * @container: a #GtkContainer
- * @needs_redraws: the new value for the container's @reallocate_redraws flag
+ * @needs_redraws: the new value for the container’s @reallocate_redraws flag
  *
  * Sets the @reallocate_redraws flag of the container to the given value.
  *
@@ -2212,10 +2212,10 @@ gtk_container_get_focus_child (GtkContainer *container)
  * gtk_container_get_children:
  * @container: a #GtkContainer
  *
- * Returns the container's non-internal children. See
+ * Returns the container’s non-internal children. See
  * gtk_container_forall() for details on what constitutes an "internal" child.
  *
- * Return value: (element-type GtkWidget) (transfer container): a newly-allocated list of the container's non-internal children.
+ * Return value: (element-type GtkWidget) (transfer container): a newly-allocated list of the container’s non-internal children.
  **/
 GList*
 gtk_container_get_children (GtkContainer *container)
@@ -3041,7 +3041,7 @@ chain_widget_destroyed (GtkWidget *widget,
  * Sets a focus chain, overriding the one computed automatically by GTK+.
  *
  * In principle each widget in the chain should be a descendant of the
- * container, but this is not enforced by this method, since it's allowed
+ * container, but this is not enforced by this method, since it’s allowed
  * to set the focus chain before you pack the widgets, or have a widget
  * in the chain that isn't always packed. The necessary checks are done
  * when the focus chain is actually traversed.
@@ -3455,7 +3455,7 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
  * @container: a #GtkContainer
  * @child: a child of @container
  * @cr: Cairo context as passed to the container. If you want to use @cr
- *   in container's draw function, consider using cairo_save() and
+ *   in container’s draw function, consider using cairo_save() and
  *   cairo_restore() before calling this function.
  *
  * When a container receives a call to the draw function, it must send

@@ -621,7 +621,7 @@ gtk_scale_button_set_icons (GtkScaleButton  *button,
  * gtk_scale_button_get_adjustment:
  * @button: a #GtkScaleButton
  *
- * Gets the #GtkAdjustment associated with the #GtkScaleButton's scale.
+ * Gets the #GtkAdjustment associated with the #GtkScaleButton’s scale.
  * See gtk_range_get_adjustment() for details.
  *
  * Returns: (transfer none): the adjustment associated with the scale
@@ -642,7 +642,7 @@ gtk_scale_button_get_adjustment	(GtkScaleButton *button)
  * @adjustment: a #GtkAdjustment
  *
  * Sets the #GtkAdjustment to be used as a model
- * for the #GtkScaleButton's scale.
+ * for the #GtkScaleButton’s scale.
  * See gtk_range_set_adjustment() for details.
  *
  * Since: 2.12

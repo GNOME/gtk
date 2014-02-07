@@ -1357,10 +1357,10 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * Sets a widget as a potential drop destination, and adds default behaviors.
  *
  * The default behaviors listed in @flags have an effect similar
- * to installing default handlers for the widget's drag-and-drop signals
+ * to installing default handlers for the widget’s drag-and-drop signals
  * (#GtkWidget::drag-motion, #GtkWidget::drag-drop, ...). They all exist
  * for convenience. When passing #GTK_DEST_DEFAULT_ALL for instance it is
- * sufficient to connect to the widget's #GtkWidget::drag-data-received
+ * sufficient to connect to the widget’s #GtkWidget::drag-data-received
  * signal to get primitive, but consistent drag-and-drop support.
  *
  * Things become more complicated when you try to preview the dragged data,
@@ -1372,8 +1372,8 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * Especially the later is dramatic, when your own #GtkWidget::drag-motion
  * handler calls gtk_drag_get_data() to inspect the dragged data.
  *
- * There's no way to set a default action here, you can use the
- * #GtkWidget::drag-motion callback for that. Here's an example which selects
+ * There’s no way to set a default action here, you can use the
+ * #GtkWidget::drag-motion callback for that. Here’s an example which selects
  * the action to use depending on whether the control key is pressed or not:
  * |[<!-- language="C" -->
  * static void
@@ -1514,7 +1514,7 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
 
 /**
  * gtk_drag_dest_set_target_list: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  * @target_list: (allow-none): list of droppable targets, or %NULL for none
  * 
  * Sets the target types that this widget can accept from drag-and-drop.
@@ -1549,7 +1549,7 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
 
 /**
  * gtk_drag_dest_add_text_targets: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  *
  * Add the text targets supported by #GtkSelectionData to
  * the target list of the drag destination. The targets
@@ -1576,7 +1576,7 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_dest_add_image_targets: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  *
  * Add the image targets supported by #GtkSelectionData to
  * the target list of the drag destination. The targets
@@ -1603,7 +1603,7 @@ gtk_drag_dest_add_image_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_dest_add_uri_targets: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  *
  * Add the URI targets supported by #GtkSelectionData to
  * the target list of the drag destination. The targets
@@ -1630,7 +1630,7 @@ gtk_drag_dest_add_uri_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_dest_set_track_motion: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  * @track_motion: whether to accept all targets
  *
  * Tells the widget to emit #GtkWidget::drag-motion and
@@ -1659,7 +1659,7 @@ gtk_drag_dest_set_track_motion (GtkWidget *widget,
 
 /**
  * gtk_drag_dest_get_track_motion: (method)
- * @widget: a #GtkWidget that's a drag destination
+ * @widget: a #GtkWidget that’s a drag destination
  *
  * Returns whether the widget has been configured to always
  * emit #GtkWidget::drag-motion signals.
@@ -2857,7 +2857,7 @@ gtk_drag_source_get_target_list (GtkWidget *widget)
 
 /**
  * gtk_drag_source_set_target_list: (method)
- * @widget: a #GtkWidget that's a drag source
+ * @widget: a #GtkWidget that’s a drag source
  * @target_list: (allow-none): list of draggable targets, or %NULL for none
  *
  * Changes the target types that this widget offers for drag-and-drop.
@@ -2893,7 +2893,7 @@ gtk_drag_source_set_target_list (GtkWidget     *widget,
 
 /**
  * gtk_drag_source_add_text_targets: (method)
- * @widget: a #GtkWidget that's is a drag source
+ * @widget: a #GtkWidget that’s is a drag source
  *
  * Add the text targets supported by #GtkSelectionData to
  * the target list of the drag source.  The targets
@@ -2920,7 +2920,7 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_source_add_image_targets: (method)
- * @widget: a #GtkWidget that's is a drag source
+ * @widget: a #GtkWidget that’s is a drag source
  *
  * Add the writable image targets supported by #GtkSelectionData to
  * the target list of the drag source. The targets
@@ -2947,7 +2947,7 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
 
 /**
  * gtk_drag_source_add_uri_targets: (method)
- * @widget: a #GtkWidget that's is a drag source
+ * @widget: a #GtkWidget that’s is a drag source
  *
  * Add the URI targets supported by #GtkSelectionData to
  * the target list of the drag source.  The targets

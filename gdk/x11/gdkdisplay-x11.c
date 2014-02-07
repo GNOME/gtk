@@ -1981,9 +1981,9 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
 /**
  * _gdk_x11_display_screen_for_xrootwin:
  * @display: a #GdkDisplay
- * @xrootwin: window ID for one of of the screen's of the display.
+ * @xrootwin: window ID for one of of the screen’s of the display.
  * 
- * Given the root window ID of one of the screen's of a #GdkDisplay,
+ * Given the root window ID of one of the screen’s of a #GdkDisplay,
  * finds the screen.
  * 
  * Return value: (transfer none): the #GdkScreen corresponding to
@@ -2473,7 +2473,7 @@ gdk_x11_register_standard_event_type (GdkDisplay *display,
 }
 
 /* look up the extension name for a given major opcode.  grubs around in
- * xlib to do it since a) it's already cached there b) XQueryExtension
+ * xlib to do it since a) it’s already cached there b) XQueryExtension
  * emits protocol so we can't use it in an error handler.
  */
 static const char *
@@ -2788,8 +2788,8 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
  * @sm_client_id: the client id assigned by the session manager when the
  *    connection was opened, or %NULL to remove the property.
  *
- * Sets the `SM_CLIENT_ID` property on the application's leader window so that
- * the window manager can save the application's state using the X11R6 ICCCM
+ * Sets the `SM_CLIENT_ID` property on the application’s leader window so that
+ * the window manager can save the application’s state using the X11R6 ICCCM
  * session management protocol.
  *
  * See the X Session Management Library documentation for more information on

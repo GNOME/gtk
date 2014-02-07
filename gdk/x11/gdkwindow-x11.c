@@ -5521,7 +5521,7 @@ gdk_x11_get_server_time (GdkWindow *window)
  * 
  * Returns the X resource (window) belonging to a #GdkWindow.
  * 
- * Return value: the ID of @drawable's X resource.
+ * Return value: the ID of @drawable’s X resource.
  **/
 XID
 gdk_x11_window_get_xid (GdkWindow *window)

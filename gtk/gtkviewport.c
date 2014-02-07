@@ -55,7 +55,7 @@
  * ignore the presence of the viewport.
  *
  * The #GtkViewport will start scrolling content only if allocated less
- * than the child widget's minimum size in a given orientation.
+ * than the child widget’s minimum size in a given orientation.
  */
 
 struct _GtkViewportPrivate

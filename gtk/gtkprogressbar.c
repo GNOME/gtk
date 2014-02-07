@@ -1053,7 +1053,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
 /**
  * gtk_progress_bar_set_fraction:
  * @pbar: a #GtkProgressBar
- * @fraction: fraction of the task that's been completed
+ * @fraction: fraction of the task that’s been completed
  *
  * Causes the progress bar to “fill in” the given fraction
  * of the bar. The fraction should be between 0.0 and 1.0,
@@ -1288,7 +1288,7 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
  * gtk_progress_bar_get_fraction:
  * @pbar: a #GtkProgressBar
  *
- * Returns the current fraction of the task that's been completed.
+ * Returns the current fraction of the task that’s been completed.
  *
  * Return value: a fraction from 0.0 to 1.0
  */

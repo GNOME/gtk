@@ -64,9 +64,9 @@ typedef enum
 /**
  * GdkInputMode:
  * @GDK_MODE_DISABLED: the device is disabled and will not report any events.
- * @GDK_MODE_SCREEN: the device is enabled. The device's coordinate space
+ * @GDK_MODE_SCREEN: the device is enabled. The device’s coordinate space
  *                   maps to the entire screen.
- * @GDK_MODE_WINDOW: the device is enabled. The device's coordinate space
+ * @GDK_MODE_WINDOW: the device is enabled. The device’s coordinate space
  *                   is mapped to a single window. The manner in which this window
  *                   is chosen is undefined, but it will typically be the same
  *                   way in which the focus window for key events is determined.
@@ -132,7 +132,7 @@ typedef enum {
 /**
  * GdkTimeCoord:
  * @time: The timestamp for this event.
- * @axes: the values of the device's axes.
+ * @axes: the values of the device’s axes.
  *
  * A #GdkTimeCoord stores a single event in a motion history.
  */

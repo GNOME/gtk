@@ -99,7 +99,7 @@
  * For this, the model keeps a model->n_nodes_valid field which is the count of valid nodes starting from the
  * beginning of the model->files array.  When a node changes its information, or when a node gets deleted, that
  * node and the following ones get invalidated by simply setting model->n_nodes_valid to the array index of the
- * node.  If the model happens to need a node's row number and that node is in the model->files array after
+ * node.  If the model happens to need a node’s row number and that node is in the model->files array after
  * model->n_nodes_valid, then the nodes get re-validated up to the sought node.  See node_validate_rows() for
  * this logic.
  *

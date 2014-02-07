@@ -79,7 +79,7 @@
  * simply free the data blob. The latter is more useful when the
  * contents of clipboard reflect the internal state of a #GObject
  * (As an example, for the PRIMARY clipboard, when an entry widget
- * provides the clipboard's contents the contents are simply the
+ * provides the clipboard’s contents the contents are simply the
  * text within the selected region.) If the contents change, the
  * entry widget can call gtk_clipboard_set_with_owner() to update
  * the timestamp for clipboard ownership, without having to worry
@@ -337,7 +337,7 @@ clipboard_display_closed (GdkDisplay   *display,
  * selections under the X window system. On Win32 the
  * #GDK_SELECTION_PRIMARY clipboard is essentially ignored.)
  *
- * It's possible to have arbitrary named clipboards; if you do invent
+ * It’s possible to have arbitrary named clipboards; if you do invent
  * new clipboards, you should prefix the selection name with an
  * underscore (because the ICCCM requires that nonstandard atoms are
  * underscore-prefixed), and namespace it as well. For example,
@@ -1123,7 +1123,7 @@ request_rich_text_received_func (GtkClipboard     *clipboard,
  *
  * The @text parameter to @callback will contain the resulting rich
  * text if the request succeeded, or %NULL if it failed. The @length
- * parameter will contain @text's length. This function can fail for
+ * parameter will contain @text’s length. This function can fail for
  * various reasons, in particular if the clipboard was empty or if the
  * contents of the clipboard could not be converted into rich text form.
  *
@@ -1960,7 +1960,7 @@ gtk_clipboard_owner_change (GtkClipboard        *clipboard,
  * function can be used to determine if a “Paste” menu item should be
  * insensitive or not.
  *
- * If you want to see if there's text available on the clipboard, use
+ * If you want to see if there’s text available on the clipboard, use
  * gtk_clipboard_wait_is_text_available () instead.
  *
  * Return value: %TRUE if the target is available, %FALSE otherwise.

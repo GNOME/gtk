@@ -610,7 +610,7 @@ typedef enum
  * @GTK_SELECTION_SINGLE: Zero or one element may be selected.
  * @GTK_SELECTION_BROWSE: Exactly one element is selected.
  *     In some circumstances, such as initially or during a search
- *     operation, it's possible for no element to be selected with
+ *     operation, it’s possible for no element to be selected with
  *     %GTK_SELECTION_BROWSE. What is really enforced is that the user
  *     can't deselect a currently selected element except by selecting
  *     another element.
@@ -689,7 +689,7 @@ typedef enum
  *  other, rather than vertically stacked
  *
  * Used to customize the appearance of a #GtkToolbar. Note that
- * setting the toolbar style overrides the user's preferences
+ * setting the toolbar style overrides the user’s preferences
  * for the default toolbar style.  Note that if the button has only
  * a label set and GTK_TOOLBAR_ICONS is used, the label will be
  * visible, and vice versa.

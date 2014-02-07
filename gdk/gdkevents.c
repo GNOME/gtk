@@ -464,7 +464,7 @@ gdk_event_peek (void)
  * @event: a #GdkEvent.
  *
  * Appends a copy of the given event onto the front of the event
- * queue for event->any.window's display, or the default event
+ * queue for event->any.window’s display, or the default event
  * queue if event->any.window is %NULL. See gdk_display_put_event().
  **/
 void
@@ -611,7 +611,7 @@ _gdk_event_get_pointer_emulated (GdkEvent *event)
  * @event: a #GdkEvent
  * 
  * Copies a #GdkEvent, copying or incrementing the reference count of the
- * resources associated with it (e.g. #GdkWindow's and strings).
+ * resources associated with it (e.g. #GdkWindow’s and strings).
  * 
  * Return value: a copy of @event. The returned #GdkEvent should be freed with
  * gdk_event_free().
@@ -913,7 +913,7 @@ gdk_event_get_time (const GdkEvent *event)
  * 
  * If the event contains a “state” field, puts that field in @state. Otherwise
  * stores an empty state (0). Returns %TRUE if there was a state field
- * in the event. @event may be %NULL, in which case it's treated
+ * in the event. @event may be %NULL, in which case it’s treated
  * as if the event had no state field.
  * 
  * Return value: %TRUE if there was a state field in the event 

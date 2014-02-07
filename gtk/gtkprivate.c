@@ -87,7 +87,7 @@ _gtk_get_data_prefix (void)
  * names spelled out in English.
  * However, this function does check the above environment
  * variables, and does return a Unix-style locale string based on
- * either said environment variables or the thread's current locale.
+ * either said environment variables or the thread’s current locale.
  *
  * Return value: a dynamically allocated string, free with g_free().
  */

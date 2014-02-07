@@ -198,7 +198,7 @@
  * respective objects.
  *
  * Additionally, since 3.10 a special &lt;template&gt; tag has been
- * added to the format allowing one to define a widget class's components.
+ * added to the format allowing one to define a widget class’s components.
  */
 
 #include "config.h"
@@ -955,10 +955,10 @@ gtk_builder_new (void)
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
  * domain.
  *
- * It's not really reasonable to attempt to handle failures of this
+ * It’s not really reasonable to attempt to handle failures of this
  * call.  You should not use this function with untrusted files (ie:
  * files that are not part of your application).  Broken #GtkBuilder
- * files can easily crash your program, and it's possible that memory
+ * files can easily crash your program, and it’s possible that memory
  * was leaked leading up to the reported failure.  The only reasonable
  * thing to do when an error is detected is to call g_error().
  *
@@ -1132,7 +1132,7 @@ _gtk_builder_extend_with_template (GtkBuilder    *builder,
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_RESOURCE_ERROR
  * domain.
  *
- * It's not really reasonable to attempt to handle failures of this
+ * It’s not really reasonable to attempt to handle failures of this
  * call.  The only reasonable thing to do when an error is detected is
  * to call g_error().
  *
@@ -1287,7 +1287,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * Upon errors 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
  *
- * It's not really reasonable to attempt to handle failures of this
+ * It’s not really reasonable to attempt to handle failures of this
  * call.  The only reasonable thing to do when an error is detected is
  * to call g_error().
  *
@@ -1562,8 +1562,8 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
  * This method is a simpler variation of gtk_builder_connect_signals_full().
  * It uses symbols explicitly added to @builder with prior calls to
  * gtk_builder_add_callback_symbol(). In the case that symbols are not
- * explicitly added; it uses #GModule's introspective features (by opening the module %NULL) 
- * to look at the application's symbol table. From here it tries to match
+ * explicitly added; it uses #GModule’s introspective features (by opening the module %NULL) 
+ * to look at the application’s symbol table. From here it tries to match
  * the signal handler names given in the interface description with
  * symbols in the application and connects the signals. Note that this
  * function can only be called once, subsequent calls will do nothing.

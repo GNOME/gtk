@@ -76,7 +76,7 @@ typedef struct _GtkTextAppearance GtkTextAppearance;
  * @strikethrough: Strikethrough style
  * @draw_bg: Whether to use background-related values; this is
  *   irrelevant for the values struct when in a tag, but is used for
- *   the composite values struct; it's true if any of the tags being
+ *   the composite values struct; it’s true if any of the tags being
  *   composited had background stuff set.
  * @inside_selection: This are only used when we are actually laying
  *   out and rendering a paragraph; not when a #GtkTextAppearance is
@@ -157,7 +157,7 @@ struct _GtkTextAppearance
  * @editable: Can edit this text.
  *
  * Using #GtkTextAttributes directly should rarely be necessary.
- * It's primarily useful with gtk_text_iter_get_attributes().
+ * It’s primarily useful with gtk_text_iter_get_attributes().
  * As with most GTK+ structs, the fields in this struct should only
  * be read, never modified directly.
  */

@@ -308,7 +308,7 @@ gtk_text_tag_table_lookup (GtkTextTagTable *table,
  * @tag: a #GtkTextTag
  *
  * Remove a tag from the table. If a #GtkTextBuffer has @table as its tag table,
- * the tag is removed from the buffer. The table's reference to the tag is
+ * the tag is removed from the buffer. The table’s reference to the tag is
  * removed, so the tag will end up destroyed if you don't have a reference to
  * it.
  **/

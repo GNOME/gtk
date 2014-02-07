@@ -92,7 +92,7 @@ struct _GtkAssistant
 /**
  * GtkAssistantClass:
  * @parent_class: The parent class.
- * @prepare: Signal emitted when a new page is set as the assistant's current page, before making the new page visible.
+ * @prepare: Signal emitted when a new page is set as the assistant’s current page, before making the new page visible.
  * @apply: Signal emitted when the apply button is clicked.
  * @close: Signal emitted either when the close button or last page apply button is clicked.
  * @cancel: Signal emitted when the cancel button is clicked.
@@ -124,7 +124,7 @@ struct _GtkAssistantClass
  * @data: (closure): user data.
  *
  * A function used by gtk_assistant_set_forward_page_func() to know which
- * is the next page given a current one. It's called both for computing the
+ * is the next page given a current one. It’s called both for computing the
  * next page when the user presses the “forward” button and for handling
  * the behavior of the “last” button.
  *

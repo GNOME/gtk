@@ -108,7 +108,7 @@
  * or stock items, rather than directly, but looking up icons
  * directly is also simple. The #GtkIconTheme object acts
  * as a database of all the icons in the current theme. You
- * can create new #GtkIconTheme objects, but it's much more
+ * can create new #GtkIconTheme objects, but it’s much more
  * efficient to use the standard icon theme for the #GdkScreen
  * so that the icon information is shared with other people
  * looking up icons. In the case where the default screen is
@@ -538,7 +538,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
 
 
 /* Callback when the display that the icon theme is attached to
- * is closed; unset the screen, and if it's the unique theme
+ * is closed; unset the screen, and if it’s the unique theme
  * for the screen, drop the reference
  */
 static void
@@ -637,7 +637,7 @@ unset_screen (GtkIconTheme *icon_theme)
  * @screen: a #GdkScreen
  * 
  * Sets the screen for an icon theme; the screen is used
- * to track the user's currently configured icon theme,
+ * to track the user’s currently configured icon theme,
  * which might be different for different screens.
  *
  * Since: 2.4
@@ -891,7 +891,7 @@ gtk_icon_theme_finalize (GObject *object)
  * one or more of the directories in @path with the same name
  * as the icon theme. (Themes from multiple of the path elements
  * are combined to allow themes to be extended by adding icons
- * in the user's home directory.)
+ * in the user’s home directory.)
  *
  * In addition if an icon found isn't found either in the current
  * icon theme or the default icon theme, and an image file with
@@ -5043,7 +5043,7 @@ gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
  * of built-in icons is to allow an application or library
  * that uses themed icons to function requiring files to
  * be present in the file system. For instance, the default
- * images for all of GTK+'s stock icons are registered
+ * images for all of GTK+’s stock icons are registered
  * as built-icons.
  *
  * In general, if you use gtk_icon_theme_add_builtin_icon()

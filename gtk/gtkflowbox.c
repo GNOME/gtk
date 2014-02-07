@@ -4278,7 +4278,7 @@ gtk_flow_box_get_column_spacing (GtkFlowBox *box)
  * @n_children: the minimum number of children per line
  *
  * Sets the minimum number of children to line up
- * in @box's orientation before flowing.
+ * in @box’s orientation before flowing.
  *
  * Since: 3.12
  */
@@ -4321,7 +4321,7 @@ gtk_flow_box_get_min_children_per_line (GtkFlowBox *box)
  * @n_children: the maximum number of children per line
  *
  * Sets the maximum number of children to request and
- * allocate space for in @box's orientation.
+ * allocate space for in @box’s orientation.
  *
  * Setting the maximum number of children per line
  * limits the overall natural size request to be no more

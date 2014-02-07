@@ -57,9 +57,9 @@ struct _GtkCellAreaContext
  * @reset: Clear any previously stored information about requested and
  *     allocated sizes for the context.
  * @get_preferred_height_for_width: Returns the aligned height for the given
- *     width that context must store while collecting sizes for it's rows.
+ *     width that context must store while collecting sizes for it’s rows.
  * @get_preferred_width_for_height: Returns the aligned width for the given
- *     height that context must store while collecting sizes for it's rows.
+ *     height that context must store while collecting sizes for it’s rows.
  */
 struct _GtkCellAreaContextClass
 {

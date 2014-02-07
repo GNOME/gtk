@@ -910,7 +910,7 @@ gtk_style_has_context (GtkStyle *style)
  * @window: a #GdkWindow.
  *
  * Attaches a style to a window; this process allocates the
- * colors and creates the GC's for the style - it specializes
+ * colors and creates the GC’s for the style - it specializes
  * it to a particular visual. The process may involve the creation
  * of a new style if the style has already been attached to a
  * window with a different style and visual.
@@ -987,7 +987,7 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
  * @color_name: the name of the logical color to look up
  * @color: (out): the #GdkColor to fill in
  *
- * Looks up @color_name in the style's logical color mappings,
+ * Looks up @color_name in the style’s logical color mappings,
  * filling in @color and returning %TRUE if found, otherwise
  * returning %FALSE. Do not cache the found mapping, because
  * it depends on the #GtkStyle and might change when a theme
@@ -4063,14 +4063,14 @@ gtk_widget_get_default_style (void)
  * gtk_widget_style_attach:
  * @widget: a #GtkWidget
  *
- * This function attaches the widget's #GtkStyle to the widget's
+ * This function attaches the widget’s #GtkStyle to the widget's
  * #GdkWindow. It is a replacement for
  *
  * |[
  * widget->style = gtk_style_attach (widget->style, widget->window);
  * ]|
  *
- * and should only ever be called in a derived widget's “realize”
+ * and should only ever be called in a derived widget’s “realize”
  * implementation which does not chain up to its parent class'
  * “realize” implementation, because one of the parent classes
  * (finally #GtkWidget) would attach the style itself.
@@ -4160,7 +4160,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
  *
  * Simply an accessor function that returns @widget->style.
  *
- * Return value: (transfer none): the widget's #GtkStyle
+ * Return value: (transfer none): the widget’s #GtkStyle
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
  */
@@ -4375,7 +4375,7 @@ gtk_widget_modify_fg (GtkWidget      *widget,
  * See also gtk_widget_modify_style().
  *
  * > Note that “no window” widgets (which have the %GTK_NO_WINDOW
- * > flag set) draw on their parent container's window and thus may
+ * > flag set) draw on their parent container’s window and thus may
  * > not draw any background themselves. This is the case for e.g.
  * > #GtkLabel.
  * >
@@ -4473,7 +4473,7 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * and #GtkTextView. See also gtk_widget_modify_style().
  *
  * > Note that “no window” widgets (which have the %GTK_NO_WINDOW
- * > flag set) draw on their parent container's window and thus may
+ * > flag set) draw on their parent container’s window and thus may
  * > not draw any background themselves. This is the case for e.g.
  * > #GtkLabel.
  * >
@@ -4600,8 +4600,8 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
  * the name of a widget, you allow users or theme authors to apply
  * styles to that specific widget in their gtkrc
  * file. @path_reversed_p fills in the path in reverse order,
- * i.e. starting with @widget's name instead of starting with the name
- * of @widget's outermost ancestor.
+ * i.e. starting with @widget’s name instead of starting with the name
+ * of @widget’s outermost ancestor.
  *
  * Deprecated:3.0: Use gtk_widget_get_path() instead
  **/
@@ -4670,7 +4670,7 @@ gtk_widget_path (GtkWidget *widget,
  * @path_reversed: (out) (allow-none): location to store the reverse
  *     class path as an allocated string, or %NULL
  *
- * Same as gtk_widget_path(), but always uses the name of a widget's type,
+ * Same as gtk_widget_path(), but always uses the name of a widget’s type,
  * never uses a custom name set with gtk_widget_set_name().
  *
  * Deprecated:3.0: Use gtk_widget_get_path() instead

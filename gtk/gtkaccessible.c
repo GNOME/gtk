@@ -167,7 +167,7 @@ gtk_accessible_class_init (GtkAccessibleClass *klass)
  * Sets the #GtkWidget corresponding to the #GtkAccessible.
  *
  * @accessible will not hold a reference to @widget.
- * It is the caller's responsibility to ensure that when @widget
+ * It is the caller’s responsibility to ensure that when @widget
  * is destroyed, the widget is unset by calling this function
  * again with @widget set to %NULL.
  *

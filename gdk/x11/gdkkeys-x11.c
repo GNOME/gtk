@@ -1042,7 +1042,7 @@ gdk_x11_keymap_lookup_key (GdkKeymap          *keymap,
  *  - add the group and level return.
  *  - change the interpretation of mods_rtrn as described
  *    in the docs for gdk_keymap_translate_keyboard_state()
- * It's unchanged for ease of diff against the Xlib sources; don't
+ * It’s unchanged for ease of diff against the Xlib sources; don't
  * reformat it.
  */
 static Bool
@@ -1444,7 +1444,7 @@ gdk_x11_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
  * @keycode: the hardware keycode from a key event
  *
  * Determines whether a particular key code represents a key that
- * is a modifier. That is, it's a key that normally just affects
+ * is a modifier. That is, it’s a key that normally just affects
  * the keyboard state and the behavior of other keys rather than
  * producing a direct effect itself. This is only needed for code
  * processing raw X events, since #GdkEventKey directly includes

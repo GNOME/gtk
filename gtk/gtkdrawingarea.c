@@ -35,7 +35,7 @@
  * @See_also: #GtkImage
  *
  * The #GtkDrawingArea widget is used for creating custom user interface
- * elements. It's essentially a blank widget; you can draw on it. After
+ * elements. It’s essentially a blank widget; you can draw on it. After
  * creating a drawing area, the application may want to connect to:
  *
  * - Mouse and button press signals to respond to input from
@@ -93,9 +93,9 @@
  * ]|
  *
  * Draw signals are normally delivered when a drawing area first comes
- * onscreen, or when it's covered by another window and then uncovered.
+ * onscreen, or when it’s covered by another window and then uncovered.
  * You can also force an expose event by adding to the “damage region”
- * of the drawing area's window; gtk_widget_queue_draw_area() and
+ * of the drawing area’s window; gtk_widget_queue_draw_area() and
  * gdk_window_invalidate_rect() are equally good ways to do this.
  * You'll then get a draw signal for the invalid region.
  *

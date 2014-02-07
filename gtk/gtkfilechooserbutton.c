@@ -2774,7 +2774,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 
 /* Calback for the "notify::popup-shown" signal on the combo box.
  * When the combo is popped up, we don't want the ROW_TYPE_EMPTY_SELECTION to be visible
- * at all; otherwise we would be showing a “(None)” item in the combo box's popup.
+ * at all; otherwise we would be showing a “(None)” item in the combo box’s popup.
  *
  * However, when the combo box is *not* popped up, we want the empty-selection row
  * to be visible depending on the selection.
@@ -3007,7 +3007,7 @@ gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
  * Retrieves the title of the browse dialog used by @button. The returned value
  * should not be modified or freed.
  *
- * Returns: a pointer to the browse dialog's title.
+ * Returns: a pointer to the browse dialog’s title.
  *
  * Since: 2.6
  **/
@@ -3023,7 +3023,7 @@ gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
  * gtk_file_chooser_button_get_width_chars:
  * @button: the button widget to examine.
  *
- * Retrieves the width in characters of the @button widget's entry and/or label.
+ * Retrieves the width in characters of the @button widget’s entry and/or label.
  *
  * Returns: an integer width (in characters) that the button will use to size itself.
  *

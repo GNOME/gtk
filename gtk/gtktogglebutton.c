@@ -50,7 +50,7 @@
  * A toggle button is created by calling either gtk_toggle_button_new() or
  * gtk_toggle_button_new_with_label(). If using the former, it is advisable to
  * pack a widget, (such as a #GtkLabel and/or a #GtkImage), into the toggle
- * button's container. (See #GtkButton for more information).
+ * button’s container. (See #GtkButton for more information).
  *
  * The state of a #GtkToggleButton can be set specifically using
  * gtk_toggle_button_set_active(), and retrieved using

@@ -37,7 +37,7 @@
  *
  * If an item is one of the non-normal classes (submenu, separator), only the
  * label of the item needs to be respected. Otherwise, all the properties
- * of the item contribute to the item's appearance and state.
+ * of the item contribute to the item’s appearance and state.
  *
  * Implementing the appearance of the menu item is up to toolkits, and certain
  * toolkits may choose to ignore certain properties, like icon or accel. The
@@ -66,7 +66,7 @@
  * Applications using submenus may want to lazily build their submenus in
  * response to the user clicking on it, as building a submenu may be expensive.
  *
- * Thus, the submenu has two special controls -- the submenu's visibility
+ * Thus, the submenu has two special controls -- the submenu’s visibility
  * should be controlled by the GtkMenuTrackerItem::submenu-shown property,
  * and if a user clicks on the submenu, do not immediately show the menu,
  * but call gtk_menu_tracker_item_request_submenu_shown() and wait for the

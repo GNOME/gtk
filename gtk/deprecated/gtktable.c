@@ -626,7 +626,7 @@ gtk_table_new (guint	rows,
  * @rows: The new number of rows.
  * @columns: The new number of columns.
  *
- * If you need to change a table's size after
+ * If you need to change a table’s size after
  * it has been created, this function allows you to do so.
  *
  * Deprecated: 3.4: #GtkGrid resizes automatically.

@@ -86,9 +86,9 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_PROPERTY_PADDING:
  *
- * A property holding the rendered element's padding as a #GtkBorder. The
+ * A property holding the rendered element’s padding as a #GtkBorder. The
  * padding is defined as the spacing between the inner part of the element border
- * and its child. It's the innermost spacing property of the padding/border/margin
+ * and its child. It’s the innermost spacing property of the padding/border/margin
  * series.
  */
 #define GTK_STYLE_PROPERTY_PADDING "padding"
@@ -96,7 +96,7 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_PROPERTY_BORDER_WIDTH:
  *
- * A property holding the rendered element's border width in pixels as
+ * A property holding the rendered element’s border width in pixels as
  * a #GtkBorder. The border is the intermediary spacing property of the
  * padding/border/margin series.
  *
@@ -109,7 +109,7 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_PROPERTY_MARGIN:
  *
- * A property holding the rendered element's margin as a #GtkBorder. The
+ * A property holding the rendered element’s margin as a #GtkBorder. The
  * margin is defined as the spacing between the border of the element
  * and its surrounding elements. It is external to #GtkWidget<!-- -->s's
  * size allocations, and the most external spacing property of the
@@ -120,28 +120,28 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_PROPERTY_BORDER_RADIUS:
  *
- * A property holding the rendered element's border radius in pixels as a #gint.
+ * A property holding the rendered element’s border radius in pixels as a #gint.
  */
 #define GTK_STYLE_PROPERTY_BORDER_RADIUS "border-radius"
 
 /**
  * GTK_STYLE_PROPERTY_BORDER_STYLE:
  *
- * A property holding the element's border style as a #GtkBorderStyle.
+ * A property holding the element’s border style as a #GtkBorderStyle.
  */
 #define GTK_STYLE_PROPERTY_BORDER_STYLE "border-style"
 
 /**
  * GTK_STYLE_PROPERTY_BORDER_COLOR:
  *
- * A property holding the element's border color as a #GdkRGBA.
+ * A property holding the element’s border color as a #GdkRGBA.
  */
 #define GTK_STYLE_PROPERTY_BORDER_COLOR "border-color"
 
 /**
  * GTK_STYLE_PROPERTY_BACKGROUND_IMAGE:
  *
- * A property holding the element's background as a #cairo_pattern_t.
+ * A property holding the element’s background as a #cairo_pattern_t.
  */
 #define GTK_STYLE_PROPERTY_BACKGROUND_IMAGE "background-image"
 

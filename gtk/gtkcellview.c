@@ -1435,7 +1435,7 @@ gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
  * Sets whether @cell_view should request space to fit the entire #GtkTreeModel.
  *
  * This is used by #GtkComboBox to ensure that the cell view displayed on
- * the combo box's button always gets enough space and does not resize
+ * the combo box’s button always gets enough space and does not resize
  * when selection changes.
  *
  * Since: 3.0

@@ -80,7 +80,7 @@
  * two Hebrew characters. The Hebrew characters will be printed on the key next to
  * the English characters.
  *
- * In order to use a keymap to interpret a key event, it's necessary to first
+ * In order to use a keymap to interpret a key event, it’s necessary to first
  * convert the keyboard state into an effective group and level. This is done via a
  * set of rules that varies widely according to type of keyboard and user
  * configuration. The function gdk_keymap_translate_keyboard_state() accepts a
@@ -649,7 +649,7 @@ gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
  * @keymap: a #GdkKeymap
  * @intent: the use case for the modifier mask
  *
- * Returns the modifier mask the @keymap's windowing system backend
+ * Returns the modifier mask the @keymap’s windowing system backend
  * uses for a particular purpose.
  *
  * Note that this function always returns real hardware modifiers, not

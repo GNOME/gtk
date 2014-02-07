@@ -252,10 +252,10 @@ gdk_frame_clock_init (GdkFrameClock *clock)
  * @frame_clock: a #GdkFrameClock
  *
  * Gets the time that should currently be used for animations.  Inside
- * the processing of a frame, it's the time used to compute the
+ * the processing of a frame, it’s the time used to compute the
  * animation position of everything in a frame. Outside of a frame, it's
  * the time of the conceptual “previous frame,” which may be either
- * the actual previous frame time, or if that's too old, an updated
+ * the actual previous frame time, or if that’s too old, an updated
  * time.
  *
  * Since: 3.8

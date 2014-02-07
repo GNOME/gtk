@@ -60,7 +60,7 @@
  *
  * #GtkThemingEngine<!-- -->s have limited access to the object they are
  * rendering, the #GtkThemingEngine API has read-only accessors to the
- * style information contained in the rendered object's #GtkStyleContext.
+ * style information contained in the rendered object’s #GtkStyleContext.
  */
 
 enum {
@@ -470,7 +470,7 @@ gtk_theming_engine_get_style_property (GtkThemingEngine *engine,
  * @args: va_list of property name/return location pairs, followed by %NULL
  *
  * Retrieves several widget style properties from @engine according to the
- * currently rendered content's style.
+ * currently rendered content’s style.
  *
  * Since: 3.0
  **/
@@ -492,7 +492,7 @@ gtk_theming_engine_get_style_valist (GtkThemingEngine *engine,
  * @...: property name /return value pairs, followed by %NULL
  *
  * Retrieves several widget style properties from @engine according
- * to the currently rendered content's style.
+ * to the currently rendered content’s style.
  *
  * Since: 3.0
  **/
@@ -518,7 +518,7 @@ gtk_theming_engine_get_style (GtkThemingEngine *engine,
  * @color_name: color name to lookup
  * @color: (out): Return location for the looked up color
  *
- * Looks up and resolves a color name in the current style's color map.
+ * Looks up and resolves a color name in the current style’s color map.
  *
  * Returns: %TRUE if @color_name was found and resolved, %FALSE otherwise
  **/
@@ -568,9 +568,9 @@ gtk_theming_engine_get_state (GtkThemingEngine *engine)
  *
  * If @progress is not %NULL, the animation progress will be returned
  * there, 0.0 means the state is closest to being %FALSE, while 1.0 means
- * it's closest to being %TRUE. This means transition animations will
+ * it’s closest to being %TRUE. This means transition animations will
  * run from 0 to 1 when @state is being set to %TRUE and from 1 to 0 when
- * it's being set to %FALSE.
+ * it’s being set to %FALSE.
  *
  * Returns: %TRUE if there is a running transition animation for @state.
  *

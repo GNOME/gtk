@@ -75,8 +75,8 @@
  * of its child nodes is a frequently occurring use case. Therefore,
  * #GtkTreeModelFilter explicitly supports this. For example, when a node
  * does not have any children, you might not want the node to be visible.
- * As soon as the first row is added to the node's child level (or the
- * last row removed), the node's visibility should be updated.
+ * As soon as the first row is added to the node’s child level (or the
+ * last row removed), the node’s visibility should be updated.
  *
  * This introduces a dependency from the node on its child nodes. In order
  * to accommodate this, #GtkTreeModelFilter must make sure the necessary
@@ -90,7 +90,7 @@
  *
  * Beware, however, that this explicit support is limited to these two
  * cases. For example, if you want a node to be visible only if two nodes
- * in a child's child level (2 levels deeper) are visible, you are on your
+ * in a child’s child level (2 levels deeper) are visible, you are on your
  * own. In this case, either rely on #GtkTreeStore to emit all signals
  * because it does not implement reference counting, or for models that
  * do implement reference counting, obtain references on these child levels
@@ -116,7 +116,7 @@
  * similar data structures, many assumptions made in the GtkTreeModelSort
  * code do *not* apply in the GtkTreeModelFilter case. Reference counting
  * in particular is more complicated in GtkTreeModelFilter, because
- * we explicitly support reliance on the state of a node's children as
+ * we explicitly support reliance on the state of a node’s children as
  * outlined in the public API documentation. Because of these differences,
  * you are strongly recommended to first read through these notes before
  * making any modification to the code.
@@ -192,7 +192,7 @@
  * rule 1 in the GtkTreeModel documentation.
  *
  * A second case is required to support visible functions which depend on
- * the state of a node's children (see the public API documentation for
+ * the state of a node’s children (see the public API documentation for
  * GtkTreeModelFilter above). We build the child level of each node that
  * could be visible in the client (i.e. the level has an ext_ref_count > 0;
  * not the elt, because the elt might be invisible and thus unreferenced

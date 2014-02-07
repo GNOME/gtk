@@ -7422,7 +7422,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
  * @entry: a #GtkEntry
  * @text_area: (out): Return location for the text area.
  *
- * Gets the area where the entry's text is drawn. This function is
+ * Gets the area where the entry’s text is drawn. This function is
  * useful when drawing something to the entry in a draw callback.
  *
  * If the entry is not realized, @text_area is filled with zeros.
@@ -7800,7 +7800,7 @@ gtk_entry_get_text_length (GtkEntry *entry)
 /**
  * gtk_entry_set_activates_default:
  * @entry: a #GtkEntry
- * @setting: %TRUE to activate window's default widget on Enter keypress
+ * @setting: %TRUE to activate window’s default widget on Enter keypress
  *
  * If @setting is %TRUE, pressing Enter in the @entry will activate the default
  * widget for the window containing the entry. This usually means that
@@ -7939,8 +7939,8 @@ gtk_entry_get_has_frame (GtkEntry *entry)
  * @entry: a #GtkEntry
  * @border: (allow-none): a #GtkBorder, or %NULL
  *
- * Sets %entry's inner-border property to @border, or clears it if %NULL
- * is passed. The inner-border is the area around the entry's text, but
+ * Sets %entry’s inner-border property to @border, or clears it if %NULL
+ * is passed. The inner-border is the area around the entry’s text, but
  * inside its frame.
  *
  * If set, this property overrides the inner-border style property.
@@ -7967,10 +7967,10 @@ gtk_entry_set_inner_border (GtkEntry        *entry,
  * gtk_entry_get_inner_border:
  * @entry: a #GtkEntry
  *
- * This function returns the entry's #GtkEntry:inner-border property. See
+ * This function returns the entry’s #GtkEntry:inner-border property. See
  * gtk_entry_set_inner_border() for more information.
  *
- * Return value: (transfer none): the entry's #GtkBorder, or %NULL if none was set.
+ * Return value: (transfer none): the entry’s #GtkBorder, or %NULL if none was set.
  *
  * Since: 2.10
  *
@@ -8023,7 +8023,7 @@ gtk_entry_get_layout (GtkEntry *entry)
  * 
  * Converts from a position in the entry contents (returned
  * by gtk_entry_get_text()) to a position in the
- * entry's #PangoLayout (returned by gtk_entry_get_layout(),
+ * entry’s #PangoLayout (returned by gtk_entry_get_layout(),
  * with text retrieved via pango_layout_get_text()).
  * 
  * Return value: byte index into the entry contents
@@ -8061,7 +8061,7 @@ gtk_entry_layout_index_to_text_index (GtkEntry *entry,
  * @entry: a #GtkEntry
  * @text_index: byte index into the entry contents
  * 
- * Converts from a position in the entry's #PangoLayout (returned by
+ * Converts from a position in the entry’s #PangoLayout (returned by
  * gtk_entry_get_layout()) to a position in the entry contents
  * (returned by gtk_entry_get_text()).
  * 
@@ -8782,7 +8782,7 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
  * @y: the y coordinate of the position to find
  *
  * Finds the icon at the given position and return its index. The
- * position's coordinates are relative to the @entry's top left corner.
+ * position’s coordinates are relative to the @entry’s top left corner.
  * If @x, @y doesn't lie inside an icon, -1 is returned.
  * This function is intended for use in a #GtkWidget::query-tooltip
  * signal handler.
@@ -8910,9 +8910,9 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  * gtk_entry_get_icon_area:
  * @entry: A #GtkEntry
  * @icon_pos: Icon position
- * @icon_area: (out): Return location for the icon's area
+ * @icon_area: (out): Return location for the icon’s area
  *
- * Gets the area where entry's icon at @icon_pos is drawn.
+ * Gets the area where entry’s icon at @icon_pos is drawn.
  * This function is useful when drawing something to the
  * entry in a draw callback.
  *
@@ -10189,9 +10189,9 @@ gtk_entry_get_cursor_hadjustment (GtkEntry *entry)
 /**
  * gtk_entry_set_progress_fraction:
  * @entry: a #GtkEntry
- * @fraction: fraction of the task that's been completed
+ * @fraction: fraction of the task that’s been completed
  *
- * Causes the entry's progress indicator to “fill in” the given
+ * Causes the entry’s progress indicator to “fill in” the given
  * fraction of the bar. The fraction should be between 0.0 and 1.0,
  * inclusive.
  *
@@ -10242,7 +10242,7 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
  * gtk_entry_get_progress_fraction:
  * @entry: a #GtkEntry
  *
- * Returns the current fraction of the task that's been completed.
+ * Returns the current fraction of the task that’s been completed.
  * See gtk_entry_set_progress_fraction().
  *
  * Return value: a fraction from 0.0 to 1.0
@@ -10312,7 +10312,7 @@ gtk_entry_get_progress_pulse_step (GtkEntry *entry)
  * @entry: a #GtkEntry
  *
  * Indicates that some progress is made, but you don't know how much.
- * Causes the entry's progress indicator to enter “activity mode,”
+ * Causes the entry’s progress indicator to enter “activity mode,”
  * where a block bounces back and forth. Each call to
  * gtk_entry_progress_pulse() causes the block to move by a little bit
  * (the amount of movement per pulse is determined by

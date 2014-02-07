@@ -1,7 +1,7 @@
 /*
  *  GtkPlacesSidebar - sidebar widget for places in the filesystem
  *
- *  This code comes from Nautilus, GNOME's file manager.
+ *  This code comes from Nautilus, GNOME’s file manager.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License as
@@ -74,7 +74,7 @@
  * @See_also: #GtkFileChooser
  *
  * #GtkPlacesSidebar is a widget that displays a list of frequently-used places in the
- * file system:  the user's home directory, the user's bookmarks, and volumes and drives.
+ * file system:  the user’s home directory, the user’s bookmarks, and volumes and drives.
  * This widget is used as a sidebar in #GtkFileChooser and may be used by file managers
  * and similar programs.
  *
@@ -4524,7 +4524,7 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
  *
  * Gets the currently-selected location in the @sidebar.  This can be #NULL when
  * nothing is selected, for example, when gtk_places_sidebar_set_location() has
- * been called with a location that is not among the sidebar's list of places to
+ * been called with a location that is not among the sidebar’s list of places to
  * show.
  *
  * You can use this function to get the selection in the @sidebar.  Also, if you
@@ -4569,7 +4569,7 @@ gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
  *
  * Sets whether the @sidebar should show an item for the Desktop folder.
  * The default value for this option is determined by the desktop
- * environment and the user's configuration, but this function can be
+ * environment and the user’s configuration, but this function can be
  * used to override it on a per-application basis.
  *
  * Since: 3.10
@@ -4731,7 +4731,7 @@ find_shortcut_link (GtkPlacesSidebar *sidebar,
  * shortcuts.  The shortcuts are application-specific; they are not shared
  * across applications, and they are not persistent.  If this function
  * is called multiple times with different locations, then they are added
- * to the sidebar's list in the same order as the function is called.
+ * to the sidebar’s list in the same order as the function is called.
  *
  * Since: 3.10
  */

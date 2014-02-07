@@ -32,7 +32,7 @@
  * stages of the GLib main loop (prepare, check, dispatch), and make the
  * appropriate calls into GLib.
  *
- * Both cases share a single problem: the OS X API's don't allow us to
+ * Both cases share a single problem: the OS X API’s don't allow us to
  * wait simultaneously for file descriptors and for events. So when we
  * need to do a blocking wait that includes file descriptor activity, we
  * push the actual work of calling select() to a helper thread (the
@@ -102,7 +102,7 @@ static GQueue *current_events;
 
 /* The default poll function for GLib; we replace this with our own
  * Cocoa-aware version and then call the old version to do actual
- * file descriptor polling. There's no actual need to chain to the
+ * file descriptor polling. There’s no actual need to chain to the
  * old one; we could reimplement the same functionality from scratch,
  * but since the default implementation does the right thing, why
  * bother.

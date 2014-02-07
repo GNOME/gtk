@@ -971,7 +971,7 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
  * gtk_text_layout_is_valid:
  * @layout: a #GtkTextLayout
  *
- * Check if there are any invalid regions in a #GtkTextLayout's buffer
+ * Check if there are any invalid regions in a #GtkTextLayout’s buffer
  *
  * Return value: %TRUE if any invalid regions were found
  */
@@ -1681,8 +1681,8 @@ add_child_attrs (GtkTextLayout      *layout,
  * @layout: a #GtkTextLayout
  * @display: a #GtkTextLineDisplay
  * @insert_iter: iter pointing to the cursor location
- * @insert_index: cursor offset in the @display's layout, it may
- * be different from @insert_iter's offset in case when preedit
+ * @insert_index: cursor offset in the @display’s layout, it may
+ * be different from @insert_iter’s offset in case when preedit
  * string is present.
  * @pos: location to store cursor position
  * @cursor_at_line_end: whether cursor is at the end of line
@@ -1963,7 +1963,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
 }
 
 /* Iterate over the line and fill in display->cursors.
- * It's a stripped copy of gtk_text_layout_get_line_display() */
+ * It’s a stripped copy of gtk_text_layout_get_line_display() */
 static void
 update_text_display_cursors (GtkTextLayout      *layout,
 			     GtkTextLine        *line,

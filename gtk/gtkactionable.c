@@ -168,7 +168,7 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
  * will be associated with the same action, but with a different target
  * value for that action.  Clicking on a particular button will activate
  * the action with the target of that button, which will typically cause
- * the action's state to change to that value.  Since the action's state
+ * the action’s state to change to that value.  Since the action’s state
  * is now equal to the target value of the button, the button will now
  * be rendered as active (and the other buttons, with different targets,
  * rendered inactive).

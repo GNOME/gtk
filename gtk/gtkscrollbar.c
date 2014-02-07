@@ -155,7 +155,7 @@ gtk_scrollbar_style_updated (GtkWidget *widget)
 
 /**
  * gtk_scrollbar_new:
- * @orientation: the scrollbar's orientation.
+ * @orientation: the scrollbar’s orientation.
  * @adjustment: (allow-none): the #GtkAdjustment to use, or %NULL to create a new adjustment.
  *
  * Creates a new scrollbar with the given orientation.

@@ -123,7 +123,7 @@
  *
  * - To choose a folder instead of a file. Use #GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
  *
- * Note that old versions of the file chooser's documentation suggested
+ * Note that old versions of the file chooser’s documentation suggested
  * using gtk_file_chooser_set_current_folder() in various
  * situations, with the intention of letting the application
  * suggest a reasonable default folder.  This is no longer

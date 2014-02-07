@@ -529,7 +529,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
  * @event: a #GtkEvent
  * 
  * Looks up the best matching entry or entries in the hash table for a
- * given keyval/modifiers pair. It's better to use
+ * given keyval/modifiers pair. It’s better to use
  * _gtk_key_hash_lookup() if you have the original #GdkEventKey
  * available.  The results are sorted so that entries with less
  * modifiers come before entries with more modifiers.
