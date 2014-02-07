@@ -3691,7 +3691,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 
 /*************************************************************
  * gtk_drag_source_check_selection:
- *     Check if we've set up handlers/claimed the selection
+ *     Check if we’ve set up handlers/claimed the selection
  *     for a given drag. If not, add them.
  *   arguments:
  *     

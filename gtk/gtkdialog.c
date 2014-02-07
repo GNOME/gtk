@@ -121,7 +121,7 @@
  *                              G_CALLBACK (gtk_widget_destroy),
  *                              dialog);
  *
- *    /&ast; Add the label, and show everything we've added to the dialog &ast;/
+ *    /&ast; Add the label, and show everything we’ve added to the dialog &ast;/
  *
  *    gtk_container_add (GTK_CONTAINER (content_area), label);
  *    gtk_widget_show_all (dialog);

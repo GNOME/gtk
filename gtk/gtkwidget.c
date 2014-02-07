@@ -4285,7 +4285,7 @@ gtk_widget_unparent (GtkWidget *widget)
  * #GtkWindow), it will be removed from the list of toplevels, and the
  * reference GTK+ holds to it will be removed. Removing a
  * widget from its container or the list of toplevels results in the
- * widget being finalized, unless you've added additional references
+ * widget being finalized, unless you’ve added additional references
  * to the widget with g_object_ref().
  *
  * In most cases, only toplevel widgets (windows) require explicit

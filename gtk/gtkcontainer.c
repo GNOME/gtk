@@ -1906,7 +1906,7 @@ gtk_container_real_check_resize (GtkContainer *container)
 /* The container hasn't changed size but one of its children
  *  queued a resize request. Which means that the allocation
  *  is not sufficient for the requisition of some child.
- *  We've already performed a size request at this point,
+ *  We’ve already performed a size request at this point,
  *  so we simply need to reallocate and let the allocation
  *  trickle down via GTK_WIDGET_ALLOC_NEEDED flags.
  */

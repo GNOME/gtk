@@ -44,7 +44,7 @@
  *
  * When widgets receive an event, they frequently emit one or more
  * “signals”. Signals notify your program that "something
- * interesting happened" by invoking functions you've connected to the signal
+ * interesting happened" by invoking functions you’ve connected to the signal
  * with g_signal_connect(). Functions connected to a signal are often termed
  * “callbacks”.
  *

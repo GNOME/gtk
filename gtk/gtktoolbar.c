@@ -3091,7 +3091,7 @@ gtk_toolbar_finalize (GObject *object)
  * @icon_size: The #GtkIconSize that stock icons in the toolbar shall have.
  *
  * This function sets the size of stock icons in the toolbar. You
- * can call it both before you add the icons and after they've been
+ * can call it both before you add the icons and after they’ve been
  * added. The size you set will override user preferences for the default
  * icon size.
  * 

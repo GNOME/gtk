@@ -708,7 +708,7 @@ gtk_paper_size_get_default (void)
  * larger than most printers margins, so that it will be within
  * the imageble area on any printer.
  *
- * I've taken the actual values used from the OSX page setup dialog.
+ * I’ve taken the actual values used from the OSX page setup dialog.
  * I'm not sure exactly where they got these values for, but might
  * correspond to this (from ghostscript docs):
  *
