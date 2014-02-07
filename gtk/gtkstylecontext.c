@@ -180,45 +180,20 @@
  * Theme engines can also use style classes to vary their rendering.
  *
  * Widgets can also add regions with flags to their context.
+ *
  * The regions used by GTK+ widgets are:
- * <informaltable>
- *   <tgroup cols="4">
- *     <thead>
- *       <row>
- *         <entry>Region</entry>
- *         <entry>Flags</entry>
- *         <entry>Macro</entry>
- *         <entry>Used by</entry>
- *       </row>
- *     </thead>
- *     <tbody>
- *       <row>
- *         <entry>row</entry>
- *         <entry>even, odd</entry>
- *         <entry>GTK_STYLE_REGION_ROW</entry>
- *         <entry>#GtkTreeView</entry>
- *       </row>
- *       <row>
- *         <entry>column</entry>
- *         <entry>first, last, sorted</entry>
- *         <entry>GTK_STYLE_REGION_COLUMN</entry>
- *         <entry>#GtkTreeView</entry>
- *       </row>
- *       <row>
- *         <entry>column-header</entry>
- *         <entry></entry>
- *         <entry>GTK_STYLE_REGION_COLUMN_HEADER</entry>
- *         <entry></entry>
- *       </row>
- *       <row>
- *         <entry>tab</entry>
- *         <entry>even, odd, first, last</entry>
- *         <entry>GTK_STYLE_REGION_TAB</entry>
- *         <entry>#GtkNotebook</entry>
- *       </row>
- *     </tbody>
- *   </tgroup>
- * </informaltable>
+ *
+ * ## row
+ * Used by #GtkTreeView. Can be used with the flags: `even`, `odd`.
+ *
+ * ## column
+ * Used by #GtkTreeView. Can be used with the flags: `first`, `last`, `sorted`.
+ *
+ * ## column-header
+ * Used by #GtkTreeView.
+ *
+ * ## tab
+ * Used by #GtkNotebook. Can be used with the flags: `even`, `odd`, `first`, `last`.
  *
  * # Custom styling in UI libraries and applications
  *
