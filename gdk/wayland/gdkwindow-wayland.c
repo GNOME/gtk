@@ -1005,6 +1005,24 @@ xdg_surface_focused_unset (void *data,
   gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
 }
 
+static void
+xdg_surface_delete (void *data,
+                    struct xdg_surface *xdg_surface)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkDisplay *display;
+  GdkEvent *event;
+
+  display = gdk_window_get_display (window);
+
+  event = gdk_event_new (GDK_DELETE);
+
+  event->any.window = window;
+  event->any.send_event = TRUE;
+
+  _gdk_wayland_display_deliver_event (display, event);
+}
+
 static const struct xdg_surface_listener xdg_surface_listener = {
   xdg_surface_ping,
   xdg_surface_configure,
@@ -1014,6 +1032,7 @@ static const struct xdg_surface_listener xdg_surface_listener = {
   xdg_surface_request_unset_maximized,
   xdg_surface_focused_set,
   xdg_surface_focused_unset,
+  xdg_surface_delete,
 };
 
 static void

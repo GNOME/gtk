@@ -373,6 +373,19 @@
 	decorations should be updated accordingly.
       </description>
     </event>
+
+    <event name="delete">
+      <description summary="surface wants to be closed">
+        The delete event is sent by the compositor when the user
+        wants the surface to be closed. This should be equivalent to
+        the user clicking the close button in client-side decorations,
+        if your application has any...
+
+        This is only a request that the user intends to close your
+        window. The client may choose to ignore this request, or show
+        a dialog to ask the user to save their data...
+      </description>
+    </event>
   </interface>
 
   <interface name="xdg_popup" version="1">
