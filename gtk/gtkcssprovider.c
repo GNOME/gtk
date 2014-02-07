@@ -341,143 +341,172 @@
  *                            0.8);
  * }
  * ]|
- * 
- * The various ways to express colors in GTK+ CSS are:
- * <informaltable>
- *   <tgroup cols="3">
- *     <thead>
- *       <row>
- *         <entry>Syntax</entry>
- *         <entry>Explanation</entry>
- *         <entry>Examples</entry>
- *       </row>
- *     </thead>
- *     <tbody>
- *       <row>
- *         <entry>rgb(@r, @g, @b)</entry>
- *         <entry>An opaque color; @r, @g, @b can be either integers between
- *                0 and 255 or percentages</entry>
- *         <entry><literallayout>rgb(128, 10, 54)
- * rgb(20%, 30%, 0%)</literallayout></entry>
- *       </row>
- *       <row>
- *         <entry>rgba(@r, @g, @b, @a)</entry>
- *         <entry>A translucent color; @r, @g, @b are as in the previous row,
- *                @a is a floating point number between 0 and 1</entry>
- *         <entry><literallayout>rgba(255, 255, 0, 0.5)</literallayout></entry>
- *       </row>
- *       <row>
- *         <entry>&num;@xxyyzz</entry>
- *         <entry>An opaque color; @xx, @yy, @zz are hexadecimal numbers
- *                specifying @r, @g, @b variants with between 1 and 4
- *                hexadecimal digits per component are allowed</entry>
- *         <entry><literallayout>&num;ff12ab
- * &num;f0c</literallayout></entry>
- *       </row>
- *       <row>
- *         <entry>&commat;name</entry>
- *         <entry>Reference to a color that has been defined with
- *                &commat;define-color
- *         </entry>
- *         <entry>&commat;bg_color</entry>
- *       </row>
- *       <row>
- *         <entry>mix(@color1, @color2, @f)</entry>
- *         <entry>A linear combination of @color1 and @color2. @f is a
- *                floating point number between 0 and 1.</entry>
- *         <entry><literallayout>mix(&num;ff1e0a, &commat;bg_color, 0.8)</literallayout></entry>
- *       </row>
- *       <row>
- *         <entry>shade(@color, @f)</entry>
- *         <entry>A lighter or darker variant of @color. @f is a
- *                floating point number.
- *         </entry>
- *         <entry>shade(&commat;fg_color, 0.5)</entry>
- *       </row>
- *       <row>
- *         <entry>lighter(@color)</entry>
- *         <entry>A lighter variant of @color</entry>
- *       </row>
- *       <row>
- *         <entry>darker(@color)</entry>
- *         <entry>A darker variant of @color</entry>
- *       </row>
- *       <row>
- *         <entry>alpha(@color, @f)</entry>
- *         <entry>Modifies passed color’s alpha by a factor @f. @f is a
- *                floating point number. @f < 1.0 results in a more transparent
- *                color while @f > 1.0 results in a more opaque color.
- *         </entry>
- *         <entry>alhpa(blue, 0.5)</entry>
- *       </row>
- *     </tbody>
- *   </tgroup>
- * </informaltable>
+ *
+ * # Specifying Colors
+ * There are various ways to express colors in GTK+ CSS.
+ *
+ * ## rgb(r, g, b)
+ *
+ * An opaque color.
+ *
+ * - `r`, `g`, `b` can be either integers between 0 and 255, or percentages.
+ *
+ * |[
+ *   color: rgb(128, 10, 54);
+ *   background-color: rgb(20%, 30%, 0%);
+ * ]|
+ *
+ * ## rgba(r, g, b, a)
+ *
+ * A translucent color.
+ *
+ * - `r`, `g`, `b` can be either integers between 0 and 255, or percentages.
+ * - `a` is a floating point number between 0 and 1.
+ *
+ * |[
+ *   color: rgb(128, 10, 54, 0.5);
+ * ]|
+ *
+ * ## &num;xxyyzz
+ *
+ * An opaque color.
+ *
+ * - `xx`, `yy`, `zz` are hexadecimal numbers specifying `r`, `g`, `b`
+ *   variants with between 1 and 4 hexadecimal digits per component.
+ *
+ * |[
+ *   color: #f0c;
+ *   background-color: #ff00cc;
+ *   border-color: #ffff0000cccc;
+ * ]|
+ *
+ * ## &commat;name
+ *
+ * Reference to a color that has been defined with &commat;define-color
+ *
+ * |[
+ *   color: @bg_color;
+ * ]|
+ *
+ * ## mix(color1, color2, factor)
+ *
+ * A linear combination of `color1` and `color2`.
+ *
+ * - `factor` is a floating point number between 0 and 1.
+ *
+ * |[
+ *   color: mix(#ff1e0a, @bg_color, 0.8);
+ * ]|
+ *
+ * ## shade(color, factor)
+ *
+ * A lighter or darker variant of `color`.
+ *
+ * - `factor` is a floating point number.
+ *
+ * |[
+ *   color: shade(@fg_color, 0.5);
+ * ]|
+ *
+ * ## lighter(color)
+ *
+ * A lighter variant of `color`.
+ *
+ * |[
+ *   color: lighter(@fg_color);
+ * ]|
+ *
+ * ## darker(color)
+ *
+ * A darker variant of `color`.
+ *
+ * |[
+ *   color: darker(@bg_color);
+ * ]|
+ *
+ * ## alpha(color, factor)
+ *
+ * Modifies passed color’s alpha by a factor.
+ *
+ * - `factor` is a floating point number. `factor` < 1.0 results in a more
+ *   transparent color while `factor` > 1.0 results in a more opaque color.
+ *
+ * |[
+ *   color: alpha(@fg_color, 0.5);
+ * ]|
+ *
  *
  * # Gradients
  *
- * Linear or radial Gradients can be used as background images.
+ * Linear or radial gradients can be used as background images.
  *
- * A linear gradient along the line from (@start_x, @start_y) to
- * (@end_x, @end_y) is specified using the syntax
- * <literallayout>-gtk-gradient (linear,
- *               @start_x @start_y, @end_x @end_y,
- *               color-stop (@position, @color),
- *               ...)</literallayout>
- * where @start_x and @end_x can be either a floating point number between
- * 0 and 1 or one of the special values “left”, “right” or “center”, @start_y
- * and @end_y can be either a floating point number between 0 and 1 or one
- * of the special values “top”, “bottom” or “center”, @position is a floating
- * point number between 0 and 1 and @color is a color expression (see above).
+ * ## Linear Gradients
+ *
+ * A linear gradient along the line from (`start_x`, `start_y`) to
+ * (`end_x`, `end_y`) is specified using the following syntax:
+ *
+ * > `-gtk-gradient (linear, start_x start_y, end_x end_y, color-stop (position, color), ...)`
+ *
+ * - `start_x` and `end_x` can be either a floating point number between
+ * 0 and 1, or one of the special values: “left”, “right”, or “center”.
+ * - `start_y` and `end_y` can be either a floating point number between 0 and 1, or one
+ * of the special values: “top”, “bottom” or “center”.
+ * - `position` is a floating point number between 0 and 1.
+ * - `color` is a color expression (see above).
+ *
  * The color-stop can be repeated multiple times to add more than one color
- * stop. “from (@color)” and “to (@color)” can be used as abbreviations for
+ * stop. “from (color)” and “to (color)” can be used as abbreviations for
  * color stops with position 0 and 1, respectively.
  *
- * An example for a linear gradient:
+ * ## Example: Linear Gradient
  * ![](gradient1.png)
- * This gradient was specified with
- * <literallayout>-gtk-gradient (linear,
+ * |[
+ * -gtk-gradient (linear,
  *                left top, right bottom,
- *                from(&commat;yellow), to(&commat;blue))</literallayout>
+ *                from(@yellow), to(@blue));
+ * ]|
  *
- * Another example for a linear gradient:
+ * ## Example: Linear Gradient 2
  * ![](gradient2.png)
- * This gradient was specified with
- * <literallayout>-gtk-gradient (linear,
+ * |[
+ * -gtk-gradient (linear,
  *                0 0, 0 1,
- *                color-stop(0, &commat;yellow),
- *                color-stop(0.2, &commat;blue),
- *                color-stop(1, &num;0f0))</literallayout>
+ *                color-stop(0, @yellow),
+ *                color-stop(0.2, @blue),
+ *                color-stop(1, #0f0))
+ * ]|
  *
- * A radial gradient along the two circles defined by (@start_x, @start_y,
- * @start_radius) and (@end_x, @end_y, @end_radius) is specified using the
- * syntax
- * <literallayout>-gtk-gradient (radial,
- *                @start_x @start_y, @start_radius,
- *                @end_x @end_y, @end_radius,
- *                color-stop (@position, @color),
- *                ...)</literallayout>
- * where @start_radius and @end_radius are floating point numbers and
- * the other parameters are as before.
+ * ## Radial Gradients
  *
- * An example of a radial gradient:
+ * A radial gradient along the two circles defined by (`start_x`,
+ * `start_y`, `start_radius`) and (`end_x`, `end_y`, `end_radius`) is
+ * specified using the following syntax:
+ *
+ * > `-gtk-gradient (radial, start_x start_y, start_radius, end_x end_y, end_radius, color-stop (position, color), ...)`
+ *
+ * where `start_radius` and `end_radius` are floating point numbers
+ * and the other parameters are as before.
+ *
+ * ## Example: Radial Gradient
  * ![](gradient3.png)
- * This gradient was specified with
- * <literallayout>-gtk-gradient (radial,
+ * |[
+ * -gtk-gradient (radial,
  *                center center, 0,
  *                center center, 1,
- *                from(&commat;yellow), to(&commat;green))</literallayout>
+ *                from(@yellow), to(@green))
+ * ]|
  *
- * Another example of a radial gradient:
+ * ## Example: Radial Gradient 2
  * ![](gradient4.png)
- * This gradient was specified with
- * <literallayout>-gtk-gradient (radial,
+ * |[
+ * -gtk-gradient (radial,
  *                0.4 0.4, 0.1,
  *                0.6 0.6, 0.7,
- *                color-stop (0, &num;f00),
- *                color-stop (0.1, &num;a0f),
- *                color-stop (0.2, &commat;yellow),
- *                color-stop (1, &commat;green))</literallayout>
+ *                color-stop (0, #f00),
+ *                color-stop (0.1, #a0f),
+ *                color-stop (0.2, @yellow),
+ *                color-stop (1, @green))
+ * ]|
  *
  * # Text shadow
  *
@@ -485,19 +514,22 @@
  * text-shadow syntax, as defined in the
  * [CSS3 Specification](http://www.w3.org/TR/css3-text/#text-shadow).
  *
- * A text shadow is specified using the syntax
- * <literallayout>text-shadow: @horizontal_offset @vertical_offset [ @blur_radius ] @color</literallayout>
- * The offset of the shadow is specified with the @horizontal_offset and @vertical_offset
- * parameters. The optional blur radius is parsed, but it is currently not rendered by
- * the GTK+ theming engine.
+ * A text shadow is specified using the following syntax:
  *
- * To set a shadow on an icon, use the icon-shadow property instead,
+ * > `text-shadow: horizontal_offset vertical_offset [ blur_radius ] color`
+ *
+ * - The offset of the shadow is specified with the
+ * `horizontal_offset` and `vertical_offset` parameters.
+ * - The optional blur radius is parsed, but it is currently not
+ * rendered by the GTK+ theming engine.
+ *
+ * To set a shadow on an icon, use the `icon-shadow` property instead,
  * with the same syntax.
  *
  * To set multiple shadows on an element, you can specify a comma-separated list
- * of shadow elements in the text-shadow or icon-shadow property. Shadows are
- * always rendered front-back, i.e. the first shadow specified is on top of the
- * others. Shadows can thus overlay each other, but they can never overlay the
+ * of shadow elements in the `text-shadow` or `icon-shadow` property. Shadows are
+ * always rendered front to back (i.e. the first shadow specified is on top of the
+ * others). Shadows can thus overlay each other, but they can never overlay the
  * text or icon itself, which is always rendered on top of the shadow layer.
  *
  * # Box shadow
@@ -506,19 +538,22 @@
  * as defined in the
  * [CSS3 Specification](http://www.w3.org/TR/css3-background/#the-box-shadow).
  *
- * A box shadow is specified using the syntax
- * <literallayout>box-shadow: [ @inset ] @horizontal_offset @vertical_offset [ @blur_radius ] [ @spread ] @color</literallayout>
- * A positive offset will draw a shadow that is offset to the right (down) of the box,
- * a negative offset to the left (top). The optional spread parameter defines an additional
- * distance to expand the shadow shape in all directions, by the specified radius.
- * The optional blur radius parameter is parsed, but it is currently not rendered by
+ * A box shadow is specified using the following syntax:
+ *
+ * > `box-shadow: [ inset ] horizontal_offset vertical_offset [ blur_radius ] [ spread ] color`
+ *
+ * - A positive offset will draw a shadow that is offset to the right (down) of the box,
+ * - A negative offset to the left (top).
+ * - The optional spread parameter defines an additional distance to
+ * expand the shadow shape in all directions, by the specified radius.
+ * - The optional blur radius parameter is parsed, but it is currently not rendered by
  * the GTK+ theming engine.
- * The inset parameter defines whether the drop shadow should be rendered inside or outside
+ * - The inset parameter defines whether the drop shadow should be rendered inside or outside
  * the box canvas.
  *
  * To set multiple box-shadows on an element, you can specify a comma-separated list
- * of shadow elements in the box-shadow property. Shadows are always rendered
- * front-back, i.e. the first shadow specified is on top of the others, so they may
+ * of shadow elements in the `box-shadow` property. Shadows are always rendered
+ * front to back (i.e. the first shadow specified is on top of the others) so they may
  * overlap other boxes or other shadows.
  *
  * # Border images
@@ -529,76 +564,119 @@
  *
  * ![](slices.png)
  *
- * The parameters of the slicing process are controlled by
- * four separate properties. Note that you can use the
- * <literallayout>border-image</literallayout> shorthand property
- * to set values for the three properties at the same time.
+ * The parameters of the slicing process are controlled by four
+ * separate properties.
  *
- * <literallayout>border-image-source: url(@path)
- * (or border-image-source: -gtk-gradient(...))</literallayout>:
- * Specifies the source of the border image, and it can either
- * be an URL or a gradient (see above).
+ * - Image Source
+ * - Image Slice
+ * - Image Width
+ * - Image Repeat
  *
- * <literallayout>border-image-slice: @top @right @bottom @left</literallayout>
- * The sizes specified by the @top, @right, @bottom and @left parameters
- * are the offsets, in pixels, from the relevant edge where the image
+ * Note that you can use the `border-image` shorthand property to set
+ * values for the properties at the same time.
+ *
+ * ## Image Source
+ *
+ * The border image source can be specified either as a
+ * URL or a gradient:
+ * |[
+ *   border-image-source: url(path);
+ * ]|
+ * or
+ * |[
+ *   border-image-source: -gtk-gradient(...);
+ * ]|
+ *
+ * ## Image Slice
+ *
+ * |[
+ *   border-image-slice: top right bottom left;
+ * ]|
+ *
+ * The sizes specified by the `top`, `right`, `bottom`, and `left` parameters
+ * are the offsets (in pixels) from the relevant edge where the image
  * should be “cut off” to build the slices used for the rendering
  * of the border.
  *
- * <literallayout>border-image-width: @top @right @bottom @left</literallayout>
+ * ## Image Width
+ *
+ * |[
+ *   border-image-width: top right bottom left;
+ * ]|
+ *
  * The sizes specified by the @top, @right, @bottom and @left parameters
  * are inward distances from the border box edge, used to specify the
  * rendered size of each slice determined by border-image-slice.
  * If this property is not specified, the values of border-width will
  * be used as a fallback.
  *
- * <literallayout>border-image-repeat: [stretch|repeat|round|space] ? 
- * [stretch|repeat|round|space]</literallayout>
+ * ## Image Repeat
+ *
  * Specifies how the image slices should be rendered in the area
  * outlined by border-width.
- * The default (stretch) is to resize the slice to fill in the whole 
- * allocated area.
- * If the value of this property is “repeat”, the image slice
- * will be tiled to fill the area.
- * If the value of this property is “round”, the image slice will
- * be tiled to fill the area, and scaled to fit it exactly
- * a whole number of times.
- * If the value of this property is “space”, the image slice will
- * be tiled to fill the area, and if it doesn’t fit it exactly a whole
- * number of times, the extra space is distributed as padding around 
+ *
+ * |[
+ *   border-image-repeat: [stretch|repeat|round|space];
+ * ]|
+ * or
+ * |[
+ *   border-image-repeat: [stretch|repeat|round|space] [stretch|repeat|round|space];
+ * ]|
+ *
+ * - The default (stretch) is to resize the slice to fill in the
+ * whole allocated area.
+ *
+ * - If the value of this property is “repeat”, the image slice will
+ * be tiled to fill the area.
+ *
+ * - If the value of this property is “round”, the image slice will be
+ * tiled to fill the area, and scaled to fit it exactly a whole number
+ * of times.
+ *
+ * - If the value of this property is “space”, the image slice will be
+ * tiled to fill the area, and if it doesn’t fit it exactly a whole
+ * number of times, the extra space is distributed as padding around
  * the slices.
- * If two options are specified, the first one affects
- * the horizontal behaviour and the second one the vertical behaviour.
- * If only one option is specified, it affects both.
  *
- * An example of a border image:
+ * - If two options are specified, the first one affects the
+ * horizontal behaviour and the second one the vertical behaviour.  If
+ * only one option is specified, it affects both.
+ *
+ *
+ * ## Example: Border Image
  * ![](border1.png)
- * This border image was specified with
- * <literallayout>url("gradient1.png") 10 10 10 10</literallayout>
+ * |[
+ * border-image: url("gradient1.png") 10 10 10 10;
+ * ]|
  *
- * An example of a repeating border image:
+ * ## Example: Repeating Border Image
  * ![](border2.png)
- * This border image was specified with
- * <literallayout>url("gradient1.png") 10 10 10 10 repeat</literallayout>
+ * |[
+ * border-image: url("gradient1.png") 10 10 10 10 repeat;
+ * ]|
  *
- * An example of a stretched border image:
+ * ## Example: Stetched Border Image
  * ![](border3.png)
- * This border image was specified with
- * <literallayout>url("gradient1.png") 10 10 10 10 stretch</literallayout>
+ * |[
+ * border-image: url("gradient1.png") 10 10 10 10 stretch;
+ * ]|
  *
  * # Transitions
  *
  * Styles can specify transitions that will be used to create a gradual
  * change in the appearance when a widget state changes. The following
  * syntax is used to specify transitions:
- * <literallayout>@duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?</literallayout>
- * The @duration is the amount of time that the animation will take for
- * a complete cycle from start to end. If the loop option is given, the
- * animation will be repated until the state changes again.
- * The option after the duration determines the transition function from a
- * small set of predefined functions.
  *
- * # Linear transition
+ * > `duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?`
+ *
+ * - The `duration` is the amount of time that the animation will take
+ * for a complete cycle from start to end.
+ * - If the loop option is given, the animation will be repated until
+ * the state changes again.
+ * - The option after the duration determines the transition function
+ * from a small set of predefined functions.
+ *
+ * ## Linear Transition
  *
  * ![](linear.png)
  *
@@ -618,12 +696,12 @@
  *
  * ![](ease-out.png)
  *
- * # Supported properties
+ * # Supported Properties
  *
- * Properties are the part that differ the most to common CSS,
- * not all properties are supported (some are planned to be
- * supported eventually, some others are meaningless or don't
- * map intuitively in a widget based environment).
+ * Properties are the part that differ the most to common CSS, not all
+ * properties are supported (some are planned to be supported
+ * eventually, some others are meaningless or don't map intuitively in
+ * a widget based environment).
  *
  * The currently supported properties are:
  * <informaltable>
@@ -897,7 +975,7 @@
  * GtkThemingEngines can register their own, engine-specific style properties
  * with the function gtk_theming_engine_register_property(). These properties
  * can be set in CSS like other properties, using a name of the form
- * <literallayout>-namespace-name</literallayout>, where namespace is typically
+ * `-namespace-name`, where namespace is typically
  * the name of the theming engine, and name is the
  * name of the property. Style properties that have been registered by widgets
  * using gtk_widget_class_install_style_property() can also be set in this
