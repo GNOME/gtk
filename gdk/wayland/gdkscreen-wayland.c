@@ -718,6 +718,12 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
   if (strcmp (name, "gtk-shell-shows-desktop") == 0)
     return set_capability_setting (screen, value, GTK_SHELL_CAPABILITY_DESKTOP_ICONS);
 
+  if (strcmp (name, "gtk-dialogs-use-header") == 0)
+    {
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
   return FALSE;
 }
 
