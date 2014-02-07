@@ -775,6 +775,17 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_SUGGESTED_ACTION "suggested-action"
 
+/**
+ * GTK_STYLE_CLASS_DESTRUCTIVE_ACTION:
+ *
+ * A CSS class used when an action (usually a button) is
+ * one that is expected to remove or destroy something visible
+ * to the user.
+ *
+ * Since: 3.12
+ */
+#define GTK_STYLE_CLASS_DESTRUCTIVE_ACTION "destructive-action"
+
 /* Predefined set of widget regions */
 
 /**
