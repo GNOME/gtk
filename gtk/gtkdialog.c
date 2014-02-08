@@ -43,6 +43,7 @@
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
 #include "deprecated/gtkstock.h"
+#include "gtksizegroup.h"
 
 /**
  * SECTION:gtkdialog
@@ -169,6 +170,7 @@ struct _GtkDialogPrivate
   GtkWidget *vbox;
   GtkWidget *headerbar;
   GtkWidget *action_area;
+  GtkSizeGroup *size_group;
 
   gint use_header_bar;
   gboolean constructed;
@@ -377,6 +379,8 @@ add_to_header_bar (GtkDialog *dialog,
   else 
     gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->headerbar), child);
 
+  gtk_size_group_add_widget (priv->size_group, child);
+
   if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
     gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (priv->headerbar), FALSE);
 }
@@ -458,6 +462,16 @@ gtk_dialog_constructor (GType                  type,
 }
 
 static void
+gtk_dialog_finalize (GObject *obj)
+{
+  GtkDialog *dialog = GTK_DIALOG (obj);
+
+  g_object_unref (dialog->priv->size_group);
+
+  G_OBJECT_CLASS (gtk_dialog_parent_class)->finalize (obj);
+}
+
+static void
 gtk_dialog_class_init (GtkDialogClass *class)
 {
   GObjectClass *gobject_class;
@@ -470,6 +484,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class->constructor  = gtk_dialog_constructor;
   gobject_class->set_property = gtk_dialog_set_property;
   gobject_class->get_property = gtk_dialog_get_property;
+  gobject_class->finalize = gtk_dialog_finalize;
 
   widget_class->map = gtk_dialog_map;
   widget_class->style_updated = gtk_dialog_style_updated;
@@ -628,6 +643,7 @@ gtk_dialog_init (GtkDialog *dialog)
   dialog->priv = gtk_dialog_get_instance_private (dialog);
 
   dialog->priv->use_header_bar = -1;
+  dialog->priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
