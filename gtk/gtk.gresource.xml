@@ -12,6 +12,7 @@
     <file alias="cursor/dnd-move.png">cursor/cursor_dnd_move.png</file>
     <file alias="cursor/dnd-copy.png">cursor/cursor_dnd_copy.png</file>
     <file compressed="true">ui/gtkaboutdialog.ui</file>
+    <file compressed="true">ui/gtkactionbar.ui</file>
     <file compressed="true">ui/gtkappchooserdialog.ui</file>
     <file compressed="true">ui/gtkappchooserwidget.ui</file>
     <file compressed="true">ui/gtkassistant.ui</file>

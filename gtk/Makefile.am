@@ -1115,6 +1115,7 @@ EXTRA_DIST += gtkbuilder.rnc gtkbuilder.rng
 COMPOSITE_TEMPLATES =				\
 	resources/ui/gtkapplication-quartz.ui	\
 	resources/ui/gtkaboutdialog.ui		\
+	resources/ui/gtkactionbar.ui		\
 	resources/ui/gtkappchooserdialog.ui	\
 	resources/ui/gtkappchooserwidget.ui	\
 	resources/ui/gtkassistant.ui		\
