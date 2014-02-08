@@ -3909,6 +3909,12 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_int (value, gtk_widget_get_margin_right (widget));
       G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
+    case PROP_MARGIN_START:
+      g_value_set_int (value, gtk_widget_get_margin_start (widget));
+      break;
+    case PROP_MARGIN_END:
+      g_value_set_int (value, gtk_widget_get_margin_end (widget));
+      break;
     case PROP_MARGIN_TOP:
       g_value_set_int (value, gtk_widget_get_margin_top (widget));
       break;
