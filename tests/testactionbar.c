@@ -20,6 +20,17 @@ toggle_center (GtkCheckButton *button,
 }
 
 static void
+toggle_visibility (GtkCheckButton *button,
+                   GParamSpec     *pspec,
+                   GtkActionBar   *bar)
+{
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+    gtk_widget_show (GTK_WIDGET (bar));
+  else
+    gtk_widget_hide (GTK_WIDGET (bar));
+}
+
+static void
 create_widgets (GtkActionBar  *bar,
                 GtkPackType    pack_type,
                 gint           n)
@@ -86,15 +97,15 @@ activate (GApplication *gapp)
   GtkWidget *spin;
   GtkWidget *check;
   GtkWidget *bar;
-  GtkWidget *frame;
 
   window = gtk_application_window_new (app);
   gtk_application_add_window (app, GTK_WINDOW (window));
 
   bar = gtk_action_bar_new ();
+  gtk_widget_set_no_show_all (bar, TRUE);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  
+
   grid = gtk_grid_new ();
   g_object_set (grid,
                 "halign", GTK_ALIGN_CENTER,
@@ -128,12 +139,15 @@ activate (GApplication *gapp)
   gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), spin, 1, 2, 1, 1);
 
-  frame = gtk_frame_new (NULL);
-  gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (frame, GTK_ALIGN_END);
-  gtk_container_add (GTK_CONTAINER (frame), bar);
+  label = gtk_label_new ("Visible");
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  check = gtk_check_button_new ();
+  g_signal_connect (check, "notify::active",
+                    G_CALLBACK (toggle_visibility), bar);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), check, 1, 3, 1, 1);
 
-  gtk_box_pack_start (GTK_BOX (box), frame, TRUE, TRUE, 0);
+  gtk_box_pack_end (GTK_BOX (box), bar, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_widget_show_all (window);
 }
