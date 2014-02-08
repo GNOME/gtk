@@ -27,6 +27,7 @@
 
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkpopover.h>
 
 G_BEGIN_DECLS
 
@@ -67,9 +68,15 @@ GtkWidget   *gtk_menu_button_new            (void);
 
 GDK_AVAILABLE_IN_3_6
 void         gtk_menu_button_set_popup      (GtkMenuButton *menu_button,
-                                             GtkWidget     *popup);
+                                             GtkWidget     *menu);
 GDK_AVAILABLE_IN_3_6
 GtkMenu     *gtk_menu_button_get_popup      (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_3_12
+void         gtk_menu_button_set_popover    (GtkMenuButton *menu_button,
+                                             GtkWidget     *popover);
+GDK_AVAILABLE_IN_3_12
+GtkPopover  *gtk_menu_button_get_popover    (GtkMenuButton *menu_button);
 
 GDK_AVAILABLE_IN_3_6
 void         gtk_menu_button_set_direction  (GtkMenuButton *menu_button,
@@ -88,6 +95,14 @@ void         gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
                                                GtkWidget     *align_widget);
 GDK_AVAILABLE_IN_3_6
 GtkWidget   *gtk_menu_button_get_align_widget (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_3_12
+void         gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
+                                              gboolean       use_popover);
+
+GDK_AVAILABLE_IN_3_12
+gboolean     gtk_menu_button_get_use_popover (GtkMenuButton *menu_button);
+
 
 G_END_DECLS
 
