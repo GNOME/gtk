@@ -508,7 +508,7 @@
  *                color-stop (1, @green))
  * ]|
  *
- * # Border images # {#border-images]
+ * # Border images # {#border-images}
  *
  * Images and gradients can also be used in slices for the purpose of creating
  * scalable borders.
