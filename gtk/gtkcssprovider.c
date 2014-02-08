@@ -342,7 +342,7 @@
  * }
  * ]|
  *
- * # Specifying Colors
+ * # Specifying Colors # {#specifying-colors}
  * There are various ways to express colors in GTK+ CSS.
  *
  * ## rgb(r, g, b)
@@ -508,55 +508,7 @@
  *                color-stop (1, @green))
  * ]|
  *
- * # Text shadow
- *
- * A shadow list can be applied to text or symbolic icons, using the CSS3
- * text-shadow syntax, as defined in the
- * [CSS3 Specification](http://www.w3.org/TR/css3-text/#text-shadow).
- *
- * A text shadow is specified using the following syntax:
- *
- * > `text-shadow: horizontal_offset vertical_offset [ blur_radius ] color`
- *
- * - The offset of the shadow is specified with the
- * `horizontal_offset` and `vertical_offset` parameters.
- * - The optional blur radius is parsed, but it is currently not
- * rendered by the GTK+ theming engine.
- *
- * To set a shadow on an icon, use the `icon-shadow` property instead,
- * with the same syntax.
- *
- * To set multiple shadows on an element, you can specify a comma-separated list
- * of shadow elements in the `text-shadow` or `icon-shadow` property. Shadows are
- * always rendered front to back (i.e. the first shadow specified is on top of the
- * others). Shadows can thus overlay each other, but they can never overlay the
- * text or icon itself, which is always rendered on top of the shadow layer.
- *
- * # Box shadow
- *
- * Themes can apply shadows on framed elements using the CSS3 box-shadow syntax,
- * as defined in the
- * [CSS3 Specification](http://www.w3.org/TR/css3-background/#the-box-shadow).
- *
- * A box shadow is specified using the following syntax:
- *
- * > `box-shadow: [ inset ] horizontal_offset vertical_offset [ blur_radius ] [ spread ] color`
- *
- * - A positive offset will draw a shadow that is offset to the right (down) of the box,
- * - A negative offset to the left (top).
- * - The optional spread parameter defines an additional distance to
- * expand the shadow shape in all directions, by the specified radius.
- * - The optional blur radius parameter is parsed, but it is currently not rendered by
- * the GTK+ theming engine.
- * - The inset parameter defines whether the drop shadow should be rendered inside or outside
- * the box canvas.
- *
- * To set multiple box-shadows on an element, you can specify a comma-separated list
- * of shadow elements in the `box-shadow` property. Shadows are always rendered
- * front to back (i.e. the first shadow specified is on top of the others) so they may
- * overlap other boxes or other shadows.
- *
- * # Border images
+ * # Border images # {#border-images]
  *
  * Images and gradients can also be used in slices for the purpose of creating
  * scalable borders.
@@ -661,40 +613,6 @@
  * border-image: url("gradient1.png") 10 10 10 10 stretch;
  * ]|
  *
- * # Transitions
- *
- * Styles can specify transitions that will be used to create a gradual
- * change in the appearance when a widget state changes. The following
- * syntax is used to specify transitions:
- *
- * > `duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?`
- *
- * - The `duration` is the amount of time that the animation will take
- * for a complete cycle from start to end.
- * - If the loop option is given, the animation will be repated until
- * the state changes again.
- * - The option after the duration determines the transition function
- * from a small set of predefined functions.
- *
- * ## Linear Transition
- *
- * ![](linear.png)
- *
- * ## Ease transition
- *
- * ![](ease.png)
- *
- * ## Ease-in-out transition
- *
- * ![](ease-in-out.png)
- *
- * ## Ease-in transition
- *
- * ![](ease-in.png)
- *
- * ## Ease-out transition
- *
- * ![](ease-out.png)
  *
  * # Supported Properties
  *
@@ -704,273 +622,466 @@
  * a widget based environment).
  *
  * The currently supported properties are:
- * <informaltable>
- *   <tgroup cols="4">
- *     <thead>
- *       <row>
- *         <entry>Property name</entry>
- *         <entry>Syntax</entry>
- *         <entry>Maps to</entry>
- *         <entry>Examples</entry>
- *       </row>
- *     </thead>
- *     <tbody>
- *       <row>
- *         <entry>engine</entry>
- *         <entry>engine-name</entry>
- *         <entry>#GtkThemingEngine</entry>
- *         <entry>engine: clearlooks;
- *  engine: none; /&ast; use the default (i.e. builtin) engine) &ast;/ </entry>
- *       </row>
- *       <row>
- *         <entry>background-color</entry>
- *         <entry morerows="1">color (see above)</entry>
- *         <entry morerows="6">#GdkRGBA</entry>
- *         <entry morerows="6"><literallayout>background-color: &num;fff;
- * color: &amp;color1;
- * background-color: shade (&amp;color1, 0.5);
- * color: mix (&amp;color1, &num;f0f, 0.8);</literallayout>
- *         </entry>
- *       </row>
- *       <row>
- *         <entry>color</entry>
- *       </row>
- *       <row>
- *         <entry>border-top-color</entry>
- *         <entry morerows="3">transparent|color (see above)</entry>
- *       </row>
- *       <row>
- *         <entry>border-right-color</entry>
- *       </row>
- *       <row>
- *         <entry>border-bottom-color</entry>
- *       </row>
- *       <row>
- *         <entry>border-left-color</entry>
- *       </row>
- *       <row>
- *         <entry>border-color</entry>
- *         <entry>[transparent|color]{1,4}</entry>
- *       </row>
- *       <row>
- *         <entry>font-family</entry>
- *         <entry>@family [, @family]*</entry>
- *         <entry>#gchararray</entry>
- *         <entry>font-family: Sans, Arial;</entry>
- *       </row>
- *       <row>
- *         <entry>font-style</entry>
- *         <entry>[normal|oblique|italic]</entry>
- *         <entry>#PANGO_TYPE_STYLE</entry>
- *         <entry>font-style: italic;</entry>
- *       </row>
- *       <row>
- *         <entry>font-variant</entry>
- *         <entry>[normal|small-caps]</entry>
- *         <entry>#PANGO_TYPE_VARIANT</entry>
- *         <entry>font-variant: normal;</entry>
- *       </row>
- *       <row>
- *         <entry>font-weight</entry>
- *         <entry>[normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900]</entry>
- *         <entry>#PANGO_TYPE_WEIGHT</entry>
- *         <entry>font-weight: bold;</entry>
- *       </row>
- *       <row>
- *         <entry>font-size</entry>
- *         <entry>Font size in point</entry>
- *         <entry>#gint</entry>
- *         <entry>font-size: 13;</entry>
- *       </row>
- *       <row>
- *         <entry>font</entry>
- *         <entry>@family [@style] [@size]</entry>
- *         <entry>#PangoFontDescription</entry>
- *         <entry>font: Sans 15;</entry>
- *       </row>
- *       <row>
- *         <entry>margin-top</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>margin-top: 0;</entry>
- *       </row>
- *       <row>
- *         <entry>margin-left</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>margin-left: 1;</entry>
- *       </row>
- *       <row>
- *         <entry>margin-bottom</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>margin-bottom: 2;</entry>
- *       </row>
- *       <row>
- *         <entry>margin-right</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>margin-right: 4;</entry>
- *       </row>
- *       <row>
- *         <entry>margin</entry>
- *         <entry><literallayout>@width
- * @vertical_width @horizontal_width
- * @top_width @horizontal_width @bottom_width
- * @top_width @right_width @bottom_width @left_width</literallayout>
- *         </entry>
- *         <entry>#GtkBorder</entry>
- *         <entry><literallayout>margin: 5;
- * margin: 5 10;
- * margin: 5 10 3;
- * margin: 5 10 3 5;</literallayout>
- *         </entry>
- *       </row>
- *       <row>
- *         <entry>padding-top</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>padding-top: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>padding-left</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>padding-left: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>padding-bottom</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>padding-bottom: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>padding-right</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>padding-right: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>padding</entry>
- *         <entry><literallayout>@width
- * @vertical_width @horizontal_width
- * @top_width @horizontal_width @bottom_width
- * @top_width @right_width @bottom_width @left_width</literallayout>
- *         </entry>
- *         <entry>#GtkBorder</entry>
- *         <entry><literallayout>padding: 5;
- * padding: 5 10;
- * padding: 5 10 3;
- * padding: 5 10 3 5;</literallayout>
- *         </entry>
- *       </row>
- *       <row>
- *         <entry>background-image</entry>
- *         <entry><literallayout>gradient (see above) or
- * url(@path)</literallayout></entry>
- *         <entry>#cairo_pattern_t</entry>
- *         <entry><literallayout>-gtk-gradient (linear,
- *                left top, right top,
- *                from (&num;fff), to (&num;000));
- * -gtk-gradient (linear, 0.0 0.5, 0.5 1.0,
- *                from (&num;fff),
- *                color-stop (0.5, &num;f00),
- *                to (&num;000));
- * -gtk-gradient (radial,
- *                center center, 0.2,
- *                center center, 0.8,
- *                color-stop (0.0, &num;fff),
- *                color-stop (1.0, &num;000));
- * url ("background.png");</literallayout>
- *         </entry>
- *       </row>
- *       <row>
- *         <entry>background-repeat</entry>
- *         <entry>[repeat|no-repeat]</entry>
- *         <entry>internal</entry>
- *         <entry><literallayout>background-repeat: no-repeat;</literallayout>
- *                If not specified, the style doesn’t respect the CSS3
- *                specification, since the background will be
- *                stretched to fill the area.
- *         </entry>
- *       </row>
- *       <row>
- *         <entry>border-top-width</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>border-top-width: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>border-left-width</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>border-left-width: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>border-bottom-width</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>border-bottom-width: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>border-right-width</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>border-right-width: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>border-width</entry>
- *         <entry>#GtkBorder</entry>
- *         <entry><literallayout>border-width: 1;
- * border-width: 1 2;
- * border-width: 1 2 3;
- * border-width: 1 2 3 5;</literallayout>
- *         </entry>
- *       </row>
- *       <row>
- *         <entry>border-radius</entry>
- *         <entry>integer</entry>
- *         <entry>#gint</entry>
- *         <entry>border-radius: 5;</entry>
- *       </row>
- *       <row>
- *         <entry>border-style</entry>
- *         <entry>[none|solid|inset|outset]</entry>
- *         <entry>#GtkBorderStyle</entry>
- *         <entry>border-style: solid;</entry>
- *       </row>
- *       <row>
- *         <entry>border-image</entry>
- *         <entry><literallayout>border image (see above)</literallayout></entry>
- *         <entry>internal use only</entry>
- *         <entry><literallayout>border-image: url("/path/to/image.png") 3 4 3 4 stretch;
- * border-image: url("/path/to/image.png") 3 4 4 3 repeat stretch;</literallayout>
- *         </entry>
- *       </row>
- *       <row>
- *         <entry>text-shadow</entry>
- *         <entry>shadow list (see above)</entry>
- *         <entry>internal use only</entry>
- *         <entry><literallayout>text-shadow: 1 1 0 blue, -4 -4 red;</literallayout></entry>
- *       </row>
- *       <row>
- *         <entry>transition</entry>
- *         <entry>transition (see above)</entry>
- *         <entry>internal use only</entry>
- *         <entry><literallayout>transition: 150ms ease-in-out;
- * transition: 1s linear loop;</literallayout>
- *         </entry>
- *       </row>
- *       <row>
- *         <entry>gtk-key-bindings</entry>
- *         <entry>binding set name list</entry>
- *         <entry>internal use only</entry>
- *         <entry><literallayout>gtk-bindings: binding1, binding2, ...;</literallayout>
- *         </entry>
- *       </row>
- *     </tbody>
- *   </tgroup>
- * </informaltable>
+ *
+ * ## engine: [name|none];
+ *
+ * - `none` means to use the default (ie. builtin engine)
+ * |[
+ *  engine: clearlooks;
+ * ]|
+ *
+ * ## background-color: [color|transparent];
+ *
+ * - `color`: See [Specifying Colors][specifying-colors]
+ * |[
+ *  background-color: shade (@color1, 0.5);
+ * ]|
+ *
+ * ## color: [color|transparent];
+ *
+ * - `color`: See [Specifying Colors][specifying-colors]
+ * |[
+ *  color: #fff;
+ * ]|
+ *
+ * ## border-color: [color|transparent]{1,4};
+ *
+ * - `color`: See [Specifying Colors][specifying-colors]
+ * - Four values used to specify: top right bottom left
+ * - Three values used to specify: top vertical bottom
+ * - Two values used to specify: horizontal vertical
+ * - One value used to specify: color
+ * |[
+ *  border-color: red green blue;
+ * ]|
+ *
+ * ## border-top-color: [color|transparent];
+ *
+ * - `color`: See [Specifying Colors][specifying-colors]
+ * |[
+ *  border-top-color: @borders;
+ * ]|
+ *
+ * ## border-right-color: [color|transparent];
+ *
+ * - `color`: See [Specifying Colors][specifying-colors]
+ * |[
+ *  border-right-color: @borders;
+ * ]|
+ *
+ * ## border-bottom-color: [color|transparent];
+ *
+ * - `color`: See [Specifying Colors][specifying-colors]
+ * |[
+ *  border-bottom-color: @borders;
+ * ]|
+ *
+ * ## border-left-color: [color|transparent];
+ *
+ * - `color`: See [Specifying Colors][specifying-colors]
+ * |[
+ *  border-left-color: @borders;
+ * ]|
+ *
+ * ## font-family: name;
+ *
+ * The name of the font family or font name to use.
+ *
+ * - Note: unlike the CSS2 Specification this does not support using a
+ *   prioritized list of font family names and/or generic family
+ *   names.
+ *
+ * |[
+ *  font-family: Sans, Cantarell;
+ * ]|
+ *
+ * ## font-style: [normal|oblique|italic];
+ *
+ * Selects between normal, italic and oblique faces within a font family.
+ *
+ * |[
+ *  font-style: italic;
+ * ]|
+ *
+ * ## font-variant: [normal|small-caps];
+ *
+ * In a small-caps font the lower case letters look similar to the
+ * uppercase ones, but in a smaller size and with slightly different
+ * proportions.
+ *
+ * |[
+ *  font-variant: normal;
+ * ]|
+ *
+ * ## font-weight: [normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900];
+ *
+ * Selects the weight of the font. The values '100' to '900' form an
+ * ordered sequence, where each number indicates a weight that is at
+ * least as dark as its predecessor. The keyword 'normal' is
+ * synonymous with '400', and 'bold' is synonymous with
+ * '700'. Keywords other than 'normal' and 'bold' have been shown to
+ * be often confused with font names and a numerical scale was
+ * therefore chosen for the 9-value list.
+ * - Maps to #PANGO_TYPE_WEIGHT
+ * |[
+ *  font-weight: bold;
+ * ]|
+ *
+ * ## font-size: [absolute-size|relative-size|percentage];
+ *
+ * - `absolute-size`: The size in normal size units like `px`, `pt`,
+ *    and `em`. Or symbolic sizes like `xx-small`, `x-small`, `small`,
+ *    `medium`, `large`, `x-large`, `xx-large`.
+ * - `relative-size`: `larger` or `smaller` relative to the parent.
+ * - `percentage`: A percentage difference from the nominal size.
+ * |[
+ *  font-size: 12px;
+ * ]|
+ *
+ * ## font: [family] [style] [variant] [size];
+ *
+ * A shorthand for setting a few font properties at once.
+ * - Supports any format accepted by pango_font_description_from_string()
+ * - Note: this is somewhat different from the CSS2 Specification for this property.
+ * |[
+ *  font: Bold 11;
+ * ]|
+ *
+ * ## margin: [length|percentage]{1,4};
+ *
+ * A shorthand for setting the margin space required on all sides of
+ * an element.
+ * - Four values used to specify: top right bottom left
+ * - Three values used to specify: top horizontal bottom
+ * - Two values used to specify: vertical horizontal
+ * - One value used to specify: margin
+ * |[
+ *  margin: 1em 2em 4em;
+ * ]|
+ *
+ * ## margin-top: [length|percentage];
+ *
+ * Sets the margin space required on the top of an element.
+ * |[
+ *  margin-top: 10px;
+ * ]|
+ *
+ * ## margin-right: [length|percentage];
+ *
+ * Sets the margin space required on the right of an element.
+ * |[
+ *  margin-right: 0px;
+ * ]|
+ *
+ * ## margin-bottom: [length|percentage];
+ *
+ * Sets the margin space required on the bottom of an element.
+ * |[
+ *  margin-bottom: 10px;
+ * ]|
+ *
+ * ## margin-left: [length|percentage];
+ *
+ * Sets the margin space required on the left of an element.
+ * |[
+ *  margin-left: 1em;
+ * ]|
+ *
+ * ## padding: [length|percentage]{1,4};
+ *
+ * A shorthand for setting the padding space required on all sides of
+ * an element. The padding area is the space between the content of
+ * the element and its border.
+ * - Four values used to specify: top right bottom left
+ * - Three values used to specify: top horizontal bottom
+ * - Two values used to specify: vertical horizontal
+ * - One value used to specify: padding
+ * |[
+ *  padding: 1em 2em 4em;
+ * ]|
+ *
+ * ## padding-top: [length|percentage];
+ *
+ * Sets the padding space required on the top of an element.
+ * |[
+ *  padding-top: 10px;
+ * ]|
+ *
+ * ## padding-right: [length|percentage];
+ *
+ * Sets the padding space required on the right of an element.
+ * |[
+ *  padding-right: 0px;
+ * ]|
+ *
+ * ## padding-bottom: [length|percentage];
+ *
+ * Sets the padding space required on the bottom of an element.
+ * |[
+ *  padding-bottom: 10px;
+ * ]|
+ *
+ * ## padding-left: [length|percentage];
+ *
+ * Sets the padding space required on the left of an element.
+ * |[
+ *  padding-left: 1em;
+ * ]|
+ *
+ * ## border-width: [width]{1,4};
+ *
+ * A shorthand for setting the border width on all sides of
+ * an element.
+ * - Four values used to specify: top right bottom left
+ * - Three values used to specify: top vertical bottom
+ * - Two values used to specify: horizontal vertical
+ * - One value used to specify: width
+ * |[
+ *  border-width: 1px 2px 4px;
+ * ]|
+ *
+ * ## border-top-width: [width];
+ *
+ * Sets the border width required on the top of an element.
+ * |[
+ *  border-top: 10px;
+ * ]|
+ *
+ * ## border-right-width: [width];
+ *
+ * Sets the border width required on the right of an element.
+ * |[
+ *  border-right: 0px;
+ * ]|
+ *
+ * ## border-bottom-width: [width];
+ *
+ * Sets the border width required on the bottom of an element.
+ * |[
+ *  border-bottom: 10px;
+ * ]|
+ *
+ * ## border-left-width: [width];
+ *
+ * Sets the border width required on the left of an element.
+ * |[
+ *  border-left: 1em;
+ * ]|
+ *
+ * ## border-radius: [length|percentage]{1,4};
+ *
+ * Allows setting how rounded all border corners are.
+ * - Four values used to specify: top-left top-right bottom-right bottom-left
+ * - Three values used to specify: top-left top-right-and-bottom-left bottom-right
+ * - Two values used to specify: top-left-and-bottom-right top-right-and-bottom-left
+ * - One value used to specify: radius on all sides
+ * |[
+ *  border-radius: 8px
+ * ]|
+ *
+ * ## border-style: [none|solid|inset|outset]{1,4};
+ *
+ * A shorthand property for setting the line style for all four sides
+ * of the elements border.
+ * - Four values used to specify: top right bottom left;
+ * - Three values used to specify: top horizontal bottom
+ * - Two values used to specify: vertical horizontal
+ * - One value used to specify: style
+ * |[
+ *  border-style: solid;
+ * ]|
+ *
+ * ## border-image: [source] [slice] [ / width ] [repeat]; A shorthand
+ * for setting an image on the borders of elements. See [Border
+ * Images][border-images].
+ * |[
+ *  border-image: url("/path/to/image.png") 3 4 4 3 repeat stretch;
+ * ]|
+ *
+ * ## border-image-source: [none|url|linear-gradient]{1,4};
+ *
+ * Defines the image to use instead of the style of the border. If
+ * this property is set to none, the style defined by border-style is
+ * used instead.
+ * |[
+ *  border-image-source: url("/path/to/image.png");
+ * ]|
+ *
+ * ## border-image-slice: [number|percentage]{1,4};
+ *
+ * Divides the image specified by border-image-source in nine regions:
+ * the four corners, the four edges and the middle. It does this by
+ * specifying 4 inwards offsets.
+ * - Four values used to specify: top right bottom left;
+ * - Three values used to specify: top vertical bottom
+ * - Two values used to specify: horizontal vertical
+ * - One value used to specify: slice
+ * |[
+ *  border-image-slice: 3 3 4 3;
+ * ]|
+ *
+ * ## border-image-width: [length|percentage]{1,4};
+ *
+ * Defines the offset to use for dividing the border image in nine
+ * parts, the top-left corner, central top edge, top-right-corner,
+ * central right edge, bottom-right corner, central bottom edge,
+ * bottom-left corner, and central right edge. They represent inward
+ * distance from the top, right, bottom, and left edges.
+ * - Four values used to specify: top right bottom left;
+ * - Three values used to specify: top horizontal bottom
+ * - Two values used to specify: vertical horizontal
+ * - One value used to specify: width
+ * |[
+ *  border-image-width: 4px 0 4px 0;
+ * ]|
+ *
+ * ## border-image-repeat: [none|url|linear-gradient]{1,4};
+ *
+ * Defines how the middle part of a border image is handled to match
+ * the size of the border. It has a one-value syntax which describes
+ * the behavior for all sides, and a two-value syntax that sets a
+ * different value for the horizontal and vertical behavior.
+ * - Two values used to specify: horizontal vertical
+ * - One value used to specify: repeat
+ * |[
+ *  border-image-repeat: stretch;
+ * ]|
+ *
+ * ## background-image: [none|url|linear-gradient], ...
+ * Sets one or several background images for an element. The images
+ * are drawn on successive stacking context layers, with the first
+ * specified being drawn as if it is the closest to the user. The
+ * borders of the element are then drawn on top of them, and the
+ * background-color is drawn beneath them.
+ * - There can be several sources listed, separated by commas.
+ * |[
+ *  background-image: gtk-gradient (linear,
+ *                                  left top, right top,
+ *                                  from (#fff), to (#000));
+ * ]|
+ *
+ * ## background-repeat: [repeat|no-repeat|space|round|repeat-x|repeat-y];
+ *
+ * Defines how background images are repeated. A background image can
+ * be repeated along the horizontal axis, the vertical axis, both, or
+ * not repeated at all.
+ * - `repeat`: The image is repeated in the given direction as much as
+ *    needed to cover the whole background image painting area. The
+ *    last image may be clipped if the whole thing won't fit in the
+ *    remaining area.
+ * - `space`: The image is repeated in the given direction as much as
+ *    needed to cover most of the background image painting area,
+ *    without clipping an image. The remaining non-covered space is
+ *    spaced out evenly between the images. The first and last images
+ *    touches the edge of the element. The value of the
+ *    background-position CSS property is ignored for the concerned
+ *    direction, except if one single image is greater than the
+ *    background image painting area, which is the only case where an
+ *    image can be clipped when the space value is used.
+ * - `round`: The image is repeated in the given direction as much as
+ *    needed to cover most of the background image painting area,
+ *    without clipping an image. If it doesn't cover exactly the area,
+ *    the tiles are resized in that direction in order to match it.
+ * - `no-repeat`: The image is not repeated (and hence the background
+ *    image painting area will not necessarily been entirely
+ *    covered). The position of the non-repeated background image is
+ *    defined by the background-position CSS property.
+ * - Note if not specified, the style doesn’t respect the CSS3
+ *    specification, since the background will be stretched to fill
+ *    the area.
+ * |[
+ *  background-repeat: no-repeat;
+ * ]|
+ *
+ * ## text-shadow: horizontal_offset vertical_offset [ blur_radius ] color;
+ *
+ * A shadow list can be applied to text or symbolic icons, using the CSS3
+ * text-shadow syntax, as defined in the
+ * [CSS3 Specification](http://www.w3.org/TR/css3-text/#text-shadow).
+ *
+ * - The offset of the shadow is specified with the
+ * `horizontal_offset` and `vertical_offset` parameters.
+ * - The optional blur radius is parsed, but it is currently not
+ * rendered by the GTK+ theming engine.
+ *
+ * To set a shadow on an icon, use the `icon-shadow` property instead,
+ * with the same syntax.
+ *
+ * To set multiple shadows on an element, you can specify a comma-separated list
+ * of shadow elements in the `text-shadow` or `icon-shadow` property. Shadows are
+ * always rendered front to back (i.e. the first shadow specified is on top of the
+ * others). Shadows can thus overlay each other, but they can never overlay the
+ * text or icon itself, which is always rendered on top of the shadow layer.
+ *
+ * |[
+ *   text-shadow: text-shadow: 1 1 0 blue, -4 -4 red;
+ * ]|
+
+ * ## box-shadow: [ inset ] horizontal_offset vertical_offset [ blur_radius ] [ spread ] color;
+ *
+ * Themes can apply shadows on framed elements using the CSS3 box-shadow syntax,
+ * as defined in the
+ * [CSS3 Specification](http://www.w3.org/TR/css3-background/#the-box-shadow).
+ *
+ * - A positive offset will draw a shadow that is offset to the right (down) of the box,
+ * - A negative offset to the left (top).
+ * - The optional spread parameter defines an additional distance to
+ * expand the shadow shape in all directions, by the specified radius.
+ * - The optional blur radius parameter is parsed, but it is currently not rendered by
+ * the GTK+ theming engine.
+ * - The inset parameter defines whether the drop shadow should be rendered inside or outside
+ * the box canvas.
+ *
+ * To set multiple box-shadows on an element, you can specify a comma-separated list
+ * of shadow elements in the `box-shadow` property. Shadows are always rendered
+ * front to back (i.e. the first shadow specified is on top of the others) so they may
+ * overlap other boxes or other shadows.
+ *
+ * |[
+ *   box-shadow: inset 0 1px 1px alpha(black, 0.1);
+ * ]|
+ *
+ * ## transition: duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop];
+ *
+ * Styles can specify transitions that will be used to create a
+ * gradual change in the appearance when a widget state changes.
+ * - The `duration` is the amount of time that the animation will take
+ * for a complete cycle from start to end.
+ * - If the loop option is given, the animation will be repated until
+ * the state changes again.
+ * - The option after the duration determines the transition function
+ * from a small set of predefined functions.
+ *
+ * - Linear
+ *
+ *   ![](linear.png)
+ *
+ * - Ease transition
+ *
+ * ![](ease.png)
+ *
+ * - Ease-in-out transition
+ *
+ * ![](ease-in-out.png)
+ *
+ * - Ease-in transition
+ *
+ * ![](ease-in.png)
+ *
+ * - Ease-out transition
+ *
+ * ![](ease-out.png)
+ *
+ * |[
+ *   transition: 150ms ease-in-out;
+ * ]|
+ *
+ *
+ * ## gtk-key-bindings: binding1, binding2, ...;
+ *
+ * Key binding set name list.
+ *
+ * ## Other Properties
  *
  * GtkThemingEngines can register their own, engine-specific style properties
  * with the function gtk_theming_engine_register_property(). These properties
