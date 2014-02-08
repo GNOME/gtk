@@ -7711,6 +7711,28 @@ gtk_color_chooser_dialog_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcenterbox</FILE>
+<TITLE>GtkCenterBox</TITLE>
+GtkCenterBox
+gtk_center_box_new
+gtk_center_box_pack_start
+gtk_center_box_pack_end
+gtk_center_box_get_center_widget
+gtk_center_box_set_center_widget
+
+<SUBSECTION Standard>
+GTK_TYPE_CENTER_BOX
+GTK_CENTER_BOX
+GTK_CENTER_BOX_CLASS
+GTK_IS_CENTER_BOX
+GTK_IS_CENTER_BOX_CLASS
+GTK_CENTER_BOX_GET_CLASS
+
+<SUBSECTION Private>
+gtk_center_box_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkactionbar</FILE>
 <TITLE>GtkActionBar</TITLE>
 GtkActionBar

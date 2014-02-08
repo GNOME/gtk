@@ -220,6 +220,7 @@ gtk_public_h_sources = 		\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h		\
+	gtkcenterbox.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
@@ -654,6 +655,7 @@ gtk_base_c_sources = 		\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
 	gtkcellview.c		\
+	gtkcenterbox.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
 	gtkcolorbutton.c	\

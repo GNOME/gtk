@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef __GTK_ACTION_BAR_H__
-#define __GTK_ACTION_BAR_H__
+#ifndef __GTK_CENTER_BOX_H__
+#define __GTK_CENTER_BOX_H__
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -28,24 +28,24 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ACTION_BAR            (gtk_action_bar_get_type ())
-#define GTK_ACTION_BAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ACTION_BAR, GtkActionBar))
-#define GTK_ACTION_BAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ACTION_BAR, GtkActionBarClass))
-#define GTK_IS_ACTION_BAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ACTION_BAR))
-#define GTK_IS_ACTION_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ACTION_BAR))
-#define GTK_ACTION_BAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACTION_BAR, GtkActionBarClass))
+#define GTK_TYPE_CENTER_BOX            (gtk_center_box_get_type ())
+#define GTK_CENTER_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CENTER_BOX, GtkCenterBox))
+#define GTK_CENTER_BOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CENTER_BOX, GtkCenterBoxClass))
+#define GTK_IS_CENTER_BOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CENTER_BOX))
+#define GTK_IS_CENTER_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CENTER_BOX))
+#define GTK_CENTER_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CENTER_BOX, GtkCenterBoxClass))
 
-typedef struct _GtkActionBar              GtkActionBar;
-typedef struct _GtkActionBarPrivate       GtkActionBarPrivate;
-typedef struct _GtkActionBarClass         GtkActionBarClass;
+typedef struct _GtkCenterBox              GtkCenterBox;
+typedef struct _GtkCenterBoxPrivate       GtkCenterBoxPrivate;
+typedef struct _GtkCenterBoxClass         GtkCenterBoxClass;
 
-struct _GtkActionBar
+struct _GtkCenterBox
 {
   /*< private >*/
   GtkContainer container;
 };
 
-struct _GtkActionBarClass
+struct _GtkCenterBoxClass
 {
   /*< private >*/
   GtkContainerClass parent_class;
@@ -58,21 +58,21 @@ struct _GtkActionBarClass
 };
 
 GDK_AVAILABLE_IN_3_12
-GType        gtk_action_bar_get_type          (void) G_GNUC_CONST;
+GType        gtk_center_box_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_12
-GtkWidget   *gtk_action_bar_new               (void);
+GtkWidget   *gtk_center_box_new               (void);
 GDK_AVAILABLE_IN_3_12
-GtkWidget   *gtk_action_bar_get_center_widget (GtkActionBar *bar);
+GtkWidget   *gtk_center_box_get_center_widget (GtkCenterBox *box);
 GDK_AVAILABLE_IN_3_12
-void         gtk_action_bar_set_center_widget (GtkActionBar *bar,
+void         gtk_center_box_set_center_widget (GtkCenterBox *box,
                                                GtkWidget    *center_widget);
 
 GDK_AVAILABLE_IN_3_12
-void         gtk_action_bar_pack_start        (GtkActionBar *bar,
+void         gtk_center_box_pack_start        (GtkCenterBox *box,
                                                GtkWidget    *child);
 GDK_AVAILABLE_IN_3_12
-void         gtk_action_bar_pack_end          (GtkActionBar *bar,
+void         gtk_center_box_pack_end          (GtkCenterBox *box,
                                                GtkWidget    *child);
 G_END_DECLS
 
-#endif /* __GTK_ACTION_BAR_H__ */
+#endif /* __GTK_CENTER_BOX_H__ */
