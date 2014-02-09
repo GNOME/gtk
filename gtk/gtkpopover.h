@@ -35,13 +35,15 @@ G_BEGIN_DECLS
 
 typedef struct _GtkPopover GtkPopover;
 typedef struct _GtkPopoverClass GtkPopoverClass;
+typedef struct _GtkPopoverPrivate GtkPopoverPrivate;
 
 struct _GtkPopover
 {
   GtkBin parent_instance;
 
   /*< private >*/
-  gpointer priv;
+
+  GtkPopoverPrivate *priv;
 };
 
 struct _GtkPopoverClass
@@ -49,6 +51,8 @@ struct _GtkPopoverClass
   GtkBinClass parent_class;
 
   void (* closed) (GtkPopover *popover);
+
+  /*< private >*/
 
   /* Padding for future expansion */
   gpointer reserved[10];
