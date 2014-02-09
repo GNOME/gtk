@@ -639,14 +639,30 @@ _gtk_popover_update_child_visible (GtkPopover *popover)
     gtk_widget_set_child_visible (GTK_WIDGET (popover), TRUE);
 }
 
+static GtkPositionType
+opposite_position (GtkPositionType pos)
+{
+  switch (pos)
+    {
+    default:
+    case GTK_POS_LEFT: return GTK_POS_RIGHT;
+    case GTK_POS_RIGHT: return GTK_POS_LEFT;
+    case GTK_POS_TOP: return GTK_POS_BOTTOM;
+    case GTK_POS_BOTTOM: return GTK_POS_TOP;
+    }
+}
+
 static void
 gtk_popover_update_position (GtkPopover *popover)
 {
   GtkAllocation window_alloc;
   GdkRectangle rect;
   GtkPopoverPrivate *priv;
-  GtkPositionType pos;
   GtkRequisition req;
+  GtkPositionType pos;
+  gint overshoot[4];
+  gint i;
+  gint best;
 
   priv = popover->priv;
 
@@ -660,17 +676,33 @@ gtk_popover_update_position (GtkPopover *popover)
   gtk_popover_get_pointed_to_coords (popover, &rect);
   pos = get_effective_position (popover, priv->preferred_position);
 
-  /* Check whether there's enough room on the
-   * preferred side, move to the opposite one if not.
-   */
-  if (pos == GTK_POS_TOP && rect.y < req.height)
-    priv->final_position = GTK_POS_BOTTOM;
-  else if (pos == GTK_POS_BOTTOM && rect.y > window_alloc.height - req.height)
-    priv->final_position = GTK_POS_TOP;
-  else if (pos == GTK_POS_LEFT && rect.x < req.width)
-    priv->final_position = get_effective_position (popover, GTK_POS_RIGHT);
-  else if (pos == GTK_POS_RIGHT && rect.x > window_alloc.width - req.width)
-    priv->final_position = get_effective_position (popover, GTK_POS_LEFT);
+  overshoot[GTK_POS_TOP] = req.height - rect.y;
+  overshoot[GTK_POS_BOTTOM] = rect.y + rect.height + req.height - window_alloc.height;
+  overshoot[GTK_POS_LEFT] = req.width - rect.x;
+  overshoot[GTK_POS_RIGHT] = rect.x + rect.width + req.width - window_alloc.width;
+
+  if (overshoot[pos] <= 0)
+    {
+      priv->final_position = pos;
+    }
+  else if (overshoot[opposite_position (pos)] <= 0)
+    {
+      priv->final_position = opposite_position (pos);
+    }
+  else
+    {
+      best = G_MAXINT;
+      pos = 0;
+      for (i = 0; i < 4; i++)
+        {
+          if (overshoot[i] < best)
+            {
+              pos = i;
+              best = overshoot[i];
+            }
+        }
+      priv->final_position = pos;
+    }
 
   _gtk_window_set_popover_position (priv->window, GTK_WIDGET (popover),
                                     priv->final_position, &rect);
