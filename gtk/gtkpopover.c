@@ -2016,7 +2016,6 @@ gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
       GtkWidget *child;
       GtkWidget *button;
       GtkWidget *content;
-      GtkWidget *parent;
 
       child = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       g_object_set (child, "margin", 10, NULL);
