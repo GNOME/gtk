@@ -249,12 +249,6 @@
 	ignore it if it doesn't resize, pick a smaller size (to
 	satisfy aspect ratio or resize in steps of NxM pixels).
 
-	The edges parameter provides a hint about how the surface
-	was resized. The client may use this information to decide
-	how to adjust its content to the new size (e.g. a scrolling
-	area might adjust its content position to leave the viewable
-	content unmoved). Valid edge values are from resize_edge enum.
-
 	The client is free to dismiss all but the last configure
 	event it received.
 
@@ -391,18 +385,25 @@
       </description>
     </request>
 
-    <event name="focused_set">
-      <description summary="surface was focused">
-	The focused_set event is sent when this surface has been
-	activated. Window decorations should be updated accordingly.
+    <event name="activated">
+      <description summary="surface was activated">
+	The activated_set event is sent when this surface has been
+	activated, which means that the surface has user attention.
+        Window decorations should be updated accordingly. You should
+        not use this event for anything but the style of decorations
+        you display, use wl_keyboard.enter and wl_keyboard.leave for
+        determining keyboard focus.
       </description>
     </event>
 
-    <event name="focused_unset">
-      <description summary="surface was unfocused">
-	The focused_unset event is sent when this surface has been
-	deactivated, because another surface has been activated. Window
-	decorations should be updated accordingly.
+    <event name="deactivated">
+      <description summary="surface was deactivated">
+	The deactivate event is sent when this surface has been
+        deactivated, which means that the surface lost user attention.
+        Window decorations should be updated accordingly. You should
+        not use this event for anything but the style of decorations
+        you display, use wl_keyboard.enter and wl_keyboard.leave for
+        determining keyboard focus.
       </description>
     </event>
 
