@@ -472,7 +472,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
+ * #GtkSizeGroups that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *
@@ -507,7 +507,7 @@ gtk_widget_get_preferred_width (GtkWidget *widget,
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
+ * #GtkSizeGroups that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *
@@ -543,7 +543,7 @@ gtk_widget_get_preferred_height (GtkWidget *widget,
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
+ * #GtkSizeGroups that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *
@@ -579,7 +579,7 @@ gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
+ * #GtkSizeGroups that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *
@@ -618,7 +618,7 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request and GtkWidgetClass::adjust_baseline_request virtual methods
- * and by any #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
+ * and by any #GtkSizeGroups that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *

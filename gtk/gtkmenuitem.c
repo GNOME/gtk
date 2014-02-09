@@ -73,9 +73,9 @@
  *
  * # GtkMenuItem as GtkBuildable
  *
- * The GtkMenuItem implementation of the #GtkBuildable interface
- * supports adding a submenu by specifying “submenu” as the “type”
- * attribute of a &lt;child&gt; element.
+ * The GtkMenuItem implementation of the #GtkBuildable interface supports
+ * adding a submenu by specifying “submenu” as the “type” attribute of
+ * a <child> element.
  *
  * An example of UI definition fragment with submenus:
  * |[

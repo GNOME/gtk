@@ -1050,8 +1050,8 @@ gtk_printer_get_capabilities (GtkPrinter *printer)
  *
  * Compares two printers.
  * 
- * Return value: 0 if the printer match, a negative value if @a &lt; @b, 
- *   or a positive value if @a &gt; @b
+ * Return value: 0 if the printer match, a negative value if @a < @b, 
+ *   or a positive value if @a > @b
  *
  * Since: 2.10
  */
@@ -1218,7 +1218,7 @@ list_printers_init (PrinterList     *printer_list,
  * @wait: if %TRUE, wait in a recursive mainloop until
  *    all printers are enumerated; otherwise return early
  *
- * Calls a function for all #GtkPrinter<!-- -->s. 
+ * Calls a function for all #GtkPrinters. 
  * If @func returns %TRUE, the enumeration is stopped.
  *
  * Since: 2.10

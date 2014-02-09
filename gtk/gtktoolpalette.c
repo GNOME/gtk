@@ -43,12 +43,12 @@
  * @Short_description: A tool palette with categories
  * @Title: GtkToolPalette
  *
- * A #GtkToolPalette allows you to add #GtkToolItem<!-- -->s to a palette-like
+ * A #GtkToolPalette allows you to add #GtkToolItems to a palette-like
  * container with different categories and drag and drop support.
  *
  * A #GtkToolPalette is created with a call to gtk_tool_palette_new().
  *
- * #GtkToolItem<!-- -->s cannot be added directly to a #GtkToolPalette - 
+ * #GtkToolItems cannot be added directly to a #GtkToolPalette - 
  * instead they are added to a #GtkToolItemGroup which can than be added
  * to a #GtkToolPalette. To add a #GtkToolItemGroup to a #GtkToolPalette,
  * use gtk_container_add().
@@ -86,14 +86,14 @@
  *   GtkWidget *palette;
  *   GtkWidget *item;
  *
- *   /<!-- -->* Get the dragged item *<!-- -->/
+ *   /&ast; Get the dragged item &ast;/
  *   palette = gtk_widget_get_ancestor (gtk_drag_get_source_widget (context),
  *                                      GTK_TYPE_TOOL_PALETTE);
  *   if (palette != NULL)
  *     item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (palette),
  *                                            selection);
  *
- *   /<!-- -->* Do something with item *<!-- -->/
+ *   /&ast; Do something with item &ast;/
  * }
  *
  * GtkWidget *target, palette;
@@ -1624,7 +1624,7 @@ gtk_tool_palette_set_drag_source (GtkToolPalette            *palette,
  *     on that widget
  * @targets: the #GtkToolPaletteDragTargets which the widget
  *     should support
- * @actions: the #GdkDragAction<!-- -->s which the widget should suppport
+ * @actions: the #GdkDragActions which the widget should suppport
  *
  * Sets @palette as drag source (see gtk_tool_palette_set_drag_source())
  * and sets @widget as a drag destination for drags from @palette.

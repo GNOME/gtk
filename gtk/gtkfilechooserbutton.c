@@ -83,7 +83,7 @@
  * }
  * ]|
  *
- * The #GtkFileChooserButton supports the #GtkFileChooserAction<!-- -->s
+ * The #GtkFileChooserButton supports the #GtkFileChooserActions
  * %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
  *
  * > The #GtkFileChooserButton will ellipsize the label, and will thus

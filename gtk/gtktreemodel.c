@@ -184,7 +184,7 @@
  *                        -1);
  *
  *    /&ast; Do something with the data &ast;/
- *    g_print ("Row &percnt;d: (&percnt;s,&percnt;d)\n", row_count, str_data, int_data);
+ *    g_print ("Row %d: (%s,%d)\n", row_count, str_data, int_data);
  *    g_free (str_data);
  *
  *    row_count++;
@@ -1593,10 +1593,10 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
  * The first index is 0. If @n is too big, or @parent has no children,
  * @iter is set to an invalid iterator and %FALSE is returned. @parent
  * will remain a valid node after this function has been called. As a
- * special case, if @parent is %NULL, then the @n<!-- -->th root node
+ * special case, if @parent is %NULL, then the @n-th root node
  * is set.
  *
- * Return value: %TRUE, if @parent has an @n<!-- -->th child
+ * Return value: %TRUE, if @parent has an @n-th child
  */
 gboolean
 gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
@@ -1728,7 +1728,7 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
  * each column number followed by a place to store the value being
  * retrieved.  The list is terminated by a -1. For example, to get a
  * value from column 0 with type %G_TYPE_STRING, you would
- * write: `gtk_tree_model_get (model, iter, 0, &amp;place_string_here, -1)`,
+ * write: `gtk_tree_model_get (model, iter, 0, &place_string_here, -1)`,
  * where `place_string_here` is a #gchararray
  * to be filled with the string.
  *

@@ -258,8 +258,8 @@
  * # GtkWidget as GtkBuildable
  *
  * The GtkWidget implementation of the GtkBuildable interface supports a
- * custom &lt;accelerator&gt; element, which has attributes named key,
- * modifiers and signal and allows to specify accelerators.
+ * custom <accelerator> element, which has attributes named ”key”, ”modifiers”
+ * and ”signal” and allows to specify accelerators.
  *
  * An example of a UI definition fragment specifying an accelerator:
  * |[
@@ -268,10 +268,10 @@
  * </object>
  * ]|
  *
- * In addition to accelerators, #GtkWidget also support a
- * custom &lt;accessible&gt; element, which supports actions and relations.
- * Properties on the accessible implementation of an object can be set by accessing the
- * internal child “accessible” of a #GtkWidget.
+ * In addition to accelerators, GtkWidget also support a custom <accessible>
+ * element, which supports actions and relations. Properties on the accessible
+ * implementation of an object can be set by accessing the internal child
+ * “accessible” of a #GtkWidget.
  *
  * An example of a UI definition fragment specifying an accessible:
  * |[
@@ -292,7 +292,7 @@
  * ]|
  *
  * Finally, GtkWidget allows style information such as style classes to
- * be associated with widgets, using the custom &lt;style&gt; element:
+ * be associated with widgets, using the custom <style> element:
  * |[
  * <object class="GtkButton" id="button1">
  *   <style>
@@ -315,25 +315,25 @@
  * The interface description semantics expected in composite template descriptions
  * is slightly different from regulare #GtkBuilder XML.
  *
- * Unlike regular interface descriptions, gtk_widget_class_set_template() will expect a
- * &lt;template&gt; tag as a direct child of the toplevel &lt;interface&gt;
- * tag. The &lt;template&gt; tag must specify the “class” attribute which
- * must be the type name of the widget. Optionally, the “parent” attribute
- * may be specified to specify the direct parent type of the widget type, this
- * is ignored by the GtkBuilder but required for Glade to introspect what kind
+ * Unlike regular interface descriptions, gtk_widget_class_set_template() will
+ * expect a <template> tag as a direct child of the toplevel <interface>
+ * tag. The <template> tag must specify the “class” attribute which must be
+ * the type name of the widget. Optionally, the “parent” attribute may be
+ * specified to specify the direct parent type of the widget type, this is
+ * ignored by the GtkBuilder but required for Glade to introspect what kind
  * of properties and internal children exist for a given type when the actual
  * type does not exist.
  *
- * The XML which is contained inside the &lt;template&gt; tag behaves as if
- * it were added to the &lt;object&gt; tag defining @widget itself. You may set
- * properties on @widget by inserting &lt;property&gt; tags into the &lt;template&gt; 
- * tag, and also add &lt;child&gt; tags to add children and extend @widget in the
- * normal way you would with &lt;object&gt; tags.
+ * The XML which is contained inside the <template> tag behaves as if it were
+ * added to the <object> tag defining @widget itself. You may set properties
+ * on @widget by inserting <property> tags into the <template> tag, and also
+ * add <child> tags to add children and extend @widget in the normal way you
+ * would with <object> tags.
  *
- * Additionally, &lt;object&gt; tags can also be added before and
- * after the initial &lt;template&gt; tag in the normal way, allowing
- * one to define auxilary objects which might be referenced by other
- * widgets declared as children of the &lt;template&gt; tag.
+ * Additionally, <object> tags can also be added before and after the initial
+ * <template> tag in the normal way, allowing one to define auxilary objects
+ * which might be referenced by other widgets declared as children of the
+ * <template> tag.
  *
  * An example of a GtkBuilder Template Definition:
  * |[
@@ -2285,7 +2285,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * @widget: the object on which the signal is emitted
    *
    * The ::composited-changed signal is emitted when the composited
-   * status of @widget<!-- -->s screen changes.
+   * status of @widgets screen changes.
    * See gdk_screen_is_composited().
    */
   widget_signals[COMPOSITED_CHANGED] =
@@ -4066,7 +4066,7 @@ gtk_widget_freeze_child_notify (GtkWidget *widget)
  * gtk_widget_child_notify:
  * @widget: a #GtkWidget
  * @child_property: the name of a child property installed on the
- *                  class of @widget<!-- -->’s parent
+ *                  class of @widget’s parent
  *
  * Emits a #GtkWidget::child-notify signal for the
  * [child property][child-properties] @child_property
@@ -8105,11 +8105,10 @@ gtk_widget_device_is_shadowed (GtkWidget *widget,
  * same page as the docs for #GtkStyleContext).
  *
  * Note that the CSS syntax has certain special characters to delimit
- * and represent elements in a selector (period, &num;, &gt;, &ast;...),
- * so using these will make your widget impossible to match by name.
- * Any combination of alphanumeric symbols, dashes and underscores will
- * suffice.
- **/
+ * and represent elements in a selector (period, #, >, *...), so using
+ * these will make your widget impossible to match by name. Any combination
+ * of alphanumeric symbols, dashes and underscores will suffice.
+ */
 void
 gtk_widget_set_name (GtkWidget	 *widget,
 		     const gchar *name)
@@ -9054,7 +9053,7 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
  *
  * This function does not act recursively. Setting the color of a
  * container does not affect its children. Note that some widgets that
- * you may not think of as containers, for instance #GtkButton<!-- -->s,
+ * you may not think of as containers, for instance #GtkButtons,
  * are actually containers.
  *
  * This API is mostly meant as a quick way for applications to
@@ -9437,7 +9436,7 @@ reset_style_recurse (GtkWidget *widget, gpointer data)
  * @widget: a #GtkWidget
  *
  * Updates the style context of @widget and all descendents
- * by updating its widget path. #GtkContainer<!-- -->s may want
+ * by updating its widget path. #GtkContainers may want
  * to use this on a child when reordering it in a way that a different
  * style might apply to it. See also gtk_container_get_path_for_child().
  *
@@ -10755,7 +10754,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  * `gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW)`
  * would return
  * %NULL if @widget wasn’t inside a toplevel window, and if the
- * window was inside a #GtkWindow<!-- -->-derived widget which was in turn
+ * window was inside a #GtkWindow-derived widget which was in turn
  * inside the toplevel #GtkWindow. While the second case may
  * seem unlikely, it actually happens when a #GtkPlug is embedded
  * inside a #GtkSocket within the same application.
@@ -15140,7 +15139,7 @@ gtk_widget_get_support_multidevice (GtkWidget *widget)
  *
  * Enables or disables multiple pointer awareness. If this setting is %TRUE,
  * @widget will start receiving multiple, per device enter/leave events. Note
- * that if custom #GdkWindow<!-- -->s are created in #GtkWidget::realize,
+ * that if custom #GdkWindows are created in #GtkWidget::realize,
  * gdk_window_set_support_multidevice() will have to be called manually on them.
  *
  * Since: 3.0

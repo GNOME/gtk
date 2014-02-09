@@ -799,7 +799,7 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  * gchar *msg;
  *
  * msg = g_markup_printf_escaped (message_format, ...);
- * gtk_message_dialog_format_secondary_markup (message_dialog, "&percnt;s", msg);
+ * gtk_message_dialog_format_secondary_markup (message_dialog, "%s", msg);
  * g_free (msg);
  * ]|
  *

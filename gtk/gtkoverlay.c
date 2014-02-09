@@ -50,7 +50,7 @@
  *
  * The GtkOverlay implementation of the GtkBuildable interface
  * supports placing a child as an overlay by specifying “overlay” as
- * the “type” attribute of a `&lt;child&gt;` element.
+ * the “type” attribute of a `<child>` element.
  */
 
 struct _GtkOverlayPrivate

@@ -45,7 +45,7 @@
  * The use of this is best demonstrated through an example.  In the
  * following sample code we create two #GtkTreeView widgets each with a
  * view of the same data.  As the model is wrapped here by a
- * #GtkTreeModelSort, the two #GtkTreeView<!-- -->s can each sort their
+ * #GtkTreeModelSort, the two #GtkTreeViews can each sort their
  * view of the data without affecting the other.  By contrast, if we
  * simply put the same model in each widget, then sorting the first would
  * sort the second.
@@ -60,18 +60,18 @@
  *   GtkTreeModel *sort_model2;
  *   GtkTreeModel *child_model;
  *
- *   // get the child model
+ *   /&ast; get the child model &ast;/
  *   child_model = get_my_model ();
  *
- *   // Create the first tree
+ *   /&ast; Create the first tree &ast;/
  *   sort_model1 = gtk_tree_model_sort_new_with_model (child_model);
  *   tree_view1 = gtk_tree_view_new_with_model (sort_model1);
  *
- *   // Create the second tree
+ *   /&ast; Create the second tree &ast;/
  *   sort_model2 = gtk_tree_model_sort_new_with_model (child_model);
  *   tree_view2 = gtk_tree_view_new_with_model (sort_model2);
  *
- *   // Now we can sort the two models independently
+ *   /&ast; Now we can sort the two models independently &ast;/
  *   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model1),
  *                                         COLUMN_1, GTK_SORT_ASCENDING);
  *   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model2),
@@ -98,15 +98,15 @@
  *   char *some_data = NULL;
  *   char *modified_data;
  *
- *   // Get the current selected row and the model.
+ *   /&ast; Get the current selected row and the model. &ast;/
  *   if (! gtk_tree_selection_get_selected (selection,
  *                                          &sort_model,
  *                                          &sort_iter))
  *     return;
  *
- *   /<!---->* Look up the current value on the selected row and get a new value
- *    * to change it to.
- *    *<!---->/
+ *   /&ast; Look up the current value on the selected row and get
+ *    &ast; a new value to change it to.
+ *    &ast;/
  *   gtk_tree_model_get (GTK_TREE_MODEL (sort_model), &sort_iter,
  *                       COLUMN_1, &some_data,
  *                       -1);
@@ -114,15 +114,15 @@
  *   modified_data = change_the_data (some_data);
  *   g_free (some_data);
  *
- *   // Get an iterator on the child model, instead of the sort model.
+ *   /&ast; Get an iterator on the child model, instead of the sort model. &ast;/
  *   gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (sort_model),
  *                                                   &child_iter,
  *                                                   &sort_iter);
  *
- *   /<!---->* Get the child model and change the value of the row.  In this
- *    * example, the child model is a GtkListStore.  It could be any other
- *    * type of model, though.
- *    *<!---->/
+ *   /&ast; Get the child model and change the value of the row. In this
+ *    &ast; example, the child model is a GtkListStore. It could be any other
+ *    &ast; type of model, though.
+ *    &ast;/
  *   child_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (sort_model));
  *   gtk_list_store_set (GTK_LIST_STORE (child_model), &child_iter,
  *                       COLUMN_1, &modified_data,

@@ -610,6 +610,7 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
   priv = gtk_menu_button_get_instance_private (menu_button);
   menu_button->priv = priv;
   priv->arrow_type = GTK_ARROW_DOWN;
+  priv->use_popover = TRUE;
 
   add_arrow (menu_button);
 

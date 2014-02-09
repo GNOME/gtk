@@ -39,7 +39,7 @@
  * @Title: GtkToolItem
  * @see_also: #GtkToolbar, #GtkToolButton, #GtkSeparatorToolItem
  *
- * #GtkToolItem<!-- -->s are widgets that can appear on a toolbar. To
+ * #GtkToolItems are widgets that can appear on a toolbar. To
  * create a toolbar item that contain something else than a button, use
  * gtk_tool_item_new(). Use gtk_container_add() to add a child
  * widget to the tool item.
@@ -1292,11 +1292,11 @@ gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
  *
  * Custom subclasses of #GtkToolItem should use this function to
  * update their menu item when the #GtkToolItem changes. That the
- * @menu_item_id<!-- -->s must match ensures that a #GtkToolItem
+ * @menu_item_ids must match ensures that a #GtkToolItem
  * will not inadvertently change a menu item that they did not create.
  *
  * Return value: (transfer none): The #GtkMenuItem passed to
- *     gtk_tool_item_set_proxy_menu_item(), if the @menu_item_id<!-- -->s
+ *     gtk_tool_item_set_proxy_menu_item(), if the @menu_item_ids
  *     match.
  *
  * Since: 2.4

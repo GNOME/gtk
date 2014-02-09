@@ -134,18 +134,18 @@
  * the class name of the widget, while for the class path, the class name is
  * always used.
  *
- * Since GTK+ 2.10, `widget_class` paths can also contain
- * `&lt;classname&gt;` substrings, which are matching
- * the class with the given name and any derived classes. For instance,
+ * Since GTK+ 2.10, `widget_class` paths can also contain <classname>
+ * substrings, which are matching the class with the given name and any
+ * derived classes. For instance,
  * |[
- * widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
+ * widget_class "*<GtkMenuItem>.GtkLabel" style "my-style"
  * ]|
  * will match #GtkLabel widgets which are contained in any kind of menu item.
  *
- * So, if you have a #GtkEntry named `"myentry"`, inside of a
- * horizontal box in a window named `"mywindow"`, then the
- * widget path is: `"mywindow.GtkHBox.myentry"`
- * while the class path is: `"GtkWindow.GtkHBox.GtkEntry"`.
+ * So, if you have a #GtkEntry named `"myentry"`, inside of a horizontal
+ * box in a window named `"mywindow"`, then the widget path is:
+ * `"mywindow.GtkHBox.myentry"` while the class path is:
+ * `"GtkWindow.GtkHBox.GtkEntry"`.
  *
  * Matching against class is a little different. The pattern match is done
  * against all class names in the widgets class hierarchy (not the layout
@@ -372,12 +372,11 @@
  * * `bg_pixmap[state] =
  *       pixmap`
  *
- *          Sets a background pixmap to be used in place of
- *          the `bg` color (or for #GtkText,
- *          in place of the `base` color. The special
- *          value `"&lt;parent&gt;"` may be used to indicate that the widget should
+ *          Sets a background pixmap to be used in place of the `bg` color
+ *          (or for #GtkText, in place of the `base` color. The special
+ *          value `"<parent>"` may be used to indicate that the widget should
  *          use the same background pixmap as its parent. The special value
- *          `"&lt;none&gt;"` may be used to indicate no background pixmap.
+ *          `"<none>"` may be used to indicate no background pixmap.
 
  * * `font = font`
  *
@@ -578,54 +577,46 @@
  * }
  * ]|
  *
- * `key` is a string consisting of a
- * series of modifiers followed by the name of a key. The
- * modifiers can be:
+ * `key` is a string consisting of a series of modifiers followed by
+ * the name of a key. The modifiers can be:
  *
- * - `&lt;alt&gt;`
+ * - `<alt>`
  *
- * - `&lt;ctl&gt;`
+ * - `<ctl>`
  *
- * - `&lt;control&gt;`
+ * - `<control>`
  *
- * - `&lt;meta&gt;`
+ * - `<meta>`
  *
- * - `&lt;hyper&gt;`
+ * - `<hyper>`
  *
- * - `&lt;super&gt;`
+ * - `<super>`
  *
- * - `&lt;mod1&gt;`
+ * - `<mod1>`
  *
- * - `&lt;mod2&gt;`
+ * - `<mod2>`
  *
- * - `&lt;mod3&gt;`
+ * - `<mod3>`
  *
- * - `&lt;mod4&gt;`
+ * - `<mod4>`
  *
- * - `&lt;mod5&gt;`
+ * - `<mod5>`
  *
- * - `&lt;release&gt;`
+ * - `<release>`
  *
- * - `&lt;shft&gt;`
+ * - `<shft>`
  *
- * - `&lt;shift&gt;`
+ * - `<shift>`
  *
- * `&lt;shft&gt;` is an alias for
- * `&lt;shift&gt;`,
- * `&lt;ctl&gt;` is an alias for
- * `&lt;control&gt;`,
- *  and
- * `&lt;alt&gt;` is an alias for
- * `&lt;mod1&gt;`.
+ * `<shft>` is an alias for `<shift>`, `<ctl>` is an alias for
+ * `<control>`, and `<alt>` is an alias for `<mod1>`.
  *
- * The action that is bound to the key is a sequence
- * of signal names (strings) followed by parameters for
- * each signal. The signals must be action signals.
- * (See g_signal_new()). Each parameter can be
- * a float, integer, string, or unquoted string
- * representing an enumeration value. The types of
- * the parameters specified must match the types of the
- * parameters of the signal.
+ * The action that is bound to the key is a sequence of signal names
+ * (strings) followed by parameters for each signal. The signals must
+ * be action signals. (See g_signal_new()). Each parameter can be a
+ * float, integer, string, or unquoted string representing an enumeration
+ * value. The types of the parameters specified must match the types of
+ * the parameters of the signal.
  *
  * Binding sets are connected to widgets in the same manner as styles,
  * with one difference: Binding sets override other binding sets first

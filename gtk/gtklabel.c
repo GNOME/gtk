@@ -70,9 +70,10 @@
  * # GtkLabel as GtkBuildable
  *
  * The GtkLabel implementation of the GtkBuildable interface supports a
- * custom &lt;attributes&gt; element, which supports any number of &lt;attribute&gt;
- * elements. the &lt;attribute&gt; element has attributes named name, value,
- * start and end and allows you to specify #PangoAttribute values for this label.
+ * custom <attributes> element, which supports any number of <attribute>
+ * elements. The <attribute> element has attributes named “name“, “value“,
+ * “start“ and “end“ and allows you to specify #PangoAttribute values for
+ * this label.
  *
  * An example of a UI definition fragment specifying Pango attributes:
  * |[
@@ -147,9 +148,9 @@
  * tags in the Pango manual.)
  *
  * The markup passed to gtk_label_set_markup() must be valid; for example,
- * literal &lt;, &gt; and &amp; characters must be escaped as \&lt;,
- * \gt;, and \&amp;. If you pass text obtained from the user, file,
- * or a network to gtk_label_set_markup(), you’ll want to escape it with
+ * literal <, > and & characters must be escaped as &lt;, &gt;, and &amp;.
+ * If you pass text obtained from the user, file, or a network to
+ * gtk_label_set_markup(), you’ll want to escape it with
  * g_markup_escape_text() or g_markup_printf_escaped().
  *
  * Markup strings are just a convenient way to set the #PangoAttrList on
@@ -198,10 +199,10 @@
  * # Links
  *
  * Since 2.18, GTK+ supports markup for clickable hyperlinks in addition
- * to regular Pango markup. The markup for links is borrowed from HTML, using the
- * `&lt;a&gt;` with href and title attributes. GTK+ renders links similar to the
- * way they appear in web browsers, with colored, underlined text. The title
- * attribute is displayed as a tooltip on the link.
+ * to regular Pango markup. The markup for links is borrowed from HTML,
+ * using the `<a>` with “href“ and “title“ attributes. GTK+ renders links
+ * similar to the way they appear in web browsers, with colored, underlined
+ * text. The “title“ attribute is displayed as a tooltip on the link.
  *
  * An example looks like this:
  *
@@ -2598,11 +2599,11 @@ gtk_label_set_markup_internal (GtkLabel    *label,
  * [Pango text markup language][PangoMarkupFormat], setting the
  * label’s text and attribute list based on the parse results. If the @str is
  * external data, you may need to escape it with g_markup_escape_text() or
- * g_markup_printf_escaped()<!-- -->:
+ * g_markup_printf_escaped():
  * |[<!-- language="C" -->
  * char *markup;
  *
- * markup = g_markup_printf_escaped ("&lt;span style=\"italic\"&gt;&percnt;s&lt;/span&gt;", str);
+ * markup = g_markup_printf_escaped ("<span style=\"italic\">\%s</span>", str);
  * gtk_label_set_markup (GTK_LABEL (label), markup);
  * g_free (markup);
  * ]|

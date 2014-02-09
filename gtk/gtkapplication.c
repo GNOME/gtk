@@ -1073,9 +1073,8 @@ gtk_application_update_accels (GtkApplication *application)
  * to be activated when the key combination specificed by @accelerator
  * is pressed.
  *
- * @accelerator must be a string that can be parsed by
- * gtk_accelerator_parse(), e.g. "&lt;Primary&gt;q" or
- * “&lt;Control&gt;&lt;Alt&gt;p”.
+ * @accelerator must be a string that can be parsed by gtk_accelerator_parse(),
+ * e.g. "<Primary>q" or “<Control><Alt>p”.
  *
  * @action_name must be the name of an action as it would be used
  * in the app menu, i.e. actions that have been added to the application

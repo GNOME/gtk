@@ -84,12 +84,11 @@
  *
  * # GtkSizeGroup as GtkBuildable
  *
- * Size groups can be specified in a UI definition by placing an
- * &lt;object&gt; element with `class="GtkSizeGroup"`
- * somewhere in the UI definition. The widgets that belong to the
- * size group are specified by a &lt;widgets&gt; element that may
- * contain multiple &lt;widget&gt; elements, one for each member
- * of the size group. The name attribute gives the id of the widget.
+ * Size groups can be specified in a UI definition by placing an <object>
+ * element with `class="GtkSizeGroup"` somewhere in the UI definition. The
+ * widgets that belong to the size group are specified by a <widgets> element
+ * that may contain multiple <widget> elements, one for each member of the
+ * size group. The ”name” attribute gives the id of the widget.
  *
  * An example of a UI definition fragment with GtkSizeGroup:
  * |[

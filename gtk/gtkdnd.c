@@ -1347,10 +1347,10 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * gtk_drag_dest_set: (method)
  * @widget: a #GtkWidget
  * @flags: which types of default drag behavior to use
- * @targets: (allow-none) (array length=n_targets): a pointer to an array of #GtkTargetEntry<!-- -->s
- *     indicating the drop types that this @widget will accept, or %NULL.
- *     Later you can access the list with gtk_drag_dest_get_target_list()
- *     and gtk_drag_dest_find_target().
+ * @targets: (allow-none) (array length=n_targets): a pointer to an array of
+ *     #GtkTargetEntrys indicating the drop types that this @widget will
+ *     accept, or %NULL. Later you can access the list with
+ *     gtk_drag_dest_get_target_list() and gtk_drag_dest_find_target().
  * @n_targets: the number of entries in @targets
  * @actions: a bitmask of possible actions for a drop onto this @widget.
  *

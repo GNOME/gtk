@@ -104,15 +104,15 @@
  * ]|
  *
  * The above example will not have the desired effect of causing
- * “&lt;Control&gt;Right” and “&lt;Control&gt;Left” key presses to
- * be ignored by GTK+. Instead, it just causes any existing bindings
- * from the bindings set “MoveCursor3” to be deleted, so when
- * “&lt;Control&gt;Right” or “&lt;Control&gt;Left” are pressed, no
- * binding for these keys is found in binding set “MoveCursor3”.
- * GTK+ will thus continue to search for matching key bindings, and
- * will eventually lookup and find the default GTK+ bindings for
- * entries which implement word movement. To keep GTK+ from activating
- * its default bindings, the “unbind” keyword can be used like this:
+ * “<Control>Right” and “<Control>Left” key presses to be ignored by GTK+.
+ * Instead, it just causes any existing bindings from the bindings set
+ * “MoveCursor3” to be deleted, so when “<Control>Right” or
+ * “<Control>Left” are pressed, no binding for these keys is found in
+ * binding set “MoveCursor3”. GTK+ will thus continue to search for
+ * matching key bindings, and will eventually lookup and find the default
+ * GTK+ bindings for entries which implement word movement. To keep GTK+
+ * from activating its default bindings, the “unbind” keyword can be used
+ * like this:
  *
  * |[
  * @binding-set MoveCursor3
@@ -126,12 +126,11 @@
  * }
  * ]|
  *
- * Now, GTK+ will find a match when looking up “&lt;Control&gt;Right”
- * and “&lt;Control&gt;Left” key presses before it resorts to its default
- * bindings, and the match instructs it to abort (“unbind”) the search,
- * so the key presses are not consumed by this widget. As usual, further
- * processing of the key presses, e.g. by an entry’s parent widget, is
- * now possible.
+ * Now, GTK+ will find a match when looking up “<Control>Right” and
+ * “<Control>Left” key presses before it resorts to its default bindings,
+ * and the match instructs it to abort (“unbind”) the search, so the key
+ * presses are not consumed by this widget. As usual, further processing
+ * of the key presses, e.g. by an entry’s parent widget, is now possible.
  */
 
 /* --- defines --- */

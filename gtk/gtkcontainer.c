@@ -202,10 +202,9 @@
  *
  * # GtkContainer as GtkBuildable
  *
- * The GtkContainer implementation of the GtkBuildable interface
- * supports a &lt;packing&gt; element for children, which can
- * contain multiple &lt;property&gt; elements that specify
- * child properties for the child.
+ * The GtkContainer implementation of the GtkBuildable interface supports
+ * a <packing> element for children, which can contain multiple <property>
+ * elements that specify child properties for the child.
  * 
  * An example of child properties in UI definitions:
  * |[

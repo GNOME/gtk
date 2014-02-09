@@ -45,7 +45,7 @@
  * @Title: GtkToolItemGroup
  *
  * A #GtkToolItemGroup is used together with #GtkToolPalette to add
- * #GtkToolItem<!-- -->s to a palette like container with different
+ * #GtkToolItems to a palette like container with different
  * categories and drag and drop support.
  *
  * Since: 2.20

@@ -39,11 +39,11 @@
  * Implementations of GtkCellLayout which also implement the GtkBuildable
  * interface (#GtkCellView, #GtkIconView, #GtkComboBox,
  * #GtkEntryCompletion, #GtkTreeViewColumn) accept GtkCellRenderer objects
- * as &lt;child&gt; elements in UI definitions. They support a custom
- * &lt;attributes&gt; element for their children, which can contain
- * multiple &lt;attribute&gt; elements. Each &lt;attribute&gt; element has
- * a name attribute which specifies a property of the cell renderer; the
- * content of the element is the attribute value.
+ * as <child> elements in UI definitions. They support a custom <attributes>
+ * element for their children, which can contain multiple <attribute>
+ * elements. Each <attribute> element has a name attribute which specifies
+ * a property of the cell renderer; the content of the element is the
+ * attribute value.
  *
  * This is an example of a UI definition fragment specifying attributes:
  * |[
@@ -57,12 +57,11 @@
  * </object>
  * ]|
  *
- * Furthermore for implementations of GtkCellLayout that use a
- * #GtkCellArea to lay out cells (all GtkCellLayouts in GTK+ use
- * a GtkCellArea) [cell properties][cell-properties]
- * can also be defined in the format by specifying the custom
- * &lt;cell-packing&gt; attribute which can contain multiple
- * &lt;property&gt; elements defined in the normal way.
+ * Furthermore for implementations of GtkCellLayout that use a #GtkCellArea
+ * to lay out cells (all GtkCellLayouts in GTK+ use a GtkCellArea)
+ * [cell properties][cell-properties] can also be defined in the format by
+ * specifying the custom <cell-packing> attribute which can contain multiple
+ * <property> elements defined in the normal way.
  *
  * Here is a UI definition fragment specifying cell properties:
  *

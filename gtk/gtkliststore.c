@@ -111,7 +111,7 @@
  * a tail pointer prior to GTK+ 2.6.  As a result, it was fast at data
  * insertion and deletion, and not fast at random data access.  The
  * #GtkListStore sets the #GTK_TREE_MODEL_ITERS_PERSIST flag, which means
- * that #GtkTreeIter<!-- -->s can be cached while the row exists.  Thus, if
+ * that #GtkTreeIters can be cached while the row exists.  Thus, if
  * access to a particular row is needed often and your code is expected to
  * run on older versions of GTK+, it is worth keeping the iter around.
  *
@@ -135,22 +135,19 @@
  * # GtkListStore as GtkBuildable
  *
  * The GtkListStore implementation of the GtkBuildable interface allows
- * to specify the model columns with a &lt;columns&gt; element that may
- * contain multiple &lt;column&gt; elements, each specifying one model
- * column. The “type” attribute specifies the data type for the column.
+ * to specify the model columns with a <columns> element that may contain
+ * multiple <column> elements, each specifying one model column. The “type”
+ * attribute specifies the data type for the column.
  *
  * Additionally, it is possible to specify content for the list store
- * in the UI definition, with the &lt;data&gt; element. It can contain
- * multiple &lt;row&gt; elements, each specifying to content for one
- * row of the list model. Inside a &lt;row&gt;, the &lt;col&gt; elements
- * specify the content for individual cells.
+ * in the UI definition, with the <data> element. It can contain multiple
+ * <row> elements, each specifying to content for one row of the list model.
+ * Inside a <row>, the <col> elements specify the content for individual cells.
  *
- * Note that it is probably more common to define your models
- * in the code, and one might consider it a layering violation
- * to specify the content of a list store in a UI definition,
- * data, not presentation,
- * and common wisdom is to separate the two, as far as possible.
- * <!-- FIXME a bit inconclusive -->
+ * Note that it is probably more common to define your models in the code,
+ * and one might consider it a layering violation to specify the content of
+ * a list store in a UI definition, data, not presentation, and common wisdom
+ * is to separate the two, as far as possible.
  *
  * An example of a UI Definition fragment for a list store:
  * |[<!-- language="C" -->

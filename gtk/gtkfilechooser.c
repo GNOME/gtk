@@ -99,7 +99,7 @@
  *
  *   ...
  *
- *   preview = gtk_image_new (<!-- -->);
+ *   preview = gtk_image_new ();
  *
  *   gtk_file_chooser_set_preview_widget (my_file_chooser, preview);
  *   g_signal_connect (my_file_chooser, "update-preview",

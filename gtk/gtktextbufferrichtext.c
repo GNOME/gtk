@@ -407,7 +407,7 @@ gtk_text_buffer_deserialize_get_can_create_tags (GtkTextBuffer *buffer,
  * gtk_text_buffer_register_serialize_tagset()
  *
  * Return value: (array length=n_formats) (transfer container): an array of
- *               #GdkAtom<!-- -->s representing the registered formats.
+ *               #GdkAtoms representing the registered formats.
  *
  * Since: 2.10
  **/
@@ -435,7 +435,7 @@ gtk_text_buffer_get_serialize_formats (GtkTextBuffer *buffer,
  * gtk_text_buffer_register_deserialize_tagset()
  *
  * Return value: (array length=n_formats) (transfer container): an array of
- *               #GdkAtom<!-- -->s representing the registered formats.
+ *               #GdkAtoms representing the registered formats.
  *
  * Since: 2.10
  **/
@@ -465,7 +465,7 @@ gtk_text_buffer_get_deserialize_formats (GtkTextBuffer *buffer,
  * This function serializes the portion of text between @start
  * and @end in the rich text format represented by @format.
  *
- * @format<!-- -->s to be used must be registered using
+ * @formats to be used must be registered using
  * gtk_text_buffer_register_serialize_format() or
  * gtk_text_buffer_register_serialize_tagset() beforehand.
  *
@@ -526,7 +526,7 @@ gtk_text_buffer_serialize (GtkTextBuffer     *register_buffer,
  * This function deserializes rich text in format @format and inserts
  * it at @iter.
  *
- * @format<!-- -->s to be used must be registered using
+ * @formats to be used must be registered using
  * gtk_text_buffer_register_deserialize_format() or
  * gtk_text_buffer_register_deserialize_tagset() beforehand.
  *

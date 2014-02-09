@@ -80,7 +80,7 @@
  *
  *    /&ast; Create a radio button with a GtkEntry widget &ast;/
  *    radio1 = gtk_radio_button_new (NULL);
- *    entry = gtk_entry_new (<!-- -->);
+ *    entry = gtk_entry_new ();
  *    gtk_container_add (GTK_CONTAINER (radio1), entry);
  *
  *

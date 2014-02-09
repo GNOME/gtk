@@ -41,11 +41,10 @@
  * # GtkFileFilter as GtkBuildable
  *
  * The GtkFileFilter implementation of the GtkBuildable interface
- * supports adding rules using the &lt;mime-types&gt;, &lt;patterns&gt;
- * and &lt;applications&gt; elements and listing the rules within.
- * Specifying a &lt;mime-type&gt; or &lt;pattern&gt; is the same
- * as calling gtk_recent_filter_add_mime_type()
- * or gtk_recent_filter_add_pattern().
+ * supports adding rules using the <mime-types>, <patterns> and
+ * <applications> elements and listing the rules within. Specifying
+ * a <mime-type> or <pattern> has the same effect as as calling
+ * gtk_recent_filter_add_mime_type() or gtk_recent_filter_add_pattern().
  *
  * An example of a UI definition fragment specifying GtkFileFilter
  * rules:

@@ -636,7 +636,7 @@ gtk_widget_path_iter_set_name (GtkWidgetPath *path,
  * @qname: widget name as a #GQuark
  *
  * See gtk_widget_path_iter_has_name(). This is a version
- * that operates on #GQuark<!-- -->s.
+ * that operates on #GQuarks.
  *
  * Returns: %TRUE if the widget at @pos has this name
  *
@@ -890,7 +890,7 @@ gtk_widget_path_iter_list_classes (const GtkWidgetPath *path,
  * @qname: class name as a #GQuark
  *
  * See gtk_widget_path_iter_has_class(). This is a version that operates
- * with GQuark<!-- -->s.
+ * with GQuarks.
  *
  * Returns: %TRUE if the widget at @pos has the class defined.
  *
@@ -1131,7 +1131,7 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
  * @flags: (out): return location for the region flags
  *
  * See gtk_widget_path_iter_has_region(). This is a version that operates
- * with GQuark<!-- -->s.
+ * with GQuarks.
  *
  * Returns: %TRUE if the widget at @pos has the region defined.
  *

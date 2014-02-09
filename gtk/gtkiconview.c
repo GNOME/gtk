@@ -4772,7 +4772,7 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
  * @icon_view will connect a #GtkWidget::query-tooltip signal handler.
  *
  * Note that the signal handler sets the text with gtk_tooltip_set_markup(),
- * so &amp;, &lt;, etc have to be escaped in the text.
+ * so &, <, etc have to be escaped in the text.
  *
  * Since: 2.12
  */
@@ -5452,7 +5452,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  *
  * Creates a list of paths of all selected items. Additionally, if you are
  * planning on modifying the model after calling this function, you may
- * want to convert the returned list into a list of #GtkTreeRowReference<!-- -->s.
+ * want to convert the returned list into a list of #GtkTreeRowReferences.
  * To do this, you can use gtk_tree_row_reference_new().
  *
  * To free the return value, use:

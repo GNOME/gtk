@@ -63,11 +63,11 @@
  *
  * # GtkScale as GtkBuildable
  *
- * GtkScale supports a custom &lt;marks&gt; element, which
- * can contain multiple &lt;mark&gt; elements. The “value” and “position”
- * attributes have the same meaning as gtk_scale_add_mark() parameters of the
- * same name. If the element is not empty, its content is taken as the markup
- * to show at the mark. It can be translated with the usual "translatable and
+ * GtkScale supports a custom <marks> element, which can contain multiple
+ * <mark> elements. The “value” and “position” attributes have the same
+ * meaning as gtk_scale_add_mark() parameters of the same name. If the
+ * element is not empty, its content is taken as the markup to show at
+ * the mark. It can be translated with the usual ”translatable” and
  * “context” attributes.
  */
 
@@ -280,13 +280,13 @@ gtk_scale_class_init (GtkScaleClass *class)
    * @value. That string will then be used to display the scale's value.
    *
    * Here's an example signal handler which displays a value 1.0 as
-   * with "--&gt;1.0&lt;--".
+   * with "-->1.0<--".
    * |[<!-- language="C" -->
    * static gchar*
    * format_value_callback (GtkScale *scale,
    *                        gdouble   value)
    * {
-   *   return g_strdup_printf ("--&gt;&percnt;0.*g&lt;--",
+   *   return g_strdup_printf ("-->\%0.*g<--",
    *                           gtk_scale_get_digits (scale), value);
    *  }
    * ]|

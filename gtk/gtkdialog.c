@@ -135,10 +135,10 @@
  * @vbox and @action_area as internal children with the names “vbox” and
  * “action_area”.
  *
- * GtkDialog supports a custom &lt;action-widgets&gt; element, which
- * can contain multiple &lt;action-widget&gt; elements. The “response”
- * attribute specifies a numeric response, and the content of the element
- * is the id of widget (which should be a child of the dialogs @action_area).
+ * GtkDialog supports a custom <action-widgets> element, which can contain
+ * multiple <action-widget> elements. The “response” attribute specifies a
+ * numeric response, and the content of the element is the id of widget
+ * (which should be a child of the dialogs @action_area).
  *
  * An example of a #GtkDialog UI definition fragment:
  * |[
@@ -1477,7 +1477,7 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
  * [GNOME Human Interface Guidelines](http://library.gnome.org/devel/hig-book/stable/)
  * with the affirmative button at the far
  * right, and the cancel button left of it. But the builtin GTK+ dialogs
- * and #GtkMessageDialog<!-- -->s do provide an alternative button order,
+ * and #GtkMessageDialogs do provide an alternative button order,
  * which is more suitable on some platforms, e.g. Windows.
  *
  * Use this function after adding all the buttons to your dialog, as the

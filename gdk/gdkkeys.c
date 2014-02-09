@@ -495,12 +495,10 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * @state. For convenience, #GdkEventKey already contains the translated
  * keyval, so this function isn’t as useful as you might think.
  *
- * @consumed_modifiers gives modifiers that should be masked out
- * from @state when comparing this key press to a hot key. For
- * instance, on a US keyboard, the `plus`
- * symbol is shifted, so when comparing a key press to a
- * `&lt;Control&gt;plus` accelerator &lt;Shift&gt; should
- * be masked out.
+ * @consumed_modifiers gives modifiers that should be masked outfrom @state
+ * when comparing this key press to a hot key. For instance, on a US keyboard,
+ * the `plus` symbol is shifted, so when comparing a key press to a
+ * `<Control>plus` accelerator `<Shift>` should be masked out.
  *
  * |[<!-- language="C" -->
  * /&ast; We want to ignore irrelevant modifiers like ScrollLock &ast;/;
@@ -525,16 +523,14 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * ]|
  *
  * However, this did not work if multi-modifier combinations were
- * used in the keymap, since, for instance, `&lt;Control&gt;`
- * would be masked out even if only `&lt;Control&gt;&lt;Alt&gt;`
- * was used in the keymap. To support this usage as well as well as
- * possible, all single modifier combinations
- * that could affect the key for any combination of modifiers will
- * be returned in @consumed_modifiers; multi-modifier combinations
- * are returned only when actually found in @state. When you store
- * accelerators, you should always store them with consumed modifiers
- * removed. Store `&lt;Control&gt;plus`,
- * not `&lt;Control&gt;&lt;Shift&gt;plus`,
+ * used in the keymap, since, for instance, `<Control>` would be
+ * masked out even if only `<Control><Alt>` was used in the keymap.
+ * To support this usage as well as well as possible, all single
+ * modifier combinations that could affect the key for any combination
+ * of modifiers will be returned in @consumed_modifiers; multi-modifier
+ * combinations are returned only when actually found in @state. When
+ * you store accelerators, you should always store them with consumed
+ * modifiers removed. Store `<Control>plus`, not `<Control><Shift>plus`,
  *
  * Return value: %TRUE if there was a keyval bound to the keycode/state/group
  **/

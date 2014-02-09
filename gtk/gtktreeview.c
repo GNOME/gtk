@@ -99,8 +99,8 @@
  * # GtkTreeView as GtkBuildable
  *
  * The GtkTreeView implementation of the GtkBuildable interface accepts
- * #GtkTreeViewColumn objects as &lt;child&gt; elements and exposes the
- * internal #GtkTreeSelection in UI definitions.
+ * #GtkTreeViewColumn objects as <child> elements and exposes the internal
+ * #GtkTreeSelection in UI definitions.
  *
  * An example of a UI definition fragment with GtkTreeView:
  * |[
@@ -13355,7 +13355,7 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * (please see gtk_tree_view_get_bin_window()).
  * That is, @x and @y are relative to an events coordinates. @x and @y must
  * come from an event on the @tree_view only where `event->window ==
- * gtk_tree_view_get_bin_window (<!-- -->)`. It is primarily for
+ * gtk_tree_view_get_bin_window ()`. It is primarily for
  * things like popup menus. If @path is non-%NULL, then it will be filled
  * with the #GtkTreePath at that point.  This path should be freed with
  * gtk_tree_path_free().  If @column is non-%NULL, then it will be filled
@@ -13994,7 +13994,7 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
  *
  * The @x and @y coordinate that are provided must be relative to bin_window
  * coordinates.  That is, @x and @y must come from an event on @tree_view
- * where `event->window == gtk_tree_view_get_bin_window (<!-- -->)`.
+ * where `event->window == gtk_tree_view_get_bin_window ()`.
  *
  * For converting widget coordinates (eg. the ones you get from
  * GtkWidget::query-tooltip), please see
@@ -16366,7 +16366,7 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
  * @tree_view will connect a #GtkWidget::query-tooltip signal handler.
  *
  * Note that the signal handler sets the text with gtk_tooltip_set_markup(),
- * so &amp;, &lt;, etc have to be escaped in the text.
+ * so &, <, etc have to be escaped in the text.
  *
  * Since: 2.12
  */

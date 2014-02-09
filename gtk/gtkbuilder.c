@@ -71,33 +71,32 @@
  *
  * [RELAX NG Compact Syntax](https://git.gnome.org/browse/gtk+/tree/gtk/gtkbuilder.rnc)
  *
- * The toplevel element is &lt;interface&gt;. It optionally takes a
- * “domain” attribute, which will make the builder look for translated
- * strings using dgettext() in the domain specified. This can also be
- * done by calling gtk_builder_set_translation_domain() on the builder.
- * Objects are described by &lt;object&gt; elements, which can contain
- * &lt;property&gt; elements to set properties, &lt;signal&gt; elements
- * which connect signals to handlers, and &lt;child&gt; elements, which
- * describe child objects (most often widgets inside a container, but
- * also e.g. actions in an action group, or columns in a tree model).
- * A &lt;child&gt; element contains an &lt;object&gt; element which
- * describes the child object. The target toolkit version(s) are
- * described by &lt;requires&gt; elements, the “lib” attribute specifies
- * the widget library in question (currently the only supported value 
- * s “gtk+”) and the “version” attribute specifies the target version
- * in the form “&lt;major&gt;.&lt;minor&gt;”. The builder will error
+ * The toplevel element is <interface>. It optionally takes a “domain”
+ * attribute, which will make the builder look for translated strings
+ * using dgettext() in the domain specified. This can also be done by
+ * calling gtk_builder_set_translation_domain() on the builder.
+ * Objects are described by <object> elements, which can contain
+ * <property> elements to set properties, <signal> elements which
+ * connect signals to handlers, and <child> elements, which describe
+ * child objects (most often widgets inside a container, but also e.g.
+ * actions in an action group, or columns in a tree model). A <child>
+ * element contains an <object> element which describes the child object.
+ * The target toolkit version(s) are described by <requires> elements,
+ * the “lib” attribute specifies the widget library in question (currently
+ * the only supported value is “gtk+”) and the “version” attribute specifies
+ * the target version in the form “<major>.<minor>”. The builder will error
  * out if the version requirements are not met.
  *
- * Typically, the specific kind of object represented by an &lt;object&gt;
- * element is specified by the “class” attribute. If the type has not been
- * loaded yet, GTK+ tries to find the get_type() function from the
- * class name by applying heuristics. This works in most cases, but
- * if necessary, it is possible to specify the name of the
- * get_type() function explictly with the "type-func" attribute.
- * As a special case, GtkBuilder allows to use an object that has been
- * constructed by a #GtkUIManager in another part of the UI definition
- * by specifying the id of the #GtkUIManager in the “constructor”
- * attribute and the name of the object in the “id” attribute.
+ * Typically, the specific kind of object represented by an <object>
+ * element is specified by the “class” attribute. If the type has not
+ * been loaded yet, GTK+ tries to find the get_type() function from the
+ * class name by applying heuristics. This works in most cases, but if
+ * necessary, it is possible to specify the name of the get_type() function
+ * explictly with the "type-func" attribute. As a special case, GtkBuilder
+ * allows to use an object that has been constructed by a #GtkUIManager in
+ * another part of the UI definition by specifying the id of the #GtkUIManager
+ * in the “constructor” attribute and the name of the object in the “id”
+ * attribute.
  *
  * Objects may be given a name with the “id” attribute, which allows the
  * application to retrieve them from the builder with gtk_builder_get_object().
@@ -106,8 +105,8 @@
  * with ___ (3 underscores) for its own purposes.
  *
  * Setting properties of objects is pretty straightforward with the
- * &lt;property&gt; element: the “name” attribute specifies the name
- * of the property, and the content of the element specifies the value.
+ * <property> element: the “name” attribute specifies the name of the
+ * property, and the content of the element specifies the value.
  * If the “translatable” attribute is set to a true value, GTK+ uses
  * gettext() (or dgettext() if the builder has a translation domain set)
  * to find a translation for the value. This happens before the value
@@ -135,11 +134,11 @@
  * object has to be constructed before it can be used as the value of
  * a construct-only property.
  *
- * Signal handlers are set up with the &lt;signal&gt; element. The
- * “name” attribute specifies the name of the signal, and the “handler”
- * attribute specifies the function to connect to the signal. By default,
- * GTK+ tries to find the handler using g_module_symbol(), but this can
- * be changed by passing a custom #GtkBuilderConnectFunc to
+ * Signal handlers are set up with the <signal> element. The “name”
+ * attribute specifies the name of the signal, and the “handler” attribute
+ * specifies the function to connect to the signal. By default, GTK+ tries
+ * to find the handler using g_module_symbol(), but this can be changed by
+ * passing a custom #GtkBuilderConnectFunc to
  * gtk_builder_connect_signals_full(). The remaining attributes, “after”,
  * “swapped” and “object”, have the same meaning as the corresponding
  * parameters of the g_signal_connect_object() or
@@ -151,13 +150,13 @@
  * been constructed by GTK+ as part of a composite widget, to set
  * properties on them or to add further children (e.g. the @vbox of
  * a #GtkDialog). This can be achieved by setting the “internal-child”
- * propery of the &lt;child&gt; element to a true value. Note that
- * GtkBuilder still requires an &lt;object&gt; element for the internal
- * child, even if it has already been constructed.
+ * propery of the <child> element to a true value. Note that GtkBuilder
+ * still requires an <object> element for the internal child, even if it
+ * has already been constructed.
  *
  * A number of widgets have different places where a child can be added
  * (e.g. tabs vs. page content in notebooks). This can be reflected in
- * a UI definition by specifying the “type” attribute on a &lt;child&gt;.
+ * a UI definition by specifying the “type” attribute on a <child>
  * The possible values for the “type” attribute are described in the
  * sections describing the widget-specific portions of UI definitions.
  *
@@ -189,16 +188,15 @@
  *
  * Beyond this general structure, several object classes define their
  * own XML DTD fragments for filling in the ANY placeholders in the DTD
- * above. Note that a custom element in a &lt;child&gt; element gets
- * parsed by the custom tag handler of the parent object, while a custom
- * element in an &lt;object&gt; element gets parsed by the custom tag
- * handler of the object.
+ * above. Note that a custom element in a <child> element gets parsed by
+ * the custom tag handler of the parent object, while a custom element in
+ * an <object> element gets parsed by the custom tag handler of the object.
  *
  * These XML fragments are explained in the documentation of the
  * respective objects.
  *
- * Additionally, since 3.10 a special &lt;template&gt; tag has been
- * added to the format allowing one to define a widget class’s components.
+ * Additionally, since 3.10 a special <template> tag has been added
+ * to the format allowing one to define a widget class’s components.
  */
 
 #include "config.h"

@@ -42,7 +42,7 @@
  * @See_also: #GtkToolbar, #GtkMenuToolButton, #GtkToggleToolButton,
  *   #GtkRadioToolButton, #GtkSeparatorToolItem
  *
- * #GtkToolButton<!-- -->s are #GtkToolItems containing buttons.
+ * #GtkToolButtons are #GtkToolItems containing buttons.
  *
  * Use gtk_tool_button_new() to create a new #GtkToolButton.
  *

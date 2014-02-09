@@ -59,7 +59,7 @@
  *   GtkPageSetup *new_page_setup;
  *
  *   if (settings == NULL)
- *     settings = gtk_print_settings_new (<!-- -->);
+ *     settings = gtk_print_settings_new ();
  *
  *   new_page_setup = gtk_print_run_page_setup_dialog (GTK_WINDOW (main_window),
  *                                                     page_setup, settings);

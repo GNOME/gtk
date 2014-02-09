@@ -538,7 +538,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  *
  * Creates a list of path of all selected rows. Additionally, if you are
  * planning on modifying the model after calling this function, you may
- * want to convert the returned list into a list of #GtkTreeRowReference<!-- -->s.
+ * want to convert the returned list into a list of #GtkTreeRowReferences.
  * To do this, you can use gtk_tree_row_reference_new().
  *
  * To free the return value, use:

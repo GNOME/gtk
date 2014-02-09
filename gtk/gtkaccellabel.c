@@ -72,19 +72,21 @@
  *   GtkWidget *save_item;
  *   GtkAccelGroup *accel_group;
  *
- *   /<!---->* Create a GtkAccelGroup and add it to the window. *<!---->/
- *   accel_group = gtk_accel_group_new (<!-- -->);
+ *   /&ast; Create a GtkAccelGroup and add it to the window. &ast;/
+ *   accel_group = gtk_accel_group_new ();
  *   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
  *
- *   /<!---->* Create the menu item using the convenience function. *<!---->/
+ *   /&ast; Create the menu item using the convenience function. &ast;/
  *   save_item = gtk_menu_item_new_with_label ("Save");
  *   gtk_widget_show (save_item);
  *   gtk_container_add (GTK_CONTAINER (menu), save_item);
  *
- *   /<!---->* Now add the accelerator to the GtkMenuItem. Note that since we called
- *      gtk_menu_item_new_with_label(<!-- -->) to create the GtkMenuItem the
- *      GtkAccelLabel is automatically set up to display the GtkMenuItem
- *      accelerators. We just need to make sure we use GTK_ACCEL_VISIBLE here. *<!---->/
+ *   /&ast; Now add the accelerator to the GtkMenuItem. Note that since we
+ *    &ast; called gtk_menu_item_new_with_label() to create the GtkMenuItem
+ *    &ast; the GtkAccelLabel is automatically set up to display the
+ *    &ast; GtkMenuItem accelerators. We just need to make sure we use
+ *    &ast; GTK_ACCEL_VISIBLE here.
+ *    &ast;/
  *   gtk_widget_add_accelerator (save_item, "activate", accel_group,
  *                               GDK_KEY_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
  * ]|

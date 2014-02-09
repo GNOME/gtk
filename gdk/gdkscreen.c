@@ -1020,7 +1020,7 @@ gdk_screen_get_active_window (GdkScreen *screen)
  * gdk_screen_get_window_stack:
  * @screen: a #GdkScreen
  *
- * Returns a #GList of #GdkWindow<!-- -->s representing the current
+ * Returns a #GList of #GdkWindows representing the current
  * window stack.
  *
  * On X11, this is done by inspecting the _NET_CLIENT_LIST_STACKING
@@ -1037,7 +1037,7 @@ gdk_screen_get_active_window (GdkScreen *screen)
  * its windows unrefed using g_object_unref() when no longer needed.
  *
  * Return value: (transfer full) (element-type GdkWindow):
- *     a list of #GdkWindow<!-- -->s for the current window stack,
+ *     a list of #GdkWindows for the current window stack,
  *               or %NULL.
  *
  * Since: 2.10

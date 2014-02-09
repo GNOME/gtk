@@ -73,7 +73,7 @@
  * ]|
  *
  * In order to retrieve the list of recently used files, you can use
- * gtk_recent_manager_get_items(), which returns a list of #GtkRecentInfo-struct<!-- -->s.
+ * gtk_recent_manager_get_items(), which returns a list of #GtkRecentInfo-structs.
  *
  * A #GtkRecentManager is the model used to populate the contents of
  * one, or more #GtkRecentChooser implementations.

@@ -32,7 +32,7 @@
  * types; e.g. a filter for text/plain also matches a file with mime
  * type application/rtf, since application/rtf is a subclass of text/plain.
  * Note that #GtkRecentFilter allows wildcards for the subtype of a
- * mime type, so you can e.g. filter for image/<!-- -->*.
+ * mime type, so you can e.g. filter for image/&ast;.
  *
  * Normally, filters are used by adding them to a #GtkRecentChooser,
  * see gtk_recent_chooser_add_filter(), but it is also possible to
@@ -43,11 +43,11 @@
  * ## GtkRecentFilter as GtkBuildable
  *
  * The GtkRecentFilter implementation of the GtkBuildable interface
- * supports adding rules using the &lt;mime-types&gt;, &lt;patterns&gt; and
- * &lt;applications&gt; elements and listing the rules within. Specifying
- * a &lt;mime-type&gt;, &lt;pattern&gt; or &lt;application&gt; is the same
- * as calling gtk_recent_filter_add_mime_type(), gtk_recent_filter_add_pattern()
- * or gtk_recent_filter_add_application().
+ * supports adding rules using the <mime-types>, <patterns> and
+ * <applications> elements and listing the rules within. Specifying
+ * a <mime-type>, <pattern> or <application> has the same effect as
+ * calling gtk_recent_filter_add_mime_type(),
+ * gtk_recent_filter_add_pattern() or gtk_recent_filter_add_application().
  *
  * An example of a UI definition fragment specifying GtkRecentFilter rules:
  * |[

@@ -92,10 +92,9 @@
  * # GtkWindow as GtkBuildable
  *
  * The GtkWindow implementation of the GtkBuildable interface supports a
- * custom `&lt;accel-groups&gt;` element, which supports
- * any number of `&lt;group&gt;` elements representing the
- * #GtkAccelGroup objects you want to add to your window (synonymous with
- * gtk_window_add_accel_group().
+ * custom <accel-groups> element, which supports any number of <group>
+ * elements representing the #GtkAccelGroup objects you want to add to
+ * your window (synonymous with gtk_window_add_accel_group().
  *
  * An example of a UI definition fragment with accel groups:
  * |[
@@ -110,9 +109,9 @@
  * <object class="GtkAccelGroup" id="accelgroup1"/>
  * ]|
  * 
- * The GtkWindow implementation of the GtkBuildable interface
- * supports setting a child as the titlebar by specifying “titlebar” as
- * the “type” attribute of a `&lt;child&gt;` element.
+ * The GtkWindow implementation of the GtkBuildable interface supports
+ * setting a child as the titlebar by specifying “titlebar” as the “type”
+ * attribute of a <child> element.
  */
 
 #define MNEMONICS_DELAY 300 /* ms */

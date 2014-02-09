@@ -71,7 +71,7 @@
  * ## Obtaining the window ID of a socket.
  *
  * |[<!-- language="C" -->
- * GtkWidget *socket = gtk_socket_new (<!-- -->);
+ * GtkWidget *socket = gtk_socket_new ();
  * gtk_widget_show (socket);
  * gtk_container_add (GTK_CONTAINER (parent), socket);
  *

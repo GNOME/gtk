@@ -96,14 +96,14 @@
  * Selectors work very similar to the way they do in CSS, with widget class
  * names taking the role of element names, and widget names taking the role
  * of IDs. When used in a selector, widget names must be prefixed with a
- * '&num;' character. The “*” character represents the so-called universal
+ * '#' character. The “*” character represents the so-called universal
  * selector, which matches any widget.
  *
  * To express more complicated situations, selectors can be combined in
  * various ways:
  * - To require that a widget satisfies several conditions,
  *   combine several selectors into one by concatenating them. E.g.
- *   `GtkButton&num;button1` matches a GtkButton widget
+ *   `GtkButton\#button1` matches a GtkButton widget
  *   with the name button1.
  * - To only match a widget when it occurs inside some other
  *   widget, write the two selectors after each other, separated by whitespace.
@@ -267,18 +267,18 @@
  * whose selectors more closely match a widget path will take precedence
  * over the others.
  *
- * # &commat; Rules
+ * # @ Rules
  *
- * GTK+’s CSS supports the &commat;import rule, in order to load another
+ * GTK+’s CSS supports the \@import rule, in order to load another
  * CSS style sheet in addition to the currently parsed one.
  *
- * An example for using the &commat;import rule:
+ * An example for using the \@import rule:
  * |[
  * @import url ("path/to/common.css");
  * ]|
  * 
  * In order to extend key bindings affecting different widgets, GTK+
- * supports the &commat;binding-set rule to parse a set of bind/unbind
+ * supports the \@binding-set rule to parse a set of bind/unbind
  * directives, see #GtkBindingSet for the supported syntax. Note that
  * the binding sets defined in this way must be associated with rule sets
  * by setting the gtk-key-bindings style property.
@@ -288,7 +288,7 @@
  * according to the current key theme, which is defined by the
  * #GtkSettings:gtk-key-theme-name setting.
  *
- * An example for using the &commat;binding rule:
+ * An example for using the \@binding rule:
  * |[
  * @binding-set binding-set1 {
  *   bind "<alt>Left" { "move-cursor" (visual-positions, -3, 0) };
@@ -306,7 +306,7 @@
  * }
  * ]|
  *
- * GTK+ also supports an additional &commat;define-color rule, in order
+ * GTK+ also supports an additional \@define-color rule, in order
  * to define a color name which may be used instead of color numeric
  * representations. Also see the #GtkSettings:gtk-color-scheme setting
  * for a way to override the values of these named colors.
@@ -367,7 +367,7 @@
  *   color: rgb(128, 10, 54, 0.5);
  * ]|
  *
- * ## &num;xxyyzz
+ * ## \#xxyyzz
  *
  * An opaque color.
  *
@@ -380,9 +380,9 @@
  *   border-color: #ffff0000cccc;
  * ]|
  *
- * ## &commat;name
+ * ## \@name
  *
- * Reference to a color that has been defined with &commat;define-color
+ * Reference to a color that has been defined with \@define-color
  *
  * |[
  *   color: @bg_color;

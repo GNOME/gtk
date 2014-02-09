@@ -193,7 +193,7 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
  * Engines must ensure property registration happens exactly once,
  * usually GTK+ deals with theming engines as singletons, so this
  * should be guaranteed to happen once, but bear this in mind
- * when creating #GtkThemeEngine<!-- -->s yourself.
+ * when creating #GtkThemeEngines yourself.
  *
  * In order to make use of the custom registered properties in
  * the CSS file, make sure the engine is loaded first by specifying

@@ -1895,7 +1895,7 @@ gtk_selection_data_get_targets (const GtkSelectionData  *selection_data,
 
 /**
  * gtk_targets_include_text:
- * @targets: (array length=n_targets): an array of #GdkAtom<!-- -->s
+ * @targets: (array length=n_targets): an array of #GdkAtoms
  * @n_targets: the length of @targets
  * 
  * Determines if any of the targets in @targets can be used to
@@ -1940,7 +1940,7 @@ gtk_targets_include_text (GdkAtom *targets,
 
 /**
  * gtk_targets_include_rich_text:
- * @targets: (array length=n_targets): an array of #GdkAtom<!-- -->s
+ * @targets: (array length=n_targets): an array of #GdkAtoms
  * @n_targets: the length of @targets
  * @buffer: a #GtkTextBuffer
  *
@@ -2058,7 +2058,7 @@ gtk_selection_data_targets_include_rich_text (const GtkSelectionData *selection_
 
 /**
  * gtk_targets_include_image:
- * @targets: (array length=n_targets): an array of #GdkAtom<!-- -->s
+ * @targets: (array length=n_targets): an array of #GdkAtoms
  * @n_targets: the length of @targets
  * @writable: whether to accept only targets for which GTK+ knows
  *   how to convert a pixbuf into the format
@@ -2140,7 +2140,7 @@ gtk_selection_data_targets_include_image (const GtkSelectionData *selection_data
 
 /**
  * gtk_targets_include_uri:
- * @targets: (array length=n_targets): an array of #GdkAtom<!-- -->s
+ * @targets: (array length=n_targets): an array of #GdkAtoms
  * @n_targets: the length of @targets
  * 
  * Determines if any of the targets in @targets can be used to

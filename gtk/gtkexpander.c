@@ -71,11 +71,10 @@
  *
  * # GtkExpander as GtkBuildable
  *
- * The GtkExpander implementation of the GtkBuildable interface
- * supports placing a child in the label position by specifying
- * “label” as the “type” attribute of a &lt;child&gt; element.
- * A normal content child can be specified without specifying
- * a &lt;child&gt; type attribute.
+ * The GtkExpander implementation of the GtkBuildable interface supports
+ * placing a child in the label position by specifying “label” as the
+ * “type” attribute of a <child> element. A normal content child can be
+ * specified without specifying a <child> type attribute.
  *
  * An example of a UI definition fragment with GtkExpander:
  * |[

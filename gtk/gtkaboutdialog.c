@@ -79,11 +79,11 @@
  * use the function gtk_show_about_dialog() which constructs and shows a dialog
  * and keeps it around so that it can be shown again.
  *
- * Note that GTK+ sets a default title of `_("About &percnt;s")`
- * on the dialog window (where &percnt;s is replaced by the name of the
- * application, but in order to ensure proper translation of the title,
- * applications should set the title property explicitly when constructing
- * a GtkAboutDialog, as shown in the following example:
+ * Note that GTK+ sets a default title of `_("About \%s")` on the dialog
+ * window (where \%s is replaced by the name of the application, but in
+ * order to ensure proper translation of the title, applications should
+ * set the title property explicitly when constructing a GtkAboutDialog,
+ * as shown in the following example:
  * |[<!-- language="C" -->
  * gtk_show_about_dialog (NULL,
  *                        "program-name", "ExampleCode",

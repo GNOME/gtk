@@ -131,13 +131,12 @@ G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
  * @red, @green, and @blue fields of a #GdkColor.
  *
  * The string can either one of a large set of standard names
- * (taken from the X11 `rgb.txt` file), or
- * it can be a hex value in the form “&num;rgb” “&num;rrggbb”
- * “&num;rrrgggbbb” or “&num;rrrrggggbbbb” where “r”, “g” and
- * “b” are hex digits of the red, green, and blue components
- * of the color, respectively. (White in the four forms is
- * “&num;fff”, “&num;ffffff”, “&num;fffffffff” and
- * “&num;ffffffffffff”).
+ * (taken from the X11 `rgb.txt` file), or it can be a hexadecimal
+ * value in the form “\#rgb” “\#rrggbb”, “\#rrrgggbbb” or
+ * “\#rrrrggggbbbb” where “r”, “g” and “b” are hex digits of
+ * the red, green, and blue components of the color, respectively.
+ * (White in the four forms is “\#fff”, “\#ffffff”, “\#fffffffff”
+ * and “\#ffffffffffff”).
  *
  * Return value: %TRUE if the parsing succeeded
  */
@@ -163,9 +162,8 @@ gdk_color_parse (const gchar *spec,
  * gdk_color_to_string:
  * @color: a #GdkColor
  *
- * Returns a textual specification of @color in the hexadecimal form
- * `&num;rrrrggggbbbb`, where `r`,
- * `g` and `b` are hex digits
+ * Returns a textual specification of @color in the hexadecimal
+ * form `\#rrrrggggbbbb`, where `r`, `g` and `b` are hex digits
  * representing the red, green and blue components respectively.
  *
  * The returned string can be parsed by gdk_color_parse().

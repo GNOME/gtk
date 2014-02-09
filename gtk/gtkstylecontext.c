@@ -197,7 +197,7 @@
  *
  * # Custom styling in UI libraries and applications
  *
- * If you are developing a library with custom #GtkWidget<!-- -->s that
+ * If you are developing a library with custom #GtkWidgets that
  * render differently than standard components, you may need to add a
  * #GtkStyleProvider yourself with the %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK
  * priority, either a #GtkCssProvider or a custom object implementing the
@@ -1025,7 +1025,7 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
  *
  * This function is only useful when using the theming layer
  * separated from GTK+, if you are using #GtkStyleContext to
- * theme #GtkWidget<!-- -->s, use gtk_widget_get_style_context()
+ * theme #GtkWidgets, use gtk_widget_get_style_context()
  * in order to get a style context ready to theme the widget.
  *
  * Returns: A newly created #GtkStyleContext.
@@ -4260,7 +4260,7 @@ gtk_render_extension (GtkStyleContext *context,
  * @height: rectangle height
  *
  * Renders a handle (as in #GtkHandleBox, #GtkPaned and
- * #GtkWindow<!-- -->’s resize grip), in the rectangle
+ * #GtkWindow’s resize grip), in the rectangle
  * determined by @x, @y, @width, @height.
  *
  * Handles rendered for the paned and grip classes:

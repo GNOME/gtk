@@ -142,8 +142,8 @@ parse_rgb_value (const gchar  *str,
  *
  * The string can be either one of:
  * - A standard name (Taken from the X11 rgb.txt file).
- * - A hex value in the form “&num;rgb” “&num;rrggbb” “&num;rrrgggbbb”
- *   or “&num;rrrrggggbbbb”
+ * - A hexadecimal value in the form “\#rgb”, “\#rrggbb”,
+ *   “\#rrrgggbbb” or ”\#rrrrggggbbbb”
  * - A RGB color in the form “rgb(r,g,b)” (In this case the color will
  *   have full opacity)
  * - A RGBA color in the form “rgba(r,g,b,a)”

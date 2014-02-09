@@ -58,7 +58,7 @@
  * theming engine would be created as an .so library, and installed in
  * $(gtk-modules-dir)/theming-engines/.
  *
- * #GtkThemingEngine<!-- -->s have limited access to the object they are
+ * #GtkThemingEngines have limited access to the object they are
  * rendering, the #GtkThemingEngine API has read-only accessors to the
  * style information contained in the rendered object’s #GtkStyleContext.
  */

@@ -135,6 +135,8 @@ struct _GtkWidget
 {
   GInitiallyUnowned parent_instance;
 
+  /*< private >*/
+
   GtkWidgetPrivate *priv;
 };
 

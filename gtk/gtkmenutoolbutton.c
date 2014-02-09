@@ -51,8 +51,8 @@
  * # GtkMenuToolButton as GtkBuildable
  *
  * The GtkMenuToolButton implementation of the GtkBuildable interface
- * supports adding a menu by specifying “menu” as the “type”
- * attribute of a &lt;child&gt; element.
+ * supports adding a menu by specifying “menu” as the “type” attribute
+ * of a <child> element.
  *
  * An example for a UI definition fragment with menus:
  * |[

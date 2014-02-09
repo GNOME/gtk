@@ -2035,9 +2035,9 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
  * purpose, automatically gets an accel path assigned.
  *
  * For example, a menu containing menu items “New” and “Exit”, will, after
- * `gtk_menu_set_accel_path (menu, "&lt;Gnumeric-Sheet&gt;/File");`
- * has been called, assign its items the accel paths:
- * `"&lt;Gnumeric-Sheet&gt;/File/New"` and `"&lt;Gnumeric-Sheet&gt;/File/Exit"`.
+ * `gtk_menu_set_accel_path (menu, "<Gnumeric-Sheet>/File");` has been
+ * called, assign its items the accel paths: `"<Gnumeric-Sheet>/File/New"`
+ * and `"<Gnumeric-Sheet>/File/Exit"`.
  *
  * Assigning accel paths to menu items then enables the user to change
  * their accelerators at runtime. More details about accelerator paths

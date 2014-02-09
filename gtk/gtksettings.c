@@ -923,7 +923,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:color-hash:
    *
    * Holds a hash table representation of the #GtkSettings:gtk-color-scheme
-   * setting, mapping color names to #GdkColor<!-- -->s.
+   * setting, mapping color names to #GdkColors.
    *
    * Since: 2.10
    *
@@ -976,8 +976,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-print-preview-command:
    *
    * A command to run for displaying the print preview. The command
-   * should contain a `&percnt;f` placeholder, which will get replaced by
-   * the path to the pdf file. The command may also contain a `&percnt;s`
+   * should contain a `\%f` placeholder, which will get replaced by
+   * the path to the pdf file. The command may also contain a `\%s`
    * placeholder, which will get replaced by the path to a file
    * containing the print settings in the format produced by
    * gtk_print_settings_to_file().

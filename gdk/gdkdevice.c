@@ -1084,11 +1084,11 @@ gdk_device_get_n_axes (GdkDevice *device)
  * gdk_device_list_axes:
  * @device: a pointer #GdkDevice
  *
- * Returns a #GList of #GdkAtom<!-- -->s, containing the labels for
+ * Returns a #GList of #GdkAtoms, containing the labels for
  * the axes that @device currently has.
  *
  * Returns: (transfer container) (element-type GdkAtom):
- *     A #GList of #GdkAtom<!-- -->s, free with g_list_free().
+ *     A #GList of #GdkAtoms, free with g_list_free().
  *
  * Since: 3.0
  **/

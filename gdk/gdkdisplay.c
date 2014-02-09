@@ -2110,12 +2110,12 @@ static GQueue gdk_error_traps = G_QUEUE_INIT;
  * ## Trapping an X error
  *
  * |[<!-- language="C" -->
- * gdk_error_trap_push (<!-- -->);
+ * gdk_error_trap_push ();
  *
  *  // ... Call the X function which may cause an error here ...
  *
  *
- * if (gdk_error_trap_pop (<!-- -->))
+ * if (gdk_error_trap_pop ())
  *  {
  *    // ... Handle the error here ...
  *  }

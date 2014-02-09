@@ -1441,15 +1441,15 @@ out:
  * @accelerator_mods: (out) (allow-none): return location for accelerator
  *     modifier mask, %NULL
  *
- * Parses a string representing an accelerator. The
- * format looks like “&lt;Control&gt;a” or “&lt;Shift&gt;&lt;Alt&gt;F1”
- * or “&lt;Release&gt;z” (the last one is for key release).
+ * Parses a string representing an accelerator. The format looks like
+ * “<Control>a” or “<Shift><Alt>F1” or “<Release>z” (the last one is
+ * for key release).
  *
- * The parser is fairly liberal and allows lower or upper case,
- * and also abbreviations such as “&lt;Ctl&gt;” and “&lt;Ctrl&gt;”.
- * Key names are parsed using gdk_keyval_from_name(). For character
- * keys the name is not the symbol, but the lowercase name, e.g. one
- * would use “&lt;Ctrl&gt;minus” instead of “&lt;Ctrl&gt;-”.
+ * The parser is fairly liberal and allows lower or upper case, and also
+ * abbreviations such as “<Ctl>” and “<Ctrl>”. Key names are parsed using
+ * gdk_keyval_from_name(). For character keys the name is not the symbol,
+ * but the lowercase name, e.g. one would use “<Ctrl>minus” instead of
+ * “<Ctrl>-”.
  *
  * If the parse fails, @accelerator_key and @accelerator_mods will
  * be set to 0 (zero).
@@ -1509,10 +1509,9 @@ gtk_accelerator_name_with_keycode (GdkDisplay      *display,
  * @accelerator_key: accelerator keyval
  * @accelerator_mods: accelerator modifier mask
  *
- * Converts an accelerator keyval and modifier mask
- * into a string parseable by gtk_accelerator_parse().
- * For example, if you pass in #GDK_KEY_q and #GDK_CONTROL_MASK,
- * this function returns “&lt;Control&gt;q”.
+ * Converts an accelerator keyval and modifier mask into a string
+ * parseable by gtk_accelerator_parse(). For example, if you pass in
+ * #GDK_KEY_q and #GDK_CONTROL_MASK, this function returns “<Control>q”.
  *
  * If you need to display accelerators in the user interface,
  * see gtk_accelerator_get_label().

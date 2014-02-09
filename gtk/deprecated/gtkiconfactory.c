@@ -72,9 +72,8 @@
  *
  * # GtkIconFactory as GtkBuildable # {#GtkIconFactory-BUILDER-UI}
  *
- * GtkIconFactory supports a custom &lt;sources&gt; element, which can contain
- * multiple &lt;source&gt; elements.
- * The following attributes are allowed:
+ * GtkIconFactory supports a custom <sources> element, which can contain
+ * multiple <source> elements. The following attributes are allowed:
  *
  * - stock-id
  *

@@ -64,10 +64,10 @@
  * void make_toggles (void) {
  *    GtkWidget *dialog, *toggle1, *toggle2;
  *
- *    dialog = gtk_dialog_new (<!-- -->);
+ *    dialog = gtk_dialog_new ();
  *    toggle1 = gtk_toggle_button_new_with_label ("Hi, i’m a toggle button.");
  *
- *    // Makes this toggle button invisible
+ *    /&ast; Makes this toggle button invisible &ast;/
  *    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle1), TRUE);
  *
  *    g_signal_connect (toggle1, "toggled",

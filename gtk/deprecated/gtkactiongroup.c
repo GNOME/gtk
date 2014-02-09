@@ -48,24 +48,23 @@
  *
  * Accelerators are handled by the GTK+ accelerator map. All actions are
  * assigned an accelerator path (which normally has the form
- * `&lt;Actions&gt;/group-name/action-name`)
- * and a shortcut is associated with this accelerator path. All menuitems
- * and toolitems take on this accelerator path. The GTK+ accelerator map
- * code makes sure that the correct shortcut is displayed next to the menu
- * item.
+ * `<Actions>/group-name/action-name`) and a shortcut is associated with
+ * this accelerator path. All menuitems and toolitems take on this accelerator
+ * path. The GTK+ accelerator map code makes sure that the correct shortcut
+ * is displayed next to the menu item.
  *
  * # GtkActionGroup as GtkBuildable # {#GtkActionGroup-BUILDER-UI}
  *
  * The #GtkActionGroup implementation of the #GtkBuildable interface accepts
- * #GtkAction objects as &lt;child&gt; elements in UI definitions.
+ * #GtkAction objects as <child> elements in UI definitions.
  *
  * Note that it is probably more common to define actions and action groups
  * in the code, since they are directly related to what the code can do.
  *
  * The GtkActionGroup implementation of the GtkBuildable interface supports
- * a custom &lt;accelerator&gt; element, which has attributes named key and
- * modifiers and allows to specify accelerators. This is similar to the
- * &lt;accelerator&gt; element of #GtkWidget, the main difference is that
+ * a custom <accelerator> element, which has attributes named “key“ and
+ * “modifiers“ and allows to specify accelerators. This is similar to the
+ * <accelerator> element of #GtkWidget, the main difference is that
  * it doesn’t allow you to specify a signal.
  *
  * ## A #GtkDialog UI definition fragment. ##
@@ -964,8 +963,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
  * If @accelerator is %NULL, attempts to use the accelerator associated 
  * with the stock_id of the action. 
  *
- * Accel paths are set to
- * `&lt;Actions&gt;/group-name/action-name`.
+ * Accel paths are set to `<Actions>/group-name/action-name`.
  *
  * Since: 2.4
  *
@@ -1108,9 +1106,8 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  * This is a convenience function to create a number of actions and add them 
  * to the action group.
  *
- * The “activate” signals of the actions are connected to the callbacks and
- * their accel paths are set to 
- * `&lt;Actions&gt;/group-name/action-name`.  
+ * The “activate” signals of the actions are connected to the callbacks
+ * and their accel paths are set to `<Actions>/group-name/action-name`.  
  * 
  * Since: 2.4
  *
@@ -1243,9 +1240,8 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
  * This is a convenience function to create a number of toggle actions and add them 
  * to the action group.
  *
- * The “activate” signals of the actions are connected to the callbacks and
- * their accel paths are set to 
- * `&lt;Actions&gt;/group-name/action-name`.  
+ * The “activate” signals of the actions are connected to the callbacks
+ * and their accel paths are set to `<Actions>/group-name/action-name`.  
  * 
  * Since: 2.4
  *
@@ -1365,7 +1361,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
  *
  * The “changed” signal of the first radio action is connected to the 
  * @on_change callback and the accel paths of the actions are set to 
- * `&lt;Actions&gt;/group-name/action-name`.  
+ * `<Actions>/group-name/action-name`.  
  * 
  * Since: 2.4
  *

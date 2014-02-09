@@ -640,7 +640,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    *                       THE_DOUBLE_VALUE_COLUMN, &value,
    *                       -1);
    *
-   *   return g_strdup_printf ("&percnt;g", value);
+   *   return g_strdup_printf ("%g", value);
    * }
    * ]|
    *
@@ -2379,7 +2379,7 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
  *
  * Pops up the menu or dropdown list of @combo_box, the popup window
  * will be grabbed so only @device and its associated pointer/keyboard
- * are the only #GdkDevice<!-- -->s able to send events to it.
+ * are the only #GdkDevices able to send events to it.
  *
  * Since: 3.0
  **/

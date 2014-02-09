@@ -205,10 +205,10 @@
  *
  * # Accelerators #
  *
- * Every action has an accelerator path. Accelerators are installed together with
- * menuitem proxies, but they can also be explicitly added with &lt;accelerator&gt;
- * elements in the UI definition. This makes it possible to have accelerators for
- * actions even if they have no visible proxies.
+ * Every action has an accelerator path. Accelerators are installed together
+ * with menuitem proxies, but they can also be explicitly added with
+ * <accelerator> elements in the UI definition. This makes it possible to
+ * have accelerators for actions even if they have no visible proxies.
  *
  * # Smart Separators # {#Smart-Separators}
  *
@@ -240,10 +240,10 @@
  * # GtkUIManager as GtkBuildable # {#GtkUIManager-BUILDER-UI}
  *
  * The GtkUIManager implementation of the GtkBuildable interface accepts
- * GtkActionGroup objects as &lt;child&gt; elements in UI definitions.
+ * GtkActionGroup objects as <child> elements in UI definitions.
  *
  * A GtkUIManager UI definition as described above can be embedded in
- * an GtkUIManager &lt;object&gt; element in a GtkBuilder UI definition.
+ * an GtkUIManager <object> element in a GtkBuilder UI definition.
  *
  * The widgets that are constructed by a GtkUIManager can be embedded in
  * other parts of the constructed user interface with the help of the
@@ -1093,19 +1093,20 @@ gtk_ui_manager_get_accel_group (GtkUIManager *manager)
  * Looks up a widget by following a path. 
  * The path consists of the names specified in the XML description of the UI. 
  * separated by “/”. Elements which don’t have a name or action attribute in 
- * the XML (e.g. &lt;popup&gt;) can be addressed by their XML element name 
+ * the XML (e.g. <popup>) can be addressed by their XML element name 
  * (e.g. "popup"). The root element ("/ui") can be omitted in the path.
  *
- * Note that the widget found by following a path that ends in a &lt;menu&gt;
- * element is the menuitem to which the menu is attached, not the menu itmanager.
+ * Note that the widget found by following a path that ends in a <menu>;
+ * element is the menuitem to which the menu is attached, not the menu it
+ * manages.
  *
  * Also note that the widgets constructed by a ui manager are not tied to 
  * the lifecycle of the ui manager. If you add the widgets returned by this 
  * function to some container or explicitly ref them, they will survive the
  * destruction of the ui manager.
  *
- * Return value: (transfer none): the widget found by following the path, or %NULL if no widget
- *   was found.
+ * Return value: (transfer none): the widget found by following the path,
+ *     or %NULL if no widget was found
  *
  * Since: 2.4
  *
@@ -1932,9 +1933,9 @@ add_ui_from_string (GtkUIManager *manager,
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @error: return location for an error
  * 
- * Parses a string containing a [UI definition][XML-UI] and 
- * merges it with the current contents of @manager. An enclosing &lt;ui&gt; 
- * element is added if it is missing.
+ * Parses a string containing a [UI definition][XML-UI] and merges it with
+ * the current contents of @manager. An enclosing <ui> element is added if
+ * it is missing.
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
  *   to unmerge the UI with gtk_ui_manager_remove_ui(). If an error occurred,

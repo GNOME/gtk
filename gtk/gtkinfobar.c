@@ -104,10 +104,10 @@
  * the content area and action area as internal children with the names
  * “content_area” and “action_area”.
  *
- * GtkInfoBar supports a custom &lt;action-widgets&gt; element, which
- * can contain multiple &lt;action-widget&gt; elements. The “response”
- * attribute specifies a numeric response, and the content of the element
- * is the id of widget (which should be a child of the dialogs @action_area).
+ * GtkInfoBar supports a custom <action-widgets> element, which can contain
+ * multiple <action-widget> elements. The “response” attribute specifies a
+ * numeric response, and the content of the element is the id of widget
+ * (which should be a child of the dialogs @action_area).
  */
 
 enum

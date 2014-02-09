@@ -120,18 +120,18 @@
  *
  * icon_theme = gtk_icon_theme_get_default ();
  * pixbuf = gtk_icon_theme_load_icon (icon_theme,
- *                                    "my-icon-name", // icon name
- *                                    48, // size
- *                                    0,  // flags
+ *                                    "my-icon-name", /&ast; icon name &ast;/
+ *                                    48, /&ast; icon size &ast;/
+ *                                    0,  /&ast; flags &ast;/
  *                                    &error);
  * if (!pixbuf)
  *   {
- *     g_warning ("Couldn’t load icon: &percnt;s", error->message);
+ *     g_warning ("Couldn’t load icon: %s", error->message);
  *     g_error_free (error);
  *   }
  * else
  *   {
- *     // Use the pixbuf
+ *     /&ast; Use the pixbuf &ast;/
  *     g_object_unref (pixbuf);
  *   }
  * ]|
