@@ -366,6 +366,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   button = gtk_menu_button_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), menu);
+                  gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), TRUE);
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   image = gtk_image_new ();
                   gtk_container_add (GTK_CONTAINER (button), image);
