@@ -40,19 +40,22 @@
 
     <enum name="version">
       <description summary="latest protocol version">
-	Use this enum to check the protocol version, and it will be updated
-	automatically.
+	The 'current' member of this enum gives the version of the
+	protocol.  Implementations can compare this to the version
+	they implement using static_assert to ensure the protocol and
+	implementation versions match.
       </description>
-      <entry name="current" value="2" summary="Always the latest version"/>
+      <entry name="current" value="3" summary="Always the latest version"/>
     </enum>
 
 
     <request name="use_unstable_version">
       <description summary="enable use of this unstable version">
-	Use this request in order to enable use of this interface.
-
-	Understand and agree that one is using an unstable interface,
-	that will likely change in the future, breaking the API.
+	Negotiate the unstable version of the interface.  This
+	mechanism is in place to ensure client and server agree on the
+	unstable versions of the protocol that they speak or exit
+	cleanly if they don't agree.  This request will go away once
+	the xdg-shell protocol is stable.
       </description>
       <arg name="version" type="int"/>
     </request>
@@ -275,113 +278,87 @@
       <arg name="output" type="object" interface="wl_output" allow-null="true"/>
     </request>
 
-    <event name="request_set_fullscreen">
-      <description summary="server requests that the client set fullscreen">
-	Event sent from the compositor to the client requesting that the client
-	goes to a fullscreen state. It's the client job to call set_fullscreen
-	and really trigger the fullscreen state.
+    <enum name="state">
+      <description summary="types of state on the surface">
+        The different state values used on the surface. This is designed for
+        state values like maximized, fullscreen. It is paired with the
+        request_change_state event to ensure that both the client and the
+        compositor setting the state can be synchronized.
+
+        States set in this way are double-buffered. They will get applied on
+        the next commit.
+
+        Desktop environments may extend this enum by taking up a range of
+        values and documenting the range they chose in this description.
+        They are not required to document the values for the range that they
+        chose. Ideally, any good extensions from a desktop environment should
+        make its way into standardization into this enum.
+
+        The current reserved ranges are:
+
+        0x0000 - 0x0FFF: xdg-shell core values, documented below.
+        0x1000 - 0x1FFF: GNOME
       </description>
-    </event>
+      <entry name="maximized" value="1" summary="the surface is maximized">
+        A non-zero value indicates the surface is maximized. Otherwise,
+        the surface is unmaximized.
+      </entry>
+      <entry name="fullscreen" value="2" summary="the surface is fullscreen">
+        A non-zero value indicates the surface is fullscreen. Otherwise,
+        the surface is not fullscreen.
+      </entry>
+    </enum>
 
-    <event name="request_unset_fullscreen">
-      <description summary="server requests that the client unset fullscreen">
-	Event sent from the compositor to the client requesting that the client
-	leaves the fullscreen state. It's the client job to call
-	unset_fullscreen and really leave the fullscreen state.
+    <request name="request_change_state">
+      <description summary="client requests to change a surface's state">
+        This asks the compositor to change the state. If the compositor wants
+        to change the state, it will send a change_state event with the same
+        state_type, value, and serial, and the event flow continues as if it
+        it was initiated by the compositor.
+
+        If the compositor does not want to change the state, it will send a
+        change_state to the client with the old value of the state.
       </description>
-    </event>
-
-    <request name="set_fullscreen">
-      <description summary="set the surface state as fullscreen">
-	Set the surface as fullscreen.
-
-	After this request, the compositor should send a configure event
-	informing the output size.
-
-	This request informs the compositor that the next attached buffer
-	committed will be in a fullscreen state. The buffer size should be the
-	same size as the size informed in the configure event, if the client
-	doesn't want to leave any empty area.
-
-	In other words: the next attached buffer after set_maximized is the new
-	maximized buffer. And the surface will be positioned at the maximized
-	position on commit.
-
-	A simple way to synchronize and wait for the correct configure event is
-	to use a wl_display.sync request right after the set_fullscreen
-	request. When the sync callback returns, the last configure event
-	received just before it will be the correct one, and should contain the
-	right size for the surface to maximize.
-
-	Setting one state won't unset another state. Use
-	xdg_surface.unset_fullscreen for unsetting it.
-      </description>
+      <arg name="state_type" type="uint" summary="the state to set"/>
+      <arg name="value" type="uint" summary="the value to change the state to"/>
+      <arg name="serial" type="uint" summary="an event serial">
+        This serial is so the client can know which change_state event corresponds
+        to which request_change_state request it sent out.
+      </arg>
     </request>
 
-    <request name="unset_fullscreen">
-      <description summary="unset the surface state as fullscreen">
-	Unset the surface fullscreen state.
-
-	Same negotiation as set_fullscreen must be used.
+    <event name="change_state">
+      <description summary="compositor wants to change a surface's state">
+        This event tells the client to change a surface's state. The client
+        should respond with an ack_change_state request to the compositor to
+        guarantee that the compositor knows that the client has seen it.
       </description>
-    </request>
 
-    <event name="request_set_maximized">
-      <description summary="server requests that the client set maximized">
-	Event sent from the compositor to the client requesting that the client
-	goes to a maximized state. It's the client job to call set_maximized
-	and really trigger the maximized state.
-      </description>
+      <arg name="state_type" type="uint" summary="the state to set"/>
+      <arg name="value" type="uint" summary="the value to change the state to"/>
+      <arg name="serial" type="uint" summary="a serial for the compositor's own tracking"/>
     </event>
 
-    <event name="request_unset_maximized">
-      <description summary="server requests that the client unset maximized">
-	Event sent from the compositor to the client requesting that the client
-	leaves the maximized state. It's the client job to call unset_maximized
-	and really leave the maximized state.
+    <request name="ack_change_state">
+      <description summary="ack a change_state event">
+        When a change_state event is received, a client should then ack it
+        using the ack_change_state request to ensure that the compositor
+        knows the client has seen the event.
+
+        By this point, the state is confirmed, and the next attach should
+        contain the buffer drawn for the new state value.
+
+        The values here need to be the same as the values in the cooresponding
+        change_state event.
       </description>
-    </event>
-
-    <request name="set_maximized">
-      <description summary="set the surface state as maximized">
-	Set the surface as maximized.
-
-	After this request, the compositor will send a configure event
-	informing the output size minus panel and other MW decorations.
-
-	This request informs the compositor that the next attached buffer
-	committed will be in a maximized state. The buffer size should be the
-	same size as the size informed in the configure event, if the client
-	doesn't want to leave any empty area.
-
-	In other words: the next attached buffer after set_maximized is the new
-	maximized buffer. And the surface will be positioned at the maximized
-	position on commit.
-
-	A simple way to synchronize and wait for the correct configure event is
-	to use a wl_display.sync request right after the set_maximized request.
-	When the sync callback returns, the last configure event received just
-	before it will be the correct one, and should contain the right size
-	for the surface to maximize.
-
-	Setting one state won't unset another state. Use
-	xdg_surface.unset_maximized for unsetting it.
-      </description>
-    </request>
-
-    <request name="unset_maximized">
-      <description summary="unset the surface state as maximized">
-	Unset the surface maximized state.
-
-	Same negotiation as set_maximized must be used.
-      </description>
+      <arg name="state_type" type="uint" summary="the state to set"/>
+      <arg name="value" type="uint" summary="the value to change the state to"/>
+      <arg name="serial" type="uint" summary="a serial to pass to change_state"/>
     </request>
 
     <request name="set_minimized">
-      <description summary="set the surface state as minimized">
-	Set the surface minimized state.
-
-	Setting one state won't unset another state.
+      <description summary="minimize the surface">
+        Minimize the surface.
       </description>
     </request>
 
