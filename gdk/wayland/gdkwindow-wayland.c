@@ -107,7 +107,6 @@ struct _GdkWindowImplWayland
   struct gtk_surface *gtk_surface;
 
   unsigned int mapped : 1;
-  unsigned int fullscreen : 1;
   unsigned int use_custom_surface : 1;
   unsigned int pending_commit : 1;
   GdkWindowTypeHint hint;
@@ -943,35 +942,31 @@ xdg_surface_configure (void               *data,
 }
 
 static void
-xdg_surface_request_set_fullscreen (void *data,
-                                    struct xdg_surface *xdg_surface)
+xdg_surface_change_state (void *data,
+                          struct xdg_surface *xdg_surface,
+                          uint32_t state_type,
+                          uint32_t value,
+                          uint32_t serial)
 {
   GdkWindow *window = GDK_WINDOW (data);
-  gdk_window_fullscreen (window);
-}
 
-static void
-xdg_surface_request_unset_fullscreen (void *data,
-                                      struct xdg_surface *xdg_surface)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-  gdk_window_unfullscreen (window);
-}
+  switch (state_type)
+    {
+    case XDG_SURFACE_STATE_TYPE_MAXIMIZED:
+      if (value)
+        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_MAXIMIZED);
+      else
+        gdk_synthesize_window_state (window, GDK_WINDOW_STATE_MAXIMIZED, 0);
+      break;
+    case XDG_SURFACE_STATE_TYPE_FULLSCREEN:
+      if (value)
+        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+      else
+        gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+      break;
+    }
 
-static void
-xdg_surface_request_set_maximized (void *data,
-                                   struct xdg_surface *xdg_surface)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-  gdk_window_maximize (window);
-}
-
-static void
-xdg_surface_request_unset_maximized (void *data,
-                                     struct xdg_surface *xdg_surface)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-  gdk_window_unmaximize (window);
+  xdg_surface_ack_change_state (xdg_surface, state_type, value, serial);
 }
 
 static void
@@ -1010,10 +1005,7 @@ xdg_surface_delete (void *data,
 
 static const struct xdg_surface_listener xdg_surface_listener = {
   xdg_surface_configure,
-  xdg_surface_request_set_fullscreen,
-  xdg_surface_request_unset_fullscreen,
-  xdg_surface_request_set_maximized,
-  xdg_surface_request_unset_maximized,
+  xdg_surface_change_state,
   xdg_surface_activated,
   xdg_surface_deactivated,
   xdg_surface_delete,
@@ -1732,8 +1724,10 @@ gdk_wayland_window_maximize (GdkWindow *window)
   if (!impl->xdg_surface)
     return;
 
-  xdg_surface_set_maximized (impl->xdg_surface);
-  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_MAXIMIZED);
+  xdg_surface_request_change_state (impl->xdg_surface,
+                                    XDG_SURFACE_STATE_TYPE_MAXIMIZED,
+                                    TRUE,
+                                    0 /* serial, unused */);
 }
 
 static void
@@ -1747,8 +1741,10 @@ gdk_wayland_window_unmaximize (GdkWindow *window)
   if (!impl->xdg_surface)
     return;
 
-  xdg_surface_unset_maximized (impl->xdg_surface);
-  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_MAXIMIZED, 0);
+  xdg_surface_request_change_state (impl->xdg_surface,
+                                    XDG_SURFACE_STATE_TYPE_MAXIMIZED,
+                                    FALSE,
+                                    0 /* serial, unused */);
 }
 
 static void
@@ -1759,15 +1755,13 @@ gdk_wayland_window_fullscreen (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (impl->fullscreen)
-    return;
-
   if (!impl->xdg_surface)
     return;
 
-  xdg_surface_set_fullscreen (impl->xdg_surface);
-  impl->fullscreen = TRUE;
-  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+  xdg_surface_request_change_state (impl->xdg_surface,
+                                    XDG_SURFACE_STATE_TYPE_FULLSCREEN,
+                                    TRUE,
+                                    0 /* serial, unused */);
 }
 
 static void
@@ -1778,15 +1772,13 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!impl->fullscreen)
-    return;
-
   if (!impl->xdg_surface)
     return;
 
-  xdg_surface_unset_fullscreen (impl->xdg_surface);
-  impl->fullscreen = FALSE;
-  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+  xdg_surface_request_change_state (impl->xdg_surface,
+                                    XDG_SURFACE_STATE_TYPE_FULLSCREEN,
+                                    FALSE,
+                                    0 /* serial, unused */);
 }
 
 static void
