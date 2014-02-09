@@ -71,8 +71,8 @@ GDK_AVAILABLE_IN_3_12
 GtkWidget *     gtk_popover_get_relative_to (GtkPopover            *popover);
 
 GDK_AVAILABLE_IN_3_12
-void            gtk_popover_set_pointing_to (GtkPopover         *popover,
-                                             const GdkRectangle *rect);
+void            gtk_popover_set_pointing_to (GtkPopover            *popover,
+                                             const GdkRectangle    *rect);
 GDK_AVAILABLE_IN_3_12
 gboolean        gtk_popover_get_pointing_to (GtkPopover            *popover,
                                              GdkRectangle *rect);

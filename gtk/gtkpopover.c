@@ -1700,7 +1700,7 @@ gtk_popover_get_relative_to (GtkPopover *popover)
  * Since: 3.12
  **/
 void
-gtk_popover_set_pointing_to (GtkPopover            *popover,
+gtk_popover_set_pointing_to (GtkPopover         *popover,
                              const GdkRectangle *rect)
 {
   g_return_if_fail (GTK_IS_POPOVER (popover));
