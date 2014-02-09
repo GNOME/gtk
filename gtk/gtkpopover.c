@@ -44,6 +44,7 @@
 #include <gdk/gdk.h>
 #include <cairo-gobject.h>
 #include "gtkpopover.h"
+#include "gtkpopoverprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 #include "gtkwindowprivate.h"
@@ -1782,13 +1783,9 @@ gtk_popover_set_position (GtkPopover      *popover,
 GtkPositionType
 gtk_popover_get_position (GtkPopover *popover)
 {
-  GtkPopoverPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_POPOVER (popover), GTK_POS_TOP);
 
-  priv = popover->priv;
-
-  return priv->preferred_position;
+  return popover->priv->preferred_position;
 }
 
 /**
@@ -1813,10 +1810,12 @@ gtk_popover_set_modal (GtkPopover *popover,
 
   priv = popover->priv;
 
-  if ((priv->modal == TRUE) == (modal == TRUE))
+  model = modal != FALSE;
+
+  if (priv->modal == modal)
     return;
 
-  priv->modal = (modal != FALSE);
+  priv->modal = modal;
 
   if (gtk_widget_is_visible (GTK_WIDGET (popover)))
     gtk_popover_apply_modality (popover, priv->modal);
@@ -1838,13 +1837,9 @@ gtk_popover_set_modal (GtkPopover *popover,
 gboolean
 gtk_popover_get_modal (GtkPopover *popover)
 {
-  GtkPopoverPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
 
-  priv = popover->priv;
-
-  return priv->modal;
+  return popover->priv->modal;
 }
 
 void
@@ -1855,9 +1850,11 @@ _gtk_popover_set_apply_shape (GtkPopover *popover,
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
-  priv = gtk_popover_get_instance_private (popover);
+  priv = popover->priv;
 
-  if ((priv->apply_shape == TRUE) == (apply_shape == TRUE))
+  apply_shape = apply_shape != FALSE;
+
+  if (priv->apply_shape == apply_shape)
     return;
 
   priv->apply_shape = apply_shape;

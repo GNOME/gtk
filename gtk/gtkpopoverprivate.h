@@ -21,6 +21,6 @@
 #include "gtkpopover.h"
 
 void    _gtk_popover_set_apply_shape   (GtkPopover   *popover,
-                                        gboolean      modal);
+                                        gboolean      apply_shape);
 
 #endif /* __GTK_POPOVER_PRIVATE_H__ */
