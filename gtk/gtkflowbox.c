@@ -4657,7 +4657,7 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
  * which of the children to show. For instance, to implement a search
  * function that only shows the children matching the search terms.
  *
- * The @filter_func will be called for ach child after the call, and
+ * The @filter_func will be called for each child after the call, and
  * it will continue to be called each time a child changes (via
  * gtk_flow_box_child_changed()) or when gtk_flow_box_invalidate_filter()
  * is called.
