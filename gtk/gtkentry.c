@@ -182,6 +182,7 @@ struct _GtkEntryPrivate
   gint          start_x;
   gint          start_y;
   gint          width_chars;
+  gint          max_width_chars;
 
   gunichar      invisible_char;
 
@@ -286,6 +287,7 @@ enum {
   PROP_INVISIBLE_CHAR,
   PROP_ACTIVATES_DEFAULT,
   PROP_WIDTH_CHARS,
+  PROP_MAX_WIDTH_CHARS,
   PROP_SCROLL_OFFSET,
   PROP_TEXT,
   PROP_XALIGN,
@@ -843,6 +845,25 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    g_param_spec_int ("width-chars",
                                                      P_("Width in chars"),
                                                      P_("Number of characters to leave space for in the entry"),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkEntry:max-width-chars:
+   *
+   * The desired maximum width of the entry, in characters.
+   * If this property is set to -1, the width will be calculated
+   * automatically.
+   *
+   * Since: 3.12
+   */ 
+  g_object_class_install_property (gobject_class,
+                                   PROP_MAX_WIDTH_CHARS,
+                                   g_param_spec_int ("max-width-chars",
+                                                     P_("Maximum width in characters"),
+                                                     P_("The desired maximum width of the entry, in characters"),
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
@@ -2128,6 +2149,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_width_chars (entry, g_value_get_int (value));
       break;
 
+    case PROP_MAX_WIDTH_CHARS:
+      gtk_entry_set_max_width_chars (entry, g_value_get_int (value));
+      break;
+
     case PROP_TEXT:
       gtk_entry_set_text (entry, g_value_get_string (value));
       break;
@@ -2367,6 +2392,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_WIDTH_CHARS:
       g_value_set_int (value, priv->width_chars);
+      break;
+
+    case PROP_MAX_WIDTH_CHARS:
+      g_value_set_int (value, priv->max_width_chars);
       break;
 
     case PROP_SCROLL_OFFSET:
@@ -2624,6 +2653,7 @@ gtk_entry_init (GtkEntry *entry)
   priv->visible = TRUE;
   priv->dnd_position = -1;
   priv->width_chars = -1;
+  priv->max_width_chars = -1;
   priv->is_cell_renderer = FALSE;
   priv->editing_canceled = FALSE;
   priv->has_frame = TRUE;
@@ -3332,7 +3362,10 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   PangoContext *context;
   gint icon_widths = 0;
   gint icon_width, i;
-  gint width;
+  gint min, nat;
+  gint char_width;
+  gint digit_width;
+  gint char_pixels;
 
   context = gtk_widget_get_pango_context (widget);
 
@@ -3342,16 +3375,21 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
 
   _gtk_entry_get_borders (entry, &borders);
 
-  if (priv->width_chars < 0)
-    width = MIN_ENTRY_WIDTH + borders.left + borders.right;
-  else
-    {
-      gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
-      gint digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
-      gint char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
+  char_width = pango_font_metrics_get_approximate_char_width (metrics);
+  digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
+  char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
 
-      width = char_pixels * priv->width_chars + borders.left + borders.right;
-    }
+  if (priv->width_chars < 0)
+    min = MIN_ENTRY_WIDTH + borders.left + borders.right;
+  else
+    min = char_pixels * priv->width_chars + borders.left + borders.right;
+
+  if (priv->max_width_chars < 0)
+    nat = MIN_ENTRY_WIDTH + borders.left + borders.right;
+  else
+    nat = char_pixels * priv->max_width_chars + borders.left + borders.right;
+
+  nat = MAX (min, nat);
 
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -3360,13 +3398,16 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
         icon_widths += icon_width;
     }
 
-  if (icon_widths > width)
-    width += icon_widths;
+  if (icon_widths > min)
+    {
+      min += icon_widths;
+      nat += icon_width;
+    }
 
   pango_font_metrics_unref (metrics);
 
-  *minimum = width;
-  *natural = width;
+  *minimum = min;
+  *natural = nat;
 }
 
 static void
@@ -7889,6 +7930,52 @@ gtk_entry_get_width_chars (GtkEntry *entry)
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
   return entry->priv->width_chars;
+}
+
+/**
+ * gtk_entry_set_max_width_chars:
+ * @entry: a #GtkEntry
+ * @n_chars: the new desired maximum width, in characters
+ *
+ * Sets the desired maximum width in characters of @entry.
+ *
+ * Since: 3.12
+ */
+void
+gtk_entry_set_max_width_chars (GtkEntry *entry,
+                               gint      n_chars)
+{
+  GtkEntryPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  priv = entry->priv;
+
+  if (priv->max_width_chars != n_chars)
+    {
+      priv->max_width_chars = n_chars;
+      g_object_notify (G_OBJECT (entry), "max-width-chars");
+      gtk_widget_queue_resize (GTK_WIDGET (entry));
+    }
+}
+
+/**
+ * gtk_entry_get_max_width_chars:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the desired maximum width of @entry, in characters.
+ * See gtk_entry_set_max_width_chars().
+ *
+ * Return value: the maximum width of the entry, in characters
+ *
+ * Since: 3.12
+ */
+gint
+gtk_entry_get_max_width_chars (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  return entry->priv->max_width_chars;
 }
 
 /**

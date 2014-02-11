@@ -197,6 +197,12 @@ void       gtk_entry_set_width_chars            (GtkEntry      *entry,
 GDK_AVAILABLE_IN_ALL
 gint       gtk_entry_get_width_chars            (GtkEntry      *entry);
 
+GDK_AVAILABLE_IN_3_12
+void       gtk_entry_set_max_width_chars        (GtkEntry      *entry,
+                                                 gint           n_chars);
+GDK_AVAILABLE_IN_3_12
+gint       gtk_entry_get_max_width_chars        (GtkEntry      *entry);
+
 /* Somewhat more convenient than the GtkEditable generic functions
  */
 GDK_AVAILABLE_IN_ALL
