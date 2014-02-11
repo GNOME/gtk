@@ -1332,7 +1332,7 @@ gdk_window_new (GdkWindow     *parent,
   if (attributes_mask & GDK_WA_VISUAL)
     window->visual = attributes->visual;
   else
-    window->visual = gdk_screen_get_preferred_visual (screen);
+    window->visual = gdk_screen_get_system_visual (screen);
 
   window->event_mask = attributes->event_mask;
 
