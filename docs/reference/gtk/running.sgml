@@ -479,15 +479,6 @@ nevertheless.
 </formalpara>
 
 <formalpara>
-  <title><envar>GDK_RGBA</envar></title>
-
-  <para>
-    Since 3.12, this environment variable can be used to prevent
-    using RGBA visuals on the X11 backend by setting GDK_RGBA=0.
-  </para>
-</formalpara>
-
-<formalpara>
   <title><envar>XDG_DATA_HOME</envar>, <envar>XDG_DATA_DIRS</envar></title>
 
   <para>
