@@ -165,15 +165,18 @@ preedit_changed_cb (GtkEntry  *entry,
  *
  * |[<!-- language="C" -->
  * static gboolean
- * window_key_press_event_cb (GtkWidget *widget,
- *                            GdkEvent  *event,
- *                            gpointer   user_data)
+ * on_key_press_event (GtkWidget *widget,
+ *                     GdkEvent  *event,
+ *                     gpointer   user_data)
  * {
- *   return gtk_search_bar_handle_event (GTK_SEARCH_BAR (user_data), event);
+ *   GtkSearchBar *bar = GTK_SEARCH_BAR (user_data);
+ *   return gtk_search_bar_handle_event (bar, event);
  * }
  *
- * g_signal_connect (window, "key-press-event",
- *                   G_CALLBACK (window_key_press_event_cb), search_bar);
+ * g_signal_connect (window,
+ *                  "key-press-event",
+ *                   G_CALLBACK (on_key_press_event),
+ *                   search_bar);
  * ]|
  *
  * Return value: %GDK_EVENT_STOP if the key press event resulted

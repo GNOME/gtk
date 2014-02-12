@@ -66,7 +66,8 @@ struct _GtkFrameClass
 
   /*< public >*/
 
-  void (*compute_child_allocation) (GtkFrame *frame, GtkAllocation *allocation);
+  void (*compute_child_allocation) (GtkFrame *frame,
+                                    GtkAllocation *allocation);
 
   /*< private >*/
 

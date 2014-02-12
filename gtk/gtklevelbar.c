@@ -40,19 +40,25 @@
  * static GtkWidget *
  * create_level_bar (void)
  * {
- *   GtkWidget *level_bar;
+ *   GtkWidget *widget;
+ *   GtkLevelBar *bar;
  *
- *   level_bar = gtk_level_bar_new ();
+ *   widget = gtk_level_bar_new ();
+ *   bar = GTK_LEVEL_BAR (widget);
  *
- *   /<!---->* This changes the value of the default low offset *<!---->/
- *   gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (level_bar),
- *                                   GTK_LEVEL_BAR_OFFSET_LOW, 0.10);
+ *   /<!---->* This changes the value of the default low offset
+ *   *<!---->/
+ *
+ *   gtk_level_bar_add_offset_value (bar,
+ *                                   GTK_LEVEL_BAR_OFFSET_LOW,
+ *                                   0.10);
  *
  *   /<!---->* This adds a new offset to the bar; the application will
- *    * be able to change its color by using the following selector,
- *    * either by adding it to its CSS file or using
- *    * gtk_css_provider_load_from_data() and gtk_style_context_add_provider()
- *    *
+ *    be able to change its color by using the following selector,
+ *    either by adding it to its CSS file or using
+ *    gtk_css_provider_load_from_data() and
+ *    gtk_style_context_add_provider()
+ *
  *    * .level-bar.fill-block.level-my-offset {
  *    *   background-color: green;
  *    *   border-style: solid;
@@ -60,10 +66,10 @@
  *    *   border-style: 1px;
  *    * }
  *    *<!---->/
- *   gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (level_bar),
- *                                   "my-offset", 0.60);
  *
- *   return level_bar;
+ *   gtk_level_bar_add_offset_value (bar, "my-offset", 0.60);
+ *
+ *   return widget;
  * }
  * ]|
  *

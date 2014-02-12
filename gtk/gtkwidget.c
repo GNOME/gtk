@@ -156,20 +156,28 @@
  *
  * |[<!-- language="C" -->
  * static void
- * foo_widget_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
+ * foo_widget_get_preferred_height (GtkWidget *widget,
+ *                                  gint *min_height,
+ *                                  gint *nat_height)
  * {
  *    if (i_am_in_height_for_width_mode)
  *      {
  *        gint min_width;
  *
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width,
- *                                                                      min_height, nat_height);
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
+ *                                                            &min_width,
+ *                                                            NULL);
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width
+ *                                                           (widget,
+ *                                                            min_width,
+ *                                                            min_height,
+ *                                                            nat_height);
  *      }
  *    else
  *      {
- *         ... some widgets do both. For instance, if a GtkLabel is rotated to 90 degrees
- *         it will return the minimum and natural height for the rotated label here.
+ *         ... some widgets do both. For instance, if a GtkLabel is
+ *         rotated to 90 degrees it will return the minimum and
+ *         natural height for the rotated label here.
  *      }
  * }
  * ]|
@@ -178,18 +186,22 @@
  * the minimum and natural width:
  * |[<!-- language="C" -->
  * static void
- * foo_widget_get_preferred_width_for_height (GtkWidget *widget, gint for_height,
- *                                            gint *min_width, gint *nat_width)
+ * foo_widget_get_preferred_width_for_height (GtkWidget *widget,
+ *                                            gint for_height,
+ *                                            gint *min_width,
+ *                                            gint *nat_width)
  * {
  *    if (i_am_in_height_for_width_mode)
  *      {
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, min_width, nat_width);
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
+ *                                                            min_width,
+ *                                                            nat_width);
  *      }
  *    else
  *      {
- *         ... again if a widget is sometimes operating in width-for-height mode
- *         (like a rotated GtkLabel) it can go ahead and do its real width for
- *         height calculation here.
+ *         ... again if a widget is sometimes operating in
+ *         width-for-height mode (like a rotated GtkLabel) it can go
+ *         ahead and do its real width for height calculation here.
  *      }
  * }
  * ]|
@@ -201,8 +213,9 @@
  * be careful to call its virtual methods directly, like this:
  *
  * |[<!-- language="C" -->
- * GTK_WIDGET_GET_CLASS(widget)-&gt;get_preferred_width (widget),
- *                                  &min, &natural);
+ * GTK_WIDGET_GET_CLASS(widget)->get_preferred_width (widget,
+ *                                                    &min,
+ *                                                    &natural);
  * ]|
  *
  * It will not work to use the wrapper functions, such as
@@ -2952,7 +2965,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *     gdk_drag_status (context, 0, time);
    *   else
    *    {
-   *      private_data->pending_status = gdk_drag_context_get_suggested_action (context);
+   *      private_data->pending_status
+   *         = gdk_drag_context_get_suggested_action (context);
    *      gtk_drag_get_data (widget, context, target, time);
    *    }
    *
@@ -2974,16 +2988,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *    {
    *      private_data->suggested_action = 0;
    *
-   *      /&ast; We are getting this data due to a request in drag_motion,
-   *       * rather than due to a request in drag_drop, so we are just
-   *       * supposed to call gdk_drag_status(), not actually paste in
-   *       * the data.
-   *       &ast;/
+   *      /&ast; We are getting this data due to a request in
+   *      drag_motion, rather than due to a request in drag_drop,
+   *      so we are just supposed to call gdk_drag_status(), not
+   *      actually paste in the data. &ast;/
+   *
    *      str = gtk_selection_data_get_text (selection_data);
    *      if (!data_is_acceptable (str))
    *        gdk_drag_status (context, 0, time);
    *      else
-   *        gdk_drag_status (context, private_data->suggested_action, time);
+   *        gdk_drag_status (context,
+   *                         private_data->suggested_action,
+   *                         time);
    *    }
    *   else
    *    {
@@ -11096,17 +11112,6 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  * container. Composite children aren’t treated differently by GTK (but
  * see gtk_container_foreach() vs. gtk_container_forall()), but e.g. GUI
  * builders might want to treat them in a different way.
- *
- * Here is a simple example:
- * |[<!-- language="C" -->
- *   gtk_widget_push_composite_child ();
- *   scrolled_window->hscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
- *   gtk_widget_set_composite_name (scrolled_window->hscrollbar, "hscrollbar");
- *   gtk_widget_pop_composite_child ();
- *   gtk_widget_set_parent (scrolled_window->hscrollbar,
- *                          GTK_WIDGET (scrolled_window));
- *   g_object_ref (scrolled_window->hscrollbar);
- * ]|
  *
  * Deprecated: 3.10: This API never really worked well and was mostly unused, now
  * we have a more complete mechanism for composite children, see gtk_widget_class_set_template().

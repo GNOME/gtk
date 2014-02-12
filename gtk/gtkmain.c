@@ -59,7 +59,8 @@
  * int
  * main (int argc, char **argv)
  * {
- *   /&ast; Initialize i18n support with bindtextdomain(), etc. &ast;/
+ *   /&ast; Initialize i18n support with
+ *    bindtextdomain(), etc. &ast;/
  *   ...
  *
  *   /&ast; Initialize the widget set &ast;/
@@ -74,7 +75,8 @@
  *   /&ast; Show the application window &ast;/
  *   gtk_widget_show_all (mainwin);
  *
- *   /&ast; Enter the main event loop, and wait for user interaction &ast;/
+ *   /&ast; Enter the main event loop, and
+ *    wait for user interaction &ast;/
  *   gtk_main ();
  *
  *   /&ast; The user lost interest &ast;/
@@ -1811,18 +1813,23 @@ gtk_main_do_event (GdkEvent *event)
  * main (int argc, char **argv)
  * {
  *   GtkWidget *win, *but;
+ *   const char *text = "Close yourself. I mean it!";
  *
  *   gtk_init (&argc, &argv);
  *
  *   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
- *   g_signal_connect (win, "delete-event",
- *                     G_CALLBACK (gtk_true), NULL);
+ *   g_signal_connect (win,
+ *                     "delete-event",
+ *                     G_CALLBACK (gtk_true),
+ *                     NULL);
  *   g_signal_connect (win, "destroy",
- *                     G_CALLBACK (gtk_main_quit), NULL);
+ *                     G_CALLBACK (gtk_main_quit),
+ *                     NULL);
  *
- *   but = gtk_button_new_with_label ("Close yourself. I mean it!");
+ *   but = gtk_button_new_with_label (text);
  *   g_signal_connect_swapped (but, "clicked",
- *                             G_CALLBACK (gtk_object_destroy), win);
+ *                             G_CALLBACK (gtk_object_destroy),
+ *                             win);
  *   gtk_container_add (GTK_CONTAINER (win), but);
  *
  *   gtk_widget_show_all (win);

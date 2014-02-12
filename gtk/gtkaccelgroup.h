@@ -56,8 +56,8 @@ G_BEGIN_DECLS
  */
 typedef enum
 {
-  GTK_ACCEL_VISIBLE        = 1 << 0,	/* display in GtkAccelLabel? */
-  GTK_ACCEL_LOCKED         = 1 << 1,	/* is it removable? */
+  GTK_ACCEL_VISIBLE        = 1 << 0,
+  GTK_ACCEL_LOCKED         = 1 << 1,
   GTK_ACCEL_MASK           = 0x07
 } GtkAccelFlags;
 

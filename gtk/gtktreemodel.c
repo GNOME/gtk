@@ -116,13 +116,16 @@
  * ## Acquiring a #GtkTreeIter-struct
  *
  * |[<!-- language="C" -->
- *  /&ast; Three ways of getting the iter pointing to the location &ast;/
+ *  /&ast; Three ways of getting the iter pointing to the
+ *   location &ast;/
  * GtkTreePath *path;
  * GtkTreeIter iter;
  * GtkTreeIter parent_iter;
  *
  * /&ast; get the iterator from a string &ast;/
- * gtk_tree_model_get_iter_from_string (model, &iter, "3:2:5");
+ * gtk_tree_model_get_iter_from_string (model,
+ *                                      &iter,
+ *                                      "3:2:5");
  *
  * /&ast; get the iterator from a path &ast;/
  * path = gtk_tree_path_new_from_string ("3:2:5");
@@ -130,11 +133,14 @@
  * gtk_tree_path_free (path);
  *
  * /&ast; walk the tree to find the iterator &ast;/
- * gtk_tree_model_iter_nth_child (model, &iter, NULL, 3);
+ * gtk_tree_model_iter_nth_child (model, &iter,
+ *                                NULL, 3);
  * parent_iter = iter;
- * gtk_tree_model_iter_nth_child (model, &iter, &parent_iter, 2);
+ * gtk_tree_model_iter_nth_child (model, &iter,
+ *                                &parent_iter, 2);
  * parent_iter = iter;
- * gtk_tree_model_iter_nth_child (model, &iter, &parent_iter, 5);
+ * gtk_tree_model_iter_nth_child (model, &iter,
+ *                                &parent_iter, 5);
  * ]|
  *
  * This second example shows a quick way of iterating through a list
@@ -161,22 +167,26 @@
  * gint row_count = 0;
  *
  * /&ast; make a new list_store &ast;/
- * list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT);
+ * list_store = gtk_list_store_new (N_COLUMNS,
+ *                                  G_TYPE_STRING,
+ *                                  G_TYPE_INT);
  *
  * /&ast; Fill the list store with data &ast;/
  * populate_model (list_store);
  *
- * /&ast; Get the first iter in the list, check it is valid and walk
- *  &ast; through the list, reading each row. &ast;/
- * for (valid = gtk_tree_model_get_iter_first (list_store, &iter);
- *      valid;
- *      valid = gtk_tree_model_iter_next (list_store, &iter))
+ * /&ast; Get the first iter in the list, check it is
+ *  valid and walk through the list, reading each row.
+ * &ast;/
+ *
+ * valid = gtk_tree_model_get_iter_first (list_store,
+ *                                        &iter);
+ * while (valid)
  *  {
  *    gchar *str_data;
  *    gint   int_data;
  *
- *    /&ast; Make sure you terminate calls to gtk_tree_model_get()
- *     &ast; with a “-1” value
+ *    /&ast; Make sure you terminate calls to
+ *     &ast; gtk_tree_model_get() with a “-1” value
  *     &ast;/
  *    gtk_tree_model_get (list_store, &iter,
  *                        STRING_COLUMN, &str_data,
@@ -184,9 +194,12 @@
  *                        -1);
  *
  *    /&ast; Do something with the data &ast;/
- *    g_print ("Row %d: (%s,%d)\n", row_count, str_data, int_data);
+ *    g_print ("Row %d: (%s,%d)\n",
+ *             row_count, str_data, int_data);
  *    g_free (str_data);
  *
+ *    valid = gtk_tree_model_iter_next (list_store,
+ *                                      &iter);
  *    row_count++;
  *  }
  * ]|

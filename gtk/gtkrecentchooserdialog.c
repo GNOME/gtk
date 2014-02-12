@@ -51,18 +51,23 @@
  *
  * |[<!-- language="C" -->
  * GtkWidget *dialog;
+ * gint res;
  *
  * dialog = gtk_recent_chooser_dialog_new ("Recent Documents",
  *                                         parent_window,
- *                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
- *                                         _("_Open"), GTK_RESPONSE_ACCEPT,
+ *                                         _("_Cancel"),
+ *                                         GTK_RESPONSE_CANCEL,
+ *                                         _("_Open"),
+ *                                         GTK_RESPONSE_ACCEPT,
  *                                         NULL);
  *
- * if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+ * res = gtk_dialog_run (GTK_DIALOG (dialog));
+ * if (res == GTK_RESPONSE_ACCEPT)
  *   {
  *     GtkRecentInfo *info;
+ *     GtkRecentChooser *chooser = GTK_RECENT_CHOOSER (dialog);
  *
- *     info = gtk_recent_chooser_get_current_item (GTK_RECENT_CHOOSER (dialog));
+ *     info = gtk_recent_chooser_get_current_item (chooser);
  *     open_file (gtk_recent_info_get_uri (info));
  *     gtk_recent_info_unref (info);
  *   }

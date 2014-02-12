@@ -11367,7 +11367,7 @@ gtk_XParseGeometry (const char   *string,
  * gtk_window_parse_geometry:
  * @window: a #GtkWindow
  * @geometry: geometry string
- * 
+ *
  * Parses a standard X Window System geometry string - see the
  * manual page for X (type “man X”) for details on this.
  * gtk_window_parse_geometry() does work on all GTK+ ports
@@ -11390,46 +11390,53 @@ gtk_XParseGeometry (const char   *string,
  * on the window.
  * |[<!-- language="C" -->
  * #include <gtk/gtk.h>
- *    
+ *
  * static void
  * fill_with_content (GtkWidget *vbox)
  * {
  *   /&ast; fill with content... &ast;/
  * }
- *    
+ *
  * int
  * main (int argc, char *argv[])
  * {
  *   GtkWidget *window, *vbox;
  *   GdkGeometry size_hints = {
- *     100, 50, 0, 0, 100, 50, 10, 10, 0.0, 0.0, GDK_GRAVITY_NORTH_WEST  
+ *     100, 50, 0, 0, 100, 50, 10,
+ *     10, 0.0, 0.0, GDK_GRAVITY_NORTH_WEST
  *   };
- *    
+ *
  *   gtk_init (&argc, &argv);
- *   
+ *
  *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
- *   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
- *   
+ *   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL,
+ *                       FALSE, 0);
+ *
  *   gtk_container_add (GTK_CONTAINER (window), vbox);
  *   fill_with_content (vbox);
  *   gtk_widget_show_all (vbox);
- *   
+ *
  *   gtk_window_set_geometry_hints (GTK_WINDOW (window),
  * 	  			    window,
  * 				    &size_hints,
- * 				    GDK_HINT_MIN_SIZE | 
- * 				    GDK_HINT_BASE_SIZE | 
+ * 				    GDK_HINT_MIN_SIZE |
+ * 				    GDK_HINT_BASE_SIZE |
  * 				    GDK_HINT_RESIZE_INC);
- *   
+ *
  *   if (argc > 1)
  *     {
- *       if (!gtk_window_parse_geometry (GTK_WINDOW (window), argv[1]))
- *         fprintf (stderr, "Failed to parse “%s”\n", argv[1]);
+ *       gboolean res;
+ *       res = gtk_window_parse_geometry (GTK_WINDOW (window),
+ *                                        argv[1]);
+ *       if (! res)
+ *         fprintf (stderr,
+ *                  "Failed to parse “%s”\n",
+ *                  argv[1]);
  *     }
- *    
+ *
  *   gtk_widget_show_all (window);
  *   gtk_main ();
- *    
+ *
  *   return 0;
  * }
  * ]|

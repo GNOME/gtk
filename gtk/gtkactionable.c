@@ -56,7 +56,7 @@
  * @get_action_name: virtual pointer for gtk_actionable_get_action_name()
  * @set_action_name: virtual pointer for gtk_actionable_set_action_name()
  * @get_action_target_value: virtual pointer for gtk_actionable_get_action_target_value()
- * @set_action_target_value: virtual pointer for gtk_actionable_set_action_target_value
+ * @set_action_target_value: virtual pointer for gtk_actionable_set_action_target_value()
  *
  * The interface vtable for #GtkActionable.
  **/

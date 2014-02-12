@@ -207,7 +207,11 @@
  * An example looks like this:
  *
  * |[<!-- language="C" -->
- * gtk_label_set_markup (label, "Go to the <a href=\"http://www.gtk.org title="&lt;i&gt;Our&lt;/i&gt; website\">GTK+ website</a> for more...");
+ * const gchar *text =
+ * "Go to the"
+ * "<a href=\"http://www.gtk.org title="&lt;i&gt;Our&lt;/i&gt; website\">"
+ * "GTK+ website</a> for more...";
+ * gtk_label_set_markup (label, text);
  * ]|
  *
  * It is possible to implement custom handling for links and their tooltips with
@@ -2601,9 +2605,10 @@ gtk_label_set_markup_internal (GtkLabel    *label,
  * external data, you may need to escape it with g_markup_escape_text() or
  * g_markup_printf_escaped():
  * |[<!-- language="C" -->
+ * const char *format = "<span style=\"italic\">\%s</span>";
  * char *markup;
  *
- * markup = g_markup_printf_escaped ("<span style=\"italic\">\%s</span>", str);
+ * markup = g_markup_printf_escaped (format, str);
  * gtk_label_set_markup (GTK_LABEL (label), markup);
  * g_free (markup);
  * ]|

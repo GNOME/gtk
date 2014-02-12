@@ -109,21 +109,30 @@
  *
  * |[<!-- language="C" -->
  * static void
- * foo_container_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
+ * foo_container_get_preferred_height (GtkWidget *widget,
+ *                                     gint *min_height,
+ *                                     gint *nat_height)
  * {
  *    if (i_am_in_height_for_width_mode)
  *      {
  *        gint min_width;
  *
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width,
- *                                                                       min_height, nat_height);
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
+ *                                                            &min_width,
+ *                                                            NULL);
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width
+ *                                                           (widget,
+ *                                                            min_width,
+ *                                                            min_height,
+ *                                                            nat_height);
  *      }
  *    else
  *      {
- *        ... many containers support both request modes, execute the real width-for-height
- *        request here by returning the collective heights of all widgets that are
- *        stacked vertically (or whatever is appropriate for this container) ...
+ *        ... many containers support both request modes, execute the
+ *        real width-for-height request here by returning the
+ *        collective heights of all widgets that are stacked
+ *        vertically (or whatever is appropriate for this container)
+ *        ...
  *      }
  * }
  * ]|
@@ -133,17 +142,22 @@
  *
  * |[<!-- language="C" -->
  * static void
- * foo_container_get_preferred_width_for_height (GtkWidget *widget, gint for_height,
- *                                               gint *min_width, gint *nat_width)
+ * foo_container_get_preferred_width_for_height (GtkWidget *widget,
+ *                                               gint for_height,
+ *                                               gint *min_width,
+ *                                               gint *nat_width)
  * {
  *    if (i_am_in_height_for_width_mode)
  *      {
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, min_width, nat_width);
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
+ *                                                            min_width,
+ *                                                            nat_width);
  *      }
  *    else
  *      {
- *        ... execute the real width-for-height request here based on the required width
- *        of the children collectively if the container were to be allocated the said height ...
+ *        ... execute the real width-for-height request here based on
+ *        the required width of the children collectively if the
+ *        container were to be allocated the said height ...
  *      }
  * }
  * ]|

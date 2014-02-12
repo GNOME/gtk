@@ -87,8 +87,8 @@
  *                           COLUMN_BOOLEAN,  FALSE,
  *                           -1);
  *
- *       /&ast; As the store will keep a copy of the string internally,
- *        &ast; we free some_data.
+ *       /&ast; As the store will keep a copy of
+ *        &ast; the string internally, we free some_data.
  *        &ast;/
  *       g_free (some_data);
  *     }

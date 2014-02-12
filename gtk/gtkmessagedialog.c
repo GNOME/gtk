@@ -60,12 +60,14 @@
  *
  * An example for using a modal dialog:
  * |[<!-- language="C" -->
- *  dialog = gtk_message_dialog_new (main_application_window,
- *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+ *  GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+ *  dialog = gtk_message_dialog_new (parent_window,
+ *                                   flags,
  *                                   GTK_MESSAGE_ERROR,
  *                                   GTK_BUTTONS_CLOSE,
- *                                   "Error loading file '%s': %s",
- *                                   filename, g_strerror (errno));
+ *                                   "Error reading “%s”: %s",
+ *                                   filename,
+ *                                   g_strerror (errno));
  *  gtk_dialog_run (GTK_DIALOG (dialog));
  *  gtk_widget_destroy (dialog);
  * ]|
@@ -74,14 +76,18 @@
  *
  * An example for a non-modal dialog:
  * |[<!-- language="C" -->
- *  dialog = gtk_message_dialog_new (main_application_window,
- *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+ *  GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+ *  dialog = gtk_message_dialog_new (parent_window,
+ *                                   flags,
  *                                   GTK_MESSAGE_ERROR,
  *                                   GTK_BUTTONS_CLOSE,
- *                                   "Error loading file '%s': %s",
- *                                   filename, g_strerror (errno));
+ *                                   "Error reading “%s”: %s",
+ *                                   filename,
+ *                                   g_strerror (errno));
  *
- *  /&ast; Destroy the dialog when the user responds to it (e.g. clicks a button) &ast;/
+ *  /&ast; Destroy the dialog when the user responds to it
+ *  (e.g. clicks a button) &ast;/
+ *
  *  g_signal_connect_swapped (dialog, "response",
  *                            G_CALLBACK (gtk_widget_destroy),
  *                            dialog);
@@ -608,8 +614,9 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * argument.
  * |[<!-- language="C" -->
  *  GtkWidget *dialog;
- *  dialog = gtk_message_dialog_new (main_application_window,
- *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+ *  GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+ *  dialog = gtk_message_dialog_new (parent_window,
+ *                                   flags,
  *                                   GTK_MESSAGE_ERROR,
  *                                   GTK_BUTTONS_CLOSE,
  *                                   NULL);
@@ -799,7 +806,8 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  * gchar *msg;
  *
  * msg = g_markup_printf_escaped (message_format, ...);
- * gtk_message_dialog_format_secondary_markup (message_dialog, "%s", msg);
+ * gtk_message_dialog_format_secondary_markup (message_dialog,
+ *                                             "%s", msg);
  * g_free (msg);
  * ]|
  *

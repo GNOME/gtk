@@ -59,19 +59,24 @@
  *
  * |[
  * GtkWidget *dialog;
+ * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+ * gint res;
  *
  * dialog = gtk_file_chooser_dialog_new ("Open File",
  *                                       parent_window,
- *                                       GTK_FILE_CHOOSER_ACTION_OPEN,
- *                                       _("_Cancel"), GTK_RESPONSE_CANCEL,
- *                                       _("_Open"), GTK_RESPONSE_ACCEPT,
+ *                                       action,
+ *                                       _("_Cancel"),
+ *                                       GTK_RESPONSE_CANCEL,
+ *                                       _("_Open"),
+ *                                       GTK_RESPONSE_ACCEPT,
  *                                       NULL);
  *
- * if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+ * res = gtk_dialog_run (GTK_DIALOG (dialog));
+ * if (res == GTK_RESPONSE_ACCEPT)
  *   {
  *     char *filename;
- *
- *     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+ *     GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+ *     filename = gtk_file_chooser_get_filename (chooser);
  *     open_file (filename);
  *     g_free (filename);
  *   }
@@ -83,25 +88,35 @@
  *
  * |[
  * GtkWidget *dialog;
+ * GtkFileChooser *chooser;
+ * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+ * gint res;
  *
  * dialog = gtk_file_chooser_dialog_new ("Save File",
  *                                       parent_window,
- *                                       GTK_FILE_CHOOSER_ACTION_SAVE,
- *                                       _("_Cancel"), GTK_RESPONSE_CANCEL,
- *                                       _("_Save"), GTK_RESPONSE_ACCEPT,
+ *                                       action,
+ *                                       _("_Cancel"),
+ *                                       GTK_RESPONSE_CANCEL,
+ *                                       _("_Save"),
+ *                                       GTK_RESPONSE_ACCEPT,
  *                                       NULL);
- * gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+ * chooser = GTK_FILE_CHOOSER (dialog);
+ *
+ * gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
  *
  * if (user_edited_a_new_document)
- *   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "Untitled document");
+ *   gtk_file_chooser_set_current_name (chooser,
+ *                                      _("Untitled document"));
  * else
- *   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), filename_for_existing_document);
+ *   gtk_file_chooser_set_filename (chooser,
+ *                                  existing_filename);
  *
- * if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+ * res = gtk_dialog_run (GTK_DIALOG (dialog));
+ * if (res == GTK_RESPONSE_ACCEPT)
  *   {
  *     char *filename;
  *
- *     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+ *     filename = gtk_file_chooser_get_filename (chooser);
  *     save_to_file (filename);
  *     g_free (filename);
  *   }
@@ -143,12 +158,15 @@
  *
  * |[
  * GtkWidget *dialog;
+ * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
  *
  * dialog = gtk_file_chooser_dialog_new ("Open File",
  *                                       parent_window,
- *                                       GTK_FILE_CHOOSER_ACTION_OPEN,
- *                                       _("_Cancel"), GTK_RESPONSE_CANCEL,
- *                                       _("_Open"), GTK_RESPONSE_ACCEPT,
+ *                                       action,
+ *                                       _("_Cancel"),
+ *                                       GTK_RESPONSE_CANCEL,
+ *                                       _("_Open"),
+ *                                       GTK_RESPONSE_ACCEPT,
  *                                       NULL);
  * ]|
  *

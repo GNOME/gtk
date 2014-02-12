@@ -8397,23 +8397,25 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  * widget that corresponds to the dropped tab.
  * |[<!-- language="C" -->
  *  static void
- *  on_drop_zone_drag_data_received (GtkWidget        *widget,
- *                                   GdkDragContext   *context,
- *                                   gint              x,
- *                                   gint              y,
- *                                   GtkSelectionData *selection_data,
- *                                   guint             info,
- *                                   guint             time,
- *                                   gpointer          user_data)
+ *  on_drag_data_received (GtkWidget        *widget,
+ *                         GdkDragContext   *context,
+ *                         gint              x,
+ *                         gint              y,
+ *                         GtkSelectionData *data,
+ *                         guint             info,
+ *                         guint             time,
+ *                         gpointer          user_data)
  *  {
  *    GtkWidget *notebook;
  *    GtkWidget **child;
+ *    GtkContainer *container;
  *
  *    notebook = gtk_drag_get_source_widget (context);
- *    child = (void*) gtk_selection_data_get_data (selection_data);
+ *    child = (void*) gtk_selection_data_get_data (data);
  *
  *    process_widget (*child);
- *    gtk_container_remove (GTK_CONTAINER (notebook), *child);
+ *    container = GTK_CONTAINER (notebook);
+ *    gtk_container_remove (container, *child);
  *  }
  * ]|
  *

@@ -7737,7 +7737,9 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  * This is equivalent to:
  *
  * |[<!-- language="C" -->
- * gtk_entry_buffer_get_text (gtk_entry_get_buffer (entry));
+ * GtkEntryBuffer *buffer;
+ * buffer = gtk_entry_get_buffer (entry);
+ * gtk_entry_buffer_get_text (buffer);
  * ]|
  *
  * Return value: a pointer to the contents of the widget as a
@@ -7759,7 +7761,7 @@ gtk_entry_get_text (GtkEntry *entry)
  * @max: the maximum length of the entry, or 0 for no maximum.
  *   (other than the maximum length of entries.) The value passed in will
  *   be clamped to the range 0-65536.
- * 
+ *
  * Sets the maximum allowed length of the contents of the widget. If
  * the current contents are longer than the given length, then they
  * will be truncated to fit.
@@ -7767,7 +7769,9 @@ gtk_entry_get_text (GtkEntry *entry)
  * This is equivalent to:
  *
  * |[<!-- language="C" -->
- * gtk_entry_buffer_set_max_length (gtk_entry_get_buffer (entry), max);
+ * GtkEntryBuffer *buffer;
+ * buffer = gtk_entry_get_buffer (entry);
+ * gtk_entry_buffer_set_max_length (buffer, max);
  * ]|
  **/
 void
@@ -7788,7 +7792,9 @@ gtk_entry_set_max_length (GtkEntry     *entry,
  * This is equivalent to:
  *
  * |[<!-- language="C" -->
- * gtk_entry_buffer_get_max_length (gtk_entry_get_buffer (entry));
+ * GtkEntryBuffer *buffer;
+ * buffer = gtk_entry_get_buffer (entry);
+ * gtk_entry_buffer_get_max_length (buffer);
  * ]|
  *
  * Return value: the maximum allowed number of characters
@@ -7812,7 +7818,9 @@ gtk_entry_get_max_length (GtkEntry *entry)
  * This is equivalent to:
  *
  * |[<!-- language="C" -->
- * gtk_entry_buffer_get_length (gtk_entry_get_buffer (entry));
+ * GtkEntryBuffer *buffer;
+ * buffer = gtk_entry_get_buffer (entry);
+ * gtk_entry_buffer_get_length (buffer);
  * ]|
  *
  * Return value: the current number of characters

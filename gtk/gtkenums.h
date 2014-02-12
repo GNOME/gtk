@@ -200,15 +200,13 @@ typedef enum
 typedef enum
 {
   GTK_DELETE_CHARS,
-  GTK_DELETE_WORD_ENDS,           /* delete only the portion of the word to the
-                                   * left/right of cursor if we're in the middle
-                                   * of a word */
+  GTK_DELETE_WORD_ENDS,
   GTK_DELETE_WORDS,
   GTK_DELETE_DISPLAY_LINES,
   GTK_DELETE_DISPLAY_LINE_ENDS,
-  GTK_DELETE_PARAGRAPH_ENDS,      /* like C-k in Emacs (or its reverse) */
-  GTK_DELETE_PARAGRAPHS,          /* C-k in pico, kill whole line */
-  GTK_DELETE_WHITESPACE           /* M-\ in Emacs */
+  GTK_DELETE_PARAGRAPH_ENDS,
+  GTK_DELETE_PARAGRAPHS,
+  GTK_DELETE_WHITESPACE
 } GtkDeleteType;
 
 /* Focus movement types */

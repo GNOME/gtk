@@ -100,32 +100,36 @@
  *
  * An example for simple GtkDialog usage:
  * |[<!-- language="C" -->
- * /&ast; Function to open a dialog box displaying the message provided. &ast;/
+ * /&ast; Function to open a dialog box with a message &ast;/
  * void
- * quick_message (gchar *message)
+ * quick_message (GtkWindow *parent, gchar *message)
  * {
- *    GtkWidget *dialog, *label, *content_area;
+ *  GtkWidget *dialog, *label, *content_area;
+ *  GtkDialogFlags flags;
  *
- *    /&ast; Create the widgets &ast;/
- *    dialog = gtk_dialog_new_with_buttons ("Message",
- *                                          main_application_window,
- *                                          GTK_DIALOG_DESTROY_WITH_PARENT,
- *                                          _("_OK"),
- *                                          GTK_RESPONSE_NONE,
- *                                          NULL);
- *    content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
- *    label = gtk_label_new (message);
+ *  /&ast; Create the widgets &ast;/
+ *  flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+ *  dialog = gtk_dialog_new_with_buttons ("Message",
+ *                                        parent,
+ *                                        flags,
+ *                                        _("_OK"),
+ *                                        GTK_RESPONSE_NONE,
+ *                                        NULL);
+ *  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+ *  label = gtk_label_new (message);
  *
- *    /&ast; Ensure that the dialog box is destroyed when the user responds &ast;/
- *    g_signal_connect_swapped (dialog,
- *                              "response",
- *                              G_CALLBACK (gtk_widget_destroy),
- *                              dialog);
+ *  /&ast; Ensure that the dialog box is destroyed when the user
+ *  responds &ast;/
  *
- *    /&ast; Add the label, and show everything we’ve added to the dialog &ast;/
+ *  g_signal_connect_swapped (dialog,
+ *                            "response",
+ *                            G_CALLBACK (gtk_widget_destroy),
+ *                            dialog);
  *
- *    gtk_container_add (GTK_CONTAINER (content_area), label);
- *    gtk_widget_show_all (dialog);
+ *  /&ast; Add the label, and show everything we’ve added &ast;/
+ *
+ *  gtk_container_add (GTK_CONTAINER (content_area), label);
+ *  gtk_widget_show_all (dialog);
  * }
  * ]|
  *
@@ -860,14 +864,16 @@ gtk_dialog_new_empty (const gchar     *title,
  *
  * Here’s a simple example:
  * |[<!-- language="C" -->
- *  GtkWidget *dialog = gtk_dialog_new_with_buttons ("My dialog",
- *                                                   main_app_window,
- *                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
- *                                                   _("_OK"),
- *                                                   GTK_RESPONSE_ACCEPT,
- *                                                   _("_Cancel"),
- *                                                   GTK_RESPONSE_REJECT,
- *                                                   NULL);
+ *  GtkWidget *dialog;
+ *  GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
+ *  dialog = gtk_dialog_new_with_buttons ("My dialog",
+ *                                        main_app_window,
+ *                                        flags,
+ *                                        _("_OK"),
+ *                                        GTK_RESPONSE_ACCEPT,
+ *                                        _("_Cancel"),
+ *                                        GTK_RESPONSE_REJECT,
+ *                                        NULL);
  * ]|
  *
  * Return value: a new #GtkDialog

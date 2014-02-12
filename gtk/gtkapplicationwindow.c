@@ -93,8 +93,11 @@
  *     "    </submenu>"
  *     "  </menu>"
  *     "</interface>");
+ *
+ * menubar = G_MENU_MODEL (gtk_builder_get_object (builder,
+ *                                                 "menubar"));
  * gtk_application_set_menubar (G_APPLICATION (app),
- *                              G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+ *                              menubar);
  * g_object_unref (builder);
  *
  * ...

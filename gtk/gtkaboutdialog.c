@@ -1654,7 +1654,8 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
  * Using gettext(), a simple way to achieve that is to mark the
  * string for translation:
  * |[<!-- language="C" -->
- *  gtk_about_dialog_set_translator_credits (about, _("translator-credits"));
+ *  gtk_about_dialog_set_translator_credits (about,
+ *                                           _("translator-credits"));
  * ]|
  * It is a good idea to use the customary msgid “translator-credits” for this
  * purpose, since translators will already know the purpose of that msgid, and
