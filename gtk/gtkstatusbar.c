@@ -456,21 +456,13 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
   if (priv->messages == NULL)
     return;
 
-  msg = priv->messages->data;
-
-  /* care about signal emission if the topmost item is removed */
-  if (msg->context_id == context_id)
-    {
-      gtk_statusbar_pop (statusbar, context_id);
-
-      prev = NULL;
-      list = priv->messages;
-    }
-  else
-    {
-      prev = priv->messages;
-      list = prev->next;
-    }
+  /* We special-case the topmost message at the bottom of this
+   * function:
+   * If we need to pop it, we have to update various state and we want
+   * an up-to-date list of remaining messages in that case.
+   */
+  prev = priv->messages;
+  list = prev->next;
 
   while (list != NULL)
     {
@@ -478,27 +470,25 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
 
       if (msg->context_id == context_id)
         {
-          if (prev == NULL)
-            priv->messages = list->next;
-          else
-            prev->next = list->next;
+          prev->next = list->next;
 
           gtk_statusbar_msg_free (msg);
           g_slist_free_1 (list);
 
-          if (prev == NULL)
-            prev = priv->messages;
-
-          if (prev)
-            list = prev->next;
-          else
-            list = NULL;
+          list = prev->next;
         }
       else
         {
           prev = list;
           list = prev->next;
         }
+    }
+
+  /* Treat topmost message here */
+  msg = priv->messages->data;
+  if (msg->context_id == context_id)
+    {
+      gtk_statusbar_pop (statusbar, context_id);
     }
 }
 
