@@ -3360,24 +3360,24 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   PangoFontMetrics *metrics;
   GtkBorder borders;
   PangoContext *context;
-  gint icon_widths = 0;
   gint icon_width, i;
   gint min, nat;
   gint char_width;
   gint digit_width;
   gint char_pixels;
 
-  context = gtk_widget_get_pango_context (widget);
+  _gtk_entry_get_borders (entry, &borders);
 
+  context = gtk_widget_get_pango_context (widget);
   metrics = pango_context_get_metrics (context,
                                        pango_context_get_font_description (context),
                                        pango_context_get_language (context));
 
-  _gtk_entry_get_borders (entry, &borders);
-
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
   digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
   char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
+
+  pango_font_metrics_unref (metrics);
 
   if (priv->width_chars < 0)
     min = MIN_ENTRY_WIDTH + borders.left + borders.right;
@@ -3389,22 +3389,12 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   else
     nat = char_pixels * priv->max_width_chars + borders.left + borders.right;
 
-  nat = MAX (min, nat);
-
+  icon_width = 0;
   for (i = 0; i < MAX_ICONS; i++)
-    {
-      icon_width = get_icon_width (entry, i);
-      if (icon_width > 0)
-        icon_widths += icon_width;
-    }
+    icon_width += get_icon_width (entry, i);
 
-  if (icon_widths > min)
-    {
-      min += icon_widths;
-      nat += icon_width;
-    }
-
-  pango_font_metrics_unref (metrics);
+  min = MAX (min, icon_width);
+  nat = MAX (min, nat);
 
   *minimum = min;
   *natural = nat;
