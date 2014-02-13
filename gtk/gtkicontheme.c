@@ -261,7 +261,6 @@ struct _GtkIconInfo
   guint raw_coordinates : 1;
   guint forced_size     : 1;
   guint emblems_applied : 1;
-  guint is_svg          : 1;
 
   /* Cached information if we go ahead and try to load
    * the icon.
@@ -1725,13 +1724,6 @@ choose_icon (GtkIconTheme       *icon_theme,
  out:
   if (icon_info)
     {
-      if (icon_info->filename)
-        icon_info->is_svg = (suffix_from_name (icon_info->filename) == ICON_SUFFIX_SVG);
-      else
-        /* This can only happen when we have an icon cache. In this case, we know we're
-         * not dealing with an SVG, but with raw pixel data. */
-        icon_info->is_svg = FALSE;
-
       icon_info->desired_size = size;
       icon_info->desired_scale = scale;
       icon_info->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
@@ -3686,6 +3678,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
   int image_width, image_height;
   int scaled_desired_size;
   GdkPixbuf *source_pixbuf;
+  gboolean is_svg;
 
   /* First check if we already succeeded have the necessary
    * information (or failed earlier)
@@ -3710,7 +3703,30 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
 
   scaled_desired_size = icon_info->desired_size * icon_info->desired_scale;
 
-  if (icon_info->is_svg)
+  is_svg = FALSE;
+  if (G_IS_FILE_ICON (icon_info->loadable))
+    {
+      GFile *file;
+      GFileInfo *file_info;
+      const gchar *content_type;
+
+      file = g_file_icon_get_file (G_FILE_ICON (icon_info->loadable));
+      file_info = g_file_query_info (file, 
+                                     G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                                     G_FILE_QUERY_INFO_NONE,
+                                     NULL, NULL);
+      if (file_info) 
+        {
+          content_type = g_file_info_get_content_type (file_info);
+
+          if (content_type && strcmp (content_type, "image/svg+xml") == 0)
+            is_svg = TRUE;
+
+          g_object_unref (file_info);
+       }
+    }
+
+  if (is_svg)
     {
       GInputStream *stream;
 
