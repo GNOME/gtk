@@ -265,7 +265,7 @@ on_show (WidgetInfo *info)
   if (shot_id != 0)
     return;
 
-  shot_id = g_timeout_add (1000, (GSourceFunc) shoot_one, info);
+  shot_id = g_timeout_add (500, (GSourceFunc) shoot_one, info);
 }
 
 static gboolean
