@@ -54,8 +54,12 @@ static GdkPixbuf *
 add_border_to_shot (GdkPixbuf *pixbuf)
 {
   GdkPixbuf *retval;
+  GdkColorspace colorspace;
+  int bits;
 
-  retval = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
+  colorspace = gdk_pixbuf_get_colorspace (pixbuf);
+  bits = gdk_pixbuf_get_bits_per_sample (pixbuf);
+  retval = gdk_pixbuf_new (colorspace, TRUE, bits,
 			   gdk_pixbuf_get_width (pixbuf) + 2,
 			   gdk_pixbuf_get_height (pixbuf) + 2);
 
@@ -78,8 +82,12 @@ remove_shaped_area (GdkPixbuf *pixbuf,
   XRectangle *rectangles;
   int rectangle_count, rectangle_order;
   int i;
+  GdkColorspace colorspace;
+  int bits;
 
-  retval = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
+  colorspace = gdk_pixbuf_get_colorspace (pixbuf);
+  bits = gdk_pixbuf_get_bits_per_sample (pixbuf);
+  retval = gdk_pixbuf_new (colorspace, TRUE, bits,
 			   gdk_pixbuf_get_width (pixbuf),
 			   gdk_pixbuf_get_height (pixbuf));
   
