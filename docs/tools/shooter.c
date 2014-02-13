@@ -126,9 +126,15 @@ remove_shaped_area (GdkPixbuf *pixbuf,
   return retval;
 }
 
+typedef enum {
+  DECOR_NONE,
+  DECOR_FRAME,
+  DECOR_WINDOW_FRAME
+} DecorationType;
+
 static GdkPixbuf *
-take_window_shot (Window   child,
-		  gboolean include_decoration)
+take_window_shot (Window         child,
+                  DecorationType decor)
 {
   GdkWindow *window;
   Window xid;
@@ -139,7 +145,7 @@ take_window_shot (Window   child,
   GdkPixbuf *tmp, *tmp2;
   GdkPixbuf *retval = NULL;
 
-  if (include_decoration)
+  if (decor == DECOR_WINDOW_FRAME)
     xid = find_toplevel_window (child);
   else
     xid = child;
@@ -175,10 +181,12 @@ take_window_shot (Window   child,
 
   if (tmp != NULL)
     {
-      if (include_decoration)
+      if (decor == DECOR_WINDOW_FRAME)
         tmp2 = remove_shaped_area (tmp, xid);
-      else
+      else if (decor == DECOR_FRAME)
         tmp2 = add_border_to_shot (tmp);
+      else
+        tmp2 = g_object_ref (tmp);
 
       g_object_unref (tmp);
 
@@ -194,6 +202,17 @@ take_window_shot (Window   child,
 
 static GList *toplevels;
 static guint shot_id;
+static gboolean
+
+window_is_csd (GdkWindow *window)
+{
+  gboolean set;
+  GdkWMDecoration decorations = 0;
+
+  /* FIXME: is this accurate? */
+  set = gdk_window_get_decorations (window, &decorations);
+  return (set && (decorations == 0));
+}
 
 static gboolean
 shoot_one (WidgetInfo *info)
@@ -201,6 +220,7 @@ shoot_one (WidgetInfo *info)
   GdkWindow *window;
   XID id;
   GdkPixbuf *screenshot = NULL;
+  DecorationType decor = DECOR_FRAME;
 
   if (g_list_find (toplevels, info) == NULL)
     {
@@ -210,7 +230,9 @@ shoot_one (WidgetInfo *info)
 
   window = gtk_widget_get_window (info->window);
   id = gdk_x11_window_get_xid (window);
-  screenshot = take_window_shot (id, info->include_decorations);
+  if (window_is_csd (window))
+    decor = (info->include_decorations) ? DECOR_NONE : DECOR_WINDOW_FRAME;
+  screenshot = take_window_shot (id, decor);
   if (screenshot != NULL)
     {
       char *filename;
