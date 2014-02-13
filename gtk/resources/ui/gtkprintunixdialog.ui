@@ -70,6 +70,7 @@
               <object class="GtkNotebook" id="notebook">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="show_border">False</property>
                 <child>
                   <object class="GtkBox" id="general_main_box">
                     <property name="visible">True</property>
