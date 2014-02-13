@@ -1,3 +1,4 @@
 N_("Select Application");
 N_("label");
-N_("Show Other Applications");
+N_("_View All Application");
+N_("_Find Applications in Software ");

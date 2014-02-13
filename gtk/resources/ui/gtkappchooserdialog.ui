@@ -40,7 +40,7 @@
                   <object class="GtkLabel" id="label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">label</property>
                     <property name="wrap">True</property>
@@ -74,17 +74,20 @@
       </object>
     </child>
   </template>
-  <object class="GtkImage" id="show_more_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">list-add-symbolic</property>
-  </object>
   <object class="GtkButton" id="show_more_button">
-    <property name="label" translatable="yes">Show Other Applications</property>
+    <property name="label" translatable="yes">_View All Application</property>
     <property name="visible">True</property>
+    <property name="use_underline">True</property>
     <property name="can_focus">True</property>
     <property name="receives_default">True</property>
-    <property name="image">show_more_image</property>
     <signal name="clicked" handler="show_more_button_clicked_cb" swapped="no"/>
+  </object>
+  <object class="GtkButton" id="software_button">
+    <property name="label" translatable="yes">_Find Applications in Software </property>
+    <property name="visible">True</property>
+    <property name="use_underline">True</property>
+    <property name="can_focus">True</property>
+    <property name="receives_default">True</property>
+    <signal name="clicked" handler="software_button_clicked_cb" swapped="no"/>
   </object>
 </interface>

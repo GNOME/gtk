@@ -38,6 +38,7 @@
 #include "gtktreemodelsort.h"
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
+#include "gtklabel.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -81,6 +82,8 @@ struct _GtkAppChooserWidgetPrivate {
 
   GtkWidget *program_list;
   GtkListStore *program_list_store;
+  GtkWidget *no_apps_label;
+  GtkWidget *no_apps;
 
   GtkTreeViewColumn *column;
   GtkCellRenderer *padding_renderer;
@@ -438,7 +441,7 @@ gtk_app_chooser_sort_func (GtkTreeModel *model,
       goto out;
     }
 
-  /* they're both recommended/falback or not, so if one is a heading, wins */
+  /* they're both recommended/fallback or not, so if one is a heading, wins */
   if (a_heading)
     {
       retval = -1;
@@ -660,15 +663,13 @@ add_no_applications_label (GtkAppChooserWidget *self)
 {
   gchar *text = NULL, *desc = NULL;
   const gchar *string;
-  GtkTreeIter iter;
 
   if (self->priv->default_text == NULL)
     {
       if (self->priv->content_type)
 	desc = g_content_type_get_description (self->priv->content_type);
 
-      string = text = g_strdup_printf (_("No applications available to open “%s”"),
-                                       desc);
+      string = text = g_strdup_printf (_("No applications found for “%s”."), desc);
       g_free (desc);
     }
   else
@@ -676,11 +677,7 @@ add_no_applications_label (GtkAppChooserWidget *self)
       string = self->priv->default_text;
     }
 
-  gtk_list_store_append (self->priv->program_list_store, &iter);
-  gtk_list_store_set (self->priv->program_list_store, &iter,
-                      COLUMN_HEADING_TEXT, string,
-                      COLUMN_HEADING, TRUE,
-                      -1);
+  gtk_label_set_text (GTK_LABEL (self->priv->no_apps_label), string);
 
   g_free (text);
 }
@@ -693,7 +690,8 @@ gtk_app_chooser_widget_select_first (GtkAppChooserWidget *self)
   GtkTreeModel *model;
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->priv->program_list));
-  gtk_tree_model_get_iter_first (model, &iter);
+  if (!gtk_tree_model_get_iter_first (model, &iter))
+    return;
 
   while (info == NULL)
     {
@@ -791,7 +789,14 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
     }
 
   if (!apps_added)
-    add_no_applications_label (self);
+    {
+      add_no_applications_label (self);
+      gtk_widget_show (self->priv->no_apps);
+    }
+  else
+    {
+      gtk_widget_hide (self->priv->no_apps);
+    }
 
   gtk_app_chooser_widget_select_first (self);
 
@@ -1110,6 +1115,8 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, padding_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, secondary_padding);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, no_apps_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, no_apps);
   gtk_widget_class_bind_template_callback (widget_class, refresh_and_emit_app_selected);
   gtk_widget_class_bind_template_callback (widget_class, program_list_selection_activated);
   gtk_widget_class_bind_template_callback (widget_class, widget_button_press_event_cb);
