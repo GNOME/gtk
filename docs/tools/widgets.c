@@ -16,88 +16,6 @@
 #define LARGE_WIDTH 240
 #define LARGE_HEIGHT 240
 
-static Window
-find_toplevel_window (Window xid)
-{
-  Window root, parent, *children;
-  guint nchildren;
-
-  do
-    {
-      if (XQueryTree (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), xid, &root,
-		      &parent, &children, &nchildren) == 0)
-	{
-	  g_warning ("Couldn't find window manager window");
-	  return None;
-	}
-
-      if (root == parent)
-	return xid;
-
-      xid = parent;
-    }
-  while (TRUE);
-}
-
-
-static gboolean
-adjust_size_callback (WidgetInfo *info)
-{
-  Window toplevel;
-  Window root;
-  GdkWindow *window;
-  gint tx;
-  gint ty;
-  guint twidth;
-  guint theight;
-  guint tborder_width;
-  guint tdepth;
-  gint target_width = 0;
-  gint target_height = 0;
-
-  window = gtk_widget_get_window (info->window);
-  toplevel = find_toplevel_window (GDK_WINDOW_XID (window));
-  XGetGeometry (GDK_WINDOW_XDISPLAY (window),
-		toplevel,
-		&root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
-
-  switch (info->size)
-    {
-    case SMALL:
-      target_width = SMALL_WIDTH;
-      target_height = SMALL_HEIGHT;
-      break;
-    case MEDIUM:
-      target_width = MEDIUM_WIDTH;
-      target_height = MEDIUM_HEIGHT;
-      break;
-    case LARGE:
-      target_width = LARGE_WIDTH;
-      target_height = LARGE_HEIGHT;
-      break;
-    case ASIS:
-      target_width = twidth;
-      target_height = theight;
-      break;
-    }
-
-  if (twidth > target_width ||
-      theight > target_height)
-    {
-      gtk_widget_set_size_request (info->window,
-				   2 + target_width - (twidth - target_width), /* Dunno why I need the +2 fudge factor; */
-				   2 + target_height - (theight - target_height));
-    }
-  return FALSE;
-}
-
-static void
-realize_callback (GtkWidget  *widget,
-		  WidgetInfo *info)
-{
-  gdk_threads_add_timeout (500, (GSourceFunc)adjust_size_callback, info);
-}
-
 static WidgetInfo *
 new_widget_info (const char *name,
 		 GtkWidget  *widget,
@@ -113,7 +31,6 @@ new_widget_info (const char *name,
       info->window = widget;
       gtk_window_set_resizable (GTK_WINDOW (info->window), FALSE);
       info->include_decorations = TRUE;
-      g_signal_connect (info->window, "realize", G_CALLBACK (realize_callback), info);
     }
   else
     {
@@ -126,7 +43,6 @@ new_widget_info (const char *name,
     }
   info->no_focus = TRUE;
 
-  gtk_widget_set_app_paintable (info->window, TRUE);
   g_signal_connect (info->window, "focus", G_CALLBACK (gtk_true), NULL);
 
   switch (size)

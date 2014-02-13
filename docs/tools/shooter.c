@@ -25,6 +25,8 @@
 #define _(x) (x)
 #endif
 
+static void queue_show (void);
+
 static Window
 find_toplevel_window (Window xid)
 {
@@ -127,7 +129,7 @@ take_window_shot (Window   child,
   gint width, height;
 
   GdkPixbuf *tmp, *tmp2;
-  GdkPixbuf *retval;
+  GdkPixbuf *retval = NULL;
 
   if (include_decoration)
     xid = find_toplevel_window (child);
@@ -163,24 +165,104 @@ take_window_shot (Window   child,
   tmp = gdk_pixbuf_get_from_window (window,
 				    x, y, width, height);
 
-  if (include_decoration)
-    tmp2 = remove_shaped_area (tmp, xid);
-  else
-    tmp2 = add_border_to_shot (tmp);
+  if (tmp != NULL)
+    {
+      if (include_decoration)
+        tmp2 = remove_shaped_area (tmp, xid);
+      else
+        tmp2 = add_border_to_shot (tmp);
 
-  retval = create_shadowed_pixbuf (tmp2);
-  g_object_unref (tmp);
-  g_object_unref (tmp2);
+      g_object_unref (tmp);
+
+      if (tmp2 != NULL)
+        {
+          retval = create_shadowed_pixbuf (tmp2);
+          g_object_unref (tmp2);
+        }
+    }
 
   return retval;
 }
 
+static GList *toplevels;
+static guint shot_id;
+
+static gboolean
+shoot_one (WidgetInfo *info)
+{
+  GdkWindow *window;
+  XID id;
+  GdkPixbuf *screenshot = NULL;
+
+  if (g_list_find (toplevels, info) == NULL)
+    {
+      g_warning ("Widget not found in queue");
+      gtk_main_quit ();
+    }
+
+  window = gtk_widget_get_window (info->window);
+  id = gdk_x11_window_get_xid (window);
+  screenshot = take_window_shot (id, info->include_decorations);
+  if (screenshot != NULL)
+    {
+      char *filename;
+      filename = g_strdup_printf ("./%s.png", info->name);
+      gdk_pixbuf_save (screenshot, filename, "png", NULL, NULL);
+      g_free (filename);
+      g_object_unref (screenshot);
+    }
+  else
+    {
+      g_warning ("unable to save shot of %s", info->name);
+    }
+  gtk_widget_destroy (info->window);
+
+  shot_id = 0;
+
+  /* remove from the queue and try to load up another */
+  toplevels = g_list_remove (toplevels, info);
+  if (toplevels == NULL)
+    gtk_main_quit ();
+  else
+    queue_show ();
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+on_show (WidgetInfo *info)
+{
+  if (shot_id != 0)
+    return;
+
+  shot_id = g_timeout_add (1000, (GSourceFunc) shoot_one, info);
+}
+
+static gboolean
+show_one (void)
+{
+  WidgetInfo *info = toplevels->data;
+
+  g_message ("shooting %s", info->name);
+
+  g_signal_connect_swapped (info->window,
+                            "show",
+                            G_CALLBACK (on_show),
+                            info);
+
+  gtk_widget_show (info->window);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+queue_show (void)
+{
+  g_idle_add ((GSourceFunc) show_one, NULL);
+}
+
 int main (int argc, char **argv)
 {
-  GList *toplevels;
-  GdkPixbuf *screenshot = NULL;
-  GList *node;
-
   /* If there's no DISPLAY, we silently error out.  We don't want to break
    * headless builds. */
   if (! gtk_init_check (&argc, &argv))
@@ -188,45 +270,8 @@ int main (int argc, char **argv)
 
   toplevels = get_all_widgets ();
 
-  for (node = toplevels; node; node = g_list_next (node))
-    {
-      GtkAllocation allocation;
-      GdkWindow *window;
-      WidgetInfo *info;
-      XID id;
-      char *filename;
-
-      info = node->data;
-
-      gtk_widget_show (info->window);
-
-      window = gtk_widget_get_window (info->window);
-      gtk_widget_get_allocation (info->window, &allocation);
-
-      gtk_widget_show_now (info->window);
-      gtk_widget_queue_draw_area (info->window,
-                                  allocation.x, allocation.y,
-                                  allocation.width, allocation.height);
-      gdk_window_process_updates (window, TRUE);
-
-      while (gtk_events_pending ())
-	{
-	  gtk_main_iteration ();
-	}
-      sleep (1);
-
-      while (gtk_events_pending ())
-	{
-	  gtk_main_iteration ();
-	}
-
-      id = gdk_x11_window_get_xid (window);
-      screenshot = take_window_shot (id, info->include_decorations);
-      filename = g_strdup_printf ("./%s.png", info->name);
-      gdk_pixbuf_save (screenshot, filename, "png", NULL, NULL);
-      g_free(filename);
-      gtk_widget_hide (info->window);
-    }
+  queue_show ();
+  gtk_main ();
 
   return 0;
 }
