@@ -847,8 +847,8 @@ create_message_dialog (void)
 				   GTK_BUTTONS_OK,
 				   NULL);
   gtk_window_set_icon_name (GTK_WINDOW (widget), "edit-copy");
-  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (widget),
-				 "<b>Message Dialog</b>\n\nWith secondary text");
+  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (widget), "Message Dialog");
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (widget), "%s", "With secondary text");
   return new_widget_info ("messagedialog", widget, ASIS);
 }
 
