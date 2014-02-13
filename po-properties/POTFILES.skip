@@ -53,6 +53,8 @@ gtk/resources/ui/gtkaboutdialog.ui
 gtk/resources/ui/gtkaboutdialog.ui.h
 gtk/resources/ui/gtkappchooserdialog.ui
 gtk/resources/ui/gtkappchooserdialog.ui.h
+gtk/resources/ui/gtkappchooserwidget.ui
+gtk/resources/ui/gtkappchooserwidget.ui.h
 gtk/resources/ui/gtkapplication-quartz.ui
 gtk/resources/ui/gtkapplication-quartz.ui.h
 gtk/resources/ui/gtkassistant.ui
