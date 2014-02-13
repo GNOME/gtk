@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.9.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-09 19:57+0100\n"
-"PO-Revision-Date: 2014-02-09 20:02+0100\n"
+"POT-Creation-Date: 2014-02-13 08:12+0100\n"
+"PO-Revision-Date: 2014-02-13 08:14+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -71,7 +71,7 @@ msgstr "Feilsøkingsflagg som skal settes for GDK"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:456 ../gtk/gtkmain.c:459
 msgid "FLAGS"
 msgstr "FLAGG"
 
@@ -604,12 +604,12 @@ msgid "_Close"
 msgstr "_Lukk"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:397
-#: ../gtk/gtkwindow.c:8632
+#: ../gtk/gtkwindow.c:8631
 msgid "Minimize"
 msgstr "Minimer"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:420
-#: ../gtk/gtkwindow.c:8640
+#: ../gtk/gtkwindow.c:8639
 msgid "Maximize"
 msgstr "Maksimer"
 
@@ -1157,10 +1157,10 @@ msgstr ""
 "velg «Lagre farge her.»"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
-#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:626
+#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:611
 #: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:803
 #: ../gtk/gtkfilechooserwidget.c:5361 ../gtk/gtkfontchooserdialog.c:155
-#: ../gtk/gtkmessagedialog.c:889 ../gtk/gtkmessagedialog.c:902
+#: ../gtk/gtkmessagedialog.c:897 ../gtk/gtkmessagedialog.c:910
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:663 ../gtk/gtkprintunixdialog.c:730
@@ -1168,7 +1168,7 @@ msgstr ""
 msgid "_Cancel"
 msgstr "_Avbryt"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:627
+#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:612
 #: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:156
 #: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
@@ -1210,8 +1210,8 @@ msgstr "_Forhåndsvisning:"
 msgid "_Apply"
 msgstr "_Bruk"
 
-#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:881
-#: ../gtk/gtkmessagedialog.c:903 ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:889
+#: ../gtk/gtkmessagedialog.c:911 ../gtk/gtkprintbackend.c:748
 msgid "_OK"
 msgstr "_OK"
 
@@ -1323,17 +1323,17 @@ msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Ja"
 
-#: ../gtk/deprecated/gtkuimanager.c:1778
+#: ../gtk/deprecated/gtkuimanager.c:1779
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Uventet startmarkering «%s» på linje %d tegn %d"
 
-#: ../gtk/deprecated/gtkuimanager.c:1868
+#: ../gtk/deprecated/gtkuimanager.c:1869
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Uventet tegndata på linje %d tegn %d"
 
-#: ../gtk/deprecated/gtkuimanager.c:2723
+#: ../gtk/deprecated/gtkuimanager.c:2724
 msgid "Empty"
 msgstr "Tom"
 
@@ -1358,11 +1358,11 @@ msgstr "Tom"
 #. * use the function gtk_show_about_dialog() which constructs and shows a dialog
 #. * and keeps it around so that it can be shown again.
 #. *
-#. * Note that GTK+ sets a default title of `_("About &percnt;s")`
-#. * on the dialog window (where &percnt;s is replaced by the name of the
-#. * application, but in order to ensure proper translation of the title,
-#. * applications should set the title property explicitly when constructing
-#. * a GtkAboutDialog, as shown in the following example:
+#. * Note that GTK+ sets a default title of `_("About \%s")` on the dialog
+#. * window (where \%s is replaced by the name of the application, but in
+#. * order to ensure proper translation of the title, applications should
+#. * set the title property explicitly when constructing a GtkAboutDialog,
+#. * as shown in the following example:
 #. * |[<!-- language="C" -->
 #. * gtk_show_about_dialog (NULL,
 #. *                        "program-name", "ExampleCode",
@@ -1458,19 +1458,19 @@ msgstr "Nettsted"
 msgid "About %s"
 msgstr "Om %s"
 
-#: ../gtk/gtkaboutdialog.c:2305
+#: ../gtk/gtkaboutdialog.c:2306
 msgid "Created by"
 msgstr "Laget av"
 
-#: ../gtk/gtkaboutdialog.c:2308
+#: ../gtk/gtkaboutdialog.c:2309
 msgid "Documented by"
 msgstr "Dokumentert av"
 
-#: ../gtk/gtkaboutdialog.c:2318
+#: ../gtk/gtkaboutdialog.c:2319
 msgid "Translated by"
 msgstr "Oversatt av"
 
-#: ../gtk/gtkaboutdialog.c:2323
+#: ../gtk/gtkaboutdialog.c:2324
 msgid "Artwork by"
 msgstr "Grafikk av"
 
@@ -1479,7 +1479,7 @@ msgstr "Grafikk av"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:159
+#: ../gtk/gtkaccellabel.c:161
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1489,7 +1489,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:165
+#: ../gtk/gtkaccellabel.c:167
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1499,7 +1499,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:171
+#: ../gtk/gtkaccellabel.c:173
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1509,7 +1509,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:801
+#: ../gtk/gtkaccellabel.c:803
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1519,7 +1519,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:816
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1529,17 +1529,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:828
+#: ../gtk/gtkaccellabel.c:830
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:845
+#: ../gtk/gtkaccellabel.c:847
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mellomrom"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:850
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1548,59 +1548,60 @@ msgstr "Backslash"
 msgid "Other application…"
 msgstr "Annet program …"
 
+#: ../gtk/gtkappchooserdialog.c:197 ../gtk/gtkappchooserdialog.c:204
+#: ../gtk/gtkappchooserdialog.c:221
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
+msgid "Select Application"
+msgstr "Velg program"
+
 #. Translators: %s is a filename
+#: ../gtk/gtkappchooserdialog.c:199
+#, c-format
+msgid "Opening “%s”."
+msgstr "Åpne «%s»."
+
 #: ../gtk/gtkappchooserdialog.c:200
 #, c-format
-msgid "Select an application to open “%s”"
-msgstr "Velg et program til å åpne «%s»"
-
-#: ../gtk/gtkappchooserdialog.c:201 ../gtk/gtkappchooserwidget.c:670
-#, c-format
-msgid "No applications available to open “%s”"
-msgstr "Ingen programmer tilgjengelig til å åpne «%s»"
+msgid "No applications found for “%s”"
+msgstr "Ingen programmer funnet for «%s»"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:207
+#: ../gtk/gtkappchooserdialog.c:206
 #, c-format
-msgid "Select an application for “%s” files"
-msgstr "Velg et program for «%s»-filer"
+msgid "Opening “%s” files."
+msgstr "Åpne «%s» filer."
 
-#: ../gtk/gtkappchooserdialog.c:209
+#: ../gtk/gtkappchooserdialog.c:208
 #, c-format
-msgid "No applications available to open “%s” files"
-msgstr "Ingen programmer tilgjengelig til å åpne «%s»-filer"
+msgid "No applications found for “%s” files"
+msgstr "Ingen programmer funnet for «%s»-filer"
 
-#: ../gtk/gtkappchooserdialog.c:225
-msgid ""
-"Click \"Show other applications\", for more options, or \"Software\" to "
-"install a new application"
-msgstr "Klikk på «Vis andre programmer» for flere alternativer, eller «Programvare» for å installere et nytt program"
-
-#: ../gtk/gtkappchooserdialog.c:295
+#: ../gtk/gtkappchooserdialog.c:301
 msgid "Forget association"
 msgstr "Glem kobling"
 
-#: ../gtk/gtkappchooserdialog.c:423
+#: ../gtk/gtkappchooserdialog.c:431
 msgid "Failed to start GNOME Software"
 msgstr "Klarte ikke å starte GNOME programvare"
 
-#: ../gtk/gtkappchooserdialog.c:441
-msgid "Software"
-msgstr "Programvare"
-
-#: ../gtk/gtkappchooserwidget.c:619
+#: ../gtk/gtkappchooserwidget.c:622
 msgid "Default Application"
 msgstr "Forvalgt program"
 
-#: ../gtk/gtkappchooserwidget.c:757
+#: ../gtk/gtkappchooserwidget.c:672
+#, c-format
+msgid "No applications found for “%s”."
+msgstr "Ingen programmer funnet for «%s»."
+
+#: ../gtk/gtkappchooserwidget.c:755
 msgid "Recommended Applications"
 msgstr "Anbefalte programmer"
 
-#: ../gtk/gtkappchooserwidget.c:772
+#: ../gtk/gtkappchooserwidget.c:770
 msgid "Related Applications"
 msgstr "Relaterte programmer"
 
-#: ../gtk/gtkappchooserwidget.c:786
+#: ../gtk/gtkappchooserwidget.c:784
 msgid "Other Applications"
 msgstr "Andre programmer"
 
@@ -2009,7 +2010,7 @@ msgstr "_Tilpass"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:885
+#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:893
 #: ../gtk/resources/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "_Lukk"
@@ -2068,30 +2069,30 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:9346 ../gtk/gtkentry.c:9499 ../gtk/gtklabel.c:6253
+#: ../gtk/gtkentry.c:9431 ../gtk/gtkentry.c:9584 ../gtk/gtklabel.c:6259
 #: ../gtk/gtktextview.c:8779 ../gtk/gtktextview.c:8967
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../gtk/gtkentry.c:9350 ../gtk/gtkentry.c:9502 ../gtk/gtklabel.c:6254
+#: ../gtk/gtkentry.c:9435 ../gtk/gtkentry.c:9587 ../gtk/gtklabel.c:6260
 #: ../gtk/gtktextview.c:8783 ../gtk/gtktextview.c:8971
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../gtk/gtkentry.c:9354 ../gtk/gtkentry.c:9505 ../gtk/gtklabel.c:6255
+#: ../gtk/gtkentry.c:9439 ../gtk/gtkentry.c:9590 ../gtk/gtklabel.c:6261
 #: ../gtk/gtktextview.c:8785 ../gtk/gtktextview.c:8973
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: ../gtk/gtkentry.c:9357 ../gtk/gtklabel.c:6257 ../gtk/gtktextview.c:8788
+#: ../gtk/gtkentry.c:9442 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8788
 msgid "_Delete"
 msgstr "_Slett"
 
-#: ../gtk/gtkentry.c:9368 ../gtk/gtklabel.c:6266 ../gtk/gtktextview.c:8802
+#: ../gtk/gtkentry.c:9453 ../gtk/gtklabel.c:6272 ../gtk/gtktextview.c:8802
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: ../gtk/gtkentry.c:10470
+#: ../gtk/gtkentry.c:10555
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -2121,7 +2122,7 @@ msgstr "Caps Lock er på"
 #. * }
 #. * ]|
 #. *
-#. * The #GtkFileChooserButton supports the #GtkFileChooserAction<!-- -->s
+#. * The #GtkFileChooserButton supports the #GtkFileChooserActions
 #. * %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
 #. *
 #. * > The #GtkFileChooserButton will ellipsize the label, and will thus
@@ -2354,16 +2355,16 @@ msgstr "Velg en skrift"
 msgid "Application menu"
 msgstr "Programmeny"
 
-#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8755
+#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8754
 msgid "Close"
 msgstr "Lukk"
 
-#: ../gtk/gtkicontheme.c:2125 ../gtk/gtkicontheme.c:2188
+#: ../gtk/gtkicontheme.c:2117 ../gtk/gtkicontheme.c:2180
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon «%s» er ikke tilstede i tema"
 
-#: ../gtk/gtkicontheme.c:3900
+#: ../gtk/gtkicontheme.c:3916
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
@@ -2387,29 +2388,29 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "System (%s)"
 
-#: ../gtk/gtkinfobar.c:1186 ../gtk/gtkmessagedialog.c:368
+#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:374
 msgid "Information"
 msgstr "Informasjon"
 
-#: ../gtk/gtkinfobar.c:1190 ../gtk/gtkmessagedialog.c:373
+#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:379
 msgid "Question"
 msgstr "Spørsmål"
 
-#: ../gtk/gtkinfobar.c:1194 ../gtk/gtkmessagedialog.c:378
+#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:384
 msgid "Warning"
 msgstr "Advarsel"
 
-#: ../gtk/gtkinfobar.c:1198 ../gtk/gtkmessagedialog.c:383
+#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:389
 msgid "Error"
 msgstr "Feil"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6236
+#: ../gtk/gtklabel.c:6242
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6244
+#: ../gtk/gtklabel.c:6250
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkas adresse"
 
@@ -2505,40 +2506,40 @@ msgstr ""
 "Kontakt din systemadministrator"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:449
 msgid "Load additional GTK+ modules"
 msgstr "Last tilleggsmoduler for GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:450
 msgid "MODULES"
 msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:452
 msgid "Make all warnings fatal"
 msgstr "La alle advarsler være fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:455
 msgid "GTK+ debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 
-#: ../gtk/gtkmain.c:758
+#: ../gtk/gtkmain.c:760
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: ../gtk/gtkmain.c:824
+#: ../gtk/gtkmain.c:826
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: ../gtk/gtkmain.c:824
+#: ../gtk/gtkmain.c:826
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
@@ -2547,7 +2548,7 @@ msgstr "Vis alternativer for GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1137
+#: ../gtk/gtkmain.c:1139
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2555,11 +2556,11 @@ msgstr "default:LTR"
 msgid "Menu"
 msgstr "Meny"
 
-#: ../gtk/gtkmessagedialog.c:893
+#: ../gtk/gtkmessagedialog.c:901
 msgid "_No"
 msgstr "_Nei"
 
-#: ../gtk/gtkmessagedialog.c:894
+#: ../gtk/gtkmessagedialog.c:902
 msgid "_Yes"
 msgstr "_Ja"
 
@@ -3427,43 +3428,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8640
+#: ../gtk/gtkwindow.c:8639
 msgid "Unmaximize"
 msgstr "Gjenopprett"
 
-#: ../gtk/gtkwindow.c:8649
+#: ../gtk/gtkwindow.c:8648
 msgid "Move"
 msgstr "Flytt"
 
-#: ../gtk/gtkwindow.c:8655
+#: ../gtk/gtkwindow.c:8654
 msgid "Resize"
 msgstr "Endre størrelse"
 
-#: ../gtk/gtkwindow.c:8667
+#: ../gtk/gtkwindow.c:8666
 msgid "Always on Top"
 msgstr "Alltid øverst"
 
-#: ../gtk/gtkwindow.c:8679
+#: ../gtk/gtkwindow.c:8678
 msgid "Always on Visible Workspace"
 msgstr "Alltid på synlig arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8687
+#: ../gtk/gtkwindow.c:8686
 msgid "Only on This Workspace"
 msgstr "Kun på dette arbeidsområdet"
 
-#: ../gtk/gtkwindow.c:8704
+#: ../gtk/gtkwindow.c:8703
 msgid "Move to Workspace Up"
 msgstr "Flytt opp et arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8713
+#: ../gtk/gtkwindow.c:8712
 msgid "Move to Workspace Down"
 msgstr "Flytt ned et arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8727
+#: ../gtk/gtkwindow.c:8726
 msgid "Move to Another Workspace"
 msgstr "Flytt til annet arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8735
+#: ../gtk/gtkwindow.c:8734
 #, c-format
 msgid "Workspace %d"
 msgstr "Arbeidsområde %d"
@@ -4905,17 +4906,21 @@ msgstr "Om"
 msgid "Credits"
 msgstr "Bidragsytere"
 
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
-msgid "Select Application"
-msgstr "Velg program"
-
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 msgid "label"
 msgstr "etikett"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
-msgid "Show Other Applications"
-msgstr "Vis andre programmer"
+msgid "_View All Application"
+msgstr "_Vis alle programmer"
+
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
+msgid "_Find Applications in Software "
+msgstr "_Finn programmer i Programvare "
+
+#: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
+msgid "No applications found."
+msgstr "Ingen programmer funnet."
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:2
 msgid "Preferences"
