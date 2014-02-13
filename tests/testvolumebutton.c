@@ -80,19 +80,23 @@ main (int    argc,
   GtkWidget *button2;
   GtkWidget *button3;
   GtkWidget *box;
+  GtkWidget *vbox;
 
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
   button = gtk_volume_button_new ();
   button2 = gtk_volume_button_new ();
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   g_signal_connect (G_OBJECT (button), "value-changed",
                     G_CALLBACK (value_changed),
                     NULL);
 
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_container_add (GTK_CONTAINER (vbox), box);
   gtk_container_add (GTK_CONTAINER (box), button);
   gtk_container_add (GTK_CONTAINER (box), button2);
 
