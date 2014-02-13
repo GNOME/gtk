@@ -379,8 +379,10 @@ create_info_bar (void)
 {
   GtkWidget *widget;
   GtkWidget *align;
+  WidgetInfo *info;
 
-  widget = gtk_info_bar_new_with_buttons ("Close", 0, NULL);
+  widget = gtk_info_bar_new ();
+  gtk_info_bar_set_show_close_button (GTK_INFO_BAR (widget), TRUE);
   gtk_info_bar_set_message_type (GTK_INFO_BAR (widget), GTK_MESSAGE_INFO);
   gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (widget))),
                      gtk_label_new ("Info Bar"));
@@ -388,7 +390,10 @@ create_info_bar (void)
   align = gtk_alignment_new (0.5, 0, 1.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
 
-  return new_widget_info ("info-bar", align, SMALL);
+  info = new_widget_info ("info-bar", align, SMALL);
+  gtk_container_set_border_width (GTK_CONTAINER (info->window), 0);
+
+  return info;
 }
 static WidgetInfo *
 create_recent_chooser_dialog (void)
