@@ -1079,15 +1079,25 @@ create_spinner (void)
 static WidgetInfo *
 create_volume_button (void)
 {
-  GtkWidget *button, *widget;
-  GtkWidget *plus_button;
+  GtkWidget *button, *box;
+  GtkWidget *widget;
+  GtkWidget *popup;
+
+  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_size_request (widget, 100, 250);
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (widget), box);
 
   button = gtk_volume_button_new ();
+  gtk_box_pack_end (GTK_BOX (box), button, FALSE, FALSE, 0);
+
   gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
-  /* Hack: get the private dock */
-  plus_button = gtk_scale_button_get_plus_button (GTK_SCALE_BUTTON (button));
-  widget = gtk_widget_get_parent (gtk_widget_get_parent (gtk_widget_get_parent (plus_button)));
-  gtk_widget_show_all (widget);
+  popup = gtk_scale_button_get_popup (GTK_SCALE_BUTTON (button));
+  gtk_widget_realize (widget);
+  gtk_widget_show (box);
+  gtk_widget_show (popup);
+
   return new_widget_info ("volumebutton", widget, ASIS);
 }
 
