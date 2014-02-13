@@ -155,8 +155,8 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
                                    g_param_spec_boolean ("use-symbolic",
                                                          P_("Use symbolic icons"),
                                                          P_("Whether to use symbolic icons"),
-                                                         FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         TRUE,
+                                                         G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
   /* Bind class to template
    */
