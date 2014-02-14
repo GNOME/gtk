@@ -44,8 +44,7 @@
  * @Title: GtkMessageDialog
  * @See_also:#GtkDialog
  *
- * #GtkMessageDialog presents a dialog with an image representing the type of
- * message (Error, Question, etc.) alongside some message text. It’s simply a
+ * #GtkMessageDialog presents a dialog with some message text. It’s simply a
  * convenience widget; you could construct the equivalent of #GtkMessageDialog
  * from #GtkDialog without too much effort, but #GtkMessageDialog saves typing.
  *
@@ -170,8 +169,8 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("message-border",
-                                                             P_("Image/label border"),
-                                                             P_("Width of border around the label and image in the message dialog"),
+                                                             P_("label border"),
+                                                             P_("Width of border around the label in the message dialog"),
                                                              0,
                                                              G_MAXINT,
                                                              12,
@@ -180,9 +179,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   /**
    * GtkMessageDialog:message-type:
    *
-   * The type of the message. The type is used to determine
-   * the image that is shown in the dialog, unless the image is 
-   * explicitly set by the ::image property.
+   * The type of the message.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MESSAGE_TYPE,
@@ -266,10 +263,11 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 
   /**
    * GtkMessageDialog:image:
-   * 
+   *
    * The image for this dialog.
    *
    * Since: 2.10
+   * Deprecated: 3.12: Use #GtkDialog to create dialogs with images
    */
   g_object_class_install_property (gobject_class,
                                    PROP_IMAGE,
@@ -277,7 +275,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                         P_("Image"),
                                                         P_("The image"),
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   /**
    * GtkMessageDialog:message-area:
@@ -298,7 +296,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 
   /* Setup Composite data */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkmessagedialog.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, image);
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, secondary_label);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkMessageDialog, message_area);
@@ -364,7 +361,6 @@ setup_type (GtkMessageDialog *dialog,
   GtkMessageDialogPrivate *priv = dialog->priv;
   const gchar *name = NULL;
   AtkObject *atk_obj;
-  GIcon *gicon = NULL;
 
   priv->message_type = type;
 
@@ -372,22 +368,18 @@ setup_type (GtkMessageDialog *dialog,
     {
     case GTK_MESSAGE_INFO:
       name = _("Information");
-      gicon = g_themed_icon_new_with_default_fallbacks ("dialog-information-symbolic");
       break;
 
     case GTK_MESSAGE_QUESTION:
       name = _("Question");
-      gicon = g_themed_icon_new_with_default_fallbacks ("dialog-question-symbolic");
       break;
 
     case GTK_MESSAGE_WARNING:
       name = _("Warning");
-      gicon = g_themed_icon_new_with_default_fallbacks ("dialog-warning-symbolic");
       break;
 
     case GTK_MESSAGE_ERROR:
       name = _("Error");
-      gicon = g_themed_icon_new_with_default_fallbacks ("dialog-error-symbolic");
       break;
 
     case GTK_MESSAGE_OTHER:
@@ -397,10 +389,6 @@ setup_type (GtkMessageDialog *dialog,
       g_warning ("Unknown GtkMessageType %u", type);
       break;
     }
-
-  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), gicon, GTK_ICON_SIZE_DIALOG);
-  if (gicon)
-    g_object_unref (gicon);
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (dialog));
   if (GTK_IS_ACCESSIBLE (atk_obj))
@@ -469,7 +457,9 @@ gtk_message_dialog_set_property (GObject      *object,
 				g_value_get_boolean (value));
       break;
     case PROP_IMAGE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_message_dialog_set_image (dialog, g_value_get_object (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
 
     default:
@@ -666,6 +656,7 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
  * Sets the dialog’s image to @image.
  *
  * Since: 2.10
+ * Deprecated: 3.12: Use #GtkDialog to create dialogs with images
  **/
 void
 gtk_message_dialog_set_image (GtkMessageDialog *dialog,
@@ -678,24 +669,25 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
   g_return_if_fail (image == NULL || GTK_IS_WIDGET (image));
 
   priv = dialog->priv;
+  
+  if (priv->image)
+    gtk_widget_destroy (priv->image);
 
-  if (image == NULL)
-    {
-      image = gtk_image_new_from_icon_name (NULL, GTK_ICON_SIZE_DIALOG);
-      gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
-      gtk_widget_set_valign (image, GTK_ALIGN_START);
+  priv->image = image;
+ 
+  if (priv->image)
+    { 
+      gtk_widget_set_halign (priv->image, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (priv->image, GTK_ALIGN_START);
+      parent = gtk_widget_get_parent (priv->message_area);
+      gtk_container_add (GTK_CONTAINER (parent), priv->image);
+      gtk_box_reorder_child (GTK_BOX (parent), priv->image, 0);
     }
 
   priv->message_type = GTK_MESSAGE_OTHER;
 
-  parent = gtk_widget_get_parent (priv->image);
-  gtk_container_add (GTK_CONTAINER (parent), image);
-  gtk_container_remove (GTK_CONTAINER (parent), priv->image);
-  gtk_box_reorder_child (GTK_BOX (parent), image, 0);
-
-  priv->image = image;
-
   g_object_notify (G_OBJECT (dialog), "image");
+  g_object_notify (G_OBJECT (dialog), "message-type");
 }
 
 /**
@@ -707,6 +699,7 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
  * Return value: (transfer none): the dialog’s image
  *
  * Since: 2.14
+ * Deprecated: 3.12: Use #GtkDialog for dialogs with images
  **/
 GtkWidget *
 gtk_message_dialog_get_image (GtkMessageDialog *dialog)
@@ -854,9 +847,8 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  *
  * Returns the message area of the dialog. This is the box where the
  * dialog’s primary and secondary labels are packed. You can add your
- * own extra content to that box and it will appear below those labels,
- * on the right side of the dialog’s image (or on the left for right-to-left
- * languages).  See gtk_dialog_get_content_area() for the corresponding
+ * own extra content to that box and it will appear below those labels.
+ * See gtk_dialog_get_content_area() for the corresponding
  * function in the parent #GtkDialog.
  *
  * Return value: (transfer none): A #GtkVBox corresponding to the
@@ -931,7 +923,7 @@ gtk_message_dialog_style_updated (GtkWidget *widget)
   GtkWidget *parent;
   gint border_width;
 
-  parent = gtk_widget_get_parent (gtk_message_dialog_get_image (dialog));
+  parent = gtk_widget_get_parent (dialog->priv->message_area);
 
   if (parent)
     {

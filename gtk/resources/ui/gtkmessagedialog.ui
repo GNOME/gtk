@@ -28,23 +28,6 @@
             <property name="border_width">0</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkImage" id="image">
-                <property name="visible">False</property>
-                <property name="can_focus">False</property>
-                <property name="halign">center</property>
-                <property name="valign">start</property>
-                <property name="icon_name">image-missing</property>
-                <property name="use_fallback">True</property>
-                <property name="icon_size">6</property>
-                <property name="xpad">12</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkBox" id="message_area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
