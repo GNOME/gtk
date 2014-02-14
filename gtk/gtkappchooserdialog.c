@@ -493,9 +493,9 @@ setup_search (GtkAppChooserDialog *self)
       g_object_bind_property (button, "active",
                               self->priv->search_bar, "search-mode-enabled",
                               G_BINDING_BIDIRECTIONAL);
-      g_object_bind_property (button, "sensitive",
-                              self->priv->search_entry, "sensitive",
-                              G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (self->priv->search_entry, "sensitive",
+                              button, "sensitive",
+                              G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
     }
 }
 
