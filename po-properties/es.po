@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-13 09:54+0000\n"
-"PO-Revision-Date: 2014-02-13 13:24+0100\n"
+"POT-Creation-Date: 2014-02-14 01:42+0000\n"
+"PO-Revision-Date: 2014-02-14 10:01+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -2058,7 +2058,7 @@ msgstr "Valor de la barra de progreso"
 
 #: ../gtk/gtkcellrendererprogress.c:155 ../gtk/gtkcellrenderertext.c:253
 #: ../gtk/gtkentrybuffer.c:348 ../gtk/gtkentry.c:885
-#: ../gtk/gtkmessagedialog.c:215 ../gtk/gtkprogressbar.c:179
+#: ../gtk/gtkmessagedialog.c:212 ../gtk/gtkprogressbar.c:179
 #: ../gtk/gtktextbuffer.c:220
 msgid "Text"
 msgstr "Texto"
@@ -3122,12 +3122,10 @@ msgid "Number of characters to leave space for in the entry"
 msgstr "Número de caracteres para dejar de espacio en la entrada"
 
 #: ../gtk/gtkentry.c:865
-#| msgid "Maximum Width In Characters"
 msgid "Maximum width in characters"
 msgstr "Anchura máxima en caracteres"
 
 #: ../gtk/gtkentry.c:866
-#| msgid "The desired maximum width of the label, in characters"
 msgid "The desired maximum width of the entry, in characters"
 msgstr "La anchura máxima de la entrada, en caracteres"
 
@@ -4190,11 +4188,11 @@ msgstr "Usar alternativa"
 msgid "Whether to use icon names fallback"
 msgstr "Indica si usar nombres de iconos como alternativa"
 
-#: ../gtk/gtkinfobar.c:449 ../gtk/gtkmessagedialog.c:190
+#: ../gtk/gtkinfobar.c:449 ../gtk/gtkmessagedialog.c:187
 msgid "Message Type"
 msgstr "Tipo de mensaje"
 
-#: ../gtk/gtkinfobar.c:450 ../gtk/gtkmessagedialog.c:191
+#: ../gtk/gtkinfobar.c:450 ../gtk/gtkmessagedialog.c:188
 msgid "The type of message"
 msgstr "El tipo de mensaje"
 
@@ -4762,65 +4760,65 @@ msgstr "Menú"
 msgid "The dropdown menu"
 msgstr "El menú desplegable"
 
+#: ../gtk/gtkmessagedialog.c:172
+#| msgid "Image/label border"
+msgid "label border"
+msgstr "borde de la etiqueta"
+
 #: ../gtk/gtkmessagedialog.c:173
-msgid "Image/label border"
-msgstr "Borde de la imagen/etiqueta"
+#| msgid "Width of border around the label and image in the message dialog"
+msgid "Width of border around the label in the message dialog"
+msgstr "Anchura del borde alrededor de la etiqueta en el diálogo de mensajes"
 
-#: ../gtk/gtkmessagedialog.c:174
-msgid "Width of border around the label and image in the message dialog"
-msgstr ""
-"Anchura del borde alrededor de la etiqueta y la imagen en el diálogo de "
-"mensajes"
-
-#: ../gtk/gtkmessagedialog.c:198
+#: ../gtk/gtkmessagedialog.c:195
 msgid "Message Buttons"
 msgstr "Botones del mensaje"
 
-#: ../gtk/gtkmessagedialog.c:199
+#: ../gtk/gtkmessagedialog.c:196
 msgid "The buttons shown in the message dialog"
 msgstr "Los botones mostrados en el diálogo de mensaje"
 
-#: ../gtk/gtkmessagedialog.c:216
+#: ../gtk/gtkmessagedialog.c:213
 msgid "The primary text of the message dialog"
 msgstr "El texto primario del diálogo de mensaje"
 
-#: ../gtk/gtkmessagedialog.c:231
+#: ../gtk/gtkmessagedialog.c:228
 msgid "Use Markup"
 msgstr "Usar marcado"
 
-#: ../gtk/gtkmessagedialog.c:232
+#: ../gtk/gtkmessagedialog.c:229
 msgid "The primary text of the title includes Pango markup."
 msgstr "El texto primario del título incluye marcado Pango."
 
-#: ../gtk/gtkmessagedialog.c:246
+#: ../gtk/gtkmessagedialog.c:243
 msgid "Secondary Text"
 msgstr "Texto secundario"
 
-#: ../gtk/gtkmessagedialog.c:247
+#: ../gtk/gtkmessagedialog.c:244
 msgid "The secondary text of the message dialog"
 msgstr "El texto secundario del diálogo de mensaje"
 
-#: ../gtk/gtkmessagedialog.c:262
+#: ../gtk/gtkmessagedialog.c:259
 msgid "Use Markup in secondary"
 msgstr "Usar marcado en el secundario"
 
-#: ../gtk/gtkmessagedialog.c:263
+#: ../gtk/gtkmessagedialog.c:260
 msgid "The secondary text includes Pango markup."
 msgstr "El texto secundario incluye marcado Pango."
 
-#: ../gtk/gtkmessagedialog.c:277
+#: ../gtk/gtkmessagedialog.c:275
 msgid "Image"
 msgstr "Imagen"
 
-#: ../gtk/gtkmessagedialog.c:278
+#: ../gtk/gtkmessagedialog.c:276
 msgid "The image"
 msgstr "La imagen"
 
-#: ../gtk/gtkmessagedialog.c:294
+#: ../gtk/gtkmessagedialog.c:292
 msgid "Message area"
 msgstr "Área de mensajes"
 
-#: ../gtk/gtkmessagedialog.c:295
+#: ../gtk/gtkmessagedialog.c:293
 msgid "GtkVBox that holds the dialog's primary and secondary labels"
 msgstr "GtkVBox que contiene las etiquetas primaria y secundaria del diálogo"
 
