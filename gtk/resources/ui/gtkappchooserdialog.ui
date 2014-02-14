@@ -72,7 +72,7 @@
     </child>
   </template>
   <object class="GtkButton" id="show_more_button">
-    <property name="label" translatable="yes">_View All Application</property>
+    <property name="label" translatable="yes">_View All Applications</property>
     <property name="visible">True</property>
     <property name="use_underline">True</property>
     <property name="can_focus">True</property>
