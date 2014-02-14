@@ -833,7 +833,7 @@ GtkCalendar.button:hover {
   icon-shadow: none;
 }
 
-titlebar .titlebutton:backdrop {
+.titlebar .titlebutton:backdrop {
   background-image: none;
   color: #a7aba7;
   border-image: none;
