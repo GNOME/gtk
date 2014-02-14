@@ -6,6 +6,7 @@
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Select a Color</property>
     <property name="type_hint">dialog</property>
+    <property name="resizable">False</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
