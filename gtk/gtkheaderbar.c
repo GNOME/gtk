@@ -600,6 +600,7 @@ gtk_header_bar_get_size (GtkWidget      *widget,
   gint nvis_children;
   gint minimum, natural;
   GtkBorder css_borders;
+  gint center_min, center_nat;
 
   minimum = natural = 0;
   nvis_children = 0;
@@ -612,15 +613,16 @@ gtk_header_bar_get_size (GtkWidget      *widget,
         nvis_children += 1;
     }
 
+  center_min = center_nat = 0;
   if (priv->label_box != NULL)
     {
-      if (add_child_size (priv->label_sizing_box, orientation, &minimum, &natural))
+      if (add_child_size (priv->label_sizing_box, orientation, &center_min, &center_nat))
         nvis_children += 1;
     }
 
   if (priv->custom_title != NULL)
     {
-      if (add_child_size (priv->custom_title, orientation, &minimum, &natural))
+      if (add_child_size (priv->custom_title, orientation, &center_min, &center_nat))
         nvis_children += 1;
     }
 
@@ -646,13 +648,16 @@ gtk_header_bar_get_size (GtkWidget      *widget,
 
   if (GTK_ORIENTATION_HORIZONTAL == orientation)
     {
-      minimum += css_borders.left + css_borders.right;
-      natural += css_borders.left + css_borders.right;
+      minimum += center_min + css_borders.left + css_borders.right;
+      natural += center_nat + css_borders.left + css_borders.right;
     }
   else
     {
-      minimum += css_borders.top + css_borders.bottom;
-      natural += css_borders.top + css_borders.bottom;
+      /* We don't enforce css borders on the center widget, to make
+       * title/subtitle combinations fit without growing the header
+       */
+      minimum = MAX (center_min, minimum + css_borders.top + css_borders.bottom);
+      natural = MAX (center_nat, natural + css_borders.top + css_borders.bottom);
     }
 
   if (minimum_size)
@@ -770,6 +775,7 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
   gint child_minimum;
   gint child_natural;
   GtkBorder css_borders;
+  gint center_min, center_nat;
 
   nvis_children = count_visible_children (bar);
 
@@ -830,21 +836,18 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
       i += 1;
     }
 
+  center_min = center_nat = 0;
   if (priv->label_box != NULL)
     {
       gtk_widget_get_preferred_height (priv->label_sizing_box,
-                                       &child_minimum, &child_natural);
-      computed_minimum = MAX (computed_minimum, child_minimum);
-      computed_natural = MAX (computed_natural, child_natural);
+                                       &center_min, &center_nat);
     }
 
   if (priv->custom_title != NULL &&
       gtk_widget_get_visible (priv->custom_title))
     {
       gtk_widget_get_preferred_height (priv->custom_title,
-                                       &child_minimum, &child_natural);
-      computed_minimum = MAX (computed_minimum, child_minimum);
-      computed_natural = MAX (computed_natural, child_natural);
+                                       &center_min, &center_nat);
     }
 
   if (priv->titlebar_start_box != NULL)
@@ -865,8 +868,11 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
 
   get_css_padding_and_border (widget, &css_borders);
 
-  computed_minimum += css_borders.top + css_borders.bottom;
-  computed_natural += css_borders.top + css_borders.bottom;
+  /* We don't enforce css borders on the center widget, to make
+   * title/subtitle combinations fit without growing the header
+   */
+  computed_minimum = MAX (center_min, computed_minimum + css_borders.top + css_borders.bottom);
+  computed_natural = MAX (center_nat, computed_natural + css_borders.top + css_borders.bottom);
 
   if (minimum_size)
     *minimum_size = computed_minimum;
@@ -1054,8 +1060,11 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
   side[GTK_PACK_START] += start_width;
   side[GTK_PACK_END] += end_width;
 
-  child_allocation.y = allocation->y + css_borders.top;
-  child_allocation.height = height;
+  /* We don't enforce css borders on the center widget, to make
+   * title/subtitle combinations fit without growing the header
+   */
+  child_allocation.y = allocation->y;
+  child_allocation.height = allocation->height;
 
   width = MAX (side[0], side[1]);
 
@@ -1083,6 +1092,9 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
 
   if (priv->label_box != NULL)
     gtk_widget_size_allocate (priv->label_box, &child_allocation);
+
+  child_allocation.y = allocation->y + css_borders.top;
+  child_allocation.height = height;
 
   if (priv->titlebar_start_box)
     {
