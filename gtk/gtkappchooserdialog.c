@@ -50,9 +50,13 @@
 #include "gtklabel.h"
 #include "gtkbbox.h"
 #include "gtkbutton.h"
+#include "gtkentry.h"
+#include "gtktogglebutton.h"
+#include "gtkstylecontext.h"
 #include "gtkmenuitem.h"
 #include "gtkheaderbar.h"
 #include "gtkdialogprivate.h"
+#include "gtksearchbar.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -70,6 +74,8 @@ struct _GtkAppChooserDialogPrivate {
 
   GtkWidget *open_label;
 
+  GtkWidget *search_bar;
+  GtkWidget *search_entry;
   GtkWidget *app_chooser_widget;
   GtkWidget *show_more_button;
   GtkWidget *software_button;
@@ -323,6 +329,14 @@ widget_populate_popup_cb (GtkAppChooserWidget *widget,
     }
 }
 
+static gboolean
+key_press_event_cb (GtkWidget    *widget,
+                    GdkEvent     *event,
+                    GtkSearchBar *bar)
+{
+  return gtk_search_bar_handle_event (bar, event);
+}
+
 static void
 construct_appchooser_widget (GtkAppChooserDialog *self)
 {
@@ -353,6 +367,11 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
   gtk_dialog_set_response_sensitive (GTK_DIALOG (self), GTK_RESPONSE_OK, info != NULL);
   if (info)
     g_object_unref (info);
+
+  _gtk_app_chooser_widget_set_search_entry (GTK_APP_CHOOSER_WIDGET (self->priv->app_chooser_widget),
+                                            GTK_ENTRY (self->priv->search_entry));
+  g_signal_connect (self, "key-press-event",
+                    G_CALLBACK (key_press_event_cb), self->priv->search_bar);
 }
 
 static void
@@ -448,6 +467,39 @@ ensure_software_button (GtkAppChooserDialog *self)
 }
 
 static void
+setup_search (GtkAppChooserDialog *self)
+{
+  gboolean use_header;
+
+  g_object_get (self, "use-header-bar", &use_header, NULL);
+  if (use_header)
+    {
+      GtkWidget *button;
+      GtkWidget *image;
+      GtkWidget *header;
+
+      button = gtk_toggle_button_new ();
+      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      image = gtk_image_new_from_icon_name ("edit-find-symbolic", GTK_ICON_SIZE_MENU);
+      gtk_widget_show (image);
+      gtk_container_add (GTK_CONTAINER (button), image);
+      gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
+      gtk_style_context_remove_class (gtk_widget_get_style_context (button), "text-button");
+      gtk_widget_show (button);
+
+      header = gtk_dialog_get_header_bar (GTK_DIALOG (self));
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
+
+      g_object_bind_property (button, "active",
+                              self->priv->search_bar, "search-mode-enabled",
+                              G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (button, "sensitive",
+                              self->priv->search_entry, "sensitive",
+                              G_BINDING_BIDIRECTIONAL);
+    }
+}
+
+static void
 gtk_app_chooser_dialog_constructed (GObject *object)
 {
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
@@ -458,6 +510,46 @@ gtk_app_chooser_dialog_constructed (GObject *object)
   construct_appchooser_widget (self);
   set_dialog_properties (self);
   ensure_software_button (self);
+  setup_search (self);
+}
+
+/* This is necessary do deal with the fact that GtkDialog
+ * exposes bits of its internal spacing as style properties,
+ * and puts the action area inside the content area.
+ * To achieve a flush-top search bar, we need the content
+ * area border to be 0, and distribute the spacing to other
+ * containers to compensate.
+ */
+static void
+update_spacings (GtkAppChooserDialog *self)
+{
+  GtkWidget *widget;
+  gint content_area_border;
+  gint action_area_border;
+
+  gtk_widget_style_get (GTK_WIDGET (self),
+                        "content-area-border", &content_area_border,
+                        "action-area-border", &action_area_border,
+                        NULL);
+
+  widget = gtk_dialog_get_content_area (GTK_DIALOG (self));
+  gtk_container_set_border_width (GTK_CONTAINER (widget), 0);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  widget = gtk_dialog_get_action_area (GTK_DIALOG (self));
+G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_container_set_border_width (GTK_CONTAINER (widget), 5 + content_area_border + action_area_border);
+
+  widget = self->priv->inner_box;
+  gtk_container_set_border_width (GTK_CONTAINER (widget), 10 + content_area_border);
+}
+
+static void
+gtk_app_chooser_dialog_style_updated (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_app_chooser_dialog_parent_class)->style_updated (widget);
+
+  update_spacings (GTK_APP_CHOOSER_DIALOG (widget));
 }
 
 static void
@@ -556,6 +648,9 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   gobject_class->get_property = gtk_app_chooser_dialog_get_property;
   gobject_class->constructed = gtk_app_chooser_dialog_constructed;
 
+  widget_class = GTK_WIDGET_CLASS (klass);
+  widget_class->style_updated = gtk_app_chooser_dialog_style_updated;
+
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
 
   /**
@@ -588,14 +683,14 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
 
   /* Bind class to template
    */
-  widget_class = GTK_WIDGET_CLASS (klass);
-
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/ui/gtkappchooserdialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, show_more_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, software_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, inner_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, search_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, search_entry);
   gtk_widget_class_bind_template_callback (widget_class, show_more_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, software_button_clicked_cb);
 }
@@ -625,6 +720,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    */
   g_signal_connect (self, "response",
                     G_CALLBACK (gtk_app_chooser_dialog_response), NULL);
+
+  update_spacings (self);
 }
 
 static void

@@ -659,7 +659,7 @@ gtk_app_chooser_add_default (GtkAppChooserWidget *self,
 }
 
 static void
-add_no_applications_label (GtkAppChooserWidget *self)
+update_no_applications_label (GtkAppChooserWidget *self)
 {
   gchar *text = NULL, *desc = NULL;
   const gchar *string;
@@ -789,14 +789,9 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
     }
 
   if (!apps_added)
-    {
-      add_no_applications_label (self);
-      gtk_widget_show (self->priv->no_apps);
-    }
-  else
-    {
-      gtk_widget_hide (self->priv->no_apps);
-    }
+    update_no_applications_label (self);
+
+  gtk_widget_set_visible (self->priv->no_apps, !apps_added);
 
   gtk_app_chooser_widget_select_first (self);
 
@@ -1485,4 +1480,15 @@ gtk_app_chooser_widget_get_default_text (GtkAppChooserWidget *self)
   g_return_val_if_fail (GTK_IS_APP_CHOOSER_WIDGET (self), NULL);
 
   return self->priv->default_text;
+}
+
+void
+_gtk_app_chooser_widget_set_search_entry (GtkAppChooserWidget *self,
+                                          GtkEntry            *entry)
+{
+  gtk_tree_view_set_search_entry (GTK_TREE_VIEW (self->priv->program_list), entry);
+
+  g_object_bind_property (self->priv->no_apps, "visible",
+                          entry, "sensitive",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
 }

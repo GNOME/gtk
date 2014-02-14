@@ -27,6 +27,7 @@
 
 #include "gtkappchooser.h"
 #include "gtkappchooserwidget.h"
+#include "gtkentry.h"
 
 typedef struct _GtkAppChooserIface GtkAppChooserIface;
 typedef GtkAppChooserIface GtkAppChooserInterface;
@@ -39,5 +40,9 @@ struct _GtkAppChooserIface {
   GAppInfo * (* get_app_info) (GtkAppChooser *object);
   void       (* refresh)      (GtkAppChooser *object);
 };
+
+void
+_gtk_app_chooser_widget_set_search_entry (GtkAppChooserWidget *self,
+                                          GtkEntry            *entry);
 
 #endif /* __GTK_APP_CHOOSER_PRIVATE_H__ */
