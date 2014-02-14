@@ -75,7 +75,7 @@ main (int argc, char *argv[])
   g_object_unref (G_OBJECT (builder));
   g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   create_dark_popup (window);
   gtk_main ();
