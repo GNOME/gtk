@@ -7395,7 +7395,7 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
  *         return TRUE;
  *     }
  *
- *     /&ast; Do some stuff &ast;/
+ *     // Do some stuff
  *
  *   return GTK_WIDGET_CLASS (gtk_foo_bar_parent_class)->key_press_event (widget, event);
  * }

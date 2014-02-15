@@ -11394,7 +11394,7 @@ gtk_XParseGeometry (const char   *string,
  * static void
  * fill_with_content (GtkWidget *vbox)
  * {
- *   /&ast; fill with content... &ast;/
+ *   // fill with content...
  * }
  *
  * int

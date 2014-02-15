@@ -1678,11 +1678,11 @@ gdk_event_get_source_device (const GdkEvent *event)
  *
  * |[<!-- language="C" -->
  * {
- *   /&ast; motion_event handler &ast;/
+ *   // motion_event handler
  *   x = motion_event->x;
  *   y = motion_event->y;
- *   /&ast; handle (x,y) motion &ast;/
- *   gdk_event_request_motions (motion_event); /&ast; handles is_hint events &ast;/
+ *   // handle (x,y) motion
+ *   gdk_event_request_motions (motion_event); // handles is_hint events
  * }
  * ]|
  *

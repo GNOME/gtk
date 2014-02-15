@@ -60,18 +60,18 @@
  *   GtkTreeModel *sort_model2;
  *   GtkTreeModel *child_model;
  *
- *   /&ast; get the child model &ast;/
+ *   // get the child model
  *   child_model = get_my_model ();
  *
- *   /&ast; Create the first tree &ast;/
+ *   // Create the first tree
  *   sort_model1 = gtk_tree_model_sort_new_with_model (child_model);
  *   tree_view1 = gtk_tree_view_new_with_model (sort_model1);
  *
- *   /&ast; Create the second tree &ast;/
+ *   // Create the second tree
  *   sort_model2 = gtk_tree_model_sort_new_with_model (child_model);
  *   tree_view2 = gtk_tree_view_new_with_model (sort_model2);
  *
- *   /&ast; Now we can sort the two models independently &ast;/
+ *   // Now we can sort the two models independently
  *   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model1),
  *                                         COLUMN_1, GTK_SORT_ASCENDING);
  *   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model2),
@@ -98,15 +98,14 @@
  *   char *some_data = NULL;
  *   char *modified_data;
  *
- *   /&ast; Get the current selected row and the model. &ast;/
+ *   // Get the current selected row and the model.
  *   if (! gtk_tree_selection_get_selected (selection,
  *                                          &sort_model,
  *                                          &sort_iter))
  *     return;
  *
- *   /&ast; Look up the current value on the selected row and get
- *    &ast; a new value to change it to.
- *    &ast;/
+ *   // Look up the current value on the selected row and get
+ *   // a new value to change it to.
  *   gtk_tree_model_get (GTK_TREE_MODEL (sort_model), &sort_iter,
  *                       COLUMN_1, &some_data,
  *                       -1);
@@ -114,15 +113,14 @@
  *   modified_data = change_the_data (some_data);
  *   g_free (some_data);
  *
- *   /&ast; Get an iterator on the child model, instead of the sort model. &ast;/
+ *   // Get an iterator on the child model, instead of the sort model.
  *   gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (sort_model),
  *                                                   &child_iter,
  *                                                   &sort_iter);
  *
- *   /&ast; Get the child model and change the value of the row. In this
- *    &ast; example, the child model is a GtkListStore. It could be any other
- *    &ast; type of model, though.
- *    &ast;/
+ *   // Get the child model and change the value of the row. In this
+ *   // example, the child model is a GtkListStore. It could be any other
+ *   // type of model, though.
  *   child_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (sort_model));
  *   gtk_list_store_set (GTK_LIST_STORE (child_model), &child_iter,
  *                       COLUMN_1, &modified_data,

@@ -86,14 +86,14 @@
  *   GtkWidget *palette;
  *   GtkWidget *item;
  *
- *   /&ast; Get the dragged item &ast;/
+ *   // Get the dragged item
  *   palette = gtk_widget_get_ancestor (gtk_drag_get_source_widget (context),
  *                                      GTK_TYPE_TOOL_PALETTE);
  *   if (palette != NULL)
  *     item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (palette),
  *                                            selection);
  *
- *   /&ast; Do something with item &ast;/
+ *   // Do something with item
  * }
  *
  * GtkWidget *target, palette;

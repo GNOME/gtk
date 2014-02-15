@@ -120,9 +120,9 @@
  *
  * icon_theme = gtk_icon_theme_get_default ();
  * pixbuf = gtk_icon_theme_load_icon (icon_theme,
- *                                    "my-icon-name", /&ast; icon name &ast;/
- *                                    48, /&ast; icon size &ast;/
- *                                    0,  /&ast; flags &ast;/
+ *                                    "my-icon-name", // icon name
+ *                                    48, // icon size
+ *                                    0,  // flags
  *                                    &error);
  * if (!pixbuf)
  *   {
@@ -131,7 +131,7 @@
  *   }
  * else
  *   {
- *     /&ast; Use the pixbuf &ast;/
+ *     // Use the pixbuf
  *     g_object_unref (pixbuf);
  *   }
  * ]|

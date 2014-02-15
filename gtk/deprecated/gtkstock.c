@@ -496,7 +496,7 @@ static const GtkStockItem builtin_items [] =
  *   return (gchar*)g_dpgettext2 (GETTEXT_PACKAGE, msgctxt, msgid);
  * }
  *
- * /&ast; ... &ast;/
+ * ...
  *
  * gtk_stock_add (items, G_N_ELEMENTS (items));
  * gtk_stock_set_translate_func ("odd-item-domain", my_translate_func, "odd items"); 

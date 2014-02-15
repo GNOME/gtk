@@ -104,9 +104,8 @@
  *   GtkCellRenderer *cell;
  *
  *   cell = gtk_cell_renderer_pixbuf_new ();
- *   /&ast; The following call causes the default cell area for combo boxes,
- *    &ast; a GtkCellAreaBox, to be instantiated
- *    &ast;/
+ *   // The following call causes the default cell area for combo boxes,
+ *   // a GtkCellAreaBox, to be instantiated
  *   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (b), cell, FALSE);
  *   ...
  * }
@@ -114,9 +113,7 @@
  * GtkWidget *
  * my_combo_box_new (GtkCellArea *area)
  * {
- *   /&ast; This call is going to cause a warning
- *    &ast; about area being ignored
- *    &ast;/
+ *   // This call is going to cause a warning about area being ignored
  *   return g_object_new (MY_TYPE_COMBO_BOX, "cell-area", area, NULL);
  * }
  * ]|

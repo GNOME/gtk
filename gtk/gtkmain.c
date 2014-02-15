@@ -59,27 +59,27 @@
  * int
  * main (int argc, char **argv)
  * {
- *   /&ast; Initialize i18n support with
- *    bindtextdomain(), etc. &ast;/
+ *   // Initialize i18n support with bindtextdomain(), etc.
+ *
  *   ...
  *
- *   /&ast; Initialize the widget set &ast;/
+ *   // Initialize the widget set
  *   gtk_init (&argc, &argv);
  *
- *   /&ast; Create the main window &ast;/
+ *   // Create the main window
  *   mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *
- *   /&ast; Set up our GUI elements &ast;/
+ *   // Set up our GUI elements
+ *
  *   ...
  *
- *   /&ast; Show the application window &ast;/
+ *   // Show the application window
  *   gtk_widget_show_all (mainwin);
  *
- *   /&ast; Enter the main event loop, and
- *    wait for user interaction &ast;/
+ *   // Enter the main event loop, and wait for user interaction
  *   gtk_main ();
  *
- *   /&ast; The user lost interest &ast;/
+ *   // The user lost interest
  *   return 0;
  * }
  * ]|
@@ -1251,12 +1251,12 @@ gtk_main_quit (void)
  * ## Updating the UI during a long computation
  *
  * |[<!-- language="C" -->
- *  /&ast; computation going on... &ast;/
+ *  // computation going on...
  *
  *  while (gtk_events_pending ())
  *    gtk_main_iteration ();
  *
- *  /&ast; ...computation continued &ast;/
+ *  // ...computation continued
  * ]|
  *
  * Returns: %TRUE if any events are pending, %FALSE otherwise

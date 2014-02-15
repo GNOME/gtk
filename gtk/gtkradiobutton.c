@@ -78,17 +78,17 @@
  *    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
  *    gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
  *
- *    /&ast; Create a radio button with a GtkEntry widget &ast;/
+ *    // Create a radio button with a GtkEntry widget
  *    radio1 = gtk_radio_button_new (NULL);
  *    entry = gtk_entry_new ();
  *    gtk_container_add (GTK_CONTAINER (radio1), entry);
  *
  *
- *    /&ast; Create a radio button with a label &ast;/
+ *    // Create a radio button with a label
  *    radio2 = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio1),
  *                                                          "I’m the second radio button.");
  *
- *    /&ast; Pack them into a box, then show all the widgets &ast;/
+ *    // Pack them into a box, then show all the widgets
  *    gtk_box_pack_start (GTK_BOX (box), radio1, TRUE, TRUE, 2);
  *    gtk_box_pack_start (GTK_BOX (box), radio2, TRUE, TRUE, 2);
  *    gtk_container_add (GTK_CONTAINER (window), box);
@@ -358,7 +358,7 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
  *   GtkRadioButton *radio_button;
  *   GtkRadioButton *last_button;
  *
- *   while (/&ast; more buttons to add &ast;/)
+ *   while ( ...more buttons to add... )
  *     {
  *        radio_button = gtk_radio_button_new (...);
  *

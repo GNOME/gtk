@@ -79,7 +79,7 @@
  *
  *       some_data = get_some_data (i);
  *
- *       /&ast; Add a new row to the model &ast;/
+ *       // Add a new row to the model
  *       gtk_list_store_append (list_store, &iter);
  *       gtk_list_store_set (list_store, &iter,
  *                           COLUMN_STRING, some_data,
@@ -87,13 +87,12 @@
  *                           COLUMN_BOOLEAN,  FALSE,
  *                           -1);
  *
- *       /&ast; As the store will keep a copy of
- *        &ast; the string internally, we free some_data.
- *        &ast;/
+ *       // As the store will keep a copy of the string internally,
+ *       // we free some_data.
  *       g_free (some_data);
  *     }
  *
- *   /&ast; Modify a particular row &ast;/
+ *   // Modify a particular row
  *   path = gtk_tree_path_new_from_string ("4");
  *   gtk_tree_model_get_iter (GTK_TREE_MODEL (list_store),
  *                            &iter,

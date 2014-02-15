@@ -2988,10 +2988,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *    {
    *      private_data->suggested_action = 0;
    *
-   *      /&ast; We are getting this data due to a request in
-   *      drag_motion, rather than due to a request in drag_drop,
-   *      so we are just supposed to call gdk_drag_status(), not
-   *      actually paste in the data. &ast;/
+   *      // We are getting this data due to a request in drag_motion,
+   *      // rather than due to a request in drag_drop, so we are just
+   *      // supposed to call gdk_drag_status(), not actually paste in
+   *      // the data.
    *
    *      str = gtk_selection_data_get_text (selection_data);
    *      if (!data_is_acceptable (str))
@@ -3003,7 +3003,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *    }
    *   else
    *    {
-   *      /&ast; accept the drop &ast;/
+   *      // accept the drop
    *    }
    * }
    * ]|
@@ -3127,7 +3127,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *     {
    *       GdkDragAction action;
    *
-   *       /&ast; handle data here &ast;/
+   *       // handle data here
    *
    *       action = gdk_drag_context_get_selected_action (context);
    *       if (action == GDK_ACTION_ASK)
@@ -10782,7 +10782,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
  *  if (gtk_widget_is_toplevel (toplevel))
  *    {
- *      /&ast; Perform action on toplevel. &ast;/
+ *      // Perform action on toplevel.
  *    }
  * ]|
  *

@@ -200,7 +200,7 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
  * the engine property, either in a previous rule or within the same
  * one.
  * |[
- * &ast; {
+ * * {
  *     engine: someengine;
  *     -SomeEngine-custom-property: 2;
  * }

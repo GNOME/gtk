@@ -81,10 +81,8 @@
  * ## Using a GtkSpinButton to get an integer
  *
  * |[<!-- language="C" -->
- * /&ast; Provides a function to retrieve an integer value from a
- *  &ast; GtkSpinButton and creates a spin button to model percentage
- *  &ast; values.
- *  &ast;/
+ * // Provides a function to retrieve an integer value from a GtkSpinButton
+ * // and creates a spin button to model percentage values.
  *
  * gint
  * grab_int_value (GtkSpinButton *button,
@@ -105,7 +103,7 @@
  *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
  *
- *   /&ast; creates the spinbutton, with no decimal places &ast;/
+ *   // creates the spinbutton, with no decimal places
  *   button = gtk_spin_button_new (adjustment, 1.0, 0);
  *   gtk_container_add (GTK_CONTAINER (window), button);
  *
@@ -116,9 +114,8 @@
  * ## Using a GtkSpinButton to get a floating point value
  *
  * |[<!-- language="C" -->
- * /&ast; Provides a function to retrieve a floating point value from a
- *  &ast; GtkSpinButton, and creates a high precision spin button.
- *  &ast;/
+ * // Provides a function to retrieve a floating point value from a
+ * // GtkSpinButton, and creates a high precision spin button.
  *
  * gfloat
  * grab_float_value (GtkSpinButton *button,
@@ -138,7 +135,7 @@
  *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
  *
- *   /&ast; creates the spinbutton, with three decimal places &ast;/
+ *   // creates the spinbutton, with three decimal places
  *   button = gtk_spin_button_new (adjustment, 0.001, 3);
  *   gtk_container_add (GTK_CONTAINER (window), button);
  *
@@ -457,7 +454,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * The ::output signal can be used to change to formatting
    * of the value that is displayed in the spin buttons entry.
    * |[<!-- language="C" -->
-   * /&ast; show leading zeros &ast;/
+   * // show leading zeros
    * static gboolean
    * on_output (GtkSpinButton *spin,
    *            gpointer       data)

@@ -406,7 +406,7 @@ create_menu_item (GtkAction *action)
  *   GSList *group = NULL;
  *   GtkRadioAction *action;
  *  
- *   while (/&ast; more actions to add &ast;/)
+ *   while ( ...more actions to add... /)
  *     {
  *        action = gtk_radio_action_new (...);
  *        
@@ -496,7 +496,7 @@ gtk_radio_action_set_group (GtkRadioAction *action,
  *   GtkRadioAction *action;
  *   GtkRadioAction *last_action;
  *  
- *   while (/&ast; more actions to add &ast;/)
+ *   while ( ...more actions to add... /)
  *     {
  *        action = gtk_radio_action_new (...);
  *        

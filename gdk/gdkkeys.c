@@ -501,14 +501,14 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * `<Control>plus` accelerator `<Shift>` should be masked out.
  *
  * |[<!-- language="C" -->
- * /&ast; We want to ignore irrelevant modifiers like ScrollLock &ast;/;
+ * // We want to ignore irrelevant modifiers like ScrollLock
  * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
  * gdk_keymap_translate_keyboard_state (keymap, event->hardware_keycode,
  *                                      event->state, event->group,
  *                                      &keyval, NULL, NULL, &consumed);
  * if (keyval == GDK_PLUS &&
  *     (event->state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
- *   /&ast; Control was pressed &ast;/
+ *   // Control was pressed
  * ]|
  * 
  * An older interpretation @consumed_modifiers was that it contained
@@ -516,10 +516,10 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * this allowed accelerators to be stored with irrelevant consumed
  * modifiers, by doing:
  * |[<!-- language="C" -->
- * /&ast; XXX Don’t do this XXX &ast;/
+ * // XXX Don’t do this XXX
  * if (keyval == accel_keyval &&
  *     (event->state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
- *   /&ast; Accelerator was pressed &ast;/
+ *   // Accelerator was pressed
  * ]|
  *
  * However, this did not work if multi-modifier combinations were

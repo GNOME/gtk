@@ -115,38 +115,47 @@
  *   the two selectors. E.g. `GtkNotebook > GtkLabel` matches
  *   GtkLabel widgets that are direct children of a GtkNotebook.
  *
- * An example of widget classes and names in selectors:
+ * ## Examples of widget classes and names in selectors
  *
+ * Theme labels that are descendants of a window:
  * |[
- * /&ast; Theme labels that are descendants of a window &ast;/
  * GtkWindow GtkLabel {
  *     background-color: #898989
  * }
+ * ]|
  *
- * /&ast; Theme notebooks, and anything that’s within these &ast;/
+ * Theme notebooks, and anything that’s within these:
+ * |[
  * GtkNotebook {
  *     background-color: #a939f0
  * }
+ * ]|
  *
- * /&ast; Theme combo boxes, and entries that
- *  are direct children of a notebook &ast;/
+ * Theme combo boxes, and entries that are direct children of a notebook:
+ * |[
  * GtkComboBox,
  * GtkNotebook > GtkEntry {
  *     color: @fg_color;
  *     background-color: #1209a2
  * }
+ * ]|
  *
- * /&ast; Theme any widget within a GtkBin &ast;/
+ * Theme any widget within a GtkBin:
+ * |[
  * GtkBin * {
  *     font: Sans 20
  * }
+ * ]|
  *
- * /&ast; Theme a label named title-label &ast;/
+ * Theme a label named title-label:
+ * |[
  * GtkLabel#title-label {
  *     font: Sans 15
  * }
+ * ]|
  *
- * /&ast; Theme any widget named main-entry &ast;/
+ * Theme any widget named main-entry:
+ * |[
  * #main-entry {
  *     background-color: #f0a810
  * }
@@ -166,14 +175,17 @@
  * a string as a widget class name if it contains any uppercase characters
  * (which should work for more widgets with names like GtkLabel).
  *
- * An example for style classes in selectors:
+ * ## Examples for style classes in selectors
+ *
+ * Theme all widgets defining the class entry:
  * |[
- * /&ast; Theme all widgets defining the class entry &ast;/
  * .entry {
  *     color: #39f1f9;
  * }
+ * ]|
  *
- * /&ast; Theme spinbuttons’ entry &ast;/
+ * Theme spinbuttons’ entry:
+ * |[
  * GtkSpinButton.entry {
  *     color: #900185
  * }
@@ -197,20 +209,25 @@
  * for a list of all regions
  * used by GTK+ widgets.
  *
- * An example for regions in selectors:
+ * ## Examples for regions in selectors
+ *
+ * Theme any label within a notebook:
  * |[
- * /&ast; Theme any label within a notebook &ast;/
  * GtkNotebook GtkLabel {
  *     color: #f90192;
  * }
+ * ]|
  *
- * /&ast; Theme labels within notebook tabs &ast;/
+ * Theme labels within notebook tabs:
+ * |[
  * GtkNotebook tab GtkLabel {
  *     color: #703910;
  * }
+ * ]|
  *
- * /&ast; Theme labels in the any first notebook
- *  tab, both selectors are equivalent &ast;/
+ * Theme labels in the any first notebook tab, both selectors are
+ * equivalent:
+ * |[
  * GtkNotebook tab:nth-child(first) GtkLabel,
  * GtkNotebook tab:first-child GtkLabel {
  *     color: #89d012;
@@ -223,37 +240,47 @@
  * are :active, :prelight (or :hover), :insensitive, :selected, :focused
  * and :inconsistent.
  *
- * And example for styling specific widget states:
+ * ## Examples for styling specific widget states
+ *
+ * Theme active (pressed) buttons: 
  * |[
- * /&ast; Theme active (pressed) buttons &ast;/
  * GtkButton:active {
  *     background-color: #0274d9;
  * }
+ * ]|
  *
- * /&ast; Theme buttons with the mouse pointer on it,
- *    both are equivalent &ast;/
+ * Theme buttons with the mouse pointer on it, both are equivalent:
+ * |[
  * GtkButton:hover,
  * GtkButton:prelight {
  *     background-color: #3085a9;
  * }
+ * ]|
  *
- * /&ast; Theme insensitive widgets, both are equivalent &ast;/
+ * Theme insensitive widgets, both are equivalent:
+ * |[
  * :insensitive,
  * *:insensitive {
  *     background-color: #320a91;
  * }
+ * ]|
  *
- * /&ast; Theme selection colors in entries &ast;/
+ * Theme selection colors in entries:
+ * |[
  * GtkEntry:selected {
  *     background-color: #56f9a0;
  * }
+ * ]|
  *
- * /&ast; Theme focused labels &ast;/
+ * Theme focused labels:
+ * |[
  * GtkLabel:focused {
  *     background-color: #b4940f;
  * }
+ * ]|
  *
- * /&ast; Theme inconsistent checkbuttons &ast;/
+ * Theme inconsistent checkbuttons:
+ * |[
  * GtkCheckButton:inconsistent {
  *     background-color: #20395a;
  * }

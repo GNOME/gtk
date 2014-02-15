@@ -722,12 +722,12 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * |[<!-- language="C" -->
  * if (document_is_new)
  *   {
- *     /&ast; the user just created a new document &ast;/
+ *     // the user just created a new document
  *     gtk_file_chooser_set_current_name (chooser, "Untitled document");
  *   }
  * else
  *   {
- *     /&ast; the user edited an existing document &ast;/ 
+ *     // the user edited an existing document
  *     gtk_file_chooser_set_filename (chooser, existing_filename);
  *   }
  * ]|
@@ -1074,12 +1074,12 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * |[<!-- language="C" -->
  * if (document_is_new)
  *   {
- *     /&ast; the user just created a new document &ast;/
+ *     // the user just created a new document
  *     gtk_file_chooser_set_current_name (chooser, "Untitled document");
  *   }
  * else
  *   {
- *     /&ast; the user edited an existing document &ast;/ 
+ *     // the user edited an existing document
  *     gtk_file_chooser_set_uri (chooser, existing_uri);
  *   }
  * ]|
@@ -1440,13 +1440,13 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * |[<!-- language="C" -->
  * if (document_is_new)
  *   {
- *     /&ast; the user just created a new document &ast;/
+ *     // the user just created a new document
  *     gtk_file_chooser_set_current_folder_file (chooser, default_file_for_saving);
  *     gtk_file_chooser_set_current_name (chooser, "Untitled document");
  *   }
  * else
  *   {
- *     /&ast; the user edited an existing document &ast;/
+ *     // the user edited an existing document
  *     gtk_file_chooser_set_file (chooser, existing_file);
  *   }
  * ]|

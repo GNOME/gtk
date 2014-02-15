@@ -74,7 +74,7 @@
  *
  * A simple example for using a GtkInfoBar:
  * |[<!-- language="C" -->
- * /&ast; set up info bar &ast;/
+ * // set up info bar
  * GtkWidget *widget;
  * GtkInfoBar *bar;
  *
@@ -98,9 +98,9 @@
  *                  widget,
  *                  0, 2, 1, 1);
  *
- * /&ast; ... &ast;/
+ * ...
  *
- * /&ast; show an error message &ast;/
+ * // show an error message
  * gtk_label_set_text (GTK_LABEL (message_label), message);
  * gtk_info_bar_set_message_type (bar,
  *                                GTK_MESSAGE_ERROR);

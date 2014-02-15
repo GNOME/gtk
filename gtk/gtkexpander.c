@@ -60,11 +60,11 @@
  *
  *   if (gtk_expander_get_expanded (expander))
  *     {
- *       /&ast; Show or create widgets &ast;/
+ *       // Show or create widgets
  *     }
  *   else
  *     {
- *       /&ast; Hide or destroy widgets &ast;/
+ *       // Hide or destroy widgets
  *     }
  * }
  * ]|

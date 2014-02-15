@@ -86,12 +86,9 @@
  *     g_print ("Event box clicked at coordinates %f,%f\n",
  *              event->x, event->y);
  *
- *     /&ast; Returning TRUE means we handled the event,
- *      &ast; so the signal emission should be stopped
- *      &ast; (don’t call any further callbacks that
- *      &ast; may be connected). Return FALSE to
- *      &ast; continue invoking callbacks.
- *      &ast;/
+ *     // Returning TRUE means we handled the event, so the signal
+ *     // emission should be stopped (don’t call any further callbacks
+ *     // that may be connected). Return FALSE to continue invoking callbacks.
  *     return TRUE;
  *   }
  *

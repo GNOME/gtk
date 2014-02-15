@@ -673,14 +673,14 @@ gdk_threads_dispatch_free (gpointer data)
  * static gboolean
  * idle_callback (gpointer data)
  * {
- *    /&ast; gdk_threads_enter(); would be needed for g_idle_add() &ast;/
+ *    // gdk_threads_enter(); would be needed for g_idle_add()
  *
  *    SomeWidget *self = data;
- *    /&ast; do stuff with self &ast;/
+ *    // do stuff with self
  *
  *    self->idle_id = 0;
  *
- *    /&ast; gdk_threads_leave(); would be needed for g_idle_add() &ast;/
+ *    // gdk_threads_leave(); would be needed for g_idle_add()
  *    return FALSE;
  * }
  *
@@ -688,7 +688,7 @@ gdk_threads_dispatch_free (gpointer data)
  * some_widget_do_stuff_later (SomeWidget *self)
  * {
  *    self->idle_id = gdk_threads_add_idle (idle_callback, self)
- *    /&ast; using g_idle_add() here would require thread protection in the callback &ast;/
+ *    // using g_idle_add() here would require thread protection in the callback
  * }
  *
  * static void
@@ -780,7 +780,7 @@ gdk_threads_add_idle (GSourceFunc    function,
  * {
  *    SomeWidget *self = data;
  *    
- *    /&ast; do stuff with self &ast;/
+ *    // do stuff with self
  *    
  *    self->timeout_id = 0;
  *    

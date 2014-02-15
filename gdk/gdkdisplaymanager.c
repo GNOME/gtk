@@ -91,14 +91,14 @@
  * #ifdef GDK_WINDOWING_X11
  *   if (GDK_IS_X11_DISPLAY (display))
  *     {
- *       /&ast; make X11-specific calls here &ast;/
+ *       // make X11-specific calls here
  *     }
  *   else
  * #endif
  * #ifdef GDK_WINDOWING_QUARTZ
  *   if (GDK_IS_QUARTZ_DISPLAY (display))
  *     {
- *       /&ast; make Quartz-specific calls here &ast;/
+ *       // make Quartz-specific calls here
 *     }
  *   else
  * #endif

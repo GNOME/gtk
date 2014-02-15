@@ -116,23 +116,22 @@
  * ## Acquiring a #GtkTreeIter-struct
  *
  * |[<!-- language="C" -->
- *  /&ast; Three ways of getting the iter pointing to the
- *   location &ast;/
+ * // Three ways of getting the iter pointing to the location
  * GtkTreePath *path;
  * GtkTreeIter iter;
  * GtkTreeIter parent_iter;
  *
- * /&ast; get the iterator from a string &ast;/
+ * // get the iterator from a string
  * gtk_tree_model_get_iter_from_string (model,
  *                                      &iter,
  *                                      "3:2:5");
  *
- * /&ast; get the iterator from a path &ast;/
+ * // get the iterator from a path
  * path = gtk_tree_path_new_from_string ("3:2:5");
  * gtk_tree_model_get_iter (model, &iter, path);
  * gtk_tree_path_free (path);
  *
- * /&ast; walk the tree to find the iterator &ast;/
+ * // walk the tree to find the iterator
  * gtk_tree_model_iter_nth_child (model, &iter,
  *                                NULL, 3);
  * parent_iter = iter;
@@ -166,17 +165,16 @@
  * gboolean valid;
  * gint row_count = 0;
  *
- * /&ast; make a new list_store &ast;/
+ * // make a new list_store
  * list_store = gtk_list_store_new (N_COLUMNS,
  *                                  G_TYPE_STRING,
  *                                  G_TYPE_INT);
  *
- * /&ast; Fill the list store with data &ast;/
+ * // Fill the list store with data
  * populate_model (list_store);
  *
- * /&ast; Get the first iter in the list, check it is
- *  valid and walk through the list, reading each row.
- * &ast;/
+ * // Get the first iter in the list, check it is valid and walk
+ * // through the list, reading each row.
  *
  * valid = gtk_tree_model_get_iter_first (list_store,
  *                                        &iter);
@@ -185,15 +183,13 @@
  *    gchar *str_data;
  *    gint   int_data;
  *
- *    /&ast; Make sure you terminate calls to
- *     &ast; gtk_tree_model_get() with a “-1” value
- *     &ast;/
+ *    // Make sure you terminate calls to gtk_tree_model_get() with a “-1” value
  *    gtk_tree_model_get (list_store, &iter,
  *                        STRING_COLUMN, &str_data,
  *                        INT_COLUMN, &int_data,
  *                        -1);
  *
- *    /&ast; Do something with the data &ast;/
+ *    // Do something with the data
  *    g_print ("Row %d: (%s,%d)\n",
  *             row_count, str_data, int_data);
  *    g_free (str_data);

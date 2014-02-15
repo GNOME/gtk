@@ -259,7 +259,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    *     {
    *       GtkEntry *entry = GTK_ENTRY (editable);
    *       
-   *       /&ast; ... create a GtkEntryCompletion &ast;/
+   *       // ... create a GtkEntryCompletion
    *       
    *       gtk_entry_set_completion (entry, completion);
    *     }

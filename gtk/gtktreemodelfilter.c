@@ -3830,7 +3830,7 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  *               GtkTreeIter  *iter,
  *               gpointer      data)
  * {
- *   /&ast; Visible if row is non-empty and first column is “HI” &ast;/
+ *   // Visible if row is non-empty and first column is “HI”
  *   gchar *str;
  *   gboolean visible = FALSE;
  *

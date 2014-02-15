@@ -86,7 +86,7 @@
  *  return FALSE;
  * }
  * [...]
- *   GtkWidget &ast;drawing_area = gtk_drawing_area_new ();
+ *   GtkWidget *drawing_area = gtk_drawing_area_new ();
  *   gtk_widget_set_size_request (drawing_area, 100, 100);
  *   g_signal_connect (G_OBJECT (drawing_area), "draw",
  *                     G_CALLBACK (draw_callback), NULL);

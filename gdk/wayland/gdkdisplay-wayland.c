@@ -52,14 +52,14 @@
  * #ifdef GDK_WINDOWING_WAYLAND
  *   if (GDK_IS_WAYLAND_DISPLAY (display))
  *     {
- *       /&ast; make Wayland-specific calls here &ast;/
+ *       // make Wayland-specific calls here
  *     }
  *   else
  * #endif
  * #ifdef GDK_WINDOWING_X11
  *   if (GDK_IS_X11_DISPLAY (display))
  *     {
- *       /&ast; make X11-specific calls here &ast;/
+ *       // make X11-specific calls here
  *     }
  *   else
  * #endif

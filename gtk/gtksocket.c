@@ -75,9 +75,8 @@
  * gtk_widget_show (socket);
  * gtk_container_add (GTK_CONTAINER (parent), socket);
  *
- * /&ast; The following call is only necessary if one of
- *  * the ancestors of the socket is not yet visible.
- *  &ast;/
+ * // The following call is only necessary if one of
+ * // the ancestors of the socket is not yet visible.
  * gtk_widget_realize (socket);
  * g_print ("The ID of the sockets window is %#x\n",
  *          gtk_socket_get_id (socket));

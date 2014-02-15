@@ -72,7 +72,7 @@
  *    text = "Hi, i’m a toggle button.";
  *    toggle1 = gtk_toggle_button_new_with_label (text);
  *
- *    /&ast; Makes this toggle button invisible &ast;/
+ *    // Makes this toggle button invisible
  *    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle1),
  *                                TRUE);
  *

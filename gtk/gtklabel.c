@@ -107,7 +107,7 @@
  * the label is inside a button:
  *
  * |[<!-- language="C" -->
- *   /&ast; Pressing Alt+H will activate this button &ast;/
+ *   // Pressing Alt+H will activate this button
  *   button = gtk_button_new ();
  *   label = gtk_label_new_with_mnemonic ("_Hello");
  *   gtk_container_add (GTK_CONTAINER (button), label);
@@ -117,7 +117,7 @@
  * already inside:
  *
  * |[<!-- language="C" -->
- *   /&ast; Pressing Alt+H will activate this button &ast;/
+ *   // Pressing Alt+H will activate this button
  *   button = gtk_button_new_with_mnemonic ("_Hello");
  * ]|
  *
@@ -126,7 +126,7 @@
  * gtk_label_set_mnemonic_widget():
  *
  * |[<!-- language="C" -->
- *   /&ast; Pressing Alt+H will focus the entry &ast;/
+ *   // Pressing Alt+H will focus the entry
  *   entry = gtk_entry_new ();
  *   label = gtk_label_new_with_mnemonic ("_Hello");
  *   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);

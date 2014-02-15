@@ -67,7 +67,7 @@
  *   }
  * else
  *  {
- *    /&ast; Use the info object &ast;/
+ *    // Use the info object
  *    gtk_recent_info_unref (info);
  *  }
  * ]|

@@ -84,8 +84,8 @@
  *                                   filename,
  *                                   g_strerror (errno));
  *
- *  /&ast; Destroy the dialog when the user responds to it
- *  (e.g. clicks a button) &ast;/
+ *  // Destroy the dialog when the user responds to it
+ *  // (e.g. clicks a button)
  *
  *  g_signal_connect_swapped (dialog, "response",
  *                            G_CALLBACK (gtk_widget_destroy),
