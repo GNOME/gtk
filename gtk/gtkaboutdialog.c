@@ -667,7 +667,7 @@ update_license_button_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = about->priv;
 
-  if (priv->license_type == GTK_LICENSE_CUSTOM && priv->license != NULL)
+  if (priv->license_type == GTK_LICENSE_CUSTOM && priv->license != NULL && priv->license[0] != '\0')
     gtk_widget_show (priv->license_page);
   else
     gtk_widget_hide (priv->license_page);
