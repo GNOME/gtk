@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-13 12:15+0200\n"
-"PO-Revision-Date: 2014-02-13 12:24+0200\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
+"POT-Creation-Date: 2014-02-15 18:54+0200\n"
+"PO-Revision-Date: 2014-02-15 20:00+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -1164,10 +1164,10 @@ msgstr ""
 "לגרור פיסת צבע לכאן או ללחוץ לחיצה ימנית ולבחור ב־\"שמור צבע כאן\"."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
-#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:611
+#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:706
 #: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:803
 #: ../gtk/gtkfilechooserwidget.c:5361 ../gtk/gtkfontchooserdialog.c:155
-#: ../gtk/gtkmessagedialog.c:897 ../gtk/gtkmessagedialog.c:910
+#: ../gtk/gtkmessagedialog.c:889 ../gtk/gtkmessagedialog.c:902
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:663 ../gtk/gtkprintunixdialog.c:730
@@ -1175,7 +1175,7 @@ msgstr ""
 msgid "_Cancel"
 msgstr "_ביטול"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:612
+#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:707
 #: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:156
 #: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
@@ -1217,8 +1217,8 @@ msgstr "_תצוגה מקדימה:"
 msgid "_Apply"
 msgstr "ה_חלה"
 
-#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:889
-#: ../gtk/gtkmessagedialog.c:911 ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:881
+#: ../gtk/gtkmessagedialog.c:903 ../gtk/gtkprintbackend.c:748
 msgid "_OK"
 msgstr "_אישור"
 
@@ -1538,7 +1538,7 @@ msgstr "אומנות על ידי"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:161
+#: ../gtk/gtkaccellabel.c:160
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1548,7 +1548,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:167
+#: ../gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1558,7 +1558,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:173
+#: ../gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1568,7 +1568,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:803
+#: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1578,7 +1578,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:816
+#: ../gtk/gtkaccellabel.c:815
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1588,17 +1588,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:830
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "מטה"
 
-#: ../gtk/gtkaccellabel.c:847
+#: ../gtk/gtkaccellabel.c:846
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "רווח"
 
-#: ../gtk/gtkaccellabel.c:850
+#: ../gtk/gtkaccellabel.c:849
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "לוכסן אחורי"
@@ -1607,39 +1607,39 @@ msgstr "לוכסן אחורי"
 msgid "Other application…"
 msgstr "יישום אחר…"
 
-#: ../gtk/gtkappchooserdialog.c:197 ../gtk/gtkappchooserdialog.c:204
-#: ../gtk/gtkappchooserdialog.c:221
+#: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
+#: ../gtk/gtkappchooserdialog.c:227
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
 msgid "Select Application"
 msgstr "בחירת יישום"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:199
+#: ../gtk/gtkappchooserdialog.c:205
 #, c-format
 msgid "Opening “%s”."
 msgstr "פתיחת %s."
 
-#: ../gtk/gtkappchooserdialog.c:200
+#: ../gtk/gtkappchooserdialog.c:206
 #, c-format
 msgid "No applications found for “%s”"
 msgstr "לא נמצאו יישומים עבור „%s“"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:206
+#: ../gtk/gtkappchooserdialog.c:212
 #, c-format
 msgid "Opening “%s” files."
 msgstr "פתיחת קובצי „%s”."
 
-#: ../gtk/gtkappchooserdialog.c:208
+#: ../gtk/gtkappchooserdialog.c:214
 #, c-format
 msgid "No applications found for “%s” files"
 msgstr "לא נמצאו יישומים עבור קובצי „%s“"
 
-#: ../gtk/gtkappchooserdialog.c:301
+#: ../gtk/gtkappchooserdialog.c:307
 msgid "Forget association"
 msgstr "מחיקת השיוך"
 
-#: ../gtk/gtkappchooserdialog.c:431
+#: ../gtk/gtkappchooserdialog.c:450
 msgid "Failed to start GNOME Software"
 msgstr "נכשלה הפעלת GNOME תכנה"
 
@@ -2069,7 +2069,7 @@ msgstr "ה_תאמה אישית"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:893
+#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:885
 #: ../gtk/resources/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "_סגירה"
@@ -2446,19 +2446,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "מערכת (%s)"
 
-#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:374
+#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:370
 msgid "Information"
 msgstr "מידע"
 
-#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:379
+#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:374
 msgid "Question"
 msgstr "שאלה"
 
-#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:384
+#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:378
 msgid "Warning"
 msgstr "אזהרה"
 
-#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:389
+#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:382
 msgid "Error"
 msgstr "שגיאה"
 
@@ -2613,11 +2613,11 @@ msgstr "default:RTL"
 msgid "Menu"
 msgstr "תפריט"
 
-#: ../gtk/gtkmessagedialog.c:901
+#: ../gtk/gtkmessagedialog.c:893
 msgid "_No"
 msgstr "_לא"
 
-#: ../gtk/gtkmessagedialog.c:902
+#: ../gtk/gtkmessagedialog.c:894
 msgid "_Yes"
 msgstr "_כן"
 
@@ -4968,7 +4968,7 @@ msgid "label"
 msgstr "תווית"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
-msgid "_View All Application"
+msgid "_View All Applications"
 msgstr "ה_צגת כל היישומים"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
