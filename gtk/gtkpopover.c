@@ -2048,7 +2048,50 @@ back_to_main (GtkWidget *popover)
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "main");
 }
 
-static void
+/**
+ * gtk_popover_bind_model:
+ * @popover: a #GtkPopover
+ * @model: (allow-none): the #GMenuModel to bind to or %NULL to remove
+ *   binding
+ * @action_namespace: (allow-none): the namespace for actions in @model
+ * @with_separators: %TRUE if toplevel items in @popover should have
+ *   separators between them
+ *
+ * Establishes a binding between a #GtkPopover and a #GMenuModel.
+ *
+ * The contents of @popover are removed and then refilled with menu items
+ * according to @model.  When @model changes, @popover is updated.
+ * Calling this function twice on @popover with different @model will
+ * cause the first binding to be replaced with a binding to the new
+ * model. If @model is %NULL then any previous binding is undone and
+ * all children are removed.
+ *
+ * Individual items in @model are represented by #GtkModelButton widgets,
+ * while submenus are represented by #GtkStack widgets.
+ *
+ * @with_separators determines if toplevel items (eg: sections) have
+ * separators inserted between them.  This is typically desired for
+ * menus but doesn’t make sense for menubars.
+ *
+ * If @action_namespace is non-%NULL then the effect is as if all
+ * actions mentioned in the @model have their names prefixed with the
+ * namespace, plus a dot.  For example, if the action “quit” is
+ * mentioned and @action_namespace is “app” then the effective action
+ * name is “app.quit”.
+ *
+ * This function uses #GtkActionable to define the action name and
+ * target values on the created menu items.  If you want to use an
+ * action group other than “app” and “win”, or if you want to use a
+ * #GtkMenuShell outside of a #GtkApplicationWindow, then you will need
+ * to attach your own action group to the widget hierarchy using
+ * gtk_widget_insert_action_group().  As an example, if you created a
+ * group with a “quit” action and inserted it with the name “mygroup”
+ * then you would use the action name “mygroup.quit” in your
+ * #GMenuModel.
+ *
+ * Since: 3.12
+ */
+void
 gtk_popover_bind_model (GtkPopover  *popover,
                         GMenuModel  *model,
                         const gchar *action_namespace,
