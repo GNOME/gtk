@@ -145,6 +145,22 @@ wait_for_roundtrip(GdkWaylandDisplay *display)
 }
 
 static void
+xdg_shell_ping (void             *data,
+                struct xdg_shell *xdg_shell,
+                uint32_t          serial)
+{
+  GdkWaylandDisplay *wayland_display = data;
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
+
+  xdg_shell_pong (xdg_shell, serial);
+}
+
+static const struct xdg_shell_listener xdg_shell_listener = {
+  xdg_shell_ping,
+};
+
+static void
 gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id,
 					const char *interface, uint32_t version)
 {
@@ -167,6 +183,7 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
     display_wayland->xdg_shell =
       wl_registry_bind(display_wayland->wl_registry, id, &xdg_shell_interface, 1);
     xdg_shell_use_unstable_version(display_wayland->xdg_shell, XDG_SHELL_VERSION_CURRENT);
+    xdg_shell_add_listener(display_wayland->xdg_shell, &xdg_shell_listener, display_wayland);
   } else if (strcmp(interface, "gtk_shell") == 0) {
     display_wayland->gtk_shell =
       wl_registry_bind(display_wayland->wl_registry, id, &gtk_shell_interface, 1);

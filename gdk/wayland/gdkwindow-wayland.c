@@ -924,21 +924,6 @@ gdk_wayland_window_create_surface (GdkWindow *window)
 }
 
 static void
-xdg_surface_ping (void               *data,
-                  struct xdg_surface *xdg_surface,
-                  uint32_t            serial)
-{
-
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWaylandDisplay *wayland_display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-
-  _gdk_wayland_display_update_serial (wayland_display, serial);
-
-  xdg_surface_pong (xdg_surface, serial);
-}
-
-static void
 xdg_surface_configure (void               *data,
                        struct xdg_surface *xdg_surface,
                        int32_t             width,
@@ -1024,7 +1009,6 @@ xdg_surface_delete (void *data,
 }
 
 static const struct xdg_surface_listener xdg_surface_listener = {
-  xdg_surface_ping,
   xdg_surface_configure,
   xdg_surface_request_set_fullscreen,
   xdg_surface_request_unset_fullscreen,
@@ -1050,20 +1034,6 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
 }
 
 static void
-xdg_popup_ping (void             *data,
-                struct xdg_popup *xdg_popup,
-                uint32_t          serial)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWaylandDisplay *wayland_display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-
-  _gdk_wayland_display_update_serial (wayland_display, serial);
-
-  xdg_popup_pong (xdg_popup, serial);
-}
-
-static void
 xdg_popup_done (void             *data,
                 struct xdg_popup *xdg_popup,
                 uint32_t          serial)
@@ -1078,7 +1048,6 @@ xdg_popup_done (void             *data,
 }
 
 static const struct xdg_popup_listener xdg_popup_listener = {
-  xdg_popup_ping,
   xdg_popup_done,
 };
 

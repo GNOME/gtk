@@ -43,7 +43,7 @@
 	Use this enum to check the protocol version, and it will be updated
 	automatically.
       </description>
-      <entry name="current" value="1" summary="Always the latest version"/>
+      <entry name="current" value="2" summary="Always the latest version"/>
     </enum>
 
 
@@ -83,6 +83,28 @@
       <arg name="x" type="int"/>
       <arg name="y" type="int"/>
       <arg name="flags" type="uint"/>
+    </request>
+
+    <event name="ping">
+      <description summary="check if the client is alive">
+        The ping event asks the client if it's still alive. Pass the
+        serial specified in the event back to the compositor by sending
+        a "pong" request back with the specified serial.
+
+        Compositors can use this to determine if the client is still
+        alive. It's unspecified what will happen if the client doesn't
+        respond to the ping request, or in what timeframe. Clients should
+        try to respond in a reasonable amount of time.
+      </description>
+      <arg name="serial" type="uint" summary="pass this to the callback"/>
+    </event>
+
+    <request name="pong">
+      <description summary="respond to a ping event">
+	A client must respond to a ping event with a pong request or
+	the client may be deemed unresponsive.
+      </description>
+      <arg name="serial" type="uint" summary="serial of the ping event"/>
     </request>
   </interface>
 
@@ -175,22 +197,6 @@
       </description>
       <arg name="app_id" type="string"/>
     </request>
-
-    <request name="pong">
-      <description summary="respond to a ping event">
-	A client must respond to a ping event with a pong request or
-	the client may be deemed unresponsive.
-      </description>
-      <arg name="serial" type="uint" summary="serial of the ping event"/>
-    </request>
-
-    <event name="ping">
-      <description summary="ping client">
-	Ping a client to check if it is receiving events and sending
-	requests. A client is expected to reply with a pong request.
-      </description>
-      <arg name="serial" type="uint"/>
-    </event>
 
     <request name="move">
       <description summary="start an interactive move">
@@ -446,22 +452,6 @@
 	its role as a xdg_surface. The wl_surface is unmapped.
       </description>
     </request>
-
-    <request name="pong">
-      <description summary="respond to a ping event">
-	A client must respond to a ping event with a pong request or
-	the client may be deemed unresponsive.
-      </description>
-      <arg name="serial" type="uint" summary="serial of the ping event"/>
-    </request>
-
-    <event name="ping">
-      <description summary="ping client">
-	Ping a client to check if it is receiving events and sending
-	requests. A client is expected to reply with a pong request.
-      </description>
-      <arg name="serial" type="uint"/>
-    </event>
 
     <event name="popup_done">
       <description summary="popup interaction is done">
