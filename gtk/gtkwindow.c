@@ -7687,6 +7687,8 @@ gtk_window_motion_notify_event (GtkWidget      *widget,
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkWidget *src;
   gboolean window_drag;
+  gint x, y;
+  GtkWindowRegion region;
 
   if (!priv->drag_possible)
     return FALSE;
@@ -7697,6 +7699,17 @@ gtk_window_motion_notify_event (GtkWidget      *widget,
       gtk_widget_style_get (GTK_WIDGET (src),
                             "window-dragging", &window_drag,
                             NULL);
+      gtk_widget_translate_coordinates (src, widget, event->x, event->y, &x, &y);
+    }
+  else
+    {
+      x = event->x;
+      y = event->y;
+    }
+
+  region = get_active_region_type (GTK_WINDOW (widget), (GdkEventAny*)event, x, y);
+  if (region == GTK_WINDOW_REGION_CONTENT)
+    {
       if (!window_drag)
         {
           priv->drag_possible = FALSE;
