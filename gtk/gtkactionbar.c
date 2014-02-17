@@ -24,7 +24,7 @@
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"
 #include "gtktypebuiltins.h"
-#include "gtkcenterbox.h"
+#include "gtkbox.h"
 #include "gtkrevealer.h"
 
 #include <string.h>
@@ -253,7 +253,7 @@ gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
   if (type && strcmp (type, "center") == 0)
-    gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->center_box), GTK_WIDGET (child));
+    gtk_box_set_center_widget (GTK_BOX (priv->center_box), GTK_WIDGET (child));
   else if (!type)
     gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
@@ -285,7 +285,7 @@ gtk_action_bar_pack_start (GtkActionBar *action_bar,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
-  gtk_center_box_pack_start (GTK_CENTER_BOX (priv->center_box), child);
+  gtk_box_pack_start (GTK_BOX (priv->center_box), child, FALSE, TRUE, 0);
 }
 
 /**
@@ -304,7 +304,7 @@ gtk_action_bar_pack_end (GtkActionBar *action_bar,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
-  gtk_center_box_pack_end (GTK_CENTER_BOX (priv->center_box), child);
+  gtk_box_pack_end (GTK_BOX (priv->center_box), child, FALSE, TRUE, 0);
 }
 
 /**
@@ -322,8 +322,7 @@ gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
-  gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->center_box),
-                                    center_widget);
+  gtk_box_set_center_widget (GTK_BOX (priv->center_box), center_widget);
 }
 
 /**
@@ -343,7 +342,7 @@ gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
 
   g_return_val_if_fail (GTK_IS_ACTION_BAR (action_bar), NULL);
 
-  return gtk_center_box_get_center_widget (GTK_CENTER_BOX (priv->center_box));
+  return gtk_box_get_center_widget (GTK_BOX (priv->center_box));
 }
 
 /**

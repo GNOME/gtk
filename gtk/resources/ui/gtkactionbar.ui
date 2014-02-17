@@ -8,8 +8,9 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkCenterBox" id="center_box">
+          <object class="GtkBox" id="center_box">
             <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
             <property name="can_focus">False</property>
             <property name="border_width">0</property>
             <property name="spacing">6</property>
