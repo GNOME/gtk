@@ -129,6 +129,12 @@ void        gtk_box_set_child_packing   (GtkBox         *box,
                                          guint           padding,
                                          GtkPackType     pack_type);
 
+GDK_AVAILABLE_IN_3_12
+void        gtk_box_set_center_widget   (GtkBox         *box,
+                                         GtkWidget      *widget);
+GDK_AVAILABLE_IN_3_12
+GtkWidget  *gtk_box_get_center_widget   (GtkBox         *box);
+
 G_END_DECLS
 
 #endif /* __GTK_BOX_H__ */
