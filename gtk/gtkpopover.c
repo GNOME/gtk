@@ -2054,8 +2054,6 @@ back_to_main (GtkWidget *popover)
  * @model: (allow-none): the #GMenuModel to bind to or %NULL to remove
  *   binding
  * @action_namespace: (allow-none): the namespace for actions in @model
- * @with_separators: %TRUE if toplevel items in @popover should have
- *   separators between them
  *
  * Establishes a binding between a #GtkPopover and a #GMenuModel.
  *
@@ -2065,13 +2063,6 @@ back_to_main (GtkWidget *popover)
  * cause the first binding to be replaced with a binding to the new
  * model. If @model is %NULL then any previous binding is undone and
  * all children are removed.
- *
- * Individual items in @model are represented by #GtkModelButton widgets,
- * while submenus are represented by #GtkStack widgets.
- *
- * @with_separators determines if toplevel items (eg: sections) have
- * separators inserted between them.  This is typically desired for
- * menus but doesn’t make sense for menubars.
  *
  * If @action_namespace is non-%NULL then the effect is as if all
  * actions mentioned in the @model have their names prefixed with the
@@ -2094,8 +2085,7 @@ back_to_main (GtkWidget *popover)
 void
 gtk_popover_bind_model (GtkPopover  *popover,
                         GMenuModel  *model,
-                        const gchar *action_namespace,
-                        gboolean     with_separators)
+                        const gchar *action_namespace)
 {
   GtkActionMuxer *muxer;
   GtkWidget *child;
@@ -2138,7 +2128,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
 
       priv->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
                                             model,
-                                            with_separators,
+                                            TRUE,
                                             action_namespace,
                                             gtk_popover_tracker_insert_func,
                                             gtk_popover_tracker_remove_func,
@@ -2152,7 +2142,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
  * @model: a #GMenuModel
  *
  * Creates a #GtkPopover and populates it according to
- * @model. The popover is pointed to the @relative_to wideget.
+ * @model. The popover is pointed to the @relative_to widget.
  *
  * The created buttons are connected to actions found in the
  * #GtkApplicationWindow to which the popover belongs - typically
@@ -2175,7 +2165,7 @@ gtk_popover_new_from_model (GtkWidget  *relative_to,
   g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
 
   popover = gtk_popover_new (relative_to);
-  gtk_popover_bind_model (GTK_POPOVER (popover), model, NULL, TRUE);
+  gtk_popover_bind_model (GTK_POPOVER (popover), model, NULL);
 
   return popover;
 }

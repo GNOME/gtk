@@ -95,8 +95,7 @@ gboolean        gtk_popover_get_modal       (GtkPopover            *popover);
 GDK_AVAILABLE_IN_3_12
 void            gtk_popover_bind_model      (GtkPopover            *popover,
                                              GMenuModel            *model,
-                                             const gchar           *action_namespace,
-                                             gboolean              with_separators);
+                                             const gchar           *action_namespace);
 
 G_END_DECLS
 
