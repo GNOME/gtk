@@ -1137,7 +1137,11 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
     }
 
   /* Allocate the center widget */
-  center_pos = (box_size - center_size) / 2;
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    center_pos = allocation->x + (box_size - center_size) / 2;
+  else
+    center_pos = allocation->y + (box_size - center_size) / 2;
+
   if (center_pos < side[GTK_PACK_START])
     center_pos = side[GTK_PACK_START];
   else if (center_pos + center_size > side[GTK_PACK_END])
