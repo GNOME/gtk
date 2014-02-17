@@ -207,10 +207,12 @@ static void  gtk_box_get_preferred_height_and_baseline_for_width (GtkWidget     
 								  gint                *minimum_baseline,
 								  gint                *natural_baseline);
 
+static void               gtk_box_buildable_init                 (GtkBuildableIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkBox)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_box_buildable_init))
 
 static void
 gtk_box_class_init (GtkBoxClass *class)
@@ -1390,6 +1392,26 @@ gtk_box_get_path_for_child (GtkContainer *container,
     gtk_widget_path_append_for_widget (path, child);
 
   return path;
+}
+
+static void
+gtk_box_buildable_add_child (GtkBuildable *buildable,
+                             GtkBuilder   *builder,
+                             GObject      *child,
+                             const gchar  *type)
+{
+  if (type && strcmp (type, "center") == 0)
+    gtk_box_set_center_widget (GTK_BOX (buildable), GTK_WIDGET (child));
+  else if (!type)
+    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  else
+    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_BOX (buildable), type);
+}
+
+static void
+gtk_box_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add_child = gtk_box_buildable_add_child;
 }
 
 static void
