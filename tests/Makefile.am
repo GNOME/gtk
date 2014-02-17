@@ -39,6 +39,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testassistant			\
 	testbaseline			\
 	testbbox			\
+	testbox                         \
 	testboxcss                      \
 	testbuttons			\
 	testcairo			\
