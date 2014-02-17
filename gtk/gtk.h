@@ -70,7 +70,6 @@
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtkcellview.h>
-#include <gtk/gtkcenterbox.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkclipboard.h>
