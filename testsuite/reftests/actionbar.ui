@@ -8,7 +8,6 @@
       <object class="GtkActionBar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">0</property>
         <child>
           <object class="GtkButton">
             <property name="visible">True</property>
