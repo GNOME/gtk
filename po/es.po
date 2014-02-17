@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-13 09:53+0000\n"
-"PO-Revision-Date: 2014-02-13 16:54+0100\n"
+"POT-Creation-Date: 2014-02-17 11:56+0000\n"
+"PO-Revision-Date: 2014-02-17 16:31+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -615,12 +615,12 @@ msgid "_Close"
 msgstr "_Cerrar"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:397
-#: ../gtk/gtkwindow.c:8631
+#: ../gtk/gtkwindow.c:8644
 msgid "Minimize"
 msgstr "Minimizar"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:420
-#: ../gtk/gtkwindow.c:8639
+#: ../gtk/gtkwindow.c:8652
 msgid "Maximize"
 msgstr "Maximizar"
 
@@ -1173,10 +1173,10 @@ msgstr ""
 "botón derecho sobre éste y seleccione «Guardar color aquí»."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
-#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:611
+#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:706
 #: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:803
 #: ../gtk/gtkfilechooserwidget.c:5361 ../gtk/gtkfontchooserdialog.c:155
-#: ../gtk/gtkmessagedialog.c:897 ../gtk/gtkmessagedialog.c:910
+#: ../gtk/gtkmessagedialog.c:889 ../gtk/gtkmessagedialog.c:902
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:663 ../gtk/gtkprintunixdialog.c:730
@@ -1184,7 +1184,7 @@ msgstr ""
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:612
+#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:707
 #: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:156
 #: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
@@ -1228,8 +1228,8 @@ msgstr "_Vista previa:"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:889
-#: ../gtk/gtkmessagedialog.c:911 ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:881
+#: ../gtk/gtkmessagedialog.c:903 ../gtk/gtkprintbackend.c:748
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -1497,7 +1497,7 @@ msgstr "Arte por"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:161
+#: ../gtk/gtkaccellabel.c:160
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Mayús"
@@ -1507,7 +1507,7 @@ msgstr "Mayús"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:167
+#: ../gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1517,7 +1517,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:173
+#: ../gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1527,7 +1527,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:803
+#: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1537,7 +1537,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:816
+#: ../gtk/gtkaccellabel.c:815
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1547,17 +1547,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:830
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:847
+#: ../gtk/gtkaccellabel.c:846
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espacio"
 
-#: ../gtk/gtkaccellabel.c:850
+#: ../gtk/gtkaccellabel.c:849
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Contrabarra"
@@ -1566,43 +1566,39 @@ msgstr "Contrabarra"
 msgid "Other application…"
 msgstr "Otra aplicación…"
 
-#: ../gtk/gtkappchooserdialog.c:197 ../gtk/gtkappchooserdialog.c:204
-#: ../gtk/gtkappchooserdialog.c:221
+#: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
+#: ../gtk/gtkappchooserdialog.c:227
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
 msgid "Select Application"
 msgstr "Seleccionar aplicación"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:199
+#: ../gtk/gtkappchooserdialog.c:205
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s”."
 msgstr "Abriendo «%s»."
 
-#: ../gtk/gtkappchooserdialog.c:200
+#: ../gtk/gtkappchooserdialog.c:206
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications found for “%s”"
 msgstr "No existen aplicaciones disponibles para abrir «%s»"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:206
+#: ../gtk/gtkappchooserdialog.c:212
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s” files."
 msgstr "Abriendo archivos «%s»."
 
-#: ../gtk/gtkappchooserdialog.c:208
+#: ../gtk/gtkappchooserdialog.c:214
 #, c-format
-#| msgid "Select an application for “%s” files"
 msgid "No applications found for “%s” files"
 msgstr "No hay aplicaciones para archivos «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:301
+#: ../gtk/gtkappchooserdialog.c:307
 msgid "Forget association"
 msgstr "Olvidar asociación"
 
-#: ../gtk/gtkappchooserdialog.c:431
+#: ../gtk/gtkappchooserdialog.c:450
 msgid "Failed to start GNOME Software"
 msgstr "Falló al iniciar GNOME Software"
 
@@ -1612,7 +1608,6 @@ msgstr "Aplicación predeterminada"
 
 #: ../gtk/gtkappchooserwidget.c:672
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications found for “%s”."
 msgstr "No hay aplicaciones para «%s»"
 
@@ -2035,7 +2030,7 @@ msgstr "_Personalizar"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:893
+#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:885
 #: ../gtk/resources/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "_Cerrar"
@@ -2382,7 +2377,7 @@ msgstr "Escoja una tipografía"
 msgid "Application menu"
 msgstr "Menú de la aplicación"
 
-#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8754
+#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8767
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2416,19 +2411,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistema (%s)"
 
-#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:374
+#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:370
 msgid "Information"
 msgstr "Información"
 
-#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:379
+#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:374
 msgid "Question"
 msgstr "Pregunta"
 
-#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:384
+#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:378
 msgid "Warning"
 msgstr "Advertencia"
 
-#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:389
+#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:382
 msgid "Error"
 msgstr "Error"
 
@@ -2583,11 +2578,11 @@ msgstr "default:LTR"
 msgid "Menu"
 msgstr "Menú"
 
-#: ../gtk/gtkmessagedialog.c:901
+#: ../gtk/gtkmessagedialog.c:893
 msgid "_No"
 msgstr "_No"
 
-#: ../gtk/gtkmessagedialog.c:902
+#: ../gtk/gtkmessagedialog.c:894
 msgid "_Yes"
 msgstr "_Sí"
 
@@ -3456,43 +3451,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8639
+#: ../gtk/gtkwindow.c:8652
 msgid "Unmaximize"
 msgstr "Desmaximizar"
 
-#: ../gtk/gtkwindow.c:8648
+#: ../gtk/gtkwindow.c:8661
 msgid "Move"
 msgstr "Mover"
 
-#: ../gtk/gtkwindow.c:8654
+#: ../gtk/gtkwindow.c:8667
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: ../gtk/gtkwindow.c:8666
+#: ../gtk/gtkwindow.c:8679
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: ../gtk/gtkwindow.c:8678
+#: ../gtk/gtkwindow.c:8691
 msgid "Always on Visible Workspace"
 msgstr "Siempre en el área de trabajo visible"
 
-#: ../gtk/gtkwindow.c:8686
+#: ../gtk/gtkwindow.c:8699
 msgid "Only on This Workspace"
 msgstr "Sólo en este área de trabajo"
 
-#: ../gtk/gtkwindow.c:8703
+#: ../gtk/gtkwindow.c:8716
 msgid "Move to Workspace Up"
 msgstr "Subir a un área de trabajo"
 
-#: ../gtk/gtkwindow.c:8712
+#: ../gtk/gtkwindow.c:8725
 msgid "Move to Workspace Down"
 msgstr "Bajar a un área de trabajo"
 
-#: ../gtk/gtkwindow.c:8726
+#: ../gtk/gtkwindow.c:8739
 msgid "Move to Another Workspace"
 msgstr "Mover a otro área de trabajo"
 
-#: ../gtk/gtkwindow.c:8734
+#: ../gtk/gtkwindow.c:8747
 #, c-format
 msgid "Workspace %d"
 msgstr "Área de trabajo %d"
@@ -4945,17 +4940,16 @@ msgid "label"
 msgstr "etiqueta"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
-#| msgid "Select Application"
-msgid "_View All Application"
+#| msgid "_View All Application"
+msgid "_View All Applications"
 msgstr "_Ver todas las aplicaciones"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
-#| msgid "_Find applications online"
-msgid "_Find Applications in Software "
-msgstr "_Buscar aplicaciones en Software"
+#| msgid "_View All Application"
+msgid "_Find New Applications"
+msgstr "_Buscar aplicaciones nuevas"
 
 #: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
-#| msgid "_Find applications online"
 msgid "No applications found."
 msgstr "No se han encontrado aplicaciones."
 
@@ -5384,6 +5378,10 @@ msgstr "Bajar volumen"
 #: ../gtk/resources/ui/gtkvolumebutton.ui.h:6
 msgid "Decreases the volume"
 msgstr "Disminuye el volumen"
+
+#~| msgid "_Find applications online"
+#~ msgid "_Find Applications in Software "
+#~ msgstr "_Buscar aplicaciones en Software"
 
 #~ msgid "Select an application to open “%s”"
 #~ msgstr "Seleccionar una aplicación para abrir «%s»"
