@@ -1456,9 +1456,9 @@ gtk_box_pack (GtkBox      *box,
   GtkBoxPrivate *private = box->priv;
   GtkBoxChild *child_info;
 
-  g_return_if_fail (GTK_IS_BOX (box));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
+  g_return_val_if_fail (GTK_IS_BOX (box), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
+  g_return_val_if_fail (gtk_widget_get_parent (child) == NULL, NULL);
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
