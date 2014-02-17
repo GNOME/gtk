@@ -80,7 +80,7 @@
     <signal name="clicked" handler="show_more_button_clicked_cb" swapped="no"/>
   </object>
   <object class="GtkButton" id="software_button">
-    <property name="label" translatable="yes">_Find Applications in Software </property>
+    <property name="label" translatable="yes">_Find New Applications</property>
     <property name="visible">True</property>
     <property name="use_underline">True</property>
     <property name="can_focus">True</property>
