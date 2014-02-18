@@ -2,7 +2,7 @@ window1
   "dialog"
   index: 0
   name: Select a Color
-  state: enabled resizable sensitive showing visible
+  state: enabled sensitive showing visible
   toolkit: gtk
   <AtkComponent>
   layer: window
