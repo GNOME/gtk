@@ -130,6 +130,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
   widget_class->unmap = gtk_separator_tool_item_unmap;
   widget_class->button_press_event = gtk_separator_tool_item_button_event;
   widget_class->button_release_event = gtk_separator_tool_item_button_event;
+  widget_class->motion_notify_event = gtk_separator_tool_item_button_event;
 
   toolitem_class->create_menu_proxy = gtk_separator_tool_item_create_menu_proxy;
   
@@ -290,7 +291,8 @@ gtk_separator_tool_item_realize (GtkWidget *widget)
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = gtk_widget_get_events (widget) |
                           GDK_BUTTON_PRESS_MASK |
-                          GDK_BUTTON_RELEASE_MASK;
+                          GDK_BUTTON_RELEASE_MASK |
+                          GDK_POINTER_MOTION_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   window = gtk_widget_get_parent_window (widget);
