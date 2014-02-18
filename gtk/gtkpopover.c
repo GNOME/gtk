@@ -1643,7 +1643,7 @@ gtk_popover_set_relative_to (GtkPopover *popover,
  * gtk_popover_get_relative_to:
  * @popover: a #GtkPopover
  *
- * Returns the wigdet @popover is currently attached to
+ * Returns the widget @popover is currently attached to
  *
  * Returns: (transfer none): a #GtkWidget
  *
