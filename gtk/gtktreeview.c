@@ -2092,6 +2092,21 @@ gtk_tree_view_destroy (GtkWidget *widget)
 	}
     }
 
+  if (tree_view->priv->search_custom_entry_set)
+    {
+      g_signal_handlers_disconnect_by_func (tree_view->priv->search_entry,
+                                            G_CALLBACK (gtk_tree_view_search_init),
+                                            tree_view);
+      g_signal_handlers_disconnect_by_func (tree_view->priv->search_entry,
+                                            G_CALLBACK (gtk_tree_view_search_key_press_event),
+                                            tree_view);
+
+      g_object_unref (tree_view->priv->search_entry);
+
+      tree_view->priv->search_entry = NULL;
+      tree_view->priv->search_custom_entry_set = FALSE;
+    }
+
   if (tree_view->priv->search_destroy && tree_view->priv->search_user_data)
     {
       tree_view->priv->search_destroy (tree_view->priv->search_user_data);
@@ -14856,6 +14871,7 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
       gtk_widget_destroy (tree_view->priv->search_window);
 
       tree_view->priv->search_window = NULL;
+      tree_view->priv->search_entry_changed_id = 0;
     }
 
   if (entry)
