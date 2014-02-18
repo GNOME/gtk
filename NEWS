@@ -1,3 +1,58 @@
+Overview of Changes in GTK+ 3.11.5 to 3.11.5
+============================================
+
+* GtkActionBar is a new widget that is meant to be used
+  for actions at the bottom of a window.
+
+* GtkPopover:
+ - A ::closed signal has been added
+ - Style propagation to popovers has been fixed
+ - Popovers can now be populated from a menu model
+ - GtkMenuButton can use popovers instead of menus
+
+* GtkAppChooserDialog has been redesigned
+
+* GtkBox can now place a widget centered, regardless of
+  the sizes of children on either side, similar to GtkHeaderBar.
+
+* The API documentation has been converted to markdown, and
+  many cleanups and improvements have been made at the same time.
+
+* Bug fixes:
+ 706515 HeaderBars are sometimes too tall
+ 707999 HeaderBar height increases when the subtitle label is set...
+ 721309 Links inside dimmed labels get different colors depending...
+ 723014 wip: Make popover from menu model
+ 723394 const parameter to GtkPopover gtk_popover_set_pointing_to
+ 723627 The padding aroung the timelabel is wrong
+ 723637 GtkTreeViewColumn: fix critical warning
+ 723672 Dialogs with header bars - buttons should have an equal w...
+ 723716 GtkFlowBox::child-activated match slot signature
+ 723771 gtkwindow: remove delete-event idle function on finalize
+ 723863 Implementation for component->get_size not needed
+ 723929 Add a generic center box
+ 724008 void function should not return void expression
+ 724094 Add GtkEntry:max-width-chars
+ 724218 App chooser dialog looks rough
+ 724411 GtkAboutDialog: License visible even if not set and prede...
+ 724503 Make gtk_popover_bind_model() public
+ 724539 Can't drag primary toolbars with a GtkSeparatorToolItem i...
+ 724541 Labels with links can't be activated in a GtkListBox 
+
+* Translation updates:
+ French
+ Galician
+ Hebrew
+ Indonesian
+ Norwegian bokmål
+ Russian
+ Scottish Gaelic
+ Slovenian
+ Spanish
+ Tajik
+ Thai
+
+
 Overview of Changes in GTK+ 3.11.4 to 3.11.5
 ============================================
 
