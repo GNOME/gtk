@@ -1602,7 +1602,7 @@ gtk_popover_update_preferred_position (GtkPopover      *popover,
 
 /**
  * gtk_popover_new:
- * @relative_to: #GtkWidget the popover is related to
+ * @relative_to (allow-none): #GtkWidget the popover is related to
  *
  * Creates a new popover to point to @relative_to
  *
@@ -1613,6 +1613,8 @@ gtk_popover_update_preferred_position (GtkPopover      *popover,
 GtkWidget *
 gtk_popover_new (GtkWidget *relative_to)
 {
+  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
+
   return g_object_new (GTK_TYPE_POPOVER,
                        "relative-to", relative_to,
                        NULL);
@@ -1621,10 +1623,15 @@ gtk_popover_new (GtkWidget *relative_to)
 /**
  * gtk_popover_set_relative_to:
  * @popover: a #GtkPopover
- * @relative_to: a #GtkWidget
+ * @relative_to (allow-none): a #GtkWidget
  *
  * Sets a new widget to be attached to @popover. If @popover is
  * visible, the position will be updated.
+ *
+ * Note: the ownership of popovers is always given to their @relative_to
+ * widget, so if @relative_to is set to %NULL on an attached @popover, it
+ * will be detached from its previous widget, and consequently destroyed
+ * unless extra references are kept.
  *
  * Since: 3.12
  **/
@@ -1633,10 +1640,12 @@ gtk_popover_set_relative_to (GtkPopover *popover,
                              GtkWidget  *relative_to)
 {
   g_return_if_fail (GTK_IS_POPOVER (popover));
-  g_return_if_fail (GTK_IS_WIDGET (relative_to));
+  g_return_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to));
 
   gtk_popover_update_relative_to (popover, relative_to);
-  gtk_popover_update_position (popover);
+
+  if (relative_to)
+    gtk_popover_update_position (popover);
 }
 
 /**
@@ -2138,7 +2147,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
 
 /**
  * gtk_popover_new_from_model:
- * @relative_to: #GtkWidget the popover is related to
+ * @relative_to (allow-none): #GtkWidget the popover is related to
  * @model: a #GMenuModel
  *
  * Creates a #GtkPopover and populates it according to
@@ -2162,6 +2171,7 @@ gtk_popover_new_from_model (GtkWidget  *relative_to,
 {
   GtkWidget *popover;
 
+  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
   g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
 
   popover = gtk_popover_new (relative_to);
