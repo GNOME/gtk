@@ -310,10 +310,6 @@ on_child_changed (GtkWidget        *widget,
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       priv->in_child_changed = FALSE;
     }
-
-  g_hash_table_foreach (priv->buttons,
-                        (GHFunc)update_needs_attention,
-                        priv->stack);
 }
 
 static void
