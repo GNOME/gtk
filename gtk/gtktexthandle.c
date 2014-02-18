@@ -371,12 +371,16 @@ _gtk_text_handle_set_scrollable (GtkTextHandle *handle,
           g_object_unref (priv->hadj);
           priv->hadj = NULL;
         }
+ 
+      g_object_remove_weak_pointer (G_OBJECT (priv->parent_scrollable), (gpointer *) &priv->parent_scrollable);
     }
 
   priv->parent_scrollable = scrollable;
 
   if (scrollable)
     {
+      g_object_add_weak_pointer (G_OBJECT (priv->parent_scrollable), (gpointer *) &priv->parent_scrollable);
+
       priv->vadj = gtk_scrollable_get_vadjustment (scrollable);
       priv->hadj = gtk_scrollable_get_hadjustment (scrollable);
 
