@@ -36,6 +36,7 @@ TEST_PROGS += 			\
 	defaultvalue		\
 	entry			\
 	expander		\
+	firefox-stylecontext	\
 	floating		\
 	grid			\
 	gtkmenu			\
