@@ -4801,7 +4801,10 @@ gtk_label_button_release (GtkWidget      *widget,
   /* The goal here is to return TRUE iff we ate the
    * button press to start selecting.
    */
-  return TRUE;
+  if (info->selectable)
+    return TRUE;
+
+  return FALSE;
 }
 
 static void
