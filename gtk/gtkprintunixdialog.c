@@ -121,7 +121,7 @@
 static GObject *gtk_print_unix_dialog_constructor  (GType               type,
                                                     guint               n_params,
                                                     GObjectConstructParam *params);
-static void     gtk_print_unix_dialog_destroy      (GtkPrintUnixDialog *dialog);
+static void     gtk_print_unix_dialog_destroy      (GtkWidget          *widget);
 static void     gtk_print_unix_dialog_finalize     (GObject            *object);
 static void     gtk_print_unix_dialog_set_property (GObject            *object,
                                                     guint               prop_id,
@@ -400,6 +400,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   object_class->get_property = gtk_print_unix_dialog_get_property;
 
   widget_class->style_updated = gtk_print_unix_dialog_style_updated;
+  widget_class->destroy = gtk_print_unix_dialog_destroy;
 
   g_object_class_install_property (object_class,
                                    PROP_PAGE_SETUP,
@@ -538,7 +539,6 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, number_up_layout);
 
   /* Callbacks handled in the UI */
-  gtk_widget_class_bind_template_callback (widget_class, gtk_print_unix_dialog_destroy);
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
   gtk_widget_class_bind_template_callback (widget_class, error_dialogs);
   gtk_widget_class_bind_template_callback (widget_class, emit_ok_response);
@@ -812,10 +812,14 @@ gtk_print_unix_dialog_constructor (GType                  type,
 }
 
 static void
-gtk_print_unix_dialog_destroy (GtkPrintUnixDialog *dialog)
+gtk_print_unix_dialog_destroy (GtkWidget *widget)
 {
+  GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (widget);
+
   /* Make sure we don't destroy custom widgets owned by the backends */
   clear_per_printer_ui (dialog);
+
+  GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->destroy (widget);
 }
 
 static void
@@ -1948,6 +1952,9 @@ static void
 clear_per_printer_ui (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
+
+  if (priv->finishing_table == NULL)
+    return;
 
   gtk_container_foreach (GTK_CONTAINER (priv->finishing_table),
                          (GtkCallback)gtk_widget_destroy, NULL);

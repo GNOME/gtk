@@ -50,7 +50,6 @@
   <template class="GtkPrintUnixDialog" parent="GtkDialog">
     <property name="can_focus">False</property>
     <property name="type_hint">normal</property>
-    <signal name="destroy" handler="gtk_print_unix_dialog_destroy" swapped="no"/>
     <signal name="notify::page-setup" handler="redraw_page_layout_preview" swapped="no"/>
     <signal name="response" handler="error_dialogs" swapped="no"/>
     <child internal-child="vbox">
