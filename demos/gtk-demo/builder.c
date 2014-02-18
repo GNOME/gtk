@@ -37,6 +37,7 @@ do_builder (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GError *err = NULL;
+  GtkWidget *toolbar;
 
   if (!window)
     {
@@ -53,6 +54,9 @@ do_builder (GtkWidget *do_widget)
                              gtk_widget_get_screen (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
+      toolbar = GTK_WIDGET (gtk_builder_get_object (builder, "toolbar1"));
+      gtk_style_context_add_class (gtk_widget_get_style_context (toolbar),
+                                   "primary-toolbar");
     }
 
   if (!gtk_widget_get_visible (window))
