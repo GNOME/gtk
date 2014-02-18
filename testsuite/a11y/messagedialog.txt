@@ -25,23 +25,10 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      image
-        "icon"
-        parent: box
-        index: 0
-        name: Information
-        state: enabled sensitive
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: 48 x 48
-        image description: (null)
       message_area
         "filler"
         parent: box
-        index: 1
+        index: 0
         state: enabled sensitive showing vertical visible
         toolkit: gtk
         <AtkComponent>
