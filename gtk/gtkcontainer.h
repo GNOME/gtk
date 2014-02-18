@@ -243,7 +243,7 @@ void gtk_container_child_notify (GtkContainer *container,
  * properties in set_child_property() and get_child_property() implementations.
  */
 #define GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID(object, property_id, pspec) \
-    G_OBJECT_WARN_INVALID_PSPEC ((object), "child property id", (property_id), (pspec))
+    G_OBJECT_WARN_INVALID_PSPEC ((object), "child property", (property_id), (pspec))
 
 
 GDK_AVAILABLE_IN_ALL
