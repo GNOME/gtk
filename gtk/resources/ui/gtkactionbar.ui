@@ -8,15 +8,21 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkBox" id="center_box">
+          <object class="GtkFrame" id="frame">
             <property name="visible">True</property>
-            <property name="orientation">horizontal</property>
             <property name="can_focus">False</property>
-            <property name="border_width">0</property>
-            <property name="spacing">6</property>
             <style>
               <class name="action-bar"/>
             </style>
+            <child>
+              <object class="GtkBox" id="center_box">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="can_focus">False</property>
+                <property name="border_width">0</property>
+                <property name="spacing">6</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
