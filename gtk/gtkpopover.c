@@ -1662,9 +1662,9 @@ gtk_popover_get_relative_to (GtkPopover *popover)
  * @popover: a #GtkPopover
  * @rect: rectangle to point to
  *
- * Sets the rectangle that @popover will point to, in the coordinate
- * space of the widget @popover is attached to, see
- * gtk_popover_set_relative_to()
+ * Sets the rectangle that @popover will point to, in the
+ * coordinate space of the widget @popover is attached to,
+ * see gtk_popover_set_relative_to().
  *
  * Since: 3.12
  **/
