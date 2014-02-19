@@ -560,6 +560,7 @@ GTK_TYPE_LIST_BOX_ROW
 
 <SUBSECTION Private>
 gtk_list_box_get_type
+gtk_list_box_row_get_type
 </SECTION>
 
 <SECTION>
@@ -2600,6 +2601,8 @@ gtk_places_sidebar_list_shortcuts
 gtk_places_sidebar_get_nth_bookmark
 gtk_places_sidebar_get_show_connect_to_server
 gtk_places_sidebar_set_show_connect_to_server
+gtk_places_sidebar_get_local_only
+gtk_places_sidebar_set_local_only
 <SUBSECTION Standard>
 GTK_PLACES_SIDEBAR
 GTK_IS_PLACES_SIDEBAR
@@ -7773,6 +7776,7 @@ GtkStack
 gtk_stack_new
 gtk_stack_add_named
 gtk_stack_add_titled
+gtk_stack_get_child_by_name
 gtk_stack_set_visible_child
 gtk_stack_get_visible_child
 gtk_stack_set_visible_child_name
@@ -7868,7 +7872,7 @@ gtk_flow_box_child_changed
 GtkPopover
 gtk_popover_new
 gtk_popover_new_from_model
-gtk_popover_bind_model_
+gtk_popover_bind_model
 gtk_popover_set_relative_to
 gtk_popover_get_relative_to
 gtk_popover_set_pointing_to
