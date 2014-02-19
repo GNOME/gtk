@@ -122,6 +122,20 @@ gtk_action_bar_remove (GtkContainer *container,
     gtk_container_remove (GTK_CONTAINER (priv->center_box), child);
 }
 
+static void
+gtk_action_bar_forall (GtkContainer *container,
+                       gboolean      include_internals,
+                       GtkCallback   callback,
+                       gpointer      callback_data)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (container));
+
+  if (include_internals)
+    (* callback) (priv->revealer, callback_data);
+  else if (priv->center_box)
+    gtk_container_forall (GTK_CONTAINER (priv->center_box), callback, callback_data);
+}
+
 static GType
 gtk_action_bar_child_type (GtkContainer *container)
 {
@@ -188,6 +202,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
 
   container_class->add = gtk_action_bar_add;
   container_class->remove = gtk_action_bar_remove;
+  container_class->forall = gtk_action_bar_forall;
   container_class->child_type = gtk_action_bar_child_type;
   container_class->set_child_property = gtk_action_bar_set_child_property;
   container_class->get_child_property = gtk_action_bar_get_child_property;
