@@ -137,6 +137,24 @@ gtk_action_bar_forall (GtkContainer *container,
     gtk_container_forall (GTK_CONTAINER (priv->center_box), callback, callback_data);
 }
 
+static void
+gtk_action_bar_map (GtkWidget *widget)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+
+  gtk_widget_set_mapped (widget, TRUE);
+  gtk_widget_map (priv->revealer);
+}
+
+static void
+gtk_action_bar_unmap (GtkWidget *widget)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+
+  gtk_widget_set_mapped (widget, FALSE);
+  gtk_widget_unmap (priv->revealer);
+}
+
 static GType
 gtk_action_bar_child_type (GtkContainer *container)
 {
@@ -200,6 +218,8 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
 
   widget_class->show = gtk_action_bar_show;
   widget_class->hide = gtk_action_bar_hide;
+  widget_class->map = gtk_action_bar_map;
+  widget_class->unmap = gtk_action_bar_unmap;
 
   container_class->add = gtk_action_bar_add;
   container_class->remove = gtk_action_bar_remove;
