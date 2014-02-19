@@ -890,11 +890,11 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
         {
           min_size[child->pack] += req->minimum_size + 2 * child->padding;
           nat_size[child->pack] += req->natural_size + 2 * child->padding;
+
+          idx[child->pack] += 1;
         }
 
       req->data = child;
-
-      idx[child->pack] += 1; 
     }
 
   /* Determine size of center */
