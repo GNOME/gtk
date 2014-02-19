@@ -2585,7 +2585,7 @@ _gtk_box_get_children (GtkBox *box)
 /**
  * gtk_box_set_center_widget:
  * @box: a #GtkBox
- * @widget: the widget to center
+ * @widget: (allow-none): the widget to center
  *
  * Sets a center widget; that is a child widget that will be
  * centered with respect to the full width of the box, even
@@ -2598,11 +2598,14 @@ void
 gtk_box_set_center_widget (GtkBox    *box,
                            GtkWidget *widget)
 {
+  GtkBoxPrivate *priv = box->priv;
+
   g_return_if_fail (GTK_IS_BOX (box));
 
-  box->priv->center = gtk_box_pack (box, widget,
-                                    FALSE, TRUE, 0,
-                                    GTK_PACK_START);
+  if (widget)
+    priv->center = gtk_box_pack (box, widget, FALSE, TRUE, 0, GTK_PACK_START);
+  else if (priv->center)
+    gtk_box_remove (GTK_CONTAINER (box), priv->center->widget);
 }
 
 /**
@@ -2618,10 +2621,12 @@ gtk_box_set_center_widget (GtkBox    *box,
 GtkWidget *
 gtk_box_get_center_widget (GtkBox *box)
 {
+  GtkBoxPrivate *priv = box->priv;
+
   g_return_val_if_fail (GTK_IS_BOX (box), NULL);
 
-  if (box->priv->center)
-    return box->priv->center->widget;
+  if (priv->center)
+    return priv->center->widget;
 
   return NULL;
 }
