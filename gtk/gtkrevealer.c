@@ -303,8 +303,8 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
 
   child_allocation->x = 0;
   child_allocation->y = 0;
-  child_allocation->width = allocation->width;
-  child_allocation->height = allocation->height;
+  child_allocation->width = 0;
+  child_allocation->height = 0;
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
@@ -318,6 +318,9 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
         gtk_widget_get_preferred_height_for_width (child, child_allocation->width, NULL,
                                                    &child_allocation->height);
     }
+
+  child_allocation->width = MAX (child_allocation->width, allocation->width);
+  child_allocation->height = MAX (child_allocation->height, allocation->height);
 }
 
 static void
