@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.9.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-13 08:12+0100\n"
-"PO-Revision-Date: 2014-02-13 08:14+0100\n"
+"POT-Creation-Date: 2014-02-19 23:54+0100\n"
+"PO-Revision-Date: 2014-02-19 23:55+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -604,12 +604,12 @@ msgid "_Close"
 msgstr "_Lukk"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:397
-#: ../gtk/gtkwindow.c:8631
+#: ../gtk/gtkwindow.c:8644
 msgid "Minimize"
 msgstr "Minimer"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:420
-#: ../gtk/gtkwindow.c:8639
+#: ../gtk/gtkwindow.c:8652
 msgid "Maximize"
 msgstr "Maksimer"
 
@@ -1157,18 +1157,18 @@ msgstr ""
 "velg «Lagre farge her.»"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
-#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:611
+#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:706
 #: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:803
 #: ../gtk/gtkfilechooserwidget.c:5361 ../gtk/gtkfontchooserdialog.c:155
-#: ../gtk/gtkmessagedialog.c:897 ../gtk/gtkmessagedialog.c:910
+#: ../gtk/gtkmessagedialog.c:889 ../gtk/gtkmessagedialog.c:902
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
-#: ../gtk/gtkprintunixdialog.c:663 ../gtk/gtkprintunixdialog.c:730
+#: ../gtk/gtkprintunixdialog.c:667 ../gtk/gtkprintunixdialog.c:734
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
 msgid "_Cancel"
 msgstr "_Avbryt"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:612
+#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:707
 #: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:156
 #: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
@@ -1210,8 +1210,8 @@ msgstr "_Forhåndsvisning:"
 msgid "_Apply"
 msgstr "_Bruk"
 
-#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:889
-#: ../gtk/gtkmessagedialog.c:911 ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:881
+#: ../gtk/gtkmessagedialog.c:903 ../gtk/gtkprintbackend.c:748
 msgid "_OK"
 msgstr "_OK"
 
@@ -1479,7 +1479,7 @@ msgstr "Grafikk av"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:161
+#: ../gtk/gtkaccellabel.c:160
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1489,7 +1489,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:167
+#: ../gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1499,7 +1499,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:173
+#: ../gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1509,7 +1509,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:803
+#: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1519,7 +1519,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:816
+#: ../gtk/gtkaccellabel.c:815
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1529,17 +1529,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:830
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:847
+#: ../gtk/gtkaccellabel.c:846
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mellomrom"
 
-#: ../gtk/gtkaccellabel.c:850
+#: ../gtk/gtkaccellabel.c:849
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1548,39 +1548,39 @@ msgstr "Backslash"
 msgid "Other application…"
 msgstr "Annet program …"
 
-#: ../gtk/gtkappchooserdialog.c:197 ../gtk/gtkappchooserdialog.c:204
-#: ../gtk/gtkappchooserdialog.c:221
+#: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
+#: ../gtk/gtkappchooserdialog.c:227
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
 msgid "Select Application"
 msgstr "Velg program"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:199
+#: ../gtk/gtkappchooserdialog.c:205
 #, c-format
 msgid "Opening “%s”."
 msgstr "Åpne «%s»."
 
-#: ../gtk/gtkappchooserdialog.c:200
+#: ../gtk/gtkappchooserdialog.c:206
 #, c-format
 msgid "No applications found for “%s”"
 msgstr "Ingen programmer funnet for «%s»"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:206
+#: ../gtk/gtkappchooserdialog.c:212
 #, c-format
 msgid "Opening “%s” files."
 msgstr "Åpne «%s» filer."
 
-#: ../gtk/gtkappchooserdialog.c:208
+#: ../gtk/gtkappchooserdialog.c:214
 #, c-format
 msgid "No applications found for “%s” files"
 msgstr "Ingen programmer funnet for «%s»-filer"
 
-#: ../gtk/gtkappchooserdialog.c:301
+#: ../gtk/gtkappchooserdialog.c:307
 msgid "Forget association"
 msgstr "Glem kobling"
 
-#: ../gtk/gtkappchooserdialog.c:431
+#: ../gtk/gtkappchooserdialog.c:450
 msgid "Failed to start GNOME Software"
 msgstr "Klarte ikke å starte GNOME programvare"
 
@@ -2010,13 +2010,13 @@ msgstr "_Tilpass"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:893
+#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:885
 #: ../gtk/resources/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "_Lukk"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:412 ../gtk/gtkprintunixdialog.c:3300
+#: ../gtk/gtkcustompaperunixdialog.c:412 ../gtk/gtkprintunixdialog.c:3311
 msgid "Manage Custom Sizes"
 msgstr "Håndter egendefinerte størrelser"
 
@@ -2069,26 +2069,26 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:9431 ../gtk/gtkentry.c:9584 ../gtk/gtklabel.c:6259
+#: ../gtk/gtkentry.c:9431 ../gtk/gtkentry.c:9584 ../gtk/gtklabel.c:6262
 #: ../gtk/gtktextview.c:8779 ../gtk/gtktextview.c:8967
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../gtk/gtkentry.c:9435 ../gtk/gtkentry.c:9587 ../gtk/gtklabel.c:6260
+#: ../gtk/gtkentry.c:9435 ../gtk/gtkentry.c:9587 ../gtk/gtklabel.c:6263
 #: ../gtk/gtktextview.c:8783 ../gtk/gtktextview.c:8971
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../gtk/gtkentry.c:9439 ../gtk/gtkentry.c:9590 ../gtk/gtklabel.c:6261
+#: ../gtk/gtkentry.c:9439 ../gtk/gtkentry.c:9590 ../gtk/gtklabel.c:6264
 #: ../gtk/gtktextview.c:8785 ../gtk/gtktextview.c:8973
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: ../gtk/gtkentry.c:9442 ../gtk/gtklabel.c:6263 ../gtk/gtktextview.c:8788
+#: ../gtk/gtkentry.c:9442 ../gtk/gtklabel.c:6266 ../gtk/gtktextview.c:8788
 msgid "_Delete"
 msgstr "_Slett"
 
-#: ../gtk/gtkentry.c:9453 ../gtk/gtklabel.c:6272 ../gtk/gtktextview.c:8802
+#: ../gtk/gtkentry.c:9453 ../gtk/gtklabel.c:6275 ../gtk/gtktextview.c:8802
 msgid "Select _All"
 msgstr "Velg _alt"
 
@@ -2301,12 +2301,12 @@ msgstr "Ukjent"
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke gå til mappen fordi den ikke er lokal"
 
-#: ../gtk/gtkfilechooserwidget.c:5354 ../gtk/gtkprintunixdialog.c:654
+#: ../gtk/gtkfilechooserwidget.c:5354 ../gtk/gtkprintunixdialog.c:658
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "En fil med navn «%s» eksisterer allerede. Vil du erstatte den?"
 
-#: ../gtk/gtkfilechooserwidget.c:5357 ../gtk/gtkprintunixdialog.c:658
+#: ../gtk/gtkfilechooserwidget.c:5357 ../gtk/gtkprintunixdialog.c:662
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2314,7 +2314,7 @@ msgstr ""
 "Filen eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
 "innholdet."
 
-#: ../gtk/gtkfilechooserwidget.c:5362 ../gtk/gtkprintunixdialog.c:666
+#: ../gtk/gtkfilechooserwidget.c:5362 ../gtk/gtkprintunixdialog.c:670
 msgid "_Replace"
 msgstr "E_rstatt"
 
@@ -2355,7 +2355,7 @@ msgstr "Velg en skrift"
 msgid "Application menu"
 msgstr "Programmeny"
 
-#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8754
+#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8767
 msgid "Close"
 msgstr "Lukk"
 
@@ -2388,29 +2388,29 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "System (%s)"
 
-#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:374
+#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:370
 msgid "Information"
 msgstr "Informasjon"
 
-#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:379
+#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:374
 msgid "Question"
 msgstr "Spørsmål"
 
-#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:384
+#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:378
 msgid "Warning"
 msgstr "Advarsel"
 
-#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:389
+#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:382
 msgid "Error"
 msgstr "Feil"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6242
+#: ../gtk/gtklabel.c:6245
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6250
+#: ../gtk/gtklabel.c:6253
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkas adresse"
 
@@ -2556,11 +2556,11 @@ msgstr "default:LTR"
 msgid "Menu"
 msgstr "Meny"
 
-#: ../gtk/gtkmessagedialog.c:901
+#: ../gtk/gtkmessagedialog.c:893
 msgid "_No"
 msgstr "_Nei"
 
-#: ../gtk/gtkmessagedialog.c:902
+#: ../gtk/gtkmessagedialog.c:894
 msgid "_Yes"
 msgstr "_Ja"
 
@@ -2691,7 +2691,7 @@ msgstr ""
 " Topp: %s %s\n"
 " Bunn: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3354
+#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3365
 msgid "Manage Custom Sizes…"
 msgstr "Håndter egendefinerte størrelser …"
 
@@ -3042,19 +3042,19 @@ msgstr "Ugyldig håndtak til PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Uspesifisert feil"
 
-#: ../gtk/gtkprintunixdialog.c:729
+#: ../gtk/gtkprintunixdialog.c:733
 msgid "Pre_view"
 msgstr "Forhånds_visning"
 
-#: ../gtk/gtkprintunixdialog.c:731
+#: ../gtk/gtkprintunixdialog.c:735
 msgid "_Print"
 msgstr "S_kriv ut"
 
-#: ../gtk/gtkprintunixdialog.c:838
+#: ../gtk/gtkprintunixdialog.c:846
 msgid "Getting printer information failed"
 msgstr "Klarte ikke å hente informasjon om skriveren"
 
-#: ../gtk/gtkprintunixdialog.c:2037
+#: ../gtk/gtkprintunixdialog.c:2048
 msgid "Getting printer information…"
 msgstr "Henter informasjon om skriver …"
 
@@ -3064,42 +3064,42 @@ msgstr "Henter informasjon om skriver …"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3094
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Left to right, top to bottom"
 msgstr "Venstre til høyre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3094
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Left to right, bottom to top"
 msgstr "Venstre til høyre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3095
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgid "Right to left, top to bottom"
 msgstr "Høyre til venstre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3095
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgid "Right to left, bottom to top"
 msgstr "Høyre til venstre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3085
+#: ../gtk/gtkprintunixdialog.c:3096
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
 msgid "Top to bottom, left to right"
 msgstr "Topp til bunn, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3085
+#: ../gtk/gtkprintunixdialog.c:3096
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
 msgid "Top to bottom, right to left"
 msgstr "Topp til bunn, høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3086
+#: ../gtk/gtkprintunixdialog.c:3097
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgid "Bottom to top, left to right"
 msgstr "Bunn til topp, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3086
+#: ../gtk/gtkprintunixdialog.c:3097
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgid "Bottom to top, right to left"
 msgstr "Bunn til topp, høyre til venstre"
@@ -3107,28 +3107,28 @@ msgstr "Bunn til topp, høyre til venstre"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3090 ../gtk/gtkprintunixdialog.c:3103
+#: ../gtk/gtkprintunixdialog.c:3101 ../gtk/gtkprintunixdialog.c:3114
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4860
 msgid "Page Ordering"
 msgstr "Siderekkefølge"
 
-#: ../gtk/gtkprintunixdialog.c:3119
+#: ../gtk/gtkprintunixdialog.c:3130
 msgid "Left to right"
 msgstr "Venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3120
+#: ../gtk/gtkprintunixdialog.c:3131
 msgid "Right to left"
 msgstr "Høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3132
+#: ../gtk/gtkprintunixdialog.c:3143
 msgid "Top to bottom"
 msgstr "Topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3133
+#: ../gtk/gtkprintunixdialog.c:3144
 msgid "Bottom to top"
 msgstr "Bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3376
+#: ../gtk/gtkprintunixdialog.c:3387
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -3428,43 +3428,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8639
+#: ../gtk/gtkwindow.c:8652
 msgid "Unmaximize"
 msgstr "Gjenopprett"
 
-#: ../gtk/gtkwindow.c:8648
+#: ../gtk/gtkwindow.c:8661
 msgid "Move"
 msgstr "Flytt"
 
-#: ../gtk/gtkwindow.c:8654
+#: ../gtk/gtkwindow.c:8667
 msgid "Resize"
 msgstr "Endre størrelse"
 
-#: ../gtk/gtkwindow.c:8666
+#: ../gtk/gtkwindow.c:8679
 msgid "Always on Top"
 msgstr "Alltid øverst"
 
-#: ../gtk/gtkwindow.c:8678
+#: ../gtk/gtkwindow.c:8691
 msgid "Always on Visible Workspace"
 msgstr "Alltid på synlig arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8686
+#: ../gtk/gtkwindow.c:8699
 msgid "Only on This Workspace"
 msgstr "Kun på dette arbeidsområdet"
 
-#: ../gtk/gtkwindow.c:8703
+#: ../gtk/gtkwindow.c:8716
 msgid "Move to Workspace Up"
 msgstr "Flytt opp et arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8712
+#: ../gtk/gtkwindow.c:8725
 msgid "Move to Workspace Down"
 msgstr "Flytt ned et arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8726
+#: ../gtk/gtkwindow.c:8739
 msgid "Move to Another Workspace"
 msgstr "Flytt til annet arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8734
+#: ../gtk/gtkwindow.c:8747
 #, c-format
 msgid "Workspace %d"
 msgstr "Arbeidsområde %d"
@@ -4911,12 +4911,12 @@ msgid "label"
 msgstr "etikett"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
-msgid "_View All Application"
+msgid "_View All Applications"
 msgstr "_Vis alle programmer"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
-msgid "_Find Applications in Software "
-msgstr "_Finn programmer i Programvare "
+msgid "_Find New Applications"
+msgstr "_Finn nye programmer"
 
 #: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
 msgid "No applications found."
