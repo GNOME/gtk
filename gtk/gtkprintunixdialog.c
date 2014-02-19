@@ -641,10 +641,14 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
 
                   if (g_file_query_exists (file, NULL))
                     {
+                      GFile *parent;
+
                       toplevel = get_toplevel (GTK_WIDGET (print_dialog));
 
                       basename = g_file_get_basename (file);
-                      dirname = g_file_get_parse_name (g_file_get_parent (file));
+                      parent = g_file_get_parent (file);
+                      dirname = g_file_get_parse_name (parent);
+                      g_object_unref (parent);
 
                       dialog = gtk_message_dialog_new (toplevel,
                                                        GTK_DIALOG_MODAL |
