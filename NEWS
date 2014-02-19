@@ -1,3 +1,25 @@
+Overview of Changes in GTK+ 3.11.6 to 3.11.7
+============================================
+
+* GtkActionBar:
+ - Fix theming
+
+* GtkBox:
+ - Allow setting center widget to NULL
+ - Fix a size-allocation error
+
+* GtkPopover:
+ - Fix a crash with text handles (#724392)
+ - Allow resetting relative-to  (#724407)
+
+* Wayland:
+ - Use new xdg-shell ping
+ - Use new xdg-shell focus methods
+
+* Printing:
+ - Fix a small memory leak (#724631)
+
+
 Overview of Changes in GTK+ 3.11.5 to 3.11.6
 ============================================
 
