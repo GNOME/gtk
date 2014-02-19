@@ -155,6 +155,20 @@ gtk_action_bar_unmap (GtkWidget *widget)
   gtk_widget_unmap (priv->revealer);
 }
 
+static void
+gtk_action_bar_destroy (GtkWidget *widget)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+
+  if (priv->revealer)
+    {
+      gtk_widget_destroy (priv->revealer);
+      priv->revealer = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->destroy (widget);
+}
+
 static GType
 gtk_action_bar_child_type (GtkContainer *container)
 {
@@ -220,6 +234,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   widget_class->hide = gtk_action_bar_hide;
   widget_class->map = gtk_action_bar_map;
   widget_class->unmap = gtk_action_bar_unmap;
+  widget_class->destroy = gtk_action_bar_destroy;
 
   container_class->add = gtk_action_bar_add;
   container_class->remove = gtk_action_bar_remove;
