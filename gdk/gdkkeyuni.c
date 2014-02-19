@@ -879,7 +879,7 @@ static const struct {
  * Convert from a GDK key symbol to the corresponding ISO10646 (Unicode)
  * character.
  * 
- * Return value: the corresponding unicode character, or 0 if there
+ * Returns: the corresponding unicode character, or 0 if there
  *               is no corresponding character.
  **/
 guint32
@@ -1678,7 +1678,7 @@ static const struct {
  * 
  * Convert from a ISO10646 character to a key symbol.
  * 
- * Return value: the corresponding GDK key symbol, if one exists.
+ * Returns: the corresponding GDK key symbol, if one exists.
  *               or, if there is no corresponding symbol, 
  *               wc | 0x01000000
  **/

@@ -1877,7 +1877,7 @@ gtk_paned_motion (GtkWidget      *widget,
  *
  * Creates a new #GtkPaned widget.
  *
- * Return value: a new #GtkPaned.
+ * Returns: a new #GtkPaned.
  *
  * Since: 3.0
  **/
@@ -2070,7 +2070,7 @@ gtk_paned_forall (GtkContainer *container,
  * 
  * Obtains the position of the divider between the two panes.
  * 
- * Return value: position of the divider
+ * Returns: position of the divider
  **/
 gint
 gtk_paned_get_position (GtkPaned  *paned)
@@ -2143,7 +2143,7 @@ gtk_paned_set_position (GtkPaned *paned,
  * 
  * Obtains the first child of the paned widget.
  * 
- * Return value: (transfer none): first child, or %NULL if it is not set.
+ * Returns: (transfer none): first child, or %NULL if it is not set.
  *
  * Since: 2.4
  **/
@@ -2161,7 +2161,7 @@ gtk_paned_get_child1 (GtkPaned *paned)
  * 
  * Obtains the second child of the paned widget.
  * 
- * Return value: (transfer none): second child, or %NULL if it is not set.
+ * Returns: (transfer none): second child, or %NULL if it is not set.
  *
  * Since: 2.4
  **/
@@ -2832,7 +2832,7 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
  * enables the callback to distinguish between the window
  * of the paned, a child and the handle.
  *
- * Return value: (transfer none): the paned’s handle window.
+ * Returns: (transfer none): the paned’s handle window.
  *
  * Since: 2.20
  **/

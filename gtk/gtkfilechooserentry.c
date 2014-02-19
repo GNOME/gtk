@@ -710,7 +710,7 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
  * which is an entry with completion with respect to a
  * #GtkFileSystem object.
  *
- * Return value: the newly created #GtkFileChooserEntry
+ * Returns: the newly created #GtkFileChooserEntry
  **/
 GtkWidget *
 _gtk_file_chooser_entry_new (gboolean       eat_tabs)
@@ -764,7 +764,7 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
  * be different.  If the user has entered unparsable text, or text which
  * the entry cannot handle, this will return %NULL.
  *
- * Return value: the file for the current folder - you must g_object_unref()
+ * Returns: the file for the current folder - you must g_object_unref()
  *   the value after use.
  **/
 GFile *
@@ -785,7 +785,7 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
  * and if a filename path is needed, g_file_get_child_for_display_name()
  * must be used
   *
- * Return value: the entered filename - this value is owned by the
+ * Returns: the entered filename - this value is owned by the
  *  chooser entry and must not be modified or freed.
  **/
 const gchar *

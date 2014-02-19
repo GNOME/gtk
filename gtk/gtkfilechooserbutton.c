@@ -3097,7 +3097,7 @@ gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
  * Returns whether the button grabs focus when it is clicked with the mouse.
  * See gtk_file_chooser_button_set_focus_on_click().
  *
- * Return value: %TRUE if the button grabs focus when it is clicked with
+ * Returns: %TRUE if the button grabs focus when it is clicked with
  *               the mouse.
  *
  * Since: 2.10

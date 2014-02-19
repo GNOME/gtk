@@ -1457,7 +1457,7 @@ gtk_assistant_remove (GtkContainer *container,
  *
  * Creates a new #GtkAssistant.
  *
- * Return value: a newly created #GtkAssistant
+ * Returns: a newly created #GtkAssistant
  *
  * Since: 2.10
  */
@@ -1477,7 +1477,7 @@ gtk_assistant_new (void)
  *
  * Returns the page number of the current page.
  *
- * Return value: The index (starting from 0) of the current
+ * Returns: The index (starting from 0) of the current
  *     page in the @assistant, or -1 if the @assistant has no pages,
  *     or no current page.
  *
@@ -1622,7 +1622,7 @@ gtk_assistant_previous_page (GtkAssistant *assistant)
  *
  * Returns the number of pages in the @assistant
  *
- * Return value: the number of pages in the @assistant
+ * Returns: the number of pages in the @assistant
  *
  * Since: 2.10
  */
@@ -1646,7 +1646,7 @@ gtk_assistant_get_n_pages (GtkAssistant *assistant)
  *
  * Returns the child widget contained in page number @page_num.
  *
- * Return value: (transfer none): the child widget, or %NULL
+ * Returns: (transfer none): the child widget, or %NULL
  *     if @page_num is out of bounds
  *
  * Since: 2.10
@@ -1684,7 +1684,7 @@ gtk_assistant_get_nth_page (GtkAssistant *assistant,
  *
  * Prepends a page to the @assistant.
  *
- * Return value: the index (starting at 0) of the inserted page
+ * Returns: the index (starting at 0) of the inserted page
  *
  * Since: 2.10
  */
@@ -1705,7 +1705,7 @@ gtk_assistant_prepend_page (GtkAssistant *assistant,
  *
  * Appends a page to the @assistant.
  *
- * Return value: the index (starting at 0) of the inserted page
+ * Returns: the index (starting at 0) of the inserted page
  *
  * Since: 2.10
  */
@@ -1728,7 +1728,7 @@ gtk_assistant_append_page (GtkAssistant *assistant,
  *
  * Inserts a page in the @assistant at a given position.
  *
- * Return value: the index (starting from 0) of the inserted page
+ * Returns: the index (starting from 0) of the inserted page
  *
  * Since: 2.10
  */
@@ -2000,7 +2000,7 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
  *
  * Gets the title for @page.
  *
- * Return value: the title for @page
+ * Returns: the title for @page
  *
  * Since: 2.10
  */
@@ -2079,7 +2079,7 @@ gtk_assistant_set_page_type (GtkAssistant         *assistant,
  *
  * Gets the page type of @page.
  *
- * Return value: the page type of @page
+ * Returns: the page type of @page
  *
  * Since: 2.10
  */
@@ -2163,7 +2163,7 @@ gtk_assistant_do_set_page_header_image (GtkAssistant *assistant,
  *
  * Gets the header image for @page.
  *
- * Return value: (transfer none): the header image for @page,
+ * Returns: (transfer none): the header image for @page,
  *     or %NULL if there’s no header image for the page
  *
  * Since: 2.10
@@ -2254,7 +2254,7 @@ gtk_assistant_do_set_page_side_image (GtkAssistant *assistant,
  *
  * Gets the side image for @page.
  *
- * Return value: (transfer none): the side image for @page,
+ * Returns: (transfer none): the side image for @page,
  *     or %NULL if there’s no side image for the page
  *
  * Since: 2.10
@@ -2332,7 +2332,7 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
  *
  * Gets whether @page is complete.
  *
- * Return value: %TRUE if @page is complete.
+ * Returns: %TRUE if @page is complete.
  *
  * Since: 2.10
  */

@@ -644,7 +644,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * }
    * ]|
    *
-   * Return value: (transfer full): a newly allocated string representing @path 
+   * Returns: (transfer full): a newly allocated string representing @path 
    * for the current GtkComboBox model.
    *
    * Since: 3.4
@@ -3987,7 +3987,7 @@ gtk_combo_box_cell_layout_get_area (GtkCellLayout *cell_layout)
  *
  * Creates a new empty #GtkComboBox.
  *
- * Return value: A new #GtkComboBox.
+ * Returns: A new #GtkComboBox.
  *
  * Since: 2.4
  */
@@ -4003,7 +4003,7 @@ gtk_combo_box_new (void)
  *
  * Creates a new empty #GtkComboBox using @area to layout cells.
  *
- * Return value: A new #GtkComboBox.
+ * Returns: A new #GtkComboBox.
  */
 GtkWidget *
 gtk_combo_box_new_with_area (GtkCellArea  *area)
@@ -4019,7 +4019,7 @@ gtk_combo_box_new_with_area (GtkCellArea  *area)
  *
  * The new combo box will use @area to layout cells.
  *
- * Return value: A new #GtkComboBox.
+ * Returns: A new #GtkComboBox.
  */
 GtkWidget *
 gtk_combo_box_new_with_area_and_entry (GtkCellArea *area)
@@ -4036,7 +4036,7 @@ gtk_combo_box_new_with_area_and_entry (GtkCellArea *area)
  *
  * Creates a new empty #GtkComboBox with an entry.
  *
- * Return value: A new #GtkComboBox.
+ * Returns: A new #GtkComboBox.
  *
  * Since: 2.24
  */
@@ -4052,7 +4052,7 @@ gtk_combo_box_new_with_entry (void)
  *
  * Creates a new #GtkComboBox with the model initialized to @model.
  *
- * Return value: A new #GtkComboBox.
+ * Returns: A new #GtkComboBox.
  *
  * Since: 2.4
  */
@@ -4075,7 +4075,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
  * Creates a new empty #GtkComboBox with an entry
  * and with the model initialized to @model.
  *
- * Return value: A new #GtkComboBox
+ * Returns: A new #GtkComboBox
  *
  * Since: 2.24
  */
@@ -4261,7 +4261,7 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
  * `gtk_tree_path_get_indices (path)[0]`, where
  * `path` is the #GtkTreePath of the active item.
  *
- * Return value: An integer which is the index of the currently active item,
+ * Returns: An integer which is the index of the currently active item,
  *     or -1 if there’s no active item.
  *
  * Since: 2.4
@@ -4409,7 +4409,7 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
  *
  * Sets @iter to point to the current active item, if it exists.
  *
- * Return value: %TRUE, if @iter was set
+ * Returns: %TRUE, if @iter was set
  *
  * Since: 2.4
  */
@@ -4544,7 +4544,7 @@ out:
  *
  * Returns the #GtkTreeModel which is acting as data source for @combo_box.
  *
- * Return value: (transfer none): A #GtkTreeModel which was passed
+ * Returns: (transfer none): A #GtkTreeModel which was passed
  *     during construction.
  *
  * Since: 2.4
@@ -5015,7 +5015,7 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
  *
  * Gets the current value of the :add-tearoffs property.
  *
- * Return value: the current value of the :add-tearoffs property.
+ * Returns: the current value of the :add-tearoffs property.
  *
  * Deprecated: 3.10
  */
@@ -5209,7 +5209,7 @@ gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
  *
  * Returns the current row separator function.
  *
- * Return value: the current row separator function.
+ * Returns: the current row separator function.
  *
  * Since: 2.6
  */
@@ -5298,7 +5298,7 @@ gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
  * Returns whether the combo box sets the dropdown button
  * sensitive or not when there are no items in the model.
  *
- * Return Value: %GTK_SENSITIVITY_ON if the dropdown button
+ * Returns: %GTK_SENSITIVITY_ON if the dropdown button
  *    is sensitive when the model is empty, %GTK_SENSITIVITY_OFF
  *    if the button is always insensitive or
  *    %GTK_SENSITIVITY_AUTO if it is only sensitive as long as
@@ -5321,7 +5321,7 @@ gtk_combo_box_get_button_sensitivity (GtkComboBox *combo_box)
  *
  * Returns whether the combo box has an entry.
  *
- * Return Value: whether there is an entry in @combo_box.
+ * Returns: whether there is an entry in @combo_box.
  *
  * Since: 2.24
  **/
@@ -5378,7 +5378,7 @@ gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
  * Returns the column which @combo_box is using to get the strings
  * from to display in the internal entry.
  *
- * Return value: A column in the data source model of @combo_box.
+ * Returns: A column in the data source model of @combo_box.
  *
  * Since: 2.24
  */
@@ -5430,7 +5430,7 @@ gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box,
  * Returns whether the combo box grabs focus when it is clicked
  * with the mouse. See gtk_combo_box_set_focus_on_click().
  *
- * Return value: %TRUE if the combo box grabs focus when it is
+ * Returns: %TRUE if the combo box grabs focus when it is
  *     clicked with the mouse.
  *
  * Since: 2.6
@@ -5775,7 +5775,7 @@ gtk_combo_box_set_id_column (GtkComboBox *combo_box,
  * Returns the column which @combo_box is using to get string IDs
  * for values from.
  *
- * Return value: A column in the data source model of @combo_box.
+ * Returns: A column in the data source model of @combo_box.
  *
  * Since: 3.0
  */
@@ -5803,7 +5803,7 @@ gtk_combo_box_get_id_column (GtkComboBox *combo_box)
  * no row is active, or if the active row has a %NULL ID value, then %NULL
  * is returned.
  *
- * Return value: the ID of the active row, or %NULL
+ * Returns: the ID of the active row, or %NULL
  *
  * Since: 3.0
  **/

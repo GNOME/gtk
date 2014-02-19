@@ -160,7 +160,7 @@ gtk_print_backend_file_get_type (void)
  * implements the #GtkPrintBackend interface with direct access to
  * the filesystem using Unix/Linux API calls
  *
- * Return value: the new #GtkPrintBackendFile object
+ * Returns: the new #GtkPrintBackendFile object
  **/
 GtkPrintBackend *
 gtk_print_backend_file_new (void)

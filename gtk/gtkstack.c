@@ -1142,7 +1142,7 @@ gtk_stack_remove (GtkContainer *container,
  * the argument. Returns %NULL if there is no child with this
  * name.
  *
- * Return value: (transfer none): the requested child of the #GtkStack
+ * Returns: (transfer none): the requested child of the #GtkStack
  *
  * Since: 3.12
  */
@@ -1207,7 +1207,7 @@ gtk_stack_set_homogeneous (GtkStack *stack,
  * Gets whether @stack is homogeneous.
  * See gtk_stack_set_homogeneous().
  *
- * Return value: whether @stack is homogeneous.
+ * Returns: whether @stack is homogeneous.
  *
  * Since: 3.10
  */
@@ -1272,7 +1272,7 @@ gtk_stack_set_transition_duration (GtkStack *stack,
  * Gets the type of animation that will be used
  * for transitions between pages in @stack.
  *
- * Return value: the current transition type of @stack
+ * Returns: the current transition type of @stack
  *
  * Since: 3.10
  */
@@ -1321,7 +1321,7 @@ gtk_stack_set_transition_type (GtkStack              *stack,
  * Returns whether the @stack is currently in a transition from one page to
  * another.
  *
- * Return value: %TRUE if the transition is currently running, %FALSE otherwise.
+ * Returns: %TRUE if the transition is currently running, %FALSE otherwise.
  *
  * Since: 3.12
  */
@@ -1342,7 +1342,7 @@ gtk_stack_get_transition_running (GtkStack *stack)
  * Gets the currently visible child of @stack, or %NULL if
  * there are no visible children.
  *
- * Return value: (transfer none): the visible child of the #GtkStack
+ * Returns: (transfer none): the visible child of the #GtkStack
  *
  * Since: 3.10
  */
@@ -1363,7 +1363,7 @@ gtk_stack_get_visible_child (GtkStack *stack)
  * Returns the name of the currently visible child of @stack, or
  * %NULL if there is no visible child.
  *
- * Return value: (transfer none): the name of the visible child of the #GtkStack
+ * Returns: (transfer none): the name of the visible child of the #GtkStack
  *
  * Since: 3.10
  */

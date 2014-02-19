@@ -1003,7 +1003,7 @@ gtk_about_dialog_show (GtkWidget *widget)
  *
  * Returns the program name displayed in the about dialog.
  *
- * Return value: The program name. The string is owned by the about
+ * Returns: The program name. The string is owned by the about
  *  dialog and must not be modified.
  *
  * Since: 2.12
@@ -1083,7 +1083,7 @@ gtk_about_dialog_set_program_name (GtkAboutDialog *about,
  *
  * Returns the version string.
  *
- * Return value: The version string. The string is owned by the about
+ * Returns: The version string. The string is owned by the about
  *  dialog and must not be modified.
  *
  * Since: 2.6
@@ -1131,7 +1131,7 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
  *
  * Returns the copyright string.
  *
- * Return value: The copyright string. The string is owned by the about
+ * Returns: The copyright string. The string is owned by the about
  *  dialog and must not be modified.
  *
  * Since: 2.6
@@ -1190,7 +1190,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
  *
  * Returns the comments string.
  *
- * Return value: The comments. The string is owned by the about
+ * Returns: The comments. The string is owned by the about
  *  dialog and must not be modified.
  *
  * Since: 2.6
@@ -1247,7 +1247,7 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
  *
  * Returns the license information.
  *
- * Return value: The license information. The string is owned by the about
+ * Returns: The license information. The string is owned by the about
  *  dialog and must not be modified.
  *
  * Since: 2.6
@@ -1358,7 +1358,7 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
  *
  * Returns the website URL.
  *
- * Return value: The website URL. The string is owned by the about
+ * Returns: The website URL. The string is owned by the about
  *  dialog and must not be modified.
  *
  * Since: 2.6
@@ -1410,7 +1410,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
  *
  * Returns the label used for the website link.
  *
- * Return value: The label used for the website link. The string is
+ * Returns: The label used for the website link. The string is
  *     owned by the about dialog and must not be modified.
  *
  * Since: 2.6
@@ -1463,7 +1463,7 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
  * Returns the string which are displayed in the authors tab
  * of the secondary credits dialog.
  *
- * Return value: (array zero-terminated=1) (transfer none): A
+ * Returns: (array zero-terminated=1) (transfer none): A
  *  %NULL-terminated string array containing the authors. The array is
  *  owned by the about dialog and must not be modified.
  *
@@ -1518,7 +1518,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
  * Returns the string which are displayed in the documenters
  * tab of the secondary credits dialog.
  *
- * Return value: (array zero-terminated=1) (transfer none): A
+ * Returns: (array zero-terminated=1) (transfer none): A
  *  %NULL-terminated string array containing the documenters. The
  *  array is owned by the about dialog and must not be modified.
  *
@@ -1573,7 +1573,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
  * Returns the string which are displayed in the artists tab
  * of the secondary credits dialog.
  *
- * Return value: (array zero-terminated=1) (transfer none): A
+ * Returns: (array zero-terminated=1) (transfer none): A
  *  %NULL-terminated string array containing the artists. The array is
  *  owned by the about dialog and must not be modified.
  *
@@ -1628,7 +1628,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
  * Returns the translator credits string which is displayed
  * in the translators tab of the secondary credits dialog.
  *
- * Return value: The translator credits string. The string is
+ * Returns: The translator credits string. The string is
  *   owned by the about dialog and must not be modified.
  *
  * Since: 2.6
@@ -1690,7 +1690,7 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
  *
  * Returns the pixbuf displayed as logo in the about dialog.
  *
- * Return value: (transfer none): the pixbuf displayed as logo. The
+ * Returns: (transfer none): the pixbuf displayed as logo. The
  *   pixbuf is owned by the about dialog. If you want to keep a
  *   reference to it, you have to call g_object_ref() on it.
  *
@@ -1763,7 +1763,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
  *
  * Returns the icon name displayed as logo in the about dialog.
  *
- * Return value: the icon name displayed as logo. The string is
+ * Returns: the icon name displayed as logo. The string is
  *   owned by the dialog. If you want to keep a reference
  *   to it, you have to call g_strdup() on it.
  *
@@ -2512,7 +2512,7 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
  *
  * Retrieves the license set using gtk_about_dialog_set_license_type()
  *
- * Return value: a #GtkLicense value
+ * Returns: a #GtkLicense value
  *
  * Since: 3.0
  */

@@ -2118,7 +2118,7 @@ gtk_spin_button_new (GtkAdjustment *adjustment,
  * is a power of ten. If the resulting precision is not suitable for your
  * needs, use gtk_spin_button_set_digits() to correct it.
  *
- * Return value: The new spin button as a #GtkWidget
+ * Returns: The new spin button as a #GtkWidget
  */
 GtkWidget *
 gtk_spin_button_new_with_range (gdouble min,
@@ -2219,7 +2219,7 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
  *
  * Get the adjustment associated with a #GtkSpinButton
  *
- * Return value: (transfer none): the #GtkAdjustment of @spin_button
+ * Returns: (transfer none): the #GtkAdjustment of @spin_button
  **/
 GtkAdjustment *
 gtk_spin_button_get_adjustment (GtkSpinButton *spin_button)
@@ -2392,7 +2392,7 @@ gtk_spin_button_get_range (GtkSpinButton *spin_button,
  *
  * Get the value in the @spin_button.
  *
- * Return value: the value of @spin_button
+ * Returns: the value of @spin_button
  */
 gdouble
 gtk_spin_button_get_value (GtkSpinButton *spin_button)
@@ -2408,7 +2408,7 @@ gtk_spin_button_get_value (GtkSpinButton *spin_button)
  *
  * Get the value @spin_button represented as an integer.
  *
- * Return value: the value of @spin_button
+ * Returns: the value of @spin_button
  */
 gint
 gtk_spin_button_get_value_as_int (GtkSpinButton *spin_button)
@@ -2488,7 +2488,7 @@ gtk_spin_button_set_update_policy (GtkSpinButton             *spin_button,
  * Gets the update behavior of a spin button.
  * See gtk_spin_button_set_update_policy().
  *
- * Return value: the current update policy
+ * Returns: the current update policy
  */
 GtkSpinButtonUpdatePolicy
 gtk_spin_button_get_update_policy (GtkSpinButton *spin_button)
@@ -2532,7 +2532,7 @@ gtk_spin_button_set_numeric (GtkSpinButton *spin_button,
  * Returns whether non-numeric text can be typed into the spin button.
  * See gtk_spin_button_set_numeric().
  *
- * Return value: %TRUE if only numeric text can be entered
+ * Returns: %TRUE if only numeric text can be entered
  */
 gboolean
 gtk_spin_button_get_numeric (GtkSpinButton *spin_button)
@@ -2579,7 +2579,7 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
  * opposite limit when the upper or lower limit of the range is
  * exceeded. See gtk_spin_button_set_wrap().
  *
- * Return value: %TRUE if the spin button wraps around
+ * Returns: %TRUE if the spin button wraps around
  */
 gboolean
 gtk_spin_button_get_wrap (GtkSpinButton *spin_button)
@@ -2628,7 +2628,7 @@ gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
  * Returns whether the values are corrected to the nearest step.
  * See gtk_spin_button_set_snap_to_ticks().
  *
- * Return value: %TRUE if values are snapped to the nearest step
+ * Returns: %TRUE if values are snapped to the nearest step
  */
 gboolean
 gtk_spin_button_get_snap_to_ticks (GtkSpinButton *spin_button)

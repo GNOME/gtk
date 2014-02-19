@@ -564,7 +564,7 @@ gtk_image_get_property (GObject     *object,
  * image is not defined, it will be whatever is appropriate for
  * displaying the file.
  * 
- * Return value: a new #GtkImage
+ * Returns: a new #GtkImage
  **/
 GtkWidget*
 gtk_image_new_from_file   (const gchar *filename)
@@ -599,7 +599,7 @@ gtk_image_new_from_file   (const gchar *filename)
  * image is not defined, it will be whatever is appropriate for
  * displaying the file.
  *
- * Return value: a new #GtkImage
+ * Returns: a new #GtkImage
  *
  * Since: 3.4
  **/
@@ -628,7 +628,7 @@ gtk_image_new_from_resource (const gchar *resource_path)
  * #GtkImage created will not react to state changes. Should you want that, 
  * you should use gtk_image_new_from_icon_name().
  * 
- * Return value: a new #GtkImage
+ * Returns: a new #GtkImage
  **/
 GtkWidget*
 gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
@@ -651,7 +651,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
  * surface; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  * 
- * Return value: a new #GtkImage
+ * Returns: a new #GtkImage
  **/
 GtkWidget*
 gtk_image_new_from_surface (cairo_surface_t *surface)
@@ -677,7 +677,7 @@ gtk_image_new_from_surface (cairo_surface_t *surface)
  * You can register your own stock icon names, see
  * gtk_icon_factory_add_default() and gtk_icon_factory_add().
  * 
- * Return value: a new #GtkImage displaying the stock icon
+ * Returns: a new #GtkImage displaying the stock icon
  *
  * Deprecated: 3.10: Use gtk_image_new_from_icon_name() instead.
  **/
@@ -713,7 +713,7 @@ gtk_image_new_from_stock (const gchar    *stock_id,
  * icon set; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  * 
- * Return value: a new #GtkImage
+ * Returns: a new #GtkImage
  *
  * Deprecated: 3.10: Use gtk_image_new_from_icon_name() instead.
  **/
@@ -748,7 +748,7 @@ gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
  * keep in mind that the animation will only be shown if the main loop
  * is not busy with something that has a higher priority.
  *
- * Return value: a new #GtkImage widget
+ * Returns: a new #GtkImage widget
  **/
 GtkWidget*
 gtk_image_new_from_animation (GdkPixbufAnimation *animation)
@@ -774,7 +774,7 @@ gtk_image_new_from_animation (GdkPixbufAnimation *animation)
  * displayed instead.  If the current icon theme is changed, the icon
  * will be updated appropriately.
  * 
- * Return value: a new #GtkImage displaying the themed icon
+ * Returns: a new #GtkImage displaying the themed icon
  *
  * Since: 2.6
  **/
@@ -801,7 +801,7 @@ gtk_image_new_from_icon_name (const gchar    *icon_name,
  * displayed instead.  If the current icon theme is changed, the icon
  * will be updated appropriately.
  * 
- * Return value: a new #GtkImage displaying the themed icon
+ * Returns: a new #GtkImage displaying the themed icon
  *
  * Since: 2.14
  **/
@@ -1206,7 +1206,7 @@ gtk_image_set_from_surface (GtkImage       *image,
  * to store image data. If the #GtkImage has no image data,
  * the return value will be %GTK_IMAGE_EMPTY.
  * 
- * Return value: image representation being used
+ * Returns: image representation being used
  **/
 GtkImageType
 gtk_image_get_storage_type (GtkImage *image)
@@ -1226,7 +1226,7 @@ gtk_image_get_storage_type (GtkImage *image)
  * The caller of this function does not own a reference to the
  * returned pixbuf.
  * 
- * Return value: (transfer none): the displayed pixbuf, or %NULL if
+ * Returns: (transfer none): the displayed pixbuf, or %NULL if
  * the image is empty
  **/
 GdkPixbuf*
@@ -1313,7 +1313,7 @@ gtk_image_get_icon_set  (GtkImage        *image,
  * The caller of this function does not own a reference to the
  * returned animation.
  * 
- * Return value: (transfer none): the displayed animation, or %NULL if
+ * Returns: (transfer none): the displayed animation, or %NULL if
  * the image is empty
  **/
 GdkPixbufAnimation*
@@ -1401,7 +1401,7 @@ gtk_image_get_gicon (GtkImage     *image,
  * 
  * Creates a new empty #GtkImage widget.
  * 
- * Return value: a newly created #GtkImage widget. 
+ * Returns: a newly created #GtkImage widget. 
  **/
 GtkWidget*
 gtk_image_new (void)

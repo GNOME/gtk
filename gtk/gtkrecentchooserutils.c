@@ -408,7 +408,7 @@ get_is_recent_filtered (GtkRecentFilter *filter,
  * #GtkRecentChooser interface inside the GtkRecentChooser::get_items
  * vfunc.
  *
- * Return value: a list of #GtkRecentInfo objects
+ * Returns: a list of #GtkRecentInfo objects
  */
 GList *
 _gtk_recent_chooser_get_items (GtkRecentChooser  *chooser,

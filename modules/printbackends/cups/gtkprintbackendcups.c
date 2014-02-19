@@ -311,7 +311,7 @@ gtk_print_backend_cups_get_type (void)
  * implements the #GtkPrintBackend interface with direct access to
  * the filesystem using Unix/Linux API calls
  *
- * Return value: the new #GtkPrintBackendCups object
+ * Returns: the new #GtkPrintBackendCups object
  */
 GtkPrintBackend *
 gtk_print_backend_cups_new (void)

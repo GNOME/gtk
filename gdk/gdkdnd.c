@@ -51,7 +51,7 @@
  *
  * Retrieves the list of targets of the context.
  *
- * Return value: (transfer none) (element-type GdkAtom): a #GList of targets
+ * Returns: (transfer none) (element-type GdkAtom): a #GList of targets
  *
  * Since: 2.22
  **/
@@ -70,7 +70,7 @@ gdk_drag_context_list_targets (GdkDragContext *context)
  * Determines the bitmask of actions proposed by the source if
  * gdk_drag_context_get_suggested_action() returns GDK_ACTION_ASK.
  *
- * Return value: the #GdkDragAction flags
+ * Returns: the #GdkDragAction flags
  *
  * Since: 2.22
  **/
@@ -88,7 +88,7 @@ gdk_drag_context_get_actions (GdkDragContext *context)
  *
  * Determines the suggested drag action of the context.
  *
- * Return value: a #GdkDragAction value
+ * Returns: a #GdkDragAction value
  *
  * Since: 2.22
  **/
@@ -106,7 +106,7 @@ gdk_drag_context_get_suggested_action (GdkDragContext *context)
  *
  * Determines the action chosen by the drag destination.
  *
- * Return value: a #GdkDragAction value
+ * Returns: a #GdkDragAction value
  *
  * Since: 2.22
  **/
@@ -124,7 +124,7 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
  *
  * Returns the #GdkWindow where the DND operation started.
  *
- * Return value: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkWindow
  *
  * Since: 2.22
  **/
@@ -142,7 +142,7 @@ gdk_drag_context_get_source_window (GdkDragContext *context)
  *
  * Returns the destination windw for the DND operation.
  *
- * Return value: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkWindow
  *
  * Since: 3.0
  **/
@@ -427,7 +427,7 @@ gdk_drop_finish (GdkDragContext *context,
  * handling a %GDK_DROP_FINISHED event, its return value is
  * meaningless at other times.
  *
- * Return value: %TRUE if the drop was successful.
+ * Returns: %TRUE if the drop was successful.
  *
  * Since: 2.6
  **/
@@ -445,7 +445,7 @@ gdk_drag_drop_succeeded (GdkDragContext *context)
  *
  * Returns the selection atom for the current source window.
  *
- * Return value: (transfer none): the selection atom, or %GDK_NONE
+ * Returns: (transfer none): the selection atom, or %GDK_NONE
  */
 GdkAtom
 gdk_drag_get_selection (GdkDragContext *context)

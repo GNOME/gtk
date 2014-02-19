@@ -339,7 +339,7 @@ gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
  * Returns whether the check menu item is active. See
  * gtk_check_menu_item_set_active ().
  * 
- * Return value: %TRUE if the menu item is checked.
+ * Returns: %TRUE if the menu item is checked.
  */
 gboolean
 gtk_check_menu_item_get_active (GtkCheckMenuItem *check_menu_item)
@@ -419,7 +419,7 @@ gtk_check_menu_item_set_inconsistent (GtkCheckMenuItem *check_menu_item,
  * 
  * Retrieves the value set by gtk_check_menu_item_set_inconsistent().
  * 
- * Return value: %TRUE if inconsistent
+ * Returns: %TRUE if inconsistent
  **/
 gboolean
 gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item)
@@ -466,7 +466,7 @@ gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
  * 
  * Returns whether @check_menu_item looks like a #GtkRadioMenuItem
  * 
- * Return value: Whether @check_menu_item looks like a #GtkRadioMenuItem
+ * Returns: Whether @check_menu_item looks like a #GtkRadioMenuItem
  * 
  * Since: 2.4
  **/

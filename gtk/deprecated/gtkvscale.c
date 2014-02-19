@@ -100,7 +100,7 @@ gtk_vscale_new (GtkAdjustment *adjustment)
  * is a power of ten. If the resulting precision is not suitable for your
  * needs, use gtk_scale_set_digits() to correct it.
  *
- * Return value: a new #GtkVScale
+ * Returns: a new #GtkVScale
  *
  * Deprecated: 3.2: Use gtk_scale_new_with_range() with %GTK_ORIENTATION_VERTICAL instead
  **/

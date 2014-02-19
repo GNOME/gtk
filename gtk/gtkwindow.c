@@ -1845,7 +1845,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
  *
  * To delete a #GtkWindow, call gtk_window_destroy().
  * 
- * Return value: a new #GtkWindow.
+ * Returns: a new #GtkWindow.
  **/
 GtkWidget*
 gtk_window_new (GtkWindowType type)
@@ -1923,7 +1923,7 @@ gtk_window_set_title (GtkWindow   *window,
  *
  * Retrieves the title of the window. See gtk_window_set_title().
  *
- * Return value: the title of the window, or %NULL if none has
+ * Returns: the title of the window, or %NULL if none has
  *    been set explicitly. The returned string is owned by the widget
  *    and must not be modified or freed.
  **/
@@ -2086,7 +2086,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
  * Returns the role of the window. See gtk_window_set_role() for
  * further explanation.
  *
- * Return value: the role of the window if set, or %NULL. The
+ * Returns: the role of the window if set, or %NULL. The
  *   returned is owned by the widget and must not be modified
  *   or freed.
  **/
@@ -2434,7 +2434,7 @@ gtk_window_set_mnemonic_modifier (GtkWindow      *window,
  * Returns the mnemonic modifier for this window. See
  * gtk_window_set_mnemonic_modifier().
  *
- * Return value: the modifier mask used to activate
+ * Returns: the modifier mask used to activate
  *               mnemonics on this window.
  **/
 GdkModifierType
@@ -2491,7 +2491,7 @@ gtk_window_set_position (GtkWindow         *window,
  * 
  * Activates the current focused widget within the window.
  * 
- * Return value: %TRUE if a widget got activated.
+ * Returns: %TRUE if a widget got activated.
  **/
 gboolean 
 gtk_window_activate_focus (GtkWindow *window)
@@ -2518,7 +2518,7 @@ gtk_window_activate_focus (GtkWindow *window)
  * is not focused then  `gtk_widget_has_focus (widget)` will
  * not be %TRUE for the widget.
  *
- * Return value: (transfer none): the currently focused widget, or %NULL if there is none.
+ * Returns: (transfer none): the currently focused widget, or %NULL if there is none.
  **/
 GtkWidget *
 gtk_window_get_focus (GtkWindow *window)
@@ -2537,7 +2537,7 @@ gtk_window_get_focus (GtkWindow *window)
  * (see gtk_widget_set_receives_default()), in which case the
  * focused widget is activated. 
  * 
- * Return value: %TRUE if a widget got activated.
+ * Returns: %TRUE if a widget got activated.
  **/
 gboolean
 gtk_window_activate_default (GtkWindow *window)
@@ -2615,7 +2615,7 @@ gtk_window_set_modal (GtkWindow *window,
  * 
  * Returns whether the window is modal. See gtk_window_set_modal().
  *
- * Return value: %TRUE if the window is set to be modal and
+ * Returns: %TRUE if the window is set to be modal and
  *               establishes a grab when shown
  **/
 gboolean
@@ -2636,7 +2636,7 @@ gtk_window_get_modal (GtkWindow *window)
  * `g_list_foreach (result, (GFunc)g_object_ref, NULL)` first, and
  * then unref all the widgets afterwards.
  *
- * Return value: (element-type GtkWidget) (transfer container): list of toplevel widgets
+ * Returns: (element-type GtkWidget) (transfer container): list of toplevel widgets
  **/
 GList*
 gtk_window_list_toplevels (void)
@@ -2862,7 +2862,7 @@ gtk_window_set_transient_for  (GtkWindow *window,
  * Fetches the transient parent for this window. See
  * gtk_window_set_transient_for().
  *
- * Return value: (transfer none): the transient parent for this window, or %NULL
+ * Returns: (transfer none): the transient parent for this window, or %NULL
  *    if no transient parent has been set.
  **/
 GtkWindow *
@@ -2936,7 +2936,7 @@ gtk_window_set_attached_to (GtkWindow *window,
  * Fetches the attach widget for this window. See
  * gtk_window_set_attached_to().
  *
- * Return value: (transfer none): the widget where the window is attached,
+ * Returns: (transfer none): the widget where the window is attached,
  *   or %NULL if the window is not attached to any widget.
  *
  * Since: 3.4
@@ -2981,7 +2981,7 @@ gtk_window_set_opacity  (GtkWindow *window,
  * Fetches the requested opacity for this window. See
  * gtk_window_set_opacity().
  *
- * Return value: the requested opacity for this window.
+ * Returns: the requested opacity for this window.
  *
  * Since: 2.12
  * Deprecated: 3.8: Use gtk_widget_get_opacity instead.
@@ -3000,7 +3000,7 @@ gtk_window_get_opacity (GtkWindow *window)
  *
  * Gets the #GtkApplication associated with the window (if any).
  *
- * Return value: (transfer none): a #GtkApplication, or %NULL
+ * Returns: (transfer none): a #GtkApplication, or %NULL
  *
  * Since: 3.0
  **/
@@ -3113,7 +3113,7 @@ gtk_window_set_type_hint (GtkWindow           *window,
  *
  * Gets the type hint for this window. See gtk_window_set_type_hint().
  *
- * Return value: the type hint for @window.
+ * Returns: the type hint for @window.
  **/
 GdkWindowTypeHint
 gtk_window_get_type_hint (GtkWindow *window)
@@ -3161,7 +3161,7 @@ gtk_window_set_skip_taskbar_hint (GtkWindow *window,
  * 
  * Gets the value set by gtk_window_set_skip_taskbar_hint()
  * 
- * Return value: %TRUE if window shouldn’t be in taskbar
+ * Returns: %TRUE if window shouldn’t be in taskbar
  * 
  * Since: 2.2
  **/
@@ -3214,7 +3214,7 @@ gtk_window_set_skip_pager_hint (GtkWindow *window,
  * 
  * Gets the value set by gtk_window_set_skip_pager_hint().
  * 
- * Return value: %TRUE if window shouldn’t be in pager
+ * Returns: %TRUE if window shouldn’t be in pager
  * 
  * Since: 2.2
  **/
@@ -3264,7 +3264,7 @@ gtk_window_set_urgency_hint (GtkWindow *window,
  * 
  * Gets the value set by gtk_window_set_urgency_hint()
  * 
- * Return value: %TRUE if window is urgent
+ * Returns: %TRUE if window is urgent
  * 
  * Since: 2.8
  **/
@@ -3314,7 +3314,7 @@ gtk_window_set_accept_focus (GtkWindow *window,
  * 
  * Gets the value set by gtk_window_set_accept_focus().
  * 
- * Return value: %TRUE if window should receive the input focus
+ * Returns: %TRUE if window should receive the input focus
  * 
  * Since: 2.4
  **/
@@ -3365,7 +3365,7 @@ gtk_window_set_focus_on_map (GtkWindow *window,
  * 
  * Gets the value set by gtk_window_set_focus_on_map().
  * 
- * Return value: %TRUE if window should receive the input focus when
+ * Returns: %TRUE if window should receive the input focus when
  * mapped.
  * 
  * Since: 2.6
@@ -3422,7 +3422,7 @@ gtk_window_set_destroy_with_parent  (GtkWindow *window,
  * Returns whether the window will be destroyed with its transient parent. See
  * gtk_window_set_destroy_with_parent ().
  *
- * Return value: %TRUE if the window will be destroyed with its transient parent.
+ * Returns: %TRUE if the window will be destroyed with its transient parent.
  **/
 gboolean
 gtk_window_get_destroy_with_parent (GtkWindow *window)
@@ -3478,7 +3478,7 @@ gtk_window_set_hide_titlebar_when_maximized (GtkWindow *window,
  * Returns whether the window has requested to have its titlebar hidden
  * when maximized. See gtk_window_set_hide_titlebar_when_maximized ().
  *
- * Return value: %TRUE if the window has requested to have its titlebar
+ * Returns: %TRUE if the window has requested to have its titlebar
  *               hidden when maximized
  *
  * Since: 3.4
@@ -3811,7 +3811,7 @@ gtk_window_set_decorated (GtkWindow *window,
  * Returns whether the window has been set to have decorations
  * such as a title bar via gtk_window_set_decorated().
  *
- * Return value: %TRUE if the window has been set to have decorations
+ * Returns: %TRUE if the window has been set to have decorations
  **/
 gboolean
 gtk_window_get_decorated (GtkWindow *window)
@@ -3880,7 +3880,7 @@ gtk_window_set_deletable (GtkWindow *window,
  * Returns whether the window has been set to have a close button
  * via gtk_window_set_deletable().
  *
- * Return value: %TRUE if the window has been set to have a close button
+ * Returns: %TRUE if the window has been set to have a close button
  *
  * Since: 2.10
  **/
@@ -4209,7 +4209,7 @@ gtk_window_set_icon_list (GtkWindow  *window,
  * The list is copied, but the reference count on each
  * member won’t be incremented.
  *
- * Return value: (element-type GdkPixbuf) (transfer container): copy of window’s icon list
+ * Returns: (element-type GdkPixbuf) (transfer container): copy of window’s icon list
  **/
 GList*
 gtk_window_get_icon_list (GtkWindow  *window)
@@ -4352,7 +4352,7 @@ gtk_window_get_icon_name (GtkWindow *window)
  * called gtk_window_set_icon_list(), gets the first icon in
  * the icon list).
  *
- * Return value: (transfer none): icon for window
+ * Returns: (transfer none): icon for window
  **/
 GdkPixbuf*
 gtk_window_get_icon (GtkWindow  *window)
@@ -4605,7 +4605,7 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
  * but the pixbufs in the list have not had their reference count
  * incremented.
  * 
- * Return value: (element-type GdkPixbuf) (transfer container): copy of default icon list 
+ * Returns: (element-type GdkPixbuf) (transfer container): copy of default icon list 
  **/
 GList*
 gtk_window_get_default_icon_list (void)
@@ -7549,7 +7549,7 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
  * however in some cases it may be useful to call this directly when
  * overriding the standard key handling for a toplevel window.
  *
- * Return value: %TRUE if a widget in the focus chain handled the event.
+ * Returns: %TRUE if a widget in the focus chain handled the event.
  *
  * Since: 2.4
  */
@@ -10464,7 +10464,7 @@ gtk_window_set_resizable (GtkWindow *window,
  *
  * Gets the value set by gtk_window_set_resizable().
  *
- * Return value: %TRUE if the user can resize the window
+ * Returns: %TRUE if the user can resize the window
  **/
 gboolean
 gtk_window_get_resizable (GtkWindow *window)
@@ -10515,7 +10515,7 @@ gtk_window_set_gravity (GtkWindow *window,
  *
  * Gets the value set by gtk_window_set_gravity().
  *
- * Return value: (transfer none): window gravity
+ * Returns: (transfer none): window gravity
  **/
 GdkGravity
 gtk_window_get_gravity (GtkWindow *window)
@@ -10736,7 +10736,7 @@ gtk_window_check_screen (GtkWindow *window)
  *
  * Returns the #GdkScreen associated with @window.
  *
- * Return value: (transfer none): a #GdkScreen.
+ * Returns: (transfer none): a #GdkScreen.
  *
  * Since: 2.2
  */
@@ -10760,7 +10760,7 @@ gtk_window_get_screen (GtkWindow *window)
  * differently in an active window from a widget in an inactive window.
  * See gtk_window_has_toplevel_focus()
  * 
- * Return value: %TRUE if the window part of the current active window.
+ * Returns: %TRUE if the window part of the current active window.
  *
  * Since: 2.4
  **/
@@ -10780,7 +10780,7 @@ gtk_window_is_active (GtkWindow *window)
  * For real toplevel windows, this is identical to gtk_window_is_active(),
  * but for embedded windows, like #GtkPlug, the results will differ.
  * 
- * Return value: %TRUE if the input focus is within this GtkWindow
+ * Returns: %TRUE if the input focus is within this GtkWindow
  *
  * Since: 2.4
  **/
@@ -10826,7 +10826,7 @@ gtk_window_group_class_init (GtkWindowGroupClass *klass)
  * Creates a new #GtkWindowGroup object. Grabs added with
  * gtk_grab_add() only affect windows within the same #GtkWindowGroup.
  * 
- * Return value: a new #GtkWindowGroup. 
+ * Returns: a new #GtkWindowGroup. 
  **/
 GtkWindowGroup *
 gtk_window_group_new (void)
@@ -11010,7 +11010,7 @@ gtk_window_get_group (GtkWindow *window)
  *
  * Returns whether @window has an explicit window group.
  *
- * Return value: %TRUE if @window has an explicit window group.
+ * Returns: %TRUE if @window has an explicit window group.
  *
  * Since 2.22
  **/
@@ -11454,7 +11454,7 @@ gtk_XParseGeometry (const char   *string,
  * }
  * ]|
  *
- * Return value: %TRUE if string was parsed successfully
+ * Returns: %TRUE if string was parsed successfully
  **/
 gboolean
 gtk_window_parse_geometry (GtkWindow   *window,
@@ -11695,7 +11695,7 @@ gtk_window_free_key_hash (GtkWindow *window)
  * however in some cases it may be useful to call this directly when
  * overriding the standard key handling for a toplevel window.
  *
- * Return value: %TRUE if a mnemonic or accelerator was found and activated.
+ * Returns: %TRUE if a mnemonic or accelerator was found and activated.
  *
  * Since: 2.4
  */
@@ -11961,7 +11961,7 @@ gtk_window_set_auto_startup_notification (gboolean setting)
  *
  * Gets the type of the window. See #GtkWindowType.
  *
- * Return value: the type of the window
+ * Returns: the type of the window
  *
  * Since: 2.20
  **/

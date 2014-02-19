@@ -767,7 +767,7 @@ gtk_text_buffer_notify (GObject    *object,
  *
  * Creates a new text buffer.
  *
- * Return value: a new text buffer
+ * Returns: a new text buffer
  **/
 GtkTextBuffer*
 gtk_text_buffer_new (GtkTextTagTable *table)
@@ -837,7 +837,7 @@ _gtk_text_buffer_get_btree (GtkTextBuffer *buffer)
  *
  * Get the #GtkTextTagTable associated with this buffer.
  *
- * Return value: (transfer none): the buffer’s tag table
+ * Returns: (transfer none): the buffer’s tag table
  **/
 GtkTextTagTable*
 gtk_text_buffer_get_tag_table (GtkTextBuffer *buffer)
@@ -996,7 +996,7 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
  * have a tag affecting editability applied to it. Typically the
  * result of gtk_text_view_get_editable() is appropriate here.
  *
- * Return value: whether text was actually inserted
+ * Returns: whether text was actually inserted
  **/
 gboolean
 gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
@@ -1034,7 +1034,7 @@ gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
  * have a tag affecting editability applied to it. Typically the
  * result of gtk_text_view_get_editable() is appropriate here.
  * 
- * Return value: whether text was actually inserted
+ * Returns: whether text was actually inserted
  **/
 gboolean
 gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
@@ -1689,7 +1689,7 @@ gtk_text_buffer_delete (GtkTextBuffer *buffer,
  * the location of the last deleted range, or left untouched if
  * no text was deleted.
  *
- * Return value: whether some text was actually deleted
+ * Returns: whether some text was actually deleted
  **/
 gboolean
 gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
@@ -1835,7 +1835,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
  * and character indexes into the buffer. Contrast with
  * gtk_text_buffer_get_slice().
  *
- * Return value: an allocated UTF-8 string
+ * Returns: an allocated UTF-8 string
  **/
 gchar*
 gtk_text_buffer_get_text (GtkTextBuffer     *buffer,
@@ -1873,7 +1873,7 @@ gtk_text_buffer_get_text (GtkTextBuffer     *buffer,
  * text as well, so it is not a reliable indicator that a pixbuf or
  * widget is in the buffer.
  *
- * Return value: an allocated UTF-8 string
+ * Returns: an allocated UTF-8 string
  **/
 gchar*
 gtk_text_buffer_get_slice (GtkTextBuffer     *buffer,
@@ -1994,7 +1994,7 @@ gtk_text_buffer_insert_child_anchor (GtkTextBuffer      *buffer,
  * owned by the buffer; no reference count is returned to
  * the caller of gtk_text_buffer_create_child_anchor().
  * 
- * Return value: (transfer none): the created child anchor
+ * Returns: (transfer none): the created child anchor
  **/
 GtkTextChildAnchor*
 gtk_text_buffer_create_child_anchor (GtkTextBuffer *buffer,
@@ -2059,7 +2059,7 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
  * Move the mark to the given position, if not @should_exist, 
  * create the mark.
  *
- * Return value: mark
+ * Returns: mark
  **/
 static GtkTextMark*
 gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
@@ -2115,7 +2115,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
  * Emits the #GtkTextBuffer::mark-set signal as notification of the mark's
  * initial placement.
  *
- * Return value: (transfer none): the new #GtkTextMark object
+ * Returns: (transfer none): the new #GtkTextMark object
  **/
 GtkTextMark*
 gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
@@ -2256,7 +2256,7 @@ gtk_text_buffer_delete_mark (GtkTextBuffer *buffer,
  * Returns the mark named @name in buffer @buffer, or %NULL if no such
  * mark exists in the buffer.
  *
- * Return value: (transfer none): a #GtkTextMark, or %NULL
+ * Returns: (transfer none): a #GtkTextMark, or %NULL
  **/
 GtkTextMark*
 gtk_text_buffer_get_mark (GtkTextBuffer *buffer,
@@ -2339,7 +2339,7 @@ gtk_text_buffer_delete_mark_by_name (GtkTextBuffer *buffer,
  * named “insert”, but very slightly more efficient, and involves less
  * typing.
  *
- * Return value: (transfer none): insertion point mark
+ * Returns: (transfer none): insertion point mark
  **/
 GtkTextMark*
 gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
@@ -2365,7 +2365,7 @@ gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
  * for handling the selection, if you just want to know whether there’s a
  * selection and what its bounds are.
  *
- * Return value: (transfer none): selection bound mark
+ * Returns: (transfer none): selection bound mark
  **/
 GtkTextMark*
 gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
@@ -2478,7 +2478,7 @@ gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
  * The @first_property_name argument and subsequent arguments are a list
  * of properties to set on the tag, as with g_object_set().
  *
- * Return value: (transfer none): a new tag
+ * Returns: (transfer none): a new tag
  */
 GtkTextTag*
 gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
@@ -3025,7 +3025,7 @@ gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
  * %FALSE. Used for example to enable a “save” function in a text
  * editor.
  * 
- * Return value: %TRUE if the buffer has been modified
+ * Returns: %TRUE if the buffer has been modified
  **/
 gboolean
 gtk_text_buffer_get_modified (GtkTextBuffer *buffer)
@@ -3071,7 +3071,7 @@ gtk_text_buffer_set_modified (GtkTextBuffer *buffer,
  * 
  * Indicates whether the buffer has some text currently selected.
  * 
- * Return value: %TRUE if the there is text selected
+ * Returns: %TRUE if the there is text selected
  *
  * Since: 2.10
  **/
@@ -3095,7 +3095,7 @@ gtk_text_buffer_get_has_selection (GtkTextBuffer *buffer)
  * Obtains the number of lines in the buffer. This value is cached, so
  * the function is very fast.
  * 
- * Return value: number of lines in the buffer
+ * Returns: number of lines in the buffer
  **/
 gint
 gtk_text_buffer_get_line_count (GtkTextBuffer *buffer)
@@ -3114,7 +3114,7 @@ gtk_text_buffer_get_line_count (GtkTextBuffer *buffer)
  * the buffer in string form to be this many bytes long. The character
  * count is cached, so this function is very fast.
  * 
- * Return value: number of characters in the buffer
+ * Returns: number of characters in the buffer
  **/
 gint
 gtk_text_buffer_get_char_count (GtkTextBuffer *buffer)
@@ -3825,7 +3825,7 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
  * the editability of the selection will be considered (users can’t delete
  * uneditable text).
  * 
- * Return value: whether there was a non-empty selection to delete
+ * Returns: whether there was a non-empty selection to delete
  **/
 gboolean
 gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
@@ -3868,7 +3868,7 @@ gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
  * invalid after calling this function; however, the @iter will be
  * re-initialized to point to the location where text was deleted. 
  *
- * Return value: %TRUE if the buffer was modified
+ * Returns: %TRUE if the buffer was modified
  *
  * Since: 2.6
  **/
@@ -4067,7 +4067,7 @@ gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer,
  * NULL, then they are not filled in, but the return value still indicates
  * whether text is selected.
  *
- * Return value: whether the selection has nonzero length
+ * Returns: whether the selection has nonzero length
  **/
 gboolean
 gtk_text_buffer_get_selection_bounds (GtkTextBuffer *buffer,
@@ -4203,7 +4203,7 @@ gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
  * using gtk_target_list_add_rich_text_targets() and
  * gtk_target_list_add_text_targets().
  *
- * Return value: (transfer none): the #GtkTargetList
+ * Returns: (transfer none): the #GtkTargetList
  *
  * Since: 2.10
  **/
@@ -4235,7 +4235,7 @@ gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer)
  * using gtk_target_list_add_rich_text_targets() and
  * gtk_target_list_add_text_targets().
  *
- * Return value: (transfer none): the #GtkTargetList
+ * Returns: (transfer none): the #GtkTargetList
  *
  * Since: 2.10
  **/

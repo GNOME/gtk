@@ -353,7 +353,7 @@ _gtk_print_context_set_page_setup (GtkPrintContext *context,
  * Obtains the cairo context that is associated with the
  * #GtkPrintContext.
  *
- * Return value: (transfer none): the cairo context of @context
+ * Returns: (transfer none): the cairo context of @context
  *
  * Since: 2.10
  */
@@ -372,7 +372,7 @@ gtk_print_context_get_cairo_context (GtkPrintContext *context)
  * Obtains the #GtkPageSetup that determines the page
  * dimensions of the #GtkPrintContext.
  *
- * Return value: (transfer none): the page setup of @context
+ * Returns: (transfer none): the page setup of @context
  *
  * Since: 2.10
  */
@@ -390,7 +390,7 @@ gtk_print_context_get_page_setup (GtkPrintContext *context)
  *
  * Obtains the width of the #GtkPrintContext, in pixels.
  *
- * Return value: the width of @context
+ * Returns: the width of @context
  *
  * Since: 2.10 
  */
@@ -419,7 +419,7 @@ gtk_print_context_get_width (GtkPrintContext *context)
  * 
  * Obtains the height of the #GtkPrintContext, in pixels.
  *
- * Return value: the height of @context
+ * Returns: the height of @context
  *
  * Since: 2.10
  */
@@ -449,7 +449,7 @@ gtk_print_context_get_height (GtkPrintContext *context)
  * Obtains the horizontal resolution of the #GtkPrintContext,
  * in dots per inch.
  *
- * Return value: the horizontal resolution of @context
+ * Returns: the horizontal resolution of @context
  *
  * Since: 2.10
  */
@@ -468,7 +468,7 @@ gtk_print_context_get_dpi_x (GtkPrintContext *context)
  * Obtains the vertical resolution of the #GtkPrintContext,
  * in dots per inch.
  *
- * Return value: the vertical resolution of @context
+ * Returns: the vertical resolution of @context
  *
  * Since: 2.10
  */
@@ -490,7 +490,7 @@ gtk_print_context_get_dpi_y (GtkPrintContext *context)
  *
  * Obtains the hardware printer margins of the #GtkPrintContext, in units.
  *
- * Return value: %TRUE if the hard margins were retrieved
+ * Returns: %TRUE if the hard margins were retrieved
  *
  * Since: 2.20
  */
@@ -543,7 +543,7 @@ _gtk_print_context_set_hard_margins (GtkPrintContext *context,
  * Returns a #PangoFontMap that is suitable for use
  * with the #GtkPrintContext.
  *
- * Return value: (transfer none): the font map of @context
+ * Returns: (transfer none): the font map of @context
  *
  * Since: 2.10
  */
@@ -562,7 +562,7 @@ gtk_print_context_get_pango_fontmap (GtkPrintContext *context)
  * Creates a new #PangoContext that can be used with the
  * #GtkPrintContext.
  *
- * Return value: (transfer full): a new Pango context for @context
+ * Returns: (transfer full): a new Pango context for @context
  * 
  * Since: 2.10
  */
@@ -596,7 +596,7 @@ gtk_print_context_create_pango_context (GtkPrintContext *context)
  * Creates a new #PangoLayout that is suitable for use
  * with the #GtkPrintContext.
  * 
- * Return value: (transfer full): a new Pango layout for @context
+ * Returns: (transfer full): a new Pango layout for @context
  *
  * Since: 2.10
  */

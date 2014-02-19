@@ -1081,7 +1081,7 @@ gtk_tool_button_sync_action_properties (GtkActivatable *activatable,
  *
  * It is an error if @stock_id is not a name of a stock item.
  * 
- * Return value: A new #GtkToolButton
+ * Returns: A new #GtkToolButton
  * 
  * Since: 2.4
  *
@@ -1109,7 +1109,7 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
  * Creates a new %GtkToolButton using @icon_widget as contents and @label as
  * label.
  *
- * Return value: A new #GtkToolButton
+ * Returns: A new #GtkToolButton
  * 
  * Since: 2.4
  **/
@@ -1178,7 +1178,7 @@ gtk_tool_button_set_label (GtkToolButton *button,
  * doesn’t have a label. or uses a the label from a stock item. The returned
  * string is owned by GTK+, and must not be modified or freed.
  * 
- * Return value: The label, or %NULL
+ * Returns: The label, or %NULL
  * 
  * Since: 2.4
  **/
@@ -1230,7 +1230,7 @@ gtk_tool_button_set_use_underline (GtkToolButton *button,
  * Returns whether underscores in the label property are used as mnemonics
  * on menu items on the overflow menu. See gtk_tool_button_set_use_underline().
  * 
- * Return value: %TRUE if underscores in the label property are used as
+ * Returns: %TRUE if underscores in the label property are used as
  * mnemonics on menu items on the overflow menu.
  * 
  * Since: 2.4
@@ -1281,7 +1281,7 @@ gtk_tool_button_set_stock_id (GtkToolButton *button,
  * Returns the name of the stock item. See gtk_tool_button_set_stock_id().
  * The returned string is owned by GTK+ and must not be freed or modifed.
  * 
- * Return value: the name of the stock item for @button.
+ * Returns: the name of the stock item for @button.
  * 
  * Since: 2.4
  *
@@ -1439,7 +1439,7 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
  * Returns the widget used as label on @button.
  * See gtk_tool_button_set_label_widget().
  *
- * Return value: (transfer none): The widget used as label
+ * Returns: (transfer none): The widget used as label
  *     on @button, or %NULL.
  *
  * Since: 2.4
@@ -1459,7 +1459,7 @@ gtk_tool_button_get_label_widget (GtkToolButton *button)
  * Return the widget used as icon widget on @button.
  * See gtk_tool_button_set_icon_widget().
  *
- * Return value: (transfer none): The widget used as icon
+ * Returns: (transfer none): The widget used as icon
  *     on @button, or %NULL.
  *
  * Since: 2.4

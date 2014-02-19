@@ -3320,7 +3320,7 @@ gdk_win32_window_is_win32 (GdkWindow *window)
  * 
  * Gets a DC with the given drawable selected into it.
  *
- * Return value: The DC, on success. Otherwise
+ * Returns: The DC, on success. Otherwise
  *  %NULL. If this function succeeded
  *  _gdk_win32_impl_release_dc()  must be called
  *  release the DC when you are done using it.

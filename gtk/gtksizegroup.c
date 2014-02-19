@@ -415,7 +415,7 @@ gtk_size_group_get_property (GObject      *object,
  * 
  * Create a new #GtkSizeGroup.
  
- * Return value: a newly created #GtkSizeGroup
+ * Returns: a newly created #GtkSizeGroup
  **/
 GtkSizeGroup *
 gtk_size_group_new (GtkSizeGroupMode mode)
@@ -468,7 +468,7 @@ gtk_size_group_set_mode (GtkSizeGroup     *size_group,
  * 
  * Gets the current mode of the size group. See gtk_size_group_set_mode().
  * 
- * Return value: the current mode of the size group.
+ * Returns: the current mode of the size group.
  **/
 GtkSizeGroupMode
 gtk_size_group_get_mode (GtkSizeGroup *size_group)
@@ -617,7 +617,7 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
  * 
  * Returns the list of widgets associated with @size_group.
  *
- * Return value:  (element-type GtkWidget) (transfer none): a #GSList of
+ * Returns:  (element-type GtkWidget) (transfer none): a #GSList of
  *   widgets. The list is owned by GTK+ and should not be modified.
  *
  * Since: 2.10

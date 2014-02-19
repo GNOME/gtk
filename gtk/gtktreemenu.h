@@ -54,7 +54,7 @@ typedef struct _GtkTreeMenuPrivate       GtkTreeMenuPrivate;
  * which has children should be replicated as a header item in the
  * child menu.
  *
- * Return value: %TRUE if @iter should have an activatable header menu
+ * Returns: %TRUE if @iter should have an activatable header menu
  * item created for it in a submenu.
  */
 typedef gboolean (*GtkTreeMenuHeaderFunc) (GtkTreeModel      *model,

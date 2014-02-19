@@ -235,7 +235,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * the #GtkFileChooser inserts only the part of the prefix up to the
    * next '/'.
    *
-   * Return value: %TRUE if the signal has been handled
+   * Returns: %TRUE if the signal has been handled
    *
    * Since: 2.6
    */
@@ -263,7 +263,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Note that @model is the model that was passed to
    * gtk_entry_completion_set_model().
    *
-   * Return value: %TRUE if the signal has been handled
+   * Returns: %TRUE if the signal has been handled
    *
    * Since: 2.4
    */
@@ -292,7 +292,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Note that @model is the model that was passed to
    * gtk_entry_completion_set_model().
    *
-   * Return value: %TRUE if the signal has been handled
+   * Returns: %TRUE if the signal has been handled
    *
    * Since: 2.12
    */
@@ -1139,7 +1139,7 @@ gtk_entry_completion_selection_changed (GtkTreeSelection *selection,
  *
  * Creates a new #GtkEntryCompletion object.
  *
- * Return value: A newly created #GtkEntryCompletion object
+ * Returns: A newly created #GtkEntryCompletion object
  *
  * Since: 2.4
  */
@@ -1161,7 +1161,7 @@ gtk_entry_completion_new (void)
  * specified @area to layout cells in the underlying
  * #GtkTreeViewColumn for the drop-down menu.
  *
- * Return value: A newly created #GtkEntryCompletion object
+ * Returns: A newly created #GtkEntryCompletion object
  *
  * Since: 3.0
  */
@@ -1181,7 +1181,7 @@ gtk_entry_completion_new_with_area (GtkCellArea *area)
  *
  * Gets the entry @completion has been attached to.
  *
- * Return value: (transfer none): The entry @completion has been attached to
+ * Returns: (transfer none): The entry @completion has been attached to
  *
  * Since: 2.4
  */
@@ -1245,7 +1245,7 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
  * Returns the model the #GtkEntryCompletion is using as data source.
  * Returns %NULL if the model is unset.
  *
- * Return value: (transfer none): A #GtkTreeModel, or %NULL if none
+ * Returns: (transfer none): A #GtkTreeModel, or %NULL if none
  *     is currently being used
  *
  * Since: 2.4
@@ -1323,7 +1323,7 @@ gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
  *
  * Returns the minimum key length as set for @completion.
  *
- * Return value: The currently used minimum key length
+ * Returns: The currently used minimum key length
  *
  * Since: 2.4
  */
@@ -1538,7 +1538,7 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
  *
  * Returns the column in the model of @completion to get strings from.
  *
- * Return value: the column containing the strings
+ * Returns: the column containing the strings
  *
  * Since: 2.6
  */
@@ -2049,7 +2049,7 @@ gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion,
  * Returns whether the common prefix of the possible completions should
  * be automatically inserted in the entry.
  *
- * Return value: %TRUE if inline completion is turned on
+ * Returns: %TRUE if inline completion is turned on
  *
  * Since: 2.6
  */
@@ -2093,7 +2093,7 @@ gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion,
  *
  * Returns whether the completions should be presented in a popup window.
  *
- * Return value: %TRUE if popup completion is turned on
+ * Returns: %TRUE if popup completion is turned on
  *
  * Since: 2.6
  */
@@ -2138,7 +2138,7 @@ gtk_entry_completion_set_popup_set_width (GtkEntryCompletion *completion,
  * Returns whether the  completion popup window will be resized to the
  * width of the entry.
  *
- * Return value: %TRUE if the popup window will be resized to the width of
+ * Returns: %TRUE if the popup window will be resized to the width of
  *   the entry
  *
  * Since: 2.8
@@ -2187,7 +2187,7 @@ gtk_entry_completion_set_popup_single_match (GtkEntryCompletion *completion,
  * Returns whether the completion popup window will appear even if there is
  * only a single match.
  *
- * Return value: %TRUE if the popup window will appear regardless of the
+ * Returns: %TRUE if the popup window will appear regardless of the
  *    number of matches
  *
  * Since: 2.8

@@ -684,7 +684,7 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
  * GTK+ maintains a global list of binding sets. Each binding set has
  * a unique name which needs to be specified upon creation.
  *
- * Return value: (transfer full): new binding set
+ * Returns: (transfer full): new binding set
  */
 GtkBindingSet*
 gtk_binding_set_new (const gchar *set_name)
@@ -715,7 +715,7 @@ gtk_binding_set_new (const gchar *set_name)
  * the passed in class structure. New binding sets are created on
  * demand by this function.
  *
- * Return value: (transfer full): the binding set corresponding to
+ * Returns: (transfer full): the binding set corresponding to
  *     @object_class
  */
 GtkBindingSet*
@@ -766,7 +766,7 @@ gtk_binding_set_find_interned (const gchar *set_name)
  * The @set_name can either be a name used for gtk_binding_set_new()
  * or the type name of a class used in gtk_binding_set_by_class().
  *
- * Return value: (transfer none): %NULL or the specified binding set
+ * Returns: (transfer none): %NULL or the specified binding set
  */
 GtkBindingSet*
 gtk_binding_set_find (const gchar *set_name)
@@ -786,7 +786,7 @@ gtk_binding_set_find (const gchar *set_name)
  * Find a key binding matching @keyval and @modifiers within
  * @binding_set and activate the binding on @object.
  *
- * Return value: %TRUE if a binding was found and activated
+ * Returns: %TRUE if a binding was found and activated
  */
 gboolean
 gtk_binding_set_activate (GtkBindingSet  *binding_set,
@@ -1605,7 +1605,7 @@ gtk_bindings_activate_list (GObject  *object,
  * Find a key binding matching @keyval and @modifiers and activate the
  * binding on @object.
  *
- * Return value: %TRUE if a binding was found and activated
+ * Returns: %TRUE if a binding was found and activated
  */
 gboolean
 gtk_bindings_activate (GObject         *object,
@@ -1644,7 +1644,7 @@ gtk_bindings_activate (GObject         *object,
  * Looks up key bindings for @object to find one matching
  * @event, and if one was found, activate it.
  *
- * Return value: %TRUE if a matching key binding was found
+ * Returns: %TRUE if a matching key binding was found
  *
  * Since: 2.4
  */

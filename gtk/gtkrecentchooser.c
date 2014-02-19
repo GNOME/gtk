@@ -274,7 +274,7 @@ gtk_recent_chooser_error_quark (void)
  *
  * Gets the #GtkRecentManager used by @chooser.
  *
- * Return value: the recent manager for @chooser.
+ * Returns: the recent manager for @chooser.
  *
  * Since: 2.10
  */
@@ -311,7 +311,7 @@ gtk_recent_chooser_set_show_private (GtkRecentChooser *chooser,
  * Returns whether @chooser should display recently used resources
  * registered as private.
  *
- * Return value: %TRUE if the recent chooser should show private items,
+ * Returns: %TRUE if the recent chooser should show private items,
  *   %FALSE otherwise.
  *
  * Since: 2.10
@@ -354,7 +354,7 @@ gtk_recent_chooser_set_show_not_found (GtkRecentChooser *chooser,
  * Retrieves whether @chooser should show the recently used resources that
  * were not found.
  *
- * Return value: %TRUE if the resources not found should be displayed, and
+ * Returns: %TRUE if the resources not found should be displayed, and
  *   %FALSE otheriwse.
  *
  * Since: 2.10
@@ -396,7 +396,7 @@ gtk_recent_chooser_set_show_icons (GtkRecentChooser *chooser,
  *
  * Retrieves whether @chooser should show an icon near the resource.
  *
- * Return value: %TRUE if the icons should be displayed, %FALSE otherwise.
+ * Returns: %TRUE if the icons should be displayed, %FALSE otherwise.
  *
  * Since: 2.10
  */
@@ -436,7 +436,7 @@ gtk_recent_chooser_set_select_multiple (GtkRecentChooser *chooser,
  *
  * Gets whether @chooser can select multiple items.
  *
- * Return value: %TRUE if @chooser can select more than one item.
+ * Returns: %TRUE if @chooser can select more than one item.
  *
  * Since: 2.10
  */
@@ -480,7 +480,7 @@ gtk_recent_chooser_set_local_only (GtkRecentChooser *chooser,
  * Gets whether only local resources should be shown in the recently used
  * resources selector.  See gtk_recent_chooser_set_local_only()
  *
- * Return value: %TRUE if only local resources should be shown.
+ * Returns: %TRUE if only local resources should be shown.
  *
  * Since: 2.10
  */
@@ -522,7 +522,7 @@ gtk_recent_chooser_set_limit (GtkRecentChooser *chooser,
  * Gets the number of items returned by gtk_recent_chooser_get_items()
  * and gtk_recent_chooser_get_uris().
  *
- * Return value: A positive integer, or -1 meaning that all items are
+ * Returns: A positive integer, or -1 meaning that all items are
  *   returned.
  *
  * Since: 2.10
@@ -565,7 +565,7 @@ gtk_recent_chooser_set_show_tips (GtkRecentChooser *chooser,
  * Gets whether @chooser should display tooltips containing the full path
  * of a recently user resource.
  *
- * Return value: %TRUE if the recent chooser should show tooltips,
+ * Returns: %TRUE if the recent chooser should show tooltips,
  *   %FALSE otherwise.
  *
  * Since: 2.10
@@ -626,7 +626,7 @@ gtk_recent_chooser_set_sort_type (GtkRecentChooser  *chooser,
  *
  * Gets the value set by gtk_recent_chooser_set_sort_type().
  *
- * Return value: the sorting order of the @chooser.
+ * Returns: the sorting order of the @chooser.
  *
  * Since: 2.10
  */
@@ -682,7 +682,7 @@ gtk_recent_chooser_set_sort_func  (GtkRecentChooser  *chooser,
  *
  * Sets @uri as the current URI for @chooser.
  *
- * Return value: %TRUE if the URI was found.
+ * Returns: %TRUE if the URI was found.
  *
  * Since: 2.10
  */
@@ -702,7 +702,7 @@ gtk_recent_chooser_set_current_uri (GtkRecentChooser  *chooser,
  *
  * Gets the URI currently selected by @chooser.
  *
- * Return value: a newly allocated string holding a URI.
+ * Returns: a newly allocated string holding a URI.
  *
  * Since: 2.10
  */
@@ -720,7 +720,7 @@ gtk_recent_chooser_get_current_uri (GtkRecentChooser *chooser)
  * 
  * Gets the #GtkRecentInfo currently selected by @chooser.
  *
- * Return value: a #GtkRecentInfo.  Use gtk_recent_info_unref() when
+ * Returns: a #GtkRecentInfo.  Use gtk_recent_info_unref() when
  *   when you have finished using it.
  *
  * Since: 2.10
@@ -753,7 +753,7 @@ gtk_recent_chooser_get_current_item (GtkRecentChooser *chooser)
  *
  * Selects @uri inside @chooser.
  *
- * Return value: %TRUE if @uri was found.
+ * Returns: %TRUE if @uri was found.
  *
  * Since: 2.10
  */
@@ -827,7 +827,7 @@ gtk_recent_chooser_unselect_all (GtkRecentChooser *chooser)
  * The return value of this function is affected by the “sort-type” and
  * “limit” properties of @chooser.
  *
- * Return value:  (element-type GtkRecentInfo) (transfer full): A newly allocated
+ * Returns:  (element-type GtkRecentInfo) (transfer full): A newly allocated
  *   list of #GtkRecentInfo objects.  You should
  *   use gtk_recent_info_unref() on every item of the list, and then free
  *   the list itself using g_list_free().
@@ -855,7 +855,7 @@ gtk_recent_chooser_get_items (GtkRecentChooser *chooser)
  *
  * Since the returned array is %NULL terminated, @length may be %NULL.
  * 
- * Return value: (array length=length zero-terminated=1) (transfer full):
+ * Returns: (array length=length zero-terminated=1) (transfer full):
  *     A newly allocated, %NULL-terminated array of strings. Use
  *     g_strfreev() to free it.
  *
@@ -943,7 +943,7 @@ gtk_recent_chooser_remove_filter (GtkRecentChooser *chooser,
  *
  * Gets the #GtkRecentFilter objects held by @chooser.
  *
- * Return value: (element-type GtkRecentFilter) (transfer container): A singly linked list
+ * Returns: (element-type GtkRecentFilter) (transfer container): A singly linked list
  *   of #GtkRecentFilter objects.  You
  *   should just free the returned list using g_slist_free().
  *
@@ -984,7 +984,7 @@ gtk_recent_chooser_set_filter (GtkRecentChooser *chooser,
  * Gets the #GtkRecentFilter object currently used by @chooser to affect
  * the display of the recently used resources.
  *
- * Return value: (transfer none): a #GtkRecentFilter object.
+ * Returns: (transfer none): a #GtkRecentFilter object.
  *
  * Since: 2.10
  */

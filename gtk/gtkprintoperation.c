@@ -166,7 +166,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkPrintOperation, gtk_print_operation, G_TYPE_OBJECT,
  *
  * Registers an error quark for #GtkPrintOperation if necessary.
  * 
- * Return value: The error quark used for #GtkPrintOperation errors.
+ * Returns: The error quark used for #GtkPrintOperation errors.
  *
  * Since: 2.10
  **/
@@ -804,7 +804,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * it all in the ::begin-print handler, and set the number of pages
    * from there.
    *
-   * Return value: %TRUE if pagination is complete
+   * Returns: %TRUE if pagination is complete
    *
    * Since: 2.10
    */
@@ -1550,7 +1550,7 @@ gtk_print_operation_set_print_settings (GtkPrintOperation *op,
  * gtk_print_operation_set_print_settings() or
  * gtk_print_operation_run() have been called.
  *
- * Return value: (transfer none): the current print settings of @op.
+ * Returns: (transfer none): the current print settings of @op.
  *
  * Since: 2.10
  **/
@@ -1809,7 +1809,7 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
  * Returns the status of the print operation. 
  * Also see gtk_print_operation_get_status_string().
  * 
- * Return value: the status of the print operation
+ * Returns: the status of the print operation
  *
  * Since: 2.10
  **/
@@ -1833,7 +1833,7 @@ gtk_print_operation_get_status (GtkPrintOperation *op)
  * Use gtk_print_operation_get_status() to obtain a status
  * value that is suitable for programmatic use. 
  * 
- * Return value: a string representation of the status
+ * Returns: a string representation of the status
  *    of the print operation
  *
  * Since: 2.10
@@ -1858,7 +1858,7 @@ gtk_print_operation_get_status_string (GtkPrintOperation *op)
  * can be in a non-finished state even after done has been called, as
  * the operation status then tracks the print job status on the printer.
  * 
- * Return value: %TRUE, if the print operation is finished.
+ * Returns: %TRUE, if the print operation is finished.
  *
  * Since: 2.10
  **/
@@ -3157,7 +3157,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * Note that gtk_print_operation_run() can only be called once on a
  * given #GtkPrintOperation.
  *
- * Return value: the result of the print operation. A return value of 
+ * Returns: the result of the print operation. A return value of 
  *   %GTK_PRINT_OPERATION_RESULT_APPLY indicates that the printing was
  *   completed successfully. In this case, it is a good idea to obtain 
  *   the used print settings with gtk_print_operation_get_print_settings() 

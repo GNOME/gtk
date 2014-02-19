@@ -163,7 +163,7 @@ gtk_text_tag_table_init (GtkTextTagTable *table)
  * Creates a new #GtkTextTagTable. The table contains no tags by
  * default.
  * 
- * Return value: a new #GtkTextTagTable
+ * Returns: a new #GtkTextTagTable
  **/
 GtkTextTagTable*
 gtk_text_tag_table_new (void)
@@ -286,7 +286,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
  * 
  * Look up a named tag.
  * 
- * Return value: (transfer none): The tag, or %NULL if none by that name is in the table.
+ * Returns: (transfer none): The tag, or %NULL if none by that name is in the table.
  **/
 GtkTextTag*
 gtk_text_tag_table_lookup (GtkTextTagTable *table,
@@ -414,7 +414,7 @@ gtk_text_tag_table_foreach (GtkTextTagTable       *table,
  * 
  * Returns the size of the table (number of tags)
  * 
- * Return value: number of tags in @table
+ * Returns: number of tags in @table
  **/
 gint
 gtk_text_tag_table_get_size (GtkTextTagTable *table)

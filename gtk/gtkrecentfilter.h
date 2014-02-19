@@ -68,7 +68,7 @@ typedef enum {
  * The type of function that is used with custom filters,
  * see gtk_recent_filter_add_custom().
  *
- * Return value: %TRUE if the file should be displayed
+ * Returns: %TRUE if the file should be displayed
  */
 typedef gboolean (*GtkRecentFilterFunc) (const GtkRecentFilterInfo *filter_info,
 					 gpointer                   user_data);

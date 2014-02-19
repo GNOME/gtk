@@ -303,7 +303,7 @@ gtk_print_job_finalize (GObject *object)
  *
  * Creates a new #GtkPrintJob.
  *
- * Return value: a new #GtkPrintJob
+ * Returns: a new #GtkPrintJob
  *
  * Since: 2.10
  **/
@@ -329,7 +329,7 @@ gtk_print_job_new (const gchar      *title,
  * 
  * Gets the #GtkPrintSettings of the print job.
  * 
- * Return value: (transfer none): the settings of @job
+ * Returns: (transfer none): the settings of @job
  *
  * Since: 2.10
  */
@@ -347,7 +347,7 @@ gtk_print_job_get_settings (GtkPrintJob *job)
  * 
  * Gets the #GtkPrinter of the print job.
  * 
- * Return value: (transfer none): the printer of @job
+ * Returns: (transfer none): the printer of @job
  *
  * Since: 2.10
  */
@@ -365,7 +365,7 @@ gtk_print_job_get_printer (GtkPrintJob *job)
  * 
  * Gets the job title.
  * 
- * Return value: the title of @job
+ * Returns: the title of @job
  *
  * Since: 2.10
  */
@@ -383,7 +383,7 @@ gtk_print_job_get_title (GtkPrintJob *job)
  * 
  * Gets the status of the print job.
  * 
- * Return value: the status of @job
+ * Returns: the status of @job
  *
  * Since: 2.10
  */
@@ -464,7 +464,7 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
  * Gets a cairo surface onto which the pages of
  * the print job should be rendered.
  * 
- * Return value: (transfer none): the cairo surface of @job
+ * Returns: (transfer none): the cairo surface of @job
  *
  * Since: 2.10
  **/
@@ -575,7 +575,7 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
  * Returns wheter jobs will be tracked after printing.
  * For details, see gtk_print_job_set_track_print_status().
  *
- * Return value: %TRUE if print job status will be reported after printing
+ * Returns: %TRUE if print job status will be reported after printing
  *
  * Since: 2.10
  */

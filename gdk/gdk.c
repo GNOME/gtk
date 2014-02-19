@@ -382,7 +382,7 @@ gdk_get_display_arg_name (void)
  * display has previously been set, simply returns that. An internal
  * function that should not be used by applications.
  *
- * Return value: (transfer none): the default display, if it could be
+ * Returns: (transfer none): the default display, if it could be
  *   opened, otherwise %NULL.
  **/
 GdkDisplay *
@@ -701,7 +701,7 @@ gdk_threads_dispatch_free (gpointer data)
  * }
  * ]|
  *
- * Return value: the ID (greater than 0) of the event source.
+ * Returns: the ID (greater than 0) of the event source.
  *
  * Since: 2.12
  */
@@ -736,7 +736,7 @@ gdk_threads_add_idle_full (gint           priority,
  *
  * See gdk_threads_add_idle_full().
  *
- * Return value: the ID (greater than 0) of the event source.
+ * Returns: the ID (greater than 0) of the event source.
  * 
  * Since: 2.12
  */
@@ -803,7 +803,7 @@ gdk_threads_add_idle (GSourceFunc    function,
  * }
  * ]|
  *
- * Return value: the ID (greater than 0) of the event source.
+ * Returns: the ID (greater than 0) of the event source.
  * 
  * Since: 2.12
  */
@@ -842,7 +842,7 @@ gdk_threads_add_timeout_full (gint           priority,
  *
  * See gdk_threads_add_timeout_full().
  * 
- * Return value: the ID (greater than 0) of the event source.
+ * Returns: the ID (greater than 0) of the event source.
  *
  * Since: 2.12
  */
@@ -869,7 +869,7 @@ gdk_threads_add_timeout (guint       interval,
  * See g_timeout_add_seconds_full() for a discussion of why it is
  * a good idea to use this function if you don’t need finer granularity.
  *
- * Return value: the ID (greater than 0) of the event source.
+ * Returns: the ID (greater than 0) of the event source.
  * 
  * Since: 2.14
  */
@@ -907,7 +907,7 @@ gdk_threads_add_timeout_seconds_full (gint           priority,
  *
  * For details, see gdk_threads_add_timeout_full().
  * 
- * Return value: the ID (greater than 0) of the event source.
+ * Returns: the ID (greater than 0) of the event source.
  *
  * Since: 2.14
  */

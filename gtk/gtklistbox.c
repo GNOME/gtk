@@ -471,7 +471,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
  *
  * Gets the selected row.
  *
- * Return value: (transfer none): the selected #GtkWidget
+ * Returns: (transfer none): the selected #GtkWidget
  *
  * Since: 3.10
  */
@@ -497,7 +497,7 @@ gtk_list_box_get_selected_row (GtkListBox *list_box)
  *
  * Gets the n:th child in the list (not counting headers).
  *
- * Return value: (transfer none): the child #GtkWidget
+ * Returns: (transfer none): the child #GtkWidget
  *
  * Since: 3.10
  */
@@ -526,7 +526,7 @@ gtk_list_box_get_row_at_index (GtkListBox *list_box,
  *
  * Gets the row at the @y position.
  *
- * Return value: (transfer none): the row
+ * Returns: (transfer none): the row
  *
  * Since: 3.10
  */
@@ -657,7 +657,7 @@ gtk_list_box_set_adjustment (GtkListBox    *list_box,
  * Gets the adjustment (if any) that the widget uses to
  * for vertical scrolling.
  *
- * Return value: (transfer none): the adjustment
+ * Returns: (transfer none): the adjustment
  *
  * Since: 3.10
  */
@@ -2744,7 +2744,7 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
  * in a #GtkListBoxUpdateHeaderFunc to see if there is a header
  * set already, and if so to update the state of it.
  *
- * Return value: (transfer none): the current header, or %NULL if none
+ * Returns: (transfer none): the current header, or %NULL if none
  *
  * Since: 3.10
  */

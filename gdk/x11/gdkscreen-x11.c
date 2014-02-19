@@ -1554,7 +1554,7 @@ fetch_net_wm_check_window (GdkScreen *screen)
  * You can monitor the window_manager_changed signal on #GdkScreen to detect
  * a window manager change.
  *
- * Return value: %TRUE if the window manager supports @property
+ * Returns: %TRUE if the window manager supports @property
  *
  * Since: 2.2
  **/
@@ -1635,7 +1635,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
  *
  * Returns the name of the window manager for @screen.
  *
- * Return value: the name of the window manager screen @screen, or
+ * Returns: the name of the window manager screen @screen, or
  * "unknown" if the window manager is unknown. The string is owned by GDK
  * and should not be freed.
  *

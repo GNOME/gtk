@@ -89,7 +89,7 @@ _gtk_get_data_prefix (void)
  * variables, and does return a Unix-style locale string based on
  * either said environment variables or the thread’s current locale.
  *
- * Return value: a dynamically allocated string, free with g_free().
+ * Returns: a dynamically allocated string, free with g_free().
  */
 
 gchar *

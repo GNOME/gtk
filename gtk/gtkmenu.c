@@ -2363,7 +2363,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
  * Returns whether the menu is torn off.
  * See gtk_menu_set_tearoff_state().
  *
- * Return value: %TRUE if the menu is currently torn off.
+ * Returns: %TRUE if the menu is currently torn off.
  *
  * Deprecated: 3.10
  */
@@ -2412,7 +2412,7 @@ gtk_menu_set_title (GtkMenu     *menu,
  *
  * Returns the title of the menu. See gtk_menu_set_title().
  *
- * Return value: the title of the menu, or %NULL if the menu
+ * Returns: the title of the menu, or %NULL if the menu
  *     has no title set on it. This string is owned by GTK+
  *     and should not be modified or freed.
  *
@@ -5517,7 +5517,7 @@ gtk_menu_get_monitor (GtkMenu *menu)
  * Returns a list of the menus which are attached to this widget.
  * This list is owned by GTK+ and must not be modified.
  *
- * Return value: (element-type GtkWidget) (transfer none): the list
+ * Returns: (element-type GtkWidget) (transfer none): the list
  *     of menus attached to his widget.
  *
  * Since: 2.6

@@ -1154,7 +1154,7 @@ gtk_drag_get_data (GtkWidget      *widget,
  *
  * Determines the source widget for a drag.
  *
- * Return value: (transfer none): if the drag is occurring
+ * Returns: (transfer none): if the drag is occurring
  *     within a single application, a pointer to the source widget.
  *     Otherwise, %NULL.
  */
@@ -1498,7 +1498,7 @@ gtk_drag_dest_unset (GtkWidget *widget)
  * Returns the list of targets this widget can accept from
  * drag-and-drop.
  * 
- * Return value: (transfer none): the #GtkTargetList, or %NULL if none
+ * Returns: (transfer none): the #GtkTargetList, or %NULL if none
  **/
 GtkTargetList*
 gtk_drag_dest_get_target_list (GtkWidget *widget)
@@ -1664,7 +1664,7 @@ gtk_drag_dest_set_track_motion (GtkWidget *widget,
  * Returns whether the widget has been configured to always
  * emit #GtkWidget::drag-motion signals.
  *
- * Return Value: %TRUE if the widget always emits
+ * Returns: %TRUE if the widget always emits
  *   #GtkWidget::drag-motion events
  *
  * Since: 2.10
@@ -1808,7 +1808,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * that case, they will have to implement a drag_motion handler that
  * passes the correct target list to this function.
  *
- * Return value: (transfer none): first target that the source offers
+ * Returns: (transfer none): first target that the source offers
  *     and the dest can accept, or %GDK_NONE
  **/
 GdkAtom
@@ -2694,7 +2694,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * (remember to free the event with gdk_event_free() when you are done).
  * If you can really not pass a real event, pass #NULL instead.
  *
- * Return value: (transfer none): the context for this drag.
+ * Returns: (transfer none): the context for this drag.
  *
  * Since: 3.10
  **/
@@ -2727,7 +2727,7 @@ gtk_drag_begin_with_coordinates (GtkWidget         *widget,
  * This is equivalent to gtk_drag_begin_with_coordinates(), passing -1, -1
  * as coordinates.
  *
- * Return value: (transfer none): the context for this drag.
+ * Returns: (transfer none): the context for this drag.
  *
  * Deprecated: 3.10: Use gtk_drag_begin_with_coordinates() instead.
  **/
@@ -2839,7 +2839,7 @@ gtk_drag_source_unset (GtkWidget *widget)
  * Gets the list of targets this widget can provide for
  * drag-and-drop.
  *
- * Return value: (transfer none): the #GtkTargetList, or %NULL if none
+ * Returns: (transfer none): the #GtkTargetList, or %NULL if none
  *
  * Since: 2.4
  **/
@@ -4558,7 +4558,7 @@ gtk_drag_abort_timeout (gpointer data)
  * at (@current_x, @current_y) has passed the GTK+ drag threshold, and thus
  * should trigger the beginning of a drag-and-drop operation.
  *
- * Return Value: %TRUE if the drag threshold has been passed.
+ * Returns: %TRUE if the drag threshold has been passed.
  **/
 gboolean
 gtk_drag_check_threshold (GtkWidget *widget,

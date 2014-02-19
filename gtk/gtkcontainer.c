@@ -786,7 +786,7 @@ gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
  * children can be added, e.g. for a #GtkPaned which already has two
  * children.
  *
- * Return value: a #GType.
+ * Returns: a #GType.
  **/
 GType
 gtk_container_child_type (GtkContainer *container)
@@ -1505,7 +1505,7 @@ gtk_container_set_border_width (GtkContainer *container,
  * Retrieves the border width of the container. See
  * gtk_container_set_border_width().
  *
- * Return value: the current border width
+ * Returns: the current border width
  **/
 guint
 gtk_container_get_border_width (GtkContainer *container)
@@ -1641,7 +1641,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
  * Returns the resize mode for the container. See
  * gtk_container_set_resize_mode ().
  *
- * Return value: the current resize mode
+ * Returns: the current resize mode
  *
  * Deprecated: 3.12: Resize modes are deprecated. They aren’t necessary
  *     anymore since frame clocks and might introduce obscure bugs if
@@ -2228,7 +2228,7 @@ gtk_container_get_focus_child (GtkContainer *container)
  * Returns the container’s non-internal children. See
  * gtk_container_forall() for details on what constitutes an "internal" child.
  *
- * Return value: (element-type GtkWidget) (transfer container): a newly-allocated list of the container’s non-internal children.
+ * Returns: (element-type GtkWidget) (transfer container): a newly-allocated list of the container’s non-internal children.
  **/
 GList*
 gtk_container_get_children (GtkContainer *container)
@@ -2934,7 +2934,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
  * Sorts @children in the correct order for focusing with
  * direction type @direction.
  *
- * Return value: a copy of @children, sorted in correct focusing order,
+ * Returns: a copy of @children, sorted in correct focusing order,
  *   with children that aren’t suitable for focusing in this direction
  *   removed.
  **/
@@ -3122,7 +3122,7 @@ gtk_container_set_focus_chain (GtkContainer *container,
  * of the children. In that case, GTK+ stores %NULL in
  * @focusable_widgets and returns %FALSE.
  *
- * Return value: %TRUE if the focus chain of the container
+ * Returns: %TRUE if the focus chain of the container
  * has been set explicitly.
  **/
 gboolean
@@ -3228,7 +3228,7 @@ gtk_container_set_focus_vadjustment (GtkContainer  *container,
  * Retrieves the vertical focus adjustment for the container. See
  * gtk_container_set_focus_vadjustment().
  *
- * Return value: (transfer none): the vertical focus adjustment, or %NULL if
+ * Returns: (transfer none): the vertical focus adjustment, or %NULL if
  *   none has been set.
  **/
 GtkAdjustment *
@@ -3283,7 +3283,7 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
  * Retrieves the horizontal focus adjustment for the container. See
  * gtk_container_set_focus_hadjustment ().
  *
- * Return value: (transfer none): the horizontal focus adjustment, or %NULL if
+ * Returns: (transfer none): the horizontal focus adjustment, or %NULL if
  *   none has been set.
  **/
 GtkAdjustment *

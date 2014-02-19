@@ -444,7 +444,7 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
  * Retrieves whether the button is displayed as a separate indicator
  * and label. See gtk_toggle_button_set_mode().
  *
- * Return value: %TRUE if the togglebutton is drawn as a separate indicator
+ * Returns: %TRUE if the togglebutton is drawn as a separate indicator
  *   and label.
  **/
 gboolean
@@ -565,7 +565,7 @@ gtk_toggle_button_set_inconsistent (GtkToggleButton *toggle_button,
  * 
  * Gets the value set by gtk_toggle_button_set_inconsistent().
  * 
- * Return value: %TRUE if the button is displayed as inconsistent, %FALSE otherwise
+ * Returns: %TRUE if the button is displayed as inconsistent, %FALSE otherwise
  **/
 gboolean
 gtk_toggle_button_get_inconsistent (GtkToggleButton *toggle_button)

@@ -930,7 +930,7 @@ gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
  * Gets the type of shadow drawn around the handle box. See
  * gtk_handle_box_set_shadow_type().
  *
- * Return value: the type of shadow currently drawn around the handle box.
+ * Returns: the type of shadow currently drawn around the handle box.
  *
  * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  **/
@@ -976,7 +976,7 @@ gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
  * Gets the handle position of the handle box. See
  * gtk_handle_box_set_handle_position().
  *
- * Return value: the current handle position.
+ * Returns: the current handle position.
  *
  * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  **/
@@ -1039,7 +1039,7 @@ gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
  * Gets the edge used for determining reattachment of the handle box.
  * See gtk_handle_box_set_snap_edge().
  *
- * Return value: the edge used for determining reattachment, or
+ * Returns: the edge used for determining reattachment, or
  *   (GtkPositionType)-1 if this is determined (as per default)
  *   from the handle position.
  *
@@ -1059,7 +1059,7 @@ gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
  *
  * Whether the handlebox’s child is currently detached.
  *
- * Return value: %TRUE if the child is currently detached, otherwise %FALSE
+ * Returns: %TRUE if the child is currently detached, otherwise %FALSE
  *
  * Since: 2.14
  *

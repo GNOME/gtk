@@ -52,7 +52,7 @@ typedef struct _GtkTreeModelIface   GtkTreeModelIface;
  * Type of the callback passed to gtk_tree_model_foreach() to
  * iterate over the rows in a tree model.
  *
- * Return value: %TRUE to stop iterating, %FALSE to continue
+ * Returns: %TRUE to stop iterating, %FALSE to continue
  *
  */
 typedef gboolean (* GtkTreeModelForeachFunc) (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);

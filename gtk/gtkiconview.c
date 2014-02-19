@@ -2245,7 +2245,7 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
  *
  * The returned #GtkTreePath must be freed with gtk_tree_path_free().
  *
- * Return value: %TRUE if the cursor is set.
+ * Returns: %TRUE if the cursor is set.
  *
  * Since: 2.8
  **/
@@ -4365,7 +4365,7 @@ _gtk_icon_view_set_cell_data (GtkIconView     *icon_view,
  * 
  * Creates a new #GtkIconView widget
  * 
- * Return value: A newly created #GtkIconView widget
+ * Returns: A newly created #GtkIconView widget
  *
  * Since: 2.6
  **/
@@ -4382,7 +4382,7 @@ gtk_icon_view_new (void)
  * Creates a new #GtkIconView widget using the
  * specified @area to layout cells inside the icons.
  * 
- * Return value: A newly created #GtkIconView widget
+ * Returns: A newly created #GtkIconView widget
  *
  * Since: 3.0
  **/
@@ -4398,7 +4398,7 @@ gtk_icon_view_new_with_area (GtkCellArea *area)
  * 
  * Creates a new #GtkIconView widget with the model @model.
  * 
- * Return value: A newly created #GtkIconView widget.
+ * Returns: A newly created #GtkIconView widget.
  *
  * Since: 2.6 
  **/
@@ -4455,7 +4455,7 @@ gtk_icon_view_convert_widget_to_bin_window_coords (GtkIconView *icon_view,
  * See gtk_icon_view_convert_widget_to_bin_window_coords() for converting
  * widget coordinates to bin_window coordinates.
  * 
- * Return value: The #GtkTreePath corresponding to the icon or %NULL
+ * Returns: The #GtkTreePath corresponding to the icon or %NULL
  * if no icon exists at that position.
  *
  * Since: 2.6 
@@ -4496,7 +4496,7 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  * See gtk_icon_view_convert_widget_to_bin_window_coords() for converting
  * widget coordinates to bin_window coordinates.
  * 
- * Return value: %TRUE if an item exists at the specified position
+ * Returns: %TRUE if an item exists at the specified position
  *
  * Since: 2.8
  **/
@@ -4540,7 +4540,7 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
  *
  * This function is only valid if @icon_view is realized.
  *
- * Return value: %FALSE if there is no such item, %TRUE otherwise
+ * Returns: %FALSE if there is no such item, %TRUE otherwise
  *
  * Since: 3.6
  */
@@ -4670,7 +4670,7 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
  * that row and the corresponding model. @x and @y will always be converted
  * to be relative to @icon_view’s bin_window if @keyboard_tooltip is %FALSE.
  *
- * Return value: whether or not the given tooltip context points to a item
+ * Returns: whether or not the given tooltip context points to a item
  *
  * Since: 2.12
  */
@@ -4813,7 +4813,7 @@ gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
  * Returns the column of @icon_view’s model which is being used for
  * displaying tooltips on @icon_view’s rows.
  *
- * Return value: the index of the tooltip column that is currently being
+ * Returns: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.
  *
  * Since: 2.12
@@ -4838,7 +4838,7 @@ gtk_icon_view_get_tooltip_column (GtkIconView *icon_view)
  * 
  * Both paths should be freed with gtk_tree_path_free() after use.
  * 
- * Return value: %TRUE, if valid paths were placed in @start_path and @end_path
+ * Returns: %TRUE, if valid paths were placed in @start_path and @end_path
  *
  * Since: 2.8
  **/
@@ -4951,7 +4951,7 @@ gtk_icon_view_set_selection_mode (GtkIconView      *icon_view,
  * 
  * Gets the selection mode of the @icon_view.
  *
- * Return value: the current selection mode
+ * Returns: the current selection mode
  *
  * Since: 2.6 
  **/
@@ -5096,7 +5096,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
  * Returns the model the #GtkIconView is based on.  Returns %NULL if the
  * model is unset.
  *
- * Return value: (transfer none): A #GtkTreeModel, or %NULL if none is
+ * Returns: (transfer none): A #GtkTreeModel, or %NULL if none is
  *     currently being used.
  *
  * Since: 2.6 
@@ -5460,7 +5460,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  * g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
  * ]|
  *
- * Return value: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
+ * Returns: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
  *
  * Since: 2.6
  **/
@@ -5555,7 +5555,7 @@ gtk_icon_view_unselect_all (GtkIconView *icon_view)
  * Returns %TRUE if the icon pointed to by @path is currently
  * selected. If @path does not point to a valid location, %FALSE is returned.
  * 
- * Return value: %TRUE if @path is selected.
+ * Returns: %TRUE if @path is selected.
  *
  * Since: 2.6
  **/
@@ -5704,7 +5704,7 @@ gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
  * Returns the value of the ::item-orientation property which determines 
  * whether the labels are drawn beside the icons instead of below. 
  * 
- * Return value: the relative position of texts and icons 
+ * Returns: the relative position of texts and icons 
  *
  * Since: 2.6
  **/
@@ -5754,7 +5754,7 @@ gtk_icon_view_set_columns (GtkIconView *icon_view,
  * 
  * Returns the value of the ::columns property.
  * 
- * Return value: the number of columns, or -1
+ * Returns: the number of columns, or -1
  *
  * Since: 2.6
  */
@@ -5804,7 +5804,7 @@ gtk_icon_view_set_item_width (GtkIconView *icon_view,
  * 
  * Returns the value of the ::item-width property.
  * 
- * Return value: the width of a single item, or -1
+ * Returns: the width of a single item, or -1
  *
  * Since: 2.6
  */
@@ -5853,7 +5853,7 @@ gtk_icon_view_set_spacing (GtkIconView *icon_view,
  * 
  * Returns the value of the ::spacing property.
  * 
- * Return value: the space between cells 
+ * Returns: the space between cells 
  *
  * Since: 2.6
  */
@@ -5900,7 +5900,7 @@ gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
  * 
  * Returns the value of the ::row-spacing property.
  * 
- * Return value: the space between rows
+ * Returns: the space between rows
  *
  * Since: 2.6
  */
@@ -5947,7 +5947,7 @@ gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
  * 
  * Returns the value of the ::column-spacing property.
  * 
- * Return value: the space between columns
+ * Returns: the space between columns
  *
  * Since: 2.6
  */
@@ -5995,7 +5995,7 @@ gtk_icon_view_set_margin (GtkIconView *icon_view,
  * 
  * Returns the value of the ::margin property.
  * 
- * Return value: the space at the borders 
+ * Returns: the space at the borders 
  *
  * Since: 2.6
  */
@@ -6042,7 +6042,7 @@ gtk_icon_view_set_item_padding (GtkIconView *icon_view,
  * 
  * Returns the value of the ::item-padding property.
  * 
- * Return value: the padding around items
+ * Returns: the padding around items
  *
  * Since: 2.18
  */
@@ -7047,7 +7047,7 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  * 
  * Determines the destination item for a given position.
  * 
- * Return value: whether there is an item at the given position.
+ * Returns: whether there is an item at the given position.
  *
  * Since: 2.8
  **/
@@ -7109,7 +7109,7 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
  * Creates a #cairo_surface_t representation of the item at @path.  
  * This image is used for a drag icon.
  *
- * Return value: (transfer full): a newly-allocated surface of the drag icon.
+ * Returns: (transfer full): a newly-allocated surface of the drag icon.
  * 
  * Since: 2.8
  **/
@@ -7174,7 +7174,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
  * Retrieves whether the user can reorder the list via drag-and-drop. 
  * See gtk_icon_view_set_reorderable().
  *
- * Return value: %TRUE if the list can be reordered.
+ * Returns: %TRUE if the list can be reordered.
  *
  * Since: 2.8
  **/
@@ -7276,7 +7276,7 @@ gtk_icon_view_set_activate_on_single_click (GtkIconView *icon_view,
  *
  * Gets the setting set by gtk_icon_view_set_activate_on_single_click().
  *
- * Return value: %TRUE if item-activated will be emitted on a single click
+ * Returns: %TRUE if item-activated will be emitted on a single click
  *
  * Since: 3.8
  **/

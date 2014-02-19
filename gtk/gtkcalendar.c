@@ -3546,7 +3546,7 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
  *
  * Creates a new calendar, with the current date being selected.
  *
- * Return value: a newly #GtkCalendar widget
+ * Returns: a newly #GtkCalendar widget
  **/
 GtkWidget*
 gtk_calendar_new (void)
@@ -3560,7 +3560,7 @@ gtk_calendar_new (void)
  *
  * Returns the current display options of @calendar.
  *
- * Return value: the display options.
+ * Returns: the display options.
  *
  * Since: 2.4
  **/
@@ -3996,7 +3996,7 @@ gtk_calendar_set_detail_height_rows (GtkCalendar *calendar,
  *
  * Since: 2.14
  *
- * Return value: The width of detail cells, in characters.
+ * Returns: The width of detail cells, in characters.
  */
 gint
 gtk_calendar_get_detail_width_chars (GtkCalendar *calendar)
@@ -4015,7 +4015,7 @@ gtk_calendar_get_detail_width_chars (GtkCalendar *calendar)
  *
  * Since: 2.14
  *
- * Return value: The height of detail cells, in rows.
+ * Returns: The height of detail cells, in rows.
  */
 gint
 gtk_calendar_get_detail_height_rows (GtkCalendar *calendar)

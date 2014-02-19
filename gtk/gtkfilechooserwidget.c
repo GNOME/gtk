@@ -7670,7 +7670,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
  * be embedded in custom windows, and it is the same widget that is used by
  * #GtkFileChooserDialog.
  *
- * Return value: a new #GtkFileChooserWidget
+ * Returns: a new #GtkFileChooserWidget
  *
  * Since: 2.4
  **/

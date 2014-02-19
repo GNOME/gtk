@@ -398,7 +398,7 @@ gdk_keymap_get_modifier_state (GdkKeymap *keymap)
  * The returned array should be freed
  * with g_free().
  *
- * Return value: %TRUE if keys were found and returned
+ * Returns: %TRUE if keys were found and returned
  **/
 gboolean
 gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
@@ -459,7 +459,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
  * this function, since the effective group/level may not be
  * the same as the current keyboard state.
  *
- * Return value: a keyval, or 0 if none was mapped to the given @key
+ * Returns: a keyval, or 0 if none was mapped to the given @key
  **/
 guint
 gdk_keymap_lookup_key (GdkKeymap          *keymap,
@@ -532,7 +532,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * you store accelerators, you should always store them with consumed
  * modifiers removed. Store `<Control>plus`, not `<Control><Shift>plus`,
  *
- * Return value: %TRUE if there was a keyval bound to the keycode/state/group
+ * Returns: %TRUE if there was a keyval bound to the keycode/state/group
  **/
 gboolean
 gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
@@ -680,7 +680,7 @@ gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
  * `gdk/gdkkeysyms.h` header file
  * but without the leading “GDK_KEY_”.
  *
- * Return value: (transfer none): a string containing the name of the key,
+ * Returns: (transfer none): a string containing the name of the key,
  *     or %NULL if @keyval is not a valid key. The string should not be
  *     modified.
  */

@@ -292,7 +292,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
    * the input method surrounding context by calling the
    * gtk_im_context_set_surrounding() method.
    *
-   * Return value: %TRUE if the signal was handled.
+   * Returns: %TRUE if the signal was handled.
    */
   im_context_signals[RETRIEVE_SURROUNDING] =
     g_signal_new (I_("retrieve-surrounding"),
@@ -313,7 +313,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
    * The ::delete-surrounding signal is emitted when the input method
    * needs to delete all or part of the context surrounding the cursor.
    *
-   * Return value: %TRUE if the signal was handled.
+   * Returns: %TRUE if the signal was handled.
    */
   im_context_signals[DELETE_SURROUNDING] =
     g_signal_new (I_("delete-surrounding"),
@@ -500,7 +500,7 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
  * events. If this function returns %TRUE, then no further processing
  * should be done for this key event.
  * 
- * Return value: %TRUE if the input method handled the key event.
+ * Returns: %TRUE if the input method handled the key event.
  *
  **/
 gboolean
@@ -684,7 +684,7 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  * for a widget to respond to the ::retrieve_surrounding signal, so input
  * methods must be prepared to function without context.
  *
- * Return value: %TRUE if surrounding text was provided; in this case
+ * Returns: %TRUE if surrounding text was provided; in this case
  *    you must free the result stored in *text.
  **/
 gboolean
@@ -735,7 +735,7 @@ gtk_im_context_get_surrounding (GtkIMContext *context,
  * subsitutions in the existing text in response to new input. It is
  * not useful for applications.
  * 
- * Return value: %TRUE if the signal was handled.
+ * Returns: %TRUE if the signal was handled.
  **/
 gboolean
 gtk_im_context_delete_surrounding (GtkIMContext *context,

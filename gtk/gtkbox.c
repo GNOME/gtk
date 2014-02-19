@@ -2000,7 +2000,7 @@ gtk_box_get_preferred_height_for_width (GtkWidget *widget,
  *
  * Creates a new #GtkBox.
  *
- * Return value: a new #GtkBox.
+ * Returns: a new #GtkBox.
  *
  * Since: 3.0
  **/
@@ -2113,7 +2113,7 @@ gtk_box_set_homogeneous (GtkBox  *box,
  * Returns whether the box is homogeneous (all children are the
  * same size). See gtk_box_set_homogeneous().
  *
- * Return value: %TRUE if the box is homogeneous.
+ * Returns: %TRUE if the box is homogeneous.
  **/
 gboolean
 gtk_box_get_homogeneous (GtkBox *box)
@@ -2158,7 +2158,7 @@ gtk_box_set_spacing (GtkBox *box,
  *
  * Gets the value set by gtk_box_set_spacing().
  *
- * Return value: spacing between children
+ * Returns: spacing between children
  **/
 gint
 gtk_box_get_spacing (GtkBox *box)
@@ -2208,7 +2208,7 @@ gtk_box_set_baseline_position (GtkBox             *box,
  *
  * Gets the value set by gtk_box_set_baseline_position().
  *
- * Return value: the baseline position
+ * Returns: the baseline position
  *
  * Since: 3.10
  **/
@@ -2614,7 +2614,7 @@ gtk_box_set_center_widget (GtkBox    *box,
  *
  * Retrieves the center widget of the box.
  *
- * Return value: the center widget
+ * Returns: the center widget
  *
  * Since: 3.12
  */

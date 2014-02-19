@@ -597,7 +597,7 @@ gdk_device_get_window_at_position (GdkDevice  *device,
  * more motion events delivered directly, independent of the windowing
  * system.
  *
- * Return value: %TRUE if the windowing system supports motion history and
+ * Returns: %TRUE if the windowing system supports motion history and
  *  at least one event was found.
  **/
 gboolean
@@ -667,7 +667,7 @@ gdk_device_free_history (GdkTimeCoord **events,
  *
  * Determines the name of the device.
  *
- * Return value: a name
+ * Returns: a name
  *
  * Since: 2.20
  **/
@@ -685,7 +685,7 @@ gdk_device_get_name (GdkDevice *device)
  *
  * Determines whether the pointer follows device motion.
  *
- * Return value: %TRUE if the pointer follows device motion
+ * Returns: %TRUE if the pointer follows device motion
  *
  * Since: 2.20
  **/
@@ -704,7 +704,7 @@ gdk_device_get_has_cursor (GdkDevice *device)
  *
  * Determines the type of the device.
  *
- * Return value: a #GdkInputSource
+ * Returns: a #GdkInputSource
  *
  * Since: 2.20
  **/
@@ -722,7 +722,7 @@ gdk_device_get_source (GdkDevice *device)
  *
  * Determines the mode of the device.
  *
- * Return value: a #GdkInputSource
+ * Returns: a #GdkInputSource
  *
  * Since: 2.20
  **/
@@ -1169,7 +1169,7 @@ gdk_device_get_axis_value (GdkDevice *device,
  * Interprets an array of double as axis values for a given device,
  * and locates the value in the array for a given axis use.
  *
- * Return value: %TRUE if the given axis use was found, otherwise %FALSE
+ * Returns: %TRUE if the given axis use was found, otherwise %FALSE
  **/
 gboolean
 gdk_device_get_axis (GdkDevice  *device,

@@ -3770,7 +3770,7 @@ gtk_tree_model_filter_set_root (GtkTreeModelFilter *filter,
  * Creates a new #GtkTreeModel, with @child_model as the child_model
  * and @root as the virtual root.
  *
- * Return value: (transfer full): A new #GtkTreeModel.
+ * Returns: (transfer full): A new #GtkTreeModel.
  *
  * Since: 2.4
  */
@@ -3792,7 +3792,7 @@ gtk_tree_model_filter_new (GtkTreeModel *child_model,
  *
  * Returns a pointer to the child model of @filter.
  *
- * Return value: (transfer none): A pointer to a #GtkTreeModel.
+ * Returns: (transfer none): A pointer to a #GtkTreeModel.
  *
  * Since: 2.4
  */
@@ -3948,7 +3948,7 @@ gtk_tree_model_filter_set_visible_column (GtkTreeModelFilter *filter,
  * row pointed at by @child_iter.  If @filter_iter was not set, %FALSE is
  * returned.
  *
- * Return value: %TRUE, if @filter_iter was set, i.e. if @child_iter is a
+ * Returns: %TRUE, if @filter_iter was set, i.e. if @child_iter is a
  * valid iterator pointing to a visible row in child model.
  *
  * Since: 2.4
@@ -4130,7 +4130,7 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
  * child model or points to a row which is not visible in @filter, then %NULL
  * is returned.
  *
- * Return value: A newly allocated #GtkTreePath, or %NULL.
+ * Returns: A newly allocated #GtkTreePath, or %NULL.
  *
  * Since: 2.4
  */
@@ -4173,7 +4173,7 @@ gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filter,
  * point to the same location in the model not being filtered. If @filter_path
  * does not point to a location in the child model, %NULL is returned.
  *
- * Return value: A newly allocated #GtkTreePath, or %NULL.
+ * Returns: A newly allocated #GtkTreePath, or %NULL.
  *
  * Since: 2.4
  */

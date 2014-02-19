@@ -573,7 +573,7 @@ gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
  *
  * Creates a new #GtkLinkButton with the URI as its text.
  *
- * Return value: a new link button widget.
+ * Returns: a new link button widget.
  *
  * Since: 2.10
  */
@@ -623,7 +623,7 @@ gtk_link_button_new (const gchar *uri)
  *
  * Creates a new #GtkLinkButton containing a label.
  *
- * Return value: (transfer none): a new link button widget.
+ * Returns: (transfer none): a new link button widget.
  *
  * Since: 2.10
  */
@@ -708,7 +708,7 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
  *
  * Retrieves the URI set using gtk_link_button_set_uri().
  *
- * Return value: a valid URI.  The returned string is owned by the link button
+ * Returns: a valid URI.  The returned string is owned by the link button
  *   and should not be modified or freed.
  *
  * Since: 2.10
@@ -768,7 +768,7 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
  *
  * The state may also be changed using gtk_link_button_set_visited().
  *
- * Return value: %TRUE if the link has been visited, %FALSE otherwise
+ * Returns: %TRUE if the link has been visited, %FALSE otherwise
  *
  * Since: 2.14
  */

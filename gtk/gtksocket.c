@@ -241,7 +241,7 @@ gtk_socket_class_init (GtkSocketClass *class)
    * The default action is to destroy the #GtkSocket widget, so if you 
    * want to reuse it you must add a signal handler that returns %TRUE. 
    *
-   * Return value: %TRUE to stop other handlers from being invoked.
+   * Returns: %TRUE to stop other handlers from being invoked.
    */
   socket_signals[PLUG_REMOVED] =
     g_signal_new (I_("plug-removed"),
@@ -282,7 +282,7 @@ gtk_socket_init (GtkSocket *socket)
  * 
  * Create a new empty #GtkSocket.
  * 
- * Return value:  the new #GtkSocket.
+ * Returns:  the new #GtkSocket.
  **/
 GtkWidget*
 gtk_socket_new (void)
@@ -336,7 +336,7 @@ gtk_socket_add_id (GtkSocket      *socket,
  * The #GtkSocket must have already be added into a toplevel window 
  * before you can make this call.
  * 
- * Return value: the window ID for the socket
+ * Returns: the window ID for the socket
  **/
 Window
 gtk_socket_get_id (GtkSocket *socket)
@@ -357,7 +357,7 @@ gtk_socket_get_id (GtkSocket *socket)
  * Retrieves the window of the plug. Use this to check if the plug has
  * been created inside of the socket.
  *
- * Return value: (transfer none): the window of the plug if available, or %NULL
+ * Returns: (transfer none): the window of the plug if available, or %NULL
  *
  * Since:  2.14
  **/

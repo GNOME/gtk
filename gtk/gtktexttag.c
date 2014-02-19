@@ -767,7 +767,7 @@ gtk_text_tag_init (GtkTextTag *text_tag)
  * Creates a #GtkTextTag. Configure the tag using object arguments,
  * i.e. using g_object_set().
  * 
- * Return value: a new #GtkTextTag
+ * Returns: a new #GtkTextTag
  **/
 GtkTextTag*
 gtk_text_tag_new (const gchar *name)
@@ -1894,7 +1894,7 @@ delta_priority_foreach (GtkTextTag *tag, gpointer user_data)
  * 
  * Get the tag priority.
  * 
- * Return value: The tag’s priority.
+ * Returns: The tag’s priority.
  **/
 gint
 gtk_text_tag_get_priority (GtkTextTag *tag)
@@ -1968,7 +1968,7 @@ gtk_text_tag_set_priority (GtkTextTag *tag,
  * 
  * Emits the “event” signal on the #GtkTextTag.
  * 
- * Return value: result of signal emission (whether the event was handled)
+ * Returns: result of signal emission (whether the event was handled)
  **/
 gboolean
 gtk_text_tag_event (GtkTextTag        *tag,

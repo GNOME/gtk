@@ -707,7 +707,7 @@ gtk_color_button_get_color (GtkColorButton *button,
  *
  * Returns the current alpha value.
  *
- * Return value: an integer between 0 and 65535
+ * Returns: an integer between 0 and 65535
  *
  * Since: 2.4
  *

@@ -799,7 +799,7 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
  * Some cell renderers may use events; for example, #GtkCellRendererToggle 
  * toggles when it gets a mouse click.
  *
- * Return value: %TRUE if the event was consumed/handled
+ * Returns: %TRUE if the event was consumed/handled
  **/
 gboolean
 gtk_cell_renderer_activate (GtkCellRenderer      *cell,
@@ -844,7 +844,7 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
  *
  * Passes an activate event to the cell renderer for possible processing.
  *
- * Return value: (transfer none): A new #GtkCellEditable, or %NULL
+ * Returns: (transfer none): A new #GtkCellEditable, or %NULL
  **/
 GtkCellEditable *
 gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,

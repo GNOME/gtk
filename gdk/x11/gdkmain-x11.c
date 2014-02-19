@@ -422,7 +422,7 @@ gdk_x11_ungrab_server (void)
  * 
  * Gets the default GTK+ screen number.
  * 
- * Return value: returns the screen number specified by
+ * Returns: returns the screen number specified by
  *   the --display command line option or the DISPLAY environment
  *   variable when gdk_init() calls XOpenDisplay().
  **/
@@ -438,7 +438,7 @@ gdk_x11_get_default_screen (void)
  * Gets the root window of the default screen 
  * (see gdk_x11_get_default_screen()).  
  * 
- * Return value: an Xlib Window.
+ * Returns: an Xlib Window.
  **/
 Window
 gdk_x11_get_default_root_xwindow (void)
@@ -451,7 +451,7 @@ gdk_x11_get_default_root_xwindow (void)
  * 
  * Gets the default GTK+ display.
  * 
- * Return value: (transfer none): the Xlib Display* for
+ * Returns: (transfer none): the Xlib Display* for
  * the display specified in the `--display` command
  * line option or the `DISPLAY` environment variable.
  **/

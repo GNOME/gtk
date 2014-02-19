@@ -281,7 +281,7 @@ gdk_rgba_parse (GdkRGBA     *rgba,
  * A hash function suitable for using for a hash
  * table that stores #GdkRGBAs.
  *
- * Return value: The hash value for @p
+ * Returns: The hash value for @p
  *
  * Since: 3.0
  */
@@ -303,7 +303,7 @@ gdk_rgba_hash (gconstpointer p)
  *
  * Compares two RGBA colors.
  *
- * Return value: %TRUE if the two colors compare equal
+ * Returns: %TRUE if the two colors compare equal
  *
  * Since: 3.0
  */

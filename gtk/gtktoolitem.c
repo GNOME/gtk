@@ -223,7 +223,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * to invalidate the cache and ensure that the toolbar rebuilds its overflow
  * menu.
  *
- * Return value: %TRUE if the signal was handled, %FALSE if not
+ * Returns: %TRUE if the signal was handled, %FALSE if not
  **/
   toolitem_signals[CREATE_MENU_PROXY] =
     g_signal_new (I_("create-menu-proxy"),
@@ -671,7 +671,7 @@ gtk_tool_item_set_use_action_appearance (GtkToolItem *item,
  * 
  * Creates a new #GtkToolItem
  * 
- * Return value: the new #GtkToolItem
+ * Returns: the new #GtkToolItem
  * 
  * Since: 2.4
  **/
@@ -693,7 +693,7 @@ gtk_tool_item_new (void)
  * #GtkToolItem should call this function to find out how text should
  * be ellipsized.
  *
- * Return value: a #PangoEllipsizeMode indicating how text in @tool_item
+ * Returns: a #PangoEllipsizeMode indicating how text in @tool_item
  * should be ellipsized.
  *
  * Since: 2.20
@@ -720,7 +720,7 @@ gtk_tool_item_get_ellipsize_mode (GtkToolItem *tool_item)
  * #GtkToolItem should call this function to find out what size icons
  * they should use.
  * 
- * Return value: (type int): a #GtkIconSize indicating the icon size
+ * Returns: (type int): a #GtkIconSize indicating the icon size
  * used for @tool_item
  * 
  * Since: 2.4
@@ -747,7 +747,7 @@ gtk_tool_item_get_icon_size (GtkToolItem *tool_item)
  * #GtkToolItem should call this function to find out what size icons
  * they should use.
  * 
- * Return value: a #GtkOrientation indicating the orientation
+ * Returns: a #GtkOrientation indicating the orientation
  * used for @tool_item
  * 
  * Since: 2.4
@@ -783,7 +783,7 @@ gtk_tool_item_get_orientation (GtkToolItem *tool_item)
  * - %GTK_TOOLBAR_BOTH_HORIZ, meaning the tool item should show
  *   both an icon and a label, arranged horizontally
  * 
- * Return value: A #GtkToolbarStyle indicating the toolbar style used
+ * Returns: A #GtkToolbarStyle indicating the toolbar style used
  * for @tool_item.
  * 
  * Since: 2.4
@@ -811,7 +811,7 @@ gtk_tool_item_get_toolbar_style (GtkToolItem *tool_item)
  * of the #GtkToolItem::toolbar_reconfigured signal to find out the
  * relief style of buttons.
  * 
- * Return value: a #GtkReliefStyle indicating the relief style used
+ * Returns: a #GtkReliefStyle indicating the relief style used
  * for @tool_item.
  * 
  * Since: 2.4
@@ -838,7 +838,7 @@ gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
  * #GtkToolItem should call this function to find out how text should
  * be aligned.
  * 
- * Return value: a #gfloat indicating the horizontal text alignment
+ * Returns: a #gfloat indicating the horizontal text alignment
  * used for @tool_item
  * 
  * Since: 2.20
@@ -865,7 +865,7 @@ gtk_tool_item_get_text_alignment (GtkToolItem *tool_item)
  * #GtkToolItem should call this function to find out how text should
  * be orientated.
  *
- * Return value: a #GtkOrientation indicating the text orientation
+ * Returns: a #GtkOrientation indicating the text orientation
  * used for @tool_item
  *
  * Since: 2.20
@@ -892,7 +892,7 @@ gtk_tool_item_get_text_orientation (GtkToolItem *tool_item)
  * Custom subclasses of #GtkToolItem should call this function
  * and use the size group for labels.
  *
- * Return value: (transfer none): a #GtkSizeGroup
+ * Returns: (transfer none): a #GtkSizeGroup
  *
  * Since: 2.20
  */
@@ -945,7 +945,7 @@ gtk_tool_item_set_expand (GtkToolItem *tool_item,
  * Returns whether @tool_item is allocated extra space.
  * See gtk_tool_item_set_expand().
  * 
- * Return value: %TRUE if @tool_item is allocated extra space.
+ * Returns: %TRUE if @tool_item is allocated extra space.
  * 
  * Since: 2.4
  **/
@@ -991,7 +991,7 @@ gtk_tool_item_set_homogeneous (GtkToolItem *tool_item,
  * Returns whether @tool_item is the same size as other homogeneous
  * items. See gtk_tool_item_set_homogeneous().
  * 
- * Return value: %TRUE if the item is the same size as other homogeneous
+ * Returns: %TRUE if the item is the same size as other homogeneous
  * items.
  * 
  * Since: 2.4
@@ -1011,7 +1011,7 @@ gtk_tool_item_get_homogeneous (GtkToolItem *tool_item)
  * Returns whether @tool_item is considered important. See
  * gtk_tool_item_set_is_important()
  * 
- * Return value: %TRUE if @tool_item is considered important.
+ * Returns: %TRUE if @tool_item is considered important.
  * 
  * Since: 2.4
  **/
@@ -1147,7 +1147,7 @@ gtk_tool_item_set_use_drag_window (GtkToolItem *toolitem,
  * Returns whether @tool_item has a drag window. See
  * gtk_tool_item_set_use_drag_window().
  * 
- * Return value: %TRUE if @tool_item uses a drag window.
+ * Returns: %TRUE if @tool_item uses a drag window.
  * 
  * Since: 2.4
  **/
@@ -1193,7 +1193,7 @@ gtk_tool_item_set_visible_horizontal (GtkToolItem *toolitem,
  * Returns whether the @tool_item is visible on toolbars that are
  * docked horizontally.
  * 
- * Return value: %TRUE if @tool_item is visible on toolbars that are
+ * Returns: %TRUE if @tool_item is visible on toolbars that are
  * docked horizontally.
  * 
  * Since: 2.4
@@ -1244,7 +1244,7 @@ gtk_tool_item_set_visible_vertical (GtkToolItem *toolitem,
  * Returns whether @tool_item is visible when the toolbar is docked vertically.
  * See gtk_tool_item_set_visible_vertical().
  * 
- * Return value: Whether @tool_item is visible when the toolbar is docked vertically
+ * Returns: Whether @tool_item is visible when the toolbar is docked vertically
  * 
  * Since: 2.4
  **/
@@ -1264,7 +1264,7 @@ gtk_tool_item_get_visible_vertical (GtkToolItem *toolitem)
  * gtk_tool_item_set_proxy_menu_item(), ie. the #GtkMenuItem
  * that is going to appear in the overflow menu.
  *
- * Return value: (transfer none): The #GtkMenuItem that is going to appear in the
+ * Returns: (transfer none): The #GtkMenuItem that is going to appear in the
  * overflow menu for @tool_item.
  *
  * Since: 2.4
@@ -1295,7 +1295,7 @@ gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
  * @menu_item_ids must match ensures that a #GtkToolItem
  * will not inadvertently change a menu item that they did not create.
  *
- * Return value: (transfer none): The #GtkMenuItem passed to
+ * Returns: (transfer none): The #GtkMenuItem passed to
  *     gtk_tool_item_set_proxy_menu_item(), if the @menu_item_ids
  *     match.
  *

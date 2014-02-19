@@ -89,7 +89,7 @@ get_module_path (void)
  * 
  * Determines the search path for a particular type of module.
  * 
- * Return value: the search path for the module type. Free with g_strfreev().
+ * Returns: the search path for the module type. Free with g_strfreev().
  **/
 gchar **
 _gtk_get_module_path (const gchar *type)
@@ -165,7 +165,7 @@ module_build_la_path (const gchar *directory,
  * Looks for a dynamically module named @name of type @type in the standard GTK+
  *  module search path.
  * 
- * Return value: the pathname to the found module, or %NULL if it wasn’t found.
+ * Returns: the pathname to the found module, or %NULL if it wasn’t found.
  *  Free with g_free().
  **/
 gchar *

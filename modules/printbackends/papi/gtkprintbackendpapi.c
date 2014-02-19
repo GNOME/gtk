@@ -157,7 +157,7 @@ gtk_print_backend_papi_get_type (void)
  * implements the #GtkPrintBackend interface with direct access to
  * the filesystem using Unix/Linux API calls
  *
- * Return value: the new #GtkPrintBackendPapi object
+ * Returns: the new #GtkPrintBackendPapi object
  **/
 GtkPrintBackend *
 gtk_print_backend_papi_new (void)

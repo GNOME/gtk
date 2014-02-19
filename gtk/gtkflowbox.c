@@ -4145,7 +4145,7 @@ gtk_flow_box_set_vadjustment (GtkFlowBox    *box,
  * Returns whether the box is homogeneous (all children are the
  * same size). See gtk_box_set_homogeneous().
  *
- * Return value: %TRUE if the box is homogeneous.
+ * Returns: %TRUE if the box is homogeneous.
  *
  * Since: 3.12
  */

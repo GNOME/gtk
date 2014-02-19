@@ -4203,7 +4203,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    *
    * The drag action to use must be the return value of the signal handler.
    *
-   * Return value: The drag action to use, for example, #GDK_ACTION_COPY
+   * Returns: The drag action to use, for example, #GDK_ACTION_COPY
    * or #GDK_ACTION_MOVE, or 0 if no action is allowed here (i.e. drops
    * are not allowed in the specified @dest_file).
    *
@@ -4229,7 +4229,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * The places sidebar emits this signal when it needs to ask the application
    * to pop up a menu to ask the user for which drag action to perform.
    *
-   * Return value: the final drag action that the sidebar should pass to the drag side
+   * Returns: the final drag action that the sidebar should pass to the drag side
    * of the drag-and-drop operation.
    *
    * Since: 3.10
@@ -4601,7 +4601,7 @@ gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar,
  *
  * Returns the value previously set with gtk_places_sidebar_set_show_desktop()
  *
- * Return value: %TRUE if the sidebar will display a builtin shortcut to the desktop folder.
+ * Returns: %TRUE if the sidebar will display a builtin shortcut to the desktop folder.
  *
  * Since: 3.10
  */
@@ -4645,7 +4645,7 @@ gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar,
  *
  * Returns the value previously set with gtk_places_sidebar_set_show_connect_to_server()
  *
- * Return value: %TRUE if the sidebar will display a “Connect to Server” item.
+ * Returns: %TRUE if the sidebar will display a “Connect to Server” item.
  *
  * Since: 3.10
  */
@@ -4687,7 +4687,7 @@ gtk_places_sidebar_set_local_only (GtkPlacesSidebar *sidebar,
  *
  * Returns the value previously set with gtk_places_sidebar_set_local_only().
  *
- * Return value: %TRUE if the sidebar will only show local files.
+ * Returns: %TRUE if the sidebar will only show local files.
  *
  * Since: 3.12
  */
@@ -4786,7 +4786,7 @@ gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar,
  *
  * Gets the list of shortcuts.
  *
- * Return value: (element-type GFile) (transfer full):
+ * Returns: (element-type GFile) (transfer full):
  *     A #GSList of #GFile of the locations that have been added as
  *     application-specific shortcuts with gtk_places_sidebar_add_shortcut().
  * To free this list, you can use
@@ -4813,7 +4813,7 @@ gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
  * and returns one of them.  This function is used by #GtkFileChooser to implement
  * the “Alt-1”, “Alt-2”, etc. shortcuts, which activate the cooresponding bookmark.
  *
- * Return value: (transfer full): The bookmark specified by the index @n, or
+ * Returns: (transfer full): The bookmark specified by the index @n, or
  * #NULL if no such index exist.  Note that the indices start at 0, even though
  * the file chooser starts them with the keyboard shortcut “Alt-1”.
  *

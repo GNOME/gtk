@@ -688,7 +688,7 @@ gtk_recent_action_init (GtkRecentAction *action)
  * a #GtkActionGroup and set the accelerator for the action,
  * call gtk_action_group_add_action_with_accel().
  *
- * Return value: the newly created #GtkRecentAction.
+ * Returns: the newly created #GtkRecentAction.
  *
  * Since: 2.12
  *
@@ -725,7 +725,7 @@ gtk_recent_action_new (const gchar *name,
  * a #GtkActionGroup and set the accelerator for the action,
  * call gtk_action_group_add_action_with_accel().
  *
- * Return value: the newly created #GtkRecentAction
+ * Returns: the newly created #GtkRecentAction
  * 
  * Since: 2.12
  *
@@ -756,7 +756,7 @@ gtk_recent_action_new_for_manager (const gchar      *name,
  *
  * Returns the value set by gtk_recent_chooser_menu_set_show_numbers().
  *
- * Return value: %TRUE if numbers should be shown.
+ * Returns: %TRUE if numbers should be shown.
  *
  * Since: 2.12
  *

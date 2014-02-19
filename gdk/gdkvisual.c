@@ -84,7 +84,7 @@ gdk_visual_class_init (GdkVisualClass *visual_class)
  *
  * Call g_list_free() on the return value when you’re finished with it.
  *
- * Return value: (transfer container) (element-type GdkVisual):
+ * Returns: (transfer container) (element-type GdkVisual):
  *     a list of visuals; the list must be freed, but not its contents
  */
 GList*
@@ -100,7 +100,7 @@ gdk_list_visuals (void)
  * This is the visual for the root window of the display.
  * The return value should not be freed.
  *
- * Return value: (transfer none): system visual
+ * Returns: (transfer none): system visual
  */
 GdkVisual*
 gdk_visual_get_system (void)
@@ -115,7 +115,7 @@ gdk_visual_get_system (void)
  * means “largest,” i.e. 32 preferred over 24 preferred over 8 bits
  * per pixel.
  *
- * Return value: best available depth
+ * Returns: best available depth
  */
 gint
 gdk_visual_get_best_depth (void)
@@ -130,7 +130,7 @@ gdk_visual_get_best_depth (void)
  *
  * Return the best available visual type for the default GDK screen.
  *
- * Return value: best visual type
+ * Returns: best visual type
  */
 GdkVisualType
 gdk_visual_get_best_type (void)
@@ -146,7 +146,7 @@ gdk_visual_get_best_type (void)
  * Get the visual with the most available colors for the default
  * GDK screen. The return value should not be freed.
  *
- * Return value: (transfer none): best visual
+ * Returns: (transfer none): best visual
  */
 GdkVisual*
 gdk_visual_get_best (void)
@@ -165,7 +165,7 @@ gdk_visual_get_best (void)
  * over grayscale or fixed-colormap visuals. The return value should
  * not be freed. %NULL may be returned if no visual supports @depth.
  *
- * Return value: (transfer none): best visual for the given depth
+ * Returns: (transfer none): best visual for the given depth
  */
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
@@ -184,7 +184,7 @@ gdk_visual_get_best_with_depth (gint depth)
  * should not be freed. %NULL may be returned if no visual has type
  * @visual_type.
  *
- * Return value: (transfer none): best visual of the given type
+ * Returns: (transfer none): best visual of the given type
  */
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
@@ -203,7 +203,7 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
  * Combines gdk_visual_get_best_with_depth() and
  * gdk_visual_get_best_with_type().
  *
- * Return value: (transfer none): best visual with both @depth and
+ * Returns: (transfer none): best visual with both @depth and
  *     @visual_type, or %NULL if none
  */
 GdkVisual*
@@ -265,7 +265,7 @@ gdk_query_visual_types (GdkVisualType **visual_types,
  *
  * Returns the type of visual this is (PseudoColor, TrueColor, etc).
  *
- * Return value: A #GdkVisualType stating the type of @visual.
+ * Returns: A #GdkVisualType stating the type of @visual.
  *
  * Since: 2.22
  */
@@ -283,7 +283,7 @@ gdk_visual_get_visual_type (GdkVisual *visual)
  *
  * Returns the bit depth of this visual.
  *
- * Return value: The bit depth of this visual.
+ * Returns: The bit depth of this visual.
  *
  * Since: 2.22
  */
@@ -301,7 +301,7 @@ gdk_visual_get_depth (GdkVisual *visual)
  *
  * Returns the byte order of this visual.
  *
- * Return value: A #GdkByteOrder stating the byte order of @visual.
+ * Returns: A #GdkByteOrder stating the byte order of @visual.
  *
  * Since: 2.22
  */
@@ -319,7 +319,7 @@ gdk_visual_get_byte_order (GdkVisual *visual)
  *
  * Returns the size of a colormap for this visual.
  *
- * Return value: The size of a colormap that is suitable for @visual.
+ * Returns: The size of a colormap that is suitable for @visual.
  *
  * Since: 2.22
  */
@@ -337,7 +337,7 @@ gdk_visual_get_colormap_size (GdkVisual *visual)
  *
  * Returns the number of significant bits per red, green and blue value.
  *
- * Return value: The number of significant bits per color value for @visual.
+ * Returns: The number of significant bits per color value for @visual.
  *
  * Since: 2.22
  */
@@ -454,7 +454,7 @@ gdk_visual_get_blue_pixel_details (GdkVisual *visual,
  *
  * Gets the screen to which this visual belongs
  *
- * Return value: (transfer none): the screen to which this visual belongs.
+ * Returns: (transfer none): the screen to which this visual belongs.
  *
  * Since: 2.2
  */

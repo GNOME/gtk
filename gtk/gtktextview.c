@@ -1567,7 +1567,7 @@ gtk_text_view_init (GtkTextView *text_view)
  * for you. Get the buffer with gtk_text_view_get_buffer(). If you want
  * to specify your own buffer, consider gtk_text_view_new_with_buffer().
  *
- * Return value: a new #GtkTextView
+ * Returns: a new #GtkTextView
  **/
 GtkWidget*
 gtk_text_view_new (void)
@@ -1586,7 +1586,7 @@ gtk_text_view_new (void)
  * text view adds its own reference count to the buffer; it does not
  * take over an existing reference.
  *
- * Return value: a new #GtkTextView.
+ * Returns: a new #GtkTextView.
  **/
 GtkWidget*
 gtk_text_view_new_with_buffer (GtkTextBuffer *buffer)
@@ -1768,7 +1768,7 @@ get_buffer (GtkTextView *text_view)
  * The reference count on the buffer is not incremented; the caller
  * of this function won’t own a new reference.
  *
- * Return value: (transfer none): a #GtkTextBuffer
+ * Returns: (transfer none): a #GtkTextBuffer
  **/
 GtkTextBuffer*
 gtk_text_view_get_buffer (GtkTextView *text_view)
@@ -2007,7 +2007,7 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
  * using gtk_text_view_scroll_to_mark() which saves a point to be 
  * scrolled to after line validation.
  *
- * Return value: %TRUE if scrolling occurred
+ * Returns: %TRUE if scrolling occurred
  **/
 gboolean
 gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
@@ -2481,7 +2481,7 @@ clamp_iter_onscreen (GtkTextView *text_view, GtkTextIter *iter)
  * Moves a mark within the buffer so that it's
  * located within the currently-visible text area.
  *
- * Return value: %TRUE if the mark moved (wasn’t already onscreen)
+ * Returns: %TRUE if the mark moved (wasn’t already onscreen)
  **/
 gboolean
 gtk_text_view_move_mark_onscreen (GtkTextView *text_view,
@@ -2574,7 +2574,7 @@ gtk_text_view_set_wrap_mode (GtkTextView *text_view,
  *
  * Gets the line wrapping for the view.
  *
- * Return value: the line wrap setting
+ * Returns: the line wrap setting
  **/
 GtkWrapMode
 gtk_text_view_get_wrap_mode (GtkTextView *text_view)
@@ -2637,7 +2637,7 @@ gtk_text_view_set_editable (GtkTextView *text_view,
  * Returns the default editability of the #GtkTextView. Tags in the
  * buffer may override this setting for some ranges of text.
  *
- * Return value: whether text is editable by default
+ * Returns: whether text is editable by default
  **/
 gboolean
 gtk_text_view_get_editable (GtkTextView *text_view)
@@ -2685,7 +2685,7 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
  * 
  * Gets the default number of pixels to put above paragraphs.
  * 
- * Return value: default number of pixels above paragraphs
+ * Returns: default number of pixels above paragraphs
  **/
 gint
 gtk_text_view_get_pixels_above_lines (GtkTextView *text_view)
@@ -2734,7 +2734,7 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
  * 
  * Gets the value set by gtk_text_view_set_pixels_below_lines().
  * 
- * Return value: default number of blank pixels below paragraphs
+ * Returns: default number of blank pixels below paragraphs
  **/
 gint
 gtk_text_view_get_pixels_below_lines (GtkTextView *text_view)
@@ -2783,7 +2783,7 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
  * 
  * Gets the value set by gtk_text_view_set_pixels_inside_wrap().
  * 
- * Return value: default number of pixels of blank space between wrapped lines
+ * Returns: default number of pixels of blank space between wrapped lines
  **/
 gint
 gtk_text_view_get_pixels_inside_wrap (GtkTextView *text_view)
@@ -2833,7 +2833,7 @@ gtk_text_view_set_justification (GtkTextView     *text_view,
  * Gets the default justification of paragraphs in @text_view.
  * Tags in the buffer may override the default.
  * 
- * Return value: default justification
+ * Returns: default justification
  **/
 GtkJustification
 gtk_text_view_get_justification (GtkTextView *text_view)
@@ -2882,7 +2882,7 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
  * Gets the default left margin size of paragraphs in the @text_view.
  * Tags in the buffer may override the default.
  * 
- * Return value: left margin in pixels
+ * Returns: left margin in pixels
  **/
 gint
 gtk_text_view_get_left_margin (GtkTextView *text_view)
@@ -2929,7 +2929,7 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
  * Gets the default right margin for text in @text_view. Tags
  * in the buffer may override the default.
  * 
- * Return value: right margin in pixels
+ * Returns: right margin in pixels
  **/
 gint
 gtk_text_view_get_right_margin (GtkTextView *text_view)
@@ -2979,7 +2979,7 @@ gtk_text_view_set_indent (GtkTextView *text_view,
  * Tags in the view’s buffer may override the default.
  * The indentation may be negative.
  * 
- * Return value: number of pixels of indentation
+ * Returns: number of pixels of indentation
  **/
 gint
 gtk_text_view_get_indent (GtkTextView *text_view)
@@ -3036,7 +3036,7 @@ gtk_text_view_set_tabs (GtkTextView   *text_view,
  * “standard” (8-space) tabs are used. Free the return value
  * with pango_tab_array_free().
  * 
- * Return value: copy of default tab array, or %NULL if “standard” 
+ * Returns: copy of default tab array, or %NULL if “standard” 
  *    tabs are used; must be freed with pango_tab_array_free().
  **/
 PangoTabArray*
@@ -3096,7 +3096,7 @@ gtk_text_view_set_cursor_visible (GtkTextView *text_view,
  *
  * Find out whether the cursor is being displayed.
  *
- * Return value: whether the insertion mark is visible
+ * Returns: whether the insertion mark is visible
  **/
 gboolean
 gtk_text_view_get_cursor_visible (GtkTextView *text_view)
@@ -3114,7 +3114,7 @@ gtk_text_view_get_cursor_visible (GtkTextView *text_view)
  * Moves the cursor to the currently visible region of the
  * buffer, it it isn’t there already.
  *
- * Return value: %TRUE if the cursor had to be moved.
+ * Returns: %TRUE if the cursor had to be moved.
  **/
 gboolean
 gtk_text_view_place_cursor_onscreen (GtkTextView *text_view)
@@ -6601,7 +6601,7 @@ gtk_text_view_toggle_overwrite (GtkTextView *text_view)
  *
  * Returns whether the #GtkTextView is in overwrite mode or not.
  *
- * Return value: whether @text_view is in overwrite mode or not.
+ * Returns: whether @text_view is in overwrite mode or not.
  * 
  * Since: 2.4
  **/
@@ -6670,7 +6670,7 @@ gtk_text_view_set_accepts_tab (GtkTextView *text_view,
  * Returns whether pressing the Tab key inserts a tab characters.
  * gtk_text_view_set_accepts_tab().
  * 
- * Return value: %TRUE if pressing the Tab key inserts a tab character, 
+ * Returns: %TRUE if pressing the Tab key inserts a tab character, 
  *   %FALSE if pressing the Tab key moves the keyboard focus.
  * 
  * Since: 2.4
@@ -7293,7 +7293,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
  * The return value is a copy owned by the caller of this function,
  * and should be freed.
  * 
- * Return value: a new #GtkTextAttributes
+ * Returns: a new #GtkTextAttributes
  **/
 GtkTextAttributes*
 gtk_text_view_get_default_attributes (GtkTextView *text_view)
@@ -7401,7 +7401,7 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
  * }
  * ]|
  *
- * Return value: %TRUE if the input method handled the key event.
+ * Returns: %TRUE if the input method handled the key event.
  *
  * Since: 2.22
  */
@@ -9438,7 +9438,7 @@ text_window_get_height (GtkTextWindow *win)
  * height is 0, and are nonexistent before the widget has been
  * realized.
  *
- * Return value: (transfer none): a #GdkWindow, or %NULL
+ * Returns: (transfer none): a #GdkWindow, or %NULL
  **/
 GdkWindow*
 gtk_text_view_get_window (GtkTextView *text_view,
@@ -9506,7 +9506,7 @@ gtk_text_view_get_window (GtkTextView *text_view,
  * should be called on `event-&gt;window` to
  * see which window it was.
  *
- * Return value: the window type.
+ * Returns: the window type.
  **/
 GtkTextWindowType
 gtk_text_view_get_window_type (GtkTextView *text_view,
@@ -9955,7 +9955,7 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
  * Gets the width of the specified border window. See
  * gtk_text_view_set_border_window_size().
  *
- * Return value: width of window
+ * Returns: width of window
  **/
 gint
 gtk_text_view_get_border_window_size (GtkTextView       *text_view,
@@ -10230,7 +10230,7 @@ gtk_text_view_move_child (GtkTextView *text_view,
  * they depend on the view’s width; paragraphs are the same in all
  * views, since they depend on the contents of the #GtkTextBuffer.
  * 
- * Return value: %TRUE if @iter was moved and is not on the end iterator
+ * Returns: %TRUE if @iter was moved and is not on the end iterator
  **/
 gboolean
 gtk_text_view_forward_display_line (GtkTextView *text_view,
@@ -10258,7 +10258,7 @@ gtk_text_view_forward_display_line (GtkTextView *text_view,
  * they depend on the view’s width; paragraphs are the same in all
  * views, since they depend on the contents of the #GtkTextBuffer.
  * 
- * Return value: %TRUE if @iter was moved and is not on the end iterator
+ * Returns: %TRUE if @iter was moved and is not on the end iterator
  **/
 gboolean
 gtk_text_view_backward_display_line (GtkTextView *text_view,
@@ -10286,7 +10286,7 @@ gtk_text_view_backward_display_line (GtkTextView *text_view,
  * they depend on the view’s width; paragraphs are the same in all
  * views, since they depend on the contents of the #GtkTextBuffer.
  * 
- * Return value: %TRUE if @iter was moved and is not on the end iterator
+ * Returns: %TRUE if @iter was moved and is not on the end iterator
  **/
 gboolean
 gtk_text_view_forward_display_line_end (GtkTextView *text_view,
@@ -10314,7 +10314,7 @@ gtk_text_view_forward_display_line_end (GtkTextView *text_view,
  * they depend on the view’s width; paragraphs are the same in all
  * views, since they depend on the contents of the #GtkTextBuffer.
  * 
- * Return value: %TRUE if @iter was moved and is not on the end iterator
+ * Returns: %TRUE if @iter was moved and is not on the end iterator
  **/
 gboolean
 gtk_text_view_backward_display_line_start (GtkTextView *text_view,
@@ -10337,7 +10337,7 @@ gtk_text_view_backward_display_line_start (GtkTextView *text_view,
  * See gtk_text_view_forward_display_line() for an explanation of
  * display lines vs. paragraphs.
  * 
- * Return value: %TRUE if @iter begins a wrapped line
+ * Returns: %TRUE if @iter begins a wrapped line
  **/
 gboolean
 gtk_text_view_starts_display_line (GtkTextView       *text_view,
@@ -10370,7 +10370,7 @@ gtk_text_view_starts_display_line (GtkTextView       *text_view,
  * of the current run, and there may be jumps when the cursor
  * is moved off of the end of a run.
  * 
- * Return value: %TRUE if @iter moved and is not on the end iterator
+ * Returns: %TRUE if @iter moved and is not on the end iterator
  **/
 gboolean
 gtk_text_view_move_visually (GtkTextView *text_view,

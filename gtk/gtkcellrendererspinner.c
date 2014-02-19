@@ -176,7 +176,7 @@ gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
  * Returns a new cell renderer which will show a spinner to indicate
  * activity.
  *
- * Return value: a new #GtkCellRenderer
+ * Returns: a new #GtkCellRenderer
  *
  * Since: 2.20
  */

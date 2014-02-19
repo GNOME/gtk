@@ -367,7 +367,7 @@ gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
  *
  * Retrieves the center bar widget of the bar.
  *
- * Return value: (transfer none): the center #GtkWidget.
+ * Returns: (transfer none): the center #GtkWidget.
  *
  * Since: 3.12
  */

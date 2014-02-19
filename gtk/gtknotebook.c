@@ -1566,7 +1566,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
  *
  * Creates a new #GtkNotebook widget with no pages.
 
- * Return value: the newly created #GtkNotebook
+ * Returns: the newly created #GtkNotebook
  */
 GtkWidget*
 gtk_notebook_new (void)
@@ -6957,7 +6957,7 @@ gtk_notebook_menu_detacher (GtkWidget *widget,
  *
  * Appends a page to @notebook.
  *
- * Return value: the index (starting from 0) of the appended
+ * Returns: the index (starting from 0) of the appended
  *     page in the notebook, or -1 if function fails
  */
 gint
@@ -6988,7 +6988,7 @@ gtk_notebook_append_page (GtkNotebook *notebook,
  * Appends a page to @notebook, specifying the widget to use as the
  * label in the popup menu.
  *
- * Return value: the index (starting from 0) of the appended
+ * Returns: the index (starting from 0) of the appended
  *     page in the notebook, or -1 if function fails
  */
 gint
@@ -7014,7 +7014,7 @@ gtk_notebook_append_page_menu (GtkNotebook *notebook,
  *
  * Prepends a page to @notebook.
  *
- * Return value: the index (starting from 0) of the prepended
+ * Returns: the index (starting from 0) of the prepended
  *     page in the notebook, or -1 if function fails
  */
 gint
@@ -7045,7 +7045,7 @@ gtk_notebook_prepend_page (GtkNotebook *notebook,
  * Prepends a page to @notebook, specifying the widget to use as the
  * label in the popup menu.
  *
- * Return value: the index (starting from 0) of the prepended
+ * Returns: the index (starting from 0) of the prepended
  *     page in the notebook, or -1 if function fails
  */
 gint
@@ -7073,7 +7073,7 @@ gtk_notebook_prepend_page_menu (GtkNotebook *notebook,
  *
  * Insert a page into @notebook at the given position.
  *
- * Return value: the index (starting from 0) of the inserted
+ * Returns: the index (starting from 0) of the inserted
  *     page in the notebook, or -1 if function fails
  */
 gint
@@ -7138,7 +7138,7 @@ gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
  * Insert a page into @notebook at the given position, specifying
  * the widget to use as the label in the popup menu.
  *
- * Return value: the index (starting from 0) of the inserted
+ * Returns: the index (starting from 0) of the inserted
  *     page in the notebook
  */
 gint
@@ -7203,7 +7203,7 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
  *
  * Returns the page number of the current page.
  *
- * Return value: the index (starting from 0) of the current
+ * Returns: the index (starting from 0) of the current
  *     page in the notebook. If the notebook has no pages,
  *     then -1 will be returned.
  */
@@ -7230,7 +7230,7 @@ gtk_notebook_get_current_page (GtkNotebook *notebook)
  *
  * Returns the child widget contained in page number @page_num.
  *
- * Return value: (transfer none): the child widget, or %NULL
+ * Returns: (transfer none): the child widget, or %NULL
  *     if @page_num is out of bounds
  */
 GtkWidget*
@@ -7265,7 +7265,7 @@ gtk_notebook_get_nth_page (GtkNotebook *notebook,
  *
  * Gets the number of pages in a notebook.
  *
- * Return value: the number of pages in the notebook
+ * Returns: the number of pages in the notebook
  *
  * Since: 2.2
  */
@@ -7289,7 +7289,7 @@ gtk_notebook_get_n_pages (GtkNotebook *notebook)
  * Finds the index of the page which contains the given child
  * widget.
  *
- * Return value: the index of the page containing @child, or
+ * Returns: the index of the page containing @child, or
  *     -1 if @child is not in the notebook
  */
 gint
@@ -7460,7 +7460,7 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
  * Returns whether a bevel will be drawn around the notebook pages.
  * See gtk_notebook_set_show_border().
  *
- * Return value: %TRUE if the bevel is drawn
+ * Returns: %TRUE if the bevel is drawn
  */
 gboolean
 gtk_notebook_get_show_border (GtkNotebook *notebook)
@@ -7545,7 +7545,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
  * Returns whether the tabs of the notebook are shown.
  * See gtk_notebook_set_show_tabs().
  *
- * Return value: %TRUE if the tabs are shown
+ * Returns: %TRUE if the tabs are shown
  */
 gboolean
 gtk_notebook_get_show_tabs (GtkNotebook *notebook)
@@ -7590,7 +7590,7 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
  * Gets the edge at which the tabs for switching pages in the
  * notebook are drawn.
  *
- * Return value: the edge at which the tabs are drawn
+ * Returns: the edge at which the tabs are drawn
  */
 GtkPositionType
 gtk_notebook_get_tab_pos (GtkNotebook *notebook)
@@ -7638,7 +7638,7 @@ gtk_notebook_set_scrollable (GtkNotebook *notebook,
  * Returns whether the tab label area has arrows for scrolling.
  * See gtk_notebook_set_scrollable().
  *
- * Return value: %TRUE if arrows for scrolling are present
+ * Returns: %TRUE if arrows for scrolling are present
  */
 gboolean
 gtk_notebook_get_scrollable (GtkNotebook *notebook)
@@ -7654,7 +7654,7 @@ gtk_notebook_get_scrollable (GtkNotebook *notebook)
  *
  * Returns the horizontal width of a tab border.
  *
- * Return value: horizontal width of a tab border
+ * Returns: horizontal width of a tab border
  *
  * Since: 2.22
  *
@@ -7674,7 +7674,7 @@ gtk_notebook_get_tab_hborder (GtkNotebook *notebook)
  *
  * Returns the vertical width of a tab border.
  *
- * Return value: vertical width of a tab border
+ * Returns: vertical width of a tab border
  *
  * Since: 2.22
  *
@@ -7782,7 +7782,7 @@ gtk_notebook_popup_disable  (GtkNotebook *notebook)
  * %NULL is returned if @child is not in @notebook or
  * if no tab label has specifically been set for @child.
  *
- * Return value: (transfer none): the tab label
+ * Returns: (transfer none): the tab label
  */
 GtkWidget *
 gtk_notebook_get_tab_label (GtkNotebook *notebook,
@@ -7922,7 +7922,7 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
  * Retrieves the text of the tab label for the page containing
  * @child.
  *
- * Return value: the text of the tab label, or %NULL if the
+ * Returns: the text of the tab label, or %NULL if the
  *     tab label widget is not a #GtkLabel. The string is owned
  *     by the widget and must not be freed.
  */
@@ -7950,7 +7950,7 @@ gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
  *
  * Retrieves the menu label widget of the page containing @child.
  *
- * Return value: (transfer none): the menu label, or %NULL if the
+ * Returns: (transfer none): the menu label, or %NULL if the
  *     notebook page does not have a menu label other than the
  *     default (the tab label).
  */
@@ -8059,7 +8059,7 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
  * Retrieves the text of the menu label for the page containing
  * @child.
  *
- * Return value: the text of the tab label, or %NULL if the
+ * Returns: the text of the tab label, or %NULL if the
  *     widget does not have a menu label other than the default
  *     menu label, or the menu label widget is not a #GtkLabel.
  *     The string is owned by the widget and must not be freed.
@@ -8276,7 +8276,7 @@ gtk_notebook_set_group_name (GtkNotebook *notebook,
  *
  * Gets the current group name for @notebook.
  *
- * Return Value: (transfer none): the group name,
+ * Returns: (transfer none): the group name,
  *     or %NULL if none is set.
  *
  * Since: 2.24
@@ -8296,7 +8296,7 @@ gtk_notebook_get_group_name (GtkNotebook *notebook)
  *
  * Gets whether the tab can be reordered via drag and drop or not.
  *
- * Return Value: %TRUE if the tab is reorderable.
+ * Returns: %TRUE if the tab is reorderable.
  *
  * Since: 2.10
  */
@@ -8357,7 +8357,7 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
  *
  * Returns whether the tab contents can be detached from @notebook.
  *
- * Return Value: %TRUE if the tab is detachable.
+ * Returns: %TRUE if the tab is detachable.
  *
  * Since: 2.10
  */

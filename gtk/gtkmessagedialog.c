@@ -529,7 +529,7 @@ gtk_message_dialog_get_property (GObject     *object,
  * signal is emitted with response IDs from #GtkResponseType. See
  * #GtkDialog for more details.
  *
- * Return value: (transfer none): a new #GtkMessageDialog
+ * Returns: (transfer none): a new #GtkMessageDialog
  */
 GtkWidget*
 gtk_message_dialog_new (GtkWindow     *parent,
@@ -614,7 +614,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  *                                 markup);
  * ]|
  * 
- * Return value: a new #GtkMessageDialog
+ * Returns: a new #GtkMessageDialog
  *
  * Since: 2.4
  **/
@@ -696,7 +696,7 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
  *
  * Gets the dialog’s image.
  *
- * Return value: (transfer none): the dialog’s image
+ * Returns: (transfer none): the dialog’s image
  *
  * Since: 2.14
  * Deprecated: 3.12: Use #GtkDialog for dialogs with images
@@ -851,7 +851,7 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  * See gtk_dialog_get_content_area() for the corresponding
  * function in the parent #GtkDialog.
  *
- * Return value: (transfer none): A #GtkVBox corresponding to the
+ * Returns: (transfer none): A #GtkVBox corresponding to the
  *     “message area” in the @message_dialog.
  *
  * Since: 2.22

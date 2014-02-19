@@ -913,7 +913,7 @@ gtk_menu_bar_move_current (GtkMenuShell         *menu_shell,
  * Retrieves the current pack direction of the menubar. 
  * See gtk_menu_bar_set_pack_direction().
  *
- * Return value: the pack direction
+ * Returns: the pack direction
  *
  * Since: 2.8
  */
@@ -966,7 +966,7 @@ gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
  * Retrieves the current child pack direction of the menubar.
  * See gtk_menu_bar_set_child_pack_direction().
  *
- * Return value: the child pack direction
+ * Returns: the child pack direction
  *
  * Since: 2.8
  */

@@ -854,7 +854,7 @@ gtk_font_button_set_use_size (GtkFontButton *font_button,
  * 
  * Returns whether the name of the font style will be shown in the label.
  * 
- * Return value: whether the font style will be shown in the label.
+ * Returns: whether the font style will be shown in the label.
  *
  * Since: 2.4
  **/
@@ -899,7 +899,7 @@ gtk_font_button_set_show_style (GtkFontButton *font_button,
  * 
  * Returns whether the font size will be shown in the label.
  * 
- * Return value: whether the font size will be shown in the label.
+ * Returns: whether the font size will be shown in the label.
  *
  * Since: 2.4
  **/

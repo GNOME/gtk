@@ -179,7 +179,7 @@ preedit_changed_cb (GtkEntry  *entry,
  *                   search_bar);
  * ]|
  *
- * Return value: %GDK_EVENT_STOP if the key press event resulted
+ * Returns: %GDK_EVENT_STOP if the key press event resulted
  *     in text being entered in the search entry (and revealing
  *     the search bar if necessary), %GDK_EVENT_PROPAGATE otherwise.
  *
@@ -455,7 +455,7 @@ gtk_search_bar_init (GtkSearchBar *bar)
  * which widget is going to be your text entry using
  * gtk_search_bar_connect_entry().
  *
- * Return value: a new #GtkSearchBar
+ * Returns: a new #GtkSearchBar
  *
  * Since: 3.10
  */
@@ -508,7 +508,7 @@ gtk_search_bar_connect_entry (GtkSearchBar *bar,
  *
  * Returns whether the search mode is on or off.
  *
- * Return value: whether search mode is toggled on
+ * Returns: whether search mode is toggled on
  *
  * Since: 3.10
  */
@@ -548,7 +548,7 @@ gtk_search_bar_set_search_mode (GtkSearchBar *bar,
  *
  * Returns whether the close button is shown.
  *
- * Return value: whether the close button is shown
+ * Returns: whether the close button is shown
  *
  * Since: 3.10
  */

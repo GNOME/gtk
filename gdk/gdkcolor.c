@@ -51,7 +51,7 @@
  *
  * The result must be freed using gdk_color_free().
  *
- * Return value: a copy of @color
+ * Returns: a copy of @color
  */
 GdkColor*
 gdk_color_copy (const GdkColor *color)
@@ -86,7 +86,7 @@ gdk_color_free (GdkColor *color)
  * A hash function suitable for using for a hash
  * table that stores #GdkColors.
  *
- * Return value: The hash function applied to @color
+ * Returns: The hash function applied to @color
  */
 guint
 gdk_color_hash (const GdkColor *color)
@@ -104,7 +104,7 @@ gdk_color_hash (const GdkColor *color)
  *
  * Compares two colors.
  *
- * Return value: %TRUE if the two colors compare equal
+ * Returns: %TRUE if the two colors compare equal
  */
 gboolean
 gdk_color_equal (const GdkColor *colora,
@@ -138,7 +138,7 @@ G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
  * (White in the four forms is “\#fff”, “\#ffffff”, “\#fffffffff”
  * and “\#ffffffffffff”).
  *
- * Return value: %TRUE if the parsing succeeded
+ * Returns: %TRUE if the parsing succeeded
  */
 gboolean
 gdk_color_parse (const gchar *spec,
@@ -168,7 +168,7 @@ gdk_color_parse (const gchar *spec,
  *
  * The returned string can be parsed by gdk_color_parse().
  *
- * Return value: a newly-allocated text string
+ * Returns: a newly-allocated text string
  *
  * Since: 2.12
  */

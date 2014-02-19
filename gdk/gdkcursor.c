@@ -153,7 +153,7 @@ gdk_cursor_init (GdkCursor *cursor)
  *
  * Adds a reference to @cursor.
  *
- * Return value: (transfer full): Same @cursor that was passed in
+ * Returns: (transfer full): Same @cursor that was passed in
  *
  * Deprecated: 3.0: Use g_object_ref() instead
  */
@@ -191,7 +191,7 @@ gdk_cursor_unref (GdkCursor *cursor)
  *
  * To make the cursor invisible, use %GDK_BLANK_CURSOR.
  *
- * Return value: a new #GdkCursor
+ * Returns: a new #GdkCursor
  */
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
@@ -205,7 +205,7 @@ gdk_cursor_new (GdkCursorType cursor_type)
  *
  * Returns the cursor type for this cursor.
  *
- * Return value: a #GdkCursorType
+ * Returns: a #GdkCursorType
  *
  * Since: 2.22
  **/
@@ -243,7 +243,7 @@ gdk_cursor_get_cursor_type (GdkCursor *cursor)
  * - ![](sb_v_double_arrow.png) #GDK_SB_V_DOUBLE_ARROW (move horizontal splitter)
  * - #GDK_BLANK_CURSOR (Blank cursor). Since 2.16
  *
- * Return value: a new #GdkCursor
+ * Returns: a new #GdkCursor
  *
  * Since: 2.2
  **/

@@ -2117,7 +2117,7 @@ _gtk_cell_area_box_group_visible (GtkCellAreaBox  *box,
  *
  * Creates a new #GtkCellAreaBox.
  *
- * Return value: a newly created #GtkCellAreaBox
+ * Returns: a newly created #GtkCellAreaBox
  *
  * Since: 3.0
  */
@@ -2223,7 +2223,7 @@ gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
  *
  * Gets the spacing added between cell renderers.
  *
- * Return value: the space added between cell renderers in @box.
+ * Returns: the space added between cell renderers in @box.
  *
  * Since: 3.0
  */

@@ -948,7 +948,7 @@ gtk_rc_set_default_files (gchar **filenames)
  * Retrieves the current list of RC files that will be parsed
  * at the end of gtk_init().
  *
- * Return value: (transfer none) (array zero-terminated=1) (element-type filename):
+ * Returns: (transfer none) (array zero-terminated=1) (element-type filename):
  *      A %NULL-terminated array of filenames.  This memory is owned
  *     by GTK+ and must not be freed by the application.  If you want
  *     to store this information, you should make a copy.
@@ -1140,7 +1140,7 @@ gtk_rc_style_new (void)
  * will correctly copy an RC style that is a member of a class
  * derived from #GtkRcStyle.
  *
- * Return value: (transfer full): the resulting #GtkRcStyle
+ * Returns: (transfer full): the resulting #GtkRcStyle
  *
  * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
@@ -1329,7 +1329,7 @@ gtk_rc_reset_styles (GtkSettings *settings)
  * for the given #GtkSettings has changed, discard all style information
  * and then reread all previously read RC files.
  *
- * Return value: %TRUE if the files were reread.
+ * Returns: %TRUE if the files were reread.
  *
  * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
@@ -1347,7 +1347,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
  * default #GtkSettings has changed, discard all style information
  * and then reread all previously read RC files.
  *
- * Return value:  %TRUE if the files were reread.
+ * Returns:  %TRUE if the files were reread.
  *
  * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
@@ -1409,7 +1409,7 @@ gtk_rc_get_style (GtkWidget *widget)
  *                             G_OBJECT_TYPE (widget));
  * ]|
  *
- * Return value: (transfer none): A style created by matching with the
+ * Returns: (transfer none): A style created by matching with the
  *     supplied paths, or %NULL if nothing matching was specified and the
  *     default style should be used. The returned value is owned by GTK+
  *     as part of an internal cache, so you must call g_object_ref() on
@@ -1553,7 +1553,7 @@ lookup_color (GtkRcStyle *style,
  * If the file is not found, it outputs a warning message using
  * g_warning() and returns %NULL.
  *
- * Return value: (type filename): the filename.
+ * Returns: (type filename): the filename.
  *
  * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
@@ -1574,7 +1574,7 @@ gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
  * Searches for a theme engine in the GTK+ search path. This function
  * is not useful for applications and should not be used.
  *
- * Return value: (type filename): The filename, if found (must be
+ * Returns: (type filename): The filename, if found (must be
  *   freed with g_free()), otherwise %NULL.
  *
  * Deprecated: 3.0: Use #GtkCssProvider instead.

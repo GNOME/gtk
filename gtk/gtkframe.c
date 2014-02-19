@@ -332,7 +332,7 @@ gtk_frame_get_property (GObject         *object,
  * Creates a new #GtkFrame, with optional label @label.
  * If @label is %NULL, the label is omitted.
  * 
- * Return value: a new #GtkFrame widget
+ * Returns: a new #GtkFrame widget
  **/
 GtkWidget*
 gtk_frame_new (const gchar *label)
@@ -425,7 +425,7 @@ gtk_frame_set_label (GtkFrame *frame,
  * for the label widget if a non-%NULL argument was passed
  * to gtk_frame_new().)
  * 
- * Return value: the text in the label, or %NULL if there
+ * Returns: the text in the label, or %NULL if there
  *               was no label widget or the lable widget was not
  *               a #GtkLabel. This string is owned by GTK+ and
  *               must not be modified or freed.
@@ -501,7 +501,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
  * Retrieves the label widget for the frame. See
  * gtk_frame_set_label_widget().
  *
- * Return value: (transfer none): the label widget, or %NULL if there is none.
+ * Returns: (transfer none): the label widget, or %NULL if there is none.
  **/
 GtkWidget *
 gtk_frame_get_label_widget (GtkFrame *frame)
@@ -624,7 +624,7 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
  * Retrieves the shadow type of the frame. See
  * gtk_frame_set_shadow_type().
  *
- * Return value: the current shadow type of the frame.
+ * Returns: the current shadow type of the frame.
  **/
 GtkShadowType
 gtk_frame_get_shadow_type (GtkFrame *frame)

@@ -1630,7 +1630,7 @@ gtk_expander_get_preferred_width_for_height (GtkWidget *widget,
  *
  * Creates a new expander using @label as the text of the label.
  *
- * Return value: a new #GtkExpander widget.
+ * Returns: a new #GtkExpander widget.
  *
  * Since: 2.4
  */
@@ -1652,7 +1652,7 @@ gtk_expander_new (const gchar *label)
  * accelerator called a mnemonic.
  * Pressing Alt and that key activates the button.
  *
- * Return value: a new #GtkExpander widget.
+ * Returns: a new #GtkExpander widget.
  *
  * Since: 2.4
  */
@@ -1717,7 +1717,7 @@ gtk_expander_set_expanded (GtkExpander *expander,
  *
  * See gtk_expander_set_expanded().
  *
- * Return value: the current state of the expander
+ * Returns: the current state of the expander
  *
  * Since: 2.4
  */
@@ -1762,7 +1762,7 @@ gtk_expander_set_spacing (GtkExpander *expander,
  *
  * Gets the value set by gtk_expander_set_spacing().
  *
- * Return value: spacing between the expander and child
+ * Returns: spacing between the expander and child
  *
  * Since: 2.4
  */
@@ -1826,7 +1826,7 @@ gtk_expander_set_label (GtkExpander *expander,
  * be avoided by fetching the label text directly from the label
  * widget.
  *
- * Return value: The text of the label widget. This string is owned
+ * Returns: The text of the label widget. This string is owned
  *     by the widget and must not be modified or freed.
  *
  * Since: 2.4
@@ -1886,7 +1886,7 @@ gtk_expander_set_use_underline (GtkExpander *expander,
  * Returns whether an embedded underline in the expander label
  * indicates a mnemonic. See gtk_expander_set_use_underline().
  *
- * Return value: %TRUE if an embedded underline in the expander
+ * Returns: %TRUE if an embedded underline in the expander
  *     label indicates the mnemonic accelerator keys
  *
  * Since: 2.4
@@ -1941,7 +1941,7 @@ gtk_expander_set_use_markup (GtkExpander *expander,
  * the [Pango text markup language][PangoMarkupFormat].
  * See gtk_expander_set_use_markup().
  *
- * Return value: %TRUE if the label’s text will be parsed for markup
+ * Returns: %TRUE if the label’s text will be parsed for markup
  *
  * Since: 2.4
  */
@@ -2016,7 +2016,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
  * Retrieves the label widget for the frame. See
  * gtk_expander_set_label_widget().
  *
- * Return value: (transfer none): the label widget,
+ * Returns: (transfer none): the label widget,
  *     or %NULL if there is none
  *
  * Since: 2.4
@@ -2070,7 +2070,7 @@ gtk_expander_set_label_fill (GtkExpander *expander,
  * Returns whether the label widget will fill all available
  * horizontal space allocated to @expander.
  *
- * Return value: %TRUE if the label widget will fill all
+ * Returns: %TRUE if the label widget will fill all
  *     available horizontal space
  *
  * Since: 2.22
@@ -2113,7 +2113,7 @@ gtk_expander_set_resize_toplevel (GtkExpander *expander,
  * Returns whether the expander will resize the toplevel widget
  * containing the expander upon resizing and collpasing.
  *
- * Return value: the “resize toplevel” setting.
+ * Returns: the “resize toplevel” setting.
  *
  * Since: 3.2
  */

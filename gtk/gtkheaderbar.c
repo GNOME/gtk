@@ -1158,7 +1158,7 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
  *
  * Retrieves the title of the header. See gtk_header_bar_set_title().
  *
- * Return value: the title of the header, or %NULL if none has
+ * Returns: the title of the header, or %NULL if none has
  *    been set explicitly. The returned string is owned by the widget
  *    and must not be modified or freed.
  *
@@ -1219,7 +1219,7 @@ gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
  *
  * Retrieves the subtitle of the header. See gtk_header_bar_set_subtitle().
  *
- * Return value: the subtitle of the header, or %NULL if none has
+ * Returns: the subtitle of the header, or %NULL if none has
  *    been set explicitly. The returned string is owned by the widget
  *    and must not be modified or freed.
  *
@@ -1311,7 +1311,7 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
  * Retrieves the custom title widget of the header. See
  * gtk_header_bar_set_custom_title().
  *
- * Return value: (transfer none): the custom title widget
+ * Returns: (transfer none): the custom title widget
  *    of the header, or %NULL if none has been set explicitly.
  *
  * Since: 3.10

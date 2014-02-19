@@ -703,7 +703,7 @@ _gdk_x11_display_utf8_to_string_target (GdkDisplay  *display,
  *
  * Converts from UTF-8 to compound text.
  *
- * Return value: %TRUE if the conversion succeeded,
+ * Returns: %TRUE if the conversion succeeded,
  *     otherwise %FALSE
  *
  * Since: 2.24

@@ -409,7 +409,7 @@ iter_is_valid (GtkTreeIter  *iter,
  * GDK_TYPE_PIXBUF);` will create a new #GtkListStore with three columns, of type
  * int, string and #GdkPixbuf respectively.
  *
- * Return value: a new #GtkListStore
+ * Returns: a new #GtkListStore
  */
 GtkListStore *
 gtk_list_store_new (gint n_columns,
@@ -454,7 +454,7 @@ gtk_list_store_new (gint n_columns,
  *
  * Non-vararg creation function.  Used primarily by language bindings.
  *
- * Return value: (transfer full): a new #GtkListStore
+ * Returns: (transfer full): a new #GtkListStore
  **/
 GtkListStore *
 gtk_list_store_newv (gint   n_columns,
@@ -1189,7 +1189,7 @@ gtk_list_store_set (GtkListStore *list_store,
  * @iter is set to be the next valid row, or invalidated if it pointed 
  * to the last row in @list_store.
  *
- * Return value: %TRUE if @iter is valid, %FALSE if not.
+ * Returns: %TRUE if @iter is valid, %FALSE if not.
  **/
 gboolean
 gtk_list_store_remove (GtkListStore *list_store,
@@ -1444,7 +1444,7 @@ gtk_list_store_clear (GtkListStore *list_store)
  *
  * Checks if the given iter is a valid iter for this #GtkListStore.
  *
- * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
  *
  * Since: 2.2
  **/

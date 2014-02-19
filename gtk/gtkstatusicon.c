@@ -496,7 +496,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * Gets emitted when the size available for the image
    * changes, e.g. because the notification area got resized.
    *
-   * Return value: %TRUE if the icon was updated for the new
+   * Returns: %TRUE if the icon was updated for the new
    * size. Otherwise, GTK+ will scale the icon as necessary.
    *
    * Since: 2.10
@@ -525,7 +525,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * Whether this event is emitted is platform-dependent.  Use the ::activate
    * and ::popup-menu signals in preference.
    *
-   * Return value: %TRUE to stop other handlers from being invoked
+   * Returns: %TRUE to stop other handlers from being invoked
    * for the event. %FALSE to propagate the event further.
    *
    * Since: 2.14
@@ -552,7 +552,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * Whether this event is emitted is platform-dependent.  Use the ::activate
    * and ::popup-menu signals in preference.
    *
-   * Return value: %TRUE to stop other handlers from being invoked
+   * Returns: %TRUE to stop other handlers from being invoked
    * for the event. %FALSE to propagate the event further.
    *
    * Since: 2.14
@@ -1173,7 +1173,7 @@ gtk_status_icon_get_property (GObject    *object,
  * 
  * Creates an empty status icon object.
  * 
- * Return value: a new #GtkStatusIcon
+ * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
  **/
@@ -1192,7 +1192,7 @@ gtk_status_icon_new (void)
  * The image will be scaled down to fit in the available 
  * space in the notification area, if necessary.
  * 
- * Return value: a new #GtkStatusIcon
+ * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
  **/
@@ -1213,7 +1213,7 @@ gtk_status_icon_new_from_pixbuf (GdkPixbuf *pixbuf)
  * The image will be scaled down to fit in the available 
  * space in the notification area, if necessary.
  * 
- * Return value: a new #GtkStatusIcon
+ * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
  **/
@@ -1234,7 +1234,7 @@ gtk_status_icon_new_from_file (const gchar *filename)
  * own stock icon names, see gtk_icon_factory_add_default() and 
  * gtk_icon_factory_add(). 
  *
- * Return value: a new #GtkStatusIcon
+ * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
  *
@@ -1256,7 +1256,7 @@ gtk_status_icon_new_from_stock (const gchar *stock_id)
  * If the current icon theme is changed, the icon will be updated 
  * appropriately.
  * 
- * Return value: a new #GtkStatusIcon
+ * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
  **/
@@ -1275,7 +1275,7 @@ gtk_status_icon_new_from_icon_name (const gchar *icon_name)
  * Creates a status icon displaying a #GIcon. If the icon is a
  * themed icon, it will be updated when the theme changes.
  *
- * Return value: a new #GtkStatusIcon
+ * Returns: a new #GtkStatusIcon
  *
  * Since: 2.14
  **/
@@ -1849,7 +1849,7 @@ gtk_status_icon_set_from_gicon (GtkStatusIcon *status_icon,
  * to store image data. If the #GtkStatusIcon has no image data,
  * the return value will be %GTK_IMAGE_EMPTY. 
  * 
- * Return value: the image representation being used
+ * Returns: the image representation being used
  *
  * Since: 2.10
  **/
@@ -1870,7 +1870,7 @@ gtk_status_icon_get_storage_type (GtkStatusIcon *status_icon)
  * The caller of this function does not own a reference to the
  * returned pixbuf.
  * 
- * Return value: (transfer none): the displayed pixbuf,
+ * Returns: (transfer none): the displayed pixbuf,
  *     or %NULL if the image is empty.
  *
  * Since: 2.10
@@ -1897,7 +1897,7 @@ gtk_status_icon_get_pixbuf (GtkStatusIcon *status_icon)
  * The returned string is owned by the #GtkStatusIcon and should not
  * be freed or modified.
  * 
- * Return value: stock id of the displayed stock icon,
+ * Returns: stock id of the displayed stock icon,
  *   or %NULL if the image is empty.
  *
  * Since: 2.10
@@ -1926,7 +1926,7 @@ gtk_status_icon_get_stock (GtkStatusIcon *status_icon)
  * The returned string is owned by the #GtkStatusIcon and should not
  * be freed or modified.
  * 
- * Return value: name of the displayed icon, or %NULL if the image is empty.
+ * Returns: name of the displayed icon, or %NULL if the image is empty.
  *
  * Since: 2.10
  **/
@@ -1983,7 +1983,7 @@ gtk_status_icon_get_gicon (GtkStatusIcon *status_icon)
  * Note that the returned size is only meaningful while the 
  * status icon is embedded (see gtk_status_icon_is_embedded()).
  * 
- * Return value: the size that is available for the image
+ * Returns: the size that is available for the image
  *
  * Since: 2.10
  **/
@@ -2024,7 +2024,7 @@ gtk_status_icon_set_screen (GtkStatusIcon *status_icon,
  *
  * Returns the #GdkScreen associated with @status_icon.
  *
- * Return value: (transfer none): a #GdkScreen.
+ * Returns: (transfer none): a #GdkScreen.
  *
  * Since: 2.12
  */
@@ -2105,7 +2105,7 @@ gtk_status_icon_set_visible (GtkStatusIcon *status_icon,
  * the user can actually see the icon, see also 
  * gtk_status_icon_is_embedded().
  * 
- * Return value: %TRUE if the status icon is visible
+ * Returns: %TRUE if the status icon is visible
  *
  * Since: 2.10
  **/
@@ -2124,7 +2124,7 @@ gtk_status_icon_get_visible (GtkStatusIcon *status_icon)
  * Returns whether the status icon is embedded in a notification
  * area. 
  * 
- * Return value: %TRUE if the status icon is embedded in
+ * Returns: %TRUE if the status icon is embedded in
  *   a notification area.
  *
  * Since: 2.10
@@ -2311,7 +2311,7 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
  * is embedded in a notification area, see
  * gtk_status_icon_is_embedded().
  *
- * Return value: %TRUE if the location information has 
+ * Returns: %TRUE if the location information has 
  *               been filled in
  *
  * Since: 2.10
@@ -2400,7 +2400,7 @@ gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon,
  * Returns the current value of the has-tooltip property.
  * See #GtkStatusIcon:has-tooltip for more information.
  *
- * Return value: current value of has-tooltip on @status_icon.
+ * Returns: current value of has-tooltip on @status_icon.
  *
  * Since: 2.16
  */
@@ -2493,7 +2493,7 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
  *
  * Gets the contents of the tooltip for @status_icon.
  *
- * Return value: the tooltip text, or %NULL. You should free the
+ * Returns: the tooltip text, or %NULL. You should free the
  *   returned string with g_free() when done.
  *
  * Since: 2.16
@@ -2577,7 +2577,7 @@ gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
  *
  * Gets the contents of the tooltip for @status_icon.
  *
- * Return value: the tooltip text, or %NULL. You should free the
+ * Returns: the tooltip text, or %NULL. You should free the
  *   returned string with g_free() when done.
  *
  * Since: 2.16
@@ -2623,7 +2623,7 @@ gtk_status_icon_get_tooltip_markup (GtkStatusIcon *status_icon)
  * more likely to be met by one of the non-X11 specific methods, such
  * as gtk_status_icon_position_menu().
  *
- * Return value: An 32 bit unsigned integer identifier for the 
+ * Returns: An 32 bit unsigned integer identifier for the 
  * underlying X11 Window
  *
  * Since: 2.14

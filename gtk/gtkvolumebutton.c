@@ -184,7 +184,7 @@ gtk_volume_button_init (GtkVolumeButton *button)
  * a stepping of 0.02. Volume values can be obtained and modified using
  * the functions from #GtkScaleButton.
  *
- * Return value: a new #GtkVolumeButton
+ * Returns: a new #GtkVolumeButton
  *
  * Since: 2.12
  */

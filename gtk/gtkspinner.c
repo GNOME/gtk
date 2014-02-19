@@ -247,7 +247,7 @@ gtk_spinner_set_active (GtkSpinner *spinner,
  *
  * Returns a new spinner widget. Not yet started.
  *
- * Return value: a new #GtkSpinner
+ * Returns: a new #GtkSpinner
  *
  * Since: 2.20
  */

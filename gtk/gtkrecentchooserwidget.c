@@ -156,7 +156,7 @@ gtk_recent_chooser_widget_init (GtkRecentChooserWidget *widget)
  * Creates a new #GtkRecentChooserWidget object.  This is an embeddable widget
  * used to access the recently used resources list.
  *
- * Return value: a new #GtkRecentChooserWidget
+ * Returns: a new #GtkRecentChooserWidget
  *
  * Since: 2.10
  */
@@ -175,7 +175,7 @@ gtk_recent_chooser_widget_new (void)
  * This is useful if you have implemented your own recent manager, or if you
  * have a customized instance of a #GtkRecentManager object.
  *
- * Return value: a new #GtkRecentChooserWidget
+ * Returns: a new #GtkRecentChooserWidget
  *
  * Since: 2.10
  */

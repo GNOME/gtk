@@ -89,7 +89,7 @@ gtk_printer_papi_finalize (GObject *object)
  *
  * Creates a new #GtkPrinterPapi.
  *
- * Return value: a new #GtkPrinterPapi
+ * Returns: a new #GtkPrinterPapi
  *
  * Since: 2.10
  **/

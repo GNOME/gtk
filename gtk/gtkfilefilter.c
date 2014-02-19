@@ -352,7 +352,7 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
  * gtk_file_filter_add_pattern (filter, "*");
  * ]|
  * 
- * Return value: a new #GtkFileFilter
+ * Returns: a new #GtkFileFilter
  * 
  * Since: 2.4
  **/
@@ -391,7 +391,7 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
  * 
  * Gets the human-readable name for the filter. See gtk_file_filter_set_name().
  * 
- * Return value: The human-readable name of the filter,
+ * Returns: The human-readable name of the filter,
  *   or %NULL. This value is owned by GTK+ and must not
  *   be modified or freed.
  * 
@@ -540,7 +540,7 @@ gtk_file_filter_add_custom (GtkFileFilter         *filter,
  * is intended principally for use in the implementation of
  * #GtkFileChooser.
  * 
- * Return value: bitfield of flags indicating needed fields when
+ * Returns: bitfield of flags indicating needed fields when
  *   calling gtk_file_filter_filter()
  * 
  * Since: 2.4
@@ -565,7 +565,7 @@ gtk_file_filter_get_needed (GtkFileFilter *filter)
  * is intended principally for use in the implementation of
  * #GtkFileChooser.
  * 
- * Return value: %TRUE if the file should be displayed
+ * Returns: %TRUE if the file should be displayed
  * 
  * Since: 2.4
  **/

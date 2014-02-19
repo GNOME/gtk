@@ -181,7 +181,7 @@ gtk_stock_add_static (const GtkStockItem *items,
  * Fills @item with the registered values for @stock_id, returning %TRUE
  * if @stock_id was known.
  *
- * Return value: %TRUE if @item was initialized
+ * Returns: %TRUE if @item was initialized
  *
  * Deprecated: 3.10
  **/
@@ -229,7 +229,7 @@ gtk_stock_lookup (const gchar  *stock_id,
  * or registered with gtk_stock_add(). The list must be freed with g_slist_free(),
  * and each string in the list must be freed with g_free().
  *
- * Return value: (element-type utf8) (transfer full): a list of known stock IDs
+ * Returns: (element-type utf8) (transfer full): a list of known stock IDs
  *
  * Deprecated: 3.10
  **/
@@ -281,7 +281,7 @@ gtk_stock_list_ids (void)
  * 
  * Copies a stock item, mostly useful for language bindings and not in applications.
  * 
- * Return value: a new #GtkStockItem
+ * Returns: a new #GtkStockItem
  *
  * Deprecated: 3.10
  **/

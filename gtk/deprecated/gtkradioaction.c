@@ -208,7 +208,7 @@ gtk_radio_action_init (GtkRadioAction *action)
  * a #GtkActionGroup and set the accelerator for the action,
  * call gtk_action_group_add_action_with_accel().
  *
- * Return value: a new #GtkRadioAction
+ * Returns: a new #GtkRadioAction
  *
  * Since: 2.4
  *
@@ -544,7 +544,7 @@ gtk_radio_action_join_group (GtkRadioAction *action,
  * Obtains the value property of the currently active member of 
  * the group to which @action belongs.
  * 
- * Return value: The value of the currently active group member
+ * Returns: The value of the currently active group member
  *
  * Since: 2.4
  *

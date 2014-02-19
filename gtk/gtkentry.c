@@ -6615,7 +6615,7 @@ gtk_entry_reset_im_context (GtkEntry *entry)
  * and the default key event handling of the #GtkEntry.
  * See gtk_text_view_reset_im_context() for an example of use.
  *
- * Return value: %TRUE if the input method handled the key event.
+ * Returns: %TRUE if the input method handled the key event.
  *
  * Since: 2.22
  */
@@ -7335,7 +7335,7 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
  *
  * Creates a new entry.
  *
- * Return value: a new #GtkEntry.
+ * Returns: a new #GtkEntry.
  */
 GtkWidget*
 gtk_entry_new (void)
@@ -7349,7 +7349,7 @@ gtk_entry_new (void)
  *
  * Creates a new entry with the specified text buffer.
  *
- * Return value: a new #GtkEntry
+ * Returns: a new #GtkEntry
  *
  * Since: 2.18
  */
@@ -7583,7 +7583,7 @@ gtk_entry_set_visibility (GtkEntry *entry,
  * Retrieves whether the text in @entry is visible. See
  * gtk_entry_set_visibility().
  *
- * Return value: %TRUE if the text is currently visible
+ * Returns: %TRUE if the text is currently visible
  **/
 gboolean
 gtk_entry_get_visibility (GtkEntry *entry)
@@ -7637,7 +7637,7 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
  * Retrieves the character displayed in place of the real characters
  * for entries with visibility set to false. See gtk_entry_set_invisible_char().
  *
- * Return value: the current invisible char, or 0, if the entry does not
+ * Returns: the current invisible char, or 0, if the entry does not
  *               show invisible text at all. 
  **/
 gunichar
@@ -7715,7 +7715,7 @@ gtk_entry_set_overwrite_mode (GtkEntry *entry,
  * 
  * Gets the value set by gtk_entry_set_overwrite_mode().
  * 
- * Return value: whether the text is overwritten when typing.
+ * Returns: whether the text is overwritten when typing.
  *
  * Since: 2.14
  **/
@@ -7742,7 +7742,7 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  * gtk_entry_buffer_get_text (buffer);
  * ]|
  *
- * Return value: a pointer to the contents of the widget as a
+ * Returns: a pointer to the contents of the widget as a
  *      string. This string points to internally allocated
  *      storage in the widget and must not be freed, modified or
  *      stored.
@@ -7797,7 +7797,7 @@ gtk_entry_set_max_length (GtkEntry     *entry,
  * gtk_entry_buffer_get_max_length (buffer);
  * ]|
  *
- * Return value: the maximum allowed number of characters
+ * Returns: the maximum allowed number of characters
  *               in #GtkEntry, or 0 if there is no maximum.
  **/
 gint
@@ -7823,7 +7823,7 @@ gtk_entry_get_max_length (GtkEntry *entry)
  * gtk_entry_buffer_get_length (buffer);
  * ]|
  *
- * Return value: the current number of characters
+ * Returns: the current number of characters
  *               in #GtkEntry, or 0 if there are none.
  *
  * Since: 2.14
@@ -7875,7 +7875,7 @@ gtk_entry_set_activates_default (GtkEntry *entry,
  * 
  * Retrieves the value set by gtk_entry_set_activates_default().
  * 
- * Return value: %TRUE if the entry will activate the default widget
+ * Returns: %TRUE if the entry will activate the default widget
  **/
 gboolean
 gtk_entry_get_activates_default (GtkEntry *entry)
@@ -7920,7 +7920,7 @@ gtk_entry_set_width_chars (GtkEntry *entry,
  * 
  * Gets the value set by gtk_entry_set_width_chars().
  * 
- * Return value: number of chars to request space for, or negative if unset
+ * Returns: number of chars to request space for, or negative if unset
  **/
 gint
 gtk_entry_get_width_chars (GtkEntry *entry)
@@ -7964,7 +7964,7 @@ gtk_entry_set_max_width_chars (GtkEntry *entry,
  * Retrieves the desired maximum width of @entry, in characters.
  * See gtk_entry_set_max_width_chars().
  *
- * Return value: the maximum width of the entry, in characters
+ * Returns: the maximum width of the entry, in characters
  *
  * Since: 3.12
  */
@@ -8009,7 +8009,7 @@ gtk_entry_set_has_frame (GtkEntry *entry,
  * 
  * Gets the value set by gtk_entry_set_has_frame().
  * 
- * Return value: whether the entry has a beveled frame
+ * Returns: whether the entry has a beveled frame
  **/
 gboolean
 gtk_entry_get_has_frame (GtkEntry *entry)
@@ -8055,7 +8055,7 @@ gtk_entry_set_inner_border (GtkEntry        *entry,
  * This function returns the entry’s #GtkEntry:inner-border property. See
  * gtk_entry_set_inner_border() for more information.
  *
- * Return value: (transfer none): the entry’s #GtkBorder, or %NULL if none was set.
+ * Returns: (transfer none): the entry’s #GtkBorder, or %NULL if none was set.
  *
  * Since: 2.10
  *
@@ -8086,7 +8086,7 @@ gtk_entry_get_inner_border (GtkEntry *entry)
  * gtk_entry_text_index_to_layout_index() are needed to convert byte
  * indices in the layout to byte indices in the entry contents.
  *
- * Return value: (transfer none): the #PangoLayout for this entry
+ * Returns: (transfer none): the #PangoLayout for this entry
  **/
 PangoLayout*
 gtk_entry_get_layout (GtkEntry *entry)
@@ -8111,7 +8111,7 @@ gtk_entry_get_layout (GtkEntry *entry)
  * entry’s #PangoLayout (returned by gtk_entry_get_layout(),
  * with text retrieved via pango_layout_get_text()).
  * 
- * Return value: byte index into the entry contents
+ * Returns: byte index into the entry contents
  **/
 gint
 gtk_entry_layout_index_to_text_index (GtkEntry *entry,
@@ -8150,7 +8150,7 @@ gtk_entry_layout_index_to_text_index (GtkEntry *entry,
  * gtk_entry_get_layout()) to a position in the entry contents
  * (returned by gtk_entry_get_text()).
  * 
- * Return value: byte index into the entry layout text
+ * Returns: byte index into the entry layout text
  **/
 gint
 gtk_entry_text_index_to_layout_index (GtkEntry *entry,
@@ -8267,7 +8267,7 @@ gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign)
  * 
  * Gets the value set by gtk_entry_set_alignment().
  * 
- * Return value: the alignment
+ * Returns: the alignment
  *
  * Since: 2.4
  **/
@@ -8836,7 +8836,7 @@ gtk_entry_get_icon_sensitive (GtkEntry             *entry,
  * to store image data. If the icon has no image data,
  * the return value will be %GTK_IMAGE_EMPTY.
  *
- * Return value: image representation being used
+ * Returns: image representation being used
  *
  * Since: 2.16
  **/
@@ -10200,7 +10200,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
  *
  * Returns the auxiliary completion object currently in use by @entry.
  *
- * Return value: (transfer none): The auxiliary completion object currently
+ * Returns: (transfer none): The auxiliary completion object currently
  *     in use by @entry.
  *
  * Since: 2.4
@@ -10258,7 +10258,7 @@ gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
  * Retrieves the horizontal cursor adjustment for the entry. 
  * See gtk_entry_set_cursor_hadjustment().
  *
- * Return value: (transfer none): the horizontal cursor adjustment, or %NULL
+ * Returns: (transfer none): the horizontal cursor adjustment, or %NULL
  *   if none has been set.
  *
  * Since: 2.12
@@ -10330,7 +10330,7 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
  * Returns the current fraction of the task that’s been completed.
  * See gtk_entry_set_progress_fraction().
  *
- * Return value: a fraction from 0.0 to 1.0
+ * Returns: a fraction from 0.0 to 1.0
  *
  * Since: 2.16
  */
@@ -10380,7 +10380,7 @@ gtk_entry_set_progress_pulse_step (GtkEntry *entry,
  *
  * Retrieves the pulse step set with gtk_entry_set_progress_pulse_step().
  *
- * Return value: a fraction from 0.0 to 1.0
+ * Returns: a fraction from 0.0 to 1.0
  *
  * Since: 2.16
  */
@@ -10715,7 +10715,7 @@ gtk_entry_set_attributes (GtkEntry      *entry,
  * Gets the attribute list that was set on the entry using
  * gtk_entry_set_attributes(), if any.
  *
- * Return value: (transfer none): the attribute list, or %NULL
+ * Returns: (transfer none): the attribute list, or %NULL
  *     if none was set.
  *
  * Since: 3.6
@@ -10768,7 +10768,7 @@ gtk_entry_set_tabs (GtkEntry      *entry,
  * Gets the tabstops that were set on the entry using gtk_entry_set_tabs(), if
  * any.
  *
- * Return value: (transfer none): the tabstops, or %NULL if none was set.
+ * Returns: (transfer none): the tabstops, or %NULL if none was set.
  *
  * Since: 3.10
  */

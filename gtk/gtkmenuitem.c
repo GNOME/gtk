@@ -1137,7 +1137,7 @@ activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
  * 
  * This function is used by #GtkAction.
  *
- * Return value: whether @menu is empty.
+ * Returns: whether @menu is empty.
  **/
 static gboolean
 gtk_menu_is_empty (GtkWidget *menu)
@@ -1358,7 +1358,7 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
  * Gets the submenu underneath this menu item, if any.
  * See gtk_menu_item_set_submenu().
  *
- * Return value: (transfer none): submenu for this menu item, or %NULL if none
+ * Returns: (transfer none): submenu for this menu item, or %NULL if none
  */
 GtkWidget *
 gtk_menu_item_get_submenu (GtkMenuItem *menu_item)
@@ -2262,7 +2262,7 @@ gtk_menu_item_set_right_justified (GtkMenuItem *menu_item,
  * Gets whether the menu item appears justified at the right
  * side of the menu bar.
  *
- * Return value: %TRUE if the menu item will appear at the
+ * Returns: %TRUE if the menu item will appear at the
  *   far right if added to a menu bar.
  *
  * Deprecated: 3.2: See gtk_menu_item_set_right_justified()
@@ -2593,7 +2593,7 @@ gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
  * Checks if an underline in the text indicates the next character
  * should be used for the mnemonic accelerator key.
  *
- * Return value: %TRUE if an embedded underline in the label
+ * Returns: %TRUE if an embedded underline in the label
  *     indicates the mnemonic accelerator key.
  *
  * Since: 2.16

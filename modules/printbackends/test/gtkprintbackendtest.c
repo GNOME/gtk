@@ -158,7 +158,7 @@ gtk_print_backend_test_get_type (void)
  * implements the #GtkPrintBackend interface with direct access to
  * the testsystem using Unix/Linux API calls
  *
- * Return value: the new #GtkPrintBackendTest object
+ * Returns: the new #GtkPrintBackendTest object
  **/
 GtkPrintBackend *
 gtk_print_backend_test_new (void)

@@ -370,7 +370,7 @@ viewport_get_view_allocation (GtkViewport   *viewport,
  *
  * Returns the horizontal adjustment of the viewport.
  *
- * Return value: (transfer none): the horizontal adjustment of @viewport.
+ * Returns: (transfer none): the horizontal adjustment of @viewport.
  *
  * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
  **/
@@ -388,7 +388,7 @@ gtk_viewport_get_hadjustment (GtkViewport *viewport)
  * 
  * Returns the vertical adjustment of the viewport.
  *
- * Return value: (transfer none): the vertical adjustment of @viewport.
+ * Returns: (transfer none): the vertical adjustment of @viewport.
  *
  * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
  **/
@@ -613,7 +613,7 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
  * Gets the shadow type of the #GtkViewport. See
  * gtk_viewport_set_shadow_type().
  *
- * Return value: the shadow type 
+ * Returns: the shadow type 
  **/
 GtkShadowType
 gtk_viewport_get_shadow_type (GtkViewport *viewport)
@@ -629,7 +629,7 @@ gtk_viewport_get_shadow_type (GtkViewport *viewport)
  *
  * Gets the bin window of the #GtkViewport.
  *
- * Return value: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkWindow
  *
  * Since: 2.20
  **/
@@ -647,7 +647,7 @@ gtk_viewport_get_bin_window (GtkViewport *viewport)
  *
  * Gets the view window of the #GtkViewport.
  *
- * Return value: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkWindow
  *
  * Since: 2.22
  **/

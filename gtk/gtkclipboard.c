@@ -344,7 +344,7 @@ clipboard_display_closed (GdkDisplay   *display,
  * if your application called “Foo” has a special-purpose
  * clipboard, you might call it “_FOO_SPECIAL_CLIPBOARD”.
  *
- * Return value: (transfer none): the appropriate clipboard object. If no
+ * Returns: (transfer none): the appropriate clipboard object. If no
  *   clipboard already exists, a new one will be created. Once a clipboard
  *   object has been created, it is persistent and, since it is owned by
  *   GTK+, must not be freed or unrefd.
@@ -370,7 +370,7 @@ gtk_clipboard_get_for_display (GdkDisplay *display,
  * Returns the clipboard object for the given selection.
  * See gtk_clipboard_get_for_display() for complete details.
  *
- * Return value: (transfer none): the appropriate clipboard object. If no clipboard
+ * Returns: (transfer none): the appropriate clipboard object. If no clipboard
  *     already exists, a new one will be created. Once a clipboard
  *     object has been created, it is persistent and, since it is
  *     owned by GTK+, must not be freed or unreffed.
@@ -639,7 +639,7 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
  * a list of supported formats for the clipboard data and a function
  * to call to get the actual data when it is requested.
  *
- * Return value: %TRUE if setting the clipboard data succeeded.
+ * Returns: %TRUE if setting the clipboard data succeeded.
  *    If setting the clipboard data failed the provided callback
  *    functions will be ignored.
  **/
@@ -685,7 +685,7 @@ gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
  * is that instead of an generic @user_data pointer, a #GObject is passed
  * in.
  *
- * Return value: %TRUE if setting the clipboard data succeeded.
+ * Returns: %TRUE if setting the clipboard data succeeded.
  *     If setting the clipboard data failed the provided callback
  *     functions will be ignored.
  **/
@@ -720,7 +720,7 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
  * gtk_clipboard_clear() has not subsequently called, returns the owner set
  * by gtk_clipboard_set_with_owner().
  *
- * Return value: (transfer none): the owner of the clipboard, if any;
+ * Returns: (transfer none): the owner of the clipboard, if any;
  *     otherwise %NULL.
  **/
 GObject *
@@ -1385,7 +1385,7 @@ clipboard_received_func (GtkClipboard     *clipboard,
  * This function waits for the data to be received using the main 
  * loop, so events, timeouts, etc, may be dispatched during the wait.
  * 
- * Return value: a newly-allocated #GtkSelectionData object or %NULL
+ * Returns: a newly-allocated #GtkSelectionData object or %NULL
  *               if retrieving the given target failed. If non-%NULL,
  *               this value must be freed with gtk_selection_data_free() 
  *               when you are finished with it.
@@ -1438,7 +1438,7 @@ clipboard_text_received_func (GtkClipboard *clipboard,
  * the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  * 
- * Return value: a newly-allocated UTF-8 string which must
+ * Returns: a newly-allocated UTF-8 string which must
  *               be freed with g_free(), or %NULL if retrieving
  *               the selection data failed. (This could happen
  *               for various reasons, in particular if the
@@ -1497,7 +1497,7 @@ clipboard_rich_text_received_func (GtkClipboard *clipboard,
  * waits for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Return value: (array length=length) (transfer full): a
+ * Returns: (array length=length) (transfer full): a
  *               newly-allocated binary block of data which must be
  *               freed with g_free(), or %NULL if retrieving the
  *               selection data failed. (This could happen for various
@@ -1564,7 +1564,7 @@ clipboard_image_received_func (GtkClipboard *clipboard,
  * the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Return value: (transfer full): a newly-allocated #GdkPixbuf
+ * Returns: (transfer full): a newly-allocated #GdkPixbuf
  *     object which must be disposed with g_object_unref(), or
  *     %NULL if retrieving the selection data failed. (This could
  *     happen for various reasons, in particular if the clipboard
@@ -1618,7 +1618,7 @@ clipboard_uris_received_func (GtkClipboard *clipboard,
  * for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Return value: (array zero-terminated=1) (element-type utf8) (transfer full): a newly-allocated
+ * Returns: (array zero-terminated=1) (element-type utf8) (transfer full): a newly-allocated
  * 		 %NULL-terminated array of strings which must
  *               be freed with g_strfreev(), or %NULL if
  *               retrieving the selection data failed. (This
@@ -1660,7 +1660,7 @@ gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
  *
  * Gets the #GdkDisplay associated with @clipboard
  *
- * Return value: (transfer none): the #GdkDisplay associated with @clipboard
+ * Returns: (transfer none): the #GdkDisplay associated with @clipboard
  *
  * Since: 2.2
  **/
@@ -1686,7 +1686,7 @@ gtk_clipboard_get_display (GtkClipboard *clipboard)
  * gtk_clipboard_wait_for_text() since it doesn’t need to retrieve
  * the actual text.
  * 
- * Return value: %TRUE is there is text available, %FALSE otherwise.
+ * Returns: %TRUE is there is text available, %FALSE otherwise.
  **/
 gboolean
 gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
@@ -1719,7 +1719,7 @@ gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
  * gtk_clipboard_wait_for_rich_text() since it doesn’t need to retrieve
  * the actual text.
  *
- * Return value: %TRUE is there is rich text available, %FALSE otherwise.
+ * Returns: %TRUE is there is rich text available, %FALSE otherwise.
  *
  * Since: 2.10
  **/
@@ -1757,7 +1757,7 @@ gtk_clipboard_wait_is_rich_text_available (GtkClipboard  *clipboard,
  * gtk_clipboard_wait_for_image() since it doesn’t need to retrieve
  * the actual image data.
  * 
- * Return value: %TRUE is there is an image available, %FALSE otherwise.
+ * Returns: %TRUE is there is an image available, %FALSE otherwise.
  *
  * Since: 2.6
  **/
@@ -1792,7 +1792,7 @@ gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard)
  * gtk_clipboard_wait_for_uris() since it doesn’t need to retrieve
  * the actual URI data.
  * 
- * Return value: %TRUE is there is an URI list available, %FALSE otherwise.
+ * Returns: %TRUE is there is an URI list available, %FALSE otherwise.
  *
  * Since: 2.14
  **/
@@ -1827,7 +1827,7 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
  * This function waits for the data to be received using the main
  * loop, so events, timeouts, etc, may be dispatched during the wait.
  *
- * Return value: %TRUE if any targets are present on the clipboard,
+ * Returns: %TRUE if any targets are present on the clipboard,
  *               otherwise %FALSE.
  *
  * Since: 2.4
@@ -1963,7 +1963,7 @@ gtk_clipboard_owner_change (GtkClipboard        *clipboard,
  * If you want to see if there’s text available on the clipboard, use
  * gtk_clipboard_wait_is_text_available () instead.
  *
- * Return value: %TRUE if the target is available, %FALSE otherwise.
+ * Returns: %TRUE if the target is available, %FALSE otherwise.
  *
  * Since: 2.6
  */

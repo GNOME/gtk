@@ -94,7 +94,7 @@ gtk_orientable_set_orientation (GtkOrientable  *orientable,
  *
  * Retrieves the orientation of the @orientable.
  *
- * Return value: the orientation of the @orientable.
+ * Returns: the orientation of the @orientable.
  *
  * Since: 2.16
  **/

@@ -477,7 +477,7 @@ gtk_text_layout_set_keyboard_direction (GtkTextLayout   *layout,
  * Gets the text buffer used by the layout. See
  * gtk_text_layout_set_buffer().
  *
- * Return value: the text buffer used by the layout.
+ * Returns: the text buffer used by the layout.
  */
 GtkTextBuffer *
 gtk_text_layout_get_buffer (GtkTextLayout *layout)
@@ -544,7 +544,7 @@ gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
  *
  * Returns whether the insertion cursor will be shown.
  *
- * Return value: if %FALSE, the insertion cursor will not be
+ * Returns: if %FALSE, the insertion cursor will not be
  *     shown, even if the text is editable.
  */
 gboolean
@@ -707,7 +707,7 @@ gtk_text_layout_wrap (GtkTextLayout *layout,
 /**
  * gtk_text_layout_get_lines:
  *
- * Return value: (element-type GtkTextLine) (transfer container):
+ * Returns: (element-type GtkTextLine) (transfer container):
  */
 GSList*
 gtk_text_layout_get_lines (GtkTextLayout *layout,
@@ -973,7 +973,7 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
  *
  * Check if there are any invalid regions in a #GtkTextLayout’s buffer
  *
- * Return value: %TRUE if any invalid regions were found
+ * Returns: %TRUE if any invalid regions were found
  */
 gboolean
 gtk_text_layout_is_valid (GtkTextLayout *layout)
@@ -1467,7 +1467,7 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
  * allows setting family, style, weight, variant, stretch,
  * and size simultaneously.)
  *
- * Return value:
+ * Returns:
  */
 static PangoAttribute *
 gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)

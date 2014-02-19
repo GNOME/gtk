@@ -577,7 +577,7 @@ gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
  *
  * Returns the cell renderers which have been added to @cell_layout.
  *
- * Return value: (element-type GtkCellRenderer) (transfer container):
+ * Returns: (element-type GtkCellRenderer) (transfer container):
  *     a list of cell renderers. The list, but not the renderers has
  *     been newly allocated and should be freed with g_list_free()
  *     when no longer needed.
@@ -600,7 +600,7 @@ gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
  * if called on a #GtkCellArea or might be %NULL if no #GtkCellArea
  * is used by @cell_layout.
  *
- * Return value: (transfer none): the cell area used by @cell_layout.
+ * Returns: (transfer none): the cell area used by @cell_layout.
  *
  * Since: 3.0
  */

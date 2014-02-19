@@ -247,7 +247,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
  * Creates a #GtkSearchEntry, with a find icon when the search field is
  * empty, and a clear icon when it isn't.
  *
- * Return value: a new #GtkSearchEntry
+ * Returns: a new #GtkSearchEntry
  *
  * Since: 3.6
  */

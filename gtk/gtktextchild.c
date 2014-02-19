@@ -333,7 +333,7 @@ gtk_text_child_anchor_class_init (GtkTextChildAnchorClass *klass)
  * To perform the creation and insertion in one step, use the
  * convenience function gtk_text_buffer_create_child_anchor().
  * 
- * Return value: a new #GtkTextChildAnchor
+ * Returns: a new #GtkTextChildAnchor
  **/
 GtkTextChildAnchor*
 gtk_text_child_anchor_new (void)
@@ -387,7 +387,7 @@ gtk_text_child_anchor_finalize (GObject *obj)
  * The returned list should be freed with g_list_free().
  *
  *
- * Return value: (element-type GtkWidget) (transfer container): list of widgets anchored at @anchor
+ * Returns: (element-type GtkWidget) (transfer container): list of widgets anchored at @anchor
  **/
 GList*
 gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)
@@ -425,7 +425,7 @@ gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)
  * to use this function &mdash; otherwise all deleted child anchors
  * will also be finalized.
  * 
- * Return value: %TRUE if the child anchor has been deleted from its buffer
+ * Returns: %TRUE if the child anchor has been deleted from its buffer
  **/
 gboolean
 gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor)

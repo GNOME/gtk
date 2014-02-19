@@ -1553,7 +1553,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
  * value in the model, thus rendering a different string in each row
  * of the #GtkTreeView
  * 
- * Return value: the new cell renderer
+ * Returns: the new cell renderer
  **/
 GtkCellRenderer *
 gtk_cell_renderer_text_new (void)

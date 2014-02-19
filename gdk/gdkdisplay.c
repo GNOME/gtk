@@ -306,7 +306,7 @@ gdk_display_is_closed  (GdkDisplay  *display)
  * Gets the next #GdkEvent to be processed for @display, fetching events from the
  * windowing system if necessary.
  * 
- * Return value: the next #GdkEvent to be processed, or %NULL if no events
+ * Returns: the next #GdkEvent to be processed, or %NULL if no events
  * are pending. The returned #GdkEvent should be freed with gdk_event_free().
  *
  * Since: 2.2
@@ -331,7 +331,7 @@ gdk_display_get_event (GdkDisplay *display)
  * not get more events from the windowing system.  It only checks the events
  * that have already been moved to the GDK event queue.)
  * 
- * Return value: a copy of the first #GdkEvent on the event queue, or %NULL 
+ * Returns: a copy of the first #GdkEvent on the event queue, or %NULL 
  * if no events are in the queue. The returned #GdkEvent should be freed with
  * gdk_event_free().
  *
@@ -1288,7 +1288,7 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
  * Determines information about the current keyboard grab.
  * This is not public API and must not be used by applications.
  *
- * Return value: %TRUE if this application currently has the
+ * Returns: %TRUE if this application currently has the
  *  keyboard grabbed.
  **/
 gboolean
@@ -1553,7 +1553,7 @@ gdk_display_flush (GdkDisplay *display)
  * on @display. This window is implicitly created by GDK.
  * See gdk_window_set_group().
  *
- * Return value: (transfer none): The default group leader window
+ * Returns: (transfer none): The default group leader window
  * for @display
  *
  * Since: 2.4
@@ -1573,7 +1573,7 @@ gdk_display_get_default_group (GdkDisplay *display)
  * Returns whether #GdkEventOwnerChange events will be
  * sent when the owner of a selection changes.
  *
- * Return value: whether #GdkEventOwnerChange events will
+ * Returns: whether #GdkEventOwnerChange events will
  *               be sent.
  *
  * Since: 2.6
@@ -1595,7 +1595,7 @@ gdk_display_supports_selection_notification (GdkDisplay *display)
  * Request #GdkEventOwnerChange events for ownership changes
  * of the selection named by the given atom.
  *
- * Return value: whether #GdkEventOwnerChange events will
+ * Returns: whether #GdkEventOwnerChange events will
  *               be sent.
  *
  * Since: 2.6
@@ -1727,7 +1727,7 @@ gdk_display_supports_composite (GdkDisplay *display)
  * Returns the list of available input devices attached to @display.
  * The list is statically allocated and should not be freed.
  *
- * Return value: (transfer none) (element-type GdkDevice):
+ * Returns: (transfer none) (element-type GdkDevice):
  *     a list of #GdkDevice
  *
  * Since: 2.2
@@ -1780,7 +1780,7 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
  *
  * Opens a display.
  *
- * Return value: (transfer none): a #GdkDisplay, or %NULL
+ * Returns: (transfer none): a #GdkDisplay, or %NULL
  *     if the display could not be opened
  *
  * Since: 2.2
@@ -2069,7 +2069,7 @@ _gdk_display_create_window (GdkDisplay *display)
  *
  * Returns the #GdkKeymap attached to @display.
  *
- * Return value: (transfer none): the #GdkKeymap attached to @display.
+ * Returns: (transfer none): the #GdkKeymap attached to @display.
  *
  * Since: 2.2
  */
@@ -2215,7 +2215,7 @@ gdk_error_trap_pop_ignored (void)
  * sync for you, so you had to gdk_flush() if your last
  * call to Xlib was not a blocking round trip.
  *
- * Return value: X error code or 0 on success
+ * Returns: X error code or 0 on success
  */
 gint
 gdk_error_trap_pop (void)

@@ -259,7 +259,7 @@ gdk_frame_clock_init (GdkFrameClock *clock)
  * time.
  *
  * Since: 3.8
- * Return value: a timestamp in microseconds, in the timescale of
+ * Returns: a timestamp in microseconds, in the timescale of
  *  of g_get_monotonic_time().
  */
 gint64
@@ -387,7 +387,7 @@ gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
  * gdk_frame_clock_get_history_start() and
  * gdk_frame_clock_get_frame_counter(), inclusive.
  *
- * Return value: the frame counter value for the oldest frame
+ * Returns: the frame counter value for the oldest frame
  *  that is available in the internal frame history of the
  *  #GdkFrameClock.
  * Since: 3.8
@@ -436,7 +436,7 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
  * for the current frame or a recent frame. The #GdkFrameTimings
  * object may not yet be complete: see gdk_frame_timings_get_complete().
  *
- * Return value: the #GdkFrameTimings object for the specified
+ * Returns: the #GdkFrameTimings object for the specified
  *  frame, or %NULL if it is not available. See
  *  gdk_frame_clock_get_history_start().
  * Since: 3.8

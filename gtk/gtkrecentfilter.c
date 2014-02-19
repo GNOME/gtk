@@ -406,7 +406,7 @@ gtk_recent_filter_buildable_custom_tag_end (GtkBuildable *buildable,
  * gtk_recent_filter_add_pattern (filter, "*");
  * ]|
  *
- * Return value: a new #GtkRecentFilter
+ * Returns: a new #GtkRecentFilter
  *
  * Since: 2.10
  */
@@ -446,7 +446,7 @@ gtk_recent_filter_set_name (GtkRecentFilter *filter,
  * Gets the human-readable name for the filter.
  * See gtk_recent_filter_set_name().
  *
- * Return value: the name of the filter, or %NULL.  The returned string
+ * Returns: the name of the filter, or %NULL.  The returned string
  *   is owned by the filter object and should not be freed.
  *
  * Since: 2.10
@@ -470,7 +470,7 @@ gtk_recent_filter_get_name (GtkRecentFilter *filter)
  * is intended principally for use in the implementation of
  * #GtkRecentChooser.
  * 
- * Return value: bitfield of flags indicating needed fields when
+ * Returns: bitfield of flags indicating needed fields when
  *   calling gtk_recent_filter_filter()
  *
  * Since: 2.10
@@ -701,7 +701,7 @@ gtk_recent_filter_add_custom (GtkRecentFilter      *filter,
  * is intended principally for use in the implementation of
  * #GtkRecentChooser.
  * 
- * Return value: %TRUE if the file should be displayed
+ * Returns: %TRUE if the file should be displayed
  *
  * Since: 2.10
  */

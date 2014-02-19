@@ -160,7 +160,7 @@ gtk_scrollbar_style_updated (GtkWidget *widget)
  *
  * Creates a new scrollbar with the given orientation.
  *
- * Return value:  the new #GtkScrollbar.
+ * Returns:  the new #GtkScrollbar.
  *
  * Since: 3.0
  **/

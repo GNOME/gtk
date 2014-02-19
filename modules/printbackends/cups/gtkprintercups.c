@@ -542,7 +542,7 @@ colord_printer_details_aquired_cb (GtkPrinterCups *printer,
  *
  * Creates a new #GtkPrinterCups.
  *
- * Return value: a new #GtkPrinterCups
+ * Returns: a new #GtkPrinterCups
  *
  * Since: 2.10
  **/

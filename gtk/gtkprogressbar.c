@@ -1273,7 +1273,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
  * to the text, not a copy of it, so will become invalid
  * if you change the text in the progress bar.
  *
- * Return value: text, or %NULL; this string is owned by the widget
+ * Returns: text, or %NULL; this string is owned by the widget
  * and should not be modified or freed.
  */
 const gchar*
@@ -1290,7 +1290,7 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
  *
  * Returns the current fraction of the task that’s been completed.
  *
- * Return value: a fraction from 0.0 to 1.0
+ * Returns: a fraction from 0.0 to 1.0
  */
 gdouble
 gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
@@ -1306,7 +1306,7 @@ gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
  *
  * Retrieves the pulse step set with gtk_progress_bar_set_pulse_step().
  *
- * Return value: a fraction from 0.0 to 1.0
+ * Returns: a fraction from 0.0 to 1.0
  */
 gdouble
 gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
@@ -1322,7 +1322,7 @@ gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
  *
  * Gets the value set by gtk_progress_bar_set_inverted().
  *
- * Return value: %TRUE if the progress bar is inverted
+ * Returns: %TRUE if the progress bar is inverted
  */
 gboolean
 gtk_progress_bar_get_inverted (GtkProgressBar *pbar)
@@ -1370,7 +1370,7 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
  * Returns the ellipsizing position of the progress bar.
  * See gtk_progress_bar_set_ellipsize().
  *
- * Return value: #PangoEllipsizeMode
+ * Returns: #PangoEllipsizeMode
  *
  * Since: 2.6
  */

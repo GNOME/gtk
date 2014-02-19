@@ -3372,7 +3372,7 @@ page_name_func (GtkCellLayout   *cell_layout,
  *
  * Creates a new #GtkPrintUnixDialog.
  *
- * Return value: a new #GtkPrintUnixDialog
+ * Returns: a new #GtkPrintUnixDialog
  *
  * Since: 2.10
  */

@@ -175,7 +175,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkLayout, gtk_layout, GTK_TYPE_CONTAINER,
  * you’d like the layout to use for scrolling, pass %NULL for
  * @hadjustment and @vadjustment.
  * 
- * Return value: a new #GtkLayout
+ * Returns: a new #GtkLayout
  **/
   
 GtkWidget*    
@@ -198,7 +198,7 @@ gtk_layout_new (GtkAdjustment *hadjustment,
  *
  * Retrieve the bin window of the layout used for drawing operations.
  *
- * Return value: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkWindow
  *
  * Since: 2.14
  **/
@@ -221,7 +221,7 @@ gtk_layout_get_bin_window (GtkLayout *layout)
  *
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
  *
- * Return value: (transfer none): horizontal scroll adjustment
+ * Returns: (transfer none): horizontal scroll adjustment
  *
  * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
  **/
@@ -243,7 +243,7 @@ gtk_layout_get_hadjustment (GtkLayout *layout)
  *
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
  *
- * Return value: (transfer none): vertical scroll adjustment
+ * Returns: (transfer none): vertical scroll adjustment
  *
  * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
  **/

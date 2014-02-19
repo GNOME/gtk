@@ -1295,7 +1295,7 @@ gtk_level_bar_set_mode (GtkLevelBar     *self,
  *
  * Return the value of the #GtkLevelBar:inverted property.
  *
- * Return value: %TRUE if the level bar is inverted
+ * Returns: %TRUE if the level bar is inverted
  *
  * Since: 3.8
  */

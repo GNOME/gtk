@@ -308,7 +308,7 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
  * GDK_TYPE_PIXBUF);` will create a new #GtkTreeStore with three columns, of type
  * #gint, #gchararray, and #GdkPixbuf respectively.
  *
- * Return value: a new #GtkTreeStore
+ * Returns: a new #GtkTreeStore
  **/
 GtkTreeStore *
 gtk_tree_store_new (gint n_columns,
@@ -348,7 +348,7 @@ gtk_tree_store_new (gint n_columns,
  *
  * Non vararg creation function.  Used primarily by language bindings.
  *
- * Return value: (transfer full): a new #GtkTreeStore
+ * Returns: (transfer full): a new #GtkTreeStore
  **/
 GtkTreeStore *
 gtk_tree_store_newv (gint   n_columns,
@@ -1196,7 +1196,7 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
  * next valid row at that level, or invalidated if it previously pointed to the
  * last one.
  *
- * Return value: %TRUE if @iter is still valid, %FALSE if not.
+ * Returns: %TRUE if @iter is still valid, %FALSE if not.
  **/
 gboolean
 gtk_tree_store_remove (GtkTreeStore *tree_store,
@@ -1777,7 +1777,7 @@ gtk_tree_store_append (GtkTreeStore *tree_store,
  * Returns %TRUE if @iter is an ancestor of @descendant.  That is, @iter is the
  * parent (or grandparent or great-grandparent) of @descendant.
  * 
- * Return value: %TRUE, if @iter is an ancestor of @descendant
+ * Returns: %TRUE, if @iter is an ancestor of @descendant
  **/
 gboolean
 gtk_tree_store_is_ancestor (GtkTreeStore *tree_store,
@@ -1801,7 +1801,7 @@ gtk_tree_store_is_ancestor (GtkTreeStore *tree_store,
  * Returns the depth of @iter.  This will be 0 for anything on the root level, 1
  * for anything down a level, etc.
  * 
- * Return value: The depth of @iter
+ * Returns: The depth of @iter
  **/
 gint
 gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
@@ -1914,7 +1914,7 @@ gtk_tree_store_iter_is_valid_helper (GtkTreeIter *iter,
  *
  * Checks if the given iter is a valid iter for this #GtkTreeStore.
  *
- * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
  *
  * Since: 2.2
  **/

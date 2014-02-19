@@ -394,7 +394,7 @@ gtk_adjustment_new (gdouble value,
  * Gets the current value of the adjustment. See
  * gtk_adjustment_set_value ().
  *
- * Return value: The current value of the adjustment.
+ * Returns: The current value of the adjustment.
  **/
 gdouble
 gtk_adjustment_get_value (GtkAdjustment *adjustment)
@@ -446,7 +446,7 @@ gtk_adjustment_set_value (GtkAdjustment *adjustment,
  *
  * Retrieves the minimum value of the adjustment.
  *
- * Return value: The current minimum value of the adjustment.
+ * Returns: The current minimum value of the adjustment.
  *
  * Since: 2.14
  **/
@@ -495,7 +495,7 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
  *
  * Retrieves the maximum value of the adjustment.
  *
- * Return value: The current maximum value of the adjustment.
+ * Returns: The current maximum value of the adjustment.
  *
  * Since: 2.14
  **/
@@ -540,7 +540,7 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
  *
  * Retrieves the step increment of the adjustment.
  *
- * Return value: The current step increment of the adjustment.
+ * Returns: The current step increment of the adjustment.
  *
  * Since: 2.14
  **/
@@ -581,7 +581,7 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
  *
  * Retrieves the page increment of the adjustment.
  *
- * Return value: The current page increment of the adjustment.
+ * Returns: The current page increment of the adjustment.
  *
  * Since: 2.14
  **/
@@ -622,7 +622,7 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
  *
  * Retrieves the page size of the adjustment.
  *
- * Return value: The current page size of the adjustment.
+ * Returns: The current page size of the adjustment.
  *
  * Since: 2.14
  **/

@@ -378,7 +378,7 @@ check_hash (CacheInfo *info,
  * be deserialized. The amount of validation can
  * be controlled with the @flags field.  
  *
- * Return value: %TRUE if the cache is valid
+ * Returns: %TRUE if the cache is valid
  */
 gboolean 
 _gtk_icon_cache_validate (CacheInfo *info)

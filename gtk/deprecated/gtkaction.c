@@ -621,7 +621,7 @@ gtk_action_buildable_get_name (GtkBuildable *buildable)
  * See the [UI Definition section][XML-UI] for information on allowed action
  * names.
  *
- * Return value: a new #GtkAction
+ * Returns: a new #GtkAction
  *
  * Since: 2.4
  *
@@ -1105,7 +1105,7 @@ _gtk_action_remove_from_proxy_list (GtkAction     *action,
  * Returns the proxy widgets for an action.
  * See also gtk_activatable_get_related_action().
  *
- * Return value: (element-type GtkWidget) (transfer none): a #GSList of proxy widgets. The list is owned by GTK+
+ * Returns: (element-type GtkWidget) (transfer none): a #GSList of proxy widgets. The list is owned by GTK+
  * and must not be modified.
  *
  * Since: 2.4
@@ -1126,7 +1126,7 @@ gtk_action_get_proxies (GtkAction *action)
  * 
  * Returns the name of the action.
  * 
- * Return value: the name of the action. The string belongs to GTK+ and should not
+ * Returns: the name of the action. The string belongs to GTK+ and should not
  *   be freed.
  *
  * Since: 2.4
@@ -1147,7 +1147,7 @@ gtk_action_get_name (GtkAction *action)
  * 
  * Returns whether the action is effectively sensitive.
  *
- * Return value: %TRUE if the action and its associated action group 
+ * Returns: %TRUE if the action and its associated action group 
  * are both sensitive.
  *
  * Since: 2.4
@@ -1175,7 +1175,7 @@ gtk_action_is_sensitive (GtkAction *action)
  * necessarily mean effective sensitivity. See gtk_action_is_sensitive() 
  * for that.
  *
- * Return value: %TRUE if the action itself is sensitive.
+ * Returns: %TRUE if the action itself is sensitive.
  *
  * Since: 2.4
  *
@@ -1227,7 +1227,7 @@ gtk_action_set_sensitive (GtkAction *action,
  * 
  * Returns whether the action is effectively visible.
  *
- * Return value: %TRUE if the action and its associated action group 
+ * Returns: %TRUE if the action and its associated action group 
  * are both visible.
  *
  * Since: 2.4
@@ -1255,7 +1255,7 @@ gtk_action_is_visible (GtkAction *action)
  * necessarily mean effective visibility. See gtk_action_is_sensitive() 
  * for that.
  *
- * Return value: %TRUE if the action itself is visible.
+ * Returns: %TRUE if the action itself is visible.
  *
  * Since: 2.4
  *
@@ -2060,7 +2060,7 @@ gtk_action_disconnect_accelerator (GtkAction *action)
  * item or the toolbar item it creates, this function returns an
  * instance of that menu.
  *
- * Return value: (transfer none): the menu item provided by the
+ * Returns: (transfer none): the menu item provided by the
  *               action, or %NULL.
  *
  * Since: 2.12

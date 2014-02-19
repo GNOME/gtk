@@ -177,7 +177,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * Creates a new #GtkFontChooserDialog.
  *
- * Return value: a new #GtkFontChooserDialog
+ * Returns: a new #GtkFontChooserDialog
  *
  * Since: 3.2
  */

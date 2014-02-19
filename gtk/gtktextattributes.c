@@ -58,7 +58,7 @@
  * Creates a #GtkTextAttributes, which describes
  * a set of properties on some text.
  * 
- * Return value: a new #GtkTextAttributes,
+ * Returns: a new #GtkTextAttributes,
  *     free with gtk_text_attributes_unref().
  */
 GtkTextAttributes*
@@ -86,7 +86,7 @@ gtk_text_attributes_new (void)
  *
  * Copies @src and returns a new #GtkTextAttributes.
  *
- * Return value: a copy of @src,
+ * Returns: a copy of @src,
  *     free with gtk_text_attributes_unref()
  */
 GtkTextAttributes*

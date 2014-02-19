@@ -307,7 +307,7 @@ gtk_get_interface_age (void)
  * old version of gtk_check_version(), but still get loaded
  * into an application using a newer version of GTK+.
  *
- * Return value: %NULL if the GTK+ library is compatible with the
+ * Returns: %NULL if the GTK+ library is compatible with the
  *   given version, or a string describing the version mismatch.
  *   The returned string is owned by GTK+ and should not be modified
  *   or freed.
@@ -914,7 +914,7 @@ gtk_init_with_args (gint                 *argc,
  * There is no need to call this function explicitly if you are using
  * gtk_init(), or gtk_init_check().
  *
- * Return value: %TRUE if initialization succeeded, otherwise %FALSE
+ * Returns: %TRUE if initialization succeeded, otherwise %FALSE
  */
 gboolean
 gtk_parse_args (int    *argc,
@@ -969,7 +969,7 @@ gtk_parse_args (int    *argc,
  * communication with the user - for example a curses or command line
  * interface.
  *
- * Return value: %TRUE if the windowing system has been successfully
+ * Returns: %TRUE if the windowing system has been successfully
  *     initialized, %FALSE otherwise
  */
 gboolean
@@ -1159,7 +1159,7 @@ gtk_get_locale_direction (void)
  * This function is equivalent to pango_language_get_default().
  * See that function for details.
  *
- * Return value: the default language as a #PangoLanguage,
+ * Returns: the default language as a #PangoLanguage,
  *     must not be freed
  */
 PangoLanguage *
@@ -2085,7 +2085,7 @@ gtk_grab_add (GtkWidget *widget)
  *
  * Queries the current grab of the default window group.
  *
- * Return value: (transfer none): The widget which currently
+ * Returns: (transfer none): The widget which currently
  *     has the grab or %NULL if no grab is active
  */
 GtkWidget*
@@ -2287,7 +2287,7 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
  * the current event will be the #GdkEventButton that triggered
  * the ::clicked signal.
  *
- * Return value: (transfer full): a copy of the current event, or
+ * Returns: (transfer full): a copy of the current event, or
  *     %NULL if there is no current event. The returned event must be
  *     freed with gdk_event_free().
  */
@@ -2306,7 +2306,7 @@ gtk_get_current_event (void)
  * If there is a current event and it has a timestamp,
  * return that timestamp, otherwise return %GDK_CURRENT_TIME.
  *
- * Return value: the timestamp from the current event,
+ * Returns: the timestamp from the current event,
  *     or %GDK_CURRENT_TIME.
  */
 guint32
@@ -2326,7 +2326,7 @@ gtk_get_current_event_time (void)
  * that state field in @state and return %TRUE, otherwise return
  * %FALSE.
  *
- * Return value: %TRUE if there was a current event and it
+ * Returns: %TRUE if there was a current event and it
  *     had a state field
  */
 gboolean
@@ -2368,7 +2368,7 @@ gtk_get_current_event_device (void)
  * returns %NULL, otherwise returns the widget that received the event
  * originally.
  *
- * Return value: (transfer none): the widget that originally
+ * Returns: (transfer none): the widget that originally
  *     received @event, or %NULL
  */
 GtkWidget*

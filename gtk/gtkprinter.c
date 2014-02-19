@@ -382,7 +382,7 @@ gtk_printer_get_property (GObject    *object,
  *
  * Creates a new #GtkPrinter.
  *
- * Return value: a new #GtkPrinter
+ * Returns: a new #GtkPrinter
  *
  * Since: 2.10
  **/
@@ -408,7 +408,7 @@ gtk_printer_new (const gchar     *name,
  * 
  * Returns the backend of the printer.
  * 
- * Return value: (transfer none): the backend of @printer
+ * Returns: (transfer none): the backend of @printer
  * 
  * Since: 2.10
  */
@@ -426,7 +426,7 @@ gtk_printer_get_backend (GtkPrinter *printer)
  * 
  * Returns the name of the printer.
  * 
- * Return value: the name of @printer
+ * Returns: the name of @printer
  *
  * Since: 2.10
  */
@@ -444,7 +444,7 @@ gtk_printer_get_name (GtkPrinter *printer)
  * 
  * Gets the description of the printer.
  * 
- * Return value: the description of @printer
+ * Returns: the description of @printer
  *
  * Since: 2.10
  */
@@ -482,7 +482,7 @@ gtk_printer_set_description (GtkPrinter  *printer,
  * Returns the state message describing the current state
  * of the printer.
  * 
- * Return value: the state message of @printer
+ * Returns: the state message of @printer
  *
  * Since: 2.10
  */
@@ -520,7 +520,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
  * 
  * Returns a description of the location of the printer.
  * 
- * Return value: the location of @printer
+ * Returns: the location of @printer
  *
  * Since: 2.10
  */
@@ -558,7 +558,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
  * 
  * Gets the name of the icon to use for the printer.
  * 
- * Return value: the icon name for @printer
+ * Returns: the icon name for @printer
  *
  * Since: 2.10
  */
@@ -591,7 +591,7 @@ gtk_printer_set_icon_name (GtkPrinter  *printer,
  * 
  * Gets the number of jobs currently queued on the printer.
  * 
- * Return value: the number of jobs on @printer
+ * Returns: the number of jobs on @printer
  *
  * Since: 2.10
  */
@@ -629,7 +629,7 @@ gtk_printer_set_job_count (GtkPrinter *printer,
  * 
  * Returns whether the printer details are available.
  * 
- * Return value: %TRUE if @printer details are available
+ * Returns: %TRUE if @printer details are available
  *
  * Since: 2.12
  */
@@ -655,7 +655,7 @@ gtk_printer_set_has_details (GtkPrinter *printer,
  * Returns whether the printer is currently active (i.e. 
  * accepts new jobs).
  * 
- * Return value: %TRUE if @printer is active
+ * Returns: %TRUE if @printer is active
  *
  * Since: 2.10
  */
@@ -684,7 +684,7 @@ gtk_printer_set_is_active (GtkPrinter *printer,
  * A paused printer still accepts jobs, but it is not
  * printing them.
  * 
- * Return value: %TRUE if @printer is paused
+ * Returns: %TRUE if @printer is paused
  *
  * Since: 2.14
  */
@@ -720,7 +720,7 @@ gtk_printer_set_is_paused (GtkPrinter *printer,
  * 
  * Returns whether the printer is accepting jobs
  * 
- * Return value: %TRUE if @printer is accepting jobs
+ * Returns: %TRUE if @printer is accepting jobs
  *
  * Since: 2.14
  */
@@ -758,7 +758,7 @@ gtk_printer_set_is_accepting_jobs (GtkPrinter *printer,
  * represent actual printer hardware, but something like 
  * a CUPS class).
  * 
- * Return value: %TRUE if @printer is virtual
+ * Returns: %TRUE if @printer is virtual
  *
  * Since: 2.10
  */
@@ -777,7 +777,7 @@ gtk_printer_is_virtual (GtkPrinter *printer)
  * Returns whether the printer accepts input in
  * PDF format.  
  *
- * Return value: %TRUE if @printer accepts PDF
+ * Returns: %TRUE if @printer accepts PDF
  *
  * Since: 2.10
  */
@@ -805,7 +805,7 @@ gtk_printer_set_accepts_pdf (GtkPrinter *printer,
  * Returns whether the printer accepts input in
  * PostScript format.  
  *
- * Return value: %TRUE if @printer accepts PostScript
+ * Returns: %TRUE if @printer accepts PostScript
  *
  * Since: 2.10
  */
@@ -850,7 +850,7 @@ gtk_printer_set_is_new (GtkPrinter *printer,
  * 
  * Returns whether the printer is the default printer.
  * 
- * Return value: %TRUE if @printer is the default
+ * Returns: %TRUE if @printer is the default
  *
  * Since: 2.10
  */
@@ -949,7 +949,7 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
  * This will return and empty list unless the printer’s details are 
  * available, see gtk_printer_has_details() and gtk_printer_request_details().
  *
- * Return value: (element-type GtkPageSetup) (transfer full): a newly allocated list of newly allocated #GtkPageSetup s.
+ * Returns: (element-type GtkPageSetup) (transfer full): a newly allocated list of newly allocated #GtkPageSetup s.
  *
  * Since: 2.12
  */
@@ -970,7 +970,7 @@ gtk_printer_list_papers (GtkPrinter *printer)
  *
  * Returns default page size of @printer.
  * 
- * Return value: a newly allocated #GtkPageSetup with default page size of the printer.
+ * Returns: a newly allocated #GtkPageSetup with default page size of the printer.
  *
  * Since: 2.14
  */
@@ -999,7 +999,7 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
  * Note: This will not succeed unless the printer’s details are available,
  * see gtk_printer_has_details() and gtk_printer_request_details().
  *
- * Return value: %TRUE iff the hard margins were retrieved
+ * Returns: %TRUE iff the hard margins were retrieved
  *
  * Since: 2.20
  */
@@ -1028,7 +1028,7 @@ gtk_printer_get_hard_margins (GtkPrinter *printer,
  * This will return 0 unless the printer’s details are available, see
  * gtk_printer_has_details() and gtk_printer_request_details().
  *
- * Return value: the printer’s capabilities
+ * Returns: the printer’s capabilities
  *
  * Since: 2.12
  */
@@ -1050,7 +1050,7 @@ gtk_printer_get_capabilities (GtkPrinter *printer)
  *
  * Compares two printers.
  * 
- * Return value: 0 if the printer match, a negative value if @a < @b, 
+ * Returns: 0 if the printer match, a negative value if @a < @b, 
  *   or a positive value if @a > @b
  *
  * Since: 2.10

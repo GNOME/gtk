@@ -531,7 +531,7 @@ gtk_tree_model_sort_drag_source_init (GtkTreeDragSourceIface *iface)
  *
  * Creates a new #GtkTreeModel, with @child_model as the child model.
  *
- * Return value: (transfer full): A new #GtkTreeModel.
+ * Returns: (transfer full): A new #GtkTreeModel.
  */
 GtkTreeModel *
 gtk_tree_model_sort_new_with_model (GtkTreeModel *child_model)
@@ -2206,7 +2206,7 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
  *
  * Returns the model the #GtkTreeModelSort is sorting.
  *
- * Return value: (transfer none): the "child model" being sorted
+ * Returns: (transfer none): the "child model" being sorted
  **/
 GtkTreeModel *
 gtk_tree_model_sort_get_model (GtkTreeModelSort *tree_model)
@@ -2288,7 +2288,7 @@ gtk_real_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_mode
  * point to the same row in the sorted model.  If @child_path isn’t a valid 
  * path on the child model, then %NULL is returned.
  * 
- * Return value: A newly allocated #GtkTreePath, or %NULL
+ * Returns: A newly allocated #GtkTreePath, or %NULL
  **/
 GtkTreePath *
 gtk_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_model_sort,
@@ -2311,7 +2311,7 @@ gtk_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_model_sor
  * the row pointed at by @child_iter.  If @sort_iter was not set, %FALSE
  * is returned.  Note: a boolean is only returned since 2.14.
  *
- * Return value: %TRUE, if @sort_iter was set, i.e. if @sort_iter is a
+ * Returns: %TRUE, if @sort_iter was set, i.e. if @sort_iter is a
  * valid iterator pointer to a visible row in the child model.
  **/
 gboolean
@@ -2361,7 +2361,7 @@ gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sor
  * sorted.  If @sorted_path does not point to a location in the child model, 
  * %NULL is returned.
  * 
- * Return value: A newly allocated #GtkTreePath, or %NULL
+ * Returns: A newly allocated #GtkTreePath, or %NULL
  **/
 GtkTreePath *
 gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sort,
@@ -2772,7 +2772,7 @@ gtk_tree_model_sort_iter_is_valid_helper (GtkTreeIter *iter,
  *
  * Checks if the given iter is a valid iter for this #GtkTreeModelSort.
  *
- * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
  *
  * Since: 2.2
  **/

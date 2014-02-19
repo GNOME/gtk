@@ -291,7 +291,7 @@ gtk_scale_class_init (GtkScaleClass *class)
    *  }
    * ]|
    *
-   * Return value: allocated string representing @value
+   * Returns: allocated string representing @value
    */
   signals[FORMAT_VALUE] =
     g_signal_new (I_("format-value"),
@@ -573,7 +573,7 @@ gtk_scale_get_property (GObject      *object,
  *
  * Creates a new #GtkScale.
  *
- * Return value: a new #GtkScale
+ * Returns: a new #GtkScale
  *
  * Since: 3.0
  **/
@@ -607,7 +607,7 @@ gtk_scale_new (GtkOrientation  orientation,
  * is a power of ten. If the resulting precision is not suitable for your
  * needs, use gtk_scale_set_digits() to correct it.
  *
- * Return value: a new #GtkScale
+ * Returns: a new #GtkScale
  *
  * Since: 3.0
  */
@@ -1410,7 +1410,7 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
  * Emits #GtkScale::format-value signal to format the value, 
  * if no user signal handlers, falls back to a default format.
  * 
- * Return value: formatted value
+ * Returns: formatted value
  */
 gchar*
 _gtk_scale_format_value (GtkScale *scale,
@@ -1450,7 +1450,7 @@ gtk_scale_finalize (GObject *object)
  * object is owned by the scale so does not need to be freed by
  * the caller.
  *
- * Return value: (transfer none): the #PangoLayout for this scale,
+ * Returns: (transfer none): the #PangoLayout for this scale,
  *     or %NULL if the #GtkScale:draw-value property is %FALSE.
  *
  * Since: 2.4

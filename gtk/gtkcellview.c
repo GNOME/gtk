@@ -936,7 +936,7 @@ row_changed_cb (GtkTreeModel         *model,
  *
  * Creates a new #GtkCellView widget.
  *
- * Return value: A newly created #GtkCellView widget.
+ * Returns: A newly created #GtkCellView widget.
  *
  * Since: 2.6
  */
@@ -964,7 +964,7 @@ gtk_cell_view_new (void)
  * in this way alignments with cellviews for other rows are
  * possible.
  *
- * Return value: A newly created #GtkCellView widget.
+ * Returns: A newly created #GtkCellView widget.
  *
  * Since: 2.6
  */
@@ -988,7 +988,7 @@ gtk_cell_view_new_with_context (GtkCellArea        *area,
  * Creates a new #GtkCellView widget, adds a #GtkCellRendererText 
  * to it, and makes it show @text.
  *
- * Return value: A newly created #GtkCellView widget.
+ * Returns: A newly created #GtkCellView widget.
  *
  * Since: 2.6
  */
@@ -1021,7 +1021,7 @@ gtk_cell_view_new_with_text (const gchar *text)
  * to it, and makes it show @markup. The text can be
  * marked up with the [Pango text markup language][PangoMarkupFormat].
  *
- * Return value: A newly created #GtkCellView widget.
+ * Returns: A newly created #GtkCellView widget.
  *
  * Since: 2.6
  */
@@ -1053,7 +1053,7 @@ gtk_cell_view_new_with_markup (const gchar *markup)
  * Creates a new #GtkCellView widget, adds a #GtkCellRendererPixbuf
  * to it, and makes it show @pixbuf.
  *
- * Return value: A newly created #GtkCellView widget.
+ * Returns: A newly created #GtkCellView widget.
  *
  * Since: 2.6
  */
@@ -1234,7 +1234,7 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
  * Sets @requisition to the size needed by @cell_view to display 
  * the model row pointed to by @path.
  * 
- * Return value: %TRUE
+ * Returns: %TRUE
  *
  * Since: 2.6
  * 
@@ -1356,7 +1356,7 @@ gtk_cell_view_set_background_rgba (GtkCellView   *cell_view,
  * Gets whether @cell_view is configured to draw all of its
  * cells in a sensitive state.
  *
- * Return value: whether @cell_view draws all of its
+ * Returns: whether @cell_view draws all of its
  * cells in a sensitive state
  *
  * Since: 3.0
@@ -1410,7 +1410,7 @@ gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
  * Gets whether @cell_view is configured to request space
  * to fit the entire #GtkTreeModel.
  *
- * Return value: whether @cell_view requests space to fit
+ * Returns: whether @cell_view requests space to fit
  * the entire #GtkTreeModel.
  *
  * Since: 3.0

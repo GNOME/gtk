@@ -1242,7 +1242,7 @@ gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
  * gtk_recent_chooser_menu_new_for_manager() function to know how to create
  * a #GtkRecentChooserMenu widget bound to another #GtkRecentManager object.
  *
- * Return value: a new #GtkRecentChooserMenu
+ * Returns: a new #GtkRecentChooserMenu
  *
  * Since: 2.10
  */
@@ -1266,7 +1266,7 @@ gtk_recent_chooser_menu_new (void)
  * object or if you wish to share a common #GtkRecentManager object
  * among multiple #GtkRecentChooser widgets.
  *
- * Return value: a new #GtkRecentChooserMenu, bound to @manager.
+ * Returns: a new #GtkRecentChooserMenu, bound to @manager.
  *
  * Since: 2.10
  */
@@ -1286,7 +1286,7 @@ gtk_recent_chooser_menu_new_for_manager (GtkRecentManager *manager)
  *
  * Returns the value set by gtk_recent_chooser_menu_set_show_numbers().
  * 
- * Return value: %TRUE if numbers should be shown.
+ * Returns: %TRUE if numbers should be shown.
  *
  * Since: 2.10
  */

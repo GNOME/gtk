@@ -129,7 +129,7 @@ gtk_radio_tool_button_set_property (GObject         *object,
  * 
  * Creates a new #GtkRadioToolButton, adding it to @group.
  * 
- * Return value: The new #GtkRadioToolButton
+ * Returns: The new #GtkRadioToolButton
  * 
  * Since: 2.4
  **/
@@ -156,7 +156,7 @@ gtk_radio_tool_button_new (GSList *group)
  * The new #GtkRadioToolButton will contain an icon and label from the
  * stock item indicated by @stock_id.
  * 
- * Return value: The new #GtkRadioToolButton
+ * Returns: The new #GtkRadioToolButton
  * 
  * Since: 2.4
  *
@@ -186,7 +186,7 @@ gtk_radio_tool_button_new_from_stock (GSList      *group,
  *
  * Creates a new #GtkRadioToolButton adding it to the same group as @gruup
  *
- * Return value: (transfer none): The new #GtkRadioToolButton
+ * Returns: (transfer none): The new #GtkRadioToolButton
  *
  * Since: 2.4
  **/
@@ -212,7 +212,7 @@ gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
  * The new #GtkRadioToolButton will contain an icon and label from the
  * stock item indicated by @stock_id.
  *
- * Return value: (transfer none): A new #GtkRadioToolButton
+ * Returns: (transfer none): A new #GtkRadioToolButton
  *
  * Since: 2.4
  *
@@ -249,7 +249,7 @@ get_radio_button (GtkRadioToolButton *button)
  *
  * Returns the radio button group @button belongs to.
  *
- * Return value: (transfer none) (element-type GtkRadioButton): The group @button belongs to.
+ * Returns: (transfer none) (element-type GtkRadioButton): The group @button belongs to.
  *
  * Since: 2.4
  */

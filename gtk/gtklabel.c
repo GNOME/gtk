@@ -1601,7 +1601,7 @@ gtk_label_buildable_custom_finished (GtkBuildable *buildable,
  * Creates a new label with the given text inside it. You can
  * pass %NULL to get an empty label widget.
  *
- * Return value: the new #GtkLabel
+ * Returns: the new #GtkLabel
  **/
 GtkWidget*
 gtk_label_new (const gchar *str)
@@ -1636,7 +1636,7 @@ gtk_label_new (const gchar *str)
  * the button or menu item will automatically become the mnemonic widget 
  * and be activated by the mnemonic.
  *
- * Return value: the new #GtkLabel
+ * Returns: the new #GtkLabel
  **/
 GtkWidget*
 gtk_label_new_with_mnemonic (const gchar *str)
@@ -1953,7 +1953,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
  * Retrieves the target of the mnemonic (keyboard shortcut) of this
  * label. See gtk_label_set_mnemonic_widget().
  *
- * Return value: (transfer none): the target of the label’s mnemonic,
+ * Returns: (transfer none): the target of the label’s mnemonic,
  *     or %NULL if none has been set and the default algorithm will be used.
  **/
 GtkWidget *
@@ -2175,7 +2175,7 @@ gtk_label_set_attributes (GtkLabel         *label,
  * effective attributes for the label, use
  * pango_layout_get_attribute (gtk_label_get_layout (label)).
  *
- * Return value: (transfer none): the attribute list, or %NULL
+ * Returns: (transfer none): the attribute list, or %NULL
  *     if none was set.
  **/
 PangoAttrList *
@@ -2218,7 +2218,7 @@ gtk_label_set_label (GtkLabel    *label,
  * underlines indicating mnemonics and Pango markup. (See
  * gtk_label_get_text()).
  *
- * Return value: the text of the label widget. This string is
+ * Returns: the text of the label widget. This string is
  *   owned by the widget and must not be modified or freed.
  **/
 const gchar *
@@ -2670,7 +2670,7 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
  * screen. This does not include any embedded underlines
  * indicating mnemonics or Pango markup. (See gtk_label_get_label())
  * 
- * Return value: the text in the label widget. This is the internal
+ * Returns: the text in the label widget. This is the internal
  *   string used by the label, and must not be modified.
  **/
 const gchar *
@@ -2830,7 +2830,7 @@ gtk_label_set_justify (GtkLabel        *label,
  *
  * Returns the justification of the label. See gtk_label_set_justify().
  *
- * Return value: #GtkJustification
+ * Returns: #GtkJustification
  **/
 GtkJustification
 gtk_label_get_justify (GtkLabel *label)
@@ -2879,7 +2879,7 @@ gtk_label_set_ellipsize (GtkLabel          *label,
  *
  * Returns the ellipsizing position of the label. See gtk_label_set_ellipsize().
  *
- * Return value: #PangoEllipsizeMode
+ * Returns: #PangoEllipsizeMode
  *
  * Since: 2.6
  **/
@@ -2925,7 +2925,7 @@ gtk_label_set_width_chars (GtkLabel *label,
  * Retrieves the desired width of @label, in characters. See
  * gtk_label_set_width_chars().
  * 
- * Return value: the width of the label in characters.
+ * Returns: the width of the label in characters.
  * 
  * Since: 2.6
  **/
@@ -2972,7 +2972,7 @@ gtk_label_set_max_width_chars (GtkLabel *label,
  * Retrieves the desired maximum width of @label, in characters. See
  * gtk_label_set_width_chars().
  * 
- * Return value: the maximum width of the label in characters.
+ * Returns: the maximum width of the label in characters.
  * 
  * Since: 2.6
  **/
@@ -3028,7 +3028,7 @@ gtk_label_set_line_wrap (GtkLabel *label,
  * Returns whether lines in the label are automatically wrapped. 
  * See gtk_label_set_line_wrap().
  *
- * Return value: %TRUE if the lines of the label are automatically wrapped.
+ * Returns: %TRUE if the lines of the label are automatically wrapped.
  */
 gboolean
 gtk_label_get_line_wrap (GtkLabel *label)
@@ -3074,7 +3074,7 @@ gtk_label_set_line_wrap_mode (GtkLabel *label,
  *
  * Returns line wrap mode used by the label. See gtk_label_set_line_wrap_mode().
  *
- * Return value: %TRUE if the lines of the label are automatically wrapped.
+ * Returns: %TRUE if the lines of the label are automatically wrapped.
  *
  * Since: 2.10
  */
@@ -5203,7 +5203,7 @@ gtk_label_set_selectable (GtkLabel *label,
  * 
  * Gets the value set by gtk_label_set_selectable().
  * 
- * Return value: %TRUE if the user can copy text from the label
+ * Returns: %TRUE if the user can copy text from the label
  **/
 gboolean
 gtk_label_get_selectable (GtkLabel *label)
@@ -5265,7 +5265,7 @@ gtk_label_set_angle (GtkLabel *label,
  * Gets the angle of rotation for the label. See
  * gtk_label_set_angle().
  * 
- * Return value: the angle of rotation for the label
+ * Returns: the angle of rotation for the label
  *
  * Since: 2.6
  **/
@@ -5460,7 +5460,7 @@ gtk_label_select_region  (GtkLabel *label,
  * Gets the selected range of characters in the label, returning %TRUE
  * if there’s a selection.
  * 
- * Return value: %TRUE if selection is non-empty
+ * Returns: %TRUE if selection is non-empty
  **/
 gboolean
 gtk_label_get_selection_bounds (GtkLabel  *label,
@@ -5534,7 +5534,7 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
  * freed by the caller. The @label is free to recreate its layout at
  * any time, so it should be considered read-only.
  *
- * Return value: (transfer none): the #PangoLayout for this label
+ * Returns: (transfer none): the #PangoLayout for this label
  **/
 PangoLayout*
 gtk_label_get_layout (GtkLabel *label)
@@ -5608,7 +5608,7 @@ gtk_label_set_use_markup (GtkLabel *label,
  * the [Pango text markup language][PangoMarkupFormat].
  * See gtk_label_set_use_markup ().
  *
- * Return value: %TRUE if the label’s text will be parsed for markup.
+ * Returns: %TRUE if the label’s text will be parsed for markup.
  **/
 gboolean
 gtk_label_get_use_markup (GtkLabel *label)
@@ -5647,7 +5647,7 @@ gtk_label_set_use_underline (GtkLabel *label,
  * Returns whether an embedded underline in the label indicates a
  * mnemonic. See gtk_label_set_use_underline().
  *
- * Return value: %TRUE whether an embedded underline in the label indicates
+ * Returns: %TRUE whether an embedded underline in the label indicates
  *               the mnemonic accelerator keys.
  **/
 gboolean
@@ -5696,7 +5696,7 @@ gtk_label_set_single_line_mode (GtkLabel *label,
  *
  * Returns whether the label is in single line mode.
  *
- * Return value: %TRUE when the label is in single line mode.
+ * Returns: %TRUE when the label is in single line mode.
  *
  * Since: 2.6
  **/

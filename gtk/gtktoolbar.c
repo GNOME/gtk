@@ -458,7 +458,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    * number is given by the @button parameter. If the menu was popped
    * up using the keybaord, @button is -1.
    *
-   * Return value: return %TRUE if the signal was handled, %FALSE if not
+   * Returns: return %TRUE if the signal was handled, %FALSE if not
    */
   toolbar_signals[POPUP_CONTEXT_MENU] =
     g_signal_new (I_("popup-context-menu"),
@@ -479,7 +479,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    * A keybinding signal used internally by GTK+. This signal can't
    * be used in application code
    *
-   * Return value: %TRUE if the signal was handled, %FALSE if not
+   * Returns: %TRUE if the signal was handled, %FALSE if not
    */
   toolbar_signals[FOCUS_HOME_OR_END] =
     g_signal_new_class_handler (I_("focus-home-or-end"),
@@ -2714,7 +2714,7 @@ gtk_toolbar_popup_menu (GtkWidget *toolbar)
  * 
  * Creates a new toolbar. 
  
- * Return Value: the newly-created toolbar.
+ * Returns: the newly-created toolbar.
  **/
 GtkWidget *
 gtk_toolbar_new (void)
@@ -2760,7 +2760,7 @@ gtk_toolbar_insert (GtkToolbar  *toolbar,
  * Returns the position of @item on the toolbar, starting from 0.
  * It is an error if @item is not a child of the toolbar.
  * 
- * Return value: the position of item on the toolbar.
+ * Returns: the position of item on the toolbar.
  * 
  * Since: 2.4
  **/
@@ -2823,7 +2823,7 @@ gtk_toolbar_set_style (GtkToolbar      *toolbar,
  * Retrieves whether the toolbar has text, icons, or both . See
  * gtk_toolbar_set_style().
  
- * Return value: the current style of @toolbar
+ * Returns: the current style of @toolbar
  **/
 GtkToolbarStyle
 gtk_toolbar_get_style (GtkToolbar *toolbar)
@@ -2867,7 +2867,7 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
  * 
  * Returns the number of items on the toolbar.
  * 
- * Return value: the number of items on the toolbar
+ * Returns: the number of items on the toolbar
  * 
  * Since: 2.4
  **/
@@ -2891,7 +2891,7 @@ gtk_toolbar_get_n_items (GtkToolbar *toolbar)
  * Returns the @n'th item on @toolbar, or %NULL if the
  * toolbar does not contain an @n'th item.
  *
- * Return value: (transfer none): The @n'th #GtkToolItem on @toolbar,
+ * Returns: (transfer none): The @n'th #GtkToolItem on @toolbar,
  *     or %NULL if there isn’t an @n'th item.
  *
  * Since: 2.4
@@ -2927,7 +2927,7 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
  *
  * Retrieves the icon size for the toolbar. See gtk_toolbar_set_icon_size().
  *
- * Return value: the current icon size for the icons on the toolbar.
+ * Returns: the current icon size for the icons on the toolbar.
  **/
 GtkIconSize
 gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
@@ -2944,7 +2944,7 @@ gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
  * Returns the relief style of buttons on @toolbar. See
  * gtk_button_set_relief().
  * 
- * Return value: The relief style of buttons on @toolbar.
+ * Returns: The relief style of buttons on @toolbar.
  * 
  * Since: 2.4
  **/
@@ -2999,7 +2999,7 @@ gtk_toolbar_set_show_arrow (GtkToolbar *toolbar,
  * Returns whether the toolbar has an overflow menu.
  * See gtk_toolbar_set_show_arrow().
  * 
- * Return value: %TRUE if the toolbar has an overflow menu.
+ * Returns: %TRUE if the toolbar has an overflow menu.
  * 
  * Since: 2.4
  **/
@@ -3024,7 +3024,7 @@ gtk_toolbar_get_show_arrow (GtkToolbar *toolbar)
  *
  * @x and @y are in @toolbar coordinates.
  * 
- * Return value: The position corresponding to the point (@x, @y) on the toolbar.
+ * Returns: The position corresponding to the point (@x, @y) on the toolbar.
  * 
  * Since: 2.4
  **/

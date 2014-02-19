@@ -8249,7 +8249,7 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
  * 
  * Returns whether fixed height mode is turned on for @tree_view.
  * 
- * Return value: %TRUE if @tree_view is in fixed height mode
+ * Returns: %TRUE if @tree_view is in fixed height mode
  * 
  * Since: 2.6
  **/
@@ -11215,7 +11215,7 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
  *
  * Creates a new #GtkTreeView widget.
  *
- * Return value: A newly created #GtkTreeView widget.
+ * Returns: A newly created #GtkTreeView widget.
  **/
 GtkWidget *
 gtk_tree_view_new (void)
@@ -11229,7 +11229,7 @@ gtk_tree_view_new (void)
  *
  * Creates a new #GtkTreeView widget with the model initialized to @model.
  *
- * Return value: A newly created #GtkTreeView widget.
+ * Returns: A newly created #GtkTreeView widget.
  **/
 GtkWidget *
 gtk_tree_view_new_with_model (GtkTreeModel *model)
@@ -11247,7 +11247,7 @@ gtk_tree_view_new_with_model (GtkTreeModel *model)
  * Returns the model the #GtkTreeView is based on.  Returns %NULL if the
  * model is unset.
  *
- * Return value: (transfer none): A #GtkTreeModel, or %NULL if none is currently being used.
+ * Returns: (transfer none): A #GtkTreeModel, or %NULL if none is currently being used.
  **/
 GtkTreeModel *
 gtk_tree_view_get_model (GtkTreeView *tree_view)
@@ -11417,7 +11417,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
  *
  * Gets the #GtkTreeSelection associated with @tree_view.
  *
- * Return value: (transfer none): A #GtkTreeSelection object.
+ * Returns: (transfer none): A #GtkTreeSelection object.
  **/
 GtkTreeSelection *
 gtk_tree_view_get_selection (GtkTreeView *tree_view)
@@ -11433,7 +11433,7 @@ gtk_tree_view_get_selection (GtkTreeView *tree_view)
  *
  * Gets the #GtkAdjustment currently being used for the horizontal aspect.
  *
- * Return value: (transfer none): A #GtkAdjustment object, or %NULL
+ * Returns: (transfer none): A #GtkAdjustment object, or %NULL
  *     if none is currently being used.
  *
  * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
@@ -11509,7 +11509,7 @@ gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
  *
  * Gets the #GtkAdjustment currently being used for the vertical aspect.
  *
- * Return value: (transfer none): A #GtkAdjustment object, or %NULL
+ * Returns: (transfer none): A #GtkAdjustment object, or %NULL
  *     if none is currently being used.
  *
  * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
@@ -11586,7 +11586,7 @@ gtk_tree_view_do_set_vadjustment (GtkTreeView   *tree_view,
  *
  * Returns %TRUE if the headers on the @tree_view are visible.
  *
- * Return value: Whether the headers are visible or not.
+ * Returns: Whether the headers are visible or not.
  **/
 gboolean
 gtk_tree_view_get_headers_visible (GtkTreeView *tree_view)
@@ -11722,7 +11722,7 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
  *
  * Returns whether all header columns are clickable.
  *
- * Return value: %TRUE if all header columns are clickable, otherwise %FALSE
+ * Returns: %TRUE if all header columns are clickable, otherwise %FALSE
  *
  * Since: 2.10
  **/
@@ -11782,7 +11782,7 @@ gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
  *
  * Gets the setting set by gtk_tree_view_set_rules_hint().
  *
- * Return value: %TRUE if rules are useful for the user of this tree
+ * Returns: %TRUE if rules are useful for the user of this tree
  **/
 gboolean
 gtk_tree_view_get_rules_hint (GtkTreeView  *tree_view)
@@ -11824,7 +11824,7 @@ gtk_tree_view_set_activate_on_single_click (GtkTreeView *tree_view,
  *
  * Gets the setting set by gtk_tree_view_set_activate_on_single_click().
  *
- * Return value: %TRUE if row-activated will be emitted on a single click
+ * Returns: %TRUE if row-activated will be emitted on a single click
  *
  * Since: 3.8
  **/
@@ -11848,7 +11848,7 @@ gtk_tree_view_get_activate_on_single_click (GtkTreeView *tree_view)
  * mode enabled, then @column must have its “sizing” property set to be
  * GTK_TREE_VIEW_COLUMN_FIXED.
  *
- * Return value: The number of columns in @tree_view after appending.
+ * Returns: The number of columns in @tree_view after appending.
  **/
 gint
 gtk_tree_view_append_column (GtkTreeView       *tree_view,
@@ -11891,7 +11891,7 @@ _gtk_tree_view_reset_header_styles (GtkTreeView *tree_view)
  *
  * Removes @column from @tree_view.
  *
- * Return value: The number of columns in @tree_view after removing.
+ * Returns: The number of columns in @tree_view after removing.
  **/
 gint
 gtk_tree_view_remove_column (GtkTreeView       *tree_view,
@@ -11968,7 +11968,7 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
  * “fixed_height” mode enabled, then @column must have its “sizing” property
  * set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
- * Return value: The number of columns in @tree_view after insertion.
+ * Returns: The number of columns in @tree_view after insertion.
  **/
 gint
 gtk_tree_view_insert_column (GtkTreeView       *tree_view,
@@ -12042,7 +12042,7 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
  * has “fixed_height” mode enabled, then the new column will have its sizing
  * property set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
- * Return value: The number of columns in @tree_view after insertion.
+ * Returns: The number of columns in @tree_view after insertion.
  **/
 gint
 gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
@@ -12098,7 +12098,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
  * If @tree_view has “fixed_height” mode enabled, then the new column will have its
  * “sizing” property set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
- * Return value: number of columns in the tree view post-insert
+ * Returns: number of columns in the tree view post-insert
  **/
 gint
 gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
@@ -12149,7 +12149,7 @@ gtk_tree_view_get_n_columns (GtkTreeView *tree_view)
  *
  * Gets the #GtkTreeViewColumn at the given position in the #tree_view.
  *
- * Return value: (transfer none): The #GtkTreeViewColumn, or %NULL if the
+ * Returns: (transfer none): The #GtkTreeViewColumn, or %NULL if the
  *     position is outside the range of columns.
  **/
 GtkTreeViewColumn *
@@ -12174,7 +12174,7 @@ gtk_tree_view_get_column (GtkTreeView *tree_view,
  * Returns a #GList of all the #GtkTreeViewColumn s currently in @tree_view.
  * The returned list must be freed with g_list_free ().
  *
- * Return value: (element-type GtkTreeViewColumn) (transfer container): A list of #GtkTreeViewColumn s
+ * Returns: (element-type GtkTreeViewColumn) (transfer container): A list of #GtkTreeViewColumn s
  **/
 GList *
 gtk_tree_view_get_columns (GtkTreeView *tree_view)
@@ -12279,7 +12279,7 @@ gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
  * Returns the column that is the current expander column.
  * This column has the expander arrow drawn next to it.
  *
- * Return value: (transfer none): The expander column.
+ * Returns: (transfer none): The expander column.
  **/
 GtkTreeViewColumn *
 gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
@@ -12748,7 +12748,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
  *
  * Opens the row so its children are visible.
  *
- * Return value: %TRUE if the row existed and had children
+ * Returns: %TRUE if the row existed and had children
  **/
 gboolean
 gtk_tree_view_expand_row (GtkTreeView *tree_view,
@@ -12933,7 +12933,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
  *
  * Collapses a row (hides its child rows, if they exist).
  *
- * Return value: %TRUE if the row was collapsed.
+ * Returns: %TRUE if the row was collapsed.
  **/
 gboolean
 gtk_tree_view_collapse_row (GtkTreeView *tree_view,
@@ -13020,7 +13020,7 @@ gtk_tree_view_map_expanded_rows (GtkTreeView            *tree_view,
  *
  * Returns %TRUE if the node pointed to by @path is expanded in @tree_view.
  *
- * Return value: %TRUE if #path is expanded.
+ * Returns: %TRUE if #path is expanded.
  **/
 gboolean
 gtk_tree_view_row_expanded (GtkTreeView *tree_view,
@@ -13047,7 +13047,7 @@ gtk_tree_view_row_expanded (GtkTreeView *tree_view,
  * Retrieves whether the user can reorder the tree via drag-and-drop. See
  * gtk_tree_view_set_reorderable().
  *
- * Return value: %TRUE if the tree can be reordered.
+ * Returns: %TRUE if the tree can be reordered.
  **/
 gboolean
 gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
@@ -13345,7 +13345,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
  * This is used primarily to compare to `event->window`
  * to confirm that the event on @tree_view is on the right window.
  *
- * Return value: (transfer none): A #GdkWindow, or %NULL when @tree_view
+ * Returns: (transfer none): A #GdkWindow, or %NULL when @tree_view
  *     hasn’t been realized yet
  **/
 GdkWindow *
@@ -13384,7 +13384,7 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * GtkWidget::query-tooltip), please see
  * gtk_tree_view_convert_widget_to_bin_window_coords().
  *
- * Return value: %TRUE if a row exists at that coordinate.
+ * Returns: %TRUE if a row exists at that coordinate.
  **/
 gboolean
 gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
@@ -14019,7 +14019,7 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
  * likewise as for gtk_tree_view_get_path_at_pos().  Please see
  * gtk_tree_view_get_path_at_pos() for more information.
  *
- * Return value: %TRUE if the area at the given coordinates is blank,
+ * Returns: %TRUE if the area at the given coordinates is blank,
  * %FALSE otherwise.
  *
  * Since: 3.0
@@ -14364,7 +14364,7 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
  * meaningful if @tree_view is realized.  Therefore this function will always
  * return %FALSE if @tree_view is not realized or does not have a model.
  * 
- * Return value: whether there is a row at the given position, %TRUE if this
+ * Returns: whether there is a row at the given position, %TRUE if this
  * is indeed the case.
  **/
 gboolean
@@ -14463,7 +14463,7 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
  * Creates a #cairo_surface_t representation of the row at @path.  
  * This image is used for a drag icon.
  *
- * Return value: (transfer full): a newly-allocated surface of the drag icon.
+ * Returns: (transfer full): a newly-allocated surface of the drag icon.
  **/
 cairo_surface_t *
 gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
@@ -14706,7 +14706,7 @@ gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
  * Returns whether or not the tree allows to start interactive searching 
  * by typing in text.
  *
- * Return value: whether or not to let the user search interactively
+ * Returns: whether or not to let the user search interactively
  */
 gboolean
 gtk_tree_view_get_enable_search (GtkTreeView *tree_view)
@@ -14723,7 +14723,7 @@ gtk_tree_view_get_enable_search (GtkTreeView *tree_view)
  *
  * Gets the column searched on by the interactive search code.
  *
- * Return value: the column the interactive search code searches in.
+ * Returns: the column the interactive search code searches in.
  */
 gint
 gtk_tree_view_get_search_column (GtkTreeView *tree_view)
@@ -14768,7 +14768,7 @@ gtk_tree_view_set_search_column (GtkTreeView *tree_view,
  *
  * Returns the compare function currently in use.
  *
- * Return value: the currently used compare function for the search code.
+ * Returns: the currently used compare function for the search code.
  */
 
 GtkTreeViewSearchEqualFunc
@@ -14817,7 +14817,7 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
  * entry for @tree_view.  In case the built-in entry is being used, %NULL
  * will be returned.
  *
- * Return value: (transfer none): the entry currently in use as search entry.
+ * Returns: (transfer none): the entry currently in use as search entry.
  *
  * Since: 2.10
  */
@@ -14936,7 +14936,7 @@ gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view
  *
  * Returns the positioning function currently in use.
  *
- * Return value: the currently used function for positioning the search dialog.
+ * Returns: the currently used function for positioning the search dialog.
  *
  * Since: 2.10
  */
@@ -15658,7 +15658,7 @@ gtk_tree_view_set_hover_selection (GtkTreeView *tree_view,
  * 
  * Returns whether hover selection mode is turned on for @tree_view.
  * 
- * Return value: %TRUE if @tree_view is in hover selection mode
+ * Returns: %TRUE if @tree_view is in hover selection mode
  *
  * Since: 2.6 
  **/
@@ -15699,7 +15699,7 @@ gtk_tree_view_set_hover_expand (GtkTreeView *tree_view,
  * 
  * Returns whether hover expansion mode is turned on for @tree_view.
  * 
- * Return value: %TRUE if @tree_view is in hover expansion mode
+ * Returns: %TRUE if @tree_view is in hover expansion mode
  *
  * Since: 2.6 
  **/
@@ -15742,7 +15742,7 @@ gtk_tree_view_set_rubber_banding (GtkTreeView *tree_view,
  * selection mode is #GTK_SELECTION_MULTIPLE, rubber banding will allow the
  * user to select multiple rows by dragging the mouse.
  * 
- * Return value: %TRUE if rubber banding in @tree_view is enabled.
+ * Returns: %TRUE if rubber banding in @tree_view is enabled.
  *
  * Since: 2.10
  **/
@@ -15759,7 +15759,7 @@ gtk_tree_view_get_rubber_banding (GtkTreeView *tree_view)
  * Returns whether a rubber banding operation is currently being done
  * in @tree_view.
  *
- * Return value: %TRUE if a rubber banding operation is currently being
+ * Returns: %TRUE if a rubber banding operation is currently being
  * done in @tree_view.
  *
  * Since: 2.12
@@ -15782,7 +15782,7 @@ gtk_tree_view_is_rubber_banding_active (GtkTreeView *tree_view)
  * 
  * Returns the current row separator function.
  * 
- * Return value: the current row separator function.
+ * Returns: the current row separator function.
  *
  * Since: 2.6
  **/
@@ -15861,7 +15861,7 @@ gtk_tree_view_state_flags_changed (GtkWidget     *widget,
  *
  * Returns which grid lines are enabled in @tree_view.
  *
- * Return value: a #GtkTreeViewGridLines value indicating which grid lines
+ * Returns: a #GtkTreeViewGridLines value indicating which grid lines
  * are enabled.
  *
  * Since: 2.10
@@ -15948,7 +15948,7 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
  *
  * Returns whether or not tree lines are drawn in @tree_view.
  *
- * Return value: %TRUE if tree lines are drawn in @tree_view, %FALSE
+ * Returns: %TRUE if tree lines are drawn in @tree_view, %FALSE
  * otherwise.
  *
  * Since: 2.10
@@ -16068,7 +16068,7 @@ gtk_tree_view_set_show_expanders (GtkTreeView *tree_view,
  *
  * Returns whether or not expanders are drawn in @tree_view.
  *
- * Return value: %TRUE if expanders are drawn in @tree_view, %FALSE
+ * Returns: %TRUE if expanders are drawn in @tree_view, %FALSE
  * otherwise.
  *
  * Since: 2.12
@@ -16110,7 +16110,7 @@ gtk_tree_view_set_level_indentation (GtkTreeView *tree_view,
  * Returns the amount, in pixels, of extra indentation for child levels
  * in @tree_view.
  *
- * Return value: the amount of extra indentation for child levels in
+ * Returns: the amount of extra indentation for child levels in
  * @tree_view.  A return value of 0 means that this feature is disabled.
  *
  * Since: 2.12
@@ -16264,7 +16264,7 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
  * that row and the corresponding model.  @x and @y will always be converted
  * to be relative to @tree_view’s bin_window if @keyboard_tooltip is %FALSE.
  *
- * Return value: whether or not the given tooltip context points to a row.
+ * Returns: whether or not the given tooltip context points to a row.
  *
  * Since: 2.12
  */
@@ -16423,7 +16423,7 @@ gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
  * Returns the column of @tree_view’s model which is being used for
  * displaying tooltips on @tree_view’s rows.
  *
- * Return value: the index of the tooltip column that is currently being
+ * Returns: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.
  *
  * Since: 2.12

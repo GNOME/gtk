@@ -385,7 +385,7 @@ gtk_separator_tool_item_draw (GtkWidget *widget,
  * 
  * Create a new #GtkSeparatorToolItem
  * 
- * Return value: the new #GtkSeparatorToolItem
+ * Returns: the new #GtkSeparatorToolItem
  * 
  * Since: 2.4
  */
@@ -407,7 +407,7 @@ gtk_separator_tool_item_new (void)
  * Returns whether @item is drawn as a line, or just blank. 
  * See gtk_separator_tool_item_set_draw().
  * 
- * Return value: %TRUE if @item is drawn as a line, or just blank.
+ * Returns: %TRUE if @item is drawn as a line, or just blank.
  * 
  * Since: 2.4
  */

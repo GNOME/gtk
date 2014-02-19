@@ -138,7 +138,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
  *
  * Retrieves the #GtkAdjustment used for horizontal scrolling.
  *
- * Return value: (transfer none): horizontal #GtkAdjustment.
+ * Returns: (transfer none): horizontal #GtkAdjustment.
  *
  * Since: 3.0
  **/
@@ -186,7 +186,7 @@ gtk_scrollable_set_hadjustment (GtkScrollable *scrollable,
  *
  * Retrieves the #GtkAdjustment used for vertical scrolling.
  *
- * Return value: (transfer none): vertical #GtkAdjustment.
+ * Returns: (transfer none): vertical #GtkAdjustment.
  *
  * Since: 3.0
  **/
@@ -235,7 +235,7 @@ gtk_scrollable_set_vadjustment (GtkScrollable *scrollable,
  *
  * Gets the horizontal #GtkScrollablePolicy.
  *
- * Return value: The horizontal #GtkScrollablePolicy.
+ * Returns: The horizontal #GtkScrollablePolicy.
  *
  * Since: 3.0
  **/
@@ -277,7 +277,7 @@ gtk_scrollable_set_hscroll_policy (GtkScrollable       *scrollable,
  *
  * Gets the vertical #GtkScrollablePolicy.
  *
- * Return value: The vertical #GtkScrollablePolicy.
+ * Returns: The vertical #GtkScrollablePolicy.
  *
  * Since: 3.0
  **/

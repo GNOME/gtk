@@ -335,7 +335,7 @@ gtk_menu_tool_button_buildable_interface_init (GtkBuildableIface *iface)
  * Creates a new #GtkMenuToolButton using @icon_widget as icon and
  * @label as label.
  *
- * Return value: the new #GtkMenuToolButton
+ * Returns: the new #GtkMenuToolButton
  *
  * Since: 2.6
  **/
@@ -364,7 +364,7 @@ gtk_menu_tool_button_new (GtkWidget   *icon_widget,
  * The new #GtkMenuToolButton will contain an icon and label from
  * the stock item indicated by @stock_id.
  *
- * Return value: the new #GtkMenuToolButton
+ * Returns: the new #GtkMenuToolButton
  *
  * Since: 2.6
  *
@@ -426,7 +426,7 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
  *
  * Gets the #GtkMenu associated with #GtkMenuToolButton.
  *
- * Return value: (transfer none): the #GtkMenu associated
+ * Returns: (transfer none): the #GtkMenu associated
  *     with #GtkMenuToolButton
  *
  * Since: 2.6

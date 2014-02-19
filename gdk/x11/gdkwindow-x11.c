@@ -1185,7 +1185,7 @@ x_event_mask_to_gdk_event_mask (long mask)
  * was already known to GDK, a new reference to the existing
  * #GdkWindow is returned.
  *
- * Return value: (transfer full): a #GdkWindow wrapper for the native
+ * Returns: (transfer full): a #GdkWindow wrapper for the native
  *   window, or %NULL if the window has been destroyed. The wrapper
  *   will be newly created, if one doesn’t exist already.
  *
@@ -5485,7 +5485,7 @@ timestamp_predicate (Display *display,
  *
  * Routine to get the current X server time stamp.
  *
- * Return value: the time stamp.
+ * Returns: the time stamp.
  **/
 guint32
 gdk_x11_get_server_time (GdkWindow *window)
@@ -5521,7 +5521,7 @@ gdk_x11_get_server_time (GdkWindow *window)
  * 
  * Returns the X resource (window) belonging to a #GdkWindow.
  * 
- * Return value: the ID of @drawable’s X resource.
+ * Returns: the ID of @drawable’s X resource.
  **/
 XID
 gdk_x11_window_get_xid (GdkWindow *window)

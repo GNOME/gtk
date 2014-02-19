@@ -563,7 +563,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
  *
  * Creates a new #GtkFontChooserWidget.
  *
- * Return value: a new #GtkFontChooserWidget
+ * Returns: a new #GtkFontChooserWidget
  *
  * Since: 3.2
  */

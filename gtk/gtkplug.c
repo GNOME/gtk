@@ -344,7 +344,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
  * be used to embed this window inside another window, for
  * instance with gtk_socket_add_id().
  * 
- * Return value: the window ID for the plug
+ * Returns: the window ID for the plug
  **/
 Window
 gtk_plug_get_id (GtkPlug *plug)
@@ -363,7 +363,7 @@ gtk_plug_get_id (GtkPlug *plug)
  *
  * Determines whether the plug is embedded in a socket.
  *
- * Return value: %TRUE if the plug is embedded in a socket
+ * Returns: %TRUE if the plug is embedded in a socket
  *
  * Since: 2.14
  **/
@@ -381,7 +381,7 @@ gtk_plug_get_embedded (GtkPlug *plug)
  *
  * Retrieves the socket the plug is embedded in.
  *
- * Return value: (transfer none): the window of the socket, or %NULL
+ * Returns: (transfer none): the window of the socket, or %NULL
  *
  * Since: 2.14
  **/
@@ -623,7 +623,7 @@ gtk_plug_construct_for_display (GtkPlug    *plug,
  * by @socket_id. If @socket_id is 0, the plug is left “unplugged” and
  * can later be plugged into a #GtkSocket by  gtk_socket_add_id().
  * 
- * Return value: the new #GtkPlug widget.
+ * Returns: the new #GtkPlug widget.
  **/
 GtkWidget*
 gtk_plug_new (Window socket_id)
@@ -638,7 +638,7 @@ gtk_plug_new (Window socket_id)
  * 
  * Create a new plug widget inside the #GtkSocket identified by socket_id.
  *
- * Return value: the new #GtkPlug widget.
+ * Returns: the new #GtkPlug widget.
  *
  * Since: 2.2
  */

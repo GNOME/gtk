@@ -928,7 +928,7 @@ _gtk_builder_finish (GtkBuilder *builder)
  * Most users will probably want to use gtk_builder_new_from_file(),
  * gtk_builder_new_from_resource() or gtk_builder_new_from_string().
  *
- * Return value: a new (empty) #GtkBuilder object
+ * Returns: a new (empty) #GtkBuilder object
  *
  * Since: 2.12
  **/
@@ -1391,7 +1391,7 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
  * Gets the object named @name. Note that this function does not
  * increment the reference count of the returned object. 
  *
- * Return value: (transfer none): the object named @name or %NULL if
+ * Returns: (transfer none): the object named @name or %NULL if
  *    it could not be found in the object tree.
  *
  * Since: 2.12
@@ -1422,7 +1422,7 @@ object_add_to_list (gchar    *object_id,
  * this function does not increment the reference counts of the returned
  * objects.
  *
- * Return value: (element-type GObject) (transfer container): a newly-allocated #GSList containing all the objects
+ * Returns: (element-type GObject) (transfer container): a newly-allocated #GSList containing all the objects
  *   constructed by the #GtkBuilder instance. It should be freed by
  *   g_slist_free()
  *
@@ -1471,7 +1471,7 @@ gtk_builder_set_translation_domain (GtkBuilder  *builder,
  *
  * Gets the translation domain of @builder.
  *
- * Return value: the translation domain. This string is owned
+ * Returns: the translation domain. This string is owned
  * by the builder object and must not be modified or freed.
  *
  * Since: 2.12

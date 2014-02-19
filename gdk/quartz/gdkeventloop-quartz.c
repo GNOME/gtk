@@ -386,7 +386,7 @@ pollfds_equal (GPollFD *old_pollfds,
  * timeout is used only to tell if the polling operation is blocking
  * or non-blocking.
  *
- * Return value:
+ * Returns:
  *  -1: No file descriptors ready, began asynchronous poll
  *   0: No file descriptors ready, asynchronous poll not needed
  * > 0: Number of file descriptors ready
@@ -543,7 +543,7 @@ select_thread_start_poll (GPollFD *ufds,
  *
  * The results of the poll are written into the GPollFD array passed in.
  *
- * Return Value: number of file descriptors ready
+ * Returns: number of file descriptors ready
  */
 static int
 select_thread_collect_poll (GPollFD *ufds, guint nfds)

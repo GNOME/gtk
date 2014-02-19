@@ -64,7 +64,7 @@ static GQuark    deserialize_quark (void);
  * This function registers a rich text serialization @function along with
  * its @mime_type with the passed @buffer.
  *
- * Return value: (transfer none): the #GdkAtom that corresponds to the
+ * Returns: (transfer none): the #GdkAtom that corresponds to the
  *               newly registered format’s mime-type.
  *
  * Since: 2.10
@@ -121,7 +121,7 @@ gtk_text_buffer_register_serialize_format (GtkTextBuffer              *buffer,
  * identifier != %NULL here, since the %NULL tagset requires the
  * receiving buffer to deal with with pasting of arbitrary tags.
  *
- * Return value: (transfer none): the #GdkAtom that corresponds to the
+ * Returns: (transfer none): the #GdkAtom that corresponds to the
  *               newly registered format’s mime-type.
  *
  * Since: 2.10
@@ -162,7 +162,7 @@ gtk_text_buffer_register_serialize_tagset (GtkTextBuffer *buffer,
  * This function registers a rich text deserialization @function along with
  * its @mime_type with the passed @buffer.
  *
- * Return value: (transfer none): the #GdkAtom that corresponds to the
+ * Returns: (transfer none): the #GdkAtom that corresponds to the
  *               newly registered format’s mime-type.
  *
  * Since: 2.10
@@ -205,7 +205,7 @@ gtk_text_buffer_register_deserialize_format (GtkTextBuffer                *buffe
  * format with the passed @buffer. See
  * gtk_text_buffer_register_serialize_tagset() for details.
  *
- * Return value: (transfer none): the #GdkAtom that corresponds to the
+ * Returns: (transfer none): the #GdkAtom that corresponds to the
  *               newly registered format’s mime-type.
  *
  * Since: 2.10
@@ -361,7 +361,7 @@ gtk_text_buffer_deserialize_set_can_create_tags (GtkTextBuffer *buffer,
  * This functions returns the value set with
  * gtk_text_buffer_deserialize_set_can_create_tags()
  *
- * Return value: whether deserializing this format may create tags
+ * Returns: whether deserializing this format may create tags
  *
  * Since: 2.10
  **/
@@ -406,7 +406,7 @@ gtk_text_buffer_deserialize_get_can_create_tags (GtkTextBuffer *buffer,
  * with @buffer using gtk_text_buffer_register_serialize_format() or
  * gtk_text_buffer_register_serialize_tagset()
  *
- * Return value: (array length=n_formats) (transfer container): an array of
+ * Returns: (array length=n_formats) (transfer container): an array of
  *               #GdkAtoms representing the registered formats.
  *
  * Since: 2.10
@@ -434,7 +434,7 @@ gtk_text_buffer_get_serialize_formats (GtkTextBuffer *buffer,
  * with @buffer using gtk_text_buffer_register_deserialize_format() or
  * gtk_text_buffer_register_deserialize_tagset()
  *
- * Return value: (array length=n_formats) (transfer container): an array of
+ * Returns: (array length=n_formats) (transfer container): an array of
  *               #GdkAtoms representing the registered formats.
  *
  * Since: 2.10
@@ -469,7 +469,7 @@ gtk_text_buffer_get_deserialize_formats (GtkTextBuffer *buffer,
  * gtk_text_buffer_register_serialize_format() or
  * gtk_text_buffer_register_serialize_tagset() beforehand.
  *
- * Return value: (array length=length) (transfer full): the serialized
+ * Returns: (array length=length) (transfer full): the serialized
  *               data, encoded as @format
  *
  * Since: 2.10
@@ -530,7 +530,7 @@ gtk_text_buffer_serialize (GtkTextBuffer     *register_buffer,
  * gtk_text_buffer_register_deserialize_format() or
  * gtk_text_buffer_register_deserialize_tagset() beforehand.
  *
- * Return value: %TRUE on success, %FALSE otherwise.
+ * Returns: %TRUE on success, %FALSE otherwise.
  *
  * Since: 2.10
  **/

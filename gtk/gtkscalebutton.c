@@ -516,7 +516,7 @@ gtk_scale_button_dispose (GObject *object)
  * Creates a #GtkScaleButton, with a range between @min and @max, with
  * a stepping of @step.
  *
- * Return value: a new #GtkScaleButton
+ * Returns: a new #GtkScaleButton
  *
  * Since: 2.12
  */
@@ -547,7 +547,7 @@ gtk_scale_button_new (GtkIconSize   size,
  *
  * Gets the current value of the scale button.
  *
- * Return value: current value of the scale button
+ * Returns: current value of the scale button
  *
  * Since: 2.12
  */

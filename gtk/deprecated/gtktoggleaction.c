@@ -178,7 +178,7 @@ gtk_toggle_action_init (GtkToggleAction *action)
  * a #GtkActionGroup and set the accelerator for the action,
  * call gtk_action_group_add_action_with_accel().
  *
- * Return value: a new #GtkToggleAction
+ * Returns: a new #GtkToggleAction
  *
  * Since: 2.4
  *

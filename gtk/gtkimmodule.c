@@ -599,7 +599,7 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
  * Create an IM context of a type specified by the string
  * ID @context_id.
  * 
- * Return value: a newly created input context of or @context_id, or
+ * Returns: a newly created input context of or @context_id, or
  *     if that could not be created, a newly created GtkIMContextSimple.
  */
 GtkIMContext *
@@ -777,7 +777,7 @@ get_current_input_language (void)
  * Return the context_id of the best IM context type 
  * for the given window.
  * 
- * Return value: the context ID (will never be %NULL)
+ * Returns: the context ID (will never be %NULL)
  */
 const gchar *
 _gtk_im_module_get_default_context_id (GdkWindow *client_window)

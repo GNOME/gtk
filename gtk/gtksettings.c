@@ -1726,7 +1726,7 @@ settings_init_style (GtkSettings *settings)
  *
  * Gets the #GtkSettings object for @screen, creating it if necessary.
  *
- * Return value: (transfer none): a #GtkSettings object.
+ * Returns: (transfer none): a #GtkSettings object.
  *
  * Since: 2.2
  */
@@ -1781,7 +1781,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
  * Gets the #GtkSettings object for the default GDK screen, creating
  * it if necessary. See gtk_settings_get_for_screen().
  *
- * Return value: (transfer none): a #GtkSettings object. If there is no default
+ * Returns: (transfer none): a #GtkSettings object. If there is no default
  *  screen, then returns %NULL.
  **/
 GtkSettings*
@@ -2340,7 +2340,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * blue are integers between 0 and 65535 or floating-point numbers
  * between 0 and 1.
  *
- * Return value: %TRUE if @gstring could be parsed and @property_value
+ * Returns: %TRUE if @gstring could be parsed and @property_value
  * has been set to the resulting #GdkColor.
  **/
 gboolean
@@ -2384,7 +2384,7 @@ gtk_rc_property_parse_color (const GParamSpec *pspec,
  * its numeric value. For consistency with flags parsing, the value
  * may be surrounded by parentheses.
  *
- * Return value: %TRUE if @gstring could be parsed and @property_value
+ * Returns: %TRUE if @gstring could be parsed and @property_value
  * has been set to the resulting #GEnumValue.
  **/
 gboolean
@@ -2479,7 +2479,7 @@ parse_flags_value (GScanner    *scanner,
  * numerically. Multiple flags can be specified in the form
  * `"( flag1 | flag2 | ... )"`.
  *
- * Return value: %TRUE if @gstring could be parsed and @property_value
+ * Returns: %TRUE if @gstring could be parsed and @property_value
  * has been set to the resulting flags value.
  **/
 gboolean
@@ -2583,7 +2583,7 @@ get_braced_int (GScanner *scanner,
  * requisition in the form
  * `"{ width, height }"` for integers %width and %height.
  *
- * Return value: %TRUE if @gstring could be parsed and @property_value
+ * Returns: %TRUE if @gstring could be parsed and @property_value
  * has been set to the resulting #GtkRequisition.
  **/
 gboolean
@@ -2625,7 +2625,7 @@ gtk_rc_property_parse_requisition  (const GParamSpec *pspec,
  * `"{ left, right, top, bottom }"` for integers
  * left, right, top and bottom.
  *
- * Return value: %TRUE if @gstring could be parsed and @property_value
+ * Returns: %TRUE if @gstring could be parsed and @property_value
  * has been set to the resulting #GtkBorder.
  **/
 gboolean

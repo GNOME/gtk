@@ -583,7 +583,7 @@ _gdk_visual_get_x11_colormap (GdkVisual *visual)
  *
  * Returns the X visual belonging to a #GdkVisual.
  *
- * Return value: (transfer none): an Xlib Visual*.
+ * Returns: (transfer none): an Xlib Visual*.
  **/
 Visual *
 gdk_x11_visual_get_xvisual (GdkVisual *visual)

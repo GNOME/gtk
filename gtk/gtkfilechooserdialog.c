@@ -556,7 +556,7 @@ gtk_file_chooser_dialog_new_valist (const gchar          *title,
  * Creates a new #GtkFileChooserDialog.  This function is analogous to
  * gtk_dialog_new_with_buttons().
  *
- * Return value: a new #GtkFileChooserDialog
+ * Returns: a new #GtkFileChooserDialog
  *
  * Since: 2.4
  **/

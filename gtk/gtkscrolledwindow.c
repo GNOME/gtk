@@ -954,7 +954,7 @@ gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
  * Gets the placement of the contents with respect to the scrollbars
  * for the scrolled window. See gtk_scrolled_window_set_placement().
  *
- * Return value: the current placement value.
+ * Returns: the current placement value.
  *
  * See also gtk_scrolled_window_set_placement() and
  * gtk_scrolled_window_unset_placement().
@@ -1028,7 +1028,7 @@ gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
  * Gets the shadow type of the scrolled window. See 
  * gtk_scrolled_window_set_shadow_type().
  *
- * Return value: the current shadow type
+ * Returns: the current shadow type
  **/
 GtkShadowType
 gtk_scrolled_window_get_shadow_type (GtkScrolledWindow *scrolled_window)
@@ -1090,7 +1090,7 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
  *
  * Returns the specified kinetic scrolling behavior.
  *
- * Return value: the scrolling behavior flags.
+ * Returns: the scrolling behavior flags.
  *
  * Since: 3.4
  */
@@ -3043,7 +3043,7 @@ gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
  * Gets the spacing between the scrolled window’s scrollbars and
  * the scrolled widget. Used by GtkCombo
  * 
- * Return value: the spacing, in pixels.
+ * Returns: the spacing, in pixels.
  */
 gint
 _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)

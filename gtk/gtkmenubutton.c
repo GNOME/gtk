@@ -1055,7 +1055,7 @@ gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
  * Returns whether a #GtkPopover or a #GtkMenu will be constructed
  * from the menu model.
  *
- * Return value: %TRUE if using a #GtkPopover
+ * Returns: %TRUE if using a #GtkPopover
  *
  * Since: 3.12
  */

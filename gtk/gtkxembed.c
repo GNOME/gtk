@@ -95,7 +95,7 @@ _gtk_xembed_set_focus_wrapped (void)
  * Gets whether the current focus sequence has wrapped around
  * to the beginning of the ultimate toplevel.
  * 
- * Return value: %TRUE if the focus sequence has wrapped around.
+ * Returns: %TRUE if the focus sequence has wrapped around.
  **/
 gboolean
 _gtk_xembed_get_focus_wrapped (void)

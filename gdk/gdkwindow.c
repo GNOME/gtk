@@ -1223,7 +1223,7 @@ sync_native_window_stack_position (GdkWindow *window)
  * more details.  Note: to use this on displays other than the default
  * display, @parent must be specified.
  *
- * Return value: (transfer full): the new #GdkWindow
+ * Returns: (transfer full): the new #GdkWindow
  **/
 GdkWindow*
 gdk_window_new (GdkWindow     *parent,
@@ -2105,7 +2105,7 @@ gdk_window_get_user_data (GdkWindow *window,
  *
  * Gets the type of the window. See #GdkWindowType.
  *
- * Return value: type of window
+ * Returns: type of window
  **/
 GdkWindowType
 gdk_window_get_window_type (GdkWindow *window)
@@ -2121,7 +2121,7 @@ gdk_window_get_window_type (GdkWindow *window)
  * 
  * Gets the #GdkVisual describing the pixel format of @window.
  * 
- * Return value: (transfer none): a #GdkVisual
+ * Returns: (transfer none): a #GdkVisual
  *
  * Since: 2.24
  **/
@@ -2139,7 +2139,7 @@ gdk_window_get_visual (GdkWindow *window)
  * 
  * Gets the #GdkScreen associated with a #GdkWindow.
  * 
- * Return value: (transfer none): the #GdkScreen associated with @window
+ * Returns: (transfer none): the #GdkScreen associated with @window
  *
  * Since: 2.24
  **/
@@ -2157,7 +2157,7 @@ gdk_window_get_screen (GdkWindow *window)
  * 
  * Gets the #GdkDisplay associated with a #GdkWindow.
  * 
- * Return value: (transfer none): the #GdkDisplay associated with @window
+ * Returns: (transfer none): the #GdkDisplay associated with @window
  *
  * Since: 2.24
  **/
@@ -2174,7 +2174,7 @@ gdk_window_get_display (GdkWindow *window)
  *
  * Check to see if a window is destroyed..
  *
- * Return value: %TRUE if the window is destroyed
+ * Returns: %TRUE if the window is destroyed
  *
  * Since: 2.18
  **/
@@ -2271,7 +2271,7 @@ gdk_window_get_position (GdkWindow *window,
  * gdk_window_get_parent() will most likely not do what you expect if
  * there are offscreen windows in the hierarchy.
  *
- * Return value: (transfer none): parent of @window
+ * Returns: (transfer none): parent of @window
  **/
 GdkWindow*
 gdk_window_get_parent (GdkWindow *window)
@@ -2291,7 +2291,7 @@ gdk_window_get_parent (GdkWindow *window)
  *
  * See also: gdk_offscreen_window_get_embedder()
  *
- * Return value: (transfer none): effective parent of @window
+ * Returns: (transfer none): effective parent of @window
  *
  * Since: 2.22
  **/
@@ -2321,7 +2321,7 @@ gdk_window_get_effective_parent (GdkWindow *window)
  * gdk_window_get_toplevel() will most likely not do what you expect
  * if there are offscreen windows in the hierarchy.
  *
- * Return value: (transfer none): the toplevel window containing @window
+ * Returns: (transfer none): the toplevel window containing @window
  **/
 GdkWindow *
 gdk_window_get_toplevel (GdkWindow *window)
@@ -2349,7 +2349,7 @@ gdk_window_get_toplevel (GdkWindow *window)
  *
  * See also: gdk_offscreen_window_get_embedder()
  *
- * Return value: (transfer none): the effective toplevel window containing @window
+ * Returns: (transfer none): the effective toplevel window containing @window
  *
  * Since: 2.22
  **/
@@ -2379,7 +2379,7 @@ gdk_window_get_effective_toplevel (GdkWindow *window)
  * The returned list must be freed, but the elements in the
  * list need not be.
  *
- * Return value: (transfer container) (element-type GdkWindow):
+ * Returns: (transfer container) (element-type GdkWindow):
  *     list of child windows inside @window
  **/
 GList*
@@ -2400,7 +2400,7 @@ gdk_window_get_children (GdkWindow *window)
  * Like gdk_window_get_children(), but does not copy the list of
  * children, so the list does not need to be freed.
  *
- * Return value: (transfer none) (element-type GdkWindow):
+ * Returns: (transfer none) (element-type GdkWindow):
  *     a reference to the list of child windows in @window
  **/
 GList *
@@ -2429,7 +2429,7 @@ gdk_window_peek_children (GdkWindow *window)
  * The list is returned in (relative) stacking order, i.e. the
  * lowest window is first.
  *
- * Return value: (transfer container) (element-type GdkWindow):
+ * Returns: (transfer container) (element-type GdkWindow):
  *     list of child windows inside @window
  *
  * Since: 3.10
@@ -2571,7 +2571,7 @@ gdk_window_remove_filter (GdkWindow     *window,
  * The returned list should be freed with g_list_free(), but
  * its elements need not be freed.
  *
- * Return value: (transfer container) (element-type GdkWindow):
+ * Returns: (transfer container) (element-type GdkWindow):
  *     list of toplevel windows, free with g_list_free()
  *
  * Since: 2.2
@@ -2607,7 +2607,7 @@ gdk_screen_get_toplevel_windows (GdkScreen *screen)
  * Checks whether the window has been mapped (with gdk_window_show() or
  * gdk_window_show_unraised()).
  *
- * Return value: %TRUE if the window is mapped
+ * Returns: %TRUE if the window is mapped
  **/
 gboolean
 gdk_window_is_visible (GdkWindow *window)
@@ -2626,7 +2626,7 @@ gdk_window_is_visible (GdkWindow *window)
  * we only check as far as we have GDK window parents, not to the root
  * window.)
  *
- * Return value: %TRUE if the window is viewable
+ * Returns: %TRUE if the window is viewable
  **/
 gboolean
 gdk_window_is_viewable (GdkWindow *window)
@@ -2646,7 +2646,7 @@ gdk_window_is_viewable (GdkWindow *window)
  * Gets the bitwise OR of the currently active window state flags,
  * from the #GdkWindowState enumeration.
  *
- * Return value: window state bitfield
+ * Returns: window state bitfield
  **/
 GdkWindowState
 gdk_window_get_state (GdkWindow *window)
@@ -3155,7 +3155,7 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
  * Note that calling cairo_reset_clip() on the resulting #cairo_t will
  * produce undefined results, so avoid it at all costs.
  *
- * Return value: A newly created Cairo context. Free with
+ * Returns: A newly created Cairo context. Free with
  *  cairo_destroy() when you are done drawing.
  * 
  * Since: 2.8
@@ -4070,7 +4070,7 @@ _gdk_window_invalidate_for_expose (GdkWindow       *window,
  * gdk_window_get_update_area() returns %NULL. You are responsible for
  * calling cairo_region_destroy() on the returned region if it’s non-%NULL.
  *
- * Return value: the update area for @window
+ * Returns: the update area for @window
  **/
 cairo_region_t *
 gdk_window_get_update_area (GdkWindow *window)
@@ -4412,7 +4412,7 @@ gdk_window_constrain_size (GdkGeometry    *geometry,
  * The position is given in coordinates relative to the upper left
  * corner of @window.
  *
- * Return value: (transfer none): the window containing the pointer (as with
+ * Returns: (transfer none): the window containing the pointer (as with
  * gdk_window_at_pointer()), or %NULL if the window containing the
  * pointer isn’t known to GDK
  *
@@ -4445,7 +4445,7 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * The position is given in coordinates relative to the upper left
  * corner of @window.
  *
- * Return value: (transfer none): The window underneath @device (as with
+ * Returns: (transfer none): The window underneath @device (as with
  * gdk_device_get_window_at_position()), or %NULL if the window is not known to GDK.
  *
  * Since: 3.10
@@ -4501,7 +4501,7 @@ gdk_window_get_device_position_double (GdkWindow       *window,
  *
  * Use gdk_window_get_device_position_double() if you need subpixel precision.
  *
- * Return value: (transfer none): The window underneath @device (as with
+ * Returns: (transfer none): The window underneath @device (as with
  * gdk_device_get_window_at_position()), or %NULL if the window is not known to GDK.
  *
  * Since: 3.0
@@ -4531,7 +4531,7 @@ gdk_window_get_device_position (GdkWindow       *window,
  * Obtains the root window (parent all other windows are inside)
  * for the default display and screen.
  *
- * Return value: (transfer none): the default root window
+ * Returns: (transfer none): the default root window
  **/
 GdkWindow *
 gdk_get_default_root_window (void)
@@ -5257,7 +5257,7 @@ gdk_window_set_events (GdkWindow       *window,
  * Gets the event mask for @window for all master input devices. See
  * gdk_window_set_events().
  *
- * Return value: event mask for @window
+ * Returns: event mask for @window
  **/
 GdkEventMask
 gdk_window_get_events (GdkWindow *window)
@@ -5860,7 +5860,7 @@ gdk_window_set_cursor_internal (GdkWindow *window,
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
- * Return value: (transfer none): a #GdkCursor, or %NULL. The returned
+ * Returns: (transfer none): a #GdkCursor, or %NULL. The returned
  *   object is owned by the #GdkWindow and should not be unreferenced
  *   directly. Use gdk_window_set_cursor() to unset the cursor of the
  *   window
@@ -6128,7 +6128,7 @@ gdk_window_get_height (GdkWindow *window)
  * gdk_window_get_geometry() which return the position of a window
  * relative to its parent window.)
  *
- * Return value: not meaningful, ignore
+ * Returns: not meaningful, ignore
  */
 gint
 gdk_window_get_origin (GdkWindow *window,
@@ -6603,7 +6603,7 @@ gdk_window_merge_child_input_shapes (GdkWindow *window)
  * implementing scary features that involve deep knowledge of the
  * windowing system. Don’t worry about it unless you have to.
  *
- * Return value: %TRUE if the server supports static gravity
+ * Returns: %TRUE if the server supports static gravity
  */
 gboolean
 gdk_window_set_static_gravities (GdkWindow *window,
@@ -6717,7 +6717,7 @@ gdk_window_set_composited (GdkWindow *window,
  * Determines whether or not the window manager is hinted that @window
  * has modal behaviour.
  *
- * Return value: whether or not the window has the modal hint set.
+ * Returns: whether or not the window has the modal hint set.
  *
  * Since: 2.22
  */
@@ -6736,7 +6736,7 @@ gdk_window_get_modal_hint (GdkWindow *window)
  * Determines whether or not the desktop environment shuld be hinted that
  * the window does not want to receive input focus.
  *
- * Return value: whether or not the window should receive input focus.
+ * Returns: whether or not the window should receive input focus.
  *
  * Since: 2.22
  */
@@ -6755,7 +6755,7 @@ gdk_window_get_accept_focus (GdkWindow *window)
  * Determines whether or not the desktop environment should be hinted that the
  * window does not want to receive input focus when it is mapped.
  *
- * Return value: whether or not the window wants to receive input focus when
+ * Returns: whether or not the window wants to receive input focus when
  * it is mapped.
  *
  * Since: 2.22
@@ -6774,7 +6774,7 @@ gdk_window_get_focus_on_map (GdkWindow *window)
  *
  * Determines whether or not the window is an input only window.
  *
- * Return value: %TRUE if @window is input only
+ * Returns: %TRUE if @window is input only
  *
  * Since: 2.22
  */
@@ -6792,7 +6792,7 @@ gdk_window_is_input_only (GdkWindow *window)
  *
  * Determines whether or not the window is shaped.
  *
- * Return value: %TRUE if @window is shaped
+ * Returns: %TRUE if @window is shaped
  *
  * Since: 2.22
  */
@@ -9413,7 +9413,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
  *
  * This function returns the type hint set for a window.
  *
- * Return value: The type hint set for @window
+ * Returns: The type hint set for @window
  *
  * Since: 2.10
  **/
@@ -9755,7 +9755,7 @@ gdk_window_set_event_compression (GdkWindow *window,
  *
  * Get the current event compression setting for this window.
  *
- * Return value: %TRUE if motion events will be compressed
+ * Returns: %TRUE if motion events will be compressed
  *
  * Since: 3.12
  **/
@@ -10090,7 +10090,7 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
  *
  * Returns the group leader window for @window. See gdk_window_set_group().
  *
- * Return value: (transfer none): the group leader window for @window
+ * Returns: (transfer none): the group leader window for @window
  *
  * Since: 2.4
  **/
@@ -10444,7 +10444,7 @@ gdk_window_get_drag_protocol (GdkWindow  *window,
  *
  * This function is called by the drag source.
  *
- * Return value: (transfer full): a newly created #GdkDragContext
+ * Returns: (transfer full): a newly created #GdkDragContext
  */
 GdkDragContext *
 gdk_drag_begin (GdkWindow     *window,
@@ -10470,7 +10470,7 @@ gdk_drag_begin (GdkWindow     *window,
  *
  * This function is called by the drag source.
  *
- * Return value: (transfer full): a newly created #GdkDragContext
+ * Returns: (transfer full): a newly created #GdkDragContext
  */
 GdkDragContext *
 gdk_drag_begin_for_device (GdkWindow     *window,
@@ -10789,7 +10789,7 @@ gdk_window_set_frame_clock (GdkWindow     *window,
  * window.
  *
  * Since: 3.8
- * Return value: (transfer none): the frame clock
+ * Returns: (transfer none): the frame clock
  */
 GdkFrameClock*
 gdk_window_get_frame_clock (GdkWindow *window)
@@ -10821,7 +10821,7 @@ gdk_window_get_frame_clock (GdkWindow *window)
  * a configure event will be sent to the toplevel window.
  *
  * Since: 3.10
- * Return value: the scale factor
+ * Returns: the scale factor
  */
 gint
 gdk_window_get_scale_factor (GdkWindow *window)

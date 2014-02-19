@@ -2161,7 +2161,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
  * Actions can also be added using gtk_widget_insert_action_group()
  * on the menus attach widget or on any of its parent widgets.
  *
- * Return value: the new #GtkPopover
+ * Returns: the new #GtkPopover
  *
  * Since: 3.12
  */

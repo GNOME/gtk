@@ -866,7 +866,7 @@ gtk_table_set_row_spacing (GtkTable *table,
  * Gets the amount of space between row @row, and
  * row @row + 1. See gtk_table_set_row_spacing().
  *
- * Return value: the row spacing
+ * Returns: the row spacing
  *
  * Deprecated: 3.4: #GtkGrid does not offer a replacement for this
  *     functionality.
@@ -929,7 +929,7 @@ gtk_table_set_col_spacing (GtkTable *table,
  * Gets the amount of space between column @col, and
  * column @col + 1. See gtk_table_set_col_spacing().
  *
- * Return value: the column spacing
+ * Returns: the column spacing
  *
  * Deprecated: 3.4: #GtkGrid does not offer a replacement for this
  *     functionality.
@@ -987,7 +987,7 @@ gtk_table_set_row_spacings (GtkTable *table,
  * the spacing that will be used for newly added rows.
  * (See gtk_table_set_row_spacings())
  *
- * Return value: the default row spacing
+ * Returns: the default row spacing
  *
  * Deprecated: 3.4: Use gtk_grid_get_row_spacing() with #GtkGrid.
  **/
@@ -1038,7 +1038,7 @@ gtk_table_set_col_spacings (GtkTable *table,
  * the spacing that will be used for newly added columns.
  * (See gtk_table_set_col_spacings())
  *
- * Return value: the default column spacing
+ * Returns: the default column spacing
  *
  * Deprecated: 3.4: Use gtk_grid_get_column_spacing() with #GtkGrid.
  **/
@@ -1091,7 +1091,7 @@ gtk_table_set_homogeneous (GtkTable *table,
  * Returns whether the table cells are all constrained to the same
  * width and height. (See gtk_table_set_homogeneous ())
  *
- * Return value: %TRUE if the cells are all constrained to the same size
+ * Returns: %TRUE if the cells are all constrained to the same size
  *
  * Deprecated: 3.4: Use gtk_grid_get_row_homogeneous() and
  *     gtk_grid_get_column_homogeneous() with #GtkGrid.

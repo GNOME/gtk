@@ -265,7 +265,7 @@ gtk_icon_factory_finalize (GObject *object)
  * add a default icon factory with their icons, which will allow
  * themes to override the icons for the application.
  *
- * Return value: a new #GtkIconFactory
+ * Returns: a new #GtkIconFactory
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -336,7 +336,7 @@ gtk_icon_factory_add (GtkIconFactory *factory,
  * widget that will display the icon, instead of using this
  * function directly, so that themes are taken into account.
  *
- * Return value: (transfer none): icon set of @stock_id.
+ * Returns: (transfer none): icon set of @stock_id.
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -437,7 +437,7 @@ _gtk_icon_factory_get_default_icons (void)
  * using this function directly, so that themes are taken into
  * account.
  *
- * Return value: (transfer none): a #GtkIconSet, or %NULL
+ * Returns: (transfer none): a #GtkIconSet, or %NULL
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -761,7 +761,7 @@ icon_size_lookup_intern (GtkIconSize  size,
  * are free to render the pixbuf however they like, including changing
  * the usual size.
  *
- * Return value: %TRUE if @size was a valid size
+ * Returns: %TRUE if @size was a valid size
  *
  * Since: 2.2
  *
@@ -793,7 +793,7 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
  * are free to render the pixbuf however they like, including changing
  * the usual size.
  *
- * Return value: %TRUE if @size was a valid size
+ * Returns: %TRUE if @size was a valid size
  */
 gboolean
 gtk_icon_size_lookup (GtkIconSize  size,
@@ -927,7 +927,7 @@ gtk_icon_size_register_alias (const gchar *alias,
  *
  * Looks up the icon size associated with @name.
  *
- * Return value: (type int): the icon size
+ * Returns: (type int): the icon size
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -1029,7 +1029,7 @@ static guint cache_serial = 0;
  * #GtkIconSet is to create application-specific icon sets to place in
  * a #GtkIconFactory.
  *
- * Return value: a new #GtkIconSet
+ * Returns: a new #GtkIconSet
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -1059,7 +1059,7 @@ gtk_icon_set_new (void)
  * using scaling, pixelation, etc. as required to adjust the icon size
  * or make the icon look insensitive/prelighted.
  *
- * Return value: a new #GtkIconSet
+ * Returns: a new #GtkIconSet
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -1088,7 +1088,7 @@ gtk_icon_set_new_from_pixbuf (GdkPixbuf *pixbuf)
  *
  * Increments the reference count on @icon_set.
  *
- * Return value: @icon_set.
+ * Returns: @icon_set.
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -1147,7 +1147,7 @@ G_DEFINE_BOXED_TYPE (GtkIconSet, gtk_icon_set,
  *
  * Copies @icon_set by value.
  *
- * Return value: a new #GtkIconSet identical to the first.
+ * Returns: a new #GtkIconSet identical to the first.
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  **/
@@ -1550,7 +1550,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
  * (perhaps because an image file fails to load), a default "missing
  * image" icon will be returned instead.
  *
- * Return value: (transfer full): a #GdkPixbuf to be displayed
+ * Returns: (transfer full): a #GdkPixbuf to be displayed
  *
  * Since: 3.0
  *
@@ -1583,7 +1583,7 @@ gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
  * (perhaps because an image file fails to load), a default "missing
  * image" icon will be returned instead.
  *
- * Return value: (transfer full): a #cairo_surface_t to be displayed
+ * Returns: (transfer full): a #cairo_surface_t to be displayed
  *
  * Since: 3.10
  *
@@ -1629,7 +1629,7 @@ gtk_icon_set_render_icon_surface  (GtkIconSet      *icon_set,
  * (perhaps because an image file fails to load), a default "missing
  * image" icon will be returned instead.
  *
- * Return value: (transfer full): a #GdkPixbuf to be displayed
+ * Returns: (transfer full): a #GdkPixbuf to be displayed
  *
  * Deprecated: 3.0: Use gtk_icon_set_render_icon_pixbuf() instead
  */
@@ -1885,7 +1885,7 @@ gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
  * the icon source will be used as the base icon for any desired text
  * direction, widget state, or icon size.
  *
- * Return value: a new #GtkIconSource
+ * Returns: a new #GtkIconSource
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -1913,7 +1913,7 @@ gtk_icon_source_new (void)
  *
  * Creates a copy of @source; mostly useful for language bindings.
  *
- * Return value: a new #GtkIconSource
+ * Returns: a new #GtkIconSource
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2101,7 +2101,7 @@ gtk_icon_source_set_pixbuf (GtkIconSource *source,
  * filename is not a copy, and should not be modified or expected to
  * persist beyond the lifetime of the icon source.
  *
- * Return value: (type filename): image filename. This string must not
+ * Returns: (type filename): image filename. This string must not
  * be modified or freed.
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
@@ -2125,7 +2125,7 @@ gtk_icon_source_get_filename (const GtkIconSource *source)
  * icon_name is not a copy, and should not be modified or expected to
  * persist beyond the lifetime of the icon source.
  *
- * Return value: icon name. This string must not be modified or freed.
+ * Returns: icon name. This string must not be modified or freed.
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2153,7 +2153,7 @@ gtk_icon_source_get_icon_name (const GtkIconSource *source)
  * virtual function. The reference count on the pixbuf is
  * not incremented.
  *
- * Return value: (transfer none): source pixbuf
+ * Returns: (transfer none): source pixbuf
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2262,7 +2262,7 @@ gtk_icon_source_set_size_wildcarded (GtkIconSource *source,
  *
  * Gets the value set by gtk_icon_source_set_size_wildcarded().
  *
- * Return value: %TRUE if this icon source is a base for any icon size variant
+ * Returns: %TRUE if this icon source is a base for any icon size variant
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2280,7 +2280,7 @@ gtk_icon_source_get_size_wildcarded (const GtkIconSource *source)
  *
  * Gets the value set by gtk_icon_source_set_state_wildcarded().
  *
- * Return value: %TRUE if this icon source is a base for any widget state variant
+ * Returns: %TRUE if this icon source is a base for any widget state variant
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2298,7 +2298,7 @@ gtk_icon_source_get_state_wildcarded (const GtkIconSource *source)
  *
  * Gets the value set by gtk_icon_source_set_direction_wildcarded().
  *
- * Return value: %TRUE if this icon source is a base for any text direction variant
+ * Returns: %TRUE if this icon source is a base for any text direction variant
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2390,7 +2390,7 @@ gtk_icon_source_set_size (GtkIconSource *source,
  * value is only useful/meaningful if the text direction is not
  * wildcarded.
  *
- * Return value: text direction this source matches
+ * Returns: text direction this source matches
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2410,7 +2410,7 @@ gtk_icon_source_get_direction (const GtkIconSource *source)
  * value is only useful/meaningful if the widget state is not
  * wildcarded.
  *
- * Return value: widget state this source matches
+ * Returns: widget state this source matches
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2429,7 +2429,7 @@ gtk_icon_source_get_state (const GtkIconSource *source)
  * Obtains the icon size this source applies to. The return value
  * is only useful/meaningful if the icon size is not wildcarded.
  *
- * Return value: (type int): icon size this source matches.
+ * Returns: (type int): icon size this source matches.
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -2722,7 +2722,7 @@ _gtk_icon_set_invalidate_caches (void)
  * The strings in the returned list aren’t copied.
  * The list itself should be freed.
  *
- * Return value: List of ids in icon factories
+ * Returns: List of ids in icon factories
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */

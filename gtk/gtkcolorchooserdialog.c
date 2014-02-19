@@ -270,7 +270,7 @@ gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
  *
  * Creates a new #GtkColorChooserDialog.
  *
- * Return value: a new #GtkColorChooserDialog
+ * Returns: a new #GtkColorChooserDialog
  *
  * Since: 3.4
  */

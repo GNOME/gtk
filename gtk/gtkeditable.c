@@ -247,7 +247,7 @@ gtk_editable_delete_text (GtkEditable *editable,
  * 
  * Note that positions are specified in characters, not bytes.
  *
- * Return value: a pointer to the contents of the widget as a
+ * Returns: a pointer to the contents of the widget as a
  *      string. This string is allocated by the #GtkEditable
  *      implementation and should be freed by the caller.
  */
@@ -292,7 +292,7 @@ gtk_editable_set_position (GtkEditable      *editable,
  * 
  * Note that this position is in characters, not in bytes.
  *
- * Return value: the cursor position
+ * Returns: the cursor position
  */
 gint
 gtk_editable_get_position (GtkEditable *editable)
@@ -314,7 +314,7 @@ gtk_editable_get_position (GtkEditable *editable)
  *
  * Note that positions are specified in characters, not bytes.
  *
- * Return value: %TRUE if an area is selected, %FALSE otherwise
+ * Returns: %TRUE if an area is selected, %FALSE otherwise
  */
 gboolean
 gtk_editable_get_selection_bounds (GtkEditable *editable,
@@ -450,7 +450,7 @@ gtk_editable_set_editable (GtkEditable    *editable,
  * Retrieves whether @editable is editable. See
  * gtk_editable_set_editable().
  *
- * Return value: %TRUE if @editable is editable.
+ * Returns: %TRUE if @editable is editable.
  */
 gboolean
 gtk_editable_get_editable (GtkEditable *editable)

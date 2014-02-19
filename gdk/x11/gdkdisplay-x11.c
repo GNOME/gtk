@@ -1950,7 +1950,7 @@ gdk_x11_display_finalize (GObject *object)
  * 
  * Find the #GdkDisplay corresponding to @xdisplay, if any exists.
  * 
- * Return value: (transfer none) (type GdkX11Display): the #GdkDisplay, if found, otherwise %NULL.
+ * Returns: (transfer none) (type GdkX11Display): the #GdkDisplay, if found, otherwise %NULL.
  *
  * Since: 2.2
  **/
@@ -1986,7 +1986,7 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
  * Given the root window ID of one of the screen’s of a #GdkDisplay,
  * finds the screen.
  * 
- * Return value: (transfer none): the #GdkScreen corresponding to
+ * Returns: (transfer none): the #GdkScreen corresponding to
  *     @xrootwin, or %NULL.
  **/
 GdkScreen *
@@ -2751,7 +2751,7 @@ gdk_x11_display_set_window_scale (GdkDisplay *display,
  *
  * Since: 3.0
  *
- * Return value: X error code or 0 on success
+ * Returns: X error code or 0 on success
  */
 gint
 gdk_x11_display_error_trap_pop (GdkDisplay *display)

@@ -144,7 +144,7 @@ gtk_printer_option_set_clear_conflicts (GtkPrinterOptionSet *set)
 /**
  * gtk_printer_option_set_get_groups:
  *
- * Return value: (element-type utf8) (transfer full):
+ * Returns: (element-type utf8) (transfer full):
  */
 GList *
 gtk_printer_option_set_get_groups (GtkPrinterOptionSet *set)

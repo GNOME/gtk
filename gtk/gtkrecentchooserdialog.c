@@ -315,7 +315,7 @@ gtk_recent_chooser_dialog_new_valist (const gchar      *title,
  * Creates a new #GtkRecentChooserDialog.  This function is analogous to
  * gtk_dialog_new_with_buttons().
  *
- * Return value: a new #GtkRecentChooserDialog
+ * Returns: a new #GtkRecentChooserDialog
  *
  * Since: 2.10
  */
@@ -353,7 +353,7 @@ gtk_recent_chooser_dialog_new (const gchar *title,
  * This is useful if you have implemented your own recent manager, or if you
  * have a customized instance of a #GtkRecentManager object.
  *
- * Return value: a new #GtkRecentChooserDialog
+ * Returns: a new #GtkRecentChooserDialog
  *
  * Since: 2.10
  */

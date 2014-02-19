@@ -53,7 +53,7 @@ gdk_pointer_ungrab (guint32 time)
  * Note that this does not take the inmplicit pointer grab on button
  * presses into account.
  *
- * Return value: %TRUE if the pointer is currently grabbed by this application.
+ * Returns: %TRUE if the pointer is currently grabbed by this application.
  *
  * Deprecated: 3.0: Use gdk_display_device_is_grabbed() instead.
  **/
@@ -94,7 +94,7 @@ gdk_keyboard_ungrab (guint32 time)
  * NOTE: For multihead-aware widgets or applications use
  * gdk_display_get_window_at_pointer() instead.
  *
- * Return value: (transfer none): window under the mouse pointer
+ * Returns: (transfer none): window under the mouse pointer
  *
  * Deprecated: 3.0: Use gdk_device_get_window_at_position() instead.
  **/

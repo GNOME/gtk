@@ -763,7 +763,7 @@ gtk_range_init (GtkRange *range)
  * The return value does not have a reference added, so should not
  * be unreferenced.
  * 
- * Return value: (transfer none): a #GtkAdjustment
+ * Returns: (transfer none): a #GtkAdjustment
  **/
 GtkAdjustment*
 gtk_range_get_adjustment (GtkRange *range)
@@ -872,7 +872,7 @@ gtk_range_set_inverted (GtkRange *range,
  * 
  * Gets the value set by gtk_range_set_inverted().
  * 
- * Return value: %TRUE if the range is inverted
+ * Returns: %TRUE if the range is inverted
  **/
 gboolean
 gtk_range_get_inverted (GtkRange *range)
@@ -920,7 +920,7 @@ gtk_range_set_flippable (GtkRange *range,
  *
  * Gets the value set by gtk_range_set_flippable().
  *
- * Return value: %TRUE if the range is flippable
+ * Returns: %TRUE if the range is flippable
  *
  * Since: 2.18
  **/
@@ -975,7 +975,7 @@ gtk_range_set_slider_size_fixed (GtkRange *range,
  *
  * See gtk_range_set_slider_size_fixed().
  *
- * Return value: whether the range’s slider has a fixed size.
+ * Returns: whether the range’s slider has a fixed size.
  *
  * Since: 2.20
  **/
@@ -1030,7 +1030,7 @@ gtk_range_set_min_slider_size (GtkRange *range,
  *
  * See gtk_range_set_min_slider_size().
  *
- * Return value: The minimum size of the range’s slider.
+ * Returns: The minimum size of the range’s slider.
  *
  * Since: 2.20
  **/
@@ -1144,7 +1144,7 @@ gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
  * Gets the sensitivity policy for the stepper that points to the
  * 'lower' end of the GtkRange’s adjustment.
  *
- * Return value: The lower stepper’s sensitivity policy.
+ * Returns: The lower stepper’s sensitivity policy.
  *
  * Since: 2.10
  **/
@@ -1195,7 +1195,7 @@ gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
  * Gets the sensitivity policy for the stepper that points to the
  * 'upper' end of the GtkRange’s adjustment.
  *
- * Return value: The upper stepper’s sensitivity policy.
+ * Returns: The upper stepper’s sensitivity policy.
  *
  * Since: 2.10
  **/
@@ -1310,7 +1310,7 @@ gtk_range_set_value (GtkRange *range,
  * 
  * Gets the current value of the range.
  * 
- * Return value: current value of the range.
+ * Returns: current value of the range.
  **/
 gdouble
 gtk_range_get_value (GtkRange *range)
@@ -1357,7 +1357,7 @@ gtk_range_set_show_fill_level (GtkRange *range,
  *
  * Gets whether the range displays the fill level graphically.
  *
- * Return value: %TRUE if @range shows the fill level.
+ * Returns: %TRUE if @range shows the fill level.
  *
  * Since: 2.12
  **/
@@ -1407,7 +1407,7 @@ gtk_range_set_restrict_to_fill_level (GtkRange *range,
  *
  * Gets whether the range is restricted to the fill level.
  *
- * Return value: %TRUE if @range is restricted to the fill level.
+ * Returns: %TRUE if @range is restricted to the fill level.
  *
  * Since: 2.12
  **/
@@ -1473,7 +1473,7 @@ gtk_range_set_fill_level (GtkRange *range,
  *
  * Gets the current position of the fill level indicator.
  *
- * Return value: The current fill level
+ * Returns: The current fill level
  *
  * Since: 2.12
  **/
@@ -2961,7 +2961,7 @@ gtk_range_button_release (GtkWidget      *widget,
  *
  * Returns a good step value for the mouse wheel.
  *
- * Return value: A good step value for the mouse wheel.
+ * Returns: A good step value for the mouse wheel.
  *
  * Since: 2.4
  **/
@@ -4376,7 +4376,7 @@ gtk_range_set_round_digits (GtkRange *range,
  * Gets the number of digits to round the value to when
  * it changes. See #GtkRange::change-value.
  *
- * Return value: the number of digits to round to
+ * Returns: the number of digits to round to
  *
  * Since: 2.24
  */

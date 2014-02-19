@@ -241,7 +241,7 @@ gdk_selection_send_notify_for_display (GdkDisplay       *display,
  * will not be used by applications, who should use the #GtkClipboard
  * API instead.
  *
- * Return value: the length of the retrieved data.
+ * Returns: the length of the retrieved data.
  */
 gint
 gdk_selection_property_get (GdkWindow  *requestor,
@@ -289,7 +289,7 @@ gdk_selection_convert (GdkWindow *requestor,
  * Converts a text property in the given encoding to
  * a list of UTF-8 strings.
  *
- * Return value: the number of strings in the resulting list
+ * Returns: the number of strings in the resulting list
  *
  * Since: 2.2
  */
@@ -318,7 +318,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
  * is not specified; it may be as pseudo-escape sequences
  * \x{ABCD}, or it may be in some other form of approximation.
  *
- * Return value: the newly-allocated string, or %NULL if the
+ * Returns: the newly-allocated string, or %NULL if the
  *               conversion failed. (It should not fail for
  *               any properly formed UTF-8 string unless system
  *               limits like memory or file descriptors are exceeded.)

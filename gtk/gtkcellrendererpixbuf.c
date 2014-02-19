@@ -410,7 +410,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
  * in the model, thus rendering a different image in each row of the
  * #GtkTreeView.
  * 
- * Return value: the new cell renderer
+ * Returns: the new cell renderer
  **/
 GtkCellRenderer *
 gtk_cell_renderer_pixbuf_new (void)

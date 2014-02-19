@@ -960,7 +960,7 @@ gtk_style_detach (GtkStyle *style)
  * and the default icon factory, returning an icon set if found,
  * otherwise %NULL.
  *
- * Return value: (transfer none): icon set of @stock_id
+ * Returns: (transfer none): icon set of @stock_id
  *
  * Deprecated:3.0: Use gtk_style_context_lookup_icon_set() instead
  */
@@ -993,7 +993,7 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
  * it depends on the #GtkStyle and might change when a theme
  * switch occurs.
  *
- * Return value: %TRUE if the mapping was found.
+ * Returns: %TRUE if the mapping was found.
  *
  * Since: 2.10
  *
@@ -1290,7 +1290,7 @@ gtk_style_real_set_background (GtkStyle    *style,
  * according to the given parameters and returns the result in a
  * pixbuf.
  *
- * Return value: (transfer full): a newly-created #GdkPixbuf
+ * Returns: (transfer full): a newly-created #GdkPixbuf
  *     containing the rendered icon
  *
  * Deprecated:3.0: Use gtk_render_icon_pixbuf() instead
@@ -4160,7 +4160,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
  *
  * Simply an accessor function that returns @widget->style.
  *
- * Return value: (transfer none): the widget’s #GtkStyle
+ * Returns: (transfer none): the widget’s #GtkStyle
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
  */
@@ -4239,7 +4239,7 @@ gtk_widget_modify_style (GtkWidget      *widget,
  * thus dropping any reference to the old modifier style. Add a reference
  * to the modifier style if you want to keep it alive.
  *
- * Return value: (transfer none): the modifier style for the widget.
+ * Returns: (transfer none): the modifier style for the widget.
  *     This rc style is owned by the widget. If you want to keep a
  *     pointer to value this around, you must add a refcount using
  *     g_object_ref().
@@ -4749,7 +4749,7 @@ gtk_widget_class_path (GtkWidget *widget,
  * the application and should not be modified. The pixbuf should be
  * freed after use with g_object_unref().
  *
- * Return value: (transfer full): a new pixbuf, or %NULL if the
+ * Returns: (transfer full): a new pixbuf, or %NULL if the
  *     stock ID wasn’t known
  *
  * Deprecated: 3.0: Use gtk_widget_render_icon_pixbuf() instead.

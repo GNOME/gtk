@@ -257,7 +257,7 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
  * 
  * Creates a new #GtkCellRendererProgress. 
  *
- * Return value: the new cell renderer
+ * Returns: the new cell renderer
  *
  * Since: 2.6
  **/

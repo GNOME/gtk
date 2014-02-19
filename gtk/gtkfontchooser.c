@@ -136,7 +136,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
  *
  * If the selected font is not installed, returns %NULL.
  *
- * Return value: (transfer none): A #PangoFontFamily representing the
+ * Returns: (transfer none): A #PangoFontFamily representing the
  *     selected font family, or %NULL. The returned object is owned by @fontchooser
  *     and must not be modified or freed.
  *
@@ -159,7 +159,7 @@ gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
  *
  * If the selected font is not installed, returns %NULL.
  *
- * Return value: (transfer none): A #PangoFontFace representing the
+ * Returns: (transfer none): A #PangoFontFace representing the
  *     selected font group details, or %NULL. The returned object is owned by
  *     @fontchooser and must not be modified or freed.
  *
@@ -179,7 +179,7 @@ gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
  *
  * The selected font size.
  *
- * Return value: A n integer representing the selected font size,
+ * Returns: A n integer representing the selected font size,
  *     or -1 if no font size is selected.
  *
  * Since: 3.2
@@ -207,7 +207,7 @@ gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
  * Use pango_font_description_equal() if you want to compare two
  * font descriptions.
  *
- * Return value: (transfer full) (allow-none): A string with the name
+ * Returns: (transfer full) (allow-none): A string with the name
  *     of the current font, or %NULL if  no font is selected. You must
  *     free this string with g_free().
  *
@@ -260,7 +260,7 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
  * Use pango_font_description_equal() if you want to compare two
  * font descriptions.
  *
- * Return value: (transfer full) (allow-none): A #PangoFontDescription for the
+ * Returns: (transfer full) (allow-none): A #PangoFontDescription for the
  *     current font, or %NULL if  no font is selected.
  *
  * Since: 3.2
@@ -302,7 +302,7 @@ gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
  *
  * Gets the text displayed in the preview area.
  *
- * Return value: (transfer full): the text displayed in the
+ * Returns: (transfer full): the text displayed in the
  *     preview area
  *
  * Since: 3.2
@@ -345,7 +345,7 @@ gtk_font_chooser_set_preview_text (GtkFontChooser *fontchooser,
  *
  * Returns whether the preview entry is shown or not.
  *
- * Return value: %TRUE if the preview entry is shown
+ * Returns: %TRUE if the preview entry is shown
  *     or %FALSE if it is hidden.
  *
  * Since: 3.2

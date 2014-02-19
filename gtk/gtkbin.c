@@ -321,7 +321,7 @@ gtk_bin_size_allocate (GtkWidget     *widget,
  * no child widget. The returned widget does not have a reference
  * added, so you do not need to unref it.
  *
- * Return value: (transfer none): pointer to child of the #GtkBin
+ * Returns: (transfer none): pointer to child of the #GtkBin
  **/
 GtkWidget*
 gtk_bin_get_child (GtkBin *bin)

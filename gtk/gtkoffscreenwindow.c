@@ -282,7 +282,7 @@ gtk_offscreen_window_init (GtkOffscreenWindow *window)
  * Creates a toplevel container widget that is used to retrieve
  * snapshots of widgets without showing them on the screen.
  *
- * Return value: A pointer to a #GtkWidget
+ * Returns: A pointer to a #GtkWidget
  *
  * Since: 2.20
  */

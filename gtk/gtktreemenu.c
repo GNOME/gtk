@@ -1564,7 +1564,7 @@ gtk_tree_menu_set_model_internal (GtkTreeMenu  *menu,
  *
  * Creates a new #GtkTreeMenu.
  *
- * Return value: A newly created #GtkTreeMenu with no model or root.
+ * Returns: A newly created #GtkTreeMenu with no model or root.
  *
  * Since: 3.0
  */
@@ -1580,7 +1580,7 @@ _gtk_tree_menu_new (void)
  *
  * Creates a new #GtkTreeMenu using @area to render its cells.
  *
- * Return value: A newly created #GtkTreeMenu with no model or root.
+ * Returns: A newly created #GtkTreeMenu with no model or root.
  *
  * Since: 3.0
  */
@@ -1600,7 +1600,7 @@ _gtk_tree_menu_new_with_area (GtkCellArea    *area)
  *
  * Creates a new #GtkTreeMenu hierarchy from the provided @model and @root using @area to render its cells.
  *
- * Return value: A newly created #GtkTreeMenu.
+ * Returns: A newly created #GtkTreeMenu.
  *
  * Since: 3.0
  */
@@ -1643,7 +1643,7 @@ _gtk_tree_menu_set_model (GtkTreeMenu  *menu,
  *
  * Gets the @model currently used for the menu heirarhcy.
  *
- * Return value: (transfer none): the #GtkTreeModel which is used
+ * Returns: (transfer none): the #GtkTreeModel which is used
  * for @menu’s hierarchy.
  *
  * Since: 3.0
@@ -1699,7 +1699,7 @@ _gtk_tree_menu_set_root (GtkTreeMenu *menu,
  * Gets the @root path for @menu’s hierarchy, or returns %NULL if @menu
  * has no model or is building a heirarchy for the entire model. *
  *
- * Return value: (transfer full) (allow-none): A newly created #GtkTreePath
+ * Returns: (transfer full) (allow-none): A newly created #GtkTreePath
  * pointing to the root of @menu which must be freed with gtk_tree_path_free().
  *
  * Since: 3.0
@@ -1725,7 +1725,7 @@ _gtk_tree_menu_get_root (GtkTreeMenu *menu)
  *
  * Gets whether this menu is build with a leading tearoff menu item.
  *
- * Return value: %TRUE if the menu has a tearoff item.
+ * Returns: %TRUE if the menu has a tearoff item.
  *
  * Since: 3.0
  */
@@ -1777,7 +1777,7 @@ _gtk_tree_menu_set_tearoff (GtkTreeMenu *menu,
  * Gets the wrap width which is used to determine the number of columns
  * for @menu. If the wrap width is larger than 1, @menu is in table mode.
  *
- * Return value: the wrap width.
+ * Returns: the wrap width.
  *
  * Since: 3.0
  */
@@ -1832,7 +1832,7 @@ _gtk_tree_menu_set_wrap_width (GtkTreeMenu *menu,
  * The row span column contains integers which indicate how many rows
  * a menu item should span.
  *
- * Return value: the column in @menu’s model containing row span information, or -1.
+ * Returns: the column in @menu’s model containing row span information, or -1.
  *
  * Since: 3.0
  */
@@ -1888,7 +1888,7 @@ _gtk_tree_menu_set_row_span_column (GtkTreeMenu *menu,
  * The column span column contains integers which indicate how many columns
  * a menu item should span.
  *
- * Return value: the column in @menu’s model containing column span information, or -1.
+ * Returns: the column in @menu’s model containing column span information, or -1.
  *
  * Since: 3.0
  */
@@ -1942,7 +1942,7 @@ _gtk_tree_menu_set_column_span_column (GtkTreeMenu *menu,
  *
  * Gets the current #GtkTreeViewRowSeparatorFunc separator function.
  *
- * Return value: the current row separator function.
+ * Returns: the current row separator function.
  *
  * Since: 3.0
  */
@@ -1999,7 +1999,7 @@ _gtk_tree_menu_set_row_separator_func (GtkTreeMenu          *menu,
  *
  * Gets the current #GtkTreeMenuHeaderFunc header function.
  *
- * Return value: the current header function.
+ * Returns: the current header function.
  *
  * Since: 3.0
  */

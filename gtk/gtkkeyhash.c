@@ -119,7 +119,7 @@ key_hash_keys_changed (GdkKeymap  *keymap,
  * 
  * Create a new key hash object for doing binding resolution. 
  * 
- * Return value: the newly created object. Free with _gtk_key_hash_free().
+ * Returns: the newly created object. Free with _gtk_key_hash_free().
  **/
 GtkKeyHash *
 _gtk_key_hash_new (GdkKeymap      *keymap,
@@ -373,7 +373,7 @@ keyval_in_group (GdkKeymap  *keymap,
  * This means that fuzzy matches won’t be considered if their keyval is 
  * present in the current group.
  * 
- * Return value: A newly-allocated #GSList of matching entries.
+ * Returns: A newly-allocated #GSList of matching entries.
  *     Free with g_slist_free() when no longer needed.
  */
 GSList *
@@ -534,7 +534,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
  * available.  The results are sorted so that entries with less
  * modifiers come before entries with more modifiers.
  * 
- * Return value: A #GSList of all matching entries.
+ * Returns: A #GSList of all matching entries.
  **/
 GSList *
 _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,

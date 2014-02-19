@@ -300,7 +300,7 @@ _gtk_print_backend_create (const gchar *backend_name)
 /**
  * gtk_print_backend_load_modules:
  *
- * Return value: (element-type GtkPrintBackend) (transfer container):
+ * Returns: (element-type GtkPrintBackend) (transfer container):
  */
 GList *
 gtk_print_backend_load_modules (void)
@@ -588,7 +588,7 @@ gtk_print_backend_set_list_done (GtkPrintBackend *backend)
  *
  * Returns the current list of printers.
  *
- * Return value: (element-type GtkPrinter) (transfer container):
+ * Returns: (element-type GtkPrinter) (transfer container):
  *   A list of #GtkPrinter objects. The list should be freed
  *   with g_list_free().
  */

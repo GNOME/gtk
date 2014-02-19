@@ -2345,7 +2345,7 @@ gtk_button_set_label (GtkButton   *button,
  * case if you create an empty button with gtk_button_new() to 
  * use as a container.
  *
- * Return value: The text of the label widget. This string is owned
+ * Returns: The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
  **/
 const gchar *
@@ -2393,7 +2393,7 @@ gtk_button_set_use_underline (GtkButton *button,
  * Returns whether an embedded underline in the button label indicates a
  * mnemonic. See gtk_button_set_use_underline ().
  *
- * Return value: %TRUE if an embedded underline in the button label
+ * Returns: %TRUE if an embedded underline in the button label
  *               indicates the mnemonic accelerator keys.
  **/
 gboolean
@@ -2442,7 +2442,7 @@ gtk_button_set_use_stock (GtkButton *button,
  *
  * Returns whether the button label is a stock item.
  *
- * Return value: %TRUE if the button label is used to
+ * Returns: %TRUE if the button label is used to
  *               select a stock item instead of being
  *               used directly as the label text.
  *
@@ -2495,7 +2495,7 @@ gtk_button_set_focus_on_click (GtkButton *button,
  * Returns whether the button grabs focus when it is clicked with the mouse.
  * See gtk_button_set_focus_on_click().
  *
- * Return value: %TRUE if the button grabs focus when it is clicked with
+ * Returns: %TRUE if the button grabs focus when it is clicked with
  *               the mouse.
  *
  * Since: 2.4
@@ -2771,7 +2771,7 @@ gtk_button_set_image (GtkButton *button,
  * This may have been explicitly set by gtk_button_set_image()
  * or constructed by gtk_button_new_from_stock().
  *
- * Return value: (transfer none): a #GtkWidget or %NULL in case there is no image
+ * Returns: (transfer none): a #GtkWidget or %NULL in case there is no image
  *
  * Since: 2.6
  */
@@ -2821,7 +2821,7 @@ gtk_button_set_image_position (GtkButton       *button,
  * Gets the position of the image relative to the text 
  * inside the button.
  *
- * Return value: the position
+ * Returns: the position
  *
  * Since: 2.10
  */
@@ -2898,7 +2898,7 @@ gtk_button_get_always_show_image (GtkButton *button)
  * Returns the button’s event window if it is realized, %NULL otherwise.
  * This function should be rarely needed.
  *
- * Return value: (transfer none): @button’s event window.
+ * Returns: (transfer none): @button’s event window.
  *
  * Since: 2.22
  */

@@ -313,7 +313,7 @@ gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
  * Creates a new #GtkComboBoxText, which is a #GtkComboBox just displaying
  * strings.
  *
- * Return value: A new #GtkComboBoxText
+ * Returns: A new #GtkComboBoxText
  *
  * Since: 2.24
  */
@@ -330,7 +330,7 @@ gtk_combo_box_text_new (void)
  * Creates a new #GtkComboBoxText, which is a #GtkComboBox just displaying
  * strings. The combo box created by this function has an entry.
  *
- * Return value: a new #GtkComboBoxText
+ * Returns: a new #GtkComboBoxText
  *
  * Since: 2.24
  */

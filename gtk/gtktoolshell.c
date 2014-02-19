@@ -90,7 +90,7 @@ gtk_tool_shell_real_get_ellipsize_mode (GtkToolShell *shell)
  * Retrieves the icon size for the tool shell. Tool items must not call this
  * function directly, but rely on gtk_tool_item_get_icon_size() instead.
  *
- * Return value: (type int): the current size for icons of @shell
+ * Returns: (type int): the current size for icons of @shell
  *
  * Since: 2.14
  **/
@@ -108,7 +108,7 @@ gtk_tool_shell_get_icon_size (GtkToolShell *shell)
  * call this function directly, but rely on gtk_tool_item_get_orientation()
  * instead.
  *
- * Return value: the current orientation of @shell
+ * Returns: the current orientation of @shell
  *
  * Since: 2.14
  **/
@@ -126,7 +126,7 @@ gtk_tool_shell_get_orientation (GtkToolShell *shell)
  * not call this function directly, but rely on gtk_tool_item_get_toolbar_style()
  * instead.
  *
- * Return value: the current style of @shell
+ * Returns: the current style of @shell
  *
  * Since: 2.14
  **/
@@ -143,7 +143,7 @@ gtk_tool_shell_get_style (GtkToolShell *shell)
  * Returns the relief style of buttons on @shell. Tool items must not call this
  * function directly, but rely on gtk_tool_item_get_relief_style() instead.
  *
- * Return value: The relief style of buttons on @shell.
+ * Returns: The relief style of buttons on @shell.
  *
  * Since: 2.14
  **/
@@ -185,7 +185,7 @@ gtk_tool_shell_rebuild_menu (GtkToolShell *shell)
  * call this function directly, but rely on gtk_tool_item_get_text_orientation()
  * instead.
  *
- * Return value: the current text orientation of @shell
+ * Returns: the current text orientation of @shell
  *
  * Since: 2.20
  **/
@@ -205,7 +205,7 @@ gtk_tool_shell_get_text_orientation (GtkToolShell *shell)
  * call this function directly, but rely on gtk_tool_item_get_text_alignment()
  * instead.
  *
- * Return value: the current text alignment of @shell
+ * Returns: the current text alignment of @shell
  *
  * Since: 2.20
  **/
@@ -225,7 +225,7 @@ gtk_tool_shell_get_text_alignment (GtkToolShell *shell)
  * call this function directly, but rely on gtk_tool_item_get_ellipsize_mode()
  * instead.
  *
- * Return value: the current ellipsize mode of @shell
+ * Returns: the current ellipsize mode of @shell
  *
  * Since: 2.20
  **/
@@ -245,7 +245,7 @@ gtk_tool_shell_get_ellipsize_mode (GtkToolShell *shell)
  * call this function directly, but rely on gtk_tool_item_get_text_size_group()
  * instead.
  *
- * Return value: (transfer none): the current text size group of @shell
+ * Returns: (transfer none): the current text size group of @shell
  *
  * Since: 2.20
  **/

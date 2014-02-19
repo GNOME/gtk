@@ -1392,7 +1392,7 @@ _gtk_file_system_model_new_valist (GtkFileSystemModelGetValue get_func,
  * to the list using _gtk_file_system_model_add_and_query_file()
  * or _gtk_file_system_model_update_file().
  *
- * Return value: the newly created #GtkFileSystemModel
+ * Returns: the newly created #GtkFileSystemModel
  **/
 GtkFileSystemModel *
 _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
@@ -1429,7 +1429,7 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
  * it will also monitor the drectory and update the model's
  * contents to reflect changes, if the @directory supports monitoring.
  * 
- * Return value: the newly created #GtkFileSystemModel
+ * Returns: the newly created #GtkFileSystemModel
  **/
 GtkFileSystemModel *
 _gtk_file_system_model_new_for_directory (GFile *                    dir,
@@ -1649,7 +1649,7 @@ _gtk_file_system_model_iter_is_filtered_out (GtkFileSystemModel *model,
  * Gets the #GFileInfo-struct for a particular row
  * of @model.
  * 
- * Return value: a #GFileInfo-struct. This value
+ * Returns: a #GFileInfo-struct. This value
  *   is owned by @model and must not be modified or freed.
  *   If you want to keep the information for later use,
  *   you must take a reference, since the #GFileInfo-struct may be
@@ -1679,7 +1679,7 @@ _gtk_file_system_model_get_info (GtkFileSystemModel *model,
  * 
  * Gets the file for a particular row in @model. 
  *
- * Return value: the file. This object is owned by @model and
+ * Returns: the file. This object is owned by @model and
  *   or freed. If you want to save the path for later use,
  *   you must take a ref, since the object may be freed
  *   on later changes to the file system.

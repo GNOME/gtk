@@ -387,7 +387,7 @@ gtk_toggle_tool_button_sync_action_properties (GtkActivatable *activatable,
  * 
  * Returns a new #GtkToggleToolButton
  * 
- * Return value: a newly created #GtkToggleToolButton
+ * Returns: a newly created #GtkToggleToolButton
  * 
  * Since: 2.4
  **/
@@ -412,7 +412,7 @@ gtk_toggle_tool_button_new (void)
  *
  * It is an error if @stock_id is not a name of a stock item.
  * 
- * Return value: A new #GtkToggleToolButton
+ * Returns: A new #GtkToggleToolButton
  * 
  * Since: 2.4
  *
@@ -462,7 +462,7 @@ gtk_toggle_tool_button_set_active (GtkToggleToolButton *button,
  * Queries a #GtkToggleToolButton and returns its current state.
  * Returns %TRUE if the toggle button is pressed in and %FALSE if it is raised.
  * 
- * Return value: %TRUE if the toggle tool button is pressed in, %FALSE if not
+ * Returns: %TRUE if the toggle tool button is pressed in, %FALSE if not
  * 
  * Since: 2.4
  **/

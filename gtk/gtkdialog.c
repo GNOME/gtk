@@ -875,7 +875,7 @@ gtk_dialog_new_empty (const gchar     *title,
  *                                        NULL);
  * ]|
  *
- * Return value: a new #GtkDialog
+ * Returns: a new #GtkDialog
  */
 GtkWidget*
 gtk_dialog_new_with_buttons (const gchar    *title,
@@ -969,7 +969,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * dialog’s action area. The button widget is returned, but usually
  * you don’t need it.
  *
- * Return value: (transfer none): the #GtkButton widget that was added
+ * Returns: (transfer none): the #GtkButton widget that was added
  **/
 GtkWidget*
 gtk_dialog_add_button (GtkDialog   *dialog,
@@ -1263,7 +1263,7 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  * such as timeouts, IO channel watches, DND drops, etc, will
  * be triggered during a gtk_dialog_run() call.
  *
- * Return value: response ID
+ * Returns: response ID
  **/
 gint
 gtk_dialog_run (GtkDialog *dialog)

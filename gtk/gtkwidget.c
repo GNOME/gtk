@@ -2898,7 +2898,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * been already handled (not showing the default "drag operation failed"
    * animation), otherwise it returns %FALSE.
    *
-   * Return value: %TRUE if the failed drag operation has been already handled.
+   * Returns: %TRUE if the failed drag operation has been already handled.
    *
    * Since: 2.12
    */
@@ -4145,7 +4145,7 @@ gtk_widget_thaw_child_notify (GtkWidget *widget)
  * g_object_new(), but returns a widget so you don’t have to
  * cast the object yourself.
  *
- * Return value: a new #GtkWidget of type @widget_type
+ * Returns: a new #GtkWidget of type @widget_type
  **/
 GtkWidget*
 gtk_widget_new (GType        type,
@@ -4520,7 +4520,7 @@ gtk_widget_real_hide (GtkWidget *widget)
  * the window. By default, GTK+ destroys windows when ::delete-event
  * is received.
  *
- * Return value: %TRUE
+ * Returns: %TRUE
  **/
 gboolean
 gtk_widget_hide_on_delete (GtkWidget *widget)
@@ -5304,7 +5304,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  *
  * Unrealized widgets do not have a frame clock.
  *
- * Return value: (transfer none): a #GdkFrameClock (or #NULL if widget is unrealized)
+ * Returns: (transfer none): a #GdkFrameClock (or #NULL if widget is unrealized)
  *
  * Since: 3.8
  */
@@ -5689,7 +5689,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
  * Find the common ancestor of @widget_a and @widget_b that
  * is closest to the two widgets.
  *
- * Return value: the closest common ancestor of @widget_a and
+ * Returns: the closest common ancestor of @widget_a and
  *   @widget_b or %NULL if @widget_a and @widget_b do not
  *   share a common ancestor.
  **/
@@ -5754,7 +5754,7 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
  * operation, both widgets must be realized, and must share a common
  * toplevel.
  *
- * Return value: %FALSE if either widget was not realized, or there
+ * Returns: %FALSE if either widget was not realized, or there
  *   was no common ancestor. In this case, nothing is stored in
  *   *@dest_x and *@dest_y. Otherwise %TRUE.
  **/
@@ -6010,7 +6010,7 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
  * that the widget must be sensitive, and the widget and all
  * its ancestors mapped.
  *
- * Return value: %TRUE if the accelerator can be activated.
+ * Returns: %TRUE if the accelerator can be activated.
  *
  * Since: 2.4
  **/
@@ -6219,7 +6219,7 @@ gtk_widget_remove_accelerator (GtkWidget      *widget,
  * #GtkAccelGroup of a closure which can be found out with
  * gtk_accel_group_from_accel_closure().
  *
- * Return value: (transfer container) (element-type GClosure):
+ * Returns: (transfer container) (element-type GClosure):
  *     a newly allocated #GList of closures
  */
 GList*
@@ -6863,7 +6863,7 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
  * use gdk_window_invalidate_rect() to invalidate a region of the
  * window.
  *
- * Return value: return from the event signal emission (%TRUE if
+ * Returns: return from the event signal emission (%TRUE if
  *               the event was handled)
  **/
 gboolean
@@ -7027,7 +7027,7 @@ gtk_cairo_transform_to_window (cairo_t   *cr,
  * To cause the redraw to be done immediately, follow that call
  * with a call to gdk_window_process_updates().
  *
- * Return value: return from the event signal emission (%TRUE if
+ * Returns: return from the event signal emission (%TRUE if
  *               the event was handled)
  **/
 gint
@@ -7240,7 +7240,7 @@ gtk_widget_event_internal (GtkWidget *widget,
  * press Enter on a widget during key navigation. If @widget isn't
  * activatable, the function returns %FALSE.
  *
- * Return value: %TRUE if the widget was activatable
+ * Returns: %TRUE if the widget was activatable
  **/
 gboolean
 gtk_widget_activate (GtkWidget *widget)
@@ -7393,7 +7393,7 @@ gtk_widget_reparent (GtkWidget *widget,
  * an intersection.  @intersection may be %NULL if you’re only
  * interested in whether there was an intersection.
  *
- * Return value: %TRUE if there was an intersection
+ * Returns: %TRUE if there was an intersection
  **/
 gboolean
 gtk_widget_intersect (GtkWidget	         *widget,
@@ -7768,7 +7768,7 @@ gtk_widget_set_can_focus (GtkWidget *widget,
  * Determines whether @widget can own the input focus. See
  * gtk_widget_set_can_focus().
  *
- * Return value: %TRUE if @widget can own the input focus, %FALSE otherwise
+ * Returns: %TRUE if @widget can own the input focus, %FALSE otherwise
  *
  * Since: 2.18
  **/
@@ -7788,7 +7788,7 @@ gtk_widget_get_can_focus (GtkWidget *widget)
  * gtk_widget_is_focus() for the difference between having the global
  * input focus, and only having the focus within a toplevel.
  *
- * Return value: %TRUE if the widget has the global input focus.
+ * Returns: %TRUE if the widget has the global input focus.
  *
  * Since: 2.18
  **/
@@ -7814,7 +7814,7 @@ gtk_widget_has_focus (GtkWidget *widget)
  * To find out if the widget has the global input focus, use
  * gtk_widget_has_focus().
  *
- * Return value: %TRUE if the widget should display a “focus rectangle”
+ * Returns: %TRUE if the widget should display a “focus rectangle”
  *
  * Since: 3.2
  */
@@ -7851,7 +7851,7 @@ gtk_widget_has_visible_focus (GtkWidget *widget)
  * necessarily set; #GtkWidget:has-focus will only be set if the
  * toplevel widget additionally has the global input focus.)
  *
- * Return value: %TRUE if the widget is the focus widget.
+ * Returns: %TRUE if the widget is the focus widget.
  **/
 gboolean
 gtk_widget_is_focus (GtkWidget *widget)
@@ -7901,7 +7901,7 @@ gtk_widget_set_can_default (GtkWidget *widget,
  * Determines whether @widget can be a default widget. See
  * gtk_widget_set_can_default().
  *
- * Return value: %TRUE if @widget can be a default widget, %FALSE otherwise
+ * Returns: %TRUE if @widget can be a default widget, %FALSE otherwise
  *
  * Since: 2.18
  **/
@@ -7920,7 +7920,7 @@ gtk_widget_get_can_default (GtkWidget *widget)
  * Determines whether @widget is the current default widget within its
  * toplevel. See gtk_widget_set_can_default().
  *
- * Return value: %TRUE if @widget is the current default widget within
+ * Returns: %TRUE if @widget is the current default widget within
  *     its toplevel, %FALSE otherwise
  *
  * Since: 2.18
@@ -8017,7 +8017,7 @@ gtk_widget_set_receives_default (GtkWidget *widget,
  *
  * See gtk_widget_set_receives_default().
  *
- * Return value: %TRUE if @widget acts as the default widget when focussed,
+ * Returns: %TRUE if @widget acts as the default widget when focussed,
  *               %FALSE otherwise
  *
  * Since: 2.18
@@ -8039,7 +8039,7 @@ gtk_widget_get_receives_default (GtkWidget *widget)
  *
  * See also gtk_grab_add().
  *
- * Return value: %TRUE if the widget is in the grab_widgets stack
+ * Returns: %TRUE if the widget is in the grab_widgets stack
  *
  * Since: 2.18
  **/
@@ -8152,7 +8152,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * Retrieves the name of a widget. See gtk_widget_set_name() for the
  * significance of widget names.
  *
- * Return value: name of the widget. This string is owned by GTK+ and
+ * Returns: name of the widget. This string is owned by GTK+ and
  * should not be modified or freed
  **/
 const gchar*
@@ -8440,7 +8440,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
  *
  * See gtk_widget_set_visible().
  *
- * Return value: %TRUE if the widget is visible
+ * Returns: %TRUE if the widget is visible
  *
  * Since: 2.18
  **/
@@ -8463,7 +8463,7 @@ gtk_widget_get_visible (GtkWidget *widget)
  *
  * See also gtk_widget_get_visible() and gtk_widget_set_visible()
  *
- * Return value: %TRUE if the widget and all its parents are visible
+ * Returns: %TRUE if the widget and all its parents are visible
  *
  * Since: 3.8
  **/
@@ -8519,7 +8519,7 @@ gtk_widget_set_has_window (GtkWidget *widget,
  * Determines whether @widget has a #GdkWindow of its own. See
  * gtk_widget_set_has_window().
  *
- * Return value: %TRUE if @widget has a window, %FALSE otherwise
+ * Returns: %TRUE if @widget has a window, %FALSE otherwise
  *
  * Since: 2.18
  **/
@@ -8541,7 +8541,7 @@ gtk_widget_get_has_window (GtkWidget *widget)
  * #GtkPlugs) are toplevel widgets. Toplevel widgets have no parent
  * widget.
  *
- * Return value: %TRUE if @widget is a toplevel, %FALSE otherwise
+ * Returns: %TRUE if @widget is a toplevel, %FALSE otherwise
  *
  * Since: 2.18
  **/
@@ -8567,7 +8567,7 @@ _gtk_widget_set_is_toplevel (GtkWidget *widget,
  * Determines whether @widget can be drawn to. A widget can be drawn
  * to if it is mapped and visible.
  *
- * Return value: %TRUE if @widget is drawable, %FALSE otherwise
+ * Returns: %TRUE if @widget is drawable, %FALSE otherwise
  *
  * Since: 2.18
  **/
@@ -8586,7 +8586,7 @@ gtk_widget_is_drawable (GtkWidget *widget)
  *
  * Determines whether @widget is realized.
  *
- * Return value: %TRUE if @widget is realized, %FALSE otherwise
+ * Returns: %TRUE if @widget is realized, %FALSE otherwise
  *
  * Since: 2.20
  **/
@@ -8625,7 +8625,7 @@ gtk_widget_set_realized (GtkWidget *widget,
  *
  * Whether the widget is mapped.
  *
- * Return value: %TRUE if the widget is mapped, %FALSE otherwise.
+ * Returns: %TRUE if the widget is mapped, %FALSE otherwise.
  *
  * Since: 2.20
  */
@@ -8703,7 +8703,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
  *
  * See gtk_widget_set_app_paintable()
  *
- * Return value: %TRUE if the widget is app paintable
+ * Returns: %TRUE if the widget is app paintable
  *
  * Since: 2.18
  **/
@@ -8766,7 +8766,7 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
  *
  * See gtk_widget_set_double_buffered()
  *
- * Return value: %TRUE if the widget is double buffered
+ * Returns: %TRUE if the widget is double buffered
  *
  * Since: 2.18
  **/
@@ -9009,7 +9009,7 @@ gtk_widget_set_parent (GtkWidget *widget,
  *
  * Returns the parent container of @widget.
  *
- * Return value: (transfer none): the parent container of @widget, or %NULL
+ * Returns: (transfer none): the parent container of @widget, or %NULL
  **/
 GtkWidget *
 gtk_widget_get_parent (GtkWidget *widget)
@@ -9373,7 +9373,7 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
  * in the future if used on a widget that has a composited
  * window in its hierarchy (as set by gdk_window_set_composited()).
  *
- * Return value: %TRUE if the widget can rely on its alpha
+ * Returns: %TRUE if the widget can rely on its alpha
  * channel being drawn correctly.
  *
  * Since: 2.10
@@ -9669,7 +9669,7 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  * match any changes to the widget’s attributes. This can be tracked
  * by using the #GtkWidget::screen-changed signal on the widget.
  *
- * Return value: (transfer none): the #PangoContext for the widget.
+ * Returns: (transfer none): the #PangoContext for the widget.
  **/
 PangoContext *
 gtk_widget_get_pango_context (GtkWidget *widget)
@@ -9742,7 +9742,7 @@ gtk_widget_update_pango_context (GtkWidget *widget)
  * font description, and base direction for drawing text for
  * this widget. See also gtk_widget_get_pango_context().
  *
- * Return value: (transfer full): the new #PangoContext
+ * Returns: (transfer full): the new #PangoContext
  **/
 PangoContext *
 gtk_widget_create_pango_context (GtkWidget *widget)
@@ -9783,7 +9783,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * This can be tracked by using the #GtkWidget::screen-changed signal
  * on the widget.
  *
- * Return value: (transfer full): the new #PangoLayout
+ * Returns: (transfer full): the new #PangoLayout
  **/
 PangoLayout *
 gtk_widget_create_pango_layout (GtkWidget   *widget,
@@ -9821,7 +9821,7 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * the application and should not be modified. The pixbuf should be freed
  * after use with g_object_unref().
  *
- * Return value: (transfer full): a new pixbuf, or %NULL if the
+ * Returns: (transfer full): a new pixbuf, or %NULL if the
  *     stock ID wasn’t known
  *
  * Since: 3.0
@@ -10001,7 +10001,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
  * This function is only useful for container implementations and
  * never should be called by an application.
  *
- * Return value: %TRUE if the widget is mapped with the parent.
+ * Returns: %TRUE if the widget is mapped with the parent.
  **/
 gboolean
 gtk_widget_get_child_visible (GtkWidget *widget)
@@ -10042,7 +10042,7 @@ gtk_widget_get_screen_unchecked (GtkWidget *widget)
  * resources when a widget has been realized, and you should
  * free those resources when the widget is unrealized.
  *
- * Return value: (transfer none): the #GdkScreen for the toplevel for this widget.
+ * Returns: (transfer none): the #GdkScreen for the toplevel for this widget.
  *
  * Since: 2.2
  **/
@@ -10079,7 +10079,7 @@ gtk_widget_get_screen (GtkWidget *widget)
  * screen, and all widgets added into a hierarchy with a toplevel
  * window at the top.
  *
- * Return value: %TRUE if there is a #GdkScreen associcated
+ * Returns: %TRUE if there is a #GdkScreen associcated
  *   with the widget.
  *
  * Since: 2.2
@@ -10165,7 +10165,7 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
  * resources when a widget has been realized, and you should
  * free those resources when the widget is unrealized.
  *
- * Return value: (transfer none): the #GdkDisplay for the toplevel for this widget.
+ * Returns: (transfer none): the #GdkDisplay for the toplevel for this widget.
  *
  * Since: 2.2
  **/
@@ -10190,7 +10190,7 @@ gtk_widget_get_display (GtkWidget *widget)
  * create display specific resources when a widget has been realized,
  * and you should free those resources when the widget is unrealized.
  *
- * Return value: (transfer none): the #GdkWindow root window for the toplevel for this widget.
+ * Returns: (transfer none): the #GdkWindow root window for the toplevel for this widget.
  *
  * Since: 2.2
  *
@@ -10229,7 +10229,7 @@ gtk_widget_get_root_window (GtkWidget *widget)
  * call gtk_widget_grab_focus() to place the focus accordingly;
  * if returning %FALSE, they don’t modify the current focus location.
  *
- * Return value: %TRUE if focus ended up inside @widget
+ * Returns: %TRUE if focus ended up inside @widget
  **/
 gboolean
 gtk_widget_child_focus (GtkWidget       *widget,
@@ -10291,7 +10291,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
  * entire row with the cursor keys, as e.g. known from user interfaces
  * that require entering license keys.
  *
- * Return value: %TRUE if stopping keyboard navigation is fine, %FALSE
+ * Returns: %TRUE if stopping keyboard navigation is fine, %FALSE
  *               if the emitting widget should try to handle the keyboard
  *               navigation attempt in its parent container(s).
  *
@@ -10634,7 +10634,7 @@ gtk_widget_set_device_enabled (GtkWidget *widget,
  * Returns whether @device can interact with @widget and its
  * children. See gtk_widget_set_device_enabled().
  *
- * Return value: %TRUE is @device is enabled for @widget
+ * Returns: %TRUE is @device is enabled for @widget
  *
  * Since: 3.0
  */
@@ -10800,7 +10800,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  *    }
  * ]|
  *
- * Return value: (transfer none): the topmost ancestor of @widget, or @widget itself
+ * Returns: (transfer none): the topmost ancestor of @widget, or @widget itself
  *    if there’s no ancestor.
  **/
 GtkWidget*
@@ -10829,7 +10829,7 @@ gtk_widget_get_toplevel (GtkWidget *widget)
  * Note that unlike gtk_widget_is_ancestor(), gtk_widget_get_ancestor()
  * considers @widget to be an ancestor of itself.
  *
- * Return value: (transfer none): the ancestor widget, or %NULL if not found
+ * Returns: (transfer none): the ancestor widget, or %NULL if not found
  **/
 GtkWidget*
 gtk_widget_get_ancestor (GtkWidget *widget,
@@ -10882,7 +10882,7 @@ gtk_widget_set_visual (GtkWidget *widget,
  *
  * Gets the visual that will be used to render @widget.
  *
- * Return value: (transfer none): the visual for @widget
+ * Returns: (transfer none): the visual for @widget
  **/
 GdkVisual*
 gtk_widget_get_visual (GtkWidget *widget)
@@ -10925,7 +10925,7 @@ gtk_widget_get_visual (GtkWidget *widget)
  * is attached to a toplevel, since the settings object is specific
  * to a particular #GdkScreen.
  *
- * Return value: (transfer none): the relevant #GtkSettings object
+ * Returns: (transfer none): the relevant #GtkSettings object
  */
 GtkSettings*
 gtk_widget_get_settings (GtkWidget *widget)
@@ -10943,7 +10943,7 @@ gtk_widget_get_settings (GtkWidget *widget)
  * from the #GdkEventMask enumeration). These are the events that the widget
  * will receive.
  *
- * Return value: event mask for @widget
+ * Returns: event mask for @widget
  **/
 gint
 gtk_widget_get_events (GtkWidget *widget)
@@ -11038,7 +11038,7 @@ gtk_widget_get_pointer (GtkWidget *widget,
  * Determines whether @widget is somewhere inside @ancestor, possibly with
  * intermediate containers.
  *
- * Return value: %TRUE if @ancestor contains @widget as a child,
+ * Returns: %TRUE if @ancestor contains @widget as a child,
  *    grandchild, great grandchild, etc.
  **/
 gboolean
@@ -11226,7 +11226,7 @@ gtk_widget_set_direction (GtkWidget        *widget,
  * Gets the reading direction for a particular widget. See
  * gtk_widget_set_direction().
  *
- * Return value: the reading direction for the widget.
+ * Returns: the reading direction for the widget.
  **/
 GtkTextDirection
 gtk_widget_get_direction (GtkWidget *widget)
@@ -11298,7 +11298,7 @@ gtk_widget_set_default_direction (GtkTextDirection dir)
  * Obtains the current default reading direction. See
  * gtk_widget_set_default_direction().
  *
- * Return value: the current default direction.
+ * Returns: the current default direction.
  **/
 GtkTextDirection
 gtk_widget_get_default_direction (void)
@@ -11766,7 +11766,7 @@ gtk_widget_real_adjust_baseline_request (GtkWidget         *widget,
  * Returns the address of the widget’s request cache (strictly for
  * internal use in gtksizerequest.c)
  *
- * Return value: the address of @widget’s size request cache.
+ * Returns: the address of @widget’s size request cache.
  **/
 gpointer
 _gtk_widget_peek_request_cache (GtkWidget *widget)
@@ -11825,7 +11825,7 @@ _gtk_widget_set_device_window (GtkWidget *widget,
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
  *
- * Return value: the device window set on @widget, or %NULL
+ * Returns: the device window set on @widget, or %NULL
  */
 GdkWindow *
 _gtk_widget_get_device_window (GtkWidget *widget,
@@ -12223,7 +12223,7 @@ static const GtkWidgetAuxInfo default_aux_info = {
  *
  * Get the #GtkWidgetAuxInfo-struct for the widget.
  *
- * Return value: the #GtkWidgetAuxInfo-struct for the widget, or
+ * Returns: the #GtkWidgetAuxInfo-struct for the widget, or
  *    %NULL if @create is %FALSE and one doesn’t already exist.
  */
 static GtkWidgetAuxInfo *
@@ -12976,7 +12976,7 @@ gtk_widget_queue_compute_expand (GtkWidget *widget)
  * set on the widget itself, or, if none has been explicitly set,
  * the widget may expand if some of its children do.
  *
- * Return value: whether widget tree rooted here should be expanded
+ * Returns: whether widget tree rooted here should be expanded
  */
 gboolean
 gtk_widget_compute_expand (GtkWidget     *widget,
@@ -13106,7 +13106,7 @@ gtk_widget_set_expand_set (GtkWidget      *widget,
  * than computing whether the entire widget tree rooted at this widget
  * wants to expand.
  *
- * Return value: whether hexpand flag is set
+ * Returns: whether hexpand flag is set
  */
 gboolean
 gtk_widget_get_hexpand (GtkWidget *widget)
@@ -13171,7 +13171,7 @@ gtk_widget_set_hexpand (GtkWidget      *widget,
  * There are few reasons to use this function, but it’s here
  * for completeness and consistency.
  *
- * Return value: whether hexpand has been explicitly set
+ * Returns: whether hexpand has been explicitly set
  */
 gboolean
 gtk_widget_get_hexpand_set (GtkWidget      *widget)
@@ -13221,7 +13221,7 @@ gtk_widget_set_hexpand_set (GtkWidget      *widget,
  *
  * See gtk_widget_get_hexpand() for more detail.
  *
- * Return value: whether vexpand flag is set
+ * Returns: whether vexpand flag is set
  */
 gboolean
 gtk_widget_get_vexpand (GtkWidget *widget)
@@ -13259,7 +13259,7 @@ gtk_widget_set_vexpand (GtkWidget      *widget,
  *
  * See gtk_widget_get_hexpand_set() for more detail.
  *
- * Return value: whether vexpand has been explicitly set
+ * Returns: whether vexpand has been explicitly set
  */
 gboolean
 gtk_widget_get_vexpand_set (GtkWidget      *widget)
@@ -14417,7 +14417,7 @@ gtk_widget_set_margin_bottom (GtkWidget *widget,
  * associated with it, so must be attached to a toplevel
  * window.
  *
- * Return value: (transfer none): the appropriate clipboard object. If no
+ * Returns: (transfer none): the appropriate clipboard object. If no
  *             clipboard already exists, a new one will
  *             be created. Once a clipboard object has
  *             been created, it is persistent for all time.
@@ -14449,7 +14449,7 @@ gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
  * (GFunc)g_object_ref, NULL)` first, and then unref all the
  * widgets afterwards.
 
- * Return value: (element-type GtkWidget) (transfer container): the list of
+ * Returns: (element-type GtkWidget) (transfer container): the list of
  *  mnemonic labels; free this list
  *  with g_list_free() when you are done with it.
  *
@@ -14537,7 +14537,7 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
  * which determines whether calls to gtk_widget_show_all()
  * will affect this widget.
  *
- * Return value: the current value of the “no-show-all” property.
+ * Returns: the current value of the “no-show-all” property.
  *
  * Since: 2.4
  **/
@@ -14664,7 +14664,7 @@ gtk_widget_set_tooltip_window (GtkWidget *widget,
  * GtkWindow created by default, or the custom tooltip window set
  * using gtk_widget_set_tooltip_window().
  *
- * Return value: (transfer none): The #GtkWindow of the current tooltip.
+ * Returns: (transfer none): The #GtkWindow of the current tooltip.
  *
  * Since: 2.12
  */
@@ -14750,7 +14750,7 @@ gtk_widget_set_tooltip_text (GtkWidget   *widget,
  *
  * Gets the contents of the tooltip for @widget.
  *
- * Return value: the tooltip text, or %NULL. You should free the
+ * Returns: the tooltip text, or %NULL. You should free the
  *   returned string with g_free() when done.
  *
  * Since: 2.12
@@ -14798,7 +14798,7 @@ gtk_widget_set_tooltip_markup (GtkWidget   *widget,
  *
  * Gets the contents of the tooltip for @widget.
  *
- * Return value: the tooltip text, or %NULL. You should free the
+ * Returns: the tooltip text, or %NULL. You should free the
  *   returned string with g_free() when done.
  *
  * Since: 2.12
@@ -14841,7 +14841,7 @@ gtk_widget_set_has_tooltip (GtkWidget *widget,
  * Returns the current value of the has-tooltip property.  See
  * #GtkWidget:has-tooltip for more information.
  *
- * Return value: current value of has-tooltip on @widget.
+ * Returns: current value of has-tooltip on @widget.
  *
  * Since: 2.12
  */
@@ -15122,7 +15122,7 @@ gtk_widget_unregister_window (GtkWidget    *widget,
  *
  * Returns the widget’s window if it is realized, %NULL otherwise
  *
- * Return value: (transfer none): @widget’s window.
+ * Returns: (transfer none): @widget’s window.
  *
  * Since: 2.14
  */
@@ -15273,7 +15273,7 @@ gtk_widget_set_opacity  (GtkWidget *widget,
  * Fetches the requested opacity for this widget. See
  * gtk_widget_set_opacity().
  *
- * Return value: the requested opacity for this widget.
+ * Returns: the requested opacity for this widget.
  *
  * Since: 3.8
  **/
@@ -15326,7 +15326,7 @@ _gtk_widget_set_has_focus (GtkWidget *widget,
  *   gdk_event_free (event);
  * ]|
  *
- * Return value: the return value from the event signal emission: %TRUE
+ * Returns: the return value from the event signal emission: %TRUE
  *   if the event was handled, and %FALSE otherwise
  *
  * Since: 2.20

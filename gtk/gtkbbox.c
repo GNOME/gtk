@@ -395,7 +395,7 @@ gtk_button_box_get_layout (GtkButtonBox *widget)
  *
  * Returns whether @child should appear in a secondary group of children.
  *
- * Return value: whether @child should appear in a secondary group of children.
+ * Returns: whether @child should appear in a secondary group of children.
  *
  * Since: 2.4
  **/
@@ -1136,7 +1136,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
  *
  * Creates a new #GtkButtonBox.
  *
- * Return value: a new #GtkButtonBox.
+ * Returns: a new #GtkButtonBox.
  *
  * Since: 3.0
  */

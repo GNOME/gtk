@@ -80,7 +80,7 @@ _gdk_event_emit (GdkEvent *event)
  * Find the first event on the queue that is not still
  * being filled in.
  * 
- * Return value: Pointer to the list node for that event, or NULL.
+ * Returns: Pointer to the list node for that event, or NULL.
  **/
 GList*
 _gdk_event_queue_find_first (GdkDisplay *display)
@@ -241,7 +241,7 @@ _gdk_event_queue_remove_link (GdkDisplay *display,
  * Removes and returns the first event from the event
  * queue that is not still being filled in.
  * 
- * Return value: the event, or %NULL. Ownership is transferred
+ * Returns: the event, or %NULL. Ownership is transferred
  * to the caller.
  **/
 GdkEvent*
@@ -365,7 +365,7 @@ gdk_event_handler_set (GdkEventFunc   func,
  *
  * Checks if any events are ready to be processed for any display.
  *
- * Return value: %TRUE if any events are pending.
+ * Returns: %TRUE if any events are pending.
  */
 gboolean
 gdk_events_pending (void)
@@ -406,7 +406,7 @@ gdk_events_pending (void)
  * on, fetching events from the windowing system if necessary.
  * See gdk_display_get_event().
  * 
- * Return value: the next #GdkEvent to be processed, or %NULL if no events
+ * Returns: the next #GdkEvent to be processed, or %NULL if no events
  * are pending. The returned #GdkEvent should be freed with gdk_event_free().
  **/
 GdkEvent*
@@ -435,7 +435,7 @@ gdk_event_get (void)
  * If there is an event waiting in the event queue of some open
  * display, returns a copy of it. See gdk_display_peek_event().
  * 
- * Return value: a copy of the first #GdkEvent on some event queue, or %NULL if no
+ * Returns: a copy of the first #GdkEvent on some event queue, or %NULL if no
  * events are in any queues. The returned #GdkEvent should be freed with
  * gdk_event_free().
  **/
@@ -494,7 +494,7 @@ static GHashTable *event_hash = NULL;
  * 
  * Creates a new event of the given type. All fields are set to 0.
  * 
- * Return value: a newly-allocated #GdkEvent. The returned #GdkEvent 
+ * Returns: a newly-allocated #GdkEvent. The returned #GdkEvent 
  * should be freed with gdk_event_free().
  *
  * Since: 2.2
@@ -613,7 +613,7 @@ _gdk_event_get_pointer_emulated (GdkEvent *event)
  * Copies a #GdkEvent, copying or incrementing the reference count of the
  * resources associated with it (e.g. #GdkWindow’s and strings).
  * 
- * Return value: a copy of @event. The returned #GdkEvent should be freed with
+ * Returns: a copy of @event. The returned #GdkEvent should be freed with
  * gdk_event_free().
  **/
 GdkEvent*
@@ -820,7 +820,7 @@ gdk_event_free (GdkEvent *event)
  *
  * Extracts the #GdkWindow associated with an event.
  *
- * Return value: (transfer none): The #GdkWindow associated with the event
+ * Returns: (transfer none): The #GdkWindow associated with the event
  *
  * Since: 3.10
  */
@@ -839,7 +839,7 @@ gdk_event_get_window (const GdkEvent *event)
  * Returns the time stamp from @event, if there is one; otherwise
  * returns #GDK_CURRENT_TIME. If @event is %NULL, returns #GDK_CURRENT_TIME.
  * 
- * Return value: time stamp field from @event
+ * Returns: time stamp field from @event
  **/
 guint32
 gdk_event_get_time (const GdkEvent *event)
@@ -916,7 +916,7 @@ gdk_event_get_time (const GdkEvent *event)
  * in the event. @event may be %NULL, in which case it’s treated
  * as if the event had no state field.
  * 
- * Return value: %TRUE if there was a state field in the event 
+ * Returns: %TRUE if there was a state field in the event 
  **/
 gboolean
 gdk_event_get_state (const GdkEvent        *event,
@@ -997,7 +997,7 @@ gdk_event_get_state (const GdkEvent        *event,
  * 
  * Extract the event window relative x/y coordinates from an event.
  * 
- * Return value: %TRUE if the event delivered event window coordinates
+ * Returns: %TRUE if the event delivered event window coordinates
  **/
 gboolean
 gdk_event_get_coords (const GdkEvent *event,
@@ -1063,7 +1063,7 @@ gdk_event_get_coords (const GdkEvent *event,
  * 
  * Extract the root window relative x/y coordinates from an event.
  * 
- * Return value: %TRUE if the event delivered root window coordinates
+ * Returns: %TRUE if the event delivered root window coordinates
  **/
 gboolean
 gdk_event_get_root_coords (const GdkEvent *event,
@@ -1133,7 +1133,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
  *
  * Extract the button number from an event.
  *
- * Return value: %TRUE if the event delivered a button number
+ * Returns: %TRUE if the event delivered a button number
  *
  * Since: 3.2
  **/
@@ -1172,7 +1172,7 @@ gdk_event_get_button (const GdkEvent *event,
  *
  * Extracts the click count from an event.
  *
- * Return value: %TRUE if the event delivered a click count
+ * Returns: %TRUE if the event delivered a click count
  *
  * Since: 3.2
  */
@@ -1215,7 +1215,7 @@ gdk_event_get_click_count (const GdkEvent *event,
  *
  * Extracts the keyval from an event.
  *
- * Return value: %TRUE if the event delivered a key symbol
+ * Returns: %TRUE if the event delivered a key symbol
  *
  * Since: 3.2
  */
@@ -1250,7 +1250,7 @@ gdk_event_get_keyval (const GdkEvent *event,
  *
  * Extracts the hardware keycode from an event.
  *
- * Return value: %TRUE if the event delivered a hardware keycode
+ * Returns: %TRUE if the event delivered a hardware keycode
  *
  * Since: 3.2
  */
@@ -1285,7 +1285,7 @@ gdk_event_get_keycode (const GdkEvent *event,
  *
  * Extracts the scroll direction from an event.
  *
- * Return value: %TRUE if the event delivered a scroll direction
+ * Returns: %TRUE if the event delivered a scroll direction
  *
  * Since: 3.2
  */
@@ -1370,7 +1370,7 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
  * Extract the axis value for a particular axis use from
  * an event structure.
  * 
- * Return value: %TRUE if the specified axis was found, otherwise %FALSE
+ * Returns: %TRUE if the specified axis was found, otherwise %FALSE
  **/
 gboolean
 gdk_event_get_axis (const GdkEvent *event,
@@ -1921,7 +1921,7 @@ gdk_event_set_screen (GdkEvent  *event,
  * to which `event->motion.x_root` and
  * `event->motion.y_root` are relative.
  * 
- * Return value: (transfer none): the screen for the event
+ * Returns: (transfer none): the screen for the event
  *
  * Since: 2.2
  **/
@@ -1992,7 +1992,7 @@ gdk_set_show_events (gboolean show_events)
  * 
  * Gets whether event debugging output is enabled.
  * 
- * Return value: %TRUE if event debugging output is enabled.
+ * Returns: %TRUE if event debugging output is enabled.
  **/
 gboolean
 gdk_get_show_events (void)
@@ -2225,7 +2225,7 @@ gdk_setting_get (const gchar *name,
  *
  * Retrieves the type of the event.
  *
- * Return value: a #GdkEventType
+ * Returns: a #GdkEventType
  *
  * Since: 3.10
  */
