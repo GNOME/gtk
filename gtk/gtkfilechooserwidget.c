@@ -91,6 +91,19 @@
 #include <io.h>
 #endif
 
+/**
+ * SECTION:gtkfilechooserwidget
+ * Short_description: A file chooser widget
+ * @Title: GtkFileChooserWidget
+ * @See_also: #GtkFileChooserDialog
+ *
+ * #GtkFileChooserWidget is a widget for choosing files.
+ * It exposes the #GtkFileChooser interface, and you should
+ * use the methods of this interface to interact with the
+ * widget.
+ */
+
+
 /* Values for GtkSelection-related "info" fields */
 #define SELECTION_TEXT 0
 #define SELECTION_URI  1
