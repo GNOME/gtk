@@ -44,7 +44,6 @@
 #include <gdk/gdk.h>
 #include <cairo-gobject.h>
 #include "gtkpopover.h"
-#include "gtkpopoverprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 #include "gtkwindowprivate.h"
@@ -123,6 +122,7 @@ gtk_popover_init (GtkPopover *popover)
   gtk_widget_set_has_window (widget, TRUE);
   popover->priv = gtk_popover_get_instance_private (popover);
   popover->priv->modal = TRUE;
+  popover->priv->apply_shape = TRUE;
 }
 
 static void
@@ -1813,24 +1813,6 @@ gtk_popover_get_modal (GtkPopover *popover)
   g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
 
   return popover->priv->modal;
-}
-
-void
-_gtk_popover_set_apply_shape (GtkPopover *popover,
-                              gboolean    apply_shape)
-{
-  GtkPopoverPrivate *priv = popover->priv;
-
-  g_return_if_fail (GTK_IS_POPOVER (popover));
-
-  apply_shape = apply_shape != FALSE;
-
-  if (priv->apply_shape == apply_shape)
-    return;
-
-  priv->apply_shape = apply_shape;
-  gtk_popover_update_position (popover);
-  gtk_widget_queue_draw (GTK_WIDGET (popover));
 }
 
 static void

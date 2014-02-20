@@ -57,7 +57,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 #include "a11y/gtkscalebuttonaccessible.h"
-#include "gtkpopoverprivate.h"
 
 /**
  * SECTION:gtkscalebutton
@@ -356,9 +355,6 @@ gtk_scale_button_init (GtkScaleButton *button)
 
   gtk_widget_init_template (GTK_WIDGET (button));
   gtk_popover_set_relative_to (GTK_POPOVER (priv->dock), GTK_WIDGET (button));
-
-  /* FIXME: to be removed when compositing over native windows is fixed */
-  _gtk_popover_set_apply_shape (GTK_POPOVER (priv->dock), TRUE);
 
   /* Need a local reference to the adjustment */
   g_object_ref (priv->adjustment);
