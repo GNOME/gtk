@@ -277,6 +277,8 @@ testdata = \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
 	reset-to-defaults.css \
+	revealer-extra-size.ref.ui \
+	revealer-extra-size.ui \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
 	separator-size.ref.ui \
