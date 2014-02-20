@@ -21,7 +21,6 @@
 
 #include "gtkstyleprovider.h"
 #include "gtkstyleproviderprivate.h"
-#include "gtksettingsprivate.h"
 
 typedef struct _GtkStyleCascadeIter GtkStyleCascadeIter;
 typedef struct _GtkStyleProviderData GtkStyleProviderData;
@@ -308,14 +307,6 @@ GtkStyleCascade *
 _gtk_style_cascade_new (void)
 {
   return g_object_new (GTK_TYPE_STYLE_CASCADE, NULL);
-}
-
-GtkStyleCascade *
-_gtk_style_cascade_get_for_screen (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (screen));
 }
 
 void

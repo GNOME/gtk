@@ -637,7 +637,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv->info->state_flags = GTK_STATE_FLAG_DIR_LTR;
 
   gtk_style_context_set_cascade (style_context,
-                                 _gtk_style_cascade_get_for_screen (priv->screen));
+                                 _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (priv->screen)));
 }
 
 static void
@@ -1084,7 +1084,7 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
 
   priv = context->priv;
 
-  if (priv->cascade == _gtk_style_cascade_get_for_screen (priv->screen))
+  if (priv->cascade == _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (priv->screen)))
     {
       GtkStyleCascade *new_cascade;
       
@@ -1120,7 +1120,7 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
 
   priv = context->priv;
 
-  if (priv->cascade == _gtk_style_cascade_get_for_screen (priv->screen))
+  if (priv->cascade == _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (priv->screen)))
     return;
 
   _gtk_style_cascade_remove_provider (priv->cascade, provider);
@@ -1193,7 +1193,7 @@ gtk_style_context_add_provider_for_screen (GdkScreen        *screen,
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
   g_return_if_fail (!GTK_IS_SETTINGS (provider) || _gtk_settings_get_screen (GTK_SETTINGS (provider)) == screen);
 
-  cascade = _gtk_style_cascade_get_for_screen (screen);
+  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (screen));
   _gtk_style_cascade_add_provider (cascade, provider, priority);
 }
 
@@ -1216,7 +1216,7 @@ gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
   g_return_if_fail (!GTK_IS_SETTINGS (provider));
 
-  cascade = _gtk_style_cascade_get_for_screen (screen);
+  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (screen));
   _gtk_style_cascade_remove_provider (cascade, provider);
 }
 
@@ -2541,6 +2541,7 @@ gtk_style_context_set_screen (GtkStyleContext *context,
                               GdkScreen       *screen)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleCascade *screen_cascade;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GDK_IS_SCREEN (screen));
@@ -2549,13 +2550,14 @@ gtk_style_context_set_screen (GtkStyleContext *context,
   if (priv->screen == screen)
     return;
 
-  if (priv->cascade == _gtk_style_cascade_get_for_screen (priv->screen))
+  screen_cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (screen));
+  if (priv->cascade == screen_cascade)
     {
-      gtk_style_context_set_cascade (context, _gtk_style_cascade_get_for_screen (screen));
+      gtk_style_context_set_cascade (context, screen_cascade);
     }
   else
     {
-      _gtk_style_cascade_set_parent (priv->cascade, _gtk_style_cascade_get_for_screen (screen));
+      _gtk_style_cascade_set_parent (priv->cascade, screen_cascade);
     }
 
   priv->screen = screen;

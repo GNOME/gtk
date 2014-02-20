@@ -49,7 +49,6 @@ struct _GtkStyleCascadeClass
 GType                 _gtk_style_cascade_get_type               (void) G_GNUC_CONST;
 
 GtkStyleCascade *     _gtk_style_cascade_new                    (void);
-GtkStyleCascade *     _gtk_style_cascade_get_for_screen         (GdkScreen           *screen);
 
 void                  _gtk_style_cascade_set_parent             (GtkStyleCascade     *cascade,
                                                                  GtkStyleCascade     *parent);
