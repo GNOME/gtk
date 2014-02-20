@@ -9357,16 +9357,14 @@ gtk_window_move_resize (GtkWindow *window)
 #if 0
   if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
-      int notify_x, notify_y;
+      GtkAllocation alloc;
 
-      /* this is the position from the last configure notify */
-      gdk_window_get_position (widget->window, &notify_x, &notify_y);
-    
+      gtk_widget_get_allocation (widget, &alloc);
+
       g_message ("--- %s ---\n"
 		 "last  : %d,%d\t%d x %d\n"
 		 "this  : %d,%d\t%d x %d\n"
 		 "alloc : %d,%d\t%d x %d\n"
-		 "req   :      \t%d x %d\n"
 		 "resize:      \t%d x %d\n" 
 		 "size_changed: %d pos_changed: %d hints_changed: %d\n"
 		 "configure_notify_received: %d\n"
@@ -9381,15 +9379,14 @@ gtk_window_move_resize (GtkWindow *window)
 		 new_request.y,
 		 new_request.width,
 		 new_request.height,
-		 notify_x, notify_y,
-		 widget->allocation.width,
-		 widget->allocation.height,
-		 widget->requisition.width,
-		 widget->requisition.height,
+		 alloc.x,
+		 alloc.y,
+		 alloc.width,
+		 alloc.height,
 		 info->resize_width,
 		 info->resize_height,
-		 configure_request_pos_changed,
 		 configure_request_size_changed,
+		 configure_request_pos_changed,
 		 hints_changed,
 		 priv->configure_notify_received,
 		 priv->configure_request_count,
