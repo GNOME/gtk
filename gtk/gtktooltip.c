@@ -291,12 +291,15 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  gtk_label_set_markup (GTK_LABEL (tooltip->label), markup);
-
   if (markup)
-    gtk_widget_show (tooltip->label);
+    {
+      gtk_label_set_markup (GTK_LABEL (tooltip->label), markup);
+      gtk_widget_show (tooltip->label);
+    }
   else
-    gtk_widget_hide (tooltip->label);
+    {
+      gtk_widget_hide (tooltip->label);
+    }
 }
 
 /**
@@ -315,12 +318,15 @@ gtk_tooltip_set_text (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  gtk_label_set_text (GTK_LABEL (tooltip->label), text);
-
   if (text)
-    gtk_widget_show (tooltip->label);
+    {
+      gtk_label_set_text (GTK_LABEL (tooltip->label), text);
+      gtk_widget_show (tooltip->label);
+    }
   else
-    gtk_widget_hide (tooltip->label);
+    {
+      gtk_widget_hide (tooltip->label);
+    }
 }
 
 /**
@@ -341,12 +347,15 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
   if (pixbuf)
     g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
-  gtk_image_set_from_pixbuf (GTK_IMAGE (tooltip->image), pixbuf);
-
   if (pixbuf)
-    gtk_widget_show (tooltip->image);
+    {
+      gtk_image_set_from_pixbuf (GTK_IMAGE (tooltip->image), pixbuf);
+      gtk_widget_show (tooltip->image);
+    }
   else
-    gtk_widget_hide (tooltip->image);
+    {
+      gtk_widget_hide (tooltip->image);
+    }
 }
 
 /**
@@ -370,14 +379,17 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_image_set_from_stock (GTK_IMAGE (tooltip->image), stock_id, size);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   if (stock_id)
-    gtk_widget_show (tooltip->image);
+    {
+ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_image_set_from_stock (GTK_IMAGE (tooltip->image), stock_id, size);
+ G_GNUC_END_IGNORE_DEPRECATIONS;
+      gtk_widget_show (tooltip->image);
+    }
   else
-    gtk_widget_hide (tooltip->image);
+    {
+      gtk_widget_hide (tooltip->image);
+    }
 }
 
 /**
@@ -399,12 +411,15 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  gtk_image_set_from_icon_name (GTK_IMAGE (tooltip->image), icon_name, size);
-
   if (icon_name)
-    gtk_widget_show (tooltip->image);
+    {
+      gtk_image_set_from_icon_name (GTK_IMAGE (tooltip->image), icon_name, size);
+      gtk_widget_show (tooltip->image);
+    }
   else
-    gtk_widget_hide (tooltip->image);
+    {
+      gtk_widget_hide (tooltip->image);
+    }
 }
 
 /**
@@ -426,12 +441,15 @@ gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  gtk_image_set_from_gicon (GTK_IMAGE (tooltip->image), gicon, size);
-
   if (gicon)
-    gtk_widget_show (tooltip->image);
+    {
+      gtk_image_set_from_gicon (GTK_IMAGE (tooltip->image), gicon, size);
+      gtk_widget_show (tooltip->image);
+    }
   else
-    gtk_widget_hide (tooltip->image);
+    {
+      gtk_widget_hide (tooltip->image);
+    }
 }
 
 /**
