@@ -2674,7 +2674,7 @@ gtk_window_dispose (GObject *object)
       GtkWindowPopover *popover;
 
       popover = priv->popovers->data;
-      priv->popovers = g_list_remove_link (priv->popovers, priv->popovers);
+      priv->popovers = g_list_delete_link (priv->popovers, priv->popovers);
       popover_destroy (popover);
     }
 
