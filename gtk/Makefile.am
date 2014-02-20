@@ -281,6 +281,7 @@ gtk_public_h_sources = 		\
 	gtkfontchooserwidget.h	\
 	gtkframe.h		\
 	gtkgesture.h		\
+	gtkgesturedrag.h	\
 	gtkgesturelongpress.h	\
 	gtkgesturerotate.h	\
 	gtkgestureswipe.h	\
@@ -778,6 +779,7 @@ gtk_base_c_sources = 		\
 	gtkframe.c		\
 	gtkgladecatalog.c	\
 	gtkgesture.c		\
+	gtkgesturedrag.c	\
 	gtkgesturelongpress.c	\
 	gtkgesturerotate.c	\
 	gtkgestureswipe.c	\

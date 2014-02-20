@@ -107,6 +107,7 @@
 #include <gtk/gtkfontchooserwidget.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkgesture.h>
+#include <gtk/gtkgesturedrag.h>
 #include <gtk/gtkgesturelongpress.h>
 #include <gtk/gtkgesturerotate.h>
 #include <gtk/gtkgestureswipe.h>
