@@ -19,6 +19,7 @@
 #define __GTK_SETTINGS_PRIVATE_H__
 
 #include <gtk/gtksettings.h>
+#include "gtkstylecascadeprivate.h"
 
 G_BEGIN_DECLS
 
@@ -36,6 +37,7 @@ gboolean            _gtk_settings_parse_convert              (GtkRcPropertyParse
                                                               GParamSpec             *pspec,
                                                               GValue                 *dest_value);
 GdkScreen          *_gtk_settings_get_screen                 (GtkSettings            *settings);
+GtkStyleCascade    *_gtk_settings_get_style_cascade          (GtkSettings            *settings);
 
 
 G_END_DECLS

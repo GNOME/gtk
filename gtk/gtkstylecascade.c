@@ -21,6 +21,7 @@
 
 #include "gtkstyleprovider.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtksettingsprivate.h"
 
 typedef struct _GtkStyleCascadeIter GtkStyleCascadeIter;
 typedef struct _GtkStyleProviderData GtkStyleProviderData;
@@ -312,22 +313,9 @@ _gtk_style_cascade_new (void)
 GtkStyleCascade *
 _gtk_style_cascade_get_for_screen (GdkScreen *screen)
 {
-  GtkStyleCascade *cascade;
-  static GQuark quark = 0;
-
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  if (G_UNLIKELY (!quark))
-    quark = g_quark_from_static_string ("gtk-style-cascade");
-
-  cascade = g_object_get_qdata (G_OBJECT (screen), quark);
-  if (cascade == NULL)
-    {
-      cascade = _gtk_style_cascade_new ();
-      g_object_set_qdata_full (G_OBJECT (screen), quark, cascade, g_object_unref);
-    }
-
-  return cascade;
+  return _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (screen));
 }
 
 void

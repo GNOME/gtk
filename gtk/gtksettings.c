@@ -114,6 +114,7 @@ struct _GtkSettingsPrivate
   GData *queued_settings;      /* of type GtkSettingsValue* */
   GtkSettingsPropertyValue *property_values;
   GdkScreen *screen;
+  GtkStyleCascade *style_cascade;
   GtkCssProvider *theme_provider;
   GtkCssProvider *key_theme_provider;
 };
@@ -290,6 +291,7 @@ gtk_settings_init (GtkSettings *settings)
   g_datalist_init (&priv->queued_settings);
   object_list = g_slist_prepend (object_list, settings);
 
+  priv->style_cascade = _gtk_style_cascade_new ();
   priv->theme_provider = gtk_css_provider_new ();
 
   /* build up property array for all yet existing properties and queue
@@ -1675,16 +1677,24 @@ gtk_settings_finalize (GObject *object)
 
   settings_update_provider (priv->screen, &priv->theme_provider, NULL);
   settings_update_provider (priv->screen, &priv->key_theme_provider, NULL);
+  g_clear_object (&priv->style_cascade);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
+}
+
+GtkStyleCascade *
+_gtk_settings_get_style_cascade (GtkSettings *settings)
+{
+  g_return_val_if_fail (GTK_IS_SETTINGS (settings), NULL);
+
+  return settings->priv->style_cascade;
 }
 
 static void
 settings_init_style (GtkSettings *settings)
 {
   static GtkCssProvider *css_provider = NULL;
-
-  GdkScreen *screen = settings->priv->screen;
+  GtkSettingsPrivate *priv = settings->priv;
 
   /* Add provider for user file */
   if (G_UNLIKELY (!css_provider))
@@ -1704,17 +1714,17 @@ settings_init_style (GtkSettings *settings)
       g_free (css_path);
     }
 
-  gtk_style_context_add_provider_for_screen (screen,
-                                             GTK_STYLE_PROVIDER (css_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+  _gtk_style_cascade_add_provider (priv->style_cascade,
+                                   GTK_STYLE_PROVIDER (css_provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-  gtk_style_context_add_provider_for_screen (screen,
-                                             GTK_STYLE_PROVIDER (settings),
-                                             GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+  _gtk_style_cascade_add_provider (priv->style_cascade,
+                                   GTK_STYLE_PROVIDER (settings),
+                                   GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
-  gtk_style_context_add_provider_for_screen (screen,
-                                             GTK_STYLE_PROVIDER (settings->priv->theme_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+  _gtk_style_cascade_add_provider (priv->style_cascade,
+                                   GTK_STYLE_PROVIDER (settings->priv->theme_provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
   settings_update_theme (settings);
   settings_update_key_theme (settings);
