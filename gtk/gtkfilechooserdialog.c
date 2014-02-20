@@ -219,6 +219,8 @@ static void     file_chooser_widget_default_size_changed (GtkWidget            *
 							  GtkFileChooserDialog *dialog);
 static void     file_chooser_widget_response_requested (GtkWidget            *widget,
 							GtkFileChooserDialog *dialog);
+static void     file_chooser_widget_selection_changed (GtkWidget            *widget,
+							GtkFileChooserDialog *dialog);
 
 static void response_cb (GtkDialog *dialog,
 			 gint       response_id);
@@ -254,6 +256,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_file_activated);
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_default_size_changed);
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_response_requested);
+  gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_selection_changed);
 }
 
 static void
@@ -270,7 +273,8 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
 }
 
 static GtkWidget *
-get_accept_action_widget (GtkDialog *dialog)
+get_accept_action_widget (GtkDialog *dialog,
+                          gboolean   sensitive_only)
 {
   gint response[] = {
     GTK_RESPONSE_ACCEPT,
@@ -284,8 +288,14 @@ get_accept_action_widget (GtkDialog *dialog)
   for (i = 0; i < G_N_ELEMENTS (response); i++)
     {
       widget = gtk_dialog_get_widget_for_response (dialog, response[i]);
-      if (widget && gtk_widget_is_sensitive (widget))
-	return widget;
+      if (widget)
+        {
+          if (!sensitive_only)
+            return widget;
+
+          if (gtk_widget_is_sensitive (widget))
+            return widget;
+        }
     }
 
   return NULL;
@@ -313,7 +323,7 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
-  widget = get_accept_action_widget (GTK_DIALOG (dialog));
+  widget = get_accept_action_widget (GTK_DIALOG (dialog), TRUE);
   if (widget)
     gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
 }
@@ -384,6 +394,26 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
 }
 
 static void
+file_chooser_widget_selection_changed (GtkWidget            *widget,
+                                       GtkFileChooserDialog *dialog)
+{
+  GtkWidget *button;
+  GSList *uris;
+  gboolean sensitive;
+
+  button = get_accept_action_widget (GTK_DIALOG (dialog), FALSE);
+  if (button == NULL)
+    return;
+
+  uris = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (dialog->priv->widget));
+  sensitive = (uris != NULL);
+  gtk_widget_set_sensitive (button, sensitive);
+
+  if (uris)
+    g_slist_free_full (uris, g_free);
+}
+
+static void
 file_chooser_widget_response_requested (GtkWidget            *widget,
 					GtkFileChooserDialog *dialog)
 {
@@ -397,7 +427,7 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
-  button = get_accept_action_widget (GTK_DIALOG (dialog));
+  button = get_accept_action_widget (GTK_DIALOG (dialog), TRUE);
   if (button)
     {
       gtk_widget_activate (button);
@@ -444,7 +474,7 @@ ensure_default_response (GtkFileChooserDialog *dialog)
 {
   GtkWidget *widget;
 
-  widget = get_accept_action_widget (GTK_DIALOG (dialog));
+  widget = get_accept_action_widget (GTK_DIALOG (dialog), TRUE);
   if (widget)
     gtk_widget_grab_default (widget); 
 }
