@@ -2147,7 +2147,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
 
 /**
  * gtk_popover_new_from_model:
- * @relative_to (allow-none): #GtkWidget the popover is related to
+ * @relative_to: (allow-none): #GtkWidget the popover is related to
  * @model: a #GMenuModel
  *
  * Creates a #GtkPopover and populates it according to
