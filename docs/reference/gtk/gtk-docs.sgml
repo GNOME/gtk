@@ -117,7 +117,7 @@
     </chapter>
 
     <chapter id="NumericEntry">
-      <title>Numeric/Text Data Entry</title>
+      <title>Numeric and Text Data Entry</title>
       <xi:include href="xml/gtkentry.xml" />
       <xi:include href="xml/gtkentrybuffer.xml" />
       <xi:include href="xml/gtkentrycompletion.xml" />
@@ -194,7 +194,7 @@
     </chapter>
 
     <chapter id="SelectorWidgets">
-      <title>Selectors (Color/File/Font)</title>
+      <title>Selector Widgets and Dialogs</title>
       <xi:include href="xml/gtkcolorchooser.xml" />
       <xi:include href="xml/gtkcolorbutton.xml" />
       <xi:include href="xml/gtkcolorchooserwidget.xml" />
