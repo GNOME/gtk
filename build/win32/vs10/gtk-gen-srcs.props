@@ -58,6 +58,8 @@ echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)
 :DONE_GDKCONFIG_H
     </GenGdkConfigHBroadway>
     <GenerateGtkDbusBuiltSources>
+set PATH=$(PATH);$(PythonPath)
+
 cd ..\..\..\gtk
 
 python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml

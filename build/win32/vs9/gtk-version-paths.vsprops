@@ -50,4 +50,8 @@
 		Name="GtkDllSuffix"
 		Value="$(GtkSeparateVSDllSuffix)"
 	/>
+	<UserMacro
+		Name="PythonPath"
+		Value="c:\python27"
+	/>
 </VisualStudioPropertySheet>
