@@ -710,6 +710,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv;
   GtkTreeSortable *sort;
+  GtkWidget *widget;
 
   dialog->priv = gtk_print_unix_dialog_get_instance_private (dialog);
   priv = dialog->priv;
@@ -735,6 +736,8 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
                           _("_Print"), GTK_RESPONSE_OK,
                           NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  widget = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_widget_set_sensitive (widget, FALSE);
 
   /* Treeview auxilary functions need to be setup here  */
   gtk_tree_model_filter_set_visible_func (priv->printer_list_filter,
