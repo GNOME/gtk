@@ -1338,8 +1338,18 @@ popover_destroy (GtkWindowPopover *popover)
       popover->unmap_id = 0;
     }
 
-  if (popover->widget && gtk_widget_get_parent (popover->widget))
-    gtk_widget_unparent (popover->widget);
+  if (popover->widget)
+    {
+      GtkWidget *parent;
+
+      parent = gtk_widget_get_parent (popover->widget);
+
+      if (parent)
+        {
+          gtk_widget_unregister_window (parent, popover->window);
+          gtk_widget_unparent (popover->widget);
+        }
+    }
 
   if (popover->window)
     gdk_window_destroy (popover->window);
@@ -6252,8 +6262,10 @@ gtk_window_realize (GtkWidget *widget)
 
 static void
 popover_unrealize (GtkWidget        *widget,
-                   GtkWindowPopover *popover)
+                   GtkWindowPopover *popover,
+                   GtkWindow        *window)
 {
+  gtk_widget_unregister_window (GTK_WIDGET (window), popover->window);
   gtk_widget_unrealize (popover->widget);
   gdk_window_destroy (popover->window);
   popover->window = NULL;
@@ -6316,7 +6328,7 @@ gtk_window_unrealize (GtkWidget *widget)
     {
       GtkWindowPopover *popover = link->data;
       link = link->next;
-      popover_unrealize (popover->widget, popover);
+      popover_unrealize (popover->widget, popover, window);
     }
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
