@@ -170,12 +170,22 @@ gtk_css_keyframes_lookup_property (GtkCssKeyframes *keyframes,
 }
 
 static GtkCssKeyframes *
-gtk_css_keyframes_new (void)
+gtk_css_keyframes_alloc (void)
 {
   GtkCssKeyframes *keyframes;
 
   keyframes = g_slice_new0 (GtkCssKeyframes);
   keyframes->ref_count = 1;
+
+  return keyframes;
+}
+
+static GtkCssKeyframes *
+gtk_css_keyframes_new (void)
+{
+  GtkCssKeyframes *keyframes;
+
+  keyframes = gtk_css_keyframes_alloc ();
 
   gtk_css_keyframes_add_keyframe (keyframes, 0);
   gtk_css_keyframes_add_keyframe (keyframes, 1);
@@ -439,7 +449,7 @@ _gtk_css_keyframes_compute (GtkCssKeyframes         *keyframes,
   g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
   g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values), NULL);
 
-  resolved = gtk_css_keyframes_new ();
+  resolved = gtk_css_keyframes_alloc ();
   resolved->n_keyframes = keyframes->n_keyframes;
   resolved->keyframe_progress = g_memdup (keyframes->keyframe_progress, keyframes->n_keyframes * sizeof (double));
   resolved->n_properties = keyframes->n_properties;
