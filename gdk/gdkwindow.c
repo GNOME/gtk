@@ -6424,6 +6424,8 @@ do_child_shapes (GdkWindow *window,
   cairo_region_xor_rectangle (region, &r);
 
   gdk_window_shape_combine_region (window, region, 0, 0);
+
+  cairo_region_destroy (region);
 }
 
 /**
