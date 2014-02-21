@@ -1003,7 +1003,6 @@
                 </child>
                 <child>
                   <object class="GtkGrid" id="job_page">
-                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">12</property>
                     <property name="row_spacing">18</property>
@@ -1386,7 +1385,6 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="image_quality_page">
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">none</property>
@@ -1451,7 +1449,6 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="color_page">
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">none</property>
@@ -1516,7 +1513,6 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="finishing_page">
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">none</property>
@@ -1581,7 +1577,6 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="advanced_page">
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">none</property>
