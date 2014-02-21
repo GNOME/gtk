@@ -3023,6 +3023,7 @@ settings_update_theme (GtkSettings *settings)
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
 
+  g_free (theme_name);
   g_free (theme_dir);
   g_free (path);
 }
