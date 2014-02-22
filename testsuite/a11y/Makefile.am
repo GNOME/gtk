@@ -79,6 +79,7 @@ testdata = \
 	stack.ui stack.txt \
 	headerbar.ui headerbar.txt \
 	tree.ui tree.txt \
+	actionbar.ui actionbar.txt \
 	$(NULL)
 
 test_in_files = \
