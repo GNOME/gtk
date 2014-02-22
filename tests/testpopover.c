@@ -28,9 +28,14 @@ int main (int argc, char *argv[])
   GtkWidget *button;
   GtkBuilder *builder;
   GMenuModel *model;
-  GtkWidget *popover;
   GSimpleActionGroup *actions;
-  GtkWidget *box;
+  GtkWidget *overlay;
+  GtkWidget *grid;
+  GtkWidget *popover;
+  GtkWidget *label;
+  GtkWidget *check;
+  GtkWidget *combo;
+  GtkWidget *align;
 
   gtk_init (&argc, &argv);
 
@@ -41,27 +46,85 @@ int main (int argc, char *argv[])
 
   gtk_widget_insert_action_group (win, "top", G_ACTION_GROUP (actions));
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (win), box);
+  overlay = gtk_overlay_new ();
+  gtk_container_add (GTK_CONTAINER (win), overlay);
 
-  button = gtk_button_new_with_label ("Pop");
-  g_object_set (button, "margin", 10, NULL);
-  gtk_widget_set_halign (button, GTK_ALIGN_END);
-  gtk_widget_set_valign (button, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  align = gtk_alignment_new (0.5, 0.5, 0, 0);
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (grid, GTK_ALIGN_FILL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+  gtk_container_add (GTK_CONTAINER (overlay), align);
+  gtk_container_add (GTK_CONTAINER (align), grid);
 
   builder = gtk_builder_new_from_file ("popover.ui");
   model = (GMenuModel *)gtk_builder_get_object (builder, "menu");
-  popover = gtk_popover_new_from_model (button, model);
-  g_signal_connect_swapped (button, "clicked",
-                            G_CALLBACK (gtk_widget_show), popover);
 
   button = gtk_menu_button_new ();
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), model);
+  gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), TRUE);
+
+  popover = GTK_WIDGET (gtk_menu_button_get_popover (GTK_MENU_BUTTON (button)));
+
   g_object_set (button, "margin", 10, NULL);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   gtk_widget_set_valign (button, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
+
+  label = gtk_label_new ("Popover hexpand");
+  check = gtk_check_button_new ();
+  g_object_bind_property (popover, "hexpand",
+                          check, "active",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label , 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), check, 2, 1, 1, 1);
+
+  label = gtk_label_new ("Popover vexpand");
+  check = gtk_check_button_new ();
+  g_object_bind_property (popover, "vexpand",
+                          check, "active",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label , 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), check, 2, 2, 1, 1);
+
+  label = gtk_label_new ("Button direction");
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "up", "Up");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "down", "Down");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "left", "Left");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "right", "Right");
+
+  g_object_bind_property (button, "direction",
+                          combo, "active",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label , 1, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), combo, 2, 3, 1, 1);
+
+  label = gtk_label_new ("Button halign");
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "fill", "Fill");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "start", "Start");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "end", "End");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "center", "Center");
+  g_object_bind_property (button, "halign",
+                          combo, "active",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label , 1, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), combo, 2, 4, 1, 1);
+
+  label = gtk_label_new ("Button valign");
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "fill", "Fill");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "start", "Start");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "end", "End");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "center", "Center");
+  g_object_bind_property (button, "valign",
+                          combo, "active",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label , 1, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), combo, 2, 5, 1, 1);
+
 
   gtk_widget_show_all (win);
 
