@@ -135,7 +135,7 @@ enum
 {
   PROP_0,
   PROP_POPUP,
-  PROP_MODEL,
+  PROP_MENU_MODEL,
   PROP_ALIGN_WIDGET,
   PROP_DIRECTION,
   PROP_USE_POPOVER,
@@ -159,7 +159,7 @@ gtk_menu_button_set_property (GObject      *object,
       case PROP_POPUP:
         gtk_menu_button_set_popup (self, g_value_get_object (value));
         break;
-      case PROP_MODEL:
+      case PROP_MENU_MODEL:
         gtk_menu_button_set_menu_model (self, g_value_get_object (value));
         break;
       case PROP_ALIGN_WIDGET:
@@ -192,7 +192,7 @@ gtk_menu_button_get_property (GObject    *object,
       case PROP_POPUP:
         g_value_set_object (value, priv->menu);
         break;
-      case PROP_MODEL:
+      case PROP_MENU_MODEL:
         g_value_set_object (value, priv->model);
         break;
       case PROP_ALIGN_WIDGET:
@@ -519,7 +519,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * Since: 3.6
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_MODEL,
+                                   PROP_MENU_MODEL,
                                    g_param_spec_object ("menu-model",
                                                         P_("Menu model"),
                                                         P_("The model from which the popup is made."),
