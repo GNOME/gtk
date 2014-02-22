@@ -11923,6 +11923,11 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
 
   position = g_list_index (tree_view->priv->columns, column);
 
+  if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
+    _gtk_tree_view_column_unrealize_button (column);
+
+  _gtk_tree_view_column_unset_tree_view (column);
+
   tree_view->priv->columns = g_list_remove (tree_view->priv->columns, column);
   tree_view->priv->n_columns--;
 
@@ -11930,7 +11935,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
     {
       GList *list;
 
-      _gtk_tree_view_column_unrealize_button (column);
       for (list = tree_view->priv->columns; list; list = list->next)
 	{
 	  GtkTreeViewColumn *tmp_column;
@@ -11948,7 +11952,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
     }
 
   _gtk_tree_view_reset_header_styles (tree_view);
-  _gtk_tree_view_column_unset_tree_view (column);
   _gtk_tree_view_accessible_remove_column (tree_view, column, position);
 
   g_object_unref (column);
