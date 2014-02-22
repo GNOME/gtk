@@ -1,0 +1,38 @@
+window1
+  "frame"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  menubutton
+    "toggle button"
+    parent: window1
+    index: 0
+    name: Menu
+    state: enabled focusable sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkImage>
+    image size: -1 x -1
+    image description: (null)
+    <AtkAction>
+    action 0 name: click
+    action 0 description: Clicks the button
+    unnamed-GtkCheckMenuItemAccessible-0
+      "menu item"
+      parent: unnamed-GtkMenuAccessible-1
+      index: 0
+      name: New
+      state: enabled selectable sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: popup
+      alpha: 1
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the menuitem
+      <AtkSelection>

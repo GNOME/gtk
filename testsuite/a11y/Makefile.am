@@ -74,6 +74,7 @@ testdata = \
 	placeholder-text.ui placeholder-text.txt \
 	menu.ui menu.txt \
 	menubutton.ui menubutton.txt \
+	menubutton2.ui menubutton2.txt \
 	combos.ui combos.txt \
 	listbox.ui listbox.txt \
 	stack.ui stack.txt \
