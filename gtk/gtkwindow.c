@@ -490,6 +490,8 @@ static void     resize_grip_create_window             (GtkWindow    *window);
 static void     resize_grip_destroy_window            (GtkWindow    *window);
 static void     update_grip_visibility                (GtkWindow    *window);
 static void     update_window_buttons                 (GtkWindow    *window);
+static void     get_shadow_width                      (GtkWidget    *widget,
+                                                       GtkBorder    *shadow_width);
 
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
@@ -5878,9 +5880,17 @@ popover_get_rect (GtkWindowPopover      *popover,
 {
   GtkAllocation win_alloc;
   GtkRequisition req;
+  GtkBorder win_border;
 
   gtk_widget_get_preferred_size (popover->widget, NULL, &req);
   gtk_widget_get_allocation (GTK_WIDGET (window), &win_alloc);
+
+  get_shadow_width (GTK_WIDGET (window), &win_border);
+  win_alloc.x += win_border.left;
+  win_alloc.y += win_border.top;
+  win_alloc.width -= win_border.left + win_border.right;
+  win_alloc.height -= win_border.top + win_border.bottom;
+
   rect->width = req.width;
   rect->height = req.height;
 
@@ -5889,21 +5899,21 @@ popover_get_rect (GtkWindowPopover      *popover,
       if (req.height < win_alloc.height &&
           gtk_widget_get_vexpand (popover->widget))
         {
-          rect->y = 0;
+          rect->y = win_alloc.y;
           rect->height = win_alloc.height;
         }
       else
         rect->y = CLAMP (popover->rect.y + (popover->rect.height / 2) -
-                         (req.height / 2), 0, win_alloc.height - req.height);
+                         (req.height / 2), win_alloc.y, win_alloc.y + win_alloc.height - req.height);
 
       if ((popover->pos == GTK_POS_LEFT) ==
           (gtk_widget_get_direction (popover->widget) == GTK_TEXT_DIR_LTR))
         {
           rect->x = popover->rect.x - req.width;
 
-          if (rect->x > 0 && gtk_widget_get_hexpand (popover->widget))
+          if (rect->x > win_alloc.x && gtk_widget_get_hexpand (popover->widget))
             {
-              rect->x = 0;
+              rect->x = win_alloc.x;
               rect->width = popover->rect.x;
             }
         }
@@ -5911,9 +5921,9 @@ popover_get_rect (GtkWindowPopover      *popover,
         {
           rect->x = popover->rect.x + popover->rect.width;
 
-          if (rect->x + rect->width < win_alloc.width &&
+          if (rect->x + rect->width < win_alloc.x + win_alloc.width &&
               gtk_widget_get_hexpand (popover->widget))
-            rect->width = win_alloc.width - rect->x;
+            rect->width = win_alloc.x + win_alloc.width - rect->x;
         }
     }
   else if (popover->pos == GTK_POS_TOP || popover->pos == GTK_POS_BOTTOM)
@@ -5921,20 +5931,21 @@ popover_get_rect (GtkWindowPopover      *popover,
       if (req.width < win_alloc.width &&
           gtk_widget_get_hexpand (popover->widget))
         {
-          rect->x = 0;
+          rect->x = win_alloc.x;
           rect->width = win_alloc.width;
         }
       else
         rect->x = CLAMP (popover->rect.x + (popover->rect.width / 2) -
-                         (req.width / 2), 0, win_alloc.width - req.width);
+                         (req.width / 2), win_alloc.x, win_alloc.x + win_alloc.width - req.width);
 
       if (popover->pos == GTK_POS_TOP)
         {
           rect->y = popover->rect.y - req.height;
 
-          if (rect->y > 0 && gtk_widget_get_vexpand (popover->widget))
+          if (rect->y > win_alloc.y &&
+              gtk_widget_get_vexpand (popover->widget))
             {
-              rect->y = 0;
+              rect->y = win_alloc.y;
               rect->height = popover->rect.y;
             }
         }
@@ -5942,9 +5953,9 @@ popover_get_rect (GtkWindowPopover      *popover,
         {
           rect->y = popover->rect.y + popover->rect.height;
 
-          if (rect->y + rect->height < win_alloc.height &&
+          if (rect->y + rect->height < win_alloc.x + win_alloc.height &&
               gtk_widget_get_vexpand (popover->widget))
-            rect->height = win_alloc.height - rect->y;
+            rect->height = win_alloc.y + win_alloc.height - rect->y;
         }
     }
 }
