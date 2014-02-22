@@ -75,6 +75,7 @@ testdata = \
 	menu.ui menu.txt \
 	menubutton.ui menubutton.txt \
 	menubutton2.ui menubutton2.txt \
+	menubutton3.ui menubutton3.txt \
 	combos.ui combos.txt \
 	listbox.ui listbox.txt \
 	stack.ui stack.txt \

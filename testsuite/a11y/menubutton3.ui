@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <menu id="menu">
+    <section>
+      <item>
+        <attribute name="label">New</attribute>
+      </item>
+    </section>
+  </menu>
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuButton" id="menubutton">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="menu-model">menu</property>
+        <property name="use-popover">True</property>
+      </object>
+    </child>
+  </object>
+</interface>
