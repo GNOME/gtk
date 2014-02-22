@@ -734,6 +734,8 @@ gtk_menu_button_set_popup (GtkMenuButton *menu_button,
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   g_return_if_fail (GTK_IS_MENU (menu) || menu == NULL);
 
+  g_object_freeze_notify (G_OBJECT (menu_button));
+
   g_clear_object (&priv->model);
 
   _gtk_menu_button_set_popup_with_func (menu_button, menu, NULL, NULL);
@@ -743,6 +745,8 @@ gtk_menu_button_set_popup (GtkMenuButton *menu_button,
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button),
                             priv->menu != NULL || priv->popover != NULL);
+
+  g_object_thaw_notify (G_OBJECT (menu_button));
 }
 
 /**
@@ -794,30 +798,39 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
 
   priv = menu_button->priv;
 
-  g_clear_object (&priv->model);
-  gtk_menu_button_set_popup (menu_button, NULL);
-  gtk_menu_button_set_popover (menu_button, NULL);
+  g_object_freeze_notify (G_OBJECT (menu_button));
 
-  if (menu_model == NULL)
-    return;
+  if (menu_model)
+    g_object_ref (menu_model);
 
-  priv->model = g_object_ref (menu_model);
-
-  if (priv->use_popover)
+  if (menu_model)
     {
-      GtkWidget *popover;
+      if (priv->use_popover)
+        {
+          GtkWidget *popover;
 
-      popover = gtk_popover_new_from_model (GTK_WIDGET (menu_button), menu_model);
-      gtk_menu_button_set_popover (menu_button, popover);
+          popover = gtk_popover_new_from_model (GTK_WIDGET (menu_button), menu_model);
+          gtk_menu_button_set_popover (menu_button, popover);
+        }
+      else
+        {
+          GtkWidget *menu;
+
+          menu = gtk_menu_new_from_model (menu_model);
+          gtk_widget_show_all (menu);
+          gtk_menu_button_set_popup (menu_button, menu);
+        }
     }
   else
     {
-      GtkWidget *menu;
-
-      menu = gtk_menu_new_from_model (menu_model);
-      gtk_widget_show_all (menu);
-      gtk_menu_button_set_popup (menu_button, menu);
+      gtk_menu_button_set_popup (menu_button, NULL);
+      gtk_menu_button_set_popover (menu_button, NULL);
     }
+
+  priv->model = menu_model;
+  g_object_notify (G_OBJECT (menu_button), "menu-model");
+
+  g_object_thaw_notify (G_OBJECT (menu_button));
 }
 
 /**
@@ -1089,6 +1102,8 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   g_return_if_fail (GTK_IS_POPOVER (popover) || popover == NULL);
 
+  g_object_freeze_notify (G_OBJECT (menu_button));
+
   g_clear_object (&priv->model);
 
   if (priv->popover)
@@ -1117,6 +1132,10 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button),
                             priv->menu != NULL || priv->popover != NULL);
+
+  g_object_notify (G_OBJECT (menu_button), "popover");
+  g_object_notify (G_OBJECT (menu_button), "menu-model");
+  g_object_freeze_notify (G_OBJECT (menu_button));
 }
 
 /**
