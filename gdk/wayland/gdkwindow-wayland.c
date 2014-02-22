@@ -1487,7 +1487,10 @@ gdk_window_wayland_resize_cairo_surface (GdkWindow       *window,
                                          gint             width,
                                          gint             height)
 {
-  return surface;
+  /* cairo image surfaces cannot be resized */
+  cairo_surface_destroy (surface);
+
+  return NULL;
 }
 
 static cairo_region_t *
