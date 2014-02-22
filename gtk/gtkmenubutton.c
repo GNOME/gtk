@@ -1060,7 +1060,14 @@ gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
 
   priv->use_popover = use_popover;
 
+  g_object_freeze_notify (G_OBJECT (menu_button));
+
+  if (priv->model)
+    gtk_menu_button_set_menu_model (menu_button, priv->model);
+
   g_object_notify (G_OBJECT (menu_button), "use-popover");
+
+  g_object_thaw_notify (G_OBJECT (menu_button));
 }
 
 /**
