@@ -1338,18 +1338,8 @@ popover_destroy (GtkWindowPopover *popover)
       popover->unmap_id = 0;
     }
 
-  if (popover->widget)
-    {
-      GtkWidget *parent;
-
-      parent = gtk_widget_get_parent (popover->widget);
-
-      if (parent)
-        {
-          gtk_widget_unregister_window (parent, popover->window);
-          gtk_widget_unparent (popover->widget);
-        }
-    }
+  if (popover->widget && gtk_widget_get_parent (popover->widget))
+    gtk_widget_unparent (popover->widget);
 
   if (popover->window)
     gdk_window_destroy (popover->window);
@@ -2679,21 +2669,20 @@ gtk_window_dispose (GObject *object)
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = window->priv;
 
-  while (priv->popovers)
-    {
-      GtkWindowPopover *popover;
-
-      popover = priv->popovers->data;
-      priv->popovers = g_list_delete_link (priv->popovers, priv->popovers);
-      popover_destroy (popover);
-    }
-
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
   unset_titlebar (window);
   remove_attach_widget (window);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
+
+  while (priv->popovers)
+    {
+      GtkWindowPopover *popover = priv->popovers->data;
+      priv->popovers = g_list_delete_link (priv->popovers, priv->popovers);
+      popover_destroy (popover);
+    }
+
 }
 
 static void
@@ -5987,8 +5976,7 @@ popover_realize (GtkWidget        *widget,
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
   parent_window = gtk_widget_get_window (GTK_WIDGET (window));
-  popover->window =
-    gdk_window_new (parent_window, &attributes, attributes_mask);
+  popover->window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_register_window (GTK_WIDGET (window), popover->window);
 
   gtk_widget_set_parent_window (popover->widget, popover->window);
@@ -12211,6 +12199,9 @@ _gtk_window_remove_popover (GtkWindow *window,
 
   if (!data)
     return;
+
+  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+    popover_unrealize (popover, data, window);
 
   priv->popovers = g_list_remove (priv->popovers, data);
   popover_destroy (data);
