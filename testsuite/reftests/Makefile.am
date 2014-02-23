@@ -279,6 +279,8 @@ testdata = \
 	reset-to-defaults.css \
 	revealer-extra-size.ref.ui \
 	revealer-extra-size.ui \
+	revealer-wrappable-contents.ref.ui \
+	revealer-wrappable-contents.ui \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
 	separator-size.ref.ui \
