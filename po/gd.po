@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gtk+3.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-05 10:27+0000\n"
-"PO-Revision-Date: 2014-02-05 11:02+0100\n"
+"POT-Creation-Date: 2014-02-23 09:51+0000\n"
+"PO-Revision-Date: 2014-02-23 14:02+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig http://www.foramnagaidhlig.net\n"
 "Language: gd\n"
@@ -76,7 +76,7 @@ msgstr "Brataichean dì-bhugachadh GDK a tha ri shuidheachadh"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:456 ../gtk/gtkmain.c:459
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -86,11 +86,11 @@ msgid "GDK debugging flags to unset"
 msgstr "Brataichean dì-bhugachadh GDK a tha ri dhì-shuidheachadh"
 
 #.
-#. * Translators, the strings in the 'keyboard label' context are
+#. * Translators, the strings in the “keyboard label” context are
 #. * display names for keyboard keys. Some of them have prefixes like
 #. * XF86 or ISO_ - these should be removed in the translation. Similarly,
-#. * underscores should be replaced by spaces. The prefix 'KP_' stands
-#. * for 'key pad' and you may want to include that in your translation.
+#. * underscores should be replaced by spaces. The prefix “KP_” stands
+#. * for “key pad” and you may want to include that in your translation.
 #. * Here are some examples of English translations:
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
@@ -581,43 +581,43 @@ msgstr "Cuiridh seo an gnìomh an leudaichear"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/a11y/gtkimageaccessible.c:52 ../gtk/deprecated/gtkstock.c:342
+#: ../gtk/a11y/gtkimageaccessible.c:52 ../gtk/deprecated/gtkstock.c:340
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_Mu dhèidhinn"
 
-#: ../gtk/a11y/gtkimageaccessible.c:53 ../gtk/deprecated/gtkstock.c:343
+#: ../gtk/a11y/gtkimageaccessible.c:53 ../gtk/deprecated/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Cuir ris"
 
-#: ../gtk/a11y/gtkimageaccessible.c:54 ../gtk/deprecated/gtkstock.c:345
+#: ../gtk/a11y/gtkimageaccessible.c:54 ../gtk/deprecated/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Trom"
 
-#: ../gtk/a11y/gtkimageaccessible.c:55 ../gtk/deprecated/gtkstock.c:347
+#: ../gtk/a11y/gtkimageaccessible.c:55 ../gtk/deprecated/gtkstock.c:345
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "_CD-ROM"
 
-#: ../gtk/a11y/gtkimageaccessible.c:56 ../gtk/deprecated/gtkstock.c:348
+#: ../gtk/a11y/gtkimageaccessible.c:56 ../gtk/deprecated/gtkstock.c:346
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Falamhaich"
 
-#: ../gtk/a11y/gtkimageaccessible.c:57 ../gtk/deprecated/gtkstock.c:349
+#: ../gtk/a11y/gtkimageaccessible.c:57 ../gtk/deprecated/gtkstock.c:347
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Dùin"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:397
-#: ../gtk/gtkwindow.c:8619
+#: ../gtk/gtkwindow.c:8655
 msgid "Minimize"
 msgstr "Fìor-lùghdaich"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:420
-#: ../gtk/gtkwindow.c:8627
+#: ../gtk/gtkwindow.c:8663
 msgid "Maximize"
 msgstr "Làn-mheudaich"
 
@@ -625,369 +625,369 @@ msgstr "Làn-mheudaich"
 msgid "Restore"
 msgstr "Aisig"
 
-#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/deprecated/gtkstock.c:352
+#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/deprecated/gtkstock.c:350
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "Dèan _lethbhreac"
 
-#: ../gtk/a11y/gtkimageaccessible.c:62 ../gtk/deprecated/gtkstock.c:353
+#: ../gtk/a11y/gtkimageaccessible.c:62 ../gtk/deprecated/gtkstock.c:351
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Ge_arr"
 
-#: ../gtk/a11y/gtkimageaccessible.c:63 ../gtk/deprecated/gtkstock.c:354
+#: ../gtk/a11y/gtkimageaccessible.c:63 ../gtk/deprecated/gtkstock.c:352
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Sguab às"
 
-#: ../gtk/a11y/gtkimageaccessible.c:64 ../gtk/deprecated/gtkstock.c:336
+#: ../gtk/a11y/gtkimageaccessible.c:64 ../gtk/deprecated/gtkstock.c:334
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Mearachd"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/a11y/gtkimageaccessible.c:65 ../gtk/deprecated/gtkstock.c:334
+#: ../gtk/a11y/gtkimageaccessible.c:65 ../gtk/deprecated/gtkstock.c:332
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Fiosrachadh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:66 ../gtk/deprecated/gtkstock.c:337
+#: ../gtk/a11y/gtkimageaccessible.c:66 ../gtk/deprecated/gtkstock.c:335
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Ceist"
 
-#: ../gtk/a11y/gtkimageaccessible.c:67 ../gtk/deprecated/gtkstock.c:335
+#: ../gtk/a11y/gtkimageaccessible.c:67 ../gtk/deprecated/gtkstock.c:333
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Rabhadh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:68 ../gtk/deprecated/gtkstock.c:357
+#: ../gtk/a11y/gtkimageaccessible.c:68 ../gtk/deprecated/gtkstock.c:355
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Cuir an gnìomh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:69 ../gtk/deprecated/gtkstock.c:359
+#: ../gtk/a11y/gtkimageaccessible.c:69 ../gtk/deprecated/gtkstock.c:357
 msgctxt "Stock label"
 msgid "_File"
 msgstr "_Faidhle"
 
-#: ../gtk/a11y/gtkimageaccessible.c:70 ../gtk/deprecated/gtkstock.c:360
+#: ../gtk/a11y/gtkimageaccessible.c:70 ../gtk/deprecated/gtkstock.c:358
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Lorg"
 
-#: ../gtk/a11y/gtkimageaccessible.c:71 ../gtk/deprecated/gtkstock.c:361
+#: ../gtk/a11y/gtkimageaccessible.c:71 ../gtk/deprecated/gtkstock.c:359
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Lorg agus _cuir 'na àite"
 
-#: ../gtk/a11y/gtkimageaccessible.c:72 ../gtk/deprecated/gtkstock.c:362
+#: ../gtk/a11y/gtkimageaccessible.c:72 ../gtk/deprecated/gtkstock.c:360
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Clàr-sùbailte"
 
-#: ../gtk/a11y/gtkimageaccessible.c:73 ../gtk/deprecated/gtkstock.c:363
+#: ../gtk/a11y/gtkimageaccessible.c:73 ../gtk/deprecated/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Làn-sgrìn"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/a11y/gtkimageaccessible.c:74 ../gtk/deprecated/gtkstock.c:366
+#: ../gtk/a11y/gtkimageaccessible.c:74 ../gtk/deprecated/gtkstock.c:364
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Bonn"
 
 #. This is a navigation label as in "go to the first page"
-#: ../gtk/a11y/gtkimageaccessible.c:75 ../gtk/deprecated/gtkstock.c:368
+#: ../gtk/a11y/gtkimageaccessible.c:75 ../gtk/deprecated/gtkstock.c:366
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "A' _chiad tè"
 
 #. This is a navigation label as in "go to the last page"
-#: ../gtk/a11y/gtkimageaccessible.c:76 ../gtk/deprecated/gtkstock.c:370
+#: ../gtk/a11y/gtkimageaccessible.c:76 ../gtk/deprecated/gtkstock.c:368
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "An tè _mu dheireadh"
 
 #. This is a navigation label as in "go to the top of the page"
-#: ../gtk/a11y/gtkimageaccessible.c:77 ../gtk/deprecated/gtkstock.c:372
+#: ../gtk/a11y/gtkimageaccessible.c:77 ../gtk/deprecated/gtkstock.c:370
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "Barr"
 
 #. This is a navigation label as in "go back"
-#: ../gtk/a11y/gtkimageaccessible.c:78 ../gtk/deprecated/gtkstock.c:374
+#: ../gtk/a11y/gtkimageaccessible.c:78 ../gtk/deprecated/gtkstock.c:372
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Air ais"
 
 #. This is a navigation label as in "go down"
-#: ../gtk/a11y/gtkimageaccessible.c:79 ../gtk/deprecated/gtkstock.c:376
+#: ../gtk/a11y/gtkimageaccessible.c:79 ../gtk/deprecated/gtkstock.c:374
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Sìos"
 
 #. This is a navigation label as in "go forward"
-#: ../gtk/a11y/gtkimageaccessible.c:80 ../gtk/deprecated/gtkstock.c:378
+#: ../gtk/a11y/gtkimageaccessible.c:80 ../gtk/deprecated/gtkstock.c:376
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "Air a_dhart"
 
 #. This is a navigation label as in "go up"
-#: ../gtk/a11y/gtkimageaccessible.c:81 ../gtk/deprecated/gtkstock.c:380
+#: ../gtk/a11y/gtkimageaccessible.c:81 ../gtk/deprecated/gtkstock.c:378
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Suas"
 
-#: ../gtk/a11y/gtkimageaccessible.c:82 ../gtk/deprecated/gtkstock.c:381
+#: ../gtk/a11y/gtkimageaccessible.c:82 ../gtk/deprecated/gtkstock.c:379
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "_Clàr-cruaidh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:83 ../gtk/deprecated/gtkstock.c:382
+#: ../gtk/a11y/gtkimageaccessible.c:83 ../gtk/deprecated/gtkstock.c:380
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_Cobhair"
 
-#: ../gtk/a11y/gtkimageaccessible.c:84 ../gtk/deprecated/gtkstock.c:383
+#: ../gtk/a11y/gtkimageaccessible.c:84 ../gtk/deprecated/gtkstock.c:381
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Dhachaigh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:85 ../gtk/deprecated/gtkstock.c:384
+#: ../gtk/a11y/gtkimageaccessible.c:85 ../gtk/deprecated/gtkstock.c:382
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Meudaich an eag"
 
-#: ../gtk/a11y/gtkimageaccessible.c:86 ../gtk/deprecated/gtkstock.c:387
+#: ../gtk/a11y/gtkimageaccessible.c:86 ../gtk/deprecated/gtkstock.c:385
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Fiosrachadh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:87 ../gtk/deprecated/gtkstock.c:388
+#: ../gtk/a11y/gtkimageaccessible.c:87 ../gtk/deprecated/gtkstock.c:386
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Eadailteach"
 
-#: ../gtk/a11y/gtkimageaccessible.c:88 ../gtk/deprecated/gtkstock.c:389
+#: ../gtk/a11y/gtkimageaccessible.c:88 ../gtk/deprecated/gtkstock.c:387
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Gearr leum gu"
 
 #. This is about text justification, "centered text"
-#: ../gtk/a11y/gtkimageaccessible.c:89 ../gtk/deprecated/gtkstock.c:391
+#: ../gtk/a11y/gtkimageaccessible.c:89 ../gtk/deprecated/gtkstock.c:389
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Meadhanaich"
 
 #. This is about text justification
-#: ../gtk/a11y/gtkimageaccessible.c:90 ../gtk/deprecated/gtkstock.c:393
+#: ../gtk/a11y/gtkimageaccessible.c:90 ../gtk/deprecated/gtkstock.c:391
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Lìon"
 
 #. This is about text justification, "left-justified text"
-#: ../gtk/a11y/gtkimageaccessible.c:91 ../gtk/deprecated/gtkstock.c:395
+#: ../gtk/a11y/gtkimageaccessible.c:91 ../gtk/deprecated/gtkstock.c:393
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Clì"
 
 #. This is about text justification, "right-justified text"
-#: ../gtk/a11y/gtkimageaccessible.c:92 ../gtk/deprecated/gtkstock.c:397
+#: ../gtk/a11y/gtkimageaccessible.c:92 ../gtk/deprecated/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Deas"
 
-#: ../gtk/a11y/gtkimageaccessible.c:93 ../gtk/deprecated/gtkstock.c:364
+#: ../gtk/a11y/gtkimageaccessible.c:93 ../gtk/deprecated/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Fàg an làn-sgrìn"
 
 #. Media label, as in "fast forward"
-#: ../gtk/a11y/gtkimageaccessible.c:94 ../gtk/deprecated/gtkstock.c:400
+#: ../gtk/a11y/gtkimageaccessible.c:94 ../gtk/deprecated/gtkstock.c:398
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Air adhart"
 
 #. Media label, as in "next song"
-#: ../gtk/a11y/gtkimageaccessible.c:95 ../gtk/deprecated/gtkstock.c:402
+#: ../gtk/a11y/gtkimageaccessible.c:95 ../gtk/deprecated/gtkstock.c:400
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "Ai_r adhart"
 
 #. Media label, as in "pause music"
-#: ../gtk/a11y/gtkimageaccessible.c:96 ../gtk/deprecated/gtkstock.c:404
+#: ../gtk/a11y/gtkimageaccessible.c:96 ../gtk/deprecated/gtkstock.c:402
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "Cuir 'na st_ad"
 
 #. Media label, as in "play music"
-#: ../gtk/a11y/gtkimageaccessible.c:97 ../gtk/deprecated/gtkstock.c:406
+#: ../gtk/a11y/gtkimageaccessible.c:97 ../gtk/deprecated/gtkstock.c:404
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Cluich"
 
 #. Media label, as in  "previous song"
-#: ../gtk/a11y/gtkimageaccessible.c:98 ../gtk/deprecated/gtkstock.c:408
+#: ../gtk/a11y/gtkimageaccessible.c:98 ../gtk/deprecated/gtkstock.c:406
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "Air ai_s"
 
 #. Media label
-#: ../gtk/a11y/gtkimageaccessible.c:99 ../gtk/deprecated/gtkstock.c:410
+#: ../gtk/a11y/gtkimageaccessible.c:99 ../gtk/deprecated/gtkstock.c:408
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Clàraich"
 
 #. Media label
-#: ../gtk/a11y/gtkimageaccessible.c:100 ../gtk/deprecated/gtkstock.c:412
+#: ../gtk/a11y/gtkimageaccessible.c:100 ../gtk/deprecated/gtkstock.c:410
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "T_oinn air ais"
 
 #. Media label
-#: ../gtk/a11y/gtkimageaccessible.c:101 ../gtk/deprecated/gtkstock.c:414
+#: ../gtk/a11y/gtkimageaccessible.c:101 ../gtk/deprecated/gtkstock.c:412
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Stad"
 
-#: ../gtk/a11y/gtkimageaccessible.c:102 ../gtk/deprecated/gtkstock.c:415
+#: ../gtk/a11y/gtkimageaccessible.c:102 ../gtk/deprecated/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Lìonra"
 
-#: ../gtk/a11y/gtkimageaccessible.c:103 ../gtk/deprecated/gtkstock.c:416
+#: ../gtk/a11y/gtkimageaccessible.c:103 ../gtk/deprecated/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_New"
 msgstr "Ù_r"
 
-#: ../gtk/a11y/gtkimageaccessible.c:104 ../gtk/deprecated/gtkstock.c:419
+#: ../gtk/a11y/gtkimageaccessible.c:104 ../gtk/deprecated/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Fosgail"
 
-#: ../gtk/a11y/gtkimageaccessible.c:105 ../gtk/deprecated/gtkstock.c:429
+#: ../gtk/a11y/gtkimageaccessible.c:105 ../gtk/deprecated/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Cuir ann"
 
-#: ../gtk/a11y/gtkimageaccessible.c:106 ../gtk/deprecated/gtkstock.c:431
+#: ../gtk/a11y/gtkimageaccessible.c:106 ../gtk/deprecated/gtkstock.c:429
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Clò-bhuail"
 
-#: ../gtk/a11y/gtkimageaccessible.c:107 ../gtk/deprecated/gtkstock.c:432
+#: ../gtk/a11y/gtkimageaccessible.c:107 ../gtk/deprecated/gtkstock.c:430
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "_Ro-shealladh a' chlò-bhualaidh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:108 ../gtk/deprecated/gtkstock.c:433
+#: ../gtk/a11y/gtkimageaccessible.c:108 ../gtk/deprecated/gtkstock.c:431
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Roghainnean"
 
-#: ../gtk/a11y/gtkimageaccessible.c:109 ../gtk/deprecated/gtkstock.c:434
+#: ../gtk/a11y/gtkimageaccessible.c:109 ../gtk/deprecated/gtkstock.c:432
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Fàg an-seo"
 
-#: ../gtk/a11y/gtkimageaccessible.c:110 ../gtk/deprecated/gtkstock.c:435
+#: ../gtk/a11y/gtkimageaccessible.c:110 ../gtk/deprecated/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Ath-dhèan"
 
-#: ../gtk/a11y/gtkimageaccessible.c:111 ../gtk/deprecated/gtkstock.c:436
+#: ../gtk/a11y/gtkimageaccessible.c:111 ../gtk/deprecated/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Ath-nuadhaich"
 
-#: ../gtk/a11y/gtkimageaccessible.c:112 ../gtk/deprecated/gtkstock.c:437
+#: ../gtk/a11y/gtkimageaccessible.c:112 ../gtk/deprecated/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Thoir air falbh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:113 ../gtk/deprecated/gtkstock.c:438
+#: ../gtk/a11y/gtkimageaccessible.c:113 ../gtk/deprecated/gtkstock.c:436
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "Ai_sig"
 
-#: ../gtk/a11y/gtkimageaccessible.c:114 ../gtk/deprecated/gtkstock.c:439
+#: ../gtk/a11y/gtkimageaccessible.c:114 ../gtk/deprecated/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Sàbhail"
 
-#: ../gtk/a11y/gtkimageaccessible.c:115 ../gtk/deprecated/gtkstock.c:440
+#: ../gtk/a11y/gtkimageaccessible.c:115 ../gtk/deprecated/gtkstock.c:438
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Sàbhail _mar"
 
-#: ../gtk/a11y/gtkimageaccessible.c:116 ../gtk/deprecated/gtkstock.c:441
+#: ../gtk/a11y/gtkimageaccessible.c:116 ../gtk/deprecated/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Tagh na _h-uile"
 
 #. Sorting direction
-#: ../gtk/a11y/gtkimageaccessible.c:117 ../gtk/deprecated/gtkstock.c:445
+#: ../gtk/a11y/gtkimageaccessible.c:117 ../gtk/deprecated/gtkstock.c:443
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "A' _dìreadh"
 
 #. Sorting direction
-#: ../gtk/a11y/gtkimageaccessible.c:118 ../gtk/deprecated/gtkstock.c:447
+#: ../gtk/a11y/gtkimageaccessible.c:118 ../gtk/deprecated/gtkstock.c:445
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "A' _tèarnadh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:119 ../gtk/deprecated/gtkstock.c:448
+#: ../gtk/a11y/gtkimageaccessible.c:119 ../gtk/deprecated/gtkstock.c:446
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Dearbhadh-litreachaidh"
 
-#: ../gtk/a11y/gtkimageaccessible.c:120 ../gtk/deprecated/gtkstock.c:449
+#: ../gtk/a11y/gtkimageaccessible.c:120 ../gtk/deprecated/gtkstock.c:447
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Stad"
 
 #. Font variant
-#: ../gtk/a11y/gtkimageaccessible.c:121 ../gtk/deprecated/gtkstock.c:451
+#: ../gtk/a11y/gtkimageaccessible.c:121 ../gtk/deprecated/gtkstock.c:449
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Loidhne troimhe"
 
 #. Font variant
-#: ../gtk/a11y/gtkimageaccessible.c:122 ../gtk/deprecated/gtkstock.c:454
+#: ../gtk/a11y/gtkimageaccessible.c:122 ../gtk/deprecated/gtkstock.c:452
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Fo-loidhne"
 
-#: ../gtk/a11y/gtkimageaccessible.c:123 ../gtk/deprecated/gtkstock.c:455
+#: ../gtk/a11y/gtkimageaccessible.c:123 ../gtk/deprecated/gtkstock.c:453
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Neo-dhèan"
 
-#: ../gtk/a11y/gtkimageaccessible.c:124 ../gtk/deprecated/gtkstock.c:385
+#: ../gtk/a11y/gtkimageaccessible.c:124 ../gtk/deprecated/gtkstock.c:383
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Lùghdaich an eag"
 
 #. Zoom
-#: ../gtk/a11y/gtkimageaccessible.c:125 ../gtk/deprecated/gtkstock.c:458
+#: ../gtk/a11y/gtkimageaccessible.c:125 ../gtk/deprecated/gtkstock.c:456
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "Meud _abhàisteach"
 
 #. Zoom
-#: ../gtk/a11y/gtkimageaccessible.c:126 ../gtk/deprecated/gtkstock.c:460
+#: ../gtk/a11y/gtkimageaccessible.c:126 ../gtk/deprecated/gtkstock.c:458
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "_Meud as fhearr"
 
-#: ../gtk/a11y/gtkimageaccessible.c:127 ../gtk/deprecated/gtkstock.c:461
+#: ../gtk/a11y/gtkimageaccessible.c:127 ../gtk/deprecated/gtkstock.c:459
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "Sùm _a-steach"
 
-#: ../gtk/a11y/gtkimageaccessible.c:128 ../gtk/deprecated/gtkstock.c:462
+#: ../gtk/a11y/gtkimageaccessible.c:128 ../gtk/deprecated/gtkstock.c:460
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Sùm _a-mach"
@@ -1169,18 +1169,18 @@ msgstr ""
 "deas air agus tagh \"Sàbhail an dath an-seo\"."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
-#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:626
-#: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:804
-#: ../gtk/gtkfilechooserwidget.c:5361 ../gtk/gtkfontchooserdialog.c:155
-#: ../gtk/gtkmessagedialog.c:890 ../gtk/gtkmessagedialog.c:903
+#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:706
+#: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:803
+#: ../gtk/gtkfilechooserwidget.c:5376 ../gtk/gtkfontchooserdialog.c:155
+#: ../gtk/gtkmessagedialog.c:889 ../gtk/gtkmessagedialog.c:902
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
-#: ../gtk/gtkprintunixdialog.c:663 ../gtk/gtkprintunixdialog.c:730
+#: ../gtk/gtkprintunixdialog.c:667 ../gtk/gtkprintunixdialog.c:735
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
 msgid "_Cancel"
 msgstr "_Sguir dheth"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:627
+#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:707
 #: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:156
 #: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
@@ -1222,8 +1222,8 @@ msgstr "_Ro-shealladh:"
 msgid "_Apply"
 msgstr "Cuir _an sàs"
 
-#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:882
-#: ../gtk/gtkmessagedialog.c:904 ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:881
+#: ../gtk/gtkmessagedialog.c:903 ../gtk/gtkprintbackend.c:748
 msgid "_OK"
 msgstr "_Ceart ma-tha"
 
@@ -1231,122 +1231,122 @@ msgstr "_Ceart ma-tha"
 msgid "Font Selection"
 msgstr "Taghadh a' chrutha-chlò"
 
-#: ../gtk/deprecated/gtkstock.c:344
+#: ../gtk/deprecated/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Cuir an gnìomh"
 
-#: ../gtk/deprecated/gtkstock.c:346
+#: ../gtk/deprecated/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Sguir dheth"
 
-#: ../gtk/deprecated/gtkstock.c:350
+#: ../gtk/deprecated/gtkstock.c:348
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "C_eangail"
 
-#: ../gtk/deprecated/gtkstock.c:351
+#: ../gtk/deprecated/gtkstock.c:349
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Iompaich"
 
-#: ../gtk/deprecated/gtkstock.c:355
+#: ../gtk/deprecated/gtkstock.c:353
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Tilg air falbh"
 
-#: ../gtk/deprecated/gtkstock.c:356
+#: ../gtk/deprecated/gtkstock.c:354
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Bris an ceangal"
 
-#: ../gtk/deprecated/gtkstock.c:358
+#: ../gtk/deprecated/gtkstock.c:356
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Deasaich"
 
-#: ../gtk/deprecated/gtkstock.c:386
+#: ../gtk/deprecated/gtkstock.c:384
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Clàr-amais"
 
-#: ../gtk/deprecated/gtkstock.c:417
+#: ../gtk/deprecated/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Chan eil"
 
-#: ../gtk/deprecated/gtkstock.c:418
+#: ../gtk/deprecated/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Ceart ma-tha"
 
 #. Page orientation
-#: ../gtk/deprecated/gtkstock.c:421
+#: ../gtk/deprecated/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Dreach-tìre"
 
 #. Page orientation
-#: ../gtk/deprecated/gtkstock.c:423
+#: ../gtk/deprecated/gtkstock.c:421
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Portraid"
 
 #. Page orientation
-#: ../gtk/deprecated/gtkstock.c:425
+#: ../gtk/deprecated/gtkstock.c:423
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Dreach-tìre contrarra"
 
 #. Page orientation
-#: ../gtk/deprecated/gtkstock.c:427
+#: ../gtk/deprecated/gtkstock.c:425
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Portraid chontrarra"
 
-#: ../gtk/deprecated/gtkstock.c:428
+#: ../gtk/deprecated/gtkstock.c:426
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Suidheachadh na d_uilleige"
 
-#: ../gtk/deprecated/gtkstock.c:430
+#: ../gtk/deprecated/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Roghainnean"
 
-#: ../gtk/deprecated/gtkstock.c:442
+#: ../gtk/deprecated/gtkstock.c:440
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Dath"
 
-#: ../gtk/deprecated/gtkstock.c:443
+#: ../gtk/deprecated/gtkstock.c:441
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Cruth-clò"
 
-#: ../gtk/deprecated/gtkstock.c:452
+#: ../gtk/deprecated/gtkstock.c:450
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Neo-dhèan an sguabadh às"
 
-#: ../gtk/deprecated/gtkstock.c:456
+#: ../gtk/deprecated/gtkstock.c:454
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Tha"
 
-#: ../gtk/deprecated/gtkuimanager.c:1781
+#: ../gtk/deprecated/gtkuimanager.c:1779
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 "Taga tòiseachaidh \"%s\" ris nach robh dùil ann an loidhne %d, caractar %d"
 
-#: ../gtk/deprecated/gtkuimanager.c:1871
+#: ../gtk/deprecated/gtkuimanager.c:1869
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Dàta caractar ris nach robh dùil ann an loidhne %d, caractar %d"
 
-#: ../gtk/deprecated/gtkuimanager.c:2726
+#: ../gtk/deprecated/gtkuimanager.c:2724
 msgid "Empty"
 msgstr "Falamh"
 
@@ -1371,11 +1371,11 @@ msgstr "Falamh"
 #. * use the function gtk_show_about_dialog() which constructs and shows a dialog
 #. * and keeps it around so that it can be shown again.
 #. *
-#. * Note that GTK+ sets a default title of `_("About &percnt;s")`
-#. * on the dialog window (where &percnt;s is replaced by the name of the
-#. * application, but in order to ensure proper translation of the title,
-#. * applications should set the title property explicitly when constructing
-#. * a GtkAboutDialog, as shown in the following example:
+#. * Note that GTK+ sets a default title of `_("About \%s")` on the dialog
+#. * window (where \%s is replaced by the name of the application, but in
+#. * order to ensure proper translation of the title, applications should
+#. * set the title property explicitly when constructing a GtkAboutDialog,
+#. * as shown in the following example:
 #. * |[<!-- language="C" -->
 #. * gtk_show_about_dialog (NULL,
 #. *                        "program-name", "ExampleCode",
@@ -1386,16 +1386,13 @@ msgstr "Falamh"
 #. *
 #. * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
 #. * e.g. using gtk_dialog_run(). In this case, you might need to know that
-#. * the 'Close' button returns the #GTK_RESPONSE_CANCEL response id.
+#. * the “Close” button returns the #GTK_RESPONSE_CANCEL response id.
 #.
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
 #: ../gtk/gtkaboutdialog.c:103
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY;\n"
-#| "for details, visit <a href=\"%s\">%s</a>"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "See the <a href=\"%s\">%s</a> for details."
@@ -1409,7 +1406,6 @@ msgid "License"
 msgstr "Ceadachas"
 
 #: ../gtk/gtkaboutdialog.c:114
-#| msgid "Custom size"
 msgid "Custom License"
 msgstr "Ceadachas gnàthaichte"
 
@@ -1475,19 +1471,19 @@ msgstr "Làrach-lìn"
 msgid "About %s"
 msgstr "Mu dhèidhinn %s"
 
-#: ../gtk/gtkaboutdialog.c:2305
+#: ../gtk/gtkaboutdialog.c:2306
 msgid "Created by"
 msgstr "Air a chruthachadh le"
 
-#: ../gtk/gtkaboutdialog.c:2308
+#: ../gtk/gtkaboutdialog.c:2309
 msgid "Documented by"
 msgstr "An stiùireadh le"
 
-#: ../gtk/gtkaboutdialog.c:2318
+#: ../gtk/gtkaboutdialog.c:2319
 msgid "Translated by"
 msgstr "Air eadar-theangachadh le"
 
-#: ../gtk/gtkaboutdialog.c:2323
+#: ../gtk/gtkaboutdialog.c:2324
 msgid "Artwork by"
 msgstr "An obair-ealain le"
 
@@ -1496,7 +1492,7 @@ msgstr "An obair-ealain le"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:159
+#: ../gtk/gtkaccellabel.c:160
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1506,7 +1502,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:165
+#: ../gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1516,7 +1512,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:171
+#: ../gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1526,7 +1522,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:801
+#: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1536,7 +1532,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:815
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1546,17 +1542,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:828
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:845
+#: ../gtk/gtkaccellabel.c:846
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:849
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1565,68 +1561,69 @@ msgstr "Backslash"
 msgid "Other application…"
 msgstr "Aplacaid eile..."
 
-#. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:200
-#, c-format
-msgid "Select an application to open “%s”"
-msgstr "Tagh aplacaid a dh'fhosglas \"%s\""
+#: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
+#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
+msgid "Select Application"
+msgstr "Tagh aplacaid"
 
-#: ../gtk/gtkappchooserdialog.c:201 ../gtk/gtkappchooserwidget.c:670
+#. Translators: %s is a filename
+#: ../gtk/gtkappchooserdialog.c:205
 #, c-format
-msgid "No applications available to open “%s”"
-msgstr "Chan eil aplacaidean ri làimh a dh'fhosglas \"%s\""
+#| msgid "Opening %s"
+msgid "Opening “%s”."
+msgstr "A' fosgladh \"%s\"."
+
+#: ../gtk/gtkappchooserdialog.c:206
+#, c-format
+#| msgid "No applications available to open “%s”"
+msgid "No applications found for “%s”"
+msgstr "Cha deach aplacaid a lorg a dh'fhosglas \"%s\""
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:207
+#: ../gtk/gtkappchooserdialog.c:212
 #, c-format
-msgid "Select an application for “%s” files"
-msgstr "Tagh aplacaid airson faidhlichean \"%s\""
+#| msgid "Opening %s"
+msgid "Opening “%s” files."
+msgstr "A' fosgladh faidhlichean \"%s\"."
 
-#: ../gtk/gtkappchooserdialog.c:209
+#: ../gtk/gtkappchooserdialog.c:214
 #, c-format
-msgid "No applications available to open “%s” files"
-msgstr "Chan eil aplacaidean ri làimh a dh'fhosglas faidhlichean \"%s\""
+#| msgid "Select an application for “%s” files"
+msgid "No applications found for “%s” files"
+msgstr "Cha deach aplacaid a lorg airson faidhlichean \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:225
-#| msgid ""
-#| "Click \"Show other applications\", for more options, or \"Find "
-#| "applications online\" to install a new application"
-msgid ""
-"Click \"Show other applications\", for more options, or \"Software\" to "
-"install a new application"
-msgstr ""
-"Briog air \"Seall aplacaidean eile\" airson barrachd roghainnean no \"Bathar-"
-"bog\" gus aplacaid ùr a stàladh"
-
-#: ../gtk/gtkappchooserdialog.c:295
+#: ../gtk/gtkappchooserdialog.c:307
 msgid "Forget association"
 msgstr "Dìochuimhnich an co-cheangal"
 
-#: ../gtk/gtkappchooserdialog.c:423
+#: ../gtk/gtkappchooserdialog.c:450
 msgid "Failed to start GNOME Software"
 msgstr "Cha deach leinn GNOME Software a thòiseachadh"
 
-#: ../gtk/gtkappchooserdialog.c:441
-msgid "Software"
-msgstr "Bathar-bog"
-
-#: ../gtk/gtkappchooserwidget.c:619
+#: ../gtk/gtkappchooserwidget.c:622
 msgid "Default Application"
 msgstr "An aplacaid bhunaiteach"
 
-#: ../gtk/gtkappchooserwidget.c:757
+#: ../gtk/gtkappchooserwidget.c:672
+#, c-format
+#| msgid "No applications available to open “%s”"
+msgid "No applications found for “%s”."
+msgstr "Cha deach aplacaid a lorg airson \"%s\"."
+
+#: ../gtk/gtkappchooserwidget.c:755
 msgid "Recommended Applications"
 msgstr "Aplacaidean a mholamaid"
 
-#: ../gtk/gtkappchooserwidget.c:772
+#: ../gtk/gtkappchooserwidget.c:770
 msgid "Related Applications"
 msgstr "Aplacaidean co-cheangailte"
 
-#: ../gtk/gtkappchooserwidget.c:786
+#: ../gtk/gtkappchooserwidget.c:784
 msgid "Other Applications"
 msgstr "Aplacaidean eile"
 
-#: ../gtk/gtkapplicationwindow.c:325 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:321 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Aplacaid"
@@ -1991,12 +1988,10 @@ msgid "Custom"
 msgstr "Gnàthaichte"
 
 #: ../gtk/gtkcolorchooserwidget.c:528
-#| msgid "Custom color %d: %s"
 msgid "Custom color"
 msgstr "Dath gnàthaichte"
 
 #: ../gtk/gtkcolorchooserwidget.c:529
-#| msgid "Create custom color"
 msgid "Create a custom color"
 msgstr "Cruthaich dath gnàthaichte"
 
@@ -2033,13 +2028,13 @@ msgstr "_Gnàthaich"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:886
+#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:885
 #: ../gtk/resources/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "_Dùin"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:412 ../gtk/gtkprintunixdialog.c:3300
+#: ../gtk/gtkcustompaperunixdialog.c:412 ../gtk/gtkprintunixdialog.c:3314
 msgid "Manage Custom Sizes"
 msgstr "Stiùirich na meudan gnàthaichte"
 
@@ -2092,30 +2087,30 @@ msgstr "_Deas:"
 msgid "Paper Margins"
 msgstr "Marghain a' phàipeir"
 
-#: ../gtk/gtkentry.c:9348 ../gtk/gtkentry.c:9501 ../gtk/gtklabel.c:6228
-#: ../gtk/gtktextview.c:8778 ../gtk/gtktextview.c:8966
+#: ../gtk/gtkentry.c:9431 ../gtk/gtkentry.c:9584 ../gtk/gtklabel.c:6262
+#: ../gtk/gtktextview.c:8779 ../gtk/gtktextview.c:8967
 msgid "Cu_t"
 msgstr "_Gearr"
 
-#: ../gtk/gtkentry.c:9352 ../gtk/gtkentry.c:9504 ../gtk/gtklabel.c:6229
-#: ../gtk/gtktextview.c:8782 ../gtk/gtktextview.c:8970
+#: ../gtk/gtkentry.c:9435 ../gtk/gtkentry.c:9587 ../gtk/gtklabel.c:6263
+#: ../gtk/gtktextview.c:8783 ../gtk/gtktextview.c:8971
 msgid "_Copy"
 msgstr "Dèan _lethbhreac"
 
-#: ../gtk/gtkentry.c:9356 ../gtk/gtkentry.c:9507 ../gtk/gtklabel.c:6230
-#: ../gtk/gtktextview.c:8784 ../gtk/gtktextview.c:8972
+#: ../gtk/gtkentry.c:9439 ../gtk/gtkentry.c:9590 ../gtk/gtklabel.c:6264
+#: ../gtk/gtktextview.c:8785 ../gtk/gtktextview.c:8973
 msgid "_Paste"
 msgstr "_Cuir ann"
 
-#: ../gtk/gtkentry.c:9359 ../gtk/gtklabel.c:6232 ../gtk/gtktextview.c:8787
+#: ../gtk/gtkentry.c:9442 ../gtk/gtklabel.c:6266 ../gtk/gtktextview.c:8788
 msgid "_Delete"
 msgstr "_Sguab às"
 
-#: ../gtk/gtkentry.c:9370 ../gtk/gtklabel.c:6241 ../gtk/gtktextview.c:8801
+#: ../gtk/gtkentry.c:9453 ../gtk/gtklabel.c:6275 ../gtk/gtktextview.c:8802
 msgid "Select _All"
 msgstr "Tagh a _h-uile"
 
-#: ../gtk/gtkentry.c:10472
+#: ../gtk/gtkentry.c:10555
 msgid "Caps Lock is on"
 msgstr "Tha CapsLock air"
 
@@ -2145,38 +2140,37 @@ msgstr "Tha CapsLock air"
 #. * }
 #. * ]|
 #. *
-#. * The #GtkFileChooserButton supports the #GtkFileChooserAction<!-- -->s
+#. * The #GtkFileChooserButton supports the #GtkFileChooserActions
 #. * %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
 #. *
-#. * <important>
-#. * The #GtkFileChooserButton will ellipsize the label,
-#. * and will thus request little horizontal space.  To give the button
-#. * more space, you should call gtk_widget_get_preferred_size(),
-#. * gtk_file_chooser_button_set_width_chars(), or pack the button in
-#. * such a way that other interface elements give space to the widget.
-#. * </important>
+#. * > The #GtkFileChooserButton will ellipsize the label, and will thus
+#. * > request little horizontal space.  To give the button more space,
+#. * > you should call gtk_widget_get_preferred_size(),
+#. * > gtk_file_chooser_button_set_width_chars(), or pack the button in
+#. * > such a way that other interface elements give space to the
+#. * > widget.
 #.
 #. **************** *
 #. *  Private Macros  *
 #. * ****************
-#: ../gtk/gtkfilechooserbutton.c:103
+#: ../gtk/gtkfilechooserbutton.c:102
 msgid "Select a File"
 msgstr "Tagh faidhle"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:846
+#: ../gtk/gtkfilechooserbutton.c:103 ../gtk/gtkplacessidebar.c:846
 msgid "Desktop"
 msgstr "An deasg"
 
-#: ../gtk/gtkfilechooserbutton.c:105
+#: ../gtk/gtkfilechooserbutton.c:104
 #: ../gtk/resources/ui/gtkfilechooserbutton.ui.h:1
 msgid "(None)"
 msgstr "(Chan eil gin)"
 
-#: ../gtk/gtkfilechooserbutton.c:806 ../gtk/gtkplacessidebar.c:3179
+#: ../gtk/gtkfilechooserbutton.c:805 ../gtk/gtkplacessidebar.c:3179
 msgid "_Open"
 msgstr "F_osgail"
 
-#: ../gtk/gtkfilechooserbutton.c:2153
+#: ../gtk/gtkfilechooserbutton.c:2152
 msgid "Other…"
 msgstr "Eile..."
 
@@ -2189,15 +2183,15 @@ msgstr "Eile..."
 msgid "%1$s on %2$s"
 msgstr "%1$s air %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:314
+#: ../gtk/gtkfilechooserwidget.c:327
 msgid "Type name of new folder"
 msgstr "Sgrìobh ainm a' phasgain ùir"
 
-#: ../gtk/gtkfilechooserwidget.c:713
+#: ../gtk/gtkfilechooserwidget.c:726
 msgid "The folder could not be created"
 msgstr "Cha b' urrainn dhuinn am pasgan a chruthachadh"
 
-#: ../gtk/gtkfilechooserwidget.c:726
+#: ../gtk/gtkfilechooserwidget.c:739
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2206,139 +2200,138 @@ msgstr ""
 "ann mu thràth air a bheil an t-ainm seo. Feuch ainm eile no thoir ainm eile "
 "air an t-seann-fhaidhle an toiseach."
 
-#: ../gtk/gtkfilechooserwidget.c:740
+#: ../gtk/gtkfilechooserwidget.c:753
 msgid "You need to choose a valid filename."
 msgstr "Feumaidh tu ainm dligheach a thaghadh dhan fhaidhle."
 
-#: ../gtk/gtkfilechooserwidget.c:743
+#: ../gtk/gtkfilechooserwidget.c:756
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr ""
 "Cha ghabh faidhle a chruthachadh fo %s a chionn 's nach e pasgan tha ann"
 
-#: ../gtk/gtkfilechooserwidget.c:751
+#: ../gtk/gtkfilechooserwidget.c:764
 msgid "Cannot create file as the filename is too long"
 msgstr ""
 "Cha ghabh am faidhle a chruthachadh a chionn 's gu bheil ainm an fhaidhle ro "
 "fhada"
 
-#: ../gtk/gtkfilechooserwidget.c:752
+#: ../gtk/gtkfilechooserwidget.c:765
 msgid "Try using a shorter name."
 msgstr "Feuch an cleachd thu ainm nas giorra."
 
-#: ../gtk/gtkfilechooserwidget.c:762
+#: ../gtk/gtkfilechooserwidget.c:775
 msgid "You may only select folders"
 msgstr "Chan fhaod thu ach pasganan a thaghadh"
 
-#: ../gtk/gtkfilechooserwidget.c:763
+#: ../gtk/gtkfilechooserwidget.c:776
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Chan e pasgan a tha san rud a thagh thu; feuch rud eile."
 
-#: ../gtk/gtkfilechooserwidget.c:771
+#: ../gtk/gtkfilechooserwidget.c:784
 msgid "Invalid file name"
 msgstr "Tha ainm an fhaidhle mì-dhligheach"
 
-#: ../gtk/gtkfilechooserwidget.c:781
+#: ../gtk/gtkfilechooserwidget.c:794
 msgid "The folder contents could not be displayed"
 msgstr "Cha b' urrainn dhuinn susbaint a’ phasgain a shealltainn"
 
-#: ../gtk/gtkfilechooserwidget.c:1416
+#: ../gtk/gtkfilechooserwidget.c:1429
 msgid "Could not select file"
 msgstr "Cha b' urrainn dhuinn am faidhle a thaghadh"
 
-#: ../gtk/gtkfilechooserwidget.c:1646
+#: ../gtk/gtkfilechooserwidget.c:1659
 msgid "_Visit File"
 msgstr "_Tadhail air an fhaidhle seo"
 
-#: ../gtk/gtkfilechooserwidget.c:1649
+#: ../gtk/gtkfilechooserwidget.c:1662
 msgid "_Copy Location"
 msgstr "Dèan lethbhreac dhen _ionad"
 
-#: ../gtk/gtkfilechooserwidget.c:1652
+#: ../gtk/gtkfilechooserwidget.c:1665
 msgid "_Add to Bookmarks"
 msgstr "_Cuir ris na comharran-lìn"
 
-#: ../gtk/gtkfilechooserwidget.c:1659
+#: ../gtk/gtkfilechooserwidget.c:1672
 msgid "Show _Hidden Files"
 msgstr "Seall faidhlichean _falaichte"
 
-#: ../gtk/gtkfilechooserwidget.c:1662
+#: ../gtk/gtkfilechooserwidget.c:1675
 msgid "Show _Size Column"
 msgstr "Seall colbh a' _mheud"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:1911
+#: ../gtk/gtkfilechooserwidget.c:1924
 msgid "_Name:"
 msgstr "_Ainm:"
 
-#: ../gtk/gtkfilechooserwidget.c:2159 ../gtk/gtkfilechooserwidget.c:2170
+#: ../gtk/gtkfilechooserwidget.c:2172 ../gtk/gtkfilechooserwidget.c:2183
 msgid "Please select a folder below"
 msgstr "Tagh pasgan gu h-ìseal"
 
-#: ../gtk/gtkfilechooserwidget.c:2165
+#: ../gtk/gtkfilechooserwidget.c:2178
 msgid "Please type a file name"
 msgstr "Cuir a-steach ainm faidhle"
 
-#: ../gtk/gtkfilechooserwidget.c:2221
+#: ../gtk/gtkfilechooserwidget.c:2234
 msgid "Recently Used"
 msgstr "Air a chleachdadh o chionn goirid"
 
-#: ../gtk/gtkfilechooserwidget.c:2231
+#: ../gtk/gtkfilechooserwidget.c:2244
 msgid "Search:"
 msgstr "Lorg:"
 
-#: ../gtk/gtkfilechooserwidget.c:2661
+#: ../gtk/gtkfilechooserwidget.c:2674
 msgid "Save in folder:"
 msgstr "Sàbhail sa phasgan:"
 
-#: ../gtk/gtkfilechooserwidget.c:2663
+#: ../gtk/gtkfilechooserwidget.c:2676
 msgid "Create in folder:"
 msgstr "Cruthaich sa phasgan:"
 
-#: ../gtk/gtkfilechooserwidget.c:3819
+#: ../gtk/gtkfilechooserwidget.c:3832
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Cha b' urrainn susbaint %s a leughadh"
 
-#: ../gtk/gtkfilechooserwidget.c:3823
+#: ../gtk/gtkfilechooserwidget.c:3836
 msgid "Could not read the contents of the folder"
 msgstr "Cha b' urrainn susbaint a' phasgain a leughadh"
 
-#: ../gtk/gtkfilechooserwidget.c:3914
+#: ../gtk/gtkfilechooserwidget.c:3927
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3914
+#: ../gtk/gtkfilechooserwidget.c:3927
 msgid "%-I:%M %P"
 msgstr "%-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3916
+#: ../gtk/gtkfilechooserwidget.c:3929
 msgid "Yesterday at %H:%M"
 msgstr "An-dè aig %H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3916
-#| msgid "Yesterday at %H:%M"
+#: ../gtk/gtkfilechooserwidget.c:3929
 msgid "Yesterday at %-I:%M %P"
 msgstr "An-dè aig %-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:4105
+#: ../gtk/gtkfilechooserwidget.c:4120
 msgid "Unknown"
 msgstr "Neo-aithnichte"
 
-#: ../gtk/gtkfilechooserwidget.c:4570
+#: ../gtk/gtkfilechooserwidget.c:4585
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 "Chan urrainn dhuinn leum a ghearradh gun phasgan a chionn 's nach eil e "
 "ionadail"
 
-#: ../gtk/gtkfilechooserwidget.c:5354 ../gtk/gtkprintunixdialog.c:654
+#: ../gtk/gtkfilechooserwidget.c:5369 ../gtk/gtkprintunixdialog.c:658
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr ""
 "Tha faidhle air a bheil \"%s\" ann mu thràth. A bheil thu airson am fear ùr "
 "a chur an àite an t-seann-fhir?"
 
-#: ../gtk/gtkfilechooserwidget.c:5357 ../gtk/gtkprintunixdialog.c:658
+#: ../gtk/gtkfilechooserwidget.c:5372 ../gtk/gtkprintunixdialog.c:662
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2346,15 +2339,15 @@ msgstr ""
 "Tha am faidhle seo ann an \"%s\" mu thràth. Ma chuireas tu am fear ùr 'na "
 "àite, sgrìobhar thairis air an t-susbaint ann."
 
-#: ../gtk/gtkfilechooserwidget.c:5362 ../gtk/gtkprintunixdialog.c:666
+#: ../gtk/gtkfilechooserwidget.c:5377 ../gtk/gtkprintunixdialog.c:670
 msgid "_Replace"
 msgstr "_Cuir 'na àite"
 
-#: ../gtk/gtkfilechooserwidget.c:6181
+#: ../gtk/gtkfilechooserwidget.c:6196
 msgid "Could not start the search process"
 msgstr "Cha b' urrainn dhuinn tòiseachadh air an lorg"
 
-#: ../gtk/gtkfilechooserwidget.c:6182
+#: ../gtk/gtkfilechooserwidget.c:6197
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -2362,13 +2355,13 @@ msgstr ""
 "Cha b' urrainn dhan phrògram ceangal a dhèanamh ri daemon an inneacsaiche. "
 "Dèan cinnteach gu bheil e a' dol."
 
-#: ../gtk/gtkfilechooserwidget.c:6196
+#: ../gtk/gtkfilechooserwidget.c:6211
 msgid "Could not send the search request"
 msgstr "Cha b' urrainn dhuinn an t-iarratas luirg a chur"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
-#. * token for the fake "File System" volume.  So, we'll return a pointer to
+#. * token for the fake “File System” volume.  So, we’ll return a pointer to
 #. * this particular string.
 #.
 #: ../gtk/gtkfilesystem.c:47
@@ -2384,21 +2377,20 @@ msgid "Pick a Font"
 msgstr "Tagh cruth-clò"
 
 #: ../gtk/gtkheaderbar.c:376
-#, fuzzy
 #| msgid "Application"
 msgid "Application menu"
-msgstr "Clàr-taice aplacaid"
+msgstr "Clàr-taice na h-aplacaid"
 
-#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8742
+#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8778
 msgid "Close"
 msgstr "Dùin"
 
-#: ../gtk/gtkicontheme.c:2125 ../gtk/gtkicontheme.c:2188
+#: ../gtk/gtkicontheme.c:2117 ../gtk/gtkicontheme.c:2180
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Chan eil an ìomhaigheag \"%s\" san ùrlar"
 
-#: ../gtk/gtkicontheme.c:3900
+#: ../gtk/gtkicontheme.c:3916
 msgid "Failed to load icon"
 msgstr "Dh'fhàillig luchdadh na h-ìomhaigheige"
 
@@ -2422,29 +2414,29 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Siostam (%s)"
 
-#: ../gtk/gtkinfobar.c:1186 ../gtk/gtkmessagedialog.c:368
+#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:370
 msgid "Information"
 msgstr "Fiosrachadh"
 
-#: ../gtk/gtkinfobar.c:1190 ../gtk/gtkmessagedialog.c:373
+#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:374
 msgid "Question"
 msgstr "Ceist"
 
-#: ../gtk/gtkinfobar.c:1194 ../gtk/gtkmessagedialog.c:378
+#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:378
 msgid "Warning"
 msgstr "Rabhadh"
 
-#: ../gtk/gtkinfobar.c:1198 ../gtk/gtkmessagedialog.c:383
+#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:382
 msgid "Error"
 msgstr "Mearachd"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6211
+#: ../gtk/gtklabel.c:6245
 msgid "_Open Link"
 msgstr "_Fosgail an ceangal"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6219
+#: ../gtk/gtklabel.c:6253
 msgid "Copy _Link Address"
 msgstr "Dèan lethbhreac de sheòladh a' _cheangail"
 
@@ -2541,40 +2533,40 @@ msgstr ""
 "Cuir fios gu rianaire an t-siostaim agad"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:449
 msgid "Load additional GTK+ modules"
 msgstr "Luchdaich mòidealan GTK+ a bharrachd"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:450
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:452
 msgid "Make all warnings fatal"
 msgstr "Dèan rabhadh marbhtach dhen a h-uile rabhadh"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:455
 msgid "GTK+ debugging flags to set"
 msgstr "Brataichean dì-bhugachadh GTK+ a tha ri shuidheachadh"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to unset"
 msgstr "Brataichean dì-bhugachadh GTK+ a tha ri dhì-shuidheachadh"
 
-#: ../gtk/gtkmain.c:758
+#: ../gtk/gtkmain.c:760
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Cha ghabh na leanas a thaisbeanadh: %s"
 
-#: ../gtk/gtkmain.c:824
+#: ../gtk/gtkmain.c:826
 msgid "GTK+ Options"
 msgstr "Roghainnean GTK+"
 
-#: ../gtk/gtkmain.c:824
+#: ../gtk/gtkmain.c:826
 msgid "Show GTK+ Options"
 msgstr "Seall roghainnean GTK+"
 
@@ -2583,19 +2575,19 @@ msgstr "Seall roghainnean GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1137
+#: ../gtk/gtkmain.c:1139
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmenubutton.c:550
+#: ../gtk/gtkmenubutton.c:620
 msgid "Menu"
 msgstr "Clàr-taice"
 
-#: ../gtk/gtkmessagedialog.c:894
+#: ../gtk/gtkmessagedialog.c:893
 msgid "_No"
 msgstr "_Chan eil"
 
-#: ../gtk/gtkmessagedialog.c:895
+#: ../gtk/gtkmessagedialog.c:894
 msgid "_Yes"
 msgstr "_Tha"
 
@@ -2727,7 +2719,7 @@ msgstr ""
 " Barr: %s %s\n"
 " Bonn: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3354
+#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3368
 msgid "Manage Custom Sizes…"
 msgstr "Stiùirich na meudan gnàthaiche..."
 
@@ -3079,19 +3071,19 @@ msgstr "Handle mì-dhligheach airson PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Mearachd nach deach a mhìneachadh"
 
-#: ../gtk/gtkprintunixdialog.c:729
+#: ../gtk/gtkprintunixdialog.c:734
 msgid "Pre_view"
 msgstr "_Ro-shealladh:"
 
-#: ../gtk/gtkprintunixdialog.c:731
+#: ../gtk/gtkprintunixdialog.c:736
 msgid "_Print"
 msgstr "_Clò-bhuail"
 
-#: ../gtk/gtkprintunixdialog.c:838
+#: ../gtk/gtkprintunixdialog.c:849
 msgid "Getting printer information failed"
 msgstr "Cha b' urrainn dhuinn fiosrachadh fhaighinn on chlò-bhualadair"
 
-#: ../gtk/gtkprintunixdialog.c:2037
+#: ../gtk/gtkprintunixdialog.c:2051
 msgid "Getting printer information…"
 msgstr "A' faighinn fiosrachadh on chlò-bhualadair..."
 
@@ -3101,42 +3093,42 @@ msgstr "A' faighinn fiosrachadh on chlò-bhualadair..."
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3097
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Left to right, top to bottom"
 msgstr "Clì gu deas, barr gu bonn"
 
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3097
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Left to right, bottom to top"
 msgstr "Clì gu deas, barr gu bonn"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3098
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgid "Right to left, top to bottom"
 msgstr "Deas gu clì, barr gu bonn"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3098
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgid "Right to left, bottom to top"
 msgstr "Deas gu clì, bun gu barr"
 
-#: ../gtk/gtkprintunixdialog.c:3085
+#: ../gtk/gtkprintunixdialog.c:3099
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
 msgid "Top to bottom, left to right"
 msgstr "Barr gu bonn, clì gu deas"
 
-#: ../gtk/gtkprintunixdialog.c:3085
+#: ../gtk/gtkprintunixdialog.c:3099
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
 msgid "Top to bottom, right to left"
 msgstr "Barr gu bonn, deas gu clì"
 
-#: ../gtk/gtkprintunixdialog.c:3086
+#: ../gtk/gtkprintunixdialog.c:3100
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgid "Bottom to top, left to right"
 msgstr "Bonn gu barr, clì gu deas"
 
-#: ../gtk/gtkprintunixdialog.c:3086
+#: ../gtk/gtkprintunixdialog.c:3100
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgid "Bottom to top, right to left"
 msgstr "Bonn gu barr, deas gu clì"
@@ -3144,28 +3136,28 @@ msgstr "Bonn gu barr, deas gu clì"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3090 ../gtk/gtkprintunixdialog.c:3103
+#: ../gtk/gtkprintunixdialog.c:3104 ../gtk/gtkprintunixdialog.c:3117
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4860
 msgid "Page Ordering"
 msgstr "Òrdugh nan duilleagan"
 
-#: ../gtk/gtkprintunixdialog.c:3119
+#: ../gtk/gtkprintunixdialog.c:3133
 msgid "Left to right"
 msgstr "Clì gu deas"
 
-#: ../gtk/gtkprintunixdialog.c:3120
+#: ../gtk/gtkprintunixdialog.c:3134
 msgid "Right to left"
 msgstr "Deas gu clì"
 
-#: ../gtk/gtkprintunixdialog.c:3132
+#: ../gtk/gtkprintunixdialog.c:3146
 msgid "Top to bottom"
 msgstr "Barr gu bonn"
 
-#: ../gtk/gtkprintunixdialog.c:3133
+#: ../gtk/gtkprintunixdialog.c:3147
 msgid "Bottom to top"
 msgstr "Bonn gu barr"
 
-#: ../gtk/gtkprintunixdialog.c:3376
+#: ../gtk/gtkprintunixdialog.c:3390
 msgid "Print"
 msgstr "Clò-bhuail"
 
@@ -3474,43 +3466,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8627
+#: ../gtk/gtkwindow.c:8663
 msgid "Unmaximize"
 msgstr "Neo-làn-mheudaich"
 
-#: ../gtk/gtkwindow.c:8636
+#: ../gtk/gtkwindow.c:8672
 msgid "Move"
 msgstr "Gluais"
 
-#: ../gtk/gtkwindow.c:8642
+#: ../gtk/gtkwindow.c:8678
 msgid "Resize"
 msgstr "Atharraich am meud"
 
-#: ../gtk/gtkwindow.c:8654
+#: ../gtk/gtkwindow.c:8690
 msgid "Always on Top"
 msgstr "Air uachdar an-còmhnaidh"
 
-#: ../gtk/gtkwindow.c:8666
+#: ../gtk/gtkwindow.c:8702
 msgid "Always on Visible Workspace"
 msgstr "Air rum-obrach a chì thu an-còmhnaidh"
 
-#: ../gtk/gtkwindow.c:8674
+#: ../gtk/gtkwindow.c:8710
 msgid "Only on This Workspace"
 msgstr "Air an rum-obrach seo a-mhàin"
 
-#: ../gtk/gtkwindow.c:8691
+#: ../gtk/gtkwindow.c:8727
 msgid "Move to Workspace Up"
 msgstr "Gluais dhan rum-obrach air a' bharr"
 
-#: ../gtk/gtkwindow.c:8700
+#: ../gtk/gtkwindow.c:8736
 msgid "Move to Workspace Down"
 msgstr "Gluais dhan rum-obrach air a' bhonn"
 
-#: ../gtk/gtkwindow.c:8714
+#: ../gtk/gtkwindow.c:8750
 msgid "Move to Another Workspace"
 msgstr "Gluais gu rum-obrach eile"
 
-#: ../gtk/gtkwindow.c:8722
+#: ../gtk/gtkwindow.c:8758
 #, c-format
 msgid "Workspace %d"
 msgstr "Rùm-obrach %d"
@@ -4966,37 +4958,37 @@ msgid "Print to Test Printer"
 msgstr "Clò-bhuail gus an clò-bhualadair a chur fo dheuchainn"
 
 #: ../gtk/resources/ui/gtkaboutdialog.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_About"
 msgid "About"
 msgstr "Mu dhèidhinn"
 
 #: ../gtk/resources/ui/gtkaboutdialog.ui.h:2
-#| msgid "C_redits"
 msgid "Credits"
 msgstr "Cliù"
-
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
-#| msgid "Default Application"
-msgid "Select Application"
-msgstr "Tagh aplacaid"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 msgid "label"
 msgstr "leubail"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
-msgid "Show Other Applications"
-msgstr "Seall aplacaidean eile"
+#| msgid "Related Applications"
+msgid "_View All Applications"
+msgstr "_Seall na h-uile aplacaid"
+
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
+#| msgid "_Find applications online"
+msgid "_Find New Applications"
+msgstr "_Lorg aplacaidean ùra"
+
+#: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
+#| msgid "_Find applications online"
+msgid "No applications found."
+msgstr "Cha deach aplacaid a lorg."
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Preferences"
 msgid "Preferences"
 msgstr "Roghainnean"
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:3
-#| msgid "Devices"
 msgid "Services"
 msgstr "Seirbheisean"
 
@@ -5015,19 +5007,14 @@ msgstr "Seall na h-uile"
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:7
 #, c-format
-#| msgid "About %s"
 msgid "Quit %s"
 msgstr "Fàg %s"
 
 #: ../gtk/resources/ui/gtkassistant.ui.h:2
-#| msgctxt "Stock label, media"
-#| msgid "_Next"
 msgid "_Next"
 msgstr "Ai_r adhart"
 
 #: ../gtk/resources/ui/gtkassistant.ui.h:3
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgid "_Back"
 msgstr "_Air ais"
 
@@ -5117,7 +5104,6 @@ msgid "Font"
 msgstr "Cruth-clò"
 
 #: ../gtk/resources/ui/gtkfontchooserdialog.ui.h:1
-#| msgid "Se_lection"
 msgid "Select Font"
 msgstr "Tagh cruth-clò"
 
@@ -5423,11 +5409,30 @@ msgstr "Lùghdaich àirde na fuaime"
 msgid "Decreases the volume"
 msgstr "Lùghdaichidh seo àirde na fuaime"
 
+#~ msgid "Select an application to open “%s”"
+#~ msgstr "Tagh aplacaid a dh'fhosglas \"%s\""
+
+#~ msgid "No applications available to open “%s” files"
+#~ msgstr "Chan eil aplacaidean ri làimh a dh'fhosglas faidhlichean \"%s\""
+
+#~| msgid ""
+#~| "Click \"Show other applications\", for more options, or \"Find "
+#~| "applications online\" to install a new application"
+#~ msgid ""
+#~ "Click \"Show other applications\", for more options, or \"Software\" to "
+#~ "install a new application"
+#~ msgstr ""
+#~ "Briog air \"Seall aplacaidean eile\" airson barrachd roghainnean no "
+#~ "\"Bathar-bog\" gus aplacaid ùr a stàladh"
+
+#~ msgid "Software"
+#~ msgstr "Bathar-bog"
+
+#~ msgid "Show Other Applications"
+#~ msgstr "Seall aplacaidean eile"
+
 #~ msgid "Failed to look for applications online"
 #~ msgstr "Dh’fhàillig oirnn aplacaidean a lorg air loidhne"
-
-#~ msgid "_Find applications online"
-#~ msgstr "_Lorg aplacaidean air loidhne"
 
 #~ msgid ""
 #~ "%s cannot quit at this time:\n"
