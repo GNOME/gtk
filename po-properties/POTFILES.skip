@@ -191,6 +191,8 @@ testsuite/reftests/quit-mnemonic.ref.ui
 testsuite/reftests/quit-mnemonic.ui
 testsuite/reftests/revealer-extra-size.ref.ui
 testsuite/reftests/revealer-extra-size.ui
+testsuite/reftests/revealer-wrappable-contents.ref.ui
+testsuite/reftests/revealer-wrappable-contents.ui
 testsuite/reftests/rotated-layout.ref.ui
 testsuite/reftests/rotated-layout.ui
 testsuite/reftests/sizegroups-basics.ref.ui
