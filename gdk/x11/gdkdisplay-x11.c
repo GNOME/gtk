@@ -189,7 +189,7 @@ static void
 do_net_wm_state_changes (GdkWindow *window)
 {
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
-  GdkWindowState old_state;
+  GdkWindowState old_state, set, unset;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
@@ -197,37 +197,31 @@ do_net_wm_state_changes (GdkWindow *window)
 
   old_state = gdk_window_get_state (window);
 
+  set = unset = 0;
+
   /* For found_sticky to remain TRUE, we have to also be on desktop
    * 0xFFFFFFFF
    */
   if (old_state & GDK_WINDOW_STATE_STICKY)
     {
       if (!(toplevel->have_sticky && toplevel->on_all_desktops))
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_STICKY,
-                                     0);
+        unset |= GDK_WINDOW_STATE_STICKY;
     }
   else
     {
       if (toplevel->have_sticky && toplevel->on_all_desktops)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_STICKY);
+        set |= GDK_WINDOW_STATE_STICKY;
     }
 
   if (old_state & GDK_WINDOW_STATE_FULLSCREEN)
     {
       if (!toplevel->have_fullscreen)
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_FULLSCREEN,
-                                     0);
+        unset |= GDK_WINDOW_STATE_FULLSCREEN;
     }
   else
     {
       if (toplevel->have_fullscreen)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_FULLSCREEN);
+        set |= GDK_WINDOW_STATE_FULLSCREEN;
     }
 
   /* Our "maximized" means both vertical and horizontal; if only one,
@@ -236,16 +230,12 @@ do_net_wm_state_changes (GdkWindow *window)
   if (old_state & GDK_WINDOW_STATE_MAXIMIZED)
     {
       if (!(toplevel->have_maxvert && toplevel->have_maxhorz))
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_MAXIMIZED,
-                                     0);
+        unset |= GDK_WINDOW_STATE_MAXIMIZED;
     }
   else
     {
       if (toplevel->have_maxvert && toplevel->have_maxhorz)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_MAXIMIZED);
+        set |= GDK_WINDOW_STATE_MAXIMIZED;
     }
 
   /* FIXME: we rely on implementation details of mutter here:
@@ -255,47 +245,37 @@ do_net_wm_state_changes (GdkWindow *window)
   if (old_state & GDK_WINDOW_STATE_TILED)
     {
       if (!toplevel->have_maxvert)
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_TILED,
-                                     0);
+        unset |= GDK_WINDOW_STATE_TILED;
     }
   else
     {
-      if (toplevel->have_maxvert)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_TILED);
+      if (toplevel->have_maxvert && !toplevel->have_maxhorz)
+        set |= GDK_WINDOW_STATE_TILED;
     }
 
   if (old_state & GDK_WINDOW_STATE_FOCUSED)
     {
       if (!toplevel->have_focused)
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_FOCUSED,
-                                     0);
+        unset |= GDK_WINDOW_STATE_FOCUSED;
     }
   else
     {
       if (toplevel->have_focused)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_FOCUSED);
+        set |= GDK_WINDOW_STATE_FOCUSED;
     }
 
   if (old_state & GDK_WINDOW_STATE_ICONIFIED)
     {
       if (!toplevel->have_hidden)
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_ICONIFIED,
-                                     0);
+        unset |= GDK_WINDOW_STATE_ICONIFIED;
     }
   else
     {
       if (toplevel->have_hidden)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_ICONIFIED);
+        set |= GDK_WINDOW_STATE_ICONIFIED;
     }
+
+  gdk_synthesize_window_state (window, unset, set);
 }
 
 static void
