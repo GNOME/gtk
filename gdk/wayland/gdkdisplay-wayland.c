@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/mman.h>
 
 #include <glib.h>
 #include "gdkwayland.h"
@@ -761,4 +762,171 @@ gdk_wayland_display_get_xdg_shell (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY(display), NULL);
 
   return wayland_display->xdg_shell;
+}
+
+static const cairo_user_data_key_t gdk_wayland_cairo_key;
+
+typedef struct _GdkWaylandCairoSurfaceData {
+  gpointer buf;
+  size_t buf_length;
+  struct wl_shm_pool *pool;
+  struct wl_buffer *buffer;
+  GdkWaylandDisplay *display;
+  uint32_t scale;
+  gboolean busy;
+} GdkWaylandCairoSurfaceData;
+
+static void
+buffer_release_callback (void             *_data,
+                         struct wl_buffer *wl_buffer)
+{
+  cairo_surface_t *surface = _data;
+  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
+
+  data->busy = FALSE;
+  cairo_surface_destroy (surface);
+}
+
+static const struct wl_buffer_listener buffer_listener = {
+  buffer_release_callback
+};
+
+struct wl_shm_pool *
+create_shm_pool (struct wl_shm  *shm,
+                 int             width,
+                 int             height,
+                 size_t         *buf_length,
+                 void          **data_out)
+{
+  char filename[] = "/tmp/wayland-shm-XXXXXX";
+  struct wl_shm_pool *pool;
+  int fd, size, stride;
+  void *data;
+
+  fd = mkstemp (filename);
+  if (fd < 0)
+    {
+      g_critical (G_STRLOC ": Unable to create temporary file (%s): %s",
+                  filename, g_strerror (errno));
+      return NULL;
+    }
+
+  stride = width * 4;
+  size = stride * height;
+  if (ftruncate (fd, size) < 0)
+    {
+      g_critical (G_STRLOC ": Truncating temporary file failed: %s",
+                  g_strerror (errno));
+      close (fd);
+      return NULL;
+    }
+
+  data = mmap (NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  unlink (filename);
+
+  if (data == MAP_FAILED)
+    {
+      g_critical (G_STRLOC ": mmap'ping temporary file failed: %s",
+                  g_strerror (errno));
+      close (fd);
+      return NULL;
+    }
+
+  pool = wl_shm_create_pool(shm, fd, size);
+
+  close (fd);
+
+  *data_out = data;
+  *buf_length = size;
+
+  return pool;
+}
+
+static void
+gdk_wayland_cairo_surface_destroy (void *p)
+{
+  GdkWaylandCairoSurfaceData *data = p;
+
+  if (data->buffer)
+    wl_buffer_destroy (data->buffer);
+
+  if (data->pool)
+    wl_shm_pool_destroy (data->pool);
+
+  munmap (data->buf, data->buf_length);
+  g_free (data);
+}
+
+cairo_surface_t *
+_gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
+                                         int                width,
+                                         int                height,
+                                         guint              scale)
+{
+  GdkWaylandCairoSurfaceData *data;
+  cairo_surface_t *surface = NULL;
+  cairo_status_t status;
+  int stride;
+
+  data = g_new (GdkWaylandCairoSurfaceData, 1);
+  data->display = display;
+  data->buffer = NULL;
+  data->scale = scale;
+  data->busy = FALSE;
+
+  stride = width * 4;
+
+  data->pool = create_shm_pool (display->shm,
+                                width*scale, height*scale,
+                                &data->buf_length,
+                                &data->buf);
+
+  surface = cairo_image_surface_create_for_data (data->buf,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 width*scale,
+                                                 height*scale,
+                                                 stride*scale);
+
+  data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
+                                            width*scale, height*scale,
+                                            stride*scale, WL_SHM_FORMAT_ARGB8888);
+  wl_buffer_add_listener (data->buffer, &buffer_listener, surface);
+
+  cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
+                               data, gdk_wayland_cairo_surface_destroy);
+
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  cairo_surface_set_device_scale (surface, scale, scale);
+#endif
+
+  status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+    {
+      g_critical (G_STRLOC ": Unable to create Cairo image surface: %s",
+                  cairo_status_to_string (status));
+    }
+
+  return surface;
+}
+
+struct wl_buffer *
+_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface)
+{
+  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
+  return data->buffer;
+}
+
+void
+_gdk_wayland_shm_surface_set_busy (cairo_surface_t *surface)
+{
+  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
+  data->busy = TRUE;
+  cairo_surface_reference (surface);
+}
+
+gboolean
+_gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface)
+{
+  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
+  return data->busy;
 }

@@ -178,10 +178,12 @@ void _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
 guint32 _gdk_wayland_display_get_serial (GdkWaylandDisplay *wayland_display);
 void _gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display, guint32 serial);
 
-struct wl_shm_pool * _create_shm_pool (struct wl_shm *shm,
-                                      int             width,
-                                      int             height,
-                                      size_t         *buf_length,
-                                      void          **data_out);
+cairo_surface_t * _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
+                                                           int                width,
+                                                           int                height,
+                                                           guint              scale);
+struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface);
+void _gdk_wayland_shm_surface_set_busy (cairo_surface_t *surface);
+gboolean _gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface);
 
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */
