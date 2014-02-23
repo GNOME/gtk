@@ -41,8 +41,6 @@ gint _gtk_tool_item_group_get_height_for_width (GtkToolItemGroup *group,
                                                 gint              width);
 gint _gtk_tool_item_group_get_width_for_height (GtkToolItemGroup *group,
                                                 gint              height);
-void _gtk_tool_item_group_paint                (GtkToolItemGroup *group,
-                                                cairo_t          *cr);
 gint _gtk_tool_item_group_get_size_for_limit   (GtkToolItemGroup *group,
                                                 gint              limit,
                                                 gboolean          vertical,
