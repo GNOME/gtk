@@ -34,7 +34,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/mman.h>
 #include <errno.h>
 
 #define WL_SURFACE_HAS_BUFFER_SCALE 3
@@ -386,25 +385,11 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
     }
 }
 
-static const cairo_user_data_key_t gdk_wayland_cairo_key;
-
-typedef struct _GdkWaylandCairoSurfaceData {
-  gpointer buf;
-  size_t buf_length;
-  struct wl_shm_pool *pool;
-  struct wl_buffer *buffer;
-  GdkWaylandDisplay *display;
-  int32_t width, height;
-  uint32_t scale;
-  gboolean busy;
-} GdkWaylandCairoSurfaceData;
-
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkWindow     *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandCairoSurfaceData *data;
   struct wl_callback *callback;
 
   if (!impl->pending_commit)
@@ -418,14 +403,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   _gdk_frame_clock_freeze (clock);
 
   wl_surface_commit (impl->surface);
-
-  data = cairo_surface_get_user_data (impl->cairo_surface,
-                                      &gdk_wayland_cairo_key);
-  if (!data->busy)
-    {
-      data->busy = TRUE;
-      cairo_surface_reference (impl->cairo_surface);
-    }
+  _gdk_wayland_shm_surface_set_busy (impl->cairo_surface);
 }
 
 static void
@@ -549,7 +527,6 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 {
   GdkWaylandDisplay *display;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandCairoSurfaceData *data;
   int32_t server_width, server_height, dx, dy;
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -560,12 +537,9 @@ gdk_wayland_window_attach_image (GdkWindow *window)
    */
   if (impl->server_surface)
     {
-      data = cairo_surface_get_user_data (impl->server_surface,
-                                          &gdk_wayland_cairo_key);
-
       /* Save the old dimensions used for the surface */
-      server_width = data->width;
-      server_height = data->height;
+      server_width = cairo_image_surface_get_width (impl->server_surface);
+      server_height = cairo_image_surface_get_height (impl->server_surface);
 
       cairo_surface_destroy (impl->server_surface);
     }
@@ -578,165 +552,27 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   /* Save the current "drawn to" surface for future calls into here */
   impl->server_surface = cairo_surface_reference (impl->cairo_surface);
 
-  /* Get a Wayland buffer from this new surface */
-  data = cairo_surface_get_user_data (impl->cairo_surface,
-                                      &gdk_wayland_cairo_key);
-
   if (impl->resize_edges & XDG_SURFACE_RESIZE_EDGE_LEFT)
-    dx = server_width - data->width;
+    dx = server_width - cairo_image_surface_get_width (impl->cairo_surface);
   else
     dx = 0;
 
   if (impl->resize_edges & XDG_SURFACE_RESIZE_EDGE_TOP)
-    dy = server_height - data->height;
+    dy = server_height - cairo_image_surface_get_height (impl->cairo_surface);
   else
     dy = 0;
 
   /* Attach this new buffer to the surface */
-  wl_surface_attach (impl->surface, data->buffer, dx, dy);
+  wl_surface_attach (impl->surface,
+                     _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface),
+                     dx, dy);
 
   /* Only set the buffer scale if supported by the compositor */
   display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   if (display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
-    wl_surface_set_buffer_scale (impl->surface, data->scale);
+    wl_surface_set_buffer_scale (impl->surface, impl->scale);
 
   impl->pending_commit = TRUE;
-}
-
-static void
-gdk_wayland_cairo_surface_destroy (void *p)
-{
-  GdkWaylandCairoSurfaceData *data = p;
-
-  if (data->buffer)
-    wl_buffer_destroy (data->buffer);
-
-  if (data->pool)
-    wl_shm_pool_destroy (data->pool);
-
-  munmap (data->buf, data->buf_length);
-  g_free (data);
-}
-
-struct wl_shm_pool *
-_create_shm_pool (struct wl_shm  *shm,
-                  int             width,
-                  int             height,
-                  size_t         *buf_length,
-                  void          **data_out)
-{
-  char filename[] = "/tmp/wayland-shm-XXXXXX";
-  struct wl_shm_pool *pool;
-  int fd, size, stride;
-  void *data;
-
-  fd = mkstemp (filename);
-  if (fd < 0)
-    {
-      g_critical (G_STRLOC ": Unable to create temporary file (%s): %s",
-                  filename, g_strerror (errno));
-      return NULL;
-    }
-
-  stride = width * 4;
-  size = stride * height;
-  if (ftruncate (fd, size) < 0)
-    {
-      g_critical (G_STRLOC ": Truncating temporary file failed: %s",
-                  g_strerror (errno));
-      close (fd);
-      return NULL;
-    }
-
-  data = mmap (NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-  unlink (filename);
-
-  if (data == MAP_FAILED)
-    {
-      g_critical (G_STRLOC ": mmap'ping temporary file failed: %s",
-                  g_strerror (errno));
-      close (fd);
-      return NULL;
-    }
-
-  pool = wl_shm_create_pool(shm, fd, size);
-
-  close (fd);
-
-  *data_out = data;
-  *buf_length = size;
-
-  return pool;
-}
-
-
-static void
-buffer_release_callback (void             *_data,
-                         struct wl_buffer *wl_buffer)
-{
-  cairo_surface_t *surface = _data;
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
-
-  data->busy = FALSE;
-  cairo_surface_destroy (surface);
-}
-
-static const struct wl_buffer_listener buffer_listener = {
-  buffer_release_callback
-};
-
-static cairo_surface_t *
-gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
-                                  int                width,
-                                  int                height,
-                                  guint              scale)
-{
-  GdkWaylandCairoSurfaceData *data;
-  cairo_surface_t *surface = NULL;
-  cairo_status_t status;
-  int stride;
-
-  data = g_new (GdkWaylandCairoSurfaceData, 1);
-  data->display = display;
-  data->buffer = NULL;
-  data->width = width;
-  data->height = height;
-  data->scale = scale;
-  data->busy = FALSE;
-
-  stride = width * 4;
-
-  data->pool = _create_shm_pool (display->shm,
-                                 width*scale, height*scale,
-                                 &data->buf_length,
-                                 &data->buf);
-
-  surface = cairo_image_surface_create_for_data (data->buf,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 width*scale,
-                                                 height*scale,
-                                                 stride*scale);
-
-  data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
-                                            width*scale, height*scale,
-                                            stride*scale, WL_SHM_FORMAT_ARGB8888);
-  wl_buffer_add_listener (data->buffer, &buffer_listener, surface);
-
-  cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
-                               data, gdk_wayland_cairo_surface_destroy);
-
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
-  cairo_surface_set_device_scale (surface, scale, scale);
-#endif
-
-  status = cairo_surface_status (surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-    {
-      g_critical (G_STRLOC ": Unable to create Cairo image surface: %s",
-                  cairo_status_to_string (status));
-    }
-
-  return surface;
 }
 
 static void
@@ -745,14 +581,12 @@ gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   if (!impl->cairo_surface)
     {
-      GdkWaylandDisplay *display_wayland =
-        GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
+      GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
 
-      impl->cairo_surface =
-        gdk_wayland_create_cairo_surface (display_wayland,
-                                          impl->wrapper->width,
-                                          impl->wrapper->height,
-                                          impl->scale);
+      impl->cairo_surface = _gdk_wayland_display_create_shm_surface (display_wayland,
+                                                                     impl->wrapper->width,
+                                                                     impl->wrapper->height,
+                                                                     impl->scale);
     }
 }
 
@@ -788,13 +622,8 @@ gdk_window_impl_wayland_begin_paint_region (GdkWindow            *window,
                                             const cairo_region_t *region)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandCairoSurfaceData *data;
-
   gdk_wayland_window_ensure_cairo_surface (window);
-  data = cairo_surface_get_user_data (impl->cairo_surface,
-                                      &gdk_wayland_cairo_key);
-
-  return data->busy;
+  return _gdk_wayland_shm_surface_get_busy (impl->cairo_surface);
 }
 
 static void
@@ -1584,11 +1413,7 @@ gdk_wayland_window_destroy (GdkWindow *window,
   gdk_wayland_window_hide_surface (window, TRUE);
 
   if (impl->cairo_surface)
-    {
-      cairo_surface_finish (impl->cairo_surface);
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_wayland_cairo_key,
-                                   NULL, NULL);
-    }
+    cairo_surface_finish (impl->cairo_surface);
 }
 
 static void
