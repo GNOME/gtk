@@ -312,10 +312,10 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
       transition = effective_transition (revealer);
       if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-        gtk_widget_get_preferred_width_for_height (child, child_allocation->height, NULL,
+        gtk_widget_get_preferred_width_for_height (child, allocation->height, NULL,
                                                    &child_allocation->width);
       else
-        gtk_widget_get_preferred_height_for_width (child, child_allocation->width, NULL,
+        gtk_widget_get_preferred_height_for_width (child, allocation->width, NULL,
                                                    &child_allocation->height);
     }
 
