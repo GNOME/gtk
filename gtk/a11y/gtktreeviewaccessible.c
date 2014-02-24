@@ -378,12 +378,8 @@ create_cell_accessible (GtkTreeView           *treeview,
    */
   if (g_list_length (renderer_list) != 1)
     {
-      GtkCellAccessible *container_cell;
-
       container = gtk_container_cell_accessible_new ();
-
-      container_cell = GTK_CELL_ACCESSIBLE (container);
-      _gtk_cell_accessible_initialize (container_cell, GTK_WIDGET (treeview), ATK_OBJECT (accessible));
+      _gtk_cell_accessible_initialize (GTK_CELL_ACCESSIBLE (container), GTK_WIDGET (treeview), ATK_OBJECT (accessible));
 
       parent = ATK_OBJECT (container);
     }
