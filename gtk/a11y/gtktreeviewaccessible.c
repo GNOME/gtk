@@ -360,11 +360,24 @@ peek_cell (GtkTreeViewAccessible *accessible,
 }
 
 static GtkCellAccessible *
+create_cell_accessible_for_renderer (GtkCellRenderer *renderer,
+                                     GtkWidget       *widget,
+                                     AtkObject       *parent)
+{
+  GtkCellAccessible *cell;
+
+  cell = GTK_CELL_ACCESSIBLE (gtk_renderer_cell_accessible_new (renderer));
+  
+  _gtk_cell_accessible_initialize (cell, widget, parent);
+
+  return cell;
+}
+
+static GtkCellAccessible *
 create_cell_accessible (GtkTreeView           *treeview,
                         GtkTreeViewAccessible *accessible,
                         GtkTreeViewColumn     *column)
 {
-  GtkCellRenderer *renderer;
   AtkObject *parent;
   GtkContainerCellAccessible *container = NULL;
   GList *renderer_list;
@@ -390,11 +403,7 @@ create_cell_accessible (GtkTreeView           *treeview,
 
   for (l = renderer_list; l; l = l->next)
     {
-      renderer = GTK_CELL_RENDERER (l->data);
-
-      cell = GTK_CELL_ACCESSIBLE (gtk_renderer_cell_accessible_new (renderer));
-      _gtk_cell_accessible_initialize (cell, GTK_WIDGET (treeview), parent);
-
+      cell = create_cell_accessible_for_renderer (l->data, GTK_WIDGET (treeview), parent);
       if (container)
         gtk_container_cell_accessible_add_child (container, cell);
     }
