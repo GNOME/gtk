@@ -1508,7 +1508,6 @@ gtk_main_do_event (GdkEvent *event)
 {
   GtkWidget *event_widget;
   GtkWidget *grab_widget = NULL;
-  GtkWidget *topmost_widget = NULL;
   GtkWindowGroup *window_group;
   GdkEvent *rewritten_event = NULL;
   GdkDevice *device;
@@ -1573,14 +1572,6 @@ gtk_main_do_event (GdkEvent *event)
 
   if (!grab_widget)
     grab_widget = gtk_window_group_get_current_grab (window_group);
-
-  /* Find out the topmost widget where captured event propagation
-   * should start, which is the widget holding the GTK+ grab
-   * if any, otherwise it's left NULL and events are emitted
-   * from the toplevel (or topmost parentless parent).
-   */
-  if (grab_widget)
-    topmost_widget = grab_widget;
 
   /* If the grab widget is an ancestor of the event widget
    * then we send the event to the original event widget.
@@ -1695,7 +1686,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_TOUCH_BEGIN:
-      if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
+      if (!_gtk_propagate_captured_event (grab_widget, event, NULL))
         gtk_propagate_event (grab_widget, event);
       break;
 
@@ -1743,19 +1734,19 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
-      if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
+      if (!_gtk_propagate_captured_event (grab_widget, event, NULL))
         gtk_propagate_event (grab_widget, event);
       break;
 
     case GDK_ENTER_NOTIFY:
       if (gtk_widget_is_sensitive (grab_widget) &&
-          !_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
+          !_gtk_propagate_captured_event (grab_widget, event, NULL))
         gtk_widget_event (grab_widget, event);
       break;
 
     case GDK_LEAVE_NOTIFY:
       if (gtk_widget_is_sensitive (grab_widget) &&
-          !_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
+          !_gtk_propagate_captured_event (grab_widget, event, NULL))
         gtk_widget_event (grab_widget, event);
       break;
 
