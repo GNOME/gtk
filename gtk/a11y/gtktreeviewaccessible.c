@@ -362,8 +362,6 @@ peek_cell (GtkTreeViewAccessible *accessible,
 static GtkCellAccessible *
 create_cell_accessible (GtkTreeView           *treeview,
                         GtkTreeViewAccessible *accessible,
-                        GtkRBTree             *tree,
-                        GtkRBNode             *node,
                         GtkTreeViewColumn     *column)
 {
   GtkCellRenderer *renderer;
@@ -387,11 +385,6 @@ create_cell_accessible (GtkTreeView           *treeview,
       container_cell = GTK_CELL_ACCESSIBLE (container);
       _gtk_cell_accessible_initialize (container_cell, GTK_WIDGET (treeview), ATK_OBJECT (accessible));
 
-      /* The GtkTreeViewAccessibleCellInfo structure for the container will
-       * be before the ones for the cells so that the first one we find for
-       * a position will be for the container
-       */
-      cell_info_new (accessible, tree, node, column, container_cell);
       parent = ATK_OBJECT (container);
     }
   else
@@ -404,11 +397,6 @@ create_cell_accessible (GtkTreeView           *treeview,
       renderer = GTK_CELL_RENDERER (l->data);
 
       cell = GTK_CELL_ACCESSIBLE (gtk_renderer_cell_accessible_new (renderer));
-
-      /* Create the GtkTreeViewAccessibleCellInfo for this cell */
-      if (parent == ATK_OBJECT (accessible))
-        cell_info_new (accessible, tree, node, column, cell);
-
       _gtk_cell_accessible_initialize (cell, GTK_WIDGET (treeview), parent);
 
       if (container)
@@ -430,7 +418,8 @@ create_cell (GtkTreeView           *treeview,
 {
   GtkCellAccessible *cell;
 
-  cell = create_cell_accessible (treeview, accessible, tree, node, column);
+  cell = create_cell_accessible (treeview, accessible, column);
+  cell_info_new (accessible, tree, node, column, cell);
 
   set_cell_data (treeview, accessible, cell);
   _gtk_cell_accessible_update_cache (cell);
