@@ -376,7 +376,7 @@ create_cell_accessible (GtkTreeView           *treeview,
   /* If there is not exactly one renderer in the list,
    * make a container
    */
-  if (renderer_list == NULL || renderer_list->next)
+  if (g_list_length (renderer_list) != 1)
     {
       GtkCellAccessible *container_cell;
 
