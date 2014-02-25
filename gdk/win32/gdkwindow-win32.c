@@ -796,16 +796,14 @@ gdk_win32_window_destroy (GdkWindow *window,
     }
 }
 
-static cairo_surface_t *
+static gboolean
 gdk_win32_window_resize_cairo_surface (GdkWindow       *window,
                                        cairo_surface_t *surface,
                                        gint             width,
                                        gint             height)
 {
   /* XXX: Make Cairo surface use DC clip */
-  cairo_surface_destroy (surface);
-
-  return NULL;
+  return FALSE;
 }
 
 static void

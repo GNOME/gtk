@@ -1337,7 +1337,7 @@ gdk_x11_window_destroy (GdkWindow *window,
     XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
 }
 
-static cairo_surface_t *
+static gboolean
 gdk_window_x11_resize_cairo_surface (GdkWindow       *window,
                                      cairo_surface_t *surface,
                                      gint             width,
@@ -1345,7 +1345,7 @@ gdk_window_x11_resize_cairo_surface (GdkWindow       *window,
 {
   cairo_xlib_surface_set_size (surface, width, height);
 
-  return surface;
+  return TRUE;
 }
 
 static void

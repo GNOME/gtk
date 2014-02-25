@@ -550,7 +550,7 @@ gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
   return FALSE;
 }
 
-static cairo_surface_t *
+static gboolean
 gdk_offscreen_window_resize_cairo_surface (GdkWindow       *window,
                                            cairo_surface_t *surface,
                                            gint             width,
@@ -559,7 +559,7 @@ gdk_offscreen_window_resize_cairo_surface (GdkWindow       *window,
   /* No-op.  The surface gets resized in
    * gdk_offscreen_window_move_resize_internal().
    */
-  return surface;
+  return TRUE;
 }
 
 /**

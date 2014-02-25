@@ -1481,14 +1481,14 @@ gdk_window_wayland_destroy_foreign (GdkWindow *window)
 {
 }
 
-static cairo_surface_t *
+static gboolean
 gdk_window_wayland_resize_cairo_surface (GdkWindow       *window,
                                          cairo_surface_t *surface,
                                          gint             width,
                                          gint             height)
 {
   /* cairo image surfaces cannot be resized */
-  return NULL;
+  return FALSE;
 }
 
 static cairo_region_t *

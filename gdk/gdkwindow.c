@@ -1003,17 +1003,17 @@ recompute_visible_regions_internal (GdkWindow *private,
 	}
     }
 
-  if (private->cairo_surface && gdk_window_has_impl (private))
+  if (private->cairo_surface)
     {
-      GdkWindowImplClass *iface = GDK_WINDOW_IMPL_GET_CLASS (private->impl);
-
-      private->cairo_surface = iface->resize_cairo_surface (private,
-                                                            private->cairo_surface,
-                                                            private->width,
-                                                            private->height);
+      if (!gdk_window_has_impl (private) ||
+          !GDK_WINDOW_IMPL_GET_CLASS (private->impl)->resize_cairo_surface (private,
+                                                                            private->cairo_surface,
+                                                                            private->width,
+                                                                            private->height))
+        {
+          gdk_window_drop_cairo_surface (private);
+        }
     }
-  else if (private->cairo_surface)
-    gdk_window_drop_cairo_surface (private);
 }
 
 /* Call this when private has changed in one or more of these ways:

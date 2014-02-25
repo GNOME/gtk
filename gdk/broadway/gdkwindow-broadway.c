@@ -365,16 +365,14 @@ _gdk_broadway_window_destroy (GdkWindow *window,
 				       impl->id);
 }
 
-static cairo_surface_t *
+static gboolean
 gdk_window_broadway_resize_cairo_surface (GdkWindow       *window,
 					  cairo_surface_t *surface,
 					  gint             width,
 					  gint             height)
 {
   /* Image surfaces cannot be resized */
-  cairo_surface_destroy (surface);
-
-  return NULL;
+  return FALSE;
 }
 
 static void

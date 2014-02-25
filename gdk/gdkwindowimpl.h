@@ -158,10 +158,14 @@ struct _GdkWindowImplClass
   */
   void         (*destroy_foreign)       (GdkWindow       *window);
 
-  cairo_surface_t * (* resize_cairo_surface) (GdkWindow       *window,
-                                              cairo_surface_t *surface,
-                                              gint             width,
-                                              gint             height);
+  /* Resizes @surface to a new size. If successful, return %TRUE.
+   * If the backend cannot resize surfaces, return %FALSE and a new
+   * surface will be created instead.
+   */
+  gboolean     (* resize_cairo_surface) (GdkWindow       *window,
+                                         cairo_surface_t *surface,
+                                         gint             width,
+                                         gint             height);
 
   /* optional */
   gboolean     (* beep)                 (GdkWindow       *window);
