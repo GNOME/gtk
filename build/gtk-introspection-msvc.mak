@@ -1,10 +1,4 @@
-# NMake Makefile to build Introspection Files for ATK
-
-# Change or pass in as a variable/env var if needed
-GDK_DLLNAME = gdk-3-vs$(VSVER)
-GTK_DLLNAME = gtk-3-vs$(VSVER)
-
-# Please do not change anything after this line
+# NMake Makefile to build Introspection Files for GTK+
 
 !include detectenv_msvc.mak
 
@@ -43,7 +37,7 @@ Gdk-$(APIVERSION).gir: gdk_list
 	$(TIME_T_DEFINE) --namespace=Gdk --nsversion=3.0	\
 	--include=Gio-2.0 --include=GdkPixbuf-2.0	\
 	--include=Pango-1.0 --include=cairo-1.0	\
-	--no-libtool --library=$(GDK_DLLNAME)	\
+	--no-libtool --library=gdk-3.0	\
 	--reparse-validate --add-include-path=$(G_IR_INCLUDEDIR) --add-include-path=.	\
 	--pkg-export gdk-3.0 --warn-all --c-include="gdk/gdk.h"	\
 	-DG_LOG_DOMAIN=\"Gdk\" -DGDK_COMPILATION	\
@@ -57,12 +51,12 @@ Gtk-$(APIVERSION).gir: gtk_list
 	--namespace=Gtk --nsversion=3.0	\
 	--include=Atk-1.0	\
 	--include-uninstalled=./Gdk-$(APIVERSION).gir	\
-	--no-libtool --library=$(GTK_DLLNAME)	\
+	--no-libtool --library=gtk-3.0 --library=gdk-3.0	\
 	--reparse-validate --add-include-path=$(G_IR_INCLUDEDIR) --add-include-path=.	\
 	--pkg-export gtk+-3.0 --warn-all --c-include="gtk/gtkx.h"	\
 	-DG_LOG_DOMAIN=\"Gtk\" -DGTK_LIBDIR=\"/dummy/lib\"	\
 	$(TIME_T_DEFINE) -DGTK_DATADIR=\"/dummy/share\" -DGTK_DATA_PREFIX=\"/dummy\"	\
-	-DGTK_SYSCONFDIR=\"/dummy/etc\" -DGTK_VERSION=\"3.11.4\"	\
+	-DGTK_SYSCONFDIR=\"/dummy/etc\" -DGTK_VERSION=\"3.11.8\"	\
 	-DGTK_BINARY_VERSION=\"3.0.0\" -DGTK_HOST=\"i686-pc-vs$(VSVER)\"	\
 	-DGTK_COMPILATION -DGTK_PRINT_BACKENDS=\"file\"	\
 	-DGTK_PRINT_PREVIEW_COMMAND=\"undefined-gtk-print-preview-command\"	\
