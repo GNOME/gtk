@@ -99,6 +99,8 @@ static void gtk_fixed_get_preferred_height (GtkWidget *widget,
                                             gint      *natural);
 static void gtk_fixed_size_allocate (GtkWidget        *widget,
                                      GtkAllocation    *allocation);
+static gboolean gtk_fixed_draw      (GtkWidget        *widget,
+                                     cairo_t          *cr);
 static void gtk_fixed_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
@@ -135,6 +137,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
   widget_class->get_preferred_width = gtk_fixed_get_preferred_width;
   widget_class->get_preferred_height = gtk_fixed_get_preferred_height;
   widget_class->size_allocate = gtk_fixed_size_allocate;
+  widget_class->draw = gtk_fixed_draw;
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
@@ -545,3 +548,27 @@ gtk_fixed_forall (GtkContainer *container,
       (* callback) (child->widget, callback_data);
     }
 }
+
+static gboolean
+gtk_fixed_draw (GtkWidget *widget,
+                cairo_t   *cr)
+{
+  GtkFixed *fixed = GTK_FIXED (widget);
+  GtkFixedPrivate *priv = fixed->priv;
+  GtkFixedChild *child;
+  GList *list;
+
+  for (list = priv->children;
+       list;
+       list = list->next)
+    {
+      child = list->data;
+
+      gtk_container_propagate_draw (GTK_CONTAINER (fixed),
+                                    child->widget,
+                                    cr);
+    }
+  
+  return FALSE;
+}
+
