@@ -378,38 +378,36 @@ create_cell_accessible (GtkTreeView           *treeview,
                         GtkTreeViewAccessible *accessible,
                         GtkTreeViewColumn     *column)
 {
-  AtkObject *parent;
-  GtkContainerCellAccessible *container = NULL;
   GList *renderer_list;
   GList *l;
   GtkCellAccessible *cell;
 
   renderer_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
 
-  /* If there is not exactly one renderer in the list,
-   * make a container
+  /* If there is exactly one renderer in the list (which is a 
+   * common case), shortcut and don't make a container
    */
-  if (g_list_length (renderer_list) != 1)
+  if (g_list_length (renderer_list) == 1)
     {
+      cell = create_cell_accessible_for_renderer (renderer_list->data, GTK_WIDGET (treeview), ATK_OBJECT (accessible));
+    }
+  else
+    {
+      GtkContainerCellAccessible *container;
+
       container = gtk_container_cell_accessible_new ();
       _gtk_cell_accessible_initialize (GTK_CELL_ACCESSIBLE (container), GTK_WIDGET (treeview), ATK_OBJECT (accessible));
 
-      parent = ATK_OBJECT (container);
-    }
-  else
-    parent = ATK_OBJECT (accessible);
+      for (l = renderer_list; l; l = l->next)
+        {
+          cell = create_cell_accessible_for_renderer (l->data, GTK_WIDGET (treeview), ATK_OBJECT (container));
+          gtk_container_cell_accessible_add_child (container, cell);
+        }
 
-  cell = NULL;
-
-  for (l = renderer_list; l; l = l->next)
-    {
-      cell = create_cell_accessible_for_renderer (l->data, GTK_WIDGET (treeview), parent);
-      if (container)
-        gtk_container_cell_accessible_add_child (container, cell);
+      cell = GTK_CELL_ACCESSIBLE (container);
     }
+
   g_list_free (renderer_list);
-  if (container)
-    cell = GTK_CELL_ACCESSIBLE (container);
 
   return cell;
 }
