@@ -163,6 +163,47 @@ update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
     }
 }
 
+static guint pulse_entry_id = 0;
+
+static gboolean
+pulse_entry (GtkEntry *entry)
+{
+  gtk_entry_progress_pulse (entry);
+
+  pulse_entry_id = g_timeout_add (100, (GSourceFunc)pulse_entry, entry);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+on_entry_icon_release (GtkEntry            *entry,
+                       GtkEntryIconPosition icon_pos,
+                       GdkEvent            *event,
+                       gpointer             user_data)
+{
+  static int num = 0;
+
+  if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
+    return;
+
+  num++;
+
+  if (num % 3 == 0)
+    {
+      if (pulse_entry_id > 0)
+        g_source_remove (pulse_entry_id);
+      gtk_entry_set_progress_fraction (entry, 0);
+    }
+  else if (num % 3 == 1)
+    gtk_entry_set_progress_fraction (entry, 0.25);
+  else if (num % 3 == 2)
+    {
+      gtk_entry_set_progress_pulse_step (entry, 0.1);
+      pulse_entry (entry);
+    }
+
+}
+
 static void
 startup (GApplication *app)
 {
@@ -192,6 +233,8 @@ activate (GApplication *app)
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, "/ui/widget-factory.ui", NULL);
+  gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
+  gtk_builder_connect_signals (builder, NULL);
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), window);
