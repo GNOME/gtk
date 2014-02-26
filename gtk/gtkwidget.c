@@ -396,6 +396,12 @@ typedef struct {
   GDestroyNotify        destroy_notify;
 } GtkWidgetTemplate;
 
+typedef struct {
+  GtkEventController *controller;
+  guint evmask_notify_id;
+  guint propagation_phase : 2;
+} EventControllerData;
+
 struct _GtkWidgetPrivate
 {
   /* The state of the widget. Needs to be able to hold all GtkStateFlags bits
@@ -505,6 +511,8 @@ struct _GtkWidgetPrivate
   /* Number of gtk_widget_push_verify_invariants () */
   guint verifying_invariants_count;
 #endif /* G_ENABLE_DEBUG */
+
+  GList *event_controllers;
 };
 
 struct _GtkWidgetClassPrivate
@@ -6930,6 +6938,48 @@ _gtk_widget_set_captured_event_handler (GtkWidget               *widget,
   g_object_set_data (G_OBJECT (widget), "captured-event-handler", callback);
 }
 
+static GdkEventMask
+_gtk_widget_get_controllers_evmask (GtkWidget *widget)
+{
+  EventControllerData *data;
+  GdkEventMask evmask = 0;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+      evmask |= gtk_event_controller_get_event_mask (data->controller);
+    }
+
+  return evmask;
+}
+
+static gboolean
+_gtk_widget_run_controllers (GtkWidget           *widget,
+                             const GdkEvent      *event,
+                             GtkPropagationPhase  phase)
+{
+  EventControllerData *data;
+  gboolean handled = FALSE;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (data->propagation_phase == phase)
+        handled |= gtk_event_controller_handle_event (data->controller, event);
+    }
+
+  return handled;
+}
+
 gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
                             GdkEvent  *event)
@@ -6951,13 +7001,15 @@ _gtk_widget_captured_event (GtkWidget *widget,
   if (!event_window_is_still_viewable (event))
     return TRUE;
 
+  return_val = _gtk_widget_run_controllers (widget, event, GTK_PHASE_CAPTURE);
+
   handler = g_object_get_data (G_OBJECT (widget), "captured-event-handler");
   if (!handler)
-    return FALSE;
+    return return_val;
 
   g_object_ref (widget);
 
-  return_val = handler (widget, event);
+  return_val |= handler (widget, event);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
   /* The widget that was originally to receive the event
@@ -7155,6 +7207,7 @@ gtk_widget_event_internal (GtkWidget *widget,
 
   g_object_ref (widget);
 
+  return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
   g_signal_emit (widget, widget_signals[EVENT], 0, event, &return_val);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
@@ -10701,7 +10754,10 @@ gtk_widget_add_events_internal_list (GtkWidget *widget,
                                      gint       events,
                                      GList     *window_list)
 {
+  GdkEventMask controllers_mask;
   GList *l;
+
+  controllers_mask = _gtk_widget_get_controllers_evmask (widget);
 
   for (l = window_list; l != NULL; l = l->next)
     {
@@ -10714,9 +10770,16 @@ gtk_widget_add_events_internal_list (GtkWidget *widget,
           GList *children;
 
           if (device)
-            gdk_window_set_device_events (window, device, gdk_window_get_events (window) | events);
+            {
+              gdk_window_set_device_events (window, device,
+                                            gdk_window_get_events (window) |
+                                            events | controllers_mask);
+            }
           else
-            gdk_window_set_events (window, gdk_window_get_events (window) | events);
+            {
+              gdk_window_set_events (window, gdk_window_get_events (window) |
+                                     events | controllers_mask);
+            }
 
           children = gdk_window_get_children (window);
           gtk_widget_add_events_internal_list (widget, device, events, children);
@@ -11591,6 +11654,7 @@ gtk_widget_finalize (GObject *object)
   GtkWidgetPrivate *priv = widget->priv;
   GtkWidgetAuxInfo *aux_info;
   GtkAccessible *accessible;
+  EventControllerData *data;
 
   gtk_grab_remove (widget);
 
@@ -11617,6 +11681,12 @@ gtk_widget_finalize (GObject *object)
     }
 
   _gtk_size_request_cache_free (&priv->requests);
+
+  while (priv->event_controllers)
+    {
+      data = priv->event_controllers->data;
+      gtk_widget_remove_controller (widget, data->controller);
+    }
 
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
@@ -16276,4 +16346,106 @@ _gtk_widget_get_action_group (GtkWidget   *widget,
   if (widget->priv->muxer)
     return gtk_action_muxer_lookup (widget->priv->muxer, prefix);
   return NULL;
+}
+
+static void
+event_controller_notify_event_mask (GtkEventController *controller,
+                                    GParamSpec         *pspec,
+                                    GtkWidget          *widget)
+{
+  GdkEventMask evmask;
+
+  evmask = gtk_event_controller_get_event_mask (controller);
+  gtk_widget_add_events_internal (widget, NULL, evmask);
+}
+
+void
+gtk_widget_add_controller (GtkWidget           *widget,
+                           GtkEventController  *controller,
+                           GtkPropagationPhase  phase)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (phase == GTK_PHASE_CAPTURE ||
+                    phase == GTK_PHASE_BUBBLE);
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (data->controller != controller)
+        continue;
+
+      data->propagation_phase = phase;
+      return;
+    }
+
+  data = g_new0 (EventControllerData, 1);
+  data->controller = g_object_ref (controller);
+  data->propagation_phase = phase;
+  data->evmask_notify_id =
+    g_signal_connect (controller, "notify::event-mask",
+                      G_CALLBACK (event_controller_notify_event_mask), widget);
+
+  priv->event_controllers = g_list_prepend (priv->event_controllers, data);
+}
+
+void
+gtk_widget_remove_controller (GtkWidget           *widget,
+                              GtkEventController  *controller)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (data->controller != controller)
+        continue;
+
+      gtk_event_controller_reset (data->controller);
+      g_signal_handler_disconnect (data->controller, data->evmask_notify_id);
+      g_object_unref (data->controller);
+      g_free (data);
+      priv->event_controllers = g_list_delete_link (priv->event_controllers, l);
+      return;
+    }
+}
+
+GList *
+gtk_widget_list_controllers (GtkWidget           *widget,
+                             GtkPropagationPhase  phase)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l, *retval = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (phase == GTK_PHASE_CAPTURE ||
+                        phase == GTK_PHASE_BUBBLE, NULL);
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (data->propagation_phase == phase)
+        retval = g_list_prepend (retval, data->controller);
+    }
+
+  return retval;
 }

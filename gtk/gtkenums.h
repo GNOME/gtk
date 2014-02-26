@@ -1051,6 +1051,12 @@ typedef enum
 
 typedef enum
 {
+  GTK_PHASE_CAPTURE,
+  GTK_PHASE_BUBBLE
+} GtkPropagationPhase;
+
+typedef enum
+{
   GTK_EVENT_SEQUENCE_NONE,
   GTK_EVENT_SEQUENCE_CLAIMED,
   GTK_EVENT_SEQUENCE_DENIED
