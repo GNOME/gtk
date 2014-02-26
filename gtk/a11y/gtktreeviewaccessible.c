@@ -1448,7 +1448,7 @@ cell_info_new (GtkTreeViewAccessible *accessible,
   cell_info->tree = tree;
   cell_info->node = node;
   cell_info->cell_col_ref = tv_col;
-  cell_info->cell = g_object_ref (cell);
+  cell_info->cell = cell;
   cell_info->view = accessible;
 
   g_object_set_qdata (G_OBJECT (cell), 

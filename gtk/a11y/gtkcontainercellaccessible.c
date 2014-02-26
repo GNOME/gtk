@@ -141,6 +141,8 @@ gtk_container_cell_accessible_add_child (GtkContainerCellAccessible *container,
   g_return_if_fail (GTK_IS_CONTAINER_CELL_ACCESSIBLE (container));
   g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (child));
 
+  g_object_ref (child);
+
   container->priv->n_children++;
   container->priv->children = g_list_append (container->priv->children, child);
   atk_object_set_parent (ATK_OBJECT (child), ATK_OBJECT (container));
@@ -156,6 +158,8 @@ gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *containe
 
   container->priv->children = g_list_remove (container->priv->children, child);
   container->priv->n_children--;
+
+  g_object_unref (child);
 }
 
 GList *
