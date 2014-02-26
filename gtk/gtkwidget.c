@@ -16449,3 +16449,65 @@ gtk_widget_list_controllers (GtkWidget           *widget,
 
   return retval;
 }
+
+GtkEventSequenceState
+gtk_widget_get_sequence_state (GtkWidget        *widget,
+                               GdkEventSequence *sequence)
+{
+  GtkEventSequenceState state;
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget),
+                        GTK_EVENT_SEQUENCE_NONE);
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      state = gtk_gesture_get_sequence_state (GTK_GESTURE (data->controller),
+                                              sequence);
+      if (state != GTK_EVENT_SEQUENCE_NONE)
+        return state;
+    }
+
+  return GTK_EVENT_SEQUENCE_NONE;
+}
+
+void
+gtk_widget_set_sequence_state (GtkWidget             *widget,
+                               GdkEventSequence      *sequence,
+                               GtkEventSequenceState  state)
+{
+  EventControllerData *data;
+  gboolean handled = FALSE;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget),
+                        GTK_EVENT_SEQUENCE_NONE);
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      handled |= gtk_gesture_set_sequence_state (GTK_GESTURE (data->controller),
+                                                 sequence, state);
+    }
+
+  if (!handled)
+    return;
+
+  /* FIXME: Propagate upwards/downwards */
+}

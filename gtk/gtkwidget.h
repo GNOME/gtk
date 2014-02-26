@@ -1481,6 +1481,14 @@ GDK_AVAILABLE_IN_3_14
 GList * gtk_widget_list_controllers                     (GtkWidget           *widget,
                                                          GtkPropagationPhase  phase);
 
+GDK_AVAILABLE_IN_3_14
+GtkEventSequenceState gtk_widget_get_sequence_state     (GtkWidget             *widget,
+                                                         GdkEventSequence      *sequence);
+GDK_AVAILABLE_IN_3_14
+void                  gtk_widget_set_sequence_state     (GtkWidget             *widget,
+                                                         GdkEventSequence      *sequence,
+                                                         GtkEventSequenceState  state);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_H__ */
