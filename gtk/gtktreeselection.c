@@ -38,7 +38,7 @@
  * The #GtkTreeSelection object is a helper object to manage the selection
  * for a #GtkTreeView widget.  The #GtkTreeSelection object is
  * automatically created when a new #GtkTreeView widget is created, and
- * cannot exist independentally of this widget.  The primary reason the
+ * cannot exist independently of this widget.  The primary reason the
  * #GtkTreeSelection objects exists is for cleanliness of code and API.
  * That is, there is no conceptual reason all these functions could not be
  * methods on the #GtkTreeView widget instead of a separate function.
