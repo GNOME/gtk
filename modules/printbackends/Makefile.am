@@ -2,6 +2,10 @@ include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = file lpr
 
+if HAVE_CLOUDPRINT
+SUBDIRS += cloudprint
+endif
+
 if HAVE_CUPS
 SUBDIRS += cups
 endif

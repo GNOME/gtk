@@ -18,6 +18,21 @@ endif
 
 SUBDIRS = a11y native .
 
+if HAVE_CLOUDPRINT
+if HAVE_PAPI_CUPS
+GTK_PRINT_BACKENDS=file,papi,cups,cloudprint
+else
+if HAVE_CUPS
+GTK_PRINT_BACKENDS=file,cups,cloudprint
+else
+if HAVE_PAPI
+GTK_PRINT_BACKENDS=file,papi,cloudprint
+else
+GTK_PRINT_BACKENDS=file,lpr,cloudprint
+endif
+endif
+endif
+else
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups
 else
@@ -28,6 +43,7 @@ if HAVE_PAPI
 GTK_PRINT_BACKENDS=file,papi
 else
 GTK_PRINT_BACKENDS=file,lpr
+endif
 endif
 endif
 endif

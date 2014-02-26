@@ -1520,6 +1520,37 @@ else
   fi
 fi
 
+# Checks to see if we should compile with cloudprint backend for GTK+
+#
+
+AC_ARG_ENABLE(cloudprint,
+              [AS_HELP_STRING([--disable-cloudprint],
+                              [disable cloudprint print backend])],,
+              [enable_cloudprint=auto])
+
+if test "x$enable_cloudprint" = "xno"; then
+  AM_CONDITIONAL(HAVE_CLOUDPRINT, false)
+else
+  PKG_CHECK_MODULES(REST, [rest-0.7], have_rest=yes, have_rest=no)
+  PKG_CHECK_MODULES(JSON_GLIB, [json-glib-1.0], have_json_glib=yes, have_json_glib=no)
+  if test "x$have_rest" = "xyes" -a "x$have_json_glib" = "xyes"; then
+    PRINT_BACKENDS="$PRINT_BACKENDS cloudprint"
+  fi
+  AM_CONDITIONAL(HAVE_CLOUDPRINT, test "x$have_rest" = "xyes" -a "x$have_json_glib" = "xyes")
+fi
+
+if test "x$enable_cloudprint" = "xyes" -a "x$have_rest" = "xno"; then
+    AC_MSG_ERROR([
+*** rest not found.
+])
+fi
+
+if test "x$enable_cloudprint" = "xyes" -a "x$have_json_glib" = "xno"; then
+    AC_MSG_ERROR([
+*** json-glib not found.
+])
+fi
+
 AM_CONDITIONAL(HAVE_PAPI_CUPS, test "x$have_papi" = "xyes" -a "x$CUPS_CONFIG" != "xno")
 
 gtk_save_cppflags="$CPPFLAGS"
@@ -1859,6 +1890,7 @@ modules/engines/pixbuf/Makefile
 modules/input/Makefile
 modules/printbackends/Makefile
 modules/printbackends/cups/Makefile
+modules/printbackends/cloudprint/Makefile
 modules/printbackends/lpr/Makefile
 modules/printbackends/file/Makefile
 modules/printbackends/papi/Makefile
