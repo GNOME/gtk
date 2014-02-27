@@ -140,6 +140,11 @@ struct _GdkWindowImplWayland
 
   gint64 pending_frame_counter;
   guint32 scale;
+
+  int margin_left;
+  int margin_right;
+  int margin_top;
+  int margin_bottom;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -880,6 +885,21 @@ gdk_wayland_window_sync_title (GdkWindow *window)
 }
 
 static void
+gdk_wayland_window_sync_margin (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!impl->xdg_surface)
+    return;
+
+  xdg_surface_set_margin (impl->xdg_surface,
+                          impl->margin_left,
+                          impl->margin_right,
+                          impl->margin_top,
+                          impl->margin_bottom);
+}
+
+static void
 surface_enter (void              *data,
                struct wl_surface *wl_surface,
                struct wl_output  *output)
@@ -1030,6 +1050,7 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
 
   gdk_wayland_window_sync_transient_for (window);
   gdk_wayland_window_sync_title (window);
+  gdk_wayland_window_sync_margin (window);
   xdg_surface_set_app_id (impl->xdg_surface, gdk_get_program_class ());
 }
 
@@ -2130,10 +2151,11 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!impl->xdg_surface)
-    return;
-
-  xdg_surface_set_margin (impl->xdg_surface, left, right, top, bottom);
+  impl->margin_left = left;
+  impl->margin_right = right;
+  impl->margin_top = top;
+  impl->margin_bottom = bottom;
+  gdk_wayland_window_sync_margin (window);
 }
 
 static void
