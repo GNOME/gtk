@@ -1061,10 +1061,6 @@ xdg_popup_done (void             *data,
 {
   GdkWindow *window = GDK_WINDOW (data);
 
-  /* When the popup is complete hide the window - this really relies on the
-   * fix in https://bugzilla.gnome.org/show_bug.cgi?id=670881 to work
-   * effectively.
-   */
   gdk_window_hide (window);
 }
 
