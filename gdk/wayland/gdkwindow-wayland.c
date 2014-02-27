@@ -1364,10 +1364,10 @@ gdk_window_wayland_get_geometry (GdkWindow *window,
     }
 }
 
-void
-_gdk_wayland_window_offset (GdkWindow *window,
-                            gint      *x_out,
-                            gint      *y_out)
+static void
+gdk_wayland_window_offset (GdkWindow *window,
+                           gint      *x_out,
+                           gint      *y_out)
 {
   GdkWindowImplWayland *impl, *parent_impl;
   GdkWindow *parent_window;
@@ -1399,7 +1399,7 @@ gdk_window_wayland_get_root_coords (GdkWindow *window,
 {
   gint x_offset, y_offset;
 
-  _gdk_wayland_window_offset (window, &x_offset, &y_offset);
+  gdk_wayland_window_offset (window, &x_offset, &y_offset);
 
   if (root_x)
     *root_x = x_offset + x;
