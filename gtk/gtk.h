@@ -109,6 +109,7 @@
 #include <gtk/gtkgesture.h>
 #include <gtk/gtkgesturedrag.h>
 #include <gtk/gtkgesturelongpress.h>
+#include <gtk/gtkgesturemultipress.h>
 #include <gtk/gtkgesturerotate.h>
 #include <gtk/gtkgestureswipe.h>
 #include <gtk/gtkgesturezoom.h>
