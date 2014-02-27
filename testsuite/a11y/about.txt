@@ -322,7 +322,7 @@ See the GNU General Public License, version 3 or later for details.
               <AtkHyperlink>
               start index: 56
               end index: 102
-              anchors: http://www.gnu.org/licenses/gpl.html
+              anchors: http://www.gnu.org/licenses/gpl-3.0.html
             unnamed-GtkLabelAccessibleLinkImpl-1
               "link"
               parent: license_label
@@ -331,7 +331,7 @@ See the GNU General Public License, version 3 or later for details.
                 <AtkHyperlink>
                 start index: 56
                 end index: 102
-                anchors: http://www.gnu.org/licenses/gpl.html
+                anchors: http://www.gnu.org/licenses/gpl-3.0.html
         credits_page
           "filler"
           parent: stack
