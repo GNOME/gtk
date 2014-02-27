@@ -1125,8 +1125,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
       if (rd && rd->response_id == response_id)
         {
 	  gtk_widget_grab_default (widget);
-          if (dialog->priv->constructed && dialog->priv->use_header_bar == 1)
-            gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_SUGGESTED_ACTION);
+          gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_SUGGESTED_ACTION);
         }
 
       tmp_list = g_list_next (tmp_list);
