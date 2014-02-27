@@ -1127,6 +1127,8 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
 	  gtk_widget_grab_default (widget);
           gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_SUGGESTED_ACTION);
         }
+      else
+        gtk_style_context_remove_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_SUGGESTED_ACTION);
 
       tmp_list = g_list_next (tmp_list);
     }
