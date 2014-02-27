@@ -279,7 +279,18 @@ apply_use_header_bar (GtkDialog *dialog)
   gtk_widget_set_visible (priv->action_area, !priv->use_header_bar);
   gtk_widget_set_visible (priv->headerbar, priv->use_header_bar);
   if (!priv->use_header_bar)
-    gtk_window_set_titlebar (GTK_WINDOW (dialog), NULL);
+    {
+      GtkWidget *box = NULL;
+
+      if (gtk_window_get_type_hint (GTK_WINDOW (dialog)) == GDK_WINDOW_TYPE_HINT_DIALOG)
+        {
+          box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+          gtk_widget_show (box);
+          gtk_widget_set_size_request (box, -1, 16);
+        }
+
+      gtk_window_set_titlebar (GTK_WINDOW (dialog), box);
+    }
   if (priv->use_header_bar)
     g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
 }
