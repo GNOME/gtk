@@ -243,7 +243,7 @@ to_embedder (GdkWindow *window,
 			 NULL);
 }
 
-static gint
+static void
 gdk_offscreen_window_get_root_coords (GdkWindow *window,
 				      gint       x,
 				      gint       y,
@@ -275,8 +275,6 @@ gdk_offscreen_window_get_root_coords (GdkWindow *window,
     *root_x = tmpx;
   if (root_y)
     *root_y = tmpy;
-
-  return TRUE;
 }
 
 static gboolean

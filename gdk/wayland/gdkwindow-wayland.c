@@ -1390,7 +1390,7 @@ gdk_wayland_window_offset (GdkWindow *window,
   *y_out = y_offset;
 }
 
-static gint
+static void
 gdk_window_wayland_get_root_coords (GdkWindow *window,
                                     gint       x,
                                     gint       y,
@@ -1406,8 +1406,6 @@ gdk_window_wayland_get_root_coords (GdkWindow *window,
 
   if (root_y)
     *root_y = y_offset + y;
-
-  return 1;
 }
 
 static gboolean

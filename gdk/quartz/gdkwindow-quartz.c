@@ -1730,7 +1730,7 @@ gdk_window_quartz_get_geometry (GdkWindow *window,
     }
 }
 
-static gint
+static void
 gdk_window_quartz_get_root_coords (GdkWindow *window,
                                    gint       x,
                                    gint       y,
@@ -1749,7 +1749,7 @@ gdk_window_quartz_get_root_coords (GdkWindow *window,
       if (root_y)
 	*root_y = 0;
       
-      return 0;
+      return;
     }
 
   if (window == _gdk_root)
@@ -1759,7 +1759,7 @@ gdk_window_quartz_get_root_coords (GdkWindow *window,
       if (root_y)
         *root_y = y;
 
-      return 1;
+      return;
     }
   
   toplevel = gdk_window_get_toplevel (window);
@@ -1789,8 +1789,6 @@ gdk_window_quartz_get_root_coords (GdkWindow *window,
     *root_x = tmp_x;
   if (root_y)
     *root_y = tmp_y;
-
-  return TRUE;
 }
 
 static void

@@ -96,7 +96,7 @@ struct _GdkWindowImplClass
                                          gint            *y,
                                          gint            *width,
                                          gint            *height);
-  gint         (* get_root_coords)      (GdkWindow       *window,
+  void         (* get_root_coords)      (GdkWindow       *window,
 					 gint             x,
 					 gint             y,
                                          gint            *root_x,

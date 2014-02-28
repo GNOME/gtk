@@ -3089,7 +3089,7 @@ gdk_window_x11_get_geometry (GdkWindow *window,
     }
 }
 
-static gint
+static void
 gdk_window_x11_get_root_coords (GdkWindow *window,
 				gint       x,
 				gint       y,
@@ -3097,23 +3097,20 @@ gdk_window_x11_get_root_coords (GdkWindow *window,
 				gint      *root_y)
 {
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
-  gint return_val;
   Window child;
   gint tx;
   gint ty;
   
-  return_val = XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
-				      GDK_WINDOW_XID (window),
-				      GDK_WINDOW_XROOTWIN (window),
-				      x * impl->window_scale, y * impl->window_scale, &tx, &ty,
-				      &child);
-  
+  XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
+                         GDK_WINDOW_XID (window),
+                         GDK_WINDOW_XROOTWIN (window),
+                         x * impl->window_scale, y * impl->window_scale, &tx, &ty,
+                         &child);
+
   if (root_x)
     *root_x = tx / impl->window_scale;
   if (root_y)
     *root_y = ty / impl->window_scale;
-  
-  return return_val;
 }
 
 static void

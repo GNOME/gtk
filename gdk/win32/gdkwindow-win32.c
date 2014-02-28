@@ -2020,7 +2020,7 @@ gdk_win32_window_get_geometry (GdkWindow *window,
     }
 }
 
-static gint
+static void
 gdk_win32_window_get_root_coords (GdkWindow *window,
 				  gint       x,
 				  gint       y,
@@ -2046,7 +2046,6 @@ gdk_win32_window_get_root_coords (GdkWindow *window,
 			   GDK_WINDOW_HWND (window),
 			   x, y,
 			   tx + _gdk_offset_x, ty + _gdk_offset_y));
-  return 1;
 }
 
 static void

@@ -707,7 +707,7 @@ gdk_window_broadway_get_geometry (GdkWindow *window,
 
 }
 
-static gint
+static void
 gdk_window_broadway_get_root_coords (GdkWindow *window,
 				     gint       x,
 				     gint       y,
@@ -722,8 +722,6 @@ gdk_window_broadway_get_root_coords (GdkWindow *window,
     *root_x = x + impl->wrapper->x;
   if (root_y)
     *root_y = y + impl->wrapper->y;
-
-  return 1;
 }
 
 static void
