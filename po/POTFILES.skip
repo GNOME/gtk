@@ -131,6 +131,8 @@ testsuite/reftests/css-multi-state.ref.ui
 testsuite/reftests/css-multi-state.ui
 testsuite/reftests/entry-progress-coloring.ref.ui
 testsuite/reftests/entry-progress-coloring.ui
+testsuite/reftests/fixed-widget-stacking.ref.ui
+testsuite/reftests/fixed-widget-stacking.ui
 testsuite/reftests/font-sizes-names.ref.ui
 testsuite/reftests/font-sizes-names.ui
 testsuite/reftests/grid-empty-with-spacing.ui
