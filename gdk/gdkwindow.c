@@ -6135,24 +6135,14 @@ gdk_window_get_origin (GdkWindow *window,
 		       gint      *x,
 		       gint      *y)
 {
-  GdkWindowImplClass *impl_class;
+  gint dummy_x, dummy_y;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
-  if (GDK_WINDOW_DESTROYED (window))
-    {
-      if (x)
-	*x = 0;
-      if (y)
-	*y = 0;
-      return 0;
-    }
-
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-  impl_class->get_root_coords (window->impl_window,
-			       window->abs_x,
-			       window->abs_y,
-			       x, y);
+  gdk_window_get_root_coords (window,
+                              0, 0,
+                              x ? x : &dummy_x,
+                              y ? y : &dummy_y);
 
   return TRUE;
 }
