@@ -108,6 +108,9 @@
 #define SELECTION_TEXT 0
 #define SELECTION_URI  1
 
+/* 150 mseconds of delay */
+#define LOCATION_CHANGED_TIMEOUT 150
+
 /* Profiling stuff */
 #undef PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
@@ -291,6 +294,8 @@ struct _GtkFileChooserWidgetPrivate {
   GtkCellRenderer *list_pixbuf_renderer;
   GtkTreeViewColumn *list_mtime_column;
   GtkTreeViewColumn *list_size_column;
+
+  guint location_changed_id;
 
   GSource *edited_idle;
   char *edited_new_text;
@@ -601,6 +606,9 @@ gtk_file_chooser_widget_finalize (GObject *object)
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (object);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GSList *l;
+
+  if (priv->location_changed_id > 0)
+    g_source_remove (priv->location_changed_id);
 
   unset_file_system_backend (impl);
 
@@ -1883,6 +1891,40 @@ set_icon_cell_renderer_fixed_size (GtkFileChooserWidget *impl)
                                     ypad * 2 + priv->icon_size);
 }
 
+static gboolean
+location_changed_timeout_cb (gpointer user_data)
+{
+  GtkFileChooserWidget *impl = user_data;
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (impl));
+  check_preview_change (impl);
+  g_signal_emit_by_name (impl, "selection-changed", 0);
+
+  priv->location_changed_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+reset_location_timeout (GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->location_changed_id > 0)
+    g_source_remove (priv->location_changed_id);
+  priv->location_changed_id = g_timeout_add (LOCATION_CHANGED_TIMEOUT,
+                                            location_changed_timeout_cb,
+                                            impl);
+  g_source_set_name_by_id (priv->location_changed_id, "[gtk+] location_changed_timeout_cb");
+}
+
+static void
+location_entry_changed_cb (GtkEditable *editable,
+                           GtkFileChooserWidget *impl)
+{
+  reset_location_timeout (impl);
+}
 
 static void
 location_entry_create (GtkFileChooserWidget *impl)
@@ -1890,7 +1932,11 @@ location_entry_create (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   if (!priv->location_entry)
-    priv->location_entry = _gtk_file_chooser_entry_new (TRUE);
+    {
+      priv->location_entry = _gtk_file_chooser_entry_new (TRUE);
+      g_signal_connect (priv->location_entry, "changed",
+                        G_CALLBACK (location_entry_changed_cb), impl);
+    }
 
   _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->local_only);
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
@@ -4280,7 +4326,9 @@ update_chooser_entry (GtkFileChooserWidget *impl)
 
 	  if (change_entry && !priv->auto_selecting_first_row)
 	    {
+              g_signal_handlers_block_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
 	      gtk_entry_set_text (GTK_ENTRY (priv->location_entry), priv->browse_files_last_selected_name);
+              g_signal_handlers_unblock_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
 
 	      if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 		_gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (priv->location_entry));
@@ -4312,7 +4360,9 @@ update_chooser_entry (GtkFileChooserWidget *impl)
       g_free (priv->browse_files_last_selected_name);
       priv->browse_files_last_selected_name = NULL;
 
+      g_signal_handlers_block_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
       gtk_entry_set_text (GTK_ENTRY (priv->location_entry), "");
+      g_signal_handlers_unblock_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
       return;
     }
 
@@ -4347,7 +4397,11 @@ update_chooser_entry (GtkFileChooserWidget *impl)
         clear_entry = FALSE;
 
       if (clear_entry)
-        gtk_entry_set_text (GTK_ENTRY (priv->location_entry), "");
+        {
+          g_signal_handlers_block_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
+          gtk_entry_set_text (GTK_ENTRY (priv->location_entry), "");
+          g_signal_handlers_unblock_by_func (priv->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
+        }
     }
 }
 
