@@ -6149,7 +6149,7 @@ gdk_window_get_origin (GdkWindow *window,
     }
 
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-  impl_class->get_root_coords (window,
+  impl_class->get_root_coords (window->impl_window,
 			       window->abs_x,
 			       window->abs_y,
 			       x, y);
@@ -6191,7 +6191,7 @@ gdk_window_get_root_coords (GdkWindow *window,
     }
   
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-  impl_class->get_root_coords (window,
+  impl_class->get_root_coords (window->impl_window,
 			       x + window->abs_x,
 			       y + window->abs_y,
 			       root_x, root_y);
