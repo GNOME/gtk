@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: Gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-26 01:40+0000\n"
-"PO-Revision-Date: 2014-02-27 13:26-0300\n"
+"POT-Creation-Date: 2014-02-28 14:29+0000\n"
+"PO-Revision-Date: 2014-02-28 12:26-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.5.4\n"
 
 # Não encontrei tradução melhor para broadway
 #: ../gdk/broadway/gdkbroadway-server.c:141
@@ -2329,7 +2329,10 @@ msgstr "Ontem às %H:%M"
 msgid "Yesterday at %-I:%M %P"
 msgstr "Ontem às %-I:%M %P"
 
+#. Translators: We don't know whether this printer is
+#. * available to print to.
 #: ../gtk/gtkfilechooserwidget.c:4120
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Desconhecido"
 
@@ -4487,6 +4490,33 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método de entrada do X"
 
+#. Translators: The printer status is online, i.e. it is
+#. * ready to print.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
+#| msgctxt "Stock label"
+#| msgid "_Underline"
+msgid "Online"
+msgstr "Conectada"
+
+#. Translators: The printer is offline.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:751
+msgid "Offline"
+msgstr "Desconectada"
+
+#. We shouldn't get here because the query omits dormant
+#. * printers by default.
+#. Translators: Printer has been offline for a long time.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:757
+msgid "Dormant"
+msgstr "Dormente"
+
+#. How many document pages to go onto one side of paper.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:939
+#: ../modules/printbackends/file/gtkprintbackendfile.c:676
+#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+msgid "Pages per _sheet:"
+msgstr "Páginas por _folha:"
+
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1007
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1222
 msgid "Username:"
@@ -4889,11 +4919,6 @@ msgstr "PostScript"
 #: ../modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "SVG"
 msgstr "SVG"
-
-#: ../modules/printbackends/file/gtkprintbackendfile.c:676
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
-msgid "Pages per _sheet:"
-msgstr "Páginas por _folha:"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "File"
