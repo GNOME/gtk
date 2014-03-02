@@ -123,6 +123,7 @@ _gdk_broadway_display_open (const gchar *display_name)
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
+  GError *error = NULL;
 
   display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
@@ -151,10 +152,11 @@ _gdk_broadway_display_open (const gchar *display_name)
   if (display_name == NULL)
     display_name = g_getenv ("BROADWAY_DISPLAY");
 
-  broadway_display->server = _gdk_broadway_server_new (display_name, NULL);
+  broadway_display->server = _gdk_broadway_server_new (display_name, &error);
   if (broadway_display->server == NULL)
     {
-      g_printerr ("Unable to init server\n");
+      g_printerr ("Unable to init server: %s\n", error->message);
+      g_error_free (error);
       return NULL;
     }
 
