@@ -3026,7 +3026,7 @@ gtk_css_provider_print_keyframes (GHashTable *keyframes,
  *
  * Using gtk_css_provider_load_from_data() with the return value
  * from this function on a new provider created with
- * gtk_css_provider_new() will basicallu create a duplicate of
+ * gtk_css_provider_new() will basically create a duplicate of
  * this @provider.
  *
  * Returns: a new string representing the @provider.
