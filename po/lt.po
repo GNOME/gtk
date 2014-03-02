@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-21 17:36+0000\n"
-"PO-Revision-Date: 2014-02-21 22:52+0200\n"
+"POT-Creation-Date: 2014-03-02 09:52+0000\n"
+"PO-Revision-Date: 2014-03-02 20:03+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -503,17 +503,17 @@ msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "Paspaudžia mygtuką"
 
-#: ../gtk/a11y/gtkcellaccessible.c:258
+#: ../gtk/a11y/gtkcellaccessible.c:265
 msgctxt "Action name"
 msgid "Expand or contract"
 msgstr "Išskleisti arba suskleisti"
 
-#: ../gtk/a11y/gtkcellaccessible.c:260
+#: ../gtk/a11y/gtkcellaccessible.c:267
 msgctxt "Action name"
 msgid "Edit"
 msgstr "Keisti"
 
-#: ../gtk/a11y/gtkcellaccessible.c:262
+#: ../gtk/a11y/gtkcellaccessible.c:269
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:149
 #: ../gtk/a11y/gtkentryaccessible.c:1554
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
@@ -521,18 +521,18 @@ msgctxt "Action name"
 msgid "Activate"
 msgstr "Aktyvinti"
 
-#: ../gtk/a11y/gtkcellaccessible.c:275
+#: ../gtk/a11y/gtkcellaccessible.c:282
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
 msgstr ""
 "Išskleidžia arba suskleidžia eilutę medžio rodinyje, kuriame yra šis langelis"
 
-#: ../gtk/a11y/gtkcellaccessible.c:277
+#: ../gtk/a11y/gtkcellaccessible.c:284
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
 msgstr "Sukuria elementą, kuriame galima redaguoti langelio turinį"
 
-#: ../gtk/a11y/gtkcellaccessible.c:279
+#: ../gtk/a11y/gtkcellaccessible.c:286
 msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "Aktyvina langelį"
@@ -616,12 +616,12 @@ msgid "_Close"
 msgstr "_Užverti"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:397
-#: ../gtk/gtkwindow.c:8644
+#: ../gtk/gtkwindow.c:8655
 msgid "Minimize"
 msgstr "Sumažinti"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:420
-#: ../gtk/gtkwindow.c:8652
+#: ../gtk/gtkwindow.c:8663
 msgid "Maximize"
 msgstr "Išdidinti"
 
@@ -1172,7 +1172,7 @@ msgstr ""
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:706
 #: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:803
-#: ../gtk/gtkfilechooserwidget.c:5374 ../gtk/gtkfontchooserdialog.c:155
+#: ../gtk/gtkfilechooserwidget.c:5376 ../gtk/gtkfontchooserdialog.c:155
 #: ../gtk/gtkmessagedialog.c:889 ../gtk/gtkmessagedialog.c:902
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
@@ -1570,26 +1570,22 @@ msgstr "Pasirinkite programą"
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:205
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s”."
 msgstr "Atveriama „%s“."
 
 #: ../gtk/gtkappchooserdialog.c:206
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications found for “%s”"
 msgstr "Nerasta programų „%s“ atvėrimui"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:212
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s” files."
 msgstr "Atveriami „%s“ failai."
 
 #: ../gtk/gtkappchooserdialog.c:214
 #, c-format
-#| msgid "Select an application for “%s” files"
 msgid "No applications found for “%s” files"
 msgstr "Nerasta programų „%s“ failams"
 
@@ -1607,7 +1603,6 @@ msgstr "Numatytoji programa"
 
 #: ../gtk/gtkappchooserwidget.c:672
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications found for “%s”."
 msgstr "Nerasta programų „%s“ atvėrimui."
 
@@ -2310,34 +2305,37 @@ msgstr "Vakar %H:%M"
 msgid "Yesterday at %-I:%M %P"
 msgstr "Vakar %-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:4118
+#. Translators: We don't know whether this printer is
+#. * available to print to.
+#: ../gtk/gtkfilechooserwidget.c:4120
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: ../gtk/gtkfilechooserwidget.c:4583
+#: ../gtk/gtkfilechooserwidget.c:4585
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: ../gtk/gtkfilechooserwidget.c:5367 ../gtk/gtkprintunixdialog.c:658
+#: ../gtk/gtkfilechooserwidget.c:5369 ../gtk/gtkprintunixdialog.c:658
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Failas pavadinimu „%s“ jau yra. Ar norite jį perrašyti?"
 
-#: ../gtk/gtkfilechooserwidget.c:5370 ../gtk/gtkprintunixdialog.c:662
+#: ../gtk/gtkfilechooserwidget.c:5372 ../gtk/gtkprintunixdialog.c:662
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Failas vietoje „%s“ jau yra. Pakeitus jį, jo turinys bus perrašytas."
 
-#: ../gtk/gtkfilechooserwidget.c:5375 ../gtk/gtkprintunixdialog.c:670
+#: ../gtk/gtkfilechooserwidget.c:5377 ../gtk/gtkprintunixdialog.c:670
 msgid "_Replace"
 msgstr "_Pakeisti"
 
-#: ../gtk/gtkfilechooserwidget.c:6194
+#: ../gtk/gtkfilechooserwidget.c:6196
 msgid "Could not start the search process"
 msgstr "Nepavyko paleisti paieškos proceso"
 
-#: ../gtk/gtkfilechooserwidget.c:6195
+#: ../gtk/gtkfilechooserwidget.c:6197
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -2345,7 +2343,7 @@ msgstr ""
 "Programai nepavyko sukurti ryšio su indeksavimo posisteme. Įsitikinkite, kad "
 "ji veikia."
 
-#: ../gtk/gtkfilechooserwidget.c:6209
+#: ../gtk/gtkfilechooserwidget.c:6211
 msgid "Could not send the search request"
 msgstr "Nepavyko išsiųsti paieškos užklausos"
 
@@ -2370,7 +2368,7 @@ msgstr "Pasirinkite šriftą"
 msgid "Application menu"
 msgstr "Programos meniu"
 
-#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8767
+#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8778
 msgid "Close"
 msgstr "Užverti"
 
@@ -3438,43 +3436,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8652
+#: ../gtk/gtkwindow.c:8663
 msgid "Unmaximize"
 msgstr "Atstatyti"
 
-#: ../gtk/gtkwindow.c:8661
+#: ../gtk/gtkwindow.c:8672
 msgid "Move"
 msgstr "Perkelti"
 
-#: ../gtk/gtkwindow.c:8667
+#: ../gtk/gtkwindow.c:8678
 msgid "Resize"
 msgstr "Keisti dydį"
 
-#: ../gtk/gtkwindow.c:8679
+#: ../gtk/gtkwindow.c:8690
 msgid "Always on Top"
 msgstr "Visada viršuje"
 
-#: ../gtk/gtkwindow.c:8691
+#: ../gtk/gtkwindow.c:8702
 msgid "Always on Visible Workspace"
 msgstr "Visada matomame darbalaukyje"
 
-#: ../gtk/gtkwindow.c:8699
+#: ../gtk/gtkwindow.c:8710
 msgid "Only on This Workspace"
 msgstr "Tik šiame darbalaukyje"
 
-#: ../gtk/gtkwindow.c:8716
+#: ../gtk/gtkwindow.c:8727
 msgid "Move to Workspace Up"
 msgstr "Perkelti į aukštesnįjį darbalaukį"
 
-#: ../gtk/gtkwindow.c:8725
+#: ../gtk/gtkwindow.c:8736
 msgid "Move to Workspace Down"
 msgstr "Perkelti į žemesnįjį darbalaukį"
 
-#: ../gtk/gtkwindow.c:8739
+#: ../gtk/gtkwindow.c:8750
 msgid "Move to Another Workspace"
 msgstr "Perkelti į kitą darbalaukį"
 
-#: ../gtk/gtkwindow.c:8747
+#: ../gtk/gtkwindow.c:8758
 #, c-format
 msgid "Workspace %d"
 msgstr "Darbalaukis %d"
@@ -4458,6 +4456,33 @@ msgstr "Vietnamiečių (VIQR)"
 msgid "X Input Method"
 msgstr "X įvesties metodas"
 
+#. Translators: The printer status is online, i.e. it is
+#. * ready to print.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
+#| msgctxt "Stock label"
+#| msgid "_Underline"
+msgid "Online"
+msgstr "Veikia"
+
+#. Translators: The printer is offline.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:751
+msgid "Offline"
+msgstr "Atsijungęs"
+
+#. We shouldn't get here because the query omits dormant
+#. * printers by default.
+#. Translators: Printer has been offline for a long time.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:757
+msgid "Dormant"
+msgstr "Miega"
+
+#. How many document pages to go onto one side of paper.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:939
+#: ../modules/printbackends/file/gtkprintbackendfile.c:676
+#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+msgid "Pages per _sheet:"
+msgstr "Puslapių _lakšte:"
+
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1007
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1222
 msgid "Username:"
@@ -4852,11 +4877,6 @@ msgstr "Postscript"
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:676
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
-msgid "Pages per _sheet:"
-msgstr "Puslapių _lakšte:"
-
 #: ../modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "File"
 msgstr "Failas"
@@ -4925,17 +4945,14 @@ msgid "label"
 msgstr "etiketė"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
-#| msgid "Related Applications"
 msgid "_View All Applications"
 msgstr "_Rodyti visas programas"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
-#| msgid "Other Applications"
 msgid "_Find New Applications"
 msgstr "_Rasti naujas programas"
 
 #: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
-#| msgid "No items found"
 msgid "No applications found."
 msgstr "Nerasta programų."
 
@@ -5363,4 +5380,3 @@ msgstr "Patylinti"
 #: ../gtk/resources/ui/gtkvolumebutton.ui.h:6
 msgid "Decreases the volume"
 msgstr "Patylina"
-
