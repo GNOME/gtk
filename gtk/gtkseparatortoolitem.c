@@ -83,6 +83,8 @@ static void     gtk_separator_tool_item_map               (GtkWidget            
 static void     gtk_separator_tool_item_unmap             (GtkWidget                 *widget);
 static gboolean gtk_separator_tool_item_button_event      (GtkWidget                 *widget,
                                                            GdkEventButton            *event);
+static gboolean gtk_separator_tool_item_motion_event      (GtkWidget                 *widget,
+                                                           GdkEventMotion            *event);
 
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
@@ -130,7 +132,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
   widget_class->unmap = gtk_separator_tool_item_unmap;
   widget_class->button_press_event = gtk_separator_tool_item_button_event;
   widget_class->button_release_event = gtk_separator_tool_item_button_event;
-  widget_class->motion_notify_event = gtk_separator_tool_item_button_event;
+  widget_class->motion_notify_event = gtk_separator_tool_item_motion_event;
 
   toolitem_class->create_menu_proxy = gtk_separator_tool_item_create_menu_proxy;
   
@@ -342,6 +344,19 @@ gtk_separator_tool_item_unmap (GtkWidget *widget)
     gdk_window_hide (priv->event_window);
 
   GTK_WIDGET_CLASS (gtk_separator_tool_item_parent_class)->unmap (widget);
+}
+
+static gboolean
+gtk_separator_tool_item_motion_event (GtkWidget      *widget,
+                                      GdkEventMotion *event)
+{
+  GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
+  GtkSeparatorToolItemPrivate *priv = separator->priv;
+
+  /* We want window dragging to work on empty toolbar areas,
+   * so we only eat button events on visible separators
+   */
+  return priv->draw;
 }
 
 static gboolean
