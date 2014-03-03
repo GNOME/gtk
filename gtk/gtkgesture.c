@@ -37,6 +37,7 @@ enum {
   BEGIN,
   END,
   UPDATE,
+  CANCEL,
   SEQUENCE_STATE_CHANGED,
   N_SIGNALS
 };
@@ -403,6 +404,13 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_STRUCT_OFFSET (GtkGestureClass, update),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, G_TYPE_POINTER);
+  signals[CANCEL] =
+    g_signal_new ("cancel",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkGestureClass, cancel),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, G_TYPE_POINTER);
   signals[SEQUENCE_STATE_CHANGED] =
     g_signal_new ("sequence-state-changed",
                   G_TYPE_FROM_CLASS (klass),
@@ -505,9 +513,20 @@ gtk_gesture_get_sequence_state (GtkGesture       *gesture,
  * @sequence: a #GdkEventSequence
  * @state: the sequence state
  *
- * Sets the state of @sequence in @gesture.
+ * Sets the state of @sequence in @gesture. Sequences start
+ * in state #GTK_EVENT_SEQUENCE_NONE, and whenever they change
+ * state, they can never go back to that state. Likewise,
+ * sequences in state #GTK_EVENT_SEQUENCE_DENIED cannot turn
+ * back to a not denied state. With these rules, the lifetime
+ * of an event sequence is constrained to the next four:
  *
- * Returns: #TRUE if @sequence is handled by @gesture.
+ * * None
+ * * None → Denied
+ * * None → Claimed
+ * * None → Claimed → Denied
+ *
+ * Returns: #TRUE if @sequence is handled by @gesture,
+ *          and the state is changed successfully.
  *
  * Since: 3.14
  **/
@@ -528,6 +547,15 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
   data = g_hash_table_lookup (priv->points, sequence);
 
   if (!data || data->state == state)
+    return FALSE;
+
+  /* denied sequences remain denied */
+  if (data->state == GTK_EVENT_SEQUENCE_DENIED)
+    return FALSE;
+
+  /* Sequences can't go from claimed/denied to none */
+  if (state == GTK_EVENT_SEQUENCE_NONE &&
+      data->state != GTK_EVENT_SEQUENCE_NONE)
     return FALSE;
 
   old_state = data->state;
@@ -961,4 +989,35 @@ gtk_gesture_handles_sequence (GtkGesture       *gesture,
   priv = gtk_gesture_get_instance_private (gesture);
 
   return g_hash_table_contains (priv->points, sequence);
+}
+
+/**
+ * gtk_gesture_cancel_sequence:
+ * @gesture: a #GtkGesture
+ * @sequence: a #GdkEventSequence
+ *
+ * Cancels @sequence on @gesture, this emits #GtkGesture::cancel
+ * and forgets the sequence altogether.
+ *
+ * Returns: #TRUE if the sequence was being handled by gesture
+ **/
+gboolean
+gtk_gesture_cancel_sequence (GtkGesture       *gesture,
+                             GdkEventSequence *sequence)
+{
+  GtkGesturePrivate *priv;
+  PointData *data;
+
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
+
+  priv = gtk_gesture_get_instance_private (gesture);
+  data = g_hash_table_lookup (priv->points, sequence);
+
+  if (!data)
+    return FALSE;
+
+  g_signal_emit (gesture, signals[CANCEL], 0, sequence);
+  _gtk_gesture_check_recognized (gesture, sequence);
+  _gtk_gesture_remove_point (gesture, data->event);
+  return TRUE;
 }

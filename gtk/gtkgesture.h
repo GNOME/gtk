@@ -57,6 +57,9 @@ struct _GtkGestureClass
   void     (* end)    (GtkGesture       *gesture,
                        GdkEventSequence *sequence);
 
+  void     (* cancel) (GtkGesture       *gesture,
+                       GdkEventSequence *sequence);
+
   void     (* sequence_state_changed) (GtkGesture            *gesture,
                                        GdkEventSequence      *sequence,
                                        GtkEventSequenceState  state);
@@ -89,7 +92,9 @@ GdkEventSequence * gtk_gesture_get_last_updated_sequence
 GDK_AVAILABLE_IN_3_14
 gboolean    gtk_gesture_handles_sequence     (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
-
+GDK_AVAILABLE_IN_3_14
+gboolean    gtk_gesture_cancel_sequence      (GtkGesture       *gesture,
+                                              GdkEventSequence *sequence);
 GDK_AVAILABLE_IN_3_14
 const GdkEvent *
             gtk_gesture_get_last_event       (GtkGesture       *gesture,

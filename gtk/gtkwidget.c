@@ -592,6 +592,7 @@ enum {
   DRAG_FAILED,
   STYLE_UPDATED,
   TOUCH_EVENT,
+  SEQUENCE_STATE_CHANGED,
   LAST_SIGNAL
 };
 
@@ -3427,6 +3428,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  _gtk_marshal_BOOLEAN__UINT,
                   G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
 
+  widget_signals[SEQUENCE_STATE_CHANGED] =
+    g_signal_new (I_("sequence-state-changed"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST, 0,
+                  g_signal_accumulator_first_wins, NULL, NULL,
+                  G_TYPE_BOOLEAN, 3, GTK_TYPE_WIDGET,
+                  G_TYPE_POINTER, GTK_TYPE_EVENT_SEQUENCE_STATE);
+
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
                                 "popup-menu", 0);
@@ -4035,6 +4044,78 @@ gtk_widget_get_property (GObject         *object,
     }
 }
 
+static gboolean
+_gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
+                                         GdkEventSequence      *sequence,
+                                         GtkEventSequenceState  state)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  EventControllerData *data;
+  gboolean handled = FALSE;
+  GList *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      handled |= gtk_gesture_set_sequence_state (GTK_GESTURE (data->controller),
+                                                 sequence, state);
+    }
+
+  return handled;
+}
+
+static gboolean
+_gtk_widget_cancel_sequence (GtkWidget *widget,
+                             GdkEventSequence *sequence)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  EventControllerData *data;
+  gboolean handled = FALSE;
+  GList *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      handled |= gtk_gesture_cancel_sequence (GTK_GESTURE (data->controller),
+                                              sequence);
+    }
+
+  return handled;
+}
+
+static gboolean
+gtk_widget_real_sequence_state_changed (GtkWidget             *widget,
+                                        GtkWidget             *changed_widget,
+                                        GdkEventSequence      *sequence,
+                                        GtkEventSequenceState  state)
+{
+  GtkEventSequenceState changed_state;
+
+  if (widget == changed_widget)
+    return _gtk_widget_set_sequence_state_internal (widget, sequence, state);
+  else if (gtk_widget_is_ancestor (widget, changed_widget))
+    return _gtk_widget_cancel_sequence (widget, sequence);
+  else
+    {
+      changed_state = gtk_widget_get_sequence_state (changed_widget, sequence);
+
+      if (state == GTK_EVENT_SEQUENCE_CLAIMED &&
+          changed_state == GTK_EVENT_SEQUENCE_CLAIMED)
+        return _gtk_widget_set_sequence_state_internal (widget, sequence,
+                                                        GTK_EVENT_SEQUENCE_DENIED);
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_widget_init (GtkWidget *widget)
 {
@@ -4092,6 +4173,10 @@ gtk_widget_init (GtkWidget *widget)
   priv->style = gtk_widget_get_default_style ();
   G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_ref (priv->style);
+
+  g_signal_connect (widget, "sequence-state-changed",
+                    G_CALLBACK (gtk_widget_real_sequence_state_changed),
+                    NULL);
 }
 
 
@@ -16487,27 +16572,36 @@ gtk_widget_set_sequence_state (GtkWidget             *widget,
 {
   EventControllerData *data;
   gboolean handled = FALSE;
+  GtkWidget *event_widget;
   GtkWidgetPrivate *priv;
-  GList *l;
+  const GdkEvent *event;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget),
-                        GTK_EVENT_SEQUENCE_NONE);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
+                    state <= GTK_EVENT_SEQUENCE_DENIED);
 
-  priv = widget->priv;
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      data = l->data;
-
-      if (!GTK_IS_GESTURE (data->controller))
-        continue;
-
-      handled |= gtk_gesture_set_sequence_state (GTK_GESTURE (data->controller),
-                                                 sequence, state);
-    }
+  g_signal_emit (widget, widget_signals[SEQUENCE_STATE_CHANGED],
+                 0, widget, sequence, state, &handled);
 
   if (!handled)
     return;
 
-  /* FIXME: Propagate upwards/downwards */
+  priv = widget->priv;
+  data = priv->event_controllers->data;
+  event = gtk_gesture_get_last_event (GTK_GESTURE (data->controller), sequence);
+
+  if (!event)
+    return;
+
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+  g_assert (widget == event_widget ||
+            gtk_widget_is_ancestor (event_widget, widget));
+
+  while (event_widget)
+    {
+      if (event_widget != widget)
+        g_signal_emit (event_widget, widget_signals[SEQUENCE_STATE_CHANGED],
+                       0, widget, sequence, state, &handled);
+      event_widget = gtk_widget_get_parent (event_widget);
+    }
 }
