@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-04 22:25+0000\n"
-"PO-Revision-Date: 2014-02-05 16:21+0700\n"
+"POT-Creation-Date: 2014-03-03 09:51+0000\n"
+"PO-Revision-Date: 2014-03-03 18:00+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -73,7 +73,7 @@ msgstr "แฟล็กการดีบั๊กของ GDK ที่จะ�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:456 ../gtk/gtkmain.c:459
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -83,11 +83,11 @@ msgid "GDK debugging flags to unset"
 msgstr "แฟล็กการดีบั๊กของ GDK ที่จะปิด"
 
 #.
-#. * Translators, the strings in the 'keyboard label' context are
+#. * Translators, the strings in the “keyboard label” context are
 #. * display names for keyboard keys. Some of them have prefixes like
 #. * XF86 or ISO_ - these should be removed in the translation. Similarly,
-#. * underscores should be replaced by spaces. The prefix 'KP_' stands
-#. * for 'key pad' and you may want to include that in your translation.
+#. * underscores should be replaced by spaces. The prefix “KP_” stands
+#. * for “key pad” and you may want to include that in your translation.
 #. * Here are some examples of English translations:
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
@@ -492,17 +492,17 @@ msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "คลิกปุ่ม"
 
-#: ../gtk/a11y/gtkcellaccessible.c:258
+#: ../gtk/a11y/gtkcellaccessible.c:265
 msgctxt "Action name"
 msgid "Expand or contract"
 msgstr "ขยายหรือยุบ"
 
-#: ../gtk/a11y/gtkcellaccessible.c:260
+#: ../gtk/a11y/gtkcellaccessible.c:267
 msgctxt "Action name"
 msgid "Edit"
 msgstr "แก้ไข"
 
-#: ../gtk/a11y/gtkcellaccessible.c:262
+#: ../gtk/a11y/gtkcellaccessible.c:269
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:149
 #: ../gtk/a11y/gtkentryaccessible.c:1554
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
@@ -510,17 +510,17 @@ msgctxt "Action name"
 msgid "Activate"
 msgstr "เรียกใช้งาน"
 
-#: ../gtk/a11y/gtkcellaccessible.c:275
+#: ../gtk/a11y/gtkcellaccessible.c:282
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
 msgstr "ขยายหรือยุบแถวของแผนภาพต้นไม้ที่บรรจุเซลล์นี้"
 
-#: ../gtk/a11y/gtkcellaccessible.c:277
+#: ../gtk/a11y/gtkcellaccessible.c:284
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
 msgstr "สร้างวิดเจ็ตที่เนื้อหาของเซลล์สามารถแก้ไขได้"
 
-#: ../gtk/a11y/gtkcellaccessible.c:279
+#: ../gtk/a11y/gtkcellaccessible.c:286
 msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "เรียกใช้งานเซลล์"
@@ -573,43 +573,43 @@ msgstr "เรียกใช้งานช่องพับเก็บ"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/a11y/gtkimageaccessible.c:52 ../gtk/deprecated/gtkstock.c:342
+#: ../gtk/a11y/gtkimageaccessible.c:52 ../gtk/deprecated/gtkstock.c:340
 msgctxt "Stock label"
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: ../gtk/a11y/gtkimageaccessible.c:53 ../gtk/deprecated/gtkstock.c:343
+#: ../gtk/a11y/gtkimageaccessible.c:53 ../gtk/deprecated/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "เ_พิ่ม"
 
-#: ../gtk/a11y/gtkimageaccessible.c:54 ../gtk/deprecated/gtkstock.c:345
+#: ../gtk/a11y/gtkimageaccessible.c:54 ../gtk/deprecated/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "ตัวห_นา"
 
-#: ../gtk/a11y/gtkimageaccessible.c:55 ../gtk/deprecated/gtkstock.c:347
+#: ../gtk/a11y/gtkimageaccessible.c:55 ../gtk/deprecated/gtkstock.c:345
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "ซีดี_รอม"
 
-#: ../gtk/a11y/gtkimageaccessible.c:56 ../gtk/deprecated/gtkstock.c:348
+#: ../gtk/a11y/gtkimageaccessible.c:56 ../gtk/deprecated/gtkstock.c:346
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_ล้าง"
 
-#: ../gtk/a11y/gtkimageaccessible.c:57 ../gtk/deprecated/gtkstock.c:349
+#: ../gtk/a11y/gtkimageaccessible.c:57 ../gtk/deprecated/gtkstock.c:347
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "ปิ_ด"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkheaderbar.c:397
-#: ../gtk/gtkwindow.c:8621
+#: ../gtk/gtkwindow.c:8655
 msgid "Minimize"
 msgstr "ย่อเก็บ"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:420
-#: ../gtk/gtkwindow.c:8629
+#: ../gtk/gtkwindow.c:8663
 msgid "Maximize"
 msgstr "ขยายแผ่"
 
@@ -617,369 +617,369 @@ msgstr "ขยายแผ่"
 msgid "Restore"
 msgstr "คืนขนาด"
 
-#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/deprecated/gtkstock.c:352
+#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/deprecated/gtkstock.c:350
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_คัดลอก"
 
-#: ../gtk/a11y/gtkimageaccessible.c:62 ../gtk/deprecated/gtkstock.c:353
+#: ../gtk/a11y/gtkimageaccessible.c:62 ../gtk/deprecated/gtkstock.c:351
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_ตัด"
 
-#: ../gtk/a11y/gtkimageaccessible.c:63 ../gtk/deprecated/gtkstock.c:354
+#: ../gtk/a11y/gtkimageaccessible.c:63 ../gtk/deprecated/gtkstock.c:352
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_ลบ"
 
-#: ../gtk/a11y/gtkimageaccessible.c:64 ../gtk/deprecated/gtkstock.c:336
+#: ../gtk/a11y/gtkimageaccessible.c:64 ../gtk/deprecated/gtkstock.c:334
 msgctxt "Stock label"
 msgid "Error"
 msgstr "ผิดพลาด"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/a11y/gtkimageaccessible.c:65 ../gtk/deprecated/gtkstock.c:334
+#: ../gtk/a11y/gtkimageaccessible.c:65 ../gtk/deprecated/gtkstock.c:332
 msgctxt "Stock label"
 msgid "Information"
 msgstr "ข้อมูล"
 
-#: ../gtk/a11y/gtkimageaccessible.c:66 ../gtk/deprecated/gtkstock.c:337
+#: ../gtk/a11y/gtkimageaccessible.c:66 ../gtk/deprecated/gtkstock.c:335
 msgctxt "Stock label"
 msgid "Question"
 msgstr "คำถาม"
 
-#: ../gtk/a11y/gtkimageaccessible.c:67 ../gtk/deprecated/gtkstock.c:335
+#: ../gtk/a11y/gtkimageaccessible.c:67 ../gtk/deprecated/gtkstock.c:333
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: ../gtk/a11y/gtkimageaccessible.c:68 ../gtk/deprecated/gtkstock.c:357
+#: ../gtk/a11y/gtkimageaccessible.c:68 ../gtk/deprecated/gtkstock.c:355
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "เ_รียกใช้"
 
-#: ../gtk/a11y/gtkimageaccessible.c:69 ../gtk/deprecated/gtkstock.c:359
+#: ../gtk/a11y/gtkimageaccessible.c:69 ../gtk/deprecated/gtkstock.c:357
 msgctxt "Stock label"
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
-#: ../gtk/a11y/gtkimageaccessible.c:70 ../gtk/deprecated/gtkstock.c:360
+#: ../gtk/a11y/gtkimageaccessible.c:70 ../gtk/deprecated/gtkstock.c:358
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_หา"
 
-#: ../gtk/a11y/gtkimageaccessible.c:71 ../gtk/deprecated/gtkstock.c:361
+#: ../gtk/a11y/gtkimageaccessible.c:71 ../gtk/deprecated/gtkstock.c:359
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "หาและแ_ทนที่"
 
-#: ../gtk/a11y/gtkimageaccessible.c:72 ../gtk/deprecated/gtkstock.c:362
+#: ../gtk/a11y/gtkimageaccessible.c:72 ../gtk/deprecated/gtkstock.c:360
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_ฟลอปปี้"
 
-#: ../gtk/a11y/gtkimageaccessible.c:73 ../gtk/deprecated/gtkstock.c:363
+#: ../gtk/a11y/gtkimageaccessible.c:73 ../gtk/deprecated/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "เ_ต็มจอ"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/a11y/gtkimageaccessible.c:74 ../gtk/deprecated/gtkstock.c:366
+#: ../gtk/a11y/gtkimageaccessible.c:74 ../gtk/deprecated/gtkstock.c:364
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "ล่า_งสุด"
 
 #. This is a navigation label as in "go to the first page"
-#: ../gtk/a11y/gtkimageaccessible.c:75 ../gtk/deprecated/gtkstock.c:368
+#: ../gtk/a11y/gtkimageaccessible.c:75 ../gtk/deprecated/gtkstock.c:366
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "แ_รกสุด"
 
 #. This is a navigation label as in "go to the last page"
-#: ../gtk/a11y/gtkimageaccessible.c:76 ../gtk/deprecated/gtkstock.c:370
+#: ../gtk/a11y/gtkimageaccessible.c:76 ../gtk/deprecated/gtkstock.c:368
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_ท้ายสุด"
 
 #. This is a navigation label as in "go to the top of the page"
-#: ../gtk/a11y/gtkimageaccessible.c:77 ../gtk/deprecated/gtkstock.c:372
+#: ../gtk/a11y/gtkimageaccessible.c:77 ../gtk/deprecated/gtkstock.c:370
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_บนสุด"
 
 #. This is a navigation label as in "go back"
-#: ../gtk/a11y/gtkimageaccessible.c:78 ../gtk/deprecated/gtkstock.c:374
+#: ../gtk/a11y/gtkimageaccessible.c:78 ../gtk/deprecated/gtkstock.c:372
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_ถอยกลับ"
 
 #. This is a navigation label as in "go down"
-#: ../gtk/a11y/gtkimageaccessible.c:79 ../gtk/deprecated/gtkstock.c:376
+#: ../gtk/a11y/gtkimageaccessible.c:79 ../gtk/deprecated/gtkstock.c:374
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_ลง"
 
 #. This is a navigation label as in "go forward"
-#: ../gtk/a11y/gtkimageaccessible.c:80 ../gtk/deprecated/gtkstock.c:378
+#: ../gtk/a11y/gtkimageaccessible.c:80 ../gtk/deprecated/gtkstock.c:376
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "ถั_ดไป"
 
 #. This is a navigation label as in "go up"
-#: ../gtk/a11y/gtkimageaccessible.c:81 ../gtk/deprecated/gtkstock.c:380
+#: ../gtk/a11y/gtkimageaccessible.c:81 ../gtk/deprecated/gtkstock.c:378
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_ขึ้น"
 
-#: ../gtk/a11y/gtkimageaccessible.c:82 ../gtk/deprecated/gtkstock.c:381
+#: ../gtk/a11y/gtkimageaccessible.c:82 ../gtk/deprecated/gtkstock.c:379
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "ฮาร์_ดดิสก์"
 
-#: ../gtk/a11y/gtkimageaccessible.c:83 ../gtk/deprecated/gtkstock.c:382
+#: ../gtk/a11y/gtkimageaccessible.c:83 ../gtk/deprecated/gtkstock.c:380
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../gtk/a11y/gtkimageaccessible.c:84 ../gtk/deprecated/gtkstock.c:383
+#: ../gtk/a11y/gtkimageaccessible.c:84 ../gtk/deprecated/gtkstock.c:381
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_บ้าน"
 
-#: ../gtk/a11y/gtkimageaccessible.c:85 ../gtk/deprecated/gtkstock.c:384
+#: ../gtk/a11y/gtkimageaccessible.c:85 ../gtk/deprecated/gtkstock.c:382
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "เพิ่มระยะร่น"
 
-#: ../gtk/a11y/gtkimageaccessible.c:86 ../gtk/deprecated/gtkstock.c:387
+#: ../gtk/a11y/gtkimageaccessible.c:86 ../gtk/deprecated/gtkstock.c:385
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_ข้อมูล"
 
-#: ../gtk/a11y/gtkimageaccessible.c:87 ../gtk/deprecated/gtkstock.c:388
+#: ../gtk/a11y/gtkimageaccessible.c:87 ../gtk/deprecated/gtkstock.c:386
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "ตัวเ_อียง"
 
-#: ../gtk/a11y/gtkimageaccessible.c:88 ../gtk/deprecated/gtkstock.c:389
+#: ../gtk/a11y/gtkimageaccessible.c:88 ../gtk/deprecated/gtkstock.c:387
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_กระโดดไป"
 
 #. This is about text justification, "centered text"
-#: ../gtk/a11y/gtkimageaccessible.c:89 ../gtk/deprecated/gtkstock.c:391
+#: ../gtk/a11y/gtkimageaccessible.c:89 ../gtk/deprecated/gtkstock.c:389
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_กึ่งกลาง"
 
 #. This is about text justification
-#: ../gtk/a11y/gtkimageaccessible.c:90 ../gtk/deprecated/gtkstock.c:393
+#: ../gtk/a11y/gtkimageaccessible.c:90 ../gtk/deprecated/gtkstock.c:391
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "เ_ต็มกรอบ"
 
 #. This is about text justification, "left-justified text"
-#: ../gtk/a11y/gtkimageaccessible.c:91 ../gtk/deprecated/gtkstock.c:395
+#: ../gtk/a11y/gtkimageaccessible.c:91 ../gtk/deprecated/gtkstock.c:393
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "ชิด_ซ้าย"
 
 #. This is about text justification, "right-justified text"
-#: ../gtk/a11y/gtkimageaccessible.c:92 ../gtk/deprecated/gtkstock.c:397
+#: ../gtk/a11y/gtkimageaccessible.c:92 ../gtk/deprecated/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "ชิด_ขวา"
 
-#: ../gtk/a11y/gtkimageaccessible.c:93 ../gtk/deprecated/gtkstock.c:364
+#: ../gtk/a11y/gtkimageaccessible.c:93 ../gtk/deprecated/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "เ_ลิกแสดงเต็มจอ"
 
 #. Media label, as in "fast forward"
-#: ../gtk/a11y/gtkimageaccessible.c:94 ../gtk/deprecated/gtkstock.c:400
+#: ../gtk/a11y/gtkimageaccessible.c:94 ../gtk/deprecated/gtkstock.c:398
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "กรอไ_ป"
 
 #. Media label, as in "next song"
-#: ../gtk/a11y/gtkimageaccessible.c:95 ../gtk/deprecated/gtkstock.c:402
+#: ../gtk/a11y/gtkimageaccessible.c:95 ../gtk/deprecated/gtkstock.c:400
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_ถัดไป"
 
 #. Media label, as in "pause music"
-#: ../gtk/a11y/gtkimageaccessible.c:96 ../gtk/deprecated/gtkstock.c:404
+#: ../gtk/a11y/gtkimageaccessible.c:96 ../gtk/deprecated/gtkstock.c:402
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_พัก"
 
 #. Media label, as in "play music"
-#: ../gtk/a11y/gtkimageaccessible.c:97 ../gtk/deprecated/gtkstock.c:406
+#: ../gtk/a11y/gtkimageaccessible.c:97 ../gtk/deprecated/gtkstock.c:404
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "เ_ล่น"
 
 #. Media label, as in  "previous song"
-#: ../gtk/a11y/gtkimageaccessible.c:98 ../gtk/deprecated/gtkstock.c:408
+#: ../gtk/a11y/gtkimageaccessible.c:98 ../gtk/deprecated/gtkstock.c:406
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "ก่อ_นหน้า"
 
 #. Media label
-#: ../gtk/a11y/gtkimageaccessible.c:99 ../gtk/deprecated/gtkstock.c:410
+#: ../gtk/a11y/gtkimageaccessible.c:99 ../gtk/deprecated/gtkstock.c:408
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_อัด"
 
 #. Media label
-#: ../gtk/a11y/gtkimageaccessible.c:100 ../gtk/deprecated/gtkstock.c:412
+#: ../gtk/a11y/gtkimageaccessible.c:100 ../gtk/deprecated/gtkstock.c:410
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "กรอ_กลับ"
 
 #. Media label
-#: ../gtk/a11y/gtkimageaccessible.c:101 ../gtk/deprecated/gtkstock.c:414
+#: ../gtk/a11y/gtkimageaccessible.c:101 ../gtk/deprecated/gtkstock.c:412
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_หยุด"
 
-#: ../gtk/a11y/gtkimageaccessible.c:102 ../gtk/deprecated/gtkstock.c:415
+#: ../gtk/a11y/gtkimageaccessible.c:102 ../gtk/deprecated/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "เค_รือข่าย"
 
-#: ../gtk/a11y/gtkimageaccessible.c:103 ../gtk/deprecated/gtkstock.c:416
+#: ../gtk/a11y/gtkimageaccessible.c:103 ../gtk/deprecated/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_New"
 msgstr "ใ_หม่"
 
-#: ../gtk/a11y/gtkimageaccessible.c:104 ../gtk/deprecated/gtkstock.c:419
+#: ../gtk/a11y/gtkimageaccessible.c:104 ../gtk/deprecated/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_เปิด"
 
-#: ../gtk/a11y/gtkimageaccessible.c:105 ../gtk/deprecated/gtkstock.c:429
+#: ../gtk/a11y/gtkimageaccessible.c:105 ../gtk/deprecated/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_แปะ"
 
-#: ../gtk/a11y/gtkimageaccessible.c:106 ../gtk/deprecated/gtkstock.c:431
+#: ../gtk/a11y/gtkimageaccessible.c:106 ../gtk/deprecated/gtkstock.c:429
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_พิมพ์"
 
-#: ../gtk/a11y/gtkimageaccessible.c:107 ../gtk/deprecated/gtkstock.c:432
+#: ../gtk/a11y/gtkimageaccessible.c:107 ../gtk/deprecated/gtkstock.c:430
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "_ตัวอย่างก่อนพิมพ์"
 
-#: ../gtk/a11y/gtkimageaccessible.c:108 ../gtk/deprecated/gtkstock.c:433
+#: ../gtk/a11y/gtkimageaccessible.c:108 ../gtk/deprecated/gtkstock.c:431
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "คุณ_สมบัติ"
 
-#: ../gtk/a11y/gtkimageaccessible.c:109 ../gtk/deprecated/gtkstock.c:434
+#: ../gtk/a11y/gtkimageaccessible.c:109 ../gtk/deprecated/gtkstock.c:432
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_ออก"
 
-#: ../gtk/a11y/gtkimageaccessible.c:110 ../gtk/deprecated/gtkstock.c:435
+#: ../gtk/a11y/gtkimageaccessible.c:110 ../gtk/deprecated/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_ทำซ้ำ"
 
-#: ../gtk/a11y/gtkimageaccessible.c:111 ../gtk/deprecated/gtkstock.c:436
+#: ../gtk/a11y/gtkimageaccessible.c:111 ../gtk/deprecated/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "เ_รียกใหม่"
 
-#: ../gtk/a11y/gtkimageaccessible.c:112 ../gtk/deprecated/gtkstock.c:437
+#: ../gtk/a11y/gtkimageaccessible.c:112 ../gtk/deprecated/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "เ_อาออก"
 
-#: ../gtk/a11y/gtkimageaccessible.c:113 ../gtk/deprecated/gtkstock.c:438
+#: ../gtk/a11y/gtkimageaccessible.c:113 ../gtk/deprecated/gtkstock.c:436
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "คืน_กลับ"
 
-#: ../gtk/a11y/gtkimageaccessible.c:114 ../gtk/deprecated/gtkstock.c:439
+#: ../gtk/a11y/gtkimageaccessible.c:114 ../gtk/deprecated/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_บันทึก"
 
-#: ../gtk/a11y/gtkimageaccessible.c:115 ../gtk/deprecated/gtkstock.c:440
+#: ../gtk/a11y/gtkimageaccessible.c:115 ../gtk/deprecated/gtkstock.c:438
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "บันทึกเป็_น"
 
-#: ../gtk/a11y/gtkimageaccessible.c:116 ../gtk/deprecated/gtkstock.c:441
+#: ../gtk/a11y/gtkimageaccessible.c:116 ../gtk/deprecated/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "เลือกทั้ง_หมด"
 
 #. Sorting direction
-#: ../gtk/a11y/gtkimageaccessible.c:117 ../gtk/deprecated/gtkstock.c:445
+#: ../gtk/a11y/gtkimageaccessible.c:117 ../gtk/deprecated/gtkstock.c:443
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_น้อยไปมาก"
 
 #. Sorting direction
-#: ../gtk/a11y/gtkimageaccessible.c:118 ../gtk/deprecated/gtkstock.c:447
+#: ../gtk/a11y/gtkimageaccessible.c:118 ../gtk/deprecated/gtkstock.c:445
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_มากไปน้อย"
 
-#: ../gtk/a11y/gtkimageaccessible.c:119 ../gtk/deprecated/gtkstock.c:448
+#: ../gtk/a11y/gtkimageaccessible.c:119 ../gtk/deprecated/gtkstock.c:446
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "ต_รวจตัวสะกด"
 
-#: ../gtk/a11y/gtkimageaccessible.c:120 ../gtk/deprecated/gtkstock.c:449
+#: ../gtk/a11y/gtkimageaccessible.c:120 ../gtk/deprecated/gtkstock.c:447
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_หยุด"
 
 #. Font variant
-#: ../gtk/a11y/gtkimageaccessible.c:121 ../gtk/deprecated/gtkstock.c:451
+#: ../gtk/a11y/gtkimageaccessible.c:121 ../gtk/deprecated/gtkstock.c:449
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "ขีด_ทับ"
 
 #. Font variant
-#: ../gtk/a11y/gtkimageaccessible.c:122 ../gtk/deprecated/gtkstock.c:454
+#: ../gtk/a11y/gtkimageaccessible.c:122 ../gtk/deprecated/gtkstock.c:452
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_ขีดเส้นใต้"
 
-#: ../gtk/a11y/gtkimageaccessible.c:123 ../gtk/deprecated/gtkstock.c:455
+#: ../gtk/a11y/gtkimageaccessible.c:123 ../gtk/deprecated/gtkstock.c:453
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "เรี_ยกคืน"
 
-#: ../gtk/a11y/gtkimageaccessible.c:124 ../gtk/deprecated/gtkstock.c:385
+#: ../gtk/a11y/gtkimageaccessible.c:124 ../gtk/deprecated/gtkstock.c:383
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "ลดระยะร่น"
 
 #. Zoom
-#: ../gtk/a11y/gtkimageaccessible.c:125 ../gtk/deprecated/gtkstock.c:458
+#: ../gtk/a11y/gtkimageaccessible.c:125 ../gtk/deprecated/gtkstock.c:456
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "ขนาด_ปกติ"
 
 #. Zoom
-#: ../gtk/a11y/gtkimageaccessible.c:126 ../gtk/deprecated/gtkstock.c:460
+#: ../gtk/a11y/gtkimageaccessible.c:126 ../gtk/deprecated/gtkstock.c:458
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "ขนาด_พอดี"
 
-#: ../gtk/a11y/gtkimageaccessible.c:127 ../gtk/deprecated/gtkstock.c:461
+#: ../gtk/a11y/gtkimageaccessible.c:127 ../gtk/deprecated/gtkstock.c:459
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "แสดงขย_าย"
 
-#: ../gtk/a11y/gtkimageaccessible.c:128 ../gtk/deprecated/gtkstock.c:462
+#: ../gtk/a11y/gtkimageaccessible.c:128 ../gtk/deprecated/gtkstock.c:460
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "แสดง_ย่อ"
@@ -1147,18 +1147,18 @@ msgstr ""
 "หรือลากสีจากกรอบสีปัจจุบันทางด้านซ้ายมาลงที่นี่"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
-#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:626
-#: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:804
-#: ../gtk/gtkfilechooserwidget.c:5361 ../gtk/gtkfontchooserdialog.c:155
-#: ../gtk/gtkmessagedialog.c:890 ../gtk/gtkmessagedialog.c:903
+#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:706
+#: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:803
+#: ../gtk/gtkfilechooserwidget.c:5376 ../gtk/gtkfontchooserdialog.c:155
+#: ../gtk/gtkmessagedialog.c:889 ../gtk/gtkmessagedialog.c:902
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
-#: ../gtk/gtkprintunixdialog.c:663 ../gtk/gtkprintunixdialog.c:730
+#: ../gtk/gtkprintunixdialog.c:667 ../gtk/gtkprintunixdialog.c:735
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
 msgid "_Cancel"
 msgstr "_ยกเลิก"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:627
+#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:707
 #: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:156
 #: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
@@ -1200,8 +1200,8 @@ msgstr "ตัว_อย่าง:"
 msgid "_Apply"
 msgstr "เริ่มใ_ช้"
 
-#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:882
-#: ../gtk/gtkmessagedialog.c:904 ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:881
+#: ../gtk/gtkmessagedialog.c:903 ../gtk/gtkprintbackend.c:748
 msgid "_OK"
 msgstr "_ตกลง"
 
@@ -1209,121 +1209,121 @@ msgstr "_ตกลง"
 msgid "Font Selection"
 msgstr "เลือกแบบอักษร"
 
-#: ../gtk/deprecated/gtkstock.c:344
+#: ../gtk/deprecated/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "เริ่มใ_ช้"
 
-#: ../gtk/deprecated/gtkstock.c:346
+#: ../gtk/deprecated/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_ยกเลิก"
 
-#: ../gtk/deprecated/gtkstock.c:350
+#: ../gtk/deprecated/gtkstock.c:348
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "เ_ชื่อมต่อ"
 
-#: ../gtk/deprecated/gtkstock.c:351
+#: ../gtk/deprecated/gtkstock.c:349
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "แปล_ง"
 
-#: ../gtk/deprecated/gtkstock.c:355
+#: ../gtk/deprecated/gtkstock.c:353
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_ละทิ้ง"
 
-#: ../gtk/deprecated/gtkstock.c:356
+#: ../gtk/deprecated/gtkstock.c:354
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "เลิ_กเชื่อมต่อ"
 
-#: ../gtk/deprecated/gtkstock.c:358
+#: ../gtk/deprecated/gtkstock.c:356
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../gtk/deprecated/gtkstock.c:386
+#: ../gtk/deprecated/gtkstock.c:384
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_ดัชนี"
 
-#: ../gtk/deprecated/gtkstock.c:417
+#: ../gtk/deprecated/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_No"
 msgstr "ไ_ม่"
 
-#: ../gtk/deprecated/gtkstock.c:418
+#: ../gtk/deprecated/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_ตกลง"
 
 #. Page orientation
-#: ../gtk/deprecated/gtkstock.c:421
+#: ../gtk/deprecated/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "แนวนอน"
 
 #. Page orientation
-#: ../gtk/deprecated/gtkstock.c:423
+#: ../gtk/deprecated/gtkstock.c:421
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "แนวตั้ง"
 
 #. Page orientation
-#: ../gtk/deprecated/gtkstock.c:425
+#: ../gtk/deprecated/gtkstock.c:423
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "แนวนอนกลับด้าน"
 
 #. Page orientation
-#: ../gtk/deprecated/gtkstock.c:427
+#: ../gtk/deprecated/gtkstock.c:425
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "แนวตั้งกลับด้าน"
 
-#: ../gtk/deprecated/gtkstock.c:428
+#: ../gtk/deprecated/gtkstock.c:426
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "ตั้ง_หน้ากระดาษ"
 
-#: ../gtk/deprecated/gtkstock.c:430
+#: ../gtk/deprecated/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_ปรับแต่ง"
 
-#: ../gtk/deprecated/gtkstock.c:442
+#: ../gtk/deprecated/gtkstock.c:440
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_สี"
 
-#: ../gtk/deprecated/gtkstock.c:443
+#: ../gtk/deprecated/gtkstock.c:441
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_แบบอักษร"
 
-#: ../gtk/deprecated/gtkstock.c:452
+#: ../gtk/deprecated/gtkstock.c:450
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "เลิ_กลบ"
 
-#: ../gtk/deprecated/gtkstock.c:456
+#: ../gtk/deprecated/gtkstock.c:454
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "ใ_ช่"
 
-#: ../gtk/deprecated/gtkuimanager.c:1790
+#: ../gtk/deprecated/gtkuimanager.c:1779
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "ไม่ควรจะพบแท็กเริ่มต้น '%s' ที่บรรทัดที่ %d ตัวอักษรที่ %d"
 
-#: ../gtk/deprecated/gtkuimanager.c:1880
+#: ../gtk/deprecated/gtkuimanager.c:1869
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "ไม่ควรจะพบข้อมูลตัวอักษร ที่บรรทัดที่ %d ตัวอักษรที่ %d"
 
-#: ../gtk/deprecated/gtkuimanager.c:2735
+#: ../gtk/deprecated/gtkuimanager.c:2724
 msgid "Empty"
 msgstr "ว่าง"
 
@@ -1336,8 +1336,8 @@ msgstr "ว่าง"
 #. * a program like its logo, name, copyright, website and license. It is
 #. * also possible to give credits to the authors, documenters, translators
 #. * and artists who have worked on the program. An about dialog is typically
-#. * opened when the user selects the <literal>About</literal> option from
-#. * the <literal>Help</literal> menu. All parts of the dialog are optional.
+#. * opened when the user selects the `About` option from
+#. * the `Help` menu. All parts of the dialog are optional.
 #. *
 #. * About dialogs often contain links and email addresses. GtkAboutDialog
 #. * displays these as clickable links. By default, it calls gtk_show_uri()
@@ -1348,11 +1348,11 @@ msgstr "ว่าง"
 #. * use the function gtk_show_about_dialog() which constructs and shows a dialog
 #. * and keeps it around so that it can be shown again.
 #. *
-#. * Note that GTK+ sets a default title of <literal>_("About &percnt;s")</literal>
-#. * on the dialog window (where &percnt;s is replaced by the name of the
-#. * application, but in order to ensure proper translation of the title,
-#. * applications should set the title property explicitly when constructing
-#. * a GtkAboutDialog, as shown in the following example:
+#. * Note that GTK+ sets a default title of `_("About \%s")` on the dialog
+#. * window (where \%s is replaced by the name of the application, but in
+#. * order to ensure proper translation of the title, applications should
+#. * set the title property explicitly when constructing a GtkAboutDialog,
+#. * as shown in the following example:
 #. * |[<!-- language="C" -->
 #. * gtk_show_about_dialog (NULL,
 #. *                        "program-name", "ExampleCode",
@@ -1363,7 +1363,7 @@ msgstr "ว่าง"
 #. *
 #. * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
 #. * e.g. using gtk_dialog_run(). In this case, you might need to know that
-#. * the 'Close' button returns the #GTK_RESPONSE_CANCEL response id.
+#. * the “Close” button returns the #GTK_RESPONSE_CANCEL response id.
 #.
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -1448,19 +1448,19 @@ msgstr "เว็บไซต์"
 msgid "About %s"
 msgstr "เกี่ยวกับ %s"
 
-#: ../gtk/gtkaboutdialog.c:2305
+#: ../gtk/gtkaboutdialog.c:2306
 msgid "Created by"
 msgstr "สร้างโดย"
 
-#: ../gtk/gtkaboutdialog.c:2308
+#: ../gtk/gtkaboutdialog.c:2309
 msgid "Documented by"
 msgstr "เอกสารโดย"
 
-#: ../gtk/gtkaboutdialog.c:2318
+#: ../gtk/gtkaboutdialog.c:2319
 msgid "Translated by"
 msgstr "แปลโดย"
 
-#: ../gtk/gtkaboutdialog.c:2323
+#: ../gtk/gtkaboutdialog.c:2324
 msgid "Artwork by"
 msgstr "งานศิลป์โดย"
 
@@ -1469,7 +1469,7 @@ msgstr "งานศิลป์โดย"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:159
+#: ../gtk/gtkaccellabel.c:160
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1479,7 +1479,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:165
+#: ../gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1489,7 +1489,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:171
+#: ../gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1499,7 +1499,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:801
+#: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1509,7 +1509,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:815
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1519,17 +1519,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:828
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:845
+#: ../gtk/gtkaccellabel.c:846
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:849
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1538,65 +1538,64 @@ msgstr "Backslash"
 msgid "Other application…"
 msgstr "โปรแกรมอื่น…"
 
-#. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:200
-#, c-format
-msgid "Select an application to open “%s”"
-msgstr "เลือกโปรแกรมสำหรับเปิด “%s”"
+#: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
+#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
+msgid "Select Application"
+msgstr "เลือกโปรแกรม"
 
-#: ../gtk/gtkappchooserdialog.c:201 ../gtk/gtkappchooserwidget.c:670
+#. Translators: %s is a filename
+#: ../gtk/gtkappchooserdialog.c:205
 #, c-format
-msgid "No applications available to open “%s”"
-msgstr "ไม่มีโปรแกรมสำหรับเปิด “%s”"
+msgid "Opening “%s”."
+msgstr "กำลังเปิด “%s”"
+
+#: ../gtk/gtkappchooserdialog.c:206
+#, c-format
+msgid "No applications found for “%s”"
+msgstr "ไม่พบโปรแกรมสำหรับ “%s”"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:207
+#: ../gtk/gtkappchooserdialog.c:212
 #, c-format
-msgid "Select an application for “%s” files"
-msgstr "เลือกโปรแกรมสำหรับแฟ้มชนิด “%s”"
+msgid "Opening “%s” files."
+msgstr "กำลังเปิดแฟ้ม “%s”"
 
-#: ../gtk/gtkappchooserdialog.c:209
+#: ../gtk/gtkappchooserdialog.c:214
 #, c-format
-msgid "No applications available to open “%s” files"
-msgstr "ไม่มีโปรแกรมสำหรับเปิดแฟ้มชนิด “%s”"
+msgid "No applications found for “%s” files"
+msgstr "ไม่พบโปรแกรมสำหรับแฟ้มชนิด “%s”"
 
-#: ../gtk/gtkappchooserdialog.c:225
-msgid ""
-"Click \"Show other applications\", for more options, or \"Software\" to "
-"install a new application"
-msgstr ""
-"คลิก \"แสดงโปรแกรมอื่นๆ\" เพื่อเลือกโปรแกรมได้หลากหลายขึ้น หรือ \"ซอฟต์แวร์\" "
-"เพื่อติดตั้งโปรแกรมใหม่เพิ่มเติม"
-
-#: ../gtk/gtkappchooserdialog.c:295
+#: ../gtk/gtkappchooserdialog.c:307
 msgid "Forget association"
 msgstr "ทิ้งความเกี่ยวโยง"
 
-#: ../gtk/gtkappchooserdialog.c:423
+#: ../gtk/gtkappchooserdialog.c:450
 msgid "Failed to start GNOME Software"
 msgstr "เปิดทำงานโปรแกรม \"ซอฟต์แวร์\" ชอง GNOME ไม่สำเร็จ"
 
-#: ../gtk/gtkappchooserdialog.c:441
-msgid "Software"
-msgstr "ซอฟต์แวร์"
-
-#: ../gtk/gtkappchooserwidget.c:619
+#: ../gtk/gtkappchooserwidget.c:622
 msgid "Default Application"
 msgstr "โปรแกรมปริยาย"
 
-#: ../gtk/gtkappchooserwidget.c:757
+#: ../gtk/gtkappchooserwidget.c:672
+#, c-format
+msgid "No applications found for “%s”."
+msgstr "ไม่พบโปรแกรมสำหรับ “%s”"
+
+#: ../gtk/gtkappchooserwidget.c:755
 msgid "Recommended Applications"
 msgstr "โปรแกรมแนะนำ"
 
-#: ../gtk/gtkappchooserwidget.c:772
+#: ../gtk/gtkappchooserwidget.c:770
 msgid "Related Applications"
 msgstr "โปรแกรมที่เกี่ยวข้อง"
 
-#: ../gtk/gtkappchooserwidget.c:786
+#: ../gtk/gtkappchooserwidget.c:784
 msgid "Other Applications"
 msgstr "โปรแกรมอื่นๆ"
 
-#: ../gtk/gtkapplicationwindow.c:325 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:321 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "โปรแกรม"
@@ -2001,13 +2000,13 @@ msgstr "_กำหนดเอง"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:886
+#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:885
 #: ../gtk/resources/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "ปิ_ด"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:412 ../gtk/gtkprintunixdialog.c:3300
+#: ../gtk/gtkcustompaperunixdialog.c:412 ../gtk/gtkprintunixdialog.c:3314
 msgid "Manage Custom Sizes"
 msgstr "จัดการขนาดกระดาษที่กำหนดเอง"
 
@@ -2060,30 +2059,30 @@ msgstr "_ขวา:"
 msgid "Paper Margins"
 msgstr "ขอบกระดาษ"
 
-#: ../gtk/gtkentry.c:9348 ../gtk/gtkentry.c:9501 ../gtk/gtklabel.c:6227
-#: ../gtk/gtktextview.c:8778 ../gtk/gtktextview.c:8966
+#: ../gtk/gtkentry.c:9431 ../gtk/gtkentry.c:9584 ../gtk/gtklabel.c:6262
+#: ../gtk/gtktextview.c:8779 ../gtk/gtktextview.c:8967
 msgid "Cu_t"
 msgstr "_ตัด"
 
-#: ../gtk/gtkentry.c:9352 ../gtk/gtkentry.c:9504 ../gtk/gtklabel.c:6228
-#: ../gtk/gtktextview.c:8782 ../gtk/gtktextview.c:8970
+#: ../gtk/gtkentry.c:9435 ../gtk/gtkentry.c:9587 ../gtk/gtklabel.c:6263
+#: ../gtk/gtktextview.c:8783 ../gtk/gtktextview.c:8971
 msgid "_Copy"
 msgstr "_คัดลอก"
 
-#: ../gtk/gtkentry.c:9356 ../gtk/gtkentry.c:9507 ../gtk/gtklabel.c:6229
-#: ../gtk/gtktextview.c:8784 ../gtk/gtktextview.c:8972
+#: ../gtk/gtkentry.c:9439 ../gtk/gtkentry.c:9590 ../gtk/gtklabel.c:6264
+#: ../gtk/gtktextview.c:8785 ../gtk/gtktextview.c:8973
 msgid "_Paste"
 msgstr "_แปะ"
 
-#: ../gtk/gtkentry.c:9359 ../gtk/gtklabel.c:6231 ../gtk/gtktextview.c:8787
+#: ../gtk/gtkentry.c:9442 ../gtk/gtklabel.c:6266 ../gtk/gtktextview.c:8788
 msgid "_Delete"
 msgstr "_ลบ"
 
-#: ../gtk/gtkentry.c:9370 ../gtk/gtklabel.c:6240 ../gtk/gtktextview.c:8801
+#: ../gtk/gtkentry.c:9453 ../gtk/gtklabel.c:6275 ../gtk/gtktextview.c:8802
 msgid "Select _All"
 msgstr "เลือกทั้ง_หมด"
 
-#: ../gtk/gtkentry.c:10472
+#: ../gtk/gtkentry.c:10555
 msgid "Caps Lock is on"
 msgstr "ปุ่ม Caps Lock ติดอยู่"
 
@@ -2113,38 +2112,37 @@ msgstr "ปุ่ม Caps Lock ติดอยู่"
 #. * }
 #. * ]|
 #. *
-#. * The #GtkFileChooserButton supports the #GtkFileChooserAction<!-- -->s
+#. * The #GtkFileChooserButton supports the #GtkFileChooserActions
 #. * %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
 #. *
-#. * <important>
-#. * The #GtkFileChooserButton will ellipsize the label,
-#. * and will thus request little horizontal space.  To give the button
-#. * more space, you should call gtk_widget_get_preferred_size(),
-#. * gtk_file_chooser_button_set_width_chars(), or pack the button in
-#. * such a way that other interface elements give space to the widget.
-#. * </important>
+#. * > The #GtkFileChooserButton will ellipsize the label, and will thus
+#. * > request little horizontal space.  To give the button more space,
+#. * > you should call gtk_widget_get_preferred_size(),
+#. * > gtk_file_chooser_button_set_width_chars(), or pack the button in
+#. * > such a way that other interface elements give space to the
+#. * > widget.
 #.
 #. **************** *
 #. *  Private Macros  *
 #. * ****************
-#: ../gtk/gtkfilechooserbutton.c:103
+#: ../gtk/gtkfilechooserbutton.c:102
 msgid "Select a File"
 msgstr "เลือกแฟ้ม"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:846
+#: ../gtk/gtkfilechooserbutton.c:103 ../gtk/gtkplacessidebar.c:846
 msgid "Desktop"
 msgstr "พื้นโต๊ะ"
 
-#: ../gtk/gtkfilechooserbutton.c:105
+#: ../gtk/gtkfilechooserbutton.c:104
 #: ../gtk/resources/ui/gtkfilechooserbutton.ui.h:1
 msgid "(None)"
 msgstr "(ไม่มี)"
 
-#: ../gtk/gtkfilechooserbutton.c:806 ../gtk/gtkplacessidebar.c:3179
+#: ../gtk/gtkfilechooserbutton.c:805 ../gtk/gtkplacessidebar.c:3179
 msgid "_Open"
 msgstr "_เปิด"
 
-#: ../gtk/gtkfilechooserbutton.c:2153
+#: ../gtk/gtkfilechooserbutton.c:2152
 msgid "Other…"
 msgstr "อื่นๆ…"
 
@@ -2157,15 +2155,15 @@ msgstr "อื่นๆ…"
 msgid "%1$s on %2$s"
 msgstr "%1$s ที่ %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:314
+#: ../gtk/gtkfilechooserwidget.c:327
 msgid "Type name of new folder"
 msgstr "ป้อนชื่อของโฟลเดอร์ใหม่"
 
-#: ../gtk/gtkfilechooserwidget.c:713
+#: ../gtk/gtkfilechooserwidget.c:726
 msgid "The folder could not be created"
 msgstr "ไม่สามารถสร้างโฟลเดอร์ได้"
 
-#: ../gtk/gtkfilechooserwidget.c:726
+#: ../gtk/gtkfilechooserwidget.c:739
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2173,157 +2171,160 @@ msgstr ""
 "ไม่สามารถสร้างโฟลเดอร์ที่กำหนดได้ เนื่องจากมีแฟ้มชื่อซ้ำกันอยู่ก่อนแล้ว "
 "กรุณาลองใช้ชื่ออื่นตั้งชื่อโฟลเดอร์ หรือมิฉะนั้นก็เปลี่ยนชื่อแฟ้มดังกล่าวเสียก่อน"
 
-#: ../gtk/gtkfilechooserwidget.c:740
+#: ../gtk/gtkfilechooserwidget.c:753
 msgid "You need to choose a valid filename."
 msgstr "คุณต้องระบุชื่อแฟ้มที่ถูกต้อง"
 
-#: ../gtk/gtkfilechooserwidget.c:743
+#: ../gtk/gtkfilechooserwidget.c:756
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "ไม่สามารถสร้างแฟ้มภายใต้ %s เพราะตำแหน่งดังกล่าวไม่ใช่โฟลเดอร์"
 
-#: ../gtk/gtkfilechooserwidget.c:751
+#: ../gtk/gtkfilechooserwidget.c:764
 msgid "Cannot create file as the filename is too long"
 msgstr "ไม่สามารถสร้างแฟ้มได้ เพราะชื่อแฟ้มยาวเกินไป"
 
-#: ../gtk/gtkfilechooserwidget.c:752
+#: ../gtk/gtkfilechooserwidget.c:765
 msgid "Try using a shorter name."
 msgstr "กรุณาใช้ชื่อที่สั้นกว่านี้"
 
-#: ../gtk/gtkfilechooserwidget.c:762
+#: ../gtk/gtkfilechooserwidget.c:775
 msgid "You may only select folders"
 msgstr "คุณสามารถเลือกได้เฉพาะโฟลเดอร์เท่านั้น"
 
-#: ../gtk/gtkfilechooserwidget.c:763
+#: ../gtk/gtkfilechooserwidget.c:776
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "รายการที่คุณเลือกไม่ใช่โฟลเดอร์ กรุณาเลือกรายการใหม่"
 
-#: ../gtk/gtkfilechooserwidget.c:771
+#: ../gtk/gtkfilechooserwidget.c:784
 msgid "Invalid file name"
 msgstr "ชื่อแฟ้มใช้ไม่ได้"
 
-#: ../gtk/gtkfilechooserwidget.c:781
+#: ../gtk/gtkfilechooserwidget.c:794
 msgid "The folder contents could not be displayed"
 msgstr "ไม่สามารถแสดงเนื้อหาของโฟลเดอร์ได้"
 
-#: ../gtk/gtkfilechooserwidget.c:1416
+#: ../gtk/gtkfilechooserwidget.c:1429
 msgid "Could not select file"
 msgstr "เลือกแฟ้มไม่สำเร็จ"
 
-#: ../gtk/gtkfilechooserwidget.c:1646
+#: ../gtk/gtkfilechooserwidget.c:1659
 msgid "_Visit File"
 msgstr "ไ_ปดูแฟ้ม"
 
-#: ../gtk/gtkfilechooserwidget.c:1649
+#: ../gtk/gtkfilechooserwidget.c:1662
 msgid "_Copy Location"
 msgstr "_คัดลอกตำแหน่ง"
 
-#: ../gtk/gtkfilechooserwidget.c:1652
+#: ../gtk/gtkfilechooserwidget.c:1665
 msgid "_Add to Bookmarks"
 msgstr "เ_พิ่มลงในที่คั่นหน้า"
 
-#: ../gtk/gtkfilechooserwidget.c:1659
+#: ../gtk/gtkfilechooserwidget.c:1672
 msgid "Show _Hidden Files"
 msgstr "แสดงแฟ้มซ่อ_น"
 
-#: ../gtk/gtkfilechooserwidget.c:1662
+#: ../gtk/gtkfilechooserwidget.c:1675
 msgid "Show _Size Column"
 msgstr "แสดงคอลัมน์_ขนาด"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:1911
+#: ../gtk/gtkfilechooserwidget.c:1924
 msgid "_Name:"
 msgstr "_ชื่อ:"
 
-#: ../gtk/gtkfilechooserwidget.c:2159 ../gtk/gtkfilechooserwidget.c:2170
+#: ../gtk/gtkfilechooserwidget.c:2172 ../gtk/gtkfilechooserwidget.c:2183
 msgid "Please select a folder below"
 msgstr "กรุณาเลือกโฟลเดอร์ที่ด้านล่างนี้"
 
-#: ../gtk/gtkfilechooserwidget.c:2165
+#: ../gtk/gtkfilechooserwidget.c:2178
 msgid "Please type a file name"
 msgstr "กรุณาป้อนชื่อแฟ้ม"
 
-#: ../gtk/gtkfilechooserwidget.c:2221
+#: ../gtk/gtkfilechooserwidget.c:2234
 msgid "Recently Used"
 msgstr "เอกสารล่าสุด"
 
-#: ../gtk/gtkfilechooserwidget.c:2231
+#: ../gtk/gtkfilechooserwidget.c:2244
 msgid "Search:"
 msgstr "ค้นหา:"
 
-#: ../gtk/gtkfilechooserwidget.c:2661
+#: ../gtk/gtkfilechooserwidget.c:2674
 msgid "Save in folder:"
 msgstr "บันทึกในโฟลเดอร์:"
 
-#: ../gtk/gtkfilechooserwidget.c:2663
+#: ../gtk/gtkfilechooserwidget.c:2676
 msgid "Create in folder:"
 msgstr "สร้างในโฟลเดอร์:"
 
-#: ../gtk/gtkfilechooserwidget.c:3819
+#: ../gtk/gtkfilechooserwidget.c:3832
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "ไม่สามารถอ่านเนื้อหาของ %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3823
+#: ../gtk/gtkfilechooserwidget.c:3836
 msgid "Could not read the contents of the folder"
 msgstr "ไม่สามารถอ่านเนื้อหาของโฟลเดอร์"
 
-#: ../gtk/gtkfilechooserwidget.c:3914
+#: ../gtk/gtkfilechooserwidget.c:3927
 msgid "%H:%M"
 msgstr "%H:%M น."
 
-#: ../gtk/gtkfilechooserwidget.c:3914
+#: ../gtk/gtkfilechooserwidget.c:3927
 msgid "%-I:%M %P"
 msgstr "%-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3916
+#: ../gtk/gtkfilechooserwidget.c:3929
 msgid "Yesterday at %H:%M"
 msgstr "เมื่อวาน %H:%M น."
 
-#: ../gtk/gtkfilechooserwidget.c:3916
+#: ../gtk/gtkfilechooserwidget.c:3929
 msgid "Yesterday at %-I:%M %P"
 msgstr "เมื่อวาน %-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:4105
+#. Translators: We don't know whether this printer is
+#. * available to print to.
+#: ../gtk/gtkfilechooserwidget.c:4120
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
-#: ../gtk/gtkfilechooserwidget.c:4570
+#: ../gtk/gtkfilechooserwidget.c:4585
 msgid "Cannot change to folder because it is not local"
 msgstr "ไปโฟลเดอร์ที่กำหนดไม่สำเร็จ เพราะไม่ใช่โฟลเดอร์ในเครื่องนี้"
 
-#: ../gtk/gtkfilechooserwidget.c:5354 ../gtk/gtkprintunixdialog.c:654
+#: ../gtk/gtkfilechooserwidget.c:5369 ../gtk/gtkprintunixdialog.c:658
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "มีแฟ้มชื่อ “%s” อยู่ก่อนแล้ว คุณต้องการจะแทนที่แฟ้มหรือไม่?"
 
-#: ../gtk/gtkfilechooserwidget.c:5357 ../gtk/gtkprintunixdialog.c:658
+#: ../gtk/gtkfilechooserwidget.c:5372 ../gtk/gtkprintunixdialog.c:662
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "มีแฟ้มดังกล่าวอยู่แล้วใน “%s” หากสั่งแทนที่ก็จะเขียนทับเนื้อหาแฟ้มเดิม"
 
-#: ../gtk/gtkfilechooserwidget.c:5362 ../gtk/gtkprintunixdialog.c:666
+#: ../gtk/gtkfilechooserwidget.c:5377 ../gtk/gtkprintunixdialog.c:670
 msgid "_Replace"
 msgstr "แ_ทนที่"
 
-#: ../gtk/gtkfilechooserwidget.c:6181
+#: ../gtk/gtkfilechooserwidget.c:6196
 msgid "Could not start the search process"
 msgstr "เรียกโพรเซสค้นหาไม่สำเร็จ"
 
-#: ../gtk/gtkfilechooserwidget.c:6182
+#: ../gtk/gtkfilechooserwidget.c:6197
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "โปรแกรมไม่สามารถเชื่อมต่อไปยังดีมอนผู้ทำดัชนีได้ กรุณาตรวจสอบให้แน่ใจว่าดีมอนทำงานอยู่"
 
-#: ../gtk/gtkfilechooserwidget.c:6196
+#: ../gtk/gtkfilechooserwidget.c:6211
 msgid "Could not send the search request"
 msgstr "ส่งคำขอค้นหาไม่สำเร็จ"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
-#. * token for the fake "File System" volume.  So, we'll return a pointer to
+#. * token for the fake “File System” volume.  So, we’ll return a pointer to
 #. * this particular string.
 #.
 #: ../gtk/gtkfilesystem.c:47
@@ -2342,16 +2343,16 @@ msgstr "เลือกแบบอักษร"
 msgid "Application menu"
 msgstr "เมนูโปรแกรม"
 
-#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8744
+#: ../gtk/gtkheaderbar.c:438 ../gtk/gtkwindow.c:8778
 msgid "Close"
 msgstr "ปิด"
 
-#: ../gtk/gtkicontheme.c:2126 ../gtk/gtkicontheme.c:2189
+#: ../gtk/gtkicontheme.c:2117 ../gtk/gtkicontheme.c:2180
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ชุดตกแต่งไม่มีไอคอน '%s'"
 
-#: ../gtk/gtkicontheme.c:3901
+#: ../gtk/gtkicontheme.c:3916
 msgid "Failed to load icon"
 msgstr "โหลดไอคอนไม่สำเร็จ"
 
@@ -2375,29 +2376,29 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "ระบบ (%s)"
 
-#: ../gtk/gtkinfobar.c:1186 ../gtk/gtkmessagedialog.c:368
+#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:370
 msgid "Information"
 msgstr "ข้อมูล"
 
-#: ../gtk/gtkinfobar.c:1190 ../gtk/gtkmessagedialog.c:373
+#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:374
 msgid "Question"
 msgstr "คำถาม"
 
-#: ../gtk/gtkinfobar.c:1194 ../gtk/gtkmessagedialog.c:378
+#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:378
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: ../gtk/gtkinfobar.c:1198 ../gtk/gtkmessagedialog.c:383
+#: ../gtk/gtkinfobar.c:1207 ../gtk/gtkmessagedialog.c:382
 msgid "Error"
 msgstr "ผิดพลาด"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6210
+#: ../gtk/gtklabel.c:6245
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6218
+#: ../gtk/gtklabel.c:6253
 msgid "Copy _Link Address"
 msgstr "คัดลอกที่อยู่_ลิงก์"
 
@@ -2492,40 +2493,40 @@ msgstr ""
 "กรุณาติดต่อผู้ดูแลระบบของคุณ"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:449
 msgid "Load additional GTK+ modules"
 msgstr "โหลดมอดูล GTK+ เพิ่มเติม"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:450
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:452
 msgid "Make all warnings fatal"
 msgstr "ให้ความสำคัญกับคำเตือนประหนึ่งความล้มเหลว"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:455
 msgid "GTK+ debugging flags to set"
 msgstr "แฟล็กการดีบั๊กของ GTK+ ที่จะเปิดใช้"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to unset"
 msgstr "แฟล็กการดีบั๊กของ GTK+ ที่จะปิด"
 
-#: ../gtk/gtkmain.c:758
+#: ../gtk/gtkmain.c:760
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ไม่สามารถเปิดดิสเพลย์: %s"
 
-#: ../gtk/gtkmain.c:824
+#: ../gtk/gtkmain.c:826
 msgid "GTK+ Options"
 msgstr "ตัวเลือกของ GTK+"
 
-#: ../gtk/gtkmain.c:824
+#: ../gtk/gtkmain.c:826
 msgid "Show GTK+ Options"
 msgstr "แสดงตัวเลือกของ GTK+"
 
@@ -2534,19 +2535,19 @@ msgstr "แสดงตัวเลือกของ GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1137
+#: ../gtk/gtkmain.c:1139
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmenubutton.c:592
+#: ../gtk/gtkmenubutton.c:620
 msgid "Menu"
 msgstr "เมนู"
 
-#: ../gtk/gtkmessagedialog.c:894
+#: ../gtk/gtkmessagedialog.c:893
 msgid "_No"
 msgstr "ไ_ม่"
 
-#: ../gtk/gtkmessagedialog.c:895
+#: ../gtk/gtkmessagedialog.c:894
 msgid "_Yes"
 msgstr "ใ_ช่"
 
@@ -2648,7 +2649,7 @@ msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:645 ../gtk/gtkpapersize.c:850
+#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:850
 #: ../gtk/gtkpapersize.c:890
 msgid "Not a valid page setup file"
 msgstr "ไม่ใช่แฟ้มค่าตั้งหน้ากระดาษที่ใช้การได้"
@@ -2676,7 +2677,7 @@ msgstr ""
 " บน: %s %s\n"
 " ล่าง: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3354
+#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3368
 msgid "Manage Custom Sizes…"
 msgstr "จัดการขนาดกระดาษที่กำหนดเอง…"
 
@@ -3026,19 +3027,19 @@ msgstr "แฮนเดิลไปยัง PrintDlgEx ผิดพลาด"
 msgid "Unspecified error"
 msgstr "ข้อผิดพลาดไม่ปรากฏสาเหตุ"
 
-#: ../gtk/gtkprintunixdialog.c:729
+#: ../gtk/gtkprintunixdialog.c:734
 msgid "Pre_view"
 msgstr "ตัว_อย่าง"
 
-#: ../gtk/gtkprintunixdialog.c:731
+#: ../gtk/gtkprintunixdialog.c:736
 msgid "_Print"
 msgstr "_พิมพ์"
 
-#: ../gtk/gtkprintunixdialog.c:838
+#: ../gtk/gtkprintunixdialog.c:849
 msgid "Getting printer information failed"
 msgstr "อ่านข้อมูลเครื่องพิมพ์ไม่สำเร็จ"
 
-#: ../gtk/gtkprintunixdialog.c:2037
+#: ../gtk/gtkprintunixdialog.c:2051
 msgid "Getting printer information…"
 msgstr "กำลังอ่านข้อมูลเครื่องพิมพ์…"
 
@@ -3048,42 +3049,42 @@ msgstr "กำลังอ่านข้อมูลเครื่องพิ
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3097
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Left to right, top to bottom"
 msgstr "ซ้ายไปขวา, บนลงล่าง"
 
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3097
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Left to right, bottom to top"
 msgstr "ซ้ายไปขวา, ล่างขึ้นบน"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3098
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgid "Right to left, top to bottom"
 msgstr "ขวามาซ้าย, บนลงล่าง"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3098
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgid "Right to left, bottom to top"
 msgstr "ขวามาซ้าย, ล่างขึ้นบน"
 
-#: ../gtk/gtkprintunixdialog.c:3085
+#: ../gtk/gtkprintunixdialog.c:3099
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
 msgid "Top to bottom, left to right"
 msgstr "บนลงล่าง, ซ้ายไปขวา"
 
-#: ../gtk/gtkprintunixdialog.c:3085
+#: ../gtk/gtkprintunixdialog.c:3099
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
 msgid "Top to bottom, right to left"
 msgstr "บนลงล่าง, ขวามาซ้าย"
 
-#: ../gtk/gtkprintunixdialog.c:3086
+#: ../gtk/gtkprintunixdialog.c:3100
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgid "Bottom to top, left to right"
 msgstr "ล่างขึ้นบน, ซ้ายไปขวา"
 
-#: ../gtk/gtkprintunixdialog.c:3086
+#: ../gtk/gtkprintunixdialog.c:3100
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgid "Bottom to top, right to left"
 msgstr "ล่างขึ้นบน, ขวามาซ้าย"
@@ -3091,28 +3092,28 @@ msgstr "ล่างขึ้นบน, ขวามาซ้าย"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3090 ../gtk/gtkprintunixdialog.c:3103
+#: ../gtk/gtkprintunixdialog.c:3104 ../gtk/gtkprintunixdialog.c:3117
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4860
 msgid "Page Ordering"
 msgstr "การเรียงหน้า"
 
-#: ../gtk/gtkprintunixdialog.c:3119
+#: ../gtk/gtkprintunixdialog.c:3133
 msgid "Left to right"
 msgstr "ซ้ายไปขวา"
 
-#: ../gtk/gtkprintunixdialog.c:3120
+#: ../gtk/gtkprintunixdialog.c:3134
 msgid "Right to left"
 msgstr "ขวามาซ้าย"
 
-#: ../gtk/gtkprintunixdialog.c:3132
+#: ../gtk/gtkprintunixdialog.c:3146
 msgid "Top to bottom"
 msgstr "บนลงล่าง"
 
-#: ../gtk/gtkprintunixdialog.c:3133
+#: ../gtk/gtkprintunixdialog.c:3147
 msgid "Bottom to top"
 msgstr "ล่างขึ้นบน"
 
-#: ../gtk/gtkprintunixdialog.c:3376
+#: ../gtk/gtkprintunixdialog.c:3390
 msgid "Print"
 msgstr "พิมพ์"
 
@@ -3410,43 +3411,43 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8629
+#: ../gtk/gtkwindow.c:8663
 msgid "Unmaximize"
 msgstr "เลิกขยายแผ่"
 
-#: ../gtk/gtkwindow.c:8638
+#: ../gtk/gtkwindow.c:8672
 msgid "Move"
 msgstr "ย้าย"
 
-#: ../gtk/gtkwindow.c:8644
+#: ../gtk/gtkwindow.c:8678
 msgid "Resize"
 msgstr "ปรับขนาด"
 
-#: ../gtk/gtkwindow.c:8656
+#: ../gtk/gtkwindow.c:8690
 msgid "Always on Top"
 msgstr "อยู่บนสุด"
 
-#: ../gtk/gtkwindow.c:8668
+#: ../gtk/gtkwindow.c:8702
 msgid "Always on Visible Workspace"
 msgstr "แสดงบนพื้นที่ทำงานเสมอ"
 
-#: ../gtk/gtkwindow.c:8676
+#: ../gtk/gtkwindow.c:8710
 msgid "Only on This Workspace"
 msgstr "แสดงบนพื้นที่ทำงานนี้เท่านั้น"
 
-#: ../gtk/gtkwindow.c:8693
+#: ../gtk/gtkwindow.c:8727
 msgid "Move to Workspace Up"
 msgstr "ย้ายไปพื้นที่ทำงานบน"
 
-#: ../gtk/gtkwindow.c:8702
+#: ../gtk/gtkwindow.c:8736
 msgid "Move to Workspace Down"
 msgstr "ย้ายไปพื้นที่ทำงานล่าง"
 
-#: ../gtk/gtkwindow.c:8716
+#: ../gtk/gtkwindow.c:8750
 msgid "Move to Another Workspace"
 msgstr "ย้ายไปพื้นที่ทำงานอื่น"
 
-#: ../gtk/gtkwindow.c:8724
+#: ../gtk/gtkwindow.c:8758
 #, c-format
 msgid "Workspace %d"
 msgstr "พื้นที่ทำงาน %d"
@@ -4429,6 +4430,31 @@ msgstr "เวียดนาม (VIQR)"
 msgid "X Input Method"
 msgstr "X Input Method"
 
+#. Translators: The printer status is online, i.e. it is
+#. * ready to print.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
+msgid "Online"
+msgstr "ออนไลน์"
+
+#. Translators: The printer is offline.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:751
+msgid "Offline"
+msgstr "ออฟไลน์"
+
+#. We shouldn't get here because the query omits dormant
+#. * printers by default.
+#. Translators: Printer has been offline for a long time.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:757
+msgid "Dormant"
+msgstr "หยุดทำงาน"
+
+#. How many document pages to go onto one side of paper.
+#: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:939
+#: ../modules/printbackends/file/gtkprintbackendfile.c:676
+#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+msgid "Pages per _sheet:"
+msgstr "จำนวนหน้าต่อแ_ผ่น:"
+
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1007
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1222
 msgid "Username:"
@@ -4820,11 +4846,6 @@ msgstr "โพสต์สคริปต์"
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:676
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
-msgid "Pages per _sheet:"
-msgstr "จำนวนหน้าต่อแ_ผ่น:"
-
 #: ../modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "File"
 msgstr "แฟ้ม"
@@ -4888,17 +4909,21 @@ msgstr "เกี่ยวกับ"
 msgid "Credits"
 msgstr "เครดิต"
 
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
-msgid "Select Application"
-msgstr "เลือกโปรแกรม"
-
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 msgid "label"
 msgstr "ฉลาก"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
-msgid "Show Other Applications"
-msgstr "แสดงโปรแกรมอื่นๆ"
+msgid "_View All Applications"
+msgstr "ดูโปรแกรม_ทั้งหมด"
+
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
+msgid "_Find New Applications"
+msgstr "_หาโปรแกรมตัวใหม่"
+
+#: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
+msgid "No applications found."
+msgstr "หาโปรแกรมไม่พบ"
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:2
 msgid "Preferences"
@@ -5323,14 +5348,30 @@ msgstr "หรี่เสียง"
 msgid "Decreases the volume"
 msgstr "ลดความดัง"
 
+#~ msgid "Select an application to open “%s”"
+#~ msgstr "เลือกโปรแกรมสำหรับเปิด “%s”"
+
+#~ msgid "No applications available to open “%s” files"
+#~ msgstr "ไม่มีโปรแกรมสำหรับเปิดแฟ้มชนิด “%s”"
+
+#~ msgid ""
+#~ "Click \"Show other applications\", for more options, or \"Software\" to "
+#~ "install a new application"
+#~ msgstr ""
+#~ "คลิก \"แสดงโปรแกรมอื่นๆ\" เพื่อเลือกโปรแกรมได้หลากหลายขึ้น หรือ \"ซอฟต์แวร์\" "
+#~ "เพื่อติดตั้งโปรแกรมใหม่เพิ่มเติม"
+
+#~ msgid "Software"
+#~ msgstr "ซอฟต์แวร์"
+
+#~ msgid "Show Other Applications"
+#~ msgstr "แสดงโปรแกรมอื่นๆ"
+
 #~ msgid "Switches between on and off states"
 #~ msgstr "สวิตช์ปิด/เปิด"
 
 #~ msgid "Failed to look for applications online"
 #~ msgstr "ไม่สามารถหาโปรแกรมแบบออนไลน์ได้"
-
-#~ msgid "_Find applications online"
-#~ msgstr "_หาโปรแกรมแบบออนไลน์"
 
 #~ msgid ""
 #~ "%s cannot quit at this time:\n"
