@@ -45,6 +45,7 @@ enum {
 struct _PointData
 {
   GdkEvent *event;
+  guint press_handled : 1;
   guint state : 2;
 };
 
@@ -301,8 +302,14 @@ gtk_gesture_handle_event (GtkEventController *controller,
         break;
       /* Fall through */
     case GDK_TOUCH_BEGIN:
-      if (_gtk_gesture_update_point (gesture, event, TRUE))
-        _gtk_gesture_check_recognized (gesture, sequence);
+      if (_gtk_gesture_update_point (gesture, event, TRUE) &&
+          _gtk_gesture_check_recognized (gesture, sequence))
+        {
+          PointData *data;
+
+          data = g_hash_table_lookup (priv->points, sequence);
+          data->press_handled = TRUE;
+        }
       break;
     case GDK_BUTTON_RELEASE:
       if (priv->touch_only)
@@ -1020,4 +1027,22 @@ gtk_gesture_cancel_sequence (GtkGesture       *gesture,
   _gtk_gesture_check_recognized (gesture, sequence);
   _gtk_gesture_remove_point (gesture, data->event);
   return TRUE;
+}
+
+gboolean
+_gtk_gesture_handled_sequence_press (GtkGesture       *gesture,
+                                     GdkEventSequence *sequence)
+{
+  GtkGesturePrivate *priv;
+  PointData *data;
+
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
+
+  priv = gtk_gesture_get_instance_private (gesture);
+  data = g_hash_table_lookup (priv->points, sequence);
+
+  if (!data)
+    return FALSE;
+
+  return data->press_handled;
 }

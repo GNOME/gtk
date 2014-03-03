@@ -509,6 +509,7 @@ gtk_private_h_sources =		\
 	gtkfilesystemmodel.h	\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
+	gtkgestureprivate.h	\
 	gtkheaderbarprivate.h	\
 	gtkhslaprivate.h	\
 	gtkiconcache.h		\
