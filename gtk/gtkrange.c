@@ -3054,9 +3054,9 @@ update_autoscroll_mode (GtkRange *range)
         }
 
       if (pos < SCROLL_EDGE_SIZE)
-        mode = GTK_SCROLL_STEP_BACKWARD;
+        mode = range->priv->inverted ? GTK_SCROLL_STEP_FORWARD : GTK_SCROLL_STEP_BACKWARD;
       else if (pos > (size - SCROLL_EDGE_SIZE))
-        mode = GTK_SCROLL_STEP_FORWARD;
+        mode = range->priv->inverted ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_STEP_FORWARD;
     }
 
   if (mode != range->priv->autoscroll_mode)
