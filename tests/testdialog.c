@@ -1,6 +1,48 @@
 #include <gtk/gtk.h>
 
 static void
+show_message_dialog1 (GtkWindow *parent)
+{
+  GtkWidget *dialog;
+
+  dialog = GTK_WIDGET (gtk_message_dialog_new (parent,
+                                               GTK_DIALOG_MODAL|
+                                               GTK_DIALOG_DESTROY_WITH_PARENT|
+                                               GTK_DIALOG_USE_HEADER_BAR,
+                                               GTK_MESSAGE_INFO,
+                                               GTK_BUTTONS_OK,
+                                               "Oops! Something went wrong."));
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                            "Unhandled error message: SSH program unexpectedly exited");
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
+static void
+show_message_dialog2 (GtkWindow *parent)
+{
+  GtkWidget *dialog;
+
+  dialog = GTK_WIDGET (gtk_message_dialog_new (parent,
+                                               GTK_DIALOG_MODAL|
+                                               GTK_DIALOG_DESTROY_WITH_PARENT|
+                                               GTK_DIALOG_USE_HEADER_BAR,
+                                               GTK_MESSAGE_INFO,
+                                               GTK_BUTTONS_NONE,
+                                               "Empty all items from Wastebasket?"));
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                            "All items in the Wastebasket will be permanently deleted");
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog), 
+                          "Cancel", GTK_RESPONSE_CANCEL,
+                          "Empty Wastebasket", GTK_RESPONSE_OK,
+                          NULL);  
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
+static void
 show_color_chooser (GtkWindow *parent)
 {
   GtkWidget *dialog;
@@ -253,6 +295,17 @@ main (int argc, char *argv[])
   gtk_widget_show (box);
   gtk_container_add (GTK_CONTAINER (vbox), box);
 
+  button = gtk_button_new_with_label ("Message dialog");
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (show_message_dialog1), window);
+  gtk_widget_show (button);
+  gtk_container_add (GTK_CONTAINER (box), button);
+
+  button = gtk_button_new_with_label ("Confirmation dialog");
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (show_message_dialog2), window);
+  gtk_widget_show (button);
+  gtk_container_add (GTK_CONTAINER (box), button);
+
+  button = gtk_button_new_with_label ("Builtin");
   button = gtk_button_new_with_label ("Builtin");
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (show_color_chooser), window);
   gtk_widget_show (button);
