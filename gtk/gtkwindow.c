@@ -2175,7 +2175,7 @@ _gtk_window_internal_set_focus (GtkWindow *window,
  * presses Enter in a dialog (for example). This function sets or
  * unsets the default widget for a #GtkWindow about. When setting
  * (rather than unsetting) the default widget it’s generally easier to
- * call gtk_widget_grab_focus() on the widget. Before making a widget
+ * call gtk_widget_grab_default() on the widget. Before making a widget
  * the default widget, you must call gtk_widget_set_can_default() on the
  * widget you’d like to make the default.
  **/
