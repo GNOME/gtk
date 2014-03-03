@@ -555,6 +555,11 @@ struct _GdkEventExpose
  *   %GDK_VISIBILITY_PARTIAL or %GDK_VISIBILITY_UNOBSCURED).
  *
  * Generated when the window visibility status has changed.
+ *
+ * Deprecated: 3.12: Modern composited windowing systems with pervasive
+ *     transparency make it impossible to track the visibility of a window
+ *     reliably, so this event can not be guaranteed to provide useful
+ *     information.
  */
 struct _GdkEventVisibility
 {

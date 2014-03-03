@@ -3178,14 +3178,19 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * @event: (type Gdk.EventVisibility): the #GdkEventVisibility which
    *   triggered this signal.
    *
-   * The ::visibility-notify-event will be emitted when the @widget's window
-   * is obscured or unobscured.
+   * The ::visibility-notify-event will be emitted when the @widget's
+   * window is obscured or unobscured.
    *
    * To receive this signal the #GdkWindow associated to the widget needs
    * to enable the #GDK_VISIBILITY_NOTIFY_MASK mask.
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event.
    *   %FALSE to propagate the event further.
+   *
+   * Deprecated: 3.12: Modern composited windowing systems with pervasive
+   *     transparency make it impossible to track the visibility of a window
+   *     reliably, so this signal can not be guaranteed to provide useful
+   *     information.
    */
   widget_signals[VISIBILITY_NOTIFY_EVENT] =
     g_signal_new (I_("visibility-notify-event"),
@@ -3195,7 +3200,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE | G_SIGNAL_DEPRECATED);
 
   /**
    * GtkWidget::window-state-event:
