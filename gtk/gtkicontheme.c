@@ -5066,7 +5066,7 @@ gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
 /**
  * gtk_icon_theme_add_builtin_icon:
  * @icon_name: the name of the icon to register
- * @size: the size at which to register the icon (different
+ * @size: the size in pixels at which to register the icon (different
  *        images can be registered for the same icon name
  *        at different sizes.)
  * @pixbuf: #GdkPixbuf that contains the image to use
