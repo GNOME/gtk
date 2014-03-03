@@ -1414,6 +1414,31 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkTreeView::move-cursor:
+   * @tree_view: the object on which the signal is emitted.
+   * @step: the granularity of the move, as a
+   * #GtkMovementStep. %GTK_MOVEMENT_LOGICAL_POSITIONS,
+   * %GTK_MOVEMENT_VISUAL_POSITIONS, %GTK_MOVEMENT_DISPLAY_LINES,
+   * %GTK_MOVEMENT_PAGES and %GTK_MOVEMENT_BUFFER_ENDS are
+   * supported. %GTK_MOVEMENT_LOGICAL_POSITIONS and
+   * %GTK_MOVEMENT_VISUAL_POSITIONS are treated identically.
+   * @direction: the direction to move: +1 to move forwards;
+   * -1 to move backwards. The resulting movement is
+   * undefined for all other values.
+   *
+   * The #GtkTreeView::move-cursor signal is a [keybinding
+   * signal][GtkBindingSignal] which gets emitted when the user
+   * presses one of the cursor keys.
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control the cursor
+   * programmatically. In contrast to gtk_tree_view_set_cursor() and
+   * gtk_tree_view_set_cursor_on_cell() when moving horizontally
+   * #GtkTreeView::move-cursor does not reset the current selection.
+   *
+   * Returns: %TRUE if @step is supported, %FALSE otherwise.
+   */
   tree_view_signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
 		  G_TYPE_FROM_CLASS (o_class),
@@ -13070,10 +13095,11 @@ gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
  * #GtkTreeDragDestIface.  Both #GtkTreeStore and #GtkListStore support
  * these.  If @reorderable is %TRUE, then the user can reorder the
  * model by dragging and dropping rows. The developer can listen to
- * these changes by connecting to the model’s row_inserted and
- * row_deleted signals. The reordering is implemented by setting up
- * the tree view as a drag source and destination. Therefore, drag and
- * drop can not be used in a reorderable view for any other purpose.
+ * these changes by connecting to the model’s #GtkTreeModel::row-inserted
+ * and #GtkTreeModel::row-deleted signals. The reordering is implemented
+ * by setting up the tree view as a drag source and destination.
+ * Therefore, drag and drop can not be used in a reorderable view for any
+ * other purpose.
  *
  * This function does not give you any degree of control over the order -- any
  * reordering is allowed.  If more control is needed, you should probably
