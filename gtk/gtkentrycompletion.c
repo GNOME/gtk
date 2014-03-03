@@ -833,7 +833,7 @@ gtk_entry_completion_clear_text_column_renderer (GtkEntryCompletion *completion)
       GtkCellArea *area;
 
       area = gtk_entry_completion_get_area (GTK_CELL_LAYOUT (completion));
-      gtk_cell_layout_clear (GTK_CELL_LAYOUT (area));
+      gtk_cell_layout_clear (area);
 
       completion->priv->text_column = -1;
       g_object_notify (G_OBJECT (completion), "text_column");
