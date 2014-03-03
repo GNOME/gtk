@@ -66,6 +66,7 @@
 #include "gtktypebuiltins.h"
 #include "a11y/gtkwidgetaccessible.h"
 #include "gtkapplicationprivate.h"
+#include "gtkgestureprivate.h"
 
 /* for the use of round() */
 #include "fallback-c89.c"
@@ -4044,14 +4045,90 @@ gtk_widget_get_property (GObject         *object,
     }
 }
 
+static void
+_gtk_widget_emulate_press (GtkWidget      *widget,
+                           const GdkEvent *event)
+{
+  GtkWidget *event_widget, *next_child, *parent;
+  GdkEvent *press;
+
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
+  if (event_widget == widget)
+    return;
+
+  if (event->type == GDK_TOUCH_BEGIN ||
+      event->type == GDK_TOUCH_UPDATE ||
+      event->type == GDK_TOUCH_END)
+    {
+      press = gdk_event_copy (event);
+      press->type = GDK_TOUCH_BEGIN;
+    }
+  else if (event->type == GDK_BUTTON_PRESS ||
+           event->type == GDK_BUTTON_RELEASE)
+    {
+      press = gdk_event_copy (event);
+      press->type = GDK_BUTTON_PRESS;
+    }
+  else if (event->type == GDK_MOTION_NOTIFY)
+    {
+      press = gdk_event_new (GDK_BUTTON_PRESS);
+      press->button.window = g_object_ref (event->motion.window);
+      press->button.time = event->motion.time;
+      press->button.x = event->motion.x;
+      press->button.y = event->motion.y;
+      press->button.x_root = event->motion.x_root;
+      press->button.y_root = event->motion.y_root;
+      press->button.state = event->motion.state;
+
+      press->button.axes = g_memdup (event->motion.axes,
+                                     sizeof (gdouble) *
+                                     gdk_device_get_n_axes (event->motion.device));
+
+      if (event->motion.state & GDK_BUTTON3_MASK)
+        press->button.button = 3;
+      else if (event->motion.state & GDK_BUTTON2_MASK)
+        press->button.button = 2;
+      else
+        {
+          if ((event->motion.state & GDK_BUTTON1_MASK) == 0)
+            g_critical ("Guessing button number 1 on generated button press event");
+
+          press->button.button = 1;
+        }
+
+      gdk_event_set_device (press, gdk_event_get_device (event));
+      gdk_event_set_source_device (press, gdk_event_get_source_device (event));
+    }
+  else
+    return;
+
+  press->any.send_event = TRUE;
+  next_child = event_widget;
+  parent = gtk_widget_get_parent (next_child);
+
+  while (parent != widget)
+    {
+      next_child = parent;
+      parent = gtk_widget_get_parent (parent);
+    }
+
+  /* Perform propagation state starting from the next child in the chain */
+  if (!_gtk_propagate_captured_event (event_widget, press, next_child))
+    gtk_propagate_event (event_widget, press);
+
+  gdk_event_free (press);
+}
+
 static gboolean
 _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
                                          GdkEventSequence      *sequence,
                                          GtkEventSequenceState  state)
 {
   GtkWidgetPrivate *priv = widget->priv;
+  const GdkEvent *mimic_event = NULL;
+  gboolean retval, handled = FALSE;
   EventControllerData *data;
-  gboolean handled = FALSE;
   GList *l;
 
   for (l = priv->event_controllers; l; l = l->next)
@@ -4061,9 +4138,26 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
       if (!GTK_IS_GESTURE (data->controller))
         continue;
 
-      handled |= gtk_gesture_set_sequence_state (GTK_GESTURE (data->controller),
-                                                 sequence, state);
+      retval = gtk_gesture_set_sequence_state (GTK_GESTURE (data->controller),
+                                               sequence, state);
+      handled |= retval;
+
+      /* If the sequence goes denied, check whether this is a controller attached
+       * to the capture phase, that additionally handled the button/touch press (ie.
+       * it was consumed), the corresponding press will be emulated for widgets
+       * beneath, so the widgets beneath get a coherent stream of events from now on.
+       */
+      if (retval && !mimic_event &&
+          data->propagation_phase == GTK_PHASE_CAPTURE &&
+          state == GTK_EVENT_SEQUENCE_DENIED &&
+          _gtk_gesture_handled_sequence_press (GTK_GESTURE (data->controller),
+                                               sequence))
+        mimic_event = gtk_gesture_get_last_event (GTK_GESTURE (data->controller),
+                                                  sequence);
     }
+
+  if (mimic_event)
+    _gtk_widget_emulate_press (widget, mimic_event);
 
   return handled;
 }
