@@ -446,8 +446,7 @@ buffer_diff_core (const guchar *buf_a,
 }
 
 static cairo_surface_t *
-compare_surfaces (const char *test_file,
-                  cairo_surface_t *surface1,
+compare_surfaces (cairo_surface_t *surface1,
                   cairo_surface_t *surface2)
 {
   int w1, h1, w2, h2, w, h;
@@ -493,7 +492,7 @@ test_ui_file (GFile *file)
     }
   g_free (reference_file);
 
-  diff_image = compare_surfaces (ui_file, ui_image, reference_image);
+  diff_image = compare_surfaces (ui_image, reference_image);
 
   save_image (ui_image, ui_file, ".out.png");
   save_image (reference_image, ui_file, ".ref.png");
