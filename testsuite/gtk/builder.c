@@ -1028,7 +1028,7 @@ test_children (void)
   g_assert (dialog != NULL);
   g_assert (GTK_IS_DIALOG (dialog));
   children = gtk_container_get_children (GTK_CONTAINER (dialog));
-  g_assert (g_list_length (children) == 1);
+  g_assert (g_list_length (children) == 2);
   g_list_free (children);
   
   vbox = gtk_builder_get_object (builder, "dialog1-vbox");
