@@ -1126,7 +1126,7 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
         {
           deleted_item = items;
         }
-      if (info->index != item->item->index)
+      else if (info->index != item->item->index)
         {
           if (tmp_list == NULL)
             tmp_list = items;
@@ -1136,7 +1136,6 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
 
       items = items->next;
     }
-  gtk_icon_view_accessible_traverse_items (view, tmp_list);
   if (deleted_item)
     {
       info = deleted_item->data;
@@ -1147,6 +1146,7 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
       g_object_unref (info->item);
       g_free (info);
     }
+  gtk_icon_view_accessible_traverse_items (view, tmp_list);
 
   return;
 }
