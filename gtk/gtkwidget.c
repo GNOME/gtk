@@ -3195,12 +3195,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   widget_signals[VISIBILITY_NOTIFY_EVENT] =
     g_signal_new (I_("visibility-notify-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, visibility_notify_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE | G_SIGNAL_DEPRECATED);
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
    * GtkWidget::window-state-event:
