@@ -88,6 +88,8 @@ void             gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menuba
 /* Private functions */
 void _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
 				GtkDirectionType  dir);
+GList* _gtk_menu_bar_get_viewable_menu_bars (GtkWindow *window);
+
 
 
 G_END_DECLS

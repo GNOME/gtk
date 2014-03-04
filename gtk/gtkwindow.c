@@ -42,6 +42,7 @@
 #include "gtkmain.h"
 #include "gtkmnemonichash.h"
 #include "gtkmenubar.h"
+#include "gtkmenushellprivate.h"
 #include "gtkicontheme.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
@@ -11552,6 +11553,71 @@ gtk_window_parse_geometry (GtkWindow   *window,
   return result != 0;
 }
 
+static gboolean
+gtk_window_activate_menubar (GtkWindow   *window,
+                             GdkEventKey *event)
+{
+  GtkWindowPrivate *priv = window->priv;
+  gchar *accel = NULL;
+  guint keyval = 0;
+  GdkModifierType mods = 0;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
+                "gtk-menu-bar-accel", &accel,
+                NULL);
+
+  if (accel == NULL || *accel == 0)
+    return FALSE;
+
+  gtk_accelerator_parse (accel, &keyval, &mods);
+  g_free (accel);
+
+  if (keyval == 0)
+    {
+      g_warning ("Failed to parse menu bar accelerator '%s'\n", accel);
+      return FALSE;
+    }
+
+  /* FIXME this is wrong, needs to be in the global accel resolution
+   * thing, to properly consider i18n etc., but that probably requires
+   * AccelGroup changes etc.
+   */
+  if (event->keyval == keyval &&
+      ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
+       (mods & gtk_accelerator_get_default_mod_mask ())))
+    {
+      GList *tmp_menubars;
+      GList *menubars;
+      GtkMenuShell *menu_shell;
+
+      if (priv->title_box != NULL &&
+          !gtk_widget_is_ancestor (gtk_window_get_focus (window), priv->title_box) &&
+          gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD))
+        return TRUE;
+
+      tmp_menubars = _gtk_menu_bar_get_viewable_menu_bars (window);
+      if (tmp_menubars == NULL)
+        return FALSE;
+
+      menubars = _gtk_container_focus_sort (GTK_CONTAINER (window), tmp_menubars,
+                                            GTK_DIR_TAB_FORWARD, NULL);
+      g_list_free (tmp_menubars);
+
+      if (menubars == NULL)
+        return FALSE;
+
+      menu_shell = GTK_MENU_SHELL (menubars->data);
+
+      _gtk_menu_shell_set_keyboard_mode (menu_shell, TRUE);
+      gtk_menu_shell_select_first (menu_shell, FALSE);
+
+      g_list_free (menubars);
+
+      return TRUE;
+    }
+  return FALSE;
+}
+
 static void
 gtk_window_mnemonic_hash_foreach (guint      keyval,
 				  GSList    *targets,
@@ -11775,7 +11841,7 @@ gtk_window_activate_key (GtkWindow   *window,
         }
     }
 
-  return FALSE;
+  return gtk_window_activate_menubar (window, event);
 }
 
 static void
