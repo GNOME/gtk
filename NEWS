@@ -1,3 +1,48 @@
+Overview of Changes in GTK+ 3.11.7 to 3.11.8
+============================================
+
+* Documentation: Update screenshots
+
+* Printing: Google cloud print support
+
+* Bugs fixed:
+ 724742 revealer: Allocate extra size to child
+ 724895 printing: Fix visibility of tabs in dialog
+ 481073	allow "visibility-notify-event" signal to work when composited
+ 547988	Open button sensitive when nothing selected, returns nothing
+ 554618	GtkFileChooserDialog leaks memory
+ 723368	GTK+ print module for Google Cloud Print
+ 723438	jhbuild buildone glib gtk+ fails with `HAVE_INTROSPECTION do...
+ 724411	GtkAboutDialog: License visible even if not set and predefin...
+ 724799	gtk_menu_tool_button_set_menu () broken in gtk3-3.11.6+
+ 724891	GtkTreeViewColumn::button never freed
+ 724921	Gtk-CRITICAL **: gtk_widget_unregister_window: assertion 'GD...
+ 724968	wayland: Fix gdk_window_wayland_resize_cairo_surface()
+ 724999	GtkRevealer changes broke gedit infobar messages
+ 725089	Cairo context sent to the "draw" signal handler has incorrec...
+ 725172	GdkWindow: fix redraws for backends that keep the same backi...
+ 725205	[patch] treeselection docs: spelling fix
+ 725225	auto scroll in vertical popover from volume button goes the ...
+ 725345	dialogs: always use CSD on dialogs
+ 725559	Fix typo in gtk_window_set_default() documentation
+ 725560	GtkTreeView documentation fixes 
+        Make sure CSS theme is loaded when needed
+        GtkStackSwitcher: Avoid unnecessary updates
+
+* Translation updates:
+ Brazilian Portuguese
+ Galician
+ Hebrew
+ Kazakh
+ Lithuanian
+ Norwegian bokmål
+ Polish
+ Russian
+ Scottish Gaelic
+ Thai
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.11.6 to 3.11.7
 ============================================
 
