@@ -238,6 +238,7 @@ gtk_popover_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.event_mask =
     gtk_widget_get_events (widget) |
+    GDK_POINTER_MOTION_MASK |
     GDK_BUTTON_MOTION_MASK |
     GDK_BUTTON_PRESS_MASK |
     GDK_BUTTON_RELEASE_MASK |
