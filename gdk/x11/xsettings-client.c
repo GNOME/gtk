@@ -582,6 +582,12 @@ _gdk_x11_xsettings_init (GdkX11Screen *x11_screen)
 }
 
 void
+_gdk_x11_settings_force_reread (GdkX11Screen *x11_screen)
+{
+  read_settings (x11_screen, TRUE);
+}
+
+void
 _gdk_x11_xsettings_finish (GdkX11Screen *x11_screen)
 {
   gdk_window_remove_filter (gdk_screen_get_root_window (GDK_SCREEN (x11_screen)), gdk_xsettings_root_window_filter, x11_screen);

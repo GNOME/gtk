@@ -27,5 +27,6 @@
 
 void _gdk_x11_xsettings_init            (GdkX11Screen        *x11_screen);
 void _gdk_x11_xsettings_finish          (GdkX11Screen        *x11_screen);
+void _gdk_x11_settings_force_reread     (GdkX11Screen        *x11_screen);
 
 #endif /* XSETTINGS_CLIENT_H */

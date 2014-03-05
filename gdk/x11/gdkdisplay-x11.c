@@ -2697,6 +2697,7 @@ gdk_x11_display_set_window_scale (GdkDisplay *display,
                                   gint scale)
 {
   GdkX11Screen *x11_screen;
+  gboolean need_reread_settings = FALSE;
 
   g_return_if_fail (GDK_IS_X11_DISPLAY (display));
 
@@ -2709,8 +2710,19 @@ gdk_x11_display_set_window_scale (GdkDisplay *display,
 
   x11_screen = GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen);
 
-  x11_screen->fixed_window_scale = TRUE;
+  if (!x11_screen->fixed_window_scale)
+    {
+      x11_screen->fixed_window_scale = TRUE;
+
+      /* We treat screens with a window scale set differently when
+       * reading xsettings, so we need to reread */
+      need_reread_settings = TRUE;
+    }
+
   _gdk_x11_screen_set_window_scale (x11_screen, scale);
+
+  if (need_reread_settings)
+    _gdk_x11_settings_force_reread (x11_screen);
 }
 
 
