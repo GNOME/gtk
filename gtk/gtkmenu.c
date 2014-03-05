@@ -2528,6 +2528,19 @@ get_menu_padding (GtkWidget *widget,
 }
 
 static void
+get_menu_margin (GtkWidget *widget,
+                 GtkBorder *margin)
+{
+  GtkStyleContext *context;
+  GtkStateFlags state;
+
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_get_margin (context, state, margin);
+}
+
+static void
 gtk_menu_realize (GtkWidget *widget)
 {
   GtkMenu *menu = GTK_MENU (widget);
@@ -4491,9 +4504,11 @@ gtk_menu_position (GtkMenu  *menu,
       gint needed_width;
       gint needed_height;
       GtkBorder padding;
+      GtkBorder margin;
       gboolean rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
       get_menu_padding (widget, &padding);
+      get_menu_margin (widget, &margin);
 
       /* The placement of popup menus horizontally works like this (with
        * RTL in parentheses)
@@ -4534,12 +4549,12 @@ gtk_menu_position (GtkMenu  *menu,
               (!rtl && needed_width >  space_right))
             {
               /* position left */
-              x = x + padding.left - requisition.width + 1;
+              x = x - margin.left + padding.left - requisition.width + 1;
             }
           else
             {
               /* position right */
-              x = x - padding.right;
+              x = x + margin.right - padding.right;
             }
 
           /* x is clamped on-screen further down */
@@ -4585,9 +4600,9 @@ gtk_menu_position (GtkMenu  *menu,
           needed_height <= space_below)
         {
           if (needed_height <= space_below)
-            y = y - padding.top;
+            y = y + margin.top - padding.top;
           else
-            y = y + padding.bottom - requisition.height + 1;
+            y = y - margin.bottom + padding.bottom - requisition.height + 1;
 
           y = CLAMP (y, monitor.y,
                      monitor.y + monitor.height - requisition.height);
