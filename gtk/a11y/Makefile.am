@@ -37,6 +37,7 @@ gtka11y_c_sources =			\
 	gtknotebookaccessible.c		\
 	gtknotebookpageaccessible.c	\
 	gtkpanedaccessible.c		\
+	gtkpopoveraccessible.c		\
 	gtkprogressbaraccessible.c	\
 	gtkradiobuttonaccessible.c	\
 	gtkradiomenuitemaccessible.c	\
@@ -89,6 +90,7 @@ gtka11yinclude_HEADERS =		\
 	gtknotebookaccessible.h		\
 	gtknotebookpageaccessible.h	\
 	gtkpanedaccessible.h		\
+	gtkpopoveraccessible.h		\
 	gtkprogressbaraccessible.h	\
 	gtkradiobuttonaccessible.h	\
 	gtkradiomenuitemaccessible.h	\

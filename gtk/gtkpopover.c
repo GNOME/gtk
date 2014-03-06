@@ -61,6 +61,7 @@
 #include "gtkmenutracker.h"
 #include "gtkstack.h"
 #include "gtksizegroup.h"
+#include "a11y/gtkpopoveraccessible.h"
 
 #define TAIL_GAP_WIDTH 24
 #define TAIL_HEIGHT    12
@@ -1346,6 +1347,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                   G_TYPE_NONE, 0);
 
   quark_widget_popovers = g_quark_from_static_string ("gtk-quark-widget-popovers");
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_POPOVER_ACCESSIBLE);
 }
 
 static void

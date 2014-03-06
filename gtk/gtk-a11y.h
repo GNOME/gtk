@@ -57,6 +57,7 @@
 #include <gtk/a11y/gtkmenushellaccessible.h>
 #include <gtk/a11y/gtknotebookaccessible.h>
 #include <gtk/a11y/gtknotebookpageaccessible.h>
+#include <gtk/a11y/gtkpopoveraccessible.h>
 #include <gtk/a11y/gtkpanedaccessible.h>
 #include <gtk/a11y/gtkprogressbaraccessible.h>
 #include <gtk/a11y/gtkradiobuttonaccessible.h>
