@@ -1384,6 +1384,13 @@ _gtk_popover_parent_size_allocate (GtkWidget     *widget,
 }
 
 static void
+_unmanage_popover (GObject *object)
+{
+  g_object_run_dispose (object);
+  g_object_unref (object);
+}
+
+static void
 widget_manage_popover (GtkWidget  *widget,
                        GtkPopover *popover)
 {
@@ -1394,7 +1401,7 @@ widget_manage_popover (GtkWidget  *widget,
   if (G_UNLIKELY (!popovers))
     {
       popovers = g_hash_table_new_full (NULL, NULL,
-                                        (GDestroyNotify) g_object_unref, NULL);
+                                        (GDestroyNotify) _unmanage_popover, NULL);
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_widget_popovers, popovers,
                                (GDestroyNotify) g_hash_table_unref);
