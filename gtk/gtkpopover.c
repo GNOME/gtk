@@ -102,6 +102,7 @@ struct _GtkPopoverPrivate
   guint modal              : 1;
   guint button_pressed     : 1;
   guint apply_shape        : 1;
+  guint grab_notify_blocked : 1;
 };
 
 static GQuark quark_widget_popovers = 0;
@@ -254,6 +255,52 @@ gtk_popover_realize (GtkWidget *widget)
   gtk_widget_set_realized (widget, TRUE);
 }
 
+static gboolean
+window_focus_in (GtkWidget  *widget,
+                 GdkEvent   *event,
+                 GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  /* Regain the grab when the window is focused */
+  if (priv->modal &&
+      gtk_widget_is_drawable (GTK_WIDGET (popover)))
+    {
+      GtkWidget *focus;
+
+      gtk_grab_add (GTK_WIDGET (popover));
+
+      focus = gtk_window_get_focus (GTK_WINDOW (widget));
+
+      if (!gtk_widget_is_ancestor (focus, GTK_WIDGET (popover)))
+        gtk_widget_grab_focus (GTK_WIDGET (popover));
+
+      if (priv->grab_notify_blocked)
+        g_signal_handler_unblock (priv->widget, priv->grab_notify_id);
+
+      priv->grab_notify_blocked = FALSE;
+    }
+  return FALSE;
+}
+
+static gboolean
+window_focus_out (GtkWidget  *widget,
+                  GdkEvent   *event,
+                  GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  /* Temporarily remove the grab when unfocused */
+  if (priv->modal &&
+      gtk_widget_is_drawable (GTK_WIDGET (popover)))
+    {
+      g_signal_handler_block (priv->widget, priv->grab_notify_id);
+      gtk_grab_remove (GTK_WIDGET (popover));
+      priv->grab_notify_blocked = TRUE;
+    }
+  return FALSE;
+}
+
 static void
 gtk_popover_apply_modality (GtkPopover *popover,
                             gboolean    modal)
@@ -270,9 +317,15 @@ gtk_popover_apply_modality (GtkPopover *popover,
         g_object_ref (prev_focus);
       gtk_grab_add (GTK_WIDGET (popover));
       gtk_widget_grab_focus (GTK_WIDGET (popover));
+
+      g_signal_connect (priv->window, "focus-in-event",
+                        G_CALLBACK (window_focus_in), popover);
+      g_signal_connect (priv->window, "focus-out-event",
+                        G_CALLBACK (window_focus_out), popover);
     }
   else
     {
+      g_signal_handlers_disconnect_by_data (priv->window, popover);
       gtk_grab_remove (GTK_WIDGET (popover));
 
       if (priv->prev_focus_widget)
