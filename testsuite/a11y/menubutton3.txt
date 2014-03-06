@@ -22,3 +22,46 @@ window1
     <AtkAction>
     action 0 name: click
     action 0 description: Clicks the button
+  unnamed-GtkPopoverAccessible-0
+    "panel"
+    parent: menubutton
+    popup-for: menubutton
+    state: enabled modal sensitive
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    unnamed-GtkContainerAccessible-1
+      "panel"
+      parent: unnamed-GtkPopoverAccessible-0
+      index: 0
+      state: enabled sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GtkContainerAccessible-2
+        "filler"
+        parent: unnamed-GtkContainerAccessible-1
+        index: 0
+        state: enabled sensitive vertical visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        unnamed-GtkButtonAccessible-3
+          "push button"
+          parent: unnamed-GtkContainerAccessible-2
+          index: 0
+          name: New
+          state: enabled focusable sensitive visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkImage>
+          image size: -1 x -1
+          image description: (null)
+          <AtkAction>
+          action 0 name: click
+          action 0 description: Clicks the button
