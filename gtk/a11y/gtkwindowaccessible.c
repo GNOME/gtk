@@ -23,6 +23,7 @@
 #include "gtkwidgetaccessibleprivate.h"
 #include "gtkwindowaccessible.h"
 #include "gtktoplevelaccessible.h"
+#include "gtkwindowprivate.h"
 
 /* atkcomponent.h */
 
@@ -279,6 +280,51 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
+count_widget (GtkWidget *widget,
+              gint      *count)
+{
+  (*count)++;
+}
+
+static void
+prepend_widget (GtkWidget  *widget,
+		GList     **list)
+{
+  *list = g_list_prepend (*list, widget);
+}
+
+static gint
+gtk_window_accessible_get_n_children (AtkObject *object)
+{
+  GtkWidget *window;
+  gint count = 0;
+
+  window = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
+  gtk_container_forall (GTK_CONTAINER (window),
+			(GtkCallback) count_widget, &count);
+  return count;
+}
+
+static AtkObject *
+gtk_window_accessible_ref_child (AtkObject *object,
+                                 gint       i)
+{
+  GtkWidget *window, *ref_child;
+  GList *children = NULL;
+
+  window = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
+  gtk_container_forall (GTK_CONTAINER (window),
+			(GtkCallback) prepend_widget, &children);
+  ref_child = g_list_nth_data (children, i);
+  g_list_free (children);
+
+  if (!ref_child)
+    return NULL;
+
+  return g_object_ref (gtk_widget_get_accessible (ref_child));
+}
+
+static void
 gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 {
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
@@ -292,6 +338,8 @@ gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
   class->ref_state_set = gtk_window_accessible_ref_state_set;
   class->initialize = gtk_window_accessible_initialize;
   class->focus_event = gtk_window_accessible_focus_event;
+  class->get_n_children = gtk_window_accessible_get_n_children;
+  class->ref_child = gtk_window_accessible_ref_child;
 }
 
 static void
