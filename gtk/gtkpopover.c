@@ -275,10 +275,12 @@ gtk_popover_apply_modality (GtkPopover *popover,
     {
       gtk_grab_remove (GTK_WIDGET (popover));
 
-      /* Let prev_focus_widget regain focus */
       if (priv->prev_focus_widget)
         {
-          gtk_widget_grab_focus (priv->prev_focus_widget);
+          /* Let prev_focus_widget regain focus */
+          if (gtk_widget_is_drawable (priv->prev_focus_widget))
+            gtk_widget_grab_focus (priv->prev_focus_widget);
+
           g_object_unref (priv->prev_focus_widget);
           priv->prev_focus_widget = NULL;
         }
