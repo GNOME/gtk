@@ -8088,6 +8088,17 @@ gtk_window_forall (GtkContainer *container,
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *child;
 
+  if (include_internals)
+    {
+      GList *l;
+
+      for (l = priv->popovers; l; l = l->next)
+        {
+          GtkWindowPopover *data = l->data;
+          (* callback) (data->widget, callback_data);
+        }
+    }
+
   child = gtk_bin_get_child (GTK_BIN (container));
   if (child != NULL)
     (* callback) (child, callback_data);
@@ -9843,13 +9854,11 @@ gtk_window_draw (GtkWidget *widget,
 		 cairo_t   *cr)
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
-  GtkWindowPopover *popover;
   GtkStyleContext *context;
   gboolean ret = FALSE;
   GtkAllocation allocation;
   GtkBorder window_border;
   gint title_height;
-  GList *link;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -9931,19 +9940,6 @@ gtk_window_draw (GtkWidget *widget,
 
       cairo_restore (cr);
       gtk_style_context_restore (context);
-    }
-
-  link = priv->popovers;
-
-  while (link)
-    {
-      popover = link->data;
-      link = link->next;
-
-      if (popover->window && gtk_widget_is_visible (popover->widget) &&
-          gtk_cairo_should_draw_window (cr, popover->window))
-        gtk_container_propagate_draw (GTK_CONTAINER (widget),
-                                      popover->widget, cr);
     }
 
   return ret;
