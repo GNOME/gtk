@@ -1392,6 +1392,10 @@ gtk_stack_get_visible_child_name (GtkStack *stack)
  * two will be animated with the current
  * transition type of @stack.
  *
+ * Note that the @child widget has to be visible itself
+ * (see gtk_widget_show()) in order to become the visible
+ * child of @stack.
+ *
  * Since: 3.10
  */
 void
@@ -1430,6 +1434,10 @@ gtk_stack_set_visible_child (GtkStack  *stack,
  * two will be animated with the current
  * transition type of @stack.
  *
+ * Note that the child widget has to be visible itself
+ * (see gtk_widget_show()) in order to become the visible
+ * child of @stack.
+ *
  * Since: 3.10
  */
 void
@@ -1448,6 +1456,10 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
  * @transition: the transition type to use
  *
  * Makes the child with the given name visible.
+ *
+ * Note that the child widget has to be visible itself
+ * (see gtk_widget_show()) in order to become the visible
+ * child of @stack.
  *
  * Since: 3.10
  */
