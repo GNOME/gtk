@@ -9593,6 +9593,7 @@ gtk_entry_drag_motion (GtkWidget        *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
+  GtkAllocation primary, secondary;
   GtkStyleContext *style_context;
   GtkWidget *source_widget;
   GdkDragAction suggested_action;
@@ -9604,6 +9605,13 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   gtk_style_context_get_padding (style_context, 0, &padding);
   x -= padding.left;
   y -= padding.top;
+
+  get_icon_allocations (entry, &primary, &secondary);
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    x -= secondary.width;
+  else
+    x -= primary.width;
 
   old_position = priv->dnd_position;
   new_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
@@ -9663,6 +9671,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   GtkEditable *editable = GTK_EDITABLE (widget);
+  GtkAllocation primary, secondary;
   GtkStyleContext *style_context;
   GtkBorder padding;
   gchar *str;
@@ -9673,6 +9682,13 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
   gtk_style_context_get_padding (style_context, 0, &padding);
   x -= padding.left;
   y -= padding.top;
+
+  get_icon_allocations (entry, &primary, &secondary);
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    x -= secondary.width;
+  else
+    x -= primary.width;
 
   if (str && priv->editable)
     {
