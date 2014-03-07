@@ -3001,11 +3001,11 @@ gtk_calendar_button_press (GtkWidget      *widget,
   GtkCalendarPrivate *priv = calendar->priv;
   gint arrow = -1;
 
-  if (event->window == priv->main_win)
-    calendar_main_button_press (calendar, event);
-
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
+
+  if (event->window == priv->main_win)
+    calendar_main_button_press (calendar, event);
 
   for (arrow = ARROW_YEAR_LEFT; arrow <= ARROW_MONTH_RIGHT; arrow++)
     {
