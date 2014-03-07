@@ -2976,47 +2976,63 @@ settings_update_provider (GdkScreen       *screen,
     }
 }
 
-static char *
-get_theme_name (GtkSettings *settings)
+static void
+get_theme_name (GtkSettings  *settings,
+                gchar       **theme_name,
+                gchar       **theme_variant)
 {
-  char *theme_name = NULL;
+  gboolean prefer_dark;
+
+  *theme_name = NULL;
+  *theme_variant = NULL;
 
   if (g_getenv ("GTK_THEME"))
-    theme_name = g_strdup (g_getenv ("GTK_THEME"));
+    *theme_name = g_strdup (g_getenv ("GTK_THEME"));
 
-  if (theme_name && *theme_name)
-    return theme_name;
+  if (*theme_name && **theme_name)
+    {
+      char *p;
+      p = strrchr (*theme_name, ':');
+      if (p) {
+        *p = '\0';
+        p++;
+        *theme_variant = g_strdup (p);
+      }
 
-  g_free (theme_name);
+g_print ("theme: %s variant: %s\n", *theme_name, *theme_variant);
+      return;
+    }
+
+  g_free (*theme_name);
+
   g_object_get (settings,
-                "gtk-theme-name", &theme_name,
+                "gtk-theme-name", theme_name,
+                "gtk-application-prefer-dark-theme", &prefer_dark,
                 NULL);
 
-  if (theme_name && *theme_name)
-    return theme_name;
+  if (prefer_dark)
+    *theme_variant = g_strdup ("dark");
 
-  g_free (theme_name);
-  return g_strdup (DEFAULT_THEME_NAME);
+  if (*theme_name && **theme_name)
+    return;
+
+  g_free (*theme_name);
+  *theme_name = g_strdup (DEFAULT_THEME_NAME);
 }
 
 static void
 settings_update_theme (GtkSettings *settings)
 {
   GtkSettingsPrivate *priv = settings->priv;
-  gboolean prefer_dark_theme;
   gchar *theme_name;
+  gchar *theme_variant;
   gchar *theme_dir;
   gchar *path;
 
-  g_object_get (settings,
-                "gtk-application-prefer-dark-theme", &prefer_dark_theme,
-                NULL);
-
-  theme_name = get_theme_name (settings);
+  get_theme_name (settings, &theme_name, &theme_variant);
 
   _gtk_css_provider_load_named (priv->theme_provider,
-                                theme_name,
-                                prefer_dark_theme ? "dark" : NULL);
+                                theme_name, theme_variant);
 
   /* reload per-theme settings */
   theme_dir = _gtk_css_provider_get_theme_dir ();
@@ -3026,6 +3042,7 @@ settings_update_theme (GtkSettings *settings)
     gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
 
   g_free (theme_name);
+  g_free (theme_variant);
   g_free (theme_dir);
   g_free (path);
 }

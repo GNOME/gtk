@@ -322,6 +322,10 @@ additional environment variables.
     that is specified by the gtk-theme-name setting. This is intended
     mainly for easy debugging of theme issues.
   </para>
+  <para>
+    It is also possible to specify a theme variant to load, by appending
+    the variant name with a colon, like this: `GTK_THEME=Adwaita:dark`.
+  </para>
 </formalpara>
 
 <para>
