@@ -17,9 +17,12 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
 #include "gtkcontaineraccessible.h"
 #include "gtkcontaineraccessibleprivate.h"
+
+#include <gtk/gtk.h>
+
+#include "gtkwidgetprivate.h"
 
 struct _GtkContainerAccessiblePrivate
 {
@@ -76,36 +79,42 @@ gtk_container_accessible_ref_child (AtkObject *obj,
   return accessible;
 }
 
-static gint
-gtk_container_accessible_add_gtk (GtkContainer *container,
-                                  GtkWidget    *widget,
-                                  gpointer      data)
+void
+_gtk_container_accessible_add (GtkWidget *parent,
+                               GtkWidget *child)
 {
-  GtkContainerAccessible *accessible = GTK_CONTAINER_ACCESSIBLE (data);
+  GtkContainerAccessible *accessible;
   GtkContainerAccessibleClass *klass;
+  AtkObject *obj;
 
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (parent));
+  if (!GTK_IS_CONTAINER_ACCESSIBLE (obj))
+    return;
+
+  accessible = GTK_CONTAINER_ACCESSIBLE (obj);
   klass = GTK_CONTAINER_ACCESSIBLE_GET_CLASS (accessible);
 
   if (klass->add_gtk)
-    return klass->add_gtk (container, widget, data);
-  else
-    return 1;
+    klass->add_gtk (GTK_CONTAINER (parent), child, obj);
 }
- 
-static gint
-gtk_container_accessible_remove_gtk (GtkContainer *container,
-                                     GtkWidget    *widget,
-                                     gpointer     data)
-{
-  GtkContainerAccessible *accessible = GTK_CONTAINER_ACCESSIBLE (data);
-  GtkContainerAccessibleClass *klass;
 
+void
+_gtk_container_accessible_remove (GtkWidget *parent,
+                                  GtkWidget *child)
+{
+  GtkContainerAccessible *accessible;
+  GtkContainerAccessibleClass *klass;
+  AtkObject *obj;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (parent));
+  if (!GTK_IS_CONTAINER_ACCESSIBLE (obj))
+    return;
+
+  accessible = GTK_CONTAINER_ACCESSIBLE (obj);
   klass = GTK_CONTAINER_ACCESSIBLE_GET_CLASS (accessible);
 
   if (klass->remove_gtk)
-    return klass->remove_gtk (container, widget, data);
-  else
-    return 1;
+    klass->remove_gtk (GTK_CONTAINER (parent), child, obj);
 }
 
 static gint
@@ -164,9 +173,6 @@ gtk_container_accessible_real_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (gtk_container_accessible_parent_class)->initialize (obj, data);
 
   accessible->priv->children = gtk_container_get_children (GTK_CONTAINER (data));
-
-  g_signal_connect (data, "add", G_CALLBACK (gtk_container_accessible_add_gtk), obj);
-  g_signal_connect (data, "remove", G_CALLBACK (gtk_container_accessible_remove_gtk), obj);
 
   obj->role = ATK_ROLE_PANEL;
 }

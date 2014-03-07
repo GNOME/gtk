@@ -50,6 +50,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetpath.h"
 #include "a11y/gtkcontaineraccessible.h"
+#include "a11y/gtkcontaineraccessibleprivate.h"
 
 /**
  * SECTION:gtkcontainer
@@ -1556,6 +1557,8 @@ gtk_container_add (GtkContainer *container,
     }
 
   g_signal_emit (container, container_signals[ADD], 0, widget);
+
+  _gtk_container_accessible_add (GTK_WIDGET (container), widget);
 }
 
 /**
@@ -1581,7 +1584,13 @@ gtk_container_remove (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (container) || GTK_IS_ASSISTANT (container) || GTK_IS_ACTION_BAR (container));
 
+  g_object_ref (widget);
+
   g_signal_emit (container, container_signals[REMOVE], 0, widget);
+
+  _gtk_container_accessible_remove (GTK_WIDGET (container), widget);
+
+  g_object_unref (widget);
 }
 
 void

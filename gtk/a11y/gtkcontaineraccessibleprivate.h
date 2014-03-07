@@ -1,5 +1,5 @@
 /* GTK+ - accessibility implementations
- * Copyright 2001 Sun Microsystems Inc.
+ * Copyright (C) 2014  Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,12 +22,17 @@
 
 G_BEGIN_DECLS
 
-void _gtk_container_accessible_add_child    (GtkContainerAccessible *accessible,
-                                             AtkObject              *child,
-                                             gint                    index);
-void _gtk_container_accessible_remove_child (GtkContainerAccessible *accessible,
-                                             AtkObject              *child,
-                                             gint                    index);
+void            _gtk_container_accessible_add_child     (GtkContainerAccessible *accessible,
+                                                         AtkObject              *child,
+                                                         gint                    index);
+void            _gtk_container_accessible_remove_child  (GtkContainerAccessible *accessible,
+                                                         AtkObject              *child,
+                                                         gint                    index);
+void            _gtk_container_accessible_add           (GtkWidget              *parent,
+                                                         GtkWidget              *child);
+void            _gtk_container_accessible_remove        (GtkWidget              *parent,
+                                                         GtkWidget              *child);
+
 G_END_DECLS
 
 #endif /* __GTK_CONTAINER_ACCESSIBLE_PRIVATE_H__ */
