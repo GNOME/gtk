@@ -46,7 +46,7 @@
           <object class="GtkButton" id="run_button">
             <property name="visible">True</property>
             <property name="valign">center</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="action_name">win.run</property>
             <style>
               <class name="text-button"/>
