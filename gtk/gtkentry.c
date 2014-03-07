@@ -6342,8 +6342,12 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   text = pango_layout_get_text (layout);
-  cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
   get_layout_position (entry, &x, &y);
+
+  if (type == CURSOR_DND)
+    cursor_index = g_utf8_offset_to_pointer (text, priv->dnd_position) - text;
+  else
+    cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
 
   if (!priv->overwrite_mode)
     block = FALSE;
