@@ -25,7 +25,6 @@
 #endif
 
 #include <gtk/gtkeventcontroller.h>
-#include <gtk/gtkeventcontroller.h>
 
 G_BEGIN_DECLS
 
