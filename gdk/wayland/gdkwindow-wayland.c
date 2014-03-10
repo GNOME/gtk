@@ -1134,7 +1134,6 @@ static void
 gdk_wayland_window_map (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowImplWayland *parent;
   GdkWindow *transient_for;
 
   if (!impl->mapped && !impl->use_custom_surface)
@@ -1162,15 +1161,13 @@ gdk_wayland_window_map (GdkWindow *window)
           struct wl_seat *grab_input_seat = NULL;
           GdkWindowImplWayland *tmp_impl;
 
-          parent = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
-
           /* Use the device that was used for the grab as the device for
            * the popup window setup - so this relies on GTK+ taking the
            * grab before showing the popup window.
            */
           grab_input_seat = impl->grab_input_seat;
 
-          tmp_impl = parent;
+          tmp_impl = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
           while (!grab_input_seat)
             {
               grab_input_seat = tmp_impl->grab_input_seat;
