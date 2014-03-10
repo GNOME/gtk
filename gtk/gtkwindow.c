@@ -57,6 +57,7 @@
 #include "gtkheaderbar.h"
 #include "gtkheaderbarprivate.h"
 #include "a11y/gtkwindowaccessible.h"
+#include "a11y/gtkcontaineraccessibleprivate.h"
 #include "gtkapplicationprivate.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -12236,6 +12237,7 @@ _gtk_window_add_popover (GtkWindow *window,
 {
   GtkWindowPrivate *priv;
   GtkWindowPopover *data;
+  AtkObject *accessible;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GTK_IS_WIDGET (popover));
@@ -12254,6 +12256,10 @@ _gtk_window_add_popover (GtkWindow *window,
     popover_realize (popover, data, window);
 
   gtk_widget_set_parent (popover, GTK_WIDGET (window));
+
+  accessible = gtk_widget_get_accessible (GTK_WIDGET (window));
+  _gtk_container_accessible_add_child (GTK_CONTAINER_ACCESSIBLE (accessible),
+                                       gtk_widget_get_accessible (popover), -1);
 }
 
 void
@@ -12262,6 +12268,7 @@ _gtk_window_remove_popover (GtkWindow *window,
 {
   GtkWindowPrivate *priv;
   GtkWindowPopover *data;
+  AtkObject *accessible;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GTK_IS_WIDGET (popover));
@@ -12277,6 +12284,10 @@ _gtk_window_remove_popover (GtkWindow *window,
     popover_unrealize (popover, data, window);
 
   priv->popovers = g_list_remove (priv->popovers, data);
+
+  accessible = gtk_widget_get_accessible (GTK_WIDGET (window));
+  _gtk_container_accessible_remove_child (GTK_CONTAINER_ACCESSIBLE (accessible),
+                                          gtk_widget_get_accessible (popover), -1);
   popover_destroy (data);
 }
 
