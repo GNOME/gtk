@@ -1545,11 +1545,20 @@ gtk_text_view_init (GtkTextView *text_view)
                     G_CALLBACK (gtk_text_view_handle_dragged), text_view);
   g_signal_connect (priv->text_handle, "drag-finished",
                     G_CALLBACK (gtk_text_view_handle_drag_finished), text_view);
+}
 
-  priv->magnifier = _gtk_magnifier_new (widget);
+static void
+_gtk_text_view_ensure_magnifier (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  if (priv->magnifier_popover)
+    return;
+
+  priv->magnifier = _gtk_magnifier_new (GTK_WIDGET (text_view));
   gtk_widget_set_size_request (priv->magnifier, 100, 60);
   _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
-  priv->magnifier_popover = gtk_popover_new (widget);
+  priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (text_view));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
                                GTK_STYLE_CLASS_OSD);
   gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
@@ -3230,7 +3239,8 @@ gtk_text_view_finalize (GObject *object)
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
-  gtk_widget_destroy (priv->magnifier_popover);
+  if (priv->magnifier_popover)
+    gtk_widget_destroy (priv->magnifier_popover);
   g_object_unref (priv->text_handle);
   g_object_unref (priv->im_context);
 
@@ -4609,6 +4619,7 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   GtkTextViewPrivate *priv;
   GtkAllocation allocation;
 
+  _gtk_text_view_ensure_magnifier (text_view);
   gtk_widget_get_allocation (GTK_WIDGET (text_view), &allocation);
 
   priv = text_view->priv;
@@ -4718,7 +4729,9 @@ gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
                                     GtkTextView           *text_view)
 {
   gtk_text_view_selection_bubble_popup_set (text_view);
-  gtk_widget_hide (text_view->priv->magnifier_popover);
+
+  if (text_view->priv->magnifier_popover)
+    gtk_widget_hide (text_view->priv->magnifier_popover);
 }
 
 static void
@@ -7110,7 +7123,8 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view)
                           priv->grab_device);
   priv->grab_device = NULL;
 
-  gtk_widget_hide (priv->magnifier_popover);
+  if (priv->magnifier_popover)
+    gtk_widget_hide (priv->magnifier_popover);
 
   return TRUE;
 }
