@@ -28,21 +28,24 @@ struct _GtkContainerAccessiblePrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkContainerAccessible, gtk_container_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
+static void
+count_widget (GtkWidget *widget,
+              gint      *count)
+{
+  (*count)++;
+}
+
 static gint
 gtk_container_accessible_get_n_children (AtkObject* obj)
 {
   GtkWidget *widget;
-  GList *children;
   gint count = 0;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return 0;
 
-  children = gtk_container_get_children (GTK_CONTAINER (widget));
-  count = g_list_length (children);
-  g_list_free (children);
-
+  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) count_widget, &count);
   return count;
 }
 
