@@ -1071,7 +1071,28 @@ static const struct xdg_popup_listener xdg_popup_listener = {
 static void
 gdk_wayland_window_offset (GdkWindow *window,
                            gint      *x_out,
-                           gint      *y_out);
+                           gint      *y_out)
+{
+  GdkWindowImplWayland *impl, *parent_impl;
+  GdkWindow *parent_window;
+  gint x_offset = 0, y_offset = 0;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  parent_window = impl->transient_for;
+  while (parent_window)
+    {
+      parent_impl = GDK_WINDOW_IMPL_WAYLAND (parent_window->impl);
+
+      x_offset += window->x;
+      y_offset += window->y;
+
+      parent_window = parent_impl->transient_for;
+    }
+
+  *x_out = x_offset;
+  *y_out = y_offset;
+}
 
 static void
 gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
@@ -1373,32 +1394,6 @@ gdk_window_wayland_get_geometry (GdkWindow *window,
       if (height)
         *height = window->height;
     }
-}
-
-static void
-gdk_wayland_window_offset (GdkWindow *window,
-                           gint      *x_out,
-                           gint      *y_out)
-{
-  GdkWindowImplWayland *impl, *parent_impl;
-  GdkWindow *parent_window;
-  gint x_offset = 0, y_offset = 0;
-
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  parent_window = impl->transient_for;
-  while (parent_window)
-    {
-      parent_impl = GDK_WINDOW_IMPL_WAYLAND (parent_window->impl);
-
-      x_offset += window->x;
-      y_offset += window->y;
-
-      parent_window = parent_impl->transient_for;
-    }
-
-  *x_out = x_offset;
-  *y_out = y_offset;
 }
 
 static void
