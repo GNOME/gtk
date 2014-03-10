@@ -2695,6 +2695,15 @@ gtk_entry_init (GtkEntry *entry)
                     G_CALLBACK (gtk_entry_handle_dragged), entry);
   g_signal_connect (priv->text_handle, "drag-finished",
                     G_CALLBACK (gtk_entry_handle_drag_finished), entry);
+}
+
+static void
+gtk_entry_ensure_magnifier (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (priv->magnifier_popover)
+    return;
 
   priv->magnifier = _gtk_magnifier_new (GTK_WIDGET (entry));
   gtk_widget_set_size_request (priv->magnifier, 100, 60);
@@ -2946,7 +2955,9 @@ gtk_entry_finalize (GObject *object)
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
-  gtk_widget_destroy (priv->magnifier_popover);
+  if (priv->magnifier_popover)
+    gtk_widget_destroy (priv->magnifier_popover);
+
   g_object_unref (priv->text_handle);
   g_free (priv->placeholder_text);
   g_free (priv->im_module);
@@ -4465,7 +4476,8 @@ gtk_entry_button_release (GtkWidget      *widget,
   else if (is_touchscreen)
     {
       gtk_entry_selection_bubble_popup_set (entry);
-      gtk_widget_hide (priv->magnifier_popover);
+      if (priv->magnifier_popover)
+        gtk_widget_hide (priv->magnifier_popover);
     }
 
   priv->button = 0;
@@ -4497,6 +4509,8 @@ gtk_entry_show_magnifier (GtkEntry *entry,
   GtkAllocation allocation, primary, secondary;
   cairo_rectangle_int_t rect;
   GtkEntryPrivate *priv;
+
+  gtk_entry_ensure_magnifier (entry);
 
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
   get_icon_allocations (entry, &primary, &secondary);
@@ -6574,7 +6588,9 @@ gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
                                 GtkEntry              *entry)
 {
   gtk_entry_selection_bubble_popup_set (entry);
-  gtk_widget_hide (entry->priv->magnifier_popover);
+
+  if (entry->priv->magnifier_popover)
+    gtk_widget_hide (entry->priv->magnifier_popover);
 }
 
 
