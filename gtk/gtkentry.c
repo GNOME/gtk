@@ -5795,6 +5795,16 @@ gtk_entry_cut_clipboard (GtkEntry *entry)
     }
 
   gtk_entry_selection_bubble_popup_unset (entry);
+
+  if (priv->text_handle)
+    {
+      GtkTextHandleMode handle_mode;
+
+      handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
+
+      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
+        gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
+    }
 }
 
 static void
@@ -5806,6 +5816,16 @@ gtk_entry_paste_clipboard (GtkEntry *entry)
     gtk_entry_paste (entry, GDK_SELECTION_CLIPBOARD);
   else
     gtk_widget_error_bell (GTK_WIDGET (entry));
+
+  if (priv->text_handle)
+    {
+      GtkTextHandleMode handle_mode;
+
+      handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
+
+      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
+        gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
+    }
 }
 
 static void
