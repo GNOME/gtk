@@ -6704,7 +6704,7 @@ update_border_windows (GtkWindow *window)
                               window_border.left - border.left, window_border.top - border.top,
                               border.left + handle, border.top + handle);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_NORTH_EAST],
-                              window_border.left + width - handle, 0,
+                              window_border.left + width - handle, window_border.top - border.top,
                               border.right + handle, border.top + handle);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH_WEST],
                               window_border.left - border.left, window_border.top + height - handle,
