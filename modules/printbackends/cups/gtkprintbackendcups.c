@@ -815,7 +815,8 @@ gtk_print_backend_cups_finalize (GObject *object)
 
 #ifdef HAVE_CUPS_API_1_6
   g_clear_object (&backend_cups->avahi_cancellable);
-  g_clear_pointer (&backend_cups->avahi_default_printer, g_free);
+  g_free (backend_cups->avahi_default_printer);
+  backend_cups->avahi_default_printer = NULL;
   g_clear_object (&backend_cups->dbus_connection);
 #endif
 
@@ -870,7 +871,8 @@ gtk_print_backend_cups_dispose (GObject *object)
                                   NULL,
                                   NULL,
                                   NULL);
-          g_clear_pointer (&backend_cups->avahi_service_browser_paths[i], g_free);
+          g_free (backend_cups->avahi_service_browser_paths[i]);
+          backend_cups->avahi_service_browser_paths[i] = NULL;
         }
     }
 
@@ -2819,7 +2821,10 @@ avahi_service_browser_signal_handler (GDBusConnection *connection,
                 {
                   if (g_strcmp0 (gtk_printer_get_name (GTK_PRINTER (printer)),
                                  backend->avahi_default_printer) == 0)
-                    g_clear_pointer (&backend->avahi_default_printer, g_free);
+                    {
+                      g_free (backend->avahi_default_printer);
+                      backend->avahi_default_printer = NULL;
+                    }
 
                   g_signal_emit_by_name (backend, "printer-removed", printer);
                   gtk_print_backend_remove_printer (GTK_PRINT_BACKEND (backend),
