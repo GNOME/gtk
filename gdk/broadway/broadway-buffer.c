@@ -228,7 +228,9 @@ encode_pixel (struct encoder *encoder, guint32 color, guint32 prev_color)
       (encoder->delta != delta &&
        encoder->delta_run > encoder->color_run) ||
 
-      (encoder->delta != delta && encoder->color != color))
+      (encoder->delta != delta && encoder->color != color) ||
+
+      (encoder->delta_run == 0xFFFFF || encoder->color_run == 0xFFFFF))
     {
       encode_run (encoder);
 
