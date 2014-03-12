@@ -6513,6 +6513,16 @@ max_borders (GtkBorder *one,
 }
 
 static void
+subtract_borders (GtkBorder *one,
+                  GtkBorder *two)
+{
+  one->top -= two->top;
+  one->right -= two->right;
+  one->bottom -= two->bottom;
+  one->left -= two->left;
+}
+
+static void
 add_window_frame_style_class (GtkStyleContext *context)
 {
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
@@ -6834,6 +6844,19 @@ update_border_windows (GtkWindow *window)
       gdk_window_hide (priv->border_window[GDK_WINDOW_EDGE_WEST]);
       gdk_window_hide (priv->border_window[GDK_WINDOW_EDGE_EAST]);
     }
+
+  /* we also update the input shape, which makes it so that clicks
+   * outside the border windows go through
+   */
+
+  subtract_borders (&window_border, &border);
+  rect.x = window_border.left;
+  rect.y = window_border.top;
+  rect.width = gtk_widget_get_allocated_width (widget) - window_border.left - window_border.right;
+  rect.height = gtk_widget_get_allocated_height (widget) - window_border.top - window_border.bottom;
+  region = cairo_region_create_rectangle (&rect);
+  gtk_widget_input_shape_combine_region (widget, region);
+  cairo_region_destroy (region);
 }
 
 static void
