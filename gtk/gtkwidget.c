@@ -855,7 +855,6 @@ static GQuark		quark_accel_closures = 0;
 static GQuark		quark_event_mask = 0;
 static GQuark           quark_device_event_mask = 0;
 static GQuark		quark_parent_window = 0;
-static GQuark		quark_pointer_window = 0;
 static GQuark		quark_shape_info = 0;
 static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
@@ -1022,7 +1021,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
   quark_device_event_mask = g_quark_from_static_string ("gtk-device-event-mask");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
-  quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
   quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
@@ -4627,9 +4625,6 @@ gtk_widget_unmap (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[UNMAP], 0);
 
       gtk_widget_pop_verify_invariants (widget);
-
-      /* Unset pointer/window info */
-      g_object_set_qdata (G_OBJECT (widget), quark_pointer_window, NULL);
     }
 }
 
@@ -11780,49 +11775,14 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
   return &widget->priv->requests;
 }
 
-/*
- * _gtk_widget_set_device_window:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- * @window: the new device window
- *
- * Sets pointer window for @widget and @device.
- * Does not ref @window.
- */
-void
-_gtk_widget_set_device_window (GtkWidget *widget,
-                               GdkDevice *device,
-                               GdkWindow *window)
+static gboolean
+is_my_window (GtkWidget *widget,
+              GdkWindow *window)
 {
-  GHashTable *device_window;
+  gpointer user_data;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
-
-  if (!gtk_widget_get_mapped (widget))
-    return;
-
-  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
-
-  if (!device_window && window)
-    {
-      device_window = g_hash_table_new (NULL, NULL);
-      g_object_set_qdata_full (G_OBJECT (widget),
-                               quark_pointer_window,
-                               device_window,
-                               (GDestroyNotify) g_hash_table_destroy);
-    }
-
-  if (window)
-    g_hash_table_insert (device_window, device, window);
-  else if (device_window)
-    {
-      g_hash_table_remove (device_window, device);
-
-      if (g_hash_table_size (device_window) == 0)
-        g_object_set_qdata (G_OBJECT (widget), quark_pointer_window, NULL);
-    }
+  gdk_window_get_user_data (window, &user_data);
+  return (user_data == widget);
 }
 
 /*
@@ -11830,26 +11790,44 @@ _gtk_widget_set_device_window (GtkWidget *widget,
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
  *
- * Returns: the device window set on @widget, or %NULL
+ * Returns: the window of @widget that @device is in, or %NULL
  */
 GdkWindow *
 _gtk_widget_get_device_window (GtkWidget *widget,
                                GdkDevice *device)
 {
-  GHashTable *device_window;
+  GdkWindow *window;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
-  if (!gtk_widget_get_mapped (widget))
+  window = gdk_device_get_last_event_window (device);
+  if (window && is_my_window (widget, window))
+    return window;
+  else
     return NULL;
+}
 
-  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
+static void
+list_devices (GtkWidget        *widget,
+              GdkDeviceManager *device_manager,
+              GdkDeviceType     device_type,
+              GList           **result)
+{
+  GList *devices = gdk_device_manager_list_devices (device_manager, device_type);
+  GList *l;
 
-  if (!device_window)
-    return NULL;
-
-  return g_hash_table_lookup (device_window, device);
+  for (l = devices; l; l = l->next)
+    {
+      GdkDevice *device = l->data;
+      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
+        {
+          GdkWindow *window = gdk_device_get_last_event_window (device);
+          if (window && is_my_window (widget, window))
+            *result = g_list_prepend (*result, device);
+        }
+    }
+  g_list_free (devices);
 }
 
 /*
@@ -11864,27 +11842,22 @@ _gtk_widget_get_device_window (GtkWidget *widget,
 GList *
 _gtk_widget_list_devices (GtkWidget *widget)
 {
-  GHashTableIter iter;
-  GHashTable *device_window;
-  GList *devices = NULL;
-  gpointer key, value;
+  GdkDisplay *display;
+  GdkDeviceManager *device_manager;
+  GList *result = NULL;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
+  display = gtk_widget_get_display (widget);
+  device_manager = gdk_display_get_device_manager (display);
   if (!gtk_widget_get_mapped (widget))
     return NULL;
 
-  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
+  list_devices (widget, device_manager, GDK_DEVICE_TYPE_MASTER, &result);
+  /* Rare, but we can get events for grabbed slave devices */
+  list_devices (widget, device_manager, GDK_DEVICE_TYPE_SLAVE, &result);
 
-  if (G_UNLIKELY (!device_window))
-    return NULL;
-
-  g_hash_table_iter_init (&iter, device_window);
-
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    devices = g_list_prepend (devices, key);
-
-  return devices;
+  return result;
 }
 
 static void

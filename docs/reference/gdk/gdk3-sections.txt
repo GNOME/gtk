@@ -736,6 +736,7 @@ GdkTimeCoord
 gdk_device_get_axis
 gdk_device_list_axes
 gdk_device_get_axis_value
+gdk_device_get_last_event_window
 
 <SUBSECTION Standard>
 GDK_TYPE_AXIS_USE

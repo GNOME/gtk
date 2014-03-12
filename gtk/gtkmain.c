@@ -1736,22 +1736,12 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_ENTER_NOTIFY:
-      if (event->crossing.detail != GDK_NOTIFY_VIRTUAL &&
-          event->crossing.detail != GDK_NOTIFY_NONLINEAR_VIRTUAL)
-        _gtk_widget_set_device_window (event_widget,
-                                       gdk_event_get_device (event),
-                                       event->any.window);
       if (gtk_widget_is_sensitive (grab_widget) &&
           !_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_widget_event (grab_widget, event);
       break;
 
     case GDK_LEAVE_NOTIFY:
-      if (event->crossing.detail != GDK_NOTIFY_VIRTUAL &&
-          event->crossing.detail != GDK_NOTIFY_NONLINEAR_VIRTUAL)
-        _gtk_widget_set_device_window (event_widget,
-                                       gdk_event_get_device (event),
-                                       NULL);
       if (gtk_widget_is_sensitive (grab_widget) &&
           !_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_widget_event (grab_widget, event);

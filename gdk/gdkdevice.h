@@ -271,6 +271,8 @@ gboolean gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
                                            GdkWindow  **grab_window,
                                            gboolean    *owner_events);
 
+GDK_AVAILABLE_IN_3_12
+GdkWindow *gdk_device_get_last_event_window (GdkDevice *device);
 
 G_END_DECLS
 
