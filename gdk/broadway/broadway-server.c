@@ -4,8 +4,6 @@
 
 #include "broadway-output.h"
 
-#define _XOPEN_SOURCE /* for crypt */
-
 #include <glib.h>
 #include <glib/gprintf.h>
 #include "gdktypes.h"
@@ -18,7 +16,6 @@
 #elif defined (G_OS_WIN32)
 #include <io.h>
 #endif
-#include <crypt.h>
 #ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
 #endif

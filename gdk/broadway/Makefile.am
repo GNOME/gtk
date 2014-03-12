@@ -89,9 +89,9 @@ broadwayd_SOURCES = \
 	broadway-output.c
 
 if OS_WIN32
-broadwayd_LDADD = $(GDK_DEP_LIBS) -lcrypt -lws2_32
+broadwayd_LDADD = $(GDK_DEP_LIBS) -lws2_32
 else
-broadwayd_LDADD = $(GDK_DEP_LIBS) -lrt -lcrypt
+broadwayd_LDADD = $(GDK_DEP_LIBS) -lrt
 endif
 
 MAINTAINERCLEANFILES = $(broadway_built_sources)
