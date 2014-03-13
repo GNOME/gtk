@@ -4872,12 +4872,58 @@ get_move_resize_data (GdkDisplay *display,
 }
 
 static void
+check_maximize (MoveResizeData *mv_resize,
+                gdouble         x_root,
+                gdouble         y_root)
+{
+  GdkWindowState state;
+  gint y;
+
+  if (mv_resize->is_resize)
+    return;
+
+  state = gdk_window_get_state (mv_resize->moveresize_window);
+
+  if (state & GDK_WINDOW_STATE_MAXIMIZED)
+    return;
+
+  y = mv_resize->moveresize_orig_y + (y_root - mv_resize->moveresize_y);
+
+  if (y < 10)
+    gdk_window_maximize (mv_resize->moveresize_window);
+}
+
+static void
+check_unmaximize (MoveResizeData *mv_resize,
+                  gdouble         x_root,
+                  gdouble         y_root)
+{
+  GdkWindowState state;
+  gint dx, dy;
+
+  if (mv_resize->is_resize)
+    return;
+
+  state = gdk_window_get_state (mv_resize->moveresize_window);
+
+  if ((state & GDK_WINDOW_STATE_MAXIMIZED) == 0)
+    return;
+
+  dx = x_root - mv_resize->moveresize_x;
+  dy = y_root - mv_resize->moveresize_y;
+
+  if (ABS (dx) > 20 || ABS (dy) > 20)
+    gdk_window_unmaximize (mv_resize->moveresize_window);
+}
+
+static void
 update_pos (MoveResizeData *mv_resize,
 	    gint            new_root_x,
 	    gint            new_root_y)
 {
   gint dx, dy;
 
+  check_unmaximize (mv_resize, new_root_x, new_root_y);
   dx = new_root_x - mv_resize->moveresize_x;
   dy = new_root_y - mv_resize->moveresize_y;
 
@@ -5066,7 +5112,12 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
        * get a permanently stuck grab.
        */
       if ((event->xmotion.state & button_mask) == 0)
-        finish_drag (mv_resize);
+        {
+          check_maximize (mv_resize,
+                          event->xmotion.x_root / impl->window_scale,
+                          event->xmotion.y_root / impl->window_scale);
+          finish_drag (mv_resize);
+        }
       break;
 
     case ButtonRelease:
@@ -5075,7 +5126,12 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
                   event->xbutton.y_root / impl->window_scale);
 
       if (event->xbutton.button == mv_resize->moveresize_button)
-        finish_drag (mv_resize);
+        {
+          check_maximize (mv_resize,
+                          event->xmotion.x_root / impl->window_scale,
+                          event->xmotion.y_root / impl->window_scale);
+          finish_drag (mv_resize);
+        }
       break;
 
 #if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
@@ -5091,13 +5147,23 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
             update_pos (mv_resize, xev->root_x / impl->window_scale, xev->root_y / impl->window_scale);
             state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
             if ((state & button_mask) == 0)
-            finish_drag (mv_resize);
+              {
+                check_maximize (mv_resize,
+                                xev->root_x / impl->window_scale,
+                                xev->root_y / impl->window_scale);
+                finish_drag (mv_resize);
+              }
             break;
 
           case XI_ButtonRelease:
             update_pos (mv_resize, xev->root_x / impl->window_scale, xev->root_y / impl->window_scale);
             if (xev->detail == mv_resize->moveresize_button)
-              finish_drag (mv_resize);
+              {
+                check_maximize (mv_resize,
+                                xev->root_x / impl->window_scale,
+                                xev->root_y / impl->window_scale);
+                finish_drag (mv_resize);
+              }
             break;
           }
       }
