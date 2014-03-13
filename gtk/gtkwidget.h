@@ -946,7 +946,8 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_allocation         (GtkWidget     *widget,
                                                          const GtkAllocation *allocation);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_width and gtk_widget_get_preferred_height)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_width & gtk_widget_get_preferred_height)
+
 void                  gtk_widget_get_requisition        (GtkWidget     *widget,
                                                          GtkRequisition *requisition);
 
