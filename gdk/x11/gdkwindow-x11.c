@@ -5303,6 +5303,24 @@ emulate_move_drag (GdkWindow     *window,
   create_moveresize_window (mv_resize, timestamp);
 }
 
+static gboolean
+_should_perform_ewmh_drag (GdkWindow *window,
+                           GdkDevice *device)
+{
+  GdkPointerWindowInfo *info;
+  GdkDisplay *display;
+
+  display = gdk_window_get_display (window);
+  info = _gdk_display_get_pointer_info (display, device);
+
+  if ((!info->last_slave || gdk_device_get_source (info->last_slave) != GDK_SOURCE_TOUCHSCREEN) &&
+      gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+                                           gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 gdk_x11_window_begin_resize_drag (GdkWindow     *window,
                                   GdkWindowEdge  edge,
@@ -5316,8 +5334,8 @@ gdk_x11_window_begin_resize_drag (GdkWindow     *window,
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
-  if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
+  /* Avoid EWMH for touch devices */
+  if (_should_perform_ewmh_drag (window, device))
     wmspec_resize_drag (window, edge, device, button, root_x, root_y, timestamp);
   else
     emulate_resize_drag (window, edge, device, button, root_x, root_y, timestamp);
@@ -5341,8 +5359,8 @@ gdk_x11_window_begin_move_drag (GdkWindow *window,
   else
     direction = _NET_WM_MOVERESIZE_MOVE;
 
-  if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
+  /* Avoid EWMH for touch devices */
+  if (_should_perform_ewmh_drag (window, device))
     wmspec_moveresize (window, direction, device, button, root_x, root_y, timestamp);
   else
     emulate_move_drag (window, device, button, root_x, root_y, timestamp);
