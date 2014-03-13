@@ -301,6 +301,8 @@ struct _GdkWindowImplClass
                                            gint            right,
                                            gint            top,
                                            gint            bottom);
+  gboolean     (* show_window_menu)       (GdkWindow      *window,
+                                           GdkEvent       *event);
 };
 
 /* Interface Functions */

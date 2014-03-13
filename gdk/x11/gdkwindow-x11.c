@@ -5702,6 +5702,47 @@ gdk_x11_window_set_opaque_region (GdkWindow      *window,
     g_free (data);
 }
 
+static gboolean
+gdk_x11_window_show_window_menu (GdkWindow *window,
+                                 GdkEvent  *event)
+{
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+  GdkDevice *device;
+  int device_id;
+  XClientMessageEvent xclient = { 0 };
+
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      break;
+    default:
+      return FALSE;
+    }
+
+  if (!gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+                                            gdk_atom_intern_static_string ("_GTK_SHOW_WINDOW_MENU")))
+    return FALSE;
+
+  device = gdk_event_get_device (event);
+
+  g_object_get (G_OBJECT (device),
+                "device-id", &device_id,
+                NULL);
+
+  xclient.type = ClientMessage;
+  xclient.window = GDK_WINDOW_XID (window);
+  xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_GTK_SHOW_WINDOW_MENU");
+  xclient.data.l[0] = device_id;
+  xclient.format = 32;
+
+  XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
+              SubstructureRedirectMask | SubstructureNotifyMask,
+              (XEvent *)&xclient);
+
+  return TRUE;
+}
+
 static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
@@ -5791,4 +5832,5 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->get_scale_factor = gdk_x11_window_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_window_set_opaque_region;
   impl_class->set_shadow_width = gdk_x11_window_set_shadow_width;
+  impl_class->show_window_menu = gdk_x11_window_show_window_menu;
 }

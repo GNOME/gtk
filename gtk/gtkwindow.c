@@ -8633,48 +8633,6 @@ popup_position_func (GtkMenu   *menu,
 }
 
 static void
-ontop_window_clicked (GtkMenuItem *menuitem,
-                      gpointer     user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-
-  gtk_window_set_keep_above (window, !window->priv->above_initially);
-}
-
-#ifdef GDK_WINDOWING_X11
-static void
-stick_window_clicked (GtkMenuItem *menuitem,
-                      gpointer     user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-
-  gtk_window_stick (window);
-}
-
-static void
-unstick_window_clicked (GtkMenuItem *menuitem,
-                        gpointer     user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-
-  gtk_window_unstick (window);
-}
-
-static void
-workspace_change_clicked (GtkMenuItem *menuitem,
-                          gpointer     user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-  GdkWindow *gdk_window;
-  guint32 desktop;
-
-  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
-  desktop = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (menuitem), "workspace"));
-  gdk_x11_window_move_to_desktop (gdk_window, desktop);
-}
-#endif
-
-static void
 close_window_clicked (GtkMenuItem *menuitem,
                       gpointer     user_data)
 {
@@ -8685,30 +8643,8 @@ close_window_clicked (GtkMenuItem *menuitem,
 }
 
 static void
-move_window_clicked (GtkMenuItem *menuitem,
-                     gpointer     user_data)
-{
-  GtkWidget *widget = (GtkWidget *)user_data;
-
-  gdk_window_begin_move_drag (gtk_widget_get_window (widget),
-                              0, 0, 0,
-                              gtk_get_current_event_time ());
-}
-
-static void
-resize_window_clicked (GtkMenuItem *menuitem,
-                       gpointer     user_data)
-{
-  GtkWidget *widget = (GtkWidget *)user_data;
-
-  gdk_window_begin_resize_drag (gtk_widget_get_window (widget),
-                                0, 0, 0, 0,
-                                gtk_get_current_event_time ());
-}
-
-static void
-gtk_window_do_popup (GtkWindow      *window,
-                     GdkEventButton *event)
+gtk_window_do_popup_fallback (GtkWindow      *window,
+                              GdkEventButton *event)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *menuitem;
@@ -8723,129 +8659,6 @@ gtk_window_do_popup (GtkWindow      *window,
   gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu),
                              GTK_WIDGET (window),
                              popup_menu_detach);
-
-  menuitem = gtk_menu_item_new_with_label (_("Minimize"));
-  gtk_widget_show (menuitem);
-  if (priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect_swapped (G_OBJECT (menuitem), "activate",
-                            G_CALLBACK (gtk_window_iconify), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-  menuitem = gtk_menu_item_new_with_label (priv->maximized ? _("Unmaximize") : _("Maximize"));
-  gtk_widget_show (menuitem);
-  if (!priv->resizable ||
-      priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect_swapped (G_OBJECT (menuitem), "activate",
-                            G_CALLBACK (_gtk_window_toggle_maximized), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-  menuitem = gtk_menu_item_new_with_label (_("Move"));
-  gtk_widget_show (menuitem);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
-                    G_CALLBACK (move_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-  menuitem = gtk_menu_item_new_with_label (_("Resize"));
-  gtk_widget_show (menuitem);
-  if (!priv->resizable || priv->maximized)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
-                    G_CALLBACK (resize_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-  menuitem = gtk_check_menu_item_new_with_label (_("Always on Top"));
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), priv->above_initially);
-  if (priv->maximized)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  gtk_widget_show (menuitem);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
-                    G_CALLBACK (ontop_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    {
-      menuitem = gtk_check_menu_item_new_with_label (_("Always on Visible Workspace"));
-      gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), priv->stick_initially);
-      gtk_widget_show (menuitem);
-      g_signal_connect (G_OBJECT (menuitem), "activate",
-                        G_CALLBACK (stick_window_clicked), window);
-      gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-      menuitem = gtk_check_menu_item_new_with_label (_("Only on This Workspace"));
-      gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), !priv->stick_initially);
-      gtk_widget_show (menuitem);
-      g_signal_connect (G_OBJECT (menuitem), "activate",
-                        G_CALLBACK (unstick_window_clicked), window);
-      gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-      if (!priv->stick_initially)
-        {
-          guint32 n_desktops, desktop;
-
-          n_desktops = gdk_x11_screen_get_number_of_desktops (gtk_widget_get_screen (GTK_WIDGET (window)));
-          desktop = gdk_x11_window_get_desktop (gtk_widget_get_window (GTK_WIDGET (window)));
-
-          if (desktop > 0)
-            {
-              menuitem = gtk_menu_item_new_with_label (_("Move to Workspace Up"));
-              g_object_set_data (G_OBJECT (menuitem), "workspace", GUINT_TO_POINTER (desktop - 1));
-              gtk_widget_show (menuitem);
-              g_signal_connect (G_OBJECT (menuitem), "activate",
-                                G_CALLBACK (workspace_change_clicked), window);
-              gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-            }
-          if (desktop + 1 < n_desktops)
-            {
-              menuitem = gtk_menu_item_new_with_label (_("Move to Workspace Down"));
-              g_object_set_data (G_OBJECT (menuitem), "workspace", GUINT_TO_POINTER (desktop + 1));
-              gtk_widget_show (menuitem);
-              g_signal_connect (G_OBJECT (menuitem), "activate",
-                                G_CALLBACK (workspace_change_clicked), window);
-              gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-            }
-          if (n_desktops > 2)
-            {
-              GtkWidget *submenu;
-              gint d;
-              guint32 current;
-
-              current = gdk_x11_screen_get_current_desktop (gtk_widget_get_screen (GTK_WIDGET (window)));
-              menuitem = gtk_menu_item_new_with_label (_("Move to Another Workspace"));
-              gtk_widget_show (menuitem);
-              gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-              submenu = gtk_menu_new ();
-              gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-              for (d = 0; d < n_desktops; d++)
-                {
-                  gchar *label;
-                  label = g_strdup_printf (_("Workspace %d"), d + 1);
-                  menuitem = gtk_menu_item_new_with_label (label);
-                  g_free (label);
-                  g_object_set_data (G_OBJECT (menuitem), "workspace", GUINT_TO_POINTER (d));
-                  if (d == current)
-                    gtk_widget_set_sensitive (menuitem, FALSE);
-                  gtk_widget_show (menuitem);
-                  g_signal_connect (G_OBJECT (menuitem), "activate",
-                                    G_CALLBACK (workspace_change_clicked), window);
-                  gtk_menu_shell_append (GTK_MENU_SHELL (submenu), menuitem);
-                }
-            }
-        }
-    }
-#endif
-
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
   menuitem = gtk_menu_item_new_with_label (_("Close"));
   gtk_widget_show (menuitem);
@@ -8865,6 +8678,15 @@ gtk_window_do_popup (GtkWindow      *window,
                     NULL, NULL,
                     popup_position_func, window,
                     0, gtk_get_current_event_time ());
+}
+
+static void
+gtk_window_do_popup (GtkWindow      *window,
+                     GdkEventButton *event)
+{
+  if (!gdk_window_show_window_menu (gtk_widget_get_window (GTK_WIDGET (window)),
+                                    (GdkEvent *) event))
+    gtk_window_do_popup_fallback (window, event);
 }
 
 /*********************************

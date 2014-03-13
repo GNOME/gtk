@@ -1100,6 +1100,9 @@ void       gdk_window_set_shadow_width         (GdkWindow      *window,
                                                 gint            right,
                                                 gint            top,
                                                 gint            bottom);
+GDK_AVAILABLE_IN_3_14
+gboolean  gdk_window_show_window_menu          (GdkWindow      *window,
+                                                GdkEvent       *event);
 
 G_END_DECLS
 

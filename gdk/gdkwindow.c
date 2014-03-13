@@ -10921,3 +10921,36 @@ gdk_window_set_shadow_width (GdkWindow *window,
   if (impl_class->set_shadow_width)
     impl_class->set_shadow_width (window, left, right, top, bottom);
 }
+
+/**
+ * gdk_window_show_window_menu:
+ * @window: a #GdkWindow
+ * @event: a #GdkEvent to show the menu for
+ *
+ * Asks the window menu to show the window menu. The window menu is
+ * the menu shown when right-clicking the titlebar on traditional
+ * windows managed by the window manager. This is useful for windows
+ * using client-side decorations, activating it with a right-click
+ * on the window decorations.
+ *
+ * Returns: %TRUE if the window menu was shown by the window
+ * manager and %FALSE otherwise.
+ *
+ * Since: 3.14
+ */
+gboolean
+gdk_window_show_window_menu (GdkWindow *window,
+                             GdkEvent  *event)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), FALSE);
+
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (impl_class->show_window_menu)
+    return impl_class->show_window_menu (window, event);
+  else
+    return FALSE;
+}
