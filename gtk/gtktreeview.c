@@ -5918,7 +5918,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
    * the typeahead find capabilities. */
   if (gtk_widget_has_focus (GTK_WIDGET (tree_view))
       && tree_view->priv->enable_search
-      && !tree_view->priv->search_custom_entry_set)
+      && !tree_view->priv->search_custom_entry_set
+      && !gtk_tree_view_search_key_cancels_search (event->keyval))
     {
       GdkEvent *new_event;
       char *old_text;
