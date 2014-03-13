@@ -5770,6 +5770,15 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 }
 
 static gboolean
+gtk_tree_view_search_key_cancels_search (guint keyval)
+{
+  return keyval == GDK_KEY_Escape
+      || keyval == GDK_KEY_Tab
+      || keyval == GDK_KEY_KP_Tab
+      || keyval == GDK_KEY_ISO_Left_Tab;
+}
+
+static gboolean
 gtk_tree_view_key_press (GtkWidget   *widget,
 			 GdkEventKey *event)
 {
@@ -15200,10 +15209,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
 
   /* close window and cancel the search */
   if (!tree_view->priv->search_custom_entry_set
-      && (event->keyval == GDK_KEY_Escape ||
-          event->keyval == GDK_KEY_Tab ||
-	    event->keyval == GDK_KEY_KP_Tab ||
-	    event->keyval == GDK_KEY_ISO_Left_Tab))
+      && gtk_tree_view_search_key_cancels_search (event->keyval))
     {
       gtk_tree_view_search_dialog_hide (widget, tree_view,
                                         gdk_event_get_device ((GdkEvent *) event));
