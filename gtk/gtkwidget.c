@@ -11801,6 +11801,9 @@ _gtk_widget_get_device_window (GtkWidget *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    return NULL;
+
   window = gdk_device_get_last_event_window (device);
   if (window && is_my_window (widget, window))
     return window;
