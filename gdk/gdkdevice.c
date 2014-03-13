@@ -1729,6 +1729,8 @@ _gdk_device_window_at_position (GdkDevice        *device,
  * application's windows.
  *
  * Returns: (transfer none) (allow-none): the last window the device
+ *
+ * Since: 3.12
  */
 GdkWindow *
 gdk_device_get_last_event_window (GdkDevice *device)
