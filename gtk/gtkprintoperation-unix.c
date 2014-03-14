@@ -135,8 +135,9 @@ op_unix_free (GtkPrintOperationUnix *op_unix)
 {
   if (op_unix->job)
     {
-      g_signal_handler_disconnect (op_unix->job,
-				   op_unix->job_status_changed_tag);
+      if (op_unix->job_status_changed_tag > 0)
+        g_signal_handler_disconnect (op_unix->job,
+				     op_unix->job_status_changed_tag);
       g_object_unref (op_unix->job);
     }
 
