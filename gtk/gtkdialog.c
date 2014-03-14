@@ -272,6 +272,18 @@ add_cb (GtkContainer *container,
 }
 
 static void
+update_title (GObject    *dialog,
+              GParamSpec *pspec,
+              GtkWidget  *label)
+{
+  const gchar *title;
+
+  title = gtk_window_get_title (GTK_WINDOW (dialog));
+  gtk_label_set_label (GTK_LABEL (label), title);
+  gtk_widget_set_visible (label, title && title[0]);
+}
+
+static void
 apply_use_header_bar (GtkDialog *dialog)
 {
   GtkDialogPrivate *priv = dialog->priv;
@@ -284,9 +296,15 @@ apply_use_header_bar (GtkDialog *dialog)
 
       if (gtk_window_get_type_hint (GTK_WINDOW (dialog)) == GDK_WINDOW_TYPE_HINT_DIALOG)
         {
+          GtkWidget *label;
+
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
           gtk_widget_show (box);
           gtk_widget_set_size_request (box, -1, 16);
+          label = gtk_label_new ("");
+          gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
+          gtk_box_set_center_widget (GTK_BOX (box), label);
+          g_signal_connect (dialog, "notify::title", G_CALLBACK (update_title), label);
         }
 
       gtk_window_set_titlebar (GTK_WINDOW (dialog), box);
