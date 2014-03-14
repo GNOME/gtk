@@ -104,6 +104,7 @@ main (int argc, char **argv)
   gchar *anim_filename = NULL;
   GIcon *icon;
   GFile *file;
+  GdkGeometry geo;
 
   gtk_init (&argc, &argv);
 
@@ -114,6 +115,14 @@ main (int argc, char **argv)
     anim_filename = argv[2];
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  geo.min_width = 400;
+  geo.min_height = 300;
+  geo.max_width = 800;
+  geo.max_height = 600;
+
+  gtk_window_set_geometry_hints (GTK_WINDOW (window), NULL, &geo, GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
+
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
 
