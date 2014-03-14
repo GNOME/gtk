@@ -455,7 +455,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 			   GError      **error)
 {
   GtkPrintJobPrivate *priv;
-  gchar *filename;
+  gchar *filename = NULL;
   gdouble width, height;
   GtkPaperSize *paper_size;
   int fd;

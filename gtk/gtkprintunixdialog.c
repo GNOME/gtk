@@ -1855,12 +1855,12 @@ selected_printer_changed (GtkTreeSelection   *selection,
                           G_CALLBACK (printer_details_acquired), dialog);
       /* take the reference */
       priv->request_details_printer = printer;
-      gtk_printer_request_details (printer);
       set_busy_cursor (dialog, TRUE);
       gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
                           g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter"),
                           PRINTER_LIST_COL_STATE, _("Getting printer information..."),
                           -1);
+      gtk_printer_request_details (printer);
       return;
     }
 
