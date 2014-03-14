@@ -3366,7 +3366,7 @@ cups_request_ppd (GtkPrinter *printer)
   GtkPrintBackend *print_backend;
   GtkPrinterCups *cups_printer;
   GtkCupsRequest *request;
-  char *ppd_filename;
+  char *ppd_filename = NULL;
   gchar *resource;
   http_t *http;
   GetPPDData *data;
