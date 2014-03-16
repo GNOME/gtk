@@ -20,15 +20,16 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-15 09:54+0000\n"
-"PO-Revision-Date: 2014-03-15 12:11+0100\n"
-"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
+"POT-Creation-Date: 2014-03-16 12:51+0000\n"
+"PO-Revision-Date: 2014-03-16 16:57+0100\n"
+"Last-Translator: Luis Menina <liberforce@freeside.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:141
 #, c-format
@@ -208,82 +209,82 @@ msgstr "Verr. num."
 #: ../gdk/keyname-table.h:6864
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "Num_Espace"
+msgstr "Espace (pavé num.)"
 
 #: ../gdk/keyname-table.h:6865
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "Num_Tab"
+msgstr "Tabulation (pavé num.)"
 
 #: ../gdk/keyname-table.h:6866
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "Num_Entrée"
+msgstr "Entrée (pavé num.)"
 
 #: ../gdk/keyname-table.h:6867
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "Num_Origine"
+msgstr "Origine (pavé num.)"
 
 #: ../gdk/keyname-table.h:6868
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "Num_Gauche"
+msgstr "Gauche (pavé num.)"
 
 #: ../gdk/keyname-table.h:6869
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "Num_Haut"
+msgstr "Haut (pavé num.)"
 
 #: ../gdk/keyname-table.h:6870
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "Num_Droite"
+msgstr "Droite (pavé num.)"
 
 #: ../gdk/keyname-table.h:6871
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "Num_Bas"
+msgstr "Bas (pavé num.)"
 
 #: ../gdk/keyname-table.h:6872
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "Num_Page_Haut"
+msgstr "Page haut (pavé num.)"
 
 #: ../gdk/keyname-table.h:6873
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "Num_Préc"
+msgstr "Précédent (pavé num.)"
 
 #: ../gdk/keyname-table.h:6874
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "Num_Page_Bas"
+msgstr "Page bas (pavé num.)"
 
 #: ../gdk/keyname-table.h:6875
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "Num_Suiv"
+msgstr "Suivant (pavé num.)"
 
 #: ../gdk/keyname-table.h:6876
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "Num_Fin"
+msgstr "Fin (pavé num.)"
 
 #: ../gdk/keyname-table.h:6877
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "Num_Début"
+msgstr "Début (pavé num.)"
 
 #: ../gdk/keyname-table.h:6878
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "Num_Inser"
+msgstr "Inser (pavé num.)"
 
 #: ../gdk/keyname-table.h:6879
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "Num_Suppr"
+msgstr "Suppr (pavé num.)"
 
 #: ../gdk/keyname-table.h:6880
 msgctxt "keyboard label"
@@ -293,62 +294,62 @@ msgstr "Suppr"
 #: ../gdk/keyname-table.h:6881
 msgctxt "keyboard label"
 msgid "MonBrightnessUp"
-msgstr "LuminositéÉcranPlusForte"
+msgstr "Luminosité écran plus forte"
 
 #: ../gdk/keyname-table.h:6882
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
-msgstr "LuminositéÉcranPlusFaible"
+msgstr "Luminosité écran plus faible"
 
 #: ../gdk/keyname-table.h:6883
 msgctxt "keyboard label"
 msgid "KbdBrightnessUp"
-msgstr "LuminositéClavierPlusForte"
+msgstr "Luminosité clavier plus forte"
 
 #: ../gdk/keyname-table.h:6884
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
-msgstr "LuminositéClavierPlusFaible"
+msgstr "Luminosité clavier plus faible"
 
 #: ../gdk/keyname-table.h:6885
 msgctxt "keyboard label"
 msgid "AudioMute"
-msgstr "SourdineVolume"
+msgstr "Sourdine volume"
 
 #: ../gdk/keyname-table.h:6886
 msgctxt "keyboard label"
 msgid "AudioMicMute"
-msgstr "SourdineVolumeMicro"
+msgstr "Sourdine volume micro"
 
 #: ../gdk/keyname-table.h:6887
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
-msgstr "VolumePlusFaible"
+msgstr "Volume plus faible"
 
 #: ../gdk/keyname-table.h:6888
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
-msgstr "VolumePlusFort"
+msgstr "Volume plus fort"
 
 #: ../gdk/keyname-table.h:6889
 msgctxt "keyboard label"
 msgid "AudioPlay"
-msgstr "DémarrageLecture"
+msgstr "Démarrage lecture"
 
 #: ../gdk/keyname-table.h:6890
 msgctxt "keyboard label"
 msgid "AudioStop"
-msgstr "ArrêtLecture"
+msgstr "Arrêt lecture"
 
 #: ../gdk/keyname-table.h:6891
 msgctxt "keyboard label"
 msgid "AudioNext"
-msgstr "MorceauSuivant"
+msgstr "Morceau suivant"
 
 #: ../gdk/keyname-table.h:6892
 msgctxt "keyboard label"
 msgid "AudioPrev"
-msgstr "MorceauPrécédent"
+msgstr "Morceau précédent"
 
 #: ../gdk/keyname-table.h:6893
 msgctxt "keyboard label"
@@ -363,17 +364,17 @@ msgstr "Pause"
 #: ../gdk/keyname-table.h:6895
 msgctxt "keyboard label"
 msgid "AudioRewind"
-msgstr "LectureEnArrière"
+msgstr "Lecture en arrière"
 
 #: ../gdk/keyname-table.h:6896
 msgctxt "keyboard label"
 msgid "AudioMedia"
-msgstr "MédiaAudio"
+msgstr "Média audio"
 
 #: ../gdk/keyname-table.h:6897
 msgctxt "keyboard label"
 msgid "ScreenSaver"
-msgstr "ÉconomiseurÉcran"
+msgstr "Économiseur écran"
 
 #: ../gdk/keyname-table.h:6898
 msgctxt "keyboard label"
@@ -388,17 +389,17 @@ msgstr "Lancement1"
 #: ../gdk/keyname-table.h:6900
 msgctxt "keyboard label"
 msgid "Forward"
-msgstr "EnAvant"
+msgstr "En avant"
 
 #: ../gdk/keyname-table.h:6901
 msgctxt "keyboard label"
 msgid "Back"
-msgstr "EnArrière"
+msgstr "En arrière"
 
 #: ../gdk/keyname-table.h:6902
 msgctxt "keyboard label"
 msgid "Sleep"
-msgstr "MiseEnVeille"
+msgstr "Mise en veille"
 
 #: ../gdk/keyname-table.h:6903
 msgctxt "keyboard label"
@@ -408,7 +409,7 @@ msgstr "Hibernation"
 #: ../gdk/keyname-table.h:6904
 msgctxt "keyboard label"
 msgid "WLAN"
-msgstr "RéseauSansFil"
+msgstr "Réseau sans fil"
 
 #: ../gdk/keyname-table.h:6905
 msgctxt "keyboard label"
@@ -423,7 +424,7 @@ msgstr "Écran"
 #: ../gdk/keyname-table.h:6907
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
-msgstr "BasculePavéTactile"
+msgstr "Bascule pavé tactile"
 
 #: ../gdk/keyname-table.h:6908
 msgctxt "keyboard label"
@@ -557,7 +558,7 @@ msgstr "Sélectionne la couleur"
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:162
 msgctxt "Action description"
 msgid "Activates the color"
-msgstr "Active la couleur."
+msgstr "Active la couleur"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:163
 msgctxt "Action description"
