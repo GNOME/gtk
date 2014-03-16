@@ -99,7 +99,7 @@ _gtk_get_libdir (void)
   if (gtk_libdir == NULL)
     {
       gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
-      gchar *slash = strrchr (root, '\\');
+      gchar *slash = root ? strrchr (root, '\\') : NULL;
       if (slash != NULL &&
           g_ascii_strcasecmp (slash + 1, ".libs") == 0)
 	gtk_libdir = GTK_LIBDIR;
