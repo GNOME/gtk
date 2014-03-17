@@ -238,6 +238,22 @@ gdk_wayland_device_warp (GdkDevice *device,
 }
 
 static void
+get_coordinates (GdkWaylandDeviceData *data,
+                 double *x, double *y,
+                 double *x_root, double *y_root)
+{
+  if (x)
+    *x = data->surface_x;
+  if (y)
+    *y = data->surface_y;
+  /* TODO: Do something clever for relative here */
+  if (x_root)
+    *x_root = data->surface_x;
+  if (y_root)
+    *y_root = data->surface_y;
+}
+
+static void
 gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkWindow        *window,
                                 GdkWindow       **root_window,
@@ -258,17 +274,10 @@ gdk_wayland_device_query_state (GdkDevice        *device,
     *root_window = gdk_screen_get_root_window (default_screen);
   if (child_window)
     *child_window = wd->pointer_focus;
-  /* TODO: Do something clever for relative here */
-  if (root_x)
-    *root_x = wd->surface_x;
-  if (root_y)
-    *root_y = wd->surface_y;
-  if (win_x)
-    *win_x = wd->surface_x;
-  if (win_y)
-    *win_y = wd->surface_y;
   if (mask)
     *mask = wd->modifiers;
+
+  get_coordinates (wd, win_x, win_y, root_x, root_y);
 }
 
 static GdkGrabStatus
@@ -614,8 +623,6 @@ static const struct wl_data_device_listener data_device_listener = {
   data_device_selection
 };
 
-
-
 static void
 pointer_handle_enter (void              *data,
                       struct wl_pointer *pointer,
@@ -639,22 +646,25 @@ pointer_handle_enter (void              *data,
   device->pointer_focus = wl_surface_get_user_data(surface);
   g_object_ref(device->pointer_focus);
 
+  device->surface_x = wl_fixed_to_double (sx);
+  device->surface_y = wl_fixed_to_double (sy);
+  device->enter_serial = serial;
+
   event = gdk_event_new (GDK_ENTER_NOTIFY);
   event->crossing.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->pointer);
   event->crossing.subwindow = NULL;
   event->crossing.time = (guint32)(g_get_monotonic_time () / 1000);
-  event->crossing.x = wl_fixed_to_double (sx);
-  event->crossing.y = wl_fixed_to_double (sy);
-
   event->crossing.mode = GDK_CROSSING_NORMAL;
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   event->crossing.focus = TRUE;
   event->crossing.state = 0;
 
-  device->surface_x = wl_fixed_to_double (sx);
-  device->surface_y = wl_fixed_to_double (sy);
-  device->enter_serial = serial;
+  get_coordinates (device,
+                   &event->crossing.x,
+                   &event->crossing.y,
+                   &event->crossing.x_root,
+                   &event->crossing.y_root);
 
   _gdk_wayland_display_deliver_event (device->display, event);
 
@@ -688,13 +698,16 @@ pointer_handle_leave (void              *data,
   gdk_event_set_device (event, device->pointer);
   event->crossing.subwindow = NULL;
   event->crossing.time = (guint32)(g_get_monotonic_time () / 1000);
-  event->crossing.x = device->surface_x;
-  event->crossing.y = device->surface_y;
-
   event->crossing.mode = GDK_CROSSING_NORMAL;
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   event->crossing.focus = TRUE;
   event->crossing.state = 0;
+
+  get_coordinates (device,
+                   &event->crossing.x,
+                   &event->crossing.y,
+                   &event->crossing.x_root,
+                   &event->crossing.y_root);
 
   _gdk_wayland_display_deliver_event (device->display, event);
 
@@ -737,12 +750,16 @@ pointer_handle_motion (void              *data,
   event->motion.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->pointer);
   event->motion.time = time;
-  event->motion.x = wl_fixed_to_double (sx);
-  event->motion.y = wl_fixed_to_double (sy);
   event->motion.axes = NULL;
   event->motion.state = device->modifiers;
   event->motion.is_hint = 0;
   gdk_event_set_screen (event, display->screen);
+
+  get_coordinates (device,
+                   &event->motion.x,
+                   &event->motion.y,
+                   &event->motion.x_root,
+                   &event->motion.y_root);
 
   GDK_NOTE (EVENTS,
             g_message ("motion %d %d, state %d",
@@ -792,12 +809,16 @@ pointer_handle_button (void              *data,
   event->button.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->pointer);
   event->button.time = time;
-  event->button.x = device->surface_x;
-  event->button.y = device->surface_y;
   event->button.axes = NULL;
   event->button.state = device->modifiers;
   event->button.button = gdk_button;
   gdk_event_set_screen (event, display->screen);
+
+  get_coordinates (device,
+                   &event->button.x,
+                   &event->button.y,
+                   &event->button.x_root,
+                   &event->button.y_root);
 
   modifier = 1 << (8 + gdk_button - 1);
   if (state)
@@ -847,13 +868,17 @@ pointer_handle_axis (void              *data,
   event->scroll.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->pointer);
   event->scroll.time = time;
-  event->scroll.x = (gdouble) device->surface_x;
-  event->scroll.y = (gdouble) device->surface_y;
   event->scroll.direction = GDK_SCROLL_SMOOTH;
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
   event->scroll.state = device->modifiers;
   gdk_event_set_screen (event, display->screen);
+
+  get_coordinates (device,
+                   &event->scroll.x,
+                   &event->scroll.y,
+                   &event->scroll.x_root,
+                   &event->scroll.y_root);
 
   GDK_NOTE (EVENTS,
             g_message ("scroll %f %f",
