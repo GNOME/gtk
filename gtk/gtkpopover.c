@@ -1682,7 +1682,7 @@ gtk_popover_update_preferred_position (GtkPopover      *popover,
 
 /**
  * gtk_popover_new:
- * @relative_to (allow-none): #GtkWidget the popover is related to
+ * @relative_to: (allow-none): #GtkWidget the popover is related to
  *
  * Creates a new popover to point to @relative_to
  *
@@ -1703,7 +1703,7 @@ gtk_popover_new (GtkWidget *relative_to)
 /**
  * gtk_popover_set_relative_to:
  * @popover: a #GtkPopover
- * @relative_to (allow-none): a #GtkWidget
+ * @relative_to: (allow-none): a #GtkWidget
  *
  * Sets a new widget to be attached to @popover. If @popover is
  * visible, the position will be updated.
