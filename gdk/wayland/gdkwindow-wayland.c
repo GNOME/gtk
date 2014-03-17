@@ -146,6 +146,7 @@ struct _GdkWindowImplWayland
   int margin_bottom;
 
   cairo_region_t *opaque_region;
+  cairo_region_t *input_region;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -811,6 +812,7 @@ gdk_window_impl_wayland_finalize (GObject *object)
   g_free (impl->title);
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
+  g_clear_pointer (&impl->input_region, cairo_region_destroy);
 
   G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
@@ -944,6 +946,25 @@ gdk_wayland_window_sync_opaque_region (GdkWindow *window)
 }
 
 static void
+gdk_wayland_window_sync_input_region (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  struct wl_region *wl_region = NULL;
+
+  if (!impl->surface)
+    return;
+
+  if (impl->input_region != NULL)
+    wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)),
+                                             impl->input_region);
+
+  wl_surface_set_input_region (impl->surface, wl_region);
+
+  if (wl_region != NULL)
+    wl_region_destroy (wl_region);
+}
+
+static void
 surface_enter (void              *data,
                struct wl_surface *wl_surface,
                struct wl_output  *output)
@@ -985,6 +1006,7 @@ gdk_wayland_window_create_surface (GdkWindow *window)
   wl_surface_add_listener (impl->surface, &surface_listener, window);
 
   gdk_wayland_window_sync_opaque_region (window);
+  gdk_wayland_window_sync_input_region (window);
 }
 
 static void
@@ -1518,6 +1540,15 @@ gdk_window_wayland_input_shape_combine_region (GdkWindow            *window,
                                                gint                  offset_x,
                                                gint                  offset_y)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  g_clear_pointer (&impl->input_region, cairo_region_destroy);
+  impl->input_region = cairo_region_copy (shape_region);
+  cairo_region_translate (impl->input_region, offset_x, offset_y);
+  gdk_wayland_window_sync_input_region (window);
 }
 
 static gboolean
