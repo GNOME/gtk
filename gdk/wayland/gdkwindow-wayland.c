@@ -1667,8 +1667,7 @@ static void
 gdk_wayland_window_get_frame_extents (GdkWindow    *window,
                                       GdkRectangle *rect)
 {
-  rect->x = window->x;
-  rect->y = window->y;
+  gdk_wayland_window_get_fake_root_coords (window, &rect->x, &rect->y);
   rect->width = window->width;
   rect->height = window->height;
 }
