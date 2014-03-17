@@ -242,15 +242,30 @@ get_coordinates (GdkWaylandDeviceData *data,
                  double *x, double *y,
                  double *x_root, double *y_root)
 {
+  int root_x, root_y;
+
   if (x)
     *x = data->surface_x;
   if (y)
     *y = data->surface_y;
-  /* TODO: Do something clever for relative here */
+
+  if (data->pointer_focus)
+    {
+      gdk_window_get_root_coords (data->pointer_focus,
+                                  data->surface_x,
+                                  data->surface_y,
+                                  &root_x, &root_y);
+    }
+  else
+    {
+      root_x = data->surface_x;
+      root_y = data->surface_y;
+    }
+
   if (x_root)
-    *x_root = data->surface_x;
+    *x_root = root_x;
   if (y_root)
-    *y_root = data->surface_y;
+    *y_root = root_y;
 }
 
 static void
