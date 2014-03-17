@@ -1060,10 +1060,43 @@ static const struct xdg_popup_listener xdg_popup_listener = {
   xdg_popup_done,
 };
 
+/**
+ * gdk_wayland_window_get_fake_root_coords:
+ * @window: A #GdkWindow
+ * @x_out: (out): The X offset of this window
+ * @y_out: (out): The Y offset of this window
+ *
+ * Wayland does not have a global coordinate space shared between
+ * surfaces. In fact, for regular toplevels, we have no idea where
+ * our surfaces are positioned, relatively.
+ *
+ * However, there are some cases like popups and subsurfaces where
+ * we do have some amount of control over the placement of our
+ * window, and we can semi-accurately control the x/y position of
+ * these windows, if they are relative to another surface.
+ *
+ * GTK+ loves to position "relative" popups like menus in root
+ * window coordinates, since it was built for display servers that
+ * have queryable absolute coordinate spaces. In these cases, GTK+
+ * might ask for the root coordinates of a widget window, add a
+ * few values, and then call gdk_window_move() with that absolute
+ * value.
+ *
+ * In Wayland, we have to "reverse-engineer" this use, and figure
+ * out the root coordinates from the relative position, and the
+ * relative position from the root coordinates.
+ *
+ * We invent a coordinate space called the "fake root coordinate"
+ * space in which a toplevel is always at 0,0, and all popups are
+ * relative to that space.
+ *
+ * gdk_wayland_window_get_fake_root_coords() gives you the
+ * position of a #GdkWindow in "fake root" coordinates.
+ */
 static void
-gdk_wayland_window_offset (GdkWindow *window,
-                           gint      *x_out,
-                           gint      *y_out)
+gdk_wayland_window_get_fake_root_coords (GdkWindow *window,
+                                         gint      *x_out,
+                                         gint      *y_out)
 {
   GdkWindowImplWayland *impl, *parent_impl;
   GdkWindow *parent_window;
@@ -1107,7 +1140,7 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
 
   device = wl_seat_get_user_data (seat);
 
-  gdk_wayland_window_offset (parent, &parent_x, &parent_y);
+  gdk_wayland_window_get_fake_root_coords (parent, &parent_x, &parent_y);
 
   x = window->x - parent_x;
   y = window->y - parent_y;
@@ -1394,7 +1427,7 @@ gdk_window_wayland_get_root_coords (GdkWindow *window,
 {
   gint x_offset, y_offset;
 
-  gdk_wayland_window_offset (window, &x_offset, &y_offset);
+  gdk_wayland_window_get_fake_root_coords (window, &x_offset, &y_offset);
 
   if (root_x)
     *root_x = x_offset + x;
