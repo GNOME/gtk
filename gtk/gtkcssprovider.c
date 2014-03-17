@@ -1908,7 +1908,7 @@ gtk_css_provider_invalid_token (GtkCssProvider *provider,
                           scanner,
                           GTK_CSS_PROVIDER_ERROR,
                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                          "expected a valid %s", expected);
+                          "expected %s", expected);
 }
 
 static void 
