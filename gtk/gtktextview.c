@@ -4588,6 +4588,32 @@ emit_event_on_tags (GtkWidget   *widget,
 }
 
 static void
+_text_window_to_widget_coords (GtkTextView *text_view,
+                               gint        *x,
+                               gint        *y)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  if (priv->top_window)
+    (*y) += priv->top_window->requisition.height;
+  if (priv->left_window)
+    (*x) += priv->left_window->requisition.width;
+}
+
+static void
+_widget_to_text_window_coords (GtkTextView *text_view,
+                               gint        *x,
+                               gint        *y)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  if (priv->top_window)
+    (*y) -= priv->top_window->requisition.height;
+  if (priv->left_window)
+    (*x) -= priv->left_window->requisition.width;
+}
+
+static void
 gtk_text_view_set_handle_position (GtkTextView           *text_view,
                                    GtkTextIter           *iter,
                                    GtkTextHandlePosition  pos)
@@ -4617,6 +4643,8 @@ gtk_text_view_set_handle_position (GtkTextView           *text_view,
 
       rect.x = CLAMP (x, 0, SCREEN_WIDTH (text_view));
       rect.y = CLAMP (y, 0, SCREEN_HEIGHT (text_view));
+      _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
+
       _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
     }
 }
@@ -4639,6 +4667,7 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   rect.x = x;
   rect.y = y;
   rect.width = rect.height = 1;
+  _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
 
   _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), x, y);
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
@@ -4664,6 +4693,8 @@ gtk_text_view_handle_dragged (GtkTextHandle         *handle,
   priv = text_view->priv;
   buffer = get_buffer (text_view);
   mode = _gtk_text_handle_get_mode (handle);
+
+  _widget_to_text_window_coords (text_view, &x, &y);
 
   gtk_text_view_selection_bubble_popup_unset (text_view);
   gtk_text_layout_get_iter_at_pixel (priv->layout, &iter,
@@ -9007,6 +9038,8 @@ bubble_targets_received (GtkClipboard     *clipboard,
   gtk_text_view_get_selection_rect (text_view, &rect);
   rect.x -= priv->xoffset;
   rect.y -= priv->yoffset;
+
+  _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->selection_bubble), &rect);
   gtk_widget_show (priv->selection_bubble);
