@@ -1817,22 +1817,13 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_set_keep_above (GdkWindow *window,
-                                   gboolean   setting)
+gdk_wayland_window_set_keep_above (GdkWindow *window, gboolean setting)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
 }
 
 static void
 gdk_wayland_window_set_keep_below (GdkWindow *window, gboolean setting)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
 }
 
 static GdkWindow *
