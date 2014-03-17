@@ -9630,7 +9630,15 @@ gdk_window_get_root_origin (GdkWindow *window,
 			    gint      *x,
 			    gint      *y)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_root_origin (window, x, y);
+  GdkRectangle rect;
+
+  gdk_window_get_frame_extents (window, &rect);
+
+  if (x)
+    *x = rect.x;
+
+  if (y)
+    *y = rect.y;
 }
 
 /**

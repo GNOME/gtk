@@ -1791,25 +1791,6 @@ gdk_window_quartz_get_root_coords (GdkWindow *window,
     *root_y = tmp_y;
 }
 
-static void
-gdk_quartz_window_get_root_origin (GdkWindow *window,
-                                   gint      *x,
-                                   gint      *y)
-{
-  GdkRectangle rect;
-
-  rect.x = 0;
-  rect.y = 0;
-  
-  gdk_window_get_frame_extents (window, &rect);
-
-  if (x)
-    *x = rect.x;
-
-  if (y)
-    *y = rect.y;
-}
-
 /* Returns coordinates relative to the passed in window. */
 static GdkWindow *
 gdk_window_quartz_get_device_state_helper (GdkWindow       *window,
@@ -2987,7 +2968,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->set_role = gdk_quartz_window_set_role;
   impl_class->set_startup_id = gdk_quartz_window_set_startup_id;
   impl_class->set_transient_for = gdk_quartz_window_set_transient_for;
-  impl_class->get_root_origin = gdk_quartz_window_get_root_origin;
   impl_class->get_frame_extents = gdk_quartz_window_get_frame_extents;
   impl_class->set_override_redirect = gdk_quartz_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_quartz_window_set_accept_focus;

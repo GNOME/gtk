@@ -2064,27 +2064,6 @@ gdk_win32_window_restack_toplevel (GdkWindow *window,
 }
 
 static void
-gdk_win32_window_get_root_origin (GdkWindow *window,
-			    gint      *x,
-			    gint      *y)
-{
-  GdkRectangle rect;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  gdk_window_get_frame_extents (window, &rect);
-
-  if (x)
-    *x = rect.x;
-
-  if (y)
-    *y = rect.y;
-
-  GDK_NOTE (MISC, g_print ("gdk_window_get_root_origin: %p: %+d%+d\n",
-			   GDK_WINDOW_HWND (window), rect.x, rect.y));
-}
-
-static void
 gdk_win32_window_get_frame_extents (GdkWindow    *window,
                               GdkRectangle *rect)
 {
@@ -3472,7 +3451,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->set_role = gdk_win32_window_set_role;
   //impl_class->set_startup_id = gdk_x11_window_set_startup_id;
   impl_class->set_transient_for = gdk_win32_window_set_transient_for;
-  impl_class->get_root_origin = gdk_win32_window_get_root_origin;
   impl_class->get_frame_extents = gdk_win32_window_get_frame_extents;
   impl_class->set_override_redirect = gdk_win32_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_win32_window_set_accept_focus;

@@ -194,9 +194,6 @@ struct _GdkWindowImplClass
 					 const gchar *startup_id);
   void         (* set_transient_for)    (GdkWindow *window,
 					 GdkWindow *parent);
-  void         (* get_root_origin)      (GdkWindow *window,
-					 gint      *x,
-					 gint      *y);
   void         (* get_frame_extents)    (GdkWindow    *window,
 					 GdkRectangle *rect);
   void         (* set_override_redirect) (GdkWindow *window,

@@ -743,7 +743,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->set_role = gdk_offscreen_window_set_string;
   impl_class->set_startup_id = gdk_offscreen_window_set_string;
   impl_class->set_transient_for = gdk_offscreen_window_set_transient_for;
-  impl_class->get_root_origin = NULL;
   impl_class->get_frame_extents = gdk_offscreen_window_get_frame_extents;
   impl_class->set_override_redirect = NULL;
   impl_class->set_accept_focus = NULL;

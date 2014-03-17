@@ -725,24 +725,6 @@ gdk_window_broadway_get_root_coords (GdkWindow *window,
 }
 
 static void
-gdk_broadway_window_get_root_origin (GdkWindow *window,
-				     gint      *x,
-				     gint      *y)
-{
-  GdkWindowImplBroadway *impl;
-
-  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-
-  /* TODO: This should take wm frame into account */
-
-  if (x)
-    *x = impl->wrapper->x;
-
-  if (y)
-    *y = impl->wrapper->x;
-}
-
-static void
 gdk_broadway_window_get_frame_extents (GdkWindow    *window,
 				       GdkRectangle *rect)
 {
@@ -1584,7 +1566,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->set_role = gdk_broadway_window_set_role;
   impl_class->set_startup_id = gdk_broadway_window_set_startup_id;
   impl_class->set_transient_for = gdk_broadway_window_set_transient_for;
-  impl_class->get_root_origin = gdk_broadway_window_get_root_origin;
   impl_class->get_frame_extents = gdk_broadway_window_get_frame_extents;
   impl_class->set_override_redirect = gdk_broadway_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_broadway_window_set_accept_focus;

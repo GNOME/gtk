@@ -3114,22 +3114,6 @@ gdk_window_x11_get_root_coords (GdkWindow *window,
 }
 
 static void
-gdk_x11_window_get_root_origin (GdkWindow *window,
-			    gint      *x,
-			    gint      *y)
-{
-  GdkRectangle rect;
-
-  gdk_window_get_frame_extents (window, &rect);
-
-  if (x)
-    *x = rect.x;
-
-  if (y)
-    *y = rect.y;
-}
-
-static void
 gdk_x11_window_get_frame_extents (GdkWindow    *window,
                                   GdkRectangle *rect)
 {
@@ -5766,7 +5750,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->set_role = gdk_x11_window_set_role;
   impl_class->set_startup_id = gdk_x11_window_set_startup_id;
   impl_class->set_transient_for = gdk_x11_window_set_transient_for;
-  impl_class->get_root_origin = gdk_x11_window_get_root_origin;
   impl_class->get_frame_extents = gdk_x11_window_get_frame_extents;
   impl_class->set_override_redirect = gdk_x11_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_x11_window_set_accept_focus;

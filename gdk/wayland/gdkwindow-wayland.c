@@ -1664,18 +1664,6 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_get_root_origin (GdkWindow *window,
-                                   gint      *x,
-                                   gint      *y)
-{
-  if (x)
-    *x = 0;
-
-  if (y)
-    *y = 0;
-}
-
-static void
 gdk_wayland_window_get_frame_extents (GdkWindow    *window,
                                       GdkRectangle *rect)
 {
@@ -2226,7 +2214,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->set_role = gdk_wayland_window_set_role;
   impl_class->set_startup_id = gdk_wayland_window_set_startup_id;
   impl_class->set_transient_for = gdk_wayland_window_set_transient_for;
-  impl_class->get_root_origin = gdk_wayland_window_get_root_origin;
   impl_class->get_frame_extents = gdk_wayland_window_get_frame_extents;
   impl_class->set_override_redirect = gdk_wayland_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_wayland_window_set_accept_focus;
