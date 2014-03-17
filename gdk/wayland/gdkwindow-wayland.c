@@ -1098,21 +1098,17 @@ gdk_wayland_window_get_fake_root_coords (GdkWindow *window,
                                          gint      *x_out,
                                          gint      *y_out)
 {
-  GdkWindowImplWayland *impl, *parent_impl;
-  GdkWindow *parent_window;
   gint x_offset = 0, y_offset = 0;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  parent_window = impl->transient_for;
-  while (parent_window)
+  while (window)
     {
-      parent_impl = GDK_WINDOW_IMPL_WAYLAND (parent_window->impl);
+      GdkWindowImplWayland *impl;
 
       x_offset += window->x;
       y_offset += window->y;
 
-      parent_window = parent_impl->transient_for;
+      impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+      window = impl->transient_for;
     }
 
   *x_out = x_offset;
