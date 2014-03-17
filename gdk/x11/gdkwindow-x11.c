@@ -4890,7 +4890,7 @@ check_unmaximize (MoveResizeData *mv_resize,
 
   state = gdk_window_get_state (mv_resize->moveresize_window);
 
-  if ((state & GDK_WINDOW_STATE_MAXIMIZED) == 0)
+  if ((state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED)) == 0)
     return;
 
   dx = x_root - mv_resize->moveresize_x;
