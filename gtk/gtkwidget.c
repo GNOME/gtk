@@ -3499,6 +3499,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * The "link-color" style property defines the color of unvisited links.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.12: Links now use a separate state flags for selecting
+   *     different theming, this style property is ignored
    */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("link-color",
@@ -3513,6 +3516,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * The "visited-link-color" style property defines the color of visited links.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.12: Links now use a separate state flags for selecting
+   *     different theming, this style property is ignored
    */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("visited-link-color",

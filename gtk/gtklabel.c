@@ -265,12 +265,9 @@ struct _GtkLabelPrivate
  * to ensure that pressing inside a link and releasing outside of it
  * does not activate the link.
  *
- * Links are rendered with the link-color/visited-link-color colors
- * that are determined by the style and with an underline. When the mouse
- * pointer is over a link, the pointer is changed to indicate the link,
- * and the background behind the link is rendered with the base[PRELIGHT]
- * color. While a button is pressed over a link, the background is rendered
- * with the base[ACTIVE] color.
+ * Links are rendered with the #GTK_STATE_FLAG_LINK/#GTK_STATE_FLAG_VISITED
+ * state flags. When the mouse pointer is over a link, the pointer is changed
+ * to indicate the link.
  *
  * Labels with links accept keyboard focus, and it is possible to move
  * the focus between the embedded links using Tab/Shift-Tab. The focus
@@ -930,8 +927,8 @@ gtk_label_class_init (GtkLabelClass *class)
    * GtkLabel:track-visited-links:
    *
    * Set this property to %TRUE to make the label track which links
-   * have been clicked. It will then apply the ::visited-link-color
-   * color, instead of ::link-color.
+   * have been visited. It will then apply the #GTK_STATE_FLAG_VISITED
+   * when rendering this link, in addition to #GTK_STATE_FLAG_LINK.
    *
    * Since: 2.18
    */
