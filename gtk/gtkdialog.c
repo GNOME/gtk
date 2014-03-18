@@ -302,6 +302,8 @@ apply_use_header_bar (GtkDialog *dialog)
           gtk_widget_show (box);
           gtk_widget_set_size_request (box, -1, 16);
           label = gtk_label_new ("");
+          gtk_widget_set_margin_top (label, 6);
+          gtk_widget_set_margin_bottom (label, 6);
           gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
           gtk_box_set_center_widget (GTK_BOX (box), label);
           g_signal_connect_object (dialog, "notify::title", G_CALLBACK (update_title), label, 0);
