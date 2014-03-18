@@ -20,6 +20,29 @@ show_message_dialog1 (GtkWindow *parent)
 }
 
 static void
+show_message_dialog1a (GtkWindow *parent)
+{
+  GtkWidget *dialog;
+  GtkWidget *image;
+
+  dialog = GTK_WIDGET (gtk_message_dialog_new (parent,
+                                               GTK_DIALOG_MODAL|
+                                               GTK_DIALOG_DESTROY_WITH_PARENT|
+                                               GTK_DIALOG_USE_HEADER_BAR,
+                                               GTK_MESSAGE_INFO,
+                                               GTK_BUTTONS_OK,
+                                               "The system network services are not compatible with this version."));
+
+  image = gtk_image_new_from_icon_name ("computer-fail", GTK_ICON_SIZE_DIALOG);
+  gtk_widget_show (image);
+  gtk_message_dialog_set_image (GTK_MESSAGE_DIALOG (dialog), image);
+
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
+static void
 show_message_dialog2 (GtkWindow *parent)
 {
   GtkWidget *dialog;
@@ -297,6 +320,11 @@ main (int argc, char *argv[])
 
   button = gtk_button_new_with_label ("Message dialog");
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (show_message_dialog1), window);
+  gtk_widget_show (button);
+  gtk_container_add (GTK_CONTAINER (box), button);
+
+  button = gtk_button_new_with_label ("Message with icon");
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (show_message_dialog1a), window);
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (box), button);
 
