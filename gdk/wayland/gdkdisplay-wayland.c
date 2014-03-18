@@ -404,7 +404,7 @@ gdk_wayland_display_store_clipboard (GdkDisplay    *display,
 static gboolean
 gdk_wayland_display_supports_shapes (GdkDisplay *display)
 {
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
