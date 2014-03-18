@@ -1472,7 +1472,7 @@ normalise_detailed_name (const gchar *detailed_action_name)
 /**
  * gtk_application_set_accels_for_action:
  * @application: a #GtkApplication
- * @detailed_action_name: a detailed action name, specifying and action
+ * @detailed_action_name: a detailed action name, specifying an action
  *     and target to associate accelerators with
  * @accels: (array zero-terminated=1): a list of accelerators in the format understood by
  *     gtk_accelerator_parse()
@@ -1503,7 +1503,7 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
 /**
  * gtk_application_get_accels_for_action:
  * @application: a #GtkApplication
- * @detailed_action_name: a detailed action name, specifying and action
+ * @detailed_action_name: a detailed action name, specifying an action
  *     and target to obtain accelerators for
  *
  * Gets the accelerators that are currently associated with
