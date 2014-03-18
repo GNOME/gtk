@@ -49,7 +49,7 @@
   </object>
   <template class="GtkPrintUnixDialog" parent="GtkDialog">
     <property name="can_focus">False</property>
-    <property name="type_hint">normal</property>
+    <property name="type_hint">dialog</property>
     <signal name="notify::page-setup" handler="redraw_page_layout_preview" swapped="no"/>
     <signal name="response" handler="error_dialogs" swapped="no"/>
     <child internal-child="vbox">
