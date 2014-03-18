@@ -1,3 +1,24 @@
+Overview of Changes from GTK+ 2.24.22 to 2.24.23
+================================================
+
+* Bug fixes:
+ 634146 Calls to g_win32_get_package_installation_directory_of_module()...
+ 651224 null pointer dereferenced due to multiple bugs in gtkclipboard-...
+ 665507 Pixmap via cairo DIB breaks gdk_gc_set_stipple() use
+ 671538 memory and gdi leaks on windows xp
+ 701751 GtkProgressBar causes warnings
+ 704937 IME input method does not handle dead keys
+ 705367 kqueue file monitor consumes file descriptors
+ 708119 Wrong gdk_pixmap_new() parameters in documentation
+ 708783 printing crashes gtk based apps (firefox, chromium, gimp, ...)
+ 710936 GtkFileChooser: Incorrect Japanese message for an error dialog...
+ 711110 GDK_HINT_MAX_SIZE ignored on Win32
+ 711298 "Edit Scheduled Transaction" window way too modal
+ 711552 Crash when processing list of GdkWindows
+ 712536 Themes with specified gap_file, gap_start_file or gap_end_file...
+ 722496 GtkFileChooser: fix documentation
+
+
 Overview of Changes from GTK+ 2.24.21 to 2.24.22
 ================================================
 
