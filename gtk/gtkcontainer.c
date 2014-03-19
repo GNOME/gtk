@@ -1584,6 +1584,7 @@ gtk_container_remove (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (container) || GTK_IS_ASSISTANT (container) || GTK_IS_ACTION_BAR (container));
 
+  g_object_ref (container);
   g_object_ref (widget);
 
   g_signal_emit (container, container_signals[REMOVE], 0, widget);
@@ -1591,6 +1592,7 @@ gtk_container_remove (GtkContainer *container,
   _gtk_container_accessible_remove (GTK_WIDGET (container), widget);
 
   g_object_unref (widget);
+  g_object_unref (container);
 }
 
 void
