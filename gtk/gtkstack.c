@@ -66,7 +66,10 @@
  * @GTK_STACK_TRANSITION_TYPE_UNDER_DOWN: Uncover the new page by sliding down. Since: 3.12
  * @GTK_STACK_TRANSITION_TYPE_UNDER_LEFT: Uncover the new page by sliding to the left. Since: 3.12
  * @GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT: Uncover the new page by sliding to the right. Since: 3.12
- * @GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN: Cover the old page or uncover the new page, according to order. Since: 3.12
+ * @GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN: Cover the old page sliding up or uncover the new page sliding down, according to order. Since: 3.12
+ * @GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP: Cover the old page sliding down or uncover the new page sliding up, according to order. Since: 3.14
+ * @GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT: Cover the old page sliding left or uncover the new page sliding right, according to order. Since: 3.14
+ * @GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT: Cover the old page sliding right or uncover the new page sliding left, according to order. Since: 3.14
  *
  * These enumeration values describe the possible transitions
  * between pages in a #GtkStack widget.
@@ -724,7 +727,10 @@ is_direction_dependent_transition (GtkStackTransitionType transition_type)
 {
   return (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT ||
           transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN ||
-          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN);
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT);
 }
 
 /* Returns simple transition type for a direction dependent transition, given
@@ -742,6 +748,12 @@ get_simple_transition_type (gboolean               new_child_first,
       return new_child_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN : GTK_STACK_TRANSITION_TYPE_SLIDE_UP;
     case GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN:
       return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_DOWN : GTK_STACK_TRANSITION_TYPE_OVER_UP;
+    case GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP:
+      return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_UP : GTK_STACK_TRANSITION_TYPE_OVER_DOWN;
+    case GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT:
+      return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT : GTK_STACK_TRANSITION_TYPE_OVER_LEFT;
+    case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT:
+      return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_LEFT : GTK_STACK_TRANSITION_TYPE_OVER_RIGHT;
     }
   return transition_type;
 }

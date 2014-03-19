@@ -227,6 +227,9 @@ main (gint argc,
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "UNDER_LEFT");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "UNDER_RIGHT");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_UP_DOWN");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_DOWN_UP");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_LEFT_RIGHT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_RIGHT_LEFT");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   gtk_container_add (GTK_CONTAINER (hbox), combo);
