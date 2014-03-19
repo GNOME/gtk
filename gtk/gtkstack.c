@@ -675,6 +675,77 @@ ease_out_cubic (double t)
   return p * p * p + 1;
 }
 
+static inline gboolean
+is_left_transition (GtkStackTransitionType transition_type)
+{
+  return (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_LEFT);
+}
+
+static inline gboolean
+is_right_transition (GtkStackTransitionType transition_type)
+{
+  return (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT);
+}
+
+static inline gboolean
+is_up_transition (GtkStackTransitionType transition_type)
+{
+  return (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP);
+}
+
+static inline gboolean
+is_down_transition (GtkStackTransitionType transition_type)
+{
+  return (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_DOWN);
+}
+
+/* Transitions that cause the bin window to move */
+static inline gboolean
+is_window_moving_transition (GtkStackTransitionType transition_type)
+{
+  return (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_DOWN ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_LEFT ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT);
+}
+
+/* Transitions that change direction depending on the relative order of the
+old and new child */
+static inline gboolean
+is_direction_dependent_transition (GtkStackTransitionType transition_type)
+{
+  return (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN ||
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN);
+}
+
+/* Returns simple transition type for a direction dependent transition, given
+whether the new child (the one being switched to) is first in the stacking order
+(added earlier). */
+static inline GtkStackTransitionType
+get_simple_transition_type (gboolean               new_child_first,
+                            GtkStackTransitionType transition_type)
+{
+  switch (transition_type)
+    {
+    case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT:
+      return new_child_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT : GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT;
+    case GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN:
+      return new_child_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN : GTK_STACK_TRANSITION_TYPE_SLIDE_UP;
+    case GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN:
+      return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_DOWN : GTK_STACK_TRANSITION_TYPE_OVER_UP;
+    }
+  return transition_type;
+}
+
 static gint
 get_bin_window_x (GtkStack      *stack,
                   GtkAllocation *allocation)
@@ -684,11 +755,9 @@ get_bin_window_x (GtkStack      *stack,
 
   if (priv->transition_pos < 1.0)
     {
-      if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT ||
-          priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_LEFT)
+      if (is_left_transition (priv->active_transition_type))
         x = allocation->width * (1 - ease_out_cubic (priv->transition_pos));
-      if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT ||
-          priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT)
+      if (is_right_transition (priv->active_transition_type))
         x = -allocation->width * (1 - ease_out_cubic (priv->transition_pos));
     }
 
@@ -704,11 +773,9 @@ get_bin_window_y (GtkStack      *stack,
 
   if (priv->transition_pos < 1.0)
     {
-      if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP ||
-          priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP)
+      if (is_up_transition (priv->active_transition_type))
         y = allocation->height * (1 - ease_out_cubic (priv->transition_pos));
-      if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN ||
-          priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_DOWN)
+      if (is_down_transition(priv->active_transition_type))
         y = -allocation->height * (1 - ease_out_cubic (priv->transition_pos));
     }
 
@@ -726,14 +793,7 @@ gtk_stack_set_transition_position (GtkStack *stack,
   gtk_widget_queue_draw (GTK_WIDGET (stack));
 
   if (priv->bin_window != NULL &&
-      (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT ||
-       priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT ||
-       priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP ||
-       priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN ||
-       priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP ||
-       priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_DOWN ||
-       priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_LEFT ||
-       priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT))
+      is_window_moving_transition (priv->active_transition_type))
     {
       GtkAllocation allocation;
       gtk_widget_get_allocation (GTK_WIDGET (stack), &allocation);
@@ -830,18 +890,21 @@ effective_transition_type (GtkStack               *stack,
 {
   if (gtk_widget_get_direction (GTK_WIDGET (stack)) == GTK_TEXT_DIR_RTL)
     {
-      if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT)
-        return GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT;
-      else if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT)
-        return GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT;
-      else if (transition_type == GTK_STACK_TRANSITION_TYPE_OVER_LEFT)
-        return GTK_STACK_TRANSITION_TYPE_OVER_RIGHT;
-      else if (transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT)
-        return GTK_STACK_TRANSITION_TYPE_OVER_LEFT;
-      else if (transition_type == GTK_STACK_TRANSITION_TYPE_UNDER_LEFT)
-        return GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT;
-      else if (transition_type == GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT)
-        return GTK_STACK_TRANSITION_TYPE_UNDER_LEFT;
+      switch (transition_type)
+        {
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
+          return GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT;
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
+          return GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT;
+        case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
+          return GTK_STACK_TRANSITION_TYPE_OVER_RIGHT;
+        case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
+          return GTK_STACK_TRANSITION_TYPE_OVER_LEFT;
+        case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
+          return GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT;
+        case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
+          return GTK_STACK_TRANSITION_TYPE_UNDER_LEFT;
+        }
     }
 
   return transition_type;
@@ -930,15 +993,11 @@ set_visible_child (GtkStack               *stack,
     gtk_widget_set_child_visible (child_info->widget, TRUE);
 
   if ((child_info == NULL || priv->last_visible_child == NULL) &&
-      (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT ||
-       transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN ||
-       transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN))
+      is_direction_dependent_transition (transition_type))
     {
       transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
     }
-  else if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT ||
-	   transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN ||
-	   transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN)
+  else if (is_direction_dependent_transition (transition_type))
     {
       gboolean i_first = FALSE;
       for (l = priv->children; l != NULL; l = g_list_next (l))
@@ -952,18 +1011,7 @@ set_visible_child (GtkStack               *stack,
 	    break;
         }
 
-      if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT)
-	{
-	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT : GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT;
-	}
-      else if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN)
-	{
-	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN : GTK_STACK_TRANSITION_TYPE_SLIDE_UP;
-	}
-      else if (transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN)
-	{
-	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_UNDER_DOWN : GTK_STACK_TRANSITION_TYPE_OVER_UP;
-	}
+      transition_type = get_simple_transition_type (i_first, transition_type);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (stack));
