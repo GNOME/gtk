@@ -8540,7 +8540,9 @@ gtk_widget_get_realized (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @realized: %TRUE to mark the widget as realized
  *
- * Marks the widget as being realized.
+ * Marks the widget as being realized. This function must only be 
+ * called after all #GdkWindows for the @widget have been created 
+ * and registered.
  *
  * This function should only ever be called in a derived widget's
  * "realize" or "unrealize" implementation.
