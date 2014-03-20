@@ -536,8 +536,6 @@ gtk_expander_realize (GtkWidget *widget)
 
   priv = GTK_EXPANDER (widget)->priv;
 
-  gtk_widget_set_realized (widget, TRUE);
-
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   get_expander_bounds (GTK_EXPANDER (widget), &expander_rect);
@@ -576,6 +574,8 @@ gtk_expander_realize (GtkWidget *widget)
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                        &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->event_window);
+
+  gtk_widget_set_realized (widget, TRUE);
 }
 
 static void
