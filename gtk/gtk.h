@@ -111,6 +111,7 @@
 #include <gtk/gtkgesturelongpress.h>
 #include <gtk/gtkgesturemultipress.h>
 #include <gtk/gtkgesturerotate.h>
+#include <gtk/gtkgesturesingle.h>
 #include <gtk/gtkgestureswipe.h>
 #include <gtk/gtkgesturezoom.h>
 #include <gtk/gtkgrid.h>
