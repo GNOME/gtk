@@ -41,7 +41,7 @@ enum {
 
 static guint signals[N_SIGNALS] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureDrag, gtk_gesture_drag, GTK_TYPE_GESTURE)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureDrag, gtk_gesture_drag, GTK_TYPE_GESTURE_SINGLE)
 
 static void
 gtk_gesture_drag_begin (GtkGesture       *gesture,
