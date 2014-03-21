@@ -1303,11 +1303,10 @@ send_delete_event (gpointer data)
 
   event->any.window = g_object_ref (gtk_widget_get_window (window));
   event->any.send_event = TRUE;
+  priv->delete_event_handler = 0;
 
   gtk_main_do_event (event);
   gdk_event_free (event);
-
-  priv->delete_event_handler = 0;
 
   return G_SOURCE_REMOVE;
 }
