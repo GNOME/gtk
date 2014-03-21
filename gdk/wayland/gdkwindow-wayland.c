@@ -1970,7 +1970,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
       break;
 
     case GDK_WINDOW_EDGE_NORTH_EAST:
-      resize_edges = XDG_SURFACE_RESIZE_EDGE_RIGHT;
+      resize_edges = XDG_SURFACE_RESIZE_EDGE_TOP_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_WEST:
