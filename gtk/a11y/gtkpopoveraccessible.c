@@ -49,6 +49,8 @@ popover_update_relative_to (AtkObject  *obj,
 
   if (priv->widget)
     {
+      g_object_remove_weak_pointer (G_OBJECT (priv->widget),
+                                    (gpointer*) &priv->widget);
       widget_accessible = gtk_widget_get_accessible (priv->widget);
       atk_object_remove_relationship (obj,
                                       ATK_RELATION_POPUP_FOR,
