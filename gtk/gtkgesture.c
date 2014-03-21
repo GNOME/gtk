@@ -402,7 +402,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
 
       /* Fall through */
     case GDK_TOUCH_UPDATE:
-      if (_gtk_gesture_update_point (gesture, event, TRUE) &&
+      if (_gtk_gesture_update_point (gesture, event, FALSE) &&
           _gtk_gesture_check_recognized (gesture, sequence))
         g_signal_emit (gesture, signals[UPDATE], 0, sequence);
       break;
