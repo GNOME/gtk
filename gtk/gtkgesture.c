@@ -200,6 +200,7 @@ _gtk_gesture_check_recognized (GtkGesture       *gesture,
     _gtk_gesture_set_recognized (gesture, FALSE, sequence);
   else if (!priv->recognized &&
            current_n_points == priv->n_points &&
+           g_hash_table_size (priv->points) == priv->n_points &&
            _gtk_gesture_do_check (gesture))
     _gtk_gesture_set_recognized (gesture, TRUE, sequence);
 
