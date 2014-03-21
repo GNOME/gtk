@@ -29,7 +29,6 @@ typedef struct _PointData PointData;
 
 enum {
   PROP_N_POINTS = 1,
-  PROP_TOUCH_ONLY,
 };
 
 enum {
@@ -57,7 +56,6 @@ struct _GtkGesturePrivate
   GdkDevice *device;
   guint n_points;
   guint recognized : 1;
-  guint touch_only : 1;
 };
 
 static guint signals[N_SIGNALS] = { 0 };
@@ -79,8 +77,6 @@ gtk_gesture_get_property (GObject    *object,
     case PROP_N_POINTS:
       g_value_set_uint (value, priv->n_points);
       break;
-    case PROP_TOUCH_ONLY:
-      g_value_set_boolean (value, priv->touch_only);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -100,9 +96,6 @@ gtk_gesture_set_property (GObject      *object,
     case PROP_N_POINTS:
       priv->n_points = g_value_get_uint (value);
       break;
-    case PROP_TOUCH_ONLY:
-      gtk_gesture_set_touch_only (GTK_GESTURE (object),
-                                  g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -285,10 +278,12 @@ gtk_gesture_handle_event (GtkEventController *controller,
   GtkGesture *gesture = GTK_GESTURE (controller);
   GdkEventSequence *sequence;
   GtkGesturePrivate *priv;
+  gboolean was_recognized;
 
   priv = gtk_gesture_get_instance_private (gesture);
   sequence = gdk_event_get_event_sequence (event);
   priv->last_sequence = sequence;
+  was_recognized = gtk_gesture_is_recognized (gesture);
 
 #if 0
   if (event->any.window != priv->window)
@@ -298,9 +293,6 @@ gtk_gesture_handle_event (GtkEventController *controller,
   switch (event->type)
     {
     case GDK_BUTTON_PRESS:
-      if (priv->touch_only)
-        break;
-      /* Fall through */
     case GDK_TOUCH_BEGIN:
       if (_gtk_gesture_update_point (gesture, event, TRUE) &&
           _gtk_gesture_check_recognized (gesture, sequence))
@@ -310,23 +302,20 @@ gtk_gesture_handle_event (GtkEventController *controller,
           data = g_hash_table_lookup (priv->points, sequence);
           data->press_handled = TRUE;
         }
+
       break;
     case GDK_BUTTON_RELEASE:
-      if (priv->touch_only)
-        break;
-      /* Fall through */
     case GDK_TOUCH_END:
       if (_gtk_gesture_update_point (gesture, event, FALSE))
         {
-          if (_gtk_gesture_check_recognized (gesture, sequence))
+          if (was_recognized &&
+              _gtk_gesture_check_recognized (gesture, sequence))
             g_signal_emit (gesture, signals[UPDATE], 0, sequence);
 
           _gtk_gesture_remove_point (gesture, event);
         }
       break;
     case GDK_MOTION_NOTIFY:
-      if (priv->touch_only)
-        break;
       if ((event->motion.state & BUTTONS_MASK) == 0)
         break;
 
@@ -373,14 +362,6 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                                                       1, G_MAXUINT, 1,
                                                       GTK_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class,
-                                   PROP_TOUCH_ONLY,
-                                   g_param_spec_boolean ("touch-only",
-                                                         P_("Handle only touch events"),
-                                                         P_("Whether the gesture handles"
-                                                            " only touch events"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE));
 
   signals[CHECK] =
     g_signal_new ("check",
@@ -429,22 +410,6 @@ gtk_gesture_class_init (GtkGestureClass *klass)
 }
 
 static void
-_gtk_gesture_update_evmask (GtkGesture *gesture)
-{
-  GtkGesturePrivate *priv;
-  GdkEventMask evmask;
-
-  priv = gtk_gesture_get_instance_private (gesture);
-  evmask = GDK_TOUCH_MASK;
-
-  if (!priv->touch_only)
-    evmask |= GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-      GDK_BUTTON_MOTION_MASK;
-
-  gtk_event_controller_set_event_mask (GTK_EVENT_CONTROLLER (gesture), evmask);
-}
-
-static void
 gtk_gesture_init (GtkGesture *gesture)
 {
   GtkGesturePrivate *priv;
@@ -452,13 +417,8 @@ gtk_gesture_init (GtkGesture *gesture)
   priv = gtk_gesture_get_instance_private (gesture);
   priv->points = g_hash_table_new_full (NULL, NULL, NULL,
                                         (GDestroyNotify) g_free);
-
-  if (g_getenv ("GTK_TEST_TOUCHSCREEN"))
-    priv->touch_only = FALSE;
-  else
-    priv->touch_only = TRUE;
-
-  _gtk_gesture_update_evmask (gesture);
+  gtk_event_controller_set_event_mask (GTK_EVENT_CONTROLLER (gesture),
+                                       GDK_TOUCH_MASK);
 }
 
 /**
@@ -918,59 +878,6 @@ gtk_gesture_check (GtkGesture *gesture)
   priv = gtk_gesture_get_instance_private (gesture);
 
   return _gtk_gesture_check_recognized (gesture, priv->last_sequence);
-}
-
-/**
- * gtk_gesture_get_touch_only:
- * @gesture: a #GtkGesture
- *
- * Returns #TRUE if the gesture is only triggered by touch events.
- *
- * Returns: #TRUE if the gesture only handles touch events.
- *
- * Since: 3.14
- **/
-gboolean
-gtk_gesture_get_touch_only (GtkGesture *gesture)
-{
-  GtkGesturePrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
-
-  priv = gtk_gesture_get_instance_private (gesture);
-
-  return priv->touch_only;
-}
-
-/**
- * gtk_gesture_set_touch_only:
- * @gesture: a #GtkGesture
- * @touch_only: whether @gesture handles only touch events
- *
- * If @touch_only is #TRUE, @gesture will only handle events of type
- * #GDK_TOUCH_BEGIN, #GDK_TOUCH_UPDATE or #GDK_TOUCH_END. If #FALSE,
- * mouse events will be handled too.
- *
- * Since: 3.14
- **/
-void
-gtk_gesture_set_touch_only (GtkGesture *gesture,
-                            gboolean    touch_only)
-{
-  GtkGesturePrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
-
-  priv = gtk_gesture_get_instance_private (gesture);
-
-  touch_only = touch_only != FALSE;
-
-  if (priv->touch_only == touch_only)
-    return;
-
-  priv->touch_only = touch_only;
-  g_object_notify (G_OBJECT (gesture), "touch-only");
-  _gtk_gesture_update_evmask (gesture);
 }
 
 /**

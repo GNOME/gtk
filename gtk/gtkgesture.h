@@ -126,13 +126,6 @@ gboolean    gtk_gesture_is_recognized        (GtkGesture       *gesture);
 GDK_AVAILABLE_IN_3_14
 gboolean    gtk_gesture_check                (GtkGesture       *gesture);
 
-GDK_AVAILABLE_IN_3_14
-gboolean    gtk_gesture_get_touch_only       (GtkGesture       *gesture);
-
-GDK_AVAILABLE_IN_3_14
-void        gtk_gesture_set_touch_only       (GtkGesture       *gesture,
-                                              gboolean          touch_only);
-
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_H__ */
