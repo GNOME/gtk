@@ -322,7 +322,13 @@ gtk_gesture_handle_event (GtkEventController *controller,
   GtkGesture *gesture = GTK_GESTURE (controller);
   GdkEventSequence *sequence;
   GtkGesturePrivate *priv;
+  GdkDevice *source_device;
   gboolean was_recognized;
+
+  source_device = gdk_event_get_source_device (event);
+
+  if (!source_device)
+    return FALSE;
 
   priv = gtk_gesture_get_instance_private (gesture);
   sequence = gdk_event_get_event_sequence (event);
