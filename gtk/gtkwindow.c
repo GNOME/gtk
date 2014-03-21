@@ -6562,7 +6562,8 @@ get_shadow_width (GtkWidget *widget,
 
   *shadow_width = border;
 
-  if (!priv->client_decorated)
+  if (!priv->decorated ||
+      !priv->client_decorated)
     return;
 
   if (priv->maximized ||
