@@ -363,9 +363,10 @@ gtk_gesture_handle_event (GtkEventController *controller,
 
   priv = gtk_gesture_get_instance_private (gesture);
   sequence = gdk_event_get_event_sequence (event);
-  priv->last_sequence = sequence;
   was_recognized = gtk_gesture_is_recognized (gesture);
 
+  if (gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_DENIED)
+    priv->last_sequence = sequence;
 
   switch (event->type)
     {
