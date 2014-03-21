@@ -24,7 +24,7 @@
 #endif
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkgesture.h>
+#include <gtk/gtkgesturesingle.h>
 
 G_BEGIN_DECLS
 
@@ -40,12 +40,12 @@ typedef struct _GtkGestureMultiPressClass GtkGestureMultiPressClass;
 
 struct _GtkGestureMultiPress
 {
-  GtkGesture parent_instance;
+  GtkGestureSingle parent_instance;
 };
 
 struct _GtkGestureMultiPressClass
 {
-  GtkGestureClass parent_class;
+  GtkGestureSingleClass parent_class;
 
   gboolean (* pressed) (GtkGestureMultiPress *gesture,
                         gint                  n_press,
@@ -63,15 +63,6 @@ GType        gtk_gesture_multi_press_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_14
 GtkGesture * gtk_gesture_multi_press_new      (GtkWidget            *widget);
-
-GDK_AVAILABLE_IN_3_14
-void         gtk_gesture_multi_press_reset    (GtkGestureMultiPress *gesture);
-
-GDK_AVAILABLE_IN_3_14
-void         gtk_gesture_multi_press_set_button (GtkGestureMultiPress *gesture,
-                                                 guint                 button);
-GDK_AVAILABLE_IN_3_14
-guint        gtk_gesture_multi_press_get_button (GtkGestureMultiPress *gesture);
 
 GDK_AVAILABLE_IN_3_14
 void         gtk_gesture_multi_press_set_area (GtkGestureMultiPress *gesture,
