@@ -763,7 +763,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                             G_CALLBACK (scrolled_window_swipe_cb),
                             scrolled_window);
   priv->long_press_gesture = gtk_gesture_long_press_new (widget);
-  gtk_gesture_long_press_set_button (GTK_GESTURE_LONG_PRESS (priv->long_press_gesture), 1);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->long_press_gesture), 1);
   g_signal_connect_swapped (priv->long_press_gesture, "pressed",
                             G_CALLBACK (scrolled_window_long_press_cb),
                             scrolled_window);
