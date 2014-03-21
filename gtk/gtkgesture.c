@@ -294,6 +294,20 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
 }
 
 static void
+_gtk_gesture_check_empty (GtkGesture *gesture)
+{
+  GtkGesturePrivate *priv;
+
+  priv = gtk_gesture_get_instance_private (gesture);
+
+  if (g_hash_table_size (priv->points) == 0)
+    {
+      priv->window = NULL;
+      priv->device = NULL;
+    }
+}
+
+static void
 _gtk_gesture_remove_point (GtkGesture     *gesture,
                            const GdkEvent *event)
 {
@@ -305,14 +319,31 @@ _gtk_gesture_remove_point (GtkGesture     *gesture,
   device = gdk_event_get_device (event);
   priv = gtk_gesture_get_instance_private (gesture);
 
-  g_hash_table_remove (priv->points, sequence);
+  if (priv->device != device)
+    return;
 
-  if (device == priv->device &&
-      g_hash_table_size (priv->points) == 0)
+  g_hash_table_remove (priv->points, sequence);
+  _gtk_gesture_check_empty (gesture);
+}
+
+static void
+_gtk_gesture_cancel_all (GtkGesture *gesture)
+{
+  GdkEventSequence *sequence;
+  GtkGesturePrivate *priv;
+  GHashTableIter iter;
+
+  priv = gtk_gesture_get_instance_private (gesture);
+  g_hash_table_iter_init (&iter, priv->points);
+
+  while (g_hash_table_iter_next (&iter, (gpointer*) &sequence, NULL))
     {
-      priv->window = NULL;
-      priv->device = NULL;
+      g_signal_emit (gesture, signals[CANCEL], 0, sequence);
+      g_hash_table_iter_remove (&iter);
+      _gtk_gesture_check_recognized (gesture, sequence);
     }
+
+  _gtk_gesture_check_empty (gesture);
 }
 
 static gboolean
@@ -386,6 +417,12 @@ gtk_gesture_handle_event (GtkEventController *controller,
 }
 
 static void
+gtk_gesture_reset (GtkEventController *controller)
+{
+  _gtk_gesture_cancel_all (GTK_GESTURE (controller));
+}
+
+static void
 gtk_gesture_class_init (GtkGestureClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -396,6 +433,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   object_class->finalize = gtk_gesture_finalize;
 
   controller_class->handle_event = gtk_gesture_handle_event;
+  controller_class->reset = gtk_gesture_reset;
 
   klass->check = gtk_gesture_check_impl;
 
