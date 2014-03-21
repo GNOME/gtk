@@ -44,7 +44,7 @@ enum {
 
 static guint signals[N_SIGNALS] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureSwipe, gtk_gesture_swipe, GTK_TYPE_GESTURE)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureSwipe, gtk_gesture_swipe, GTK_TYPE_GESTURE_SINGLE)
 
 static void
 gtk_gesture_swipe_finalize (GObject *object)

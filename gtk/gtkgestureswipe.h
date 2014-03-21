@@ -25,7 +25,7 @@
 #endif
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkgesture.h>
+#include <gtk/gtkgesturesingle.h>
 
 G_BEGIN_DECLS
 
@@ -41,12 +41,12 @@ typedef struct _GtkGestureSwipeClass GtkGestureSwipeClass;
 
 struct _GtkGestureSwipe
 {
-  GtkGesture parent_instance;
+  GtkGestureSingle parent_instance;
 };
 
 struct _GtkGestureSwipeClass
 {
-  GtkGestureClass parent_class;
+  GtkGestureSingleClass parent_class;
 
   void (* swipe) (GtkGestureSwipe *gesture,
                   gdouble          velocity_x,
