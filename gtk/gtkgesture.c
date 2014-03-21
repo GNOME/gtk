@@ -915,13 +915,9 @@ gtk_gesture_get_bounding_box_center (GtkGesture *gesture,
 gboolean
 gtk_gesture_is_active (GtkGesture *gesture)
 {
-  GtkGesturePrivate *priv;
-
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
 
-  priv = gtk_gesture_get_instance_private (gesture);
-
-  return g_hash_table_size (priv->points) != 0;
+  return _gtk_gesture_effective_n_points (gesture) != 0;
 }
 
 /**
@@ -989,12 +985,20 @@ gtk_gesture_handles_sequence (GtkGesture       *gesture,
                               GdkEventSequence *sequence)
 {
   GtkGesturePrivate *priv;
+  PointData *data;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
 
   priv = gtk_gesture_get_instance_private (gesture);
+  data = g_hash_table_lookup (priv->points, sequence);
 
-  return g_hash_table_contains (priv->points, sequence);
+  if (!data)
+    return FALSE;
+
+  if (data->state == GTK_EVENT_SEQUENCE_DENIED)
+    return FALSE;
+
+  return TRUE;
 }
 
 /**
