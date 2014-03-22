@@ -3428,8 +3428,11 @@ gtk_combo_box_list_popup_resize (GtkComboBox *combo_box)
   GtkComboBoxPrivate *priv = combo_box->priv;
 
   if (!priv->resize_idle_id)
-    priv->resize_idle_id =
-      gdk_threads_add_idle (list_popup_resize_idle, combo_box);
+    {
+      priv->resize_idle_id =
+        gdk_threads_add_idle (list_popup_resize_idle, combo_box);
+      g_source_set_name_by_id (priv->resize_idle_id, "[gtk+] list_popup_resize_idle");
+    }
 }
 
 static void
@@ -4931,7 +4934,9 @@ static void
 popdown_handler (GtkWidget *widget,
                  gpointer   data)
 {
-  gdk_threads_add_idle (popdown_idle, g_object_ref (data));
+  guint id;
+  id = gdk_threads_add_idle (popdown_idle, g_object_ref (data));
+  g_source_set_name_by_id (id, "[gtk+] popdown_idle");
 }
 
 static gboolean
@@ -5005,6 +5010,7 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
 
       combo_box->priv->popup_idle_id =
           gdk_threads_add_idle (popup_idle, combo_box);
+      g_source_set_name_by_id (combo_box->priv->popup_idle_id, "[gtk+] popup_idle");
     }
 }
 

@@ -182,11 +182,14 @@ send_batch (SearchThreadData *data)
   
   if (data->uri_hits) 
     {
+      guint id;
+
       hits = g_new (SearchHits, 1);
       hits->uris = data->uri_hits;
       hits->thread_data = data;
       
-      gdk_threads_add_idle (search_thread_add_hits_idle, hits);
+      id = gdk_threads_add_idle (search_thread_add_hits_idle, hits);
+      g_source_set_name_by_id (id, "[gtk+] search_thread_add_hits_idle");
     }
 
   data->uri_hits = NULL;
@@ -269,6 +272,8 @@ search_visit_func (const char        *fpath,
 static gpointer 
 search_thread_func (gpointer user_data)
 {
+  guint id;
+
 #ifdef HAVE_FTW_H
   SearchThreadData *data;
   
@@ -284,7 +289,8 @@ search_thread_func (gpointer user_data)
 
   send_batch (data);
   
-  gdk_threads_add_idle (search_thread_done_idle, data);
+  id = gdk_threads_add_idle (search_thread_done_idle, data);
+  g_source_set_name_by_id (id, "[gtk+] search_thread_done_idle");
 #endif /* HAVE_FTW_H */
   
   return NULL;

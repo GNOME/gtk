@@ -270,6 +270,7 @@ start_progressive_loading (GtkWidget *image)
   load_timeout = gdk_threads_add_timeout (150,
                                 progressive_timeout,
                                 image);
+  g_source_set_name_by_id (load_timeout, "[gtk+] progressive_timeout");
 }
 
 static void

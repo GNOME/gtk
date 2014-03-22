@@ -6922,6 +6922,7 @@ install_presize_handler (GtkTreeView *tree_view)
     {
       tree_view->priv->validate_rows_timer =
 	gdk_threads_add_idle_full (GTK_TREE_VIEW_PRIORITY_VALIDATE, (GSourceFunc) validate_rows, tree_view, NULL);
+      g_source_set_name_by_id (tree_view->priv->validate_rows_timer, "[gtk+] validate_rows");
     }
 }
 
@@ -6950,6 +6951,7 @@ install_scroll_sync_handler (GtkTreeView *tree_view)
     {
       tree_view->priv->scroll_sync_timer =
 	gdk_threads_add_idle_full (GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC, (GSourceFunc) scroll_sync_handler, tree_view, NULL);
+      g_source_set_name_by_id (tree_view->priv->scroll_sync_timer, "[gtk+] scroll_sync_handler");
     }
 }
 

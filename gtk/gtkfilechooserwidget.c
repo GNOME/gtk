@@ -6685,6 +6685,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
                                                     recent_idle_load,
                                                     load_data,
                                                     recent_idle_cleanup);
+  g_source_set_name_by_id (priv->load_recent_id, "[gtk+] recent_idle_load");
 }
 
 static void

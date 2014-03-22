@@ -4186,10 +4186,13 @@ gtk_drag_add_update_idle (GtkDragSourceInfo *info)
    * from the last move can catch up before we move again.
    */
   if (!info->update_idle)
-    info->update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW + 5,
-					 gtk_drag_update_idle,
-					 info,
-					 NULL);
+    {
+      info->update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW + 5,
+						     gtk_drag_update_idle,
+						     info,
+						     NULL);
+      g_source_set_name_by_id (info->update_idle, "[gtk+] gtk_drag_update_idle");
+    }
 }
 
 /**

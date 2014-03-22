@@ -8229,12 +8229,15 @@ _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 
   if (!toplevel->synthesize_crossing_event_queued)
     {
+      guint id;
+
       toplevel->synthesize_crossing_event_queued = TRUE;
 
-      gdk_threads_add_idle_full (GDK_PRIORITY_EVENTS - 1,
-                                 do_synthesize_crossing_event,
-                                 g_object_ref (toplevel),
-                                 g_object_unref);
+      id = gdk_threads_add_idle_full (GDK_PRIORITY_EVENTS - 1,
+                                      do_synthesize_crossing_event,
+                                      g_object_ref (toplevel),
+                                      g_object_unref);
+      g_source_set_name_by_id (id, "[gtk+] do_synthesize_crossing_event");
     }
 }
 

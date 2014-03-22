@@ -1282,7 +1282,10 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
   priv->is_sliding = TRUE;
   
   if (!priv->idle_id)
-    priv->idle_id = gdk_threads_add_idle (slide_idle_handler, toolbar);
+    {
+      priv->idle_id = gdk_threads_add_idle (slide_idle_handler, toolbar);
+      g_source_set_name_by_id (priv->idle_id, "[gtk+] slide_idle_handler");
+    }
 
   gtk_widget_get_allocation (widget, &allocation);
 

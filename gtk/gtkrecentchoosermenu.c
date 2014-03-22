@@ -1103,6 +1103,7 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
   					         idle_populate_func,
 					         pdata,
                                                  idle_populate_clean_up);
+  g_source_set_name_by_id (priv->populate_id, "[gtk+] idle_populate_func");
 }
 
 /* bounce activate signal from the recent menu item widget 

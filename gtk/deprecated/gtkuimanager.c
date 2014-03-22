@@ -3155,6 +3155,7 @@ queue_update (GtkUIManager *manager)
   manager->private_data->update_tag = gdk_threads_add_idle (
 					       (GSourceFunc)do_updates_idle, 
 					       manager);
+  g_source_set_name_by_id (manager->private_data->update_tag, "[gtk+] do_updates_idle");
 }
 
 

@@ -603,6 +603,7 @@ gail_focus_notify_when_idle (GtkWidget *widget)
     }
 
   focus_notify_handler = gdk_threads_add_idle (gail_focus_idle_handler, widget);
+  g_source_set_name_by_id (focus_notify_handler, "[gtk+] gail_focus_idle_handler");
 }
 
 static gboolean

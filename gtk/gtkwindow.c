@@ -1330,6 +1330,7 @@ gtk_window_close (GtkWindow *window)
     return;
 
   window->priv->delete_event_handler = gdk_threads_add_idle (send_delete_event, window);
+  g_source_set_name_by_id (window->priv->delete_event_handler, "[gtk+] send_delete_event");
 }
 
 static void
@@ -2275,7 +2276,10 @@ _gtk_window_notify_keys_changed (GtkWindow *window)
   GtkWindowPrivate *priv = window->priv;
 
   if (!priv->keys_changed_handler)
-    priv->keys_changed_handler = gdk_threads_add_idle (handle_keys_changed, window);
+    {
+      priv->keys_changed_handler = gdk_threads_add_idle (handle_keys_changed, window);
+      g_source_set_name_by_id (priv->keys_changed_handler, "[gtk+] handle_keys_changed");
+    }
 }
 
 /**

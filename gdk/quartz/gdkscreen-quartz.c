@@ -282,8 +282,11 @@ display_reconfiguration_callback (CGDirectDisplayID            display,
        * yet, so we delay our refresh into an idle handler.
        */
       if (!screen->screen_changed_id)
-        screen->screen_changed_id = gdk_threads_add_idle (screen_changed_idle,
-                                                          screen);
+        {
+          screen->screen_changed_id = gdk_threads_add_idle (screen_changed_idle,
+                                                            screen);
+          g_source_set_name_by_id (screen->screen_changed_id, "[gtk+] screen_changed_idle");
+        }
     }
 }
 

@@ -6118,6 +6118,7 @@ gtk_entry_recompute (GtkEntry *entry)
     {
       priv->recompute_idle = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 15, /* between resize and redraw */
 					       recompute_idle_func, entry, NULL); 
+      g_source_set_name_by_id (priv->recompute_idle, "[gtk+] recompute_idle_func");
     }
 }
 

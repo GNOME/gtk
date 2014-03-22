@@ -631,14 +631,17 @@ preview_ready (GtkPrintOperationPreview *preview,
                GtkPrintContext          *context,
 	       PreviewOp                *pop)
 {
+  guint id;
+
   pop->print_context = context;
 
   g_object_ref (preview);
       
-  gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE + 10,
-	                     preview_print_idle,
-		             pop,
-		             preview_print_idle_done);
+  id = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE + 10,
+				  preview_print_idle,
+				  pop,
+				  preview_print_idle_done);
+  g_source_set_name_by_id (id, "[gtk+] preview_print_idle");
 }
 
 
@@ -3053,6 +3056,7 @@ print_pages (GtkPrintOperation       *op,
 					                 print_pages_idle, 
 					                 data, 
 					                 print_pages_idle_done);
+  g_source_set_name_by_id (priv->print_pages_idle_id, "[gtk+] print_pages_idle");
   
   /* Recursive main loop to make sure we don't exit  on sync operations  */
   if (priv->is_sync)
