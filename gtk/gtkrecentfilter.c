@@ -695,7 +695,9 @@ gtk_recent_filter_add_custom (GtkRecentFilter      *filter,
  *
  * Tests whether a file should be displayed according to @filter.
  * The #GtkRecentFilterInfo @filter_info should include
- * the fields returned from gtk_recent_filter_get_needed().
+ * the fields returned from gtk_recent_filter_get_needed(), and
+ * must set the #GtkRecentFilterInfo.contains field of @filter_info
+ * to indicate which fields have been set.
  *
  * This function will not typically be used by applications; it
  * is intended principally for use in the implementation of
