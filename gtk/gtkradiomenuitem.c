@@ -164,11 +164,13 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
   GtkRadioMenuItemPrivate *priv;
   GtkWidget *old_group_singleton = NULL;
   GtkWidget *new_group_singleton = NULL;
-  
+
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item));
-  g_return_if_fail (!g_slist_find (group, radio_menu_item));
 
   priv = radio_menu_item->priv;
+
+  if (priv->group == group)
+    return;
 
   if (priv->group)
     {
