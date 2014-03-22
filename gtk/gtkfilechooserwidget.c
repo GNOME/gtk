@@ -1920,10 +1920,11 @@ reset_location_timeout (GtkFileChooserWidget *impl)
 }
 
 static void
-location_entry_changed_cb (GtkEditable *editable,
+location_entry_changed_cb (GtkEditable          *editable,
                            GtkFileChooserWidget *impl)
 {
-  reset_location_timeout (impl);
+  if (impl->priv->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    reset_location_timeout (impl);
 }
 
 static void
