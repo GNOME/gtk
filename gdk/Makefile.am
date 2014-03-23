@@ -75,6 +75,8 @@ gdk_public_h_sources = 				\
 	gdkdnd.h				\
 	gdkevents.h				\
 	gdkframetimings.h			\
+	gdkglcontext.h				\
+	gdkglpixelformat.h			\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
 	gdkkeysyms-compat.h			\
@@ -111,6 +113,8 @@ gdk_private_headers = 				\
 	gdkdndprivate.h				\
 	gdkframeclockidle.h			\
 	gdkframeclockprivate.h			\
+	gdkglcontextprivate.h			\
+	gdkglpixelformatprivate.h		\
 	gdkscreenprivate.h			\
 	gdkinternals.h				\
 	gdkintl.h				\
@@ -135,6 +139,8 @@ gdk_c_sources = 				\
 	gdkdnd.c				\
 	gdkevents.c     			\
 	gdkframetimings.c			\
+	gdkglcontext.c				\
+	gdkglpixelformat.c			\
 	gdkglobals.c				\
 	gdkkeys.c				\
 	gdkkeyuni.c				\

@@ -37,6 +37,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkglcontext-x11.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -2902,6 +2903,11 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->convert_selection = _gdk_x11_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_x11_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_x11_display_utf8_to_string_target;
+
+  display_class->validate_gl_pixel_format = gdk_x11_display_validate_gl_pixel_format;
+  display_class->create_gl_context = gdk_x11_display_create_gl_context;
+  display_class->destroy_gl_context = gdk_x11_display_destroy_gl_context;
+  display_class->make_gl_context_current = gdk_x11_display_make_gl_context_current;
 
   _gdk_x11_windowing_init ();
 }

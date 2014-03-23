@@ -2225,3 +2225,133 @@ gdk_error_trap_pop (void)
 {
   return gdk_error_trap_pop_internal (TRUE);
 }
+
+/*< private >
+ * gdk_display_create_gl_context:
+ * @display: a #GdkDisplay
+ * @format: a #GdkGLPixelFormat
+ * @share: (optional): an optional shared #GdkGLContext 
+ *
+ * Creates a new platform-specific #GdkGLContext for the
+ * given @display and @format.
+ *
+ * Returns: (transfer full): the newly created #GdkGLContext
+ */
+GdkGLContext *
+gdk_display_create_gl_context (GdkDisplay       *display,
+                               GdkGLPixelFormat *format,
+                               GdkGLContext     *share)
+{
+  return GDK_DISPLAY_GET_CLASS (display)->create_gl_context (display, format, share);
+}
+
+/*< private >
+ * gdk_display_destroy_gl_context:
+ * @display: a #GdkDisplay
+ * @context: a #GdkGLContext
+ *
+ * Destroys the platform-specific parts of the @context.
+ *
+ * The @context instance is still valid, though inert, after
+ * this functionr returns.
+ */
+void
+gdk_display_destroy_gl_context (GdkDisplay   *display,
+                                GdkGLContext *context)
+{
+  GDK_DISPLAY_GET_CLASS (display)->destroy_gl_context (display, context);
+}
+
+/*< private >
+ * gdk_display_make_gl_context_current:
+ * @display: a #GdkDisplay
+ * @context: (optional): a #GdkGLContext, or %NULL
+ * @window: (optional): a #GdkWindow, or %NULL
+ *
+ * Makes the given @context the current GL context, or unsets
+ * the current GL context if @context is %NULL.
+ *
+ * Returns: %TRUE if successful
+ */
+gboolean
+gdk_display_make_gl_context_current (GdkDisplay   *display,
+                                     GdkGLContext *context,
+                                     GdkWindow    *window)
+{
+  GdkGLContext *current = gdk_display_get_current_gl_context (display);
+
+  if (current == context)
+    return TRUE;
+
+  if (context == NULL)
+    g_object_set_data (G_OBJECT (display), "-gdk-gl-current-context", NULL);
+  else
+    g_object_set_data_full (G_OBJECT (display), "-gdk-gl-current-context",
+                            g_object_ref (context),
+                            (GDestroyNotify) g_object_unref);
+
+  return GDK_DISPLAY_GET_CLASS (display)->make_gl_context_current (display, context, window);
+}
+
+/*< private >
+ * gdk_display_get_current_gl_context:
+ * @display: a #GdkDisplay
+ *
+ * Retrieves the current #GdkGLContext associated with @display.
+ *
+ * Returns: (transfer none): the current #GdkGLContext or %NULL
+ */
+GdkGLContext *
+gdk_display_get_current_gl_context (GdkDisplay *display)
+{
+  return g_object_get_data (G_OBJECT (display), "-gdk-gl-current-context");
+}
+
+/*< private >
+ * gdk_display_validate_gl_pixel_format:
+ * @display: a #GdkDisplay
+ * @format: a #GdkGLPixelFormat
+ * @error: return location for a #GError
+ *
+ * Validates a #GdkGLPixelFormat for the given display.
+ *
+ * If the pixel format is invalid, @error will be set.
+ *
+ * Returns: %TRUE if the pixel format is valid
+ */
+gboolean
+gdk_display_validate_gl_pixel_format (GdkDisplay        *display,
+                                      GdkGLPixelFormat  *format,
+                                      GError           **error)
+{
+  return GDK_DISPLAY_GET_CLASS (display)->validate_gl_pixel_format (display, format, error);
+}
+
+/**
+ * gdk_display_get_gl_context:
+ * @display: a #GdkDisplay
+ * @format: a #GdkGLPixelFormat
+ * @share: (optional): a shared #GdkGLContext, or %NULL
+ *
+ * Creates a new #GdkGLContext for the given display, with the given
+ * pixel format.
+ *
+ * If @share is not %NULL then the newly created #GdkGLContext will
+ * share resources with it.
+ *
+ * Returns: (transfer full): the newly created #GdkGLContext, or
+ *   %NULL on error
+ *
+ * Since: 3.14
+ */
+GdkGLContext *
+gdk_display_get_gl_context (GdkDisplay       *display,
+                            GdkGLPixelFormat *format,
+                            GdkGLContext     *share)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_GL_PIXEL_FORMAT (format), NULL);
+  g_return_val_if_fail (share == NULL || GDK_IS_GL_CONTEXT (share), NULL);
+
+  return gdk_display_create_gl_context (display, format, share);
+}

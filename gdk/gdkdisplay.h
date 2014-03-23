@@ -171,6 +171,11 @@ GdkDeviceManager * gdk_display_get_device_manager (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_3_14
+GdkGLContext *gdk_display_get_gl_context (GdkDisplay       *display,
+                                          GdkGLPixelFormat *format,
+                                          GdkGLContext     *share);
+
 G_END_DECLS
 
 #endif  /* __GDK_DISPLAY_H__ */
