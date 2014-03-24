@@ -400,6 +400,7 @@ typedef struct {
 typedef struct {
   GtkGesture *controller;
   guint evmask_notify_id;
+  guint grab_notify_id;
   guint propagation_phase : 2;
 } EventControllerData;
 
@@ -16529,6 +16530,46 @@ _gtk_widget_get_action_group (GtkWidget   *widget,
 }
 
 static void
+event_controller_grab_notify (GtkWidget           *widget,
+                              gboolean             was_grabbed,
+                              EventControllerData *data)
+{
+  GtkWidget *grab_widget, *toplevel;
+  GtkWindowGroup *group;
+  GdkDevice *device;
+
+  device = gtk_gesture_get_device (data->controller);
+
+  if (!device)
+    return;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel))
+    group = gtk_window_get_group (GTK_WINDOW (toplevel));
+  else
+    group = gtk_window_get_group (NULL);
+
+  grab_widget = gtk_window_group_get_current_device_grab (group, device);
+
+  if (!grab_widget)
+    grab_widget = gtk_window_group_get_current_grab (group);
+
+  if (!grab_widget || grab_widget == widget)
+    return;
+
+  if (((data->propagation_phase == GTK_PHASE_NONE ||
+        data->propagation_phase == GTK_PHASE_BUBBLE) &&
+       !gtk_widget_is_ancestor (widget, grab_widget)) ||
+      (data->propagation_phase == GTK_PHASE_CAPTURE &&
+       !gtk_widget_is_ancestor (widget, grab_widget) &&
+       !gtk_widget_is_ancestor (grab_widget, widget)))
+    {
+      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (data->controller));
+    }
+}
+
+static void
 event_controller_notify_event_mask (GtkEventController *controller,
                                     GParamSpec         *pspec,
                                     GtkWidget          *widget)
@@ -16581,6 +16622,9 @@ gtk_widget_add_gesture (GtkWidget           *widget,
   data->evmask_notify_id =
     g_signal_connect (gesture, "notify::event-mask",
                       G_CALLBACK (event_controller_notify_event_mask), widget);
+  data->grab_notify_id =
+    g_signal_connect (widget, "grab-notify",
+                      G_CALLBACK (event_controller_grab_notify), data);
 
   priv->event_controllers = g_list_prepend (priv->event_controllers, data);
 }
