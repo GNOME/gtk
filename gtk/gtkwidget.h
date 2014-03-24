@@ -33,7 +33,7 @@
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtktypes.h>
-#include <gtk/gtkeventcontroller.h>
+#include <gtk/gtkgesture.h>
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
@@ -1471,14 +1471,14 @@ void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *
 						         gssize                 struct_offset);
 
 GDK_AVAILABLE_IN_3_14
-void    gtk_widget_add_controller                       (GtkWidget           *widget,
-                                                         GtkEventController  *controller,
+void    gtk_widget_add_gesture                          (GtkWidget           *widget,
+                                                         GtkGesture          *gesture,
                                                          GtkPropagationPhase  phase);
 GDK_AVAILABLE_IN_3_14
-void    gtk_widget_remove_controller                    (GtkWidget           *widget,
-                                                         GtkEventController  *controller);
+void    gtk_widget_remove_gesture                       (GtkWidget           *widget,
+                                                         GtkGesture          *gesture);
 GDK_AVAILABLE_IN_3_14
-GList * gtk_widget_list_controllers                     (GtkWidget           *widget,
+GList * gtk_widget_list_gestures                        (GtkWidget           *widget,
                                                          GtkPropagationPhase  phase);
 
 GDK_AVAILABLE_IN_3_14
