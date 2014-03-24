@@ -207,7 +207,7 @@ gtk_gesture_multi_press_update (GtkGesture       *gesture,
        * reset on the pressed handler */
       n_presses = priv->n_presses + 1;
 
-      g_signal_emit (gesture, signals[PRESSED], 0, n_presses, TRUE, x, y);
+      g_signal_emit (gesture, signals[PRESSED], 0, n_presses, x, y);
 
       if (priv->n_presses == 0)
         {
@@ -217,39 +217,56 @@ gtk_gesture_multi_press_update (GtkGesture       *gesture,
 
       priv->n_presses++;
       break;
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_UPDATE:
+      gtk_gesture_get_point (gesture, sequence, &x, &y);
+
+      if (!_gtk_gesture_multi_press_check_within_threshold (multi_press, x, y))
+        _gtk_gesture_multi_press_stop (multi_press);
+      break;
     default:
       break;
     }
 }
 
 static void
+gtk_gesture_multi_press_cancel (GtkGesture       *gesture,
+                                GdkEventSequence *sequence)
+{
+  if (sequence == gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)))
+    _gtk_gesture_multi_press_stop (GTK_GESTURE_MULTI_PRESS (gesture));
+}
+
+static void
+gtk_gesture_multi_press_reset (GtkEventController *controller)
+{
+  _gtk_gesture_multi_press_stop (GTK_GESTURE_MULTI_PRESS (controller));
+  GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_multi_press_parent_class)->reset (controller);
+}
+
+static void
 gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
 {
+  GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkGestureClass *gesture_class = GTK_GESTURE_CLASS (klass);
 
   object_class->finalize = gtk_gesture_multi_press_finalize;
-  object_class->set_property = gtk_gesture_multi_press_set_property;
-  object_class->get_property = gtk_gesture_multi_press_get_property;
 
   gesture_class->check = gtk_gesture_multi_press_check;
   gesture_class->begin = gtk_gesture_multi_press_update;
   gesture_class->update = gtk_gesture_multi_press_update;
+  gesture_class->cancel = gtk_gesture_multi_press_cancel;
 
-  g_object_class_install_property (object_class,
-                                   PROP_BUTTON,
-                                   g_param_spec_uint ("button",
-                                                      P_("Button number"),
-                                                      P_("Button number to listen to"),
-                                                      0, G_MAXUINT, 0,
-                                                      GTK_PARAM_READWRITE));
+  controller_class->reset = gtk_gesture_multi_press_reset;
+
   signals[PRESSED] =
     g_signal_new ("pressed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureMultiPressClass, pressed),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 4, G_TYPE_INT, G_TYPE_BOOLEAN,
+                  G_TYPE_NONE, 3, G_TYPE_INT,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);
   signals[STOPPED] =
     g_signal_new ("stopped",

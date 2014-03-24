@@ -49,7 +49,6 @@ struct _GtkGestureMultiPressClass
 
   gboolean (* pressed) (GtkGestureMultiPress *gesture,
                         gint                  n_press,
-                        gboolean              in_area,
                         gdouble               x,
                         gdouble               y);
   void     (* stopped) (GtkGestureMultiPress *gesture);
