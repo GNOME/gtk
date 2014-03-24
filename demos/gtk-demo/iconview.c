@@ -270,6 +270,7 @@ do_iconview (GtkWidget *do_widget)
 
       up_button = gtk_tool_button_new (NULL, NULL);
       gtk_tool_button_set_label (GTK_TOOL_BUTTON (up_button), _("_Up"));
+      gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (up_button), TRUE);
       gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (up_button), "go-up");
       gtk_tool_item_set_is_important (up_button, TRUE);
       gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
@@ -277,6 +278,7 @@ do_iconview (GtkWidget *do_widget)
 
       home_button = gtk_tool_button_new (NULL, NULL);
       gtk_tool_button_set_label (GTK_TOOL_BUTTON (home_button), _("_Home"));
+      gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (home_button), TRUE);
       gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (home_button), "go-home");
       gtk_tool_item_set_is_important (home_button, TRUE);
       gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), home_button, -1);
