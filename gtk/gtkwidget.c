@@ -16549,8 +16549,8 @@ gtk_widget_add_controller (GtkWidget           *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
-  g_return_if_fail (phase == GTK_PHASE_CAPTURE ||
-                    phase == GTK_PHASE_BUBBLE);
+  g_return_if_fail (phase >= GTK_PHASE_NONE &&
+                    phase <= GTK_PHASE_BUBBLE);
 
   priv = widget->priv;
 
@@ -16613,8 +16613,8 @@ gtk_widget_list_controllers (GtkWidget           *widget,
   GList *l, *retval = NULL;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (phase == GTK_PHASE_CAPTURE ||
-                        phase == GTK_PHASE_BUBBLE, NULL);
+  g_return_val_if_fail (phase >= GTK_PHASE_NONE &&
+                        phase <= GTK_PHASE_BUBBLE, NULL);
 
   priv = widget->priv;
 
