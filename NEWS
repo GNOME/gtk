@@ -1,3 +1,36 @@
+Overview of Changes in GTK+ 3.11.9 to 3.12.0
+============================================
+
+* Wayland:
+ - Add support for input regions
+ - Correctly report display capabilities
+ - Fix resizing from the north-east corner
+
+* Bugs fixed:
+ 723045 Window re-size causes artifacts
+ 724728 GtkPrintOperation is below is parent in fullscreen mode
+ 726369 gnome-terminal crashes when closing a window
+ 726476 New fontchooser dialog doesn't update font list upon change
+ 726717 Nesting GtkExpander gives Gdk-CRITICAL error
+ 726749 Segmentation fault in libglib-2.0.so.0 with glib-2.39.92
+ 726825 possible invalid reads on delete event
+ 726838 crash when unsetting GtkTreeView model
+ 726855 When subdirectory selected, subdirectory name only briefly appears...
+ 726858 GTK_ENABLE_DEBUG should be G_ENABLE_DEBUG
+ 726900 gtk_recent_filter_filter() requirements aren't fully documented 
+
+* Translation updates:
+ Czech
+ Danish
+ Germans
+ Hungarian
+ Indonesian
+ Italian
+ Scottish Gaelic
+ Serbian
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.11.8 to 3.11.9
 ============================================
 
