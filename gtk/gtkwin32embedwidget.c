@@ -252,7 +252,7 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
 static void
 gtk_win32_embed_widget_show (GtkWidget *widget)
 {
-  gtk_widget_set_visible (widget, TRUE);
+  _gtk_widget_set_visible_flag (widget, TRUE);
   
   gtk_widget_realize (widget);
   gtk_container_check_resize (GTK_CONTAINER (widget));
@@ -262,7 +262,7 @@ gtk_win32_embed_widget_show (GtkWidget *widget)
 static void
 gtk_win32_embed_widget_hide (GtkWidget *widget)
 {
-  gtk_widget_set_visible (widget, FALSE);
+  _gtk_widget_set_visible_flag (widget, FALSE);
   gtk_widget_unmap (widget);
 }
 
