@@ -1247,24 +1247,21 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
 
   if (priv->kinetic_scrolling)
     {
-      gtk_widget_add_controller (GTK_WIDGET (scrolled_window),
-                                 GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                 GTK_PHASE_CAPTURE);
-      gtk_widget_add_controller (GTK_WIDGET (scrolled_window),
-                                 GTK_EVENT_CONTROLLER (priv->swipe_gesture),
-                                 GTK_PHASE_CAPTURE);
-      gtk_widget_add_controller (GTK_WIDGET (scrolled_window),
-                                 GTK_EVENT_CONTROLLER (priv->long_press_gesture),
-                                 GTK_PHASE_CAPTURE);
+      gtk_widget_add_gesture (GTK_WIDGET (scrolled_window),
+                              priv->drag_gesture, GTK_PHASE_CAPTURE);
+      gtk_widget_add_gesture (GTK_WIDGET (scrolled_window),
+                              priv->swipe_gesture, GTK_PHASE_CAPTURE);
+      gtk_widget_add_gesture (GTK_WIDGET (scrolled_window),
+                              priv->long_press_gesture, GTK_PHASE_CAPTURE);
     }
   else
     {
-      gtk_widget_remove_controller (GTK_WIDGET (scrolled_window),
-                                    GTK_EVENT_CONTROLLER (priv->drag_gesture));
-      gtk_widget_remove_controller (GTK_WIDGET (scrolled_window),
-                                    GTK_EVENT_CONTROLLER (priv->swipe_gesture));
-      gtk_widget_remove_controller (GTK_WIDGET (scrolled_window),
-                                    GTK_EVENT_CONTROLLER (priv->long_press_gesture));
+      gtk_widget_remove_gesture (GTK_WIDGET (scrolled_window),
+                                 priv->drag_gesture);
+      gtk_widget_remove_gesture (GTK_WIDGET (scrolled_window),
+                                 priv->swipe_gesture);
+      gtk_widget_remove_gesture (GTK_WIDGET (scrolled_window),
+                                 priv->long_press_gesture);
 
       gtk_scrolled_window_cancel_deceleration (scrolled_window);
     }
