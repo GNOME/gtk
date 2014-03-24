@@ -416,7 +416,7 @@ gdk_wayland_display_supports_input_shapes (GdkDisplay *display)
 static gboolean
 gdk_wayland_display_supports_composite (GdkDisplay *display)
 {
-  return TRUE;
+  return FALSE;
 }
 
 static GList *
