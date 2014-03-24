@@ -70,6 +70,27 @@ gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
   return gtk_cell_accessible_parent_get_child_index (GTK_CELL_ACCESSIBLE_PARENT (cell->priv->parent), cell);
 }
 
+static AtkRelationSet *
+gtk_cell_accessible_ref_relation_set (AtkObject *object)
+{
+  GtkCellAccessible *cell;
+  AtkRelationSet *relationset;
+  AtkObject *parent;
+
+  relationset = ATK_OBJECT_CLASS (gtk_cell_accessible_parent_class)->ref_relation_set (object);
+  if (relationset == NULL)
+    relationset = atk_relation_set_new ();
+
+  cell = GTK_CELL_ACCESSIBLE (object);
+  parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
+
+  gtk_cell_accessible_parent_update_relationset (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                                 cell,
+                                                 relationset);
+
+  return relationset;
+}
+
 static AtkStateSet *
 gtk_cell_accessible_ref_state_set (AtkObject *accessible)
 {
@@ -130,6 +151,7 @@ gtk_cell_accessible_class_init (GtkCellAccessibleClass *klass)
 
   class->get_index_in_parent = gtk_cell_accessible_get_index_in_parent;
   class->ref_state_set = gtk_cell_accessible_ref_state_set;
+  class->ref_relation_set = gtk_cell_accessible_ref_relation_set;
   class->get_parent = gtk_cell_accessible_get_parent;
 }
 

@@ -71,6 +71,10 @@ struct _GtkCellAccessibleParentIface
                                  GtkCellAccessible       *cell);
   void     ( *edit)             (GtkCellAccessibleParent *parent,
                                  GtkCellAccessible       *cell);
+  /* end of actions */
+  void     ( *update_relationset) (GtkCellAccessibleParent *parent,
+                                 GtkCellAccessible       *cell,
+                                 AtkRelationSet          *relationset);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -107,6 +111,10 @@ void     gtk_cell_accessible_parent_activate         (GtkCellAccessibleParent *p
 GDK_AVAILABLE_IN_ALL
 void     gtk_cell_accessible_parent_edit             (GtkCellAccessibleParent *parent,
                                                       GtkCellAccessible       *cell);
+GDK_AVAILABLE_IN_3_12
+void     gtk_cell_accessible_parent_update_relationset (GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell,
+                                                      AtkRelationSet          *relationset);
 
 G_END_DECLS
 

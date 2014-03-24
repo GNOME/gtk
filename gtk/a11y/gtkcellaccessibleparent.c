@@ -170,3 +170,20 @@ gtk_cell_accessible_parent_edit (GtkCellAccessibleParent *parent,
   if (iface->edit)
     (iface->edit) (parent, cell);
 }
+
+void
+gtk_cell_accessible_parent_update_relationset (GtkCellAccessibleParent *parent,
+                                               GtkCellAccessible       *cell,
+                                               AtkRelationSet          *relationset)
+{
+  GtkCellAccessibleParentIface *iface;
+
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent));
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (cell));
+  g_return_if_fail (ATK_IS_RELATION_SET (relationset));
+
+  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
+
+  if (iface->update_relationset)
+    (iface->update_relationset) (parent, cell, relationset);
+}
