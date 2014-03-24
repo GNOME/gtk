@@ -35,7 +35,6 @@
 #include "gtkmarshalers.h"
 #include "gtkbox.h"
 #include "gtkboxprivate.h"
-#include "gtkcontainerprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkbindings.h"
@@ -567,15 +566,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
-  /**
-   * GtkDialog:content-area-border:
-   *
-   * The default border width used around the
-   * content area of the dialog, as returned by
-   * gtk_dialog_get_content_area(), unless gtk_container_set_border_width()
-   * was called on that widget directly.
-   *
-   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("content-area-border",
                                                              P_("Content area border"),
@@ -666,11 +656,9 @@ update_spacings (GtkDialog *dialog)
                         "button-spacing", &button_spacing,
                         "action-area-border", &action_area_border,
                         NULL);
-
-  if (!_gtk_container_get_border_width_set (GTK_CONTAINER (priv->vbox)))
-    gtk_container_set_border_width (GTK_CONTAINER (priv->vbox),
-                                    content_area_border);
-
+  
+  gtk_container_set_border_width (GTK_CONTAINER (priv->vbox),
+                                  content_area_border);
   if (!_gtk_box_get_spacing_set (GTK_BOX (priv->vbox)))
     {
       gtk_box_set_spacing (GTK_BOX (priv->vbox), content_area_spacing);
@@ -679,10 +667,8 @@ update_spacings (GtkDialog *dialog)
 
   gtk_box_set_spacing (GTK_BOX (priv->action_area),
                        button_spacing);
-
-  if (!_gtk_container_get_border_width_set (GTK_CONTAINER (priv->action_area)))
-    gtk_container_set_border_width (GTK_CONTAINER (priv->action_area),
-                                    action_area_border);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->action_area),
+                                  action_area_border);
 }
 
 static void

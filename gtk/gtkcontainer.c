@@ -247,7 +247,6 @@ struct _GtkContainerPrivate
   guint resize_handler;
 
   guint border_width : 16;
-  guint border_width_set   : 1;
 
   guint has_focus_chain    : 1;
   guint reallocate_redraws : 1;
@@ -1382,7 +1381,6 @@ gtk_container_init (GtkContainer *container)
   priv->border_width = 0;
   priv->resize_mode = GTK_RESIZE_PARENT;
   priv->reallocate_redraws = FALSE;
-  priv->border_width_set = FALSE;
 }
 
 static void
@@ -1464,31 +1462,6 @@ gtk_container_get_property (GObject         *object,
     }
 }
 
-gboolean
-_gtk_container_get_border_width_set (GtkContainer *container)
-{
-  GtkContainerPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
-
-  priv = container->priv;
-
-  return priv->border_width_set;
-}
-
-void
-_gtk_container_set_border_width_set (GtkContainer *container,
-                                     gboolean      border_width_set)
-{
-  GtkContainerPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  priv = container->priv;
-
-  priv->border_width_set = border_width_set ? TRUE : FALSE;
-}
-
 /**
  * gtk_container_set_border_width:
  * @container: a #GtkContainer
@@ -1519,8 +1492,6 @@ gtk_container_set_border_width (GtkContainer *container,
   if (priv->border_width != border_width)
     {
       priv->border_width = border_width;
-      _gtk_container_set_border_width_set (container, TRUE);
-
       g_object_notify (G_OBJECT (container), "border-width");
 
       if (gtk_widget_get_realized (GTK_WIDGET (container)))
