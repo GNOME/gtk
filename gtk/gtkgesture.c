@@ -662,6 +662,10 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
   data->state = state;
   g_signal_emit (gesture, signals[SEQUENCE_STATE_CHANGED], 0,
                  sequence, old_state);
+
+  if (state == GTK_EVENT_SEQUENCE_DENIED)
+    _gtk_gesture_check_recognized (gesture, sequence);
+
   return TRUE;
 }
 
