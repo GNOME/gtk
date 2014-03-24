@@ -52,35 +52,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellAccessible, gtk_cell_accessible, GTK_TYPE_ACCESS
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
-static void
-gtk_cell_accessible_object_finalize (GObject *obj)
-{
-  AtkRelationSet *relation_set;
-  AtkRelation *relation;
-  GPtrArray *target;
-  gpointer target_object;
-  gint i;
-
-  relation_set = atk_object_ref_relation_set (ATK_OBJECT (obj));
-  if (ATK_IS_RELATION_SET (relation_set))
-    {
-      relation = atk_relation_set_get_relation_by_type (relation_set,
-                                                        ATK_RELATION_NODE_CHILD_OF);
-      if (relation)
-        {
-          target = atk_relation_get_target (relation);
-          for (i = 0; i < target->len; i++)
-            {
-              target_object = g_ptr_array_index (target, i);
-              if (GTK_IS_CELL_ACCESSIBLE (target_object))
-                g_object_unref (target_object);
-            }
-        }
-      g_object_unref (relation_set);
-    }
-  G_OBJECT_CLASS (gtk_cell_accessible_parent_class)->finalize (obj);
-}
-
 static gint
 gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
 {
@@ -156,9 +127,6 @@ static void
 gtk_cell_accessible_class_init (GtkCellAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GObjectClass *g_object_class = G_OBJECT_CLASS (klass);
-
-  g_object_class->finalize = gtk_cell_accessible_object_finalize;
 
   class->get_index_in_parent = gtk_cell_accessible_get_index_in_parent;
   class->ref_state_set = gtk_cell_accessible_ref_state_set;
