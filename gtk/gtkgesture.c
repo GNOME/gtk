@@ -21,7 +21,7 @@
 #include <gtk/gtkgesture.h>
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
-#include "gtkmarshalers.h"
+#include "gtkmain.h"
 #include "gtkintl.h"
 
 typedef struct _GtkGesturePrivate GtkGesturePrivate;
@@ -45,6 +45,8 @@ enum {
 struct _PointData
 {
   GdkEvent *event;
+  gdouble widget_x;
+  gdouble widget_y;
   guint press_handled : 1;
   guint state : 2;
 };
@@ -230,6 +232,43 @@ _find_widget_window (GtkGesture *gesture,
   return NULL;
 }
 
+static void
+_update_widget_coordinates (GtkGesture *gesture,
+                            PointData  *data)
+{
+  GdkWindow *window, *event_widget_window;
+  GtkWidget *event_widget, *widget;
+  GtkAllocation allocation;
+  gdouble event_x, event_y;
+  gint wx, wy, x, y;
+
+  event_widget = gtk_get_event_widget (data->event);
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  event_widget_window = gtk_widget_get_window (event_widget);
+  gdk_event_get_coords (data->event, &event_x, &event_y);
+  window = data->event->any.window;
+
+  while (window != event_widget_window)
+    {
+      gdk_window_get_position (window, &wx, &wy);
+      event_x += wx;
+      event_y += wy;
+      window = gdk_window_get_effective_parent (window);
+    }
+
+  if (!gtk_widget_get_has_window (event_widget))
+    {
+      gtk_widget_get_allocation (event_widget, &allocation);
+      event_x -= allocation.x;
+      event_y -= allocation.y;
+    }
+
+  gtk_widget_translate_coordinates (event_widget, widget,
+                                    event_x, event_y, &x, &y);
+  data->widget_x = x;
+  data->widget_y = y;
+}
+
 static gboolean
 _gtk_gesture_update_point (GtkGesture     *gesture,
                            const GdkEvent *event,
@@ -290,6 +329,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
     gdk_event_free (data->event);
 
   data->event = gdk_event_copy (event);
+  _update_widget_coordinates (gesture, data);
 
   return TRUE;
 }
@@ -737,7 +777,12 @@ gtk_gesture_get_point (GtkGesture       *gesture,
                                      NULL, (gpointer *) &data))
     return FALSE;
 
-  return gdk_event_get_coords (data->event, x, y);
+  if (x)
+    *x = data->widget_x;
+  if (y)
+    *y = data->widget_y;
+
+  return TRUE;
 }
 
 /**
