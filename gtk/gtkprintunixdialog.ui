@@ -256,6 +256,9 @@
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="range_table"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -373,6 +376,9 @@
                                     <property name="height">1</property>
                                   </packing>
                                 </child>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_widget1"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -403,6 +409,9 @@
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="grid1"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -502,6 +511,9 @@
                                     <property name="height">2</property>
                                   </packing>
                                 </child>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_widget2"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -563,6 +575,9 @@
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="grid2"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -775,6 +790,9 @@
                                     <property name="height">1</property>
                                   </packing>
                                 </child>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_widget3"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -805,6 +823,9 @@
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="grid3"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -993,6 +1014,9 @@
                                     <property name="height">1</property>
                                   </packing>
                                 </child>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_widget4"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1078,6 +1102,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="grid5"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1156,6 +1183,9 @@
                                 <property name="height">1</property>
                               </packing>
                             </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="label_widget5"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1187,6 +1217,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="grid6"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1295,6 +1328,9 @@
                                 <property name="height">1</property>
                               </packing>
                             </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="label_widget6"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1326,6 +1362,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="grid7"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1404,6 +1443,9 @@
                                 <property name="height">1</property>
                               </packing>
                             </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="label_widget7"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
