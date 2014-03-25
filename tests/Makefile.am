@@ -52,6 +52,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testdialog			\
 	testdnd				\
 	testellipsise			\
+	testemblems			\
 	testentrycompletion 		\
 	testentryicons			\
 	testfilechooser			\
