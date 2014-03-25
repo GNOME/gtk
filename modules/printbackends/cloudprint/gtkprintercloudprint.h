@@ -30,8 +30,6 @@ G_BEGIN_DECLS
 #define GTK_PRINTER_CLOUDPRINT(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINTER_CLOUDPRINT, GtkPrinterCloudprint))
 #define GTK_IS_PRINTER_CLOUDPRINT(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINTER_CLOUDPRINT))
 
-typedef struct _GtkPrinterCloudprint	GtkPrinterCloudprint;
-
 void	gtk_printer_cloudprint_register_type (GTypeModule *module);
 GtkPrinterCloudprint *gtk_printer_cloudprint_new	(const char *name,
 							 gboolean is_virtual,
