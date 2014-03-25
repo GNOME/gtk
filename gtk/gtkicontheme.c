@@ -3578,7 +3578,7 @@ apply_emblems_to_pixbuf (GdkPixbuf *pixbuf,
   GSList *l;
 
   if (info->emblem_infos == NULL)
-    return g_object_ref (pixbuf);
+    return NULL;
 
   w = gdk_pixbuf_get_width (pixbuf);
   h = gdk_pixbuf_get_height (pixbuf);
@@ -3658,9 +3658,8 @@ apply_emblems (GtkIconInfo *info)
     {
       g_object_unref (info->pixbuf);
       info->pixbuf = icon;
+      info->emblems_applied = TRUE;
     }
-
-  info->emblems_applied = TRUE;
 }
 
 /* If this returns TRUE, its safe to call
@@ -4174,7 +4173,7 @@ symbolic_cache_get_proxy (SymbolicPixbufCache *symbolic_cache,
 }
 
 static GdkPixbuf *
-_gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
+_gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
 				       const GdkRGBA  *fg,
 				       const GdkRGBA  *success_color,
 				       const GdkRGBA  *warning_color,
@@ -4305,8 +4304,11 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
       GdkPixbuf *icon;
 
       icon = apply_emblems_to_pixbuf (pixbuf, icon_info);
-      g_object_unref (pixbuf);
-      pixbuf = icon;
+      if (icon != NULL)
+        {
+          g_object_unref (pixbuf);
+          pixbuf = icon;
+        }
 
       if (use_cache)
 	{
