@@ -143,6 +143,9 @@ gtk_gesture_swipe_end (GtkGesture       *gesture,
   gdouble velocity_x, velocity_y;
   guint32 evtime;
 
+  if (gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_DENIED)
+    return;
+
   priv = gtk_gesture_swipe_get_instance_private (swipe);
   gtk_gesture_get_last_update_time (gesture, sequence, &evtime);
   _gtk_gesture_swipe_clear_backlog (swipe, evtime);
