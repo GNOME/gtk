@@ -737,6 +737,11 @@ GtkComboBox.combobox-entry .button:insensitive {
     background-image: -gtk-win32-theme-part(combobox, 1 4);
 }
 
+/* Dropdown list should have "window" color, as listbox contents do (usually it's "white") */
+GtkComboBox GtkCellLayout * {
+    background-color: -gtk-win32-color(listview, 5);
+}
+
 GtkComboBox .separator {
     /* always disable separators */
     -GtkWidget-wide-separators: true;
