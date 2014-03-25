@@ -48,9 +48,15 @@ gtk_gesture_drag_begin (GtkGesture       *gesture,
                         GdkEventSequence *sequence)
 {
   GtkGestureDragPrivate *priv;
+  GdkEventSequence *current;
+
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
   priv = gtk_gesture_drag_get_instance_private (GTK_GESTURE_DRAG (gesture));
-  gtk_gesture_get_point (gesture, sequence, &priv->start_x, &priv->start_y);
+  gtk_gesture_get_point (gesture, current, &priv->start_x, &priv->start_y);
+  priv->last_x = priv->start_x;
+  priv->last_y = priv->start_y;
+
   g_signal_emit (gesture, signals[DRAG_BEGIN], 0, priv->start_x, priv->start_y);
 }
 
@@ -74,10 +80,13 @@ gtk_gesture_drag_end (GtkGesture       *gesture,
                       GdkEventSequence *sequence)
 {
   GtkGestureDragPrivate *priv;
+  GdkEventSequence *current;
   gdouble x, y;
 
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
   priv = gtk_gesture_drag_get_instance_private (GTK_GESTURE_DRAG (gesture));
-  gtk_gesture_get_point (gesture, sequence, &priv->last_x, &priv->last_y);
+  gtk_gesture_get_point (gesture, current, &priv->last_x, &priv->last_y);
   x = priv->last_x - priv->start_x;
   y = priv->last_y - priv->start_y;
 
@@ -155,8 +164,8 @@ gtk_gesture_drag_new (GtkWidget *widget)
  **/
 gboolean
 gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
-                                  gint           *x,
-                                  gint           *y)
+                                  gdouble        *x,
+                                  gdouble        *y)
 {
   GtkGestureDragPrivate *priv;
 
@@ -175,10 +184,10 @@ gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
 }
 
 /**
- * gtk_gesture_drag_get_current_point:
+ * gtk_gesture_drag_get_offset:
  * @gesture: a #GtkGesture
- * @x: X coordinate for the current point
- * @y: Y coordinate for the current point
+ * @x: X offset for the current point
+ * @y: Y offset for the current point
  *
  * If the @gesture is active, this function returns %TRUE and
  * fills in @x and @y with the coordinates of the current point,
@@ -189,9 +198,9 @@ gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
  * Since: 3.14
  **/
 gboolean
-gtk_gesture_drag_get_current_point (GtkGestureDrag *gesture,
-                                    gint           *x,
-                                    gint           *y)
+gtk_gesture_drag_get_offset (GtkGestureDrag *gesture,
+                             gdouble        *x,
+                             gdouble        *y)
 {
   GtkGestureDragPrivate *priv;
 
@@ -201,10 +210,10 @@ gtk_gesture_drag_get_current_point (GtkGestureDrag *gesture,
   priv = gtk_gesture_drag_get_instance_private (gesture);
 
   if (x)
-    *x = priv->last_x;
+    *x = priv->last_x - priv->start_x;
 
   if (y)
-    *y = priv->last_y;
+    *y = priv->last_y - priv->start_y;
 
   return TRUE;
 }
