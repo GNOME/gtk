@@ -1,5 +1,15 @@
 @import url("gtk-win32-base.css");
 
+/* Override non-entry combobox arrow parts from the base theme,
+   since XP draws an empty white rectangle for parts 6 1 and 6 4.
+   Draw parts 1 1 and 1 4 instead */
+GtkComboBox GtkBox {
+    background-image: -gtk-win32-theme-part(combobox, 1 1, margins (1 0 1 0));
+}
+GtkComboBox GtkBox:insensitive {
+    background-image: -gtk-win32-theme-part(combobox, 1 4, margins (1 0 1 0));
+}
+
 .menubar {
     background-color: #f7f7f7;
     /*background-color: -gtk-win32-color(button, 30);*/

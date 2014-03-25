@@ -744,6 +744,41 @@ GtkComboBox .separator {
     -GtkWidget-vertical-separator: 0;
 }
 
+/* Draw "arrow" for non-entry comboboxes. Select the box, since selecting
+   the arrow itself does not seem to work as intended. */
+GtkComboBox GtkBox {
+    color: rgba(255, 0, 0, 0);
+    background-image: -gtk-win32-theme-part(combobox, 6 1);
+}
+GtkComboBox GtkBox:insensitive {
+    color: rgba(255, 0, 0, 0);
+    background-image: -gtk-win32-theme-part(combobox, 6 4);
+}
+/* Make sure the style above does not touch comboboxes with entries by
+   disabling background image for the box again */
+GtkComboBox.combobox-entry GtkBox {
+    color: rgba(255, 0, 0, 0);
+    background-image: none;
+}
+GtkComboBox.combobox-entry GtkBox:insensitive {
+    color: rgba(255, 0, 0, 0);
+    background-image: none;
+}
+/* The arrow is part of the background image drawn by the theme, don't draw GTK's own arrow */
+GtkComboBox.combobox-entry GtkArrow {
+    color: rgba(255, 0, 0, 0);
+}
+GtkComboBox.combobox-entry GtkArrow:insensitive {
+    color: rgba(255, 0, 0, 0);
+}
+GtkComboBox GtkArrow {
+    color: rgba(255, 0, 0, 0);
+}
+GtkComboBox GtkArrow:insensitive {
+    color: rgba(255, 0, 0, 0);
+}
+
+
 /* Notebook */
 
 .notebook {
