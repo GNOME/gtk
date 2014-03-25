@@ -925,6 +925,17 @@ GtkSwitch.trough:active {
     padding: 3px 5px;
 }
 
+/* Add more padding to menus, increasing visible height of each menuitem */
+.menu * {
+  padding: 2px;
+}
+
+/* Make arrows a bit smaller to fit better into W32 theme
+   FIXME: they still have the wrong style though - angle instead of a filled triangle */
+GtkMenuItem {
+    -GtkMenuItem-arrow-scaling: 0.5;
+}
+
 /* Assistant */
 
 GtkAssistant .sidebar .highlight {
