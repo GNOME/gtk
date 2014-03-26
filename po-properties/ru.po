@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-12-19 16:23+0000\n"
-"PO-Revision-Date: 2014-03-26 11:42+0300\n"
+"PO-Revision-Date: 2014-03-26 12:12+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -1901,19 +1901,19 @@ msgstr "Фиксированная высота"
 
 #: ../gtk/gtkcellrenderer.c:369
 msgid "Is Expander"
-msgstr "Расширяемая"
+msgstr "Является экспандером"
 
 #: ../gtk/gtkcellrenderer.c:370
 msgid "Row has children"
-msgstr "У строки есть дочерние элементы"
+msgstr "Строка содержит дочерние элементы"
 
 #: ../gtk/gtkcellrenderer.c:378
 msgid "Is Expanded"
-msgstr "Расширенная"
+msgstr "Раскрыта"
 
 #: ../gtk/gtkcellrenderer.c:379
 msgid "Row is an expander row, and is expanded"
-msgstr "Строка является расширяемой, и она расширена"
+msgstr "Строка является экспандером, строка раскрыта"
 
 #: ../gtk/gtkcellrenderer.c:386
 msgid "Cell background color name"
@@ -1982,27 +1982,27 @@ msgstr ""
 
 #: ../gtk/gtkcellrendererpixbuf.c:150
 msgid "Pixbuf Object"
-msgstr "Объект значок (Pixbuf)"
+msgstr "Значок"
 
 #: ../gtk/gtkcellrendererpixbuf.c:151
 msgid "The pixbuf to render"
-msgstr "Значок (Рixbuf) для отрисовки"
+msgstr "Объект pixbuf для отрисовки"
 
 #: ../gtk/gtkcellrendererpixbuf.c:158
 msgid "Pixbuf Expander Open"
-msgstr "Значок (Pixbuf) для открытого расширителя"
+msgstr "Значок раскрытого экспандера"
 
 #: ../gtk/gtkcellrendererpixbuf.c:159
 msgid "Pixbuf for open expander"
-msgstr "Значок (Pixbuf) для открытого расширяемого объекта"
+msgstr "Значок для раскрытого экспандера"
 
 #: ../gtk/gtkcellrendererpixbuf.c:166
 msgid "Pixbuf Expander Closed"
-msgstr "Значок (Pixbuf) для закрытого расширителя"
+msgstr "Значок закрытого экспандера"
 
 #: ../gtk/gtkcellrendererpixbuf.c:167
 msgid "Pixbuf for closed expander"
-msgstr "Значок (Pixbuf) для закрытого расширяемого объекта"
+msgstr "Значок для закрытого экспандера"
 
 #: ../gtk/gtkcellrendererpixbuf.c:173
 msgid "surface"
@@ -3198,11 +3198,11 @@ msgstr "Показывать текст в поле, когда оно пуст�
 
 #: ../gtk/gtkentry.c:1041
 msgid "Primary pixbuf"
-msgstr "Главный значок"
+msgstr "Основной значок"
 
 #: ../gtk/gtkentry.c:1042
 msgid "Primary pixbuf for the entry"
-msgstr "Значок (Pixbuf) для открытого расширяемого объекта"
+msgstr "Основной значок поля ввода"
 
 #: ../gtk/gtkentry.c:1056
 msgid "Secondary pixbuf"
@@ -3210,7 +3210,7 @@ msgstr "Дополнительный значок"
 
 #: ../gtk/gtkentry.c:1057
 msgid "Secondary pixbuf for the entry"
-msgstr "Дополнительный значок для поля ввода"
+msgstr "Дополнительный значок поля ввода"
 
 #: ../gtk/gtkentry.c:1073
 msgid "Primary stock ID"
@@ -3495,15 +3495,15 @@ msgstr ""
 
 #: ../gtk/gtkexpander.c:280
 msgid "Expanded"
-msgstr "Расширенный"
+msgstr "Раскрыт"
 
 #: ../gtk/gtkexpander.c:281
 msgid "Whether the expander has been opened to reveal the child widget"
-msgstr "Может ли открытый расширитель обнаруживать дочерний элемент"
+msgstr "Раскрыт ли экспандер для отображения дочернего виджета"
 
 #: ../gtk/gtkexpander.c:289
 msgid "Text of the expander's label"
-msgstr "Текст метки расширителя"
+msgstr "Текстовая метка экспандера"
 
 #: ../gtk/gtkexpander.c:304 ../gtk/gtklabel.c:737
 msgid "Use markup"
@@ -3526,7 +3526,7 @@ msgstr "Виджет «Метка»"
 
 #: ../gtk/gtkexpander.c:323
 msgid "A widget to display in place of the usual expander label"
-msgstr "Виджет, который будет отображаться вместо обычной метки расширителя"
+msgstr "Виджет, используемый вместо обычной текстовой метки экспандера"
 
 #: ../gtk/gtkexpander.c:330
 msgid "Label fill"
@@ -3546,21 +3546,22 @@ msgid ""
 "Whether the expander will resize the toplevel window upon expanding and "
 "collapsing"
 msgstr ""
-"Будет ли расширитель изменять размер окна верхнего уровня при расширении"
+"Будет ли экспандер изменять размер окна верхнего уровня при раскрытии и "
+"закрытии"
 
 #: ../gtk/gtkexpander.c:353 ../gtk/gtktoolitemgroup.c:1628
 #: ../gtk/gtktreeview.c:1208
 msgid "Expander Size"
-msgstr "Размер расширителя"
+msgstr "Размер экспандера"
 
 #: ../gtk/gtkexpander.c:354 ../gtk/gtktoolitemgroup.c:1629
 #: ../gtk/gtktreeview.c:1209
 msgid "Size of the expander arrow"
-msgstr "Размер расширяющей стрелки"
+msgstr "Размер стрелки экспандера"
 
 #: ../gtk/gtkexpander.c:363
 msgid "Spacing around expander arrow"
-msgstr "Интервал вокруг стрелки-расширителя"
+msgstr "Отступ от стрелки экспандера"
 
 #: ../gtk/gtkfilechooserbutton.c:418
 msgid "Dialog"
@@ -7614,7 +7615,7 @@ msgstr "Пространство заголовка"
 
 #: ../gtk/gtktoolitemgroup.c:1638
 msgid "Spacing between expander arrow and caption"
-msgstr "Интервал между стрелкой-расширителем и заголовком"
+msgstr "Расстояние между стрелкой экспандера и заголовком"
 
 #: ../gtk/gtktoolitemgroup.c:1654
 msgid "Whether the item should receive extra space when the group grows"
@@ -7765,11 +7766,11 @@ msgstr "Заголовки столбцов чувствительны к наж
 
 #: ../gtk/gtktreeview.c:1019
 msgid "Expander Column"
-msgstr "Расширяемый столбец"
+msgstr "Столбец экспандера"
 
 #: ../gtk/gtktreeview.c:1020
 msgid "Set the column for the expander column"
-msgstr "Задать расширяемый столбец"
+msgstr "Установить столбец для экспандера"
 
 #: ../gtk/gtktreeview.c:1035
 msgid "Rules Hint"
@@ -7830,11 +7831,11 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:1128
 msgid "Show Expanders"
-msgstr "Показывать элементы раскрытия"
+msgstr "Показывать экспандеры"
 
 #: ../gtk/gtktreeview.c:1129
 msgid "View has expanders"
-msgstr "Показывать элементы раскрытия дерева"
+msgstr "У виджета просмотра есть экспандеры"
 
 #: ../gtk/gtktreeview.c:1143
 msgid "Level Indentation"
@@ -7902,11 +7903,11 @@ msgstr "Разрешить окраску строк в разный цвет"
 
 #: ../gtk/gtktreeview.c:1242
 msgid "Indent Expanders"
-msgstr "Отступ расширителя"
+msgstr "Отступ экспандеров"
 
 #: ../gtk/gtktreeview.c:1243
 msgid "Make the expanders indented"
-msgstr "Создаёт отступы в расширяемых объектах"
+msgstr "Создаёт отступы в экспандерах"
 
 #: ../gtk/gtktreeview.c:1249
 msgid "Even Row Color"
