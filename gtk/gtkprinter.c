@@ -1146,7 +1146,7 @@ backend_status_changed (GObject    *object,
     list_done_cb (backend, printer_list);  
 }
 
-static void
+static gboolean
 list_printers_remove_backend (PrinterList     *printer_list,
                               GtkPrintBackend *backend)
 {
@@ -1155,7 +1155,12 @@ list_printers_remove_backend (PrinterList     *printer_list,
   g_object_unref (backend);
 
   if (printer_list->backends == NULL)
-    free_printer_list (printer_list);
+    {
+      free_printer_list (printer_list);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -1193,7 +1198,10 @@ list_printers_init (PrinterList     *printer_list,
   
   if (status == GTK_PRINT_BACKEND_STATUS_UNAVAILABLE || 
       gtk_print_backend_printer_list_is_done (backend))
-    list_printers_remove_backend(printer_list, backend);
+    {
+      if (list_printers_remove_backend (printer_list, backend))
+        return TRUE;
+    }
   else
     {
       g_signal_connect (backend, "printer-added", 
