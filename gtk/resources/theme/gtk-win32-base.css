@@ -152,6 +152,12 @@ GtkAssistant .sidebar .highlight {
 
 /* Check buttons */
 
+/* This is meaningless, it just enables prelight propagation to check/radio mark */
+GtkCheckButton:prelight,
+GtkRadioButton:prelight {
+  color: @fg_color;
+}
+
 .check {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(button, 3 1);
