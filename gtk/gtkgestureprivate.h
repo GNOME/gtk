@@ -27,6 +27,10 @@ G_BEGIN_DECLS
 gboolean _gtk_gesture_handled_sequence_press (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
 
+gboolean _gtk_gesture_get_pointer_emulating_sequence
+                                             (GtkGesture        *gesture,
+                                              GdkEventSequence **sequence);
+
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_PRIVATE_H__ */

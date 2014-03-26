@@ -1161,3 +1161,40 @@ _gtk_gesture_handled_sequence_press (GtkGesture       *gesture,
 
   return data->press_handled;
 }
+
+gboolean
+_gtk_gesture_get_pointer_emulating_sequence (GtkGesture        *gesture,
+                                             GdkEventSequence **sequence)
+{
+  GtkGesturePrivate *priv;
+  GdkEventSequence *seq;
+  GHashTableIter iter;
+  PointData *data;
+
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
+
+  priv = gtk_gesture_get_instance_private (gesture);
+  g_hash_table_iter_init (&iter, priv->points);
+
+  while (g_hash_table_iter_next (&iter, (gpointer*) &seq, (gpointer*) &data))
+    {
+      switch (data->event->type)
+        {
+        case GDK_TOUCH_BEGIN:
+        case GDK_TOUCH_UPDATE:
+        case GDK_TOUCH_END:
+          if (!data->event->touch.emulating_pointer)
+            continue;
+          /* Fall through */
+        case GDK_BUTTON_PRESS:
+        case GDK_BUTTON_RELEASE:
+        case GDK_MOTION_NOTIFY:
+          *sequence = seq;
+          return TRUE;
+        default:
+          break;
+        }
+    }
+
+  return FALSE;
+}
