@@ -16822,3 +16822,24 @@ gtk_widget_set_sequence_state (GtkWidget             *widget,
       event_widget = gtk_widget_get_parent (event_widget);
     }
 }
+
+void
+gtk_widget_set_gesture_state (GtkWidget             *widget,
+                              GtkGesture            *gesture,
+                              GtkEventSequenceState  state)
+{
+  GList *gestures, *l;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_GESTURE (gesture));
+  g_return_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
+                    state <= GTK_EVENT_SEQUENCE_DENIED);
+  g_return_if_fail (_gtk_widget_has_gesture (widget, gesture));
+
+  gestures = gtk_gesture_get_sequences (gesture);
+
+  for (l = gestures; l; l = l->next)
+    gtk_widget_set_sequence_state (widget, l->data, state);
+
+  g_list_free (gestures);
+}

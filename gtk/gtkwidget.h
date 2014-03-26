@@ -1488,6 +1488,10 @@ GDK_AVAILABLE_IN_3_14
 void                  gtk_widget_set_sequence_state     (GtkWidget             *widget,
                                                          GdkEventSequence      *sequence,
                                                          GtkEventSequenceState  state);
+GDK_AVAILABLE_IN_3_14
+void                  gtk_widget_set_gesture_state      (GtkWidget             *widget,
+                                                         GtkGesture            *gesture,
+                                                         GtkEventSequenceState  state);
 
 G_END_DECLS
 
