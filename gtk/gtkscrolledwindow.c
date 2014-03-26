@@ -617,7 +617,7 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   if (hadjustment && priv->hscrollbar_visible)
     {
-      dx = priv->drag_start_x - offset_x + old_overshoot_x;
+      dx = priv->drag_start_x - offset_x;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, hadjustment,
                                                  dx, TRUE, FALSE);
     }
@@ -625,7 +625,7 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
   if (vadjustment && priv->vscrollbar_visible)
     {
-      dy = priv->drag_start_y - offset_y + old_overshoot_y;
+      dy = priv->drag_start_y - offset_y;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, vadjustment,
                                                  dy, TRUE, FALSE);
     }
