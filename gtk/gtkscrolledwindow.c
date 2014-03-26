@@ -656,15 +656,14 @@ scrolled_window_drag_end_cb (GtkScrolledWindow *scrolled_window,
                              GtkGesture        *gesture)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GdkEventSequence *current, *last;
 
-  if (!priv->in_drag)
-    {
-      GdkEventSequence *sequence;
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  last = gtk_gesture_get_last_updated_sequence (gesture);
 
-      sequence = gtk_gesture_get_last_updated_sequence (gesture);
-      gtk_widget_set_sequence_state (GTK_WIDGET (scrolled_window),
-                                     sequence, GTK_EVENT_SEQUENCE_DENIED);
-    }
+  if (!priv->in_drag || current != last)
+    gtk_widget_set_sequence_state (GTK_WIDGET (scrolled_window),
+                                   current, GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
@@ -716,8 +715,11 @@ scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
   sequence = gtk_gesture_get_last_updated_sequence (gesture);
   event = gtk_gesture_get_last_event (gesture, sequence);
 
-  if (event->type != GDK_TOUCH_END &&
-      event->type != GDK_BUTTON_RELEASE)
+  if (event->type == GDK_TOUCH_BEGIN)
+    gtk_widget_set_gesture_state (GTK_WIDGET (scrolled_window), gesture,
+                                  GTK_EVENT_SEQUENCE_DENIED);
+  else if (event->type != GDK_TOUCH_END &&
+           event->type != GDK_BUTTON_RELEASE)
     priv->in_drag = TRUE;
 }
 
