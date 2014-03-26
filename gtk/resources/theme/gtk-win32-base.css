@@ -720,6 +720,13 @@ GtkComboBox.combobox-entry .button {
     border-width: 0;
     background-image: -gtk-win32-theme-part(combobox, 1 1);
     color: rgba(0, 0, 0, 0);
+/* Remove padding from combobox button (GtkArrow inside of it is hardcoded to be
+   16x16, but we draw even smaller arrow instead, so padding is completely unnecessary,
+   it only makes the button bigger for not good reason).
+   Only do this for combobox-entry, because non-entry combobox IS the button,
+   and it does need to be as thick as the items of the list it pops up (and it's
+   still slimmer than padded combobox-entry!). */
+    padding: 0px;
 }
 
 GtkComboBox.combobox-entry .button:prelight,
