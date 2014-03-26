@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-12-19 16:23+0000\n"
-"PO-Revision-Date: 2014-03-26 11:27+0300\n"
+"PO-Revision-Date: 2014-03-26 11:42+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -3962,7 +3962,7 @@ msgstr "Модель для просмотра в виде значков"
 
 #: ../gtk/gtkiconview.c:481
 msgid "Number of columns"
-msgstr "Число столбцов"
+msgstr "Количество столбцов"
 
 #: ../gtk/gtkiconview.c:482
 msgid "Number of columns to display"
@@ -3970,7 +3970,7 @@ msgstr "Количество отображаемых столбцов"
 
 #: ../gtk/gtkiconview.c:499
 msgid "Width for each item"
-msgstr "Виджет для каждого элемента"
+msgstr "Ширина для каждого элемента"
 
 #: ../gtk/gtkiconview.c:500
 msgid "The width used for each item"
@@ -3978,23 +3978,23 @@ msgstr "Ширина, используемая для каждого элеме�
 
 #: ../gtk/gtkiconview.c:516
 msgid "Space which is inserted between cells of an item"
-msgstr "Пространство, вставляемое между ячейками элемента"
+msgstr "Пространство между ячейками элемента"
 
 #: ../gtk/gtkiconview.c:531
 msgid "Row Spacing"
-msgstr "Межстрочный интервал"
+msgstr "Расстояние между строками"
 
 #: ../gtk/gtkiconview.c:532
 msgid "Space which is inserted between grid rows"
-msgstr "Пространство, вставляемое между строками сетки"
+msgstr "Расстояние между строками сетки"
 
 #: ../gtk/gtkiconview.c:547
 msgid "Column Spacing"
-msgstr "Интервал столбцов"
+msgstr "Расстояние между столбцами"
 
 #: ../gtk/gtkiconview.c:548
 msgid "Space which is inserted between grid columns"
-msgstr "Пространство между столбцами сетки"
+msgstr "Расстояние между столбцами сетки"
 
 #: ../gtk/gtkiconview.c:563
 msgid "Margin"
@@ -4002,8 +4002,7 @@ msgstr "Отступ"
 
 #: ../gtk/gtkiconview.c:564
 msgid "Space which is inserted at the edges of the icon view"
-msgstr ""
-"Пространство, вставляемое между углами значков в режиме просмотра «значки»"
+msgstr "Отступ от углов виджета просмотра значков"
 
 #: ../gtk/gtkiconview.c:579
 msgid "Item Orientation"
@@ -4013,16 +4012,17 @@ msgstr "Ориентация элемента"
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
-"Как текст и значки каждого элемента позиционируются относительно друг друга"
+"Способ позиционирования текста и значков для каждого элемента относительно "
+"друг друга"
 
 #: ../gtk/gtkiconview.c:596 ../gtk/gtktreeview.c:1027
 #: ../gtk/gtktreeviewcolumn.c:372
 msgid "Reorderable"
-msgstr "Переставляемые"
+msgstr "Изменяемый порядок элементов"
 
 #: ../gtk/gtkiconview.c:597 ../gtk/gtktreeview.c:1028
 msgid "View is reorderable"
-msgstr "Элементы просмотра можно перегруппировывать"
+msgstr "Порядок элементов просмотра можно изменять"
 
 #: ../gtk/gtkiconview.c:604 ../gtk/gtktreeview.c:1178
 msgid "Tooltip Column"
@@ -4060,11 +4060,11 @@ msgstr "Прозрачность диалога выделения"
 
 #: ../gtk/gtkimage.c:231 ../gtk/gtkstatusicon.c:222
 msgid "Pixbuf"
-msgstr "Pixbuf"
+msgstr "Изображение"
 
 #: ../gtk/gtkimage.c:232 ../gtk/gtkstatusicon.c:223
 msgid "A GdkPixbuf to display"
-msgstr "Отображаемый GdkPixbuf"
+msgstr "Объект GdkPixbuf для отображения"
 
 #: ../gtk/gtkimage.c:239
 msgid "Surface"
@@ -4072,7 +4072,7 @@ msgstr "Поверхность"
 
 #: ../gtk/gtkimage.c:240
 msgid "A cairo_surface_t to display"
-msgstr "Отображаемый cairo_surface_t"
+msgstr "Объект cairo_surface_t для отображения"
 
 #: ../gtk/gtkimage.c:247 ../gtk/gtkrecentmanager.c:293
 #: ../gtk/gtkstatusicon.c:230
