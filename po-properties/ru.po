@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-12-19 16:23+0000\n"
-"PO-Revision-Date: 2014-02-17 21:14+0300\n"
+"PO-Revision-Date: 2014-03-26 11:27+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -1044,7 +1044,7 @@ msgstr "Пространство, добавляемое к элементу у�
 
 #: ../gtk/gtkappchooserbutton.c:615
 msgid "Include an 'Other…' item"
-msgstr "Включить элемент 'Другой...'"
+msgstr "Включить элемент «Другой…»"
 
 #: ../gtk/gtkappchooserbutton.c:616
 msgid ""
@@ -1614,7 +1614,7 @@ msgstr "Месяц"
 
 #: ../gtk/gtkcalendar.c:485
 msgid "The selected month (as a number between 0 and 11)"
-msgstr "Выбранный месяц (как номер между 0 и 11)"
+msgstr "Выбранный месяц (как число между 0 и 11)"
 
 #: ../gtk/gtkcalendar.c:499
 msgid "Day"
@@ -1624,7 +1624,7 @@ msgstr "День"
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
-msgstr "Выбранный день (как номер между 1 и 31 или 0 для отмены выбора)"
+msgstr "Выбранный день (как число между 1 и 31, 0 — отменить выбор дня)"
 
 #: ../gtk/gtkcalendar.c:514
 msgid "Show Heading"
@@ -3735,28 +3735,24 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkflowbox.c:3734
-#, fuzzy
 #| msgid "Vertical padding"
 msgid "Vertical spacing"
-msgstr "Вертикальное дополнение"
+msgstr "Интервал по вертикали"
 
 #: ../gtk/gtkflowbox.c:3735
-#, fuzzy
 #| msgid "The amount of space between children"
 msgid "The amount of vertical space between two children"
-msgstr "Расстояние между вложенными элементами"
+msgstr "Расстояние по вертикали между двумя дочерними виджетами"
 
 #: ../gtk/gtkflowbox.c:3749
-#, fuzzy
 #| msgid "Horizontal padding"
 msgid "Horizontal spacing"
-msgstr "Горизонтальное дополнение"
+msgstr "Интервал по горизонтали"
 
 #: ../gtk/gtkflowbox.c:3750
-#, fuzzy
 #| msgid "The amount of space between children"
 msgid "The amount of horizontal space between two children"
-msgstr "Расстояние между вложенными элементами"
+msgstr "Расстояние по горизонтали между двумя дочерними виджетами"
 
 #: ../gtk/gtkfontbutton.c:437
 msgid "The title of the font chooser dialog"
@@ -3897,7 +3893,6 @@ msgid "The title to display"
 msgstr "Заголовок для отображения"
 
 #: ../gtk/gtkheaderbar.c:1756
-#, fuzzy
 #| msgid "Subitle"
 msgid "Subtitle"
 msgstr "Подзаголовок"
@@ -3915,16 +3910,14 @@ msgid "Custom title widget to display"
 msgstr "Виджет для отображения настраиваемого заголовка"
 
 #: ../gtk/gtkheaderbar.c:1783
-#, fuzzy
 #| msgid "Show Icons"
 msgid "Show decorations"
-msgstr "Показывать значок"
+msgstr "Показывать декорации"
 
 #: ../gtk/gtkheaderbar.c:1784
-#, fuzzy
 #| msgid "Whether to show a window close button"
 msgid "Whether to show window decorations"
-msgstr "Показывать ли в окне кнопку закрытия"
+msgstr "Показывать ли декорации окна"
 
 #: ../gtk/gtkheaderbar.c:1799
 #, fuzzy
@@ -3933,10 +3926,9 @@ msgid "Has Subtitle"
 msgstr "Подзаголовок"
 
 #: ../gtk/gtkheaderbar.c:1800
-#, fuzzy
 #| msgid "Whether to request enough space for every row in the model"
 msgid "Whether to reserve space for a subtitle"
-msgstr "Запрашивать ли достаточно пространства на каждую строку в модели"
+msgstr "Нужно ли зарезервировать место для подзаголовка"
 
 #: ../gtk/gtkiconview.c:418
 msgid "Pixbuf column"
@@ -4006,7 +3998,7 @@ msgstr "Пространство между столбцами сетки"
 
 #: ../gtk/gtkiconview.c:563
 msgid "Margin"
-msgstr "Граница"
+msgstr "Отступ"
 
 #: ../gtk/gtkiconview.c:564
 msgid "Space which is inserted at the edges of the icon view"
@@ -7183,7 +7175,7 @@ msgstr "Отступ слева"
 
 #: ../gtk/gtktexttag.c:432 ../gtk/gtktextview.c:759
 msgid "Width of the left margin in pixels"
-msgstr "Ширина отступа слева в точках растра"
+msgstr "Ширина отступа слева в пикселах"
 
 #: ../gtk/gtktexttag.c:441
 msgid "Right margin"
@@ -7278,11 +7270,11 @@ msgstr "Фон параграфа в формате RGBA как GdkRGBA"
 
 #: ../gtk/gtktexttag.c:615
 msgid "Margin Accumulates"
-msgstr "Границы накапливаются"
+msgstr "Отступы суммируются"
 
 #: ../gtk/gtktexttag.c:616
 msgid "Whether left and right margins accumulate."
-msgstr "Накапливаются ли левая и правая границы."
+msgstr "Суммируются ли отступы слева и справа."
 
 #: ../gtk/gtktexttag.c:629
 msgid "Background full height set"
@@ -8086,11 +8078,11 @@ msgstr "Имя виджета"
 
 #: ../gtk/gtkwidget.c:1153
 msgid "The name of the widget"
-msgstr "Название виджета"
+msgstr "Имя виджета"
 
 #: ../gtk/gtkwidget.c:1160
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr "Родительский виджет для виджета. Должен быть виджетом-контейнером"
+msgstr "Родительский виджет этого виджета. Должен быть контейнером"
 
 #: ../gtk/gtkwidget.c:1167
 msgid "Width request"
@@ -8118,35 +8110,35 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1186
 msgid "Whether the widget is visible"
-msgstr "Будет ли виджет видимым"
+msgstr "Является ли виджет видимым"
 
 #: ../gtk/gtkwidget.c:1193
 msgid "Whether the widget responds to input"
-msgstr "Будет ли виждет использовать ввод"
+msgstr "Реагирует ли виджет на ввод"
 
 #: ../gtk/gtkwidget.c:1199
 msgid "Application paintable"
-msgstr "Отрисовываемый приложением"
+msgstr "Отрисовывается приложением"
 
 #: ../gtk/gtkwidget.c:1200
 msgid "Whether the application will paint directly on the widget"
-msgstr "Будет ли приложение рисовать напрямую в виджете"
+msgstr "Будет ли приложение рисовать непосредственно на виджете"
 
 #: ../gtk/gtkwidget.c:1206
 msgid "Can focus"
-msgstr "Может иметь фокус"
+msgstr "Принимает фокус"
 
 #: ../gtk/gtkwidget.c:1207
 msgid "Whether the widget can accept the input focus"
-msgstr "Будет ли виджет принимать фокус ввода"
+msgstr "Может ли виджет принимать фокус ввода"
 
 #: ../gtk/gtkwidget.c:1213
 msgid "Has focus"
-msgstr "Имеет фокус"
+msgstr "Содержит фокус"
 
 #: ../gtk/gtkwidget.c:1214
 msgid "Whether the widget has the input focus"
-msgstr "Имеет ли виджет фокус ввода"
+msgstr "Содержит ли виджет фокус ввода"
 
 #: ../gtk/gtkwidget.c:1220
 msgid "Is focus"
@@ -8154,7 +8146,7 @@ msgstr "Имеет фокус"
 
 #: ../gtk/gtkwidget.c:1221
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "Получает ли виджет фокус ввода в окне"
+msgstr "Является ли виджет, находящийся в виджете верхнего уровня, фокусным"
 
 #: ../gtk/gtkwidget.c:1227
 msgid "Can default"
@@ -8162,7 +8154,7 @@ msgstr "Выбирается по умолчанию"
 
 #: ../gtk/gtkwidget.c:1228
 msgid "Whether the widget can be the default widget"
-msgstr "Может ли виджет быть «элементом по умолчанию»"
+msgstr "Может ли виджет быть виджетом по умолчанию"
 
 #: ../gtk/gtkwidget.c:1234
 msgid "Has default"
@@ -8170,7 +8162,7 @@ msgstr "Выбран по умолчанию"
 
 #: ../gtk/gtkwidget.c:1235
 msgid "Whether the widget is the default widget"
-msgstr "Является ли виджет «исходным виджетом»"
+msgstr "Является ли виджет виджетом по умолчанию"
 
 #: ../gtk/gtkwidget.c:1241
 msgid "Receives default"
@@ -8184,11 +8176,11 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1248
 msgid "Composite child"
-msgstr "Составной дочерний элемент"
+msgstr "Составной дочерний виджет"
 
 #: ../gtk/gtkwidget.c:1249
 msgid "Whether the widget is part of a composite widget"
-msgstr "Является ли виджет частью составного элемента управления"
+msgstr "Является ли виджет частью составного виджета"
 
 #: ../gtk/gtkwidget.c:1258
 msgid "Style"
@@ -8198,7 +8190,7 @@ msgstr "Стиль"
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
-msgstr "Стиль элемента управления, описывающий его внешний вид (цвета и т.п.)"
+msgstr "Стиль виджета, описывающий его внешний вид (цвета и т. п.)"
 
 #: ../gtk/gtkwidget.c:1268
 msgid "Events"
@@ -8207,12 +8199,11 @@ msgstr "События"
 #: ../gtk/gtkwidget.c:1269
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
-"Маска события, определяющая, какие события GdkEvents может получать этот "
-"виджет"
+"Маска событий, задающая события GdkEvents, которые получает этот виджет"
 
 #: ../gtk/gtkwidget.c:1276
 msgid "No show all"
-msgstr "Не показывать всё"
+msgstr "Игнорировать gtk_widget_show_all()"
 
 #: ../gtk/gtkwidget.c:1277
 msgid "Whether gtk_widget_show_all() should not affect this widget"
@@ -8220,7 +8211,7 @@ msgstr "Будет ли функция gtk_widget_show_all() воздейств�
 
 #: ../gtk/gtkwidget.c:1300
 msgid "Whether this widget has a tooltip"
-msgstr "Имеет ли виджет всплывающую подсказку"
+msgstr "Есть ли у виджета всплывающая подсказка"
 
 #: ../gtk/gtkwidget.c:1357
 msgid "The widget's window if it is realized"
@@ -8228,11 +8219,11 @@ msgstr "Окно виджета, если виджет размещён на э�
 
 #: ../gtk/gtkwidget.c:1371
 msgid "Double Buffered"
-msgstr "Дважды буферизован"
+msgstr "Двойная буферизация"
 
 #: ../gtk/gtkwidget.c:1372
 msgid "Whether the widget is double buffered"
-msgstr "Должен ли виджет дважды буферизовываться"
+msgstr "Использует ли виджет двойную буферизацию"
 
 #: ../gtk/gtkwidget.c:1387
 msgid "How to position in extra horizontal space"
@@ -8244,65 +8235,63 @@ msgstr "Размещение по вертикали в дополнительн
 
 #: ../gtk/gtkwidget.c:1424
 msgid "Margin on Left"
-msgstr "Граница слева"
+msgstr "Отступ слева"
 
 #: ../gtk/gtkwidget.c:1425
 msgid "Pixels of extra space on the left side"
-msgstr "Пикселов дополнительного пространства с левой стороны"
+msgstr "Пикселы дополнительного пространства с левой стороны"
 
 #: ../gtk/gtkwidget.c:1447
 msgid "Margin on Right"
-msgstr "Граница справа"
+msgstr "Отступ справа"
 
 #: ../gtk/gtkwidget.c:1448
 msgid "Pixels of extra space on the right side"
-msgstr "Пикселов дополнительного пространства с правой стороны"
+msgstr "Пикселы дополнительного пространства с правой стороны"
 
 #: ../gtk/gtkwidget.c:1468
-#, fuzzy
 #| msgid "Margin on Bottom"
 msgid "Margin on Start"
-msgstr "Граница от низа"
+msgstr "Отступ в начале"
 
 #: ../gtk/gtkwidget.c:1469
 #| msgid "Pixels of extra space on the right side"
 msgid "Pixels of extra space on the start"
-msgstr "Пиксели дополнительного пространства с правой стороны"
+msgstr "Пикселы дополнительного пространства в начале"
 
 #: ../gtk/gtkwidget.c:1489
-#, fuzzy
 #| msgid "Margin on Top"
 msgid "Margin on End"
-msgstr "Граница от верха"
+msgstr "Отступ в конце"
 
 #: ../gtk/gtkwidget.c:1490
 #| msgid "Pixels of extra space on the left side"
 msgid "Pixels of extra space on the end"
-msgstr "Пиксели дополнительного пространства с левой стороны"
+msgstr "Пикселы дополнительного пространства в конце"
 
 #: ../gtk/gtkwidget.c:1510
 msgid "Margin on Top"
-msgstr "Граница от верха"
+msgstr "Отступ сверху"
 
 #: ../gtk/gtkwidget.c:1511
 msgid "Pixels of extra space on the top side"
-msgstr "Пикселов дополнительного пространства сверху"
+msgstr "Пикселы дополнительного пространства с верхней стороны"
 
 #: ../gtk/gtkwidget.c:1531
 msgid "Margin on Bottom"
-msgstr "Граница от низа"
+msgstr "Отступ снизу"
 
 #: ../gtk/gtkwidget.c:1532
 msgid "Pixels of extra space on the bottom side"
-msgstr "Пикселов дополнительного пространства внизу"
+msgstr "Пикселы дополнительного пространства с нижней стороны"
 
 #: ../gtk/gtkwidget.c:1549
 msgid "All Margins"
-msgstr "Все границы"
+msgstr "Все отступы"
 
 #: ../gtk/gtkwidget.c:1550
 msgid "Pixels of extra space on all four sides"
-msgstr "Пикселов дополнительного со всех четырёх сторон"
+msgstr "Пикселы дополнительного со всех четырёх сторон"
 
 #: ../gtk/gtkwidget.c:1583
 msgid "Horizontal Expand"
@@ -8626,7 +8615,7 @@ msgstr "Является ли окно активным"
 
 #: ../gtk/gtkwindow.c:880
 msgid "Focus in Toplevel"
-msgstr "/Фокус находится в окне"
+msgstr "Фокус находится в окне"
 
 #: ../gtk/gtkwindow.c:881
 msgid "Whether the input focus is within this GtkWindow"
