@@ -200,6 +200,10 @@ GtkButton.check:active:prelight {
     background-image: -gtk-win32-theme-part(button, 3 10);
 }
 
+.check:selected {
+    background-color: transparent;
+}
+
 /* Radio buttons */
 
 .radio {
@@ -238,6 +242,10 @@ GtkButton.check:active:prelight {
 
 .radio:inconsistent:prelight {
     background-image: -gtk-win32-theme-part(button, 2 4, over(2 6, 0.3));
+}
+
+.radio:selected {
+    background-color: transparent;
 }
 
 /* Scrollbars */
