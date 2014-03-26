@@ -1340,3 +1340,23 @@ GtkStatusbar > GtkFrame {
                      -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent));
   animation: spinner 1s infinite linear;
 }
+
+/* Popovers */
+GtkPopover {
+    border-radius: 3px;
+    background-clip: border-box;
+    background-color: @bg_color;
+
+    border-color: rgba(0, 0, 0, 1);
+    border-width: 1px;
+    border-style: solid;
+
+    box-shadow: 0 2px 3px alpha(black, 0.5);
+    margin: 10px;
+    padding: 2px;
+}
+GtkPopover > .list,
+GtkPopover > .view,
+GtkPopover > .toolbar {
+    background-color: transparent;
+}
