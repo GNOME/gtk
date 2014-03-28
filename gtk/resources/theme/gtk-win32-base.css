@@ -1331,3 +1331,9 @@ GtkPopover > .toolbar {
 .list {
   background-color: -gtk-win32-color(listbox, 5);
 }
+
+/* Dim label */
+.dim-label {
+    color: alpha(currentColor, 0.55);
+    text-shadow: none;
+}
