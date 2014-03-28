@@ -259,10 +259,9 @@ typedef enum
  *  menu accelerators.
  * @GDK_MODIFIER_INTENT_CONTEXT_MENU: the modifier used to invoke context menus.
  *  Note that mouse button 3 always triggers context menus. When this modifier
- *  is not 0, it <strong>additionally</strong> triggers context menus when used
- *  with mouse button 1.
+ *  is not 0, it additionally triggers context menus when used with mouse button 1.
  * @GDK_MODIFIER_INTENT_EXTEND_SELECTION: the modifier used to extend selections
- *  using &lt;modifier&gt;-click or &lt;modifier&gt;-cursor-key
+ *  using `modifier`-click or `modifier`-cursor-key
  * @GDK_MODIFIER_INTENT_MODIFY_SELECTION: the modifier used to modify selections,
  *  which in most cases means toggling the clicked item into or out of the selection.
  * @GDK_MODIFIER_INTENT_NO_TEXT_INPUT: when any of these modifiers is pressed, the
