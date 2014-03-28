@@ -123,3 +123,42 @@ GtkProgressBar.progressbar {
 .notebook tab:active.left {
     padding: 4px 1px 4px 4px;
 }
+
+/* Listbox */
+
+/* This is roughly similar to what Vista+ theme draws. The reason for using
+this instead of changing background-color to @selection_bg_color is that
+blanket "* { color: @text_color; }" style overrides ".list-row:selected {
+color: @selected_fg_color; }", causing labels and widgets in list rows to have
+black (not white) text over blue background. Fixing that requires overhauling
+the whole theme to put narrow "color: @text_color" style everywhere, to be
+able to remove the blanket style.
+And the reason for not using appropriate W32 theme part is that the appropriate
+W32 theme part does not exist in XP theme. */
+.list-row:prelight {
+    background-image: -gtk-gradient (linear,
+               0 0, 0 1,
+               color-stop(0, rgb(253, 254, 255)),
+               color-stop(1, rgb(237, 245, 255)));
+    box-shadow: inset -1px -1px 0px rgba (128, 128, 255, 0.5), inset 1px 1px 0px rgba (128, 128, 255, 0.5);
+}
+
+.list-row:selected {
+  /* Override *:selected {} blanket style, keeping the background - bright
+     and the text - dark */
+    background-color: transparent;
+    color: @text_color;
+    background-image: -gtk-gradient (linear,
+               0 0, 0 1,
+               color-stop(0, rgb(236, 244, 255)),
+               color-stop(1, rgb(208, 230, 255)));
+    box-shadow: inset -1px -1px 0px rgba (128, 128, 255, 0.5), inset 1px 1px 0px rgba (128, 128, 255, 0.5);
+}
+
+.list-row:selected:prelight {
+    background-image: -gtk-gradient (linear,
+               0 0, 0 1,
+               color-stop(0, rgb(221, 236, 255)),
+               color-stop(1, rgb(194, 220, 255)));
+    box-shadow: inset -1px -1px 0px rgba (128, 128, 255, 0.5), inset 1px 1px 0px rgba (128, 128, 255, 0.5);
+}

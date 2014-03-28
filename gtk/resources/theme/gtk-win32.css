@@ -317,3 +317,24 @@
     /* Make active tab "stick out" left by padding it more at the right */
     padding-right: 4px;
 }
+
+
+/* Listbox */
+
+/* We're cheating here, using part 6 (listview header group),
+   because part 1 (listview item) is empty for some reason */
+.list-row:prelight {
+  background-image: -gtk-win32-theme-part(listview, 6 10);
+}
+
+.list-row:selected {
+  /* Override *:selected {} blanket style, keeping the background - bright
+     and the text - dark */
+  background-color: transparent;
+  color: @text_color;
+  background-image: -gtk-win32-theme-part(listview, 6 11);
+}
+
+.list-row:selected:prelight {
+  background-image: -gtk-win32-theme-part(listview, 6 12);
+}
