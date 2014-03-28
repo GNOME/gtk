@@ -107,6 +107,9 @@ enum {
   ACTIVATE_CURSOR_ROW,
   TOGGLE_CURSOR_ROW,
   MOVE_CURSOR,
+  SELECTED_ROWS_CHANGED,
+  SELECT_ALL,
+  UNSELECT_ALL,
   LAST_SIGNAL
 };
 
@@ -377,6 +380,8 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * The ::row-selected signal is emitted when a new row is selected, or
    * (with a %NULL @row) when the selection is cleared.
    *
+   * Also see #GtkListBox::selected-rows-changed.
+   *
    * Since: 3.10
    */
   signals[ROW_SELECTED] =
@@ -388,6 +393,63 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_LIST_BOX_ROW);
+
+  /**
+   * GtkListBox::selected-rows-changed:
+   * @list_box: the #GtkListBox on wich the signal is emitted
+   *
+   * The ::selected-rows-changed signal is emitted when the
+   * set of selected rows changes.
+   *
+   * Since: 3.14
+   */
+  signals[SELECTED_ROWS_CHANGED] = g_signal_new ("selected-rows-changed",
+                                                 GTK_TYPE_LIST_BOX,
+                                                 G_SIGNAL_RUN_FIRST,
+                                                 G_STRUCT_OFFSET (GtkListBoxClass, selected_rows_changed),
+                                                 NULL, NULL,
+                                                 g_cclosure_marshal_VOID__VOID,
+                                                 G_TYPE_NONE, 0);
+
+  /**
+   * GtkListBox::select-all:
+   * @box: the #GtkListBox on which the signal is emitted
+   *
+   * The ::select-all signal is a [keybinding signal][GtkBindingSignal]
+   * which gets emitted to select all children of the box, if the selection
+   * mode permits it.
+   *
+   * The default bindings for this signal is Ctrl-a.
+   *
+   * Since: 3.14
+   */
+  signals[SELECT_ALL] = g_signal_new ("select-all",
+                                      GTK_TYPE_LIST_BOX,
+                                      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                      G_STRUCT_OFFSET (GtkListBoxClass, select_all),
+                                      NULL, NULL,
+                                      g_cclosure_marshal_VOID__VOID,
+                                      G_TYPE_NONE, 0);
+
+  /**
+   * GtkListBox::unselect-all:
+   * @box: the #GtkListBox on which the signal is emitted
+   * 
+   * The ::unselect-all signal is a [keybinding signal][GtkBindingSignal]
+   * which gets emitted to unselect all children of the box, if the selection
+   * mode permits it.
+   *
+   * The default bindings for this signal is Ctrl-Shift-a.
+   *
+   * Since: 3.14
+   */
+  signals[UNSELECT_ALL] = g_signal_new ("unselect-all",
+                                      GTK_TYPE_LIST_BOX,
+                                      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                      G_STRUCT_OFFSET (GtkListBoxClass, unselect_all),
+                                      NULL, NULL,
+                                      g_cclosure_marshal_VOID__VOID,
+                                      G_TYPE_NONE, 0);
 
   /**
    * GtkListBox::row-activated:
@@ -576,10 +638,142 @@ gtk_list_box_select_row (GtkListBox    *list_box,
                          GtkListBoxRow *row)
 {
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+  g_return_if_fail (row == NULL || GTK_IS_LIST_BOX_ROW (row));
 
   gtk_list_box_update_selected (list_box, row);
 }
 
+/**   
+ * gtk_list_box_unselect_row:
+ * @list_box: a #GtkListBox
+ * @row: the row to unselected
+ *
+ * Unselects a single row of @list_box, if the selection
+ * mode allows it.
+ *
+ * Since: 3.14
+ */                       
+void
+gtk_list_box_unselect_row (GtkListBox    *list_box,
+                           GtkListBoxRow *row)
+{
+  g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+  
+  gtk_list_box_update_selected (list_box, NULL);
+} 
+
+/**
+ * gtk_list_box_select_all:
+ * @list_box: a #GtkListBox
+ *
+ * Select all children of @list_box, if the selection
+ * mode allows it.
+ *
+ * Since: 3.14
+ */
+void
+gtk_list_box_select_all (GtkListBox *list_box)
+{
+  g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+}
+
+/**
+ * gtk_list_box_unselect_all:
+ * @list_box: a #GtkListBox
+ *
+ * Unselect all children of @list_box, if the selection
+ * mode allows it.
+ *
+ * Since: 3.14
+ */
+void
+gtk_list_box_unselect_all (GtkListBox *list_box)
+{
+  g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+
+  gtk_list_box_update_selected (list_box, NULL);
+}
+
+/**
+ * GtkListBoxForeachFunc:
+ * @list_box: a #GtkListBox
+ * @row: a #GtkListBoxRow
+ * @user_data: (closure): user data
+ *
+ * A function used by gtk_list_box_selected_foreach().
+ * It will be called on every selected child of the @list_box.
+ *
+ * Since: 3.14
+ */
+
+/**
+ * gtk_list_box_selected_foreach:
+ * @list_box: a #GtkListBox
+ * @func: (scope call): the function to call for each selected child
+ * @data: user data to pass to the function
+ *
+ * Calls a function for each selected child.
+ *
+ * Note that the selection cannot be modified from within
+ * this function.
+ *
+ * Since: 3.14
+ */
+void
+gtk_list_box_selected_foreach (GtkListBox            *list_box,
+                               GtkListBoxForeachFunc  func,
+                               gpointer               data)
+{
+  GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
+  GtkListBoxRow *row;
+  GSequenceIter *iter;
+
+  g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+
+  for (iter = g_sequence_get_begin_iter (priv->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      if (gtk_list_box_row_is_selected (row))
+        (*func) (list_box, row, data);
+    }
+}
+
+/**
+ * gtk_list_box_get_selected_children:
+ * @list_box: a #GtkListBox
+ *
+ * Creates a list of all selected children.
+ *
+ * Returns: (element-type GtkListBoxRow) (transfer container):
+ *     A #GList containing the #GtkWidget for each selected child.
+ *     Free with g_list_free() when done.
+ *
+ * Since: 3.14
+ */
+GList *
+gtk_list_box_get_selected_children (GtkListBox *list_box)
+{
+  GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
+  GtkListBoxRow *row;
+  GSequenceIter *iter;
+  GList *selected = NULL;
+
+  g_return_val_if_fail (GTK_IS_LIST_BOX (list_box), NULL);
+
+  for (iter = g_sequence_get_begin_iter (priv->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      if (gtk_list_box_row_is_selected (row))
+        selected = g_list_prepend (selected, row);
+    }
+
+  return g_list_reverse (selected);
+}
 
 /**
  * gtk_list_box_set_placeholder:
@@ -1099,8 +1293,10 @@ gtk_list_box_update_selected (GtkListBox    *list_box,
         gtk_widget_set_state_flags (GTK_WIDGET (priv->selected_row),
                                     GTK_STATE_FLAG_SELECTED,
                                     FALSE);
-      g_signal_emit (list_box, signals[ROW_SELECTED], 0,
-                     priv->selected_row);
+
+      g_signal_emit (list_box, signals[ROW_SELECTED], 0, priv->selected_row);
+      g_signal_emit (list_box, signals[SELECTED_ROWS_CHANGED], 0);
+
       gtk_widget_queue_draw (GTK_WIDGET (list_box));
     }
   _gtk_list_box_accessible_selection_changed (list_box);
@@ -2810,6 +3006,34 @@ gtk_list_box_row_get_index (GtkListBoxRow *row)
     return g_sequence_iter_get_position (priv->iter);
 
   return -1;
+}
+
+/**
+ * gtk_list_box_row_is_selected:
+ * @row: a #GtkListBoxRow
+ *
+ * Returns whether the child is currently selected in its
+ * #GtkListBox container.
+ *
+ * Returns: %TRUE if @row is selected
+ *
+ * Since: 3.14
+ */
+gboolean
+gtk_list_box_row_is_selected (GtkListBoxRow *row)
+{
+  GtkListBox *list_box;
+  GtkListBoxPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), FALSE);
+
+  list_box = gtk_list_box_row_get_box (row);
+  if (list_box == NULL)
+    return FALSE;
+
+  priv = gtk_list_box_get_instance_private (list_box);
+
+  return priv->selected_row == row;
 }
 
 static void

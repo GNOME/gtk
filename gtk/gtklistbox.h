@@ -73,6 +73,9 @@ struct _GtkListBoxClass
   void (*move_cursor)         (GtkListBox      *list_box,
                                GtkMovementStep  step,
                                gint             count);
+  void (*selected_rows_changed) (GtkListBox    *box);
+  void (*select_all)            (GtkListBox    *box);
+  void (*unselect_all)          (GtkListBox    *box);
 
   /*< private >*/
 
@@ -80,9 +83,6 @@ struct _GtkListBoxClass
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
 };
 
 #define GTK_TYPE_LIST_BOX_ROW            (gtk_list_box_row_get_type ())
@@ -180,6 +180,8 @@ gint       gtk_list_box_row_get_index     (GtkListBoxRow *row);
 GDK_AVAILABLE_IN_3_10
 void       gtk_list_box_row_changed       (GtkListBoxRow *row);
 
+GDK_AVAILABLE_IN_3_14
+gboolean   gtk_list_box_row_is_selected   (GtkListBoxRow *row);
 
 GDK_AVAILABLE_IN_3_10
 GType          gtk_list_box_get_type                     (void) G_GNUC_CONST;
@@ -209,6 +211,25 @@ void           gtk_list_box_set_adjustment               (GtkListBox            
                                                           GtkAdjustment                 *adjustment);
 GDK_AVAILABLE_IN_3_10
 GtkAdjustment *gtk_list_box_get_adjustment               (GtkListBox                    *list_box);
+
+typedef void (* GtkListBoxForeachFunc) (GtkListBox      *box,
+                                        GtkListBoxRow   *row,
+                                        gpointer         user_data);
+
+GDK_AVAILABLE_IN_3_14
+void           gtk_list_box_selected_foreach             (GtkListBox                    *list_box,
+                                                          GtkListBoxForeachFunc          func,
+                                                          gpointer                       data);
+GDK_AVAILABLE_IN_3_14
+GList         *gtk_list_box_get_selected_rows            (GtkListBox                    *list_box);
+GDK_AVAILABLE_IN_3_14
+void           gtk_list_box_unselect_row                 (GtkListBox                    *list_box,
+                                                          GtkListBoxRow                 *row);
+GDK_AVAILABLE_IN_3_14
+void           gtk_list_box_select_all                   (GtkListBox                    *list_box);
+GDK_AVAILABLE_IN_3_14
+void           gtk_list_box_unselect_all                 (GtkListBox                    *list_box);
+
 GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_set_selection_mode           (GtkListBox                    *list_box,
                                                           GtkSelectionMode               mode);
@@ -247,6 +268,7 @@ void           gtk_list_box_drag_highlight_row           (GtkListBox            
                                                           GtkListBoxRow                 *row);
 GDK_AVAILABLE_IN_3_10
 GtkWidget*     gtk_list_box_new                          (void);
+
 
 
 G_END_DECLS
