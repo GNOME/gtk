@@ -234,9 +234,7 @@ struct _GtkWindowPrivate
 
   guint    drag_possible             : 1;
 
-  gint     button_press_x;
-  gint     button_press_y;
-  guint32  button_press_time;
+  GtkGesture *multipress_gesture;
 };
 
 enum {
@@ -406,12 +404,6 @@ static gint gtk_window_key_press_event    (GtkWidget         *widget,
 					   GdkEventKey       *event);
 static gint gtk_window_key_release_event  (GtkWidget         *widget,
 					   GdkEventKey       *event);
-static gint gtk_window_button_press_event (GtkWidget         *widget,
-                                           GdkEventButton    *event);
-static gint gtk_window_button_release_event (GtkWidget         *widget,
-                                             GdkEventButton    *event);
-static gint gtk_window_motion_notify_event (GtkWidget         *widget,
-                                            GdkEventMotion    *event);
 static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
@@ -582,6 +574,11 @@ static void unset_titlebar (GtkWindow *window);
 static void on_titlebar_title_notify (GtkHeaderBar *titlebar,
                                       GParamSpec   *pspec,
                                       GtkWindow    *self);
+static GtkWindowRegion get_active_region_type (GtkWindow   *window,
+                                               GdkEventAny *event,
+                                               gint         x,
+                                               gint         y);
+
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
@@ -687,9 +684,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->key_press_event = gtk_window_key_press_event;
   widget_class->key_release_event = gtk_window_key_release_event;
   widget_class->focus_in_event = gtk_window_focus_in_event;
-  widget_class->button_press_event = gtk_window_button_press_event;
-  widget_class->button_release_event = gtk_window_button_release_event;
-  widget_class->motion_notify_event = gtk_window_motion_notify_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
@@ -1383,6 +1377,124 @@ popover_destroy (GtkWindowPopover *popover)
 }
 
 static void
+multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
+                               gint                  n_press,
+                               gdouble               x,
+                               gdouble               y,
+                               GtkWindow            *window)
+{
+  GtkWidget *event_widget, *widget;
+  gboolean window_drag = FALSE;
+  GdkEventSequence *sequence;
+  GtkWindowRegion region;
+  GtkWindowPrivate *priv;
+  const GdkEvent *event;
+  guint button;
+
+  widget = GTK_WIDGET (window);
+  priv = gtk_window_get_instance_private (window);
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+
+  region = get_active_region_type (window, (GdkEventAny*) event, x, y);
+  priv->drag_possible = FALSE;
+
+  if (button == GDK_BUTTON_SECONDARY && region == GTK_WINDOW_REGION_TITLE)
+    {
+      gtk_window_do_popup (window, (GdkEventButton*) event);
+      gtk_widget_set_sequence_state (widget, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      return;
+    }
+  else if (button == GDK_BUTTON_MIDDLE && region == GTK_WINDOW_REGION_TITLE)
+    {
+      gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (window)));
+      gtk_widget_set_sequence_state (widget, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      return;
+    }
+  else if (button != GDK_BUTTON_PRIMARY)
+    return;
+
+  event_widget = gtk_get_event_widget ((GdkEvent*) event);
+
+  switch (region)
+    {
+    case GTK_WINDOW_REGION_CONTENT:
+      if (event_widget != widget)
+        gtk_widget_style_get (event_widget, "window-dragging",
+                              &window_drag, NULL);
+      /* fall thru */
+    case GTK_WINDOW_REGION_TITLE:
+      if (!window_drag && event_widget != widget)
+        {
+          gtk_widget_set_sequence_state (widget, sequence,
+                                         GTK_EVENT_SEQUENCE_DENIED);
+          return;
+        }
+
+      if (n_press == 2)
+        _gtk_window_toggle_maximized (window);
+      /* fall thru */
+    case GTK_WINDOW_REGION_EDGE:
+      if (n_press == 1)
+        priv->drag_possible = TRUE;
+      break;
+    default:
+      if (!priv->maximized)
+        {
+          gdouble x_root, y_root;
+
+          gdk_event_get_root_coords (event, &x_root, &y_root);
+          gdk_window_begin_resize_drag_for_device (gtk_widget_get_window (widget),
+                                                   (GdkWindowEdge) region,
+                                                   gdk_event_get_device ((GdkEvent *) event),
+                                                   GDK_BUTTON_PRIMARY,
+                                                   x_root, y_root,
+                                                   gdk_event_get_time (event));
+        }
+      break;
+    }
+
+  gtk_widget_set_sequence_state (widget, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+multipress_gesture_stopped_cb (GtkGestureMultiPress *gesture,
+                               GtkWindow            *window)
+{
+  GdkEventSequence *sequence;
+  GtkWindowPrivate *priv;
+  const GdkEvent *event;
+  gdouble x, y;
+
+  if (!gtk_gesture_is_active (GTK_GESTURE (gesture)))
+    return;
+
+  /* The gesture is active, but stopped, so a too long
+   * press happened, or one drifting out of the threshold
+   */
+  priv = gtk_window_get_instance_private (window);
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  gtk_gesture_get_point (GTK_GESTURE (gesture), sequence, &x, &y);
+
+  if (priv->drag_possible)
+    {
+      gdouble x_root, y_root;
+
+      gdk_event_get_root_coords (event, &x_root, &y_root);
+      gdk_window_begin_move_drag_for_device (gtk_widget_get_window (GTK_WIDGET (window)),
+                                             gdk_event_get_device ((GdkEvent*) event),
+                                             GDK_BUTTON_PRIMARY,
+                                             x_root, y_root,
+                                             gdk_event_get_time (event));
+    }
+
+  priv->drag_possible = FALSE;
+}
+
+static void
 gtk_window_init (GtkWindow *window)
 {
   GtkStyleContext *context;
@@ -1451,6 +1563,15 @@ gtk_window_init (GtkWindow *window)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 
   priv->scale = gtk_widget_get_scale_factor (widget);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (window));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (multipress_gesture_pressed_cb), window);
+  g_signal_connect (priv->multipress_gesture, "stopped",
+                    G_CALLBACK (multipress_gesture_stopped_cb), window);
+  gtk_widget_add_gesture (GTK_WIDGET (window), priv->multipress_gesture,
+                          GTK_PHASE_CAPTURE);
 }
 
 static void
@@ -7725,236 +7846,6 @@ get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
     }
 
   return GTK_WINDOW_REGION_CONTENT;
-}
-
-static inline gboolean
-in_double_click_range (GtkWidget      *widget,
-                       GdkEventButton *event)
-{
-  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
-  gint double_click_time;
-  gint double_click_distance;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-double-click-time", &double_click_time,
-                "gtk-double-click-distance", &double_click_distance,
-                NULL);
-
-  if (event->time < priv->button_press_time + double_click_time &&
-      ABS (event->x_root - priv->button_press_x) <= double_click_distance &&
-      ABS (event->y_root - priv->button_press_y) <= double_click_distance)
-    return TRUE;
-
-  return FALSE;
-}
-
-static gint
-gtk_window_motion_notify_event (GtkWidget      *widget,
-                                GdkEventMotion *event)
-{
-  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
-  GtkWidget *src;
-  gboolean window_drag;
-  gint x, y;
-  GtkWindowRegion region;
-
-  if (!priv->drag_possible)
-    return FALSE;
-
-  gdk_window_get_user_data (event->window, (gpointer *)&src);
-  if (src && src != widget)
-    {
-      gtk_widget_style_get (GTK_WIDGET (src),
-                            "window-dragging", &window_drag,
-                            NULL);
-      gtk_widget_translate_coordinates (src, widget, event->x, event->y, &x, &y);
-    }
-  else
-    {
-      x = event->x;
-      y = event->y;
-    }
-
-  region = get_active_region_type (GTK_WINDOW (widget), (GdkEventAny*)event, x, y);
-  if (region == GTK_WINDOW_REGION_CONTENT)
-    {
-      if (!window_drag)
-        {
-          priv->drag_possible = FALSE;
-          return FALSE;
-        }
-    }
-
-  if (!in_double_click_range (widget, (GdkEventButton *)event))
-    {
-      gdk_window_begin_move_drag_for_device (gtk_widget_get_window (widget),
-                                             gdk_event_get_device ((GdkEvent *)event),
-                                             GDK_BUTTON_PRIMARY,
-                                             event->x_root,
-                                             event->y_root,
-                                             event->time);
-      priv->drag_possible = FALSE;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gint
-gtk_window_button_release_event (GtkWidget      *widget,
-                                 GdkEventButton *event)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = window->priv;
-
-  priv->drag_possible = FALSE;
-
-  return FALSE;
-}
-
-static gint
-gtk_window_button_press_event (GtkWidget      *widget,
-                               GdkEventButton *event)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = window->priv;
-  GdkWindowEdge edge;
-  GdkWindow *gdk_window;
-  gint x, y;
-  GtkWidget *src;
-  GtkWindowRegion region;
-  gboolean window_drag = FALSE;
-
-  gdk_window = gtk_widget_get_window (widget);
-
-  /* We do our own double-click detection, so we ignore
-   * GDK_2BUTTON_PRESS and GDK_3BUTTON_PRESS events
-   */
-  if (event->type != GDK_BUTTON_PRESS)
-    return FALSE;
-
-  if (priv->fullscreen)
-    return FALSE;
-
-  if (event->window == priv->grip_window)
-    {
-      if (get_drag_edge (widget, &edge))
-        gdk_window_begin_resize_drag_for_device (gdk_window,
-                                                 edge,
-                                                 gdk_event_get_device ((GdkEvent *) event),
-                                                 event->button,
-                                                 event->x_root,
-                                                 event->y_root,
-                                                 event->time);
-
-      return TRUE;
-    }
-
-  gdk_window_get_user_data (event->window, (gpointer *)&src);
-  if (src && src != widget)
-    {
-      gtk_widget_style_get (GTK_WIDGET (src),
-                            "window-dragging", &window_drag,
-                            NULL);
-      gtk_widget_translate_coordinates (src, widget, event->x, event->y, &x, &y);
-    }
-  else
-    {
-      x = event->x;
-      y = event->y;
-    }
-
-  region = get_active_region_type (window, (GdkEventAny*)event, x, y);
-
-  if (event->button == GDK_BUTTON_PRIMARY)
-    {
-      if (in_double_click_range (widget, event))
-        {
-          switch (region)
-            {
-            case GTK_WINDOW_REGION_CONTENT:
-              if (!window_drag) /* do nothing */
-                break;
-              /* fall thru */
-            case GTK_WINDOW_REGION_TITLE:
-              _gtk_window_toggle_maximized (window);
-              return TRUE;
-            default:
-              break;
-            }
-        }
-      else
-        {
-          switch (region)
-            {
-            case GTK_WINDOW_REGION_CONTENT:
-              if (!window_drag)
-                break;
-              /* fall thru */
-
-            case GTK_WINDOW_REGION_TITLE:
-            case GTK_WINDOW_REGION_EDGE:
-              priv->drag_possible = TRUE;
-              priv->button_press_x = event->x_root;
-              priv->button_press_y = event->y_root;
-              priv->button_press_time = event->time;
-              return TRUE;
-
-            default:
-              if (!priv->maximized)
-                {
-                  gdk_window_begin_resize_drag_for_device (gdk_window,
-                                                           (GdkWindowEdge)region,
-                                                           gdk_event_get_device ((GdkEvent *) event),
-                                                           event->button,
-                                                           event->x_root,
-                                                           event->y_root,
-                                                           event->time);
-                  return TRUE;
-                }
-              break;
-            }
-        }
-    }
-  else if (event->button == GDK_BUTTON_SECONDARY)
-    {
-      if (region == GTK_WINDOW_REGION_TITLE)
-        {
-          gtk_window_do_popup (window, event);
-          return TRUE;
-        }
-    }
-  else if (event->button == GDK_BUTTON_MIDDLE)
-    {
-      if (region == GTK_WINDOW_REGION_TITLE)
-        {
-          gdk_window_lower (gdk_window);
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
-gboolean
-_gtk_window_check_handle_wm_event (GdkEvent *event)
-{
-  GtkWidget *widget;
-
-  widget = gtk_get_event_widget (event);
-
-  if (!GTK_IS_WINDOW (widget))
-    return FALSE;
-
-  if (event->type == GDK_BUTTON_PRESS ||
-      event->type == GDK_2BUTTON_PRESS)
-    return gtk_window_button_press_event (widget, &event->button);
-  else if (event->type == GDK_BUTTON_RELEASE)
-    return gtk_window_button_release_event (widget, &event->button);
-  else if (event->type == GDK_MOTION_NOTIFY)
-    return gtk_window_motion_notify_event (widget, &event->motion);
-  else
-    return FALSE;
 }
 
 static void
