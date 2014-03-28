@@ -314,7 +314,7 @@ clipboard_display_closed (GdkDisplay   *display,
 
 /**
  * gtk_clipboard_get_for_display:
- * @display: the display for which the clipboard is to be retrieved or created
+ * @display: the #GdkDisplay for which the clipboard is to be retrieved or created.
  * @selection: a #GdkAtom which identifies the clipboard to use.
  *
  * Returns the clipboard object for the given selection.
