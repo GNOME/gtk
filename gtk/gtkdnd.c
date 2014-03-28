@@ -90,6 +90,7 @@ struct _GtkDragSourceSite
   GdkDragAction      actions;            /* Possible actions */
 
   GtkIconHelper     *icon_helper;
+  GtkGesture        *drag_gesture;
 
   /* Stored button press information to detect drag beginning */
   gint               state;
@@ -180,7 +181,7 @@ enum {
 };
 
 /* Forward declarations */
-static void          gtk_drag_get_event_actions (GdkEvent        *event, 
+static void          gtk_drag_get_event_actions (const GdkEvent  *event,
 					         gint             button,
 					         GdkDragAction    actions,
 					         GdkDragAction   *suggested_action,
@@ -265,7 +266,7 @@ static void gtk_drag_update                    (GtkDragSourceInfo *info,
 						GdkScreen         *screen,
 						gint               x_root,
 						gint               y_root,
-						GdkEvent          *event);
+						const GdkEvent    *event);
 static gboolean gtk_drag_motion_cb             (GtkWidget         *widget, 
 					        GdkEventMotion    *event, 
 					        gpointer           data);
@@ -696,8 +697,8 @@ gtk_drag_get_event_time (GdkEvent *event)
 }
 
 static void
-gtk_drag_get_event_actions (GdkEvent *event, 
-			    gint button, 
+gtk_drag_get_event_actions (const GdkEvent *event,
+			    gint button,
 			    GdkDragAction  actions,
 			    GdkDragAction *suggested_action,
 			    GdkDragAction *possible_actions)
@@ -2472,7 +2473,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 			 GtkTargetList     *target_list,
 			 GdkDragAction      actions,
 			 gint               button,
-			 GdkEvent          *event,
+			 const GdkEvent    *event,
                          int                x,
                          int                y)
 {
@@ -2797,7 +2798,11 @@ gtk_drag_source_set (GtkWidget            *widget,
     {
       site = g_slice_new0 (GtkDragSourceSite);
       site->icon_helper = _gtk_icon_helper_new ();
-      
+      site->drag_gesture = gtk_gesture_drag_new (widget);
+      gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (site->drag_gesture),
+                                         FALSE);
+      gtk_widget_add_gesture (widget, site->drag_gesture, GTK_PHASE_NONE);
+
       g_signal_connect (widget, "button-press-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
@@ -2807,7 +2812,6 @@ gtk_drag_source_set (GtkWidget            *widget,
       g_signal_connect (widget, "motion-notify-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
-      
       g_object_set_data_full (G_OBJECT (widget),
 			      I_("gtk-site-data"), 
 			      site, gtk_drag_source_site_destroy);
@@ -2838,8 +2842,9 @@ gtk_drag_source_unset (GtkWidget *widget)
   if (site)
     {
       g_signal_handlers_disconnect_by_func (widget,
-					    gtk_drag_source_event_cb,
-					    site);
+                                            gtk_drag_source_event_cb,
+                                            site);
+      gtk_widget_remove_gesture (widget, site->drag_gesture);
       g_object_set_data (G_OBJECT (widget), I_("gtk-site-data"), NULL);
     }
 }
@@ -3899,58 +3904,38 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 			  GdkEvent       *event,
 			  gpointer        data)
 {
-  GtkDragSourceSite *site;
-  gboolean retval = FALSE;
-  site = (GtkDragSourceSite *)data;
+  gdouble start_x, start_y, offset_x, offset_y;
+  GtkDragSourceSite *site = data;
 
-  switch (event->type)
+  gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (site->drag_gesture), event);
+
+  if (gtk_gesture_is_recognized (site->drag_gesture))
     {
-    case GDK_BUTTON_PRESS:
-      if ((GDK_BUTTON1_MASK << (event->button.button - 1)) & site->start_button_mask)
-	{
-	  site->state |= (GDK_BUTTON1_MASK << (event->button.button - 1));
-	  site->x = event->button.x;
-	  site->y = event->button.y;
-	}
-      break;
-      
-    case GDK_BUTTON_RELEASE:
-      if ((GDK_BUTTON1_MASK << (event->button.button - 1)) & site->start_button_mask)
-	site->state &= ~(GDK_BUTTON1_MASK << (event->button.button - 1));
-      break;
-      
-    case GDK_MOTION_NOTIFY:
-      if (site->state & event->motion.state & site->start_button_mask)
-	{
-	  /* FIXME: This is really broken and can leave us
-	   * with a stuck grab
-	   */
-	  int i;
-	  for (i=1; i<6; i++)
-	    {
-	      if (site->state & event->motion.state & 
-		  GDK_BUTTON1_MASK << (i - 1))
-		break;
-	    }
+      gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (site->drag_gesture),
+                                        &start_x, &start_y);
+      gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (site->drag_gesture),
+                                   &offset_x, &offset_y);
 
-	  if (gtk_drag_check_threshold (widget, site->x, site->y,
-					event->motion.x, event->motion.y))
-	    {
-	      site->state = 0;
-	      gtk_drag_begin_internal (widget, site, site->target_list,
-				       site->actions, i, event,
-                                       site->x, site->y);
+      if (gtk_drag_check_threshold (widget, start_x, start_y,
+                                    start_x + offset_x, start_y + offset_y))
+        {
+          GdkEventSequence *sequence;
+          const GdkEvent *event;
+          guint button;
 
-	      retval = TRUE;
-	    }
-	}
-      break;
-      
-    default:			/* hit for 2/3BUTTON_PRESS */
-      break;
+          sequence = gtk_gesture_get_last_updated_sequence (site->drag_gesture);
+          event = gtk_gesture_get_last_event (GTK_GESTURE (site->drag_gesture), sequence);
+          button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (site->drag_gesture));
+
+          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (site->drag_gesture));
+          gtk_drag_begin_internal (widget, site, site->target_list,
+                                   site->actions, button, event,
+                                   start_x, start_y);
+          return TRUE;
+        }
     }
-  
-  return retval;
+
+  return FALSE;
 }
 
 static void 
@@ -3962,6 +3947,7 @@ gtk_drag_source_site_destroy (gpointer data)
     gtk_target_list_unref (site->target_list);
 
   g_clear_object (&site->icon_helper);
+  g_clear_object (&site->drag_gesture);
   g_slice_free (GtkDragSourceSite, site);
 }
 
@@ -4223,7 +4209,7 @@ gtk_drag_update (GtkDragSourceInfo *info,
 		 GdkScreen         *screen,
 		 gint               x_root,
 		 gint               y_root,
-		 GdkEvent          *event)
+		 const GdkEvent    *event)
 {
   info->cur_screen = screen;
   info->cur_x = x_root;
