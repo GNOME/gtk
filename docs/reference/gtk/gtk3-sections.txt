@@ -7933,8 +7933,6 @@ gtk_gesture_get_bounding_box
 gtk_gesture_get_bounding_box_center
 gtk_gesture_is_active
 gtk_gesture_check
-gtk_gesture_get_touch_only
-gtk_gesture_set_touch_only
 
 <SUBSECTION Standard>
 GTK_TYPE_GESTURE
@@ -7948,12 +7946,33 @@ gtk_gesture_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkgesturesingle</FILE>
+<TITLE>GtkGestureSingle<TITLE>
+GtkGestureSingle
+gtk_gesture_single_get_touch_only
+gtk_gesture_single_set_touch_only
+gtk_gesture_single_get_button
+gtk_gesture_single_set_button
+gtk_gesture_single_get_current_button
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_SINGLE
+GTK_GESTURE_SINGLE
+GTK_GESTURE_SINGLE_CLASS
+GTK_IS_GESTURE_SINGLE
+GTK_GESTURE_SINGLE_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_single_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkgesturedrag</FILE>
 <TITLE>GtkGestureDrag</TITLE>
 GtkGestureDrag
 gtk_gesture_drag_new
 gtk_gesture_drag_get_start_point
-gtk_gesture_drag_get_current_point
+gtk_gesture_drag_get_offset
 
 <SUBSECTION Standard>
 GTK_TYPE_GESTURE_DRAG
@@ -7971,8 +7990,6 @@ gtk_gesture_drag_get_type
 <TITLE>GtkGestureLongPress</TITLE>
 GtkGestureLongPress
 gtk_gesture_long_press_new
-gtk_gesture_long_press_set_button
-gtk_gesture_long_press_get_button
 
 <SUBSECTION Standard>
 GTK_TYPE_GESTURE_LONG_PRESS
@@ -7991,8 +8008,6 @@ gtk_gesture_long_press_get_type
 GtkGestureMultiPress
 gtk_gesture_multi_press_new
 gtk_gesture_multi_press_reset
-gtk_gesture_multi_press_set_button
-gtk_gesture_multi_press_get_button
 gtk_gesture_multi_press_set_area
 gtk_gesture_multi_press_get_area
 
