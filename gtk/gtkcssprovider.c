@@ -103,7 +103,7 @@
  * various ways:
  * - To require that a widget satisfies several conditions,
  *   combine several selectors into one by concatenating them. E.g.
- *   `GtkButton\#button1` matches a GtkButton widget
+ *   `GtkButton#button1` matches a GtkButton widget
  *   with the name button1.
  * - To only match a widget when it occurs inside some other
  *   widget, write the two selectors after each other, separated by whitespace.
