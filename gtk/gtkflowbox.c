@@ -4537,7 +4537,7 @@ gtk_flow_box_unselect_all (GtkFlowBox *box)
  * @user_data: (closure): user data
  *
  * A function used by gtk_flow_box_selected_foreach().
- * It will be called on every selected child of tht @box.
+ * It will be called on every selected child of the @box.
  *
  * Since: 3.12
  */
