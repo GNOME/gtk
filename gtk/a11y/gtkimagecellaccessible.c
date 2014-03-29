@@ -83,7 +83,8 @@ gtk_image_cell_accessible_get_image_position (AtkImage     *image,
                                               gint         *y,
                                               AtkCoordType  coord_type)
 {
-  atk_component_get_position (ATK_COMPONENT (image), x, y, coord_type);
+  atk_component_get_extents (ATK_COMPONENT (image), x, y, NULL, NULL,
+                             coord_type);
 }
 
 static void

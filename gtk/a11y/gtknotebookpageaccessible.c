@@ -316,7 +316,8 @@ gtk_notebook_page_accessible_get_extents (AtkComponent *component,
       if (!child)
         return;
 
-      atk_component_get_position (ATK_COMPONENT (child), x, y, coord_type);
+      atk_component_get_extents (ATK_COMPONENT (child), x, y, NULL, NULL,
+                                 coord_type);
       g_object_unref (child);
     }
   else

@@ -327,7 +327,8 @@ gtk_entry_icon_accessible_get_position (AtkComponent   *component,
   GtkWidget *widget;
 
   *x = G_MININT;
-  atk_component_get_position (ATK_COMPONENT (icon->entry), x, y, coord_type);
+  atk_component_get_extents (ATK_COMPONENT (icon->entry), x, y, NULL, NULL,
+                             coord_type);
   if (*x == G_MININT)
     return;
 

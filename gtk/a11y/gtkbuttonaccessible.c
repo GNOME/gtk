@@ -405,7 +405,8 @@ gtk_button_accessible_get_image_position (AtkImage     *image,
   if (button_image != NULL)
     {
       obj = gtk_widget_get_accessible (button_image);
-      atk_component_get_position (ATK_COMPONENT (obj), x, y, coord_type);
+      atk_component_get_extents (ATK_COMPONENT (obj), x, y, NULL, NULL,
+                                 coord_type);
     }
   else
     {
