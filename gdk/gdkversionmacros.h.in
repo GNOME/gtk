@@ -293,4 +293,19 @@
 # define GDK_AVAILABLE_IN_3_12                _GDK_EXTERN
 #endif
 
+#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_14
+# define GDK_DEPRECATED_IN_3_14               GDK_DEPRECATED
+# define GDK_DEPRECATED_IN_3_14_FOR(f)        GDK_DEPRECATED_FOR(f)
+#else
+# define GDK_DEPRECATED_IN_3_14               _GDK_EXTERN
+# define GDK_DEPRECATED_IN_3_14_FOR(f)        _GDK_EXTERN
+#endif
+
+#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_3_14
+# define GDK_AVAILABLE_IN_3_14                GDK_UNAVAILABLE(3, 14)
+#else
+# define GDK_AVAILABLE_IN_3_14                _GDK_EXTERN
+#endif
+
 #endif  /* __GDK_VERSION_MACROS_H__ */
+
