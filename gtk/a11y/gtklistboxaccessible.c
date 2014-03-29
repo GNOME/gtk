@@ -85,6 +85,26 @@ gtk_list_box_accessible_add_selection (AtkSelection *selection,
 }
 
 static gboolean
+gtk_list_box_accessible_remove_selection (AtkSelection *selection,
+                                          gint          idx)
+{
+  GtkWidget *box;
+  GtkListBoxRow *row;
+
+  box = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
+  if (box == NULL)
+    return FALSE;
+
+  row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (box), idx);
+  if (row)
+    {
+      gtk_list_box_unselect_row (GTK_LIST_BOX (box), row);
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static gboolean
 gtk_list_box_accessible_clear_selection (AtkSelection *selection)
 {
   GtkWidget *box;
@@ -93,8 +113,43 @@ gtk_list_box_accessible_clear_selection (AtkSelection *selection)
   if (box == NULL)
     return FALSE;
 
-  gtk_list_box_select_row (GTK_LIST_BOX (box), NULL);
+  gtk_list_box_unselect_all (GTK_LIST_BOX (box));
   return TRUE;
+}
+
+static gboolean
+gtk_list_box_accessible_select_all (AtkSelection *selection)
+{
+  GtkWidget *box;
+
+  box = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
+  if (box == NULL)
+    return FALSE;
+
+  gtk_list_box_select_all (GTK_LIST_BOX (box));
+  return TRUE;
+}
+
+typedef struct
+{
+  gint idx;
+  GtkWidget *row;
+} FindSelectedData;
+
+static void
+find_selected_row (GtkListBox    *box,
+                   GtkListBoxRow *row,
+                   gpointer       data)
+{
+  FindSelectedData *d = data;
+
+  if (d->idx == 0)
+    {
+      if (d->row == NULL)
+        d->row = GTK_WIDGET (row);
+    }
+  else
+    d->idx -= 1;
 }
 
 static AtkObject *
@@ -102,40 +157,48 @@ gtk_list_box_accessible_ref_selection (AtkSelection *selection,
                                        gint          idx)
 {
   GtkWidget *box;
-  GtkListBoxRow *row;
   AtkObject *accessible;
-
-  if (idx != 0)
-    return NULL;
+  FindSelectedData data;
 
   box = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (box == NULL)
     return NULL;
 
-  row = gtk_list_box_get_selected_row (GTK_LIST_BOX (box));
-  if (row == NULL)
+  data.idx = idx;
+  data.row = NULL;
+  gtk_list_box_selected_foreach (GTK_LIST_BOX (box), find_selected_row, &data);
+
+  if (data.row == NULL)
     return NULL;
 
-  accessible = gtk_widget_get_accessible (GTK_WIDGET (row));
+  accessible = gtk_widget_get_accessible (data.row);
   g_object_ref (accessible);
   return accessible;
+}
+
+static void
+count_selected (GtkListBox    *box,
+                GtkListBoxRow *row,
+                gpointer       data)
+{
+  gint *count = data;
+  *count += 1;
 }
 
 static gint
 gtk_list_box_accessible_get_selection_count (AtkSelection *selection)
 {
   GtkWidget *box;
-  GtkListBoxRow *row;
+  gint count;
 
   box = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (box == NULL)
     return 0;
 
-  row = gtk_list_box_get_selected_row (GTK_LIST_BOX (box));
-  if (row == NULL)
-    return 0;
+  count = 0;
+  gtk_list_box_selected_foreach (GTK_LIST_BOX (box), count_selected, &count);
 
-  return 1;
+  return count;
 }
 
 static gboolean
@@ -149,20 +212,20 @@ gtk_list_box_accessible_is_child_selected (AtkSelection *selection,
   if (box == NULL)
     return FALSE;
 
-  row = gtk_list_box_get_selected_row (GTK_LIST_BOX (box));
-  if (row == NULL)
-    return FALSE;
+  row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (box), idx);
 
-  return row == gtk_list_box_get_row_at_index (GTK_LIST_BOX (box), idx);
+  return gtk_list_box_row_is_selected (row);
 }
 
 static void atk_selection_interface_init (AtkSelectionIface *iface)
 {
   iface->add_selection = gtk_list_box_accessible_add_selection;
+  iface->remove_selection = gtk_list_box_accessible_remove_selection;
   iface->clear_selection = gtk_list_box_accessible_clear_selection;
   iface->ref_selection = gtk_list_box_accessible_ref_selection;
   iface->get_selection_count = gtk_list_box_accessible_get_selection_count;
   iface->is_child_selected = gtk_list_box_accessible_is_child_selected;
+  iface->select_all_selection = gtk_list_box_accessible_select_all;
 }
 
 void
