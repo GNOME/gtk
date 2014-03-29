@@ -1323,23 +1323,15 @@ static gboolean
 gtk_list_box_row_set_selected (GtkListBoxRow *row,
                                gboolean       selected)
 {
-  GtkListBox *box;
-  GtkListBoxRowPrivate *priv;
-
-  priv = gtk_list_box_row_get_instance_private (row);
-
-  if (priv->selected != selected)
+  if (ROW_PRIV (row)->selected != selected)
     {
-      priv->selected = selected;
+      ROW_PRIV (row)->selected = selected;
       if (selected)
         gtk_widget_set_state_flags (GTK_WIDGET (row),
                                     GTK_STATE_FLAG_SELECTED, FALSE);
       else
         gtk_widget_unset_state_flags (GTK_WIDGET (row),
                                       GTK_STATE_FLAG_SELECTED);
-
-      box = gtk_list_box_row_get_box (row);
-      _gtk_list_box_accessible_selection_changed (box);
 
       gtk_widget_queue_draw (GTK_WIDGET (row));
 
