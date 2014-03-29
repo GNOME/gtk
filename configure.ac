@@ -363,6 +363,25 @@ fi
 AC_SUBST(ENABLE_ON_X11)
 
 if test "$enable_win32_backend" = "yes"; then
+  AC_MSG_CHECKING([for DWM])
+  AC_LINK_IFELSE([
+    AC_LANG_PROGRAM([[
+        #include <windows.h>
+        #include <dwmapi.h>
+      ]],
+      [[
+        DWM_BLURBEHIND bb;
+        memset (&bb, 0, sizeof (bb));
+        bb.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
+      ]]
+    )],
+    [dwm_ok=yes], [dwm_ok=no]
+  )
+  AC_MSG_RESULT($dwm_ok)
+  if test "$dwm_ok" = "yes"; then
+    AC_DEFINE([HAVE_W32_DWM], [1], [Define if W32 DWM API is available])
+  fi
+
   cairo_backends="$cairo_backends cairo-win32"
   GDK_BACKENDS="$GDK_BACKENDS win32"
   backend_immodules="$backend_immodules,ime"
