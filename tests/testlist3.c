@@ -15,6 +15,27 @@ create_row (const gchar *text)
 }
 
 static void
+on_row_activated (GtkListBox *self,
+                  GtkWidget  *child)
+{
+  const char *id;
+  id = g_object_get_data (G_OBJECT (gtk_bin_get_child (GTK_BIN (child))), "id");
+  g_message ("Row activated %p: %s", child, id);
+}
+
+static void
+on_selected_children_changed (GtkListBox *self)
+{
+  g_message ("Selection changed");
+}
+
+static void
+a11y_selection_changed (AtkObject *obj)
+{
+  g_message ("Accessible selection changed");
+}
+
+static void
 selection_mode_changed (GtkComboBox *combo, gpointer data)
 {
   GtkListBox *list = data;
@@ -43,6 +64,10 @@ main (int argc, char *argv[])
 
   list = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);
+
+  g_signal_connect (list, "row-activated", G_CALLBACK (on_row_activated), NULL);
+  g_signal_connect (list, "selected-rows-changed", G_CALLBACK (on_selected_children_changed), NULL);
+  g_signal_connect (gtk_widget_get_accessible (list), "selection-changed", G_CALLBACK (a11y_selection_changed), NULL);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (sw, TRUE);
