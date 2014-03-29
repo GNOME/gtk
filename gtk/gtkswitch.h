@@ -72,6 +72,7 @@ struct _GtkSwitchClass
 
   void (* activate) (GtkSwitch *sw);
 
+  gboolean (* state_set) (GtkSwitch *sw, gboolean state);
   /*< private >*/
 
   void (* _switch_padding_1) (void);
@@ -79,7 +80,6 @@ struct _GtkSwitchClass
   void (* _switch_padding_3) (void);
   void (* _switch_padding_4) (void);
   void (* _switch_padding_5) (void);
-  void (* _switch_padding_6) (void);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -93,6 +93,12 @@ void            gtk_switch_set_active   (GtkSwitch *sw,
                                          gboolean   is_active);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_switch_get_active   (GtkSwitch *sw);
+
+GDK_AVAILABLE_IN_3_14
+void            gtk_switch_set_state   (GtkSwitch *sw,
+                                        gboolean   state);
+GDK_AVAILABLE_IN_3_14
+gboolean        gtk_switch_get_state   (GtkSwitch *sw);
 
 G_END_DECLS
 

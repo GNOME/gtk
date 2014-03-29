@@ -32,6 +32,9 @@
  * #GtkSwitch is a widget that has two states: on or off. The user can control
  * which state should be active by clicking the empty area, or by dragging the
  * handle.
+ *
+ * GtkSwitch can also handle situations where the underlying state changes with
+ * a delay. See #GtkSwitch::state-set for details.
  */
 
 #include "config.h"
@@ -64,6 +67,7 @@ struct _GtkSwitchPrivate
   gint drag_start;
   gint drag_threshold;
 
+  guint state                 : 1;
   guint is_active             : 1;
   guint is_dragging           : 1;
   guint in_press              : 1;
@@ -75,6 +79,7 @@ enum
 {
   PROP_0,
   PROP_ACTIVE,
+  PROP_STATE,
   PROP_RELATED_ACTION,
   PROP_USE_ACTION_APPEARANCE,
   LAST_PROP,
@@ -85,6 +90,7 @@ enum
 enum
 {
   ACTIVATE,
+  STATE_SET,
   LAST_SIGNAL
 };
 
@@ -729,6 +735,10 @@ gtk_switch_set_property (GObject      *gobject,
       gtk_switch_set_active (sw, g_value_get_boolean (value));
       break;
 
+    case PROP_STATE:
+      gtk_switch_set_state (sw, g_value_get_boolean (value));
+      break;
+
     case PROP_RELATED_ACTION:
       gtk_switch_set_related_action (sw, g_value_get_object (value));
       break;
@@ -762,6 +772,10 @@ gtk_switch_get_property (GObject    *gobject,
     {
     case PROP_ACTIVE:
       g_value_set_boolean (value, priv->is_active);
+      break;
+
+    case PROP_STATE:
+      g_value_set_boolean (value, priv->state);
       break;
 
     case PROP_RELATED_ACTION:
@@ -803,6 +817,22 @@ gtk_switch_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_switch_parent_class)->dispose (object);
 }
 
+static gboolean
+state_set (GtkSwitch *sw, gboolean state)
+{
+  if (sw->priv->action_helper)
+    gtk_action_helper_activate (sw->priv->action_helper);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  if (sw->priv->action)
+    gtk_action_activate (sw->priv->action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  gtk_switch_set_state (sw, state);
+
+  return TRUE;
+}
+
 static void
 gtk_switch_class_init (GtkSwitchClass *klass)
 {
@@ -836,6 +866,21 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                           FALSE,
                           GTK_PARAM_READWRITE);
 
+  /**
+   * GtkSwitch:state:
+   *
+   * The backend state that is controlled by the switch. 
+   * See #GtkSwitch::state-set for details.
+   *
+   * Since: 3.14
+   */
+  switch_props[PROP_STATE] =
+    g_param_spec_boolean ("state",
+                          P_("State"),
+                          P_("The backend state"),
+                          FALSE,
+                          GTK_PARAM_READWRITE);
+
   gobject_class->set_property = gtk_switch_set_property;
   gobject_class->get_property = gtk_switch_get_property;
   gobject_class->dispose = gtk_switch_dispose;
@@ -857,6 +902,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->leave_notify_event = gtk_switch_leave;
 
   klass->activate = gtk_switch_activate;
+  klass->state_set = state_set;
 
   /**
    * GtkSwitch:slider-width:
@@ -889,6 +935,38 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   widget_class->activate_signal = signals[ACTIVATE];
+
+  /**
+   * GtkSwitch::state-set:
+   * @widget: the object on which the signal was emitted
+   *
+   * The ::state-set signal on GtkSwitch is emitted to change the underlying
+   * state. It is emitted when the user changes the switch position. The
+   * default handler keeps the state in sync with the #GtkState:active
+   * property.
+   *
+   * To implement delayed state change, applications can connect to this signal,
+   * initiate the change of the underlying state, and call gtk_switch_set_state()
+   * when the underlying state change is complete. The signal handler should
+   * return %TRUE to prevent the default handler from running.
+   *
+   * Visually, the underlying state is represented by the trough color of
+   * the switch, while the #GtkSwitch:active property is represented by the
+   * position of the switch.
+   *
+   * Returns: %TRUE to stop the signal emission
+   *
+   * Since: 3.14
+   */
+  signals[STATE_SET] =
+    g_signal_new (I_("state-set"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkSwitchClass, state_set),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__BOOLEAN,
+                  G_TYPE_BOOLEAN, 1,
+                  G_TYPE_BOOLEAN);
 
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
@@ -945,26 +1023,16 @@ gtk_switch_set_active (GtkSwitch *sw,
   if (priv->is_active != is_active)
     {
       AtkObject *accessible;
+      gboolean handled;
 
       priv->is_active = is_active;
 
       g_object_notify_by_pspec (G_OBJECT (sw), switch_props[PROP_ACTIVE]);
 
-      if (priv->action_helper)
-        gtk_action_helper_activate (priv->action_helper);
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (priv->action)
-        gtk_action_activate (priv->action);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+      g_signal_emit (sw, signals[STATE_SET], 0, is_active, &handled);
 
       accessible = gtk_widget_get_accessible (GTK_WIDGET (sw));
       atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, priv->is_active);
-
-      if (priv->is_active)
-        gtk_widget_set_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_ACTIVE, FALSE);
-      else
-        gtk_widget_unset_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_ACTIVE);
 
       gtk_widget_queue_draw (GTK_WIDGET (sw));
     }
@@ -986,6 +1054,68 @@ gtk_switch_get_active (GtkSwitch *sw)
   g_return_val_if_fail (GTK_IS_SWITCH (sw), FALSE);
 
   return sw->priv->is_active;
+}
+
+/**
+ * gtk_switch_set_state:
+ * @sw: a #GtkSwitch
+ * @state: the new state
+ *
+ * Sets the underlying state of the #GtkSwitch.
+ *
+ * Normally, this is the same as #GtkSwitch:active, unless the switch
+ * is set up for delayed state changes. This function is typically
+ * called from a #GtkSwitch::state-set signal handler.
+ *
+ * See #GtkSwitch::state-set for details.
+ *
+ * Since: 3.14
+ */
+void
+gtk_switch_set_state (GtkSwitch *sw,
+                      gboolean   state)
+{
+  g_return_if_fail (GTK_IS_SWITCH (sw));
+
+  state = state != FALSE;
+
+  if (sw->priv->state == state)
+    return;
+
+  sw->priv->state = state;
+
+  /* This will be a no-op if we're switching the state in response
+   * to a UI change. We're setting active anyway, to catch 'spontaneous'
+   * state changes.
+   */
+  gtk_switch_set_active (sw, state);
+
+  if (state)
+    gtk_widget_set_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_ACTIVE, FALSE);
+  else
+    gtk_widget_unset_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_ACTIVE);
+
+  g_object_notify (G_OBJECT (sw), "state");
+
+  gtk_widget_queue_draw (GTK_WIDGET (sw));
+}
+
+/**
+ * gtk_switch_get_state:
+ * @sw: a #GtkSwitch
+ *
+ * Gets the underlying state of the #GtkSwitch.
+ *
+ * Returns: the underlying state
+ *
+ * Since: 3.14
+ */
+gboolean
+gtk_switch_get_state (GtkSwitch *sw)
+{
+  g_return_val_if_fail (GTK_IS_SWITCH (sw), FALSE);
+
+  return sw->priv->state;
 }
 
 static void
