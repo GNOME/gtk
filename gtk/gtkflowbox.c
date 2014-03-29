@@ -961,8 +961,6 @@ static gboolean
 gtk_flow_box_child_set_selected (GtkFlowBoxChild *child,
                                  gboolean         selected)
 {
-  GtkFlowBox *box;
-
   if (CHILD_PRIV (child)->selected != selected)
     {
       CHILD_PRIV (child)->selected = selected;
@@ -972,9 +970,6 @@ gtk_flow_box_child_set_selected (GtkFlowBoxChild *child,
       else
         gtk_widget_unset_state_flags (GTK_WIDGET (child),
                                       GTK_STATE_FLAG_SELECTED);
-
-      box = gtk_flow_box_child_get_box (child);
-      _gtk_flow_box_accessible_selection_changed (GTK_WIDGET (box));
 
       gtk_widget_queue_draw (GTK_WIDGET (child));
 
