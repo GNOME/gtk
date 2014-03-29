@@ -252,11 +252,11 @@ gtk_icon_factory_finalize (GObject *object)
  * gtk_icon_factory_new:
  *
  * Creates a new #GtkIconFactory. An icon factory manages a collection
- * of #GtkIconSet<!-- -->s; a #GtkIconSet manages a set of variants of a
+ * of #GtkIconSets; a #GtkIconSet manages a set of variants of a
  * particular icon (i.e. a #GtkIconSet contains variants for different
  * sizes and widget states). Icons in an icon factory are named by a
  * stock ID, which is a simple string identifying the icon. Each
- * #GtkStyle has a list of #GtkIconFactory<!-- -->s derived from the current
+ * #GtkStyle has a list of #GtkIconFactorys derived from the current
  * theme; those icon factories are consulted first when searching for
  * an icon. If the theme doesn’t set a particular icon, GTK+ looks for
  * the icon in a list of default icon factories, maintained by
@@ -2149,7 +2149,7 @@ gtk_icon_source_get_icon_name (const GtkIconSource *source)
  * In addition, if a filename source is in use, this
  * function in some cases will return the pixbuf from
  * loaded from the filename. This is, for example, true
- * for the GtkIconSource passed to the #GtkStyle render_icon(<!-- -->)
+ * for the GtkIconSource passed to the #GtkStyle render_icon()
  * virtual function. The reference count on the pixbuf is
  * not incremented.
  *

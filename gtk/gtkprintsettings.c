@@ -45,11 +45,8 @@
  * document. The predefined keys try to use shared values as much as possible
  * so that moving such a document between systems still works.
  *
- * <!-- TODO example of getting, storing and setting settings -->
- *
  * Printing support was added in GTK+ 2.10.
  */
-
 
 typedef struct _GtkPrintSettingsClass GtkPrintSettingsClass;
 
@@ -1568,7 +1565,6 @@ gtk_print_settings_set_default_source (GtkPrintSettings *settings,
  * Gets the value of %GTK_PRINT_SETTINGS_MEDIA_TYPE.
  *
  * The set of media types is defined in PWG 5101.1-2002 PWG.
- * <!-- FIXME link here -->
  * 
  * Returns: the media type
  *
@@ -1588,7 +1584,6 @@ gtk_print_settings_get_media_type (GtkPrintSettings *settings)
  * Sets the value of %GTK_PRINT_SETTINGS_MEDIA_TYPE.
  * 
  * The set of media types is defined in PWG 5101.1-2002 PWG.
- * <!-- FIXME link here -->
  *
  * Since: 2.10
  */

@@ -462,7 +462,7 @@
  * the range 0-65535 or floats in the range 0.0-1.0.
  *
  * Since 2.10, colors can also be specified by refering to a symbolic color, as
- * follows: `@<!-- -->color-name`, or by using expressions to combine
+ * follows: `@color-name`, or by using expressions to combine
  * colors. The following expressions are currently supported:
  *
  * * mix (factor, color1, color2)
@@ -494,7 +494,7 @@
  * |[
  *  mix (0.5, "red", "blue")
  *  shade (1.5, mix (0.3, "#0abbc0", { 0.3, 0.5, 0.9 }))
- *  lighter (@<!-- -->foreground)
+ *  lighter (@foreground)
  * ]|
  *
  * In a `stock` definition, icon sources are specified as a

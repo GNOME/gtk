@@ -1474,8 +1474,6 @@ gtk_button_leave (GtkButton *button)
  * Sets the relief style of the edges of the given #GtkButton widget.
  * Three styles exist, GTK_RELIEF_NORMAL, GTK_RELIEF_HALF, GTK_RELIEF_NONE.
  * The default style is, as one can guess, GTK_RELIEF_NORMAL.
- *
- * <!-- FIXME: put pictures of each style -->
  */
 void
 gtk_button_set_relief (GtkButton *button,

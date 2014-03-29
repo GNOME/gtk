@@ -52,8 +52,6 @@
  *
  * ## Draw transformed text with Pango and cairo ## {#rotated-example}
  *
- * <!-- Note that this example is basically the same as
- *      demos/gtk-demo/rotated_text.c -->
  * |[<!-- language="C" -->
  * #define RADIUS 100
  * #define N_WORDS 10
@@ -67,9 +65,9 @@
  * int width, height;
  * int i;
  *
- * /<!---->* Set up a transformation matrix so that the user space coordinates for
- *  * where we are drawing are [-RADIUS, RADIUS], [-RADIUS, RADIUS]
- *  * We first center, then change the scale *<!---->/
+ * // Set up a transformation matrix so that the user space coordinates for
+ * // where we are drawing are [-RADIUS, RADIUS], [-RADIUS, RADIUS]
+ * // We first center, then change the scale
  *
  * width = gdk_window_get_width (window);
  * height = gdk_window_get_height (window);
@@ -80,7 +78,7 @@
  *                  radius + (height - 2 * radius) / 2);
  *                  cairo_scale (cr, radius / RADIUS, radius / RADIUS);
  *
- * /<!---->* Create a PangoLayout, set the font and text *<!---->/
+ * // Create a PangoLayout, set the font and text
  * context = gdk_pango_context_get_for_screen (screen);
  * layout = pango_layout_new (context);
  * pango_layout_set_text (layout, "Text", -1);
@@ -88,7 +86,7 @@
  * pango_layout_set_font_description (layout, desc);
  * pango_font_description_free (desc);
  *
- * /<!---->* Draw the layout N_WORDS times in a circle *<!---->/
+ * // Draw the layout N_WORDS times in a circle
  * for (i = 0; i < N_WORDS; i++)
  *   {
  *     double red, green, blue;
@@ -96,7 +94,7 @@
  *
  *     cairo_save (cr);
  *
- *     /<!---->* Gradient from red at angle == 60 to blue at angle == 300 *<!---->/
+ *     // Gradient from red at angle == 60 to blue at angle == 300
  *     red = (1 + cos (angle - 60)) / 2;
  *     green = 0;
  *     blue = 1 - red;
@@ -104,7 +102,7 @@
  *     cairo_set_source_rgb (cr, red, green, blue);
  *     cairo_rotate (cr, angle);
  *
- *     /<!---->* Inform Pango to re-layout the text with the new transformation matrix *<!---->/
+ *     // Inform Pango to re-layout the text with the new transformation matrix
  *     pango_cairo_update_layout (cr, layout);
  *
  *     pango_layout_get_size (layout, &width, &height);

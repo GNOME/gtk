@@ -101,7 +101,7 @@ struct _GtkStyleContextClass
  * padding/border/margin series.
  *
  * gtk_render_frame() uses this property to find out the frame line width,
- * so #GtkWidget<!-- -->s rendering frames may need to add up this padding when
+ * so #GtkWidgets rendering frames may need to add up this padding when
  * requesting size
  */
 #define GTK_STYLE_PROPERTY_BORDER_WIDTH "border-width"
@@ -111,7 +111,7 @@ struct _GtkStyleContextClass
  *
  * A property holding the rendered element’s margin as a #GtkBorder. The
  * margin is defined as the spacing between the border of the element
- * and its surrounding elements. It is external to #GtkWidget<!-- -->s's
+ * and its surrounding elements. It is external to #GtkWidget's
  * size allocations, and the most external spacing property of the
  * padding/border/margin series.
  */

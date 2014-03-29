@@ -46,7 +46,7 @@
  * ## Connecting the popup signal handler.
  *
  * |[<!-- language="C" -->
- *   /<!---->* connect our handler which will popup the menu *<!---->/
+ *   // connect our handler which will popup the menu
  *   g_signal_connect_swapped (window, "button_press_event",
  *	G_CALLBACK (my_popup_handler), menu);
  * ]|
@@ -64,9 +64,8 @@
  *   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
  *   g_return_val_if_fail (event != NULL, FALSE);
  *
- *   /<!---->* The "widget" is the menu that was supplied when 
- *    * g_signal_connect_swapped() was called.
- *    *<!---->/
+ *   // The "widget" is the menu that was supplied when 
+ *   // g_signal_connect_swapped() was called.
  *   menu = GTK_MENU (widget);
  *
  *   if (event->type == GDK_BUTTON_PRESS)

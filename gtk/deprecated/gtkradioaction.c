@@ -164,7 +164,7 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
   /**
    * GtkRadioAction::changed:
    * @action: the action on which the signal is emitted
-   * @current: the member of @action<!-- -->s group which has just been activated
+   * @current: the member of @action's group which has just been activated
    *
    * The ::changed signal is emitted on every member of a radio group when the
    * active member is changed. The signal gets emitted after the ::activate signals

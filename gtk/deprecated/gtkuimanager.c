@@ -2225,7 +2225,7 @@ remove_ui (GNode   *node,
  * @manager: a #GtkUIManager object
  * @merge_id: a merge id as returned by gtk_ui_manager_add_ui_from_string()
  * 
- * Unmerges the part of @manager<!-- -->s content identified by @merge_id.
+ * Unmerges the part of @manager's content identified by @merge_id.
  *
  * Since: 2.4
  *
