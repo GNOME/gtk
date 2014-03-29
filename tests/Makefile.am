@@ -78,6 +78,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testkineticscrolling		\
 	testlist			\
 	testlist2			\
+	testlist3			\
 	testlevelbar			\
 	testlockbutton			\
 	testmenubutton			\
