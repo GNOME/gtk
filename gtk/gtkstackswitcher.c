@@ -439,6 +439,19 @@ gtk_stack_switcher_dispose (GObject *object)
 }
 
 static void
+gtk_stack_switcher_finalize (GObject *object)
+{
+  GtkStackSwitcher *switcher = GTK_STACK_SWITCHER (object);
+  GtkStackSwitcherPrivate *priv;
+
+  priv = gtk_stack_switcher_get_instance_private (switcher);
+
+  g_hash_table_destroy (priv->buttons);
+
+  G_OBJECT_CLASS (gtk_stack_switcher_parent_class)->finalize (object);
+}
+
+static void
 gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -446,6 +459,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
   object_class->get_property = gtk_stack_switcher_get_property;
   object_class->set_property = gtk_stack_switcher_set_property;
   object_class->dispose = gtk_stack_switcher_dispose;
+  object_class->finalize = gtk_stack_switcher_finalize;
 
   g_object_class_install_property (object_class,
                                    PROP_STACK,
