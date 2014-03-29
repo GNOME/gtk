@@ -974,7 +974,7 @@ gtk_tree_view_accessible_is_child_selected (AtkSelection *selection,
   if (widget == NULL)
     return FALSE;
 
-  row = atk_table_get_row_at_index (ATK_TABLE (selection), i);
+  row = gtk_tree_view_accessible_get_row_at_index (ATK_TABLE (selection), i);
 
   return gtk_tree_view_accessible_is_row_selected (ATK_TABLE (selection), row);
 }
