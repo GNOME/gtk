@@ -99,6 +99,7 @@ typedef struct
   gint y;
   gint height;
   gboolean visible;
+  gboolean selected;
 } GtkListBoxRowPrivate;
 
 enum {
@@ -125,11 +126,12 @@ enum  {
   LAST_PROPERTY
 };
 
+#define BOX_PRIV(box) ((GtkListBoxPrivate*)gtk_list_box_get_instance_private ((GtkListBox*)(box)))
+#define ROW_PRIV(row) ((GtkListBoxRowPrivate*)gtk_list_box_row_get_instance_private ((GtkListBoxRow*)(row)))
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkListBox, gtk_list_box, GTK_TYPE_CONTAINER)
 G_DEFINE_TYPE_WITH_PRIVATE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_BIN)
 
-static void                 gtk_list_box_update_selected              (GtkListBox          *list_box,
-                                                                       GtkListBoxRow       *row);
 static void                 gtk_list_box_apply_filter_all             (GtkListBox          *list_box);
 static void                 gtk_list_box_update_header                (GtkListBox          *list_box,
                                                                        GSequenceIter       *iter);
@@ -211,6 +213,17 @@ static void                 gtk_list_box_get_preferred_width_for_height (GtkWidg
                                                                          gint                 height,
                                                                          gint                *minimum_width,
                                                                          gint                *natural_width);
+
+static void                 gtk_list_box_select_row_internal            (GtkListBox          *box,
+                                                                         GtkListBoxRow       *row);
+static void                 gtk_list_box_unselect_row_internal          (GtkListBox          *box,
+                                                                         GtkListBoxRow       *row);
+static void                 gtk_list_box_select_all_between             (GtkListBox          *box,
+                                                                         GtkListBoxRow       *row1,
+                                                                         GtkListBoxRow       *row2,
+                                                                         gboolean             modify);
+static gboolean             gtk_list_box_unselect_all_internal          (GtkListBox          *box);
+static void                 gtk_list_box_selected_rows_changed          (GtkListBox          *list_box);
 
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -354,6 +367,9 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   klass->activate_cursor_row = gtk_list_box_activate_cursor_row;
   klass->toggle_cursor_row = gtk_list_box_toggle_cursor_row;
   klass->move_cursor = gtk_list_box_move_cursor;
+  klass->select_all = gtk_list_box_select_all;
+  klass->unselect_all = gtk_list_box_unselect_all;
+  klass->selected_rows_changed = gtk_list_box_selected_rows_changed;
 
   properties[PROP_SELECTION_MODE] =
     g_param_spec_enum ("selection-mode",
@@ -507,13 +523,13 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                  GTK_MOVEMENT_BUFFER_ENDS, 1);
   gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_End, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Up, GDK_CONTROL_MASK,
+  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Up, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Up, GDK_CONTROL_MASK,
+  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Up, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Down, GDK_CONTROL_MASK,
+  gtk_list_box_add_move_binding (binding_set, GDK_KEY_Down, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Down, GDK_CONTROL_MASK,
+  gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Down, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, 1);
   gtk_list_box_add_move_binding (binding_set, GDK_KEY_Page_Up, 0,
                                  GTK_MOVEMENT_PAGES, -1);
@@ -523,8 +539,16 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                  GTK_MOVEMENT_PAGES, 1);
   gtk_list_box_add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0,
                                  GTK_MOVEMENT_PAGES, 1);
+
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, GDK_CONTROL_MASK,
                                 "toggle-cursor-row", 0, NULL);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
+                                "toggle-cursor-row", 0, NULL);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
+                                "select-all", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "unselect-all", 0);
 }
 
 /**
@@ -640,7 +664,10 @@ gtk_list_box_select_row (GtkListBox    *list_box,
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
   g_return_if_fail (row == NULL || GTK_IS_LIST_BOX_ROW (row));
 
-  gtk_list_box_update_selected (list_box, row);
+  if (row)
+    gtk_list_box_select_row_internal (list_box, row);
+  else
+    gtk_list_box_unselect_all_internal (list_box);
 }
 
 /**   
@@ -660,7 +687,7 @@ gtk_list_box_unselect_row (GtkListBox    *list_box,
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
   g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
   
-  gtk_list_box_update_selected (list_box, NULL);
+  gtk_list_box_unselect_row_internal (list_box, row);
 } 
 
 /**
@@ -676,6 +703,15 @@ void
 gtk_list_box_select_all (GtkListBox *list_box)
 {
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+
+  if (BOX_PRIV (list_box)->selection_mode != GTK_SELECTION_MULTIPLE)
+    return;
+
+  if (g_sequence_get_length (BOX_PRIV (list_box)->children) > 0)
+    {
+      gtk_list_box_select_all_between (list_box, NULL, NULL, FALSE);
+      g_signal_emit (list_box, signals[SELECTED_ROWS_CHANGED], 0);
+    }
 }
 
 /**
@@ -690,9 +726,23 @@ gtk_list_box_select_all (GtkListBox *list_box)
 void
 gtk_list_box_unselect_all (GtkListBox *list_box)
 {
+  gboolean dirty = FALSE;
+
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
-  gtk_list_box_update_selected (list_box, NULL);
+  if (BOX_PRIV (list_box)->selection_mode == GTK_SELECTION_BROWSE)
+    return;
+
+  dirty = gtk_list_box_unselect_all_internal (list_box);
+
+  if (dirty)
+    g_signal_emit (list_box, signals[SELECTED_ROWS_CHANGED], 0);
+}
+
+static void
+gtk_list_box_selected_rows_changed (GtkListBox *list_box)
+{
+  _gtk_list_box_accessible_selection_changed (list_box);
 }
 
 /**
@@ -899,26 +949,27 @@ void
 gtk_list_box_set_selection_mode (GtkListBox       *list_box,
                                  GtkSelectionMode  mode)
 {
-  GtkListBoxPrivate *priv;
+  GtkListBoxPrivate *priv = BOX_PRIV (list_box);
+  gboolean dirty = FALSE;
 
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
-
-  priv = gtk_list_box_get_instance_private (list_box);
-
-  if (mode == GTK_SELECTION_MULTIPLE)
-    {
-      g_warning ("Multiple selections not supported");
-      return;
-    }
 
   if (priv->selection_mode == mode)
     return;
 
+  if (mode == GTK_SELECTION_NONE ||
+      priv->selection_mode == GTK_SELECTION_MULTIPLE)
+    {
+      dirty = gtk_list_box_unselect_all_internal (list_box);
+      priv->selected_row = NULL;
+    }
+
   priv->selection_mode = mode;
-  if (mode == GTK_SELECTION_NONE)
-    gtk_list_box_update_selected (list_box, NULL);
 
   g_object_notify_by_pspec (G_OBJECT (list_box), properties[PROP_SELECTION_MODE]);
+
+  if (dirty)
+    g_signal_emit (list_box, signals[SELECTED_ROWS_CHANGED], 0);
 }
 
 /**
@@ -1254,14 +1305,39 @@ gtk_list_box_add_move_binding (GtkBindingSet   *binding_set,
                                GtkMovementStep  step,
                                gint             count)
 {
+  GdkDisplay *display;
+  GdkModifierType extend_mod_mask = GDK_SHIFT_MASK;
+  GdkModifierType modify_mod_mask = GDK_CONTROL_MASK;
+
+  display = gdk_display_get_default ();
+  if (display)
+    {
+      extend_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                                      GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+      modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+    }
+
   gtk_binding_entry_add_signal (binding_set, keyval, modmask,
-                                "move-cursor", (guint) 2, GTK_TYPE_MOVEMENT_STEP, step, G_TYPE_INT, count, NULL);
-
-  if ((modmask & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-    return;
-
-  gtk_binding_entry_add_signal (binding_set, keyval, GDK_CONTROL_MASK,
-                                "move-cursor", (guint) 2, GTK_TYPE_MOVEMENT_STEP, step, G_TYPE_INT, count, NULL);
+                                "move-cursor", 2,
+                                GTK_TYPE_MOVEMENT_STEP, step,
+                                G_TYPE_INT, count,
+                                NULL);
+  gtk_binding_entry_add_signal (binding_set, keyval, modmask | extend_mod_mask,
+                                "move-cursor", 2,
+                                GTK_TYPE_MOVEMENT_STEP, step,
+                                G_TYPE_INT, count,
+                                NULL);
+  gtk_binding_entry_add_signal (binding_set, keyval, modmask | modify_mod_mask,
+                                "move-cursor", 2,
+                                GTK_TYPE_MOVEMENT_STEP, step,
+                                G_TYPE_INT, count,
+                                NULL);
+  gtk_binding_entry_add_signal (binding_set, keyval, modmask | extend_mod_mask | modify_mod_mask,
+                                "move-cursor", 2,
+                                GTK_TYPE_MOVEMENT_STEP, step,
+                                G_TYPE_INT, count,
+                                NULL);
 }
 
 static void
@@ -1276,42 +1352,224 @@ gtk_list_box_update_cursor (GtkListBox    *list_box,
   _gtk_list_box_accessible_update_cursor (list_box, row);
 }
 
-static void
-gtk_list_box_update_selected (GtkListBox    *list_box,
-                              GtkListBoxRow *row)
+static GtkListBox *
+gtk_list_box_row_get_box (GtkListBoxRow *row)
 {
-  GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
+  GtkWidget *parent;
 
-  if (row != priv->selected_row &&
-      (row == NULL || priv->selection_mode != GTK_SELECTION_NONE))
+  parent = gtk_widget_get_parent (GTK_WIDGET (row));
+  if (parent && GTK_IS_LIST_BOX (parent))
+    return GTK_LIST_BOX (parent);
+
+  return NULL;
+}
+
+static gboolean
+row_is_visible (GtkListBoxRow *row)
+{
+  return ROW_PRIV (row)->visible;
+}
+
+static gboolean
+gtk_list_box_row_set_selected (GtkListBoxRow *row,
+                               gboolean       selected)
+{
+  GtkListBox *box;
+  GtkListBoxRowPrivate *priv;
+
+  priv = gtk_list_box_row_get_instance_private (row);
+
+  if (priv->selected != selected)
     {
-      if (priv->selected_row)
-        gtk_widget_unset_state_flags (GTK_WIDGET (priv->selected_row),
+      priv->selected = selected;
+      if (selected)
+        gtk_widget_set_state_flags (GTK_WIDGET (row),
+                                    GTK_STATE_FLAG_SELECTED, FALSE);
+      else
+        gtk_widget_unset_state_flags (GTK_WIDGET (row),
                                       GTK_STATE_FLAG_SELECTED);
-      priv->selected_row = row;
-      if (priv->selected_row)
-        gtk_widget_set_state_flags (GTK_WIDGET (priv->selected_row),
-                                    GTK_STATE_FLAG_SELECTED,
-                                    FALSE);
 
-      g_signal_emit (list_box, signals[ROW_SELECTED], 0, priv->selected_row);
-      g_signal_emit (list_box, signals[SELECTED_ROWS_CHANGED], 0);
+      box = gtk_list_box_row_get_box (row);
+      _gtk_list_box_accessible_selection_changed (box);
 
-      gtk_widget_queue_draw (GTK_WIDGET (list_box));
+      gtk_widget_queue_draw (GTK_WIDGET (row));
+
+      return TRUE;
     }
-  _gtk_list_box_accessible_selection_changed (list_box);
-  if (row != NULL)
-    gtk_list_box_update_cursor (list_box, row);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_list_box_unselect_all_internal (GtkListBox *box)
+{
+  GtkListBoxRow *row;
+  GSequenceIter *iter;
+  gboolean dirty = FALSE;
+
+  if (BOX_PRIV (box)->selection_mode == GTK_SELECTION_NONE)
+    return FALSE;
+
+  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      dirty |= gtk_list_box_row_set_selected (row, FALSE);
+    }
+
+  return dirty;
 }
 
 static void
-gtk_list_box_select_and_activate (GtkListBox    *list_box,
+gtk_list_box_unselect_row_internal (GtkListBox    *box,
+                                    GtkListBoxRow *row)
+{
+  if (!ROW_PRIV (row)->selected)
+    return;
+
+  if (BOX_PRIV (box)->selection_mode == GTK_SELECTION_NONE)
+    return;
+  else if (BOX_PRIV (box)->selection_mode != GTK_SELECTION_MULTIPLE)
+    gtk_list_box_unselect_all_internal (box);
+  else
+    gtk_list_box_row_set_selected (row, FALSE);
+
+  g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+}
+
+static void
+gtk_list_box_select_row_internal (GtkListBox    *box,
                                   GtkListBoxRow *row)
 {
-  gtk_list_box_update_selected (list_box, row);
+  if (ROW_PRIV (row)->selected)
+    return;
 
+  if (BOX_PRIV (box)->selection_mode == GTK_SELECTION_NONE)
+    return;
+  if (BOX_PRIV (box)->selection_mode != GTK_SELECTION_MULTIPLE)
+    gtk_list_box_unselect_all_internal (box);
+
+  gtk_list_box_row_set_selected (row, TRUE);
+  BOX_PRIV (box)->selected_row = row;
+
+  g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+}
+
+static void
+gtk_list_box_select_all_between (GtkListBox    *box,
+                                 GtkListBoxRow *row1,
+                                 GtkListBoxRow *row2,
+                                 gboolean       modify)
+{
+  GSequenceIter *iter, *iter1, *iter2;
+
+  if (row1)
+    iter1 = ROW_PRIV (row1)->iter;
+  else
+    iter1 = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
+
+  if (row2)
+    iter2 = ROW_PRIV (row2)->iter;
+  else
+    iter2 = g_sequence_get_end_iter (BOX_PRIV (box)->children);
+
+  if (g_sequence_iter_compare (iter2, iter1) < 0)
+    {
+      iter = iter1;
+      iter1 = iter2;
+      iter2 = iter;
+    }
+
+  for (iter = iter1;
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      GtkListBoxRow *row;
+
+      row = GTK_LIST_BOX_ROW (g_sequence_get (iter));
+      if (row_is_visible (row))
+        {
+          if (modify)
+            gtk_list_box_row_set_selected (row, !ROW_PRIV (row)->selected);
+          else
+            gtk_list_box_row_set_selected (row, TRUE);
+        }
+
+      if (g_sequence_iter_compare (iter, iter2) == 0)
+        break;
+    }
+}
+
+static void
+gtk_list_box_update_selection (GtkListBox    *box,
+                               GtkListBoxRow *row,
+                               gboolean       modify,
+                               gboolean       extend)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+
+  gtk_list_box_update_cursor (box, row);
+
+  if (priv->selection_mode == GTK_SELECTION_NONE)
+    return;
+
+  if (priv->selection_mode == GTK_SELECTION_BROWSE)
+    {
+      gtk_list_box_unselect_all_internal (box);
+      gtk_list_box_row_set_selected (row, TRUE);
+      priv->selected_row = row;
+    }
+  else if (priv->selection_mode == GTK_SELECTION_SINGLE)
+    {
+      gboolean was_selected;
+
+      was_selected = ROW_PRIV (row)->selected;
+      gtk_list_box_unselect_all_internal (box);
+      gtk_list_box_row_set_selected (row, modify ? !was_selected : TRUE);
+      priv->selected_row = ROW_PRIV (row)->selected ? row : NULL;
+    }
+  else /* GTK_SELECTION_MULTIPLE */
+    {
+      if (extend)
+        {
+          gtk_list_box_unselect_all_internal (box);
+          if (priv->selected_row == NULL)
+            {
+              gtk_list_box_row_set_selected (row, TRUE);
+              priv->selected_row = row;
+            }
+          else
+            gtk_list_box_select_all_between (box, priv->selected_row, row, FALSE);
+        }
+      else
+        {
+          if (modify)
+            {
+              gtk_list_box_row_set_selected (row, !ROW_PRIV (row)->selected);
+            }
+          else
+            {
+              gtk_list_box_unselect_all_internal (box);
+              gtk_list_box_row_set_selected (row, !ROW_PRIV (row)->selected);
+              priv->selected_row = row;
+            }
+        }
+    }
+
+  g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+}
+
+static void
+gtk_list_box_select_and_activate (GtkListBox    *box,
+                                  GtkListBoxRow *row)
+{
   if (row != NULL)
-    g_signal_emit (list_box, signals[ROW_ACTIVATED], 0, row);
+    {
+      gtk_list_box_select_row_internal (box, row);
+      gtk_list_box_update_cursor (box, row);
+      g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
+    }
 }
 
 static void
@@ -1449,15 +1707,12 @@ gtk_list_box_button_press_event (GtkWidget      *widget,
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
   gboolean retval = GDK_EVENT_PROPAGATE;
-  gboolean ctrl_pressed;
   GdkWindow *window;
   double x, y;
 
   if (event->button == GDK_BUTTON_PRIMARY)
     {
       GtkListBoxRow *row;
-
-      ctrl_pressed = (event->state & GDK_CONTROL_MASK) != 0;
 
       priv->active_row = NULL;
 
@@ -1474,38 +1729,44 @@ gtk_list_box_button_press_event (GtkWidget      *widget,
       row = gtk_list_box_get_row_at_y (list_box, y);
       if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
         {
-          if (event->type == GDK_2BUTTON_PRESS)
+          priv->active_row = row;
+          priv->active_row_active = TRUE;
+          gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
+                                      GTK_STATE_FLAG_ACTIVE,
+                                      FALSE);
+          gtk_widget_queue_draw (GTK_WIDGET (list_box));
+          if (event->type == GDK_2BUTTON_PRESS &&
+              !priv->activate_single_click)
             {
-              if (!priv->activate_single_click)
-                g_signal_emit (list_box, signals[ROW_ACTIVATED], 0,
-                               row);
+              g_signal_emit (list_box, signals[ROW_ACTIVATED], 0, row);
+              retval = GDK_EVENT_STOP;
             }
-          else if (ctrl_pressed)
-            {
-              if (priv->selection_mode == GTK_SELECTION_SINGLE &&
-                  priv->selected_row == row)
-                gtk_list_box_update_selected (list_box, NULL);
-              else
-                gtk_list_box_update_selected (list_box, row);
-            }
-          else
-            {
-              priv->active_row = row;
-              priv->active_row_active = TRUE;
-              gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
-                                          GTK_STATE_FLAG_ACTIVE,
-                                          FALSE);
-              gtk_widget_queue_draw (GTK_WIDGET (list_box));
-            }
-
-          retval = GDK_EVENT_STOP;
         }
-      /* TODO:
-         Should mark as active while down,
-         and handle grab breaks */
     }
 
   return retval;
+}
+
+static void
+get_current_selection_modifiers (GtkWidget *widget,
+                                 gboolean  *modify,
+                                 gboolean  *extend)
+{
+  GdkModifierType state = 0;
+  GdkModifierType mask;
+
+  *modify = FALSE;
+  *extend = FALSE;
+
+  if (gtk_get_current_event_state (&state))
+    {
+      mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+      if ((state & mask) == mask)
+        *modify = TRUE;
+      mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+      if ((state & mask) == mask)
+        *extend = TRUE;
+    }
 }
 
 static gboolean
@@ -1516,13 +1777,14 @@ gtk_list_box_button_release_event (GtkWidget      *widget,
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
   gboolean retval = GDK_EVENT_PROPAGATE;
 
-  /* Take a ref to protect against reentrancy (i.e. the activation may destroy the widget) */
+  /* Take a ref to protect against reentrancy
+   * (the activation may destroy the widget)
+   */
   g_object_ref (list_box);
 
   if (event->button == GDK_BUTTON_PRIMARY)
     {
-      if (priv->active_row != NULL &&
-          priv->active_row_active)
+      if (priv->active_row != NULL && priv->active_row_active)
         {
           gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
                                         GTK_STATE_FLAG_ACTIVE);
@@ -1530,10 +1792,27 @@ gtk_list_box_button_release_event (GtkWidget      *widget,
           if (priv->activate_single_click)
             gtk_list_box_select_and_activate (list_box, priv->active_row);
           else
-            gtk_list_box_update_selected (list_box, priv->active_row);
+            {
+              gboolean modify;
+              gboolean extend;
+              GdkDevice *device;
+
+              get_current_selection_modifiers (widget, &modify, &extend);
+
+              /* With touch, we default to modifying the selection.
+               * You can still clear the selection and start over
+               * by holding Ctrl.
+               */
+              device = gdk_event_get_source_device ((GdkEvent *)event);
+              if (gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
+                modify = !modify;
+
+              gtk_list_box_update_selection (list_box, priv->active_row, modify, extend);
+            }
 
           retval = GDK_EVENT_STOP;
         }
+
       priv->active_row = NULL;
       priv->active_row_active = FALSE;
       gtk_widget_queue_draw (GTK_WIDGET (list_box));
@@ -1553,8 +1832,6 @@ gtk_list_box_show (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_list_box_parent_class)->show (widget);
 }
-
-#define ROW_PRIV(_row) ((GtkListBoxRowPrivate *)gtk_list_box_row_get_instance_private (_row))
 
 static gboolean
 gtk_list_box_focus (GtkWidget        *widget,
@@ -1720,12 +1997,6 @@ update_row_is_visible (GtkListBox    *list_box,
     list_box_add_visible_rows (list_box, -1);
   if (!was_visible && row_priv->visible)
     list_box_add_visible_rows (list_box, 1);
-}
-
-static gboolean
-row_is_visible (GtkListBoxRow *row)
-{
-  return ROW_PRIV (row)->visible;
 }
 
 static void
@@ -1939,6 +2210,7 @@ gtk_list_box_remove (GtkContainer *container,
   GtkListBox *list_box = GTK_LIST_BOX (container);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
   gboolean was_visible;
+  gboolean was_selected;
   GtkListBoxRow *row;
   GSequenceIter *next;
 
@@ -1969,6 +2241,8 @@ gtk_list_box_remove (GtkContainer *container,
       return;
     }
 
+  was_selected = ROW_PRIV (row)->selected;
+
   if (ROW_PRIV (row)->visible)
     list_box_add_visible_rows (list_box, -1);
 
@@ -1980,20 +2254,19 @@ gtk_list_box_remove (GtkContainer *container,
     }
 
   if (row == priv->selected_row)
-      gtk_list_box_update_selected (list_box, NULL);
-  if (row == priv->prelight_row) {
-    gtk_widget_unset_state_flags (GTK_WIDGET (priv->prelight_row),
-                                  GTK_STATE_FLAG_PRELIGHT);
-    priv->prelight_row = NULL;
-  }
+    priv->selected_row =NULL;
+  if (row == priv->prelight_row)
+    {
+      gtk_widget_unset_state_flags (GTK_WIDGET (row), GTK_STATE_FLAG_PRELIGHT);
+      priv->prelight_row = NULL;
+    }
   if (row == priv->cursor_row)
     priv->cursor_row = NULL;
-  if (row == priv->active_row) {
-    if (priv->active_row_active)
-      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
-                                    GTK_STATE_FLAG_ACTIVE);
-    priv->active_row = NULL;
-  }
+  if (row == priv->active_row)
+    {
+      gtk_widget_unset_state_flags (GTK_WIDGET (row), GTK_STATE_FLAG_ACTIVE);
+      priv->active_row = NULL;
+    }
 
   if (row == priv->drag_highlighted_row)
     gtk_list_box_drag_unhighlight_row (list_box);
@@ -2006,6 +2279,9 @@ gtk_list_box_remove (GtkContainer *container,
 
   if (was_visible && gtk_widget_get_visible (GTK_WIDGET (list_box)))
     gtk_widget_queue_resize (GTK_WIDGET (list_box));
+
+  if (was_selected)
+    g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
 }
 
 static void
@@ -2431,9 +2707,10 @@ gtk_list_box_toggle_cursor_row (GtkListBox *list_box)
   if (priv->cursor_row == NULL)
     return;
 
-  if (priv->selection_mode == GTK_SELECTION_SINGLE &&
-      priv->selected_row == priv->cursor_row)
-    gtk_list_box_update_selected (list_box, NULL);
+  if ((priv->selection_mode == GTK_SELECTION_SINGLE ||
+       priv->selection_mode == GTK_SELECTION_MULTIPLE) &&
+      ROW_PRIV (priv->cursor_row)->selected)
+    gtk_list_box_unselect_row_internal (list_box, priv->cursor_row);
   else
     gtk_list_box_select_and_activate (list_box, priv->cursor_row);
 }
@@ -2444,26 +2721,15 @@ gtk_list_box_move_cursor (GtkListBox      *list_box,
                           gint             count)
 {
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
-  GdkModifierType state;
-  gboolean modify_selection_pressed;
+  gboolean modify;
+  gboolean extend;
   GtkListBoxRow *row;
-  GdkModifierType modify_mod_mask;
   GtkListBoxRow *prev;
   GtkListBoxRow *next;
   gint page_size;
   GSequenceIter *iter;
   gint start_y;
   gint end_y;
-
-  modify_selection_pressed = FALSE;
-
-  if (gtk_get_current_event_state (&state))
-    {
-      modify_mod_mask = gtk_widget_get_modifier_mask (GTK_WIDGET (list_box),
-                                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-      if ((state & modify_mod_mask) == modify_mod_mask)
-        modify_selection_pressed = TRUE;
-    }
 
   row = NULL;
   switch (step)
@@ -2569,9 +2835,11 @@ gtk_list_box_move_cursor (GtkListBox      *list_box,
       return;
     }
 
+  get_current_selection_modifiers (GTK_WIDGET (list_box), &modify, &extend);
+
   gtk_list_box_update_cursor (list_box, row);
-  if (!modify_selection_pressed)
-    gtk_list_box_update_selected (list_box, row);
+  if (!modify)
+    gtk_list_box_update_selection (list_box, row, FALSE, extend);
 }
 
 
@@ -2602,43 +2870,22 @@ gtk_list_box_row_init (GtkListBoxRow *row)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST_ROW);
 }
 
-static GtkListBox *
-gtk_list_box_row_get_box (GtkListBoxRow *row)
-{
-  GtkWidget *parent;
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (row));
-  if (parent && GTK_IS_LIST_BOX (parent))
-    return GTK_LIST_BOX (parent);
-
-  return NULL;
-}
-
 static void
 gtk_list_box_row_set_focus (GtkListBoxRow *row)
 {
   GtkListBox *list_box = gtk_list_box_row_get_box (row);
-  GdkModifierType state = 0;
-  gboolean modify_selection_pressed;
+  gboolean modify;
+  gboolean extend;
 
   if (!list_box)
     return;
 
-  modify_selection_pressed = FALSE;
-  if (gtk_get_current_event_state (&state))
-    {
-      GdkModifierType modify_mod_mask;
-      modify_mod_mask =
-        gtk_widget_get_modifier_mask (GTK_WIDGET (list_box),
-                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-      if ((state & modify_mod_mask) == modify_mod_mask)
-        modify_selection_pressed = TRUE;
-    }
+  get_current_selection_modifiers (GTK_WIDGET (row), &modify, &extend);
 
-  if (modify_selection_pressed)
+  if (modify)
     gtk_list_box_update_cursor (list_box, row);
   else
-    gtk_list_box_update_selected (list_box, row);
+    gtk_list_box_update_selection (list_box, row, FALSE, FALSE);
 }
 
 static gboolean
