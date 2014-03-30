@@ -419,7 +419,11 @@ gtk_application_impl_dbus_init (GtkApplicationImplDBus *dbus)
 static void
 gtk_application_impl_dbus_finalize (GObject *object)
 {
-  //GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) object;
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) object;
+
+  g_free (dbus->app_menu_path);
+  g_free (dbus->menubar_path);
+  g_free (dbus->app_id);
 
   G_OBJECT_CLASS (gtk_application_impl_dbus_parent_class)->finalize (object);
 }
