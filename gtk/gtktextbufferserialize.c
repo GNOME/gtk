@@ -576,6 +576,8 @@ serialize_text (GtkTextBuffer        *buffer,
     }
   while (!gtk_text_iter_equal (&iter, &context->end));
 
+  g_slist_free (tag_list);
+
   /* Close any open tags */
   for (tag_list = active_tags; tag_list; tag_list = tag_list->next)
     g_string_append (context->text_str, "</apply_tag>");
