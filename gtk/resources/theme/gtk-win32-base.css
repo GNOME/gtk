@@ -351,12 +351,33 @@ GtkButton.check:active:prelight {
     background-image: -gtk-win32-theme-part(scrollbar, 2 2, over (8 2));
 }
 
+.scrollbar.slider:active {
+    background-image: -gtk-win32-theme-part(scrollbar, 2 3, over (8 3));
+}
+
+.scrollbar.slider:insensitive {
+  /* There's a theme part for "disabled slider", but the only app observed
+     to have a disabled scrollbar (Notepad) does not draw its slider at all
+     when scrollbar is disabled. */
+  background-image: none;
+  background-color: transparent;
+}
+
 .scrollbar.slider.vertical {
     background-image: -gtk-win32-theme-part(scrollbar, 3 1, over (9 1));
 }
 
 .scrollbar.slider.vertical:prelight {
     background-image: -gtk-win32-theme-part(scrollbar, 3 2, over (9 2));
+}
+
+.scrollbar.slider.vertical:active {
+    background-image: -gtk-win32-theme-part(scrollbar, 3 3, over (9 3));
+}
+
+.scrollbar.slider.vertical:insensitive {
+  background-image: none;
+  background-color: transparent;
 }
 
 /* Entry */
