@@ -219,7 +219,8 @@ enum {
   PROP_DECORATION_LAYOUT,
   PROP_DIALOGS_USE_HEADER,
   PROP_ENABLE_PRIMARY_PASTE,
-  PROP_RECENT_FILES_ENABLED
+  PROP_RECENT_FILES_ENABLED,
+  PROP_LONG_PRESS_TIME
 };
 
 /* --- prototypes --- */
@@ -1635,6 +1636,22 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_RECENT_FILES_ENABLED);
+
+  /**
+   * GtkSettings:gtk-long-press-time:
+   *
+   * The time for a button or touch press to be considered a "long press".
+   *
+   * Since: 3.14
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_uint ("gtk-long-press-time",
+								P_("Long press time"),
+								P_("Time for a button/touch press to be considered a long press (in milliseconds)"),
+								0, G_MAXINT, 500,
+								GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_LONG_PRESS_TIME);
 }
 
 static void
