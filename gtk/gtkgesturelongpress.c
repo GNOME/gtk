@@ -24,8 +24,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#define DEFAULT_TRIGGER_DELAY 500
-
 typedef struct _GtkGestureLongPressPrivate GtkGestureLongPressPrivate;
 
 enum {
@@ -92,6 +90,8 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
 {
   GtkGestureLongPressPrivate *priv;
   const GdkEvent *event;
+  GtkWidget *widget;
+  gint delay;
 
   priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (gesture));
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -102,10 +102,14 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
        event->type != GDK_TOUCH_BEGIN))
     return;
 
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  g_object_get (gtk_widget_get_settings (widget),
+		"gtk-long-press-time", &delay, NULL);
+
   gtk_gesture_get_point (gesture, sequence,
                          &priv->initial_x, &priv->initial_y);
   priv->timeout_id =
-    gdk_threads_add_timeout (DEFAULT_TRIGGER_DELAY,
+    gdk_threads_add_timeout (delay,
                              _gtk_gesture_long_press_timeout,
                              gesture);
 }
