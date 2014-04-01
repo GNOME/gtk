@@ -340,11 +340,6 @@ struct _GtkTreeViewPrivate
   /* Cell Editing */
   GtkTreeViewColumn *edited_column;
 
-  /* The node that's currently being collapsed or expanded */
-  GtkRBNode *expanded_collapsed_node;
-  GtkRBTree *expanded_collapsed_tree;
-  guint expand_collapse_timeout;
-
   /* Auto expand/collapse timeout in hover mode */
   guint auto_expand_timeout;
 
@@ -2025,14 +2020,12 @@ static void
 gtk_tree_view_free_rbtree (GtkTreeView *tree_view)
 {
   _gtk_rbtree_free (tree_view->priv->tree);
-  
+
   tree_view->priv->tree = NULL;
   tree_view->priv->button_pressed_node = NULL;
   tree_view->priv->button_pressed_tree = NULL;
   tree_view->priv->prelight_tree = NULL;
   tree_view->priv->prelight_node = NULL;
-  tree_view->priv->expanded_collapsed_node = NULL;
-  tree_view->priv->expanded_collapsed_tree = NULL;
 }
 
 static void
