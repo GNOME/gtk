@@ -11866,7 +11866,13 @@ gtk_tree_view_expand_all (GtkTreeView *tree_view)
 static gboolean
 expand_collapse_timeout (gpointer data)
 {
-  return do_expand_collapse (data);
+  GtkTreeView *tree_view = GTK_TREE_VIEW (data);
+  gboolean retval = do_expand_collapse (data);
+
+  if (! retval)
+    remove_expand_collapse_timeout (tree_view);
+
+  return retval;
 }
 
 static void
