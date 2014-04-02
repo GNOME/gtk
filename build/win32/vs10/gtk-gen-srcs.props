@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gtk-build-defines.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <CopyConfigH>copy ..\..\..\config.h.win32 ..\..\..\config.h</CopyConfigH>
+    <CopyGdkConfigH>copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h</CopyGdkConfigH>
+    <GtkGenerateGdkDef>
+echo EXPORTS &gt; $(DefDir)\gdk.def
+cl /EP -DGDK_WINDOWING_WIN32 -DALL_FILES -DG_GNUC_CONST= ..\..\..\gdk\gdk.symbols &gt;&gt; $(DefDir)\gdk.def
+    </GtkGenerateGdkDef>
+    <GtkGenerateGtkDefW64>
+echo EXPORTS &gt; $(DefDir)\gtk.def
+cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -D_WIN64 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt; $(DefDir)\gtk.def
+    </GtkGenerateGtkDefW64>
+    <GtkGenerateGtkDef>
+echo EXPORTS &gt; $(DefDir)\gtk.def
+cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt; $(DefDir)\gtk.def
+    </GtkGenerateGtkDef>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtkgensrcsprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="CopyConfigH">
+      <Value>$(CopyConfigH)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CopyGdkConfigH">
+      <Value>$(CopyGdkConfigH)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkGenerateGdkDef">
+      <Value>$(GtkGenerateGdkDef)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkGenerateGtkDefW64">
+      <Value>$(GtkGenerateGtkDefW64)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkGenerateGtkDef">
+      <Value>$(GtkGenerateGtkDef)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

@@ -15,17 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_rc_style.c">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_style.c">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_theme_main.c">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modules\engines\ms-windows\xp_theme.c">
-      <Filter>Sources</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_rc_style.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_style.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_theme_main.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\engines\ms-windows\xp_theme.c"><Filter>Sources</Filter></ClCompile>
   </ItemGroup>
 </Project>
