@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gtkgensrcsprops"
+	InheritedPropertySheets=".\gtk-build-defines.vsprops"
+	>
+	<UserMacro
+		Name="CopyConfigH"
+		Value="copy ..\..\..\config.h.win32 ..\..\..\config.h"
+	/>
+	<UserMacro
+		Name="CopyGdkConfigH"
+		Value="copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h"
+	/>
+	<UserMacro
+		Name="GtkGenerateGdkDef"
+		Value="
+echo EXPORTS &gt; $(DefDir)\gdk.def&#x0D;&#x0A;
+cl /EP -DGDK_WINDOWING_WIN32 -DALL_FILES -DG_GNUC_CONST= ..\..\..\gdk\gdk.symbols &gt;&gt; $(DefDir)\gdk.def&#x0D;&#x0A;
+		      "
+	/>
+	<UserMacro
+		Name="GtkGenerateGtkDefW64"
+		Value="
+echo EXPORTS &gt; $(DefDir)\gtk.def&#x0D;&#x0A;
+cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -D_WIN64 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt; $(DefDir)\gtk.def&#x0D;&#x0A;
+		      "
+	/>
+	<UserMacro
+		Name="GtkGenerateGtkDef"
+		Value="
+echo EXPORTS &gt; $(DefDir)\gtk.def&#x0D;&#x0A;
+cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt; $(DefDir)\gtk.def&#x0D;&#x0A;
+		      "
+	/>
+</VisualStudioPropertySheet>
