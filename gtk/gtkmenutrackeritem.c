@@ -87,6 +87,7 @@ struct _GtkMenuTrackerItem
   GtkActionObservable *observable;
   gchar *action_namespace;
   gchar *action_and_target;
+  gchar *display_hint;
   GMenuItem *item;
   GtkMenuTrackerItemRole role : 4;
   guint is_separator : 1;
@@ -204,6 +205,7 @@ gtk_menu_tracker_item_finalize (GObject *object)
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (object);
 
   g_free (self->action_namespace);
+  g_free (self->display_hint);
 
   if (self->observable)
     g_object_unref (self->observable);
@@ -473,7 +475,8 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
                             GMenuModel          *model,
                             gint                 item_index,
                             const gchar         *action_namespace,
-                            gboolean             is_separator)
+                            gboolean             is_separator,
+                            const gchar         *display_hint)
 {
   GtkMenuTrackerItem *self;
   const gchar *action_name;
@@ -487,6 +490,7 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
   self->action_namespace = g_strdup (action_namespace);
   self->observable = g_object_ref (observable);
   self->is_separator = is_separator;
+  self->display_hint = g_strdup (display_hint);
 
   if (!is_separator && g_menu_item_get_attribute (self->item, "hidden-when", "&s", &hidden_when))
     {
@@ -689,6 +693,12 @@ gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
   g_menu_item_get_attribute (self->item, "x-gtk-private-special", "&s", &special);
 
   return special;
+}
+
+const gchar *
+gtk_menu_tracker_item_get_display_hint (GtkMenuTrackerItem *self)
+{
+  return self->display_hint;
 }
 
 GMenuModel *

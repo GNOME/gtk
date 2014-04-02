@@ -46,9 +46,11 @@ GtkMenuTrackerItem *   _gtk_menu_tracker_item_new                       (GtkActi
                                                                          GMenuModel          *model,
                                                                          gint                 item_index,
                                                                          const gchar         *action_namespace,
-                                                                         gboolean             is_separator);
+                                                                         gboolean             is_separator,
+                                                                         const gchar         *display_hint);
 
 const gchar *           gtk_menu_tracker_item_get_special               (GtkMenuTrackerItem *self);
+const gchar *           gtk_menu_tracker_item_get_display_hint          (GtkMenuTrackerItem *self);
 
 GtkActionObservable *  _gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
 
