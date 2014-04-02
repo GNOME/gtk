@@ -59,6 +59,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkactionmuxer.h"
 #include "gtkmenutracker.h"
+#include "gtkmenutrackeritem.h"
 #include "gtkstack.h"
 #include "gtksizegroup.h"
 #include "a11y/gtkpopoveraccessible.h"
@@ -2004,9 +2005,9 @@ gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
       GtkWidget *separator;
       const gchar *label;
 
-      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
- 
       label = gtk_menu_tracker_item_get_label (item);
+
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 
       if (label != NULL)
         {
@@ -2092,18 +2093,61 @@ gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
     }
   else
     {
-      widget = gtk_model_button_new ();
-      g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "visible", widget, "visible", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "role", widget, "action-role", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "toggled", widget, "toggled", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "accel", widget, "accel", G_BINDING_SYNC_CREATE);
+      const gchar *hint;
+      GtkWidget *icon_box = NULL;
+      GtkWidget *button;
 
-      g_signal_connect (widget, "clicked", G_CALLBACK (gtk_popover_item_activate), item);
+      hint = gtk_menu_tracker_item_get_display_hint (item);
+      if (g_strcmp0 (hint, "iconic") == 0)
+        {
+          GList *l;
+          GtkWidget *sibling = NULL;
+          l = gtk_container_get_children (GTK_CONTAINER (box));
+          sibling = g_list_nth_data (l, position);
+          g_list_free (l);
+          if (sibling)
+            icon_box = GTK_WIDGET (g_object_get_data (G_OBJECT (sibling), "iconic-section"));
+          if (GTK_IS_BOX (icon_box))
+            {
+              widget = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+              gtk_widget_set_no_show_all (widget, TRUE);
+              g_object_set_data (G_OBJECT (widget), "iconic-section", icon_box);
+            }
+          else
+            {
+              icon_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+              gtk_widget_set_halign (icon_box, GTK_ALIGN_FILL);
+              gtk_style_context_add_class (gtk_widget_get_style_context (icon_box), GTK_STYLE_CLASS_LINKED);
+              gtk_widget_show (icon_box);
+              g_object_set_data (G_OBJECT (icon_box), "iconic-section", icon_box);
+              widget = icon_box;
+            }
+        }
+
+      button = gtk_model_button_new ();
+      g_object_bind_property (item, "label", button, "text", G_BINDING_SYNC_CREATE);
+      if (g_strcmp0 (hint, "iconic") == 0)
+        g_object_bind_property (item, "verb-icon", button, "icon", G_BINDING_SYNC_CREATE);
+      else
+        g_object_bind_property (item, "icon", button, "icon", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "sensitive", button, "sensitive", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "visible", button, "visible", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "role", button, "action-role", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "toggled", button, "toggled", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "accel", button, "accel", G_BINDING_SYNC_CREATE);
+      g_signal_connect (button, "clicked", G_CALLBACK (gtk_popover_item_activate), item);
+      if (icon_box)
+        {
+          g_object_set (button, "iconic", TRUE, "centered", TRUE, NULL);
+          g_object_set_data_full (G_OBJECT (button), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
+
+          gtk_box_pack_end (GTK_BOX (icon_box), button, TRUE, TRUE, 0);
+        }
+      else
+        {
+          widget = button;
+        }
     }
-
   g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
 
   gtk_container_add (GTK_CONTAINER (box), widget);
