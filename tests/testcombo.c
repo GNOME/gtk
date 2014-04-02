@@ -1057,6 +1057,8 @@ main (int argc, char **argv)
 	GtkTreeIter iter;
 	GdkRGBA color;
 	GtkCellArea *area;
+        gchar *text;
+        gint i;
 
         gtk_init (&argc, &argv);
 
@@ -1430,6 +1432,18 @@ main (int argc, char **argv)
                                         "text", 0, NULL);
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 	gtk_combo_box_set_popup_fixed_width (GTK_COMBO_BOX (combobox), FALSE);
+
+        tmp = gtk_frame_new ("Looong");
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        combobox = gtk_combo_box_text_new ();
+        for (i = 0; i < 200; i++)
+          {
+            text = g_strdup_printf ("Item %d", i);
+            gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combobox), text);
+            g_free (text);
+          }
+        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 53);
+        gtk_container_add (GTK_CONTAINER (tmp), combobox);
 
         gtk_widget_show_all (window);
 
