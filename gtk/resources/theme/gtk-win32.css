@@ -328,10 +328,14 @@
 }
 
 .list-row:selected {
+  background-color: transparent;
   /* Override *:selected {} blanket style, keeping the background - bright
      and the text - dark */
-  background-color: transparent;
   color: @text_color;
+  background-image: -gtk-win32-theme-part(listview, 6 13);
+}
+
+.list-row:selected:focus {
   background-image: -gtk-win32-theme-part(listview, 6 11);
 }
 
