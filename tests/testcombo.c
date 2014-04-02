@@ -1021,6 +1021,7 @@ main (int argc, char **argv)
 	GtkTreePath *path;
 	GtkTreeIter iter;
         GdkColor color;
+        gint i;
 
         gtk_init (&argc, &argv);
 
@@ -1330,6 +1331,18 @@ main (int argc, char **argv)
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_path_free (path);
         gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combobox), &iter);
+
+        tmp = gtk_frame_new ("Looong");
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        combobox = gtk_combo_box_text_new ();
+        for (i = 0; i < 200; i++)
+          {
+            gchar *text = g_strdup_printf ("Item %d", i);
+            gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combobox), text);
+            g_free (text);
+          }
+        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 53);
+        gtk_container_add (GTK_CONTAINER (tmp), combobox);
 
 #if 1
 	gdk_threads_add_timeout (1000, (GSourceFunc) capital_animation, model);
