@@ -1,6 +1,24 @@
 <interface>
   <menu id="menu">
     <section>
+      <attribute name="display-hint">iconic</attribute>
+      <item>
+        <attribute name="label">Cut</attribute>
+        <attribute name="action">top.cut</attribute>
+        <attribute name="verb-icon">edit-cut-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label">Copy</attribute>
+        <attribute name="action">top.copy</attribute>
+        <attribute name="verb-icon">edit-copy-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label">Paste</attribute>
+        <attribute name="action">top.paste</attribute>
+        <attribute name="verb-icon">edit-paste-symbolic</attribute>
+      </item>
+    </section>
+    <section>
       <item>
         <attribute name="label">No action</attribute>
         <attribute name="action">action1</attribute>
@@ -44,6 +62,21 @@
           <attribute name="label">Item 5b</attribute>
           <attribute name="action">top.action5</attribute>
         </item>
+        <section>
+          <attribute name="display-hint">iconic</attribute>
+          <item>
+            <attribute name="label">List</attribute>
+            <attribute name="action">top.set-view</attribute>
+            <attribute name="target">list</attribute>
+            <attribute name="verb-icon">view-list-symbolic</attribute>
+          </item>
+          <item>
+            <attribute name="label">Grid</attribute>
+            <attribute name="action">top.set-view</attribute>
+            <attribute name="target">grid</attribute>
+            <attribute name="verb-icon">view-grid-symbolic</attribute>
+          </item>
+        </section>
         <item>
           <attribute name="label">Item 5c</attribute>
           <attribute name="action">top.action5</attribute>
@@ -51,6 +84,29 @@
         <item>
           <attribute name="label">Item 5d</attribute>
           <attribute name="action">top.action5</attribute>
+        </item>
+      </section>
+      <section>
+        <attribute name="display-hint">iconic</attribute>
+        <attribute name="label">Format</attribute>
+        <item>
+          <attribute name="label">Bold</attribute>
+          <attribute name="action">top.bold</attribute>
+        </item>
+        <item>
+          <attribute name="label">Italic</attribute>
+          <attribute name="action">top.italic</attribute>
+          <attribute name="verb-icon">format-text-italic-symbolic</attribute>
+        </item>
+        <item>
+          <attribute name="label">Strikethrough</attribute>
+          <attribute name="action">top.strikethrough</attribute>
+          <attribute name="verb-icon">format-text-strikethrough-symbolic</attribute>
+        </item>
+        <item>
+          <attribute name="label">Underline</attribute>
+          <attribute name="action">top.underline</attribute>
+          <attribute name="verb-icon">format-text-underline-symbolic</attribute>
         </item>
       </section>
       <section>
