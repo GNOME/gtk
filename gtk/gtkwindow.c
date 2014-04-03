@@ -1847,7 +1847,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
  * the window internally, gtk_window_new() does not return a reference
  * to the caller.
  *
- * To delete a #GtkWindow, call gtk_window_destroy().
+ * To delete a #GtkWindow, call gtk_widget_destroy().
  * 
  * Returns: a new #GtkWindow.
  **/
