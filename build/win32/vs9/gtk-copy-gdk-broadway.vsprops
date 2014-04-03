@@ -6,6 +6,10 @@
 	InheritedPropertySheets=".\gtk-build-defines.vsprops"
 	>
 	<Tool
+		Name="VCLinkerTool"
+		AdditionalOptions="/EXPORT:gdk_win32_display_manager_get_type"
+	/>
+	<Tool
 		Name="VCPostBuildEventTool"
 		CommandLine="
 if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; goto DoRelease&#x0D;&#x0A;

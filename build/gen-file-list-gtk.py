@@ -28,10 +28,23 @@ def gen_gdk_filelist(srcroot, subdir, dest):
         for i in sources:
             d.write(srcroot + '\\' + subdir + '\\' + i.replace('/', '\\') + '\n')
 
-def gen_filelist_gtk(srcroot, subdir, dest):
+def gen_gdkwin32_filelist(srcroot, subdir, dest):
+    vars = read_vars_from_AM(os.path.join(srcroot, subdir, 'Makefile.am'),
+                             vars = {},
+                             conds = {'HAVE_INTROSPECTION': True,
+                                      'OS_WIN32': True},
+                             filters = ['w32_introspection_files'])
+
+    files = vars['w32_introspection_files'].split()
+
+    with open(dest, 'w') as d:
+        for i in files:
+            d.write(srcroot + '\\' + subdir + '\\' + i.replace('/', '\\') + '\n')
+
+def gen_gtk_filelist(srcroot, subdir, dest):
     vars = read_vars_from_AM(os.path.join(srcroot, 'gtk', 'Makefile.am'),
                              vars = {},
-                             conds = {'USE_WIN32':True,
+                             conds = {'USE_WIN32': True,
                                       'USE_QUARTZ': False,
                                       'USE_X11': False,
                                       'USE_EXTERNAL_ICON_CACHE': False},
@@ -60,7 +73,8 @@ def main(argv):
     subdir_gtk = 'gtk'
 
     gen_gdk_filelist(srcroot, subdir_gdk, 'gdk_list')
-    gen_filelist_gtk(srcroot, subdir_gtk, 'gtk_list')
+    gen_gdkwin32_filelist(srcroot, subdir_gdk, 'gdkwin32_list')
+    gen_gtk_filelist(srcroot, subdir_gtk, 'gtk_list')
     return 0
 
 if __name__ == '__main__':

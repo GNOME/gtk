@@ -6,6 +6,9 @@ APIVERSION = 3.0
 
 CHECK_PACKAGE = gdk-pixbuf-2.0 atk pangocairo gio-2.0
 
+built_install_girs = Gdk-$(APIVERSION).gir GdkWin32-$(APIVERSION).gir Gtk-$(APIVERSION).gir
+built_install_typelibs = Gdk-$(APIVERSION).typelib GdkWin32-$(APIVERSION).typelib Gtk-$(APIVERSION).typelib
+
 !if "$(PLAT)" == "x64"
 TIME_T_DEFINE = -Dtime_t=long long
 !else
@@ -15,9 +18,9 @@ TIME_T_DEFINE = -Dtime_t=long
 !include introspection-msvc.mak
 
 !if "$(BUILD_INTROSPECTION)" == "TRUE"
-all: setgirbuildnev Gdk-$(APIVERSION).gir Gdk-$(APIVERSION).typelib Gtk-$(APIVERSION).gir Gtk-$(APIVERSION).typelib
+all: setgirbuildnev $(built_install_girs) $(built_install_typelibs)
 
-gdk_list gtk_list:
+gdk_list gdkwin32_list gtk_list:
 	@-echo Generating Filelist to Introspect for GDK/GTK...
 	$(PYTHON2) gen-file-list-gtk.py
 
@@ -27,6 +30,10 @@ setgirbuildnev:
 	@set PATH=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(BASEDIR)\bin;$(PATH);$(MINGWDIR)\bin
 	@set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
 	@set LIB=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(LIB)
+
+win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib: win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\gdk-$(APIVERSION).lib
+	@-echo Copying win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib from win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\gdk-$(APIVERSION).lib...
+	@-copy /b win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\gdk-$(APIVERSION).lib win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib
 
 Gdk-$(APIVERSION).gir: gdk_list
 	@-echo Generating Gdk-$(APIVERSION).gir...
@@ -41,7 +48,22 @@ Gdk-$(APIVERSION).gir: gdk_list
 	--reparse-validate --add-include-path=$(G_IR_INCLUDEDIR) --add-include-path=.	\
 	--pkg-export gdk-3.0 --warn-all --c-include="gdk/gdk.h"	\
 	-DG_LOG_DOMAIN=\"Gdk\" -DGDK_COMPILATION	\
-	--filelist=gdk_list	-o Gdk-3.0.gir
+	--filelist=gdk_list	-o $@
+
+GdkWin32-$(APIVERSION).gir: gdkwin32_list win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib
+	@-echo Generating GdkWin32-$(APIVERSION).gir...
+	$(PYTHON2) $(G_IR_SCANNER) --verbose -I.. -I..\gdk	\
+	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include	\
+	-I$(BASEDIR)\include\pango-1.0 -I$(BASEDIR)\include\atk-1.0	\
+	-I$(BASEDIR)\include\gdk-pixbuf-2.0 -I$(BASEDIR)\include	\
+	$(TIME_T_DEFINE) --namespace=GdkWin32 --nsversion=3.0	\
+	--include=Gio-2.0 --include=GdkPixbuf-2.0	\
+	--include=Pango-1.0	--include-uninstalled=./Gdk-$(APIVERSION).gir	\
+	--no-libtool --library=gdk-3.0	\
+	--reparse-validate --add-include-path=$(G_IR_INCLUDEDIR) --add-include-path=.	\
+	--pkg-export gdk-win32-3.0 --warn-all --c-include="gdk/gdkwin32.h"	\
+	-DG_LOG_DOMAIN=\"Gdk\" -DGDK_COMPILATION	\
+	--filelist=gdkwin32_list	-o $@
 
 Gtk-$(APIVERSION).gir: gtk_list
 	$(PYTHON2) $(G_IR_SCANNER) --verbose -I.. -I..\gtk -I..\gdk	\
@@ -56,7 +78,7 @@ Gtk-$(APIVERSION).gir: gtk_list
 	--pkg-export gtk+-3.0 --warn-all --c-include="gtk/gtkx.h"	\
 	-DG_LOG_DOMAIN=\"Gtk\" -DGTK_LIBDIR=\"/dummy/lib\"	\
 	$(TIME_T_DEFINE) -DGTK_DATADIR=\"/dummy/share\" -DGTK_DATA_PREFIX=\"/dummy\"	\
-	-DGTK_SYSCONFDIR=\"/dummy/etc\" -DGTK_VERSION=\"3.11.8\"	\
+	-DGTK_SYSCONFDIR=\"/dummy/etc\" -DGTK_VERSION=\"3.12.0\"	\
 	-DGTK_BINARY_VERSION=\"3.0.0\" -DGTK_HOST=\"i686-pc-vs$(VSVER)\"	\
 	-DGTK_COMPILATION -DGTK_PRINT_BACKENDS=\"file\"	\
 	-DGTK_PRINT_PREVIEW_COMMAND=\"undefined-gtk-print-preview-command\"	\
@@ -65,21 +87,15 @@ Gtk-$(APIVERSION).gir: gtk_list
 	-DINCLUDE_IM_ime -DINCLUDE_IM_inuktitut -DINCLUDE_IM_ipa	\
 	-DINCLUDE_IM_multipress -DINCLUDE_IM_thai -DINCLUDE_IM_ti_er	\
 	-DINCLUDE_IM_ti_et -DINCLUDE_IM_viqr --filelist=gtk_list	\
-	-o Gtk-3.0.gir
+	-o $@
 
-Gdk-$(APIVERSION).typelib: Gdk-$(APIVERSION).gir
-	@-echo Compiling Gdk-$(APIVERSION).typelib...
-	$(G_IR_COMPILER) --includedir=. --debug --verbose Gdk-$(APIVERSION).gir -o Gdk-$(APIVERSION).typelib
+$(built_install_typelibs): $(built_install_girs)
+	@-echo Compiling $*.typelib...
+	@-$(G_IR_COMPILER) --includedir=. --debug --verbose $*.gir -o $@
 
-Gtk-$(APIVERSION).typelib: Gtk-$(APIVERSION).gir Gdk-$(APIVERSION).typelib
-	@-echo Compiling Gtk-$(APIVERSION).typelib...
-	$(G_IR_COMPILER) --includedir=. --debug --verbose Gtk-$(APIVERSION).gir -o Gtk-$(APIVERSION).typelib
-
-install-introspection: setgirbuildnev Gdk-$(APIVERSION).gir Gdk-$(APIVERSION).typelib Gtk-$(APIVERSION).gir Gtk-$(APIVERSION).typelib
-	@-copy Gdk-$(APIVERSION).gir $(G_IR_INCLUDEDIR)
-	@-copy /b Gdk-$(APIVERSION).typelib $(G_IR_TYPELIBDIR)
-	@-copy Gtk-$(APIVERSION).gir $(G_IR_INCLUDEDIR)
-	@-copy /b Gtk-$(APIVERSION).typelib $(G_IR_TYPELIBDIR)
+install-introspection: setgirbuildnev $(built_install_girs) $(built_install_typelibs)
+	@-copy *.gir $(G_IR_INCLUDEDIR)
+	@-copy /b *.typelib $(G_IR_TYPELIBDIR)
 
 !else
 all:
@@ -87,10 +103,10 @@ all:
 !endif
 
 clean:
-	@-del /f/q Gtk-$(APIVERSION).typelib
-	@-del /f/q Gtk-$(APIVERSION).gir
-	@-del /f/q Gdk-$(APIVERSION).typelib
-	@-del /f/q Gdk-$(APIVERSION).gir
+	@-del /f/q *.typelib
+	@-del /f/q *.gir
+	@-del /f/q win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib
 	@-del /f/q gtk_list
+	@-del /f/q gdkwin32_list
 	@-del /f/q gdk_list
 	@-del /f/q *.pyc

@@ -12,6 +12,7 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>$(OutDir)\gdk-win32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/EXPORT:gdk_win32_display_manager_get_type</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
 </Project>
