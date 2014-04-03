@@ -3,7 +3,6 @@
   <PropertyGroup Label="UserMacros">
     <VSVer>10</VSVer>
     <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
-    <GlibEtcInstallRootFromBuildWin32>..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRootFromBuildWin32>
     <CopyDir>..\..\..\..\vs$(VSVer)\$(Platform)</CopyDir>
     <ApiVersion>3.0</ApiVersion>
     <GtkLibtoolCompatibleDllPrefix>lib</GtkLibtoolCompatibleDllPrefix>
@@ -23,9 +22,6 @@
     </BuildMacro>
     <BuildMacro Include="GlibEtcInstallRoot">
       <Value>$(GlibEtcInstallRoot)</Value>
-    </BuildMacro>
-    <BuildMacro Include="GlibEtcInstallRootFromBuildWin32">
-      <Value>$(GlibEtcInstallRootFromBuildWin32)</Value>
     </BuildMacro>
     <BuildMacro Include="CopyDir">
       <Value>$(CopyDir)</Value>
