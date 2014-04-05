@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include "gtkscrollbar.h"
+#include "gtkrangeprivate.h"
 
 #include "gtkadjustment.h"
 #include "gtkintl.h"

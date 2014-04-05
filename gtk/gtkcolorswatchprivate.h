@@ -15,12 +15,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_COLOR_SWATCH_H__
-#define __GTK_COLOR_SWATCH_H__
-
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
+#ifndef __GTK_COLOR_SWATCH_PRIVATE_H__
+#define __GTK_COLOR_SWATCH_PRIVATE_H__
 
 #include <gtk/gtkdrawingarea.h>
 
@@ -61,39 +57,27 @@ struct _GtkColorSwatchClass
 };
 
 
-G_GNUC_INTERNAL
 GType       gtk_color_swatch_get_type         (void) G_GNUC_CONST;
-
-G_GNUC_INTERNAL
 GtkWidget * gtk_color_swatch_new              (void);
-
-G_GNUC_INTERNAL
 void        gtk_color_swatch_set_rgba         (GtkColorSwatch *swatch,
                                                const GdkRGBA  *color);
-G_GNUC_INTERNAL
 gboolean    gtk_color_swatch_get_rgba         (GtkColorSwatch *swatch,
                                                GdkRGBA        *color);
-G_GNUC_INTERNAL
 void        gtk_color_swatch_set_hsva         (GtkColorSwatch *swatch,
                                                gdouble         h,
                                                gdouble         s,
                                                gdouble         v,
                                                gdouble         a);
-G_GNUC_INTERNAL
 void        gtk_color_swatch_set_can_drop     (GtkColorSwatch *swatch,
                                                gboolean        can_drop);
-G_GNUC_INTERNAL
 void        gtk_color_swatch_set_icon         (GtkColorSwatch *swatch,
                                                const gchar    *icon);
-G_GNUC_INTERNAL
 void        gtk_color_swatch_set_use_alpha    (GtkColorSwatch *swatch,
                                                gboolean        use_alpha);
-G_GNUC_INTERNAL
 void        gtk_color_swatch_set_selectable   (GtkColorSwatch *swatch,
                                                gboolean        selectable);
-G_GNUC_INTERNAL
 gboolean    gtk_color_swatch_get_selectable   (GtkColorSwatch *swatch);
 
 G_END_DECLS
 
-#endif /* __GTK_COLOR_SWATCH_H__ */
+#endif /* __GTK_COLOR_SWATCH_PRIVATE_H__ */

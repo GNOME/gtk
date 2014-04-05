@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkaccelmapprivate.h"
+#include "gtkaccelgroupprivate.h"
 
 #include "gtkmarshalers.h"
 #include "gtkwindowprivate.h"

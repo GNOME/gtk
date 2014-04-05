@@ -229,27 +229,12 @@ GDK_AVAILABLE_IN_ALL
 GdkModifierType
 	 gtk_accelerator_get_default_mod_mask (void);
 
-
-/* --- internal --- */
 GDK_AVAILABLE_IN_ALL
 GtkAccelGroupEntry*	gtk_accel_group_query	(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods,
 						 guint          *n_entries);
 
-void		     _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
-						 GQuark         accel_path_quark);
-GSList*       _gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group);
-
-struct _GtkAccelGroupEntry
-{
-  GtkAccelKey  key;
-  GClosure    *closure;
-  GQuark       accel_path_quark;
-};
-
-
 G_END_DECLS
-
 
 #endif /* __GTK_ACCEL_GROUP_H__ */

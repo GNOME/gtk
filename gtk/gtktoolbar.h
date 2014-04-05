@@ -146,14 +146,6 @@ void            gtk_toolbar_set_drop_highlight_item (GtkToolbar      *toolbar,
 						     gint             index_);
 
 
-/* internal functions */
-gchar *         _gtk_toolbar_elide_underscores      (const gchar         *original);
-void            _gtk_toolbar_paint_space_line       (GtkWidget           *widget,
-						     GtkToolbar          *toolbar,
-                                                     cairo_t             *cr);
-gint            _gtk_toolbar_get_default_space_size (void);
-
-
 G_END_DECLS
 
 #endif /* __GTK_TOOLBAR_H__ */

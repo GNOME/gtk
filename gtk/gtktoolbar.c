@@ -34,6 +34,7 @@
 #include <string.h>
 
 #include "gtktoolbar.h"
+#include "gtktoolbarprivate.h"
 
 #include "gtkarrow.h"
 #include "gtkbindings.h"

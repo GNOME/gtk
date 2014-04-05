@@ -18,10 +18,6 @@
 #ifndef __GTK_COLOR_PLANE_H__
 #define __GTK_COLOR_PLANE_H__
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #include <gtk/gtkdrawingarea.h>
 #include <gtk/gtktypes.h>
 
@@ -58,10 +54,7 @@ struct _GtkColorPlaneClass
 };
 
 
-G_GNUC_INTERNAL
 GType       gtk_color_plane_get_type (void) G_GNUC_CONST;
-
-G_GNUC_INTERNAL
 GtkWidget * gtk_color_plane_new      (GtkAdjustment *h_adj,
                                       GtkAdjustment *s_adj,
                                       GtkAdjustment *v_adj);

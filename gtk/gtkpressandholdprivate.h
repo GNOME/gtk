@@ -53,13 +53,8 @@ struct _GtkPressAndHoldClass
 };
 
 
-G_GNUC_INTERNAL
 GType             gtk_press_and_hold_get_type      (void) G_GNUC_CONST;
-
-G_GNUC_INTERNAL
 GtkPressAndHold * gtk_press_and_hold_new           (void);
-
-G_GNUC_INTERNAL
 void              gtk_press_and_hold_process_event (GtkPressAndHold *pah,
                                                     GdkEvent        *event);
 

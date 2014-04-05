@@ -27,7 +27,7 @@
 #include "deprecated/gtkstock.h"
 #include "gtkbox.h"
 #include "gtkintl.h"
-#include "gtktoolbar.h"
+#include "gtktoolbarprivate.h"
 #include "deprecated/gtkactivatable.h"
 #include "gtkactionable.h"
 #include "gtkprivate.h"

@@ -29,6 +29,7 @@
 #include <math.h>
 
 #include "gtkrange.h"
+#include "gtkrangeprivate.h"
 
 #include "gtkadjustment.h"
 #include "gtkcolorscaleprivate.h"

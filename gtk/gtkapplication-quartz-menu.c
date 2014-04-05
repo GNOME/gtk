@@ -23,7 +23,7 @@
 #include "gtkapplicationprivate.h"
 #include "gtkmenutracker.h"
 #include "gtkicontheme.h"
-#include "gtktoolbar.h"
+#include "gtktoolbarprivate.h"
 #include "gtkquartz.h"
 
 #include <gdk/quartz/gdkquartz.h>

@@ -1,5 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* GTK - The GIMP Toolkit
+ * Copyright (C) 1998, 2001 Tim Janik
  * Copyright (C) Javier Jardón <jjardon@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -20,6 +21,10 @@
 #define __GTK_ACCEL_GROUP_PRIVATE_H__
 
 
+#include <gtk/gtkaccelgroup.h>
+
+G_BEGIN_DECLS
+
 struct _GtkAccelGroupPrivate
 {
   guint               lock_count;
@@ -29,4 +34,17 @@ struct _GtkAccelGroupPrivate
   GtkAccelGroupEntry *priv_accels;
 };
 
-#endif  /* __GTK_ACCEL_GROUP_PRIVATE_H__ */
+void	_gtk_accel_group_reconnect        (GtkAccelGroup *accel_group,
+                                           GQuark         accel_path_quark);
+GSList* _gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group);
+
+struct _GtkAccelGroupEntry
+{
+  GtkAccelKey  key;
+  GClosure    *closure;
+  GQuark       accel_path_quark;
+};
+
+G_END_DECLS
+
+#endif /* __GTK_ACCEL_GROUP_PRIVATE_H__ */

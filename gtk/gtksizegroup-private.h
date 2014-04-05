@@ -21,7 +21,9 @@
 
 #include <gtk/gtksizegroup.h>
 
-/**
+G_BEGIN_DECLS
+
+/*
  * GtkQueueResizeFlags:
  * @GTK_QUEUE_RESIZE_INVALIDATE_ONLY: invalidate all cached sizes
  *  as we would normally do when a widget is queued for resize,
@@ -41,5 +43,7 @@ GHashTable * _gtk_size_group_get_widget_peers (GtkWidget           *for_widget,
                                                GtkOrientation       orientation);
 void _gtk_size_group_queue_resize             (GtkWidget           *widget,
                                                GtkQueueResizeFlags  flags);
+
+G_END_DECLS
 
 #endif /* __GTK_SIZE_GROUP_PRIVATE_H__ */

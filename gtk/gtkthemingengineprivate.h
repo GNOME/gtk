@@ -22,6 +22,8 @@
 #include "gtk/gtkthemingengine.h"
 #include "gtk/gtkcssvalueprivate.h"
 
+G_BEGIN_DECLS
+
 void _gtk_theming_engine_paint_spinner (cairo_t       *cr,
                                         gdouble        radius,
                                         gdouble        progress,
@@ -32,5 +34,7 @@ GtkCssValue  *_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
 void          _gtk_theming_engine_set_context   (GtkThemingEngine *engine,
                                                  GtkStyleContext  *context);
 GtkStyleContext *_gtk_theming_engine_get_context   (GtkThemingEngine *engine);
+
+G_END_DECLS
 
 #endif /* __GTK_THEMING_ENGINE_PRIVATE_H__ */

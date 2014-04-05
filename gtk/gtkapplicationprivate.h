@@ -26,34 +26,27 @@
 
 #include "gtkactionmuxer.h"
 
-G_GNUC_INTERNAL
+G_BEGIN_DECLS
+
 void                    gtk_application_window_set_id                   (GtkApplicationWindow     *window,
                                                                          guint                     id);
-G_GNUC_INTERNAL
 GActionGroup *          gtk_application_window_get_action_group         (GtkApplicationWindow     *window);
-G_GNUC_INTERNAL
 void                    gtk_application_handle_window_realize           (GtkApplication           *application,
                                                                          GtkWindow                *window);
-G_GNUC_INTERNAL
 void                    gtk_application_handle_window_map               (GtkApplication           *application,
                                                                          GtkWindow                *window);
-G_GNUC_INTERNAL
 GtkActionMuxer *        gtk_application_get_parent_muxer_for_window     (GtkWindow                *window);
 
-G_GNUC_INTERNAL
 gboolean                gtk_application_activate_accel                  (GtkApplication           *application,
                                                                          GActionGroup             *action_group,
                                                                          guint                     key,
                                                                          GdkModifierType           modifier);
 
-G_GNUC_INTERNAL
 void                    gtk_application_foreach_accel_keys              (GtkApplication           *application,
                                                                          GtkWindow                *window,
                                                                          GtkWindowKeysForeachFunc  callback,
                                                                          gpointer                  user_data);
-G_GNUC_INTERNAL
 GtkActionMuxer *        gtk_application_get_action_muxer                (GtkApplication           *application);
-G_GNUC_INTERNAL
 void                    gtk_application_insert_action_group             (GtkApplication           *application,
                                                                          const gchar              *name,
                                                                          GActionGroup             *action_group);
@@ -153,67 +146,48 @@ typedef struct
                                              GtkWindow                   *window);
 } GtkApplicationImplDBusClass;
 
-G_GNUC_INTERNAL
 GType                   gtk_application_impl_get_type                   (void);
-G_GNUC_INTERNAL
 GType                   gtk_application_impl_dbus_get_type              (void);
-G_GNUC_INTERNAL
 GType                   gtk_application_impl_x11_get_type               (void);
-G_GNUC_INTERNAL
 GType                   gtk_application_impl_wayland_get_type           (void);
-G_GNUC_INTERNAL
 GType                   gtk_application_impl_quartz_get_type            (void);
 
-G_GNUC_INTERNAL
 GtkApplicationImpl *    gtk_application_impl_new                        (GtkApplication              *application,
                                                                          GdkDisplay                  *display);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_startup                    (GtkApplicationImpl          *impl,
                                                                          gboolean                     register_sesion);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_shutdown                   (GtkApplicationImpl          *impl);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_before_emit                (GtkApplicationImpl          *impl,
                                                                          GVariant                    *platform_data);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_window_added               (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_window_removed             (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_active_window_changed      (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_handle_window_realize      (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_handle_window_map          (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_set_app_menu               (GtkApplicationImpl          *impl,
                                                                          GMenuModel                  *app_menu);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_set_menubar                (GtkApplicationImpl          *impl,
                                                                          GMenuModel                  *menubar);
-G_GNUC_INTERNAL
 guint                   gtk_application_impl_inhibit                    (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window,
                                                                          GtkApplicationInhibitFlags   flags,
                                                                          const gchar                 *reason);
-G_GNUC_INTERNAL
 void                    gtk_application_impl_uninhibit                  (GtkApplicationImpl          *impl,
                                                                          guint                        cookie);
-G_GNUC_INTERNAL
 gboolean                gtk_application_impl_is_inhibited               (GtkApplicationImpl          *impl,
                                                                          GtkApplicationInhibitFlags   flags);
 
-G_GNUC_INTERNAL
 gchar *                 gtk_application_impl_dbus_get_window_path       (GtkApplicationImplDBus      *dbus,
                                                                          GtkWindow                   *window);
 
-G_GNUC_INTERNAL
 void                    gtk_application_impl_quartz_setup_menu          (GMenuModel                  *model,
                                                                          GtkActionMuxer              *muxer);
+
+G_END_DECLS
 
 #endif /* __GTK_APPLICATION_PRIVATE_H__ */

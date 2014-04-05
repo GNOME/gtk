@@ -20,6 +20,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gtkimageaccessible.h"
+#include "gtktoolbarprivate.h"
 #include "gtkintl.h"
 
 struct _GtkImageAccessiblePrivate

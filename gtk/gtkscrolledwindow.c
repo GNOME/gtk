@@ -35,6 +35,7 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkscrollbar.h"
+#include "gtkrangeprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"

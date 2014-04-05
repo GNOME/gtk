@@ -35,6 +35,7 @@
 
 #include "gtkcontainer.h"
 #include "gtkaccelmapprivate.h"
+#include "gtkaccelgroupprivate.h"
 #include "gtkclipboard.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcssnumbervalueprivate.h"

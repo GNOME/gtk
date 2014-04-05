@@ -18,10 +18,6 @@
 #ifndef __GTK_COLOR_EDITOR_H__
 #define __GTK_COLOR_EDITOR_H__
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #include <gtk/gtkbox.h>
 
 G_BEGIN_DECLS
@@ -57,10 +53,7 @@ struct _GtkColorEditorClass
 };
 
 
-G_GNUC_INTERNAL
 GType       gtk_color_editor_get_type (void) G_GNUC_CONST;
-
-G_GNUC_INTERNAL
 GtkWidget * gtk_color_editor_new      (void);
 
 G_END_DECLS

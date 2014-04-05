@@ -25,6 +25,8 @@
 #include <gdk/wayland/gdkwayland.h>
 #include <gtk/gtkclipboardprivate.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_CLIPBOARD_WAYLAND            (gtk_clipboard_wayland_get_type ())
 #define GTK_CLIPBOARD_WAYLAND(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CLIPBOARD_WAYLAND, GtkClipboardWayland))
 #define GTK_IS_CLIPBOARD_WAYLAND(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CLIPBOARD_WAYLAND))
@@ -50,6 +52,8 @@ struct _GtkClipboardWaylandClass
 };
 
 GType         gtk_clipboard_wayland_get_type (void) G_GNUC_CONST;
+
+G_END_DECLS
 
 #endif /* GDK_WINDOWING_WAYLAND */
 

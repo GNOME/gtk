@@ -21,7 +21,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtkintl.h"
-#include "gtktoolbar.h"
+#include "gtktoolbarprivate.h"
 #include "gtkprivate.h"
 
 /**

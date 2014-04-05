@@ -18,10 +18,6 @@
 #ifndef __GTK_COLOR_SCALE_H__
 #define __GTK_COLOR_SCALE_H__
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #include <gtk/gtkscale.h>
 
 G_BEGIN_DECLS
@@ -62,14 +58,9 @@ typedef enum
   GTK_COLOR_SCALE_ALPHA
 } GtkColorScaleType;
 
-G_GNUC_INTERNAL
 GType       gtk_color_scale_get_type (void) G_GNUC_CONST;
-
-G_GNUC_INTERNAL
 GtkWidget * gtk_color_scale_new      (GtkAdjustment     *adjustment,
                                       GtkColorScaleType  type);
-
-G_GNUC_INTERNAL
 void        gtk_color_scale_set_rgba (GtkColorScale     *scale,
                                       const GdkRGBA     *color);
 

@@ -530,6 +530,7 @@ gtk_private_h_sources =		\
 	gtkprivate.h		\
 	gtkpixelcacheprivate.h	\
 	gtkquery.h		\
+	gtkrangeprivate.h	\
 	gtkrbtree.h		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
@@ -563,6 +564,7 @@ gtk_private_h_sources =		\
 	gtkthemingbackgroundprivate.h \
 	gtkthemingengineprivate.h \
 	gtktrashmonitor.h	\
+	gtktoolbarprivate.h	\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\

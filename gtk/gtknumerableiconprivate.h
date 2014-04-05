@@ -24,7 +24,11 @@
 
 #include "gtknumerableicon.h"
 
+G_BEGIN_DECLS
+
 void _gtk_numerable_icon_set_background_icon_size (GtkNumerableIcon *self,
                                                    gint icon_size);
+
+G_END_DECLS
 
 #endif /* __GTK_NUMERABLE_ICON_PRIVATE_H__ */

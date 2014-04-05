@@ -19,10 +19,6 @@
 #define __GTK_ACCEL_MAP_PRIVATE_H__
 
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #include <gtk/gtkaccelmap.h>
 
 G_BEGIN_DECLS

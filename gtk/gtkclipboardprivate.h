@@ -22,6 +22,8 @@
 
 #include <gtk/gtkclipboard.h>
 
+G_BEGIN_DECLS
+
 #define GTK_CLIPBOARD_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CLIPBOARD, GtkClipboardClass))
 #define GTK_IS_CLIPBOARD_CLASS(klass)	        (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CLIPBOARD))
 #define GTK_CLIPBOARD_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CLIPBOARD, GtkClipboardClass))
@@ -81,5 +83,7 @@ struct _GtkClipboardClass
   void          (* owner_change)                (GtkClipboard                   *clipboard,
                                                  GdkEventOwnerChange            *event);
 };
+
+G_END_DECLS
 
 #endif /* __GTK_CLIPBOARD_PRIVATE_H__ */

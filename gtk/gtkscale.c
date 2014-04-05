@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include "gtkscaleprivate.h"
+#include "gtkrangeprivate.h"
 
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
