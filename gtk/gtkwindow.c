@@ -7613,7 +7613,11 @@ gtk_window_propagate_key_event (GtkWindow        *window,
       GtkWidget *parent;
       
       if (gtk_widget_is_sensitive (focus))
-        handled = gtk_widget_event (focus, (GdkEvent*) event);
+        {
+          handled = gtk_widget_event (focus, (GdkEvent*) event);
+          if (handled)
+            break;
+        }
 
       parent = gtk_widget_get_parent (focus);
       if (parent)
