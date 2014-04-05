@@ -1,3 +1,53 @@
+Overview of Changes in GTK+ 3.10.7 to 3.10.8
+============================================
+
+* Bugs fixed:
+ 566945 gtk_widget_override_color() documentation should mention non-...
+ 591258 Easy to accidentally select first option in popup menus
+ 692931 The list of printers should be searchable/sortable
+ 693200 Printing via evince crashes badly when /tmp is not writable
+ 701884 lots of invalid reads in iconview a11y code
+ 704456 Synthesized crossing events don't have correct device position
+ 712752 GtkClipboard: add _get_default and _get_primary
+ 722058 GtkTreeModelFilter bug
+ 722722 Fix vertical alignment of labels in "Paper" section of the pr...
+ 723121 GtkPlacesSidebar: pressing "eject" icon does not power down drive
+ 723159 CSD shadows are clipped
+ 723183 GtkStyleContext: don't use disconnect_by_func()
+ 723366 GtkFileChooser crashes due to a signal connection left behind...
+ 723390 gdkwindow: Use an InputOnly window for focus_window
+ 723438 jhbuild buildone glib gtk+ fails with `HAVE_INTROSPECTION doe...
+ 723555 [PATCH] Decode extension names in X11 error handler
+ 723621 Underscore of mnemonics visible in Copy, Cut, Paste popup.
+ 723771 gtkwindow: remove delete-event idle function on finalize
+ 724008 void function should not return void expression
+ 724541 Labels with links can't be activated in a GtkListBox
+ 724631 printing leaks a GFile
+ 724891 GtkTreeViewColumn::button never freed
+ 724895 Print dialog UI regressions
+ 725089 Cairo context sent to the "draw" signal handler has incorrect...
+ 725172 GdkWindow: fix redraws for backends that keep the same backin...
+ 725205 treeselection docs: spelling fix
+ 725225 auto scroll in vertical popover from volume button goes the w...
+ 725754 Fix font size when gdk_x11_display_set_window_scale() is used
+ 725824 gtkentrycompletion: fix a critical warning
+ 725866 DnD fixes
+ 726136 use && instead of 'and' in deprecation warnings
+ 726476 New fontchooser dialog doesn't update font list upon change
+ 726717 Nesting GtkExpander gives Gdk-CRITICAL error
+ 726858 GTK_ENABLE_DEBUG should be G_ENABLE_DEBUG
+ 726859 Assertion/crash if gtk_radio_menu_item_set_group() is called ...
+ 726871 treeview: Lower the duration of validation iterations
+ 726996 Label-for/Labelled-by AtkRelations missing for containers in ...
+ 727643 Segfault in gtk-3.12.0 
+
+* Translation updates:
+ Catalan
+ Kannada
+ Russian
+ Scottish Gaelic
+
+
 Overview of Changes in GTK+ 3.10.6 to 3.10.7
 ============================================
 
