@@ -12,6 +12,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="icon_name">image-missing</property>
+        <property name="use-fallback">True</property>
       </object>
     </child>
   </template>
@@ -45,6 +46,7 @@
                 <property name="visible">True</property>
                 <property name="icon-name">list-add-symbolic</property>
                 <property name="icon-size">0</property>
+                <property name="use-fallback">True</property>
               </object>
             </child>
             <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
@@ -91,6 +93,7 @@
                 <property name="visible">True</property>
                 <property name="icon-name">list-remove-symbolic</property>
                 <property name="icon-size">0</property>
+                <property name="use-fallback">True</property>
               </object>
             </child>
             <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
