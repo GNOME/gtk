@@ -22,7 +22,7 @@ GTK+ is free software and part of the GNU Project. However, the
 licensing terms for GTK+, the GNU LGPL, allow it to be used by all
 developers, including those developing proprietary software, without
 any license fees or royalties.</description>
-  <homepage rdf:resource="http://www.gtk+.org/" />
+  <homepage rdf:resource="http://www.gtk.org/" />
   <license rdf:resource="http://usefulinc.com/doap/licenses/lgpl" />
   <bug-database rdf:resource="http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B" />
   <download-page rdf:resource="http://download.gnome.org/sources/gtk+/" />
