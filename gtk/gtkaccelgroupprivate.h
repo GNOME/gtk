@@ -38,13 +38,6 @@ void	_gtk_accel_group_reconnect        (GtkAccelGroup *accel_group,
                                            GQuark         accel_path_quark);
 GSList* _gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group);
 
-struct _GtkAccelGroupEntry
-{
-  GtkAccelKey  key;
-  GClosure    *closure;
-  GQuark       accel_path_quark;
-};
-
 G_END_DECLS
 
 #endif /* __GTK_ACCEL_GROUP_PRIVATE_H__ */

@@ -235,6 +235,13 @@ GtkAccelGroupEntry*	gtk_accel_group_query	(GtkAccelGroup	*accel_group,
 						 GdkModifierType accel_mods,
 						 guint          *n_entries);
 
+struct _GtkAccelGroupEntry
+{
+  GtkAccelKey  key;
+  GClosure    *closure;
+  GQuark       accel_path_quark;
+};
+
 G_END_DECLS
 
 #endif /* __GTK_ACCEL_GROUP_H__ */
