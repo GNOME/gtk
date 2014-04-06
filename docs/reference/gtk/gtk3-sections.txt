@@ -523,7 +523,13 @@ gtk_list_box_new
 gtk_list_box_prepend
 gtk_list_box_insert
 gtk_list_box_select_row
+gtk_list_box_unselect_row
+gtk_list_box_select_all
+gtk_list_box_unselect_all
 gtk_list_box_get_selected_row
+GtkListBoxForeachFunc
+gtk_list_box_selected_foreach
+gtk_list_box_get_selected_rows
 
 gtk_list_box_set_selection_mode
 gtk_list_box_get_selection_mode
@@ -545,6 +551,7 @@ gtk_list_box_drag_unhighlight_row
 
 gtk_list_box_row_new
 gtk_list_box_row_changed
+gtk_list_box_row_is_selected
 gtk_list_box_row_get_header
 gtk_list_box_row_get_type
 gtk_list_box_row_set_header
