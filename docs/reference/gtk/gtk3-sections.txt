@@ -7494,6 +7494,8 @@ GtkSwitchClass
 gtk_switch_new
 gtk_switch_set_active
 gtk_switch_get_active
+gtk_switch_set_state
+gtk_switch_get_state
 
 <SUBSECTION Standard>
 GTK_TYPE_SWITCH
