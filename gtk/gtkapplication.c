@@ -668,8 +668,10 @@ extract_accel_from_menu_item (GMenuModel     *model,
     }
   g_object_unref (iter);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (accel && action)
     gtk_application_add_accelerator (app, accel, action, target);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (target)
     g_variant_unref (target);
@@ -1075,6 +1077,8 @@ gtk_application_update_accels (GtkApplication *application)
  * than calling this function for each accelerator.
  *
  * Since: 3.4
+ *
+ * Deprecated: 3.14: Use gtk_application_set_accels_for_action() instead
  */
 void
 gtk_application_add_accelerator (GtkApplication *application,
@@ -1107,6 +1111,8 @@ gtk_application_add_accelerator (GtkApplication *application,
  * with gtk_application_add_accelerator().
  *
  * Since: 3.4
+ *
+ * Deprecated: 3.14: Use gtk_application_set_accels_for_action() instead
  */
 void
 gtk_application_remove_accelerator (GtkApplication *application,
