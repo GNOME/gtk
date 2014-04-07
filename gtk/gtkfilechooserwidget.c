@@ -205,6 +205,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_widgets_box;
   GtkWidget *browse_widgets_hpaned;
   GtkWidget *browse_header_box;
+  GtkWidget *browse_files_box;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
@@ -2463,51 +2464,6 @@ unset_file_system_backend (GtkFileChooserWidget *impl)
   priv->file_system = NULL;
 }
 
-/* Saves the widgets around the pathbar so they can be reparented later
- * in the correct place.  This function must be called paired with
- * restore_path_bar().
- */
-static void
-save_path_bar (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GtkWidget *parent;
-
-  g_object_ref (priv->browse_path_bar_hbox);
-
-  parent = gtk_widget_get_parent (priv->browse_path_bar_hbox);
-  if (parent)
-    gtk_container_remove (GTK_CONTAINER (parent), priv->browse_path_bar_hbox);
-}
-
-/* Reparents the path bar and the "Create folder" button to the right place:
- * Above the file list in Open mode, or to the right of the “Save in folder:”
- * label in Save mode.  The save_path_bar() function must be called before this
- * one.
- */
-static void
-restore_path_bar (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-
-  if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN
-      || priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    {
-      gtk_box_pack_start (GTK_BOX (priv->browse_header_box), priv->browse_path_bar_hbox, FALSE, FALSE, 0);
-      gtk_box_reorder_child (GTK_BOX (priv->browse_header_box), priv->browse_path_bar_hbox, 0);
-    }
-  else if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE
-	   || priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    {
-      gtk_widget_set_hexpand (priv->browse_path_bar_hbox, TRUE);
-      gtk_grid_attach (GTK_GRID (priv->save_widgets_table), priv->browse_path_bar_hbox, 1, 1, 1, 1);
-    }
-  else
-    g_assert_not_reached ();
-
-  g_object_unref (priv->browse_path_bar_hbox);
-}
-
 /* Takes the folder stored in a row in the recent_model, and puts it in the pathbar */
 static void
 put_recent_folder_in_pathbar (GtkFileChooserWidget *impl, GtkTreeIter *iter)
@@ -2707,8 +2663,6 @@ update_appearance (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  save_path_bar (impl);
-
   if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
       priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
@@ -2742,7 +2696,6 @@ update_appearance (GtkFileChooserWidget *impl)
   if (priv->location_entry)
     _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
 
-  restore_path_bar (impl);
   path_bar_update (impl);
 
   /* This *is* needed; we need to redraw the file list because the "sensitivity"
@@ -7577,6 +7530,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_hpaned);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, places_sidebar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_tree_view);

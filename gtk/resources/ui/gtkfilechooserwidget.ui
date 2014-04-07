@@ -50,139 +50,6 @@
                 <property name="position">0</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkBox" id="browse_path_bar_hbox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">12</property>
-                <child>
-                  <object class="GtkToggleButton" id="location_button">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Type a file name</property>
-                    <property name="image">location_button_image</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="location_button-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Type a file name</property>
-                      </object>
-                    </child>
-                    <signal name="toggled" handler="location_button_toggled_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkPathBar" id="browse_path_bar">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <signal name="path-clicked" handler="path_bar_clicked" after="yes" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkInfoBar" id="browse_select_a_folder_info_bar">
-                    <property name="app_paintable">True</property>
-                    <property name="can_focus">False</property>
-                    <child internal-child="content_area">
-                      <object class="GtkBox" id="infobar-content_area1">
-                        <property name="can_focus">False</property>
-                        <property name="border_width">8</property>
-                        <property name="spacing">16</property>
-                        <child>
-                          <object class="GtkImage" id="browse_select_a_folder_icon">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">folder</property>
-                            <property name="icon_size">1</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="browse_select_a_folder_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label">message</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                    <child internal-child="action_area">
-                      <object class="GtkButtonBox" id="infobar-action_area1">
-                        <property name="can_focus">False</property>
-                        <property name="border_width">5</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <property name="layout_style">end</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="browse_special_mode_icon">
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">image-missing</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="browse_special_mode_label">
-                    <property name="can_focus">False</property>
-                    <property name="label">special</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="browse_new_folder_button">
-                    <property name="label" translatable="yes">Create Fo_lder</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="new_folder_button_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">5</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -215,6 +82,139 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
+                <child>
+                  <object class="GtkBox" id="browse_path_bar_hbox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkToggleButton" id="location_button">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Type a file name</property>
+                        <property name="image">location_button_image</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="location_button-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Type a file name</property>
+                          </object>
+                        </child>
+                        <signal name="toggled" handler="location_button_toggled_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkPathBar" id="browse_path_bar">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <signal name="path-clicked" handler="path_bar_clicked" after="yes" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkInfoBar" id="browse_select_a_folder_info_bar">
+                        <property name="app_paintable">True</property>
+                        <property name="can_focus">False</property>
+                        <child internal-child="content_area">
+                          <object class="GtkBox" id="infobar-content_area1">
+                            <property name="can_focus">False</property>
+                            <property name="border_width">8</property>
+                            <property name="spacing">16</property>
+                            <child>
+                              <object class="GtkImage" id="browse_select_a_folder_icon">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">folder</property>
+                                <property name="icon_size">1</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="browse_select_a_folder_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label">message</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                        <child internal-child="action_area">
+                          <object class="GtkButtonBox" id="infobar-action_area1">
+                            <property name="can_focus">False</property>
+                            <property name="border_width">5</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <property name="layout_style">end</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="browse_special_mode_icon">
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">image-missing</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="browse_special_mode_label">
+                        <property name="can_focus">False</property>
+                        <property name="label">special</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="browse_new_folder_button">
+                        <property name="label" translatable="yes">Create Fo_lder</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="new_folder_button_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="pack_type">end</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkBox" id="list_and_preview_box">
                     <property name="visible">True</property>
@@ -319,7 +319,7 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -351,7 +351,7 @@
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
