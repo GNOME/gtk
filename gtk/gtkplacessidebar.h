@@ -105,6 +105,11 @@ gboolean           gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSideb
 GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_connect_to_server);
+GDK_AVAILABLE_IN_3_14
+gboolean           gtk_places_sidebar_get_show_enter_location    (GtkPlacesSidebar   *sidebar);
+GDK_AVAILABLE_IN_3_14
+void               gtk_places_sidebar_set_show_enter_location    (GtkPlacesSidebar   *sidebar,
+                                                                  gboolean            show_enter_location);
 
 GDK_AVAILABLE_IN_3_12
 void                 gtk_places_sidebar_set_local_only           (GtkPlacesSidebar   *sidebar,
