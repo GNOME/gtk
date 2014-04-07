@@ -1960,6 +1960,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
   location_switch_to_path_bar (impl);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
 
   priv->save_widgets_table = gtk_grid_new ();
   gtk_box_pack_start (GTK_BOX (vbox), priv->save_widgets_table, FALSE, FALSE, 0);
@@ -2026,7 +2027,7 @@ location_switch_to_path_bar (GtkFileChooserWidget *impl)
       priv->location_entry = NULL;
     }
 
-  gtk_widget_hide (priv->location_entry_box);
+  gtk_widget_hide (priv->browse_header_box);
 }
 
 /* Turns on the location entry.  Can be called even if we are already in that
@@ -2038,7 +2039,7 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   /* when in search or recent files mode, we are not showing the
-   * location_entry_box container, so there's no point in switching
+   * browse_header_box container, so there's no point in switching
    * to it.
    */
   if (priv->operation_mode == OPERATION_MODE_SEARCH ||
@@ -2047,7 +2048,7 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
 
   /* Box */
 
-  gtk_widget_show (priv->location_entry_box);
+  gtk_widget_show (priv->browse_header_box);
 
   /* Entry */
 
@@ -2142,7 +2143,7 @@ location_toggle_popup_handler (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   /* when in search or recent files mode, we are not showing the
-   * location_entry_box container, so there's no point in switching
+   * browse_header_box container, so there's no point in switching
    * to it.
    */
   if (priv->operation_mode == OPERATION_MODE_SEARCH ||
@@ -2586,7 +2587,7 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
       location_mode_set (impl, priv->location_mode, TRUE);
 
       if (priv->location_mode == LOCATION_MODE_FILENAME_ENTRY)
-	gtk_widget_show (priv->location_entry_box);
+	gtk_widget_show (priv->browse_header_box);
     }
 }
 
@@ -2614,7 +2615,7 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
       priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       gtk_widget_hide (priv->location_button);
-      gtk_widget_hide (priv->location_entry_box);
+      gtk_widget_hide (priv->browse_header_box);
     }
 
   recent_start_loading (impl);
@@ -6441,7 +6442,7 @@ search_setup_widgets (GtkFileChooserWidget *impl)
       priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       gtk_widget_hide (priv->location_button);
-      gtk_widget_hide (priv->location_entry_box);
+      gtk_widget_hide (priv->browse_header_box);
     }
 
   focus_search_entry_in_idle (impl);

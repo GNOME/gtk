@@ -10,21 +10,23 @@
   <template class="GtkFileChooserWidget" parent="GtkBox">
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">12</property>
+    <property name="spacing">0</property>
     <child>
       <object class="GtkBox" id="browse_widgets_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">0</property>
         <child>
           <object class="GtkBox" id="browse_header_box">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="border_width">10</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkBox" id="location_entry_box">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">12</property>
                 <child>
@@ -61,12 +63,13 @@
           <object class="GtkPaned" id="browse_widgets_hpaned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="border_width">0</property>
             <child>
               <object class="GtkPlacesSidebar" id="places_sidebar">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
+                <property name="shadow_type">none</property>
                 <property name="local_only">True</property>
                 <signal name="open-location" handler="places_sidebar_open_location_cb" swapped="no"/>
                 <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
@@ -81,12 +84,13 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
+                <property name="spacing">0</property>
                 <child>
                   <object class="GtkBox" id="browse_path_bar_hbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
+                    <property name="border_width">6</property>
                     <child>
                       <object class="GtkToggleButton" id="location_button">
                         <property name="visible">True</property>
@@ -345,6 +349,7 @@
     <child>
       <object class="GtkBox" id="extra_and_filters">
         <property name="visible">True</property>
+        <property name="border_width">10</property>
         <child>
           <object class="GtkBox" id="extra_align">
             <property name="can_focus">False</property>
