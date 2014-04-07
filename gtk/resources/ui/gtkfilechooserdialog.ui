@@ -13,9 +13,10 @@
         <property name="border_width">0</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">0</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="border_width">6</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
