@@ -809,8 +809,6 @@ update_places (GtkPlacesSidebar *sidebar)
 
   /* add built-in bookmarks */
 
-  add_heading (sidebar, SECTION_COMPUTER, _("Places"));
-
   if (should_show_recent (sidebar))
     {
       mount_uri = "recent:///";
@@ -3498,49 +3496,6 @@ icon_cell_renderer_func (GtkTreeViewColumn *column,
   g_object_set (cell, "visible", type != PLACES_HEADING, NULL);
 }
 
-static void
-padding_cell_renderer_func (GtkTreeViewColumn *column,
-                            GtkCellRenderer   *cell,
-                            GtkTreeModel      *model,
-                            GtkTreeIter       *iter,
-                            gpointer           user_data)
-{
-  PlaceType type;
-
-  gtk_tree_model_get (model, iter,
-                      PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
-                      -1);
-
-  if (type == PLACES_HEADING)
-    g_object_set (cell,
-                  "visible", FALSE,
-                  "xpad", 0,
-                  "ypad", 0,
-                  NULL);
-  else
-    g_object_set (cell,
-                  "visible", TRUE,
-                  "xpad", 3,
-                  "ypad", 3,
-                  NULL);
-}
-
-static void
-heading_cell_renderer_func (GtkTreeViewColumn *column,
-                            GtkCellRenderer   *cell,
-                            GtkTreeModel      *model,
-                            GtkTreeIter       *iter,
-                            gpointer           user_data)
-{
-  PlaceType type;
-
-  gtk_tree_model_get (model, iter,
-                      PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
-                      -1);
-
-  g_object_set (cell, "visible", type == PLACES_HEADING, NULL);
-}
-
 static gint
 places_sidebar_sort_func (GtkTreeModel *model,
                           GtkTreeIter  *iter_a,
@@ -3698,6 +3653,20 @@ shell_shows_desktop_changed (GtkSettings *settings,
     }
 }
 
+static gboolean
+row_separator_func (GtkTreeModel *model,
+                    GtkTreeIter *iter,
+                    gpointer data)
+{
+  PlaceType type;
+
+  gtk_tree_model_get (model, iter,
+                      PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
+                      -1);
+
+  return type == PLACES_HEADING;
+}
+
 static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 {
@@ -3739,41 +3708,20 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   tree_view = GTK_TREE_VIEW (gtk_tree_view_new ());
   gtk_tree_view_set_headers_visible (tree_view, FALSE);
 
+  gtk_tree_view_set_row_separator_func (tree_view,
+                                        row_separator_func,
+                                        sidebar,
+                                        NULL);
+
   col = gtk_tree_view_column_new ();
-
-  /* initial padding */
-  cell = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (col, cell, FALSE);
-  g_object_set (cell,
-                "xpad", 6,
-                NULL);
-
-  /* headings */
-  cell = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (col, cell, FALSE);
-  gtk_tree_view_column_set_attributes (col, cell,
-                                       "text", PLACES_SIDEBAR_COLUMN_HEADING_TEXT,
-                                       NULL);
-  g_object_set (cell,
-                "weight", PANGO_WEIGHT_BOLD,
-                "weight-set", TRUE,
-                "ypad", 6,
-                "xpad", 0,
-                NULL);
-  gtk_tree_view_column_set_cell_data_func (col, cell,
-                                           heading_cell_renderer_func,
-                                           sidebar, NULL);
-
-  /* icon padding */
-  cell = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (col, cell, FALSE);
-  gtk_tree_view_column_set_cell_data_func (col, cell,
-                                           padding_cell_renderer_func,
-                                           sidebar, NULL);
 
   /* icon renderer */
   cell = gtk_cell_renderer_pixbuf_new ();
-  g_object_set (cell, "follow-state", TRUE, NULL);
+  g_object_set (cell,
+                "xpad", 10,
+                "ypad", 6,
+                "follow-state", TRUE,
+                NULL);
   gtk_tree_view_column_pack_start (col, cell, FALSE);
   gtk_tree_view_column_set_attributes (col, cell,
                                        "gicon", PLACES_SIDEBAR_COLUMN_GICON,
