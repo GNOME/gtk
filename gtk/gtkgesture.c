@@ -639,7 +639,6 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
 {
   GtkGesturePrivate *priv;
   PointData *data;
-  guint old_state;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
   g_return_val_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
@@ -663,10 +662,9 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
       data->state != GTK_EVENT_SEQUENCE_NONE)
     return FALSE;
 
-  old_state = data->state;
   data->state = state;
   g_signal_emit (gesture, signals[SEQUENCE_STATE_CHANGED], 0,
-                 sequence, old_state);
+                 sequence, state);
 
   if (state == GTK_EVENT_SEQUENCE_DENIED)
     _gtk_gesture_check_recognized (gesture, sequence);
