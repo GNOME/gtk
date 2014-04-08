@@ -17,7 +17,7 @@ can be found here:
 
 Information about using git with GNOME can be found here:
 
-        http://live.gnome.org/Git
+        https://wiki.gnome.org/Git
 
 In order to get GIT GTK+ installed on your system, you need to have
 the most recent GIT versions of GLib, Pango, and ATK installed as well.

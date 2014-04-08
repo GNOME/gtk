@@ -202,7 +202,7 @@ How to compile GTK+ itself
       </listitem>
       <listitem>
         <para>
-          <ulink url="http://live.gnome.org/GObjectIntrospection">Gobject Introspection</ulink>
+          <ulink url="https://wiki.gnome.org/Projects/GObjectIntrospection">Gobject Introspection</ulink>
           is a framework for making introspection data available to
           language bindings. It is available
           <ulink url="http://download.gnome.org/sources/gobject-introspection/">here</ulink>.
