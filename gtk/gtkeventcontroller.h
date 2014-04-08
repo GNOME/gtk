@@ -29,6 +29,7 @@ typedef struct _GtkEventControllerClass GtkEventControllerClass;
 
 #include <gdk/gdk.h>
 #include <gtk/gtktypes.h>
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 
@@ -73,6 +74,14 @@ gboolean     gtk_event_controller_handle_event   (GtkEventController *controller
                                                   const GdkEvent     *event);
 GDK_AVAILABLE_IN_3_14
 void         gtk_event_controller_reset          (GtkEventController *controller);
+
+GDK_AVAILABLE_IN_3_14
+GtkPropagationPhase
+             gtk_event_controller_get_propagation_phase (GtkEventController *controller);
+
+GDK_AVAILABLE_IN_3_14
+void         gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
+                                                         GtkPropagationPhase  phase);
 
 G_END_DECLS
 
