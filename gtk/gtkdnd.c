@@ -2801,7 +2801,9 @@ gtk_drag_source_set (GtkWidget            *widget,
       site->drag_gesture = gtk_gesture_drag_new (widget);
       gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (site->drag_gesture),
                                          FALSE);
-      gtk_widget_add_gesture (widget, site->drag_gesture, GTK_PHASE_NONE);
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (site->drag_gesture),
+                                                  GTK_PHASE_NONE);
+      gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (site->drag_gesture));
 
       g_signal_connect (widget, "button-press-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
@@ -2844,7 +2846,8 @@ gtk_drag_source_unset (GtkWidget *widget)
       g_signal_handlers_disconnect_by_func (widget,
                                             gtk_drag_source_event_cb,
                                             site);
-      gtk_widget_remove_gesture (widget, site->drag_gesture);
+      gtk_widget_remove_controller (widget,
+                                    GTK_EVENT_CONTROLLER (site->drag_gesture));
       g_object_set_data (G_OBJECT (widget), I_("gtk-site-data"), NULL);
     }
 }
