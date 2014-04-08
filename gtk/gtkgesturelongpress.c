@@ -130,9 +130,9 @@ gtk_gesture_long_press_update (GtkGesture       *gesture,
     {
       if (priv->timeout_id)
         {
-          g_signal_emit (gesture, signals[CANCELLED], 0);
           g_source_remove (priv->timeout_id);
           priv->timeout_id = 0;
+          g_signal_emit (gesture, signals[CANCELLED], 0);
         }
 
       priv->cancelled = TRUE;
@@ -149,10 +149,9 @@ gtk_gesture_long_press_end (GtkGesture       *gesture,
 
   if (priv->timeout_id)
     {
-      if (!priv->triggered)
-        g_signal_emit (gesture, signals[CANCELLED], 0);
       g_source_remove (priv->timeout_id);
       priv->timeout_id = 0;
+      g_signal_emit (gesture, signals[CANCELLED], 0);
     }
 
   priv->cancelled = priv->triggered = FALSE;
@@ -163,15 +162,8 @@ gtk_gesture_long_press_sequence_state_changed (GtkGesture            *gesture,
                                                GdkEventSequence      *sequence,
                                                GtkEventSequenceState  state)
 {
-  GtkGestureLongPressPrivate *priv;
-
-  priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (gesture));
-
   if (state == GTK_EVENT_SEQUENCE_DENIED)
-    {
-      gtk_gesture_long_press_end (gesture, sequence);
-      priv->cancelled = TRUE;
-    }
+    gtk_gesture_long_press_end (gesture, sequence);
 }
 
 static void
