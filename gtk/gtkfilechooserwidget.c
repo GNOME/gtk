@@ -200,8 +200,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *save_widgets;
   GtkWidget *save_widgets_table;
 
-  GtkWidget *save_folder_label;
-
   /* The file browsing widgets */
   GtkWidget *browse_widgets_box;
   GtkWidget *browse_widgets_hpaned;
@@ -1986,13 +1984,6 @@ save_widgets_create (GtkFileChooserWidget *impl)
   gtk_widget_show (priv->location_entry);
   gtk_label_set_mnemonic_widget (GTK_LABEL (widget), priv->location_entry);
 
-  /* Folder combo */
-  priv->save_folder_label = gtk_label_new (NULL);
-  gtk_widget_set_halign (priv->save_folder_label, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->save_folder_label, GTK_ALIGN_CENTER);
-  gtk_grid_attach (GTK_GRID (priv->save_widgets_table), priv->save_folder_label, 0, 1, 1, 1);
-  gtk_widget_show (priv->save_folder_label);
-
   priv->save_widgets = vbox;
   gtk_box_pack_start (GTK_BOX (impl), priv->save_widgets, FALSE, FALSE, 0);
   gtk_box_reorder_child (GTK_BOX (impl), priv->save_widgets, 0);
@@ -2012,7 +2003,6 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
   priv->save_widgets = NULL;
   priv->save_widgets_table = NULL;
   priv->location_entry = NULL;
-  priv->save_folder_label = NULL;
 }
 
 /* Turns on the path bar widget.  Can be called even if we are already in that
@@ -2636,16 +2626,7 @@ update_appearance (GtkFileChooserWidget *impl)
   if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
       priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      const char *text;
-
       save_widgets_create (impl);
-
-      if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-	text = _("Save in folder:");
-      else
-	text = _("Create in folder:");
-
-      gtk_label_set_text (GTK_LABEL (priv->save_folder_label), text);
 
       if (priv->select_multiple)
 	{
