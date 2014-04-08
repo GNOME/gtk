@@ -19,8 +19,6 @@
 #include "config.h"
 #include <gtk/gtkgesturedrag.h>
 
-#define CAPTURE_THRESHOLD_MS 150
-
 typedef struct _GtkGestureDragPrivate GtkGestureDragPrivate;
 typedef struct _EventData EventData;
 
