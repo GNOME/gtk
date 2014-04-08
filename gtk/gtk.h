@@ -110,6 +110,7 @@
 #include <gtk/gtkgesturedrag.h>
 #include <gtk/gtkgesturelongpress.h>
 #include <gtk/gtkgesturemultipress.h>
+#include <gtk/gtkgesturepan.h>
 #include <gtk/gtkgesturerotate.h>
 #include <gtk/gtkgesturesingle.h>
 #include <gtk/gtkgestureswipe.h>

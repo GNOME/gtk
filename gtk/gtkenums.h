@@ -1063,4 +1063,18 @@ typedef enum
   GTK_EVENT_SEQUENCE_DENIED
 } GtkEventSequenceState;
 
+typedef enum
+{
+  GTK_PAN_DIRECTION_LEFT,
+  GTK_PAN_DIRECTION_RIGHT,
+  GTK_PAN_DIRECTION_UP,
+  GTK_PAN_DIRECTION_DOWN
+} GtkPanDirection;
+
+typedef enum
+{
+  GTK_PAN_ORIENTATION_VERTICAL,
+  GTK_PAN_ORIENTATION_HORIZONTAL
+} GtkPanOrientation;
+
 #endif /* __GTK_ENUMS_H__ */
