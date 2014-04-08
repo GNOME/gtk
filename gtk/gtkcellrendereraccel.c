@@ -511,7 +511,6 @@ grab_key_callback (GtkWidget            *widget,
   edited = TRUE;
 
  out:
-  gtk_device_grab_remove (priv->grab_widget, priv->grab_pointer);
   gdk_device_ungrab (priv->grab_keyboard, event->time);
   gdk_device_ungrab (priv->grab_pointer, event->time);
 
@@ -541,7 +540,6 @@ ungrab_stuff (GtkWidget            *widget,
 {
   GtkCellRendererAccelPrivate *priv = accel->priv;
 
-  gtk_device_grab_remove (priv->grab_widget, priv->grab_pointer);
   gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
   gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
 
@@ -748,8 +746,6 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
                           g_strdup (path), g_free);
   
   gtk_widget_show_all (priv->edit_widget);
-
-  gtk_device_grab_add (priv->grab_widget, pointer, TRUE);
 
   g_signal_connect (priv->edit_widget, "unrealize",
                     G_CALLBACK (ungrab_stuff), accel);
