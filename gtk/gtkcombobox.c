@@ -2473,7 +2473,6 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
       return;
     }
 
-  gtk_device_grab_add (priv->popup_window, pointer, TRUE);
   priv->grab_pointer = pointer;
   priv->grab_keyboard = keyboard;
 
@@ -2551,7 +2550,6 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
     gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
   gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
 
-  gtk_device_grab_remove (priv->popup_window, priv->grab_pointer);
   gtk_widget_hide (priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button),
                                 FALSE);
