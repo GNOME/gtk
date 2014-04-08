@@ -91,11 +91,9 @@ _gtk_gesture_multi_press_stop (GtkGestureMultiPress *gesture)
   if (priv->n_presses == 0)
     return;
 
-  if (priv->n_presses != 0)
-    g_signal_emit (gesture, signals[STOPPED], 0);
-
   priv->current_button = 0;
   priv->n_presses = 0;
+  g_signal_emit (gesture, signals[STOPPED], 0);
   gtk_gesture_check (GTK_GESTURE (gesture));
 }
 
