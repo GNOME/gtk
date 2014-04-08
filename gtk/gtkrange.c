@@ -37,7 +37,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientableprivate.h"
-#include "gtkpressandholdprivate.h"
 #include "gtkprivate.h"
 #include "gtkscale.h"
 #include "gtkscrollbar.h"
@@ -148,7 +147,7 @@ struct _GtkRangePrivate
   /* Whether we're doing fine adjustment */
   guint zoom                   : 1;
   guint zoom_set               : 1;
-  GtkPressAndHold *press_and_hold;
+  GtkGesture *long_press_gesture;
   GtkScrollType autoscroll_mode;
   guint autoscroll_id;
 
@@ -1506,7 +1505,11 @@ gtk_range_destroy (GtkWidget *widget)
 
   gtk_range_remove_step_timer (range);
 
-  g_clear_object (&priv->press_and_hold);
+  if (priv->long_press_gesture)
+    {
+      gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (priv->long_press_gesture));
+      g_clear_object (&priv->long_press_gesture);
+    }
 
   if (priv->adjustment)
     {
@@ -2365,7 +2368,11 @@ update_zoom_set (GtkRange *range,
                  gboolean  zoom_set)
 {
   if (zoom_set)
-    g_clear_object (&range->priv->press_and_hold);
+    {
+      gtk_widget_remove_controller (GTK_WIDGET (range),
+                                    GTK_EVENT_CONTROLLER (range->priv->long_press_gesture));
+      g_clear_object (&range->priv->long_press_gesture);
+    }
 
   range->priv->zoom_set = zoom_set;
 }
@@ -2537,10 +2544,10 @@ gtk_range_key_press (GtkWidget   *widget,
 }
 
 static void
-hold_action (GtkPressAndHold *pah,
-             gint             x,
-             gint             y,
-             GtkRange        *range)
+hold_action (GtkGestureLongPress *gesture,
+             gdouble              x,
+             gdouble              y,
+             GtkRange            *range)
 {
   update_zoom_state (range, TRUE);
   update_zoom_set (range, TRUE);
@@ -2698,25 +2705,22 @@ gtk_range_button_press (GtkWidget      *widget,
             }
           else
             {
-              if (!priv->press_and_hold)
+              if (!priv->long_press_gesture)
                 {
-                  gint drag_threshold;
+                  priv->long_press_gesture =
+                    gtk_gesture_long_press_new (widget);
+                  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->long_press_gesture),
+                                                     FALSE);
+                  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->long_press_gesture), 1);
+                  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->long_press_gesture),
+                                                              GTK_PHASE_NONE);
 
-                  g_object_get (gtk_widget_get_settings (widget),
-                                "gtk-dnd-drag-threshold", &drag_threshold,
-                                NULL);
-                  priv->press_and_hold = gtk_press_and_hold_new ();
-
-                  g_object_set (priv->press_and_hold,
-                                "drag-threshold", drag_threshold,
-                                "hold-time", ZOOM_HOLD_TIME,
-                                NULL);
-
-                  g_signal_connect (priv->press_and_hold, "hold",
+                  g_signal_connect (priv->long_press_gesture, "pressed",
                                     G_CALLBACK (hold_action), range);
                 }
 
-              gtk_press_and_hold_process_event (priv->press_and_hold, (GdkEvent *)event);
+              gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->long_press_gesture),
+                                                 (const GdkEvent*) event);
             }
         }
 
@@ -2929,8 +2933,9 @@ gtk_range_button_release (GtkWidget      *widget,
     {
       if (priv->grab_location == MOUSE_SLIDER)
         {
-          if (priv->press_and_hold)
-            gtk_press_and_hold_process_event (priv->press_and_hold, (GdkEvent *)event);
+          if (priv->long_press_gesture)
+            gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->long_press_gesture),
+                                               (const GdkEvent*) event);
         }
 
       stop_scrolling (range);
@@ -3071,8 +3076,9 @@ gtk_range_motion_notify (GtkWidget      *widget,
 
   if (priv->grab_location == MOUSE_SLIDER)
     {
-      if (!priv->zoom_set && priv->press_and_hold != NULL)
-        gtk_press_and_hold_process_event (priv->press_and_hold, (GdkEvent *)event);
+      if (!priv->zoom_set && priv->long_press_gesture != NULL)
+        gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->long_press_gesture),
+                                           (const GdkEvent*) event);
 
       update_autoscroll_mode (range);
       if (priv->autoscroll_mode == GTK_SCROLL_NONE)
