@@ -2595,8 +2595,6 @@ gtk_icon_view_start_rubberbanding (GtkIconView  *icon_view,
 
   icon_view->priv->doing_rubberband = TRUE;
   icon_view->priv->rubberband_device = device;
-
-  gtk_device_grab_add (GTK_WIDGET (icon_view), device, TRUE);
 }
 
 static void
@@ -2604,9 +2602,6 @@ gtk_icon_view_stop_rubberbanding (GtkIconView *icon_view)
 {
   if (!icon_view->priv->doing_rubberband)
     return;
-
-  gtk_device_grab_remove (GTK_WIDGET (icon_view),
-                          icon_view->priv->rubberband_device);
 
   icon_view->priv->doing_rubberband = FALSE;
   icon_view->priv->rubberband_device = NULL;
