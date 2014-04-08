@@ -136,7 +136,7 @@ check_not_found (const gchar *haystack,
 }
 
 static void
-test_full_buffer (void)
+test_search_full_buffer (void)
 {
   check_found_forward ("foo", "foo", 0, 0, 3, "foo");
   check_found_backward ("foo", "foo", 0, 0, 3, "foo");
@@ -318,16 +318,104 @@ test_forward_to_tag_toggle (void)
   g_object_unref (buffer);
 }
 
+static void
+check_word_boundaries (const gchar *buffer_text,
+                       gint         offset,
+                       gboolean     starts_word,
+                       gboolean     ends_word,
+                       gboolean     inside_word)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
+
+  g_assert_cmpint (starts_word, ==, gtk_text_iter_starts_word (&iter));
+  g_assert_cmpint (ends_word, ==, gtk_text_iter_ends_word (&iter));
+  g_assert_cmpint (inside_word, ==, gtk_text_iter_inside_word (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
+check_forward_word_end (const gchar *buffer_text,
+                        gint         initial_offset,
+                        gint         result_offset,
+                        gboolean     ret)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  g_assert_cmpint (ret, ==, gtk_text_iter_forward_word_end (&iter));
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
+check_backward_word_start (const gchar *buffer_text,
+                           gint         initial_offset,
+                           gint         result_offset,
+                           gboolean     ret)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  g_assert_cmpint (ret, ==, gtk_text_iter_backward_word_start (&iter));
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
+test_word_boundaries (void)
+{
+  /* Test with trivial content. The word boundaries are anyway determined by
+   * Pango and can change in the future for corner cases.
+   */
+
+  check_word_boundaries ("ab ", 0, TRUE, FALSE, TRUE);
+  check_word_boundaries ("ab ", 1, FALSE, FALSE, TRUE);
+  check_word_boundaries ("ab ", 2, FALSE, TRUE, FALSE);
+  check_word_boundaries ("ab ", 3, FALSE, FALSE, FALSE);
+
+  check_forward_word_end ("ab ", 0, 2, TRUE);
+  check_forward_word_end ("ab ", 1, 2, TRUE);
+  check_forward_word_end ("ab ", 2, 3, FALSE); /* FIXME bug? */
+  check_forward_word_end ("ab ", 3, 3, FALSE);
+  check_forward_word_end ("ab", 0, 2, FALSE); /* the FALSE is strange here */
+
+  check_backward_word_start (" ab", 3, 1, TRUE);
+  check_backward_word_start (" ab", 2, 1, TRUE);
+  check_backward_word_start (" ab", 1, 1, FALSE); /* FIXME Inconsistent with the equivalent for forward_word_end() */
+  check_backward_word_start (" ab", 0, 0, FALSE);
+  check_backward_word_start ("ab", 2, 0, TRUE);
+}
+
 int
 main (int argc, char** argv)
 {
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/TextIter/Search Empty", test_empty_search);
-  g_test_add_func ("/TextIter/Search Full Buffer", test_full_buffer);
+  g_test_add_func ("/TextIter/Search Full Buffer", test_search_full_buffer);
   g_test_add_func ("/TextIter/Search", test_search);
   g_test_add_func ("/TextIter/Search Caseless", test_search_caseless);
   g_test_add_func ("/TextIter/Forward To Tag Toggle", test_forward_to_tag_toggle);
+  g_test_add_func ("/TextIter/Word Boundaries", test_word_boundaries);
 
   return g_test_run();
 }
