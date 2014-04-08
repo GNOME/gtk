@@ -75,9 +75,12 @@ GDK_AVAILABLE_IN_3_14
 GdkDevice * gtk_gesture_get_device           (GtkGesture       *gesture);
 
 GDK_AVAILABLE_IN_3_14
+gboolean    gtk_gesture_set_state            (GtkGesture            *gesture,
+                                              GtkEventSequenceState  state);
+GDK_AVAILABLE_IN_3_14
 GtkEventSequenceState
-            gtk_gesture_get_sequence_state   (GtkGesture       *gesture,
-                                              GdkEventSequence *sequence);
+            gtk_gesture_get_sequence_state   (GtkGesture            *gesture,
+                                              GdkEventSequence      *sequence);
 GDK_AVAILABLE_IN_3_14
 gboolean    gtk_gesture_set_sequence_state   (GtkGesture            *gesture,
                                               GdkEventSequence      *sequence,

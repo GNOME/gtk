@@ -672,6 +672,28 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
   return TRUE;
 }
 
+gboolean
+gtk_gesture_set_state (GtkGesture            *gesture,
+                       GtkEventSequenceState  state)
+{
+  GdkEventSequence *sequence;
+  gboolean handled = FALSE;
+  GtkGesturePrivate *priv;
+  GHashTableIter iter;
+
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
+  g_return_val_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
+                        state <= GTK_EVENT_SEQUENCE_DENIED, FALSE);
+
+  priv = gtk_gesture_get_instance_private (gesture);
+  g_hash_table_iter_init (&iter, priv->points);
+
+  while (g_hash_table_iter_next (&iter, (gpointer*) &sequence, NULL))
+    handled |= gtk_gesture_set_sequence_state (gesture, sequence, state);
+
+  return handled;
+}
+
 /**
  * gtk_gesture_get_sequences:
  * @gesture: a #GtkGesture
