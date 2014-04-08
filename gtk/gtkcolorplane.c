@@ -19,10 +19,10 @@
 
 #include "gtkcolorplaneprivate.h"
 
+#include "gtkgesturelongpress.h"
 #include "gtkaccessible.h"
 #include "gtkadjustment.h"
 #include "gtkcolorutils.h"
-#include "gtkpressandholdprivate.h"
 #include "gtkintl.h"
 
 struct _GtkColorPlanePrivate
@@ -34,7 +34,7 @@ struct _GtkColorPlanePrivate
   cairo_surface_t *surface;
   gboolean in_drag;
 
-  GtkPressAndHold *press_and_hold;
+  GtkGesture *long_press_gesture;
 };
 
 enum {
@@ -296,10 +296,10 @@ plane_motion_notify (GtkWidget      *widget,
 }
 
 static void
-hold_action (GtkPressAndHold *pah,
-             gint             x,
-             gint             y,
-             GtkColorPlane   *plane)
+hold_action (GtkGestureLongPress *gesture,
+             gdouble              x,
+             gdouble              y,
+             GtkColorPlane       *plane)
 {
   gboolean handled;
 
@@ -312,26 +312,6 @@ plane_touch (GtkWidget     *widget,
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
 
-  if (!plane->priv->press_and_hold)
-    {
-      gint drag_threshold;
-
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-dnd-drag-threshold", &drag_threshold,
-                    NULL);
-
-      plane->priv->press_and_hold = gtk_press_and_hold_new ();
-
-      g_object_set (plane->priv->press_and_hold,
-                    "drag-threshold", drag_threshold,
-                    "hold-time", 1000,
-                    NULL);
-
-      g_signal_connect (plane->priv->press_and_hold, "hold",
-                        G_CALLBACK (hold_action), plane);
-    }
-
-  gtk_press_and_hold_process_event (plane->priv->press_and_hold, (GdkEvent *)event);
   update_color (plane, event->x, event->y);
 
   return TRUE;
@@ -443,6 +423,10 @@ gtk_color_plane_init (GtkColorPlane *plane)
       atk_object_set_name (atk_obj, _("Color Plane"));
       atk_object_set_role (atk_obj, ATK_ROLE_COLOR_CHOOSER);
     }
+
+  plane->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (plane));
+  g_signal_connect (plane->priv->long_press_gesture, "pressed",
+                    G_CALLBACK (hold_action), plane);
 }
 
 static void
@@ -457,7 +441,9 @@ plane_finalize (GObject *object)
   g_clear_object (&plane->priv->s_adj);
   g_clear_object (&plane->priv->v_adj);
 
-  g_clear_object (&plane->priv->press_and_hold);
+  gtk_widget_remove_controller (GTK_WIDGET (object),
+                                GTK_EVENT_CONTROLLER (plane->priv->long_press_gesture));
+  g_clear_object (&plane->priv->long_press_gesture);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
 }
