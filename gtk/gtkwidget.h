@@ -1469,29 +1469,14 @@ void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *
 						         const gchar           *name,
 						         gboolean               internal_child,
 						         gssize                 struct_offset);
-
 GDK_AVAILABLE_IN_3_14
-void    gtk_widget_add_gesture                          (GtkWidget           *widget,
-                                                         GtkGesture          *gesture,
-                                                         GtkPropagationPhase  phase);
+void    gtk_widget_add_controller                       (GtkWidget           *widget,
+                                                         GtkEventController  *controller);
 GDK_AVAILABLE_IN_3_14
-void    gtk_widget_remove_gesture                       (GtkWidget           *widget,
-                                                         GtkGesture          *gesture);
+void    gtk_widget_remove_controller                    (GtkWidget           *widget,
+                                                         GtkEventController  *controller);
 GDK_AVAILABLE_IN_3_14
-GList * gtk_widget_list_gestures                        (GtkWidget           *widget,
-                                                         GtkPropagationPhase  phase);
-
-GDK_AVAILABLE_IN_3_14
-GtkEventSequenceState gtk_widget_get_sequence_state     (GtkWidget             *widget,
-                                                         GdkEventSequence      *sequence);
-GDK_AVAILABLE_IN_3_14
-void                  gtk_widget_set_sequence_state     (GtkWidget             *widget,
-                                                         GdkEventSequence      *sequence,
-                                                         GtkEventSequenceState  state);
-GDK_AVAILABLE_IN_3_14
-void                  gtk_widget_set_gesture_state      (GtkWidget             *widget,
-                                                         GtkGesture            *gesture,
-                                                         GtkEventSequenceState  state);
+GList * gtk_widget_list_controllers                     (GtkWidget           *widget);
 
 G_END_DECLS
 

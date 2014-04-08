@@ -398,10 +398,10 @@ typedef struct {
 } GtkWidgetTemplate;
 
 typedef struct {
-  GtkGesture *controller;
+  GtkEventController *controller;
   guint evmask_notify_id;
   guint grab_notify_id;
-  guint propagation_phase : 2;
+  guint sequence_state_changed_id;
 } EventControllerData;
 
 struct _GtkWidgetPrivate
@@ -594,6 +594,7 @@ enum {
   DRAG_FAILED,
   STYLE_UPDATED,
   TOUCH_EVENT,
+  SEQUENCE_GRABBED,
   SEQUENCE_STATE_CHANGED,
   LAST_SIGNAL
 };
@@ -3430,12 +3431,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  _gtk_marshal_BOOLEAN__UINT,
                   G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
 
+  widget_signals[SEQUENCE_GRABBED] =
+    g_signal_new (I_("sequence-grabbed"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST, 0,
+                  NULL, NULL, NULL,
+                  G_TYPE_BOOLEAN, 3, GTK_TYPE_WIDGET,
+                  G_TYPE_POINTER, GTK_TYPE_EVENT_SEQUENCE_STATE);
+
   widget_signals[SEQUENCE_STATE_CHANGED] =
     g_signal_new (I_("sequence-state-changed"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST, 0,
-                  g_signal_accumulator_first_wins, NULL, NULL,
-                  G_TYPE_BOOLEAN, 3, GTK_TYPE_WIDGET,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 3, GTK_TYPE_GESTURE,
                   G_TYPE_POINTER, GTK_TYPE_EVENT_SEQUENCE_STATE);
 
   binding_set = gtk_binding_set_by_class (klass);
@@ -4133,7 +4142,12 @@ _gtk_widget_get_last_event (GtkWidget        *widget,
   for (l = priv->event_controllers; l; l = l->next)
     {
       data = l->data;
-      event = gtk_gesture_get_last_event (data->controller, sequence);
+
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      event = gtk_gesture_get_last_event (GTK_GESTURE (data->controller),
+                                          sequence);
       if (event)
         return event;
     }
@@ -4142,40 +4156,104 @@ _gtk_widget_get_last_event (GtkWidget        *widget,
 }
 
 static gboolean
+_gtk_widget_get_emulating_sequence (GtkWidget         *widget,
+                                    GdkEventSequence  *sequence,
+                                    GdkEventSequence **sequence_out)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  GList *l;
+
+  *sequence_out = sequence;
+
+  if (sequence)
+    {
+      const GdkEvent *last_event;
+
+      last_event = _gtk_widget_get_last_event (widget, sequence);
+
+      if (last_event &&
+          (last_event->type == GDK_TOUCH_BEGIN ||
+           last_event->type == GDK_TOUCH_UPDATE ||
+           last_event->type == GDK_TOUCH_END) &&
+          last_event->touch.emulating_pointer)
+        return TRUE;
+    }
+  else
+    {
+      /* For a NULL(pointer) sequence, find the pointer emulating one */
+      for (l = priv->event_controllers; l; l = l->next)
+        {
+          EventControllerData *data = l->data;
+
+          if (!GTK_IS_GESTURE (data->controller))
+            continue;
+
+          if (_gtk_gesture_get_pointer_emulating_sequence (GTK_GESTURE (data->controller),
+                                                           sequence_out))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
 _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
                                          GdkEventSequence      *sequence,
                                          GtkEventSequenceState  state,
-                                         gboolean               emulates_pointer)
+                                         GList                 *group)
 {
-  gboolean retval, sequence_handled, handled = FALSE;
   GtkWidgetPrivate *priv = widget->priv;
   const GdkEvent *mimic_event;
   gboolean send_event = FALSE;
-  EventControllerData *data;
+  gboolean emulates_pointer;
   GdkEventSequence *seq;
+  gboolean handled = FALSE;
   GList *l;
 
   if (!priv->event_controllers && state != GTK_EVENT_SEQUENCE_CLAIMED)
     return TRUE;
 
-  mimic_event = _gtk_widget_get_last_event (widget, sequence);
+  emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
+  mimic_event = _gtk_widget_get_last_event (widget, seq);
 
   for (l = priv->event_controllers; l; l = l->next)
     {
+      GtkPropagationPhase propagation_phase;
+      GtkEventSequenceState gesture_state;
+      gboolean sequence_handled, retval;
+      EventControllerData *data;
+      GtkGesture *gesture;
+
       seq = sequence;
       data = l->data;
+      gesture_state = state;
 
-      if (seq && emulates_pointer &&
-          !gtk_gesture_handles_sequence (data->controller, seq))
-        seq = NULL;
-
-      if (!gtk_gesture_handles_sequence (data->controller, seq))
+      if (!GTK_IS_GESTURE (data->controller))
         continue;
 
+      gesture = GTK_GESTURE (data->controller);
+
+      if (seq && emulates_pointer &&
+          !gtk_gesture_handles_sequence (gesture, seq))
+        seq = NULL;
+
+      /* If a group is provided, ensure only gestures pertaining to the group
+       * get a "claimed" state, all other gestures must deny the sequence.
+       */
+      if (group && gesture_state == GTK_EVENT_SEQUENCE_CLAIMED &&
+          !g_list_find (group, data->controller))
+        gesture_state = GTK_EVENT_SEQUENCE_DENIED;
+
+      g_signal_handler_block (data->controller, data->sequence_state_changed_id);
+
       sequence_handled =
-        _gtk_gesture_handled_sequence_press (data->controller, seq);
-      retval = gtk_gesture_set_sequence_state (data->controller, seq, state);
+        _gtk_gesture_handled_sequence_press (gesture, seq);
+      retval = gtk_gesture_set_sequence_state (gesture, seq, state);
       handled |= retval;
+
+      g_signal_handler_unblock (data->controller, data->sequence_state_changed_id);
+      propagation_phase = gtk_event_controller_get_propagation_phase (data->controller);
 
       /* If the sequence goes denied, check whether this is a controller attached
        * to the capture phase, that additionally handled the button/touch press (ie.
@@ -4183,7 +4261,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
        * beneath, so the widgets beneath get a coherent stream of events from now on.
        */
       if (retval && sequence_handled &&
-          data->propagation_phase == GTK_PHASE_CAPTURE &&
+          propagation_phase == GTK_PHASE_CAPTURE &&
           state == GTK_EVENT_SEQUENCE_DENIED)
         send_event = TRUE;
     }
@@ -4196,101 +4274,67 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
 
 static gboolean
 _gtk_widget_cancel_sequence (GtkWidget        *widget,
-                             GdkEventSequence *sequence,
-                             gboolean          emulates_pointer)
+                             GdkEventSequence *sequence)
 {
   GtkWidgetPrivate *priv = widget->priv;
-  EventControllerData *data;
+  gboolean emulates_pointer;
   gboolean handled = FALSE;
   GdkEventSequence *seq;
   GList *l;
 
+  emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
+
   for (l = priv->event_controllers; l; l = l->next)
     {
+      EventControllerData *data;
+      GtkGesture *gesture;
+
       seq = sequence;
       data = l->data;
 
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      gesture = GTK_GESTURE (data->controller);
+
       if (seq && emulates_pointer &&
-          !gtk_gesture_handles_sequence (data->controller, seq))
+          !gtk_gesture_handles_sequence (gesture, seq))
         seq = NULL;
 
-      if (!gtk_gesture_handles_sequence (data->controller, seq))
+      if (!gtk_gesture_handles_sequence (gesture, seq))
         continue;
 
       handled |=
-        gtk_gesture_cancel_sequence (data->controller, seq);
+        gtk_gesture_cancel_sequence (gesture, seq);
     }
 
   return handled;
 }
 
 static gboolean
-_gtk_widget_get_emulating_sequence (GtkWidget         *widget,
-                                    GdkEventSequence **sequence)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-  EventControllerData *data;
-  GList *l;
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      data = l->data;
-
-      if (_gtk_gesture_get_pointer_emulating_sequence (data->controller,
-                                                       sequence))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
 gtk_widget_real_sequence_state_changed (GtkWidget             *widget,
-                                        GtkWidget             *changed_widget,
+                                        GtkGesture            *gesture,
                                         GdkEventSequence      *sequence,
                                         GtkEventSequenceState  state)
 {
-  GtkEventSequenceState changed_state;
-  gboolean emulates_pointer = FALSE;
-  const GdkEvent *last_event;
+  gboolean retval;
+  GList *group;
 
-  if (!sequence)
-    {
-      if (!_gtk_widget_get_emulating_sequence (widget, &sequence))
-        return FALSE;
-    }
-  else
-    {
-      last_event = _gtk_widget_get_last_event (changed_widget, sequence);
+  group = gtk_gesture_get_group (gesture);
+  retval = _gtk_widget_set_sequence_state_internal (widget, sequence,
+                                                    state, group);
+  g_list_free (group);
 
-      if (!last_event)
-        return FALSE;
+  return retval;
+}
 
-      if ((last_event->type == GDK_TOUCH_BEGIN ||
-           last_event->type == GDK_TOUCH_UPDATE ||
-           last_event->type == GDK_TOUCH_END) &&
-          last_event->touch.emulating_pointer)
-        emulates_pointer = TRUE;
-    }
-
-  if (widget == changed_widget)
-    return _gtk_widget_set_sequence_state_internal (widget, sequence,
-                                                    state, emulates_pointer);
-  else if (state == GTK_EVENT_SEQUENCE_CLAIMED &&
-           gtk_widget_is_ancestor (widget, changed_widget))
-    return _gtk_widget_cancel_sequence (widget, sequence, emulates_pointer);
-  else
-    {
-      changed_state = gtk_widget_get_sequence_state (changed_widget, sequence);
-
-      if (state == GTK_EVENT_SEQUENCE_CLAIMED &&
-          changed_state == GTK_EVENT_SEQUENCE_CLAIMED)
-        return _gtk_widget_set_sequence_state_internal (widget, sequence,
-                                                        GTK_EVENT_SEQUENCE_DENIED,
-                                                        emulates_pointer);
-    }
-
-  return FALSE;
+static void
+gtk_widget_real_sequence_grabbed (GtkWidget        *widget,
+                                  GtkWidget        *changed_widget,
+                                  GdkEventSequence *sequence)
+{
+  _gtk_widget_set_sequence_state_internal (widget, sequence,
+                                           GTK_EVENT_SEQUENCE_DENIED, NULL);
 }
 
 static void
@@ -4351,6 +4395,9 @@ gtk_widget_init (GtkWidget *widget)
   G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_ref (priv->style);
 
+  g_signal_connect (widget, "sequence-grabbed",
+                    G_CALLBACK (gtk_widget_real_sequence_grabbed),
+                    NULL);
   g_signal_connect (widget, "sequence-state-changed",
                     G_CALLBACK (gtk_widget_real_sequence_state_changed),
                     NULL);
@@ -7235,9 +7282,8 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
     {
       data = l->data;
 
-      if (data->propagation_phase == phase)
-        handled |= gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (data->controller),
-                                                      event);
+      if (phase == gtk_event_controller_get_propagation_phase (data->controller))
+        handled |= gtk_event_controller_handle_event (data->controller, event);
     }
 
   return handled;
@@ -11723,6 +11769,12 @@ gtk_widget_dispose (GObject *object)
   while (priv->attached_windows)
     gtk_window_set_attached_to (priv->attached_windows->data, NULL);
 
+  while (priv->event_controllers)
+    {
+      EventControllerData *data = priv->event_controllers->data;
+      gtk_widget_remove_controller (widget, data->controller);
+    }
+
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
 
@@ -11917,7 +11969,6 @@ gtk_widget_finalize (GObject *object)
   GtkWidgetPrivate *priv = widget->priv;
   GtkWidgetAuxInfo *aux_info;
   GtkAccessible *accessible;
-  EventControllerData *data;
 
   gtk_grab_remove (widget);
 
@@ -11944,12 +11995,6 @@ gtk_widget_finalize (GObject *object)
     }
 
   _gtk_size_request_cache_free (&priv->requests);
-
-  while (priv->event_controllers)
-    {
-      data = priv->event_controllers->data;
-      gtk_widget_remove_gesture (widget, data->controller);
-    }
 
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
@@ -16617,10 +16662,11 @@ event_controller_grab_notify (GtkWidget           *widget,
                               EventControllerData *data)
 {
   GtkWidget *grab_widget, *toplevel;
+  GtkPropagationPhase phase;
   GtkWindowGroup *group;
   GdkDevice *device;
 
-  device = gtk_gesture_get_device (data->controller);
+  device = gtk_gesture_get_device (GTK_GESTURE (data->controller));
 
   if (!device)
     return;
@@ -16640,14 +16686,27 @@ event_controller_grab_notify (GtkWidget           *widget,
   if (!grab_widget || grab_widget == widget)
     return;
 
-  if (((data->propagation_phase == GTK_PHASE_NONE ||
-        data->propagation_phase == GTK_PHASE_BUBBLE) &&
+  phase = gtk_event_controller_get_propagation_phase (data->controller);
+
+  if (((phase == GTK_PHASE_NONE ||
+        phase == GTK_PHASE_BUBBLE) &&
        !gtk_widget_is_ancestor (widget, grab_widget)) ||
-      (data->propagation_phase == GTK_PHASE_CAPTURE &&
+      (phase == GTK_PHASE_CAPTURE &&
        !gtk_widget_is_ancestor (widget, grab_widget) &&
        !gtk_widget_is_ancestor (grab_widget, widget)))
     {
-      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (data->controller));
+      gtk_event_controller_reset (data->controller);
+    }
+}
+
+static void
+_gtk_widget_update_evmask (GtkWidget *widget)
+{
+  if (gtk_widget_get_realized (widget))
+    {
+      gint events = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget),
+                                                         quark_event_mask));
+      gtk_widget_add_events_internal (widget, NULL, events);
     }
 }
 
@@ -16656,155 +16715,24 @@ event_controller_notify_event_mask (GtkEventController *controller,
                                     GParamSpec         *pspec,
                                     GtkWidget          *widget)
 {
-  GdkEventMask evmask;
-
-  evmask = gtk_event_controller_get_event_mask (controller);
-  gtk_widget_add_events_internal (widget, NULL, evmask);
+  _gtk_widget_update_evmask (widget);
 }
 
-EventControllerData *
-_gtk_widget_has_gesture (GtkWidget  *widget,
-                         GtkGesture *gesture)
-{
-  EventControllerData *data;
-  GtkWidgetPrivate *priv;
-  GList *l;
-
-  priv = widget->priv;
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      data = l->data;
-      if (data->controller == gesture)
-        return data;
-    }
-
-  return NULL;
-}
-
-void
-gtk_widget_add_gesture (GtkWidget           *widget,
-                        GtkGesture          *gesture,
-                        GtkPropagationPhase  phase)
-{
-  EventControllerData *data;
-  GtkWidgetPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_GESTURE (gesture));
-  g_return_if_fail (phase >= GTK_PHASE_NONE &&
-                    phase <= GTK_PHASE_BUBBLE);
-  g_return_if_fail (!_gtk_widget_has_gesture (widget, gesture));
-
-  priv = widget->priv;
-
-  data = g_new0 (EventControllerData, 1);
-  data->controller = g_object_ref (gesture);
-  data->propagation_phase = phase;
-  data->evmask_notify_id =
-    g_signal_connect (gesture, "notify::event-mask",
-                      G_CALLBACK (event_controller_notify_event_mask), widget);
-  data->grab_notify_id =
-    g_signal_connect (widget, "grab-notify",
-                      G_CALLBACK (event_controller_grab_notify), data);
-
-  priv->event_controllers = g_list_prepend (priv->event_controllers, data);
-}
-
-void
-gtk_widget_remove_gesture (GtkWidget  *widget,
-                           GtkGesture *gesture)
-{
-  EventControllerData *data;
-  GtkWidgetPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_GESTURE (gesture));
-
-  priv = widget->priv;
-  data = _gtk_widget_has_gesture (widget, gesture);
-
-  if (!data)
-    return;
-
-  priv->event_controllers = g_list_remove (priv->event_controllers, data);
-
-  if (g_signal_handler_is_connected (widget, data->grab_notify_id))
-    g_signal_handler_disconnect (widget, data->grab_notify_id);
-
-  g_signal_handler_disconnect (data->controller, data->evmask_notify_id);
-  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (data->controller));
-  g_object_unref (data->controller);
-  g_free (data);
-}
-
-GList *
-gtk_widget_list_gestures (GtkWidget           *widget,
-                          GtkPropagationPhase  phase)
-{
-  EventControllerData *data;
-  GtkWidgetPrivate *priv;
-  GList *l, *retval = NULL;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (phase >= GTK_PHASE_NONE &&
-                        phase <= GTK_PHASE_BUBBLE, NULL);
-
-  priv = widget->priv;
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      data = l->data;
-
-      if (data->propagation_phase == phase)
-        retval = g_list_prepend (retval, data->controller);
-    }
-
-  return retval;
-}
-
-GtkEventSequenceState
-gtk_widget_get_sequence_state (GtkWidget        *widget,
-                               GdkEventSequence *sequence)
-{
-  GtkEventSequenceState state;
-  EventControllerData *data;
-  GtkWidgetPrivate *priv;
-  GList *l;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget),
-                        GTK_EVENT_SEQUENCE_NONE);
-
-  priv = widget->priv;
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      data = l->data;
-      state = gtk_gesture_get_sequence_state (data->controller, sequence);
-      if (state != GTK_EVENT_SEQUENCE_NONE)
-        return state;
-    }
-
-  return GTK_EVENT_SEQUENCE_NONE;
-}
-
-void
-gtk_widget_set_sequence_state (GtkWidget             *widget,
-                               GdkEventSequence      *sequence,
-                               GtkEventSequenceState  state)
+static void
+event_controller_sequence_state_changed (GtkGesture            *gesture,
+                                         GdkEventSequence      *sequence,
+                                         GtkEventSequenceState  state,
+                                         GtkWidget             *widget)
 {
   gboolean handled = FALSE;
   GtkWidget *event_widget;
+  gboolean cancel = TRUE;
   const GdkEvent *event;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
-                    state <= GTK_EVENT_SEQUENCE_DENIED);
-
   g_signal_emit (widget, widget_signals[SEQUENCE_STATE_CHANGED],
-                 0, widget, sequence, state, &handled);
+                 0, gesture, sequence, state, &handled);
 
-  if (!handled)
+  if (!handled || state != GTK_EVENT_SEQUENCE_CLAIMED)
     return;
 
   event = _gtk_widget_get_last_event (widget, sequence);
@@ -16816,30 +16744,117 @@ gtk_widget_set_sequence_state (GtkWidget             *widget,
 
   while (event_widget)
     {
-      if (event_widget != widget)
-        g_signal_emit (event_widget, widget_signals[SEQUENCE_STATE_CHANGED],
-                       0, widget, sequence, state, &handled);
+      if (event_widget == widget)
+        cancel = FALSE;
+      else if (cancel)
+        _gtk_widget_cancel_sequence (event_widget, sequence);
+      else
+        g_signal_emit (event_widget, widget_signals[SEQUENCE_GRABBED], 0,
+                       widget, sequence);
+
       event_widget = gtk_widget_get_parent (event_widget);
     }
 }
 
-void
-gtk_widget_set_gesture_state (GtkWidget             *widget,
-                              GtkGesture            *gesture,
-                              GtkEventSequenceState  state)
+EventControllerData *
+_gtk_widget_has_controller (GtkWidget          *widget,
+                            GtkEventController *controller)
 {
-  GList *gestures, *l;
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (data->controller == controller)
+        return data;
+    }
+
+  return NULL;
+}
+
+void
+gtk_widget_add_controller (GtkWidget          *widget,
+                           GtkEventController *controller)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_GESTURE (gesture));
-  g_return_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
-                    state <= GTK_EVENT_SEQUENCE_DENIED);
-  g_return_if_fail (_gtk_widget_has_gesture (widget, gesture));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (!_gtk_widget_has_controller (widget, controller));
 
-  gestures = gtk_gesture_get_sequences (gesture);
+  priv = widget->priv;
 
-  for (l = gestures; l; l = l->next)
-    gtk_widget_set_sequence_state (widget, l->data, state);
+  data = g_new0 (EventControllerData, 1);
+  data->controller = g_object_ref (controller);
+  data->evmask_notify_id =
+    g_signal_connect (controller, "notify::event-mask",
+                      G_CALLBACK (event_controller_notify_event_mask), widget);
+  data->grab_notify_id =
+    g_signal_connect (widget, "grab-notify",
+                      G_CALLBACK (event_controller_grab_notify), data);
 
-  g_list_free (gestures);
+  if (GTK_IS_GESTURE (controller))
+    {
+      data->sequence_state_changed_id =
+        g_signal_connect (controller, "sequence-state-changed",
+                          G_CALLBACK (event_controller_sequence_state_changed),
+                          widget);
+    }
+
+  priv->event_controllers = g_list_prepend (priv->event_controllers, data);
+  _gtk_widget_update_evmask (widget);
+}
+
+void
+gtk_widget_remove_controller (GtkWidget          *widget,
+                              GtkEventController *controller)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  priv = widget->priv;
+  data = _gtk_widget_has_controller (widget, controller);
+
+  if (!data)
+    return;
+
+  priv->event_controllers = g_list_remove (priv->event_controllers, data);
+
+  if (g_signal_handler_is_connected (widget, data->grab_notify_id))
+    g_signal_handler_disconnect (widget, data->grab_notify_id);
+
+  g_signal_handler_disconnect (data->controller, data->evmask_notify_id);
+  g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (data->controller));
+  g_object_unref (data->controller);
+  g_free (data);
+}
+
+GList *
+gtk_widget_list_controllers (GtkWidget *widget)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l, *retval = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+      retval = g_list_prepend (retval, data->controller);
+    }
+
+  return retval;
 }
