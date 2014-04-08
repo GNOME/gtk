@@ -62,7 +62,7 @@ gtk_gesture_long_press_check (GtkGesture *gesture)
   if (priv->cancelled)
     return FALSE;
 
-  return gtk_gesture_is_active (gesture);
+  return GTK_GESTURE_CLASS (gtk_gesture_long_press_parent_class)->check (gesture);
 }
 
 static gboolean
@@ -136,6 +136,7 @@ gtk_gesture_long_press_update (GtkGesture       *gesture,
         }
 
       priv->cancelled = TRUE;
+      gtk_gesture_check (gesture);
     }
 }
 
