@@ -3402,12 +3402,15 @@ gtk_text_iter_ends_word (const GtkTextIter *iter)
 /**
  * gtk_text_iter_inside_word:
  * @iter: a #GtkTextIter
- * 
- * Determines whether @iter is inside a natural-language word (as
- * opposed to say inside some whitespace).  Word breaks are determined
- * by Pango and should be correct for nearly any language (if not, the
- * correct fix would be to the Pango word break algorithms).
- * 
+ *
+ * Determines whether the character pointed by @iter is part of a
+ * natural-language word (as opposed to say inside some whitespace).  Word
+ * breaks are determined by Pango and should be correct for nearly any language
+ * (if not, the correct fix would be to the Pango word break algorithms).
+ *
+ * Note that if gtk_text_iter_starts_word() returns %TRUE, then this function
+ * returns %TRUE too, since @iter points to the first character of the word.
+ *
  * Returns: %TRUE if @iter is inside a word
  **/
 gboolean
