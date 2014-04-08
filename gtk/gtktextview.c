@@ -7052,10 +7052,6 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
     data->granularity = SELECT_CHARACTERS;
 
   priv->grab_device = button->device;
-  gtk_device_grab_add (GTK_WIDGET (text_view),
-                       priv->grab_device,
-                       TRUE);
-
   buffer = get_buffer (text_view);
   
   cursor = *iter;
@@ -7138,8 +7134,6 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view)
       priv->scroll_timeout = 0;
     }
 
-  gtk_device_grab_remove (GTK_WIDGET (text_view),
-                          priv->grab_device);
   priv->grab_device = NULL;
 
   if (priv->magnifier_popover)
