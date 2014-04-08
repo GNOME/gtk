@@ -292,6 +292,9 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
   priv = gtk_gesture_get_instance_private (gesture);
   widget_window = _find_widget_window (gesture, event->any.window);
 
+  if (!widget_window)
+    return FALSE;
+
   if (add)
     {
       /* If the event happens with the wrong device, or
