@@ -642,9 +642,9 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
   PointData *data;
   guint old_state;
 
-  g_return_if_fail (GTK_IS_GESTURE (gesture));
-  g_return_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
-                    state <= GTK_EVENT_SEQUENCE_DENIED);
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
+  g_return_val_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
+                        state <= GTK_EVENT_SEQUENCE_DENIED, FALSE);
 
   priv = gtk_gesture_get_instance_private (gesture);
   data = g_hash_table_lookup (priv->points, sequence);
