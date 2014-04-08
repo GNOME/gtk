@@ -62,6 +62,11 @@ GType        gtk_gesture_swipe_get_type  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_14
 GtkGesture * gtk_gesture_swipe_new       (GtkWidget *widget);
 
+GDK_AVAILABLE_IN_3_14
+gboolean     gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,
+                                             gdouble         *velocity_x,
+                                             gdouble         *velocity_y);
+
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_SWIPE_H__ */

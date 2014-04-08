@@ -109,12 +109,17 @@ _gtk_gesture_swipe_calculate_velocity (GtkGestureSwipe *gesture,
                                        gdouble         *velocity_y)
 {
   GtkGestureSwipePrivate *priv;
+  GdkEventSequence *sequence;
+  guint32 evtime, diff_time;
   EventData *start, *end;
   gdouble diff_x, diff_y;
-  guint32 diff_time;
 
   priv = gtk_gesture_swipe_get_instance_private (gesture);
   *velocity_x = *velocity_y = 0;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_get_last_update_time (GTK_GESTURE (gesture), sequence, &evtime);
+  _gtk_gesture_swipe_clear_backlog (gesture, evtime);
 
   if (priv->events->len == 0)
     return;
@@ -141,14 +146,14 @@ gtk_gesture_swipe_end (GtkGesture       *gesture,
   GtkGestureSwipe *swipe = GTK_GESTURE_SWIPE (gesture);
   GtkGestureSwipePrivate *priv;
   gdouble velocity_x, velocity_y;
-  guint32 evtime;
+  GdkEventSequence *seq;
 
-  if (gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_DENIED)
+  seq = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (gtk_gesture_get_sequence_state (gesture, seq) == GTK_EVENT_SEQUENCE_DENIED)
     return;
 
   priv = gtk_gesture_swipe_get_instance_private (swipe);
-  gtk_gesture_get_last_update_time (gesture, sequence, &evtime);
-  _gtk_gesture_swipe_clear_backlog (swipe, evtime);
   _gtk_gesture_swipe_calculate_velocity (swipe, &velocity_x, &velocity_y);
   g_signal_emit (gesture, signals[SWIPE], 0, velocity_x, velocity_y);
 
@@ -201,4 +206,26 @@ gtk_gesture_swipe_new (GtkWidget *widget)
   return g_object_new (GTK_TYPE_GESTURE_SWIPE,
                        "widget", widget,
                        NULL);
+}
+
+gboolean
+gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,
+                                gdouble         *velocity_x,
+                                gdouble         *velocity_y)
+{
+  gdouble vel_x, vel_y;
+
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), NULL);
+
+  if (!gtk_gesture_is_recognized (GTK_GESTURE (gesture)))
+    return FALSE;
+
+  _gtk_gesture_swipe_calculate_velocity (gesture, &vel_x, &vel_y);
+
+  if (velocity_x)
+    *velocity_x = vel_x;
+  if (velocity_y)
+    *velocity_y = vel_y;
+
+  return TRUE;
 }
