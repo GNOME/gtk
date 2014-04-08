@@ -166,7 +166,7 @@ Please refer to the following GNOME Live! page for a more detailed ouline
 on the process of building the GTK+ stack and its dependencies with Visual
 C++:
 
-https://live.gnome.org/GTK%2B/Win32/MSVCCompilationOfGTKStack
+https://wiki.gnome.org/Projects/GTK+/Win32/MSVCCompilationOfGTKStack
 
 Alternative 1 also generates Microsoft import libraries (.lib), if you
 have lib.exe available. It might also work for cross-compilation from
