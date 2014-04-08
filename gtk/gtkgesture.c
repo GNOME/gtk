@@ -649,8 +649,11 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
   priv = gtk_gesture_get_instance_private (gesture);
   data = g_hash_table_lookup (priv->points, sequence);
 
-  if (!data || data->state == state)
+  if (!data)
     return FALSE;
+
+  if (data->state == state)
+    return TRUE;
 
   /* denied sequences remain denied */
   if (data->state == GTK_EVENT_SEQUENCE_DENIED)
