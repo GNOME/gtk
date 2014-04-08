@@ -1049,6 +1049,24 @@ typedef enum
   GTK_INPUT_HINT_INHIBIT_OSK         = 1 << 7
 } GtkInputHints;
 
+/**
+ * GtkPropagationPhase:
+ * @GTK_PHASE_NONE: Events are not delivered automatically. Those can be
+ *   manually fed through gtk_event_controller_handle_event(). This should
+ *   only be used when full control about when, or whether the controller
+ *   handles the event is needed.
+ * @GTK_PHASE_CAPTURE: Events are delivered in the capture phase. The
+ *   capture phase happens before the bubble phase, runs from the toplevel down
+ *   to the event widget. This option should only be used on containers that
+ *   might possibly handle events before their children do.
+ * @GTK_PHASE_BUBBLE: Events are delivered in the bubble phase. The bubble
+ *   phase happens after the capture phase, runs from the event widget, up to
+ *   the toplevel.
+ *
+ * Describes the stage at which events are fed into a #GtkEventController.
+ *
+ * Since: 3.14
+ */
 typedef enum
 {
   GTK_PHASE_NONE,
