@@ -1394,6 +1394,7 @@ gtk_list_box_select_row_internal (GtkListBox    *box,
   gtk_list_box_row_set_selected (row, TRUE);
   BOX_PRIV (box)->selected_row = row;
 
+  g_signal_emit (box, signals[ROW_SELECTED], 0, row);
   g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
 }
 
