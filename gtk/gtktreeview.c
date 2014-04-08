@@ -3060,7 +3060,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	{
 	  if (event->button == GDK_BUTTON_PRIMARY)
 	    {
-	      gtk_grab_add (widget);
 	      tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
 	      tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
 	      gtk_tree_view_queue_draw_arrow (GTK_TREE_VIEW (widget),
@@ -3325,7 +3324,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
                                event->time) != GDK_GRAB_SUCCESS)
             return FALSE;
 
-          gtk_grab_add (widget);
           tree_view->priv->in_column_resize = TRUE;
 
 	  /* block attached dnd signal handler */
@@ -3451,7 +3449,6 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
 				       drag_data);
 
   tree_view->priv->in_column_resize = FALSE;
-  gtk_grab_remove (widget);
   gdk_device_ungrab (gdk_event_get_device ((GdkEvent*)event), event->time);
   return TRUE;
 }
@@ -3515,7 +3512,6 @@ gtk_tree_view_button_release (GtkWidget      *widget,
           gtk_tree_path_free (path);
         }
 
-      gtk_grab_remove (widget);
       tree_view->priv->button_pressed_tree = NULL;
       tree_view->priv->button_pressed_node = NULL;
     }
@@ -4225,7 +4221,6 @@ static void
 gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
 {
   remove_scroll_timeout (tree_view);
-  gtk_grab_remove (GTK_WIDGET (tree_view));
 
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
     {
@@ -4574,7 +4569,6 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
 
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_MAYBE_START)
     {
-      gtk_grab_add (GTK_WIDGET (tree_view));
       gtk_tree_view_update_rubber_band (tree_view);
 
       tree_view->priv->rubber_band_status = RUBBER_BAND_ACTIVE;
@@ -9911,8 +9905,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
   gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
-
-  gtk_grab_remove (button);
 
   send_event = gdk_event_new (GDK_LEAVE_NOTIFY);
   send_event->crossing.send_event = TRUE;
