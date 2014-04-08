@@ -584,9 +584,8 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
   else
     return;
 
-  sequence = gtk_gesture_get_last_updated_sequence (gesture);
-  gtk_widget_set_sequence_state (GTK_WIDGET (scrolled_window),
-                                 sequence, state);
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_set_sequence_state (gesture, sequence, state);
 }
 
 static void
@@ -606,9 +605,9 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
     {
       GdkEventSequence *sequence;
 
-      sequence = gtk_gesture_get_last_updated_sequence (gesture);
-      gtk_widget_set_sequence_state (GTK_WIDGET (scrolled_window),
-                                     sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+      gtk_gesture_set_sequence_state (gesture, sequence,
+                                      GTK_EVENT_SEQUENCE_CLAIMED);
     }
 
   _gtk_scrolled_window_get_overshoot (scrolled_window,
@@ -662,8 +661,8 @@ scrolled_window_drag_end_cb (GtkScrolledWindow *scrolled_window,
   last = gtk_gesture_get_last_updated_sequence (gesture);
 
   if (!priv->in_drag || current != last)
-    gtk_widget_set_sequence_state (GTK_WIDGET (scrolled_window),
-                                   current, GTK_EVENT_SEQUENCE_DENIED);
+    gtk_gesture_set_sequence_state (gesture, current,
+                                    GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
@@ -699,9 +698,9 @@ scrolled_window_long_press_cb (GtkScrolledWindow *scrolled_window,
 {
   GdkEventSequence *sequence;
 
-  sequence = gtk_gesture_get_last_updated_sequence (gesture);
-  gtk_widget_set_sequence_state (GTK_WIDGET (scrolled_window),
-                                 sequence, GTK_EVENT_SEQUENCE_DENIED);
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_set_sequence_state (gesture, sequence,
+                                  GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
@@ -715,9 +714,10 @@ scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
   sequence = gtk_gesture_get_last_updated_sequence (gesture);
   event = gtk_gesture_get_last_event (gesture, sequence);
 
-  if (event->type == GDK_TOUCH_BEGIN)
-    gtk_widget_set_gesture_state (GTK_WIDGET (scrolled_window), gesture,
-                                  GTK_EVENT_SEQUENCE_DENIED);
+  if (event->type == GDK_TOUCH_BEGIN ||
+      event->type == GDK_BUTTON_PRESS)
+    gtk_gesture_set_sequence_state (gesture, sequence,
+                                    GTK_EVENT_SEQUENCE_DENIED);
   else if (event->type != GDK_TOUCH_END &&
            event->type != GDK_BUTTON_RELEASE)
     priv->in_drag = TRUE;
@@ -750,6 +750,9 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->min_content_height = -1;
 
   priv->drag_gesture = gtk_gesture_drag_new (widget);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 1);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
+                                              GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (priv->drag_gesture, "drag-begin",
                             G_CALLBACK (scrolled_window_drag_begin_cb),
                             scrolled_window);
@@ -761,11 +764,18 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                             scrolled_window);
 
   priv->swipe_gesture = gtk_gesture_swipe_new (widget);
+  gtk_gesture_group (priv->swipe_gesture, priv->drag_gesture);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->swipe_gesture), 1);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture),
+                                              GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (priv->swipe_gesture, "swipe",
                             G_CALLBACK (scrolled_window_swipe_cb),
                             scrolled_window);
   priv->long_press_gesture = gtk_gesture_long_press_new (widget);
+  gtk_gesture_group (priv->long_press_gesture, priv->drag_gesture);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->long_press_gesture), 1);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->long_press_gesture),
+                                              GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (priv->long_press_gesture, "pressed",
                             G_CALLBACK (scrolled_window_long_press_cb),
                             scrolled_window);
@@ -1249,21 +1259,21 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
 
   if (priv->kinetic_scrolling)
     {
-      gtk_widget_add_gesture (GTK_WIDGET (scrolled_window),
-                              priv->drag_gesture, GTK_PHASE_CAPTURE);
-      gtk_widget_add_gesture (GTK_WIDGET (scrolled_window),
-                              priv->swipe_gesture, GTK_PHASE_CAPTURE);
-      gtk_widget_add_gesture (GTK_WIDGET (scrolled_window),
-                              priv->long_press_gesture, GTK_PHASE_CAPTURE);
+      gtk_widget_add_controller (GTK_WIDGET (scrolled_window),
+                                 GTK_EVENT_CONTROLLER (priv->drag_gesture));
+      gtk_widget_add_controller (GTK_WIDGET (scrolled_window),
+                                 GTK_EVENT_CONTROLLER (priv->swipe_gesture));
+      gtk_widget_add_controller (GTK_WIDGET (scrolled_window),
+                                 GTK_EVENT_CONTROLLER (priv->long_press_gesture));
     }
   else
     {
-      gtk_widget_remove_gesture (GTK_WIDGET (scrolled_window),
-                                 priv->drag_gesture);
-      gtk_widget_remove_gesture (GTK_WIDGET (scrolled_window),
-                                 priv->swipe_gesture);
-      gtk_widget_remove_gesture (GTK_WIDGET (scrolled_window),
-                                 priv->long_press_gesture);
+      gtk_widget_remove_controller (GTK_WIDGET (scrolled_window),
+                                    GTK_EVENT_CONTROLLER (priv->drag_gesture));
+      gtk_widget_remove_controller (GTK_WIDGET (scrolled_window),
+                                    GTK_EVENT_CONTROLLER (priv->swipe_gesture));
+      gtk_widget_remove_controller (GTK_WIDGET (scrolled_window),
+                                    GTK_EVENT_CONTROLLER (priv->long_press_gesture));
 
       gtk_scrolled_window_cancel_deceleration (scrolled_window);
     }
@@ -1369,17 +1379,9 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
       priv->deceleration_id = 0;
     }
 
-  if (priv->drag_gesture)
-    {
-      g_object_unref (priv->drag_gesture);
-      priv->drag_gesture = NULL;
-    }
-
-  if (priv->swipe_gesture)
-    {
-      g_object_unref (priv->swipe_gesture);
-      priv->swipe_gesture = NULL;
-    }
+  g_clear_object (&priv->drag_gesture);
+  g_clear_object (&priv->swipe_gesture);
+  g_clear_object (&priv->long_press_gesture);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
 }
