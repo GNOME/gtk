@@ -134,9 +134,8 @@ _gtk_gesture_effective_n_points (GtkGesture *gesture)
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &data))
     {
-      if (data->state == GTK_EVENT_SEQUENCE_DENIED)
-        continue;
-      if (data->event->type == GDK_TOUCH_END ||
+      if (data->state == GTK_EVENT_SEQUENCE_DENIED ||
+          data->event->type == GDK_TOUCH_END ||
           data->event->type == GDK_BUTTON_RELEASE)
         continue;
 
