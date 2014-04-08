@@ -17,6 +17,27 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
+
+/**
+ * SECTION:gtkeventcontroller
+ * @Short_description: Self-contained handler of series of events
+ * @Title: GtkEventController
+ * @See_also: #GtkGesture
+ *
+ * #GtkEventController is a base, low-level implementation for event
+ * controllers. Those react to a series of events, and possibly trigger
+ * actions as a consequence of those.
+ *
+ * Most usually, event controllers are attached to a widget through
+ * gtk_widget_add_controller(). This ensures events received by the
+ * widget are delivered to the controller. On special situations,
+ * manual delivery may be desired, this can be achieved by setting
+ * the capture phase to %GTK_PHASE_NONE and feeding events manually
+ * through gtk_event_controller_handle_event(). See
+ * gtk_event_controller_set_propagation_phase() and #GtkPropagationPhase
+ * to know more about how events are delivered to event controllers.
+ */
+
 #include "config.h"
 #include <gtk/gtkeventcontroller.h>
 #include "gtktypebuiltins.h"
