@@ -1395,8 +1395,10 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
   priv = gtk_window_get_instance_private (window);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
-
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+
+  if (!event)
+    return;
 
   region = get_active_region_type (window, (GdkEventAny*) event, x, y);
   priv->drag_possible = FALSE;
@@ -1404,13 +1406,15 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
   if (button == GDK_BUTTON_SECONDARY && region == GTK_WINDOW_REGION_TITLE)
     {
       gtk_window_do_popup (window, (GdkEventButton*) event);
-      gtk_widget_set_sequence_state (widget, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                      sequence, GTK_EVENT_SEQUENCE_CLAIMED);
       return;
     }
   else if (button == GDK_BUTTON_MIDDLE && region == GTK_WINDOW_REGION_TITLE)
     {
       gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (window)));
-      gtk_widget_set_sequence_state (widget, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                      sequence, GTK_EVENT_SEQUENCE_CLAIMED);
       return;
     }
   else if (button != GDK_BUTTON_PRIMARY)
@@ -1428,8 +1432,8 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
     case GTK_WINDOW_REGION_TITLE:
       if (!window_drag && event_widget != widget)
         {
-          gtk_widget_set_sequence_state (widget, sequence,
-                                         GTK_EVENT_SEQUENCE_DENIED);
+          gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                          sequence, GTK_EVENT_SEQUENCE_DENIED);
           return;
         }
 
@@ -1453,10 +1457,12 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
                                                    x_root, y_root,
                                                    gdk_event_get_time (event));
         }
+
       break;
     }
 
-  gtk_widget_set_sequence_state (widget, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+  gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                  sequence, GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
@@ -1491,6 +1497,7 @@ multipress_gesture_stopped_cb (GtkGestureMultiPress *gesture,
                                              gdk_event_get_time (event));
     }
 
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
   priv->drag_possible = FALSE;
 }
 
@@ -1565,13 +1572,15 @@ gtk_window_init (GtkWindow *window)
   priv->scale = gtk_widget_get_scale_factor (widget);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (window));
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                              GTK_PHASE_CAPTURE);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (multipress_gesture_pressed_cb), window);
   g_signal_connect (priv->multipress_gesture, "stopped",
                     G_CALLBACK (multipress_gesture_stopped_cb), window);
-  gtk_widget_add_gesture (GTK_WIDGET (window), priv->multipress_gesture,
-                          GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (window),
+                             GTK_EVENT_CONTROLLER (priv->multipress_gesture));
 }
 
 static void
@@ -7846,6 +7855,27 @@ get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
     }
 
   return GTK_WINDOW_REGION_CONTENT;
+}
+
+gboolean
+_gtk_window_check_handle_wm_event (GdkEvent *event)
+{
+  GtkWindowPrivate *priv;
+  GtkWidget *widget;
+
+  widget = gtk_get_event_widget (event);
+
+  if (GTK_IS_WINDOW (widget) &&
+      (event->type == GDK_BUTTON_PRESS || event->type == GDK_BUTTON_RELEASE ||
+       event->type == GDK_TOUCH_BEGIN || event->type == GDK_TOUCH_UPDATE ||
+       event->type == GDK_MOTION_NOTIFY || event->type == GDK_TOUCH_END))
+    {
+      priv = GTK_WINDOW (widget)->priv;
+      return gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                                (const GdkEvent*) event);
+    }
+
+  return FALSE;
 }
 
 static void
