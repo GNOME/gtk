@@ -58,6 +58,7 @@ struct _GtkGesturePrivate
   GdkWindow *user_window;
   GdkWindow *window;
   GdkDevice *device;
+  GList *group_link;
   guint n_points;
   guint recognized : 1;
 };
@@ -554,6 +555,8 @@ gtk_gesture_init (GtkGesture *gesture)
                                         (GDestroyNotify) g_free);
   gtk_event_controller_set_event_mask (GTK_EVENT_CONTROLLER (gesture),
                                        GDK_TOUCH_MASK);
+
+  priv->group_link = g_list_prepend (NULL, gesture);
 }
 
 /**
@@ -1167,6 +1170,94 @@ gtk_gesture_set_window (GtkGesture *gesture,
 
   priv->user_window = window;
   g_object_notify (G_OBJECT (gesture), "window");
+}
+
+GList *
+_gtk_gesture_get_group_link (GtkGesture *gesture)
+{
+  GtkGesturePrivate *priv;
+
+  priv = gtk_gesture_get_instance_private (gesture);
+
+  return priv->group_link;
+}
+
+void
+gtk_gesture_group (GtkGesture *gesture,
+                   GtkGesture *group_gesture)
+{
+  GList *link, *group_link, *next;
+
+  g_return_if_fail (GTK_IS_GESTURE (gesture));
+  g_return_if_fail (GTK_IS_GESTURE (group_gesture));
+  g_return_if_fail (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (group_gesture)) ==
+                    gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)));
+
+  link = _gtk_gesture_get_group_link (gesture);
+
+  if (link->prev || link->next)
+    {
+      if (gtk_gesture_is_grouped_with (gesture, group_gesture))
+        return;
+      gtk_gesture_ungroup (gesture);
+    }
+
+  group_link = _gtk_gesture_get_group_link (group_gesture);
+  next = group_link->next;
+
+  /* Rewire link so it's inserted after the group_gesture elem */
+  link->prev = group_link;
+  link->next = next;
+  group_link->next = link;
+  if (next)
+    next->prev = link;
+}
+
+void
+gtk_gesture_ungroup (GtkGesture *gesture)
+{
+  GList *link, *prev, *next;
+
+  g_return_if_fail (GTK_IS_GESTURE (gesture));
+
+  link = _gtk_gesture_get_group_link (gesture);
+  prev = link->prev;
+  next = link->next;
+
+  /* Detach link from the group chain */
+  if (prev)
+    prev->next = next;
+  if (next)
+    next->prev = prev;
+
+  link->next = link->prev = NULL;
+}
+
+GList *
+gtk_gesture_get_group (GtkGesture *gesture)
+{
+  GList *link;
+
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), NULL);
+
+  link = _gtk_gesture_get_group_link (gesture);
+
+  return g_list_copy (g_list_first (link));
+}
+
+gboolean
+gtk_gesture_is_grouped_with (GtkGesture *gesture,
+                             GtkGesture *other)
+{
+  GList *link;
+
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
+  g_return_val_if_fail (GTK_IS_GESTURE (other), FALSE);
+
+  link = _gtk_gesture_get_group_link (gesture);
+  link = g_list_first (link);
+
+  return g_list_find (link, other) != NULL;
 }
 
 gboolean

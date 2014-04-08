@@ -136,6 +136,19 @@ GDK_AVAILABLE_IN_3_14
 void        gtk_gesture_set_window           (GtkGesture       *gesture,
                                               GdkWindow        *window);
 
+GDK_AVAILABLE_IN_3_14
+void        gtk_gesture_group                (GtkGesture       *group_gesture,
+                                              GtkGesture       *gesture);
+GDK_AVAILABLE_IN_3_14
+void        gtk_gesture_ungroup              (GtkGesture       *gesture);
+
+GDK_AVAILABLE_IN_3_14
+GList *     gtk_gesture_get_group            (GtkGesture       *gesture);
+
+GDK_AVAILABLE_IN_3_14
+gboolean    gtk_gesture_is_grouped_with      (GtkGesture       *gesture,
+                                              GtkGesture       *other);
+
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_H__ */
