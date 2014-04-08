@@ -20,11 +20,11 @@
 #include "gtkcolorscaleprivate.h"
 
 #include "gtkcolorchooserprivate.h"
+#include "gtkgesturelongpress.h"
 #include "gtkcolorutils.h"
 #include "gtkorientable.h"
 #include "gtkstylecontext.h"
 #include "gtkaccessible.h"
-#include "gtkpressandholdprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -37,7 +37,7 @@ struct _GtkColorScalePrivate
   GdkRGBA color;
   GtkColorScaleType type;
 
-  GtkPressAndHold *press_and_hold;
+  GtkGesture *long_press_gesture;
 };
 
 enum
@@ -45,6 +45,11 @@ enum
   PROP_ZERO,
   PROP_SCALE_TYPE
 };
+
+static void hold_action (GtkGestureLongPress *gesture,
+                         gdouble              x,
+                         gdouble              y,
+                         GtkColorScale       *scale);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
 
@@ -249,6 +254,12 @@ gtk_color_scale_init (GtkColorScale *scale)
   scale->priv = gtk_color_scale_get_instance_private (scale);
 
   gtk_widget_add_events (GTK_WIDGET (scale), GDK_TOUCH_MASK);
+
+  scale->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (scale));
+  g_signal_connect (scale->priv->long_press_gesture, "pressed",
+                    G_CALLBACK (hold_action), scale);
+  gtk_widget_add_controller (GTK_WIDGET (scale),
+                             GTK_EVENT_CONTROLLER (scale->priv->long_press_gesture));
 }
 
 static void
@@ -259,7 +270,9 @@ scale_finalize (GObject *object)
   if (scale->priv->surface)
     cairo_surface_destroy (scale->priv->surface);
 
-  g_clear_object (&scale->priv->press_and_hold);
+  gtk_widget_remove_controller (GTK_WIDGET (object),
+                                GTK_EVENT_CONTROLLER (scale->priv->long_press_gesture));
+  g_clear_object (&scale->priv->long_press_gesture);
 
   G_OBJECT_CLASS (gtk_color_scale_parent_class)->finalize (object);
 }
@@ -322,46 +335,15 @@ scale_set_property (GObject      *object,
 }
 
 static void
-hold_action (GtkPressAndHold *pah,
-             gint             x,
-             gint             y,
-             GtkColorScale   *scale)
+hold_action (GtkGestureLongPress *gesture,
+             gdouble              x,
+             gdouble              y,
+             GtkColorScale       *scale)
 {
   gboolean handled;
 
   g_signal_emit_by_name (scale, "popup-menu", &handled);
 }
-
-static gboolean
-scale_touch (GtkWidget     *widget,
-             GdkEventTouch *event)
-{
-  GtkColorScale *scale = GTK_COLOR_SCALE (widget);
-
-  if (!scale->priv->press_and_hold)
-    {
-      gint drag_threshold;
-
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-dnd-drag-threshold", &drag_threshold,
-                    NULL);
-
-      scale->priv->press_and_hold = gtk_press_and_hold_new ();
-
-      g_object_set (scale->priv->press_and_hold,
-                    "drag-threshold", drag_threshold,
-                    "hold-time", 1000,
-                    NULL);
-
-      g_signal_connect (scale->priv->press_and_hold, "hold",
-                        G_CALLBACK (hold_action), scale);
-    }
-
-  gtk_press_and_hold_process_event (scale->priv->press_and_hold, (GdkEvent *)event);
-
-  return GTK_WIDGET_CLASS (gtk_color_scale_parent_class)->touch_event (widget, event);
-}
-
 
 static void
 gtk_color_scale_class_init (GtkColorScaleClass *class)
@@ -374,7 +356,6 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
   object_class->set_property = scale_set_property;
 
   widget_class->draw = scale_draw;
-  widget_class->touch_event = scale_touch;
 
   g_object_class_install_property (object_class, PROP_SCALE_TYPE,
       g_param_spec_int ("scale-type", P_("Scale type"), P_("Scale type"),
