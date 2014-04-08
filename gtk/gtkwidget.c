@@ -1779,7 +1779,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   /**
    * GtkWidget::size-allocate:
    * @widget: the object which received the signal.
-   * @allocation:
+   * @allocation: the region which has been allocated to the widget.
    */
   widget_signals[SIZE_ALLOCATE] =
     g_signal_new (I_("size-allocate"),
