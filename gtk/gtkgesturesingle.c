@@ -17,6 +17,23 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
+
+/**
+ * SECTION:gtkgesturesingle
+ * @Short_description: Gesture especialized for mouse/single finger input
+ * @Title: GtkGestureSingle
+ *
+ * #GtkGestureSingle is an especialization of #GtkGesture, optimized (although
+ * not restricted) to dealing with mouse and single touch gestures. Under
+ * interaction, these gestures stick to the first interacting sequence, which
+ * is accessible through gtk_gesture_single_get_current_sequence() while the
+ * gesture is being interacted with.
+ *
+ * By default gestures only react to touch events, gtk_gesture_single_set_touch_only()
+ * can be used to change this default behavior. Callers may also specify
+ * a mouse button number to interact with through gtk_gesture_single_set_button().
+ */
+
 #include "config.h"
 #include <gtk/gtkgesturesingle.h>
 #include "gtkprivate.h"
@@ -188,6 +205,13 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
   controller_class->reset = gtk_gesture_single_reset;
   controller_class->handle_event = gtk_gesture_single_handle_event;
 
+  /**
+   * GtkGestureSingle:touch-only:
+   *
+   * Whether the gesture handles only touch events
+   *
+   * Since: 3.14
+   */
   g_object_class_install_property (object_class,
                                    PROP_TOUCH_ONLY,
                                    g_param_spec_boolean ("touch-only",
@@ -196,6 +220,13 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                                                             " only touch events"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
+  /**
+   * GtkGestureSingle:button:
+   *
+   * Mouse button number to listen to, or 0 to listen for any button.
+   *
+   * Since: 3.14
+   */
   g_object_class_install_property (object_class,
                                    PROP_BUTTON,
                                    g_param_spec_uint ("button",
@@ -339,6 +370,15 @@ gtk_gesture_single_set_button (GtkGestureSingle *gesture,
   g_object_notify (G_OBJECT (gesture), "button");
 }
 
+/**
+ * gtk_gesture_single_get_current_button:
+ * @gesture: a #GtkGestureSingle
+ *
+ * Returns the button number currently interacting with @gesture, or 0 if there
+ * is none.
+ *
+ * Returns: The current button number
+ **/
 guint
 gtk_gesture_single_get_current_button (GtkGestureSingle *gesture)
 {
@@ -351,6 +391,15 @@ gtk_gesture_single_get_current_button (GtkGestureSingle *gesture)
   return priv->current_button;
 }
 
+/**
+ * gtk_gesture_single_get_current_sequence:
+ * @gesture: a #GtkGestureSingle
+ *
+ * Returns the event sequence currently interacting with @gesture,
+ * this is only meaningful if gtk_gesture_is_active() returns #TRUE.
+ *
+ * Returns: the current sequence
+ **/
 GdkEventSequence *
 gtk_gesture_single_get_current_sequence (GtkGestureSingle *gesture)
 {
