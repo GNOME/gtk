@@ -17,6 +17,19 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
+
+/**
+ * SECTION:gtkgesturezoom
+ * @Short_description: Zoom gesture
+ * @Title: GtkGestureZoom
+ * @See_also: #GtkGestureRotate
+ *
+ * #GtkGestureZoom is a #GtkGesture implementation able to recognize
+ * pinch/zoom gestures, whenever the distance between both tracked
+ * sequences changes, the #GtkGestureZoom:scale-changed signal is
+ * emitted to report the scale factor.
+ */
+
 #include "config.h"
 #include <math.h>
 #include <gtk/gtkgesturezoom.h>
@@ -138,6 +151,11 @@ gtk_gesture_zoom_class_init (GtkGestureZoomClass *klass)
    * GtkGestureZoom::scale-changed:
    * @controller: the object on which the signal is emitted
    * @scale: Scale delta, taking the initial state as 1:1
+   *
+   * This signal is emitted whenever the distance between both tracked
+   * sequences changes.
+   *
+   * Since: 3.14
    */
   signals[SCALE_CHANGED] =
     g_signal_new ("scale-changed",
