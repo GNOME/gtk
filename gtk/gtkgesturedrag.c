@@ -16,6 +16,20 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
+
+/**
+ * SECTION:gtkgesturedrag
+ * @Short_description: Drag gesture
+ * @Title: GtkGestureDrag
+ * @See_also: #GtkGestureSwipe
+ *
+ * #GtkGestureDrag is a #GtkGesture implementation that recognizes drag
+ * operations. The drag operation itself can be tracked throught the
+ * #GtkGestureDrag:drag-begin, #GtkGestureDrag:drag-update and
+ * #GtkGestureDrag:drag-end signals, or the relevant coordinates be
+ * extracted through gtk_gesture_drag_get_offset() and
+ * gtk_gesture_drag_get_start_point().
+ */
 #include "config.h"
 #include <gtk/gtkgesturedrag.h>
 
@@ -100,6 +114,16 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
   gesture_class->update = gtk_gesture_drag_update;
   gesture_class->end = gtk_gesture_drag_end;
 
+  /**
+   * GtkGestureDrag:drag-begin:
+   * @gesture: the object which received the signal
+   * @start_x: X coordinate, relative to the widget allocation
+   * @start_y: Y coordinate, relative to the widget allocation
+   *
+   * This signal is emitted whenever dragging starts.
+   *
+   * Since: 3.14
+   */
   signals[DRAG_BEGIN] =
     g_signal_new ("drag-begin",
                   G_TYPE_FROM_CLASS (klass),
@@ -107,6 +131,16 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
                   G_STRUCT_OFFSET (GtkGestureDragClass, drag_begin),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  /**
+   * GtkGestureDrag:drag-update:
+   * @gesture: the object which received the signal
+   * @offset_x: X offset, relative to the start point
+   * @offset_y: Y offset, relative to the start point
+   *
+   * This signal is emitted whenever the dragging point moves.
+   *
+   * Since: 3.14
+   */
   signals[DRAG_UPDATE] =
     g_signal_new ("drag-update",
                   G_TYPE_FROM_CLASS (klass),
@@ -114,6 +148,16 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
                   G_STRUCT_OFFSET (GtkGestureDragClass, drag_update),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  /**
+   * GtkGestureDrag:drag-end:
+   * @gesture: the object which received the signal
+   * @offset_x: X offset, relative to the start point
+   * @offset_y: Y offset, relative to the start point
+   *
+   * This signal is emitted whenever the dragging is finished.
+   *
+   * Since: 3.14
+   */
   signals[DRAG_END] =
     g_signal_new ("drag-end",
                   G_TYPE_FROM_CLASS (klass),
