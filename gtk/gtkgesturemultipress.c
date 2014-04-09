@@ -17,6 +17,23 @@
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
 
+/**
+ * SECTION:gtkgesturemultipress
+ * @Short_description: Multipress gesture
+ * @Title: GtkGestureMultiPress
+ *
+ * #GtkGestureMultiPress is a #GtkGesture implementation able to recognize
+ * multiple clicks on a nearby zone, which can be listened for through the
+ * #GtkGestureMultiPress:pressed signal. Whenever time or distance between clicks
+ * exceed the GTK+ defaults, #GtkGestureMultiPress:stopped is emitted, and the
+ * click counter is reset.
+ *
+ * Callers may also restrict the area that is considered valid for a >1
+ * touch/button press through gtk_gesture_multi_press_set_area(), so any
+ * click happening outside that area is considered to be a first click of
+ * its own.
+ */
+
 #include "config.h"
 #include "gtkgesturemultipress.h"
 #include "gtkprivate.h"
@@ -258,6 +275,17 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
 
   controller_class->reset = gtk_gesture_multi_press_reset;
 
+  /**
+   * GtkGestureMultiPress:pressed:
+   * @gesture: the object which received the signal
+   * @n_press: how many touch/button presses happened with this one
+   * @x: The X coordinate, in widget allocation coordinates
+   * @y: The Y coordinate, in widget allocation coordinates
+   *
+   * This signal is emitted whenever a button or touch press happens.
+   *
+   * Since: 3.14
+   */
   signals[PRESSED] =
     g_signal_new ("pressed",
                   G_TYPE_FROM_CLASS (klass),
@@ -266,6 +294,15 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 3, G_TYPE_INT,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  /**
+   * GtkGestureMultiPress:stopped:
+   * @gesture: the object which received the signal
+   *
+   * This signal is emitted whenever any time/distance threshold has
+   * been exceeded.
+   *
+   * Since: 3.14
+   */
   signals[STOPPED] =
     g_signal_new ("stopped",
                   G_TYPE_FROM_CLASS (klass),
