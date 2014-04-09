@@ -25,7 +25,7 @@
  * @See_also: #GtkGesture
  *
  * #GtkEventController is a base, low-level implementation for event
- * controllers. Those react to a series of events, and possibly trigger
+ * controllers. Those react to a series of #GdkEvents, and possibly trigger
  * actions as a consequence of those.
  *
  * Most usually, event controllers are attached to a widget through
@@ -134,6 +134,13 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   object_class->set_property = gtk_event_controller_set_property;
   object_class->get_property = gtk_event_controller_get_property;
 
+  /**
+   * GtkEventController:widget:
+   *
+   * The widget receiving the #GdkEvents that the controller will handle.
+   *
+   * Since: 3.14
+   */
   g_object_class_install_property (object_class,
                                    PROP_WIDGET,
                                    g_param_spec_object ("widget",
@@ -142,6 +149,13 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT_ONLY));
+  /**
+   * GtkEventController:event-mask:
+   *
+   * Set of events that the controller handles.
+   *
+   * Since: 3.14
+   */
   g_object_class_install_property (object_class,
                                    PROP_EVENT_MASK,
                                    g_param_spec_flags ("event-mask",
@@ -149,6 +163,15 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                        P_("Event mask the controller handles"),
                                                        GDK_TYPE_EVENT_MASK, 0,
                                                        GTK_PARAM_READWRITE));
+  /**
+   * GtkEventController:propagation-phase:
+   *
+   * Specifies the stage in event propagation at which events are handled by the
+   * controller. Note that this requires a controller to be attached through
+   * gtk_widget_add_controller().
+   *
+   * Since: 3.14
+   */
   g_object_class_install_property (object_class,
                                    PROP_PROPAGATION_PHASE,
                                    g_param_spec_enum ("propagation-phase",
@@ -156,6 +179,18 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                       P_("Phase in event propagation where this controller handles events"),
                                                       GTK_TYPE_PROPAGATION_PHASE, GTK_PHASE_BUBBLE,
                                                       GTK_PARAM_READWRITE));
+  /**
+   * GtkEventController:handle-event:
+   * @controller: the object which receives the signal
+   * @event: the event to handle
+   *
+   * This signal is emitted on @controller whenever an event is to be handled.
+   *
+   * Return value: %TRUE to propagate further emission if the event was handled,
+   *   %FALSE otherwise
+   *
+   * Since: 3.14
+   */
   signals[HANDLE_EVENT] =
     g_signal_new ("handle-event",
                   G_TYPE_FROM_CLASS (klass),
@@ -164,6 +199,15 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                   g_signal_accumulator_true_handled, NULL, NULL,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+  /**
+   * GtkEventController:reset:
+   * @controller: the object which receives the signal
+   *
+   * This signal is emitted on @controller whenever it needs to be reset. When
+   * this happens controllers must forget any recorded state.
+   *
+   * Since: 3.14
+   */
   signals[RESET] =
     g_signal_new ("reset",
                   G_TYPE_FROM_CLASS (klass),
