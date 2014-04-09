@@ -121,6 +121,7 @@ copy ..\..\..\gtk\a11y\gtkmenushellaccessible.h $(CopyDir)\include\gtk-$(ApiVers
 copy ..\..\..\gtk\a11y\gtknotebookaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtknotebookpageaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkpanedaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
+copy ..\..\..\gtk\a11y\gtkpopoveraccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkprogressbaraccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkradiobuttonaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkradiomenuitemaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;

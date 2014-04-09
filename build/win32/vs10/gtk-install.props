@@ -214,6 +214,8 @@ copy ..\..\..\gtk\a11y\gtknotebookpageaccessible.h $(CopyDir)\include\gtk-$(ApiV
 
 copy ..\..\..\gtk\a11y\gtkpanedaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
+copy ..\..\..\gtk\a11y\gtkpopoveraccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
+
 copy ..\..\..\gtk\a11y\gtkprogressbaraccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
 copy ..\..\..\gtk\a11y\gtkradiobuttonaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
