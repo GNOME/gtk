@@ -5876,10 +5876,10 @@ move_cursor (GtkTextView       *text_view,
 }
 
 static void
-gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
-                                    GtkMovementStep  step,
-                                    gint             count,
-                                    gboolean         extend_selection)
+gtk_text_view_move_cursor (GtkTextView     *text_view,
+                           GtkMovementStep  step,
+                           gint             count,
+                           gboolean         extend_selection)
 {
   GtkTextViewPrivate *priv;
   GtkTextIter insert;
@@ -6120,15 +6120,6 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
 
   gtk_text_view_check_cursor_blink (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
-}
-
-static void
-gtk_text_view_move_cursor (GtkTextView     *text_view,
-                           GtkMovementStep  step,
-                           gint             count,
-                           gboolean         extend_selection)
-{
-  gtk_text_view_move_cursor_internal (text_view, step, count, extend_selection);
 }
 
 static void
