@@ -184,6 +184,7 @@ typedef enum {
 typedef enum {
   OPERATION_MODE_BROWSE,
   OPERATION_MODE_SEARCH,
+  OPERATION_MODE_ENTER_LOCATION,
   OPERATION_MODE_RECENT
 } OperationMode;
 
@@ -2120,7 +2121,7 @@ static void
 places_sidebar_show_enter_location_cb (GtkPlacesSidebar *sidebar,
                                        GtkFileChooserWidget *impl)
 {
-  location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
+  operation_mode_set (impl, OPERATION_MODE_ENTER_LOCATION);
 }
 
 static void
@@ -2332,6 +2333,9 @@ location_bar_update (GtkFileChooserWidget *impl)
 
   switch (priv->operation_mode)
     {
+    case OPERATION_MODE_ENTER_LOCATION:
+      break;
+
     case OPERATION_MODE_BROWSE:
       break;
 
@@ -2382,6 +2386,10 @@ operation_mode_stop (GtkFileChooserWidget *impl, OperationMode mode)
 {
   switch (mode)
     {
+    case OPERATION_MODE_ENTER_LOCATION:
+      stop_loading_and_clear_list_model (impl, TRUE);
+      break;
+
     case OPERATION_MODE_BROWSE:
       stop_loading_and_clear_list_model (impl, TRUE);
       break;
@@ -2399,6 +2407,13 @@ operation_mode_stop (GtkFileChooserWidget *impl, OperationMode mode)
     default:
       g_assert_not_reached ();
     }
+}
+
+static void
+operation_mode_set_enter_location (GtkFileChooserWidget *impl)
+{
+  location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
+  location_bar_update (impl);
 }
 
 static void
@@ -2443,6 +2458,10 @@ operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
 
   switch (priv->operation_mode)
     {
+    case OPERATION_MODE_ENTER_LOCATION:
+      operation_mode_set_enter_location (impl);
+      break;
+
     case OPERATION_MODE_BROWSE:
       operation_mode_set_browse (impl);
       break;
