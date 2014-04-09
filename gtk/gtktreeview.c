@@ -563,6 +563,7 @@ static void     gtk_tree_view_destroy              (GtkWidget        *widget);
 static void     gtk_tree_view_realize              (GtkWidget        *widget);
 static void     gtk_tree_view_unrealize            (GtkWidget        *widget);
 static void     gtk_tree_view_map                  (GtkWidget        *widget);
+static void     gtk_tree_view_unmap                (GtkWidget        *widget);
 static void     gtk_tree_view_get_preferred_width  (GtkWidget        *widget,
 						    gint             *minimum,
 						    gint             *natural);
@@ -918,6 +919,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   /* GtkWidget signals */
   widget_class->destroy = gtk_tree_view_destroy;
   widget_class->map = gtk_tree_view_map;
+  widget_class->unmap = gtk_tree_view_unmap;
   widget_class->realize = gtk_tree_view_realize;
   widget_class->unrealize = gtk_tree_view_unrealize;
   widget_class->get_preferred_width = gtk_tree_view_get_preferred_width;
@@ -2215,6 +2217,8 @@ gtk_tree_view_map (GtkWidget *widget)
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *tmp_list;
 
+  _gtk_pixel_cache_map (tree_view->priv->pixel_cache);
+
   gtk_widget_set_mapped (widget, TRUE);
 
   tmp_list = tree_view->priv->children;
@@ -2234,6 +2238,16 @@ gtk_tree_view_map (GtkWidget *widget)
   gtk_tree_view_map_buttons (tree_view);
 
   gdk_window_show (gtk_widget_get_window (widget));
+}
+
+static void
+gtk_tree_view_unmap (GtkWidget *widget)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unmap (widget);
+
+  _gtk_pixel_cache_unmap (tree_view->priv->pixel_cache);
 }
 
 static void
