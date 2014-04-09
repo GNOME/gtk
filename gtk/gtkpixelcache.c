@@ -377,12 +377,14 @@ _gtk_pixel_cache_repaint (GtkPixelCache *cache,
     cairo_region_destroy (region_dirty);
 }
 
-static gboolean
-blow_cache_cb  (gpointer user_data)
+static void
+gtk_pixel_cache_blow_cache (GtkPixelCache *cache)
 {
-  GtkPixelCache *cache = user_data;
-
-  cache->timeout_tag = 0;
+  if (cache->timeout_tag)
+    {
+      g_source_remove (cache->timeout_tag);
+      cache->timeout_tag = 0;
+    }
 
   if (cache->surface)
     {
@@ -392,6 +394,16 @@ blow_cache_cb  (gpointer user_data)
 	cairo_region_destroy (cache->surface_dirty);
       cache->surface_dirty = NULL;
     }
+}
+
+static gboolean
+blow_cache_cb  (gpointer user_data)
+{
+  GtkPixelCache *cache = user_data;
+
+  cache->timeout_tag = 0;
+
+  gtk_pixel_cache_blow_cache (cache);
 
   return G_SOURCE_REMOVE;
 }
