@@ -16,6 +16,28 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
+
+/**
+ * SECTION:gtkgesturepan
+ * @Short_description: Pan gesture
+ * @Title: GtkGesturePan
+ *
+ * #GtkGesturePan is a #GtkGesture implementation able to recognize
+ * pan gestures, those are drags that are locked to happen along one
+ * axis. The axis that a #GtkGesturePan handles is defined at
+ * construct time, and can be changed through
+ * gtk_gesture_pan_set_orientation().
+ *
+ * When the gesture starts to be recognized, #GtkGesturePan will
+ * attempt to determine as early as possible whether the sequence
+ * is moving in the expected direction, and denying the sequence if
+ * this does not happen.
+ *
+ * Once a panning gesture along the expected axis is recognized,
+ * the #GtkGesturePan:pan signal will be emitted as input events
+ * are received, containing the offset in the given axis.
+ */
+
 #include "config.h"
 #include <gtk/gtkgesturepan.h>
 #include "gtktypebuiltins.h"
@@ -204,6 +226,13 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
   drag_gesture_class->drag_update = gtk_gesture_pan_drag_update;
   drag_gesture_class->drag_end = gtk_gesture_pan_drag_end;
 
+  /**
+   * GtkGesturePan:orientation:
+   *
+   * The expected orientation of pan gestures.
+   *
+   * Since: 3.14
+   */
   g_object_class_install_property (object_class,
                                    PROP_ORIENTATION,
                                    g_param_spec_enum ("orientation",
@@ -212,13 +241,25 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
                                                       GTK_TYPE_PAN_ORIENTATION,
                                                       GTK_PAN_ORIENTATION_HORIZONTAL,
                                                       GTK_PARAM_READWRITE));
+  /**
+   * GtkGesturePan:pan:
+   * @gesture: The object which received the signal
+   * @direction: current direction of the pan gesture
+   * @offset: Offset along the gesture orientation
+   *
+   * This signal is emitted once a panning gesture along the
+   * expected axis is detected.
+   *
+   * Since: 3.14
+   */
   signals[PAN] =
     g_signal_new ("pan",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGesturePanClass, pan),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, GTK_TYPE_PAN_DIRECTION);
+                  G_TYPE_NONE, 2, GTK_TYPE_PAN_DIRECTION,
+                  G_TYPE_DOUBLE);
 }
 
 static void
@@ -230,6 +271,17 @@ gtk_gesture_pan_init (GtkGesturePan *gesture)
   priv->orientation = GTK_PAN_ORIENTATION_HORIZONTAL;
 }
 
+/**
+ * gtk_gesture_pan_new:
+ * @widget: a #GtkWidget
+ * @orientation: expected orientation
+ *
+ * Returns a newly created #GtkGesture that recognizes pan gestures.
+ *
+ * Returns: a newly created #GtkGesturePan
+ *
+ * Since: 3.14
+ **/
 GtkGesture *
 gtk_gesture_pan_new (GtkWidget         *widget,
                      GtkPanOrientation  orientation)
@@ -242,6 +294,16 @@ gtk_gesture_pan_new (GtkWidget         *widget,
                        NULL);
 }
 
+/**
+ * gtk_gesture_pan_get_orientation:
+ * @gesture: A #GtkGesturePan
+ *
+ * Returns the orientation of the pan gestures that this @gesture expects.
+ *
+ * Return value: the expected orientation for pan gestures.
+ *
+ * Since: 3.14
+ */
 GtkPanOrientation
 gtk_gesture_pan_get_orientation (GtkGesturePan *gesture)
 {
@@ -254,6 +316,15 @@ gtk_gesture_pan_get_orientation (GtkGesturePan *gesture)
   return priv->orientation;
 }
 
+/**
+ * gtk_gesture_pan_set_orientation:
+ * @gesture: A #GtkGesturePan
+ * @orientation: expected orientation
+ *
+ * Sets the orientation to be expected on pan gestures.
+ *
+ * Since: 3.14
+ */
 void
 gtk_gesture_pan_set_orientation (GtkGesturePan     *gesture,
                                  GtkPanOrientation  orientation)
