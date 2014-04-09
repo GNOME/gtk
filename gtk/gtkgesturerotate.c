@@ -17,6 +17,18 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
+
+/**
+ * SECTION:gtkgesturerotate
+ * @Short_description: Rotate gesture
+ * @Title: GtkGestureRotate
+ * @See_also: #GtkGestureZoom
+ *
+ * #GtkGestureRotate is a #GtkGesture implementation able to recognize
+ * 2-finger rotations, whenever the angle between both handled sequences
+ * changes, the #GtkGestureRotate:angle-changed signal is emitted.
+ */
+
 #include "config.h"
 #include <math.h>
 #include <gtk/gtkgesturerotate.h>
@@ -142,7 +154,12 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
    * GtkGestureRotate::angle-changed:
    * @gesture: the object on which the signal is emitted
    * @angle: Current angle in radians
-   * @angle_delta: Difference with the starting angle in radians
+   * @angle_delta: Difference with the starting angle, in radians
+   *
+   * This signal is emitted when the angle between both tracked points
+   * changes.
+   *
+   * Since: 3.14
    */
   signals[ANGLE_CHANGED] =
     g_signal_new ("angle-changed",
