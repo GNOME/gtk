@@ -17,6 +17,24 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
+
+/**
+ * SECTION:gtkgestureswipe
+ * @Short_description: Swipe gesture
+ * @Title: GtkGestureSwipe
+ *
+ * #GtkGestureSwipe is a #GtkGesture implementation able to recognize
+ * swipes, after a press/move/.../move/release sequence happens, the
+ * GtkGestureSwipe:swipe signal will be emitted, providing the velocity
+ * and directionality of the sequence at the time it was lifted.
+ *
+ * If the velocity is desired in intermediate points,
+ * gtk_gesture_swipe_get_velocity() can be called on eg. a
+ * #GtkGesture:update handler.
+ *
+ * All velocities are reported in pixels/sec values.
+ */
+
 #include "config.h"
 #include <gtk/gtkgestureswipe.h>
 #include "gtkmarshalers.h"
@@ -172,6 +190,17 @@ gtk_gesture_swipe_class_init (GtkGestureSwipeClass *klass)
   gesture_class->update = gtk_gesture_swipe_update;
   gesture_class->end = gtk_gesture_swipe_end;
 
+  /**
+   * GtkGestureSwipe:swipe:
+   * @gesture: object which received the signal
+   * @velocity_x: velocity in the X axis, in pixels/sec
+   * @velocity_y: velocity in the Y axis, in pixels/sec
+   *
+   * This signal is emitted when the recognized gesture is finished, velocity
+   * and direction are a product of previously recorded events.
+   *
+   * Since: 3.14
+   */
   signals[SWIPE] =
     g_signal_new ("swipe",
                   G_TYPE_FROM_CLASS (klass),
@@ -208,6 +237,20 @@ gtk_gesture_swipe_new (GtkWidget *widget)
                        NULL);
 }
 
+/**
+ * gtk_gesture_swipe_get_velocity:
+ * @gesture: a #GtkGestureSwipe
+ * @velocity_x: (out): return value for the velocity in the X axis, in pixels/sec
+ * @velocity_y: (out): return value for the velocity in the Y axis, in pixels/sec
+ *
+ * If the gesture is recognized, this function returns %TRUE and fill in
+ * @velocity_x and @velocity_y with the recorded velocity, as per the
+ * last event(s) processed.
+ *
+ * Returns: whether velocity could be calculated
+ *
+ * Since: 3.14
+ **/
 gboolean
 gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,
                                 gdouble         *velocity_x,
