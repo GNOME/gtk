@@ -220,7 +220,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_path_bar;
   GtkWidget *browse_select_a_folder_info_bar;
   GtkWidget *browse_select_a_folder_label;
-  GtkWidget *browse_select_a_folder_icon;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
@@ -2160,8 +2159,8 @@ location_toggle_popup_handler (GtkFileChooserWidget *impl)
 }
 
 typedef enum {
+  PATH_BAR_HIDDEN,
   PATH_BAR_FOLDER_PATH,
-  PATH_BAR_SELECT_A_FOLDER,
   PATH_BAR_ERROR_NO_FILENAME,
   PATH_BAR_ERROR_NO_FOLDER
 } PathBarMode;
@@ -2179,12 +2178,6 @@ info_bar_set (GtkFileChooserWidget *impl, PathBarMode mode)
 
   switch (mode)
     {
-    case PATH_BAR_SELECT_A_FOLDER:
-      str = g_strconcat ("<i>", _("Please select a folder below"), "</i>", NULL);
-      free_str = TRUE;
-      message_type = GTK_MESSAGE_OTHER;
-      break;
-
     case PATH_BAR_ERROR_NO_FILENAME:
       str = _("Please type a file name");
       message_type = GTK_MESSAGE_WARNING;
@@ -2201,9 +2194,6 @@ info_bar_set (GtkFileChooserWidget *impl, PathBarMode mode)
     }
 
   gtk_info_bar_set_message_type (GTK_INFO_BAR (priv->browse_select_a_folder_info_bar), message_type);
-  gtk_image_set_from_icon_name (GTK_IMAGE (priv->browse_select_a_folder_icon),
-                                (message_type == GTK_MESSAGE_WARNING) ? "dialog-warning-symbolic" : "folder-symbolic",
-                                GTK_ICON_SIZE_MENU);
   gtk_label_set_markup (GTK_LABEL (priv->browse_select_a_folder_label), str);
 
   if (free_str)
@@ -2225,11 +2215,14 @@ path_bar_set_mode (GtkFileChooserWidget *impl, PathBarMode mode)
 
   switch (mode)
     {
+    case PATH_BAR_HIDDEN:
+      path_bar_visible = FALSE;
+      break;
+
     case PATH_BAR_FOLDER_PATH:
       path_bar_visible = TRUE;
       break;
 
-    case PATH_BAR_SELECT_A_FOLDER:
     case PATH_BAR_ERROR_NO_FILENAME:
     case PATH_BAR_ERROR_NO_FOLDER:
       info_bar_set (impl, mode);
@@ -2424,12 +2417,11 @@ static void
 path_bar_update (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  PathBarMode mode;
+  PathBarMode mode = PATH_BAR_FOLDER_PATH;
 
   switch (priv->operation_mode)
     {
     case OPERATION_MODE_BROWSE:
-      mode = PATH_BAR_FOLDER_PATH;
       break;
 
     case OPERATION_MODE_RECENT:
@@ -2446,19 +2438,13 @@ path_bar_update (GtkFileChooserWidget *impl)
 
 	  if (have_selected)
 	    {
-	      mode = PATH_BAR_FOLDER_PATH;
 	      put_recent_folder_in_pathbar (impl, &iter);
 	    }
-	  else
-	    mode = PATH_BAR_SELECT_A_FOLDER;
 	}
-      else
-	mode = PATH_BAR_FOLDER_PATH;
-
+      mode = PATH_BAR_HIDDEN;
       break;
 
     case OPERATION_MODE_SEARCH:
-      mode = PATH_BAR_FOLDER_PATH;
       break;
 
     default:
@@ -7423,7 +7409,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_path_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_select_a_folder_info_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_select_a_folder_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_select_a_folder_icon);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, filter_combo_hbox);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, filter_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, preview_box);
