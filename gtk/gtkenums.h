@@ -1074,6 +1074,16 @@ typedef enum
   GTK_PHASE_BUBBLE
 } GtkPropagationPhase;
 
+/**
+ * GtkEventSequenceState:
+ * @GTK_EVENT_SEQUENCE_NONE: The sequence is handled, but not grabbed.
+ * @GTK_EVENT_SEQUENCE_CLAIMED: The sequence is handled and grabbed.
+ * @GTK_EVENT_SEQUENCE_DENIED: The sequence is denied.
+ *
+ * Describes the state of a #GdkEventSequence in a #GtkGesture.
+ *
+ * Since: 3.14
+ */
 typedef enum
 {
   GTK_EVENT_SEQUENCE_NONE,
@@ -1081,6 +1091,17 @@ typedef enum
   GTK_EVENT_SEQUENCE_DENIED
 } GtkEventSequenceState;
 
+/**
+ * GtkPanDirection:
+ * @GTK_PAN_DIRECTION_LEFT: panned towards the left
+ * @GTK_PAN_DIRECTION_RIGHT: panned towards the right
+ * @GTK_PAN_DIRECTION_UP: panned upwards
+ * @GTK_PAN_DIRECTION_DOWN: panned downwards
+ *
+ * Describes the panning direction of a #GtkGesturePan
+ *
+ * Since: 3.14
+ */
 typedef enum
 {
   GTK_PAN_DIRECTION_LEFT,
@@ -1089,6 +1110,15 @@ typedef enum
   GTK_PAN_DIRECTION_DOWN
 } GtkPanDirection;
 
+/**
+ * GtkPanOrientation:
+ * @GTK_PAN_ORIENTATION_VERTICAL: vertical panning allowed
+ * @GTK_PAN_ORIENTATION_HORIZONTAL: horizontal panning allowed
+ *
+ * Describes the panning axis of a #GtkGesturePan
+ *
+ * Since: 3.14
+ */
 typedef enum
 {
   GTK_PAN_ORIENTATION_VERTICAL,
