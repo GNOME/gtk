@@ -17,6 +17,21 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
+
+/**
+ * SECTION:gtkgesturelongpress
+ * @Short_description: "press and hold" gesture
+ * @Title: GtkGestureLongPress
+ *
+ * #GtkGestureLongPress is a #GtkGesture implementation able to recognize
+ * long presses, triggering the #GtkGestureLongPress:pressed after the
+ * timeout is exceeded.
+ *
+ * If the touchpoint is lifted before the timeout passes, or if it drifts
+ * too far of the initial press point, the #GtkGestureLongPress::cancelled
+ * signal will be emitted.
+ */
+
 #include "config.h"
 #include <gtk/gtk.h>
 #include <gtk/gtkgesturelongpress.h>
@@ -196,6 +211,17 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
   gesture_class->sequence_state_changed =
     gtk_gesture_long_press_sequence_state_changed;
 
+  /**
+   * GtkGestureLongPress:pressed:
+   * @gesture: the object which received the signal
+   * @x: the X coordinate where the press happened, relative to the widget allocation
+   * @y: the Y coordinate where the press happened, relative to the widget allocation
+   *
+   * This signal is emitted whenever a press goes unmoved/unreleased longer than
+   * what the GTK+ defaults tell.
+   *
+   * Since: 3.14
+   */
   signals[PRESSED] =
     g_signal_new ("pressed",
                   G_TYPE_FROM_CLASS (klass),
@@ -203,6 +229,15 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
                   G_STRUCT_OFFSET (GtkGestureLongPressClass, pressed),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  /**
+   * GtkGestureLongPress:cancelled:
+   * @gesture: the object which received the signal
+   *
+   * This signal is emitted whenever a press moved too far, or was released
+   * before #GtkGestureLongPress:pressed happened.
+   *
+   * Since: 3.14
+   */
   signals[CANCELLED] =
     g_signal_new ("cancelled",
                   G_TYPE_FROM_CLASS (klass),
