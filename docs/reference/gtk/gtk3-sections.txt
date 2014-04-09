@@ -5587,8 +5587,6 @@ gtk_widget_class_set_connect_func
 gtk_widget_add_controller
 gtk_widget_remove_controller
 gtk_widget_list_controllers
-gtk_widget_get_sequence_state
-gtk_widget_set_sequence_state
 
 <SUBSECTION Standard>
 GTK_WIDGET
@@ -7904,6 +7902,9 @@ gtk_popover_get_modal
 <TITLE>GtkEventController</TITLE>
 GtkEventController
 gtk_event_controller_handle_event
+GtkPropagationPhase
+gtk_event_controller_get_propagation_phase
+gtk_event_controller_set_propagation_phase
 
 <SUBSECTION Standard>
 GTK_TYPE_EVENT_CONTROLLER
@@ -7922,23 +7923,39 @@ gtk_event_controller_get_type
 <TITLE>GtkGesture</TITLE>
 GtkGesture
 gtk_gesture_get_device
+gtk_gesture_get_window
+gtk_gesture_set_window
+gtk_gesture_is_active
+gtk_gesture_is_recognized
+gtk_gesture_check
+GtkEventSequenceState
 gtk_gesture_get_sequence_state
 gtk_gesture_set_sequence_state
+gtk_gesture_set_state
+gtk_gesture_cancel_sequence
 gtk_gesture_get_sequences
-gtk_gesture_get_last_updated_sequence
 gtk_gesture_handles_sequence
-gtk_gesture_get_point
+
+<SUBSECTION>
+gtk_gesture_get_last_updated_sequence
 gtk_gesture_get_last_update_time
+gtk_gesture_get_last_event
+gtk_gesture_get_point
 gtk_gesture_get_bounding_box
 gtk_gesture_get_bounding_box_center
-gtk_gesture_is_active
-gtk_gesture_check
+
+<SUBSECTION>
+gtk_gesture_group
+gtk_gesture_ungroup
+gtk_gesture_get_group
+gtk_gesture_is_grouped_with
 
 <SUBSECTION Standard>
 GTK_TYPE_GESTURE
 GTK_GESTURE
 GTK_GESTURE_CLASS
 GTK_IS_GESTURE
+GTK_IS_GESTURE_CLASS
 GTK_GESTURE_GET_CLASS
 
 <SUBSECTION Private>
@@ -7947,19 +7964,21 @@ gtk_gesture_get_type
 
 <SECTION>
 <FILE>gtkgesturesingle</FILE>
-<TITLE>GtkGestureSingle<TITLE>
+<TITLE>GtkGestureSingle</TITLE>
 GtkGestureSingle
 gtk_gesture_single_get_touch_only
 gtk_gesture_single_set_touch_only
 gtk_gesture_single_get_button
 gtk_gesture_single_set_button
 gtk_gesture_single_get_current_button
+gtk_gesture_single_get_current_sequence
 
 <SUBSECTION Standard>
 GTK_TYPE_GESTURE_SINGLE
 GTK_GESTURE_SINGLE
 GTK_GESTURE_SINGLE_CLASS
 GTK_IS_GESTURE_SINGLE
+GTK_IS_GESTURE_SINGLE_CLASS
 GTK_GESTURE_SINGLE_GET_CLASS
 
 <SUBSECTION Private>
@@ -7979,6 +7998,7 @@ GTK_TYPE_GESTURE_DRAG
 GTK_GESTURE_DRAG
 GTK_GESTURE_DRAG_CLASS
 GTK_IS_GESTURE_DRAG
+GTK_IS_GESTURE_DRAG_CLASS
 GTK_GESTURE_DRAG_GET_CLASS
 
 <SUBSECTION Private>
@@ -7996,6 +8016,7 @@ GTK_TYPE_GESTURE_LONG_PRESS
 GTK_GESTURE_LONG_PRESS
 GTK_GESTURE_LONG_PRESS_CLASS
 GTK_IS_GESTURE_LONG_PRESS
+GTK_IS_GESTURE_LONG_PRESS_CLASS
 GTK_GESTURE_LONG_PRESS_GET_CLASS
 
 <SUBSECTION Private>
@@ -8007,7 +8028,6 @@ gtk_gesture_long_press_get_type
 <TITLE>GtkGestureMultiPress</TITLE>
 GtkGestureMultiPress
 gtk_gesture_multi_press_new
-gtk_gesture_multi_press_reset
 gtk_gesture_multi_press_set_area
 gtk_gesture_multi_press_get_area
 
@@ -8016,6 +8036,7 @@ GTK_TYPE_GESTURE_MULTI_PRESS
 GTK_GESTURE_MULTI_PRESS
 GTK_GESTURE_MULTI_PRESS_CLASS
 GTK_IS_GESTURE_MULTI_PRESS
+GTK_IS_GESTURE_MULTI_PRESS_CLASS
 GTK_GESTURE_MULTI_PRESS_GET_CLASS
 
 <SUBSECTION Private>
@@ -8023,16 +8044,40 @@ gtk_gesture_multi_press_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkgesturepan</FILE>
+<TITLE>GtkGesturePan</TITLE>
+GtkGesturePan
+GtkPanDirection
+GtkPanOrientation
+gtk_gesture_pan_new
+gtk_gesture_pan_get_orientation
+gtk_gesture_pan_set_orientation
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_PAN
+GTK_GESTURE_PAN
+GTK_GESTURE_PAN_CLASS
+GTK_IS_GESTURE_PAN
+GTK_IS_GESTURE_PAN_CLASS
+GTK_GESTURE_PAN_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_pan_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkgestureswipe</FILE>
 <TITLE>GtkGestureSwipe</TITLE>
 GtkGestureSwipe
 gtk_gesture_swipe_new
+gtk_gesture_swipe_get_velocity
 
 <SUBSECTION Standard>
 GTK_TYPE_GESTURE_SWIPE
 GTK_GESTURE_SWIPE
 GTK_GESTURE_SWIPE_CLASS
 GTK_IS_GESTURE_SWIPE
+GTK_IS_GESTURE_SWIPE_CLASS
 GTK_GESTURE_SWIPE_GET_CLASS
 
 <SUBSECTION Private>
@@ -8051,6 +8096,7 @@ GTK_TYPE_GESTURE_ROTATE
 GTK_GESTURE_ROTATE
 GTK_GESTURE_ROTATE_CLASS
 GTK_IS_GESTURE_ROTATE
+GTK_IS_GESTURE_ROTATE_CLASS
 GTK_GESTURE_ROTATE_GET_CLASS
 
 <SUBSECTION Private>
@@ -8069,6 +8115,7 @@ GTK_TYPE_GESTURE_ZOOM
 GTK_GESTURE_ZOOM
 GTK_GESTURE_ZOOM_CLASS
 GTK_IS_GESTURE_ZOOM
+GTK_IS_GESTURE_ZOOM_CLASS
 GTK_GESTURE_ZOOM_GET_CLASS
 
 <SUBSECTION Private>

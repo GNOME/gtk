@@ -84,7 +84,9 @@ gtk_gesture_get_type
 gtk_gesture_drag_get_type
 gtk_gesture_long_press_get_type
 gtk_gesture_multi_press_get_type
+gtk_gesture_pan_get_type
 gtk_gesture_rotate_get_type
+gtk_gesture_single_get_type
 gtk_gesture_swipe_get_type
 gtk_gesture_zoom_get_type
 gtk_grid_get_type
