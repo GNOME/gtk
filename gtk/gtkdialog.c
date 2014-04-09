@@ -174,6 +174,7 @@ struct _GtkDialogPrivate
   GtkWidget *vbox;
   GtkWidget *headerbar;
   GtkWidget *action_area;
+  GtkWidget *action_box;
   GtkSizeGroup *size_group;
 
   gint use_header_bar;
@@ -289,7 +290,7 @@ apply_use_header_bar (GtkDialog *dialog)
 {
   GtkDialogPrivate *priv = dialog->priv;
 
-  gtk_widget_set_visible (priv->action_area, !priv->use_header_bar);
+  gtk_widget_set_visible (priv->action_box, !priv->use_header_bar);
   gtk_widget_set_visible (priv->headerbar, priv->use_header_bar);
   if (!priv->use_header_bar)
     {
@@ -655,6 +656,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, vbox);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, headerbar);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_box);
   gtk_widget_class_bind_template_callback (widget_class, gtk_dialog_delete_event_handler);
 }
 
