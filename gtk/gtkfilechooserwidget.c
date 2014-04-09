@@ -218,8 +218,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_path_bar_hbox;
   GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
-  GtkWidget *browse_special_mode_icon;
-  GtkWidget *browse_special_mode_label;
   GtkWidget *browse_select_a_folder_info_bar;
   GtkWidget *browse_select_a_folder_label;
   GtkWidget *browse_select_a_folder_icon;
@@ -2165,8 +2163,7 @@ typedef enum {
   PATH_BAR_FOLDER_PATH,
   PATH_BAR_SELECT_A_FOLDER,
   PATH_BAR_ERROR_NO_FILENAME,
-  PATH_BAR_ERROR_NO_FOLDER,
-  PATH_BAR_RECENTLY_USED
+  PATH_BAR_ERROR_NO_FOLDER
 } PathBarMode;
 
 /* Sets the info bar to show the appropriate informational or warning message */
@@ -2223,11 +2220,8 @@ path_bar_set_mode (GtkFileChooserWidget *impl, PathBarMode mode)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   gboolean path_bar_visible		= FALSE;
-  gboolean special_mode_widgets_visible = FALSE;
   gboolean info_bar_visible		= FALSE;
   gboolean create_folder_visible        = FALSE;
-
-  char *tmp;
 
   switch (mode)
     {
@@ -2242,23 +2236,11 @@ path_bar_set_mode (GtkFileChooserWidget *impl, PathBarMode mode)
       info_bar_visible = TRUE;
       break;
 
-    case PATH_BAR_RECENTLY_USED:
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->browse_special_mode_icon), "document-open-recent", GTK_ICON_SIZE_BUTTON);
-
-      tmp = g_strdup_printf ("<b>%s</b>", _("Recently Used"));
-      gtk_label_set_markup (GTK_LABEL (priv->browse_special_mode_label), tmp);
-      g_free (tmp);
-
-      special_mode_widgets_visible = TRUE;
-      break;
-
     default:
       g_assert_not_reached ();
     }
 
   gtk_widget_set_visible (priv->browse_path_bar,			path_bar_visible);
-  gtk_widget_set_visible (priv->browse_special_mode_icon,		special_mode_widgets_visible);
-  gtk_widget_set_visible (priv->browse_special_mode_label,		special_mode_widgets_visible);
   gtk_widget_set_visible (priv->browse_select_a_folder_info_bar,	info_bar_visible);
 
   if (path_bar_visible)
@@ -2471,7 +2453,7 @@ path_bar_update (GtkFileChooserWidget *impl)
 	    mode = PATH_BAR_SELECT_A_FOLDER;
 	}
       else
-	mode = PATH_BAR_RECENTLY_USED;
+	mode = PATH_BAR_FOLDER_PATH;
 
       break;
 
@@ -7439,8 +7421,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_path_bar_hbox);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_path_bar_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_path_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_special_mode_icon);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_special_mode_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_select_a_folder_info_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_select_a_folder_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_select_a_folder_icon);
