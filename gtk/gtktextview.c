@@ -326,6 +326,8 @@ static void gtk_text_view_get_preferred_height (GtkWidget        *widget,
 						gint             *natural);
 static void gtk_text_view_size_allocate        (GtkWidget        *widget,
                                                 GtkAllocation    *allocation);
+static void gtk_text_view_map                  (GtkWidget        *widget);
+static void gtk_text_view_unmap                (GtkWidget        *widget);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
 static void gtk_text_view_style_updated        (GtkWidget        *widget);
@@ -649,6 +651,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gobject_class->finalize = gtk_text_view_finalize;
 
   widget_class->destroy = gtk_text_view_destroy;
+  widget_class->map = gtk_text_view_map;
+  widget_class->unmap = gtk_text_view_unmap;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->style_updated = gtk_text_view_style_updated;
@@ -4320,6 +4324,34 @@ gtk_text_view_unrealize (GtkWidget *widget)
     text_window_unrealize (priv->bottom_window);
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_text_view_map (GtkWidget *widget)
+{
+  GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
+
+  text_view = GTK_TEXT_VIEW (widget);
+  priv = text_view->priv;
+
+  _gtk_pixel_cache_map (priv->pixel_cache);
+
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->map (widget);
+}
+
+static void
+gtk_text_view_unmap (GtkWidget *widget)
+{
+  GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
+
+  text_view = GTK_TEXT_VIEW (widget);
+  priv = text_view->priv;
+
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unmap (widget);
+
+  _gtk_pixel_cache_unmap (priv->pixel_cache);
 }
 
 static void
