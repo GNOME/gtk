@@ -32,6 +32,8 @@ typedef void (*GtkPixelCacheDrawFunc) (cairo_t *cr,
 
 GtkPixelCache *_gtk_pixel_cache_new            (void);
 void           _gtk_pixel_cache_free           (GtkPixelCache         *cache);
+void           _gtk_pixel_cache_map            (GtkPixelCache         *cache);
+void           _gtk_pixel_cache_unmap          (GtkPixelCache         *cache);
 void           _gtk_pixel_cache_invalidate     (GtkPixelCache         *cache,
                                                 cairo_region_t        *region);
 void           _gtk_pixel_cache_draw           (GtkPixelCache         *cache,

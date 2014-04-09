@@ -467,3 +467,15 @@ _gtk_pixel_cache_draw (GtkPixelCache *cache,
       draw (cr, user_data);
     }
 }
+
+void
+_gtk_pixel_cache_map (GtkPixelCache *cache)
+{
+  _gtk_pixel_cache_invalidate (cache, NULL);
+}
+
+void
+_gtk_pixel_cache_unmap (GtkPixelCache *cache)
+{
+  gtk_pixel_cache_blow_cache (cache);
+}
