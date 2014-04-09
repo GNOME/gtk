@@ -96,6 +96,8 @@ static void gtk_viewport_get_property             (GObject         *object,
 static void gtk_viewport_destroy                  (GtkWidget        *widget);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
+static void gtk_viewport_map                      (GtkWidget        *widget);
+static void gtk_viewport_unmap                    (GtkWidget        *widget);
 static gint gtk_viewport_draw                     (GtkWidget        *widget,
 						   cairo_t          *cr);
 static void gtk_viewport_add                      (GtkContainer     *container,
@@ -140,6 +142,8 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->destroy = gtk_viewport_destroy;
   widget_class->realize = gtk_viewport_realize;
   widget_class->unrealize = gtk_viewport_unrealize;
+  widget_class->map = gtk_viewport_map;
+  widget_class->unmap = gtk_viewport_unmap;
   widget_class->draw = gtk_viewport_draw;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->style_updated = gtk_viewport_style_updated;
@@ -787,6 +791,28 @@ gtk_viewport_unrealize (GtkWidget *widget)
   priv->bin_window = NULL;
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_viewport_map (GtkWidget *widget)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = viewport->priv;
+
+  _gtk_pixel_cache_map (priv->pixel_cache);
+
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->map (widget);
+}
+
+static void
+gtk_viewport_unmap (GtkWidget *widget)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = viewport->priv;
+
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unmap (widget);
+
+  _gtk_pixel_cache_unmap (priv->pixel_cache);
 }
 
 static void
