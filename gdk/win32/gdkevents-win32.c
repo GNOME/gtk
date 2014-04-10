@@ -3326,8 +3326,27 @@ gdk_event_translate (MSG  *msg,
 	}
       else
 	{
-	  mmi->ptMaxTrackSize.x = 30000;
-	  mmi->ptMaxTrackSize.y = 30000;
+	  HMONITOR winmon;
+	  MONITORINFO moninfo;
+
+	  winmon = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
+
+	  moninfo.cbSize = sizeof (moninfo);
+
+	  if (GetMonitorInfoA (winmon, &moninfo))
+	    {
+	      mmi->ptMaxTrackSize.x = moninfo.rcWork.right - moninfo.rcWork.left;
+	      mmi->ptMaxTrackSize.y = moninfo.rcWork.bottom - moninfo.rcWork.top;
+	    }
+	  else
+	    {
+	      /* Apparently, this is just a very big number (bigger than any widget
+               * could realistically be) to make sure the window is as big as
+               * possible when maximized.
+               */
+	      mmi->ptMaxTrackSize.x = 30000;
+	      mmi->ptMaxTrackSize.y = 30000;
+	    }
 	}
 
       if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))
