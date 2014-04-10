@@ -5416,21 +5416,34 @@ static GtkWidget *dialog_window = NULL;
 static void
 label_toggle (GtkWidget *widget)
 {
-  static GtkWidget *label = NULL;
+  GtkWidget *content_area;
+  GList *l, *children;
 
-  if (label == NULL)
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog_window));
+  children = gtk_container_get_children (GTK_CONTAINER (content_area));
+
+  for (l = children; l; l = l->next)
     {
+      if (GTK_IS_LABEL (l->data))
+        {
+          gtk_container_remove (GTK_CONTAINER (content_area), l->data);
+          break;
+        }
+    }
+
+  /* no label removed, so add one */
+  if (l == NULL)
+    {
+      GtkWidget *label;
+      
       label = gtk_label_new ("Dialog Test");
       g_object_set (label, "margin", 10, NULL);
-      gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog_window))),
+      gtk_box_pack_start (GTK_BOX (content_area),
 			  label, TRUE, TRUE, 0);
       gtk_widget_show (label);
     }
-  else
-    {
-      gtk_widget_destroy (label);
-      label = NULL;
-    }
+  
+  g_list_free (children);
 }
 
 static void
