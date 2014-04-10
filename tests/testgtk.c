@@ -5414,44 +5414,44 @@ create_font_selection (GtkWidget *widget)
 static GtkWidget *dialog_window = NULL;
 
 static void
-label_toggle (GtkWidget *widget)
+dialog_response_cb (GtkWidget *widget, gint response, gpointer unused)
 {
   GtkWidget *content_area;
   GList *l, *children;
 
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog_window));
-  children = gtk_container_get_children (GTK_CONTAINER (content_area));
-
-  for (l = children; l; l = l->next)
+  if (response == GTK_RESPONSE_APPLY)
     {
-      if (GTK_IS_LABEL (l->data))
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog_window));
+      children = gtk_container_get_children (GTK_CONTAINER (content_area));
+
+      for (l = children; l; l = l->next)
         {
-          gtk_container_remove (GTK_CONTAINER (content_area), l->data);
-          break;
+          if (GTK_IS_LABEL (l->data))
+            {
+              gtk_container_remove (GTK_CONTAINER (content_area), l->data);
+              break;
+            }
         }
-    }
 
-  /* no label removed, so add one */
-  if (l == NULL)
-    {
-      GtkWidget *label;
+      /* no label removed, so add one */
+      if (l == NULL)
+        {
+          GtkWidget *label;
+          
+          label = gtk_label_new ("Dialog Test");
+          g_object_set (label, "margin", 10, NULL);
+          gtk_box_pack_start (GTK_BOX (content_area),
+                              label, TRUE, TRUE, 0);
+          gtk_widget_show (label);
+        }
       
-      label = gtk_label_new ("Dialog Test");
-      g_object_set (label, "margin", 10, NULL);
-      gtk_box_pack_start (GTK_BOX (content_area),
-			  label, TRUE, TRUE, 0);
-      gtk_widget_show (label);
+      g_list_free (children);
     }
-  
-  g_list_free (children);
 }
 
 static void
 create_dialog (GtkWidget *widget)
 {
-  GtkWidget *action_area;
-  GtkWidget *button;
-
   if (!dialog_window)
     {
       /* This is a terrible example; it's much simpler to create
@@ -5467,24 +5467,21 @@ create_dialog (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&dialog_window);
 
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog_window));
 
       gtk_window_set_title (GTK_WINDOW (dialog_window), "GtkDialog");
       gtk_container_set_border_width (GTK_CONTAINER (dialog_window), 0);
 
-      button = gtk_button_new_with_label ("OK");
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-      gtk_widget_grab_default (button);
-      gtk_widget_show (button);
+      gtk_dialog_add_button (GTK_DIALOG (dialog_window),
+                             "OK",
+                             GTK_RESPONSE_OK);
 
-      button = gtk_button_new_with_label ("Toggle");
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (label_toggle),
+      gtk_dialog_add_button (GTK_DIALOG (dialog_window),
+                             "Toggle",
+                             GTK_RESPONSE_APPLY);
+      
+      g_signal_connect (dialog_window, "response",
+			G_CALLBACK (dialog_response_cb),
 			NULL);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
     }
 
   if (!gtk_widget_get_visible (dialog_window))
