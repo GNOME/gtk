@@ -8236,8 +8236,7 @@ entry_changed (GtkWidget *widget, ProgressData *pdata)
 void
 create_progress_bar (GtkWidget *widget)
 {
-  GtkWidget *action_area, *content_area;
-  GtkWidget *button;
+  GtkWidget *content_area;
   GtkWidget *vbox;
   GtkWidget *vbox2;
   GtkWidget *hbox;
@@ -8280,7 +8279,6 @@ create_progress_bar (GtkWidget *widget)
       pdata->timer = 0;
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (pdata->window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (pdata->window));
 
       gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
       gtk_container_set_border_width (GTK_CONTAINER (pdata->window), 0);
@@ -8376,13 +8374,10 @@ create_progress_bar (GtkWidget *widget)
 			G_CALLBACK (toggle_activity_mode), pdata);
       gtk_grid_attach (GTK_GRID (grid), check, 0, 15, 1, 1);
 
-      button = gtk_button_new_with_label ("close");
-      g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK (gtk_widget_destroy),
-				pdata->window);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-      gtk_widget_grab_default (button);
+      gtk_dialog_add_button (GTK_DIALOG (pdata->window), "Close", GTK_RESPONSE_CLOSE);
+      g_signal_connect (pdata->window, "response",
+			G_CALLBACK (gtk_widget_destroy),
+			NULL);
     }
 
   if (!gtk_widget_get_visible (pdata->window))
