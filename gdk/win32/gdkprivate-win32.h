@@ -41,6 +41,15 @@
 
 #include "config.h"
 
+#ifdef HAVE_W32_DWM
+#include <dwmapi.h>
+typedef HRESULT (WINAPI *PFN_DwmEnableBlurBehindWindow)(HWND,
+    const DWM_BLURBEHIND *);
+typedef HRESULT (WINAPI *PFN_DwmIsCompositionEnabled)(BOOL *pfEnabled);
+extern PFN_DwmEnableBlurBehindWindow dwmEnableBlurBehindWindow;
+extern PFN_DwmIsCompositionEnabled dwmIsCompositionEnabled;
+#endif
+
 /* Make up for some minor w32api or MSVC6 header lossage */
 
 #ifndef PS_JOIN_MASK
@@ -496,6 +505,7 @@ gchar *_gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager,
 					         GdkAtom            atom);
 void _gdk_win32_append_event (GdkEvent *event);
 void _gdk_win32_emit_configure_event (GdkWindow *window);
+gboolean _gdk_win32_is_desktop_composition_enabled ();
 
 /* Initialization */
 void _gdk_win32_windowing_init (void);
