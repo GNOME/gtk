@@ -574,7 +574,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
    * content area of the dialog, as returned by
    * gtk_dialog_get_content_area(), unless gtk_container_set_border_width()
    * was called on that widget directly.
-   *
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("content-area-border",
@@ -611,6 +610,14 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              6,
                                                              GTK_PARAM_READABLE));
 
+  /**
+   * GtkDialog:action-area-border:
+   *
+   * The default border width used around the
+   * action area of the dialog, as returned by
+   * gtk_dialog_get_action_area(), unless gtk_container_set_border_width()
+   * was called on that widget directly.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("action-area-border",
                                                              P_("Action area border"),
@@ -668,8 +675,11 @@ update_spacings (GtkDialog *dialog)
                         NULL);
 
   if (!_gtk_container_get_border_width_set (GTK_CONTAINER (priv->vbox)))
-    gtk_container_set_border_width (GTK_CONTAINER (priv->vbox),
-                                    content_area_border);
+    {
+      gtk_container_set_border_width (GTK_CONTAINER (priv->vbox),
+                                      content_area_border);
+      _gtk_container_set_border_width_set (GTK_CONTAINER (priv->vbox), FALSE);
+    }
 
   if (!_gtk_box_get_spacing_set (GTK_BOX (priv->vbox)))
     {
@@ -681,8 +691,11 @@ update_spacings (GtkDialog *dialog)
                        button_spacing);
 
   if (!_gtk_container_get_border_width_set (GTK_CONTAINER (priv->action_area)))
-    gtk_container_set_border_width (GTK_CONTAINER (priv->action_area),
-                                    action_area_border);
+    {
+      gtk_container_set_border_width (GTK_CONTAINER (priv->action_area),
+                                      action_area_border);
+      _gtk_container_set_border_width_set (GTK_CONTAINER (priv->action_area), FALSE);
+    }
 }
 
 static void
