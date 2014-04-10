@@ -180,7 +180,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                       GTK_TYPE_PROPAGATION_PHASE, GTK_PHASE_BUBBLE,
                                                       GTK_PARAM_READWRITE));
   /**
-   * GtkEventController:handle-event:
+   * GtkEventController::handle-event:
    * @controller: the object which receives the signal
    * @event: the event to handle
    *
@@ -200,7 +200,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   /**
-   * GtkEventController:reset:
+   * GtkEventController::reset:
    * @controller: the object which receives the signal
    *
    * This signal is emitted on @controller whenever it needs to be reset. When
