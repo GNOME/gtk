@@ -9369,9 +9369,8 @@ void
 create_mainloop (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *action_area, *content_area;
+  GtkWidget *content_area;
   GtkWidget *label;
-  GtkWidget *button;
 
   if (!window)
     {
@@ -9387,7 +9386,6 @@ create_mainloop (GtkWidget *widget)
 			&window);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
 
       label = gtk_label_new ("In recursive main loop...");
       g_object_set (label, "margin", 20, NULL);
@@ -9395,17 +9393,12 @@ create_mainloop (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (content_area), label, TRUE, TRUE, 0);
       gtk_widget_show (label);
 
-      button = gtk_button_new_with_label ("Leave");
-      gtk_box_pack_start (GTK_BOX (action_area), button, FALSE, TRUE, 0);
-
-      g_signal_connect_swapped (button, "clicked",
+      gtk_dialog_add_button (GTK_DIALOG (window),
+                             "Leave",
+                             GTK_RESPONSE_OK);
+      g_signal_connect_swapped (window, "response",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
-
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
-
-      gtk_widget_show (button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -9542,147 +9535,6 @@ void create_layout (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-#if 0
-/* FIXME: need to completely redo this for GtkStyleContext */
-void
-create_styles (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *content_area, *action_area;
-  GtkWidget *label;
-  GtkWidget *button;
-  GtkWidget *entry;
-  GtkWidget *vbox;
-  static GdkRGBA red =    { 1,0,0,1 };
-  static GdkRGBA green =  { 0,1,0,1 };
-  static GdkRGBA blue =   { 0,0,1,1 };
-  static GdkRGBA yellow = { 1,1,0,1 };
-  static GdkRGBA cyan =   { 0,1,1,1 };
-  PangoFontDescription *font_desc;
-
-  GtkRcStyle *rc_style;
-
-  if (!window)
-    {
-      window = gtk_dialog_new ();
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-     
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
-
-      button = gtk_button_new_with_label ("Close");
-      g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK (gtk_widget_destroy),
-				window);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
-
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
-      gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, FALSE, 0);
-      
-      label = gtk_label_new ("Font:");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      font_desc = pango_font_description_from_string ("Helvetica,Sans Oblique 18");
-
-      button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_override_font (gtk_bin_get_child (GTK_BIN (button)), font_desc);
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
-      label = gtk_label_new ("Foreground:");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_override_color (gtk_bin_get_child (GTK_BIN (button)), 0, &red);
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
-      label = gtk_label_new ("Background:");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_override_background_color (button, 0, &green);
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
-      label = gtk_label_new ("Text:");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (entry), "Some Text");
-      gtk_widget_override_color (entry, 0, &blue);
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
-
-      label = gtk_label_new ("Base:");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (entry), "Some Text");
-      gtk_widget_override_background_color (entry, 0, &yellow);
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
-
-      label = gtk_label_new ("Cursor:");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (entry), "Some Text");
-      gtk_widget_modify_cursor (entry, &red, &red);
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
-
-      label = gtk_label_new ("Multiple:");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      button = gtk_button_new_with_label ("Some Text");
-
-      rc_style = gtk_rc_style_new ();
-
-      rc_style->font_desc = pango_font_description_copy (font_desc);
-      rc_style->color_flags[GTK_STATE_NORMAL] = GTK_RC_FG | GTK_RC_BG;
-      rc_style->color_flags[GTK_STATE_PRELIGHT] = GTK_RC_FG | GTK_RC_BG;
-      rc_style->color_flags[GTK_STATE_ACTIVE] = GTK_RC_FG | GTK_RC_BG;
-      rc_style->fg[GTK_STATE_NORMAL] = yellow;
-      rc_style->bg[GTK_STATE_NORMAL] = blue;
-      rc_style->fg[GTK_STATE_PRELIGHT] = blue;
-      rc_style->bg[GTK_STATE_PRELIGHT] = yellow;
-      rc_style->fg[GTK_STATE_ACTIVE] = red;
-      rc_style->bg[GTK_STATE_ACTIVE] = cyan;
-      rc_style->xthickness = 5;
-      rc_style->ythickness = 5;
-
-      gtk_widget_modify_style (button, rc_style);
-      gtk_widget_modify_style (gtk_bin_get_child (GTK_BIN (button)), rc_style);
-
-      g_object_unref (rc_style);
-      
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-    }
-  
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
-  else
-    gtk_widget_destroy (window);
-}
-#endif
-
 /*
  * Main Window and Exit
  */
@@ -9747,9 +9599,6 @@ struct {
   { "snapshot", create_snapshot },
   { "spinbutton", create_spins },
   { "statusbar", create_statusbar },
-#if 0
-  { "styles", create_styles },
-#endif
   { "test mainloop", create_mainloop, TRUE },
   { "test scrolling", create_scroll_test },
   { "test selection", create_selection_test },
