@@ -8900,9 +8900,15 @@ selection_test_received (GtkWidget        *tree_view,
 }
 
 void
-selection_test_get_targets (GtkWidget *widget, GtkWidget *tree_view)
+selection_test_get_targets (GtkWidget *dialog, gint response, GtkWidget *tree_view)
 {
   static GdkAtom targets_atom = GDK_NONE;
+
+  if (response != GTK_RESPONSE_APPLY)
+    {
+      gtk_widget_destroy (dialog);
+      return;
+    }
 
   if (targets_atom == GDK_NONE)
     targets_atom = gdk_atom_intern ("TARGETS", FALSE);
@@ -8915,8 +8921,7 @@ void
 create_selection_test (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *action_area, *content_area;
-  GtkWidget *button;
+  GtkWidget *content_area;
   GtkWidget *vbox;
   GtkWidget *scrolled_win;
   GtkListStore* store;
@@ -8937,7 +8942,6 @@ create_selection_test (GtkWidget *widget)
 			&window);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
 
       gtk_window_set_title (GTK_WINDOW (window), "Selection Test");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -8971,18 +8975,16 @@ create_selection_test (GtkWidget *widget)
 			G_CALLBACK (selection_test_received), NULL);
 
       /* .. And create some buttons */
-      button = gtk_button_new_with_label ("Get Targets");
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
+      gtk_dialog_add_button (GTK_DIALOG (window),
+                             "Get Targets",
+                             GTK_RESPONSE_APPLY);
 
-      g_signal_connect (button, "clicked",
+      g_signal_connect (window, "response",
 			G_CALLBACK (selection_test_get_targets), tree_view);
 
-      button = gtk_button_new_with_label ("Quit");
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-
-      g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK (gtk_widget_destroy),
-				window);
+      gtk_dialog_add_button (GTK_DIALOG (window),
+                             "Quit",
+                             GTK_RESPONSE_CLOSE);
     }
 
   if (!gtk_widget_get_visible (window))
