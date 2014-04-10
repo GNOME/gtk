@@ -5671,7 +5671,7 @@ event_watcher_toggle (void)
 static void
 create_event_watcher (GtkWidget *widget)
 {
-  GtkWidget *action_area, *content_area;
+  GtkWidget *content_area;
   GtkWidget *button;
 
   if (!dialog_window)
@@ -5688,7 +5688,6 @@ create_event_watcher (GtkWidget *widget)
 			NULL);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog_window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog_window));
 
       gtk_window_set_title (GTK_WINDOW (dialog_window), "Event Watcher");
       gtk_container_set_border_width (GTK_CONTAINER (dialog_window), 0);
@@ -5702,14 +5701,8 @@ create_event_watcher (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (content_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
-      button = gtk_button_new_with_label ("Close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
-				dialog_window);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-      gtk_widget_grab_default (button);
-      gtk_widget_show (button);
+      gtk_dialog_add_button (GTK_DIALOG (dialog_window), "Close", GTK_RESPONSE_CLOSE);
+      g_signal_connect (dialog_window, "response", G_CALLBACK (gtk_widget_destroy), NULL);
     }
 
   if (!gtk_widget_get_visible (dialog_window))
