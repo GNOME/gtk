@@ -9085,11 +9085,10 @@ void
 create_scroll_test (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *action_area, *content_area;
+  GtkWidget *content_area;
   GtkWidget *hbox;
   GtkWidget *drawing_area;
   GtkWidget *scrollbar;
-  GtkWidget *button;
   GtkAdjustment *adjustment;
   GdkGeometry geometry;
   GdkWindowHints geometry_mask;
@@ -9106,7 +9105,6 @@ create_scroll_test (GtkWidget *widget)
 			&window);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
 
       gtk_window_set_title (GTK_WINDOW (window), "Scroll Test");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -9142,13 +9140,12 @@ create_scroll_test (GtkWidget *widget)
       
       /* .. And create some buttons */
 
-      button = gtk_button_new_with_label ("Quit");
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-
-      g_signal_connect_swapped (button, "clicked",
+      gtk_dialog_add_button (GTK_DIALOG (window),
+                             "Quit",
+                             GTK_RESPONSE_CLOSE);
+      g_signal_connect_swapped (window, "response",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
-      gtk_widget_show (button);
 
       /* Set up gridded geometry */
 
