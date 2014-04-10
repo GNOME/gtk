@@ -2425,7 +2425,7 @@ gtk_assistant_accessible_get_n_children (AtkObject *accessible)
   if (widget == NULL)
     return 0;
 
-  return g_list_length (GTK_ASSISTANT (widget)->priv->pages) + 1;
+  return g_list_length (GTK_ASSISTANT (widget)->priv->pages) + 2;
 }
 
 static AtkObject *
@@ -2459,6 +2459,11 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
   else if (index == n_pages)
     {
       child = priv->action_area;
+      title = NULL;
+    }
+  else if (index == n_pages + 1)
+    {
+      child = priv->headerbar;
       title = NULL;
     }
   else
