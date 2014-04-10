@@ -26,7 +26,7 @@
  *
  * #GtkGestureRotate is a #GtkGesture implementation able to recognize
  * 2-finger rotations, whenever the angle between both handled sequences
- * changes, the #GtkGestureRotate:angle-changed signal is emitted.
+ * changes, the #GtkGestureRotate::angle-changed signal is emitted.
  */
 
 #include "config.h"
