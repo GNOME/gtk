@@ -174,23 +174,6 @@ gdk_win32_screen_is_composited (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 
-  return _gdk_win32_is_desktop_composition_enabled ();
-}
-
-gboolean
-_gdk_win32_is_desktop_composition_enabled ()
-{
-  BOOL b;
-  DWORD sysver, major, minor;
-  sysver = GetVersion ();
-  major = (DWORD)(LOBYTE (LOWORD (sysver)));
-  minor = (DWORD)(HIBYTE (LOWORD (sysver)));
-  /* Composition is always enabled in W8 */
-  if (major >= 6 && minor >= 2)
-    return TRUE;
-
-  if (dwmIsCompositionEnabled && (S_OK == dwmIsCompositionEnabled (&b)))
-    return b;
   return FALSE;
 }
 

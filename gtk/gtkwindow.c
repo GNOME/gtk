@@ -3630,9 +3630,6 @@ gdk_window_supports_csd (GtkWindow *window)
 
       screen = gtk_widget_get_screen (widget);
 
-      if (!gdk_screen_is_composited (screen))
-        return FALSE;
-
       /* We need a visual with alpha */
       visual = gdk_screen_get_rgba_visual (screen);
       if (!visual)

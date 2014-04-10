@@ -48,12 +48,6 @@ static gboolean gdk_synchronize = FALSE;
 
 static gboolean dummy;
 
-#ifdef HAVE_W32_DWM
-static HMODULE dwmdll = NULL;
-PFN_DwmEnableBlurBehindWindow dwmEnableBlurBehindWindow = NULL;
-PFN_DwmIsCompositionEnabled dwmIsCompositionEnabled = NULL;
-#endif
-
 const GOptionEntry _gdk_windowing_args[] = {
   { "sync", 0, 0, G_OPTION_ARG_NONE, &gdk_synchronize, 
     /* Description of --sync in --help output */              N_("Don't batch GDI requests"), NULL },
@@ -138,29 +132,6 @@ _gdk_win32_windowing_init (void)
   _cf_text_html = RegisterClipboardFormat ("text/html");
 
   _gdk_win32_selection_init ();
-
-/* HAVE_W32_DWM means that we have necessary declarations at compile-time,
- * but we'd still like to be able to run on XP, so we'll load the functions
- * we need at runtime.
- */
-#ifdef HAVE_W32_DWM
-  if (dwmdll == NULL)
-    {
-      dwmdll = LoadLibraryA ("dwmapi.dll");
-      if (dwmdll == NULL)
-        {
-          /* This will make sure that we only try this once */
-          dwmdll = INVALID_HANDLE_VALUE;
-        }
-      else
-        {
-          dwmEnableBlurBehindWindow = (PFN_DwmEnableBlurBehindWindow)
-              GetProcAddress (dwmdll, "DwmEnableBlurBehindWindow");
-          dwmIsCompositionEnabled = (PFN_DwmIsCompositionEnabled)
-              GetProcAddress (dwmdll, "DwmIsCompositionEnabled");
-        }
-    }
-#endif
 }
 
 void
