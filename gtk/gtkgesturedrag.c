@@ -115,7 +115,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
   gesture_class->end = gtk_gesture_drag_end;
 
   /**
-   * GtkGestureDrag:drag-begin:
+   * GtkGestureDrag::drag-begin:
    * @gesture: the object which received the signal
    * @start_x: X coordinate, relative to the widget allocation
    * @start_y: Y coordinate, relative to the widget allocation
@@ -132,7 +132,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
   /**
-   * GtkGestureDrag:drag-update:
+   * GtkGestureDrag::drag-update:
    * @gesture: the object which received the signal
    * @offset_x: X offset, relative to the start point
    * @offset_y: Y offset, relative to the start point
@@ -149,7 +149,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
   /**
-   * GtkGestureDrag:drag-end:
+   * GtkGestureDrag::drag-end:
    * @gesture: the object which received the signal
    * @offset_x: X offset, relative to the start point
    * @offset_y: Y offset, relative to the start point
