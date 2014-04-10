@@ -16777,6 +16777,20 @@ _gtk_widget_has_controller (GtkWidget          *widget,
   return NULL;
 }
 
+/**
+ * gtk_widget_add_controller:
+ * @widget: a #GtkWidget, must be the same than the one passed on construction to @controller
+ * @controller: a #GtkEventController
+ *
+ * Adds @controller to the list of controllers that are triggered
+ * any time @widget receives events. the stage at which the events
+ * are delivered to @controller is mandated by
+ * gtk_event_controller_get_propagation_phase(). @widget will also take care
+ * of calling gtk_event_controller_reset() whenever input is grabbed
+ * elsewhere.
+ *
+ * Since: 3.14
+ **/
 void
 gtk_widget_add_controller (GtkWidget          *widget,
                            GtkEventController *controller)
@@ -16786,6 +16800,7 @@ gtk_widget_add_controller (GtkWidget          *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
   g_return_if_fail (!_gtk_widget_has_controller (widget, controller));
 
   priv = widget->priv;
@@ -16811,6 +16826,13 @@ gtk_widget_add_controller (GtkWidget          *widget,
   _gtk_widget_update_evmask (widget);
 }
 
+/**
+ * gtk_widget_remove_controller:
+ * @widget: a #GtkWidget
+ * @controller: a #GtkEventController attached to @widget
+ *
+ * Removes @controller from the list of controllers managed by @widget.
+ **/
 void
 gtk_widget_remove_controller (GtkWidget          *widget,
                               GtkEventController *controller)
@@ -16839,6 +16861,17 @@ gtk_widget_remove_controller (GtkWidget          *widget,
   g_free (data);
 }
 
+/**
+ * gtk_widget_list_controllers:
+ * @widget: a #GtkWidget
+ *
+ * Returns the list of controllers that are managed by @widget.
+ *
+ * Returns: (transfer container) (element-type GtkEventController): the list of
+ *   controllers, free with g_list_free()
+ *
+ * Since: 3.14
+ **/
 GList *
 gtk_widget_list_controllers (GtkWidget *widget)
 {
