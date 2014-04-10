@@ -30,7 +30,7 @@
  *
  * If the velocity is desired in intermediate points,
  * gtk_gesture_swipe_get_velocity() can be called on eg. a
- * #GtkGesture:update handler.
+ * #GtkGesture::update handler.
  *
  * All velocities are reported in pixels/sec values.
  */
@@ -191,7 +191,7 @@ gtk_gesture_swipe_class_init (GtkGestureSwipeClass *klass)
   gesture_class->end = gtk_gesture_swipe_end;
 
   /**
-   * GtkGestureSwipe:swipe:
+   * GtkGestureSwipe::swipe:
    * @gesture: object which received the signal
    * @velocity_x: velocity in the X axis, in pixels/sec
    * @velocity_y: velocity in the Y axis, in pixels/sec
