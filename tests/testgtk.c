@@ -5202,8 +5202,8 @@ void
 create_flipping (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *check_button, *button;
-  GtkWidget *action_area, *content_area;
+  GtkWidget *check_button;
+  GtkWidget *content_area;
 
   if (!window)
     {
@@ -5217,7 +5217,6 @@ create_flipping (GtkWidget *widget)
 			&window);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
 
       gtk_window_set_title (GTK_WINDOW (window), "Bidirectional Flipping");
 
@@ -5250,10 +5249,8 @@ create_flipping (GtkWidget *widget)
 			  create_forward_back ("Right-to-Left", GTK_TEXT_DIR_RTL),
 			  TRUE, TRUE, 0);
 
-      button = gtk_button_new_with_label ("Close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy), window);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
+      gtk_dialog_add_button (GTK_DIALOG (window), "Close", GTK_RESPONSE_CLOSE);
+      g_signal_connect (window, "response", G_CALLBACK (gtk_widget_destroy), NULL);
     }
   
   if (!gtk_widget_get_visible (window))
