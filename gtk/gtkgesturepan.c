@@ -34,7 +34,7 @@
  * this does not happen.
  *
  * Once a panning gesture along the expected axis is recognized,
- * the #GtkGesturePan:pan signal will be emitted as input events
+ * the #GtkGesturePan::pan signal will be emitted as input events
  * are received, containing the offset in the given axis.
  */
 
@@ -242,7 +242,7 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
                                                       GTK_PAN_ORIENTATION_HORIZONTAL,
                                                       GTK_PARAM_READWRITE));
   /**
-   * GtkGesturePan:pan:
+   * GtkGesturePan::pan:
    * @gesture: The object which received the signal
    * @direction: current direction of the pan gesture
    * @offset: Offset along the gesture orientation
