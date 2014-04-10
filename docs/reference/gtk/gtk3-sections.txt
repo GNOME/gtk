@@ -7905,6 +7905,10 @@ gtk_event_controller_handle_event
 GtkPropagationPhase
 gtk_event_controller_get_propagation_phase
 gtk_event_controller_set_propagation_phase
+gtk_event_controller_get_event_mask
+gtk_event_controller_set_event_mask
+gtk_event_controller_get_widget
+gtk_event_controller_reset
 
 <SUBSECTION Standard>
 GTK_TYPE_EVENT_CONTROLLER
