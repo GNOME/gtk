@@ -87,11 +87,6 @@
             <property name="position">0</property>
           </packing>
         </child>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox">
-            <property name="border_width">0</property>
-          </object>
-        </child>
       </object>
     </child>
   </template>
