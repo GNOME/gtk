@@ -5414,29 +5414,28 @@ create_font_selection (GtkWidget *widget)
 static GtkWidget *dialog_window = NULL;
 
 static void
-label_toggle (GtkWidget  *widget,
-	      GtkWidget **label)
+label_toggle (GtkWidget *widget)
 {
-  if (!(*label))
+  static GtkWidget *label = NULL;
+
+  if (label == NULL)
     {
-      *label = gtk_label_new ("Dialog Test");
-      g_signal_connect (*label,
-			"destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			label);
-      g_object_set (*label, "margin", 10, NULL);
+      label = gtk_label_new ("Dialog Test");
+      g_object_set (label, "margin", 10, NULL);
       gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog_window))),
-			  *label, TRUE, TRUE, 0);
-      gtk_widget_show (*label);
+			  label, TRUE, TRUE, 0);
+      gtk_widget_show (label);
     }
   else
-    gtk_widget_destroy (*label);
+    {
+      gtk_widget_destroy (label);
+      label = NULL;
+    }
 }
 
 static void
 create_dialog (GtkWidget *widget)
 {
-  static GtkWidget *label;
   GtkWidget *action_area;
   GtkWidget *button;
 
@@ -5469,12 +5468,10 @@ create_dialog (GtkWidget *widget)
       button = gtk_button_new_with_label ("Toggle");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (label_toggle),
-			&label);
+			NULL);
       gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
-
-      label = NULL;
     }
 
   if (!gtk_widget_get_visible (dialog_window))
