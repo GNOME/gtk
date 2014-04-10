@@ -24,7 +24,7 @@
  * @Title: GtkGestureLongPress
  *
  * #GtkGestureLongPress is a #GtkGesture implementation able to recognize
- * long presses, triggering the #GtkGestureLongPress:pressed after the
+ * long presses, triggering the #GtkGestureLongPress::pressed after the
  * timeout is exceeded.
  *
  * If the touchpoint is lifted before the timeout passes, or if it drifts
@@ -212,7 +212,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
     gtk_gesture_long_press_sequence_state_changed;
 
   /**
-   * GtkGestureLongPress:pressed:
+   * GtkGestureLongPress::pressed:
    * @gesture: the object which received the signal
    * @x: the X coordinate where the press happened, relative to the widget allocation
    * @y: the Y coordinate where the press happened, relative to the widget allocation
@@ -230,7 +230,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
   /**
-   * GtkGestureLongPress:cancelled:
+   * GtkGestureLongPress::cancelled:
    * @gesture: the object which received the signal
    *
    * This signal is emitted whenever a press moved too far, or was released
