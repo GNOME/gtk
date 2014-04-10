@@ -3096,82 +3096,81 @@ find_line_log_attrs (const GtkTextIter *iter,
   return result;
 }
 
-/* FIXME this function is very, very gratuitously slow */
 static gboolean
-find_by_log_attrs (GtkTextIter    *iter,
-                   FindLogAttrFunc func,
-                   gboolean        forward,
-                   gboolean        already_moved_initially)
+find_by_log_attrs (GtkTextIter     *iter,
+                   FindLogAttrFunc  func,
+                   gboolean         forward)
 {
   GtkTextIter orig;
-  gint offset = 0;
-  gboolean found = FALSE;
+  gboolean already_moved_initially = FALSE;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
   orig = *iter;
-  
-  found = find_line_log_attrs (iter, func, &offset, already_moved_initially);
-  
-  if (!found)
+
+  while (TRUE)
     {
+      gint offset = 0;
+      gboolean found;
+
+      found = find_line_log_attrs (iter, func, &offset, already_moved_initially);
+
+      if (found)
+        {
+          gtk_text_iter_set_line_offset (iter, offset);
+
+          return !gtk_text_iter_equal (iter, &orig) && !gtk_text_iter_is_end (iter);
+        }
+
       if (forward)
         {
-          if (gtk_text_iter_forward_line (iter))
-            return find_by_log_attrs (iter, func, forward,
-                                      TRUE);
-          else
+          if (!gtk_text_iter_forward_line (iter))
             return FALSE;
+
+          already_moved_initially = TRUE;
         }
       else
-        {                    
+        {
+          /* TODO optimize this part */
           /* go to end of previous line. need to check that
            * line is > 0 because backward_line snaps to start of
            * line 0 if it's on line 0
            */
-          if (gtk_text_iter_get_line (iter) > 0 && 
+          if (gtk_text_iter_get_line (iter) > 0 &&
               gtk_text_iter_backward_line (iter))
             {
               if (!gtk_text_iter_ends_line (iter))
                 gtk_text_iter_forward_to_line_end (iter);
-              
-              return find_by_log_attrs (iter, func, forward,
-                                        TRUE);
+
+              already_moved_initially = TRUE;
             }
           else
-            return FALSE;
+            {
+              return FALSE;
+            }
         }
-    }
-  else
-    {      
-      gtk_text_iter_set_line_offset (iter, offset);
-
-      return
-        (already_moved_initially || !gtk_text_iter_equal (iter, &orig)) &&
-        !gtk_text_iter_is_end (iter);
     }
 }
 
-static gboolean 
-find_visible_by_log_attrs (GtkTextIter    *iter,
-			   FindLogAttrFunc func,
-			   gboolean        forward,
-			   gboolean        already_moved_initially)
+static gboolean
+find_visible_by_log_attrs (GtkTextIter     *iter,
+                           FindLogAttrFunc  func,
+                           gboolean         forward)
 {
   GtkTextIter pos;
 
   g_return_val_if_fail (iter != NULL, FALSE);
-  
+
   pos = *iter;
-  
-  while (find_by_log_attrs (&pos, func, forward, already_moved_initially)) 
+
+  while (find_by_log_attrs (&pos, func, forward))
     {
-      if (!_gtk_text_btree_char_is_invisible (&pos)) 
+      if (!_gtk_text_btree_char_is_invisible (&pos))
 	{
 	  *iter = pos;
 	  return TRUE;
 	}
-  }
+    }
 
   return FALSE;
 }
@@ -3225,7 +3224,7 @@ move_multiple_steps (GtkTextIter *iter,
 gboolean
 gtk_text_iter_forward_word_end (GtkTextIter *iter)
 {
-  return find_by_log_attrs (iter, find_word_end_func, TRUE, FALSE);
+  return find_by_log_attrs (iter, find_word_end_func, TRUE);
 }
 
 /**
@@ -3243,7 +3242,7 @@ gtk_text_iter_forward_word_end (GtkTextIter *iter)
 gboolean
 gtk_text_iter_backward_word_start (GtkTextIter      *iter)
 {
-  return find_by_log_attrs (iter, find_word_start_func, FALSE, FALSE);
+  return find_by_log_attrs (iter, find_word_start_func, FALSE);
 }
 
 /* FIXME a loop around a truly slow function means
@@ -3303,7 +3302,7 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
 gboolean
 gtk_text_iter_forward_visible_word_end (GtkTextIter *iter)
 {
-  return find_visible_by_log_attrs (iter, find_word_end_func, TRUE, FALSE);
+  return find_visible_by_log_attrs (iter, find_word_end_func, TRUE);
 }
 
 /**
@@ -3323,7 +3322,7 @@ gtk_text_iter_forward_visible_word_end (GtkTextIter *iter)
 gboolean
 gtk_text_iter_backward_visible_word_start (GtkTextIter      *iter)
 {
-  return find_visible_by_log_attrs (iter, find_word_start_func, FALSE, FALSE);
+  return find_visible_by_log_attrs (iter, find_word_start_func, FALSE);
 }
 
 /**
@@ -3487,7 +3486,7 @@ gtk_text_iter_inside_sentence (const GtkTextIter *iter)
 gboolean
 gtk_text_iter_forward_sentence_end (GtkTextIter *iter)
 {
-  return find_by_log_attrs (iter, find_sentence_end_func, TRUE, FALSE);
+  return find_by_log_attrs (iter, find_sentence_end_func, TRUE);
 }
 
 /**
@@ -3505,7 +3504,7 @@ gtk_text_iter_forward_sentence_end (GtkTextIter *iter)
 gboolean
 gtk_text_iter_backward_sentence_start (GtkTextIter      *iter)
 {
-  return find_by_log_attrs (iter, find_sentence_start_func, FALSE, FALSE);
+  return find_by_log_attrs (iter, find_sentence_start_func, FALSE);
 }
 
 /* FIXME a loop around a truly slow function means
@@ -3620,7 +3619,7 @@ is_cursor_pos_func (const PangoLogAttr *attrs,
 gboolean
 gtk_text_iter_forward_cursor_position (GtkTextIter *iter)
 {
-  return find_by_log_attrs (iter, find_forward_cursor_pos_func, TRUE, FALSE);
+  return find_by_log_attrs (iter, find_forward_cursor_pos_func, TRUE);
 }
 
 /**
@@ -3634,7 +3633,7 @@ gtk_text_iter_forward_cursor_position (GtkTextIter *iter)
 gboolean
 gtk_text_iter_backward_cursor_position (GtkTextIter *iter)
 {
-  return find_by_log_attrs (iter, find_backward_cursor_pos_func, FALSE, FALSE);
+  return find_by_log_attrs (iter, find_backward_cursor_pos_func, FALSE);
 }
 
 /**
@@ -3689,7 +3688,7 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
 gboolean
 gtk_text_iter_forward_visible_cursor_position (GtkTextIter *iter)
 {
-  return find_visible_by_log_attrs (iter, find_forward_cursor_pos_func, TRUE, FALSE);
+  return find_visible_by_log_attrs (iter, find_forward_cursor_pos_func, TRUE);
 }
 
 /**
@@ -3706,7 +3705,7 @@ gtk_text_iter_forward_visible_cursor_position (GtkTextIter *iter)
 gboolean
 gtk_text_iter_backward_visible_cursor_position (GtkTextIter *iter)
 {
-  return find_visible_by_log_attrs (iter, find_backward_cursor_pos_func, FALSE, FALSE);
+  return find_visible_by_log_attrs (iter, find_backward_cursor_pos_func, FALSE);
 }
 
 /**
