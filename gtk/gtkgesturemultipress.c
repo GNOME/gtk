@@ -24,8 +24,8 @@
  *
  * #GtkGestureMultiPress is a #GtkGesture implementation able to recognize
  * multiple clicks on a nearby zone, which can be listened for through the
- * #GtkGestureMultiPress:pressed signal. Whenever time or distance between clicks
- * exceed the GTK+ defaults, #GtkGestureMultiPress:stopped is emitted, and the
+ * #GtkGestureMultiPress::pressed signal. Whenever time or distance between clicks
+ * exceed the GTK+ defaults, #GtkGestureMultiPress::stopped is emitted, and the
  * click counter is reset.
  *
  * Callers may also restrict the area that is considered valid for a >1
@@ -276,7 +276,7 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
   controller_class->reset = gtk_gesture_multi_press_reset;
 
   /**
-   * GtkGestureMultiPress:pressed:
+   * GtkGestureMultiPress::pressed:
    * @gesture: the object which received the signal
    * @n_press: how many touch/button presses happened with this one
    * @x: The X coordinate, in widget allocation coordinates
@@ -295,7 +295,7 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
                   G_TYPE_NONE, 3, G_TYPE_INT,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);
   /**
-   * GtkGestureMultiPress:stopped:
+   * GtkGestureMultiPress::stopped:
    * @gesture: the object which received the signal
    *
    * This signal is emitted whenever any time/distance threshold has
