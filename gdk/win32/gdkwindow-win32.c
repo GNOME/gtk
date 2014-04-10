@@ -38,9 +38,6 @@
 #include "gdkdisplayprivate.h"
 #include "gdkvisualprivate.h"
 #include "gdkwin32window.h"
-#ifdef HAVE_W32_DWM
-#include <dwmapi.h>
-#endif
 
 #include <cairo-win32.h>
 
@@ -687,45 +684,6 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
   if (attributes_mask & GDK_WA_CURSOR)
     gdk_window_set_cursor (window, attributes->cursor);
-
-/* HAVE_W32_DWM means that we have necessary declarations at compile-time,
- * but we'd still like to be able to run on XP, so we'll load the only non-XP
- * function we need here at runtime.
- */
-#ifdef HAVE_W32_DWM
-  {
-    typedef HRESULT (WINAPI *PFN_DwmEnableBlurBehindWindow)(HWND,
-        const DWM_BLURBEHIND *);
-    HMODULE dwmdll;
-    PFN_DwmEnableBlurBehindWindow dwmEnableBlurBehindWindow = NULL;
-
-    dwmdll = GetModuleHandle ("dwmapi.dll");
-    dwmEnableBlurBehindWindow = (PFN_DwmEnableBlurBehindWindow)
-        GetProcAddress (dwmdll, "DwmEnableBlurBehindWindow");
-
-    if (dwmEnableBlurBehindWindow)
-      {
-        /* Enable blurbehind, but give it an empty region, leaving us
-           with all the transparency with none of the blur */
-        DWM_BLURBEHIND bb;
-        HRGN hRgn;
-        hRgn = CreateRectRgn (0, 0, -1, -1);
-        if (hRgn != NULL)
-          {
-            HRESULT hr;
-            memset (&bb, 0, sizeof (bb));
-            bb.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
-            bb.hRgnBlur = hRgn;
-            bb.fEnable = TRUE;
-            hr = dwmEnableBlurBehindWindow (GDK_WINDOW_HWND (window), &bb);
-            if (S_OK != hr)
-              g_warning ("%s: %s failed: %" G_GINT64_MODIFIER "x", G_STRLOC,
-                  "DwmEnableBlurBehindWindow", (guint64) hr);
-            DeleteObject (hRgn);
-          }
-      }
-  }
-#endif
 }
 
 GdkWindow *
@@ -3429,7 +3387,7 @@ gdk_win32_ref_cairo_surface (GdkWindow *window)
       if (!hdc)
 	return NULL;
 
-      impl->cairo_surface = cairo_win32_surface_create_with_alpha (hdc);
+      impl->cairo_surface = cairo_win32_surface_create (hdc);
 
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
 				   impl, gdk_win32_cairo_surface_destroy);
