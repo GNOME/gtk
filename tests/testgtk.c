@@ -3757,8 +3757,14 @@ scrolled_windows_destroy_cb (GtkWidget *widget, GtkWidget *scrollwin)
 }
 
 static void
-scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
+scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
 {
+  if (response != GTK_RESPONSE_APPLY)
+    {
+      gtk_widget_destroy (dialog);
+      return;
+    }
+
   if (sw_parent)
     {
       gtk_widget_reparent (scrollwin, sw_parent);
@@ -3774,7 +3780,7 @@ scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
       sw_parent = gtk_widget_get_parent (scrollwin);
       sw_float_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (sw_float_parent),
-			     gtk_widget_get_screen (widget));
+			     gtk_widget_get_screen (dialog));
       
       gtk_window_set_default_size (GTK_WINDOW (sw_float_parent), 200, 200);
       
@@ -3793,10 +3799,10 @@ static void
 create_scrolled_windows (GtkWidget *widget)
 {
   static GtkWidget *window;
-  GtkWidget *content_area, *action_area;
+  GtkWidget *content_area;
   GtkWidget *scrolled_window;
-  GtkWidget *grid;
   GtkWidget *button;
+  GtkWidget *grid;
   char buffer[32];
   int i, j;
 
@@ -3812,7 +3818,6 @@ create_scrolled_windows (GtkWidget *widget)
 			&window);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
 
       gtk_window_set_title (GTK_WINDOW (window), "dialog");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -3844,24 +3849,17 @@ create_scrolled_windows (GtkWidget *widget)
 	    gtk_widget_show (button);
 	  }
 
+      gtk_dialog_add_button (GTK_DIALOG (window),
+                             "Close",
+                             GTK_RESPONSE_CLOSE);
 
-      button = gtk_button_new_with_label ("Close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
-				window);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-      gtk_widget_grab_default (button);
-      gtk_widget_show (button);
+      gtk_dialog_add_button (GTK_DIALOG (window),
+                             "Reparent Out",
+                             GTK_RESPONSE_APPLY);
 
-      button = gtk_button_new_with_label ("Reparent Out");
-      g_signal_connect (button, "clicked",
+      g_signal_connect (window, "response",
 			G_CALLBACK (scrolled_windows_remove),
 			scrolled_window);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-      gtk_widget_grab_default (button);
-      gtk_widget_show (button);
 
       gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
     }
