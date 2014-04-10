@@ -215,7 +215,6 @@ main (int argc, char *argv[])
   GtkWidget *dialog;
   GtkWidget *button;
   GtkWidget *box;
-  GtkWidget *bbox;
   GtkWidget *update;
   GPermission *permission;
 
@@ -254,17 +253,13 @@ main (int argc, char *argv[])
                                         NULL);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
-  bbox = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
-  gtk_container_add (GTK_CONTAINER (bbox), button);
-  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (bbox), button, TRUE);
-  gtk_button_box_set_child_non_homogeneous (GTK_BUTTON_BOX (bbox), button, TRUE);
-
   content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (content), gtk_check_button_new_with_label ("Control 1"));
   gtk_container_add (GTK_CONTAINER (content), gtk_check_button_new_with_label ("Control 2"));
   gtk_widget_set_sensitive (content, FALSE);
 
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), content);
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), button);
 
   gtk_widget_show_all (window);
   gtk_widget_show_all (dialog);
