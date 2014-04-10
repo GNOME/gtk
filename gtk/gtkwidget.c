@@ -594,8 +594,6 @@ enum {
   DRAG_FAILED,
   STYLE_UPDATED,
   TOUCH_EVENT,
-  SEQUENCE_GRABBED,
-  SEQUENCE_STATE_CHANGED,
   LAST_SIGNAL
 };
 
@@ -3431,22 +3429,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  _gtk_marshal_BOOLEAN__UINT,
                   G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
 
-  widget_signals[SEQUENCE_GRABBED] =
-    g_signal_new (I_("sequence-grabbed"),
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST, 0,
-                  NULL, NULL, NULL,
-                  G_TYPE_BOOLEAN, 3, GTK_TYPE_WIDGET,
-                  G_TYPE_POINTER, GTK_TYPE_EVENT_SEQUENCE_STATE);
-
-  widget_signals[SEQUENCE_STATE_CHANGED] =
-    g_signal_new (I_("sequence-state-changed"),
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST, 0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 3, GTK_TYPE_GESTURE,
-                  G_TYPE_POINTER, GTK_TYPE_EVENT_SEQUENCE_STATE);
-
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
                                 "popup-menu", 0);
@@ -4311,32 +4293,6 @@ _gtk_widget_cancel_sequence (GtkWidget        *widget,
   return handled;
 }
 
-static gboolean
-gtk_widget_real_sequence_state_changed (GtkWidget             *widget,
-                                        GtkGesture            *gesture,
-                                        GdkEventSequence      *sequence,
-                                        GtkEventSequenceState  state)
-{
-  gboolean retval;
-  GList *group;
-
-  group = gtk_gesture_get_group (gesture);
-  retval = _gtk_widget_set_sequence_state_internal (widget, sequence,
-                                                    state, group);
-  g_list_free (group);
-
-  return retval;
-}
-
-static void
-gtk_widget_real_sequence_grabbed (GtkWidget        *widget,
-                                  GtkWidget        *changed_widget,
-                                  GdkEventSequence *sequence)
-{
-  _gtk_widget_set_sequence_state_internal (widget, sequence,
-                                           GTK_EVENT_SEQUENCE_DENIED, NULL);
-}
-
 static void
 gtk_widget_init (GtkWidget *widget)
 {
@@ -4394,13 +4350,6 @@ gtk_widget_init (GtkWidget *widget)
   priv->style = gtk_widget_get_default_style ();
   G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_ref (priv->style);
-
-  g_signal_connect (widget, "sequence-grabbed",
-                    G_CALLBACK (gtk_widget_real_sequence_grabbed),
-                    NULL);
-  g_signal_connect (widget, "sequence-state-changed",
-                    G_CALLBACK (gtk_widget_real_sequence_state_changed),
-                    NULL);
 }
 
 
@@ -16728,9 +16677,12 @@ event_controller_sequence_state_changed (GtkGesture            *gesture,
   GtkWidget *event_widget;
   gboolean cancel = TRUE;
   const GdkEvent *event;
+  GList *group;
 
-  g_signal_emit (widget, widget_signals[SEQUENCE_STATE_CHANGED],
-                 0, gesture, sequence, state, &handled);
+  group = gtk_gesture_get_group (gesture);
+  handled = _gtk_widget_set_sequence_state_internal (widget, sequence,
+                                                     state, group);
+  g_list_free (group);
 
   if (!handled || state != GTK_EVENT_SEQUENCE_CLAIMED)
     return;
@@ -16749,8 +16701,9 @@ event_controller_sequence_state_changed (GtkGesture            *gesture,
       else if (cancel)
         _gtk_widget_cancel_sequence (event_widget, sequence);
       else
-        g_signal_emit (event_widget, widget_signals[SEQUENCE_GRABBED], 0,
-                       widget, sequence);
+        _gtk_widget_set_sequence_state_internal (event_widget, sequence,
+                                                 GTK_EVENT_SEQUENCE_DENIED,
+                                                 NULL);
 
       event_widget = gtk_widget_get_parent (event_widget);
     }
