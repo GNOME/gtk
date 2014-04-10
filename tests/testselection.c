@@ -352,10 +352,16 @@ selection_received (GtkWidget *widget, GtkSelectionData *selection_data)
 }
 
 void
-paste (GtkWidget *widget, GtkWidget *entry)
+paste (GtkWidget *dialog, gint response, GtkWidget *entry)
 {
   const char *name;
   GdkAtom atom;
+
+  if (response != GTK_RESPONSE_APPLY)
+    {
+      gtk_widget_destroy (dialog);
+      return;
+    }
 
   name = gtk_entry_get_text (GTK_ENTRY(entry));
   atom = gdk_atom_intern (name, FALSE);
@@ -379,9 +385,8 @@ quit (void)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *action_area, *content_area;
+  GtkWidget *content_area;
   GtkWidget *dialog;
-  GtkWidget *button;
   GtkWidget *vbox;
   GtkWidget *label;
   GtkWidget *entry;
@@ -409,7 +414,6 @@ main (int argc, char *argv[])
 		    G_CALLBACK (quit), NULL);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
@@ -453,18 +457,15 @@ main (int argc, char *argv[])
   gtk_widget_show (entry);
 
   /* .. And create some buttons */
-  button = gtk_button_new_with_label ("Paste");
-  gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-  g_signal_connect (button, "clicked",
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+                         "Paste",
+                         GTK_RESPONSE_APPLY);
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+                         "Quit",
+                         GTK_RESPONSE_CLOSE);
+
+  g_signal_connect (dialog, "response",
 		    G_CALLBACK (paste), entry);
-  gtk_widget_show (button);
-
-  button = gtk_button_new_with_label ("Quit");
-  gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-
-  g_signal_connect_swapped (button, "clicked",
-			    G_CALLBACK (gtk_widget_destroy), dialog);
-  gtk_widget_show (button);
 
   gtk_widget_show (dialog);
 
