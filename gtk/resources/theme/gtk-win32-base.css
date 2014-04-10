@@ -129,6 +129,7 @@ GtkAssistant .sidebar .highlight {
     -GtkWidget-focus-line-width: 1;
     -GtkWidget-focus-padding: 3;
     -GtkButton-interior-focus: true;
+    -GtkButton-default-border: 0px;
     padding: 3px;
 }
 
