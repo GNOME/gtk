@@ -9271,77 +9271,6 @@ create_timeout_test (GtkWidget *widget)
 }
 
 /*
- * rc file test
- */
-
-void
-create_rc_file (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *action_area, *content_area;
-  GtkWidget *button;
-  GtkWidget *frame;
-  GtkWidget *vbox;
-  GtkWidget *label;
-
-  if (!window)
-    {
-      window = gtk_dialog_new ();
-
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
-
-      frame = gtk_aspect_frame_new ("Testing RC file prioritization", 0.5, 0.5, 0.0, TRUE);
-      gtk_box_pack_start (GTK_BOX (content_area), frame, FALSE, FALSE, 0);
-
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (frame), vbox);
-      
-      label = gtk_label_new ("This label should be red");
-      gtk_widget_set_name (label, "testgtk-red-label");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      label = gtk_label_new ("This label should be green");
-      gtk_widget_set_name (label, "testgtk-green-label");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      label = gtk_label_new ("This label should be blue");
-      gtk_widget_set_name (label, "testgtk-blue-label");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      gtk_window_set_title (GTK_WINDOW (window), "Reload Rc file");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-
-      button = gtk_button_new_with_label ("Reload");
-      g_signal_connect_swapped (button, "clicked",
-                                G_CALLBACK (gtk_style_context_reset_widgets),
-                                gtk_widget_get_screen (button));
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-      gtk_widget_grab_default (button);
-
-      button = gtk_button_new_with_label ("Close");
-      g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK (gtk_widget_destroy),
-				window);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
-  else
-    gtk_widget_destroy (window);
-}
-
-/*
  * Test of recursive mainloop
  */
 
@@ -9573,7 +9502,6 @@ struct {
   { "properties", create_properties },
   { "radio buttons", create_radio_buttons },
   { "range controls", create_range_controls },
-  { "rc file", create_rc_file },
   { "reparent", create_reparent },
   { "resize grips", create_resize_grips },
   { "rotated label", create_rotated_label },
