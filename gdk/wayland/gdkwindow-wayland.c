@@ -638,10 +638,10 @@ gdk_wayland_window_set_user_time (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_sync_transient_for (GdkWindow *window)
+gdk_wayland_window_sync_parent (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  struct wl_surface *transient_for_surface;
+  struct wl_surface *parent_surface;
 
   if (!impl->xdg_surface)
     return;
@@ -654,12 +654,12 @@ gdk_wayland_window_sync_transient_for (GdkWindow *window)
       if (!impl_parent->surface)
         return;
 
-      transient_for_surface = impl_parent->surface;
+      parent_surface = impl_parent->surface;
     }
   else
-    transient_for_surface = NULL;
+    parent_surface = NULL;
 
-  xdg_surface_set_transient_for (impl->xdg_surface, transient_for_surface);
+  xdg_surface_set_parent (impl->xdg_surface, parent_surface);
 }
 
 static void
@@ -894,7 +894,7 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
   impl->xdg_surface = xdg_shell_get_xdg_surface (display_wayland->xdg_shell, impl->surface);
   xdg_surface_add_listener (impl->xdg_surface, &xdg_surface_listener, window);
 
-  gdk_wayland_window_sync_transient_for (window);
+  gdk_wayland_window_sync_parent (window);
   gdk_wayland_window_sync_title (window);
   gdk_wayland_window_sync_margin (window);
   xdg_surface_set_app_id (impl->xdg_surface, gdk_get_program_class ());
@@ -1516,7 +1516,7 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   impl->transient_for = parent;
 
-  gdk_wayland_window_sync_transient_for (window);
+  gdk_wayland_window_sync_parent (window);
 }
 
 static void

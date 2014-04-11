@@ -137,11 +137,8 @@
       </description>
     </request>
 
-    <request name="set_transient_for">
+    <request name="set_parent">
       <description summary="surface is a child of another surface">
-	Setting a surface as transient of another means that it is child
-	of another surface.
-
 	Child surfaces are stacked above their parents, and will be
 	unmapped if the parent is unmapped too. They should not appear
 	on task bars and alt+tab.
