@@ -3131,14 +3131,18 @@ find_by_log_attrs (GtkTextIter     *iter,
         }
       else
         {
-          /* TODO optimize this part */
-          /* go to end of previous line. need to check that
-           * line is > 0 because backward_line snaps to start of
-           * line 0 if it's on line 0
+          GtkTextIter tmp_iter = *iter;
+
+          /* Go to end of previous line. First go to the current line offset 0,
+           * because backward_line() snaps to start of line 0 if iter is already
+           * on line 0.
            */
-          if (gtk_text_iter_get_line (iter) > 0 &&
-              gtk_text_iter_backward_line (iter))
+          gtk_text_iter_set_line_offset (&tmp_iter, 0);
+
+          if (gtk_text_iter_backward_line (&tmp_iter))
             {
+              *iter = tmp_iter;
+
               if (!gtk_text_iter_ends_line (iter))
                 gtk_text_iter_forward_to_line_end (iter);
 
