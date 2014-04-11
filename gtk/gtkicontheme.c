@@ -2543,12 +2543,16 @@ add_key_to_list (gpointer key,
  * @icon_theme: a #GtkIconTheme
  * @context: (allow-none): a string identifying a particular type of
  *           icon, or %NULL to list all icons.
- * 
+ *
  * Lists the icons in the current icon theme. Only a subset
  * of the icons can be listed by providing a context string.
  * The set of values for the context string is system dependent,
  * but will typically include such values as “Applications” and
- * “MimeTypes”.
+ * “MimeTypes”. Contexts are explained in the
+ * [Icon Theme Specification](http://www.freedesktop.org/wiki/Specifications/icon-theme-spec).
+ * The standard contexts are listed in the
+ * [Icon Naming Specification](http://www.freedesktop.org/wiki/Specifications/icon-naming-spec).
+ * Also see gtk_icon_theme_list_contexts().
  *
  * Returns: (element-type utf8) (transfer full): a #GList list
  *     holding the names of all the icons in the theme. You must
@@ -2610,7 +2614,8 @@ gtk_icon_theme_list_icons (GtkIconTheme *icon_theme,
  * @icon_theme: a #GtkIconTheme
  *
  * Gets the list of contexts available within the current
- * hierarchy of icon themes
+ * hierarchy of icon themes.
+ * See gtk_icon_theme_list_icons() for details about contexts.
  *
  * Returns: (element-type utf8) (transfer full): a #GList list
  *     holding the names of all the contexts in the theme. You must first
