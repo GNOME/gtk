@@ -164,6 +164,7 @@ GtkTextLineSegment *_gtk_char_segment_new_from_two_strings (const gchar    *text
 GtkTextLineSegment *_gtk_toggle_segment_new                (GtkTextTagInfo *info,
                                                             gboolean        on);
 
+void                _gtk_toggle_segment_free               (GtkTextLineSegment *seg);
 
 G_END_DECLS
 

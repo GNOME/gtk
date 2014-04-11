@@ -194,7 +194,7 @@ _gtk_char_segment_new (const gchar *text, guint len)
 
   g_assert (gtk_text_byte_begins_utf8_char (text));
 
-  seg = g_malloc (CSEG_SIZE (len));
+  seg = g_slice_alloc (CSEG_SIZE (len));
   seg->type = (GtkTextLineSegmentClass *)&gtk_text_char_type;
   seg->next = NULL;
   seg->byte_count = len;
@@ -222,7 +222,7 @@ _gtk_char_segment_new_from_two_strings (const gchar *text1,
   g_assert (gtk_text_byte_begins_utf8_char (text1));
   g_assert (gtk_text_byte_begins_utf8_char (text2));
 
-  seg = g_malloc (CSEG_SIZE (len1+len2));
+  seg = g_slice_alloc (CSEG_SIZE (len1+len2));
   seg->type = &gtk_text_char_type;
   seg->next = NULL;
   seg->byte_count = len1 + len2;
@@ -236,6 +236,17 @@ _gtk_char_segment_new_from_two_strings (const gchar *text1,
     char_segment_self_check (seg);
 
   return seg;
+}
+
+static void
+_gtk_char_segment_free (GtkTextLineSegment *seg)
+{
+  if (seg == NULL)
+    return;
+
+  g_assert (seg->type == &gtk_text_char_type);
+
+  g_slice_free1 (CSEG_SIZE (seg->byte_count), seg);
 }
 
 /*
@@ -285,7 +296,7 @@ char_segment_split_func (GtkTextLineSegment *seg, int index)
       char_segment_self_check (new2);
     }
 
-  g_free (seg);
+  _gtk_char_segment_free (seg);
   return new1;
 }
 
@@ -340,8 +351,8 @@ char_segment_cleanup_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
   if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     char_segment_self_check (newPtr);
 
-  g_free (segPtr);
-  g_free (segPtr2);
+  _gtk_char_segment_free (segPtr);
+  _gtk_char_segment_free (segPtr2);
   return newPtr;
 }
 
@@ -371,7 +382,7 @@ char_segment_cleanup_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 static int
 char_segment_delete_func (GtkTextLineSegment *segPtr, GtkTextLine *line, int treeGone)
 {
-  g_free ((char*) segPtr);
+  _gtk_char_segment_free (segPtr);
   return 0;
 }
 
@@ -417,7 +428,7 @@ _gtk_toggle_segment_new (GtkTextTagInfo *info, gboolean on)
 {
   GtkTextLineSegment *seg;
 
-  seg = g_malloc (TSEG_SIZE);
+  seg = g_slice_alloc (TSEG_SIZE);
 
   seg->type = on ? &gtk_text_toggle_on_type : &gtk_text_toggle_off_type;
 
@@ -430,6 +441,18 @@ _gtk_toggle_segment_new (GtkTextTagInfo *info, gboolean on)
   seg->body.toggle.inNodeCounts = 0;
 
   return seg;
+}
+
+void
+_gtk_toggle_segment_free (GtkTextLineSegment *seg)
+{
+  if (seg == NULL)
+    return;
+
+  g_assert (seg->type == &gtk_text_toggle_on_type ||
+            seg->type == &gtk_text_toggle_off_type);
+
+  g_slice_free1 (TSEG_SIZE, seg);
 }
 
 /*
@@ -462,7 +485,7 @@ toggle_segment_delete_func (GtkTextLineSegment *segPtr, GtkTextLine *line, int t
 {
   if (treeGone)
     {
-      g_free ((char *) segPtr);
+      _gtk_toggle_segment_free (segPtr);
       return 0;
     }
 
@@ -545,9 +568,9 @@ toggle_segment_cleanup_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
                                              segPtr->body.toggle.info, -counts);
             }
           prevPtr->next = segPtr2->next;
-          g_free ((char *) segPtr2);
+          _gtk_toggle_segment_free (segPtr2);
           segPtr2 = segPtr->next;
-          g_free ((char *) segPtr);
+          _gtk_toggle_segment_free (segPtr);
           return segPtr2;
         }
     }

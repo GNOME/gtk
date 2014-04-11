@@ -73,6 +73,12 @@
       }                                                                 \
   } G_STMT_END
 
+#define PIXBUF_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
+        + sizeof (GtkTextPixbuf)))
+
+#define WIDGET_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
+        + sizeof (GtkTextChildBody)))
+
 static GtkTextLineSegment *
 pixbuf_segment_cleanup_func (GtkTextLineSegment *seg,
                              GtkTextLine        *line)
@@ -89,7 +95,7 @@ pixbuf_segment_delete_func (GtkTextLineSegment *seg,
   if (seg->body.pixbuf.pixbuf)
     g_object_unref (seg->body.pixbuf.pixbuf);
 
-  g_free (seg);
+  g_slice_free1 (PIXBUF_SEG_SIZE, seg);
 
   return 0;
 }
@@ -120,15 +126,12 @@ const GtkTextLineSegmentClass gtk_text_pixbuf_type = {
 
 };
 
-#define PIXBUF_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
-        + sizeof (GtkTextPixbuf)))
-
 GtkTextLineSegment *
 _gtk_pixbuf_segment_new (GdkPixbuf *pixbuf)
 {
   GtkTextLineSegment *seg;
 
-  seg = g_malloc (PIXBUF_SEG_SIZE);
+  seg = g_slice_alloc (PIXBUF_SEG_SIZE);
 
   seg->type = &gtk_text_pixbuf_type;
 
@@ -218,15 +221,12 @@ const GtkTextLineSegmentClass gtk_text_child_type = {
   child_segment_check_func                               /* checkFunc */
 };
 
-#define WIDGET_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
-        + sizeof (GtkTextChildBody)))
-
 GtkTextLineSegment *
 _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg;
 
-  seg = g_malloc (WIDGET_SEG_SIZE);
+  seg = g_slice_alloc (WIDGET_SEG_SIZE);
 
   seg->type = &gtk_text_child_type;
 
@@ -370,8 +370,8 @@ gtk_text_child_anchor_finalize (GObject *obj)
         }
   
       g_slist_free (seg->body.child.widgets);
-  
-      g_free (seg);
+
+      g_slice_free1 (WIDGET_SEG_SIZE, seg);
     }
 
   anchor->segment = NULL;

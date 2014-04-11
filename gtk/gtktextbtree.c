@@ -65,6 +65,7 @@
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
 #include "gtktextmarkprivate.h"
+#include "gtktextsegment.h"
 
 /*
  * Types
@@ -901,9 +902,9 @@ _gtk_text_btree_delete (GtkTextIter *start,
 	       * cleanup_line() below. See bug 317125.
 	       */
 	      next2 = prev_seg->next->next;
-	      g_free ((char *)prev_seg->next);
+              _gtk_toggle_segment_free (prev_seg->next);
 	      prev_seg->next = next2;
-	      g_free ((char *)seg);
+              _gtk_toggle_segment_free (seg);
 	      seg = NULL;
 	    }
 	  else
@@ -1952,7 +1953,7 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
           seg->body.toggle.inNodeCounts = FALSE;
         }
 
-      g_free (seg);
+      _gtk_toggle_segment_free (seg);
 
       /* We only clean up lines when we're done with them, saves some
          gratuitous line-segment-traversals */

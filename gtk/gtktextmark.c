@@ -90,6 +90,11 @@
  * Marks are typically created using the gtk_text_buffer_create_mark() function.
  */
 
+/*
+ * Macro that determines the size of a mark segment:
+ */
+#define MSEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
+        + sizeof (GtkTextMarkBody)))
 
 static void gtk_text_mark_set_property (GObject         *object,
 				        guint            prop_id,
@@ -161,7 +166,7 @@ gtk_text_mark_finalize (GObject *obj)
                    "impending");
 
       g_free (seg->body.mark.name);
-      g_free (seg);
+      g_slice_free1 (MSEG_SIZE, seg);
 
       mark->segment = NULL;
     }
@@ -358,20 +363,12 @@ gtk_text_mark_get_left_gravity (GtkTextMark *mark)
   return seg->type == &gtk_text_left_mark_type;
 }
 
-/*
- * Macro that determines the size of a mark segment:
- */
-
-#define MSEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
-        + sizeof (GtkTextMarkBody)))
-
-
 static GtkTextLineSegment *
 gtk_mark_segment_new (GtkTextMark *mark_obj)
 {
   GtkTextLineSegment *mark;
 
-  mark = (GtkTextLineSegment *) g_malloc0 (MSEG_SIZE);
+  mark = g_slice_alloc0 (MSEG_SIZE);
   mark->body.mark.name = NULL;
   mark->type = &gtk_text_right_mark_type;
 
