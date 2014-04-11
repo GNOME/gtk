@@ -36,6 +36,7 @@ typedef struct {
   gchar *constructor;
   GSList *properties;
   GSList *signals;
+  GSList *bindings;
   GObject *object;
   CommonInfo *parent;
   gboolean applied_properties;
@@ -62,7 +63,8 @@ typedef struct {
   gchar *name;
   GString *text;
   gchar *data;
-  gboolean translatable;
+  gboolean translatable:1;
+  gboolean bound:1;
   gchar *context;
 } PropertyInfo;
 
@@ -74,6 +76,15 @@ typedef struct {
   GConnectFlags flags;
   gchar *connect_object_name;
 } SignalInfo;
+
+typedef struct
+{
+  GObject *target;
+  gchar *target_property;
+  gchar *source;
+  gchar *source_property;
+  GBindingFlags flags;
+} BindingInfo;
 
 typedef struct {
   TagInfo  tag;

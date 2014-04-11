@@ -2777,6 +2777,62 @@ test_no_ids (void)
   g_object_unref (builder);
 }
 
+static void
+test_property_bindings (void)
+{
+  const gchar *buffer =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "    <child>"
+    "      <object class=\"GtkVBox\" id=\"vbox\">"
+    "        <property name=\"visible\">True</property>"
+    "        <property name=\"orientation\">vertical</property>"
+    "        <child>"
+    "          <object class=\"GtkCheckButton\" id=\"checkbutton\">"
+    "            <property name=\"active\">false</property>"
+    "          </object>"
+    "        </child>"
+    "        <child>"
+    "          <object class=\"GtkButton\" id=\"button\">"
+    "            <property name=\"sensitive\" bind-source=\"checkbutton\" bind-property=\"active\" bind-flags=\"sync-create\">false</property>"
+    "          </object>"
+    "        </child>"
+    "        <child>"
+    "          <object class=\"GtkButton\" id=\"button2\">"
+    "            <property name=\"sensitive\" bind-source=\"checkbutton\" bind-property=\"active\" />"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+
+  GtkBuilder *builder;
+  GObject *checkbutton, *button, *button2, *window;
+  
+  builder = builder_new_from_string (buffer, -1, NULL);
+  
+  checkbutton = gtk_builder_get_object (builder, "checkbutton");
+  g_assert (GTK_IS_CHECK_BUTTON (checkbutton));
+  g_assert (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+
+  button = gtk_builder_get_object (builder, "button");
+  g_assert (GTK_IS_BUTTON (button));
+  g_assert (!gtk_widget_get_sensitive (GTK_WIDGET (button)));
+
+  button2 = gtk_builder_get_object (builder, "button2");
+  g_assert (GTK_IS_BUTTON (button2));
+  g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button2)));
+  
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), TRUE);
+  g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button)));
+  g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button2)));
+  
+  window = gtk_builder_get_object (builder, "window");
+  gtk_widget_destroy (GTK_WIDGET (window));
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2827,6 +2883,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/LevelBar", test_level_bar);
   g_test_add_func ("/Builder/Expose Object", test_expose_object);
   g_test_add_func ("/Builder/No IDs", test_no_ids);
+  g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
 
   return g_test_run();
 }

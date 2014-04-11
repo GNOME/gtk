@@ -27,6 +27,9 @@ property = element property {
   attribute translatable { "yes" | "no" } ?,
   attribute comments { text } ?,
   attribute context { text } ?,
+  (attribute bind-source { text },
+   attribute bind-property { text },
+   attribute bind-flags { text } ?) ?,
   text ?
 }
 

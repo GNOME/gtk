@@ -587,8 +587,11 @@ parse_property (ParserData   *data,
                 GError      **error)
 {
   PropertyInfo *info;
-  gchar *name = NULL;
-  gchar *context = NULL;
+  const gchar *name = NULL;
+  const gchar *context = NULL;
+  const gchar *bind_source = NULL;
+  const gchar *bind_property = NULL;
+  GBindingFlags bind_flags = G_BINDING_DEFAULT;
   gboolean translatable = FALSE;
   ObjectInfo *object_info;
   int i;
@@ -605,7 +608,7 @@ parse_property (ParserData   *data,
   for (i = 0; names[i] != NULL; i++)
     {
       if (strcmp (names[i], "name") == 0)
-        name = g_strdelimit (g_strdup (values[i]), "_", '-');
+        name = values[i];
       else if (strcmp (names[i], "translatable") == 0)
 	{
 	  if (!_gtk_builder_boolean_from_string (values[i], &translatable,
@@ -618,7 +621,21 @@ parse_property (ParserData   *data,
         }
       else if (strcmp (names[i], "context") == 0) 
         {
-          context = g_strdup (values[i]);
+          context = values[i];
+        }
+      else if (strcmp (names[i], "bind-source") == 0) 
+        {
+          bind_source = values[i];
+        }
+      else if (strcmp (names[i], "bind-property") == 0) 
+        {
+          bind_property = values[i];
+        }
+      else if (strcmp (names[i], "bind-flags") == 0) 
+        {
+          if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, values[i],
+                                               &bind_flags, error))
+            return;
         }
       else
 	{
@@ -633,10 +650,30 @@ parse_property (ParserData   *data,
       return;
     }
 
+  if (bind_source && bind_property)
+    {
+      BindingInfo *binfo = g_slice_new0 (BindingInfo);
+
+      binfo->target_property = g_strdup (name);
+      binfo->source = g_strdup (bind_source);
+      binfo->source_property = g_strdup (bind_property);
+      binfo->flags = bind_flags;
+
+      object_info->bindings = g_slist_prepend (object_info->bindings, binfo);
+    }
+  else if (bind_source || bind_property)
+    {
+      error_missing_attribute (data, element_name,
+                               (bind_source) ? "bind-property" : "bind-source",
+                               error);
+      return;
+    }
+
   info = g_slice_new0 (PropertyInfo);
-  info->name = name;
+  info->name = g_strdelimit (g_strdup (name), "_", '-');
   info->translatable = translatable;
-  info->context = context;
+  info->bound = (bind_source != NULL && bind_property != NULL);
+  info->context = g_strdup (context);
   info->text = g_string_new ("");
   state_push (data, info);
 
@@ -648,6 +685,8 @@ free_property_info (PropertyInfo *info)
 {
   g_free (info->data);
   g_free (info->name);
+  g_free (info->context);
+  /* info->text is already freed */
   g_slice_free (PropertyInfo, info);
 }
 

@@ -99,6 +99,21 @@
         </attribute>
       </optional>
       <optional>
+        <group>
+          <attribute name="bind-source">
+            <text/>
+          </attribute>
+          <attribute name="bind-property">
+            <text/>
+          </attribute>
+          <optional>
+            <attribute name="bind-flags">
+              <text/>
+            </attribute>
+          </optional>
+        </group>
+      </optional>
+      <optional>
         <text/>
       </optional>
     </element>

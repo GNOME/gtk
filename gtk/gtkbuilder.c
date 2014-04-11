@@ -134,6 +134,14 @@
  * object has to be constructed before it can be used as the value of
  * a construct-only property.
  *
+ * It is also possible to bind a property value to another object's
+ * property value using the attributes
+ * "bind-source" to specify the source object of the binding,
+ * "bind-property" to specify the source property and optionally
+ * "bind-flags" to specify the binding flags 
+ * Internally builder implement this using GBinding objects.
+ * For more information see g_object_bind_property()
+ * 
  * Signal handlers are set up with the <signal> element. The “name”
  * attribute specifies the name of the signal, and the “handler” attribute
  * specifies the function to connect to the signal. By default, GTK+ tries
@@ -244,6 +252,7 @@ struct _GtkBuilderPrivate
   GHashTable *callbacks;
   GSList *delayed_properties;
   GSList *signals;
+  GSList *bindings;
   gchar *filename;
   gchar *resource_prefix;
   GType template_type;
@@ -499,6 +508,13 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
               continue;
             }
         }
+      else if (prop->bound && (!prop->data || *prop->data == '\0'))
+        {
+          /* Ignore properties with a binding and no value since they are
+           * only there for to express the binding.
+           */
+          continue;
+        }
       else if (!gtk_builder_value_from_string (builder, pspec,
 					       prop->data, &parameter.value, &error))
         {
@@ -572,6 +588,15 @@ object_set_name (GObject *object, const gchar *name)
     g_object_set_data_full (object, "gtk-builder-name", g_strdup (name), g_free);
 }
 
+static inline const gchar *
+object_get_name (GObject *object)
+{
+  if (GTK_IS_BUILDABLE (object))
+    return gtk_buildable_get_name (GTK_BUILDABLE (object));
+  else
+    return g_object_get_data (object, "gtk-builder-name");
+}
+
 void
 _gtk_builder_add_object (GtkBuilder  *builder,
                          const gchar *id,
@@ -579,6 +604,22 @@ _gtk_builder_add_object (GtkBuilder  *builder,
 {
   object_set_name (object, id);
   g_hash_table_insert (builder->priv->objects, g_strdup (id), g_object_ref (object));
+}
+
+static inline void
+gtk_builder_take_bindings (GtkBuilder *builder,
+                           GObject    *target,
+                           GSList     *bindings)
+{
+  GSList *l;
+
+  for (l = bindings; l; l = g_slist_next (l))
+    {
+      BindingInfo *info = l->data;
+      info->target = target;
+    }
+
+  builder->priv->bindings = g_slist_concat (builder->priv->bindings, bindings);
 }
 
 GObject *
@@ -740,6 +781,9 @@ _gtk_builder_construct (GtkBuilder *builder,
       g_value_unset (&param->value);
     }
   g_array_free (parameters, TRUE);
+
+  if (info->bindings)
+    gtk_builder_take_bindings (builder, obj, info->bindings);
 
   /* put it in the hash table. */
   _gtk_builder_add_object (builder, info->id, obj);
@@ -909,10 +953,46 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
   g_slist_free (props);
 }
 
+static inline void
+free_binding_info (gpointer data, gpointer user)
+{
+  BindingInfo *info = data;
+  g_free (info->target_property);
+  g_free (info->source);
+  g_free (info->source_property);
+  g_slice_free (BindingInfo, data);
+}
+
+static inline void
+gtk_builder_create_bindings (GtkBuilder *builder)
+{
+  GSList *l;
+
+  for (l = builder->priv->bindings; l; l = g_slist_next (l))
+    {
+      BindingInfo *info = l->data;
+      GObject *source;
+
+      if ((source = gtk_builder_get_object (builder, info->source)))
+        g_object_bind_property (source, info->source_property,
+                                info->target, info->target_property,
+                                info->flags);
+      else
+        g_warning ("Could not find source object '%s' to bind property '%s'",
+                   info->source, info->source_property);
+
+      free_binding_info (info, NULL);
+    }
+
+  g_slist_free (builder->priv->bindings);
+  builder->priv->bindings = NULL;
+}
+
 void
 _gtk_builder_finish (GtkBuilder *builder)
 {
   gtk_builder_apply_delayed_properties (builder);
+  gtk_builder_create_bindings (builder);
 }
 
 /**
