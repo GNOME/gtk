@@ -3452,6 +3452,7 @@ gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
   _gtk_entry_get_borders (entry, &borders);
   pango_layout_get_pixel_size (layout, NULL, &height);
 
+  height = MAX (height, PANGO_PIXELS (priv->ascent + priv->descent));
   height += borders.top + borders.bottom;
 
   baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
