@@ -111,20 +111,9 @@ struct _GdkWindowImplWayland
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
 
-  /* The surface which is being "drawn to" to */
   cairo_surface_t *cairo_surface;
 
-  /* The surface that was the last surface the Wayland buffer from which was attached
-   * to the Wayland surface. It will be the same as cairo_surface after a call
-   * to gdk_wayland_window_attach_image. But after a call to
-   * gdk_wayland_window_update_size and then
-   * gdk_wayland_window_ref_cairo_surface the above pointer will be different.
-   */
-  cairo_surface_t *server_surface;
-
   gchar *title;
-
-  uint32_t resize_edges;
 
   /* Time of most recent user interaction. */
   gulong user_time;
@@ -527,45 +516,14 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 {
   GdkWaylandDisplay *display;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  int32_t server_width, server_height, dx, dy;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  /* The wayland surface is attached to a buffer that is from the old "drawn
-   * to" surface. Unref the surface and restore the state.
-   */
-  if (impl->server_surface)
-    {
-      /* Save the old dimensions used for the surface */
-      server_width = cairo_image_surface_get_width (impl->server_surface);
-      server_height = cairo_image_surface_get_height (impl->server_surface);
-
-      cairo_surface_destroy (impl->server_surface);
-    }
-  else
-    {
-      server_width = 0;
-      server_height = 0;
-    }
-
-  /* Save the current "drawn to" surface for future calls into here */
-  impl->server_surface = cairo_surface_reference (impl->cairo_surface);
-
-  if (impl->resize_edges & XDG_SURFACE_RESIZE_EDGE_LEFT)
-    dx = server_width - cairo_image_surface_get_width (impl->cairo_surface);
-  else
-    dx = 0;
-
-  if (impl->resize_edges & XDG_SURFACE_RESIZE_EDGE_TOP)
-    dy = server_height - cairo_image_surface_get_height (impl->cairo_surface);
-  else
-    dy = 0;
-
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface),
-                     dx, dy);
+                     0, 0);
 
   /* Only set the buffer scale if supported by the compositor */
   display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
@@ -1174,9 +1132,6 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
           xdg_popup_destroy (impl->xdg_popup);
           impl->xdg_popup = NULL;
         }
-
-      cairo_surface_destroy (impl->server_surface);
-      impl->server_surface = NULL;
     }
 
   impl->mapped = FALSE;
@@ -1828,7 +1783,6 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   if (!impl->xdg_surface)
     return;
 
-  impl->resize_edges = resize_edges;
   xdg_surface_resize (impl->xdg_surface,
                       gdk_wayland_device_get_wl_seat (device),
                       _gdk_wayland_display_get_serial (wayland_display),
