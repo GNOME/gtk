@@ -164,7 +164,7 @@ window1
                               weight: <omitted>
                               wrap-mode: word
           <AtkHypertext>
-    ___object_7___
+    action_area
       "filler"
       parent: dialog-vbox1
       index: 1
