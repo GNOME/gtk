@@ -1118,7 +1118,7 @@ gtk_plug_hide (GtkWidget *widget)
     GTK_WIDGET_CLASS (bin_class)->hide (widget);
 }
 
-/* From gdkinternals.h */
+/* From gdkprivate.h */
 void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
                                   GdkWindowState set_flags);
