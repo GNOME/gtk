@@ -113,6 +113,8 @@ struct _GdkWindowImplWayland
 
   cairo_surface_t *cairo_surface;
 
+  int32_t next_attach_serial;
+
   gchar *title;
 
   /* Time of most recent user interaction. */
@@ -520,6 +522,12 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  if (impl->next_attach_serial > 0)
+    {
+      xdg_surface_ack_configure (impl->xdg_surface, impl->next_attach_serial);
+      impl->next_attach_serial = 0;
+    }
+
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface),
@@ -800,63 +808,51 @@ static void
 xdg_surface_configure (void               *data,
                        struct xdg_surface *xdg_surface,
                        int32_t             width,
-                       int32_t             height)
+                       int32_t             height,
+                       struct wl_array    *states,
+                       uint32_t            serial)
 {
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowState new_state = 0;
+  uint32_t *p;
 
-  gdk_window_constrain_size (&impl->geometry_hints,
-                             impl->geometry_mask,
-                             width,
-                             height,
-                             &width,
-                             &height);
-
-  gdk_wayland_window_configure (window, width, height);
-}
-
-static void
-xdg_surface_change_state (void *data,
-                          struct xdg_surface *xdg_surface,
-                          uint32_t state_type,
-                          uint32_t value,
-                          uint32_t serial)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-
-  switch (state_type)
+  if (width > 0 && height > 0)
     {
-    case XDG_SURFACE_STATE_MAXIMIZED:
-      if (value)
-        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_MAXIMIZED);
-      else
-        gdk_synthesize_window_state (window, GDK_WINDOW_STATE_MAXIMIZED, 0);
-      break;
-    case XDG_SURFACE_STATE_FULLSCREEN:
-      if (value)
-        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
-      else
-        gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
-      break;
+      gdk_window_constrain_size (&impl->geometry_hints,
+                                 impl->geometry_mask,
+                                 width,
+                                 height,
+                                 &width,
+                                 &height);
+
+      gdk_wayland_window_configure (window, width, height);
     }
 
-  xdg_surface_ack_change_state (xdg_surface, state_type, value, serial);
-}
+  wl_array_for_each(p, states)
+    {
+      uint32_t state = *p;
+      switch (state)
+        {
+        case XDG_SURFACE_STATE_FULLSCREEN:
+          new_state |= GDK_WINDOW_STATE_FULLSCREEN;
+          break;
+        case XDG_SURFACE_STATE_MAXIMIZED:
+          new_state |= GDK_WINDOW_STATE_MAXIMIZED;
+          break;
+        case XDG_SURFACE_STATE_ACTIVATED:
+          new_state |= GDK_WINDOW_STATE_FOCUSED;
+          break;
+        case XDG_SURFACE_STATE_RESIZING:
+          break;
+        default:
+          /* Unknown state */
+          break;
+        }
+    }
 
-static void
-xdg_surface_activated (void *data,
-                       struct xdg_surface *xdg_surface)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
-}
-
-static void
-xdg_surface_deactivated (void *data,
-                         struct xdg_surface *xdg_surface)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
+  _gdk_set_window_state (window, new_state);
+  impl->next_attach_serial = serial;
 }
 
 static void
@@ -879,9 +875,6 @@ xdg_surface_close (void *data,
 
 static const struct xdg_surface_listener xdg_surface_listener = {
   xdg_surface_configure,
-  xdg_surface_change_state,
-  xdg_surface_activated,
-  xdg_surface_deactivated,
   xdg_surface_close,
 };
 
@@ -1612,10 +1605,7 @@ gdk_wayland_window_maximize (GdkWindow *window)
   if (!impl->xdg_surface)
     return;
 
-  xdg_surface_request_change_state (impl->xdg_surface,
-                                    XDG_SURFACE_STATE_MAXIMIZED,
-                                    TRUE,
-                                    0 /* serial, unused */);
+  xdg_surface_set_maximized (impl->xdg_surface);
 }
 
 static void
@@ -1629,10 +1619,7 @@ gdk_wayland_window_unmaximize (GdkWindow *window)
   if (!impl->xdg_surface)
     return;
 
-  xdg_surface_request_change_state (impl->xdg_surface,
-                                    XDG_SURFACE_STATE_MAXIMIZED,
-                                    FALSE,
-                                    0 /* serial, unused */);
+  xdg_surface_unset_maximized (impl->xdg_surface);
 }
 
 static void
@@ -1646,10 +1633,7 @@ gdk_wayland_window_fullscreen (GdkWindow *window)
   if (!impl->xdg_surface)
     return;
 
-  xdg_surface_request_change_state (impl->xdg_surface,
-                                    XDG_SURFACE_STATE_FULLSCREEN,
-                                    TRUE,
-                                    0 /* serial, unused */);
+  xdg_surface_set_fullscreen (impl->xdg_surface, NULL);
 }
 
 static void
@@ -1663,10 +1647,7 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
   if (!impl->xdg_surface)
     return;
 
-  xdg_surface_request_change_state (impl->xdg_surface,
-                                    XDG_SURFACE_STATE_FULLSCREEN,
-                                    FALSE,
-                                    0 /* serial, unused */);
+  xdg_surface_unset_fullscreen (impl->xdg_surface);
 }
 
 static void

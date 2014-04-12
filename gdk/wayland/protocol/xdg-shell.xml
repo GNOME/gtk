@@ -241,40 +241,6 @@
       <arg name="edges" type="uint" summary="which edge or corner is being dragged"/>
     </request>
 
-    <event name="configure">
-      <description summary="suggest resize">
-	The configure event asks the client to resize its surface.
-
-	The size is a hint, in the sense that the client is free to
-	ignore it if it doesn't resize, pick a smaller size (to
-	satisfy aspect ratio or resize in steps of NxM pixels).
-
-	The client is free to dismiss all but the last configure
-	event it received.
-
-	The width and height arguments specify the size of the window
-	in surface local coordinates.
-      </description>
-
-      <arg name="width" type="int"/>
-      <arg name="height" type="int"/>
-    </event>
-
-    <request name="set_output">
-      <description summary="set the default output used by this surface">
-	Set the default output used by this surface when it is first mapped.
-
-	If this value is NULL (default), it's up to the compositor to choose
-	which display will be used to map this surface.
-
-	When fullscreen or maximized state are set on this surface, and it
-	wasn't mapped yet, the output set with this method will be used.
-	Otherwise, the output where the surface is currently mapped will be
-	used.
-      </description>
-      <arg name="output" type="object" interface="wl_output" allow-null="true"/>
-    </request>
-
     <enum name="state">
       <description summary="types of state on the surface">
         The different state values used on the surface. This is designed for
@@ -297,89 +263,78 @@
         0x1000 - 0x1FFF: GNOME
       </description>
       <entry name="maximized" value="1" summary="the surface is maximized">
-        A non-zero value indicates the surface is maximized. Otherwise,
-        the surface is unmaximized.
+        The surface is maximized. The window geometry specified in the configure
+        event must be obeyed by the client.
       </entry>
       <entry name="fullscreen" value="2" summary="the surface is fullscreen">
-        A non-zero value indicates the surface is fullscreen. Otherwise,
-        the surface is not fullscreen.
+        The surface is fullscreen. The window geometry specified in the configure
+        event must be obeyed by the client.
+      </entry>
+      <entry name="resizing" value="3">
+        The surface is being resized. The window geometry specified in the
+        configure event is a maximum; the client cannot resize beyond it.
+        Clients that have aspect ratio or cell sizing configuration can use
+        a smaller size, however.
+      </entry>
+      <entry name="activated" value="4">
+        Client window decorations should be painted as if the window is
+        active. Do not assume this means that the window actually has
+        keyboard or pointer focus.
       </entry>
     </enum>
 
-    <request name="request_change_state">
-      <description summary="client requests to change a surface's state">
-        This asks the compositor to change the state. If the compositor wants
-        to change the state, it will send a change_state event with the same
-        state_type, value, and serial, and the event flow continues as if it
-        it was initiated by the compositor.
+    <event name="configure">
+      <description summary="suggest a surface chnage">
+	The configure event asks the client to resize its surface.
 
-        If the compositor does not want to change the state, it will send a
-        change_state to the client with the old value of the state.
-      </description>
-      <arg name="state_type" type="uint" summary="the state to set"/>
-      <arg name="value" type="uint" summary="the value to change the state to"/>
-      <arg name="serial" type="uint" summary="an event serial">
-        This serial is so the client can know which change_state event corresponds
-        to which request_change_state request it sent out.
-      </arg>
-    </request>
+	The width and height arguments specify a hint to the window
+        about how its surface should be resized in surface local
+        coordinates. The states listed in the event specify how the
+        width/height arguments should be interpreted.
 
-    <event name="change_state">
-      <description summary="compositor wants to change a surface's state">
-        This event tells the client to change a surface's state. The client
-        should respond with an ack_change_state request to the compositor to
-        guarantee that the compositor knows that the client has seen it.
+        A client should arrange a new surface, and then send a
+        ack_configure request with the serial sent in this configure
+        event before attaching a new surface.
+
+	If the client receives multiple configure events before it
+        can respond to one, it is free to discard all but the last
+        event it received.
       </description>
 
-      <arg name="state_type" type="uint" summary="the state to set"/>
-      <arg name="value" type="uint" summary="the value to change the state to"/>
-      <arg name="serial" type="uint" summary="a serial for the compositor's own tracking"/>
+      <arg name="width" type="int"/>
+      <arg name="height" type="int"/>
+      <arg name="states" type="array"/>
+      <arg name="serial" type="uint"/>
     </event>
 
-    <request name="ack_change_state">
-      <description summary="ack a change_state event">
-        When a change_state event is received, a client should then ack it
-        using the ack_change_state request to ensure that the compositor
+    <request name="ack_configure">
+      <description summary="ack a configure event">
+        When a configure event is received, a client should then ack it
+        using the ack_configure request to ensure that the compositor
         knows the client has seen the event.
 
         By this point, the state is confirmed, and the next attach should
-        contain the buffer drawn for the new state value.
-
-        The values here need to be the same as the values in the cooresponding
-        change_state event.
+        contain the buffer drawn for the configure event you are acking.
       </description>
-      <arg name="state_type" type="uint" summary="the state to set"/>
-      <arg name="value" type="uint" summary="the value to change the state to"/>
-      <arg name="serial" type="uint" summary="a serial to pass to change_state"/>
+      <arg name="serial" type="uint" summary="a serial to configure for"/>
     </request>
 
-    <request name="set_minimized">
-      <description summary="minimize the surface">
-        Minimize the surface.
+    <request name="set_maximized" />
+    <request name="unset_maximized" />
+
+    <request name="set_fullscreen">
+      <description summary="set the window as fullscreen on a monitor">
+	Make the surface fullscreen.
+
+        You can specify an output that you would prefer to be fullscreen.
+	If this value is NULL, it's up to the compositor to choose which
+        display will be used to map this surface.
       </description>
+      <arg name="output" type="object" interface="wl_output" allow-null="true"/>
     </request>
+    <request name="unset_fullscreen" />
 
-    <event name="activated">
-      <description summary="surface was activated">
-	The activated_set event is sent when this surface has been
-	activated, which means that the surface has user attention.
-        Window decorations should be updated accordingly. You should
-        not use this event for anything but the style of decorations
-        you display, use wl_keyboard.enter and wl_keyboard.leave for
-        determining keyboard focus.
-      </description>
-    </event>
-
-    <event name="deactivated">
-      <description summary="surface was deactivated">
-	The deactivate event is sent when this surface has been
-        deactivated, which means that the surface lost user attention.
-        Window decorations should be updated accordingly. You should
-        not use this event for anything but the style of decorations
-        you display, use wl_keyboard.enter and wl_keyboard.leave for
-        determining keyboard focus.
-      </description>
-    </event>
+    <request name="set_minimized" />
 
     <event name="close">
       <description summary="surface wants to be closed">
