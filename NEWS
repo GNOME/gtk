@@ -1,3 +1,46 @@
+Overview of Changes in GTK+ 3.12.0 to 3.12.1
+============================================
+
+* Bug fixes:
+ 712752 GtkClipboard: add _get_default and _get_primary
+ 722058 GtkTreeModelFilter bug
+ 722817 Add gobject-introspection for GdkWin32
+ 726298 gtk-font-name isn't correctly handled on Windows
+ 726475 After looking at Asielriot solitare, I get rendering glitches...
+ 726859 Assertion/crash if gtk_radio_menu_item_set_group() is called twice
+ 726870 all: Name more idles and timeouts
+ 726871 treeview: Lower the duration of validation iterations
+ 726996 Label-for/Labelled-by AtkRelations missing for containers in ...
+ 727009 redefinition of GtkPrinterCloudprint: cloudprint fails to build
+ 727022 W32: Both inc- and dec-buttons on GtkSpinbutton are "inc"
+ 727035 W32: Combobox button is drawn with two arrows
+ 727036 W32: Combobox dropdown color is button-gray instead of window-white
+ 727037 W32: Menu items look thin, while submenu arrows are huge
+ 727075 W32: Combobox (with an entry) is gigantic
+ 727078 W32: GtkPopover is transparent and non-interactable
+ 727080 W32: Window re-size grip looks UGLY.
+ 727210 W32: Prelight doesn't apply to check/radio marks
+ 727211 W32: Selection background color applies to check/radio marks
+ 727213 W32: Notebook widget is not styled correctly
+ 727244 W32: Items selected in listbox have correct background color,...
+ 727245 W32: No .dim-label style
+ 727313 a11y: do not use deprecated a11y functions.
+ 727322 docs: Remove '\' escape character from literals
+ 727391 W32: scrollbar sliders have no "active" and "insensitive" styles
+ 727410 W32: tooltips are not themed
+ 727414 Redundant text in titlebar
+ 727643 Segfault in gtk-3.12.0
+ 727662 [PATCH] GtkVolumeButton displays "missing image" icons
+ 727973 W32: focused button is visibly smaller  
+ 728023 Warning when passing NULL window to inhibit
+ 727644 SEGV in gtk_window_propagate_key_event()
+
+* Translation updates:
+ Basque
+ Catalan
+ Greek
+ Russian
+
 Overview of Changes in GTK+ 3.11.9 to 3.12.0
 ============================================
 
