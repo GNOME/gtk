@@ -2092,35 +2092,32 @@ _gdk_event_button_generate (GdkDisplay *display,
 }
 
 void
-gdk_synthesize_window_state (GdkWindow     *window,
-                             GdkWindowState unset_flags,
-                             GdkWindowState set_flags)
+_gdk_set_window_state (GdkWindow      *window,
+                       GdkWindowState  new_state)
 {
   GdkEvent temp_event;
   GdkWindowState old;
-  
+
   g_return_if_fail (window != NULL);
-  
+
   temp_event.window_state.window = window;
   temp_event.window_state.type = GDK_WINDOW_STATE;
   temp_event.window_state.send_event = FALSE;
-  
-  old = temp_event.window_state.window->state;
-  
-  temp_event.window_state.new_window_state = old;
-  temp_event.window_state.new_window_state |= set_flags;
-  temp_event.window_state.new_window_state &= ~unset_flags;
-  temp_event.window_state.changed_mask = temp_event.window_state.new_window_state ^ old;
+  temp_event.window_state.new_window_state = new_state;
+
+  old = window->state;
 
   if (temp_event.window_state.new_window_state == old)
     return; /* No actual work to do, nothing changed. */
+
+  temp_event.window_state.changed_mask = new_state ^ old;
 
   /* Actually update the field in GdkWindow, this is sort of an odd
    * place to do it, but seems like the safest since it ensures we expose no
    * inconsistent state to the user.
    */
-  
-  window->state = temp_event.window_state.new_window_state;
+
+  window->state = new_state;
 
   if (temp_event.window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
     _gdk_window_update_viewable (window);
@@ -2136,12 +2133,21 @@ gdk_synthesize_window_state (GdkWindow     *window,
     case GDK_WINDOW_TEMP: /* ? */
       gdk_display_put_event (gdk_window_get_display (window), &temp_event);
       break;
-      
     case GDK_WINDOW_FOREIGN:
     case GDK_WINDOW_ROOT:
     case GDK_WINDOW_CHILD:
       break;
     }
+}
+
+void
+gdk_synthesize_window_state (GdkWindow     *window,
+                             GdkWindowState unset_flags,
+                             GdkWindowState set_flags)
+{
+  g_return_if_fail (window != NULL);
+
+  _gdk_set_window_state (window, (window->state | set_flags) & ~unset_flags);
 }
 
 /**

@@ -321,6 +321,9 @@ void _gdk_windowing_event_data_copy (const GdkEvent *src,
                                      GdkEvent       *dst);
 void _gdk_windowing_event_data_free (GdkEvent       *event);
 
+void _gdk_set_window_state (GdkWindow *window,
+                            GdkWindowState new_state);
+
 gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
                                      GdkRectangle *extents);
 
