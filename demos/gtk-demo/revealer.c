@@ -18,6 +18,8 @@ change_direction (GtkRevealer *revealer)
   gtk_revealer_set_reveal_child (revealer, !revealed);
 }
 
+static guint timeout = 0;
+
 static gboolean
 reveal_one (gpointer data)
 {
@@ -33,10 +35,14 @@ reveal_one (gpointer data)
                     G_CALLBACK (change_direction), NULL);
   count++;
 
-  return count < 9;
+  if (count >= 9)
+    {
+      timeout = 0;
+      return FALSE;
+    }
+  else
+    return TRUE;
 }
-
-static guint timeout = 0;
 
 static void
 response_cb (GtkWidget *dialog,
