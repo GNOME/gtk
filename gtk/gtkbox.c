@@ -2614,7 +2614,7 @@ gtk_box_set_center_widget (GtkBox    *box,
  *
  * Retrieves the center widget of the box.
  *
- * Returns: the center widget
+ * Returns: (transfer none): the center widget
  *
  * Since: 3.12
  */
