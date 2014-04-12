@@ -1277,24 +1277,30 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
       if (gtk_widget_get_realized (widget))
 	{
+          GtkBorder margin;
+
+          gtk_style_context_get_margin (gtk_widget_get_style_context (widget),
+                                        gtk_widget_get_state_flags (widget),
+                                        &margin);
+
 	  if (gtk_widget_get_mapped (widget))
 	    gdk_window_show (priv->handle);
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
               gdk_window_move_resize (priv->handle,
-                                      priv->handle_pos.x,
+                                      priv->handle_pos.x - margin.left,
                                       priv->handle_pos.y,
-                                      handle_size,
+                                      handle_size + margin.left + margin.right,
                                       priv->handle_pos.height);
             }
           else
             {
               gdk_window_move_resize (priv->handle,
                                       priv->handle_pos.x,
-                                      priv->handle_pos.y,
+                                      priv->handle_pos.y - margin.top,
                                       priv->handle_pos.width,
-                                      handle_size);
+                                      handle_size + margin.top + margin.bottom);
             }
 	}
 
