@@ -287,8 +287,7 @@ main (int argc, char *argv[])
     { "about", activate_about, NULL, NULL, NULL },
     { "quit", activate_quit, NULL, NULL, NULL },
   };
-
-  gtk_init (&argc, &argv);
+  gint status;
 
   app = gtk_application_new ("org.gtk.WidgetFactory", 0);
 
@@ -299,7 +298,8 @@ main (int argc, char *argv[])
   g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
-  g_application_run (G_APPLICATION (app), argc, argv);
+  status = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
 
-  return 0;
+  return status;
 }
