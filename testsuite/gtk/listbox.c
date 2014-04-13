@@ -130,7 +130,9 @@ test_selection (void)
                     &count);
 
   row = gtk_list_box_get_row_at_index (list, 20);
+  g_assert (!gtk_list_box_row_is_selected (row));
   gtk_list_box_select_row (list, row);
+  g_assert (gtk_list_box_row_is_selected (row));
   g_assert (callback_row == row);
   g_assert_cmpint (count, ==, 1);
   row2 = gtk_list_box_get_selected_row (list);
@@ -145,10 +147,12 @@ test_selection (void)
 
   row = gtk_list_box_get_row_at_index (list, 20);
   gtk_list_box_select_row (list, row);
+  g_assert (gtk_list_box_row_is_selected (row));
   g_assert (callback_row == row);
   g_assert_cmpint (count, ==, 3);
 
   gtk_list_box_set_selection_mode (list, GTK_SELECTION_NONE);
+  g_assert (!gtk_list_box_row_is_selected (row));
   g_assert (callback_row == NULL);
   g_assert_cmpint (count, ==, 4);
   row2 = gtk_list_box_get_selected_row (list);
@@ -163,6 +167,93 @@ test_selection (void)
   index = gtk_list_box_row_get_index (row);
   g_assert_cmpint (index, ==, -1);
   g_object_unref (row);
+
+  g_object_unref (list);
+}
+
+static void
+on_selected_rows_changed (GtkListBox *box, gpointer data)
+{
+  gint *i = data;
+
+  (*i)++;
+}
+
+static void
+test_multi_selection (void)
+{
+  GtkListBox *list;
+  GList *l;
+  GtkListBoxRow *row, *row2;
+  GtkWidget *label;
+  gint i;
+  gchar *s;
+  gint count;
+
+  list = GTK_LIST_BOX (gtk_list_box_new ());
+  g_object_ref_sink (list);
+  gtk_widget_show (GTK_WIDGET (list));
+
+  g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
+  g_assert (gtk_list_box_get_selected_rows (list) == NULL);
+
+  gtk_list_box_set_selection_mode (list, GTK_SELECTION_MULTIPLE);
+
+  for (i = 0; i < 100; i++)
+    {
+      s = g_strdup_printf ("%d", i);
+      label = gtk_label_new (s);
+      g_object_set_data (G_OBJECT (label), "data", GINT_TO_POINTER (i));
+      g_free (s);
+      gtk_container_add (GTK_CONTAINER (list), label);
+    }
+
+  count = 0;
+  g_signal_connect (list, "selected-rows-changed",
+                    G_CALLBACK (on_selected_rows_changed),
+                    &count);
+
+  row = gtk_list_box_get_row_at_index (list, 20);
+
+  gtk_list_box_select_all (list);
+  g_assert_cmpint (count, ==, 1);
+  l = gtk_list_box_get_selected_rows (list);
+  g_assert_cmpint (g_list_length (l), ==, 100);
+  g_list_free (l);
+  g_assert (gtk_list_box_row_is_selected (row));
+
+  gtk_list_box_unselect_all (list);
+  g_assert_cmpint (count, ==, 2);
+  l = gtk_list_box_get_selected_rows (list);
+  g_assert (l == NULL);
+  g_assert (!gtk_list_box_row_is_selected (row));
+
+  gtk_list_box_select_row (list, row);
+  g_assert (gtk_list_box_row_is_selected (row));
+  g_assert_cmpint (count, ==, 3);
+  l = gtk_list_box_get_selected_rows (list);
+  g_assert_cmpint (g_list_length (l), ==, 1);
+  g_assert (l->data == row);
+  g_list_free (l);
+
+  row2 = gtk_list_box_get_row_at_index (list, 40);
+  g_assert (!gtk_list_box_row_is_selected (row2));
+  gtk_list_box_select_row (list, row2);
+  g_assert (gtk_list_box_row_is_selected (row2));
+  g_assert_cmpint (count, ==, 4);
+  l = gtk_list_box_get_selected_rows (list);
+  g_assert_cmpint (g_list_length (l), ==, 2);
+  g_assert (l->data == row);
+  g_assert (l->next->data == row2);
+  g_list_free (l);
+
+  gtk_list_box_unselect_row (list, row);
+  g_assert (!gtk_list_box_row_is_selected (row));
+  g_assert_cmpint (count, ==, 5);
+  l = gtk_list_box_get_selected_rows (list);
+  g_assert_cmpint (g_list_length (l), ==, 1);
+  g_assert (l->data == row2);
+  g_list_free (l);
 
   g_object_unref (list);
 }
@@ -344,6 +435,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/listbox/sort", test_sort);
   g_test_add_func ("/listbox/selection", test_selection);
+  g_test_add_func ("/listbox/multi-selection", test_multi_selection);
   g_test_add_func ("/listbox/filter", test_filter);
   g_test_add_func ("/listbox/header", test_header);
 
