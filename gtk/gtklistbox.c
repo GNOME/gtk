@@ -776,7 +776,7 @@ gtk_list_box_selected_foreach (GtkListBox            *box,
 }
 
 /**
- * gtk_list_box_get_selected_children:
+ * gtk_list_box_get_selected_rows:
  * @box: a #GtkListBox
  *
  * Creates a list of all selected children.
@@ -788,7 +788,7 @@ gtk_list_box_selected_foreach (GtkListBox            *box,
  * Since: 3.14
  */
 GList *
-gtk_list_box_get_selected_children (GtkListBox *box)
+gtk_list_box_get_selected_rows (GtkListBox *box)
 {
   GtkListBoxRow *row;
   GSequenceIter *iter;
