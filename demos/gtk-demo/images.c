@@ -50,18 +50,21 @@ progressive_updated_callback (GdkPixbufLoader *loader,
                               gpointer     data)
 {
   GtkWidget *image;
+  GdkPixbuf *pixbuf;
 
   image = GTK_WIDGET (data);
 
   /* We know the pixbuf inside the GtkImage has changed, but the image
-   * itself doesn't know this; so queue a redraw.  If we wanted to be
-   * really efficient, we could use a drawing area or something
-   * instead of a GtkImage, so we could control the exact position of
-   * the pixbuf on the display, then we could queue a draw for only
-   * the updated area of the image.
+   * itself doesn't know this; so give it a hint by setting the pixbuf
+   * again. Queuing a redraw used to be sufficient, but nowadays GtkImage
+   * uses GtkIconHelper which caches the pixbuf state and will just redraw
+   * from the cache.
    */
 
-  gtk_widget_queue_draw (image);
+  pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (image));
+  g_object_ref (pixbuf);
+  gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+  g_object_unref (pixbuf);
 }
 
 static gint
