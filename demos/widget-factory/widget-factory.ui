@@ -1363,7 +1363,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
-                            <property name="hscrollbar_policy">never</property>
                             <child>
                               <object class="GtkTextView" id="textview1">
                                 <property name="visible">True</property>
