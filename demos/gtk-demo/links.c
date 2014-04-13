@@ -33,6 +33,7 @@ activate_link (GtkWidget   *label,
                  "The term <i>keynav</i> is a shorthand for "
                  "keyboard navigation and refers to the process of using "
                  "a program (exclusively) via keyboard input.");
+      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
       gtk_window_present (GTK_WINDOW (dialog));
       g_signal_connect (dialog, "response", G_CALLBACK (response_cb), NULL);
