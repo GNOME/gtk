@@ -16,11 +16,11 @@
       </item>
     </section>
   </menu>
-  <menu id='gear_menu'>
+  <menu id="gear_menu">
     <section>
       <item>
-        <attribute name='label' translatable='yes'>Dark Theme</attribute>
-        <attribute name='action'>win.dark</attribute>
+        <attribute name="label" translatable="yes">Dark Theme</attribute>
+        <attribute name="action">win.dark</attribute>
       </item>
     </section>
   </menu>
@@ -1924,6 +1924,88 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="top-attach">2</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkFrame">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkListBox" id="listbox">
+                            <property name="visible">True</property>
+                            <property name="selection-mode">none</property>
+                            <child>
+                              <object class="GtkBox" id="listboxrow1">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label">Row 1</property>
+                                    <property name="halign">start</property>
+                                    <property name="margin">6</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSwitch">
+                                    <property name="visible">True</property>
+                                    <property name="margin">6</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="listboxrow2">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label">Row 2</property>
+                                    <property name="halign">start</property>
+                                    <property name="margin">6</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkScale">
+                                    <property name="orientation">horizontal</property>
+                                    <property name="visible">True</property>
+                                    <property name="margin">6</property>
+                                    <property name="draw-value">False</property>
+                                    <property name="width-request">150</property>
+                                    <property name="adjustment">adjustment1</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="listboxrow3">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label">Row 3</property>
+                                    <property name="halign">start</property>
+                                    <property name="margin">6</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -1936,5 +2018,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="listboxrow1"/>
+      <widget name="listboxrow2"/>
+      <widget name="listboxrow3"/>
+    </widgets>
   </object>
 </interface>

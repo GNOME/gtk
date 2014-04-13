@@ -221,6 +221,22 @@ startup (GApplication *app)
 }
 
 static void
+update_header (GtkListBoxRow *row,
+               GtkListBoxRow *before,
+               gpointer       data)
+{
+  if (before != NULL &&
+      gtk_list_box_row_get_header (row) == NULL)
+    {
+      GtkWidget *separator;
+
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_widget_show (separator);
+      gtk_list_box_row_set_header (row, separator);
+    }
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -254,6 +270,9 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "page2note");
   adj = (GtkAdjustment *) gtk_builder_get_object (builder, "adjustment2");
   g_signal_connect (adj, "value-changed", G_CALLBACK (spin_value_changed), widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "listbox");
+  gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_header, NULL, NULL);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 
