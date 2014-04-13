@@ -1859,60 +1859,62 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkActionBar" id="actionbar1">
-                        <property name="visible">True</property>
-                        <child type="center">
-                          <object class="GtkStackSwitcher" id="switcher">
-                            <property name="visible">True</property>
-                            <property name="stack">stack</property>
-                            <property name="halign">center</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkFrame" id="frame">
                         <property name="visible">True</property>
                         <property name="hexpand">False</property>
                         <child>
-                          <object class="GtkStack" id="stack">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
-                            <property name="transition-type">crossfade</property>
-                            <property name="transition-duration">1000</property>
+                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkScrolledWindow" id="swo">
+                              <object class="GtkActionBar" id="actionbar1">
                                 <property name="visible">True</property>
-                                <property name="shadow-type">none</property>
-                                <property name="hscrollbar_policy">never</property>
-                                <child>
-                                  <object class="GtkTextView" id="tvo">
+                                <child type="center">
+                                  <object class="GtkStackSwitcher" id="switcher">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="buffer">textbuffer2</property>
+                                    <property name="stack">stack</property>
+                                    <property name="halign">center</property>
                                   </object>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="name">page1</property>
-                                <property name="icon-name">document-open-recent-symbolic</property>
-                                <property name="title">News</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkImage" id="imageo">
+                              <object class="GtkStack" id="stack">
                                 <property name="visible">True</property>
-                                <property name="icon-name">gtk3-widget-factory</property>
-                                <property name="pixel-size">256</property>
+                                <property name="transition-type">crossfade</property>
+                                <property name="transition-duration">1000</property>
+                                <child>
+                                  <object class="GtkScrolledWindow" id="swo">
+                                    <property name="visible">True</property>
+                                    <property name="shadow-type">none</property>
+                                    <property name="hscrollbar_policy">never</property>
+                                    <child>
+                                      <object class="GtkTextView" id="tvo">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="buffer">textbuffer2</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="name">page1</property>
+                                    <property name="icon-name">document-open-recent-symbolic</property>
+                                    <property name="title">News</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkImage" id="imageo">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">gtk3-widget-factory</property>
+                                    <property name="pixel-size">256</property>
+                                  </object>
+                                  <packing>
+                                    <property name="name">page2</property>
+                                    <property name="icon-name">system-shutdown-symbolic</property>
+                                    <property name="title">Logo</property>
+                                  </packing>
+                                </child>
                               </object>
-                              <packing>
-                                <property name="name">page2</property>
-                                <property name="icon-name">system-shutdown-symbolic</property>
-                                <property name="title">Logo</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
