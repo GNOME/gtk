@@ -944,7 +944,10 @@ gtk_list_box_set_selection_mode (GtkListBox       *box,
   g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_SELECTION_MODE]);
 
   if (dirty)
-    g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+    {
+      g_signal_emit (box, signals[ROW_SELECTED], 0, NULL);
+      g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+    }
 }
 
 /**
@@ -2214,7 +2217,10 @@ gtk_list_box_remove (GtkContainer *container,
     gtk_widget_queue_resize (widget);
 
   if (was_selected)
-    g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+    {
+      g_signal_emit (box, signals[ROW_SELECTED], 0, NULL);
+      g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+    }
 }
 
 static void
