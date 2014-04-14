@@ -214,7 +214,8 @@ static const char gtk_selection_handler_key[] = "gtk-selection-handlers";
 
 /**
  * gtk_target_list_new:
- * @targets: (array length=ntargets): Pointer to an array of #GtkTargetEntry
+ * @targets: (array length=ntargets) (allow-none): Pointer to an array
+ *   of #GtkTargetEntry
  * @ntargets: number of entries in @targets.
  * 
  * Creates a new #GtkTargetList from an array of #GtkTargetEntry.
