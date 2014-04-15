@@ -256,9 +256,7 @@ static void gtk_drag_selection_get             (GtkWidget         *widget,
 						guint32            time,
 						gpointer           data);
 static void gtk_drag_anim_destroy              (GtkDragAnim       *anim);
-static gboolean gtk_drag_anim_tick             (GtkWidget         *widget,
-                                                GdkFrameClock     *frame_clock,
-                                                gpointer           data);
+static gboolean gtk_drag_anim_timeout          (gpointer           data);
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
 static void gtk_drag_source_info_destroy       (GtkDragSourceInfo *info);
 static void gtk_drag_add_update_idle           (GtkDragSourceInfo *info);
@@ -3807,7 +3805,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	   * to respond really late, we still are OK.
 	   */
 	  gtk_drag_clear_source_info (info->context);
-	  gtk_widget_add_tick_callback (info->widget, gtk_drag_anim_tick, anim, (GDestroyNotify) gtk_drag_anim_destroy);
+	  gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17, gtk_drag_anim_timeout, anim, (GDestroyNotify) gtk_drag_anim_destroy);
 	}
     }
 }
@@ -4038,13 +4036,13 @@ gtk_drag_anim_destroy (GtkDragAnim *anim)
 }
 
 static gboolean
-gtk_drag_anim_tick (GtkWidget     *widget,
-                    GdkFrameClock *frame_clock,
-                    gpointer       data)
+gtk_drag_anim_timeout (gpointer data)
 {
   GtkWidget *icon_window;
   GtkDragAnim *anim = data;
   GtkDragSourceInfo *info = anim->info;
+  GtkWidget *widget = info->widget;
+  GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
   gint64 current_time = gdk_frame_clock_get_frame_time (frame_clock);
   int hot_x, hot_y;
   double f = (current_time - anim->start_time) / (double) ANIM_TIME;
