@@ -405,6 +405,104 @@ test_word_boundaries (void)
   check_backward_word_start ("ab", 2, 0, TRUE);
 }
 
+static void
+check_cursor_position (const gchar *buffer_text,
+                       gboolean     forward,
+                       gint         initial_offset,
+                       gint         result_offset,
+                       gboolean     ret)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  if (forward)
+    g_assert_cmpint (ret, ==, gtk_text_iter_forward_cursor_position (&iter));
+  else
+    g_assert_cmpint (ret, ==, gtk_text_iter_backward_cursor_position (&iter));
+
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
+test_cursor_positions (void)
+{
+  /* forward */
+  check_cursor_position ("a\r\nb", TRUE, 0, 1, TRUE);
+  check_cursor_position ("a\r\nb", TRUE, 1, 3, TRUE);
+  check_cursor_position ("a\r\nb", TRUE, 2, 3, TRUE);
+  check_cursor_position ("a\r\nb", TRUE, 3, 4, FALSE);
+  check_cursor_position ("a\r\nb", TRUE, 4, 4, FALSE);
+
+  /* backward */
+  check_cursor_position ("a\r\nb", FALSE, 4, 3, TRUE);
+  check_cursor_position ("a\r\nb", FALSE, 3, 1, TRUE);
+  check_cursor_position ("a\r\nb", FALSE, 2, 1, TRUE);
+  check_cursor_position ("a\r\nb", FALSE, 1, 0, TRUE);
+  check_cursor_position ("a\r\nb", FALSE, 0, 0, FALSE);
+}
+
+static void
+check_visible_cursor_position (GtkTextBuffer *buffer,
+                               gboolean       forward,
+                               gint           initial_offset,
+                               gint           result_offset,
+                               gboolean       ret)
+{
+  GtkTextIter iter;
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  if (forward)
+    g_assert_cmpint (ret, ==, gtk_text_iter_forward_visible_cursor_position (&iter));
+  else
+    g_assert_cmpint (ret, ==, gtk_text_iter_backward_visible_cursor_position (&iter));
+
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+}
+
+static void
+test_visible_cursor_positions (void)
+{
+  GtkTextBuffer *buffer;
+  GtkTextTag *invisible_tag;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  invisible_tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                              "invisible", TRUE,
+                                              NULL);
+
+  /* Buffer contents: "abcd" with 'bc' invisible */
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, "a", -1);
+  gtk_text_buffer_insert_with_tags (buffer, &iter, "bc", -1, invisible_tag, NULL);
+  gtk_text_buffer_insert (buffer, &iter, "d", -1);
+
+  /* forward */
+  check_visible_cursor_position (buffer, TRUE, 0, 3, TRUE);
+  check_visible_cursor_position (buffer, TRUE, 1, 3, TRUE);
+  check_visible_cursor_position (buffer, TRUE, 2, 3, TRUE);
+  check_visible_cursor_position (buffer, TRUE, 3, 3, FALSE); /* FIXME result offset should be 4, not 3 */
+  check_visible_cursor_position (buffer, TRUE, 4, 4, FALSE);
+
+  /* backward */
+  check_visible_cursor_position (buffer, FALSE, 4, 3, TRUE);
+  check_visible_cursor_position (buffer, FALSE, 3, 0, TRUE);
+  check_visible_cursor_position (buffer, FALSE, 2, 0, TRUE);
+  check_visible_cursor_position (buffer, FALSE, 1, 0, TRUE);
+  check_visible_cursor_position (buffer, FALSE, 0, 0, FALSE);
+
+  g_object_unref (buffer);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -416,6 +514,8 @@ main (int argc, char** argv)
   g_test_add_func ("/TextIter/Search Caseless", test_search_caseless);
   g_test_add_func ("/TextIter/Forward To Tag Toggle", test_forward_to_tag_toggle);
   g_test_add_func ("/TextIter/Word Boundaries", test_word_boundaries);
+  g_test_add_func ("/TextIter/Cursor Positions", test_cursor_positions);
+  g_test_add_func ("/TextIter/Visible Cursor Positions", test_visible_cursor_positions);
 
   return g_test_run();
 }
