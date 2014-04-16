@@ -36,6 +36,7 @@ typedef enum  {
   GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
   GTK_MENU_TRACKER_ITEM_ROLE_CHECK,
   GTK_MENU_TRACKER_ITEM_ROLE_RADIO,
+  GTK_MENU_TRACKER_ITEM_ROLE_SCALE
 } GtkMenuTrackerItemRole;
 
 GType                   gtk_menu_tracker_item_get_type                  (void) G_GNUC_CONST;
@@ -90,5 +91,12 @@ void                    gtk_menu_tracker_item_request_submenu_shown     (GtkMenu
                                                                          gboolean            shown);
 
 gboolean                gtk_menu_tracker_item_get_submenu_shown         (GtkMenuTrackerItem *self);
+
+GMenuItem              *gtk_menu_tracker_item_get_item                  (GtkMenuTrackerItem *self);
+
+GVariant               *gtk_menu_tracker_item_get_state                 (GtkMenuTrackerItem *self);
+
+void                    gtk_menu_tracker_item_change_state              (GtkMenuTrackerItem *self,
+                                                                         GVariant           *value);
 
 #endif

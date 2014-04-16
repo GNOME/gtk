@@ -8,6 +8,15 @@ activate (GSimpleAction *action,
   g_print ("%s activated\n", g_action_get_name (G_ACTION (action)));
 }
 
+static void
+set_zoom (GSimpleAction *action,
+          GVariant      *value,
+          gpointer       user_data)
+{
+  g_print ("setting zoom to %f\n", g_variant_get_double (value));
+  g_simple_action_set_state (action, value);
+}
+
 static GActionEntry entries[] = {
   { "cut", activate, NULL, NULL, NULL },
   { "copy", activate, NULL, NULL, NULL },
@@ -27,7 +36,12 @@ static GActionEntry entries[] = {
   { "action7", activate, NULL, NULL, NULL },
   { "action8", activate, NULL, NULL, NULL },
   { "action9", activate, NULL, NULL, NULL },
-  { "action10", activate, NULL, NULL, NULL }
+  { "action10", activate, NULL, NULL, NULL },
+  { "set-view", NULL, "s", "'list'", NULL },
+  { "cut", activate, NULL, NULL, NULL },
+  { "copy", activate, NULL, NULL, NULL },
+  { "paste", activate, NULL, NULL, NULL },
+  { "zoom", NULL, NULL, "5.0", set_zoom }
 };
 
 int main (int argc, char *argv[])
@@ -46,7 +60,6 @@ int main (int argc, char *argv[])
   GtkWidget *align;
 
   gtk_init (&argc, &argv);
-
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
   actions = g_simple_action_group_new ();
@@ -70,8 +83,8 @@ int main (int argc, char *argv[])
   model = (GMenuModel *)gtk_builder_get_object (builder, "menu");
 
   button = gtk_menu_button_new ();
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), model);
   gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), TRUE);
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), model);
 
   popover = GTK_WIDGET (gtk_menu_button_get_popover (GTK_MENU_BUTTON (button)));
 
@@ -132,7 +145,6 @@ int main (int argc, char *argv[])
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), label , 1, 5, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), combo, 2, 5, 1, 1);
-
 
   gtk_widget_show_all (win);
 

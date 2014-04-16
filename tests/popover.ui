@@ -17,6 +17,14 @@
         <attribute name="action">top.paste</attribute>
         <attribute name="verb-icon">edit-paste-symbolic</attribute>
       </item>
+      <item>
+        <attribute name="type">scale</attribute>
+        <attribute name="action">top.zoom</attribute>
+        <attribute name="minimum" type="d">0.0</attribute>
+        <attribute name="maximum" type="d">10.0</attribute>
+        <attribute name="step" type="d">1.0</attribute>
+        <attribute name="marks" type="i">3</attribute>
+      </item>
     </section>
     <section>
       <item>

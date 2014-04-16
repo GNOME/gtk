@@ -96,6 +96,12 @@ gtk_model_menu_item_set_action_role (GtkModelMenuItem       *item,
   AtkObject *accessible;
   AtkRole a11y_role;
 
+  if (role == GTK_MENU_TRACKER_ITEM_ROLE_SCALE)
+    {
+      g_warning ("GtkMenu does not support scales");
+      role = GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
+    }
+
   if (role == item->role)
     return;
 

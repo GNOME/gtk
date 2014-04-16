@@ -2021,6 +2021,62 @@ open_submenu (GtkWidget *button,
   gtk_widget_grab_focus (focus);
 }
 
+static GtkWidget *
+scale_from_item (GMenuItem *item)
+{
+  GtkWidget *scale;
+  gdouble min, max, step;
+  gint32 marks;
+  gint i;
+  
+  if (!g_menu_item_get_attribute (item, "minimum", "d", &min))
+    min = 0.0;
+  if (!g_menu_item_get_attribute (item, "maximum", "d", &max))
+    max = 10.0;
+  if (!g_menu_item_get_attribute (item, "step", "d", &step))
+    step = 1.0;
+  if (!g_menu_item_get_attribute (item, "marks", "i", &marks))
+    marks = 0;
+
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, min, max, step);
+  gtk_widget_set_margin_top (scale, 6);
+  gtk_widget_set_margin_bottom (scale, 6);
+  gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
+  gtk_scale_set_has_origin (GTK_SCALE (scale), TRUE);
+
+  if (marks > 1)
+    {
+      for (i = 0; i < marks; i++)
+        gtk_scale_add_mark (GTK_SCALE (scale), min + i * (max - min) / (gdouble) (marks - 1), GTK_POS_BOTTOM, NULL);
+    }
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (scale),
+                                  GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
+
+  return scale;
+}
+
+static void
+gtk_popover_scale_changed (GtkRange           *range,
+                           GtkMenuTrackerItem *item)
+{
+  gtk_menu_tracker_item_change_state (item, g_variant_new_double (gtk_range_get_value (range)));
+}
+
+static void
+gtk_popover_update_scale (GtkMenuTrackerItem *item, GParamSpec *pspec, GtkRange *range)
+{
+  GVariant *state;
+
+  g_signal_handlers_block_by_func (range, gtk_popover_scale_changed, item);
+
+  state = gtk_menu_tracker_item_get_state (item);
+  gtk_range_set_value (range, g_variant_get_double (state));
+  g_variant_unref (state);
+
+  g_signal_handlers_unblock_by_func (range, gtk_popover_scale_changed, item);
+}
+
 static void
 gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
                                  gint                position,
@@ -2119,11 +2175,20 @@ gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
       gtk_widget_set_halign (content, GTK_ALIGN_FILL);
       gtk_widget_show (content);
       gtk_container_add (GTK_CONTAINER (child), content);
+
       tracker = gtk_menu_tracker_new_for_item_submenu (item, gtk_popover_tracker_insert_func, gtk_popover_tracker_remove_func, content);
 
       g_object_set_data_full (G_OBJECT (widget), "submenutracker", tracker, (GDestroyNotify)gtk_menu_tracker_free);
 
       gtk_widget_show (widget);
+    }
+  else if (gtk_menu_tracker_item_get_role (item) == GTK_MENU_TRACKER_ITEM_ROLE_SCALE)
+    {
+      widget = scale_from_item (gtk_menu_tracker_item_get_item (item));
+      g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "visible", widget, "visible", G_BINDING_SYNC_CREATE);
+      g_signal_connect (item, "notify::state", G_CALLBACK (gtk_popover_update_scale), widget);
+      g_signal_connect (widget, "value-changed", G_CALLBACK (gtk_popover_scale_changed), item);
     }
   else
     {

@@ -117,6 +117,7 @@ enum {
   PROP_TOGGLED,
   PROP_ACCEL,
   PROP_SUBMENU_SHOWN,
+  PROP_STATE,
   N_PROPS
 };
 
@@ -138,6 +139,7 @@ gtk_menu_tracker_item_role_get_type (void)
         { GTK_MENU_TRACKER_ITEM_ROLE_NORMAL, "GTK_MENU_TRACKER_ITEM_ROLE_NORMAL", "normal" },
         { GTK_MENU_TRACKER_ITEM_ROLE_CHECK, "GTK_MENU_TRACKER_ITEM_ROLE_CHECK", "check" },
         { GTK_MENU_TRACKER_ITEM_ROLE_RADIO, "GTK_MENU_TRACKER_ITEM_ROLE_RADIO", "radio" },
+        { GTK_MENU_TRACKER_ITEM_ROLE_SCALE, "GTK_MENU_TRACKER_ITEM_ROLE_SCALE", "scale" },
         { 0, NULL, NULL }
       };
       GType type;
@@ -192,6 +194,9 @@ gtk_menu_tracker_item_get_property (GObject    *object,
       break;
     case PROP_SUBMENU_SHOWN:
       g_value_set_boolean (value, gtk_menu_tracker_item_get_submenu_shown (self));
+      break;
+    case PROP_STATE:
+      g_value_set_variant (value, gtk_menu_tracker_item_get_state (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -250,6 +255,8 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
     g_param_spec_string ("accel", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_SUBMENU_SHOWN] =
     g_param_spec_boolean ("submenu-shown", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
+  gtk_menu_tracker_item_pspecs[PROP_STATE] =
+    g_param_spec_variant ("state", "", "", G_VARIANT_TYPE_ANY, NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
 
   g_object_class_install_properties (class, N_PROPS, gtk_menu_tracker_item_pspecs);
 
@@ -294,6 +301,18 @@ gtk_menu_tracker_item_update_visibility (GtkMenuTrackerItem *self)
     }
 }
 
+static GtkMenuTrackerItemRole
+get_initial_role (GMenuItem *item)
+{
+  const gchar *type;
+
+  if (g_menu_item_get_attribute (item, "type", "&s", &type) &&
+      g_strcmp0 (type, "scale") == 0)
+    return GTK_MENU_TRACKER_ITEM_ROLE_SCALE;
+  else
+    return GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
+}
+
 static void
 gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
                                     GtkActionObservable *observable,
@@ -304,6 +323,9 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
   GVariant *action_target;
+  GtkMenuTrackerItemRole old_role;
+
+  old_role = self->role;
 
   action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
 
@@ -331,6 +353,11 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
       self->toggled = g_variant_get_boolean (state);
       self->role = GTK_MENU_TRACKER_ITEM_ROLE_CHECK;
     }
+  else if (state != NULL && g_variant_is_of_type (state, G_VARIANT_TYPE_DOUBLE))
+    {
+      self->toggled = FALSE;
+      self->role = GTK_MENU_TRACKER_ITEM_ROLE_SCALE;
+    }
 
   g_object_freeze_notify (G_OBJECT (self));
 
@@ -340,7 +367,7 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
   if (self->toggled)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
 
-  if (self->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+  if (self->role != old_role)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
 
   g_object_thaw_notify (G_OBJECT (self));
@@ -406,6 +433,8 @@ gtk_menu_tracker_item_action_state_changed (GtkActionObserver   *observer,
 
   if (self->toggled != was_toggled)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
+
+  g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_STATE]);
 }
 
 static void
@@ -427,7 +456,7 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
   self->can_activate = FALSE;
   self->sensitive = FALSE;
   self->toggled = FALSE;
-  self->role = GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
+  self->role = get_initial_role (self->item);
 
   /* Backwards from adding: we want to remove ourselves from the menu
    * -before- thrashing the properties.
@@ -442,7 +471,7 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
   if (was_toggled)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
 
-  if (old_role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+  if (old_role != self->role)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
 
   g_object_thaw_notify (G_OBJECT (self));
@@ -491,6 +520,7 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
   self->observable = g_object_ref (observable);
   self->is_separator = is_separator;
   self->display_hint = g_strdup (display_hint);
+  self->role = get_initial_role (self->item);
 
   if (!is_separator && g_menu_item_get_attribute (self->item, "hidden-when", "&s", &hidden_when))
     {
@@ -938,4 +968,29 @@ gboolean
 _gtk_menu_tracker_item_may_disappear (GtkMenuTrackerItem *self)
 {
   return self->hidden_when != HIDDEN_NEVER;
+}
+
+GMenuItem *
+gtk_menu_tracker_item_get_item (GtkMenuTrackerItem *self)
+{
+  return self->item;
+}
+
+GVariant *
+gtk_menu_tracker_item_get_state (GtkMenuTrackerItem *self)
+{
+  const gchar *action_name;
+
+  action_name = strrchr (self->action_and_target, '|') + 1;
+  return g_action_group_get_action_state (G_ACTION_GROUP (self->observable), action_name);
+}
+
+void
+gtk_menu_tracker_item_change_state (GtkMenuTrackerItem *self,
+                                    GVariant           *value)
+{
+  const gchar *action_name;
+
+  action_name = strrchr (self->action_and_target, '|') + 1;
+  g_action_group_change_action_state (G_ACTION_GROUP (self->observable), action_name, value);
 }
