@@ -2877,7 +2877,7 @@ add_autoscroll (GtkRange *range)
     return;
 
   priv->autoscroll_id = gtk_widget_add_tick_callback (GTK_WIDGET (range),
-                                                      (GtkTickCallback)autoscroll_cb,
+                                                      autoscroll_cb,
                                                       range,
                                                       NULL);
 }

@@ -767,10 +767,11 @@ gtk_stack_set_transition_position (GtkStack *stack,
 }
 
 static gboolean
-gtk_stack_transition_cb (GtkStack      *stack,
+gtk_stack_transition_cb (GtkWidget     *widget,
                          GdkFrameClock *frame_clock,
                          gpointer       user_data)
 {
+  GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   gint64 now;
   gdouble t;
@@ -805,7 +806,7 @@ gtk_stack_schedule_ticks (GtkStack *stack)
   if (priv->tick_id == 0)
     {
       priv->tick_id =
-        gtk_widget_add_tick_callback (GTK_WIDGET (stack), (GtkTickCallback)gtk_stack_transition_cb, stack, NULL);
+        gtk_widget_add_tick_callback (GTK_WIDGET (stack), gtk_stack_transition_cb, stack, NULL);
       g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_TRANSITION_RUNNING]);
     }
 }

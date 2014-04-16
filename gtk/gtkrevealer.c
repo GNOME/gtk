@@ -547,10 +547,11 @@ gtk_revealer_animate_step (GtkRevealer *revealer,
 }
 
 static gboolean
-gtk_revealer_animate_cb (GtkRevealer   *revealer,
+gtk_revealer_animate_cb (GtkWidget     *widget,
                          GdkFrameClock *frame_clock,
                          gpointer       user_data)
 {
+  GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   gint64 now;
 
@@ -589,7 +590,7 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
       priv->end_time = priv->start_time + (priv->transition_duration * 1000);
       if (priv->tick_id == 0)
         priv->tick_id =
-          gtk_widget_add_tick_callback (widget, (GtkTickCallback)gtk_revealer_animate_cb, revealer, NULL);
+          gtk_widget_add_tick_callback (widget, gtk_revealer_animate_cb, revealer, NULL);
       gtk_revealer_animate_step (revealer, priv->start_time);
     }
   else
