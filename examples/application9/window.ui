@@ -58,6 +58,7 @@
             <child>
               <object class="GtkMenuButton" id="gears">
                 <property name="visible">True</property>
+                <property name="use-popover">True</property>
                 <style>
                   <class name="image-button"/>
                 </style>
