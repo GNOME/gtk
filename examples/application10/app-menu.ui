@@ -12,7 +12,6 @@
       <item>
         <attribute name="label" translatable="yes">_Quit</attribute>
         <attribute name="action">app.quit</attribute>
-        <attribute name="accel"><![CDATA[<Ctrl>Q]]></attribute>
       </item>
     </section>
   </menu>
