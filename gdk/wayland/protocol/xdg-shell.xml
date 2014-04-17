@@ -381,9 +381,9 @@
       </description>
     </event>
 
-    <event name="delete">
+    <event name="close">
       <description summary="surface wants to be closed">
-        The delete event is sent by the compositor when the user
+        The close event is sent by the compositor when the user
         wants the surface to be closed. This should be equivalent to
         the user clicking the close button in client-side decorations,
         if your application has any...

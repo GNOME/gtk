@@ -860,8 +860,8 @@ xdg_surface_deactivated (void *data,
 }
 
 static void
-xdg_surface_delete (void *data,
-                    struct xdg_surface *xdg_surface)
+xdg_surface_close (void *data,
+                   struct xdg_surface *xdg_surface)
 {
   GdkWindow *window = GDK_WINDOW (data);
   GdkDisplay *display;
@@ -882,7 +882,7 @@ static const struct xdg_surface_listener xdg_surface_listener = {
   xdg_surface_change_state,
   xdg_surface_activated,
   xdg_surface_deactivated,
-  xdg_surface_delete,
+  xdg_surface_close,
 };
 
 static void
