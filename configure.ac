@@ -397,6 +397,11 @@ else
 fi
 AC_SUBST(DISABLE_ON_QUARTZ)
 
+AC_CHECK_LIB([rt], [shm_open], [SHM_LIBS="-lrt"], [SHM_LIBS=""])
+AC_SUBST(SHM_LIBS)
+
+AC_CHECK_FUNCS(posix_fallocate)
+
 if test "x$enable_broadway_backend" = xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
   cairo_backends="$cairo_backends cairo"
