@@ -26,12 +26,6 @@ struct _ExampleAppPrefsPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(ExampleAppPrefs, example_app_prefs, GTK_TYPE_DIALOG)
 
 static void
-preferences_closed (GtkWidget *button)
-{
-  gtk_widget_destroy (gtk_widget_get_toplevel (button));
-}
-
-static void
 example_app_prefs_init (ExampleAppPrefs *prefs)
 {
   ExampleAppPrefsPrivate *priv;
@@ -68,12 +62,10 @@ example_app_prefs_class_init (ExampleAppPrefsClass *class)
                                                "/org/gtk/exampleapp/prefs.ui");
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppPrefs, font);
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppPrefs, transition);
-
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), preferences_closed);
 }
 
 ExampleAppPrefs *
 example_app_prefs_new (ExampleAppWindow *win)
 {
-  return g_object_new (EXAMPLE_APP_PREFS_TYPE, "transient-for", win, NULL);
+  return g_object_new (EXAMPLE_APP_PREFS_TYPE, "transient-for", win, "use-header-bar", TRUE, NULL);
 }

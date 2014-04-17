@@ -64,19 +64,6 @@
             </child>
           </object>
         </child>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="action_area">
-            <property name="visible">True</property>
-            <child>
-              <object class="GtkButton" id="close">
-                <signal name="clicked" handler="preferences_closed"/>
-                <property name="visible">True</property>
-                <property name="label">_Close</property>
-                <property name="use-underline">True</property>
-              </object>
-            </child>
-          </object>
-        </child>
       </object>
     </child>
   </template>
