@@ -40,12 +40,24 @@ typedef struct _DataOffer DataOffer;
 
 typedef struct _GdkWaylandSelectionOffer GdkWaylandSelectionOffer;
 
+typedef struct _GdkWaylandTouchData GdkWaylandTouchData;
+
+struct _GdkWaylandTouchData
+{
+  uint32_t id;
+  gdouble x;
+  gdouble y;
+  GdkWindow *window;
+  guint initial_touch : 1;
+};
+
 struct _GdkWaylandDeviceData
 {
   guint32 id;
   struct wl_seat *wl_seat;
   struct wl_pointer *wl_pointer;
   struct wl_keyboard *wl_keyboard;
+  struct wl_touch *wl_touch;
 
   GdkDisplay *display;
   GdkDeviceManager *device_manager;
@@ -54,8 +66,11 @@ struct _GdkWaylandDeviceData
   GdkDevice *master_keyboard;
   GdkDevice *pointer;
   GdkDevice *keyboard;
+  GdkDevice *touch;
   GdkCursor *cursor;
   GdkKeymap *keymap;
+
+  GHashTable *touches;
 
   GdkModifierType modifiers;
   GdkWindow *pointer_focus;
@@ -1226,6 +1241,174 @@ keyboard_handle_modifiers (void               *data,
     g_signal_emit_by_name (keymap, "direction-changed");
 }
 
+static GdkWaylandTouchData *
+_device_manager_add_touch (GdkWaylandDeviceData *device,
+                           uint32_t              id,
+                           struct wl_surface    *surface)
+{
+  GdkWaylandTouchData *touch;
+
+  touch = g_new0 (GdkWaylandTouchData, 1);
+  touch->id = id;
+  touch->window = wl_surface_get_user_data (surface);
+  touch->initial_touch = (g_hash_table_size (device->touches) == 0);
+
+  g_hash_table_insert (device->touches, GUINT_TO_POINTER (id), touch);
+
+  return touch;
+}
+
+static GdkWaylandTouchData *
+_device_manager_get_touch (GdkWaylandDeviceData *device,
+                           uint32_t              id)
+{
+  return g_hash_table_lookup (device->touches, GUINT_TO_POINTER (id));
+}
+
+static void
+_device_manager_remove_touch (GdkWaylandDeviceData *device,
+                              uint32_t              id)
+{
+  g_hash_table_remove (device->touches, GUINT_TO_POINTER (id));
+}
+
+static GdkEvent *
+_create_touch_event (GdkWaylandDeviceData *device,
+                     GdkWaylandTouchData  *touch,
+                     GdkEventType          evtype,
+                     uint32_t              time)
+{
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+  gint x_root, y_root;
+  GdkEvent *event;
+
+  event = gdk_event_new (evtype);
+  event->touch.window = g_object_ref (touch->window);
+  gdk_event_set_device (event, device->master_pointer);
+  gdk_event_set_source_device (event, device->touch);
+  event->touch.time = time;
+  event->touch.state = device->modifiers;
+  gdk_event_set_screen (event, display->screen);
+  event->touch.sequence = GUINT_TO_POINTER (touch->id);
+
+  if (touch->initial_touch)
+    {
+      _gdk_event_set_pointer_emulated (event, TRUE);
+      event->touch.emulating_pointer = TRUE;
+    }
+
+  gdk_window_get_root_coords (touch->window,
+                              touch->x, touch->y,
+                              &x_root, &y_root);
+
+  event->touch.x = touch->x;
+  event->touch.y = touch->y;
+  event->touch.x_root = x_root;
+  event->touch.y_root = y_root;
+
+  return event;
+}
+
+static void
+touch_handle_down (void              *data,
+                   struct wl_touch   *wl_touch,
+                   uint32_t           serial,
+                   uint32_t           time,
+                   struct wl_surface *wl_surface,
+                   int32_t            id,
+                   wl_fixed_t         x,
+                   wl_fixed_t         y)
+{
+  GdkWaylandDeviceData *device = data;
+  GdkWaylandTouchData *touch;
+  GdkEvent *event;
+
+  touch = _device_manager_add_touch (device, id, wl_surface);
+  touch->x = wl_fixed_to_double (x);
+  touch->y = wl_fixed_to_double (y);
+
+  event = _create_touch_event (device, touch, GDK_TOUCH_BEGIN, time);
+
+  GDK_NOTE (EVENTS,
+            g_message ("touch begin %f %f", event->touch.x, event->touch.y));
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+}
+
+static void
+touch_handle_up (void            *data,
+                 struct wl_touch *wl_touch,
+                 uint32_t         serial,
+                 uint32_t         time,
+                 int32_t          id)
+{
+  GdkWaylandDeviceData *device = data;
+  GdkWaylandTouchData *touch;
+  GdkEvent *event;
+
+  touch = _device_manager_get_touch (device, id);
+  event = _create_touch_event (device, touch, GDK_TOUCH_END, time);
+
+  GDK_NOTE (EVENTS,
+            g_message ("touch end %f %f", event->touch.x, event->touch.y));
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+  _device_manager_remove_touch (device, id);
+}
+
+static void
+touch_handle_motion (void            *data,
+                     struct wl_touch *wl_touch,
+                     uint32_t         time,
+                     int32_t          id,
+                     wl_fixed_t       x,
+                     wl_fixed_t       y)
+{
+  GdkWaylandDeviceData *device = data;
+  GdkWaylandTouchData *touch;
+  GdkEvent *event;
+
+  touch = _device_manager_get_touch (device, id);
+  touch->x = wl_fixed_to_double (x);
+  touch->y = wl_fixed_to_double (y);
+
+  event = _create_touch_event (device, touch, GDK_TOUCH_UPDATE, time);
+
+  GDK_NOTE (EVENTS,
+            g_message ("touch update %f %f", event->touch.x, event->touch.y));
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+}
+
+static void
+touch_handle_frame (void            *data,
+                    struct wl_touch *wl_touch)
+{
+}
+
+static void
+touch_handle_cancel (void            *data,
+                     struct wl_touch *wl_touch)
+{
+  GdkWaylandDeviceData *device = data;
+  GdkWaylandTouchData *touch;
+  GHashTableIter iter;
+  GdkEvent *event;
+
+  g_hash_table_iter_init (&iter, device->touches);
+
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch))
+    {
+      event = _create_touch_event (device, touch, GDK_TOUCH_CANCEL,
+                                   GDK_CURRENT_TIME);
+      _gdk_wayland_display_deliver_event (device->display, event);
+
+      g_hash_table_iter_remove (&iter);
+    }
+
+  GDK_NOTE (EVENTS, g_message ("touch cancel"));
+}
+
 static const struct wl_pointer_listener pointer_listener = {
     pointer_handle_enter,
     pointer_handle_leave,
@@ -1240,6 +1423,14 @@ static const struct wl_keyboard_listener keyboard_listener = {
     keyboard_handle_leave,
     keyboard_handle_key,
     keyboard_handle_modifiers,
+};
+
+static const struct wl_touch_listener touch_listener = {
+  touch_handle_down,
+  touch_handle_up,
+  touch_handle_motion,
+  touch_handle_frame,
+  touch_handle_cancel
 };
 
 static void
@@ -1324,6 +1515,43 @@ seat_handle_capabilities (void                    *data,
       g_object_unref (device->keyboard);
       device->keyboard = NULL;
     }
+
+  if ((caps & WL_SEAT_CAPABILITY_TOUCH) && !device->wl_touch)
+    {
+      device->wl_touch = wl_seat_get_touch (seat);
+      wl_touch_set_user_data (device->wl_touch, device);
+      wl_touch_add_listener (device->wl_touch, &touch_listener, device);
+
+      device->touch = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
+                                    "name", "Wayland Touch",
+                                    "type", GDK_DEVICE_TYPE_SLAVE,
+                                    "input-source", GDK_SOURCE_TOUCHSCREEN,
+                                    "input-mode", GDK_MODE_SCREEN,
+                                    "has-cursor", FALSE,
+                                    "display", device->display,
+                                    "device-manager", device->device_manager,
+                                    NULL);
+      _gdk_device_set_associated_device (device->touch, device->master_pointer);
+      GDK_WAYLAND_DEVICE (device->touch)->device = device;
+
+      device_manager->devices =
+        g_list_prepend (device_manager->devices, device->touch);
+
+      g_signal_emit_by_name (device_manager, "device-added", device->touch);
+    }
+  else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD) && device->wl_touch)
+    {
+      wl_touch_destroy (device->wl_touch);
+      device->wl_touch = NULL;
+      _gdk_device_set_associated_device (device->touch, NULL);
+
+      device_manager->devices =
+        g_list_remove (device_manager->devices, device->touch);
+
+      g_signal_emit_by_name (device_manager, "device-removed", device->touch);
+      g_object_unref (device->touch);
+      device->touch = NULL;
+    }
 }
 
 static const struct wl_seat_listener seat_listener = {
@@ -1405,7 +1633,8 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   device->keymap = _gdk_wayland_keymap_new ();
   device->display = display;
   device->device_manager = device_manager;
-
+  device->touches = g_hash_table_new_full (NULL, NULL, NULL,
+                                           (GDestroyNotify) g_free);
   device->wl_seat = wl_seat;
 
   wl_seat_add_listener (device->wl_seat, &seat_listener, device);
@@ -1443,6 +1672,7 @@ _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
           wl_surface_destroy (device->pointer_surface);
           /* FIXME: destroy data_device */
           g_clear_object (&device->keyboard_settings);
+          g_hash_table_destroy (device->touches);
           g_free (device);
 
           break;
