@@ -172,6 +172,9 @@ gtk_gesture_swipe_end (GtkGesture       *gesture,
   if (gtk_gesture_get_sequence_state (gesture, seq) == GTK_EVENT_SEQUENCE_DENIED)
     return;
 
+  if (gtk_gesture_is_active (gesture))
+    return;
+
   priv = gtk_gesture_swipe_get_instance_private (swipe);
   _gtk_gesture_swipe_calculate_velocity (swipe, &velocity_x, &velocity_y);
   g_signal_emit (gesture, signals[SWIPE], 0, velocity_x, velocity_y);
