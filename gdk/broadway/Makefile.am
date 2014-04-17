@@ -1,5 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 include $(top_srcdir)/Makefile.decl
+NULL =
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
 libgdkbroadwayincludedir = $(includedir)/gtk-3.0/gdk/broadway
@@ -75,7 +76,8 @@ libgdk_broadway_la_SOURCES =		\
 
 if OS_UNIX
 libgdk_broadway_la_LIBADD = \
-	-lrt
+	$(SHM_LIBS)         \
+	$(NULL)
 endif
 
 broadwayd_SOURCES = \
@@ -91,7 +93,7 @@ broadwayd_SOURCES = \
 if OS_WIN32
 broadwayd_LDADD = $(GDK_DEP_LIBS) -lws2_32
 else
-broadwayd_LDADD = $(GDK_DEP_LIBS) -lrt
+broadwayd_LDADD = $(GDK_DEP_LIBS) @SHM_LIBS@
 endif
 
 MAINTAINERCLEANFILES = $(broadway_built_sources)
