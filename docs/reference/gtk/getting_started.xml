@@ -982,9 +982,8 @@ example_app_window_init (ExampleAppWindow *win)
         <programlisting><xi:include href="../../../../examples/application10/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
-      <para>A small extra refinement that we have added here is to allow
-      the header bar to provide a fallback application menu, by setting
-      the show-fallback-app-menu property to TRUE. Here is how the
+      <para>A small extra bonus of using a header bar is that we get
+      a fallback application menu for free. Here is how the
       application now looks, if this fallback is used.</para>
 
       <informalfigure>

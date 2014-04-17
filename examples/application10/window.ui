@@ -9,7 +9,6 @@
           <object class="GtkHeaderBar" id="header">
             <property name="visible">True</property>
             <property name="show-close-button">True</property>
-            <property name="show-fallback-app-menu">True</property>
             <child>
               <object class="GtkLabel" id="lines_label">
                 <property name="visible">False</property>
