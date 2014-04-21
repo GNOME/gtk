@@ -1888,8 +1888,8 @@ gtk_header_bar_buildable_init (GtkBuildableIface *iface)
  * @bar: A #GtkHeaderBar
  * @child: the #GtkWidget to be added to @bar
  *
- * Adds @child to @box, packed with reference to the
- * start of the @box.
+ * Adds @child to @bar, packed with reference to the
+ * start of the @bar.
  *
  * Since: 3.10
  */
@@ -1905,8 +1905,8 @@ gtk_header_bar_pack_start (GtkHeaderBar *bar,
  * @bar: A #GtkHeaderBar
  * @child: the #GtkWidget to be added to @bar
  *
- * Adds @child to @box, packed with reference to the
- * end of the @box.
+ * Adds @child to @bar, packed with reference to the
+ * end of the @bar.
  *
  * Since: 3.10
  */
