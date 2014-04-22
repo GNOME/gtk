@@ -1077,7 +1077,6 @@ gdk_wayland_window_show (GdkWindow *window,
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkEvent *event;
 
   display = gdk_window_get_display (window);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -1093,8 +1092,6 @@ gdk_wayland_window_show (GdkWindow *window,
   gdk_window_set_type_hint (window, impl->hint);
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
-  event = _gdk_make_event (window, GDK_VISIBILITY_NOTIFY, NULL, FALSE);
-  event->visibility.state = GDK_VISIBILITY_UNOBSCURED;
 
   if (impl->cairo_surface)
     gdk_wayland_window_attach_image (window);
