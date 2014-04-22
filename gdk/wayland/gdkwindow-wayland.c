@@ -1089,8 +1089,6 @@ gdk_wayland_window_show (GdkWindow *window,
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
 
-  gdk_window_set_type_hint (window, impl->hint);
-
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
 
   if (impl->cairo_surface)
