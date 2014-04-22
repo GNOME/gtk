@@ -193,6 +193,12 @@ gdk_property_change (GdkWindow    *window,
       format == 8 &&
       mode == GDK_PROP_MODE_REPLACE)
     {
+      if (type == _image_bmp && nelements < sizeof (BITMAPFILEHEADER))
+        {
+           g_warning ("Clipboard contains invalid bitmap data");
+           return;
+        }
+
       if (type == _utf8_string)
 	{
 	  if (!OpenClipboard (GDK_WINDOW_HWND (window)))
