@@ -1089,6 +1089,8 @@ gdk_wayland_window_show (GdkWindow *window,
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
 
+  gdk_wayland_window_map (window);
+
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
 
   if (impl->cairo_surface)
@@ -1853,8 +1855,6 @@ gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   cairo_rectangle_int_t rect;
   int i, n;
-
-  gdk_wayland_window_map (window);
 
   gdk_wayland_window_ensure_cairo_surface (window);
   gdk_wayland_window_attach_image (window);
