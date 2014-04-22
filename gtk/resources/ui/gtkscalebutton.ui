@@ -45,7 +45,6 @@
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="icon-name">list-add-symbolic</property>
-                <property name="icon-size">0</property>
                 <property name="use-fallback">True</property>
               </object>
             </child>
@@ -92,7 +91,6 @@
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="icon-name">list-remove-symbolic</property>
-                <property name="icon-size">0</property>
                 <property name="use-fallback">True</property>
               </object>
             </child>
