@@ -153,6 +153,12 @@ GtkAssistant .sidebar .highlight {
 
 /* Check buttons */
 
+/* Prevent selected check/radio buttons from getting the "selected" blue background */
+GtkCheckButton:prelight:selected,
+GtkRadioButton:prelight:selected {
+  background-color: transparent;
+}
+
 /* This is meaningless, it just enables prelight propagation to check/radio mark */
 GtkCheckButton:prelight,
 GtkRadioButton:prelight {
