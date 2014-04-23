@@ -1250,7 +1250,7 @@ gtk_drag_highlight_draw (GtkWidget *widget,
   GtkStyleContext *context;
 
   if (GTK_IS_WINDOW (widget))
-    {u
+    {
       /* We don't want to draw the drag highlight around the
        * CSD window decorations
        */
