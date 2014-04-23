@@ -1373,3 +1373,103 @@ GtkPopover > .toolbar {
     color: alpha(currentColor, 0.55);
     text-shadow: none;
 }
+
+/* Modelbuttons */
+.modelbutton:focused,
+.modelbutton {
+    background-color: transparent;
+    background-image: -gtk-win32-theme-part(menu, 14 1);
+}
+
+.modelbutton:active,
+.modelbutton:active:focused {
+    background-color: transparent;
+    background-image: -gtk-win32-theme-part(menu, 14 1);
+}
+
+.modelbutton:active:prelight:focused,
+.modelbutton:prelight:focused,
+.modelbutton:prelight {
+    background-image: -gtk-win32-theme-part(menu, 14 2);
+}
+
+.modelbutton:active:prelight:insensitive:focused,
+.modelbutton:prelight:insensitive:focused,
+.modelbutton:prelight:insensitive {
+    background-image: -gtk-win32-theme-part(menu, 14 4);
+}
+
+
+.modelbutton.radio:focused,
+.modelbutton.radio,
+.modelbutton.radio:prelight,
+.modelbutton.radio:insensitive {
+    background-color: transparent;
+    background-image: none;
+    border-width: 0;
+}
+
+.modelbutton.radio:active:focused, 
+.modelbutton.radio:active, 
+.modelbutton.radio:active:prelight {
+    background-image: -gtk-win32-theme-part(menu, 12 2, over (11 3));
+    border-width: 0;
+}
+
+.modelbutton.radio:inconsistent:focused,
+.modelbutton.radio:inconsistent,
+.modelbutton.radio:inconsistent:insensitive,
+.modelbutton.radio:inconsistent:prelight,
+.modelbutton.radio:inconsistent:active,
+.modelbutton.radio:inconsistent:active:prelight {
+    background-image: none; /* Fall back to default, this state is not in win32 */
+    border-width: 0;
+}
+
+.modelbutton.radio:insensitive:active:focused,
+.modelbutton.radio:insensitive:active,
+.modelbutton.radio:insensitive:active:prelight {
+    background-image: -gtk-win32-theme-part(menu, 12 1, over (11 4));
+    border-width: 0;
+}
+
+.modelbutton.check:focused,
+.modelbutton.check,
+.modelbutton.check:insensitive,
+.modelbutton.check:prelight,
+.modelbutton.check:prelight:focused {
+    background-color: transparent;
+    background-image: none;
+    border-width: 0;
+}
+
+
+.modelbutton.check:active:focused, 
+.modelbutton.check:active, 
+.modelbutton.check:active:prelight:focused,
+.modelbutton.check:active:prelight {
+    background-image: -gtk-win32-theme-part(menu, 12 2, over (11 1));
+    border-width: 0;
+}
+
+.modelbutton.check:inconsistent:focused,
+.modelbutton.check:inconsistent,
+.modelbutton.check:inconsistent:insensitive,
+.modelbutton.check:inconsistent:insensitive:focused,
+.modelbutton.check:inconsistent:prelight,
+.modelbutton.check:inconsistent:prelight:focused,
+.modelbutton.check:inconsistent:active,
+.modelbutton.check:inconsistent:active:focused,
+.modelbutton.check:inconsistent:active:prelight:focused,
+.modelbutton.check:inconsistent:active:prelight {
+    background-image: none; /* Fall back to default, this state is not in win32 */
+    border-width: 0;
+}
+
+.modelbutton.check:insensitive:active:focused,
+.modelbutton.check:insensitive:active,
+.modelbutton.check:insensitive:active:prelight:focused,
+.modelbutton.check:insensitive:active:prelight {
+    background-image: -gtk-win32-theme-part(menu, 12 1, over (11 2));
+    border-width: 0;
+}
