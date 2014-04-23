@@ -160,9 +160,11 @@ GtkRadioButton:prelight:selected {
 }
 
 /* This is meaningless, it just enables prelight propagation to check/radio mark */
+GtkCheckButton,
+GtkRadioButton,
 GtkCheckButton:prelight,
 GtkRadioButton:prelight {
-  color: @fg_color;
+  background-image: -gtk-gradient (linear, left top, right bottom, from(transparent), to(transparent));
 }
 
 .check {
