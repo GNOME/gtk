@@ -167,6 +167,7 @@ GtkRadioButton:prelight {
   background-image: -gtk-gradient (linear, left top, right bottom, from(transparent), to(transparent));
 }
 
+.check:focused,
 .check {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(button, 3 1);
@@ -181,10 +182,12 @@ GtkRadioButton:prelight {
    in a listview where all checkboxes in a row gets prelighted
    whenever the row is prelighted */
 
+GtkButton.check:focused:prelight,
 GtkButton.check:prelight {
     background-image: -gtk-win32-theme-part(button, 3 2);
 }
 
+.check:focused:active,
 .check:active {
     background-image: -gtk-win32-theme-part(button, 3 5);
 }
@@ -193,10 +196,12 @@ GtkButton.check:prelight {
     background-image: -gtk-win32-theme-part(button, 3 8);
 }
 
+GtkButton.check:focused:active:prelight,
 GtkButton.check:active:prelight {
     background-image: -gtk-win32-theme-part(button, 3 6);
 }
 
+.check:focused:inconsistent,
 .check:inconsistent {
     background-image: -gtk-win32-theme-part(button, 3 9);
 }
@@ -205,6 +210,7 @@ GtkButton.check:active:prelight {
     background-image: -gtk-win32-theme-part(button, 3 12);
 }
 
+.check:focused:inconsistent:prelight,
 .check:inconsistent:prelight {
     background-image: -gtk-win32-theme-part(button, 3 10);
 }
