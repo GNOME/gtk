@@ -1246,24 +1246,38 @@ gtk_drag_highlight_draw (GtkWidget *widget,
 			 cairo_t   *cr,
 			 gpointer   data)
 {
-  int width = gtk_widget_get_allocated_width (widget);
-  int height = gtk_widget_get_allocated_height (widget);
+  GtkAllocation alloc;
   GtkStyleContext *context;
+
+  if (GTK_IS_WINDOW (widget))
+    {u
+      /* We don't want to draw the drag highlight around the
+       * CSD window decorations
+       */
+      gtk_widget_get_allocation (gtk_bin_get_child (GTK_BIN (widget)), &alloc);
+    }
+  else
+    {
+      alloc.x = 0;
+      alloc.y = 0;
+      alloc.width = gtk_widget_get_allocated_width (widget);
+      alloc.height = gtk_widget_get_allocated_height (widget);
+    }
 
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
 
-  gtk_render_frame (context, cr, 0, 0, width, height);
+  gtk_render_frame (context, cr, alloc.x, alloc.y, alloc.width, alloc.height);
 
   gtk_style_context_restore (context);
 
   cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
   cairo_set_line_width (cr, 1.0);
   cairo_rectangle (cr,
-                   0.5, 0.5,
-                   width - 1, height - 1);
+                   alloc.x + 0.5, alloc.y + 0.5,
+                   alloc.width - 1, alloc.height - 1);
   cairo_stroke (cr);
 
   return FALSE;
