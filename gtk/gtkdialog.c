@@ -142,28 +142,28 @@
  * GtkDialog supports a custom <action-widgets> element, which can contain
  * multiple <action-widget> elements. The “response” attribute specifies a
  * numeric response, and the content of the element is the id of widget
- * (which should be a child of the dialogs @action_area).
+ * (which should be a child of the dialogs @action_area). To mark a response
+ * as default, set the “default“ attribute of the <action-widget> element
+ * to true.
+ *
+ * GtkDialog supports adding action widgets by specifying “action“ as
+ * the “type“ attribute of a <child> element. The widget will be added
+ * either to the action area or the headerbar of the dialog, depending
+ * on the “use-header-bar“ property. The response id has to be associated
+ * with the action widget using the <action-widgets> element.
  *
  * An example of a #GtkDialog UI definition fragment:
  * |[
  * <object class="GtkDialog" id="dialog1">
- *   <child internal-child="vbox">
- *     <object class="GtkVBox" id="vbox">
- *       <child internal-child="action_area">
- *         <object class="GtkHButtonBox" id="button_box">
- *           <child>
- *             <object class="GtkButton" id="button_cancel"/>
- *           </child>
- *           <child>
- *             <object class="GtkButton" id="button_ok"/>
- *           </child>
- *         </object>
- *       </child>
- *     </object>
+ *   <child type="action">
+ *     <object class="GtkButton" id="button_cancel"/>
+ *   </child>
+ *   <child type="action">
+ *     <object class="GtkButton" id="button_ok"/>
  *   </child>
  *   <action-widgets>
- *     <action-widget response="ok">button_ok</action-widget>
  *     <action-widget response="cancel">button_cancel</action-widget>
+ *     <action-widget response="ok" default="true">button_ok</action-widget>
  *   </action-widgets>
  * </object>
  * ]|
@@ -215,6 +215,10 @@ static void      gtk_dialog_buildable_custom_finished    (GtkBuildable  *buildab
                                                           GObject       *child,
                                                           const gchar   *tagname,
                                                           gpointer       user_data);
+static void      gtk_dialog_buildable_add_child          (GtkBuildable  *buildable,
+                                                          GtkBuilder    *builder,
+                                                          GObject       *child,
+                                                          const gchar   *type);
 
 
 enum {
@@ -721,6 +725,7 @@ gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->custom_tag_start = gtk_dialog_buildable_custom_tag_start;
   iface->custom_finished = gtk_dialog_buildable_custom_finished;
+  iface->add_child = gtk_dialog_buildable_add_child;
 }
 
 static gboolean
@@ -1649,6 +1654,7 @@ gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
 typedef struct {
   gchar *widget_name;
   gint response_id;
+  gboolean is_default;
 } ActionWidgetInfo;
 
 typedef struct {
@@ -1656,10 +1662,11 @@ typedef struct {
   GtkBuilder *builder;
   GSList *items;
   gchar *response;
+  gboolean is_default;
 } ActionWidgetsSubParserData;
 
 static gint
-parse_response_id (gchar *response_attr)
+parse_response_id (const gchar *response_attr)
 {
   int response_id;
   GEnumClass *enum_class = NULL;
@@ -1697,8 +1704,12 @@ attributes_start_element (GMarkupParseContext *context,
   if (strcmp (element_name, "action-widget") == 0)
     {
       for (i = 0; names[i]; i++)
-	if (strcmp (names[i], "response") == 0)
-	  parser_data->response = g_strdup (values[i]);
+        {
+	  if (strcmp (names[i], "response") == 0)
+	    parser_data->response = g_strdup (values[i]);
+          else if (strcmp (names[i], "default") == 0)
+            parser_data->is_default = TRUE;
+        }
     }
   else if (strcmp (element_name, "action-widgets") == 0)
     return;
@@ -1716,6 +1727,7 @@ attributes_text_element (GMarkupParseContext *context,
   ActionWidgetsSubParserData *parser_data = (ActionWidgetsSubParserData*)user_data;
   ActionWidgetInfo *item;
 
+  
   if (!parser_data->response)
     return;
 
@@ -1723,8 +1735,10 @@ attributes_text_element (GMarkupParseContext *context,
   item->widget_name = g_strndup (text, text_len);
   item->response_id = parse_response_id (parser_data->response);
   g_free (parser_data->response);
+  item->is_default = parser_data->is_default;
   parser_data->items = g_slist_prepend (parser_data->items, item);
   parser_data->response = NULL;
+  parser_data->is_default = FALSE;
 }
 
 static const GMarkupParser attributes_parser =
@@ -1825,11 +1839,28 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
        gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area),
                                            GTK_WIDGET (object), TRUE);
 
+      if (item->is_default)
+        gtk_widget_grab_default (GTK_WIDGET (object));
+
       g_free (item->widget_name);
       g_free (item);
     }
   g_slist_free (parser_data->items);
   g_slice_free (ActionWidgetsSubParserData, parser_data);
+}
+
+static void
+gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
+                                GtkBuilder    *builder,
+                                GObject       *child,
+                                const gchar   *type)
+{
+  if (!type)
+    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  else if (g_strcmp0 (type, "action") == 0)
+    gtk_dialog_add_action_widget (GTK_DIALOG (buildable), GTK_WIDGET (child), GTK_RESPONSE_NONE);
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 /**
