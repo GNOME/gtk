@@ -441,6 +441,30 @@ add_to_action_area (GtkDialog *dialog,
 }
 
 static void
+update_suggested_action (GtkDialog *dialog)
+{
+  GtkDialogPrivate *priv = dialog->priv;
+
+  if (priv->use_header_bar)
+    {
+      GList *children, *l;
+
+      children = gtk_container_get_children (GTK_CONTAINER (priv->headerbar));
+      for (l = children; l != NULL; l = l->next)
+        {
+          GtkWidget *child = l->data;
+	  GtkStyleContext *context = gtk_widget_get_style_context (child);
+
+          if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_DEFAULT))
+            gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+          else
+            gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+        }
+      g_list_free (children);
+    }
+}
+
+static void
 add_action_widgets (GtkDialog *dialog)
 {
   GtkDialogPrivate *priv = dialog->priv;
@@ -467,12 +491,11 @@ add_action_widgets (GtkDialog *dialog)
           g_object_unref (child);
 
           if (has_default)
-            {
-              gtk_widget_grab_default (child);
-              gtk_style_context_add_class (gtk_widget_get_style_context (child), GTK_STYLE_CLASS_SUGGESTED_ACTION);
-            }
+            gtk_widget_grab_default (child);
         }
       g_list_free (children);
+
+      update_suggested_action (dialog);
     }
 }
 static GObject *
@@ -1017,7 +1040,15 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
   add_response_data (dialog, child, response_id);
 
   if (priv->constructed && priv->use_header_bar)
-    add_to_header_bar (dialog, child, response_id);
+    {
+      add_to_header_bar (dialog, child, response_id);
+
+      if (gtk_widget_has_default (child))
+        {
+          gtk_widget_grab_default (child);
+          update_suggested_action (dialog);
+        }
+    }
   else
     add_to_action_area (dialog, child, response_id);
 }
@@ -1188,17 +1219,15 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
       ResponseData *rd = get_response_data (widget, FALSE);
 
       if (rd && rd->response_id == response_id)
-        {
-	  gtk_widget_grab_default (widget);
-          gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_SUGGESTED_ACTION);
-        }
-      else
-        gtk_style_context_remove_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_SUGGESTED_ACTION);
+	gtk_widget_grab_default (widget);
 
       tmp_list = g_list_next (tmp_list);
     }
 
   g_list_free (children);
+
+  if (dialog->priv->use_header_bar)
+    update_suggested_action (dialog);
 }
 
 /**
