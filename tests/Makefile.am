@@ -524,7 +524,10 @@ EXTRA_DIST += 			\
 	merge-3.ui		\
 	gnome-textfile.png	\
 	testsplitheaders.ui	\
-	makefile.msc
+	makefile.msc		\
+	mydialog.ui		\
+	mydialog2.ui		\
+	popover.ui
 
 
 -include $(top_srcdir)/git.mk
