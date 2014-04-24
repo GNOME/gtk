@@ -216,7 +216,6 @@ show_dialog_from_template (GtkWindow *parent)
                          "transient-for", parent,
                          NULL);
 
-  add_buttons (dialog);
   add_content (dialog);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
@@ -238,7 +237,6 @@ show_dialog_flex_template (GtkWindow *parent)
                          "use-header-bar", use_header,
                          NULL);
 
-  add_buttons (dialog);
   add_content (dialog);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
