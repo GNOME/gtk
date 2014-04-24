@@ -122,6 +122,15 @@
  */
 #define GDK_VERSION_3_12        (G_ENCODE_VERSION (3, 12))
 
+/**
+ * GDK_VERSION_3_14:
+ *
+ * A macro that evaluates to the 3.14 version of GDK, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 3.14
+ */
+#define GDK_VERSION_3_14        (G_ENCODE_VERSION (3, 14))
 
 /* evaluates to the current stable version; for development cycles,
  * this means the next stable target
