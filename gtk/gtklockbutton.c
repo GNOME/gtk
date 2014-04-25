@@ -451,8 +451,10 @@ gtk_lock_button_clicked (GtkButton *button)
 {
   GtkLockButtonPrivate *priv = GTK_LOCK_BUTTON (button)->priv;
 
-  /* if we already have a pending interactive check, then do nothing */
-  if (priv->cancellable != NULL)
+  /* if we already have a pending interactive check or permission is not set,
+   * then do nothing
+   */
+  if (priv->cancellable != NULL || priv->permission == NULL)
     return;
 
   if (g_permission_get_allowed (priv->permission))
