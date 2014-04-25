@@ -41,9 +41,6 @@
 #include <errno.h>
 
 #if defined(__OpenBSD__)
-#include <stdlib.h>
-#include <sys/param.h>
-#include <fcntl.h>
 #include <sys/sysctl.h>
 #endif
 
@@ -731,11 +728,11 @@ pid_get_parent (GPid pid)
   int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, pid,
                 sizeof(struct kinfo_proc), 0 };
 
-  if (sysctl(mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
+  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
       return (-1);
   mib[5] = (len / sizeof(struct kinfo_proc));
 
-  if (sysctl(mib, G_N_ELEMENTS (mib), &kp, &len, NULL, 0) < 0)
+  if (sysctl (mib, G_N_ELEMENTS (mib), &kp, &len, NULL, 0) < 0)
       return -1;
 
   ppid = kp.p_ppid;
@@ -746,21 +743,23 @@ pid_get_parent (GPid pid)
 static gchar *
 pid_get_env (GPid pid, const gchar *key)
 {
-  size_t len = PATH_MAX;
-  char **strs = NULL;
-  char *ret;
+  size_t len;
+  char **strs;
+  char *ret = NULL;
   char *end;
   int key_len;
   int i;
 
   int mib[] = { CTL_KERN, KERN_PROC_ARGS, pid, KERN_PROC_ENV };
 
-  strs = (char **)realloc(strs, len);
+  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
+    return ret;
+
+  strs = g_malloc0 (len);
 
   key_len = strlen (key);
 
-  ret = NULL;
-  if (sysctl(mib, G_N_ELEMENTS (mib), strs, &len, NULL, 0) != -1)
+  if (sysctl (mib, G_N_ELEMENTS (mib), strs, &len, NULL, 0) != -1)
     {
       for (i = 0; strs[i] != NULL; i++)
 	{
@@ -783,18 +782,20 @@ pid_get_env (GPid pid, const gchar *key)
 static gchar *
 pid_get_command_line (GPid pid)
 {
-  size_t len = PATH_MAX;
-  char **strs = NULL;
-  char *ret = NULL;
-  char *end;
+  size_t len;
+  char **strs;
+  char *ret, *end;
 
   int mib[] = { CTL_KERN, KERN_PROC_ARGS, pid, KERN_PROC_ARGV };
 
-  strs = (char **)realloc(strs, len);
+  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
+    return NULL;
 
-  if (sysctl(mib, G_N_ELEMENTS (mib), strs, &len, NULL, 0) == -1) {
+  strs = g_malloc0 (len);
+
+  if (sysctl (mib, G_N_ELEMENTS (mib), strs, &len, NULL, 0) == -1) {
     g_free (strs);
-    return ret;
+    return NULL;
   }
 
   ret = g_strjoinv (" ", strs);
