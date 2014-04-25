@@ -568,7 +568,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                    g_param_spec_boolean ("use-popover",
                                                          P_("Use a popover"),
                                                          P_("Use a popover instead of a menu"),
-                                                         FALSE,
+                                                         TRUE,
                                                          G_PARAM_READWRITE));
 
   /**
