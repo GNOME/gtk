@@ -39,7 +39,7 @@ struct _GtkModelButton
   GtkWidget *label;
   gboolean toggled;
   gboolean has_submenu;
-  gboolean center;
+  gboolean centered;
   gboolean inverted;
   GtkMenuTrackerItemRole role;
 };
@@ -146,10 +146,10 @@ gtk_model_button_set_inverted (GtkModelButton *button,
 
 static void
 gtk_model_button_set_centered (GtkModelButton *button,
-                               gboolean        center)
+                               gboolean        centered)
 {
-  button->center = center;
-  gtk_widget_set_halign (button->box, button->center ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
+  button->centered = centered;
+  gtk_widget_set_halign (button->box, button->centered ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
   gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
@@ -226,6 +226,51 @@ gtk_model_button_get_full_border (GtkModelButton *button,
   *indicator = indicator_size + 2 * indicator_spacing;
 }
 
+static gboolean
+has_sibling_with_indicator (GtkWidget *button)
+{
+  GtkWidget *parent;
+  gboolean has_indicator;
+  GList *children, *l;
+  GtkModelButton *sibling;
+
+  has_indicator = FALSE;
+
+  parent = gtk_widget_get_parent (button);
+  children = gtk_container_get_children (GTK_CONTAINER (parent));
+
+  for (l = children; l; l = l->next)
+    {
+      sibling = l->data;
+
+      if (!GTK_IS_MODEL_BUTTON (sibling))
+        continue;
+
+      if (!gtk_widget_is_visible (GTK_WIDGET (sibling)))
+        continue;
+
+      if (!sibling->centered &&
+          (sibling->has_submenu || sibling->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL))
+        {
+          has_indicator = TRUE;
+          break;
+        }
+    }
+
+  g_list_free (children);
+
+  return has_indicator;
+}
+
+static gboolean
+needs_indicator (GtkModelButton *button)
+{
+  if (button->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+    return TRUE;
+
+  return has_sibling_with_indicator (GTK_WIDGET (button));
+}
+
 static void
 gtk_model_button_get_preferred_width_for_height (GtkWidget *widget,
                                                  gint       height,
@@ -236,6 +281,7 @@ gtk_model_button_get_preferred_width_for_height (GtkWidget *widget,
   GtkWidget *child;
   GtkBorder border;
   gint indicator;
+
 
   gtk_model_button_get_full_border (button, &border, &indicator);
 
@@ -257,8 +303,19 @@ gtk_model_button_get_preferred_width_for_height (GtkWidget *widget,
       *natural = 0;
     }
 
-  *minimum += border.left + border.right + indicator + (button->center ? indicator : 0);
-  *natural += border.left + border.right + indicator + (button->center ? indicator : 0);
+  *minimum += border.left + border.right;
+  *natural += border.left + border.right;
+
+  if (button->centered)
+    {
+      *minimum += 2 * indicator;
+      *natural += 2 * indicator;
+    }
+  else if (needs_indicator (button))
+    {
+      *minimum += indicator;
+      *natural += indicator;
+    }
 }
 
 static void
@@ -291,24 +348,56 @@ gtk_model_button_get_preferred_height_and_baseline_for_width (GtkWidget         
       gint child_min_baseline = -1, child_nat_baseline = -1;
 
       if (width > -1)
-        width -= border.left + border.right + indicator + (button->center ? indicator : 0);
+        {
+          width -= border.left + border.right;
+          if (button->centered)
+            width -= 2 * indicator;
+          else if (needs_indicator (button))
+            width -= indicator;
+        }
 
-        gtk_widget_get_preferred_height_and_baseline_for_width (child, width,
-                                                                &child_min, &child_nat,
-                                                                &child_min_baseline, &child_nat_baseline);
+      gtk_widget_get_preferred_height_and_baseline_for_width (child, width,
+                                                              &child_min, &child_nat,
+                                                              &child_min_baseline, &child_nat_baseline);
 
-        *minimum = MAX (indicator + (button->center ? indicator : 0), child_min);
-        *natural = MAX (indicator + (button->center ? indicator : 0), child_nat);
+      if (button->centered)
+        {
+          *minimum = MAX (2 * indicator, child_min);
+          *natural = MAX (2 * indicator, child_nat);
+        }
+      else if (needs_indicator (button))
+        {
+          *minimum = MAX (indicator, child_min);
+          *natural = MAX (indicator, child_nat);
+        }
+      else
+        {
+          *minimum = child_min;
+          *natural = child_nat;
+        }
 
-        if (minimum_baseline && child_min_baseline >= 0)
-          *minimum_baseline = child_min_baseline + border.top + (*minimum - child_min) / 2;
-        if (natural_baseline && child_nat_baseline >= 0)
-          *natural_baseline = child_nat_baseline + border.top + (*natural - child_nat) / 2;
+      if (minimum_baseline && child_min_baseline >= 0)
+        *minimum_baseline = child_min_baseline + border.top + (*minimum - child_min) / 2;
+      if (natural_baseline && child_nat_baseline >= 0)
+        *natural_baseline = child_nat_baseline + border.top + (*natural - child_nat) / 2;
     }
   else
     {
-      *minimum = indicator + (button->center ? indicator : 0);
-      *natural = indicator + (button->center ? indicator : 0);
+      if (button->centered)
+        {
+          *minimum = 2 * indicator;
+          *natural = 2 * indicator;
+        }
+      else if (needs_indicator (button))
+        {
+          *minimum = indicator;
+          *natural = indicator;
+        }
+      else
+        {
+          *minimum = 0;
+          *natural = 0;
+        }
     }
 
   *minimum += border.top + border.bottom;
@@ -372,15 +461,18 @@ gtk_model_button_size_allocate (GtkWidget     *widget,
           
       gtk_model_button_get_full_border (button, &border, &indicator);
 
-      if (button->center)
+      if (button->centered)
         {
           border.left += indicator;
           border.right += indicator;
         }
-      else if (indicator_is_left (widget))
-        border.left += indicator;
-      else
-        border.right += indicator;
+      else if (needs_indicator (button))
+        {
+          if (indicator_is_left (widget))
+            border.left += indicator;
+          else
+            border.right += indicator;
+        }
       child_allocation.x = allocation->x + border.left;
       child_allocation.y = allocation->y + border.top;
       child_allocation.width = allocation->width - border.left - border.right;
@@ -463,7 +555,7 @@ gtk_model_button_draw (GtkWidget *widget,
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &indicator_size, NULL);
   indicator_spacing = indicator_size / 8;
 
-  x = width - border_width -focus_width - focus_pad - indicator_spacing - indicator_size;
+  x = width - border_width - focus_width - focus_pad - indicator_spacing - indicator_size;
 
   if (indicator_is_left (widget))
     x = width - (indicator_size + x);
