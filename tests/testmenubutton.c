@@ -141,7 +141,7 @@ int main (int argc, char **argv)
                 item = g_menu_item_new (label, NULL);
                 if (i == 3)
                   g_menu_item_set_attribute (item, "icon", "s", "preferences-desktop-locale-symbolic");
-		g_menu_insert_item (menu, i - 1, item);
+		g_menu_insert_item (menu, 0, item);
                 g_object_unref (item);
 		g_free (label);
 	}
