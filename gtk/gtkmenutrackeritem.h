@@ -61,6 +61,8 @@ const gchar *           gtk_menu_tracker_item_get_label                 (GtkMenu
 
 GIcon *                 gtk_menu_tracker_item_get_icon                  (GtkMenuTrackerItem *self);
 
+GIcon *                 gtk_menu_tracker_item_get_verb_icon             (GtkMenuTrackerItem *self);
+
 gboolean                gtk_menu_tracker_item_get_sensitive             (GtkMenuTrackerItem *self);
 
 GtkMenuTrackerItemRole  gtk_menu_tracker_item_get_role                  (GtkMenuTrackerItem *self);
