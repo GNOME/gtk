@@ -1256,6 +1256,7 @@ load_themes (GtkIconTheme *icon_theme)
    * in gnome is a pragmatic solution to prevent missing
    * icons in GTK+ applications when run under, e.g. KDE.
    */
+  insert_theme (icon_theme, "Adwaita");
   insert_theme (icon_theme, "gnome");
   insert_theme (icon_theme, DEFAULT_THEME_NAME);
   priv->themes = g_list_reverse (priv->themes);
