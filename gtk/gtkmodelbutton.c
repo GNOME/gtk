@@ -41,6 +41,7 @@ struct _GtkModelButton
   gboolean has_submenu;
   gboolean centered;
   gboolean inverted;
+  gboolean iconic;
   GtkMenuTrackerItemRole role;
 };
 
@@ -58,7 +59,8 @@ enum
   PROP_ACCEL,
   PROP_HAS_SUBMENU,
   PROP_INVERTED,
-  PROP_CENTERED
+  PROP_CENTERED,
+  PROP_ICONIC
 };
 
 static void
@@ -97,20 +99,32 @@ gtk_model_button_set_action_role (GtkModelButton         *button,
 }
 
 static void
+update_visibility (GtkModelButton *button)
+{
+  gboolean has_icon;
+  gboolean has_text;
+
+  has_icon = gtk_image_get_storage_type (GTK_IMAGE (button->image)) != GTK_IMAGE_EMPTY;
+  has_text = gtk_label_get_text (GTK_LABEL (button->label))[0] != '\0';
+
+  gtk_widget_set_visible (button->image, has_icon);
+  gtk_widget_set_visible (button->label, has_text && (!button->iconic || !has_icon));
+}
+
+static void
 gtk_model_button_set_icon (GtkModelButton *button,
                            GIcon          *icon)
 {
   gtk_image_set_from_gicon (GTK_IMAGE (button->image), icon, GTK_ICON_SIZE_MENU);
-  gtk_widget_set_visible (button->image, icon != NULL);
+  update_visibility (button);
 }
 
 static void
 gtk_model_button_set_text (GtkModelButton *button,
                            const gchar    *text)
 {
-  if (text != NULL)
-    gtk_label_set_text_with_mnemonic (GTK_LABEL (button->label), text);
-  gtk_widget_set_visible (button->label, text != NULL);
+  gtk_label_set_text_with_mnemonic (GTK_LABEL (button->label), text);
+  update_visibility (button);
 }
 
 static void
@@ -151,6 +165,28 @@ gtk_model_button_set_centered (GtkModelButton *button,
   button->centered = centered;
   gtk_widget_set_halign (button->box, button->centered ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
   gtk_widget_queue_draw (GTK_WIDGET (button));
+}
+
+static void
+gtk_model_button_set_iconic (GtkModelButton *button,
+                             gboolean        iconic)
+{
+  button->iconic = iconic;
+  if (iconic)
+    {
+      gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (button)),
+                                      GTK_STYLE_CLASS_MENUITEM);
+      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NORMAL);
+    }
+  else
+    {
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (button)),
+                                   GTK_STYLE_CLASS_MENUITEM);
+      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+    }
+
+  update_visibility (button);
+  gtk_widget_queue_resize (GTK_WIDGET (button));
 }
 
 static void
@@ -195,6 +231,10 @@ gtk_model_button_set_property (GObject      *object,
       gtk_model_button_set_centered (button, g_value_get_boolean (value));
       break;
 
+    case PROP_ICONIC:
+      gtk_model_button_set_iconic (button, g_value_get_boolean (value));
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -223,7 +263,10 @@ gtk_model_button_get_full_border (GtkModelButton *button,
   border->top = border_width + focus_width + focus_pad;
   border->bottom = border_width + focus_width + focus_pad;
 
-  *indicator = indicator_size + 2 * indicator_spacing;
+  if (button->iconic)
+    *indicator = 0;
+  else
+    *indicator = indicator_size + 2 * indicator_spacing;
 }
 
 static gboolean
@@ -540,12 +583,22 @@ gtk_model_button_draw (GtkWidget *widget,
   gint focus_width, focus_pad;
   gint baseline;
 
+  state = get_button_state (model_button);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+
+  if (model_button->iconic)
+    {
+      GTK_WIDGET_CLASS (gtk_model_button_parent_class)->draw (widget, cr);
+      goto out;
+    }
+
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  context = gtk_widget_get_style_context (widget);
   baseline = gtk_widget_get_allocated_baseline (widget);
-  state = get_button_state (model_button);
 
   gtk_widget_style_get (widget, 
                         "focus-line-width", &focus_width, 
@@ -565,9 +618,6 @@ gtk_model_button_draw (GtkWidget *widget,
   else
     y = CLAMP (baseline - indicator_size * button->priv->baseline_align,
                0, height - indicator_size);
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr,
                          border_width, border_width,
@@ -614,11 +664,12 @@ gtk_model_button_draw (GtkWidget *widget,
                         height - 2 * (border_width + focus_pad) - border.top - border.bottom);
     }
 
-  gtk_style_context_restore (context);
-
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
+
+out:
+  gtk_style_context_restore (context);
 
   return FALSE;
 }
@@ -640,30 +691,34 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->draw = gtk_model_button_draw;
 
   g_object_class_install_property (object_class, PROP_ACTION_ROLE,
-                                   g_param_spec_enum ("action-role", "action role", "action role",
+                                   g_param_spec_enum ("action-role", "", "",
                                                       GTK_TYPE_MENU_TRACKER_ITEM_ROLE,
                                                       GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
                                                       G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ICON,
-                                   g_param_spec_object ("icon", "icon", "icon", G_TYPE_ICON,
+                                   g_param_spec_object ("icon", "", "", G_TYPE_ICON,
                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TEXT,
-                                   g_param_spec_string ("text", "text", "text", NULL,
+                                   g_param_spec_string ("text", "", "", NULL,
                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TOGGLED,
-                                   g_param_spec_boolean ("toggled", "toggled", "toggled", FALSE,
+                                   g_param_spec_boolean ("toggled", "", "", FALSE,
                                                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ACCEL,
-                                   g_param_spec_string ("accel", "accel", "accel", NULL,
+                                   g_param_spec_string ("accel", "", "", NULL,
                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_HAS_SUBMENU,
-                                   g_param_spec_boolean ("has-submenu", "has-submenu", "has-submenu", FALSE,
+                                   g_param_spec_boolean ("has-submenu", "", "", FALSE,
                                                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INVERTED,
-                                   g_param_spec_boolean ("inverted", "inverted", "inverted", FALSE,
+                                   g_param_spec_boolean ("inverted", "", "", FALSE,
+
                                                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CENTERED,
-                                   g_param_spec_boolean ("centered", "centered", "centered", FALSE,
+                                   g_param_spec_boolean ("centered", "", "", FALSE,
+                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ICONIC,
+                                   g_param_spec_boolean ("iconic", "", "", TRUE,
                                                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_PUSH_BUTTON);
