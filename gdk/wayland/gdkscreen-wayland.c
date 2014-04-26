@@ -986,6 +986,7 @@ output_handle_scale(void *data,
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 
   monitor->scale = factor;
+  g_signal_emit_by_name (monitor->screen, "monitors-changed");
 }
 
 static void
