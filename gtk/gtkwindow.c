@@ -11618,9 +11618,12 @@ gtk_window_activate_menubar (GtkWindow   *window,
       GList *tmp_menubars;
       GList *menubars;
       GtkMenuShell *menu_shell;
+      GtkWidget *focus;
+
+      focus = gtk_window_get_focus (window);
 
       if (priv->title_box != NULL &&
-          !gtk_widget_is_ancestor (gtk_window_get_focus (window), priv->title_box) &&
+          (focus == NULL || !gtk_widget_is_ancestor (focus, priv->title_box)) &&
           gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD))
         return TRUE;
 
