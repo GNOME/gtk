@@ -37,6 +37,40 @@
  * is desired on a popover, gtk_popover_set_modal() may be called on it
  * to tweak its behavior.
  *
+ * ## GtkPopover as menu replacement
+ *
+ * GtkPopover is often used to replace menus. To facilitate this, it
+ * supports being populated from a #GMenuModel, using
+ * gtk_popover_new_from_model(). In addition to all the regular menu
+ * model features, this function supports rendering sections in the
+ * model in a more compact form, as a row of icon buttons instead of
+ * menu items.
+ *
+ * To use this rendering, set the ”display-hint” attribute of the
+ * section to ”horizontal-buttons” and set the icons of your items
+ * with the ”verb-icon” attribute.
+ *
+ * |[
+ * <section>
+ *   <attribute name="display-hint">horizontal-buttons</attribute>
+ *   <item>
+ *     <attribute name="label">Cut</attribute>
+ *     <attribute name="action">app.cut</attribute>
+ *     <attribute name="verb-icon">edit-cut-symbolic</attribute>
+ *   </item>
+ *   <item>
+ *     <attribute name="label">Copy</attribute>
+ *     <attribute name="action">app.copy</attribute>
+ *     <attribute name="verb-icon">edit-copy-symbolic</attribute>
+ *   </item>
+ *   <item>
+ *     <attribute name="label">Paste</attribute>
+ *     <attribute name="action">app.paste</attribute>
+ *     <attribute name="verb-icon">edit-paste-symbolic</attribute>
+ *   </item>
+ * </section>
+ * ]|
+ *
  * Since: 3.12
  */
 
