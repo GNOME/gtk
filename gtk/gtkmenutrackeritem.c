@@ -109,6 +109,7 @@ enum {
   PROP_HAS_SUBMENU,
   PROP_LABEL,
   PROP_ICON,
+  PROP_VERB_ICON,
   PROP_SENSITIVE,
   PROP_VISIBLE,
   PROP_ROLE,
@@ -170,6 +171,9 @@ gtk_menu_tracker_item_get_property (GObject    *object,
     case PROP_ICON:
       g_value_set_object (value, gtk_menu_tracker_item_get_icon (self));
       break;
+    case PROP_VERB_ICON:
+      g_value_set_object (value, gtk_menu_tracker_item_get_verb_icon (self));
+      break;
     case PROP_SENSITIVE:
       g_value_set_boolean (value, gtk_menu_tracker_item_get_sensitive (self));
       break;
@@ -228,6 +232,8 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
     g_param_spec_string ("label", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_ICON] =
     g_param_spec_object ("icon", "", "", G_TYPE_ICON, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
+  gtk_menu_tracker_item_pspecs[PROP_VERB_ICON] =
+    g_param_spec_object ("verb-icon", "", "", G_TYPE_ICON, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_SENSITIVE] =
     g_param_spec_boolean ("sensitive", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_VISIBLE] =
@@ -602,6 +608,28 @@ gtk_menu_tracker_item_get_icon (GtkMenuTrackerItem *self)
   GIcon *icon;
 
   icon_data = g_menu_item_get_attribute_value (self->item, "icon", NULL);
+
+  if (icon_data == NULL)
+    return NULL;
+
+  icon = g_icon_deserialize (icon_data);
+  g_variant_unref (icon_data);
+
+  return icon;
+}
+
+/*< private >
+ * gtk_menu_tracker_item_get_verb_icon:
+ *
+ * Returns: (transfer full):
+ */
+GIcon *
+gtk_menu_tracker_item_get_verb_icon (GtkMenuTrackerItem *self)
+{
+  GVariant *icon_data;
+  GIcon *icon;
+
+  icon_data = g_menu_item_get_attribute_value (self->item, "verb-icon", NULL);
 
   if (icon_data == NULL)
     return NULL;
