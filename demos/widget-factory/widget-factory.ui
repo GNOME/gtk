@@ -1806,14 +1806,20 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="orientation">vertical</property>
                             <property name="adjustment">adjustment2</property>
                           </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
                         </child>
                         <child>
                           <object class="GtkSpinButton" id="verticalspin2">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="orientation">vertical</property>
-                            <property name="adjustment">adjustment1</property>
+                            <property name="adjustment">adjustment2</property>
                           </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
                         </child>
                         <child>
                           <object class="GtkVolumeButton">
@@ -1822,15 +1828,92 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="valign">center</property>
                             <property name="use-symbolic">True</property>
                             <property name="value">.5</property>
+                            <property name="halign">center</property>
                           </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
                         </child>
                         <child>
                           <object class="GtkVolumeButton">
+                            <property name="visible">True</property>
                             <property name="orientation">horizontal</property>
                             <property name="valign">center</property>
                             <property name="use-symbolic">True</property>
                             <property name="value">.5</property>
+                            <property name="halign">center</property>
                           </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAspectFrame" id="panedframe1">
+                            <property name="visible">True</property>
+                            <property name="obey-child">False</property>
+                            <property name="ratio">1.0</property>
+                            <child>
+                              <object class="GtkPaned">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label">Left</property>
+                                    <style>
+                                      <class name="view"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label">Right</property>
+                                    <style>
+                                      <class name="view"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAspectFrame" id="panedframe2">
+                            <property name="visible">True</property>
+                            <property name="obey-child">False</property>
+                            <property name="ratio">1.0</property>
+                            <child>
+                              <object class="GtkPaned">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label">Top</property>
+                                    <style>
+                                      <class name="view"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label">Bottom</property>
+                                    <style>
+                                      <class name="view"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -2023,6 +2106,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
       <widget name="listboxrow1"/>
       <widget name="listboxrow2"/>
       <widget name="listboxrow3"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">both</property>
+    <widgets>
+      <widget name="panedframe1"/>
+      <widget name="panedframe2"/>
     </widgets>
   </object>
 </interface>
