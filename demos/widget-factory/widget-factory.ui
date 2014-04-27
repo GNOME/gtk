@@ -24,6 +24,56 @@
       </item>
     </section>
   </menu>
+  <menu id="dinner_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Steak</attribute>
+        <attribute name="action">app.main</attribute>
+        <attribute name="target">steak</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Pizza</attribute>
+        <attribute name="action">app.main</attribute>
+        <attribute name="target">pizza</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Wine</attribute>
+        <attribute name="action">app.wine</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Beer</attribute>
+        <attribute name="action">app.beer</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Water</attribute>
+        <attribute name="action">app.water</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name="label" translatable="yes">Dessert</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Brownies</attribute>
+            <attribute name="action">app.dessert</attribute>
+            <attribute name="target">brownies</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Banana Sundae</attribute>
+            <attribute name="action">app.dessert</attribute>
+            <attribute name="target">sundae</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Lemon Bars</attribute>
+            <attribute name="action">app.dessert</attribute>
+            <attribute name="target">bars</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
     <property name="value">50</property>
@@ -1922,15 +1972,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="filler1">
-                        <property name="visible">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="filler2">
                         <property name="visible">True</property>
                       </object>
@@ -2085,6 +2126,31 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <child>
+                          <object class="GtkMenuButton">
+                            <property name="visible">True</property>
+                            <property name="menu-model">dinner_menu</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="icon-name">document-open-recent-symbolic</property>
+                                <property name="icon-size">4</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>

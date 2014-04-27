@@ -286,6 +286,13 @@ main (int argc, char *argv[])
   static GActionEntry app_entries[] = {
     { "about", activate_about, NULL, NULL, NULL },
     { "quit", activate_quit, NULL, NULL, NULL },
+
+    { "main", NULL, "s", "''", NULL },
+    { "wine", NULL, NULL, "false", NULL },
+    { "beer", NULL, NULL, "false", NULL },
+    { "water", NULL, NULL, "false", NULL },
+    { "dessert", NULL, "s", "''", NULL }
+
   };
   gint status;
 
