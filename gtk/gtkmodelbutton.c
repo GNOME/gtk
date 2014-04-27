@@ -595,7 +595,8 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_container_add (GTK_CONTAINER (button->box), button->image);
   gtk_container_add (GTK_CONTAINER (button->box), button->label);
   gtk_container_add (GTK_CONTAINER (button), button->box);
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (button)), "modelbutton");
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (button)),
+                               GTK_STYLE_CLASS_MENUITEM);
 }
 
 GtkWidget *
