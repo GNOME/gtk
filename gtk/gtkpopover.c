@@ -970,9 +970,7 @@ gtk_popover_get_preferred_width (GtkWidget *widget,
                                  gint      *natural_width)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = popover->priv;
   GtkWidget *child;
-  GtkPositionType pos;
   gint min, nat, extra, minimal_size;
   GtkBorder border, margin;
 
@@ -988,15 +986,7 @@ gtk_popover_get_preferred_width (GtkWidget *widget,
 
   min = MAX (min, minimal_size) + border.left + border.right;
   nat = MAX (nat, minimal_size) + border.left + border.right;
-
-  pos = get_effective_position (popover, priv->preferred_position);
-
-  if (pos == GTK_POS_LEFT)
-    extra = margin.left + MAX (TAIL_HEIGHT, margin.right);
-  else if (pos == GTK_POS_RIGHT)
-    extra = MAX (TAIL_HEIGHT, margin.left) + margin.right;
-  else
-    extra = margin.left + margin.right;
+  extra = MAX (TAIL_HEIGHT, margin.left) + MAX (TAIL_HEIGHT, margin.right);
 
   min += extra;
   nat += extra;
@@ -1017,7 +1007,6 @@ gtk_popover_get_preferred_width_for_height (GtkWidget *widget,
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = popover->priv;
   GtkWidget *child;
-  GtkPositionType pos;
   gint min, nat, extra, minimal_size;
   gint child_height;
   GtkBorder border, margin;
@@ -1040,15 +1029,7 @@ gtk_popover_get_preferred_width_for_height (GtkWidget *widget,
 
   min = MAX (min, minimal_size) + border.left + border.right;
   nat = MAX (nat, minimal_size) + border.left + border.right;
-
-  pos = get_effective_position (popover, priv->preferred_position);
-
-  if (pos == GTK_POS_LEFT)
-    extra = margin.left + MAX (TAIL_HEIGHT, margin.right);
-  else if (pos == GTK_POS_RIGHT)
-    extra = MAX (TAIL_HEIGHT, margin.left) + margin.right;
-  else
-    extra = margin.left + margin.right;
+  extra = MAX (TAIL_HEIGHT, margin.left) + MAX (TAIL_HEIGHT, margin.right);
 
   min += extra;
   nat += extra;
@@ -1066,9 +1047,7 @@ gtk_popover_get_preferred_height (GtkWidget *widget,
                                   gint      *natural_height)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = popover->priv;
   GtkWidget *child;
-  GtkPositionType pos;
   gint min, nat, extra, minimal_size;
   GtkBorder border, margin;
 
@@ -1084,15 +1063,7 @@ gtk_popover_get_preferred_height (GtkWidget *widget,
 
   min = MAX (min, minimal_size) + border.top + border.bottom;
   nat = MAX (nat, minimal_size) + border.top + border.bottom;
-
-  pos = get_effective_position (popover, priv->preferred_position);
-
-  if (pos == GTK_POS_TOP)
-    extra = margin.top + MAX (TAIL_HEIGHT, margin.bottom);
-  else if (pos == GTK_POS_BOTTOM)
-    extra = MAX (TAIL_HEIGHT, margin.top) + margin.bottom;
-  else
-    extra = margin.top + margin.bottom;
+  extra = MAX (TAIL_HEIGHT, margin.top) + MAX (TAIL_HEIGHT, margin.bottom);
 
   min += extra;
   nat += extra;
@@ -1113,7 +1084,6 @@ gtk_popover_get_preferred_height_for_width (GtkWidget *widget,
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = popover->priv;
   GtkWidget *child;
-  GtkPositionType pos;
   gint min, nat, extra, minimal_size;
   gint child_width;
   GtkBorder border, margin;
@@ -1135,15 +1105,7 @@ gtk_popover_get_preferred_height_for_width (GtkWidget *widget,
 
   min = MAX (min, minimal_size) + border.top + border.bottom;
   nat = MAX (nat, minimal_size) + border.top + border.bottom;
-
-  pos = get_effective_position (popover, priv->preferred_position);
-
-  if (pos == GTK_POS_TOP)
-    extra = margin.top + MAX (TAIL_HEIGHT, margin.bottom);
-  else if (pos == GTK_POS_BOTTOM)
-    extra = MAX (TAIL_HEIGHT, margin.top) + margin.bottom;
-  else
-    extra = margin.top + margin.bottom;
+  extra = MAX (TAIL_HEIGHT, margin.top) + MAX (TAIL_HEIGHT, margin.bottom);
 
   min += extra;
   nat += extra;
