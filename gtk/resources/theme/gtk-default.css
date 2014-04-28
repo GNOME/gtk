@@ -855,6 +855,6 @@ GtkCalendar.button:hover {
   background-color: @bg_color;
 }
 
-window-frame:backdrop {
+.window-frame:backdrop {
   box-shadow: 0 2px 5px 1px alpha(black, 0.5);
 }
