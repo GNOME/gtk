@@ -560,17 +560,18 @@ gtk_menu_tracker_new (GtkActionObservable      *observable,
 }
 
 GtkMenuTracker *
-gtk_menu_tracker_new_for_item_submenu (GtkMenuTrackerItem       *item,
-                                       GtkMenuTrackerInsertFunc  insert_func,
-                                       GtkMenuTrackerRemoveFunc  remove_func,
-                                       gpointer                  user_data)
+gtk_menu_tracker_new_for_item_link (GtkMenuTrackerItem       *item,
+                                    const gchar              *link_name,
+                                    GtkMenuTrackerInsertFunc  insert_func,
+                                    GtkMenuTrackerRemoveFunc  remove_func,
+                                    gpointer                  user_data)
 {
   GtkMenuTracker *tracker;
   GMenuModel *submenu;
   gchar *namespace;
 
-  submenu = _gtk_menu_tracker_item_get_submenu (item);
-  namespace = _gtk_menu_tracker_item_get_submenu_namespace (item);
+  submenu = _gtk_menu_tracker_item_get_link (item, link_name);
+  namespace = _gtk_menu_tracker_item_get_link_namespace (item);
 
   tracker = gtk_menu_tracker_new (_gtk_menu_tracker_item_get_observable (item), submenu,
                                   TRUE, namespace, insert_func, remove_func, user_data);

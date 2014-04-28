@@ -106,7 +106,6 @@ struct _GtkMenuTrackerItem
 enum {
   PROP_0,
   PROP_IS_SEPARATOR,
-  PROP_HAS_SUBMENU,
   PROP_LABEL,
   PROP_ICON,
   PROP_SENSITIVE,
@@ -159,9 +158,6 @@ gtk_menu_tracker_item_get_property (GObject    *object,
     {
     case PROP_IS_SEPARATOR:
       g_value_set_boolean (value, gtk_menu_tracker_item_get_is_separator (self));
-      break;
-    case PROP_HAS_SUBMENU:
-      g_value_set_boolean (value, gtk_menu_tracker_item_get_has_submenu (self));
       break;
     case PROP_LABEL:
       g_value_set_string (value, gtk_menu_tracker_item_get_label (self));
@@ -221,8 +217,6 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
 
   gtk_menu_tracker_item_pspecs[PROP_IS_SEPARATOR] =
     g_param_spec_boolean ("is-separator", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
-  gtk_menu_tracker_item_pspecs[PROP_HAS_SUBMENU] =
-    g_param_spec_boolean ("has-submenu", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_LABEL] =
     g_param_spec_string ("label", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_ICON] =
@@ -559,11 +553,12 @@ gtk_menu_tracker_item_get_is_separator (GtkMenuTrackerItem *self)
  * for #GtkMenuTrackerItem.
  */
 gboolean
-gtk_menu_tracker_item_get_has_submenu (GtkMenuTrackerItem *self)
+gtk_menu_tracker_item_get_has_link (GtkMenuTrackerItem *self,
+                                    const gchar        *link_name)
 {
   GMenuModel *link;
 
-  link = g_menu_item_get_link (self->item, G_MENU_LINK_SUBMENU);
+  link = g_menu_item_get_link (self->item, link_name);
 
   if (link)
     {
@@ -652,13 +647,14 @@ gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
 }
 
 GMenuModel *
-_gtk_menu_tracker_item_get_submenu (GtkMenuTrackerItem *self)
+_gtk_menu_tracker_item_get_link (GtkMenuTrackerItem *self,
+                                 const gchar        *link_name)
 {
-  return g_menu_item_get_link (self->item, "submenu");
+  return g_menu_item_get_link (self->item, link_name);
 }
 
 gchar *
-_gtk_menu_tracker_item_get_submenu_namespace (GtkMenuTrackerItem *self)
+_gtk_menu_tracker_item_get_link_namespace (GtkMenuTrackerItem *self)
 {
   const gchar *namespace;
 

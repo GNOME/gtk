@@ -2057,7 +2057,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
 
       gtk_widget_show (widget);
     }
-  else if (gtk_menu_tracker_item_get_has_submenu (item))
+  else if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU))
     {
       GtkMenuShell *submenu;
 
@@ -2070,10 +2070,11 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
        * prevent arbitrary recursion depth.  We could also do it
        * lazy...
        */
-      submenu->priv->tracker = gtk_menu_tracker_new_for_item_submenu (item,
-                                                                      gtk_menu_shell_tracker_insert_func,
-                                                                      gtk_menu_shell_tracker_remove_func,
-                                                                      submenu);
+      submenu->priv->tracker = gtk_menu_tracker_new_for_item_link (item,
+                                                                   G_MENU_LINK_SUBMENU,
+                                                                   gtk_menu_shell_tracker_insert_func,
+                                                                   gtk_menu_shell_tracker_remove_func,
+                                                                   submenu);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (widget), GTK_WIDGET (submenu));
 
       if (gtk_menu_tracker_item_get_should_request_show (item))

@@ -2039,7 +2039,7 @@ gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
           gtk_widget_show (widget);
         }
     }
-  else if (gtk_menu_tracker_item_get_has_submenu (item))
+  else if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU))
     {
       GtkMenuTracker *tracker;
       GtkWidget *child;
@@ -2084,7 +2084,9 @@ gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
       gtk_widget_set_halign (content, GTK_ALIGN_FILL);
       gtk_widget_show (content);
       gtk_container_add (GTK_CONTAINER (child), content);
-      tracker = gtk_menu_tracker_new_for_item_submenu (item, gtk_popover_tracker_insert_func, gtk_popover_tracker_remove_func, content);
+      tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SUBMENU,
+                                                    gtk_popover_tracker_insert_func,
+                                                    gtk_popover_tracker_remove_func, content);
 
       g_object_set_data_full (G_OBJECT (widget), "submenutracker", tracker, (GDestroyNotify)gtk_menu_tracker_free);
 
