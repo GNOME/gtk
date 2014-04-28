@@ -114,11 +114,11 @@ enum {
   PROP_TOGGLED,
   PROP_ACCEL,
   PROP_SUBMENU_SHOWN,
+  PROP_IS_VISIBLE,
   N_PROPS
 };
 
 static GParamSpec *gtk_menu_tracker_item_pspecs[N_PROPS];
-static guint gtk_menu_tracker_visibility_changed_signal;
 
 static void gtk_menu_tracker_item_init_observer_iface (GtkActionObserverInterface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkMenuTrackerItem, gtk_menu_tracker_item, G_TYPE_OBJECT,
@@ -184,6 +184,9 @@ gtk_menu_tracker_item_get_property (GObject    *object,
     case PROP_SUBMENU_SHOWN:
       g_value_set_boolean (value, gtk_menu_tracker_item_get_submenu_shown (self));
       break;
+    case PROP_IS_VISIBLE:
+      g_value_set_boolean (value, gtk_menu_tracker_item_get_is_visible (self));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -236,13 +239,10 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
     g_param_spec_string ("accel", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_SUBMENU_SHOWN] =
     g_param_spec_boolean ("submenu-shown", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
+  gtk_menu_tracker_item_pspecs[PROP_IS_VISIBLE] =
+    g_param_spec_boolean ("is-visible", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
 
   g_object_class_install_properties (class, N_PROPS, gtk_menu_tracker_item_pspecs);
-
-  gtk_menu_tracker_visibility_changed_signal = g_signal_new ("visibility-changed", GTK_TYPE_MENU_TRACKER_ITEM,
-                                                             G_SIGNAL_RUN_FIRST, 0, NULL, NULL,
-                                                             g_cclosure_marshal_VOID__BOOLEAN, G_TYPE_NONE,
-                                                             1, G_TYPE_BOOLEAN);
 }
 
 /* This syncs up the visibility for the hidden-when='' case.  We call it
@@ -276,7 +276,7 @@ gtk_menu_tracker_item_update_visibility (GtkMenuTrackerItem *self)
   if (visible != self->is_visible)
     {
       self->is_visible = visible;
-      g_signal_emit (self, gtk_menu_tracker_visibility_changed_signal, 0, visible);
+      g_object_notify (G_OBJECT (self), "is-visible");
     }
 }
 
@@ -878,14 +878,29 @@ gtk_menu_tracker_item_request_submenu_shown (GtkMenuTrackerItem *self,
     gtk_menu_tracker_item_set_submenu_shown (self, shown);
 }
 
+/**
+ * gtk_menu_tracker_item_get_is_visible:
+ * @self: A #GtkMenuTrackerItem instance
+ *
+ * Don't use this unless you're tracking items for yourself -- normally
+ * the tracker will emit add/remove automatically when this changes.
+ *
+ * Returns: if the item should currently be shown
+ */
 gboolean
-_gtk_menu_tracker_item_is_visible (GtkMenuTrackerItem *self)
+gtk_menu_tracker_item_get_is_visible (GtkMenuTrackerItem *self)
 {
   return self->is_visible;
 }
 
+/**
+ * gtk_menu_tracker_item_may_disappear:
+ * @self: A #GtkMenuTrackerItem instance
+ *
+ * Returns: if the item may disappear (ie: is-visible property may change)
+ */
 gboolean
-_gtk_menu_tracker_item_may_disappear (GtkMenuTrackerItem *self)
+gtk_menu_tracker_item_may_disappear (GtkMenuTrackerItem *self)
 {
   return self->hidden_when != HIDDEN_NEVER;
 }

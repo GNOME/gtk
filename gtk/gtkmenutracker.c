@@ -367,19 +367,19 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
            * case that we want to show a separator, but we will never do
            * that because separators are not shown for this fake section.
            */
-          if (_gtk_menu_tracker_item_may_disappear (item))
+          if (gtk_menu_tracker_item_may_disappear (item))
             {
               GtkMenuTrackerSection *fake_section;
 
               fake_section = g_slice_new0 (GtkMenuTrackerSection);
               fake_section->is_fake = TRUE;
               fake_section->model = g_object_ref (item);
-              fake_section->handler = g_signal_connect (item, "visibility-changed",
+              fake_section->handler = g_signal_connect (item, "notify::is-visible",
                                                         G_CALLBACK (gtk_menu_tracker_item_visibility_changed),
                                                         tracker);
               *change_point = g_slist_prepend (*change_point, fake_section);
 
-              if (_gtk_menu_tracker_item_is_visible (item))
+              if (gtk_menu_tracker_item_get_is_visible (item))
                 {
                   (* tracker->insert_func) (item, offset, tracker->user_data);
                   fake_section->items = g_slist_prepend (NULL, NULL);
