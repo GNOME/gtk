@@ -935,7 +935,7 @@ recompute_visible_regions_internal (GdkWindow *private,
 	  /* Convert from parent coords to window coords */
 	  cairo_region_translate (new_clip, -private->x, -private->y);
 
-	  if (private->shape)
+	  if (should_apply_clip_as_shape (private) && private->shape)
 	    cairo_region_intersect (new_clip, private->shape);
 	}
       else
