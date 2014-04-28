@@ -45,6 +45,7 @@ struct _GtkMenuSectionBox
   GtkBox            *item_box;
   GtkWidget         *separator;
   guint              separator_sync_idle;
+  gboolean           iconic;
 };
 
 G_DEFINE_TYPE (GtkMenuSectionBox, gtk_menu_section_box, GTK_TYPE_BOX)
@@ -230,7 +231,15 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
       widget = gtk_model_button_new ();
 
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+
+      if (box->iconic)
+        {
+          g_object_bind_property (item, "verb-icon", widget, "icon", G_BINDING_SYNC_CREATE);
+          g_object_set (widget, "iconic", TRUE, "centered", TRUE, NULL);
+        }
+      else
+        g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+
       g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "role", widget, "action-role", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "toggled", widget, "toggled", G_BINDING_SYNC_CREATE);
@@ -244,7 +253,10 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
   g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
 
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
-  gtk_container_add (GTK_CONTAINER (box->item_box), widget);
+  if (box->iconic)
+    gtk_box_pack_start (GTK_BOX (box->item_box), widget, TRUE, TRUE, 0);
+  else
+    gtk_container_add (GTK_CONTAINER (box->item_box), widget);
   gtk_box_reorder_child (GTK_BOX (box->item_box), widget, position);
 
   gtk_menu_section_box_schedule_separator_sync (box);
@@ -262,10 +274,11 @@ gtk_menu_section_box_init (GtkMenuSectionBox *box)
   item_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   box->item_box = GTK_BOX (item_box);
   gtk_box_pack_end (GTK_BOX (box), item_box, FALSE, FALSE, 0);
+  gtk_widget_set_halign (GTK_WIDGET (item_box), GTK_ALIGN_FILL);
   gtk_widget_show (item_box);
 
   gtk_widget_set_halign (GTK_WIDGET (box), GTK_ALIGN_FILL);
-  g_object_set (box, "margin", 10, NULL);
+  g_object_set (box, "margin", 0, NULL);
 
 }
 
@@ -273,8 +286,6 @@ static void
 gtk_menu_section_box_dispose (GObject *object)
 {
   GtkMenuSectionBox *box = GTK_MENU_SECTION_BOX (object);
-
-  g_print ("disposed %p\n", object);
 
   if (box->separator_sync_idle)
     {
@@ -298,7 +309,7 @@ gtk_menu_section_box_new_toplevel (GtkStack    *stack,
 {
   GtkMenuSectionBox *box;
 
-  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
+  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, "margin", 10,  NULL);
   box->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   gtk_size_group_add_widget (box->size_group, GTK_WIDGET (box));
   gtk_stack_add_named (stack, GTK_WIDGET (box), "main");
@@ -319,7 +330,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
   GtkMenuSectionBox *box;
   GtkWidget *button;
 
-  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
+  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, "margin", 10, NULL);
   box->size_group = g_object_ref (toplevel->size_group);
   gtk_size_group_add_widget (box->size_group, GTK_WIDGET (box));
 
@@ -357,6 +368,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   GtkMenuSectionBox *box;
   GtkWidget *separator;
   const gchar *label;
+  const gchar *hint;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->size_group = g_object_ref (toplevel->size_group);
@@ -364,6 +376,14 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
   separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   label = gtk_menu_tracker_item_get_label (item);
+  hint = gtk_menu_tracker_item_get_display_hint (item);
+
+  if (hint && g_str_equal (hint, "horizontal-buttons"))
+    {
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), GTK_STYLE_CLASS_LINKED);
+      box->iconic = TRUE;
+    }
 
   if (label != NULL)
     {
