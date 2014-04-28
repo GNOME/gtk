@@ -50,6 +50,8 @@ GtkMenuTrackerItem *   _gtk_menu_tracker_item_new                       (GtkActi
 
 const gchar *           gtk_menu_tracker_item_get_special               (GtkMenuTrackerItem *self);
 
+const gchar *           gtk_menu_tracker_item_get_display_hint          (GtkMenuTrackerItem *self);
+
 GtkActionObservable *  _gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
 
 gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);

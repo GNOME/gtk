@@ -45,6 +45,7 @@ struct _GtkMenuSectionBox
   GtkBox            *item_box;
   GtkWidget         *separator;
   guint              separator_sync_idle;
+  gboolean           iconic;
 };
 
 G_DEFINE_TYPE (GtkMenuSectionBox, gtk_menu_section_box, GTK_TYPE_BOX)
@@ -230,7 +231,15 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
       widget = gtk_model_button_new ();
 
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+
+      if (box->iconic)
+        {
+          g_object_bind_property (item, "verb-icon", widget, "icon", G_BINDING_SYNC_CREATE);
+          g_object_set (widget, "iconic", TRUE, "centered", TRUE, NULL);
+        }
+      else
+        g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+
       g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "role", widget, "action-role", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "toggled", widget, "toggled", G_BINDING_SYNC_CREATE);
@@ -262,6 +271,7 @@ gtk_menu_section_box_init (GtkMenuSectionBox *box)
   item_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   box->item_box = GTK_BOX (item_box);
   gtk_box_pack_end (GTK_BOX (box), item_box, FALSE, FALSE, 0);
+  gtk_widget_set_halign (GTK_WIDGET (item_box), GTK_ALIGN_FILL);
   gtk_widget_show (item_box);
 
   gtk_widget_set_halign (GTK_WIDGET (box), GTK_ALIGN_FILL);
@@ -357,6 +367,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   GtkMenuSectionBox *box;
   GtkWidget *separator;
   const gchar *label;
+  const gchar *hint;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->size_group = g_object_ref (toplevel->size_group);
@@ -364,6 +375,14 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
   separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   label = gtk_menu_tracker_item_get_label (item);
+  hint = gtk_menu_tracker_item_get_display_hint (item);
+
+  if (hint && g_str_equal (hint, "iconic"))
+    {
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), GTK_STYLE_CLASS_LINKED);
+      box->iconic = TRUE;
+    }
 
   if (label != NULL)
     {
