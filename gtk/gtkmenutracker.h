@@ -40,7 +40,8 @@ GtkMenuTracker *        gtk_menu_tracker_new                            (GtkActi
                                                                          GtkMenuTrackerRemoveFunc  remove_func,
                                                                          gpointer                  user_data);
 
-GtkMenuTracker *        gtk_menu_tracker_new_for_item_submenu           (GtkMenuTrackerItem       *item,
+GtkMenuTracker *        gtk_menu_tracker_new_for_item_link              (GtkMenuTrackerItem       *item,
+                                                                         const gchar              *link_name,
                                                                          GtkMenuTrackerInsertFunc  insert_func,
                                                                          GtkMenuTrackerRemoveFunc  remove_func,
                                                                          gpointer                  user_data);

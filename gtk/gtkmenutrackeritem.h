@@ -54,7 +54,8 @@ GtkActionObservable *  _gtk_menu_tracker_item_get_observable            (GtkMenu
 
 gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);
 
-gboolean                gtk_menu_tracker_item_get_has_submenu           (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_has_link              (GtkMenuTrackerItem *self,
+                                                                         const gchar        *link_name);
 
 const gchar *           gtk_menu_tracker_item_get_label                 (GtkMenuTrackerItem *self);
 
@@ -68,9 +69,10 @@ gboolean                gtk_menu_tracker_item_get_toggled               (GtkMenu
 
 const gchar *           gtk_menu_tracker_item_get_accel                 (GtkMenuTrackerItem *self);
 
-GMenuModel *           _gtk_menu_tracker_item_get_submenu               (GtkMenuTrackerItem *self);
+GMenuModel *           _gtk_menu_tracker_item_get_link                  (GtkMenuTrackerItem *self,
+                                                                         const gchar        *link_name);
 
-gchar *                _gtk_menu_tracker_item_get_submenu_namespace     (GtkMenuTrackerItem *self);
+gchar *                _gtk_menu_tracker_item_get_link_namespace        (GtkMenuTrackerItem *self);
 
 gboolean                gtk_menu_tracker_item_may_disappear             (GtkMenuTrackerItem *self);
 
