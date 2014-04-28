@@ -1539,7 +1539,7 @@ seat_handle_capabilities (void                    *data,
 
       g_signal_emit_by_name (device_manager, "device-added", device->touch);
     }
-  else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD) && device->wl_touch)
+  else if (!(caps & WL_SEAT_CAPABILITY_TOUCH) && device->wl_touch)
     {
       wl_touch_destroy (device->wl_touch);
       device->wl_touch = NULL;
