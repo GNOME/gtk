@@ -488,10 +488,11 @@ gtk_recent_chooser_menu_set_current_uri (GtkRecentChooser  *chooser,
   GList *children, *l;
   GtkWidget *menu_item = NULL;
   gboolean found = FALSE;
+  gint i = 0;
   
   children = gtk_container_get_children (GTK_CONTAINER (menu));
   
-  for (l = children; l != NULL; l = l->next)
+  for (l = children; l != NULL; l = l->next, i++)
     {
       GtkRecentInfo *info;
       
@@ -503,9 +504,7 @@ gtk_recent_chooser_menu_set_current_uri (GtkRecentChooser  *chooser,
       
       if (strcmp (uri, gtk_recent_info_get_uri (info)) == 0)
         {
-          gtk_menu_shell_activate_item (GTK_MENU_SHELL (menu),
-	                                menu_item,
-					TRUE);
+          gtk_menu_set_active (GTK_MENU (menu), i);
 	  found = TRUE;
 
 	  break;
@@ -1114,7 +1113,9 @@ item_activate_cb (GtkWidget *widget,
 		  gpointer   user_data)
 {
   GtkRecentChooser *chooser = GTK_RECENT_CHOOSER (user_data);
-  
+  GtkRecentInfo *info = g_object_get_data (G_OBJECT (widget), "gtk-recent-info");
+
+  gtk_recent_chooser_menu_set_current_uri (chooser, gtk_recent_info_get_uri (info), NULL);
   _gtk_recent_chooser_item_activated (chooser);
 }
 
