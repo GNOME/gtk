@@ -62,8 +62,6 @@ GIcon *                 gtk_menu_tracker_item_get_icon                  (GtkMenu
 
 gboolean                gtk_menu_tracker_item_get_sensitive             (GtkMenuTrackerItem *self);
 
-gboolean                gtk_menu_tracker_item_get_visible               (GtkMenuTrackerItem *self);
-
 GtkMenuTrackerItemRole  gtk_menu_tracker_item_get_role                  (GtkMenuTrackerItem *self);
 
 gboolean                gtk_menu_tracker_item_get_toggled               (GtkMenuTrackerItem *self);
