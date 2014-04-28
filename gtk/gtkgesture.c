@@ -318,13 +318,16 @@ _update_widget_coordinates (GtkGesture *gesture,
   gdk_event_get_coords (data->event, &event_x, &event_y);
   window = data->event->any.window;
 
-  while (window != event_widget_window)
+  while (window && window != event_widget_window)
     {
       gdk_window_get_position (window, &wx, &wy);
       event_x += wx;
       event_y += wy;
       window = gdk_window_get_effective_parent (window);
     }
+
+  if (!window)
+    return;
 
   if (!gtk_widget_get_has_window (event_widget))
     {
