@@ -674,6 +674,16 @@ gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
   return special;
 }
 
+const gchar *
+gtk_menu_tracker_item_get_display_hint (GtkMenuTrackerItem *self)
+{
+  const gchar *display_hint = NULL;
+
+  g_menu_item_get_attribute (self->item, "display-hint", "&s", &display_hint);
+
+  return display_hint;
+}
+
 GMenuModel *
 _gtk_menu_tracker_item_get_link (GtkMenuTrackerItem *self,
                                  const gchar        *link_name)
