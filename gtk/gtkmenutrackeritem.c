@@ -110,7 +110,6 @@ enum {
   PROP_LABEL,
   PROP_ICON,
   PROP_SENSITIVE,
-  PROP_VISIBLE,
   PROP_ROLE,
   PROP_TOGGLED,
   PROP_ACCEL,
@@ -173,9 +172,6 @@ gtk_menu_tracker_item_get_property (GObject    *object,
     case PROP_SENSITIVE:
       g_value_set_boolean (value, gtk_menu_tracker_item_get_sensitive (self));
       break;
-    case PROP_VISIBLE:
-      g_value_set_boolean (value, gtk_menu_tracker_item_get_visible (self));
-      break;
     case PROP_ROLE:
       g_value_set_enum (value, gtk_menu_tracker_item_get_role (self));
       break;
@@ -230,8 +226,6 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
     g_param_spec_object ("icon", "", "", G_TYPE_ICON, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_SENSITIVE] =
     g_param_spec_boolean ("sensitive", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
-  gtk_menu_tracker_item_pspecs[PROP_VISIBLE] =
-    g_param_spec_boolean ("visible", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_ROLE] =
     g_param_spec_enum ("role", "", "",
                        GTK_TYPE_MENU_TRACKER_ITEM_ROLE, GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
@@ -616,12 +610,6 @@ gboolean
 gtk_menu_tracker_item_get_sensitive (GtkMenuTrackerItem *self)
 {
   return self->sensitive;
-}
-
-gboolean
-gtk_menu_tracker_item_get_visible (GtkMenuTrackerItem *self)
-{
-  return TRUE;
 }
 
 GtkMenuTrackerItemRole
