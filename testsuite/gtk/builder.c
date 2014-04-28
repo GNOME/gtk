@@ -2833,6 +2833,77 @@ test_property_bindings (void)
   g_object_unref (builder);
 }
 
+#define MY_GTK_GRID_TEMPLATE "\
+<interface>\n\
+ <template class=\"MyGtkGrid\" parent=\"GtkGrid\">\n\
+   <property name=\"visible\">True</property>\n\
+    <child>\n\
+     <object class=\"GtkLabel\" id=\"label\">\n\
+       <property name=\"visible\">True</property>\n\
+     </object>\n\
+  </child>\n\
+ </template>\n\
+</interface>\n"
+
+#define MY_TYPE_GTK_GRID             (my_gtk_grid_get_type ())
+#define MY_IS_GTK_GRID(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MY_TYPE_GTK_GRID))
+
+typedef struct
+{
+  GtkGridClass parent_class;
+} MyGtkGridClass;
+
+typedef struct
+{
+  GtkLabel *label;
+} MyGtkGridPrivate;
+
+typedef struct
+{
+  GtkGrid parent_instance;
+  GtkLabel *label;
+  MyGtkGridPrivate *priv;
+} MyGtkGrid;
+
+G_DEFINE_TYPE_WITH_PRIVATE (MyGtkGrid, my_gtk_grid, GTK_TYPE_GRID);
+
+static void
+my_gtk_grid_init (MyGtkGrid *grid)
+{
+  grid->priv = my_gtk_grid_get_instance_private (grid);
+  gtk_widget_init_template (GTK_WIDGET (grid));
+}
+
+static void
+my_gtk_grid_class_init (MyGtkGridClass *klass)
+{
+  GBytes *template = g_bytes_new_static (MY_GTK_GRID_TEMPLATE, strlen (MY_GTK_GRID_TEMPLATE));
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_template (widget_class, template);
+  gtk_widget_class_bind_template_child (widget_class, MyGtkGrid, label);
+  gtk_widget_class_bind_template_child_private (widget_class, MyGtkGrid, label);
+}
+
+static void
+test_template ()
+{
+  MyGtkGrid *my_gtk_grid;
+
+  /* make sure the type we are trying to register does not exist */
+  g_assert (!g_type_from_name ("MyGtkGrid"));
+
+  /* create the template object */
+  my_gtk_grid = g_object_new (MY_TYPE_GTK_GRID, NULL);
+
+  /* Check everything is fine */
+  g_assert (g_type_from_name ("MyGtkGrid"));
+  g_assert (MY_IS_GTK_GRID (my_gtk_grid));
+  g_assert (my_gtk_grid->label == my_gtk_grid->priv->label);
+  g_assert (GTK_IS_LABEL (my_gtk_grid->label));
+  g_assert (GTK_IS_LABEL (my_gtk_grid->priv->label));
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2882,6 +2953,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/GMenu", test_gmenu);
   g_test_add_func ("/Builder/LevelBar", test_level_bar);
   g_test_add_func ("/Builder/Expose Object", test_expose_object);
+  g_test_add_func ("/Builder/Template", test_template);
   g_test_add_func ("/Builder/No IDs", test_no_ids);
   g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
 
