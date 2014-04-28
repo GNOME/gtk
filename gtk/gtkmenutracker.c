@@ -60,6 +60,7 @@ typedef struct _GtkMenuTrackerSection GtkMenuTrackerSection;
 struct _GtkMenuTracker
 {
   GtkActionObservable      *observable;
+  gboolean                  merge_sections;
   GtkMenuTrackerInsertFunc  insert_func;
   GtkMenuTrackerRemoveFunc  remove_func;
   gpointer                  user_data;
@@ -308,7 +309,8 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
 
       submenu = g_menu_model_get_item_link (model, position + n_items, G_MENU_LINK_SECTION);
       g_assert (submenu != model);
-      if (submenu != NULL)
+
+      if (submenu != NULL && tracker->merge_sections)
         {
           GtkMenuTrackerSection *subsection;
           gchar *action_namespace = NULL;
@@ -340,7 +342,7 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
           GtkMenuTrackerItem *item;
 
           item = _gtk_menu_tracker_item_new (tracker->observable, model, position + n_items,
-                                             section->action_namespace, FALSE);
+                                             section->action_namespace, submenu != NULL);
 
           /* In the case that the item may disappear we handle that by
            * treating the item that we just created as being its own
@@ -540,6 +542,7 @@ GtkMenuTracker *
 gtk_menu_tracker_new (GtkActionObservable      *observable,
                       GMenuModel               *model,
                       gboolean                  with_separators,
+                      gboolean                  merge_sections,
                       const gchar              *action_namespace,
                       GtkMenuTrackerInsertFunc  insert_func,
                       GtkMenuTrackerRemoveFunc  remove_func,
@@ -548,6 +551,7 @@ gtk_menu_tracker_new (GtkActionObservable      *observable,
   GtkMenuTracker *tracker;
 
   tracker = g_slice_new (GtkMenuTracker);
+  tracker->merge_sections = merge_sections;
   tracker->observable = g_object_ref (observable);
   tracker->insert_func = insert_func;
   tracker->remove_func = remove_func;
@@ -562,6 +566,7 @@ gtk_menu_tracker_new (GtkActionObservable      *observable,
 GtkMenuTracker *
 gtk_menu_tracker_new_for_item_link (GtkMenuTrackerItem       *item,
                                     const gchar              *link_name,
+                                    gboolean                  merge_sections,
                                     GtkMenuTrackerInsertFunc  insert_func,
                                     GtkMenuTrackerRemoveFunc  remove_func,
                                     gpointer                  user_data)
@@ -574,7 +579,7 @@ gtk_menu_tracker_new_for_item_link (GtkMenuTrackerItem       *item,
   namespace = _gtk_menu_tracker_item_get_link_namespace (item);
 
   tracker = gtk_menu_tracker_new (_gtk_menu_tracker_item_get_observable (item), submenu,
-                                  TRUE, namespace, insert_func, remove_func, user_data);
+                                  TRUE, merge_sections, namespace, insert_func, remove_func, user_data);
 
   g_object_unref (submenu);
   g_free (namespace);

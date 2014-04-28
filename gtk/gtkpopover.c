@@ -2084,7 +2084,7 @@ gtk_popover_tracker_insert_func (GtkMenuTrackerItem *item,
       gtk_widget_set_halign (content, GTK_ALIGN_FILL);
       gtk_widget_show (content);
       gtk_container_add (GTK_CONTAINER (child), content);
-      tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SUBMENU,
+      tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SUBMENU, TRUE,
                                                     gtk_popover_tracker_insert_func,
                                                     gtk_popover_tracker_remove_func, content);
 
@@ -2201,6 +2201,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
 
       priv->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
                                             model,
+                                            TRUE,
                                             TRUE,
                                             action_namespace,
                                             gtk_popover_tracker_insert_func,
