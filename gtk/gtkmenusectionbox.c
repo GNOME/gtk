@@ -70,6 +70,15 @@ gtk_menu_section_box_sync_item (GtkWidget *widget,
     (*n_items)++;
 }
 
+/* We are trying to implement the following rules here:
+ *
+ * rule 1: never ever show separators for empty sections
+ * rule 2: always show a separator if there is a label
+ * rule 3: don't show a separator for the first section
+ * rule 4: don't show a separator for the following sections if there are
+ *         no items before it
+ * (rule 5: these rules don't apply exactly the same way for subsections)
+ */
 void
 gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
                                       gint              *n_items)
