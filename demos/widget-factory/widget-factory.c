@@ -287,11 +287,12 @@ main (int argc, char *argv[])
     { "about", activate_about, NULL, NULL, NULL },
     { "quit", activate_quit, NULL, NULL, NULL },
 
-    { "main", NULL, "s", "''", NULL },
+    { "main", NULL, "s", "'steak'", NULL },
     { "wine", NULL, NULL, "false", NULL },
     { "beer", NULL, NULL, "false", NULL },
-    { "water", NULL, NULL, "false", NULL },
-    { "dessert", NULL, "s", "''", NULL }
+    { "water", NULL, NULL, "true", NULL },
+    { "dessert", NULL, "s", "'bars'", NULL },
+    { "pay", NULL, "s", NULL, NULL }
 
   };
   gint status;

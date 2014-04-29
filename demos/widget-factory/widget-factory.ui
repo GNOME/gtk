@@ -72,6 +72,27 @@
           </item>
         </section>
       </submenu>
+      <section>
+        <attribute name="display-hint">horizontal-buttons</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Cash</attribute>
+          <attribute name="action">app.pay</attribute>
+          <attribute name="target">cash</attribute>
+          <attribute name="verb-icon">document-save-symbolic</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Credit Card</attribute>
+          <attribute name="action">app.pay</attribute>
+          <attribute name="target">card</attribute>
+          <attribute name="verb-icon">document-send-symbolic</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Cheque</attribute>
+          <attribute name="action">app.pay</attribute>
+          <attribute name="target">cheque</attribute>
+          <attribute name="verb-icon">document-save-as-symbolic</attribute>
+        </item>
+      </section>
     </section>
   </menu>
   <object class="GtkAdjustment" id="adjustment1">
