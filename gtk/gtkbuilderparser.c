@@ -318,11 +318,11 @@ parse_object (GMarkupParseContext  *context,
 {
   ObjectInfo *object_info;
   ChildInfo* child_info;
-  int i;
-  gchar *object_class = NULL;
-  gchar *object_id = NULL;
-  gchar *constructor = NULL;
-  gint line, line2;
+  const gchar *object_class = NULL;
+  const gchar *object_id = NULL;
+  const gchar *constructor = NULL;
+  gchar *internal_id = NULL;
+  gint i, line, line2;
 
   child_info = state_peek_info (data, ChildInfo);
   if (child_info && strcmp (child_info->tag.name, "object") == 0)
@@ -334,11 +334,11 @@ parse_object (GMarkupParseContext  *context,
   for (i = 0; names[i] != NULL; i++)
     {
       if (strcmp (names[i], "class") == 0)
-        object_class = g_strdup (values[i]);
+        object_class = values[i];
       else if (strcmp (names[i], "id") == 0)
-        object_id = g_strdup (values[i]);
+        object_id = values[i];
       else if (strcmp (names[i], "constructor") == 0)
-        constructor = g_strdup (values[i]);
+        constructor = values[i];
       else if (strcmp (names[i], "type-func") == 0)
         {
 	  /* Call the GType function, and return the name of the GType,
@@ -369,11 +369,10 @@ parse_object (GMarkupParseContext  *context,
       return;
     }
 
-  data->object_counter++;
-
   if (!object_id)
     {
-      object_id = g_strdup_printf ("___object_%d___", data->object_counter++);
+      internal_id = g_strdup_printf ("___object_%d___", ++data->object_counter);
+      object_id = internal_id;
     }
 
   ++data->cur_object_level;
@@ -393,17 +392,15 @@ parse_object (GMarkupParseContext  *context,
         }
       else
         {
-          g_free (object_class);
-          g_free (object_id);
-          g_free (constructor);
+          g_free (internal_id);
           return;
         }
     }
 
   object_info = g_slice_new0 (ObjectInfo);
-  object_info->class_name = object_class;
-  object_info->id = object_id;
-  object_info->constructor = constructor;
+  object_info->class_name = g_strdup (object_class);
+  object_info->id = (internal_id) ? internal_id : g_strdup (object_id);
+  object_info->constructor = g_strdup (constructor);
   state_push (data, object_info);
   object_info->tag.name = element_name;
 
@@ -434,7 +431,7 @@ parse_template (GMarkupParseContext  *context,
 {
   ObjectInfo *object_info;
   int i;
-  gchar *object_class = NULL;
+  const gchar *object_class = NULL;
   gint line, line2;
   GType template_type = _gtk_builder_get_template_type (data->builder);
   GType parsed_type;
@@ -459,7 +456,7 @@ parse_template (GMarkupParseContext  *context,
   for (i = 0; names[i] != NULL; i++)
     {
       if (strcmp (names[i], "class") == 0)
-        object_class = g_strdup (values[i]);
+        object_class = values[i];
       else if (strcmp (names[i], "parent") == 0)
         /* Ignore 'parent' attribute, however it's needed by Glade */;
       else
@@ -489,7 +486,7 @@ parse_template (GMarkupParseContext  *context,
   ++data->cur_object_level;
 
   object_info = g_slice_new0 (ObjectInfo);
-  object_info->class_name = object_class;
+  object_info->class_name = g_strdup (object_class);
   object_info->id = g_strdup (object_class);
   object_info->object = gtk_builder_get_object (data->builder, object_class);
   state_push (data, object_info);
@@ -698,9 +695,9 @@ parse_signal (ParserData   *data,
               GError      **error)
 {
   SignalInfo *info;
-  gchar *name = NULL;
-  gchar *handler = NULL;
-  gchar *object = NULL;
+  const gchar *name = NULL;
+  const gchar *handler = NULL;
+  const gchar *object = NULL;
   gboolean after = FALSE;
   gboolean swapped = FALSE;
   gboolean swapped_set = FALSE;
@@ -719,9 +716,9 @@ parse_signal (ParserData   *data,
   for (i = 0; names[i] != NULL; i++)
     {
       if (strcmp (names[i], "name") == 0)
-        name = g_strdup (values[i]);
+        name = values[i];
       else if (strcmp (names[i], "handler") == 0)
-        handler = g_strdup (values[i]);
+        handler = values[i];
       else if (strcmp (names[i], "after") == 0)
 	{
 	  if (!_gtk_builder_boolean_from_string (values[i], &after, error))
@@ -734,7 +731,7 @@ parse_signal (ParserData   *data,
 	  swapped_set = TRUE;
 	}
       else if (strcmp (names[i], "object") == 0)
-        object = g_strdup (values[i]);
+        object = values[i];
       else if (strcmp (names[i], "last_modification_time") == 0)
 	/* parse but ignore */
 	;
@@ -761,13 +758,13 @@ parse_signal (ParserData   *data,
     swapped = TRUE;
   
   info = g_slice_new0 (SignalInfo);
-  info->name = name;
-  info->handler = handler;
+  info->name = g_strdup (name);
+  info->handler = g_strdup (handler);
   if (after)
     info->flags |= G_CONNECT_AFTER;
   if (swapped)
     info->flags |= G_CONNECT_SWAPPED;
-  info->connect_object_name = object;
+  info->connect_object_name = g_strdup (object);
   state_push (data, info);
 
   info->tag.name = element_name;
