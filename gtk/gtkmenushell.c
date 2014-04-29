@@ -2185,7 +2185,7 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
 
   if (model)
     menu_shell->priv->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
-                                                      model, with_separators, FALSE, action_namespace,
+                                                      model, with_separators, TRUE, action_namespace,
                                                       gtk_menu_shell_tracker_insert_func,
                                                       gtk_menu_shell_tracker_remove_func,
                                                       menu_shell);
