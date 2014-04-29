@@ -1,7 +1,8 @@
 <interface>
   <menu id="menu">
     <section>
-      <attribute name="display-hint">horizontal-buttons</attribute>
+      <!--<attribute name="display-hint">horizontal-buttons</attribute>-->
+      <attribute name="label">Edit</attribute>
       <item>
         <attribute name="label">Cut</attribute>
         <attribute name="action">top.cut</attribute>

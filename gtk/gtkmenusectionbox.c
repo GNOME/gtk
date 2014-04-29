@@ -84,16 +84,21 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
                                       gint              *n_items)
 {
   gboolean should_have_separator;
+  gboolean has_separator;
+  gboolean has_label;
   gint n_items_before = *n_items;
 
   gtk_container_foreach (GTK_CONTAINER (box->item_box), gtk_menu_section_box_sync_item, n_items);
 
-  should_have_separator = n_items_before > 0 && *n_items > n_items_before;
-
   if (box->separator == NULL)
     return;
 
-  if (should_have_separator == (gtk_widget_get_parent (box->separator) != NULL))
+  has_separator = gtk_widget_get_parent (box->separator) != NULL;
+  has_label = !GTK_IS_SEPARATOR (box->separator);
+
+  should_have_separator = (has_label || n_items_before > 0) && *n_items > n_items_before;
+
+  if (should_have_separator == has_separator)
     return;
 
   if (should_have_separator)
