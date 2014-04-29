@@ -164,7 +164,7 @@ window1
                               weight: <omitted>
                               wrap-mode: word
           <AtkHypertext>
-    ___object_7___
+    action_box
       "filler"
       parent: dialog-vbox1
       index: 1
@@ -173,3 +173,12 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
+      action_area
+        "filler"
+        parent: action_box
+        index: 0
+        state: enabled horizontal sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
