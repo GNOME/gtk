@@ -11218,24 +11218,23 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 		       - gtk_adjustment_get_value (tree_view->priv->hadjustment),
 		       0);
       dy = tree_view->priv->dy - (int) gtk_adjustment_get_value (tree_view->priv->vadjustment);
-      if (dy)
-	{
-          update_prelight (tree_view,
-                           tree_view->priv->event_last_x,
-                           tree_view->priv->event_last_y - dy);
-	}
       tree_view->priv->in_scroll = TRUE;
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
       tree_view->priv->in_scroll = FALSE;
 
-      if (tree_view->priv->dy != (int) gtk_adjustment_get_value (tree_view->priv->vadjustment))
+      if (dy != 0)
         {
           /* update our dy and top_row */
           tree_view->priv->dy = (int) gtk_adjustment_get_value (tree_view->priv->vadjustment);
 
+          update_prelight (tree_view,
+                           tree_view->priv->event_last_x,
+                           tree_view->priv->event_last_y);
+
           if (!tree_view->priv->in_top_row_to_dy)
             gtk_tree_view_dy_to_top_row (tree_view);
-	}
+
+        }
     }
 }
 
