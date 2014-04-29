@@ -131,6 +131,20 @@ test_parser (void)
                              GTK_BUILDER_ERROR_DUPLICATE_ID));
   g_error_free (error);
 
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"><property name=\"deafbeef\"></property></object></interface>", -1, &error);
+  g_assert (g_error_matches (error,
+                             GTK_BUILDER_ERROR,
+                             GTK_BUILDER_ERROR_INVALID_PROPERTY));
+  g_error_free (error);
+  
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"><signal name=\"deafbeef\" handler=\"gtk_true\"/></object></interface>", -1, &error);
+  g_assert (g_error_matches (error,
+                             GTK_BUILDER_ERROR,
+                             GTK_BUILDER_ERROR_INVALID_SIGNAL));
+  g_error_free (error);
+
   g_object_unref (builder);
 }
 

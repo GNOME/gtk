@@ -31,7 +31,7 @@ typedef struct {
 
 typedef struct {
   TagInfo tag;
-  gchar *class_name;
+  GType type;
   gchar *id;
   gchar *constructor;
   GSList *properties;
@@ -60,7 +60,7 @@ typedef struct {
 
 typedef struct {
   TagInfo tag;
-  gchar *name;
+  GParamSpec *pspec;
   GString *text;
   gchar *data;
   gboolean translatable:1;
@@ -71,7 +71,8 @@ typedef struct {
 typedef struct {
   TagInfo tag;
   gchar *object_name;
-  gchar *name;
+  guint  id;
+  GQuark detail;
   gchar *handler;
   GConnectFlags flags;
   gchar *connect_object_name;
@@ -80,7 +81,7 @@ typedef struct {
 typedef struct
 {
   GObject *target;
-  gchar *target_property;
+  GParamSpec *target_pspec;
   gchar *source;
   gchar *source_property;
   GBindingFlags flags;

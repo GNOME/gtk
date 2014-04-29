@@ -436,7 +436,7 @@ gtk_builder_real_get_type_from_name (GtkBuilder  *builder,
 typedef struct
 {
   gchar *object;
-  gchar *name;
+  GParamSpec *pspec;
   gchar *value;
 } DelayedProperty;
 
@@ -450,13 +450,8 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
                             GArray      **filtered_parameters)
 {
   GSList *l;
-  GParamSpec *pspec;
-  GObjectClass *oclass;
   DelayedProperty *property;
   GError *error = NULL;
-  
-  oclass = g_type_class_ref (object_type);
-  g_assert (oclass != NULL);
 
   if (parameters)
     *parameters = g_array_new (FALSE, FALSE, sizeof (GParameter));
@@ -468,19 +463,10 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       PropertyInfo *prop = (PropertyInfo*)l->data;
       GParameter parameter = { NULL };
 
-      pspec = g_object_class_find_property (G_OBJECT_CLASS (oclass),
-                                            prop->name);
-      if (!pspec)
-        {
-          g_warning ("Unknown property: %s.%s",
-                     g_type_name (object_type), prop->name);
-          continue;
-        }
+      parameter.name = prop->pspec->name;
 
-      parameter.name = prop->name;
-
-      if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
-          (G_PARAM_SPEC_VALUE_TYPE (pspec) != GDK_TYPE_PIXBUF))
+      if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
+          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF))
         {
           GObject *object = gtk_builder_get_object (builder, prop->data);
 
@@ -491,17 +477,17 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
             }
           else 
             {
-              if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+              if (prop->pspec->flags & G_PARAM_CONSTRUCT_ONLY)
                 {
                   g_warning ("Failed to get construct only property "
                              "%s of %s with value `%s'",
-                             prop->name, object_name, prop->data);
+                             prop->pspec->name, object_name, prop->data);
                   continue;
                 }
               /* Delay setting property */
               property = g_slice_new (DelayedProperty);
+              property->pspec = prop->pspec;
               property->object = g_strdup (object_name);
-              property->name = g_strdup (prop->name);
               property->value = g_strdup (prop->data);
               builder->priv->delayed_properties =
                 g_slist_prepend (builder->priv->delayed_properties, property);
@@ -515,18 +501,18 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
            */
           continue;
         }
-      else if (!gtk_builder_value_from_string (builder, pspec,
+      else if (!gtk_builder_value_from_string (builder, prop->pspec,
 					       prop->data, &parameter.value, &error))
         {
           g_warning ("Failed to set property %s.%s to %s: %s",
-                     g_type_name (object_type), prop->name, prop->data,
+                     g_type_name (object_type), prop->pspec->name, prop->data,
 		     error->message);
 	  g_error_free (error);
 	  error = NULL;
           continue;
         }
 
-      if (pspec->flags & filter_flags)
+      if (prop->pspec->flags & filter_flags)
 	{
 	  if (filtered_parameters)
 	    g_array_append_val (*filtered_parameters, parameter);
@@ -537,8 +523,6 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
 	    g_array_append_val (*parameters, parameter);
 	}
     }
-
-  g_type_class_unref (oclass);
 }
 
 static GObject *
@@ -628,7 +612,6 @@ _gtk_builder_construct (GtkBuilder *builder,
 			GError **error)
 {
   GArray *parameters, *construct_parameters;
-  GType object_type;
   GObject *obj;
   int i;
   GtkBuildableIface *iface;
@@ -636,26 +619,17 @@ _gtk_builder_construct (GtkBuilder *builder,
   GtkBuildable *buildable;
   GParamFlags param_filter_flags;
 
-  g_assert (info->class_name != NULL);
-  object_type = gtk_builder_get_type_from_name (builder, info->class_name);
-  if (object_type == G_TYPE_INVALID)
-    {
-      g_set_error (error,
-		   GTK_BUILDER_ERROR,
-		   GTK_BUILDER_ERROR_INVALID_VALUE,
-		   "Invalid object type `%s'",
-		   info->class_name);
-      return NULL;
-    }
-  else if (builder->priv->template_type != 0 &&
-	   g_type_is_a (object_type, builder->priv->template_type))
+  g_assert (info->type != G_TYPE_INVALID);
+
+  if (builder->priv->template_type != 0 &&
+      g_type_is_a (info->type, builder->priv->template_type))
     {
       g_set_error (error,
 		   GTK_BUILDER_ERROR,
 		   GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED,
 		   "Refused to build object of type `%s' because it "
 		   "conforms to the template type `%s', avoiding infinite recursion.",
-		   info->class_name, g_type_name (builder->priv->template_type));
+		   g_type_name (info->type), g_type_name (builder->priv->template_type));
       return NULL;
     }
 
@@ -676,7 +650,7 @@ _gtk_builder_construct (GtkBuilder *builder,
   else
     param_filter_flags = G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY;
 
-  gtk_builder_get_parameters (builder, object_type,
+  gtk_builder_get_parameters (builder, info->type,
                               info->id,
                               info->properties,
 			      param_filter_flags,
@@ -723,7 +697,7 @@ _gtk_builder_construct (GtkBuilder *builder,
     }
   else
     {
-      obj = g_object_newv (object_type,
+      obj = g_object_newv (info->type,
                            construct_parameters->len,
                            (GParameter *)construct_parameters->data);
 
@@ -740,7 +714,7 @@ _gtk_builder_construct (GtkBuilder *builder,
         g_object_ref_sink (obj);
 
       GTK_NOTE (BUILDER,
-                g_print ("created %s of type %s\n", info->id, info->class_name));
+                g_print ("created %s of type %s\n", info->id, g_type_name (info->type)));
 
       for (i = 0; i < construct_parameters->len; i++)
         {
@@ -800,18 +774,16 @@ _gtk_builder_apply_properties (GtkBuilder *builder,
 			       GError **error)
 {
   GArray *parameters;
-  GType object_type;
   GtkBuildableIface *iface;
   GtkBuildable *buildable;
   gboolean custom_set_property;
   gint i;
 
   g_assert (info->object != NULL);
-  g_assert (info->class_name != NULL);
-  object_type = gtk_builder_get_type_from_name (builder, info->class_name);
+  g_assert (info->type != G_TYPE_INVALID);
 
   /* Fetch all properties that are not construct-only */
-  gtk_builder_get_parameters (builder, object_type,
+  gtk_builder_get_parameters (builder, info->type,
                               info->id,
                               info->properties,
 			      G_PARAM_CONSTRUCT_ONLY,
@@ -903,11 +875,6 @@ static void
 gtk_builder_apply_delayed_properties (GtkBuilder *builder)
 {
   GSList *l, *props;
-  DelayedProperty *property;
-  GObject *object;
-  GType object_type;
-  GObjectClass *oclass;
-  GParamSpec *pspec;
 
   /* take the list over from the builder->priv.
    *
@@ -919,36 +886,22 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
 
   for (l = props; l; l = l->next)
     {
-      property = (DelayedProperty*)l->data;
+      DelayedProperty *property = l->data;
+      GObject *object, *obj;
+
       object = g_hash_table_lookup (builder->priv->objects, property->object);
       g_assert (object != NULL);
 
-      object_type = G_OBJECT_TYPE (object);
-      g_assert (object_type != G_TYPE_INVALID);
-
-      oclass = g_type_class_ref (object_type);
-      g_assert (oclass != NULL);
-
-      pspec = g_object_class_find_property (G_OBJECT_CLASS (oclass),
-                                            property->name);
-      if (!pspec)
-        g_warning ("Unknown property: %s.%s", g_type_name (object_type),
-                   property->name);
+      obj = g_hash_table_lookup (builder->priv->objects, property->value);
+      if (obj)
+        g_object_set (object, property->pspec->name, obj, NULL);
       else
-        {
-          GObject *obj;
+        g_warning ("No object called: %s", property->value);
 
-          obj = g_hash_table_lookup (builder->priv->objects, property->value);
-          if (!obj)
-            g_warning ("No object called: %s", property->value);
-          else
-            g_object_set (object, property->name, obj, NULL);
-        }
+
       g_free (property->value);
       g_free (property->object);
-      g_free (property->name);
       g_slice_free (DelayedProperty, property);
-      g_type_class_unref (oclass);
     }
   g_slist_free (props);
 }
@@ -957,7 +910,7 @@ static inline void
 free_binding_info (gpointer data, gpointer user)
 {
   BindingInfo *info = data;
-  g_free (info->target_property);
+
   g_free (info->source);
   g_free (info->source_property);
   g_slice_free (BindingInfo, data);
@@ -975,7 +928,7 @@ gtk_builder_create_bindings (GtkBuilder *builder)
 
       if ((source = gtk_builder_get_object (builder, info->source)))
         g_object_bind_property (source, info->source_property,
-                                info->target, info->target_property,
+                                info->target, info->target_pspec->name,
                                 info->flags);
       else
         g_warning ("Could not find source object '%s' to bind property '%s'",
@@ -1724,6 +1677,7 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
   GSList *l;
   GObject *object;
   GObject *connect_object;
+  GString *detailed_id = NULL;
   
   g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (func != NULL);
@@ -1735,9 +1689,12 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
   for (l = builder->priv->signals; l; l = l->next)
     {
       SignalInfo *signal = (SignalInfo*)l->data;
+      const gchar *signal_name;
 
       g_assert (signal != NULL);
-      g_assert (signal->name != NULL);
+      g_assert (signal->id != 0);
+
+      signal_name = g_signal_name (signal->id);
 
       object = g_hash_table_lookup (builder->priv->objects,
 				    signal->object_name);
@@ -1751,17 +1708,30 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
 						signal->connect_object_name);
 	  if (!connect_object)
 	      g_warning ("Could not lookup object %s on signal %s of object %s",
-			 signal->connect_object_name, signal->name,
-			 signal->object_name);
+			 signal->connect_object_name, signal_name,
+                         signal->object_name);
 	}
-						  
-      func (builder, object, signal->name, signal->handler, 
-	    connect_object, signal->flags, user_data);
+
+      if (signal->detail)
+        {
+          if (detailed_id == NULL)
+            detailed_id = g_string_new ("");
+
+          g_string_printf (detailed_id, "%s::%s", signal_name,
+                           g_quark_to_string (signal->detail));
+          signal_name = detailed_id->str;
+        }
+
+      func (builder, object, signal_name, signal->handler,
+            connect_object, signal->flags, user_data);
     }
 
   g_slist_foreach (builder->priv->signals, (GFunc)_free_signal_info, NULL);
   g_slist_free (builder->priv->signals);
   builder->priv->signals = NULL;
+
+  if (detailed_id)
+    g_string_free (detailed_id, TRUE);
 }
 
 /**
