@@ -8405,6 +8405,8 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
     {
       get_shadow_width (widget, &window_border);
 
+      height -= window_border.top + window_border.bottom;
+
       if (priv->title_box != NULL &&
           gtk_widget_get_visible (priv->title_box) &&
           gtk_widget_get_child_visible (priv->title_box))
@@ -8514,6 +8516,8 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
       !priv->fullscreen)
     {
       get_shadow_width (widget, &window_border);
+
+      width -= window_border.left + window_border.right;
 
       if (priv->title_box != NULL &&
           gtk_widget_get_visible (priv->title_box) &&
