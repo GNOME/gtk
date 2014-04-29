@@ -46,6 +46,7 @@ struct _GtkMenuSectionBox
   GtkWidget         *separator;
   guint              separator_sync_idle;
   gboolean           iconic;
+  gint               depth;
 };
 
 G_DEFINE_TYPE (GtkMenuSectionBox, gtk_menu_section_box, GTK_TYPE_BOX)
@@ -56,7 +57,7 @@ void                    gtk_menu_section_box_new_submenu                (GtkMenu
                                                                          GtkMenuSectionBox  *toplevel,
                                                                          GtkWidget          *focus);
 GtkWidget *             gtk_menu_section_box_new_section                (GtkMenuTrackerItem *item,
-                                                                         GtkMenuSectionBox  *toplevel);
+                                                                         GtkMenuSectionBox  *parent);
 
 static void
 gtk_menu_section_box_sync_item (GtkWidget *widget,
@@ -96,7 +97,7 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
   has_separator = gtk_widget_get_parent (box->separator) != NULL;
   has_label = !GTK_IS_SEPARATOR (box->separator);
 
-  should_have_separator = (has_label || n_items_before > 0) && *n_items > n_items_before;
+  should_have_separator = (has_label || (n_items_before > 0 && box->depth <= 1)) && *n_items > n_items_before;
 
   if (should_have_separator == has_separator)
     return;
@@ -229,7 +230,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
 
   if (gtk_menu_tracker_item_get_is_separator (item))
     {
-      widget = gtk_menu_section_box_new_section (item, box->toplevel);
+      widget = gtk_menu_section_box_new_section (item, box);
     }
   else if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU))
     {
@@ -395,7 +396,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
 
 GtkWidget *
 gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
-                                  GtkMenuSectionBox  *toplevel)
+                                  GtkMenuSectionBox  *parent)
 {
   GtkMenuSectionBox *box;
   GtkWidget *separator;
@@ -403,8 +404,9 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   const gchar *hint;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
-  box->size_group = g_object_ref (toplevel->size_group);
-  box->toplevel = toplevel;
+  box->size_group = g_object_ref (parent->size_group);
+  box->toplevel = parent->toplevel;
+  box->depth = parent->depth + 1;
 
   separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   label = gtk_menu_tracker_item_get_label (item);
