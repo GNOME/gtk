@@ -322,6 +322,8 @@ testdata = \
 	window-border-width.ui \
 	window-default-size.ref.ui \
 	window-default-size.ui \
+	window-height-for-width.ref.ui \
+	window-height-for-width.ui \
 	$(NULL)
 
 EXTRA_DIST += 			\
