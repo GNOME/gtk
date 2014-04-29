@@ -293,6 +293,24 @@ gtk_menu_section_box_dispose (GObject *object)
       box->separator_sync_idle = 0;
     }
 
+  if (box->separator)
+    {
+      gtk_widget_destroy (box->separator);
+      box->separator = NULL;
+    }
+
+  if (box->size_group)
+    {
+      g_object_unref (box->size_group);
+      box->size_group = NULL;
+    }
+
+  if (box->tracker)
+    {
+      gtk_menu_tracker_free (box->tracker);
+      box->tracker = NULL;
+    }
+
   G_OBJECT_CLASS (gtk_menu_section_box_parent_class)->dispose (object);
 }
 
@@ -415,6 +433,8 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
                     NULL);
       gtk_widget_show (box->separator);
     }
+
+  g_object_add_weak_pointer (G_OBJECT (box->separator), (gpointer *)&(box->separator));
 
   box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SECTION, FALSE,
                                                      gtk_menu_section_box_insert_func,
