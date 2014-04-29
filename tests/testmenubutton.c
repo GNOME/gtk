@@ -39,6 +39,7 @@ int main (int argc, char **argv)
 	GtkWidget *grid;
 	GtkWidget *entry;
 	GtkWidget *label;
+	GtkWidget *check;
 	GtkWidget *combo;
 	GtkWidget *menu_widget;
 	GtkAccelGroup *accel_group;
@@ -132,6 +133,10 @@ int main (int argc, char **argv)
 	gtk_grid_attach (GTK_GRID (grid), button, 1, row++, 1, 1);
 	gtk_widget_show (create_prop_editor (G_OBJECT (button), 0));
 
+        check = gtk_check_button_new_with_label ("Popover");
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+	gtk_grid_attach (GTK_GRID (grid), check, 0, row, 1, 1);
+
 	/* Button with GMenuModel */
 	menu = g_menu_new ();
 	for (i = 5; i > 0; i--) {
@@ -147,6 +152,8 @@ int main (int argc, char **argv)
 	}
 
 	button = gtk_menu_button_new ();
+        g_object_bind_property (check, "active", button, "use-popover", G_BINDING_SYNC_CREATE);
+
 	gtk_widget_set_halign (button, GTK_ALIGN_START);
 	menubuttons = g_list_prepend (menubuttons, button);
 	gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), G_MENU_MODEL (menu));
