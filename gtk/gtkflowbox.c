@@ -434,10 +434,8 @@ gtk_flow_box_child_get_preferred_height_for_width (GtkWidget *widget,
         gtk_widget_get_preferred_height_for_width (child, width - full_border.left - full_border.right,
                                                    &child_min, &child_natural);
 
-      if (minimum_height)
-        *minimum_height = full_border.top + child_min + full_border.bottom;
-      if (natural_height)
-        *natural_height = full_border.top + child_natural + full_border.bottom;
+      *minimum_height = full_border.top + child_min + full_border.bottom;
+      *natural_height = full_border.top + child_natural + full_border.bottom;
     }
   else
     {
@@ -461,10 +459,8 @@ gtk_flow_box_child_get_preferred_width (GtkWidget *widget,
       if (child && gtk_widget_get_visible (child))
         gtk_widget_get_preferred_width (child, &child_min, &child_natural);
 
-      if (minimum_width)
-        *minimum_width = full_border.left + child_min + full_border.right;
-      if (natural_width)
-        *natural_width = full_border.left + child_natural + full_border.right;
+      *minimum_width = full_border.left + child_min + full_border.right;
+      *natural_width = full_border.left + child_natural + full_border.right;
     }
   else
     {
@@ -498,10 +494,8 @@ gtk_flow_box_child_get_preferred_width_for_height (GtkWidget *widget,
         gtk_widget_get_preferred_width_for_height (child, height - full_border.top - full_border.bottom,
                                                    &child_min, &child_natural);
 
-      if (minimum_width)
-        *minimum_width = full_border.left + child_min + full_border.right;
-      if (natural_width)
-        *natural_width = full_border.left + child_natural + full_border.right;
+      *minimum_width = full_border.left + child_min + full_border.right;
+      *natural_width = full_border.left + child_natural + full_border.right;
     }
 }
 
@@ -529,10 +523,8 @@ gtk_flow_box_child_get_preferred_height (GtkWidget *widget,
       if (child && gtk_widget_get_visible (child))
         gtk_widget_get_preferred_height (child, &child_min, &child_natural);
 
-      if (minimum_height)
-        *minimum_height = full_border.top + child_min + full_border.bottom;
-      if (natural_height)
-        *natural_height = full_border.top + child_natural + full_border.bottom;
+      *minimum_height = full_border.top + child_min + full_border.bottom;
+      *natural_height = full_border.top + child_natural + full_border.bottom;
     }
 }
 
