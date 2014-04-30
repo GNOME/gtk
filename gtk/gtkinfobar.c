@@ -337,10 +337,8 @@ gtk_info_bar_get_preferred_width (GtkWidget *widget,
                                                                      minimum_width,
                                                                      natural_width);
 
-  if (minimum_width)
-    *minimum_width += border.left + border.right;
-  if (natural_width)
-    *natural_width += border.left + border.right;
+  *minimum_width += border.left + border.right;
+  *natural_width += border.left + border.right;
 }
 
 static void
@@ -356,10 +354,8 @@ gtk_info_bar_get_preferred_height (GtkWidget *widget,
                                                                       minimum_height,
                                                                       natural_height);
 
-  if (minimum_height)
-    *minimum_height += border.top + border.bottom;
-  if (natural_height)
-    *natural_height += border.top + border.bottom;
+  *minimum_height += border.top + border.bottom;
+  *natural_height += border.top + border.bottom;
 }
 
 static gboolean
