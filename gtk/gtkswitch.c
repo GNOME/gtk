@@ -365,11 +365,8 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
 
   g_object_unref (layout);
 
-  if (minimum)
-    *minimum = width;
-
-  if (natural)
-    *natural = width;
+  *minimum = width;
+  *natural = width;
 }
 
 static void
@@ -417,11 +414,8 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   g_object_unref (layout);
   g_free (str);
 
-  if (minimum)
-    *minimum = height;
-
-  if (natural)
-    *natural = height;
+  *minimum = height;
+  *natural = height;
 }
 
 static void
