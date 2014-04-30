@@ -991,11 +991,8 @@ gtk_popover_get_preferred_width (GtkWidget *widget,
   min += extra;
   nat += extra;
 
-  if (minimum_width)
-    *minimum_width = min;
-
-  if (natural_width)
-    *natural_width = nat;
+  *minimum_width = min;
+  *natural_width = nat;
 }
 
 static void
@@ -1034,11 +1031,8 @@ gtk_popover_get_preferred_width_for_height (GtkWidget *widget,
   min += extra;
   nat += extra;
 
-  if (minimum_width)
-    *minimum_width = min;
-
-  if (natural_width)
-    *natural_width = nat;
+  *minimum_width = min;
+  *natural_width = nat;
 }
 
 static void
@@ -1068,11 +1062,8 @@ gtk_popover_get_preferred_height (GtkWidget *widget,
   min += extra;
   nat += extra;
 
-  if (minimum_height)
-    *minimum_height = min;
-
-  if (natural_height)
-    *natural_height = nat;
+  *minimum_height = min;
+  *natural_height = nat;
 }
 
 static void
