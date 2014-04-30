@@ -916,11 +916,8 @@ gtk_frame_get_preferred_size (GtkWidget      *widget,
       natural += (border_width * 2) + padding.top + padding.bottom;
     }
 
- if (minimum_size)
-    *minimum_size = minimum;
-
-  if (natural_size)
-    *natural_size = natural;
+  *minimum_size = minimum;
+  *natural_size = natural;
 }
 
 static void
@@ -981,11 +978,8 @@ gtk_frame_get_preferred_height_for_width (GtkWidget *widget,
       natural += child_nat;
     }
 
- if (minimum_height)
-    *minimum_height = minimum;
-
-  if (natural_height)
-    *natural_height = natural;
+  *minimum_height = minimum;
+  *natural_height = natural;
 }
 
 static void
