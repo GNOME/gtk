@@ -29,10 +29,11 @@
 #include "gtkadjustment.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkpixelcacheprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
-#include "gtkpixelcacheprivate.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
@@ -1050,10 +1051,11 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
 
   if (child && gtk_widget_get_visible (child))
     {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-      else
-	gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+      _gtk_widget_get_preferred_size_for_size (child,
+                                               orientation,
+                                               -1,
+                                               &child_min, &child_nat,
+                                               NULL, NULL);
 
       minimum += child_min;
       natural += child_nat;
