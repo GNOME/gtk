@@ -49,6 +49,7 @@ examples/application9/prefs.ui
 examples/application9/window.ui
 examples/bloatpad.c
 examples/plugman.c
+gtk/paper_names.c
 gtk/resources/ui/gtkaboutdialog.ui
 gtk/resources/ui/gtkappchooserdialog.ui
 gtk/resources/ui/gtkappchooserwidget.ui
@@ -73,7 +74,6 @@ gtk/resources/ui/gtkrecentchooserdefault.ui
 gtk/resources/ui/gtkscalebutton.ui
 gtk/resources/ui/gtkstatusbar.ui
 gtk/resources/ui/gtkvolumebutton.ui
-gtk/paper_names.c
 tests/testfilechooser.c
 testsuite/a11y/accessible-name.ui
 testsuite/a11y/assistant.ui
@@ -196,6 +196,8 @@ testsuite/reftests/treeview-headers-hidden.ref.ui
 testsuite/reftests/treeview-headers-hidden.ui
 testsuite/reftests/window-border-width.ref.ui
 testsuite/reftests/window-border-width.ui
+testsuite/reftests/window-height-for-width.ref.ui
+testsuite/reftests/window-height-for-width.ui
 tests/visuals/inline-toolbar-horizontal.ui
 tests/visuals/inline-toolbar-vertical.ui
 tests/visuals/linked-buttons-horizontal.ui
