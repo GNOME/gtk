@@ -115,6 +115,14 @@ static void gtk_viewport_get_preferred_width      (GtkWidget        *widget,
 static void gtk_viewport_get_preferred_height     (GtkWidget        *widget,
 						   gint             *minimum_size,
 						   gint             *natural_size);
+static void gtk_viewport_get_preferred_width_for_height (GtkWidget  *widget,
+                                                   gint              height,
+						   gint             *minimum_size,
+						   gint             *natural_size);
+static void gtk_viewport_get_preferred_height_for_width (GtkWidget  *widget,
+                                                   gint              width,
+						   gint             *minimum_size,
+						   gint             *natural_size);
 
 static void viewport_set_adjustment               (GtkViewport      *viewport,
                                                    GtkOrientation    orientation,
@@ -150,6 +158,8 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->style_updated = gtk_viewport_style_updated;
   widget_class->get_preferred_width = gtk_viewport_get_preferred_width;
   widget_class->get_preferred_height = gtk_viewport_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_viewport_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_viewport_get_preferred_height_for_width;
   widget_class->queue_draw_region = gtk_viewport_queue_draw_region;
   
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
@@ -1012,6 +1022,7 @@ gtk_viewport_style_updated (GtkWidget *widget)
 static void
 gtk_viewport_get_preferred_size (GtkWidget      *widget,
                                  GtkOrientation  orientation,
+                                 gint            for_size,
                                  gint           *minimum_size,
                                  gint           *natural_size)
 {
@@ -1037,15 +1048,27 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
       gtk_style_context_get_border (context, state, &border);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        minimum += border.left + border.right;
+        {
+          for_size -= border.top + border.bottom;
+          minimum += border.left + border.right;
+        }
       else
-        minimum += border.top + border.bottom;
+        {
+          for_size -= border.left + border.right;
+          minimum += border.top + border.bottom;
+        }
     }
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    minimum += padding.left + padding.right;
+    {
+      for_size -= padding.top + padding.bottom;
+      minimum += padding.left + padding.right;
+    }
   else
-    minimum += padding.top + padding.bottom;
+    {
+      for_size -= padding.left + padding.right;
+      minimum += padding.top + padding.bottom;
+    }
 
   natural = minimum;
 
@@ -1053,7 +1076,7 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
     {
       _gtk_widget_get_preferred_size_for_size (child,
                                                orientation,
-                                               -1,
+                                               for_size,
                                                &child_min, &child_nat,
                                                NULL, NULL);
 
@@ -1073,7 +1096,7 @@ gtk_viewport_get_preferred_width (GtkWidget *widget,
                                   gint      *minimum_size,
                                   gint      *natural_size)
 {
-  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum_size, natural_size);
 }
 
 static void
@@ -1081,5 +1104,23 @@ gtk_viewport_get_preferred_height (GtkWidget *widget,
                                    gint      *minimum_size,
                                    gint      *natural_size)
 {
-  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, -1, minimum_size, natural_size);
+}
+
+static void
+gtk_viewport_get_preferred_width_for_height (GtkWidget *widget,
+                                             gint       height,
+                                             gint      *minimum_size,
+                                             gint      *natural_size)
+{
+  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, height, minimum_size, natural_size);
+}
+
+static void
+gtk_viewport_get_preferred_height_for_width (GtkWidget *widget,
+                                             gint       width,
+                                             gint      *minimum_size,
+                                             gint      *natural_size)
+{
+  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, width, minimum_size, natural_size);
 }
