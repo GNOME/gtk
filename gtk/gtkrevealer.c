@@ -756,10 +756,8 @@ gtk_revealer_real_get_preferred_height (GtkWidget *widget,
 
   minimum_height = MIN (minimum_height, natural_height);
 
-  if (minimum_height_out)
-    *minimum_height_out = minimum_height;
-  if (natural_height_out)
-    *natural_height_out = natural_height;
+  *minimum_height_out = minimum_height;
+  *natural_height_out = natural_height;
 }
 
 static void
@@ -784,10 +782,8 @@ gtk_revealer_real_get_preferred_height_for_width (GtkWidget *widget,
 
   minimum_height = MIN (minimum_height, natural_height);
 
-  if (minimum_height_out)
-    *minimum_height_out = minimum_height;
-  if (natural_height_out)
-    *natural_height_out = natural_height;
+  *minimum_height_out = minimum_height;
+  *natural_height_out = natural_height;
 }
 
 static void
@@ -811,10 +807,8 @@ gtk_revealer_real_get_preferred_width (GtkWidget *widget,
 
   minimum_width = MIN (minimum_width, natural_width);
 
-  if (minimum_width_out)
-    *minimum_width_out = minimum_width;
-  if (natural_width_out)
-    *natural_width_out = natural_width;
+  *minimum_width_out = minimum_width;
+  *natural_width_out = natural_width;
 }
 
 static void
@@ -839,10 +833,8 @@ gtk_revealer_real_get_preferred_width_for_height (GtkWidget *widget,
 
   minimum_width = MIN (minimum_width, natural_width);
 
-  if (minimum_width_out)
-    *minimum_width_out = minimum_width;
-  if (natural_width_out)
-    *natural_width_out = natural_width;
+  *minimum_width_out = minimum_width;
+  *natural_width_out = natural_width;
 }
 
 /**
