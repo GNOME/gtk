@@ -661,11 +661,8 @@ gtk_header_bar_get_size (GtkWidget      *widget,
       natural = MAX (center_nat, natural + css_borders.top + css_borders.bottom);
     }
 
-  if (minimum_size)
-    *minimum_size = minimum;
-
-  if (natural_size)
-    *natural_size = natural;
+  *minimum_size = minimum;
+  *natural_size = natural;
 }
 
 static void
@@ -748,11 +745,8 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
   required_size += css_borders.left + css_borders.right;
   required_natural += css_borders.left + css_borders.right;
 
-  if (minimum_size)
-    *minimum_size = required_size;
-
-  if (natural_size)
-    *natural_size = required_natural;
+  *minimum_size = required_size;
+  *natural_size = required_natural;
 }
 
 static void
@@ -875,11 +869,8 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
   computed_minimum = MAX (center_min, computed_minimum + css_borders.top + css_borders.bottom);
   computed_natural = MAX (center_nat, computed_natural + css_borders.top + css_borders.bottom);
 
-  if (minimum_size)
-    *minimum_size = computed_minimum;
-
-  if (natural_size)
-    *natural_size = computed_natural;
+  *minimum_size = computed_minimum;
+  *natural_size = computed_natural;
 }
 
 static void
