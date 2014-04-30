@@ -13904,11 +13904,8 @@ gtk_widget_real_get_width (GtkWidget *widget,
 			   gint      *minimum_size,
 			   gint      *natural_size)
 {
-  if (minimum_size)
-    *minimum_size = 0;
-
-  if (natural_size)
-    *natural_size = 0;
+  *minimum_size = 0;
+  *natural_size = 0;
 }
 
 static void
@@ -13916,11 +13913,8 @@ gtk_widget_real_get_height (GtkWidget *widget,
 			    gint      *minimum_size,
 			    gint      *natural_size)
 {
-  if (minimum_size)
-    *minimum_size = 0;
-
-  if (natural_size)
-    *natural_size = 0;
+  *minimum_size = 0;
+  *natural_size = 0;
 }
 
 static void
