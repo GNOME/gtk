@@ -1084,11 +1084,8 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
       natural += child_nat;
     }
 
-  if (minimum_size)
-    *minimum_size = minimum;
-
-  if (natural_size)
-    *natural_size = natural;
+  *minimum_size = minimum;
+  *natural_size = natural;
 }
 
 static void
