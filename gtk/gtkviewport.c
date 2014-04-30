@@ -1025,10 +1025,7 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
-  /* XXX This should probably be (border_width * 2); but GTK+ has
-   * been doing this with a single border for a while now...
-   */
-  minimum = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  minimum = 2 * gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (widget));
   state = gtk_widget_get_state_flags (GTK_WIDGET (widget));
