@@ -3252,11 +3252,8 @@ gtk_menu_get_preferred_width (GtkWidget *widget,
   priv->toggle_size = max_toggle_size;
   priv->accel_size  = max_accel_width;
 
-  if (minimum_size)
-    *minimum_size = min_width;
-
-  if (natural_size)
-    *natural_size = nat_width;
+  *minimum_size = min_width;
+  *natural_size = nat_width;
 
   /* Don't resize the tearoff if it is not active,
    * because it won't redraw (it is only a background pixmap).
@@ -3335,11 +3332,8 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
         }
     }
 
-  if (minimum_size)
-    *minimum_size = min_height;
-
-  if (natural_size)
-    *natural_size = nat_height;
+  *minimum_size = min_height;
+  *natural_size = nat_height;
 
   g_free (min_heights);
   g_free (nat_heights);
