@@ -2031,7 +2031,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkFrame" id="frame">
+                          <object class="GtkFrame" id="page2frame1">
                             <property name="visible">True</property>
                             <property name="hexpand">False</property>
                             <child>
@@ -2188,7 +2188,474 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">10</property>
+                        <child>
+                          <object class="GtkFrame" id="page2frame2">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkMenuBar">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkMenuItem" id="menuitem1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="use_action_appearance">False</property>
+                                        <property name="label" translatable="yes">_File</property>
+                                        <property name="use_underline">True</property>
+                                        <child type="submenu">
+                                          <object class="GtkMenu" id="menu1">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem101">
+                                                <property name="label" translatable="yes">_New</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem102">
+                                                <property name="label" translatable="yes">_Open</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem103">
+                                                <property name="label" translatable="yes">_Save</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem104">
+                                                <property name="label" translatable="yes">Save _As</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem105">
+                                                <property name="label" translatable="yes">_Quit</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="action_name">app.quit</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuItem" id="menuitem2">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="use_action_appearance">False</property>
+                                        <property name="label" translatable="yes">_Edit</property>
+                                        <property name="use_underline">True</property>
+                                        <child type="submenu">
+                                          <object class="GtkMenu" id="menu2">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem106">
+                                                <property name="label" translatable="yes">Cu_t</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem107">
+                                                <property name="label" translatable="yes">_Copy</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem108">
+                                                <property name="label" translatable="yes">_Paste</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkMenuItem" id="menuitem109">
+                                                <property name="label" translatable="yes">_Delete</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="action_name">win.delete</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkMenuItem" id="searchmenuitem">
+                                                <property name="label" translatable="yes">_Search</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="action_name">win.search</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkImageMenuItem" id="togglesmenuitem">
+                                                <property name="label">Checks &amp; Radios</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="use_stock">False</property>
+                                                <child type="submenu">
+                                                  <object class="GtkMenu" id="togglessubmenu">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <child>
+                                                      <object class="GtkCheckMenuItem" id="checkmenuitem1">
+                                                        <property name="label">_Check</property>
+                                                        <property name="active">True</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkCheckMenuItem" id="checkmenuitem2">
+                                                        <property name="label">_Check</property>
+                                                        <property name="active">True</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkCheckMenuItem" id="checkmenuitem3">
+                                                        <property name="label">_Check</property>
+                                                        <property name="active">False</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="inconsistent">True</property>
+                                                        <property name="sensitive">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkCheckMenuItem" id="checkmenuitem4">
+                                                        <property name="label">_Check</property>
+                                                        <property name="active">False</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkCheckMenuItem" id="checkmenuitem5">
+                                                        <property name="label">_Check</property>
+                                                        <property name="active">False</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkCheckMenuItem" id="checkmenuitem6">
+                                                        <property name="label">_Check</property>
+                                                        <property name="active">False</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="inconsistent">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkSeparatorMenuItem" id="separatormenuitem">
+                                                        <property name="visible">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkRadioMenuItem" id="radiomenuitem1">
+                                                        <property name="label">_Radio</property>
+                                                        <property name="active">True</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkRadioMenuItem" id="radiomenuitem2">
+                                                        <property name="label">_Radio</property>
+                                                        <property name="active">True</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkRadioMenuItem" id="radiomenuitem3">
+                                                        <property name="label">_Radio</property>
+                                                        <property name="active">False</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="inconsistent">True</property>
+                                                        <property name="sensitive">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkRadioMenuItem" id="radiomenuitem4">
+                                                        <property name="label">_Radio</property>
+                                                        <property name="active">False</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkRadioMenuItem" id="radiomenuitem5">
+                                                        <property name="label">_Radio</property>
+                                                        <property name="active">False</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkRadioMenuItem" id="radiomenuitem6">
+                                                        <property name="label">_Radio</property>
+                                                        <property name="active">False</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="inconsistent">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_action_appearance">False</property>
+                                                        <property name="use_underline">True</property>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuItem" id="menuitem3">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="use_action_appearance">False</property>
+                                        <property name="label" translatable="yes">_View</property>
+                                        <property name="use_underline">True</property>
+                                        <child type="submenu">
+                                          <object class="GtkMenu" id="view-menu">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <child>
+                                              <object class="GtkCheckMenuItem" id="darkmenuitem">
+                                                <property name="label">_Dark theme</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="action_name">win.dark</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckMenuItem" id="toolbarmenuitem">
+                                                <property name="label">_Toolbar</property>
+                                                <property name="visible">True</property>
+                                                <property name="active">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="action_name">win.toolbar</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuItem" id="menuitem4">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="use_action_appearance">False</property>
+                                        <property name="label" translatable="yes">_Help</property>
+                                        <property name="use_underline">True</property>
+                                        <child type="submenu">
+                                          <object class="GtkMenu" id="menu3">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <child>
+                                              <object class="GtkMenuItem" id="aboutmenuitem">
+                                                <property name="label" translatable="yes">_About</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="action_name">app.about</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToolbar" id="toolbar">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkToolButton">
+                                        <property name="visible">True</property>
+                                        <property name="label">New</property>
+                                        <property name="icon-name">document-new</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton">
+                                        <property name="visible">True</property>
+                                        <property name="label">Save</property>
+                                        <property name="icon-name">document-save</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton">
+                                        <property name="visible">True</property>
+                                        <property name="label">Search</property>
+                                        <property name="icon-name">search</property>
+                                        <property name="action-name">win.search</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSearchBar" id="searchbar">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkSearchEntry">
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkInfoBar" id="infobar">
+                                    <property name="show-close-button">True</property>
+                                    <property name="no-show-all">True</property>
+                                    <child internal-child="content_area">
+                                      <object class="GtkBox">
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label">You wanted to delete something.</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkScrolledWindow">
+                                    <property name="visible">True</property>
+                                    <property name="shadow_type">in</property>
+                                    <property name="vexpand">True</property>
+                                    <child>
+                                      <object class="GtkTextView">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="buffer">textbuffer1</property>
+                                        <property name="wrap_mode">2</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
                       </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="filler2">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                      </packing>
                     </child>
                   </object>
                 </child>

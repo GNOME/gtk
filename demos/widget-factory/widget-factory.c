@@ -24,18 +24,6 @@
 #include <gtk/gtk.h>
 
 static void
-activate_toggle (GSimpleAction *action,
-                 GVariant      *parameter,
-                 gpointer       user_data)
-{
-  GVariant *state;
-
-  state = g_action_get_state (G_ACTION (action));
-  g_action_change_state (G_ACTION (action), g_variant_new_boolean (!g_variant_get_boolean (state)));
-  g_variant_unref (state);
-}
-
-static void
 change_theme_state (GSimpleAction *action,
                     GVariant      *state,
                     gpointer       user_data)
@@ -48,6 +36,44 @@ change_theme_state (GSimpleAction *action,
                 NULL);
 
   g_simple_action_set_state (action, state);
+}
+
+static void
+change_toolbar_state (GSimpleAction *action,
+                      GVariant      *state,
+                      gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkWidget *toolbar;
+
+  toolbar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "toolbar"));
+  gtk_widget_set_visible (toolbar, g_variant_get_boolean (state));
+
+  g_simple_action_set_state (action, state);
+}
+
+static void
+activate_search (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkWidget *searchbar;
+
+  searchbar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "searchbar"));
+  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (searchbar), TRUE);
+}
+
+static void
+activate_delete (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkWidget *infobar;
+
+  infobar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "infobar"));
+  gtk_widget_show (infobar);
 }
 
 static void
@@ -237,6 +263,13 @@ update_header (GtkListBoxRow *row,
 }
 
 static void
+info_bar_response (GtkWidget *infobar, gint response_id)
+{
+  if (response_id == GTK_RESPONSE_CLOSE)
+    gtk_widget_hide (infobar);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -244,7 +277,10 @@ activate (GApplication *app)
   GtkWidget *widget;
   GtkAdjustment *adj;
   static GActionEntry win_entries[] = {
-    { "dark", activate_toggle, NULL, "false", change_theme_state }
+    { "dark", NULL, NULL, "false", change_theme_state },
+    { "toolbar", NULL, NULL, "true", change_toolbar_state },
+    { "search", activate_search, NULL, NULL, NULL },
+    { "delete", activate_delete, NULL, NULL, NULL }
   };
 
   builder = gtk_builder_new ();
@@ -273,6 +309,16 @@ activate (GApplication *app)
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "listbox");
   gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_header, NULL, NULL);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbar");
+  g_object_set_data (G_OBJECT (window), "toolbar", widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "searchbar");
+  g_object_set_data (G_OBJECT (window), "searchbar", widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "infobar");
+  g_signal_connect (widget, "response", G_CALLBACK (info_bar_response), NULL); 
+  g_object_set_data (G_OBJECT (window), "infobar", widget);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 
