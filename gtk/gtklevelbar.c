@@ -545,10 +545,8 @@ gtk_level_bar_get_preferred_width (GtkWidget *widget,
   else
     width += block_width;
 
-  if (minimum)
-    *minimum = width;
-  if (natural)
-    *natural = width;
+  *minimum = width;
+  *natural = width;
 }
 
 static void
@@ -572,10 +570,8 @@ gtk_level_bar_get_preferred_height (GtkWidget *widget,
   else
     height += block_height;
 
-  if (minimum)
-    *minimum = height;
-  if (natural)
-    *natural = height;
+  *minimum = height;
+  *natural = height;
 }
 
 static void
