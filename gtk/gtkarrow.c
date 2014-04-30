@@ -201,11 +201,8 @@ gtk_arrow_get_preferred_width (GtkWidget *widget,
 
   _gtk_misc_get_padding_and_border (GTK_MISC (widget), &border);
 
-  if (minimum_size)
-    *minimum_size = MIN_ARROW_SIZE + border.left + border.right;
-
-  if (natural_size)
-    *natural_size = MIN_ARROW_SIZE + border.left + border.right;
+  *minimum_size = MIN_ARROW_SIZE + border.left + border.right;
+  *natural_size = MIN_ARROW_SIZE + border.left + border.right;
 }
 
 static void
@@ -217,11 +214,8 @@ gtk_arrow_get_preferred_height (GtkWidget *widget,
 
   _gtk_misc_get_padding_and_border (GTK_MISC (widget), &border);
 
-  if (minimum_size)
-    *minimum_size = MIN_ARROW_SIZE + border.top + border.bottom;
-
-  if (natural_size)
-    *natural_size = MIN_ARROW_SIZE + border.top + border.bottom;
+  *minimum_size = MIN_ARROW_SIZE + border.top + border.bottom;
+  *natural_size = MIN_ARROW_SIZE + border.top + border.bottom;
 }
 
 /**
