@@ -3211,17 +3211,13 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (minimum_size)
-	*minimum_size = minimum_req.width;
-      if (natural_size)
-	*natural_size = natural_req.width;
+      *minimum_size = minimum_req.width;
+      *natural_size = natural_req.width;
     }
   else
     {
-      if (minimum_size)
-	*minimum_size = minimum_req.height;
-      if (natural_size)
-	*natural_size = natural_req.height;
+      *minimum_size = minimum_req.height;
+      *natural_size = natural_req.height;
     }
 }
 
