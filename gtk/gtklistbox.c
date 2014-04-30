@@ -2296,7 +2296,6 @@ gtk_list_box_get_preferred_height_for_width (GtkWidget *widget,
   GtkListBoxPrivate *priv = BOX_PRIV (widget);
   GSequenceIter *iter;
   gint minimum_height;
-  gint natural_height;
 
   minimum_height = 0;
 
@@ -2327,11 +2326,8 @@ gtk_list_box_get_preferred_height_for_width (GtkWidget *widget,
   /* We always allocate the minimum height, since handling expanding rows is way too costly,
    * and unlikely to be used, as lists are generally put inside a scrolling window anyway.
    */
-  natural_height = minimum_height;
-  if (minimum_height_out)
-    *minimum_height_out = minimum_height;
-  if (natural_height_out)
-    *natural_height_out = natural_height;
+  *minimum_height_out = minimum_height;
+  *natural_height_out = minimum_height;
 }
 
 static void
@@ -2378,10 +2374,8 @@ gtk_list_box_get_preferred_width (GtkWidget *widget,
         }
     }
 
-  if (minimum_width_out)
-    *minimum_width_out = minimum_width;
-  if (natural_width_out)
-    *natural_width_out = natural_width;
+  *minimum_width_out = minimum_width;
+  *natural_width_out = natural_width;
 }
 
 static void
@@ -3002,10 +2996,8 @@ gtk_list_box_row_get_preferred_height_for_width (GtkWidget *widget,
       gtk_widget_get_preferred_height_for_width (child, width - full_border.left - full_border.right,
                                                  &child_min, &child_natural);
 
-  if (minimum_height_out)
-    *minimum_height_out = full_border.top + child_min + full_border.bottom;
-  if (natural_height_out)
-    *natural_height_out = full_border.top + child_natural + full_border.bottom;
+  *minimum_height_out = full_border.top + child_min + full_border.bottom;
+  *natural_height_out = full_border.top + child_natural + full_border.bottom;
 }
 
 static void
@@ -3025,10 +3017,8 @@ gtk_list_box_row_get_preferred_width (GtkWidget *widget,
       gtk_widget_get_preferred_width (child,
                                       &child_min, &child_natural);
 
-  if (minimum_width_out)
-    *minimum_width_out = full_border.left + child_min + full_border.right;
-  if (natural_width_out)
-    *natural_width_out = full_border.left + child_natural + full_border.bottom;
+  *minimum_width_out = full_border.left + child_min + full_border.right;
+  *natural_width_out = full_border.left + child_natural + full_border.bottom;
 }
 
 static void
