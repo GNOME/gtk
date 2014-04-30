@@ -1045,10 +1045,8 @@ gtk_toolbar_get_preferred_width (GtkWidget *widget,
 
   gtk_toolbar_size_request (widget, &min_requisition, &nat_requisition);
 
-  if (minimum)
-    *minimum = min_requisition.width;
-  if (natural)
-    *natural = nat_requisition.width;
+  *minimum = min_requisition.width;
+  *natural = nat_requisition.width;
 }
 
 static void
@@ -1060,10 +1058,8 @@ gtk_toolbar_get_preferred_height (GtkWidget *widget,
 
   gtk_toolbar_size_request (widget, &min_requisition, &nat_requisition);
 
-  if (minimum)
-    *minimum = min_requisition.height;
-  if (natural)
-    *natural = nat_requisition.height;
+  *minimum = min_requisition.height;
+  *natural = nat_requisition.height;
 }
 
 static gint
