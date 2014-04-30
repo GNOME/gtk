@@ -500,11 +500,8 @@ gtk_event_box_get_preferred_width (GtkWidget *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
 
-  if (minimum)
-    *minimum = 0;
-
-  if (natural)
-    *natural = 0;
+  *minimum = 0;
+  *natural = 0;
 
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
@@ -522,11 +519,8 @@ gtk_event_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
 
-  if (minimum)
-    *minimum = 0;
-
-  if (natural)
-    *natural = 0;
+  *minimum = 0;
+  *natural = 0;
 
   if (minimum_baseline)
     *minimum_baseline = -1;
