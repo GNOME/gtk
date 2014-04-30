@@ -5593,11 +5593,8 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   minimum_width += padding.left + padding.right;
   natural_width += padding.left + padding.right;
 
-  if (minimum_size)
-    *minimum_size = minimum_width;
-
-  if (natural_size)
-    *natural_size = natural_width;
+  *minimum_size = minimum_width;
+  *natural_size = natural_width;
 }
 
 static void
@@ -5732,11 +5729,8 @@ gtk_combo_box_get_preferred_height_for_width (GtkWidget *widget,
   min_height += padding.top + padding.bottom;
   nat_height += padding.top + padding.bottom;
 
-  if (minimum_size)
-    *minimum_size = min_height;
-
-  if (natural_size)
-    *natural_size = nat_height;
+  *minimum_size = min_height;
+  *natural_size = nat_height;
 }
 
 /**
