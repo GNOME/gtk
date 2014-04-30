@@ -903,11 +903,8 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
                          &accel_width);
   priv->accelerator_width = accel_width;
 
-  if (minimum_size)
-    *minimum_size = min_width;
-
-  if (natural_size)
-    *natural_size = nat_width;
+  *minimum_size = min_width;
+  *natural_size = nat_width;
 }
 
 static void
@@ -1016,11 +1013,8 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
                          &accel_width);
   priv->accelerator_width = accel_width;
 
-  if (minimum_size)
-    *minimum_size = min_height;
-
-  if (natural_size)
-    *natural_size = nat_height;
+  *minimum_size = min_height;
+  *natural_size = nat_height;
 }
 
 static void
