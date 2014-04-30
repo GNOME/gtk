@@ -34,6 +34,7 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkstylecontext.h"
+#include "gtkstylecontextprivate.h"
 #include "a11y/gtkspinneraccessible.h"
 
 
@@ -172,11 +173,8 @@ gtk_spinner_get_preferred_width (GtkWidget *widget,
                                  gint      *minimum_size,
                                  gint      *natural_size)
 {
-  if (minimum_size)
-    *minimum_size = SPINNER_SIZE;
-
-  if (natural_size)
-    *natural_size = SPINNER_SIZE;
+  *minimum_size = SPINNER_SIZE;
+  *natural_size = SPINNER_SIZE;
 }
 
 static void
@@ -184,11 +182,8 @@ gtk_spinner_get_preferred_height (GtkWidget *widget,
                                   gint      *minimum_size,
                                   gint      *natural_size)
 {
-  if (minimum_size)
-    *minimum_size = SPINNER_SIZE;
-
-  if (natural_size)
-    *natural_size = SPINNER_SIZE;
+  *minimum_size = SPINNER_SIZE;
+  *natural_size = SPINNER_SIZE;
 }
 
 static gboolean
