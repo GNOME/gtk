@@ -1123,11 +1123,8 @@ gtk_grid_request_sum (GtkGridRequest *request,
       nat -= linedata->spacing;
     }
 
-  if (minimum)
-    *minimum = min;
-
-  if (natural)
-    *natural = nat;
+  *minimum = min;
+  *natural = nat;
 }
 
 /* Computes minimum and natural fields of lines.
@@ -1428,11 +1425,8 @@ gtk_grid_get_size (GtkGrid        *grid,
   GtkGridRequest request;
   GtkGridLines *lines;
 
-  if (minimum)
-    *minimum = 0;
-
-  if (natural)
-    *natural = 0;
+  *minimum = 0;
+  *natural = 0;
 
   if (minimum_baseline)
     *minimum_baseline = -1;
