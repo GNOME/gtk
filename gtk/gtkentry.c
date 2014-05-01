@@ -214,7 +214,6 @@ struct _GtkEntryPrivate
   guint         in_click                : 1; /* Flag so we don't select all when clicking in entry to focus in */
   guint         is_cell_renderer        : 1;
   guint         invisible_char_set      : 1;
-  guint         interior_focus          : 1;
   guint         mouse_cursor_obscured   : 1;
   guint         need_im_reset           : 1;
   guint         progress_pulse_mode     : 1;
@@ -2801,13 +2800,9 @@ get_icon_allocations (GtkEntry      *entry,
                       GtkAllocation *secondary)
 
 {
-  GtkEntryPrivate *priv = entry->priv;
   gint x, y, width, height;
 
   get_text_area_size (entry, &x, &y, &width, &height);
-
-  if (gtk_widget_has_focus (GTK_WIDGET (entry)) && !priv->interior_focus)
-    y += priv->focus_width;
 
   primary->y = y;
   primary->height = height;
@@ -3360,14 +3355,6 @@ _gtk_entry_get_borders (GtkEntry *entry,
       tmp.left += border.left;
     }
 
-  if (!priv->interior_focus)
-    {
-      tmp.top += priv->focus_width;
-      tmp.right += priv->focus_width;
-      tmp.bottom += priv->focus_width;
-      tmp.left += priv->focus_width;
-    }
-
   if (border_out != NULL)
     *border_out = tmp;
 }
@@ -3493,9 +3480,6 @@ place_windows (GtkEntry *entry)
   get_text_area_size (entry, &x, &y, &width, &height);
   get_icon_allocations (entry, &primary, &secondary);
 
-  if (gtk_widget_has_focus (widget) && !priv->interior_focus)
-    y += priv->focus_width;
-
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x += secondary.width;
   else
@@ -3529,7 +3513,6 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
 			      gint     *width,
 			      gint     *height)
 {
-  GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkAllocation allocation;
   GtkRequisition requisition;
@@ -3547,9 +3530,6 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
     get_frame_size (entry, TRUE, NULL, NULL, NULL, &frame_height);
   else
     frame_height = req_height;
-
-  if (gtk_widget_has_focus (widget) && !priv->interior_focus)
-    frame_height -= 2 * priv->focus_width;
 
   if (x)
     *x = borders.left;
@@ -3789,14 +3769,6 @@ gtk_entry_draw_frame (GtkWidget       *widget,
       width += borders.left + borders.right;
     }
 
-  if (gtk_widget_has_focus (widget) && !priv->interior_focus)
-    {
-      x += priv->focus_width;
-      y += priv->focus_width;
-      width -= 2 * priv->focus_width;
-      height -= 2 * priv->focus_width;
-    }
-
   gtk_render_background (context, cr,
                          x, y, width, height);
 
@@ -3805,17 +3777,6 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 		      x, y, width, height);
 
   gtk_entry_draw_progress (widget, context, cr);
-
-  if (gtk_widget_has_visible_focus (widget) && !priv->interior_focus)
-    {
-      x -= priv->focus_width;
-      y -= priv->focus_width;
-      width += 2 * priv->focus_width;
-      height += 2 * priv->focus_width;
-
-      gtk_render_focus (context, cr,
-                        0, 0, width, height);
-    }
 
   cairo_restore (cr);
 }
@@ -5136,14 +5097,11 @@ gtk_entry_update_cached_style_values (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
   gint focus_width;
-  gboolean interior_focus;
 
   gtk_widget_style_get (GTK_WIDGET (entry),
 			"focus-line-width", &focus_width,
-			"interior-focus", &interior_focus,
 			NULL);
   priv->focus_width = focus_width;
-  priv->interior_focus = interior_focus;
 
   if (!priv->invisible_char_set)
     {
