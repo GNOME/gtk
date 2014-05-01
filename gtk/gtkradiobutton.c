@@ -875,7 +875,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   gint x, y;
   gint indicator_size, indicator_spacing;
   gint focus_width;
-  gint focus_pad;
   gint baseline;
   guint border_width;
 
@@ -889,7 +888,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
-                        "focus-padding", &focus_pad,
                         NULL);
 
   _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
@@ -906,7 +904,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
   child = gtk_bin_get_child (GTK_BIN (check_button));
   if (!(child && gtk_widget_get_visible (child)))
-    x += focus_width + focus_pad;
+    x += focus_width;
 
   state &= ~(GTK_STATE_FLAG_INCONSISTENT |
              GTK_STATE_FLAG_ACTIVE |
