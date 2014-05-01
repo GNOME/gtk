@@ -356,8 +356,6 @@ static gint gtk_text_view_motion_event         (GtkWidget        *widget,
                                                 GdkEventMotion   *event);
 static gint gtk_text_view_draw                 (GtkWidget        *widget,
                                                 cairo_t          *cr);
-static void gtk_text_view_draw_focus           (GtkWidget        *widget,
-                                                cairo_t          *cr);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
@@ -3495,23 +3493,10 @@ gtk_text_view_size_request (GtkWidget      *widget,
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GSList *tmp_list;
-  gint focus_edge_width;
-  gint focus_width;
   guint border_width;
-  gboolean interior_focus;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
-
-  gtk_widget_style_get (widget,
-			"interior-focus", &interior_focus,
-			"focus-line-width", &focus_width,
-			NULL);
-
-  if (interior_focus)
-    focus_edge_width = 0;
-  else
-    focus_edge_width = focus_width;
 
   if (priv->layout)
     {
@@ -3524,8 +3509,8 @@ gtk_text_view_size_request (GtkWidget      *widget,
       priv->text_window->requisition.height = 0;
     }
   
-  requisition->width = priv->text_window->requisition.width + focus_edge_width * 2;
-  requisition->height = priv->text_window->requisition.height + focus_edge_width * 2;
+  requisition->width = priv->text_window->requisition.width;
+  requisition->height = priv->text_window->requisition.height;
 
   if (priv->left_window)
     requisition->width += priv->left_window->requisition.width;
@@ -3761,10 +3746,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
-  gint focus_edge_width;
-  gint focus_width;
   guint border_width;
-  gboolean interior_focus;
   gboolean size_changed;
   
   text_view = GTK_TEXT_VIEW (widget);
@@ -3795,17 +3777,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * windows get at least a 1x1 allocation.
    */
 
-  gtk_widget_style_get (widget,
-			"interior-focus", &interior_focus,
-			"focus-line-width", &focus_width,
-			NULL);
-
-  if (interior_focus)
-    focus_edge_width = 0;
-  else
-    focus_edge_width = focus_width;
-  
-  width = allocation->width - focus_edge_width * 2 - border_width * 2;
+  width = allocation->width - border_width * 2;
 
   if (priv->left_window)
     left_rect.width = priv->left_window->requisition.width;
@@ -3826,8 +3798,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   top_rect.width = text_rect.width;
   bottom_rect.width = text_rect.width;
 
-
-  height = allocation->height - focus_edge_width * 2 - border_width * 2;
+  height = allocation->height - border_width * 2;
 
   if (priv->top_window)
     top_rect.height = priv->top_window->requisition.height;
@@ -3849,8 +3820,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   right_rect.height = text_rect.height;
 
   /* Origins */
-  left_rect.x = focus_edge_width + border_width;
-  top_rect.y = focus_edge_width + border_width;
+  left_rect.x = border_width;
+  top_rect.y = border_width;
 
   text_rect.x = left_rect.x + left_rect.width;
   text_rect.y = top_rect.y + top_rect.height;
@@ -5422,8 +5393,6 @@ gtk_text_view_draw (GtkWidget *widget,
 			     gtk_widget_get_allocated_width (widget),
 			     gtk_widget_get_allocated_height (widget));
       gtk_style_context_restore (context);
-
-      gtk_text_view_draw_focus (widget, cr);
     }
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
@@ -5475,29 +5444,6 @@ gtk_text_view_draw (GtkWidget *widget,
     }
   
   return FALSE;
-}
-
-static void
-gtk_text_view_draw_focus (GtkWidget *widget,
-                          cairo_t   *cr)
-{
-  gboolean interior_focus;
-
-  /* We clear the focus if we are in interior focus mode. */
-  gtk_widget_style_get (widget,
-			"interior-focus", &interior_focus,
-			NULL);
-  
-  if (gtk_widget_has_visible_focus (widget) && !interior_focus)
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (widget);
-
-      gtk_render_focus (context, cr, 0, 0,
-                        gtk_widget_get_allocated_width (widget),
-                        gtk_widget_get_allocated_height (widget));
-    }
 }
 
 static gboolean
