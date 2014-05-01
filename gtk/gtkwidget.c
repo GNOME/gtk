@@ -3442,12 +3442,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_WHATS_THIS);
 
+  /**
+   * GtkWidget:interior-focus:
+   *
+   * The "interior-focus" style property defines whether
+   * to draw the focus indicator inside widgets.
+   *
+   * Deprecated: 3.14: use the outline CSS properties instead.
+   */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boolean ("interior-focus",
 								 P_("Interior Focus"),
 								 P_("Whether to draw the focus indicator inside widgets"),
 								 TRUE,
-								 GTK_PARAM_READABLE));
+								 GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
 
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_int ("focus-line-width",
