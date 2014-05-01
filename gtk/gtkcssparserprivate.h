@@ -97,6 +97,11 @@ void            _gtk_css_parser_resync            (GtkCssParser          *parser
                                                    gboolean               sync_at_semicolon,
                                                    char                   terminator);
 
+/* XXX: Find better place to put it? */
+void            _gtk_css_print_string             (GString               *str,
+                                                   const char            *string);
+
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_PARSER_PRIVATE_H__ */

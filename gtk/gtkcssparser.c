@@ -1012,3 +1012,47 @@ _gtk_css_parser_resync (GtkCssParser *parser,
 
   gtk_css_parser_resync_internal (parser, sync_at_semicolon, TRUE, terminator);
 }
+
+void
+_gtk_css_print_string (GString    *str,
+                       const char *string)
+{
+  gsize len;
+
+  g_return_if_fail (str != NULL);
+  g_return_if_fail (string != NULL);
+
+  g_string_append_c (str, '"');
+
+  do {
+    len = strcspn (string, "\"\n\r\f");
+    g_string_append_len (str, string, len);
+    string += len;
+    switch (*string)
+      {
+      case '\0':
+        break;
+      case '\n':
+        g_string_append (str, "\\A ");
+        break;
+      case '\r':
+        g_string_append (str, "\\D ");
+        break;
+      case '\f':
+        g_string_append (str, "\\C ");
+        break;
+      case '\"':
+        g_string_append (str, "\\\"");
+        break;
+      case '\\':
+        g_string_append (str, "\\\\");
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+      }
+  } while (*string);
+
+  g_string_append_c (str, '"');
+}
+
