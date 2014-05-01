@@ -1051,6 +1051,7 @@ _gtk_css_print_string (GString    *str,
         g_assert_not_reached ();
         break;
       }
+    string++;
   } while (*string);
 
   g_string_append_c (str, '"');

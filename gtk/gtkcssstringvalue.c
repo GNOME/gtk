@@ -111,6 +111,7 @@ gtk_css_value_ident_print (const GtkCssValue *value,
         g_assert_not_reached ();
         break;
       }
+    string++;
   } while (*string);
 }
 
