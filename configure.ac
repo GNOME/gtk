@@ -1890,8 +1890,6 @@ gtk/a11y/Makefile
 gtk/native/Makefile
 libgail-util/Makefile
 modules/Makefile
-modules/engines/Makefile
-modules/engines/pixbuf/Makefile
 modules/input/Makefile
 modules/printbackends/Makefile
 modules/printbackends/cups/Makefile
