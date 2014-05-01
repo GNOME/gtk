@@ -210,14 +210,12 @@ gtk_check_button_paint (GtkWidget    *widget,
       GtkStyleContext *context;
       GtkAllocation allocation;
       gint border_width;
-      gint interior_focus;
       gint focus_width;
       gint focus_pad;
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
       gtk_widget_style_get (widget,
-                            "interior-focus", &interior_focus,
                             "focus-line-width", &focus_width,
                             "focus-padding", &focus_pad,
                             NULL);
@@ -225,7 +223,7 @@ gtk_check_button_paint (GtkWidget    *widget,
       gtk_widget_get_allocation (widget, &allocation);
       context = gtk_widget_get_style_context (widget);
 
-      if (interior_focus && child && gtk_widget_get_visible (child))
+      if (child && gtk_widget_get_visible (child))
         {
           GtkAllocation child_allocation;
 
@@ -529,7 +527,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   gint focus_pad;
   gint baseline;
   guint border_width;
-  gboolean interior_focus;
   GtkAllocation allocation;
   GtkStyleContext *context;
 
@@ -543,7 +540,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   state = gtk_widget_get_state_flags (widget);
 
   gtk_widget_style_get (widget, 
-                        "interior-focus", &interior_focus,
                         "focus-line-width", &focus_width, 
                         "focus-padding", &focus_pad, 
                         NULL);
@@ -560,7 +556,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 	       0, allocation.height - indicator_size);
 
   child = gtk_bin_get_child (GTK_BIN (check_button));
-  if (!interior_focus || !(child && gtk_widget_get_visible (child)))
+  if (!(child && gtk_widget_get_visible (child)))
     x += focus_width + focus_pad;      
 
   state &= ~(GTK_STATE_FLAG_INCONSISTENT |
