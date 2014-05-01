@@ -1459,7 +1459,7 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
 {
   GtkGridRequest request;
   GtkGridLines *lines;
-  gint min_size;
+  gint min_size, nat_size;
 
   if (minimum)
     *minimum = 0;
@@ -1486,7 +1486,7 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
   memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GtkGridLine));
 
   gtk_grid_request_run (&request, 1 - orientation, FALSE);
-  gtk_grid_request_sum (&request, 1 - orientation, &min_size, NULL, NULL, NULL);
+  gtk_grid_request_sum (&request, 1 - orientation, &min_size, &nat_size, NULL, NULL);
   gtk_grid_request_allocate (&request, 1 - orientation, MAX (size, min_size));
 
   gtk_grid_request_run (&request, orientation, TRUE);
