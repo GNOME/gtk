@@ -5362,7 +5362,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
           tree_view->priv->draw_keyfocus &&
 	  gtk_widget_has_visible_focus (widget))
         {
-	  gint tmp_y, tmp_height, focus_pad;
+	  gint tmp_y, tmp_height;
 	  GtkStateFlags focus_rect_state = 0;
 
           gtk_style_context_save (context);
@@ -5381,14 +5381,10 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
               tmp_height = gtk_tree_view_get_row_height (tree_view, node);
 	    }
 
-          gtk_style_context_get_style (context,
-                                       "focus-padding", &focus_pad,
-                                       NULL);
-
           gtk_render_focus (context, cr,
-                            focus_pad, tmp_y + focus_pad,
-                            gdk_window_get_width (tree_view->priv->bin_window) - 2 * focus_pad,
-                            tmp_height - 2 * focus_pad);
+                            0, tmp_y,
+                            gdk_window_get_width (tree_view->priv->bin_window),
+                            tmp_height);
 
           gtk_style_context_restore (context);
         }
@@ -6143,7 +6139,6 @@ validate_row (GtkTreeView *tree_view,
   gboolean retval = FALSE;
   gboolean is_separator = FALSE;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
-  gint focus_pad;
   gint grid_line_width;
   gboolean wide_separators;
   gint separator_height;
@@ -6157,7 +6152,6 @@ validate_row (GtkTreeView *tree_view,
   is_separator = row_is_separator (tree_view, iter, NULL);
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"focus-padding", &focus_pad,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			"grid-line-width", &grid_line_width,
@@ -6219,9 +6213,9 @@ validate_row (GtkTreeView *tree_view,
       else
         {
           if (wide_separators)
-            height = separator_height + 2 * focus_pad;
+            height = separator_height;
           else
-            height = 2 + 2 * focus_pad;
+            height = 2;
         }
 
       if (gtk_tree_view_is_expander_column (tree_view, column))
