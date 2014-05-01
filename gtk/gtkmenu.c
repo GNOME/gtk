@@ -3267,12 +3267,12 @@ gtk_menu_get_preferred_height (GtkWidget *widget,
                                gint      *minimum_size,
                                gint      *natural_size)
 {
-  gint min_width;
+  gint min_width, nat_width;
 
   /* Menus are height-for-width only, just return the height
    * for the minimum width
    */
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
+  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, &nat_width);
   GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width, minimum_size, natural_size);
 }
 
