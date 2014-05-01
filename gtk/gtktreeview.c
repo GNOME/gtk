@@ -5362,7 +5362,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
           tree_view->priv->draw_keyfocus &&
 	  gtk_widget_has_visible_focus (widget))
         {
-	  gint tmp_y, tmp_height;
+	  gint tmp_y, tmp_height, focus_pad;
 	  GtkStateFlags focus_rect_state = 0;
 
           gtk_style_context_save (context);
@@ -5381,10 +5381,14 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
               tmp_height = gtk_tree_view_get_row_height (tree_view, node);
 	    }
 
+          gtk_style_context_get_style (context,
+                                       "focus-padding", &focus_pad,
+                                       NULL);
+
           gtk_render_focus (context, cr,
-                            0, tmp_y,
-                            gdk_window_get_width (tree_view->priv->bin_window),
-                            tmp_height);
+                            focus_pad, tmp_y + focus_pad,
+                            gdk_window_get_width (tree_view->priv->bin_window) - 2 * focus_pad,
+                            tmp_height - 2 * focus_pad);
 
           gtk_style_context_restore (context);
         }
