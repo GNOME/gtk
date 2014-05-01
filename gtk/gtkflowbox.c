@@ -2093,9 +2093,9 @@ gtk_flow_box_get_preferred_width (GtkWidget *widget,
   else /* GTK_ORIENTATION_VERTICAL */
     {
       /* Return the width for the minimum height */
-      gint min_height;
+      gint min_height, nat_height;
 
-      GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, &min_height, NULL);
+      GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, &min_height, &nat_height);
       GTK_WIDGET_GET_CLASS (widget)->get_preferred_width_for_height (widget,
                                                                      min_height,
                                                                      &min_width,
@@ -2127,9 +2127,9 @@ gtk_flow_box_get_preferred_height (GtkWidget *widget,
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       /* Return the height for the minimum width */
-      gint min_width;
+      gint min_width, nat_width;
 
-      GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
+      GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, &nat_width);
       GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget,
                                                                      min_width,
                                                                      &min_height,
@@ -2218,7 +2218,7 @@ gtk_flow_box_get_preferred_height_for_width (GtkWidget *widget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gint min_width;
+      gint min_width, nat_width;
       gint line_length;
       gint item_size, extra_pixels;
 
@@ -2227,7 +2227,7 @@ gtk_flow_box_get_preferred_height_for_width (GtkWidget *widget,
         goto out;
 
       /* Make sure its no smaller than the minimum */
-      GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
+      GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, &nat_width);
 
       avail_size = MAX (width, min_width);
       if (avail_size <= 0)
@@ -2384,7 +2384,7 @@ gtk_flow_box_get_preferred_width_for_height (GtkWidget *widget,
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
-      gint min_height;
+      gint min_height, nat_height;
       gint line_length;
       gint item_size, extra_pixels;
 
@@ -2393,7 +2393,7 @@ gtk_flow_box_get_preferred_width_for_height (GtkWidget *widget,
         goto out;
 
       /* Make sure its no smaller than the minimum */
-      GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, &min_height, NULL);
+      GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, &min_height, &nat_height);
 
       avail_size = MAX (height, min_height);
       if (avail_size <= 0)
