@@ -1696,7 +1696,7 @@ gtk_button_get_full_border (GtkButton *button,
   GtkWidget *widget = GTK_WIDGET (button);
   GtkStyleContext *context;
   GtkBorder default_border, padding, border;
-  int focus_width, focus_pad;
+  int focus_width;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -1704,13 +1704,12 @@ gtk_button_get_full_border (GtkButton *button,
                         &padding, &border);
   gtk_style_context_get_style (context,
                                "focus-line-width", &focus_width,
-                               "focus-padding", &focus_pad,
                                NULL);
 
-  full_border->left = padding.left + border.left + focus_width + focus_pad;
-  full_border->right = padding.right + border.right + focus_width + focus_pad; 
-  full_border->top = padding.top + border.top + focus_width + focus_pad; 
-  full_border->bottom = padding.bottom + border.bottom + focus_width + focus_pad; 
+  full_border->left = padding.left + border.left + focus_width;
+  full_border->right = padding.right + border.right + focus_width; 
+  full_border->top = padding.top + border.top + focus_width; 
+  full_border->bottom = padding.bottom + border.bottom + focus_width; 
 
   if (gtk_widget_get_can_default (GTK_WIDGET (button)))
     {
@@ -1788,7 +1787,6 @@ gtk_button_draw (GtkWidget *widget,
   GtkBorder default_border;
   GtkBorder default_outside_border;
   gint focus_width;
-  gint focus_pad;
   GtkAllocation allocation;
   GtkStyleContext *context;
   GtkStateFlags state;
@@ -1801,7 +1799,6 @@ gtk_button_draw (GtkWidget *widget,
   gtk_button_get_props (button, &default_border, &default_outside_border, NULL, NULL);
   gtk_style_context_get_style (context,
                                "focus-line-width", &focus_width,
-                               "focus-padding", &focus_pad,
                                NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -1852,10 +1849,10 @@ gtk_button_draw (GtkWidget *widget,
                                    NULL);
       gtk_style_context_get_border (context, state, &border);
 
-      x += border.left + focus_pad;
-      y += border.top + focus_pad;
-      width -= (2 * focus_pad) + border.left + border.right;
-      height -=  (2 * focus_pad) + border.top + border.bottom;
+      x += border.left;
+      y += border.top;
+      width -= border.left + border.right;
+      height -= border.top + border.bottom;
 
       if (priv->depressed && displace_focus)
         {
