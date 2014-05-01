@@ -2281,8 +2281,8 @@ gtk_list_box_get_preferred_height (GtkWidget *widget,
                                    gint      *minimum_height,
                                    gint      *natural_height)
 {
-  gint natural_width;
-  gtk_list_box_get_preferred_width (widget, NULL, &natural_width);
+  gint min_width, natural_width;
+  gtk_list_box_get_preferred_width (widget, &min_width, &natural_width);
   gtk_list_box_get_preferred_height_for_width (widget, natural_width,
                                                minimum_height, natural_height);
 }
@@ -2971,9 +2971,9 @@ gtk_list_box_row_get_preferred_height (GtkWidget *widget,
                                        gint      *minimum_height,
                                        gint      *natural_height)
 {
-  gint natural_width;
+  gint min_width, natural_width;
 
-  gtk_list_box_row_get_preferred_width (widget, NULL, &natural_width);
+  gtk_list_box_row_get_preferred_width (widget, &min_width, &natural_width);
   gtk_list_box_row_get_preferred_height_for_width (widget, natural_width,
                                                    minimum_height, natural_height);
 }
