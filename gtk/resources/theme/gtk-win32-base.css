@@ -12,6 +12,14 @@
 @define-color error_fg_color rgb (166, 38, 38);
 @define-color error_bg_color rgb (237, 54, 54);
 
+@define-color app_notification_a #aeaea4;
+@define-color app_notification_b #d1d1cb;
+@define-color app_notification_c #d8d8d3;
+
+@define-color app_notification_border #949486;
+
+@define-color primary_toolbar_button_text_shadow alpha(black, 0.1);
+
 GtkWindow,
 GtkViewport {
     background-color: @bg_color;
@@ -1472,4 +1480,22 @@ GtkPopover > .toolbar {
 .button.menuitem.check:insensitive:active:prelight {
     background-image: -gtk-win32-theme-part(menu, 12 1, over (11 2));
     border-width: 0;
+}
+
+/* Application notification */
+.app-notification {
+    border-style: solid;
+    border-color: @app_notification_border;
+    border-width: 0 1px 1px 1px;
+    border-radius: 0 0 5px 5px;
+    padding: 8px;
+
+    background-image: linear-gradient(to bottom,
+                                      @app_notification_a,
+                                      @app_notification_b 18%,
+                                      @app_notification_c);
+
+    color: @theme_text_color;
+    text-shadow: 0 1px @primary_toolbar_button_text_shadow;
+    border-image: none;
 }
