@@ -1165,14 +1165,12 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
   if (gtk_entry_get_width_chars (entry) < 0)
     {
       gint width, w;
-      gboolean interior_focus;
       gint focus_width;
       GtkBorder borders;
       PangoLayout *layout;
       gchar *str;
 
       gtk_style_context_get_style (style_context,
-                                   "interior-focus", &interior_focus,
                                    "focus-line-width", &focus_width,
                                    NULL);
 
