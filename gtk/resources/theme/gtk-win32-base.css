@@ -159,6 +159,11 @@ GtkAssistant .sidebar .highlight {
     color: @text_color;
 }
 
+/* Override *:selected { ...} style; affects horizontal-buttons */
+.button:selected {
+  background-color: transparent;
+}
+
 /* Check buttons */
 
 /* Prevent selected check/radio buttons from getting the "selected" blue background */
