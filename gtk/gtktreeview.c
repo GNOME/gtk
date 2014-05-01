@@ -6805,6 +6805,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
   if (validated_area)
     {
       GtkRequisition requisition;
+      gint dummy;
 
       /* We temporarily guess a size, under the assumption that it will be the
        * same when we get our next size_allocate.  If we don't do this, we'll be
@@ -6821,8 +6822,8 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
        * untill we've recieved an allocation (never update scroll adjustments from size-requests).
        */
       prevent_recursion_hack = TRUE;
-      gtk_tree_view_get_preferred_width (GTK_WIDGET (tree_view), &requisition.width, NULL);
-      gtk_tree_view_get_preferred_height (GTK_WIDGET (tree_view), &requisition.height, NULL);
+      gtk_tree_view_get_preferred_width (GTK_WIDGET (tree_view), &requisition.width, &dummy);
+      gtk_tree_view_get_preferred_height (GTK_WIDGET (tree_view), &requisition.height, &dummy);
       prevent_recursion_hack = FALSE;
 
       /* If rows above the current position have changed height, this has
