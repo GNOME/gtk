@@ -1895,12 +1895,12 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
       offset = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_outline_radius_for_engine (&border_box, engine, GTK_JUNCTION_NONE);
       _gtk_rounded_box_shrink (&border_box,
                                - border_width[GTK_CSS_TOP] - offset,
                                - border_width[GTK_CSS_RIGHT] - offset,
                                - border_width[GTK_CSS_LEFT] - offset,
                                - border_width[GTK_CSS_BOTTOM] - offset);
+      _gtk_rounded_box_apply_outline_radius_for_engine (&border_box, engine, GTK_JUNCTION_NONE);
 
       render_border (cr, &border_box, border_width, 0, colors, border_style);
     }
