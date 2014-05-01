@@ -1742,29 +1742,6 @@ render_frame_internal (GtkThemingEngine *engine,
 
       render_border (cr, &border_box, border_width, hidden_side, colors, border_style);
     }
-
-  border_style[0] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_STYLE));
-  if (border_style[0] != GTK_BORDER_STYLE_NONE)
-    {
-      int offset;
-
-      border_style[1] = border_style[2] = border_style[3] = border_style[0];
-      border_width[0] = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
-      border_width[3] = border_width[2] = border_width[1] = border_width[0];
-      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_COLOR));
-      colors[3] = colors[2] = colors[1] = colors[0];
-      offset = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
-      
-      /* reinit box here - outlines don't have a border radius */
-      _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_shrink (&border_box,
-                               - border_width[GTK_CSS_TOP] - offset,
-                               - border_width[GTK_CSS_RIGHT] - offset,
-                               - border_width[GTK_CSS_LEFT] - offset,
-                               - border_width[GTK_CSS_BOTTOM] - offset);
-      
-      render_border (cr, &border_box, border_width, hidden_side, colors, border_style);
-    }
 }
 
 static void
@@ -1900,63 +1877,33 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
                                  gdouble           width,
                                  gdouble           height)
 {
-  GtkStateFlags flags;
-  GdkRGBA color;
-  gint line_width;
-  gint8 *dash_list;
+  GtkBorderStyle border_style[4];
+  GtkRoundedBox border_box;
+  double border_width[4];
+  GdkRGBA colors[4];
 
-  cairo_save (cr);
-  flags = gtk_theming_engine_get_state (engine);
-
-  gtk_theming_engine_get_color (engine, flags, &color);
-
-  gtk_theming_engine_get_style (engine,
-				"focus-line-width", &line_width,
-				"focus-line-pattern", (gchar *) &dash_list,
-				NULL);
-
-  cairo_set_line_width (cr, (gdouble) line_width);
-
-  if (dash_list[0])
+  border_style[0] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_STYLE));
+  if (border_style[0] != GTK_BORDER_STYLE_NONE)
     {
-      gint n_dashes = strlen ((const gchar *) dash_list);
-      gdouble *dashes = g_new (gdouble, n_dashes);
-      gdouble total_length = 0;
-      gdouble dash_offset;
-      gint i;
+      int offset;
 
-      for (i = 0; i < n_dashes; i++)
-	{
-	  dashes[i] = dash_list[i];
-	  total_length += dash_list[i];
-	}
+      border_style[1] = border_style[2] = border_style[3] = border_style[0];
+      border_width[0] = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
+      border_width[3] = border_width[2] = border_width[1] = border_width[0];
+      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_COLOR));
+      colors[3] = colors[2] = colors[1] = colors[0];
+      offset = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
 
-      /* The dash offset here aligns the pattern to integer pixels
-       * by starting the dash at the right side of the left border
-       * Negative dash offsets in cairo don't work
-       * (https://bugs.freedesktop.org/show_bug.cgi?id=2729)
-       */
-      dash_offset = - line_width / 2.;
+      _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
+      _gtk_rounded_box_apply_outline_radius_for_engine (&border_box, engine, GTK_JUNCTION_NONE);
+      _gtk_rounded_box_shrink (&border_box,
+                               - border_width[GTK_CSS_TOP] - offset,
+                               - border_width[GTK_CSS_RIGHT] - offset,
+                               - border_width[GTK_CSS_LEFT] - offset,
+                               - border_width[GTK_CSS_BOTTOM] - offset);
 
-      while (dash_offset < 0)
-	dash_offset += total_length;
-
-      cairo_set_dash (cr, dashes, n_dashes, dash_offset);
-      g_free (dashes);
+      render_border (cr, &border_box, border_width, 0, colors, border_style);
     }
-
-  cairo_rectangle (cr,
-                   x + line_width / 2.,
-                   y + line_width / 2.,
-                   width - line_width,
-                   height - line_width);
-
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_stroke (cr);
-
-  cairo_restore (cr);
-
-  g_free (dash_list);
 }
 
 static void

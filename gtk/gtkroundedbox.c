@@ -138,6 +138,21 @@ _gtk_rounded_box_apply_border_radius_for_engine (GtkRoundedBox    *box,
   _gtk_rounded_box_apply_border_radius_for_context (box, _gtk_theming_engine_get_context (engine), junction);
 }
 
+void
+_gtk_rounded_box_apply_outline_radius_for_engine (GtkRoundedBox    *box,
+                                                  GtkThemingEngine *engine,
+                                                  GtkJunctionSides  junction)
+{
+  GtkCssValue *corner[4];
+
+  corner[GTK_CSS_TOP_LEFT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS);
+  corner[GTK_CSS_TOP_RIGHT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS);
+  corner[GTK_CSS_BOTTOM_LEFT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS);
+  corner[GTK_CSS_BOTTOM_RIGHT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS);
+
+  _gtk_rounded_box_apply_border_radius (box, corner, junction);
+}
+
 static void
 gtk_css_border_radius_grow (GtkRoundedBoxCorner *corner,
                             double               horizontal,
