@@ -42,7 +42,7 @@ response_cb (GtkDialog *dialog,
       gtk_widget_override_background_color (da, 0, &color);
     }
 
-  gtk_widget_hide (GTK_WIDGET (dialog));
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
