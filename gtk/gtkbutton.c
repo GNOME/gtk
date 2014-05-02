@@ -648,8 +648,7 @@ gtk_button_init (GtkButton *button)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
   g_signal_connect (priv->gesture, "begin", G_CALLBACK (gesture_begin_cb), button);
   g_signal_connect (priv->gesture, "end", G_CALLBACK (gesture_end_cb), button);
-  gtk_widget_add_controller (GTK_WIDGET (button),
-                             GTK_EVENT_CONTROLLER (priv->gesture));
+  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (priv->gesture));
 }
 
 static void
@@ -662,6 +661,13 @@ gtk_button_destroy (GtkWidget *widget)
     {
       g_free (priv->label_text);
       priv->label_text = NULL;
+    }
+
+  if (priv->gesture)
+    {
+      gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (priv->gesture));
+      g_object_unref (priv->gesture);
+      priv->gesture = NULL;
     }
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->destroy (widget);
