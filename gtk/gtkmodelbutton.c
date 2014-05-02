@@ -245,23 +245,22 @@ gtk_model_button_get_full_border (GtkModelButton *button,
                                   GtkBorder      *border,
                                   gint           *indicator)
 {
-  gint focus_width, focus_pad;
+  gint focus_width;
   gint indicator_size, indicator_spacing;
   gint border_width;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (button));
   gtk_widget_style_get (GTK_WIDGET (button),
                         "focus-line-width", &focus_width,
-                        "focus-padding", &focus_pad,
                         NULL);
 
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &indicator_size, NULL);
   indicator_spacing = indicator_size / 8;
 
-  border->left = border_width + focus_width + focus_pad;
-  border->right = border_width + focus_width + focus_pad;
-  border->top = border_width + focus_width + focus_pad;
-  border->bottom = border_width + focus_width + focus_pad;
+  border->left = border_width + focus_width;
+  border->right = border_width + focus_width;
+  border->top = border_width + focus_width;
+  border->bottom = border_width + focus_width;
 
   if (button->iconic)
     *indicator = 0;
@@ -580,7 +579,7 @@ gtk_model_button_draw (GtkWidget *widget,
   gint x, y;
   gint width, height;
   gint indicator_size, indicator_spacing;
-  gint focus_width, focus_pad;
+  gint focus_width;
   gint baseline;
 
   state = get_button_state (model_button);
@@ -602,13 +601,12 @@ gtk_model_button_draw (GtkWidget *widget,
 
   gtk_widget_style_get (widget, 
                         "focus-line-width", &focus_width, 
-                        "focus-padding", &focus_pad, 
                         NULL);
 
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &indicator_size, NULL);
   indicator_spacing = indicator_size / 8;
 
-  x = width - border_width - focus_width - focus_pad - indicator_spacing - indicator_size;
+  x = width - border_width - focus_width - indicator_spacing - indicator_size;
 
   if (indicator_is_left (widget))
     x = width - (indicator_size + x);
@@ -658,10 +656,10 @@ gtk_model_button_draw (GtkWidget *widget,
       gtk_style_context_get_border (context, state, &border);
 
       gtk_render_focus (context, cr,
-                        border_width + border.left + focus_pad,
-                        border_width + border.top + focus_pad,
-                        width - 2 * (border_width + focus_pad) - border.left - border.right,
-                        height - 2 * (border_width + focus_pad) - border.top - border.bottom);
+                        border_width + border.left,
+                        border_width + border.top,
+                        width - 2 * border_width - border.left - border.right,
+                        height - 2 * border_width - border.top - border.bottom);
     }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
