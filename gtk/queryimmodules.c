@@ -37,8 +37,6 @@
 #include "gtk/gtkimcontextinfo.h"
 #include "gtk/gtkversion.h"
 
-#define GDK_DISABLE_DEPRECATION_WARNINGS
-
 #include "gtk/deprecated/gtkrc.h"
 
 static void
@@ -165,7 +163,9 @@ int main (int argc, char **argv)
 
   if (argc > 1 && strcmp (argv[1], "--update-cache") == 0)
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       cache_file = gtk_rc_get_im_module_file ();
+G_GNUC_END_IGNORE_DEPRECATIONS
       first_file = 2;
     }
 
@@ -184,7 +184,9 @@ int main (int argc, char **argv)
       int i;
       GHashTable *dirs_done;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       path = gtk_rc_get_im_module_path ();
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_string_append_printf (contents, "# ModulesPath = %s\n#\n", path);
 
