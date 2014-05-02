@@ -2910,7 +2910,6 @@ gtk_list_box_row_draw (GtkWidget *widget,
   GtkStyleContext* context;
   GtkStateFlags state;
   GtkBorder border;
-  gint focus_pad;
 
   gtk_widget_get_allocation (widget, &allocation);
   context = gtk_widget_get_style_context (widget);
@@ -2922,13 +2921,9 @@ gtk_list_box_row_draw (GtkWidget *widget,
   if (gtk_widget_has_visible_focus (GTK_WIDGET (row)))
     {
       gtk_style_context_get_border (context, state, &border);
-
-      gtk_style_context_get_style (context,
-                                   "focus-padding", &focus_pad,
-                                   NULL);
-      gtk_render_focus (context, cr, border.left + focus_pad, border.top + focus_pad,
-                        allocation.width - 2 * focus_pad - border.left - border.right,
-                        allocation.height - 2 * focus_pad - border.top - border.bottom);
+      gtk_render_focus (context, cr, border.left, border.top,
+                        allocation.width - border.left - border.right,
+                        allocation.height - border.top - border.bottom);
     }
 
   GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->draw (widget, cr);
@@ -2944,7 +2939,7 @@ gtk_list_box_row_get_full_border (GtkListBoxRow *row,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding, border;
-  int focus_width, focus_pad;
+  int focus_width;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_style_context_get_state (context);
@@ -2953,13 +2948,12 @@ gtk_list_box_row_get_full_border (GtkListBoxRow *row,
   gtk_style_context_get_border (context, state, &border);
   gtk_style_context_get_style (context,
                                "focus-line-width", &focus_width,
-                               "focus-padding", &focus_pad,
                                NULL);
 
-  full_border->left = padding.left + border.left + focus_width + focus_pad;
-  full_border->right = padding.right + border.right + focus_width + focus_pad;
-  full_border->top = padding.top + border.top + focus_width + focus_pad;
-  full_border->bottom = padding.bottom + border.bottom + focus_width + focus_pad;
+  full_border->left = padding.left + border.left + focus_width;
+  full_border->right = padding.right + border.right + focus_width;
+  full_border->top = padding.top + border.top + focus_width;
+  full_border->bottom = padding.bottom + border.bottom + focus_width;
 }
 
 static void gtk_list_box_row_get_preferred_height_for_width (GtkWidget *widget,
