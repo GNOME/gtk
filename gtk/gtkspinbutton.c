@@ -751,6 +751,14 @@ gtk_spin_button_finalize (GObject *object)
   if (priv->up_panel_context)
     g_object_unref (priv->up_panel_context);
 
+  gtk_widget_remove_controller (GTK_WIDGET (spin_button),
+                                GTK_EVENT_CONTROLLER (priv->long_press_gesture));
+  g_object_unref (priv->long_press_gesture);
+
+  gtk_widget_add_controller (GTK_WIDGET (spin_button),
+                             GTK_EVENT_CONTROLLER (priv->swipe_gesture));
+  g_object_unref (priv->swipe_gesture);
+
   G_OBJECT_CLASS (gtk_spin_button_parent_class)->finalize (object);
 }
 
