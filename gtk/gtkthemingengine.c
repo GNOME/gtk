@@ -31,6 +31,7 @@
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
+#include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -1019,6 +1020,26 @@ gtk_theming_engine_get_screen (GtkThemingEngine *engine)
 
   priv = engine->priv;
   return gtk_style_context_get_screen (priv->context);
+}
+
+static gboolean
+render_icon_image (GtkThemingEngine *engine,
+                   cairo_t          *cr,
+                   double            x,
+                   double            y,
+                   double            width,
+                   double            height)
+{
+  GtkCssImage *image;
+
+  image = _gtk_css_image_value_get_image (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SOURCE));
+  if (image == NULL)
+    return FALSE;
+
+  cairo_translate (cr, x, y);
+  _gtk_css_image_draw (image, cr, width, height);
+
+  return TRUE;
 }
 
 /* Paint method implementations */
@@ -2571,6 +2592,9 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
 {
   GtkThemingBackground bg;
   
+  if (render_icon_image (engine, cr, x, y, width, height))
+    return;
+
   _gtk_theming_background_init (&bg, engine, x, y, width, height, 0);
   
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER) &&
