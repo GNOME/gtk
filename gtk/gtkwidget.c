@@ -1241,7 +1241,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  							P_("Style"),
  							P_("The style of the widget, which contains information about how it will look (colors etc)"),
  							GTK_TYPE_STYLE,
- 							GTK_PARAM_READWRITE));
+ 							GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
@@ -1409,7 +1409,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      0,
                                                      G_MAXINT16,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkWidget:margin-right:
@@ -1432,7 +1432,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      0,
                                                      G_MAXINT16,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkWidget:margin-start:
