@@ -438,6 +438,7 @@ parse_template (GMarkupParseContext  *context,
   ObjectInfo *object_info;
   int i;
   const gchar *object_class = NULL;
+  const gchar *parent_class = NULL;
   gint line, line2;
   GType template_type = _gtk_builder_get_template_type (data->builder);
   GType parsed_type;
@@ -464,7 +465,7 @@ parse_template (GMarkupParseContext  *context,
       if (strcmp (names[i], "class") == 0)
         object_class = values[i];
       else if (strcmp (names[i], "parent") == 0)
-        /* Ignore 'parent' attribute, however it's needed by Glade */;
+        parent_class = values[i];
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
@@ -489,6 +490,29 @@ parse_template (GMarkupParseContext  *context,
       return;
     }
 
+  if (parent_class)
+    {
+      GType parent_type = g_type_from_name (parent_class);
+      GType expected_type = g_type_parent (parsed_type);
+
+      if (parent_type == G_TYPE_INVALID)
+        {
+          g_set_error (error, GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Invalid template parent type `%s'",
+                       parent_class);
+          return;
+        }      
+      if (parent_type != expected_type)
+        {
+          g_set_error (error, GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_TEMPLATE_MISMATCH,
+                       "Template parent type `%s' does not match instance parent type `%s'.",
+                       parent_class, g_type_name (expected_type));
+          return;
+        }
+    }
+  
   ++data->cur_object_level;
 
   object_info = g_slice_new0 (ObjectInfo);
