@@ -957,6 +957,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
 
+  gtk_css_style_property_register        ("-gtk-icon-source",
+                                          GTK_CSS_PROPERTY_ICON_SOURCE,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_NO_RESIZE,
+                                          css_image_value_parse,
+                                          css_image_value_query,
+                                          css_image_value_assign,
+                                          _gtk_css_image_value_new (NULL));
   gtk_css_style_property_register        ("icon-shadow",
                                           GTK_CSS_PROPERTY_ICON_SHADOW,
                                           G_TYPE_NONE,
