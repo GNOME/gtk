@@ -26,7 +26,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#define GDK_DISABLE_DEPRECATION_WARNINGS
 #include "config.h"
 
 #include "gtkcolorbutton.h"
@@ -875,7 +874,7 @@ gtk_color_button_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_USE_ALPHA:
-      gtk_color_button_set_use_alpha (button, g_value_get_boolean (value));
+      gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (button), g_value_get_boolean (value));
       break;
     case PROP_TITLE:
       gtk_color_button_set_title (button, g_value_get_string (value));
@@ -892,14 +891,16 @@ gtk_color_button_set_property (GObject      *object,
         rgba.blue = color->blue / 65535.0;
         rgba.alpha = 1.0;
 
-        gtk_color_button_set_rgba (button, &rgba);
+        gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button), &rgba);
       }
       break;
     case PROP_ALPHA:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_color_button_set_alpha (button, g_value_get_uint (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_RGBA:
-      gtk_color_button_set_rgba (button, g_value_get_boxed (value));
+      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button), g_value_get_boxed (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -918,7 +919,7 @@ gtk_color_button_get_property (GObject    *object,
   switch (param_id)
     {
     case PROP_USE_ALPHA:
-      g_value_set_boolean (value, gtk_color_button_get_use_alpha (button));
+      g_value_set_boolean (value, gtk_color_chooser_get_use_alpha (GTK_COLOR_CHOOSER (button)));
       break;
     case PROP_TITLE:
       g_value_set_string (value, gtk_color_button_get_title (button));
@@ -928,7 +929,7 @@ gtk_color_button_get_property (GObject    *object,
         GdkColor color;
         GdkRGBA rgba;
 
-        gtk_color_button_get_rgba (button, &rgba);
+        gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (button), &rgba);
 
         color.red = (guint16) (rgba.red * 65535 + 0.5);
         color.green = (guint16) (rgba.green * 65535 + 0.5);
@@ -938,13 +939,15 @@ gtk_color_button_get_property (GObject    *object,
       }
       break;
     case PROP_ALPHA:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       g_value_set_uint (value, gtk_color_button_get_alpha (button));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_RGBA:
       {
         GdkRGBA rgba;
 
-        gtk_color_button_get_rgba (button, &rgba);
+        gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (button), &rgba);
         g_value_set_boxed (value, &rgba);
       }
       break;
@@ -975,8 +978,10 @@ typedef void (* set_rgba) (GtkColorChooser *, const GdkRGBA *);
 static void
 gtk_color_button_iface_init (GtkColorChooserInterface *iface)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   iface->get_rgba = (get_rgba)gtk_color_button_get_rgba;
   iface->set_rgba = (set_rgba)gtk_color_button_set_rgba;
+G_GNUC_END_IGNORE_DEPRECATIONS
   iface->add_palette = gtk_color_button_add_palette;
 }
 
