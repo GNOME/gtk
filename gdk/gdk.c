@@ -24,8 +24,6 @@
 
 #include "config.h"
 
-#define GDK_DISABLE_DEPRECATION_WARNINGS 1
-
 #include "gdkversionmacros.h"
 #include "gdkmain.h"
 
