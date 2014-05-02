@@ -754,6 +754,7 @@ get_simple_transition_type (gboolean               new_child_first,
       return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT : GTK_STACK_TRANSITION_TYPE_OVER_LEFT;
     case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT:
       return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_LEFT : GTK_STACK_TRANSITION_TYPE_OVER_RIGHT;
+    default: ;
     }
   return transition_type;
 }
@@ -916,6 +917,7 @@ effective_transition_type (GtkStack               *stack,
           return GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT;
         case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
           return GTK_STACK_TRANSITION_TYPE_UNDER_LEFT;
+        default: ;
         }
     }
 
