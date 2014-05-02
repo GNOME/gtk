@@ -5463,6 +5463,11 @@ gtk_window_finalize (GObject *object)
       priv->mnemonics_display_timeout_id = 0;
     }
 
+  gtk_widget_remove_controller (GTK_WIDGET (window),
+                                GTK_EVENT_CONTROLLER (priv->multipress_gesture));
+  g_object_unref (priv->multipress_gesture);
+
+
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
 
