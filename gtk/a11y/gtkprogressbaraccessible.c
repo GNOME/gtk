@@ -101,9 +101,31 @@ gtk_progress_bar_accessible_get_minimum_value (AtkValue *obj,
 }
 
 static void
+gtk_progress_bar_accessible_get_value_and_text (AtkValue  *obj,
+                                                gdouble   *value,
+                                                gchar    **text)
+{
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+
+  *value = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (widget));
+  *text = NULL;
+}
+
+static AtkRange *
+gtk_progress_bar_accessible_get_range (AtkValue *obj)
+{
+  return atk_range_new (0.0, 1.0, NULL);
+}
+
+static void
 atk_value_interface_init (AtkValueIface *iface)
 {
   iface->get_current_value = gtk_progress_bar_accessible_get_current_value;
   iface->get_maximum_value = gtk_progress_bar_accessible_get_maximum_value;
   iface->get_minimum_value = gtk_progress_bar_accessible_get_minimum_value;
+
+  iface->get_value_and_text = gtk_progress_bar_accessible_get_value_and_text;
+  iface->get_range = gtk_progress_bar_accessible_get_range;
 }
