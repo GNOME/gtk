@@ -794,7 +794,7 @@ gtk_dialog_map (GtkWidget *widget)
   GtkDialog *dialog = GTK_DIALOG (widget);
 
   if (gtk_window_get_transient_for (window) == NULL)
-    g_warning ("GtkDialog mapped without a transient parent. This is discouraged.");
+    g_message ("GtkDialog mapped without a transient parent. This is discouraged.");
 
   GTK_WIDGET_CLASS (gtk_dialog_parent_class)->map (widget);
 
