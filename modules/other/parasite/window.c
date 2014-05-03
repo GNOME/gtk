@@ -207,6 +207,7 @@ gtkparasite_window_create()
     GtkWidget *box;
     GtkWidget *nb;
     char *title;
+    GtkWindowGroup *group;
 
     window = g_new0(ParasiteWindow, 1);
 
@@ -221,6 +222,9 @@ gtkparasite_window_create()
                       "delete-event",
                       G_CALLBACK (delete_window),
                       NULL);
+
+    group = gtk_window_group_new ();
+    gtk_window_group_add_window (group, GTK_WINDOW (window->window));
 
     title = g_strdup_printf("Parasite - %s", g_get_application_name());
     gtk_window_set_title (GTK_WINDOW (window->window), title);
