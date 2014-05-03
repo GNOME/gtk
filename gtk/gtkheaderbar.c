@@ -1673,7 +1673,7 @@ gtk_header_bar_draw (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->draw (widget, cr);
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
