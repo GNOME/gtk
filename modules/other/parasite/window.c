@@ -42,7 +42,9 @@ on_widget_tree_selection_changed (ParasiteWidgetTree *widget_tree,
 
   if (selected != NULL)
     {
-      parasite_proplist_set_object (PARASITE_PROPLIST (parasite->prop_list), selected);
+      if (!parasite_proplist_set_object (PARASITE_PROPLIST (parasite->prop_list), selected))
+        return;
+
       parasite_proplist_set_object (PARASITE_PROPLIST (parasite->child_prop_list), selected);
       parasite_objecthierarchy_set_object (PARASITE_OBJECTHIERARCHY (parasite->oh), selected);
 

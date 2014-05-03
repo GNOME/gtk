@@ -338,7 +338,7 @@ parasite_proplist_new (GtkWidget *widget_tree,
                          NULL);
 }
 
-void
+gboolean
 parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
 {
   GtkTreeIter iter;
@@ -346,6 +346,9 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
   guint num_properties;
   guint i;
   GList *l;
+
+  if (pl->priv->object == object)
+    return FALSE;
 
   pl->priv->object = object;
 
@@ -369,11 +372,11 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
       GtkWidget *parent;
 
       if (!GTK_IS_WIDGET (object))
-        return;
+        return TRUE;
 
       parent = gtk_widget_get_parent (GTK_WIDGET (object));
       if (!parent)
-        return;
+        return TRUE;
 
       props = gtk_container_class_list_child_properties (G_OBJECT_GET_CLASS (parent), &num_properties);
     }
@@ -409,6 +412,8 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
 
         g_free (signal_name);
     }
+
+  return TRUE;
 }
 
 

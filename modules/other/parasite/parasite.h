@@ -43,12 +43,10 @@ typedef struct
     GtkWidget *widget_css_editor;
     GtkWidget *oh;
 
-    GtkWidget *grab_window;
-    GtkWidget *highlight_window;
-
     GtkWidget *widget_popup;
 
-    GdkWindow *selected_window;
+    GtkWidget *selected_widget;
+    GtkWidget *flash_widget;
 
     int flash_count;
     int flash_cnx;

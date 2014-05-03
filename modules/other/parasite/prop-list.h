@@ -51,7 +51,7 @@ G_BEGIN_DECLS
 GType      parasite_proplist_get_type   (void);
 GtkWidget *parasite_proplist_new        (GtkWidget *widget_tree,
                                          gboolean   child_properties);
-void       parasite_proplist_set_object (ParasitePropList *proplist,
+gboolean   parasite_proplist_set_object (ParasitePropList *proplist,
                                          GObject          *object);
 
 G_END_DECLS
