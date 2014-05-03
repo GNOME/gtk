@@ -206,6 +206,68 @@ gtk_spin_button_accessible_set_current_value (AtkValue     *obj,
 }
 
 static void
+gtk_spin_button_accessible_get_value_and_text (AtkValue  *obj,
+                                         gdouble   *value,
+                                         gchar    **text)
+{
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
+  if (adjustment == NULL)
+    return;
+
+  *value = gtk_adjustment_get_value (adjustment);
+  *text = NULL;
+}
+
+static AtkRange *
+gtk_spin_button_accessible_get_range (AtkValue *obj)
+{
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
+  if (adjustment == NULL)
+    return NULL;
+
+  return atk_range_new (gtk_adjustment_get_lower (adjustment),
+                        gtk_adjustment_get_upper (adjustment),
+                        NULL);
+}
+
+static void
+gtk_spin_button_accessible_set_value (AtkValue      *obj,
+                                const gdouble  value)
+{
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
+  if (adjustment == NULL)
+    return;
+
+  gtk_adjustment_set_value (adjustment, value);
+}
+
+static gdouble
+gtk_spin_button_accessible_get_increment (AtkValue *obj)
+{
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
+  if (adjustment == NULL)
+    return 0;
+
+  return gtk_adjustment_get_minimum_increment (adjustment);
+}
+
+static void
 atk_value_interface_init (AtkValueIface *iface)
 {
   iface->get_current_value = gtk_spin_button_accessible_get_current_value;
@@ -213,4 +275,9 @@ atk_value_interface_init (AtkValueIface *iface)
   iface->get_minimum_value = gtk_spin_button_accessible_get_minimum_value;
   iface->get_minimum_increment = gtk_spin_button_accessible_get_minimum_increment;
   iface->set_current_value = gtk_spin_button_accessible_set_current_value;
+
+  iface->get_value_and_text = gtk_spin_button_accessible_get_value_and_text;
+  iface->get_range = gtk_spin_button_accessible_get_range;
+  iface->set_value = gtk_spin_button_accessible_set_value;
+  iface->get_increment = gtk_spin_button_accessible_get_increment;
 }
