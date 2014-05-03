@@ -42,10 +42,9 @@ on_widget_tree_selection_changed (ParasiteWidgetTree *widget_tree,
 
   if (selected != NULL)
     {
-      parasite_proplist_set_object (PARASITE_PROPLIST (parasite->prop_list),
-                                    selected);
-      parasite_objecthierarchy_set_object (PARASITE_OBJECTHIERARCHY (parasite->oh),
-                                           selected);
+      parasite_proplist_set_object (PARASITE_PROPLIST (parasite->prop_list), selected);
+      parasite_proplist_set_object (PARASITE_PROPLIST (parasite->child_prop_list), selected);
+      parasite_objecthierarchy_set_object (PARASITE_OBJECTHIERARCHY (parasite->oh), selected);
 
       if (GTK_IS_WIDGET (selected))
         {
@@ -135,9 +134,11 @@ create_widget_list_pane(ParasiteWindow *parasite)
 }
 
 static GtkWidget *
-create_prop_list_pane(ParasiteWindow *parasite)
+create_prop_list_pane (ParasiteWindow *parasite,
+                       gboolean        child_properties)
 {
     GtkWidget *swin;
+    GtkWidget *pl;
 
     swin = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                         "hscrollbar-policy", GTK_POLICY_AUTOMATIC,
@@ -146,8 +147,13 @@ create_prop_list_pane(ParasiteWindow *parasite)
                         "width-request", 250,
                         NULL);
 
-    parasite->prop_list = parasite_proplist_new (parasite->widget_tree);
-    gtk_container_add(GTK_CONTAINER(swin), parasite->prop_list);
+    pl = parasite_proplist_new (parasite->widget_tree, child_properties);
+    gtk_container_add (GTK_CONTAINER (swin), pl);
+
+    if (child_properties)
+      parasite->child_prop_list = pl;
+    else
+      parasite->prop_list = pl;
 
     return swin;
 }
@@ -273,8 +279,12 @@ gtkparasite_window_create()
                        "show-border", FALSE,
                        NULL);
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
-                              create_prop_list_pane (window),
-                              gtk_label_new ("GObject Properties"));
+                              create_prop_list_pane (window, FALSE),
+                              gtk_label_new ("Properties"));
+
+    gtk_notebook_append_page (GTK_NOTEBOOK (nb),
+                              create_prop_list_pane (window, TRUE),
+                              gtk_label_new ("Child Properties"));
 
     window->oh = parasite_objecthierarchy_new ();
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),

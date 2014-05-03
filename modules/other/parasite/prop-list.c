@@ -39,7 +39,8 @@ enum
 enum
 {
   PROP_0,
-  PROP_WIDGET_TREE
+  PROP_WIDGET_TREE,
+  PROP_CHILD_PROPERTIES
 };
 
 struct _ParasitePropListPrivate
@@ -50,6 +51,8 @@ struct _ParasitePropListPrivate
   GList *signal_cnxs;
   GtkWidget *widget_tree;
   GtkTreeViewColumn *property_column;
+  GtkTreeViewColumn *value_column;
+  gboolean child_properties;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (ParasitePropList, parasite_proplist, GTK_TYPE_TREE_VIEW)
@@ -163,19 +166,20 @@ constructed (GObject *object)
   g_object_set (renderer,
                 "scale", TREE_TEXT_SCALE,
                 "editable", TRUE,
+                "is-child-property", pl->priv->child_properties,
                 NULL);
-  column = gtk_tree_view_column_new_with_attributes ("Value", renderer,
-                                                     "text", COLUMN_VALUE,
-                                                     "object", COLUMN_OBJECT,
-                                                     "name", COLUMN_NAME,
-                                                      NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (pl), column);
-  gtk_tree_view_column_set_resizable (column, TRUE);
+  pl->priv->value_column = gtk_tree_view_column_new_with_attributes ("Value", renderer,
+                                                                     "text", COLUMN_VALUE,
+                                                                     "object", COLUMN_OBJECT,
+                                                                     "name", COLUMN_NAME,
+                                                                     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (pl), pl->priv->value_column);
+  gtk_tree_view_column_set_resizable (pl->priv->value_column, TRUE);
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pl->priv->model),
                                         COLUMN_NAME,
                                         GTK_SORT_ASCENDING);
- gtk_tree_view_column_set_cell_data_func (column,
+ gtk_tree_view_column_set_cell_data_func (pl->priv->value_column,
                                           renderer,
                                           (GtkTreeCellDataFunc) draw_columns,
                                           pl,
@@ -212,6 +216,10 @@ get_property (GObject    *object,
         g_value_take_object (value, pl->priv->widget_tree);
         break;
 
+      case PROP_CHILD_PROPERTIES:
+        g_value_set_boolean (value, pl->priv->child_properties);
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
@@ -230,6 +238,10 @@ set_property (GObject      *object,
     {
       case PROP_WIDGET_TREE:
         pl->priv->widget_tree = g_value_get_object (value);
+        break;
+
+      case PROP_CHILD_PROPERTIES:
+        pl->priv->child_properties = g_value_get_boolean (value);
         break;
 
       default:
@@ -254,6 +266,9 @@ parasite_proplist_class_init (ParasitePropListClass *klass)
                                                          "Widget tree",
                                                          GTK_TYPE_WIDGET,
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class, PROP_CHILD_PROPERTIES,
+      g_param_spec_boolean ("child-properties", "Child properties", "Child properties",
+                            FALSE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void
@@ -265,7 +280,17 @@ parasite_prop_list_update_prop (ParasitePropList *pl,
   char *value;
 
   g_value_init(&gvalue, prop->value_type);
-  g_object_get_property (pl->priv->object, prop->name, &gvalue);
+  if (pl->priv->child_properties)
+    {
+      GtkWidget *parent;
+
+      parent = gtk_widget_get_parent (GTK_WIDGET (pl->priv->object));
+      gtk_container_child_get_property (GTK_CONTAINER (parent),
+                                        GTK_WIDGET (pl->priv->object),
+                                        prop->name, &gvalue);
+    }
+  else
+    g_object_get_property (pl->priv->object, prop->name, &gvalue);
 
   if (G_VALUE_HOLDS_ENUM (&gvalue))
     {
@@ -281,7 +306,7 @@ parasite_prop_list_update_prop (ParasitePropList *pl,
 
   gtk_list_store_set (pl->priv->model, iter,
                       COLUMN_NAME, prop->name,
-                      COLUMN_VALUE, value,
+                      COLUMN_VALUE, value ? value : g_strdup (""),
                       COLUMN_DEFINED_AT, g_type_name (prop->owner_type),
                       COLUMN_OBJECT, pl->priv->object,
                       COLUMN_TOOLTIP, g_param_spec_get_blurb (prop),
@@ -304,10 +329,12 @@ parasite_proplist_prop_changed_cb (GObject *pspec,
 }
 
 GtkWidget *
-parasite_proplist_new (GtkWidget *widget_tree)
+parasite_proplist_new (GtkWidget *widget_tree,
+                       gboolean   child_properties)
 {
     return g_object_new (PARASITE_TYPE_PROPLIST,
                          "widget-tree", widget_tree,
+                         "child-properties", child_properties,
                          NULL);
 }
 
@@ -336,7 +363,22 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
   g_hash_table_remove_all (pl->priv->prop_iters);
   gtk_list_store_clear (pl->priv->model);
 
-  props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
+  if (pl->priv->child_properties)
+    {
+      GtkWidget *parent;
+
+      if (!GTK_IS_WIDGET (object))
+        return;
+
+      parent = gtk_widget_get_parent (GTK_WIDGET (object));
+      if (!parent)
+        return;
+
+      props = gtk_container_class_list_child_properties (G_OBJECT_GET_CLASS (parent), &num_properties);
+    }
+  else
+    props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
+
   for (i = 0; i < num_properties; i++)
     {
       GParamSpec *prop = props[i];
@@ -351,7 +393,10 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
       g_hash_table_insert (pl->priv->prop_iters, (gpointer) prop->name, gtk_tree_iter_copy (&iter));
 
       /* Listen for updates */
-      signal_name = g_strdup_printf ("notify::%s", prop->name);
+      if (pl->priv->child_properties)
+        signal_name = g_strdup_printf ("child-notify::%s", prop->name);
+      else
+        signal_name = g_strdup_printf ("notify::%s", prop->name);
 
       pl->priv->signal_cnxs =
             g_list_prepend (pl->priv->signal_cnxs, GINT_TO_POINTER(
