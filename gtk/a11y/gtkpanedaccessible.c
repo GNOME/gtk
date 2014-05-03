@@ -143,10 +143,59 @@ gtk_paned_accessible_set_current_value (AtkValue     *obj,
 }
 
 static void
+gtk_paned_accessible_get_value_and_text (AtkValue  *obj,
+                                         gdouble   *value,
+                                         gchar    **text)
+{
+  GtkWidget *widget;
+  GtkPaned *paned;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  paned = GTK_PANED (widget);
+
+  *value = gtk_paned_get_position (paned);
+  *text = NULL;
+}
+
+static AtkRange *
+gtk_paned_accessible_get_range (AtkValue *obj)
+{
+  GtkWidget *widget;
+  gint minimum_value;
+  gint maximum_value;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+
+  g_object_get (widget,
+                "min-position", &minimum_value,
+                "max-position", &maximum_value,
+                NULL);
+
+  return atk_range_new (minimum_value, maximum_value, NULL);
+}
+
+static void
+gtk_paned_accessible_set_value (AtkValue      *obj,
+                                const gdouble  value)
+{
+  GtkWidget *widget;
+  GtkPaned *paned;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  paned = GTK_PANED (widget);
+
+  gtk_paned_set_position (paned, (gint)(value + 0.5));
+}
+
+static void
 atk_value_interface_init (AtkValueIface *iface)
 {
   iface->get_current_value = gtk_paned_accessible_get_current_value;
   iface->get_maximum_value = gtk_paned_accessible_get_maximum_value;
   iface->get_minimum_value = gtk_paned_accessible_get_minimum_value;
   iface->set_current_value = gtk_paned_accessible_set_current_value;
+
+  iface->get_value_and_text = gtk_paned_accessible_get_value_and_text;
+  iface->get_range = gtk_paned_accessible_get_range;
+  iface->set_value = gtk_paned_accessible_set_value;
 }
