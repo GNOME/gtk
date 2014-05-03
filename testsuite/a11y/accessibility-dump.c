@@ -605,6 +605,7 @@ dump_atk_table (AtkTable *table,
       g_string_append_printf (string, "%*s", depth + DEPTH_INCREMENT, "");
       for (j = 0; j < atk_table_get_n_columns (table); j++)
         {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           int id = atk_table_get_index_at (table, i, j);
 
           obj = atk_object_ref_accessible_child (ATK_OBJECT (table), id);
@@ -615,6 +616,7 @@ dump_atk_table (AtkTable *table,
                                   atk_table_get_row_at_index (table, id) == i ? "✓" : "⚠",
                                   atk_table_get_column_at_index (table, id) == j ? "✓" : "⚠",
                                   get_name (obj));
+G_GNUC_END_IGNORE_DEPRECATIONS
         }
       g_string_append (string, "\n");
     }
