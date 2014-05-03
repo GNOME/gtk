@@ -16,9 +16,9 @@ window1
     layer: widget
     alpha: 1
     <AtkValue>
-    minimum value: 0
-    maximum value: 0
-    current value: 0
+    minimum value: 0.000000
+    maximum value: 0.000000
+    current value: 0.000000
     label1
       "label"
       parent: paned1
