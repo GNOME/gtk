@@ -213,6 +213,74 @@ gtk_range_accessible_set_current_value (AtkValue     *obj,
 }
 
 static void
+gtk_range_accessible_get_value_and_text (AtkValue  *obj,
+                                         gdouble   *value,
+                                         gchar    **text)
+{
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
+    return;
+
+  *value = gtk_adjustment_get_value (adjustment);
+  *text = NULL;
+}
+
+static AtkRange *
+gtk_range_accessible_get_range (AtkValue *obj)
+{
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+  gdouble min, max;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
+    return NULL;
+
+  min = gtk_adjustment_get_lower (adjustment);
+  max = gtk_adjustment_get_upper (adjustment)
+        - gtk_adjustment_get_page_size (adjustment);
+
+  if (gtk_range_get_restrict_to_fill_level (GTK_RANGE (widget)))
+    max = MIN (max, gtk_range_get_fill_level (GTK_RANGE (widget)));
+
+  return atk_range_new (min, max, NULL);
+}
+
+static void
+gtk_range_accessible_set_value (AtkValue      *obj,
+                                const gdouble  value)
+{
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
+    return;
+
+  gtk_adjustment_set_value (adjustment, value);
+}
+
+static gdouble
+gtk_range_accessible_get_increment (AtkValue *obj)
+{
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
+    return 0;
+
+  return gtk_adjustment_get_minimum_increment (adjustment);
+}
+
+static void
 atk_value_interface_init (AtkValueIface *iface)
 {
   iface->get_current_value = gtk_range_accessible_get_current_value;
@@ -220,4 +288,9 @@ atk_value_interface_init (AtkValueIface *iface)
   iface->get_minimum_value = gtk_range_accessible_get_minimum_value;
   iface->get_minimum_increment = gtk_range_accessible_get_minimum_increment;
   iface->set_current_value = gtk_range_accessible_set_current_value;
+
+  iface->get_value_and_text = gtk_range_accessible_get_value_and_text;
+  iface->get_range = gtk_range_accessible_get_range;
+  iface->set_value = gtk_range_accessible_set_value;
+  iface->get_increment = gtk_range_accessible_get_increment;
 }
