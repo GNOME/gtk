@@ -63,7 +63,8 @@ test_basic (GtkWidget *widget)
   AtkObject *atk_object;
   AtkValue *atk_value;
   gdouble value = 50;
-  GValue ret;
+  gdouble ret;
+  gchar *text;
 
   atk_object = gtk_widget_get_accessible (widget);
   atk_value = ATK_VALUE (atk_object);
@@ -74,9 +75,10 @@ test_basic (GtkWidget *widget)
   g_assert_cmpint (notify_data.count, ==, 1);
   g_assert_cmpstr (notify_data.last_name, ==, "accessible-value");
 
-  memset (&ret, 0, sizeof (ret));
-  atk_value_get_current_value (atk_value, &ret);
-  g_assert_cmpfloat (g_value_get_double (&ret), ==, value);
+  text = NULL;
+  atk_value_get_value_and_text (atk_value, &ret, &text);
+  g_assert_cmpfloat (ret, ==, value);
+  g_free (text);
 
   g_free (notify_data.last_name);
   g_signal_handlers_disconnect_by_func (atk_object, G_CALLBACK (notify_cb), &notify_data);

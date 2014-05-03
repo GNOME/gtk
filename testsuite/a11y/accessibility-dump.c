@@ -427,40 +427,34 @@ dump_atk_value (AtkValue *atk_value,
                 guint     depth,
                 GString  *string)
 {
-  GValue value = G_VALUE_INIT;
-  GValue svalue = G_VALUE_INIT;
+  AtkRange *range;
+  gdouble value;
+  gchar *text;
+
+  value = 0.0;
+  text = NULL;
+
+  atk_value_get_value_and_text (atk_value, &value, &text);
+  range = atk_value_get_range (atk_value);
 
   g_string_append_printf (string, "%*s<AtkValue>\n", depth, "");
 
-  g_value_init (&value, G_TYPE_DOUBLE);
-  g_value_init (&svalue, G_TYPE_STRING);
+  if (range)
+    {
+      g_string_append_printf (string, "%*sminimum value: %f\n", depth, "", atk_range_get_lower_limit (range));
 
-  atk_value_get_minimum_value (atk_value, &value);
-  if (g_value_transform (&value, &svalue))
-    g_string_append_printf (string, "%*sminimum value: %s\n", depth, "", g_value_get_string (&svalue));
+      g_string_append_printf (string, "%*smaximum value: %f\n", depth, "", atk_range_get_upper_limit (range));
+
+      atk_range_free (range);
+    }
+
+  if (text)
+    {
+      g_string_append_printf (string, "%*scurrent value: %f %s\n", depth, "", value, text); 
+      g_free (text);
+    }
   else
-    g_string_append_printf (string, "%*sminimum value: <%s>\n", depth, "", G_VALUE_TYPE_NAME (&value));
-
-  g_value_reset (&value);
-  g_value_reset (&svalue);
-
-  atk_value_get_maximum_value (atk_value, &value);
-  if (g_value_transform (&value, &svalue))
-    g_string_append_printf (string, "%*smaximum value: %s\n", depth, "", g_value_get_string (&svalue));
-  else
-    g_string_append_printf (string, "%*smaximum value: <%s>\n", depth, "", G_VALUE_TYPE_NAME (&value));
-
-  g_value_reset (&value);
-  g_value_reset (&svalue);
-
-  atk_value_get_current_value (atk_value, &value);
-  if (g_value_transform (&value, &svalue))
-    g_string_append_printf (string, "%*scurrent value: %s\n", depth, "", g_value_get_string (&svalue));
-  else
-    g_string_append_printf (string, "%*scurrent value: %s\n", depth, "", G_VALUE_TYPE_NAME (&value));
-
-  g_value_reset (&value);
-  g_value_reset (&svalue);
+    g_string_append_printf (string, "%*scurrent value: %f\n", depth, "", value);
 
   /* Don't dump minimum increment; it changes too much in response to
    * theme changes.
