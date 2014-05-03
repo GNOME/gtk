@@ -919,7 +919,7 @@ gtk_color_button_get_property (GObject    *object,
   switch (param_id)
     {
     case PROP_USE_ALPHA:
-      g_value_set_boolean (value, gtk_color_chooser_get_use_alpha (GTK_COLOR_CHOOSER (button)));
+      g_value_set_boolean (value, button->priv->use_alpha);
       break;
     case PROP_TITLE:
       g_value_set_string (value, gtk_color_button_get_title (button));
@@ -939,9 +939,13 @@ gtk_color_button_get_property (GObject    *object,
       }
       break;
     case PROP_ALPHA:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      g_value_set_uint (value, gtk_color_button_get_alpha (button));
-G_GNUC_END_IGNORE_DEPRECATIONS
+      {
+        guint16 alpha;
+
+        alpha = (guint16) (button->priv->rgba.alpha * 65535 + 0.5);
+
+        g_value_set_uint (value, alpha);
+      }
       break;
     case PROP_RGBA:
       {
