@@ -362,6 +362,7 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
 
   g_hash_table_remove_all (pl->priv->prop_iters);
   gtk_list_store_clear (pl->priv->model);
+  gtk_widget_set_sensitive (GTK_WIDGET (pl), FALSE);
 
   if (pl->priv->child_properties)
     {
@@ -378,6 +379,8 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
     }
   else
     props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (pl), TRUE);
 
   for (i = 0; i < num_properties; i++)
     {
