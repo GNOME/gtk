@@ -2014,7 +2014,6 @@ gtk_range_draw (GtkWidget *widget,
   GtkRangePrivate *priv = range->priv;
   GtkStateFlags widget_state;
   gint focus_line_width = 0;
-  gint focus_padding = 0;
   gboolean draw_trough = TRUE;
   gboolean draw_slider = TRUE;
   GtkStyleContext *context;
@@ -2037,7 +2036,6 @@ gtk_range_draw (GtkWidget *widget,
   if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
     gtk_widget_style_get (GTK_WIDGET (range),
                           "focus-line-width", &focus_line_width,
-                          "focus-padding", &focus_padding,
                           NULL);
 
   gtk_range_calc_marks (range);
@@ -2055,13 +2053,13 @@ gtk_range_draw (GtkWidget *widget,
 
     {
       gint     x      = (priv->range_rect.x +
-                         focus_line_width + focus_padding);
+                         focus_line_width);
       gint     y      = (priv->range_rect.y +
-                         focus_line_width + focus_padding);
+                         focus_line_width);
       gint     width  = (priv->range_rect.width -
-                         2 * (focus_line_width + focus_padding));
+                         2 * (focus_line_width));
       gint     height = (priv->range_rect.height -
-                         2 * (focus_line_width + focus_padding));
+                         2 * (focus_line_width));
       gboolean trough_under_steppers;
       gint     stepper_size;
       gint     stepper_spacing;
@@ -3472,14 +3470,12 @@ gtk_range_get_props (GtkRange  *range,
   if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
     {
       gint focus_line_width;
-      gint focus_padding;
       
       gtk_widget_style_get (GTK_WIDGET (range),
 			    "focus-line-width", &focus_line_width,
-			    "focus-padding", &focus_padding,
 			    NULL);
 
-      tmp_focus_width = focus_line_width + focus_padding;
+      tmp_focus_width = focus_line_width;
     }
   else
     {
