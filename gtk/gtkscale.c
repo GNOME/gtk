@@ -1131,14 +1131,12 @@ gtk_scale_draw (GtkWidget *widget,
   GtkRange *range = GTK_RANGE (scale);
   GtkStyleContext *context;
   gint *marks;
-  gint focus_padding;
   gint slider_width;
   gint value_spacing;
   gint min_sep = 4;
 
   context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget,
-                        "focus-padding", &focus_padding,
                         "slider-width", &slider_width,
                         "value-spacing", &value_spacing,
                         NULL);
