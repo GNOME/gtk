@@ -294,7 +294,7 @@ gtkparasite_inspect_button_new (ParasiteWindow *parasite)
 {
   GtkWidget *button;
 
-  button = gtk_button_new_from_icon_name ("find", GTK_ICON_SIZE_BUTTON);
+  button = gtk_button_new_from_icon_name ("edit-find", GTK_ICON_SIZE_BUTTON);
   gtk_widget_set_tooltip_text (button, "Inspect");
   g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (on_inspect), parasite);
 
