@@ -1693,12 +1693,8 @@ static void
 gtk_button_get_full_border (GtkButton *button,
                             GtkBorder *full_border)
 {
-  GtkWidget *widget = GTK_WIDGET (button);
-  GtkStyleContext *context;
   GtkBorder default_border, padding, border;
   int focus_width;
-
-  context = gtk_widget_get_style_context (widget);
 
   gtk_button_get_props (button, &default_border, NULL,
                         &padding, &border);
@@ -1786,7 +1782,6 @@ gtk_button_draw (GtkWidget *widget,
   gint x, y;
   GtkBorder default_border;
   GtkBorder default_outside_border;
-  gint focus_width;
   GtkAllocation allocation;
   GtkStyleContext *context;
   GtkStateFlags state;
@@ -1797,10 +1792,6 @@ gtk_button_draw (GtkWidget *widget,
   state = gtk_style_context_get_state (context);
 
   gtk_button_get_props (button, &default_border, &default_outside_border, NULL, NULL);
-  gtk_style_context_get_style (context,
-                               "focus-line-width", &focus_width,
-                               NULL);
-
   gtk_widget_get_allocation (widget, &allocation);
 
   x = 0;
