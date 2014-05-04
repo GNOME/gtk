@@ -273,7 +273,7 @@ gtkparasite_window_create()
     gtk_container_add (GTK_CONTAINER (box), hpaned);
 
     vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-    gtk_paned_pack1 (GTK_PANED (hpaned), vpaned, TRUE, FALSE);
+    gtk_paned_pack1 (GTK_PANED (hpaned), vpaned, TRUE, TRUE);
     gtk_paned_pack1 (GTK_PANED (vpaned), create_widget_list_pane (window), TRUE, FALSE);
 
     nb = g_object_new (GTK_TYPE_NOTEBOOK,
@@ -303,7 +303,7 @@ gtkparasite_window_create()
                               window->widget_css_editor,
                               gtk_label_new ("Custom CSS"));
 
-    gtk_paned_pack2 (GTK_PANED (hpaned), nb, FALSE, FALSE);
+    gtk_paned_pack2 (GTK_PANED (hpaned), nb, TRUE, TRUE);
 
     if (parasite_python_is_enabled())
     {
