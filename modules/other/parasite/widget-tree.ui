@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkTreeStore" id="model">
+    <columns>
+      <column type="gpointer"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gboolean"/>
+      <column type="gboolean"/>
+      <column type="gboolean"/>
+      <column type="gchararray"/>
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <template class="ParasiteWidgetTree" parent="GtkTreeView">
+    <property name="model">model</property>
+    <property name="enable-search">True</property>
+    <property name="search-column">2</property>
+    <child internal-child="selection">
+      <object class="GtkTreeSelection">
+        <signal name="changed" handler="on_widget_selected"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Widget</property>
+        <property name="resizable">True</property>
+        <child>
+          <object class="GtkCellRendererText">
+            <property name="scale">0.8</property>
+          </object>
+          <attributes>
+            <attribute name="text">1</attribute>
+            <attribute name="sensitive">7</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Name</property>
+        <property name="resizable">True</property>
+        <child>
+          <object class="GtkCellRendererText">
+            <property name="scale">0.8</property>
+          </object>
+          <attributes>
+            <attribute name="text">2</attribute>
+            <attribute name="sensitive">7</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Realized</property>
+        <child>
+          <object class="GtkCellRendererToggle">
+            <property name="activatable">True</property>
+            <property name="indicator-size">10</property>
+          </object>
+          <attributes>
+            <attribute name="active">3</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Mapped</property>
+        <child>
+          <object class="GtkCellRendererToggle">
+            <property name="activatable">True</property>
+            <property name="indicator-size">10</property>
+          </object>
+          <attributes>
+            <attribute name="active">4</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Visible</property>
+        <child>
+          <object class="GtkCellRendererToggle">
+            <property name="activatable">True</property>
+            <property name="indicator-size">10</property>
+          </object>
+          <attributes>
+            <attribute name="active">5</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Address</property>
+        <property name="resizable">True</property>
+        <child>
+          <object class="GtkCellRendererText">
+            <property name="scale">0.8</property>
+            <property name="family">monospace</property>
+          </object>
+          <attributes>
+            <attribute name="text">6</attribute>
+            <attribute name="sensitive">7</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

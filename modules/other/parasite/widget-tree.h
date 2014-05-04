@@ -37,17 +37,17 @@
 
 typedef struct _ParasiteWidgetTreePrivate ParasiteWidgetTreePrivate;
 
-typedef struct _ParasiteWidgetTree {
-   GtkTreeView parent;
-
-   // Private
-   ParasiteWidgetTreePrivate *priv;
+typedef struct _ParasiteWidgetTree
+{
+  GtkTreeView parent;
+  ParasiteWidgetTreePrivate *priv;
 } ParasiteWidgetTree;
 
-typedef struct _ParasiteWidgetTreeClass {
-   GtkTreeViewClass parent;
+typedef struct _ParasiteWidgetTreeClass
+{
+  GtkTreeViewClass parent;
 
-    void (*widget_changed)(ParasiteWidgetTree *tree);
+  void (*widget_changed) (ParasiteWidgetTree *tree);
 } ParasiteWidgetTreeClass;
 
 
@@ -57,16 +57,16 @@ G_BEGIN_DECLS
 GType      parasite_widget_tree_get_type            (void);
 GtkWidget *parasite_widget_tree_new                 (void);
 
-GObject   *parasite_widget_tree_get_selected_object (ParasiteWidgetTree *widget_tree);
+GObject   *parasite_widget_tree_get_selected_object (ParasiteWidgetTree *wt);
 
-void       parasite_widget_tree_scan                (ParasiteWidgetTree *widget_tree,
-                                                     GtkWidget *window);
-void       parasite_widget_tree_select_object       (ParasiteWidgetTree *widget_tree,
+void       parasite_widget_tree_scan                (ParasiteWidgetTree *wt,
+                                                     GtkWidget          *window);
+void       parasite_widget_tree_select_object       (ParasiteWidgetTree *wt,
                                                      GObject            *object);
-void       parasite_widget_tree_append_object       (ParasiteWidgetTree *widget_tree,
+void       parasite_widget_tree_append_object       (ParasiteWidgetTree *wt,
                                                      GObject            *object,
                                                      GtkTreeIter        *parent_iter);
-gboolean   parasite_widget_tree_find_object         (ParasiteWidgetTree *widget_tree,
+gboolean   parasite_widget_tree_find_object         (ParasiteWidgetTree *wt,
                                                      GObject            *object,
                                                      GtkTreeIter        *iter);
 
@@ -75,4 +75,4 @@ G_END_DECLS
 
 #endif // _GTKPARASITE_WIDGETTREE_H_
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:
