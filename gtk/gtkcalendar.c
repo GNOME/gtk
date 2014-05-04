@@ -1145,6 +1145,48 @@ calendar_row_height (GtkCalendar *calendar)
              ? calendar_get_ysep (calendar) : CALENDAR_MARGIN)) / 6;
 }
 
+static void
+get_component_paddings (GtkCalendar *calendar,
+                        GtkBorder   *padding,
+                        GtkBorder   *day_padding,
+                        GtkBorder   *day_name_padding,
+                        GtkBorder   *week_padding)
+{
+  GtkStyleContext * context;
+  GtkStateFlags state;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (calendar);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  if (padding)
+    gtk_style_context_get_padding (context, state, padding);
+
+  if (day_padding)
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "day-number");
+      gtk_style_context_get_padding (context, state, day_padding);
+      gtk_style_context_restore (context);
+    }
+
+  if (day_name_padding)
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "day-name");
+      gtk_style_context_get_padding (context, state, day_name_padding);
+      gtk_style_context_restore (context);
+    }
+
+  if (week_padding)
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "week-number");
+      gtk_style_context_get_padding (context, state, week_padding);
+      gtk_style_context_restore (context);
+    }
+}
 
 /* calendar_left_x_for_column: returns the x coordinate
  * for the left of the column */
@@ -1157,14 +1199,10 @@ calendar_left_x_for_column (GtkCalendar *calendar,
   gint x_left;
   gint week_width;
   gint calendar_xsep = calendar_get_xsep (calendar);
-  GtkStyleContext *context;
-  GtkStateFlags state;
   gint inner_border = calendar_get_inner_border (calendar);
   GtkBorder padding;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (calendar));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (calendar));
-  gtk_style_context_get_padding (context, state, &padding);
+  get_component_paddings (calendar, &padding, NULL, NULL, NULL);
 
   week_width = priv->week_width + padding.left + inner_border;
 
@@ -1215,17 +1253,11 @@ static gint
 calendar_top_y_for_row (GtkCalendar *calendar,
                         gint         row)
 {
-  GtkStyleContext *context;
   GtkAllocation allocation;
   gint inner_border = calendar_get_inner_border (calendar);
-  GtkStateFlags state;
   GtkBorder padding;
 
-  gtk_widget_get_allocation (GTK_WIDGET (calendar), &allocation);
-  context = gtk_widget_get_style_context (GTK_WIDGET (calendar));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (calendar));
-
-  gtk_style_context_get_padding (context, state, &padding);
+  get_component_paddings (calendar, &padding, NULL, NULL, NULL);
 
   return  allocation.height
           - padding.top - inner_border
@@ -1269,16 +1301,11 @@ calendar_arrow_rectangle (GtkCalendar  *calendar,
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = calendar->priv;
   GtkAllocation allocation;
-  GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   gboolean year_left;
 
+  get_component_paddings (calendar, &padding, NULL, NULL, NULL);
   gtk_widget_get_allocation (widget, &allocation);
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_style_context_get_padding (context, state, &padding);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     year_left = priv->year_before;
@@ -1663,15 +1690,10 @@ gtk_calendar_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint inner_border = calendar_get_inner_border (GTK_CALENDAR (widget));
-  GtkStyleContext *context;
   GtkAllocation allocation;
-  GtkStateFlags state = 0;
   GtkBorder padding;
 
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
-
+  get_component_paddings (GTK_CALENDAR (widget), &padding, NULL, NULL, NULL);
   gtk_widget_get_allocation (widget, &allocation);
 
   GTK_WIDGET_CLASS (gtk_calendar_parent_class)->realize (widget);
@@ -1843,49 +1865,6 @@ gtk_calendar_query_tooltip (GtkWidget  *widget,
     return GTK_WIDGET_CLASS (gtk_calendar_parent_class)->query_tooltip (widget, x, y, keyboard_mode, tooltip);
 
   return FALSE;
-}
-
-static void
-get_component_paddings (GtkCalendar *calendar,
-                        GtkBorder   *padding,
-                        GtkBorder   *day_padding,
-                        GtkBorder   *day_name_padding,
-                        GtkBorder   *week_padding)
-{
-  GtkStyleContext * context;
-  GtkStateFlags state;
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (calendar);
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  if (padding)
-    gtk_style_context_get_padding (context, state, padding);
-
-  if (day_padding)
-    {
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "day-number");
-      gtk_style_context_get_padding (context, state, day_padding);
-      gtk_style_context_restore (context);
-    }
-
-  if (day_name_padding)
-    {
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "day-name");
-      gtk_style_context_get_padding (context, state, day_name_padding);
-      gtk_style_context_restore (context);
-    }
-
-  if (week_padding)
-    {
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "week-number");
-      gtk_style_context_get_padding (context, state, week_padding);
-      gtk_style_context_restore (context);
-    }
 }
 
 /****************************************
@@ -2170,17 +2149,12 @@ gtk_calendar_size_allocate (GtkWidget     *widget,
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;
-  GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   guint i;
   gint inner_border = calendar_get_inner_border (calendar);
   gint calendar_xsep = calendar_get_xsep (calendar);
 
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
-
+  get_component_paddings (calendar, &padding, NULL, NULL, NULL);
   gtk_widget_set_allocation (widget, allocation);
 
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
@@ -2254,7 +2228,6 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   GtkCalendarPrivate *priv = calendar->priv;
   GtkAllocation allocation;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   char buffer[255];
   gint x, y;
@@ -2268,9 +2241,8 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   struct tm *tm;
   gchar *str;
 
+  get_component_paddings (calendar, &padding, NULL, NULL, NULL);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
 
   cairo_save (cr);
   cairo_translate (cr, padding.left, padding.top);
