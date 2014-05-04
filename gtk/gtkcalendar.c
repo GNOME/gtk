@@ -1845,7 +1845,49 @@ gtk_calendar_query_tooltip (GtkWidget  *widget,
   return FALSE;
 }
 
-
+static void
+get_component_paddings (GtkCalendar *calendar,
+                        GtkBorder   *padding,
+                        GtkBorder   *day_padding,
+                        GtkBorder   *day_name_padding,
+                        GtkBorder   *week_padding)
+{
+  GtkStyleContext * context;
+  GtkStateFlags state;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (calendar);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  if (padding)
+    gtk_style_context_get_padding (context, state, padding);
+
+  if (day_padding)
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "day-number");
+      gtk_style_context_get_padding (context, state, day_padding);
+      gtk_style_context_restore (context);
+    }
+
+  if (day_name_padding)
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "day-name");
+      gtk_style_context_get_padding (context, state, day_name_padding);
+      gtk_style_context_restore (context);
+    }
+
+  if (week_padding)
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "week-number");
+      gtk_style_context_get_padding (context, state, week_padding);
+      gtk_style_context_restore (context);
+    }
+}
+
 /****************************************
  *       Size Request and Allocate      *
  ****************************************/
@@ -1856,9 +1898,7 @@ gtk_calendar_size_request (GtkWidget      *widget,
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding;
+  GtkBorder padding, day_padding, day_name_padding, week_padding;
   PangoLayout *layout;
   PangoRectangle logical_rect;
 
@@ -1868,15 +1908,15 @@ gtk_calendar_size_request (GtkWidget      *widget,
   gint header_width, main_width;
   gint max_header_height = 0;
   gint focus_width;
-  gint focus_padding;
   gint max_detail_height;
   gint inner_border = calendar_get_inner_border (calendar);
   gint calendar_ysep = calendar_get_ysep (calendar);
   gint calendar_xsep = calendar_get_xsep (calendar);
 
+  gboolean show_week_numbers = (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS);
+
   gtk_widget_style_get (GTK_WIDGET (widget),
                         "focus-line-width", &focus_width,
-                        "focus-padding", &focus_padding,
                         NULL);
 
   layout = gtk_widget_create_pango_layout (widget, NULL);
@@ -1964,7 +2004,7 @@ gtk_calendar_size_request (GtkWidget      *widget,
       }
 
   priv->max_week_char_width = 0;
-  if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
+  if (show_week_numbers)
     for (i = 0; i < 9; i++)
       {
         gchar buffer[32];
@@ -2043,17 +2083,19 @@ gtk_calendar_size_request (GtkWidget      *widget,
             }
     }
 
+  get_component_paddings (calendar, &padding, &day_padding, &day_name_padding, &week_padding);
+
+  priv->min_day_width += day_padding.left + day_padding.right;
+  if (show_week_numbers)
+    priv->max_week_char_width += week_padding.left + week_padding.right;
+
   /* We add one to max_day_char_width to be able to make the marked day "bold" */
   priv->max_day_char_width = priv->min_day_width / 2 + 1;
 
-  main_width = (7 * (priv->min_day_width + (focus_padding + focus_width) * 2) + (DAY_XSEP * 6) + CALENDAR_MARGIN * 2
-                + (priv->max_week_char_width
-                   ? priv->max_week_char_width * 2 + (focus_padding + focus_width) * 2 + calendar_xsep * 2
+  main_width = (7 * (priv->min_day_width + (focus_width) * 2) + (DAY_XSEP * 6) + CALENDAR_MARGIN * 2
+                + (show_week_numbers
+                   ? priv->max_week_char_width * 2 + (focus_width) * 2 + calendar_xsep * 2
                    : 0));
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
 
   requisition->width = MAX (header_width, main_width + inner_border * 2) + padding.left + padding.right;
 
@@ -2073,8 +2115,9 @@ gtk_calendar_size_request (GtkWidget      *widget,
   if (priv->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
     {
       priv->day_name_h = (priv->max_label_char_ascent
-                                  + priv->max_label_char_descent
-                                  + 2 * (focus_padding + focus_width) + calendar_margin);
+                          + priv->max_label_char_descent
+                          + day_name_padding.top + day_name_padding.bottom
+                          + 2 * (focus_width) + calendar_margin);
       calendar_margin = calendar_ysep;
     }
   else
@@ -2086,7 +2129,8 @@ gtk_calendar_size_request (GtkWidget      *widget,
                           + 6 * (priv->max_day_char_ascent
                                  + priv->max_day_char_descent
                                  + max_detail_height
-                                 + 2 * (focus_padding + focus_width))
+                                 + day_padding.top + day_padding.bottom
+                                 + 2 * (focus_width))
                           + DAY_YSEP * 5);
 
   height = priv->header_h + priv->day_name_h + priv->main_h;
@@ -2322,8 +2366,7 @@ calendar_paint_day_names (GtkCalendar *calendar,
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = calendar->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding;
+  GtkBorder padding, day_name_padding;
   GtkAllocation allocation;
   char buffer[255];
   int day,i;
@@ -2331,15 +2374,13 @@ calendar_paint_day_names (GtkCalendar *calendar,
   int day_wid_sep;
   PangoLayout *layout;
   PangoRectangle logical_rect;
-  gint focus_padding;
   gint focus_width;
   gint calendar_ysep = calendar_get_ysep (calendar);
   gint calendar_xsep = calendar_get_xsep (calendar);
   gint inner_border = calendar_get_inner_border (calendar);
 
+  get_component_paddings (calendar, &padding, NULL, &day_name_padding, NULL);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
 
   cairo_save (cr);
 
@@ -2349,7 +2390,6 @@ calendar_paint_day_names (GtkCalendar *calendar,
 
   gtk_widget_style_get (GTK_WIDGET (widget),
                         "focus-line-width", &focus_width,
-                        "focus-padding", &focus_padding,
                         NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -2401,7 +2441,7 @@ calendar_paint_day_names (GtkCalendar *calendar,
                              : 0)
                           + day_wid_sep * i
                           + (day_width - logical_rect.width)/2),
-                         CALENDAR_MARGIN + focus_width + focus_padding + logical_rect.y,
+                         CALENDAR_MARGIN + focus_width + day_name_padding.top + logical_rect.y,
                          layout);
     }
 
@@ -2418,23 +2458,20 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = calendar->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding;
+  GtkBorder padding, week_padding;
   guint week = 0, year;
   gint row, x_loc, y_loc;
   gint day_height;
   char buffer[32];
   PangoLayout *layout;
   PangoRectangle logical_rect;
-  gint focus_padding;
   gint focus_width;
   gint calendar_xsep = calendar_get_xsep (calendar);
   gint inner_border = calendar_get_inner_border (calendar);
   gint x, y;
 
+  get_component_paddings (calendar, &padding, NULL, NULL, &week_padding);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
 
   cairo_save (cr);
 
@@ -2446,7 +2483,6 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
 
   gtk_widget_style_get (GTK_WIDGET (widget),
                         "focus-line-width", &focus_width,
-                        "focus-padding", &focus_padding,
                         NULL);
 
   gtk_style_context_save (context);
@@ -2502,7 +2538,7 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
 
       x_loc = x + (priv->week_width
                    - logical_rect.width
-                   - calendar_xsep - focus_padding - focus_width);
+                   - calendar_xsep - focus_width - week_padding.right);
 
       gtk_render_layout (context, cr, x_loc, y_loc, layout);
     }
