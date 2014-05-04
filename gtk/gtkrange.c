@@ -3741,15 +3741,13 @@ gtk_range_calc_layout (GtkRange *range,
   GtkRangePrivate *priv = range->priv;
   gint slider_width, stepper_size, focus_width, trough_border, stepper_spacing;
   gint slider_length;
-  GtkBorder border, trough_margin;
+  GtkBorder border;
   gint n_steppers;
   gboolean has_steppers_ab;
   gboolean has_steppers_cd;
   gboolean trough_under_steppers;
   GdkRectangle range_rect;
   GtkWidget *widget;
-  GtkStyleContext *context;
-  GtkStateFlags state;
 
   if (!priv->need_recalc)
     return;
@@ -3765,13 +3763,6 @@ gtk_range_calc_layout (GtkRange *range,
    */
 
   widget = GTK_WIDGET (range);
-  context = gtk_widget_get_style_context (widget);
-
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
-  gtk_style_context_get_margin (context, state, &trough_margin);
-  gtk_style_context_restore (context);
 
   gtk_range_get_props (range,
                        &slider_width, &stepper_size,
