@@ -496,8 +496,10 @@ gtk_list_box_get_selected_row (GtkListBox *list_box)
  * @index_: the index of the row
  *
  * Gets the n:th child in the list (not counting headers).
+ * If @_index is negative or larger than the number of items in the
+ * list, %NULL is returned.
  *
- * Returns: (transfer none): the child #GtkWidget
+ * Returns: (transfer none): the child #GtkWidget or %NULL
  *
  * Since: 3.10
  */
@@ -513,7 +515,7 @@ gtk_list_box_get_row_at_index (GtkListBox *list_box,
   priv = gtk_list_box_get_instance_private (list_box);
 
   iter = g_sequence_get_iter_at_pos (priv->children, index_);
-  if (iter)
+  if (!g_sequence_iter_is_end (iter))
     return g_sequence_get (iter);
 
   return NULL;
