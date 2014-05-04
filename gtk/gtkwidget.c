@@ -3456,13 +3456,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 								 P_("Whether to draw the focus indicator inside widgets"),
 								 TRUE,
 								 GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
-
+  /**
+   * GtkWidget:focus-line-width:
+   *
+   * The "focus-line-width" style property defines the width,
+   * in pixels, of the focus indicator line
+   *
+   * Deprecated: 3.14: use the outline-width and padding CSS properties instead.
+   */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_int ("focus-line-width",
 							     P_("Focus linewidth"),
 							     P_("Width, in pixels, of the focus indicator line"),
 							     0, G_MAXINT, 1,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
   /**
    * GtkWidget:focus-line-pattern:
    *
