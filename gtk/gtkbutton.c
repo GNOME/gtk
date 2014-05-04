@@ -1694,18 +1694,14 @@ gtk_button_get_full_border (GtkButton *button,
                             GtkBorder *full_border)
 {
   GtkBorder default_border, padding, border;
-  int focus_width;
 
   gtk_button_get_props (button, &default_border, NULL,
                         &padding, &border);
-  gtk_style_context_get_style (context,
-                               "focus-line-width", &focus_width,
-                               NULL);
 
-  full_border->left = padding.left + border.left + focus_width;
-  full_border->right = padding.right + border.right + focus_width; 
-  full_border->top = padding.top + border.top + focus_width; 
-  full_border->bottom = padding.bottom + border.bottom + focus_width; 
+  full_border->left = padding.left + border.left;
+  full_border->right = padding.right + border.right;
+  full_border->top = padding.top + border.top;
+  full_border->bottom = padding.bottom + border.bottom;
 
   if (gtk_widget_get_can_default (GTK_WIDGET (button)))
     {
