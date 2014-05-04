@@ -179,11 +179,7 @@ gtk_switch_motion (GtkWidget      *widget,
       GtkStyleContext *context;
       GtkStateFlags state;
       GtkBorder padding;
-      gint width, focus_width;
-
-      gtk_widget_style_get (widget,
-                            "focus-line-width", &focus_width,
-                            NULL);
+      gint width;
 
       context = gtk_widget_get_style_context (widget);
       state = gtk_widget_get_state_flags (widget);
@@ -195,7 +191,7 @@ gtk_switch_motion (GtkWidget      *widget,
       
       gtk_widget_get_allocation (widget, &allocation);
 
-      width = allocation.width - 2 * focus_width;
+      width = allocation.width;
 
       /* constrain the handle within the trough width */
       if (position > (width / 2) - padding.right)
@@ -321,7 +317,7 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
-  gint width, slider_width, focus_width;
+  gint width, slider_width;
   PangoLayout *layout;
   PangoRectangle logical_rect;
 
@@ -339,10 +335,7 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
 
   gtk_widget_style_get (widget,
                         "slider-width", &slider_width,
-                        "focus-line-width", &focus_width,
                         NULL);
-
-  slider_width = MAX (slider_width, 3 * focus_width);
 
   /* Translators: if the "on" state label requires more than three
    * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -375,7 +368,7 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
-  gint height, focus_width, slider_width, min_height;
+  gint height, slider_width, min_height;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gchar *str;
@@ -394,10 +387,9 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
 
   gtk_widget_style_get (widget,
                         "slider-width", &slider_width,
-                        "focus-line-width", &focus_width,
                         NULL);
 
-  min_height = MAX (slider_width * 0.6, 3 * focus_width);
+  min_height = slider_width * 0.6;
 
   str = g_strdup_printf ("%s%s",
                          C_("switch", "ON"),
@@ -614,15 +606,9 @@ gtk_switch_draw (GtkWidget *widget,
 
   if (gtk_widget_has_visible_focus (widget))
     {
-      gint focus_width;
-
-      gtk_widget_style_get (widget,
-                            "focus-line-width", &focus_width,
-                            NULL);
-
       gtk_render_focus (context, cr,
-                        handle.x + focus_width, handle.y + focus_width,
-                        handle.width - focus_width*2, handle.height - focus_width*2);
+                        handle.x, handle.y,
+                        handle.width, handle.height);
     }
 
   return FALSE;
