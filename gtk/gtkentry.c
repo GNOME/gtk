@@ -175,7 +175,6 @@ struct _GtkEntryPrivate
   gint          dnd_position;               /* In chars, -1 == no DND cursor */
   gint          drag_start_x;
   gint          drag_start_y;
-  gint          focus_width;
   gint          insert_pos;
   gint          selection_bound;
   gint          scroll_offset;
@@ -5096,12 +5095,6 @@ static void
 gtk_entry_update_cached_style_values (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
-  gint focus_width;
-
-  gtk_widget_style_get (GTK_WIDGET (entry),
-			"focus-line-width", &focus_width,
-			NULL);
-  priv->focus_width = focus_width;
 
   if (!priv->invisible_char_set)
     {
