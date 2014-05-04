@@ -46,7 +46,7 @@ on_widget_tree_selection_changed (ParasiteWidgetTree *widget_tree,
         return;
 
       parasite_proplist_set_object (PARASITE_PROPLIST (parasite->child_prop_list), selected);
-      parasite_objecthierarchy_set_object (PARASITE_OBJECTHIERARCHY (parasite->oh), selected);
+      parasite_object_hierarchy_set_object (PARASITE_OBJECT_HIERARCHY (parasite->oh), selected);
 
       if (GTK_IS_WIDGET (selected))
         {
@@ -288,7 +288,7 @@ gtkparasite_window_create()
                               create_prop_list_pane (window, TRUE),
                               gtk_label_new ("Child Properties"));
 
-    window->oh = parasite_objecthierarchy_new ();
+    window->oh = parasite_object_hierarchy_new ();
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
                               window->oh,
                               gtk_label_new ("Hierarchy"));

@@ -25,8 +25,7 @@
 
 enum
 {
-  COLUMN_OBJECT_NAME,
-  NUM_COLUMNS
+  COLUMN_OBJECT_NAME
 };
 
 struct _ParasiteObjectHierarchyPrivate
@@ -35,62 +34,34 @@ struct _ParasiteObjectHierarchyPrivate
   GtkTreeView *tree;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteObjectHierarchy, parasite_objecthierarchy, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (ParasiteObjectHierarchy, parasite_object_hierarchy, GTK_TYPE_BOX)
 
 static void
-parasite_objecthierarchy_init (ParasiteObjectHierarchy *oh)
+parasite_object_hierarchy_init (ParasiteObjectHierarchy *oh)
 {
-  oh->priv = parasite_objecthierarchy_get_instance_private (oh);
+  oh->priv = parasite_object_hierarchy_get_instance_private (oh);
+  gtk_widget_init_template (GTK_WIDGET (oh));
 }
 
 static void
-constructed (GObject *object)
+parasite_object_hierarchy_class_init (ParasiteObjectHierarchyClass *klass)
 {
-  ParasiteObjectHierarchy *oh = PARASITE_OBJECTHIERARCHY (object);
-  GtkWidget *sw;
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  g_object_set (object,
-                "orientation", GTK_ORIENTATION_VERTICAL,
-                NULL);
-
-  sw = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                     "expand", TRUE,
-                     NULL);
-  gtk_container_add (GTK_CONTAINER (object), sw);
-
-  oh->priv->model = gtk_tree_store_new (NUM_COLUMNS,
-                                        G_TYPE_STRING);   // COLUMN_OBJECT_NAME
-  oh->priv->tree = GTK_TREE_VIEW (gtk_tree_view_new_with_model (GTK_TREE_MODEL (oh->priv->model)));
-  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (oh->priv->tree));
-
-
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "scale", TREE_TEXT_SCALE, NULL);
-  column = gtk_tree_view_column_new_with_attributes ("Object Hierarchy", renderer,
-                                                     "text", COLUMN_OBJECT_NAME,
-                                                     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (oh->priv->tree), column);
-}
-
-static void
-parasite_objecthierarchy_class_init (ParasiteObjectHierarchyClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->constructed  = constructed;
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/object-hierarchy.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteObjectHierarchy, model);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteObjectHierarchy, tree);
 }
 
 GtkWidget *
-parasite_objecthierarchy_new (void)
+parasite_object_hierarchy_new (void)
 {
-  return GTK_WIDGET (g_object_new (PARASITE_TYPE_OBJECTHIERARCHY,
-                                   NULL));
+  return GTK_WIDGET (g_object_new (PARASITE_TYPE_OBJECT_HIERARCHY, NULL));
 }
 
 void
-parasite_objecthierarchy_set_object (ParasiteObjectHierarchy *oh, GObject *object)
+parasite_object_hierarchy_set_object (ParasiteObjectHierarchy *oh,
+                                      GObject                 *object)
 {
   GObjectClass *klass = G_OBJECT_GET_CLASS (object);
   const gchar *class_name;
@@ -104,7 +75,7 @@ parasite_objecthierarchy_set_object (ParasiteObjectHierarchy *oh, GObject *objec
       class_name = G_OBJECT_CLASS_NAME (klass);
       list = g_slist_append (list, (gpointer)class_name);
     }
-  while ((klass = g_type_class_peek_parent (klass))) ;
+  while ((klass = g_type_class_peek_parent (klass)));
   list = g_slist_reverse (list);
 
   for (l = list; l; l = l->next)
@@ -119,8 +90,7 @@ parasite_objecthierarchy_set_object (ParasiteObjectHierarchy *oh, GObject *objec
   g_slist_free (list);
 
   gtk_tree_view_expand_all (oh->priv->tree);
-  gtk_tree_selection_select_iter (gtk_tree_view_get_selection (oh->priv->tree),
-                                  &iter);
+  gtk_tree_selection_select_iter (gtk_tree_view_get_selection (oh->priv->tree), &iter);
 }
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:
