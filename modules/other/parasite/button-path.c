@@ -24,63 +24,41 @@
 
 struct _ParasiteButtonPathPrivate
 {
-    GtkWidget *sw;
-    GtkWidget *button_box;
+  GtkWidget *sw;
+  GtkWidget *button_box;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteButtonPath, parasite_buttonpath, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (ParasiteButtonPath, parasite_button_path, GTK_TYPE_BOX)
 
 static void
-parasite_buttonpath_init (ParasiteButtonPath *bp)
+parasite_button_path_init (ParasiteButtonPath *bp)
 {
-  GtkWidget *label;
-
-  bp->priv = parasite_buttonpath_get_instance_private (bp);
-
-  g_object_set (bp,
-                "orientation", GTK_ORIENTATION_HORIZONTAL,
-                NULL);
-
-  bp->priv->sw = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                               "hscrollbar-policy", GTK_POLICY_AUTOMATIC,
-                               "vscrollbar-policy", GTK_POLICY_NEVER,
-                               "hexpand", TRUE,
-                               NULL);
-  gtk_container_add (GTK_CONTAINER (bp), bp->priv->sw);
-
-  bp->priv->button_box = g_object_new (GTK_TYPE_BOX,
-                                       "orientation", GTK_ORIENTATION_HORIZONTAL,
-                                       "hexpand", TRUE,
-                                       "margin", 6,
-                                       NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (bp->priv->button_box), "linked");
-  gtk_container_add (GTK_CONTAINER (bp->priv->sw), bp->priv->button_box);
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "label", "Choose a widget through the inspector",
-                        "xalign", 0.5,
-                        "hexpand", TRUE,
-                        NULL);
-  gtk_container_add (GTK_CONTAINER (bp->priv->button_box), label);
+  bp->priv = parasite_button_path_get_instance_private (bp);
+  gtk_widget_init_template (GTK_WIDGET (bp));
 }
 
 static void
-parasite_buttonpath_class_init(ParasiteButtonPathClass *klass)
+parasite_button_path_class_init (ParasiteButtonPathClass *klass)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/button-path.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteButtonPath, sw);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteButtonPath, button_box);
 }
 
 GtkWidget *
-parasite_buttonpath_new ()
+parasite_button_path_new (void)
 {
-    return GTK_WIDGET (g_object_new (PARASITE_TYPE_BUTTONPATH, NULL));
+  return GTK_WIDGET (g_object_new (PARASITE_TYPE_BUTTON_PATH, NULL));
 }
 
 void
-parasite_buttonpath_set_widget(ParasiteButtonPath *bp,
-                               GtkWidget *widget)
+parasite_button_path_set_widget (ParasiteButtonPath *bp,
+                                 GtkWidget          *widget)
 {
-  char *path, **words;
-  int i;
+  gchar *path, **words;
+  gint i;
   GtkWidget *b;
   GtkContainer *box = GTK_CONTAINER (bp->priv->button_box);
 
@@ -100,4 +78,4 @@ parasite_buttonpath_set_widget(ParasiteButtonPath *bp,
   g_free (path);
 }
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:

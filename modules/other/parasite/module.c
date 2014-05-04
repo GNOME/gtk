@@ -25,6 +25,7 @@
 #include "config.h"
 #include "parasite.h"
 #include "python-hooks.h"
+#include "resources.h"
 
 
 void
@@ -33,6 +34,8 @@ gtk_module_init(gint *argc, gchar ***argv)
 #ifdef ENABLE_PYTHON
     parasite_python_init();
 #endif
+
+    parasite_register_resource ();
 
     gtkparasite_window_create();
 }

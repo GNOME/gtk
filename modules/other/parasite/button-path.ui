@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="ParasiteButtonPath" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <child>
+      <object class="GtkScrolledWindow" id="sw">
+        <property name="visible">True</property>
+        <property name="hscrollbar-policy">automatic</property>
+        <property name="vscrollbar-policy">never</property>
+        <property name="hexpand">True</property>
+        <child>
+          <object class="GtkButtonBox" id="button_box">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="hexpand">True</property>
+            <property name="margin">6</property>
+            <property name="spacing">0</property>
+            <property name="layout-style">start</property>
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label">Choose a widget through the inspector</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0.5</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

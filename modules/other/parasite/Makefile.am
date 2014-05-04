@@ -2,7 +2,21 @@ moduledir = $(libdir)/gtk-3.0/modules
 
 module_LTLIBRARIES = libgtkparasite.la
 
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/parasite.gresource.xml)
+resources.h: parasite.gresource.xml
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/parasite.gresource.xml \
+		--target=$@ --sourcedir=$(srcdir) --c-name parasite --generate-header --manual-register
+resources.c: parasite.gresource.xml $(resource_files)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/parasite.gresource.xml \
+		--target=$@ --sourcedir=$(srcdir) --c-name parasite --generate-source --manual-register
+
+BUILT_SOURCES = \
+	resources.h \
+	resources.c
+
 libgtkparasite_la_SOURCES = \
+	resources.h \
+	resources.c \
 	inspect-button.c \
 	module.c \
 	parasite.h \
@@ -48,5 +62,8 @@ libgtkparasite_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libgtkparasite_la_LIBADD = \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
+
+EXTRA_DIST= \
+	$(resource_files)
 
 -include $(top_srcdir)/git.mk

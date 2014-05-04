@@ -53,7 +53,7 @@ on_widget_tree_selection_changed (ParasiteWidgetTree *widget_tree,
           GtkWidget *widget = GTK_WIDGET (selected);
 
           gtkparasite_flash_widget(parasite, widget);
-          parasite_buttonpath_set_widget (PARASITE_BUTTONPATH (parasite->button_path), widget);
+          parasite_button_path_set_widget (PARASITE_BUTTON_PATH (parasite->button_path), widget);
           parasite_classeslist_set_widget (PARASITE_CLASSESLIST (parasite->classes_list), widget);
           parasite_csseditor_set_widget (PARASITE_CSSEDITOR (parasite->widget_css_editor), widget);
         }
@@ -266,7 +266,7 @@ gtkparasite_window_create()
                               parasite_csseditor_new (TRUE),
                               gtk_label_new ("Custom CSS"));
 
-    window->button_path = parasite_buttonpath_new ();
+    window->button_path = parasite_button_path_new ();
     gtk_container_add (GTK_CONTAINER (box), window->button_path);
 
     hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);

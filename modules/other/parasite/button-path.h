@@ -19,42 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTKPARASITE_BUTTONPATH_H_
-#define _GTKPARASITE_BUTTONPATH_H_
+#ifndef _GTKPARASITE_BUTTON_PATH_H_
+#define _GTKPARASITE_BUTTON_PATH_H_
 
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_BUTTONPATH            (parasite_buttonpath_get_type())
-#define PARASITE_BUTTONPATH(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_BUTTONPATH, ParasiteButtonPath))
-#define PARASITE_BUTTONPATH_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_BUTTONPATH, ParasiteButtonPathClass))
-#define PARASITE_IS_BUTTONPATH(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_BUTTONPATH))
-#define PARASITE_IS_BUTTONPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_BUTTONPATH))
-#define PARASITE_BUTTONPATH_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_BUTTONPATH, ParasiteButtonPathClass))
+#define PARASITE_TYPE_BUTTON_PATH            (parasite_button_path_get_type())
+#define PARASITE_BUTTON_PATH(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_BUTTON_PATH, ParasiteButtonPath))
+#define PARASITE_BUTTON_PATH_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_BUTTON_PATH, ParasiteButtonPathClass))
+#define PARASITE_IS_BUTTON_PATH(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_BUTTON_PATH))
+#define PARASITE_IS_BUTTON_PATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_BUTTON_PATH))
+#define PARASITE_BUTTON_PATH_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_BUTTON_PATH, ParasiteButtonPathClass))
 
 
 typedef struct _ParasiteButtonPathPrivate ParasiteButtonPathPrivate;
 
-typedef struct _ParasiteButtonPath {
-   GtkBox parent;
-   ParasiteButtonPathPrivate *priv;
+typedef struct _ParasiteButtonPath
+{
+  GtkBox parent;
+  ParasiteButtonPathPrivate *priv;
 } ParasiteButtonPath;
 
-typedef struct _ParasiteButtonPathClass {
-   GtkBoxClass parent;
+typedef struct _ParasiteButtonPathClass
+{
+  GtkBoxClass parent;
 } ParasiteButtonPathClass;
 
 
 G_BEGIN_DECLS
 
-GType parasite_buttonpath_get_type ();
-GtkWidget *parasite_buttonpath_new ();
-void parasite_buttonpath_set_widget (ParasiteButtonPath *bp,
-                                     GtkWidget *widget);
+GType      parasite_button_path_get_type   (void);
+GtkWidget *parasite_button_path_new        (void);
+void       parasite_button_path_set_widget (ParasiteButtonPath *bp,
+                                            GtkWidget          *widget);
 
 G_END_DECLS
 
 
-#endif // _GTKPARASITE_BUTTONPATH_H_
+#endif // _GTKPARASITE_BUTTON_PATH_H_
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:
