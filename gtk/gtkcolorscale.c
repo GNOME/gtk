@@ -56,22 +56,21 @@ gtk_color_scale_get_trough_size (GtkColorScale *scale,
                                  gint *height_out)
 {
   GtkWidget *widget = GTK_WIDGET (scale);
-  gint width, height, focus_line_width, focus_padding;
+  gint width, height, focus_line_width;
   gint x_offset, y_offset;
   gint slider_width, slider_height;
 
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_line_width,
-                        "focus-padding", &focus_padding,
                         "slider-width", &slider_width,
                         "slider-length", &slider_height,
                         NULL);
 
-  width = gtk_widget_get_allocated_width (widget) - 2 * (focus_line_width + focus_padding);
-  height = gtk_widget_get_allocated_height (widget) - 2 * (focus_line_width + focus_padding);
+  width = gtk_widget_get_allocated_width (widget) - 2 * (focus_line_width);
+  height = gtk_widget_get_allocated_height (widget) - 2 * (focus_line_width);
 
-  x_offset = focus_line_width + focus_padding;
-  y_offset = focus_line_width + focus_padding;
+  x_offset = focus_line_width;
+  y_offset = focus_line_width;
 
   /* if the slider has a vertical shape, draw the trough asymmetric */
   if (slider_width > slider_height)
