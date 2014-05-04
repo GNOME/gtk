@@ -1027,7 +1027,6 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
   if (path)
     {
       GtkTreeViewColumn *expander_column;
-      gint focus_line_width;
 
       gtk_tree_view_get_cell_area (tree_view, path, tv_col, cell_rect);
       expander_column = gtk_tree_view_get_expander_column (tree_view);
@@ -1040,12 +1039,6 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
           cell_rect->x += expander_size + EXTRA_EXPANDER_PADDING;
           cell_rect->width -= expander_size + EXTRA_EXPANDER_PADDING;
         }
-      gtk_widget_style_get (widget,
-                            "focus-line-width", &focus_line_width,
-                            NULL);
-
-      cell_rect->x += focus_line_width;
-      cell_rect->width -= 2 * focus_line_width;
 
       gtk_tree_path_free (path);
 

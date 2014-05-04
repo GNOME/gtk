@@ -1129,20 +1129,9 @@ render_cell (GtkCellRenderer        *renderer,
         (renderer == focus_cell ||
          gtk_cell_area_is_focus_sibling (data->area, focus_cell, renderer)))))
     {
-      gint focus_line_width;
       GdkRectangle cell_focus;
 
       gtk_cell_renderer_get_aligned_area (renderer, data->widget, flags, &inner_area, &cell_focus);
-
-      gtk_widget_style_get (data->widget,
-                            "focus-line-width", &focus_line_width,
-                            NULL);
-
-      /* The focus rectangle is located around the aligned area of the cell */
-      cell_focus.x -= focus_line_width;
-      cell_focus.y -= focus_line_width;
-      cell_focus.width += 2 * focus_line_width;
-      cell_focus.height += 2 * focus_line_width;
 
       if (data->first_focus)
         {
@@ -3561,21 +3550,25 @@ gtk_cell_area_inner_cell_area (GtkCellArea        *area,
                                const GdkRectangle *cell_area,
                                GdkRectangle       *inner_area)
 {
-  gint focus_line_width;
+  GtkBorder border;
+  GtkStyleContext *context;
+  GtkStateFlags state;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (cell_area != NULL);
   g_return_if_fail (inner_area != NULL);
 
-  gtk_widget_style_get (widget, "focus-line-width", &focus_line_width, NULL);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_get_padding (context, state, &border);
 
   *inner_area = *cell_area;
 
-  inner_area->x      += focus_line_width;
-  inner_area->width  -= focus_line_width * 2;
-  inner_area->y      += focus_line_width;
-  inner_area->height -= focus_line_width * 2;
+  inner_area->x += border.left;
+  inner_area->width -= border.left + border.right;
+  inner_area->y += border.top;
+  inner_area->height -= border.top + border.bottom;
 }
 
 /**
@@ -3606,7 +3599,9 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
                                 gint               *minimum_size,
                                 gint               *natural_size)
 {
-  gint focus_line_width;
+  GtkBorder border;
+  GtkStyleContext *context;
+  GtkStateFlags state;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
@@ -3614,9 +3609,9 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
   g_return_if_fail (minimum_size != NULL);
   g_return_if_fail (natural_size != NULL);
 
-  gtk_widget_style_get (widget, "focus-line-width", &focus_line_width, NULL);
-
-  focus_line_width *= 2;
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_get_padding (context, state, &border);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -3624,11 +3619,14 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
           gtk_cell_renderer_get_preferred_width (renderer, widget, minimum_size, natural_size);
       else
         {
-          for_size = MAX (0, for_size - focus_line_width);
+          for_size = MAX (0, for_size - border.left - border.right);
 
           gtk_cell_renderer_get_preferred_width_for_height (renderer, widget, for_size,
                                                             minimum_size, natural_size);
         }
+
+      *minimum_size += border.left + border.right;
+      *natural_size += border.left + border.right;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
@@ -3636,15 +3634,15 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
         gtk_cell_renderer_get_preferred_height (renderer, widget, minimum_size, natural_size);
       else
         {
-          for_size = MAX (0, for_size - focus_line_width);
+          for_size = MAX (0, for_size - border.top - border.bottom);
 
           gtk_cell_renderer_get_preferred_height_for_width (renderer, widget, for_size,
                                                             minimum_size, natural_size);
         }
-    }
 
-  *minimum_size += focus_line_width;
-  *natural_size += focus_line_width;
+      *minimum_size += border.top + border.bottom;
+      *natural_size += border.top + border.bottom;
+    }
 }
 
 void
