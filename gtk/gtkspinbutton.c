@@ -1156,23 +1156,15 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkStyleContext *style_context;
-
-  style_context = gtk_widget_get_style_context (widget);
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->get_preferred_width (widget, minimum, natural);
 
   if (gtk_entry_get_width_chars (entry) < 0)
     {
       gint width, w;
-      gint focus_width;
       GtkBorder borders;
       PangoLayout *layout;
       gchar *str;
-
-      gtk_style_context_get_style (style_context,
-                                   "focus-line-width", &focus_width,
-                                   NULL);
 
       layout = pango_layout_copy (gtk_entry_get_layout (entry));
 
