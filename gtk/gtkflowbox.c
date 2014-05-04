@@ -373,21 +373,17 @@ gtk_flow_box_child_get_full_border (GtkFlowBoxChild *child,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding, border;
-  int focus_width;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_style_context_get_state (context);
 
   gtk_style_context_get_padding (context, state, &padding);
   gtk_style_context_get_border (context, state, &border);
-  gtk_style_context_get_style (context,
-                               "focus-line-width", &focus_width,
-                               NULL);
 
-  full_border->left = padding.left + border.left + focus_width;
-  full_border->right = padding.right + border.right + focus_width;
-  full_border->top = padding.top + border.top + focus_width;
-  full_border->bottom = padding.bottom + border.bottom + focus_width;
+  full_border->left = padding.left + border.left;
+  full_border->right = padding.right + border.right;
+  full_border->top = padding.top + border.top;
+  full_border->bottom = padding.bottom + border.bottom;
 }
 
 static GtkSizeRequestMode
