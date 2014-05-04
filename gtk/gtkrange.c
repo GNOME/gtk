@@ -256,7 +256,6 @@ static void          gtk_range_calc_marks               (GtkRange      *range);
 static void          gtk_range_get_props                (GtkRange      *range,
                                                          gint          *slider_width,
                                                          gint          *stepper_size,
-                                                         gint          *focus_width,
                                                          gint          *trough_border,
                                                          gint          *stepper_spacing,
                                                          gboolean      *trough_under_steppers,
@@ -265,7 +264,6 @@ static void          gtk_range_get_props                (GtkRange      *range,
 static void          gtk_range_calc_request             (GtkRange      *range,
                                                          gint           slider_width,
                                                          gint           stepper_size,
-                                                         gint           focus_width,
                                                          gint           trough_border,
                                                          gint           stepper_spacing,
                                                          GdkRectangle  *range_rect,
@@ -1540,7 +1538,7 @@ gtk_range_get_preferred_width (GtkWidget *widget,
                                gint      *natural)
 {
   GtkRange *range;
-  gint slider_width, stepper_size, focus_width, trough_border, stepper_spacing;
+  gint slider_width, stepper_size, trough_border, stepper_spacing;
   GdkRectangle range_rect;
   GtkBorder border;
 
@@ -1548,13 +1546,13 @@ gtk_range_get_preferred_width (GtkWidget *widget,
 
   gtk_range_get_props (range,
                        &slider_width, &stepper_size,
-                       &focus_width, &trough_border,
+                       &trough_border,
                        &stepper_spacing, NULL,
                        NULL, NULL);
 
   gtk_range_calc_request (range,
                           slider_width, stepper_size,
-                          focus_width, trough_border, stepper_spacing,
+                          trough_border, stepper_spacing,
                           &range_rect, &border, NULL, NULL, NULL, NULL);
 
   *minimum = *natural = range_rect.width + border.left + border.right;
@@ -1566,7 +1564,7 @@ gtk_range_get_preferred_height (GtkWidget *widget,
                                 gint      *natural)
 {
   GtkRange *range;
-  gint slider_width, stepper_size, focus_width, trough_border, stepper_spacing;
+  gint slider_width, stepper_size, trough_border, stepper_spacing;
   GdkRectangle range_rect;
   GtkBorder border;
 
@@ -1574,13 +1572,13 @@ gtk_range_get_preferred_height (GtkWidget *widget,
 
   gtk_range_get_props (range,
                        &slider_width, &stepper_size,
-                       &focus_width, &trough_border,
+                       &trough_border,
                        &stepper_spacing, NULL,
                        NULL, NULL);
 
   gtk_range_calc_request (range,
                           slider_width, stepper_size,
-                          focus_width, trough_border, stepper_spacing,
+                          trough_border, stepper_spacing,
                           &range_rect, &border, NULL, NULL, NULL, NULL);
 
   *minimum = *natural = range_rect.height + border.top + border.bottom;
@@ -1974,7 +1972,7 @@ draw_stepper (GtkRange     *range,
       gint arrow_displacement_y;
 
       gtk_range_get_props (GTK_RANGE (widget),
-                           NULL, NULL, NULL, NULL, NULL, NULL,
+                           NULL, NULL, NULL, NULL, NULL,
                            &arrow_displacement_x, &arrow_displacement_y);
 
       arrow_x += arrow_displacement_x;
@@ -2013,7 +2011,6 @@ gtk_range_draw (GtkWidget *widget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   GtkStateFlags widget_state;
-  gint focus_line_width = 0;
   gboolean draw_trough = TRUE;
   gboolean draw_slider = TRUE;
   GtkStyleContext *context;
@@ -2033,11 +2030,6 @@ gtk_range_draw (GtkWidget *widget,
       draw_slider = TRUE;
     }
 
-  if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
-    gtk_widget_style_get (GTK_WIDGET (range),
-                          "focus-line-width", &focus_line_width,
-                          NULL);
-
   gtk_range_calc_marks (range);
   gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
 
@@ -2052,14 +2044,10 @@ gtk_range_draw (GtkWidget *widget,
   cairo_clip (cr);
 
     {
-      gint     x      = (priv->range_rect.x +
-                         focus_line_width);
-      gint     y      = (priv->range_rect.y +
-                         focus_line_width);
-      gint     width  = (priv->range_rect.width -
-                         2 * (focus_line_width));
-      gint     height = (priv->range_rect.height -
-                         2 * (focus_line_width));
+      gint     x      = priv->range_rect.x;
+      gint     y      = priv->range_rect.y;
+      gint     width  = priv->range_rect.width;
+      gint     height = priv->range_rect.height;
       gboolean trough_under_steppers;
       gint     stepper_size;
       gint     stepper_spacing;
@@ -2496,7 +2484,7 @@ coord_to_value (GtkRange *range,
       slider_length = priv->slider.width;
     }
 
-  gtk_range_get_props (range, NULL, NULL, NULL, &trough_border, NULL,
+  gtk_range_get_props (range, NULL, NULL, &trough_border, NULL,
                        &trough_under_steppers, NULL, NULL);
 
   if (! trough_under_steppers)
@@ -3445,7 +3433,6 @@ static void
 gtk_range_get_props (GtkRange  *range,
                      gint      *slider_width,
                      gint      *stepper_size,
-                     gint      *focus_width,
                      gint      *trough_border,
                      gint      *stepper_spacing,
                      gboolean  *trough_under_steppers,
@@ -3453,7 +3440,7 @@ gtk_range_get_props (GtkRange  *range,
 		     gint      *arrow_displacement_y)
 {
   GtkWidget *widget =  GTK_WIDGET (range);
-  gint tmp_slider_width, tmp_stepper_size, tmp_focus_width, tmp_trough_border;
+  gint tmp_slider_width, tmp_stepper_size, tmp_trough_border;
   gint tmp_stepper_spacing, tmp_trough_under_steppers;
   gint tmp_arrow_displacement_x, tmp_arrow_displacement_y;
   
@@ -3467,26 +3454,8 @@ gtk_range_get_props (GtkRange  *range,
 			"arrow-displacement-y", &tmp_arrow_displacement_y,
                         NULL);
 
-  if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
-    {
-      gint focus_line_width;
-      
-      gtk_widget_style_get (GTK_WIDGET (range),
-			    "focus-line-width", &focus_line_width,
-			    NULL);
-
-      tmp_focus_width = focus_line_width;
-    }
-  else
-    {
-      tmp_focus_width = 0;
-    }
-  
   if (slider_width)
     *slider_width = tmp_slider_width;
-
-  if (focus_width)
-    *focus_width = tmp_focus_width;
 
   if (trough_border)
     *trough_border = tmp_trough_border;
@@ -3652,7 +3621,6 @@ static void
 gtk_range_calc_request (GtkRange      *range,
                         gint           slider_width,
                         gint           stepper_size,
-                        gint           focus_width,
                         gint           trough_border,
                         gint           stepper_spacing,
                         GdkRectangle  *range_rect,
@@ -3700,8 +3668,8 @@ gtk_range_calc_request (GtkRange      *range,
    */
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
-      range_rect->width = (focus_width + trough_border) * 2 + slider_width;
-      range_rect->height = stepper_size * n_steppers + (focus_width + trough_border) * 2 + slider_length;
+      range_rect->width =  + trough_border * 2 + slider_width;
+      range_rect->height = stepper_size * n_steppers + trough_border * 2 + slider_length;
 
       if (n_steppers_ab > 0)
         range_rect->height += stepper_spacing;
@@ -3711,8 +3679,8 @@ gtk_range_calc_request (GtkRange      *range,
     }
   else
     {
-      range_rect->width = stepper_size * n_steppers + (focus_width + trough_border) * 2 + slider_length;
-      range_rect->height = (focus_width + trough_border) * 2 + slider_width;
+      range_rect->width = stepper_size * n_steppers + trough_border * 2 + slider_length;
+      range_rect->height = trough_border * 2 + slider_width;
 
       if (n_steppers_ab > 0)
         range_rect->width += stepper_spacing;
@@ -3739,7 +3707,7 @@ gtk_range_calc_layout (GtkRange *range,
 		       gdouble   adjustment_value)
 {
   GtkRangePrivate *priv = range->priv;
-  gint slider_width, stepper_size, focus_width, trough_border, stepper_spacing;
+  gint slider_width, stepper_size, trough_border, stepper_spacing;
   gint slider_length;
   GtkBorder border;
   gint n_steppers;
@@ -3766,13 +3734,13 @@ gtk_range_calc_layout (GtkRange *range,
 
   gtk_range_get_props (range,
                        &slider_width, &stepper_size,
-                       &focus_width, &trough_border,
+                       &trough_border,
                        &stepper_spacing, &trough_under_steppers,
 		       NULL, NULL);
 
   gtk_range_calc_request (range, 
                           slider_width, stepper_size,
-                          focus_width, trough_border, stepper_spacing,
+                          trough_border, stepper_spacing,
                           &range_rect, &border, &n_steppers,
                           &has_steppers_ab, &has_steppers_cd, &slider_length);
   
@@ -3801,7 +3769,7 @@ gtk_range_calc_layout (GtkRange *range,
        * height, or if we don't have enough height, divided equally
        * among available space.
        */
-      stepper_width = range_rect.width - focus_width * 2;
+      stepper_width = range_rect.width;
 
       if (trough_under_steppers)
         stepper_width -= trough_border * 2;
@@ -3816,8 +3784,8 @@ gtk_range_calc_layout (GtkRange *range,
 
       /* Stepper A */
       
-      priv->stepper_a.x = range_rect.x + focus_width + trough_border * trough_under_steppers;
-      priv->stepper_a.y = range_rect.y + focus_width + trough_border * trough_under_steppers;
+      priv->stepper_a.x = range_rect.x + trough_border * trough_under_steppers;
+      priv->stepper_a.y = range_rect.y + trough_border * trough_under_steppers;
 
       if (priv->has_stepper_a)
         {
@@ -3860,7 +3828,7 @@ gtk_range_calc_layout (GtkRange *range,
         }
       
       priv->stepper_d.x = priv->stepper_a.x;
-      priv->stepper_d.y = range_rect.y + range_rect.height - priv->stepper_d.height - focus_width - trough_border * trough_under_steppers;
+      priv->stepper_d.y = range_rect.y + range_rect.height - priv->stepper_d.height - trough_border * trough_under_steppers;
 
       /* Stepper C */
 
@@ -3889,8 +3857,8 @@ gtk_range_calc_layout (GtkRange *range,
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      priv->slider.x = priv->trough.x + focus_width + trough_border;
-      priv->slider.width = priv->trough.width - (focus_width + trough_border) * 2;
+      priv->slider.x = priv->trough.x + trough_border;
+      priv->slider.width = priv->trough.width - trough_border * 2;
 
       /* Compute slider position/length */
       {
@@ -3948,7 +3916,7 @@ gtk_range_calc_layout (GtkRange *range,
        * width, or if we don't have enough width, divided equally
        * among available space.
        */
-      stepper_height = range_rect.height + focus_width * 2;
+      stepper_height = range_rect.height;
 
       if (trough_under_steppers)
         stepper_height -= trough_border * 2;
@@ -3963,8 +3931,8 @@ gtk_range_calc_layout (GtkRange *range,
 
       /* Stepper A */
       
-      priv->stepper_a.x = range_rect.x + focus_width + trough_border * trough_under_steppers;
-      priv->stepper_a.y = range_rect.y + focus_width + trough_border * trough_under_steppers;
+      priv->stepper_a.x = range_rect.x + trough_border * trough_under_steppers;
+      priv->stepper_a.y = range_rect.y + trough_border * trough_under_steppers;
 
       if (priv->has_stepper_a)
         {
@@ -4006,7 +3974,7 @@ gtk_range_calc_layout (GtkRange *range,
           priv->stepper_d.height = 0;
         }
 
-      priv->stepper_d.x = range_rect.x + range_rect.width - priv->stepper_d.width - focus_width - trough_border * trough_under_steppers;
+      priv->stepper_d.x = range_rect.x + range_rect.width - priv->stepper_d.width - trough_border * trough_under_steppers;
       priv->stepper_d.y = priv->stepper_a.y;
 
 
@@ -4037,8 +4005,8 @@ gtk_range_calc_layout (GtkRange *range,
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      priv->slider.y = priv->trough.y + focus_width + trough_border;
-      priv->slider.height = priv->trough.height - (focus_width + trough_border) * 2;
+      priv->slider.y = priv->trough.y + trough_border;
+      priv->slider.height = priv->trough.height - trough_border * 2;
 
       /* Compute slider position/length */
       {
