@@ -72,10 +72,10 @@ fill_gtk (const char *path, GHashTable *t)
 
   while ((dir_entry = g_dir_read_name (dir)))
     {
-      char *filename = g_build_filename (path, dir_entry, "gtk-3.0", NULL);
+      char *filename = g_build_filename (path, dir_entry, "gtk-3.0", "gtk.css", NULL);
 
-      if (g_file_test (filename, G_FILE_TEST_IS_DIR)
-          && !g_hash_table_contains (t, dir_entry))
+      if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
+          !g_hash_table_contains (t, dir_entry))
         g_hash_table_add (t, g_strdup (dir_entry));
 
       g_free (filename);
@@ -116,6 +116,7 @@ create_gtk (ParasiteThemes *pt)
   gtk_container_add (GTK_CONTAINER (b), l);
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  g_hash_table_add (t, g_strdup ("Raleigh"));
 
   fill_gtk (GTK_DATADIR "/themes", t);
   path = g_build_filename (g_get_user_data_dir (), "themes", NULL);
