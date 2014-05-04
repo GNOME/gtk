@@ -6131,6 +6131,7 @@ validate_row (GtkTreeView *tree_view,
 	      GtkTreePath *path)
 {
   GtkTreeViewColumn *column;
+  GtkStyleContext *context;
   GList *list, *first_column, *last_column;
   gint height = 0;
   gint horizontal_separator;
@@ -6178,6 +6179,10 @@ validate_row (GtkTreeView *tree_view,
        !(gtk_tree_view_column_get_visible (GTK_TREE_VIEW_COLUMN (first_column->data)));
        first_column = first_column->next)
     ;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
 
   for (list = tree_view->priv->columns; list; list = list->next)
     {
@@ -6243,6 +6248,8 @@ validate_row (GtkTreeView *tree_view,
       if (new_width > original_width)
 	retval = TRUE;
     }
+
+  gtk_style_context_restore (context);
 
   if (draw_hgrid_lines)
     height += grid_line_width;
