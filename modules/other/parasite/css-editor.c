@@ -23,15 +23,14 @@
 #include "css-editor.h"
 #include "parasite.h"
 
-#define PARASITE_CSSEDITOR_TEXT "parasite-csseditor-text"
-#define PARASITE_CSSEDITOR_PROVIDER "parasite-csseditor-provider"
+#define PARASITE_CSS_EDITOR_TEXT "parasite-css-editor-text"
+#define PARASITE_CSS_EDITOR_PROVIDER "parasite-css-editor-provider"
 
 enum
 {
   COLUMN_ENABLED,
   COLUMN_NAME,
-  COLUMN_USER,
-  NUM_COLUMNS
+  COLUMN_USER
 };
 
 enum
@@ -49,6 +48,7 @@ typedef struct
 struct _ParasiteCssEditorPrivate
 {
   GtkWidget *toolbar;
+  GtkWidget *view;
   GtkTextBuffer *text;
   GtkCssProvider *provider;
   gboolean global;
@@ -56,82 +56,69 @@ struct _ParasiteCssEditorPrivate
   GtkToggleToolButton *disable_button;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteCssEditor, parasite_csseditor, GTK_TYPE_BOX)
-
-static const gchar *initial_text_global =
-          "/*\n"
-          "You can type here any CSS rule recognized by GTK+.\n"
-          "You can temporarily disable this custom CSS by clicking on the \"Pause\" button above.\n\n"
-          "Changes are applied instantly and globally, for the whole application.\n"
-          "*/\n\n";
-static const gchar *initial_text_widget =
-          "/*\n"
-          "You can type here any CSS rule recognized by GTK+.\n"
-          "You can temporarily disable this custom CSS by clicking on the \"Pause\" button above.\n\n"
-          "Changes are applied instantly, only for this selected widget.\n"
-          "*/\n\n";
+G_DEFINE_TYPE_WITH_PRIVATE (ParasiteCssEditor, parasite_css_editor, GTK_TYPE_BOX)
 
 static void
-disable_toggled (GtkToggleToolButton *button, ParasiteCssEditor *editor)
+set_initial_text (ParasiteCssEditor *editor)
+{
+  const gchar *initial_text_global =
+    "/*\n"
+    "You can type here any CSS rule recognized by GTK+.\n"
+    "You can temporarily disable this custom CSS by clicking on the \"Pause\" button above.\n\n"
+    "Changes are applied instantly and globally, for the whole application.\n"
+    "*/\n\n";
+  const gchar *initial_text_widget =
+    "/*\n"
+    "You can type here any CSS rule recognized by GTK+.\n"
+    "You can temporarily disable this custom CSS by clicking on the \"Pause\" button above.\n\n"
+    "Changes are applied instantly, only for this selected widget.\n"
+    "*/\n\n";
+  const gchar *text = NULL;
+
+  if (editor->priv->selected_context)
+    text = g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSS_EDITOR_TEXT);
+  if (text)
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), text, -1);
+  else if (editor->priv->global)
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), initial_text_global, -1);
+  else
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), initial_text_widget, -1);
+}
+
+static void
+disable_toggled (GtkToggleToolButton *button,
+                 ParasiteCssEditor   *editor)
 {
   if (gtk_toggle_tool_button_get_active (button))
     {
       if (editor->priv->global)
-        {
-          gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
-                                                        GTK_STYLE_PROVIDER (editor->priv->provider));
-        }
+        gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
+                                                      GTK_STYLE_PROVIDER (editor->priv->provider));
       else if (editor->priv->selected_context)
-        {
-          gtk_style_context_remove_provider (editor->priv->selected_context,
-                                             GTK_STYLE_PROVIDER (g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSSEDITOR_PROVIDER)));
-        }
+        gtk_style_context_remove_provider (editor->priv->selected_context,
+                                           GTK_STYLE_PROVIDER (g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSS_EDITOR_PROVIDER)));
     }
   else
     {
       if (editor->priv->global)
-        {
-          gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                                     GTK_STYLE_PROVIDER (editor->priv->provider),
-                                                     GTK_STYLE_PROVIDER_PRIORITY_USER);
-        }
+        gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                                   GTK_STYLE_PROVIDER (editor->priv->provider),
+                                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
       else if (editor->priv->selected_context)
-        {
-          gtk_style_context_add_provider (editor->priv->selected_context,
-                                          GTK_STYLE_PROVIDER (g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSSEDITOR_PROVIDER)),
-                                          G_MAXUINT);
-        }
+        gtk_style_context_add_provider (editor->priv->selected_context,
+                                        GTK_STYLE_PROVIDER (g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSS_EDITOR_PROVIDER)),
+                                        G_MAXUINT);
     }
 }
 
 static void
-create_toolbar (ParasiteCssEditor *editor)
-{
-  editor->priv->toolbar = g_object_new (GTK_TYPE_TOOLBAR,
-                                        "icon-size", GTK_ICON_SIZE_SMALL_TOOLBAR,
-                                        NULL);
-  gtk_container_add (GTK_CONTAINER (editor), editor->priv->toolbar);
-
-  editor->priv->disable_button = g_object_new (GTK_TYPE_TOGGLE_TOOL_BUTTON,
-                                               "icon-name", "media-playback-pause",
-                                               "tooltip-text", "Disable this custom css",
-                                               NULL);
-  g_signal_connect (editor->priv->disable_button,
-                    "toggled",
-                    G_CALLBACK (disable_toggled),
-                    editor);
-  gtk_container_add (GTK_CONTAINER (editor->priv->toolbar),
-                     GTK_WIDGET (editor->priv->disable_button));
-}
-
-static void
-apply_system_font (GtkWidget *widget)
+apply_system_font (ParasiteCssEditor *editor)
 {
   GSettings *s = g_settings_new ("org.gnome.desktop.interface");
   gchar *font_name = g_settings_get_string (s, "monospace-font-name");
   PangoFontDescription *font_desc = pango_font_description_from_string (font_name);
 
-  gtk_widget_override_font (widget, font_desc);
+  gtk_widget_override_font (editor->priv->view, font_desc);
 
   pango_font_description_free (font_desc);
   g_free (font_name);
@@ -151,15 +138,16 @@ get_current_text (GtkTextBuffer *buffer)
 }
 
 static void
-text_changed (GtkTextBuffer *buffer, ParasiteCssEditor *editor)
+text_changed (GtkTextBuffer     *buffer,
+              ParasiteCssEditor *editor)
 {
   GtkCssProvider *provider;
-  char *text;
+  gchar *text;
 
   if (editor->priv->global)
     provider = editor->priv->provider;
   else if (editor->priv->selected_context)
-    provider = g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSSEDITOR_PROVIDER);
+    provider = g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSS_EDITOR_PROVIDER);
   else
     return;
 
@@ -198,42 +186,6 @@ show_parsing_error (GtkCssProvider    *provider,
 }
 
 static void
-create_text_widget (ParasiteCssEditor *editor)
-{
-  GtkWidget *sw, *view;
-
-  editor->priv->text = gtk_text_buffer_new (NULL);
-
-  if (editor->priv->global)
-    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), initial_text_global, -1);
-  else
-    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), initial_text_widget, -1);
-
-  g_signal_connect (editor->priv->text, "changed", G_CALLBACK (text_changed), editor);
-
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (editor->priv->text),
-                              "warning",
-                              "underline", PANGO_UNDERLINE_SINGLE,
-                              NULL);
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (editor->priv->text),
-                              "error",
-                              "underline", PANGO_UNDERLINE_ERROR,
-                              NULL);
-
-  sw = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                     "expand", TRUE,
-                     NULL);
-  gtk_container_add (GTK_CONTAINER (editor), sw);
-
-  view = g_object_new (GTK_TYPE_TEXT_VIEW,
-                       "buffer", editor->priv->text,
-                       "wrap-mode", GTK_WRAP_WORD,
-                       NULL);
-  apply_system_font (view);
-  gtk_container_add (GTK_CONTAINER (sw), view);
-}
-
-static void
 create_provider (ParasiteCssEditor *editor)
 {
   GtkCssProvider *provider = gtk_css_provider_new ();
@@ -251,35 +203,29 @@ create_provider (ParasiteCssEditor *editor)
                                       GTK_STYLE_PROVIDER (provider),
                                       G_MAXUINT);
       g_object_set_data (G_OBJECT (editor->priv->selected_context),
-                         PARASITE_CSSEDITOR_PROVIDER,
-                         provider);
+                         PARASITE_CSS_EDITOR_PROVIDER, provider);
     }
 
-  g_signal_connect (provider,
-                    "parsing-error",
-                    G_CALLBACK (show_parsing_error),
-                    editor);
+  g_signal_connect (provider, "parsing-error",
+                    G_CALLBACK (show_parsing_error), editor);
 }
 
 static void
-parasite_csseditor_init (ParasiteCssEditor *editor)
+parasite_css_editor_init (ParasiteCssEditor *editor)
 {
-  editor->priv = parasite_csseditor_get_instance_private (editor);
+  editor->priv = parasite_css_editor_get_instance_private (editor);
+  gtk_widget_init_template (GTK_WIDGET (editor));
 }
 
 static void
 constructed (GObject *object)
 {
-  ParasiteCssEditor *editor = PARASITE_CSSEDITOR (object);
+  ParasiteCssEditor *editor = PARASITE_CSS_EDITOR (object);
 
-  g_object_set (editor,
-                "orientation", GTK_ORIENTATION_VERTICAL,
-                "sensitive", editor->priv->global,
-                NULL);
-
-  create_toolbar (editor);
+  gtk_widget_set_sensitive (GTK_WIDGET (editor), editor->priv->global);
   create_provider (editor);
-  create_text_widget (editor);
+  apply_system_font (editor);
+  set_initial_text (editor);
 }
 
 static void
@@ -288,7 +234,7 @@ get_property (GObject    *object,
               GValue     *value,
               GParamSpec *pspec)
 {
-  ParasiteCssEditor *editor = PARASITE_CSSEDITOR (object);
+  ParasiteCssEditor *editor = PARASITE_CSS_EDITOR (object);
 
   switch (param_id)
     {
@@ -308,7 +254,7 @@ set_property (GObject      *object,
               const GValue *value,
               GParamSpec   *pspec)
 {
-  ParasiteCssEditor *editor = PARASITE_CSSEDITOR (object);
+  ParasiteCssEditor *editor = PARASITE_CSS_EDITOR (object);
 
   switch (param_id)
     {
@@ -323,38 +269,44 @@ set_property (GObject      *object,
 }
 
 static void
-parasite_csseditor_class_init (ParasiteCssEditorClass *klass)
+parasite_css_editor_class_init (ParasiteCssEditorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = get_property;
   object_class->set_property = set_property;
-  object_class->constructed  = constructed;
+  object_class->constructed = constructed;
 
-  g_object_class_install_property (object_class,
-                                   PROP_GLOBAL,
-                                   g_param_spec_boolean ("global",
-                                                         "Global",
-                                                         "Whether this editor changes the whole application or just the selected widget",
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class, PROP_GLOBAL,
+      g_param_spec_boolean ("global", "Global", "Whether this editor changes the whole application or just the selected widget",
+                            TRUE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/css-editor.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteCssEditor, toolbar);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteCssEditor, text);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteCssEditor, view);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteCssEditor, disable_button);
+  gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
+  gtk_widget_class_bind_template_callback (widget_class, text_changed);
 }
 
 GtkWidget *
-parasite_csseditor_new (gboolean global)
+parasite_css_editor_new (gboolean global)
 {
-    return GTK_WIDGET (g_object_new (PARASITE_TYPE_CSSEDITOR,
-                                     "global", global,
-                                     NULL));
+  return GTK_WIDGET (g_object_new (PARASITE_TYPE_CSS_EDITOR,
+                                   "global", global,
+                                   NULL));
 }
 
 void
-parasite_csseditor_set_widget (ParasiteCssEditor *editor, GtkWidget *widget)
+parasite_css_editor_set_widget (ParasiteCssEditor *editor,
+                                GtkWidget         *widget)
 {
   gchar *text;
   GtkCssProvider *provider;
 
-  g_return_if_fail (PARASITE_IS_CSSEDITOR (editor));
+  g_return_if_fail (PARASITE_IS_CSS_EDITOR (editor));
   g_return_if_fail (!editor->priv->global);
 
   gtk_widget_set_sensitive (GTK_WIDGET (editor), TRUE);
@@ -363,26 +315,19 @@ parasite_csseditor_set_widget (ParasiteCssEditor *editor, GtkWidget *widget)
     {
       text = get_current_text (GTK_TEXT_BUFFER (editor->priv->text));
       g_object_set_data_full (G_OBJECT (editor->priv->selected_context),
-                              PARASITE_CSSEDITOR_TEXT,
+                              PARASITE_CSS_EDITOR_TEXT,
                               text,
                               g_free);
     }
 
   editor->priv->selected_context = gtk_widget_get_style_context (widget);
 
-  provider = g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSSEDITOR_PROVIDER);
+  provider = g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSS_EDITOR_PROVIDER);
   if (!provider)
-    {
-      create_provider (editor);
-    }
+    create_provider (editor);
 
-  text = g_object_get_data (G_OBJECT (editor->priv->selected_context), PARASITE_CSSEDITOR_TEXT);
-  if (text)
-    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), text, -1);
-  else
-    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), initial_text_widget, -1);
-
+  set_initial_text (editor);
   disable_toggled (editor->priv->disable_button, editor);
 }
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:

@@ -3,5 +3,6 @@
   <gresource prefix="/org/gtk/parasite">
     <file>button-path.ui</file>
     <file>object-hierarchy.ui</file>
+    <file>css-editor.ui</file>
   </gresource>
 </gresources>

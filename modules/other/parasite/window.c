@@ -55,7 +55,7 @@ on_widget_tree_selection_changed (ParasiteWidgetTree *widget_tree,
           gtkparasite_flash_widget(parasite, widget);
           parasite_button_path_set_widget (PARASITE_BUTTON_PATH (parasite->button_path), widget);
           parasite_classeslist_set_widget (PARASITE_CLASSESLIST (parasite->classes_list), widget);
-          parasite_csseditor_set_widget (PARASITE_CSSEDITOR (parasite->widget_css_editor), widget);
+          parasite_css_editor_set_widget (PARASITE_CSS_EDITOR (parasite->widget_css_editor), widget);
         }
       else
         {
@@ -263,7 +263,7 @@ gtkparasite_window_create()
                               gtk_label_new ("Themes"));
 
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
-                              parasite_csseditor_new (TRUE),
+                              parasite_css_editor_new (TRUE),
                               gtk_label_new ("Custom CSS"));
 
     window->button_path = parasite_button_path_new ();
@@ -298,7 +298,7 @@ gtkparasite_window_create()
                               window->classes_list,
                               gtk_label_new ("CSS Classes"));
 
-    window->widget_css_editor = parasite_csseditor_new (FALSE);
+    window->widget_css_editor = parasite_css_editor_new (FALSE);
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
                               window->widget_css_editor,
                               gtk_label_new ("Custom CSS"));

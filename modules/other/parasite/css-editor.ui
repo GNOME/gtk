@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkTextTagTable" id="tags">
+    <child type="tag">
+      <object class="GtkTextTag">
+        <property name="name">warning</property>
+        <property name="underline">single</property>
+      </object>
+      <object class="GtkTextTag">
+        <property name="name">error</property>
+        <property name="underline">error</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="text">
+    <property name="tag-table">tags</property>
+    <signal name="changed" handler="text_changed"/>
+  </object>
+  <template class="ParasiteCssEditor" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkToolbar" id="toolbar">
+        <property name="visible">True</property>
+        <property name="icon-size">small-toolbar</property>
+        <child>
+          <object class="GtkToggleToolButton" id="disable_button">
+            <property name="visible">True</property>
+            <property name="icon-name">media-playback-pause</property>
+            <property name="tooltip-text">Disable this custom CSS</property>
+            <signal name="toggled" handler="disable_toggled"/>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="expand">True</property>
+        <child>
+          <object class="GtkTextView" id="view">
+            <property name="visible">True</property>
+            <property name="buffer">text</property>
+            <property name="wrap-mode">word</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -20,40 +20,41 @@
  * THE SOFTWARE.
  */
 
-#ifndef _GTKPARASITE_CSSEDITOR_H_
-#define _GTKPARASITE_CSSEDITOR_H_
+#ifndef _GTKPARASITE_CSS_EDITOR_H_
+#define _GTKPARASITE_CSS_EDITOR_H_
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_CSSEDITOR            (parasite_csseditor_get_type())
-#define PARASITE_CSSEDITOR(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_CSSEDITOR, ParasiteCssEditor))
-#define PARASITE_CSSEDITOR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_CSSEDITOR, ParasiteCssEditorClass))
-#define PARASITE_IS_CSSEDITOR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_CSSEDITOR))
-#define PARASITE_IS_CSSEDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_CSSEDITOR))
-#define PARASITE_CSSEDITOR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_CSSEDITOR, ParasiteCssEditorClass))
+#define PARASITE_TYPE_CSS_EDITOR            (parasite_css_editor_get_type())
+#define PARASITE_CSS_EDITOR(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_CSS_EDITOR, ParasiteCssEditor))
+#define PARASITE_CSS_EDITOR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_CSS_EDITOR, ParasiteCssEditorClass))
+#define PARASITE_IS_CSS_EDITOR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_CSS_EDITOR))
+#define PARASITE_IS_CSS_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_CSS_EDITOR))
+#define PARASITE_CSS_EDITOR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_CSS_EDITOR, ParasiteCssEditorClass))
 
 
 typedef struct _ParasiteCssEditorPrivate ParasiteCssEditorPrivate;
 
-typedef struct _ParasiteCssEditor {
-   GtkBox parent;
-   ParasiteCssEditorPrivate *priv;
+typedef struct _ParasiteCssEditor
+{
+  GtkBox parent;
+  ParasiteCssEditorPrivate *priv;
 } ParasiteCssEditor;
 
-typedef struct _ParasiteCssEditorClass {
-   GtkBoxClass parent;
+typedef struct _ParasiteCssEditorClass
+{
+  GtkBoxClass parent;
 } ParasiteCssEditorClass;
 
 G_BEGIN_DECLS
 
-GType parasite_csseditor_get_type ();
-
-GtkWidget *parasite_csseditor_new (gboolean global);
-void parasite_csseditor_set_widget (ParasiteCssEditor *editor,
-                                    GtkWidget         *widget);
+GType      parasite_css_editor_get_type   (void);
+GtkWidget *parasite_css_editor_new        (gboolean           global);
+void       parasite_css_editor_set_widget (ParasiteCssEditor *editor,
+                                           GtkWidget         *widget);
 
 G_END_DECLS
 
-#endif // _GTKPARASITE_CSSEDITOR_H_
+#endif // _GTKPARASITE_CSS_EDITOR_H_
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:
