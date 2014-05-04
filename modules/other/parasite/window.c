@@ -54,7 +54,7 @@ on_widget_tree_selection_changed (ParasiteWidgetTree *widget_tree,
 
           gtkparasite_flash_widget(parasite, widget);
           parasite_button_path_set_widget (PARASITE_BUTTON_PATH (parasite->button_path), widget);
-          parasite_classeslist_set_widget (PARASITE_CLASSESLIST (parasite->classes_list), widget);
+          parasite_classes_list_set_widget (PARASITE_CLASSES_LIST (parasite->classes_list), widget);
           parasite_css_editor_set_widget (PARASITE_CSS_EDITOR (parasite->widget_css_editor), widget);
         }
       else
@@ -293,7 +293,7 @@ gtkparasite_window_create()
                               window->oh,
                               gtk_label_new ("Hierarchy"));
 
-    window->classes_list = parasite_classeslist_new ();
+    window->classes_list = parasite_classes_list_new ();
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
                               window->classes_list,
                               gtk_label_new ("CSS Classes"));

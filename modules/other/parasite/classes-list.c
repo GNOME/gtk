@@ -27,29 +27,32 @@ enum
 {
   COLUMN_ENABLED,
   COLUMN_NAME,
-  COLUMN_USER,
-  NUM_COLUMNS
+  COLUMN_STYLE
 };
 
 typedef struct
 {
   gboolean enabled;
-  gboolean user;
+  PangoStyle style;
 } ParasiteClassesListByContext;
 
 struct _ParasiteClassesListPrivate
 {
   GtkWidget *toolbar;
   GtkWidget *view;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *name_renderer;
   GtkListStore *model;
   GHashTable *contexts;
   GtkStyleContext *current_context;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteClassesList, parasite_classeslist, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (ParasiteClassesList, parasite_classes_list, GTK_TYPE_BOX)
 
 static void
-enabled_toggled (GtkCellRendererToggle *renderer, gchar *path, ParasiteClassesList *cl)
+enabled_toggled (GtkCellRendererToggle *renderer,
+                 const gchar           *path,
+                 ParasiteClassesList   *cl)
 {
   GtkTreeIter iter;
   gboolean enabled;
@@ -80,33 +83,26 @@ enabled_toggled (GtkCellRendererToggle *renderer, gchar *path, ParasiteClassesLi
         {
           c->enabled = enabled;
           if (enabled)
-            {
-              gtk_style_context_add_class (cl->priv->current_context, name);
-            }
+            gtk_style_context_add_class (cl->priv->current_context, name);
           else
-            {
-              gtk_style_context_remove_class (cl->priv->current_context, name);
-            }
+            gtk_style_context_remove_class (cl->priv->current_context, name);
         }
       else
-        {
-          g_warning ("Parasite: Couldn't find the css class %s in the class hash table.", name);
-        }
+        g_warning ("Parasite: Couldn't find the css class %s in the class hash table.", name);
     }
   else
-    {
-      g_warning ("Parasite: Couldn't find the hash table for the style context for css class %s.", name);
-    }
+    g_warning ("Parasite: Couldn't find the hash table for the style context for css class %s.", name);
 }
 
 static void
-add_clicked (GtkButton *button, ParasiteClassesList *cl)
+add_clicked (GtkButton           *button,
+             ParasiteClassesList *cl)
 {
   GtkWidget *dialog, *content_area, *entry;
 
   dialog = gtk_dialog_new_with_buttons ("New class",
-                                         GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (cl))),
-                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (cl))),
+                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
                                          "_OK", GTK_RESPONSE_OK,
                                          "Cancel", GTK_RESPONSE_CANCEL,
                                          NULL);
@@ -134,14 +130,14 @@ add_clicked (GtkButton *button, ParasiteClassesList *cl)
 
           ParasiteClassesListByContext *c = g_new0 (ParasiteClassesListByContext, 1);
           c->enabled = TRUE;
-          c->user = TRUE;
+          c->style = PANGO_STYLE_ITALIC;
           g_hash_table_insert (context, (gpointer)g_strdup (name), c);
 
           gtk_list_store_append (cl->priv->model, &tree_iter);
           gtk_list_store_set (cl->priv->model, &tree_iter,
                              COLUMN_ENABLED, TRUE,
                              COLUMN_NAME, name,
-                             COLUMN_USER, TRUE,
+                             COLUMN_STYLE, PANGO_STYLE_ITALIC,
                             -1);
         }
     }
@@ -170,7 +166,7 @@ read_classes_from_style_context (ParasiteClassesList *cl)
       gtk_list_store_set (cl->priv->model, &tree_iter,
                           COLUMN_ENABLED, TRUE,
                           COLUMN_NAME, l->data,
-                          COLUMN_USER, FALSE,
+                          COLUMN_STYLE, PANGO_STYLE_NORMAL,
                           -1);
     }
     g_list_free (classes);
@@ -178,7 +174,8 @@ read_classes_from_style_context (ParasiteClassesList *cl)
 }
 
 static void
-restore_defaults_clicked (GtkButton *button, ParasiteClassesList *cl)
+restore_defaults_clicked (GtkButton           *button,
+                          ParasiteClassesList *cl)
 {
   GHashTableIter hash_iter;
   gchar *name;
@@ -188,14 +185,10 @@ restore_defaults_clicked (GtkButton *button, ParasiteClassesList *cl)
   g_hash_table_iter_init (&hash_iter, hash_context);
   while (g_hash_table_iter_next (&hash_iter, (gpointer *)&name, (gpointer *)&c))
     {
-      if (c->user)
-        {
-          gtk_style_context_remove_class (cl->priv->current_context, name);
-        }
+      if (c->style == PANGO_STYLE_ITALIC)
+        gtk_style_context_remove_class (cl->priv->current_context, name);
       else if (!c->enabled)
-        {
-          gtk_style_context_add_class (cl->priv->current_context, name);
-        }
+        gtk_style_context_add_class (cl->priv->current_context, name);
     }
 
   gtk_list_store_clear (cl->priv->model);
@@ -203,96 +196,16 @@ restore_defaults_clicked (GtkButton *button, ParasiteClassesList *cl)
 }
 
 static void
-create_toolbar (ParasiteClassesList *cl)
+parasite_classes_list_init (ParasiteClassesList *cl)
 {
-  GtkWidget *button;
-
-  cl->priv->toolbar = g_object_new (GTK_TYPE_TOOLBAR,
-                                    "icon-size", GTK_ICON_SIZE_SMALL_TOOLBAR,
-                                    "sensitive", FALSE,
-                                    NULL);
-  gtk_container_add (GTK_CONTAINER (cl), cl->priv->toolbar);
-
-  button = g_object_new (GTK_TYPE_TOOL_BUTTON,
-                         "icon-name", "add",
-                         "tooltip-text", "Add a class",
-                         NULL);
-  g_signal_connect (button, "clicked", G_CALLBACK (add_clicked), cl);
-  gtk_container_add (GTK_CONTAINER (cl->priv->toolbar), button);
-
-  button = g_object_new (GTK_TYPE_TOOL_BUTTON,
-                         "icon-name", "revert",
-                         "tooltip-text", "Restore defaults for this widget",
-                         NULL);
-  g_signal_connect (button, "clicked", G_CALLBACK (restore_defaults_clicked), cl);
-  gtk_container_add (GTK_CONTAINER (cl->priv->toolbar), button);
-}
-
-static void
-draw_name_column (GtkTreeViewColumn   *column,
-                  GtkCellRenderer     *renderer,
-                  GtkTreeModel        *model,
-                  GtkTreeIter         *iter,
-                  ParasiteClassesList *cl)
-{
-  gboolean user;
-
-  gtk_tree_model_get (model, iter, COLUMN_USER, &user, -1);
-  if (user)
-    {
-      g_object_set (renderer, "style", PANGO_STYLE_ITALIC, NULL);
-    }
-  else
-    {
-      g_object_set (renderer, "style", PANGO_STYLE_NORMAL, NULL);
-    }
-}
-
-static void
-parasite_classeslist_init (ParasiteClassesList *cl)
-{
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-  GtkWidget *sw;
-
-  g_object_set (cl, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
-
-  cl->priv = parasite_classeslist_get_instance_private (cl);
-
-  create_toolbar (cl);
-
-  sw = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                     "expand", TRUE,
-                     NULL);
-  gtk_container_add (GTK_CONTAINER (cl), sw);
-
+  cl->priv = parasite_classes_list_get_instance_private (cl);
+  gtk_widget_init_template (GTK_WIDGET (cl));
   cl->priv->contexts = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_hash_table_destroy);
-  cl->priv->model = gtk_list_store_new (NUM_COLUMNS,
-                                        G_TYPE_BOOLEAN,  // COLUMN_ENABLED
-                                        G_TYPE_STRING,   // COLUMN_NAME
-                                        G_TYPE_BOOLEAN); // COLUMN_USER
-  cl->priv->view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (cl->priv->model));
-  gtk_container_add (GTK_CONTAINER (sw), cl->priv->view);
-
-  renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (renderer, "toggled", G_CALLBACK (enabled_toggled), cl);
-  column = gtk_tree_view_column_new_with_attributes ("", renderer,
-                                                     "active", COLUMN_ENABLED,
-                                                     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (cl->priv->view), column);
-
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "scale", TREE_TEXT_SCALE, NULL);
-  column = gtk_tree_view_column_new_with_attributes ("Name", renderer,
-                                                     "text", COLUMN_NAME,
-                                                     NULL);
-  gtk_tree_view_column_set_cell_data_func (column, renderer, (GtkTreeCellDataFunc)draw_name_column, cl, NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (cl->priv->view), column);
 }
 
 void
-parasite_classeslist_set_widget (ParasiteClassesList *cl,
-                                 GtkWidget *widget)
+parasite_classes_list_set_widget (ParasiteClassesList *cl,
+                                  GtkWidget           *widget)
 {
   GtkStyleContext *widget_context;
   GHashTable *hash_context;
@@ -320,7 +233,7 @@ parasite_classeslist_set_widget (ParasiteClassesList *cl,
           gtk_list_store_set (cl->priv->model, &tree_iter,
                              COLUMN_ENABLED, c->enabled,
                              COLUMN_NAME, name,
-                             COLUMN_USER, c->user,
+                             COLUMN_STYLE, c->style,
                             -1);
         }
     }
@@ -331,14 +244,25 @@ parasite_classeslist_set_widget (ParasiteClassesList *cl,
 }
 
 static void
-parasite_classeslist_class_init (ParasiteClassesListClass *klass)
+parasite_classes_list_class_init (ParasiteClassesListClass *klass)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/classes-list.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteClassesList, toolbar);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteClassesList, view);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteClassesList, model);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteClassesList, column);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteClassesList, name_renderer);
+  gtk_widget_class_bind_template_callback (widget_class, add_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, restore_defaults_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, enabled_toggled);
 }
 
 GtkWidget *
-parasite_classeslist_new ()
+parasite_classes_list_new (void)
 {
-    return GTK_WIDGET (g_object_new (PARASITE_TYPE_CLASSESLIST, NULL));
+  return GTK_WIDGET (g_object_new (PARASITE_TYPE_CLASSES_LIST, NULL));
 }
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:

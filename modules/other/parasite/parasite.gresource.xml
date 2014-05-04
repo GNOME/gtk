@@ -4,5 +4,6 @@
     <file>button-path.ui</file>
     <file>object-hierarchy.ui</file>
     <file>css-editor.ui</file>
+    <file>classes-list.ui</file>
   </gresource>
 </gresources>
