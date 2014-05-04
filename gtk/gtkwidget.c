@@ -3470,12 +3470,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 								P_("Dash pattern used to draw the focus indicator. The character values are interpreted as pixel widths of alternating on and off segments of the line."),
 								"\1\1",
 								GTK_PARAM_READABLE));
+  /**
+   * GtkWidget:focus-padding:
+   *
+   * The "focus-padding" style property defines the width, in pixels,
+   * between focus indicator and the widget 'box'.
+   *
+   * Deprecated: 3.14: use the padding CSS properties instead.
+   */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_int ("focus-padding",
 							     P_("Focus padding"),
 							     P_("Width, in pixels, between focus indicator and the widget 'box'"),
 							     0, G_MAXINT, 1,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("cursor-color",
 							       P_("Cursor color"),
