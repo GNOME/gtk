@@ -29,15 +29,15 @@
 
 
 void
-gtk_module_init(gint *argc, gchar ***argv)
+gtk_module_init (gint *argc, gchar ***argv)
 {
 #ifdef ENABLE_PYTHON
-    parasite_python_init();
+  parasite_python_init ();
 #endif
 
-    parasite_register_resource ();
+  parasite_register_resource ();
 
-    gtkparasite_window_create();
+  gtkparasite_window_create ();
 }
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:
