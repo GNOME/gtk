@@ -35,6 +35,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkcsstransformvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkthemingengineprivate.h"
@@ -1037,7 +1038,14 @@ render_icon_image (GtkThemingEngine *engine,
     return FALSE;
 
   cairo_translate (cr, x, y);
-  _gtk_css_image_draw (image, cr, width, height);
+  cairo_translate (cr, width / 2, height / 2);
+  
+  if (_gtk_css_transform_value_apply (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_TRANSFORM), cr))
+    {
+      cairo_translate (cr, -width / 2, -height / 2);
+
+      _gtk_css_image_draw (image, cr, width, height);
+    }
 
   return TRUE;
 }

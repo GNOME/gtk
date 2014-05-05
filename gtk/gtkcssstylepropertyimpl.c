@@ -57,6 +57,7 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
+#include "gtkcsstransformvalueprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 #include "gtkwin32themeprivate.h"
@@ -577,6 +578,13 @@ shadow_value_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+transform_value_parse (GtkCssStyleProperty *property,
+                       GtkCssParser        *parser)
+{
+  return _gtk_css_transform_value_parse (parser);
+}
+
+static GtkCssValue *
 border_corner_radius_value_parse (GtkCssStyleProperty *property,
                                   GtkCssParser        *parser)
 {
@@ -962,8 +970,8 @@ _gtk_css_style_property_init_properties (void)
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_NO_RESIZE,
                                           css_image_value_parse,
-                                          css_image_value_query,
-                                          css_image_value_assign,
+                                          NULL,
+                                          NULL,
                                           _gtk_css_image_value_new (NULL));
   gtk_css_style_property_register        ("icon-shadow",
                                           GTK_CSS_PROPERTY_ICON_SHADOW,
@@ -973,6 +981,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
+  gtk_css_style_property_register        ("-gtk-icon-transform",
+                                          GTK_CSS_PROPERTY_ICON_TRANSFORM,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_NO_RESIZE,
+                                          transform_value_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_transform_value_new_none ());
 
   gtk_css_style_property_register        ("box-shadow",
                                           GTK_CSS_PROPERTY_BOX_SHADOW,
