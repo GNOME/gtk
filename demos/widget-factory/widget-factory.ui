@@ -883,6 +883,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           <object class="GtkSwitch" id="switch1">
                             <property name="visible">True</property>
                             <property name="sensitive">True</property>
+                            <property name="halign">center</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -894,6 +895,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           <object class="GtkSwitch" id="switch2">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
+                            <property name="halign">center</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
