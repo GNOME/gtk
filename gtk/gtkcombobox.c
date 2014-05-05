@@ -5505,6 +5505,11 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   gint                   child_min, child_nat;
   GtkBorder              padding;
   gfloat                 arrow_scaling;
+  gint                   dummy;
+
+  /* https://bugzilla.gnome.org/show_bug.cgi?id=729496 */
+  if (natural_size == NULL)
+    natural_size = &dummy;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
