@@ -20,20 +20,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTKPARASITE_H_
-#define _GTKPARASITE_H_
+#ifndef _PARASITE_WINDOW_H_
+#define _PARASITE_WINDOW_H_
 
 
 #include <gtk/gtk.h>
+
+#define PARASITE_TYPE_WINDOW            (parasite_window_get_type())
+#define PARASITE_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_WINDOW, ParasiteWindow))
+#define PARASITE_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_WINDOW, ParasiteWindowClass))
+#define PARASITE_IS_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_WINDOW))
+#define PARASITE_IS_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_WINDOW))
+#define PARASITE_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_WINDOW, ParasiteWindowClass))
 
 
 #define TREE_TEXT_SCALE 0.8
 #define TREE_CHECKBOX_SIZE (gint)(0.8 * 13)
 
-
 typedef struct
 {
-  GtkWidget *window;
+  GtkWindow parent;
+
   GtkWidget *widget_tree;
   GtkWidget *prop_list;
   GtkWidget *child_prop_list;
@@ -41,7 +48,7 @@ typedef struct
   GtkWidget *button_path;
   GtkWidget *classes_list;
   GtkWidget *widget_css_editor;
-  GtkWidget *oh;
+  GtkWidget *object_hierarchy;
 
   GtkWidget *widget_popup;
 
@@ -53,15 +60,24 @@ typedef struct
 
 } ParasiteWindow;
 
+typedef struct
+{
+  GtkWindowClass parent;
+} ParasiteWindowClass;
 
-void       gtkparasite_window_create      (void);
+
+G_BEGIN_DECLS
+
+GType      parasite_window_get_type (void);
+GtkWidget *parasite_window_new      (void);
 
 void       gtkparasite_flash_widget       (ParasiteWindow *parasite,
                                            GtkWidget      *widget);
 
 GtkWidget *gtkparasite_inspect_button_new (ParasiteWindow *parasite);
 
+G_END_DECLS
 
-#endif // _GTKPARASITE_H_
+#endif // _PARASITE_WINDOW_H_
 
 // vim: set et sw=2 ts=2:

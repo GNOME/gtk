@@ -8,5 +8,6 @@
     <file>widget-tree.ui</file>
     <file>prop-list.ui</file>
     <file>themes.ui</file>
+    <file>window.ui</file>
   </gresource>
 </gresources>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkImage" id="update_image">
+    <property name="visible">True</property>
+    <property name="icon-name">view-refresh</property>
+    <property name="icon-size">4</property>
+  </object>
+  <object class="GtkImage" id="inspect_image">
+    <property name="visible">True</property>
+    <property name="icon-name">edit-find</property>
+    <property name="icon-size">4</property>
+  </object>
+  <object class="GtkMenu" id="widget_popup">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="label">Send Widget to Shell</property>
+        <signal name="activate" handler="on_send_widget_to_shell_activate"/>
+      </object>
+    </child>
+  </object>
+  <template class="ParasiteWindow" parent="GtkWindow">
+    <property name="default-height">500</property>
+    <property name="default-width">1000</property>
+    <signal name="delete-event" handler="delete_window"/>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="show-close-button">True</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="image">inspect_image</property>
+                <property name="tooltip-text">Inspect</property>
+                <signal name="clicked" handler="on_inspect"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="visible">True</property>
+                <property name="image">update_image</property>
+                <property name="tooltip-text">Show Graphic Updates</property>
+                <signal name="toggled" handler="on_graphic_updates_toggled"/>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkNotebook">
+        <property name="visible">True</property>
+        <property name="show-border">False</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="ParasiteButtonPath" id="button_path">
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkPaned">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <child>
+                  <object class="GtkPaned">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="shadow-type">in</property>
+                        <property name="width-request">250</property>
+                        <property name="expand">True</property>
+                        <child>
+                          <object class="ParasiteWidgetTree" id="widget_tree">
+                            <property name="visible">True</property>
+                            <signal name="widget-changed" handler="on_widget_tree_selection_changed"/>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="resize">True</property>
+                        <property name="shrink">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="ParasitePythonShell" id="python_shell">
+                        <property name="visible">False</property>
+                      </object>
+                      <packing>
+                        <property name="resize">False</property>
+                        <property name="shrink">False</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkNotebook">
+                    <property name="visible">True</property>
+                    <property name="enable-popup">True</property>
+                    <property name="show-border">False</property>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="shadow-type">in</property>
+                        <property name="width-request">250</property>
+                        <child>
+                          <object class="ParasitePropList" id="prop_list">
+                            <property name="visible">True</property>
+                            <property name="child-properties">False</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label">Properties</property>
+                      </object>
+                    </child> 
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="shadow-type">in</property>
+                        <property name="width-request">250</property>
+                        <child>
+                          <object class="ParasitePropList" id="child_prop_list">
+                            <property name="visible">True</property>
+                            <property name="child-properties">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label">Child Properties</property>
+                      </object>
+                    </child> 
+                    <child>
+                      <object class="ParasiteObjectHierarchy" id="object_hierarchy">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label">Hierarchy</property>
+                      </object>
+                    </child> 
+                    <child>
+                      <object class="ParasiteClassesList" id="classes_list">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label">CSS Classes</property>
+                      </object>
+                    </child> 
+                    <child>
+                      <object class="ParasiteCssEditor" id="widget_css_editor">
+                        <property name="visible">True</property>
+                        <property name="global">False</property>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label">Custom CSS</property>
+                      </object>
+                    </child> 
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label">Widget Tree</property>
+          </object>
+        </child>
+        <child>
+          <object class="ParasiteThemes">
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label">Themes</property>
+          </object>
+        </child>
+        <child>
+          <object class="ParasiteCssEditor">
+            <property name="visible">True</property>
+            <property name="global">True</property>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label">Custom CSS</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

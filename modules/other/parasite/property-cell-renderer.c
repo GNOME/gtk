@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "parasite.h"
+
 #include "property-cell-renderer.h"
 #include "widget-tree.h"
 
@@ -325,7 +325,7 @@ start_editing (GtkCellRenderer *renderer,
         }
 
         renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(combobox));
-        g_object_set(G_OBJECT(renderers->data), "scale", TREE_TEXT_SCALE, NULL);
+        g_object_set(G_OBJECT(renderers->data), "scale", 0.8, NULL);
         g_list_free(renderers);
 
         editable = GTK_CELL_EDITABLE(combobox);

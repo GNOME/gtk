@@ -21,7 +21,6 @@
  */
 
 #include "classes-list.h"
-#include "parasite.h"
 
 enum
 {

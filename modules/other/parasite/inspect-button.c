@@ -20,7 +20,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "parasite.h"
+
+#include "window.h"
 #include "widget-tree.h"
 
 typedef struct
@@ -230,7 +231,7 @@ on_highlight_widget (GtkWidget      *button,
       return;
     }
 
-  if (gtk_widget_get_toplevel (widget) == parasite->window)
+  if (gtk_widget_get_toplevel (widget) == GTK_WIDGET (parasite))
     {
       /* Don't hilight things in the parasite window */
       return;
@@ -266,7 +267,7 @@ property_query_event (GtkWidget *widget,
   return FALSE;
 }
 
-static void
+void
 on_inspect (GtkWidget      *button,
             ParasiteWindow *parasite)
 {

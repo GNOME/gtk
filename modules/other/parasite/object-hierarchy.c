@@ -21,7 +21,6 @@
  */
 
 #include "object-hierarchy.h"
-#include "parasite.h"
 
 enum
 {

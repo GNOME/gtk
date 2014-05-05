@@ -21,7 +21,6 @@
  */
 
 #include "css-editor.h"
-#include "parasite.h"
 
 #define PARASITE_CSS_EDITOR_TEXT "parasite-css-editor-text"
 #define PARASITE_CSS_EDITOR_PROVIDER "parasite-css-editor-provider"

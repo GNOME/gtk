@@ -22,8 +22,7 @@
  */
 #include <glib.h>
 
-#include "config.h"
-#include "parasite.h"
+#include "window.h"
 #include "python-hooks.h"
 #include "resources.h"
 
@@ -37,7 +36,7 @@ gtk_module_init (gint *argc, gchar ***argv)
 
   parasite_register_resource ();
 
-  gtkparasite_window_create ();
+  gtk_window_present (GTK_WINDOW (parasite_window_new ()));
 }
 
 // vim: set et sw=2 ts=2:

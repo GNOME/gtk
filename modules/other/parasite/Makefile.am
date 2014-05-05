@@ -19,17 +19,17 @@ libgtkparasite_la_SOURCES = \
 	resources.c \
 	inspect-button.c \
 	module.c \
-	parasite.h \
 	prop-list.h \
 	prop-list.c \
-	property-cell-renderer.c \
 	property-cell-renderer.h \
-	python-hooks.c \
+	property-cell-renderer.c \
 	python-hooks.h \
-	python-shell.c \
+	python-hooks.c \
 	python-shell.h \
+	python-shell.c \
 	widget-tree.h \
 	widget-tree.c \
+	window.h \
 	window.c \
 	button-path.h \
 	button-path.c \
