@@ -1291,7 +1291,7 @@ gtk_application_get_menubar (GtkApplication *application)
 
 /**
  * gtk_application_inhibit:
- * @application: the #GApplication
+ * @application: the #GtkApplication
  * @window: (allow-none): a #GtkWindow, or %NULL
  * @flags: what types of actions should be inhibited
  * @reason: (allow-none): a short, human-readable string that explains
@@ -1340,7 +1340,7 @@ gtk_application_inhibit (GtkApplication             *application,
 
 /**
  * gtk_application_uninhibit:
- * @application: the #GApplication
+ * @application: the #GtkApplication
  * @cookie: a cookie that was returned by gtk_application_inhibit()
  *
  * Removes an inhibitor that has been established with gtk_application_inhibit().
@@ -1361,7 +1361,7 @@ gtk_application_uninhibit (GtkApplication *application,
 
 /**
  * gtk_application_is_inhibited:
- * @application: the #GApplication
+ * @application: the #GtkApplication
  * @flags: what types of actions should be queried
  *
  * Determines if any of the actions specified in @flags are
