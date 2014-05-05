@@ -1477,9 +1477,12 @@ normalise_detailed_name (const gchar *detailed_action_name)
  * @accels: (array zero-terminated=1): a list of accelerators in the format understood by
  *     gtk_accelerator_parse()
  *
- * Sets one or more keyboard accelerator that will trigger the
+ * Sets zero or more keyboard accelerators that will trigger the
  * given action. The first item in @accels will be the primary 
  * accelerator, which may be displayed in the UI.
+ *
+ * To remove all accelerators for an action, use an empty, zero-terminated
+ * array for @accels.
  *
  * Since: 3.12
  */
