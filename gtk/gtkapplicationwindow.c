@@ -885,6 +885,18 @@ gtk_application_window_real_map (GtkWidget *widget)
 }
 
 static void
+gtk_application_window_real_unmap (GtkWidget *widget)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
+
+  /* XXX could eliminate this by tweaking gtk_window_unmap */
+  if (window->priv->menubar)
+    gtk_widget_unmap (window->priv->menubar);
+
+  GTK_WIDGET_CLASS (gtk_application_window_parent_class)->unmap (widget);
+}
+
+static void
 gtk_application_window_real_forall_internal (GtkContainer *container,
                                              gboolean      include_internal,
                                              GtkCallback   callback,
@@ -1001,6 +1013,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   widget_class->realize = gtk_application_window_real_realize;
   widget_class->unrealize = gtk_application_window_real_unrealize;
   widget_class->map = gtk_application_window_real_map;
+  widget_class->unmap = gtk_application_window_real_unmap;
   object_class->get_property = gtk_application_window_get_property;
   object_class->set_property = gtk_application_window_set_property;
   object_class->dispose = gtk_application_window_dispose;
