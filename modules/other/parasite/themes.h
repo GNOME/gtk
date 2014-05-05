@@ -35,13 +35,15 @@
 
 typedef struct _ParasiteThemesPrivate ParasiteThemesPrivate;
 
-typedef struct _ParasiteThemes {
-   GtkListBox parent;
-   ParasiteThemesPrivate *priv;
+typedef struct _ParasiteThemes
+{
+  GtkListBox parent;
+  ParasiteThemesPrivate *priv;
 } ParasiteThemes;
 
-typedef struct _ParasiteThemesClass {
-   GtkListBoxClass parent;
+typedef struct _ParasiteThemesClass
+{
+  GtkListBoxClass parent;
 } ParasiteThemesClass;
 
 G_BEGIN_DECLS
@@ -53,4 +55,4 @@ G_END_DECLS
 
 #endif // _GTKPARASITE_THEMES_H_
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:

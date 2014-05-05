@@ -24,45 +24,24 @@
 
 struct _ParasiteThemesPrivate
 {
-  int dummy;
+  GtkWidget *dark_switch;
+  GtkWidget *theme_combo;
+  GtkWidget *icon_combo;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (ParasiteThemes, parasite_themes, GTK_TYPE_LIST_BOX)
 
 static void
-parasite_themes_init (ParasiteThemes *pt)
+init_dark (ParasiteThemes *pt)
 {
-  pt->priv = parasite_themes_get_instance_private (pt);
-}
-
-static GtkWidget *
-create_dark (ParasiteThemes *pt)
-{
-  GtkWidget *b, *l, *s;
-
-  b = g_object_new (GTK_TYPE_BOX,
-                    "orientation", GTK_ORIENTATION_HORIZONTAL,
-                    "margin", 10,
-                    NULL);
-
-  l = g_object_new (GTK_TYPE_LABEL,
-                    "label", "Use dark variant",
-                    "hexpand", TRUE,
-                    "xalign", 0.0,
-                    NULL);
-  gtk_container_add (GTK_CONTAINER (b), l);
-
-  s = gtk_switch_new ();
-  g_object_bind_property (s, "active",
+  g_object_bind_property (pt->priv->dark_switch, "active",
                           gtk_settings_get_default (), "gtk-application-prefer-dark-theme",
                           G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (b), s);
-
-  return b;
 }
 
 static void
-fill_gtk (const char *path, GHashTable *t)
+fill_gtk (const gchar *path,
+          GHashTable  *t)
 {
   const gchar *dir_entry;
   GDir *dir = g_dir_open (path, 0, NULL);
@@ -72,7 +51,7 @@ fill_gtk (const char *path, GHashTable *t)
 
   while ((dir_entry = g_dir_read_name (dir)))
     {
-      char *filename = g_build_filename (path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+      gchar *filename = g_build_filename (path, dir_entry, "gtk-3.0", "gtk.css", NULL);
 
       if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
           !g_hash_table_contains (t, dir_entry))
@@ -83,37 +62,13 @@ fill_gtk (const char *path, GHashTable *t)
 }
 
 static void
-gtk_changed (GtkComboBox *c, ParasiteThemes *pt)
+init_theme (ParasiteThemes *pt)
 {
-  char *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
-
-  g_object_set (gtk_settings_get_default (),
-                "gtk-theme-name", theme,
-                NULL);
-  g_free (theme);
-}
-
-static GtkWidget *
-create_gtk (ParasiteThemes *pt)
-{
-  GtkWidget *b, *l, *c;
   GHashTable *t;
-  char *theme, *default_theme, *path;
   GHashTableIter iter;
-  int i, pos;
+  gchar *theme, *current_theme, *path;
+  gint i, pos;
   GSettings *settings;
-
-  b = g_object_new (GTK_TYPE_BOX,
-                    "orientation", GTK_ORIENTATION_HORIZONTAL,
-                    "margin", 10,
-                    NULL);
-
-  l = g_object_new (GTK_TYPE_LABEL,
-                    "label", "GTK+ Theme",
-                    "hexpand", TRUE,
-                    "xalign", 0.0,
-                    NULL);
-  gtk_container_add (GTK_CONTAINER (b), l);
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   g_hash_table_add (t, g_strdup ("Raleigh"));
@@ -123,32 +78,27 @@ create_gtk (ParasiteThemes *pt)
   fill_gtk (path, t);
   g_free (path);
 
-  c = gtk_combo_box_text_new ();
-  gtk_container_add (GTK_CONTAINER (b), c);
-
   settings = g_settings_new ("org.gnome.desktop.interface");
-  default_theme = g_settings_get_string (settings, "gtk-theme");
+  current_theme = g_settings_get_string (settings, "gtk-theme");
   g_object_unref (settings);
 
   g_hash_table_iter_init (&iter, t);
   pos = i = 0;
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
     {
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (c), theme);
-      if (g_strcmp0 (theme, default_theme) == 0)
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (pt->priv->theme_combo), theme);
+      if (g_strcmp0 (theme, current_theme) == 0)
         pos = i;
       i++;
     }
   g_hash_table_destroy (t);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (c), pos);
-  g_signal_connect (c, "changed", G_CALLBACK (gtk_changed), pt);
-
-  return b;
+  gtk_combo_box_set_active (GTK_COMBO_BOX (pt->priv->theme_combo), pos);
 }
 
 static void
-fill_icons (const char *path, GHashTable *t)
+fill_icons (const gchar *path,
+            GHashTable  *t)
 {
   const gchar *dir_entry;
   GDir *dir = g_dir_open (path, 0, NULL);
@@ -158,7 +108,7 @@ fill_icons (const char *path, GHashTable *t)
 
   while ((dir_entry = g_dir_read_name (dir)))
     {
-      char *filename = g_build_filename (path, dir_entry, "index.theme", NULL);
+      gchar *filename = g_build_filename (path, dir_entry, "index.theme", NULL);
 
       if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
           g_strcmp0 (dir_entry, "hicolor") != 0 &&
@@ -170,37 +120,13 @@ fill_icons (const char *path, GHashTable *t)
 }
 
 static void
-icons_changed (GtkComboBox *c, ParasiteThemes *pt)
+init_icons (ParasiteThemes *pt)
 {
-  char *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
-
-  g_object_set (gtk_settings_get_default (),
-                "gtk-icon-theme-name", theme,
-                NULL);
-  g_free (theme);
-}
-
-static GtkWidget *
-create_icons (ParasiteThemes *pt)
-{
-  GtkWidget *b, *l, *c;
   GHashTable *t;
-  char *theme, *default_theme, *path;
   GHashTableIter iter;
-  int i, pos;
+  gchar *theme, *current_theme, *path;
+  gint i, pos;
   GSettings *settings;
-
-  b = g_object_new (GTK_TYPE_BOX,
-                    "orientation", GTK_ORIENTATION_HORIZONTAL,
-                    "margin", 10,
-                    NULL);
-
-  l = g_object_new (GTK_TYPE_LABEL,
-                    "label", "Icon Theme",
-                    "hexpand", TRUE,
-                    "xalign", 0.0,
-                    NULL);
-  gtk_container_add (GTK_CONTAINER (b), l);
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -209,51 +135,65 @@ create_icons (ParasiteThemes *pt)
   fill_icons (path, t);
   g_free (path);
 
-  c = gtk_combo_box_text_new ();
-  gtk_container_add (GTK_CONTAINER (b), c);
-
   settings = g_settings_new ("org.gnome.desktop.interface");
-  default_theme = g_settings_get_string (settings, "icon-theme");
+  current_theme = g_settings_get_string (settings, "icon-theme");
   g_object_unref (settings);
 
   g_hash_table_iter_init (&iter, t);
   pos = i = 0;
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
     {
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (c), theme);
-      if (g_strcmp0 (theme, default_theme) == 0)
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (pt->priv->icon_combo), theme);
+      if (g_strcmp0 (theme, current_theme) == 0)
         pos = i;
       i++;
     }
   g_hash_table_destroy (t);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (c), pos);
-  g_signal_connect (c, "changed", G_CALLBACK (icons_changed), pt);
-
-  return b;
+  gtk_combo_box_set_active (GTK_COMBO_BOX (pt->priv->icon_combo), pos);
 }
 
 static void
-constructed (GObject *object)
+theme_changed (GtkComboBox    *c,
+               ParasiteThemes *pt)
 {
-  ParasiteThemes *pt = PARASITE_THEMES (object);
-  GtkContainer *box = GTK_CONTAINER (object);
+  gchar *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
+  g_object_set (gtk_settings_get_default (), "gtk-theme-name", theme, NULL);
+  g_free (theme);
+}
 
-  g_object_set (object,
-                "selection-mode", GTK_SELECTION_NONE,
-                NULL);
+static void
+icons_changed (GtkComboBox    *c,
+               ParasiteThemes *pt)
+{
+  gchar *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
+  g_object_set (gtk_settings_get_default (), "gtk-icon-theme-name", theme, NULL);
+  g_free (theme);
+}
 
-  gtk_container_add (box, create_dark (pt));
-  gtk_container_add (box, create_gtk (pt));
-  gtk_container_add (box, create_icons (pt));
+static void
+parasite_themes_init (ParasiteThemes *pt)
+{
+  pt->priv = parasite_themes_get_instance_private (pt);
+  gtk_widget_init_template (GTK_WIDGET (pt));
+
+  init_dark (pt);
+  init_theme (pt);
+  init_icons (pt);
 }
 
 static void
 parasite_themes_class_init (ParasiteThemesClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed  = constructed;
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/themes.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteThemes, dark_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteThemes, theme_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasiteThemes, icon_combo);
+
+  gtk_widget_class_bind_template_callback (widget_class, theme_changed);
+  gtk_widget_class_bind_template_callback (widget_class, icons_changed);
 }
 
 GtkWidget *
@@ -262,4 +202,4 @@ parasite_themes_new (void)
   return GTK_WIDGET (g_object_new (PARASITE_TYPE_THEMES, NULL));
 }
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:

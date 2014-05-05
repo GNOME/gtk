@@ -7,5 +7,6 @@
     <file>classes-list.ui</file>
     <file>widget-tree.ui</file>
     <file>prop-list.ui</file>
+    <file>themes.ui</file>
   </gresource>
 </gresources>
