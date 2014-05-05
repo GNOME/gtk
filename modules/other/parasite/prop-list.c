@@ -32,8 +32,7 @@ enum
   COLUMN_DEFINED_AT,
   COLUMN_OBJECT,
   COLUMN_TOOLTIP,
-  COLUMN_RO,
-  NUM_COLUMNS
+  COLUMN_WRITABLE
 };
 
 enum
@@ -50,174 +49,46 @@ struct _ParasitePropListPrivate
   GHashTable *prop_iters;
   GList *signal_cnxs;
   GtkWidget *widget_tree;
-  GtkTreeViewColumn *property_column;
-  GtkTreeViewColumn *value_column;
+  GtkCellRenderer *value_renderer;
   gboolean child_properties;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasitePropList, parasite_proplist, GTK_TYPE_TREE_VIEW)
+G_DEFINE_TYPE_WITH_PRIVATE (ParasitePropList, parasite_prop_list, GTK_TYPE_TREE_VIEW)
 
 static void
-parasite_proplist_init (ParasitePropList *pl)
+parasite_prop_list_init (ParasitePropList *pl)
 {
-  pl->priv = parasite_proplist_get_instance_private (pl);
-}
-
-static gboolean
-query_tooltip_cb (GtkWidget        *widget,
-			      gint             x,
-			      gint             y,
-			      gboolean         keyboard_tip,
-			      GtkTooltip       *tooltip,
-			      ParasitePropList *pl)
-{
-  GtkTreeIter iter;
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
-  GtkTreePath *path = NULL;
-  gchar *tooltip_text;
-
-  if (!gtk_tree_view_get_tooltip_context (tree_view,
-                                          &x,
-                                          &y,
-                                          keyboard_tip,
-                                          &model,
-                                          &path,
-                                          &iter))
-    return FALSE;
-
-  gtk_tree_model_get (model, &iter, COLUMN_TOOLTIP, &tooltip_text, -1);
-  gtk_tooltip_set_text (tooltip, tooltip_text);
-
-  gtk_tree_view_set_tooltip_cell (tree_view,
-                                  tooltip,
-                                  path,
-                                  pl->priv->property_column,
-                                  NULL);
-
-  gtk_tree_path_free (path);
-  g_free (tooltip_text);
-
-  return TRUE;
-}
-
-static void
-draw_columns (GtkTreeViewColumn *column,
-              GtkCellRenderer   *renderer,
-              GtkTreeModel      *model,
-              GtkTreeIter       *iter,
-              ParasitePropList  *pl)
-{
-  gboolean ro;
-
-  gtk_tree_model_get (model, iter, COLUMN_RO, &ro, -1);
-  if (ro)
-    {
-      g_object_set (renderer, "foreground", "#a7aba7", NULL);
-    }
-  else
-    {
-      g_object_set (renderer, "foreground-set", FALSE, NULL);
-    }
-}
-
-static void
-constructed (GObject *object)
-{
-  ParasitePropList *pl = PARASITE_PROPLIST (object);
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-
+  pl->priv = parasite_prop_list_get_instance_private (pl);
+  gtk_widget_init_template (GTK_WIDGET (pl));
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pl->priv->model),
+                                        COLUMN_NAME,
+                                        GTK_SORT_ASCENDING);
   pl->priv->prop_iters = g_hash_table_new_full (g_str_hash,
                                                 g_str_equal,
                                                 NULL,
                                                 (GDestroyNotify) gtk_tree_iter_free);
-
-  pl->priv->model = gtk_list_store_new(NUM_COLUMNS,
-                                       G_TYPE_STRING,  // COLUMN_NAME
-                                       G_TYPE_STRING,  // COLUMN_VALUE
-                                       G_TYPE_STRING,  // COLUMN_DEFINED_AT
-                                       G_TYPE_OBJECT,  // COLUMN_OBJECT
-                                       G_TYPE_STRING,  // COLUMN_TOOLTIP
-                                       G_TYPE_BOOLEAN);// COLUMN_RO
-  gtk_tree_view_set_model (GTK_TREE_VIEW (pl),
-                           GTK_TREE_MODEL (pl->priv->model));
-
-  renderer = gtk_cell_renderer_text_new();
-  g_object_set (renderer, "scale", TREE_TEXT_SCALE, NULL);
-  pl->priv->property_column = gtk_tree_view_column_new_with_attributes ("Property",
-                                                                        renderer,
-                                                                        "text", COLUMN_NAME,
-                                                                        NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (pl), pl->priv->property_column);
-  g_object_set (pl->priv->property_column,
-                "resizable", TRUE,
-                "sort-order", GTK_SORT_ASCENDING,
-                "sort-column-id", COLUMN_NAME,
-                NULL);
- gtk_tree_view_column_set_cell_data_func (pl->priv->property_column,
-                                          renderer,
-                                          (GtkTreeCellDataFunc) draw_columns,
-                                          pl,
-                                          NULL);
-
-  renderer = parasite_property_cell_renderer_new ();
-  g_object_set_data (G_OBJECT (renderer), "parasite-widget-tree", pl->priv->widget_tree);
-  g_object_set (renderer,
-                "scale", TREE_TEXT_SCALE,
-                "editable", TRUE,
-                "is-child-property", pl->priv->child_properties,
-                NULL);
-  pl->priv->value_column = gtk_tree_view_column_new_with_attributes ("Value", renderer,
-                                                                     "text", COLUMN_VALUE,
-                                                                     "object", COLUMN_OBJECT,
-                                                                     "name", COLUMN_NAME,
-                                                                     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (pl), pl->priv->value_column);
-  gtk_tree_view_column_set_resizable (pl->priv->value_column, TRUE);
-
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pl->priv->model),
-                                        COLUMN_NAME,
-                                        GTK_SORT_ASCENDING);
- gtk_tree_view_column_set_cell_data_func (pl->priv->value_column,
-                                          renderer,
-                                          (GtkTreeCellDataFunc) draw_columns,
-                                          pl,
-                                          NULL);
-
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "scale", TREE_TEXT_SCALE, NULL);
-  column = gtk_tree_view_column_new_with_attributes ("Defined at",
-                                                     renderer,
-                                                     "text", COLUMN_DEFINED_AT,
-                                                     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (pl), column);
-  gtk_tree_view_column_set_cell_data_func (column,
-                                           renderer,
-                                           (GtkTreeCellDataFunc) draw_columns,
-                                           pl,
-                                           NULL);
-
-  g_object_set (object, "has-tooltip", TRUE, NULL);
-  g_signal_connect (object, "query-tooltip", G_CALLBACK (query_tooltip_cb), pl);
 }
 
 static void
 get_property (GObject    *object,
-              guint      param_id,
+              guint       param_id,
               GValue     *value,
               GParamSpec *pspec)
 {
-  ParasitePropList *pl = PARASITE_PROPLIST (object);
+  ParasitePropList *pl = PARASITE_PROP_LIST (object);
 
   switch (param_id)
     {
       case PROP_WIDGET_TREE:
         g_value_take_object (value, pl->priv->widget_tree);
+        g_object_set_data (G_OBJECT (pl->priv->value_renderer), "parasite-widget-tree", pl->priv->widget_tree);
         break;
 
       case PROP_CHILD_PROPERTIES:
         g_value_set_boolean (value, pl->priv->child_properties);
+        g_object_set (pl->priv->value_renderer,
+                      "is-child-property", pl->priv->child_properties,
+                      NULL);
         break;
 
       default:
@@ -228,11 +99,11 @@ get_property (GObject    *object,
 
 static void
 set_property (GObject      *object,
-              guint        param_id,
+              guint         param_id,
               const GValue *value,
               GParamSpec   *pspec)
 {
-  ParasitePropList *pl = PARASITE_PROPLIST (object);
+  ParasitePropList *pl = PARASITE_PROP_LIST (object);
 
   switch (param_id)
     {
@@ -251,33 +122,33 @@ set_property (GObject      *object,
 }
 
 static void
-parasite_proplist_class_init (ParasitePropListClass *klass)
+parasite_prop_list_class_init (ParasitePropListClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS(klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = get_property;
   object_class->set_property = set_property;
-  object_class->constructed  = constructed;
 
-  g_object_class_install_property (object_class,
-                                   PROP_WIDGET_TREE,
-                                   g_param_spec_object ("widget-tree",
-                                                         "Widget Tree",
-                                                         "Widget tree",
-                                                         GTK_TYPE_WIDGET,
-                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class, PROP_WIDGET_TREE,
+      g_param_spec_object ("widget-tree", "Widget Tree", "Widget tree",
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class, PROP_CHILD_PROPERTIES,
       g_param_spec_boolean ("child-properties", "Child properties", "Child properties",
                             FALSE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/prop-list.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, ParasitePropList, model);
+  gtk_widget_class_bind_template_child_private (widget_class, ParasitePropList, value_renderer);
 }
 
 static void
 parasite_prop_list_update_prop (ParasitePropList *pl,
-                                GtkTreeIter *iter,
-                                GParamSpec *prop)
+                                GtkTreeIter      *iter,
+                                GParamSpec       *prop)
 {
   GValue gvalue = {0};
-  char *value;
+  gchar *value;
 
   g_value_init(&gvalue, prop->value_type);
   if (pl->priv->child_properties)
@@ -294,8 +165,8 @@ parasite_prop_list_update_prop (ParasitePropList *pl,
 
   if (G_VALUE_HOLDS_ENUM (&gvalue))
     {
-      GEnumClass *enum_class = G_PARAM_SPEC_ENUM(prop)->enum_class;
-      GEnumValue *enum_value = g_enum_get_value(enum_class, g_value_get_enum(&gvalue));
+      GEnumClass *enum_class = G_PARAM_SPEC_ENUM (prop)->enum_class;
+      GEnumValue *enum_value = g_enum_get_value (enum_class, g_value_get_enum (&gvalue));
 
       value = g_strdup (enum_value->value_name);
     }
@@ -310,7 +181,7 @@ parasite_prop_list_update_prop (ParasitePropList *pl,
                       COLUMN_DEFINED_AT, g_type_name (prop->owner_type),
                       COLUMN_OBJECT, pl->priv->object,
                       COLUMN_TOOLTIP, g_param_spec_get_blurb (prop),
-                      COLUMN_RO, !(prop->flags & G_PARAM_WRITABLE),
+                      COLUMN_WRITABLE, (prop->flags & G_PARAM_WRITABLE) != 0,
                       -1);
 
   g_free (value);
@@ -318,9 +189,9 @@ parasite_prop_list_update_prop (ParasitePropList *pl,
 }
 
 static void
-parasite_proplist_prop_changed_cb (GObject *pspec,
-                                   GParamSpec *prop,
-                                   ParasitePropList *pl)
+parasite_prop_list_prop_changed_cb (GObject          *pspec,
+                                    GParamSpec       *prop,
+                                    ParasitePropList *pl)
 {
   GtkTreeIter *iter = g_hash_table_lookup(pl->priv->prop_iters, prop->name);
 
@@ -329,17 +200,20 @@ parasite_proplist_prop_changed_cb (GObject *pspec,
 }
 
 GtkWidget *
-parasite_proplist_new (GtkWidget *widget_tree,
-                       gboolean   child_properties)
+parasite_prop_list_new (GtkWidget *widget_tree,
+                        gboolean   child_properties)
 {
-    return g_object_new (PARASITE_TYPE_PROPLIST,
-                         "widget-tree", widget_tree,
-                         "child-properties", child_properties,
-                         NULL);
+  g_type_ensure (PARASITE_TYPE_PROPERTY_CELL_RENDERER);
+
+  return g_object_new (PARASITE_TYPE_PROP_LIST,
+                       "widget-tree", widget_tree,
+                       "child-properties", child_properties,
+                       NULL);
 }
 
 gboolean
-parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
+parasite_prop_list_set_object (ParasitePropList *pl,
+                               GObject          *object)
 {
   GtkTreeIter iter;
   GParamSpec **props;
@@ -388,7 +262,7 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
   for (i = 0; i < num_properties; i++)
     {
       GParamSpec *prop = props[i];
-      char *signal_name;
+      gchar *signal_name;
 
       if (! (prop->flags & G_PARAM_READABLE))
         continue;
@@ -405,10 +279,9 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
         signal_name = g_strdup_printf ("notify::%s", prop->name);
 
       pl->priv->signal_cnxs =
-            g_list_prepend (pl->priv->signal_cnxs, GINT_TO_POINTER(
-                g_signal_connect(object, signal_name,
-                                 G_CALLBACK (parasite_proplist_prop_changed_cb),
-                                 pl)));
+          g_list_prepend (pl->priv->signal_cnxs,
+                          GINT_TO_POINTER (g_signal_connect(object, signal_name,
+                                                            G_CALLBACK (parasite_prop_list_prop_changed_cb), pl)));
 
         g_free (signal_name);
     }
@@ -416,5 +289,4 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
   return TRUE;
 }
 
-
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:

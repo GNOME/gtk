@@ -20,42 +20,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTKPARASITE_PROPLIST_H_
-#define _GTKPARASITE_PROPLIST_H_
+#ifndef _GTKPARASITE_PROP_LIST_H_
+#define _GTKPARASITE_PROP_LIST_H_
 
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_PROPLIST            (parasite_proplist_get_type())
-#define PARASITE_PROPLIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_PROPLIST, ParasitePropList))
-#define PARASITE_PROPLIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_PROPLIST, ParasitePropListClass))
-#define PARASITE_IS_PROPLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_PROPLIST))
-#define PARASITE_IS_PROPLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_PROPLIST))
-#define PARASITE_PROPLIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_PROPLIST, ParasitePropListClass))
+#define PARASITE_TYPE_PROP_LIST            (parasite_prop_list_get_type())
+#define PARASITE_PROP_LIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_PROP_LIST, ParasitePropList))
+#define PARASITE_PROP_LIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_PROP_LIST, ParasitePropListClass))
+#define PARASITE_IS_PROP_LIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_PROP_LIST))
+#define PARASITE_IS_PROP_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_PROP_LIST))
+#define PARASITE_PROP_LIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_PROP_LIST, ParasitePropListClass))
 
 
 typedef struct _ParasitePropListPrivate ParasitePropListPrivate;
 
-typedef struct _ParasitePropList {
-   GtkTreeView parent;
-   ParasitePropListPrivate *priv;
+typedef struct _ParasitePropList
+{
+  GtkTreeView parent;
+  ParasitePropListPrivate *priv;
 } ParasitePropList;
 
-typedef struct _ParasitePropListClass {
-   GtkTreeViewClass parent;
+typedef struct _ParasitePropListClass
+{
+  GtkTreeViewClass parent;
 } ParasitePropListClass;
 
 
 G_BEGIN_DECLS
 
-GType      parasite_proplist_get_type   (void);
-GtkWidget *parasite_proplist_new        (GtkWidget *widget_tree,
-                                         gboolean   child_properties);
-gboolean   parasite_proplist_set_object (ParasitePropList *proplist,
-                                         GObject          *object);
+GType      parasite_prop_list_get_type   (void);
+GtkWidget *parasite_prop_list_new        (GtkWidget        *widget_tree,
+                                          gboolean          child_properties);
+gboolean   parasite_prop_list_set_object (ParasitePropList *pl,
+                                          GObject          *object);
 
 G_END_DECLS
 
-#endif // _GTKPARASITE_PROPLIST_H_
+#endif // _GTKPARASITE_PROP_LIST_H_
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:

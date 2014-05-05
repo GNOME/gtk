@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkListStore" id="model">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="GObject"/>
+      <column type="gchararray"/>
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <template class="ParasitePropList" parent="GtkTreeView">
+    <property name="model">model</property>
+    <property name="tooltip-column">4</property>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Property</property>
+        <property name="resizable">True</property>
+        <property name="sort-order">ascending</property>
+        <property name="sort-column-id">0</property>
+        <child>
+          <object class="GtkCellRendererText">
+            <property name="scale">0.8</property>
+          </object>
+          <attributes>
+            <attribute name="text">0</attribute>
+            <attribute name="sensitive">5</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Value</property>
+        <property name="resizable">True</property>
+        <child>
+          <object class="ParasitePropertyCellRenderer" id="value_renderer">
+            <property name="scale">0.8</property>
+            <property name="editable">True</property>
+          </object>
+          <attributes>
+            <attribute name="text">1</attribute>
+            <attribute name="object">3</attribute>
+            <attribute name="name">0</attribute>
+            <attribute name="sensitive">5</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title">Defined At</property>
+        <child>
+          <object class="GtkCellRendererText">
+            <property name="scale">0.8</property>
+          </object>
+          <attributes>
+            <attribute name="text">2</attribute>
+            <attribute name="sensitive">5</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

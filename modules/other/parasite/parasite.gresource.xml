@@ -6,5 +6,6 @@
     <file>css-editor.ui</file>
     <file>classes-list.ui</file>
     <file>widget-tree.ui</file>
+    <file>prop-list.ui</file>
   </gresource>
 </gresources>

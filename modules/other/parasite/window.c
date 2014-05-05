@@ -42,10 +42,10 @@ on_widget_tree_selection_changed (ParasiteWidgetTree *widget_tree,
 
   if (selected != NULL)
     {
-      if (!parasite_proplist_set_object (PARASITE_PROPLIST (parasite->prop_list), selected))
+      if (!parasite_prop_list_set_object (PARASITE_PROP_LIST (parasite->prop_list), selected))
         return;
 
-      parasite_proplist_set_object (PARASITE_PROPLIST (parasite->child_prop_list), selected);
+      parasite_prop_list_set_object (PARASITE_PROP_LIST (parasite->child_prop_list), selected);
       parasite_object_hierarchy_set_object (PARASITE_OBJECT_HIERARCHY (parasite->oh), selected);
 
       if (GTK_IS_WIDGET (selected))
@@ -149,7 +149,7 @@ create_prop_list_pane (ParasiteWindow *parasite,
                         "width-request", 250,
                         NULL);
 
-    pl = parasite_proplist_new (parasite->widget_tree, child_properties);
+    pl = parasite_prop_list_new (parasite->widget_tree, child_properties);
     gtk_container_add (GTK_CONTAINER (swin), pl);
 
     if (child_properties)
