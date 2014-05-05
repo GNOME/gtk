@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 #include "gtkaccessibilitymisc.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_DEFINE_TYPE (GtkMiscImpl, _gtk_misc_impl, ATK_TYPE_MISC)
 
@@ -48,3 +49,5 @@ static void
 _gtk_misc_impl_init (GtkMiscImpl *misc)
 {
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
