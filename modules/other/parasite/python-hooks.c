@@ -21,7 +21,6 @@
  * THE SOFTWARE.
  */
 #include <dlfcn.h>
-#include "config.h"
 #include <signal.h>
 
 #ifdef ENABLE_PYTHON
