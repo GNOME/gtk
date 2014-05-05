@@ -44,22 +44,15 @@ typedef struct
 
 typedef struct
 {
-   GtkCellRendererTextClass parent;
-
-   // Padding for future expansion
-   void (*reserved0)(void);
-   void (*reserved1)(void);
-   void (*reserved2)(void);
-   void (*reserved3)(void);
-
+  GtkCellRendererTextClass parent;
 } ParasitePropertyCellRendererClass;
 
 
 G_BEGIN_DECLS
 
 
-GType parasite_property_cell_renderer_get_type();
-GtkCellRenderer *parasite_property_cell_renderer_new();
+GType            parasite_property_cell_renderer_get_type (void);
+GtkCellRenderer *parasite_property_cell_renderer_new      (void);
 
 
 G_END_DECLS
@@ -67,4 +60,4 @@ G_END_DECLS
 
 #endif // _GTKPARASITE_PROPERTY_CELL_RENDERER_H_
 
-// vim: set et sw=4 ts=4:
+// vim: set et sw=2 ts=2:
