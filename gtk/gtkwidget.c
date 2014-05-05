@@ -163,11 +163,11 @@
  * {
  *    if (i_am_in_height_for_width_mode)
  *      {
- *        gint min_width;
+ *        gint min_width, nat_width;
  *
  *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
  *                                                            &min_width,
- *                                                            NULL);
+ *                                                            &nat_width);
  *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width
  *                                                           (widget,
  *                                                            min_width,
