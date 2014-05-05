@@ -523,6 +523,9 @@ gtk_gesture_handle_event (GtkEventController *controller,
           _gtk_gesture_check_recognized (gesture, sequence))
         g_signal_emit (gesture, signals[UPDATE], 0, sequence);
       break;
+    case GDK_TOUCH_CANCEL:
+      gtk_gesture_cancel_sequence (gesture, sequence);
+      break;
     default:
       /* Unhandled event */
       return FALSE;
