@@ -767,6 +767,21 @@ gtk_color_button_get_rgba (GtkColorButton *button,
   *rgba = button->priv->rgba;
 }
 
+static void
+set_use_alpha (GtkColorButton *button, gboolean use_alpha)
+{
+  use_alpha = (use_alpha != FALSE);
+
+  if (button->priv->use_alpha != use_alpha)
+    {
+      button->priv->use_alpha = use_alpha;
+
+      gtk_widget_queue_draw (button->priv->draw_area);
+
+      g_object_notify (G_OBJECT (button), "use-alpha");
+    }
+}
+
 /**
  * gtk_color_button_set_use_alpha:
  * @button: a #GtkColorButton
@@ -783,17 +798,7 @@ gtk_color_button_set_use_alpha (GtkColorButton *button,
                                 gboolean        use_alpha)
 {
   g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
-
-  use_alpha = (use_alpha != FALSE);
-
-  if (button->priv->use_alpha != use_alpha)
-    {
-      button->priv->use_alpha = use_alpha;
-
-      gtk_widget_queue_draw (button->priv->draw_area);
-
-      g_object_notify (G_OBJECT (button), "use-alpha");
-    }
+  set_use_alpha (button, use_alpha);
 }
 
 /**
@@ -874,7 +879,7 @@ gtk_color_button_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_USE_ALPHA:
-      gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (button), g_value_get_boolean (value));
+      set_use_alpha (button, g_value_get_boolean (value));
       break;
     case PROP_TITLE:
       gtk_color_button_set_title (button, g_value_get_string (value));
