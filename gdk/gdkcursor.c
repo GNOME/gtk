@@ -356,6 +356,7 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   const char *option;
   char *end;
   gint64 value;
+  GdkCursor *cursor;
  
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
@@ -384,7 +385,11 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
 
   surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
   
-  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_surface (display, surface, x, y);
+  cursor = GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_surface (display, surface, x, y);
+
+  cairo_surface_destroy (surface);
+
+  return cursor;
 }
 
 /**
