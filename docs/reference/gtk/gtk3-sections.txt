@@ -7923,7 +7923,6 @@ gtk_gesture_get_window
 gtk_gesture_set_window
 gtk_gesture_is_active
 gtk_gesture_is_recognized
-gtk_gesture_check
 GtkEventSequenceState
 gtk_gesture_get_sequence_state
 gtk_gesture_set_sequence_state

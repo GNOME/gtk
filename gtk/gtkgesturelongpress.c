@@ -35,6 +35,7 @@
 #include "config.h"
 #include "gtkgesturelongpress.h"
 #include "gtkgesturelongpressprivate.h"
+#include "gtkgestureprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkdnd.h"
 #include "gtkprivate.h"
@@ -152,7 +153,7 @@ gtk_gesture_long_press_update (GtkGesture       *gesture,
         }
 
       priv->cancelled = TRUE;
-      gtk_gesture_check (gesture);
+      _gtk_gesture_check (gesture);
     }
 }
 

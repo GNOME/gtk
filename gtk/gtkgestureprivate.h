@@ -54,6 +54,8 @@ struct _GtkGestureClass
 
 G_BEGIN_DECLS
 
+gboolean _gtk_gesture_check                  (GtkGesture       *gesture);
+
 gboolean _gtk_gesture_handled_sequence_press (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
 

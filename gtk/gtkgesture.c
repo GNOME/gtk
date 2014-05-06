@@ -104,7 +104,6 @@ enum {
 };
 
 enum {
-  CHECK,
   BEGIN,
   END,
   UPDATE,
@@ -252,11 +251,15 @@ _gtk_gesture_set_recognized (GtkGesture       *gesture,
 static gboolean
 _gtk_gesture_do_check (GtkGesture *gesture)
 {
-  gboolean retval;
+  GtkGestureClass *gesture_class;
+  gboolean retval = FALSE;
 
-  g_signal_emit (G_OBJECT (gesture), signals[CHECK], 0, &retval);
-  retval = retval != FALSE;
+  gesture_class = GTK_GESTURE_GET_CLASS (gesture);
 
+  if (!gesture_class->check)
+    return retval;
+
+  retval = gesture_class->check (gesture);
   return retval;
 }
 
@@ -602,26 +605,6 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                                                          P_("GdkWindow to receive events about"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
-  /**
-   * GtkGesture::check:
-   * @gesture: the object which received the signal
-   *
-   * This signal is triggered when the number of interacting touch
-   * points become the expected by @gesture (see the #GtkGesture:n-points
-   * property). If a handler returns #TRUE, the gesture is recognized.
-   *
-   * Return value: #TRUE if the gesture is recognized, #FALSE otherwise.
-   *
-   * Since: 3.14
-   */
-  signals[CHECK] =
-    g_signal_new ("check",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkGestureClass, check),
-                  g_signal_accumulator_true_handled,
-                  NULL, NULL,
-                  G_TYPE_BOOLEAN, 0);
   /**
    * GtkGesture::begin:
    * @gesture: the object which received the signal
@@ -1216,21 +1199,8 @@ gtk_gesture_is_recognized (GtkGesture *gesture)
   return priv->recognized;
 }
 
-/**
- * gtk_gesture_check:
- * @gesture: a #GtkGesture
- *
- * Triggers a check on the @gesture, this should only be called by
- * implementations of #GtkGesture, in order to force gesture recognition
- * to finish if eg. some implementation-dependent criteria doesn't match
- * anymore.
- *
- * Returns: Whether the gesture is recognized.
- *
- * Since: 3.14
- **/
 gboolean
-gtk_gesture_check (GtkGesture *gesture)
+_gtk_gesture_check (GtkGesture *gesture)
 {
   GtkGesturePrivate *priv;
 

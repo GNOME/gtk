@@ -35,6 +35,7 @@
  */
 
 #include "config.h"
+#include "gtkgestureprivate.h"
 #include "gtkgesturemultipress.h"
 #include "gtkgesturemultipressprivate.h"
 #include "gtkprivate.h"
@@ -112,7 +113,7 @@ _gtk_gesture_multi_press_stop (GtkGestureMultiPress *gesture)
   priv->current_button = 0;
   priv->n_presses = 0;
   g_signal_emit (gesture, signals[STOPPED], 0);
-  gtk_gesture_check (GTK_GESTURE (gesture));
+  _gtk_gesture_check (GTK_GESTURE (gesture));
 }
 
 static gboolean
