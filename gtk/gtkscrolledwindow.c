@@ -650,19 +650,13 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
 
 static void
 scrolled_window_drag_end_cb (GtkScrolledWindow *scrolled_window,
-                             gdouble            offset_x,
-                             gdouble            offset_y,
+                             GdkEventSequence  *sequence,
                              GtkGesture        *gesture)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  GdkEventSequence *current, *last;
 
-  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  last = gtk_gesture_get_last_updated_sequence (gesture);
-
-  if (!priv->in_drag || current != last)
-    gtk_gesture_set_sequence_state (gesture, current,
-                                    GTK_EVENT_SEQUENCE_DENIED);
+  if (!priv->in_drag || !gtk_gesture_handles_sequence (gesture, sequence))
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
@@ -759,7 +753,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   g_signal_connect_swapped (priv->drag_gesture, "drag-update",
                             G_CALLBACK (scrolled_window_drag_update_cb),
                             scrolled_window);
-  g_signal_connect_swapped (priv->drag_gesture, "drag-end",
+  g_signal_connect_swapped (priv->drag_gesture, "end",
                             G_CALLBACK (scrolled_window_drag_end_cb),
                             scrolled_window);
 

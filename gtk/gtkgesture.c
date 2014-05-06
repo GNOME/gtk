@@ -268,7 +268,9 @@ _gtk_gesture_check_recognized (GtkGesture       *gesture,
 
   current_n_points = _gtk_gesture_effective_n_points (gesture);
 
-  if (priv->recognized && current_n_points != priv->n_points)
+  if (priv->recognized &&
+      (current_n_points != priv->n_points ||
+       g_hash_table_size (priv->points) != priv->n_points))
     _gtk_gesture_set_recognized (gesture, FALSE, sequence);
   else if (!priv->recognized &&
            current_n_points == priv->n_points &&
@@ -351,6 +353,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
   GdkWindow *widget_window;
   GtkGesturePrivate *priv;
   GdkDevice *device;
+  gboolean existed;
   PointData *data;
   gdouble x, y;
 
@@ -384,9 +387,9 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
     return FALSE;
 
   sequence = gdk_event_get_event_sequence (event);
-
-  if (!g_hash_table_lookup_extended (priv->points, sequence,
-                                     NULL, (gpointer *) &data))
+  existed = g_hash_table_lookup_extended (priv->points, sequence,
+                                          NULL, (gpointer *) &data);
+  if (!existed)
     {
       if (!add)
         return FALSE;
@@ -406,6 +409,14 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
 
   data->event = gdk_event_copy (event);
   _update_widget_coordinates (gesture, data);
+
+  /* Deny the sequence right away if the expected
+   * number of points is exceeded, so this sequence
+   * can be tracked with gtk_gesture_handles_sequence().
+   */
+  if (!existed && g_hash_table_size (priv->points) > priv->n_points)
+    gtk_gesture_set_sequence_state (gesture, sequence,
+                                    GTK_EVENT_SEQUENCE_DENIED);
 
   return TRUE;
 }
