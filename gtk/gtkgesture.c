@@ -1030,35 +1030,6 @@ gtk_gesture_get_last_update_time (GtkGesture       *gesture,
 };
 
 /**
- * gtk_gesture_get_last_event_type:
- * @gesture: a #GtkGesture
- * @sequence: a #GdkEventSequence
- *
- * Returns the last event type that was processed for @sequence.
- *
- * Returns: the last event type.
- *
- * Since: 3.14
- **/
-GdkEventType
-gtk_gesture_get_last_event_type (GtkGesture       *gesture,
-                                 GdkEventSequence *sequence)
-{
-  GtkGesturePrivate *priv;
-  PointData *data;
-
-  g_return_val_if_fail (GTK_IS_GESTURE (gesture), GDK_NOTHING);
-
-  priv = gtk_gesture_get_instance_private (gesture);
-
-  if (!g_hash_table_lookup_extended (priv->points, sequence,
-                                     NULL, (gpointer *) &data))
-    return GDK_NOTHING;
-
-  return data->event->type;
-}
-
-/**
  * gtk_gesture_get_bounding_box:
  * @gesture: a #GtkGesture
  * @rect: (out): bounding box containing all active touches.
