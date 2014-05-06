@@ -120,6 +120,12 @@ GDK_AVAILABLE_IN_3_14
 gboolean    gtk_gesture_is_grouped_with      (GtkGesture       *gesture,
                                               GtkGesture       *other);
 
+GDK_AVAILABLE_IN_3_14
+void        gtk_gesture_attach               (GtkGesture          *gesture,
+                                              GtkPropagationPhase  phase);
+GDK_AVAILABLE_IN_3_14
+void        gtk_gesture_detach               (GtkGesture          *gesture);
+
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_H__ */

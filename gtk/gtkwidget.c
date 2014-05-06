@@ -399,6 +399,7 @@ typedef struct {
 
 typedef struct {
   GtkEventController *controller;
+  GtkPropagationPhase phase;
   guint evmask_notify_id;
   guint grab_notify_id;
   guint sequence_state_changed_id;
@@ -4201,7 +4202,6 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
 
   for (l = priv->event_controllers; l; l = l->next)
     {
-      GtkPropagationPhase propagation_phase;
       GtkEventSequenceState gesture_state;
       gboolean sequence_handled, retval;
       EventControllerData *data;
@@ -4240,7 +4240,6 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
       handled |= retval;
 
       g_signal_handler_unblock (data->controller, data->sequence_state_changed_id);
-      propagation_phase = gtk_event_controller_get_propagation_phase (data->controller);
 
       /* If the sequence goes denied, check whether this is a controller attached
        * to the capture phase, that additionally handled the button/touch press (ie.
@@ -4248,7 +4247,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
        * beneath, so the widgets beneath get a coherent stream of events from now on.
        */
       if (retval && sequence_handled &&
-          propagation_phase == GTK_PHASE_CAPTURE &&
+          data->phase == GTK_PHASE_CAPTURE &&
           state == GTK_EVENT_SEQUENCE_DENIED)
         send_event = TRUE;
     }
@@ -7237,7 +7236,7 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
     {
       data = l->data;
 
-      if (phase == gtk_event_controller_get_propagation_phase (data->controller))
+      if (phase == data->phase)
         handled |= gtk_event_controller_handle_event (data->controller, event);
     }
 
@@ -11729,7 +11728,7 @@ gtk_widget_dispose (GObject *object)
   while (priv->event_controllers)
     {
       EventControllerData *data = priv->event_controllers->data;
-      gtk_widget_remove_controller (widget, data->controller);
+      _gtk_widget_remove_controller (widget, data->controller);
     }
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
@@ -16619,7 +16618,6 @@ event_controller_grab_notify (GtkWidget           *widget,
                               EventControllerData *data)
 {
   GtkWidget *grab_widget, *toplevel;
-  GtkPropagationPhase phase;
   GtkWindowGroup *group;
   GdkDevice *device;
 
@@ -16643,12 +16641,10 @@ event_controller_grab_notify (GtkWidget           *widget,
   if (!grab_widget || grab_widget == widget)
     return;
 
-  phase = gtk_event_controller_get_propagation_phase (data->controller);
-
-  if (((phase == GTK_PHASE_NONE ||
-        phase == GTK_PHASE_BUBBLE) &&
+  if (((data->phase == GTK_PHASE_NONE ||
+        data->phase == GTK_PHASE_BUBBLE) &&
        !gtk_widget_is_ancestor (widget, grab_widget)) ||
-      (phase == GTK_PHASE_CAPTURE &&
+      (data->phase == GTK_PHASE_CAPTURE &&
        !gtk_widget_is_ancestor (widget, grab_widget) &&
        !gtk_widget_is_ancestor (grab_widget, widget)))
     {
@@ -16738,23 +16734,10 @@ _gtk_widget_has_controller (GtkWidget          *widget,
   return NULL;
 }
 
-/**
- * gtk_widget_add_controller:
- * @widget: a #GtkWidget, must be the same than the one passed on construction to @controller
- * @controller: a #GtkEventController
- *
- * Adds @controller to the list of controllers that are triggered
- * any time @widget receives events. the stage at which the events
- * are delivered to @controller is mandated by
- * gtk_event_controller_get_propagation_phase(). @widget will also take care
- * of calling gtk_event_controller_reset() whenever input is grabbed
- * elsewhere.
- *
- * Since: 3.14
- **/
 void
-gtk_widget_add_controller (GtkWidget          *widget,
-                           GtkEventController *controller)
+_gtk_widget_add_controller (GtkWidget           *widget,
+                            GtkEventController  *controller,
+                            GtkPropagationPhase  phase)
 {
   EventControllerData *data;
   GtkWidgetPrivate *priv;
@@ -16763,11 +16746,20 @@ gtk_widget_add_controller (GtkWidget          *widget,
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
   g_return_if_fail (!_gtk_widget_has_controller (widget, controller));
+  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_BUBBLE);
 
   priv = widget->priv;
+  data = _gtk_widget_has_controller (widget, controller);
+
+  if (data)
+    {
+      data->phase = phase;
+      return;
+    }
 
   data = g_new0 (EventControllerData, 1);
   data->controller = g_object_ref (controller);
+  data->phase = phase;
   data->evmask_notify_id =
     g_signal_connect (controller, "notify::event-mask",
                       G_CALLBACK (event_controller_notify_event_mask), widget);
@@ -16787,16 +16779,9 @@ gtk_widget_add_controller (GtkWidget          *widget,
   _gtk_widget_update_evmask (widget);
 }
 
-/**
- * gtk_widget_remove_controller:
- * @widget: a #GtkWidget
- * @controller: a #GtkEventController attached to @widget
- *
- * Removes @controller from the list of controllers managed by @widget.
- **/
 void
-gtk_widget_remove_controller (GtkWidget          *widget,
-                              GtkEventController *controller)
+_gtk_widget_remove_controller (GtkWidget          *widget,
+                               GtkEventController *controller)
 {
   EventControllerData *data;
   GtkWidgetPrivate *priv;
@@ -16820,35 +16805,4 @@ gtk_widget_remove_controller (GtkWidget          *widget,
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (data->controller));
   g_object_unref (data->controller);
   g_free (data);
-}
-
-/**
- * gtk_widget_list_controllers:
- * @widget: a #GtkWidget
- *
- * Returns the list of controllers that are managed by @widget.
- *
- * Returns: (transfer container) (element-type GtkEventController): the list of
- *   controllers, free with g_list_free()
- *
- * Since: 3.14
- **/
-GList *
-gtk_widget_list_controllers (GtkWidget *widget)
-{
-  EventControllerData *data;
-  GtkWidgetPrivate *priv;
-  GList *l, *retval = NULL;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  priv = widget->priv;
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      data = l->data;
-      retval = g_list_prepend (retval, data->controller);
-    }
-
-  return retval;
 }

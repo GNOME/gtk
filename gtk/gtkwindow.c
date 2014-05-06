@@ -1572,15 +1572,12 @@ gtk_window_init (GtkWindow *window)
   priv->scale = gtk_widget_get_scale_factor (widget);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (window));
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                              GTK_PHASE_CAPTURE);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (multipress_gesture_pressed_cb), window);
   g_signal_connect (priv->multipress_gesture, "stopped",
                     G_CALLBACK (multipress_gesture_stopped_cb), window);
-  gtk_widget_add_controller (GTK_WIDGET (window),
-                             GTK_EVENT_CONTROLLER (priv->multipress_gesture));
+  gtk_gesture_attach (priv->multipress_gesture, GTK_PHASE_CAPTURE);
 }
 
 static void
@@ -5463,10 +5460,8 @@ gtk_window_finalize (GObject *object)
       priv->mnemonics_display_timeout_id = 0;
     }
 
-  gtk_widget_remove_controller (GTK_WIDGET (window),
-                                GTK_EVENT_CONTROLLER (priv->multipress_gesture));
+  gtk_gesture_detach (priv->multipress_gesture);
   g_object_unref (priv->multipress_gesture);
-
 
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }

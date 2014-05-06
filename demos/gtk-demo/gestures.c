@@ -156,7 +156,7 @@ do_gestures (GtkWidget *do_widget)
       gesture = gtk_gesture_swipe_new (drawing_area);
       g_signal_connect (gesture, "swipe",
                         G_CALLBACK (swipe_gesture_swept), drawing_area);
-      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
+      gtk_gesture_attach (gesture, GTK_PHASE_BUBBLE);
       g_object_unref (gesture);
 
       /* Long press */
@@ -165,21 +165,21 @@ do_gestures (GtkWidget *do_widget)
                         G_CALLBACK (long_press_gesture_pressed), drawing_area);
       g_signal_connect (gesture, "end",
                         G_CALLBACK (long_press_gesture_end), drawing_area);
-      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
+      gtk_gesture_attach (gesture, GTK_PHASE_BUBBLE);
       g_object_unref (gesture);
 
       /* Rotate */
       rotate = gesture = gtk_gesture_rotate_new (drawing_area);
       g_signal_connect (gesture, "angle-changed",
                         G_CALLBACK (rotation_angle_changed), drawing_area);
-      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
+      gtk_gesture_attach (gesture, GTK_PHASE_BUBBLE);
       g_object_unref (gesture);
 
       /* Zoom */
       zoom = gesture = gtk_gesture_zoom_new (drawing_area);
       g_signal_connect (gesture, "scale-changed",
                         G_CALLBACK (zoom_scale_changed), drawing_area);
-      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
+      gtk_gesture_attach (gesture, GTK_PHASE_BUBBLE);
       g_object_unref (gesture);
     }
 

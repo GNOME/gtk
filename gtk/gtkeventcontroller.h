@@ -59,14 +59,6 @@ gboolean     gtk_event_controller_handle_event   (GtkEventController *controller
 GDK_AVAILABLE_IN_3_14
 void         gtk_event_controller_reset          (GtkEventController *controller);
 
-GDK_AVAILABLE_IN_3_14
-GtkPropagationPhase
-             gtk_event_controller_get_propagation_phase (GtkEventController *controller);
-
-GDK_AVAILABLE_IN_3_14
-void         gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
-                                                         GtkPropagationPhase  phase);
-
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_H__ */

@@ -5583,11 +5583,6 @@ gtk_widget_class_bind_template_callback
 gtk_widget_class_bind_template_callback_full
 gtk_widget_class_set_connect_func
 
-<SUBSECTION Gestures>
-gtk_widget_add_controller
-gtk_widget_remove_controller
-gtk_widget_list_controllers
-
 <SUBSECTION Standard>
 GTK_WIDGET
 GTK_IS_WIDGET
@@ -7902,9 +7897,6 @@ gtk_popover_get_modal
 <TITLE>GtkEventController</TITLE>
 GtkEventController
 gtk_event_controller_handle_event
-GtkPropagationPhase
-gtk_event_controller_get_propagation_phase
-gtk_event_controller_set_propagation_phase
 gtk_event_controller_get_event_mask
 gtk_event_controller_set_event_mask
 gtk_event_controller_get_widget
@@ -7939,6 +7931,9 @@ gtk_gesture_set_state
 gtk_gesture_cancel_sequence
 gtk_gesture_get_sequences
 gtk_gesture_handles_sequence
+GtkPropagationPhase
+gtk_gesture_attach
+gtk_gesture_detach
 
 <SUBSECTION>
 gtk_gesture_get_last_updated_sequence

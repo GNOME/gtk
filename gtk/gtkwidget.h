@@ -1469,14 +1469,6 @@ void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *
 						         const gchar           *name,
 						         gboolean               internal_child,
 						         gssize                 struct_offset);
-GDK_AVAILABLE_IN_3_14
-void    gtk_widget_add_controller                       (GtkWidget           *widget,
-                                                         GtkEventController  *controller);
-GDK_AVAILABLE_IN_3_14
-void    gtk_widget_remove_controller                    (GtkWidget           *widget,
-                                                         GtkEventController  *controller);
-GDK_AVAILABLE_IN_3_14
-GList * gtk_widget_list_controllers                     (GtkWidget           *widget);
 
 G_END_DECLS
 

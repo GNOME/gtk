@@ -152,6 +152,12 @@ gchar **          _gtk_widget_list_action_prefixes         (GtkWidget    *widget
 GActionGroup *    _gtk_widget_get_action_group             (GtkWidget    *widget,
                                                             const gchar  *prefix);
 
+void              _gtk_widget_add_controller               (GtkWidget           *widget,
+                                                            GtkEventController  *controller,
+                                                            GtkPropagationPhase  phase);
+void              _gtk_widget_remove_controller            (GtkWidget           *widget,
+                                                            GtkEventController  *controller);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

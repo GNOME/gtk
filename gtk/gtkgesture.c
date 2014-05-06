@@ -88,6 +88,7 @@
 
 #include "config.h"
 #include "gtkgesture.h"
+#include "gtkwidgetprivate.h"
 #include "gtkgestureprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -1556,4 +1557,52 @@ _gtk_gesture_get_pointer_emulating_sequence (GtkGesture        *gesture,
     }
 
   return FALSE;
+}
+
+/**
+ * gtk_gesture_attach:
+ * @gesture: a #GtkGesture
+ * @phase: phase at which events are handled
+ *
+ * Attaches @gesture to its widget, so @gesture is able to receive
+ * and manage the events that are emitted on the #GtkWidget. This call
+ * will also make sure that the gesture state is maintained properly
+ * whenever input is grabbed elsewhere.
+ *
+ * If @phase is %GTK_PHASE_NONE, no automatical event handling will be
+ * performed, but other additional gesture maintenance will. The events
+ * can be managed by calling gtk_event_controller_handle_event().
+ *
+ * Since: 3.14
+ **/
+void
+gtk_gesture_attach (GtkGesture          *gesture,
+                    GtkPropagationPhase  phase)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_GESTURE (gesture));
+  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_BUBBLE);
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  _gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture), phase);
+}
+
+/**
+ * gtk_gesture_detach:
+ * @gesture: a #GtkGesture
+ *
+ * Detaches @gesture from its widget.
+ *
+ * Since: 3.14
+ **/
+void
+gtk_gesture_detach (GtkGesture *gesture)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_GESTURE (gesture));
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  _gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 }

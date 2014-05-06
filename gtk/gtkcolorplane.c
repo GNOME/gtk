@@ -427,7 +427,7 @@ gtk_color_plane_init (GtkColorPlane *plane)
   plane->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (plane));
   g_signal_connect (plane->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), plane);
-  gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (plane->priv->long_press_gesture));
+  gtk_gesture_attach (plane->priv->long_press_gesture, GTK_PHASE_BUBBLE);
 }
 
 static void
@@ -442,7 +442,7 @@ plane_finalize (GObject *object)
   g_clear_object (&plane->priv->s_adj);
   g_clear_object (&plane->priv->v_adj);
 
-  gtk_widget_remove_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (plane->priv->long_press_gesture));
+  gtk_gesture_detach (plane->priv->long_press_gesture);
   g_clear_object (&plane->priv->long_press_gesture);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
