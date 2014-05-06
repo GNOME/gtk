@@ -75,6 +75,9 @@ struct _GtkHeaderBarPrivate
   GtkWidget *titlebar_start_box;
   GtkWidget *titlebar_end_box;
 
+  GtkWidget *titlebar_start_separator;
+  GtkWidget *titlebar_end_separator;
+
   GtkWidget *titlebar_icon;
   GtkWidget *titlebar_menu_button;
   GtkWidget *titlebar_min_button;
@@ -239,6 +242,34 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
   return FALSE;
 }
 
+static void
+_gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+  gboolean have_visible_at_start = FALSE;
+  gboolean have_visible_at_end = FALSE;
+  GList *l;
+  
+  for (l = priv->children; l != NULL; l = l->next)
+    {
+      Child *child = l->data;
+
+      if (gtk_widget_get_visible (child->widget))
+        {
+          if (child->pack_type == GTK_PACK_START)
+            have_visible_at_start = TRUE;
+          else
+            have_visible_at_end = TRUE;
+        }
+    }
+
+  if (priv->titlebar_start_separator != NULL)
+    gtk_widget_set_visible (priv->titlebar_start_separator, have_visible_at_start);
+
+  if (priv->titlebar_end_separator != NULL)
+    gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
+}
+
 void
 _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 {
@@ -285,11 +316,13 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
     {
       gtk_widget_destroy (priv->titlebar_start_box);
       priv->titlebar_start_box = NULL;
+      priv->titlebar_start_separator = NULL;
     }
   if (priv->titlebar_end_box)
     {
       gtk_widget_destroy (priv->titlebar_end_box);
       priv->titlebar_end_box = NULL;
+      priv->titlebar_end_separator = NULL;
     }
 
   if (!priv->shows_wm_decorations)
@@ -332,7 +365,12 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           t = g_strsplit (tokens[i], ",", -1);
 
           separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-          gtk_widget_show (separator);
+          gtk_widget_set_no_show_all (separator, TRUE);
+
+          if (i == 0)
+            priv->titlebar_start_separator = separator;
+          else
+            priv->titlebar_end_separator = separator;
 
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, priv->spacing);
 
@@ -457,7 +495,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           gtk_widget_set_parent (box, GTK_WIDGET (bar));
 
           gtk_box_pack_start (GTK_BOX (box), separator, FALSE, FALSE, 0);
-          if (i ==1)
+          if (i == 1)
             gtk_box_reorder_child (GTK_BOX (box), separator, 0);
 
           if ((direction == GTK_TEXT_DIR_LTR && i == 0) ||
@@ -474,6 +512,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       g_strfreev (tokens);
     }
   g_free (layout_desc);
+
+  _gtk_header_bar_update_separator_visibility (bar);
 }
 
 gboolean
@@ -1453,6 +1493,8 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
   gtk_widget_child_notify (widget, "pack-type");
   gtk_widget_child_notify (widget, "position");
   gtk_widget_thaw_child_notify (widget);
+
+  _gtk_header_bar_update_separator_visibility (bar);
 }
 
 static void
@@ -1497,6 +1539,7 @@ gtk_header_bar_remove (GtkContainer *container,
       priv->children = g_list_delete_link (priv->children, l);
       g_free (child);
       gtk_widget_queue_resize (GTK_WIDGET (container));
+      _gtk_header_bar_update_separator_visibility (bar);
     }
 }
 
