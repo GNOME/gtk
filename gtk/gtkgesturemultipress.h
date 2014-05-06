@@ -38,25 +38,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureMultiPress GtkGestureMultiPress;
 typedef struct _GtkGestureMultiPressClass GtkGestureMultiPressClass;
 
-struct _GtkGestureMultiPress
-{
-  GtkGestureSingle parent_instance;
-};
-
-struct _GtkGestureMultiPressClass
-{
-  GtkGestureSingleClass parent_class;
-
-  gboolean (* pressed) (GtkGestureMultiPress *gesture,
-                        gint                  n_press,
-                        gdouble               x,
-                        gdouble               y);
-  void     (* stopped) (GtkGestureMultiPress *gesture);
-
-  /*<private>*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType        gtk_gesture_multi_press_get_type (void) G_GNUC_CONST;
 

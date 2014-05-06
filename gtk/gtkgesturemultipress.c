@@ -36,6 +36,7 @@
 
 #include "config.h"
 #include "gtkgesturemultipress.h"
+#include "gtkgesturemultipressprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

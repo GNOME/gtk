@@ -33,9 +33,10 @@
  */
 
 #include "config.h"
-#include <gtk/gtk.h>
-#include <gtk/gtkgesturelongpress.h>
+#include "gtkgesturelongpress.h"
+#include "gtkgesturelongpressprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkdnd.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

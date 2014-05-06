@@ -39,7 +39,8 @@
  */
 
 #include "config.h"
-#include <gtk/gtkgesturepan.h>
+#include "gtkgesturepan.h"
+#include "gtkgesturepanprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

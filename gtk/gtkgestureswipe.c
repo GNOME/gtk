@@ -36,7 +36,8 @@
  */
 
 #include "config.h"
-#include <gtk/gtkgestureswipe.h>
+#include "gtkgestureswipe.h"
+#include "gtkgestureswipeprivate.h"
 #include "gtkmarshalers.h"
 
 #define CAPTURE_THRESHOLD_MS 150

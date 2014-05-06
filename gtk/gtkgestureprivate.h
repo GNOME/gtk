@@ -16,11 +16,41 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
-
 #ifndef __GTK_GESTURE_PRIVATE_H__
 #define __GTK_GESTURE_PRIVATE_H__
 
+#include "gtkeventcontrollerprivate.h"
 #include "gtkgesture.h"
+
+struct _GtkGesture
+{
+  GtkEventController parent_instance;
+};
+
+struct _GtkGestureClass
+{
+  GtkEventControllerClass parent_class;
+
+  gboolean (* check)  (GtkGesture       *gesture);
+
+  void     (* begin)  (GtkGesture       *gesture,
+                       GdkEventSequence *sequence);
+  void     (* update) (GtkGesture       *gesture,
+                       GdkEventSequence *sequence);
+  void     (* end)    (GtkGesture       *gesture,
+                       GdkEventSequence *sequence);
+
+  void     (* cancel) (GtkGesture       *gesture,
+                       GdkEventSequence *sequence);
+
+  void     (* sequence_state_changed) (GtkGesture            *gesture,
+                                       GdkEventSequence      *sequence,
+                                       GtkEventSequenceState  state);
+
+  /*< private >*/
+  gpointer padding[10];
+};
+
 
 G_BEGIN_DECLS
 
@@ -28,8 +58,8 @@ gboolean _gtk_gesture_handled_sequence_press (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
 
 gboolean _gtk_gesture_get_pointer_emulating_sequence
-                                             (GtkGesture        *gesture,
-                                              GdkEventSequence **sequence);
+                                                (GtkGesture        *gesture,
+                                                 GdkEventSequence **sequence);
 
 G_END_DECLS
 

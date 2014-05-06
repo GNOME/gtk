@@ -31,7 +31,8 @@
 
 #include "config.h"
 #include <math.h>
-#include <gtk/gtkgesturerotate.h>
+#include "gtkgesturerotate.h"
+#include "gtkgesturerotateprivate.h"
 #include "gtkmarshalers.h"
 
 typedef struct _GtkGestureRotatePrivate GtkGestureRotatePrivate;

@@ -39,7 +39,8 @@
  */
 
 #include "config.h"
-#include <gtk/gtkeventcontroller.h>
+#include "gtkeventcontroller.h"
+#include "gtkeventcontrollerprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"

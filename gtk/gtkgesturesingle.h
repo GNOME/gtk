@@ -39,19 +39,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureSingle GtkGestureSingle;
 typedef struct _GtkGestureSingleClass GtkGestureSingleClass;
 
-struct _GtkGestureSingle
-{
-  GtkGesture parent_instance;
-};
-
-struct _GtkGestureSingleClass
-{
-  GtkGestureClass parent_class;
-
-  /*< private >*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType       gtk_gesture_single_get_type       (void) G_GNUC_CONST;
 

@@ -31,7 +31,8 @@
  * gtk_gesture_drag_get_start_point().
  */
 #include "config.h"
-#include <gtk/gtkgesturedrag.h>
+#include "gtkgesturedrag.h"
+#include "gtkgesturedragprivate.h"
 
 typedef struct _GtkGestureDragPrivate GtkGestureDragPrivate;
 typedef struct _EventData EventData;

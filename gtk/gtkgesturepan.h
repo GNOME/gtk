@@ -38,23 +38,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGesturePan GtkGesturePan;
 typedef struct _GtkGesturePanClass GtkGesturePanClass;
 
-struct _GtkGesturePan
-{
-  GtkGestureDrag parent_instance;
-};
-
-struct _GtkGesturePanClass
-{
-  GtkGestureDragClass parent_class;
-
-  void (* pan) (GtkGesturePan *gesture,
-                GtkPanDirection direction,
-                gdouble         offset);
-
-  /*< private >*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType             gtk_gesture_pan_get_type        (void) G_GNUC_CONST;
 

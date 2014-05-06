@@ -39,21 +39,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureZoom GtkGestureZoom;
 typedef struct _GtkGestureZoomClass GtkGestureZoomClass;
 
-struct _GtkGestureZoom
-{
-  GtkGesture parent_instance;
-};
-
-struct _GtkGestureZoomClass
-{
-  GtkGestureClass parent_class;
-
-  void (* scale_changed) (GtkGestureZoom *gesture,
-                          gdouble         scale);
-  /*< private >*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType        gtk_gesture_zoom_get_type        (void) G_GNUC_CONST;
 

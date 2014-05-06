@@ -503,6 +503,7 @@ gtk_private_h_sources =		\
 	gtkcustompaperunixdialog.h \
 	gtkdialogprivate.h 	\
 	gtkentryprivate.h	\
+	gtkeventcontrollerprivate.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
 	gtkfilechooserprivate.h	\
@@ -512,6 +513,13 @@ gtk_private_h_sources =		\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
 	gtkgestureprivate.h	\
+	gtkgesturedragprivate.h	\
+	gtkgesturelongpressprivate.h	\
+	gtkgesturemultipressprivate.h	\
+	gtkgesturepanprivate.h	\
+	gtkgesturerotateprivate.h	\
+	gtkgestureswipeprivate.h	\
+	gtkgesturezoomprivate.h	\
 	gtkheaderbarprivate.h	\
 	gtkhslaprivate.h	\
 	gtkiconcache.h		\

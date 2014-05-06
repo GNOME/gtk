@@ -39,22 +39,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureRotate GtkGestureRotate;
 typedef struct _GtkGestureRotateClass GtkGestureRotateClass;
 
-struct _GtkGestureRotate
-{
-  GtkGesture parent_instance;
-};
-
-struct _GtkGestureRotateClass
-{
-  GtkGestureClass parent_class;
-
-  void (* angle_changed) (GtkGestureRotate *gesture,
-                          gdouble           angle,
-                          gdouble           delta);
-  /*< private >*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType        gtk_gesture_rotate_get_type        (void) G_GNUC_CONST;
 

@@ -38,24 +38,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureLongPress GtkGestureLongPress;
 typedef struct _GtkGestureLongPressClass GtkGestureLongPressClass;
 
-struct _GtkGestureLongPress
-{
-  GtkGestureSingle parent_instance;
-};
-
-struct _GtkGestureLongPressClass
-{
-  GtkGestureSingleClass parent_class;
-
-  void (* pressed)   (GtkGestureLongPress *gesture,
-                      gdouble              x,
-                      gdouble              y);
-  void (* cancelled) (GtkGestureLongPress *gesture);
-
-  /*< private >*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType        gtk_gesture_long_press_get_type   (void) G_GNUC_CONST;
 

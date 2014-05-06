@@ -35,7 +35,8 @@
  */
 
 #include "config.h"
-#include <gtk/gtkgesturesingle.h>
+#include "gtkgesturesingle.h"
+#include "gtkgesturesingleprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

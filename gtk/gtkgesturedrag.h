@@ -38,28 +38,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureDrag GtkGestureDrag;
 typedef struct _GtkGestureDragClass GtkGestureDragClass;
 
-struct _GtkGestureDrag
-{
-  GtkGestureSingle parent_instance;
-};
-
-struct _GtkGestureDragClass
-{
-  GtkGestureSingleClass parent_class;
-
-  void (* drag_begin)  (GtkGestureDrag *gesture,
-                        gdouble         start_x,
-                        gdouble         start_y);
-  void (* drag_update) (GtkGestureDrag *gesture,
-                        gdouble         offset_x,
-                        gdouble         offset_y);
-  void (* drag_end)    (GtkGestureDrag *gesture,
-                        gdouble         offset_x,
-                        gdouble         offset_y);
-  /*<private>*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType        gtk_gesture_drag_get_type          (void) G_GNUC_CONST;
 

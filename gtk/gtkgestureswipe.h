@@ -39,23 +39,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureSwipe GtkGestureSwipe;
 typedef struct _GtkGestureSwipeClass GtkGestureSwipeClass;
 
-struct _GtkGestureSwipe
-{
-  GtkGestureSingle parent_instance;
-};
-
-struct _GtkGestureSwipeClass
-{
-  GtkGestureSingleClass parent_class;
-
-  void (* swipe) (GtkGestureSwipe *gesture,
-                  gdouble          velocity_x,
-                  gdouble          velocity_y);
-
-  /*< private >*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType        gtk_gesture_swipe_get_type  (void) G_GNUC_CONST;
 

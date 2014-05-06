@@ -87,7 +87,8 @@
  */
 
 #include "config.h"
-#include <gtk/gtkgesture.h>
+#include "gtkgesture.h"
+#include "gtkgestureprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"

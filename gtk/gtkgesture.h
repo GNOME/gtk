@@ -39,35 +39,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGesture GtkGesture;
 typedef struct _GtkGestureClass GtkGestureClass;
 
-struct _GtkGesture
-{
-  GtkEventController parent_instance;
-};
-
-struct _GtkGestureClass
-{
-  GtkEventControllerClass parent_class;
-
-  gboolean (* check)  (GtkGesture       *gesture);
-
-  void     (* begin)  (GtkGesture       *gesture,
-                       GdkEventSequence *sequence);
-  void     (* update) (GtkGesture       *gesture,
-                       GdkEventSequence *sequence);
-  void     (* end)    (GtkGesture       *gesture,
-                       GdkEventSequence *sequence);
-
-  void     (* cancel) (GtkGesture       *gesture,
-                       GdkEventSequence *sequence);
-
-  void     (* sequence_state_changed) (GtkGesture            *gesture,
-                                       GdkEventSequence      *sequence,
-                                       GtkEventSequenceState  state);
-
-  /*< private >*/
-  gpointer padding[10];
-};
-
 GDK_AVAILABLE_IN_3_14
 GType       gtk_gesture_get_type             (void) G_GNUC_CONST;
 

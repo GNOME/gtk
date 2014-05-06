@@ -40,22 +40,6 @@ G_BEGIN_DECLS
 #define GTK_IS_EVENT_CONTROLLER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_EVENT_CONTROLLER))
 #define GTK_EVENT_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_EVENT_CONTROLLER, GtkEventControllerClass))
 
-struct _GtkEventController
-{
-  GObject parent_instance;
-};
-
-struct _GtkEventControllerClass
-{
-  GObjectClass parent_class;
-
-  gboolean (* handle_event) (GtkEventController *controller,
-                             const GdkEvent     *event);
-  void     (* reset)        (GtkEventController *controller);
-
-  /*<private>*/
-  gpointer padding[10];
-};
 
 GDK_AVAILABLE_IN_3_14
 GType        gtk_event_controller_get_type       (void) G_GNUC_CONST;
