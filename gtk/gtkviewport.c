@@ -1049,24 +1049,28 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          for_size -= border.top + border.bottom;
+          if (for_size >= 0)
+            for_size -= border.top + border.bottom;
           minimum += border.left + border.right;
         }
       else
         {
-          for_size -= border.left + border.right;
+          if (for_size >= 0)
+            for_size -= border.left + border.right;
           minimum += border.top + border.bottom;
         }
     }
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      for_size -= padding.top + padding.bottom;
+      if (for_size >= 0)
+        for_size -= padding.top + padding.bottom;
       minimum += padding.left + padding.right;
     }
   else
     {
-      for_size -= padding.left + padding.right;
+      if (for_size >= 0)
+        for_size -= padding.left + padding.right;
       minimum += padding.top + padding.bottom;
     }
 
