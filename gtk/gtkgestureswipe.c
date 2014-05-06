@@ -38,6 +38,7 @@
 #include "config.h"
 #include "gtkgestureswipe.h"
 #include "gtkgestureswipeprivate.h"
+#include "gtkgestureprivate.h"
 #include "gtkmarshalers.h"
 
 #define CAPTURE_THRESHOLD_MS 150
@@ -112,7 +113,7 @@ gtk_gesture_swipe_update (GtkGesture       *gesture,
   gdouble x, y;
 
   priv = gtk_gesture_swipe_get_instance_private (swipe);
-  gtk_gesture_get_last_update_time (gesture, sequence, &new.evtime);
+  _gtk_gesture_get_last_update_time (gesture, sequence, &new.evtime);
   gtk_gesture_get_point (gesture, sequence, &x, &y);
 
   new.point.x = x;
@@ -137,7 +138,7 @@ _gtk_gesture_swipe_calculate_velocity (GtkGestureSwipe *gesture,
   *velocity_x = *velocity_y = 0;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  gtk_gesture_get_last_update_time (GTK_GESTURE (gesture), sequence, &evtime);
+  _gtk_gesture_get_last_update_time (GTK_GESTURE (gesture), sequence, &evtime);
   _gtk_gesture_swipe_clear_backlog (gesture, evtime);
 
   if (priv->events->len == 0)

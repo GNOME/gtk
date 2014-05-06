@@ -7936,7 +7936,6 @@ gtk_gesture_detach
 
 <SUBSECTION>
 gtk_gesture_get_last_updated_sequence
-gtk_gesture_get_last_update_time
 gtk_gesture_get_last_event
 gtk_gesture_get_point
 gtk_gesture_get_bounding_box

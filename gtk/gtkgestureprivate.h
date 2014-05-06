@@ -66,6 +66,10 @@ gboolean _gtk_gesture_get_pointer_emulating_sequence
 gboolean _gtk_gesture_cancel_sequence        (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
 
+gboolean _gtk_gesture_get_last_update_time   (GtkGesture       *gesture,
+                                              GdkEventSequence *sequence,
+                                              guint32          *evtime);
+
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_PRIVATE_H__ */

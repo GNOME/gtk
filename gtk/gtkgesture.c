@@ -993,24 +993,10 @@ gtk_gesture_get_point (GtkGesture       *gesture,
   return TRUE;
 }
 
-/**
- * gtk_gesture_get_last_update_time:
- * @gesture: a #GtkGesture
- * @sequence: (allow-none): a #GdkEventSequence, or %NULL for pointer events
- * @evtime: (out) (allow-none): return location for last update time
- *
- * If @sequence is being interpreted by @gesture, this function
- * returns %TRUE and fills @evtime with the last event time it
- * received from that @sequence.
- *
- * Returns: %TRUE if @sequence is currently interpreted
- *
- * Since: 3.14
- **/
 gboolean
-gtk_gesture_get_last_update_time (GtkGesture       *gesture,
-                                  GdkEventSequence *sequence,
-                                  guint32          *evtime)
+_gtk_gesture_get_last_update_time (GtkGesture       *gesture,
+                                   GdkEventSequence *sequence,
+                                   guint32          *evtime)
 {
   GtkGesturePrivate *priv;
   PointData *data;

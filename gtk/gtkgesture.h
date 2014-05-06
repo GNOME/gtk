@@ -76,11 +76,6 @@ gboolean    gtk_gesture_get_point            (GtkGesture       *gesture,
                                               gdouble          *x,
                                               gdouble          *y);
 GDK_AVAILABLE_IN_3_14
-gboolean    gtk_gesture_get_last_update_time (GtkGesture       *gesture,
-                                              GdkEventSequence *sequence,
-                                              guint32          *evtime);
-
-GDK_AVAILABLE_IN_3_14
 gboolean    gtk_gesture_get_bounding_box     (GtkGesture       *gesture,
                                               GdkRectangle     *rect);
 GDK_AVAILABLE_IN_3_14
