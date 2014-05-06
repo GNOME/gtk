@@ -508,6 +508,7 @@ static void
 bloat_pad_startup (GApplication *application)
 {
   BloatPad *bloatpad = (BloatPad*) application;
+  GtkApplication *app = GTK_APPLICATION (application);
   GtkBuilder *builder;
   GMenu *menu;
   GMenuItem *item;
@@ -517,6 +518,19 @@ bloat_pad_startup (GApplication *application)
   GFile *file;
   gchar *data;
   gsize size;
+  gint i;
+  struct {
+    const gchar *action_and_target;
+    const gchar *accelerators[2];
+  } accels[] = {
+    { "app.new", { "<Primary>n", NULL } },
+    { "app.quit", { "<Primary>q", NULL } },
+    { "win.copy", { "<Primary>c", NULL } },
+    { "win.paste", { "<Primary>p", NULL } },
+    { "win.justify::left", { "<Primary>l", NULL } },
+    { "win.justify::center", { "<Primary>m", NULL } },
+    { "win.justify::right", { "<Primary>r", NULL } }
+  };
 
   G_APPLICATION_CLASS (bloat_pad_parent_class)
     ->startup (application);
@@ -606,15 +620,10 @@ bloat_pad_startup (GApplication *application)
                                "    </submenu>"
                                "  </menu>"
                                "</interface>", -1, NULL);
-  gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-  gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
-  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>n", "app.new", NULL);
-  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>q", "app.quit", NULL);
-  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>c", "win.copy", NULL);
-  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>p", "win.paste", NULL);
-  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>l", "win.justify", g_variant_new_string ("left"));
-  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>m", "win.justify", g_variant_new_string ("center"));
-  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>r", "win.justify", g_variant_new_string ("right"));
+  gtk_application_set_app_menu (app, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+  gtk_application_set_menubar (app, G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+  for (i = 0; i < G_N_ELEMENTS (accels); i++)
+    gtk_application_set_accels_for_action (app, accels[i].action_and_target, accels[i].accelerators);
 
   menu = G_MENU (gtk_builder_get_object (builder, "icon-menu"));
 
@@ -743,11 +752,12 @@ main (int argc, char **argv)
 {
   BloatPad *bloat_pad;
   int status;
+  const gchar *accels[] = { "F11", NULL };
 
   bloat_pad = bloat_pad_new ();
 
-  gtk_application_add_accelerator (GTK_APPLICATION (bloat_pad),
-                                   "F11", "win.fullscreen", NULL);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (bloat_pad),
+                                         "win.fullscreen", accels);
 
   status = g_application_run (G_APPLICATION (bloat_pad), argc, argv);
 
