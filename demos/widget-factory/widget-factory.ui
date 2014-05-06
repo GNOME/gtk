@@ -301,6 +301,50 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkBox" id="box223">
+                            <property name="visible">True</property>
+                            <style>
+                              <class name="linked"/>
+                            </style>
+                            <child>
+                              <object class="GtkEntry" id="entry24">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="invisible_char">•</property>
+                                <property name="text" translatable="yes">entry</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button224">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child>
+                                  <object class="GtkImage" id="button224img">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">window-close-symbolic</property>
+                                    <property name="icon-size">0</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkBox" id="box18">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -360,7 +404,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
@@ -653,7 +697,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                       </object>
