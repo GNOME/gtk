@@ -67,9 +67,6 @@ GDK_AVAILABLE_IN_3_14
 gboolean    gtk_gesture_handles_sequence     (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
 GDK_AVAILABLE_IN_3_14
-gboolean    gtk_gesture_cancel_sequence      (GtkGesture       *gesture,
-                                              GdkEventSequence *sequence);
-GDK_AVAILABLE_IN_3_14
 const GdkEvent *
             gtk_gesture_get_last_event       (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
@@ -96,9 +93,6 @@ gboolean    gtk_gesture_is_active            (GtkGesture       *gesture);
 
 GDK_AVAILABLE_IN_3_14
 gboolean    gtk_gesture_is_recognized        (GtkGesture       *gesture);
-
-GDK_AVAILABLE_IN_3_14
-gboolean    gtk_gesture_check                (GtkGesture       *gesture);
 
 GDK_AVAILABLE_IN_3_14
 GdkWindow * gtk_gesture_get_window           (GtkGesture       *gesture);

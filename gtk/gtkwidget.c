@@ -4290,8 +4290,7 @@ _gtk_widget_cancel_sequence (GtkWidget        *widget,
       if (!gtk_gesture_handles_sequence (gesture, seq))
         continue;
 
-      handled |=
-        gtk_gesture_cancel_sequence (gesture, seq);
+      handled |= _gtk_gesture_cancel_sequence (gesture, seq);
     }
 
   return handled;

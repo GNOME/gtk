@@ -539,7 +539,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
         g_signal_emit (gesture, signals[UPDATE], 0, sequence);
       break;
     case GDK_TOUCH_CANCEL:
-      gtk_gesture_cancel_sequence (gesture, sequence);
+      _gtk_gesture_cancel_sequence (gesture, sequence);
       break;
     default:
       /* Unhandled event */
@@ -1244,19 +1244,9 @@ gtk_gesture_handles_sequence (GtkGesture       *gesture,
   return TRUE;
 }
 
-/**
- * gtk_gesture_cancel_sequence:
- * @gesture: a #GtkGesture
- * @sequence: a #GdkEventSequence
- *
- * Cancels @sequence on @gesture, this emits #GtkGesture::cancel
- * and forgets the sequence altogether.
- *
- * Returns: #TRUE if the sequence was being handled by gesture
- **/
 gboolean
-gtk_gesture_cancel_sequence (GtkGesture       *gesture,
-                             GdkEventSequence *sequence)
+_gtk_gesture_cancel_sequence (GtkGesture       *gesture,
+                              GdkEventSequence *sequence)
 {
   GtkGesturePrivate *priv;
   PointData *data;
