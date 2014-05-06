@@ -176,7 +176,7 @@ stop_editing (GtkCellEditable *editable,
     {
       gboolean canceled;
 
-      g_object_get (editable, "editing_canceled", &canceled, NULL);
+      g_object_get (editable, "editing-canceled", &canceled, NULL);
       gtk_cell_renderer_stop_editing (renderer, canceled);
 
       if (canceled)
@@ -427,7 +427,7 @@ start_editing (GtkCellRenderer      *renderer,
   gtk_widget_override_font (GTK_WIDGET (editable), font_desc);
   pango_font_description_free (font_desc);
 
-  g_signal_connect(editable, "editing_done", G_CALLBACK (stop_editing), renderer);
+  g_signal_connect (editable, "editing-done", G_CALLBACK (stop_editing), renderer);
 
   return editable;
 }
