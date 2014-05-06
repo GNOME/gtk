@@ -1162,71 +1162,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="position">2</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="GtkBox" id="box22">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <object class="GtkExpander" id="expander1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <child>
-                                  <object class="GtkScrolledWindow" id="scrolledwindow3">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="shadow_type">in</property>
-                                    <property name="hscrollbar_policy">never</property>
-                                    <child>
-                                      <object class="GtkViewport" id="viewport1">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <child>
-                                          <object class="GtkLabel" id="label20">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="wrap">True</property>
-                                            <property name="wrap_mode">word</property>
-                                            <property name="label" translatable="yes">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Nullam fringilla, est ut feugiat ultrices, elit lacus ultricies nibh, id commodo tortor nisi id elit.
-Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-Morbi vel elit erat. Maecenas dignissim, dui et pharetra rutrum, tellus lectus rutrum mi, a convallis libero nisi quis tellus.
-Nulla facilisi. Nullam eleifend lobortis nisl, in porttitor tellus malesuada vitae.
-Aenean lacus tellus, pellentesque quis molestie quis, fringilla in arcu.
-Duis elementum, tellus sed tristique semper, metus metus accumsan augue, et porttitor augue orci a libero.
-Ut sed justo ac felis placerat laoreet sed id sem. Proin mattis tincidunt odio vitae tristique.
-Morbi massa libero, congue vitae scelerisque vel, ultricies vel nisl.
-Vestibulum in tortor diam, quis aliquet quam. Praesent ut justo neque, tempus rutrum est.
-Duis eu lectus quam. Vivamus eget metus a mauris molestie venenatis pulvinar eleifend nisi.
-Nulla facilisi. Pellentesque at dolor sit amet purus dapibus pulvinar molestie quis neque.
-Suspendisse feugiat quam quis dolor accumsan cursus. </property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label19">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">expander</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1926,10 +1861,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="orientation">vertical</property>
                                 <property name="adjustment">adjustment2</property>
+                                <property name="expand">False</property>
                               </object>
-                              <packing>
-                                <property name="expand">True</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="verticalspin2">
@@ -1937,10 +1870,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="sensitive">False</property>
                                 <property name="orientation">vertical</property>
                                 <property name="adjustment">adjustment2</property>
+                                <property name="expand">False</property>
                               </object>
-                              <packing>
-                                <property name="expand">True</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkGrid">
@@ -1976,93 +1907,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                     <property name="top-attach">1</property>
                                   </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkMenuButton">
-                                    <property name="visible">True</property>
-                                    <property name="menu-model">dinner_menu</property>
-                                    <property name="halign">center</property>
-                                    <property name="valign">center</property>
-                                    <child>
-                                      <object class="GtkImage">
-                                        <property name="visible">True</property>
-                                        <property name="icon-name">document-open-recent-symbolic</property>
-                                        <property name="icon-size">4</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkAspectFrame" id="panedframe1">
-                                <property name="visible">True</property>
-                                <property name="obey-child">False</property>
-                                <property name="ratio">1.0</property>
-                                <child>
-                                  <object class="GtkPaned">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">horizontal</property>
-                                    <child>
-                                      <object class="GtkLabel">
-                                        <property name="visible">True</property>
-                                        <property name="label">Left</property>
-                                        <style>
-                                          <class name="view"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel">
-                                        <property name="visible">True</property>
-                                        <property name="label">Right</property>
-                                        <style>
-                                          <class name="view"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkAspectFrame" id="panedframe2">
-                                <property name="visible">True</property>
-                                <property name="obey-child">False</property>
-                                <property name="ratio">1.0</property>
-                                <child>
-                                  <object class="GtkPaned">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <child>
-                                      <object class="GtkLabel">
-                                        <property name="visible">True</property>
-                                        <property name="label">Top</property>
-                                        <style>
-                                          <class name="view"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel">
-                                        <property name="visible">True</property>
-                                        <property name="label">Bottom</property>
-                                        <style>
-                                          <class name="view"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -2085,18 +1929,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkActionBar" id="actionbar1">
-                                    <property name="visible">True</property>
-                                    <child type="center">
-                                      <object class="GtkStackSwitcher" id="switcher">
-                                        <property name="visible">True</property>
-                                        <property name="stack">stack</property>
-                                        <property name="halign">center</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
                                   <object class="GtkStack" id="stack">
                                     <property name="visible">True</property>
                                     <property name="transition-type">crossfade</property>
@@ -2116,7 +1948,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                       </object>
                                       <packing>
                                         <property name="name">page1</property>
-                                        <property name="icon-name">document-open-recent-symbolic</property>
+                                        <property name="icon-name">preferences-desktop-locale-symbolic</property>
                                         <property name="title">News</property>
                                       </packing>
                                     </child>
@@ -2128,8 +1960,41 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                       </object>
                                       <packing>
                                         <property name="name">page2</property>
-                                        <property name="icon-name">system-shutdown-symbolic</property>
+                                        <property name="icon-name">folder-pictures-symbolic</property>
                                         <property name="title">Logo</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkActionBar" id="actionbar1">
+                                    <property name="visible">True</property>
+                                    <child type="center">
+                                      <object class="GtkStackSwitcher" id="switcher">
+                                        <property name="visible">True</property>
+                                        <property name="stack">stack</property>
+                                        <property name="halign">center</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuButton">
+                                        <property name="visible">True</property>
+                                        <property name="menu-model">dinner_menu</property>
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="icon-name">emblem-system-symbolic</property>
+                                            <property name="icon-size">4</property>
+                                          </object>
+                                        </child>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                      </object>
+                                      <packing>
+                                        <property name="pack_type">end</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -2676,6 +2541,72 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="orientation">horizontal</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="spacing">10</property>
+                                <property name="expand">True</property>
+                                <child>
+                                  <object class="GtkFrame" id="panedframe1">
+                                    <property name="visible">True</property>
+                                    <property name="expand">True</property>
+                                    <child>
+                                      <object class="GtkPaned">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label">Left</property>
+                                            <style>
+                                              <class name="view"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label">Right</property>
+                                            <style>
+                                              <class name="view"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkFrame" id="panedframe2">
+                                    <property name="visible">True</property>
+                                    <property name="expand">True</property>
+                                    <child>
+                                      <object class="GtkPaned">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label">Top</property>
+                                            <style>
+                                              <class name="view"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label">Bottom</property>
+                                            <style>
+                                              <class name="view"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -2693,15 +2624,76 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <object class="GtkBox" id="filler2">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">10</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkCalendar">
                             <property name="visible">True</property>
+                            <property name="expand">False</property>
+                            <property name="halign">center</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">horizontal</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkExpander" id="expander1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="expand">False</property>
+                            <child>
+                              <object class="GtkScrolledWindow" id="scrolledwindow3">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="shadow_type">in</property>
+                                <property name="hscrollbar_policy">automatic</property>
+                                <property name="height_request">200</property>
+                                <child>
+                                  <object class="GtkViewport" id="viewport1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label20">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="wrap">True</property>
+                                        <property name="wrap_mode">word</property>
+                                        <property name="expand">False</property>
+                                        <property name="label" translatable="yes">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Nullam fringilla, est ut feugiat ultrices, elit lacus ultricies nibh, id commodo tortor nisi id elit.
+    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+    Morbi vel elit erat. Maecenas dignissim, dui et pharetra rutrum, tellus lectus rutrum mi, a convallis libero nisi quis tellus.
+    Nulla facilisi. Nullam eleifend lobortis nisl, in porttitor tellus malesuada vitae.
+    Aenean lacus tellus, pellentesque quis molestie quis, fringilla in arcu.
+    Duis elementum, tellus sed tristique semper, metus metus accumsan augue, et porttitor augue orci a libero.
+    Ut sed justo ac felis placerat laoreet sed id sem. Proin mattis tincidunt odio vitae tristique.
+    Morbi massa libero, congue vitae scelerisque vel, ultricies vel nisl.
+    Vestibulum in tortor diam, quis aliquet quam. Praesent ut justo neque, tempus rutrum est.
+    Duis eu lectus quam. Vivamus eget metus a mauris molestie venenatis pulvinar eleifend nisi.
+    Nulla facilisi. Pellentesque at dolor sit amet purus dapibus pulvinar molestie quis neque.
+    Suspendisse feugiat quam quis dolor accumsan cursus. </property>
+                                        <style>
+                                          <class name="view"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label19">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">expander</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
