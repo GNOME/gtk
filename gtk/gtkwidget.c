@@ -4220,18 +4220,23 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
           !gtk_gesture_handles_sequence (gesture, seq))
         seq = NULL;
 
-      /* If a group is provided, ensure only gestures pertaining to the group
-       * get a "claimed" state, all other gestures must deny the sequence.
-       */
-      if (group && gesture_state == GTK_EVENT_SEQUENCE_CLAIMED &&
-          !g_list_find (group, data->controller))
-        gesture_state = GTK_EVENT_SEQUENCE_DENIED;
+      if (group && !g_list_find (group, data->controller))
+        {
+          /* If a group is provided, ensure only gestures pertaining to the group
+           * get a "claimed" state, all other claiming gestures must deny the sequence.
+           */
+          if (gesture_state == GTK_EVENT_SEQUENCE_CLAIMED &&
+              gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
+            gesture_state = GTK_EVENT_SEQUENCE_DENIED;
+          else
+            continue;
+        }
 
       g_signal_handler_block (data->controller, data->sequence_state_changed_id);
 
       sequence_handled =
         _gtk_gesture_handled_sequence_press (gesture, seq);
-      retval = gtk_gesture_set_sequence_state (gesture, seq, state);
+      retval = gtk_gesture_set_sequence_state (gesture, seq, gesture_state);
       handled |= retval;
 
       g_signal_handler_unblock (data->controller, data->sequence_state_changed_id);
