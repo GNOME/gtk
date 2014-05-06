@@ -478,6 +478,18 @@ image_effect_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+icon_style_parse (GtkCssStyleProperty *property,
+		  GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_icon_style_value_try_parse (parser);
+
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
 bindings_value_parse_one (GtkCssParser *parser)
 {
   char *name;
@@ -981,6 +993,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
+  gtk_css_style_property_register        ("-gtk-icon-style",
+                                          GTK_CSS_PROPERTY_ICON_STYLE,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_NO_RESIZE,
+                                          icon_style_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_icon_style_value_new (GTK_CSS_ICON_STYLE_REQUESTED));
   gtk_css_style_property_register        ("-gtk-icon-transform",
                                           GTK_CSS_PROPERTY_ICON_TRANSFORM,
                                           G_TYPE_NONE,

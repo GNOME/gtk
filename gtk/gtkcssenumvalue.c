@@ -706,3 +706,57 @@ _gtk_css_image_effect_value_get (const GtkCssValue *value)
 
   return value->value;
 }
+
+/* GtkCssIconStyle */
+
+static const GtkCssValueClass GTK_CSS_VALUE_ICON_STYLE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue icon_style_values[] = {
+  { &GTK_CSS_VALUE_ICON_STYLE, 1, GTK_CSS_ICON_STYLE_REQUESTED, "requested" },
+  { &GTK_CSS_VALUE_ICON_STYLE, 1, GTK_CSS_ICON_STYLE_REGULAR, "regular" },
+  { &GTK_CSS_VALUE_ICON_STYLE, 1, GTK_CSS_ICON_STYLE_SYMBOLIC, "symbolic" }
+};
+
+GtkCssValue *
+_gtk_css_icon_style_value_new (GtkCssIconStyle icon_style)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (icon_style_values); i++)
+    {
+      if (icon_style_values[i].value == icon_style)
+        return _gtk_css_value_ref (&icon_style_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_icon_style_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (icon_style_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, icon_style_values[i].name, TRUE))
+        return _gtk_css_value_ref (&icon_style_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssIconStyle
+_gtk_css_icon_style_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_ICON_STYLE, GTK_CSS_ICON_STYLE_REQUESTED);
+
+  return value->value;
+}

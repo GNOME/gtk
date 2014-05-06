@@ -68,6 +68,10 @@ GtkCssValue *     _gtk_css_image_effect_value_new       (GtkCssImageEffect  imag
 GtkCssValue *     _gtk_css_image_effect_value_try_parse (GtkCssParser      *parser);
 GtkCssImageEffect _gtk_css_image_effect_value_get       (const GtkCssValue *value);
 
+GtkCssValue *   _gtk_css_icon_style_value_new         (GtkCssIconStyle    icon_style);
+GtkCssValue *   _gtk_css_icon_style_value_try_parse   (GtkCssParser      *parser);
+GtkCssIconStyle _gtk_css_icon_style_value_get         (const GtkCssValue *value);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_ENUM_VALUE_PRIVATE_H__ */
