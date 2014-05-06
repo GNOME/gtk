@@ -3923,8 +3923,8 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
           const GdkEvent *event;
           guint button;
 
-          sequence = gtk_gesture_get_last_updated_sequence (site->drag_gesture);
-          event = gtk_gesture_get_last_event (GTK_GESTURE (site->drag_gesture), sequence);
+          sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (site->drag_gesture));
+          event = gtk_gesture_get_last_event (site->drag_gesture, sequence);
           button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (site->drag_gesture));
 
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (site->drag_gesture));
