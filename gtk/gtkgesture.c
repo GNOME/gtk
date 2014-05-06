@@ -653,6 +653,11 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * #FALSE), or the number of touch sequences became higher or lower than
    * #GtkGesture:n-points.
    *
+   * Note: @sequence might not pertain to the group of sequences that were
+   * previously triggering recognition on @gesture (ie. a just pressed touch
+   * sequence that exceeds #GtkGesture:n-points). This situation may be detected
+   * by checking through gtk_gesture_handles_sequence().
+   *
    * Since: 3.14
    */
   signals[END] =
