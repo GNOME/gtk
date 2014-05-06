@@ -110,15 +110,18 @@ static gboolean
 _gtk_gesture_rotate_check_emit (GtkGestureRotate *gesture)
 {
   GtkGestureRotatePrivate *priv;
-  gdouble angle;
+  gdouble angle, delta;
 
   if (!_gtk_gesture_rotate_get_angle (gesture, &angle))
     return FALSE;
 
   priv = gtk_gesture_rotate_get_instance_private (gesture);
+  delta = angle - priv->initial_angle;
 
-  g_signal_emit (gesture, signals[ANGLE_CHANGED], 0,
-                 angle, angle - priv->initial_angle);
+  if (delta < 0)
+    delta += 2 * G_PI;
+
+  g_signal_emit (gesture, signals[ANGLE_CHANGED], 0, angle, delta);
   return TRUE;
 }
 
