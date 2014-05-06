@@ -64,7 +64,7 @@ enum {
 
 static guint signals[N_SIGNALS] = { 0 };
 
-G_DEFINE_TYPE (GtkGesturePan, gtk_gesture_pan, GTK_TYPE_GESTURE_DRAG)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkGesturePan, gtk_gesture_pan, GTK_TYPE_GESTURE_DRAG)
 
 static void
 gtk_gesture_pan_get_property (GObject    *object,
@@ -138,7 +138,7 @@ guess_direction (GtkGesturePan   *gesture,
   abs_x = ABS (offset_x);
   abs_y = ABS (offset_y);
 
-#define FACTOR 3
+#define FACTOR 2
   if (abs_x > abs_y * FACTOR)
     direction_from_offset (offset_x, offset_y,
                            GTK_PAN_ORIENTATION_HORIZONTAL, direction);
