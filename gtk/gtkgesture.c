@@ -845,20 +845,21 @@ gboolean
 gtk_gesture_set_state (GtkGesture            *gesture,
                        GtkEventSequenceState  state)
 {
-  GdkEventSequence *sequence;
   gboolean handled = FALSE;
   GtkGesturePrivate *priv;
-  GHashTableIter iter;
+  GList *sequences, *l;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
   g_return_val_if_fail (state >= GTK_EVENT_SEQUENCE_NONE &&
                         state <= GTK_EVENT_SEQUENCE_DENIED, FALSE);
 
   priv = gtk_gesture_get_instance_private (gesture);
-  g_hash_table_iter_init (&iter, priv->points);
+  sequences = g_hash_table_get_keys (priv->points);
 
-  while (g_hash_table_iter_next (&iter, (gpointer*) &sequence, NULL))
-    handled |= gtk_gesture_set_sequence_state (gesture, sequence, state);
+  for (l = sequences; l; l = l->next)
+    handled |= gtk_gesture_set_sequence_state (gesture, l->data, state);
+
+  g_list_free (sequences);
 
   return handled;
 }
