@@ -20,6 +20,8 @@
  * THE SOFTWARE.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
 #include "classes-list.h"
 
 enum
@@ -99,18 +101,18 @@ add_clicked (GtkButton               *button,
 {
   GtkWidget *dialog, *content_area, *entry;
 
-  dialog = gtk_dialog_new_with_buttons ("New class",
+  dialog = gtk_dialog_new_with_buttons (_("New class"),
                                         GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (cl))),
                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
-                                         "_OK", GTK_RESPONSE_OK,
-                                         "Cancel", GTK_RESPONSE_CANCEL,
+                                         _("_OK"), GTK_RESPONSE_OK,
+                                         _("Cancel"), GTK_RESPONSE_CANCEL,
                                          NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   entry = g_object_new (GTK_TYPE_ENTRY,
                         "visible", TRUE,
                         "margin", 5,
-                        "placeholder-text", "Class name",
+                        "placeholder-text", _("Class name"),
                         "activates-default", TRUE,
                         NULL);
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));

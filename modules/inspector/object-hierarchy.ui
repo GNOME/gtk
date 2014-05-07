@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="gtk30">
   <object class="GtkTreeStore" id="model">
     <columns>
       <column type="gchararray"/>
@@ -17,7 +17,7 @@
             <property name="model">model</property>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="title">Object Hierarchy</property>
+                <property name="title" translatable="yes">Object Hierarchy</property>
                 <child>
                   <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>

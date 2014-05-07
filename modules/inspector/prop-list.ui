@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="gtk30">
   <object class="GtkListStore" id="model">
     <columns>
       <column type="gchararray"/>
@@ -15,7 +15,7 @@
     <property name="tooltip-column">4</property>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Property</property>
+        <property name="title" translatable="yes">Property</property>
         <property name="resizable">True</property>
         <property name="sort-order">ascending</property>
         <property name="sort-column-id">0</property>
@@ -32,7 +32,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Value</property>
+        <property name="title" translatable="yes">Value</property>
         <property name="resizable">True</property>
         <child>
           <object class="GtkInspectorPropertyCellRenderer" id="value_renderer">
@@ -50,7 +50,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Defined At</property>
+        <property name="title" translatable="yes">Defined At</property>
         <child>
           <object class="GtkCellRendererText">
             <property name="scale">0.8</property>

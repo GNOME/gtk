@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="gtk30">
   <object class="GtkListStore" id="model">
     <columns>
       <column type="gboolean"/>
@@ -18,7 +18,7 @@
           <object class="GtkToolButton">
             <property name="visible">True</property>
             <property name="icon-name">list-add</property>
-            <property name="tooltip-text">Add a class</property>
+            <property name="tooltip-text" translatable="yes">Add a class</property>
             <signal name="clicked" handler="add_clicked"/>
           </object>
         </child>
@@ -26,7 +26,7 @@
           <object class="GtkToolButton">
             <property name="visible">True</property>
             <property name="icon-name">document-revert</property>
-            <property name="tooltip-text">Restore defaults for this widget</property>
+            <property name="tooltip-text" translatable="yes">Restore defaults for this widget</property>
             <signal name="clicked" handler="restore_defaults_clicked"/>
           </object>
         </child>
@@ -42,7 +42,7 @@
             <property name="model">model</property>
             <child>
               <object class="GtkTreeViewColumn" id="column">
-                <property name="title">Name</property>
+                <property name="title" translatable="yes">Name</property>
                 <child>
                   <object class="GtkCellRendererToggle">
                     <signal name="toggled" handler="enabled_toggled"/>

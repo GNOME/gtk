@@ -20,6 +20,8 @@
  * THE SOFTWARE.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
 #include "css-editor.h"
 
 #define GTK_INSPECTOR_CSS_EDITOR_TEXT "inspector-css-editor-text"
@@ -60,28 +62,30 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssEditor, gtk_inspector_css_editor, GTK
 static void
 set_initial_text (GtkInspectorCssEditor *editor)
 {
-  const gchar *initial_text_global =
-    "/*\n"
-    "You can type here any CSS rule recognized by GTK+.\n"
-    "You can temporarily disable this custom CSS by clicking on the \"Pause\" button above.\n\n"
-    "Changes are applied instantly and globally, for the whole application.\n"
-    "*/\n\n";
-  const gchar *initial_text_widget =
-    "/*\n"
-    "You can type here any CSS rule recognized by GTK+.\n"
-    "You can temporarily disable this custom CSS by clicking on the \"Pause\" button above.\n\n"
-    "Changes are applied instantly, only for this selected widget.\n"
-    "*/\n\n";
   const gchar *text = NULL;
 
   if (editor->priv->selected_context)
     text = g_object_get_data (G_OBJECT (editor->priv->selected_context), GTK_INSPECTOR_CSS_EDITOR_TEXT);
   if (text)
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), text, -1);
-  else if (editor->priv->global)
-    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), initial_text_global, -1);
   else
-    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), initial_text_widget, -1);
+    {
+      gchar *initial_text;
+      if (editor->priv->global)
+        initial_text = g_strconcat ("/*\n",
+                                    _("You can type here any CSS rule recognized by GTK+."), "\n",
+                                    _("You can temporarily disable this custom CSS by clicking on the \"Pause\" button above."), "\n\n",
+                                    _("Changes are applied instantly and globally, for the whole application."), "\n",
+                                    "*/\n\n", NULL);
+      else
+        initial_text = g_strconcat ("/*\n",
+                                    _("You can type here any CSS rule recognized by GTK+."), "\n",
+                                    _("You can temporarily disable this custom CSS by clicking on the \"Pause\" button above."), "\n\n",
+                                    _("Changes are applied instantly, only for this selected widget."), "\n",
+                                    "*/\n\n", NULL);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (editor->priv->text), initial_text, -1);
+      g_free (initial_text);
+    }
 }
 
 static void

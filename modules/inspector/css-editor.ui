@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="gtk30">
   <object class="GtkTextTagTable" id="tags">
     <child type="tag">
       <object class="GtkTextTag">
@@ -26,7 +26,7 @@
           <object class="GtkToggleToolButton" id="disable_button">
             <property name="visible">True</property>
             <property name="icon-name">media-playback-pause</property>
-            <property name="tooltip-text">Disable this custom CSS</property>
+            <property name="tooltip-text" translatable="yes">Disable this custom CSS</property>
             <signal name="toggled" handler="disable_toggled"/>
           </object>
         </child>

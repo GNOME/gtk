@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="gtk30">
   <object class="GtkImage" id="update_image">
     <property name="visible">True</property>
     <property name="icon-name">view-refresh</property>
@@ -15,7 +15,7 @@
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
-        <property name="label">Send Widget to Shell</property>
+        <property name="label" translatable="yes">Send Widget to Shell</property>
         <signal name="activate" handler="on_send_widget_to_shell_activate"/>
       </object>
     </child>
@@ -37,7 +37,7 @@
               <object class="GtkButton">
                 <property name="visible">True</property>
                 <property name="image">inspect_image</property>
-                <property name="tooltip-text">Inspect</property>
+                <property name="tooltip-text" translatable="yes">Inspect</property>
                 <signal name="clicked" handler="on_inspect"/>
               </object>
             </child>
@@ -45,7 +45,7 @@
               <object class="GtkToggleButton">
                 <property name="visible">True</property>
                 <property name="image">update_image</property>
-                <property name="tooltip-text">Show Graphic Updates</property>
+                <property name="tooltip-text" translatable="yes">Show Graphic Updates</property>
                 <signal name="toggled" handler="on_graphic_updates_toggled"/>
               </object>
             </child>
@@ -135,7 +135,7 @@
                     <child type="tab">
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="label">Properties</property>
+                        <property name="label" translatable="yes">Properties</property>
                       </object>
                     </child> 
                     <child>
@@ -156,7 +156,7 @@
                     <child type="tab">
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="label">Child Properties</property>
+                        <property name="label" translatable="yes">Child Properties</property>
                       </object>
                     </child> 
                     <child>
@@ -167,7 +167,7 @@
                     <child type="tab">
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="label">Hierarchy</property>
+                        <property name="label" translatable="yes">Hierarchy</property>
                       </object>
                     </child> 
                     <child>
@@ -178,7 +178,7 @@
                     <child type="tab">
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="label">CSS Classes</property>
+                        <property name="label" translatable="yes">CSS Classes</property>
                       </object>
                     </child> 
                     <child>
@@ -190,7 +190,7 @@
                     <child type="tab">
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="label">Custom CSS</property>
+                        <property name="label" translatable="yes">Custom CSS</property>
                       </object>
                     </child> 
                   </object>
@@ -206,7 +206,7 @@
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="label">Widget Tree</property>
+            <property name="label" translatable="yes">Widget Tree</property>
           </object>
         </child>
         <child>
@@ -217,7 +217,7 @@
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="label">Themes</property>
+            <property name="label" translatable="yes">Themes</property>
           </object>
         </child>
         <child>
@@ -229,7 +229,7 @@
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="label">Custom CSS</property>
+            <property name="label" translatable="yes">Custom CSS</property>
           </object>
         </child>
       </object>

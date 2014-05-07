@@ -6,7 +6,7 @@ resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --gener
 resources.h: inspector.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/inspector.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name gtk_inspector --generate-header --manual-register
-resources.c: inspector.gresource.xml $(resource_files)
+resources.c: inspector.gresource.xml $(resource_files) $(template_headers)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/inspector.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name gtk_inspector --generate-source --manual-register
 
@@ -63,7 +63,29 @@ libgtkinspector_la_LIBADD = \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
 
-EXTRA_DIST= \
+templates = \ 
+	button-path.ui \
+	classes-list.ui \
+	css-editor.ui \
+	object-hierarchy.ui \
+	prop-list.ui \
+	themes.ui \
+	widget-tree.ui \
+	window.ui
+
+template_headers = $(templates:.ui=.ui.h)
+
+extract_strings = $(top_builddir)/gtk/extract-strings$(BUILD_EXEEXT)
+
+%.ui.h: %.ui $(extract_strings)
+	$(AM_V_GEN) $(extract_strings) $< > $@
+
+distclean-local:
+	if test $(srcdir) != .; then \
+	  rm -f $(template_headers); \
+	fi
+
+EXTRA_DIST=
 	$(resource_files)
 
 -include $(top_srcdir)/git.mk

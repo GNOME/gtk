@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="gtk30">
   <object class="GtkTreeStore" id="model">
     <columns>
       <column type="gpointer"/>
@@ -23,7 +23,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Widget</property>
+        <property name="title" translatable="yes">Widget</property>
         <property name="resizable">True</property>
         <child>
           <object class="GtkCellRendererText">
@@ -38,7 +38,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Name</property>
+        <property name="title" translatable="yes">Name</property>
         <property name="resizable">True</property>
         <child>
           <object class="GtkCellRendererText">
@@ -53,7 +53,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Realized</property>
+        <property name="title" translatable="yes">Realized</property>
         <child>
           <object class="GtkCellRendererToggle">
             <property name="activatable">True</property>
@@ -67,7 +67,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Mapped</property>
+        <property name="title" translatable="yes">Mapped</property>
         <child>
           <object class="GtkCellRendererToggle">
             <property name="activatable">True</property>
@@ -81,7 +81,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Visible</property>
+        <property name="title" translatable="yes">Visible</property>
         <child>
           <object class="GtkCellRendererToggle">
             <property name="activatable">True</property>
@@ -95,7 +95,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title">Address</property>
+        <property name="title" translatable="yes">Address</property>
         <property name="resizable">True</property>
         <child>
           <object class="GtkCellRendererText">

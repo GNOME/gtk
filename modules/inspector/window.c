@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
 #include <stdlib.h>
 #include "window.h"
 #include "prop-list.h"
@@ -119,7 +121,7 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
 
   gtk_window_group_add_window (gtk_window_group_new (), GTK_WINDOW (iw));
 
-  title = g_strdup_printf ("GTK+ Inspector — %s", g_get_application_name ());
+  title = g_strdup_printf (_("GTK+ Inspector — %s"), g_get_application_name ());
   gtk_window_set_title (GTK_WINDOW (iw), title);
   g_free (title);
 
