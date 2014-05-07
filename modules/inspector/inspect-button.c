@@ -292,18 +292,6 @@ on_inspect (GtkWidget          *button,
   gtk_grab_add (GTK_WIDGET (button));
 }
 
-GtkWidget *
-gtk_inspector_inspect_button_new (GtkInspectorWindow *iw)
-{
-  GtkWidget *button;
-
-  button = gtk_button_new_from_icon_name ("edit-find", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_tooltip_text (button, _("Inspect"));
-  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (on_inspect), iw);
-
-  return button;
-}
-
 static gboolean
 draw_flash (GtkWidget          *widget,
             cairo_t            *cr,

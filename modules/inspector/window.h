@@ -74,8 +74,6 @@ GtkWidget *gtk_inspector_window_new         (void);
 void       gtk_inspector_flash_widget       (GtkInspectorWindow *iw,
                                              GtkWidget      *widget);
 
-GtkWidget *gtk_inspector_inspect_button_new (GtkInspectorWindow *iw);
-
 G_END_DECLS
 
 
