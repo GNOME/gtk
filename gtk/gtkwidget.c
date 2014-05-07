@@ -7459,7 +7459,7 @@ static gint
 gtk_widget_event_internal (GtkWidget *widget,
 			   GdkEvent  *event)
 {
-  gboolean return_val = FALSE;
+  gboolean return_val = FALSE, handled;
 
   /* We check only once for is-still-visible; if someone
    * hides the window in on of the signals on the widget,
@@ -7472,8 +7472,8 @@ gtk_widget_event_internal (GtkWidget *widget,
   g_object_ref (widget);
 
   return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
-  g_signal_emit (widget, widget_signals[EVENT], 0, event, &return_val);
-  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
+  g_signal_emit (widget, widget_signals[EVENT], 0, event, &handled);
+  return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
     {
       gint signal_num;
@@ -7575,7 +7575,10 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	}
       if (signal_num != -1)
-	g_signal_emit (widget, widget_signals[signal_num], 0, event, &return_val);
+        {
+	  g_signal_emit (widget, widget_signals[signal_num], 0, event, &handled);
+          return_val |= handled;
+        }
     }
   if (WIDGET_REALIZED_FOR_EVENT (widget, event))
     g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
