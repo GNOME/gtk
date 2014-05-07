@@ -63,8 +63,8 @@
  */
 
 #define MIN_HORIZONTAL_BAR_WIDTH   150
-#define MIN_HORIZONTAL_BAR_HEIGHT  20
-#define MIN_VERTICAL_BAR_WIDTH     22
+#define MIN_HORIZONTAL_BAR_HEIGHT  6
+#define MIN_VERTICAL_BAR_WIDTH     7
 #define MIN_VERTICAL_BAR_HEIGHT    80
 
 
@@ -728,6 +728,8 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
                                  cairo_t        *cr,
                                  GtkOrientation  orientation,
                                  gboolean        inverted,
+                                 int             x,
+                                 int             y,
                                  int             width,
                                  int             height)
 {
@@ -744,13 +746,13 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       gtk_progress_bar_get_activity (pbar, orientation, &area.x, &area.width);
-      area.y = padding.top;
+      area.y = y + padding.top;
       area.height = height - padding.top - padding.bottom;
     }
   else
     {
       gtk_progress_bar_get_activity (pbar, orientation, &area.y, &area.height);
-      area.x = padding.left;
+      area.x = x + padding.left;
       area.width = width - padding.left - padding.right;
     }
 
@@ -769,6 +771,8 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
                                    gint            amount,
                                    GtkOrientation  orientation,
                                    gboolean        inverted,
+                                   int             x,
+                                   int             y,
                                    int             width,
                                    int             height)
 {
@@ -789,10 +793,10 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
     {
       area.width = amount;
       area.height = height - padding.top - padding.bottom;
-      area.y = padding.top;
+      area.y = y + padding.top;
 
       if (!inverted)
-        area.x = padding.left;
+        area.x = x + padding.left;
       else
         area.x = width - amount - padding.right;
     }
@@ -800,10 +804,10 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
     {
       area.width = width - padding.left - padding.right;
       area.height = amount;
-      area.x = padding.left;
+      area.x = x + padding.left;
 
       if (!inverted)
-        area.y = padding.top;
+        area.y = y + padding.top;
       else
         area.y = height - amount - padding.bottom;
     }
@@ -839,7 +843,7 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
   PangoRectangle logical_rect;
   GdkRectangle prelight_clip, start_clip, end_clip;
   gfloat text_xalign = 0.5;
-  gfloat text_yalign = 0.5;
+  gfloat text_yalign = 0.0;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
@@ -967,6 +971,7 @@ gtk_progress_bar_draw (GtkWidget      *widget,
   GtkStateFlags state;
   GtkBorder padding;
   int width, height;
+  int bar_width, bar_height;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
@@ -982,11 +987,22 @@ gtk_progress_bar_draw (GtkWidget      *widget,
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      bar_height = MIN_HORIZONTAL_BAR_HEIGHT;
+      bar_width = width;
+    }
+  else
+    {
+      bar_width = MIN_VERTICAL_BAR_WIDTH;
+      bar_height = height;
+    }
+
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 
-  gtk_render_background (context, cr, 0, 0, width, height);
-  gtk_render_frame (context, cr, 0, 0, width, height);
+  gtk_render_background (context, cr, width - bar_width, height - bar_height, bar_width, bar_height);
+  gtk_render_frame (context, cr, width - bar_width, height - bar_height, bar_width, bar_height);
 
   gtk_style_context_restore (context);
 
@@ -994,7 +1010,8 @@ gtk_progress_bar_draw (GtkWidget      *widget,
     {
       gtk_progress_bar_paint_activity (pbar, cr,
                                        orientation, inverted,
-                                       width, height);
+                                       width - bar_width, height - bar_height,
+                                       bar_width, bar_height);
 
       if (priv->show_text)
         {
@@ -1014,13 +1031,15 @@ gtk_progress_bar_draw (GtkWidget      *widget,
       gint space;
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        space = width - padding.left - padding.right;
+        space = bar_width - padding.left - padding.right;
       else
-        space = height - padding.top - padding.bottom;
+        space = bar_height - padding.top - padding.bottom;
 
       amount = space * gtk_progress_bar_get_fraction (pbar);
 
-      gtk_progress_bar_paint_continuous (pbar, cr, amount, orientation, inverted, width, height);
+      gtk_progress_bar_paint_continuous (pbar, cr, amount, orientation, inverted,
+                                         width - bar_width, height - bar_height,
+                                         bar_width, bar_height);
 
       if (priv->show_text)
         gtk_progress_bar_paint_text (pbar, cr, -1, amount, orientation, inverted, width, height);
