@@ -2999,7 +2999,6 @@ get_theme_name (GtkSettings  *settings,
         *theme_variant = g_strdup (p);
       }
 
-g_print ("theme: %s variant: %s\n", *theme_name, *theme_variant);
       return;
     }
 
