@@ -37,19 +37,6 @@
 
 G_DEFINE_TYPE (ParasiteWindow, parasite_window, GTK_TYPE_WINDOW)
 
-static void
-delete_window (GtkWidget *widget)
-{
-  GApplication *app = g_application_get_default ();
-
-  gtk_widget_hide (widget);
-
-  if (app)
-    g_application_quit (app);
-  else
-    exit (0);
-}
-
 extern void on_inspect (GtkWidget *button, ParasiteWindow *pw);
 
 static void
@@ -161,7 +148,6 @@ parasite_window_class_init (ParasiteWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, ParasiteWindow, python_shell);
   gtk_widget_class_bind_template_child (widget_class, ParasiteWindow, widget_popup);
 
-  gtk_widget_class_bind_template_callback (widget_class, delete_window);
   gtk_widget_class_bind_template_callback (widget_class, on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_graphic_updates_toggled);
   gtk_widget_class_bind_template_callback (widget_class, on_widget_tree_selection_changed);
@@ -171,16 +157,6 @@ parasite_window_class_init (ParasiteWindowClass *klass)
 GtkWidget *
 parasite_window_new (void)
 {
-  g_type_ensure (PARASITE_TYPE_THEMES);
-  g_type_ensure (PARASITE_TYPE_CSS_EDITOR);
-  g_type_ensure (PARASITE_TYPE_BUTTON_PATH);
-  g_type_ensure (PARASITE_TYPE_WIDGET_TREE);
-  g_type_ensure (PARASITE_TYPE_PROP_LIST);
-  g_type_ensure (PARASITE_TYPE_OBJECT_HIERARCHY);
-  g_type_ensure (PARASITE_TYPE_CLASSES_LIST);
-  g_type_ensure (PARASITE_TYPE_PYTHON_SHELL);
-  g_type_ensure (PARASITE_TYPE_PROPERTY_CELL_RENDERER);
-
   return GTK_WIDGET (g_object_new (PARASITE_TYPE_WINDOW, NULL));
 }
 

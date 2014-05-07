@@ -22,10 +22,18 @@
  */
 #include <glib.h>
 
-#include "window.h"
+#include "button-path.h"
+#include "classes-list.h"
+#include "css-editor.h"
+#include "object-hierarchy.h"
+#include "property-cell-renderer.h"
+#include "prop-list.h"
 #include "python-hooks.h"
+#include "python-shell.h"
 #include "resources.h"
-
+#include "themes.h"
+#include "widget-tree.h"
+#include "window.h"
 
 void
 gtk_module_init (gint *argc, gchar ***argv)
@@ -36,7 +44,17 @@ gtk_module_init (gint *argc, gchar ***argv)
 
   parasite_register_resource ();
 
-  gtk_window_present (GTK_WINDOW (parasite_window_new ()));
+  g_type_ensure (PARASITE_TYPE_THEMES);
+  g_type_ensure (PARASITE_TYPE_CSS_EDITOR);
+  g_type_ensure (PARASITE_TYPE_BUTTON_PATH);
+  g_type_ensure (PARASITE_TYPE_WIDGET_TREE);
+  g_type_ensure (PARASITE_TYPE_PROP_LIST);
+  g_type_ensure (PARASITE_TYPE_OBJECT_HIERARCHY);
+  g_type_ensure (PARASITE_TYPE_CLASSES_LIST);
+  g_type_ensure (PARASITE_TYPE_PYTHON_SHELL);
+  g_type_ensure (PARASITE_TYPE_PROPERTY_CELL_RENDERER);
+  g_type_ensure (PARASITE_TYPE_WINDOW);
 }
+
 
 // vim: set et sw=2 ts=2:
