@@ -105,8 +105,8 @@ on_send_widget_to_shell_activate (GtkWidget          *menuitem,
 
   str = g_strdup_printf ("gtk_inspector.gobj(%p)", object);
   gtk_inspector_python_shell_append_text (GTK_INSPECTOR_PYTHON_SHELL (iw->python_shell),
-                                     str,
-                                     NULL);
+                                          str,
+                                          NULL);
 
   g_free (str);
   gtk_inspector_python_shell_focus (GTK_INSPECTOR_PYTHON_SHELL (iw->python_shell));
@@ -134,9 +134,45 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
 }
 
 static void
+gtk_inspector_window_select_initially (GtkInspectorWindow *iw)
+{
+  GList *toplevels, *l;
+  GtkWidget *widget;
+
+  toplevels = gtk_window_list_toplevels ();
+  widget = NULL;
+  for (l = toplevels; l; l = l->next)
+    {
+      if (gtk_widget_get_mapped (GTK_WIDGET (l->data)) &&
+          GTK_IS_WINDOW (l->data) &&
+          !GTK_INSPECTOR_IS_WINDOW (l->data))
+        {
+          widget = l->data;
+          break;
+        }
+    }
+  g_list_free (toplevels);
+
+  if (widget)
+    {
+      gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree), widget);
+      gtk_inspector_widget_tree_select_object (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree), G_OBJECT (widget));
+    }
+}
+
+static void
+gtk_inspector_window_constructed (GObject *object)
+{
+  gtk_inspector_window_select_initially (GTK_INSPECTOR_WINDOW (object));
+}
+
+static void
 gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->constructed = gtk_inspector_window_constructed;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/window.ui");
 
