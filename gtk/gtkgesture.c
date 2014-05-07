@@ -510,7 +510,10 @@ gtk_gesture_handle_event (GtkEventController *controller,
           PointData *data;
 
           data = g_hash_table_lookup (priv->points, sequence);
-          data->press_handled = TRUE;
+
+          /* If the sequence was claimed early, the press event will be consumed */
+          if (gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
+            data->press_handled = TRUE;
         }
 
       break;
@@ -820,7 +823,7 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
     return FALSE;
 
   if (data->state == state)
-    return TRUE;
+    return FALSE;
 
   /* denied sequences remain denied */
   if (data->state == GTK_EVENT_SEQUENCE_DENIED)

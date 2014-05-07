@@ -4181,21 +4181,55 @@ _gtk_widget_get_emulating_sequence (GtkWidget         *widget,
 }
 
 static gboolean
+gtk_widget_needs_press_emulation (GtkWidget        *widget,
+                                  GdkEventSequence *sequence)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  gboolean sequence_press_handled = FALSE;
+  GList *l;
+
+  /* Check whether there is any remaining gesture in
+   * the capture phase that handled the press event
+   */
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      EventControllerData *data;
+      GtkGesture *gesture;
+
+      data = l->data;
+
+      if (data->phase != GTK_PHASE_CAPTURE)
+        continue;
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      gesture = GTK_GESTURE (data->controller);
+      sequence_press_handled |=
+        (gtk_gesture_handles_sequence (gesture, sequence) &&
+         _gtk_gesture_handled_sequence_press (gesture, sequence));
+    }
+
+  return !sequence_press_handled;
+}
+
+static gint
 _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
                                          GdkEventSequence      *sequence,
                                          GtkEventSequenceState  state,
-                                         GList                 *group)
+                                         GtkGesture            *emitter)
 {
+  gboolean emulates_pointer, sequence_handled = FALSE;
   GtkWidgetPrivate *priv = widget->priv;
   const GdkEvent *mimic_event;
-  gboolean send_event = FALSE;
-  gboolean emulates_pointer;
+  GList *group = NULL, *l;
   GdkEventSequence *seq;
-  gboolean handled = FALSE;
-  GList *l;
+  gint n_handled = 0;
 
   if (!priv->event_controllers && state != GTK_EVENT_SEQUENCE_CLAIMED)
     return TRUE;
+
+  if (emitter)
+    group = gtk_gesture_get_group (emitter);
 
   emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
   mimic_event = _gtk_widget_get_last_event (widget, seq);
@@ -4203,9 +4237,9 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   for (l = priv->event_controllers; l; l = l->next)
     {
       GtkEventSequenceState gesture_state;
-      gboolean sequence_handled, retval;
       EventControllerData *data;
       GtkGesture *gesture;
+      gboolean retval;
 
       seq = sequence;
       data = l->data;
@@ -4215,6 +4249,14 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
         continue;
 
       gesture = GTK_GESTURE (data->controller);
+
+      if (gesture == emitter)
+        {
+          sequence_handled |=
+            _gtk_gesture_handled_sequence_press (gesture, sequence);
+          n_handled++;
+          continue;
+        }
 
       if (seq && emulates_pointer &&
           !gtk_gesture_handles_sequence (gesture, seq))
@@ -4233,29 +4275,30 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
         }
 
       g_signal_handler_block (data->controller, data->sequence_state_changed_id);
-
-      sequence_handled =
-        _gtk_gesture_handled_sequence_press (gesture, seq);
       retval = gtk_gesture_set_sequence_state (gesture, seq, gesture_state);
-      handled |= retval;
-
       g_signal_handler_unblock (data->controller, data->sequence_state_changed_id);
 
-      /* If the sequence goes denied, check whether this is a controller attached
-       * to the capture phase, that additionally handled the button/touch press (ie.
-       * it was consumed), the corresponding press will be emulated for widgets
-       * beneath, so the widgets beneath get a coherent stream of events from now on.
-       */
-      if (retval && sequence_handled &&
-          data->phase == GTK_PHASE_CAPTURE &&
-          state == GTK_EVENT_SEQUENCE_DENIED)
-        send_event = TRUE;
+      if (retval || gesture == emitter)
+        {
+          sequence_handled |=
+            _gtk_gesture_handled_sequence_press (gesture, seq);
+          n_handled++;
+        }
     }
 
-  if (send_event && mimic_event)
+  /* If the sequence goes denied, check whether this is a controller attached
+   * to the capture phase, that additionally handled the button/touch press (ie.
+   * it was consumed), the corresponding press will be emulated for widgets
+   * beneath, so the widgets beneath get a coherent stream of events from now on.
+   */
+  if (n_handled > 0 && sequence_handled &&
+      state == GTK_EVENT_SEQUENCE_DENIED &&
+      gtk_widget_needs_press_emulation (widget, sequence))
     _gtk_widget_emulate_press (widget, mimic_event);
 
-  return handled;
+  g_list_free (group);
+
+  return n_handled;
 }
 
 static gboolean
@@ -16683,12 +16726,9 @@ event_controller_sequence_state_changed (GtkGesture            *gesture,
   GtkWidget *event_widget;
   gboolean cancel = TRUE;
   const GdkEvent *event;
-  GList *group;
 
-  group = gtk_gesture_get_group (gesture);
   handled = _gtk_widget_set_sequence_state_internal (widget, sequence,
-                                                     state, group);
-  g_list_free (group);
+                                                     state, gesture);
 
   if (!handled || state != GTK_EVENT_SEQUENCE_CLAIMED)
     return;
