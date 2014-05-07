@@ -5,7 +5,7 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <template class="ParasiteObjectHierarchy" parent="GtkBox">
+  <template class="GtkInspectorObjectHierarchy" parent="GtkBox">
     <property name="orientation">horizontal</property>
     <child>
       <object class="GtkScrolledWindow">

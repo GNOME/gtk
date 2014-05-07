@@ -20,7 +20,7 @@
       </object>
     </child>
   </object>
-  <template class="ParasiteWindow" parent="GtkWindow">
+  <template class="GtkInspectorWindow" parent="GtkWindow">
     <property name="default-height">500</property>
     <property name="default-width">1000</property>
     <child type="titlebar">
@@ -65,7 +65,7 @@
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="ParasiteButtonPath" id="button_path">
+              <object class="GtkInspectorButtonPath" id="button_path">
                 <property name="visible">True</property>
               </object>
             </child>
@@ -86,7 +86,7 @@
                         <property name="width-request">250</property>
                         <property name="expand">True</property>
                         <child>
-                          <object class="ParasiteWidgetTree" id="widget_tree">
+                          <object class="GtkInspectorWidgetTree" id="widget_tree">
                             <property name="visible">True</property>
                             <signal name="widget-changed" handler="on_widget_tree_selection_changed"/>
                           </object>
@@ -98,7 +98,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="ParasitePythonShell" id="python_shell">
+                      <object class="GtkInspectorPythonShell" id="python_shell">
                         <property name="visible">False</property>
                       </object>
                       <packing>
@@ -125,7 +125,7 @@
                         <property name="shadow-type">in</property>
                         <property name="width-request">250</property>
                         <child>
-                          <object class="ParasitePropList" id="prop_list">
+                          <object class="GtkInspectorPropList" id="prop_list">
                             <property name="visible">True</property>
                             <property name="child-properties">False</property>
                           </object>
@@ -146,7 +146,7 @@
                         <property name="shadow-type">in</property>
                         <property name="width-request">250</property>
                         <child>
-                          <object class="ParasitePropList" id="child_prop_list">
+                          <object class="GtkInspectorPropList" id="child_prop_list">
                             <property name="visible">True</property>
                             <property name="child-properties">True</property>
                           </object>
@@ -160,7 +160,7 @@
                       </object>
                     </child> 
                     <child>
-                      <object class="ParasiteObjectHierarchy" id="object_hierarchy">
+                      <object class="GtkInspectorObjectHierarchy" id="object_hierarchy">
                         <property name="visible">True</property>
                       </object>
                     </child>
@@ -171,7 +171,7 @@
                       </object>
                     </child> 
                     <child>
-                      <object class="ParasiteClassesList" id="classes_list">
+                      <object class="GtkInspectorClassesList" id="classes_list">
                         <property name="visible">True</property>
                       </object>
                     </child>
@@ -182,7 +182,7 @@
                       </object>
                     </child> 
                     <child>
-                      <object class="ParasiteCssEditor" id="widget_css_editor">
+                      <object class="GtkInspectorCssEditor" id="widget_css_editor">
                         <property name="visible">True</property>
                         <property name="global">False</property>
                       </object>
@@ -210,7 +210,7 @@
           </object>
         </child>
         <child>
-          <object class="ParasiteThemes">
+          <object class="GtkInspectorThemes">
             <property name="visible">True</property>
           </object>
         </child>
@@ -221,7 +221,7 @@
           </object>
         </child>
         <child>
-          <object class="ParasiteCssEditor">
+          <object class="GtkInspectorCssEditor">
             <property name="visible">True</property>
             <property name="global">True</property>
           </object>

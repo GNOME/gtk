@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="ParasiteThemes" parent="GtkListBox">
+  <template class="GtkInspectorThemes" parent="GtkListBox">
     <property name="selection-mode">none</property>
     <child>
       <object class="GtkBox">

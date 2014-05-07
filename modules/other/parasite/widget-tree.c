@@ -46,7 +46,7 @@ enum
 };
 
 
-struct _ParasiteWidgetTreePrivate
+struct _GtkInspectorWidgetTreePrivate
 {
   GtkTreeStore *model;
   GHashTable *iters;
@@ -54,31 +54,31 @@ struct _ParasiteWidgetTreePrivate
 
 static guint widget_tree_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteWidgetTree, parasite_widget_tree, GTK_TYPE_TREE_VIEW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorWidgetTree, gtk_inspector_widget_tree, GTK_TYPE_TREE_VIEW)
 
 static void
-on_widget_selected (GtkTreeSelection   *selection,
-                    ParasiteWidgetTree *wt)
+on_widget_selected (GtkTreeSelection       *selection,
+                    GtkInspectorWidgetTree *wt)
 {
   g_signal_emit (wt, widget_tree_signals[WIDGET_CHANGED], 0);
 }
 
 
 static void
-parasite_widget_tree_init (ParasiteWidgetTree *wt)
+gtk_inspector_widget_tree_init (GtkInspectorWidgetTree *wt)
 {
-  wt->priv = parasite_widget_tree_get_instance_private (wt);
+  wt->priv = gtk_inspector_widget_tree_get_instance_private (wt);
   wt->priv->iters = g_hash_table_new_full (g_direct_hash,
                                            g_direct_equal,
                                            NULL,
                                            (GDestroyNotify) gtk_tree_iter_free);
   gtk_widget_init_template (GTK_WIDGET (wt));
 
-  parasite_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL);
+  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL);
 }
 
 static void
-parasite_widget_tree_class_init (ParasiteWidgetTreeClass *klass)
+gtk_inspector_widget_tree_class_init (GtkInspectorWidgetTreeClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
@@ -88,25 +88,25 @@ parasite_widget_tree_class_init (ParasiteWidgetTreeClass *klass)
       g_signal_new ("widget-changed",
                     G_OBJECT_CLASS_TYPE(klass),
                     G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
-                    G_STRUCT_OFFSET(ParasiteWidgetTreeClass, widget_changed),
+                    G_STRUCT_OFFSET(GtkInspectorWidgetTreeClass, widget_changed),
                     NULL, NULL,
                     g_cclosure_marshal_VOID__VOID,
                     G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/widget-tree.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, ParasiteWidgetTree, model);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/widget-tree.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorWidgetTree, model);
   gtk_widget_class_bind_template_callback (widget_class, on_widget_selected);
 }
 
 GtkWidget *
-parasite_widget_tree_new ()
+gtk_inspector_widget_tree_new (void)
 {
-  return g_object_new (PARASITE_TYPE_WIDGET_TREE, NULL);
+  return g_object_new (GTK_TYPE_INSPECTOR_WIDGET_TREE, NULL);
 }
 
 
 GObject *
-parasite_widget_tree_get_selected_object (ParasiteWidgetTree *wt)
+gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt)
 {
   GtkTreeIter iter;
   GtkTreeSelection *sel;
@@ -128,7 +128,7 @@ parasite_widget_tree_get_selected_object (ParasiteWidgetTree *wt)
 
 typedef struct
 {
-  ParasiteWidgetTree *wt;
+  GtkInspectorWidgetTree *wt;
   GtkTreeIter *iter;
 } FindAllData;
 
@@ -137,13 +137,13 @@ on_container_forall (GtkWidget *widget,
                      gpointer   data)
 {
   FindAllData *d = data;
-  parasite_widget_tree_append_object (d->wt, G_OBJECT (widget), d->iter);
+  gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (widget), d->iter);
 }
 
 void
-parasite_widget_tree_append_object (ParasiteWidgetTree *wt,
-                                    GObject            *object,
-                                    GtkTreeIter        *parent_iter)
+gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
+                                         GObject                *object,
+                                         GtkTreeIter            *parent_iter)
 {
   GtkTreeIter iter;
   const gchar *class_name = G_OBJECT_CLASS_NAME (G_OBJECT_GET_CLASS (object));
@@ -207,21 +207,21 @@ parasite_widget_tree_append_object (ParasiteWidgetTree *wt,
 }
 
 void
-parasite_widget_tree_scan (ParasiteWidgetTree *wt,
-                           GtkWidget          *window)
+gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
+                                GtkWidget              *window)
 {
   gtk_tree_store_clear (wt->priv->model);
   g_hash_table_remove_all (wt->priv->iters);
-  parasite_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL);
-  parasite_widget_tree_append_object (wt, G_OBJECT (window), NULL);
+  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL);
+  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (window), NULL);
 
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (wt));
 }
 
 gboolean
-parasite_widget_tree_find_object (ParasiteWidgetTree *wt,
-                                  GObject            *object,
-                                  GtkTreeIter        *iter)
+gtk_inspector_widget_tree_find_object (GtkInspectorWidgetTree *wt,
+                                       GObject                *object,
+                                       GtkTreeIter            *iter)
 {
   GtkTreeIter *internal_iter = g_hash_table_lookup (wt->priv->iters, object);
   if (internal_iter)
@@ -234,12 +234,12 @@ parasite_widget_tree_find_object (ParasiteWidgetTree *wt,
 }
 
 void
-parasite_widget_tree_select_object (ParasiteWidgetTree *wt,
-                                    GObject            *object)
+gtk_inspector_widget_tree_select_object (GtkInspectorWidgetTree *wt,
+                                         GObject                *object)
 {
   GtkTreeIter iter;
 
-  if (parasite_widget_tree_find_object (wt, object, &iter))
+  if (gtk_inspector_widget_tree_find_object (wt, object, &iter))
     {
       GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
       gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt), path);

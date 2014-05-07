@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="ParasiteButtonPath" parent="GtkBox">
+  <template class="GtkInspectorButtonPath" parent="GtkBox">
     <property name="orientation">horizontal</property>
     <child>
       <object class="GtkScrolledWindow" id="sw">

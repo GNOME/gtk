@@ -22,40 +22,40 @@
 
 #include "button-path.h"
 
-struct _ParasiteButtonPathPrivate
+struct _GtkInspectorButtonPathPrivate
 {
   GtkWidget *sw;
   GtkWidget *button_box;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteButtonPath, parasite_button_path, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorButtonPath, gtk_inspector_button_path, GTK_TYPE_BOX)
 
 static void
-parasite_button_path_init (ParasiteButtonPath *bp)
+gtk_inspector_button_path_init (GtkInspectorButtonPath *bp)
 {
-  bp->priv = parasite_button_path_get_instance_private (bp);
+  bp->priv = gtk_inspector_button_path_get_instance_private (bp);
   gtk_widget_init_template (GTK_WIDGET (bp));
 }
 
 static void
-parasite_button_path_class_init (ParasiteButtonPathClass *klass)
+gtk_inspector_button_path_class_init (GtkInspectorButtonPathClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/button-path.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, ParasiteButtonPath, sw);
-  gtk_widget_class_bind_template_child_private (widget_class, ParasiteButtonPath, button_box);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/button-path.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorButtonPath, sw);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorButtonPath, button_box);
 }
 
 GtkWidget *
-parasite_button_path_new (void)
+gtk_inspector_button_path_new (void)
 {
-  return GTK_WIDGET (g_object_new (PARASITE_TYPE_BUTTON_PATH, NULL));
+  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_BUTTON_PATH, NULL));
 }
 
 void
-parasite_button_path_set_widget (ParasiteButtonPath *bp,
-                                 GtkWidget          *widget)
+gtk_inspector_button_path_set_widget (GtkInspectorButtonPath *bp,
+                                      GtkWidget          *widget)
 {
   gchar *path, **words;
   gint i;

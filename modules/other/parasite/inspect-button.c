@@ -168,58 +168,58 @@ find_widget_at_pointer (GdkDevice *device)
   return NULL;
 }
 
-static gboolean draw_flash (GtkWidget      *widget,
-                            cairo_t        *cr,
-                            ParasiteWindow *parasite);
+static gboolean draw_flash (GtkWidget          *widget,
+                            cairo_t            *cr,
+                            GtkInspectorWindow *iw);
 
 static void
-clear_flash (ParasiteWindow *parasite)
+clear_flash (GtkInspectorWindow *iw)
 {
-  if (parasite->flash_widget)
+  if (iw->flash_widget)
     {
-      gtk_widget_queue_draw (parasite->flash_widget);
-      g_signal_handlers_disconnect_by_func (parasite->flash_widget, draw_flash, parasite);
-      parasite->flash_widget = NULL;
+      gtk_widget_queue_draw (iw->flash_widget);
+      g_signal_handlers_disconnect_by_func (iw->flash_widget, draw_flash, iw);
+      iw->flash_widget = NULL;
     }
 }
 
 static void
-start_flash (ParasiteWindow *parasite,
-             GtkWidget      *widget)
+start_flash (GtkInspectorWindow *iw,
+             GtkWidget          *widget)
 {
-  parasite->flash_count = 1;
-  parasite->flash_widget = widget;
-  g_signal_connect_after (widget, "draw", G_CALLBACK (draw_flash), parasite);
+  iw->flash_count = 1;
+  iw->flash_widget = widget;
+  g_signal_connect_after (widget, "draw", G_CALLBACK (draw_flash), iw);
   gtk_widget_queue_draw (widget);
 }
 
 static void
-on_inspect_widget (GtkWidget      *button,
-                   GdkEvent       *event,
-                   ParasiteWindow *parasite)
+on_inspect_widget (GtkWidget          *button,
+                   GdkEvent           *event,
+                   GtkInspectorWindow *iw)
 {
   GtkWidget *widget;
 
-  clear_flash (parasite);
+  clear_flash (iw);
 
   widget = find_widget_at_pointer (gdk_event_get_device (event));
 
   if (widget == NULL)
     return;
 
-  parasite->selected_widget = widget;
+  iw->selected_widget = widget;
 
-  parasite_widget_tree_scan (PARASITE_WIDGET_TREE (parasite->widget_tree),
-                             gtk_widget_get_toplevel (widget));
+  gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
+                                  gtk_widget_get_toplevel (widget));
 
-  parasite_widget_tree_select_object (PARASITE_WIDGET_TREE (parasite->widget_tree),
-                                      G_OBJECT (widget));
+  gtk_inspector_widget_tree_select_object (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
+                                           G_OBJECT (widget));
 }
 
 static void
-on_highlight_widget (GtkWidget      *button,
-                     GdkEvent       *event,
-                     ParasiteWindow *parasite)
+on_highlight_widget (GtkWidget          *button,
+                     GdkEvent           *event,
+                     GtkInspectorWindow *iw)
 {
   GtkWidget *widget;
 
@@ -231,20 +231,20 @@ on_highlight_widget (GtkWidget      *button,
       return;
     }
 
-  if (gtk_widget_get_toplevel (widget) == GTK_WIDGET (parasite))
+  if (gtk_widget_get_toplevel (widget) == GTK_WIDGET (iw))
     {
-      /* Don't hilight things in the parasite window */
+      /* Don't hilight things in the inspector window */
       return;
     }
 
-  if (parasite->flash_widget == widget)
+  if (iw->flash_widget == widget)
     {
       /* Already selected */
       return;
     }
 
-  clear_flash (parasite);
-  start_flash (parasite, widget);
+  clear_flash (iw);
+  start_flash (iw, widget);
 }
 
 static gboolean
@@ -268,15 +268,15 @@ property_query_event (GtkWidget *widget,
 }
 
 void
-on_inspect (GtkWidget      *button,
-            ParasiteWindow *parasite)
+on_inspect (GtkWidget          *button,
+            GtkInspectorWindow *iw)
 {
   GdkDisplay *display;
   GdkDevice *device;
   GdkCursor *cursor;
 
   g_signal_connect (button, "event",
-                    G_CALLBACK (property_query_event), parasite);
+                    G_CALLBACK (property_query_event), iw);
 
   display = gtk_widget_get_display (button);
   cursor = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
@@ -291,25 +291,25 @@ on_inspect (GtkWidget      *button,
 }
 
 GtkWidget *
-gtkparasite_inspect_button_new (ParasiteWindow *parasite)
+gtk_inspector_inspect_button_new (GtkInspectorWindow *iw)
 {
   GtkWidget *button;
 
   button = gtk_button_new_from_icon_name ("edit-find", GTK_ICON_SIZE_BUTTON);
   gtk_widget_set_tooltip_text (button, "Inspect");
-  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (on_inspect), parasite);
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (on_inspect), iw);
 
   return button;
 }
 
 static gboolean
-draw_flash (GtkWidget *widget,
-            cairo_t   *cr,
-            ParasiteWindow *parasite)
+draw_flash (GtkWidget          *widget,
+            cairo_t            *cr,
+            GtkInspectorWindow *iw)
 {
   GtkAllocation alloc;
 
-  if (parasite->flash_count % 2 == 0)
+  if (iw->flash_count % 2 == 0)
     return FALSE;
 
   if (GTK_IS_WINDOW (widget))
@@ -337,17 +337,17 @@ draw_flash (GtkWidget *widget,
 }
 
 static gboolean
-on_flash_timeout (ParasiteWindow *parasite)
+on_flash_timeout (GtkInspectorWindow *iw)
 {
-  gtk_widget_queue_draw (parasite->flash_widget);
+  gtk_widget_queue_draw (iw->flash_widget);
 
-  parasite->flash_count++;
+  iw->flash_count++;
 
-  if (parasite->flash_count == 6)
+  if (iw->flash_count == 6)
     {
-      g_signal_handlers_disconnect_by_func (parasite->flash_widget, draw_flash, parasite);
-      parasite->flash_widget = NULL;
-      parasite->flash_cnx = 0;
+      g_signal_handlers_disconnect_by_func (iw->flash_widget, draw_flash, iw);
+      iw->flash_widget = NULL;
+      iw->flash_cnx = 0;
 
       return G_SOURCE_REMOVE;
     }
@@ -356,17 +356,17 @@ on_flash_timeout (ParasiteWindow *parasite)
 }
 
 void
-gtkparasite_flash_widget (ParasiteWindow *parasite,
-                          GtkWidget      *widget)
+gtk_inspector_flash_widget (GtkInspectorWindow *iw,
+                            GtkWidget          *widget)
 {
-  if (parasite->flash_cnx != 0)
+  if (iw->flash_cnx != 0)
     return;
 
   if (!gtk_widget_get_visible (widget) || !gtk_widget_get_mapped (widget))
     return;
 
-  start_flash (parasite, widget);
-  parasite->flash_cnx = g_timeout_add (150, (GSourceFunc) on_flash_timeout, parasite);
+  start_flash (iw, widget);
+  iw->flash_cnx = g_timeout_add (150, (GSourceFunc) on_flash_timeout, iw);
 }
 
 /* vim: set et sw=2 ts=2: */

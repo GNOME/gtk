@@ -20,18 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _PARASITE_WINDOW_H_
-#define _PARASITE_WINDOW_H_
+#ifndef _GTK_INSPECTOR_WINDOW_H_
+#define _GTK_INSPECTOR_WINDOW_H_
 
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_WINDOW            (parasite_window_get_type())
-#define PARASITE_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_WINDOW, ParasiteWindow))
-#define PARASITE_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_WINDOW, ParasiteWindowClass))
-#define PARASITE_IS_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_WINDOW))
-#define PARASITE_IS_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_WINDOW))
-#define PARASITE_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_WINDOW, ParasiteWindowClass))
+#define GTK_TYPE_INSPECTOR_WINDOW            (gtk_inspector_window_get_type())
+#define GTK_INSPECTOR_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_WINDOW, GtkInspectorWindow))
+#define GTK_INSPECTOR_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_WINDOW, GtkInspectorWindowClass))
+#define GTK_INSPECTOR_IS_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_WINDOW))
+#define GTK_INSPECTOR_IS_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_WINDOW))
+#define GTK_INSPECTOR_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_WINDOW, GtkInspectorWindowClass))
 
 
 #define TREE_TEXT_SCALE 0.8
@@ -58,26 +58,27 @@ typedef struct
   gint flash_count;
   gint flash_cnx;
 
-} ParasiteWindow;
+} GtkInspectorWindow;
 
 typedef struct
 {
   GtkWindowClass parent;
-} ParasiteWindowClass;
+} GtkInspectorWindowClass;
 
 
 G_BEGIN_DECLS
 
-GType      parasite_window_get_type (void);
-GtkWidget *parasite_window_new      (void);
+GType      gtk_inspector_window_get_type    (void);
+GtkWidget *gtk_inspector_window_new         (void);
 
-void       gtkparasite_flash_widget       (ParasiteWindow *parasite,
-                                           GtkWidget      *widget);
+void       gtk_inspector_flash_widget       (GtkInspectorWindow *iw,
+                                             GtkWidget      *widget);
 
-GtkWidget *gtkparasite_inspect_button_new (ParasiteWindow *parasite);
+GtkWidget *gtk_inspector_inspect_button_new (GtkInspectorWindow *iw);
 
 G_END_DECLS
 
-#endif // _PARASITE_WINDOW_H_
+
+#endif // _GTK_INSPECTOR_WINDOW_H_
 
 // vim: set et sw=2 ts=2:

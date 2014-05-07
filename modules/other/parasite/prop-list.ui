@@ -10,7 +10,7 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <template class="ParasitePropList" parent="GtkTreeView">
+  <template class="GtkInspectorPropList" parent="GtkTreeView">
     <property name="model">model</property>
     <property name="tooltip-column">4</property>
     <child>
@@ -35,7 +35,7 @@
         <property name="title">Value</property>
         <property name="resizable">True</property>
         <child>
-          <object class="ParasitePropertyCellRenderer" id="value_renderer">
+          <object class="GtkInspectorPropertyCellRenderer" id="value_renderer">
             <property name="scale">0.8</property>
             <property name="editable">True</property>
           </object>

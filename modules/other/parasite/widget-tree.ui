@@ -12,7 +12,7 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <template class="ParasiteWidgetTree" parent="GtkTreeView">
+  <template class="GtkInspectorWidgetTree" parent="GtkTreeView">
     <property name="model">model</property>
     <property name="enable-search">True</property>
     <property name="search-column">2</property>

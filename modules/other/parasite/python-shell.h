@@ -20,49 +20,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _PARASITE_PYTHON_SHELL_H_
-#define _PARASITE_PYTHON_SHELL_H_
+#ifndef _GTK_INSPECTOR_PYTHON_SHELL_H_
+#define _GTK_INSPECTOR_PYTHON_SHELL_H_
 
-typedef struct _ParasitePythonShell         ParasitePythonShell;
-typedef struct _ParasitePythonShellClass    ParasitePythonShellClass;
-typedef struct _ParasitePythonShellPrivate  ParasitePythonShellPrivate;
+typedef struct _GtkInspectorPythonShell         GtkInspectorPythonShell;
+typedef struct _GtkInspectorPythonShellClass    GtkInspectorPythonShellClass;
+typedef struct _GtkInspectorPythonShellPrivate  GtkInspectorPythonShellPrivate;
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_PYTHON_SHELL (parasite_python_shell_get_type())
-#define PARASITE_PYTHON_SHELL(obj) \
-		(G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_PYTHON_SHELL, ParasitePythonShell))
-#define PARASITE_PYTHON_SHELL_CLASS(klass) \
-		(G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_PYTHON_SHELL, ParasitePythonShellClass))
-#define PARASITE_IS_PYTHON_SHELL(obj) \
-		(G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_PYTHON_SHELL))
-#define PARASITE_IS_PYTHON_SHELL_CLASS(klass) \
-		(G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_PYTHON_SHELL))
-#define PARASITE_PYTHON_SHELL_GET_CLASS(obj) \
-		(G_TYPE_INSTANCE_GET_CLASS ((obj), PARASITE_TYPE_PYTHON_SHELL, ParasitePythonShellClass))
+#define GTK_TYPE_INSPECTOR_PYTHON_SHELL (gtk_inspector_python_shell_get_type())
+#define GTK_INSPECTOR_PYTHON_SHELL(obj) \
+		(G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_PYTHON_SHELL, GtkInspectorPythonShell))
+#define GTK_INSPECTOR_PYTHON_SHELL_CLASS(klass) \
+		(G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_PYTHON_SHELL, GtkInspectorPythonShellClass))
+#define GTK_INSPECTOR_IS_PYTHON_SHELL(obj) \
+		(G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_PYTHON_SHELL))
+#define GTK_INSPECTOR_IS_PYTHON_SHELL_CLASS(klass) \
+		(G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_PYTHON_SHELL))
+#define GTK_INSPECTOR_PYTHON_SHELL_GET_CLASS(obj) \
+		(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_INSPECTOR_PYTHON_SHELL, GtkInspectorPythonShellClass))
 
 
-struct _ParasitePythonShell
+struct _GtkInspectorPythonShell
 {
   GtkBox parent_object;
-  ParasitePythonShellPrivate *priv;
+  GtkInspectorPythonShellPrivate *priv;
 };
 
-struct _ParasitePythonShellClass
+struct _GtkInspectorPythonShellClass
 {
  GtkBoxClass parent_class;
 };
 
 G_BEGIN_DECLS
 
-GType parasite_python_shell_get_type(void);
+GType gtk_inspector_python_shell_get_type(void);
 
-GtkWidget *parasite_python_shell_new(void);
-void parasite_python_shell_append_text(ParasitePythonShell *python_shell,
+GtkWidget *gtk_inspector_python_shell_new(void);
+void gtk_inspector_python_shell_append_text(GtkInspectorPythonShell *python_shell,
                                        const char *str,
                                        const char *tag);
-void parasite_python_shell_focus(ParasitePythonShell *python_shell);
+void gtk_inspector_python_shell_focus(GtkInspectorPythonShell *python_shell);
 
 G_END_DECLS
 
-#endif // _PARASITE_PYTHON_SHELL_H_
+#endif // _GTK_INSPECTOR_PYTHON_SHELL_H_

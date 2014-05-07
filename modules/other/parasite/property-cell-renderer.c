@@ -24,7 +24,7 @@
 #include "property-cell-renderer.h"
 #include "widget-tree.h"
 
-struct _ParasitePropertyCellRendererPrivate
+struct _GtkInspectorPropertyCellRendererPrivate
 {
   GObject *object;
   char *name;
@@ -39,12 +39,12 @@ enum
   PROP_IS_CHILD_PROPERTY
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasitePropertyCellRenderer, parasite_property_cell_renderer, GTK_TYPE_CELL_RENDERER_TEXT);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropertyCellRenderer, gtk_inspector_property_cell_renderer, GTK_TYPE_CELL_RENDERER_TEXT);
 
 static void
-parasite_property_cell_renderer_init(ParasitePropertyCellRenderer *renderer)
+gtk_inspector_property_cell_renderer_init(GtkInspectorPropertyCellRenderer *renderer)
 {
-  renderer->priv = parasite_property_cell_renderer_get_instance_private (renderer);
+  renderer->priv = gtk_inspector_property_cell_renderer_get_instance_private (renderer);
 }
 
 static void
@@ -53,7 +53,7 @@ get_property (GObject    *object,
               GValue     *value,
               GParamSpec *pspec)
 {
-  ParasitePropertyCellRenderer *r = PARASITE_PROPERTY_CELL_RENDERER (object);
+  GtkInspectorPropertyCellRenderer *r = GTK_INSPECTOR_PROPERTY_CELL_RENDERER (object);
 
   switch (param_id)
     {
@@ -81,7 +81,7 @@ set_property (GObject      *object,
               const GValue *value,
               GParamSpec   *pspec)
 {
-  ParasitePropertyCellRenderer *r = PARASITE_PROPERTY_CELL_RENDERER (object);
+  GtkInspectorPropertyCellRenderer *r = GTK_INSPECTOR_PROPERTY_CELL_RENDERER (object);
 
   switch (param_id)
     {
@@ -108,7 +108,7 @@ set_property (GObject      *object,
 static GParamSpec *
 find_property (GtkCellRenderer *renderer)
 {
-  ParasitePropertyCellRenderer *r = PARASITE_PROPERTY_CELL_RENDERER (renderer);
+  GtkInspectorPropertyCellRenderer *r = GTK_INSPECTOR_PROPERTY_CELL_RENDERER (renderer);
 
   if (r->priv->is_child_property)
     {
@@ -126,7 +126,7 @@ static void
 get_value (GtkCellRenderer *renderer,
            GValue          *gvalue)
 {
-  ParasitePropertyCellRenderer *r = PARASITE_PROPERTY_CELL_RENDERER (renderer);
+  GtkInspectorPropertyCellRenderer *r = GTK_INSPECTOR_PROPERTY_CELL_RENDERER (renderer);
 
   if (r->priv->is_child_property)
     {
@@ -146,7 +146,7 @@ static void
 set_value (GtkCellRenderer *renderer,
            GValue          *gvalue)
 {
-  ParasitePropertyCellRenderer *r = PARASITE_PROPERTY_CELL_RENDERER (renderer);
+  GtkInspectorPropertyCellRenderer *r = GTK_INSPECTOR_PROPERTY_CELL_RENDERER (renderer);
 
   if (r->priv->is_child_property)
     {
@@ -251,7 +251,7 @@ start_editing (GtkCellRenderer      *renderer,
   GtkCellEditable *editable = NULL;
   GValue gvalue = {0};
   GParamSpec *prop;
-  ParasitePropertyCellRenderer *r = PARASITE_PROPERTY_CELL_RENDERER (renderer);
+  GtkInspectorPropertyCellRenderer *r = GTK_INSPECTOR_PROPERTY_CELL_RENDERER (renderer);
 
   prop = find_property (renderer);
 
@@ -261,25 +261,25 @@ start_editing (GtkCellRenderer      *renderer,
 
   if (G_VALUE_HOLDS_OBJECT (&gvalue))
     {
-      ParasiteWidgetTree *widget_tree = g_object_get_data (G_OBJECT (renderer), "parasite-widget-tree");
+      GtkInspectorWidgetTree *widget_tree = g_object_get_data (G_OBJECT (renderer), "gtk_inspector-widget-tree");
       GObject *prop_object = g_value_get_object (&gvalue);
       GtkTreeIter iter;
 
       if (prop_object)
         {
           /* First check if the value is already in the tree (happens with 'parent' for instance) */
-          if (parasite_widget_tree_find_object (widget_tree, prop_object, &iter))
+          if (gtk_inspector_widget_tree_find_object (widget_tree, prop_object, &iter))
             {
-              parasite_widget_tree_select_object (widget_tree, prop_object);
+              gtk_inspector_widget_tree_select_object (widget_tree, prop_object);
             }
-          else if (parasite_widget_tree_find_object (widget_tree, r->priv->object, &iter))
+          else if (gtk_inspector_widget_tree_find_object (widget_tree, r->priv->object, &iter))
             {
-              parasite_widget_tree_append_object (widget_tree, prop_object, &iter);
-              parasite_widget_tree_select_object (widget_tree, prop_object);
+              gtk_inspector_widget_tree_append_object (widget_tree, prop_object, &iter);
+              gtk_inspector_widget_tree_select_object (widget_tree, prop_object);
             }
           else
             {
-              g_warning ("Parasite: couldn't find the widget in the tree");
+              g_warning ("GtkInspector: couldn't find the widget in the tree");
             }
         }
       g_value_unset (&gvalue);
@@ -433,7 +433,7 @@ start_editing (GtkCellRenderer      *renderer,
 }
 
 static void
-parasite_property_cell_renderer_class_init (ParasitePropertyCellRendererClass *klass)
+gtk_inspector_property_cell_renderer_class_init (GtkInspectorPropertyCellRendererClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
@@ -457,9 +457,9 @@ parasite_property_cell_renderer_class_init (ParasitePropertyCellRendererClass *k
 }
 
 GtkCellRenderer *
-parasite_property_cell_renderer_new (void)
+gtk_inspector_property_cell_renderer_new (void)
 {
-  return g_object_new (PARASITE_TYPE_PROPERTY_CELL_RENDERER, NULL);
+  return g_object_new (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER, NULL);
 }
 
 

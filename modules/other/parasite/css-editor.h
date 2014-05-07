@@ -20,41 +20,41 @@
  * THE SOFTWARE.
  */
 
-#ifndef _GTKPARASITE_CSS_EDITOR_H_
-#define _GTKPARASITE_CSS_EDITOR_H_
+#ifndef _GTK_INSPECTOR_CSS_EDITOR_H_
+#define _GTK_INSPECTOR_CSS_EDITOR_H_
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_CSS_EDITOR            (parasite_css_editor_get_type())
-#define PARASITE_CSS_EDITOR(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_CSS_EDITOR, ParasiteCssEditor))
-#define PARASITE_CSS_EDITOR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_CSS_EDITOR, ParasiteCssEditorClass))
-#define PARASITE_IS_CSS_EDITOR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_CSS_EDITOR))
-#define PARASITE_IS_CSS_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_CSS_EDITOR))
-#define PARASITE_CSS_EDITOR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_CSS_EDITOR, ParasiteCssEditorClass))
+#define GTK_TYPE_INSPECTOR_CSS_EDITOR            (gtk_inspector_css_editor_get_type())
+#define GTK_INSPECTOR_CSS_EDITOR(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_CSS_EDITOR, GtkInspectorCssEditor))
+#define GTK_INSPECTOR_CSS_EDITOR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_CSS_EDITOR, GtkInspectorCssEditorClass))
+#define GTK_INSPECTOR_IS_CSS_EDITOR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_CSS_EDITOR))
+#define GTK_INSPECTOR_IS_CSS_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_CSS_EDITOR))
+#define GTK_INSPECTOR_CSS_EDITOR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_CSS_EDITOR, GtkInspectorCssEditorClass))
 
 
-typedef struct _ParasiteCssEditorPrivate ParasiteCssEditorPrivate;
+typedef struct _GtkInspectorCssEditorPrivate GtkInspectorCssEditorPrivate;
 
-typedef struct _ParasiteCssEditor
+typedef struct _GtkInspectorCssEditor
 {
   GtkBox parent;
-  ParasiteCssEditorPrivate *priv;
-} ParasiteCssEditor;
+  GtkInspectorCssEditorPrivate *priv;
+} GtkInspectorCssEditor;
 
-typedef struct _ParasiteCssEditorClass
+typedef struct _GtkInspectorCssEditorClass
 {
   GtkBoxClass parent;
-} ParasiteCssEditorClass;
+} GtkInspectorCssEditorClass;
 
 G_BEGIN_DECLS
 
-GType      parasite_css_editor_get_type   (void);
-GtkWidget *parasite_css_editor_new        (gboolean           global);
-void       parasite_css_editor_set_widget (ParasiteCssEditor *editor,
-                                           GtkWidget         *widget);
+GType      gtk_inspector_css_editor_get_type   (void);
+GtkWidget *gtk_inspector_css_editor_new        (gboolean               global);
+void       gtk_inspector_css_editor_set_widget (GtkInspectorCssEditor *editor,
+                                                GtkWidget             *widget);
 
 G_END_DECLS
 
-#endif // _GTKPARASITE_CSS_EDITOR_H_
+#endif // _GTK_INSPECTOR_CSS_EDITOR_H_
 
 // vim: set et sw=2 ts=2:

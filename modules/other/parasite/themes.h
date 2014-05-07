@@ -20,39 +20,39 @@
  * THE SOFTWARE.
  */
 
-#ifndef _GTKPARASITE_THEMES_H_
-#define _GTKPARASITE_THEMES_H_
+#ifndef _GTK_INSPECTOR_THEMES_H_
+#define _GTK_INSPECTOR_THEMES_H_
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_THEMES            (parasite_themes_get_type())
-#define PARASITE_THEMES(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_THEMES, ParasiteThemes))
-#define PARASITE_THEMES_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_THEMES, ParasiteThemesClass))
-#define PARASITE_IS_THEMES(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_THEMES))
-#define PARASITE_IS_THEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_THEMES))
-#define PARASITE_THEMES_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_THEMES, ParasiteThemesClass))
+#define GTK_TYPE_INSPECTOR_THEMES            (gtk_inspector_themes_get_type())
+#define GTK_INSPECTOR_THEMES(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_THEMES, GtkInspectorThemes))
+#define GTK_INSPECTOR_THEMES_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_THEMES, GtkInspectorThemesClass))
+#define GTK_INSPECTOR_IS_THEMES(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_THEMES))
+#define GTK_INSPECTOR_IS_THEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_THEMES))
+#define GTK_INSPECTOR_THEMES_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_THEMES, GtkInspectorThemesClass))
 
 
-typedef struct _ParasiteThemesPrivate ParasiteThemesPrivate;
+typedef struct _GtkInspectorThemesPrivate GtkInspectorThemesPrivate;
 
-typedef struct _ParasiteThemes
+typedef struct _GtkInspectorThemes
 {
   GtkListBox parent;
-  ParasiteThemesPrivate *priv;
-} ParasiteThemes;
+  GtkInspectorThemesPrivate *priv;
+} GtkInspectorThemes;
 
-typedef struct _ParasiteThemesClass
+typedef struct _GtkInspectorThemesClass
 {
   GtkListBoxClass parent;
-} ParasiteThemesClass;
+} GtkInspectorThemesClass;
 
 G_BEGIN_DECLS
 
-GType      parasite_themes_get_type (void);
-GtkWidget *parasite_themes_new      (void);
+GType      gtk_inspector_themes_get_type (void);
+GtkWidget *gtk_inspector_themes_new      (void);
 
 G_END_DECLS
 
-#endif // _GTKPARASITE_THEMES_H_
+#endif // _GTK_INSPECTOR_THEMES_H_
 
 // vim: set et sw=2 ts=2:

@@ -28,7 +28,7 @@
 
 #define MAX_HISTORY_LENGTH 20
 
-struct _ParasitePythonShellPrivate
+struct _GtkInspectorPythonShellPrivate
 {
     GtkWidget *textview;
 
@@ -42,36 +42,36 @@ struct _ParasitePythonShellPrivate
     gboolean in_block;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasitePythonShell, parasite_python_shell, GTK_TYPE_BOX);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPythonShell, gtk_inspector_python_shell, GTK_TYPE_BOX);
 
 /* Widget functions */
-static void parasite_python_shell_finalize (GObject *obj);
+static void gtk_inspector_python_shell_finalize (GObject *obj);
 
 /* Python integration */
-static void parasite_python_shell_write_prompt(GtkWidget *python_shell);
-static char *parasite_python_shell_get_input(GtkWidget *python_shell);
+static void gtk_inspector_python_shell_write_prompt(GtkWidget *python_shell);
+static char *gtk_inspector_python_shell_get_input(GtkWidget *python_shell);
 
 /* Callbacks */
-static gboolean parasite_python_shell_key_press_cb(GtkWidget *textview,
+static gboolean gtk_inspector_python_shell_key_press_cb(GtkWidget *textview,
                                                    GdkEventKey *event,
                                                    GtkWidget *python_shell);
 static void
-parasite_python_shell_class_init(ParasitePythonShellClass *klass)
+gtk_inspector_python_shell_class_init(GtkInspectorPythonShellClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-    object_class->finalize = parasite_python_shell_finalize;
+    object_class->finalize = gtk_inspector_python_shell_finalize;
 }
 
 static void
-parasite_python_shell_init (ParasitePythonShell *python_shell)
+gtk_inspector_python_shell_init (GtkInspectorPythonShell *python_shell)
 {
     GtkWidget *swin;
     GtkTextBuffer *buffer;
     GtkTextIter iter;
     PangoFontDescription *font_desc;
 
-    python_shell->priv = parasite_python_shell_get_instance_private (python_shell);
+    python_shell->priv = gtk_inspector_python_shell_get_instance_private (python_shell);
 
     python_shell->priv->history = g_queue_new();
 
@@ -94,7 +94,7 @@ parasite_python_shell_init (ParasitePythonShell *python_shell)
     gtk_text_view_set_right_margin(GTK_TEXT_VIEW(python_shell->priv->textview), 3);
 
     g_signal_connect(python_shell->priv->textview, "key_press_event",
-                     G_CALLBACK(parasite_python_shell_key_press_cb),
+                     G_CALLBACK(gtk_inspector_python_shell_key_press_cb),
                      python_shell);
 
     /* Make the textview monospaced */
@@ -124,41 +124,41 @@ parasite_python_shell_init (ParasitePythonShell *python_shell)
                                "foreground", "blue",
                                NULL);
 
-    parasite_python_shell_write_prompt(GTK_WIDGET(python_shell));
+    gtk_inspector_python_shell_write_prompt(GTK_WIDGET(python_shell));
 }
 
 static void
-parasite_python_shell_finalize(GObject *python_shell)
+gtk_inspector_python_shell_finalize(GObject *python_shell)
 {
-    ParasitePythonShellPrivate *priv = PARASITE_PYTHON_SHELL(python_shell)->priv;
+    GtkInspectorPythonShellPrivate *priv = GTK_INSPECTOR_PYTHON_SHELL(python_shell)->priv;
 
     g_queue_free(priv->history);
 }
 
 static void
-parasite_python_shell_log_stdout(const char *text, gpointer python_shell)
+gtk_inspector_python_shell_log_stdout(const char *text, gpointer python_shell)
 {
-    parasite_python_shell_append_text(PARASITE_PYTHON_SHELL(python_shell),
+    gtk_inspector_python_shell_append_text(GTK_INSPECTOR_PYTHON_SHELL(python_shell),
                                       text, "stdout");
 }
 
 static void
-parasite_python_shell_log_stderr(const char *text, gpointer python_shell)
+gtk_inspector_python_shell_log_stderr(const char *text, gpointer python_shell)
 {
-    parasite_python_shell_append_text(PARASITE_PYTHON_SHELL(python_shell),
+    gtk_inspector_python_shell_append_text(GTK_INSPECTOR_PYTHON_SHELL(python_shell),
                                       text, "stderr");
 }
 
 static void
-parasite_python_shell_write_prompt(GtkWidget *python_shell)
+gtk_inspector_python_shell_write_prompt(GtkWidget *python_shell)
 {
-    ParasitePythonShellPrivate *priv = PARASITE_PYTHON_SHELL(python_shell)->priv;
+    GtkInspectorPythonShellPrivate *priv = GTK_INSPECTOR_PYTHON_SHELL(python_shell)->priv;
     GtkTextBuffer *buffer =
         gtk_text_view_get_buffer(GTK_TEXT_VIEW(priv->textview));
     GtkTextIter iter;
     const char *prompt = (priv->pending_command == NULL ? ">>> " : "... ");
 
-    parasite_python_shell_append_text(PARASITE_PYTHON_SHELL(python_shell),
+    gtk_inspector_python_shell_append_text(GTK_INSPECTOR_PYTHON_SHELL(python_shell),
                                       prompt, "prompt");
 
     gtk_text_buffer_get_end_iter(buffer, &iter);
@@ -166,13 +166,13 @@ parasite_python_shell_write_prompt(GtkWidget *python_shell)
 }
 
 static void
-parasite_python_shell_process_line(GtkWidget *python_shell)
+gtk_inspector_python_shell_process_line(GtkWidget *python_shell)
 {
-    ParasitePythonShellPrivate *priv = PARASITE_PYTHON_SHELL(python_shell)->priv;
-    char *command = parasite_python_shell_get_input(python_shell);
+    GtkInspectorPythonShellPrivate *priv = GTK_INSPECTOR_PYTHON_SHELL(python_shell)->priv;
+    char *command = gtk_inspector_python_shell_get_input(python_shell);
     char last_char;
 
-    parasite_python_shell_append_text(PARASITE_PYTHON_SHELL(python_shell),
+    gtk_inspector_python_shell_append_text(GTK_INSPECTOR_PYTHON_SHELL(python_shell),
                                       "\n", NULL);
 
     if (*command != '\0')
@@ -215,9 +215,9 @@ parasite_python_shell_process_line(GtkWidget *python_shell)
             command = g_string_free(priv->pending_command, FALSE);
         }
 
-        parasite_python_run(command,
-                            parasite_python_shell_log_stdout,
-                            parasite_python_shell_log_stderr,
+        gtk_inspector_python_run(command,
+                            gtk_inspector_python_shell_log_stdout,
+                            gtk_inspector_python_shell_log_stderr,
                             python_shell);
 
         if (priv->pending_command != NULL)
@@ -229,14 +229,14 @@ parasite_python_shell_process_line(GtkWidget *python_shell)
         }
     }
 
-    parasite_python_shell_write_prompt(python_shell);
+    gtk_inspector_python_shell_write_prompt(python_shell);
 }
 
 static void
-parasite_python_shell_replace_input(GtkWidget *python_shell,
+gtk_inspector_python_shell_replace_input(GtkWidget *python_shell,
                                     const char *text)
 {
-    ParasitePythonShellPrivate *priv = PARASITE_PYTHON_SHELL(python_shell)->priv;
+    GtkInspectorPythonShellPrivate *priv = GTK_INSPECTOR_PYTHON_SHELL(python_shell)->priv;
     GtkTextBuffer *buffer =
         gtk_text_view_get_buffer(GTK_TEXT_VIEW(priv->textview));
     GtkTextIter start_iter;
@@ -251,9 +251,9 @@ parasite_python_shell_replace_input(GtkWidget *python_shell,
 }
 
 static char *
-parasite_python_shell_get_input(GtkWidget *python_shell)
+gtk_inspector_python_shell_get_input(GtkWidget *python_shell)
 {
-    ParasitePythonShellPrivate *priv = PARASITE_PYTHON_SHELL(python_shell)->priv;
+    GtkInspectorPythonShellPrivate *priv = GTK_INSPECTOR_PYTHON_SHELL(python_shell)->priv;
     GtkTextBuffer *buffer =
         gtk_text_view_get_buffer(GTK_TEXT_VIEW(priv->textview));
     GtkTextIter start_iter;
@@ -267,9 +267,9 @@ parasite_python_shell_get_input(GtkWidget *python_shell)
 }
 
 static const char *
-parasite_python_shell_get_history_back(GtkWidget *python_shell)
+gtk_inspector_python_shell_get_history_back(GtkWidget *python_shell)
 {
-    ParasitePythonShellPrivate *priv = PARASITE_PYTHON_SHELL(python_shell)->priv;
+    GtkInspectorPythonShellPrivate *priv = GTK_INSPECTOR_PYTHON_SHELL(python_shell)->priv;
 
     if (priv->cur_history_item == NULL)
     {
@@ -285,9 +285,9 @@ parasite_python_shell_get_history_back(GtkWidget *python_shell)
 }
 
 static const char *
-parasite_python_shell_get_history_forward(GtkWidget *python_shell)
+gtk_inspector_python_shell_get_history_forward(GtkWidget *python_shell)
 {
-    ParasitePythonShellPrivate *priv = PARASITE_PYTHON_SHELL(python_shell)->priv;
+    GtkInspectorPythonShellPrivate *priv = GTK_INSPECTOR_PYTHON_SHELL(python_shell)->priv;
 
     if (priv->cur_history_item == NULL || priv->cur_history_item->prev == NULL)
     {
@@ -301,30 +301,30 @@ parasite_python_shell_get_history_forward(GtkWidget *python_shell)
 }
 
 static gboolean
-parasite_python_shell_key_press_cb(GtkWidget *textview,
+gtk_inspector_python_shell_key_press_cb(GtkWidget *textview,
                                    GdkEventKey *event,
                                    GtkWidget *python_shell)
 {
     if (event->keyval == GDK_KEY_Return)
     {
-        parasite_python_shell_process_line(python_shell);
+        gtk_inspector_python_shell_process_line(python_shell);
         return TRUE;
     }
     else if (event->keyval == GDK_KEY_Up)
     {
-        parasite_python_shell_replace_input(python_shell,
-            parasite_python_shell_get_history_back(python_shell));
+        gtk_inspector_python_shell_replace_input(python_shell,
+            gtk_inspector_python_shell_get_history_back(python_shell));
         return TRUE;
     }
     else if (event->keyval == GDK_KEY_Down)
     {
-        parasite_python_shell_replace_input(python_shell,
-            parasite_python_shell_get_history_forward(python_shell));
+        gtk_inspector_python_shell_replace_input(python_shell,
+            gtk_inspector_python_shell_get_history_forward(python_shell));
         return TRUE;
     }
     else if (event->string != NULL)
     {
-        ParasitePythonShellPrivate *priv = PARASITE_PYTHON_SHELL(python_shell)->priv;
+        GtkInspectorPythonShellPrivate *priv = GTK_INSPECTOR_PYTHON_SHELL(python_shell)->priv;
         GtkTextBuffer *buffer =
             gtk_text_view_get_buffer(GTK_TEXT_VIEW(priv->textview));
         GtkTextMark *insert_mark = gtk_text_buffer_get_insert(buffer);
@@ -376,17 +376,17 @@ parasite_python_shell_key_press_cb(GtkWidget *textview,
 }
 
 GtkWidget *
-parasite_python_shell_new(void)
+gtk_inspector_python_shell_new(void)
 {
-    return g_object_new(PARASITE_TYPE_PYTHON_SHELL, NULL);
+    return g_object_new(GTK_TYPE_INSPECTOR_PYTHON_SHELL, NULL);
 }
 
 void
-parasite_python_shell_append_text(ParasitePythonShell *python_shell,
+gtk_inspector_python_shell_append_text(GtkInspectorPythonShell *python_shell,
                                   const char *str,
                                   const char *tag)
 {
-    ParasitePythonShellPrivate *priv = python_shell->priv;
+    GtkInspectorPythonShellPrivate *priv = python_shell->priv;
 
     GtkTextIter end;
     GtkTextBuffer *buffer =
@@ -401,7 +401,7 @@ parasite_python_shell_append_text(ParasitePythonShell *python_shell,
 }
 
 void
-parasite_python_shell_focus(ParasitePythonShell *python_shell)
+gtk_inspector_python_shell_focus(GtkInspectorPythonShell *python_shell)
 {
    gtk_widget_grab_focus (python_shell->priv->textview);
 }

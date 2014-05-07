@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gtk/parasite">
+  <gresource prefix="/org/gtk/inspector">
     <file>button-path.ui</file>
     <file>object-hierarchy.ui</file>
     <file>css-editor.ui</file>

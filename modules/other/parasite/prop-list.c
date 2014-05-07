@@ -42,7 +42,7 @@ enum
   PROP_CHILD_PROPERTIES
 };
 
-struct _ParasitePropListPrivate
+struct _GtkInspectorPropListPrivate
 {
   GObject *object;
   GtkListStore *model;
@@ -53,12 +53,12 @@ struct _ParasitePropListPrivate
   gboolean child_properties;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasitePropList, parasite_prop_list, GTK_TYPE_TREE_VIEW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropList, gtk_inspector_prop_list, GTK_TYPE_TREE_VIEW)
 
 static void
-parasite_prop_list_init (ParasitePropList *pl)
+gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
 {
-  pl->priv = parasite_prop_list_get_instance_private (pl);
+  pl->priv = gtk_inspector_prop_list_get_instance_private (pl);
   gtk_widget_init_template (GTK_WIDGET (pl));
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pl->priv->model),
                                         COLUMN_NAME,
@@ -75,13 +75,13 @@ get_property (GObject    *object,
               GValue     *value,
               GParamSpec *pspec)
 {
-  ParasitePropList *pl = PARASITE_PROP_LIST (object);
+  GtkInspectorPropList *pl = GTK_INSPECTOR_PROP_LIST (object);
 
   switch (param_id)
     {
       case PROP_WIDGET_TREE:
         g_value_take_object (value, pl->priv->widget_tree);
-        g_object_set_data (G_OBJECT (pl->priv->value_renderer), "parasite-widget-tree", pl->priv->widget_tree);
+        g_object_set_data (G_OBJECT (pl->priv->value_renderer), "gtk_inspector-widget-tree", pl->priv->widget_tree);
         break;
 
       case PROP_CHILD_PROPERTIES:
@@ -103,7 +103,7 @@ set_property (GObject      *object,
               const GValue *value,
               GParamSpec   *pspec)
 {
-  ParasitePropList *pl = PARASITE_PROP_LIST (object);
+  GtkInspectorPropList *pl = GTK_INSPECTOR_PROP_LIST (object);
 
   switch (param_id)
     {
@@ -122,7 +122,7 @@ set_property (GObject      *object,
 }
 
 static void
-parasite_prop_list_class_init (ParasitePropListClass *klass)
+gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -137,15 +137,15 @@ parasite_prop_list_class_init (ParasitePropListClass *klass)
       g_param_spec_boolean ("child-properties", "Child properties", "Child properties",
                             FALSE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/prop-list.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, ParasitePropList, model);
-  gtk_widget_class_bind_template_child_private (widget_class, ParasitePropList, value_renderer);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/prop-list.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, value_renderer);
 }
 
 static void
-parasite_prop_list_update_prop (ParasitePropList *pl,
-                                GtkTreeIter      *iter,
-                                GParamSpec       *prop)
+gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
+                                     GtkTreeIter          *iter,
+                                     GParamSpec           *prop)
 {
   GValue gvalue = {0};
   gchar *value;
@@ -189,31 +189,31 @@ parasite_prop_list_update_prop (ParasitePropList *pl,
 }
 
 static void
-parasite_prop_list_prop_changed_cb (GObject          *pspec,
-                                    GParamSpec       *prop,
-                                    ParasitePropList *pl)
+gtk_inspector_prop_list_prop_changed_cb (GObject              *pspec,
+                                         GParamSpec           *prop,
+                                         GtkInspectorPropList *pl)
 {
   GtkTreeIter *iter = g_hash_table_lookup(pl->priv->prop_iters, prop->name);
 
   if (iter != NULL)
-    parasite_prop_list_update_prop (pl, iter, prop);
+    gtk_inspector_prop_list_update_prop (pl, iter, prop);
 }
 
 GtkWidget *
-parasite_prop_list_new (GtkWidget *widget_tree,
-                        gboolean   child_properties)
+gtk_inspector_prop_list_new (GtkWidget *widget_tree,
+                             gboolean   child_properties)
 {
-  g_type_ensure (PARASITE_TYPE_PROPERTY_CELL_RENDERER);
+  g_type_ensure (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER);
 
-  return g_object_new (PARASITE_TYPE_PROP_LIST,
+  return g_object_new (GTK_TYPE_INSPECTOR_PROP_LIST,
                        "widget-tree", widget_tree,
                        "child-properties", child_properties,
                        NULL);
 }
 
 gboolean
-parasite_prop_list_set_object (ParasitePropList *pl,
-                               GObject          *object)
+gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
+                                    GObject              *object)
 {
   GtkTreeIter iter;
   GParamSpec **props;
@@ -268,7 +268,7 @@ parasite_prop_list_set_object (ParasitePropList *pl,
         continue;
 
       gtk_list_store_append (pl->priv->model, &iter);
-      parasite_prop_list_update_prop (pl, &iter, prop);
+      gtk_inspector_prop_list_update_prop (pl, &iter, prop);
 
       g_hash_table_insert (pl->priv->prop_iters, (gpointer) prop->name, gtk_tree_iter_copy (&iter));
 
@@ -281,7 +281,7 @@ parasite_prop_list_set_object (ParasitePropList *pl,
       pl->priv->signal_cnxs =
           g_list_prepend (pl->priv->signal_cnxs,
                           GINT_TO_POINTER (g_signal_connect(object, signal_name,
-                                                            G_CALLBACK (parasite_prop_list_prop_changed_cb), pl)));
+                                                            G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb), pl)));
 
         g_free (signal_name);
     }

@@ -12432,30 +12432,32 @@ static void
 gtk_window_toggle_debugging (GtkWindow *window)
 {
   static GType type = G_TYPE_NONE;
-  static GtkWidget *parasite_window = NULL;
+  static GtkWidget *inspector_window = NULL;
 
-g_print ("toggle debugging\n");
+  g_debug ("toggle debugging");
 
   if (type == G_TYPE_NONE)
     {
-      _gtk_modules_load_module ("gtkparasite");
-      type = g_type_from_name ("ParasiteWindow");
+      _gtk_modules_load_module ("gtkinspector");
+      type = g_type_from_name ("GtkInspectorWindow");
       if (type == G_TYPE_INVALID)
-        g_warning ("Failed to load gtkparasite module, debugging not available.");
+        g_warning ("Failed to load GtkInspector module, debugging not available.");
     }
 
   if (!g_type_is_a (type, GTK_TYPE_WINDOW))
     return;
 
-  if (parasite_window == NULL)
+  if (inspector_window == NULL)
     {
-      parasite_window = GTK_WIDGET (g_object_new (type, NULL));
-      g_signal_connect (parasite_window, "delete-event",
+      g_debug ("creating a GtkInspector window");
+
+      inspector_window = GTK_WIDGET (g_object_new (type, NULL));
+      g_signal_connect (inspector_window, "delete-event",
                         G_CALLBACK (gtk_widget_hide_on_delete), NULL);
     }
 
-  if (gtk_widget_is_visible (parasite_window))
-    gtk_widget_hide (parasite_window);
+  if (gtk_widget_is_visible (inspector_window))
+    gtk_widget_hide (inspector_window);
   else
-    gtk_window_present (GTK_WINDOW (parasite_window));
+    gtk_window_present (GTK_WINDOW (inspector_window));
 }

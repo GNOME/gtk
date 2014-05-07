@@ -20,59 +20,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTKPARASITE_WIDGET_TREE_H_
-#define _GTKPARASITE_WIDGET_TREE_H_
+#ifndef _GTK_INSPECTOR_WIDGET_TREE_H_
+#define _GTK_INSPECTOR_WIDGET_TREE_H_
 
 
 #include <gtk/gtk.h>
 
 
-#define PARASITE_TYPE_WIDGET_TREE            (parasite_widget_tree_get_type())
-#define PARASITE_WIDGET_TREE(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_WIDGET_TREE, ParasiteWidgetTree))
-#define PARASITE_WIDGET_TREE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_WIDGET_TREE, ParasiteWidgetTreeClass))
-#define PARASITE_IS_WIDGET_TREE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_WIDGET_TREE))
-#define PARASITE_IS_WIDGET_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_WIDGET_TREE))
-#define PARASITE_WIDGET_TREE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_WIDGET_TREE, ParasiteWidgetTreeClass))
+#define GTK_TYPE_INSPECTOR_WIDGET_TREE            (gtk_inspector_widget_tree_get_type())
+#define GTK_INSPECTOR_WIDGET_TREE(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_WIDGET_TREE, GtkInspectorWidgetTree))
+#define GTK_INSPECTOR_WIDGET_TREE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_WIDGET_TREE, GtkInspectorWidgetTreeClass))
+#define GTK_INSPECTOR_IS_WIDGET_TREE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_WIDGET_TREE))
+#define GTK_INSPECTOR_IS_WIDGET_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_WIDGET_TREE))
+#define GTK_INSPECTOR_WIDGET_TREE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_WIDGET_TREE, GtkInspectorWidgetTreeClass))
 
 
-typedef struct _ParasiteWidgetTreePrivate ParasiteWidgetTreePrivate;
+typedef struct _GtkInspectorWidgetTreePrivate GtkInspectorWidgetTreePrivate;
 
-typedef struct _ParasiteWidgetTree
+typedef struct _GtkInspectorWidgetTree
 {
   GtkTreeView parent;
-  ParasiteWidgetTreePrivate *priv;
-} ParasiteWidgetTree;
+  GtkInspectorWidgetTreePrivate *priv;
+} GtkInspectorWidgetTree;
 
-typedef struct _ParasiteWidgetTreeClass
+typedef struct _GtkInspectorWidgetTreeClass
 {
   GtkTreeViewClass parent;
 
-  void (*widget_changed) (ParasiteWidgetTree *tree);
-} ParasiteWidgetTreeClass;
+  void (*widget_changed) (GtkInspectorWidgetTree *tree);
+} GtkInspectorWidgetTreeClass;
 
 
 G_BEGIN_DECLS
 
 
-GType      parasite_widget_tree_get_type            (void);
-GtkWidget *parasite_widget_tree_new                 (void);
+GType      gtk_inspector_widget_tree_get_type            (void);
+GtkWidget *gtk_inspector_widget_tree_new                 (void);
 
-GObject   *parasite_widget_tree_get_selected_object (ParasiteWidgetTree *wt);
+GObject   *gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt);
 
-void       parasite_widget_tree_scan                (ParasiteWidgetTree *wt,
-                                                     GtkWidget          *window);
-void       parasite_widget_tree_select_object       (ParasiteWidgetTree *wt,
-                                                     GObject            *object);
-void       parasite_widget_tree_append_object       (ParasiteWidgetTree *wt,
-                                                     GObject            *object,
-                                                     GtkTreeIter        *parent_iter);
-gboolean   parasite_widget_tree_find_object         (ParasiteWidgetTree *wt,
-                                                     GObject            *object,
-                                                     GtkTreeIter        *iter);
+void       gtk_inspector_widget_tree_scan                (GtkInspectorWidgetTree *wt,
+                                                          GtkWidget              *window);
+void       gtk_inspector_widget_tree_select_object       (GtkInspectorWidgetTree *wt,
+                                                          GObject                *object);
+void       gtk_inspector_widget_tree_append_object       (GtkInspectorWidgetTree *wt,
+                                                          GObject                *object,
+                                                          GtkTreeIter            *parent_iter);
+gboolean   gtk_inspector_widget_tree_find_object         (GtkInspectorWidgetTree *wt,
+                                                          GObject                *object,
+                                                          GtkTreeIter            *iter);
 
 G_END_DECLS
 
 
-#endif // _GTKPARASITE_WIDGETTREE_H_
+#endif // _GTK_INSPECTOR_WIDGETTREE_H_
 
 // vim: set et sw=2 ts=2:

@@ -22,17 +22,17 @@
 
 #include "themes.h"
 
-struct _ParasiteThemesPrivate
+struct _GtkInspectorThemesPrivate
 {
   GtkWidget *dark_switch;
   GtkWidget *theme_combo;
   GtkWidget *icon_combo;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteThemes, parasite_themes, GTK_TYPE_LIST_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorThemes, gtk_inspector_themes, GTK_TYPE_LIST_BOX)
 
 static void
-init_dark (ParasiteThemes *pt)
+init_dark (GtkInspectorThemes *pt)
 {
   g_object_bind_property (pt->priv->dark_switch, "active",
                           gtk_settings_get_default (), "gtk-application-prefer-dark-theme",
@@ -62,7 +62,7 @@ fill_gtk (const gchar *path,
 }
 
 static void
-init_theme (ParasiteThemes *pt)
+init_theme (GtkInspectorThemes *pt)
 {
   GHashTable *t;
   GHashTableIter iter;
@@ -120,7 +120,7 @@ fill_icons (const gchar *path,
 }
 
 static void
-init_icons (ParasiteThemes *pt)
+init_icons (GtkInspectorThemes *pt)
 {
   GHashTable *t;
   GHashTableIter iter;
@@ -154,8 +154,8 @@ init_icons (ParasiteThemes *pt)
 }
 
 static void
-theme_changed (GtkComboBox    *c,
-               ParasiteThemes *pt)
+theme_changed (GtkComboBox        *c,
+               GtkInspectorThemes *pt)
 {
   gchar *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
   g_object_set (gtk_settings_get_default (), "gtk-theme-name", theme, NULL);
@@ -163,8 +163,8 @@ theme_changed (GtkComboBox    *c,
 }
 
 static void
-icons_changed (GtkComboBox    *c,
-               ParasiteThemes *pt)
+icons_changed (GtkComboBox        *c,
+               GtkInspectorThemes *pt)
 {
   gchar *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
   g_object_set (gtk_settings_get_default (), "gtk-icon-theme-name", theme, NULL);
@@ -172,9 +172,9 @@ icons_changed (GtkComboBox    *c,
 }
 
 static void
-parasite_themes_init (ParasiteThemes *pt)
+gtk_inspector_themes_init (GtkInspectorThemes *pt)
 {
-  pt->priv = parasite_themes_get_instance_private (pt);
+  pt->priv = gtk_inspector_themes_get_instance_private (pt);
   gtk_widget_init_template (GTK_WIDGET (pt));
 
   init_dark (pt);
@@ -183,23 +183,23 @@ parasite_themes_init (ParasiteThemes *pt)
 }
 
 static void
-parasite_themes_class_init (ParasiteThemesClass *klass)
+gtk_inspector_themes_class_init (GtkInspectorThemesClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/themes.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, ParasiteThemes, dark_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, ParasiteThemes, theme_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, ParasiteThemes, icon_combo);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/themes.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorThemes, dark_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorThemes, theme_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorThemes, icon_combo);
 
   gtk_widget_class_bind_template_callback (widget_class, theme_changed);
   gtk_widget_class_bind_template_callback (widget_class, icons_changed);
 }
 
 GtkWidget *
-parasite_themes_new (void)
+gtk_inspector_themes_new (void)
 {
-  return GTK_WIDGET (g_object_new (PARASITE_TYPE_THEMES, NULL));
+  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_THEMES, NULL));
 }
 
 // vim: set et sw=2 ts=2:

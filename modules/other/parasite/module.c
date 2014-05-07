@@ -39,21 +39,21 @@ void
 gtk_module_init (gint *argc, gchar ***argv)
 {
 #ifdef ENABLE_PYTHON
-  parasite_python_init ();
+  gtk_inspector_python_init ();
 #endif
 
-  parasite_register_resource ();
+  gtk_inspector_register_resource ();
 
-  g_type_ensure (PARASITE_TYPE_THEMES);
-  g_type_ensure (PARASITE_TYPE_CSS_EDITOR);
-  g_type_ensure (PARASITE_TYPE_BUTTON_PATH);
-  g_type_ensure (PARASITE_TYPE_WIDGET_TREE);
-  g_type_ensure (PARASITE_TYPE_PROP_LIST);
-  g_type_ensure (PARASITE_TYPE_OBJECT_HIERARCHY);
-  g_type_ensure (PARASITE_TYPE_CLASSES_LIST);
-  g_type_ensure (PARASITE_TYPE_PYTHON_SHELL);
-  g_type_ensure (PARASITE_TYPE_PROPERTY_CELL_RENDERER);
-  g_type_ensure (PARASITE_TYPE_WINDOW);
+  g_type_ensure (GTK_TYPE_INSPECTOR_THEMES);
+  g_type_ensure (GTK_TYPE_INSPECTOR_CSS_EDITOR);
+  g_type_ensure (GTK_TYPE_INSPECTOR_BUTTON_PATH);
+  g_type_ensure (GTK_TYPE_INSPECTOR_WIDGET_TREE);
+  g_type_ensure (GTK_TYPE_INSPECTOR_PROP_LIST);
+  g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY);
+  g_type_ensure (GTK_TYPE_INSPECTOR_CLASSES_LIST);
+  g_type_ensure (GTK_TYPE_INSPECTOR_PYTHON_SHELL);
+  g_type_ensure (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER);
+  g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
 }
 
 

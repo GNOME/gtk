@@ -16,7 +16,7 @@
     <property name="tag-table">tags</property>
     <signal name="changed" handler="text_changed"/>
   </object>
-  <template class="ParasiteCssEditor" parent="GtkBox">
+  <template class="GtkInspectorCssEditor" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkToolbar" id="toolbar">

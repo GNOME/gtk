@@ -27,40 +27,40 @@ enum
   COLUMN_OBJECT_NAME
 };
 
-struct _ParasiteObjectHierarchyPrivate
+struct _GtkInspectorObjectHierarchyPrivate
 {
   GtkTreeStore *model;
   GtkTreeView *tree;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteObjectHierarchy, parasite_object_hierarchy, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorObjectHierarchy, gtk_inspector_object_hierarchy, GTK_TYPE_BOX)
 
 static void
-parasite_object_hierarchy_init (ParasiteObjectHierarchy *oh)
+gtk_inspector_object_hierarchy_init (GtkInspectorObjectHierarchy *oh)
 {
-  oh->priv = parasite_object_hierarchy_get_instance_private (oh);
+  oh->priv = gtk_inspector_object_hierarchy_get_instance_private (oh);
   gtk_widget_init_template (GTK_WIDGET (oh));
 }
 
 static void
-parasite_object_hierarchy_class_init (ParasiteObjectHierarchyClass *klass)
+gtk_inspector_object_hierarchy_class_init (GtkInspectorObjectHierarchyClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/parasite/object-hierarchy.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, ParasiteObjectHierarchy, model);
-  gtk_widget_class_bind_template_child_private (widget_class, ParasiteObjectHierarchy, tree);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/object-hierarchy.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, tree);
 }
 
 GtkWidget *
-parasite_object_hierarchy_new (void)
+gtk_inspector_object_hierarchy_new (void)
 {
-  return GTK_WIDGET (g_object_new (PARASITE_TYPE_OBJECT_HIERARCHY, NULL));
+  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY, NULL));
 }
 
 void
-parasite_object_hierarchy_set_object (ParasiteObjectHierarchy *oh,
-                                      GObject                 *object)
+gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
+                                           GObject                     *object)
 {
   GObjectClass *klass = G_OBJECT_GET_CLASS (object);
   const gchar *class_name;
