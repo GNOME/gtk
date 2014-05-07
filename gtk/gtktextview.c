@@ -208,6 +208,8 @@ struct _GtkTextViewPrivate
 
   GtkPixelCache *pixel_cache;
 
+  GtkGesture *multipress_gesture;
+
   /* Default style settings */
   gint pixels_above_lines;
   gint pixels_below_lines;
@@ -258,6 +260,13 @@ struct _GtkTextPendingScroll
   gdouble        xalign;
   gdouble        yalign;
 };
+
+typedef enum 
+{
+  SELECT_CHARACTERS,
+  SELECT_WORDS,
+  SELECT_LINES
+} SelectionGranularity;
 
 enum
 {
@@ -338,14 +347,18 @@ static void gtk_text_view_grab_notify          (GtkWidget        *widget,
 static void gtk_text_view_state_flags_changed  (GtkWidget        *widget,
 					        GtkStateFlags     previous_state);
 
+static void gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                                      gint                  n_press,
+                                                      gdouble               x,
+                                                      gdouble               y,
+                                                      GtkTextView          *text_view);
+
 static gint gtk_text_view_event                (GtkWidget        *widget,
                                                 GdkEvent         *event);
 static gint gtk_text_view_key_press_event      (GtkWidget        *widget,
                                                 GdkEventKey      *event);
 static gint gtk_text_view_key_release_event    (GtkWidget        *widget,
                                                 GdkEventKey      *event);
-static gint gtk_text_view_button_press_event   (GtkWidget        *widget,
-                                                GdkEventButton   *event);
 static gint gtk_text_view_button_release_event (GtkWidget        *widget,
                                                 GdkEventButton   *event);
 static gint gtk_text_view_focus_in_event       (GtkWidget        *widget,
@@ -438,9 +451,10 @@ static void     gtk_text_view_set_attributes_from_style (GtkTextView        *tex
 static void     gtk_text_view_ensure_layout          (GtkTextView        *text_view);
 static void     gtk_text_view_destroy_layout         (GtkTextView        *text_view);
 static void     gtk_text_view_check_keymap_direction (GtkTextView        *text_view);
-static void     gtk_text_view_start_selection_drag   (GtkTextView        *text_view,
-                                                      const GtkTextIter  *iter,
-                                                      GdkEventButton     *event);
+static void     gtk_text_view_start_selection_drag   (GtkTextView          *text_view,
+                                                      const GtkTextIter    *iter,
+                                                      SelectionGranularity  granularity,
+                                                      const GdkEvent       *event);
 static gboolean gtk_text_view_end_selection_drag     (GtkTextView        *text_view);
 static void     gtk_text_view_start_selection_dnd    (GtkTextView        *text_view,
                                                       const GtkTextIter  *iter,
@@ -487,7 +501,7 @@ static void gtk_text_view_set_virtual_cursor_pos (GtkTextView       *text_view,
                                                   gint               y);
 
 static void gtk_text_view_do_popup               (GtkTextView       *text_view,
-						  GdkEventButton    *event);
+						  const GdkEvent    *event);
 
 static void cancel_pending_scroll                (GtkTextView   *text_view);
 static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
@@ -663,7 +677,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->event = gtk_text_view_event;
   widget_class->key_press_event = gtk_text_view_key_press_event;
   widget_class->key_release_event = gtk_text_view_key_release_event;
-  widget_class->button_press_event = gtk_text_view_button_press_event;
   widget_class->button_release_event = gtk_text_view_button_release_event;
   widget_class->focus_in_event = gtk_text_view_focus_in_event;
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
@@ -1543,6 +1556,14 @@ gtk_text_view_init (GtkTextView *text_view)
 
   /* We handle all our own redrawing */
   gtk_widget_set_redraw_on_allocate (widget, FALSE);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                     FALSE);
+  gtk_gesture_attach (priv->multipress_gesture, GTK_PHASE_BUBBLE);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (gtk_text_view_multipress_gesture_pressed),
+                    widget);
 }
 
 static void
@@ -3230,6 +3251,9 @@ gtk_text_view_finalize (GObject *object)
   g_assert (priv->buffer == NULL);
   
   cancel_pending_scroll (text_view);
+
+  gtk_gesture_detach (priv->multipress_gesture);
+  g_object_unref (priv->multipress_gesture);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
@@ -5001,26 +5025,37 @@ gtk_text_view_key_release_event (GtkWidget *widget, GdkEventKey *event)
     return GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_release_event (widget, event);
 }
 
-static gint
-gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
+static void
+gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                          gint                  n_press,
+                                          gdouble               x,
+                                          gdouble               y,
+                                          GtkTextView          *text_view)
 {
-  GtkTextView *text_view;
+  GdkEventSequence *sequence;
   GtkTextViewPrivate *priv;
-  GdkDevice *device;
+  const GdkEvent *event;
   gboolean is_touchscreen;
+  GdkDevice *device;
+  GtkTextIter iter;
+  guint button;
 
-  text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
-  gtk_widget_grab_focus (widget);
+  gtk_widget_grab_focus (GTK_WIDGET (text_view));
 
-  if (event->window != priv->text_window->bin_window)
+  if (gdk_event_get_window (event) != priv->text_window->bin_window)
     {
       /* Remove selection if any. */
       gtk_text_view_unselect (text_view);
-      return FALSE;
+      return;
     }
 
+  gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
+                                  GTK_EVENT_SEQUENCE_CLAIMED);
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_selection_bubble_popup_unset (text_view);
 
@@ -5036,98 +5071,97 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
   is_touchscreen = test_touchscreen ||
                    gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
-  if (event->type == GDK_BUTTON_PRESS)
+  if (n_press == 1)
+    gtk_text_view_reset_im_context (text_view);
+
+  if (n_press == 1 &&
+      gdk_event_triggers_context_menu (event))
     {
-      gtk_text_view_reset_im_context (text_view);
-
-      if (gdk_event_triggers_context_menu ((GdkEvent *) event))
-        {
-	  gtk_text_view_do_popup (text_view, event);
-	  return TRUE;
-        }
-      else if (event->button == GDK_BUTTON_PRIMARY)
-        {
-          /* If we're in the selection, start a drag copy/move of the
-           * selection; otherwise, start creating a new selection.
-           */
-          GtkTextIter iter;
-          GtkTextIter start, end;
-
-          gtk_text_layout_get_iter_at_pixel (priv->layout,
-                                             &iter,
-                                             event->x + priv->xoffset,
-                                             event->y + priv->yoffset);
-
-          if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
-                                                    &start, &end) &&
-              gtk_text_iter_in_range (&iter, &start, &end) &&
-              !(event->state &
-                gtk_widget_get_modifier_mask (widget,
-                                              GDK_MODIFIER_INTENT_EXTEND_SELECTION)))
-            {
-              priv->grab_device = event->device;
-              priv->drag_start_x = event->x;
-              priv->drag_start_y = event->y;
-              priv->pending_place_cursor_button = event->button;
-            }
-          else
-            {
-              gtk_text_view_start_selection_drag (text_view, &iter, event);
-
-              if (is_touchscreen)
-                {
-                  _gtk_text_view_ensure_text_handles (text_view);
-                  gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_CURSOR);
-                }
-            }
-
-          return TRUE;
-        }
-      else if (event->button == GDK_BUTTON_MIDDLE &&
-               get_middle_click_paste (text_view))
-        {
-          GtkTextIter iter;
-
-          /* We do not want to scroll back to the insert iter when we paste
-             with the middle button */
-          priv->scroll_after_paste = FALSE;
-
-          gtk_text_layout_get_iter_at_pixel (priv->layout,
-                                             &iter,
-                                             event->x + priv->xoffset,
-                                             event->y + priv->yoffset);
-
-          gtk_text_buffer_paste_clipboard (get_buffer (text_view),
-					   gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY),
-					   &iter,
-					   priv->editable);
-          return TRUE;
-        }
+      gtk_text_view_do_popup (text_view, event);
     }
-  else if ((event->type == GDK_2BUTTON_PRESS ||
-	    event->type == GDK_3BUTTON_PRESS) &&
-	   event->button == GDK_BUTTON_PRIMARY)
+  else if (button == GDK_BUTTON_MIDDLE &&
+           get_middle_click_paste (text_view))
     {
-      GtkTextIter iter;
-
-      gtk_text_view_end_selection_drag (text_view);
+      /* We do not want to scroll back to the insert iter when we paste
+         with the middle button */
+      priv->scroll_after_paste = FALSE;
 
       gtk_text_layout_get_iter_at_pixel (priv->layout,
-					 &iter,
-					 event->x + priv->xoffset,
-					 event->y + priv->yoffset);
+                                         &iter,
+                                         x + priv->xoffset,
+                                         y + priv->yoffset);
 
-      gtk_text_view_start_selection_drag (text_view, &iter, event);
+      gtk_text_buffer_paste_clipboard (get_buffer (text_view),
+                                       gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+                                                                 GDK_SELECTION_PRIMARY),
+                                       &iter,
+                                       priv->editable);
+    }
+  else if (button == GDK_BUTTON_PRIMARY)
+    {
+      GtkTextHandleMode handle_mode = GTK_TEXT_HANDLE_MODE_NONE;
+
+      switch (n_press)
+        {
+        case 1:
+          {
+            /* If we're in the selection, start a drag copy/move of the
+             * selection; otherwise, start creating a new selection.
+             */
+            GtkTextIter start, end;
+
+            handle_mode = GTK_TEXT_HANDLE_MODE_CURSOR;
+            gtk_text_layout_get_iter_at_pixel (priv->layout,
+                                               &iter,
+                                               x + priv->xoffset,
+                                               y + priv->yoffset);
+
+            if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+                                                      &start, &end) &&
+                gtk_text_iter_in_range (&iter, &start, &end) &&
+                !(event->button.state &
+                  gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),
+                                                GDK_MODIFIER_INTENT_EXTEND_SELECTION)))
+              {
+                priv->grab_device = gdk_event_get_device (event);
+                priv->drag_start_x = x;
+                priv->drag_start_y = y;
+                priv->pending_place_cursor_button = button;
+              }
+            else
+              {
+                gtk_text_view_start_selection_drag (text_view, &iter,
+                                                    SELECT_CHARACTERS, event);
+              }
+            break;
+          }
+        case 2:
+        case 3:
+          handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+          gtk_text_view_end_selection_drag (text_view);
+
+          gtk_text_layout_get_iter_at_pixel (priv->layout,
+                                             &iter,
+                                             x + priv->xoffset,
+                                             y + priv->yoffset);
+
+          gtk_text_view_start_selection_drag (text_view, &iter,
+                                              n_press == 2 ? SELECT_WORDS : SELECT_LINES,
+                                              event);
+          break;
+        default:
+          break;
+        }
 
       if (is_touchscreen)
         {
           _gtk_text_view_ensure_text_handles (text_view);
-          gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
+          gtk_text_view_update_handles (text_view, handle_mode);
         }
-      return TRUE;
     }
 
-  return FALSE;
+  if (n_press >= 3)
+    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
 
 static gint
@@ -6852,13 +6886,6 @@ drag_scan_timeout (gpointer data)
   return TRUE;
 }
 
-typedef enum 
-{
-  SELECT_CHARACTERS,
-  SELECT_WORDS,
-  SELECT_LINES
-} SelectionGranularity;
-
 /*
  * Move @start and @end to the boundaries of the selection unit (indicated by 
  * @granularity) which contained @start initially.
@@ -7028,30 +7055,26 @@ selection_motion_event_handler (GtkTextView    *text_view,
 }
 
 static void
-gtk_text_view_start_selection_drag (GtkTextView       *text_view,
-                                    const GtkTextIter *iter,
-                                    GdkEventButton    *button)
+gtk_text_view_start_selection_drag (GtkTextView          *text_view,
+                                    const GtkTextIter    *iter,
+                                    SelectionGranularity  granularity,
+                                    const GdkEvent       *event)
 {
   GtkTextViewPrivate *priv;
   GtkTextIter cursor, ins, bound;
   GtkTextIter orig_start, orig_end;
   GtkTextBuffer *buffer;
   SelectionData *data;
+  GdkModifierType state;
 
   if (text_view->priv->selection_drag_handler != 0)
     return;
 
   priv = text_view->priv;
   data = g_new0 (SelectionData, 1);
+  data->granularity = granularity;
 
-  if (button->type == GDK_2BUTTON_PRESS)
-    data->granularity = SELECT_WORDS;
-  else if (button->type == GDK_3BUTTON_PRESS)
-    data->granularity = SELECT_LINES;
-  else 
-    data->granularity = SELECT_CHARACTERS;
-
-  priv->grab_device = button->device;
+  priv->grab_device = gdk_event_get_device (event);
   buffer = get_buffer (text_view);
   
   cursor = *iter;
@@ -7060,8 +7083,9 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
   extend_selection (text_view, data->granularity, &ins, &bound);
   orig_start = ins;
   orig_end = bound;
+  gdk_event_get_state (event, &state);
 
-  if (button->state &
+  if (state &
       gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),
                                     GDK_MODIFIER_INTENT_EXTEND_SELECTION))
     {
@@ -8736,7 +8760,7 @@ popup_position_func (GtkMenu   *menu,
 typedef struct
 {
   GtkTextView *text_view;
-  gint button;
+  guint button;
   guint time;
   GdkDevice *device;
 } PopupInfo;
@@ -8858,7 +8882,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 
 static void
 gtk_text_view_do_popup (GtkTextView    *text_view,
-                        GdkEventButton *event)
+                        const GdkEvent *event)
 {
   PopupInfo *info = g_new (PopupInfo, 1);
 
@@ -8870,9 +8894,9 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
   
   if (event)
     {
-      info->button = event->button;
-      info->time = event->time;
-      info->device = event->device;
+      gdk_event_get_button (event, &info->button);
+      info->time = gdk_event_get_time (event);
+      info->device = gdk_event_get_device (event);
     }
   else
     {
