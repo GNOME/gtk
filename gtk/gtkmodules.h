@@ -49,7 +49,6 @@ typedef void     (*GtkModuleInitFunc)        (gint        *argc,
  */
 typedef void     (*GtkModuleDisplayInitFunc) (GdkDisplay   *display);
 
-
 G_END_DECLS
 
 
