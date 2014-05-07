@@ -80,6 +80,7 @@ struct _GtkWindowClass
   void     (* activate_focus)   (GtkWindow *window);
   void     (* activate_default) (GtkWindow *window);
   void	   (* keys_changed)     (GtkWindow *window);
+  void	   (* toggle_debugging) (GtkWindow *window);
 
   /*< private >*/
 
@@ -87,7 +88,6 @@ struct _GtkWindowClass
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 #define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())

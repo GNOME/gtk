@@ -59,6 +59,7 @@
 #include "a11y/gtkwindowaccessible.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
 #include "gtkapplicationprivate.h"
+#include "gtkmodulesprivate.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -243,6 +244,7 @@ enum {
   ACTIVATE_FOCUS,
   ACTIVATE_DEFAULT,
   KEYS_CHANGED,
+  TOGGLE_DEBUGGING,
   LAST_SIGNAL
 };
 
@@ -437,6 +439,7 @@ static void gtk_window_state_changed      (GtkWidget         *widget,
 static void gtk_window_real_activate_default (GtkWindow         *window);
 static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
+static void gtk_window_toggle_debugging      (GtkWindow         *window);
 static gint gtk_window_draw                  (GtkWidget         *widget,
 					      cairo_t           *cr);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
@@ -708,6 +711,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->keys_changed = gtk_window_keys_changed;
+  klass->toggle_debugging = gtk_window_toggle_debugging;
 
   /* Construct */
   g_object_class_install_property (gobject_class,
@@ -1223,6 +1227,27 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * GtkWindow::toggle-debugging:
+   * @window: the window on which the signal is emitted
+   *
+   * The ::toggle-debugging signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted when the user enables or disables
+   * interactive debugging.
+   *
+   * The default binding for this signal is Ctrl-Shift-I.
+   */
+  window_signals[TOGGLE_DEBUGGING] =
+    g_signal_new (I_("toggle-debugging"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkWindowClass, toggle_debugging),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
   /*
    * Key bindings
    */
@@ -1240,6 +1265,9 @@ gtk_window_class_init (GtkWindowClass *klass)
                                 "activate-default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
                                 "activate-default", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
+                                "toggle-debugging", 0);
 
   add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
   add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
@@ -12398,4 +12426,36 @@ _gtk_window_get_popover_position (GtkWindow             *window,
 
   if (rect)
     *rect = data->rect;
+}
+
+static void
+gtk_window_toggle_debugging (GtkWindow *window)
+{
+  static GType type = G_TYPE_NONE;
+  static GtkWidget *parasite_window = NULL;
+
+g_print ("toggle debugging\n");
+
+  if (type == G_TYPE_NONE)
+    {
+      _gtk_modules_load_module ("gtkparasite");
+      type = g_type_from_name ("ParasiteWindow");
+      if (type == G_TYPE_INVALID)
+        g_warning ("Failed to load gtkparasite module, debugging not available.");
+    }
+
+  if (!g_type_is_a (type, GTK_TYPE_WINDOW))
+    return;
+
+  if (parasite_window == NULL)
+    {
+      parasite_window = GTK_WIDGET (g_object_new (type, NULL));
+      g_signal_connect (parasite_window, "delete-event",
+                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+    }
+
+  if (gtk_widget_is_visible (parasite_window))
+    gtk_widget_hide (parasite_window);
+  else
+    gtk_window_present (GTK_WINDOW (parasite_window));
 }
