@@ -1898,8 +1898,7 @@ modules/printbackends/lpr/Makefile
 modules/printbackends/file/Makefile
 modules/printbackends/papi/Makefile
 modules/printbackends/test/Makefile
-modules/other/Makefile
-modules/other/parasite/Makefile
+modules/inspector/Makefile
 ])
 
 AC_OUTPUT
