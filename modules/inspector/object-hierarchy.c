@@ -62,21 +62,42 @@ void
 gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
                                            GObject                     *object)
 {
-  GObjectClass *klass = G_OBJECT_GET_CLASS (object);
+  GType type;
   const gchar *class_name;
   GtkTreeIter iter, parent;
-  GSList *list = NULL, *l;
+  GList *list = NULL, *l;
+  GHashTable *interfaces;
+  GHashTableIter hit;
+  GType *ifaces;
+  gint i;
 
   gtk_tree_store_clear (oh->priv->model);
 
+  interfaces = g_hash_table_new (g_str_hash, g_str_equal);
+  type = ((GTypeInstance*)object)->g_class->g_type;
+  
   do
     {
-      class_name = G_OBJECT_CLASS_NAME (klass);
-      list = g_slist_append (list, (gpointer)class_name);
+      class_name = g_type_name (type);
+      list = g_list_append (list, (gpointer)class_name);
+      ifaces = g_type_interfaces (type, NULL);
+      for (i = 0; ifaces[i]; i++)
+        g_hash_table_add (interfaces, (gchar *)g_type_name (ifaces[i]));
+      g_free (ifaces);
     }
-  while ((klass = g_type_class_peek_parent (klass)));
-  list = g_slist_reverse (list);
+  while ((type = g_type_parent (type)));
 
+  g_hash_table_iter_init (&hit, interfaces);
+  while (g_hash_table_iter_next (&hit, (gpointer *)&class_name, NULL))
+    {
+      gtk_tree_store_append (oh->priv->model, &iter, NULL);
+      gtk_tree_store_set (oh->priv->model, &iter,
+                          COLUMN_OBJECT_NAME, class_name,
+                          -1);
+    }
+  g_hash_table_unref (interfaces);
+
+  list = g_list_reverse (list);
   for (l = list; l; l = l->next)
     {
       gtk_tree_store_append (oh->priv->model, &iter, l == list ? NULL : &parent);
@@ -86,7 +107,7 @@ gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
       parent = iter;
     }
 
-  g_slist_free (list);
+  g_list_free (list);
 
   gtk_tree_view_expand_all (oh->priv->tree);
   gtk_tree_selection_select_iter (gtk_tree_view_get_selection (oh->priv->tree), &iter);
