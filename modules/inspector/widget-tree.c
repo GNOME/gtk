@@ -74,7 +74,7 @@ gtk_inspector_widget_tree_init (GtkInspectorWidgetTree *wt)
                                            (GDestroyNotify) gtk_tree_iter_free);
   gtk_widget_init_template (GTK_WIDGET (wt));
 
-  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL);
+  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
 }
 
 static void
@@ -137,17 +137,17 @@ on_container_forall (GtkWidget *widget,
                      gpointer   data)
 {
   FindAllData *d = data;
-  gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (widget), d->iter);
+  gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (widget), d->iter, NULL);
 }
 
 void
 gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
                                          GObject                *object,
-                                         GtkTreeIter            *parent_iter)
+                                         GtkTreeIter            *parent_iter,
+                                         const gchar            *name)
 {
   GtkTreeIter iter;
   const gchar *class_name = G_OBJECT_CLASS_NAME (G_OBJECT_GET_CLASS (object));
-  const gchar *name = NULL;
   gchar *address;
   gboolean realized;
   gboolean mapped;
@@ -160,7 +160,8 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   if (is_widget)
     {
       GtkWidget *widget = GTK_WIDGET (object);
-      name = gtk_widget_get_name (GTK_WIDGET (object));
+       if (name == NULL)
+         name = gtk_widget_get_name (GTK_WIDGET (object));
       realized = gtk_widget_get_realized  (widget);
       mapped = gtk_widget_get_mapped (widget);
       visible = gtk_widget_get_visible (widget);
@@ -212,8 +213,8 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
 {
   gtk_tree_store_clear (wt->priv->model);
   g_hash_table_remove_all (wt->priv->iters);
-  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL);
-  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (window), NULL);
+  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
+  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (window), NULL, NULL);
 
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (wt));
 }

@@ -274,7 +274,7 @@ start_editing (GtkCellRenderer      *renderer,
             }
           else if (gtk_inspector_widget_tree_find_object (widget_tree, r->priv->object, &iter))
             {
-              gtk_inspector_widget_tree_append_object (widget_tree, prop_object, &iter);
+              gtk_inspector_widget_tree_append_object (widget_tree, prop_object, &iter, prop->name);
               gtk_inspector_widget_tree_select_object (widget_tree, prop_object);
             }
           else

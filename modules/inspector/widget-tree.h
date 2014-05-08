@@ -65,7 +65,8 @@ void       gtk_inspector_widget_tree_select_object       (GtkInspectorWidgetTree
                                                           GObject                *object);
 void       gtk_inspector_widget_tree_append_object       (GtkInspectorWidgetTree *wt,
                                                           GObject                *object,
-                                                          GtkTreeIter            *parent_iter);
+                                                          GtkTreeIter            *parent_iter,
+                                                          const gchar            *name);
 gboolean   gtk_inspector_widget_tree_find_object         (GtkInspectorWidgetTree *wt,
                                                           GObject                *object,
                                                           GtkTreeIter            *iter);
