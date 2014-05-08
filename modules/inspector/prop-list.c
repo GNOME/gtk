@@ -48,7 +48,7 @@ struct _GtkInspectorPropListPrivate
   GObject *object;
   GtkListStore *model;
   GHashTable *prop_iters;
-  GList *signal_cnxs;
+  gulong notify_handler_id;
   GtkWidget *widget_tree;
   GtkCellRenderer *value_renderer;
   gboolean child_properties;
@@ -240,27 +240,21 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   GParamSpec **props;
   guint num_properties;
   guint i;
-  GList *l;
 
   if (pl->priv->object == object)
     return FALSE;
 
-  pl->priv->object = object;
-
-  for (l = pl->priv->signal_cnxs; l != NULL; l = l->next)
+  if (pl->priv->notify_handler_id != 0)
     {
-      gulong id = GPOINTER_TO_UINT (l->data);
-
-      if (g_signal_handler_is_connected (object, id))
-        g_signal_handler_disconnect (object, id);
+      g_signal_handler_disconnect (pl->priv->object, pl->priv->notify_handler_id);
+      pl->priv->notify_handler_id = 0;
     }
-
-  g_list_free (pl->priv->signal_cnxs);
-  pl->priv->signal_cnxs = NULL;
 
   g_hash_table_remove_all (pl->priv->prop_iters);
   gtk_list_store_clear (pl->priv->model);
   gtk_widget_set_sensitive (GTK_WIDGET (pl), FALSE);
+
+  pl->priv->object = object;
 
   if (pl->priv->child_properties)
     {
@@ -283,7 +277,6 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   for (i = 0; i < num_properties; i++)
     {
       GParamSpec *prop = props[i];
-      gchar *signal_name;
 
       if (! (prop->flags & G_PARAM_READABLE))
         continue;
@@ -292,20 +285,14 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
       gtk_inspector_prop_list_update_prop (pl, &iter, prop);
 
       g_hash_table_insert (pl->priv->prop_iters, (gpointer) prop->name, gtk_tree_iter_copy (&iter));
-
-      /* Listen for updates */
-      if (pl->priv->child_properties)
-        signal_name = g_strdup_printf ("child-notify::%s", prop->name);
-      else
-        signal_name = g_strdup_printf ("notify::%s", prop->name);
-
-      pl->priv->signal_cnxs =
-          g_list_prepend (pl->priv->signal_cnxs,
-                          GINT_TO_POINTER (g_signal_connect (object, signal_name,
-                                                             G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb), pl)));
-
-        g_free (signal_name);
     }
+
+  /* Listen for updates */
+  pl->priv->notify_handler_id =
+      g_signal_connect (object,
+                        pl->priv->child_properties ? "child-notify" : "notify",
+                        G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb),
+                        pl);
 
   g_object_set (pl->priv->attribute_column,
                 "visible", !pl->priv->child_properties && GTK_IS_CELL_RENDERER (object),
