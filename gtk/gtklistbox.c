@@ -395,7 +395,9 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * The ::row-selected signal is emitted when a new row is selected, or
    * (with a %NULL @row) when the selection is cleared.
    *
-   * Also see #GtkListBox::selected-rows-changed.
+   * When the @box is using #GTK_SELECTION_MULTIPLE, this signal will not
+   * give you the full picture of selection changes, and you should use
+   * the #GtkListBox::selected-rows-changed signal instead.
    *
    * Since: 3.10
    */
