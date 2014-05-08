@@ -36,6 +36,7 @@
 #include "python-shell.h"
 #include "button-path.h"
 #include "themes.h"
+#include "signals-list.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -72,6 +73,7 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
         return;
 
       gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->child_prop_list), selected);
+      gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
       gtk_inspector_object_hierarchy_set_object (GTK_INSPECTOR_OBJECT_HIERARCHY (iw->object_hierarchy), selected);
 
       if (GTK_IS_WIDGET (selected))
@@ -179,6 +181,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, signals_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, button_path);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, classes_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_css_editor);

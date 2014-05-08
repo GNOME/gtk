@@ -31,6 +31,7 @@
 #include "python-hooks.h"
 #include "python-shell.h"
 #include "resources.h"
+#include "signals-list.h"
 #include "themes.h"
 #include "widget-tree.h"
 #include "window.h"
@@ -54,6 +55,7 @@ gtk_module_init (gint *argc, gchar ***argv)
   g_type_ensure (GTK_TYPE_INSPECTOR_PYTHON_SHELL);
   g_type_ensure (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER);
   g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
+  g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);
 }
 
 

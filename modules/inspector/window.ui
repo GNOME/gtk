@@ -160,6 +160,26 @@
                       </object>
                     </child> 
                     <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="shadow-type">in</property>
+                        <property name="width-request">250</property>
+                        <child>
+                          <object class="GtkInspectorSignalsList" id="signals_list">
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Signals</property>
+                      </object>
+                    </child> 
+                    <child>
                       <object class="GtkInspectorObjectHierarchy" id="object_hierarchy">
                         <property name="visible">True</property>
                       </object>

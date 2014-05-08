@@ -40,7 +40,9 @@ libgtkinspector_la_SOURCES = \
 	object-hierarchy.h \
 	object-hierarchy.c \
 	themes.h \
-	themes.c
+	themes.c \
+	signals-list.h \
+	signals-list.c
 
 libgtkinspector_la_CPPFLAGS = \
 	-I$(top_srcdir) 		\
@@ -63,7 +65,7 @@ libgtkinspector_la_LIBADD = \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
 
-templates = \ 
+templates = \
 	button-path.ui \
 	classes-list.ui \
 	css-editor.ui \
@@ -71,7 +73,8 @@ templates = \
 	prop-list.ui \
 	themes.ui \
 	widget-tree.ui \
-	window.ui
+	window.ui \
+	signals-list.ui
 
 template_headers = $(templates:.ui=.ui.h)
 

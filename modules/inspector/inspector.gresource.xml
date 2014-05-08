@@ -9,5 +9,6 @@
     <file>prop-list.ui</file>
     <file>themes.ui</file>
     <file>window.ui</file>
+    <file>signals-list.ui</file>
   </gresource>
 </gresources>
