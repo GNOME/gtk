@@ -128,6 +128,7 @@
                           <object class="GtkInspectorPropList" id="prop_list">
                             <property name="visible">True</property>
                             <property name="child-properties">False</property>
+                            <property name="widget-tree">widget_tree</property>
                           </object>
                         </child>
                       </object>
@@ -149,6 +150,7 @@
                           <object class="GtkInspectorPropList" id="child_prop_list">
                             <property name="visible">True</property>
                             <property name="child-properties">True</property>
+                            <property name="widget-tree">widget_tree</property>
                           </object>
                         </child>
                       </object>

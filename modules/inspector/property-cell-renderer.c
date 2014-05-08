@@ -261,7 +261,7 @@ start_editing (GtkCellRenderer      *renderer,
 
   if (G_VALUE_HOLDS_OBJECT (&gvalue))
     {
-      GtkInspectorWidgetTree *widget_tree = g_object_get_data (G_OBJECT (renderer), "gtk_inspector-widget-tree");
+      GtkInspectorWidgetTree *widget_tree = g_object_get_data (G_OBJECT (renderer), "gtk-inspector-widget-tree");
       GObject *prop_object = g_value_get_object (&gvalue);
       GtkTreeIter iter;
 

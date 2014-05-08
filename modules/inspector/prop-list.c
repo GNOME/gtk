@@ -81,7 +81,6 @@ get_property (GObject    *object,
     {
       case PROP_WIDGET_TREE:
         g_value_take_object (value, pl->priv->widget_tree);
-        g_object_set_data (G_OBJECT (pl->priv->value_renderer), "gtk_inspector-widget-tree", pl->priv->widget_tree);
         break;
 
       case PROP_CHILD_PROPERTIES:
@@ -109,6 +108,7 @@ set_property (GObject      *object,
     {
       case PROP_WIDGET_TREE:
         pl->priv->widget_tree = g_value_get_object (value);
+        g_object_set_data (G_OBJECT (pl->priv->value_renderer), "gtk-inspector-widget-tree", pl->priv->widget_tree);
         break;
 
       case PROP_CHILD_PROPERTIES:
