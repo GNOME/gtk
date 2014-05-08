@@ -388,6 +388,11 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_cell_area_attribute_disconnect           (GtkCellArea        *area,
                                                                     GtkCellRenderer    *renderer,
                                                                     const gchar        *attribute);
+GDK_AVAILABLE_IN_3_14
+gint                  gtk_cell_area_attribute_get_column           (GtkCellArea        *area,
+                                                                    GtkCellRenderer    *renderer,
+                                                                    const gchar        *attribute);
+
 
 /* Cell Properties */
 GDK_AVAILABLE_IN_ALL

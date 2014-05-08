@@ -2319,6 +2319,46 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
 }
 
 /**
+ * gtk_cell_area_attribute_get_column:
+ * @cell_layout: a #GtkCellLayout
+ * @cell: a #GtkCellRenderer
+ * @attribute: an attribute on the renderer
+ *
+ * Returns the model column that an attribute has been mapped to,
+ * or -1 if the attribute is not mapped.
+ *
+ * Returns: the model column, or -1
+ *
+ * Since: 3.14
+ */
+gint
+gtk_cell_area_attribute_get_column (GtkCellArea     *area,
+                                    GtkCellRenderer *renderer,
+                                    const gchar     *attribute)
+{
+  GtkCellAreaPrivate *priv;
+  CellInfo           *info;
+  CellAttribute      *cell_attribute;
+  GSList             *node;
+
+  priv = area->priv;
+  info = g_hash_table_lookup (priv->cell_info, renderer);
+
+  if (info)
+    {
+      node = g_slist_find_custom (info->attributes, attribute,
+                                  (GCompareFunc)cell_attribute_find);
+      if (node)
+        {
+          cell_attribute = node->data;
+          return cell_attribute->column;
+        }
+    }
+
+  return -1;
+}
+
+/**
  * gtk_cell_area_apply_attributes:
  * @area: a #GtkCellArea
  * @tree_model: the #GtkTreeModel to pull values from
