@@ -205,6 +205,33 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       gtk_container_forall (GTK_CONTAINER (object), on_container_forall, &data);
     }
+
+  if (GTK_IS_TREE_VIEW (object))
+    {
+      gint n_columns, i;
+      GObject *column;
+
+      n_columns = gtk_tree_view_get_n_columns (GTK_TREE_VIEW (object));
+      for (i = 0; i < n_columns; i++)
+        {
+          column = G_OBJECT (gtk_tree_view_get_column (GTK_TREE_VIEW (object), i));
+          gtk_inspector_widget_tree_append_object (wt, column, &iter, NULL);
+        }
+    }
+
+  if (GTK_IS_CELL_LAYOUT (object))
+    {
+      GList *cells, *l;
+      GObject *cell;
+
+      cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (object));
+      for (l = cells; l; l = l->next)
+        {
+          cell = l->data;
+          gtk_inspector_widget_tree_append_object (wt, cell, &iter, NULL);
+        }
+      g_list_free (cells);
+    }
 }
 
 void
