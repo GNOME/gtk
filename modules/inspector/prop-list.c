@@ -32,7 +32,8 @@ enum
   COLUMN_DEFINED_AT,
   COLUMN_OBJECT,
   COLUMN_TOOLTIP,
-  COLUMN_WRITABLE
+  COLUMN_WRITABLE,
+  COLUMN_ATTRIBUTE
 };
 
 enum
@@ -51,6 +52,7 @@ struct _GtkInspectorPropListPrivate
   GtkWidget *widget_tree;
   GtkCellRenderer *value_renderer;
   gboolean child_properties;
+  GtkTreeViewColumn *attribute_column;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropList, gtk_inspector_prop_list, GTK_TYPE_TREE_VIEW)
@@ -85,9 +87,6 @@ get_property (GObject    *object,
 
       case PROP_CHILD_PROPERTIES:
         g_value_set_boolean (value, pl->priv->child_properties);
-        g_object_set (pl->priv->value_renderer,
-                      "is-child-property", pl->priv->child_properties,
-                      NULL);
         break;
 
       default:
@@ -113,6 +112,9 @@ set_property (GObject      *object,
 
       case PROP_CHILD_PROPERTIES:
         pl->priv->child_properties = g_value_get_boolean (value);
+        g_object_set (pl->priv->value_renderer,
+                      "is-child-property", pl->priv->child_properties,
+                      NULL);
         break;
 
       default:
@@ -140,6 +142,7 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, value_renderer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, attribute_column);
 }
 
 static void
@@ -148,9 +151,10 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
                                      GParamSpec           *prop)
 {
   GValue gvalue = {0};
-  gchar *value;
+  gchar *value = NULL;
+  gchar *attribute = NULL;
 
-  g_value_init(&gvalue, prop->value_type);
+  g_value_init (&gvalue, prop->value_type);
   if (pl->priv->child_properties)
     {
       GtkWidget *parent;
@@ -172,19 +176,36 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
     }
   else
     {
-      value = g_strdup_value_contents(&gvalue);
+      value = g_strdup_value_contents (&gvalue);
+    }
+
+  if (GTK_IS_CELL_RENDERER (pl->priv->object))
+    {
+      gpointer *area;
+      gint column = -1;
+
+      area = g_object_get_data (pl->priv->object, "gtk-inspector-cell-area");
+      if (area)
+        column = gtk_cell_area_attribute_get_column (GTK_CELL_AREA (area),
+                                                     GTK_CELL_RENDERER (pl->priv->object),
+                                                     prop->name);
+
+       if (column != -1)
+         attribute = g_strdup_printf ("%d", column);
     }
 
   gtk_list_store_set (pl->priv->model, iter,
                       COLUMN_NAME, prop->name,
-                      COLUMN_VALUE, value ? value : g_strdup (""),
+                      COLUMN_VALUE, value ? value : "",
                       COLUMN_DEFINED_AT, g_type_name (prop->owner_type),
                       COLUMN_OBJECT, pl->priv->object,
                       COLUMN_TOOLTIP, g_param_spec_get_blurb (prop),
                       COLUMN_WRITABLE, (prop->flags & G_PARAM_WRITABLE) != 0,
+                      COLUMN_ATTRIBUTE, attribute ? attribute : "",
                       -1);
 
   g_free (value);
+  g_free (attribute);
   g_value_unset (&gvalue);
 }
 
@@ -280,12 +301,15 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
       pl->priv->signal_cnxs =
           g_list_prepend (pl->priv->signal_cnxs,
-                          GINT_TO_POINTER (g_signal_connect(object, signal_name,
-                                                            G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb), pl)));
+                          GINT_TO_POINTER (g_signal_connect (object, signal_name,
+                                                             G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb), pl)));
 
         g_free (signal_name);
     }
 
+  g_object_set (pl->priv->attribute_column,
+                "visible", !pl->priv->child_properties && GTK_IS_CELL_RENDERER (object),
+                NULL);
   return TRUE;
 }
 

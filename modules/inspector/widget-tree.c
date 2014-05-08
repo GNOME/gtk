@@ -194,7 +194,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
                       -1);
   g_hash_table_insert (wt->priv->iters, object, gtk_tree_iter_copy (&iter));
 
-  g_free(address);
+  g_free (address);
 
   if (GTK_IS_CONTAINER (object))
     {
@@ -223,11 +223,14 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
     {
       GList *cells, *l;
       GObject *cell;
+      GtkCellArea *area;
 
+      area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (object));
       cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (object));
       for (l = cells; l; l = l->next)
         {
           cell = l->data;
+          g_object_set_data (cell, "gtk-inspector-cell-area", area);
           gtk_inspector_widget_tree_append_object (wt, cell, &iter, NULL);
         }
       g_list_free (cells);
