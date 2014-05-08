@@ -693,13 +693,21 @@ void
 gtk_list_box_select_row (GtkListBox    *box,
                          GtkListBoxRow *row)
 {
+  gboolean dirty = FALSE;
+
   g_return_if_fail (GTK_IS_LIST_BOX (box));
   g_return_if_fail (row == NULL || GTK_IS_LIST_BOX_ROW (row));
 
   if (row)
     gtk_list_box_select_row_internal (box, row);
   else
-    gtk_list_box_unselect_all_internal (box);
+    dirty = gtk_list_box_unselect_all_internal (box);
+
+  if (dirty)
+    {
+      g_signal_emit (box, signals[ROW_SELECTED], 0, NULL);
+      g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+    }
 }
 
 /**   
@@ -765,7 +773,10 @@ gtk_list_box_unselect_all (GtkListBox *box)
   dirty = gtk_list_box_unselect_all_internal (box);
 
   if (dirty)
-    g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+    {
+      g_signal_emit (box, signals[ROW_SELECTED], 0, NULL);
+      g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
+    }
 }
 
 static void
@@ -1449,6 +1460,7 @@ gtk_list_box_unselect_row_internal (GtkListBox    *box,
   else
     gtk_list_box_row_set_selected (row, FALSE);
 
+  g_signal_emit (box, signals[ROW_SELECTED], 0, NULL);
   g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
 }
 
@@ -1540,6 +1552,7 @@ gtk_list_box_update_selection (GtkListBox    *box,
     {
       gtk_list_box_unselect_all_internal (box);
       gtk_list_box_row_set_selected (row, TRUE);
+      g_signal_emit (box, signals[ROW_SELECTED], 0, row);
       priv->selected_row = row;
     }
   else if (priv->selection_mode == GTK_SELECTION_SINGLE)
@@ -1550,6 +1563,7 @@ gtk_list_box_update_selection (GtkListBox    *box,
       gtk_list_box_unselect_all_internal (box);
       gtk_list_box_row_set_selected (row, modify ? !was_selected : TRUE);
       priv->selected_row = ROW_PRIV (row)->selected ? row : NULL;
+      g_signal_emit (box, signals[ROW_SELECTED], 0, priv->selected_row);
     }
   else /* GTK_SELECTION_MULTIPLE */
     {
@@ -1560,6 +1574,7 @@ gtk_list_box_update_selection (GtkListBox    *box,
             {
               gtk_list_box_row_set_selected (row, TRUE);
               priv->selected_row = row;
+              g_signal_emit (box, signals[ROW_SELECTED], 0, row);
             }
           else
             gtk_list_box_select_all_between (box, priv->selected_row, row, FALSE);
@@ -1569,12 +1584,15 @@ gtk_list_box_update_selection (GtkListBox    *box,
           if (modify)
             {
               gtk_list_box_row_set_selected (row, !ROW_PRIV (row)->selected);
+              g_signal_emit (box, signals[ROW_SELECTED], 0, ROW_PRIV (row)->selected ? row
+                                                                                     : NULL);
             }
           else
             {
               gtk_list_box_unselect_all_internal (box);
               gtk_list_box_row_set_selected (row, !ROW_PRIV (row)->selected);
               priv->selected_row = row;
+              g_signal_emit (box, signals[ROW_SELECTED], 0, row);
             }
         }
     }
