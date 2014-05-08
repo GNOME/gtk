@@ -427,8 +427,8 @@ gdk_screen_set_font_options (GdkScreen                  *screen,
  * 
  * Gets any options previously set with gdk_screen_set_font_options().
  * 
- * Returns: the current font options, or %NULL if no default
- *  font options have been set.
+ * Returns: (nullable): the current font options, or %NULL if no
+ *  default font options have been set.
  *
  * Since: 2.10
  **/
@@ -760,8 +760,8 @@ gdk_screen_get_monitor_height_mm (GdkScreen *screen,
  * Usually something like VGA, DVI, or TV, not the actual
  * product name of the display device.
  *
- * Returns: a newly-allocated string containing the name of the monitor,
- *   or %NULL if the name cannot be determined
+ * Returns: (nullable): a newly-allocated string containing the name
+ *   of the monitor, or %NULL if the name cannot be determined
  *
  * Since: 2.14
  */
@@ -899,8 +899,9 @@ gdk_screen_get_system_visual (GdkScreen * screen)
  * For setting an overall opacity for a top-level window, see
  * gdk_window_set_opacity().
  *
- * Returns: (transfer none): a visual to use for windows with an
- *     alpha channel or %NULL if the capability is not available.
+ * Returns: (nullable) (transfer none): a visual to use for windows
+ *     with an alpha channel or %NULL if the capability is not
+ *     available.
  *
  * Since: 2.8
  **/
@@ -974,7 +975,8 @@ gdk_screen_make_display_name (GdkScreen *screen)
  * The returned window should be unrefed using g_object_unref() when
  * no longer needed.
  *
- * Returns: (transfer full): the currently active window, or %NULL.
+ * Returns: (nullable) (transfer full): the currently active window,
+ *   or %NULL.
  *
  * Since: 2.10
  **/
@@ -1006,9 +1008,8 @@ gdk_screen_get_active_window (GdkScreen *screen)
  * windows it contains, so it should be freed using g_list_free() and
  * its windows unrefed using g_object_unref() when no longer needed.
  *
- * Returns: (transfer full) (element-type GdkWindow):
- *     a list of #GdkWindows for the current window stack,
- *               or %NULL.
+ * Returns: (nullable): (transfer full) (element-type GdkWindow): a
+ *     list of #GdkWindows for the current window stack, or %NULL.
  *
  * Since: 2.10
  **/

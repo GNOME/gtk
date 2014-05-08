@@ -436,7 +436,7 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
  * for the current frame or a recent frame. The #GdkFrameTimings
  * object may not yet be complete: see gdk_frame_timings_get_complete().
  *
- * Returns: the #GdkFrameTimings object for the specified
+ * Returns: (nullable): the #GdkFrameTimings object for the specified
  *  frame, or %NULL if it is not available. See
  *  gdk_frame_clock_get_history_start().
  * Since: 3.8
@@ -469,10 +469,10 @@ gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
  *
  * Gets the frame timings for the current frame.
  *
- * Returns: the #GdkFrameTimings for the frame currently being
- *  processed, or even no frame is being processed, for the
- *  previous frame. Before any frames have been procesed,
- *  returns %NULL.
+ * Returns: (nullable): the #GdkFrameTimings for the frame currently
+ *  being processed, or even no frame is being processed, for the
+ *  previous frame. Before any frames have been procesed, returns
+ *  %NULL.
  * Since: 3.8
  */
 GdkFrameTimings *

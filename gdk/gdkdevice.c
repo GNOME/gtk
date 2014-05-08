@@ -505,7 +505,8 @@ gdk_device_get_position (GdkDevice        *device,
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
  *
- * Returns: (transfer none): the #GdkWindow under the device position, or %NULL.
+ * Returns: (nullable) (transfer none): the #GdkWindow under the
+ *   device position, or %NULL.
  *
  * Since: 3.0
  **/
@@ -554,7 +555,8 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
  *
- * Returns: (transfer none): the #GdkWindow under the device position, or %NULL.
+ * Returns: (nullable) (transfer none): the #GdkWindow under the
+ * device position, or %NULL.
  *
  * Since: 3.0
  **/
@@ -941,7 +943,8 @@ gdk_device_get_display (GdkDevice *device)
  * If @device is of type %GDK_DEVICE_TYPE_FLOATING, %NULL will be
  * returned, as there is no associated device.
  *
- * Returns: (transfer none): The associated device, or %NULL
+ * Returns: (nullable) (transfer none): The associated device, or
+ *   %NULL
  *
  * Since: 3.0
  **/
@@ -1001,10 +1004,10 @@ _gdk_device_set_associated_device (GdkDevice *device,
  * the list of slave devices attached to it, otherwise it will return
  * %NULL
  *
- * Returns: (transfer container) (element-type GdkDevice): the list of
- *          slave devices, or %NULL. The list must be freed with
- *          g_list_free(), the contents of the list are owned by GTK+
- *          and should not be freed.
+ * Returns: (nullable) (transfer container) (element-type GdkDevice):
+ *          the list of slave devices, or %NULL. The list must be
+ *          freed with g_list_free(), the contents of the list are
+ *          owned by GTK+ and should not be freed.
  **/
 GList *
 gdk_device_list_slave_devices (GdkDevice *device)

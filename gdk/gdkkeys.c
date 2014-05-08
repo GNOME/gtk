@@ -680,9 +680,9 @@ gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
  * `gdk/gdkkeysyms.h` header file
  * but without the leading “GDK_KEY_”.
  *
- * Returns: (transfer none): a string containing the name of the key,
- *     or %NULL if @keyval is not a valid key. The string should not be
- *     modified.
+ * Returns: (nullable) (transfer none): a string containing the name
+ *     of the key, or %NULL if @keyval is not a valid key. The string
+ *     should not be modified.
  */
 gchar *
 gdk_keyval_name (guint keyval)

@@ -329,8 +329,8 @@ gdk_window_class_init (GdkWindowClass *klass)
    * The ::pick-embedded-child signal is emitted to find an embedded
    * child at the given position.
    *
-   * Returns: (transfer none): the #GdkWindow of the embedded child at
-   *     @x, @y, or %NULL
+   * Returns: (nullable) (transfer none): the #GdkWindow of the
+   *     embedded child at @x, @y, or %NULL
    *
    * Since: 2.18
    */
@@ -4412,9 +4412,9 @@ gdk_window_constrain_size (GdkGeometry    *geometry,
  * The position is given in coordinates relative to the upper left
  * corner of @window.
  *
- * Returns: (transfer none): the window containing the pointer (as with
- * gdk_window_at_pointer()), or %NULL if the window containing the
- * pointer isn’t known to GDK
+ * Returns: (nullable) (transfer none): the window containing the
+ * pointer (as with gdk_window_at_pointer()), or %NULL if the window
+ * containing the pointer isn’t known to GDK
  *
  * Deprecated: 3.0: Use gdk_window_get_device_position() instead.
  **/
@@ -4445,8 +4445,9 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * The position is given in coordinates relative to the upper left
  * corner of @window.
  *
- * Returns: (transfer none): The window underneath @device (as with
- * gdk_device_get_window_at_position()), or %NULL if the window is not known to GDK.
+ * Returns: (nullable) (transfer none): The window underneath @device
+ * (as with gdk_device_get_window_at_position()), or %NULL if the
+ * window is not known to GDK.
  *
  * Since: 3.10
  **/
@@ -4501,8 +4502,9 @@ gdk_window_get_device_position_double (GdkWindow       *window,
  *
  * Use gdk_window_get_device_position_double() if you need subpixel precision.
  *
- * Returns: (transfer none): The window underneath @device (as with
- * gdk_device_get_window_at_position()), or %NULL if the window is not known to GDK.
+ * Returns: (nullable) (transfer none): The window underneath @device
+ * (as with gdk_device_get_window_at_position()), or %NULL if the
+ * window is not known to GDK.
  *
  * Since: 3.0
  **/
@@ -5814,8 +5816,8 @@ gdk_window_set_background_pattern (GdkWindow *window,
  * does not have its own background and reuses the parent's, %NULL is
  * returned and you’ll have to query it yourself.
  *
- * Returns: (transfer none): The pattern to use for the background or
- *     %NULL to use the parent’s background.
+ * Returns: (nullable) (transfer none): The pattern to use for the
+ * background or %NULL to use the parent’s background.
  *
  * Since: 2.22
  **/
@@ -5860,10 +5862,10 @@ gdk_window_set_cursor_internal (GdkWindow *window,
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
- * Returns: (transfer none): a #GdkCursor, or %NULL. The returned
- *   object is owned by the #GdkWindow and should not be unreferenced
- *   directly. Use gdk_window_set_cursor() to unset the cursor of the
- *   window
+ * Returns: (nullable) (transfer none): a #GdkCursor, or %NULL. The
+ *   returned object is owned by the #GdkWindow and should not be
+ *   unreferenced directly. Use gdk_window_set_cursor() to unset the
+ *   cursor of the window
  *
  * Since: 2.18
  */
@@ -5940,10 +5942,10 @@ gdk_window_set_cursor (GdkWindow *window,
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
- * Returns: (transfer none): a #GdkCursor, or %NULL. The returned
- *   object is owned by the #GdkWindow and should not be unreferenced
- *   directly. Use gdk_window_set_cursor() to unset the cursor of the
- *   window
+ * Returns: (nullable) (transfer none): a #GdkCursor, or %NULL. The
+ *   returned object is owned by the #GdkWindow and should not be
+ *   unreferenced directly. Use gdk_window_set_cursor() to unset the
+ *   cursor of the window
  *
  * Since: 3.0
  **/

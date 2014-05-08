@@ -203,8 +203,8 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
  * Combines gdk_visual_get_best_with_depth() and
  * gdk_visual_get_best_with_type().
  *
- * Returns: (transfer none): best visual with both @depth and
- *     @visual_type, or %NULL if none
+ * Returns: (nullable) (transfer none): best visual with both @depth
+ *     and @visual_type, or %NULL if none
  */
 GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,

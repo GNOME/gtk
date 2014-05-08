@@ -77,8 +77,8 @@
  * (In short, there are several ways this function can fail, and if it fails
  *  it returns %NULL; so check the return value.)
  *
- * Returns: (transfer full): A newly-created pixbuf with a reference
- *     count of 1, or %NULL on error
+ * Returns: (nullable) (transfer full): A newly-created pixbuf with a
+ *     reference count of 1, or %NULL on error
  */
 GdkPixbuf *
 gdk_pixbuf_get_from_window (GdkWindow *src,
@@ -225,8 +225,8 @@ convert_no_alpha (guchar *dest_data,
  * This function will create an RGB pixbuf with 8 bits per channel.
  * The pixbuf will contain an alpha channel if the @surface contains one.
  *
- * Returns: (transfer full): A newly-created pixbuf with a reference
- *     count of 1, or %NULL on error
+ * Returns: (nullable) (transfer full): A newly-created pixbuf with a
+ *     reference count of 1, or %NULL on error
  */
 GdkPixbuf *
 gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,

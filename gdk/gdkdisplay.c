@@ -306,8 +306,9 @@ gdk_display_is_closed  (GdkDisplay  *display)
  * Gets the next #GdkEvent to be processed for @display, fetching events from the
  * windowing system if necessary.
  * 
- * Returns: the next #GdkEvent to be processed, or %NULL if no events
- * are pending. The returned #GdkEvent should be freed with gdk_event_free().
+ * Returns: (nullable): the next #GdkEvent to be processed, or %NULL
+ * if no events are pending. The returned #GdkEvent should be freed
+ * with gdk_event_free().
  *
  * Since: 2.2
  **/
@@ -331,9 +332,9 @@ gdk_display_get_event (GdkDisplay *display)
  * not get more events from the windowing system.  It only checks the events
  * that have already been moved to the GDK event queue.)
  * 
- * Returns: a copy of the first #GdkEvent on the event queue, or %NULL 
- * if no events are in the queue. The returned #GdkEvent should be freed with
- * gdk_event_free().
+ * Returns: (nullable): a copy of the first #GdkEvent on the event
+ * queue, or %NULL if no events are in the queue. The returned
+ * #GdkEvent should be freed with gdk_event_free().
  *
  * Since: 2.2
  **/
@@ -585,7 +586,8 @@ gdk_display_get_pointer (GdkDisplay      *display,
  * if the window under the mouse pointer is not known to GDK (for example, 
  * belongs to another application).
  *
- * Returns: (transfer none): the window under the mouse pointer, or %NULL
+ * Returns: (nullable) (transfer none): the window under the mouse
+ *   pointer, or %NULL
  *
  * Since: 2.2
  *
@@ -1390,8 +1392,9 @@ gdk_display_device_is_grabbed (GdkDisplay *display,
  *
  * Returns the #GdkDeviceManager associated to @display.
  *
- * Returns: (transfer none): A #GdkDeviceManager, or %NULL. This memory is
- *          owned by GDK and must not be freed or unreferenced.
+ * Returns: (nullable) (transfer none): A #GdkDeviceManager, or
+ *          %NULL. This memory is owned by GDK and must not be freed
+ *          or unreferenced.
  *
  * Since: 3.0
  **/
@@ -1780,8 +1783,8 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
  *
  * Opens a display.
  *
- * Returns: (transfer none): a #GdkDisplay, or %NULL
- *     if the display could not be opened
+ * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if the
+ *     display could not be opened
  *
  * Since: 2.2
  */

@@ -284,9 +284,9 @@ gdk_device_manager_get_property (GObject      *object,
  *
  * Gets the #GdkDisplay associated to @device_manager.
  *
- * Returns: (transfer none): the #GdkDisplay to which @device_manager is
- *          associated to, or #NULL. This memory is owned by GDK and
- *          must not be freed or unreferenced.
+ * Returns: (nullable) (transfer none): the #GdkDisplay to which
+ *          @device_manager is associated to, or #NULL. This memory is
+ *          owned by GDK and must not be freed or unreferenced.
  *
  * Since: 3.0
  **/

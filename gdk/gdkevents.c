@@ -80,7 +80,8 @@ _gdk_event_emit (GdkEvent *event)
  * Find the first event on the queue that is not still
  * being filled in.
  * 
- * Returns: Pointer to the list node for that event, or NULL.
+ * Returns: (nullable): Pointer to the list node for that event, or
+ *   %NULL.
  **/
 GList*
 _gdk_event_queue_find_first (GdkDisplay *display)
@@ -241,7 +242,7 @@ _gdk_event_queue_remove_link (GdkDisplay *display,
  * Removes and returns the first event from the event
  * queue that is not still being filled in.
  * 
- * Returns: the event, or %NULL. Ownership is transferred
+ * Returns: (nullable): the event, or %NULL. Ownership is transferred
  * to the caller.
  **/
 GdkEvent*
@@ -406,8 +407,9 @@ gdk_events_pending (void)
  * on, fetching events from the windowing system if necessary.
  * See gdk_display_get_event().
  * 
- * Returns: the next #GdkEvent to be processed, or %NULL if no events
- * are pending. The returned #GdkEvent should be freed with gdk_event_free().
+ * Returns: (nullable): the next #GdkEvent to be processed, or %NULL
+ * if no events are pending. The returned #GdkEvent should be freed
+ * with gdk_event_free().
  **/
 GdkEvent*
 gdk_event_get (void)
@@ -435,9 +437,9 @@ gdk_event_get (void)
  * If there is an event waiting in the event queue of some open
  * display, returns a copy of it. See gdk_display_peek_event().
  * 
- * Returns: a copy of the first #GdkEvent on some event queue, or %NULL if no
- * events are in any queues. The returned #GdkEvent should be freed with
- * gdk_event_free().
+ * Returns: (nullable): a copy of the first #GdkEvent on some event
+ * queue, or %NULL if no events are in any queues. The returned
+ * #GdkEvent should be freed with gdk_event_free().
  **/
 GdkEvent*
 gdk_event_peek (void)
@@ -1509,7 +1511,7 @@ gdk_event_set_device (GdkEvent  *event,
  * If the event contains a “device” field, this function will return
  * it, else it will return %NULL.
  *
- * Returns: (transfer none): a #GdkDevice, or %NULL.
+ * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL.
  *
  * Since: 3.0
  **/
@@ -1641,7 +1643,7 @@ gdk_event_set_source_device (GdkEvent  *event,
  * If the event does not contain a device field, this function will
  * return %NULL.
  *
- * Returns: (transfer none): a #GdkDevice, or %NULL.
+ * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL.
  *
  * Since: 3.0
  **/

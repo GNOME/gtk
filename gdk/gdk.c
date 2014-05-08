@@ -357,8 +357,9 @@ gdk_get_display (void)
  * Gets the display name specified in the command line arguments passed
  * to gdk_init() or gdk_parse_args(), if any.
  *
- * Returns: the display name, if specified explicitly, otherwise %NULL
- *   this string is owned by GTK+ and must not be modified or freed.
+ * Returns: (nullable): the display name, if specified explicitly,
+ *   otherwise %NULL this string is owned by GTK+ and must not be
+ *   modified or freed.
  *
  * Since: 2.2
  */
@@ -380,8 +381,8 @@ gdk_get_display_arg_name (void)
  * display has previously been set, simply returns that. An internal
  * function that should not be used by applications.
  *
- * Returns: (transfer none): the default display, if it could be
- *   opened, otherwise %NULL.
+ * Returns: (nullable) (transfer none): the default display, if it
+ *   could be opened, otherwise %NULL.
  **/
 GdkDisplay *
 gdk_display_open_default_libgtk_only (void)

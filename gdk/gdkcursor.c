@@ -264,8 +264,8 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  * Creates a new cursor by looking up @name in the current cursor
  * theme.
  *
- * Returns: a new #GdkCursor, or %NULL if there is no cursor with
- *   the given name
+ * Returns: (nullable): a new #GdkCursor, or %NULL if there is no
+ *   cursor with the given name
  *
  * Since: 2.8
  */
@@ -423,7 +423,8 @@ gdk_cursor_get_display (GdkCursor *cursor)
  * on the cursor, GDK may not be able to obtain the image data. In this 
  * case, %NULL is returned.
  *
- * Returns: (transfer full): a #GdkPixbuf representing @cursor, or %NULL
+ * Returns: (nullable) (transfer full): a #GdkPixbuf representing
+ *   @cursor, or %NULL
  *
  * Since: 2.8
  */
@@ -487,7 +488,8 @@ gdk_cursor_get_image (GdkCursor *cursor)
  * on the cursor, GDK may not be able to obtain the image data. In this
  * case, %NULL is returned.
  *
- * Returns: (transfer full): a #cairo_surface_t representing @cursor, or %NULL
+ * Returns: (nullable) (transfer full): a #cairo_surface_t
+ *   representing @cursor, or %NULL
  *
  * Since: 3.10
  */

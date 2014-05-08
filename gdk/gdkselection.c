@@ -95,14 +95,12 @@ gdk_selection_owner_set (GdkWindow *owner,
  *
  * Determines the owner of the given selection.
  *
- * Returns: (transfer none): if there is a selection owner for
- *   this window, and it is a window known to the current
- *   process, the #GdkWindow that owns the selection, otherwise
- *   %NULL. Note that the return value may be owned
- *   by a different process if a foreign window
- *   was previously created for that window, but
- *   a new foreign window will never be created by
- *   this call.
+ * Returns: (nullable) (transfer none): if there is a selection owner
+ *   for this window, and it is a window known to the current process,
+ *   the #GdkWindow that owns the selection, otherwise %NULL. Note
+ *   that the return value may be owned by a different process if a
+ *   foreign window was previously created for that window, but a new
+ *   foreign window will never be created by this call.
  */
 GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
@@ -179,9 +177,10 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
  * process if a foreign window was previously created for that
  * window, but a new foreign window will never be created by this call.
  *
- * Returns: (transfer none): if there is a selection owner for this window,
- *    and it is a window known to the current process, the #GdkWindow that
- *    owns the selection, otherwise %NULL.
+ * Returns: (nullable): (transfer none): if there is a selection owner
+ *    for this window, and it is a window known to the current
+ *    process, the #GdkWindow that owns the selection, otherwise
+ *    %NULL.
  *
  * Since: 2.2
  */
@@ -318,10 +317,10 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
  * is not specified; it may be as pseudo-escape sequences
  * \x{ABCD}, or it may be in some other form of approximation.
  *
- * Returns: the newly-allocated string, or %NULL if the
- *               conversion failed. (It should not fail for
- *               any properly formed UTF-8 string unless system
- *               limits like memory or file descriptors are exceeded.)
+ * Returns: (nullable): the newly-allocated string, or %NULL if the
+ *          conversion failed. (It should not fail for any properly
+ *          formed UTF-8 string unless system limits like memory or
+ *          file descriptors are exceeded.)
  **/
 gchar *
 gdk_utf8_to_string_target (const gchar *str)
