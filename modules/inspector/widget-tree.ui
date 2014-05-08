@@ -23,7 +23,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Widget</property>
+        <property name="title" translatable="yes">Object</property>
         <property name="resizable">True</property>
         <child>
           <object class="GtkCellRendererText">
