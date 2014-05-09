@@ -6,6 +6,7 @@
       <column type="gchararray"/>
       <column type="gchararray"/>
       <column type="gchararray"/>
+      <column type="gchararray"/>
       <column type="gboolean"/>
     </columns>
   </object>
@@ -28,7 +29,7 @@
           </object>
           <attributes>
             <attribute name="text">1</attribute>
-            <attribute name="sensitive">4</attribute>
+            <attribute name="sensitive">5</attribute>
           </attributes>
         </child>
       </object>
@@ -43,7 +44,22 @@
           </object>
           <attributes>
             <attribute name="text">2</attribute>
-            <attribute name="sensitive">4</attribute>
+            <attribute name="sensitive">5</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkTreeViewColumn">
+        <property name="title" translatable="yes">Label</property>
+        <property name="resizable">True</property>
+        <child>
+          <object class="GtkCellRendererText">
+            <property name="scale">0.8</property>
+          </object>
+          <attributes>
+            <attribute name="text">3</attribute>
+            <attribute name="sensitive">5</attribute>
           </attributes>
         </child>
       </object>
@@ -58,8 +74,8 @@
             <property name="family">monospace</property>
           </object>
           <attributes>
-            <attribute name="text">3</attribute>
-            <attribute name="sensitive">4</attribute>
+            <attribute name="text">4</attribute>
+            <attribute name="sensitive">5</attribute>
           </attributes>
         </child>
       </object>

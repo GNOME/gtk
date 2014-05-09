@@ -31,6 +31,7 @@ enum
   OBJECT,
   OBJECT_TYPE,
   OBJECT_NAME,
+  OBJECT_LABEL,
   OBJECT_ADDRESS,
   SENSITIVE
 };
@@ -75,7 +76,7 @@ object_data_free (gpointer data)
 
   gtk_tree_iter_free (od->iter);
 
-  if (od->map_handler)
+  if (g_signal_handler_is_connected (od->object, od->map_handler))
     {
       g_signal_handler_disconnect (od->object, od->map_handler);
       g_signal_handler_disconnect (od->object, od->unmap_handler);
@@ -184,7 +185,9 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   gchar *address;
   gboolean mapped;
   ObjectData *od;
+  const gchar *label;
 
+  label = NULL;
   mapped = FALSE;
 
   if (GTK_IS_WIDGET (object))
@@ -197,15 +200,23 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
   if (name == NULL || g_strcmp0 (name, class_name) == 0)
     {
-      if (GTK_IS_LABEL (object))
-        name = gtk_label_get_text (GTK_LABEL (object));
-      else if (GTK_IS_BUTTON (object))
-        name = gtk_button_get_label (GTK_BUTTON (object));
-      else if (GTK_IS_WINDOW (object))
-        name = gtk_window_get_title (GTK_WINDOW (object));
-      else
-        name = "";
+      if (GTK_IS_BUILDABLE (object))
+        name = gtk_buildable_get_name (GTK_BUILDABLE (object));
     }
+
+  if (name == NULL)
+    name = "";
+
+  if (GTK_IS_LABEL (object))
+    label = gtk_label_get_text (GTK_LABEL (object));
+  else if (GTK_IS_BUTTON (object))
+    label = gtk_button_get_label (GTK_BUTTON (object));
+  else if (GTK_IS_WINDOW (object))
+    label = gtk_window_get_title (GTK_WINDOW (object));
+  else if (GTK_IS_TREE_VIEW_COLUMN (object))
+    label = gtk_tree_view_column_get_title (GTK_TREE_VIEW_COLUMN (object));
+  else
+    label = "";
 
   address = g_strdup_printf ("%p", object);
 
@@ -214,6 +225,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
                       OBJECT, object,
                       OBJECT_TYPE, class_name,
                       OBJECT_NAME, name,
+                      OBJECT_LABEL, label,
                       OBJECT_ADDRESS, address,
                       SENSITIVE, !GTK_IS_WIDGET (object) || mapped,
                       -1);
