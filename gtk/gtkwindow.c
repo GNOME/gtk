@@ -1854,15 +1854,11 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 GtkWidget*
 gtk_window_new (GtkWindowType type)
 {
-  GtkWindowPrivate *priv;
   GtkWindow *window;
 
   g_return_val_if_fail (type >= GTK_WINDOW_TOPLEVEL && type <= GTK_WINDOW_POPUP, NULL);
 
-  window = g_object_new (GTK_TYPE_WINDOW, NULL);
-  priv = window->priv;
-
-  priv->type = type;
+  window = g_object_new (GTK_TYPE_WINDOW, "type", type, NULL);
 
   return GTK_WIDGET (window);
 }
