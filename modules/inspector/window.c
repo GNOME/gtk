@@ -156,10 +156,7 @@ gtk_inspector_window_select_initially (GtkInspectorWindow *iw)
   g_list_free (toplevels);
 
   if (widget)
-    {
-      gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree), widget);
-      gtk_inspector_widget_tree_select_object (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree), G_OBJECT (widget));
-    }
+    gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree), widget);
 }
 
 static void
