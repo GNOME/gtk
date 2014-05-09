@@ -7256,7 +7256,8 @@ _gtk_widget_get_controllers_evmask (GtkWidget *widget)
   for (l = priv->event_controllers; l; l = l->next)
     {
       data = l->data;
-      evmask |= gtk_event_controller_get_event_mask (GTK_EVENT_CONTROLLER (data->controller));
+      if (data->controller)
+        evmask |= gtk_event_controller_get_event_mask (GTK_EVENT_CONTROLLER (data->controller));
     }
 
   return evmask;
@@ -7274,12 +7275,21 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
 
   priv = widget->priv;
 
-  for (l = priv->event_controllers; l; l = l->next)
+  l = priv->event_controllers;
+  while (l != NULL)
     {
+      GList *next = l->next;
       data = l->data;
 
-      if (phase == data->phase)
+      if (data->controller == NULL)
+        {
+          priv->event_controllers = g_list_delete_link (priv->event_controllers, l);
+          g_free (data);
+        }
+      else if (data->phase == phase)
         handled |= gtk_event_controller_handle_event (data->controller, event);
+
+      l = next;
     }
 
   g_object_unref (widget);
@@ -11748,6 +11758,7 @@ gtk_widget_dispose (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
+  GList *l;
 
   if (priv->parent)
     gtk_container_remove (GTK_CONTAINER (priv->parent), widget);
@@ -11770,11 +11781,14 @@ gtk_widget_dispose (GObject *object)
   while (priv->attached_windows)
     gtk_window_set_attached_to (priv->attached_windows->data, NULL);
 
-  while (priv->event_controllers)
+  for (l = priv->event_controllers; l; l = l->next)
     {
-      EventControllerData *data = priv->event_controllers->data;
-      _gtk_widget_remove_controller (widget, data->controller);
+      EventControllerData *data = l->data;
+      if (data->controller)
+        _gtk_widget_remove_controller (widget, data->controller);
     }
+  g_list_free_full (priv->event_controllers, g_free);
+  priv->event_controllers = NULL;
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
@@ -16826,18 +16840,14 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
                                GtkEventController *controller)
 {
   EventControllerData *data;
-  GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
 
-  priv = widget->priv;
   data = _gtk_widget_has_controller (widget, controller);
 
   if (!data)
     return;
-
-  priv->event_controllers = g_list_remove (priv->event_controllers, data);
 
   if (g_signal_handler_is_connected (widget, data->grab_notify_id))
     g_signal_handler_disconnect (widget, data->grab_notify_id);
@@ -16846,5 +16856,5 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
   g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (data->controller));
   g_object_unref (data->controller);
-  g_free (data);
+  data->controller = NULL;
 }
