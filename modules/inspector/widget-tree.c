@@ -63,20 +63,42 @@ on_widget_selected (GtkTreeSelection       *selection,
 
 typedef struct
 {
+  GtkInspectorWidgetTree *wt;
   GObject *object;
-  GtkTreeIter *iter;
+  GtkTreeRowReference *row;
   gulong map_handler;
   gulong unmap_handler;
 } ObjectData;
+
+static void
+remove_dead_object (gpointer data, GObject *dead_object)
+{
+  ObjectData *od = data;
+
+  if (gtk_tree_row_reference_valid (od->row))
+    {
+      GtkTreePath *path;
+      GtkTreeIter iter;
+      path = gtk_tree_row_reference_get_path (od->row);
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (od->wt->priv->model), &iter, path);
+      gtk_tree_store_remove (od->wt->priv->model, &iter);
+      gtk_tree_path_free (path);
+    }
+  od->object = NULL;
+  g_hash_table_remove (od->wt->priv->iters, dead_object);
+}
 
 static void
 object_data_free (gpointer data)
 {
   ObjectData *od = data;
 
-  gtk_tree_iter_free (od->iter);
+  gtk_tree_row_reference_free (od->row);
 
-  if (g_signal_handler_is_connected (od->object, od->map_handler))
+  if (od->object)
+    g_object_weak_unref (od->object, remove_dead_object, od);
+
+  if (od->object && od->map_handler)
     {
       g_signal_handler_disconnect (od->object, od->map_handler);
       g_signal_handler_disconnect (od->object, od->unmap_handler);
@@ -181,6 +203,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
                                          const gchar            *name)
 {
   GtkTreeIter iter;
+  GtkTreePath *path;
   const gchar *class_name = G_OBJECT_CLASS_NAME (G_OBJECT_GET_CLASS (object));
   gchar *address;
   gboolean mapped;
@@ -231,8 +254,11 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
                       -1);
 
   od = g_new0 (ObjectData, 1);
+  od->wt = wt;
   od->object = object;
-  od->iter = gtk_tree_iter_copy (&iter);
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
+  od->row = gtk_tree_row_reference_new (GTK_TREE_MODEL (wt->priv->model), path);
+  gtk_tree_path_free (path);
   if (GTK_IS_WIDGET (object))
     {
       od->map_handler = g_signal_connect (object, "map", G_CALLBACK (map_or_unmap), wt);
@@ -240,6 +266,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
     }
 
   g_hash_table_insert (wt->priv->iters, object, od);
+  g_object_weak_ref (object, remove_dead_object, od);
 
   g_free (address);
 
@@ -306,9 +333,14 @@ gtk_inspector_widget_tree_find_object (GtkInspectorWidgetTree *wt,
   ObjectData *od;
 
   od = g_hash_table_lookup (wt->priv->iters, object);
-  if (od)
+  if (od && gtk_tree_row_reference_valid (od->row))
     {
-      *iter = *od->iter;
+      GtkTreePath *path;
+
+      path = gtk_tree_row_reference_get_path (od->row);
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (wt->priv->model), iter, path);
+      gtk_tree_path_free (path);
+
       return TRUE;
     }
 

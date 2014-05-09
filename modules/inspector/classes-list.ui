@@ -10,7 +10,7 @@
   <template class="GtkInspectorClassesList" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkToolbar" id="toolbar">
+      <object class="GtkToolbar">
         <property name="visible">True</property>
         <property name="icon-size">small-toolbar</property>
         <property name="sensitive">False</property>
@@ -37,11 +37,11 @@
         <property name="visible">True</property>
         <property name="expand">True</property>
         <child>
-          <object class="GtkTreeView" id="view">
+          <object class="GtkTreeView">
             <property name="visible">True</property>
             <property name="model">model</property>
             <child>
-              <object class="GtkTreeViewColumn" id="column">
+              <object class="GtkTreeViewColumn">
                 <property name="title" translatable="yes">Name</property>
                 <child>
                   <object class="GtkCellRendererToggle">
@@ -53,7 +53,7 @@
                   </attributes>
                 </child>
                 <child>
-                  <object class="GtkCellRendererText" id="name_renderer">
+                  <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>
                   </object>
                   <attributes>

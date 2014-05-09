@@ -205,8 +205,9 @@ create_provider (GtkInspectorCssEditor *ce)
       gtk_style_context_add_provider (ce->priv->context,
                                       GTK_STYLE_PROVIDER (provider),
                                       G_MAXUINT);
-      g_object_set_data (G_OBJECT (ce->priv->context),
-                         GTK_INSPECTOR_CSS_EDITOR_PROVIDER, provider);
+      g_object_set_data_full (G_OBJECT (ce->priv->context),
+                              GTK_INSPECTOR_CSS_EDITOR_PROVIDER, provider,
+                              g_object_unref);
     }
 
   g_signal_connect (provider, "parsing-error",
@@ -302,6 +303,15 @@ gtk_inspector_css_editor_new (gboolean global)
                                    NULL));
 }
 
+static void
+remove_dead_object (gpointer data, GObject *dead_object)
+{
+  GtkInspectorCssEditor *ce = data;
+
+  ce->priv->context = NULL;
+  gtk_widget_set_sensitive (GTK_WIDGET (ce), ce->priv->global);
+}
+
 void
 gtk_inspector_css_editor_set_widget (GtkInspectorCssEditor *ce,
                                      GtkWidget             *widget)
@@ -316,6 +326,7 @@ gtk_inspector_css_editor_set_widget (GtkInspectorCssEditor *ce,
 
   if (ce->priv->context)
     {
+      g_object_weak_unref (G_OBJECT (ce->priv->context), remove_dead_object, ce);
       text = get_current_text (GTK_TEXT_BUFFER (ce->priv->text));
       g_object_set_data_full (G_OBJECT (ce->priv->context),
                               GTK_INSPECTOR_CSS_EDITOR_TEXT,
@@ -331,6 +342,8 @@ gtk_inspector_css_editor_set_widget (GtkInspectorCssEditor *ce,
 
   set_initial_text (ce);
   disable_toggled (ce->priv->disable_button, ce);
+
+  g_object_weak_ref (G_OBJECT (ce->priv->context), remove_dead_object, ce);
 }
 
 // vim: set et sw=2 ts=2:

@@ -39,16 +39,26 @@ typedef struct
 
 struct _GtkInspectorClassesListPrivate
 {
-  GtkWidget *toolbar;
-  GtkWidget *view;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *name_renderer;
   GtkListStore *model;
-  GHashTable *contexts;
-  GtkStyleContext *current_context;
+  GtkStyleContext *context;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorClassesList, gtk_inspector_classes_list, GTK_TYPE_BOX)
+
+static void
+set_hash_context (GtkInspectorClassesList *cl, GHashTable *hash_context)
+{
+  g_object_set_data_full (G_OBJECT (cl->priv->context),
+                                    "gtk-inspector-hash-context",
+                                    hash_context, (GDestroyNotify)g_hash_table_unref);
+}
+
+static GHashTable *
+get_hash_context (GtkInspectorClassesList *cl)
+{
+  return (GHashTable *)g_object_get_data (G_OBJECT (cl->priv->context),
+                                          "gtk-inspector-hash-context");
+}
 
 static void
 enabled_toggled (GtkCellRendererToggle   *renderer,
@@ -76,7 +86,7 @@ enabled_toggled (GtkCellRendererToggle   *renderer,
                       COLUMN_ENABLED, enabled,
                       -1);
 
-  context = g_hash_table_lookup (cl->priv->contexts, cl->priv->current_context);
+  context = get_hash_context (cl);
   if (context)
     {
       c = g_hash_table_lookup (context, name);
@@ -84,9 +94,9 @@ enabled_toggled (GtkCellRendererToggle   *renderer,
         {
           c->enabled = enabled;
           if (enabled)
-            gtk_style_context_add_class (cl->priv->current_context, name);
+            gtk_style_context_add_class (cl->priv->context, name);
           else
-            gtk_style_context_remove_class (cl->priv->current_context, name);
+            gtk_style_context_remove_class (cl->priv->context, name);
         }
       else
         g_warning ("GtkInspector: Couldn't find the css class %s in the class hash table.", name);
@@ -120,14 +130,16 @@ add_clicked (GtkButton               *button,
 
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
     {
-      const gchar *name = gtk_entry_get_text (GTK_ENTRY (entry));
-      GHashTable *context = g_hash_table_lookup (cl->priv->contexts, cl->priv->current_context);
+      const gchar *name;
+      GHashTable *context;
 
+      context = get_hash_context (cl);
+      name = gtk_entry_get_text (GTK_ENTRY (entry));
       if (*name && !g_hash_table_contains (context, name))
         {
           GtkTreeIter tree_iter;
 
-          gtk_style_context_add_class (cl->priv->current_context, name);
+          gtk_style_context_add_class (cl->priv->context, name);
 
           GtkInspectorClassesListByContext *c = g_new0 (GtkInspectorClassesListByContext, 1);
           c->enabled = TRUE;
@@ -155,7 +167,7 @@ read_classes_from_style_context (GtkInspectorClassesList *cl)
   GHashTable *hash_context;
 
   hash_context = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-  classes = gtk_style_context_list_classes (cl->priv->current_context);
+  classes = gtk_style_context_list_classes (cl->priv->context);
 
   for (l = classes; l; l = l->next)
     {
@@ -171,7 +183,7 @@ read_classes_from_style_context (GtkInspectorClassesList *cl)
                           -1);
     }
     g_list_free (classes);
-    g_hash_table_replace (cl->priv->contexts, cl->priv->current_context, hash_context);
+    set_hash_context (cl, hash_context);
 }
 
 static void
@@ -181,15 +193,16 @@ restore_defaults_clicked (GtkButton           *button,
   GHashTableIter hash_iter;
   gchar *name;
   GtkInspectorClassesListByContext *c;
-  GHashTable *hash_context = g_hash_table_lookup (cl->priv->contexts, cl->priv->current_context);
+  GHashTable *hash_context;
 
+  hash_context = get_hash_context (cl);
   g_hash_table_iter_init (&hash_iter, hash_context);
   while (g_hash_table_iter_next (&hash_iter, (gpointer *)&name, (gpointer *)&c))
     {
       if (c->style == PANGO_STYLE_ITALIC)
-        gtk_style_context_remove_class (cl->priv->current_context, name);
+        gtk_style_context_remove_class (cl->priv->context, name);
       else if (!c->enabled)
-        gtk_style_context_add_class (cl->priv->current_context, name);
+        gtk_style_context_add_class (cl->priv->context, name);
     }
 
   gtk_list_store_clear (cl->priv->model);
@@ -201,27 +214,47 @@ gtk_inspector_classes_list_init (GtkInspectorClassesList *cl)
 {
   cl->priv = gtk_inspector_classes_list_get_instance_private (cl);
   gtk_widget_init_template (GTK_WIDGET (cl));
-  cl->priv->contexts = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_hash_table_destroy);
+}
+
+static void remove_dead_object (gpointer data, GObject *dead_object);
+
+static void
+cleanup_context (GtkInspectorClassesList *cl)
+{
+  if (cl->priv->context)
+    g_object_weak_unref (G_OBJECT (cl->priv->context), remove_dead_object, cl);
+
+  gtk_list_store_clear (cl->priv->model);
+  cl->priv->context = NULL;
+  gtk_widget_set_sensitive (GTK_WIDGET (cl), FALSE);
+}
+
+static void
+remove_dead_object (gpointer data, GObject *dead_object)
+{
+  GtkInspectorClassesList *cl = data;
+
+  cl->priv->context = NULL;
+  cleanup_context (cl);
 }
 
 void
 gtk_inspector_classes_list_set_widget (GtkInspectorClassesList *cl,
                                        GtkWidget               *widget)
 {
-  GtkStyleContext *widget_context;
   GHashTable *hash_context;
   GtkTreeIter tree_iter;
   GtkInspectorClassesListByContext *c;
 
-  gtk_list_store_clear (cl->priv->model);
+  cleanup_context (cl);
 
   gtk_widget_set_sensitive (GTK_WIDGET (cl), TRUE);
-  widget_context = gtk_widget_get_style_context (widget);
 
-  cl->priv->current_context = widget_context;
-  gtk_widget_set_sensitive (cl->priv->toolbar, TRUE);
+  cl->priv->context = gtk_widget_get_style_context (widget);
 
-  hash_context = g_hash_table_lookup (cl->priv->contexts, widget_context);
+  g_object_weak_ref (G_OBJECT (cl->priv->context), remove_dead_object, cl);
+
+  hash_context = get_hash_context (cl);
   if (hash_context)
     {
       GHashTableIter hash_iter;
@@ -239,9 +272,7 @@ gtk_inspector_classes_list_set_widget (GtkInspectorClassesList *cl,
         }
     }
   else
-    {
-      read_classes_from_style_context (cl);
-    }
+    read_classes_from_style_context (cl);
 }
 
 static void
@@ -250,11 +281,7 @@ gtk_inspector_classes_list_class_init (GtkInspectorClassesListClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/classes-list.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, toolbar);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, model);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, name_renderer);
   gtk_widget_class_bind_template_callback (widget_class, add_clicked);
   gtk_widget_class_bind_template_callback (widget_class, restore_defaults_clicked);
   gtk_widget_class_bind_template_callback (widget_class, enabled_toggled);

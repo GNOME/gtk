@@ -232,6 +232,38 @@ gtk_inspector_prop_list_new (GtkWidget *widget_tree,
                        NULL);
 }
 
+static void remove_dead_object (gpointer data, GObject *dead_object);
+
+static void
+cleanup_object (GtkInspectorPropList *pl)
+{
+  gtk_widget_set_sensitive (GTK_WIDGET (pl), FALSE);
+
+  if (pl->priv->object)
+    g_object_weak_unref (pl->priv->object, remove_dead_object, pl);
+
+  if (pl->priv->object && pl->priv->notify_handler_id != 0)
+    {
+      g_signal_handler_disconnect (pl->priv->object, pl->priv->notify_handler_id);
+      pl->priv->notify_handler_id = 0;
+    }
+
+  pl->priv->object = NULL;
+
+  g_hash_table_remove_all (pl->priv->prop_iters);
+  gtk_list_store_clear (pl->priv->model);
+}
+
+static void
+remove_dead_object (gpointer data, GObject *dead_object)
+{
+  GtkInspectorPropList *pl = data;
+
+  pl->priv->notify_handler_id = 0;
+  pl->priv->object = NULL;
+  cleanup_object (pl);
+}
+
 gboolean
 gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
                                     GObject              *object)
@@ -244,17 +276,15 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   if (pl->priv->object == object)
     return FALSE;
 
-  if (pl->priv->notify_handler_id != 0)
-    {
-      g_signal_handler_disconnect (pl->priv->object, pl->priv->notify_handler_id);
-      pl->priv->notify_handler_id = 0;
-    }
-
-  g_hash_table_remove_all (pl->priv->prop_iters);
-  gtk_list_store_clear (pl->priv->model);
-  gtk_widget_set_sensitive (GTK_WIDGET (pl), FALSE);
+  cleanup_object (pl);
 
   pl->priv->object = object;
+
+  g_object_weak_ref (object, remove_dead_object, pl);
+
+  g_object_set (pl->priv->attribute_column,
+                "visible", !pl->priv->child_properties && GTK_IS_CELL_RENDERER (object),
+                NULL);
 
   if (pl->priv->child_properties)
     {
@@ -294,9 +324,6 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
                         G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb),
                         pl);
 
-  g_object_set (pl->priv->attribute_column,
-                "visible", !pl->priv->child_properties && GTK_IS_CELL_RENDERER (object),
-                NULL);
   return TRUE;
 }
 

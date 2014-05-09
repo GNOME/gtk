@@ -50,7 +50,7 @@ G_BEGIN_DECLS
 
 GType      gtk_inspector_css_editor_get_type   (void);
 GtkWidget *gtk_inspector_css_editor_new        (gboolean               global);
-void       gtk_inspector_css_editor_set_widget (GtkInspectorCssEditor *editor,
+void       gtk_inspector_css_editor_set_widget (GtkInspectorCssEditor *ce,
                                                 GtkWidget             *widget);
 
 G_END_DECLS
