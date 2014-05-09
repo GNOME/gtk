@@ -722,6 +722,10 @@ gtk_application_get_property (GObject    *object,
       g_value_set_object (value, gtk_application_get_menubar (application));
       break;
 
+    case PROP_ACTIVE_WINDOW:
+      g_value_set_object (value, gtk_application_get_active_window (application));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
