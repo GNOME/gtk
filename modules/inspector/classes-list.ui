@@ -45,6 +45,7 @@
                 <property name="title" translatable="yes">Name</property>
                 <child>
                   <object class="GtkCellRendererToggle">
+                    <property name="activatable">True</property>
                     <signal name="toggled" handler="enabled_toggled"/>
                   </object>
                   <attributes>
