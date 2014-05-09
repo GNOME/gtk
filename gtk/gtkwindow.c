@@ -385,6 +385,9 @@ struct _GtkWindowGroupPrivate
   GSList *device_grabs;
 };
 
+static GObject *gtk_window_constructor    (GType                  type,
+                                           guint                  n_params,
+                                           GObjectConstructParam *params);
 static void gtk_window_dispose            (GObject           *object);
 static void gtk_window_finalize           (GObject           *object);
 static void gtk_window_destroy            (GtkWidget         *widget);
@@ -665,6 +668,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
   quark_gtk_buildable_accels = g_quark_from_static_string ("gtk-window-buildable-accels");
 
+  gobject_class->constructor = gtk_window_constructor;
   gobject_class->dispose = gtk_window_dispose;
   gobject_class->finalize = gtk_window_finalize;
 
@@ -1570,14 +1574,31 @@ gtk_window_init (GtkWindow *window)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 
   priv->scale = gtk_widget_get_scale_factor (widget);
+}
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (window));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
-  g_signal_connect (priv->multipress_gesture, "pressed",
-                    G_CALLBACK (multipress_gesture_pressed_cb), window);
-  g_signal_connect (priv->multipress_gesture, "stopped",
-                    G_CALLBACK (multipress_gesture_stopped_cb), window);
-  gtk_gesture_attach (priv->multipress_gesture, GTK_PHASE_CAPTURE);
+static GObject *
+gtk_window_constructor (GType                  type,
+                        guint                  n_params,
+                        GObjectConstructParam *params)
+{
+  GObject *object;
+  GtkWindowPrivate *priv;
+
+  object = G_OBJECT_CLASS (gtk_window_parent_class)->constructor (type, n_params, params);
+
+  priv = GTK_WINDOW (object)->priv;
+  if (priv->type == GTK_WINDOW_TOPLEVEL)
+    {
+      priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
+      gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
+      g_signal_connect (priv->multipress_gesture, "pressed",
+                        G_CALLBACK (multipress_gesture_pressed_cb), object);
+      g_signal_connect (priv->multipress_gesture, "stopped",
+                        G_CALLBACK (multipress_gesture_stopped_cb), object);
+      gtk_gesture_attach (priv->multipress_gesture, GTK_PHASE_CAPTURE);
+    }
+
+  return object;
 }
 
 static void
@@ -5460,8 +5481,11 @@ gtk_window_finalize (GObject *object)
       priv->mnemonics_display_timeout_id = 0;
     }
 
-  gtk_gesture_detach (priv->multipress_gesture);
-  g_object_unref (priv->multipress_gesture);
+  if (priv->multipress_gesture)
+    {
+      gtk_gesture_detach (priv->multipress_gesture);
+      g_object_unref (priv->multipress_gesture);
+    }
 
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
@@ -7871,8 +7895,9 @@ _gtk_window_check_handle_wm_event (GdkEvent *event)
        event->type == GDK_MOTION_NOTIFY || event->type == GDK_TOUCH_END))
     {
       priv = GTK_WINDOW (widget)->priv;
-      return gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                                (const GdkEvent*) event);
+      if (priv->multipress_gesture)
+        return gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                                  (const GdkEvent*) event);
     }
 
   return FALSE;
