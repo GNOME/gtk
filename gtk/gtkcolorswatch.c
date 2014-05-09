@@ -93,6 +93,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   gtk_gesture_attach (swatch->priv->long_press_gesture, GTK_PHASE_BUBBLE);
 
   swatch->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (swatch));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), FALSE);
   g_signal_connect (swatch->priv->multipress_gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);
   gtk_gesture_attach (swatch->priv->multipress_gesture, GTK_PHASE_BUBBLE);
@@ -455,7 +456,8 @@ popup_position_func (GtkMenu   *menu,
 
 static void
 do_popup (GtkWidget      *swatch,
-          GdkEventButton *event)
+          gint            button,
+          gint            time)
 {
   GtkWidget *menu;
   GtkWidget *item;
@@ -474,41 +476,13 @@ do_popup (GtkWidget      *swatch,
 
   gtk_widget_show_all (item);
 
-  if (event)
+  if (button != 0)
     gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                    NULL, NULL, event->button, event->time);
+                    NULL, NULL, button, time);
   else
     gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
                     popup_position_func, swatch,
-                    0, gtk_get_current_event_time ());
-}
-
-static gboolean
-swatch_button_press (GtkWidget      *widget,
-                     GdkEventButton *event)
-{
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-
-  gtk_widget_grab_focus (widget);
-
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
-      swatch->priv->has_color)
-    {
-      do_popup (widget, event);
-      return TRUE;
-    }
-  else if (event->type == GDK_2BUTTON_PRESS &&
-           event->button == GDK_BUTTON_PRIMARY)
-    {
-      g_signal_emit (swatch, signals[ACTIVATE], 0);
-      return TRUE;
-    }
-  else if (event->button == GDK_BUTTON_PRIMARY)
-    {
-      return TRUE;
-    }
-
-  return FALSE;
+                    button, time);
 }
 
 static gboolean
@@ -533,19 +507,6 @@ swatch_primary_action (GtkColorSwatch *swatch)
   return FALSE;
 }
 
-static gboolean
-swatch_button_release (GtkWidget      *widget,
-                       GdkEventButton *event)
-{
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-
-  if (event->button == GDK_BUTTON_PRIMARY &&
-      swatch->priv->contains_pointer)
-    return swatch_primary_action (swatch);
-
-  return FALSE;
-}
-
 static void
 hold_action (GtkGestureLongPress *gesture,
              gdouble              x,
@@ -563,8 +524,22 @@ tap_action (GtkGestureMultiPress *gesture,
             gdouble               y,
             GtkColorSwatch       *swatch)
 {
-  if (n_press == 1)
-    swatch_primary_action (swatch);
+  guint button;
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (button == GDK_BUTTON_PRIMARY)
+    {
+      if (n_press == 1)
+        swatch_primary_action (swatch);
+      else if (n_press > 1)
+        g_signal_emit (swatch, signals[ACTIVATE], 0);
+    }
+  else if (button == GDK_BUTTON_SECONDARY)
+    {
+      if (swatch->priv->has_color)
+        do_popup (GTK_WIDGET (swatch), button, gtk_get_current_event_time ());
+    }
 }
 
 static void
@@ -660,7 +635,7 @@ swatch_size_allocate (GtkWidget *widget,
 static gboolean
 swatch_popup_menu (GtkWidget *swatch)
 {
-  do_popup (swatch, NULL);
+  do_popup (swatch, 0, gtk_get_current_event_time ());
   return TRUE;
 }
 
@@ -746,8 +721,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->drag_data_received = swatch_drag_data_received;
   widget_class->key_press_event = swatch_key_press;
   widget_class->popup_menu = swatch_popup_menu;
-  widget_class->button_press_event = swatch_button_press;
-  widget_class->button_release_event = swatch_button_release;
   widget_class->enter_notify_event = swatch_enter_notify;
   widget_class->leave_notify_event = swatch_leave_notify;
   widget_class->realize = swatch_realize;
