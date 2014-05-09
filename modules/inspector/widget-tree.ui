@@ -5,9 +5,6 @@
       <column type="gpointer"/>
       <column type="gchararray"/>
       <column type="gchararray"/>
-      <column type="gboolean"/>
-      <column type="gboolean"/>
-      <column type="gboolean"/>
       <column type="gchararray"/>
       <column type="gboolean"/>
     </columns>
@@ -31,7 +28,7 @@
           </object>
           <attributes>
             <attribute name="text">1</attribute>
-            <attribute name="sensitive">7</attribute>
+            <attribute name="sensitive">4</attribute>
           </attributes>
         </child>
       </object>
@@ -46,49 +43,7 @@
           </object>
           <attributes>
             <attribute name="text">2</attribute>
-            <attribute name="sensitive">7</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Realized</property>
-        <child>
-          <object class="GtkCellRendererToggle">
-            <property name="activatable">True</property>
-            <property name="indicator-size">10</property>
-          </object>
-          <attributes>
-            <attribute name="active">3</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Mapped</property>
-        <child>
-          <object class="GtkCellRendererToggle">
-            <property name="activatable">True</property>
-            <property name="indicator-size">10</property>
-          </object>
-          <attributes>
-            <attribute name="active">4</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Visible</property>
-        <child>
-          <object class="GtkCellRendererToggle">
-            <property name="activatable">True</property>
-            <property name="indicator-size">10</property>
-          </object>
-          <attributes>
-            <attribute name="active">5</attribute>
+            <attribute name="sensitive">4</attribute>
           </attributes>
         </child>
       </object>
@@ -103,8 +58,8 @@
             <property name="family">monospace</property>
           </object>
           <attributes>
-            <attribute name="text">6</attribute>
-            <attribute name="sensitive">7</attribute>
+            <attribute name="text">3</attribute>
+            <attribute name="sensitive">4</attribute>
           </attributes>
         </child>
       </object>

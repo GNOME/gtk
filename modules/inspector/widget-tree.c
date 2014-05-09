@@ -31,9 +31,6 @@ enum
   OBJECT,
   OBJECT_TYPE,
   OBJECT_NAME,
-  WIDGET_REALIZED,
-  WIDGET_VISIBLE,
-  WIDGET_MAPPED,
   OBJECT_ADDRESS,
   SENSITIVE
 };
@@ -63,6 +60,29 @@ on_widget_selected (GtkTreeSelection       *selection,
   g_signal_emit (wt, widget_tree_signals[WIDGET_CHANGED], 0);
 }
 
+typedef struct
+{
+  GObject *object;
+  GtkTreeIter *iter;
+  gulong map_handler;
+  gulong unmap_handler;
+} ObjectData;
+
+static void
+object_data_free (gpointer data)
+{
+  ObjectData *od = data;
+
+  gtk_tree_iter_free (od->iter);
+
+  if (od->map_handler)
+    {
+      g_signal_handler_disconnect (od->object, od->map_handler);
+      g_signal_handler_disconnect (od->object, od->unmap_handler);
+    }
+
+  g_free (od);
+}
 
 static void
 gtk_inspector_widget_tree_init (GtkInspectorWidgetTree *wt)
@@ -71,7 +91,7 @@ gtk_inspector_widget_tree_init (GtkInspectorWidgetTree *wt)
   wt->priv->iters = g_hash_table_new_full (g_direct_hash,
                                            g_direct_equal,
                                            NULL,
-                                           (GDestroyNotify) gtk_tree_iter_free);
+                                           (GDestroyNotify) object_data_free);
   gtk_widget_init_template (GTK_WIDGET (wt));
 
   gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
@@ -126,6 +146,19 @@ gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt)
   return NULL;
 }
 
+static void
+map_or_unmap (GtkWidget *widget, GtkInspectorWidgetTree *wt)
+{
+  GtkTreeIter iter;
+
+  if (gtk_inspector_widget_tree_find_object (wt, G_OBJECT (widget), &iter))
+    {
+      gtk_tree_store_set (wt->priv->model, &iter,
+                          SENSITIVE, gtk_widget_get_mapped (widget),
+                          -1);
+    }
+}
+
 typedef struct
 {
   GtkInspectorWidgetTree *wt;
@@ -149,22 +182,17 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   GtkTreeIter iter;
   const gchar *class_name = G_OBJECT_CLASS_NAME (G_OBJECT_GET_CLASS (object));
   gchar *address;
-  gboolean realized;
   gboolean mapped;
-  gboolean visible;
-  gboolean is_widget;
+  ObjectData *od;
 
-  realized = mapped = visible = FALSE;
+  mapped = FALSE;
 
-  is_widget = GTK_IS_WIDGET (object);
-  if (is_widget)
+  if (GTK_IS_WIDGET (object))
     {
       GtkWidget *widget = GTK_WIDGET (object);
        if (name == NULL)
          name = gtk_widget_get_name (GTK_WIDGET (object));
-      realized = gtk_widget_get_realized  (widget);
       mapped = gtk_widget_get_mapped (widget);
-      visible = gtk_widget_get_visible (widget);
     }
 
   if (name == NULL || g_strcmp0 (name, class_name) == 0)
@@ -186,13 +214,20 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
                       OBJECT, object,
                       OBJECT_TYPE, class_name,
                       OBJECT_NAME, name,
-                      WIDGET_REALIZED, realized,
-                      WIDGET_MAPPED, mapped,
-                      WIDGET_VISIBLE, visible,
                       OBJECT_ADDRESS, address,
-                      SENSITIVE, !is_widget || (realized && mapped && visible),
+                      SENSITIVE, !GTK_IS_WIDGET (object) || mapped,
                       -1);
-  g_hash_table_insert (wt->priv->iters, object, gtk_tree_iter_copy (&iter));
+
+  od = g_new0 (ObjectData, 1);
+  od->object = object;
+  od->iter = gtk_tree_iter_copy (&iter);
+  if (GTK_IS_WIDGET (object))
+    {
+      od->map_handler = g_signal_connect (object, "map", G_CALLBACK (map_or_unmap), wt);
+      od->unmap_handler = g_signal_connect (object, "unmap", G_CALLBACK (map_or_unmap), wt);
+    }
+
+  g_hash_table_insert (wt->priv->iters, object, od);
 
   g_free (address);
 
@@ -254,10 +289,12 @@ gtk_inspector_widget_tree_find_object (GtkInspectorWidgetTree *wt,
                                        GObject                *object,
                                        GtkTreeIter            *iter)
 {
-  GtkTreeIter *internal_iter = g_hash_table_lookup (wt->priv->iters, object);
-  if (internal_iter)
+  ObjectData *od;
+
+  od = g_hash_table_lookup (wt->priv->iters, object);
+  if (od)
     {
-      *iter = *internal_iter;
+      *iter = *od->iter;
       return TRUE;
     }
 
