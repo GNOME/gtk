@@ -279,6 +279,8 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
   gtk_tree_store_clear (wt->priv->model);
   g_hash_table_remove_all (wt->priv->iters);
   gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
+  if (g_application_get_default ())
+    gtk_inspector_widget_tree_append_object (wt, G_OBJECT (g_application_get_default ()), NULL, NULL);
   gtk_inspector_widget_tree_append_object (wt, G_OBJECT (window), NULL, NULL);
 
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (wt));
