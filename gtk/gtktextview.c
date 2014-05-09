@@ -5010,6 +5010,38 @@ gtk_text_view_key_release_event (GtkWidget *widget, GdkEventKey *event)
     return GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_release_event (widget, event);
 }
 
+static gboolean
+get_iter_from_gesture (GtkTextView *text_view,
+                       GtkGesture  *gesture,
+                       GtkTextIter *iter,
+                       gint        *x,
+                       gint        *y)
+{
+  GdkEventSequence *sequence;
+  GtkTextViewPrivate *priv;
+  gint xcoord, ycoord;
+  gdouble px, py;
+
+  priv = text_view->priv;
+  sequence =
+    gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (!gtk_gesture_get_point (gesture, sequence, &px, &py))
+    return FALSE;
+
+  xcoord = px + priv->xoffset;
+  ycoord = py + priv->yoffset;
+  _widget_to_text_window_coords (text_view, &xcoord, &ycoord);
+  gtk_text_layout_get_iter_at_pixel (priv->layout, iter, xcoord, ycoord);
+
+  if (x)
+    *x = xcoord;
+  if (y)
+    *y = ycoord;
+
+  return TRUE;
+}
+
 static void
 gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                           gint                  n_press,
@@ -5071,11 +5103,8 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
          with the middle button */
       priv->scroll_after_paste = FALSE;
 
-      gtk_text_layout_get_iter_at_pixel (priv->layout,
-                                         &iter,
-                                         x + priv->xoffset,
-                                         y + priv->yoffset);
-
+      get_iter_from_gesture (text_view, priv->multipress_gesture,
+                             &iter, NULL, NULL);
       gtk_text_buffer_paste_clipboard (get_buffer (text_view),
                                        gtk_widget_get_clipboard (GTK_WIDGET (text_view),
                                                                  GDK_SELECTION_PRIMARY),
@@ -5096,10 +5125,8 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
             GtkTextIter start, end;
 
             handle_mode = GTK_TEXT_HANDLE_MODE_CURSOR;
-            gtk_text_layout_get_iter_at_pixel (priv->layout,
-                                               &iter,
-                                               x + priv->xoffset,
-                                               y + priv->yoffset);
+            get_iter_from_gesture (text_view, priv->multipress_gesture,
+                                   &iter, NULL, NULL);
 
             if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                       &start, &end) &&
@@ -5123,11 +5150,8 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
           gtk_text_view_end_selection_drag (text_view);
 
-          gtk_text_layout_get_iter_at_pixel (priv->layout,
-                                             &iter,
-                                             x + priv->xoffset,
-                                             y + priv->yoffset);
-
+          get_iter_from_gesture (text_view, priv->multipress_gesture,
+                                 &iter, NULL, NULL);
           gtk_text_view_start_selection_drag (text_view, &iter,
                                               n_press == 2 ? SELECT_WORDS : SELECT_LINES,
                                               event);
@@ -6637,37 +6661,6 @@ gtk_text_view_unselect (GtkTextView *text_view)
                              &insert);
 }
 
-static gboolean
-get_iter_from_gesture (GtkTextView *text_view,
-                       GtkTextIter *iter,
-                       gint        *x,
-                       gint        *y)
-{
-  gdouble start_x, start_y, offset_x, offset_y;
-  GtkTextViewPrivate *priv;
-  gint xcoord, ycoord;
-
-  priv = text_view->priv;
-
-  if (!gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (priv->drag_gesture),
-                                         &start_x, &start_y) ||
-      !gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (priv->drag_gesture),
-                                    &offset_x, &offset_y))
-    return FALSE;
-
-  xcoord = start_x + offset_x + priv->xoffset;
-  ycoord = start_y + offset_y + priv->yoffset;
-  gtk_text_layout_get_iter_at_pixel (priv->layout, iter, xcoord, ycoord);
-
-  if (x)
-    *x = xcoord;
-
-  if (y)
-    *y = ycoord;
-
-  return TRUE;
-}
-
 static void
 get_iter_at_pointer (GtkTextView *text_view,
                      GdkDevice   *device,
@@ -6704,7 +6697,8 @@ move_mark_to_pointer_and_scroll (GtkTextView    *text_view,
   GtkTextMark *mark;
 
   buffer = get_buffer (text_view);
-  get_iter_from_gesture (text_view, &newplace, NULL, NULL);
+  get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
+                         &newplace, NULL, NULL);
 
   mark = gtk_text_buffer_get_mark (buffer, mark_name);
 
@@ -6884,14 +6878,39 @@ selection_data_free (SelectionData *data)
   g_free (data);
 }
 
+static gboolean
+drag_gesture_get_text_window_coords (GtkGestureDrag *gesture,
+                                     GtkTextView    *text_view,
+                                     gint           *start_x,
+                                     gint           *start_y,
+                                     gint           *x,
+                                     gint           *y)
+{
+  gdouble sx, sy, ox, oy;
+
+  if (!gtk_gesture_drag_get_start_point (gesture, &sx, &sy) ||
+      !gtk_gesture_drag_get_offset (gesture, &ox, &oy))
+    return FALSE;
+
+  *start_x = sx;
+  *start_y = sy;
+  _widget_to_text_window_coords (text_view, start_x, start_y);
+
+  *x = sx + ox;
+  *y = sy + oy;
+  _widget_to_text_window_coords (text_view, x, y);
+
+  return TRUE;
+}
+
 static void
 gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
                                    gdouble         offset_x,
                                    gdouble         offset_y,
                                    GtkTextView    *text_view)
 {
+  gint start_x, start_y, x, y;
   GdkEventSequence *sequence;
-  gdouble start_x, start_y;
   gboolean is_touchscreen;
   const GdkEvent *event;
   SelectionData *data;
@@ -6900,15 +6919,16 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   data = g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+  drag_gesture_get_text_window_coords (gesture, text_view,
+                                       &start_x, &start_y, &x, &y);
 
   if (!data)
     {
       /* If no data is attached, the initial press happened within the current
        * text selection, check for drag and drop to be initiated.
        */
-      if (gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y,
-                                    start_x + offset_x, start_y + offset_y))
+      if (gtk_drag_check_threshold (GTK_WIDGET (text_view),
+				    start_x, start_y, x, y))
         {
           GtkTextIter iter;
           gint buffer_x, buffer_y;
@@ -6929,6 +6949,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       return;
     }
 
+  /* Text selection */
   device = gdk_event_get_source_device (event);
 
   is_touchscreen = test_touchscreen ||
@@ -6949,8 +6970,8 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       gtk_text_buffer_get_iter_at_mark (buffer, &orig_start, data->orig_start);
       gtk_text_buffer_get_iter_at_mark (buffer, &orig_end, data->orig_end);
 
-      get_iter_from_gesture (text_view, &cursor, NULL, NULL);
-
+      get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
+                             &cursor, NULL, NULL);
       start = cursor;
       extend_selection (text_view, data->granularity, &start, &end);
 
@@ -6980,8 +7001,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
     {
       _gtk_text_view_ensure_text_handles (text_view);
       gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
-      gtk_text_view_show_magnifier (text_view, start_x + offset_x,
-                                    start_y + offset_y);
+      gtk_text_view_show_magnifier (text_view, x, y);
     }
 }
 
@@ -6991,17 +7011,20 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
                                 gdouble         offset_y,
                                 GtkTextView    *text_view)
 {
+  gboolean is_touchscreen, clicked_in_selection;
+  gint start_x, start_y, x, y;
   GdkEventSequence *sequence;
-  gdouble start_x, start_y;
   GtkTextViewPrivate *priv;
-  gboolean is_touchscreen;
   const GdkEvent *event;
   GdkDevice *device;
 
   priv = text_view->priv;
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+  drag_gesture_get_text_window_coords (gesture, text_view,
+                                       &start_x, &start_y, &x, &y);
 
+  clicked_in_selection =
+    g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data) == NULL;
   g_object_set_qdata (G_OBJECT (gesture), quark_text_selection_data, NULL);
   gtk_text_view_unobscure_mouse_cursor (text_view);
 
@@ -7026,8 +7049,8 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   if (is_touchscreen)
     gtk_text_view_selection_bubble_popup_set (text_view);
 
-  if (!gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y,
-                                 start_x + offset_x, start_y + offset_y))
+  if (clicked_in_selection &&
+      !gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y, x, y))
     {
       GtkTextHandleMode mode = GTK_TEXT_HANDLE_MODE_NONE;
       GtkTextIter iter;
@@ -7037,8 +7060,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
        * and place cursor.
        */
       gtk_text_layout_get_iter_at_pixel (priv->layout, &iter,
-                                         start_x + offset_x + priv->xoffset,
-                                         start_y + offset_y + priv->yoffset);
+                                         x + priv->xoffset, y + priv->yoffset);
 
       gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
       gtk_text_view_check_cursor_blink (text_view);
