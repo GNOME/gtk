@@ -39,6 +39,8 @@
           <object class="GtkInspectorPropertyCellRenderer" id="value_renderer">
             <property name="scale">0.8</property>
             <property name="editable">True</property>
+            <property name="width-chars">20</property>
+            <property name="ellipsize">end</property>
           </object>
           <attributes>
             <attribute name="text">1</attribute>
