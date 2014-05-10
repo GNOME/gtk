@@ -687,10 +687,17 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
 static gboolean gtk_widget_real_show_help        (GtkWidget         *widget,
                                                   GtkWidgetHelpType  help_type);
+static gboolean _gtk_widget_run_controllers      (GtkWidget           *widget,
+                                                  const GdkEvent      *event,
+                                                  GtkPropagationPhase  phase);
 
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
+static gboolean         gtk_widget_real_button_event            (GtkWidget        *widget,
+                                                                 GdkEventButton   *event);
+static gboolean         gtk_widget_real_motion_event            (GtkWidget        *widget,
+                                                                 GdkEventMotion   *event);
 static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
 								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
@@ -701,6 +708,8 @@ static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 								 GdkEventFocus    *event);
 static gboolean         gtk_widget_real_touch_event             (GtkWidget        *widget,
                                                                  GdkEventTouch    *event);
+static gboolean         gtk_widget_real_grab_broken_event       (GtkWidget          *widget,
+                                                                 GdkEventGrabBroken *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
@@ -1091,9 +1100,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->event = NULL;
-  klass->button_press_event = NULL;
-  klass->button_release_event = NULL;
-  klass->motion_notify_event = NULL;
+  klass->button_press_event = gtk_widget_real_button_event;
+  klass->button_release_event = gtk_widget_real_button_event;
+  klass->motion_notify_event = gtk_widget_real_motion_event;
   klass->touch_event = gtk_widget_real_touch_event;
   klass->delete_event = NULL;
   klass->destroy_event = NULL;
@@ -1123,7 +1132,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_data_received = NULL;
   klass->screen_changed = NULL;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
-  klass->grab_broken_event = NULL;
+  klass->grab_broken_event = gtk_widget_real_grab_broken_event;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->style_updated = gtk_widget_real_style_updated;
 
@@ -7096,6 +7105,22 @@ gtk_widget_draw (GtkWidget *widget,
 }
 
 static gboolean
+gtk_widget_real_button_event (GtkWidget      *widget,
+                              GdkEventButton *event)
+{
+  return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
+                                      GTK_PHASE_TARGET);
+}
+
+static gboolean
+gtk_widget_real_motion_event (GtkWidget      *widget,
+                              GdkEventMotion *event)
+{
+  return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
+                                      GTK_PHASE_TARGET);
+}
+
+static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
@@ -7136,7 +7161,8 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
   gint signum;
 
   if (!event->emulating_pointer)
-    return FALSE;
+    return _gtk_widget_run_controllers (widget, (GdkEvent*) event,
+                                        GTK_PHASE_TARGET);
 
   if (event->type == GDK_TOUCH_BEGIN ||
       event->type == GDK_TOUCH_END)
@@ -7196,6 +7222,13 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
   return return_val;
 }
 
+static gboolean
+gtk_widget_real_grab_broken_event (GtkWidget          *widget,
+                                   GdkEventGrabBroken *event)
+{
+  return _gtk_widget_run_controllers (widget, (GdkEvent*) event,
+                                      GTK_PHASE_TARGET);
+}
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
      (event->type == GDK_FOCUS_CHANGE || gtk_widget_get_realized(widget))
