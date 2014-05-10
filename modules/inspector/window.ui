@@ -228,7 +228,7 @@
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">Widget Tree</property>
+            <property name="label" translatable="yes">Objects</property>
           </object>
         </child>
         <child>
