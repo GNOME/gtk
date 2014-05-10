@@ -232,11 +232,6 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
 
   g_assert (gtk_widget_get_realized (widget));
 
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               gtk_widget_get_allocated_width (widget),
-                                               gtk_widget_get_allocated_height (widget));
-
   loop = g_main_loop_new (NULL, FALSE);
   /* We wait until the widget is drawn for the first time.
    * We can not wait for a GtkWidget::draw event, because that might not
@@ -245,6 +240,11 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
    * Both of these are rather hairy, not sure what's best. */
   gdk_event_handler_set (check_for_draw, loop, NULL);
   g_main_loop_run (loop);
+
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                               CAIRO_CONTENT_COLOR,
+                                               gtk_widget_get_allocated_width (widget),
+                                               gtk_widget_get_allocated_height (widget));
 
   cr = cairo_create (surface);
 
