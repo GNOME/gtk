@@ -19,6 +19,8 @@
 #define __GTK_STYLE_CONTEXT_PRIVATE_H__
 
 #include "gtkstylecontext.h"
+
+#include "gtkicontheme.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssvalueprivate.h"
@@ -53,6 +55,8 @@ void           _gtk_style_context_get_cursor_color           (GtkStyleContext   
                                                               GdkRGBA            *secondary_color);
 
 void           _gtk_style_context_update_animating           (GtkStyleContext    *context);
+
+GtkIconLookupFlags _gtk_style_context_get_icon_lookup_flags  (GtkStyleContext    *context);
 
 G_END_DECLS
 

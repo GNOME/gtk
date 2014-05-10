@@ -27,6 +27,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
+#include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkdebug.h"
@@ -4675,6 +4676,29 @@ _gtk_style_context_get_changes (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   return context->priv->invalidating_context;
+}
+
+GtkIconLookupFlags
+_gtk_style_context_get_icon_lookup_flags (GtkStyleContext *context)
+{
+  GtkCssIconStyle icon_style;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
+
+  icon_style = _gtk_css_icon_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_STYLE));
+
+  switch (icon_style)
+    {
+    case GTK_CSS_ICON_STYLE_REGULAR:
+      return GTK_ICON_LOOKUP_FORCE_REGULAR;
+    case GTK_CSS_ICON_STYLE_SYMBOLIC:
+      return GTK_ICON_LOOKUP_FORCE_SYMBOLIC;
+    case GTK_CSS_ICON_STYLE_REQUESTED:
+      return 0;
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
 }
 
 static AtkAttributeSet *

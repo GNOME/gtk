@@ -19,8 +19,12 @@
 
 #include "config.h"
 
-#include <math.h>
 #include "gtkiconhelperprivate.h"
+
+#include <math.h>
+
+#include "gtkiconhelperprivate.h"
+#include "gtkstylecontextprivate.h"
 
 struct _GtkIconHelperPrivate {
   GtkImageType storage_type;
@@ -254,7 +258,7 @@ check_invalidate_pixbuf (GtkIconHelper *self,
 }
 
 static GtkIconLookupFlags
-get_icon_lookup_flags (GtkIconHelper *self)
+get_icon_lookup_flags (GtkIconHelper *self, GtkStyleContext *context)
 {
   GtkIconLookupFlags flags = GTK_ICON_LOOKUP_USE_BUILTIN;
 
@@ -262,6 +266,8 @@ get_icon_lookup_flags (GtkIconHelper *self)
     flags |= GTK_ICON_LOOKUP_GENERIC_FALLBACK;
   if (self->priv->pixel_size != -1)
     flags |= GTK_ICON_LOOKUP_FORCE_SIZE;
+
+  flags |= _gtk_style_context_get_icon_lookup_flags (context);
 
   return flags;
 }
@@ -279,7 +285,7 @@ ensure_pixbuf_for_gicon (GtkIconHelper *self,
     return;
 
   icon_theme = gtk_icon_theme_get_default ();
-  flags = get_icon_lookup_flags (self);
+  flags = get_icon_lookup_flags (self, context);
 
   ensure_icon_size (self, context, &width, &height);
 
@@ -685,7 +691,7 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
     return;
 
   icon_theme = gtk_icon_theme_get_default ();
-  flags = get_icon_lookup_flags (self);
+  flags = get_icon_lookup_flags (self, context);
 
   ensure_icon_size (self, context, &width, &height);
   scale = get_scale_factor (self, context);
