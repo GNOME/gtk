@@ -50,8 +50,8 @@ G_BEGIN_DECLS
 
 GType      gtk_inspector_classes_list_get_type   (void);
 GtkWidget *gtk_inspector_classes_list_new        (void);
-void       gtk_inspector_classes_list_set_widget (GtkInspectorClassesList *cl,
-                                                  GtkWidget               *widget);
+void       gtk_inspector_classes_list_set_object (GtkInspectorClassesList *cl,
+                                                  GObject                 *object);
 
 G_END_DECLS
 

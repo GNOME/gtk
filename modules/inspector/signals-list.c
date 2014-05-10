@@ -121,8 +121,6 @@ gtk_inspector_signals_list_set_object (GtkInspectorSignalsList *sl,
 {
   gtk_list_store_clear (sl->priv->model);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (sl), TRUE);
-
   read_signals_from_object (sl, object);
 }
 

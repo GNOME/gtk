@@ -226,7 +226,6 @@ constructed (GObject *object)
 {
   GtkInspectorCssEditor *ce = GTK_INSPECTOR_CSS_EDITOR (object);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (ce), ce->priv->global);
   create_provider (ce);
   apply_system_font (ce);
   set_initial_text (ce);
@@ -309,12 +308,12 @@ remove_dead_object (gpointer data, GObject *dead_object)
   GtkInspectorCssEditor *ce = data;
 
   ce->priv->context = NULL;
-  gtk_widget_set_sensitive (GTK_WIDGET (ce), ce->priv->global);
+  gtk_widget_hide (GTK_WIDGET (ce));
 }
 
 void
-gtk_inspector_css_editor_set_widget (GtkInspectorCssEditor *ce,
-                                     GtkWidget             *widget)
+gtk_inspector_css_editor_set_object (GtkInspectorCssEditor *ce,
+                                     GObject               *object)
 {
   gchar *text;
   GtkCssProvider *provider;
@@ -322,19 +321,25 @@ gtk_inspector_css_editor_set_widget (GtkInspectorCssEditor *ce,
   g_return_if_fail (GTK_INSPECTOR_IS_CSS_EDITOR (ce));
   g_return_if_fail (!ce->priv->global);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (ce), TRUE);
-
   if (ce->priv->context)
     {
       g_object_weak_unref (G_OBJECT (ce->priv->context), remove_dead_object, ce);
       text = get_current_text (GTK_TEXT_BUFFER (ce->priv->text));
       g_object_set_data_full (G_OBJECT (ce->priv->context),
                               GTK_INSPECTOR_CSS_EDITOR_TEXT,
-                              text,
-                              g_free);
+                              text, g_free);
+      ce->priv->context = NULL;
     }
 
-  ce->priv->context = gtk_widget_get_style_context (widget);
+  if (!GTK_IS_WIDGET (object))
+    {
+      gtk_widget_hide (GTK_WIDGET (ce));
+      return;
+    }
+
+  gtk_widget_show (GTK_WIDGET (ce));
+
+  ce->priv->context = gtk_widget_get_style_context (GTK_WIDGET (object));
 
   provider = g_object_get_data (G_OBJECT (ce->priv->context), GTK_INSPECTOR_CSS_EDITOR_PROVIDER);
   if (!provider)

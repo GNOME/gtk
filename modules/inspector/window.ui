@@ -154,7 +154,6 @@
                     </child> 
                     <child>
                       <object class="GtkInspectorPropList" id="child_prop_list">
-                        <property name="visible">True</property>
                         <property name="child-properties">True</property>
                         <property name="widget-tree">widget_tree</property>
                       </object>
@@ -167,7 +166,6 @@
                     </child> 
                     <child>
                       <object class="GtkInspectorClassesList" id="classes_list">
-                        <property name="visible">True</property>
                       </object>
                     </child>
                     <child type="tab">
@@ -178,7 +176,6 @@
                     </child> 
                     <child>
                       <object class="GtkInspectorCssEditor" id="widget_css_editor">
-                        <property name="visible">True</property>
                         <property name="global">False</property>
                       </object>
                     </child>

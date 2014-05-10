@@ -226,7 +226,7 @@ cleanup_context (GtkInspectorClassesList *cl)
 
   gtk_list_store_clear (cl->priv->model);
   cl->priv->context = NULL;
-  gtk_widget_set_sensitive (GTK_WIDGET (cl), FALSE);
+  gtk_widget_hide (GTK_WIDGET (cl));
 }
 
 static void
@@ -239,8 +239,8 @@ remove_dead_object (gpointer data, GObject *dead_object)
 }
 
 void
-gtk_inspector_classes_list_set_widget (GtkInspectorClassesList *cl,
-                                       GtkWidget               *widget)
+gtk_inspector_classes_list_set_object (GtkInspectorClassesList *cl,
+                                       GObject                 *object)
 {
   GHashTable *hash_context;
   GtkTreeIter tree_iter;
@@ -248,9 +248,12 @@ gtk_inspector_classes_list_set_widget (GtkInspectorClassesList *cl,
 
   cleanup_context (cl);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (cl), TRUE);
+  if (!GTK_IS_WIDGET (object))
+    return;
 
-  cl->priv->context = gtk_widget_get_style_context (widget);
+  gtk_widget_show (GTK_WIDGET (cl));
+
+  cl->priv->context = gtk_widget_get_style_context (GTK_WIDGET (cl));
 
   g_object_weak_ref (G_OBJECT (cl->priv->context), remove_dead_object, cl);
 

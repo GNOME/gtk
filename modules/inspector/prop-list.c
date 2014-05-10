@@ -239,8 +239,6 @@ static void remove_dead_object (gpointer data, GObject *dead_object);
 static void
 cleanup_object (GtkInspectorPropList *pl)
 {
-  gtk_widget_set_sensitive (GTK_WIDGET (pl), FALSE);
-
   if (pl->priv->object)
     g_object_weak_unref (pl->priv->object, remove_dead_object, pl);
 
@@ -282,29 +280,41 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   pl->priv->object = object;
 
-  g_object_weak_ref (object, remove_dead_object, pl);
+  if (!object)
+    {
+      gtk_widget_hide (GTK_WIDGET (pl));
+      return TRUE;
+    }
 
-  g_object_set (pl->priv->attribute_column,
-                "visible", !pl->priv->child_properties && GTK_IS_CELL_RENDERER (object),
-                NULL);
+  g_object_weak_ref (object, remove_dead_object, pl);
 
   if (pl->priv->child_properties)
     {
       GtkWidget *parent;
 
       if (!GTK_IS_WIDGET (object))
-        return TRUE;
+        {
+          gtk_widget_hide (GTK_WIDGET (pl));
+          return TRUE;
+        }
 
       parent = gtk_widget_get_parent (GTK_WIDGET (object));
       if (!parent)
-        return TRUE;
+        {
+          gtk_widget_hide (GTK_WIDGET (pl));
+          return TRUE;
+        }
+
+      gtk_tree_view_column_set_visible (pl->priv->attribute_column, FALSE);
 
       props = gtk_container_class_list_child_properties (G_OBJECT_GET_CLASS (parent), &num_properties);
     }
   else
-    props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
+    {
+      gtk_tree_view_column_set_visible (pl->priv->attribute_column, GTK_IS_CELL_RENDERER (object));
 
-  gtk_widget_set_sensitive (GTK_WIDGET (pl), TRUE);
+      props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
+    }
 
   for (i = 0; i < num_properties; i++)
     {
@@ -326,6 +336,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
                         G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb),
                         pl);
 
+  gtk_widget_show (GTK_WIDGET (pl));
   return TRUE;
 }
 
