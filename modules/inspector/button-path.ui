@@ -19,13 +19,12 @@
               </object>
             </child>
             <child>
-              <object class="GtkButtonBox" id="button_box">
+              <object class="GtkBox" id="button_box">
                 <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="hexpand">True</property>
                 <property name="margin">6</property>
                 <property name="spacing">0</property>
-                <property name="layout-style">start</property>
                 <style>
                   <class name="linked"/>
                 </style>
