@@ -102,22 +102,18 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
 {
   GObject *selected = gtk_inspector_widget_tree_get_selected_object (wt);
 
-  if (selected != NULL)
-    {
-      if (!gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->prop_list), selected))
-        return;
+  if (!gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->prop_list), selected))
+    return;
 
-      gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->child_prop_list), selected);
-      gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
-      gtk_inspector_object_hierarchy_set_object (GTK_INSPECTOR_OBJECT_HIERARCHY (iw->object_hierarchy), selected);
-      gtk_inspector_button_path_set_object (GTK_INSPECTOR_BUTTON_PATH (iw->button_path), selected);
-      gtk_inspector_classes_list_set_object (GTK_INSPECTOR_CLASSES_LIST (iw->classes_list), selected);
-      gtk_inspector_css_editor_set_object (GTK_INSPECTOR_CSS_EDITOR (iw->widget_css_editor), selected);
-      gtk_inspector_data_list_set_object (GTK_INSPECTOR_DATA_LIST (iw->data_list), selected);
-
-      if (GTK_IS_WIDGET (selected))
-        gtk_inspector_flash_widget (iw, GTK_WIDGET (selected));
-    }
+  gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->child_prop_list), selected);
+  gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
+  gtk_inspector_object_hierarchy_set_object (GTK_INSPECTOR_OBJECT_HIERARCHY (iw->object_hierarchy), selected);
+  gtk_inspector_button_path_set_object (GTK_INSPECTOR_BUTTON_PATH (iw->button_path), selected);
+  gtk_inspector_classes_list_set_object (GTK_INSPECTOR_CLASSES_LIST (iw->classes_list), selected);
+  gtk_inspector_css_editor_set_object (GTK_INSPECTOR_CSS_EDITOR (iw->widget_css_editor), selected);
+  gtk_inspector_data_list_set_object (GTK_INSPECTOR_DATA_LIST (iw->data_list), selected);
+  if (GTK_IS_WIDGET (selected))
+    gtk_inspector_flash_widget (iw, GTK_WIDGET (selected));
 }
 
 static void

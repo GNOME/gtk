@@ -73,6 +73,9 @@ gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
 
   gtk_tree_store_clear (oh->priv->model);
 
+  if (object == NULL)
+    return;
+
   interfaces = g_hash_table_new (g_str_hash, g_str_equal);
   type = ((GTypeInstance*)object)->g_class->g_type;
   
