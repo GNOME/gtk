@@ -50,6 +50,7 @@ typedef struct
   GtkWidget *classes_list;
   GtkWidget *widget_css_editor;
   GtkWidget *object_hierarchy;
+  GtkWidget *data_list;
 
   GtkWidget *widget_popup;
 

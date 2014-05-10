@@ -10,5 +10,6 @@
     <file>themes.ui</file>
     <file>window.ui</file>
     <file>signals-list.ui</file>
+    <file>data-list.ui</file>
   </gresource>
 </gresources>

@@ -42,7 +42,9 @@ libgtkinspector_la_SOURCES = \
 	themes.h \
 	themes.c \
 	signals-list.h \
-	signals-list.c
+	signals-list.c \
+	data-list.h \
+	data-list.c
 
 libgtkinspector_la_CPPFLAGS = \
 	-I$(top_srcdir) 		\

@@ -25,6 +25,7 @@
 #include "button-path.h"
 #include "classes-list.h"
 #include "css-editor.h"
+#include "data-list.h"
 #include "object-hierarchy.h"
 #include "property-cell-renderer.h"
 #include "prop-list.h"
@@ -56,6 +57,7 @@ gtk_module_init (gint *argc, gchar ***argv)
   g_type_ensure (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER);
   g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);
+  g_type_ensure (GTK_TYPE_INSPECTOR_DATA_LIST);
 }
 
 

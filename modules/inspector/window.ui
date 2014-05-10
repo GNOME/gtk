@@ -185,6 +185,16 @@
                         <property name="label" translatable="yes">Custom CSS</property>
                       </object>
                     </child> 
+                    <child>
+                      <object class="GtkInspectorDataList" id="data_list">
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Data</property>
+                      </object>
+                    </child> 
                   </object>
                   <packing>
                     <property name="resize">True</property>
