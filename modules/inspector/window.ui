@@ -42,7 +42,7 @@
               <object class="GtkButton">
                 <property name="visible">True</property>
                 <property name="image">inspect_image</property>
-                <property name="tooltip-text" translatable="yes">Inspect</property>
+                <property name="tooltip-text" translatable="yes">Select an Object</property>
                 <signal name="clicked" handler="on_inspect"/>
               </object>
             </child>
