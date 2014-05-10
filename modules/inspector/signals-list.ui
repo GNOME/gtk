@@ -14,6 +14,9 @@
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="expand">True</property>
+        <property name="hscrollbar-policy">automatic</property>
+        <property name="vscrollbar-policy">always</property>
+        <property name="shadow-type">in</property>
         <child>
           <object class="GtkTreeView" id="view">
             <property name="visible">True</property>
