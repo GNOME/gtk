@@ -9,22 +9,34 @@
         <property name="vscrollbar-policy">never</property>
         <property name="hexpand">True</property>
         <child>
-          <object class="GtkButtonBox" id="button_box">
-            <property name="visible">True</property>
+          <object class="GtkBox">
             <property name="orientation">horizontal</property>
-            <property name="hexpand">True</property>
-            <property name="margin">6</property>
-            <property name="spacing">0</property>
-            <property name="layout-style">start</property>
-            <style>
-              <class name="linked"/>
-            </style>
+            <property name="visible">True</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkButton" id="placeholder">
+                <property name="margin">6</property>
+                <property name="label">X</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButtonBox" id="button_box">
+                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Choose a widget through the inspector</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">0.5</property>
+                <property name="margin">6</property>
+                <property name="spacing">0</property>
+                <property name="layout-style">start</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Choose a widget through the inspector</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0.5</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -32,4 +44,12 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">vertical</property>
+    <property name="ignore-hidden">False</property>
+    <widgets>
+      <widget name="placeholder"/>
+      <widget name="button_box"/>
+    </widgets>
+  </object>
 </interface>

@@ -54,28 +54,33 @@ gtk_inspector_button_path_new (void)
 }
 
 void
-gtk_inspector_button_path_set_widget (GtkInspectorButtonPath *bp,
-                                      GtkWidget          *widget)
+gtk_inspector_button_path_set_object (GtkInspectorButtonPath *bp,
+                                      GObject                *object)
 {
-  gchar *path, **words;
-  gint i;
-  GtkWidget *b;
   GtkContainer *box = GTK_CONTAINER (bp->priv->button_box);
+  GtkWidget *b;
 
   gtk_container_foreach (box, (GtkCallback)gtk_widget_destroy, NULL);
 
-  path = gtk_widget_path_to_string (gtk_widget_get_path (widget));
-  words = g_strsplit (path, " ", 0);
-
-  for (i = 0; i < g_strv_length (words); i++)
+  if (GTK_IS_WIDGET (object))
     {
-      b = gtk_button_new_with_label (words[i]);
-      gtk_widget_show (b);
-      gtk_container_add (box, b);
-    }
+      GtkWidget *widget = GTK_WIDGET (object);
+      gchar *path, **words;
+      gint i;
 
-  g_strfreev (words);
-  g_free (path);
+      path = gtk_widget_path_to_string (gtk_widget_get_path (widget));
+      words = g_strsplit (path, " ", 0);
+
+      for (i = 0; i < g_strv_length (words); i++)
+        {
+          b = gtk_button_new_with_label (words[i]);
+          gtk_widget_show (b);
+          gtk_container_add (box, b);
+        }
+
+      g_strfreev (words);
+      g_free (path);
+    }
 }
 
 // vim: set et sw=2 ts=2:

@@ -75,20 +75,22 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
       gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->child_prop_list), selected);
       gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
       gtk_inspector_object_hierarchy_set_object (GTK_INSPECTOR_OBJECT_HIERARCHY (iw->object_hierarchy), selected);
+      gtk_inspector_button_path_set_object (GTK_INSPECTOR_BUTTON_PATH (iw->button_path), selected);
 
       if (GTK_IS_WIDGET (selected))
         {
           GtkWidget *widget = GTK_WIDGET (selected);
 
           gtk_inspector_flash_widget (iw, widget);
-          gtk_inspector_button_path_set_widget (GTK_INSPECTOR_BUTTON_PATH (iw->button_path), widget);
           gtk_inspector_classes_list_set_widget (GTK_INSPECTOR_CLASSES_LIST (iw->classes_list), widget);
           gtk_inspector_css_editor_set_widget (GTK_INSPECTOR_CSS_EDITOR (iw->widget_css_editor), widget);
+          gtk_widget_set_visible (iw->classes_list, TRUE);
+          gtk_widget_set_visible (iw->widget_css_editor, TRUE);
         }
       else
         {
-          gtk_widget_set_sensitive (iw->classes_list, FALSE);
-          gtk_widget_set_sensitive (iw->widget_css_editor, FALSE);
+          gtk_widget_set_visible (iw->classes_list, FALSE);
+          gtk_widget_set_visible (iw->widget_css_editor, FALSE);
         }
     }
 }
