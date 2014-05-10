@@ -16700,8 +16700,7 @@ event_controller_grab_notify (GtkWidget           *widget,
   if (!grab_widget || grab_widget == widget)
     return;
 
-  if (((data->phase == GTK_PHASE_NONE ||
-        data->phase == GTK_PHASE_BUBBLE) &&
+  if ((data->phase != GTK_PHASE_CAPTURE &&
        !gtk_widget_is_ancestor (widget, grab_widget)) ||
       (data->phase == GTK_PHASE_CAPTURE &&
        !gtk_widget_is_ancestor (widget, grab_widget) &&
@@ -16802,7 +16801,7 @@ _gtk_widget_add_controller (GtkWidget           *widget,
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
   g_return_if_fail (!_gtk_widget_has_controller (widget, controller));
-  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_BUBBLE);
+  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_TARGET);
 
   priv = widget->priv;
   data = _gtk_widget_has_controller (widget, controller);

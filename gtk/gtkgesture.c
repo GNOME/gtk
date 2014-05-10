@@ -1530,7 +1530,7 @@ gtk_gesture_attach (GtkGesture          *gesture,
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_GESTURE (gesture));
-  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_BUBBLE);
+  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_TARGET);
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   _gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture), phase);
