@@ -2,64 +2,122 @@
 <interface domain="gtk30">
   <object class="GtkListStore" id="model">
     <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gint"/>
       <column type="gboolean"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
+      <column type="guint"/>
+      <column type="gulong"/>
     </columns>
   </object>
-  <template class="GtkInspectorSignalsList" parent="GtkBox">
+  <object class="GtkTextBuffer" id="text">
+  </object>
+  <template class="GtkInspectorSignalsList" parent="GtkPaned">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
+        <child>
+          <object class="GtkToolbar" id="toolbar">
+            <property name="visible">True</property>
+            <property name="icon-size">small-toolbar</property>
+            <child>
+              <object class="GtkToggleToolButton" id="trace_button">
+                <property name="visible">True</property>
+                <property name="icon-name">media-record</property>
+                <property name="tooltip-text" translatable="yes">Trace signal emissions on this object</property>
+                <signal name="toggled" handler="toggle_tracing"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="clear_button">
+                <property name="visible">True</property>
+                <property name="icon-name">edit-clear</property>
+                <property name="tooltip-text" translatable="yes">Clear log</property>
+                <signal name="clicked" handler="clear_log"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="expand">True</property>
+            <property name="hscrollbar-policy">automatic</property>
+            <property name="vscrollbar-policy">always</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTreeView" id="view">
+                <property name="visible">True</property>
+                <property name="model">model</property>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Name</property>
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="scale">0.8</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Connected</property>
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="scale">0.8</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="count_column">
+                    <property name="title" translatable="yes">Count</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="count_renderer">
+                        <property name="scale">0.8</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Defined At</property>
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="scale">0.8</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="log_win">
         <property name="expand">True</property>
         <property name="hscrollbar-policy">automatic</property>
         <property name="vscrollbar-policy">always</property>
         <property name="shadow-type">in</property>
         <child>
-          <object class="GtkTreeView" id="view">
+          <object class="GtkTextView">
             <property name="visible">True</property>
-            <property name="model">model</property>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Name</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">1</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Defined At</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">2</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>  
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Connected</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">3</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>  
+            <property name="buffer">text</property>
+            <property name="editable">False</property>
           </object>
         </child>
       </object>

@@ -32,13 +32,13 @@ typedef struct _GtkInspectorSignalsListPrivate GtkInspectorSignalsListPrivate;
 
 typedef struct _GtkInspectorSignalsList
 {
-  GtkBox parent;
+  GtkPaned parent;
   GtkInspectorSignalsListPrivate *priv;
 } GtkInspectorSignalsList;
 
 typedef struct _GtkInspectorSignalsListClass
 {
-  GtkBoxClass parent;
+  GtkPanedClass parent;
 } GtkInspectorSignalsListClass;
 
 G_BEGIN_DECLS
