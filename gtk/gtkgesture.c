@@ -479,6 +479,27 @@ _gtk_gesture_cancel_all (GtkGesture *gesture)
 }
 
 static gboolean
+gesture_within_window (GtkGesture *gesture,
+                       GdkWindow  *parent)
+{
+  GdkWindow *window;
+  GtkWidget *widget;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  window = gtk_widget_get_window (widget);
+
+  while (window)
+    {
+      if (window == parent)
+        return TRUE;
+
+      window = gdk_window_get_effective_parent (window);
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gtk_gesture_handle_event (GtkEventController *controller,
                           const GdkEvent     *event)
 {
@@ -544,6 +565,12 @@ gtk_gesture_handle_event (GtkEventController *controller,
     case GDK_TOUCH_CANCEL:
       _gtk_gesture_cancel_sequence (gesture, sequence);
       break;
+    case GDK_GRAB_BROKEN:
+      if (!event->grab_broken.grab_window ||
+          !gesture_within_window (gesture, event->grab_broken.grab_window))
+        _gtk_gesture_cancel_all (gesture);
+
+      return FALSE;
     default:
       /* Unhandled event */
       return FALSE;

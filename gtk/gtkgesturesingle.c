@@ -166,6 +166,11 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
         }
 
       break;
+    case GDK_TOUCH_CANCEL:
+    case GDK_GRAB_BROKEN:
+      return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller,
+                                                                                         event);
+      break;
     default:
       return FALSE;
     }
