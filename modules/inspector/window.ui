@@ -115,8 +115,8 @@
                 <child>
                   <object class="GtkNotebook">
                     <property name="visible">True</property>
-                    <property name="enable-popup">True</property>
                     <property name="show-border">False</property>
+                    <property name="scrollable">True</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
