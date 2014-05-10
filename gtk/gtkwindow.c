@@ -12428,13 +12428,12 @@ _gtk_window_get_popover_position (GtkWindow             *window,
     *rect = data->rect;
 }
 
-static void
-gtk_window_toggle_debugging (GtkWindow *window)
+static GtkWidget *inspector_window = NULL;
+
+void
+gtk_window_set_interactive_debugging (gboolean enable)
 {
   static GType type = G_TYPE_NONE;
-  static GtkWidget *inspector_window = NULL;
-
-  g_debug ("toggle debugging");
 
   if (type == G_TYPE_NONE)
     {
@@ -12449,15 +12448,22 @@ gtk_window_toggle_debugging (GtkWindow *window)
 
   if (inspector_window == NULL)
     {
-      g_debug ("creating a GtkInspector window");
-
       inspector_window = GTK_WIDGET (g_object_new (type, NULL));
       g_signal_connect (inspector_window, "delete-event",
                         G_CALLBACK (gtk_widget_hide_on_delete), NULL);
     }
 
-  if (gtk_widget_is_visible (inspector_window))
-    gtk_widget_hide (inspector_window);
-  else
+  if (enable)
     gtk_window_present (GTK_WINDOW (inspector_window));
+  else
+    gtk_widget_hide (inspector_window);
+}
+
+static void
+gtk_window_toggle_debugging (GtkWindow *window)
+{
+  if (GTK_IS_WIDGET (inspector_window) && gtk_widget_is_visible (inspector_window))
+    gtk_window_set_interactive_debugging (FALSE);
+  else
+    gtk_window_set_interactive_debugging (TRUE);
 }

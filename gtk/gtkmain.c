@@ -175,7 +175,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"no-css-cache", GTK_DEBUG_NO_CSS_CACHE},
   {"baselines", GTK_DEBUG_BASELINES},
   {"pixel-cache", GTK_DEBUG_PIXEL_CACHE},
-  {"no-pixel-cache", GTK_DEBUG_NO_PIXEL_CACHE}
+  {"no-pixel-cache", GTK_DEBUG_NO_PIXEL_CACHE},
+  {"interactive", GTK_DEBUG_INTERACTIVE}
 };
 #endif /* G_ENABLE_DEBUG */
 
@@ -976,10 +977,17 @@ gboolean
 gtk_init_check (int    *argc,
                 char ***argv)
 {
+  gboolean ret;
+
   if (!gtk_parse_args (argc, argv))
     return FALSE;
 
-  return gdk_display_open_default_libgtk_only () != NULL;
+  ret = gdk_display_open_default_libgtk_only () != NULL;
+
+  if (debug_flags & GTK_DEBUG_INTERACTIVE)
+    gtk_window_set_interactive_debugging (TRUE);
+
+  return ret;
 }
 
 #ifdef G_PLATFORM_WIN32
