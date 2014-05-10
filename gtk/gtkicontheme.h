@@ -113,6 +113,10 @@ struct _GtkIconThemeClass
  *   fallback, see gtk_icon_theme_choose_icon(). Since 2.12.
  * @GTK_ICON_LOOKUP_FORCE_SIZE: Always get the icon scaled to the
  *   requested size. Since 2.14.
+ * @GTK_ICON_LOOKUP_FORCE_REGULAR: Always load regular icons, even when
+ *   symbolic icon names are given. Since 3.14.
+ * @GTK_ICON_LOOKUP_FORCE_SYMBOLIC: Always load symbolic icons, even when
+ *   regular icon names are given. Since 3.14.
  * 
  * Used to specify options for gtk_icon_theme_lookup_icon()
  */
@@ -122,7 +126,9 @@ typedef enum
   GTK_ICON_LOOKUP_FORCE_SVG        = 1 << 1,
   GTK_ICON_LOOKUP_USE_BUILTIN      = 1 << 2,
   GTK_ICON_LOOKUP_GENERIC_FALLBACK = 1 << 3,
-  GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 4
+  GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 4,
+  GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 5,
+  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 6
 } GtkIconLookupFlags;
 
 /**
