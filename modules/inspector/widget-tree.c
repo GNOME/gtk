@@ -186,6 +186,7 @@ typedef struct
 {
   GtkInspectorWidgetTree *wt;
   GtkTreeIter *iter;
+  GObject *parent;
 } FindAllData;
 
 static void
@@ -194,6 +195,18 @@ on_container_forall (GtkWidget *widget,
 {
   FindAllData *d = data;
   gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (widget), d->iter, NULL);
+}
+
+static gboolean
+cell_callback (GtkCellRenderer *renderer,
+               gpointer         data)
+{
+  FindAllData *d = data;
+
+  g_object_set_data (G_OBJECT (renderer), "gtk-inspector-cell-area", d->parent);
+  gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (renderer), d->iter, NULL);
+
+  return FALSE;
 }
 
 void
@@ -276,6 +289,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       data.wt = wt;
       data.iter = &iter;
+      data.parent = object;
 
       gtk_container_forall (GTK_CONTAINER (object), on_container_forall, &data);
     }
@@ -293,21 +307,22 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
         }
     }
 
-  if (GTK_IS_CELL_LAYOUT (object))
+  if (GTK_IS_CELL_AREA (object))
     {
-      GList *cells, *l;
-      GObject *cell;
+      FindAllData data;
+
+      data.wt = wt;
+      data.iter = &iter;
+      data.parent = object;
+
+      gtk_cell_area_foreach (GTK_CELL_AREA (object), cell_callback, &data);
+    }
+  else if (GTK_IS_CELL_LAYOUT (object))
+    {
       GtkCellArea *area;
 
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (object));
-      cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (object));
-      for (l = cells; l; l = l->next)
-        {
-          cell = l->data;
-          g_object_set_data (cell, "gtk-inspector-cell-area", area);
-          gtk_inspector_widget_tree_append_object (wt, cell, &iter, NULL);
-        }
-      g_list_free (cells);
+      gtk_inspector_widget_tree_append_object (wt, G_OBJECT (area), &iter, NULL);
     }
 }
 
