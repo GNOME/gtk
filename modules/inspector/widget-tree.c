@@ -297,14 +297,36 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   if (GTK_IS_TREE_VIEW (object))
     {
       gint n_columns, i;
-      GObject *column;
+      GObject *child;
+
+      child = G_OBJECT (gtk_tree_view_get_model (GTK_TREE_VIEW (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
 
       n_columns = gtk_tree_view_get_n_columns (GTK_TREE_VIEW (object));
       for (i = 0; i < n_columns; i++)
         {
-          column = G_OBJECT (gtk_tree_view_get_column (GTK_TREE_VIEW (object), i));
-          gtk_inspector_widget_tree_append_object (wt, column, &iter, NULL);
+          child = G_OBJECT (gtk_tree_view_get_column (GTK_TREE_VIEW (object), i));
+          gtk_inspector_widget_tree_append_object (wt, child, &iter, NULL);
         }
+    }
+
+  if (GTK_IS_ICON_VIEW (object))
+    {
+      GObject *child;
+
+      child = G_OBJECT (gtk_icon_view_get_model (GTK_ICON_VIEW (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+    }
+
+  if (GTK_IS_COMBO_BOX (object))
+    {
+      GObject *child;
+
+      child = G_OBJECT (gtk_combo_box_get_model (GTK_COMBO_BOX (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
     }
 
   if (GTK_IS_CELL_AREA (object))
@@ -322,7 +344,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
       GtkCellArea *area;
 
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (object));
-      gtk_inspector_widget_tree_append_object (wt, G_OBJECT (area), &iter, NULL);
+      gtk_inspector_widget_tree_append_object (wt, G_OBJECT (area), &iter, "cell-area");
     }
 }
 
