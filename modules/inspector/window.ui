@@ -118,19 +118,10 @@
                     <property name="show-border">False</property>
                     <property name="scrollable">True</property>
                     <child>
-                      <object class="GtkScrolledWindow">
+                      <object class="GtkInspectorPropList" id="prop_list">
                         <property name="visible">True</property>
-                        <property name="hscrollbar-policy">automatic</property>
-                        <property name="vscrollbar-policy">always</property>
-                        <property name="shadow-type">in</property>
-                        <property name="width-request">250</property>
-                        <child>
-                          <object class="GtkInspectorPropList" id="prop_list">
-                            <property name="visible">True</property>
-                            <property name="child-properties">False</property>
-                            <property name="widget-tree">widget_tree</property>
-                          </object>
-                        </child>
+                        <property name="child-properties">False</property>
+                        <property name="widget-tree">widget_tree</property>
                       </object>
                     </child>
                     <child type="tab">
@@ -140,19 +131,10 @@
                       </object>
                     </child> 
                     <child>
-                      <object class="GtkScrolledWindow">
+                      <object class="GtkInspectorPropList" id="child_prop_list">
                         <property name="visible">True</property>
-                        <property name="hscrollbar-policy">automatic</property>
-                        <property name="vscrollbar-policy">always</property>
-                        <property name="shadow-type">in</property>
-                        <property name="width-request">250</property>
-                        <child>
-                          <object class="GtkInspectorPropList" id="child_prop_list">
-                            <property name="visible">True</property>
-                            <property name="child-properties">True</property>
-                            <property name="widget-tree">widget_tree</property>
-                          </object>
-                        </child>
+                        <property name="child-properties">True</property>
+                        <property name="widget-tree">widget_tree</property>
                       </object>
                     </child>
                     <child type="tab">

@@ -38,13 +38,13 @@ typedef struct _GtkInspectorPropListPrivate GtkInspectorPropListPrivate;
 
 typedef struct _GtkInspectorPropList
 {
-  GtkTreeView parent;
+  GtkBox parent;
   GtkInspectorPropListPrivate *priv;
 } GtkInspectorPropList;
 
 typedef struct _GtkInspectorPropListClass
 {
-  GtkTreeViewClass parent;
+  GtkBoxClass parent;
 } GtkInspectorPropListClass;
 
 

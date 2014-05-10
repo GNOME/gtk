@@ -53,9 +53,10 @@ struct _GtkInspectorPropListPrivate
   GtkCellRenderer *value_renderer;
   gboolean child_properties;
   GtkTreeViewColumn *attribute_column;
+  GtkWidget *tree;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropList, gtk_inspector_prop_list, GTK_TYPE_TREE_VIEW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropList, gtk_inspector_prop_list, GTK_TYPE_BOX)
 
 static void
 gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
@@ -143,6 +144,7 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, value_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, attribute_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, tree);
 }
 
 static void
@@ -214,7 +216,7 @@ gtk_inspector_prop_list_prop_changed_cb (GObject              *pspec,
                                          GParamSpec           *prop,
                                          GtkInspectorPropList *pl)
 {
-  GtkTreeIter *iter = g_hash_table_lookup(pl->priv->prop_iters, prop->name);
+  GtkTreeIter *iter = g_hash_table_lookup (pl->priv->prop_iters, prop->name);
 
   if (iter != NULL)
     gtk_inspector_prop_list_update_prop (pl, iter, prop);

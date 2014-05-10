@@ -11,73 +11,89 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <template class="GtkInspectorPropList" parent="GtkTreeView">
-    <property name="model">model</property>
-    <property name="tooltip-column">4</property>
+  <template class="GtkInspectorPropList" parent="GtkBox">
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Property</property>
-        <property name="resizable">True</property>
-        <property name="sort-order">ascending</property>
-        <property name="sort-column-id">0</property>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="expand">True</property>
+        <property name="hscrollbar-policy">automatic</property>
+        <property name="vscrollbar-policy">always</property>
+        <property name="shadow-type">in</property>
+        <property name="width-request">250</property>
         <child>
-          <object class="GtkCellRendererText">
-            <property name="scale">0.8</property>
+          <object class="GtkTreeView" id="tree">
+            <property name="visible">True</property>
+            <property name="model">model</property>
+            <property name="tooltip-column">4</property>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Property</property>
+                <property name="resizable">True</property>
+                <property name="sort-order">ascending</property>
+                <property name="sort-column-id">0</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Value</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkInspectorPropertyCellRenderer" id="value_renderer">
+                    <property name="scale">0.8</property>
+                    <property name="editable">True</property>
+                    <property name="width-chars">20</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                    <attribute name="object">3</attribute>
+                    <attribute name="name">0</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="attribute_column">
+                <property name="title" translatable="yes">Attribute</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                    <property name="editable">False</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">6</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Defined At</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">2</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
           </object>
-          <attributes>
-            <attribute name="text">0</attribute>
-            <attribute name="sensitive">5</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Value</property>
-        <property name="resizable">True</property>
-        <child>
-          <object class="GtkInspectorPropertyCellRenderer" id="value_renderer">
-            <property name="scale">0.8</property>
-            <property name="editable">True</property>
-            <property name="width-chars">20</property>
-            <property name="ellipsize">end</property>
-          </object>
-          <attributes>
-            <attribute name="text">1</attribute>
-            <attribute name="object">3</attribute>
-            <attribute name="name">0</attribute>
-            <attribute name="sensitive">5</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn" id="attribute_column">
-        <property name="title" translatable="yes">Attribute</property>
-        <property name="resizable">True</property>
-        <child>
-          <object class="GtkCellRendererText">
-            <property name="scale">0.8</property>
-            <property name="editable">False</property>
-          </object>
-          <attributes>
-            <attribute name="text">6</attribute>
-            <attribute name="sensitive">5</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Defined At</property>
-        <child>
-          <object class="GtkCellRendererText">
-            <property name="scale">0.8</property>
-          </object>
-          <attributes>
-            <attribute name="text">2</attribute>
-            <attribute name="sensitive">5</attribute>
-          </attributes>
         </child>
       </object>
     </child>
