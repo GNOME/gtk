@@ -131,19 +131,6 @@
                       </object>
                     </child> 
                     <child>
-                      <object class="GtkInspectorPropList" id="child_prop_list">
-                        <property name="visible">True</property>
-                        <property name="child-properties">True</property>
-                        <property name="widget-tree">widget_tree</property>
-                      </object>
-                    </child>
-                    <child type="tab">
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Child Properties</property>
-                      </object>
-                    </child> 
-                    <child>
                       <object class="GtkInspectorSignalsList" id="signals_list">
                         <property name="visible">True</property>
                       </object>
@@ -163,6 +150,19 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Hierarchy</property>
+                      </object>
+                    </child> 
+                    <child>
+                      <object class="GtkInspectorPropList" id="child_prop_list">
+                        <property name="visible">True</property>
+                        <property name="child-properties">True</property>
+                        <property name="widget-tree">widget_tree</property>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Child Properties</property>
                       </object>
                     </child> 
                     <child>
