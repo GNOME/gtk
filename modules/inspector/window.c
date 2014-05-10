@@ -50,6 +50,40 @@ on_graphic_updates_toggled (GtkToggleButton    *button,
   gdk_window_set_debug_updates (gtk_toggle_button_get_active (button));
 }
 
+static void
+fix_direction_recurse (GtkWidget *widget, gpointer data)
+{
+  GtkTextDirection dir = GPOINTER_TO_INT (data);
+
+  g_object_ref (widget);
+
+  gtk_widget_set_direction (widget, dir);
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), fix_direction_recurse, data);
+
+  g_object_unref (widget);
+}
+
+static GtkTextDirection initial_direction;
+
+static void
+fix_direction (GtkInspectorWindow *iw)
+{
+  fix_direction_recurse (GTK_WIDGET (iw), GINT_TO_POINTER (initial_direction));
+}
+
+static void
+on_flip (GtkButton          *button,
+         GtkInspectorWindow *iw)
+{
+  fix_direction (iw);
+
+  if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_LTR)
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+  else
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
+}
+
 static gboolean
 on_widget_tree_button_press (GtkInspectorWidgetTree *wt,
                              GdkEventButton         *event,
@@ -126,6 +160,8 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
       g_signal_connect (G_OBJECT (iw->widget_tree), "button-press-event",
                         G_CALLBACK (on_widget_tree_button_press), iw);
     }
+
+  initial_direction = gtk_widget_get_default_direction ();
 }
 
 static void
@@ -182,6 +218,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_graphic_updates_toggled);
+  gtk_widget_class_bind_template_callback (widget_class, on_flip);
   gtk_widget_class_bind_template_callback (widget_class, on_widget_tree_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_send_widget_to_shell_activate);
 }

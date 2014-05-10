@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
+  <object class="GtkImage" id="inspect_image">
+    <property name="visible">True</property>
+    <property name="icon-name">edit-find</property>
+    <property name="icon-size">4</property>
+  </object>
   <object class="GtkImage" id="update_image">
     <property name="visible">True</property>
     <property name="icon-name">view-refresh</property>
     <property name="icon-size">4</property>
   </object>
-  <object class="GtkImage" id="inspect_image">
+  <object class="GtkImage" id="flip_image">
     <property name="visible">True</property>
-    <property name="icon-name">edit-find</property>
+    <property name="icon-name">object-flip-horizontal</property>
     <property name="icon-size">4</property>
   </object>
   <object class="GtkMenu" id="widget_popup">
@@ -47,6 +52,14 @@
                 <property name="image">update_image</property>
                 <property name="tooltip-text" translatable="yes">Show Graphic Updates</property>
                 <signal name="toggled" handler="on_graphic_updates_toggled"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="image">flip_image</property>
+                <property name="tooltip-text" translatable="yes">Change Text Direction</property>
+                <signal name="clicked" handler="on_flip"/>
               </object>
             </child>
           </object>
