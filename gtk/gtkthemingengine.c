@@ -1067,6 +1067,9 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   gint border_width;
   GtkThemingBackground bg;
 
+  if (render_icon_image (engine, cr, x, y, width, height))
+    return;
+
   _gtk_theming_background_init (&bg, engine, 
                                 x, y,
                                 width, height,
@@ -1188,6 +1191,9 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   GtkBorderStyle border_style;
   GtkBorder border;
   GtkThemingBackground bg;
+
+  if (render_icon_image (engine, cr, x, y, width, height))
+    return;
 
   _gtk_theming_background_init (&bg, engine, 
                                 x, y,
