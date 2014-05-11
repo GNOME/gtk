@@ -813,6 +813,15 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
   return TRUE;
 }
 
+static gboolean
+parse_all (GtkCssShorthandProperty  *shorthand,
+           GtkCssValue             **values,
+           GtkCssParser             *parser)
+{
+  _gtk_css_parser_error (parser, "The 'all' property can only be set to 'initial', 'inherit' or 'unset'");
+  return FALSE;
+}
+
 /*** PACKING ***/
 
 static void
@@ -1089,6 +1098,25 @@ _gtk_css_shorthand_property_register (const char                        *name,
   node->query = query_func;
 }
 
+/* NB: return value is transfer: container */
+static const char **
+get_all_subproperties (void)
+{
+  const char **properties;
+  guint i, n;
+
+  n = _gtk_css_style_property_get_n_properties ();
+  properties = g_new (const char *, n + 1);
+  properties[n] = NULL;
+
+  for (i = 0; i < n; i++)
+    {
+      properties[i] = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (i)));
+    }
+
+  return properties;
+}
+
 void
 _gtk_css_shorthand_property_init_properties (void)
 {
@@ -1118,6 +1146,8 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *transition_subproperties[] = { "transition-property", "transition-duration", "transition-delay", "transition-timing-function", NULL };
   const char *animation_subproperties[] = { "animation-name", "animation-iteration-count", "animation-duration", "animation-delay", 
                                             "animation-timing-function", "animation-direction", "animation-fill-mode", NULL };
+
+  const char **all_subproperties;
 
   _gtk_css_shorthand_property_register   ("font",
                                           PANGO_TYPE_FONT_DESCRIPTION,
@@ -1227,4 +1257,13 @@ _gtk_css_shorthand_property_init_properties (void)
                                           parse_animation,
                                           NULL,
                                           NULL);
+
+  all_subproperties = get_all_subproperties ();
+  _gtk_css_shorthand_property_register   ("all",
+                                          G_TYPE_NONE,
+                                          all_subproperties,
+                                          parse_all,
+                                          NULL,
+                                          NULL);
+  g_free (all_subproperties);
 }
