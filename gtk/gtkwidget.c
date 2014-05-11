@@ -8440,13 +8440,10 @@ gtk_widget_set_visible (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (visible != gtk_widget_get_visible (widget))
-    {
-      if (visible)
-        gtk_widget_show (widget);
-      else
-        gtk_widget_hide (widget);
-    }
+  if (visible)
+    gtk_widget_show (widget);
+  else
+    gtk_widget_hide (widget);
 }
 
 void
