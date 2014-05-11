@@ -26,6 +26,7 @@
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkcssunsetvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
@@ -254,6 +255,14 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
        * also be used on properties that are not normally inherited.
        */
       return _gtk_css_inherit_value_new ();
+    }
+  else if (_gtk_css_parser_try (parser, "unset", TRUE))
+    {
+      /* If the cascaded value of a property is the unset keyword,
+       * then if it is an inherited property, this is treated as
+       * inherit, and if it is not, this is treated as initial.
+       */
+      return _gtk_css_unset_value_new ();
     }
 
   return (* style_property->parse_value) (style_property, parser);

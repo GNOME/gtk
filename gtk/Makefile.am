@@ -483,6 +483,7 @@ gtk_private_h_sources =		\
 	gtkcssstylepropertyprivate.h \
 	gtkcsstransitionprivate.h	\
 	gtkcsstypedvalueprivate.h	\
+	gtkcssunsetvalueprivate.h	\
 	gtkcssvalueprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdialogprivate.h 	\
@@ -731,6 +732,7 @@ gtk_base_c_sources = 		\
 	gtkcssstylepropertyimpl.c \
 	gtkcsstransition.c	\
 	gtkcsstypedvalue.c	\
+	gtkcssunsetvalue.c	\
 	gtkcssvalue.c		\
 	gtkcsstypes.c		\
 	gtkdialog.c		\

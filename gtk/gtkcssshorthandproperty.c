@@ -25,6 +25,7 @@
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
+#include "gtkcssunsetvalueprivate.h"
 #include "gtkintl.h"
 
 enum {
@@ -116,6 +117,17 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
       for (i = 0; i < shorthand->subproperties->len; i++)
         {
           data[i] = _gtk_css_inherit_value_new ();
+        }
+    }
+  else if (_gtk_css_parser_try (parser, "unset", TRUE))
+    {
+      /* If the cascaded value of a property is the unset keyword,
+       * then if it is an inherited property, this is treated as
+       * inherit, and if it is not, this is treated as initial.
+       */
+      for (i = 0; i < shorthand->subproperties->len; i++)
+        {
+          data[i] = _gtk_css_unset_value_new ();
         }
     }
   else if (!shorthand->parse (shorthand, data, parser))

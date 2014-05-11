@@ -25,6 +25,7 @@
 G_BEGIN_DECLS
 
 GtkCssValue *   _gtk_css_inherit_value_new            (void);
+GtkCssValue *   _gtk_css_inherit_value_get            (void);
 
 G_END_DECLS
 

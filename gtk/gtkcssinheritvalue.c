@@ -97,3 +97,9 @@ _gtk_css_inherit_value_new (void)
 {
   return _gtk_css_value_ref (&inherit);
 }
+
+GtkCssValue *
+_gtk_css_inherit_value_get (void)
+{
+  return &inherit;
+}
