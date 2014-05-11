@@ -194,10 +194,27 @@ additional environment variables.
       <term>no-css-cache</term>
       <listitem><para>Bypass caching for CSS style properties.</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>baselines</term>
+      <listitem><para>Baselines.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>pixel-cache</term>
+      <listitem><para>Pixel cache.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>no-pixel-cache</term>
+      <listitem><para>Disable the pixel cache.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>interactive</term>
+      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link>.</para></listitem>
+    </varlistentry>
 
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
-  debug options.
+  debug options. The special value <literal>help</literal> can be used
+  to obtain a list of all supported debug options.
   </para>
 </formalpara>
 
@@ -507,6 +524,24 @@ nevertheless.
   </para>
 </formalpara>
 
+</refsect2>
+
+<refsect2 id="interactive-debugging">
+<title>Interactive debugging</title>
+
+  <para>
+    GTK+ includes an interactive debugger which lets you explore the
+    widget tree of any GTK+ application at runtime, as well as tweak
+    the theme and trigger visual debugging aids.
+  </para>
+  <para>
+    To enable the debugger, you can use the Control-Shift-S keybinding
+    or pass set the <envar>GTK_DEBUG=interactive</envar> environment
+    variable.
+  </para>
+
+  <inlinegraphic fileref="inspector.png" format="PNG"></inlinegraphic>
+ 
 </refsect2>
 
 </refsect1>
