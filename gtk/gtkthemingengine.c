@@ -1818,6 +1818,9 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   gboolean is_rtl;
   gdouble progress;
 
+  if (render_icon_image (engine, cr, x, y, width, height))
+    return;
+
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
