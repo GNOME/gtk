@@ -1309,6 +1309,9 @@ gtk_theming_engine_render_arrow (GtkThemingEngine *engine,
   GtkStateFlags state;
   GdkRGBA color;
 
+  if (render_icon_image (engine, cr, x, y, size, size))
+    return;
+
   cairo_save (cr);
 
   line_width = size / 3.0 / sqrt (2);
