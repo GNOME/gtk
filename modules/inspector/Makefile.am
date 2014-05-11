@@ -68,15 +68,16 @@ libgtkinspector_la_LIBADD = \
 	$(GTK_DEP_LIBS)
 
 templates = \
-	button-path.ui \
-	classes-list.ui \
-	css-editor.ui \
-	object-hierarchy.ui \
-	prop-list.ui \
-	themes.ui \
-	widget-tree.ui \
-	window.ui \
-	signals-list.ui
+	button-path.ui 		\
+	classes-list.ui 	\
+	css-editor.ui 		\
+	data-list.ui 		\
+	object-hierarchy.ui 	\
+	prop-list.ui 		\
+	signals-list.ui		\
+	themes.ui 		\
+	widget-tree.ui 		\
+	window.ui
 
 template_headers = $(templates:.ui=.ui.h)
 

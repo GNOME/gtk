@@ -289,8 +289,10 @@ modules/inspector/window.c
 modules/inspector/button-path.ui.h
 modules/inspector/classes-list.ui.h
 modules/inspector/css-editor.ui.h
+modules/inspector/data-list.ui.h
 modules/inspector/object-hierarchy.ui.h
 modules/inspector/prop-list.ui.h
+modules/inspector/signals-list.ui.h
 modules/inspector/themes.ui.h
 modules/inspector/widget-tree.ui.h
 modules/inspector/window.ui.h
