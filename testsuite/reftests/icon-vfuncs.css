@@ -1,0 +1,14 @@
+@import "reset-to-defaults.css";
+
+* {
+  -gtk-icon-source: url("green-20x20.png");
+  -GtkCheckButton-indicator-size: 16;
+  -GtkCheckButton-indicator-spacing: 0;
+  -GtkArrow-arrow-scaling: 1.0666666666666666666667;
+  -GtkExpander-expander-spacing: 0;
+  -GtkExpander-expander-size: 16;
+}
+
+GtkImage {
+  background: lime;
+}

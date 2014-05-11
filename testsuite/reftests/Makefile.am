@@ -212,6 +212,9 @@ testdata = \
 	icon-style-basics.css \
 	icon-style-basics.ref.ui \
 	icon-style-basics.ui \
+	icon-vfuncs.css \
+	icon-vfuncs.ref.ui \
+	icon-vfuncs.ui \
 	iconview-empty.css \
 	iconview-empty.ui \
 	iconview-empty.ref.ui \
