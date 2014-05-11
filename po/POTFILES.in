@@ -294,6 +294,7 @@ modules/inspector/object-hierarchy.ui.h
 modules/inspector/prop-list.ui.h
 modules/inspector/signals-list.ui.h
 modules/inspector/themes.ui.h
+modules/inspector/visual.ui.h
 modules/inspector/widget-tree.ui.h
 modules/inspector/window.ui.h
 modules/printbackends/cloudprint/gtkprintbackendcloudprint.c

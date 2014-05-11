@@ -5,16 +5,6 @@
     <property name="icon-name">edit-find</property>
     <property name="icon-size">4</property>
   </object>
-  <object class="GtkImage" id="update_image">
-    <property name="visible">True</property>
-    <property name="icon-name">view-refresh</property>
-    <property name="icon-size">4</property>
-  </object>
-  <object class="GtkImage" id="flip_image">
-    <property name="visible">True</property>
-    <property name="icon-name">object-flip-horizontal</property>
-    <property name="icon-size">4</property>
-  </object>
   <object class="GtkMenu" id="widget_popup">
     <property name="visible">True</property>
     <child>
@@ -44,22 +34,6 @@
                 <property name="image">inspect_image</property>
                 <property name="tooltip-text" translatable="yes">Select an Object</property>
                 <signal name="clicked" handler="on_inspect"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkToggleButton">
-                <property name="visible">True</property>
-                <property name="image">update_image</property>
-                <property name="tooltip-text" translatable="yes">Show Graphic Updates</property>
-                <signal name="toggled" handler="on_graphic_updates_toggled"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="visible">True</property>
-                <property name="image">flip_image</property>
-                <property name="tooltip-text" translatable="yes">Change Text Direction</property>
-                <signal name="clicked" handler="on_flip"/>
               </object>
             </child>
           </object>
@@ -222,6 +196,17 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="label" translatable="yes">Objects</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkInspectorVisual">
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Visual</property>
           </object>
         </child>
         <child>

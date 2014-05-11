@@ -44,7 +44,9 @@ libgtkinspector_la_SOURCES = \
 	signals-list.h \
 	signals-list.c \
 	data-list.h \
-	data-list.c
+	data-list.c \
+	visual.h \
+	visual.c
 
 libgtkinspector_la_CPPFLAGS = \
 	-I$(top_srcdir) 		\
@@ -76,6 +78,7 @@ templates = \
 	prop-list.ui 		\
 	signals-list.ui		\
 	themes.ui 		\
+	visual.ui		\
 	widget-tree.ui 		\
 	window.ui
 

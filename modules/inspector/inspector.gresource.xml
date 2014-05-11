@@ -2,14 +2,15 @@
 <gresources>
   <gresource prefix="/org/gtk/inspector">
     <file>button-path.ui</file>
-    <file>object-hierarchy.ui</file>
-    <file>css-editor.ui</file>
     <file>classes-list.ui</file>
-    <file>widget-tree.ui</file>
-    <file>prop-list.ui</file>
-    <file>themes.ui</file>
-    <file>window.ui</file>
-    <file>signals-list.ui</file>
+    <file>css-editor.ui</file>
     <file>data-list.ui</file>
+    <file>object-hierarchy.ui</file>
+    <file>prop-list.ui</file>
+    <file>signals-list.ui</file>
+    <file>themes.ui</file>
+    <file>visual.ui</file>
+    <file>widget-tree.ui</file>
+    <file>window.ui</file>
   </gresource>
 </gresources>

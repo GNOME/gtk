@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <template class="GtkInspectorVisual" parent="GtkListBox">
+    <property name="selection-mode">none</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="margin">10</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Text Direction</property>
+            <property name="hexpand">True</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="direction_combo">
+            <property name="visible">True</property>
+            <signal name="changed" handler="direction_changed"/>
+            <items>
+              <item translatable="yes" id="ltr">Left-to-Right</item>
+              <item translatable="yes" id="rtl">Right-to-Left</item>
+            </items>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="margin">10</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Show Graphic Updates</property>
+            <property name="hexpand">True</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="updates_switch">
+            <property name="visible">True</property>
+            <signal name="notify::active" handler="updates_activate"/>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="margin">10</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Show Baselines</property>
+            <property name="hexpand">True</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="baselines_switch">
+            <property name="visible">True</property>
+            <signal name="notify::active" handler="baselines_activate"/>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="margin">10</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Show Pixel Cache</property>
+            <property name="hexpand">True</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="pixelcache_switch">
+            <property name="visible">True</property>
+            <signal name="notify::active" handler="pixelcache_activate"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
