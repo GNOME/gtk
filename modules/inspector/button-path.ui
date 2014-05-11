@@ -12,6 +12,7 @@
           <object class="GtkBox">
             <property name="orientation">horizontal</property>
             <property name="visible">True</property>
+            <property name="halign">start</property>
             <child>
               <object class="GtkButton" id="placeholder">
                 <property name="margin">6</property>
