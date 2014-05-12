@@ -1,3 +1,18 @@
+Overview of Changes in GTK+ 3.10.8 to 3.10.9
+============================================
+
+* Bugs fixed:
+ 495105 Open recent file keyboard shortcuts do not work correctly
+ 686170 gdk/win32: VK_SNAPSHOT maps to GDK_Print
+ 709914 Cannot move windows on touchscreen (except from WM decorations)
+ 721119 GtkMenuTracker: tweak separator logic
+ 726592 W32: problems with CSDed windows
+ 727487 Color picker check marks not cleared properly
+ 728745 win32: add more clipboard data checks to avoid crash
+ 728992 GtkLockButton crash if clicked and permission is NULL
+ 729670 cairo surface leaked for each cursor created from pixmap 
+
+
 Overview of Changes in GTK+ 3.10.7 to 3.10.8
 ============================================
 
