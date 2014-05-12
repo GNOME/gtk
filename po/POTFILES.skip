@@ -74,6 +74,17 @@ gtk/resources/ui/gtkrecentchooserdefault.ui
 gtk/resources/ui/gtkscalebutton.ui
 gtk/resources/ui/gtkstatusbar.ui
 gtk/resources/ui/gtkvolumebutton.ui
+modules/inspector/button-path.ui
+modules/inspector/classes-list.ui
+modules/inspector/css-editor.ui
+modules/inspector/data-list.ui
+modules/inspector/object-hierarchy.ui
+modules/inspector/prop-list.ui
+modules/inspector/signals-list.ui
+modules/inspector/themes.ui
+modules/inspector/visual.ui
+modules/inspector/widget-tree.ui
+modules/inspector/window.ui
 tests/testfilechooser.c
 testsuite/a11y/accessible-name.ui
 testsuite/a11y/assistant.ui
