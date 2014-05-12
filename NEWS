@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.12.1 to 3.12.2
+============================================
+
+* Bug fixes:
+ 495105 Open recent file keyboard shortcuts do not work correctly
+ 686170 gdk/win32: VK_SNAPSHOT maps to GDK_Print
+ 726592 W32: problems with CSDed windows
+ 727487 Color picker check marks not cleared properly
+ 728093 Add missing transfer annotation to gtk_box_get_center_widget
+ 728140 Illegal parameter passed to g_variant_new in gtk_application...
+ 728183 Drag and drop (GdkFrameClock) does not work for hidden widgets
+ 728272 make broadway backend build on OpenBSD
+ 728284 Graphics artifact when scrolling with hover-selection
+ 728526 weird black border appear when dragging file
+ 728745 win32: add more clipboard data checks to avoid crash
+ 728806 W32: Check- and radio-buttons have a selection rectangle on ac...
+ 728807 W32: Checkbutton focus rectangle becomes almost white on prelight
+ 728808 W32: Checkboxes on modelbuttons are drawn like buttons themselves
+ 728810 W32: Modelbuttons look like buttons
+ 728992 GtkLockButton crash if clicked and permission is NULL
+ 729346 W32: App-notification has no theme, shows up transparent
+ 729451 Removing accels with application_set_accels_for_action
+ 729670 cairo surface leaked for each cursor created from pixmap 
+
+* Translation updates:
+ Belarusian
+ German
+ Indonesian
+ Japanese
+ Russian
+ Slovenian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.12.0 to 3.12.1
 ============================================
 
