@@ -49,6 +49,13 @@ GDK_AVAILABLE_IN_3_14
 void        gtk_gesture_single_set_touch_only (GtkGestureSingle *gesture,
                                                gboolean          touch_only);
 GDK_AVAILABLE_IN_3_14
+gboolean    gtk_gesture_single_get_exclusive  (GtkGestureSingle *gesture);
+
+GDK_AVAILABLE_IN_3_14
+void        gtk_gesture_single_set_exclusive  (GtkGestureSingle *gesture,
+                                               gboolean          exclusive);
+
+GDK_AVAILABLE_IN_3_14
 guint       gtk_gesture_single_get_button     (GtkGestureSingle *gesture);
 
 GDK_AVAILABLE_IN_3_14

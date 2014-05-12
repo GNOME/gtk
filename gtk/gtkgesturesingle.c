@@ -48,10 +48,12 @@ struct _GtkGestureSinglePrivate
   guint button;
   guint current_button;
   guint touch_only : 1;
+  guint exclusive  : 1;
 };
 
 enum {
   PROP_TOUCH_ONLY = 1,
+  PROP_EXCLUSIVE,
   PROP_BUTTON
 };
 
@@ -73,6 +75,9 @@ gtk_gesture_single_get_property (GObject    *object,
     case PROP_TOUCH_ONLY:
       g_value_set_boolean (value, priv->touch_only);
       break;
+    case PROP_EXCLUSIVE:
+      g_value_set_boolean (value, priv->exclusive);
+      break;
     case PROP_BUTTON:
       g_value_set_uint (value, priv->button);
       break;
@@ -92,6 +97,10 @@ gtk_gesture_single_set_property (GObject      *object,
     case PROP_TOUCH_ONLY:
       gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (object),
                                          g_value_get_boolean (value));
+      break;
+    case PROP_EXCLUSIVE:
+      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (object),
+                                        g_value_get_boolean (value));
       break;
     case PROP_BUTTON:
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (object),
@@ -136,6 +145,9 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:
     case GDK_TOUCH_UPDATE:
+      if (priv->exclusive && !event->touch.emulating_pointer)
+        return FALSE;
+
       sequence = event->touch.sequence;
       button = 1;
       break;
@@ -225,6 +237,21 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                                                          P_("Whether the gesture handles"
                                                             " only touch events"),
                                                          TRUE,
+                                                         GTK_PARAM_READWRITE));
+  /**
+   * GtkGestureSingle:exclusive:
+   *
+   * Whether the gesture is exclusive. Exclusive gestures only listen to pointer
+   * and pointer emulated events.
+   *
+   * Since: 3.14
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_EXCLUSIVE,
+                                   g_param_spec_boolean ("exclusive",
+                                                         P_("Whether the gesture is exclusive"),
+                                                         P_("Whether the gesture is exclusive"),
+                                                         FALSE,
                                                          GTK_PARAM_READWRITE));
   /**
    * GtkGestureSingle:button:
@@ -323,6 +350,60 @@ gtk_gesture_single_set_touch_only (GtkGestureSingle *gesture,
   priv->touch_only = touch_only;
   _gtk_gesture_single_update_evmask (gesture);
   g_object_notify (G_OBJECT (gesture), "touch-only");
+}
+
+/**
+ * gtk_gesture_single_get_exclusive:
+ * @gesture: a #GtkGestureSingle
+ *
+ * Gets whether a gesture is exclusive. For more information, see
+ * gtk_gesture_single_set_exclusive().
+ *
+ * Returns: Whether the gesture is exclusive
+ *
+ * Since: 3.14
+ **/
+gboolean
+gtk_gesture_single_get_exclusive (GtkGestureSingle *gesture)
+{
+  GtkGestureSinglePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_GESTURE_SINGLE (gesture), FALSE);
+
+  priv = gtk_gesture_single_get_instance_private (gesture);
+
+  return priv->exclusive;
+}
+
+/**
+ * gtk_gesture_single_set_exclusive:
+ * @gesture: a #GtkGestureSingle
+ * @exclusive: #TRUE to make @gesture exclusive
+ *
+ * Sets whether @gesture is exclusive. An exclusive gesture will
+ * only handle pointer and "pointer emulated" touch events, so at
+ * any given time, there is only one sequence able to interact with
+ * those.
+ *
+ * Since: 3.14
+ **/
+void
+gtk_gesture_single_set_exclusive (GtkGestureSingle *gesture,
+                                  gboolean          exclusive)
+{
+  GtkGestureSinglePrivate *priv;
+
+  g_return_if_fail (GTK_IS_GESTURE_SINGLE (gesture));
+
+  exclusive = exclusive != FALSE;
+  priv = gtk_gesture_single_get_instance_private (gesture);
+
+  if (priv->exclusive == exclusive)
+    return;
+
+  priv->exclusive = exclusive;
+  _gtk_gesture_single_update_evmask (gesture);
+  g_object_notify (G_OBJECT (gesture), "exclusive");
 }
 
 /**

@@ -7963,6 +7963,8 @@ gtk_gesture_get_type
 <FILE>gtkgesturesingle</FILE>
 <TITLE>GtkGestureSingle</TITLE>
 GtkGestureSingle
+gtk_gesture_single_get_exclusive
+gtk_gesture_single_set_exclusive
 gtk_gesture_single_get_touch_only
 gtk_gesture_single_set_touch_only
 gtk_gesture_single_get_button
