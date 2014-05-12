@@ -15724,6 +15724,8 @@ _gtk_widget_update_parent_muxer (GtkWidget *widget)
 
       if (GTK_IS_MENU (widget))
         parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
+      else if (GTK_IS_POPOVER (widget))
+        parent = gtk_popover_get_relative_to (GTK_POPOVER (widget));
       else
         parent = gtk_widget_get_parent (widget);
 

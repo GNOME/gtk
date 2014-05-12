@@ -1636,6 +1636,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
                           G_CALLBACK (scrollable_notify_cb), popover);
     }
 
+  _gtk_widget_update_parent_muxer (GTK_WIDGET (popover));
   _gtk_popover_update_context_parent (popover);
   g_object_unref (popover);
 }
