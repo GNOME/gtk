@@ -198,8 +198,8 @@ gtk_css_transform_apply (const GtkCssTransform *transform,
 
 /* NB: The returned matrix may be invalid */
 static void
-gtk_css_transform_value_get_matrix (const GtkCssValue *value,
-                                    cairo_matrix_t    *matrix)
+gtk_css_transform_value_compute_matrix (const GtkCssValue *value,
+                                        cairo_matrix_t    *matrix)
 {
   guint i;
 
@@ -637,9 +637,9 @@ gtk_css_value_transform_transition (GtkCssValue *start,
           cairo_matrix_t start_matrix, end_matrix;
 
           cairo_matrix_init_identity (&start_matrix);
-          gtk_css_transform_value_get_matrix (start, &start_matrix);
+          gtk_css_transform_value_compute_matrix (start, &start_matrix);
           cairo_matrix_init_identity (&end_matrix);
-          gtk_css_transform_value_get_matrix (end, &end_matrix);
+          gtk_css_transform_value_compute_matrix (end, &end_matrix);
 
           result = gtk_css_transform_value_alloc (1);
           result->transforms[0].type = GTK_CSS_TRANSFORM_MATRIX;
@@ -1028,21 +1028,20 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
 }
 
 gboolean
-_gtk_css_transform_value_apply (const GtkCssValue *transform,
-                                cairo_t           *cr)
+_gtk_css_transform_value_get_matrix (const GtkCssValue *transform,
+                                     cairo_matrix_t    *matrix)
 {
-  cairo_matrix_t matrix, invert;
+  cairo_matrix_t invert;
 
   g_return_val_if_fail (transform->class == &GTK_CSS_VALUE_TRANSFORM, FALSE);
-  g_return_val_if_fail (cr != NULL, FALSE);
+  g_return_val_if_fail (matrix != NULL, FALSE);
   
-  gtk_css_transform_value_get_matrix (transform, &matrix);
+  gtk_css_transform_value_compute_matrix (transform, &invert);
 
-  invert = matrix;
+  *matrix = invert;
+
   if (cairo_matrix_invert (&invert) != CAIRO_STATUS_SUCCESS)
     return FALSE;
-
-  cairo_transform (cr, &matrix);
 
   return TRUE;
 }

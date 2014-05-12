@@ -28,8 +28,8 @@ G_BEGIN_DECLS
 GtkCssValue *   _gtk_css_transform_value_new_none       (void);
 GtkCssValue *   _gtk_css_transform_value_parse          (GtkCssParser           *parser);
 
-gboolean        _gtk_css_transform_value_apply          (const GtkCssValue      *transform,
-                                                         cairo_t                *cr);
+gboolean        _gtk_css_transform_value_get_matrix     (const GtkCssValue      *transform,
+                                                         cairo_matrix_t         *matrix);
 
 G_END_DECLS
 

@@ -1032,6 +1032,7 @@ render_icon_image (GtkThemingEngine *engine,
                    double            height)
 {
   const GtkCssValue *shadows;
+  cairo_matrix_t matrix;
   GtkCssImage *image;
 
   image = _gtk_css_image_value_get_image (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SOURCE));
@@ -1040,11 +1041,11 @@ render_icon_image (GtkThemingEngine *engine,
 
   shadows = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW);
 
-  cairo_translate (cr, x, y);
-  cairo_translate (cr, width / 2, height / 2);
-  
-  if (_gtk_css_transform_value_apply (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_TRANSFORM), cr))
+  if (_gtk_css_transform_value_get_matrix (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_TRANSFORM), &matrix))
     {
+      cairo_translate (cr, x, y);
+      cairo_translate (cr, width / 2, height / 2);
+      cairo_transform (cr, &matrix);
       cairo_translate (cr, -width / 2, -height / 2);
 
       if (!_gtk_css_shadows_value_is_none (shadows))
