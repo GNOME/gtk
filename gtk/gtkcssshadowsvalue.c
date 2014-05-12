@@ -241,6 +241,14 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser)
   return result;
 }
 
+gboolean
+_gtk_css_shadows_value_is_none (const GtkCssValue *shadows)
+{
+  g_return_val_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS, TRUE);
+
+  return shadows->len == 0;
+}
+
 void
 _gtk_css_shadows_value_paint_layout (const GtkCssValue *shadows,
                                      cairo_t           *cr,
