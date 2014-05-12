@@ -186,72 +186,82 @@ _gtk_gesture_multi_press_check_within_threshold (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_gesture_multi_press_update (GtkGesture       *gesture,
-                                GdkEventSequence *sequence)
+gtk_gesture_multi_press_begin (GtkGesture       *gesture,
+                               GdkEventSequence *sequence)
 {
   GtkGestureMultiPress *multi_press;
   GtkGestureMultiPressPrivate *priv;
   guint n_presses, button = 1;
+  GdkEventSequence *current;
   const GdkEvent *event;
   gdouble x, y;
+
+  if (!gtk_gesture_handles_sequence (gesture, sequence))
+    return;
 
   multi_press = GTK_GESTURE_MULTI_PRESS (gesture);
   priv = gtk_gesture_multi_press_get_instance_private (multi_press);
   event = gtk_gesture_get_last_event (gesture, sequence);
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
-  if (!event)
+  if (event->type == GDK_BUTTON_PRESS)
+    button = event->button.button;
+  else if (event->type == GDK_TOUCH_BEGIN)
+    button = 1;
+  else
     return;
 
-  switch (event->type)
+  /* Reset the gesture if the button number changes mid-recognition */
+  if (priv->n_presses > 0 &&
+      priv->current_button != button)
+    _gtk_gesture_multi_press_stop (multi_press);
+
+  priv->current_button = button;
+  _gtk_gesture_multi_press_update_timeout (multi_press);
+  gtk_gesture_get_point (gesture, current, &x, &y);
+
+  if (!_gtk_gesture_multi_press_check_within_threshold (multi_press, x, y))
+    _gtk_gesture_multi_press_stop (multi_press);
+
+  /* Increment later the real counter, just if the gesture is
+   * reset on the pressed handler */
+  n_presses = priv->n_presses + 1;
+
+  g_signal_emit (gesture, signals[PRESSED], 0, n_presses, x, y);
+
+  if (priv->n_presses == 0)
     {
-    case GDK_BUTTON_PRESS:
-      button = event->button.button;
-      /* Fall through */
-    case GDK_TOUCH_BEGIN:
-      /* Reset the gesture if the button number changes mid-recognition */
-      if (priv->n_presses > 0 &&
-          priv->current_button != button)
-        _gtk_gesture_multi_press_stop (multi_press);
-
-      priv->current_button = button;
-      _gtk_gesture_multi_press_update_timeout (multi_press);
-      gtk_gesture_get_point (gesture, sequence, &x, &y);
-
-      if (!_gtk_gesture_multi_press_check_within_threshold (multi_press, x, y))
-        _gtk_gesture_multi_press_stop (multi_press);
-
-      /* Increment later the real counter, just if the gesture is
-       * reset on the pressed handler */
-      n_presses = priv->n_presses + 1;
-
-      g_signal_emit (gesture, signals[PRESSED], 0, n_presses, x, y);
-
-      if (priv->n_presses == 0)
-        {
-          priv->initial_press_x = x;
-          priv->initial_press_y = y;
-        }
-
-      priv->n_presses++;
-      break;
-    case GDK_MOTION_NOTIFY:
-    case GDK_TOUCH_UPDATE:
-      gtk_gesture_get_point (gesture, sequence, &x, &y);
-
-      if (!_gtk_gesture_multi_press_check_within_threshold (multi_press, x, y))
-        _gtk_gesture_multi_press_stop (multi_press);
-      break;
-    default:
-      break;
+      priv->initial_press_x = x;
+      priv->initial_press_y = y;
     }
+
+  priv->n_presses++;
+}
+
+static void
+gtk_gesture_multi_press_update (GtkGesture       *gesture,
+                                GdkEventSequence *sequence)
+{
+  GtkGestureMultiPress *multi_press;
+  GdkEventSequence *current;
+  gdouble x, y;
+
+  multi_press = GTK_GESTURE_MULTI_PRESS (gesture);
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_get_point (gesture, current, &x, &y);
+
+  if (!_gtk_gesture_multi_press_check_within_threshold (multi_press, x, y))
+    _gtk_gesture_multi_press_stop (multi_press);
+}
+
+
 }
 
 static void
 gtk_gesture_multi_press_cancel (GtkGesture       *gesture,
                                 GdkEventSequence *sequence)
 {
-  if (sequence == gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)))
-    _gtk_gesture_multi_press_stop (GTK_GESTURE_MULTI_PRESS (gesture));
+  _gtk_gesture_multi_press_stop (GTK_GESTURE_MULTI_PRESS (gesture));
 }
 
 static void
@@ -271,7 +281,7 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
   object_class->finalize = gtk_gesture_multi_press_finalize;
 
   gesture_class->check = gtk_gesture_multi_press_check;
-  gesture_class->begin = gtk_gesture_multi_press_update;
+  gesture_class->begin = gtk_gesture_multi_press_begin;
   gesture_class->update = gtk_gesture_multi_press_update;
   gesture_class->cancel = gtk_gesture_multi_press_cancel;
 
