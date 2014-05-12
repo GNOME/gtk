@@ -50,12 +50,14 @@ struct _GtkGestureMultiPressPrivate
   gdouble initial_press_y;
   guint double_click_timeout_id;
   guint n_presses;
+  guint n_release;
   guint current_button;
   guint rect_is_set : 1;
 };
 
 enum {
   PRESSED,
+  RELEASED,
   STOPPED,
   LAST_SIGNAL
 };
@@ -225,7 +227,7 @@ gtk_gesture_multi_press_begin (GtkGesture       *gesture,
 
   /* Increment later the real counter, just if the gesture is
    * reset on the pressed handler */
-  n_presses = priv->n_presses + 1;
+  n_presses = priv->n_release = priv->n_presses + 1;
 
   g_signal_emit (gesture, signals[PRESSED], 0, n_presses, x, y);
 
@@ -254,7 +256,22 @@ gtk_gesture_multi_press_update (GtkGesture       *gesture,
     _gtk_gesture_multi_press_stop (multi_press);
 }
 
+static void
+gtk_gesture_multi_press_end (GtkGesture       *gesture,
+                             GdkEventSequence *sequence)
+{
+  GtkGestureMultiPress *multi_press;
+  GtkGestureMultiPressPrivate *priv;
+  GdkEventSequence *current;
+  gdouble x, y;
 
+  multi_press = GTK_GESTURE_MULTI_PRESS (gesture);
+  priv = gtk_gesture_multi_press_get_instance_private (multi_press);
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_get_point (gesture, current, &x, &y);
+
+  g_signal_emit (gesture, signals[RELEASED], 0, priv->n_release, x, y);
+  priv->n_release = 0;
 }
 
 static void
@@ -283,6 +300,7 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
   gesture_class->check = gtk_gesture_multi_press_check;
   gesture_class->begin = gtk_gesture_multi_press_begin;
   gesture_class->update = gtk_gesture_multi_press_update;
+  gesture_class->end = gtk_gesture_multi_press_end;
   gesture_class->cancel = gtk_gesture_multi_press_cancel;
 
   controller_class->reset = gtk_gesture_multi_press_reset;
@@ -303,6 +321,29 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureMultiPressClass, pressed),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 3, G_TYPE_INT,
+                  G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+
+  /**
+   * GtkGestureMultiPress::released:
+   * @gesture: the object which received the signal
+   * @n_press: number of press that is paired with this release
+   * @x: The X coordinate, in widget allocation coordinates
+   * @y: The Y coordinate, in widget allocation coordinates
+   *
+   * This signal is emitted when a button or touch is released. @n_press
+   * will report the number of press that is paired to this event, note
+   * that #GtkGestureMultiPress::stopped may have been emitted between the
+   * press and its release, @n_press will only start over at the next press.
+   *
+   * Since: 3.14
+   */
+  signals[RELEASED] =
+    g_signal_new ("released",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkGestureMultiPressClass, released),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 3, G_TYPE_INT,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);

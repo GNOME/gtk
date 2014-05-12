@@ -31,10 +31,14 @@ struct _GtkGestureMultiPressClass
 {
   GtkGestureSingleClass parent_class;
 
-  gboolean (* pressed) (GtkGestureMultiPress *gesture,
+  void     (* pressed) (GtkGestureMultiPress *gesture,
                         gint                  n_press,
                         gdouble               x,
                         gdouble               y);
+  void     (* released) (GtkGestureMultiPress *gesture,
+                         gint                  n_press,
+                         gdouble               x,
+                         gdouble               y);
   void     (* stopped) (GtkGestureMultiPress *gesture);
 
   /*<private>*/
