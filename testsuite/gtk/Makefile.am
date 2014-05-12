@@ -40,6 +40,7 @@ TEST_PROGS += 			\
 	floating		\
 	grid			\
 	gtkmenu			\
+	icontheme		\
 	keyhash			\
 	listbox			\
 	no-gtk-init		\
@@ -124,10 +125,15 @@ keyhash_SOURCES	=					\
 	$(NULL)
 
 
+test_icontheme =					\
+	icons/16x16/simple.png				\
+	icons/index.theme				\
+	$(NULL)
 
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt	\
+	$(test_icontheme)		\
 	$(NULL)
 
 GTK_GSETTINGS_SCHEMAS = \
@@ -149,6 +155,7 @@ all-am: gschemas.compiled
 if BUILDOPT_INSTALL_TESTS
 insttestdir = $(pkglibexecdir)/installed-tests
 insttest_PROGRAMS = $(TEST_PROGS)
+insttest_DATA = $(test_icontheme)
 
 %.test: %$(EXEEXT) Makefile
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \

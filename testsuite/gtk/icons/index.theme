@@ -1,0 +1,12 @@
+[Icon Theme]
+Name=Icons
+Comment=Testing of the Icon theme code
+Example=16x16/simple.png
+
+Directories=16x16
+
+[16x16]
+Context=16x16 icons
+Size=16
+Type=Fixed
+
