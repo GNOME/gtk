@@ -322,6 +322,7 @@
       <xi:include href="xml/gtkactivatable.xml" />
       <xi:include href="xml/gtkimagemenuitem.xml" />
       <xi:include href="xml/gtkstock.xml" />
+      <xi:include href="xml/gtknumerableicon.xml" />
     </chapter>
 
   </part>
@@ -352,7 +353,6 @@
     <xi:include href="xml/gtkwidgetpath.xml" />
     <xi:include href="xml/gtkicontheme.xml" />
     <xi:include href="xml/gtkiconfactory.xml" />
-    <xi:include href="xml/gtknumerableicon.xml" />
   </part>
 
   <part id="migrating">

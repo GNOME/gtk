@@ -56,43 +56,43 @@ struct _GtkNumerableIconClass {
   gpointer padding[16];
 };
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GType             gtk_numerable_icon_get_type                 (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GIcon *           gtk_numerable_icon_new                      (GIcon            *base_icon);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GIcon *           gtk_numerable_icon_new_with_style_context   (GIcon            *base_icon,
                                                                GtkStyleContext  *context);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GtkStyleContext * gtk_numerable_icon_get_style_context        (GtkNumerableIcon *self);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void              gtk_numerable_icon_set_style_context        (GtkNumerableIcon *self,
                                                                GtkStyleContext  *style);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gint              gtk_numerable_icon_get_count                (GtkNumerableIcon *self);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void              gtk_numerable_icon_set_count                (GtkNumerableIcon *self,
                                                                gint count);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 const gchar *     gtk_numerable_icon_get_label                (GtkNumerableIcon *self);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void              gtk_numerable_icon_set_label                (GtkNumerableIcon *self,
                                                                const gchar      *label);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void              gtk_numerable_icon_set_background_gicon     (GtkNumerableIcon *self,
                                                                GIcon            *icon);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GIcon *           gtk_numerable_icon_get_background_gicon     (GtkNumerableIcon *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void              gtk_numerable_icon_set_background_icon_name (GtkNumerableIcon *self,
                                                                const gchar      *icon_name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 const gchar *     gtk_numerable_icon_get_background_icon_name (GtkNumerableIcon *self);
 
 G_END_DECLS

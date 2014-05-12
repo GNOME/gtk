@@ -171,6 +171,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkhsv.h		\
 	deprecated/gtkiconfactory.h	\
 	deprecated/gtkimagemenuitem.h	\
+	deprecated/gtknumerableicon.h	\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrc.h		\
 	deprecated/gtkrecentaction.h	\
@@ -190,6 +191,7 @@ deprecated_h_sources = 			\
 
 deprecated_private_h_sources =			\
 	deprecated/gtkgradientprivate.h		\
+	deprecated/gtknumerableiconprivate.h	\
 	deprecated/gtksymboliccolorprivate.h
 
 gtk_public_h_sources = 		\
@@ -305,7 +307,6 @@ gtk_public_h_sources = 		\
 	gtkmodules.h		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
-	gtknumerableicon.h	\
 	gtkoffscreenwindow.h	\
 	gtkorientable.h		\
 	gtkoverlay.h		\
@@ -522,7 +523,6 @@ gtk_private_h_sources =		\
 	gtkmodifierstyle.h	\
 	gtkmodulesprivate.h	\
 	gtkmountoperationprivate.h \
-	gtknumerableiconprivate.h \
 	gtkorientableprivate.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
@@ -596,6 +596,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkhsv.c		\
 	deprecated/gtkiconfactory.c	\
 	deprecated/gtkimagemenuitem.c	\
+	deprecated/gtknumerableicon.c	\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrc.c		\
 	deprecated/gtkrecentaction.c	\
@@ -806,7 +807,6 @@ gtk_base_c_sources = 		\
 	gtkmodules.c		\
 	gtkmountoperation.c	\
 	gtknotebook.c		\
-	gtknumerableicon.c	\
 	gtkoffscreenwindow.c	\
 	gtkorientable.c		\
 	gtkoverlay.c		\
