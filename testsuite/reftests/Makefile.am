@@ -209,6 +209,9 @@ testdata = \
 	grid-spacing3.css \
 	grid-spacing3.ref.ui \
 	grid-spacing3.ui \
+	icon-shadow-no-transform.css \
+	icon-shadow-no-transform.ref.ui \
+	icon-shadow-no-transform.ui \
 	icon-style-basics.css \
 	icon-style-basics.ref.ui \
 	icon-style-basics.ui \
