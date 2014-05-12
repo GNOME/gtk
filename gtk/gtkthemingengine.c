@@ -1032,7 +1032,7 @@ render_icon_image (GtkThemingEngine *engine,
                    double            height)
 {
   const GtkCssValue *shadows;
-  cairo_matrix_t matrix;
+  cairo_matrix_t matrix, transform_matrix;
   GtkCssImage *image;
 
   image = _gtk_css_image_value_get_image (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SOURCE));
@@ -1041,22 +1041,29 @@ render_icon_image (GtkThemingEngine *engine,
 
   shadows = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW);
 
-  if (_gtk_css_transform_value_get_matrix (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_TRANSFORM), &matrix))
-    {
-      cairo_translate (cr, x, y);
-      cairo_translate (cr, width / 2, height / 2);
-      cairo_transform (cr, &matrix);
-      cairo_translate (cr, -width / 2, -height / 2);
+  cairo_translate (cr, x, y);
 
-      if (!_gtk_css_shadows_value_is_none (shadows))
+  if (_gtk_css_transform_value_get_matrix (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
+    {
+      /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
+      cairo_matrix_init_translate (&matrix, width / 2, height / 2);
+      cairo_matrix_multiply (&matrix, &transform_matrix, &matrix);
+      cairo_matrix_translate (&matrix, - width / 2, - height / 2);
+
+      if (_gtk_css_shadows_value_is_none (shadows))
+        {
+          cairo_transform (cr, &matrix);
+          _gtk_css_image_draw (image, cr, width, height);
+        }
+      else
         {
           cairo_push_group (cr);
+          cairo_transform (cr, &matrix);
           _gtk_css_image_draw (image, cr, width, height);
           cairo_pop_group_to_source (cr);
           _gtk_css_shadows_value_paint_icon (shadows, cr);
+          cairo_paint (cr);
         }
-      
-      _gtk_css_image_draw (image, cr, width, height);
     }
 
   return TRUE;
