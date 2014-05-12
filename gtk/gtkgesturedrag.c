@@ -211,8 +211,13 @@ gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
                                   gdouble        *y)
 {
   GtkGestureDragPrivate *priv;
+  GdkEventSequence *sequence;
 
-  if (!gtk_gesture_is_recognized (GTK_GESTURE (gesture)))
+  g_return_val_if_fail (GTK_IS_GESTURE_DRAG (gesture), FALSE);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
     return FALSE;
 
   priv = gtk_gesture_drag_get_instance_private (gesture);
@@ -246,8 +251,13 @@ gtk_gesture_drag_get_offset (GtkGestureDrag *gesture,
                              gdouble        *y)
 {
   GtkGestureDragPrivate *priv;
+  GdkEventSequence *sequence;
 
-  if (!gtk_gesture_is_recognized (GTK_GESTURE (gesture)))
+  g_return_val_if_fail (GTK_IS_GESTURE_DRAG (gesture), FALSE);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
     return FALSE;
 
   priv = gtk_gesture_drag_get_instance_private (gesture);
