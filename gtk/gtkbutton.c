@@ -585,23 +585,27 @@ gtk_button_class_init (GtkButtonClass *klass)
 }
 
 static void
-gesture_begin_cb (GtkGesture *gesture,
-                  gpointer    sequence,
-                  GtkWidget  *widget)
+multipress_pressed_cb (GtkGestureMultiPress *gesture,
+                       guint                 n_press,
+                       gdouble               x,
+                       gdouble               y,
+                       GtkWidget            *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
 
   if (priv->focus_on_click && !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
- 
+
   g_signal_emit (button, button_signals[PRESSED], 0);
 }
 
 static void
-gesture_end_cb (GtkGesture *gesture,
-                gpointer    sequence,
-                GtkWidget  *widget)
+multipress_released_cb (GtkGestureMultiPress *gesture,
+                        guint                 n_press,
+                        gdouble               x,
+                        gdouble               y,
+                        GtkWidget            *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
 
@@ -643,12 +647,12 @@ gtk_button_init (GtkButton *button)
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
 
-  priv->gesture = GTK_GESTURE (g_object_new (GTK_TYPE_GESTURE_SINGLE, "widget", button, NULL));
+  priv->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (button));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->gesture), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
-  g_signal_connect (priv->gesture, "begin", G_CALLBACK (gesture_begin_cb), button);
-  g_signal_connect (priv->gesture, "end", G_CALLBACK (gesture_end_cb), button);
-  gtk_gesture_attach (priv->gesture, GTK_PHASE_BUBBLE);
+  g_signal_connect (priv->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), button);
+  g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
+  gtk_gesture_attach (priv->gesture, GTK_PHASE_TARGET);
 }
 
 static void
