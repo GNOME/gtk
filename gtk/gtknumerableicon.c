@@ -51,6 +51,8 @@
 #include <pango/pango.h>
 #include <math.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 struct _GtkNumerableIconPrivate {
   gint count;
   gint icon_size;
@@ -713,6 +715,8 @@ _gtk_numerable_icon_set_background_icon_size (GtkNumerableIcon *self,
  * Returns: the currently displayed label
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 const gchar *
 gtk_numerable_icon_get_label (GtkNumerableIcon *self)
@@ -742,6 +746,8 @@ gtk_numerable_icon_get_label (GtkNumerableIcon *self)
  * has always priority.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 void
 gtk_numerable_icon_set_label (GtkNumerableIcon *self,
@@ -767,6 +773,8 @@ gtk_numerable_icon_set_label (GtkNumerableIcon *self,
  * Returns: the currently displayed value
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 gint
 gtk_numerable_icon_get_count (GtkNumerableIcon *self)
@@ -791,6 +799,8 @@ gtk_numerable_icon_get_count (GtkNumerableIcon *self)
  * and gtk_numerable_icon_set_label() has always priority.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 void
 gtk_numerable_icon_set_count (GtkNumerableIcon *self,
@@ -819,6 +829,8 @@ gtk_numerable_icon_set_count (GtkNumerableIcon *self,
  *     Use g_object_ref() if you want to keep it around
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 GtkStyleContext *
 gtk_numerable_icon_get_style_context (GtkNumerableIcon *self)
@@ -837,6 +849,8 @@ gtk_numerable_icon_get_style_context (GtkNumerableIcon *self)
  * given #GtkStyleContext.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 void
 gtk_numerable_icon_set_style_context (GtkNumerableIcon *self,
@@ -877,6 +891,8 @@ gtk_numerable_icon_set_style_context (GtkNumerableIcon *self,
  * gtk_numerable_icon_set_background_icon_name() has always priority.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 void
 gtk_numerable_icon_set_background_gicon (GtkNumerableIcon *self,
@@ -909,6 +925,8 @@ gtk_numerable_icon_set_background_gicon (GtkNumerableIcon *self,
  * Returns: (transfer none): a #GIcon, or %NULL
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 GIcon *
 gtk_numerable_icon_get_background_gicon (GtkNumerableIcon *self)
@@ -940,6 +958,8 @@ gtk_numerable_icon_get_background_gicon (GtkNumerableIcon *self)
  * and gtk_numerable_icon_set_background_gicon() has always priority.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 void
 gtk_numerable_icon_set_background_icon_name (GtkNumerableIcon *self,
@@ -978,6 +998,8 @@ gtk_numerable_icon_set_background_icon_name (GtkNumerableIcon *self,
  * Returns: an icon name, or %NULL
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 const gchar *
 gtk_numerable_icon_get_background_icon_name (GtkNumerableIcon *self)
@@ -996,6 +1018,8 @@ gtk_numerable_icon_get_background_icon_name (GtkNumerableIcon *self)
  * Returns: (transfer full): a new #GIcon
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 GIcon *
 gtk_numerable_icon_new (GIcon *base_icon)
@@ -1019,6 +1043,8 @@ gtk_numerable_icon_new (GIcon *base_icon)
  * Returns: (transfer full): a new #GIcon
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  */
 GIcon *
 gtk_numerable_icon_new_with_style_context (GIcon           *base_icon,

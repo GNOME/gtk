@@ -50,9 +50,6 @@
  * @Short_description: Manipulating stock icons
  * @Title: Themeable Stock Images
  *
- * Browse the available stock icons using
- * the “gtk3-demo” application.
- *
  * An icon factory manages a collection of #GtkIconSet; a #GtkIconSet manages a
  * set of variants of a particular icon (i.e. a #GtkIconSet contains variants for
  * different sizes and widget states). Icons in an icon factory are named by a
