@@ -22,7 +22,6 @@
 #include "gtkadjustment.h"
 #include "gtkcellareabox.h"
 #include "gtktreemenu.h"
-#include "gtkarrow.h"
 #include "gtkbindings.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
@@ -3169,7 +3168,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
       priv->separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
       gtk_container_add (GTK_CONTAINER (priv->box), priv->separator);
 
-      priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+      priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
       gtk_container_add (GTK_CONTAINER (priv->box), priv->arrow);
       gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
 
@@ -3186,7 +3185,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
       gtk_widget_set_parent (priv->button,
                              gtk_widget_get_parent (child));
 
-      priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+      priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
       gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
       gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
       gtk_widget_show_all (priv->button);
@@ -3468,7 +3467,7 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   g_signal_connect (priv->button, "toggled",
                     G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
 
-  priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
   gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
   priv->separator = NULL;
   gtk_widget_show_all (priv->button);
