@@ -529,6 +529,8 @@ nevertheless.
 <refsect2 id="interactive-debugging">
 <title>Interactive debugging</title>
 
+  <inlinegraphic fileref="inspector.png" format="PNG"></inlinegraphic>
+
   <para>
     GTK+ includes an interactive debugger which lets you explore the
     widget tree of any GTK+ application at runtime, as well as tweak
@@ -539,8 +541,12 @@ nevertheless.
     Control-Shift-D keyboard shortcuts, or pass set the
     <envar>GTK_DEBUG=interactive</envar> environment variable.
   </para>
-
-  <inlinegraphic fileref="inspector.png" format="PNG"></inlinegraphic>
+  <para>
+    In some situations, it may be inappropriate to give users access
+    to the interactive debugger. The keyboard shortcuts can be disabled
+    with the `enable-inspector-keybinding` key in the `org.gtk.Settings.Debug`
+    GSettings schema.
+  </para>
  
 </refsect2>
 

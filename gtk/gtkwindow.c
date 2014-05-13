@@ -12471,10 +12471,37 @@ gtk_window_set_interactive_debugging (gboolean enable)
     gtk_widget_hide (inspector_window);
 }
 
+static gboolean
+inspector_keybinding_enabled (void)
+{
+  GSettingsSchema *schema;
+  GSettings *settings;
+  gboolean enabled;
+
+  enabled = FALSE;
+
+  schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
+                                            "org.gtk.Settings.Debug",
+                                            FALSE);
+  if (schema)
+    {
+      settings = g_settings_new_full (schema, NULL, NULL);
+      enabled = g_settings_get_boolean (settings, "enable-inspector-keybinding");
+      g_object_unref (settings);
+      g_settings_schema_unref (schema);
+    }
+
+  return enabled;
+}
+
 static void
 gtk_window_toggle_debugging (GtkWindow *window)
 {
-  if (GTK_IS_WIDGET (inspector_window) && gtk_widget_is_visible (inspector_window))
+  if (!inspector_keybinding_enabled ())
+    return;
+
+  if (GTK_IS_WIDGET (inspector_window) &&
+      gtk_widget_is_visible (inspector_window))
     gtk_window_set_interactive_debugging (FALSE);
   else
     gtk_window_set_interactive_debugging (TRUE);

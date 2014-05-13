@@ -1787,10 +1787,18 @@ endif
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
 
+gsettings_SCHEMAS = \
+	org.gtk.Settings.FileChooser.gschema.xml \
+	org.gtk.Settings.ColorChooser.gschema.xml \
+	org.gtk.Settings.Debug.gschema.xml
+
+@GSETTINGS_RULES@
+
 EXTRA_DIST +=                   \
 	$(resource_files)	\
 	$(STOCK_ICONS)		\
 	$(GENERATED_ICONS)	\
+	$(gsettings_SCHEMAS)	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
@@ -1809,15 +1817,7 @@ EXTRA_DIST +=                   \
 	gtktypebuiltins.c.template \
 	gtktypebuiltins.h.template \
 	gtkprivatetypebuiltins.c.template \
-	gtkprivatetypebuiltins.h.template \
-	org.gtk.Settings.FileChooser.gschema.xml \
-	org.gtk.Settings.ColorChooser.gschema.xml
-
-gsettings_SCHEMAS = \
-	org.gtk.Settings.FileChooser.gschema.xml \
-	org.gtk.Settings.ColorChooser.gschema.xml
-
-@GSETTINGS_RULES@
+	gtkprivatetypebuiltins.h.template
 
 install-data-local:
 
