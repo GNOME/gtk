@@ -1049,6 +1049,23 @@ specific_bug_77977 (void)
   g_object_unref (tree_store);
 }
 
+static void
+specific_bug_698396 (void)
+{
+  GtkTreeStore *tree_store;
+  gint new_order[1] = { 0 };
+
+  g_test_bug ("698396");
+
+  tree_store = gtk_tree_store_new (1, G_TYPE_STRING);
+
+  g_test_expect_message ("Gtk", G_LOG_LEVEL_WARNING, "*Cannot reorder*");
+  gtk_tree_store_reorder (tree_store, NULL, new_order);
+  g_test_assert_expected_messages ();
+
+  g_object_unref (tree_store);
+}
+
 /* main */
 
 void
@@ -1175,4 +1192,5 @@ register_tree_store_tests (void)
 
   /* specific bugs */
   g_test_add_func ("/TreeStore/bug-77977", specific_bug_77977);
+  g_test_add_func ("/TreeStore/bug-698396", specific_bug_698396);
 }
