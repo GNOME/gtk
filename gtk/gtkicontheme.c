@@ -1591,6 +1591,18 @@ symbolic_pixbuf_cache_free (SymbolicPixbufCache *cache)
     }
 }
 
+static gboolean
+icon_name_is_symbolic (const char *icon_name)
+{
+  return g_str_has_suffix (icon_name, "-symbolic");
+}
+
+static gboolean
+icon_uri_is_symbolic (const char *icon_name)
+{
+  return g_str_has_suffix (icon_name, "-symbolic.svg");
+}
+
 static GtkIconInfo *
 real_choose_icon (GtkIconTheme       *icon_theme,
                   const gchar        *icon_names[],
@@ -1649,7 +1661,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
    * to show up instead.
    */
   if (icon_names[0] &&
-      g_str_has_suffix (icon_names[0], "-symbolic"))
+      icon_name_is_symbolic (icon_names[0]))
     {
       for (l = priv->themes; l; l = l->next)
         {
@@ -1808,7 +1820,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 
   for (i = 0; icon_names[i]; i++)
     {
-      if (g_str_has_suffix (icon_names[i], "-symbolic"))
+      if (icon_name_is_symbolic (icon_names[i]))
         has_symbolic = TRUE;
       else
         has_regular = TRUE;
@@ -1819,14 +1831,14 @@ choose_icon (GtkIconTheme       *icon_theme,
       new_names = g_ptr_array_new_with_free_func (g_free);
       for (i = 0; icon_names[i]; i++)
         {
-          if (g_str_has_suffix (icon_names[i], "-symbolic"))
+          if (icon_name_is_symbolic (icon_names[i]))
             g_ptr_array_add (new_names, g_strndup (icon_names[i], strlen (icon_names[i]) - strlen ("-symbolic")));
           else
             g_ptr_array_add (new_names, g_strdup (icon_names[i]));
         }
       for (i = 0; icon_names[i]; i++)
         {
-          if (g_str_has_suffix (icon_names[i], "-symbolic"))
+          if (icon_name_is_symbolic (icon_names[i]))
             g_ptr_array_add (new_names, g_strdup (icon_names[i]));
         }
       g_ptr_array_add (new_names, NULL);
@@ -1844,14 +1856,14 @@ choose_icon (GtkIconTheme       *icon_theme,
       new_names = g_ptr_array_new_with_free_func (g_free);
       for (i = 0; icon_names[i]; i++)
         {
-          if (!g_str_has_suffix (icon_names[i], "-symbolic"))
+          if (!icon_name_is_symbolic (icon_names[i]))
             g_ptr_array_add (new_names, g_strconcat (icon_names[i], "-symbolic", NULL));
           else
             g_ptr_array_add (new_names, g_strdup (icon_names[i]));
         }
       for (i = 0; icon_names[i]; i++)
         {
-          if (!g_str_has_suffix (icon_names[i], "-symbolic"))
+          if (!icon_name_is_symbolic (icon_names[i]))
             g_ptr_array_add (new_names, g_strdup (icon_names[i]));
         }
       g_ptr_array_add (new_names, NULL);
@@ -1957,9 +1969,9 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
       gchar *p, *nonsymbolic_icon_name;
       gboolean is_symbolic;
 
-      is_symbolic = g_str_has_suffix (icon_name, "-symbolic");
+      is_symbolic = icon_name_is_symbolic (icon_name);
       if (is_symbolic)
-        nonsymbolic_icon_name = g_strndup (icon_name, strlen (icon_name) - 9);
+        nonsymbolic_icon_name = g_strndup (icon_name, strlen (icon_name) - strlen ("-symbolic"));
       else
         nonsymbolic_icon_name = g_strdup (icon_name);
  
@@ -3647,7 +3659,7 @@ gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
   if (icon_info->icon_file)
     icon_uri = g_file_get_uri (icon_info->icon_file);
 
-  is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
+  is_symbolic = (icon_uri != NULL) && (icon_uri_is_symbolic (icon_uri));
   g_free (icon_uri);
 
   return is_symbolic;
