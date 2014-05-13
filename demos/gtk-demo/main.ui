@@ -128,8 +128,8 @@
                   <object class="GtkTextView" id="info-textview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_left">20</property>
-                    <property name="margin_right">20</property>
+                    <property name="margin_start">20</property>
+                    <property name="margin_end">20</property>
                     <property name="margin_top">20</property>
                     <property name="margin_bottom">20</property>
                     <property name="pixels_above_lines">2</property>
@@ -165,9 +165,8 @@
                   <object class="GtkTextView" id="source-textview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_left">20</property>
+                    <property name="margin_start">20</property>
                     <property name="margin_end">20</property>
-                    <property name="margin_right">20</property>
                     <property name="margin_top">20</property>
                     <property name="margin_bottom">20</property>
                     <property name="editable">False</property>
