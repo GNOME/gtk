@@ -12432,6 +12432,16 @@ _gtk_window_get_popover_position (GtkWindow             *window,
 
 static GtkWidget *inspector_window = NULL;
 
+/**
+ * gtk_window_set_interactive_debugging:
+ * @enable: %TRUE to enable interactive debugging
+ *
+ * Opens or closes the [interactive debugger][interactive-debugging],
+ * which offers access to the widget hierarchy of the application
+ * and to useful debugging tools.
+ *
+ * Since: 3.14
+ */
 void
 gtk_window_set_interactive_debugging (gboolean enable)
 {

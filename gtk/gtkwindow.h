@@ -483,6 +483,9 @@ void     gtk_window_set_titlebar           (GtkWindow    *window,
 GDK_AVAILABLE_IN_3_12
 gboolean gtk_window_is_maximized           (GtkWindow    *window);
 
+GDK_AVAILABLE_IN_3_14
+void     gtk_window_set_interactive_debugging (gboolean enable);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_H__ */
