@@ -94,7 +94,9 @@ distclean-local:
 	  rm -f $(template_headers); \
 	fi
 
-EXTRA_DIST=
-	$(resource_files)
+EXTRA_DIST = \
+	inspector.gresource.xml \
+	$(resource_files) \
+	$(templates)
 
 -include $(top_srcdir)/git.mk
