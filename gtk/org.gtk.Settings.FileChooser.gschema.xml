@@ -49,38 +49,42 @@
     </key>
     <key name='location-mode' enum='org.gtk.Settings.FileChooser.LocationMode'>
       <default>'path-bar'</default>
+      <summary>Location mode</summary>
       <description>
-	Controls whether the file chooser
-	shows just a path bar, or a visible entry for the filename as well, for the
-	benefit of typing-oriented users.  The possible values for these modes
-	are "path-bar" and "filename-entry".
+	Controls whether the file chooser shows just a path bar, or a visible entry
+        for the filename as well, for the benefit of typing-oriented users. The
+        possible values for these modes are "path-bar" and "filename-entry".
       </description>
     </key>
     <key name='show-hidden' type='b'>
       <default>false</default>
-      <summary>Whether to show hidden files</summary>
+      <summary>Show hidden files</summary>
       <description>
 	Controls whether the file chooser shows hidden files or not.
       </description>
     </key>
     <key type="b" name="sort-directories-first">
       <default>false</default>
-      <summary>Whether to show folders first</summary>
-      <description>If set to true, then folders are shown prior to showing files in the icon and list views.</description>
+      <summary>Show folders first</summary>
+      <description>
+        If set to true, then folders are shown before files in the list.
+      </description>
     </key>
     <key name='expand-folders' type='b'>
       <default>false</default>
+      <summary>Expand folders</summary>
       <description>This key is deprecated; do not use it.</description>
     </key>
     <key name='show-size-column' type='b'>
       <default>true</default>
+      <summary>Show file sizes</summary>
       <description>
-	Controls whether the file chooser shows a column with file
-	sizes.
+	Controls whether the file chooser shows a column with file sizes.
       </description>
     </key>
     <key name='sort-column' enum='org.gtk.Settings.FileChooser.SortColumn'>
       <default>'name'</default>
+      <summary>Sort column</summary>
       <description>
 	Can be one of "name", "modified", or "size".  It controls
 	which of the columns in the file chooser is used for sorting
@@ -89,24 +93,29 @@
     </key>
     <key name='sort-order' enum='org.gtk.Settings.FileChooser.SortOrder'>
       <default>'ascending'</default>
+      <summary>Sort order</summary>
       <description>
 	Can be one of the strings "ascending" or "descending".
       </description>
     </key>
     <key name='window-position' type='(ii)'>
       <default>(-1, -1)</default>
+      <summary>Window position</summary>
       <description>
-	Coordinates (x, y) of the upper-left corner of the GtkFileChooserDialog's window.
+	The (x, y) coordinates of the upper-left corner of the GtkFileChooserDialog's
+        window.
       </description>
     </key>
     <key name='window-size' type='(ii)'>
       <default>(-1, -1)</default>
+      <summary>Window size</summary>
       <description>
-	Size in pixels (width, height) of the GtkFileChooserDialog's window.
+	The size (width, height) of the GtkFileChooserDialog's window, in pixels.
       </description>
     </key>
     <key name='startup-mode' enum='org.gtk.Settings.FileChooser.StartupMode'>
       <default>'recent'</default>
+      <summary>Startup mode</summary>
       <description>
 	Either "recent" or "cwd"; controls whether the file chooser
 	starts up showing the list of recently-used files, or the
@@ -115,12 +124,14 @@
     </key>
     <key name='sidebar-width' type='i'>
       <default>148</default>
+      <summary>Sidebar width</summary>
       <description>
 	Width in pixels of the file chooser's places sidebar.
       </description>
     </key>
     <key name="clock-format" enum="org.gtk.Settings.FileChooser.ClockFormat">
       <default>'24h'</default>
+      <summary>Time format</summary>
       <description>
         Whether the time is shown in 24h or 12h format.
       </description>
