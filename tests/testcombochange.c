@@ -71,18 +71,6 @@ combochange_log (const char *fmt,
 }
 
 static GtkWidget *
-align_button_new (const char *text)
-{
-  GtkWidget *button = gtk_button_new ();
-  GtkWidget *label = gtk_label_new (text);
-
-  gtk_container_add (GTK_CONTAINER (button), label);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-
-  return button;
-}
-
-static GtkWidget *
 create_combo (const char *name,
 	      gboolean is_list)
 {
@@ -241,7 +229,6 @@ main (int argc, char **argv)
   GtkWidget *combo_vbox;
   GtkWidget *button;
   GtkWidget *menu_combo;
-  GtkWidget *alignment;
   GtkWidget *label;
   GtkWidget *list_combo;
   
@@ -268,25 +255,19 @@ main (int argc, char **argv)
 
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), "<b>Menu mode</b>");
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (combo_vbox), label, FALSE, FALSE, 0);
 
-  alignment = g_object_new (GTK_TYPE_ALIGNMENT, "left-padding", 12, NULL);
-  gtk_box_pack_start (GTK_BOX (combo_vbox), alignment, FALSE, FALSE, 0);
-
   menu_combo = create_combo ("menu-combo", FALSE);
-  gtk_container_add (GTK_CONTAINER (alignment), menu_combo);
+  gtk_widget_set_margin_start (menu_combo, 12);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), menu_combo, FALSE, FALSE, 0);
 
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), "<b>List mode</b>");
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (combo_vbox), label, FALSE, FALSE, 0);
 
-  alignment = g_object_new (GTK_TYPE_ALIGNMENT, "left-padding", 12, NULL);
-  gtk_box_pack_start (GTK_BOX (combo_vbox), alignment, FALSE, FALSE, 0);
-
   list_combo = create_combo ("list-combo", TRUE);
-  gtk_container_add (GTK_CONTAINER (alignment), list_combo);
+  gtk_widget_set_margin_start (list_combo, 12);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), list_combo, FALSE, FALSE, 0);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_box_pack_start (GTK_BOX (hbox), scrolled_window, TRUE, TRUE, 0);
@@ -304,19 +285,19 @@ main (int argc, char **argv)
   
   gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
 
-  button = align_button_new ("Insert");
+  button = gtk_button_new_with_label ("Insert");
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
   g_signal_connect (button, "clicked", G_CALLBACK (on_insert), NULL);
   
-  button = align_button_new ("Delete");
+  button = gtk_button_new_with_label ("Delete");
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
   g_signal_connect (button, "clicked", G_CALLBACK (on_delete), NULL);
 
-  button = align_button_new ("Reorder");
+  button = gtk_button_new_with_label ("Reorder");
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
   g_signal_connect (button, "clicked", G_CALLBACK (on_reorder), NULL);
 
-  button = align_button_new ("Animate");
+  button = gtk_button_new_with_label ("Animate");
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
   g_signal_connect (button, "clicked", G_CALLBACK (on_animate), NULL);
 

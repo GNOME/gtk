@@ -115,7 +115,8 @@ main (int argc, char **argv)
    */
   label = gtk_label_new ("Open File:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -146,7 +147,8 @@ main (int argc, char **argv)
    */
   label = gtk_label_new ("Save File:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC(label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -181,7 +183,8 @@ main (int argc, char **argv)
    */
   label = gtk_label_new ("Search:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -207,7 +210,8 @@ main (int argc, char **argv)
    */
   label = gtk_label_new ("Password:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -230,7 +234,8 @@ main (int argc, char **argv)
   /* Name - Does not set any icons. */
   label = gtk_label_new ("Name:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);

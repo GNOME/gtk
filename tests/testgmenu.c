@@ -294,11 +294,6 @@ append_items_from_model (GtkWidget    *menu,
       gtk_widget_show (w);
       gtk_widget_set_sensitive (w, FALSE);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
-#if 0
-      /* FIXME: this interferes with toggle spacing */
-      w = gtk_bin_get_child (GTK_BIN (w));
-      gtk_misc_set_alignment (GTK_MISC (w), 0.5, 0.5);
-#endif
     }
 
   for (i = 0; i < n; i++)

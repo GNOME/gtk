@@ -55,7 +55,7 @@ main (int argc, char **argv)
   gtk_box_pack_end (GTK_BOX (vbox), scale, FALSE, FALSE, 0);
 
   label = gtk_label_new ("Event processing time (ms):");
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_box_pack_end (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
   g_signal_connect (window, "motion-notify-event",
