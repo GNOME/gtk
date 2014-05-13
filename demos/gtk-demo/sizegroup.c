@@ -120,6 +120,7 @@ do_sizegroup (GtkWidget *do_widget)
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      g_object_set_data_full (G_OBJECT (window), "size-group", size_group, g_object_unref);
 
       /* Create one frame holding color options */
       frame = gtk_frame_new ("Color Options");
