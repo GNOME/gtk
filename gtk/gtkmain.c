@@ -1020,6 +1020,10 @@ gtk_init_check (int    *argc,
  * the option group returned by gtk_get_option_group(),
  * you don’t have to call gtk_init().
  *
+ * And if you are using #GtkApplication, you don't have to call any of the
+ * initialization functions either; the #GtkApplication::startup handler
+ * does it for you.
+ *
  * This function will terminate your program if it was unable to
  * initialize the windowing system for some reason. If you want
  * your program to fall back to a textual interface you want to
