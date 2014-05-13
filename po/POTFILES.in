@@ -39,6 +39,7 @@ gtk/deprecated/gtkhandlebox.c
 gtk/deprecated/gtkhsv.c
 gtk/deprecated/gtkiconfactory.c
 gtk/deprecated/gtkimagemenuitem.c
+gtk/deprecated/gtkmisc.c
 gtk/deprecated/gtknumerableicon.c
 gtk/deprecated/gtkradioaction.c
 gtk/deprecated/gtkrecentaction.c
@@ -167,7 +168,6 @@ gtk/gtkmenuitem.c
 gtk/gtkmenushell.c
 gtk/gtkmenutoolbutton.c
 gtk/gtkmessagedialog.c
-gtk/gtkmisc.c
 gtk/gtkmodifierstyle.c
 gtk/gtkmodules.c
 gtk/gtkmountoperation.c
