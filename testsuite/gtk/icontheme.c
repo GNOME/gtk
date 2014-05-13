@@ -76,17 +76,10 @@ assert_icon_lookup_fails (const char         *icon_name,
                           gint                size,
                           GtkIconLookupFlags  flags)
 {
-  static gboolean seen_could_not_find_message = FALSE;
   GtkIconInfo *info;
 
-  if (!seen_could_not_find_message)
-    g_test_expect_message ("Gtk", G_LOG_LEVEL_WARNING, "Could not find the icon*");
   info = gtk_icon_theme_lookup_icon (get_test_icontheme (), icon_name, size, flags);
-  if (!seen_could_not_find_message)
-    {
-      g_test_assert_expected_messages ();
-      seen_could_not_find_message = TRUE;
-    }
+
   if (info != NULL)
     {
       g_error ("Should not find an icon for \"%s\" with flags %s at size %d, but found \"%s\"",
@@ -100,7 +93,17 @@ assert_icon_lookup_fails (const char         *icon_name,
 static void
 test_basics (void)
 {
+  /* just a basic boring lookup so we know everything works */
   assert_icon_lookup ("simple", 16, 0, "/icons/16x16/simple.png");
+
+  /* The first time an icon is looked up that doesn't exist, GTK spews a 
+   * warning.
+   * We make that happen right here, so we can get rid of the warning 
+   * and do failing lookups in other tests.
+   */
+  g_test_expect_message ("Gtk", G_LOG_LEVEL_WARNING, "Could not find the icon*");
+  assert_icon_lookup_fails ("this-icon-totally-does-not-exist", 16, 0);
+  g_test_assert_expected_messages ();
 }
 
 static void
