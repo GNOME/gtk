@@ -40,6 +40,9 @@
  *
  * Arrows are created with a call to gtk_arrow_new().  The direction or
  * style of an arrow can be changed after creation by using gtk_arrow_set().
+ *
+ * GtkArrow has been deprecated; you can simply use a #GtkImage with a
+ * suitable icon name, such as “pan-down-symbolic“.
  */
 
 #include "config.h"
@@ -51,6 +54,8 @@
 #include "gtkintl.h"
 
 #include "a11y/gtkarrowaccessible.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 #define MIN_ARROW_SIZE  15
 
@@ -232,6 +237,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * Creates a new #GtkArrow widget.
  *
  * Returns: the new #GtkArrow widget.
+ *
+ * Deprecated: 3.14: Use a #GtkImage with a suitable icon.
  */
 GtkWidget*
 gtk_arrow_new (GtkArrowType  arrow_type,
@@ -257,6 +264,8 @@ gtk_arrow_new (GtkArrowType  arrow_type,
  * @shadow_type: a valid #GtkShadowType.
  *
  * Sets the direction and style of the #GtkArrow, @arrow.
+ *
+ * Deprecated: 3.14: Use a #GtkImage with a suitable icon.
  */
 void
 gtk_arrow_set (GtkArrow      *arrow,

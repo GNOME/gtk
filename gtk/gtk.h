@@ -43,7 +43,6 @@
 #include <gtk/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkapplicationwindow.h>
-#include <gtk/gtkarrow.h>
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkassistant.h>
 #include <gtk/gtkbbox.h>
@@ -223,6 +222,7 @@
 #include <gtk/gtkwindow.h>
 
 #ifndef GTK_DISABLE_DEPRECATED
+#include <gtk/deprecated/gtkarrow.h>
 #include <gtk/deprecated/gtkactivatable.h>
 #include <gtk/deprecated/gtkaction.h>
 #include <gtk/deprecated/gtkactiongroup.h>

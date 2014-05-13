@@ -240,7 +240,6 @@
     <chapter id="MiscObjects">
       <title>Miscellaneous</title>
       <xi:include href="xml/gtkadjustment.xml" />
-      <xi:include href="xml/gtkarrow.xml" />
       <xi:include href="xml/gtkcalendar.xml" />
       <xi:include href="xml/gtkdrawingarea.xml" />
       <xi:include href="xml/gtkeventbox.xml" />
@@ -324,6 +323,7 @@
       <xi:include href="xml/gtkstock.xml" />
       <xi:include href="xml/gtkiconfactory.xml" />
       <xi:include href="xml/gtknumerableicon.xml" />
+      <xi:include href="xml/gtkarrow.xml" />
     </chapter>
 
   </part>

@@ -157,6 +157,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkactivatable.h	\
 	deprecated/gtkaction.h		\
 	deprecated/gtkactiongroup.h	\
+	deprecated/gtkarrow.h		\
 	deprecated/gtkcolorsel.h	\
 	deprecated/gtkcolorseldialog.h	\
 	deprecated/gtkfontsel.h		\
@@ -214,7 +215,6 @@ gtk_public_h_sources = 		\
 	gtkappchooserwidget.h	\
 	gtkapplication.h	\
 	gtkapplicationwindow.h	\
-	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkassistant.h		\
 	gtkbbox.h		\
@@ -584,6 +584,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkactivatable.c	\
 	deprecated/gtkaction.c		\
 	deprecated/gtkactiongroup.c	\
+	deprecated/gtkarrow.c		\
 	deprecated/gtkcolorsel.c	\
 	deprecated/gtkcolorseldialog.c	\
 	deprecated/gtkfontsel.c		\
@@ -646,7 +647,6 @@ gtk_base_c_sources = 		\
 	gtkapplication.c	\
 	gtkapplicationimpl.c	\
 	gtkapplicationwindow.c	\
-	gtkarrow.c		\
 	gtkaspectframe.c	\
 	gtkassistant.c		\
 	gtkbbox.c		\
