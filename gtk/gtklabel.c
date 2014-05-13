@@ -181,7 +181,8 @@
  *
  * gtk_label_set_justify() sets how the lines in a label align
  * with one another. If you want to set how the label as a whole
- * aligns in its available space, see gtk_misc_set_alignment().
+ * aligns in its available space, see the #GtkWidget::halign and
+ * #GtkWidget:valign properties.
  *
  * The #GtkLabel:width-chars and #GtkLabel:max-width-chars properties
  * can be used to control the size allocation of ellipsized or wrapped
@@ -2803,12 +2804,12 @@ gtk_label_set_pattern (GtkLabel	   *label,
  * @jtype: a #GtkJustification
  *
  * Sets the alignment of the lines in the text of the label relative to
- * each other. %GTK_JUSTIFY_LEFT is the default value when the
- * widget is first created with gtk_label_new(). If you instead want
- * to set the alignment of the label as a whole, use
- * gtk_misc_set_alignment() instead. gtk_label_set_justify() has no
- * effect on labels containing only a single line.
- **/
+ * each other. %GTK_JUSTIFY_LEFT is the default value when the widget is
+ * first created with gtk_label_new(). If you instead want to set the
+ * alignment of the label as a whole, use gtk_widget_set_halign() instead.
+ * gtk_label_set_justify() has no effect on labels containing only a
+ * single line.
+ */
 void
 gtk_label_set_justify (GtkLabel        *label,
 		       GtkJustification jtype)
