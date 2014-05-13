@@ -107,6 +107,29 @@ test_basics (void)
 }
 
 static void
+test_generic_fallback (void)
+{
+  /* simple test for generic fallback */
+  assert_icon_lookup ("simple-foo-bar",
+                      16,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      "/icons/16x16/simple.png");
+
+  /* Check generic fallback also works for symbolics falling back to regular items */
+  assert_icon_lookup ("simple-foo-bar-symbolic",
+                      16,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      "/icons/16x16/simple.png");
+
+  /* Check we fall back to more generic symbolic icons before falling back to
+   * non-symbolics */
+  assert_icon_lookup ("everything-justregular-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      "/icons/scalable/everything-symbolic.svg");
+}
+
+static void
 test_force_symbolic (void)
 {
   /* check forcing symbolic works */
@@ -212,6 +235,7 @@ main (int argc, char *argv[])
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/icontheme/basics", test_basics);
+  g_test_add_func ("/icontheme/generic_fallback", test_generic_fallback);
   g_test_add_func ("/icontheme/force-symbolic", test_force_symbolic);
   g_test_add_func ("/icontheme/force-regular", test_force_regular);
 
