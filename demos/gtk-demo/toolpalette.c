@@ -656,6 +656,9 @@ load_icon_items (GtkToolPalette *palette)
       GtkWidget *group = gtk_tool_item_group_new (context);
       gtk_container_add (GTK_CONTAINER (palette), group);
 
+      if (g_strcmp0 (context, "Animations") == 0)
+        continue;
+
       g_message ("Got context '%s'", context);
       icon_names = gtk_icon_theme_list_icons (icon_theme, context);
       icon_names = g_list_sort (icon_names, (GCompareFunc) strcmp);
@@ -664,6 +667,9 @@ load_icon_items (GtkToolPalette *palette)
         {
           GtkToolItem *item;
           gchar *id = ll->data;
+
+          if (g_strcmp0 (id, "emblem-desktop") == 0)
+            continue;
 
           g_message ("Got id '%s'", id);
 
