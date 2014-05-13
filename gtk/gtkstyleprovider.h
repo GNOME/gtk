@@ -40,6 +40,11 @@ G_BEGIN_DECLS
  *
  * The priority used for default style information
  * that is used in the absence of themes.
+ *
+ * Note that this is not very useful for providing default
+ * styling for custom style classes - themes are likely to
+ * override styling provided at this priority with
+ * catch-all `* {...}` rules.
  */
 #define GTK_STYLE_PROVIDER_PRIORITY_FALLBACK      1
 
