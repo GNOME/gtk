@@ -1015,8 +1015,6 @@ main (int argc, char **argv)
     }
   /* -- End of hack -- */
 
-  gtk_init (&argc, &argv);
-
   app = gtk_application_new ("org.gtk.Demo", 0);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
