@@ -190,10 +190,11 @@ typedef struct
 } FindAllData;
 
 static void
-on_container_forall (GtkWidget *widget,
-                     gpointer   data)
+child_callback (GtkWidget *widget,
+                gpointer   data)
 {
   FindAllData *d = data;
+
   gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (widget), d->iter, NULL);
 }
 
@@ -207,6 +208,18 @@ cell_callback (GtkCellRenderer *renderer,
   gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (renderer), d->iter, NULL);
 
   return FALSE;
+}
+
+static void
+tag_callback (GtkTextTag *tag,
+              gpointer    data)
+{
+  FindAllData *d = data;
+  gchar *name;
+
+  g_object_get (tag, "name", &name, NULL);
+  gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (tag), d->iter, name);
+  g_free (name);
 }
 
 void
@@ -291,9 +304,13 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
       data.iter = &iter;
       data.parent = object;
 
-      gtk_container_forall (GTK_CONTAINER (object), on_container_forall, &data);
+      gtk_container_forall (GTK_CONTAINER (object), child_callback, &data);
     }
 
+  /* Below are special cases for dependent objects which are not
+   * children in the GtkContainer sense, but which we still want
+   * to show in the tree right away.
+   */
   if (GTK_IS_TREE_VIEW (object))
     {
       gint n_columns, i;
@@ -345,6 +362,33 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (object));
       gtk_inspector_widget_tree_append_object (wt, G_OBJECT (area), &iter, "cell-area");
+    }
+
+  if (GTK_IS_TEXT_VIEW (object))
+    {
+      GtkTextBuffer *buffer;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (object));
+      gtk_inspector_widget_tree_append_object (wt, G_OBJECT (buffer), &iter, "buffer");
+    }
+
+  if (GTK_IS_TEXT_BUFFER (object))
+    {
+      GtkTextTagTable *tags;
+
+      tags = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (object));
+      gtk_inspector_widget_tree_append_object (wt, G_OBJECT (tags), &iter, "tag-table");
+    }
+
+  if (GTK_IS_TEXT_TAG_TABLE (object))
+    {
+      FindAllData data;
+
+      data.wt = wt;
+      data.iter = &iter;
+      data.parent = object;
+
+      gtk_text_tag_table_foreach (GTK_TEXT_TAG_TABLE (object), tag_callback, &data);
     }
 }
 
