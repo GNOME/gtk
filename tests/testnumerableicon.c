@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 #include "prop-editor.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct {
   GIcon *numerable;
