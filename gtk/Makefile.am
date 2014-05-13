@@ -171,6 +171,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkhsv.h		\
 	deprecated/gtkiconfactory.h	\
 	deprecated/gtkimagemenuitem.h	\
+	deprecated/gtkmisc.h		\
 	deprecated/gtknumerableicon.h	\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrc.h		\
@@ -303,7 +304,6 @@ gtk_public_h_sources = 		\
 	gtkmenushell.h		\
 	gtkmenutoolbutton.h	\
 	gtkmessagedialog.h	\
-	gtkmisc.h		\
 	gtkmodules.h		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
@@ -596,6 +596,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkhsv.c		\
 	deprecated/gtkiconfactory.c	\
 	deprecated/gtkimagemenuitem.c	\
+	deprecated/gtkmisc.c		\
 	deprecated/gtknumerableicon.c	\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrc.c		\
@@ -799,7 +800,6 @@ gtk_base_c_sources = 		\
 	gtkmenutrackeritem.c	\
 	gtkmenutoolbutton.c	\
 	gtkmessagedialog.c	\
-	gtkmisc.c		\
 	gtkmnemonichash.c	\
 	gtkmodelmenuitem.c	\
 	gtkmodelbutton.c	\

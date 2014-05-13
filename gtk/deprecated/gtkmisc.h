@@ -66,21 +66,21 @@ struct _GtkMiscClass
   void (*_gtk_reserved4) (void);
 };
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GType   gtk_misc_get_type      (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void	gtk_misc_set_alignment (GtkMisc *misc,
 				gfloat	 xalign,
 				gfloat	 yalign);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void    gtk_misc_get_alignment (GtkMisc *misc,
 				gfloat  *xalign,
 				gfloat  *yalign);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void	gtk_misc_set_padding   (GtkMisc *misc,
 				gint	 xpad,
 				gint	 ypad);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void    gtk_misc_get_padding   (GtkMisc *misc,
 				gint    *xpad,
 				gint    *ypad);

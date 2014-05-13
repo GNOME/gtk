@@ -684,10 +684,11 @@ maybe_set_alignment (GtkButton *button,
 {
   GtkButtonPrivate *priv = button->priv;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (GTK_IS_MISC (widget))
     {
       GtkMisc *misc = GTK_MISC (widget);
-      
+
       if (priv->align_set)
 	gtk_misc_set_alignment (misc, priv->xalign, priv->yalign);
     }
@@ -706,6 +707,7 @@ maybe_set_alignment (GtkButton *button,
                            priv->xalign, priv->yalign,
                            xscale, yscale);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -1291,8 +1293,10 @@ gtk_button_construct_child (GtkButton *button)
 
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (priv->align_set)
     gtk_misc_set_alignment (GTK_MISC (label), priv->xalign, priv->yalign);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (button), label);

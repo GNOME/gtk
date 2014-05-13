@@ -489,9 +489,11 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
           if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
               gtk_label_set_angle (GTK_LABEL (label), 0);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
               gtk_misc_set_alignment (GTK_MISC (label),
                                       gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
                                       0.5);
+G_GNUC_END_IGNORE_DEPRECATIONS
             }
           else
             {
@@ -500,9 +502,11 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	        gtk_label_set_angle (GTK_LABEL (label), -90);
 	      else
 	        gtk_label_set_angle (GTK_LABEL (label), 90);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
               gtk_misc_set_alignment (GTK_MISC (label),
                                       0.5,
                                       1 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
+G_GNUC_END_IGNORE_DEPRECATIONS
             }
         }
     }
@@ -543,6 +547,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  gtk_widget_show (icon);
 	}
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       if (GTK_IS_MISC (icon) && text_orientation == GTK_ORIENTATION_HORIZONTAL)
 	gtk_misc_set_alignment (GTK_MISC (icon),
 				1.0 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
@@ -551,6 +556,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	gtk_misc_set_alignment (GTK_MISC (icon),
 				0.5,
 				gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (icon)
 	{

@@ -428,7 +428,9 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       cairo_restore (cr);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_misc_get_padding (misc, &xpad, NULL);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (direction == GTK_TEXT_DIR_RTL)
         x = xpad;

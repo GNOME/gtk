@@ -197,7 +197,9 @@ enum
   PROP_USE_FALLBACK
 };
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_DEFINE_TYPE_WITH_PRIVATE (GtkImage, gtk_image, GTK_TYPE_MISC)
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 gtk_image_class_init (GtkImageClass *class)
@@ -1523,7 +1525,9 @@ gtk_image_get_preferred_size (GtkImage *image,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (image));
   _gtk_icon_helper_get_size (priv->icon_helper, context, &width, &height);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   _gtk_misc_get_padding_and_border (GTK_MISC (image), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   width += border.left + border.right;
   height += border.top + border.bottom;
@@ -1562,7 +1566,6 @@ gtk_image_draw (GtkWidget *widget,
 {
   GtkImage *image;
   GtkImagePrivate *priv;
-  GtkMisc *misc;
   GtkStyleContext *context;
   gint x, y, width, height, baseline;
   gfloat xalign, yalign;
@@ -1571,7 +1574,6 @@ gtk_image_draw (GtkWidget *widget,
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
 
   image = GTK_IMAGE (widget);
-  misc = GTK_MISC (image);
   priv = image->priv;
 
   context = gtk_widget_get_style_context (widget);
@@ -1583,9 +1585,11 @@ gtk_image_draw (GtkWidget *widget,
                     0, 0,
                     gtk_widget_get_allocated_width (widget), gtk_widget_get_allocated_height (widget));
 
-  gtk_misc_get_alignment (misc, &xalign, &yalign);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_alignment (GTK_MISC (image), &xalign, &yalign);
+  _gtk_misc_get_padding_and_border (GTK_MISC (image), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_image_get_preferred_size (image, &width, &height);
-  _gtk_misc_get_padding_and_border (misc, &border);
 
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;

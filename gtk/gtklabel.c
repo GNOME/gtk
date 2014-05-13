@@ -506,10 +506,12 @@ static void    gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget 
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_MISC,
                          G_ADD_PRIVATE (GtkLabel)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_label_buildable_interface_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_label_buildable_interface_init))
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -3226,7 +3228,9 @@ gtk_label_update_layout_width (GtkLabel *label)
       PangoRectangle logical;
       gint width, height;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       width = gtk_widget_get_allocated_width (GTK_WIDGET (label)) - border.left - border.right;
       height = gtk_widget_get_allocated_height (GTK_WIDGET (label)) - border.top - border.bottom;
@@ -3643,7 +3647,9 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
   smallest_rect.width  = PANGO_PIXELS_CEIL (smallest_rect.width);
   smallest_rect.height = PANGO_PIXELS_CEIL (smallest_rect.height);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -3747,7 +3753,9 @@ gtk_label_get_preferred_width_for_height (GtkWidget *widget,
     {
       GtkBorder border;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (priv->wrap)
         gtk_label_clear_layout (label);
@@ -3782,7 +3790,9 @@ gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
     {
       GtkBorder border;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (priv->wrap)
         gtk_label_clear_layout (label);
@@ -3914,7 +3924,6 @@ get_layout_location (GtkLabel  *label,
                      gint      *yp)
 {
   GtkAllocation allocation;
-  GtkMisc *misc;
   GtkWidget *widget;
   GtkLabelPrivate *priv;
   GtkBorder border;
@@ -3924,12 +3933,13 @@ get_layout_location (GtkLabel  *label,
   PangoRectangle logical;
   gint baseline, layout_baseline, baseline_offset;
 
-  misc   = GTK_MISC (label);
   widget = GTK_WIDGET (label);
   priv   = label->priv;
 
-  gtk_misc_get_alignment (misc, &xalign, &yalign);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_alignment (GTK_MISC (label), &xalign, &yalign);
   _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;

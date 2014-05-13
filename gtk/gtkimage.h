@@ -31,7 +31,7 @@
 #endif
 
 #include <gio/gio.h>
-#include <gtk/gtkmisc.h>
+#include <gtk/deprecated/gtkmisc.h>
 
 
 G_BEGIN_DECLS

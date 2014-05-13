@@ -29,6 +29,8 @@
 #include "gtkprivate.h"
 
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * SECTION:gtkmisc
  * @Short_description: Base class for widgets with alignments and padding
@@ -47,9 +49,9 @@
  *
  * Note that the desired effect can in most cases be achieved by using the
  * #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties
- * on the child widget, so GtkMisc should not be used in new code.
+ * on the child widget, so GtkMisc should not be used in new code. To reflect
+ * this fact, all #GtkMisc API has been deprecated.
  */
-
 
 struct _GtkMiscPrivate
 {
@@ -103,7 +105,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
@@ -113,7 +115,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_XPAD,
@@ -123,7 +125,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						     0,
 						     G_MAXINT,
 						     0,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_YPAD,
@@ -133,7 +135,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						     0,
 						     G_MAXINT,
 						     0,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 }
 
 static void
@@ -215,6 +217,8 @@ gtk_misc_get_property (GObject      *object,
  * @yalign: the vertical alignment, from 0 (top) to 1 (bottom).
  *
  * Sets the alignment of the widget.
+ *
+ * Deprecated: 3.14: Use #GtkWidget alignment and margin properties.
  */
 void
 gtk_misc_set_alignment (GtkMisc *misc,
@@ -268,6 +272,8 @@ gtk_misc_set_alignment (GtkMisc *misc,
  *
  * Gets the X and Y alignment of the widget within its allocation. 
  * See gtk_misc_set_alignment().
+ *
+ * Deprecated: 3.14: Use #GtkWidget alignment and margin properties.
  **/
 void
 gtk_misc_get_alignment (GtkMisc *misc,
@@ -295,6 +301,8 @@ gtk_misc_get_alignment (GtkMisc *misc,
  *   in pixels.
  *
  * Sets the amount of space to add around the widget.
+ *
+ * Deprecated: 3.14: Use #GtkWidget alignment and margin properties.
  */
 void
 gtk_misc_set_padding (GtkMisc *misc,
@@ -341,6 +349,8 @@ gtk_misc_set_padding (GtkMisc *misc,
  *
  * Gets the padding in the X and Y directions of the widget. 
  * See gtk_misc_set_padding().
+ *
+ * Deprecated: 3.14: Use #GtkWidget alignment and margin properties.
  **/
 void
 gtk_misc_get_padding (GtkMisc *misc,

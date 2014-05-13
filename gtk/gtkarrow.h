@@ -30,7 +30,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkmisc.h>
+#include <gtk/deprecated/gtkmisc.h>
 
 
 G_BEGIN_DECLS

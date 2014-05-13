@@ -132,7 +132,6 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtkmessagedialog.h>
-#include <gtk/gtkmisc.h>
 #include <gtk/gtkmodules.h>
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknotebook.h>
@@ -241,6 +240,7 @@
 #include <gtk/deprecated/gtkhseparator.h>
 #include <gtk/deprecated/gtkiconfactory.h>
 #include <gtk/deprecated/gtkimagemenuitem.h>
+#include <gtk/deprecated/gtkmisc.h>
 #include <gtk/deprecated/gtknumerableicon.h>
 #include <gtk/deprecated/gtkradioaction.h>
 #include <gtk/deprecated/gtkrc.h>

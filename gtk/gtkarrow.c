@@ -85,7 +85,9 @@ static void     gtk_arrow_get_preferred_height        (GtkWidget           *widg
                                                        gint                *minimum_size,
                                                        gint                *natural_size);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_DEFINE_TYPE_WITH_PRIVATE (GtkArrow, gtk_arrow, GTK_TYPE_MISC)
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 gtk_arrow_class_init (GtkArrowClass *class)
@@ -199,7 +201,9 @@ gtk_arrow_get_preferred_width (GtkWidget *widget,
 {
   GtkBorder border;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   _gtk_misc_get_padding_and_border (GTK_MISC (widget), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   *minimum_size = MIN_ARROW_SIZE + border.left + border.right;
   *natural_size = MIN_ARROW_SIZE + border.left + border.right;
@@ -212,7 +216,9 @@ gtk_arrow_get_preferred_height (GtkWidget *widget,
 {
   GtkBorder border;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   _gtk_misc_get_padding_and_border (GTK_MISC (widget), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   *minimum_size = MIN_ARROW_SIZE + border.top + border.bottom;
   *natural_size = MIN_ARROW_SIZE + border.top + border.bottom;
@@ -311,8 +317,10 @@ gtk_arrow_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   _gtk_misc_get_padding_and_border (GTK_MISC (widget), &border);
   gtk_misc_get_alignment (GTK_MISC (widget), &xalign, &yalign);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   width = gtk_widget_get_allocated_width (widget) - border.left - border.right;
   height = gtk_widget_get_allocated_height (widget) - border.top - border.bottom;
