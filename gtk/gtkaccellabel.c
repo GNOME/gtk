@@ -378,7 +378,6 @@ gtk_accel_label_draw (GtkWidget *widget,
                       cairo_t   *cr)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
-  GtkMisc *misc = GTK_MISC (accel_label);
   GtkTextDirection direction;
   guint ac_width;
   GtkAllocation allocation;
@@ -429,7 +428,7 @@ gtk_accel_label_draw (GtkWidget *widget,
       cairo_restore (cr);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_misc_get_padding (misc, &xpad, NULL);
+      gtk_misc_get_padding (GTK_MISC (widget), &xpad, NULL);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (direction == GTK_TEXT_DIR_RTL)
