@@ -36,7 +36,6 @@
 #include "gtktoolbar.h"
 #include "gtktoolbarprivate.h"
 
-#include "gtkarrow.h"
 #include "gtkbindings.h"
 #include "gtkcontainerprivate.h"
 #include "gtkimage.h"
@@ -700,7 +699,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 
   gtk_button_set_focus_on_click (GTK_BUTTON (priv->arrow_button), FALSE);
 
-  priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
   gtk_widget_set_name (priv->arrow, "gtk-toolbar-arrow");
   gtk_widget_show (priv->arrow);
   gtk_container_add (GTK_CONTAINER (priv->arrow_button), priv->arrow);
@@ -2542,9 +2541,9 @@ gtk_toolbar_orientation_changed (GtkToolbar    *toolbar,
       priv->orientation = orientation;
       
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+        gtk_image_set_from_icon_name (GTK_IMAGE (priv->arrow), "pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
       else
-	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
+        gtk_image_set_from_icon_name (GTK_IMAGE (priv->arrow), "pan-end-symbolic", GTK_ICON_SIZE_BUTTON);
       
       gtk_toolbar_reconfigured (toolbar);
       
