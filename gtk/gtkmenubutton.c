@@ -105,7 +105,6 @@
 
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
-#include "gtkarrow.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"
@@ -591,11 +590,34 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 }
 
 static void
+set_arrow_type (GtkImage     *image,
+                GtkArrowType  arrow_type)
+{
+  switch (arrow_type)
+    {
+    case GTK_ARROW_NONE:
+    case GTK_ARROW_DOWN:
+      gtk_image_set_from_icon_name (image, "pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+      break;
+    case GTK_ARROW_UP:
+      gtk_image_set_from_icon_name (image, "pan-up-symbolic", GTK_ICON_SIZE_BUTTON);
+      break;
+    case GTK_ARROW_LEFT:
+      gtk_image_set_from_icon_name (image, "pan-start-symbolic", GTK_ICON_SIZE_BUTTON);
+      break;
+    case GTK_ARROW_RIGHT:
+      gtk_image_set_from_icon_name (image, "pan-end-symbolic", GTK_ICON_SIZE_BUTTON);
+      break;
+    }
+}
+
+static void
 add_arrow (GtkMenuButton *menu_button)
 {
   GtkWidget *arrow;
-
-  arrow = gtk_arrow_new (menu_button->priv->arrow_type, GTK_SHADOW_NONE);
+  
+  arrow = gtk_image_new ();
+  set_arrow_type (GTK_IMAGE (arrow), menu_button->priv->arrow_type);
   gtk_container_add (GTK_CONTAINER (menu_button), arrow);
   gtk_widget_show (arrow);
   menu_button->priv->arrow_widget = arrow;
@@ -983,7 +1005,7 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
   if (priv->arrow_widget != child)
     return;
 
-  gtk_arrow_set (GTK_ARROW (child), priv->arrow_type, GTK_SHADOW_NONE);
+  set_arrow_type (GTK_IMAGE (child), priv->arrow_type);
 
   update_popover_direction (menu_button);
 }
