@@ -535,9 +535,9 @@ nevertheless.
     the theme and trigger visual debugging aids.
   </para>
   <para>
-    To enable the debugger, you can use the Control-Shift-S keybinding
-    or pass set the <envar>GTK_DEBUG=interactive</envar> environment
-    variable.
+    To enable the debugger, you can use the Control-Shift-I or
+    Control-Shift-D keyboard shortcuts, or pass set the
+    <envar>GTK_DEBUG=interactive</envar> environment variable.
   </para>
 
   <inlinegraphic fileref="inspector.png" format="PNG"></inlinegraphic>

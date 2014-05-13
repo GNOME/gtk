@@ -1268,6 +1268,8 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
                                 "toggle-debugging", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_D, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
+                                "toggle-debugging", 0);
 
   add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
   add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
