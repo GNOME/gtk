@@ -29,7 +29,7 @@
 #include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtkmarshalers.h"
-#include "gtkarrow.h"
+#include "gtkimage.h"
 #include "gtkcellareacontext.h"
 #include "gtkcellareabox.h"
 #include "gtkprivate.h"
@@ -872,7 +872,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   priv->alignment = gtk_alignment_new (priv->xalign, 0.5, 0.0, 0.0);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-  priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_IN);
+  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
 
   if (priv->child)
     child = priv->child;
@@ -910,7 +910,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   GtkWidget *alignment;
   GtkWidget *arrow;
   GtkWidget *current_child;
-  GtkArrowType arrow_type = GTK_ARROW_NONE;
+  const gchar *icon_name = "missing-image";
   GtkTreeModel *model;
 
   if (priv->tree_view)
@@ -983,11 +983,11 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       switch (priv->sort_order)
         {
 	  case GTK_SORT_ASCENDING:
-	    arrow_type = alternative ? GTK_ARROW_UP : GTK_ARROW_DOWN;
+            icon_name = alternative ? "pan-up-symbolic" : "pan-down-symbolic";
 	    break;
 
 	  case GTK_SORT_DESCENDING:
-	    arrow_type = alternative ? GTK_ARROW_DOWN : GTK_ARROW_UP;
+            icon_name = alternative ? "pan-down-symbolic" : "pan-up-symbolic";
 	    break;
 
 	  default:
@@ -996,9 +996,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	}
     }
 
-  gtk_arrow_set (GTK_ARROW (arrow),
-		 arrow_type,
-		 GTK_SHADOW_IN);
+  gtk_image_set_from_icon_name (GTK_IMAGE (arrow), icon_name, GTK_ICON_SIZE_BUTTON);
 
   /* Put arrow on the right if the text is left-or-center justified, and on the
    * left otherwise; do this by packing boxes, so flipping text direction will
