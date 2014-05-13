@@ -128,6 +128,10 @@ keyhash_SOURCES	=					\
 test_icontheme =					\
 	icons/16x16/simple.png				\
 	icons/index.theme				\
+	icons/scalable/everything-justregular.svg	\
+	icons/scalable/everything-justsymbolic-symbolic.svg	\
+	icons/scalable/everything.svg			\
+	icons/scalable/everything-symbolic.svg		\
 	$(NULL)
 
 EXTRA_DIST +=				\

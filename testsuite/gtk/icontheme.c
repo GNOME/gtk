@@ -2,6 +2,8 @@
 
 #include <string.h>
 
+#define SCALABLE_IMAGE_SIZE (128)
+
 static GtkIconTheme *
 get_test_icontheme (void)
 {
@@ -62,7 +64,7 @@ assert_icon_lookup (const char         *icon_name,
     {
       g_error ("Icon for \"%s\" with flags %s at size %d should be \"...%s\" but is \"...%s\"",
                icon_name, lookup_flags_to_string (flags), size,
-               filename, gtk_icon_info_get_filename (info) + strlen (gtk_icon_info_get_filename (info)) - strlen (filename));
+               filename, gtk_icon_info_get_filename (info) + strlen (g_get_current_dir ()));
       return;
     }
 
@@ -70,9 +72,135 @@ assert_icon_lookup (const char         *icon_name,
 }
 
 static void
+assert_icon_lookup_fails (const char         *icon_name,
+                          gint                size,
+                          GtkIconLookupFlags  flags)
+{
+  static gboolean seen_could_not_find_message = FALSE;
+  GtkIconInfo *info;
+
+  if (!seen_could_not_find_message)
+    g_test_expect_message ("Gtk", G_LOG_LEVEL_WARNING, "Could not find the icon*");
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (), icon_name, size, flags);
+  if (!seen_could_not_find_message)
+    {
+      g_test_assert_expected_messages ();
+      seen_could_not_find_message = TRUE;
+    }
+  if (info != NULL)
+    {
+      g_error ("Should not find an icon for \"%s\" with flags %s at size %d, but found \"%s\"",
+               icon_name, lookup_flags_to_string (flags), size, gtk_icon_info_get_filename (info) + strlen (g_get_current_dir ()));
+      g_object_unref (info);
+      return;
+    }
+}
+
+
+static void
 test_basics (void)
 {
   assert_icon_lookup ("simple", 16, 0, "/icons/16x16/simple.png");
+}
+
+static void
+test_force_symbolic (void)
+{
+  /* check forcing symbolic works */
+  assert_icon_lookup ("everything",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-symbolic.svg");
+  /* check forcing symbolic also works for symbolic icons (d'oh) */
+  assert_icon_lookup ("everything-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-symbolic.svg");
+
+  /* check all the combos for fallbacks on an icon that only exists as symbolic */
+  assert_icon_lookup ("everything-justsymbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-justsymbolic-symbolic.svg");
+  assert_icon_lookup ("everything-justsymbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-justsymbolic-symbolic.svg");
+  assert_icon_lookup ("everything-justsymbolic-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-justsymbolic-symbolic.svg");
+  assert_icon_lookup ("everything-justsymbolic-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-justsymbolic-symbolic.svg");
+
+  /* check all the combos for fallbacks, this time for an icon that only exists as regular */
+  assert_icon_lookup ("everything-justregular",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-justregular.svg");
+  assert_icon_lookup ("everything-justregular",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-symbolic.svg");
+  assert_icon_lookup_fails ("everything-justregular-symbolic",
+                            SCALABLE_IMAGE_SIZE,
+                            GTK_ICON_LOOKUP_FORCE_SYMBOLIC);
+  assert_icon_lookup ("everything-justregular-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      "/icons/scalable/everything-symbolic.svg");
+}
+
+static void
+test_force_regular (void)
+{
+  /* check forcing regular works (d'oh) */
+  assert_icon_lookup ("everything",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything.svg");
+  /* check forcing regular also works for symbolic icons ) */
+  assert_icon_lookup ("everything-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything.svg");
+
+  /* check all the combos for fallbacks on an icon that only exists as regular */
+  assert_icon_lookup ("everything-justregular",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything-justregular.svg");
+  assert_icon_lookup ("everything-justregular",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything-justregular.svg");
+  assert_icon_lookup ("everything-justregular-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything-justregular.svg");
+  assert_icon_lookup ("everything-justregular-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything-justregular.svg");
+
+  /* check all the combos for fallbacks, this time for an icon that only exists as symbolic */
+  assert_icon_lookup_fails ("everything-justsymbolic",
+                            SCALABLE_IMAGE_SIZE,
+                            GTK_ICON_LOOKUP_FORCE_REGULAR);
+  assert_icon_lookup ("everything-justsymbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything.svg");
+  assert_icon_lookup ("everything-justsymbolic-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything-justsymbolic-symbolic.svg");
+  assert_icon_lookup ("everything-justsymbolic-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      "/icons/scalable/everything.svg");
 }
 
 int
@@ -81,6 +209,8 @@ main (int argc, char *argv[])
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/icontheme/basics", test_basics);
+  g_test_add_func ("/icontheme/force-symbolic", test_force_symbolic);
+  g_test_add_func ("/icontheme/force-regular", test_force_regular);
 
   return g_test_run();
 }
