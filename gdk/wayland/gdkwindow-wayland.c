@@ -113,8 +113,6 @@ struct _GdkWindowImplWayland
 
   cairo_surface_t *cairo_surface;
 
-  int32_t next_attach_serial;
-
   gchar *title;
 
   /* Time of most recent user interaction. */
@@ -522,12 +520,6 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (impl->next_attach_serial > 0)
-    {
-      xdg_surface_ack_configure (impl->xdg_surface, impl->next_attach_serial);
-      impl->next_attach_serial = 0;
-    }
-
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface),
@@ -852,7 +844,7 @@ xdg_surface_configure (void               *data,
     }
 
   _gdk_set_window_state (window, new_state);
-  impl->next_attach_serial = serial;
+  xdg_surface_ack_configure (xdg_surface, serial);
 }
 
 static void
