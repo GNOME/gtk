@@ -44,7 +44,7 @@
  * supports adding rules using the <mime-types>, <patterns> and
  * <applications> elements and listing the rules within. Specifying
  * a <mime-type> or <pattern> has the same effect as as calling
- * gtk_recent_filter_add_mime_type() or gtk_recent_filter_add_pattern().
+ * gtk_file_filter_add_mime_type() or gtk_file_filter_add_pattern().
  *
  * An example of a UI definition fragment specifying GtkFileFilter
  * rules:
