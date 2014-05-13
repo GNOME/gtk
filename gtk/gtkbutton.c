@@ -300,16 +300,19 @@ gtk_button_class_init (GtkButtonClass *klass)
    * 1.0 is right aligned.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.14: Access the child widget directly if you need to control
+   * its alignment.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
-                                   g_param_spec_float("xalign",
-                                                      P_("Horizontal alignment for child"),
-                                                      P_("Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"),
-                                                      0.0,
-                                                      1.0,
-                                                      0.5,
-                                                      GTK_PARAM_READWRITE));
+                                   g_param_spec_float ("xalign",
+                                                       P_("Horizontal alignment for child"),
+                                                       P_("Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"),
+                                                       0.0,
+                                                       1.0,
+                                                       0.5,
+                                                       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   /**
    * GtkButton:yalign:
@@ -319,16 +322,19 @@ gtk_button_class_init (GtkButtonClass *klass)
    * 1.0 is bottom aligned.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.14: Access the child widget directly if you need to control
+   * its alignment.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
-                                   g_param_spec_float("yalign",
-                                                      P_("Vertical alignment for child"),
-                                                      P_("Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"),
-                                                      0.0,
-                                                      1.0,
-                                                      0.5,
-                                                      GTK_PARAM_READWRITE));
+                                   g_param_spec_float ("yalign",
+                                                       P_("Vertical alignment for child"),
+                                                       P_("Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"),
+                                                       0.0,
+                                                       1.0,
+                                                       0.5,
+                                                       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   /**
    * GtkButton:image:
