@@ -16252,3 +16252,20 @@ gtk_widget_get_template_child (GtkWidget   *widget,
 
   return ret;
 }
+
+gchar **
+_gtk_widget_list_action_prefixes (GtkWidget *widget)
+{
+  if (widget->priv->muxer)
+    return gtk_action_muxer_list_prefixes (widget->priv->muxer);
+  return NULL;
+}
+
+GActionGroup *
+_gtk_widget_get_action_group (GtkWidget   *widget,
+                              const gchar *prefix)
+{
+  if (widget->priv->muxer)
+    return gtk_action_muxer_lookup (widget->priv->muxer, prefix);
+  return NULL;
+}
