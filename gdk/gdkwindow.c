@@ -6891,6 +6891,7 @@ update_cursor (GdkDisplay *display,
   /* Find the first window with the cursor actually set, as
      the cursor is inherited from the parent */
   while (cursor_window->cursor == NULL &&
+         !g_hash_table_contains (cursor_window->device_cursor, device) &&
 	 (parent = get_event_parent (cursor_window)) != NULL &&
 	 parent->window_type != GDK_WINDOW_ROOT)
     cursor_window = parent;
