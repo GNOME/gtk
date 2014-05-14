@@ -189,9 +189,10 @@ do_transparent (GtkWidget *do_widget)
       GtkWidget *view;
       GtkWidget *sw;
       GtkWidget *overlay;
-      GtkWidget *align;
       GtkWidget *entry;
       GdkRGBA transparent = {0, 0, 0, 0};
+      GtkCssProvider *provider;
+      gchar *css;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -219,17 +220,20 @@ do_transparent (GtkWidget *do_widget)
 
       gtk_widget_override_background_color (overlay, 0, &transparent);
 
-      align = gtk_alignment_new (0.0, 0.0, 0.0, 0.0);
-      gtk_alignment_set_padding (GTK_ALIGNMENT (align),
-				 0, SHADOW_OFFSET_Y, 0, SHADOW_OFFSET_X);
-      g_signal_connect (align, "draw", G_CALLBACK (draw_callback), NULL);
-      
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (align), entry);
+      provider = gtk_css_provider_new ();
+      css = g_strdup_printf ("* { border-width: 0px %dpx %dpx 0px; }",
+                             SHADOW_OFFSET_X, SHADOW_OFFSET_Y);
+      gtk_css_provider_load_from_data (provider, css, -1, NULL);
+      g_free (css);
+      gtk_style_context_add_provider (gtk_widget_get_style_context (entry),
+                                      GTK_STYLE_PROVIDER (provider),
+                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      g_signal_connect (entry, "draw", G_CALLBACK (draw_callback), NULL);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), entry);
+      gtk_widget_set_halign (entry, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (entry, GTK_ALIGN_START);
       
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), align);
-      gtk_widget_set_halign (align, GTK_ALIGN_CENTER);
-      gtk_widget_set_valign (align, GTK_ALIGN_START);
 
       gtk_widget_show_all (overlay);
     }
