@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gtk/inspector">
+    <file>actions.ui</file>
     <file>button-path.ui</file>
     <file>classes-list.ui</file>
     <file>css-editor.ui</file>

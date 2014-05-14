@@ -268,6 +268,7 @@ gtk/gtkviewport.c
 gtk/gtkvolumebutton.c
 gtk/gtkwidget.c
 gtk/gtkwindow.c
+gtk/inspector/actions.ui.h
 gtk/inspector/button-path.ui.h
 gtk/inspector/classes-list.c
 gtk/inspector/classes-list.ui.h

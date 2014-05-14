@@ -15,6 +15,8 @@ BUILT_SOURCES = 			\
 	resources.c
 
 libgtkinspector_la_SOURCES = 		\
+	actions.h			\
+	actions.c			\
 	button-path.h			\
 	button-path.c			\
 	classes-list.h			\
@@ -74,6 +76,7 @@ libgtkinspector_la_LDFLAGS =		\
 	$(LDFLAGS)
 
 templates = 				\
+	actions.ui 			\
 	button-path.ui 			\
 	classes-list.ui 		\
 	css-editor.ui 			\

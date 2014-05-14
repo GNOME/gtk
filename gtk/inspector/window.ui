@@ -182,6 +182,16 @@
                         <property name="label" translatable="yes">Data</property>
                       </object>
                     </child> 
+                    <child>
+                      <object class="GtkInspectorActions" id="actions">
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Actions</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="resize">True</property>

@@ -22,6 +22,7 @@
  */
 #include <glib.h>
 
+#include "actions.h"
 #include "button-path.h"
 #include "classes-list.h"
 #include "css-editor.h"
@@ -47,6 +48,7 @@ gtk_inspector_init (void)
 
   gtk_inspector_register_resource ();
 
+  g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
   g_type_ensure (GTK_TYPE_INSPECTOR_BUTTON_PATH);
   g_type_ensure (GTK_TYPE_INSPECTOR_CLASSES_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_EDITOR);
