@@ -1594,13 +1594,17 @@ symbolic_pixbuf_cache_free (SymbolicPixbufCache *cache)
 static gboolean
 icon_name_is_symbolic (const char *icon_name)
 {
-  return g_str_has_suffix (icon_name, "-symbolic");
+  return g_str_has_suffix (icon_name, "-symbolic")
+      || g_str_has_suffix (icon_name, "-symbolic-ltr")
+      || g_str_has_suffix (icon_name, "-symbolic-rtl");
 }
 
 static gboolean
 icon_uri_is_symbolic (const char *icon_name)
 {
-  return g_str_has_suffix (icon_name, "-symbolic.svg");
+  return g_str_has_suffix (icon_name, "-symbolic.svg")
+      || g_str_has_suffix (icon_name, "-symbolic-ltr.svg")
+      || g_str_has_suffix (icon_name, "-symbolic-rtl.svg");
 }
 
 static GtkIconInfo *
@@ -1806,6 +1810,16 @@ real_choose_icon (GtkIconTheme       *icon_theme,
   return icon_info;
 }
 
+static void
+icon_name_list_add_icon (GPtrArray  *icons,
+                         const char *dir_suffix,
+                         char       *icon_name)
+{
+  if (dir_suffix)
+    g_ptr_array_add (icons, g_strconcat (icon_name, dir_suffix, NULL));
+  g_ptr_array_add (icons, icon_name);
+}
+
 static GtkIconInfo *
 choose_icon (GtkIconTheme       *icon_theme,
              const gchar        *icon_names[],
@@ -1816,7 +1830,15 @@ choose_icon (GtkIconTheme       *icon_theme,
   gboolean has_regular = FALSE, has_symbolic = FALSE;
   GtkIconInfo *icon_info;
   GPtrArray *new_names;
+  const char *dir_suffix;
   guint i;
+
+  if (flags & GTK_ICON_LOOKUP_DIR_LTR)
+    dir_suffix = "-ltr";
+  else if (flags & GTK_ICON_LOOKUP_DIR_RTL)
+    dir_suffix = "-rtl";
+  else
+    dir_suffix = NULL;
 
   for (i = 0; icon_names[i]; i++)
     {
@@ -1832,14 +1854,14 @@ choose_icon (GtkIconTheme       *icon_theme,
       for (i = 0; icon_names[i]; i++)
         {
           if (icon_name_is_symbolic (icon_names[i]))
-            g_ptr_array_add (new_names, g_strndup (icon_names[i], strlen (icon_names[i]) - strlen ("-symbolic")));
+            icon_name_list_add_icon (new_names, dir_suffix, g_strndup (icon_names[i], strlen (icon_names[i]) - strlen ("-symbolic")));
           else
-            g_ptr_array_add (new_names, g_strdup (icon_names[i]));
+            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
         }
       for (i = 0; icon_names[i]; i++)
         {
           if (icon_name_is_symbolic (icon_names[i]))
-            g_ptr_array_add (new_names, g_strdup (icon_names[i]));
+            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
         }
       g_ptr_array_add (new_names, NULL);
 
@@ -1857,14 +1879,31 @@ choose_icon (GtkIconTheme       *icon_theme,
       for (i = 0; icon_names[i]; i++)
         {
           if (!icon_name_is_symbolic (icon_names[i]))
-            g_ptr_array_add (new_names, g_strconcat (icon_names[i], "-symbolic", NULL));
+            icon_name_list_add_icon (new_names, dir_suffix, g_strconcat (icon_names[i], "-symbolic", NULL));
           else
-            g_ptr_array_add (new_names, g_strdup (icon_names[i]));
+            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
         }
       for (i = 0; icon_names[i]; i++)
         {
           if (!icon_name_is_symbolic (icon_names[i]))
-            g_ptr_array_add (new_names, g_strdup (icon_names[i]));
+            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+        }
+      g_ptr_array_add (new_names, NULL);
+
+      icon_info = real_choose_icon (icon_theme,
+                                    (const gchar **) new_names->pdata,
+                                    size,
+                                    scale,
+                                    flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC));
+
+      g_ptr_array_free (new_names, TRUE);
+    }
+  else if (dir_suffix)
+    {
+      new_names = g_ptr_array_new_with_free_func (g_free);
+      for (i = 0; icon_names[i]; i++)
+        {
+          icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
         }
       g_ptr_array_add (new_names, NULL);
 

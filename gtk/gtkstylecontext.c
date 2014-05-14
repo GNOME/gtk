@@ -4682,6 +4682,7 @@ GtkIconLookupFlags
 _gtk_style_context_get_icon_lookup_flags (GtkStyleContext *context)
 {
   GtkCssIconStyle icon_style;
+  GtkIconLookupFlags flags;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
@@ -4690,15 +4691,25 @@ _gtk_style_context_get_icon_lookup_flags (GtkStyleContext *context)
   switch (icon_style)
     {
     case GTK_CSS_ICON_STYLE_REGULAR:
-      return GTK_ICON_LOOKUP_FORCE_REGULAR;
+      flags = GTK_ICON_LOOKUP_FORCE_REGULAR;
+      break;
     case GTK_CSS_ICON_STYLE_SYMBOLIC:
-      return GTK_ICON_LOOKUP_FORCE_SYMBOLIC;
+      flags = GTK_ICON_LOOKUP_FORCE_SYMBOLIC;
+      break;
     case GTK_CSS_ICON_STYLE_REQUESTED:
-      return 0;
+      flags = 0;
+      break;
     default:
       g_assert_not_reached ();
       return 0;
     }
+
+  if (context->priv->info->state_flags & GTK_STATE_FLAG_DIR_LTR)
+    flags |= GTK_ICON_LOOKUP_DIR_LTR;
+  else if (context->priv->info->state_flags & GTK_STATE_FLAG_DIR_RTL)
+    flags |= GTK_ICON_LOOKUP_DIR_RTL;
+
+  return flags;
 }
 
 static AtkAttributeSet *

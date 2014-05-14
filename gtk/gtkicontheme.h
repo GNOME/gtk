@@ -117,6 +117,10 @@ struct _GtkIconThemeClass
  *   when symbolic icon names are given. Since 3.14.
  * @GTK_ICON_LOOKUP_FORCE_SYMBOLIC: Try to always load symbolic icons, even
  *   when regular icon names are given. Since 3.14.
+ * @GTK_ICON_LOOKUP_DIR_LTR: Try to load a variant of the icon for left-to-right
+ *   text direction. Since 3.14.
+ * @GTK_ICON_LOOKUP_DIR_RTL: Try to load a variant of the icon for right-to-left
+ *   text direction. Since 3.14.
  * 
  * Used to specify options for gtk_icon_theme_lookup_icon()
  */
@@ -128,7 +132,9 @@ typedef enum
   GTK_ICON_LOOKUP_GENERIC_FALLBACK = 1 << 3,
   GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 4,
   GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 5,
-  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 6
+  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 6,
+  GTK_ICON_LOOKUP_DIR_LTR          = 1 << 7,
+  GTK_ICON_LOOKUP_DIR_RTL          = 1 << 8
 } GtkIconLookupFlags;
 
 /**
