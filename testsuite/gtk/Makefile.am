@@ -129,6 +129,9 @@ test_icontheme =					\
 	icons/16x16/simple.png				\
 	icons/index.theme				\
 	icons/scalable/everything-justregular.svg	\
+	icons/scalable/everything-justrtl-rtl.svg	\
+	icons/scalable/everything-rtl.svg		\
+	icons/scalable/everything-symbolic-rtl.svg	\
 	icons/scalable/everything-justsymbolic-symbolic.svg	\
 	icons/scalable/everything.svg			\
 	icons/scalable/everything-symbolic.svg		\

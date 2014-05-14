@@ -368,6 +368,43 @@ test_force_regular (void)
                       "/icons/scalable/everything.svg");
 }
 
+static void
+test_rtl (void)
+{
+  assert_icon_lookup ("everything",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_DIR_RTL,
+                      "/icons/scalable/everything-rtl.svg");
+  assert_icon_lookup ("everything-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_DIR_RTL,
+                      "/icons/scalable/everything-symbolic-rtl.svg");
+
+  assert_icon_lookup_fails ("everything-justrtl",
+                            SCALABLE_IMAGE_SIZE,
+                            0);
+  assert_icon_lookup_fails ("everything-justrtl",
+                            SCALABLE_IMAGE_SIZE,
+                            GTK_ICON_LOOKUP_DIR_LTR);
+  assert_icon_lookup ("everything-justrtl",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_DIR_RTL,
+                      "/icons/scalable/everything-justrtl-rtl.svg");
+
+  assert_icon_lookup ("everything-justrtl",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      "/icons/scalable/everything.svg");
+  assert_icon_lookup ("everything-justrtl",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_LTR,
+                      "/icons/scalable/everything.svg");
+  assert_icon_lookup ("everything-justrtl",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_RTL,
+                      "/icons/scalable/everything-justrtl-rtl.svg");
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -378,6 +415,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/generic-fallback", test_generic_fallback);
   g_test_add_func ("/icontheme/force-symbolic", test_force_symbolic);
   g_test_add_func ("/icontheme/force-regular", test_force_regular);
+  g_test_add_func ("/icontheme/rtl", test_rtl);
 
   return g_test_run();
 }
