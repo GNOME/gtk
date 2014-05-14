@@ -22,7 +22,6 @@
 #include "gtkmenutoolbutton.h"
 
 #include "gtktogglebutton.h"
-#include "gtkarrow.h"
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
 #include "gtkbox.h"
