@@ -582,6 +582,28 @@ should_show_recent (GtkPlacesSidebar *sidebar)
   return recent_files_setting_is_enabled (sidebar) && recent_scheme_is_supported ();
 }
 
+static gboolean
+path_is_home_dir (const gchar *path)
+{
+  GFile *home_dir;
+  GFile *location;
+  const gchar *home_path;
+  gboolean res;
+
+  home_path = g_get_home_dir ();
+  if (!home_path)
+    return FALSE;
+
+  home_dir = g_file_new_for_path (home_path);
+  location = g_file_new_for_path (path);
+  res = g_file_equal (home_dir, location);
+
+  g_object_unref (home_dir);
+  g_object_unref (location);
+
+  return res;
+}
+
 static void
 add_special_dirs (GtkPlacesSidebar *sidebar)
 {
@@ -608,7 +630,7 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
        * to be added multiple times in that weird configuration.
        */
       if (path == NULL ||
-          g_strcmp0 (path, g_get_home_dir ()) == 0 ||
+          path_is_home_dir (path) ||
           g_list_find_custom (dirs, path, (GCompareFunc) g_strcmp0) != NULL)
         continue;
           
@@ -662,7 +684,7 @@ get_desktop_directory_uri (void)
   /* "To disable a directory, point it to the homedir."
    * See http://freedesktop.org/wiki/Software/xdg-user-dirs
    */
-  if (g_strcmp0 (name, g_get_home_dir ()) == 0)
+  if (path_is_home_dir (name))
     return NULL;
 
   return g_strconcat ("file://", name, NULL);
