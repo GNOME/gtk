@@ -149,6 +149,10 @@ testsuite/reftests/font-sizes-names.ui
 testsuite/reftests/grid-empty-with-spacing.ui
 testsuite/reftests/grid-wfh.ref.ui
 testsuite/reftests/grid-wfh.ui
+testsuite/reftests/icon-style-basics.ref.ui
+testsuite/reftests/icon-style-basics.ui
+testsuite/reftests/icon-vfuncs.ref.ui
+testsuite/reftests/icon-vfuncs.ui
 testsuite/reftests/info-bar-message-types.ref.ui
 testsuite/reftests/info-bar-message-types.ui
 testsuite/reftests/inherit-and-initial.ref.ui
