@@ -41,7 +41,9 @@ void                    gtk_action_muxer_insert                         (GtkActi
 
 void                    gtk_action_muxer_remove                         (GtkActionMuxer *muxer,
                                                                          const gchar    *prefix);
-
+gchar **                gtk_action_muxer_list_prefixes                  (GtkActionMuxer *muxer);
+GActionGroup *          gtk_action_muxer_lookup                         (GtkActionMuxer *muxer,
+                                                                         const gchar    *prefix);
 GtkActionMuxer *        gtk_action_muxer_get_parent                     (GtkActionMuxer *muxer);
 
 void                    gtk_action_muxer_set_parent                     (GtkActionMuxer *muxer,

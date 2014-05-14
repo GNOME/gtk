@@ -730,6 +730,26 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
     }
 }
 
+gchar **
+gtk_action_muxer_list_prefixes (GtkActionMuxer *muxer)
+{
+  return (gchar **) g_hash_table_get_keys_as_array (muxer->groups, NULL);
+}
+
+GActionGroup *
+gtk_action_muxer_lookup (GtkActionMuxer *muxer,
+                         const gchar    *prefix)
+{
+  Group *group;
+
+  group = g_hash_table_lookup (muxer->groups, prefix);
+
+  if (group != NULL)
+    return group->group;
+
+  return NULL;
+}
+
 /*< private >
  * gtk_action_muxer_new:
  *
@@ -906,3 +926,4 @@ gtk_print_action_and_target (const gchar *action_namespace,
 
   return g_string_free (result, FALSE);
 }
+
