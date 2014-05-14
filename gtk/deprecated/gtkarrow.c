@@ -42,7 +42,13 @@
  * style of an arrow can be changed after creation by using gtk_arrow_set().
  *
  * GtkArrow has been deprecated; you can simply use a #GtkImage with a
- * suitable icon name, such as “pan-down-symbolic“.
+ * suitable icon name, such as “pan-down-symbolic“. When replacing 
+ * GtkArrow by an image, pay attention to the fact that GtkArrow is
+ * doing automatic flipping between #GTK_ARROW_LEFT and #GTK_ARROW_RIGHT,
+ * depending on the text direction. To get the same effect with an image,
+ * use the icon names “pan-start-symbolic“ and “pan-end-symbolic“, which
+ * react to the text direction instead of “pan-left-symbolic“ and
+ * “pan-right-symbolic“ which don't.
  */
 
 #include "config.h"
