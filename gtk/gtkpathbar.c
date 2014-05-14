@@ -22,7 +22,6 @@
 
 #include <string.h>
 
-#include "gtkarrow.h"
 #include "gtkbox.h"
 #include "gtkdnd.h"
 #include "gtkicontheme.h"
