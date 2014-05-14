@@ -130,10 +130,12 @@ draw_indicator_changed (GObject    *object,
 {
   GtkButton *button = GTK_BUTTON (object);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (button)))
     gtk_button_set_alignment (button, 0.0, 0.5);
   else
     gtk_button_set_alignment (button, 0.5, 0.5);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

@@ -802,10 +802,14 @@ gtk_button_set_property (GObject         *object,
       gtk_button_set_focus_on_click (button, g_value_get_boolean (value));
       break;
     case PROP_XALIGN:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_button_set_alignment (button, g_value_get_float (value), priv->yalign);
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_YALIGN:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_button_set_alignment (button, priv->xalign, g_value_get_float (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_IMAGE_POSITION:
       gtk_button_set_image_position (button, g_value_get_enum (value));
@@ -2481,6 +2485,9 @@ gtk_button_get_focus_on_click (GtkButton *button)
  * the child is a #GtkMisc or a #GtkAlignment.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Access the child widget directly if you need to control
+ * its alignment.
  */
 void
 gtk_button_set_alignment (GtkButton *button,
@@ -2514,6 +2521,9 @@ gtk_button_set_alignment (GtkButton *button,
  * Gets the alignment of the child in the button.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Access the child widget directly if you need to control
+ * its alignment.
  */
 void
 gtk_button_get_alignment (GtkButton *button,

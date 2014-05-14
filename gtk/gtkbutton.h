@@ -139,11 +139,11 @@ void                  gtk_button_set_focus_on_click (GtkButton      *button,
 						     gboolean        focus_on_click);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_button_get_focus_on_click (GtkButton      *button);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_button_set_alignment      (GtkButton      *button,
 						     gfloat          xalign,
 						     gfloat          yalign);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_button_get_alignment      (GtkButton      *button,
 						     gfloat         *xalign,
 						     gfloat         *yalign);
