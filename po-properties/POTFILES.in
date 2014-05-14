@@ -32,6 +32,7 @@ gtk/a11y/gtkswitchaccessible.c
 gtk/deprecated/gtkaction.c
 gtk/deprecated/gtkactiongroup.c
 gtk/deprecated/gtkactivatable.c
+gtk/deprecated/gtkarrow.c
 gtk/deprecated/gtkcolorsel.c
 gtk/deprecated/gtkcolorseldialog.c
 gtk/deprecated/gtkfontsel.c
@@ -64,7 +65,6 @@ gtk/gtkappchooserwidget.c
 gtk/gtkapplication.c
 gtk/gtkapplication-quartz.c
 gtk/gtkapplicationwindow.c
-gtk/gtkarrow.c
 gtk/gtkaspectframe.c
 gtk/gtkassistant.c
 gtk/gtkbbox.c
