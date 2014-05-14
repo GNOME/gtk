@@ -286,9 +286,6 @@ static gint gtk_spin_button_default_input  (GtkSpinButton      *spin_button,
                                             gdouble            *new_val);
 static void gtk_spin_button_default_output (GtkSpinButton      *spin_button);
 
-static gboolean gtk_spin_button_touch_event (GtkWidget     *widget,
-                                             GdkEventTouch *event);
-
 static guint spinbutton_signals[LAST_SIGNAL] = {0};
 
 G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_ENTRY,
@@ -335,7 +332,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_flags_changed = gtk_spin_button_state_flags_changed;
   widget_class->style_updated = gtk_spin_button_style_updated;
-  widget_class->touch_event = gtk_spin_button_touch_event;
 
   entry_class->activate = gtk_spin_button_activate;
   entry_class->get_text_area_size = gtk_spin_button_get_text_area_size;
@@ -719,14 +715,14 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_widget_add_events (GTK_WIDGET (spin_button), GDK_SCROLL_MASK);
 
   priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (spin_button));
-  gtk_gesture_attach (priv->long_press_gesture, GTK_PHASE_NONE);
+  gtk_gesture_attach (priv->long_press_gesture, GTK_PHASE_BUBBLE);
   g_signal_connect (priv->long_press_gesture, "pressed",
                     G_CALLBACK (long_press_action), spin_button);
   g_signal_connect (priv->long_press_gesture, "cancelled",
                     G_CALLBACK (long_press_cancel_action), spin_button);
 
   priv->swipe_gesture = gtk_gesture_swipe_new (GTK_WIDGET (spin_button));
-  gtk_gesture_attach (priv->swipe_gesture, GTK_PHASE_NONE);
+  gtk_gesture_attach (priv->swipe_gesture, GTK_PHASE_BUBBLE);
   g_signal_connect (priv->swipe_gesture, "update",
                     G_CALLBACK (swipe_gesture_update), spin_button);
 }
@@ -1515,29 +1511,6 @@ start_spinning (GtkSpinButton *spin,
   gtk_widget_queue_draw (GTK_WIDGET (spin));
 }
 
-static gboolean
-_gtk_spin_button_handle_drag (GtkWidget      *widget,
-                              const GdkEvent *event)
-{
-  GtkSpinButtonPrivate *priv;
-
-  priv = GTK_SPIN_BUTTON (widget)->priv;
-  gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->long_press_gesture),
-                                     (const GdkEvent*) event);
-  gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->swipe_gesture),
-                                     (const GdkEvent*) event);
-
-  return (gtk_gesture_is_recognized (priv->long_press_gesture) ||
-          gtk_gesture_is_recognized (priv->swipe_gesture));
-}
-
-static gboolean
-gtk_spin_button_touch_event (GtkWidget     *widget,
-                             GdkEventTouch *event)
-{
-  return _gtk_spin_button_handle_drag (widget, (const GdkEvent*) event);
-}
-
 static gint
 gtk_spin_button_button_press (GtkWidget      *widget,
                               GdkEventButton *event)
@@ -1570,7 +1543,6 @@ gtk_spin_button_button_press (GtkWidget      *widget,
         }
       else
         {
-          _gtk_spin_button_handle_drag (widget, (const GdkEvent*) event);
           return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->button_press_event (widget, event);
         }
     }
@@ -1615,7 +1587,6 @@ gtk_spin_button_button_release (GtkWidget      *widget,
     }
   else
     {
-      _gtk_spin_button_handle_drag (widget, (const GdkEvent*) event);
       return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->button_release_event (widget, event);
     }
 }
@@ -1641,7 +1612,7 @@ gtk_spin_button_motion_notify (GtkWidget      *widget,
       return FALSE;
     }
 
-  if (_gtk_spin_button_handle_drag (widget, (const GdkEvent*) event))
+  if (gtk_gesture_is_recognized (priv->swipe_gesture))
     return TRUE;
 
   return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->motion_notify_event (widget, event);
