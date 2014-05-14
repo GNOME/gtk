@@ -33,7 +33,6 @@
 #include "gtkbutton.h"
 #include "gtklabel.h"
 #include "gtkbox.h"
-#include "gtkarrow.h"
 #include "gtkintl.h"
 #include "gtkbindings.h"
 #include "gtkcontainer.h"
