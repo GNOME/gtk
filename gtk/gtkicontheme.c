@@ -1659,6 +1659,11 @@ real_choose_icon (GtkIconTheme       *icon_theme,
 
   use_builtin = flags & GTK_ICON_LOOKUP_USE_BUILTIN;
 
+  /* This is used in the icontheme unit test */
+  GTK_NOTE (ICONTHEME,
+            for (i = 0; icon_names[i]; i++)
+              g_print ("\tlookup name: %s\n", icon_names[i]));
+
   /* for symbolic icons, do a search in all registered themes first;
    * a theme that inherits them from a parent theme might provide
    * an alternative highcolor version, but still expect the symbolic icon
