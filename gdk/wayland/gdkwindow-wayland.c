@@ -990,6 +990,33 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
   xdg_popup_add_listener (impl->xdg_popup, &xdg_popup_listener, window);
 }
 
+static struct wl_seat *
+find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
+{
+  struct wl_seat *grab_input_seat = NULL;
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowImplWayland *tmp_impl;
+
+  /* Use the device that was used for the grab as the device for
+   * the popup window setup - so this relies on GTK+ taking the
+   * grab before showing the popup window.
+   */
+  grab_input_seat = impl->grab_input_seat;
+
+  tmp_impl = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
+  while (!grab_input_seat)
+    {
+      grab_input_seat = tmp_impl->grab_input_seat;
+
+      if (tmp_impl->transient_for)
+        tmp_impl = GDK_WINDOW_IMPL_WAYLAND (tmp_impl->transient_for->impl);
+      else
+        break;
+    }
+
+  return grab_input_seat;
+}
+
 static void
 gdk_wayland_window_map (GdkWindow *window)
 {
@@ -1018,26 +1045,7 @@ gdk_wayland_window_map (GdkWindow *window)
 
       if (transient_for)
         {
-          struct wl_seat *grab_input_seat = NULL;
-          GdkWindowImplWayland *tmp_impl;
-
-          /* Use the device that was used for the grab as the device for
-           * the popup window setup - so this relies on GTK+ taking the
-           * grab before showing the popup window.
-           */
-          grab_input_seat = impl->grab_input_seat;
-
-          tmp_impl = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
-          while (!grab_input_seat)
-            {
-              grab_input_seat = tmp_impl->grab_input_seat;
-
-              if (tmp_impl->transient_for)
-                tmp_impl = GDK_WINDOW_IMPL_WAYLAND (tmp_impl->transient_for->impl);
-              else
-                break;
-            }
-
+          struct wl_seat *grab_input_seat = find_grab_input_seat (window, transient_for);
           if (grab_input_seat &&
               (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
                impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
