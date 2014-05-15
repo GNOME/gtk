@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-15 12:53+0300\n"
-"PO-Revision-Date: 2014-05-15 13:08+0300\n"
+"POT-Creation-Date: 2014-05-15 21:11+0300\n"
+"PO-Revision-Date: 2014-05-15 21:14+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -3647,7 +3647,7 @@ msgstr "תכונה"
 
 #: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
 msgid "Defined At"
-msgstr "מוגדר כ"
+msgstr "הגדרה"
 
 #: ../gtk/inspector/signals-list.c:101
 msgid "Yes"
@@ -3664,7 +3664,7 @@ msgstr "פינוי יומן"
 
 #: ../gtk/inspector/signals-list.ui.h:4
 msgid "Connected"
-msgstr "מחוברה"
+msgstr "מחובר"
 
 #: ../gtk/inspector/signals-list.ui.h:5
 msgid "Count"
@@ -3700,7 +3700,7 @@ msgstr "ערכת GTK+‎"
 
 #: ../gtk/inspector/visual.ui.h:8
 msgid "Dark variant"
-msgstr "גרסה כהה"
+msgstr "ערכת נושא כהה"
 
 #: ../gtk/inspector/visual.ui.h:9
 msgid "Icon Theme"
