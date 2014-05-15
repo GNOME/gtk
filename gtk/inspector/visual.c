@@ -83,10 +83,20 @@ init_direction (GtkInspectorVisual *vis)
   gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->direction_combo), direction);
 }
 
+static void
+redraw_everything (void)
+{
+  GList *toplevels;
+  toplevels = gtk_window_list_toplevels ();
+  g_list_foreach (toplevels, (GFunc) gtk_widget_queue_draw, NULL);
+  g_list_free (toplevels);
+}
+
 void
 updates_activate (GtkSwitch *sw)
 {
   gdk_window_set_debug_updates (gtk_switch_get_active (sw));
+  redraw_everything ();
 }
 
 static void
@@ -102,6 +112,7 @@ baselines_activate (GtkSwitch *sw)
     flags &= ~GTK_DEBUG_BASELINES;
 
   gtk_set_debug_flags (flags);
+  redraw_everything ();
 }
 
 static void
@@ -117,6 +128,12 @@ pixelcache_activate (GtkSwitch *sw)
     flags &= ~GTK_DEBUG_PIXEL_CACHE;
 
   gtk_set_debug_flags (flags);
+  /* FIXME: this doesn't work, because it is redrawing
+   * _from_ the cache. We need to recurse over the tree
+   * and invalidate the pixel cache of every widget that
+   * has one.
+   */
+  redraw_everything ();
 }
 
 static void
