@@ -223,27 +223,33 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 {
   GtkTreeIter iter;
   GtkTreePath *path;
-  const gchar *class_name = G_OBJECT_CLASS_NAME (G_OBJECT_GET_CLASS (object));
+  const gchar *class_name;
   gchar *address;
   gboolean mapped;
   ObjectData *od;
   const gchar *label;
 
-  label = NULL;
-  mapped = FALSE;
+  if (GTK_IS_WIDGET (object))
+    mapped = gtk_widget_get_mapped (GTK_WIDGET (object));
+  else
+    mapped = TRUE;
+
+  class_name = G_OBJECT_CLASS_NAME (G_OBJECT_GET_CLASS (object));
 
   if (GTK_IS_WIDGET (object))
     {
-      GtkWidget *widget = GTK_WIDGET (object);
-       if (name == NULL)
-         name = gtk_widget_get_name (GTK_WIDGET (object));
-      mapped = gtk_widget_get_mapped (widget);
+      const gchar *id;
+      id = gtk_widget_get_name (GTK_WIDGET (object));
+       if (name == NULL && id != NULL && g_strcmp0 (id, class_name) != 0)
+         name = id;
     }
 
-  if (name == NULL || g_strcmp0 (name, class_name) == 0)
+  if (GTK_IS_BUILDABLE (object))
     {
-      if (GTK_IS_BUILDABLE (object))
-        name = gtk_buildable_get_name (GTK_BUILDABLE (object));
+      const gchar *id;
+      id = gtk_buildable_get_name (GTK_BUILDABLE (object));
+      if (name == NULL && id != NULL && !g_str_has_prefix (id, "___object_"))
+        name = id;
     }
 
   if (name == NULL)
@@ -269,7 +275,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
                       OBJECT_NAME, name,
                       OBJECT_LABEL, label,
                       OBJECT_ADDRESS, address,
-                      SENSITIVE, !GTK_IS_WIDGET (object) || mapped,
+                      SENSITIVE, mapped,
                       -1);
 
   od = g_new0 (ObjectData, 1);
