@@ -94,8 +94,6 @@ struct _GdkWindowImplWayland
 
   GdkWindow *wrapper;
 
-  GdkCursor *cursor;
-
   /* The wl_outputs that this window currently touches */
   GSList *outputs;
 
@@ -114,9 +112,6 @@ struct _GdkWindowImplWayland
   cairo_surface_t *cairo_surface;
 
   gchar *title;
-
-  /* Time of most recent user interaction. */
-  gulong user_time;
 
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_mask;
@@ -593,9 +588,6 @@ gdk_window_impl_wayland_finalize (GObject *object)
 
   impl = GDK_WINDOW_IMPL_WAYLAND (object);
 
-  if (impl->cursor)
-    g_object_unref (impl->cursor);
-
   g_free (impl->title);
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
@@ -629,12 +621,6 @@ gdk_wayland_window_configure (GdkWindow *window,
   g_object_ref(window);
 
   _gdk_wayland_display_deliver_event (display, event);
-}
-
-static void
-gdk_wayland_window_set_user_time (GdkWindow *window,
-                                  guint32    user_time)
-{
 }
 
 static void
@@ -1081,17 +1067,7 @@ static void
 gdk_wayland_window_show (GdkWindow *window,
                          gboolean   already_mapped)
 {
-  GdkDisplay *display;
-  GdkWaylandDisplay *display_wayland;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  display = gdk_window_get_display (window);
-  display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  if (impl->user_time != 0 &&
-      display_wayland->user_time != 0 &&
-      XSERVER_TIME_IS_LATER (display_wayland->user_time, impl->user_time))
-    gdk_wayland_window_set_user_time (window, impl->user_time);
 
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
@@ -1548,17 +1524,6 @@ static void
 gdk_wayland_window_set_focus_on_map (GdkWindow *window,
                                      gboolean focus_on_map)
 {
-  focus_on_map = focus_on_map != FALSE;
-
-  if (window->focus_on_map != focus_on_map)
-    {
-      window->focus_on_map = focus_on_map;
-
-      if ((!GDK_WINDOW_DESTROYED (window)) &&
-          (!window->focus_on_map) &&
-          WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
-        gdk_wayland_window_set_user_time (window, 0);
-    }
 }
 
 static void

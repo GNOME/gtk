@@ -50,7 +50,6 @@ struct _GdkWaylandCursor
 {
   GdkCursor cursor;
   gchar *name;
-  guint serial;
 
   struct
   {
@@ -68,8 +67,6 @@ struct _GdkWaylandCursorClass
 };
 
 G_DEFINE_TYPE (GdkWaylandCursor, _gdk_wayland_cursor, GDK_TYPE_CURSOR)
-
-static guint theme_serial = 0;
 
 struct cursor_cache_key
 {
@@ -319,7 +316,6 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
                           "display", display,
                           NULL);
   private->name = g_strdup (name);
-  private->serial = theme_serial;
   private->surface.scale = 1;
 
   /* Blank cursor case */
@@ -349,7 +345,6 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
 			 "display", wayland_display,
 			 NULL);
   cursor->name = NULL;
-  cursor->serial = theme_serial;
   cursor->surface.hotspot_x = x;
   cursor->surface.hotspot_y = y;
 
