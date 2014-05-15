@@ -19,22 +19,21 @@
 
 struct _GtkInspectorVisualPrivate
 {
-  GtkWidget *updates_switch;
   GtkWidget *direction_combo;
+  GtkWidget *updates_switch;
   GtkWidget *baselines_switch;
   GtkWidget *pixelcache_switch;
+
+  GtkWidget *theme_combo;
+  GtkWidget *dark_switch;
+  GtkWidget *icon_combo;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_LIST_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_BOX)
 
 static void
-updates_activate (GtkSwitch *sw)
-{
-  gdk_window_set_debug_updates (gtk_switch_get_active (sw));
-}
-
-static void
-fix_direction_recurse (GtkWidget *widget, gpointer data)
+fix_direction_recurse (GtkWidget *widget,
+                       gpointer   data)
 {
   GtkTextDirection dir = GPOINTER_TO_INT (data);
 
@@ -84,6 +83,12 @@ init_direction (GtkInspectorVisual *vis)
   gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->direction_combo), direction);
 }
 
+void
+updates_activate (GtkSwitch *sw)
+{
+  gdk_window_set_debug_updates (gtk_switch_get_active (sw));
+}
+
 static void
 baselines_activate (GtkSwitch *sw)
 {
@@ -115,12 +120,157 @@ pixelcache_activate (GtkSwitch *sw)
 }
 
 static void
-gtk_inspector_visual_init (GtkInspectorVisual *pt)
+fill_gtk (const gchar *path,
+          GHashTable  *t)
 {
-  pt->priv = gtk_inspector_visual_get_instance_private (pt);
-  gtk_widget_init_template (GTK_WIDGET (pt));
+  const gchar *dir_entry;
+  GDir *dir = g_dir_open (path, 0, NULL);
 
-  init_direction (pt);
+  if (!dir)
+    return;
+
+  while ((dir_entry = g_dir_read_name (dir)))
+    {
+      gchar *filename = g_build_filename (path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+
+      if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
+          !g_hash_table_contains (t, dir_entry))
+        g_hash_table_add (t, g_strdup (dir_entry));
+
+      g_free (filename);
+    }
+}
+
+static void
+init_theme (GtkInspectorVisual *vis)
+{
+  GHashTable *t;
+  GHashTableIter iter;
+  gchar *theme, *current_theme, *path;
+  gint i, pos;
+  GSettings *settings;
+
+  t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  g_hash_table_add (t, g_strdup ("Raleigh"));
+
+  fill_gtk (GTK_DATADIR "/themes", t);
+  path = g_build_filename (g_get_user_data_dir (), "themes", NULL);
+  fill_gtk (path, t);
+  g_free (path);
+
+  settings = g_settings_new ("org.gnome.desktop.interface");
+  current_theme = g_settings_get_string (settings, "gtk-theme");
+  g_object_unref (settings);
+
+  g_hash_table_iter_init (&iter, t);
+  pos = i = 0;
+  while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
+    {
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (vis->priv->theme_combo), theme);
+      if (g_strcmp0 (theme, current_theme) == 0)
+        pos = i;
+      i++;
+    }
+  g_hash_table_destroy (t);
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (vis->priv->theme_combo), pos);
+}
+
+static void
+theme_changed (GtkComboBox        *c,
+               GtkInspectorVisual *vis)
+{
+  gchar *theme;
+
+  theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
+  g_object_set (gtk_settings_get_default (), "gtk-theme-name", theme, NULL);
+  g_free (theme);
+}
+
+static void
+init_dark (GtkInspectorVisual *vis)
+{
+  g_object_bind_property (vis->priv->dark_switch, "active",
+                          gtk_settings_get_default (), "gtk-application-prefer-dark-theme",
+                          G_BINDING_BIDIRECTIONAL);
+}
+
+static void
+fill_icons (const gchar *path,
+            GHashTable  *t)
+{
+  const gchar *dir_entry;
+  GDir *dir;
+
+  dir = g_dir_open (path, 0, NULL);
+  if (!dir)
+    return;
+
+  while ((dir_entry = g_dir_read_name (dir)))
+    {
+      gchar *filename = g_build_filename (path, dir_entry, "index.theme", NULL);
+
+      if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
+          g_strcmp0 (dir_entry, "hicolor") != 0 &&
+          !g_hash_table_contains (t, dir_entry))
+        g_hash_table_add (t, g_strdup (dir_entry));
+
+      g_free (filename);
+    }
+}
+
+static void
+init_icons (GtkInspectorVisual *vis)
+{
+  GHashTable *t;
+  GHashTableIter iter;
+  gchar *theme, *current_theme, *path;
+  gint i, pos;
+  GSettings *settings;
+
+  t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  fill_icons (GTK_DATADIR "/icons", t);
+  path = g_build_filename (g_get_user_data_dir (), "icons", NULL);
+  fill_icons (path, t);
+  g_free (path);
+
+  settings = g_settings_new ("org.gnome.desktop.interface");
+  current_theme = g_settings_get_string (settings, "icon-theme");
+  g_object_unref (settings);
+
+  g_hash_table_iter_init (&iter, t);
+  pos = i = 0;
+  while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
+    {
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (vis->priv->icon_combo), theme);
+      if (g_strcmp0 (theme, current_theme) == 0)
+        pos = i;
+      i++;
+    }
+  g_hash_table_destroy (t);
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (vis->priv->icon_combo), pos);
+}
+
+static void
+icons_changed (GtkComboBox        *c,
+               GtkInspectorVisual *vis)
+{
+  gchar *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
+  g_object_set (gtk_settings_get_default (), "gtk-icon-theme-name", theme, NULL);
+  g_free (theme);
+}
+
+static void
+gtk_inspector_visual_init (GtkInspectorVisual *vis)
+{
+  vis->priv = gtk_inspector_visual_get_instance_private (vis);
+  gtk_widget_init_template (GTK_WIDGET (vis));
+  init_direction (vis);
+  init_theme (vis);
+  init_dark (vis);
+  init_icons (vis);
 }
 
 static void
@@ -133,10 +283,17 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, pixelcache_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, icon_combo);
+
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, pixelcache_activate);
+  gtk_widget_class_bind_template_callback (widget_class, theme_changed);
+  gtk_widget_class_bind_template_callback (widget_class, icons_changed);
+
 }
 
 GtkWidget *

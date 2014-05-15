@@ -32,13 +32,13 @@ typedef struct _GtkInspectorVisualPrivate GtkInspectorVisualPrivate;
 
 typedef struct _GtkInspectorVisual
 {
-  GtkListBox parent;
+  GtkBox parent;
   GtkInspectorVisualPrivate *priv;
 } GtkInspectorVisual;
 
 typedef struct _GtkInspectorVisualClass
 {
-  GtkListBoxClass parent;
+  GtkBoxClass parent;
 } GtkInspectorVisualClass;
 
 G_BEGIN_DECLS

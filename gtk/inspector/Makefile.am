@@ -42,8 +42,6 @@ libgtkinspector_la_SOURCES = 		\
 	resources.c			\
 	signals-list.h			\
 	signals-list.c			\
-	themes.h			\
-	themes.c			\
 	visual.h			\
 	visual.c			\
 	widget-tree.h			\
@@ -84,7 +82,6 @@ templates = 				\
 	object-hierarchy.ui 		\
 	prop-list.ui 			\
 	signals-list.ui			\
-	themes.ui 			\
 	visual.ui			\
 	widget-tree.ui 			\
 	window.ui

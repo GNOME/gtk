@@ -280,7 +280,6 @@ gtk/inspector/object-hierarchy.ui.h
 gtk/inspector/prop-list.ui.h
 gtk/inspector/signals-list.c
 gtk/inspector/signals-list.ui.h
-gtk/inspector/themes.ui.h
 gtk/inspector/visual.ui.h
 gtk/inspector/widget-tree.ui.h
 gtk/inspector/window.c

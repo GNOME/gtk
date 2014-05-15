@@ -36,7 +36,6 @@
 #include "python-shell.h"
 #include "button-path.h"
 #include "data-list.h"
-#include "themes.h"
 #include "signals-list.h"
 #include "actions.h"
 

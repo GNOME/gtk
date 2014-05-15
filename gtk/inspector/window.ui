@@ -220,17 +220,6 @@
           </object>
         </child>
         <child>
-          <object class="GtkInspectorThemes">
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">Themes</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkInspectorCssEditor">
             <property name="visible">True</property>
             <property name="global">True</property>
