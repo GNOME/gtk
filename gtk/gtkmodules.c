@@ -600,10 +600,3 @@ _gtk_module_has_mixed_deps (GModule *module_to_check)
 
   return result;
 }
-
-void
-_gtk_modules_load_module (const gchar *name)
-{
-  /* We leak the ref */
-  g_slist_free (load_modules (name));
-}
