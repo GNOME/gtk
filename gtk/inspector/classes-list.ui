@@ -13,7 +13,6 @@
       <object class="GtkToolbar">
         <property name="visible">True</property>
         <property name="icon-size">small-toolbar</property>
-        <property name="sensitive">False</property>
         <child>
           <object class="GtkToolButton">
             <property name="visible">True</property>
