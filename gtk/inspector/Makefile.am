@@ -91,15 +91,12 @@ templates = 				\
 
 template_headers = $(templates:.ui=.ui.h)
 
+BUILT_SOURCES += $(template_headers)
+
 extract_strings = $(top_builddir)/gtk/extract-strings$(BUILD_EXEEXT)
 
 %.ui.h: %.ui $(extract_strings)
 	$(AM_V_GEN) $(extract_strings) $< > $@
-
-distclean-local:
-	if test $(srcdir) != .; then 	\
-	  rm -f $(template_headers); 	\
-	fi
 
 EXTRA_DIST += 				\
 	inspector.gresource.xml 	\
