@@ -50,7 +50,6 @@ typedef struct _GtkInspectorButtonPathClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_button_path_get_type   (void);
-GtkWidget *gtk_inspector_button_path_new        (void);
 void       gtk_inspector_button_path_set_object (GtkInspectorButtonPath *bp,
                                                  GObject                *object);
 

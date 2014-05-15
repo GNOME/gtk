@@ -47,12 +47,6 @@ gtk_inspector_button_path_class_init (GtkInspectorButtonPathClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorButtonPath, button_box);
 }
 
-GtkWidget *
-gtk_inspector_button_path_new (void)
-{
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_BUTTON_PATH, NULL));
-}
-
 void
 gtk_inspector_button_path_set_object (GtkInspectorButtonPath *bp,
                                       GObject                *object)

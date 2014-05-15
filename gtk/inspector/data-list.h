@@ -44,7 +44,6 @@ typedef struct _GtkInspectorDataListClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_data_list_get_type   (void);
-GtkWidget *gtk_inspector_data_list_new        (void);
 void       gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
                                                GObject              *object);
 

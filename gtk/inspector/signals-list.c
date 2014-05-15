@@ -337,10 +337,4 @@ gtk_inspector_signals_list_class_init (GtkInspectorSignalsListClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, clear_log);
 }
 
-GtkWidget *
-gtk_inspector_signals_list_new (void)
-{
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_SIGNALS_LIST, NULL));
-}
-
 // vim: set et sw=2 ts=2:

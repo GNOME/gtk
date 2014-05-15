@@ -44,7 +44,6 @@ typedef struct _GtkInspectorSignalsListClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_signals_list_get_type   (void);
-GtkWidget *gtk_inspector_signals_list_new        (void);
 void       gtk_inspector_signals_list_set_object (GtkInspectorSignalsList *sl,
                                                   GObject                 *object);
 

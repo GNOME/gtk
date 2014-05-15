@@ -294,14 +294,6 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
 }
 
-GtkWidget *
-gtk_inspector_css_editor_new (gboolean global)
-{
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_CSS_EDITOR,
-                                   "global", global,
-                                   NULL));
-}
-
 static void
 remove_dead_object (gpointer data, GObject *dead_object)
 {

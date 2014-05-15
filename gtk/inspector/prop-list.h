@@ -51,8 +51,6 @@ typedef struct _GtkInspectorPropListClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_prop_list_get_type   (void);
-GtkWidget *gtk_inspector_prop_list_new        (GtkWidget            *widget_tree,
-                                               gboolean              child_properties);
 gboolean   gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
                                                GObject              *object);
 

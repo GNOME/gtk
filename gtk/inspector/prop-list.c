@@ -222,18 +222,6 @@ gtk_inspector_prop_list_prop_changed_cb (GObject              *pspec,
     gtk_inspector_prop_list_update_prop (pl, iter, prop);
 }
 
-GtkWidget *
-gtk_inspector_prop_list_new (GtkWidget *widget_tree,
-                             gboolean   child_properties)
-{
-  g_type_ensure (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER);
-
-  return g_object_new (GTK_TYPE_INSPECTOR_PROP_LIST,
-                       "widget-tree", widget_tree,
-                       "child-properties", child_properties,
-                       NULL);
-}
-
 static void remove_dead_object (gpointer data, GObject *dead_object);
 
 static void

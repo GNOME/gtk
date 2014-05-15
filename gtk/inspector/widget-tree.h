@@ -55,7 +55,6 @@ G_BEGIN_DECLS
 
 
 GType      gtk_inspector_widget_tree_get_type            (void);
-GtkWidget *gtk_inspector_widget_tree_new                 (void);
 
 GObject   *gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt);
 

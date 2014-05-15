@@ -44,7 +44,6 @@ typedef struct _GtkInspectorVisualClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_visual_get_type   (void);
-GtkWidget *gtk_inspector_visual_new        (void);
 
 G_END_DECLS
 

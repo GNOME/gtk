@@ -141,13 +141,6 @@ gtk_inspector_widget_tree_class_init (GtkInspectorWidgetTreeClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_widget_selected);
 }
 
-GtkWidget *
-gtk_inspector_widget_tree_new (void)
-{
-  return g_object_new (GTK_TYPE_INSPECTOR_WIDGET_TREE, NULL);
-}
-
-
 GObject *
 gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt)
 {

@@ -296,10 +296,4 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 
 }
 
-GtkWidget *
-gtk_inspector_visual_new (void)
-{
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_VISUAL, NULL));
-}
-
 // vim: set et sw=2 ts=2:

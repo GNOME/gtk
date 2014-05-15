@@ -122,10 +122,4 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, prefix_label);
 }
 
-GtkWidget *
-gtk_inspector_actions_new (void)
-{
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_ACTIONS, NULL));
-}
-
 // vim: set et sw=2 ts=2:

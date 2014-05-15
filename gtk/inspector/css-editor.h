@@ -49,7 +49,6 @@ typedef struct _GtkInspectorCssEditorClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_css_editor_get_type   (void);
-GtkWidget *gtk_inspector_css_editor_new        (gboolean               global);
 void       gtk_inspector_css_editor_set_object (GtkInspectorCssEditor *ce,
                                                 GObject               *object);
 

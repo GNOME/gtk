@@ -52,7 +52,6 @@ G_BEGIN_DECLS
 
 
 GType            gtk_inspector_property_cell_renderer_get_type (void);
-GtkCellRenderer *gtk_inspector_property_cell_renderer_new      (void);
 
 
 G_END_DECLS

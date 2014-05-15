@@ -161,10 +161,4 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_data_prefix);
 }
 
-GtkWidget *
-gtk_inspector_general_new (void)
-{
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_GENERAL, NULL));
-}
-
 // vim: set et sw=2 ts=2:

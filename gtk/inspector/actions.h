@@ -44,7 +44,6 @@ typedef struct _GtkInspectorActionsClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_actions_get_type   (void);
-GtkWidget *gtk_inspector_actions_new        (void);
 void       gtk_inspector_actions_set_object (GtkInspectorActions *sl,
                                              GObject              *object);
 

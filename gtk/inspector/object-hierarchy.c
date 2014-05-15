@@ -52,12 +52,6 @@ gtk_inspector_object_hierarchy_class_init (GtkInspectorObjectHierarchyClass *kla
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, tree);
 }
 
-GtkWidget *
-gtk_inspector_object_hierarchy_new (void)
-{
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY, NULL));
-}
-
 void
 gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
                                            GObject                     *object)

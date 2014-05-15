@@ -290,10 +290,4 @@ gtk_inspector_classes_list_class_init (GtkInspectorClassesListClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, enabled_toggled);
 }
 
-GtkWidget *
-gtk_inspector_classes_list_new (void)
-{
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_CLASSES_LIST, NULL));
-}
-
 // vim: set et sw=2 ts=2:

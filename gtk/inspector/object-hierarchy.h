@@ -49,7 +49,6 @@ typedef struct _GtkInspectorObjectHierarchyClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_object_hierarchy_get_type   (void);
-GtkWidget *gtk_inspector_object_hierarchy_new        (void);
 void       gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
                                                       GObject                     *object);
 

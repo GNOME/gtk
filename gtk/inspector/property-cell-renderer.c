@@ -456,11 +456,5 @@ gtk_inspector_property_cell_renderer_class_init (GtkInspectorPropertyCellRendere
                             FALSE, G_PARAM_READWRITE));
 }
 
-GtkCellRenderer *
-gtk_inspector_property_cell_renderer_new (void)
-{
-  return g_object_new (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER, NULL);
-}
-
 
 // vim: set et ts=2:
