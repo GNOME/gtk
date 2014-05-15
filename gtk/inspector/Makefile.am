@@ -40,6 +40,8 @@ libgtkinspector_la_SOURCES = 		\
 	python-hooks.c			\
 	python-shell.h			\
 	python-shell.c			\
+	resource-list.h			\
+	resource-list.c			\
 	resources.h			\
 	resources.c			\
 	signals-list.h			\
@@ -84,6 +86,7 @@ templates = 				\
 	general.ui 			\
 	object-hierarchy.ui 		\
 	prop-list.ui 			\
+	resource-list.ui		\
 	signals-list.ui			\
 	visual.ui			\
 	widget-tree.ui 			\

@@ -1,0 +1,172 @@
+/*
+ * Copyright (c) 2014 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "config.h"
+#include <glib/gi18n-lib.h>
+#include "resource-list.h"
+
+enum
+{
+  COLUMN_NAME,
+  COLUMN_PATH
+};
+
+struct _GtkInspectorResourceListPrivate
+{
+  GtkTreeStore *model;
+  GtkTextBuffer *buffer;
+  GtkWidget *image;
+  GtkWidget *content;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_BOX)
+
+static void
+load_resources_recurse (GtkInspectorResourceList *sl,
+                        GtkTreeIter              *parent,
+                        const gchar              *path)
+{
+  gchar **names;
+  gint i;
+  GtkTreeIter iter;
+
+  names = g_resources_enumerate_children (path, 0, NULL);
+  for (i = 0; names[i]; i++)
+    {
+      gint len;
+      gchar *p;
+      gboolean has_slash;
+
+      p = g_strconcat (path, names[i], NULL);
+
+      len = strlen (names[i]);
+      has_slash = names[i][len - 1] == '/';
+
+      if (has_slash)
+        names[i][len - 1] = '\0';
+
+      gtk_tree_store_append (sl->priv->model, &iter, parent);
+      gtk_tree_store_set (sl->priv->model, &iter,
+                          COLUMN_NAME, names[i],
+                          COLUMN_PATH, p,
+                          -1);
+
+      if (has_slash)
+        load_resources_recurse (sl, &iter, p);
+
+      g_free (p);
+    }
+  g_strfreev (names);
+
+}
+
+static void
+selection_changed (GtkTreeSelection         *selection,
+                   GtkInspectorResourceList *rl)
+{
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+    {
+      gchar *path;
+      GBytes *bytes;
+      gchar *type;
+      gconstpointer data;
+      gsize size;
+      GError *error = NULL;
+
+      gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
+                          COLUMN_PATH, &path,
+                          -1);
+      if (g_str_has_suffix (path, "/"))
+        {
+          gtk_text_buffer_set_text (rl->priv->buffer, "", -1);
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+          goto out;
+        }
+      bytes = g_resources_lookup_data (path, 0, &error);
+      if (bytes == NULL)
+        {
+          gtk_text_buffer_set_text (rl->priv->buffer, error->message, -1);
+          g_error_free (error);
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+        }
+      else
+        {
+          data = g_bytes_get_data (bytes, &size);
+          type = g_content_type_guess (NULL, data, size, NULL);
+          if (g_content_type_is_a (type, "text/*"))
+            {
+              gtk_text_buffer_set_text (rl->priv->buffer, data, -1);
+              gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+            }
+          else if (g_content_type_is_a (type, "image/*"))
+            {
+              gtk_image_set_from_resource (GTK_IMAGE (rl->priv->image), path);
+              gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "image");
+            }
+          else
+            {
+              gchar *content;
+              content = g_content_type_get_description (type);
+              gtk_text_buffer_set_text (rl->priv->buffer, content, -1);
+              g_free (content);
+              gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+            }
+          g_free (type);
+          g_bytes_unref (bytes);
+        }
+out:
+      g_free (path);
+    }
+  else
+    {
+      gtk_text_buffer_set_text (rl->priv->buffer, "", -1);
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+    }
+}
+
+static void
+load_resources (GtkInspectorResourceList *sl)
+{
+
+  load_resources_recurse (sl, NULL, "/");
+}
+
+static void
+gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
+{
+  sl->priv = gtk_inspector_resource_list_get_instance_private (sl);
+  gtk_widget_init_template (GTK_WIDGET (sl));
+  load_resources (sl);
+}
+
+static void
+gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/resource-list.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, buffer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, content);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, image);
+
+  gtk_widget_class_bind_template_callback (widget_class, selection_changed);
+}
+
+// vim: set et sw=2 ts=2:

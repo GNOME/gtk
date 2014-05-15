@@ -33,6 +33,7 @@
 #include "prop-list.h"
 #include "python-hooks.h"
 #include "python-shell.h"
+#include "resource-list.h"
 #include "resources.h"
 #include "signals-list.h"
 #include "visual.h"
@@ -58,6 +59,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER);
   g_type_ensure (GTK_TYPE_INSPECTOR_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_PYTHON_SHELL);
+  g_type_ensure (GTK_TYPE_INSPECTOR_RESOURCE_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_WIDGET_TREE);

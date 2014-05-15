@@ -279,6 +279,7 @@ gtk/inspector/general.ui.h
 gtk/inspector/inspect-button.c
 gtk/inspector/object-hierarchy.ui.h
 gtk/inspector/prop-list.ui.h
+gtk/inspector/resource-path.ui.h
 gtk/inspector/signals-list.c
 gtk/inspector/signals-list.ui.h
 gtk/inspector/visual.ui.h

@@ -9,6 +9,7 @@
     <file>general.ui</file>
     <file>object-hierarchy.ui</file>
     <file>prop-list.ui</file>
+    <file>resource-list.ui</file>
     <file>signals-list.ui</file>
     <file>visual.ui</file>
     <file>widget-tree.ui</file>
