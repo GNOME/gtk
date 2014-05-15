@@ -1467,6 +1467,22 @@ popup_grab_on_window (GdkWindow *window,
   return TRUE;
 }
 
+static void
+associate_menu_grab_transfer_window (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv = menu->priv;
+  GdkWindow *toplevel_window;
+  GdkWindow *transfer_window;
+
+  toplevel_window = gtk_widget_get_window (priv->toplevel);
+  transfer_window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
+
+  if (toplevel_window == NULL || transfer_window == NULL)
+    return;
+
+  g_object_set_data (G_OBJECT (toplevel_window), I_("gdk-attached-grab-window"), transfer_window);
+}
+
 /**
  * gtk_menu_popup_for_device:
  * @menu: a #GtkMenu
@@ -1703,6 +1719,8 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   /* Position the menu, possibly changing the size request
    */
   gtk_menu_position (menu, TRUE);
+
+  associate_menu_grab_transfer_window (menu);
 
   gtk_menu_scroll_to (menu, priv->scroll_offset);
 
@@ -2689,9 +2707,14 @@ menu_grab_transfer_window_destroy (GtkMenu *menu)
   GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
   if (window)
     {
+      GdkWindow *widget_window;
+
       gtk_widget_unregister_window (GTK_WIDGET (menu), window);
       gdk_window_destroy (window);
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-window"), NULL);
+
+      widget_window = gtk_widget_get_window (GTK_WIDGET (menu));
+      g_object_set_data (G_OBJECT (widget_window), I_("gdk-attached-grab-window"), window);
     }
 }
 

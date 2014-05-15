@@ -993,6 +993,7 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
 static struct wl_seat *
 find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
 {
+  GdkWindow *attached_grab_window;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *tmp_impl;
 
@@ -1002,6 +1003,20 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
    */
   if (impl->grab_input_seat)
     return impl->grab_input_seat;
+
+  /* HACK: GtkMenu grabs a special window known as the "grab transfer window"
+   * and then transfers the grab over to the correct window later. Look for
+   * this window when taking the grab to know it's correct.
+   *
+   * See: associate_menu_grab_transfer_window in gtkmenu.c
+   */
+  attached_grab_window = g_object_get_data (G_OBJECT (window), "gdk-attached-grab-window");
+  if (attached_grab_window)
+    {
+      tmp_impl = GDK_WINDOW_IMPL_WAYLAND (attached_grab_window->impl);
+      if (tmp_impl->grab_input_seat)
+        return tmp_impl->grab_input_seat;
+    }
 
   while (transient_for)
     {
