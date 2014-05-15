@@ -266,6 +266,10 @@ gtk/gtkviewport.c
 gtk/gtkvolumebutton.c
 gtk/gtkwidget.c
 gtk/gtkwindow.c
+gtk/inspector/classes-list.c
+gtk/inspector/css-editor.c
+gtk/inspector/signals-list.c
+gtk/inspector/window.c
 gtk/paper_names.c
 gtk/paper_names_offsets.c
 gtk/updateiconcache.c
@@ -281,10 +285,6 @@ modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imxim.c
-modules/inspector/classes-list.c
-modules/inspector/css-editor.c
-modules/inspector/signals-list.c
-modules/inspector/window.c
 modules/printbackends/cloudprint/gtkprintbackendcloudprint.c
 modules/printbackends/cloudprint/gtkprintercloudprint.c
 modules/printbackends/cups/gtkprintbackendcups.c
