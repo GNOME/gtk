@@ -538,7 +538,7 @@ nevertheless.
   </para>
   <para>
     To enable the debugger, you can use the Control-Shift-I or
-    Control-Shift-D keyboard shortcuts, or pass set the
+    Control-Shift-D keyboard shortcuts, or set the
     <envar>GTK_DEBUG=interactive</envar> environment variable.
   </para>
   <para>
