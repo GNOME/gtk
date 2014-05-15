@@ -39,7 +39,7 @@
 #include "window.h"
 
 void
-gtk_module_init (gint *argc, gchar ***argv)
+gtk_inspector_init (void)
 {
 #ifdef ENABLE_PYTHON
   gtk_inspector_python_init ();

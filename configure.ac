@@ -1887,6 +1887,7 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/a11y/Makefile
+gtk/inspector/Makefile
 gtk/native/Makefile
 libgail-util/Makefile
 modules/Makefile
@@ -1898,7 +1899,6 @@ modules/printbackends/lpr/Makefile
 modules/printbackends/file/Makefile
 modules/printbackends/papi/Makefile
 modules/printbackends/test/Makefile
-modules/inspector/Makefile
 ])
 
 AC_OUTPUT

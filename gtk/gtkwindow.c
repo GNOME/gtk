@@ -59,7 +59,8 @@
 #include "a11y/gtkwindowaccessible.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
 #include "gtkapplicationprivate.h"
-#include "gtkmodulesprivate.h"
+#include "inspector/init.h"
+#include "inspector/window.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -12445,22 +12446,10 @@ static GtkWidget *inspector_window = NULL;
 void
 gtk_window_set_interactive_debugging (gboolean enable)
 {
-  static GType type = G_TYPE_NONE;
-
-  if (type == G_TYPE_NONE)
-    {
-      _gtk_modules_load_module ("gtkinspector");
-      type = g_type_from_name ("GtkInspectorWindow");
-      if (type == G_TYPE_INVALID)
-        g_warning ("Failed to load GtkInspector module, debugging not available.");
-    }
-
-  if (!g_type_is_a (type, GTK_TYPE_WINDOW))
-    return;
-
   if (inspector_window == NULL)
     {
-      inspector_window = GTK_WIDGET (g_object_new (type, NULL));
+      gtk_inspector_init ();
+      inspector_window = gtk_inspector_window_new ();
       g_signal_connect (inspector_window, "delete-event",
                         G_CALLBACK (gtk_widget_hide_on_delete), NULL);
     }

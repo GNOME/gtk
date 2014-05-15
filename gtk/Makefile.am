@@ -18,7 +18,7 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = a11y native .
+SUBDIRS = a11y inspector native .
 
 if HAVE_CLOUDPRINT
 if HAVE_PAPI_CUPS
@@ -117,11 +117,13 @@ libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
 	$(top_builddir)/gtk/a11y/libgtka11y.la \
+	$(top_builddir)/gtk/inspector/libgtkinspector.la \
 	$(GMODULE_LIBS) \
 	$(GTK_DEP_LIBS)
 deps = \
 	$(top_builddir)/gdk/libgdk-3.la	\
-	$(top_builddir)/gtk/a11y/libgtka11y.la
+	$(top_builddir)/gtk/a11y/libgtka11y.la \
+	$(top_builddir)/gtk/inspector/libgtkinspector.la
 
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
