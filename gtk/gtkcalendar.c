@@ -1257,6 +1257,7 @@ calendar_top_y_for_row (GtkCalendar *calendar,
   gint inner_border = calendar_get_inner_border (calendar);
   GtkBorder padding;
 
+  gtk_widget_get_allocation (GTK_WIDGET (calendar), &allocation);
   get_component_paddings (calendar, &padding, NULL, NULL, NULL);
 
   return  allocation.height
