@@ -81,6 +81,7 @@ templates = 				\
 	classes-list.ui 		\
 	css-editor.ui 			\
 	data-list.ui 			\
+	general.ui 			\
 	object-hierarchy.ui 		\
 	prop-list.ui 			\
 	signals-list.ui			\
