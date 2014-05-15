@@ -231,6 +231,17 @@
             <property name="label" translatable="yes">Custom CSS</property>
           </object>
         </child>
+        <child>
+          <object class="GtkInspectorGeneral">
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">General</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

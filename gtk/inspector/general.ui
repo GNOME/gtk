@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <template class="GtkInspectorGeneral" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="margin">60</property>
+    <property name="spacing">10</property>
+    <child>
+      <object class="GtkFrame" id="version_frame">
+        <property name="visible">True</property>
+        <property name="halign">center</property>
+        <child>
+          <object class="GtkListBox">
+            <property name="visible">True</property>
+            <property name="selection-mode">none</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="gtk_version_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">GTK+ Version</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="gtk_version">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="gdk_backend_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">GDK Backend</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="gdk_backend">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkFrame" id="env_frame">
+        <property name="visible">True</property>
+        <property name="halign">center</property>
+        <child>
+          <object class="GtkListBox">
+            <property name="visible">True</property>
+            <property name="selection-mode">none</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="prefix_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Prefix</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="prefix">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="xdg_data_home_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">XDG_DATA_HOME</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="xdg_data_home">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="xdg_data_dirs_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">XDG_DATA_DIRS</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="xdg_data_dirs">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="gtk_path_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">GTK_PATH</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="gtk_path">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="gtk_exe_prefix_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">GTK_EXE_PREFIX</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="gtk_exe_prefix">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="gtk_data_prefix_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">GTK_DATA_PREFIX</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="gtk_data_prefix">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="gtk_version_label"/>
+      <widget name="gdk_backend_label"/>
+      <widget name="prefix_label"/>
+      <widget name="xdg_data_home_label"/>
+      <widget name="xdg_data_dirs_label"/>
+      <widget name="gtk_path_label"/>
+      <widget name="gtk_exe_prefix_label"/>
+      <widget name="gtk_data_prefix_label"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="version_frame"/>
+      <widget name="env_frame"/>
+    </widgets>
+  </object>
+-->
+</interface>

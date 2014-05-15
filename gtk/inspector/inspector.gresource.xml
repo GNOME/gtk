@@ -6,6 +6,7 @@
     <file>classes-list.ui</file>
     <file>css-editor.ui</file>
     <file>data-list.ui</file>
+    <file>general.ui</file>
     <file>object-hierarchy.ui</file>
     <file>prop-list.ui</file>
     <file>signals-list.ui</file>

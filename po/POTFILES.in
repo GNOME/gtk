@@ -275,6 +275,7 @@ gtk/inspector/classes-list.ui.h
 gtk/inspector/css-editor.c
 gtk/inspector/css-editor.ui.h
 gtk/inspector/data-list.ui.h
+gtk/inspector/general.ui.h
 gtk/inspector/inspect-button.c
 gtk/inspector/object-hierarchy.ui.h
 gtk/inspector/prop-list.ui.h

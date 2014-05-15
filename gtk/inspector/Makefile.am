@@ -25,6 +25,8 @@ libgtkinspector_la_SOURCES = 		\
 	css-editor.c			\
 	data-list.h			\
 	data-list.c			\
+	general.h			\
+	general.c			\
 	init.h				\
 	init.c				\
 	inspect-button.c		\
