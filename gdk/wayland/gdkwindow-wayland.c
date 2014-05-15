@@ -993,7 +993,6 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
 static struct wl_seat *
 find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
 {
-  struct wl_seat *grab_input_seat = NULL;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *tmp_impl;
 
@@ -1001,20 +1000,20 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
    * the popup window setup - so this relies on GTK+ taking the
    * grab before showing the popup window.
    */
-  grab_input_seat = impl->grab_input_seat;
+  if (impl->grab_input_seat)
+    return impl->grab_input_seat;
 
-  tmp_impl = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
-  while (!grab_input_seat)
+  while (transient_for)
     {
-      grab_input_seat = tmp_impl->grab_input_seat;
+      tmp_impl = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
 
-      if (tmp_impl->transient_for)
-        tmp_impl = GDK_WINDOW_IMPL_WAYLAND (tmp_impl->transient_for->impl);
-      else
-        break;
+      if (tmp_impl->grab_input_seat)
+        return tmp_impl->grab_input_seat;
+
+      transient_for = tmp_impl->transient_for;
     }
 
-  return grab_input_seat;
+  return NULL;
 }
 
 static void
