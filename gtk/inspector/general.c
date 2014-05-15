@@ -110,8 +110,7 @@ set_path_label (GtkWidget   *w,
   const gchar *v;
 
   v = g_getenv (var);
-g_print ("%s %s\n", var, v);
-  if (v)
+  if (v != NULL)
     {
       set_monospace_font (w);
       gtk_label_set_text (GTK_LABEL (w), v);
