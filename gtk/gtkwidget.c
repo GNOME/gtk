@@ -3954,7 +3954,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_enum (value, gtk_widget_get_halign (widget));
       break;
     case PROP_VALIGN:
-      g_value_set_enum (value, gtk_widget_get_valign (widget));
+      g_value_set_enum (value, gtk_widget_get_valign_with_baseline (widget));
       break;
     case PROP_MARGIN_LEFT:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
@@ -14042,7 +14042,9 @@ gtk_widget_get_valign_with_baseline (GtkWidget *widget)
  * For backwards compatibility reasons this method will never return
  * %GTK_ALIGN_BASELINE, but instead it will convert it to
  * %GTK_ALIGN_FILL. If your widget want to support baseline aligned
- * children it must use gtk_widget_get_valign_with_baseline().
+ * children it must use gtk_widget_get_valign_with_baseline(), or
+ * `g_object_get (widget, "valign", &value, NULL)`, which will
+ * also report the true value.
  *
  * Returns: the vertical alignment of @widget, ignoring baseline alignment
  */
