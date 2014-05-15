@@ -253,7 +253,7 @@ gtk_inspector_classes_list_set_object (GtkInspectorClassesList *cl,
 
   gtk_widget_show (GTK_WIDGET (cl));
 
-  cl->priv->context = gtk_widget_get_style_context (GTK_WIDGET (cl));
+  cl->priv->context = gtk_widget_get_style_context (GTK_WIDGET (object));
 
   g_object_weak_ref (G_OBJECT (cl->priv->context), remove_dead_object, cl);
 
