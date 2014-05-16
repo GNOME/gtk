@@ -219,21 +219,17 @@ _gdk_wayland_display_open (const gchar *display_name)
     return NULL;
 
   display = g_object_new (GDK_TYPE_WAYLAND_DISPLAY, NULL);
-  display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  display_wayland->wl_display = wl_display;
-
-  display_wayland->screen = _gdk_wayland_screen_new (display);
-
   display->device_manager = _gdk_wayland_device_manager_new (display);
 
-  /* Set up listener so we'll catch all events. */
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
+  display_wayland->wl_display = wl_display;
+  display_wayland->screen = _gdk_wayland_screen_new (display);
+  display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
+
   display_wayland->wl_registry = wl_display_get_registry(display_wayland->wl_display);
   wl_registry_add_listener(display_wayland->wl_registry, &registry_listener, display_wayland);
 
-  display_wayland->event_source =
-    _gdk_wayland_display_event_source_new (display);
-
+  /* Wait until the dust has settled during init... */
   wl_display_roundtrip (display_wayland->wl_display);
 
   gdk_input_init (display);
