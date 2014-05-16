@@ -23,6 +23,7 @@
 
 #include <math.h>
 
+#include "gtkcssrgbavalueprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleproviderprivate.h"
 
@@ -43,6 +44,7 @@ gtk_css_image_icon_theme_draw (GtkCssImage        *image,
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GError *error = NULL;
+  GtkIconInfo *icon_info;
   GdkPixbuf *pixbuf;
   gint size;
 
@@ -50,12 +52,22 @@ gtk_css_image_icon_theme_draw (GtkCssImage        *image,
   if (size <= 0)
     return;
 
-  pixbuf = gtk_icon_theme_load_icon_for_scale (icon_theme->icon_theme,
-                                               icon_theme->name,
-                                               size,
-                                               icon_theme->scale,
-                                               GTK_ICON_LOOKUP_USE_BUILTIN,
-                                               &error);
+  icon_info = gtk_icon_theme_lookup_icon_for_scale (icon_theme->icon_theme,
+                                                    icon_theme->name,
+                                                    size,
+                                                    icon_theme->scale,
+                                                    GTK_ICON_LOOKUP_USE_BUILTIN);
+  if (icon_info == NULL)
+    {
+      /* XXX: render missing icon image here? */
+      return;
+    }
+
+  pixbuf = gtk_icon_info_load_symbolic (icon_info,
+                                        &icon_theme->color,
+                                        NULL, NULL, NULL,
+                                        NULL,
+                                        &error);
   if (pixbuf == NULL)
     {
       /* XXX: render missing icon image here? */
@@ -70,12 +82,13 @@ gtk_css_image_icon_theme_draw (GtkCssImage        *image,
   cairo_paint (cr);
 
   g_object_unref (pixbuf);
+  g_object_unref (icon_info);
 }
 
 
 static gboolean
 gtk_css_image_icon_theme_parse (GtkCssImage  *image,
-                            GtkCssParser *parser)
+                                GtkCssParser *parser)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
 
@@ -133,6 +146,9 @@ gtk_css_image_icon_theme_compute (GtkCssImage             *image,
   copy->name = g_strdup (icon_theme->name);
   copy->icon_theme = gtk_icon_theme_get_for_screen (screen);
   copy->scale = scale;
+  copy->color = *_gtk_css_rgba_value_get_rgba (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR));
+
+  *dependencies = GTK_CSS_DEPENDS_ON_COLOR;
 
   return GTK_CSS_IMAGE (copy);
 }

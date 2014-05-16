@@ -40,6 +40,7 @@ struct _GtkCssImageIconTheme
   GtkCssImage parent;
 
   GtkIconTheme *icon_theme;
+  GdkRGBA color;
   gint scale;
   char *name;
 };
