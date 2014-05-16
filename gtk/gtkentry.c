@@ -4726,10 +4726,11 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
       gint tmp_pos = gtk_entry_find_position (entry, priv->drag_start_x);
 
       gtk_editable_set_position (GTK_EDITABLE (entry), tmp_pos);
-
-      if (is_touchscreen)
-        gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
     }
+
+  if (is_touchscreen &&
+      !gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), NULL, NULL))
+    gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
 
   gtk_entry_update_primary_selection (entry);
 }
