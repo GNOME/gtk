@@ -630,11 +630,11 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_WINDOW,
-                                   g_param_spec_boolean ("window",
-                                                         P_("GdkWindow to receive events about"),
-                                                         P_("GdkWindow to receive events about"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                   g_param_spec_object ("window",
+                                                        P_("GdkWindow to receive events about"),
+                                                        P_("GdkWindow to receive events about"),
+                                                        GDK_TYPE_WINDOW,
+                                                        GTK_PARAM_READWRITE));
   /**
    * GtkGesture::begin:
    * @gesture: the object which received the signal
