@@ -16833,7 +16833,6 @@ _gtk_widget_add_controller (GtkWidget           *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
-  g_return_if_fail (!_gtk_widget_has_controller (widget, controller));
   g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_TARGET);
 
   priv = widget->priv;
