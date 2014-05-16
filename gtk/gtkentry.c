@@ -4347,8 +4347,6 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   guint button;
   gint tmp_pos;
 
-  gtk_entry_selection_bubble_popup_unset (entry);
-
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), current);
@@ -4545,6 +4543,8 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
   const GdkEvent *event;
   gint x, y;
 
+  gtk_entry_selection_bubble_popup_unset (entry);
+
   gesture_get_current_point (GTK_GESTURE_SINGLE (gesture), entry, &x, &y);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
@@ -4701,14 +4701,20 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
   if (priv->magnifier_popover)
     gtk_widget_hide (priv->magnifier_popover);
 
-  /* Check whether the drag was cancelled rather than finished */
-  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
-    return;
-
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   source = gdk_event_get_source_device (event);
   is_touchscreen = (test_touchscreen ||
                     gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN);
+
+  if (priv->selection_bubble &&
+      gtk_widget_get_visible (priv->selection_bubble))
+    gtk_entry_selection_bubble_popup_unset (entry);
+  else if (is_touchscreen)
+    gtk_entry_selection_bubble_popup_set (entry);
+
+  /* Check whether the drag was cancelled rather than finished */
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    return;
 
   if (in_drag)
     {
@@ -4718,10 +4724,6 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
 
       if (is_touchscreen)
         gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
-    }
-  else if (is_touchscreen)
-    {
-      gtk_entry_selection_bubble_popup_set (entry);
     }
 
   gtk_entry_update_primary_selection (entry);
@@ -6612,7 +6614,11 @@ gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
                                 GtkTextHandlePosition  pos,
                                 GtkEntry              *entry)
 {
-  gtk_entry_selection_bubble_popup_set (entry);
+  if (entry->priv->selection_bubble &&
+      gtk_widget_get_visible (entry->priv->selection_bubble))
+    gtk_entry_selection_bubble_popup_unset (entry);
+  else
+    gtk_entry_selection_bubble_popup_set (entry);
 
   if (entry->priv->magnifier_popover)
     gtk_widget_hide (entry->priv->magnifier_popover);
