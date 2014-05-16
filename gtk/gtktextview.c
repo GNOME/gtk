@@ -4680,18 +4680,22 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   _gtk_text_view_ensure_magnifier (text_view);
   gtk_widget_get_allocation (GTK_WIDGET (text_view), &allocation);
 
+#define RECT_WIDTH 40
+
   priv = text_view->priv;
   x = CLAMP (x, 0, allocation.width);
   y = CLAMP (y, 0, allocation.height);
-  rect.x = x;
-  rect.y = y;
-  rect.width = rect.height = 1;
+  rect.x = x - (RECT_WIDTH / 2);
+  rect.y = y - (RECT_WIDTH / 2);
+  rect.width = rect.height = RECT_WIDTH;
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
 
   _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), x, y);
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
                                &rect);
   gtk_widget_show (priv->magnifier_popover);
+
+#undef RECT_WIDTH
 }
 
 static void
