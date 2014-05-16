@@ -149,9 +149,13 @@ struct _GtkScrolledWindowPrivate
   gint     min_content_height;
 
   /* Kinetic scrolling */
-  GtkGesture *drag_gesture;
-  GtkGesture *swipe_gesture;
   GtkGesture *long_press_gesture;
+  GtkGesture *swipe_gesture;
+
+  /* These two gestures are mutually exclusive */
+  GtkGesture *drag_gesture;
+  GtkGesture *pan_gesture;
+
   gdouble drag_start_x;
   gdouble drag_start_y;
 
@@ -718,6 +722,30 @@ scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
 }
 
 static void
+gtk_scrolled_window_check_attach_pan_gesture (GtkScrolledWindow *sw)
+{
+  GtkScrolledWindowPrivate *priv = sw->priv;
+
+  if (priv->kinetic_scrolling &&
+      ((priv->hscrollbar_visible && !priv->vscrollbar_visible) ||
+       (!priv->hscrollbar_visible && priv->vscrollbar_visible)))
+    {
+      GtkPanOrientation orientation;
+
+      if (priv->hscrollbar_visible)
+        orientation = GTK_PAN_ORIENTATION_HORIZONTAL;
+      else
+        orientation = GTK_PAN_ORIENTATION_VERTICAL;
+
+      gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
+                                       orientation);
+      gtk_gesture_attach (priv->pan_gesture, GTK_PHASE_CAPTURE);
+    }
+  else
+    gtk_gesture_detach (priv->pan_gesture);
+}
+
+static void
 gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 {
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
@@ -754,6 +782,10 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   g_signal_connect_swapped (priv->drag_gesture, "end",
                             G_CALLBACK (scrolled_window_drag_end_cb),
                             scrolled_window);
+
+  priv->pan_gesture = gtk_gesture_pan_new (widget, GTK_PAN_ORIENTATION_VERTICAL);
+  gtk_gesture_group (priv->pan_gesture, priv->drag_gesture);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->pan_gesture), 1);
 
   priv->swipe_gesture = gtk_gesture_swipe_new (widget);
   gtk_gesture_group (priv->swipe_gesture, priv->drag_gesture);
@@ -1244,6 +1276,7 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
     return;
 
   priv->kinetic_scrolling = kinetic_scrolling;
+  gtk_scrolled_window_check_attach_pan_gesture (scrolled_window);
 
   if (priv->kinetic_scrolling)
     {
@@ -2289,6 +2322,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
     }
 
   _gtk_scrolled_window_allocate_overshoot_window (scrolled_window);
+  gtk_scrolled_window_check_attach_pan_gesture (scrolled_window);
 }
 
 static gboolean
