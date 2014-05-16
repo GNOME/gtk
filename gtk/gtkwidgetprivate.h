@@ -157,6 +157,8 @@ void              _gtk_widget_add_controller               (GtkWidget           
                                                             GtkPropagationPhase  phase);
 void              _gtk_widget_remove_controller            (GtkWidget           *widget,
                                                             GtkEventController  *controller);
+GList *           _gtk_widget_list_controllers             (GtkWidget           *widget,
+                                                            GtkPropagationPhase  phase);
 
 G_END_DECLS
 

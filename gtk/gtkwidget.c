@@ -16889,3 +16889,25 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
   g_object_unref (data->controller);
   data->controller = NULL;
 }
+
+GList *
+_gtk_widget_list_controllers (GtkWidget           *widget,
+                              GtkPropagationPhase  phase)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l, *retval = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+      if (data->phase == phase && data->controller != NULL)
+        retval = g_list_prepend (retval, data->controller);
+    }
+
+  return retval;
+}
