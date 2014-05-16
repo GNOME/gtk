@@ -123,29 +123,6 @@ gdk_input_init (GdkDisplay *display)
 }
 
 static void
-init_sync_callback(void *data, struct wl_callback *callback, uint32_t serial)
-{
-  GdkWaylandDisplay *display = data;
-
-  display->init_ref_count--;
-  wl_callback_destroy(callback);
-}
-
-static const struct wl_callback_listener init_sync_listener = {
-	init_sync_callback
-};
-
-static void
-wait_for_roundtrip(GdkWaylandDisplay *display)
-{
-  struct wl_callback *callback;
-
-  display->init_ref_count++;
-  callback = wl_display_sync(display->wl_display);
-  wl_callback_add_listener(callback, &init_sync_listener, display);
-}
-
-static void
 xdg_shell_ping (void             *data,
                 struct xdg_shell *xdg_shell,
                 uint32_t          serial)
@@ -189,23 +166,13 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
     display_wayland->gtk_shell =
       wl_registry_bind(display_wayland->wl_registry, id, &gtk_shell_interface, 1);
     _gdk_wayland_screen_set_has_gtk_shell (display_wayland->screen);
-    /* We need another roundtrip to receive the shell capabilities */
-    wait_for_roundtrip(display_wayland);
   } else if (strcmp(interface, "wl_output") == 0) {
     output =
       wl_registry_bind(display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 2));
     _gdk_wayland_screen_add_output(display_wayland->screen, id, output, MIN (version, 2));
-    /* We need another roundtrip to receive the modes and geometry
-     * events for the output, which gives us the physical properties
-     * and available modes on the output. */
-    wait_for_roundtrip(display_wayland);
   } else if (strcmp(interface, "wl_seat") == 0) {
     seat = wl_registry_bind(display_wayland->wl_registry, id, &wl_seat_interface, 1);
     _gdk_wayland_device_manager_add_seat (gdk_display->device_manager, id, seat);
-    /* We need another roundtrip to receive the wl_seat capabilities
-     * event which informs us of available input devices on this
-     * seat. */
-    wait_for_roundtrip(display_wayland);
   } else if (strcmp(interface, "wl_data_device_manager") == 0) {
       display_wayland->data_device_manager =
         wl_registry_bind(display_wayland->wl_registry, id,
@@ -264,14 +231,10 @@ _gdk_wayland_display_open (const gchar *display_name)
   display_wayland->wl_registry = wl_display_get_registry(display_wayland->wl_display);
   wl_registry_add_listener(display_wayland->wl_registry, &registry_listener, display_wayland);
 
-  /* We use init_ref_count to track whether some part of our
-   * initialization still needs a roundtrip to complete. */
-  wait_for_roundtrip(display_wayland);
-  while (display_wayland->init_ref_count > 0)
-    wl_display_roundtrip(display_wayland->wl_display);
-
   display_wayland->event_source =
     _gdk_wayland_display_event_source_new (display);
+
+  wl_display_roundtrip (display_wayland->wl_display);
 
   gdk_input_init (display);
 
