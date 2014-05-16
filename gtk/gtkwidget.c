@@ -7284,7 +7284,6 @@ _gtk_widget_get_controllers_evmask (GtkWidget *widget)
   GList *l;
 
   priv = widget->priv;
-  g_object_ref (widget);
 
   for (l = priv->event_controllers; l; l = l->next)
     {
@@ -7307,6 +7306,7 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
   GList *l;
 
   priv = widget->priv;
+  g_object_ref (widget);
 
   l = priv->event_controllers;
   while (l != NULL)
