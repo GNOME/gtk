@@ -22,6 +22,8 @@ EXTRA_DIST +=	\
 	gtka11y.vcxproj.filters	\
 	gtka11y.vcxprojin	\
 	gtka11y.vcxproj.filtersin	\
+	gtk-inspector.vcxproj	\
+	gtk-inspector.vcxproj.filters	\
 	gailutil.vcxproj	\
 	gailutil.vcxproj.filters	\
 	install.vcxproj	\

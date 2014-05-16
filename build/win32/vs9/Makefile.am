@@ -13,6 +13,7 @@ EXTRA_DIST +=	\
 	gtk3-demo-application.vcproj	\
 	gtka11y.vcproj	\
 	gtka11y.vcprojin	\
+	gtk-inspector.vcproj	\
 	gailutil.vcproj	\
 	install.vcproj	\
 	broadwayd.vcproj	\
