@@ -4110,13 +4110,15 @@ gtk_entry_move_handle (GtkEntry              *entry,
   else
     {
       GtkAllocation primary, secondary;
+      gint frame_x, frame_y;
       GdkRectangle rect;
       gint win_x, win_y;
 
       get_icon_allocations (entry, &primary, &secondary);
-      gtk_entry_get_text_area_size (entry, &win_x, &win_y, NULL, NULL);
-      rect.x = CLAMP (x, 0, gdk_window_get_width (priv->text_area)) + win_x;
-      rect.y = y + win_y;
+      get_text_area_size (entry, &win_x, &win_y, NULL, NULL);
+      get_frame_size (entry, FALSE, &frame_x, &frame_y, NULL, NULL);
+      rect.x = CLAMP (x, 0, gdk_window_get_width (priv->text_area)) + win_x + frame_x;
+      rect.y = y + win_y + frame_y;
       rect.width = 1;
       rect.height = height;
 
@@ -4507,16 +4509,19 @@ gtk_entry_show_magnifier (GtkEntry *entry,
   GtkAllocation allocation, primary, secondary;
   cairo_rectangle_int_t rect;
   GtkEntryPrivate *priv;
+  gint win_y, frame_y;
 
   gtk_entry_ensure_magnifier (entry);
 
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
   get_icon_allocations (entry, &primary, &secondary);
+  get_text_area_size (entry, NULL, &win_y, NULL, NULL);
+  get_frame_size (entry, FALSE, NULL, &frame_y, NULL, NULL);
 
   priv = entry->priv;
   rect.x = CLAMP (x, 0, allocation.width - primary.width - secondary.width);
   rect.width = 1;
-  rect.y = 0;
+  rect.y = win_y + frame_y;
   rect.height = allocation.height;
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
@@ -9588,7 +9593,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   GtkEntryPrivate *priv = entry->priv;
   cairo_rectangle_int_t rect;
   GtkAllocation allocation, primary, secondary;
-  gint start_x, end_x;
+  gint start_x, end_x, frame_x, frame_y;
   gboolean has_selection;
   gboolean has_clipboard;
   DisplayMode mode;
@@ -9640,9 +9645,18 @@ bubble_targets_received (GtkClipboard     *clipboard,
   start_x -= priv->scroll_offset;
   start_x = CLAMP (start_x, 0, gdk_window_get_width (priv->text_area));
 
-  gtk_entry_get_text_area_size (entry, &rect.x, &rect.y, NULL, NULL);
+  get_text_area_size (entry, &rect.x, &rect.y, NULL, NULL);
+  get_frame_size (entry, FALSE, &frame_x, &frame_y, NULL, NULL);
+
   get_icon_allocations (entry, &primary, &secondary);
-  rect.x += primary.width;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+    rect.x += secondary.width;
+  else
+    rect.x += primary.width;
+
+  rect.x += frame_x;
+  rect.y += frame_y;
   rect.height = gdk_window_get_height (priv->text_area);
 
   if (has_selection)
