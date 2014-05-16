@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-15 21:11+0300\n"
-"PO-Revision-Date: 2014-05-15 21:14+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
+"POT-Creation-Date: 2014-05-16 03:08+0300\n"
+"PO-Revision-Date: 2014-05-16 03:09+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -3649,6 +3649,10 @@ msgstr "תכונה"
 msgid "Defined At"
 msgstr "הגדרה"
 
+#: ../gtk/inspector/resource-list.ui.h:1
+msgid "Path"
+msgstr "נתיב"
+
 #: ../gtk/inspector/signals-list.c:101
 msgid "Yes"
 msgstr "כן"
@@ -3773,6 +3777,10 @@ msgid "Visual"
 msgstr "חזותי"
 
 #: ../gtk/inspector/window.ui.h:14
+msgid "Resources"
+msgstr "מאשבים"
+
+#: ../gtk/inspector/window.ui.h:15
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
 msgid "General"
 msgstr "כללי"
