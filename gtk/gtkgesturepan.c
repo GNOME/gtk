@@ -158,9 +158,6 @@ check_orientation_matches (GtkGesturePan   *gesture,
 {
   GtkGesturePanPrivate *priv = gtk_gesture_pan_get_instance_private (gesture);
 
-  if (priv->orientation == 0)
-    return FALSE;
-
   return (((direction == GTK_PAN_DIRECTION_LEFT ||
             direction == GTK_PAN_DIRECTION_RIGHT) &&
            priv->orientation == GTK_PAN_ORIENTATION_HORIZONTAL) ||
