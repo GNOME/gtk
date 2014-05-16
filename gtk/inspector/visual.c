@@ -17,6 +17,8 @@
 
 #include "visual.h"
 
+#include "gtkprivate.h"
+
 struct _GtkInspectorVisualPrivate
 {
   GtkWidget *direction_combo;
@@ -158,6 +160,20 @@ fill_gtk (const gchar *path,
     }
 }
 
+static gchar*
+get_data_path (const gchar *subdir)
+{
+  gchar *base_datadir, *full_datadir;
+#if defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_QUARTZ)
+  base_datadir = _gtk_get_datadir();
+#else
+  base_datadir = g_strdup (GTK_DATADIR);
+#endif
+  full_datadir = g_build_filename (base_datadir, subdir, NULL);
+  g_free (base_datadir);
+  return full_datadir;
+}
+
 static void
 init_theme (GtkInspectorVisual *vis)
 {
@@ -166,11 +182,19 @@ init_theme (GtkInspectorVisual *vis)
   gchar *theme, *current_theme, *path;
   gint i, pos;
   GSettings *settings;
+  gchar *themedir = get_data_path ("themes");
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+#ifdef G_OS_WIN32
+  g_hash_table_add (t, g_strdup ("gtk-win32"));
+#else
   g_hash_table_add (t, g_strdup ("Raleigh"));
+#endif
 
-  fill_gtk (GTK_DATADIR "/themes", t);
+  fill_gtk (themedir, t);
+
+  g_free (themedir);
+
   path = g_build_filename (g_get_user_data_dir (), "themes", NULL);
   fill_gtk (path, t);
   g_free (path);
@@ -244,10 +268,14 @@ init_icons (GtkInspectorVisual *vis)
   gchar *theme, *current_theme, *path;
   gint i, pos;
   GSettings *settings;
+  gchar *iconsdir = get_data_path ("icons");
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-  fill_icons (GTK_DATADIR "/icons", t);
+  fill_icons (iconsdir, t);
+
+  g_free (iconsdir);
+
   path = g_build_filename (g_get_user_data_dir (), "icons", NULL);
   fill_icons (path, t);
   g_free (path);

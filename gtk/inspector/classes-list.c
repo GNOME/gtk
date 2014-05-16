@@ -138,10 +138,11 @@ add_clicked (GtkButton               *button,
       if (*name && !g_hash_table_contains (context, name))
         {
           GtkTreeIter tree_iter;
+          GtkInspectorClassesListByContext *c;
 
           gtk_style_context_add_class (cl->priv->context, name);
 
-          GtkInspectorClassesListByContext *c = g_new0 (GtkInspectorClassesListByContext, 1);
+          c = g_new0 (GtkInspectorClassesListByContext, 1);
           c->enabled = TRUE;
           c->style = PANGO_STYLE_ITALIC;
           g_hash_table_insert (context, (gpointer)g_strdup (name), c);
