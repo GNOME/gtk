@@ -1284,12 +1284,15 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
 
   if (target == _image_bmp)
     {
+      HGLOBAL hdatanew;
+      SIZE_T size;
+      guchar *ptr;
+
       g_return_val_if_fail (GlobalSize (hdata) >= sizeof (BITMAPFILEHEADER), NULL);
 
       /* No conversion is needed, just strip the BITMAPFILEHEADER */
-      HGLOBAL hdatanew;
-      SIZE_T size = GlobalSize (hdata) - sizeof (BITMAPFILEHEADER);
-      guchar *ptr = GlobalLock (hdata);
+      size = GlobalSize (hdata) - sizeof (BITMAPFILEHEADER);
+      ptr = GlobalLock (hdata);
 
       memmove (ptr, ptr + sizeof (BITMAPFILEHEADER), size);
       GlobalUnlock (hdata);
