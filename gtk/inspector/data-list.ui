@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
-  <object class="GtkListStore" id="model">
-    <columns>
-      <column type="gint"/>
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <template class="GtkInspectorDataList" parent="GtkBox">
     <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkToolbar" id="toolbar">
+        <property name="visible">True</property>
+        <property name="icon-size">small-toolbar</property>
+        <child>
+          <object class="GtkToggleToolButton" id="show_button">
+            <property name="visible">True</property>
+            <property name="icon-name">reload</property>
+            <property name="tooltip-text" translatable="yes">Show data</property>
+            <signal name="toggled" handler="toggle_show"/>
+          </object>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
@@ -16,35 +24,8 @@
         <property name="vscrollbar-policy">always</property>
         <property name="shadow-type">in</property>
         <child>
-          <object class= "GtkTreeView">
+          <object class= "GtkTreeView" id="view">
             <property name="visible">True</property>
-            <property name="model">model</property>
-            <child>
-              <object class="GtkTreeViewColumn" id="number_column">
-                <property name="title" translatable="yes">Column</property>
-                <child>
-                  <object class="GtkCellRendererText" id="number_renderer">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Type</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">1</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>  
           </object>
         </child>
       </object>
