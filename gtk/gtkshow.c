@@ -40,6 +40,7 @@
  * - `file:///home/gnome/pict.jpg`
  * - `http://www.gnome.org`
  * - `mailto:me@gnome.org`
+ *
  * Ideally the timestamp is taken from the event triggering
  * the gtk_show_uri() call. If timestamp is not known you can take
  * %GDK_CURRENT_TIME.
