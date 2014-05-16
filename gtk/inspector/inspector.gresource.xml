@@ -14,5 +14,6 @@
     <file>visual.ui</file>
     <file>widget-tree.ui</file>
     <file>window.ui</file>
+    <file>logo.png</file>
   </gresource>
 </gresources>
