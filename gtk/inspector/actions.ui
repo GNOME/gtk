@@ -7,7 +7,7 @@
       <column type="gboolean"/>
       <column type="gchararray"/>
       <column type="gchararray"/>
-      <column type="gchararray"/>
+      <column type="gpointer"/>
     </columns>
   </object>
   <template class="GtkInspectorActions" parent="GtkBox">
@@ -88,6 +88,8 @@
                 <child>
                   <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>
+                    <property name="editable">True</property>
+                    <signal name="edited" handler="state_edited"/>
                   </object>
                   <attributes>
                     <attribute name="text">4</attribute>
