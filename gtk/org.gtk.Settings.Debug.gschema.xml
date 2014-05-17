@@ -11,6 +11,14 @@
         the keybinding are Control-Shift-I and Control-Shift-D.
       </description>
     </key>
+    <key name='inspector-warning' type='b'>
+      <default>true</default>
+      <summary>Inspector warning</summary>
+      <description>
+        If this setting is true, GTK+ shows a warning before letting
+        the user use the interactive debugger.
+      </description>
+    </key>
   </schema>
 
 </schemalist>

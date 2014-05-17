@@ -12432,6 +12432,63 @@ _gtk_window_get_popover_position (GtkWindow             *window,
 
 static GtkWidget *inspector_window = NULL;
 
+static void
+warn_response (GtkDialog *dialog,
+               gint       response)
+{
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+  if (response == GTK_RESPONSE_NO)
+    gtk_widget_hide (inspector_window);
+}
+
+static gboolean
+show_dialog (gpointer data)
+{
+  gtk_widget_show (GTK_WIDGET (data));
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gtk_window_set_debugging (gboolean enable,
+                          gboolean warn)
+{
+  GtkWidget *dialog = NULL;
+
+  if (inspector_window == NULL)
+    {
+      gtk_inspector_init ();
+      inspector_window = gtk_inspector_window_new ();
+      g_signal_connect (inspector_window, "delete-event",
+                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+
+      if (warn)
+        {
+          dialog = gtk_message_dialog_new (GTK_WINDOW (inspector_window),
+                                           GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_QUESTION,
+                                           GTK_BUTTONS_NONE,
+                                           _("Do you want to use GTK+ Inspector ?"));
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+              _("GTK+ Inspector is an interactive debugger that lets you explore and "
+                "modify the internals of any GTK+ application. Using it may cause the "
+                "application to break or crash."));
+          gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
+          gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);
+          g_signal_connect (dialog, "response",
+                            G_CALLBACK (warn_response), inspector_window);
+        }
+    }
+
+  if (enable)
+    {
+      gtk_window_present (GTK_WINDOW (inspector_window));
+      if (dialog)
+        g_timeout_add (200, show_dialog, dialog);
+    }
+  else
+    gtk_widget_hide (inspector_window);
+}
+
 /**
  * gtk_window_set_interactive_debugging:
  * @enable: %TRUE to enable interactive debugging
@@ -12445,28 +12502,18 @@ static GtkWidget *inspector_window = NULL;
 void
 gtk_window_set_interactive_debugging (gboolean enable)
 {
-  if (inspector_window == NULL)
-    {
-      gtk_inspector_init ();
-      inspector_window = gtk_inspector_window_new ();
-      g_signal_connect (inspector_window, "delete-event",
-                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
-    }
-
-  if (enable)
-    gtk_window_present (GTK_WINDOW (inspector_window));
-  else
-    gtk_widget_hide (inspector_window);
+  gtk_window_set_debugging (enable, FALSE);
 }
 
 static gboolean
-inspector_keybinding_enabled (void)
+inspector_keybinding_enabled (gboolean *warn)
 {
   GSettingsSchema *schema;
   GSettings *settings;
   gboolean enabled;
 
   enabled = FALSE;
+  *warn = FALSE;
 
   schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
                                             "org.gtk.Settings.Debug",
@@ -12475,6 +12522,7 @@ inspector_keybinding_enabled (void)
     {
       settings = g_settings_new_full (schema, NULL, NULL);
       enabled = g_settings_get_boolean (settings, "enable-inspector-keybinding");
+      *warn = g_settings_get_boolean (settings, "inspector-warning");
       g_object_unref (settings);
       g_settings_schema_unref (schema);
     }
@@ -12485,12 +12533,14 @@ inspector_keybinding_enabled (void)
 static void
 gtk_window_toggle_debugging (GtkWindow *window)
 {
-  if (!inspector_keybinding_enabled ())
+  gboolean warn;
+
+  if (!inspector_keybinding_enabled (&warn))
     return;
 
   if (GTK_IS_WIDGET (inspector_window) &&
       gtk_widget_is_visible (inspector_window))
-    gtk_window_set_interactive_debugging (FALSE);
+    gtk_window_set_debugging (FALSE, FALSE);
   else
-    gtk_window_set_interactive_debugging (TRUE);
+    gtk_window_set_debugging (TRUE, warn);
 }
