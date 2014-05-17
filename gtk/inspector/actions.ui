@@ -13,13 +13,6 @@
   <template class="GtkInspectorActions" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkLabel" id="prefix_label">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="margin">20</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="expand">True</property>
