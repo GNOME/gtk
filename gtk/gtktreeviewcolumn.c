@@ -1023,6 +1023,11 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   else
     gtk_widget_hide (arrow);
 
+  if (priv->show_sort_indicator)
+    gtk_widget_set_opacity (arrow, 1.0);
+  else
+    gtk_widget_set_opacity (arrow, 0.0);
+
   /* It's always safe to hide the button.  It isn't always safe to show it, as
    * if you show it before it's realized, it'll get the wrong window. */
   if (priv->button &&
