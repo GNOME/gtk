@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-16 03:08+0300\n"
-"PO-Revision-Date: 2014-05-16 03:09+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2014-05-18 00:13+0300\n"
+"PO-Revision-Date: 2014-05-18 00:17+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -1171,7 +1171,7 @@ msgstr ""
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:667 ../gtk/gtkprintunixdialog.c:735
-#: ../gtk/resources/ui/gtkassistant.ui.h:5
+#: ../gtk/gtkwindow.c:12475 ../gtk/resources/ui/gtkassistant.ui.h:5
 msgid "_Cancel"
 msgstr "_ביטול"
 
@@ -1219,7 +1219,7 @@ msgstr "ה_חלה"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:881
 #: ../gtk/gtkmessagedialog.c:903 ../gtk/gtkprintbackend.c:748
-#: ../gtk/inspector/classes-list.c:117
+#: ../gtk/gtkwindow.c:12476 ../gtk/inspector/classes-list.c:117
 msgid "_OK"
 msgstr "_אישור"
 
@@ -3522,6 +3522,19 @@ msgstr "הזזת החלון למרחב עבודה אחר"
 msgid "Workspace %d"
 msgstr "מרחב עבודה %d"
 
+#: ../gtk/gtkwindow.c:12470
+msgid "Do you want to use GTK+ Inspector?"
+msgstr "האם ברצונך להשתמש במפקח GTK+‎?"
+
+#: ../gtk/gtkwindow.c:12472
+msgid ""
+"GTK+ Inspector is an interactive debugger that lets you explore and modify "
+"the internals of any GTK+ application. Using it may cause the application to "
+"break or crash."
+msgstr ""
+"מפקח GTK+‎ הוא מנפה שגיאות הידודי המאפשר לך לחקור ולשנות את הפנים של כל יישום "
+"GTK+‎. שימוש בו יכול לגרום ליישום להישבר או לקרוס."
+
 #: ../gtk/inspector/actions.ui.h:1 ../gtk/inspector/general.ui.h:3
 msgid "Prefix"
 msgstr "תחילית"
@@ -3593,12 +3606,8 @@ msgid "Disable this custom CSS"
 msgstr "השבתת CSS מותאם זה"
 
 #: ../gtk/inspector/data-list.ui.h:1
-msgid "Column"
-msgstr "עמודה"
-
-#: ../gtk/inspector/data-list.ui.h:2
-msgid "Type"
-msgstr "סוג"
+msgid "Show data"
+msgstr "הצגת מידע"
 
 #: ../gtk/inspector/general.ui.h:1
 msgid "GTK+ Version"
@@ -5667,6 +5676,12 @@ msgstr "הנמכת העצמה"
 #: ../gtk/resources/ui/gtkvolumebutton.ui.h:6
 msgid "Decreases the volume"
 msgstr "מנמיך את העצמה"
+
+#~ msgid "Column"
+#~ msgstr "עמודה"
+
+#~ msgid "Type"
+#~ msgstr "סוג"
 
 #~ msgid "Please select a folder below"
 #~ msgstr "נא לבחור תיקייה להלן"
