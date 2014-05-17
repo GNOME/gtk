@@ -62,7 +62,7 @@
 
 /**
  * gdk_selection_owner_set:
- * @owner: a #GdkWindow or %NULL to indicate that the
+ * @owner: (allow-none): a #GdkWindow or %NULL to indicate that the
  *   the owner for the given should be unset.
  * @selection: an atom identifying a selection.
  * @time_: timestamp to use when setting the selection.
@@ -136,7 +136,7 @@ gdk_selection_send_notify (GdkWindow      *requestor,
 /**
  * gdk_selection_owner_set_for_display:
  * @display: the #GdkDisplay
- * @owner: a #GdkWindow or %NULL to indicate that the owner for
+ * @owner: (nullable): a #GdkWindow or %NULL to indicate that the owner for
  *         the given should be unset
  * @selection: an atom identifying a selection
  * @time_: timestamp to use when setting the selection
@@ -177,7 +177,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
  * process if a foreign window was previously created for that
  * window, but a new foreign window will never be created by this call.
  *
- * Returns: (nullable): (transfer none): if there is a selection owner
+ * Returns: (nullable) (transfer none): if there is a selection owner
  *    for this window, and it is a window known to the current
  *    process, the #GdkWindow that owns the selection, otherwise
  *    %NULL.

@@ -69,13 +69,13 @@
  * notification when displays appear or disappear or the default display
  * changes.
  *
- * You can use gdk_display_manager_get() to obtain the GdkDisplayManager
+ * You can use gdk_display_manager_get() to obtain the #GdkDisplayManager
  * singleton, but that should be rarely necessary. Typically, initializing
  * GTK+ opens a display that you can work with without ever accessing the
- * GdkDisplayManager.
+ * #GdkDisplayManager.
  *
  * The GDK library can be built with support for multiple backends.
- * The GdkDisplayManager object determines which backend is used
+ * The #GdkDisplayManager object determines which backend is used
  * at runtime.
  *
  * When writing backend-specific code that is supposed to work with

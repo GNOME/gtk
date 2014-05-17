@@ -1853,14 +1853,14 @@ window_remove_from_pointer_info (GdkWindow  *window,
 /**
  * _gdk_window_destroy_hierarchy:
  * @window: a #GdkWindow
- * @recursing: If TRUE, then this is being called because a parent
+ * @recursing: If %TRUE, then this is being called because a parent
  *            was destroyed.
- * @recursing_native: If TRUE, then this is being called because a native parent
+ * @recursing_native: If %TRUE, then this is being called because a native parent
  *            was destroyed. This generally means that the call to the
  *            windowing system to destroy the window can be omitted, since
  *            it will be destroyed as a result of the parent being destroyed.
  *            Unless @foreign_destroy.
- * @foreign_destroy: If TRUE, the window or a parent was destroyed by some
+ * @foreign_destroy: If %TRUE, the window or a parent was destroyed by some
  *            external agency. The window has already been destroyed and no
  *            windowing system calls should be made. (This may never happen
  *            for some windowing systems.)
@@ -2024,7 +2024,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 /**
  * _gdk_window_destroy:
  * @window: a #GdkWindow
- * @foreign_destroy: If TRUE, the window or a parent was destroyed by some
+ * @foreign_destroy: If %TRUE, the window or a parent was destroyed by some
  *            external agency. The window has already been destroyed and no
  *            windowing system calls should be made. (This may never happen
  *            for some windowing systems.)
@@ -3779,7 +3779,7 @@ gdk_window_invalidate_rect (GdkWindow          *window,
 }
 
 /**
- * gdk_window_set_invalidate_handler:
+ * gdk_window_set_invalidate_handler: (skip)
  * @window: a #GdkWindow
  * @handler: a #GdkWindowInvalidateHandlerFunc callback function
  *
@@ -3961,7 +3961,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  *
  * The @child_func parameter controls whether the region of
  * each child window that intersects @region will also be invalidated.
- * Only children for which @child_func returns TRUE will have the area
+ * Only children for which @child_func returns #TRUE will have the area
  * invalidated.
  **/
 void
@@ -9300,7 +9300,8 @@ gdk_window_create_similar_surface (GdkWindow *     window,
 
 /**
  * gdk_window_create_similar_image_surface:
- * @window: window to make new surface similar to, or %NULL if none
+ * @window: (nullable): window to make new surface similar to, or
+ *   %NULL if none
  * @format: (type int): the format for the new surface
  * @width: width of the new surface
  * @height: height of the new surface

@@ -910,7 +910,7 @@ gdk_event_get_time (const GdkEvent *event)
 
 /**
  * gdk_event_get_state:
- * @event: a #GdkEvent or NULL
+ * @event: (allow-none): a #GdkEvent or %NULL
  * @state: (out): return location for state
  * 
  * If the event contains a “state” field, puts that field in @state. Otherwise

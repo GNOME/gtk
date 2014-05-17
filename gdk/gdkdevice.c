@@ -383,9 +383,9 @@ gdk_device_get_property (GObject    *object,
  * gdk_device_get_state: (skip)
  * @device: a #GdkDevice.
  * @window: a #GdkWindow.
- * @axes: an array of doubles to store the values of the axes of @device in,
- * or %NULL.
- * @mask: location to store the modifiers, or %NULL.
+ * @axes: (nullable) (array): an array of doubles to store the values of
+ * the axes of @device in, or %NULL.
+ * @mask: (optional) (out): location to store the modifiers, or %NULL.
  *
  * Gets the current state of a pointer device relative to @window. As a slave
  * device’s coordinates are those of its master pointer, this
@@ -585,8 +585,11 @@ gdk_device_get_window_at_position (GdkDevice  *device,
  * @window: the window with respect to which which the event coordinates will be reported
  * @start: starting timestamp for range of events to return
  * @stop: ending timestamp for the range of events to return
- * @events: (array length=n_events) (out) (transfer full): location to store a newly-allocated array of #GdkTimeCoord, or %NULL
- * @n_events: location to store the length of @events, or %NULL
+ * @events: (array length=n_events) (out) (transfer full) (optional):
+ *   location to store a newly-allocated array of #GdkTimeCoord, or
+ *   %NULL
+ * @n_events: (out) (optional): location to store the length of
+ *   @events, or %NULL
  *
  * Obtains the motion history for a pointer device; given a starting and
  * ending timestamp, return all events in the motion history for
@@ -646,7 +649,7 @@ _gdk_device_allocate_history (GdkDevice *device,
 
 /**
  * gdk_device_free_history: (skip)
- * @events: an array of #GdkTimeCoord.
+ * @events: (array length=n_events): an array of #GdkTimeCoord.
  * @n_events: the length of the array.
  *
  * Frees an array of #GdkTimeCoord that was returned by gdk_device_get_history().
@@ -1120,7 +1123,7 @@ gdk_device_list_axes (GdkDevice *device)
  * @device: a pointer #GdkDevice.
  * @axes: (array): pointer to an array of axes
  * @axis_label: #GdkAtom with the axis label.
- * @value: location to store the found value.
+ * @value: (out): location to store the found value.
  *
  * Interprets an array of double as axis values for a given device,
  * and locates the value in the array for a given axis label, as returned

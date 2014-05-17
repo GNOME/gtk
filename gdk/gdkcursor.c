@@ -479,8 +479,10 @@ gdk_cursor_get_image (GdkCursor *cursor)
 /**
  * gdk_cursor_get_surface:
  * @cursor: a #GdkCursor
- * @x_hot: Location to store the hotspot x position, or %NULL
- * @y_hot: Location to store the hotspot y position, or %NULL
+ * @x_hot: (optional) (out): Location to store the hotspot x position,
+ *   or %NULL
+ * @y_hot: (optional) (out): Location to store the hotspot y position,
+ *   or %NULL
  *
  * Returns a cairo image surface with the image used to display the cursor.
  *

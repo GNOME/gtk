@@ -68,7 +68,7 @@ gdk_drag_context_list_targets (GdkDragContext *context)
  * @context: a #GdkDragContext
  *
  * Determines the bitmask of actions proposed by the source if
- * gdk_drag_context_get_suggested_action() returns GDK_ACTION_ASK.
+ * gdk_drag_context_get_suggested_action() returns %GDK_ACTION_ASK.
  *
  * Returns: the #GdkDragAction flags
  *

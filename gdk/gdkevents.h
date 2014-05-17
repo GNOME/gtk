@@ -189,7 +189,7 @@ typedef enum {
  * GdkFilterFunc:
  * @xevent: the native event to filter.
  * @event: the GDK event to which the X event will be translated.
- * @data: user data set when the filter was installed.
+ * @data: (closure): user data set when the filter was installed.
  *
  * Specifies the type of function used to filter native events before they are
  * converted to GDK events.

@@ -1008,7 +1008,7 @@ gdk_screen_get_active_window (GdkScreen *screen)
  * windows it contains, so it should be freed using g_list_free() and
  * its windows unrefed using g_object_unref() when no longer needed.
  *
- * Returns: (nullable): (transfer full) (element-type GdkWindow): a
+ * Returns: (nullable) (transfer full) (element-type GdkWindow): a
  *     list of #GdkWindows for the current window stack, or %NULL.
  *
  * Since: 2.10
