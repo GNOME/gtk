@@ -12467,7 +12467,7 @@ gtk_window_set_debugging (gboolean enable,
                                            GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_QUESTION,
                                            GTK_BUTTONS_NONE,
-                                           _("Do you want to use GTK+ Inspector ?"));
+                                           _("Do you want to use GTK+ Inspector?"));
           gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
               _("GTK+ Inspector is an interactive debugger that lets you explore and "
                 "modify the internals of any GTK+ application. Using it may cause the "
