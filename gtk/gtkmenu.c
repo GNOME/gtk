@@ -5051,7 +5051,11 @@ gtk_menu_reparent (GtkMenu   *menu,
       g_object_unref (object);
     }
   else
-    gtk_widget_reparent (widget, new_parent);
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_widget_reparent (widget, new_parent);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
 
   if (was_floating)
     g_object_force_floating (object);
