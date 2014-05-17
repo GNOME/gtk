@@ -55,6 +55,7 @@
                 <child>
                   <object class="GtkTreeViewColumn">
                     <property name="title" translatable="yes">Name</property>
+                    <property name="sort-column-id">0</property>
                     <child>
                       <object class="GtkCellRendererText">
                         <property name="scale">0.8</property>
@@ -91,6 +92,7 @@
                 <child>
                   <object class="GtkTreeViewColumn">
                     <property name="title" translatable="yes">Defined At</property>
+                    <property name="sort-column-id">1</property>
                     <child>
                       <object class="GtkCellRendererText">
                         <property name="scale">0.8</property>
