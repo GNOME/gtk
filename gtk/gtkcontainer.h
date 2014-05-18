@@ -173,7 +173,7 @@ void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
 /* Widget-level methods */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void   gtk_container_set_reallocate_redraws (GtkContainer    *container,
 					     gboolean         needs_redraws);
 GDK_AVAILABLE_IN_ALL
