@@ -40,7 +40,7 @@
  * same size. GtkButtonBox gives all children the same size, but it does allow
  * 'outliers' to keep their own larger size.
  *
- * To excempt individual children from homogeneous sizing regardless of their
+ * To exempt individual children from homogeneous sizing regardless of their
  * 'outlier' status, you can set the non-homogeneous child
  * property.
  */
