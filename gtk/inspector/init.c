@@ -29,7 +29,6 @@
 #include "data-list.h"
 #include "general.h"
 #include "object-hierarchy.h"
-#include "property-cell-renderer.h"
 #include "prop-list.h"
 #include "python-hooks.h"
 #include "python-shell.h"
@@ -56,7 +55,6 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_DATA_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_GENERAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY);
-  g_type_ensure (GTK_TYPE_INSPECTOR_PROPERTY_CELL_RENDERER);
   g_type_ensure (GTK_TYPE_INSPECTOR_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_PYTHON_SHELL);
   g_type_ensure (GTK_TYPE_INSPECTOR_RESOURCE_LIST);

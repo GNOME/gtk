@@ -32,10 +32,10 @@ libgtkinspector_la_SOURCES = 		\
 	inspect-button.c		\
 	object-hierarchy.h		\
 	object-hierarchy.c		\
+	prop-editor.h			\
+	prop-editor.c			\
 	prop-list.h			\
 	prop-list.c			\
-	property-cell-renderer.h	\
-	property-cell-renderer.c	\
 	python-hooks.h			\
 	python-hooks.c			\
 	python-shell.h			\

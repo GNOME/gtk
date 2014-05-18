@@ -22,7 +22,8 @@
  */
 
 #include "prop-list.h"
-#include "property-cell-renderer.h"
+#include "prop-editor.h"
+#include "widget-tree.h"
 
 
 enum
@@ -49,8 +50,7 @@ struct _GtkInspectorPropListPrivate
   GtkListStore *model;
   GHashTable *prop_iters;
   gulong notify_handler_id;
-  GtkWidget *widget_tree;
-  GtkCellRenderer *value_renderer;
+  GtkInspectorWidgetTree *widget_tree;
   gboolean child_properties;
   GtkTreeViewColumn *attribute_column;
   GtkWidget *tree;
@@ -108,20 +108,78 @@ set_property (GObject      *object,
     {
       case PROP_WIDGET_TREE:
         pl->priv->widget_tree = g_value_get_object (value);
-        g_object_set_data (G_OBJECT (pl->priv->value_renderer), "gtk-inspector-widget-tree", pl->priv->widget_tree);
         break;
 
       case PROP_CHILD_PROPERTIES:
         pl->priv->child_properties = g_value_get_boolean (value);
-        g_object_set (pl->priv->value_renderer,
-                      "is-child-property", pl->priv->child_properties,
-                      NULL);
         break;
 
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
     }
+}
+
+static void
+show_object (GtkInspectorPropEditor *editor,
+             GObject                *object,
+             const gchar            *name,
+             GtkInspectorPropList   *pl)
+{
+  GtkTreeIter iter;
+  GtkWidget *popover;
+
+  popover = gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_POPOVER);
+  gtk_widget_hide (popover);
+
+  if (gtk_inspector_widget_tree_find_object (pl->priv->widget_tree, object, &iter))
+    {
+      gtk_inspector_widget_tree_select_object (pl->priv->widget_tree, object);
+    }
+  else if (gtk_inspector_widget_tree_find_object (pl->priv->widget_tree, pl->priv->object, &iter))
+    {
+      gtk_inspector_widget_tree_append_object (pl->priv->widget_tree, object, &iter, name);
+      gtk_inspector_widget_tree_select_object (pl->priv->widget_tree, object);
+    }
+  else
+    {
+      g_warning ("GtkInspector: couldn't find the widget in the tree");
+    }
+}
+
+static void
+row_activated (GtkTreeView *tv,
+               GtkTreePath *path,
+               GtkTreeViewColumn *col,
+               GtkInspectorPropList *pl)
+{
+  GtkTreeIter iter;
+  GdkRectangle rect;
+  gchar *name;
+  GtkWidget *editor;
+  GtkWidget *popover;
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (pl->priv->model), &iter, path);
+  gtk_tree_model_get (GTK_TREE_MODEL (pl->priv->model), &iter, COLUMN_NAME, &name, -1);
+  gtk_tree_view_get_cell_area (tv, path, col, &rect);
+  gtk_tree_view_convert_bin_window_to_widget_coords (tv, rect.x, rect.y, &rect.x, &rect.y);
+
+  popover = gtk_popover_new (GTK_WIDGET (tv));
+  gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
+
+  editor = gtk_inspector_prop_editor_new (pl->priv->object, name, pl->priv->child_properties);
+  gtk_widget_show (editor);
+
+  gtk_container_add (GTK_CONTAINER (popover), editor);
+
+  if (gtk_inspector_prop_editor_should_expand (GTK_INSPECTOR_PROP_EDITOR (editor)))
+    gtk_widget_set_vexpand (popover, TRUE);
+
+  g_signal_connect (editor, "show-object", G_CALLBACK (show_object), pl);
+
+  gtk_widget_show (popover);
+
+  g_free (name);
 }
 
 static void
@@ -142,9 +200,9 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, model);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, value_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, attribute_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, tree);
+  gtk_widget_class_bind_template_callback (widget_class, row_activated);
 }
 
 static void

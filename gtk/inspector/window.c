@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include "window.h"
 #include "prop-list.h"
-#include "property-cell-renderer.h"
 #include "classes-list.h"
 #include "css-editor.h"
 #include "object-hierarchy.h"
