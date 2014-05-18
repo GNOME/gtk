@@ -430,6 +430,7 @@ struct _GtkWidgetPrivate
   guint multidevice           : 1;
   guint has_shape_mask        : 1;
   guint in_reparent           : 1;
+  guint supports_clip         : 1;
 
   /* Queue-resize related flags */
   guint alloc_needed          : 1;
@@ -476,6 +477,7 @@ struct _GtkWidgetPrivate
   /* The widget's allocated size */
   GtkAllocation allocation;
   gint allocated_baseline;
+  GtkAllocation clip;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
@@ -4218,10 +4220,10 @@ gtk_widget_queue_draw_child (GtkWidget *widget)
   parent = priv->parent;
   if (parent && gtk_widget_is_drawable (parent))
     gtk_widget_queue_draw_area (parent,
-				priv->allocation.x,
-				priv->allocation.y,
-				priv->allocation.width,
-				priv->allocation.height);
+				priv->clip.x,
+				priv->clip.y,
+				priv->clip.width,
+				priv->clip.height);
 }
 
 /**
@@ -4628,7 +4630,7 @@ gtk_widget_map (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[MAP], 0);
 
       if (!gtk_widget_get_has_window (widget))
-        gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
+        gdk_window_invalidate_rect (priv->window, &priv->clip, FALSE);
 
       if (widget->priv->context)
         _gtk_style_context_update_animating (widget->priv->context);
@@ -4658,7 +4660,7 @@ gtk_widget_unmap (GtkWidget *widget)
       gtk_widget_push_verify_invariants (widget);
 
       if (!gtk_widget_get_has_window (widget))
-	gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
+	gdk_window_invalidate_rect (priv->window, &priv->clip, FALSE);
       _gtk_tooltip_hide (widget);
 
       if (widget->priv->context)
@@ -5267,7 +5269,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_get_allocation (widget, &rect);
+  gtk_widget_get_clip (widget, &rect);
 
   if (!gtk_widget_get_has_window (widget))
     gtk_widget_queue_draw_area (widget,
@@ -5504,7 +5506,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 {
   GtkWidgetPrivate *priv;
   GdkRectangle real_allocation;
-  GdkRectangle old_allocation;
+  GdkRectangle old_allocation, old_clip;
   GdkRectangle adjusted_allocation;
   gboolean alloc_needed;
   gboolean size_changed;
@@ -5561,6 +5563,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   priv->alloc_needed = FALSE;
 
   old_allocation = priv->allocation;
+  old_clip = priv->clip;
   old_baseline = priv->allocated_baseline;
   real_allocation = *allocation;
 
@@ -5652,20 +5655,35 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   if (!alloc_needed && !size_changed && !position_changed && !baseline_changed)
     goto out;
 
+  memset (&priv->clip, 0, sizeof (priv->clip));
+  priv->supports_clip = FALSE;
+
   priv->allocated_baseline = baseline;
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
   priv->alloc_needed = FALSE;
 
+  if (priv->supports_clip)
+    {
+      size_changed |= (old_clip.width != priv->clip.width ||
+                       old_clip.height != priv->clip.height);
+      position_changed |= (old_clip.x != priv->clip.x ||
+                          old_clip.y != priv->clip.y);
+    }
+  else
+    {
+      priv->clip = priv->allocation;
+    }
+
   if (gtk_widget_get_mapped (widget) && priv->redraw_on_alloc)
     {
       if (!gtk_widget_get_has_window (widget) && position_changed)
 	{
-	  /* Invalidate union(old_allaction,priv->allocation) in priv->window
+	  /* Invalidate union(old_clip,priv->clip) in priv->window
 	   */
-	  cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->allocation);
-	  cairo_region_union_rectangle (invalidate, &old_allocation);
+	  cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->clip);
+	  cairo_region_union_rectangle (invalidate, &old_clip);
 
 	  gdk_window_invalidate_region (priv->window, invalidate, FALSE);
 	  cairo_region_destroy (invalidate);
@@ -5673,10 +5691,10 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
       if (size_changed || baseline_changed)
 	{
-          /* Invalidate union(old_allaction,priv->allocation) in priv->window and descendents owned by widget
+          /* Invalidate union(old_clip,priv->clip) in priv->window and descendents owned by widget
            */
-          cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->allocation);
-          cairo_region_union_rectangle (invalidate, &old_allocation);
+          cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->clip);
+          cairo_region_union_rectangle (invalidate, &old_clip);
 
           gtk_widget_invalidate_widget_windows (widget, invalidate);
           cairo_region_destroy (invalidate);
@@ -5686,7 +5704,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   if ((size_changed || position_changed || baseline_changed) && priv->parent &&
       gtk_widget_get_realized (priv->parent) && _gtk_container_get_reallocate_redraws (GTK_CONTAINER (priv->parent)))
     {
-      cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->parent->priv->allocation);
+      cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->parent->priv->clip);
       gtk_widget_invalidate_widget_windows (priv->parent, invalidate);
       cairo_region_destroy (invalidate);
     }
@@ -6522,9 +6540,10 @@ _gtk_widget_draw_internal (GtkWidget *widget,
   if (clip_to_size)
     {
       cairo_rectangle (cr,
-                       0, 0,
-                       widget->priv->allocation.width,
-                       widget->priv->allocation.height);
+                       widget->priv->clip.x - widget->priv->allocation.x,
+                       widget->priv->clip.y - widget->priv->allocation.y,
+                       widget->priv->clip.width,
+                       widget->priv->clip.height);
       cairo_clip (cr);
     }
 
@@ -8466,6 +8485,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
       priv->allocation.y = -1;
       priv->allocation.width = 1;
       priv->allocation.height = 1;
+      memset (&priv->clip, 0, sizeof (priv->clip));
     }
 }
 
@@ -14878,6 +14898,93 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
   g_object_get (G_OBJECT (widget), "has-tooltip", &has_tooltip, NULL);
 
   return has_tooltip;
+}
+
+/**
+ * gtk_widget_get_clip:
+ * @widget: a #GtkWidget
+ * @clip: (out): a pointer to a #GtkAllocation to copy to
+ *
+ * Retrieves the widget’s clip area.
+ *
+ * The clip area is the area in which all of @widget's drawing will
+ * happen. Other toolkits call it the bounding box.
+ *
+ * Historically, in GTK the clip area has been equal to the allocation 
+ * retrieved via gtk_widget_get_allocation().
+ *
+ * Since: 3.14
+ */
+void
+gtk_widget_get_clip (GtkWidget     *widget,
+                     GtkAllocation *clip)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (clip != NULL);
+
+  priv = widget->priv;
+
+  *clip = priv->clip;
+}
+
+/**
+ * gtk_widget_set_clip:
+ * @widget: a #GtkWidget
+ * @clip: a pointer to a #GtkAllocation to copy from
+ *
+ * Sets the widget’s clip.  This must not be used
+ * directly, but from within a widget’s size_allocate method.
+ *
+ * The clip set should be the area that @widget draws on. If @widget is a
+ * #GtkContainer, the area must contain all children's clips.
+ *
+ * If this function is not called by @widget during a size_allocate handler,
+ * it is assumed to be equal to the allocation. However, if the function is
+ * not called, certain features that might extend a widget's allocation will
+ * not be available:
+ *
+ *  * The GtkWidget::draw signal will be clipped to the widget's allocation
+ *    to avoid overdraw.
+ *  * Calling gtk_render_background() will not draw outset shadows.
+ *
+ * It is therefor suggested that you always call gtk_widget_set_clip() during
+ * a size_allocate handler.
+ *
+ * Since: 3.14
+ */
+void
+gtk_widget_set_clip (GtkWidget           *widget,
+                     const GtkAllocation *clip)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_visible (widget) || gtk_widget_is_toplevel (widget));
+  g_return_if_fail (clip != NULL);
+
+  priv = widget->priv;
+
+  priv->clip = *clip;
+  priv->supports_clip = TRUE;
+}
+
+/**
+ * _gtk_widget_supports_clip:
+ * @widget: The #GtkWidget to check
+ *
+ * Returns %TRUE if the widget called gtk_widget_set_clip() during
+ * size allocation. See that function for details.
+ *
+ * Returns: %TRUE if the widget handles a clip separate from its allocation.
+ **/
+gboolean
+_gtk_widget_supports_clip (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
+
+  return widget->priv->supports_clip;
 }
 
 /**
