@@ -776,7 +776,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   const GdkRectangle  *area,
 					   GdkRectangle	       *intersection);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 cairo_region_t *gtk_widget_region_intersect	  (GtkWidget	       *widget,
 					   const cairo_region_t     *region);
 

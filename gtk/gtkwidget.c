@@ -7482,6 +7482,9 @@ gtk_widget_intersect (GtkWidget	         *widget,
  *     and @region. The coordinates of the return value are relative to
  *     @widget->window for %NO_WINDOW widgets, and relative to the parent
  *     window of @widget->window for widgets with their own window.
+ *
+ * Deprecated: 3.14: Use gtk_widget_get_allocation() and
+ *     cairo_region_intersect_rectangle() to get the same behavior.
  */
 cairo_region_t *
 gtk_widget_region_intersect (GtkWidget       *widget,
