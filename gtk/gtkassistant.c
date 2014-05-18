@@ -1264,12 +1264,16 @@ gtk_assistant_get_child_property (GtkContainer *container,
                           gtk_assistant_get_page_title (assistant, child));
       break;
     case CHILD_PROP_PAGE_HEADER_IMAGE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       g_value_set_object (value,
-                          ((GtkAssistantPage*) find_page (assistant, child))->header_image);
+                          gtk_assistant_get_page_header_image (assistant, child));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case CHILD_PROP_PAGE_SIDEBAR_IMAGE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       g_value_set_object (value,
-                          ((GtkAssistantPage*) find_page (assistant, child))->sidebar_image);
+                          gtk_assistant_get_page_side_image (assistant, child));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case CHILD_PROP_PAGE_COMPLETE:
       g_value_set_boolean (value,
