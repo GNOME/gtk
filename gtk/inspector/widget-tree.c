@@ -196,8 +196,10 @@ cell_callback (GtkCellRenderer *renderer,
                gpointer         data)
 {
   FindAllData *d = data;
+  gpointer cell_layout;
 
-  g_object_set_data (G_OBJECT (renderer), "gtk-inspector-cell-area", d->parent);
+  cell_layout = g_object_get_data (d->parent, "gtk-inspector-cell-layout");
+  g_object_set_data (G_OBJECT (renderer), "gtk-inspector-cell-layout", cell_layout);
   gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (renderer), d->iter, NULL);
 
   return FALSE;
@@ -360,6 +362,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
       GtkCellArea *area;
 
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (object));
+      g_object_set_data (G_OBJECT (area), "gtk-inspector-cell-layout", object);
       gtk_inspector_widget_tree_append_object (wt, G_OBJECT (area), &iter, "cell-area");
     }
 

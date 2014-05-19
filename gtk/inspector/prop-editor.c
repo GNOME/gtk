@@ -1056,6 +1056,28 @@ gtk_inspector_prop_editor_init (GtkInspectorPropEditor *editor)
                 NULL);
 }
 
+GtkTreeModel *
+gtk_cell_layout_get_model (GtkCellLayout *layout)
+{
+  if (GTK_IS_TREE_VIEW_COLUMN (layout))
+    return gtk_tree_view_get_model (GTK_TREE_VIEW (gtk_tree_view_column_get_tree_view (GTK_TREE_VIEW_COLUMN (layout))));
+  else if (GTK_IS_ICON_VIEW (layout))
+    return gtk_icon_view_get_model (GTK_ICON_VIEW (layout));
+  else if (GTK_IS_COMBO_BOX (layout)) 
+    return gtk_combo_box_get_model (GTK_COMBO_BOX (layout));
+  else
+    return NULL;
+}
+
+static void
+model_properties (GtkButton *button, GtkInspectorPropEditor *editor)
+{
+  GObject *model;
+
+  model = g_object_get_data (G_OBJECT (button), "model");
+  g_signal_emit (editor, signals[SHOW_OBJECT], 0, model, "model");
+}
+
 static void
 constructed (GObject *object)
 {
@@ -1069,6 +1091,44 @@ constructed (GObject *object)
   label = gtk_label_new (g_param_spec_get_nick (spec));
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (editor), label);
+
+  if (GTK_IS_CELL_RENDERER (editor->priv->object))
+    {
+      gpointer layout;
+      GtkCellArea *area;
+      GtkTreeModel *model = NULL;
+      gint col = -1;
+
+      layout = g_object_get_data (editor->priv->object, "gtk-inspector-cell-layout");
+      if (GTK_IS_CELL_LAYOUT (layout))
+        {
+          area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (layout));
+          col = gtk_cell_area_attribute_get_column (area,
+                                                    GTK_CELL_RENDERER (editor->priv->object), 
+                                                    editor->priv->name);
+          model = gtk_cell_layout_get_model (GTK_CELL_LAYOUT (layout));
+        }
+
+      if (col != -1)
+        {
+           GtkWidget *box;
+           GtkWidget *button;
+           gchar *text;
+
+           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+           text = g_strdup_printf (_("Mapped to column %d in %p (%s)"),
+                                   col, model, g_type_name (G_TYPE_FROM_INSTANCE (model)));
+           gtk_container_add (GTK_CONTAINER (box), gtk_label_new (text));
+           g_free (text);
+           button = gtk_button_new_with_label (_("Properties"));
+           g_object_set_data (G_OBJECT (button), "model", model);
+           g_signal_connect (button, "clicked", G_CALLBACK (model_properties), editor);
+           gtk_container_add (GTK_CONTAINER (box), button);
+           gtk_container_add (GTK_CONTAINER (editor), box);
+           gtk_widget_show_all (box);
+           return;
+        }
+    }
 
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
                 (spec->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
