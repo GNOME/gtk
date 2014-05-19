@@ -522,6 +522,8 @@ gtk_application_shutdown (GApplication *g_application)
   gtk_application_impl_shutdown (application->priv->impl);
   g_clear_object (&application->priv->impl);
 
+  gtk_action_muxer_remove (application->priv->muxer, "app");
+
   /* Keep this section in sync with gtk_main() */
 
   /* Try storing all clipboard data we have */
@@ -767,6 +769,7 @@ gtk_application_finalize (GObject *object)
 
   g_clear_object (&application->priv->app_menu);
   g_clear_object (&application->priv->menubar);
+  g_clear_object (&application->priv->muxer);
 
   accels_finalize (&application->priv->accels);
 
