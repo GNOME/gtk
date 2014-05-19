@@ -341,9 +341,9 @@ window_set_focus (GtkWindow  *window,
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  if (priv->modal &&
+  if (priv->modal && widget &&
       gtk_widget_is_drawable (GTK_WIDGET (popover)) &&
-      (!widget || !gtk_widget_is_ancestor (widget, GTK_WIDGET (popover))))
+      !gtk_widget_is_ancestor (widget, GTK_WIDGET (popover)))
     gtk_widget_hide (GTK_WIDGET (popover));
 }
 
