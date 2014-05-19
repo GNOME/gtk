@@ -15,6 +15,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
 #include "prop-editor.h"
 #include "widget-tree.h"
 
@@ -589,7 +591,7 @@ pointer_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   g_object_get (object, pspec->name, &ptr, NULL);
 
-  str = g_strdup_printf ("Pointer: %p", ptr);
+  str = g_strdup_printf (_("Pointer: %p"), ptr);
   gtk_label_set_text (label, str);
   g_free (str);
 }
@@ -604,8 +606,8 @@ object_label (GObject *obj, GParamSpec *pspec)
   else if (pspec)
     name = g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec));
   else
-    name = "unknown";
-  return g_strdup_printf ("Object: %p (%s)", obj, name);
+    name = C_("type name", "Unknown");
+  return g_strdup_printf (_("Object: %p (%s)"), obj, name);
 }
 
 static void
@@ -975,7 +977,7 @@ property_widget (GObject                *object,
       prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
 
       label = gtk_label_new ("");
-      button = gtk_button_new_with_label ("Properties");
+      button = gtk_button_new_with_label (_("Properties"));
       g_signal_connect_swapped (button, "clicked",
                                 G_CALLBACK (object_properties),
                                 editor);
@@ -1029,7 +1031,7 @@ property_widget (GObject                *object,
     }
   else
     {
-      msg = g_strdup_printf ("uneditable property type: %s",
+      msg = g_strdup_printf (_("Uneditable property type: %s"),
                              g_type_name (G_PARAM_SPEC_TYPE (spec)));
       prop_edit = gtk_label_new (msg);
       g_free (msg);
