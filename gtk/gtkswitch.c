@@ -62,6 +62,9 @@ struct _GtkSwitchPrivate
   GtkAction *action;
   GtkActionHelper *action_helper;
 
+  GtkGesture *pan_gesture;
+  GtkGesture *multipress_gesture;
+
   gint handle_x;
   gint offset;
   gint drag_start;
@@ -69,8 +72,6 @@ struct _GtkSwitchPrivate
 
   guint state                 : 1;
   guint is_active             : 1;
-  guint is_dragging           : 1;
-  guint in_press              : 1;
   guint in_switch             : 1;
   guint use_action_appearance : 1;
 };
@@ -110,171 +111,131 @@ G_DEFINE_TYPE_WITH_CODE (GtkSwitch, gtk_switch, GTK_TYPE_WIDGET,
                                                 gtk_switch_activatable_interface_init));
 G_GNUC_END_IGNORE_DEPRECATIONS;
 
-static gboolean
-gtk_switch_button_press (GtkWidget      *widget,
-                         GdkEventButton *event)
+static void
+gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                       gint                  n_press,
+                                       gdouble               x,
+                                       gdouble               y,
+                                       GtkSwitch            *sw)
 {
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
+  GtkSwitchPrivate *priv = sw->priv;
   GtkAllocation allocation;
 
-  /* Don't handle extra mouse buttons events, let them bubble up */
-  if (event->button > 5)
-    return GDK_EVENT_PROPAGATE;
-
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   if (priv->is_active)
-    {
-      /* if the event occurred in the "off" area, then this
-       * is a direct toggle
-       */
-      if (event->x <= allocation.width / 2)
-        {
-          priv->in_press = TRUE;
-          return GDK_EVENT_STOP;
-        }
-
-      priv->offset = event->x - allocation.width / 2;
-    }
+    priv->offset = allocation.width / 2;
   else
-    {
-      /* if the event occurred in the "on" area, then this
-       * is a direct toggle
-       */
-      if (event->x >= allocation.width / 2)
-        {
-          priv->in_press = TRUE;
-          return GDK_EVENT_STOP;
-        }
+    priv->offset = 0;
 
-      priv->offset = event->x;
-    }
-
-  priv->drag_start = event->x;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-dnd-drag-threshold", &priv->drag_threshold,
-                NULL);
-
-  return GDK_EVENT_STOP;
+  /* If the press didn't happen in the draggable handle,
+   * cancel the pan gesture right away
+   */
+  if ((priv->is_active && x <= allocation.width / 2) ||
+      (!priv->is_active && x > allocation.width / 2))
+    gtk_gesture_set_state (priv->pan_gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 
-static gboolean
-gtk_switch_motion (GtkWidget      *widget,
-                   GdkEventMotion *event)
+static void
+gtk_switch_multipress_gesture_released (GtkGestureMultiPress *gesture,
+                                        gint                  n_press,
+                                        gdouble               x,
+                                        gdouble               y,
+                                        GtkSwitch            *sw)
 {
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-
-  /* if this is a direct toggle we don't handle motion */
-  if (priv->in_press)
-    return GDK_EVENT_PROPAGATE;
-
-  if (ABS (event->x - priv->drag_start) < priv->drag_threshold)
-    return GDK_EVENT_STOP;
-
-  if (event->state & GDK_BUTTON1_MASK)
-    {
-      gint position = event->x - priv->offset;
-      GtkAllocation allocation;
-      GtkStyleContext *context;
-      GtkStateFlags state;
-      GtkBorder padding;
-      gint width;
-
-      context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
-      gtk_style_context_get_padding (context, state, &padding);
-      gtk_style_context_restore (context);
-      
-      gtk_widget_get_allocation (widget, &allocation);
-
-      width = allocation.width;
-
-      /* constrain the handle within the trough width */
-      if (position > (width / 2) - padding.right)
-        priv->handle_x = width / 2 - padding.right;
-      else if (position < padding.left)
-        priv->handle_x = 0;
-      else
-        priv->handle_x = position;
-
-      priv->is_dragging = TRUE;
-
-      /* we need to redraw the handle */
-      gtk_widget_queue_draw (widget);
-
-      return GDK_EVENT_STOP;
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-gtk_switch_button_release (GtkWidget      *widget,
-                           GdkEventButton *event)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
+  GtkSwitchPrivate *priv = sw->priv;
+  GdkEventSequence *sequence;
   GtkAllocation allocation;
 
-  /* Don't handle extra mouse buttons events, let them bubble up */
-  if (event->button > 5)
-    return GDK_EVENT_PROPAGATE;
+  gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (priv->in_switch &&
+      gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    gtk_switch_set_active (sw, !priv->is_active);
+}
+
+static void
+gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
+                            GtkPanDirection  direction,
+                            gdouble          offset,
+                            GtkSwitch       *sw)
+{
+  GtkWidget *widget = GTK_WIDGET (sw);
+  GtkSwitchPrivate *priv = sw->priv;
+  GtkAllocation allocation;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder padding;
+  gint width, position;
+
+  if (direction == GTK_PAN_DIRECTION_LEFT)
+    offset = -offset;
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+  position = priv->offset + offset;
+
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_restore (context);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  /* dragged toggles have a "soft" grab, so we don't care whether we
-   * are in the switch or not when the button is released; we do care
-   * for direct toggles, instead
-   */
-  if (!priv->is_dragging && !priv->in_switch)
-    return GDK_EVENT_PROPAGATE;
+  width = allocation.width;
 
-  /* direct toggle */
-  if (priv->in_press)
+  /* constrain the handle within the trough width */
+  if (position > (width / 2) - padding.right)
+    priv->handle_x = width / 2 - padding.right;
+  else if (position < padding.left)
+    priv->handle_x = 0;
+  else
+    priv->handle_x = position;
+
+  /* we need to redraw the handle */
+  gtk_widget_queue_draw (widget);
+}
+
+static void
+gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
+                                 gdouble         x,
+                                 gdouble         y,
+                                 GtkSwitch      *sw)
+{
+  GtkSwitchPrivate *priv = sw->priv;
+  GdkEventSequence *sequence;
+  GtkAllocation allocation;
+  gboolean active = FALSE;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (gtk_gesture_get_sequence_state (GTK_GESTURE (gesture), sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
     {
-      priv->in_press = FALSE;
-      gtk_switch_set_active (GTK_SWITCH (widget), !priv->is_active);
-
-      return GDK_EVENT_STOP;
-    }
-
-  /* toggle the switch if the handle was clicked but a drag had not been
-   * initiated */
-  if (!priv->is_dragging && !priv->in_press)
-    {
-      gtk_switch_set_active (GTK_SWITCH (widget), !priv->is_active);
-
-      return GDK_EVENT_STOP;
-    }
-
-  /* dragged toggle */
-  if (priv->is_dragging)
-    {
-      priv->is_dragging = FALSE;
+      gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
 
       /* if half the handle passed the middle of the switch, then we
        * consider it to be on
        */
       if ((priv->handle_x + (allocation.width / 4)) >= (allocation.width / 2))
-        {
-          gtk_switch_set_active (GTK_SWITCH (widget), TRUE);
-          priv->handle_x = allocation.width / 2;
-        }
-      else
-        {
-          gtk_switch_set_active (GTK_SWITCH (widget), FALSE);
-          priv->handle_x = 0;
-        }
-
-      gtk_widget_queue_draw (widget);
-
-      return GDK_EVENT_STOP;
+        active = TRUE;
     }
+  else if (!gtk_gesture_handles_sequence (priv->multipress_gesture, sequence))
+    active = priv->is_active;
+  else
+    return;
 
-  return GDK_EVENT_PROPAGATE;
+  if (active)
+    priv->handle_x = allocation.width / 2;
+  else
+    priv->handle_x = 0;
+
+  gtk_switch_set_active (sw, active);
+  gtk_widget_queue_draw (GTK_WIDGET (sw));
 }
 
 static gboolean
@@ -593,7 +554,7 @@ gtk_switch_draw (GtkWidget *widget,
 
   g_object_unref (layout);
 
-  if (priv->is_dragging)
+  if (gtk_gesture_is_recognized (priv->pan_gesture))
     handle.x = x + priv->handle_x;
   else if (priv->is_active)
     handle.x = x + width - handle.width;
@@ -869,9 +830,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->map = gtk_switch_map;
   widget_class->unmap = gtk_switch_unmap;
   widget_class->draw = gtk_switch_draw;
-  widget_class->button_press_event = gtk_switch_button_press;
-  widget_class->button_release_event = gtk_switch_button_release;
-  widget_class->motion_notify_event = gtk_switch_motion;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
 
@@ -952,10 +910,33 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 static void
 gtk_switch_init (GtkSwitch *self)
 {
+  GtkGesture *gesture;
+
   self->priv = gtk_switch_get_instance_private (self);
   self->priv->use_action_appearance = TRUE;
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+
+  gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (gtk_switch_multipress_gesture_pressed), self);
+  g_signal_connect (gesture, "released",
+                    G_CALLBACK (gtk_switch_multipress_gesture_released), self);
+  gtk_gesture_attach (gesture, GTK_PHASE_TARGET);
+  self->priv->multipress_gesture = gesture;
+
+  gesture = gtk_gesture_pan_new (GTK_WIDGET (self),
+                                 GTK_PAN_ORIENTATION_HORIZONTAL);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
+  g_signal_connect (gesture, "pan",
+                    G_CALLBACK (gtk_switch_pan_gesture_pan), self);
+  g_signal_connect (gesture, "drag-end",
+                    G_CALLBACK (gtk_switch_pan_gesture_drag_end), self);
+  gtk_gesture_attach (gesture, GTK_PHASE_TARGET);
+  self->priv->pan_gesture = gesture;
 }
 
 /**
