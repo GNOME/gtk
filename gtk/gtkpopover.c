@@ -1162,12 +1162,14 @@ gtk_popover_button_release (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
-  GtkWidget *child;
+  GtkWidget *child, *event_widget;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
   if (!popover->priv->button_pressed)
     return GDK_EVENT_PROPAGATE;
+
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
 
   if (child && event->window == gtk_widget_get_window (widget))
     {
@@ -1181,7 +1183,7 @@ gtk_popover_button_release (GtkWidget      *widget,
           event->y > child_alloc.y + child_alloc.height)
         gtk_widget_hide (widget);
     }
-  else
+  else if (!gtk_widget_is_ancestor (event_widget, widget))
     gtk_widget_hide (widget);
 
   return GDK_EVENT_PROPAGATE;
