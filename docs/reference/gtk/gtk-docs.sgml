@@ -416,6 +416,7 @@
     <xi:include href="osx.sgml" />
     <xi:include href="broadway.xml" />
     <xi:include href="wayland.xml" />
+    <xi:include href="mir.xml" />
   </part>
 
   <xi:include href="glossary.xml" />

@@ -330,6 +330,10 @@ AC_ARG_ENABLE(wayland-backend,
               [AS_HELP_STRING([--enable-wayland-backend],
                               [enable the wayland gdk backend])],
 			      [backend_set=yes])
+AC_ARG_ENABLE(mir-backend,
+              [AS_HELP_STRING([--enable-mir-backend],
+                              [enable the Mir gdk backend])],
+			      [backend_set=yes])
 
 if test -z "$backend_set"; then
   if test "$platform_win32" = yes; then
@@ -337,6 +341,7 @@ if test -z "$backend_set"; then
   else
     enable_x11_backend=yes
     enable_wayland_backend=maybe
+    enable_mir_backend=maybe
   fi
 fi
 
@@ -457,6 +462,30 @@ if test "$enable_wayland_backend" = "yes"; then
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
+fi
+
+MIR_DEPENDENCIES="mirclient"
+if test "$enable_mir_backend" = "maybe" ; then
+  PKG_CHECK_EXISTS($MIR_DEPENDENCIES, [have_mir_deps=yes], [have_mir_deps=no])
+  AC_MSG_CHECKING([for MIR_DEPENDENCIES])
+  if test "$have_mir_deps" = "no" ; then
+    enable_mir_backend=no
+  else
+    enable_mir_backend=yes
+  fi
+  AC_MSG_RESULT($enable_mir_backend)
+fi
+
+if test "$enable_mir_backend" = "yes"; then
+  cairo_backends="$cairo_backends cairo"
+  GDK_BACKENDS="$GDK_BACKENDS mir"
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_MIR"
+  MIR_PACKAGES="$MIR_DEPENDENCIES"
+
+  AM_CONDITIONAL(USE_MIR, true)
+else
+  AM_CONDITIONAL(USE_MIR, false)
 fi
 
 # strip leading space
@@ -1328,7 +1357,7 @@ CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
 GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0 >= gdk_pixbuf_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version"
-GDK_PRIVATE_PACKAGES="$GDK_GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES $cairo_backends epoxy >= epoxy_required_version"
+GDK_PRIVATE_PACKAGES="$GDK_GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES $cairo_backends epoxy >= epoxy_required_version"
 if test "x$enable_x11_backend" = xyes; then
   GDK_PRIVATE_PACKAGES="$GDK_PRIVATE_PACKAGES pangoft2"
 fi
@@ -1915,6 +1944,7 @@ gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/quartz/Makefile
 gdk/wayland/Makefile
+gdk/mir/Makefile
 gdk/gdkversionmacros.h
 gtk/Makefile
 gtk/makefile.msc

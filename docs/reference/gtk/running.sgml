@@ -491,6 +491,11 @@ nevertheless.
         <listitem><para>Selects the Wayland backend for connecting to Wayland display servers</para></listitem>
       </varlistentry>
 
+      <varlistentry>
+        <term>mir</term>
+        <listitem><para>Selects the Mir backend for connecting to Mir display servers</para></listitem>
+      </varlistentry>
+
     </variablelist>
     Since 3.10, this environment variable can contain a comma-separated list
     of backend names, which are tried in order. The list may also contain

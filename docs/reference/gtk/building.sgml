@@ -408,6 +408,11 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
+            <arg choice="plain">--enable-mir-backend</arg>
+            <arg choice="plain">--disable-mir-backend</arg>
+          </group>
+          <sbr/>
+          <group>
             <arg choice="plain">--enable-introspection=[no/auto/yes]</arg>
           </group>
           <sbr/>
@@ -608,8 +613,10 @@ How to compile GTK+ itself
           <systemitem>--disable-quartz-backend</systemitem>,
           <systemitem>--enable-broadway-backend</systemitem>,
           <systemitem>--disable-broadway-backend</systemitem>,
-          <systemitem>--enable-wayland-backend</systemitem>, and
-          <systemitem>--disable-wayland-backend</systemitem></title>
+          <systemitem>--enable-wayland-backend</systemitem>,
+          <systemitem>--disable-wayland-backend</systemitem>
+          <systemitem>--enable-mir-backend</systemitem>, and
+          <systemitem>--disable-mir-backend</systemitem></title>
 
         <para>
           Enables specific backends for GDK.  If none of these options

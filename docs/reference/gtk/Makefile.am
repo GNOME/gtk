@@ -146,6 +146,7 @@ content_files =					\
 	osx.sgml				\
 	broadway.xml				\
 	wayland.xml				\
+	mir.xml					\
 	question_index.sgml			\
 	resources.sgml				\
 	text_widget.sgml			\
