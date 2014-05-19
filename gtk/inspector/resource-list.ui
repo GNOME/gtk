@@ -7,7 +7,7 @@
     </columns>
   </object>
   <object class="GtkTextBuffer" id="buffer">
-    <property name="text"></property>
+    <property name="text"/>
   </object>
   <template class="GtkInspectorResourceList" parent="GtkBox">
     <property name="orientation">horizontal</property>
@@ -19,7 +19,7 @@
         <property name="vscrollbar-policy">always</property>
         <property name="shadow-type">in</property>
         <child>
-          <object class= "GtkTreeView">
+          <object class="GtkTreeView">
             <property name="visible">True</property>
             <property name="model">model</property>
             <child internal-child="selection">
@@ -46,45 +46,106 @@
       </object>
     </child>
     <child>
-      <object class="GtkStack" id="content">
+      <object class="GtkBox">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="expand">True</property>
-            <property name="hscrollbar-policy">automatic</property>
-            <property name="vscrollbar-policy">automatic</property>
-            <property name="shadow-type">in</property>
+          <object class="GtkGrid" id="info_grid">
+            <property name="row-spacing">10</property>
+            <property name="column-spacing">10</property>
+            <property name="margin">20</property>
             <child>
-              <object class="GtkTextView">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="editable">False</property>
-                <property name="buffer">buffer</property>
+                <property name="label" translatable="yes">Type:</property>
+                <property name="halign">end</property>
+                <property name="valign">baseline</property>
               </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="type_label">
+                <property name="visible">True</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Size:</property>
+                <property name="halign">end</property>
+                <property name="valign">baseline</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="size_label">
+                <property name="visible">True</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
             </child>
           </object>
-          <packing>
-            <property name="name">text</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkStack" id="content">
             <property name="visible">True</property>
-            <property name="expand">True</property>
-            <property name="hscrollbar-policy">automatic</property>
-            <property name="vscrollbar-policy">automatic</property>
-            <property name="shadow-type">in</property>
             <child>
-              <object class="GtkImage" id="image">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">automatic</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTextView">
+                    <property name="visible">True</property>
+                    <property name="margin">20</property>
+                    <property name="editable">False</property>
+                    <property name="buffer">buffer</property>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="name">text</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">automatic</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkImage" id="image">
+                    <property name="visible">True</property>
+                    <property name="margin">20</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">image</property>
+              </packing>
             </child>
           </object>
-          <packing>
-            <property name="name">image</property>
-          </packing>
         </child>
       </object>
     </child>

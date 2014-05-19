@@ -31,6 +31,9 @@ struct _GtkInspectorResourceListPrivate
   GtkTextBuffer *buffer;
   GtkWidget *image;
   GtkWidget *content;
+  GtkWidget *type_label;
+  GtkWidget *size_label;
+  GtkWidget *info_grid;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_BOX)
@@ -89,9 +92,12 @@ selection_changed (GtkTreeSelection         *selection,
       gsize size;
       GError *error = NULL;
 
+      gtk_widget_hide (rl->priv->info_grid);
+
       gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
                           COLUMN_PATH, &path,
                           -1);
+
       if (g_str_has_suffix (path, "/"))
         {
           gtk_text_buffer_set_text (rl->priv->buffer, "", -1);
@@ -107,8 +113,21 @@ selection_changed (GtkTreeSelection         *selection,
         }
       else
         {
+          gchar *text;
+
           data = g_bytes_get_data (bytes, &size);
           type = g_content_type_guess (NULL, data, size, NULL);
+
+          text = g_content_type_get_description (type);
+          gtk_label_set_text (GTK_LABEL (rl->priv->type_label), text);
+          g_free (text);
+
+          text = g_format_size (size);
+          gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
+          g_free (text);
+       
+          gtk_widget_show (rl->priv->info_grid);
+          
           if (g_content_type_is_a (type, "text/*"))
             {
               gtk_text_buffer_set_text (rl->priv->buffer, data, -1);
@@ -121,12 +140,10 @@ selection_changed (GtkTreeSelection         *selection,
             }
           else
             {
-              gchar *content;
-              content = g_content_type_get_description (type);
-              gtk_text_buffer_set_text (rl->priv->buffer, content, -1);
-              g_free (content);
+              gtk_text_buffer_set_text (rl->priv->buffer, "", 0);
               gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
             }
+
           g_free (type);
           g_bytes_unref (bytes);
         }
@@ -165,6 +182,9 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, buffer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, content);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, image);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, type_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, info_grid);
 
   gtk_widget_class_bind_template_callback (widget_class, selection_changed);
 }
