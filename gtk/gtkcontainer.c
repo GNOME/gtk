@@ -1705,8 +1705,7 @@ gtk_container_get_resize_mode (GtkContainer *container)
  * Containers requesting reallocation redraws get automatically
  * redrawn if any of their children changed allocation.
  *
- * @Deprecated: 3.14: Call gtk_widget_queue_draw() in your size_allocate
- *     handler.
+ * Deprecated: 3.14: Call gtk_widget_queue_draw() in your size_allocate handler.
  **/
 void
 gtk_container_set_reallocate_redraws (GtkContainer *container,
