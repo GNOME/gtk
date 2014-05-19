@@ -1778,6 +1778,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
                               settings, g_object_unref);
 
       settings_init_style (settings);
+      settings_update_modules (settings);
       settings_update_double_click (settings);
       settings_update_cursor_theme (settings);
       settings_update_resolution (settings);
