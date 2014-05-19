@@ -5654,9 +5654,9 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
   priv->alloc_needed = FALSE;
 
-  if (gtk_widget_get_mapped (widget))
+  if (gtk_widget_get_mapped (widget) && priv->redraw_on_alloc)
     {
-      if (!gtk_widget_get_has_window (widget) && priv->redraw_on_alloc && position_changed)
+      if (!gtk_widget_get_has_window (widget) && position_changed)
 	{
 	  /* Invalidate union(old_allaction,priv->allocation) in priv->window
 	   */
@@ -5669,16 +5669,13 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
       if (size_changed || baseline_changed)
 	{
-	  if (priv->redraw_on_alloc)
-	    {
-	      /* Invalidate union(old_allaction,priv->allocation) in priv->window and descendents owned by widget
-	       */
-	      cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->allocation);
-	      cairo_region_union_rectangle (invalidate, &old_allocation);
+          /* Invalidate union(old_allaction,priv->allocation) in priv->window and descendents owned by widget
+           */
+          cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->allocation);
+          cairo_region_union_rectangle (invalidate, &old_allocation);
 
-	      gtk_widget_invalidate_widget_windows (widget, invalidate);
-	      cairo_region_destroy (invalidate);
-	    }
+          gtk_widget_invalidate_widget_windows (widget, invalidate);
+          cairo_region_destroy (invalidate);
 	}
     }
 
