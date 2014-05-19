@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk-mir">
+<refmeta>
+<refentrytitle>Using GTK+ with Mir</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Using GTK+ with Mir</refname>
+<refpurpose>
+Mir-specific aspects of using GTK+
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Using GTK+ with Mir</title>
+
+<para>
+The GDK Mir backend provides support for running GTK+ applications
+under Mir based display servers. To run your application in this way,
+select the Mir backend by setting <literal>GDK_BACKEND=mir</literal>.
+</para>
+
+<para>
+Currently, the Mir backend does not use any additional commandline
+options or environment variables.
+</para>
+
+</refsect1>
+
+</refentry>
