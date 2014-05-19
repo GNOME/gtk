@@ -1004,7 +1004,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("-gtk-icon-transform",
                                           GTK_CSS_PROPERTY_ICON_TRANSFORM,
                                           G_TYPE_NONE,
-                                          GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_NO_RESIZE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           transform_value_parse,
                                           NULL,
                                           NULL,

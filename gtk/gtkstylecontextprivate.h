@@ -56,6 +56,12 @@ void           _gtk_style_context_get_cursor_color           (GtkStyleContext   
 
 void           _gtk_style_context_update_animating           (GtkStyleContext    *context);
 
+void           _gtk_style_context_get_icon_extents           (GtkStyleContext    *context,
+                                                              GdkRectangle       *extents,
+                                                              gint                x,
+                                                              gint                y,
+                                                              gint                width,
+                                                              gint                height);
 GtkIconLookupFlags _gtk_style_context_get_icon_lookup_flags  (GtkStyleContext    *context);
 
 G_END_DECLS
