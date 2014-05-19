@@ -697,15 +697,20 @@ pan_gesture_drag_begin_cb (GtkGestureDrag *gesture,
   GdkEventSequence *sequence;
   GtkAllocation allocation;
   const GdkEvent *event;
+  GdkDevice *device;
+  gboolean is_touch;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  device = gdk_event_get_source_device (event);
   gtk_widget_get_allocation (GTK_WIDGET (paned), &allocation);
   paned->priv->panning = FALSE;
 
+  is_touch = (event->type == GDK_TOUCH_BEGIN ||
+              gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN);
+
   if (event->any.window == priv->handle ||
-      (event->type == GDK_TOUCH_BEGIN &&
-       initiates_touch_drag (paned, start_x, start_y)))
+      (is_touch && initiates_touch_drag (paned, start_x, start_y)))
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         priv->drag_pos = start_x - (priv->handle_pos.x - allocation.x);
