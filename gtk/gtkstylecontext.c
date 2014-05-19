@@ -28,8 +28,11 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
+#include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
+#include "gtkcssshadowsvalueprivate.h"
+#include "gtkcsstransformvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
@@ -4678,6 +4681,82 @@ _gtk_style_context_get_changes (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   return context->priv->invalidating_context;
+}
+
+void
+gtk_cairo_rectangle_transform (cairo_rectangle_int_t       *dest,
+                               const cairo_rectangle_int_t *src,
+                               const cairo_matrix_t        *matrix)
+{
+  double x1, x2, x3, x4;
+  double y1, y2, y3, y4;
+
+  g_return_if_fail (dest != NULL);
+  g_return_if_fail (src != NULL);
+  g_return_if_fail (matrix != NULL);
+
+  x1 = src->x;
+  y1 = src->y;
+  x2 = src->x + src->width;
+  y2 = src->y;
+  x3 = src->x + src->width;
+  y3 = src->y + src->height;
+  x4 = src->x;
+  y4 = src->y + src->height;
+
+  cairo_matrix_transform_point (matrix, &x1, &y1);
+  cairo_matrix_transform_point (matrix, &x2, &y2);
+  cairo_matrix_transform_point (matrix, &x3, &y3);
+  cairo_matrix_transform_point (matrix, &x4, &y4);
+
+  dest->x = floor (MIN (MIN (x1, x2), MIN (x3, x4)));
+  dest->y = floor (MIN (MIN (y1, y2), MIN (y3, y4)));
+  dest->width = ceil (MAX (MAX (x1, x2), MAX (x3, x4))) - dest->x;
+  dest->height = ceil (MAX (MAX (y1, y2), MAX (y3, y4))) - dest->y;
+}
+void
+_gtk_style_context_get_icon_extents (GtkStyleContext *context,
+                                     GdkRectangle    *extents,
+                                     gint             x,
+                                     gint             y,
+                                     gint             width,
+                                     gint             height)
+{
+  cairo_matrix_t transform_matrix, matrix;
+  GtkBorder border;
+  GdkRectangle rect;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (extents != NULL);
+
+  rect.x = x;
+  rect.y = y;
+  rect.width = width;
+  rect.height = height;
+
+  /* strictly speaking we should return an empty rect here,
+   * but most code still draws a fallback  in this case */
+  if (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)) == NULL)
+    return;
+
+  if (!_gtk_css_transform_value_get_matrix (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
+    return;
+  
+  cairo_matrix_init_translate (&matrix, x + width / 2.0, y + height / 2.0);
+  cairo_matrix_multiply (&matrix, &transform_matrix, &matrix);
+  /* need to round to full pixels */
+  rect.x = - (width + 1) / 2;
+  rect.y = - (height + 1) / 2;
+  rect.width = (width + 1) & ~1;
+  rect.height = (height + 1) & ~1;
+  gtk_cairo_rectangle_transform (extents, &rect, &matrix);
+
+  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SHADOW), &border);
+
+  extents->x -= border.left;
+  extents->y -= border.top;
+  extents->width += border.left + border.right;
+  extents->height += border.top + border.bottom;
 }
 
 GtkIconLookupFlags

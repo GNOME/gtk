@@ -35,6 +35,7 @@
 #include "gtkintl.h"
 #include "gtkstylecontext.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkwidgetprivate.h"
 #include "a11y/gtkspinneraccessible.h"
 
 
@@ -67,6 +68,8 @@ struct _GtkSpinnerPrivate
 
 static gboolean gtk_spinner_draw       (GtkWidget       *widget,
                                         cairo_t         *cr);
+static void gtk_spinner_size_allocate  (GtkWidget       *widget,
+                                        GtkAllocation   *allocation);
 static void gtk_spinner_get_property   (GObject         *object,
                                         guint            param_id,
                                         GValue          *value,
@@ -98,6 +101,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   gobject_class->set_property = gtk_spinner_set_property;
 
   widget_class = GTK_WIDGET_CLASS(klass);
+  widget_class->size_allocate = gtk_spinner_size_allocate;
   widget_class->draw = gtk_spinner_draw;
   widget_class->get_preferred_width = gtk_spinner_get_preferred_width;
   widget_class->get_preferred_height = gtk_spinner_get_preferred_height;
@@ -184,6 +188,29 @@ gtk_spinner_get_preferred_height (GtkWidget *widget,
 {
   *minimum_size = SPINNER_SIZE;
   *natural_size = SPINNER_SIZE;
+}
+
+static void
+gtk_spinner_size_allocate (GtkWidget     *widget,
+                           GtkAllocation *allocation)
+{
+  GtkStyleContext *context;
+  GtkAllocation clip;
+  gint size;
+
+  context = gtk_widget_get_style_context (widget);
+  size = MIN (allocation->width, allocation->height);
+
+  _gtk_style_context_get_icon_extents (context,
+                                       &clip,
+                                       allocation->x + (allocation->width - size) / 2,
+                                       allocation->y + (allocation->height - size) / 2,
+                                       size, size);
+
+  gdk_rectangle_union (&clip, allocation, &clip);
+
+  gtk_widget_set_allocation (widget, allocation);
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static gboolean
