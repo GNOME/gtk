@@ -322,6 +322,8 @@ _gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
 
   g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
 
+  *border = b;
+
   for (i = 0; i < shadows->len; i++)
     {
       shadow = shadows->values[i];
