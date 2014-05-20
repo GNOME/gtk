@@ -6240,6 +6240,7 @@ gtk_gradient_get_type
 GTK_STYLE_ATTACHED
 GtkStyle
 GtkStyleClass
+GtkExpanderStyle
 gtk_style_new
 gtk_style_copy
 gtk_style_attach
@@ -6524,7 +6525,6 @@ gtk_binding_set_add_path
 GtkBaselinePosition
 GtkDeleteType
 GtkDirectionType
-GtkExpanderStyle
 GtkIMPreeditStyle
 GtkIMStatusStyle
 GtkJustification

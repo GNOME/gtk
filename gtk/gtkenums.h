@@ -174,23 +174,6 @@ typedef enum
 } GtkDirectionType;
 
 /**
- * GtkExpanderStyle:
- * @GTK_EXPANDER_COLLAPSED: The style used for a collapsed subtree.
- * @GTK_EXPANDER_SEMI_COLLAPSED: Intermediate style used during animation.
- * @GTK_EXPANDER_SEMI_EXPANDED: Intermediate style used during animation.
- * @GTK_EXPANDER_EXPANDED: The style used for an expanded subtree.
- *
- * Used to specify the style of the expanders drawn by a #GtkTreeView.
- */
-typedef enum
-{
-  GTK_EXPANDER_COLLAPSED,
-  GTK_EXPANDER_SEMI_COLLAPSED,
-  GTK_EXPANDER_SEMI_EXPANDED,
-  GTK_EXPANDER_EXPANDED
-} GtkExpanderStyle;
-
-/**
  * GtkIconSize:
  * @GTK_ICON_SIZE_INVALID: Invalid size.
  * @GTK_ICON_SIZE_MENU: Size appropriate for menus (16px).

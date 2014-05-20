@@ -52,6 +52,23 @@ typedef struct _GtkThemeEngine GtkThemeEngine;
 typedef struct _GtkRcProperty  GtkRcProperty;
 
 /**
+ * GtkExpanderStyle:
+ * @GTK_EXPANDER_COLLAPSED: The style used for a collapsed subtree.
+ * @GTK_EXPANDER_SEMI_COLLAPSED: Intermediate style used during animation.
+ * @GTK_EXPANDER_SEMI_EXPANDED: Intermediate style used during animation.
+ * @GTK_EXPANDER_EXPANDED: The style used for an expanded subtree.
+ *
+ * Used to specify the style of the expanders drawn by a #GtkTreeView.
+ */
+typedef enum
+{
+  GTK_EXPANDER_COLLAPSED,
+  GTK_EXPANDER_SEMI_COLLAPSED,
+  GTK_EXPANDER_SEMI_EXPANDED,
+  GTK_EXPANDER_EXPANDED
+} GtkExpanderStyle;
+
+/**
  * GTK_STYLE_ATTACHED:
  * @style: a #GtkStyle.
  *
