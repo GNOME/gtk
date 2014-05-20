@@ -3476,6 +3476,7 @@ GtkTable
 gtk_table_new
 gtk_table_resize
 gtk_table_get_size
+GtkAttachOptions
 gtk_table_attach
 gtk_table_attach_defaults
 gtk_table_set_row_spacing
@@ -6507,7 +6508,6 @@ gtk_binding_set_add_path
 <SECTION>
 <FILE>gtkenums</FILE>
 <TITLE>Standard Enumerations</TITLE>
-GtkAttachOptions
 GtkBaselinePosition
 GtkButtonBoxStyle
 GtkCornerType
