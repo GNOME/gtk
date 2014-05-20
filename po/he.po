@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-18 00:13+0300\n"
-"PO-Revision-Date: 2014-05-18 00:17+0300\n"
+"POT-Creation-Date: 2014-05-20 10:05+0300\n"
+"PO-Revision-Date: 2014-05-20 10:20+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -3559,7 +3559,7 @@ msgstr "מצב"
 
 #: ../gtk/inspector/button-path.ui.h:1
 msgid "Choose a widget through the inspector"
-msgstr "בחירת יישומון דרך הפקד"
+msgstr "ניתן לבחור יישומון דרך הפקד"
 
 #: ../gtk/inspector/classes-list.c:114
 msgid "New class"
@@ -3658,9 +3658,48 @@ msgstr "תכונה"
 msgid "Defined At"
 msgstr "הגדרה"
 
+#: ../gtk/inspector/prop-editor.c:594
+#, c-format
+msgid "Pointer: %p"
+msgstr "מצביע: %p"
+
+#: ../gtk/inspector/prop-editor.c:609
+msgctxt "type name"
+msgid "Unknown"
+msgstr "לא ידוע"
+
+#: ../gtk/inspector/prop-editor.c:610
+#, c-format
+msgid "Object: %p (%s)"
+msgstr "עצם: %p ‏(%s)"
+
+#: ../gtk/inspector/prop-editor.c:980 ../gtk/inspector/prop-editor.c:1125
+#: ../gtk/inspector/window.ui.h:3
+msgid "Properties"
+msgstr "מאפיינים"
+
+#: ../gtk/inspector/prop-editor.c:1034
+#, c-format
+msgid "Uneditable property type: %s"
+msgstr "סוג מאפיין לא ניתן לעריכה: %s"
+
+#: ../gtk/inspector/prop-editor.c:1121
+#, c-format
+msgid "Mapped to column %d in %p (%s)"
+msgstr "ממופה לעמוד %d ב־%p ‏(%s)"
+
+#. vim: set et:
 #: ../gtk/inspector/resource-list.ui.h:1
 msgid "Path"
 msgstr "נתיב"
+
+#: ../gtk/inspector/resource-list.ui.h:2
+msgid "Type:"
+msgstr "סוג:"
+
+#: ../gtk/inspector/resource-list.ui.h:3
+msgid "Size:"
+msgstr "גודל:"
 
 #: ../gtk/inspector/signals-list.c:101
 msgid "Yes"
@@ -3731,7 +3770,7 @@ msgstr "תווית"
 msgid "Address"
 msgstr "כתובת"
 
-#: ../gtk/inspector/window.c:110
+#: ../gtk/inspector/window.c:109
 #, c-format
 msgid "GTK+ Inspector — %s"
 msgstr "מפקח GTK+‎ - ‏%s"
@@ -3744,10 +3783,6 @@ msgstr "שליחת יישומון למעטפת"
 #: ../gtk/inspector/window.ui.h:2
 msgid "Select an Object"
 msgstr "בחירת עצם"
-
-#: ../gtk/inspector/window.ui.h:3
-msgid "Properties"
-msgstr "מאפיינים"
 
 #: ../gtk/inspector/window.ui.h:4
 msgid "Signals"
@@ -5679,9 +5714,6 @@ msgstr "מנמיך את העצמה"
 
 #~ msgid "Column"
 #~ msgstr "עמודה"
-
-#~ msgid "Type"
-#~ msgstr "סוג"
 
 #~ msgid "Please select a folder below"
 #~ msgstr "נא לבחור תיקייה להלן"
