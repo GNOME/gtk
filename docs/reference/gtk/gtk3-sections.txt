@@ -7905,7 +7905,6 @@ GtkEventSequenceState
 gtk_gesture_get_sequence_state
 gtk_gesture_set_sequence_state
 gtk_gesture_set_state
-gtk_gesture_cancel_sequence
 gtk_gesture_get_sequences
 gtk_gesture_handles_sequence
 GtkPropagationPhase
