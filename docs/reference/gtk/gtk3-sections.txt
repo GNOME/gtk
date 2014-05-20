@@ -3121,6 +3121,7 @@ gtk_scrolled_window_get_hscrollbar
 gtk_scrolled_window_get_vscrollbar
 gtk_scrolled_window_set_policy
 gtk_scrolled_window_add_with_viewport
+GtkCornerType
 gtk_scrolled_window_set_placement
 gtk_scrolled_window_unset_placement
 gtk_scrolled_window_set_shadow_type
@@ -6510,7 +6511,6 @@ gtk_binding_set_add_path
 <FILE>gtkenums</FILE>
 <TITLE>Standard Enumerations</TITLE>
 GtkBaselinePosition
-GtkCornerType
 GtkDeleteType
 GtkDirectionType
 GtkExpanderStyle
