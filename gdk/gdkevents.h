@@ -50,6 +50,7 @@ G_BEGIN_DECLS
 
 
 #define GDK_TYPE_EVENT          (gdk_event_get_type ())
+#define GDK_TYPE_EVENT_SEQUENCE (gdk_event_sequence_get_type ())
 
 /**
  * GDK_PRIORITY_EVENTS:
@@ -1192,6 +1193,9 @@ union _GdkEvent
 
 GDK_AVAILABLE_IN_ALL
 GType     gdk_event_get_type            (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_3_14
+GType     gdk_event_sequence_get_type   (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_events_pending	 	(void);

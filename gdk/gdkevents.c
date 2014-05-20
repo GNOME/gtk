@@ -1952,7 +1952,7 @@ gdk_event_get_screen (const GdkEvent *event)
  * %GDK_TOUCH_END or %GDK_TOUCH_CANCEL, returns the #GdkEventSequence
  * to which the event belongs. Otherwise, return %NULL.
  *
- * Returns: the event sequence that the event belongs to
+ * Returns: (transfer none): the event sequence that the event belongs to
  *
  * Since: 3.4
  */
@@ -2208,6 +2208,22 @@ gdk_display_set_double_click_distance (GdkDisplay *display,
 G_DEFINE_BOXED_TYPE (GdkEvent, gdk_event,
                      gdk_event_copy,
                      gdk_event_free)
+
+static GdkEventSequence *
+gdk_event_sequence_copy (GdkEventSequence *sequence)
+{
+  return sequence;
+}
+
+static void
+gdk_event_sequence_free (GdkEventSequence *sequence)
+{
+  /* Nothing to free here */
+}
+
+G_DEFINE_BOXED_TYPE (GdkEventSequence, gdk_event_sequence,
+                     gdk_event_sequence_copy,
+                     gdk_event_sequence_free)
 
 /**
  * gdk_setting_get:
