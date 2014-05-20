@@ -2261,6 +2261,7 @@ gtk_menu_button_set_menu_model
 gtk_menu_button_get_menu_model
 gtk_menu_button_set_use_popover
 gtk_menu_button_get_use_popover
+GtkArrowType
 gtk_menu_button_set_direction
 gtk_menu_button_get_direction
 gtk_menu_button_set_align_widget
@@ -6506,7 +6507,6 @@ gtk_binding_set_add_path
 <SECTION>
 <FILE>gtkenums</FILE>
 <TITLE>Standard Enumerations</TITLE>
-GtkArrowType
 GtkAttachOptions
 GtkBaselinePosition
 GtkButtonBoxStyle
