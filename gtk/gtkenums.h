@@ -409,19 +409,6 @@ typedef enum
 } GtkReliefStyle;
 
 /**
- * GtkResizeMode:
- * @GTK_RESIZE_PARENT: Pass resize request to the parent
- * @GTK_RESIZE_QUEUE: Queue resizes on this widget
- * @GTK_RESIZE_IMMEDIATE: Resize immediately. Deprecated.
- */
-typedef enum
-{
-  GTK_RESIZE_PARENT,
-  GTK_RESIZE_QUEUE,
-  GTK_RESIZE_IMMEDIATE
-} GtkResizeMode;
-
-/**
  * GtkScrollType:
  * @GTK_SCROLL_NONE: No scrolling.
  * @GTK_SCROLL_JUMP: Jump to new location.

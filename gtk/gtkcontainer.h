@@ -122,6 +122,20 @@ struct _GtkContainerClass
 };
 
 
+/**
+ * GtkResizeMode:
+ * @GTK_RESIZE_PARENT: Pass resize request to the parent
+ * @GTK_RESIZE_QUEUE: Queue resizes on this widget
+ * @GTK_RESIZE_IMMEDIATE: Resize immediately. Deprecated.
+ */
+typedef enum
+{
+  GTK_RESIZE_PARENT,
+  GTK_RESIZE_QUEUE,
+  GTK_RESIZE_IMMEDIATE
+} GtkResizeMode;
+
+
 /* Application-level methods */
 
 GDK_AVAILABLE_IN_ALL
