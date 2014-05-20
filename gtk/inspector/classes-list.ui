@@ -16,7 +16,7 @@
         <child>
           <object class="GtkToolButton">
             <property name="visible">True</property>
-            <property name="icon-name">list-add</property>
+            <property name="icon-name">list-add-symbolic</property>
             <property name="tooltip-text" translatable="yes">Add a class</property>
             <signal name="clicked" handler="add_clicked"/>
           </object>

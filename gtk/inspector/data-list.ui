@@ -9,7 +9,7 @@
         <child>
           <object class="GtkToggleToolButton" id="show_button">
             <property name="visible">True</property>
-            <property name="icon-name">reload</property>
+            <property name="icon-name">view-refresh-symbolic</property>
             <property name="tooltip-text" translatable="yes">Show data</property>
             <signal name="toggled" handler="toggle_show"/>
           </object>

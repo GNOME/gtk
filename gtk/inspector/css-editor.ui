@@ -25,7 +25,7 @@
         <child>
           <object class="GtkToggleToolButton" id="disable_button">
             <property name="visible">True</property>
-            <property name="icon-name">media-playback-pause</property>
+            <property name="icon-name">media-playback-pause-symbolic</property>
             <property name="tooltip-text" translatable="yes">Disable this custom CSS</property>
             <signal name="toggled" handler="disable_toggled"/>
           </object>

@@ -26,7 +26,7 @@
             <child>
               <object class="GtkToggleToolButton" id="trace_button">
                 <property name="visible">True</property>
-                <property name="icon-name">media-record</property>
+                <property name="icon-name">media-record-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Trace signal emissions on this object</property>
                 <signal name="toggled" handler="toggle_tracing"/>
               </object>
@@ -34,7 +34,6 @@
             <child>
               <object class="GtkToolButton" id="clear_button">
                 <property name="visible">True</property>
-                <property name="icon-name">edit-clear</property>
                 <property name="tooltip-text" translatable="yes">Clear log</property>
                 <signal name="clicked" handler="clear_log"/>
               </object>
