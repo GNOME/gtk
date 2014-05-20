@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="chap-input-handling">
+<refmeta>
+<refentrytitle>The GTK+ Input Handling Model</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>The GTK+ Input Handling Model</refname>
+<refpurpose>
+    GTK+ input handling in detail
+</refpurpose>
+</refnamediv>
+
+
+  <refsect1 id="input-overview">
+    <title>Overview of GTK+ input handling</title>
+
+  <refsect2>
+    <title>Devices and events</title>
+
+    <!-- input devices: master/slave, keyboard/pointer/touch -->
+    <!-- input events: button, touch, key, motion, etc -->
+  </refsect2>
+
+  <refsect2>
+    <title>Event propagation</title>
+
+    <!-- capture/bubble, event handler chain, event controllers -->
+    <!-- grabs -->
+  </refsect2>
+
+  <refsect2>
+    <title>Keyboard input</title>
+
+    <!-- focus, tab, directional navigation -->
+    <!-- mnemonics, accelerators, bindings -->
+  </refsect2>
+
+  <refsect2>
+    <title>Gestures</title>
+
+    <!-- touch sequences, states, anything else -->
+  </refsect2>
+
+  </refsect1>
+</refentry>
