@@ -72,6 +72,31 @@ struct _GtkButtonBoxClass
 };
 
 
+/**
+ * GtkButtonBoxStyle:
+ * @GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the box.
+ * @GTK_BUTTONBOX_EDGE: Buttons are placed at the edges of the box.
+ * @GTK_BUTTONBOX_START: Buttons are grouped towards the start of the box,
+ *   (on the left for a HBox, or the top for a VBox).
+ * @GTK_BUTTONBOX_END: Buttons are grouped towards the end of the box,
+ *   (on the right for a HBox, or the bottom for a VBox).
+ * @GTK_BUTTONBOX_CENTER: Buttons are centered in the box. Since 2.12.
+ * @GTK_BUTTONBOX_EXPAND: Buttons expand to fill the box. Since 3.12.
+ *
+ * Used to dictate the style that a #GtkButtonBox uses to layout the buttons it
+ * contains.
+ */
+typedef enum
+{
+  GTK_BUTTONBOX_SPREAD = 1,
+  GTK_BUTTONBOX_EDGE,
+  GTK_BUTTONBOX_START,
+  GTK_BUTTONBOX_END,
+  GTK_BUTTONBOX_CENTER,
+  GTK_BUTTONBOX_EXPAND
+} GtkButtonBoxStyle;
+
+
 GDK_AVAILABLE_IN_ALL
 GType             gtk_button_box_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL

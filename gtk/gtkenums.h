@@ -121,31 +121,6 @@ typedef enum
 } GtkBaselinePosition;
 
 /**
- * GtkButtonBoxStyle:
- * @GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the box.
- * @GTK_BUTTONBOX_EDGE: Buttons are placed at the edges of the box.
- * @GTK_BUTTONBOX_START: Buttons are grouped towards the start of the box,
- *   (on the left for a HBox, or the top for a VBox).
- * @GTK_BUTTONBOX_END: Buttons are grouped towards the end of the box,
- *   (on the right for a HBox, or the bottom for a VBox).
- * @GTK_BUTTONBOX_CENTER: Buttons are centered in the box. Since 2.12.
- * @GTK_BUTTONBOX_EXPAND: Buttons expand to fill the box. Since 3.12.
- *
- * Used to dictate the style that a #GtkButtonBox uses to layout the buttons it
- * contains. (See also: #GtkVButtonBox and #GtkHButtonBox).
- */
-typedef enum
-{
-  GTK_BUTTONBOX_SPREAD = 1,
-  GTK_BUTTONBOX_EDGE,
-  GTK_BUTTONBOX_START,
-  GTK_BUTTONBOX_END,
-  GTK_BUTTONBOX_CENTER,
-  GTK_BUTTONBOX_EXPAND
-} GtkButtonBoxStyle;
-
-
-/**
  * GtkDeleteType:
  * @GTK_DELETE_CHARS: Delete characters.
  * @GTK_DELETE_WORD_ENDS: Delete only the portion of the word to the
