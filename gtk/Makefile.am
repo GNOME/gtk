@@ -1629,7 +1629,8 @@ endif
 #
 bin_PROGRAMS = \
 	gtk-query-immodules-3.0	\
-	gtk-launch
+	gtk-launch \
+	gtk-encode-symbolic-svg
 
 if BUILD_ICON_CACHE
 bin_PROGRAMS += gtk-update-icon-cache
@@ -1675,6 +1676,10 @@ if BUILD_ICON_CACHE
 gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
 gtk_update_icon_cache_SOURCES = updateiconcache.c
 endif
+
+gtk_encode_symbolic_svg_LDADD = $(GDK_PIXBUF_LIBS) $(top_builddir)/gdk/libgdk-3.la
+gtk_encode_symbolic_svg_SOURCES = encodesymbolic.c
+
 
 gtk_launch_LDADD = $(LDADDS)
 gtk_launch_SOURCES = gtk-launch.c
