@@ -6292,6 +6292,8 @@ GtkRcStyle
 GtkRcStyleClass
 GtkRcFlags
 GtkRcTokenType
+GtkPathPriorityType
+GtkPathType
 gtk_rc_scanner_new
 gtk_rc_get_style
 gtk_rc_get_style_by_paths
@@ -6521,8 +6523,6 @@ GtkJustification
 GtkMovementStep
 GtkOrientation
 GtkPackType
-GtkPathPriorityType
-GtkPathType
 GtkPositionType
 GtkReliefStyle
 GtkResizeMode

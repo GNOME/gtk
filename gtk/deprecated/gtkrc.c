@@ -1953,3 +1953,103 @@ gtk_rc_parse_color_full (GScanner   *scanner,
       return G_TOKEN_STRING;
     }
 }
+
+typedef struct {
+  GtkPathType   type;
+  GPatternSpec *pspec;
+  gpointer      user_data;
+  guint         seq_id;
+} PatternSpec;
+
+static void
+pattern_spec_free (PatternSpec *pspec)
+{
+  if (pspec->pspec)
+    g_pattern_spec_free (pspec->pspec);
+  g_free (pspec);
+}
+
+/**
+ * gtk_binding_set_add_path:
+ * @binding_set: a #GtkBindingSet to add a path to
+ * @path_type: path type the pattern applies to
+ * @path_pattern: the actual match pattern
+ * @priority: binding priority
+ *
+ * This function was used internally by the GtkRC parsing mechanism
+ * to assign match patterns to #GtkBindingSet structures.
+ *
+ * In GTK+ 3, these match patterns are unused.
+ *
+ * Deprecated: 3.0
+ */
+void
+gtk_binding_set_add_path (GtkBindingSet       *binding_set,
+                          GtkPathType          path_type,
+                          const gchar         *path_pattern,
+                          GtkPathPriorityType  priority)
+{
+  PatternSpec *pspec;
+  GSList **slist_p, *slist;
+  static guint seq_id = 0;
+
+  g_return_if_fail (binding_set != NULL);
+  g_return_if_fail (path_pattern != NULL);
+  g_return_if_fail (priority <= GTK_PATH_PRIO_MASK);
+
+  priority &= GTK_PATH_PRIO_MASK;
+
+  switch (path_type)
+    {
+    case  GTK_PATH_WIDGET:
+      slist_p = &binding_set->widget_path_pspecs;
+      break;
+    case  GTK_PATH_WIDGET_CLASS:
+      slist_p = &binding_set->widget_class_pspecs;
+      break;
+    case  GTK_PATH_CLASS:
+      slist_p = &binding_set->class_branch_pspecs;
+      break;
+    default:
+      g_assert_not_reached ();
+      slist_p = NULL;
+      break;
+    }
+
+  pspec = g_new (PatternSpec, 1);
+  pspec->type = path_type;
+  if (path_type == GTK_PATH_WIDGET_CLASS)
+    pspec->pspec = NULL;
+  else
+    pspec->pspec = g_pattern_spec_new (path_pattern);
+  pspec->seq_id = priority << 28;
+  pspec->user_data = binding_set;
+
+  slist = *slist_p;
+  while (slist)
+    {
+      PatternSpec *tmp_pspec;
+
+      tmp_pspec = slist->data;
+      slist = slist->next;
+
+      if (g_pattern_spec_equal (tmp_pspec->pspec, pspec->pspec))
+        {
+          GtkPathPriorityType lprio = tmp_pspec->seq_id >> 28;
+
+          pattern_spec_free (pspec);
+          pspec = NULL;
+          if (lprio < priority)
+            {
+              tmp_pspec->seq_id &= 0x0fffffff;
+              tmp_pspec->seq_id |= priority << 28;
+            }
+          break;
+        }
+    }
+  if (pspec)
+    {
+      pspec->seq_id |= seq_id++ & 0x0fffffff;
+      *slist_p = g_slist_prepend (*slist_p, pspec);
+    }
+}
