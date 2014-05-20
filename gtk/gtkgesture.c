@@ -44,6 +44,28 @@
  * - A number of #GtkGesture::update, whenever an input event is processed.
  * - #GtkGesture::end when the gesture is no longer recognized.
  *
+ * ## Event propagation
+ *
+ * To receive events, a gesture needs to first be attached to its widget with
+ * gtk_gesture_attach(). The phase passed to this call determines at which
+ * point in the event processing a gesture operates.
+ *
+ * In the capture phase, events are propagated from the toplevel down to the
+ * target widget, and gestures that are attached to containers above the widget
+ * get a chance to interact with the event before it reaches the target.
+ *
+ * After the capture phase, GTK+ emits the traditional #GtkWidget::button-press,
+ * #GtkWidget::button-release, #GtkWidget::touch-event, etc signals. Gestures 
+ * with the target phase are fed events from the default #GtkWidget::event
+ * handlers.
+ *
+ * In the bubble phase, events are propagated up from the target widget to the
+ * toplevel, and gestures that are attached to containers above the widget get
+ * a chance to interact with events that have not been handled yet.
+ *
+ * Gestures attached with the phase 'none' are not receiving any events
+ * automatically, but events can be passed to them with gtk_gesture_handle_event().
+ *
  * ## States of a sequence # {#touch-sequence-states}
  *
  * Whenever input interaction happens, a single event may trigger a cascade of
@@ -53,9 +75,10 @@
  * in order to enable cooperation of gestures around the #GdkEventSequences
  * triggering those.
  *
- * Within a widget, gestures can be grouped through gtk_gesture_group(), grouped
- * gestures synchronize the state of sequences, so calling gtk_gesture_set_sequence_state()
- * on one will effectively propagate the state throughout the group.
+ * Within a widget, gestures can be grouped through gtk_gesture_group(),
+ * grouped gestures synchronize the state of sequences, so calling
+ * gtk_gesture_set_sequence_state() on one will effectively propagate
+ * the state throughout the group.
  *
  * By default, all sequences start out in the #GTK_EVENT_SEQUENCE_NONE state,
  * sequences in this state trigger the gesture event handler, but event
