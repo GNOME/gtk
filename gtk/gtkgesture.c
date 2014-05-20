@@ -64,7 +64,8 @@
  * a chance to interact with events that have not been handled yet.
  *
  * Gestures attached with the phase 'none' are not receiving any events
- * automatically, but events can be passed to them with gtk_gesture_handle_event().
+ * automatically, but events can be passed to them with
+ * gtk_event_controller_handle_event().
  *
  * ## States of a sequence # {#touch-sequence-states}
  *
