@@ -49,6 +49,21 @@ typedef struct _GtkMenuClass   GtkMenuClass;
 typedef struct _GtkMenuPrivate GtkMenuPrivate;
 
 /**
+ * GtkArrowPlacement:
+ * @GTK_ARROWS_BOTH: Place one arrow on each end of the menu.
+ * @GTK_ARROWS_START: Place both arrows at the top of the menu.
+ * @GTK_ARROWS_END: Place both arrows at the bottom of the menu.
+ *
+ * Used to specify the placement of scroll arrows in scrolling menus.
+ */
+typedef enum
+{
+  GTK_ARROWS_BOTH,
+  GTK_ARROWS_START,
+  GTK_ARROWS_END
+} GtkArrowPlacement;
+
+/**
  * GtkMenuPositionFunc:
  * @menu: a #GtkMenu.
  * @x: (out): address of the #gint representing the horizontal
