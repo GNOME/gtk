@@ -115,6 +115,55 @@ struct _GtkWindowGroupClass
   void (*_gtk_reserved4) (void);
 };
 
+
+/**
+ * GtkWindowType:
+ * @GTK_WINDOW_TOPLEVEL: A regular window, such as a dialog.
+ * @GTK_WINDOW_POPUP: A special window such as a tooltip.
+ *
+ * A #GtkWindow can be one of these types. Most things you’d consider a
+ * “window” should have type #GTK_WINDOW_TOPLEVEL; windows with this type
+ * are managed by the window manager and have a frame by default (call
+ * gtk_window_set_decorated() to toggle the frame).  Windows with type
+ * #GTK_WINDOW_POPUP are ignored by the window manager; window manager
+ * keybindings won’t work on them, the window manager won’t decorate the
+ * window with a frame, many GTK+ features that rely on the window
+ * manager will not work (e.g. resize grips and
+ * maximization/minimization). #GTK_WINDOW_POPUP is used to implement
+ * widgets such as #GtkMenu or tooltips that you normally don’t think of
+ * as windows per se. Nearly all windows should be #GTK_WINDOW_TOPLEVEL.
+ * In particular, do not use #GTK_WINDOW_POPUP just to turn off
+ * the window borders; use gtk_window_set_decorated() for that.
+ */
+typedef enum
+{
+  GTK_WINDOW_TOPLEVEL,
+  GTK_WINDOW_POPUP
+} GtkWindowType;
+
+/**
+ * GtkWindowPosition:
+ * @GTK_WIN_POS_NONE: No influence is made on placement.
+ * @GTK_WIN_POS_CENTER: Windows should be placed in the center of the screen.
+ * @GTK_WIN_POS_MOUSE: Windows should be placed at the current mouse position.
+ * @GTK_WIN_POS_CENTER_ALWAYS: Keep window centered as it changes size, etc.
+ * @GTK_WIN_POS_CENTER_ON_PARENT: Center the window on its transient
+ *  parent (see gtk_window_set_transient_for()).
+ *
+ * Window placement can be influenced using this enumeration. Note that
+ * using #GTK_WIN_POS_CENTER_ALWAYS is almost always a bad idea.
+ * It won’t necessarily work well with all window managers or on all windowing systems.
+ */
+typedef enum
+{
+  GTK_WIN_POS_NONE,
+  GTK_WIN_POS_CENTER,
+  GTK_WIN_POS_MOUSE,
+  GTK_WIN_POS_CENTER_ALWAYS,
+  GTK_WIN_POS_CENTER_ON_PARENT
+} GtkWindowPosition;
+
+
 GDK_AVAILABLE_IN_ALL
 GType      gtk_window_get_type                 (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
