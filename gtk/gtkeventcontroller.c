@@ -279,7 +279,7 @@ gtk_event_controller_get_event_mask (GtkEventController *controller)
  *
  * Returns the #GtkWidget this controller relates to.
  *
- * Returns: a #GtkWidget
+ * Returns: (transfer none): a #GtkWidget
  *
  * Since: 3.14
  **/
