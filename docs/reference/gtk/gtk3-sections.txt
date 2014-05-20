@@ -6448,6 +6448,7 @@ gtk_clipboard_get_type
 <TITLE>Drag and Drop</TITLE>
 GtkDestDefaults
 GtkTargetFlags
+GtkDragResult
 <SUBSECTION Destination Side>
 gtk_drag_dest_set
 gtk_drag_dest_set_proxy
@@ -6536,7 +6537,6 @@ GtkToolbarStyle
 GtkWindowPosition
 GtkWindowType
 GtkSortType
-GtkDragResult
 GtkJunctionSides
 GtkBorderStyle
 GtkRegionFlags
