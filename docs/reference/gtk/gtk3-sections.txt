@@ -57,6 +57,7 @@ gtk_about_dialog_get_type
 GtkAccelGroup
 GtkAccelGroupClass
 gtk_accel_group_new
+GtkAccelFlags
 gtk_accel_group_connect
 gtk_accel_group_connect_by_path
 GtkAccelGroupActivate
@@ -6504,7 +6505,6 @@ gtk_binding_set_add_path
 <SECTION>
 <FILE>gtkenums</FILE>
 <TITLE>Standard Enumerations</TITLE>
-GtkAccelFlags
 GtkArrowPlacement
 GtkArrowType
 GtkAttachOptions
