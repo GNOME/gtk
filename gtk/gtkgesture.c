@@ -684,11 +684,11 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::end:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that made gesture recognition to finish.
+   * @sequence: the #GdkEventSequence that made gesture recognition to finish
    *
    * This signal is emitted when @gesture either stopped recognizing the event
    * sequences as something to be handled (the #GtkGesture::check handler returned
-   * #FALSE), or the number of touch sequences became higher or lower than
+   * %FALSE), or the number of touch sequences became higher or lower than
    * #GtkGesture:n-points.
    *
    * Note: @sequence might not pertain to the group of sequences that were
@@ -708,7 +708,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::update:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that was updated.
+   * @sequence: the #GdkEventSequence that was updated
    *
    * This signal is emitted whenever an event is handled while the gesture is
    * recognized. @sequence is guaranteed to pertain to the set of active touches.
@@ -725,7 +725,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::cancel:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that was cancelled.
+   * @sequence: the #GdkEventSequence that was cancelled
    *
    * This signal is emitted whenever a sequence is cancelled. This usually
    * happens on active touches when gtk_event_controller_reset() is called
@@ -746,7 +746,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::sequence-state-changed:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that was cancelled.
+   * @sequence: the #GdkEventSequence that was cancelled
    * @state: the new sequence state
    *
    * This signal is emitted whenever a sequence state changes. See
@@ -786,7 +786,7 @@ gtk_gesture_init (GtkGesture *gesture)
  * Returns the master #GdkDevice that is currently operating
  * on @gesture, or %NULL if the gesture is not being interacted.
  *
- * Returns: a #GdkDevice, or %NULL.
+ * Returns: a #GdkDevice, or %NULL
  *
  * Since: 3.14
  **/
@@ -809,7 +809,7 @@ gtk_gesture_get_device (GtkGesture *gesture)
  *
  * Returns the @sequence state, as seen by @gesture.
  *
- * Returns: The sequence state in @gesture.
+ * Returns: The sequence state in @gesture
  *
  * Since: 3.14
  **/
@@ -850,8 +850,8 @@ gtk_gesture_get_sequence_state (GtkGesture       *gesture,
  * * None → Claimed
  * * None → Claimed → Denied
  *
- * Returns: #TRUE if @sequence is handled by @gesture,
- *          and the state is changed successfully.
+ * Returns: %TRUE if @sequence is handled by @gesture,
+ *          and the state is changed successfully
  *
  * Since: 3.14
  **/
@@ -905,7 +905,7 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
  * for more details on sequence states.
  *
  * Returns: %TRUE if the state of at least one sequence
- *     was changed successfully.
+ *     was changed successfully
  *
  * Since: 3.14
  */
@@ -937,12 +937,14 @@ gtk_gesture_set_state (GtkGesture            *gesture,
  * @gesture: a #GtkGesture
  *
  * Returns the list of #GdkEventSequences currently being interpreted
- * by @gesture
+ * by @gesture.
  *
  * Returns: (transfer container) (element-type GdkEventSequence): A list
  *          of #GdkEventSequences, the list elements are owned by GTK+
  *          and must not be freed or modified, the list itself must be deleted
  *          through g_list_free()
+ *
+ * Since: 3.14
  **/
 GList *
 gtk_gesture_get_sequences (GtkGesture *gesture)
@@ -978,7 +980,7 @@ gtk_gesture_get_sequences (GtkGesture *gesture)
  *
  * Returns the #GdkEventSequence that was last updated on @gesture.
  *
- * Returns: The last updated sequence.
+ * Returns: The last updated sequence
  *
  * Since: 3.14
  **/
@@ -1090,11 +1092,11 @@ _gtk_gesture_get_last_update_time (GtkGesture       *gesture,
  * @rect: (out): bounding box containing all active touches.
  *
  * If there are touch sequences being currently handled by @gesture,
- * this function returns #TRUE and fills in @rect with the bounding
- * box containing all active touches. Otherwise, #FALSE will be
+ * this function returns %TRUE and fills in @rect with the bounding
+ * box containing all active touches. Otherwise, %FALSE will be
  * returned.
  *
- * Returns: #TRUE if there are active touches, #FALSE otherwise
+ * Returns: %TRUE if there are active touches, %FALSE otherwise
  *
  * Since: 3.14
  **/
@@ -1154,11 +1156,11 @@ gtk_gesture_get_bounding_box (GtkGesture   *gesture,
  * @y: (out): Y coordinate for the bounding box center
  *
  * If there are touch sequences being currently handled by @gesture,
- * this function returns #TRUE and fills in @x and @y with the center
- * of the bounding box containing all active touches. Otherwise, #FALSE
+ * this function returns %TRUE and fills in @x and @y with the center
+ * of the bounding box containing all active touches. Otherwise, %FALSE
  * will be returned.
  *
- * Returns: #FALSE if no active touches are present, #TRUE otherwise
+ * Returns: %FALSE if no active touches are present, %TRUE otherwise
  *
  * Since: 3.14
  **/
@@ -1188,7 +1190,7 @@ gtk_gesture_get_bounding_box_center (GtkGesture *gesture,
  * A gesture is active meanwhile there are touch sequences
  * interacting with it.
  *
- * Returns: %TRUE if gesture is active.
+ * Returns: %TRUE if gesture is active
  *
  * Since: 3.14
  **/
@@ -1207,9 +1209,9 @@ gtk_gesture_is_active (GtkGesture *gesture)
  * Returns %TRUE if the gesture is currently recognized.
  * A gesture is recognized if there are as many interacting
  * touch sequences as required by @gesture, and #GtkGesture::check
- * returned #TRUE for the sequences being currently interpreted.
+ * returned %TRUE for the sequences being currently interpreted.
  *
- * Returns: %TRUE if gesture is recognized.
+ * Returns: %TRUE if gesture is recognized
  *
  * Since: 3.14
  **/
@@ -1242,10 +1244,10 @@ _gtk_gesture_check (GtkGesture *gesture)
  * @gesture: a #GtkGesture
  * @sequence: a #GdkEventSequence
  *
- * Returns #TRUE if @gesture is currently handling events corresponding to
+ * Returns %TRUE if @gesture is currently handling events corresponding to
  * @sequence.
  *
- * Returns: #TRUE if @gesture is handling @sequence.
+ * Returns: %TRUE if @gesture is handling @sequence
  *
  * Since: 3.14
  **/
@@ -1299,7 +1301,7 @@ _gtk_gesture_cancel_sequence (GtkGesture       *gesture,
  * handled by @gesture. See gtk_gesture_set_window() for more
  * information.
  *
- * Returns: the user defined window, or %NULL if none.
+ * Returns: the user defined window, or %NULL if none
  *
  * Since: 3.14
  **/
@@ -1448,7 +1450,7 @@ gtk_gesture_ungroup (GtkGesture *gesture)
  * Returns all gestures in the group of @gesture
  *
  * Returns: (element-type GtkGesture) (transfer container): The list
- *   of #GtkGestures, free with g_list_free().
+ *   of #GtkGestures, free with g_list_free()
  *
  * Since: 3.14
  **/
@@ -1469,7 +1471,7 @@ gtk_gesture_get_group (GtkGesture *gesture)
  * @gesture: a #GtkGesture
  * @other: another #GtkGesture
  *
- * Returns #TRUE if both gestures pertain to the same group.
+ * Returns %TRUE if both gestures pertain to the same group.
  *
  * Returns: whether the gestures are grouped
  *

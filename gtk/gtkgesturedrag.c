@@ -177,7 +177,7 @@ gtk_gesture_drag_init (GtkGestureDrag *gesture)
  * gtk_gesture_drag_new:
  * @widget: a #GtkWidget
  *
- * Returns a newly created #GtkGesture that recognizes drags
+ * Returns a newly created #GtkGesture that recognizes drags.
  *
  * Returns: a newly created #GtkGestureDrag
  *
@@ -201,7 +201,7 @@ gtk_gesture_drag_new (GtkWidget *widget)
  * and fills in @x and @y with the drag start coordinates,
  * in window-relative coordinates.
  *
- * Returns: #TRUE if the gesture is active.
+ * Returns: %TRUE if the gesture is active
  *
  * Since: 3.14
  **/
@@ -241,7 +241,7 @@ gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
  * fills in @x and @y with the coordinates of the current point,
  * as an offset to the starting drag point.
  *
- * Returns: #TRUE if the gesture is active.
+ * Returns: %TRUE if the gesture is active
  *
  * Since: 3.14
  **/

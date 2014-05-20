@@ -25,14 +25,14 @@
  *
  * #GtkGestureSwipe is a #GtkGesture implementation able to recognize
  * swipes, after a press/move/.../move/release sequence happens, the
- * GtkGestureSwipe:swipe signal will be emitted, providing the velocity
+ * #GtkGestureSwipe::swipe signal will be emitted, providing the velocity
  * and directionality of the sequence at the time it was lifted.
  *
  * If the velocity is desired in intermediate points,
  * gtk_gesture_swipe_get_velocity() can be called on eg. a
  * #GtkGesture::update handler.
  *
- * All velocities are reported in pixels/sec values.
+ * All velocities are reported in pixels/sec units.
  */
 
 #include "config.h"
@@ -228,7 +228,7 @@ gtk_gesture_swipe_init (GtkGestureSwipe *gesture)
  * gtk_gesture_swipe_new:
  * @widget: a #GtkWidget
  *
- * Returns a newly created #GtkGesture that recognizes swipes
+ * Returns a newly created #GtkGesture that recognizes swipes.
  *
  * Returns: a newly created #GtkGestureSwipe
  *

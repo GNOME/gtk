@@ -253,7 +253,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
  * gtk_gesture_long_press_new:
  * @widget: a #GtkWidget
  *
- * Returns a newly created #GtkGesture that recognizes long presses
+ * Returns a newly created #GtkGesture that recognizes long presses.
  *
  * Returns: a newly created #GtkGestureLongPress
  *

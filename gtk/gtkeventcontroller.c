@@ -205,7 +205,7 @@ gtk_event_controller_init (GtkEventController *controller)
  * and the controller actions triggered.
  *
  * Returns: %TRUE if the event was potentially useful to trigger the
- *          controller action.
+ *          controller action
  *
  * Since: 3.14
  **/
@@ -257,7 +257,7 @@ gtk_event_controller_set_event_mask (GtkEventController *controller,
  *
  * Returns the event mask necessary for the events handled by @controller.
  *
- * Returns: the controller event mask.
+ * Returns: the controller event mask
  *
  * Since: 3.14
  **/

@@ -24,9 +24,9 @@
  *
  * #GtkGestureMultiPress is a #GtkGesture implementation able to recognize
  * multiple clicks on a nearby zone, which can be listened for through the
- * #GtkGestureMultiPress::pressed signal. Whenever time or distance between clicks
- * exceed the GTK+ defaults, #GtkGestureMultiPress::stopped is emitted, and the
- * click counter is reset.
+ * #GtkGestureMultiPress::pressed signal. Whenever time or distance between
+ * clicks exceed the GTK+ defaults, #GtkGestureMultiPress::stopped is emitted,
+ * and the click counter is reset.
  *
  * Callers may also restrict the area that is considered valid for a >1
  * touch/button press through gtk_gesture_multi_press_set_area(), so any
@@ -392,9 +392,9 @@ gtk_gesture_multi_press_new (GtkWidget *widget)
 /**
  * gtk_gesture_multi_press_set_area:
  * @gesture: a #GtkGesture
- * @rect: (allow-none): rectangle to receive coordinates on.
+ * @rect: (allow-none): rectangle to receive coordinates on
  *
- * If @rect is non-#NULL, the press area will be checked to be
+ * If @rect is non-%NULL, the press area will be checked to be
  * confined within the rectangle, otherwise the button count
  * will be reset so the press is seen as being the first one.
  * If @rect is #NULL, the area will be reset to an unrestricted
@@ -432,11 +432,13 @@ gtk_gesture_multi_press_set_area (GtkGestureMultiPress *gesture,
  * @rect: (out): return location for the press area
  *
  * If an area was set through gtk_gesture_multi_press_set_area(),
- * this function will return #TRUE and fill in @rect with the
+ * this function will return %TRUE and fill in @rect with the
  * press area. See gtk_gesture_multi_press_set_area() for more
  * details on what the press area represents.
  *
- * Returns: 3.14
+ * Returns: %TRUE if @rect was filled with the press area
+ *
+ * Since: 3.14
  **/
 gboolean
 gtk_gesture_multi_press_get_area (GtkGestureMultiPress *gesture,

@@ -172,7 +172,7 @@ gtk_gesture_zoom_class_init (GtkGestureZoomClass *klass)
  * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes zoom
- * in/out gestures (usually known as pinch/zoom)
+ * in/out gestures (usually known as pinch/zoom).
  *
  * Returns: a newly created #GtkGestureZoom
  *
