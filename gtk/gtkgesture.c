@@ -680,7 +680,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, begin),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, G_TYPE_POINTER);
+                  G_TYPE_NONE, 1, GDK_TYPE_EVENT_SEQUENCE);
   /**
    * GtkGesture::end:
    * @gesture: the object which received the signal
@@ -704,7 +704,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, end),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, G_TYPE_POINTER);
+                  G_TYPE_NONE, 1, GDK_TYPE_EVENT_SEQUENCE);
   /**
    * GtkGesture::update:
    * @gesture: the object which received the signal
@@ -721,7 +721,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, update),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, G_TYPE_POINTER);
+                  G_TYPE_NONE, 1, GDK_TYPE_EVENT_SEQUENCE);
   /**
    * GtkGesture::cancel:
    * @gesture: the object which received the signal
@@ -742,7 +742,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, cancel),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, G_TYPE_POINTER);
+                  G_TYPE_NONE, 1, GDK_TYPE_EVENT_SEQUENCE);
   /**
    * GtkGesture::sequence-state-changed:
    * @gesture: the object which received the signal
@@ -761,7 +761,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, sequence_state_changed),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 2, G_TYPE_POINTER,
+                  G_TYPE_NONE, 2, GDK_TYPE_EVENT_SEQUENCE,
                   GTK_TYPE_EVENT_SEQUENCE_STATE);
 }
 
