@@ -151,6 +151,7 @@ content_files =					\
 	tree_widget.sgml			\
 	windows.sgml				\
 	x11.sgml				\
+	gtk3-demo.xml				\
 	gtk-query-immodules-3.0.xml		\
 	gtk-update-icon-cache.xml		\
 	gtk-launch.xml				\
@@ -447,6 +448,7 @@ man_MANS = 				\
 	gtk-query-immodules-3.0.1	\
 	gtk-update-icon-cache.1		\
 	gtk-launch.1			\
+	gtk3-demo.1			\
 	broadwayd.1
 
 if ENABLE_MAN

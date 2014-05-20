@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk3-widget-factory">
+
+<refentryinfo>
+  <title>gtk3-widget-factory</title>
+  <productname>GTK+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Matthias</firstname>
+      <surname>Clasen</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
+<refmeta>
+  <refentrytitle>gtk3-widget-factory</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname>gtk3-widget-factory</refname>
+  <refpurpose>Demonstrate GTK+ widgets</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtk3-widget-factory</command>
+<arg choice="opt">--help</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<command>gtk3-widget-factory</command> is a collection of examples.
+Its purpose is to demonstrate many GTK+ widgets in a form
+that is useful to GTK+ theme developers.
+</para>
+<para>
+The application shows widgets in different, typical combinations
+and states.
+</para>
+</refsect1>
+
+<refsect1><title>Options</title>
+  <para>The following options are understood:</para>
+  <variablelist>
+    <varlistentry>
+    <term><option>-h</option>, <option>--help</option></term>
+      <listitem><para>Show help options</para></listitem>
+    </varlistentry>
+  </variablelist>
+</refsect1>
+
+</refentry>
