@@ -6333,6 +6333,7 @@ GTK_RC_STYLE_GET_CLASS
 <SUBSECTION Private>
 gtk_rc_style_get_type
 GtkRcContext
+GTK_PATH_PRIO_MASK
 </SECTION>
 
 <SECTION>
@@ -6541,8 +6542,6 @@ GtkStateFlags
 GtkToolbarStyle
 GtkSortType
 
-<SUBSECTION Private>
-GTK_PATH_PRIO_MASK
 </SECTION>
 
 <SECTION>
