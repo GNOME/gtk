@@ -7379,7 +7379,7 @@ gtk_widget_reparent_fixup_child (GtkWidget *widget,
  * Moves a widget from one #GtkContainer to another, handling reference
  * count issues to avoid destroying the widget.
  *
- * @Deprecated: 3.14. Use gtk_container_remove() and gtk_container_add().
+ * Deprecated: 3.14. Use gtk_container_remove() and gtk_container_add().
  **/
 void
 gtk_widget_reparent (GtkWidget *widget,
