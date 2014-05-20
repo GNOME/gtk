@@ -242,7 +242,7 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
   if (GTK_IS_CELL_RENDERER (pl->priv->object))
     {
       gpointer *layout;
-      gpointer *area;
+      GtkCellArea *area;
       gint column = -1;
 
       area = NULL;
@@ -250,7 +250,7 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
       if (layout)
         area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (layout));
       if (area)
-        column = gtk_cell_area_attribute_get_column (GTK_CELL_AREA (area),
+        column = gtk_cell_area_attribute_get_column (area,
                                                      GTK_CELL_RENDERER (pl->priv->object),
                                                      prop->name);
 
