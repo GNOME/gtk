@@ -22,7 +22,7 @@
  * SECTION:gtkgesture
  * @Short_description: Gesture recognition
  * @Title: GtkGesture
- * @See_also: #GtkEventController, #GtkGestureSingle
+ * @See_also: #GtkGestureSingle
  *
  * #GtkGesture is the base object for gesture recognition, although this
  * object is quite generalized to serve as a base for multi-touch gestures,
