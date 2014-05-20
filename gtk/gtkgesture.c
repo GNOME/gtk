@@ -871,6 +871,20 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
   return TRUE;
 }
 
+/**
+ * gtk_gesture_set_state:
+ * @gesture: a #GtkGesture
+ * @state: the sequence state
+ *
+ * Sets the state of all sequences that @gesture is currently
+ * interacting with. See gtk_gesture_set_sequence_state()
+ * for more details on sequence states.
+ *
+ * Returns: %TRUE if the state of at least one sequence
+ *     was changed successfully.
+ *
+ * Since: 3.14
+ */
 gboolean
 gtk_gesture_set_state (GtkGesture            *gesture,
                        GtkEventSequenceState  state)
