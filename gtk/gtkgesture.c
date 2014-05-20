@@ -786,7 +786,7 @@ gtk_gesture_init (GtkGesture *gesture)
  * Returns the master #GdkDevice that is currently operating
  * on @gesture, or %NULL if the gesture is not being interacted.
  *
- * Returns: a #GdkDevice, or %NULL
+ * Returns: (transfer none) (allow-none): a #GdkDevice, or %NULL
  *
  * Since: 3.14
  **/
@@ -1301,7 +1301,7 @@ _gtk_gesture_cancel_sequence (GtkGesture       *gesture,
  * handled by @gesture. See gtk_gesture_set_window() for more
  * information.
  *
- * Returns: the user defined window, or %NULL if none
+ * Returns: (transfer none) (allow-none): the user defined window, or %NULL if none
  *
  * Since: 3.14
  **/
