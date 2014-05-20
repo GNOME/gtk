@@ -202,6 +202,10 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="tab_expand">True</property>
+            <property name="tab_fill">True</property>
+          </packing>
         </child>
         <child type="tab">
           <object class="GtkLabel">
@@ -213,6 +217,10 @@
           <object class="GtkInspectorVisual">
             <property name="visible">True</property>
           </object>
+          <packing>
+            <property name="tab_expand">True</property>
+            <property name="tab_fill">True</property>
+          </packing>
         </child>
         <child type="tab">
           <object class="GtkLabel">
@@ -225,6 +233,10 @@
             <property name="visible">True</property>
             <property name="global">True</property>
           </object>
+          <packing>
+            <property name="tab_expand">True</property>
+            <property name="tab_fill">True</property>
+          </packing>
         </child>
         <child type="tab">
           <object class="GtkLabel">
@@ -236,6 +248,10 @@
           <object class="GtkInspectorResourceList">
             <property name="visible">True</property>
           </object>
+          <packing>
+            <property name="tab_expand">True</property>
+            <property name="tab_fill">True</property>
+          </packing>
         </child>
         <child type="tab">
           <object class="GtkLabel">
@@ -247,6 +263,10 @@
           <object class="GtkInspectorGeneral">
             <property name="visible">True</property>
           </object>
+          <packing>
+            <property name="tab_expand">True</property>
+            <property name="tab_fill">True</property>
+          </packing>
         </child>
         <child type="tab">
           <object class="GtkLabel">
