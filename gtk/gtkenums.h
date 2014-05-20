@@ -361,29 +361,6 @@ typedef enum
 } GtkOrientation;
 
 /**
- * GtkCornerType:
- * @GTK_CORNER_TOP_LEFT: Place the scrollbars on the right and bottom of the
- *  widget (default behaviour).
- * @GTK_CORNER_BOTTOM_LEFT: Place the scrollbars on the top and right of the
- *  widget.
- * @GTK_CORNER_TOP_RIGHT: Place the scrollbars on the left and bottom of the
- *  widget.
- * @GTK_CORNER_BOTTOM_RIGHT: Place the scrollbars on the top and left of the
- *  widget.
- *
- * Specifies which corner a child widget should be placed in when packed into
- * a #GtkScrolledWindow. This is effectively the opposite of where the scroll
- * bars are placed.
- */
-typedef enum
-{
-  GTK_CORNER_TOP_LEFT,
-  GTK_CORNER_BOTTOM_LEFT,
-  GTK_CORNER_TOP_RIGHT,
-  GTK_CORNER_BOTTOM_RIGHT
-} GtkCornerType;
-
-/**
  * GtkPackType:
  * @GTK_PACK_START: The child is packed into the start of the box
  * @GTK_PACK_END: The child is packed into the end of the box
@@ -439,22 +416,6 @@ typedef enum
   GTK_PATH_WIDGET_CLASS,
   GTK_PATH_CLASS
 } GtkPathType;
-
-/**
- * GtkPolicyType:
- * @GTK_POLICY_ALWAYS: The scrollbar is always visible.
- * @GTK_POLICY_AUTOMATIC: The scrollbar will appear and disappear as necessary. For example,
- *  when all of a #GtkCList can not be seen.
- * @GTK_POLICY_NEVER: The scrollbar will never appear.
- *
- * Determines when a scroll bar will be visible.
- */
-typedef enum
-{
-  GTK_POLICY_ALWAYS,
-  GTK_POLICY_AUTOMATIC,
-  GTK_POLICY_NEVER
-} GtkPolicyType;
 
 /**
  * GtkPositionType:

@@ -3119,6 +3119,7 @@ gtk_scrolled_window_get_hadjustment
 gtk_scrolled_window_get_vadjustment
 gtk_scrolled_window_get_hscrollbar
 gtk_scrolled_window_get_vscrollbar
+GtkPolicyType
 gtk_scrolled_window_set_policy
 gtk_scrolled_window_add_with_viewport
 GtkCornerType
@@ -6522,7 +6523,6 @@ GtkOrientation
 GtkPackType
 GtkPathPriorityType
 GtkPathType
-GtkPolicyType
 GtkPositionType
 GtkReliefStyle
 GtkResizeMode
