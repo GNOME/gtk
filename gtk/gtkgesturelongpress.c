@@ -20,7 +20,7 @@
 
 /**
  * SECTION:gtkgesturelongpress
- * @Short_description: "press and hold" gesture
+ * @Short_description: "Press and Hold" gesture
  * @Title: GtkGestureLongPress
  *
  * #GtkGestureLongPress is a #GtkGesture implementation able to recognize

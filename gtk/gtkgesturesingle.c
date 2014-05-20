@@ -20,11 +20,11 @@
 
 /**
  * SECTION:gtkgesturesingle
- * @Short_description: Gesture especialized for mouse/single finger input
+ * @Short_description: Base class for for mouse/single-touch  gestures
  * @Title: GtkGestureSingle
  *
- * #GtkGestureSingle is an especialization of #GtkGesture, optimized (although
- * not restricted) for dealing with mouse and single touch gestures. Under
+ * #GtkGestureSingle is a subclass of #GtkGesture, optimized (although
+ * not restricted) for dealing with mouse and single-touch gestures. Under
  * interaction, these gestures stick to the first interacting sequence, which
  * is accessible through gtk_gesture_single_get_current_sequence() while the
  * gesture is being interacted with.

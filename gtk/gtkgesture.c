@@ -20,7 +20,7 @@
 
 /**
  * SECTION:gtkgesture
- * @Short_description: Gesture recognition
+ * @Short_description: Base class for gestures
  * @Title: GtkGesture
  * @See_also: #GtkGestureSingle
  *
