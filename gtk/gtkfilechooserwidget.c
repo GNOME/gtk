@@ -95,7 +95,7 @@
 
 /**
  * SECTION:gtkfilechooserwidget
- * Short_description: A file chooser widget
+ * @Short_description: A file chooser widget
  * @Title: GtkFileChooserWidget
  * @See_also: #GtkFileChooserDialog
  *
