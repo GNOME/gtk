@@ -65,6 +65,30 @@ size_group_row_get_property (GObject    *object,
 }
 
 static void
+size_group_row_widget_destroyed (GtkWidget *widget, SizeGroupRow *row)
+{
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (row));
+  if (parent)
+    gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (row));
+}
+
+static void
+set_widget (SizeGroupRow *row, GtkWidget *widget)
+{
+  if (row->widget)
+    g_signal_handlers_disconnect_by_func (row->widget,
+                                          size_group_row_widget_destroyed, row);
+
+  row->widget = widget;
+
+  if (row->widget)
+    g_signal_connect (row->widget, "destroy",
+                      G_CALLBACK (size_group_row_widget_destroyed), row);
+}
+
+static void
 size_group_row_set_property (GObject      *object,
                              guint         property_id,
                              const GValue *value,
@@ -75,11 +99,7 @@ size_group_row_set_property (GObject      *object,
   switch (property_id)
     {
     case PROP_WIDGET:
-      if (row->widget)
-        g_object_remove_weak_pointer (G_OBJECT (row->widget), (gpointer *)&row->widget);
-      row->widget = g_value_get_pointer (value);
-      if (row->widget)
-        g_object_add_weak_pointer (G_OBJECT (row->widget), (gpointer *)&row->widget);
+      set_widget (row, g_value_get_pointer (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -91,8 +111,7 @@ size_group_row_finalize (GObject *object)
 {
   SizeGroupRow *row = (SizeGroupRow *)object;
 
-  if (row->widget)
-    g_object_remove_weak_pointer (G_OBJECT (row->widget), (gpointer *)&row->widget);
+  set_widget (row, NULL);
 
   G_OBJECT_CLASS (size_group_row_parent_class)->finalize (object);
 }
