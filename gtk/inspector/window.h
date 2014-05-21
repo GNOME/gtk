@@ -50,6 +50,7 @@ typedef struct
   GtkWidget *classes_list;
   GtkWidget *widget_css_editor;
   GtkWidget *object_hierarchy;
+  GtkWidget *size_groups;
   GtkWidget *data_list;
   GtkWidget *actions;
 
@@ -75,7 +76,10 @@ GType      gtk_inspector_window_get_type    (void);
 GtkWidget *gtk_inspector_window_new         (void);
 
 void       gtk_inspector_flash_widget       (GtkInspectorWindow *iw,
-                                             GtkWidget      *widget);
+                                             GtkWidget          *widget);
+void       gtk_inspector_start_highlight    (GtkWidget          *widget);
+void       gtk_inspector_stop_highlight     (GtkWidget          *widget);
+                                            
 
 G_END_DECLS
 

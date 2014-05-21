@@ -299,7 +299,7 @@ draw_flash (GtkWidget          *widget,
 {
   GtkAllocation alloc;
 
-  if (iw->flash_count % 2 == 0)
+  if (iw && iw->flash_count % 2 == 0)
     return FALSE;
 
   if (GTK_IS_WINDOW (widget))
@@ -357,6 +357,20 @@ gtk_inspector_flash_widget (GtkInspectorWindow *iw,
 
   start_flash (iw, widget);
   iw->flash_cnx = g_timeout_add (150, (GSourceFunc) on_flash_timeout, iw);
+}
+
+void
+gtk_inspector_start_highlight (GtkWidget *widget)
+{
+  g_signal_connect_after (widget, "draw", G_CALLBACK (draw_flash), NULL);
+  gtk_widget_queue_draw (widget);
+}
+
+void
+gtk_inspector_stop_highlight (GtkWidget *widget)
+{
+  g_signal_handlers_disconnect_by_func (widget, draw_flash, NULL);
+  gtk_widget_queue_draw (widget);
 }
 
 /* vim: set et sw=2 ts=2: */
