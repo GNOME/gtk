@@ -196,10 +196,7 @@ gtk_search_entry_changed (GtkEditable *editable)
     }
   else
     {
-      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-        icon_name = "edit-clear-rtl-symbolic";
-      else
-        icon_name = "edit-clear-symbolic";
+      icon_name = "edit-clear-symbolic";
       cleared = FALSE;
     }
 
