@@ -15,7 +15,7 @@ get_test_icontheme (void)
 
   icon_theme = gtk_icon_theme_new ();
   gtk_icon_theme_set_custom_theme (icon_theme, "icons");
-  current_dir = g_get_current_dir ();
+  current_dir = g_test_get_dir (G_TEST_DIST);
   gtk_icon_theme_set_search_path (icon_theme, &current_dir, 1);
 
   return icon_theme;

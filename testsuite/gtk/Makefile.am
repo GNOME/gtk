@@ -162,7 +162,7 @@ all-am: gschemas.compiled
 if BUILDOPT_INSTALL_TESTS
 insttestdir = $(pkglibexecdir)/installed-tests
 insttest_PROGRAMS = $(TEST_PROGS)
-insttest_DATA = $(test_icontheme)
+nobase_insttest_DATA = $(test_icontheme)
 
 %.test: %$(EXEEXT) Makefile
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
