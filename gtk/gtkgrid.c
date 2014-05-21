@@ -24,6 +24,7 @@
 
 #include "gtkorientableprivate.h"
 #include "gtksizerequest.h"
+#include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -1677,6 +1678,8 @@ gtk_grid_size_allocate (GtkWidget     *widget,
   gtk_grid_request_position (&request, 1);
 
   gtk_grid_request_allocate_children (&request);
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static gboolean
