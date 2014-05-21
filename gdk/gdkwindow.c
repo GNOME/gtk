@@ -10927,14 +10927,13 @@ gdk_window_set_shadow_width (GdkWindow *window,
  * @window: a #GdkWindow
  * @event: a #GdkEvent to show the menu for
  *
- * Asks the window menu to show the window menu. The window menu is
- * the menu shown when right-clicking the titlebar on traditional
+ * Asks the windowing system to show the window menu. The window menu
+ * is the menu shown when right-clicking the titlebar on traditional
  * windows managed by the window manager. This is useful for windows
  * using client-side decorations, activating it with a right-click
  * on the window decorations.
  *
- * Returns: %TRUE if the window menu was shown by the window
- * manager and %FALSE otherwise.
+ * Returns: %TRUE if the window menu was shown and %FALSE otherwise.
  *
  * Since: 3.14
  */
