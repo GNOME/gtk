@@ -791,6 +791,8 @@ gtk_box_size_allocate_no_center (GtkWidget     *widget,
 	  i++;
 	}
     }
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static void
@@ -1158,6 +1160,8 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
       child_allocation.height = center_size;
     }
   gtk_widget_size_allocate_with_baseline (priv->center->widget, &child_allocation, baseline);
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static void

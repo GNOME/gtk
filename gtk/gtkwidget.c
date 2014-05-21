@@ -15414,6 +15414,49 @@ _gtk_widget_supports_clip (GtkWidget *widget)
   return widget->priv->supports_clip;
 }
 
+static void
+union_with_clip (GtkWidget *widget,
+                 gpointer   clip)
+{
+  GtkAllocation widget_clip;
+
+  if (!gtk_widget_is_drawable (widget))
+    return;
+
+  gtk_widget_get_clip (widget, &widget_clip);
+
+  gdk_rectangle_union (&widget_clip, clip, clip);
+}
+
+/**
+ * _gtk_widget_set_simple_clip:
+ * @widget: 
+ *
+ * This is a convenience function for gtk_widget_set_clip(), if you
+ * just want to set the clip for @widget based on its allocation,
+ * CSS properties and - if the widget is a #GtkContainer - its
+ * children. gtk_widget_set_allocation() must have been called
+ * and all children must have been allocated with
+ * gtk_widget_size_allocate() before calling this function. It is
+ * therefor a good idea to call this function last in your
+ * implementation of GtkWidget::size_allocate().
+ *
+ * If your widget overdraws its contents, you cannot use this
+ * function and must call gtk_widget_set_clip() yourself.
+ **/
+void
+_gtk_widget_set_simple_clip (GtkWidget *widget)
+{
+  GtkAllocation clip;
+
+  gtk_widget_get_allocation (widget, &clip);
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), union_with_clip, &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
 /**
  * gtk_widget_get_allocation:
  * @widget: a #GtkWidget

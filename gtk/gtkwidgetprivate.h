@@ -133,7 +133,8 @@ void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
 GtkStyle *        _gtk_widget_get_style                    (GtkWidget *widget);
 void              _gtk_widget_set_style                    (GtkWidget *widget,
                                                             GtkStyle  *style);
-gboolean          _gtk_widget_supports_clip                (GtkWidget           *widget);
+gboolean          _gtk_widget_supports_clip                (GtkWidget *widget);
+void              _gtk_widget_set_simple_clip              (GtkWidget *widget);
 
 typedef gboolean (*GtkCapturedEventHandler) (GtkWidget *widget, GdkEvent *event);
 
