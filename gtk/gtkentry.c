@@ -4706,6 +4706,13 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
   if (priv->magnifier_popover)
     gtk_widget_hide (priv->magnifier_popover);
 
+  /* Check whether the drag was cancelled rather than finished */
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    {
+      gtk_entry_selection_bubble_popup_unset (entry);
+      return;
+    }
+
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   source = gdk_event_get_source_device (event);
   is_touchscreen = (test_touchscreen ||
@@ -4716,10 +4723,6 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
     gtk_entry_selection_bubble_popup_unset (entry);
   else if (is_touchscreen)
     gtk_entry_selection_bubble_popup_set (entry);
-
-  /* Check whether the drag was cancelled rather than finished */
-  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
-    return;
 
   if (in_drag)
     {
