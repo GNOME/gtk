@@ -31,7 +31,6 @@ enum
   COLUMN_NAME,
   COLUMN_VALUE,
   COLUMN_DEFINED_AT,
-  COLUMN_OBJECT,
   COLUMN_TOOLTIP,
   COLUMN_WRITABLE,
   COLUMN_ATTRIBUTE
@@ -182,12 +181,26 @@ row_activated (GtkTreeView *tv,
   g_free (name);
 }
 
+static void cleanup_object (GtkInspectorPropList *pl);
+
+static void
+finalize (GObject *object)
+{
+  GtkInspectorPropList *pl = GTK_INSPECTOR_PROP_LIST (object);
+
+  cleanup_object (pl);
+  g_hash_table_unref (pl->priv->prop_iters);
+
+  G_OBJECT_CLASS (gtk_inspector_prop_list_parent_class)->finalize (object);
+}
+
 static void
 gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->finalize = finalize;
   object_class->get_property = get_property;
   object_class->set_property = set_property;
 
@@ -262,7 +275,6 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
                       COLUMN_NAME, prop->name,
                       COLUMN_VALUE, value ? value : "",
                       COLUMN_DEFINED_AT, g_type_name (prop->owner_type),
-                      COLUMN_OBJECT, pl->priv->object,
                       COLUMN_TOOLTIP, g_param_spec_get_blurb (prop),
                       COLUMN_WRITABLE, (prop->flags & G_PARAM_WRITABLE) != 0,
                       COLUMN_ATTRIBUTE, attribute ? attribute : "",
@@ -278,40 +290,28 @@ gtk_inspector_prop_list_prop_changed_cb (GObject              *pspec,
                                          GParamSpec           *prop,
                                          GtkInspectorPropList *pl)
 {
-  GtkTreeIter *iter = g_hash_table_lookup (pl->priv->prop_iters, prop->name);
+  GtkTreeIter *iter;
 
+  if (!pl->priv->object)
+    return;
+
+  iter = g_hash_table_lookup (pl->priv->prop_iters, prop->name);
   if (iter != NULL)
     gtk_inspector_prop_list_update_prop (pl, iter, prop);
 }
 
-static void remove_dead_object (gpointer data, GObject *dead_object);
-
 static void
 cleanup_object (GtkInspectorPropList *pl)
 {
-  if (pl->priv->object)
-    g_object_weak_unref (pl->priv->object, remove_dead_object, pl);
-
-  if (pl->priv->object && pl->priv->notify_handler_id != 0)
-    {
-      g_signal_handler_disconnect (pl->priv->object, pl->priv->notify_handler_id);
-      pl->priv->notify_handler_id = 0;
-    }
+  if (pl->priv->object &&
+      g_signal_handler_is_connected (pl->priv->object, pl->priv->notify_handler_id))
+    g_signal_handler_disconnect (pl->priv->object, pl->priv->notify_handler_id);
 
   pl->priv->object = NULL;
+  pl->priv->notify_handler_id = 0;
 
   g_hash_table_remove_all (pl->priv->prop_iters);
   gtk_list_store_clear (pl->priv->model);
-}
-
-static void
-remove_dead_object (gpointer data, GObject *dead_object)
-{
-  GtkInspectorPropList *pl = data;
-
-  pl->priv->notify_handler_id = 0;
-  pl->priv->object = NULL;
-  cleanup_object (pl);
 }
 
 gboolean
@@ -328,15 +328,11 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   cleanup_object (pl);
 
-  pl->priv->object = object;
-
   if (!object)
     {
       gtk_widget_hide (GTK_WIDGET (pl));
       return TRUE;
     }
-
-  g_object_weak_ref (object, remove_dead_object, pl);
 
   if (pl->priv->child_properties)
     {
@@ -366,6 +362,8 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
       props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
     }
 
+  pl->priv->object = object;
+
   for (i = 0; i < num_properties; i++)
     {
       GParamSpec *prop = props[i];
@@ -379,6 +377,11 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
       g_hash_table_insert (pl->priv->prop_iters, (gpointer) prop->name, gtk_tree_iter_copy (&iter));
     }
 
+  g_free (props);
+
+  if (GTK_IS_WIDGET (object))
+    g_signal_connect_swapped (object, "destroy", G_CALLBACK (cleanup_object), pl);
+
   /* Listen for updates */
   pl->priv->notify_handler_id =
       g_signal_connect (object,
@@ -387,6 +390,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
                         pl);
 
   gtk_widget_show (GTK_WIDGET (pl));
+
   return TRUE;
 }
 

@@ -5,7 +5,6 @@
       <column type="gchararray"/>
       <column type="gchararray"/>
       <column type="gchararray"/>
-      <column type="GObject"/>
       <column type="gchararray"/>
       <column type="gboolean"/>
       <column type="gchararray"/>
@@ -25,7 +24,7 @@
           <object class="GtkTreeView" id="tree">
             <property name="visible">True</property>
             <property name="model">model</property>
-            <property name="tooltip-column">4</property>
+            <property name="tooltip-column">3</property>
             <property name="activate-on-single-click">True</property>
             <signal name="row-activated" handler="row_activated"/>
             <child>
@@ -39,7 +38,7 @@
                   </object>
                   <attributes>
                     <attribute name="text">0</attribute>
-                    <attribute name="sensitive">5</attribute>
+                    <attribute name="sensitive">4</attribute>
                   </attributes>
                 </child>
               </object>
@@ -57,7 +56,7 @@
                   </object>
                   <attributes>
                     <attribute name="text">1</attribute>
-                    <attribute name="sensitive">5</attribute>
+                    <attribute name="sensitive">4</attribute>
                   </attributes>
                 </child>
               </object>
@@ -72,8 +71,8 @@
                     <property name="editable">False</property>
                   </object>
                   <attributes>
-                    <attribute name="text">6</attribute>
-                    <attribute name="sensitive">5</attribute>
+                    <attribute name="text">5</attribute>
+                    <attribute name="sensitive">4</attribute>
                   </attributes>
                 </child>
               </object>
@@ -88,7 +87,7 @@
                   </object>
                   <attributes>
                     <attribute name="text">2</attribute>
-                    <attribute name="sensitive">5</attribute>
+                    <attribute name="sensitive">4</attribute>
                   </attributes>
                 </child>
               </object>
