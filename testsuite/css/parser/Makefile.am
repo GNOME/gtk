@@ -334,6 +334,7 @@ test_data = \
 	single-slash.errors\
 	single-slash.ref.css \
 	string-values.css \
+	string-values.ref.css \
 	test.png \
 	transition.css \
 	transition.ref.css \

@@ -1025,13 +1025,13 @@ _gtk_css_print_string (GString    *str,
   g_string_append_c (str, '"');
 
   do {
-    len = strcspn (string, "\"\n\r\f");
+    len = strcspn (string, "\\\"\n\r\f");
     g_string_append_len (str, string, len);
     string += len;
     switch (*string)
       {
       case '\0':
-        break;
+        goto out;
       case '\n':
         g_string_append (str, "\\A ");
         break;
@@ -1054,6 +1054,7 @@ _gtk_css_print_string (GString    *str,
     string++;
   } while (*string);
 
+out:
   g_string_append_c (str, '"');
 }
 

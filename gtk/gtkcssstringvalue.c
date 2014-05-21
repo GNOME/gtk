@@ -88,7 +88,7 @@ gtk_css_value_ident_print (const GtkCssValue *value,
     switch (*string)
       {
       case '\0':
-        break;
+        goto out;
       case '\n':
         g_string_append (str, "\\A ");
         break;
@@ -113,6 +113,9 @@ gtk_css_value_ident_print (const GtkCssValue *value,
       }
     string++;
   } while (*string);
+
+out:
+  ;
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_STRING = {
