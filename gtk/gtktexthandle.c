@@ -193,14 +193,18 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
            event->motion.state & GDK_BUTTON1_MASK &&
            priv->windows[pos].dragged)
     {
-      gint x, y, width, height;
+      gint x, y, width, height, handle_height;
+      GtkAllocation allocation;
 
-      _gtk_text_handle_get_size (handle, &width, &height);
+      gtk_widget_get_allocation (priv->windows[pos].widget, &allocation);
+      width = allocation.width;
+      height = allocation.height;
+      _gtk_text_handle_get_size (handle, NULL, &handle_height);
       x = event->motion.x - priv->windows[pos].dx + (width / 2);
       y = event->motion.y - priv->windows[pos].dy;
 
       if (pos != GTK_TEXT_HANDLE_POSITION_CURSOR)
-        y += height;
+        y += height - handle_height;
 
       y += priv->windows[pos].pointing_to.height / 2;
 
