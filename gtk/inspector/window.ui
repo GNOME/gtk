@@ -198,6 +198,20 @@
                       </object>
                     </child> 
                     <child>
+                      <object class="GtkInspectorSizeGroups" id="size_groups">
+                      </object>
+                      <packing>
+                        <property name="tab_expand">True</property>
+                        <property name="tab_fill">True</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Sizegroups</property>
+                      </object>
+                    </child> 
+                    <child>
                       <object class="GtkInspectorDataList" id="data_list">
                       </object>
                       <packing>

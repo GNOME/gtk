@@ -34,6 +34,7 @@
 #include "python-hooks.h"
 #include "python-shell.h"
 #include "button-path.h"
+#include "size-groups.h"
 #include "data-list.h"
 #include "signals-list.h"
 #include "actions.h"
@@ -70,6 +71,7 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
   gtk_inspector_button_path_set_object (GTK_INSPECTOR_BUTTON_PATH (iw->button_path), selected);
   gtk_inspector_classes_list_set_object (GTK_INSPECTOR_CLASSES_LIST (iw->classes_list), selected);
   gtk_inspector_css_editor_set_object (GTK_INSPECTOR_CSS_EDITOR (iw->widget_css_editor), selected);
+  gtk_inspector_size_groups_set_object (GTK_INSPECTOR_SIZE_GROUPS (iw->size_groups), selected);
   gtk_inspector_data_list_set_object (GTK_INSPECTOR_DATA_LIST (iw->data_list), selected);
   gtk_inspector_actions_set_object (GTK_INSPECTOR_ACTIONS (iw->actions), selected);
   if (GTK_IS_WIDGET (selected))
@@ -168,6 +170,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_hierarchy);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, python_shell);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_popup);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, size_groups);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, data_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, actions);
 

@@ -46,6 +46,8 @@ libgtkinspector_la_SOURCES = 		\
 	resources.c			\
 	signals-list.h			\
 	signals-list.c			\
+	size-groups.h			\
+	size-groups.c			\
 	visual.h			\
 	visual.c			\
 	widget-tree.h			\
