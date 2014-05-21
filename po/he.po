@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-20 10:05+0300\n"
-"PO-Revision-Date: 2014-05-20 10:20+0300\n"
+"POT-Creation-Date: 2014-05-21 12:37+0300\n"
+"PO-Revision-Date: 2014-05-21 12:39+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -3701,7 +3701,7 @@ msgstr "סוג:"
 msgid "Size:"
 msgstr "גודל:"
 
-#: ../gtk/inspector/signals-list.c:101
+#: ../gtk/inspector/signals-list.c:102
 msgid "Yes"
 msgstr "כן"
 
@@ -3722,6 +3722,35 @@ msgstr "מחובר"
 msgid "Count"
 msgstr "מונה"
 
+#: ../gtk/inspector/size-groups.c:194
+msgid "Ignore hidden"
+msgstr "התעלמות מיישומונים מוסתרים"
+
+#: ../gtk/inspector/size-groups.c:212
+msgid "Mode"
+msgstr "מצב"
+
+#. Translators, these strings are names for various 'standard' cover
+#. * pages that the printing system may support.
+#.
+#: ../gtk/inspector/size-groups.c:222
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
+msgid "None"
+msgstr "ללא"
+
+#: ../gtk/inspector/size-groups.c:223
+msgid "Horizontal"
+msgstr "אופקי"
+
+#: ../gtk/inspector/size-groups.c:224
+msgid "Vertical"
+msgstr "אנכי"
+
+#: ../gtk/inspector/size-groups.c:225
+msgid "Both"
+msgstr "שניהם"
+
+#. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
 msgid "Text Direction"
 msgstr "כיוון טקסט"
@@ -3770,7 +3799,7 @@ msgstr "תווית"
 msgid "Address"
 msgstr "כתובת"
 
-#: ../gtk/inspector/window.c:109
+#: ../gtk/inspector/window.c:111
 #, c-format
 msgid "GTK+ Inspector — %s"
 msgstr "מפקח GTK+‎ - ‏%s"
@@ -3800,31 +3829,35 @@ msgstr "מאפייני ילד"
 msgid "CSS Classes"
 msgstr "מחלקות CSS"
 
-#: ../gtk/inspector/window.ui.h:8 ../gtk/inspector/window.ui.h:13
+#: ../gtk/inspector/window.ui.h:8 ../gtk/inspector/window.ui.h:14
 msgid "Custom CSS"
 msgstr "‏CSS מותאם"
 
 #: ../gtk/inspector/window.ui.h:9
+msgid "Sizegroups"
+msgstr "קבוצות גודל "
+
+#: ../gtk/inspector/window.ui.h:10
 msgid "Data"
 msgstr "מידע"
 
-#: ../gtk/inspector/window.ui.h:10
+#: ../gtk/inspector/window.ui.h:11
 msgid "Actions"
 msgstr "פעולות"
 
-#: ../gtk/inspector/window.ui.h:11
+#: ../gtk/inspector/window.ui.h:12
 msgid "Objects"
 msgstr "עצמים"
 
-#: ../gtk/inspector/window.ui.h:12
+#: ../gtk/inspector/window.ui.h:13
 msgid "Visual"
 msgstr "חזותי"
 
-#: ../gtk/inspector/window.ui.h:14
+#: ../gtk/inspector/window.ui.h:15
 msgid "Resources"
 msgstr "מאשבים"
 
-#: ../gtk/inspector/window.ui.h:15
+#: ../gtk/inspector/window.ui.h:16
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
 msgid "General"
 msgstr "כללי"
@@ -5101,13 +5134,6 @@ msgstr "עדיפות המשימה"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4816
 msgid "Billing Info"
 msgstr "נתוני חיוב"
-
-#. Translators, these strings are names for various 'standard' cover
-#. * pages that the printing system may support.
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
-msgid "None"
-msgstr "ללא"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
 msgid "Classified"
@@ -6715,9 +6741,6 @@ msgstr "מנמיך את העצמה"
 
 #~ msgid "Window"
 #~ msgstr "חלון"
-
-#~ msgid "_Mode:"
-#~ msgstr "_מצב:"
 
 #~ msgid "Axes"
 #~ msgstr "צירים"
