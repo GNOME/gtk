@@ -269,6 +269,15 @@ gtk_color_chooser_widget_set_show_editor (GtkColorChooserWidget *cc,
   gtk_widget_set_visible (cc->priv->palette, !show_editor);
 }
 
+static void
+update_from_editor (GtkColorEditor        *editor,
+                    GParamSpec            *pspec,
+                    GtkColorChooserWidget *widget)
+{
+  if (gtk_widget_get_visible (editor))
+    g_object_notify (G_OBJECT (widget), "rgba");
+}
+
 /* UI construction {{{1 */
 
 static guint
@@ -565,6 +574,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   cc->priv->editor = gtk_color_editor_new ();
   gtk_widget_set_halign (cc->priv->editor, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (cc->priv->editor, TRUE);
+  g_signal_connect (cc->priv->editor, "notify::rgba",
+                    G_CALLBACK (update_from_editor), cc);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (cc), box);
