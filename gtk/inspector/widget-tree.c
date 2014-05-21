@@ -48,6 +48,8 @@ struct _GtkInspectorWidgetTreePrivate
 {
   GtkTreeStore *model;
   GHashTable *iters;
+  gulong map_hook;
+  gulong unmap_hook;
 };
 
 static guint widget_tree_signals[LAST_SIGNAL] = { 0 };
@@ -66,8 +68,6 @@ typedef struct
   GtkInspectorWidgetTree *wt;
   GObject *object;
   GtkTreeRowReference *row;
-  gulong map_handler;
-  gulong unmap_handler;
 } ObjectData;
 
 static void
@@ -98,18 +98,33 @@ object_data_free (gpointer data)
   if (od->object)
     g_object_weak_unref (od->object, remove_dead_object, od);
 
-  if (od->object && od->map_handler)
-    {
-      g_signal_handler_disconnect (od->object, od->map_handler);
-      g_signal_handler_disconnect (od->object, od->unmap_handler);
-    }
-
   g_free (od);
+}
+
+static gboolean
+map_or_unmap (GSignalInvocationHint *ihint,
+              guint                  n_params,
+              const GValue          *params,
+              gpointer               data)
+{
+  GtkInspectorWidgetTree *wt = data;
+  GtkWidget *widget;
+  GtkTreeIter iter;
+
+  widget = g_value_get_object (params);
+  if (gtk_inspector_widget_tree_find_object (wt, G_OBJECT (widget), &iter))
+    gtk_tree_store_set (wt->priv->model, &iter,
+                        SENSITIVE, gtk_widget_get_mapped (widget),
+                        -1);
+
+  return TRUE;
 }
 
 static void
 gtk_inspector_widget_tree_init (GtkInspectorWidgetTree *wt)
 {
+  guint signal_id;
+
   wt->priv = gtk_inspector_widget_tree_get_instance_private (wt);
   wt->priv->iters = g_hash_table_new_full (g_direct_hash,
                                            g_direct_equal,
@@ -117,13 +132,37 @@ gtk_inspector_widget_tree_init (GtkInspectorWidgetTree *wt)
                                            (GDestroyNotify) object_data_free);
   gtk_widget_init_template (GTK_WIDGET (wt));
 
+  signal_id = g_signal_lookup ("map", GTK_TYPE_WIDGET);
+  wt->priv->map_hook = g_signal_add_emission_hook (signal_id, 0,
+                                                   map_or_unmap, wt, NULL);
+  signal_id = g_signal_lookup ("unmap", GTK_TYPE_WIDGET);
+  wt->priv->unmap_hook = g_signal_add_emission_hook (signal_id, 0,
+                                                   map_or_unmap, wt, NULL);
+
   gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
+}
+
+static void
+gtk_inspector_widget_tree_finalize (GObject *object)
+{
+  GtkInspectorWidgetTree *wt = GTK_INSPECTOR_WIDGET_TREE (object);
+  guint signal_id;
+
+  signal_id = g_signal_lookup ("map", GTK_TYPE_WIDGET);
+  g_signal_remove_emission_hook (signal_id, wt->priv->map_hook);
+  signal_id = g_signal_lookup ("unmap", GTK_TYPE_WIDGET);
+  g_signal_remove_emission_hook (signal_id, wt->priv->unmap_hook);
+
+  G_OBJECT_CLASS (gtk_inspector_widget_tree_parent_class)->finalize (object);
 }
 
 static void
 gtk_inspector_widget_tree_class_init (GtkInspectorWidgetTreeClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->finalize = gtk_inspector_widget_tree_finalize;
 
   klass->widget_changed = NULL;
 
@@ -160,19 +199,6 @@ gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt)
     }
 
   return NULL;
-}
-
-static void
-map_or_unmap (GtkWidget *widget, GtkInspectorWidgetTree *wt)
-{
-  GtkTreeIter iter;
-
-  if (gtk_inspector_widget_tree_find_object (wt, G_OBJECT (widget), &iter))
-    {
-      gtk_tree_store_set (wt->priv->model, &iter,
-                          SENSITIVE, gtk_widget_get_mapped (widget),
-                          -1);
-    }
 }
 
 typedef struct
@@ -286,13 +312,6 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
   od->row = gtk_tree_row_reference_new (GTK_TREE_MODEL (wt->priv->model), path);
   gtk_tree_path_free (path);
-  if (GTK_IS_WIDGET (object))
-    {
-      od->map_handler = g_signal_connect (object, "map", G_CALLBACK (map_or_unmap), wt);
-      od->unmap_handler = g_signal_connect (object, "unmap", G_CALLBACK (map_or_unmap), wt);
-    }
-
-  g_hash_table_insert (wt->priv->iters, object, od);
   g_object_weak_ref (object, remove_dead_object, od);
 
   g_free (address);
