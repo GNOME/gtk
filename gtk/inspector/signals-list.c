@@ -178,8 +178,7 @@ gtk_inspector_signals_list_init (GtkInspectorSignalsList *sl)
   sl->priv = gtk_inspector_signals_list_get_instance_private (sl);
   gtk_widget_init_template (GTK_WIDGET (sl));
 
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (sl->priv->clear_button),
-    gtk_widget_get_direction (GTK_WIDGET (sl)) == GTK_TEXT_DIR_RTL ? "edit-clear-rtl-symbolic" : "edit-clear-symbolic");
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (sl->priv->clear_button), "edit-clear-symbolic");
 
   gtk_tree_view_column_set_cell_data_func (sl->priv->count_column,
                                            sl->priv->count_renderer,
