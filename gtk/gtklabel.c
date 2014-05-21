@@ -6189,30 +6189,25 @@ popup_position_func (GtkMenu   *menu,
 }
 
 static void
-open_link_activate_cb (GtkMenuItem *menu_item,
+open_link_activate_cb (GtkMenuItem *menuitem,
                        GtkLabel    *label)
 {
   GtkLabelLink *link;
 
-  link = gtk_label_get_current_link (label);
-
-  if (link)
-    emit_activate_link (label, link);
+  link = g_object_get_data (G_OBJECT (menuitem), "link");
+  emit_activate_link (label, link);
 }
 
 static void
-copy_link_activate_cb (GtkMenuItem *menu_item,
+copy_link_activate_cb (GtkMenuItem *menuitem,
                        GtkLabel    *label)
 {
+  GtkLabelLink *link;
   GtkClipboard *clipboard;
-  const gchar *uri;
 
-  uri = gtk_label_get_current_uri (label);
-  if (uri)
-    {
-      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
-      gtk_clipboard_set_text (clipboard, uri, -1);
-    }
+  link = g_object_get_data (G_OBJECT (menuitem), "link");
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, link->uri, -1);
 }
 
 static gboolean
@@ -6262,6 +6257,7 @@ gtk_label_do_popup (GtkLabel       *label,
     {
       /* Open Link */
       menuitem = gtk_menu_item_new_with_mnemonic (_("_Open Link"));
+      g_object_set_data (G_OBJECT (menuitem), "link", link);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
@@ -6270,6 +6266,7 @@ gtk_label_do_popup (GtkLabel       *label,
 
       /* Copy Link Address */
       menuitem = gtk_menu_item_new_with_mnemonic (_("Copy _Link Address"));
+      g_object_set_data (G_OBJECT (menuitem), "link", link);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
