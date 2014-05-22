@@ -311,7 +311,8 @@ cleanup_object (GtkInspectorPropList *pl)
   pl->priv->notify_handler_id = 0;
 
   g_hash_table_remove_all (pl->priv->prop_iters);
-  gtk_list_store_clear (pl->priv->model);
+  if (pl->priv->model)
+    gtk_list_store_clear (pl->priv->model);
 }
 
 gboolean
