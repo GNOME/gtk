@@ -20,7 +20,9 @@ remove_this_row (GtkButton *button, GtkWidget *child)
   revealer = gtk_revealer_new ();
   gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), TRUE);
   gtk_widget_show (revealer);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_reparent (child, revealer);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_container_add (GTK_CONTAINER (row), revealer);
   g_signal_connect (revealer, "notify::child-revealed",
                     G_CALLBACK (row_unrevealed), NULL);
