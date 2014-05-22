@@ -272,7 +272,9 @@ color_value_print (const GValue *value,
     g_string_append (string, "none");
   else
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       char *s = gdk_color_to_string (color);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_string_append (string, s);
       g_free (s);
     }
@@ -976,12 +978,13 @@ gtk_css_style_funcs_init (void)
                                 rgba_value_parse,
                                 rgba_value_print,
                                 rgba_value_compute);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   register_conversion_function (GDK_TYPE_COLOR,
                                 color_value_parse,
                                 color_value_print,
                                 color_value_compute);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
   register_conversion_function (GTK_TYPE_SYMBOLIC_COLOR,
                                 symbolic_color_value_parse,

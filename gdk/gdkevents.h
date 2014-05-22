@@ -30,7 +30,6 @@
 #endif
 
 #include <gdk/gdkversionmacros.h>
-#include <gdk/gdkcolor.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkdevice.h>

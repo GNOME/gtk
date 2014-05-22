@@ -31,6 +31,8 @@
 
 #include <time.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * SECTION:colors
  * @Short_description: Manipulation of colors
@@ -39,7 +41,8 @@
  * A #GdkColor represents a color.
  *
  * When working with cairo, it is often more convenient
- * to use a #GdkRGBA instead.
+ * to use a #GdkRGBA instead, and #GdkColor has been
+ * deprecated in favor of #GdkRGBA.
  */
 
 
@@ -52,6 +55,8 @@
  * The result must be freed using gdk_color_free().
  *
  * Returns: a copy of @color
+ *
+ * Deprecated: 3.14: Use #GdkRGBA
  */
 GdkColor*
 gdk_color_copy (const GdkColor *color)
@@ -70,6 +75,8 @@ gdk_color_copy (const GdkColor *color)
  * @color: a #GdkColor
  *
  * Frees a #GdkColor created with gdk_color_copy().
+ *
+ * Deprecated: 3.14: Use #GdkRGBA
  */
 void
 gdk_color_free (GdkColor *color)
@@ -87,6 +94,8 @@ gdk_color_free (GdkColor *color)
  * table that stores #GdkColors.
  *
  * Returns: The hash function applied to @color
+ *
+ * Deprecated: 3.14: Use #GdkRGBA
  */
 guint
 gdk_color_hash (const GdkColor *color)
@@ -105,6 +114,8 @@ gdk_color_hash (const GdkColor *color)
  * Compares two colors.
  *
  * Returns: %TRUE if the two colors compare equal
+ *
+ * Deprecated: 3.14: Use #GdkRGBA
  */
 gboolean
 gdk_color_equal (const GdkColor *colora,
@@ -139,6 +150,8 @@ G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
  * and “\#ffffffffffff”).
  *
  * Returns: %TRUE if the parsing succeeded
+ *
+ * Deprecated: 3.14: Use #GdkRGBA
  */
 gboolean
 gdk_color_parse (const gchar *spec,
@@ -171,6 +184,8 @@ gdk_color_parse (const gchar *spec,
  * Returns: a newly-allocated text string
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.14: Use #GdkRGBA
  */
 gchar *
 gdk_color_to_string (const GdkColor *color)

@@ -696,6 +696,7 @@ color_modified (GtkColorButton *cb, GParamSpec *ignored, ObjectProperty *p)
   g_value_unset (&val);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 color_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
@@ -721,6 +722,7 @@ color_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   g_value_unset (&val);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 font_modified (GtkFontChooser *fb, GParamSpec *pspec, ObjectProperty *p)
@@ -1005,7 +1007,7 @@ property_widget (GObject                *object,
                           object, spec, G_CALLBACK (rgba_modified));
     }
   else if (type == G_TYPE_PARAM_BOXED &&
-           G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_COLOR)
+           G_PARAM_SPEC_VALUE_TYPE (spec) == g_type_from_name ("GdkColor"))
     {
       prop_edit = gtk_color_chooser_widget_new ();
       gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (prop_edit), FALSE);

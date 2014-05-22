@@ -31,7 +31,6 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdkapplaunchcontext.h>
 #include <gdk/gdkcairo.h>
-#include <gdk/gdkcolor.h>
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicemanager.h>
@@ -57,6 +56,10 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
+
+#ifndef GDK_DISABLE_DEPRECATED
+#include <gdk/deprecated/gdkcolor.h>
+#endif
 
 #undef __GDK_H_INSIDE__
 

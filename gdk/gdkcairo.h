@@ -23,7 +23,7 @@
 #endif
 
 #include <gdk/gdkversionmacros.h>
-#include <gdk/gdkcolor.h>
+#include <gdk/deprecated/gdkcolor.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkpixbuf.h>
 #include <pango/pangocairo.h>

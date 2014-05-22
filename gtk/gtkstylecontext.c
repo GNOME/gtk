@@ -3638,7 +3638,9 @@ get_cursor_color (GtkStyleContext *context,
       color->blue = style_color->blue / 65535.0;
       color->alpha = 1;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gdk_color_free (style_color);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else
     {

@@ -50,6 +50,7 @@ typedef struct
 static gchar *
 serialize_value (GValue *value)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (g_value_type_transformable (value->g_type, G_TYPE_STRING))
     {
       GValue text_value = G_VALUE_INIT;
@@ -73,6 +74,7 @@ serialize_value (GValue *value)
     {
       g_warning ("Type %s is not serializable\n", g_type_name (value->g_type));
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return NULL;
 }
@@ -81,6 +83,7 @@ static gboolean
 deserialize_value (const gchar *str,
                    GValue      *value)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (g_value_type_transformable (G_TYPE_STRING, value->g_type))
     {
       GValue text_value = G_VALUE_INIT;
@@ -191,6 +194,7 @@ deserialize_value (const gchar *str,
     {
       g_warning ("Type %s can not be deserialized\n", g_type_name (value->g_type));
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return FALSE;
 }

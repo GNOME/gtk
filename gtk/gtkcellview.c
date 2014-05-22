@@ -199,6 +199,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
    *
    * Deprecated: 3.4: Use #GtkCellView:background-rgba instead.
    */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_object_class_install_property (gobject_class,
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background-gdk",
@@ -206,6 +207,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                                       P_("Background color as a GdkColor"),
                                                       GDK_TYPE_COLOR,
                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+G_GNUC_END_IGNORE_DEPRECATIONS
   /**
    * GtkCellView:background-rgba:
    *

@@ -1400,10 +1400,12 @@ set_para_values (GtkTextLayout      *layout,
 
   display->total_width = MAX (layout->screen_width, layout->width) - display->left_margin - display->right_margin;
   
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (style->pg_bg_color)
     display->pg_bg_color = gdk_color_copy (style->pg_bg_color);
   else
     display->pg_bg_color = NULL;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (style->pg_bg_rgba)
     display->pg_bg_rgba = gdk_rgba_copy (style->pg_bg_rgba);
@@ -2497,8 +2499,10 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
       if (display->cursors)
         g_array_free (display->cursors, TRUE);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       if (display->pg_bg_color)
         gdk_color_free (display->pg_bg_color);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (display->pg_bg_rgba)
         gdk_rgba_free (display->pg_bg_rgba);

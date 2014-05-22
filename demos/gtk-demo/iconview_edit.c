@@ -52,20 +52,24 @@ set_cell_color (GtkCellLayout   *cell_layout,
                 gpointer         data)
 {
   gchar *text;
-  GdkColor color;
+  GdkRGBA color;
   guint32 pixel = 0;
   GdkPixbuf *pixbuf;
 
   gtk_tree_model_get (tree_model, iter, COL_TEXT, &text, -1);
-  if (gdk_color_parse (text, &color))
+  if (!text)
+    return;
+
+  if (gdk_rgba_parse (&color, text))
     pixel =
-      (color.red   >> 8) << 24 |
-      (color.green >> 8) << 16 |
-      (color.blue  >> 8) << 8;
+      ((gint)(color.red * 255)) << 24 |
+      ((gint)(color.green * 255)) << 16 |
+      ((gint)(color.blue  * 255)) << 8 |
+      ((gint)(color.alpha * 255));
 
   g_free (text);
 
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 24, 24);
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, 24, 24);
   gdk_pixbuf_fill (pixbuf, pixel);
 
   g_object_set (cell, "pixbuf", pixbuf, NULL);

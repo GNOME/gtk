@@ -59,24 +59,24 @@ struct _GdkColor
 
 #define GDK_TYPE_COLOR (gdk_color_get_type ())
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GType     gdk_color_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GdkColor *gdk_color_copy      (const GdkColor *color);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void      gdk_color_free      (GdkColor       *color);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 guint     gdk_color_hash      (const GdkColor *color);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean  gdk_color_equal     (const GdkColor *colora,
                                const GdkColor *colorb);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean  gdk_color_parse     (const gchar    *spec,
                                GdkColor       *color);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gchar *   gdk_color_to_string (const GdkColor *color);
 
 

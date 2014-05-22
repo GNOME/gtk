@@ -3499,6 +3499,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							     P_("Width, in pixels, between focus indicator and the widget 'box'"),
 							     0, G_MAXINT, 1,
 							     GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("cursor-color",
 							       P_("Cursor color"),
@@ -3511,6 +3512,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							       P_("Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"),
 							       GDK_TYPE_COLOR,
 							       GTK_PARAM_READABLE));
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_float ("cursor-aspect-ratio",
 							       P_("Cursor line aspect ratio"),
@@ -3525,6 +3527,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                                  FALSE,
                                                                  GTK_PARAM_READABLE));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   /**
    * GtkWidget:link-color:
    *
@@ -3540,7 +3543,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							       P_("Unvisited Link Color"),
 							       P_("Color of unvisited links"),
 							       GDK_TYPE_COLOR,
-							       GTK_PARAM_READABLE));
+							       GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkWidget:visited-link-color:
@@ -3557,7 +3560,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							       P_("Visited Link Color"),
 							       P_("Color of visited links"),
 							       GDK_TYPE_COLOR,
-							       GTK_PARAM_READABLE));
+							       GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /**
    * GtkWidget:wide-separators:

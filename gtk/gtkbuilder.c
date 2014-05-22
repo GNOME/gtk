@@ -122,7 +122,7 @@
  * as %FALSE), enumerations (can be specified by their name, nick or
  * integer value), flags (can be specified by their name, nick, integer
  * value, optionally combined with “|”, e.g. “GTK_VISIBLE|GTK_REALIZED”)
- * and colors (in a format understood by gdk_color_parse()). Pixbufs can
+ * and colors (in a format understood by gdk_rgba_parse()). Pixbufs can
  * be specified as a filename of an image file to load. Objects can be
  * referred to by their name and by default refer to objects declared
  * in the local xml fragment and objects exposed via
@@ -1977,10 +1977,11 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       }
       break;
     case G_TYPE_BOXED:
-      if (G_VALUE_HOLDS (value, GDK_TYPE_COLOR))
+      if (G_VALUE_HOLDS (value, g_type_from_name ("GdkColor")))
         {
           GdkColor color = { 0, };
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           if (gdk_color_parse (string, &color))
             g_value_set_boxed (value, &color);
           else
@@ -1992,6 +1993,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 			   string);
               ret = FALSE;
             }
+G_GNUC_END_IGNORE_DEPRECATIONS
         }
       else if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
         {

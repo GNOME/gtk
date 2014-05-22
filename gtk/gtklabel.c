@@ -1375,9 +1375,11 @@ attribute_from_text (GtkBuilder   *builder,
 	}
       break;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       /* PangoAttrColor */
     case PANGO_ATTR_FOREGROUND:
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, 
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR,
 					      value, &val, error))
 	{
 	  color = g_value_get_boxed (&val);
@@ -1408,6 +1410,8 @@ attribute_from_text (GtkBuilder   *builder,
 	  attribute = pango_attr_strikethrough_color_new (color->red, color->green, color->blue);
 	}
       break;
+
+G_GNUC_END_IGNORE_DEPRECATIONS
       
       /* PangoAttrShape */
     case PANGO_ATTR_SHAPE:

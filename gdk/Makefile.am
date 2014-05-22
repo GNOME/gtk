@@ -62,11 +62,11 @@ LDADD = 					\
 #
 # GDK header files for public installation (non-generated)
 #
+#
 gdk_public_h_sources = 				\
 	gdk.h					\
 	gdkapplaunchcontext.h			\
 	gdkcairo.h				\
-	gdkcolor.h				\
 	gdkcursor.h				\
 	gdkdevice.h				\
 	gdkdevicemanager.h			\
@@ -94,6 +94,13 @@ gdk_public_h_sources = 				\
 	gdkvisual.h				\
 	gdkwindow.h
 
+deprecated_h_sources =				\
+	deprecated/gdkcolor.h
+
+gdk_h_sources =					\
+	$(gdk_public_h_sources)			\
+	$(deprecated_h_sources)
+
 gdk_private_headers = 				\
 	gdkapplaunchcontextprivate.h		\
 	gdkcursorprivate.h			\
@@ -111,11 +118,14 @@ gdk_private_headers = 				\
 	gdkvisualprivate.h			\
 	gdkx.h
 
+deprecated_c_sources =				\
+	deprecated/gdkcolor.c
+
 gdk_c_sources = 				\
+	$(deprecated_c_sources)			\
 	gdk.c					\
 	gdkapplaunchcontext.c			\
 	gdkcairo.c				\
-	gdkcolor.c				\
 	gdkcursor.c				\
 	gdkdeprecated.c				\
 	gdkdevice.c				\
@@ -157,6 +167,9 @@ gdkincludedir = $(includedir)/gtk-3.0/gdk
 gdkinclude_HEADERS = $(gdk_public_h_sources) gdkenumtypes.h gdkversionmacros.h
 nodist_gdkinclude_HEADERS = gdkconfig.h
 
+deprecatedincludedir = $(includedir)/gtk-3.0/gdk/deprecated
+deprecatedinclude_HEADERS = $(deprecated_h_sources)
+
 common_sources = 		\
 	$(gdk_private_headers)	\
 	$(gdk_c_sources)	\
@@ -196,7 +209,7 @@ endif
 if HAVE_INTROSPECTION
 
 introspection_files = 		\
-	$(filter-out gdkkeysyms-compat.h, $(gdk_public_h_sources))	\
+	$(filter-out gdkkeysyms-compat.h, $(gdk_h_sources))	\
 	$(gdk_c_sources)	\
         gdkenumtypes.c		\
         gdkenumtypes.h
@@ -378,15 +391,15 @@ BUILT_SOURCES = \
 
 gdkenumtypes.h: stamp-gdkenumtypes.h
 	@true
-stamp-gdkenumtypes.h: $(gdk_public_h_sources) gdkenumtypes.h.template
+stamp-gdkenumtypes.h: $(gdk_h_sources) gdkenumtypes.h.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.h.template \
-		$(gdk_public_h_sources) ) >> xgen-geth \
+		$(gdk_h_sources) ) >> xgen-geth \
 	&& (cmp -s xgen-geth gdkenumtypes.h || cp xgen-geth gdkenumtypes.h ) \
 	&& rm -f xgen-geth \
 	&& echo timestamp > $(@F)
-gdkenumtypes.c: $(gdk_public_h_sources) gdkenumtypes.c.template
+gdkenumtypes.c: $(gdk_h_sources) gdkenumtypes.c.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.c.template \
-		$(gdk_public_h_sources) ) > xgen-getc \
+		$(gdk_h_sources) ) > xgen-getc \
 	&& cp xgen-getc gdkenumtypes.c  \
 	&& rm -f xgen-getc
 

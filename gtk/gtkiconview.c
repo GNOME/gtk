@@ -669,7 +669,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                            g_param_spec_boxed ("selection-box-color",
                                                                P_("Selection Box Color"),
                                                                P_("Color of the selection box"),
-                                                               GDK_TYPE_COLOR,
+                                                               g_type_from_name ("GdkColor"),
                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,

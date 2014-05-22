@@ -1837,9 +1837,7 @@ gtk_settings_get_property (GObject     *object,
   switch (property_id)
     {
     case PROP_COLOR_HASH:
-      g_value_take_boxed (value,
-                          g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                 g_free, (GDestroyNotify) gdk_color_free));
+      g_value_take_boxed (value, g_hash_table_new (g_str_hash, g_str_equal));
       return;
     default: ;
     }
@@ -1851,7 +1849,7 @@ gtk_settings_get_property (GObject     *object,
   if ((g_value_type_transformable (G_TYPE_INT, value_type) &&
        !(fundamental_type == G_TYPE_ENUM || fundamental_type == G_TYPE_FLAGS)) ||
       g_value_type_transformable (G_TYPE_STRING, G_VALUE_TYPE (value)) ||
-      g_value_type_transformable (GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
+      g_value_type_transformable (GDK_TYPE_RGBA, G_VALUE_TYPE (value)))
     {
       if (priv->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION ||
           !gdk_screen_get_setting (priv->screen, pspec->name, value))
@@ -2151,7 +2149,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
 GtkRcPropertyParser
 _gtk_rc_property_parser_from_type (GType type)
 {
-  if (type == GDK_TYPE_COLOR)
+  if (type == g_type_from_name ("GdkColor"))
     return gtk_rc_property_parse_color;
   else if (type == GTK_TYPE_REQUISITION)
     return gtk_rc_property_parse_requisition;

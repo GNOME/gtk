@@ -90,9 +90,13 @@ gtk_modifier_style_get_style_property (GtkStyleProvider *provider,
   GdkColor color;
   gchar *str;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   /* Reject non-color types for now */
   if (pspec->value_type != GDK_TYPE_COLOR)
     return FALSE;
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   priv = GTK_MODIFIER_STYLE (provider)->priv;
   str = g_strdup_printf ("-%s-%s",
