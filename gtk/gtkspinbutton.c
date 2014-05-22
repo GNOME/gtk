@@ -715,14 +715,14 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_widget_add_events (GTK_WIDGET (spin_button), GDK_SCROLL_MASK);
 
   priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (spin_button));
-  gtk_gesture_attach (priv->long_press_gesture, GTK_PHASE_BUBBLE);
+  gtk_gesture_attach (priv->long_press_gesture, GTK_PHASE_CAPTURE);
   g_signal_connect (priv->long_press_gesture, "pressed",
                     G_CALLBACK (long_press_action), spin_button);
   g_signal_connect (priv->long_press_gesture, "cancelled",
                     G_CALLBACK (long_press_cancel_action), spin_button);
 
   priv->swipe_gesture = gtk_gesture_swipe_new (GTK_WIDGET (spin_button));
-  gtk_gesture_attach (priv->swipe_gesture, GTK_PHASE_BUBBLE);
+  gtk_gesture_attach (priv->swipe_gesture, GTK_PHASE_CAPTURE);
   g_signal_connect (priv->swipe_gesture, "update",
                     G_CALLBACK (swipe_gesture_update), spin_button);
 }
