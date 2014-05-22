@@ -61,8 +61,21 @@
      the window with the keyboard focus.
     </para>
     <para>
-     GDK translates these raw windowing system events into #GdkEvents, and
-     passes these on to GTK+ by means of gdk_event_handler_set().
+     GDK translates these raw windowing system events into #GdkEvents.
+     Typical input events are:
+     <simplelist>
+       <member>GdkEventButton</member>
+       <member>GdkEventMotion</member>
+       <member>GdkEventCrossing</member>
+       <member>GdkEventKey</member>
+       <member>GdkEventFocus</member>
+       <member>GdkEventTouch</member>
+     </simplelist>
+    </para>
+    <para>
+      When GTK+ is initialized, it sets up an event handler function with
+      gdk_event_handler_set(), which receives all of these input events
+      (as well as others, for instance window management related events).
     </para>
   </refsect2>
 
