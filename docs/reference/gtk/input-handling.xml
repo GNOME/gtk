@@ -20,11 +20,50 @@
   <refsect1 id="input-overview">
     <title>Overview of GTK+ input handling</title>
 
+  <para>
+   This chapter describes in detail how GTK+ handles input. If you are interested
+   in what happens to translate a key press or mouse motion of the users into a
+   change of a GTK+ widget, you should read this chapter. This knowledge will also
+   be useful if you decide to implement your own widgets.
+  </para>
+
   <refsect2>
     <title>Devices and events</title>
 
     <!-- input devices: master/slave, keyboard/pointer/touch -->
+    <para>
+     The most basic input devices that every computer user has interacted with are
+     keyboards and mice; beyond these, GTK+ supports touchpads, touchscreens and
+     more exotic input devices such as graphics tablets. Inside GTK+, every such
+     input device is represented by a #GdkDevice object.
+    </para>
+
+    <para>
+     To simplify dealing with the variability between these input devices, GTK+
+     has a concept of master and slave devices. The concrete physical devices that
+     have many different characteristics (mice may have 2 or 3 or 8 buttons,
+     keyboards have different layouts and may or may not have a separate number
+     block, etc) are represented as slave devices. Each slave device is
+     associated with a virtual master device. Master devices always come in
+     pointer/keyboard pairs - you can think of such a pair as a 'seat'.
+    </para>
+    <para>
+     GTK+ widgets generally deal with the master devices, and thus can be used
+     with any pointing device or keyboard.
+    </para>
+
     <!-- input events: button, touch, key, motion, etc -->
+    <para>
+     When a user interacts with an input device (e.g. moves a mouse or presses
+     a key on the keyboard), GTK+ receives events from the windowing system.
+     These are typically directed at a specific window - for pointer events,
+     the window under the pointer (grabs complicate this), for keyboard events,
+     the window with the keyboard focus.
+    </para>
+    <para>
+     GDK translates these raw windowing system events into #GdkEvents, and
+     passes these on to GTK+ by means of gdk_event_handler_set().
+    </para>
   </refsect2>
 
   <refsect2>
