@@ -5726,15 +5726,13 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
     return FALSE;
 
   gdk_event_get_root_coords (event, &x_root, &y_root);
-
   device = gdk_event_get_device (event);
-
-  /* Ungrab the implicit grab */
-  gdk_device_ungrab (device, gdk_event_get_time (event));
-
   g_object_get (G_OBJECT (device),
                 "device-id", &device_id,
                 NULL);
+
+  /* Ungrab the implicit grab */
+  gdk_device_ungrab (device, gdk_event_get_time (event));
 
   xclient.type = ClientMessage;
   xclient.window = GDK_WINDOW_XID (window);
