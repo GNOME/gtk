@@ -14,7 +14,8 @@
           <object class="GtkBox" id="tool_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">5</property>
+            <property name="border_width">6</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="box_left">
                 <property name="visible">True</property>
