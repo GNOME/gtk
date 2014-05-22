@@ -1,11 +1,4 @@
-* {
-  engine: none;
-  border-style: none;
-  border-image: none;
-  background-image: none;
-  background-clip: border-box;
-  border-radius: 0;
-}
+@import "reset-to-defaults.css";
 
 GtkWindow {
   background-color: rgb(0,255,0);
