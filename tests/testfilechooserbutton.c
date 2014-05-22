@@ -31,8 +31,6 @@
 
 #include <gtk/gtk.h>
 
-#include "prop-editor.h"
-
 static gchar *backend = "gtk+";
 static gboolean rtl = FALSE;
 static GOptionEntry entries[] = {
@@ -51,28 +49,6 @@ delete_event_cb (GtkWidget *editor,
   gtk_widget_hide (editor);
 
   return TRUE;
-}
-
-
-static void
-properties_button_clicked_cb (GtkWidget *button,
-			      GObject   *entry)
-{
-  GtkWidget *editor;
-
-  editor = g_object_get_data (entry, "properties-dialog");
-
-  if (editor == NULL)
-    {
-      editor = create_prop_editor (G_OBJECT (entry), G_TYPE_INVALID);
-      gtk_container_set_border_width (GTK_CONTAINER (editor), 12);
-      gtk_window_set_transient_for (GTK_WINDOW (editor),
-				    GTK_WINDOW (gtk_widget_get_toplevel (button)));
-      g_signal_connect (editor, "delete-event", G_CALLBACK (delete_event_cb), NULL);
-      g_object_set_data (entry, "properties-dialog", editor);
-    }
-
-  gtk_window_present (GTK_WINDOW (editor));
 }
 
 
@@ -312,10 +288,6 @@ main (int   argc,
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
   gtk_box_pack_start (GTK_BOX (hbox), chooser, TRUE, TRUE, 0);
 
-  button = gtk_button_new_with_label ("Properties");
-  g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-
   button = gtk_button_new_with_label ("Tests");
   g_signal_connect (button, "clicked", G_CALLBACK (tests_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
@@ -341,10 +313,6 @@ main (int   argc,
   g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
   gtk_box_pack_start (GTK_BOX (hbox), chooser, TRUE, TRUE, 0);
-
-  button = gtk_button_new_with_label ("Properties");
-  g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Tests");
   g_signal_connect (button, "clicked", G_CALLBACK (tests_button_clicked_cb), chooser);

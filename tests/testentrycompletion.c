@@ -21,8 +21,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-#include "prop-editor.h"
-
 /* Don't copy this bad example; inline RGB data is always a better
  * idea than inline XPMs.
  */
@@ -288,27 +286,6 @@ match_selected_cb (GtkEntryCompletion *completion,
   return TRUE;
 }
 
-static void
-new_prop_editor (GObject *object)
-{
-	gtk_widget_show (create_prop_editor (object, G_OBJECT_TYPE (object)));
-}
-
-static void
-add_with_prop_edit_button (GtkWidget *vbox, GtkWidget *entry, GtkEntryCompletion *completion)
-{
-	GtkWidget *hbox, *button;
-
-	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-
-	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-
-	button = gtk_button_new_with_label ("Properties");
-	g_signal_connect_swapped (button, "clicked", G_CALLBACK (new_prop_editor), completion);
-	gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-}
-
 int 
 main (int argc, char *argv[])
 {
@@ -346,7 +323,7 @@ main (int argc, char *argv[])
   gtk_entry_set_completion (GTK_ENTRY (entry), completion);
   g_object_unref (completion);
   
-  add_with_prop_edit_button (vbox, entry, completion);
+  gtk_container_add (GTK_CONTAINER (vbox), entry);
 
   /* Create a tree model and use it as the completion model */
   completion_model = create_simple_completion_model ();
@@ -366,7 +343,7 @@ main (int argc, char *argv[])
   gtk_entry_set_completion (GTK_ENTRY (entry), completion);
   g_object_unref (completion);
   
-  add_with_prop_edit_button (vbox, entry, completion);
+  gtk_container_add (GTK_CONTAINER (vbox), entry);
 
   /* Create a tree model and use it as the completion model */
   completion_model = create_completion_model ();
@@ -403,7 +380,7 @@ main (int argc, char *argv[])
   gtk_entry_set_completion (GTK_ENTRY (entry), completion);
   g_object_unref (completion);
   
-  add_with_prop_edit_button (vbox, entry, completion);
+  gtk_container_add (GTK_CONTAINER (vbox), entry);
 
   /* Create a tree model and use it as the completion model */
   completion_model = GTK_TREE_MODEL (gtk_list_store_new (1, G_TYPE_STRING));
@@ -429,7 +406,7 @@ main (int argc, char *argv[])
   gtk_entry_set_completion (GTK_ENTRY (entry), completion);
   g_object_unref (completion);
   
-  add_with_prop_edit_button (vbox, entry, completion);
+  gtk_container_add (GTK_CONTAINER (vbox), entry);
 
   gtk_widget_show_all (window);
 

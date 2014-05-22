@@ -17,7 +17,6 @@
  */
 
 #include <string.h>
-#include "prop-editor.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
@@ -161,26 +160,6 @@ get_model_types (void)
     }
 
   return column_types;
-}
-
-static void
-col_clicked_cb (GtkTreeViewColumn *col, gpointer data)
-{
-  GtkWindow *win;
-
-  win = GTK_WINDOW (create_prop_editor (G_OBJECT (col), GTK_TYPE_TREE_VIEW_COLUMN));
-
-  gtk_window_set_title (win, gtk_tree_view_column_get_title (col));
-}
-
-static void
-setup_column (GtkTreeViewColumn *col)
-{
-  gtk_tree_view_column_set_clickable (col, TRUE);
-  g_signal_connect (col,
-		    "clicked",
-		    G_CALLBACK (col_clicked_cb),
-		    NULL);
 }
 
 static void
@@ -354,7 +333,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       rend,
                                                       "text", 1,
                                                       NULL);
-      setup_column (col);
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
@@ -368,8 +346,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       gtk_tree_view_column_pack_start (col, rend, TRUE);
       gtk_tree_view_column_add_attribute (col, rend, "text", 0);
 
-      setup_column (col);
-      
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       gtk_tree_view_set_expander_column (tree_view, col);
@@ -384,8 +360,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "active", BOOL_COLUMN,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **)book_closed_xpm);
@@ -413,8 +387,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "active", BOOL_COLUMN,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
 
       rend = gtk_cell_renderer_spin_new ();
@@ -431,8 +403,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "text", 4,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
 #if 0
       
@@ -443,8 +413,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "text", 4,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
       rend = gtk_cell_renderer_text_new ();
@@ -454,8 +422,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "text", 5,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
       rend = gtk_cell_renderer_text_new ();
@@ -465,8 +431,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "text", 6,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
       rend = gtk_cell_renderer_text_new ();
@@ -476,8 +440,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "text", 7,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
       rend = gtk_cell_renderer_text_new ();
@@ -487,8 +449,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "text", 8,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
 #endif
@@ -503,8 +463,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "text", 0,
                                                       NULL);
 
-      setup_column (col);
-      
       gtk_tree_view_insert_column (GTK_TREE_VIEW (tree_view), col, 0);
     default:
       break;
@@ -799,9 +757,6 @@ main (int    argc,
   
   gtk_container_add (GTK_CONTAINER (sw), tv);
   
-  create_prop_editor (G_OBJECT (tv), GTK_TYPE_TREE_VIEW);
-  create_prop_editor (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tv))), GTK_TYPE_TREE_SELECTION);
-
   gtk_widget_show_all (window);
   
   gtk_main ();

@@ -45,8 +45,6 @@
 #define sleep(n) _sleep(n)
 #endif
 
-#include "prop-editor.h"
-
 #include "test.xpm"
 
 gboolean
@@ -3950,15 +3948,6 @@ entry_toggle_pulse (GtkWidget *checkbutton,
 }
 
 static void
-props_clicked (GtkWidget *button,
-               GObject   *object)
-{
-  GtkWidget *window = create_prop_editor (object, 0);
-
-  gtk_window_set_title (GTK_WINDOW (window), "Object Properties");
-}
-
-static void
 create_entry (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -4003,12 +3992,6 @@ create_entry (GtkWidget *widget)
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-
-      button = gtk_button_new_with_mnemonic ("_Props");
-      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (props_clicked),
-			entry);
 
       cb = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new_with_entry ());
 
@@ -5078,7 +5061,6 @@ create_color_selection (GtkWidget *widget)
       GtkWidget *picker;
       GtkWidget *hbox;
       GtkWidget *label;
-      GtkWidget *button;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window), 
@@ -5101,12 +5083,6 @@ create_color_selection (GtkWidget *widget)
       picker = gtk_color_button_new ();
       gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (picker), TRUE);
       gtk_container_add (GTK_CONTAINER (hbox), picker);
-
-      button = gtk_button_new_with_mnemonic ("_Props");
-      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (props_clicked),
-			picker);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -6245,31 +6221,6 @@ create_notebook (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-void
-create_settings (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-
-  if (!window)
-    {
-      window = create_prop_editor (G_OBJECT (gtk_settings_get_default ()), GTK_TYPE_SETTINGS);
-      gtk_window_set_screen (GTK_WINDOW (window),
-                             gtk_widget_get_screen (widget));
-
-      gtk_widget_hide (window);
-      gtk_window_set_title (GTK_WINDOW (window), "GTK+ Settings");
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &window);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-
 /*
  * GtkPanes
  */
@@ -6296,15 +6247,6 @@ toggle_shrink (GtkWidget *widget, GtkWidget *child)
   gtk_container_child_set_property (container, child, "shrink", &value);
 }
 
-static void
-paned_props_clicked (GtkWidget *button,
-		     GObject   *paned)
-{
-  GtkWidget *window = create_prop_editor (paned, GTK_TYPE_PANED);
-  
-  gtk_window_set_title (GTK_WINDOW (window), "Paned Properties");
-}
-
 GtkWidget *
 create_pane_options (GtkPaned    *paned,
 		     const gchar *frame_label,
@@ -6315,7 +6257,6 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *frame;
   GtkWidget *grid;
   GtkWidget *label;
-  GtkWidget *button;
   GtkWidget *check_button;
 
   child1 = gtk_paned_get_child1 (paned);
@@ -6362,12 +6303,6 @@ create_pane_options (GtkPaned    *paned,
   g_signal_connect (check_button, "toggled",
 		    G_CALLBACK (toggle_shrink),
                     child2);
-
-  button = gtk_button_new_with_mnemonic ("_Properties");
-  gtk_grid_attach (GTK_GRID (grid), button, 0, 3, 2, 1);
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (paned_props_clicked),
-		    paned);
 
   return frame;
 }
@@ -8531,147 +8466,6 @@ find_widget_at_pointer (GdkDevice *device)
  return NULL;
 }
 
-struct PropertiesData {
-  GtkWidget **window;
-  GdkCursor *cursor;
-  gboolean in_query;
-  gulong handler;
-};
-
-static void
-destroy_properties (GtkWidget             *widget,
-		    struct PropertiesData *data)
-{
-  if (data->window)
-    {
-      *data->window = NULL;
-      data->window = NULL;
-    }
-
-  if (data->cursor)
-    {
-      g_object_unref (data->cursor);
-      data->cursor = NULL;
-    }
-
-  if (data->handler)
-    {
-      g_signal_handler_disconnect (widget, data->handler);
-      data->handler = 0;
-    }
-
-  g_free (data);
-}
-
-static gint
-property_query_event (GtkWidget             *widget,
-                      GdkEvent              *event,
-                      struct PropertiesData *data)
-{
-  GtkWidget *res_widget = NULL;
-
-  if (!data->in_query)
-    return FALSE;
-
-  if (event->type == GDK_BUTTON_RELEASE)
-    {
-      gtk_grab_remove (widget);
-      gdk_device_ungrab (gdk_event_get_device (event), GDK_CURRENT_TIME);
-
-      res_widget = find_widget_at_pointer (gdk_event_get_device (event));
-      if (res_widget)
-	{
-	  g_object_set_data (G_OBJECT (res_widget), "prop-editor-screen",
-			     gtk_widget_get_screen (widget));
-	  create_prop_editor (G_OBJECT (res_widget), 0);
-	}
-
-      data->in_query = FALSE;
-    }
-  return FALSE;
-}
-
-
-static void
-query_properties (GtkButton *button,
-		  struct PropertiesData *data)
-{
-  GtkWidget *widget = GTK_WIDGET (button);
-  GdkDisplay *display;
-  GdkDeviceManager *device_manager;
-  GdkDevice *device;
-
-  g_signal_connect (button, "event",
-		    G_CALLBACK (property_query_event), data);
-
-  display = gtk_widget_get_display (widget);
-
-  if (!data->cursor)
-    data->cursor = gdk_cursor_new_for_display (display, GDK_TARGET);
-
-  device_manager = gdk_display_get_device_manager (display);
-  device = gdk_device_manager_get_client_pointer (device_manager);
-  gdk_device_grab (device,
-                   gtk_widget_get_window (widget),
-                   GDK_OWNERSHIP_NONE,
-                   TRUE,
-                   GDK_BUTTON_RELEASE_MASK,
-                   data->cursor,
-                   GDK_CURRENT_TIME);
-  gtk_grab_add (widget);
-
-  data->in_query = TRUE;
-}
-
-static void
-create_properties (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *button;
-  GtkWidget *vbox;
-  GtkWidget *label;
-  struct PropertiesData *data;
-
-  data = g_new (struct PropertiesData, 1);
-  data->window = &window;
-  data->in_query = FALSE;
-  data->cursor = NULL;
-  data->handler = 0;
-
-  if (!window)
-    {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));      
-
-      data->handler = g_signal_connect (window, "destroy",
-					G_CALLBACK (destroy_properties),
-					data);
-
-      gtk_window_set_title (GTK_WINDOW (window), "test properties");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
-            
-      label = gtk_label_new ("This is just a dumb test to test properties.\nIf you need a generic module, get gtkparasite.");
-      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-      
-      button = gtk_button_new_with_label ("Query properties");
-      gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (query_properties),
-			data);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
-  else
-    gtk_widget_destroy (window);
-  
-}
-
 struct SnapshotData {
   GtkWidget *toplevel_button;
   GtkWidget **window;
@@ -9501,7 +9295,6 @@ struct {
   { "paned keyboard", create_paned_keyboard_navigation },
   { "pixbuf", create_pixbuf },
   { "progress bar", create_progress_bar },
-  { "properties", create_properties },
   { "radio buttons", create_radio_buttons },
   { "range controls", create_range_controls },
   { "reparent", create_reparent },
@@ -9510,7 +9303,6 @@ struct {
   { "rotated text", create_rotated_text },
   { "saved position", create_saved_position },
   { "scrolled windows", create_scrolled_windows },
-  { "settings", create_settings },
   { "shapes", create_shapes },
   { "size groups", create_size_groups },
   { "snapshot", create_snapshot },

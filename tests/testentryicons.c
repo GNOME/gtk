@@ -1,6 +1,5 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
-#include "prop-editor.h"
 
 static gboolean
 delete_event_cb (GtkWidget *editor,
@@ -10,27 +9,6 @@ delete_event_cb (GtkWidget *editor,
   gtk_widget_hide (editor);
 
   return TRUE;
-}
-
-static void
-properties_cb (GtkWidget *button,
-               GObject   *entry)
-{
-  GtkWidget *editor;
-
-  editor = g_object_get_data (entry, "properties-dialog");
-
-  if (editor == NULL)
-    {
-      editor = create_prop_editor (G_OBJECT (entry), G_TYPE_INVALID);
-      gtk_container_set_border_width (GTK_CONTAINER (editor), 12);
-      gtk_window_set_transient_for (GTK_WINDOW (editor),
-                                    GTK_WINDOW (gtk_widget_get_toplevel (button)));
-      g_signal_connect (editor, "delete-event", G_CALLBACK (delete_event_cb), NULL);
-      g_object_set_data (entry, "properties-dialog", editor);
-    }
-
-  gtk_window_present (GTK_WINDOW (editor));
 }
 
 static void
@@ -92,7 +70,6 @@ main (int argc, char **argv)
   GtkWidget *grid;
   GtkWidget *label;
   GtkWidget *entry;
-  GtkWidget *button;
   GIcon *icon;
   GtkTargetList *tlist;
 
@@ -136,12 +113,6 @@ main (int argc, char **argv)
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Open a file");
 
-  button = gtk_button_new_with_label ("Properties");
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 0, 1, 1);
-  g_signal_connect (button, "clicked", 
-                    G_CALLBACK (properties_cb), entry);                    
-
-  
   /*
    * Save File - sets the icon using an icon name.
    */
@@ -173,11 +144,6 @@ main (int argc, char **argv)
                     G_CALLBACK (drag_data_get_cb), NULL);
   gtk_target_list_unref (tlist);
 
-  button = gtk_button_new_with_label ("Properties");
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 1, 1, 1);
-  g_signal_connect (button, "clicked", 
-                    G_CALLBACK (properties_cb), entry);                    
-
   /*
    * Search - Uses a helper function
    */
@@ -200,11 +166,6 @@ main (int argc, char **argv)
 
   g_signal_connect (entry, "icon-press", G_CALLBACK (clear_pressed), NULL);
 
-  button = gtk_button_new_with_label ("Properties");
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 2, 1, 1);
-  g_signal_connect (button, "clicked", 
-                    G_CALLBACK (properties_cb), entry);                    
-
   /*
    * Password - Sets the icon using an icon name
    */
@@ -226,11 +187,6 @@ main (int argc, char **argv)
 				  GTK_ENTRY_ICON_PRIMARY,
 				  FALSE);
 
-  button = gtk_button_new_with_label ("Properties");
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 3, 1, 1);
-  g_signal_connect (button, "clicked", 
-                    G_CALLBACK (properties_cb), entry);                    
-
   /* Name - Does not set any icons. */
   label = gtk_label_new ("Name:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
@@ -240,11 +196,6 @@ main (int argc, char **argv)
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 4, 1, 1);
-
-  button = gtk_button_new_with_label ("Properties");
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 4, 1, 1);
-  g_signal_connect (button, "clicked", 
-                    G_CALLBACK (properties_cb), entry);                    
 
   gtk_widget_show_all (window);
 

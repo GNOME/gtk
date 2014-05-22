@@ -303,23 +303,18 @@ video_timer_SOURCES = 	\
 	variable.h
 
 testboxcss_SOURCES =	\
-	testboxcss.c	\
-	prop-editor.c
+	testboxcss.c
 
 testentrycompletion_SOURCES = 	\
-	prop-editor.c		\
 	testentrycompletion.c
 
 testentryicons_SOURCES =	\
-	prop-editor.c		\
 	testentryicons.c
 
 testfilechooser_SOURCES = 	\
-	prop-editor.c		\
 	testfilechooser.c
 
 testfilechooserbutton_SOURCES =	\
-	prop-editor.c		\
 	testfilechooserbutton.c
 
 testflowbox_SOURCES = \
@@ -332,22 +327,18 @@ testfontselectiondialog_SOURCES = \
 	testfontselectiondialog.c
 
 testfontchooser_SOURCES = \
-	prop-editor.c		\
 	testfontchooser.c
 
 testfontchooserdialog_SOURCES = \
-	prop-editor.c		\
 	testfontchooserdialog.c
 
 testgrid_SOURCES =	\
 	testgrid.c
 
 testgtk_SOURCES =	\
-	prop-editor.c   \
 	testgtk.c
 
 testtreechanging_SOURCES =	\
-	prop-editor.c		\
 	testtreechanging.c
 
 testtreeedit_SOURCES = 	\
@@ -357,16 +348,13 @@ testtreemodel_SOURCES = \
 	testtreemodel.c
 
 testtreeview_SOURCES =	\
-	prop-editor.c	\
 	testtreeview.c
 
 testtoolbar_SOURCES =	\
-	testtoolbar.c	\
-	prop-editor.c
+	testtoolbar.c
 
 testmenubutton_SOURCES =	\
-	testmenubutton.c	\
-	prop-editor.c
+	testmenubutton.c
 
 testprint_SOURCES =    	\
 	testprint.c		\
@@ -385,7 +373,6 @@ testspinbutton_SOURCES =    	\
 	testspinbutton.c
 
 teststatusicon_SOURCES =    	\
-	prop-editor.c		\
 	teststatusicon.c
 
 testmerge_SOURCES = 		\
@@ -413,18 +400,15 @@ testgiconpixbuf_SOURCES =	\
 	testgiconpixbuf.c
 
 testiconview_SOURCES = 		\
-	testiconview.c		\
-	prop-editor.c
+	testiconview.c
 
 testiconview_keynav_SOURCES = 	\
 	testiconview-keynav.c
 
 testnumerableicon_SOURCES =	\
-	testnumerableicon.c	\
-	prop-editor.c
+	testnumerableicon.c
 
 testrecentchooser_SOURCES = 	\
-	prop-editor.c 		\
 	testrecentchooser.c
 
 testgrouping_SOURCES =		\
@@ -505,7 +489,6 @@ testwindowsize_SOURCES = testwindowsize.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
-	prop-editor.h		\
 	testgtk.1 		\
 	testgtk.css		\
 	testgtk2.css		\

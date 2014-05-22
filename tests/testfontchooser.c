@@ -16,7 +16,6 @@
  */
 
 #include <gtk/gtk.h>
-#include "prop-editor.h"
 
 static void
 notify_font_cb (GtkFontChooser *fontchooser, GParamSpec *pspec, gpointer data)
@@ -86,8 +85,6 @@ main (int argc, char *argv[])
   gtk_font_chooser_set_font (GTK_FONT_CHOOSER (fontchooser), "Bitstream Vera Sans 45");
   gtk_font_chooser_set_preview_text (GTK_FONT_CHOOSER (fontchooser), "[user@host ~]$ &>>");
   gtk_font_chooser_set_show_preview_entry (GTK_FONT_CHOOSER (fontchooser), FALSE);
-
-  create_prop_editor (G_OBJECT (fontchooser), GTK_TYPE_FONT_CHOOSER);
 
   gtk_main ();
 

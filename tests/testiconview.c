@@ -18,7 +18,6 @@
 #include <gtk/gtk.h>
 #include <sys/types.h>
 #include <string.h>
-#include "prop-editor.h"
 
 #define NUMBER_OF_ITEMS   10
 #define SOME_ITEMS       100
@@ -417,7 +416,6 @@ main (gint argc, gchar **argv)
   GtkWidget *window, *icon_list, *scrolled_window;
   GtkWidget *vbox, *bbox;
   GtkWidget *button;
-  GtkWidget *prop_editor;
   GtkTreeModel *model;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *tvc;
@@ -539,9 +537,6 @@ main (gint argc, gchar **argv)
 					GDK_ACTION_MOVE);
 
 			      
-  prop_editor = create_prop_editor (G_OBJECT (icon_list), 0);
-  gtk_widget_show_all (prop_editor);
-  
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_window), icon_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),

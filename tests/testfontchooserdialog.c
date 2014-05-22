@@ -17,7 +17,6 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
-#include "prop-editor.h"
 
 static gboolean
 monospace_filter (const PangoFontFamily *family,
@@ -92,8 +91,6 @@ main (int argc, char *argv[])
 
   g_signal_connect (window, "delete-event",
                     G_CALLBACK (gtk_main_quit), NULL);
-
-  create_prop_editor (G_OBJECT (font_button), 0);
 
   gtk_main ();
 

@@ -35,8 +35,6 @@
 # endif
 #endif
 
-#include "prop-editor.h"
-
 static void
 print_current_item (GtkRecentChooser *chooser)
 {
@@ -168,8 +166,6 @@ main (int   argc,
   gtk_recent_chooser_add_filter (GTK_RECENT_CHOOSER (dialog), filter);
 
   gtk_widget_show_all (dialog);
-
-  create_prop_editor (G_OBJECT (dialog), GTK_TYPE_RECENT_CHOOSER);
 
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 

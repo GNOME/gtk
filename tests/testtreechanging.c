@@ -16,7 +16,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "prop-editor.h"
 #include <gtk/gtk.h>
 
 #define MIN_ROWS 50
@@ -505,9 +504,6 @@ main (int    argc,
   for (i = 0; i < (MIN_ROWS + MAX_ROWS) / 2; i++)
     add (GTK_TREE_VIEW (treeview));
   gtk_container_add (GTK_CONTAINER (sw), treeview);
-
-  create_prop_editor (G_OBJECT (treeview), GTK_TYPE_TREE_VIEW);
-  create_prop_editor (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview))), GTK_TYPE_TREE_SELECTION);
 
   gtk_widget_show_all (window);
 

@@ -18,7 +18,6 @@
 
 #include <stdlib.h>
 #include <gtk/gtk.h>
-#include "prop-editor.h"
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
@@ -91,27 +90,6 @@ delete_event_cb (GtkWidget *editor,
 }
 
 static void
-properties_cb (GtkWidget *button,
-               GObject   *entry)
-{
-  GtkWidget *editor;
-
-  editor = g_object_get_data (entry, "properties-dialog");
-
-  if (editor == NULL)
-    {
-      editor = create_prop_editor (G_OBJECT (entry), G_TYPE_INVALID);
-      gtk_container_set_border_width (GTK_CONTAINER (editor), 12);
-      gtk_window_set_transient_for (GTK_WINDOW (editor),
-                                    GTK_WINDOW (gtk_widget_get_toplevel (button)));
-      g_signal_connect (editor, "delete-event", G_CALLBACK (delete_event_cb), NULL);
-      g_object_set_data (entry, "properties-dialog", editor);
-    }
-
-  gtk_window_present (GTK_WINDOW (editor));
-}
-
-static void
 refresh_cb (GtkWidget *button,
             gpointer   user_data)
 {
@@ -158,11 +136,6 @@ pack_numerable (GtkWidget *parent,
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (button_clicked_cb), d);
-
-  button = gtk_button_new_with_label ("Properties");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  g_signal_connect (button, "clicked",
-                    G_CALLBACK (properties_cb), numerable);
 
   button = gtk_button_new_with_label ("Refresh");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);

@@ -35,8 +35,6 @@
 #  endif
 #endif
 
-#include "prop-editor.h"
-
 static GtkWidget *preview_label;
 static GtkWidget *preview_image;
 static GtkFileChooserAction action;
@@ -691,7 +689,6 @@ main (int argc, char **argv)
 
   /* Extra controls for manipulating the test environment
    */
-  create_prop_editor (G_OBJECT (dialog), GTK_TYPE_FILE_CHOOSER);
 
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 

@@ -1,5 +1,4 @@
 #include <gtk/gtk.h>
-#include "prop-editor.h"
 
 #define INITIAL_HALIGN          GTK_ALIGN_START
 #define INITIAL_VALIGN          GTK_ALIGN_START
@@ -131,7 +130,6 @@ int main (int argc, char **argv)
 	menubuttons = g_list_prepend (menubuttons, button);
 	gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu_widget);
 	gtk_grid_attach (GTK_GRID (grid), button, 1, row++, 1, 1);
-	gtk_widget_show (create_prop_editor (G_OBJECT (button), 0));
 
         check = gtk_check_button_new_with_label ("Popover");
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);

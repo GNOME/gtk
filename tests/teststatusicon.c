@@ -22,8 +22,6 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
-#include "prop-editor.h"
-
 typedef enum
 {
   TEST_STATUS_INFO,
@@ -179,20 +177,6 @@ icon_activated (GtkStatusIcon *icon)
 }
 
 static void
-do_properties (GtkMenuItem   *item,
-	       GtkStatusIcon *icon)
-{
-	static GtkWidget *editor = NULL;
-
-	if (editor == NULL) {
-		editor = create_prop_editor (G_OBJECT (icon), GTK_TYPE_STATUS_ICON);
-		g_signal_connect (editor, "destroy", G_CALLBACK (gtk_widget_destroyed), &editor);
-	}
-
-	gtk_window_present (GTK_WINDOW (editor));
-}
-
-static void
 do_quit (GtkMenuItem *item)
 {
   GSList *l;
@@ -228,13 +212,6 @@ popup_menu (GtkStatusIcon *icon,
 
   gtk_menu_set_screen (GTK_MENU (menu),
                        gtk_status_icon_get_screen (icon));
-
-  menuitem = gtk_menu_item_new_with_mnemonic ("_Properties");
-  g_signal_connect (menuitem, "activate", G_CALLBACK (do_properties), icon);
-
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_label ("Quit");
   g_signal_connect (menuitem, "activate", G_CALLBACK (do_quit), NULL);

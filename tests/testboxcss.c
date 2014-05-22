@@ -17,7 +17,6 @@
  */
 #include "config.h"
 #include <gtk/gtk.h>
-#include "prop-editor.h"
 
 /* This is exactly the style information you've been looking for */
 #define GTK_STYLE_PROVIDER_PRIORITY_FORCE G_MAXUINT
