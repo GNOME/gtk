@@ -1,16 +1,6 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 
-static gboolean
-delete_event_cb (GtkWidget *editor,
-                 gint       response,
-                 gpointer   user_data)
-{
-  gtk_widget_hide (editor);
-
-  return TRUE;
-}
-
 static void
 clear_pressed (GtkEntry *entry, gint icon, GdkEvent *event, gpointer data)
 {

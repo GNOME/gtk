@@ -79,16 +79,6 @@ button_clicked_cb (GtkButton *b,
   g_object_unref (provider);
 }
 
-static gboolean
-delete_event_cb (GtkWidget *editor,
-                 gint       response,
-                 gpointer   user_data)
-{
-  gtk_widget_hide (editor);
-
-  return TRUE;
-}
-
 static void
 refresh_cb (GtkWidget *button,
             gpointer   user_data)
