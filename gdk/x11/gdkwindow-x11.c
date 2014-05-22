@@ -5725,9 +5725,12 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
                                             gdk_atom_intern_static_string ("_GTK_SHOW_WINDOW_MENU")))
     return FALSE;
 
+  gdk_event_get_root_coords (event, &x_root, &y_root);
+
   device = gdk_event_get_device (event);
 
-  gdk_event_get_root_coords (event, &x_root, &y_root);
+  /* Ungrab the implicit grab */
+  gdk_device_ungrab (device);
 
   g_object_get (G_OBJECT (device),
                 "device-id", &device_id,
