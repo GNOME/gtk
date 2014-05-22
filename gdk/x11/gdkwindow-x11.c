@@ -5730,7 +5730,7 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
   device = gdk_event_get_device (event);
 
   /* Ungrab the implicit grab */
-  gdk_device_ungrab (device);
+  gdk_device_ungrab (device, gdk_event_get_time (event));
 
   g_object_get (G_OBJECT (device),
                 "device-id", &device_id,
