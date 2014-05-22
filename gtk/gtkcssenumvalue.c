@@ -485,6 +485,7 @@ _gtk_css_area_value_try_parse (GtkCssParser *parser)
 GtkCssArea
 _gtk_css_area_value_get (const GtkCssValue *value)
 {
+  g_return_val_if_fail (value != NULL, GTK_CSS_AREA_BORDER_BOX);
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_AREA, GTK_CSS_AREA_BORDER_BOX);
 
   return value->value;
