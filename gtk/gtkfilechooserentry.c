@@ -130,18 +130,22 @@ gtk_file_chooser_entry_dispatch_properties_changed (GObject     *object,
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispatch_properties_changed (object, n_pspecs, pspecs);
 
-  /* What we are after: The text in front of the cursor was modified.
-   * Unfortunately, there's no other way to catch this. */
-
-  for (i = 0; i < n_pspecs; i++)
+  /* Don't do this during or after disposal */
+  if (gtk_widget_get_parent (GTK_WIDGET (object)) != NULL)
     {
-      if (pspecs[i]->name == I_("cursor-position") ||
-          pspecs[i]->name == I_("selection-bound") ||
-          pspecs[i]->name == I_("text"))
+      /* What we are after: The text in front of the cursor was modified.
+       * Unfortunately, there's no other way to catch this.
+       */
+      for (i = 0; i < n_pspecs; i++)
         {
-          set_complete_on_load (chooser_entry, FALSE);
-          refresh_current_folder_and_file_part (chooser_entry);
-          break;
+          if (pspecs[i]->name == I_("cursor-position") ||
+              pspecs[i]->name == I_("selection-bound") ||
+              pspecs[i]->name == I_("text"))
+            {
+              set_complete_on_load (chooser_entry, FALSE);
+              refresh_current_folder_and_file_part (chooser_entry);
+              break;
+            }
         }
     }
 }
