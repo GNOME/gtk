@@ -476,10 +476,11 @@ main (int argc, char **argv)
 {
   PlugMan *plug_man;
   int status;
+  const gchar *accels[] = { "F11", NULL };
 
   plug_man = plug_man_new ();
-  gtk_application_add_accelerator (GTK_APPLICATION (plug_man),
-                                   "F11", "win.fullscreen", NULL);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (plug_man),
+                                         "win.fullscreen", accels);
   status = g_application_run (G_APPLICATION (plug_man), argc, argv);
   g_object_unref (plug_man);
 
