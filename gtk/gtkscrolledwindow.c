@@ -2890,10 +2890,10 @@ gtk_scrolled_window_adjustment_value_changed (GtkAdjustment *adjustment,
     return;
 
   /* Ensure GtkAdjustment and unclamped values are in sync */
-  if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
-    priv->unclamped_vadj_value = gtk_adjustment_get_value (adjustment);
-  else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
+  if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
     priv->unclamped_hadj_value = gtk_adjustment_get_value (adjustment);
+  else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
+    priv->unclamped_vadj_value = gtk_adjustment_get_value (adjustment);
 }
 
 static void
