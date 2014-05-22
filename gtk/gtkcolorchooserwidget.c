@@ -274,7 +274,7 @@ update_from_editor (GtkColorEditor        *editor,
                     GParamSpec            *pspec,
                     GtkColorChooserWidget *widget)
 {
-  if (gtk_widget_get_visible (editor))
+  if (gtk_widget_get_visible (GTK_WIDGET (editor)))
     g_object_notify (G_OBJECT (widget), "rgba");
 }
 
