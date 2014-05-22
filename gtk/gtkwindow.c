@@ -12260,7 +12260,10 @@ warn_response (GtkDialog *dialog,
 {
   gtk_widget_destroy (GTK_WIDGET (dialog));
   if (response == GTK_RESPONSE_NO)
-    gtk_widget_hide (inspector_window);
+    {
+      gtk_widget_destroy (inspector_window);
+      inspector_window = NULL;
+    }
 }
 
 static gboolean
@@ -12296,8 +12299,7 @@ gtk_window_set_debugging (gboolean enable,
                 "application to break or crash."));
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);
-          g_signal_connect (dialog, "response",
-                            G_CALLBACK (warn_response), inspector_window);
+          g_signal_connect (dialog, "response", G_CALLBACK (warn_response), NULL);
         }
     }
 
