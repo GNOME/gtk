@@ -168,9 +168,6 @@ testdata = \
 	css-match-siblings.css \
 	css-match-siblings.ref.ui \
 	css-match-siblings.ui \
-	css-match-style-property-order.css \
-	css-match-style-property-order.ref.ui \
-	css-match-style-property-order.ui \
 	css-match-subtype.css \
 	css-match-subtype.ref.ui \
 	css-match-subtype.ui \
