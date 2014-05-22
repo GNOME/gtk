@@ -7557,7 +7557,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 
   g_object_ref (widget);
 
-  return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
   g_signal_emit (widget, widget_signals[EVENT], 0, event, &handled);
   return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
@@ -7670,6 +7669,8 @@ gtk_widget_event_internal (GtkWidget *widget,
     g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
   else
     return_val = TRUE;
+
+  return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
 
   g_object_unref (widget);
 
