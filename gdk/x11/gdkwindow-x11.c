@@ -5709,6 +5709,7 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
   GdkDevice *device;
   int device_id;
+  double x_root, y_root;
   XClientMessageEvent xclient = { 0 };
 
   switch (event->type)
@@ -5726,6 +5727,8 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
 
   device = gdk_event_get_device (event);
 
+  gdk_event_get_root_coords (event, &x_root, &y_root);
+
   g_object_get (G_OBJECT (device),
                 "device-id", &device_id,
                 NULL);
@@ -5734,6 +5737,8 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
   xclient.window = GDK_WINDOW_XID (window);
   xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_GTK_SHOW_WINDOW_MENU");
   xclient.data.l[0] = device_id;
+  xclient.data.l[1] = x_root;
+  xclient.data.l[2] = y_root;
   xclient.format = 32;
 
   XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
