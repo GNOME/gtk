@@ -67,6 +67,8 @@
           <object class="GtkImage" id="image1">
             <property name="width_request">16</property>
             <property name="height_request">16</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -79,6 +81,8 @@
           <object class="GtkImage" id="image2">
             <property name="width_request">16</property>
             <property name="height_request">16</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -91,6 +95,8 @@
           <object class="GtkImage" id="image3">
             <property name="width_request">16</property>
             <property name="height_request">16</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -103,6 +109,8 @@
           <object class="GtkImage" id="image4">
             <property name="width_request">16</property>
             <property name="height_request">16</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -115,6 +123,8 @@
           <object class="GtkImage" id="image5">
             <property name="width_request">16</property>
             <property name="height_request">16</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
