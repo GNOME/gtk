@@ -273,7 +273,9 @@ main (int   argc,
 
   label = gtk_label_new_with_mnemonic ("_Open:");
   gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
   chooser = gtk_file_chooser_button_new ("Select A File - testfilechooserbutton",
@@ -298,7 +300,9 @@ main (int   argc,
 
   label = gtk_label_new_with_mnemonic ("Select _Folder:");
   gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
   chooser = gtk_file_chooser_button_new ("Select A Folder - testfilechooserbutton",
