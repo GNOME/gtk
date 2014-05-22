@@ -216,9 +216,9 @@ test_row_separator_height (void)
                         NULL);
 
   if (wide_separators)
-    height = separator_height + 2 * focus_pad;
+    height = separator_height;
   else
-    height = 2 + 2 * focus_pad;
+    height = 2;
 
   g_assert_cmpint (rect.height, ==, height);
   g_assert_cmpint (cell_rect.height, ==, height);
