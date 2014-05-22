@@ -1,14 +1,4 @@
-* {
-  engine: none;
-  background-image: none;
-  padding: 0;
-  border-radius: 0;
-  border-width: 0;
-  border-style: none;
-  border-image: none;
-  border-image-width: 0;
-  background-color: rgba(0,0,0,0);
-}
+@import "reset-to-defaults.css";
 
 #no-repeat {
   background-image: url("border-image-ball-red.png");

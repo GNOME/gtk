@@ -1,12 +1,4 @@
-GtkButton {
-  engine: none;
-  border-radius: 0;
-  background-image: none;
-  border-image: none;
-  border-style: none;
-  background-color: rgba(0, 0, 0, 0);
-  border-width: 0;
-}
+@import "reset-to-defaults.css";
 
 .row1, .row2, .row3 {
   /*border:5px solid blue;*/
