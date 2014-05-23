@@ -1795,6 +1795,8 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
     }
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static gboolean
