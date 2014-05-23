@@ -18,7 +18,7 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = a11y inspector native .
+SUBDIRS = inspector native .
 
 if HAVE_CLOUDPRINT
 if HAVE_PAPI_CUPS
@@ -116,13 +116,11 @@ endif
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
-	$(top_builddir)/gtk/a11y/libgtka11y.la \
 	$(top_builddir)/gtk/inspector/libgtkinspector.la \
 	$(GMODULE_LIBS) \
 	$(GTK_DEP_LIBS)
 deps = \
 	$(top_builddir)/gdk/libgdk-3.la	\
-	$(top_builddir)/gtk/a11y/libgtka11y.la \
 	$(top_builddir)/gtk/inspector/libgtkinspector.la
 
 # libtool stuff: set version and export symbols for resolving
@@ -154,6 +152,58 @@ endif
 
 # GTK+ header files for public installation (non-generated, or generated
 # by configure)
+
+a11y_h_sources =				\
+	a11y/gtkarrowaccessible.h		\
+	a11y/gtkbooleancellaccessible.h		\
+	a11y/gtkbuttonaccessible.h		\
+	a11y/gtkcellaccessible.h		\
+	a11y/gtkcellaccessibleparent.h		\
+	a11y/gtkcheckmenuitemaccessible.h	\
+	a11y/gtkcomboboxaccessible.h		\
+	a11y/gtkcontaineraccessible.h		\
+	a11y/gtkcontainercellaccessible.h	\
+	a11y/gtkentryaccessible.h		\
+	a11y/gtkexpanderaccessible.h		\
+	a11y/gtkflowboxaccessible.h		\
+	a11y/gtkflowboxchildaccessible.h	\
+	a11y/gtkframeaccessible.h		\
+	a11y/gtkiconviewaccessible.h		\
+	a11y/gtkimageaccessible.h		\
+	a11y/gtkimagecellaccessible.h		\
+	a11y/gtklabelaccessible.h		\
+	a11y/gtklevelbaraccessible.h 		\
+	a11y/gtklinkbuttonaccessible.h		\
+	a11y/gtklistboxaccessible.h		\
+	a11y/gtklistboxrowaccessible.h		\
+	a11y/gtklockbuttonaccessible.h		\
+	a11y/gtkmenuaccessible.h		\
+	a11y/gtkmenubuttonaccessible.h		\
+	a11y/gtkmenuitemaccessible.h		\
+	a11y/gtkmenushellaccessible.h		\
+	a11y/gtknotebookaccessible.h		\
+	a11y/gtknotebookpageaccessible.h	\
+	a11y/gtkpanedaccessible.h		\
+	a11y/gtkpopoveraccessible.h		\
+	a11y/gtkprogressbaraccessible.h		\
+	a11y/gtkradiobuttonaccessible.h		\
+	a11y/gtkradiomenuitemaccessible.h	\
+	a11y/gtkrangeaccessible.h		\
+	a11y/gtkrenderercellaccessible.h	\
+	a11y/gtkscaleaccessible.h		\
+	a11y/gtkscalebuttonaccessible.h		\
+	a11y/gtkscrolledwindowaccessible.h	\
+	a11y/gtkspinbuttonaccessible.h		\
+	a11y/gtkspinneraccessible.h		\
+	a11y/gtkstatusbaraccessible.h		\
+	a11y/gtkswitchaccessible.h		\
+	a11y/gtktextcellaccessible.h		\
+	a11y/gtktextviewaccessible.h		\
+	a11y/gtktogglebuttonaccessible.h	\
+	a11y/gtktoplevelaccessible.h		\
+	a11y/gtktreeviewaccessible.h		\
+	a11y/gtkwidgetaccessible.h		\
+	a11y/gtkwindowaccessible.h
 
 deprecated_h_sources = 			\
 	deprecated/gtkactivatable.h	\
@@ -192,6 +242,22 @@ deprecated_h_sources = 			\
 	deprecated/gtkvscrollbar.h	\
 	deprecated/gtkvseparator.h	\
 	deprecated/gtkvpaned.h
+
+ally_private_h_sources =			\
+	a11y/gtkaccessibility.h			\
+	a11y/gtkaccessibilitymisc.h		\
+	a11y/gtkaccessibilityutil.h		\
+	a11y/gtkcellaccessibleprivate.h		\
+	a11y/gtkcolorswatchaccessibleprivate.h	\
+	a11y/gtkcontaineraccessibleprivate.h	\
+	a11y/gtkiconviewaccessibleprivate.h	\
+	a11y/gtklabelaccessibleprivate.h	\
+	a11y/gtkflowboxaccessibleprivate.h	\
+	a11y/gtklistboxaccessibleprivate.h	\
+	a11y/gtklockbuttonaccessibleprivate.h	\
+	a11y/gtktextviewaccessibleprivate.h	\
+	a11y/gtktreeviewaccessibleprivate.h	\
+	a11y/gtkwidgetaccessibleprivate.h
 
 deprecated_private_h_sources =			\
 	deprecated/gtkgradientprivate.h		\
@@ -599,6 +665,62 @@ gtk_private_h_sources =		\
 	$(gtk_private_type_h_sources) \
 	$(gtk_clipboard_dnd_h_sources)
 
+a11y_c_sources =				\
+	a11y/gtkaccessibility.c			\
+	a11y/gtkaccessibilitymisc.c 		\
+	a11y/gtkaccessibilityutil.c		\
+	a11y/gtkarrowaccessible.c		\
+	a11y/gtkbooleancellaccessible.c		\
+	a11y/gtkbuttonaccessible.c		\
+	a11y/gtkcellaccessible.c		\
+	a11y/gtkcellaccessibleparent.c		\
+	a11y/gtkcheckmenuitemaccessible.c	\
+	a11y/gtkcolorswatchaccessible.c		\
+	a11y/gtkcomboboxaccessible.c		\
+	a11y/gtkcontaineraccessible.c		\
+	a11y/gtkcontainercellaccessible.c	\
+	a11y/gtkentryaccessible.c		\
+	a11y/gtkexpanderaccessible.c		\
+	a11y/gtkflowboxaccessible.c		\
+	a11y/gtkflowboxchildaccessible.c	\
+	a11y/gtkframeaccessible.c		\
+	a11y/gtkiconviewaccessible.c		\
+	a11y/gtkimageaccessible.c		\
+	a11y/gtkimagecellaccessible.c		\
+	a11y/gtklabelaccessible.c		\
+	a11y/gtklevelbaraccessible.c		\
+	a11y/gtklinkbuttonaccessible.c		\
+	a11y/gtklistboxaccessible.c		\
+	a11y/gtklistboxrowaccessible.c		\
+	a11y/gtklockbuttonaccessible.c		\
+	a11y/gtkmenuaccessible.c		\
+	a11y/gtkmenubuttonaccessible.c		\
+	a11y/gtkmenushellaccessible.c		\
+	a11y/gtkmenuitemaccessible.c		\
+	a11y/gtknotebookaccessible.c		\
+	a11y/gtknotebookpageaccessible.c	\
+	a11y/gtkpanedaccessible.c		\
+	a11y/gtkpopoveraccessible.c		\
+	a11y/gtkprogressbaraccessible.c		\
+	a11y/gtkradiobuttonaccessible.c		\
+	a11y/gtkradiomenuitemaccessible.c	\
+	a11y/gtkrangeaccessible.c		\
+	a11y/gtkrenderercellaccessible.c	\
+	a11y/gtkscaleaccessible.c		\
+	a11y/gtkscalebuttonaccessible.c		\
+	a11y/gtkscrolledwindowaccessible.c	\
+	a11y/gtkspinbuttonaccessible.c		\
+	a11y/gtkspinneraccessible.c		\
+	a11y/gtkstatusbaraccessible.c		\
+	a11y/gtkswitchaccessible.c		\
+	a11y/gtktextcellaccessible.c		\
+	a11y/gtktextviewaccessible.c		\
+	a11y/gtktogglebuttonaccessible.c	\
+	a11y/gtktoplevelaccessible.c		\
+	a11y/gtktreeviewaccessible.c		\
+	a11y/gtkwidgetaccessible.c		\
+	a11y/gtkwindowaccessible.c
+
 # GTK+ C sources to build the library from
 deprecated_c_sources = 			\
 	deprecated/gtkactivatable.c	\
@@ -639,6 +761,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkvpaned.c
 
 gtk_base_c_sources = 		\
+	$(a11y_c_sources)	\
 	$(deprecated_c_sources)	\
 	gtkactionmuxer.c	\
 	gtkactionobserver.c	\
@@ -1073,6 +1196,7 @@ gtk_private_h_sources += $(gtk_use_quartz_private_h_sources)
 endif
 
 gtk_all_private_h_sources = \
+	$(a11y_private_h_sources) \
 	$(deprecated_private_h_sources) \
 	$(gtk_private_h_sources) \
 	$(gtk_use_x11_private_h_sources) \
@@ -1232,15 +1356,15 @@ gtkmarshalers.c: gtkmarshalers.list
 
 gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true
-stamp-gtktypebuiltins.h: $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuiltins.h.template
+stamp-gtktypebuiltins.h: $(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sources) gtktypebuiltins.h.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtktypebuiltins.h.template \
-		$(gtk_public_h_sources) $(deprecated_h_sources) ) > xgen-gtbh \
+		$(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sources) ) > xgen-gtbh \
 	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h ) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
-gtktypebuiltins.c: $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuiltins.c.template
+gtktypebuiltins.c: $(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sources) gtktypebuiltins.c.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtktypebuiltins.c.template \
-		$(gtk_public_h_sources) $(deprecated_h_sources) ) > xgen-gtbc \
+		$(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sources) ) > xgen-gtbc \
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
@@ -1267,7 +1391,7 @@ gtkprivatetypebuiltins.c: $(gtk_private_type_h_sources)  gtkprivatetypebuiltins.
 	&& rm -f xgen-gptbc
 
 
-gtktypefuncs.c: stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gtk/deprecated/*.h $(top_srcdir)/gdk/*.h Makefile
+gtktypefuncs.c: stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gtk/a11y/*.h $(top_srcdir)/gtk/deprecated/*.h $(top_srcdir)/gdk/*.h Makefile
 	$(AM_V_GEN) echo '#include <gtk/gtkx.h>' > xgen-gtfsrc.c && \
 	  echo 'G_GNUC_BEGIN_IGNORE_DEPRECATIONS' > xgen-gtf && \
 	  ${CPP} $(DEFS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
@@ -1282,6 +1406,9 @@ lib_LTLIBRARIES = libgtk-3.la
 
 gtkincludedir = $(includedir)/gtk-3.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
+
+a11yincludedir = $(includedir)/gtk-3.0/gtk/a11y
+a11yinclude_HEADERS= $(a11y_h_sources)
 
 deprecatedincludedir = $(includedir)/gtk-3.0/gtk/deprecated
 deprecatedinclude_HEADERS= $(deprecated_h_sources)
@@ -1386,7 +1513,7 @@ if HAVE_INTROSPECTION
 # introspection. Rather than copy the annotations over from the
 # regular files, exclude the quartz ones:
 introspection_files = \
-    $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS) $(deprecatedinclude_HEADERS)) \
+    $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS)) \
     $(filter-out  gtkclipboard-quartz.c gtkdnd-quartz.c, \
     $(gtk_base_c_sources)) \
     gtkprintoperation-unix.c \
