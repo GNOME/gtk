@@ -119,12 +119,6 @@ static void gtk_button_style_updated (GtkWidget * widget);
 static void gtk_button_size_allocate (GtkWidget * widget,
 				      GtkAllocation * allocation);
 static gint gtk_button_draw (GtkWidget * widget, cairo_t *cr);
-static gint gtk_button_button_press (GtkWidget * widget,
-				     GdkEventButton * event);
-static gint gtk_button_button_release (GtkWidget * widget,
-				       GdkEventButton * event);
-static gboolean gtk_button_touch (GtkWidget     *widget,
-                                  GdkEventTouch *event);
 static gint gtk_button_grab_broken (GtkWidget * widget,
 				    GdkEventGrabBroken * event);
 static gint gtk_button_key_release (GtkWidget * widget, GdkEventKey * event);
@@ -225,9 +219,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->style_updated = gtk_button_style_updated;
   widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->draw = gtk_button_draw;
-  widget_class->button_press_event = gtk_button_button_press;
-  widget_class->button_release_event = gtk_button_button_release;
-  widget_class->touch_event = gtk_button_touch;
   widget_class->grab_broken_event = gtk_button_grab_broken;
   widget_class->key_release_event = gtk_button_key_release;
   widget_class->enter_notify_event = gtk_button_enter_notify;
@@ -594,6 +585,34 @@ gtk_button_class_init (GtkButtonClass *klass)
 }
 
 static void
+multipress_pressed_cb (GtkGestureMultiPress *gesture,
+                       guint                 n_press,
+                       gdouble               x,
+                       gdouble               y,
+                       GtkWidget            *widget)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+  GtkButtonPrivate *priv = button->priv;
+
+  if (priv->focus_on_click && !gtk_widget_has_focus (widget))
+    gtk_widget_grab_focus (widget);
+
+  g_signal_emit (button, button_signals[PRESSED], 0);
+}
+
+static void
+multipress_released_cb (GtkGestureMultiPress *gesture,
+                        guint                 n_press,
+                        gdouble               x,
+                        gdouble               y,
+                        GtkWidget            *widget)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+
+  g_signal_emit (button, button_signals[RELEASED], 0);
+}
+
+static void
 gtk_button_init (GtkButton *button)
 {
   GtkButtonPrivate *priv;
@@ -627,6 +646,14 @@ gtk_button_init (GtkButton *button)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+
+  priv->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (button));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->gesture), FALSE);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->gesture), TRUE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
+  g_signal_connect (priv->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), button);
+  g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
+  gtk_gesture_attach (priv->gesture, GTK_PHASE_TARGET);
 }
 
 static void
@@ -639,6 +666,13 @@ gtk_button_destroy (GtkWidget *widget)
     {
       g_free (priv->label_text);
       priv->label_text = NULL;
+    }
+
+  if (priv->gesture)
+    {
+      gtk_gesture_detach (priv->gesture);
+      g_object_unref (priv->gesture);
+      priv->gesture = NULL;
     }
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->destroy (widget);
@@ -1847,75 +1881,6 @@ gtk_button_draw (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_button_parent_class)->draw (widget, cr);
 
   return FALSE;
-}
-
-static gboolean
-gtk_button_button_press (GtkWidget      *widget,
-			 GdkEventButton *event)
-{
-  GtkButton *button;
-  GtkButtonPrivate *priv;
-
-  if (event->type == GDK_BUTTON_PRESS)
-    {
-      button = GTK_BUTTON (widget);
-      priv = button->priv;
-
-      if (priv->focus_on_click && !gtk_widget_has_focus (widget))
-	gtk_widget_grab_focus (widget);
-
-      if (event->button == GDK_BUTTON_PRIMARY)
-        {
-          g_signal_emit (button, button_signals[PRESSED], 0);
-          return GDK_EVENT_STOP;
-        }
-    }
-  else if (event->type == GDK_2BUTTON_PRESS)
-    {
-      return GDK_EVENT_STOP;
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-gtk_button_button_release (GtkWidget      *widget,
-			   GdkEventButton *event)
-{
-  GtkButton *button;
-
-  if (event->button == GDK_BUTTON_PRIMARY)
-    {
-      button = GTK_BUTTON (widget);
-      g_signal_emit (button, button_signals[RELEASED], 0);
-      return GDK_EVENT_STOP;
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-gtk_button_touch (GtkWidget     *widget,
-                  GdkEventTouch *event)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
-
-  if (event->type == GDK_TOUCH_BEGIN)
-    {
-      if (priv->focus_on_click && !gtk_widget_has_focus (widget))
-        gtk_widget_grab_focus (widget);
-
-      g_signal_emit (button, button_signals[PRESSED], 0);
-      return GDK_EVENT_STOP;
-    }
-  else if (event->type == GDK_TOUCH_END)
-    {
-      g_signal_emit (button, button_signals[RELEASED], 0);
-      return GDK_EVENT_STOP;
-    }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void

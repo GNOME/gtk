@@ -20,6 +20,7 @@
 #define __GTK_BUTTON_PRIVATE_H__
 
 #include "gtkactionhelper.h"
+#include "gtkgesturesingle.h"
 #include "deprecated/gtkaction.h"
 
 G_BEGIN_DECLS
@@ -35,6 +36,8 @@ struct _GtkButtonPrivate
   GdkWindow             *event_window;
 
   gchar                 *label_text;
+
+  GtkGesture            *gesture;
 
   gfloat                 xalign;
   gfloat                 yalign;

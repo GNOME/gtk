@@ -24,6 +24,7 @@
 
 #include "prop-list.h"
 #include "widget-tree.h"
+#include "gtkwidgetprivate.h"
 #include <string.h>
 
 enum
@@ -315,6 +316,33 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   g_object_weak_ref (object, remove_dead_object, od);
 
   g_free (address);
+
+  if (GTK_IS_WIDGET (object))
+    {
+      struct {
+        GtkPropagationPhase  phase;
+        const gchar         *name;
+      } phases[] = {
+        { GTK_PHASE_CAPTURE, "capture" },
+        { GTK_PHASE_TARGET,  "target" },
+        { GTK_PHASE_BUBBLE,  "bubble" },
+        { GTK_PHASE_NONE,    "" }
+      };
+      gint i;
+
+      for (i = 0; i < G_N_ELEMENTS (phases); i++)
+        {
+          GList *list, *l;
+
+          list = _gtk_widget_list_controllers (GTK_WIDGET (object), phases[i].phase);
+          for (l = list; l; l = l->next)
+            {
+              GObject *controller = l->data;
+              gtk_inspector_widget_tree_append_object (wt, controller, &iter, phases[i].name);
+            }
+          g_list_free (list);
+        }
+    }
 
   if (GTK_IS_CONTAINER (object))
     {

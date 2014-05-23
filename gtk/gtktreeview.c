@@ -436,6 +436,9 @@ struct _GtkTreeViewPrivate
   gpointer row_separator_data;
   GDestroyNotify row_separator_destroy;
 
+  /* Gestures */
+  GtkGesture *multipress_gesture;
+
   /* Tooltip support */
   gint tooltip_column;
 
@@ -882,6 +885,8 @@ static void           gtk_tree_view_do_set_vadjustment (GtkTreeView   *tree_view
 static gboolean scroll_row_timeout                   (gpointer     data);
 static void     add_scroll_timeout                   (GtkTreeView *tree_view);
 static void     remove_scroll_timeout                (GtkTreeView *tree_view);
+
+static void     grab_focus_and_unset_draw_keyfocus   (GtkTreeView *tree_view);
 
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 
@@ -1732,6 +1737,38 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
+_tree_view_multipress_pressed (GtkGestureMultiPress *gesture,
+                               gint                  n_press,
+                               gdouble               x,
+                               gdouble               y,
+                               GtkTreeView          *tree_view)
+{
+  GtkTreeViewColumn *column;
+  GtkTreePath *path;
+  gint bin_x, bin_y;
+
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+                                                     &bin_x, &bin_y);
+  gtk_tree_view_get_path_at_pos (tree_view, bin_x, bin_y,
+                                 &path, &column, NULL, NULL);
+
+  if (n_press == 2 || (n_press == 1 && tree_view->priv->activate_on_single_click))
+    gtk_tree_view_row_activated (tree_view, path, column);
+  else
+    {
+      if (n_press == 1)
+        {
+          tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
+          tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
+        }
+
+      grab_focus_and_unset_draw_keyfocus (tree_view);
+    }
+
+  gtk_tree_path_free (path);
+}
+
+static void
 gtk_tree_view_init (GtkTreeView *tree_view)
 {
   tree_view->priv = gtk_tree_view_get_instance_private (tree_view);
@@ -1799,6 +1836,12 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (tree_view)),
                                GTK_STYLE_CLASS_VIEW);
+
+  tree_view->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->multipress_gesture), FALSE);
+  g_signal_connect (tree_view->priv->multipress_gesture, "pressed",
+                    G_CALLBACK (_tree_view_multipress_pressed), tree_view);
+  gtk_gesture_attach (tree_view->priv->multipress_gesture, GTK_PHASE_BUBBLE);
 }
 
 
@@ -2162,6 +2205,12 @@ gtk_tree_view_destroy (GtkWidget *widget)
   if (tree_view->priv->pixel_cache)
     _gtk_pixel_cache_free (tree_view->priv->pixel_cache);
   tree_view->priv->pixel_cache = NULL;
+
+  if (tree_view->priv->multipress_gesture)
+    {
+      gtk_gesture_detach (tree_view->priv->multipress_gesture);
+      g_clear_object (&tree_view->priv->multipress_gesture);
+    }
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }
@@ -2995,7 +3044,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gint pre_val, aft_val;
       GtkTreeViewColumn *column = NULL;
       gint column_handled_click = FALSE;
-      gboolean row_double_click = FALSE;
       gboolean rtl;
       gboolean node_selected;
       GdkModifierType extend_mod_mask;
@@ -3015,7 +3063,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	{
 	  if (event->button == GDK_BUTTON_PRIMARY)
 	    {
-	      gtk_grab_add (widget);
 	      tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
 	      tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
 	      gtk_tree_view_queue_draw_arrow (GTK_TREE_VIEW (widget),
@@ -3245,67 +3292,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	    }
         }
 
-      if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_BUTTON_PRESS)
-        {
-
-          /* Test if a double click happened on the same row. */
-          if (!tree_view->priv->activate_on_single_click)
-            {
-              int double_click_time, double_click_distance;
-
-              g_object_get (gtk_settings_get_default (),
-                            "gtk-double-click-time", &double_click_time,
-                            "gtk-double-click-distance", &double_click_distance,
-                            NULL);
-
-              /* Same conditions as _gdk_event_button_generate */
-              if (tree_view->priv->last_button_x != -1 &&
-                  (event->time < tree_view->priv->last_button_time + double_click_time) &&
-                  (ABS (event->x - tree_view->priv->last_button_x) <= double_click_distance) &&
-                  (ABS (event->y - tree_view->priv->last_button_y) <= double_click_distance))
-                {
-                  /* We do no longer compare paths of this row and the
-                   * row clicked previously.  We use the double click
-                   * distance to decide whether this is a valid click,
-                   * allowing the mouse to slightly move over another row.
-                   */
-                  row_double_click = TRUE;
-
-                  tree_view->priv->last_button_time = 0;
-                  tree_view->priv->last_button_x = -1;
-                  tree_view->priv->last_button_y = -1;
-                }
-              else
-                {
-                  tree_view->priv->last_button_time = event->time;
-                  tree_view->priv->last_button_x = event->x;
-                  tree_view->priv->last_button_y = event->y;
-                }
-            }
-          else
-            {
-              tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
-              tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
-            }
-        }
-
-      if (row_double_click)
-	{
-	  gtk_grab_remove (widget);
-	  gtk_tree_view_row_activated (tree_view, path, column);
-
-          if (tree_view->priv->pressed_button == event->button)
-            tree_view->priv->pressed_button = -1;
-	}
-
-      gtk_tree_path_free (path);
-
-      /* If we activated the row through a double click we don't want to grab
-       * focus back, as moving focus to another widget is pretty common.
-       */
-      if (!row_double_click)
-	grab_focus_and_unset_draw_keyfocus (tree_view);
-
       return TRUE;
     }
 
@@ -3341,7 +3327,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
                                event->time) != GDK_GRAB_SUCCESS)
             return FALSE;
 
-          gtk_grab_add (widget);
           tree_view->priv->in_column_resize = TRUE;
 
 	  /* block attached dnd signal handler */
@@ -3467,7 +3452,6 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
 				       drag_data);
 
   tree_view->priv->in_column_resize = FALSE;
-  gtk_grab_remove (widget);
   gdk_device_ungrab (gdk_event_get_device ((GdkEvent*)event), event->time);
   return TRUE;
 }
@@ -3531,7 +3515,6 @@ gtk_tree_view_button_release (GtkWidget      *widget,
           gtk_tree_path_free (path);
         }
 
-      gtk_grab_remove (widget);
       tree_view->priv->button_pressed_tree = NULL;
       tree_view->priv->button_pressed_node = NULL;
     }
@@ -4241,7 +4224,6 @@ static void
 gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
 {
   remove_scroll_timeout (tree_view);
-  gtk_grab_remove (GTK_WIDGET (tree_view));
 
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
     {
@@ -4590,7 +4572,6 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
 
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_MAYBE_START)
     {
-      gtk_grab_add (GTK_WIDGET (tree_view));
       gtk_tree_view_update_rubber_band (tree_view);
 
       tree_view->priv->rubber_band_status = RUBBER_BAND_ACTIVE;
@@ -9927,8 +9908,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
   gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
-
-  gtk_grab_remove (button);
 
   send_event = gdk_event_new (GDK_LEAVE_NOTIFY);
   send_event->crossing.send_event = TRUE;

@@ -92,6 +92,7 @@
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
+#include <gtk/gtkeventcontroller.h>
 #include <gtk/gtkexpander.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfilechooser.h>
@@ -105,6 +106,15 @@
 #include <gtk/gtkfontchooserdialog.h>
 #include <gtk/gtkfontchooserwidget.h>
 #include <gtk/gtkframe.h>
+#include <gtk/gtkgesture.h>
+#include <gtk/gtkgesturedrag.h>
+#include <gtk/gtkgesturelongpress.h>
+#include <gtk/gtkgesturemultipress.h>
+#include <gtk/gtkgesturepan.h>
+#include <gtk/gtkgesturerotate.h>
+#include <gtk/gtkgesturesingle.h>
+#include <gtk/gtkgestureswipe.h>
+#include <gtk/gtkgesturezoom.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkheaderbar.h>
 #include <gtk/gtkicontheme.h>

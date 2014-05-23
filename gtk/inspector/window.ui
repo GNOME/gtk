@@ -239,6 +239,17 @@
                         <property name="label" translatable="yes">Actions</property>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkInspectorGestures" id="gestures">
+                        <property name="widget-tree">widget_tree</property>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Gestures</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="resize">True</property>

@@ -66,6 +66,7 @@
 #include "gtktypebuiltins.h"
 #include "a11y/gtkwidgetaccessible.h"
 #include "gtkapplicationprivate.h"
+#include "gtkgestureprivate.h"
 
 /* for the use of round() */
 #include "fallback-c89.c"
@@ -396,6 +397,14 @@ typedef struct {
   GDestroyNotify        destroy_notify;
 } GtkWidgetTemplate;
 
+typedef struct {
+  GtkEventController *controller;
+  GtkPropagationPhase phase;
+  guint evmask_notify_id;
+  guint grab_notify_id;
+  guint sequence_state_changed_id;
+} EventControllerData;
+
 struct _GtkWidgetPrivate
 {
   /* The state of the widget. Needs to be able to hold all GtkStateFlags bits
@@ -505,6 +514,8 @@ struct _GtkWidgetPrivate
   /* Number of gtk_widget_push_verify_invariants () */
   guint verifying_invariants_count;
 #endif /* G_ENABLE_DEBUG */
+
+  GList *event_controllers;
 };
 
 struct _GtkWidgetClassPrivate
@@ -676,10 +687,17 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
 static gboolean gtk_widget_real_show_help        (GtkWidget         *widget,
                                                   GtkWidgetHelpType  help_type);
+static gboolean _gtk_widget_run_controllers      (GtkWidget           *widget,
+                                                  const GdkEvent      *event,
+                                                  GtkPropagationPhase  phase);
 
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
+static gboolean         gtk_widget_real_button_event            (GtkWidget        *widget,
+                                                                 GdkEventButton   *event);
+static gboolean         gtk_widget_real_motion_event            (GtkWidget        *widget,
+                                                                 GdkEventMotion   *event);
 static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
 								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
@@ -690,6 +708,8 @@ static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 								 GdkEventFocus    *event);
 static gboolean         gtk_widget_real_touch_event             (GtkWidget        *widget,
                                                                  GdkEventTouch    *event);
+static gboolean         gtk_widget_real_grab_broken_event       (GtkWidget          *widget,
+                                                                 GdkEventGrabBroken *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
@@ -1080,9 +1100,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->event = NULL;
-  klass->button_press_event = NULL;
-  klass->button_release_event = NULL;
-  klass->motion_notify_event = NULL;
+  klass->button_press_event = gtk_widget_real_button_event;
+  klass->button_release_event = gtk_widget_real_button_event;
+  klass->motion_notify_event = gtk_widget_real_motion_event;
   klass->touch_event = gtk_widget_real_touch_event;
   klass->delete_event = NULL;
   klass->destroy_event = NULL;
@@ -1112,7 +1132,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_data_received = NULL;
   klass->screen_changed = NULL;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
-  klass->grab_broken_event = NULL;
+  klass->grab_broken_event = gtk_widget_real_grab_broken_event;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->style_updated = gtk_widget_real_style_updated;
 
@@ -4028,6 +4048,307 @@ gtk_widget_get_property (GObject         *object,
 }
 
 static void
+_gtk_widget_emulate_press (GtkWidget      *widget,
+                           const GdkEvent *event)
+{
+  GtkWidget *event_widget, *next_child, *parent;
+  GdkEvent *press;
+
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
+  if (event_widget == widget)
+    return;
+
+  if (event->type == GDK_TOUCH_BEGIN ||
+      event->type == GDK_TOUCH_UPDATE ||
+      event->type == GDK_TOUCH_END)
+    {
+      press = gdk_event_copy (event);
+      press->type = GDK_TOUCH_BEGIN;
+    }
+  else if (event->type == GDK_BUTTON_PRESS ||
+           event->type == GDK_BUTTON_RELEASE)
+    {
+      press = gdk_event_copy (event);
+      press->type = GDK_BUTTON_PRESS;
+    }
+  else if (event->type == GDK_MOTION_NOTIFY)
+    {
+      press = gdk_event_new (GDK_BUTTON_PRESS);
+      press->button.window = g_object_ref (event->motion.window);
+      press->button.time = event->motion.time;
+      press->button.x = event->motion.x;
+      press->button.y = event->motion.y;
+      press->button.x_root = event->motion.x_root;
+      press->button.y_root = event->motion.y_root;
+      press->button.state = event->motion.state;
+
+      press->button.axes = g_memdup (event->motion.axes,
+                                     sizeof (gdouble) *
+                                     gdk_device_get_n_axes (event->motion.device));
+
+      if (event->motion.state & GDK_BUTTON3_MASK)
+        press->button.button = 3;
+      else if (event->motion.state & GDK_BUTTON2_MASK)
+        press->button.button = 2;
+      else
+        {
+          if ((event->motion.state & GDK_BUTTON1_MASK) == 0)
+            g_critical ("Guessing button number 1 on generated button press event");
+
+          press->button.button = 1;
+        }
+
+      gdk_event_set_device (press, gdk_event_get_device (event));
+      gdk_event_set_source_device (press, gdk_event_get_source_device (event));
+    }
+  else
+    return;
+
+  press->any.send_event = TRUE;
+  next_child = event_widget;
+  parent = gtk_widget_get_parent (next_child);
+
+  while (parent != widget)
+    {
+      next_child = parent;
+      parent = gtk_widget_get_parent (parent);
+    }
+
+  /* Perform propagation state starting from the next child in the chain */
+  if (!_gtk_propagate_captured_event (event_widget, press, next_child))
+    gtk_propagate_event (event_widget, press);
+
+  gdk_event_free (press);
+}
+
+static const GdkEvent *
+_gtk_widget_get_last_event (GtkWidget        *widget,
+                            GdkEventSequence *sequence)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  EventControllerData *data;
+  const GdkEvent *event;
+  GList *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      event = gtk_gesture_get_last_event (GTK_GESTURE (data->controller),
+                                          sequence);
+      if (event)
+        return event;
+    }
+
+  return NULL;
+}
+
+static gboolean
+_gtk_widget_get_emulating_sequence (GtkWidget         *widget,
+                                    GdkEventSequence  *sequence,
+                                    GdkEventSequence **sequence_out)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  GList *l;
+
+  *sequence_out = sequence;
+
+  if (sequence)
+    {
+      const GdkEvent *last_event;
+
+      last_event = _gtk_widget_get_last_event (widget, sequence);
+
+      if (last_event &&
+          (last_event->type == GDK_TOUCH_BEGIN ||
+           last_event->type == GDK_TOUCH_UPDATE ||
+           last_event->type == GDK_TOUCH_END) &&
+          last_event->touch.emulating_pointer)
+        return TRUE;
+    }
+  else
+    {
+      /* For a NULL(pointer) sequence, find the pointer emulating one */
+      for (l = priv->event_controllers; l; l = l->next)
+        {
+          EventControllerData *data = l->data;
+
+          if (!GTK_IS_GESTURE (data->controller))
+            continue;
+
+          if (_gtk_gesture_get_pointer_emulating_sequence (GTK_GESTURE (data->controller),
+                                                           sequence_out))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_widget_needs_press_emulation (GtkWidget        *widget,
+                                  GdkEventSequence *sequence)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  gboolean sequence_press_handled = FALSE;
+  GList *l;
+
+  /* Check whether there is any remaining gesture in
+   * the capture phase that handled the press event
+   */
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      EventControllerData *data;
+      GtkGesture *gesture;
+
+      data = l->data;
+
+      if (data->phase != GTK_PHASE_CAPTURE)
+        continue;
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      gesture = GTK_GESTURE (data->controller);
+      sequence_press_handled |=
+        (gtk_gesture_handles_sequence (gesture, sequence) &&
+         _gtk_gesture_handled_sequence_press (gesture, sequence));
+    }
+
+  return !sequence_press_handled;
+}
+
+static gint
+_gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
+                                         GdkEventSequence      *sequence,
+                                         GtkEventSequenceState  state,
+                                         GtkGesture            *emitter)
+{
+  gboolean emulates_pointer, sequence_handled = FALSE;
+  GtkWidgetPrivate *priv = widget->priv;
+  const GdkEvent *mimic_event;
+  GList *group = NULL, *l;
+  GdkEventSequence *seq;
+  gint n_handled = 0;
+
+  if (!priv->event_controllers && state != GTK_EVENT_SEQUENCE_CLAIMED)
+    return TRUE;
+
+  if (emitter)
+    group = gtk_gesture_get_group (emitter);
+
+  emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
+  mimic_event = _gtk_widget_get_last_event (widget, seq);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventSequenceState gesture_state;
+      EventControllerData *data;
+      GtkGesture *gesture;
+      gboolean retval;
+
+      seq = sequence;
+      data = l->data;
+      gesture_state = state;
+
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      gesture = GTK_GESTURE (data->controller);
+
+      if (gesture == emitter)
+        {
+          sequence_handled |=
+            _gtk_gesture_handled_sequence_press (gesture, sequence);
+          n_handled++;
+          continue;
+        }
+
+      if (seq && emulates_pointer &&
+          !gtk_gesture_handles_sequence (gesture, seq))
+        seq = NULL;
+
+      if (group && !g_list_find (group, data->controller))
+        {
+          /* If a group is provided, ensure only gestures pertaining to the group
+           * get a "claimed" state, all other claiming gestures must deny the sequence.
+           */
+          if (gesture_state == GTK_EVENT_SEQUENCE_CLAIMED &&
+              gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
+            gesture_state = GTK_EVENT_SEQUENCE_DENIED;
+          else
+            continue;
+        }
+
+      g_signal_handler_block (data->controller, data->sequence_state_changed_id);
+      retval = gtk_gesture_set_sequence_state (gesture, seq, gesture_state);
+      g_signal_handler_unblock (data->controller, data->sequence_state_changed_id);
+
+      if (retval || gesture == emitter)
+        {
+          sequence_handled |=
+            _gtk_gesture_handled_sequence_press (gesture, seq);
+          n_handled++;
+        }
+    }
+
+  /* If the sequence goes denied, check whether this is a controller attached
+   * to the capture phase, that additionally handled the button/touch press (ie.
+   * it was consumed), the corresponding press will be emulated for widgets
+   * beneath, so the widgets beneath get a coherent stream of events from now on.
+   */
+  if (n_handled > 0 && sequence_handled &&
+      state == GTK_EVENT_SEQUENCE_DENIED &&
+      gtk_widget_needs_press_emulation (widget, sequence))
+    _gtk_widget_emulate_press (widget, mimic_event);
+
+  g_list_free (group);
+
+  return n_handled;
+}
+
+static gboolean
+_gtk_widget_cancel_sequence (GtkWidget        *widget,
+                             GdkEventSequence *sequence)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  gboolean emulates_pointer;
+  gboolean handled = FALSE;
+  GdkEventSequence *seq;
+  GList *l;
+
+  emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      EventControllerData *data;
+      GtkGesture *gesture;
+
+      seq = sequence;
+      data = l->data;
+
+      if (!GTK_IS_GESTURE (data->controller))
+        continue;
+
+      gesture = GTK_GESTURE (data->controller);
+
+      if (seq && emulates_pointer &&
+          !gtk_gesture_handles_sequence (gesture, seq))
+        seq = NULL;
+
+      if (!gtk_gesture_handles_sequence (gesture, seq))
+        continue;
+
+      handled |= _gtk_gesture_cancel_sequence (gesture, seq);
+    }
+
+  return handled;
+}
+
+static void
 gtk_widget_init (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
@@ -6784,6 +7105,22 @@ gtk_widget_draw (GtkWidget *widget,
 }
 
 static gboolean
+gtk_widget_real_button_event (GtkWidget      *widget,
+                              GdkEventButton *event)
+{
+  return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
+                                      GTK_PHASE_TARGET);
+}
+
+static gboolean
+gtk_widget_real_motion_event (GtkWidget      *widget,
+                              GdkEventMotion *event)
+{
+  return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
+                                      GTK_PHASE_TARGET);
+}
+
+static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
@@ -6824,7 +7161,8 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
   gint signum;
 
   if (!event->emulating_pointer)
-    return FALSE;
+    return _gtk_widget_run_controllers (widget, (GdkEvent*) event,
+                                        GTK_PHASE_TARGET);
 
   if (event->type == GDK_TOUCH_BEGIN ||
       event->type == GDK_TOUCH_END)
@@ -6884,6 +7222,13 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
   return return_val;
 }
 
+static gboolean
+gtk_widget_real_grab_broken_event (GtkWidget          *widget,
+                                   GdkEventGrabBroken *event)
+{
+  return _gtk_widget_run_controllers (widget, (GdkEvent*) event,
+                                      GTK_PHASE_TARGET);
+}
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
      (event->type == GDK_FOCUS_CHANGE || gtk_widget_get_realized(widget))
@@ -6930,6 +7275,61 @@ _gtk_widget_set_captured_event_handler (GtkWidget               *widget,
   g_object_set_data (G_OBJECT (widget), "captured-event-handler", callback);
 }
 
+static GdkEventMask
+_gtk_widget_get_controllers_evmask (GtkWidget *widget)
+{
+  EventControllerData *data;
+  GdkEventMask evmask = 0;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+      if (data->controller)
+        evmask |= gtk_event_controller_get_event_mask (GTK_EVENT_CONTROLLER (data->controller));
+    }
+
+  return evmask;
+}
+
+static gboolean
+_gtk_widget_run_controllers (GtkWidget           *widget,
+                             const GdkEvent      *event,
+                             GtkPropagationPhase  phase)
+{
+  EventControllerData *data;
+  gboolean handled = FALSE;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  priv = widget->priv;
+  g_object_ref (widget);
+
+  l = priv->event_controllers;
+  while (l != NULL)
+    {
+      GList *next = l->next;
+      data = l->data;
+
+      if (data->controller == NULL)
+        {
+          priv->event_controllers = g_list_delete_link (priv->event_controllers, l);
+          g_free (data);
+        }
+      else if (data->phase == phase)
+        handled |= gtk_event_controller_handle_event (data->controller, event);
+
+      l = next;
+    }
+
+  g_object_unref (widget);
+
+  return handled;
+}
+
 gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
                             GdkEvent  *event)
@@ -6951,13 +7351,15 @@ _gtk_widget_captured_event (GtkWidget *widget,
   if (!event_window_is_still_viewable (event))
     return TRUE;
 
+  return_val = _gtk_widget_run_controllers (widget, event, GTK_PHASE_CAPTURE);
+
   handler = g_object_get_data (G_OBJECT (widget), "captured-event-handler");
   if (!handler)
-    return FALSE;
+    return return_val;
 
   g_object_ref (widget);
 
-  return_val = handler (widget, event);
+  return_val |= handler (widget, event);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
   /* The widget that was originally to receive the event
@@ -7143,7 +7545,7 @@ static gint
 gtk_widget_event_internal (GtkWidget *widget,
 			   GdkEvent  *event)
 {
-  gboolean return_val = FALSE;
+  gboolean return_val = FALSE, handled;
 
   /* We check only once for is-still-visible; if someone
    * hides the window in on of the signals on the widget,
@@ -7155,8 +7557,8 @@ gtk_widget_event_internal (GtkWidget *widget,
 
   g_object_ref (widget);
 
-  g_signal_emit (widget, widget_signals[EVENT], 0, event, &return_val);
-  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
+  g_signal_emit (widget, widget_signals[EVENT], 0, event, &handled);
+  return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
     {
       gint signal_num;
@@ -7258,12 +7660,17 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	}
       if (signal_num != -1)
-	g_signal_emit (widget, widget_signals[signal_num], 0, event, &return_val);
+        {
+	  g_signal_emit (widget, widget_signals[signal_num], 0, event, &handled);
+          return_val |= handled;
+        }
     }
   if (WIDGET_REALIZED_FOR_EVENT (widget, event))
     g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
   else
     return_val = TRUE;
+
+  return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
 
   g_object_unref (widget);
 
@@ -10701,7 +11108,10 @@ gtk_widget_add_events_internal_list (GtkWidget *widget,
                                      gint       events,
                                      GList     *window_list)
 {
+  GdkEventMask controllers_mask;
   GList *l;
+
+  controllers_mask = _gtk_widget_get_controllers_evmask (widget);
 
   for (l = window_list; l != NULL; l = l->next)
     {
@@ -10714,9 +11124,16 @@ gtk_widget_add_events_internal_list (GtkWidget *widget,
           GList *children;
 
           if (device)
-            gdk_window_set_device_events (window, device, gdk_window_get_events (window) | events);
+            {
+              gdk_window_set_device_events (window, device,
+                                            gdk_window_get_events (window) |
+                                            events | controllers_mask);
+            }
           else
-            gdk_window_set_events (window, gdk_window_get_events (window) | events);
+            {
+              gdk_window_set_events (window, gdk_window_get_events (window) |
+                                     events | controllers_mask);
+            }
 
           children = gdk_window_get_children (window);
           gtk_widget_add_events_internal_list (widget, device, events, children);
@@ -11375,6 +11792,7 @@ gtk_widget_dispose (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
+  GList *l;
 
   if (priv->parent)
     gtk_container_remove (GTK_CONTAINER (priv->parent), widget);
@@ -11396,6 +11814,15 @@ gtk_widget_dispose (GObject *object)
 
   while (priv->attached_windows)
     gtk_window_set_attached_to (priv->attached_windows->data, NULL);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      EventControllerData *data = l->data;
+      if (data->controller)
+        _gtk_widget_remove_controller (widget, data->controller);
+    }
+  g_list_free_full (priv->event_controllers, g_free);
+  priv->event_controllers = NULL;
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
@@ -16276,4 +16703,212 @@ _gtk_widget_get_action_group (GtkWidget   *widget,
   if (widget->priv->muxer)
     return gtk_action_muxer_lookup (widget->priv->muxer, prefix);
   return NULL;
+}
+
+static void
+event_controller_grab_notify (GtkWidget           *widget,
+                              gboolean             was_grabbed,
+                              EventControllerData *data)
+{
+  GtkWidget *grab_widget, *toplevel;
+  GtkWindowGroup *group;
+  GdkDevice *device;
+
+  device = gtk_gesture_get_device (GTK_GESTURE (data->controller));
+
+  if (!device)
+    return;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel))
+    group = gtk_window_get_group (GTK_WINDOW (toplevel));
+  else
+    group = gtk_window_get_group (NULL);
+
+  grab_widget = gtk_window_group_get_current_device_grab (group, device);
+
+  if (!grab_widget)
+    grab_widget = gtk_window_group_get_current_grab (group);
+
+  if (!grab_widget || grab_widget == widget)
+    return;
+
+  if ((data->phase != GTK_PHASE_CAPTURE &&
+       !gtk_widget_is_ancestor (widget, grab_widget)) ||
+      (data->phase == GTK_PHASE_CAPTURE &&
+       !gtk_widget_is_ancestor (widget, grab_widget) &&
+       !gtk_widget_is_ancestor (grab_widget, widget)))
+    {
+      gtk_event_controller_reset (data->controller);
+    }
+}
+
+static void
+_gtk_widget_update_evmask (GtkWidget *widget)
+{
+  if (gtk_widget_get_realized (widget))
+    {
+      gint events = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget),
+                                                         quark_event_mask));
+      gtk_widget_add_events_internal (widget, NULL, events);
+    }
+}
+
+static void
+event_controller_notify_event_mask (GtkEventController *controller,
+                                    GParamSpec         *pspec,
+                                    GtkWidget          *widget)
+{
+  _gtk_widget_update_evmask (widget);
+}
+
+static void
+event_controller_sequence_state_changed (GtkGesture            *gesture,
+                                         GdkEventSequence      *sequence,
+                                         GtkEventSequenceState  state,
+                                         GtkWidget             *widget)
+{
+  gboolean handled = FALSE;
+  GtkWidget *event_widget;
+  gboolean cancel = TRUE;
+  const GdkEvent *event;
+
+  handled = _gtk_widget_set_sequence_state_internal (widget, sequence,
+                                                     state, gesture);
+
+  if (!handled || state != GTK_EVENT_SEQUENCE_CLAIMED)
+    return;
+
+  event = _gtk_widget_get_last_event (widget, sequence);
+
+  if (!event)
+    return;
+
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
+  while (event_widget)
+    {
+      if (event_widget == widget)
+        cancel = FALSE;
+      else if (cancel)
+        _gtk_widget_cancel_sequence (event_widget, sequence);
+      else
+        _gtk_widget_set_sequence_state_internal (event_widget, sequence,
+                                                 GTK_EVENT_SEQUENCE_DENIED,
+                                                 NULL);
+
+      event_widget = gtk_widget_get_parent (event_widget);
+    }
+}
+
+EventControllerData *
+_gtk_widget_has_controller (GtkWidget          *widget,
+                            GtkEventController *controller)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (data->controller == controller)
+        return data;
+    }
+
+  return NULL;
+}
+
+void
+_gtk_widget_add_controller (GtkWidget           *widget,
+                            GtkEventController  *controller,
+                            GtkPropagationPhase  phase)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
+  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_TARGET);
+
+  priv = widget->priv;
+  data = _gtk_widget_has_controller (widget, controller);
+
+  if (data)
+    {
+      data->phase = phase;
+      return;
+    }
+
+  data = g_new0 (EventControllerData, 1);
+  data->controller = g_object_ref (controller);
+  data->phase = phase;
+  data->evmask_notify_id =
+    g_signal_connect (controller, "notify::event-mask",
+                      G_CALLBACK (event_controller_notify_event_mask), widget);
+  data->grab_notify_id =
+    g_signal_connect (widget, "grab-notify",
+                      G_CALLBACK (event_controller_grab_notify), data);
+
+  if (GTK_IS_GESTURE (controller))
+    {
+      data->sequence_state_changed_id =
+        g_signal_connect (controller, "sequence-state-changed",
+                          G_CALLBACK (event_controller_sequence_state_changed),
+                          widget);
+    }
+
+  priv->event_controllers = g_list_prepend (priv->event_controllers, data);
+  _gtk_widget_update_evmask (widget);
+}
+
+void
+_gtk_widget_remove_controller (GtkWidget          *widget,
+                               GtkEventController *controller)
+{
+  EventControllerData *data;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  data = _gtk_widget_has_controller (widget, controller);
+
+  if (!data)
+    return;
+
+  if (g_signal_handler_is_connected (widget, data->grab_notify_id))
+    g_signal_handler_disconnect (widget, data->grab_notify_id);
+
+  g_signal_handler_disconnect (data->controller, data->evmask_notify_id);
+  g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (data->controller));
+  g_object_unref (data->controller);
+  data->controller = NULL;
+}
+
+GList *
+_gtk_widget_list_controllers (GtkWidget           *widget,
+                              GtkPropagationPhase  phase)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l, *retval = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+      if (data->phase == phase && data->controller != NULL)
+        retval = g_list_prepend (retval, data->controller);
+    }
+
+  return retval;
 }

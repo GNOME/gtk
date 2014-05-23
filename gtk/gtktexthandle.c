@@ -102,11 +102,14 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
 
   priv = handle->priv;
   context = gtk_widget_get_style_context (priv->parent);
+  _gtk_text_handle_get_size (handle, &width, &height);
 
   cairo_save (cr);
 
   if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
-    cairo_translate (cr, 0, priv->windows[pos].pointing_to.height);
+    cairo_translate (cr, width, priv->windows[pos].pointing_to.height);
+  else
+    cairo_translate (cr, width, height);
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context,
@@ -125,7 +128,6 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
     gtk_style_context_add_class (context,
                                  GTK_STYLE_CLASS_TOP);
 
-  _gtk_text_handle_get_size (handle, &width, &height);
   gtk_render_background (context, cr, 0, 0, width, height);
 
   gtk_style_context_restore (context);
@@ -191,14 +193,18 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
            event->motion.state & GDK_BUTTON1_MASK &&
            priv->windows[pos].dragged)
     {
-      gint x, y, width, height;
+      gint x, y, width, height, handle_height;
+      GtkAllocation allocation;
 
-      _gtk_text_handle_get_size (handle, &width, &height);
+      gtk_widget_get_allocation (priv->windows[pos].widget, &allocation);
+      width = allocation.width;
+      height = allocation.height;
+      _gtk_text_handle_get_size (handle, NULL, &handle_height);
       x = event->motion.x - priv->windows[pos].dx + (width / 2);
       y = event->motion.y - priv->windows[pos].dy;
 
       if (pos != GTK_TEXT_HANDLE_POSITION_CURSOR)
-        y += height;
+        y += height - handle_height;
 
       y += priv->windows[pos].pointing_to.height / 2;
 
@@ -312,6 +318,13 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       rect.y = handle_window->pointing_to.y;
       rect.width = width;
       rect.height = 0;
+
+      /* Make the window 3 times as wide, and 2 times as high (plus
+       * handle_window->pointing_to.height), the handle will be rendered
+       * in the center. Making the rest an invisible input area.
+       */
+      width *= 3;
+      height *= 2;
 
       _handle_update_child_visible (handle, pos);
 

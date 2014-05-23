@@ -287,6 +287,20 @@
       <xi:include href="xml/gtkappchooserwidget.xml" />
     </chapter>
 
+    <chapter id="Gestures">
+      <title>Gestures</title>
+      <xi:include href="xml/gtkeventcontroller.xml" />
+      <xi:include href="xml/gtkgesture.xml" />
+      <xi:include href="xml/gtkgesturesingle.xml" />
+      <xi:include href="xml/gtkgesturedrag.xml" />
+      <xi:include href="xml/gtkgesturelongpress.xml" />
+      <xi:include href="xml/gtkgesturemultipress.xml" />
+      <xi:include href="xml/gtkgesturepan.xml" />
+      <xi:include href="xml/gtkgestureswipe.xml" />
+      <xi:include href="xml/gtkgesturerotate.xml" />
+      <xi:include href="xml/gtkgesturezoom.xml" />
+    </chapter>
+
     <chapter id="DeprecatedObjects">
       <title>Deprecated</title>
       <xi:include href="xml/gtksymboliccolor.xml" />

@@ -166,6 +166,8 @@ struct _GtkSpinButtonPrivate
 
   GtkOrientation orientation;
 
+  GtkGesture *swipe_gesture;
+
   guint          button        : 2;
   guint          digits        : 10;
   guint          need_timer    : 1;
@@ -642,6 +644,36 @@ gtk_spin_button_get_property (GObject      *object,
 }
 
 static void
+swipe_gesture_begin (GtkGesture       *gesture,
+                     GdkEventSequence *sequence,
+                     GtkSpinButton    *spin_button)
+{
+  GdkEventSequence *current;
+  const GdkEvent *event;
+
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (gesture, current);
+
+  if (event->any.window == spin_button->priv->up_panel ||
+      event->any.window == spin_button->priv->down_panel)
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+  gtk_widget_grab_focus (GTK_WIDGET (spin_button));
+}
+
+static void
+swipe_gesture_update (GtkGesture       *gesture,
+                      GdkEventSequence *sequence,
+                      GtkSpinButton    *spin_button)
+{
+  gdouble vel_y;
+
+  gtk_gesture_swipe_get_velocity (GTK_GESTURE_SWIPE (gesture), NULL, &vel_y);
+  gtk_spin_button_real_spin (spin_button, -vel_y / 20);
+}
+
+static void
 gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv;
@@ -676,6 +708,13 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SPINBUTTON);
 
   gtk_widget_add_events (GTK_WIDGET (spin_button), GDK_SCROLL_MASK);
+
+  priv->swipe_gesture = gtk_gesture_swipe_new (GTK_WIDGET (spin_button));
+  gtk_gesture_attach (priv->swipe_gesture, GTK_PHASE_CAPTURE);
+  g_signal_connect (priv->swipe_gesture, "begin",
+                    G_CALLBACK (swipe_gesture_begin), spin_button);
+  g_signal_connect (priv->swipe_gesture, "update",
+                    G_CALLBACK (swipe_gesture_update), spin_button);
 }
 
 static void
@@ -691,6 +730,9 @@ gtk_spin_button_finalize (GObject *object)
 
   if (priv->up_panel_context)
     g_object_unref (priv->up_panel_context);
+
+  gtk_gesture_detach (priv->swipe_gesture);
+  g_object_unref (priv->swipe_gesture);
 
   G_OBJECT_CLASS (gtk_spin_button_parent_class)->finalize (object);
 }
@@ -1487,7 +1529,9 @@ gtk_spin_button_button_press (GtkWidget      *widget,
           return TRUE;
         }
       else
-        return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->button_press_event (widget, event);
+        {
+          return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->button_press_event (widget, event);
+        }
     }
   return FALSE;
 }
@@ -1529,7 +1573,9 @@ gtk_spin_button_button_release (GtkWidget      *widget,
       return TRUE;
     }
   else
-    return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->button_release_event (widget, event);
+    {
+      return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->button_release_event (widget, event);
+    }
 }
 
 static gint
@@ -1552,6 +1598,9 @@ gtk_spin_button_motion_notify (GtkWidget      *widget,
 
       return FALSE;
     }
+
+  if (gtk_gesture_is_recognized (priv->swipe_gesture))
+    return TRUE;
 
   return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->motion_notify_event (widget, event);
 }

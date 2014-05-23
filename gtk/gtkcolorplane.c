@@ -19,10 +19,11 @@
 
 #include "gtkcolorplaneprivate.h"
 
+#include "gtkgesturedrag.h"
+#include "gtkgesturelongpress.h"
 #include "gtkaccessible.h"
 #include "gtkadjustment.h"
 #include "gtkcolorutils.h"
-#include "gtkpressandholdprivate.h"
 #include "gtkintl.h"
 
 struct _GtkColorPlanePrivate
@@ -32,9 +33,9 @@ struct _GtkColorPlanePrivate
   GtkAdjustment *v_adj;
 
   cairo_surface_t *surface;
-  gboolean in_drag;
 
-  GtkPressAndHold *press_and_hold;
+  GtkGesture *drag_gesture;
+  GtkGesture *long_press_gesture;
 };
 
 enum {
@@ -180,32 +181,27 @@ plane_configure (GtkWidget         *widget,
 }
 
 static void
-set_cross_grab (GtkWidget *widget,
-                GdkDevice *device,
-                guint32    time)
+set_cross_cursor (GtkWidget *widget,
+                  gboolean   enabled)
 {
-  GdkCursor *cursor;
+  GdkCursor *cursor = NULL;
+  GdkWindow *window;
+  GdkDevice *device;
 
-  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (widget)),
-                                       GDK_CROSSHAIR);
-  gdk_device_grab (device,
-                   gtk_widget_get_window (widget),
-                   GDK_OWNERSHIP_NONE,
-                   FALSE,
-                   GDK_POINTER_MOTION_MASK
-                    | GDK_POINTER_MOTION_HINT_MASK
-                    | GDK_BUTTON_RELEASE_MASK,
-                   cursor,
-                   time);
-  g_object_unref (cursor);
-}
+  window = gtk_widget_get_window (widget);
+  device = gtk_gesture_get_device (GTK_COLOR_PLANE (widget)->priv->drag_gesture);
 
-static gboolean
-plane_grab_broken (GtkWidget          *widget,
-                   GdkEventGrabBroken *event)
-{
-  GTK_COLOR_PLANE (widget)->priv->in_drag = FALSE;
-  return TRUE;
+  if (!window || !device)
+    return;
+
+  if (enabled)
+    cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (widget)),
+                                         GDK_CROSSHAIR);
+
+  gdk_window_set_device_cursor (window, device, cursor);
+
+  if (cursor)
+    g_object_unref (cursor);
 }
 
 static void
@@ -237,104 +233,15 @@ update_color (GtkColorPlane *plane,
   gtk_widget_queue_draw (widget);
 }
 
-static gboolean
-plane_button_press (GtkWidget      *widget,
-                    GdkEventButton *event)
-{
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-
-  if (event->button == GDK_BUTTON_SECONDARY)
-    {
-      gboolean handled;
-
-      g_signal_emit_by_name (widget, "popup-menu", &handled);
-
-      return TRUE;
-    }
-
-  if (plane->priv->in_drag || event->button != GDK_BUTTON_PRIMARY)
-    return FALSE;
-
-  plane->priv->in_drag = TRUE;
-  set_cross_grab (widget, gdk_event_get_device ((GdkEvent*)event), event->time);
-  update_color (plane, event->x, event->y);
-  gtk_widget_grab_focus (widget);
-
-  return TRUE;
-}
-
-static gboolean
-plane_button_release (GtkWidget      *widget,
-                      GdkEventButton *event)
-{
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-
-  if (!plane->priv->in_drag || event->button != GDK_BUTTON_PRIMARY)
-    return FALSE;
-
-  plane->priv->in_drag = FALSE;
-
-  update_color (plane, event->x, event->y);
-  gdk_device_ungrab (gdk_event_get_device ((GdkEvent *) event), event->time);
-
-  return TRUE;
-}
-
-static gboolean
-plane_motion_notify (GtkWidget      *widget,
-                     GdkEventMotion *event)
-{
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-
-  if (!plane->priv->in_drag)
-    return FALSE;
-
-  gdk_event_request_motions (event);
-  update_color (plane, event->x, event->y);
-
-  return TRUE;
-}
-
 static void
-hold_action (GtkPressAndHold *pah,
-             gint             x,
-             gint             y,
-             GtkColorPlane   *plane)
+hold_action (GtkGestureLongPress *gesture,
+             gdouble              x,
+             gdouble              y,
+             GtkColorPlane       *plane)
 {
   gboolean handled;
 
   g_signal_emit_by_name (plane, "popup-menu", &handled);
-}
-
-static gboolean
-plane_touch (GtkWidget     *widget,
-             GdkEventTouch *event)
-{
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-
-  if (!plane->priv->press_and_hold)
-    {
-      gint drag_threshold;
-
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-dnd-drag-threshold", &drag_threshold,
-                    NULL);
-
-      plane->priv->press_and_hold = gtk_press_and_hold_new ();
-
-      g_object_set (plane->priv->press_and_hold,
-                    "drag-threshold", drag_threshold,
-                    "hold-time", 1000,
-                    NULL);
-
-      g_signal_connect (plane->priv->press_and_hold, "hold",
-                        G_CALLBACK (hold_action), plane);
-    }
-
-  gtk_press_and_hold_process_event (plane->priv->press_and_hold, (GdkEvent *)event);
-  update_color (plane, event->x, event->y);
-
-  return TRUE;
 }
 
 static void
@@ -424,6 +331,57 @@ plane_key_press (GtkWidget   *widget,
 }
 
 static void
+plane_drag_gesture_begin (GtkGestureDrag *gesture,
+                          gdouble         start_x,
+                          gdouble         start_y,
+                          GtkColorPlane  *plane)
+{
+  guint button;
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (button == GDK_BUTTON_SECONDARY)
+    {
+      gboolean handled;
+
+      g_signal_emit_by_name (plane, "popup-menu", &handled);
+    }
+
+  if (button != GDK_BUTTON_PRIMARY)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
+  set_cross_cursor (GTK_WIDGET (plane), TRUE);
+  update_color (plane, start_x, start_y);
+  gtk_widget_grab_focus (GTK_WIDGET (plane));
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+plane_drag_gesture_update (GtkGestureDrag *gesture,
+                           gdouble         offset_x,
+                           gdouble         offset_y,
+                           GtkColorPlane  *plane)
+{
+  gdouble start_x, start_y;
+
+  gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture),
+                                    &start_x, &start_y);
+  update_color (plane, start_x + offset_x, start_y + offset_y);
+}
+
+static void
+plane_drag_gesture_end (GtkGestureDrag *gesture,
+                        gdouble         offset_x,
+                        gdouble         offset_y,
+                        GtkColorPlane  *plane)
+{
+  set_cross_cursor (GTK_WIDGET (plane), FALSE);
+}
+
+static void
 gtk_color_plane_init (GtkColorPlane *plane)
 {
   AtkObject *atk_obj;
@@ -443,6 +401,22 @@ gtk_color_plane_init (GtkColorPlane *plane)
       atk_object_set_name (atk_obj, _("Color Plane"));
       atk_object_set_role (atk_obj, ATK_ROLE_COLOR_CHOOSER);
     }
+
+  plane->priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (plane));
+  g_signal_connect (plane->priv->drag_gesture, "drag-begin",
+		    G_CALLBACK (plane_drag_gesture_begin), plane);
+  g_signal_connect (plane->priv->drag_gesture, "drag-update",
+		    G_CALLBACK (plane_drag_gesture_update), plane);
+  g_signal_connect (plane->priv->drag_gesture, "drag-end",
+		    G_CALLBACK (plane_drag_gesture_end), plane);
+  gtk_gesture_attach (plane->priv->drag_gesture, GTK_PHASE_TARGET);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (plane->priv->drag_gesture),
+                                     FALSE);
+
+  plane->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (plane));
+  g_signal_connect (plane->priv->long_press_gesture, "pressed",
+                    G_CALLBACK (hold_action), plane);
+  gtk_gesture_attach (plane->priv->long_press_gesture, GTK_PHASE_TARGET);
 }
 
 static void
@@ -457,7 +431,11 @@ plane_finalize (GObject *object)
   g_clear_object (&plane->priv->s_adj);
   g_clear_object (&plane->priv->v_adj);
 
-  g_clear_object (&plane->priv->press_and_hold);
+  gtk_gesture_detach (plane->priv->drag_gesture);
+  g_clear_object (&plane->priv->drag_gesture);
+
+  gtk_gesture_detach (plane->priv->long_press_gesture);
+  g_clear_object (&plane->priv->long_press_gesture);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
 }
@@ -517,12 +495,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
 
   widget_class->draw = plane_draw;
   widget_class->configure_event = plane_configure;
-  widget_class->button_press_event = plane_button_press;
-  widget_class->button_release_event = plane_button_release;
-  widget_class->motion_notify_event = plane_motion_notify;
-  widget_class->grab_broken_event = plane_grab_broken;
   widget_class->key_press_event = plane_key_press;
-  widget_class->touch_event = plane_touch;
 
   g_object_class_install_property (object_class,
                                    PROP_H_ADJUSTMENT,

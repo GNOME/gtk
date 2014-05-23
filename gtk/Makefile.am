@@ -266,6 +266,7 @@ gtk_public_h_sources = 		\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
+	gtkeventcontroller.h	\
 	gtkexpander.h		\
 	gtkfilechooser.h	\
 	gtkfilechooserbutton.h	\
@@ -279,6 +280,15 @@ gtk_public_h_sources = 		\
 	gtkfontchooserdialog.h  \
 	gtkfontchooserwidget.h	\
 	gtkframe.h		\
+	gtkgesture.h		\
+	gtkgesturedrag.h	\
+	gtkgesturelongpress.h	\
+	gtkgesturemultipress.h	\
+	gtkgesturepan.h		\
+	gtkgesturerotate.h	\
+	gtkgesturesingle.h	\
+	gtkgestureswipe.h	\
+	gtkgesturezoom.h	\
 	gtkgrid.h		\
 	gtkheaderbar.h		\
 	gtkicontheme.h		\
@@ -493,6 +503,7 @@ gtk_private_h_sources =		\
 	gtkcustompaperunixdialog.h \
 	gtkdialogprivate.h 	\
 	gtkentryprivate.h	\
+	gtkeventcontrollerprivate.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
 	gtkfilechooserprivate.h	\
@@ -501,6 +512,14 @@ gtk_private_h_sources =		\
 	gtkfilesystemmodel.h	\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
+	gtkgestureprivate.h	\
+	gtkgesturedragprivate.h	\
+	gtkgesturelongpressprivate.h	\
+	gtkgesturemultipressprivate.h	\
+	gtkgesturepanprivate.h	\
+	gtkgesturerotateprivate.h	\
+	gtkgestureswipeprivate.h	\
+	gtkgesturezoomprivate.h	\
 	gtkheaderbarprivate.h	\
 	gtkhslaprivate.h	\
 	gtkiconcache.h		\
@@ -530,7 +549,6 @@ gtk_private_h_sources =		\
 	gtkorientableprivate.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
-	gtkpressandholdprivate.h \
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
 	gtkprivate.h		\
@@ -750,6 +768,7 @@ gtk_base_c_sources = 		\
 	gtkentrybuffer.c	\
 	gtkentrycompletion.c	\
 	gtkeventbox.c		\
+	gtkeventcontroller.c	\
 	gtkexpander.c		\
 	gtkfilechooser.c	\
 	gtkfilechooserbutton.c	\
@@ -770,6 +789,15 @@ gtk_base_c_sources = 		\
 	gtkfontchooserwidget.c	\
 	gtkframe.c		\
 	gtkgladecatalog.c	\
+	gtkgesture.c		\
+	gtkgesturedrag.c	\
+	gtkgesturelongpress.c	\
+	gtkgesturemultipress.c	\
+	gtkgesturepan.c		\
+	gtkgesturerotate.c	\
+	gtkgesturesingle.c	\
+	gtkgestureswipe.c	\
+	gtkgesturezoom.c	\
 	gtkgrid.c		\
 	gtkheaderbar.c		\
 	gtkhsla.c		\
@@ -822,7 +850,6 @@ gtk_base_c_sources = 		\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
 	gtkplacessidebar.c	\
-	gtkpressandhold.c	\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
 	gtkprintoperationpreview.c \
