@@ -32,6 +32,7 @@ TEST_PROGS += 			\
 	bitmask			\
 	builder			\
 	cellarea		\
+	check-icon-names	\
 	clipboard		\
 	defaultvalue		\
 	entry			\
