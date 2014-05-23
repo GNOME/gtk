@@ -121,6 +121,7 @@ gtk/gtkentrybuffer.c
 gtk/gtkentry.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
+gtk/gtkeventcontroller.c
 gtk/gtkexpander.c
 gtk/gtkfilechooserbutton.c
 gtk/gtkfilechooser.c
@@ -139,6 +140,9 @@ gtk/gtkfontchooser.c
 gtk/gtkfontchooserdialog.c
 gtk/gtkfontchooserwidget.c
 gtk/gtkframe.c
+gtk/gtkgesture.c
+gtk/gtkgesturepan.c
+gtk/gtkgesturesingle.c
 gtk/gtkgrid.c
 gtk/gtkheaderbar.c
 gtk/gtkicontheme.c
@@ -183,7 +187,6 @@ gtk/gtkpathbar.c
 gtk/gtkplacessidebar.c
 gtk/gtkplug.c
 gtk/gtkpopover.c
-gtk/gtkpressandhold.c
 gtk/gtkprintbackend.c
 gtk/gtkprinter.c
 gtk/gtkprinteroption.c
@@ -268,6 +271,7 @@ gtk/gtkwidget.c
 gtk/gtkwindow.c
 gtk/inspector/classes-list.c
 gtk/inspector/css-editor.c
+gtk/inspector/gestures.c
 gtk/inspector/prop-editor.c
 gtk/inspector/signals-list.c
 gtk/inspector/size-groups.c
