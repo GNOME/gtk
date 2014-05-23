@@ -1,3 +1,103 @@
+Overview of Changes in GTK+ 3.13.1 to 3.13.2
+============================================
+
+* Interactive debugging support. The GtkInspector
+  window can be triggered with the Ctrl-Shift-I
+  or Ctrl-Shift-D keyboard shortcuts, or via the
+  GTK_DEBUG environment variable.
+
+* Gesture support has landed. New classes
+  include GtkGestureLongPress, GtkGestureMultiPress,
+  GtkGestureSwipe, GtkGesturePan, GtkGestureRotate,
+  GtkGestureZoom. Many GTK+ widgets already use
+  gestures internally. Gestures also show up
+  in GtkInspector.
+
+* GtkStack has added a few more transition types
+
+* GtkProgressBar is now narrower
+
+* CSS
+ - Support outline-radius in CSS
+ - Implement 'unset' and 'all'
+ - Support -gtk-icontheme
+ - Support -gtk-icon-source
+ - Add -gtk-icon-transform, supporting the 2D
+   parts of CSS transforms
+ - Support -gtk-icon-style
+
+* Theme
+ - Use outlines to render focus rings
+ - Use icons to render spinners, expanders and arrows
+ - GtkIconTheme can force symbolic or regular
+   icon variants
+ - GtkIconTheme will automatically load rtl
+   icon variants
+
+* Win32:
+ - Theme improvements
+
+* Wayland:
+ - Update to the latest xdg-shell protocol
+
+* Deprecations:
+ GdkColor
+ GtkMisc
+ GtkArrow
+ focus-line-width style property
+ GtkNumerableIcon
+ GtkButton::x/yalign
+ gtk_widget_reparent
+ gtk_widget_region_intersect
+ gtk_container_set_reallocate_redraws
+
+* Bugs fixed:
+ 525206 Remove superfluous non-NULL tests for the GtkScrolledWindow scrollbars
+ 614717 gtk_text_buffer_create_tag fails to return error on duplicate tag
+ 636695 GdkColor should be deprecated
+ 645966 gtk-demo leaks a GtkSizeGroup
+ 698396 GtkTreeStore crashes when reordering 0 elements
+ 708037 Allow live updates on widgets implementing GtkColorChooser
+ 720330 Gtk-CRITICAL **: gtk_entry_completion_set_model: assertion 'GTK_IS_E...
+ 721069 gtk_win32_embed_widget_show infinite recursion
+ 726676 More GtkStack transition counterparts of OVER_UP_DOWN
+ 727147 Search bar is too narrow
+ 727994 Gtk Popover closes on click
+ 728135 gtk_widget_set_visible's nothing-changed-check
+ 728284 [treeview] Graphics artifact when scrolling with hover-selection
+ 729346 W32: App-notification has no theme, shows up transparent
+ 729353 W32: horizontal-buttons get "selected" background when focused
+ 729451 Removing accels with application_set_accels_for_action
+ 729461 Introspection issue with GtkApplication
+ 729473 FileChooser: typos in gtk_file_chooser_set_local_only ()
+ 729475 FileChooser: typo in gtk_set_create_folders()
+ 729496 Crash with latest gtk+ from master in gtk_combo_box_get_preferred_width
+ 729564 Deprecate GtkArrow
+ 729594 Don't stretch switches in Widget Factory
+ 729598 Populate page 2 of the Widget Factory
+ 729607 GtkAboutDialog: gtk aborts when trying to show an about dialog
+ 729670 cairo surface leaked for each cursor created from pixmap
+ 729817 GtkCellLayout: allow finding attributes at runtime
+ 729834 gdk: missing (nullable) annotations on return values
+ 729915 Popopver does not follow relative widget to find action groups
+ 729983 gdk: assorted introspection and documentation syntax fixes
+ 730007 GtkInspector: add a setting to disable C-S-i
+ 730008 make gtk_set_interactive_debugging available for apps
+ 730035 GtkFileFilter contains refs to GtkRecentFilter which are probably typos
+ 730043 Add an alternative to Ctrl-Shift-I
+ 730095 Add a private call API to export internals to modules
+ 730142 placessidebar: use proper canonicalization when checking if home
+ 730183 RFC: silence harmless critical
+ 730306 Gtk+ >= 3.0 fails to load modules from settings.ini files
+ 730526 Fix the edit-clear icons in RTL 
+
+* Translation updates:
+ Belarusian
+ Hebrew
+ Russian
+ Spanish 
+  
+
 Overview of Changes in GTK+ 3.12.0 to 3.13.1
 ============================================
 
