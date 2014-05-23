@@ -488,25 +488,33 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
           text_orientation = gtk_tool_item_get_text_orientation (GTK_TOOL_ITEM (button));
           if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
+              gfloat align;
+
               gtk_label_set_angle (GTK_LABEL (label), 0);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-              gtk_misc_set_alignment (GTK_MISC (label),
-                                      gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
-                                      0.5);
-G_GNUC_END_IGNORE_DEPRECATIONS
+              align = gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button));
+              if (align < 0.4)
+                gtk_widget_set_halign (label, GTK_ALIGN_START);
+              else if (align > 0.6)
+                gtk_widget_set_halign (label, GTK_ALIGN_END);
+              else
+                gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
             }
           else
             {
+              gfloat align;
+
               gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_NONE);
 	      if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
 	        gtk_label_set_angle (GTK_LABEL (label), -90);
 	      else
 	        gtk_label_set_angle (GTK_LABEL (label), 90);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-              gtk_misc_set_alignment (GTK_MISC (label),
-                                      0.5,
-                                      1 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
-G_GNUC_END_IGNORE_DEPRECATIONS
+              align = gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button));
+              if (align < 0.4)
+                gtk_widget_set_valign (label, GTK_ALIGN_END);
+              else if (align > 0.6)
+                gtk_widget_set_valign (label, GTK_ALIGN_START);
+              else
+                gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
             }
         }
     }
@@ -547,19 +555,33 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	  gtk_widget_show (icon);
 	}
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      if (GTK_IS_MISC (icon) && text_orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_misc_set_alignment (GTK_MISC (icon),
-				1.0 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
-				0.5);
-      else if (GTK_IS_MISC (icon))
-	gtk_misc_set_alignment (GTK_MISC (icon),
-				0.5,
-				gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
-G_GNUC_END_IGNORE_DEPRECATIONS
-
       if (icon)
 	{
+          if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              gfloat align;
+
+              align = gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button));
+              if (align > 0.6) 
+                gtk_widget_set_halign (icon, GTK_ALIGN_START);
+              else if (align < 0.4)
+                gtk_widget_set_halign (icon, GTK_ALIGN_END);
+              else
+                gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
+            }
+          else
+            {
+              gfloat align;
+
+              align = gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button));
+              if (align > 0.6) 
+                gtk_widget_set_valign (icon, GTK_ALIGN_END);
+              else if (align < 0.4)
+                gtk_widget_set_valign (icon, GTK_ALIGN_START);
+              else
+               gtk_widget_set_valign (icon, GTK_ALIGN_CENTER);
+            }
+
 	  size_group = gtk_tool_item_get_text_size_group (GTK_TOOL_ITEM (button));
 	  if (size_group != NULL)
 	    gtk_size_group_add_widget (size_group, icon);
