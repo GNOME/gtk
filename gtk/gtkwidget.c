@@ -39,6 +39,7 @@
 #include "gtkclipboard.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssshadowsvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkselectionprivate.h"
@@ -15020,9 +15021,21 @@ union_with_clip (GtkWidget *widget,
 void
 _gtk_widget_set_simple_clip (GtkWidget *widget)
 {
+  GtkStyleContext *context;
   GtkAllocation clip;
+  GtkBorder extents;
+
+  context = gtk_widget_get_style_context (widget);
 
   gtk_widget_get_allocation (widget, &clip);
+
+  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context,
+                                                                        GTK_CSS_PROPERTY_BOX_SHADOW),
+                                      &extents);
+  clip.x -= extents.left;
+  clip.y -= extents.top;
+  clip.width += extents.left + extents.right;
+  clip.height += extents.top + extents.bottom;
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget), union_with_clip, &clip);
