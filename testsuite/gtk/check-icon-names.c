@@ -103,9 +103,21 @@ static char *icon_names[] = {
   "zoom-out",
   "zoom-fit-best",
   "edit-select-all",
-  "edit-clear"
+  "edit-clear",
   /* "gtk-select-color", */
   /* "gtk-color-picker" */
+  "pan-down-symbolic",
+  "pan-up-symbolic",
+  "pan-start-symbolic",
+  "pan-end-symbolic",
+  "audio-volume-muted",
+  "audio-volume-high",
+  "audio-volume-low",
+  "audio-volume-medium",
+  "audio-volume-muted-symbolic",
+  "audio-volume-high-symbolic",
+  "audio-volume-low-symbolic",
+  "audio-volume-medium-symbolic"
 };
 
 static void
