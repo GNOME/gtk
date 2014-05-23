@@ -397,7 +397,6 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       gint x;
       gint y;
-      gint xpad;
 
       context = gtk_widget_get_style_context (widget);
       label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
@@ -427,14 +426,10 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       cairo_restore (cr);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_misc_get_padding (GTK_MISC (widget), &xpad, NULL);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
       if (direction == GTK_TEXT_DIR_RTL)
-        x = xpad;
+        x = 0;
       else
-        x = gtk_widget_get_allocated_width (widget) - xpad - ac_width;
+        x = gtk_widget_get_allocated_width (widget) - ac_width;
 
       gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);
 
