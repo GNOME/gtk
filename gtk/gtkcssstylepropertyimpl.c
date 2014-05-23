@@ -1013,7 +1013,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("box-shadow",
                                           GTK_CSS_PROPERTY_BOX_SHADOW,
                                           G_TYPE_NONE,
-                                          GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_NO_RESIZE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           shadow_value_parse,
                                           NULL,
                                           NULL,
