@@ -90,6 +90,10 @@ Overview of Changes in GTK+ 3.13.1 to 3.13.2
  730183 RFC: silence harmless critical
  730306 Gtk+ >= 3.0 fails to load modules from settings.ini files
  730526 Fix the edit-clear icons in RTL 
+ 730353 Horizontal and vertical scrolling
+ 700030 GdkEventSequence not accessible from introspected bindings
+ 641836 Capture/bubble event handling
+ 119906 Add event when Double Click timeout expires
 
 * Translation updates:
  Belarusian
