@@ -270,7 +270,7 @@ _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
 {
   _gtk_css_shadows_value_paint_box (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BOX_SHADOW),
                                     cr,
-                                    &bg->padding_box,
+                                    inset ? &bg->padding_box : &bg->border_box,
                                     inset);
 }
 
