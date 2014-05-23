@@ -117,7 +117,22 @@ static char *icon_names[] = {
   "audio-volume-muted-symbolic",
   "audio-volume-high-symbolic",
   "audio-volume-low-symbolic",
-  "audio-volume-medium-symbolic"
+  "audio-volume-medium-symbolic",
+  "document-open-symbolic",
+  "edit-find-symbolic",
+  "edit-clear-symbolic",
+  "window-close-symbolic",
+  "window-minimize-symbolic",
+  "window-maximize-symbolic",
+  "window-restore-symbolic",
+  "dialog-warning-symbolic",
+  "list-add-symbolic",
+  "list-remove-symbolic",
+  "text-x-generic",
+  "dialog-password",
+  "dialog-password-symbolic",
+  "changes-allow-symbolic",
+  "changes-prevent-symbolic"
 };
 
 static void
