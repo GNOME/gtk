@@ -669,7 +669,7 @@ clear_theme_pixbuf_and_warn (ThemePixbuf **theme_pb,
                              const char   *message)
 {
   theme_clear_pixbuf (theme_pb);
-  g_scanner_warn (scanner, message);
+  g_scanner_warn (scanner, "%s", message);
 }
 
 static guint
