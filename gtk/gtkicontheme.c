@@ -1354,6 +1354,17 @@ load_themes (GtkIconTheme *icon_theme)
   
   g_get_current_time(&tv);
   priv->last_stat_time = tv.tv_sec;
+
+  GTK_NOTE (ICONTHEME, {
+    GList *l;
+    g_print ("Current icon themes ");
+    for (l = icon_theme->priv->themes; l; l = l->next)
+      {
+        IconTheme *theme = l->data;
+        g_print ("%s ", theme->name);
+      }
+    g_print ("\n");
+  });
 }
 
 void
