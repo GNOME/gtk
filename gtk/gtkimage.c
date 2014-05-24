@@ -1623,14 +1623,17 @@ gtk_image_draw (GtkWidget *widget,
   GtkStyleContext *context;
   gint x, y, width, height, baseline;
   gfloat xalign, yalign;
+  GtkStateFlags state;
   GtkBorder border;
-
+   
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
 
   image = GTK_IMAGE (widget);
   priv = image->priv;
 
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (GTK_WIDGET (image));
+  gtk_style_context_get_border (context, state, &border);
 
   gtk_render_background (context, cr,
                          0, 0,
