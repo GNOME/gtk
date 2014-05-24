@@ -313,6 +313,8 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
   od->row = gtk_tree_row_reference_new (GTK_TREE_MODEL (wt->priv->model), path);
   gtk_tree_path_free (path);
+
+  g_hash_table_insert (wt->priv->iters, object, od);
   g_object_weak_ref (object, remove_dead_object, od);
 
   g_free (address);
