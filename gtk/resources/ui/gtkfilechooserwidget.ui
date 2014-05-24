@@ -291,15 +291,17 @@
     </child>
     <child>
       <object class="GtkActionBar" id="extra_and_filters">
-        <property name="visible">True</property>
+        <property name="no-show-all">True</property>
         <child>
           <object class="GtkBox" id="extra_align">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">12</property>
           </object>
         </child>
         <child>
           <object class="GtkBox" id="filter_combo_hbox">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">12</property>
             <child>

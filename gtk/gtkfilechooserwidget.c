@@ -238,6 +238,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkFileSystemModel *recent_model;
   guint load_recent_id;
 
+  GtkWidget *extra_and_filters;
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
   GtkWidget *preview_box;
@@ -2183,6 +2184,14 @@ gtk_file_chooser_widget_constructor (GType                  type,
   return object;
 }
 
+static void
+update_extra_and_filters (GtkFileChooserWidget *impl)
+{
+  gtk_widget_set_visible (impl->priv->extra_and_filters,
+                          gtk_widget_get_visible (impl->priv->extra_align) ||
+                          gtk_widget_get_visible (impl->priv->filter_combo_hbox));
+}
+
 /* Sets the extra_widget by packing it in the appropriate place */
 static void
 set_extra_widget (GtkFileChooserWidget *impl,
@@ -2211,6 +2220,8 @@ set_extra_widget (GtkFileChooserWidget *impl,
     }
   else
     gtk_widget_hide (priv->extra_align);
+
+  update_extra_and_filters (impl);
 }
 
 static void
@@ -4881,6 +4892,8 @@ show_filters (GtkFileChooserWidget *impl,
     gtk_widget_show (priv->filter_combo_hbox);
   else
     gtk_widget_hide (priv->filter_combo_hbox);
+
+  update_extra_and_filters (impl);
 }
 
 static void
@@ -7334,6 +7347,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, filter_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, preview_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_align);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_and_filters);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, location_entry_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, location_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, search_bar);
