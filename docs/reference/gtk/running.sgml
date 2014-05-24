@@ -532,19 +532,27 @@ nevertheless.
   <inlinegraphic fileref="inspector.png" format="PNG"></inlinegraphic>
 
   <para>
-    GTK+ includes an interactive debugger which lets you explore the
-    widget tree of any GTK+ application at runtime, as well as tweak
-    the theme and trigger visual debugging aids.
+    GTK+ includes an interactive debugger, called the GTK+ Inspector, which
+    lets you explore the widget tree of any GTK+ application at runtime, as
+    well as tweak the theme and trigger visual debugging aids. You can
+    easily try out changes at runtime before putting them into the code.
   </para>
   <para>
-    To enable the debugger, you can use the Control-Shift-I or
+    Note that the GTK+ inspector can only show GTK+ internals. It can not
+    understand the application-specific logic of a GTK+ application. Also,
+    the fact that the GTK+ inspector is running in the application process
+    limits what it can do. It is meant as a complement to full-blown debuggers
+    and system tracing facilities such as DTrace, not as a replacement.
+  </para>
+  <para>
+    To enable the GTK+ inspector, you can use the Control-Shift-I or
     Control-Shift-D keyboard shortcuts, or set the
     <envar>GTK_DEBUG=interactive</envar> environment variable.
   </para>
   <para>
-    In some situations, it may be inappropriate to give users access
-    to the interactive debugger. The keyboard shortcuts can be disabled
-    with the `enable-inspector-keybinding` key in the `org.gtk.Settings.Debug`
+    In some situations, it may be inappropriate to give users access to the
+    GTK+ inspector. The keyboard shortcuts can be disabled with the
+    `enable-inspector-keybinding` key in the `org.gtk.Settings.Debug`
     GSettings schema.
   </para>
  
