@@ -35,9 +35,9 @@
  * @Title: GtkSeparator
  *
  * GtkSeparator is a horizontal or vertical separator widget, depending on the 
- * value of the #GtkOrientable:orientation property, used to group the widgets within a
- * window. It displays a line with a shadow to make it appear sunken into the 
- * interface.
+ * value of the #GtkOrientable:orientation property, used to group the widgets
+ * within a window. It displays a line with a shadow to make it appear sunken
+ * into the interface.
  */
 
 
@@ -52,63 +52,11 @@ enum {
   PROP_ORIENTATION
 };
 
-static void       gtk_separator_set_property (GObject        *object,
-                                              guint           prop_id,
-                                              const GValue   *value,
-                                              GParamSpec     *pspec);
-static void       gtk_separator_get_property (GObject        *object,
-                                              guint           prop_id,
-                                              GValue         *value,
-                                              GParamSpec     *pspec);
-static void       gtk_separator_get_preferred_width
-                                             (GtkWidget      *widget,
-                                              gint           *minimum,
-                                              gint           *natural);
-static void       gtk_separator_get_preferred_height
-                                             (GtkWidget      *widget,
-                                              gint           *minimum,
-                                              gint           *natural);
-static gboolean   gtk_separator_draw         (GtkWidget      *widget,
-                                              cairo_t        *cr);
-
 
 G_DEFINE_TYPE_WITH_CODE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkSeparator)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
-
-static void
-gtk_separator_class_init (GtkSeparatorClass *class)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-
-  object_class->set_property = gtk_separator_set_property;
-  object_class->get_property = gtk_separator_get_property;
-
-  widget_class->get_preferred_width = gtk_separator_get_preferred_width;
-  widget_class->get_preferred_height = gtk_separator_get_preferred_height;
-
-  widget_class->draw = gtk_separator_draw;
-
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SEPARATOR);
-
-  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
-}
-
-static void
-gtk_separator_init (GtkSeparator *separator)
-{
-  GtkStyleContext *context;
-
-  separator->priv = gtk_separator_get_instance_private (separator);
-  separator->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-
-  gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (separator));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
-}
 
 static void
 gtk_separator_set_property (GObject      *object,
@@ -246,6 +194,39 @@ gtk_separator_draw (GtkWidget *widget,
     }
 
   return FALSE;
+}
+
+static void
+gtk_separator_init (GtkSeparator *separator)
+{
+  GtkStyleContext *context;
+
+  separator->priv = gtk_separator_get_instance_private (separator);
+  separator->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+
+  gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (separator));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+}
+
+static void
+gtk_separator_class_init (GtkSeparatorClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  object_class->set_property = gtk_separator_set_property;
+  object_class->get_property = gtk_separator_get_property;
+
+  widget_class->get_preferred_width = gtk_separator_get_preferred_width;
+  widget_class->get_preferred_height = gtk_separator_get_preferred_height;
+
+  widget_class->draw = gtk_separator_draw;
+
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SEPARATOR);
+
+  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 }
 
 /**
