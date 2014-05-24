@@ -132,7 +132,9 @@ static char *icon_names[] = {
   "dialog-password",
   "dialog-password-symbolic",
   "changes-allow-symbolic",
-  "changes-prevent-symbolic"
+  "changes-prevent-symbolic",
+  "user-trash-symbolic",
+  "user-trash-full-symbolic"
 };
 
 static void
