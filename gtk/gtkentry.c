@@ -3690,6 +3690,8 @@ gtk_entry_size_allocate (GtkWidget     *widget,
       if (completion)
         _gtk_entry_completion_resize_popup (completion);
     }
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static gboolean
