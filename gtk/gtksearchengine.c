@@ -45,19 +45,8 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_ABSTRACT_TYPE (GtkSearchEngine, _gtk_search_engine, G_TYPE_OBJECT);
 
 static void
-finalize (GObject *object)
-{
-  G_OBJECT_CLASS (_gtk_search_engine_parent_class)->finalize (object);
-}
-
-static void
 _gtk_search_engine_class_init (GtkSearchEngineClass *class)
 {
-  GObjectClass *gobject_class;
-  
-  gobject_class = G_OBJECT_CLASS (class);
-  gobject_class->finalize = finalize;
-  
   signals[HITS_ADDED] =
     g_signal_new ("hits-added",
 		  G_TYPE_FROM_CLASS (class),
