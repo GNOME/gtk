@@ -82,7 +82,42 @@
   <refsect2>
     <title>Event propagation</title>
 
-    <!-- capture/bubble, event handler chain, event controllers -->
+    <para>
+      When GTK+ receives an event, it determines the target widget that
+      it is directed to. Unless grabs are involved, this is done by finding
+      the widget to which the window of the event belongs.
+    </para>
+
+    <para>
+      The event is then propagated from the toplevel window down to the 
+      target widget. In this phase, which is known as the “capture” phase,
+      gestures that are attached with %GTK_PHASE_CAPTURE get a chance
+      to react to the event.
+    </para>
+
+    <para>
+      Next, the appropriate event signal is emitted for the event in question,
+      e.g. “motion-notify-event”. Handling these signals was the primary
+      way to handle input in GTK+ widgets before gestures were introduced.
+      The signals are emitted from the target widget up to the toplevel,
+      until a signal handler indicates that it has handled the event, by
+      returning %GDK_EVENT_STOP.
+    </para>
+
+    <para>
+      The default handlers for the event signals send the event
+      to gestures that are attached with %GTK_PHASE_TARGET. Therefore,
+      gestures in the ”target” phase are only used if the widget does
+      not have its own event handlers, or takes care to chain up to the
+      default handlers.
+    </para>
+
+    <para>
+      After calling the event handlers, in the so-called ”bubble” phase,
+      gestures that are attached with %GTK_PHASE_BUBBLE get a chance
+      to react to the event.
+    </para>
+
     <!-- grabs -->
   </refsect2>
 
