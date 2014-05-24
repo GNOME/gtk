@@ -263,7 +263,7 @@ gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,
 {
   gdouble vel_x, vel_y;
 
-  g_return_val_if_fail (GTK_IS_GESTURE (gesture), NULL);
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
 
   if (!gtk_gesture_is_recognized (GTK_GESTURE (gesture)))
     return FALSE;
