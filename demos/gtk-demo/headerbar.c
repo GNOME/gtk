@@ -47,7 +47,7 @@ do_headerbar (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("pan-start-symbolic", GTK_ICON_SIZE_BUTTON));
       gtk_container_add (GTK_CONTAINER (box), button);
       button = gtk_button_new ();
-      gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("pan-start-symbolic", GTK_ICON_SIZE_BUTTON));
+      gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("pan-end-symbolic", GTK_ICON_SIZE_BUTTON));
       gtk_container_add (GTK_CONTAINER (box), button);
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), box);
