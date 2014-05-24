@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gtk/inspector">
-    <file>actions.ui</file>
-    <file>button-path.ui</file>
-    <file>classes-list.ui</file>
-    <file>css-editor.ui</file>
-    <file>data-list.ui</file>
-    <file>general.ui</file>
-    <file>object-hierarchy.ui</file>
-    <file>prop-list.ui</file>
-    <file>resource-list.ui</file>
-    <file>signals-list.ui</file>
-    <file>visual.ui</file>
-    <file>widget-tree.ui</file>
-    <file>window.ui</file>
+    <file compressed="true">actions.ui</file>
+    <file compressed="true">button-path.ui</file>
+    <file compressed="true">classes-list.ui</file>
+    <file compressed="true">css-editor.ui</file>
+    <file compressed="true">data-list.ui</file>
+    <file compressed="true">general.ui</file>
+    <file compressed="true">object-hierarchy.ui</file>
+    <file compressed="true">prop-list.ui</file>
+    <file compressed="true">resource-list.ui</file>
+    <file compressed="true">signals-list.ui</file>
+    <file compressed="true">visual.ui</file>
+    <file compressed="true">widget-tree.ui</file>
+    <file compressed="true">window.ui</file>
     <file>logo.png</file>
   </gresource>
 </gresources>
