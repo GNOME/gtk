@@ -15338,7 +15338,7 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
  * The clip area is the area in which all of @widget's drawing will
  * happen. Other toolkits call it the bounding box.
  *
- * Historically, in GTK the clip area has been equal to the allocation 
+ * Historically, in GTK+ the clip area has been equal to the allocation
  * retrieved via gtk_widget_get_allocation().
  *
  * Since: 3.14
@@ -15368,17 +15368,17 @@ gtk_widget_get_clip (GtkWidget     *widget,
  * The clip set should be the area that @widget draws on. If @widget is a
  * #GtkContainer, the area must contain all children's clips.
  *
- * If this function is not called by @widget during a size_allocate handler,
+ * If this function is not called by @widget during a ::size-allocate handler,
  * it is assumed to be equal to the allocation. However, if the function is
  * not called, certain features that might extend a widget's allocation will
  * not be available:
  *
- *  * The GtkWidget::draw signal will be clipped to the widget's allocation
+ *  * The #GtkWidget::draw signal will be clipped to the widget's allocation
  *    to avoid overdraw.
  *  * Calling gtk_render_background() will not draw outset shadows.
  *
- * It is therefor suggested that you always call gtk_widget_set_clip() during
- * a size_allocate handler.
+ * It is therefore suggested that you always call gtk_widget_set_clip() during
+ * a ::size-allocate handler.
  *
  * Since: 3.14
  */
