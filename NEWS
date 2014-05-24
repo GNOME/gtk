@@ -6,12 +6,16 @@ Overview of Changes in GTK+ 3.13.1 to 3.13.2
   or Ctrl-Shift-D keyboard shortcuts, or via the
   GTK_DEBUG environment variable.
 
-* Gesture support has landed. New classes
-  include GtkGestureLongPress, GtkGestureMultiPress,
-  GtkGestureSwipe, GtkGesturePan, GtkGestureRotate,
-  GtkGestureZoom. Many GTK+ widgets already use
-  gestures internally. Gestures also show up
-  in GtkInspector.
+* Gesture support has landed. New classes include
+  GtkGestureLongPress, GtkGestureMultiPress, GtkGestureSwipe,
+  GtkGesturePan, GtkGestureRotate, GtkGestureZoom. Many GTK+
+  widgets already use gestures internally. Gestures also
+  show up in GtkInspector.
+  The gesture-related APIs are still subject to change.
+
+* GTK+ widgets can now draw outside their allocation,
+  by setting a clip with gtk_widget_set_clip().
+  The clip-related APIs are still subject to change.
 
 * GtkStack has added a few more transition types
 
