@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 static char *icon_names[] = {
-  /* stock icons */
+  /*** stock icons, from gtkiconfactory.c:get_default_icons() ***/
   "dialog-password",
   "dialog-error",
   "dialog-information",
@@ -106,35 +106,36 @@ static char *icon_names[] = {
   "edit-clear",
   /* "gtk-select-color", */
   /* "gtk-color-picker" */
-  "pan-down-symbolic",
-  "pan-up-symbolic",
-  "pan-start-symbolic",
-  "pan-end-symbolic",
-  "audio-volume-muted",
+
+  /*** Icons used in code or templates, sorted alphabetically ***/
   "audio-volume-high",
-  "audio-volume-low",
-  "audio-volume-medium",
-  "audio-volume-muted-symbolic",
   "audio-volume-high-symbolic",
+  "audio-volume-low",
   "audio-volume-low-symbolic",
+  "audio-volume-medium",
   "audio-volume-medium-symbolic",
-  "document-open-symbolic",
-  "edit-find-symbolic",
-  "edit-clear-symbolic",
-  "window-close-symbolic",
-  "window-minimize-symbolic",
-  "window-maximize-symbolic",
-  "window-restore-symbolic",
-  "dialog-warning-symbolic",
-  "list-add-symbolic",
-  "list-remove-symbolic",
-  "text-x-generic",
-  "dialog-password",
-  "dialog-password-symbolic",
+  "audio-volume-muted",
+  "audio-volume-muted-symbolic",
   "changes-allow-symbolic",
   "changes-prevent-symbolic",
+  "dialog-password",
+  "dialog-password-symbolic",
+  "dialog-warning-symbolic",
+  "document-open-symbolic",
+  "edit-clear-symbolic",
+  "edit-find-symbolic",
+  "list-add-symbolic",
+  "list-remove-symbolic",
+  "pan-down-symbolic",
+  "pan-end-symbolic",
+  "pan-start-symbolic",
+  "pan-up-symbolic",
+  "user-trash-full-symbolic",
   "user-trash-symbolic",
-  "user-trash-full-symbolic"
+  "window-close-symbolic",
+  "window-maximize-symbolic",
+  "window-minimize-symbolic",
+  "window-restore-symbolic"
 };
 
 static void
