@@ -157,6 +157,7 @@ content_files =					\
 	gtk-update-icon-cache.xml		\
 	gtk-launch.xml				\
 	broadwayd.xml				\
+	input-handling.xml			\
 	visual_index.xml			\
 	getting_started.xml			\
 	overview.xml
