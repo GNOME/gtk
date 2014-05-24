@@ -1934,6 +1934,40 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
   gdk_wayland_window_sync_margin (window);
 }
 
+static gboolean
+gdk_wayland_window_show_window_menu (GdkWindow *window,
+                                     GdkEvent  *event)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkEventButton *event_button = (GdkEventButton *) event;
+  struct wl_seat *seat;
+  double x, y;
+  GdkWaylandDeviceData *device;
+
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      break;
+    default:
+      return FALSE;
+    }
+
+  if (!impl->xdg_surface)
+    return FALSE;
+
+  seat = gdk_wayland_device_get_wl_seat (event_button->device);
+  device = wl_seat_get_user_data (seat);
+
+  gdk_event_get_coords (event, &x, &y);
+
+  xdg_surface_show_window_menu (impl->xdg_surface,
+                                seat,
+                                _gdk_wayland_device_get_button_press_serial (device),
+                                x, y);
+  return TRUE;
+}
+
 static void
 _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 {
@@ -2023,6 +2057,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->get_scale_factor = gdk_wayland_window_get_scale_factor;
   impl_class->set_opaque_region = gdk_wayland_window_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_window_set_shadow_width;
+  impl_class->show_window_menu = gdk_wayland_window_show_window_menu;
 }
 
 void
