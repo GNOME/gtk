@@ -584,6 +584,7 @@ gtk_private_h_sources =		\
 	gtkgesturemultipressprivate.h	\
 	gtkgesturepanprivate.h	\
 	gtkgesturerotateprivate.h	\
+	gtkgesturesingleprivate.h	\
 	gtkgestureswipeprivate.h	\
 	gtkgesturezoomprivate.h	\
 	gtkheaderbarprivate.h	\
