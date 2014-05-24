@@ -18,10 +18,6 @@ EXTRA_DIST +=	\
 	gtk3-demo.vcxproj.filters	\
 	gtk3-demo-application.vcxproj	\
 	gtk3-demo-application.vcxproj.filters	\
-	gtka11y.vcxproj	\
-	gtka11y.vcxproj.filters	\
-	gtka11y.vcxprojin	\
-	gtka11y.vcxproj.filtersin	\
 	gtk-inspector.vcxproj	\
 	gtk-inspector.vcxproj.filters	\
 	gailutil.vcxproj	\
