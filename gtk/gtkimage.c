@@ -1624,7 +1624,6 @@ gtk_image_draw (GtkWidget *widget,
   gint x, y, width, height, baseline;
   gfloat xalign, yalign;
   GtkBorder border;
-  GtkStateFlags state;
 
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
 
@@ -1632,7 +1631,6 @@ gtk_image_draw (GtkWidget *widget,
   priv = image->priv;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_render_background (context, cr,
                          0, 0,
