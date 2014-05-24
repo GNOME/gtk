@@ -244,7 +244,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkvseparator.h	\
 	deprecated/gtkvpaned.h
 
-ally_private_h_sources =			\
+a11y_private_h_sources =			\
 	a11y/gtkaccessibility.h			\
 	a11y/gtkaccessibilitymisc.h		\
 	a11y/gtkaccessibilityutil.h		\
