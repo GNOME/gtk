@@ -52,6 +52,9 @@
 #include "gtkintl.h"
 
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
+
 struct _GtkAlignmentPrivate
 {
   gfloat        xalign;
@@ -150,7 +153,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.0,
                                                       1.0,
 						      0.5,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
   g_object_class_install_property (gobject_class,
                                    PROP_XSCALE,
                                    g_param_spec_float("xscale",
@@ -159,7 +162,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.0,
                                                       1.0,
                                                       1.0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
   g_object_class_install_property (gobject_class,
                                    PROP_YSCALE,
                                    g_param_spec_float("yscale",
@@ -168,7 +171,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.0,
                                                       1.0,
                                                       1.0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
 
 /**
@@ -186,7 +189,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
 /**
  * GtkAlignment:bottom-padding:
@@ -203,7 +206,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
 /**
  * GtkAlignment:left-padding:
@@ -220,7 +223,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
 /**
  * GtkAlignment:right-padding:
@@ -237,7 +240,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 }
 
 static void
@@ -279,7 +282,9 @@ gtk_alignment_init (GtkAlignment *alignment)
  *
  * Creates a new #GtkAlignment.
  *
- * Returns: the new #GtkAlignment.
+ * Returns: the new #GtkAlignment
+ *
+ * Deprecated: 3.14: Use #GtkWidget alignment and margin properties
  */
 GtkWidget*
 gtk_alignment_new (gfloat xalign,
@@ -438,6 +443,8 @@ gtk_alignment_get_property (GObject         *object,
  *  unused space, from 0 to 1. The values are similar to @xscale.
  *
  * Sets the #GtkAlignment values.
+ *
+ * Deprecated: 3.14: Use #GtkWidget alignment and margin properties
  */
 void
 gtk_alignment_set (GtkAlignment *alignment,
@@ -744,6 +751,8 @@ gtk_alignment_get_preferred_height_and_baseline_for_width (GtkWidget           *
  * padding on the left.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Use #GtkWidget alignment and margin properties
  */
 void
 gtk_alignment_set_padding (GtkAlignment    *alignment,
@@ -808,6 +817,8 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
  * See gtk_alignment_set_padding ().
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Use #GtkWidget alignment and margin properties
  */
 void
 gtk_alignment_get_padding (GtkAlignment    *alignment,

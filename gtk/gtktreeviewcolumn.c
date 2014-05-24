@@ -25,7 +25,7 @@
 #include "gtktreeprivate.h"
 #include "gtkcelllayout.h"
 #include "gtkbutton.h"
-#include "gtkalignment.h"
+#include "deprecated/gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtkmarshalers.h"
@@ -869,7 +869,9 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 		    G_CALLBACK (gtk_tree_view_column_button_clicked),
 		    tree_column);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   priv->alignment = gtk_alignment_new (priv->xalign, 0.5, 0.0, 0.0);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
@@ -934,8 +936,9 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   current_child = gtk_bin_get_child (GTK_BIN (alignment));
 
   /* Set up the actual button */
-  gtk_alignment_set (GTK_ALIGNMENT (alignment), priv->xalign,
-		     0.5, 0.0, 0.0);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_alignment_set (GTK_ALIGNMENT (alignment), priv->xalign, 0.5, 0.0, 0.0);
+G_GNUC_END_IGNORE_DEPRECATIONS
       
   if (priv->child)
     {

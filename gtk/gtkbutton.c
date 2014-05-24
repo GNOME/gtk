@@ -42,7 +42,7 @@
 #include "gtkbuttonprivate.h"
 
 #include <string.h>
-#include "gtkalignment.h"
+#include "deprecated/gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

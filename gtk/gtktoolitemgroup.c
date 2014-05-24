@@ -372,7 +372,9 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
         break;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), dy, 0, dx, 0);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -392,7 +394,9 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   priv->label_widget = gtk_label_new (NULL);
   gtk_widget_set_halign (priv->label_widget, GTK_ALIGN_START);
   gtk_widget_set_valign (priv->label_widget, GTK_ALIGN_CENTER);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_container_add (GTK_CONTAINER (alignment), priv->label_widget);
   gtk_widget_show_all (alignment);
 

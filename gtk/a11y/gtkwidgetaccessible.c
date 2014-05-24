@@ -281,7 +281,7 @@ gtk_widget_accessible_ref_relation_set (AtkObject *obj)
               GtkWidget *temp_widget;
 
               temp_widget = gtk_widget_get_parent (widget);
-
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
               if (GTK_IS_ALIGNMENT (temp_widget))
                 {
                   temp_widget = gtk_widget_get_parent (temp_widget);
@@ -292,6 +292,7 @@ gtk_widget_accessible_ref_relation_set (AtkObject *obj)
                         label = find_label (gtk_widget_get_parent (temp_widget));
                     }
                 }
+G_GNUC_END_IGNORE_DEPRECATIONS
             }
           else if (GTK_IS_COMBO_BOX (widget))
             /*

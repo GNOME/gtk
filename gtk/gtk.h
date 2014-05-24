@@ -36,7 +36,6 @@
 #include <gtk/gtkactionable.h>
 #include <gtk/gtkactionbar.h>
 #include <gtk/gtkadjustment.h>
-#include <gtk/gtkalignment.h>
 #include <gtk/gtkappchooser.h>
 #include <gtk/gtkappchooserdialog.h>
 #include <gtk/gtkappchooserwidget.h>
@@ -236,6 +235,7 @@
 #include <gtk/deprecated/gtkactivatable.h>
 #include <gtk/deprecated/gtkaction.h>
 #include <gtk/deprecated/gtkactiongroup.h>
+#include <gtk/deprecated/gtkalignment.h>
 #include <gtk/deprecated/gtkcolorsel.h>
 #include <gtk/deprecated/gtkcolorseldialog.h>
 #include <gtk/deprecated/gtkfontsel.h>
