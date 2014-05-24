@@ -223,7 +223,7 @@ int
 main (int   argc,
       char *argv[])
 {
-  GtkWidget *win, *vbox, *frame, *alignment, *group_box;
+  GtkWidget *win, *vbox, *frame, *group_box;
   GtkWidget *hbox, *label, *chooser, *button;
   GtkSizeGroup *label_group;
   GOptionContext *context;
@@ -258,14 +258,14 @@ main (int   argc,
   gtk_label_set_use_markup (GTK_LABEL (gtk_frame_get_label_widget (GTK_FRAME (frame))), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-  alignment = gtk_alignment_new (0.0, 0.0, 1.0, 1.0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 6, 0, 12, 0);
-  gtk_container_add (GTK_CONTAINER (frame), alignment);
+  gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (frame, GTK_ALIGN_FILL);
+  g_object_set (frame, "margin-top", 6, "margin-start", 12, NULL);
   
   label_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   
   group_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (alignment), group_box);
+  gtk_container_add (GTK_CONTAINER (frame), group_box);
 
   /* OPEN */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);

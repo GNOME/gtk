@@ -108,13 +108,12 @@ apply_callback (GtkWidget *widget)
 static gboolean
 progress_timeout (GtkWidget *assistant)
 {
-  GtkWidget *page, *progress;
+  GtkWidget *progress;
   gint current_page;
   gdouble value;
 
   current_page = gtk_assistant_get_current_page (GTK_ASSISTANT (assistant));
-  page = gtk_assistant_get_nth_page (GTK_ASSISTANT (assistant), current_page);
-  progress = gtk_bin_get_child (GTK_BIN (page));
+  progress = gtk_assistant_get_nth_page (GTK_ASSISTANT (assistant), current_page);
 
   value  = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (progress));
   value += 0.1;
@@ -122,7 +121,7 @@ progress_timeout (GtkWidget *assistant)
 
   if (value >= 1.0)
     {
-      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), progress, TRUE);
       return FALSE;
     }
 
@@ -136,11 +135,8 @@ prepare_callback (GtkWidget *widget, GtkWidget *page)
     g_print ("prepare: %s\n", gtk_label_get_text (GTK_LABEL (page)));
   else if (gtk_assistant_get_page_type (GTK_ASSISTANT (widget), page) == GTK_ASSISTANT_PAGE_PROGRESS)
     {
-      GtkWidget *progress;
-
-      progress = gtk_bin_get_child (GTK_BIN (page));
       gtk_assistant_set_page_complete (GTK_ASSISTANT (widget), page, FALSE);
-      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), 0.0);
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (page), 0.0);
       gdk_threads_add_timeout (300, (GSourceFunc) progress_timeout, widget);
     }
   else
@@ -293,8 +289,11 @@ create_generous_assistant (GtkWidget *widget)
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_CONFIRM);
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
-      page = gtk_alignment_new (0.5, 0.5, 0.9, 0.0);
-      gtk_container_add (GTK_CONTAINER (page), gtk_progress_bar_new ());
+      page = gtk_progress_bar_new ();
+      gtk_widget_set_halign (page, GTK_ALIGN_FILL);
+      gtk_widget_set_valign (page, GTK_ALIGN_CENTER);
+      gtk_widget_set_margin_start (page, 20);
+      gtk_widget_set_margin_end (page, 20);
       gtk_widget_show_all (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Progress");

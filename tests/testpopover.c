@@ -43,7 +43,6 @@ int main (int argc, char *argv[])
   GtkWidget *label;
   GtkWidget *check;
   GtkWidget *combo;
-  GtkWidget *align;
 
   gtk_init (&argc, &argv);
 
@@ -57,14 +56,22 @@ int main (int argc, char *argv[])
   overlay = gtk_overlay_new ();
   gtk_container_add (GTK_CONTAINER (win), overlay);
 
-  align = gtk_alignment_new (0.5, 0.5, 0, 0);
   grid = gtk_grid_new ();
   gtk_widget_set_halign (grid, GTK_ALIGN_FILL);
   gtk_widget_set_valign (grid, GTK_ALIGN_FILL);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
-  gtk_container_add (GTK_CONTAINER (overlay), align);
-  gtk_container_add (GTK_CONTAINER (align), grid);
+  gtk_container_add (GTK_CONTAINER (overlay), grid);
+
+  label = gtk_label_new ("");
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_vexpand (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+
+  label = gtk_label_new ("");
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_vexpand (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), label, 3, 6, 1, 1);
 
   builder = gtk_builder_new_from_file ("popover.ui");
   model = (GMenuModel *)gtk_builder_get_object (builder, "menu");

@@ -63,7 +63,6 @@ main(int argc, char **argv)
 {
 	GtkWidget *window, *vbox;
         GtkWidget *combo_box;
-	GtkWidget *alignment;
 	GtkWidget *hbox, *label, *hscale;
 	GtkAdjustment *adjustment;
 	GtkRequisition scratch_requisition;
@@ -110,8 +109,8 @@ main(int argc, char **argv)
                           G_CALLBACK (set_interp_type),
                           NULL);
 	
-	alignment = gtk_alignment_new (0.0, 0.0, 0.0, 0.5);
-	gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
+        gtk_widget_set_halign (combo_box, GTK_ALIGN_START);
+	gtk_box_pack_start (GTK_BOX (vbox), combo_box, FALSE, FALSE, 0);
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
 	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
@@ -127,7 +126,6 @@ main(int argc, char **argv)
 	gtk_scale_set_digits (GTK_SCALE (hscale), 0);
 	gtk_box_pack_start (GTK_BOX (hbox), hscale, TRUE, TRUE, 0);
 
-	gtk_container_add (GTK_CONTAINER (alignment), combo_box);
 	gtk_widget_show_all (vbox);
 
 	/* Compute the size without the drawing area, so we know how big to make the default size */

@@ -123,7 +123,7 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *vbox, *label;
-  GtkWidget *combo, *scale, *align, *ebox;
+  GtkWidget *combo, *scale, *ebox;
 
   gtk_init (&argc, &argv);
 
@@ -146,12 +146,12 @@ main (int argc, char *argv[])
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "END");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  gtk_container_add (GTK_CONTAINER (align), label);
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   ebox = gtk_event_box_new ();
   gtk_widget_set_app_paintable (ebox, TRUE);
-  gtk_container_add (GTK_CONTAINER (ebox), align);
+  gtk_container_add (GTK_CONTAINER (ebox), label);
 
   gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, TRUE, 0);

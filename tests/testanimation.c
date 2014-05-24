@@ -311,7 +311,6 @@ do_image (const char *filename)
   GtkWidget *vbox;
   GtkWidget *image;
   GtkWidget *label;
-  GtkWidget *align;
   GtkWidget *window;
   gchar *str, *escaped;
   LoadContext *lc;
@@ -338,12 +337,9 @@ do_image (const char *filename)
       
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-  /* The alignment keeps the frame from growing when users resize
-   * the window
-   */
-  align = gtk_alignment_new (0.5, 0.5, 0, 0);
-  gtk_container_add (GTK_CONTAINER (align), frame);
-  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);      
+  gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
   image = gtk_image_new_from_pixbuf (NULL);
   gtk_container_add (GTK_CONTAINER (frame), image);
@@ -373,7 +369,6 @@ do_nonprogressive (const gchar *filename)
   GtkWidget *vbox;
   GtkWidget *image;
   GtkWidget *label;
-  GtkWidget *align;
   GtkWidget *window;
   gchar *str, *escaped;
   
@@ -399,12 +394,9 @@ do_nonprogressive (const gchar *filename)
       
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-  /* The alignment keeps the frame from growing when users resize
-   * the window
-   */
-  align = gtk_alignment_new (0.5, 0.5, 0, 0);
-  gtk_container_add (GTK_CONTAINER (align), frame);
-  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);      
+  gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
   image = gtk_image_new_from_file (filename);
   gtk_container_add (GTK_CONTAINER (frame), image);

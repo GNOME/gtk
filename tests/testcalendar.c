@@ -333,18 +333,23 @@ calendar_toggle_details (GtkWidget    *widget,
 static GtkWidget*
 create_expander (const char *caption,
                  GtkWidget  *child,
-                 gdouble     xscale,
-                 gdouble     yscale)
+                 GtkAlign    halign,
+                 GtkAlign    valign)
 {
   GtkWidget *expander = gtk_expander_new ("");
   GtkWidget *label = gtk_expander_get_label_widget (GTK_EXPANDER (expander));
-  GtkWidget *align = gtk_alignment_new (0, 0, xscale, yscale);
 
-  gtk_alignment_set_padding (GTK_ALIGNMENT (align), 6, 0, 18, 0);
+  g_object_set (child,
+                "margin-top", 6,
+                "margin-bottom", 0,
+                "margin-start", 18,
+                "margin-end", 0,
+                "halign", halign,
+                "valign", valign,
+                NULL);
   gtk_label_set_markup (GTK_LABEL (label), caption);
 
-  gtk_container_add (GTK_CONTAINER (expander), align);
-  gtk_container_add (GTK_CONTAINER (align), child);
+  gtk_container_add (GTK_CONTAINER (expander), child);
 
   return expander;
 }
@@ -352,19 +357,24 @@ create_expander (const char *caption,
 static GtkWidget*
 create_frame (const char *caption,
               GtkWidget  *child,
-              gdouble     xscale,
-              gdouble     yscale)
+              GtkAlign    halign,
+              GtkAlign    valign)
 {
   GtkWidget *frame = gtk_frame_new ("");
   GtkWidget *label = gtk_frame_get_label_widget (GTK_FRAME (frame));
-  GtkWidget *align = gtk_alignment_new (0, 0, xscale, yscale);
 
+  g_object_set (child,
+                "margin-top", 6,
+                "margin-bottom", 0,
+                "margin-start", 18,
+                "margin-end", 0,
+                "halign", halign,
+                "valign", valign,
+                NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (align), 6, 0, 18, 0);
   gtk_label_set_markup (GTK_LABEL (label), caption);
 
-  gtk_container_add (GTK_CONTAINER (frame), align);
-  gtk_container_add (GTK_CONTAINER (align), child);
+  gtk_container_add (GTK_CONTAINER (frame), child);
 
   return frame;
 }
@@ -392,7 +402,7 @@ create_calendar(void)
 
   GtkWidget *window, *hpaned, *vbox, *rpane, *hbox;
   GtkWidget *calendar, *toggle, *scroller, *button;
-  GtkWidget *frame, *label, *bbox, *align, *details;
+  GtkWidget *frame, *label, *bbox, *details;
 
   GtkSizeGroup *size;
   GtkStyleContext *context;
@@ -436,7 +446,7 @@ create_calendar(void)
 
   calendar = gtk_calendar_new ();
   calendar_data.calendar_widget = calendar;
-  frame = create_frame ("<b>Calendar</b>", calendar, 0, 0);
+  frame = create_frame ("<b>Calendar</b>", calendar, GTK_ALIGN_CENTER, GTK_ALIGN_CENTER);
   gtk_paned_pack1 (GTK_PANED (hpaned), frame, TRUE, FALSE);
 
   calendar_data.window = calendar;
@@ -471,7 +481,7 @@ create_calendar(void)
   /* Build the right font-button */
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
-  frame = create_frame ("<b>Options</b>", vbox, 1, 0);
+  frame = create_frame ("<b>Options</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
   gtk_box_pack_start (GTK_BOX (rpane), frame, FALSE, TRUE, 0);
   size = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
@@ -543,7 +553,7 @@ create_calendar(void)
   /* Build the right details frame */
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
-  frame = create_frame ("<b>Details</b>", vbox, 1, 1);
+  frame = create_frame ("<b>Details</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_FILL);
   gtk_box_pack_start (GTK_BOX (rpane), frame, FALSE, TRUE, 0);
 
   details = gtk_text_view_new();
@@ -565,9 +575,9 @@ create_calendar(void)
   gtk_box_pack_start (GTK_BOX (vbox), scroller, FALSE, TRUE, 0);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, DEF_PAD_SMALL);
-  align = gtk_alignment_new (0.0, 0.5, 0.0, 0.0);
-  gtk_container_add (GTK_CONTAINER (align), hbox);
-  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, TRUE, 0);
+  gtk_widget_set_halign (hbox, GTK_ALIGN_START);
+  gtk_widget_set_valign (hbox, GTK_ALIGN_CENTER);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
 
   button = gtk_button_new_with_mnemonic ("Demonstrate _Details");
 
@@ -596,7 +606,7 @@ create_calendar(void)
   /* Build the Right frame with the flags in */ 
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  frame = create_expander ("<b>Flags</b>", vbox, 1, 0);
+  frame = create_expander ("<b>Flags</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
   gtk_box_pack_start (GTK_BOX (rpane), frame, TRUE, TRUE, 0);
 
   for (i = 0; i < G_N_ELEMENTS (calendar_data.settings); i++)
@@ -618,7 +628,7 @@ create_calendar(void)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
   gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
-  frame = create_frame ("<b>Signal Events</b>", vbox, 1, 0);
+  frame = create_frame ("<b>Signal Events</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
   
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
