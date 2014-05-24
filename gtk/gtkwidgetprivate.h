@@ -27,6 +27,7 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtkwidget.h"
+#include "gtkeventcontroller.h"
 #include "gtkactionmuxer.h"
 
 G_BEGIN_DECLS

@@ -33,7 +33,6 @@
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtktypes.h>
-#include <gtk/gtkgesture.h>
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
