@@ -2,11 +2,6 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <!-- interface-requires gtkprivate 3.10 -->
-  <object class="GtkImage" id="location_button_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">gtk-edit</property>
-  </object>
   <template class="GtkFileChooserWidget" parent="GtkBox">
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
