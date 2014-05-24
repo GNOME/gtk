@@ -80,7 +80,9 @@ create_alignment (void)
 {
   GtkWidget *alignment;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* make the alignment visible */
   gtk_widget_set_redraw_on_allocate (alignment, TRUE);
