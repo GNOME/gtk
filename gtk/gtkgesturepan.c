@@ -104,19 +104,19 @@ gtk_gesture_pan_set_property (GObject      *object,
 }
 
 static void
-direction_from_offset (gdouble            offset_x,
-                       gdouble            offset_y,
-                       GtkPanOrientation  orientation,
-                       GtkPanDirection   *direction)
+direction_from_offset (gdouble          offset_x,
+                       gdouble          offset_y,
+                       GtkOrientation   orientation,
+                       GtkPanDirection *direction)
 {
-  if (orientation == GTK_PAN_ORIENTATION_HORIZONTAL)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (offset_x > 0)
         *direction = GTK_PAN_DIRECTION_RIGHT;
       else
         *direction = GTK_PAN_DIRECTION_LEFT;
     }
-  else if (orientation == GTK_PAN_ORIENTATION_VERTICAL)
+  else if (orientation == GTK_ORIENTATION_VERTICAL)
     {
       if (offset_y > 0)
         *direction = GTK_PAN_DIRECTION_DOWN;
@@ -141,10 +141,10 @@ guess_direction (GtkGesturePan   *gesture,
 #define FACTOR 2
   if (abs_x > abs_y * FACTOR)
     direction_from_offset (offset_x, offset_y,
-                           GTK_PAN_ORIENTATION_HORIZONTAL, direction);
+                           GTK_ORIENTATION_HORIZONTAL, direction);
   else if (abs_y > abs_x * FACTOR)
     direction_from_offset (offset_x, offset_y,
-                           GTK_PAN_ORIENTATION_VERTICAL, direction);
+                           GTK_ORIENTATION_VERTICAL, direction);
   else
     return FALSE;
 
@@ -160,10 +160,10 @@ check_orientation_matches (GtkGesturePan   *gesture,
 
   return (((direction == GTK_PAN_DIRECTION_LEFT ||
             direction == GTK_PAN_DIRECTION_RIGHT) &&
-           priv->orientation == GTK_PAN_ORIENTATION_HORIZONTAL) ||
+           priv->orientation == GTK_ORIENTATION_HORIZONTAL) ||
           ((direction == GTK_PAN_DIRECTION_UP ||
             direction == GTK_PAN_DIRECTION_DOWN) &&
-           priv->orientation == GTK_PAN_ORIENTATION_VERTICAL));
+           priv->orientation == GTK_ORIENTATION_VERTICAL));
 }
 
 static void
@@ -196,7 +196,7 @@ gtk_gesture_pan_drag_update (GtkGestureDrag *gesture,
   else
     direction_from_offset (offset_x, offset_y, priv->orientation, &direction);
 
-  offset = (priv->orientation == GTK_PAN_ORIENTATION_VERTICAL) ?
+  offset = (priv->orientation == GTK_ORIENTATION_VERTICAL) ?
     ABS (offset_y) : ABS (offset_x);
   g_signal_emit (gesture, signals[PAN], 0, direction, offset);
 }
@@ -236,8 +236,8 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
                                    g_param_spec_enum ("orientation",
                                                       P_("Orientation"),
                                                       P_("Allowed orientations"),
-                                                      GTK_TYPE_PAN_ORIENTATION,
-                                                      GTK_PAN_ORIENTATION_HORIZONTAL,
+                                                      GTK_TYPE_ORIENTATION,
+                                                      GTK_ORIENTATION_HORIZONTAL,
                                                       GTK_PARAM_READWRITE));
   /**
    * GtkGesturePan::pan:
@@ -266,7 +266,7 @@ gtk_gesture_pan_init (GtkGesturePan *gesture)
   GtkGesturePanPrivate *priv;
 
   priv = gtk_gesture_pan_get_instance_private (gesture);
-  priv->orientation = GTK_PAN_ORIENTATION_HORIZONTAL;
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 }
 
 /**
@@ -281,8 +281,8 @@ gtk_gesture_pan_init (GtkGesturePan *gesture)
  * Since: 3.14
  **/
 GtkGesture *
-gtk_gesture_pan_new (GtkWidget         *widget,
-                     GtkPanOrientation  orientation)
+gtk_gesture_pan_new (GtkWidget      *widget,
+                     GtkOrientation  orientation)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -302,7 +302,7 @@ gtk_gesture_pan_new (GtkWidget         *widget,
  *
  * Since: 3.14
  */
-GtkPanOrientation
+GtkOrientation
 gtk_gesture_pan_get_orientation (GtkGesturePan *gesture)
 {
   GtkGesturePanPrivate *priv;
@@ -324,14 +324,14 @@ gtk_gesture_pan_get_orientation (GtkGesturePan *gesture)
  * Since: 3.14
  */
 void
-gtk_gesture_pan_set_orientation (GtkGesturePan     *gesture,
-                                 GtkPanOrientation  orientation)
+gtk_gesture_pan_set_orientation (GtkGesturePan  *gesture,
+                                 GtkOrientation  orientation)
 {
   GtkGesturePanPrivate *priv;
 
   g_return_if_fail (GTK_IS_GESTURE_PAN (gesture));
-  g_return_if_fail (orientation == GTK_PAN_ORIENTATION_HORIZONTAL ||
-                    orientation == GTK_PAN_ORIENTATION_VERTICAL);
+  g_return_if_fail (orientation == GTK_ORIENTATION_HORIZONTAL ||
+                    orientation == GTK_ORIENTATION_VERTICAL);
 
   priv = gtk_gesture_pan_get_instance_private (gesture);
 

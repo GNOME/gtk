@@ -42,15 +42,15 @@ GDK_AVAILABLE_IN_3_14
 GType             gtk_gesture_pan_get_type        (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_14
-GtkGesture *      gtk_gesture_pan_new             (GtkWidget         *widget,
-                                                   GtkPanOrientation  orientation);
+GtkGesture *      gtk_gesture_pan_new             (GtkWidget      *widget,
+                                                   GtkOrientation  orientation);
 
 GDK_AVAILABLE_IN_3_14
-GtkPanOrientation gtk_gesture_pan_get_orientation (GtkGesturePan     *gesture);
+GtkOrientation    gtk_gesture_pan_get_orientation (GtkGesturePan  *gesture);
 
 GDK_AVAILABLE_IN_3_14
-void              gtk_gesture_pan_set_orientation (GtkGesturePan     *gesture,
-                                                   GtkPanOrientation  orientation);
+void              gtk_gesture_pan_set_orientation (GtkGesturePan  *gesture,
+                                                   GtkOrientation  orientation);
 
 
 G_END_DECLS
