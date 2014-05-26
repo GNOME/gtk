@@ -598,6 +598,7 @@ gtk_private_h_sources =		\
 	gtkimcontextsimpleseqs.h \
 	gtkintl.h		\
 	gtkkeyhash.h		\
+	gtkkineticscrolling.h	\
 	gtklabelprivate.h	\
 	gtklockbuttonprivate.h	\
 	gtkmagnifierprivate.h	\
@@ -939,6 +940,7 @@ gtk_base_c_sources = 		\
 	gtkinfobar.c		\
 	gtkinvisible.c		\
 	gtkkeyhash.c		\
+	gtkkineticscrolling.c	\
 	gtklabel.c		\
 	gtklayout.c		\
 	gtklevelbar.c		\
