@@ -390,7 +390,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   /**
    * GtkListBox::row-selected:
    * @box: the #GtkListBox
-   * @row: the selected row
+   * @row: (nullable): the selected row
    *
    * The ::row-selected signal is emitted when a new row is selected, or
    * (with a %NULL @row) when the selection is cleared.

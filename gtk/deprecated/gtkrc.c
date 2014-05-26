@@ -1409,11 +1409,12 @@ gtk_rc_get_style (GtkWidget *widget)
  *                             G_OBJECT_TYPE (widget));
  * ]|
  *
- * Returns: (transfer none): A style created by matching with the
- *     supplied paths, or %NULL if nothing matching was specified and the
- *     default style should be used. The returned value is owned by GTK+
- *     as part of an internal cache, so you must call g_object_ref() on
- *     the returned value if you want to keep a reference to it.
+ * Returns: (nullable) (transfer none): A style created by matching
+ *     with the supplied paths, or %NULL if nothing matching was
+ *     specified and the default style should be used. The returned
+ *     value is owned by GTK+ as part of an internal cache, so you
+ *     must call g_object_ref() on the returned value if you want to
+ *     keep a reference to it.
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
  **/

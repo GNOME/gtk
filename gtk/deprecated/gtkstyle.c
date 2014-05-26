@@ -4498,12 +4498,12 @@ gtk_widget_modify_base (GtkWidget      *widget,
 /**
  * gtk_widget_modify_cursor:
  * @widget: a #GtkWidget
- * @primary: the color to use for primary cursor (does not need to be
- *     allocated), or %NULL to undo the effect of previous calls to
- *     of gtk_widget_modify_cursor().
- * @secondary: the color to use for secondary cursor (does not need to be
- *     allocated), or %NULL to undo the effect of previous calls to
- *     of gtk_widget_modify_cursor().
+ * @primary: (nullable): the color to use for primary cursor (does not
+ *     need to be allocated), or %NULL to undo the effect of previous
+ *     calls to of gtk_widget_modify_cursor().
+ * @secondary: (nullable): the color to use for secondary cursor (does
+ *     not need to be allocated), or %NULL to undo the effect of
+ *     previous calls to of gtk_widget_modify_cursor().
  *
  * Sets the cursor color to use in a widget, overriding the #GtkWidget
  * cursor-color and secondary-cursor-color

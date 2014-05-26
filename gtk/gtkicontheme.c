@@ -1957,8 +1957,9 @@ choose_icon (GtkIconTheme       *icon_theme,
  * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon()
  * combines these two steps if all you need is the pixbuf.)
  * 
- * Returns: (transfer full): a #GtkIconInfo object containing information
- * about the icon, or %NULL if the icon wasn’t found.
+ * Returns: (nullable) (transfer full): a #GtkIconInfo object
+ * containing information about the icon, or %NULL if the icon wasn’t
+ * found.
  *
  * Since: 2.4
  */
@@ -1994,8 +1995,9 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
  * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon() combines
  * these two steps if all you need is the pixbuf.)
  *
- * Returns: (transfer full): a #GtkIconInfo object containing
- * information about the icon, or %NULL if the icon wasn’t found.
+ * Returns: (nullable) (transfer full): a #GtkIconInfo object
+ * containing information about the icon, or %NULL if the icon wasn’t
+ * found.
  *
  * Since: 3.10
  */
@@ -2098,8 +2100,9 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
  * tries them all in the given order before falling back to 
  * inherited icon themes.
  * 
- * Returns: (transfer full): a #GtkIconInfo object containing information
- * about the icon, or %NULL if the icon wasn’t found.
+ * Returns: (nullable) (transfer full): a #GtkIconInfo object
+ * containing information about the icon, or %NULL if the icon wasn’t
+ * found.
  *
  * Since: 2.12
  */
@@ -2136,8 +2139,9 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *icon_theme,
  * tries them all in the given order before falling back to 
  * inherited icon themes.
  * 
- * Returns: (transfer full): a #GtkIconInfo object containing information
- * about the icon, or %NULL if the icon wasn’t found.
+ * Returns: (nullable) (transfer full): a #GtkIconInfo object
+ * containing information about the icon, or %NULL if the icon wasn’t
+ * found.
  *
  * Since: 3.10
  */
@@ -2188,8 +2192,8 @@ gtk_icon_theme_error_quark (void)
  * returned by this function. Otherwise GTK+ may need to keep the old
  * icon theme loaded, which would be a waste of memory.
  *
- * Returns: (transfer full): the rendered icon; this may be a
- *     newly created icon or a new reference to an internal icon, so
+ * Returns: (nullable) (transfer full): the rendered icon; this may be
+ *     a newly created icon or a new reference to an internal icon, so
  *     you must not modify the icon. Use g_object_unref() to release
  *     your reference to the icon. %NULL if the icon isn’t found.
  *
@@ -2237,8 +2241,8 @@ gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
  * returned by this function. Otherwise GTK+ may need to keep the old
  * icon theme loaded, which would be a waste of memory.
  *
- * Returns: (transfer full): the rendered icon; this may be a
- *     newly created icon or a new reference to an internal icon, so
+ * Returns: (nullable) (transfer full): the rendered icon; this may be
+ *     a newly created icon or a new reference to an internal icon, so
  *     you must not modify the icon. Use g_object_unref() to release
  *     your reference to the icon. %NULL if the icon isn’t found.
  *
@@ -2299,10 +2303,11 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
  * update the icon. This is usually done by connecting to the
  * GtkWidget::style-set signal.
  *
- * Returns: (transfer full): the rendered icon; this may be a
- *     newly created icon or a new reference to an internal icon, so
- *     you must not modify the icon. Use cairo_surface_destroy() to release
- *     your reference to the icon. %NULL if the icon isn’t found.
+ * Returns: (nullable) (transfer full): the rendered icon; this may be
+ *     a newly created icon or a new reference to an internal icon, so
+ *     you must not modify the icon. Use cairo_surface_destroy() to
+ *     release your reference to the icon. %NULL if the icon isn’t
+ *     found.
  *
  * Since: 3.10
  **/
@@ -2638,7 +2643,7 @@ gtk_icon_theme_list_contexts (GtkIconTheme *icon_theme)
  * current theme (for instance, to use when presenting
  * a list of themes to the user.)
  * 
- * Returns: the name of an example icon or %NULL.
+ * Returns: (nullable): the name of an example icon or %NULL.
  *  Free with g_free().
  *
  * Since: 2.4
@@ -5360,9 +5365,9 @@ find_builtin_icon (const gchar *icon_name,
  * The icon can then be rendered into a pixbuf using
  * gtk_icon_info_load_icon().
  *
- * Returns: (transfer full): a #GtkIconInfo containing 
- *     information about the icon, or %NULL if the icon 
- *     wasn’t found. Unref with g_object_unref()
+ * Returns: (nullable) (transfer full): a #GtkIconInfo containing
+ *     information about the icon, or %NULL if the icon wasn’t
+ *     found. Unref with g_object_unref()
  *
  * Since: 2.14
  */
@@ -5390,9 +5395,9 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  * The icon can then be rendered into a pixbuf using
  * gtk_icon_info_load_icon().
  *
- * Returns: (transfer full): a #GtkIconInfo containing
- *     information about the icon, or %NULL if the icon
- *     wasn’t found. Unref with g_object_unref()
+ * Returns: (nullable) (transfer full): a #GtkIconInfo containing
+ *     information about the icon, or %NULL if the icon wasn’t
+ *     found. Unref with g_object_unref()
  *
  * Since: 3.10
  */

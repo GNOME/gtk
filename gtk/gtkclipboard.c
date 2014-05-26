@@ -1385,7 +1385,7 @@ clipboard_received_func (GtkClipboard     *clipboard,
  * This function waits for the data to be received using the main 
  * loop, so events, timeouts, etc, may be dispatched during the wait.
  * 
- * Returns: a newly-allocated #GtkSelectionData object or %NULL
+ * Returns: (nullable): a newly-allocated #GtkSelectionData object or %NULL
  *               if retrieving the given target failed. If non-%NULL,
  *               this value must be freed with gtk_selection_data_free() 
  *               when you are finished with it.
@@ -1438,7 +1438,7 @@ clipboard_text_received_func (GtkClipboard *clipboard,
  * the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  * 
- * Returns: a newly-allocated UTF-8 string which must
+ * Returns: (nullable): a newly-allocated UTF-8 string which must
  *               be freed with g_free(), or %NULL if retrieving
  *               the selection data failed. (This could happen
  *               for various reasons, in particular if the
@@ -1497,7 +1497,7 @@ clipboard_rich_text_received_func (GtkClipboard *clipboard,
  * waits for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Returns: (array length=length) (transfer full): a
+ * Returns: (nullable) (array length=length) (transfer full): a
  *               newly-allocated binary block of data which must be
  *               freed with g_free(), or %NULL if retrieving the
  *               selection data failed. (This could happen for various
@@ -1564,7 +1564,7 @@ clipboard_image_received_func (GtkClipboard *clipboard,
  * the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Returns: (transfer full): a newly-allocated #GdkPixbuf
+ * Returns: (nullable) (transfer full): a newly-allocated #GdkPixbuf
  *     object which must be disposed with g_object_unref(), or
  *     %NULL if retrieving the selection data failed. (This could
  *     happen for various reasons, in particular if the clipboard
@@ -1618,13 +1618,12 @@ clipboard_uris_received_func (GtkClipboard *clipboard,
  * for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Returns: (array zero-terminated=1) (element-type utf8) (transfer full): a newly-allocated
- * 		 %NULL-terminated array of strings which must
- *               be freed with g_strfreev(), or %NULL if
- *               retrieving the selection data failed. (This
- *               could happen for various reasons, in particular
- *               if the clipboard was empty or if the contents of
- *               the clipboard could not be converted into URI form.)
+ * Returns: (nullable) (array zero-terminated=1) (element-type utf8) (transfer full):
+ *     a newly-allocated %NULL-terminated array of strings which must
+ *     be freed with g_strfreev(), or %NULL if retrieving the
+ *     selection data failed. (This could happen for various reasons,
+ *     in particular if the clipboard was empty or if the contents of
+ *     the clipboard could not be converted into URI form.)
  *
  * Since: 2.14
  **/

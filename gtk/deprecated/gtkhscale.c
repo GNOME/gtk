@@ -68,7 +68,8 @@ gtk_hscale_init (GtkHScale *hscale)
 
 /**
  * gtk_hscale_new:
- * @adjustment: the #GtkAdjustment which sets the range of the scale.
+ * @adjustment: (nullable): the #GtkAdjustment which sets the range of
+ * the scale.
  *
  * Creates a new #GtkHScale.
  *

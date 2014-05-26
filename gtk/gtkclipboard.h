@@ -51,9 +51,10 @@ typedef void (* GtkClipboardReceivedFunc)         (GtkClipboard     *clipboard,
 /**
  * GtkClipboardTextReceivedFunc:
  * @clipboard: the #GtkClipboard
- * @text: the text received, as a UTF-8 encoded string, or %NULL
- *   if retrieving the data failed.
- * @data: the @user_data supplied to gtk_clipboard_request_text().
+ * @text: (nullable): the text received, as a UTF-8 encoded string, or
+ *   %NULL if retrieving the data failed.
+ * @data: (closure): the @user_data supplied to
+ *   gtk_clipboard_request_text().
  *
  * A function to be called when the results of gtk_clipboard_request_text()
  * are received, or when the request fails.
@@ -120,8 +121,8 @@ typedef void (* GtkClipboardURIReceivedFunc)      (GtkClipboard     *clipboard,
 /**
  * GtkClipboardTargetsReceivedFunc:
  * @clipboard: the #GtkClipboard
- * @atoms: the supported targets, as array of #GdkAtom, or %NULL
- *   if retrieving the data failed.
+ * @atoms: (nullable) (array length=n_atoms): the supported targets,
+ *   as array of #GdkAtom, or %NULL if retrieving the data failed.
  * @n_atoms: the length of the @atoms array.
  * @data: (closure): the @user_data supplied to
  *   gtk_clipboard_request_targets().

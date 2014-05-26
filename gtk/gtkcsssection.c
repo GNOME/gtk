@@ -174,7 +174,7 @@ gtk_css_section_get_section_type (const GtkCssSection *section)
  * #GTK_CSS_SECTION_IMPORT if it was loaded with an import rule from
  * a different file.
  *
- * Returns: the parent section or %NULL if none
+ * Returns: (nullable) (transfer none): the parent section or %NULL if none
  *
  * Since: 3.2
  **/

@@ -7865,7 +7865,7 @@ gtk_widget_reparent (GtkWidget *widget,
  * gtk_widget_intersect:
  * @widget: a #GtkWidget
  * @area: a rectangle
- * @intersection: rectangle to store intersection of @widget and @area
+ * @intersection: (nullable): rectangle to store intersection of @widget and @area
  *
  * Computes the intersection of a @widget’s area and @area, storing
  * the intersection in @intersection, and returns %TRUE if there was
@@ -10254,7 +10254,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
 /**
  * gtk_widget_create_pango_layout:
  * @widget: a #GtkWidget
- * @text: text to set on the layout (can be %NULL)
+ * @text: (nullable): text to set on the layout (can be %NULL)
  *
  * Creates a new #PangoLayout with the appropriate font map,
  * font description, and base direction for drawing text for

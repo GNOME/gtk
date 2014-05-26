@@ -2046,9 +2046,9 @@ gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
  * Queries the list of shortcut folders in the file chooser, as set by
  * gtk_file_chooser_add_shortcut_folder().
  *
- * Returns: (element-type filename) (transfer full): A list of
- * folder filenames, or %NULL if there are no shortcut folders.  Free
- * the returned list with g_slist_free(), and the filenames with
+ * Returns: (nullable) (element-type filename) (transfer full): A list
+ * of folder filenames, or %NULL if there are no shortcut folders.
+ * Free the returned list with g_slist_free(), and the filenames with
  * g_free().
  *
  * Since: 2.4
@@ -2144,9 +2144,9 @@ gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser    *chooser,
  * Queries the list of shortcut folders in the file chooser, as set by
  * gtk_file_chooser_add_shortcut_folder_uri().
  *
- * Returns: (element-type utf8) (transfer full): A list of folder
- * URIs, or %NULL if there are no shortcut folders.  Free the returned
- * list with g_slist_free(), and the URIs with g_free().
+ * Returns: (nullable) (element-type utf8) (transfer full): A list of
+ * folder URIs, or %NULL if there are no shortcut folders.  Free the
+ * returned list with g_slist_free(), and the URIs with g_free().
  *
  * Since: 2.4
  **/

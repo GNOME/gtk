@@ -8131,7 +8131,8 @@ gtk_entry_set_inner_border (GtkEntry        *entry,
  * This function returns the entry’s #GtkEntry:inner-border property. See
  * gtk_entry_set_inner_border() for more information.
  *
- * Returns: (transfer none): the entry’s #GtkBorder, or %NULL if none was set.
+ * Returns: (nullable) (transfer none): the entry’s #GtkBorder, or
+ *   %NULL if none was set.
  *
  * Since: 2.10
  *
@@ -9153,8 +9154,8 @@ ensure_has_tooltip (GtkEntry *entry)
  * Gets the contents of the tooltip on the icon at the specified 
  * position in @entry.
  * 
- * Returns: the tooltip text, or %NULL. Free the returned string
- *     with g_free() when done.
+ * Returns: (nullable): the tooltip text, or %NULL. Free the returned
+ *     string with g_free() when done.
  * 
  * Since: 2.16
  */
@@ -9240,8 +9241,8 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
  * Gets the contents of the tooltip on the icon at the specified 
  * position in @entry.
  * 
- * Returns: the tooltip text, or %NULL. Free the returned string
- *     with g_free() when done.
+ * Returns: (nullable): the tooltip text, or %NULL. Free the returned
+ *     string with g_free() when done.
  * 
  * Since: 2.16
  */
@@ -10849,7 +10850,7 @@ gtk_entry_set_tabs (GtkEntry      *entry,
  * Gets the tabstops that were set on the entry using gtk_entry_set_tabs(), if
  * any.
  *
- * Returns: (transfer none): the tabstops, or %NULL if none was set.
+ * Returns: (nullable) (transfer none): the tabstops, or %NULL if none was set.
  *
  * Since: 3.10
  */

@@ -1154,7 +1154,7 @@ shared_data_unref (gpointer data)
  * @entries: (array length=n_entries): an array of action descriptions
  * @n_entries: the number of entries
  * @user_data: data to pass to the action callbacks
- * @destroy: destroy notification callback for @user_data
+ * @destroy: (nullable): destroy notification callback for @user_data
  *
  * This variant of gtk_action_group_add_actions() adds a #GDestroyNotify
  * callback for @user_data. 
@@ -1265,7 +1265,7 @@ gtk_action_group_add_toggle_actions (GtkActionGroup             *action_group,
  * @entries: (array length=n_entries): an array of toggle action descriptions
  * @n_entries: the number of entries
  * @user_data: data to pass to the action callbacks
- * @destroy: destroy notification callback for @user_data
+ * @destroy: (nullable): destroy notification callback for @user_data
  *
  * This variant of gtk_action_group_add_toggle_actions() adds a 
  * #GDestroyNotify callback for @user_data. 

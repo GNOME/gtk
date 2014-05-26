@@ -11263,7 +11263,8 @@ gtk_tree_view_new_with_model (GtkTreeModel *model)
  * Returns the model the #GtkTreeView is based on.  Returns %NULL if the
  * model is unset.
  *
- * Returns: (transfer none): A #GtkTreeModel, or %NULL if none is currently being used.
+ * Returns: (transfer none) (nullable): A #GtkTreeModel, or %NULL if
+ * none is currently being used.
  **/
 GtkTreeModel *
 gtk_tree_view_get_model (GtkTreeView *tree_view)

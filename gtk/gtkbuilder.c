@@ -1643,7 +1643,7 @@ gtk_builder_connect_signals (GtkBuilder *builder,
  * @object: object to connect a signal to
  * @signal_name: name of the signal
  * @handler_name: name of the handler
- * @connect_object: a #GObject, if non-%NULL, use g_signal_connect_object()
+ * @connect_object: (nullable): a #GObject, if non-%NULL, use g_signal_connect_object()
  * @flags: #GConnectFlags to use
  * @user_data: user data
  *

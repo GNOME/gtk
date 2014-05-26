@@ -1714,10 +1714,11 @@ gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
  * 
  * Gets the contents of the selection data as a #GdkPixbuf.
  * 
- * Returns: (transfer full): if the selection data contained a recognized
- *   image type and it could be converted to a #GdkPixbuf, a 
- *   newly allocated pixbuf is returned, otherwise %NULL.
- *   If the result is non-%NULL it must be freed with g_object_unref().
+ * Returns: (nullable) (transfer full): if the selection data
+ *   contained a recognized image type and it could be converted to a
+ *   #GdkPixbuf, a newly allocated pixbuf is returned, otherwise
+ *   %NULL.  If the result is non-%NULL it must be freed with
+ *   g_object_unref().
  *
  * Since: 2.6
  **/

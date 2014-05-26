@@ -177,7 +177,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 /**
  * gtk_theming_engine_register_property: (skip)
  * @name_space: namespace for the property name
- * @parse_func: parsing function to use, or %NULL
+ * @parse_func: (nullable): parsing function to use, or %NULL
  * @pspec: the #GParamSpec for the new property
  *
  * Registers a property so it can be used in the CSS file format,

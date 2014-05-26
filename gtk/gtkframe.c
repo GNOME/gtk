@@ -448,7 +448,7 @@ gtk_frame_get_label (GtkFrame *frame)
 /**
  * gtk_frame_set_label_widget:
  * @frame: a #GtkFrame
- * @label_widget: the new label widget
+ * @label_widget: (nullable): the new label widget
  * 
  * Sets the label widget for the frame. This is the widget that
  * will appear embedded in the top edge of the frame as a
@@ -501,7 +501,8 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
  * Retrieves the label widget for the frame. See
  * gtk_frame_set_label_widget().
  *
- * Returns: (transfer none): the label widget, or %NULL if there is none.
+ * Returns: (nullable) (transfer none): the label widget, or %NULL if
+ * there is none.
  **/
 GtkWidget *
 gtk_frame_get_label_widget (GtkFrame *frame)

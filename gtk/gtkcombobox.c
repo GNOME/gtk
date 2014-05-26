@@ -5807,7 +5807,7 @@ gtk_combo_box_get_id_column (GtkComboBox *combo_box)
  * no row is active, or if the active row has a %NULL ID value, then %NULL
  * is returned.
  *
- * Returns: the ID of the active row, or %NULL
+ * Returns: (nullable): the ID of the active row, or %NULL
  *
  * Since: 3.0
  **/

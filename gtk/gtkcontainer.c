@@ -1311,8 +1311,9 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  *
  * Finds a child property of a container class by name.
  *
- * Returns: (transfer none): the #GParamSpec of the child property
- *     or %NULL if @class has no child property with that name.
+ * Returns: (nullable) (transfer none): the #GParamSpec of the child
+ *     property or %NULL if @class has no child property with that
+ *     name.
  */
 GParamSpec*
 gtk_container_class_find_child_property (GObjectClass *cclass,
