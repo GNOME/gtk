@@ -5487,6 +5487,7 @@ gtk_widget_get_has_window
 gtk_widget_set_has_window
 gtk_widget_get_sensitive
 gtk_widget_is_sensitive
+GtkStateType
 gtk_widget_get_state
 gtk_widget_get_visible
 gtk_widget_is_visible
@@ -6539,7 +6540,6 @@ GtkScrollStep
 GtkScrollType
 GtkSelectionMode
 GtkShadowType
-GtkStateType
 GtkStateFlags
 GtkToolbarStyle
 GtkSortType

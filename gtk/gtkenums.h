@@ -496,6 +496,9 @@ typedef enum
  * the widget is drawn. The #GtkStateType enumeration is also used to
  * identify different colors in a #GtkStyle for drawing, so states can be
  * used for subparts of a widget as well as entire widgets.
+ *
+ * Deprecated: 3.14: All APIs that are using this enumeration have been deprecated
+ *     in favor of alternatives using #GtkStateFlags.
  */
 typedef enum
 {
