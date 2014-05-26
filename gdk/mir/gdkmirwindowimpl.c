@@ -382,6 +382,7 @@ send_event (GdkWindow *window, GdkDevice *device, GdkEvent *event)
   GList *node;
 
   gdk_event_set_device (event, device);
+  gdk_event_set_screen (event, gdk_display_get_screen (gdk_window_get_display (window), 0));
   event->any.window = g_object_ref (window);
   event->any.send_event = FALSE; // FIXME: What is this?
 
@@ -396,7 +397,7 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   GdkEvent *event;
 
   event = gdk_event_new (type);
-  event->key.time = 0; // FIXME
+  event->key.time = (guint32) (g_get_monotonic_time () / 1000);
   event->key.state = state;
   event->key.keyval = keyval;
   event->key.length = 0;
@@ -414,7 +415,7 @@ generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble 
   GdkEvent *event;
 
   event = gdk_event_new (type);
-  event->button.time = 0; // FIXME
+  event->button.time = (guint32) (g_get_monotonic_time () / 1000);
   event->button.x = x;
   event->button.y = y;
   event->button.state = state;
@@ -431,7 +432,7 @@ generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x,
   GdkEvent *event;
 
   event = gdk_event_new (GDK_SCROLL);
-  event->scroll.time = 0; // FIXME
+  event->scroll.time = (guint32) (g_get_monotonic_time () / 1000);
   event->scroll.x = x;
   event->scroll.y = y;
   event->scroll.state = state;
@@ -450,7 +451,7 @@ generate_motion_event (GdkWindow *window, gdouble x, gdouble y, guint state)
   GdkEvent *event;
 
   event = gdk_event_new (GDK_MOTION_NOTIFY);
-  event->motion.time = 0; // FIXME
+  event->motion.time = (guint32) (g_get_monotonic_time () / 1000);
   event->motion.x = x;
   event->motion.y = y;
   event->motion.axes = NULL;
