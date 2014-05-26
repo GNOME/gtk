@@ -1595,7 +1595,8 @@ gtk_window_constructor (GType                  type,
                         G_CALLBACK (multipress_gesture_pressed_cb), object);
       g_signal_connect (priv->multipress_gesture, "stopped",
                         G_CALLBACK (multipress_gesture_stopped_cb), object);
-      gtk_gesture_attach (priv->multipress_gesture, GTK_PHASE_CAPTURE);
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                                  GTK_PHASE_CAPTURE);
     }
 
   return object;
@@ -5482,10 +5483,7 @@ gtk_window_finalize (GObject *object)
     }
 
   if (priv->multipress_gesture)
-    {
-      gtk_gesture_detach (priv->multipress_gesture);
-      g_object_unref (priv->multipress_gesture);
-    }
+    g_object_unref (priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }

@@ -400,7 +400,6 @@ typedef struct {
 
 typedef struct {
   GtkEventController *controller;
-  GtkPropagationPhase phase;
   guint evmask_notify_id;
   guint grab_notify_id;
   guint sequence_state_changed_id;
@@ -4206,11 +4205,13 @@ gtk_widget_needs_press_emulation (GtkWidget        *widget,
   for (l = priv->event_controllers; l; l = l->next)
     {
       EventControllerData *data;
+      GtkPropagationPhase phase;
       GtkGesture *gesture;
 
       data = l->data;
+      phase = gtk_event_controller_get_propagation_phase (data->controller);
 
-      if (data->phase != GTK_PHASE_CAPTURE)
+      if (phase != GTK_PHASE_CAPTURE)
         continue;
       if (!GTK_IS_GESTURE (data->controller))
         continue;
@@ -7332,6 +7333,7 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
   while (l != NULL)
     {
       GList *next = l->next;
+
       data = l->data;
 
       if (data->controller == NULL)
@@ -7339,8 +7341,15 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
           priv->event_controllers = g_list_delete_link (priv->event_controllers, l);
           g_free (data);
         }
-      else if (data->phase == phase)
-        handled |= gtk_event_controller_handle_event (data->controller, event);
+      else
+        {
+          GtkPropagationPhase controller_phase;
+
+          controller_phase = gtk_event_controller_get_propagation_phase (data->controller);
+
+          if (controller_phase == phase)
+            handled |= gtk_event_controller_handle_event (data->controller, event);
+        }
 
       l = next;
     }
@@ -16874,10 +16883,12 @@ event_controller_grab_notify (GtkWidget           *widget,
                               EventControllerData *data)
 {
   GtkWidget *grab_widget, *toplevel;
+  GtkPropagationPhase phase;
   GtkWindowGroup *group;
   GdkDevice *device;
 
   device = gtk_gesture_get_device (GTK_GESTURE (data->controller));
+  phase = gtk_event_controller_get_propagation_phase (data->controller);
 
   if (!device)
     return;
@@ -16897,9 +16908,9 @@ event_controller_grab_notify (GtkWidget           *widget,
   if (!grab_widget || grab_widget == widget)
     return;
 
-  if ((data->phase != GTK_PHASE_CAPTURE &&
+  if ((phase != GTK_PHASE_CAPTURE &&
        !gtk_widget_is_ancestor (widget, grab_widget)) ||
-      (data->phase == GTK_PHASE_CAPTURE &&
+      (phase == GTK_PHASE_CAPTURE &&
        !gtk_widget_is_ancestor (widget, grab_widget) &&
        !gtk_widget_is_ancestor (grab_widget, widget)))
     {
@@ -16988,8 +16999,7 @@ _gtk_widget_has_controller (GtkWidget          *widget,
 
 void
 _gtk_widget_add_controller (GtkWidget           *widget,
-                            GtkEventController  *controller,
-                            GtkPropagationPhase  phase)
+                            GtkEventController  *controller)
 {
   EventControllerData *data;
   GtkWidgetPrivate *priv;
@@ -16997,20 +17007,15 @@ _gtk_widget_add_controller (GtkWidget           *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
-  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_TARGET);
 
   priv = widget->priv;
   data = _gtk_widget_has_controller (widget, controller);
 
   if (data)
-    {
-      data->phase = phase;
-      return;
-    }
+    return;
 
   data = g_new0 (EventControllerData, 1);
-  data->controller = g_object_ref (controller);
-  data->phase = phase;
+  data->controller = controller;
   data->evmask_notify_id =
     g_signal_connect (controller, "notify::event-mask",
                       G_CALLBACK (event_controller_notify_event_mask), widget);
@@ -17049,8 +17054,6 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
 
   g_signal_handler_disconnect (data->controller, data->evmask_notify_id);
   g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
-  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (data->controller));
-  g_object_unref (data->controller);
   data->controller = NULL;
 }
 
@@ -17069,7 +17072,9 @@ _gtk_widget_list_controllers (GtkWidget           *widget,
   for (l = priv->event_controllers; l; l = l->next)
     {
       data = l->data;
-      if (data->phase == phase && data->controller != NULL)
+
+      if (data->controller != NULL &&
+          phase == gtk_event_controller_get_propagation_phase (data->controller))
         retval = g_list_prepend (retval, data->controller);
     }
 

@@ -2701,14 +2701,16 @@ gtk_entry_init (GtkEntry *entry)
                     G_CALLBACK (gtk_entry_drag_gesture_end), entry);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
-  gtk_gesture_attach (priv->drag_gesture, GTK_PHASE_TARGET);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
+                                              GTK_PHASE_TARGET);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (entry));
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_entry_multipress_gesture_pressed), entry);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->multipress_gesture), TRUE);
-  gtk_gesture_attach (priv->multipress_gesture, GTK_PHASE_TARGET);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                              GTK_PHASE_TARGET);
 }
 
 static void
@@ -2987,6 +2989,9 @@ gtk_entry_finalize (GObject *object)
     g_object_unref (priv->text_handle);
   g_free (priv->placeholder_text);
   g_free (priv->im_module);
+
+  g_clear_object (&priv->drag_gesture);
+  g_clear_object (&priv->multipress_gesture);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);

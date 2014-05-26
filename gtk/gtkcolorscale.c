@@ -258,7 +258,8 @@ gtk_color_scale_init (GtkColorScale *scale)
   scale->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (scale));
   g_signal_connect (scale->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), scale);
-  gtk_gesture_attach (scale->priv->long_press_gesture, GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (scale->priv->long_press_gesture),
+                                              GTK_PHASE_BUBBLE);
 }
 
 static void
@@ -269,7 +270,6 @@ scale_finalize (GObject *object)
   if (scale->priv->surface)
     cairo_surface_destroy (scale->priv->surface);
 
-  gtk_gesture_detach (scale->priv->long_press_gesture);
   g_clear_object (&scale->priv->long_press_gesture);
 
   G_OBJECT_CLASS (gtk_color_scale_parent_class)->finalize (object);

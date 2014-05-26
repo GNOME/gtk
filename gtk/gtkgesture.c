@@ -46,9 +46,9 @@
  *
  * ## Event propagation
  *
- * To receive events, a gesture needs to first be attached to its widget with
- * gtk_gesture_attach(). The phase passed to this call determines at which
- * point in the event processing a gesture operates.
+ * In order to receive events, a gesture needs to either set a propagation phase
+ * through gtk_event_controller_set_propagation_phase(), or feed those manually
+ * through gtk_event_controller_handle_event().
  *
  * In the capture phase, events are propagated from the toplevel down to the
  * target widget, and gestures that are attached to containers above the widget
@@ -56,16 +56,12 @@
  *
  * After the capture phase, GTK+ emits the traditional #GtkWidget::button-press,
  * #GtkWidget::button-release, #GtkWidget::touch-event, etc signals. Gestures 
- * with the target phase are fed events from the default #GtkWidget::event
+ * with the %GTK_PHASE_TARGET phase are fed events from the default #GtkWidget::event
  * handlers.
  *
  * In the bubble phase, events are propagated up from the target widget to the
  * toplevel, and gestures that are attached to containers above the widget get
  * a chance to interact with events that have not been handled yet.
- *
- * Gestures attached with the phase 'none' are not receiving any events
- * automatically, but events can be passed to them with
- * gtk_event_controller_handle_event().
  *
  * ## States of a sequence # {#touch-sequence-states}
  *
@@ -1546,52 +1542,4 @@ _gtk_gesture_get_pointer_emulating_sequence (GtkGesture        *gesture,
     }
 
   return FALSE;
-}
-
-/**
- * gtk_gesture_attach:
- * @gesture: a #GtkGesture
- * @phase: phase at which events are handled
- *
- * Attaches @gesture to its widget, so @gesture is able to receive
- * and manage the events that are emitted on the #GtkWidget. This call
- * will also make sure that the gesture state is maintained properly
- * whenever input is grabbed elsewhere.
- *
- * If @phase is %GTK_PHASE_NONE, no automatical event handling will be
- * performed, but other additional gesture maintenance will. The events
- * can be managed by calling gtk_event_controller_handle_event().
- *
- * Since: 3.14
- **/
-void
-gtk_gesture_attach (GtkGesture          *gesture,
-                    GtkPropagationPhase  phase)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_GESTURE (gesture));
-  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_TARGET);
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  _gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture), phase);
-}
-
-/**
- * gtk_gesture_detach:
- * @gesture: a #GtkGesture
- *
- * Detaches @gesture from its widget.
- *
- * Since: 3.14
- **/
-void
-gtk_gesture_detach (GtkGesture *gesture)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_GESTURE (gesture));
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  _gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 }

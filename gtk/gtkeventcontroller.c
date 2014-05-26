@@ -32,6 +32,7 @@
 #include "config.h"
 #include "gtkeventcontroller.h"
 #include "gtkeventcontrollerprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -40,7 +41,8 @@
 typedef struct _GtkEventControllerPrivate GtkEventControllerPrivate;
 
 enum {
-  PROP_WIDGET = 1
+  PROP_WIDGET = 1,
+  PROP_PROPAGATION_PHASE
 };
 
 enum {
@@ -53,6 +55,7 @@ struct _GtkEventControllerPrivate
 {
   GtkWidget *widget;
   guint evmask;
+  GtkPropagationPhase phase;
 };
 
 guint signals[N_SIGNALS] = { 0 };
@@ -81,6 +84,10 @@ gtk_event_controller_set_property (GObject      *object,
     case PROP_WIDGET:
       priv->widget = g_value_get_object (value);
       break;
+    case PROP_PROPAGATION_PHASE:
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (object),
+                                                  g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -101,11 +108,34 @@ gtk_event_controller_get_property (GObject    *object,
     case PROP_WIDGET:
       g_value_set_object (value, priv->widget);
       break;
+    case PROP_PROPAGATION_PHASE:
+      g_value_set_enum (value, priv->phase);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
+static void
+gtk_event_controller_constructed (GObject *object)
+{
+  GtkEventController *controller = GTK_EVENT_CONTROLLER (object);
+  GtkEventControllerPrivate *priv;
+
+  priv = gtk_event_controller_get_instance_private (controller);
+  g_assert (priv->widget != NULL);
+  _gtk_widget_add_controller (priv->widget, controller);
+}
+
+static void
+gtk_event_controller_dispose (GObject *object)
+{
+  GtkEventController *controller = GTK_EVENT_CONTROLLER (object);
+  GtkEventControllerPrivate *priv;
+
+  priv = gtk_event_controller_get_instance_private (controller);
+  _gtk_widget_remove_controller (priv->widget, controller);
+}
 
 static void
 gtk_event_controller_class_init (GtkEventControllerClass *klass)
@@ -116,6 +146,8 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
 
   object_class->set_property = gtk_event_controller_set_property;
   object_class->get_property = gtk_event_controller_get_property;
+  object_class->constructed = gtk_event_controller_constructed;
+  object_class->dispose = gtk_event_controller_dispose;
 
   /**
    * GtkEventController:widget:
@@ -132,6 +164,21 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT_ONLY));
+  /**
+   * GtkEventController:propagation-phase:
+   *
+   * The propagation phase at which this controller will handle events.
+   *
+   * Since: 3.14
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PROPAGATION_PHASE,
+                                   g_param_spec_enum ("propagation-phase",
+                                                      P_("Propagation phase"),
+                                                      P_("Propagation phase at which this controller is run"),
+                                                      GTK_TYPE_PROPAGATION_PHASE,
+                                                      GTK_PHASE_NONE,
+                                                      GTK_PARAM_READWRITE));
   /**
    * GtkEventController::handle-event:
    * @controller: the object which receives the signal
@@ -268,4 +315,61 @@ gtk_event_controller_reset (GtkEventController *controller)
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
 
   g_signal_emit (controller, signals[RESET], 0);
+}
+
+/**
+ * gtk_event_controller_get_propagation_phase:
+ * @controller: a #GtkEventController
+ *
+ * Gets the propagation phase at which @controller handles events.
+ *
+ * Returns: the propagation phase
+ *
+ * Since: 3.14
+ **/
+GtkPropagationPhase
+gtk_event_controller_get_propagation_phase (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), GTK_PHASE_NONE);
+
+  priv = gtk_event_controller_get_instance_private (controller);
+
+  return priv->phase;
+}
+
+/**
+ * gtk_event_controller_set_propagation_phase:
+ * @controller: a #GtkEventController
+ * @phase: a propagation phase
+ *
+ * Sets the propagation phase at which a controller handles events.
+ *
+ * If @phase is %GTK_PHASE_NONE, no automatic event handling will be
+ * performed, but other additional gesture maintenance will. In that phase,
+ * the events can be managed by calling gtk_event_controller_handle_event().
+ *
+ * Since: 3.14
+ **/
+void
+gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
+                                            GtkPropagationPhase  phase)
+{
+  GtkEventControllerPrivate *priv;
+
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (phase >= GTK_PHASE_NONE && phase <= GTK_PHASE_TARGET);
+
+  priv = gtk_event_controller_get_instance_private (controller);
+
+  if (priv->phase == phase)
+    return;
+
+  priv->phase = phase;
+
+  if (phase == GTK_PHASE_NONE)
+    gtk_event_controller_reset (controller);
+
+  g_object_notify (G_OBJECT (controller), "propagation-phase");
 }

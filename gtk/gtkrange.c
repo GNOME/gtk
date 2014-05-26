@@ -1505,11 +1505,7 @@ gtk_range_destroy (GtkWidget *widget)
 
   gtk_range_remove_step_timer (range);
 
-  if (priv->long_press_gesture)
-    {
-      gtk_gesture_detach (priv->long_press_gesture);
-      g_clear_object (&priv->long_press_gesture);
-    }
+  g_clear_object (&priv->long_press_gesture);
 
   if (priv->adjustment)
     {
@@ -2368,10 +2364,7 @@ update_zoom_set (GtkRange *range,
                  gboolean  zoom_set)
 {
   if (zoom_set)
-    {
-      gtk_gesture_detach (range->priv->long_press_gesture);
-      g_clear_object (&range->priv->long_press_gesture);
-    }
+    g_clear_object (&range->priv->long_press_gesture);
 
   range->priv->zoom_set = zoom_set;
 }
@@ -2711,7 +2704,6 @@ gtk_range_button_press (GtkWidget      *widget,
                   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->long_press_gesture),
                                                      FALSE);
                   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->long_press_gesture), 1);
-                  gtk_gesture_attach (priv->long_press_gesture, GTK_PHASE_NONE);
 
                   g_signal_connect (priv->long_press_gesture, "pressed",
                                     G_CALLBACK (hold_action), range);
