@@ -47,7 +47,7 @@ typedef struct _GtkTreeModelIface   GtkTreeModelIface;
  * @model: the #GtkTreeModel being iterated
  * @path: the current #GtkTreePath
  * @iter: the current #GtkTreeIter
- * @data: The user data passed to gtk_tree_model_foreach()
+ * @data: (closure): The user data passed to gtk_tree_model_foreach()
  *
  * Type of the callback passed to gtk_tree_model_foreach() to
  * iterate over the rows in a tree model.

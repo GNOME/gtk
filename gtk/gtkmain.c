@@ -2197,7 +2197,7 @@ gtk_device_grab_remove (GtkWidget *widget,
 /**
  * gtk_key_snooper_install: (skip)
  * @snooper: a #GtkKeySnoopFunc
- * @func_data: data to pass to @snooper
+ * @func_data: (closure): data to pass to @snooper
  *
  * Installs a key snooper function, which will get called on all
  * key events before delivering them normally.

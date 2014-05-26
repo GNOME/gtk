@@ -54,7 +54,7 @@ G_BEGIN_DECLS
  * GtkKeySnoopFunc:
  * @grab_widget: the widget to which the event will be delivered
  * @event: the key event
- * @func_data: data supplied to gtk_key_snooper_install()
+ * @func_data: (closure): data supplied to gtk_key_snooper_install()
  *
  * Key snooper functions are called before normal event delivery.
  * They can be used to implement custom key event handling.

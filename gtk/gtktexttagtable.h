@@ -33,6 +33,11 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GtkTextTagTableForeach:
+ * @tag: the #GtkTextTag
+ * @data: (closure): data passed to gtk_text_tag_table_foreach()
+ */
 typedef void (* GtkTextTagTableForeach) (GtkTextTag *tag, gpointer data);
 
 #define GTK_TYPE_TEXT_TAG_TABLE            (gtk_text_tag_table_get_type ())

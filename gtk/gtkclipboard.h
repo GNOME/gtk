@@ -38,7 +38,8 @@ G_BEGIN_DECLS
  * @selection_data: a #GtkSelectionData containing the data was received.
  *   If retrieving the data failed, then then length field
  *   of @selection_data will be negative.
- * @data: the @user_data supplied to gtk_clipboard_request_contents().
+ * @data: (closure): the @user_data supplied to
+ *   gtk_clipboard_request_contents().
  *
  * A function to be called when the results of gtk_clipboard_request_contents()
  * are received, or when the request fails.
@@ -71,7 +72,8 @@ typedef void (* GtkClipboardRichTextReceivedFunc) (GtkClipboard     *clipboard,
  * GtkClipboardImageReceivedFunc:
  * @clipboard: the #GtkClipboard
  * @pixbuf: the received image
- * @data: the @user_data supplied to gtk_clipboard_request_image().
+ * @data: (closure): the @user_data supplied to
+ *   gtk_clipboard_request_image().
  *
  * A function to be called when the results of gtk_clipboard_request_image()
  * are received, or when the request fails.
@@ -92,7 +94,8 @@ typedef void (* GtkClipboardURIReceivedFunc)      (GtkClipboard     *clipboard,
  * @atoms: the supported targets, as array of #GdkAtom, or %NULL
  *   if retrieving the data failed.
  * @n_atoms: the length of the @atoms array.
- * @data: the @user_data supplied to gtk_clipboard_request_targets().
+ * @data: (closure): the @user_data supplied to
+ *   gtk_clipboard_request_targets().
  *
  * A function to be called when the results of gtk_clipboard_request_targets()
  * are received, or when the request fails.

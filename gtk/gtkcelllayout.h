@@ -44,7 +44,7 @@ typedef struct _GtkCellLayoutIface      GtkCellLayoutIface;
  * @cell: the cell renderer whose value is to be set
  * @tree_model: the model
  * @iter: a #GtkTreeIter indicating the row to set the value for
- * @data: user data passed to gtk_cell_layout_set_cell_data_func()
+ * @data: (closure): user data passed to gtk_cell_layout_set_cell_data_func()
  *
  * A function which should set the value of @cell_layout’s cell renderer(s)
  * as appropriate. 
