@@ -653,7 +653,7 @@ gtk_button_init (GtkButton *button)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
   g_signal_connect (priv->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), button);
   g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
-  gtk_gesture_attach (priv->gesture, GTK_PHASE_TARGET);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_TARGET);
 }
 
 static void
@@ -668,12 +668,7 @@ gtk_button_destroy (GtkWidget *widget)
       priv->label_text = NULL;
     }
 
-  if (priv->gesture)
-    {
-      gtk_gesture_detach (priv->gesture);
-      g_object_unref (priv->gesture);
-      priv->gesture = NULL;
-    }
+  g_clear_object (&priv->gesture);
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->destroy (widget);
 }

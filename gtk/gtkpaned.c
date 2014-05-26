@@ -801,7 +801,8 @@ gtk_paned_init (GtkPaned *paned)
                     G_CALLBACK (pan_gesture_pan_cb), paned);
   g_signal_connect (gesture, "drag-end",
                     G_CALLBACK (pan_gesture_drag_end_cb), paned);
-  gtk_gesture_attach (gesture, GTK_PHASE_CAPTURE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
+                                              GTK_PHASE_CAPTURE);
   priv->pan_gesture = gesture;
 }
 
@@ -971,7 +972,6 @@ gtk_paned_finalize (GObject *object)
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
 
-  gtk_gesture_detach (paned->priv->pan_gesture);
   g_clear_object (&paned->priv->pan_gesture);
 
   G_OBJECT_CLASS (gtk_paned_parent_class)->finalize (object);

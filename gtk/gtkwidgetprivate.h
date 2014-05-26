@@ -156,8 +156,7 @@ GActionGroup *    _gtk_widget_get_action_group             (GtkWidget    *widget
                                                             const gchar  *prefix);
 
 void              _gtk_widget_add_controller               (GtkWidget           *widget,
-                                                            GtkEventController  *controller,
-                                                            GtkPropagationPhase  phase);
+                                                            GtkEventController  *controller);
 void              _gtk_widget_remove_controller            (GtkWidget           *widget,
                                                             GtkEventController  *controller);
 GList *           _gtk_widget_list_controllers             (GtkWidget           *widget,

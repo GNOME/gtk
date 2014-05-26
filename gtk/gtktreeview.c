@@ -1841,7 +1841,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->multipress_gesture), FALSE);
   g_signal_connect (tree_view->priv->multipress_gesture, "pressed",
                     G_CALLBACK (_tree_view_multipress_pressed), tree_view);
-  gtk_gesture_attach (tree_view->priv->multipress_gesture, GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->multipress_gesture),
+                                              GTK_PHASE_BUBBLE);
 }
 
 
@@ -2206,11 +2207,7 @@ gtk_tree_view_destroy (GtkWidget *widget)
     _gtk_pixel_cache_free (tree_view->priv->pixel_cache);
   tree_view->priv->pixel_cache = NULL;
 
-  if (tree_view->priv->multipress_gesture)
-    {
-      gtk_gesture_detach (tree_view->priv->multipress_gesture);
-      g_clear_object (&tree_view->priv->multipress_gesture);
-    }
+  g_clear_object (&tree_view->priv->multipress_gesture);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }

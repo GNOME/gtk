@@ -7898,6 +7898,9 @@ gtk_popover_get_modal
 <FILE>gtkeventcontroller</FILE>
 <TITLE>GtkEventController</TITLE>
 GtkEventController
+GtkPropagationPhase
+gtk_event_controller_get_propagation_phase
+gtk_event_controller_set_propagation_phase
 gtk_event_controller_handle_event
 gtk_event_controller_get_widget
 gtk_event_controller_reset
@@ -7929,9 +7932,6 @@ gtk_gesture_set_sequence_state
 gtk_gesture_set_state
 gtk_gesture_get_sequences
 gtk_gesture_handles_sequence
-GtkPropagationPhase
-gtk_gesture_attach
-gtk_gesture_detach
 
 <SUBSECTION>
 gtk_gesture_get_last_updated_sequence

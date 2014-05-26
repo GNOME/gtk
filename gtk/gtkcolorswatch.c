@@ -90,13 +90,15 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   swatch->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (swatch));
   g_signal_connect (swatch->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), swatch);
-  gtk_gesture_attach (swatch->priv->long_press_gesture, GTK_PHASE_TARGET);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (swatch->priv->long_press_gesture),
+                                              GTK_PHASE_TARGET);
 
   swatch->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (swatch));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), FALSE);
   g_signal_connect (swatch->priv->multipress_gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);
-  gtk_gesture_attach (swatch->priv->multipress_gesture, GTK_PHASE_TARGET);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (swatch->priv->multipress_gesture),
+                                              GTK_PHASE_TARGET);
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
@@ -694,10 +696,7 @@ swatch_finalize (GObject *object)
 
   g_free (swatch->priv->icon);
 
-  gtk_gesture_detach (swatch->priv->long_press_gesture);
   g_object_unref (swatch->priv->long_press_gesture);
-
-  gtk_gesture_detach (swatch->priv->multipress_gesture);
   g_object_unref (swatch->priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->finalize (object);
