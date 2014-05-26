@@ -62,6 +62,22 @@ typedef void (* GtkClipboardTextReceivedFunc)     (GtkClipboard     *clipboard,
 					           const gchar      *text,
 					           gpointer          data);
 
+/**
+ * GtkClipboardRichTextReceivedFunc:
+ * @clipboard: the #GtkClipboard
+ * @format: The format of the rich text
+ * @text: (nullable) (type utf8): the rich text received, as
+ *   a UTF-8 encoded string, or %NULL if retrieving the data failed.
+ * @length: Length of the text.
+ * @data: (closure): the @user_data supplied to
+ *   gtk_clipboard_request_rich_text().
+ *
+ * A function to be called when the results of
+ * gtk_clipboard_request_rich_text() are received, or when the request
+ * fails.
+ *
+ * Since: 2.10
+ */
 typedef void (* GtkClipboardRichTextReceivedFunc) (GtkClipboard     *clipboard,
                                                    GdkAtom           format,
 					           const guint8     *text,
@@ -84,6 +100,19 @@ typedef void (* GtkClipboardImageReceivedFunc)    (GtkClipboard     *clipboard,
 						   GdkPixbuf        *pixbuf,
 						   gpointer          data);
 
+/**
+ * GtkClipboardURIReceivedFunc:
+ * @clipboard: the #GtkClipboard
+ * @uris: (array zero-terminated=1): the received URIs
+ * @data: (closure): the @user_data supplied to
+ *   gtk_clipboard_request_uris().
+ *
+ * A function to be called when the results of
+ * gtk_clipboard_request_uris() are received, or when the request
+ * fails.
+ *
+ * Since: 2.14
+ */
 typedef void (* GtkClipboardURIReceivedFunc)      (GtkClipboard     *clipboard,
 						   gchar           **uris,
 						   gpointer          data);

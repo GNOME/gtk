@@ -4077,7 +4077,7 @@ gtk_widget_get_default_style (void)
  *
  * Since: 2.20
  *
- * Deprecated: 3.0. This step is unnecessary with #GtkStyleContext.
+ * Deprecated: 3.0: This step is unnecessary with #GtkStyleContext.
  **/
 void
 gtk_widget_style_attach (GtkWidget *widget)
@@ -4514,7 +4514,7 @@ gtk_widget_modify_base (GtkWidget      *widget,
  *
  * Since: 2.12
  *
- * Deprecated: 3.0. Use gtk_widget_override_cursor() instead.
+ * Deprecated: 3.0: Use gtk_widget_override_cursor() instead.
  */
 void
 gtk_widget_modify_cursor (GtkWidget      *widget,

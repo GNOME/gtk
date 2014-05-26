@@ -162,6 +162,14 @@ gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *containe
   g_object_unref (child);
 }
 
+/**
+ * gtk_container_cell_accessible_get_children:
+ * @container: the container
+ *
+ * Get a list of children.
+ *
+ * Returns: (transfer none) (element-type Gtk.CellAccessible)
+ */
 GList *
 gtk_container_cell_accessible_get_children (GtkContainerCellAccessible *container)
 {

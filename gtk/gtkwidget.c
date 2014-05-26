@@ -1419,7 +1419,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * request, the margin will be added in addition to the size from
    * gtk_widget_set_size_request() for example.
    *
-   * Deprecated: 3.12. Use #GtkWidget:margin-start instead.
+   * Deprecated: 3.12: Use #GtkWidget:margin-start instead.
    *
    * Since: 3.0
    */
@@ -1442,7 +1442,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * request, the margin will be added in addition to the size from
    * gtk_widget_set_size_request() for example.
    *
-   * Deprecated: 3.12. Use #GtkWidget:margin-end instead.
+   * Deprecated: 3.12: Use #GtkWidget:margin-end instead.
    *
    * Since: 3.0
    */
@@ -1821,7 +1821,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * The ::state-changed signal is emitted when the widget state changes.
    * See gtk_widget_get_state().
    *
-   * Deprecated: 3.0. Use #GtkWidget::state-flags-changed instead.
+   * Deprecated: 3.0: Use #GtkWidget::state-flags-changed instead.
    */
   widget_signals[STATE_CHANGED] =
     g_signal_new (I_("state-changed"),
@@ -7820,7 +7820,7 @@ gtk_widget_reparent_fixup_child (GtkWidget *widget,
  * Moves a widget from one #GtkContainer to another, handling reference
  * count issues to avoid destroying the widget.
  *
- * Deprecated: 3.14. Use gtk_container_remove() and gtk_container_add().
+ * Deprecated: 3.14: Use gtk_container_remove() and gtk_container_add().
  **/
 void
 gtk_widget_reparent (GtkWidget *widget,
@@ -8784,7 +8784,7 @@ gtk_widget_get_state_flags (GtkWidget *widget)
  * of a widget (insensitive, prelighted, etc.) Usually you should set
  * the state using wrapper functions such as gtk_widget_set_sensitive().
  *
- * Deprecated: 3.0. Use gtk_widget_set_state_flags() instead.
+ * Deprecated: 3.0: Use gtk_widget_set_state_flags() instead.
  **/
 void
 gtk_widget_set_state (GtkWidget           *widget,
@@ -8839,7 +8839,7 @@ gtk_widget_set_state (GtkWidget           *widget,
  *
  * Since: 2.18
  *
- * Deprecated: 3.0. Use gtk_widget_get_state_flags() instead.
+ * Deprecated: 3.0: Use gtk_widget_get_state_flags() instead.
  */
 GtkStateType
 gtk_widget_get_state (GtkWidget *widget)

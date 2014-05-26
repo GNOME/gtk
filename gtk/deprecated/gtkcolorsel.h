@@ -74,7 +74,7 @@ struct _GtkColorSelection
 {
   GtkBox parent_instance;
 
-  /* < private_data > */
+  /*< private >*/
   GtkColorSelectionPrivate *private_data;
 };
 
