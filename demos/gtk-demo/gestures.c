@@ -93,8 +93,8 @@ drawing_area_draw (GtkWidget *widget,
 
       cairo_save (cr);
 
-      if (gtk_gesture_rotate_get_angle_delta (GTK_GESTURE_ROTATE (rotate), &angle))
-        cairo_matrix_rotate (&matrix, angle);
+      angle = gtk_gesture_rotate_get_angle_delta (GTK_GESTURE_ROTATE (rotate));
+      cairo_matrix_rotate (&matrix, angle);
 
       if (gtk_gesture_zoom_get_scale_delta (GTK_GESTURE_ZOOM (zoom), &scale))
         cairo_matrix_scale (&matrix, scale, scale);
