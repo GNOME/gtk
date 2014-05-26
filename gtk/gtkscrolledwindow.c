@@ -730,7 +730,7 @@ gtk_scrolled_window_check_attach_pan_gesture (GtkScrolledWindow *sw)
       ((priv->hscrollbar_visible && !priv->vscrollbar_visible) ||
        (!priv->hscrollbar_visible && priv->vscrollbar_visible)))
     {
-      GtkPanOrientation orientation;
+      GtkOrientation orientation;
 
       if (priv->hscrollbar_visible)
         orientation = GTK_PAN_ORIENTATION_HORIZONTAL;

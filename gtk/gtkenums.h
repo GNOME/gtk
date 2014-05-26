@@ -331,11 +331,12 @@ typedef enum
 
 /**
  * GtkOrientation:
- * @GTK_ORIENTATION_HORIZONTAL: The widget is in horizontal orientation.
- * @GTK_ORIENTATION_VERTICAL: The widget is in vertical orientation.
+ * @GTK_ORIENTATION_HORIZONTAL: The element is in horizontal orientation.
+ * @GTK_ORIENTATION_VERTICAL: The element is in vertical orientation.
  *
- * Represents the orientation of widgets which can be switched between horizontal
- * and vertical orientation on the fly, like #GtkToolbar.
+ * Represents the orientation of widgets and other objects which can be switched
+ * between horizontal and vertical orientation on the fly, like #GtkToolbar or
+ * #GtkGesturePan.
  */
 typedef enum
 {
@@ -1116,20 +1117,5 @@ typedef enum
   GTK_PAN_DIRECTION_UP,
   GTK_PAN_DIRECTION_DOWN
 } GtkPanDirection;
-
-/**
- * GtkPanOrientation:
- * @GTK_PAN_ORIENTATION_VERTICAL: vertical panning allowed
- * @GTK_PAN_ORIENTATION_HORIZONTAL: horizontal panning allowed
- *
- * Describes the panning axis of a #GtkGesturePan
- *
- * Since: 3.14
- */
-typedef enum
-{
-  GTK_PAN_ORIENTATION_VERTICAL,
-  GTK_PAN_ORIENTATION_HORIZONTAL
-} GtkPanOrientation;
 
 #endif /* __GTK_ENUMS_H__ */
