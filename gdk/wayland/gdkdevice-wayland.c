@@ -1129,7 +1129,7 @@ deliver_key_event (GdkWaylandDeviceData *device,
   event->key.window = device->keyboard_focus ? g_object_ref (device->keyboard_focus) : NULL;
   gdk_event_set_device (event, device->master_keyboard);
   gdk_event_set_source_device (event, device->keyboard);
-  event->button.time = time_;
+  event->key.time = time_;
   event->key.state = device->modifiers;
   event->key.group = 0;
   event->key.hardware_keycode = key;
