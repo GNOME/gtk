@@ -40,8 +40,7 @@
 typedef struct _GtkEventControllerPrivate GtkEventControllerPrivate;
 
 enum {
-  PROP_WIDGET = 1,
-  PROP_EVENT_MASK
+  PROP_WIDGET = 1
 };
 
 enum {
@@ -82,9 +81,6 @@ gtk_event_controller_set_property (GObject      *object,
     case PROP_WIDGET:
       priv->widget = g_value_get_object (value);
       break;
-    case PROP_EVENT_MASK:
-      priv->evmask = g_value_get_flags (value);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -104,9 +100,6 @@ gtk_event_controller_get_property (GObject    *object,
     {
     case PROP_WIDGET:
       g_value_set_object (value, priv->widget);
-      break;
-    case PROP_EVENT_MASK:
-      g_value_set_flags (value, priv->evmask);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -139,20 +132,6 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT_ONLY));
-  /**
-   * GtkEventController:event-mask:
-   *
-   * Set of events that the controller handles.
-   *
-   * Since: 3.14
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_EVENT_MASK,
-                                   g_param_spec_flags ("event-mask",
-                                                       P_("Event mask"),
-                                                       P_("Event mask the controller handles"),
-                                                       GDK_TYPE_EVENT_MASK, 0,
-                                                       GTK_PARAM_READWRITE));
   /**
    * GtkEventController::handle-event:
    * @controller: the object which receives the signal
@@ -223,17 +202,6 @@ gtk_event_controller_handle_event (GtkEventController *controller,
   return retval;
 }
 
-/**
- * gtk_event_controller_set_event_mask:
- * @controller: a #GtkEventController
- * @event_mask: mask for the events the controller handles
- *
- * Sets the event mask that the controller handles. This is only
- * meant for #GtkEventController implementations and should not be
- * called in applications.
- *
- * Since: 3.14
- **/
 void
 gtk_event_controller_set_event_mask (GtkEventController *controller,
                                      GdkEventMask        event_mask)
@@ -248,19 +216,8 @@ gtk_event_controller_set_event_mask (GtkEventController *controller,
     return;
 
   priv->evmask = event_mask;
-  g_object_notify (G_OBJECT (controller), "event-mask");
 }
 
-/**
- * gtk_event_controller_get_event_mask:
- * @controller: a #GtkEventController
- *
- * Returns the event mask necessary for the events handled by @controller.
- *
- * Returns: the controller event mask
- *
- * Since: 3.14
- **/
 GdkEventMask
 gtk_event_controller_get_event_mask (GtkEventController *controller)
 {

@@ -113,6 +113,7 @@
 #include "config.h"
 #include "gtkgesture.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerprivate.h"
 #include "gtkgestureprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
