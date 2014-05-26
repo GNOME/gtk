@@ -3244,6 +3244,8 @@ gtk_settings_set_property_value
 gtk_settings_set_string_property
 gtk_settings_set_long_property
 gtk_settings_set_double_property
+GtkIMPreeditStyle
+GtkIMStatusStyle
 <SUBSECTION Standard>
 GtkSettingsClass
 GTK_IS_SETTINGS
@@ -6528,8 +6530,6 @@ gtk_binding_set_add_path
 GtkBaselinePosition
 GtkDeleteType
 GtkDirectionType
-GtkIMPreeditStyle
-GtkIMStatusStyle
 GtkJustification
 GtkMovementStep
 GtkOrientation
