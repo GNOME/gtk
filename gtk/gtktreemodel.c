@@ -2544,7 +2544,7 @@ gtk_tree_row_reference_deleted (GObject     *proxy,
  * @proxy: a #GObject
  * @path: the parent path of the reordered signal
  * @iter: the iter pointing to the parent of the reordered
- * @new_order: the new order of rows
+ * @new_order: (array): the new order of rows
  *
  * Lets a set of row reference created by
  * gtk_tree_row_reference_new_proxy() know that the

@@ -1213,7 +1213,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 /**
  * gtk_im_context_simple_add_table: (skip)
  * @context_simple: A #GtkIMContextSimple
- * @data: the table 
+ * @data: (array): the table
  * @max_seq_len: Maximum length of a sequence in the table
  *               (cannot be greater than #GTK_MAX_COMPOSE_LEN)
  * @n_seqs: number of sequences in the table

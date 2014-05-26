@@ -47,16 +47,24 @@ typedef struct _GtkColorSelection       GtkColorSelection;
 typedef struct _GtkColorSelectionPrivate  GtkColorSelectionPrivate;
 typedef struct _GtkColorSelectionClass  GtkColorSelectionClass;
 
+/**
+ * GtkColorSelectionChangePaletteFunc:
+ * @colors: (array length=n_colors): Array of colors
+ * @n_colors: Number of colors in the array
+ *
+ * Deprecated: 3.4
+ */
 typedef void (* GtkColorSelectionChangePaletteFunc) (const GdkColor    *colors,
                                                      gint               n_colors);
 
 /**
  * GtkColorSelectionChangePaletteWithScreenFunc:
  * @screen:
- * @colors:
- * @n_colors:
+ * @colors: (array length=n_colors): Array of colors
+ * @n_colors: Number of colors in the array
  *
  * Since: 2.2
+ * Deprecated: 3.4
  */
 typedef void (* GtkColorSelectionChangePaletteWithScreenFunc) (GdkScreen         *screen,
 							       const GdkColor    *colors,

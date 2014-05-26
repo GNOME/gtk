@@ -1214,7 +1214,8 @@ gtk_selection_data_get_format (const GtkSelectionData *selection_data)
 
 /**
  * gtk_selection_data_get_data: (skip)
- * @selection_data: a pointer to a #GtkSelectionData-struct.
+ * @selection_data: (array) (element-type guint8): a pointer to a
+ *   #GtkSelectionData-struct.
  *
  * Retrieves the raw data of the selection.
  *

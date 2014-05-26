@@ -126,7 +126,7 @@ struct _GtkBindingArg
  * @next: implementation detail
  * @signal_name: the action signal to be emitted
  * @n_args: number of arguments specified for the signal
- * @args: the arguments specified for the signal
+ * @args: (array length=n_args): the arguments specified for the signal
  *
  * A GtkBindingSignal stores the necessary information to
  * activate a widget in response to a key press via a signal
