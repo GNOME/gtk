@@ -46,8 +46,7 @@ GDK_AVAILABLE_IN_3_14
 GtkGesture * gtk_gesture_zoom_new             (GtkWidget      *widget);
 
 GDK_AVAILABLE_IN_3_14
-gboolean     gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture,
-                                               gdouble        *scale);
+gdouble      gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture);
 
 G_END_DECLS
 
