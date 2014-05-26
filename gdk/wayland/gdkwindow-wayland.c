@@ -47,14 +47,6 @@
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
 
-/* Return whether time1 is considered later than time2 as far as xserver
- * time is concerned.  Accounts for wraparound.
- */
-#define XSERVER_TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
-
 typedef struct _GdkWaylandWindow GdkWaylandWindow;
 typedef struct _GdkWaylandWindowClass GdkWaylandWindowClass;
 
