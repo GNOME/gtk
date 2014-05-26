@@ -56,6 +56,6 @@ GdkDevice *_gdk_mir_device_new (GdkDeviceManager *device_manager, const gchar *n
 
 GdkCursor *_gdk_mir_cursor_new (GdkDisplay *display, GdkCursorType type);
 
-GdkWindowImpl *_gdk_mir_window_impl_new (int width, int height);
+GdkWindowImpl *_gdk_mir_window_impl_new (int width, int height, GdkEventMask event_mask);
 
 #endif /* __GDK_PRIVATE_MIR_H__ */

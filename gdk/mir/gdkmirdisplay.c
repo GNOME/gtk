@@ -191,6 +191,7 @@ static gboolean
 gdk_mir_display_has_pending (GdkDisplay *display)
 {
   g_printerr ("gdk_mir_display_has_pending\n");
+  /* We don't need to poll for events - so nothing pending */
   return FALSE;
 }
 
@@ -198,6 +199,7 @@ static void
 gdk_mir_display_queue_events (GdkDisplay *display)
 {
   g_printerr ("gdk_mir_display_queue_events\n");
+  /* We don't need to poll for events - so don't do anything*/
 }
 
 static void
@@ -217,6 +219,7 @@ static gboolean
 gdk_mir_display_supports_shapes (GdkDisplay *display)
 {
   g_printerr ("gdk_mir_display_supports_shapes\n");
+  /* Mir doesn't support shaped windows */
   return FALSE;
 }
 
@@ -392,7 +395,7 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
                                     gint           attributes_mask)
 {
   g_printerr ("gdk_mir_display_create_window_impl (%d, %d, %d, %d)\n", window->x, window->y, window->width, window->height);
-  window->impl = _gdk_mir_window_impl_new (window->width, window->height);
+  window->impl = _gdk_mir_window_impl_new (window->width, window->height, event_mask);
 }
 
 static GdkKeymap *

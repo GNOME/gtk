@@ -71,12 +71,13 @@ struct _GdkMirWindowImplClass
 G_DEFINE_TYPE (GdkMirWindowImpl, gdk_mir_window_impl, GDK_TYPE_WINDOW_IMPL)
 
 GdkWindowImpl *
-_gdk_mir_window_impl_new (int width, int height)
+_gdk_mir_window_impl_new (int width, int height, GdkEventMask event_mask)
 {
   GdkMirWindowImpl *impl = g_object_new (GDK_TYPE_MIR_WINDOW_IMPL, NULL);
 
   impl->width = width;
   impl->height = height;
+  impl->event_mask = event_mask;
 
   return GDK_WINDOW_IMPL (impl);
 }
@@ -397,7 +398,6 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   GdkEvent *event;
 
   event = gdk_event_new (type);
-  event->key.time = (guint32) (g_get_monotonic_time () / 1000);
   event->key.state = state;
   event->key.keyval = keyval;
   event->key.length = 0;
@@ -409,19 +409,16 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   send_event (window, _gdk_mir_device_manager_get_keyboard (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
 }
 
-static void
+void
 generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble y, guint button, guint state)
 {
   GdkEvent *event;
 
   event = gdk_event_new (type);
-  event->button.time = (guint32) (g_get_monotonic_time () / 1000);
   event->button.x = x;
   event->button.y = y;
   event->button.state = state;
   event->button.button = button;
-  event->button.x_root = x; // FIXME
-  event->button.y_root = y; // FIXME
 
   send_event (window, gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
 }
@@ -432,13 +429,10 @@ generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x,
   GdkEvent *event;
 
   event = gdk_event_new (GDK_SCROLL);
-  event->scroll.time = (guint32) (g_get_monotonic_time () / 1000);
   event->scroll.x = x;
   event->scroll.y = y;
   event->scroll.state = state;
   event->scroll.direction = GDK_SCROLL_SMOOTH;
-  event->scroll.x_root = x; // FIXME
-  event->scroll.y_root = y; // FIXME
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
 
@@ -451,14 +445,10 @@ generate_motion_event (GdkWindow *window, gdouble x, gdouble y, guint state)
   GdkEvent *event;
 
   event = gdk_event_new (GDK_MOTION_NOTIFY);
-  event->motion.time = (guint32) (g_get_monotonic_time () / 1000);
   event->motion.x = x;
   event->motion.y = y;
-  event->motion.axes = NULL;
   event->motion.state = state;
   event->motion.is_hint = FALSE;
-  event->motion.x_root = x; // FIXME
-  event->motion.y_root = y; // FIXME
 
   send_event (window, gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
 }
