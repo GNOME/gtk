@@ -2414,9 +2414,10 @@ add_size (gpointer  key,
  * that the icon is available in a scalable format. The array 
  * is zero-terminated.
  * 
- * Returns: (array zero-terminated=1): An newly allocated array
- * describing the sizes at which the icon is available. The array
- * should be freed with g_free() when it is no longer needed.
+ * Returns: (array zero-terminated=1) (transfer full): An newly
+ * allocated array describing the sizes at which the icon is
+ * available. The array should be freed with g_free() when it is no
+ * longer needed.
  *
  * Since: 2.6
  **/
@@ -3521,7 +3522,7 @@ icon_info_new_builtin (BuiltinIcon *icon)
  * 
  * Make a copy of a #GtkIconInfo.
  * 
- * Returns: the new GtkIconInfo
+ * Returns: (transfer full): the new GtkIconInfo
  *
  * Since: 2.4
  *

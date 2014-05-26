@@ -1860,7 +1860,7 @@ gtk_file_chooser_get_extra_widget (GtkFileChooser *chooser)
 /**
  * gtk_file_chooser_add_filter:
  * @chooser: a #GtkFileChooser
- * @filter: a #GtkFileFilter
+ * @filter: (transfer full): a #GtkFileFilter
  * 
  * Adds @filter to the list of filters that the user can select between.
  * When a filter is selected, only files that are passed by that

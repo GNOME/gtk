@@ -208,7 +208,7 @@ gtk_page_setup_set_orientation (GtkPageSetup       *setup,
  * 
  * Gets the paper size of the #GtkPageSetup.
  * 
- * Returns: the paper size
+ * Returns: (transfer none): the paper size
  *
  * Since: 2.10
  */

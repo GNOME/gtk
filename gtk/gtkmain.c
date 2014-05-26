@@ -808,8 +808,8 @@ gtk_set_debug_flags (guint flags)
  * with g_option_context_add_group(), if you are using
  * g_option_context_parse() to parse your commandline arguments.
  *
- * Returns: a #GOptionGroup for the commandline arguments recognized
- *     by GTK+
+ * Returns: (transfer full): a #GOptionGroup for the commandline
+ *     arguments recognized by GTK+
  *
  * Since: 2.6
  */

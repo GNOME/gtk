@@ -899,7 +899,7 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
  * text as well, so it is not a reliable indicator that a pixbuf or
  * widget is in the buffer.
  *
- * Returns: slice of text from the buffer
+ * Returns: (transfer full): slice of text from the buffer
  **/
 gchar*
 gtk_text_iter_get_slice       (const GtkTextIter *start,
@@ -925,7 +925,7 @@ gtk_text_iter_get_slice       (const GtkTextIter *start,
  * byte offsets in the buffer. If you want offsets to correspond, see
  * gtk_text_iter_get_slice ().
  *
- * Returns: array of characters from the buffer
+ * Returns: (transfer full): array of characters from the buffer
  **/
 gchar*
 gtk_text_iter_get_text       (const GtkTextIter *start,
@@ -949,7 +949,7 @@ gtk_text_iter_get_text       (const GtkTextIter *start,
  * Invisible text is usually invisible because a #GtkTextTag with the
  * “invisible” attribute turned on has been applied to it.
  *
- * Returns: slice of text from the buffer
+ * Returns: (transfer full): slice of text from the buffer
  **/
 gchar*
 gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
@@ -973,7 +973,8 @@ gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
  * Invisible text is usually invisible because a #GtkTextTag with the
  * “invisible” attribute turned on has been applied to it.
  *
- * Returns: string containing visible text in the range
+ * Returns: (transfer full): string containing visible text in the
+ * range
  **/
 gchar*
 gtk_text_iter_get_visible_text (const GtkTextIter  *start,
@@ -1465,7 +1466,7 @@ gtk_text_iter_can_insert (const GtkTextIter *iter,
  * language apply to @iter, the return value is identical to that of
  * gtk_get_default_language ().
  *
- * Returns: language in effect at @iter
+ * Returns: (transfer full): language in effect at @iter
  **/
 PangoLanguage *
 gtk_text_iter_get_language (const GtkTextIter *iter)
