@@ -793,7 +793,7 @@ gtk_paned_init (GtkPaned *paned)
   priv->handle_pos.y = -1;
 
   gesture = gtk_gesture_pan_new (GTK_WIDGET (paned),
-                                 GTK_PAN_ORIENTATION_HORIZONTAL);
+                                 GTK_ORIENTATION_HORIZONTAL);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   g_signal_connect (gesture, "drag-begin",
                     G_CALLBACK (pan_gesture_drag_begin_cb), paned);
@@ -824,13 +824,13 @@ gtk_paned_set_property (GObject        *object,
         {
           priv->cursor_type = GDK_SB_H_DOUBLE_ARROW;
           gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                           GTK_PAN_ORIENTATION_HORIZONTAL);
+                                           GTK_ORIENTATION_HORIZONTAL);
         }
       else
         {
           priv->cursor_type = GDK_SB_V_DOUBLE_ARROW;
           gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                           GTK_PAN_ORIENTATION_VERTICAL);
+                                           GTK_ORIENTATION_VERTICAL);
         }
 
       /* state_flags_changed updates the cursor */
