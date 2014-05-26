@@ -928,7 +928,7 @@ gtk_switch_init (GtkSwitch *self)
   self->priv->multipress_gesture = gesture;
 
   gesture = gtk_gesture_pan_new (GTK_WIDGET (self),
-                                 GTK_PAN_ORIENTATION_HORIZONTAL);
+                                 GTK_ORIENTATION_HORIZONTAL);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   g_signal_connect (gesture, "pan",

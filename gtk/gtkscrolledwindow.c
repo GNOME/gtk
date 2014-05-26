@@ -733,9 +733,9 @@ gtk_scrolled_window_check_attach_pan_gesture (GtkScrolledWindow *sw)
       GtkOrientation orientation;
 
       if (priv->hscrollbar_visible)
-        orientation = GTK_PAN_ORIENTATION_HORIZONTAL;
+        orientation = GTK_ORIENTATION_HORIZONTAL;
       else
-        orientation = GTK_PAN_ORIENTATION_VERTICAL;
+        orientation = GTK_ORIENTATION_VERTICAL;
 
       gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
                                        orientation);
@@ -783,7 +783,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                             G_CALLBACK (scrolled_window_drag_end_cb),
                             scrolled_window);
 
-  priv->pan_gesture = gtk_gesture_pan_new (widget, GTK_PAN_ORIENTATION_VERTICAL);
+  priv->pan_gesture = gtk_gesture_pan_new (widget, GTK_ORIENTATION_VERTICAL);
   gtk_gesture_group (priv->pan_gesture, priv->drag_gesture);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->pan_gesture), 1);
 
