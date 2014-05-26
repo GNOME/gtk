@@ -4321,8 +4321,7 @@ available_choices (ppd_file_t     *ppd,
       else
 	continue;
 
-      /* We only care of conflicts with installed_options and
-         PageSize */
+      /* We only care of conflicts with installed_options and PageSize */
       if (!group_has_option (installed_options, other_option) &&
 	  (strcmp (other_option->keyword, "PageSize") != 0))
 	continue;
@@ -4964,26 +4963,34 @@ cups_printer_get_options (GtkPrinter           *printer,
       paper_size = gtk_page_setup_get_paper_size (page_setup);
 
       option = ppdFindOption (ppd_file, "PageSize");
-      ppd_name = gtk_paper_size_get_ppd_name (paper_size);
+      if (option)
+	{
+	  ppd_name = gtk_paper_size_get_ppd_name (paper_size);
 
-      if (ppd_name)
-	strncpy (option->defchoice, ppd_name, PPD_MAX_NAME);
-      else
-        {
-          gchar *custom_name;
-	  char width[G_ASCII_DTOSTR_BUF_SIZE];
-	  char height[G_ASCII_DTOSTR_BUF_SIZE];
+	  if (ppd_name)
+	    strncpy (option->defchoice, ppd_name, PPD_MAX_NAME);
+	  else
+	    {
+	      gchar *custom_name;
+	      char width[G_ASCII_DTOSTR_BUF_SIZE];
+	      char height[G_ASCII_DTOSTR_BUF_SIZE];
 
-	  g_ascii_formatd (width, sizeof (width), "%.2f", gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS));
-	  g_ascii_formatd (height, sizeof (height), "%.2f", gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS));
-          /* Translators: this format is used to display a custom paper
-           * size. The two placeholders are replaced with the width and height
-           * in points. E.g: "Custom 230.4x142.9"
-           */
-	  custom_name = g_strdup_printf (_("Custom %sx%s"), width, height);
-          strncpy (option->defchoice, custom_name, PPD_MAX_NAME);
-          g_free (custom_name);
-        }
+	      g_ascii_formatd (width, sizeof (width), "%.2f",
+			       gtk_paper_size_get_width (paper_size,
+							 GTK_UNIT_POINTS));
+	      g_ascii_formatd (height, sizeof (height), "%.2f",
+			       gtk_paper_size_get_height (paper_size,
+							  GTK_UNIT_POINTS));
+	      /* Translators: this format is used to display a custom
+	       * paper size. The two placeholders are replaced with
+	       * the width and height in points. E.g: "Custom
+	       * 230.4x142.9"
+               */
+	      custom_name = g_strdup_printf (_("Custom %sx%s"), width, height);
+	      strncpy (option->defchoice, custom_name, PPD_MAX_NAME);
+	      g_free (custom_name);
+	    }
+	}
 
       for (i = 0; i < ppd_file->num_groups; i++)
         handle_group (set, ppd_file, &ppd_file->groups[i], &ppd_file->groups[i], settings);
