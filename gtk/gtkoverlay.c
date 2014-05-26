@@ -559,7 +559,8 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * GtkOverlay::get-child-position:
    * @overlay: the #GtkOverlay
    * @widget: the child widget to position
-   * @allocation: (out caller-allocates): return location for the allocation
+   * @allocation: (type Gdk.Rectangle) (out caller-allocates): return
+   *   location for the allocation
    *
    * The ::get-child-position signal is emitted to determine
    * the position and size of any overlay child widgets. A

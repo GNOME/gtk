@@ -746,7 +746,8 @@ gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
  * action area. The button widget is returned, but usually you don't
  * need it.
  *
- * Returns: (transfer none): the #GtkButton widget that was added
+ * Returns: (transfer none) (type Gtk.Button): the #GtkButton widget
+ * that was added
  *
  * Since: 2.18
  */

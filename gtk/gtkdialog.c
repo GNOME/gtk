@@ -1942,7 +1942,7 @@ gtk_dialog_get_header_bar (GtkDialog *dialog)
  *
  * Returns the content area of @dialog.
  *
- * Returns: (transfer none): the content area #GtkBox.
+ * Returns: (type Gtk.Box) (transfer none): the content area #GtkBox.
  *
  * Since: 2.14
  **/

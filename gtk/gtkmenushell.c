@@ -500,7 +500,7 @@ gtk_menu_shell_dispose (GObject *object)
 /**
  * gtk_menu_shell_append:
  * @menu_shell: a #GtkMenuShell
- * @child: The #GtkMenuItem to add
+ * @child: (type Gtk.MenuItem): The #GtkMenuItem to add
  *
  * Adds a new #GtkMenuItem to the end of the menu shell's
  * item list.

@@ -4084,7 +4084,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   /**
    * GtkPlacesSidebar::open-location:
    * @sidebar: the object which received the signal.
-   * @location: #GFile to which the caller should switch.
+   * @location: (type Gio.File): #GFile to which the caller should switch.
    * @open_flags: a single value from #GtkPlacesOpenFlags specifying how the @location should be opened.
    *
    * The places sidebar emits this signal when the user selects a location
@@ -4108,9 +4108,9 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   /**
    * GtkPlacesSidebar::populate-popup:
    * @sidebar: the object which received the signal.
-   * @menu: a #GtkMenu.
-   * @selected_item: #GFile with the item to which the menu should refer, or #NULL in the case of a @selected_volume.
-   * @selected_volume: #GVolume if the selected item is a volume, or #NULL if it is a file.
+   * @menu: (type Gtk.Menu): a #GtkMenu.
+   * @selected_item: (type Gio.File) (nullable): #GFile with the item to which the menu should refer, or #NULL in the case of a @selected_volume.
+   * @selected_volume: (type Gio.Volume) (nullable): #GVolume if the selected item is a volume, or #NULL if it is a file.
    *
    * The places sidebar emits this signal when the user invokes a contextual
    * menu on one of its items.  In the signal handler, the application may
@@ -4213,9 +4213,10 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   /**
    * GtkPlacesSidebar::drag-action-requested:
    * @sidebar: the object which received the signal.
-   * @context: #GdkDragContext with information about the drag operation
-   * @dest_file: #GFile with the tentative location that is being hovered for a drop
-   * @source_file_list: (element-type GFile) (transfer none): List of #GFile that are being dragged
+   * @context: (type Gdk.DragContext): #GdkDragContext with information about the drag operation
+   * @dest_file: (type Gio.File): #GFile with the tentative location that is being hovered for a drop
+   * @source_file_list: (type GLib.List) (element-type GFile) (transfer none):
+	 *   List of #GFile that are being dragged
    *
    * When the user starts a drag-and-drop operation and the sidebar needs
    * to ask the application for which drag action to perform, then the
@@ -4271,8 +4272,9 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   /**
    * GtkPlacesSidebar::drag-perform-drop:
    * @sidebar: the object which received the signal.
-   * @dest_file: Destination #GFile.
-   * @source_file_list: (element-type GFile) (transfer none): #GList of #GFile that got dropped.
+   * @dest_file: (type Gio.File): Destination #GFile.
+   * @source_file_list: (type GLib.List) (element-type GFile) (transfer none):
+   *   #GList of #GFile that got dropped.
    * @action: Drop action to perform.
    *
    * The places sidebar emits this signal when the user completes a

@@ -2954,7 +2954,7 @@ gtk_file_chooser_button_new (const gchar          *title,
 
 /**
  * gtk_file_chooser_button_new_with_dialog:
- * @dialog: the widget to use as dialog
+ * @dialog: (type Gtk.Dialog): the widget to use as dialog
  *
  * Creates a #GtkFileChooserButton widget which uses @dialog as its
  * file-picking window.

@@ -925,7 +925,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_ERROR_BELL);
 
   /**
-   * GtkSettings:color-hash:
+   * GtkSettings:color-hash: (element-type utf8 Gdk.Color):
    *
    * Holds a hash table representation of the #GtkSettings:gtk-color-scheme
    * setting, mapping color names to #GdkColors.
