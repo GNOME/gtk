@@ -74,7 +74,7 @@ phase_changed_cb (GtkComboBox *combo, GtkInspectorGestures *sl)
   phase = gtk_combo_box_get_active (combo);
   row = gtk_widget_get_ancestor (GTK_WIDGET (combo), GTK_TYPE_LIST_BOX_ROW);
   gesture = GTK_GESTURE (g_object_get_data (G_OBJECT (row), "gesture"));
-  gtk_gesture_attach (gesture, phase);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), phase);
 }
 
 static void

@@ -48,12 +48,6 @@ GDK_AVAILABLE_IN_3_14
 GtkWidget  * gtk_event_controller_get_widget     (GtkEventController *controller);
 
 GDK_AVAILABLE_IN_3_14
-void         gtk_event_controller_set_event_mask (GtkEventController *controller,
-                                                  GdkEventMask        event_mask);
-GDK_AVAILABLE_IN_3_14
-GdkEventMask gtk_event_controller_get_event_mask (GtkEventController *controller);
-
-GDK_AVAILABLE_IN_3_14
 gboolean     gtk_event_controller_handle_event   (GtkEventController *controller,
                                                   const GdkEvent     *event);
 GDK_AVAILABLE_IN_3_14
