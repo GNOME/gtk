@@ -13222,8 +13222,10 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 /**
  * gtk_tree_view_get_cursor:
  * @tree_view: A #GtkTreeView
- * @path: (out) (transfer full) (allow-none): A pointer to be filled with the current cursor path, or %NULL
- * @focus_column: (out) (transfer none) (allow-none): A pointer to be filled with the current focus column, or %NULL
+ * @path: (out) (transfer full) (optional) (nullable): A pointer to be
+ *   filled with the current cursor path, or %NULL
+ * @focus_column: (out) (transfer none) (optional) (nullable): A
+ *   pointer to be filled with the current focus column, or %NULL
  *
  * Fills in @path and @focus_column with the current path and focus column.  If
  * the cursor isn’t currently set, then *@path will be %NULL.  If no column
@@ -13381,10 +13383,14 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * @tree_view: A #GtkTreeView.
  * @x: The x position to be identified (relative to bin_window).
  * @y: The y position to be identified (relative to bin_window).
- * @path: (out) (allow-none): A pointer to a #GtkTreePath pointer to be filled in, or %NULL
- * @column: (out) (transfer none) (allow-none): A pointer to a #GtkTreeViewColumn pointer to be filled in, or %NULL
- * @cell_x: (out) (allow-none): A pointer where the X coordinate relative to the cell can be placed, or %NULL
- * @cell_y: (out) (allow-none): A pointer where the Y coordinate relative to the cell can be placed, or %NULL
+ * @path: (out) (optional) (nullable): A pointer to a #GtkTreePath
+ *   pointer to be filled in, or %NULL
+ * @column: (out) (transfer none) (optional) (nullable): A pointer to
+ *   a #GtkTreeViewColumn pointer to be filled in, or %NULL
+ * @cell_x: (out) (optional): A pointer where the X coordinate
+ *   relative to the cell can be placed, or %NULL
+ * @cell_y: (out) (optional): A pointer where the Y coordinate
+ *   relative to the cell can be placed, or %NULL
  *
  * Finds the path at the point (@x, @y), relative to bin_window coordinates
  * (please see gtk_tree_view_get_bin_window()).
@@ -14342,8 +14348,8 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
 /**
  * gtk_tree_view_get_drag_dest_row:
  * @tree_view: a #GtkTreeView
- * @path: (out) (allow-none): Return location for the path of the highlighted row, or %NULL.
- * @pos: (out) (allow-none): Return location for the drop position, or %NULL
+ * @path: (out) (optional) (nullable): Return location for the path of the highlighted row, or %NULL.
+ * @pos: (out) (optional): Return location for the drop position, or %NULL
  * 
  * Gets information about the row that is highlighted for feedback.
  **/
@@ -14376,8 +14382,10 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
  * @tree_view: a #GtkTreeView
  * @drag_x: the position to determine the destination row for
  * @drag_y: the position to determine the destination row for
- * @path: (out) (allow-none): Return location for the path of the highlighted row, or %NULL.
- * @pos: (out) (allow-none): Return location for the drop position, or %NULL
+ * @path: (out) (optional) (nullable): Return location for the path of
+ *   the highlighted row, or %NULL.
+ * @pos: (out) (optional): Return location for the drop position, or
+ *   %NULL
  * 
  * Determines the destination row for a given position.  @drag_x and
  * @drag_y are expected to be in widget coordinates.  This function is only
@@ -16264,10 +16272,10 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
  * @x: (inout): the x coordinate (relative to widget coordinates)
  * @y: (inout): the y coordinate (relative to widget coordinates)
  * @keyboard_tip: whether this is a keyboard tooltip or not
- * @model: (out) (allow-none) (transfer none): a pointer to receive a
- *         #GtkTreeModel or %NULL
- * @path: (out) (allow-none): a pointer to receive a #GtkTreePath or %NULL
- * @iter: (out) (allow-none): a pointer to receive a #GtkTreeIter or %NULL
+ * @model: (out) (optional) (nullable) (transfer none): a pointer to
+ *         receive a #GtkTreeModel or %NULL
+ * @path: (out) (optional): a pointer to receive a #GtkTreePath or %NULL
+ * @iter: (out) (optional): a pointer to receive a #GtkTreeIter or %NULL
  *
  * This function is supposed to be used in a #GtkWidget::query-tooltip
  * signal handler for #GtkTreeView.  The @x, @y and @keyboard_tip values

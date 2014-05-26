@@ -1118,7 +1118,7 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
  * @style: a #GtkStyle
  * @widget_type: the #GType of a descendant of #GtkWidget
  * @property_name: the name of the style property to get
- * @value: a #GValue where the value of the property being
+ * @value: (out): a #GValue where the value of the property being
  *     queried will be stored
  *
  * Queries the value of a style property corresponding to a
@@ -4663,11 +4663,11 @@ gtk_widget_path (GtkWidget *widget,
 /**
  * gtk_widget_class_path:
  * @widget: a #GtkWidget
- * @path_length: (out) (allow-none): location to store the length of the
+ * @path_length: (out) (optional): location to store the length of the
  *     class path, or %NULL
- * @path: (out) (allow-none): location to store the class path as an
+ * @path: (out) (optional): location to store the class path as an
  *     allocated string, or %NULL
- * @path_reversed: (out) (allow-none): location to store the reverse
+ * @path_reversed: (out) (optional): location to store the reverse
  *     class path as an allocated string, or %NULL
  *
  * Same as gtk_widget_path(), but always uses the name of a widget’s type,
