@@ -225,7 +225,7 @@ gdk_mir_screen_get_root_window (GdkScreen *screen)
   get_screen_size (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
 
   s->root_window = _gdk_display_create_window (s->display);
-  s->root_window->impl = _gdk_mir_window_impl_new (width, height, 0);
+  s->root_window->impl = _gdk_mir_window_impl_new ();
   s->root_window->impl_window = s->root_window;
   s->root_window->visual = s->visual;
   s->root_window->window_type = GDK_WINDOW_ROOT;
@@ -333,7 +333,7 @@ gdk_mir_screen_get_system_visual (GdkScreen *screen)
 static GdkVisual *
 gdk_mir_screen_get_rgba_visual (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_rgba_visual\n");
+  //g_printerr ("gdk_mir_screen_get_rgba_visual\n");
   return GDK_MIR_SCREEN (screen)->visual;
 }
 
