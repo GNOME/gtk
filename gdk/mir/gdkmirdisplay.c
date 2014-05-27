@@ -205,7 +205,7 @@ gdk_mir_display_queue_events (GdkDisplay *display)
 static void
 gdk_mir_display_make_default (GdkDisplay *display)
 {
-  g_printerr ("gdk_mir_display_make_default\n");
+  //g_printerr ("gdk_mir_display_make_default\n");
 }
 
 static GdkWindow *
@@ -451,10 +451,10 @@ gdk_mir_display_send_selection_notify (GdkDisplay *display,
 
 static gint
 gdk_mir_display_get_selection_property (GdkDisplay  *display,
-					     GdkWindow   *requestor,
-					     guchar     **data,
-					     GdkAtom     *ret_type,
-					     gint        *ret_format)
+                                        GdkWindow   *requestor,
+                                        guchar     **data,
+                                        GdkAtom     *ret_type,
+                                        gint        *ret_format)
 {
   g_printerr ("gdk_mir_display_get_selection_property\n");
   return 0;

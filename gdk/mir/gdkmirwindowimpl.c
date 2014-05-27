@@ -409,6 +409,12 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   send_event (window, _gdk_mir_device_manager_get_keyboard (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
 }
 
+static GdkDevice *
+get_pointer (GdkWindow *window)
+{
+  return gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window)));
+}
+
 void
 generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble y, guint button, guint state)
 {
@@ -420,7 +426,7 @@ generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble 
   event->button.state = state;
   event->button.button = button;
 
-  send_event (window, gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
+  send_event (window, get_pointer (window), event);
 }
 
 static void
@@ -436,7 +442,7 @@ generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x,
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
 
-  send_event (window, gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
+  send_event (window, get_pointer (window), event);
 }
 
 static void
@@ -450,7 +456,7 @@ generate_motion_event (GdkWindow *window, gdouble x, gdouble y, guint state)
   event->motion.state = state;
   event->motion.is_hint = FALSE;
 
-  send_event (window, gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
+  send_event (window, get_pointer (window), event);
 }
 
 static guint
@@ -523,6 +529,9 @@ event_cb (MirSurface *surface, const MirEvent *event, void *context)
       x = event->motion.pointer_coordinates[0].x;
       y = event->motion.pointer_coordinates[0].y;
       modifier_state = get_modifier_state (event->motion.modifiers, event->motion.button_state);
+
+      /* Update which window has focus */
+      _gdk_mir_pointer_set_location (get_pointer (window), x, y, window, modifier_state);
 
       switch (event->motion.action)
         {
@@ -788,7 +797,7 @@ static void
 gdk_mir_window_impl_set_background (GdkWindow       *window,
                                     cairo_pattern_t *pattern)
 {
-  g_printerr ("gdk_mir_window_impl_set_background\n");
+  //g_printerr ("gdk_mir_window_impl_set_background\n");
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   if (impl->background)
@@ -826,7 +835,8 @@ gdk_mir_window_impl_set_device_cursor (GdkWindow *window,
                                        GdkDevice *device,
                                        GdkCursor *cursor)
 {
-  g_printerr ("gdk_mir_window_impl_set_device_cursor\n");
+  //g_printerr ("gdk_mir_window_impl_set_device_cursor\n");
+  /* We don't support cursors yet... */
 }
 
 static void
@@ -836,7 +846,17 @@ gdk_mir_window_impl_get_geometry (GdkWindow *window,
                                   gint      *width,
                                   gint      *height)
 {
-  g_printerr ("gdk_mir_window_impl_get_geometry\n");
+  //g_printerr ("gdk_mir_window_impl_get_geometry\n");
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  if (x)
+    *x = 0; // FIXME
+  if (y)
+    *y = 0; // FIXME
+  if (width)
+    *width = impl->width;
+  if (height)
+    *height = impl->height;
 }
 
 static gint
@@ -846,8 +866,14 @@ gdk_mir_window_impl_get_root_coords (GdkWindow *window,
                                      gint      *root_x,
                                      gint      *root_y)
 {
-  g_printerr ("gdk_mir_window_impl_get_root_coords\n");
-  return 0;
+  //g_printerr ("gdk_mir_window_impl_get_root_coords\n");
+
+  if (root_x)
+    *root_x = x; // FIXME
+  if (root_y)
+    *root_y = y; // FIXME
+
+  return 1;
 }
 
 static gboolean
@@ -974,7 +1000,8 @@ void
 gdk_mir_window_impl_set_modal_hint (GdkWindow *window,
                                     gboolean   modal)
 {
-  g_printerr ("gdk_mir_window_impl_set_modal_hint\n");
+  //g_printerr ("gdk_mir_window_impl_set_modal_hint\n");
+  /* Mir doesn't support modal windows */
 }
 
 static void
@@ -1003,7 +1030,8 @@ gdk_mir_window_impl_set_geometry_hints (GdkWindow         *window,
                                         const GdkGeometry *geometry,
                                         GdkWindowHints     geom_mask)
 {
-  g_printerr ("gdk_mir_window_impl_set_geometry_hints\n");
+  //g_printerr ("gdk_mir_window_impl_set_geometry_hints\n");
+  //FIXME: ?
 }
 
 static void
@@ -1060,21 +1088,24 @@ static void
 gdk_mir_window_impl_set_accept_focus (GdkWindow *window,
                                       gboolean   accept_focus)
 {
-  g_printerr ("gdk_mir_window_impl_set_accept_focus\n");
+  //g_printerr ("gdk_mir_window_impl_set_accept_focus\n");
+  /* Mir clients cannot control focus */
 }
 
 static void
 gdk_mir_window_impl_set_focus_on_map (GdkWindow *window,
                                       gboolean focus_on_map)
 {
-  g_printerr ("gdk_mir_window_impl_set_focus_on_map\n");
+  //g_printerr ("gdk_mir_window_impl_set_focus_on_map\n");
+  /* Mir clients cannot control focus */
 }
 
 static void
 gdk_mir_window_impl_set_icon_list (GdkWindow *window,
                                    GList     *pixbufs)
 {
-  g_printerr ("gdk_mir_window_impl_set_icon_list\n");
+  //g_printerr ("gdk_mir_window_impl_set_icon_list\n");
+  // ??
 }
 
 static void
@@ -1231,7 +1262,8 @@ static void
 gdk_mir_window_impl_set_opacity (GdkWindow *window,
                                  gdouble    opacity)
 {
-  g_printerr ("gdk_mir_window_impl_set_opacity\n");
+  //g_printerr ("gdk_mir_window_impl_set_opacity\n");
+  // FIXME
 }
 
 static void
