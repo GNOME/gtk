@@ -110,4 +110,14 @@ EXTRA_DIST += 				\
 	$(resource_files) 		\
 	$(templates)
 
+MAINTAINERCLEANFILES =			\
+	resources.c			\
+	resources.h
+	$(template_headers)
+
+distclean-local:
+	if test $(srcdir) != .; then \
+	  rm -f $(MAINTAINERCLEANFILES); \
+	fi
+
 -include $(top_srcdir)/git.mk
