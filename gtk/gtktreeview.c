@@ -2442,6 +2442,9 @@ gtk_tree_view_realize (GtkWidget *widget)
   gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
 
   install_presize_handler (tree_view); 
+
+  gtk_gesture_set_window (tree_view->priv->multipress_gesture,
+                          tree_view->priv->bin_window);
 }
 
 static void
@@ -2517,6 +2520,8 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       gdk_window_destroy (priv->drag_highlight_window);
       priv->drag_highlight_window = NULL;
     }
+
+  gtk_gesture_set_window (tree_view->priv->multipress_gesture, NULL);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
