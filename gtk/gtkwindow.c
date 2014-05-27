@@ -6947,10 +6947,10 @@ update_border_windows (GtkWindow *window)
                                        region, 0, 0);
       cairo_region_destroy (region);
 
-      gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_NORTH_WEST]);
-      gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_NORTH_EAST]);
-      gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_SOUTH_WEST]);
-      gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_SOUTH_EAST]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_NORTH_WEST]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_NORTH_EAST]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_SOUTH_WEST]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_SOUTH_EAST]);
     }
   else
     {
@@ -6982,8 +6982,8 @@ update_border_windows (GtkWindow *window)
                               x, window_border.top + height,
                               w, border.bottom);
 
-      gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_NORTH]);
-      gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_SOUTH]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_NORTH]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_SOUTH]);
     }
   else
     {
@@ -7014,8 +7014,8 @@ update_border_windows (GtkWindow *window)
                               window_border.left + width, y,
                               border.right, h);
 
-      gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_WEST]);
-      gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_EAST]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_WEST]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_EAST]);
     }
   else
     {
