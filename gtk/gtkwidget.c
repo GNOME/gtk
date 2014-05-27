@@ -11652,17 +11652,15 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
   gtk_widget_update_pango_context (widget);
 
   direction = gtk_widget_get_direction (widget);
-  state = widget->priv->state_flags;
-  state &= GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL;
 
   switch (direction)
     {
     case GTK_TEXT_DIR_LTR:
-      state |= GTK_STATE_FLAG_DIR_LTR;
+      state = GTK_STATE_FLAG_DIR_LTR;
       break;
 
     case GTK_TEXT_DIR_RTL:
-      state |= GTK_STATE_FLAG_DIR_RTL;
+      state = GTK_STATE_FLAG_DIR_RTL;
       break;
 
     case GTK_TEXT_DIR_NONE:
@@ -11671,7 +11669,9 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
       break;
     }
 
-  gtk_widget_set_state_flags (widget, state, TRUE);
+  gtk_widget_update_state_flags (widget,
+                                 state,
+                                 state ^ (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL));
 
   g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
 }
