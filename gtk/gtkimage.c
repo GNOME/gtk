@@ -33,6 +33,7 @@
 #include "gtkimageprivate.h"
 #include "deprecated/gtkiconfactory.h"
 #include "deprecated/gtkstock.h"
+#include "deprecated/gtkmisc.h"
 #include "gtkicontheme.h"
 #include "gtksizerequest.h"
 #include "gtkintl.h"
@@ -1520,11 +1521,21 @@ gtk_image_get_padding_and_border (GtkImage  *image,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder tmp;
+  gint xpad, ypad;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (image));
   state = gtk_widget_get_state_flags (GTK_WIDGET (image));
 
   gtk_style_context_get_padding (context, state, border);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
+  border->top += ypad;
+  border->left += xpad;
+  border->bottom += ypad;
+  border->right += xpad;
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   gtk_style_context_get_border (context, state, &tmp);
   border->top += tmp.top;
   border->right += tmp.right;
@@ -1640,7 +1651,6 @@ gtk_image_draw (GtkWidget *widget,
   GtkStyleContext *context;
   gint x, y, width, height, baseline;
   gfloat xalign, yalign;
-  GtkStateFlags state;
   GtkBorder border;
    
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
@@ -1649,8 +1659,6 @@ gtk_image_draw (GtkWidget *widget,
   priv = image->priv;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (GTK_WIDGET (image));
-  gtk_style_context_get_border (context, state, &border);
 
   gtk_render_background (context, cr,
                          0, 0,
@@ -1661,7 +1669,7 @@ gtk_image_draw (GtkWidget *widget,
 
   xalign = halign_to_float (widget);
   yalign = valign_to_float (widget);
-
+  gtk_image_get_padding_and_border (image, &border);
   gtk_image_get_preferred_size (image, &width, &height);
 
   baseline = gtk_widget_get_allocated_baseline (widget);

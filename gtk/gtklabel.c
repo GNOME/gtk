@@ -50,6 +50,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
+#include "deprecated/gtkmisc.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
 
@@ -3226,11 +3227,21 @@ gtk_label_get_padding_and_border (GtkLabel  *label,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder tmp;
+  gint xpad, ypad;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (label));
   state = gtk_widget_get_state_flags (GTK_WIDGET (label));
 
   gtk_style_context_get_padding (context, state, border);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+  border->top += ypad;
+  border->left += xpad;
+  border->bottom += ypad;
+  border->right += xpad;
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   gtk_style_context_get_border (context, state, &tmp);
   border->top += tmp.top;
   border->right += tmp.right;
