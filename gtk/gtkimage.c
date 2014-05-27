@@ -1522,12 +1522,12 @@ gtk_image_get_preferred_size (GtkImage *image,
   gint width, height;
   GtkBorder border;
   GtkStyleContext *context;
-  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (image));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (image));
-  gtk_style_context_get_border (context, state, &border);
   _gtk_icon_helper_get_size (priv->icon_helper, context, &width, &height);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  _gtk_misc_get_padding_and_border (GTK_MISC (image), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   width += border.left + border.right;
   height += border.top + border.bottom;
@@ -1560,60 +1560,6 @@ gtk_image_get_baseline_align (GtkImage *image)
   return image->priv->baseline_align;
 }
 
-static gfloat
-halign_to_float (GtkWidget *widget)
-{
-  gfloat ret = 0.5;
-
-  switch (gtk_widget_get_halign (widget))
-    {
-    case GTK_ALIGN_FILL:
-    case GTK_ALIGN_CENTER:
-      ret = 0.5;
-      break;
-    case GTK_ALIGN_START:
-      ret = 0.0;
-      break;
-    case GTK_ALIGN_END:
-      ret = 1.0;
-      break;
-    case GTK_ALIGN_BASELINE:
-      ret = 0.0;
-      g_assert_not_reached ();
-      break;
-    }
-
-  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
-    ret = 1.0 - ret;
-
-  return ret;
-}
-
-static gfloat
-valign_to_float (GtkWidget *widget)
-{
-  gfloat ret = 0.5;
-
-  switch (gtk_widget_get_valign (widget))
-    {
-    case GTK_ALIGN_FILL:
-    case GTK_ALIGN_CENTER:
-      ret = 0.5;
-      break;
-    case GTK_ALIGN_START:
-      ret = 0.0;
-      break;
-    case GTK_ALIGN_END:
-      ret = 1.0;
-      break;
-    case GTK_ALIGN_BASELINE:
-      ret = 0.0;
-      break;
-    }
-
-  return ret;
-}
-
 static gint
 gtk_image_draw (GtkWidget *widget,
                 cairo_t   *cr)
@@ -1623,17 +1569,14 @@ gtk_image_draw (GtkWidget *widget,
   GtkStyleContext *context;
   gint x, y, width, height, baseline;
   gfloat xalign, yalign;
-  GtkStateFlags state;
   GtkBorder border;
-   
+
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
 
   image = GTK_IMAGE (widget);
   priv = image->priv;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (GTK_WIDGET (image));
-  gtk_style_context_get_border (context, state, &border);
 
   gtk_render_background (context, cr,
                          0, 0,
@@ -1642,10 +1585,14 @@ gtk_image_draw (GtkWidget *widget,
                     0, 0,
                     gtk_widget_get_allocated_width (widget), gtk_widget_get_allocated_height (widget));
 
-  xalign = halign_to_float (widget);
-  yalign = valign_to_float (widget);
-
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_alignment (GTK_MISC (image), &xalign, &yalign);
+  _gtk_misc_get_padding_and_border (GTK_MISC (image), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_image_get_preferred_size (image, &width, &height);
+
+  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+    xalign = 1.0 - xalign;
 
   baseline = gtk_widget_get_allocated_baseline (widget);
 
