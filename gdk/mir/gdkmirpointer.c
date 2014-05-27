@@ -172,7 +172,7 @@ gdk_mir_pointer_grab (GdkDevice    *device,
                       GdkCursor    *cursor,
                       guint32       time_)
 {
-  g_printerr ("gdk_mir_pointer_grab\n");
+  //g_printerr ("gdk_mir_pointer_grab\n");
   /* Mir doesn't do grabs, so sure, you have the grab */
   return GDK_GRAB_SUCCESS;
 }
@@ -181,7 +181,7 @@ static void
 gdk_mir_pointer_ungrab (GdkDevice *device,
                         guint32    time_)
 {
-  g_printerr ("gdk_mir_pointer_ungrab\n");
+  //g_printerr ("gdk_mir_pointer_ungrab\n");
   /* Mir doesn't do grabs */
 }
 

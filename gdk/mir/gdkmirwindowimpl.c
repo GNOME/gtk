@@ -42,12 +42,7 @@ struct _GdkMirWindowImpl
 {
   GdkWindowImpl parent_instance;
 
-  /* Events to report */
-  GdkEventMask event_mask;
-
   /* Desired surface attributes */
-  int width;
-  int height;
   MirSurfaceType surface_type; // FIXME
   MirSurfaceState surface_state;
 
@@ -62,6 +57,9 @@ struct _GdkMirWindowImpl
 
   /* Cairo context for current frame */
   cairo_surface_t *cairo_surface;
+
+  /* TRUE if the window can be seen */
+  gboolean visible;
 };
 
 struct _GdkMirWindowImplClass
@@ -72,15 +70,9 @@ struct _GdkMirWindowImplClass
 G_DEFINE_TYPE (GdkMirWindowImpl, gdk_mir_window_impl, GDK_TYPE_WINDOW_IMPL)
 
 GdkWindowImpl *
-_gdk_mir_window_impl_new (int width, int height, GdkEventMask event_mask)
+_gdk_mir_window_impl_new (void)
 {
-  GdkMirWindowImpl *impl = g_object_new (GDK_TYPE_MIR_WINDOW_IMPL, NULL);
-
-  impl->width = width;
-  impl->height = height;
-  impl->event_mask = event_mask;
-
-  return GDK_WINDOW_IMPL (impl);
+  return g_object_new (GDK_TYPE_MIR_WINDOW_IMPL, NULL);
 }
 
 static void
@@ -556,8 +548,8 @@ handle_motion_event (GdkWindow *window, MirMotionEvent *event)
     case mir_motion_action_up:
       event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
       changed_button_state = impl->button_state ^ event->button_state;
-      if ((event_type == GDK_BUTTON_PRESS && (impl->event_mask & GDK_BUTTON_PRESS_MASK) != 0) ||
-          (event_type == GDK_BUTTON_RELEASE && (impl->event_mask & GDK_BUTTON_RELEASE_MASK) != 0))
+      if ((event_type == GDK_BUTTON_PRESS && (window->event_mask & GDK_BUTTON_PRESS_MASK) != 0) ||
+          (event_type == GDK_BUTTON_RELEASE && (window->event_mask & GDK_BUTTON_RELEASE_MASK) != 0))
         {
           if ((changed_button_state & mir_motion_button_primary) != 0)
             generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state);
@@ -569,15 +561,15 @@ handle_motion_event (GdkWindow *window, MirMotionEvent *event)
         impl->button_state = event->button_state;
       break;
     case mir_motion_action_scroll:
-      if ((impl->event_mask & GDK_SMOOTH_SCROLL_MASK) != 0)
+      if ((window->event_mask & GDK_SMOOTH_SCROLL_MASK) != 0)
         generate_scroll_event (window, x, y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state);
       break;
     case mir_motion_action_move: // move with button
     case mir_motion_action_hover_move: // move without button
-      if ((impl->event_mask & GDK_POINTER_MOTION_MASK) != 0 ||
-          ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON1_MASK)) != 0 ||
-          ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON2_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON2_MASK)) != 0 ||
-          ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON3_MASK)) != 0)
+      if ((window->event_mask & GDK_POINTER_MOTION_MASK) != 0 ||
+          ((window->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON1_MASK)) != 0 ||
+          ((window->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON2_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON2_MASK)) != 0 ||
+          ((window->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON3_MASK)) != 0)
         generate_motion_event (window, x, y, modifier_state);
       break;
     }
@@ -657,6 +649,8 @@ event_cb (MirSurface *surface, const MirEvent *event, void *context)
   return;
 }
 
+static int surface_count = 0;
+
 static void
 ensure_surface (GdkWindow *window)
 {
@@ -680,14 +674,37 @@ ensure_surface (GdkWindow *window)
       }
 
   parameters.name = "GTK+ Mir";
-  parameters.width = impl->width;
-  parameters.height = impl->height;
+  parameters.width = window->width;
+  parameters.height = window->height;
   parameters.pixel_format = pixel_format;
   parameters.buffer_usage = mir_buffer_usage_software;
   parameters.output_id = mir_display_output_id_invalid;
   impl->surface = mir_connection_create_surface_sync (get_connection (window), &parameters);
+  surface_count++;
+  g_printerr ("+%p %p %d\n", window, impl->surface, surface_count);
   mir_surface_set_event_handler (impl->surface, &event_delegate); // FIXME: Ignore some events until shown
   set_surface_state (impl, impl->surface_state);
+}
+
+static void
+ensure_no_surface (GdkWindow *window)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  if (impl->cairo_surface)
+    {
+      cairo_surface_finish (impl->cairo_surface);
+      cairo_surface_destroy (impl->cairo_surface);
+      impl->cairo_surface = NULL;
+    }
+
+  if (impl->surface)
+    {
+      surface_count--;
+      g_printerr ("-%p %p %d\n", window, impl->surface, surface_count);
+      mir_surface_release_sync (impl->surface);
+      impl->surface = NULL;
+    }
 }
 
 static void
@@ -709,7 +726,7 @@ send_buffer (GdkWindow *window)
 static cairo_surface_t *
 gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_ref_cairo_surface\n");
+  //g_printerr ("gdk_mir_window_impl_ref_cairo_surface\n");
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   MirGraphicsRegion region;
   cairo_format_t pixel_format = CAIRO_FORMAT_INVALID;
@@ -767,7 +784,7 @@ gdk_mir_window_impl_create_similar_image_surface (GdkWindow      *window,
                                                   int             width,
                                                   int             height)
 {
-  g_printerr ("gdk_mir_window_impl_create_similar_image_surface\n");
+  //g_printerr ("gdk_mir_window_impl_create_similar_image_surface\n");
   return cairo_image_surface_create (format, width, height);
 }
 
@@ -790,9 +807,12 @@ static void
 gdk_mir_window_impl_show (GdkWindow *window,
                           gboolean   already_mapped)
 {
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   cairo_surface_t *s;
 
-  g_printerr ("gdk_mir_window_impl_show\n");
+  //g_printerr ("gdk_mir_window_impl_show\n");
+
+  impl->visible = TRUE;
 
   /* Make sure there's a surface to see */
   ensure_surface (window);
@@ -806,20 +826,21 @@ gdk_mir_window_impl_show (GdkWindow *window,
 static void
 gdk_mir_window_impl_hide (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_hide\n");
+  //g_printerr ("gdk_mir_window_impl_hide\n");
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
-  if (impl->surface)
-    {
-      mir_surface_release_sync (impl->surface);
-      impl->surface = NULL;
-    }
+  impl->visible = FALSE;
+  ensure_no_surface (window);
 }
 
 static void
 gdk_mir_window_impl_withdraw (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_withdraw\n");
+  //g_printerr ("gdk_mir_window_impl_withdraw\n");
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  impl->visible = FALSE;
+  ensure_no_surface (window);
 }
 
 static void
@@ -861,7 +882,11 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
                                  gint       width,
                                  gint       height)
 {
-  g_printerr ("gdk_mir_window_impl_move_resize\n");
+  g_printerr ("gdk_mir_window_impl_move_resize (%d, %d, %d, %d)\n", x, y, width, height);
+
+  /* If resize requested then destroy surface */
+  if (width >= 0)
+      ensure_no_surface (window);
 }
 
 static void
@@ -880,7 +905,7 @@ static GdkEventMask
 gdk_mir_window_impl_get_events (GdkWindow *window)
 {
   //g_printerr ("gdk_mir_window_impl_get_events\n");
-  return GDK_MIR_WINDOW_IMPL (window)->event_mask;
+  return window->event_mask;
 }
 
 static void
@@ -888,7 +913,7 @@ gdk_mir_window_impl_set_events (GdkWindow    *window,
                                 GdkEventMask  event_mask)
 {
   //g_printerr ("gdk_mir_window_impl_set_events\n");
-  GDK_MIR_WINDOW_IMPL (window->impl)->event_mask = event_mask;
+  /* We just use the event mask from the GdkWindow class */
 }
 
 static gboolean
@@ -918,16 +943,15 @@ gdk_mir_window_impl_get_geometry (GdkWindow *window,
                                   gint      *height)
 {
   //g_printerr ("gdk_mir_window_impl_get_geometry\n");
-  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   if (x)
     *x = 0; // FIXME
   if (y)
     *y = 0; // FIXME
   if (width)
-    *width = impl->width;
+    *width = window->width;
   if (height)
-    *height = impl->height;
+    *height = window->height;
 }
 
 static gint
@@ -966,7 +990,7 @@ static gboolean
 gdk_mir_window_impl_begin_paint_region (GdkWindow            *window,
                                         const cairo_region_t *region)
 {
-  g_printerr ("gdk_mir_window_impl_begin_paint_region\n");
+  //g_printerr ("gdk_mir_window_impl_begin_paint_region\n");
   /* Indicate we are ready to be drawn onto directly? */
   return FALSE;
 }
@@ -974,8 +998,11 @@ gdk_mir_window_impl_begin_paint_region (GdkWindow            *window,
 static void
 gdk_mir_window_impl_end_paint (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_end_paint\n");
-  send_buffer (window);
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  //g_printerr ("gdk_mir_window_impl_end_paint\n");
+  if (impl->visible)
+    send_buffer (window);
 }
 
 static cairo_region_t *
@@ -1022,7 +1049,8 @@ static gboolean
 gdk_mir_window_impl_queue_antiexpose (GdkWindow      *window,
                                       cairo_region_t *area)
 {
-  g_printerr ("gdk_mir_window_impl_queue_antiexpose\n");
+  //g_printerr ("gdk_mir_window_impl_queue_antiexpose\n");
+  // FIXME: ?
   return FALSE;
 }
 
@@ -1031,7 +1059,11 @@ gdk_mir_window_impl_destroy (GdkWindow *window,
                              gboolean   recursing,
                              gboolean   foreign_destroy)
 {
-  g_printerr ("gdk_mir_window_impl_destroy\n");
+  //g_printerr ("gdk_mir_window_impl_destroy\n");
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  impl->visible = FALSE;
+  ensure_no_surface (window);
 }
 
 static void
@@ -1061,7 +1093,8 @@ static void
 gdk_mir_window_impl_set_type_hint (GdkWindow         *window,
                                    GdkWindowTypeHint  hint)
 {
-  g_printerr ("gdk_mir_window_impl_set_type_hint\n");
+  //g_printerr ("gdk_mir_window_impl_set_type_hint\n");
+  // FIXME: ?
 }
 
 static GdkWindowTypeHint
@@ -1134,7 +1167,8 @@ static void
 gdk_mir_window_impl_set_transient_for (GdkWindow *window,
                                        GdkWindow *parent)
 {
-  g_printerr ("gdk_mir_window_impl_set_transient_for\n");
+  //g_printerr ("gdk_mir_window_impl_set_transient_for\n");
+  //FIXME
 }
 
 static void
@@ -1381,15 +1415,14 @@ static void
 gdk_mir_window_impl_process_updates_recurse (GdkWindow      *window,
                                              cairo_region_t *region)
 {
-  g_printerr ("gdk_mir_window_impl_process_updates_recurse\n");
-  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  //g_printerr ("gdk_mir_window_impl_process_updates_recurse\n");
   cairo_rectangle_int_t rectangle;
 
   /* We redraw the whole region, but we should track the buffers and only redraw what has changed since we sent this buffer */
   rectangle.x = 0;
   rectangle.y = 0;
-  rectangle.width = impl->width;
-  rectangle.height = impl->height;
+  rectangle.width = window->width;
+  rectangle.height = window->height;
   cairo_region_union_rectangle (region, &rectangle);
 
   _gdk_window_process_updates_recurse (window, region);
@@ -1458,7 +1491,7 @@ static void
 gdk_mir_window_impl_delete_property (GdkWindow *window,
                                      GdkAtom    property)
 {
-  g_printerr ("gdk_mir_window_impl_delete_property\n");
+  //g_printerr ("gdk_mir_window_impl_delete_property\n");
 }
 
 static gint

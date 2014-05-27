@@ -60,6 +60,6 @@ void _gdk_mir_pointer_set_location (GdkDevice *pointer, gdouble x, gdouble y, Gd
 
 GdkCursor *_gdk_mir_cursor_new (GdkDisplay *display, GdkCursorType type);
 
-GdkWindowImpl *_gdk_mir_window_impl_new (int width, int height, GdkEventMask event_mask);
+GdkWindowImpl *_gdk_mir_window_impl_new (void);
 
 #endif /* __GDK_PRIVATE_MIR_H__ */
