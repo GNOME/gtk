@@ -198,7 +198,7 @@ gdk_mir_display_has_pending (GdkDisplay *display)
 static void
 gdk_mir_display_queue_events (GdkDisplay *display)
 {
-  g_printerr ("gdk_mir_display_queue_events\n");
+  //g_printerr ("gdk_mir_display_queue_events\n");
   /* We don't need to poll for events - so don't do anything*/
 }
 
