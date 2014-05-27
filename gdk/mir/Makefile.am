@@ -21,10 +21,11 @@ noinst_LTLIBRARIES = \
 
 libgdk_mir_la_SOURCES =	\
 	gdkmircursor.c \
-	gdkmirdevice.c \
 	gdkmirdevicemanager.c \
 	gdkmirdisplay.c \
+	gdkmirkeyboard.c \
 	gdkmirkeymap.c \
+	gdkmirpointer.c \
 	gdkmirscreen.c	\
 	gdkmirwindow.c	\
 	gdkmirwindowimpl.c	\

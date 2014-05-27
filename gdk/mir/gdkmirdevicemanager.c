@@ -96,8 +96,8 @@ gdk_mir_device_manager_constructed (GObject *object)
 {
   GdkMirDeviceManager *device_manager = GDK_MIR_DEVICE_MANAGER (object);
 
-  device_manager->keyboard = _gdk_mir_device_new (GDK_DEVICE_MANAGER (device_manager), "Mir Keyboard", GDK_SOURCE_KEYBOARD, FALSE);
-  device_manager->pointer = _gdk_mir_device_new (GDK_DEVICE_MANAGER (device_manager), "Mir Pointer", GDK_SOURCE_MOUSE, TRUE);
+  device_manager->keyboard = _gdk_mir_keyboard_new (GDK_DEVICE_MANAGER (device_manager), "Mir Keyboard");
+  device_manager->pointer = _gdk_mir_pointer_new (GDK_DEVICE_MANAGER (device_manager), "Mir Pointer");
 
   G_OBJECT_CLASS (gdk_mir_device_manager_parent_class)->constructed (object);
 }
