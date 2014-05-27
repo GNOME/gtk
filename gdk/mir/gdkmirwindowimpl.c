@@ -649,8 +649,6 @@ event_cb (MirSurface *surface, const MirEvent *event, void *context)
   return;
 }
 
-static int surface_count = 0;
-
 static void
 ensure_surface (GdkWindow *window)
 {
@@ -680,8 +678,6 @@ ensure_surface (GdkWindow *window)
   parameters.buffer_usage = mir_buffer_usage_software;
   parameters.output_id = mir_display_output_id_invalid;
   impl->surface = mir_connection_create_surface_sync (get_connection (window), &parameters);
-  surface_count++;
-  g_printerr ("+%p %p %d\n", window, impl->surface, surface_count);
   mir_surface_set_event_handler (impl->surface, &event_delegate); // FIXME: Ignore some events until shown
   set_surface_state (impl, impl->surface_state);
 }
@@ -700,8 +696,6 @@ ensure_no_surface (GdkWindow *window)
 
   if (impl->surface)
     {
-      surface_count--;
-      g_printerr ("-%p %p %d\n", window, impl->surface, surface_count);
       mir_surface_release_sync (impl->surface);
       impl->surface = NULL;
     }
