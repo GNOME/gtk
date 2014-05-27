@@ -1595,8 +1595,6 @@ gtk_window_constructor (GType                  type,
                         G_CALLBACK (multipress_gesture_pressed_cb), object);
       g_signal_connect (priv->multipress_gesture, "stopped",
                         G_CALLBACK (multipress_gesture_stopped_cb), object);
-      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                                  GTK_PHASE_CAPTURE);
     }
 
   return object;
