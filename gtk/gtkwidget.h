@@ -947,10 +947,10 @@ void                  gtk_widget_set_allocation         (GtkWidget     *widget,
                                                          const GtkAllocation *allocation);
 GDK_AVAILABLE_IN_3_14
 void                  gtk_widget_set_clip               (GtkWidget     *widget,
-                                                         const GtkAllocation *allocation);  
+                                                         const GtkAllocation *clip);
 GDK_AVAILABLE_IN_3_14
 void                  gtk_widget_get_clip               (GtkWidget     *widget,
-                                                         GtkAllocation *allocation);  
+                                                         GtkAllocation *clip);
 
 GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_width & gtk_widget_get_preferred_height)
 

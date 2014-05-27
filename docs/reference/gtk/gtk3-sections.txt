@@ -2615,6 +2615,8 @@ gtk_places_sidebar_get_show_connect_to_server
 gtk_places_sidebar_set_show_connect_to_server
 gtk_places_sidebar_get_local_only
 gtk_places_sidebar_set_local_only
+gtk_places_sidebar_get_show_enter_location
+gtk_places_sidebar_set_show_enter_location
 <SUBSECTION Standard>
 GTK_PLACES_SIDEBAR
 GTK_IS_PLACES_SIDEBAR
@@ -7801,6 +7803,8 @@ GtkStackTransitionType
 gtk_stack_set_transition_type
 gtk_stack_get_transition_type
 gtk_stack_get_transition_running
+<SUBSECTION Private>
+gtk_stack_get_type
 </SECTION>
 
 <SECTION>
@@ -7810,6 +7814,8 @@ GtkStackSwitcher
 gtk_stack_switcher_new
 gtk_stack_switcher_set_stack
 gtk_stack_switcher_get_stack
+<SUBSECTION Private>
+gtk_stack_switcher_get_type
 </SECTION>
 
 <SECTION>
@@ -7826,6 +7832,8 @@ gtk_revealer_set_transition_duration
 GtkRevealerTransitionType
 gtk_revealer_get_transition_type
 gtk_revealer_set_transition_type
+<SUBSECTION Private>
+gtk_revealer_get_type
 </SECTION>
 
 <SECTION>

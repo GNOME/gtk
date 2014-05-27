@@ -389,6 +389,7 @@ gdk_window_begin_resize_drag
 gdk_window_begin_resize_drag_for_device
 gdk_window_begin_move_drag
 gdk_window_begin_move_drag_for_device
+gdk_window_show_window_menu
 gdk_window_constrain_size
 gdk_window_beep
 gdk_window_get_scale_factor
