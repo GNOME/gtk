@@ -598,6 +598,7 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
     gtk_widget_grab_focus (widget);
 
   g_signal_emit (button, button_signals[PRESSED], 0);
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
