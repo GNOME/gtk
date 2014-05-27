@@ -385,7 +385,6 @@ send_event (GdkWindow *window, GdkDevice *device, GdkEvent *event)
   gdk_event_set_device (event, device);
   gdk_event_set_screen (event, gdk_display_get_screen (gdk_window_get_display (window), 0));
   event->any.window = g_object_ref (window);
-  event->any.send_event = FALSE; // FIXME: What is this?
 
   display = gdk_window_get_display (window);
   node = _gdk_event_queue_append (display, event);
@@ -415,7 +414,7 @@ get_pointer (GdkWindow *window)
   return gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window)));
 }
 
-void
+static void
 generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble y, guint button, guint state)
 {
   GdkEvent *event;
