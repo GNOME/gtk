@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gdkdevicemanagerprivate.h"
+#include "gdkdeviceprivate.h"
 
 #include "gdkmir.h"
 #include "gdkmir-private.h"
@@ -98,6 +99,8 @@ gdk_mir_device_manager_constructed (GObject *object)
 
   device_manager->keyboard = _gdk_mir_keyboard_new (GDK_DEVICE_MANAGER (device_manager), "Mir Keyboard");
   device_manager->pointer = _gdk_mir_pointer_new (GDK_DEVICE_MANAGER (device_manager), "Mir Pointer");
+  _gdk_device_set_associated_device (device_manager->keyboard, device_manager->pointer);
+  _gdk_device_set_associated_device (device_manager->pointer, device_manager->keyboard);
 
   G_OBJECT_CLASS (gdk_mir_device_manager_parent_class)->constructed (object);
 }
