@@ -188,6 +188,8 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
 GtkGesture *
 gtk_gesture_rotate_new (GtkWidget *widget)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
   return g_object_new (GTK_TYPE_GESTURE_ROTATE,
                        "widget", widget,
                        NULL);

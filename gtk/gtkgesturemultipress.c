@@ -384,6 +384,8 @@ gtk_gesture_multi_press_init (GtkGestureMultiPress *gesture)
 GtkGesture *
 gtk_gesture_multi_press_new (GtkWidget *widget)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
   return g_object_new (GTK_TYPE_GESTURE_MULTI_PRESS,
                        "widget", widget,
                        NULL);

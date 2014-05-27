@@ -115,8 +115,8 @@ gtk_event_controller_constructed (GObject *object)
   GtkEventControllerPrivate *priv;
 
   priv = gtk_event_controller_get_instance_private (controller);
-  g_assert (priv->widget != NULL);
-  _gtk_widget_add_controller (priv->widget, controller);
+  if (priv->widget)
+    _gtk_widget_add_controller (priv->widget, controller);
 }
 
 static void
@@ -126,7 +126,8 @@ gtk_event_controller_dispose (GObject *object)
   GtkEventControllerPrivate *priv;
 
   priv = gtk_event_controller_get_instance_private (controller);
-  _gtk_widget_remove_controller (priv->widget, controller);
+  if (priv->widget)
+    _gtk_widget_remove_controller (priv->widget, controller);
 }
 
 static void

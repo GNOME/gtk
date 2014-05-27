@@ -237,6 +237,8 @@ gtk_gesture_swipe_init (GtkGestureSwipe *gesture)
 GtkGesture *
 gtk_gesture_swipe_new (GtkWidget *widget)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
   return g_object_new (GTK_TYPE_GESTURE_SWIPE,
                        "widget", widget,
                        NULL);

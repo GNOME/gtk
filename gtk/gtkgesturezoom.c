@@ -181,6 +181,8 @@ gtk_gesture_zoom_class_init (GtkGestureZoomClass *klass)
 GtkGesture *
 gtk_gesture_zoom_new (GtkWidget *widget)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
   return g_object_new (GTK_TYPE_GESTURE_ZOOM,
                        "widget", widget,
                        NULL);

@@ -262,6 +262,8 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
 GtkGesture *
 gtk_gesture_long_press_new (GtkWidget *widget)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
   return g_object_new (GTK_TYPE_GESTURE_LONG_PRESS,
                        "widget", widget,
                        NULL);
