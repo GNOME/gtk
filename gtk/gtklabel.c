@@ -3220,14 +3220,22 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
 }
 
 static void
-gtk_label_get_border (GtkLabel *label, GtkBorder *border)
+gtk_label_get_padding_and_border (GtkLabel  *label,
+                                  GtkBorder *border)
 {
   GtkStyleContext *context;
   GtkStateFlags state;
+  GtkBorder tmp;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (label));
   state = gtk_widget_get_state_flags (GTK_WIDGET (label));
-  gtk_style_context_get_border (context, state, border);
+
+  gtk_style_context_get_padding (context, state, border);
+  gtk_style_context_get_border (context, state, &tmp);
+  border->top += tmp.top;
+  border->right += tmp.right;
+  border->bottom += tmp.bottom;
+  border->left += tmp.left;
 }
 
 static void
@@ -3244,7 +3252,7 @@ gtk_label_update_layout_width (GtkLabel *label)
       PangoRectangle logical;
       gint width, height;
 
-      gtk_label_get_border (label, &border);
+      gtk_label_get_padding_and_border (label, &border);
 
       width = gtk_widget_get_allocated_width (GTK_WIDGET (label)) - border.left - border.right;
       height = gtk_widget_get_allocated_height (GTK_WIDGET (label)) - border.top - border.bottom;
@@ -3661,7 +3669,7 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
   smallest_rect.width  = PANGO_PIXELS_CEIL (smallest_rect.width);
   smallest_rect.height = PANGO_PIXELS_CEIL (smallest_rect.height);
 
-  gtk_label_get_border (label, &border);
+  gtk_label_get_padding_and_border (label, &border);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -3765,7 +3773,7 @@ gtk_label_get_preferred_width_for_height (GtkWidget *widget,
     {
       GtkBorder border;
 
-      gtk_label_get_border (label, &border);
+      gtk_label_get_padding_and_border (label, &border);
 
       if (priv->wrap)
         gtk_label_clear_layout (label);
@@ -3800,7 +3808,7 @@ gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
     {
       GtkBorder border;
 
-      gtk_label_get_border (label, &border);
+      gtk_label_get_padding_and_border (label, &border);
 
       if (priv->wrap)
         gtk_label_clear_layout (label);
@@ -3998,7 +4006,7 @@ get_layout_location (GtkLabel  *label,
   widget = GTK_WIDGET (label);
   priv   = label->priv;
 
-  gtk_label_get_border (label, &border);
+  gtk_label_get_padding_and_border (label, &border);
 
   xalign = halign_to_float (widget);
   yalign = valign_to_float (widget);
