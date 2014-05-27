@@ -7130,7 +7130,7 @@ gtk_widget_real_button_event (GtkWidget      *widget,
                               GdkEventButton *event)
 {
   return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
-                                      GTK_PHASE_TARGET);
+                                      GTK_PHASE_BUBBLE);
 }
 
 static gboolean
@@ -7138,7 +7138,7 @@ gtk_widget_real_motion_event (GtkWidget      *widget,
                               GdkEventMotion *event)
 {
   return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
-                                      GTK_PHASE_TARGET);
+                                      GTK_PHASE_BUBBLE);
 }
 
 static gboolean
@@ -7183,7 +7183,7 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
 
   if (!event->emulating_pointer)
     return _gtk_widget_run_controllers (widget, (GdkEvent*) event,
-                                        GTK_PHASE_TARGET);
+                                        GTK_PHASE_BUBBLE);
 
   if (event->type == GDK_TOUCH_BEGIN ||
       event->type == GDK_TOUCH_END)
@@ -7248,7 +7248,7 @@ gtk_widget_real_grab_broken_event (GtkWidget          *widget,
                                    GdkEventGrabBroken *event)
 {
   return _gtk_widget_run_controllers (widget, (GdkEvent*) event,
-                                      GTK_PHASE_TARGET);
+                                      GTK_PHASE_BUBBLE);
 }
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
@@ -7586,6 +7586,9 @@ gtk_widget_event_internal (GtkWidget *widget,
 
   g_object_ref (widget);
 
+  if (widget == gtk_get_event_widget (event))
+    return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_TARGET);
+
   g_signal_emit (widget, widget_signals[EVENT], 0, event, &handled);
   return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
@@ -7698,8 +7701,6 @@ gtk_widget_event_internal (GtkWidget *widget,
     g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
   else
     return_val = TRUE;
-
-  return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
 
   g_object_unref (widget);
 
