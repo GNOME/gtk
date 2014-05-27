@@ -26,6 +26,7 @@
 #include "gdkwindowimpl.h"
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
+#include "gdkdeviceprivate.h"
 
 #define GDK_TYPE_MIR_WINDOW_IMPL              (gdk_mir_window_impl_get_type ())
 #define GDK_MIR_WINDOW_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_MIR, GdkMirWindowImpl))
@@ -892,8 +893,12 @@ gdk_mir_window_impl_get_device_state (GdkWindow       *window,
                                       gdouble         *y,
                                       GdkModifierType *mask)
 {
-  g_printerr ("gdk_mir_window_impl_get_device_state\n");
-  return FALSE;
+  //g_printerr ("gdk_mir_window_impl_get_device_state\n");
+  GdkWindow *child;
+
+  _gdk_device_query_state (device, window, NULL, &child, NULL, NULL, x, y, mask);
+
+  return child != NULL;
 }
 
 static gboolean
