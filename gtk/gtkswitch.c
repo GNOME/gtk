@@ -928,7 +928,7 @@ gtk_switch_init (GtkSwitch *self)
   g_signal_connect (gesture, "released",
                     G_CALLBACK (gtk_switch_multipress_gesture_released), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
-                                              GTK_PHASE_TARGET);
+                                              GTK_PHASE_BUBBLE);
   self->priv->multipress_gesture = gesture;
 
   gesture = gtk_gesture_pan_new (GTK_WIDGET (self),
@@ -940,7 +940,7 @@ gtk_switch_init (GtkSwitch *self)
   g_signal_connect (gesture, "drag-end",
                     G_CALLBACK (gtk_switch_pan_gesture_drag_end), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
-                                              GTK_PHASE_TARGET);
+                                              GTK_PHASE_BUBBLE);
   self->priv->pan_gesture = gesture;
 }
 
