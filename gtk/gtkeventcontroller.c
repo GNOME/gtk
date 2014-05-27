@@ -45,20 +45,12 @@ enum {
   PROP_PROPAGATION_PHASE
 };
 
-enum {
-  HANDLE_EVENT,
-  RESET,
-  N_SIGNALS
-};
-
 struct _GtkEventControllerPrivate
 {
   GtkWidget *widget;
   guint evmask;
   GtkPropagationPhase phase;
 };
-
-guint signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkEventController, gtk_event_controller, G_TYPE_OBJECT)
 
@@ -179,42 +171,6 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                       GTK_TYPE_PROPAGATION_PHASE,
                                                       GTK_PHASE_NONE,
                                                       GTK_PARAM_READWRITE));
-  /**
-   * GtkEventController::handle-event:
-   * @controller: the object which receives the signal
-   * @event: the event to handle
-   *
-   * This signal is emitted on @controller whenever an event is to be handled.
-   *
-   * Return value: %TRUE to propagate further emission if the event was handled,
-   *   %FALSE otherwise
-   *
-   * Since: 3.14
-   */
-  signals[HANDLE_EVENT] =
-    g_signal_new ("handle-event",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkEventControllerClass, handle_event),
-                  g_signal_accumulator_true_handled, NULL, NULL,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-  /**
-   * GtkEventController::reset:
-   * @controller: the object which receives the signal
-   *
-   * This signal is emitted on @controller whenever it needs to be reset. When
-   * this happens controllers must forget any recorded state.
-   *
-   * Since: 3.14
-   */
-  signals[RESET] =
-    g_signal_new ("reset",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkEventControllerClass, reset),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
 }
 
 static void
@@ -239,12 +195,16 @@ gboolean
 gtk_event_controller_handle_event (GtkEventController *controller,
                                    const GdkEvent     *event)
 {
+  GtkEventControllerClass *controller_class;
   gboolean retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  g_signal_emit (controller, signals[HANDLE_EVENT], 0, event, &retval);
+  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
+
+  if (controller_class->handle_event)
+    retval = controller_class->handle_event (controller, event);
 
   return retval;
 }
@@ -312,9 +272,14 @@ gtk_event_controller_get_widget (GtkEventController *controller)
 void
 gtk_event_controller_reset (GtkEventController *controller)
 {
+  GtkEventControllerClass *controller_class;
+
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
 
-  g_signal_emit (controller, signals[RESET], 0);
+  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
+
+  if (controller_class->reset)
+    controller_class->reset (controller);
 }
 
 /**
