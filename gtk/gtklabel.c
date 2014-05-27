@@ -962,7 +962,6 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      G_MAXINT,
                                                      -1,
                                                      GTK_PARAM_READWRITE));
-
   /*
    * Key bindings
    */
@@ -3220,17 +3219,6 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
 }
 
 static void
-gtk_label_get_border (GtkLabel *label, GtkBorder *border)
-{
-  GtkStyleContext *context;
-  GtkStateFlags state;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (label));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (label));
-  gtk_style_context_get_border (context, state, border);
-}
-
-static void
 gtk_label_update_layout_width (GtkLabel *label)
 {
   GtkLabelPrivate *priv = label->priv;
@@ -3244,7 +3232,9 @@ gtk_label_update_layout_width (GtkLabel *label)
       PangoRectangle logical;
       gint width, height;
 
-      gtk_label_get_border (label, &border);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       width = gtk_widget_get_allocated_width (GTK_WIDGET (label)) - border.left - border.right;
       height = gtk_widget_get_allocated_height (GTK_WIDGET (label)) - border.top - border.bottom;
@@ -3661,7 +3651,9 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
   smallest_rect.width  = PANGO_PIXELS_CEIL (smallest_rect.width);
   smallest_rect.height = PANGO_PIXELS_CEIL (smallest_rect.height);
 
-  gtk_label_get_border (label, &border);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -3765,7 +3757,9 @@ gtk_label_get_preferred_width_for_height (GtkWidget *widget,
     {
       GtkBorder border;
 
-      gtk_label_get_border (label, &border);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (priv->wrap)
         gtk_label_clear_layout (label);
@@ -3800,7 +3794,9 @@ gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
     {
       GtkBorder border;
 
-      gtk_label_get_border (label, &border);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (priv->wrap)
         gtk_label_clear_layout (label);
@@ -3926,60 +3922,6 @@ gtk_label_style_updated (GtkWidget *widget)
     gtk_label_update_layout_attributes (label);
 }
 
-static gfloat
-halign_to_float (GtkWidget *widget)
-{
-  gfloat ret = 0.5;
-
-  switch (gtk_widget_get_halign (widget))
-    {
-    case GTK_ALIGN_FILL:
-    case GTK_ALIGN_CENTER:
-      ret = 0.5;
-      break;
-    case GTK_ALIGN_START:
-      ret = 0.0;
-      break;
-    case GTK_ALIGN_END:
-      ret = 1.0;
-      break;
-    case GTK_ALIGN_BASELINE:
-      ret = 0.0;
-      g_assert_not_reached ();
-      break;    
-    }
-
-  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
-    ret = 1.0 - ret;
-
-  return ret;
-}
-
-static gfloat
-valign_to_float (GtkWidget *widget)
-{
-  gfloat ret = 0.5;
-
-  switch (gtk_widget_get_valign (widget))
-    {
-    case GTK_ALIGN_FILL:
-    case GTK_ALIGN_CENTER:
-      ret = 0.5;
-      break;
-    case GTK_ALIGN_START:
-      ret = 0.0;
-      break;
-    case GTK_ALIGN_END:
-      ret = 1.0;
-      break;
-    case GTK_ALIGN_BASELINE:
-      ret = 0.0;
-      break;    
-    }
-
-  return ret;
-}
-
 static void
 get_layout_location (GtkLabel  *label,
                      gint      *xp,
@@ -3998,10 +3940,13 @@ get_layout_location (GtkLabel  *label,
   widget = GTK_WIDGET (label);
   priv   = label->priv;
 
-  gtk_label_get_border (label, &border);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_alignment (GTK_MISC (label), &xalign, &yalign);
+  _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
-  xalign = halign_to_float (widget);
-  yalign = valign_to_float (widget);
+  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+    xalign = 1.0 - xalign;
 
   pango_layout_get_extents (priv->layout, NULL, &logical);
 
