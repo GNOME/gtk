@@ -375,7 +375,7 @@ gdk_mir_display_event_data_copy (GdkDisplay     *display,
                                  const GdkEvent *src,
                                  GdkEvent       *dst)
 {
-  g_printerr ("gdk_mir_display_event_data_copy\n");
+  //g_printerr ("gdk_mir_display_event_data_copy\n");
 }
 
 static void
