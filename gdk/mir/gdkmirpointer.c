@@ -19,6 +19,7 @@
 
 #include "gdkdeviceprivate.h"
 #include "gdkscreen.h"
+#include "gdkwindow.h"
 
 typedef struct GdkMirPointer      GdkMirPointer;
 typedef struct GdkMirPointerClass GdkMirPointerClass;
@@ -101,16 +102,16 @@ gdk_mir_pointer_get_state (GdkDevice       *device,
                            gdouble         *axes,
                            GdkModifierType *mask)
 {
-  g_printerr ("gdk_mir_pointer_get_state\n");
+  //g_printerr ("gdk_mir_pointer_get_state\n");
   GdkMirPointer *p = GDK_MIR_POINTER (device);
+  gdouble x, y;
 
+  gdk_window_get_device_position_double (window, device, &x, &y, mask);
   if (axes)
     {
       axes[0] = p->x;
       axes[1] = p->y;
     }
-  if (mask)
-    *mask = p->modifier_mask;
 }
 
 static void
@@ -118,7 +119,7 @@ gdk_mir_pointer_set_window_cursor (GdkDevice *device,
                                    GdkWindow *window,
                                    GdkCursor *cursor)
 {
-  g_printerr ("gdk_mir_pointer_set_window_cursor\n");
+  //g_printerr ("gdk_mir_pointer_set_window_cursor\n");
   /* Mir doesn't support cursors */
 }
 
@@ -128,7 +129,7 @@ gdk_mir_pointer_warp (GdkDevice *device,
                       gdouble    x,
                       gdouble    y)
 {
-  g_printerr ("gdk_mir_pointer_warp\n");
+  //g_printerr ("gdk_mir_pointer_warp\n");
   /* Mir doesn't support warping */
 }
 
@@ -143,7 +144,7 @@ gdk_mir_pointer_query_state (GdkDevice        *device,
                              gdouble          *win_y,
                              GdkModifierType  *mask)
 {
-  g_printerr ("gdk_mir_pointer_query_state\n");
+  //g_printerr ("gdk_mir_pointer_query_state\n");
   GdkMirPointer *p = GDK_MIR_POINTER (device);
 
   if (root_window)
