@@ -494,107 +494,147 @@ get_modifier_state (unsigned int modifiers, unsigned int button_state)
   return modifier_state;
 }
 
-static void
-event_cb (MirSurface *surface, const MirEvent *event, void *context)
-{
-  GdkWindow *window = context;
-  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+/*
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (event_data->window->impl);
   MirMotionButton changed_button_state;
   GdkEventType event_type;
   gdouble x, y;
   guint modifier_state;
   gboolean is_modifier = FALSE;
+*/
+
+static void
+handle_key_event (GdkWindow *window, MirKeyEvent *event)
+{
+  guint modifier_state;
+  gboolean is_modifier = FALSE;
+
+  modifier_state = get_modifier_state (event->modifiers, 0); // FIXME: Need to track button state
+
+  switch (event->action)
+    {
+    case mir_key_action_down:
+    case mir_key_action_up:
+      // FIXME: Convert keycode
+      // FIXME: is_modifier
+      generate_key_event (window,
+                          event->action == mir_key_action_down ? GDK_KEY_PRESS : GDK_KEY_RELEASE,
+                          modifier_state,
+                          event->key_code,
+                          event->scan_code,
+                          is_modifier);
+      break;
+    default:
+    //case mir_key_action_multiple:
+      // FIXME
+      break;
+    }
+}
+
+static void
+handle_motion_event (GdkWindow *window, MirMotionEvent *event)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  gdouble x, y;
+  guint modifier_state;
+  GdkEventType event_type;
+  MirMotionButton changed_button_state;
+
+  if (event->pointer_count < 1)
+    return;
+
+  x = event->pointer_coordinates[0].x;
+  y = event->pointer_coordinates[0].y;
+  modifier_state = get_modifier_state (event->modifiers, event->button_state);
+
+  /* Update which window has focus */
+  _gdk_mir_pointer_set_location (get_pointer (window), x, y, window, modifier_state);
+
+  switch (event->action)
+    {
+    case mir_motion_action_down:
+    case mir_motion_action_up:
+      event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
+      changed_button_state = impl->button_state ^ event->button_state;
+      if ((event_type == GDK_BUTTON_PRESS && (impl->event_mask & GDK_BUTTON_PRESS_MASK) != 0) ||
+          (event_type == GDK_BUTTON_RELEASE && (impl->event_mask & GDK_BUTTON_RELEASE_MASK) != 0))
+        {
+          if ((changed_button_state & mir_motion_button_primary) != 0)
+            generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state);
+          if ((changed_button_state & mir_motion_button_secondary) != 0)
+            generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state);
+          if ((changed_button_state & mir_motion_button_tertiary) != 0)
+            generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state);
+        }
+        impl->button_state = event->button_state;
+      break;
+    case mir_motion_action_scroll:
+      if ((impl->event_mask & GDK_SMOOTH_SCROLL_MASK) != 0)
+        generate_scroll_event (window, x, y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state);
+      break;
+    case mir_motion_action_move: // move with button
+    case mir_motion_action_hover_move: // move without button
+      if ((impl->event_mask & GDK_POINTER_MOTION_MASK) != 0 ||
+          ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON1_MASK)) != 0 ||
+          ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON2_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON2_MASK)) != 0 ||
+          ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON3_MASK)) != 0)
+        generate_motion_event (window, x, y, modifier_state);
+      break;
+    }
+}
+
+static void
+handle_surface_event (GdkWindow *window, MirSurfaceEvent *event)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  switch (event->attrib)
+    {
+    case mir_surface_attrib_type:
+      break;
+    case mir_surface_attrib_state:
+      impl->surface_state = event->value;
+      // FIXME: notify
+      break;
+    case mir_surface_attrib_swapinterval:
+      break;
+    case mir_surface_attrib_focus:
+      if (event->value)
+        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
+      else
+        gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
+      break;
+    default:
+      break;
+    }
+}
+
+typedef struct
+{
+  GdkWindow *window;
+  MirEvent event;
+} EventData;
+
+static gboolean
+handle_event (gpointer data)
+{
+  EventData *event_data = data;
+  MirEvent *event = &event_data->event;
 
   if (g_getenv ("GDK_MIR_LOG_EVENTS"))
-    print_event (event);
+    print_event (&event_data->event);
 
   // FIXME: Only generate events if the window wanted them?
   switch (event->type)
     {
     case mir_event_type_key:
-      modifier_state = get_modifier_state (event->key.modifiers, 0); // FIXME: Need to track button state
-
-      switch (event->key.action)
-        {
-        case mir_key_action_down:
-        case mir_key_action_up:
-          // FIXME: Convert keycode
-          // FIXME: is_modifier
-          generate_key_event (window,
-                              event->key.action == mir_key_action_down ? GDK_KEY_PRESS : GDK_KEY_RELEASE,
-                              modifier_state,
-                              event->key.key_code,
-                              event->key.scan_code,
-                              is_modifier);
-          break;
-        default:
-        //case mir_key_action_multiple:
-          // FIXME
-          break;
-        }
+      handle_key_event (event_data->window, &event->key);
       break;
     case mir_event_type_motion:
-      if (event->motion.pointer_count < 1)
-        return;
-      x = event->motion.pointer_coordinates[0].x;
-      y = event->motion.pointer_coordinates[0].y;
-      modifier_state = get_modifier_state (event->motion.modifiers, event->motion.button_state);
-
-      /* Update which window has focus */
-      _gdk_mir_pointer_set_location (get_pointer (window), x, y, window, modifier_state);
-
-      switch (event->motion.action)
-        {
-        case mir_motion_action_down:
-        case mir_motion_action_up:
-          event_type = event->motion.action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
-          changed_button_state = impl->button_state ^ event->motion.button_state;
-          if ((event_type == GDK_BUTTON_PRESS && (impl->event_mask & GDK_BUTTON_PRESS_MASK) != 0) ||
-              (event_type == GDK_BUTTON_RELEASE && (impl->event_mask & GDK_BUTTON_RELEASE_MASK) != 0))
-            {
-              if ((changed_button_state & mir_motion_button_primary) != 0)
-                generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state);
-              if ((changed_button_state & mir_motion_button_secondary) != 0)
-                generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state);
-              if ((changed_button_state & mir_motion_button_tertiary) != 0)
-                generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state);
-            }
-            impl->button_state = event->motion.button_state;
-          break;
-        case mir_motion_action_scroll:
-          if ((impl->event_mask & GDK_SMOOTH_SCROLL_MASK) != 0)
-            generate_scroll_event (window, x, y, event->motion.pointer_coordinates[0].hscroll, event->motion.pointer_coordinates[0].vscroll, modifier_state);
-          break;
-        case mir_motion_action_move: // move with button
-        case mir_motion_action_hover_move: // move without button
-          if ((impl->event_mask & GDK_POINTER_MOTION_MASK) != 0 ||
-              ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON1_MASK)) != 0 ||
-              ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON2_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON2_MASK)) != 0 ||
-              ((impl->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON3_MASK)) != 0)
-            generate_motion_event (window, x, y, modifier_state);
-          break;
-        }
+      handle_motion_event (event_data->window, &event->motion);
       break;
     case mir_event_type_surface:
-      switch (event->surface.attrib)
-        {
-        case mir_surface_attrib_type:
-          break;
-        case mir_surface_attrib_state:
-          impl->surface_state = event->surface.value;
-          // FIXME: notify
-          break;
-        case mir_surface_attrib_swapinterval:
-          break;
-        case mir_surface_attrib_focus:
-          if (event->surface.value)
-            gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
-          else
-            gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
-          break;
-        default:
-          break;
-        }
+      handle_surface_event (event_data->window, &event->surface);
       break;
     case mir_event_type_resize:
       // FIXME: Generate configure event
@@ -603,6 +643,18 @@ event_cb (MirSurface *surface, const MirEvent *event, void *context)
       // FIXME?
       break;
     }
+
+  return FALSE;
+}
+
+static void
+event_cb (MirSurface *surface, const MirEvent *event, void *context)
+{
+  EventData *data = g_new (EventData, 1);
+  data->window = context; // FIXME: ref?
+  data->event = *event;
+  gdk_threads_add_idle (handle_event, data);
+  return;
 }
 
 static void
