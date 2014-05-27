@@ -259,7 +259,7 @@ gtk_color_scale_init (GtkColorScale *scale)
   g_signal_connect (scale->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), scale);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (scale->priv->long_press_gesture),
-                                              GTK_PHASE_BUBBLE);
+                                              GTK_PHASE_TARGET);
 }
 
 static void

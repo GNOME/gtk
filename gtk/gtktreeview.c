@@ -1842,7 +1842,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   g_signal_connect (tree_view->priv->multipress_gesture, "pressed",
                     G_CALLBACK (_tree_view_multipress_pressed), tree_view);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->multipress_gesture),
-                                              GTK_PHASE_BUBBLE);
+                                              GTK_PHASE_TARGET);
 }
 
 

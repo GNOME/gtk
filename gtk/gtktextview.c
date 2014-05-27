@@ -1556,7 +1556,7 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
                                      FALSE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                              GTK_PHASE_TARGET);
+                                              GTK_PHASE_BUBBLE);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_text_view_multipress_gesture_pressed),
                     widget);
@@ -1565,7 +1565,7 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture),
                                      FALSE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                              GTK_PHASE_TARGET);
+                                              GTK_PHASE_BUBBLE);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_text_view_drag_gesture_update),
                     widget);

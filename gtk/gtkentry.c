@@ -2702,7 +2702,7 @@ gtk_entry_init (GtkEntry *entry)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                              GTK_PHASE_TARGET);
+                                              GTK_PHASE_BUBBLE);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (entry));
   g_signal_connect (priv->multipress_gesture, "pressed",
@@ -2710,7 +2710,7 @@ gtk_entry_init (GtkEntry *entry)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->multipress_gesture), TRUE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                              GTK_PHASE_TARGET);
+                                              GTK_PHASE_BUBBLE);
 }
 
 static void

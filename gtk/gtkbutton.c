@@ -653,7 +653,7 @@ gtk_button_init (GtkButton *button)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
   g_signal_connect (priv->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), button);
   g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_TARGET);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_BUBBLE);
 }
 
 static void
