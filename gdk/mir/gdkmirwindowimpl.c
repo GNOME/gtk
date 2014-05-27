@@ -722,6 +722,15 @@ gdk_mir_window_impl_create_similar_image_surface (GdkWindow      *window,
 static void
 gdk_mir_window_impl_finalize (GObject *object)
 {
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (object);
+
+  if (impl->background)
+    cairo_pattern_destroy (impl->background);
+  if (impl->surface)
+    mir_surface_release_sync (impl->surface);
+  if (impl->cairo_surface)
+    cairo_surface_destroy (impl->cairo_surface);
+
   G_OBJECT_CLASS (gdk_mir_window_impl_parent_class)->finalize (object);
 }
 
