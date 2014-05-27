@@ -198,7 +198,8 @@ gtk_gesture_rotate_new (GtkWidget *widget)
  * @gesture: a #GtkGestureRotate
  *
  * If @gesture is active, this function returns the angle difference
- * in radians since the gesture was first recognized.
+ * in radians since the gesture was first recognized. If @gesture is
+ * not active, 0 is returned.
  *
  * Returns: the angle delta in radians
  *
@@ -210,10 +211,10 @@ gtk_gesture_rotate_get_angle_delta (GtkGestureRotate *gesture)
   GtkGestureRotatePrivate *priv;
   gdouble angle;
 
-  g_return_val_if_fail (GTK_IS_GESTURE_ROTATE (gesture), FALSE);
+  g_return_val_if_fail (GTK_IS_GESTURE_ROTATE (gesture), 0.0);
 
   if (!_gtk_gesture_rotate_get_angle (gesture, &angle))
-    return 0;
+    return 0.0;
 
   priv = gtk_gesture_rotate_get_instance_private (gesture);
 

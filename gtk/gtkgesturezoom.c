@@ -189,13 +189,12 @@ gtk_gesture_zoom_new (GtkWidget *widget)
 /**
  * gtk_gesture_zoom_get_scale_delta:
  * @gesture: a #GtkGestureZoom
- * @scale: (out) (transfer none): zoom delta
  *
  * If @gesture is active, this function returns the zooming difference
  * since the gesture was recognized (hence the starting point is
  * considered 1:1). If @gesture is not active, 1 is returned.
  *
- * Returns: %TRUE if @controller is recognizing a zoom gesture
+ * Returns: the scale delta
  *
  * Since: 3.14
  **/
@@ -205,10 +204,10 @@ gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture)
   GtkGestureZoomPrivate *priv;
   gdouble distance;
 
-  g_return_val_if_fail (GTK_IS_GESTURE_ZOOM (gesture), FALSE);
+  g_return_val_if_fail (GTK_IS_GESTURE_ZOOM (gesture), 1.0);
 
   if (!_gtk_gesture_zoom_get_distance (gesture, &distance))
-    return 1;
+    return 1.0;
 
   priv = gtk_gesture_zoom_get_instance_private (gesture);
 

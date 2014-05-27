@@ -8046,7 +8046,6 @@ gtk_gesture_multi_press_get_type
 <TITLE>GtkGesturePan</TITLE>
 GtkGesturePan
 GtkPanDirection
-GtkPanOrientation
 gtk_gesture_pan_new
 gtk_gesture_pan_get_orientation
 gtk_gesture_pan_set_orientation
