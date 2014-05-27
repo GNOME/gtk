@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gdkdeviceprivate.h"
+#include "gdkscreen.h"
 
 typedef struct GdkMirPointer      GdkMirPointer;
 typedef struct GdkMirPointerClass GdkMirPointerClass;
@@ -144,10 +145,11 @@ gdk_mir_pointer_query_state (GdkDevice        *device,
 {
   g_printerr ("gdk_mir_pointer_query_state\n");
   GdkMirPointer *p = GDK_MIR_POINTER (device);
+
   if (root_window)
-    ;//*root_window = ?; // FIXME
+    *root_window = gdk_screen_get_root_window (gdk_display_get_default_screen (gdk_device_get_display (device)));
   if (child_window)
-    ;//*child_window = ?; // FIXME
+    *child_window = p->over_window;
   if (root_x)
     *root_x = p->x;
   if (root_y)
