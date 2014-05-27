@@ -333,7 +333,7 @@ gdk_mir_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 static guint
 gdk_mir_keymap_get_modifier_state (GdkKeymap *keymap)
 {
-  g_printerr ("gdk_mir_keymap_get_modifier_state\n");
+  //g_printerr ("gdk_mir_keymap_get_modifier_state\n");
   GdkMirKeymap *mir_keymap = GDK_MIR_KEYMAP (keymap);
   xkb_mod_mask_t mods;
 
