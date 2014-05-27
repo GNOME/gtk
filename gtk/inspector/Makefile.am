@@ -6,13 +6,14 @@ resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --gener
 resources.h: inspector.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/inspector.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name gtk_inspector --generate-header --manual-register
-resources.c: inspector.gresource.xml $(resource_files) $(template_headers)
+resources.c: inspector.gresource.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/inspector.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name gtk_inspector --generate-source --manual-register
 
 BUILT_SOURCES = 			\
 	resources.h			\
-	resources.c
+	resources.c			\
+	$(template_headers)
 
 libgtkinspector_la_SOURCES = 		\
 	actions.h			\
@@ -98,11 +99,9 @@ templates = 				\
 
 template_headers = $(templates:.ui=.ui.h)
 
-BUILT_SOURCES += $(template_headers)
+extract_strings = $(top_builddir)/util/extract-strings
 
-extract_strings = $(top_builddir)/gtk/extract-strings$(BUILD_EXEEXT)
-
-%.ui.h: %.ui $(extract_strings)
+%.ui.h : %.ui 
 	$(AM_V_GEN) $(extract_strings) $< > $@
 
 EXTRA_DIST += 				\
@@ -112,7 +111,7 @@ EXTRA_DIST += 				\
 
 MAINTAINERCLEANFILES =			\
 	resources.c			\
-	resources.h
+	resources.h			\
 	$(template_headers)
 
 distclean-local:

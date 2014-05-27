@@ -1888,6 +1888,7 @@ gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/inspector/Makefile
 gtk/native/Makefile
+util/Makefile
 libgail-util/Makefile
 modules/Makefile
 modules/input/Makefile

@@ -1321,9 +1321,9 @@ COMPOSITE_TEMPLATES =				\
 
 template_headers = $(COMPOSITE_TEMPLATES:.ui=.ui.h)
 
-%.ui.h: %.ui extract-strings$(BUILD_EXEEXT)
+%.ui.h: %.ui
 	$(AM_V_GEN) mkdir -p $(dir $@) \
-	&& ./extract-strings$(BUILD_EXEEXT) $< > $@
+	&& $(top_builddir)/util/extract-strings$(BUILD_EXEEXT) $< > $@
 
 #
 # rules to generate built sources
@@ -1615,17 +1615,6 @@ endif
 
 gtk_launch_LDADD = $(LDADDS)
 gtk_launch_SOURCES = gtk-launch.c
-
-# The extract_strings tool is a build utility that runs on the build system.
-extract_strings_sources = extract-strings.c
-extract_strings_cppflags =
-extract_strings_cflags = $(GLIB_CFLAGS_FOR_BUILD)
-extract_strings_ldadd = $(GLIB_LIBS_FOR_BUILD)
-extract-strings$(BUILD_EXEEXT): $(extract_strings_sources)
-	@rm -f extract-strings$(BUILD_EXEEXT)
-	$(AM_V_CCLD)$(CC_FOR_BUILD) $(extract_strings_cppflags) $(CPPFLAGS_FOR_BUILD) $(extract_strings_cflags) $(CFLAGS_FOR_BUILD) $^ $(LDFLAGS_FOR_BUILD) $(extract_strings_ldadd) $(LIBS_FOR_BUILD) -o $@
-EXTRA_DIST += $(extract_strings_sources)
-DISTCLEANFILES += extract-strings
 
 .PHONY: files test test-debug
 
