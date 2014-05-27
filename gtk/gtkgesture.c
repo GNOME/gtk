@@ -1341,7 +1341,7 @@ gtk_gesture_set_window (GtkGesture *gesture,
       GtkWidget *window_widget;
 
       gdk_window_get_user_data (window, (gpointer*) &window_widget);
-      g_return_if_fail (window_widget !=
+      g_return_if_fail (window_widget ==
                         gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)));
     }
 
