@@ -387,9 +387,18 @@ send_event (GdkWindow *window, GdkDevice *device, GdkEvent *event)
   event->any.window = g_object_ref (window);
 
   display = gdk_window_get_display (window);
-  _gdk_event_emit (event);
-  //node = _gdk_event_queue_append (display, event);
-  //_gdk_windowing_got_event (display, node, event, _gdk_display_get_next_serial (display));
+  node = _gdk_event_queue_append (display, event);
+  _gdk_windowing_got_event (display, node, event, _gdk_display_get_next_serial (display));
+  while (TRUE)
+    {
+      GdkEvent *e;
+
+      e = gdk_display_get_event (display);
+      if (!e)
+        break;
+      _gdk_event_emit (e);
+      gdk_event_free (e);
+    }
 }
 
 static void
