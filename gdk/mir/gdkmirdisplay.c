@@ -394,7 +394,7 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
                                     GdkWindowAttr *attributes,
                                     gint           attributes_mask)
 {
-  g_printerr ("gdk_mir_display_create_window_impl (%d, %d, %d, %d)\n", window->x, window->y, window->width, window->height);
+  g_printerr ("gdk_mir_display_create_window_impl (%d, %d, %d, %d), events=0x%X\n", window->x, window->y, window->width, window->height, event_mask);
   window->impl = _gdk_mir_window_impl_new ();
 }
 
