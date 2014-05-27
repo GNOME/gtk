@@ -39,6 +39,7 @@ TEST_PROGS += 			\
 	expander		\
 	firefox-stylecontext	\
 	floating		\
+	gestures		\
 	grid			\
 	gtkmenu			\
 	icontheme		\
