@@ -1514,25 +1514,6 @@ get_animation_frame (GtkImage *image)
 }
 
 static void
-gtk_image_get_padding_and_border (GtkImage  *image,
-                                  GtkBorder *border)
-{
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder tmp;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (image));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (image));
-
-  gtk_style_context_get_padding (context, state, border);
-  gtk_style_context_get_border (context, state, &tmp);
-  border->top += tmp.top;
-  border->right += tmp.right;
-  border->bottom += tmp.bottom;
-  border->left += tmp.left;
-}
-
-static void
 gtk_image_get_preferred_size (GtkImage *image,
                               gint     *width_out,
                               gint     *height_out)
@@ -1541,9 +1522,11 @@ gtk_image_get_preferred_size (GtkImage *image,
   gint width, height;
   GtkBorder border;
   GtkStyleContext *context;
+  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (image));
-  gtk_image_get_padding_and_border (image, &border);
+  state = gtk_widget_get_state_flags (GTK_WIDGET (image));
+  gtk_style_context_get_border (context, state, &border);
   _gtk_icon_helper_get_size (priv->icon_helper, context, &width, &height);
 
   width += border.left + border.right;
