@@ -50,6 +50,8 @@ struct _GdkMirWindowImpl
   cairo_pattern_t *background;
 
   /* Current button state for checking which buttons are being pressed / released */
+  gdouble x;
+  gdouble y;
   MirMotionButton button_state;
 
   /* Surface being rendered to (only exists when window visible) */
@@ -527,50 +529,39 @@ static void
 handle_motion_event (GdkWindow *window, MirMotionEvent *event)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-  gdouble x, y;
   guint modifier_state;
   GdkEventType event_type;
   MirMotionButton changed_button_state;
 
-  if (event->pointer_count < 1)
-    return;
-
-  x = event->pointer_coordinates[0].x;
-  y = event->pointer_coordinates[0].y;
+  if (event->pointer_count > 0)
+    {
+      impl->x = event->pointer_coordinates[0].x;
+      impl->y = event->pointer_coordinates[0].y;
+    }
   modifier_state = get_modifier_state (event->modifiers, event->button_state);
 
   /* Update which window has focus */
-  _gdk_mir_pointer_set_location (get_pointer (window), x, y, window, modifier_state);
-
+  _gdk_mir_pointer_set_location (get_pointer (window), impl->x, impl->y, window, modifier_state);
   switch (event->action)
     {
     case mir_motion_action_down:
     case mir_motion_action_up:
       event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
       changed_button_state = impl->button_state ^ event->button_state;
-      if ((event_type == GDK_BUTTON_PRESS && (window->event_mask & GDK_BUTTON_PRESS_MASK) != 0) ||
-          (event_type == GDK_BUTTON_RELEASE && (window->event_mask & GDK_BUTTON_RELEASE_MASK) != 0))
-        {
           if ((changed_button_state & mir_motion_button_primary) != 0)
-            generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state);
+            generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_PRIMARY, modifier_state);
           if ((changed_button_state & mir_motion_button_secondary) != 0)
-            generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state);
+            generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_SECONDARY, modifier_state);
           if ((changed_button_state & mir_motion_button_tertiary) != 0)
-            generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state);
-        }
+            generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_MIDDLE, modifier_state);
         impl->button_state = event->button_state;
       break;
     case mir_motion_action_scroll:
-      if ((window->event_mask & GDK_SMOOTH_SCROLL_MASK) != 0)
-        generate_scroll_event (window, x, y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state);
+      generate_scroll_event (window, impl->x, impl->y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state);
       break;
     case mir_motion_action_move: // move with button
     case mir_motion_action_hover_move: // move without button
-      if ((window->event_mask & GDK_POINTER_MOTION_MASK) != 0 ||
-          ((window->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON1_MASK)) != 0 ||
-          ((window->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON2_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON2_MASK)) != 0 ||
-          ((window->event_mask & (GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK)) != 0 && (modifier_state & GDK_BUTTON3_MASK)) != 0)
-        generate_motion_event (window, x, y, modifier_state);
+        generate_motion_event (window, impl->x, impl->y, modifier_state);
       break;
     }
 }
@@ -907,7 +898,7 @@ gdk_mir_window_impl_set_events (GdkWindow    *window,
                                 GdkEventMask  event_mask)
 {
   //g_printerr ("gdk_mir_window_impl_set_events\n");
-  /* We just use the event mask from the GdkWindow class */
+  /* We send all events and let GTK+ decide */
 }
 
 static gboolean
