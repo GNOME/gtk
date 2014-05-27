@@ -52,7 +52,11 @@ GdkDevice *_gdk_mir_device_manager_get_keyboard (GdkDeviceManager *device_manage
 
 GdkKeymap *_gdk_mir_keymap_new (void);
 
-GdkDevice *_gdk_mir_device_new (GdkDeviceManager *device_manager, const gchar *name, GdkInputSource input_source, gboolean has_cursor);
+GdkDevice *_gdk_mir_keyboard_new (GdkDeviceManager *device_manager, const gchar *name);
+
+GdkDevice *_gdk_mir_pointer_new (GdkDeviceManager *device_manager, const gchar *name);
+
+void _gdk_mir_pointer_set_location (GdkDevice *pointer, gdouble x, gdouble y, GdkWindow *window, GdkModifierType mask);
 
 GdkCursor *_gdk_mir_cursor_new (GdkDisplay *display, GdkCursorType type);
 

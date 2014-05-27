@@ -207,8 +207,9 @@ gdk_mir_screen_get_height_mm (GdkScreen *screen)
 static gint
 gdk_mir_screen_get_number (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_number\n");
-  return 0; //?
+  //g_printerr ("gdk_mir_screen_get_number\n");
+  /* There is only one screen... */
+  return 0;
 }
 
 static GdkWindow *
@@ -293,7 +294,7 @@ gdk_mir_screen_get_monitor_geometry (GdkScreen    *screen,
                                      gint          monitor_num,
                                      GdkRectangle *dest)
 {
-  g_printerr ("gdk_mir_screen_get_monitor_geometry (%d)\n", monitor_num);
+  //g_printerr ("gdk_mir_screen_get_monitor_geometry (%d)\n", monitor_num);
   MirDisplayOutput *output;
   MirDisplayMode *mode;
 
@@ -310,7 +311,7 @@ gdk_mir_screen_get_monitor_workarea (GdkScreen    *screen,
                                      gint          monitor_num,
                                      GdkRectangle *dest)
 {
-  g_printerr ("gdk_mir_screen_get_monitor_workarea (%d)\n", monitor_num);
+  //g_printerr ("gdk_mir_screen_get_monitor_workarea (%d)\n", monitor_num);
   // FIXME: Don't know what this is
   gdk_mir_screen_get_monitor_geometry (screen, monitor_num, dest);
 }
