@@ -507,6 +507,12 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
       return TRUE;
     }
 
+  if (g_str_equal (name, "gtk-button-images"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
   if (g_str_equal (name, "gtk-split-cursor"))
     {
       g_value_set_boolean (value, TRUE);
