@@ -429,6 +429,104 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
       return TRUE;
     }
 
+  if (g_str_equal (name, "gtk-modules"))
+    {
+      g_value_set_string (value, NULL);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-application-prefer-dark-theme"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-key-theme-name"))
+    {
+      g_value_set_string (value, NULL);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-double-click-time"))
+    {
+      g_value_set_int (value, 250);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-double-click-distance"))
+    {
+      g_value_set_int (value, 5);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-cursor-theme-name"))
+    {
+      g_value_set_string (value, "Raleigh");
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-cursor-theme-size"))
+    {
+      g_value_set_int (value, 128);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-icon-theme-name"))
+    {
+      g_value_set_string (value, "hicolor");
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-shell-shows-app-menu"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-shell-shows-menubar"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-enable-accels"))
+    {
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-enable-mnemonics"))
+    {
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-menu-images"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-split-cursor"))
+    {
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-im-module"))
+    {
+      g_value_set_string (value, NULL);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-menu-bar-accel"))
+    {
+      g_value_set_string (value, "F10");
+      return TRUE;
+    }
+
+  g_error ("unknown property %s", name);
+
   return FALSE;
 }
 
