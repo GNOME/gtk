@@ -463,6 +463,21 @@ generate_motion_event (GdkWindow *window, gdouble x, gdouble y, guint state)
   send_event (window, get_pointer (window), event);
 }
 
+static void
+generate_crossing_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble y)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (type);
+  event->crossing.x = x;
+  event->crossing.y = y;
+  event->crossing.mode = GDK_CROSSING_NORMAL;
+  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+  event->crossing.focus = TRUE;
+
+  send_event (window, get_pointer (window), event);
+}
+
 static guint
 get_modifier_state (unsigned int modifiers, unsigned int button_state)
 {
@@ -548,20 +563,24 @@ handle_motion_event (GdkWindow *window, MirMotionEvent *event)
     case mir_motion_action_up:
       event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
       changed_button_state = impl->button_state ^ event->button_state;
-          if ((changed_button_state & mir_motion_button_primary) != 0)
-            generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_PRIMARY, modifier_state);
-          if ((changed_button_state & mir_motion_button_secondary) != 0)
-            generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_SECONDARY, modifier_state);
-          if ((changed_button_state & mir_motion_button_tertiary) != 0)
-            generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_MIDDLE, modifier_state);
-        impl->button_state = event->button_state;
+      if ((changed_button_state & mir_motion_button_primary) != 0)
+        generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_PRIMARY, modifier_state);
+      if ((changed_button_state & mir_motion_button_secondary) != 0)
+        generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_SECONDARY, modifier_state);
+      if ((changed_button_state & mir_motion_button_tertiary) != 0)
+        generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_MIDDLE, modifier_state);
+      impl->button_state = event->button_state;
       break;
     case mir_motion_action_scroll:
       generate_scroll_event (window, impl->x, impl->y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state);
       break;
     case mir_motion_action_move: // move with button
     case mir_motion_action_hover_move: // move without button
-        generate_motion_event (window, impl->x, impl->y, modifier_state);
+      generate_motion_event (window, impl->x, impl->y, modifier_state);
+      break;
+    case mir_motion_action_hover_enter:
+    case mir_motion_action_hover_exit:
+      generate_crossing_event (window, event->action == mir_motion_action_hover_enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY, impl->x, impl->y);
       break;
     }
 }
@@ -869,6 +888,12 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
 {
   g_printerr ("gdk_mir_window_impl_move_resize (%d, %d, %d, %d)\n", x, y, width, height);
 
+  if (with_move)
+    {
+      window->x = x;
+      window->y = y;
+    }
+
   /* If resize requested then destroy surface */
   if (width >= 0)
       ensure_no_surface (window);
@@ -898,7 +923,7 @@ gdk_mir_window_impl_set_events (GdkWindow    *window,
                                 GdkEventMask  event_mask)
 {
   //g_printerr ("gdk_mir_window_impl_set_events\n");
-  /* We send all events and let GTK+ decide */
+  /* We send all events and let GDK decide */
 }
 
 static gboolean
