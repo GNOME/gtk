@@ -205,7 +205,11 @@ gtk_event_controller_handle_event (GtkEventController *controller,
   controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
 
   if (controller_class->handle_event)
-    retval = controller_class->handle_event (controller, event);
+    {
+      g_object_ref (controller);
+      retval = controller_class->handle_event (controller, event);
+      g_object_unref (controller);
+    }
 
   return retval;
 }
