@@ -62,6 +62,9 @@ struct _GdkMirWindowImpl
 
   /* TRUE if the window can be seen */
   gboolean visible;
+
+  /* TRUE if cursor is inside this window */
+  gboolean cursor_inside;
 };
 
 struct _GdkMirWindowImplClass
@@ -555,6 +558,14 @@ handle_motion_event (GdkWindow *window, MirMotionEvent *event)
     }
   modifier_state = get_modifier_state (event->modifiers, event->button_state);
 
+  /* The Mir events generate hover-exits even while inside the window so
+     counteract this by always generating an enter notify on all other events */
+  if (!impl->cursor_inside && event->action != mir_motion_action_hover_exit)
+    {
+      impl->cursor_inside = TRUE;
+      generate_crossing_event (window, GDK_ENTER_NOTIFY, impl->x, impl->y);
+    }
+
   /* Update which window has focus */
   _gdk_mir_pointer_set_location (get_pointer (window), impl->x, impl->y, window, modifier_state);
   switch (event->action)
@@ -578,9 +589,9 @@ handle_motion_event (GdkWindow *window, MirMotionEvent *event)
     case mir_motion_action_hover_move: // move without button
       generate_motion_event (window, impl->x, impl->y, modifier_state);
       break;
-    case mir_motion_action_hover_enter:
     case mir_motion_action_hover_exit:
-      generate_crossing_event (window, event->action == mir_motion_action_hover_enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY, impl->x, impl->y);
+      impl->cursor_inside = FALSE;
+      generate_crossing_event (window, GDK_LEAVE_NOTIFY, impl->x, impl->y);
       break;
     }
 }
