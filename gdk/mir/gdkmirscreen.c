@@ -525,6 +525,24 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
       return TRUE;
     }
 
+  if (g_str_equal (name, "gtk-cursor-blink"))
+    {
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-cursor-blink-time"))
+    {
+      g_value_set_int (value, 1200);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-cursor-blink-timeout"))
+    {
+      g_value_set_int (value, 10);
+      return TRUE;
+    }
+
   g_error ("unknown property %s", name);
 
   return FALSE;
