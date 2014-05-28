@@ -681,6 +681,8 @@ gdk_mir_event_source_convert_events (GdkMirEventSource *source)
        */
       if (window != NULL)
         gdk_mir_event_source_queue_event (source->display, window, &event->event);
+      else
+        g_warning ("window was destroyed before event arrived...");
 
       gdk_mir_queued_event_free (event);
     }

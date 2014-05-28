@@ -86,7 +86,9 @@ ensure_surface (GdkWindow *window)
   if (impl->surface)
     return;
 
-  /* no destroy notify: see below... */
+  /* no destroy notify -- we must leak for now
+   * https://bugs.launchpad.net/mir/+bug/1324100
+   */
   event_delegate.context = _gdk_mir_event_source_get_window_reference (window);
 
   // Should probably calculate this once?
@@ -115,13 +117,6 @@ ensure_no_surface (GdkWindow *window)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   GdkMirWindowReference *window_ref;
-
-  /* hack: no destroy notify on the mir surface, so we have to grab it
-   * from ourselves again...
-   */
-  window_ref = _gdk_mir_event_source_get_window_reference (window);
-  _gdk_mir_window_reference_unref (window_ref);
-  _gdk_mir_window_reference_unref (window_ref);
 
   if (impl->cairo_surface)
     {
