@@ -56,6 +56,7 @@
 #include "gtkheaderbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkdialogprivate.h"
 
 
 /**
@@ -154,6 +155,9 @@ struct _GtkAboutDialogPrivate
 
   GtkWidget *stack;
   GtkWidget *stack_switcher;
+  GtkWidget *credits_button;
+  GtkWidget *license_button;
+
   GtkWidget *logo_image;
   GtkWidget *name_label;
   GtkWidget *version_label;
@@ -178,6 +182,7 @@ struct _GtkAboutDialogPrivate
   guint hovering_over_link : 1;
   guint wrap_license : 1;
   guint in_child_changed : 1;
+  guint in_switch_page : 1;
 };
 
 enum
@@ -239,6 +244,10 @@ static gboolean             text_view_motion_notify_event   (GtkWidget          
 static gboolean             text_view_visibility_notify_event(GtkWidget          *text_view,
 							      GdkEventVisibility *event,
 							      GtkAboutDialog     *about);
+static void                 toggle_credits                  (GtkToggleButton    *button,
+                                                             gpointer            user_data);
+static void                 toggle_license                  (GtkToggleButton    *button,
+                                                             gpointer            user_data);
 
 enum {
   ACTIVATE_LINK,
@@ -279,37 +288,6 @@ stack_visible_child_notify (GtkStack       *stack,
   return FALSE;
 }
 
-static GObject *
-gtk_about_dialog_constructor (GType type,
-                              guint n_construct_properties,
-                              GObjectConstructParam *construct_params)
-{
-  GObject *object;
-  guint idx;
-  GParamSpec *pspec;
-  GValue *value;
-
-  for (idx = 0; idx < n_construct_properties; idx++)
-    {
-      pspec = construct_params[idx].pspec;
-      if (g_strcmp0 (pspec->name, "use-header-bar") != 0)
-        continue;
-
-      /* GtkDialog uses "-1" to imply an unset value for this property */
-      value = construct_params[idx].value;
-      if (g_value_get_int (value) == -1)
-        g_value_set_int (value, 1);
-
-      break;
-    }
-
-  object = G_OBJECT_CLASS (gtk_about_dialog_parent_class)->constructor (type,
-                                                                        n_construct_properties,
-                                                                        construct_params);
-
-  return object;
-}
-
 static void
 gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 {
@@ -322,7 +300,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->set_property = gtk_about_dialog_set_property;
   object_class->get_property = gtk_about_dialog_get_property;
 
-  object_class->constructor = gtk_about_dialog_constructor;
   object_class->finalize = gtk_about_dialog_finalize;
 
   widget_class->show = gtk_about_dialog_show;
@@ -691,6 +668,51 @@ switch_page (GtkAboutDialog *about,
   GtkAboutDialogPrivate *priv = about->priv;
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), name);
+
+  priv->in_switch_page = TRUE;
+  if (priv->credits_button)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->credits_button),
+                                  g_str_equal (name, "credits"));
+  if (priv->license_button)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->license_button),
+                                  g_str_equal (name, "license"));
+  priv->in_switch_page = FALSE;
+}
+
+static void
+apply_use_header_bar (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = about->priv;
+  gboolean use_header_bar;
+
+  g_object_get (about, "use-header-bar", &use_header_bar, NULL);
+  if (!use_header_bar)
+    {
+      GtkWidget *action_area;
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (about));
+      G_GNUC_END_IGNORE_DEPRECATIONS
+
+      priv->credits_button = gtk_toggle_button_new_with_mnemonic ("C_redits");
+      g_object_bind_property (priv->credits_page, "visible",
+                              priv->credits_button, "visible", G_BINDING_SYNC_CREATE);
+      g_signal_connect (priv->credits_button, "toggled", G_CALLBACK (toggle_credits), about);
+      gtk_container_add_with_properties (GTK_CONTAINER (action_area), priv->credits_button,
+                                         "secondary", TRUE,
+                                         NULL);
+
+      priv->license_button = gtk_toggle_button_new_with_mnemonic ("_License");
+      g_object_bind_property (priv->license_page, "visible",
+                              priv->license_button, "visible", G_BINDING_SYNC_CREATE);
+      g_signal_connect (priv->license_button, "toggled", G_CALLBACK (toggle_license), about);
+      gtk_container_add_with_properties (GTK_CONTAINER (action_area), priv->license_button,
+                                         "secondary", TRUE,
+                                         NULL);
+
+
+      gtk_dialog_add_button (GTK_DIALOG (about), "_Close", GTK_RESPONSE_DELETE_EVENT);
+    }
 }
 
 static void
@@ -724,6 +746,9 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CANCEL);
 
   gtk_widget_init_template (GTK_WIDGET (about));
+  gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (about));
+
+  apply_use_header_bar (about);
 
   switch_page (about, "main");
   update_stack_switcher_visibility (about);
@@ -904,6 +929,36 @@ gtk_about_dialog_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+toggle_credits (GtkToggleButton *button,
+                gpointer         user_data)
+{
+  GtkAboutDialog *about = user_data;
+  GtkAboutDialogPrivate *priv = about->priv;
+  gboolean show_credits;
+
+  if (priv->in_switch_page)
+    return;
+
+  show_credits = gtk_toggle_button_get_active (button);
+  switch_page (about, show_credits ? "credits" : "main");
+}
+
+static void
+toggle_license (GtkToggleButton *button,
+                gpointer         user_data)
+{
+  GtkAboutDialog *about = user_data;
+  GtkAboutDialogPrivate *priv = about->priv;
+  gboolean show_license;
+
+  if (priv->in_switch_page)
+    return;
+
+  show_license = gtk_toggle_button_get_active (button);
+  switch_page (about, show_license ? "license" : "main");
 }
 
 static gboolean
