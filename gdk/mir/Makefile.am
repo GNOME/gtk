@@ -23,6 +23,7 @@ libgdk_mir_la_SOURCES =	\
 	gdkmircursor.c \
 	gdkmirdevicemanager.c \
 	gdkmirdisplay.c \
+	gdkmireventsource.c	\
 	gdkmirkeyboard.c \
 	gdkmirkeymap.c \
 	gdkmirpointer.c \
