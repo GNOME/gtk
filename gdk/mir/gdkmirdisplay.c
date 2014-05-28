@@ -35,6 +35,9 @@ typedef struct GdkMirDisplay
   /* Connection to Mir server */
   MirConnection *connection;
 
+  /* Event source */
+  GdkMirEventSource *event_source;
+
   /* Serial number? */
   gulong serial;
 
@@ -131,6 +134,14 @@ gdk_mir_display_get_mir_connection (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_MIR_DISPLAY (display), NULL);
   return GDK_MIR_DISPLAY (display)->connection;
+}
+
+GdkMirEventSource *
+_gdk_mir_display_get_event_source (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_MIR_DISPLAY (display), NULL);
+
+  return GDK_MIR_DISPLAY (display)->event_source;
 }
 
 static void
@@ -493,6 +504,7 @@ gdk_mir_display_utf8_to_string_target (GdkDisplay  *display,
 static void
 gdk_mir_display_init (GdkMirDisplay *display)
 {
+  display->event_source = _gdk_mir_event_source_new (GDK_DISPLAY (display));
   display->cursor = _gdk_mir_cursor_new (GDK_DISPLAY (display), GDK_ARROW);
   display->keymap = _gdk_mir_keymap_new ();
 }
