@@ -549,6 +549,12 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
       return TRUE;
     }
 
+  if (g_str_equal (name, "gtk-entry-select-on-focus"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
   g_error ("unknown property %s", name);
 
   return FALSE;
