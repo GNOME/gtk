@@ -334,6 +334,65 @@ send_event (GdkWindow *window, GdkDevice *device, GdkEvent *event)
 }
 
 static void
+set_key_event_string (GdkEventKey *event)
+{
+  gunichar c = 0;
+
+  if (event->keyval != GDK_KEY_VoidSymbol)
+    c = gdk_keyval_to_unicode (event->keyval);
+
+  if (c)
+    {
+      gchar buf[7];
+      gint len;
+      gsize bytes_written;
+
+      /* Apply the control key - Taken from Xlib
+       */
+      if (event->state & GDK_CONTROL_MASK)
+        {
+          if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
+          else if (c == '2')
+            {
+              event->string = g_memdup ("\0\0", 2);
+              event->length = 1;
+              buf[0] = '\0';
+              return;
+            }
+          else if (c >= '3' && c <= '7') c -= ('3' - '\033');
+          else if (c == '8') c = '\177';
+          else if (c == '/') c = '_' & 0x1F;
+        }
+
+      len = g_unichar_to_utf8 (c, buf);
+      buf[len] = '\0';
+
+      event->string = g_locale_from_utf8 (buf, len,
+                                          NULL, &bytes_written,
+                                          NULL);
+      if (event->string)
+        event->length = bytes_written;
+    }
+  else if (event->keyval == GDK_KEY_Escape)
+    {
+      event->length = 1;
+      event->string = g_strdup ("\033");
+    }
+  else if (event->keyval == GDK_KEY_Return ||
+           event->keyval == GDK_KEY_KP_Enter)
+    {
+      event->length = 1;
+      event->string = g_strdup ("\r");
+    }
+
+  if (!event->string)
+    {
+      event->length = 0;
+      event->string = g_strdup ("");
+    }
+}
+
+static void
 generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint keyval, guint16 keycode, gboolean is_modifier)
 {
   GdkEvent *event;
@@ -341,11 +400,9 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   event = gdk_event_new (type);
   event->key.state = state;
   event->key.keyval = keyval;
-  event->key.length = 0;
-  event->key.string = NULL; // FIXME: Is this still needed?
   event->key.hardware_keycode = keycode;
-  event->key.group = 0; // FIXME
   event->key.is_modifier = is_modifier;
+  set_key_event_string (&event->key);
 
   send_event (window, _gdk_mir_device_manager_get_keyboard (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
 }
