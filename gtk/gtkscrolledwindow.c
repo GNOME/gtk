@@ -129,7 +129,7 @@
 #define TOUCH_BYPASS_CAPTURED_THRESHOLD 30
 
 /* Kinetic scrolling */
-#define MAX_OVERSHOOT_DISTANCE 50
+#define MAX_OVERSHOOT_DISTANCE 100
 #define DECELERATION_FRICTION 4
 #define OVERSHOOT_FRICTION 20
 
@@ -164,7 +164,6 @@ struct _GtkScrolledWindowPrivate
   gdouble drag_start_x;
   gdouble drag_start_y;
 
-  GdkWindow             *overshoot_window;
   GdkDevice             *drag_device;
   guint                  kinetic_scrolling         : 1;
   guint                  capture_button_press      : 1;
@@ -265,8 +264,6 @@ static void  gtk_scrolled_window_get_preferred_width_for_height  (GtkWidget     
 							gint                *minimum_height,
 							gint                *natural_height);
 
-static void  gtk_scrolled_window_realize               (GtkWidget           *widget);
-static void  gtk_scrolled_window_unrealize             (GtkWidget           *widget);
 static void  gtk_scrolled_window_map                   (GtkWidget           *widget);
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
 
@@ -284,7 +281,6 @@ static void gtk_scrolled_window_cancel_deceleration (GtkScrolledWindow *scrolled
 static gboolean _gtk_scrolled_window_get_overshoot (GtkScrolledWindow *scrolled_window,
                                                     gint              *overshoot_x,
                                                     gint              *overshoot_y);
-static void     _gtk_scrolled_window_allocate_overshoot_window (GtkScrolledWindow *scrolled_window);
 
 static void     gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window);
 
@@ -347,8 +343,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->get_preferred_height = gtk_scrolled_window_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_scrolled_window_get_preferred_height_for_width;
   widget_class->get_preferred_width_for_height = gtk_scrolled_window_get_preferred_width_for_height;
-  widget_class->realize = gtk_scrolled_window_realize;
-  widget_class->unrealize = gtk_scrolled_window_unrealize;
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
   widget_class->grab_notify = gtk_scrolled_window_grab_notify;
@@ -613,8 +607,6 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
                                 GtkGesture        *gesture)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  gint old_overshoot_x, old_overshoot_y;
-  gint new_overshoot_x, new_overshoot_y;
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
   gdouble dx, dy;
@@ -627,9 +619,6 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
       gtk_gesture_set_sequence_state (gesture, sequence,
                                       GTK_EVENT_SEQUENCE_CLAIMED);
     }
-
-  _gtk_scrolled_window_get_overshoot (scrolled_window,
-                                      &old_overshoot_x, &old_overshoot_y);
 
   hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   if (hadjustment && priv->hscrollbar_visible)
@@ -647,23 +636,8 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
                                                  dy, TRUE, FALSE);
     }
 
-  _gtk_scrolled_window_get_overshoot (scrolled_window,
-                                      &new_overshoot_x, &new_overshoot_y);
-
-  if (old_overshoot_x != new_overshoot_x ||
-      old_overshoot_y != new_overshoot_y)
-    {
-      if (new_overshoot_x >= 0 || new_overshoot_y >= 0)
-        {
-          /* We need to reallocate the widget to have it at
-           * negative offset, so there's a "gravity" on the
-           * bottom/right corner
-           */
-          gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
-        }
-      else if (new_overshoot_x < 0 || new_overshoot_y < 0)
-        _gtk_scrolled_window_allocate_overshoot_window (scrolled_window);
-    }
+  gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (scrolled_window)),
+                              NULL, FALSE);
 }
 
 static void
@@ -1601,6 +1575,96 @@ gtk_scrolled_window_draw_scrollbars_junction (GtkScrolledWindow *scrolled_window
   gtk_style_context_restore (context);
 }
 
+static void
+gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
+				    cairo_t           *cr)
+{
+  GtkWidget *widget = GTK_WIDGET (scrolled_window);
+  GtkAllocation allocation, relative_allocation;
+  gint overshoot_x, overshoot_y;
+  cairo_pattern_t *pattern;
+  GtkStyleContext *context;
+  cairo_matrix_t matrix;
+  GdkRectangle rect;
+  gdouble percent;
+  GdkRGBA color;
+
+  if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
+    return;
+
+  cairo_push_group (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_LIGHTEN);
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_OVERSHOOT);
+  gtk_style_context_get_background_color (context,
+					  gtk_widget_get_state_flags (widget),
+					  &color);
+
+  gtk_style_context_restore (context);
+
+  if (overshoot_x != 0)
+    {
+      percent = CLAMP (ABS ((gdouble) overshoot_x) / MAX_OVERSHOOT_DISTANCE, 0, 1);
+      rect = relative_allocation;
+      rect.width = MAX_OVERSHOOT_DISTANCE;
+
+      pattern = cairo_pattern_create_linear (0, 0, MAX_OVERSHOOT_DISTANCE, 0);
+      cairo_pattern_add_color_stop_rgba (pattern, 0, color.red, color.green, color.blue, color.alpha * percent);
+      cairo_pattern_add_color_stop_rgba (pattern, percent, color.red, color.green, color.blue, 0);
+      cairo_matrix_init_identity (&matrix);
+
+      if (overshoot_x > 0)
+        {
+          rect.x += relative_allocation.width - MAX_OVERSHOOT_DISTANCE;
+          cairo_matrix_translate (&matrix, relative_allocation.width, 0);
+          cairo_matrix_rotate (&matrix, G_PI);
+        }
+
+      cairo_pattern_set_matrix (pattern, &matrix);
+
+      gdk_cairo_rectangle (cr, &rect);
+      cairo_set_source (cr, pattern);
+      cairo_fill (cr);
+
+      cairo_pattern_destroy (pattern);
+    }
+
+  if (overshoot_y != 0)
+    {
+      percent = CLAMP (ABS ((gdouble) overshoot_y) / MAX_OVERSHOOT_DISTANCE, 0, 1);
+      rect = relative_allocation;
+      rect.height = MAX_OVERSHOOT_DISTANCE;
+
+      pattern = cairo_pattern_create_linear (0, 0, 0, MAX_OVERSHOOT_DISTANCE);
+      cairo_pattern_add_color_stop_rgba (pattern, 0, color.red, color.green, color.blue, color.alpha * percent);
+      cairo_pattern_add_color_stop_rgba (pattern, percent, color.red, color.green, color.blue, 0);
+      cairo_matrix_init_identity (&matrix);
+
+      if (overshoot_y > 0)
+        {
+          rect.y += relative_allocation.height - MAX_OVERSHOOT_DISTANCE;
+          cairo_matrix_translate (&matrix, 0, relative_allocation.height);
+          cairo_matrix_rotate (&matrix, G_PI);
+        }
+
+      cairo_pattern_set_matrix (pattern, &matrix);
+
+      cairo_set_source (cr, pattern);
+      gdk_cairo_rectangle (cr, &rect);
+      cairo_fill (cr);
+
+      cairo_pattern_destroy (pattern);
+    }
+
+  cairo_pop_group_to_source (cr);
+  cairo_paint (cr);
+}
+
 static gboolean
 gtk_scrolled_window_draw (GtkWidget *widget,
                           cairo_t   *cr)
@@ -1654,6 +1718,8 @@ gtk_scrolled_window_draw (GtkWidget *widget,
 		    relative_allocation.height);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->draw (widget, cr);
+
+  gtk_scrolled_window_draw_overshoot (scrolled_window, cr);
 
   return FALSE;
 }
@@ -1934,73 +2000,21 @@ _gtk_scrolled_window_get_overshoot (GtkScrolledWindow *scrolled_window,
 }
 
 static void
-_gtk_scrolled_window_allocate_overshoot_window (GtkScrolledWindow *scrolled_window)
-{
-  GtkAllocation window_allocation, relative_allocation, allocation;
-  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  GtkWidget *widget = GTK_WIDGET (scrolled_window);
-  gint overshoot_x, overshoot_y;
-
-  if (!gtk_widget_get_realized (widget))
-    return;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
-  _gtk_scrolled_window_get_overshoot (scrolled_window,
-                                      &overshoot_x, &overshoot_y);
-
-  window_allocation = relative_allocation;
-  window_allocation.x += allocation.x;
-  window_allocation.y += allocation.y;
-
-  /* Handle displacement to the left/top by moving the overshoot
-   * window, overshooting to the bottom/right is handled in
-   * gtk_scrolled_window_allocate_child()
-   */
-  if (overshoot_x < 0)
-    window_allocation.x += -overshoot_x;
-
-  if (overshoot_y < 0)
-    window_allocation.y += -overshoot_y;
-
-  window_allocation.width -= ABS (overshoot_x);
-  window_allocation.height -= ABS (overshoot_y);
-
-  gdk_window_move_resize (priv->overshoot_window,
-                          window_allocation.x, window_allocation.y,
-                          window_allocation.width, window_allocation.height);
-}
-
-static void
 gtk_scrolled_window_allocate_child (GtkScrolledWindow *swindow,
 				    GtkAllocation     *relative_allocation)
 {
   GtkWidget     *widget = GTK_WIDGET (swindow), *child;
   GtkAllocation  allocation;
   GtkAllocation  child_allocation;
-  gint           overshoot_x, overshoot_y;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
   gtk_widget_get_allocation (widget, &allocation);
 
   gtk_scrolled_window_relative_allocation (widget, relative_allocation);
-  _gtk_scrolled_window_get_overshoot (swindow, &overshoot_x, &overshoot_y);
 
-  /* Handle overshooting to the right/bottom by relocating the
-   * widget allocation to negative coordinates, so these edges
-   * stick to the overshoot window border.
-   */
-  if (overshoot_x > 0)
-    child_allocation.x = -overshoot_x;
-  else
-    child_allocation.x = 0;
-
-  if (overshoot_y > 0)
-    child_allocation.y = -overshoot_y;
-  else
-    child_allocation.y = 0;
-
+  child_allocation.x = relative_allocation->x + allocation.x;
+  child_allocation.y = relative_allocation->y + allocation.y;
   child_allocation.width = relative_allocation->width;
   child_allocation.height = relative_allocation->height;
 
@@ -2332,7 +2346,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (priv->vscrollbar, &child_allocation);
     }
 
-  _gtk_scrolled_window_allocate_overshoot_window (scrolled_window);
   gtk_scrolled_window_check_attach_pan_gesture (scrolled_window);
 }
 
@@ -2479,7 +2492,6 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
   GtkScrolledWindow *scrolled_window = data->scrolled_window;
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkAdjustment *hadjustment, *vadjustment;
-  gint old_overshoot_x, old_overshoot_y, overshoot_x, overshoot_y;
   gint64 current_time;
   gdouble position, elapsed;
 
@@ -2489,9 +2501,6 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
 
   hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
-
-  _gtk_scrolled_window_get_overshoot (scrolled_window,
-                                      &old_overshoot_x, &old_overshoot_y);
 
   if (data->hscrolling &&
       gtk_kinetic_scrolling_tick (data->hscrolling, elapsed, &position))
@@ -2511,31 +2520,13 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
   else if (data->vscrolling)
     g_clear_pointer (&data->vscrolling, (GDestroyNotify) gtk_kinetic_scrolling_free);
 
-  _gtk_scrolled_window_get_overshoot (scrolled_window,
-                                      &overshoot_x, &overshoot_y);
-
-  if (old_overshoot_x != overshoot_x ||
-      old_overshoot_y != overshoot_y)
-    {
-      if (overshoot_x >= 0 || overshoot_y >= 0)
-        {
-          /* We need to reallocate the widget to have it at
-           * negative offset, so there's a "gravity" on the
-           * bottom/right corner
-           */
-          gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
-        }
-      else if (overshoot_x < 0 || overshoot_y < 0)
-        {
-          _gtk_scrolled_window_allocate_overshoot_window (scrolled_window);
-        }
-    }
-
   if (!data->hscrolling && !data->vscrolling)
     {
       gtk_scrolled_window_cancel_deceleration (scrolled_window);
       return G_SOURCE_REMOVE;
     }
+
+  gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE);
 
   return G_SOURCE_CONTINUE;
 }
@@ -2766,9 +2757,6 @@ gtk_scrolled_window_add (GtkContainer *container,
                                            gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_container_add (GTK_CONTAINER (scrollable_child), child);
     }
-
-  if (gtk_widget_get_realized (GTK_WIDGET (bin)))
-    gtk_widget_set_parent_window (scrollable_child, priv->overshoot_window);
 
   _gtk_bin_set_child (bin, scrollable_child);
   gtk_widget_set_parent (scrollable_child, GTK_WIDGET (bin));
@@ -3075,59 +3063,6 @@ gtk_scrolled_window_get_preferred_width_for_height (GtkWidget *widget,
   GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
-static void
-gtk_scrolled_window_realize (GtkWidget *widget)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkAllocation allocation, relative_allocation;
-  GdkWindowAttr attributes;
-  GtkWidget *child_widget;
-  gint attributes_mask;
-
-  gtk_widget_set_realized (widget, TRUE);
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
-
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x + relative_allocation.x;
-  attributes.y = allocation.y + relative_allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK |
-    GDK_BUTTON_MOTION_MASK | GDK_TOUCH_MASK | GDK_EXPOSURE_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
-
-  scrolled_window->priv->overshoot_window =
-    gdk_window_new (gtk_widget_get_parent_window (widget),
-                    &attributes, attributes_mask);
-  gtk_widget_register_window (widget, scrolled_window->priv->overshoot_window);
-
-  child_widget = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (child_widget)
-    gtk_widget_set_parent_window (child_widget,
-                                  scrolled_window->priv->overshoot_window);
-
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->realize (widget);
-}
-
-static void
-gtk_scrolled_window_unrealize (GtkWidget *widget)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-
-  gtk_widget_unregister_window (widget, scrolled_window->priv->overshoot_window);
-  gdk_window_destroy (scrolled_window->priv->overshoot_window);
-  scrolled_window->priv->overshoot_window = NULL;
-
-  gtk_widget_set_realized (widget, FALSE);
-
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
-}
-
 static gboolean
 gtk_scrolled_window_should_animate (GtkScrolledWindow *sw)
 {
@@ -3168,8 +3103,6 @@ gtk_scrolled_window_map (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
 
-  gdk_window_show (scrolled_window->priv->overshoot_window);
-
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->map (widget);
 
   gtk_scrolled_window_update_animating (scrolled_window);
@@ -3179,8 +3112,6 @@ static void
 gtk_scrolled_window_unmap (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-
-  gdk_window_hide (scrolled_window->priv->overshoot_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
 
