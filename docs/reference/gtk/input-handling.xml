@@ -73,6 +73,14 @@
      </simplelist>
     </para>
     <para>
+      Additionally, GDK/GTK synthesizes other signals to let know whether
+      grabs (system-wide or in-app) are taking input away:
+      <simplelist>
+	<member>GdkEventGrabBroken</member>
+	<member>GtkWidget::grab-notify</member>
+      </simplelist>
+    </para>
+    <para>
       When GTK+ is initialized, it sets up an event handler function with
       gdk_event_handler_set(), which receives all of these input events
       (as well as others, for instance window management related events).
@@ -96,6 +104,13 @@
     </para>
 
     <para>
+      After the “capture” phase, the widget that was intended to be the
+      destination of the event will let run gestures attached to it with
+      GTK_PHASE_TARGET. This is known as the “target” phase, and does only
+      happen on that widget.
+    </para>
+
+    <para>
       Next, the appropriate event signal is emitted for the event in question,
       e.g. “motion-notify-event”. Handling these signals was the primary
       way to handle input in GTK+ widgets before gestures were introduced.
@@ -106,19 +121,85 @@
 
     <para>
       The default handlers for the event signals send the event
-      to gestures that are attached with GTK_PHASE_TARGET. Therefore,
-      gestures in the ”target” phase are only used if the widget does
+      to gestures that are attached with GTK_PHASE_BUBBLE. Therefore,
+      gestures in the “bubble” phase are only used if the widget does
       not have its own event handlers, or takes care to chain up to the
-      default handlers.
+      default GtkWidget handlers.
     </para>
 
     <para>
-      After calling the event handlers, in the so-called ”bubble” phase,
-      gestures that are attached with GTK_PHASE_BUBBLE get a chance
-      to react to the event.
+      Anytime during the propagation phase, a widget may indicate that a
+      received event was consumed and propagation should therefore be stopped.
+      In traditional event handlers, this is hinted by returning GDK_EVENT_STOP,
+      if gestures are used, this may happen when the widget tells the gesture
+      to claim the event touch sequence (or the pointer events) for its own. See the
+      "gesture states" section below to know more of the latter.
+    </para>
+  </refsect2>
+
+  <refsect2>
+    <title>Touch events</title>
+
+    <para>
+      Touch events are emitted as events of type GDK_TOUCH_BEGIN, GDK_TOUCH_UPDATE or
+      GDK_TOUCH_END, those events contain an “event sequence” that univocally identifies
+      the physical touch until it is lifted from the device.
     </para>
 
-    <!-- grabs -->
+    <para>
+      On some windowing platforms, multitouch devices perform pointer emulation, this works
+      by granting a “pointer emulating” hint to one of the currently interacting touch
+      sequences, which will be reported on every GdkEventTouch event from that sequence. By
+      default, if a widget didn't request touch events by setting GDK_TOUCH_MASK on its
+      event mask and didn't override GtkWidget::touch-event, GTK+ will transform these
+      “pointer emulating” events into semantically similar GdkEventButton and GdkEventMotion
+      events. Depending on GDK_TOUCH_MASK being in the event mask or not, non-pointer-emulating
+      sequences could still trigger gestures or just get filtered out, regardless of the widget
+      not handling those directly.
+    </para>
+
+    <para>
+      If the widget sets GDK_TOUCH_MASK on its event mask and doesn't chain up on
+      GtkWidget::touch-event, only touch events will be received, and no pointer emulation
+      will be performed.
+    </para>
+  </refsect2>
+
+  <refsect2>
+    <title>Grabs</title>
+
+    <para>
+      Grabs are a method to claim all input events from a device, they happen
+      either implicitly on pointer and touch devices, or explicitly. Implicit grabs
+      happen on user interaction, when a GdkEventButtonPress happens, all events from
+      then on, until after the corresponding GdkEventButtonRelease, will be reported
+      to the widget that got the first event. Likewise, on touch events, every
+      GdkEventSequence will deliver only events to the widget that received its
+      GDK_TOUCH_BEGIN event.
+    </para>
+
+    <para>
+      Explicit grabs happen programatically (both activation and deactivation),
+      and can be either system-wide (GDK grabs) or application-wide (GTK grabs).
+      On the windowing platforms that support it, GDK grabs will prevent any
+      interaction with any other application/window/widget than the grabbing one,
+      whereas GTK grabs will be effective only within the application (across all
+      its windows), still allowing for interaction with other applications.
+    </para>
+
+    <para>
+      But one important aspect of grabs is that they may potentially happen at any
+      point somewhere else, even while the pointer/touch device is already grabbed.
+      This makes it necessary for widgets to handle the cancellation of any ongoing
+      interaction. Depending on whether a GTK or GDK grab is causing this, the
+      widget will respectively receive a GtkWidget::grab-notify signal, or a
+      GdkEventGrabBroken event.
+    </para>
+
+    <para>
+      On gestures, these signals are handled automatically, causing the gesture
+      to cancel all tracked pointer/touch events, and signal the end of recognition.
+    </para>
   </refsect2>
 
   <refsect2>
@@ -129,9 +210,77 @@
   </refsect2>
 
   <refsect2>
-    <title>Gestures</title>
+    <title>Event controllers and gestures</title>
 
-    <!-- touch sequences, states, anything else -->
+    <para>
+      Event controllers are standalone objects that can perform specific actions
+      upon received GdkEvents. These are tied to a GtkWidget, and can be told of
+      the event propagation phase at which they will manage the events.
+    </para>
+
+    <para>
+      Gestures are a set of specific controllers that are prepared to handle pointer
+      and/or touch events, each gestures implementation attempts to recognize specific
+      actions out the received events, notifying of the state/progress accordingly to
+      let the widget react to those. On multi-touch gestures, every interacting touch
+      sequence will be tracked independently.
+    </para>
+
+    <para>
+      Being gestures “simple” units, it is not uncommon to tie several together to
+      perform higher level actions, grouped gestures handle the same event sequences
+      simultaneously, and those sequences share a same state across all grouped
+      gestures. Some examples of grouping may be:
+
+      <simplelist>
+	<member>
+	  A “drag” and a “swipe” gestures may want grouping. The former will report
+	  events as the dragging happens, the latter will tell the swipe X/Y velocities
+	  only after gesture has finished.
+	</member>
+	<member>
+	  Grouping a “drag” gesture with a “pan” gesture will only effectively allow
+	  dragging in the panning orientation, as both gestures share state.
+	</member>
+	<member>
+	  If “press” and “long press” are wanted simultaneously, those would need grouping.
+	</member>
+      </simplelist>
+    </para>
+  </refsect2>
+
+  <refsect2>
+    <title>Gesture states</title>
+    <para>
+      Gestures have a notion of “state” for each individual touch sequence. When events
+      from a touch sequence are first received, the touch sequence will have “none” state,
+      this means the touch sequence is being handled by the gesture to possibly trigger
+      actions, but the event propagation will not be stopped.
+    </para>
+
+    <para>
+      When the gesture enters recognition, or at a later point in time, the widget may
+      choose to claim the touch sequences (individually or as a group), hence stopping
+      event propagation after the event is run through every gesture in that widget and
+      propagation phase. Anytime this happens, the touch sequences are cancelled downwards
+      the propagation chain, to let these know that no further events will be sent.
+    </para>
+
+    <para>
+      Alternatively, or at a later point in time, the widget may choose to deny the touch
+      sequences, thus letting those go through again in event propagation. When this happens
+      in the capture phase, and if there are no other claiming gestures in the widget,
+      a GDK_TOUCH_BEGIN/GDK_BUTTON_PRESS event will be emulated and
+      propagated downwards, in order to preserve consistency.
+    </para>
+
+    <para>
+      Grouped gestures always share the same state for a given touch sequence, so setting
+      the state on one does transfer the state to the others. They also are mutually exclusive,
+      within a widget there may be only one gesture group claiming a given sequence. If
+      another gesture group claims later that same sequence, the first group will deny the
+      sequence.
+    </para>
   </refsect2>
 
   </refsect1>
