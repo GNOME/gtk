@@ -383,7 +383,7 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
 
   if (strcmp (name, "gtk-theme-name") == 0)
     {
-      g_value_set_string (value, "Ambience");
+      g_value_set_string (value, "Ambiance");
       return TRUE;
     }
 
