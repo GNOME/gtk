@@ -472,6 +472,23 @@ generate_crossing_event (GdkWindow *window, GdkEventType type, gdouble x, gdoubl
   send_event (window, get_pointer (window), event);
 }
 
+static void
+generate_focus_event (GdkWindow *window, gboolean focused)
+{
+  GdkEvent *event;
+
+  if (focused)
+    gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
+  else
+    gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
+
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  event->focus_change.send_event = FALSE;
+  event->focus_change.in = focused;
+
+  send_event (window, get_pointer (window), event);
+}
+
 static guint
 get_modifier_state (unsigned int modifiers, unsigned int button_state)
 {
@@ -603,10 +620,7 @@ handle_surface_event (GdkWindow *window, const MirSurfaceEvent *event)
     case mir_surface_attrib_swapinterval:
       break;
     case mir_surface_attrib_focus:
-      if (event->value)
-        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
-      else
-        gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
+      generate_focus_event (window, event->value != 0);
       break;
     default:
       break;
