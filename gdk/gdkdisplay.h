@@ -30,6 +30,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdkdevicemanager.h>
+#include <gdk/gdkclipboard.h>
 
 G_BEGIN_DECLS
 
@@ -170,6 +171,12 @@ GdkDeviceManager * gdk_display_get_device_manager (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
 GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
+
+GDK_AVAILABLE_IN_3_14
+GdkClipboard * gdk_display_get_clipboard (GdkDisplay *display);
+
+GDK_AVAILABLE_IN_3_14
+GdkClipboard * gdk_display_get_primary   (GdkDisplay *display);
 
 G_END_DECLS
 

@@ -225,6 +225,9 @@ struct _GdkDisplayClass
   gchar *                (*utf8_to_string_target)      (GdkDisplay     *display,
                                                         const gchar    *text);
 
+  GdkClipboard *         (*get_clipboard)              (GdkDisplay *display);
+  GdkClipboard *         (*get_primary)                (GdkDisplay *display);
+
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);
   void (*closed) (GdkDisplay *display,

@@ -2225,3 +2225,19 @@ gdk_error_trap_pop (void)
 {
   return gdk_error_trap_pop_internal (TRUE);
 }
+
+GdkClipboard *
+gdk_display_get_clipboard (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_clipboard (display);
+}
+
+GdkClipboard *
+gdk_display_get_primary (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_primary (display);
+}
