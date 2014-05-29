@@ -400,7 +400,7 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   event = gdk_event_new (type);
   event->key.state = state;
   event->key.keyval = keyval;
-  event->key.hardware_keycode = keycode;
+  event->key.hardware_keycode = keycode + 8;
   event->key.is_modifier = is_modifier;
   set_key_event_string (&event->key);
 
