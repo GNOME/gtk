@@ -27,11 +27,13 @@
 #define GDK_TYPE_MIR_WINDOW              (gdk_mir_window_get_type ())
 #define GDK_IS_WINDOW_MIR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_MIR))
 
+GDK_AVAILABLE_IN_3_10
 GType gdk_mir_display_get_type (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_10
 struct MirConnection *gdk_mir_display_get_mir_connection (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_3_10
 GType gdk_mir_window_get_type (void);
 
 #endif /* __GDK_MIR_H__ */

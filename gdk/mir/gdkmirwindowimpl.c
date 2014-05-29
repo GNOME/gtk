@@ -41,6 +41,8 @@ struct _GdkMirWindowImplClass
 
 G_DEFINE_TYPE (GdkMirWindowImpl, gdk_mir_window_impl, GDK_TYPE_WINDOW_IMPL)
 
+static cairo_surface_t *gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window);
+
 GdkWindowImpl *
 _gdk_mir_window_impl_new (void)
 {
@@ -153,6 +155,41 @@ send_buffer (GdkWindow *window)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
+  /* Transient windows draw onto parent instead */
+  if (impl->transient_for)
+    {
+      gdk_window_invalidate_rect (impl->transient_for, &impl->transient_size, FALSE);
+      return;
+    }
+
+  /* Composite transient windows over this one */
+  if (impl->transient_children)
+    {
+      cairo_surface_t *surface;
+      cairo_t *c;
+      GList *link;
+
+      surface = gdk_mir_window_impl_ref_cairo_surface (window);
+      c = cairo_create (surface);
+
+      for (link = impl->transient_children; link; link = link->next)
+        {
+          GdkWindow *child_window = link->data;
+          GdkMirWindowImpl *child_impl = GDK_MIR_WINDOW_IMPL (child_window->impl);
+
+          /* Skip children not yet drawn to */
+          if (!child_impl->cairo_surface)
+            continue;
+
+          cairo_set_source_surface (c, child_impl->cairo_surface, child_impl->transient_size.x, child_impl->transient_size.y);
+          cairo_rectangle (c, child_impl->transient_size.x, child_impl->transient_size.y, child_impl->transient_size.width, child_impl->transient_size.height);
+          cairo_fill (c);
+        }
+
+      cairo_destroy (c);
+      cairo_surface_destroy (surface);
+    }
+
   /* Send the completed buffer to Mir */
   mir_surface_swap_buffers_sync (impl->surface);
 
@@ -180,31 +217,40 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
       return impl->cairo_surface;
     }
 
-  ensure_surface (window);
-
-  mir_surface_get_graphics_region (impl->surface, &region);
-
-  // FIXME: Should calculate this once
-  switch (region.pixel_format)
+  /* Transient windows get rendered into a buffer and copied onto their parent */
+  if (impl->transient_for)
     {
-    case mir_pixel_format_argb_8888:
-      pixel_format = CAIRO_FORMAT_ARGB32;
-      break;
-    default:
-    case mir_pixel_format_abgr_8888:
-    case mir_pixel_format_xbgr_8888:
-    case mir_pixel_format_xrgb_8888:
-    case mir_pixel_format_bgr_888:
-        // uh-oh...
-        g_printerr ("Unsupported pixel format %d\n", region.pixel_format);
-        break;
+      cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, impl->transient_size.width, impl->transient_size.height);
+    }
+  else
+    {
+      ensure_surface (window);
+
+      mir_surface_get_graphics_region (impl->surface, &region);
+
+      // FIXME: Should calculate this once
+      switch (region.pixel_format)
+        {
+        case mir_pixel_format_argb_8888:
+          pixel_format = CAIRO_FORMAT_ARGB32;
+          break;
+        default:
+        case mir_pixel_format_abgr_8888:
+        case mir_pixel_format_xbgr_8888:
+        case mir_pixel_format_xrgb_8888:
+        case mir_pixel_format_bgr_888:
+          // uh-oh...
+          g_printerr ("Unsupported pixel format %d\n", region.pixel_format);
+          break;
+        }
+
+      cairo_surface = cairo_image_surface_create_for_data ((unsigned char *) region.vaddr,
+                                                           pixel_format,
+                                                           region.width,
+                                                           region.height,
+                                                           region.stride);
     }
 
-  cairo_surface = cairo_image_surface_create_for_data ((unsigned char *) region.vaddr,
-                                                       pixel_format,
-                                                       region.width,
-                                                       region.height,
-                                                       region.stride);
   impl->cairo_surface = cairo_surface_reference (cairo_surface);
 
   /* Draw background */
@@ -233,6 +279,13 @@ static void
 gdk_mir_window_impl_finalize (GObject *object)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (object);
+  GList *link;
+
+  for (link = impl->transient_children; link; link = link->next)
+    {
+      GdkWindow *window = link->data;
+      gdk_window_destroy (window);
+    }
 
   if (impl->background)
     cairo_pattern_destroy (impl->background);
@@ -240,6 +293,7 @@ gdk_mir_window_impl_finalize (GObject *object)
     mir_surface_release_sync (impl->surface);
   if (impl->cairo_surface)
     cairo_surface_destroy (impl->cairo_surface);
+  g_list_free (impl->transient_children);
 
   G_OBJECT_CLASS (gdk_mir_window_impl_parent_class)->finalize (object);
 }
@@ -324,16 +378,25 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
                                  gint       height)
 {
   g_printerr ("gdk_mir_window_impl_move_resize (%d, %d, %d, %d)\n", x, y, width, height);
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
-  if (with_move)
+  /* Transient windows are always the requested size */
+  if (impl->transient_for)
     {
-      window->x = x;
-      window->y = y;
+      if (with_move)
+        {
+          impl->transient_size.x = x;
+          impl->transient_size.y = y;
+        }
+      if (width >= 0)
+        impl->transient_size.width = width;
+      if (height >= 0)
+        impl->transient_size.height = height;
     }
 
   /* If resize requested then destroy surface */
   if (width >= 0)
-      ensure_no_surface (window);
+    ensure_no_surface (window);
 }
 
 static void
@@ -511,6 +574,13 @@ gdk_mir_window_impl_destroy (GdkWindow *window,
 
   impl->visible = FALSE;
   ensure_no_surface (window);
+
+  /* Remove from transient list */
+  if (impl->transient_for)
+    {
+      GdkMirWindowImpl *parent_impl = GDK_MIR_WINDOW_IMPL (impl->transient_for->impl);
+      parent_impl->transient_children = g_list_remove (parent_impl->transient_children, window);
+    }
 }
 
 static void
@@ -614,8 +684,24 @@ static void
 gdk_mir_window_impl_set_transient_for (GdkWindow *window,
                                        GdkWindow *parent)
 {
-  //g_printerr ("gdk_mir_window_impl_set_transient_for\n");
-  //FIXME
+  g_printerr ("gdk_mir_window_impl_set_transient_for\n");
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  if (impl->transient_for == parent)
+    return;
+
+  g_return_if_fail (impl->transient_for == NULL);
+
+  /* Link this window to the parent */
+  impl->transient_for = parent;
+  if (parent)
+    {
+      GdkMirWindowImpl *parent_impl = GDK_MIR_WINDOW_IMPL (parent->impl);
+      parent_impl->transient_children = g_list_append (parent_impl->transient_children, window);
+    }
+
+  /* Remove surface if we had made one before this was set */
+  ensure_no_surface (window);
 }
 
 static void
