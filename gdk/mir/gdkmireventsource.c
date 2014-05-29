@@ -627,6 +627,32 @@ handle_surface_event (GdkWindow *window, const MirSurfaceEvent *event)
     }
 }
 
+static void
+generate_configure_event (GdkWindow *window,
+                          gint       width,
+                          gint       height)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_CONFIGURE);
+  event->configure.send_event = FALSE;
+  event->configure.width = width;
+  event->configure.height = height;
+
+  send_event (window, get_pointer (window), event);
+}
+
+static void
+handle_resize_event (GdkWindow            *window,
+                     const MirResizeEvent *event)
+{
+  window->width = event->width;
+  window->height = event->height;
+  _gdk_window_update_size (window);
+
+  generate_configure_event (window, event->width, event->height);
+}
+
 typedef struct
 {
   GdkWindow *window;
@@ -654,9 +680,10 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
       handle_surface_event (window, &event->surface);
       break;
     case mir_event_type_resize:
-      // FIXME: Generate configure event
+      handle_resize_event (window, &event->resize);
       break;
     default:
+      g_assert_not_reached ();
       // FIXME?
       break;
     }
