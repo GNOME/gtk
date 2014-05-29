@@ -55,6 +55,13 @@ struct _GdkMirWindowImpl
 {
   GdkWindowImpl parent_instance;
 
+  /* Window we are temporary for */
+  GdkWindow *transient_for;
+  GdkRectangle transient_size;
+
+  /* Child windows (e.g. tooltips) */
+  GList *transient_children;
+
   /* Desired surface attributes */
   MirSurfaceType surface_type; // FIXME
   MirSurfaceState surface_state;
