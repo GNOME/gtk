@@ -59,12 +59,14 @@ DISTCLEANFILES = \
 	gtk+-quartz-3.0.pc		\
 	gtk+-broadway-3.0.pc		\
 	gtk+-wayland-3.0.pc		\
+	gtk+-mir-3.0.pc			\
 	gdk-3.0.pc			\
 	gdk-x11-3.0.pc			\
 	gdk-win32-3.0.pc		\
 	gdk-quartz-3.0.pc		\
 	gdk-broadway-3.0.pc		\
 	gdk-wayland-3.0.pc		\
+	gdk-mir-3.0.pc			\
 	gail-3.0.pc			\
 	config.lt
 
