@@ -27,8 +27,6 @@
 #include "gtkmisc.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkimage.h"
-#include "gtklabel.h"
 
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -233,28 +231,6 @@ gtk_misc_set_alignment (GtkMisc *misc,
   g_return_if_fail (GTK_IS_MISC (misc));
 
   priv = misc->priv;
-
-  if (GTK_IS_LABEL (misc) || GTK_IS_IMAGE (misc))
-    {
-      GtkAlign halign, valign;
-
-      if (xalign < 0.4)
-        halign = GTK_ALIGN_START;
-      else if (xalign > 0.6)
-        halign = GTK_ALIGN_END;
-      else
-        halign = GTK_ALIGN_CENTER;
-
-      if (yalign < 0.4)
-        valign = GTK_ALIGN_START;
-      else if (yalign > 0.6)
-        valign = GTK_ALIGN_END;
-      else
-        valign = GTK_ALIGN_CENTER;
-
-      gtk_widget_set_halign (GTK_WIDGET (misc), halign);
-      gtk_widget_set_valign (GTK_WIDGET (misc), valign);
-    }
 
   if (xalign < 0.0)
     xalign = 0.0;
