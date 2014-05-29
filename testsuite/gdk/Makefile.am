@@ -22,6 +22,7 @@ TEST_PROGS += 				\
 	encoding			\
 	display				\
 	keysyms				\
+	clipboard			\
 	$(NULL)
 
 CLEANFILES = 			\
