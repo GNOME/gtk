@@ -67,6 +67,7 @@ gdk_public_h_sources = 				\
 	gdk.h					\
 	gdkapplaunchcontext.h			\
 	gdkcairo.h				\
+	gdkclipboard.h				\
 	gdkcursor.h				\
 	gdkdevice.h				\
 	gdkdevicemanager.h			\
@@ -103,6 +104,7 @@ gdk_h_sources =					\
 
 gdk_private_headers = 				\
 	gdkapplaunchcontextprivate.h		\
+	gdkclipboardprivate.h			\
 	gdkcursorprivate.h			\
 	gdkdevicemanagerprivate.h		\
 	gdkdeviceprivate.h			\
@@ -111,9 +113,9 @@ gdk_private_headers = 				\
 	gdkdndprivate.h				\
 	gdkframeclockidle.h			\
 	gdkframeclockprivate.h			\
-	gdkscreenprivate.h			\
 	gdkinternals.h				\
 	gdkintl.h				\
+	gdkscreenprivate.h			\
 	gdkkeysprivate.h			\
 	gdkvisualprivate.h			\
 	gdkx.h
@@ -126,6 +128,7 @@ gdk_c_sources = 				\
 	gdk.c					\
 	gdkapplaunchcontext.c			\
 	gdkcairo.c				\
+	gdkclipboard.c				\
 	gdkcursor.c				\
 	gdkdeprecated.c				\
 	gdkdevice.c				\

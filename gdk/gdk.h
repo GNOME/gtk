@@ -31,6 +31,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdkapplaunchcontext.h>
 #include <gdk/gdkcairo.h>
+#include <gdk/gdkclipboard.h>
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicemanager.h>
