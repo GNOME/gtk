@@ -68,6 +68,7 @@ gdk_public_h_sources = 				\
 	gdkapplaunchcontext.h			\
 	gdkcairo.h				\
 	gdkclipboard.h				\
+	gdkclipboardfallback.h			\
 	gdkcursor.h				\
 	gdkdevice.h				\
 	gdkdevicemanager.h			\
@@ -129,6 +130,7 @@ gdk_c_sources = 				\
 	gdkapplaunchcontext.c			\
 	gdkcairo.c				\
 	gdkclipboard.c				\
+	gdkclipboardfallback.c			\
 	gdkcursor.c				\
 	gdkdeprecated.c				\
 	gdkdevice.c				\
