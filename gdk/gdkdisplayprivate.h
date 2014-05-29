@@ -83,6 +83,9 @@ struct _GdkDisplay
 
   GHashTable *device_grabs;
 
+  GdkClipboard *clipboard;
+  GdkClipboard *primary_clipboard;
+
   GHashTable *pointers_info;  /* GdkPointerWindowInfo for each device */
   guint32 last_event_time;    /* Last reported event time from server */
 

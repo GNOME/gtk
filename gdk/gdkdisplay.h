@@ -99,6 +99,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
                                                       GdkAtom     selection);
 
+GDK_AVAILABLE_IN_3_94
+GdkClipboard *          gdk_display_get_clipboard               (GdkDisplay     *display);
+GDK_AVAILABLE_IN_3_94
+GdkClipboard *          gdk_display_get_primary_clipboard       (GdkDisplay     *display);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_clipboard_persistence (GdkDisplay    *display);
 GDK_AVAILABLE_IN_ALL

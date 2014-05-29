@@ -27,6 +27,7 @@
 #include "gdkintl.h"
 #include "gdk-private.h"
 
+#include "gdkclipboardprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkevents.h"
@@ -1185,6 +1186,46 @@ gdk_display_request_selection_notification (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
   return GDK_DISPLAY_GET_CLASS (display)->request_selection_notification (display, selection);
+}
+
+/**
+ * gdk_display_get_clipboard:
+ * @display: a #GdkDisplay
+ *
+ * Gets the clipboard used for copy/paste operations.
+ *
+ * Returns: the display's clipboard
+ **/
+GdkClipboard *
+gdk_display_get_clipboard (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  if (display->clipboard == NULL)
+    display->clipboard = gdk_clipboard_new (display);
+
+  return display->clipboard;
+}
+
+/**
+ * gdk_display_get_primary_clipboard:
+ * @display: a #GdkDisplay
+ *
+ * Gets the clipboard used for the primary selection. On backends where the
+ * primary clipboard is not supported natively, GDK emulates this clipboard
+ * locally.
+ *
+ * Returns: the primary clipboard
+ **/
+GdkClipboard *
+gdk_display_get_primary_clipboard (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  if (display->primary_clipboard == NULL)
+    display->primary_clipboard = gdk_clipboard_new (display);
+
+  return display->primary_clipboard;
 }
 
 /**
