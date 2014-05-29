@@ -1387,7 +1387,7 @@ fi
 PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
 
 GTK_PACKAGES="atk >= atk_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version gdk-pixbuf-2.0 >= gdk_pixbuf_required_version gio-2.0 >= glib_required_version"
-GTK_PRIVATE_PACKAGES="$ATK_PACKAGES"
+GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES"
 if test "x$enable_x11_backend" = xyes; then
   GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
 fi
