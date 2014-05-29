@@ -489,6 +489,24 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
       return TRUE;
     }
 
+  if (g_str_equal (name, "gtk-shell-shows-desktop"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-recent-files-enabled"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-alternative-sort-arrows"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
   if (g_str_equal (name, "gtk-enable-accels"))
     {
       g_value_set_boolean (value, TRUE);
