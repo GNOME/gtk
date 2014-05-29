@@ -82,6 +82,7 @@ ensure_surface (GdkWindow *window)
   unsigned int n_formats, i;
   MirSurfaceParameters parameters;
   MirEventDelegate event_delegate = { event_cb, NULL };
+  GdkMirWindowReference *window_ref;
 
   if (impl->surface)
     return;
@@ -89,7 +90,9 @@ ensure_surface (GdkWindow *window)
   /* no destroy notify -- we must leak for now
    * https://bugs.launchpad.net/mir/+bug/1324100
    */
-  event_delegate.context = _gdk_mir_event_source_get_window_reference (window);
+  window_ref = _gdk_mir_event_source_get_window_reference (window);
+
+  event_delegate.context = window_ref;
 
   // Should probably calculate this once?
   // Should prefer certain formats over others
@@ -108,6 +111,20 @@ ensure_surface (GdkWindow *window)
   parameters.buffer_usage = mir_buffer_usage_software;
   parameters.output_id = mir_display_output_id_invalid;
   impl->surface = mir_connection_create_surface_sync (get_connection (window), &parameters);
+
+  MirGraphicsRegion region;
+  MirEvent resize_event;
+
+  mir_surface_get_graphics_region (impl->surface, &region);
+
+  /* Send the initial configure with the size the server gave... */
+  resize_event.resize.type = mir_event_type_resize;
+  resize_event.resize.surface_id = 0;
+  resize_event.resize.width = region.width;
+  resize_event.resize.height = region.height;
+
+  _gdk_mir_event_source_queue (window_ref, &resize_event);
+
   mir_surface_set_event_handler (impl->surface, &event_delegate); // FIXME: Ignore some events until shown
   set_surface_state (impl, impl->surface_state);
 }
@@ -116,7 +133,6 @@ static void
 ensure_no_surface (GdkWindow *window)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-  GdkMirWindowReference *window_ref;
 
   if (impl->cairo_surface)
     {
