@@ -37,6 +37,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkclipboard-x11.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -2847,6 +2848,18 @@ gdk_x11_display_get_keymap (GdkDisplay *display)
   return display_x11->keymap;
 }
 
+static GdkClipboard *
+gdk_x11_display_get_clipboard (GdkDisplay *display)
+{
+  return GDK_CLIPBOARD (gdk_clipboard_x11_new (display, "CLIPBOARD"));
+}
+
+static GdkClipboard *
+gdk_x11_display_get_primary (GdkDisplay *display)
+{
+  return GDK_CLIPBOARD (gdk_clipboard_x11_new (display, "PRIMARY"));
+}
+
 static void
 gdk_x11_display_class_init (GdkX11DisplayClass * class)
 {
@@ -2901,6 +2914,8 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->convert_selection = _gdk_x11_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_x11_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_x11_display_utf8_to_string_target;
+  display_class->get_clipboard = gdk_x11_display_get_clipboard;
+  display_class->get_primary = gdk_x11_display_get_primary;
 
   _gdk_x11_windowing_init ();
 }
