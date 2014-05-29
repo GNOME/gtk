@@ -1547,7 +1547,7 @@ gtk_builder_expose_object (GtkBuilder    *builder,
 typedef struct {
   GModule *module;
   gpointer data;
-} connect_args;
+} ConnectArgs;
 
 static void
 gtk_builder_connect_signals_default (GtkBuilder    *builder,
@@ -1559,7 +1559,7 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
 				     gpointer       user_data)
 {
   GCallback func;
-  connect_args *args = (connect_args*)user_data;
+  ConnectArgs *args = (ConnectArgs*) user_data;
 
   func = gtk_builder_lookup_callback_symbol (builder, handler_name);
 
@@ -1618,23 +1618,20 @@ void
 gtk_builder_connect_signals (GtkBuilder *builder,
 			     gpointer    user_data)
 {
-  connect_args *args;
+  ConnectArgs args;
   
   g_return_if_fail (GTK_IS_BUILDER (builder));
   
-  args = g_slice_new0 (connect_args);
-  args->data = user_data;
+  args.data = user_data;
 
   if (g_module_supported ())
-    args->module = g_module_open (NULL, G_MODULE_BIND_LAZY);
+    args.module = g_module_open (NULL, G_MODULE_BIND_LAZY);
   
   gtk_builder_connect_signals_full (builder,
                                     gtk_builder_connect_signals_default,
-                                    args);
-  if (args->module)
-    g_module_close (args->module);
-
-  g_slice_free (connect_args, args);
+                                    &args);
+  if (args.module)
+    g_module_close (args.module);
 }
 
 /**
