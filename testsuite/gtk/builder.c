@@ -2918,6 +2918,60 @@ test_template ()
   g_assert (GTK_IS_LABEL (my_gtk_grid->priv->label));
 }
 
+void
+on_cellrenderertoggle1_toggled (GtkCellRendererToggle *cell)
+{
+}
+
+static void
+test_anaconda_signal (void)
+{
+  GtkBuilder *builder;
+  const gchar buffer[] = 
+    "<?xml version='1.0' encoding='UTF-8'?>"
+    "<!-- Generated with glade 3.18.3 -->"
+    "<interface>"
+    "  <requires lib='gtk+' version='3.12'/>"
+    "  <object class='GtkListStore' id='liststore1'>"
+    "    <columns>"
+    "      <!-- column-name use -->"
+    "      <column type='gboolean'/>"
+    "    </columns>"
+    "  </object>"
+    "  <object class='GtkWindow' id='window1'>"
+    "    <property name='can_focus'>False</property>"
+    "    <child>"
+    "      <object class='GtkTreeView' id='treeview1'>"
+    "        <property name='visible'>True</property>"
+    "        <property name='can_focus'>True</property>"
+    "        <property name='model'>liststore1</property>"
+    "        <child internal-child='selection'>"
+    "          <object class='GtkTreeSelection' id='treeview-selection1'/>"
+    "        </child>"
+    "        <child>"
+    "          <object class='GtkTreeViewColumn' id='treeviewcolumn1'>"
+    "            <property name='title' translatable='yes'>column</property>"
+    "            <child>"
+    "              <object class='GtkCellRendererToggle' id='cellrenderertoggle1'>"
+    "                <signal name='toggled' handler='on_cellrenderertoggle1_toggled' swapped='no'/>"
+    "              </object>"
+    "              <attributes>"
+    "                <attribute name='active'>0</attribute>"
+    "              </attributes>"
+    "            </child>"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+
+  builder = builder_new_from_string (buffer, -1, NULL);
+  gtk_builder_connect_signals (builder, NULL);
+
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2970,6 +3024,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Template", test_template);
   g_test_add_func ("/Builder/No IDs", test_no_ids);
   g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
+  g_test_add_func ("/Builder/anaconda-signal", test_anaconda_signal);
 
   return g_test_run();
 }
