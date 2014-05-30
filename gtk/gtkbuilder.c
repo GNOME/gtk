@@ -2275,10 +2275,17 @@ GType
 gtk_builder_get_type_from_name (GtkBuilder  *builder, 
                                 const gchar *type_name)
 {
+  GType type;
+
   g_return_val_if_fail (GTK_IS_BUILDER (builder), G_TYPE_INVALID);
   g_return_val_if_fail (type_name != NULL, G_TYPE_INVALID);
 
-  return GTK_BUILDER_GET_CLASS (builder)->get_type_from_name (builder, type_name);
+  type = GTK_BUILDER_GET_CLASS (builder)->get_type_from_name (builder, type_name);
+
+  if (G_TYPE_IS_CLASSED (type))
+    g_type_class_unref (g_type_class_ref (type));
+
+  return type;
 }
 
 GQuark
