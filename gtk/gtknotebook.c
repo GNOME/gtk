@@ -2611,7 +2611,7 @@ gtk_notebook_draw (GtkWidget *widget,
             }
         }
 
-      if (priv->cur_page && priv->operation != DRAG_OPERATION_REORDER)
+      if (priv->cur_page)
         gtk_container_propagate_draw (GTK_CONTAINER (notebook),
                                       priv->cur_page->child,
                                       cr);
