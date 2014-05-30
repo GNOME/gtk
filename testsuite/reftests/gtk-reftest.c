@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include "reftest-module.h"
+
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -105,6 +107,27 @@ get_output_dir (void)
   return output_dir;
 }
 
+static void
+get_components_of_test_file (const char  *test_file,
+                             char       **directory,
+                             char       **basename)
+{
+  if (directory)
+    {
+      *directory = g_path_get_dirname (test_file);
+    }
+
+  if (basename)
+    {
+      char *base = g_path_get_basename (test_file);
+      
+      if (g_str_has_suffix (base, ".ui"))
+        base[strlen (base) - strlen (".ui")] = '\0';
+
+      *basename = base;
+    }
+}
+
 static char *
 get_output_file (const char *test_file,
                  const char *extension)
@@ -112,9 +135,7 @@ get_output_file (const char *test_file,
   const char *output_dir = get_output_dir ();
   char *result, *base;
 
-  base = g_path_get_basename (test_file);
-  if (g_str_has_suffix (base, ".ui"))
-    base[strlen (base) - strlen (".ui")] = '\0';
+  get_components_of_test_file (test_file, NULL, &base);
 
   result = g_strconcat (output_dir, G_DIR_SEPARATOR_S, base, extension, NULL);
   g_free (base);
@@ -128,13 +149,17 @@ get_test_file (const char *test_file,
                gboolean    must_exist)
 {
   GString *file = g_string_new (NULL);
+  char *dir, *base;
 
-  if (g_str_has_suffix (test_file, ".ui"))
-    g_string_append_len (file, test_file, strlen (test_file) - strlen (".ui"));
-  else
-    g_string_append (file, test_file);
-  
+  get_components_of_test_file (test_file, &dir, &base);
+
+  file = g_string_new (dir);
+  g_string_append (file, G_DIR_SEPARATOR_S);
+  g_string_append (file, base);
   g_string_append (file, extension);
+
+  g_free (dir);
+  g_free (base);
 
   if (must_exist &&
       !g_file_test (file->str, G_FILE_TEST_EXISTS))
@@ -288,17 +313,103 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
   return surface;
 }
 
+static void
+connect_signals (GtkBuilder    *builder,
+                 GObject       *object,
+                 const gchar   *signal_name,
+                 const gchar   *handler_name,
+                 GObject       *connect_object,
+                 GConnectFlags  flags,
+                 gpointer       directory)
+{
+  ReftestModule *module;
+  GCallback func;
+  GClosure *closure;
+  char **split;
+
+  split = g_strsplit (handler_name, ":", -1);
+
+  switch (g_strv_length (split))
+    {
+    case 1:
+      func = gtk_builder_lookup_callback_symbol (builder, split[0]);
+
+      if (func)
+        {
+          module = NULL;
+        }
+      else
+        {
+          module = reftest_module_new_self ();
+          if (module == NULL)
+            {
+              g_error ("glib compiled without module support.");
+              return;
+            }
+          func = reftest_module_lookup (module, split[0]);
+          if (!func)
+            {
+              g_error ("failed to lookup handler for name '%s' when connecting signals", split[0]);
+              return;
+            }
+        }
+      break;
+    case 2:
+      module = reftest_module_new (directory, split[0]);
+      if (module == NULL)
+        {
+          g_error ("Could not load module '%s' when looking up '%s'", split[0], handler_name);
+          return;
+        }
+      func = reftest_module_lookup (module, split[1]);
+      if (!func)
+        {
+          g_error ("failed to lookup handler for name '%s' in module '%s'", split[1], split[0]);
+          return;
+        }
+      break;
+    default:
+      g_error ("Could not connect signal handler named '%s'", handler_name);
+      return;
+    }
+
+  g_strfreev (split);
+
+  if (connect_object)
+    {
+      if (flags & G_CONNECT_SWAPPED)
+        closure = g_cclosure_new_object_swap (func, connect_object);
+      else
+        closure = g_cclosure_new_object (func, connect_object);
+    }
+  else
+    {
+      if (flags & G_CONNECT_SWAPPED)
+        closure = g_cclosure_new_swap (func, NULL, NULL);
+      else
+        closure = g_cclosure_new (func, NULL, NULL);
+    }
+  
+  if (module)
+    g_closure_add_finalize_notifier (closure, module, (GClosureNotify) reftest_module_unref);
+
+  g_signal_connect_closure (object, signal_name, closure, flags & G_CONNECT_AFTER ? TRUE : FALSE);
+}
+
 static cairo_surface_t *
 snapshot_ui_file (const char *ui_file)
 {
   GtkWidget *window;
   GtkBuilder *builder;
   GError *error = NULL;
+  char *directory;
+
+  get_components_of_test_file (ui_file, &directory, NULL);
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_file (builder, ui_file, &error);
   g_assert_no_error (error);
-  gtk_builder_connect_signals (builder, NULL);
+  gtk_builder_connect_signals_full (builder, connect_signals, directory);
   window = builder_get_toplevel (builder);
   g_object_unref (builder);
   g_assert (window);
@@ -380,10 +491,10 @@ coerce_surface_for_comparison (cairo_surface_t *surface,
 static cairo_surface_t *
 buffer_diff_core (const guchar *buf_a,
                   int           stride_a,
-		  const guchar *buf_b,
+        	  const guchar *buf_b,
                   int           stride_b,
-		  int		width,
-		  int		height)
+        	  int		width,
+        	  int		height)
 {
   int x, y;
   guchar *buf_diff = NULL;

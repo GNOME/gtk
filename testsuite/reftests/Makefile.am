@@ -22,6 +22,8 @@ gtk_reftest_LDADD = \
 	$(GTK_DEP_LIBS)
 
 gtk_reftest_SOURCES = \
+	reftest-module.c		\
+	reftest-module.h		\
 	gtk-reftest.c
 
 clean-local:
