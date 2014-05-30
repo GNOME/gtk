@@ -330,6 +330,8 @@ testdata = \
 	window-default-size.ui \
 	window-height-for-width.ref.ui \
 	window-height-for-width.ui \
+	window-show-contents-on-map.ref.ui \
+	window-show-contents-on-map.ui \
 	$(NULL)
 
 EXTRA_DIST += 			\
