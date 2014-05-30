@@ -1664,8 +1664,10 @@ gtk_scrolled_window_forall (GtkContainer *container,
       scrolled_window = GTK_SCROLLED_WINDOW (container);
       priv = scrolled_window->priv;
 
-      callback (priv->vscrollbar, callback_data);
-      callback (priv->hscrollbar, callback_data);
+      if (priv->vscrollbar)
+        callback (priv->vscrollbar, callback_data);
+      if (priv->hscrollbar)
+        callback (priv->hscrollbar, callback_data);
     }
 }
 
