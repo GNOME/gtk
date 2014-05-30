@@ -298,6 +298,7 @@ snapshot_ui_file (const char *ui_file)
   builder = gtk_builder_new ();
   gtk_builder_add_from_file (builder, ui_file, &error);
   g_assert_no_error (error);
+  gtk_builder_connect_signals (builder, NULL);
   window = builder_get_toplevel (builder);
   g_object_unref (builder);
   g_assert (window);
