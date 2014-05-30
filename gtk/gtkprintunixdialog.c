@@ -872,9 +872,6 @@ gtk_print_unix_dialog_finalize (GObject *object)
   disconnect_printer_details_request (dialog, FALSE);
 
   g_clear_object (&priv->current_printer);
-  g_clear_object (&priv->printer_list);
-  g_clear_object (&priv->custom_paper_list);
-  g_clear_object (&priv->printer_list_filter);
   g_clear_object (&priv->options);
 
   if (priv->number_up_layout_2_option)
