@@ -19,6 +19,7 @@
 #include <glib/gi18n-lib.h>
 #include "prop-editor.h"
 #include "widget-tree.h"
+#include "gtkwidgetprivate.h"
 
 struct _GtkInspectorPropEditorPrivate
 {
@@ -1198,6 +1199,104 @@ attribute_editor (GObject                *object,
   return vbox;
 }
 
+static GtkWidget *
+action_ancestor (GtkWidget *widget)
+{
+  if (GTK_IS_MENU (widget))
+    return gtk_menu_get_attach_widget (GTK_MENU (widget));
+  else if (GTK_IS_POPOVER (widget))
+    return gtk_popover_get_relative_to (GTK_POPOVER (widget));
+  else
+    return gtk_widget_get_parent (widget);
+}
+
+static GObject *
+find_action_owner (GtkActionable *actionable)
+{
+  GtkWidget *widget = GTK_WIDGET (actionable);
+  const gchar *full_name;
+  const gchar *dot;
+  const gchar *name;
+  gchar *prefix;
+  GtkWidget *win;
+  GActionGroup *group;
+
+  full_name = gtk_actionable_get_action_name (actionable);
+  dot = strchr (full_name, '.');
+  prefix = g_strndup (full_name, dot - full_name);
+  name = dot + 1;
+
+  win = gtk_widget_get_ancestor (widget, GTK_TYPE_APPLICATION_WINDOW);
+  if (g_strcmp0 (prefix, "win") == 0)
+    {
+      if (G_IS_OBJECT (win))
+      return (GObject *)win;
+    }
+  else if (g_strcmp0 (prefix, "app") == 0)
+    {  
+      if (GTK_IS_WINDOW (win))
+        return (GObject *)gtk_window_get_application (GTK_WINDOW (win));
+    }
+  else
+    {
+      while (widget != NULL)
+        {
+          group = _gtk_widget_get_action_group (widget, prefix);
+          if (group && g_action_group_has_action (group, name))
+            return (GObject *)widget;
+          widget = action_ancestor (widget);
+        }
+    }
+
+  return NULL;  
+}
+
+static void
+show_action_owner (GtkButton              *button,
+                   GtkInspectorPropEditor *editor)
+{
+  GObject *owner;
+
+  owner = g_object_get_data (G_OBJECT (button), "owner");
+  g_signal_emit (editor, signals[SHOW_OBJECT], 0, owner, NULL);
+}
+
+static GtkWidget *
+action_editor (GObject                *object,
+               GtkInspectorPropEditor *editor)
+{
+  GtkWidget *vbox;
+  GtkWidget *label;
+  GtkWidget *box;
+  GtkWidget *button;
+  GObject *owner;
+  gchar *text;
+
+  owner = find_action_owner (GTK_ACTIONABLE (object));
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  if (owner)
+    {
+      label = gtk_label_new (_("Action"));
+      gtk_widget_set_margin_top (label, 10);
+      gtk_container_add (GTK_CONTAINER (vbox), label);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      text = g_strdup_printf (_("Defined at: %p (%s)"),
+                              owner, g_type_name_from_instance ((GTypeInstance *)owner));
+      gtk_container_add (GTK_CONTAINER (box), gtk_label_new (text));
+      g_free (text);
+      button = gtk_button_new_with_label (_("Properties"));
+      g_object_set_data (G_OBJECT (button), "owner", owner);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (show_action_owner), editor);
+      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_container_add (GTK_CONTAINER (vbox), box);
+      gtk_widget_show_all (vbox);
+    }
+
+  return vbox;
+}
+
 static void
 constructed (GObject *object)
 {
@@ -1225,6 +1324,12 @@ constructed (GObject *object)
   if (GTK_IS_CELL_RENDERER (editor->priv->object))
     gtk_container_add (GTK_CONTAINER (editor),
                        attribute_editor (editor->priv->object, spec, editor));
+
+  if (GTK_IS_ACTIONABLE (editor->priv->object) &&
+      g_strcmp0 (editor->priv->name, "action-name") == 0)
+    gtk_container_add (GTK_CONTAINER (editor),
+                       action_editor (editor->priv->object, editor));
+    
 }
 
 static void
