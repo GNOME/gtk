@@ -1073,6 +1073,17 @@ gtk_cell_layout_get_model (GtkCellLayout *layout)
     return NULL;
 }
 
+GtkWidget *
+gtk_cell_layout_get_widget (GtkCellLayout *layout)
+{
+  if (GTK_IS_TREE_VIEW_COLUMN (layout))
+    return gtk_tree_view_column_get_tree_view (GTK_TREE_VIEW_COLUMN (layout));
+  else if (GTK_IS_WIDGET (layout))
+    return GTK_WIDGET (layout);
+  else
+    return NULL;
+}
+
 static void
 model_properties (GtkButton              *button,
                   GtkInspectorPropEditor *editor)
@@ -1102,6 +1113,8 @@ attribute_mapping_changed (GtkComboBox            *combo,
       if (col != -1)
         gtk_cell_area_attribute_connect (area, cell, editor->priv->name, col);
       gtk_widget_set_sensitive (editor->priv->editor, col == -1);
+      notify_property (editor->priv->object, find_property (editor));
+      gtk_widget_queue_draw (gtk_cell_layout_get_widget (GTK_CELL_LAYOUT (layout)));
     }
 }
 
