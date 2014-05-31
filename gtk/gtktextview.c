@@ -1564,6 +1564,8 @@ gtk_text_view_init (GtkTextView *text_view)
   priv->drag_gesture = gtk_gesture_drag_new (widget);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture),
                                      FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture),
+                                 GDK_BUTTON_PRIMARY);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
                                               GTK_PHASE_BUBBLE);
   g_signal_connect (priv->drag_gesture, "drag-update",
