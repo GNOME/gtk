@@ -44,7 +44,7 @@ static const GOptionEntry test_args[] = {
   { "directory",        'd', 0, G_OPTION_ARG_FILENAME, &arg_base_dir,
     "Directory to run tests from", "DIR" },
   { "direction",       0, 0, G_OPTION_ARG_STRING, &arg_direction,
-    "Set text direction", "DIRECTION" },
+    "Set text direction", "ltr|rtl" },
   { NULL }
 };
 
@@ -70,6 +70,8 @@ parse_command_line (int *argc, char ***argv)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
   else if (g_strcmp0 (arg_direction, "ltr") == 0)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
+  else
+    g_printerr ("Invalid argument passed to --direction argument. Valid arguments are 'ltr' and 'rtl'\n");
 
   return TRUE;
 }
