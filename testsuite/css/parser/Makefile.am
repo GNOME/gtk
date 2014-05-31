@@ -353,12 +353,12 @@ test_data = \
 EXTRA_DIST += $(test_in_files) $(test_data)
 
 if BUILDOPT_INSTALL_TESTS
-insttestdir=$(pkglibexecdir)/installed-tests/css/parser
+insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)/css/parser
 insttest_PROGRAMS = $(TEST_PROGS)
 insttest_DATA = $(test_data)
 
 substitutions = \
-	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
+	-e s,@libexecdir\@,$(libexecdir),g \
 	$(NULL)
 
 test_files = $(test_in_files:.test.in=.test)

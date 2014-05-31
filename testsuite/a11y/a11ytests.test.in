@@ -1,4 +1,4 @@
 [Test]
-Exec=/bin/sh -c "@pkglibexecdir@/installed-tests/accessibility-dump -k --verbose --directory @pkglibexecdir@/installed-tests/a11ytests"
+Exec=/bin/sh -c "@libexecdir@/installed-tests/gtk+/accessibility-dump -k --verbose --directory @libexecdir@/installed-tests/gtk+/a11ytests"
 Type=session
 

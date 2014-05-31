@@ -28,11 +28,11 @@ test_in_files += api.test.in
 EXTRA_DIST += $(test_in_files)
 
 if BUILDOPT_INSTALL_TESTS
-insttestdir=$(pkglibexecdir)/installed-tests/css
+insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)/css
 insttest_PROGRAMS = $(TEST_PROGS)
 
 substitutions = \
-	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
+	-e s,@libexecdir\@,$(libexecdir),g \
 	$(NULL)
 
 test_files = $(test_in_files:.test.in=.test)

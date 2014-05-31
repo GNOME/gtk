@@ -1,4 +1,4 @@
 [Test]
-Exec=/bin/sh -c "@pkglibexecdir@/installed-tests/derive"
+Exec=/bin/sh -c "@libexecdir@/installed-tests/gtk+/derive"
 Type=session
 

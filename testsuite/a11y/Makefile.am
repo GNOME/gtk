@@ -97,14 +97,14 @@ test_in_files = \
 EXTRA_DIST += $(test_in_files) $(testdata)
 
 if BUILDOPT_INSTALL_TESTS
-insttestdir=$(pkglibexecdir)/installed-tests
+insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)
 insttest_PROGRAMS = $(TEST_PROGS)
 
 a11ytestdir = $(insttestdir)/a11ytests
 a11ytest_DATA = $(testdata)
 
 substitutions = \
-	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
+	-e s,@libexecdir\@,$(libexecdir),g \
 	$(NULL)
 
 test_files = $(test_in_files:.test.in=.test)

@@ -344,7 +344,7 @@ EXTRA_DIST += 			\
 	$(NULL)
 
 if BUILDOPT_INSTALL_TESTS
-insttestdir=$(pkglibexecdir)/installed-tests
+insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)
 insttest_PROGRAMS = gtk-reftest
 
 reftestdir = $(insttestdir)/reftests
@@ -361,7 +361,7 @@ libreftest_la_SOURCES =			\
 	$(NULL)
 
 substitutions = \
-	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
+	-e s,@libexecdir\@,$(libexecdir),g \
 	$(NULL)
 
 reftests.test: reftests.test.in Makefile

@@ -30,7 +30,7 @@ CLEANFILES = 			\
 	$(NULL)
 
 if BUILDOPT_INSTALL_TESTS
-insttestdir=$(pkglibexecdir)/installed-tests
+insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)
 insttest_PROGRAMS = $(TEST_PROGS)
 
 %.test: %$(EXEEXT) Makefile
