@@ -70,7 +70,7 @@ parse_command_line (int *argc, char ***argv)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
   else if (g_strcmp0 (arg_direction, "ltr") == 0)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
-  else
+  else if (arg_direction != NULL)
     g_printerr ("Invalid argument passed to --direction argument. Valid arguments are 'ltr' and 'rtl'\n");
 
   return TRUE;
