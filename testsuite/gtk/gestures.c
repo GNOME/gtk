@@ -193,7 +193,13 @@ test_phases (void)
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture a1, capture b1, capture c1, target c2, bubble c3, bubble b3, bubble a3");
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c2, "
+                   "bubble c3, "
+                   "bubble b3, "
+                   "bubble a3");
 
   g_string_free (str, TRUE);
 
@@ -239,7 +245,16 @@ test_mixed (void)
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture a1, capture b1, capture c1, target c2, legacy C, bubble c3, legacy B, bubble b3, legacy A, bubble a3");
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c2, "
+                   "legacy C, "
+                   "bubble c3, "
+                   "legacy B, "
+                   "bubble b3, "
+                   "legacy A, "
+                   "bubble a3");
 
   g_string_free (str, TRUE);
 
@@ -285,7 +300,13 @@ test_early_exit (void)
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture a1, capture b1, capture c1, target c2, legacy C, bubble c3, legacy B");
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c2, "
+                   "legacy C, "
+                   "bubble c3, "
+                   "legacy B");
 
   g_string_free (str, TRUE);
 
@@ -327,7 +348,12 @@ test_claim (void)
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture a1, capture b1, capture c1, b1 state denied, a1 state denied, c1 state claimed");
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "b1 state denied, "
+                   "a1 state denied, "
+                   "c1 state claimed");
 
   g_string_free (str, TRUE);
 
@@ -370,7 +396,15 @@ test_group (void)
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture a1, capture b1, capture c1, target c3, b1 state denied, a1 state denied, c3 state claimed, target c2");
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c3, "
+                   "b1 state denied, "
+                   "a1 state denied, "
+                   "c3 state claimed, "
+                   "target c2");
+  /* FIXME: why no "c2 state claimed" ? */
 
   g_string_free (str, TRUE);
 
