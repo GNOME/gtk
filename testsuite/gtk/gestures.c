@@ -42,6 +42,19 @@ phase_nick (GtkPropagationPhase phase)
  return value->value_nick;
 }
 
+static const gchar *
+state_nick (GtkEventSequenceState state)
+{
+ GTypeClass *class;
+ GEnumValue *value;
+
+ class = g_type_class_ref (GTK_TYPE_EVENT_SEQUENCE_STATE);
+ value = g_enum_get_value ((GEnumClass*)class, state);
+ g_type_class_unref (class);  
+
+ return value->value_nick;
+}
+
 typedef struct {
   GString *str;
   gboolean exit;
@@ -83,6 +96,35 @@ press_cb (GtkGesture *g, gint n_press, gdouble x, gdouble y, gpointer data)
     gtk_gesture_set_state (g, gd->state);
 }
 
+static void
+cancel_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
+{
+  GtkEventController *c = GTK_EVENT_CONTROLLER (g);
+  GtkWidget *w;
+  GestureData *gd = data;
+  
+  w = gtk_event_controller_get_widget (c);
+
+  if (gd->str->len > 0)
+    g_string_append (gd->str, ", ");
+  g_string_append_printf (gd->str, "%s cancelled", gtk_widget_get_name (w));
+}
+
+static void
+state_changed_cb (GtkGesture *g, GdkEventSequence *sequence, GtkEventSequenceState state, gpointer data)
+{
+  GtkEventController *c = GTK_EVENT_CONTROLLER (g);
+  GtkWidget *w;
+  GestureData *gd = data;
+  
+  w = gtk_event_controller_get_widget (c);
+
+  if (gd->str->len > 0)
+    g_string_append (gd->str, ", ");
+  g_string_append_printf (gd->str, "%s state %s", gtk_widget_get_name (w), state_nick (state));
+}
+
+
 static GtkGesture *
 add_gesture (GtkWidget *w, GtkPropagationPhase phase, GString *str, GtkEventSequenceState state)
 {
@@ -98,6 +140,8 @@ add_gesture (GtkWidget *w, GtkPropagationPhase phase, GString *str, GtkEventSequ
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (g), 1);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (g), phase);
   g_signal_connect (g, "pressed", G_CALLBACK (press_cb), data);
+  g_signal_connect (g, "cancel", G_CALLBACK (cancel_cb), data);
+  g_signal_connect (g, "sequence-state-changed", G_CALLBACK (state_changed_cb), data);
 
   return g;
 }
@@ -282,7 +326,7 @@ test_claim (void)
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture A, capture B, capture C");
+      "capture A, capture B, capture C, B state denied, A state denied, C state claimed");
 
   g_string_free (str, TRUE);
 
