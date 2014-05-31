@@ -30,6 +30,14 @@
             <signal name="toggled" handler="disable_toggled"/>
           </object>
         </child>
+        <child>
+          <object class="GtkToolButton" id="save_button">
+            <property name="visible">True</property>
+            <property name="icon-name">document-save-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Save the current CSS</property>
+            <signal name="clicked" handler="save_clicked"/>
+          </object>
+        </child>
       </object>
     </child>
     <child>

@@ -114,6 +114,84 @@ disable_toggled (GtkToggleToolButton   *button,
     }
 }
 
+static gchar *
+get_current_text (GtkTextBuffer *buffer)
+{
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  gtk_text_buffer_remove_all_tags (buffer, &start, &end);
+
+  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+}
+
+static void
+save_to_file (GtkInspectorCssEditor *ce,
+              const gchar           *filename)
+{
+  gchar *text;
+  GError *error = NULL;
+
+  text = get_current_text (ce->priv->text);
+
+  if (!g_file_set_contents (filename, text, -1, &error))
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (ce))),
+                                       GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_INFO,
+                                       GTK_BUTTONS_OK,
+                                       _("Saving CSS failed"));
+      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                "%s", error->message);
+      g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      gtk_widget_show (dialog);
+      g_error_free (error);
+    }
+
+  g_free (text);
+}
+
+static void
+save_response (GtkWidget             *dialog,
+               gint                   response,
+               GtkInspectorCssEditor *ce)
+{
+  gtk_widget_hide (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      gchar *filename;
+
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      save_to_file (ce, filename);
+      g_free (filename);
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
+save_clicked (GtkToolButton         *button,
+              GtkInspectorCssEditor *ce)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_file_chooser_dialog_new ("",
+                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (ce))),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                        _("_Save"), GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  g_signal_connect (dialog, "response", G_CALLBACK (save_response), ce);
+  gtk_widget_show (dialog);
+}
+
 static void
 apply_system_font (GtkInspectorCssEditor *ce)
 {
@@ -126,18 +204,6 @@ apply_system_font (GtkInspectorCssEditor *ce)
   pango_font_description_free (font_desc);
   g_free (font_name);
   g_object_unref (s);
-}
-
-static gchar *
-get_current_text (GtkTextBuffer *buffer)
-{
-  GtkTextIter start, end;
-
-  gtk_text_buffer_get_start_iter (buffer, &start);
-  gtk_text_buffer_get_end_iter (buffer, &end);
-  gtk_text_buffer_remove_all_tags (buffer, &start, &end);
-
-  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
 }
 
 static void
@@ -291,6 +357,7 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, disable_button);
   gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
+  gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
 }
 
