@@ -41,7 +41,10 @@ typedef struct
 {
   GtkBoxClass parent;
 
-  void (*show_object) (GtkInspectorPropEditor *editor, GObject *object, const gchar *name);
+  void (*show_object) (GtkInspectorPropEditor *editor,
+                       GObject                *object,
+                       const gchar            *name,
+                       const gchar            *tab);
 } GtkInspectorPropEditorClass;
 
 

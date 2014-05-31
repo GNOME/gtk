@@ -123,6 +123,7 @@ static void
 show_object (GtkInspectorPropEditor *editor,
              GObject                *object,
              const gchar            *name,
+             const gchar            *tab,
              GtkInspectorPropList   *pl)
 {
   GtkTreeIter iter;
@@ -131,6 +132,7 @@ show_object (GtkInspectorPropEditor *editor,
   popover = gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_POPOVER);
   gtk_widget_hide (popover);
 
+  g_object_set_data (G_OBJECT (pl->priv->widget_tree), "next-tab", (gpointer)tab);
   if (gtk_inspector_widget_tree_find_object (pl->priv->widget_tree, object, &iter))
     {
       gtk_inspector_widget_tree_select_object (pl->priv->widget_tree, object);

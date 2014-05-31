@@ -642,7 +642,7 @@ object_properties (GtkInspectorPropEditor *editor)
 
   g_object_get (editor->priv->object, editor->priv->name, &obj, NULL);
   if (G_IS_OBJECT (obj))
-    g_signal_emit (editor, signals[SHOW_OBJECT], 0, obj, editor->priv->name);
+    g_signal_emit (editor, signals[SHOW_OBJECT], 0, obj, editor->priv->name, "properties");
 }
 
 static void
@@ -1092,7 +1092,7 @@ model_properties (GtkButton              *button,
   GObject *model;
 
   model = g_object_get_data (G_OBJECT (button), "model");
-  g_signal_emit (editor, signals[SHOW_OBJECT], 0, model, "model");
+  g_signal_emit (editor, signals[SHOW_OBJECT], 0, model, "model", "data");
 }
 
 static void
@@ -1258,7 +1258,7 @@ show_action_owner (GtkButton              *button,
   GObject *owner;
 
   owner = g_object_get_data (G_OBJECT (button), "owner");
-  g_signal_emit (editor, signals[SHOW_OBJECT], 0, owner, NULL);
+  g_signal_emit (editor, signals[SHOW_OBJECT], 0, owner, NULL, "actions");
 }
 
 static GtkWidget *
@@ -1404,7 +1404,7 @@ gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkInspectorPropEditorClass, show_object),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 2, G_TYPE_OBJECT, G_TYPE_STRING);
+                  G_TYPE_NONE, 3, G_TYPE_OBJECT, G_TYPE_STRING, G_TYPE_STRING);
 
   g_object_class_install_property (object_class, PROP_OBJECT,
       g_param_spec_object ("object", "Object", "The object owning the property",

@@ -62,6 +62,9 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
                                   GtkInspectorWindow     *iw)
 {
   GObject *selected = gtk_inspector_widget_tree_get_selected_object (wt);
+  GtkWidget *notebook;
+  const gchar *tab;
+  gint page_num;
 
   if (!gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->prop_list), selected))
     return;
@@ -76,6 +79,24 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
   gtk_inspector_data_list_set_object (GTK_INSPECTOR_DATA_LIST (iw->data_list), selected);
   gtk_inspector_actions_set_object (GTK_INSPECTOR_ACTIONS (iw->actions), selected);
   gtk_inspector_gestures_set_object (GTK_INSPECTOR_GESTURES (iw->gestures), selected);
+
+  notebook = gtk_widget_get_parent (iw->prop_list);
+  tab = g_object_get_data (G_OBJECT (iw), "next-tab");
+  if (g_strcmp0 (tab, "properties") == 0)
+    {
+      page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), iw->prop_list);
+      gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page_num);
+    }
+  else if (g_strcmp0 (tab, "data") == 0)
+    {
+      page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), iw->data_list);
+      gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page_num);
+    }
+  else if (g_strcmp0 (tab, "actions") == 0)
+    {
+      page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), iw->actions);
+      gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page_num);
+    }
 
   if (GTK_IS_WIDGET (selected))
     gtk_inspector_flash_widget (iw, GTK_WIDGET (selected));
