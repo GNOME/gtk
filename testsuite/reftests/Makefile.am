@@ -295,6 +295,8 @@ testdata = \
 	rotated-layout.ui \
 	separator-size.ref.ui \
 	separator-size.ui \
+	set-default-direction.ui \
+	set-default-direction.ref.ui \
 	shorthand-entry-border.css \
 	shorthand-entry-border.ref.ui \
 	shorthand-entry-border.ui \
@@ -347,6 +349,16 @@ insttest_PROGRAMS = gtk-reftest
 
 reftestdir = $(insttestdir)/reftests
 reftest_DATA = $(testdata)
+reftest_LTLIBRARIES =			\
+	libreftest.la			\
+	$(NULL)
+
+libreftest_la_LDFLAGS = -rpath $(reftestdir) -avoid-version -module $(no_undefined)
+libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
+libreftest_la_LIBADD = $(gtk_reftest_LDADD)
+libreftest_la_SOURCES =			\
+	set-default-direction.c		\
+	$(NULL)
 
 substitutions = \
 	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
