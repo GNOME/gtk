@@ -286,8 +286,6 @@ test_early_exit (void)
   add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (A, "a2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, "b2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
@@ -314,7 +312,7 @@ test_early_exit (void)
 }
 
 static void
-test_claim (void)
+test_claim_capture (void)
 {
   GtkWidget *A, *B, *C;
   GString *str;
@@ -338,8 +336,6 @@ test_claim (void)
   add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_CLAIMED);
-  add_gesture (A, "a2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, "b2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
@@ -354,6 +350,104 @@ test_claim (void)
                    "b1 state denied, "
                    "a1 state denied, "
                    "c1 state claimed");
+
+  g_string_free (str, TRUE);
+
+  gtk_widget_destroy (A);
+}
+
+static void
+test_claim_target (void)
+{
+  GtkWidget *A, *B, *C;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+
+  inject_press (C);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c2, "
+                   /* "c1 state denied, " ? */
+                   "b1 state denied, "
+                   "a1 state denied, "
+                   "c2 state claimed");
+
+  g_string_free (str, TRUE);
+
+  gtk_widget_destroy (A);
+}
+
+static void
+test_claim_bubble (void)
+{
+  GtkWidget *A, *B, *C;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+
+  inject_press (C);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c2, "
+                   "bubble c3, "
+                   "bubble b3, "
+                   "c3 cancelled, "
+                   "c2 cancelled, "
+                   "c1 cancelled, "
+                   "a1 state denied, "
+                   "b3 state claimed"
+                   );
 
   g_string_free (str, TRUE);
 
@@ -419,7 +513,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/gestures/propagation/phases", test_phases);
   g_test_add_func ("/gestures/propagation/mixed", test_mixed);
   g_test_add_func ("/gestures/propagation/early-exit", test_early_exit);
-  g_test_add_func ("/gestures/propagation/claim", test_claim);
+  g_test_add_func ("/gestures/propagation/claim/capture", test_claim_capture);
+  g_test_add_func ("/gestures/propagation/claim/target", test_claim_target);
+  g_test_add_func ("/gestures/propagation/claim/bubble", test_claim_bubble);
   g_test_add_func ("/gestures/propagation/group", test_group);
 
   return g_test_run ();
