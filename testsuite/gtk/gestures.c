@@ -81,16 +81,16 @@ static void
 press_cb (GtkGesture *g, gint n_press, gdouble x, gdouble y, gpointer data)
 {
   GtkEventController *c = GTK_EVENT_CONTROLLER (g);
-  GtkWidget *w;
   GtkPropagationPhase phase;
   GestureData *gd = data;
+  const gchar *name;
   
-  w = gtk_event_controller_get_widget (c);
+  name = g_object_get_data (G_OBJECT (g), "name");
   phase = gtk_event_controller_get_propagation_phase (c);
 
   if (gd->str->len > 0)
     g_string_append (gd->str, ", ");
-  g_string_append_printf (gd->str, "%s %s", phase_nick (phase), gtk_widget_get_name (w));
+  g_string_append_printf (gd->str, "%s %s", phase_nick (phase), name);
 
   if (gd->state != GTK_EVENT_SEQUENCE_NONE)
     gtk_gesture_set_state (g, gd->state);
@@ -99,34 +99,32 @@ press_cb (GtkGesture *g, gint n_press, gdouble x, gdouble y, gpointer data)
 static void
 cancel_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
 {
-  GtkEventController *c = GTK_EVENT_CONTROLLER (g);
-  GtkWidget *w;
   GestureData *gd = data;
+  const gchar *name;
   
-  w = gtk_event_controller_get_widget (c);
-
+  name = g_object_get_data (G_OBJECT (g), "name");
+  
   if (gd->str->len > 0)
     g_string_append (gd->str, ", ");
-  g_string_append_printf (gd->str, "%s cancelled", gtk_widget_get_name (w));
+  g_string_append_printf (gd->str, "%s cancelled", name);
 }
 
 static void
 state_changed_cb (GtkGesture *g, GdkEventSequence *sequence, GtkEventSequenceState state, gpointer data)
 {
-  GtkEventController *c = GTK_EVENT_CONTROLLER (g);
-  GtkWidget *w;
   GestureData *gd = data;
+  const gchar *name;
   
-  w = gtk_event_controller_get_widget (c);
-
+  name = g_object_get_data (G_OBJECT (g), "name");
+  
   if (gd->str->len > 0)
     g_string_append (gd->str, ", ");
-  g_string_append_printf (gd->str, "%s state %s", gtk_widget_get_name (w), state_nick (state));
+  g_string_append_printf (gd->str, "%s state %s", name, state_nick (state));
 }
 
 
 static GtkGesture *
-add_gesture (GtkWidget *w, GtkPropagationPhase phase, GString *str, GtkEventSequenceState state)
+add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString *str, GtkEventSequenceState state)
 {
   GtkGesture *g;
   GestureData *data;
@@ -139,6 +137,9 @@ add_gesture (GtkWidget *w, GtkPropagationPhase phase, GString *str, GtkEventSequ
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (g), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (g), 1);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (g), phase);
+
+  g_object_set_data (G_OBJECT (g), "name", (gpointer)name);
+
   g_signal_connect (g, "pressed", G_CALLBACK (press_cb), data);
   g_signal_connect (g, "cancel", G_CALLBACK (cancel_cb), data);
   g_signal_connect (g, "sequence-state-changed", G_CALLBACK (state_changed_cb), data);
@@ -179,20 +180,20 @@ test_phases (void)
 
   str = g_string_new ("");
 
-  add_gesture (A, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (A, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (A, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture A, capture B, capture C, target C, bubble C, bubble B, bubble A");
+      "capture a1, capture b1, capture c1, target c2, bubble c3, bubble b3, bubble a3");
 
   g_string_free (str, TRUE);
 
@@ -221,15 +222,15 @@ test_mixed (void)
 
   str = g_string_new ("");
 
-  add_gesture (A, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (A, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (A, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
   add_legacy (A, str, GDK_EVENT_PROPAGATE);
   add_legacy (B, str, GDK_EVENT_PROPAGATE);
@@ -238,7 +239,7 @@ test_mixed (void)
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture A, capture B, capture C, target C, legacy C, bubble C, legacy B, bubble B, legacy A, bubble A");
+      "capture a1, capture b1, capture c1, target c2, legacy C, bubble c3, legacy B, bubble b3, legacy A, bubble a3");
 
   g_string_free (str, TRUE);
 
@@ -267,15 +268,15 @@ test_early_exit (void)
 
   str = g_string_new ("");
 
-  add_gesture (A, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (A, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (A, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
   add_legacy (A, str, GDK_EVENT_PROPAGATE);
   add_legacy (B, str, GDK_EVENT_STOP);
@@ -284,7 +285,7 @@ test_early_exit (void)
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture A, capture B, capture C, target C, legacy C, bubble C, legacy B");
+      "capture a1, capture b1, capture c1, target c2, legacy C, bubble c3, legacy B");
 
   g_string_free (str, TRUE);
 
@@ -313,20 +314,63 @@ test_claim (void)
 
   str = g_string_new ("");
 
-  add_gesture (A, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_CLAIMED);
-  add_gesture (A, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (A, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (B, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
-  add_gesture (C, GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_gesture (A, "a2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
   inject_press (C);
 
   g_assert_cmpstr (str->str, ==,
-      "capture A, capture B, capture C, B state denied, A state denied, C state claimed");
+      "capture a1, capture b1, capture c1, b1 state denied, a1 state denied, c1 state claimed");
+
+  g_string_free (str, TRUE);
+
+  gtk_widget_destroy (A);
+}
+
+static void
+test_group (void)
+{
+  GtkWidget *A, *B, *C;
+  GString *str;
+  GtkGesture *g1, *g2;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  g1 = add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  g2 = add_gesture (C, "c3", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  gtk_gesture_group (g1, g2);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c4", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+
+  inject_press (C);
+
+  g_assert_cmpstr (str->str, ==,
+      "capture a1, capture b1, capture c1, target c3, b1 state denied, a1 state denied, c3 state claimed, target c2");
 
   g_string_free (str, TRUE);
 
@@ -342,6 +386,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/gestures/propagation/mixed", test_mixed);
   g_test_add_func ("/gestures/propagation/early-exit", test_early_exit);
   g_test_add_func ("/gestures/propagation/claim", test_claim);
+  g_test_add_func ("/gestures/propagation/group", test_group);
 
   return g_test_run ();
 }
