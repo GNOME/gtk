@@ -208,7 +208,7 @@
                     <child type="tab">
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Sizegroups</property>
+                        <property name="label" translatable="yes">Size Groups</property>
                       </object>
                     </child> 
                     <child>
