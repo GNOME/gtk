@@ -14,12 +14,16 @@ gtk_reftest_CFLAGS = \
 	-DGDK_DISABLE_DEPRECATED        \
 	-DGTK_DISABLE_DEPRECATED        \
 	$(GTK_DEBUG_FLAGS)              \
-	$(GTK_DEP_CFLAGS)
+	$(GTK_DEP_CFLAGS)		\
+	$(GMODULE_CFLAGS)		\
+	$(NULL)
 
 gtk_reftest_LDADD = \
 	$(top_builddir)/gdk/libgdk-3.la \
 	$(top_builddir)/gtk/libgtk-3.la \
-	$(GTK_DEP_LIBS)
+	$(GTK_DEP_LIBS)			\
+	$(GMODULE_LIBS)			\
+	$(NULL)
 
 gtk_reftest_SOURCES = \
 	reftest-module.c		\
