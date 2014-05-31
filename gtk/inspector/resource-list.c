@@ -86,6 +86,7 @@ selection_changed (GtkTreeSelection         *selection,
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
       gchar *path;
+      gchar *name;
       GBytes *bytes;
       gchar *type;
       gconstpointer data;
@@ -96,6 +97,7 @@ selection_changed (GtkTreeSelection         *selection,
 
       gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
                           COLUMN_PATH, &path,
+                          COLUMN_NAME, &name,
                           -1);
 
       if (g_str_has_suffix (path, "/"))
@@ -116,7 +118,7 @@ selection_changed (GtkTreeSelection         *selection,
           gchar *text;
 
           data = g_bytes_get_data (bytes, &size);
-          type = g_content_type_guess (NULL, data, size, NULL);
+          type = g_content_type_guess (name, data, size, NULL);
 
           text = g_content_type_get_description (type);
           gtk_label_set_text (GTK_LABEL (rl->priv->type_label), text);
@@ -149,6 +151,7 @@ selection_changed (GtkTreeSelection         *selection,
         }
 out:
       g_free (path);
+      g_free (name);
     }
   else
     {
