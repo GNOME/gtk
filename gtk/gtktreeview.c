@@ -2591,8 +2591,10 @@ gtk_tree_view_get_preferred_width (GtkWidget *widget,
 	tree_view->priv->n_expand_columns++;
     }
 
-  *minimum = tree_view->priv->minimum_width;
-  *natural = tree_view->priv->natural_width;
+  if (minimum != NULL)
+    *minimum = tree_view->priv->minimum_width;
+  if (natural != NULL)
+    *natural = tree_view->priv->natural_width;
 }
 
 static void
@@ -2607,8 +2609,10 @@ gtk_tree_view_get_preferred_height (GtkWidget *widget,
 
   height = gtk_tree_view_get_height (tree_view) + gtk_tree_view_get_effective_header_height (tree_view);
 
-  *minimum = height;
-  *natural = height;
+  if (minimum != NULL)
+    *minimum = height;
+  if (natural != NULL)
+    *natural = height;
 }
 
 static void
