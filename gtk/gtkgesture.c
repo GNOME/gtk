@@ -158,6 +158,8 @@ static guint signals[N_SIGNALS] = { 0 };
 
 #define BUTTONS_MASK (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)
 
+GList * _gtk_gesture_get_group_link (GtkGesture *gesture);
+
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkGesture, gtk_gesture, GTK_TYPE_EVENT_CONTROLLER)
 
 static void
@@ -369,6 +371,29 @@ _update_widget_coordinates (GtkGesture *gesture,
   data->widget_y = y;
 }
 
+static GtkEventSequenceState
+gtk_gesture_get_group_state (GtkGesture       *gesture,
+                             GdkEventSequence *sequence)
+{
+  GtkEventSequenceState state = GTK_EVENT_SEQUENCE_NONE;
+  GList *group_elem;
+
+  group_elem = g_list_first (_gtk_gesture_get_group_link (gesture));
+
+  for (; group_elem; group_elem = group_elem->next)
+    {
+      if (group_elem->data == gesture)
+        continue;
+      if (!gtk_gesture_handles_sequence (group_elem->data, sequence))
+        continue;
+
+      state = gtk_gesture_get_sequence_state (group_elem->data, sequence);
+      break;
+    }
+
+  return state;
+}
+
 static gboolean
 _gtk_gesture_update_point (GtkGesture     *gesture,
                            const GdkEvent *event,
@@ -416,6 +441,8 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
                                           NULL, (gpointer *) &data);
   if (!existed)
     {
+      GtkEventSequenceState group_state;
+
       if (!add)
         return FALSE;
 
@@ -427,6 +454,9 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
 
       data = g_new0 (PointData, 1);
       g_hash_table_insert (priv->points, sequence, data);
+
+      group_state = gtk_gesture_get_group_state (gesture, sequence);
+      gtk_gesture_set_sequence_state (gesture, sequence, group_state);
     }
 
   if (data->event)

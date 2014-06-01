@@ -497,8 +497,8 @@ test_group (void)
                    "b1 state denied, "
                    "a1 state denied, "
                    "c3 state claimed, "
+                   "c2 state claimed, "
                    "target c2");
-  /* FIXME: why no "c2 state claimed" ? */
 
   g_string_free (str, TRUE);
 
