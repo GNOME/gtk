@@ -475,11 +475,11 @@ struct _GtkTreeViewPrivate
   guint hover_expand : 1;
   guint imcontext_changed : 1;
 
+  guint in_scroll : 1;
+
   guint rubber_banding_enable : 1;
 
   guint in_grab : 1;
-
-  guint in_scroll : 1;
 
   /* Whether our key press handler is to avoid sending an unhandled binding to the search entry */
   guint search_entry_avoid_unhandled_binding : 1;
