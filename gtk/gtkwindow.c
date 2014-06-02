@@ -403,6 +403,8 @@ static gboolean gtk_window_map_event      (GtkWidget         *widget,
                                            GdkEventAny       *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
 					   GdkEventConfigure *event);
+static gboolean gtk_window_event          (GtkWidget         *widget,
+                                           GdkEvent          *event);
 static gint gtk_window_key_press_event    (GtkWidget         *widget,
 					   GdkEventKey       *event);
 static gint gtk_window_key_release_event  (GtkWidget         *widget,
@@ -685,6 +687,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->unrealize = gtk_window_unrealize;
   widget_class->size_allocate = gtk_window_size_allocate;
   widget_class->configure_event = gtk_window_configure_event;
+  widget_class->event = gtk_window_event;
   widget_class->key_press_event = gtk_window_key_press_event;
   widget_class->key_release_event = gtk_window_key_release_event;
   widget_class->focus_in_event = gtk_window_focus_in_event;
@@ -7908,6 +7911,16 @@ _gtk_window_check_handle_wm_event (GdkEvent *event)
     return GDK_EVENT_PROPAGATE;
 
   return gtk_window_handle_wm_event (GTK_WINDOW (widget), event);
+}
+
+static gboolean
+gtk_window_event (GtkWidget *widget,
+                  GdkEvent  *event)
+{
+  if (widget != gtk_get_event_widget (event))
+    return gtk_window_handle_wm_event (GTK_WINDOW (widget), event);
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
