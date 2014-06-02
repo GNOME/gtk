@@ -1755,7 +1755,10 @@ _tree_view_multipress_pressed (GtkGestureMultiPress *gesture,
                                  &path, &column, NULL, NULL);
 
   if (n_press == 2 || (n_press == 1 && tree_view->priv->activate_on_single_click))
-    gtk_tree_view_row_activated (tree_view, path, column);
+    {
+      gtk_tree_view_row_activated (tree_view, path, column);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+    }
   else
     {
       if (n_press == 1)
