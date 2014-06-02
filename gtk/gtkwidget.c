@@ -4287,6 +4287,9 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
           else
             continue;
         }
+      else if (!group &&
+               gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_CLAIMED)
+        continue;
 
       g_signal_handler_block (data->controller, data->sequence_state_changed_id);
       retval = gtk_gesture_set_sequence_state (gesture, seq, gesture_state);

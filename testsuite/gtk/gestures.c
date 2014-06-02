@@ -347,8 +347,6 @@ test_claim_capture (void)
                    "capture a1, "
                    "capture b1, "
                    "capture c1, "
-                   "b1 state denied, "
-                   "a1 state denied, "
                    "c1 state claimed");
 
   g_string_free (str, TRUE);
@@ -393,9 +391,6 @@ test_claim_target (void)
                    "capture b1, "
                    "capture c1, "
                    "target c2, "
-                   /* "c1 state denied, " ? */
-                   "b1 state denied, "
-                   "a1 state denied, "
                    "c2 state claimed");
 
   g_string_free (str, TRUE);
@@ -445,7 +440,6 @@ test_claim_bubble (void)
                    "c3 cancelled, "
                    "c2 cancelled, "
                    "c1 cancelled, "
-                   "a1 state denied, "
                    "b3 state claimed"
                    );
 
@@ -494,8 +488,6 @@ test_group (void)
                    "capture b1, "
                    "capture c1, "
                    "target c3, "
-                   "b1 state denied, "
-                   "a1 state denied, "
                    "c3 state claimed, "
                    "c2 state claimed, "
                    "target c2");
