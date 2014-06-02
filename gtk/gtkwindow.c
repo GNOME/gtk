@@ -1435,15 +1435,15 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
       if (event_widget != widget)
         gtk_widget_style_get (event_widget, "window-dragging",
                               &window_drag, NULL);
-      /* fall thru */
-    case GTK_WINDOW_REGION_TITLE:
-      if (!window_drag && event_widget != widget)
+
+      if (!window_drag)
         {
           gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
                                           sequence, GTK_EVENT_SEQUENCE_DENIED);
           return;
         }
-
+      /* fall thru */
+    case GTK_WINDOW_REGION_TITLE:
       if (n_press == 2)
         _gtk_window_toggle_maximized (window);
       /* fall thru */
