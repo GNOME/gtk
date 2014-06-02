@@ -7877,26 +7877,37 @@ get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
   return GTK_WINDOW_REGION_CONTENT;
 }
 
-gboolean
-_gtk_window_check_handle_wm_event (GdkEvent *event)
+static gboolean
+gtk_window_handle_wm_event (GtkWindow *window,
+                            GdkEvent  *event)
 {
   GtkWindowPrivate *priv;
-  GtkWidget *widget;
 
-  widget = gtk_get_event_widget (event);
-
-  if (GTK_IS_WINDOW (widget) &&
-      (event->type == GDK_BUTTON_PRESS || event->type == GDK_BUTTON_RELEASE ||
-       event->type == GDK_TOUCH_BEGIN || event->type == GDK_TOUCH_UPDATE ||
-       event->type == GDK_MOTION_NOTIFY || event->type == GDK_TOUCH_END))
+  if (event->type == GDK_BUTTON_PRESS || event->type == GDK_BUTTON_RELEASE ||
+      event->type == GDK_TOUCH_BEGIN || event->type == GDK_TOUCH_UPDATE ||
+      event->type == GDK_MOTION_NOTIFY || event->type == GDK_TOUCH_END)
     {
-      priv = GTK_WINDOW (widget)->priv;
+      priv = window->priv;
+
       if (priv->multipress_gesture)
         return gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
                                                   (const GdkEvent*) event);
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
+}
+
+gboolean
+_gtk_window_check_handle_wm_event (GdkEvent *event)
+{
+  GtkWidget *widget;
+
+  widget = gtk_get_event_widget (event);
+
+  if (!GTK_IS_WINDOW (widget))
+    return GDK_EVENT_PROPAGATE;
+
+  return gtk_window_handle_wm_event (GTK_WINDOW (widget), event);
 }
 
 static void
