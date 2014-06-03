@@ -188,6 +188,8 @@ testdata = \
 	entry-progress-coloring.ui \
 	fixed-widget-stacking.ref.ui \
 	fixed-widget-stacking.ui \
+	flipping-icons.ref.ui \
+	flipping-icons.ui \
 	font-sizes-names.css \
 	font-sizes-names.ref.ui \
 	font-sizes-names.ui \
