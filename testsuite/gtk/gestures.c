@@ -893,14 +893,14 @@ main (int argc, char *argv[])
   g_test_add_func ("/gestures/propagation/phases", test_phases);
   g_test_add_func ("/gestures/propagation/mixed", test_mixed);
   g_test_add_func ("/gestures/propagation/early-exit", test_early_exit);
-  g_test_add_func ("/gestures/propagation/claim/capture", test_claim_capture);
-  g_test_add_func ("/gestures/propagation/claim/target", test_claim_target);
-  g_test_add_func ("/gestures/propagation/claim/bubble", test_claim_bubble);
-  g_test_add_func ("/gestures/propagation/claim/early-capture", test_early_claim_capture);
-  g_test_add_func ("/gestures/propagation/claim/late-capture", test_late_claim_capture);
-  g_test_add_func ("/gestures/propagation/group", test_group);
-  g_test_add_func ("/gestures/propagation/grabs/gestures-outside-grab", test_gestures_outside_grab);
-  g_test_add_func ("/gestures/propagation/grabs/gestures-inside-grab", test_gestures_inside_grab);
+  g_test_add_func ("/gestures/claim/capture", test_claim_capture);
+  g_test_add_func ("/gestures/claim/target", test_claim_target);
+  g_test_add_func ("/gestures/claim/bubble", test_claim_bubble);
+  g_test_add_func ("/gestures/claim/early-capture", test_early_claim_capture);
+  g_test_add_func ("/gestures/claim/late-capture", test_late_claim_capture);
+  g_test_add_func ("/gestures/group", test_group);
+  g_test_add_func ("/gestures/grabs/gestures-outside-grab", test_gestures_outside_grab);
+  g_test_add_func ("/gestures/grabs/gestures-inside-grab", test_gestures_inside_grab);
 
   return g_test_run ();
 }
