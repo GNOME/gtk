@@ -22,6 +22,21 @@
 
 #include <gtk/gtk.h>
 
+
+G_MODULE_EXPORT void
+set_default_direction_ltr (void)
+{
+  g_test_message ("Attention: globally setting default text direction to LTR");
+  gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
+}
+
+G_MODULE_EXPORT void
+set_default_direction_rtl (void)
+{
+  g_test_message ("Attention: globally setting default text direction to RTL");
+  gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+}
+
 G_MODULE_EXPORT void
 switch_default_direction (void)
 {
@@ -71,4 +86,3 @@ swap_child (GtkWidget *window)
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (window), image);
 }
-
