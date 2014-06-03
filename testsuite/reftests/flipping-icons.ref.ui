@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.1 -->
+<interface>
+  <requires lib="gtk+" version="3.12"/>
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property> 
+            <property name="icon-name">go-last</property> 
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property> 
+            <property name="icon-name">go-first</property> 
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property> 
+            <property name="icon-name">media-skip-backward</property> 
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property> 
+            <property name="icon-name">media-skip-forward</property> 
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property> 
+            <property name="icon-name">media-seek-backward</property> 
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property> 
+            <property name="icon-name">media-seek-forward</property> 
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property> 
+            <property name="icon-name">pan-end-symbolic</property> 
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property> 
+            <property name="icon-name">pan-start-symbolic</property> 
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
