@@ -237,12 +237,31 @@ quit_when_idle (gpointer loop)
   return G_SOURCE_REMOVE;
 }
 
+static gint inhibit_count;
+static GMainLoop *loop;
+
+void
+reftest_inhibit_snapshot (void)
+{
+  inhibit_count++;
+}
+
+void
+reftest_uninhibit_snapshot (void)
+{
+  g_assert (inhibit_count > 0);
+  inhibit_count--;
+
+  if (inhibit_count == 0)
+    g_idle_add (quit_when_idle, loop);
+}
+
 static void
-check_for_draw (GdkEvent *event, gpointer loop)
+check_for_draw (GdkEvent *event, gpointer data)
 {
   if (event->type == GDK_EXPOSE)
     {
-      g_idle_add (quit_when_idle, loop);
+      reftest_uninhibit_snapshot ();
       gdk_event_handler_set ((GdkEventFunc) gtk_main_do_event, NULL, NULL);
     }
 
@@ -254,18 +273,23 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
 {
   cairo_surface_t *surface;
   cairo_pattern_t *bg;
-  GMainLoop *loop;
   cairo_t *cr;
 
   g_assert (gtk_widget_get_realized (widget));
 
   loop = g_main_loop_new (NULL, FALSE);
+
   /* We wait until the widget is drawn for the first time.
    * We can not wait for a GtkWidget::draw event, because that might not
    * happen if the window is fully obscured by windowed child widgets.
    * Alternatively, we could wait for an expose event on widget's window.
-   * Both of these are rather hairy, not sure what's best. */
-  gdk_event_handler_set (check_for_draw, loop, NULL);
+   * Both of these are rather hairy, not sure what's best.
+   *
+   * We also use an inhibit mechanism, to give module functions a chance
+   * to delay the snapshot.
+   */
+  reftest_inhibit_snapshot ();
+  gdk_event_handler_set (check_for_draw, NULL, NULL);
   g_main_loop_run (loop);
 
   surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),

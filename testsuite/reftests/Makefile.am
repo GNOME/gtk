@@ -28,7 +28,8 @@ gtk_reftest_LDADD = \
 gtk_reftest_SOURCES = \
 	reftest-module.c		\
 	reftest-module.h		\
-	gtk-reftest.c
+	gtk-reftest.c			\
+	gtk-reftest.h
 
 clean-local:
 	rm -rf output/ || true
