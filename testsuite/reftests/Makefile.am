@@ -372,13 +372,16 @@ substitutions = \
 	-e s,@libexecdir\@,$(libexecdir),g \
 	$(NULL)
 
-reftests.test: reftests.test.in Makefile
+%.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
 DISTCLEANFILES = reftests.test
 
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
-testmeta_DATA = reftests.test
+testmeta_DATA = 		\
+	reftests.test		\
+	reftests-dark.test	\
+	reftests-hc.test
 endif
 
 -include $(top_srcdir)/git.mk

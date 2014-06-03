@@ -1,0 +1,3 @@
+[Test]
+Exec=/bin/sh -c "GTK_THEME=HighContrast @libexecdir@/installed-tests/gtk+/gtk-reftest -k --verbose --output $(pwd) --directory @libexecdir@/installed-tests/gtk+/reftests"
+Type=session-exclusive
