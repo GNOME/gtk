@@ -55,6 +55,7 @@ struct _GtkInspectorCssEditorPrivate
   gboolean global;
   GtkStyleContext *context;
   GtkToggleToolButton *disable_button;
+  guint timeout;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssEditor, gtk_inspector_css_editor, GTK_TYPE_BOX)
@@ -207,8 +208,7 @@ apply_system_font (GtkInspectorCssEditor *ce)
 }
 
 static void
-text_changed (GtkTextBuffer         *buffer,
-              GtkInspectorCssEditor *ce)
+update_style (GtkInspectorCssEditor *ce)
 {
   GtkCssProvider *provider;
   gchar *text;
@@ -220,11 +220,33 @@ text_changed (GtkTextBuffer         *buffer,
   else
     return;
 
-  text = get_current_text (buffer);
+  text = get_current_text (ce->priv->text);
   gtk_css_provider_load_from_data (provider, text, -1, NULL);
   g_free (text);
 
   gtk_style_context_reset_widgets (gdk_screen_get_default ());
+}
+
+static gboolean
+update_timeout (gpointer data)
+{
+  GtkInspectorCssEditor *ce = data;
+
+  ce->priv->timeout = 0;
+
+  update_style (ce);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+text_changed (GtkTextBuffer         *buffer,
+              GtkInspectorCssEditor *ce)
+{
+  if (ce->priv->timeout != 0)
+    g_source_remove (ce->priv->timeout);
+
+  ce->priv->timeout = g_timeout_add (100, update_timeout, ce); 
 }
 
 static void
@@ -338,6 +360,17 @@ set_property (GObject      *object,
 }
 
 static void
+finalize (GObject *object)
+{
+  GtkInspectorCssEditor *ce = GTK_INSPECTOR_CSS_EDITOR (object);
+
+  if (ce->priv->timeout != 0)
+    g_source_remove (ce->priv->timeout);
+
+  G_OBJECT_CLASS (gtk_inspector_css_editor_parent_class)->finalize (object);
+}
+
+static void
 gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -346,6 +379,7 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
   object_class->constructed = constructed;
+  object_class->finalize = finalize;
 
   g_object_class_install_property (object_class, PROP_GLOBAL,
       g_param_spec_boolean ("global", "Global", "Whether this editor changes the whole application or just the selected widget",
