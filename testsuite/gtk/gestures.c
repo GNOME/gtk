@@ -608,6 +608,118 @@ test_claim_bubble (void)
 }
 
 static void
+test_early_claim_capture (void)
+{
+  GtkWidget *A, *B, *C;
+  GtkGesture *g;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  g = add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture a1, "
+                   "capture b1, "
+                   "b1 state claimed");
+
+  /* Reset the string */
+  g_string_erase (str, 0, str->len);
+
+  gtk_gesture_set_state (g, GTK_EVENT_SEQUENCE_DENIED);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture c1, "
+                   "c1 state claimed, "
+                   "b1 state denied");
+
+  point_release (&mouse_state, 1);
+
+  g_string_free (str, TRUE);
+  gtk_widget_destroy (A);
+}
+
+static void
+test_late_claim_capture (void)
+{
+  GtkWidget *A, *B, *C;
+  GtkGesture *g;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  g = add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_gesture (A, "a3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c2, "
+                   "c2 state claimed");
+
+  /* Reset the string */
+  g_string_erase (str, 0, str->len);
+
+  gtk_gesture_set_state (g, GTK_EVENT_SEQUENCE_CLAIMED);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c2 cancelled, "
+                   "c1 cancelled, "
+                   "b1 state claimed");
+
+  point_release (&mouse_state, 1);
+
+  g_string_free (str, TRUE);
+  gtk_widget_destroy (A);
+}
+
+static void
 test_group (void)
 {
   GtkWidget *A, *B, *C;
@@ -668,6 +780,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/gestures/propagation/claim/capture", test_claim_capture);
   g_test_add_func ("/gestures/propagation/claim/target", test_claim_target);
   g_test_add_func ("/gestures/propagation/claim/bubble", test_claim_bubble);
+  g_test_add_func ("/gestures/propagation/claim/early-capture", test_early_claim_capture);
+  g_test_add_func ("/gestures/propagation/claim/late-capture", test_late_claim_capture);
   g_test_add_func ("/gestures/propagation/group", test_group);
 
   return g_test_run ();
