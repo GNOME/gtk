@@ -1,32 +1,171 @@
 #include <gtk/gtk.h>
 
-static gboolean
-inject_press (gpointer data)
+typedef struct {
+  GtkWidget *widget;
+  gint x;
+  gint y;
+  guint state;
+  guint pressed : 1;
+} PointState;
+
+static PointState mouse_state;
+static PointState touch_state[10]; /* touchpoint 0 gets pointer emulation,
+                                    * use it first in tests for consistency.
+                                    */
+
+#define EVENT_SEQUENCE(point) (GdkEventSequence*) ((point) - touch_state + 1)
+
+static void
+point_press (PointState *point,
+             GtkWidget  *widget,
+             guint       button)
 {
-  GtkWidget *widget = data;
-  GdkEventButton *ev;
   GdkDisplay *display;
   GdkDeviceManager *dm;
   GdkDevice *device;
+  GdkEvent *ev;
 
   display = gtk_widget_get_display (widget);
   dm = gdk_display_get_device_manager (display);
   device = gdk_device_manager_get_client_pointer (dm);
 
-  ev = (GdkEventButton*)gdk_event_new (GDK_BUTTON_PRESS);
-  ev->window = g_object_ref (gtk_widget_get_window (widget));
-  ev->time = GDK_CURRENT_TIME;
-  ev->x = 1;
-  ev->y = 1;
-  ev->state = 0;
-  ev->button = 1;
-  gdk_event_set_device ((GdkEvent*)ev, device);
+  if (point == &mouse_state)
+    {
+      ev = gdk_event_new (GDK_BUTTON_PRESS);
+      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->button.time = GDK_CURRENT_TIME;
+      ev->button.x = point->x;
+      ev->button.y = point->y;
+      ev->button.button = button;
+      ev->button.state = point->state;
 
-  gtk_main_do_event ((GdkEvent*)ev);
+      point->state |= GDK_BUTTON1_MASK << (button - 1);
+    }
+  else
+    {
+      ev = gdk_event_new (GDK_TOUCH_BEGIN);
+      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->touch.time = GDK_CURRENT_TIME;
+      ev->touch.x = point->x;
+      ev->touch.y = point->y;
+      ev->touch.sequence = EVENT_SEQUENCE (point);
 
-  gdk_event_free ((GdkEvent*)ev);
+      if (point == &touch_state[0])
+        ev->touch.emulating_pointer = TRUE;
+    }
 
-  return G_SOURCE_REMOVE;
+  gdk_event_set_device (ev, device);
+
+  gtk_main_do_event (ev);
+
+  gdk_event_free (ev);
+
+  point->widget = widget;
+}
+
+static void
+point_update (PointState *point,
+              GtkWidget  *widget,
+              gdouble     x,
+              gdouble     y)
+{
+  GdkDisplay *display;
+  GdkDeviceManager *dm;
+  GdkDevice *device;
+  GdkEvent *ev;
+
+  display = gtk_widget_get_display (widget);
+  dm = gdk_display_get_device_manager (display);
+  device = gdk_device_manager_get_client_pointer (dm);
+
+  if (point == &mouse_state)
+    {
+      ev = gdk_event_new (GDK_MOTION_NOTIFY);
+      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->button.time = GDK_CURRENT_TIME;
+      ev->motion.x = x;
+      ev->motion.y = y;
+      ev->motion.state = point->state;
+    }
+  else
+    {
+      if (!point->widget || widget != point->widget)
+        return;
+
+      ev = gdk_event_new (GDK_TOUCH_UPDATE);
+      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->touch.time = GDK_CURRENT_TIME;
+      ev->touch.x = x;
+      ev->touch.y = y;
+      ev->touch.sequence = EVENT_SEQUENCE (point);
+      ev->touch.state = 0;
+
+      if (point == &touch_state[0])
+        ev->touch.emulating_pointer = TRUE;
+    }
+
+  gdk_event_set_device (ev, device);
+
+  gtk_main_do_event (ev);
+
+  gdk_event_free (ev);
+
+  point->x = x;
+  point->y = y;
+}
+
+static void
+point_release (PointState *point,
+               guint       button)
+{
+  GdkDisplay *display;
+  GdkDeviceManager *dm;
+  GdkDevice *device;
+  GdkEvent *ev;
+
+  if (point->widget == NULL)
+    return;
+
+  display = gtk_widget_get_display (point->widget);
+  dm = gdk_display_get_device_manager (display);
+  device = gdk_device_manager_get_client_pointer (dm);
+
+  if (!point->widget)
+    return;
+
+  if (point == &mouse_state)
+    {
+      if ((point->state & (GDK_BUTTON1_MASK << (button - 1))) == 0)
+        return;
+
+      ev = gdk_event_new (GDK_BUTTON_RELEASE);
+      ev->any.window = g_object_ref (gtk_widget_get_window (point->widget));
+      ev->button.time = GDK_CURRENT_TIME;
+      ev->button.x = point->x;
+      ev->button.y = point->y;
+      ev->button.state = point->state;
+
+      point->state &= ~(GDK_BUTTON1_MASK << (button - 1));
+    }
+  else
+    {
+      ev = gdk_event_new (GDK_TOUCH_END);
+      ev->any.window = g_object_ref (gtk_widget_get_window (point->widget));
+      ev->touch.time = GDK_CURRENT_TIME;
+      ev->touch.x = point->x;
+      ev->touch.y = point->y;
+      ev->touch.sequence = EVENT_SEQUENCE (point);
+      ev->touch.state = point->state;
+
+      if (point == &touch_state[0])
+        ev->touch.emulating_pointer = TRUE;
+    }
+
+  gdk_event_set_device (ev, device);
+
+  gtk_main_do_event (ev);
+
+  gdk_event_free (ev);
 }
 
 static const gchar *
@@ -190,7 +329,8 @@ test_phases (void)
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
-  inject_press (C);
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
 
   g_assert_cmpstr (str->str, ==,
                    "capture a1, "
@@ -242,7 +382,8 @@ test_mixed (void)
   add_legacy (B, str, GDK_EVENT_PROPAGATE);
   add_legacy (C, str, GDK_EVENT_PROPAGATE);
 
-  inject_press (C);
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
 
   g_assert_cmpstr (str->str, ==,
                    "capture a1, "
@@ -295,7 +436,8 @@ test_early_exit (void)
   add_legacy (B, str, GDK_EVENT_STOP);
   add_legacy (C, str, GDK_EVENT_PROPAGATE);
 
-  inject_press (C);
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
 
   g_assert_cmpstr (str->str, ==,
                    "capture a1, "
@@ -341,7 +483,8 @@ test_claim_capture (void)
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
-  inject_press (C);
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
 
   g_assert_cmpstr (str->str, ==,
                    "capture a1, "
@@ -384,7 +527,8 @@ test_claim_target (void)
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
-  inject_press (C);
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
 
   g_assert_cmpstr (str->str, ==,
                    "capture a1, "
@@ -428,7 +572,8 @@ test_claim_bubble (void)
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_CLAIMED);
   add_gesture (C, "c3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
-  inject_press (C);
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
 
   g_assert_cmpstr (str->str, ==,
                    "capture a1, "
@@ -481,7 +626,8 @@ test_group (void)
   add_gesture (B, "b3", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
   add_gesture (C, "c4", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
 
-  inject_press (C);
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
 
   g_assert_cmpstr (str->str, ==,
                    "capture a1, "
