@@ -769,6 +769,122 @@ test_group (void)
   gtk_widget_destroy (A);
 }
 
+static void
+test_gestures_outside_grab (void)
+{
+  GtkWidget *A, *B, *C, *D;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  D = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_show (D);
+
+  str = g_string_new ("");
+
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_gesture (B, "b2", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a2", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c2, "
+                   "c2 state claimed");
+
+  /* Set a grab on another window */
+  g_string_erase (str, 0, str->len);
+  gtk_grab_add (D);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c1 cancelled, "
+                   "c2 cancelled, "
+                   "b1 cancelled, "
+                   "a1 cancelled");
+
+  g_string_free (str, TRUE);
+
+  gtk_widget_destroy (A);
+  gtk_widget_destroy (D);
+}
+
+static void
+test_gestures_inside_grab (void)
+{
+  GtkWidget *A, *B, *C;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (C, "c2", GTK_PHASE_TARGET, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_gesture (B, "b2", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (A, "a2", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_NONE);
+
+  point_update (&mouse_state, C, 10, 10);
+  point_press (&mouse_state, C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture a1, "
+                   "capture b1, "
+                   "capture c1, "
+                   "target c2, "
+                   "c2 state claimed");
+
+  /* Set a grab on B */
+  g_string_erase (str, 0, str->len);
+  gtk_grab_add (B);
+  g_assert_cmpstr (str->str, ==,
+                   "a1 cancelled");
+
+  /* Update with the grab under effect */
+  g_string_erase (str, 0, str->len);
+  point_update (&mouse_state, C, 20, 20);
+  g_assert_cmpstr (str->str, ==,
+                   "b1 updated, "
+                   "c1 updated, "
+                   "c2 updated");
+
+  g_string_free (str, TRUE);
+
+  gtk_widget_destroy (A);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -783,6 +899,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/gestures/propagation/claim/early-capture", test_early_claim_capture);
   g_test_add_func ("/gestures/propagation/claim/late-capture", test_late_claim_capture);
   g_test_add_func ("/gestures/propagation/group", test_group);
+  g_test_add_func ("/gestures/propagation/grabs/gestures-outside-grab", test_gestures_outside_grab);
+  g_test_add_func ("/gestures/propagation/grabs/gestures-inside-grab", test_gestures_inside_grab);
 
   return g_test_run ();
 }
