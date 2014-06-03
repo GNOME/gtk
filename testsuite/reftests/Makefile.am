@@ -365,6 +365,7 @@ libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
 libreftest_la_LIBADD = $(gtk_reftest_LDADD)
 libreftest_la_SOURCES =			\
 	set-default-direction.c		\
+	expand-expander.c		\
 	$(NULL)
 
 substitutions = \
