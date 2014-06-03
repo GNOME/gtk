@@ -4,6 +4,7 @@
   <object class="GtkOffscreenWindow" id="window1">
     <property name="can_focus">False</property>
     <property name="type">popup</property>
+    <signal name="realize" handler="reftest:set_default_direction_ltr"/>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
