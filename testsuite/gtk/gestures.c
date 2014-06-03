@@ -249,6 +249,19 @@ cancel_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
 }
 
 static void
+update_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
+{
+  GestureData *gd = data;
+  const gchar *name;
+  
+  name = g_object_get_data (G_OBJECT (g), "name");
+  
+  if (gd->str->len > 0)
+    g_string_append (gd->str, ", ");
+  g_string_append_printf (gd->str, "%s updated", name);
+}
+
+static void
 state_changed_cb (GtkGesture *g, GdkEventSequence *sequence, GtkEventSequenceState state, gpointer data)
 {
   GestureData *gd = data;
@@ -281,6 +294,7 @@ add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString
 
   g_signal_connect (g, "pressed", G_CALLBACK (press_cb), data);
   g_signal_connect (g, "cancel", G_CALLBACK (cancel_cb), data);
+  g_signal_connect (g, "update", G_CALLBACK (update_cb), data);
   g_signal_connect (g, "sequence-state-changed", G_CALLBACK (state_changed_cb), data);
 
   return g;
