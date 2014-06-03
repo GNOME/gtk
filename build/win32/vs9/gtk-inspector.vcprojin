@@ -124,25 +124,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File RelativePath="..\..\..\gtk\inspector\actions.c" />
-			<File RelativePath="..\..\..\gtk\inspector\button-path.c" />
-			<File RelativePath="..\..\..\gtk\inspector\classes-list.c" />
-			<File RelativePath="..\..\..\gtk\inspector\css-editor.c" />
-			<File RelativePath="..\..\..\gtk\inspector\data-list.c" />
-			<File RelativePath="..\..\..\gtk\inspector\general.c" />
-			<File RelativePath="..\..\..\gtk\inspector\init.c" />
-			<File RelativePath="..\..\..\gtk\inspector\inspect-button.c" />
-			<File RelativePath="..\..\..\gtk\inspector\object-hierarchy.c" />
-			<File RelativePath="..\..\..\gtk\inspector\prop-list.c" />
-			<File RelativePath="..\..\..\gtk\inspector\property-cell-renderer.c" />
-			<File RelativePath="..\..\..\gtk\inspector\python-hooks.c" />
-			<File RelativePath="..\..\..\gtk\inspector\python-shell.c" />
-			<File RelativePath="..\..\..\gtk\inspector\resource-list.c" />
-			<File RelativePath="..\..\..\gtk\inspector\resources.c" />
-			<File RelativePath="..\..\..\gtk\inspector\signals-list.c" />
-			<File RelativePath="..\..\..\gtk\inspector\visual.c" />
-			<File RelativePath="..\..\..\gtk\inspector\widget-tree.c" />
-			<File RelativePath="..\..\..\gtk\inspector\window.c" />
+#include "libgtk-inspector.sourcefiles"
 		</Filter>
 	</Files>
 </VisualStudioProject>

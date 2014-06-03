@@ -119,4 +119,36 @@ distclean-local:
 	  rm -f $(MAINTAINERCLEANFILES); \
 	fi
 
+dist-hook: $(top_builddir)/build/win32/vs9/gtk-inspector.vcproj $(top_builddir)/build/win32/vs10/gtk-inspector.vcxproj $(top_builddir)/build/win32/vs10/gtk-inspector.vcxproj.filters
+
+$(top_builddir)/build/win32/vs9/gtk-inspector.vcproj: $(top_srcdir)/build/win32/vs9/gtk-inspector.vcprojin
+	for F in `echo $(libgtkinspector_la_SOURCES) | tr '/' '\\'`; do \
+		case $$F in \
+		*.c) echo '   <File RelativePath="..\..\..\gtk\inspector\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgtk-inspector.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gtk-inspector.vcprojin >$@
+	rm libgtk-inspector.sourcefiles
+
+$(top_builddir)/build/win32/vs10/gtk-inspector.vcxproj: $(top_srcdir)/build/win32/vs10/gtk-inspector.vcxprojin
+	for F in `echo $(libgtkinspector_la_SOURCES) | tr '/' '\\'`; do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\inspector\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgtk-inspector.vs10.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk-inspector.vcxprojin >$@
+	rm libgtk-inspector.vs10.sourcefiles
+
+$(top_builddir)/build/win32/vs10/gtk-inspector.vcxproj.filters: $(top_srcdir)/build/win32/vs10/gtk-inspector.vcxproj.filtersin
+	for F in `echo $(libgtkinspector_la_SOURCES) | tr '/' '\\'`; do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\inspector\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
+		     ;; \
+		esac; \
+	done >libgtk-inspector.vs10.sourcefiles.filters
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk-inspector.vcxproj.filtersin >$@
+	rm libgtk-inspector.vs10.sourcefiles.filters
+
 -include $(top_srcdir)/git.mk

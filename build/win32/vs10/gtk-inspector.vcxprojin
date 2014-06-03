@@ -117,25 +117,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\gtk\inspector\actions.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\button-path.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\classes-list.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\css-editor.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\data-list.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\general.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\init.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\inspect-button.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\object-hierarchy.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\prop-list.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\property-cell-renderer.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\python-hooks.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\python-shell.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\resource-list.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\resources.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\signals-list.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\visual.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\widget-tree.c" />
-    <ClCompile Include="..\..\..\gtk\inspector\window.c" />
+#include "libgtk-inspector.vs10.sourcefiles"
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gtk-prebuild.vcxproj">
