@@ -426,7 +426,7 @@ stamp-gc-h: $(top_builddir)/config.status
 dist-hook: ../build/win32/vs9/gdk.vcproj ../build/win32/vs10/gdk.vcxproj ../build/win32/vs10/gdk.vcxproj.filters
 
 ../build/win32/vs9/gdk.vcproj: ../build/win32/vs9/gdk.vcprojin
-	for F in $(libgdk_3_la_SOURCES); do \
+	for F in `echo $(libgdk_3_la_SOURCES) | tr '/' '\\'`; do \
 		case $$F in \
 		*.c) echo '   <File RelativePath="..\..\..\gdk\'$$F'" />' \
 		     ;; \
@@ -436,7 +436,7 @@ dist-hook: ../build/win32/vs9/gdk.vcproj ../build/win32/vs10/gdk.vcxproj ../buil
 	rm libgdk.sourcefiles
 
 ../build/win32/vs10/gdk.vcxproj: ../build/win32/vs10/gdk.vcxprojin
-	for F in $(libgdk_3_la_SOURCES); do \
+	for F in `echo $(libgdk_3_la_SOURCES) | tr '/' '\\'`; do \
 		case $$F in \
 		*.c) echo '   <ClCompile Include="..\..\..\gdk\'$$F'" />' \
 		     ;; \
@@ -446,7 +446,7 @@ dist-hook: ../build/win32/vs9/gdk.vcproj ../build/win32/vs10/gdk.vcxproj ../buil
 	rm libgdk.vs10.sourcefiles
 
 ../build/win32/vs10/gdk.vcxproj.filters: ../build/win32/vs10/gdk.vcxproj.filtersin
-	for F in $(libgdk_3_la_SOURCES); do \
+	for F in `echo $(libgdk_3_la_SOURCES) | tr '/' '\\'`; do \
 		case $$F in \
 		*.c) echo '   <ClCompile Include="..\..\..\gdk\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
 		     ;; \
