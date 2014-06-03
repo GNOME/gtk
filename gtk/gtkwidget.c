@@ -16887,40 +16887,15 @@ event_controller_grab_notify (GtkWidget           *widget,
                               gboolean             was_grabbed,
                               EventControllerData *data)
 {
-  GtkWidget *grab_widget, *toplevel;
-  GtkPropagationPhase phase;
-  GtkWindowGroup *group;
-  GdkDevice *device;
+  GdkDevice *device = NULL;
 
-  device = gtk_gesture_get_device (GTK_GESTURE (data->controller));
-  phase = gtk_event_controller_get_propagation_phase (data->controller);
+  if (GTK_IS_GESTURE (data->controller))
+    device = gtk_gesture_get_device (GTK_GESTURE (data->controller));
 
-  if (!device)
+  if (!device || !gtk_widget_device_is_shadowed (widget, device))
     return;
 
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  if (GTK_IS_WINDOW (toplevel))
-    group = gtk_window_get_group (GTK_WINDOW (toplevel));
-  else
-    group = gtk_window_get_group (NULL);
-
-  grab_widget = gtk_window_group_get_current_device_grab (group, device);
-
-  if (!grab_widget)
-    grab_widget = gtk_window_group_get_current_grab (group);
-
-  if (!grab_widget || grab_widget == widget)
-    return;
-
-  if ((phase != GTK_PHASE_CAPTURE &&
-       !gtk_widget_is_ancestor (widget, grab_widget)) ||
-      (phase == GTK_PHASE_CAPTURE &&
-       !gtk_widget_is_ancestor (widget, grab_widget) &&
-       !gtk_widget_is_ancestor (grab_widget, widget)))
-    {
-      gtk_event_controller_reset (data->controller);
-    }
+  gtk_event_controller_reset (data->controller);
 }
 
 static void
