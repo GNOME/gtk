@@ -1587,13 +1587,10 @@ gtk_combo_box_add (GtkContainer *container,
   if (priv->cell_view &&
       gtk_widget_get_parent (priv->cell_view))
     {
-      gtk_widget_unparent (priv->cell_view);
-      _gtk_bin_set_child (GTK_BIN (container), NULL);
-      gtk_widget_queue_resize (GTK_WIDGET (container));
+      GTK_CONTAINER_CLASS (gtk_combo_box_parent_class)->remove (container, priv->cell_view);
     }
   
-  gtk_widget_set_parent (widget, GTK_WIDGET (container));
-  _gtk_bin_set_child (GTK_BIN (container), widget);
+  GTK_CONTAINER_CLASS (gtk_combo_box_parent_class)->add (container, widget);
 
   if (priv->cell_view &&
       widget != priv->cell_view)
@@ -1657,13 +1654,10 @@ gtk_combo_box_remove (GtkContainer *container,
   if (widget == priv->cell_view)
     priv->cell_view = NULL;
 
-  gtk_widget_unparent (widget);
-  _gtk_bin_set_child (GTK_BIN (container), NULL);
+  GTK_CONTAINER_CLASS (gtk_combo_box_parent_class)->remove (container, widget);
 
   if (gtk_widget_in_destruction (GTK_WIDGET (combo_box)))
     return;
-
-  gtk_widget_queue_resize (GTK_WIDGET (container));
 
   if (!priv->tree_view)
     appears_as_list = FALSE;
@@ -1682,8 +1676,7 @@ gtk_combo_box_remove (GtkContainer *container,
   if (!priv->cell_view)
     {
       priv->cell_view = gtk_cell_view_new ();
-      gtk_widget_set_parent (priv->cell_view, GTK_WIDGET (container));
-      _gtk_bin_set_child (GTK_BIN (container), priv->cell_view);
+      GTK_CONTAINER_CLASS (gtk_combo_box_parent_class)->add (container, priv->cell_view);
 
       gtk_widget_show (priv->cell_view);
       gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view),
@@ -4817,8 +4810,7 @@ gtk_combo_box_constructor (GType                  type,
   priv->cell_view = gtk_cell_view_new_with_context (priv->area, NULL);
   gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
   gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
-  gtk_widget_set_parent (priv->cell_view, GTK_WIDGET (combo_box));
-  _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
+  GTK_CONTAINER_CLASS (gtk_combo_box_parent_class)->add (GTK_CONTAINER (combo_box),priv->cell_view);
   gtk_widget_show (priv->cell_view);
 
   gtk_combo_box_check_appearance (combo_box);

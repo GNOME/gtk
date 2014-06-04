@@ -331,9 +331,3 @@ gtk_bin_get_child (GtkBin *bin)
   return bin->priv->child;
 }
 
-void
-_gtk_bin_set_child (GtkBin    *bin,
-                    GtkWidget *widget)
-{
-  bin->priv->child = widget;
-}
