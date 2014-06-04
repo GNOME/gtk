@@ -81,7 +81,7 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
   gtk_inspector_gestures_set_object (GTK_INSPECTOR_GESTURES (iw->gestures), selected);
 
   notebook = gtk_widget_get_parent (iw->prop_list);
-  tab = g_object_get_data (G_OBJECT (iw), "next-tab");
+  tab = g_object_get_data (G_OBJECT (wt), "next-tab");
   if (g_strcmp0 (tab, "properties") == 0)
     {
       page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), iw->prop_list);
