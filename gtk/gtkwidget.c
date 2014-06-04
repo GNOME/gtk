@@ -7218,6 +7218,9 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
       bevent->button.axes = g_memdup (event->axes,
                                       sizeof (gdouble) * gdk_device_get_n_axes (event->device));
       gdk_event_set_source_device (bevent, gdk_event_get_source_device ((GdkEvent*)event));
+
+      if (event->type == GDK_TOUCH_END)
+        bevent->button.state |= GDK_BUTTON1_MASK;
     }
   else if (event->type == GDK_TOUCH_UPDATE)
     {
@@ -7226,7 +7229,7 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
       bevent->any.window = g_object_ref (event->window);
       bevent->any.send_event = FALSE;
       bevent->motion.time = event->time;
-      bevent->motion.state = event->state;
+      bevent->motion.state = event->state | GDK_BUTTON1_MASK;
       bevent->motion.x_root = event->x_root;
       bevent->motion.y_root = event->y_root;
       bevent->motion.x = event->x;
