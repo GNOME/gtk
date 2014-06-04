@@ -78,6 +78,9 @@ point_update (PointState *point,
   dm = gdk_display_get_device_manager (display);
   device = gdk_device_manager_get_client_pointer (dm);
 
+  point->x = x;
+  point->y = y;
+
   if (point == &mouse_state)
     {
       ev = gdk_event_new (GDK_MOTION_NOTIFY);
@@ -109,9 +112,6 @@ point_update (PointState *point,
   gtk_main_do_event (ev);
 
   gdk_event_free (ev);
-
-  point->x = x;
-  point->y = y;
 }
 
 static void
@@ -220,6 +220,7 @@ static void
 press_cb (GtkGesture *g, gint n_press, gdouble x, gdouble y, gpointer data)
 {
   GtkEventController *c = GTK_EVENT_CONTROLLER (g);
+  GdkEventSequence *sequence;
   GtkPropagationPhase phase;
   GestureData *gd = data;
   const gchar *name;
@@ -230,6 +231,11 @@ press_cb (GtkGesture *g, gint n_press, gdouble x, gdouble y, gpointer data)
   if (gd->str->len > 0)
     g_string_append (gd->str, ", ");
   g_string_append_printf (gd->str, "%s %s", phase_nick (phase), name);
+
+  sequence = gtk_gesture_get_last_updated_sequence (g);
+
+  if (sequence)
+    g_string_append_printf (gd->str, " (%x)", GPOINTER_TO_UINT (sequence));
 
   if (gd->state != GTK_EVENT_SEQUENCE_NONE)
     gtk_gesture_set_state (g, gd->state);
@@ -246,6 +252,35 @@ cancel_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
   if (gd->str->len > 0)
     g_string_append (gd->str, ", ");
   g_string_append_printf (gd->str, "%s cancelled", name);
+}
+
+static void
+begin_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
+{
+  GestureData *gd = data;
+  const gchar *name;
+
+  name = g_object_get_data (G_OBJECT (g), "name");
+
+  if (gd->str->len > 0)
+    g_string_append (gd->str, ", ");
+  g_string_append_printf (gd->str, "%s began", name);
+
+  if (gd->state != GTK_EVENT_SEQUENCE_NONE)
+    gtk_gesture_set_state (g, gd->state);
+}
+
+static void
+end_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
+{
+  GestureData *gd = data;
+  const gchar *name;
+
+  name = g_object_get_data (G_OBJECT (g), "name");
+
+  if (gd->str->len > 0)
+    g_string_append (gd->str, ", ");
+  g_string_append_printf (gd->str, "%s ended", name);
 }
 
 static void
@@ -272,6 +307,9 @@ state_changed_cb (GtkGesture *g, GdkEventSequence *sequence, GtkEventSequenceSta
   if (gd->str->len > 0)
     g_string_append (gd->str, ", ");
   g_string_append_printf (gd->str, "%s state %s", name, state_nick (state));
+
+  if (sequence != NULL)
+    g_string_append_printf (gd->str, " (%x)", GPOINTER_TO_UINT (sequence));
 }
 
 
@@ -295,6 +333,29 @@ add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString
   g_signal_connect (g, "pressed", G_CALLBACK (press_cb), data);
   g_signal_connect (g, "cancel", G_CALLBACK (cancel_cb), data);
   g_signal_connect (g, "update", G_CALLBACK (update_cb), data);
+  g_signal_connect (g, "sequence-state-changed", G_CALLBACK (state_changed_cb), data);
+
+  return g;
+}
+
+static GtkGesture *
+add_mt_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString *str, GtkEventSequenceState state)
+{
+  GtkGesture *g;
+  GestureData *data;
+
+  data = g_new (GestureData, 1);
+  data->str = str;
+  data->state = state;
+
+  g = gtk_gesture_rotate_new (w);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (g), phase);
+
+  g_object_set_data (G_OBJECT (g), "name", (gpointer)name);
+
+  g_signal_connect (g, "begin", G_CALLBACK (begin_cb), data);
+  g_signal_connect (g, "update", G_CALLBACK (update_cb), data);
+  g_signal_connect (g, "end", G_CALLBACK (end_cb), data);
   g_signal_connect (g, "sequence-state-changed", G_CALLBACK (state_changed_cb), data);
 
   return g;
@@ -885,6 +946,218 @@ test_gestures_inside_grab (void)
   gtk_widget_destroy (A);
 }
 
+static void
+test_multitouch_on_single (void)
+{
+  GtkWidget *A, *B, *C;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_NONE);
+  add_gesture (B, "b1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_CLAIMED);
+
+  /* First touch down */
+  point_update (&touch_state[0], C, 10, 10);
+  point_press (&touch_state[0], C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture a1 (1), "
+                   "capture b1 (1), "
+                   "b1 state claimed (1)");
+
+  /* Second touch down */
+  g_string_erase (str, 0, str->len);
+  point_update (&touch_state[1], C, 20, 20);
+  point_press (&touch_state[1], C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "a1 state denied (2), "
+                   "b1 state denied (2)");
+
+  g_string_free (str, TRUE);
+
+  gtk_widget_destroy (A);
+}
+
+static void
+test_multitouch_activation (void)
+{
+  GtkWidget *A, *B, *C;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  add_mt_gesture (C, "c1", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_CLAIMED);
+
+  /* First touch down */
+  point_update (&touch_state[0], C, 10, 10);
+  point_press (&touch_state[0], C, 1);
+
+  g_assert_cmpstr (str->str, ==, "");
+
+  /* Second touch down */
+  point_update (&touch_state[1], C, 20, 20);
+  point_press (&touch_state[1], C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c1 began, "
+                   "c1 state claimed (2), "
+                   "c1 state claimed");
+
+  /* First touch up */
+  g_string_erase (str, 0, str->len);
+  point_release (&touch_state[0], 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c1 ended");
+
+  /* A third touch down triggering again action */
+  g_string_erase (str, 0, str->len);
+  point_update (&touch_state[2], C, 20, 20);
+  point_press (&touch_state[2], C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c1 began, "
+                   "c1 state claimed (3)");
+
+  /* One touch up, gesture is finished again */
+  g_string_erase (str, 0, str->len);
+  point_release (&touch_state[2], 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c1 ended");
+
+  /* Another touch up, gesture remains inactive */
+  g_string_erase (str, 0, str->len);
+  point_release (&touch_state[1], 1);
+
+  g_assert_cmpstr (str->str, ==, "");
+
+  g_string_free (str, TRUE);
+
+  gtk_widget_destroy (A);
+}
+
+static void
+test_multitouch_interaction (void)
+{
+  GtkWidget *A, *B, *C;
+  GtkGesture *g;
+  GString *str;
+
+  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (A, "A");
+  B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_name (B, "B");
+  C = gtk_event_box_new ();
+  gtk_widget_set_hexpand (C, TRUE);
+  gtk_widget_set_vexpand (C, TRUE);
+  gtk_widget_set_name (C, "C");
+
+  gtk_container_add (GTK_CONTAINER (A), B);
+  gtk_container_add (GTK_CONTAINER (B), C);
+
+  gtk_widget_show_all (A);
+
+  str = g_string_new ("");
+
+  g = add_gesture (A, "a1", GTK_PHASE_CAPTURE, str, GTK_EVENT_SEQUENCE_CLAIMED);
+  add_mt_gesture (C, "c1", GTK_PHASE_BUBBLE, str, GTK_EVENT_SEQUENCE_CLAIMED);
+
+  /* First touch down, a1 claims the sequence */
+  point_update (&touch_state[0], C, 10, 10);
+  point_press (&touch_state[0], C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "capture a1 (1), "
+                   "a1 state claimed (1)");
+
+  /* Second touch down, a1 denies and c1 takes over */
+  g_string_erase (str, 0, str->len);
+  point_update (&touch_state[1], C, 20, 20);
+  point_press (&touch_state[1], C, 1);
+
+  /* Denying sequences in touch-excess situation is a responsibility of the caller */
+  gtk_gesture_set_state (g, GTK_EVENT_SEQUENCE_DENIED);
+
+  g_assert_cmpstr (str->str, ==,
+                   "a1 state denied (2), "
+                   "c1 began, "
+                   "c1 state claimed, "
+                   "c1 state claimed (2), "
+                   "a1 state denied (1)");
+
+  /* Move first point, only c1 should update */
+  g_string_erase (str, 0, str->len);
+  point_update (&touch_state[0], C, 30, 30);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c1 updated");
+
+  /* First touch up */
+  g_string_erase (str, 0, str->len);
+  point_release (&touch_state[0], 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c1 ended");
+
+  /* A third touch down triggering again action on c1 */
+  g_string_erase (str, 0, str->len);
+  point_update (&touch_state[2], C, 20, 20);
+  point_press (&touch_state[2], C, 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "a1 state denied (3), "
+                   "c1 began, "
+                   "c1 state claimed (3)");
+
+  /* One touch up, gesture is finished again */
+  g_string_erase (str, 0, str->len);
+  point_release (&touch_state[2], 1);
+
+  g_assert_cmpstr (str->str, ==,
+                   "c1 ended");
+
+  /* Another touch up, gesture remains inactive */
+  g_string_erase (str, 0, str->len);
+  point_release (&touch_state[1], 1);
+
+  g_assert_cmpstr (str->str, ==, "");
+
+  g_string_free (str, TRUE);
+
+  gtk_widget_destroy (A);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -901,6 +1174,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/gestures/group", test_group);
   g_test_add_func ("/gestures/grabs/gestures-outside-grab", test_gestures_outside_grab);
   g_test_add_func ("/gestures/grabs/gestures-inside-grab", test_gestures_inside_grab);
+  g_test_add_func ("/gestures/multitouch/gesture-single", test_multitouch_on_single);
+  g_test_add_func ("/gestures/multitouch/multitouch-activation", test_multitouch_activation);
+  g_test_add_func ("/gestures/multitouch/interaction", test_multitouch_interaction);
 
   return g_test_run ();
 }
