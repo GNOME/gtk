@@ -79,6 +79,7 @@
 #include "gtksizerequest.h"
 #include "gtkbox.h"
 #include "gtkwindow.h"
+#include "gtkwindowgroup.h"
 #include "gtkentry.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

@@ -229,6 +229,7 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkwindowgroup.h>
 
 #ifndef GTK_DISABLE_DEPRECATED
 #include <gtk/deprecated/gtkarrow.h>

@@ -90,32 +90,6 @@ struct _GtkWindowClass
   void (*_gtk_reserved3) (void);
 };
 
-#define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())
-#define GTK_WINDOW_GROUP(object)          (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_WINDOW_GROUP, GtkWindowGroup))
-#define GTK_WINDOW_GROUP_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WINDOW_GROUP, GtkWindowGroupClass))
-#define GTK_IS_WINDOW_GROUP(object)       (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_WINDOW_GROUP))
-#define GTK_IS_WINDOW_GROUP_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WINDOW_GROUP))
-#define GTK_WINDOW_GROUP_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WINDOW_GROUP, GtkWindowGroupClass))
-
-struct _GtkWindowGroup
-{
-  GObject parent_instance;
-
-  GtkWindowGroupPrivate *priv;
-};
-
-struct _GtkWindowGroupClass
-{
-  GObjectClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
-
 /**
  * GtkWindowType:
  * @GTK_WINDOW_TOPLEVEL: A regular window, such as a dialog.
@@ -483,27 +457,6 @@ void     gtk_window_reshow_with_initial_size (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 GtkWindowType gtk_window_get_window_type     (GtkWindow     *window);
 
-/* Window groups
- */
-GDK_AVAILABLE_IN_ALL
-GType            gtk_window_group_get_type      (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
-GtkWindowGroup * gtk_window_group_new           (void);
-GDK_AVAILABLE_IN_ALL
-void             gtk_window_group_add_window    (GtkWindowGroup     *window_group,
-						 GtkWindow          *window);
-GDK_AVAILABLE_IN_ALL
-void             gtk_window_group_remove_window (GtkWindowGroup     *window_group,
-					         GtkWindow          *window);
-GDK_AVAILABLE_IN_ALL
-GList *          gtk_window_group_list_windows  (GtkWindowGroup     *window_group);
-
-GDK_AVAILABLE_IN_ALL
-GtkWidget *      gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *      gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
-                                                           GdkDevice      *device);
 
 GDK_AVAILABLE_IN_ALL
 GtkApplication *gtk_window_get_application      (GtkWindow          *window);

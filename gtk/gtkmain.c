@@ -127,6 +127,7 @@
 #include "gtkversion.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkwindowgroup.h"
 
 #include "a11y/gtkaccessibility.h"
 

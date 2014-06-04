@@ -76,6 +76,7 @@
 #include "gtktreeselection.h"
 #include "gtkbox.h"
 #include "gtkorientable.h"
+#include "gtkwindowgroup.h"
 #include "gtkintl.h"
 
 #include <cairo-gobject.h>

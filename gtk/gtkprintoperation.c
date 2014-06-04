@@ -30,6 +30,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmessagedialog.h"
+#include "gtkwindowgroup.h"
 #include "gtktypebuiltins.h"
 
 /**

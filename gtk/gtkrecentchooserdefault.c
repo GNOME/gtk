@@ -60,6 +60,7 @@
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtkorientable.h"
+#include "gtkwindowgroup.h"
 #include "deprecated/gtkactivatable.h"
 
 #include "gtkrecentmanager.h"

@@ -471,7 +471,8 @@ gtk_public_h_sources = 		\
 	gtkvolumebutton.h	\
 	gtkwidget.h		\
 	gtkwidgetpath.h		\
-	gtkwindow.h
+	gtkwindow.h		\
+	gtkwindowgroup.h
 
 if OS_UNIX
 gtk_unix_print_public_h_sources = 	\
@@ -1075,6 +1076,7 @@ gtk_base_c_sources = 		\
 	gtkwidget.c		\
 	gtkwidgetpath.c		\
 	gtkwindow.c		\
+	gtkwindowgroup.c	\
 	gtkwin32theme.c		\
 	$(gtk_clipboard_dnd_c_sources)
 

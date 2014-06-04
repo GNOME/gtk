@@ -93,6 +93,13 @@ void            _gtk_window_get_shadow_width (GtkWindow *window,
 
 void            _gtk_window_toggle_maximized (GtkWindow *window);
 
+/* Window groups */
+
+GtkWindowGroup *_gtk_window_get_window_group (GtkWindow *window);
+
+void            _gtk_window_set_window_group (GtkWindow      *window,
+                                              GtkWindowGroup *group);
+
 /* Popovers */
 void    _gtk_window_add_popover          (GtkWindow                   *window,
                                           GtkWidget                   *popover);
