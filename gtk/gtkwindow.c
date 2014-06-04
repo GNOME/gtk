@@ -3763,7 +3763,7 @@ unset_titlebar (GtkWindow *window)
 }
 
 static gboolean
-gdk_window_supports_csd (GtkWindow *window)
+gtk_window_supports_csd (GtkWindow *window)
 {
   GtkWidget *widget = GTK_WIDGET (window);
 
@@ -3804,7 +3804,7 @@ gdk_window_supports_csd (GtkWindow *window)
 }
 
 static void
-gdk_window_enable_csd (GtkWindow *window)
+gtk_window_enable_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *widget = GTK_WIDGET (window);
@@ -3876,8 +3876,8 @@ gtk_window_set_titlebar (GtkWindow *window,
       return;
     }
 
-  if (gdk_window_supports_csd (window))
-    gdk_window_enable_csd (window);
+  if (gtk_window_supports_csd (window))
+    gtk_window_enable_csd (window);
   else
     priv->custom_title = TRUE;
 
@@ -5541,7 +5541,7 @@ create_titlebar (GtkWindow *window)
 }
 
 static gboolean
-gdk_window_should_use_csd (GtkWindow *window)
+gtk_window_should_use_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
   const gchar *csd_env;
@@ -5574,10 +5574,10 @@ create_decoration (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
-  if (!gdk_window_supports_csd (window))
+  if (!gtk_window_supports_csd (window))
     return;
 
-  gdk_window_enable_csd (window);
+  gtk_window_enable_csd (window);
 
   if (priv->title_box == NULL)
     {
@@ -6178,7 +6178,7 @@ gtk_window_realize (GtkWidget *widget)
   window = GTK_WINDOW (widget);
   priv = window->priv;
 
-  if (!priv->client_decorated && gdk_window_should_use_csd (window))
+  if (!priv->client_decorated && gtk_window_should_use_csd (window))
     create_decoration (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
