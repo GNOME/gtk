@@ -778,15 +778,14 @@ struct _GtkFlowBoxPrivate {
   gpointer           sort_data;
   GDestroyNotify     sort_destroy;
 
-  gboolean           track_motion;
+  GtkGesture        *multipress_gesture;
+  GtkGesture        *drag_gesture;
+
   gboolean           rubberband_select;
   GtkFlowBoxChild   *rubberband_first;
   GtkFlowBoxChild   *rubberband_last;
-  gint               button_down_x;
-  gint               button_down_y;
   gboolean           rubberband_modify;
   gboolean           rubberband_extend;
-  GdkDevice         *rubberband_device;
 
   GtkScrollType      autoscroll_mode;
   guint              autoscroll_id;
@@ -2686,12 +2685,12 @@ autoscroll_cb (GtkWidget     *widget,
 
   if (priv->rubberband_select)
     {
-      gint x, y;
+      GdkEventSequence *sequence;
+      gdouble x, y;
       GtkFlowBoxChild *child;
 
-      gdk_window_get_device_position (gtk_widget_get_window (widget),
-                                      priv->rubberband_device,
-                                      &x, &y, NULL);
+      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (priv->drag_gesture));
+      gtk_gesture_get_point (priv->drag_gesture, sequence, &x, &y);
 
       child = gtk_flow_box_find_child_at_pos (box, x, y);
 
@@ -2732,6 +2731,8 @@ get_view_rect (GtkFlowBox   *box,
   if (GTK_IS_VIEWPORT (parent))
     {
       view = gtk_viewport_get_view_window (GTK_VIEWPORT (parent));
+      rect->x = rect->y = 0;
+
       rect->x = gtk_adjustment_get_value (priv->hadjustment);
       rect->y = gtk_adjustment_get_value (priv->vadjustment);
       rect->width = gdk_window_get_width (view);
@@ -2823,12 +2824,49 @@ gtk_flow_box_leave_notify_event (GtkWidget        *widget,
   return FALSE;
 }
 
+static void
+gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
+                                  gdouble         offset_x,
+                                  gdouble         offset_y,
+                                  GtkFlowBox     *box)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  gdouble start_x, start_y;
+  GtkFlowBoxChild *child;
+
+  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+
+  if (!priv->rubberband_select &&
+      (offset_x * offset_x) + (offset_y * offset_y) > RUBBERBAND_START_DISTANCE * RUBBERBAND_START_DISTANCE)
+    {
+      priv->rubberband_select = TRUE;
+      priv->rubberband_first = gtk_flow_box_find_child_at_pos (box, start_x, start_y);
+
+      /* Grab focus here, so Escape-to-stop-rubberband  works */
+      gtk_flow_box_update_cursor (box, priv->rubberband_first);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+    }
+
+  if (priv->rubberband_select)
+    {
+      child = gtk_flow_box_find_child_at_pos (box, start_x + offset_x,
+                                              start_y + offset_y);
+
+      if (priv->rubberband_first == NULL)
+        priv->rubberband_first = child;
+      if (child != NULL)
+        priv->rubberband_last = child;
+
+      update_autoscroll_mode (box, start_x + offset_x, start_y + offset_y);
+      gtk_widget_queue_draw (GTK_WIDGET (box));
+    }
+}
+
 static gboolean
 gtk_flow_box_motion_notify_event (GtkWidget      *widget,
                                   GdkEventMotion *event)
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkFlowBoxChild *child;
   GdkWindow *window;
   GdkWindow *event_window;
@@ -2856,71 +2894,99 @@ gtk_flow_box_motion_notify_event (GtkWidget      *widget,
   gtk_flow_box_update_prelight (box, child);
   gtk_flow_box_update_active (box, child);
 
-  if (priv->track_motion)
-    {
-      if (!priv->rubberband_select &&
-          (event->x - priv->button_down_x) * (event->x - priv->button_down_x) +
-          (event->y - priv->button_down_y) * (event->y - priv->button_down_y) > RUBBERBAND_START_DISTANCE * RUBBERBAND_START_DISTANCE)
-        {
-          priv->rubberband_select = TRUE;
-          priv->rubberband_first = gtk_flow_box_find_child_at_pos (box, priv->button_down_x, priv->button_down_y);
-
-          /* Grab focus here, so Escape-to-stop-rubberband  works */
-          gtk_flow_box_update_cursor (box, priv->rubberband_first);
-        }
-
-      if (priv->rubberband_select)
-        {
-          if (priv->rubberband_first == NULL)
-            priv->rubberband_first = child;
-          if (child != NULL)
-            priv->rubberband_last = child;
-
-          update_autoscroll_mode (box, event->x, event->y);
-        }
-    }
-
-  return FALSE;
+  return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->motion_notify_event (widget, event);
 }
 
-static gboolean
-gtk_flow_box_button_press_event (GtkWidget      *widget,
-                                 GdkEventButton *event)
+static void
+gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                         guint                 n_press,
+                                         gdouble               x,
+                                         gdouble               y,
+                                         GtkFlowBox           *box)
 {
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkFlowBoxChild *child;
 
-  if (event->button == GDK_BUTTON_PRIMARY)
-    {
-      child = gtk_flow_box_find_child_at_pos (box, event->x, event->y);
-      if (child != NULL)
-        {
-          priv->active_child = child;
-          priv->active_child_active = TRUE;
-          gtk_widget_queue_draw (GTK_WIDGET (box));
-          if (event->type == GDK_2BUTTON_PRESS &&
-              !priv->activate_on_single_click)
-            {
-              g_signal_emit (box, signals[CHILD_ACTIVATED], 0, child);
-              return TRUE;
-            }
-        }
+  child = gtk_flow_box_find_child_at_pos (box, x, y);
 
-      if (priv->selection_mode == GTK_SELECTION_MULTIPLE)
+  if (child == NULL)
+    return;
+
+  /* The drag gesture is only triggered by first press */
+  if (n_press != 1)
+    gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+  priv->active_child = child;
+  priv->active_child_active = TRUE;
+  gtk_widget_queue_draw (GTK_WIDGET (box));
+
+  if (n_press == 2 && !priv->activate_on_single_click)
+    g_signal_emit (box, signals[CHILD_ACTIVATED], 0, child);
+}
+
+static void
+gtk_flow_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
+                                          guint                 n_press,
+                                          gdouble               x,
+                                          gdouble               y,
+                                          GtkFlowBox           *box)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+
+  if (priv->active_child != NULL && priv->active_child_active)
+    {
+      if (priv->activate_on_single_click)
+        gtk_flow_box_select_and_activate (box, priv->active_child);
+      else
         {
-          priv->track_motion = TRUE;
-          priv->rubberband_select = FALSE;
-          priv->rubberband_first = NULL;
-          priv->rubberband_last = NULL;
-          priv->button_down_x = event->x;
-          priv->button_down_y = event->y;
-          priv->rubberband_device = gdk_event_get_device ((GdkEvent*)event);
-          get_current_selection_modifiers (widget, &priv->rubberband_modify, &priv->rubberband_extend);
+          GdkEventSequence *sequence;
+          GdkInputSource source;
+          const GdkEvent *event;
+          gboolean modify;
+          gboolean extend;
+
+          get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
+
+          /* With touch, we default to modifying the selection.
+           * You can still clear the selection and start over
+           * by holding Ctrl.
+           */
+
+          sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+          event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+          source = gdk_device_get_source (gdk_event_get_source_device (event));
+
+          if (source == GDK_SOURCE_TOUCHSCREEN)
+            modify = !modify;
+
+          gtk_flow_box_update_selection (box, priv->active_child, modify, extend);
         }
     }
 
-  return FALSE;
+  priv->active_child = NULL;
+  priv->active_child_active = FALSE;
+  gtk_widget_queue_draw (GTK_WIDGET (box));
+}
+
+static void
+gtk_flow_box_drag_gesture_begin (GtkGestureDrag *gesture,
+                                 gdouble         start_x,
+                                 gdouble         start_y,
+                                 GtkWidget      *widget)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (widget);
+
+  if (priv->selection_mode != GTK_SELECTION_MULTIPLE)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
+  priv->rubberband_select = FALSE;
+  priv->rubberband_first = NULL;
+  priv->rubberband_last = NULL;
+  get_current_selection_modifiers (widget, &priv->rubberband_modify, &priv->rubberband_extend);
 }
 
 static void
@@ -2931,65 +2997,40 @@ gtk_flow_box_stop_rubberband (GtkFlowBox *box)
   priv->rubberband_select = FALSE;
   priv->rubberband_first = NULL;
   priv->rubberband_last = NULL;
-  priv->rubberband_device = NULL;
 
   remove_autoscroll (box);
 
   gtk_widget_queue_draw (GTK_WIDGET (box));
 }
 
-static gboolean
-gtk_flow_box_button_release_event (GtkWidget      *widget,
-                                   GdkEventButton *event)
+static void
+gtk_flow_box_drag_gesture_end (GtkGestureDrag *gesture,
+                               gdouble         offset_x,
+                               gdouble         offset_y,
+                               GtkFlowBox     *box)
 {
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  GdkEventSequence *sequence;
 
-  if (event->button == GDK_BUTTON_PRIMARY)
-    {
-      if (priv->active_child != NULL && priv->active_child_active)
-        {
-          if (priv->activate_on_single_click)
-            gtk_flow_box_select_and_activate (box, priv->active_child);
-          else
-            {
-              gboolean modify;
-              gboolean extend;
-              GdkDevice *device;
+  if (!priv->rubberband_select)
+    return;
 
-              get_current_selection_modifiers (widget, &modify, &extend);
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
-              /* With touch, we default to modifying the selection.
-               * You can still clear the selection and start over
-               * by holding Ctrl.
-               */
-              device = gdk_event_get_source_device ((GdkEvent *)event);
-              if (gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
-                modify = !modify;
-              
-              gtk_flow_box_update_selection (box, priv->active_child, modify, extend);
-            }
-        }
-
-      priv->active_child = NULL;
-      priv->active_child_active = FALSE;
-      gtk_widget_queue_draw (GTK_WIDGET (box));
-  }
-
-  priv->track_motion = FALSE;
-  if (priv->rubberband_select)
+  if (gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
     {
       if (!priv->rubberband_extend && !priv->rubberband_modify)
         gtk_flow_box_unselect_all_internal (box);
-      gtk_flow_box_select_all_between (box, priv->rubberband_first, priv->rubberband_last, priv->rubberband_modify);
 
+      gtk_flow_box_select_all_between (box, priv->rubberband_first, priv->rubberband_last, priv->rubberband_modify);
       gtk_flow_box_stop_rubberband (box);
 
       g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
-
     }
+  else
+    gtk_flow_box_stop_rubberband (box);
 
-  return FALSE;
+  gtk_widget_queue_draw (GTK_WIDGET (box));
 }
 
 static gboolean
@@ -3009,20 +3050,6 @@ gtk_flow_box_key_press_event (GtkWidget   *widget,
     }
 
   return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->key_press_event (widget, event);
-}
-
-static void
-gtk_flow_box_grab_notify (GtkWidget *widget,
-                          gboolean   was_grabbed)
-{
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-
-  if (!was_grabbed)
-    {
-      if (priv->rubberband_select)
-        gtk_flow_box_stop_rubberband (box);
-    }
 }
 
 /* Realize and map {{{3 */
@@ -3570,6 +3597,9 @@ gtk_flow_box_finalize (GObject *obj)
   g_clear_object (&priv->hadjustment);
   g_clear_object (&priv->vadjustment);
 
+  g_object_unref (priv->drag_gesture);
+  g_object_unref (priv->multipress_gesture);
+
   G_OBJECT_CLASS (gtk_flow_box_parent_class)->finalize (obj);
 }
 
@@ -3593,10 +3623,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   widget_class->unmap = gtk_flow_box_unmap;
   widget_class->focus = gtk_flow_box_focus;
   widget_class->draw = gtk_flow_box_draw;
-  widget_class->button_press_event = gtk_flow_box_button_press_event;
-  widget_class->button_release_event = gtk_flow_box_button_release_event;
   widget_class->key_press_event = gtk_flow_box_key_press_event;
-  widget_class->grab_notify = gtk_flow_box_grab_notify;
   widget_class->get_request_mode = gtk_flow_box_get_request_mode;
   widget_class->get_preferred_width = gtk_flow_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_flow_box_get_preferred_height;
@@ -3934,6 +3961,32 @@ gtk_flow_box_init (GtkFlowBox *box)
   priv->activate_on_single_click = TRUE;
 
   priv->children = g_sequence_new (NULL);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (box));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                     FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                 GDK_BUTTON_PRIMARY);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                              GTK_PHASE_BUBBLE);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (gtk_flow_box_multipress_gesture_pressed), box);
+  g_signal_connect (priv->multipress_gesture, "released",
+                    G_CALLBACK (gtk_flow_box_multipress_gesture_released), box);
+
+  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (box));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture),
+                                     FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture),
+                                 GDK_BUTTON_PRIMARY);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
+                                              GTK_PHASE_CAPTURE);
+  g_signal_connect (priv->drag_gesture, "drag-begin",
+                    G_CALLBACK (gtk_flow_box_drag_gesture_begin), box);
+  g_signal_connect (priv->drag_gesture, "drag-update",
+                    G_CALLBACK (gtk_flow_box_drag_gesture_update), box);
+  g_signal_connect (priv->drag_gesture, "drag-end",
+                    G_CALLBACK (gtk_flow_box_drag_gesture_end), box);
 }
  
  /* Public API {{{2 */
