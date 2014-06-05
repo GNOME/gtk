@@ -2546,9 +2546,13 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
   if (!gtk_widget_get_realized (GTK_WIDGET (combo_box)))
     return;
 
+  if (!gtk_widget_is_drawable (priv->popup_window))
+    return;
+
   if (priv->grab_keyboard)
     gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
-  gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
+  if (priv->grab_pointer)
+    gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
 
   gtk_widget_hide (priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button),
