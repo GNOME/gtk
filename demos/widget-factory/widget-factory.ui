@@ -2732,6 +2732,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
     <property name="text" translatable="yes">Do something?</property>
     <property name="secondary-text" translatable="yes">If you do something,
 bad things might happen.</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
     <child type="action">
       <object class="GtkButton" id="cancel_info_dialog">
         <property name="visible">True</property>
@@ -2754,6 +2755,7 @@ bad things might happen.</property>
     <property name="modal">True</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Action</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
     <child internal-child="vbox">
       <object class="GtkBox">
         <child>
@@ -2789,6 +2791,7 @@ bad things might happen.</property>
     <property name="modal">True</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Properties</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
     <child internal-child="vbox">
       <object class="GtkBox">
         <child>
