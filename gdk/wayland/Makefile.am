@@ -44,7 +44,9 @@ libgdk_wayland_la_SOURCES =			\
 	gdkselection-wayland.c			\
 	gdkwindow-wayland.c			\
 	gdkwayland.h				\
-	gdkprivate-wayland.h
+	gdkprivate-wayland.h			\
+	wm-button-layout-translation.c		\
+	wm-button-layout-translation.h
 
 libgdkinclude_HEADERS =				\
 	gdkwayland.h

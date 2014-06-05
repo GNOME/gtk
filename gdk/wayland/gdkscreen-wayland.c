@@ -29,6 +29,8 @@
 #include "gdkwayland.h"
 #include "gdkprivate-wayland.h"
 
+#include "wm-button-layout-translation.h"
+
 typedef struct _GdkWaylandScreen      GdkWaylandScreen;
 typedef struct _GdkWaylandScreenClass GdkWaylandScreenClass;
 
@@ -511,6 +513,7 @@ static TranslationEntry translations[] = {
   { "org.gnome.desktop.sound", "input-feedback-sounds", "gtk-enable-input-feedback-sounds", G_TYPE_BOOLEAN, { . b = FALSE } },
   { "org.gnome.desktop.privacy", "recent-files-max-age", "gtk-recent-files-max-age", G_TYPE_INT, { .i = 30 } },
   { "org.gnome.desktop.privacy", "remember-recent-files",    "gtk-recent-files-enabled", G_TYPE_BOOLEAN, { .b = TRUE } },
+  { "org.gnome.desktop.wm.preferences", "button-layout",    "gtk-decoration-layout", G_TYPE_STRING, { .s = "menu:close" } },
   { "org.gnome.settings-daemon.plugins.xsettings", "antialiasing", "gtk-xft-antialias", G_TYPE_NONE, { .i = 0 } },
   { "org.gnome.settings-daemon.plugins.xsettings", "hinting", "gtk-xft-hinting", G_TYPE_NONE, { .i = 0 } },
   { "org.gnome.settings-daemon.plugins.xsettings", "hinting", "gtk-xft-hintstyle", G_TYPE_NONE, { .i = 0 } },
@@ -681,6 +684,31 @@ set_value_from_entry (GdkScreen        *screen,
     }
 }
 
+static void
+set_decoration_layout_from_entry (GdkScreen        *screen,
+                                  TranslationEntry *entry,
+                                  GValue           *value)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  GSettings *settings;
+
+  settings = (GSettings *)g_hash_table_lookup (screen_wayland->settings, entry->schema);
+
+  if (settings)
+    {
+      gchar *s = g_settings_get_string (settings, entry->key);
+
+      translate_wm_button_layout_to_gtk (s);
+      g_value_set_string (value, s);
+
+      g_free (s);
+    }
+  else
+    {
+      g_value_set_static_string (value, entry->fallback.s);
+    }
+}
+
 static gboolean
 set_capability_setting (GdkScreen                 *screen,
 			GValue                    *value,
@@ -705,7 +733,10 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
   entry = find_translation_entry_by_setting (name);
   if (entry != NULL)
     {
-      set_value_from_entry (screen, entry, value);
+      if (strcmp (name, "gtk-decoration-layout") == 0)
+        set_decoration_layout_from_entry (screen, entry, value);
+      else
+        set_value_from_entry (screen, entry, value);
       return TRUE;
    }
 
