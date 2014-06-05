@@ -229,6 +229,9 @@ struct _GtkLabelPrivate
   PangoAttrList *markup_attrs;
   PangoLayout   *layout;
 
+  GtkGesture    *drag_gesture;
+  GtkGesture    *multipress_gesture;
+
   gchar   *label;
   gchar   *text;
 
@@ -375,10 +378,6 @@ static void gtk_label_unrealize         (GtkWidget        *widget);
 static void gtk_label_map               (GtkWidget        *widget);
 static void gtk_label_unmap             (GtkWidget        *widget);
 
-static gboolean gtk_label_button_press      (GtkWidget        *widget,
-					     GdkEventButton   *event);
-static gboolean gtk_label_button_release    (GtkWidget        *widget,
-					     GdkEventButton   *event);
 static gboolean gtk_label_motion            (GtkWidget        *widget,
 					     GdkEventMotion   *event);
 static gboolean gtk_label_leave_notify      (GtkWidget        *widget,
@@ -482,6 +481,26 @@ static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *label);
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
 
+/* Event controller callbacks */
+static void   gtk_label_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
+                                                     gint                  n_press,
+                                                     gdouble               x,
+                                                     gdouble               y,
+                                                     GtkLabel             *label);
+static void   gtk_label_multipress_gesture_released (GtkGestureMultiPress *gesture,
+                                                     gint                  n_press,
+                                                     gdouble               x,
+                                                     gdouble               y,
+                                                     GtkLabel             *label);
+static void   gtk_label_drag_gesture_begin          (GtkGestureDrag *gesture,
+                                                     gdouble         start_x,
+                                                     gdouble         start_y,
+                                                     GtkLabel       *label);
+static void   gtk_label_drag_gesture_update         (GtkGestureDrag *gesture,
+                                                     gdouble         offset_x,
+                                                     gdouble         offset_y,
+                                                     GtkLabel       *label);
+
 static GtkSizeRequestMode gtk_label_get_request_mode                (GtkWidget           *widget);
 static void               gtk_label_get_preferred_width             (GtkWidget           *widget,
                                                                      gint                *minimum_size,
@@ -557,8 +576,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->unrealize = gtk_label_unrealize;
   widget_class->map = gtk_label_map;
   widget_class->unmap = gtk_label_unmap;
-  widget_class->button_press_event = gtk_label_button_press;
-  widget_class->button_release_event = gtk_label_button_release;
   widget_class->motion_notify_event = gtk_label_motion;
   widget_class->leave_notify_event = gtk_label_leave_notify;
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
@@ -1258,6 +1275,27 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonics_visible = TRUE;
 
   gtk_label_set_text (label, "");
+
+  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (label));
+  g_signal_connect (priv->drag_gesture, "drag-begin",
+                    G_CALLBACK (gtk_label_drag_gesture_begin), label);
+  g_signal_connect (priv->drag_gesture, "drag-update",
+                    G_CALLBACK (gtk_label_drag_gesture_update), label);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture), FALSE);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), GDK_BUTTON_PRIMARY);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
+                                              GTK_PHASE_BUBBLE);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (label));
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (gtk_label_multipress_gesture_pressed), label);
+  g_signal_connect (priv->multipress_gesture, "released",
+                    G_CALLBACK (gtk_label_multipress_gesture_released), label);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->multipress_gesture), TRUE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                              GTK_PHASE_BUBBLE);
 }
 
 
@@ -3132,6 +3170,9 @@ gtk_label_finalize (GObject *object)
   gtk_label_clear_links (label);
   g_free (priv->select_info);
 
+  g_object_unref (priv->drag_gesture);
+  g_object_unref (priv->multipress_gesture);
+
   G_OBJECT_CLASS (gtk_label_parent_class)->finalize (object);
 }
 
@@ -4665,49 +4706,61 @@ out:
   return FALSE;
 }
 
-static gboolean
-gtk_label_button_press (GtkWidget      *widget,
-                        GdkEventButton *event)
+static void
+gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                      gint                  n_press,
+                                      gdouble               widget_x,
+                                      gdouble               widget_y,
+                                      GtkLabel             *label)
 {
-  GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
-  gint index = 0;
-  gint min, max;
+  GtkWidget *widget = GTK_WIDGET (label);
+  GdkEventSequence *sequence;
+  const GdkEvent *event;
+  guint button;
 
   if (info == NULL)
-    return FALSE;
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   if (info->active_link)
     {
-      if (gdk_event_triggers_context_menu ((GdkEvent *) event))
+      if (gdk_event_triggers_context_menu (event))
         {
           info->link_clicked = 1;
-          gtk_label_do_popup (label, event);
-          return TRUE;
+          gtk_label_do_popup (label, (GdkEventButton*) event);
+          return;
         }
-      else if (event->button == GDK_BUTTON_PRIMARY)
+      else if (button == GDK_BUTTON_PRIMARY)
         {
           info->link_clicked = 1;
           gtk_widget_queue_draw (widget);
           if (!info->selectable)
-            return TRUE;
+            return;
         }
     }
 
   if (!info->selectable)
-    return FALSE;
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
 
   info->in_drag = FALSE;
   info->select_words = FALSE;
 
   if (gdk_event_triggers_context_menu ((GdkEvent *) event))
-    {
-      gtk_label_do_popup (label, event);
-
-      return TRUE;
-    }
-  else if (event->button == GDK_BUTTON_PRIMARY)
+    gtk_label_do_popup (label, (GdkEventButton*) event);
+  else if (button == GDK_BUTTON_PRIMARY)
     {
       if (!gtk_widget_has_focus (widget))
         {
@@ -4716,118 +4769,55 @@ gtk_label_button_press (GtkWidget      *widget,
           priv->in_click = FALSE;
         }
 
-      if (event->type == GDK_3BUTTON_PRESS)
-        {
-          gtk_label_select_region_index (label, 0, strlen (priv->text));
-          return TRUE;
-        }
-
-      if (event->type == GDK_2BUTTON_PRESS)
+      if (n_press == 3)
+        gtk_label_select_region_index (label, 0, strlen (priv->text));
+      else if (n_press == 2)
         {
           info->select_words = TRUE;
           gtk_label_select_word (label);
-          return TRUE;
         }
-
-      get_layout_index (label, event->x, event->y, &index);
-
-      min = MIN (info->selection_anchor, info->selection_end);
-      max = MAX (info->selection_anchor, info->selection_end);
-
-      if ((info->selection_anchor != info->selection_end) &&
-          (event->state & GDK_SHIFT_MASK))
-        {
-          if (index > min && index < max)
-            {
-              /* truncate selection, but keep it as big as possible */
-              if (index - min > max - index)
-                max = index;
-              else
-                min = index;
-            }
-          else
-            {
-              /* extend (same as motion) */
-              min = MIN (min, index);
-              max = MAX (max, index);
-            }
-
-          /* ensure the anchor is opposite index */
-          if (index == min)
-            {
-              gint tmp = min;
-              min = max;
-              max = tmp;
-            }
-
-          gtk_label_select_region_index (label, min, max);
-        }
-      else
-        {
-          if (event->type == GDK_3BUTTON_PRESS)
-            gtk_label_select_region_index (label, 0, strlen (priv->text));
-          else if (event->type == GDK_2BUTTON_PRESS)
-            gtk_label_select_word (label);
-          else if (min < max && min <= index && index <= max)
-            {
-              info->in_drag = TRUE;
-              info->drag_start_x = event->x;
-              info->drag_start_y = event->y;
-            }
-          else
-            /* start a replacement */
-            gtk_label_select_region_index (label, index, index);
-        }
-
-      return TRUE;
     }
 
-  return FALSE;
+  if (n_press >= 3)
+    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
 
-static gboolean
-gtk_label_button_release (GtkWidget      *widget,
-                          GdkEventButton *event)
-
+static void
+gtk_label_multipress_gesture_released (GtkGestureMultiPress *gesture,
+                                       gint                  n_press,
+                                       gdouble               x,
+                                       gdouble               y,
+                                       GtkLabel             *label)
 {
-  GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
+  GdkEventSequence *sequence;
   gint index;
 
   if (info == NULL)
-    return FALSE;
+    return;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    return;
+
+  if (n_press != 1)
+    return;
 
   if (info->in_drag)
     {
       info->in_drag = 0;
-
-      get_layout_index (label, event->x, event->y, &index);
+      get_layout_index (label, x, y, &index);
       gtk_label_select_region_index (label, index, index);
-
-      return FALSE;
     }
-
-  if (event->button != GDK_BUTTON_PRIMARY)
-    return FALSE;
-
-  if (info->active_link &&
-      info->selection_anchor == info->selection_end &&
-      info->link_clicked)
+  else if (info->active_link &&
+           info->selection_anchor == info->selection_end &&
+           info->link_clicked)
     {
       emit_activate_link (label, info->active_link);
       info->link_clicked = 0;
-
-      return TRUE;
     }
-
-  /* The goal here is to return TRUE iff we ate the
-   * button press to start selecting.
-   */
-  if (info->selectable)
-    return TRUE;
-
-  return FALSE;
 }
 
 static void
@@ -4909,6 +4899,170 @@ drag_begin_cb (GtkWidget      *widget,
     }
 }
 
+static void
+gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
+                              gdouble         start_x,
+                              gdouble         start_y,
+                              GtkLabel       *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
+  GdkModifierType state_mask;
+  GdkEventSequence *sequence;
+  const GdkEvent *event;
+  gint min, max, index;
+
+  if (!info)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
+  get_layout_index (label, start_x, start_y, &index);
+  min = MIN (info->selection_anchor, info->selection_end);
+  max = MAX (info->selection_anchor, info->selection_end);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  gdk_event_get_state (event, &state_mask);
+
+  if ((info->selection_anchor != info->selection_end) &&
+      (state_mask & GDK_SHIFT_MASK))
+    {
+      if (index > min && index < max)
+        {
+          /* truncate selection, but keep it as big as possible */
+          if (index - min > max - index)
+            max = index;
+          else
+            min = index;
+        }
+      else
+        {
+          /* extend (same as motion) */
+          min = MIN (min, index);
+          max = MAX (max, index);
+        }
+
+      /* ensure the anchor is opposite index */
+      if (index == min)
+        {
+          gint tmp = min;
+          min = max;
+          max = tmp;
+        }
+
+      gtk_label_select_region_index (label, min, max);
+    }
+  else
+    {
+      if (min < max && min <= index && index <= max)
+        {
+          info->in_drag = TRUE;
+          info->drag_start_x = start_x;
+          info->drag_start_y = start_y;
+        }
+      else
+        /* start a replacement */
+        gtk_label_select_region_index (label, index, index);
+    }
+}
+
+static void
+gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
+                               gdouble         offset_x,
+                               gdouble         offset_y,
+                               GtkLabel       *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
+  GtkWidget *widget = GTK_WIDGET (label);
+  GdkEventSequence *sequence;
+  gdouble x, y;
+  gint index;
+
+  if (info == NULL || !info->selectable)
+    return;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_get_point (GTK_GESTURE (gesture), sequence, &x, &y);
+
+  if (info->in_drag)
+    {
+      if (gtk_drag_check_threshold (widget,
+				    info->drag_start_x,
+				    info->drag_start_y,
+				    x, y))
+	{
+	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
+          const GdkEvent *event;
+
+          event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+	  gtk_target_list_add_text_targets (target_list, 0);
+
+          g_signal_connect (widget, "drag-begin",
+                            G_CALLBACK (drag_begin_cb), NULL);
+	  gtk_drag_begin_with_coordinates (widget, target_list,
+                                           GDK_ACTION_COPY,
+                                           1, (GdkEvent*) event,
+                                           info->drag_start_x,
+                                           info->drag_start_y);
+
+	  info->in_drag = FALSE;
+
+	  gtk_target_list_unref (target_list);
+	}
+    }
+  else
+    {
+      get_layout_index (label, x, y, &index);
+
+      if (index != info->selection_anchor)
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+      if (info->select_words)
+        {
+          gint min, max;
+          gint old_min, old_max;
+          gint anchor, end;
+
+          min = gtk_label_move_backward_word (label, index);
+          max = gtk_label_move_forward_word (label, index);
+
+          anchor = info->selection_anchor;
+          end = info->selection_end;
+
+          old_min = MIN (anchor, end);
+          old_max = MAX (anchor, end);
+
+          if (min < old_min)
+            {
+              anchor = min;
+              end = old_max;
+            }
+          else if (old_max < max)
+            {
+              anchor = max;
+              end = old_min;
+            }
+          else if (anchor == old_min)
+            {
+              if (anchor != min)
+                anchor = max;
+            }
+          else
+            {
+              if (anchor != max)
+                anchor = min;
+            }
+
+          gtk_label_select_region_index (label, anchor, end);
+        }
+      else
+        gtk_label_select_region_index (label, info->selection_anchor, index);
+    }
+}
+
 static gboolean
 gtk_label_motion (GtkWidget      *widget,
                   GdkEventMotion *event)
@@ -4965,86 +5119,7 @@ gtk_label_motion (GtkWidget      *widget,
         }
     }
 
-  if (!info->selectable)
-    return FALSE;
-
-  if ((event->state & GDK_BUTTON1_MASK) == 0)
-    return FALSE;
-
-  if (info->in_drag)
-    {
-      if (gtk_drag_check_threshold (widget,
-				    info->drag_start_x,
-				    info->drag_start_y,
-				    event->x, event->y))
-	{
-	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
-
-	  gtk_target_list_add_text_targets (target_list, 0);
-
-          g_signal_connect (widget, "drag-begin",
-                            G_CALLBACK (drag_begin_cb), NULL);
-	  gtk_drag_begin_with_coordinates (widget, target_list,
-                                           GDK_ACTION_COPY,
-                                           1, (GdkEvent *)event,
-                                           info->drag_start_x,
-                                           info->drag_start_y);
-
-	  info->in_drag = FALSE;
-
-	  gtk_target_list_unref (target_list);
-	}
-    }
-  else
-    {
-      gint x, y;
-
-      gdk_window_get_device_position (info->window, event->device, &x, &y, NULL);
-      get_layout_index (label, x, y, &index);
-
-      if (info->select_words)
-        {
-          gint min, max;
-          gint old_min, old_max;
-          gint anchor, end;
-
-          min = gtk_label_move_backward_word (label, index);
-          max = gtk_label_move_forward_word (label, index);
-
-          anchor = info->selection_anchor;
-          end = info->selection_end;
-
-          old_min = MIN (anchor, end);
-          old_max = MAX (anchor, end);
-
-          if (min < old_min)
-            {
-              anchor = min;
-              end = old_max;
-            }
-          else if (old_max < max)
-            {
-              anchor = max;
-              end = old_min;
-            }
-          else if (anchor == old_min)
-            {
-              if (anchor != min)
-                anchor = max;
-            }
-          else
-            {
-              if (anchor != max)
-                anchor = min;
-            }
-
-          gtk_label_select_region_index (label, anchor, end);
-        }
-      else
-        gtk_label_select_region_index (label, info->selection_anchor, index);
-    }
-
-  return TRUE;
+  return GTK_WIDGET_CLASS (gtk_label_parent_class)->motion_notify_event (widget, event);
 }
 
 static gboolean
