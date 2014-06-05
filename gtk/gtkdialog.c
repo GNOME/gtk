@@ -406,6 +406,27 @@ add_response_data (GtkDialog *dialog,
 }
 
 static void
+apply_response_for_header_bar (GtkDialog *dialog,
+                               GtkWidget *child,
+                               gint       response_id)
+{
+  GtkDialogPrivate *priv = dialog->priv;
+  GtkPackType pack;
+
+  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_HELP)
+    pack = GTK_PACK_START;
+  else
+    pack = GTK_PACK_END;
+
+  gtk_container_child_set (GTK_CONTAINER (priv->headerbar), child,
+                           "pack-type", pack,
+                           NULL);
+
+  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
+    gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (priv->headerbar), FALSE);
+}
+
+static void
 add_to_header_bar (GtkDialog *dialog,
                    GtkWidget *child,
                    gint       response_id)
@@ -413,16 +434,21 @@ add_to_header_bar (GtkDialog *dialog,
   GtkDialogPrivate *priv = dialog->priv;
 
   gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
-
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_HELP)
-    gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->headerbar), child);
-  else 
-    gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->headerbar), child);
-
+  gtk_container_add (GTK_CONTAINER (priv->headerbar), child);
   gtk_size_group_add_widget (priv->size_group, child);
+  apply_response_for_header_bar (dialog, child, response_id);
 
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
-    gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (priv->headerbar), FALSE);
+}
+
+static void
+apply_response_for_action_area (GtkDialog *dialog,
+                                GtkWidget *child,
+                                gint       response_id)
+{
+  GtkDialogPrivate *priv = dialog->priv;
+
+  if (response_id == GTK_RESPONSE_HELP)
+    gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area), child, TRUE);
 }
 
 static void
@@ -433,11 +459,8 @@ add_to_action_area (GtkDialog *dialog,
   GtkDialogPrivate *priv = dialog->priv;
 
   gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
-
   gtk_container_add (GTK_CONTAINER (priv->action_area), child);
-
-  if (response_id == GTK_RESPONSE_HELP)
-    gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area), child, TRUE);
+  apply_response_for_action_area (dialog, child, response_id);
 }
 
 static void
@@ -498,6 +521,7 @@ add_action_widgets (GtkDialog *dialog)
       update_suggested_action (dialog);
     }
 }
+
 static GObject *
 gtk_dialog_constructor (GType                  type,
                         guint                  n_construct_properties,
@@ -1860,16 +1884,13 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 
 	  closure = g_cclosure_new_object (G_CALLBACK (action_widget_activated),
 					   G_OBJECT (dialog));
-	  g_signal_connect_closure_by_id (object,
-					  signal_id,
-					  0,
-					  closure,
-					  FALSE);
+	  g_signal_connect_closure_by_id (object, signal_id, 0, closure, FALSE);
 	}
 
-      if (ad->response_id == GTK_RESPONSE_HELP)
-       gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area),
-                                           GTK_WIDGET (object), TRUE);
+      if (!priv->use_header_bar)
+        apply_response_for_action_area (dialog, GTK_WIDGET (object), ad->response_id);
+      else
+        apply_response_for_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
 
       if (item->is_default)
         gtk_widget_grab_default (GTK_WIDGET (object));
@@ -1879,6 +1900,8 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
     }
   g_slist_free (parser_data->items);
   g_slice_free (ActionWidgetsSubParserData, parser_data);
+
+  update_suggested_action (dialog);
 }
 
 static void
@@ -1890,7 +1913,9 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
   if (!type)
     gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else if (g_strcmp0 (type, "action") == 0)
+{
     gtk_dialog_add_action_widget (GTK_DIALOG (buildable), GTK_WIDGET (child), GTK_RESPONSE_NONE);
+}
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
