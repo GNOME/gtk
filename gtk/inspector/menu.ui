@@ -22,7 +22,6 @@
           <object class= "GtkTreeView">
             <property name="visible">True</property>
             <property name="model">model</property>
-            <property name="activate-on-single-click">True</property>
             <child>
               <object class="GtkTreeViewColumn">
                 <property name="title" translatable="yes">Label</property>

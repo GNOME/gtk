@@ -43,6 +43,10 @@ gtk_inspector_menu_init (GtkInspectorMenu *sl)
   gtk_widget_init_template (GTK_WIDGET (sl));
 }
 
+static void add_menu (GtkInspectorMenu *sl,
+                      GMenuModel       *menu,
+                      GtkTreeIter      *parent);
+
 static void
 add_item (GtkInspectorMenu *sl,
           GMenuModel       *menu,
@@ -55,6 +59,7 @@ add_item (GtkInspectorMenu *sl,
   gchar *action = NULL;
   gchar *target = NULL;
   gchar *icon = NULL;
+  GMenuModel *model;
 
   g_menu_model_get_item_attribute (menu, idx, G_MENU_ATTRIBUTE_LABEL, "s", &label);
   g_menu_model_get_item_attribute (menu, idx, G_MENU_ATTRIBUTE_ACTION, "s", &action);
@@ -73,6 +78,24 @@ add_item (GtkInspectorMenu *sl,
                       COLUMN_TARGET, target,
                       COLUMN_ICON, icon,
                       -1);
+
+  model = g_menu_model_get_item_link (menu, idx, G_MENU_LINK_SECTION);
+  if (model)
+    {
+      if (label == NULL)
+        gtk_tree_store_set (sl->priv->model, &iter,
+                            COLUMN_LABEL, _("Unnamed section"),
+                            -1);
+      add_menu (sl, model, &iter);
+      g_object_unref (model);
+    }
+
+  model = g_menu_model_get_item_link (menu, idx, G_MENU_LINK_SUBMENU);
+  if (model)
+    {
+      add_menu (sl, model, &iter);
+      g_object_unref (model);
+    }
 
   g_free (label);
   g_free (action);
