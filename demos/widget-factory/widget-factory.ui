@@ -2688,7 +2688,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                               <object class="GtkLabel" id="label19">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">expander</property>
+                                <property name="label" translatable="yes">Expander</property>
                               </object>
                             </child>
                           </object>
