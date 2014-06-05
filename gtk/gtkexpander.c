@@ -127,6 +127,7 @@ struct _GtkExpanderPrivate
 {
   GtkWidget        *label_widget;
   GdkWindow        *event_window;
+  GtkGesture       *multipress_gesture;
   gint              spacing;
 
   guint             expand_timer;
@@ -134,7 +135,6 @@ struct _GtkExpanderPrivate
   guint             expanded : 1;
   guint             use_underline : 1;
   guint             use_markup : 1; 
-  guint             button_down : 1;
   guint             prelight : 1;
   guint             label_fill : 1;
   guint             resize_toplevel : 1;
@@ -158,20 +158,13 @@ static void     gtk_expander_map            (GtkWidget        *widget);
 static void     gtk_expander_unmap          (GtkWidget        *widget);
 static gboolean gtk_expander_draw           (GtkWidget        *widget,
                                              cairo_t          *cr);
-static gboolean gtk_expander_button_press   (GtkWidget        *widget,
-                                             GdkEventButton   *event);
-static gboolean gtk_expander_button_release (GtkWidget        *widget,
-                                             GdkEventButton   *event);
+
 static gboolean gtk_expander_enter_notify   (GtkWidget        *widget,
                                              GdkEventCrossing *event);
 static gboolean gtk_expander_leave_notify   (GtkWidget        *widget,
                                              GdkEventCrossing *event);
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
-static void     gtk_expander_grab_notify    (GtkWidget        *widget,
-                                             gboolean          was_grabbed);
-static void     gtk_expander_state_flags_changed  (GtkWidget     *widget,
-                                                   GtkStateFlags  previous_state);
 static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
                                              GdkDragContext   *context,
                                              gint              x,
@@ -219,6 +212,13 @@ static void  gtk_expander_get_preferred_width_for_height  (GtkWidget           *
                                                            gint                *minimum_height,
                                                            gint                *natural_height);
 
+/* Gestures */
+static void     gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
+                                                gint                  n_press,
+                                                gdouble               x,
+                                                gdouble               y,
+                                                GtkExpander          *expander);
+
 G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkExpander)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -245,13 +245,9 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class->map                  = gtk_expander_map;
   widget_class->unmap                = gtk_expander_unmap;
   widget_class->draw                 = gtk_expander_draw;
-  widget_class->button_press_event   = gtk_expander_button_press;
-  widget_class->button_release_event = gtk_expander_button_release;
   widget_class->enter_notify_event   = gtk_expander_enter_notify;
   widget_class->leave_notify_event   = gtk_expander_leave_notify;
   widget_class->focus                = gtk_expander_focus;
-  widget_class->grab_notify          = gtk_expander_grab_notify;
-  widget_class->state_flags_changed  = gtk_expander_state_flags_changed;
   widget_class->drag_motion          = gtk_expander_drag_motion;
   widget_class->drag_leave           = gtk_expander_drag_leave;
   widget_class->get_preferred_width            = gtk_expander_get_preferred_width;
@@ -386,7 +382,6 @@ gtk_expander_init (GtkExpander *expander)
   priv->expanded = FALSE;
   priv->use_underline = FALSE;
   priv->use_markup = FALSE;
-  priv->button_down = FALSE;
   priv->prelight = FALSE;
   priv->label_fill = FALSE;
   priv->expand_timer = 0;
@@ -394,6 +389,16 @@ gtk_expander_init (GtkExpander *expander)
 
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (expander));
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                 GDK_BUTTON_PRIMARY);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                     FALSE);
+  g_signal_connect (priv->multipress_gesture, "released",
+                    G_CALLBACK (gesture_multipress_released_cb), expander);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                              GTK_PHASE_BUBBLE);
 }
 
 static void
@@ -510,6 +515,8 @@ gtk_expander_destroy (GtkWidget *widget)
       priv->expand_timer = 0;
     }
 
+  g_clear_object (&priv->multipress_gesture);
+
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
 }
 
@@ -613,6 +620,7 @@ gtk_expander_realize (GtkWidget *widget)
                                        &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->event_window);
 
+  gtk_gesture_set_window (priv->multipress_gesture, priv->event_window);
   gtk_widget_set_realized (widget, TRUE);
 }
 
@@ -623,6 +631,7 @@ gtk_expander_unrealize (GtkWidget *widget)
 
   if (priv->event_window)
     {
+      gtk_gesture_set_window (priv->multipress_gesture, NULL);
       gtk_widget_unregister_window (widget, priv->event_window);
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
@@ -981,52 +990,15 @@ gtk_expander_draw (GtkWidget *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_expander_button_press (GtkWidget      *widget,
-                           GdkEventButton *event)
-{
-  GtkExpander *expander = GTK_EXPANDER (widget);
-
-  if (event->button == GDK_BUTTON_PRIMARY && event->window == expander->priv->event_window)
-    {
-      expander->priv->button_down = TRUE;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gtk_expander_button_release (GtkWidget      *widget,
-                             GdkEventButton *event)
-{
-  GtkExpander *expander = GTK_EXPANDER (widget);
-
-  if (event->button == GDK_BUTTON_PRIMARY && expander->priv->button_down)
-    {
-      if (expander->priv->prelight)
-        gtk_widget_activate (widget);
-      expander->priv->button_down = FALSE;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
-gtk_expander_grab_notify (GtkWidget *widget,
-                          gboolean   was_grabbed)
+gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
+                                gint                  n_press,
+                                gdouble               x,
+                                gdouble               y,
+                                GtkExpander          *expander)
 {
-  if (!was_grabbed)
-    GTK_EXPANDER (widget)->priv->button_down = FALSE;
-}
-
-static void
-gtk_expander_state_flags_changed (GtkWidget    *widget,
-                                  GtkStateFlags  previous_state)
-{
-  if (!gtk_widget_is_sensitive (widget))
-    GTK_EXPANDER (widget)->priv->button_down = FALSE;
+  if (expander->priv->prelight)
+    gtk_widget_activate (GTK_WIDGET (expander));
 }
 
 static void
