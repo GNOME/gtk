@@ -202,6 +202,8 @@ on_inspect_widget (GtkWidget          *button,
 {
   GtkWidget *widget;
 
+  gdk_window_raise (gtk_widget_get_window (GTK_WIDGET (iw)));
+
   clear_flash (iw);
 
   widget = find_widget_at_pointer (gdk_event_get_device (event));
@@ -292,6 +294,8 @@ on_inspect (GtkWidget          *button,
                    cursor, GDK_CURRENT_TIME);
   g_object_unref (cursor);
   gtk_grab_add (GTK_WIDGET (button));
+
+  gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (iw)));
 }
 
 static gboolean
