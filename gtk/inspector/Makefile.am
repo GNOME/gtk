@@ -16,6 +16,8 @@ BUILT_SOURCES = 			\
 	$(template_headers)
 
 libgtkinspector_la_SOURCES = 		\
+	action-editor.h			\
+	action-editor.c			\
 	actions.h			\
 	actions.c			\
 	button-path.h			\

@@ -18,6 +18,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 #include "actions.h"
+#include "action-editor.h"
 #include "gtkwidgetprivate.h"
 
 enum
@@ -224,30 +225,42 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
 }
 
 static void
-state_edited (GtkCellRenderer     *cell,
-              const gchar         *path_string,
-              const gchar         *new_text,
-              GtkInspectorActions *sl)
+row_activated (GtkTreeView         *tv,
+               GtkTreePath         *path,
+               GtkTreeViewColumn   *col,
+               GtkInspectorActions *sl)
 {
-  GtkTreePath *path;
   GtkTreeIter iter;
-  GActionGroup *group;
+  GdkRectangle rect;
+  GtkWidget *popover;
+  gchar *prefix;
   gchar *name;
-  GError *error = NULL;
-  GVariant *state;
+  GActionGroup *group;
+  GtkWidget *editor;
 
-  path = gtk_tree_path_new_from_string (path_string);
   gtk_tree_model_get_iter (GTK_TREE_MODEL (sl->priv->model), &iter, path);
-  gtk_tree_path_free (path);
-
-  gtk_tree_model_get (GTK_TREE_MODEL (sl->priv->model), &iter,
-                      COLUMN_GROUP, &group,
+  gtk_tree_model_get (GTK_TREE_MODEL (sl->priv->model),
+                      &iter,
+                      COLUMN_PREFIX, &prefix,
                       COLUMN_NAME, &name,
+                      COLUMN_GROUP, &group,
                       -1);
-  state = g_variant_parse (NULL, new_text, NULL, NULL, &error);
-  if (state)
-    g_action_group_change_action_state (group, name, state);
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (sl->priv->model), &iter, path);
+  gtk_tree_view_get_cell_area (tv, path, col, &rect);
+  gtk_tree_view_convert_bin_window_to_widget_coords (tv, rect.x, rect.y, &rect.x, &rect.y);
+
+  popover = gtk_popover_new (GTK_WIDGET (tv));
+  gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
+
+  editor = gtk_inspector_action_editor_new (group, prefix, name);
+  gtk_container_add (GTK_CONTAINER (popover), editor);
+  gtk_widget_show (popover);
+
+  g_signal_connect (popover, "hide", G_CALLBACK (gtk_widget_destroy), NULL);
+
   g_free (name);
+  g_free (prefix);
 }
 
 static void
@@ -257,7 +270,7 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/actions.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, model);
-  gtk_widget_class_bind_template_callback (widget_class, state_edited);
+  gtk_widget_class_bind_template_callback (widget_class, row_activated);
 }
 
 // vim: set et sw=2 ts=2:
