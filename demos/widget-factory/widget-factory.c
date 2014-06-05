@@ -270,11 +270,24 @@ info_bar_response (GtkWidget *infobar, gint response_id)
 }
 
 static void
+show_dialog (GtkWidget *button, GtkWidget *dialog)
+{
+  gtk_widget_show (dialog);
+}
+
+static void
+close_dialog (GtkWidget *dialog)
+{
+  gtk_widget_hide (dialog);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
   GtkWindow *window;
   GtkWidget *widget;
+  GtkWidget *dialog;
   GtkAdjustment *adj;
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_theme_state },
@@ -282,9 +295,12 @@ activate (GApplication *app)
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL }
   };
+  GError *error = NULL;
 
   builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/ui/widget-factory.ui", NULL);
+  gtk_builder_add_from_resource (builder, "/ui/widget-factory.ui", &error);
+  if (error)
+    g_print ("error: %s\n", error->message);
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
   gtk_builder_connect_signals (builder, NULL);
 
@@ -319,6 +335,21 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "infobar");
   g_signal_connect (widget, "response", G_CALLBACK (info_bar_response), NULL); 
   g_object_set_data (G_OBJECT (window), "infobar", widget);
+
+  dialog = (GtkWidget *)gtk_builder_get_object (builder, "info_dialog");
+  g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "info_dialog_button");
+  g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+
+  dialog = (GtkWidget *)gtk_builder_get_object (builder, "action_dialog");
+  g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "action_dialog_button");
+  g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+
+  dialog = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog");
+  g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog_button");
+  g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 
