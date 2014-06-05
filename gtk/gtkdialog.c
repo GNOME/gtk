@@ -1913,9 +1913,7 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
   if (!type)
     gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else if (g_strcmp0 (type, "action") == 0)
-{
     gtk_dialog_add_action_widget (GTK_DIALOG (buildable), GTK_WIDGET (child), GTK_RESPONSE_NONE);
-}
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
