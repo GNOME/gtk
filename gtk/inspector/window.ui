@@ -240,6 +240,20 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkInspectorMenu" id="menu">
+                      </object>
+                      <packing>
+                        <property name="tab_expand">True</property>
+                        <property name="tab_fill">True</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Menu</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkInspectorGestures" id="gestures">
                         <property name="widget-tree">widget_tree</property>
                       </object>
