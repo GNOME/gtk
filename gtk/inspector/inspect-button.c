@@ -211,6 +211,8 @@ on_inspect_widget (GtkWidget          *button,
 
   iw->selected_widget = widget;
 
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (iw->top_notebook), 0);
+
   gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
                                   gtk_widget_get_toplevel (widget));
 
