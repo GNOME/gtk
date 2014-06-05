@@ -85,6 +85,8 @@ typedef struct
   GtkAdjustment *adjustment;
   gboolean activate_single_click;
 
+  GtkGesture *multipress_gesture;
+
   /* DnD */
   GtkListBoxRow *drag_highlighted_row;
 
@@ -158,10 +160,6 @@ static gboolean             gtk_list_box_leave_notify_event           (GtkWidget
                                                                        GdkEventCrossing    *event);
 static gboolean             gtk_list_box_motion_notify_event          (GtkWidget           *widget,
                                                                        GdkEventMotion      *event);
-static gboolean             gtk_list_box_button_press_event           (GtkWidget           *widget,
-                                                                       GdkEventButton      *event);
-static gboolean             gtk_list_box_button_release_event         (GtkWidget           *widget,
-                                                                       GdkEventButton      *event);
 static void                 gtk_list_box_show                         (GtkWidget           *widget);
 static gboolean             gtk_list_box_focus                        (GtkWidget           *widget,
                                                                        GtkDirectionType     direction);
@@ -225,6 +223,18 @@ static void                 gtk_list_box_select_all_between             (GtkList
 static gboolean             gtk_list_box_unselect_all_internal          (GtkListBox          *box);
 static void                 gtk_list_box_selected_rows_changed          (GtkListBox          *box);
 
+static void gtk_list_box_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
+                                                      guint                 n_press,
+                                                      gdouble               x,
+                                                      gdouble               y,
+                                                      GtkListBox           *box);
+static void gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
+                                                      guint                 n_press,
+                                                      gdouble               x,
+                                                      gdouble               y,
+                                                      GtkListBox           *box);
+
+
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 static guint row_signals[ROW__LAST_SIGNAL] = { 0 };
@@ -261,6 +271,18 @@ gtk_list_box_init (GtkListBox *box)
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                              GTK_PHASE_BUBBLE);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                     FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                 GDK_BUTTON_PRIMARY);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (gtk_list_box_multipress_gesture_pressed), box);
+  g_signal_connect (priv->multipress_gesture, "released",
+                    G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
 }
 
 static void
@@ -344,8 +366,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->enter_notify_event = gtk_list_box_enter_notify_event;
   widget_class->leave_notify_event = gtk_list_box_leave_notify_event;
   widget_class->motion_notify_event = gtk_list_box_motion_notify_event;
-  widget_class->button_press_event = gtk_list_box_button_press_event;
-  widget_class->button_release_event = gtk_list_box_button_release_event;
   widget_class->show = gtk_list_box_show;
   widget_class->focus = gtk_list_box_focus;
   widget_class->draw = gtk_list_box_draw;
@@ -1646,51 +1666,31 @@ gtk_list_box_motion_notify_event (GtkWidget      *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_list_box_button_press_event (GtkWidget      *widget,
-                                 GdkEventButton *event)
+static void
+gtk_list_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                         guint                 n_press,
+                                         gdouble               x,
+                                         gdouble               y,
+                                         GtkListBox           *box)
 {
-  GtkListBox *box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = BOX_PRIV (box);
-  gboolean retval = GDK_EVENT_PROPAGATE;
-  GdkWindow *window;
-  double x, y;
+  GtkListBoxRow *row;
 
-  if (event->button == GDK_BUTTON_PRIMARY)
+  priv->active_row = NULL;
+  row = gtk_list_box_get_row_at_y (box, y);
+
+  if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
     {
-      GtkListBoxRow *row;
+      priv->active_row = row;
+      priv->active_row_active = TRUE;
+      gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
+                                  GTK_STATE_FLAG_ACTIVE,
+                                  FALSE);
+      gtk_widget_queue_draw (GTK_WIDGET (box));
 
-      priv->active_row = NULL;
-
-      window = event->window;
-      x = event->x;
-      y = event->y;
-
-      while (window && window != gtk_widget_get_window (widget))
-        {
-          gdk_window_coords_to_parent (window, x, y, &x, &y);
-          window = gdk_window_get_effective_parent (window);
-        }
-
-      row = gtk_list_box_get_row_at_y (box, y);
-      if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
-        {
-          priv->active_row = row;
-          priv->active_row_active = TRUE;
-          gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
-                                      GTK_STATE_FLAG_ACTIVE,
-                                      FALSE);
-          gtk_widget_queue_draw (GTK_WIDGET (box));
-          if (event->type == GDK_2BUTTON_PRESS &&
-              !priv->activate_single_click)
-            {
-              g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
-              retval = GDK_EVENT_STOP;
-            }
-        }
+      if (n_press == 2 && !priv->activate_single_click)
+        g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
     }
-
-  return retval;
 }
 
 static void
@@ -1715,58 +1715,57 @@ get_current_selection_modifiers (GtkWidget *widget,
     }
 }
 
-static gboolean
-gtk_list_box_button_release_event (GtkWidget      *widget,
-                                   GdkEventButton *event)
+static void
+gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
+                                          guint                 n_press,
+                                          gdouble               x,
+                                          gdouble               y,
+                                          GtkListBox           *box)
 {
-  GtkListBox *box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = BOX_PRIV (box);
-  gboolean retval = GDK_EVENT_PROPAGATE;
 
   /* Take a ref to protect against reentrancy
    * (the activation may destroy the widget)
    */
   g_object_ref (box);
 
-  if (event->button == GDK_BUTTON_PRIMARY)
+  if (priv->active_row != NULL && priv->active_row_active)
     {
-      if (priv->active_row != NULL && priv->active_row_active)
+      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
+                                    GTK_STATE_FLAG_ACTIVE);
+
+      if (n_press == 1 && priv->activate_single_click)
+        gtk_list_box_select_and_activate (box, priv->active_row);
+      else
         {
-          gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
-                                        GTK_STATE_FLAG_ACTIVE);
+          GdkEventSequence *sequence;
+          GdkInputSource source;
+          const GdkEvent *event;
+          gboolean modify;
+          gboolean extend;
 
-          if (priv->activate_single_click)
-            gtk_list_box_select_and_activate (box, priv->active_row);
-          else
-            {
-              gboolean modify;
-              gboolean extend;
-              GdkDevice *device;
+          get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
 
-              get_current_selection_modifiers (widget, &modify, &extend);
+          /* With touch, we default to modifying the selection.
+           * You can still clear the selection and start over
+           * by holding Ctrl.
+           */
+          sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+          event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+          source = gdk_device_get_source (gdk_event_get_source_device (event));
 
-              /* With touch, we default to modifying the selection.
-               * You can still clear the selection and start over
-               * by holding Ctrl.
-               */
-              device = gdk_event_get_source_device ((GdkEvent *)event);
-              if (gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
-                modify = !modify;
+          if (source == GDK_SOURCE_TOUCHSCREEN)
+            modify = !modify;
 
-              gtk_list_box_update_selection (box, priv->active_row, modify, extend);
-            }
-
-          retval = GDK_EVENT_STOP;
+          gtk_list_box_update_selection (box, priv->active_row, modify, extend);
         }
+    }
 
-      priv->active_row = NULL;
-      priv->active_row_active = FALSE;
-      gtk_widget_queue_draw (GTK_WIDGET (box));
-  }
+  priv->active_row = NULL;
+  priv->active_row_active = FALSE;
+  gtk_widget_queue_draw (GTK_WIDGET (box));
 
   g_object_unref (box);
-
-  return retval;
 }
 
 static void
