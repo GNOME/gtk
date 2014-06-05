@@ -55,6 +55,7 @@ gtk/inspector/classes-list.ui
 gtk/inspector/css-editor.ui
 gtk/inspector/data-list.ui
 gtk/inspector/general.ui
+gtk/inspector/menu.ui
 gtk/inspector/object-hierarchy.ui
 gtk/inspector/prop-list.ui
 gtk/inspector/resource-list.ui

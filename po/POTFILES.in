@@ -271,6 +271,7 @@ gtk/gtkviewport.c
 gtk/gtkvolumebutton.c
 gtk/gtkwidget.c
 gtk/gtkwindow.c
+gtk/inspector/action-editor.c
 gtk/inspector/actions.ui.h
 gtk/inspector/button-path.ui.h
 gtk/inspector/classes-list.c
@@ -281,6 +282,7 @@ gtk/inspector/data-list.ui.h
 gtk/inspector/general.ui.h
 gtk/inspector/gestures.c
 gtk/inspector/inspect-button.c
+gtk/inspector/menu.c
 gtk/inspector/menu.ui.h
 gtk/inspector/object-hierarchy.ui.h
 gtk/inspector/prop-editor.c

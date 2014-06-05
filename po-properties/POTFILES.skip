@@ -61,6 +61,8 @@ gtk/inspector/data-list.ui
 gtk/inspector/data-list.ui.h
 gtk/inspector/general.ui
 gtk/inspector/general.ui.h
+gtk/inspector/menu.ui
+gtk/inspector/menu.ui.h
 gtk/inspector/object-hierarchy.ui
 gtk/inspector/object-hierarchy.ui.h
 gtk/inspector/prop-list.ui
