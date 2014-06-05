@@ -24,7 +24,7 @@
 struct _GtkInspectorPropEditorPrivate
 {
   GObject *object;
-  char *name;
+  gchar *name;
   gboolean is_child_property;
   GtkWidget *editor;
 };
@@ -583,6 +583,7 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
       unblock_controller (G_OBJECT (entry));
     }
 }
+
 static void
 pointer_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
@@ -984,7 +985,6 @@ property_editor (GObject                *object,
       g_signal_connect_swapped (button, "clicked",
                                 G_CALLBACK (object_properties),
                                 editor);
-
       gtk_container_add (GTK_CONTAINER (prop_edit), label);
       gtk_container_add (GTK_CONTAINER (prop_edit), button);
       gtk_widget_show (label);
@@ -1333,6 +1333,16 @@ constructed (GObject *object)
 }
 
 static void
+finalize (GObject *object)
+{
+  GtkInspectorPropEditor *editor = GTK_INSPECTOR_PROP_EDITOR (object);
+
+  g_free (editor->priv->name);
+
+  G_OBJECT_CLASS (gtk_inspector_prop_editor_parent_class)->finalize (object);
+}
+
+static void
 get_property (GObject    *object,
               guint       param_id,
               GValue     *value,
@@ -1395,6 +1405,7 @@ gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = constructed;
+  object_class->finalize = finalize;
   object_class->get_property = get_property;
   object_class->set_property = set_property;
 
