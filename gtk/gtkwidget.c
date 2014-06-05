@@ -12681,6 +12681,19 @@ gtk_widget_propagate_state (GtkWidget    *widget,
           g_list_free (devices);
         }
 
+      if (!gtk_widget_is_sensitive (widget))
+        {
+          EventControllerData *data;
+          GList *l;
+
+          /* Reset all controllers */
+          for (l = priv->event_controllers; l; l = l->next)
+            {
+              data = l->data;
+              gtk_event_controller_reset (data->controller);
+            }
+        }
+
       if (GTK_IS_CONTAINER (widget))
         {
           GtkStateData child_data;
