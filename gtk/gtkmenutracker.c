@@ -219,13 +219,16 @@ gtk_menu_tracker_section_sync_separators (GtkMenuTrackerSection *section,
 
 static void
 gtk_menu_tracker_item_visibility_changed (GtkMenuTrackerItem *item,
-                                          gboolean            is_now_visible,
+                                          GParamSpec         *pspec,
                                           gpointer            user_data)
 {
   GtkMenuTracker *tracker = user_data;
   GtkMenuTrackerSection *section;
+  gboolean is_now_visible;
   gboolean was_visible;
   gint offset = 0;
+
+  is_now_visible = gtk_menu_tracker_item_get_is_visible (item);
 
   /* remember: the item is our model */
   section = gtk_menu_tracker_section_find_model (tracker->toplevel, item, &offset);
