@@ -36,7 +36,7 @@
 #include "gtkadjustment.h"
 #include "gtkorientable.h"
 #include "gtkhsv.h"
-#include "gtkwindow.h"
+#include "gtkwindowgroup.h"
 #include "gtkselection.h"
 #include "gtkcolorutils.h"
 #include "gtkdnd.h"
