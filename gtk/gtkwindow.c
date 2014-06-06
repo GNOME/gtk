@@ -224,6 +224,7 @@ struct _GtkWindowPrivate
                                             * grip-visible" notification
                                             */
   guint    gravity                   : 5; /* GdkGravity */
+  guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    custom_title              : 1; /* app-provided titlebar if CSD can't
                                            * be enabled */
@@ -3817,6 +3818,7 @@ gtk_window_enable_csd (GtkWindow *window)
   gtk_widget_set_visual (widget, visual);
 
   priv->client_decorated = TRUE;
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
 }
 
 static void
@@ -3874,6 +3876,7 @@ gtk_window_set_titlebar (GtkWindow *window,
     {
       priv->custom_title = FALSE;
       priv->client_decorated = FALSE;
+      gtk_style_context_remove_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
       return;
     }
 
@@ -5545,11 +5548,22 @@ create_titlebar (GtkWindow *window)
   return titlebar;
 }
 
+void
+_gtk_window_request_csd (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  priv->csd_requested = TRUE;
+}
+
 static gboolean
 gtk_window_should_use_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
   const gchar *csd_env;
+
+  if (priv->csd_requested)
+    return TRUE;
 
   if (!priv->decorated)
     return FALSE;
@@ -5583,6 +5597,9 @@ create_decoration (GtkWidget *widget)
     return;
 
   gtk_window_enable_csd (window);
+
+  if (priv->type == GTK_WINDOW_POPUP)
+    return;
 
   if (priv->title_box == NULL)
     {
@@ -6319,7 +6336,7 @@ gtk_window_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
-  if (priv->client_decorated)
+  if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
     {
       GdkCursorType cursor_type[8] = {
         GDK_TOP_LEFT_CORNER,

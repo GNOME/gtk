@@ -93,6 +93,8 @@ void            _gtk_window_get_shadow_width (GtkWindow *window,
 
 void            _gtk_window_toggle_maximized (GtkWindow *window);
 
+void            _gtk_window_request_csd (GtkWindow *window);
+
 /* Window groups */
 
 GtkWindowGroup *_gtk_window_get_window_group (GtkWindow *window);
