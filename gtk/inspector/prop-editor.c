@@ -1222,6 +1222,9 @@ find_action_owner (GtkActionable *actionable)
   GActionGroup *group;
 
   full_name = gtk_actionable_get_action_name (actionable);
+  if (!full_name)
+    return NULL;
+
   dot = strchr (full_name, '.');
   prefix = g_strndup (full_name, dot - full_name);
   name = dot + 1;
