@@ -138,12 +138,6 @@ static void       gtk_tooltip_class_init           (GtkTooltipClass *klass);
 static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
 static void       gtk_tooltip_dispose              (GObject         *object);
 
-static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip,
-                                                    cairo_t         *cr);
-static void       gtk_tooltip_realize_window       (GtkTooltip      *tooltip,
-                                                    GtkWidget       *widget);
-static void       gtk_tooltip_composited_changed   (GtkTooltip      *tooltip,
-                                                    GtkWidget       *widget);
 static void       gtk_tooltip_window_hide          (GtkWidget       *widget,
 						    gpointer         user_data);
 static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
@@ -173,8 +167,6 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
-  GdkScreen *screen;
-  GdkVisual *visual;
 
   tooltip->timeout_id = 0;
   tooltip->browse_mode_timeout_id = 0;
@@ -191,28 +183,13 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   tooltip->last_window = NULL;
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
-  screen = gtk_widget_get_screen (window);
-  visual = gdk_screen_get_rgba_visual (screen);
-
-  if (visual != NULL)
-    gtk_widget_set_visual (window, visual);
-
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_TOOLTIP);
-  gtk_widget_set_app_paintable (window, TRUE);
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-  gtk_widget_set_name (window, "gtk-tooltip");
   g_signal_connect (window, "hide",
                     G_CALLBACK (gtk_tooltip_window_hide), tooltip);
 
   context = gtk_widget_get_style_context (window);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
-
-  g_signal_connect_swapped (window, "draw",
-                            G_CALLBACK (gtk_tooltip_paint_window), tooltip);
-  g_signal_connect_swapped (window, "realize",
-                            G_CALLBACK (gtk_tooltip_realize_window), tooltip);
-  g_signal_connect_swapped (window, "composited-changed",
-                            G_CALLBACK (gtk_tooltip_composited_changed), tooltip);
 
   /* FIXME: don't hardcode the padding */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -587,88 +564,6 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
    * callback.
    */
   tooltip->custom_was_reset = FALSE;
-}
-
-static void
-paint_background_and_frame (GtkTooltip *tooltip,
-                            cairo_t *cr)
-{
-  GtkStyleContext *context;
-  gint width, height;
-
-  width = gtk_widget_get_allocated_width (tooltip->window);
-  height = gtk_widget_get_allocated_height (tooltip->window);
-  context = gtk_widget_get_style_context (tooltip->window);
-
-  gtk_render_background (context, cr,
-                         0, 0, width, height);
-  gtk_render_frame (context, cr,
-                    0, 0, width, height);  
-}
-
-static void
-maybe_update_shape (GtkTooltip *tooltip)
-{
-  cairo_t *cr;
-  cairo_surface_t *surface;
-  cairo_region_t *region;
-
-  /* fallback to XShape only for non-composited clients */
-  if (gtk_widget_is_composited (tooltip->window))
-    {
-      gtk_widget_shape_combine_region (tooltip->window, NULL);
-      return;
-    }
-
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (tooltip->window),
-                                               CAIRO_CONTENT_COLOR_ALPHA,
-                                               gtk_widget_get_allocated_width (tooltip->window),
-                                               gtk_widget_get_allocated_height (tooltip->window));
-
-  cr = cairo_create (surface);
-  paint_background_and_frame (tooltip, cr);
-  cairo_destroy (cr);
-
-  region = gdk_cairo_region_create_from_surface (surface);
-  gtk_widget_shape_combine_region (tooltip->window, region);
-
-  cairo_surface_destroy (surface);
-  cairo_region_destroy (region);
-}
-
-static void
-gtk_tooltip_composited_changed (GtkTooltip *tooltip,
-                                GtkWidget  *widget)
-{
-  if (gtk_widget_get_realized (tooltip->window))
-    maybe_update_shape (tooltip);
-}
-
-static void
-gtk_tooltip_realize_window (GtkTooltip *tooltip,
-                            GtkWidget *widget)
-{
-  maybe_update_shape (tooltip);
-}
-
-static gboolean
-gtk_tooltip_paint_window (GtkTooltip *tooltip,
-                          cairo_t    *cr)
-{
-  if (gtk_widget_is_composited (tooltip->window))
-    {
-      /* clear any background */
-      cairo_save (cr);
-      cairo_set_source_rgba (cr, 0, 0, 0, 0);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_paint (cr);
-      cairo_restore (cr);
-    }
-
-  maybe_update_shape (tooltip);
-  paint_background_and_frame (tooltip, cr);
-
-  return FALSE;
 }
 
 static void
