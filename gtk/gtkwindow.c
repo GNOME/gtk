@@ -6823,9 +6823,6 @@ update_border_windows (GtkWindow *window)
   GtkStyleContext *context;
   GtkStateFlags state;
 
-  if (priv->border_window[0] == NULL)
-    return;
-
   state = gtk_widget_get_state_flags (widget);
   context = gtk_widget_get_style_context (widget);
 
@@ -6838,6 +6835,9 @@ update_border_windows (GtkWindow *window)
                         NULL);
   gtk_style_context_restore (context);
   get_shadow_width (widget, &window_border);
+
+  if (priv->border_window[0] == NULL)
+    goto shape;
 
   if (!priv->resizable ||
       priv->tiled ||
@@ -7012,6 +7012,7 @@ update_border_windows (GtkWindow *window)
       gdk_window_hide (priv->border_window[GDK_WINDOW_EDGE_EAST]);
     }
 
+shape:
   /* we also update the input shape, which makes it so that clicks
    * outside the border windows go through
    */
