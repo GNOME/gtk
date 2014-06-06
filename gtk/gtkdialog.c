@@ -1859,6 +1859,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
   for (l = parser_data->items; l; l = l->next)
     {
       ActionWidgetInfo *item = l->data;
+      gboolean is_action;
 
       object = gtk_builder_get_object (builder, item->widget_name);
       if (!object)
@@ -1868,6 +1869,14 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 		     gtk_buildable_get_name (GTK_BUILDABLE (buildable)));
 	  continue;
 	}
+
+      /* If the widget already has reponse data at this point, it
+       * was either added by gtk_dialog_add_action_widget(), or via
+       * <child type="action"> or by moving an action area child
+       * to the header bar. In these cases, apply placement heuristics
+       * based on the response id.
+       */
+      is_action = get_response_data (GTK_WIDGET (object), FALSE) != NULL;
 
       ad = get_response_data (GTK_WIDGET (object), TRUE);
       ad->response_id = item->response_id;
@@ -1886,10 +1895,13 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 	  g_signal_connect_closure_by_id (object, signal_id, 0, closure, FALSE);
 	}
 
-      if (GTK_IS_HEADER_BAR (gtk_widget_get_parent (GTK_WIDGET (object))))
-        apply_response_for_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
-      else
-        apply_response_for_action_area (dialog, GTK_WIDGET (object), ad->response_id);
+      if (is_action)
+        {
+          if (GTK_IS_HEADER_BAR (gtk_widget_get_parent (GTK_WIDGET (object))))
+            apply_response_for_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
+          else
+            apply_response_for_action_area (dialog, GTK_WIDGET (object), ad->response_id);
+        }
 
       if (item->is_default)
         gtk_widget_grab_default (GTK_WIDGET (object));
