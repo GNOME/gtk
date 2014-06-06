@@ -980,6 +980,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   GdkRectangle monitor;
   guint cursor_size;
   GdkRectangle bounds;
+  GtkBorder border;
 
 #define MAX_DISTANCE 32
 
@@ -990,8 +991,10 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
   screen = gtk_widget_get_screen (new_tooltip_widget);
 
-  width = gtk_widget_get_allocated_width (GTK_WIDGET (tooltip->current_window));
-  height = gtk_widget_get_allocated_height (GTK_WIDGET (tooltip->current_window));
+  _gtk_window_get_shadow_width (GTK_WINDOW (tooltip->current_window), &border);
+
+  width = gtk_widget_get_allocated_width (GTK_WIDGET (tooltip->current_window)) - border.left - border.right;
+  height = gtk_widget_get_allocated_height (GTK_WIDGET (tooltip->current_window)) - border.top - border.bottom;
 
   monitor_num = gdk_screen_get_monitor_at_point (screen,
                                                  tooltip->last_x,
@@ -1132,6 +1135,9 @@ found:
                                           GTK_WINDOW (toplevel));
         }
 #endif
+
+      x -= border.left;
+      y -= border.top;
 
       gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
       gtk_widget_show (GTK_WIDGET (tooltip->current_window));
