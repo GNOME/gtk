@@ -1840,18 +1840,17 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 				      gpointer      user_data)
 {
   GtkDialog *dialog = GTK_DIALOG (buildable);
-  GtkDialogPrivate *priv = dialog->priv;
   GSList *l;
   ActionWidgetsSubParserData *parser_data;
   GObject *object;
   ResponseData *ad;
   guint signal_id;
 
-  if (strcmp (tagname, "action-widgets"))
+  if (strcmp (tagname, "action-widgets") != 0)
     {
-    parent_buildable_iface->custom_finished (buildable, builder, child,
-					     tagname, user_data);
-    return;
+      parent_buildable_iface->custom_finished (buildable, builder, child,
+                                               tagname, user_data);
+      return;
     }
 
   parser_data = (ActionWidgetsSubParserData*)user_data;
@@ -1887,10 +1886,10 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 	  g_signal_connect_closure_by_id (object, signal_id, 0, closure, FALSE);
 	}
 
-      if (!priv->use_header_bar)
-        apply_response_for_action_area (dialog, GTK_WIDGET (object), ad->response_id);
-      else
+      if (GTK_IS_HEADER_BAR (gtk_widget_get_parent (GTK_WIDGET (object))))
         apply_response_for_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
+      else
+        apply_response_for_action_area (dialog, GTK_WIDGET (object), ad->response_id);
 
       if (item->is_default)
         gtk_widget_grab_default (GTK_WIDGET (object));
