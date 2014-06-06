@@ -850,6 +850,24 @@ GtkCalendar.button:hover {
   margin: 10px;
 }
 
+.window-frame.tooltip.csd {
+  border-radius: 1px 1px 0 0;
+  box-shadow: none;
+  margin: 0px;
+}
+
+.window-frame.popup.csd {
+  border-radius: 1px 1px 0 0;
+  box-shadow: 0 1px 1px 1px alpha(black, 0.5);
+  margin: 0px;
+}
+
+.window-frame.popup {
+  border-color: darker (@bg_color);
+  border-width: 1px;
+  border-style: solid;
+}
+
 .window-frame.tiled {
   border-radius: 0;
   background-color: @bg_color;
