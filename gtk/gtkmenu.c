@@ -111,6 +111,7 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkwindowprivate.h"
 
 #include "deprecated/gtktearoffmenuitem.h"
 
@@ -4474,6 +4475,7 @@ gtk_menu_position (GtkMenu  *menu,
   GdkScreen *pointer_screen;
   GdkRectangle monitor;
   GdkDevice *pointer;
+  GtkBorder border;
 
   widget = GTK_WIDGET (menu);
 
@@ -4485,8 +4487,11 @@ gtk_menu_position (GtkMenu  *menu,
    * the right place to popup the menu.
    */
   gtk_widget_realize (priv->toplevel);
-  requisition.width = gtk_widget_get_allocated_width (widget);
-  requisition.height = gtk_widget_get_allocated_height (widget);
+
+  _gtk_window_get_shadow_width (GTK_WINDOW (priv->toplevel), &border);
+
+  requisition.width = gtk_widget_get_allocated_width (widget)- border.left - border.right;
+  requisition.height = gtk_widget_get_allocated_height (widget) - border.top - border.bottom;
 
   if (pointer_screen != screen)
     {
@@ -4657,6 +4662,9 @@ gtk_menu_position (GtkMenu  *menu,
     }
 
   x = CLAMP (x, monitor.x, MAX (monitor.x, monitor.x + monitor.width - requisition.width));
+
+  x -= border.left;
+  y -= border.top;
 
   if (GTK_MENU_SHELL (menu)->priv->active)
     {
