@@ -249,6 +249,16 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_RUBBERBAND "rubberband"
 
 /**
+ * GTK_STYLE_CLASS_CSD:
+ *
+ * A CSS class that gets added to windows which have
+ * client-side decorations.
+ *
+ * Since: 3.14
+ */
+#define GTK_STYLE_CLASS_CSD "csd"
+
+/**
  * GTK_STYLE_CLASS_TOOLTIP:
  *
  * A CSS class to match tooltip windows.
