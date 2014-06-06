@@ -1099,6 +1099,8 @@ gtk_menu_init (GtkMenu *menu)
   gtk_window_set_resizable (GTK_WINDOW (priv->toplevel), FALSE);
   gtk_window_set_mnemonic_modifier (GTK_WINDOW (priv->toplevel), 0);
 
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->toplevel), "popup");
+
   /* Refloat the menu, so that reference counting for the menu isn't
    * affected by it being a child of the toplevel
    */
