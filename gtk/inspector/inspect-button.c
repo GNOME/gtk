@@ -62,10 +62,15 @@ find_widget (GtkWidget      *widget,
 
   if (gtk_widget_get_parent (widget) && !data->first)
     {
-      GdkWindow *window = gtk_widget_get_window (widget);
+      GdkWindow *window;
+
+      window = gtk_widget_get_window (widget);
       while (window != gtk_widget_get_window (gtk_widget_get_parent (widget)))
         {
           gint tx, ty, twidth, theight;
+
+          if (window == NULL)
+            return;
 
           twidth = gdk_window_get_width (window);
           theight = gdk_window_get_height (window);
