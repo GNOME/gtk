@@ -197,7 +197,8 @@ enum
   PROP_LOGO,
   PROP_LOGO_ICON_NAME,
   PROP_WRAP_LICENSE,
-  PROP_LICENSE_TYPE
+  PROP_LICENSE_TYPE,
+  LAST_PROP
 };
 
 static void                 gtk_about_dialog_finalize       (GObject            *object);
@@ -239,13 +240,13 @@ static gboolean             text_view_visibility_notify_event(GtkWidget         
 							      GdkEventVisibility *event,
 							      GtkAboutDialog     *about);
 
-
 enum {
   ACTIVATE_LINK,
   LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG)
 
@@ -358,13 +359,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.12
    */
-  g_object_class_install_property (object_class,
-                                   PROP_NAME,
-                                   g_param_spec_string ("program-name",
-                                                        P_("Program name"),
-                                                        P_("The name of the program. If this is not set, it defaults to g_get_application_name()"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_NAME] =
+    g_param_spec_string ("program-name",
+                         P_("Program name"),
+                         P_("The name of the program. If this is not set, it defaults to g_get_application_name()"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:version:
@@ -373,13 +373,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_VERSION,
-                                   g_param_spec_string ("version",
-                                                        P_("Program version"),
-                                                        P_("The version of the program"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_VERSION] =
+    g_param_spec_string ("version",
+                         P_("Program version"),
+                         P_("The version of the program"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:copyright:
@@ -388,13 +387,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_COPYRIGHT,
-                                   g_param_spec_string ("copyright",
-                                                        P_("Copyright string"),
-                                                        P_("Copyright information for the program"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_COPYRIGHT] =
+    g_param_spec_string ("copyright",
+                         P_("Copyright string"),
+                         P_("Copyright information for the program"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
         
 
   /**
@@ -406,13 +404,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_COMMENTS,
-                                   g_param_spec_string ("comments",
-                                                        P_("Comments string"),
-                                                        P_("Comments about the program"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_COMMENTS] =
+    g_param_spec_string ("comments",
+                         P_("Comments string"),
+                         P_("Comments about the program"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:license:
@@ -428,13 +425,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LICENSE,
-                                   g_param_spec_string ("license",
-                                                        _("License"),
-                                                        _("The license of the program"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_LICENSE] =
+    g_param_spec_string ("license",
+                         _("License"),
+                         _("The license of the program"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:license-type:
@@ -457,14 +453,13 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 3.0
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LICENSE_TYPE,
-                                   g_param_spec_enum ("license-type",
-                                                      P_("License Type"),
-                                                      P_("The license type of the program"),
-                                                      GTK_TYPE_LICENSE,
-                                                      GTK_LICENSE_UNKNOWN,
-                                                      GTK_PARAM_READWRITE));
+  props[PROP_LICENSE_TYPE] =
+    g_param_spec_enum ("license-type",
+                       P_("License Type"),
+                       P_("The license type of the program"),
+                       GTK_TYPE_LICENSE,
+                       GTK_LICENSE_UNKNOWN,
+                       GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:website:
@@ -474,13 +469,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WEBSITE,
-                                   g_param_spec_string ("website",
-                                                        P_("Website URL"),
-                                                        P_("The URL for the link to the website of the program"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_WEBSITE] =
+    g_param_spec_string ("website",
+                         P_("Website URL"),
+                         P_("The URL for the link to the website of the program"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:website-label:
@@ -489,13 +483,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WEBSITE_LABEL,
-                                   g_param_spec_string ("website-label",
-                                                        P_("Website label"),
-                                                        P_("The label for the link to the website of the program"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_WEBSITE_LABEL] =
+    g_param_spec_string ("website-label",
+                         P_("Website label"),
+                         P_("The label for the link to the website of the program"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:authors:
@@ -506,13 +499,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_AUTHORS,
-                                   g_param_spec_boxed ("authors",
-                                                       P_("Authors"),
-                                                       P_("List of authors of the program"),
-                                                       G_TYPE_STRV,
-                                                       GTK_PARAM_READWRITE));
+  props[PROP_AUTHORS] =
+    g_param_spec_boxed ("authors",
+                        P_("Authors"),
+                        P_("List of authors of the program"),
+                        G_TYPE_STRV,
+                        GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:documenters:
@@ -523,13 +515,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_DOCUMENTERS,
-                                   g_param_spec_boxed ("documenters",
-                                                       P_("Documenters"),
-                                                       P_("List of people documenting the program"),
-                                                       G_TYPE_STRV,
-                                                       GTK_PARAM_READWRITE));
+  props[PROP_DOCUMENTERS] =
+    g_param_spec_boxed ("documenters",
+                        P_("Documenters"),
+                        P_("List of people documenting the program"),
+                        G_TYPE_STRV,
+                        GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:artists:
@@ -540,14 +531,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ARTISTS,
-                                   g_param_spec_boxed ("artists",
-                                                       P_("Artists"),
-                                                       P_("List of people who have contributed artwork to the program"),
-                                                       G_TYPE_STRV,
-                                                       GTK_PARAM_READWRITE));
-
+  props[PROP_ARTISTS] =
+    g_param_spec_boxed ("artists",
+                        P_("Artists"),
+                        P_("List of people who have contributed artwork to the program"),
+                        G_TYPE_STRV,
+                        GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:translator-credits:
@@ -558,14 +547,13 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TRANSLATOR_CREDITS,
-                                   g_param_spec_string ("translator-credits",
-                                                        P_("Translator credits"),
-                                                        P_("Credits to the translators. This string should be marked as translatable"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
-        
+  props[PROP_TRANSLATOR_CREDITS] =
+    g_param_spec_string ("translator-credits",
+                         P_("Translator credits"),
+                         P_("Credits to the translators. This string should be marked as translatable"),
+                         NULL,
+                         GTK_PARAM_READWRITE);
+
   /**
    * GtkAboutDialog:logo:
    *
@@ -574,13 +562,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LOGO,
-                                   g_param_spec_object ("logo",
-                                                        P_("Logo"),
-                                                        P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
-                                                        GDK_TYPE_PIXBUF,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_LOGO] =
+    g_param_spec_object ("logo",
+                         P_("Logo"),
+                         P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
+                         GDK_TYPE_PIXBUF,
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkAboutDialog:logo-icon-name:
@@ -590,13 +577,13 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LOGO_ICON_NAME,
-                                   g_param_spec_string ("logo-icon-name",
-                                                        P_("Logo Icon Name"),
-                                                        P_("A named icon to use as the logo for the about box."),
-                                                        "image-missing",
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_LOGO_ICON_NAME] =
+    g_param_spec_string ("logo-icon-name",
+                         P_("Logo Icon Name"),
+                         P_("A named icon to use as the logo for the about box."),
+                         "image-missing",
+                         GTK_PARAM_READWRITE);
+
   /**
    * GtkAboutDialog:wrap-license:
    *
@@ -604,13 +591,14 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Since: 2.8
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WRAP_LICENSE,
-                                   g_param_spec_boolean ("wrap-license",
-                                                         P_("Wrap license"),
-                                                         P_("Whether to wrap the license text."),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE));
+  props[PROP_WRAP_LICENSE] =
+    g_param_spec_boolean ("wrap-license",
+                          P_("Wrap license"),
+                          P_("Whether to wrap the license text."),
+                          FALSE,
+                          GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /* Bind class to template
    */
@@ -1073,7 +1061,7 @@ gtk_about_dialog_set_program_name (GtkAboutDialog *about,
 
   update_name_version (about);
 
-  g_object_notify (G_OBJECT (about), "program-name");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_NAME]);
 }
 
 
@@ -1122,7 +1110,7 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
 
   update_name_version (about);
 
-  g_object_notify (G_OBJECT (about), "version");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_VERSION]);
 }
 
 /**
@@ -1181,7 +1169,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
   else
     gtk_widget_hide (priv->copyright_label);
 
-  g_object_notify (G_OBJECT (about), "copyright");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_COPYRIGHT]);
 }
 
 /**
@@ -1238,7 +1226,7 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
     }
   g_free (tmp);
 
-  g_object_notify (G_OBJECT (about), "comments");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_COMMENTS]);
 }
 
 /**
@@ -1299,8 +1287,8 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
 
   update_license_button_visibility (about);
 
-  g_object_notify (G_OBJECT (about), "license");
-  g_object_notify (G_OBJECT (about), "license-type");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE]);
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE_TYPE]);
 }
 
 /**
@@ -1348,7 +1336,7 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
     {
        priv->wrap_license = wrap_license;
 
-       g_object_notify (G_OBJECT (about), "wrap-license");
+       g_object_notify_by_pspec (G_OBJECT (about), props[PROP_WRAP_LICENSE]);
     }
 }
 
@@ -1401,7 +1389,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
 
   update_website (about);
 
-  g_object_notify (G_OBJECT (about), "website");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_WEBSITE]);
 }
 
 /**
@@ -1453,7 +1441,7 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
 
   update_website (about);
 
-  g_object_notify (G_OBJECT (about), "website-label");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_WEBSITE_LABEL]);
 }
 
 /**
@@ -1508,7 +1496,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
 
   update_credits_button_visibility (about);
 
-  g_object_notify (G_OBJECT (about), "authors");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_AUTHORS]);
 }
 
 /**
@@ -1563,7 +1551,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
 
   update_credits_button_visibility (about);
 
-  g_object_notify (G_OBJECT (about), "documenters");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_DOCUMENTERS]);
 }
 
 /**
@@ -1618,7 +1606,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
 
   update_credits_button_visibility (about);
 
-  g_object_notify (G_OBJECT (about), "artists");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_ARTISTS]);
 }
 
 /**
@@ -1681,7 +1669,7 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
 
   update_credits_button_visibility (about);
 
-  g_object_notify (G_OBJECT (about), "translator-credits");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_TRANSLATOR_CREDITS]);
 }
 
 /**
@@ -1735,7 +1723,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
   g_object_freeze_notify (G_OBJECT (about));
 
   if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
-    g_object_notify (G_OBJECT (about), "logo-icon-name");
+    g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO_ICON_NAME]);
 
   if (logo != NULL)
     gtk_image_set_from_pixbuf (GTK_IMAGE (priv->logo_image), logo);
@@ -1752,7 +1740,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
         }
     }
 
-  g_object_notify (G_OBJECT (about), "logo");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO]);
 
   g_object_thaw_notify (G_OBJECT (about));
 }
@@ -1810,7 +1798,7 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
   g_object_freeze_notify (G_OBJECT (about));
 
   if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PIXBUF)
-    g_object_notify (G_OBJECT (about), "logo");
+    g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO]);
 
   if (icon_name)
     {
@@ -1854,7 +1842,7 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
       gtk_image_clear (GTK_IMAGE (priv->logo_image));
     }
 
-  g_object_notify (G_OBJECT (about), "logo-icon-name");
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO_ICON_NAME]);
 
   g_object_thaw_notify (G_OBJECT (about));
 }
@@ -2492,15 +2480,15 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 
           update_license_button_visibility (about);
 
-          g_object_notify (G_OBJECT (about), "wrap-license");
-          g_object_notify (G_OBJECT (about), "license");
+          g_object_notify_by_pspec (G_OBJECT (about), props[PROP_WRAP_LICENSE]);
+          g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE]);
         }
       else
         {
           gtk_widget_show (priv->license_label);
         }
 
-      g_object_notify (G_OBJECT (about), "license-type");
+      g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE_TYPE]);
 
       g_object_thaw_notify (G_OBJECT (about));
     }
