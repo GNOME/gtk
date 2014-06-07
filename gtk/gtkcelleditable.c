@@ -51,7 +51,7 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
                                        P_("Editing Canceled"),
                                        P_("Indicates that editing has been canceled"),
                                        FALSE,
-                                       GTK_PARAM_READWRITE));
+                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellEditable::editing-done:
