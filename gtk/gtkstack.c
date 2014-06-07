@@ -374,38 +374,30 @@ gtk_stack_class_init (GtkStackClass *klass)
   /*container_class->get_path_for_child = gtk_stack_get_path_for_child; */
   gtk_container_class_handle_border_width (container_class);
 
-  stack_props[PROP_HOMOGENEOUS] = g_param_spec_boolean ("homogeneous",
-                                                        P_("Homogeneous"),
-                                                        P_("Homogeneous sizing"),
-                                                        TRUE,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
-  stack_props[PROP_VISIBLE_CHILD] = g_param_spec_object ("visible-child",
-                                                         P_("Visible child"),
-                                                         P_("The widget currently visible in the stack"),
-                                                         GTK_TYPE_WIDGET,
-                                                         GTK_PARAM_READWRITE);
-  stack_props[PROP_VISIBLE_CHILD_NAME] = g_param_spec_string ("visible-child-name",
-                                                              P_("Name of visible child"),
-                                                              P_("The name of the widget currently visible in the stack"),
-                                                              NULL,
-                                                              GTK_PARAM_READWRITE);
-  stack_props[PROP_TRANSITION_DURATION] = g_param_spec_uint ("transition-duration",
-                                                             P_("Transition duration"),
-                                                             P_("The animation duration, in milliseconds"),
-                                                             0, G_MAXUINT,
-                                                             200,
-                                                             GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
-  stack_props[PROP_TRANSITION_TYPE] = g_param_spec_enum ("transition-type",
-                                                         P_("Transition type"),
-                                                         P_("The type of animation used to transition"),
-                                                         GTK_TYPE_STACK_TRANSITION_TYPE,
-                                                         GTK_STACK_TRANSITION_TYPE_NONE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
-  stack_props[PROP_TRANSITION_RUNNING] = g_param_spec_boolean ("transition-running",
-                                                               P_("Transition running"),
-                                                               P_("Whether or not the transition is currently running"),
-                                                               FALSE,
-                                                               GTK_PARAM_READABLE);
+  stack_props[PROP_HOMOGENEOUS] =
+      g_param_spec_boolean ("homogeneous", P_("Homogeneous"), P_("Homogeneous sizing"),
+                            TRUE,
+                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
+  stack_props[PROP_VISIBLE_CHILD] =
+      g_param_spec_object ("visible-child", P_("Visible child"), P_("The widget currently visible in the stack"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+  stack_props[PROP_VISIBLE_CHILD_NAME] =
+      g_param_spec_string ("visible-child-name", P_("Name of visible child"), P_("The name of the widget currently visible in the stack"),
+                           NULL,
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+  stack_props[PROP_TRANSITION_DURATION] =
+      g_param_spec_uint ("transition-duration", P_("Transition duration"), P_("The animation duration, in milliseconds"),
+                         0, G_MAXUINT, 200,
+                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
+  stack_props[PROP_TRANSITION_TYPE] =
+      g_param_spec_enum ("transition-type", P_("Transition type"), P_("The type of animation used to transition"),
+                         GTK_TYPE_STACK_TRANSITION_TYPE, GTK_STACK_TRANSITION_TYPE_NONE,
+                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
+  stack_props[PROP_TRANSITION_RUNNING] =
+      g_param_spec_boolean ("transition-running", P_("Transition running"), P_("Whether or not the transition is currently running"),
+                            FALSE,
+                            GTK_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 
