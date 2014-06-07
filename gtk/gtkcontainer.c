@@ -500,7 +500,7 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       0,
                                                       65535,
                                                       0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
                                    g_param_spec_object ("child",
