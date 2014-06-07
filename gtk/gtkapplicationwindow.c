@@ -298,9 +298,10 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
       /* the shell does not show it, so make sure we show it */
       if (g_menu_model_get_n_items (G_MENU_MODEL (window->priv->app_menu_section)) == 0)
         {
-          GMenuModel *app_menu;
+          GMenuModel *app_menu = NULL;
 
-          app_menu = gtk_application_get_app_menu (gtk_window_get_application (GTK_WINDOW (window)));
+          if (gtk_window_get_application (GTK_WINDOW (window)) != NULL)
+            app_menu = gtk_application_get_app_menu (gtk_window_get_application (GTK_WINDOW (window)));
 
           if (app_menu != NULL)
             {
@@ -347,9 +348,10 @@ gtk_application_window_update_shell_shows_menubar (GtkApplicationWindow *window,
       /* the shell does not show it, so make sure we show it */
       if (g_menu_model_get_n_items (G_MENU_MODEL (window->priv->menubar_section)) == 0)
         {
-          GMenuModel *menubar;
+          GMenuModel *menubar = NULL;
 
-          menubar = gtk_application_get_menubar (gtk_window_get_application (GTK_WINDOW (window)));
+          if (gtk_window_get_application (GTK_WINDOW (window)) != NULL)
+            menubar = gtk_application_get_menubar (gtk_window_get_application (GTK_WINDOW (window)));
 
           if (menubar != NULL)
             g_menu_append_section (window->priv->menubar_section, NULL, menubar);
