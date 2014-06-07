@@ -750,7 +750,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 P_("Resizable"),
 							 P_("If TRUE, users can resize the window"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_MODAL,
@@ -758,7 +758,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 P_("Modal"),
 							 P_("If TRUE, the window is modal (other windows are not usable while this one is up)"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_WIN_POS,
@@ -767,7 +767,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 						      P_("The initial position of the window"),
 						      GTK_TYPE_WINDOW_POSITION,
 						      GTK_WIN_POS_NONE,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
  
   g_object_class_install_property (gobject_class,
                                    PROP_DEFAULT_WIDTH,
@@ -777,7 +777,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_DEFAULT_HEIGHT,
@@ -787,7 +787,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_DESTROY_WITH_PARENT,
@@ -795,7 +795,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 P_("Destroy with Parent"),
 							 P_("If this window should be destroyed when the parent is destroyed"),
                                                          FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:hide-titlebar-when-maximized:
@@ -810,7 +810,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 P_("Hide the titlebar during maximization"),
 							 P_("If this window's titlebar should be hidden when the window is maximized"),
                                                          FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ICON,
@@ -818,7 +818,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         P_("Icon"),
                                                         P_("Icon for this window"),
                                                         GDK_TYPE_PIXBUF,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:mnemonics-visible:
@@ -836,7 +836,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          P_("Mnemonics Visible"),
                                                          P_("Whether mnemonics are currently visible in this window"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:focus-visible:
@@ -854,7 +854,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          P_("Focus Visible"),
                                                          P_("Whether focus rectangles are currently visible in this window"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkWindow:icon-name:
@@ -870,7 +870,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         P_("Icon Name"),
                                                         P_("Name of the themed icon for this window"),
 							NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
 				   PROP_SCREEN,
@@ -878,7 +878,7 @@ gtk_window_class_init (GtkWindowClass *klass)
  							P_("Screen"),
  							P_("The screen where this window will be displayed"),
 							GDK_TYPE_SCREEN,
- 							GTK_PARAM_READWRITE));
+ 							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_IS_ACTIVE,
@@ -903,7 +903,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                       P_("Hint to help the desktop environment understand what kind of window this is and how to treat it."),
                                                       GDK_TYPE_WINDOW_TYPE_HINT,
                                                       GDK_WINDOW_TYPE_HINT_NORMAL,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
 				   PROP_SKIP_TASKBAR_HINT,
@@ -911,7 +911,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          P_("Skip taskbar"),
                                                          P_("TRUE if the window should not be in the task bar."),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
 				   PROP_SKIP_PAGER_HINT,
@@ -919,7 +919,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          P_("Skip pager"),
                                                          P_("TRUE if the window should not be in the pager."),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));  
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
 				   PROP_URGENCY_HINT,
@@ -927,7 +927,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          P_("Urgent"),
                                                          P_("TRUE if the window should be brought to the user's attention."),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));  
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));  
 
   /**
    * GtkWindow:accept-focus:
@@ -942,7 +942,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          P_("Accept focus"),
                                                          P_("TRUE if the window should receive the input focus."),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));  
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:focus-on-map:
@@ -957,7 +957,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          P_("Focus on map"),
                                                          P_("TRUE if the window should receive the input focus when mapped."),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));  
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:decorated:
@@ -972,7 +972,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 P_("Decorated"),
 							 P_("Whether the window should be decorated by the window manager"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:deletable:
@@ -987,7 +987,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 P_("Deletable"),
 							 P_("Whether the window frame should have a close button"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:has-resize-grip:
@@ -1007,7 +1007,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          P_("Resize grip"),
                                                          P_("Specifies whether the window should have a resize grip"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:resize-grip-visible:
@@ -1040,7 +1040,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 						      P_("The window gravity of the window"),
 						      GDK_TYPE_GRAVITY,
 						      GDK_GRAVITY_NORTH_WEST,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -1057,7 +1057,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							P_("Transient for Window"),
 							P_("The transient parent of the dialog"),
 							GTK_TYPE_WINDOW,
-							GTK_PARAM_READWRITE| G_PARAM_CONSTRUCT));
+							GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:attached-to:
@@ -1078,7 +1078,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         P_("Attached to Widget"),
                                                         P_("The widget where the window is attached"),
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_IS_MAXIMIZED,
@@ -1138,7 +1138,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         P_("GtkApplication"),
                                                         P_("The GtkApplication for the window"),
                                                         GTK_TYPE_APPLICATION,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                                                        GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWindow:set-focus:
@@ -2650,9 +2650,12 @@ gtk_window_set_position (GtkWindow         *window,
       gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
     }
 
-  priv->position = position;
+  if (priv->position != position)
+    {
+      priv->position = position;
   
-  g_object_notify (G_OBJECT (window), "window-position");
+      g_object_notify (G_OBJECT (window), "window-position");
+    }
 }
 
 /**
@@ -3619,6 +3622,9 @@ gtk_window_set_hide_titlebar_when_maximized (GtkWindow *window,
                                              gboolean   setting)
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (window->priv->hide_titlebar_when_maximized == setting)
+    return;
 
 #ifdef GDK_WINDOWING_X11
   {
@@ -4801,9 +4807,11 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
       if (width < 0)
         width = -1;
 
-      info->default_width = width;
-
-      g_object_notify (G_OBJECT (window), "default-width");
+      if (info->default_width != width)
+        {
+          info->default_width = width;
+          g_object_notify (G_OBJECT (window), "default-width");
+        }
     }
 
   if (change_height)
@@ -4814,9 +4822,11 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
       if (height < 0)
         height = -1;
 
-      info->default_height = height;
-      
-      g_object_notify (G_OBJECT (window), "default-height");
+      if (info->default_height != height)
+        {
+          info->default_height = height;
+          g_object_notify (G_OBJECT (window), "default-height");
+        }
     }
   
   g_object_thaw_notify (G_OBJECT (window));
