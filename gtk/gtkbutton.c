@@ -246,14 +246,14 @@ gtk_button_class_init (GtkButtonClass *klass)
                          P_("Label"),
                          P_("Text of the label widget inside the button, if the button contains a label widget"),
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
   
   props[PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline",
                           P_("Use underline"),
                           P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
   
   /**
    * GtkButton:use-stock:
@@ -265,14 +265,14 @@ gtk_button_class_init (GtkButtonClass *klass)
                           P_("Use stock"),
                           P_("If set, the label is used to pick a stock item instead of being displayed"),
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED);
+                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
   
   props[PROP_FOCUS_ON_CLICK] =
     g_param_spec_boolean ("focus-on-click",
                           P_("Focus on click"),
                           P_("Whether the button grabs focus when it is clicked with the mouse"),
                           TRUE,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
   
   props[PROP_RELIEF] =
     g_param_spec_enum ("relief",
@@ -280,7 +280,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                        P_("The border relief style"),
                        GTK_TYPE_RELIEF_STYLE,
                        GTK_RELIEF_NORMAL,
-                       GTK_PARAM_READWRITE);
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
   
   /**
    * GtkButton:xalign:
@@ -299,7 +299,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                         P_("Horizontal alignment for child"),
                         P_("Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"),
                         0.0, 1.0, 0.5,
-                        GTK_PARAM_READWRITE|G_PARAM_DEPRECATED);
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkButton:yalign:
@@ -318,7 +318,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                         P_("Vertical alignment for child"),
                         P_("Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"),
                         0.0, 1.0, 0.5,
-                        GTK_PARAM_READWRITE|G_PARAM_DEPRECATED);
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkButton:image:
@@ -332,7 +332,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                          P_("Image widget"),
                          P_("Child widget to appear next to the button text"),
                          GTK_TYPE_WIDGET,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkButton:image-position:
@@ -347,7 +347,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                        P_("The position of the image relative to the text"),
                        GTK_TYPE_POSITION_TYPE,
                        GTK_POS_LEFT,
-                       GTK_PARAM_READWRITE);
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkButton:always-show-image:
@@ -365,7 +365,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                            P_("Always show image"),
                            P_("Whether the image will always be shown"),
                            FALSE,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
