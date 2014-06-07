@@ -1174,7 +1174,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						     -1,
  						     G_MAXINT,
  						     -1,
- 						     GTK_PARAM_READWRITE));
+ 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_HEIGHT_REQUEST,
 				   g_param_spec_int ("height-request",
@@ -1183,42 +1183,42 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						     -1,
  						     G_MAXINT,
  						     -1,
- 						     GTK_PARAM_READWRITE));
+ 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
  							 P_("Visible"),
  							 P_("Whether the widget is visible"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
  							 P_("Sensitive"),
  							 P_("Whether the widget responds to input"),
  							 TRUE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_APP_PAINTABLE,
 				   g_param_spec_boolean ("app-paintable",
  							 P_("Application paintable"),
  							 P_("Whether the application will paint directly on the widget"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_CAN_FOCUS,
 				   g_param_spec_boolean ("can-focus",
  							 P_("Can focus"),
  							 P_("Whether the widget can accept the input focus"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_FOCUS,
 				   g_param_spec_boolean ("has-focus",
  							 P_("Has focus"),
  							 P_("Whether the widget has the input focus"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_IS_FOCUS,
 				   g_param_spec_boolean ("is-focus",
@@ -1232,21 +1232,21 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 P_("Can default"),
  							 P_("Whether the widget can be the default widget"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_DEFAULT,
 				   g_param_spec_boolean ("has-default",
  							 P_("Has default"),
  							 P_("Whether the widget is the default widget"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_RECEIVES_DEFAULT,
 				   g_param_spec_boolean ("receives-default",
  							 P_("Receives default"),
  							 P_("If TRUE, the widget will receive the default action when it is focused"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_COMPOSITE_CHILD,
 				   g_param_spec_boolean ("composite-child",
@@ -1274,14 +1274,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  						       P_("The event mask that decides what kind of GdkEvents this widget gets"),
  						       GDK_TYPE_EVENT_MASK,
  						       GDK_STRUCTURE_MASK,
- 						       GTK_PARAM_READWRITE));
+ 						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_NO_SHOW_ALL,
 				   g_param_spec_boolean ("no-show-all",
  							 P_("No show all"),
  							 P_("Whether gtk_widget_show_all() should not affect this widget"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkWidget:has-tooltip:
@@ -1304,7 +1304,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  							 P_("Has tooltip"),
  							 P_("Whether this widget has a tooltip"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkWidget:tooltip-text:
    *
@@ -1376,7 +1376,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                          P_("Double Buffered"),
                                                          P_("Whether the widget is double buffered"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:halign:
@@ -1392,7 +1392,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                       P_("How to position in extra horizontal space"),
                                                       GTK_TYPE_ALIGN,
                                                       GTK_ALIGN_FILL,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:valign:
@@ -1408,7 +1408,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                       P_("How to position in extra vertical space"),
                                                       GTK_TYPE_ALIGN,
                                                       GTK_ALIGN_FILL,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:margin-left:
@@ -1431,7 +1431,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      0,
                                                      G_MAXINT16,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   /**
    * GtkWidget:margin-right:
@@ -1454,7 +1454,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      0,
                                                      G_MAXINT16,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   /**
    * GtkWidget:margin-start:
@@ -1475,7 +1475,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      0,
                                                      G_MAXINT16,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:margin-end:
@@ -1496,7 +1496,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      0,
                                                      G_MAXINT16,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:margin-top:
@@ -1517,7 +1517,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      0,
                                                      G_MAXINT16,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:margin-bottom:
@@ -1538,7 +1538,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      0,
                                                      G_MAXINT16,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:margin:
@@ -1588,7 +1588,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                          P_("Horizontal Expand"),
                                                          P_("Whether widget wants more horizontal space"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:hexpand-set:
@@ -1603,7 +1603,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                          P_("Horizontal Expand Set"),
                                                          P_("Whether to use the hexpand property"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:vexpand:
@@ -1618,7 +1618,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                          P_("Vertical Expand"),
                                                          P_("Whether widget wants more vertical space"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:vexpand-set:
@@ -1633,7 +1633,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                          P_("Vertical Expand Set"),
                                                          P_("Whether to use the vexpand property"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:expand:
@@ -1668,7 +1668,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							0.0,
 							1.0,
 							1.0,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkWidget:scale-factor:
@@ -11029,12 +11029,18 @@ void
 gtk_widget_set_events (GtkWidget *widget,
 		       gint	  events)
 {
+  gint e;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!gtk_widget_get_realized (widget));
 
-  g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
-                      GINT_TO_POINTER (events));
-  g_object_notify (G_OBJECT (widget), "events");
+  e = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
+  if (e != events)
+    {
+      g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
+                          GINT_TO_POINTER (events));
+      g_object_notify (G_OBJECT (widget), "events");
+    }
 }
 
 /**
@@ -15110,6 +15116,8 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
 
       g_object_set_qdata (G_OBJECT (widget), quark_has_tooltip,
 			  GUINT_TO_POINTER (priv_has_tooltip));
+
+      g_object_notify (G_OBJECT (widget), "has-tooltip");
     }
 }
 
@@ -15831,7 +15839,7 @@ static void
 gtk_widget_update_alpha (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
-  double opacity;
+  gdouble opacity;
   guint8 alpha;
 
   priv = widget->priv;
@@ -15856,8 +15864,7 @@ gtk_widget_update_alpha (GtkWidget *widget)
   if (gtk_widget_get_realized (widget))
     {
       if (gtk_widget_is_toplevel (widget))
-	gdk_window_set_opacity (priv->window,
-				priv->alpha / 255.0);
+	gdk_window_set_opacity (priv->window, priv->alpha / 255.0);
 
       gtk_widget_queue_draw (widget);
     }
@@ -15886,8 +15893,8 @@ gtk_widget_update_alpha (GtkWidget *widget)
  * Since: 3.8
  **/
 void
-gtk_widget_set_opacity  (GtkWidget *widget,
-			 gdouble    opacity)
+gtk_widget_set_opacity (GtkWidget *widget,
+                        gdouble    opacity)
 {
   GtkWidgetPrivate *priv;
   guint8 alpha;
@@ -15907,14 +15914,15 @@ gtk_widget_set_opacity  (GtkWidget *widget,
 
   gtk_widget_update_alpha (widget);
 
+  g_object_notify (G_OBJECT (widget), "opacity");
 }
 
 /**
  * gtk_widget_get_opacity:
  * @widget: a #GtkWidget
  *
- * Fetches the requested opacity for this widget. See
- * gtk_widget_set_opacity().
+ * Fetches the requested opacity for this widget.
+ * See gtk_widget_set_opacity().
  *
  * Returns: the requested opacity for this widget.
  *
@@ -15925,7 +15933,7 @@ gtk_widget_get_opacity (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0.0);
 
-  return widget->priv->alpha / 255.0;
+  return widget->priv->user_alpha / 255.0;
 }
 
 static void
