@@ -729,7 +729,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                         P_("ComboBox model"),
                                                         P_("The model for the combo box"),
                                                         GTK_TYPE_TREE_MODEL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkComboBox:wrap-width:
@@ -748,7 +748,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -771,7 +771,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -793,7 +793,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -815,7 +815,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkComboBox:add-tearoffs:
@@ -835,7 +835,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          P_("Add tearoffs to menus"),
                                                          P_("Whether dropdowns should have a tearoff menu item"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   /**
    * GtkComboBox:has-frame:
@@ -851,7 +851,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          P_("Has Frame"),
                                                          P_("Whether the combo box draws a frame around the child"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_FOCUS_ON_CLICK,
@@ -859,7 +859,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          P_("Focus on click"),
                                                          P_("Whether the combo box grabs focus when it is clicked with the mouse"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkComboBox:tearoff-title:
@@ -877,7 +877,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                         P_("Tearoff Title"),
                                                         P_("A title that may be displayed by the window manager when the popup is torn-off"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
 
   /**
@@ -913,7 +913,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                        P_("Whether the dropdown button is sensitive when the model is empty"),
                                                        GTK_TYPE_SENSITIVITY_TYPE,
                                                        GTK_SENSITIVITY_AUTO,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:has-entry:
@@ -928,7 +928,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                           P_("Has Entry"),
                                                           P_("Whether combo box has an entry"),
                                                           FALSE,
-                                                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
    /**
     * GtkComboBox:entry-text-column:
@@ -946,7 +946,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          "with strings from the entry if the combo was "
                                                          "created with #GtkComboBox:has-entry = %TRUE"),
                                                       -1, G_MAXINT, -1,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:id-column:
@@ -963,7 +963,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                       P_("The column in the combo box's model that provides "
                                                       "string IDs for the values in the model"),
                                                       -1, G_MAXINT, -1,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:active-id:
@@ -978,7 +978,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          P_("Active id"),
                                                          P_("The value of the id column "
                                                          "for the active row"),
-                                                         NULL, GTK_PARAM_READWRITE));
+                                                         NULL,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:popup-fixed-width:
@@ -996,7 +997,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                              "fixed width matching the allocated width "
                                                              "of the combo box"),
                                                           TRUE,
-                                                          GTK_PARAM_READWRITE));
+                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:cell-area:
@@ -1014,7 +1015,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          P_("Cell Area"),
                                                          P_("The GtkCellArea used to layout cells"),
                                                          GTK_TYPE_CELL_AREA,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("appears-as-list",
