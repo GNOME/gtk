@@ -756,7 +756,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Text Buffer"),
                                                         P_("Text buffer object which actually stores entry text"),
                                                         GTK_TYPE_ENTRY_BUFFER,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_CURSOR_POSITION,
@@ -784,7 +784,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("Editable"),
 							 P_("Whether the entry contents can be edited"),
                                                          TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_MAX_LENGTH,
@@ -794,14 +794,14 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      0,
                                                      GTK_ENTRY_BUFFER_MAX_SIZE,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBILITY,
                                    g_param_spec_boolean ("visibility",
 							 P_("Visibility"),
 							 P_("FALSE displays the \"invisible char\" instead of the actual text (password mode)"),
                                                          TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_FRAME,
@@ -809,7 +809,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("Has Frame"),
 							 P_("FALSE removes outside bevel from entry"),
                                                          TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:inner-border:
@@ -826,8 +826,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        P_("Inner Border"),
                                                        P_("Border between text and frame. Overrides the inner-border style property"),
                                                        GTK_TYPE_BORDER,
-                                                       GTK_PARAM_READWRITE |
-                                                       G_PARAM_DEPRECATED));
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
@@ -835,7 +834,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("Invisible character"),
 							 P_("The character to use when masking entry contents (in \"password mode\")"),
 							 '*',
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVATES_DEFAULT,
@@ -843,7 +842,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("Activates default"),
 							 P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
                                                          FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_WIDTH_CHARS,
                                    g_param_spec_int ("width-chars",
@@ -852,7 +851,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:max-width-chars:
@@ -871,7 +870,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_SCROLL_OFFSET,
@@ -881,7 +880,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READABLE));
+                                                     GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_TEXT,
@@ -889,7 +888,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							P_("Text"),
 							P_("The contents of the entry"),
 							"",
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:xalign:
@@ -907,7 +906,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 						       0.0,
 						       1.0,
 						       0.0,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:truncate-multiline:
@@ -922,7 +921,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Truncate multiline"),
                                                          P_("Whether to truncate multiline pastes to one line."),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:shadow-type:
@@ -939,7 +938,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                       P_("Which kind of shadow to draw around the entry when has-frame is set"),
                                                       GTK_TYPE_SHADOW_TYPE,
                                                       GTK_SHADOW_IN,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:overwrite-mode:
@@ -954,7 +953,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Overwrite mode"),
                                                          P_("Whether new text overwrites existing text"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:text-length:
@@ -1004,7 +1003,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Caps Lock warning"),
                                                          P_("Whether password entries will show a warning when Caps Lock is on"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:progress-fraction:
@@ -1021,7 +1020,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         0.0,
                                                         1.0,
                                                         0.0,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:progress-pulse-step:
@@ -1039,7 +1038,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         0.0,
                                                         1.0,
                                                         0.1,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
   * GtkEntry:placeholder-text:
@@ -1055,7 +1054,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        P_("Placeholder text"),
                                                        P_("Show text in the entry when it's empty and unfocused"),
                                                        NULL,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
    * GtkEntry:primary-icon-pixbuf:
@@ -1070,7 +1069,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary pixbuf"),
                                                         P_("Primary pixbuf for the entry"),
                                                         GDK_TYPE_PIXBUF,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:secondary-icon-pixbuf:
@@ -1085,7 +1084,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary pixbuf"),
                                                         P_("Secondary pixbuf for the entry"),
                                                         GDK_TYPE_PIXBUF,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:primary-icon-stock:
@@ -1102,7 +1101,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary stock ID"),
                                                         P_("Stock ID for primary icon"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   /**
    * GtkEntry:secondary-icon-stock:
@@ -1119,7 +1118,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary stock ID"),
                                                         P_("Stock ID for secondary icon"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
   
   /**
    * GtkEntry:primary-icon-name:
@@ -1134,7 +1133,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary icon name"),
                                                         P_("Icon name for primary icon"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:secondary-icon-name:
@@ -1149,7 +1148,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary icon name"),
                                                         P_("Icon name for secondary icon"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:primary-icon-gicon:
@@ -1164,7 +1163,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary GIcon"),
                                                         P_("GIcon for primary icon"),
                                                         G_TYPE_ICON,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:secondary-icon-gicon:
@@ -1179,7 +1178,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary GIcon"),
                                                         P_("GIcon for secondary icon"),
                                                         G_TYPE_ICON,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:primary-icon-storage-type:
@@ -1232,7 +1231,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Primary icon activatable"),
                                                          P_("Whether the primary icon is activatable"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:secondary-icon-activatable:
@@ -1253,7 +1252,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Secondary icon activatable"),
                                                          P_("Whether the secondary icon is activatable"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   
   /**
@@ -1276,7 +1275,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Primary icon sensitive"),
                                                          P_("Whether the primary icon is sensitive"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:secondary-icon-sensitive:
@@ -1298,7 +1297,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Secondary icon sensitive"),
                                                          P_("Whether the secondary icon is sensitive"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:primary-icon-tooltip-text:
@@ -1315,7 +1314,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary icon tooltip text"),
                                                         P_("The contents of the tooltip on the primary icon"),                              
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkEntry:secondary-icon-tooltip-text:
@@ -1332,7 +1331,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary icon tooltip text"),
                                                         P_("The contents of the tooltip on the secondary icon"),                              
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:primary-icon-tooltip-markup:
@@ -1350,7 +1349,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary icon tooltip markup"),
                                                         P_("The contents of the tooltip on the primary icon"),                              
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:secondary-icon-tooltip-markup:
@@ -1368,7 +1367,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary icon tooltip markup"),
                                                         P_("The contents of the tooltip on the secondary icon"),                              
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:im-module:
@@ -1388,7 +1387,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("IM module"),
                                                         P_("Which IM module should be used"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:completion:
@@ -1403,7 +1402,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Completion"),
                                                         P_("The auxiliary completion object"),
                                                         GTK_TYPE_ENTRY_COMPLETION,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:input-purpose:
@@ -1426,7 +1425,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                       P_("Purpose of the text field"),
                                                       GTK_TYPE_INPUT_PURPOSE,
                                                       GTK_INPUT_PURPOSE_FREE_FORM,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:input-hints:
@@ -1443,7 +1442,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        P_("Hints for the text field behaviour"),
                                                        GTK_TYPE_INPUT_HINTS,
                                                        GTK_INPUT_HINT_NONE,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:attributes:
@@ -1460,7 +1459,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        P_("Attributes"),
                                                        P_("A list of style attributes to apply to the text of the label"),
                                                        PANGO_TYPE_ATTR_LIST,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:populate-all:
@@ -1476,7 +1475,8 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Populate all"),
                                                          P_("Whether to emit ::populate-popup for touch popups"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkEntry::tabs:
    *
@@ -1490,7 +1490,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        P_("Tabs"),
                                                        P_("A list of tabstop locations to apply to the text of the entry"),
                                                        PANGO_TYPE_TAB_ARRAY,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:icon-prelight:
@@ -1505,7 +1505,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                  P_("Icon Prelight"),
                                                                  P_("Whether activatable icons should prelight when hovered"),
                                                                  TRUE,
-                                                                 GTK_PARAM_READABLE));
+                                                                 GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntry:progress-border:
@@ -1523,8 +1523,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                P_("Progress Border"),
                                                                P_("Border around the progress bar"),
                                                                GTK_TYPE_BORDER,
-                                                               GTK_PARAM_READABLE |
-                                                               G_PARAM_DEPRECATED));
+                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
   
   /**
    * GtkEntry:invisible-char:
@@ -2120,6 +2119,7 @@ gtk_entry_set_property (GObject         *object,
 	    if (new_value && gtk_widget_has_focus (widget))
 	      gtk_im_context_focus_in (priv->im_context);
 
+            g_object_notify (object, "editable");
 	    gtk_widget_queue_draw (widget);
 	  }
       }
@@ -2166,11 +2166,19 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_TRUNCATE_MULTILINE:
-      priv->truncate_multiline = g_value_get_boolean (value);
+      if (priv->truncate_multiline != g_value_get_boolean (value))
+        {
+          priv->truncate_multiline = g_value_get_boolean (value);
+          g_object_notify (object, "truncate-multiline");
+        }
       break;
 
     case PROP_SHADOW_TYPE:
-      priv->shadow_type = g_value_get_enum (value);
+      if (priv->shadow_type != g_value_get_enum (value))
+        {
+          priv->shadow_type = g_value_get_enum (value);
+          g_object_notify (object, "shadow-type");
+        }
       break;
 
     case PROP_OVERWRITE_MODE:
@@ -2185,7 +2193,11 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_CAPS_LOCK_WARNING:
-      priv->caps_lock_warning = g_value_get_boolean (value);
+      if (priv->caps_lock_warning != g_value_get_boolean (value))
+        {
+          priv->caps_lock_warning = g_value_get_boolean (value);
+          g_object_notify (object, "caps-lock-warning");
+        }
       break;
 
     case PROP_PROGRESS_FRACTION:
@@ -2305,10 +2317,15 @@ gtk_entry_set_property (GObject         *object,
       priv->im_module = g_value_dup_string (value);
       if (GTK_IS_IM_MULTICONTEXT (priv->im_context))
         gtk_im_multicontext_set_context_id (GTK_IM_MULTICONTEXT (priv->im_context), priv->im_module);
+      g_object_notify (object, "im-module");
       break;
 
     case PROP_EDITING_CANCELED:
-      priv->editing_canceled = g_value_get_boolean (value);
+      if (priv->editing_canceled != g_value_get_boolean (value))
+        {
+          priv->editing_canceled = g_value_get_boolean (value);
+          g_object_notify (object, "editing-canceled");
+        }
       break;
 
     case PROP_COMPLETION:
