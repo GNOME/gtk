@@ -364,7 +364,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Program name"),
                          P_("The name of the program. If this is not set, it defaults to g_get_application_name()"),
                          NULL,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:version:
@@ -378,7 +378,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Program version"),
                          P_("The version of the program"),
                          NULL,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:copyright:
@@ -392,7 +392,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Copyright string"),
                          P_("Copyright information for the program"),
                          NULL,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
         
 
   /**
@@ -409,7 +409,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Comments string"),
                          P_("Comments about the program"),
                          NULL,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:license:
@@ -430,7 +430,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          _("License"),
                          _("The license of the program"),
                          NULL,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:license-type:
@@ -459,7 +459,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                        P_("The license type of the program"),
                        GTK_TYPE_LICENSE,
                        GTK_LICENSE_UNKNOWN,
-                       GTK_PARAM_READWRITE);
+                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:website:
@@ -474,7 +474,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Website URL"),
                          P_("The URL for the link to the website of the program"),
                          NULL,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:website-label:
@@ -488,7 +488,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Website label"),
                          P_("The label for the link to the website of the program"),
                          NULL,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:authors:
@@ -504,7 +504,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                         P_("Authors"),
                         P_("List of authors of the program"),
                         G_TYPE_STRV,
-                        GTK_PARAM_READWRITE);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:documenters:
@@ -520,7 +520,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                         P_("Documenters"),
                         P_("List of people documenting the program"),
                         G_TYPE_STRV,
-                        GTK_PARAM_READWRITE);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:artists:
@@ -536,7 +536,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                         P_("Artists"),
                         P_("List of people who have contributed artwork to the program"),
                         G_TYPE_STRV,
-                        GTK_PARAM_READWRITE);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:translator-credits:
@@ -552,7 +552,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Translator credits"),
                          P_("Credits to the translators. This string should be marked as translatable"),
                          NULL,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:logo:
@@ -567,7 +567,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Logo"),
                          P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
                          GDK_TYPE_PIXBUF,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:logo-icon-name:
@@ -582,7 +582,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          P_("Logo Icon Name"),
                          P_("A named icon to use as the logo for the about box."),
                          "image-missing",
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:wrap-license:
@@ -596,7 +596,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                           P_("Wrap license"),
                           P_("Whether to wrap the license text."),
                           FALSE,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
