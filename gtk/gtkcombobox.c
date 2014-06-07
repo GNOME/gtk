@@ -1170,17 +1170,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_HAS_FRAME:
-      priv->has_frame = g_value_get_boolean (value);
-
-      if (priv->has_entry)
+      if (priv->has_frame != g_value_get_boolean (value))
         {
-          GtkWidget *child;
-
-          child = gtk_bin_get_child (GTK_BIN (combo_box));
-
-          gtk_entry_set_has_frame (GTK_ENTRY (child), priv->has_frame);
+          priv->has_frame = g_value_get_boolean (value);
+          if (priv->has_entry)
+            gtk_entry_set_has_frame (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_box))),
+                                     priv->has_frame);
+          g_object_notify (object, "has-frame");
         }
-
       break;
 
     case PROP_FOCUS_ON_CLICK:
@@ -1212,7 +1209,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_EDITING_CANCELED:
-      priv->editing_canceled = g_value_get_boolean (value);
+      if (priv->editing_canceled != g_value_get_boolean (value))
+        {
+          priv->editing_canceled = g_value_get_boolean (value);
+          g_object_notify (object, "editing-canceled");
+        }
       break;
 
     case PROP_HAS_ENTRY:
@@ -5372,13 +5373,18 @@ gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
   g_return_if_fail (text_column >= 0);
   g_return_if_fail (model == NULL || text_column < gtk_tree_model_get_n_columns (model));
 
-  priv->text_column = text_column;
+  if (priv->text_column != text_column)
+    {
+      priv->text_column = text_column;
 
-  if (priv->text_renderer != NULL)
-    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box),
-                                    priv->text_renderer,
-                                    "text", text_column,
-                                    NULL);
+      if (priv->text_renderer != NULL)
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box),
+                                        priv->text_renderer,
+                                        "text", text_column,
+                                        NULL);
+
+      g_object_notify (G_OBJECT (combo_box), "entry-text-column");
+    }
 }
 
 /**
@@ -5909,5 +5915,7 @@ gtk_combo_box_set_active_id (GtkComboBox *combo_box,
         }
     } while (gtk_tree_model_iter_next (model, &iter));
 
-    return match;
+  g_object_notify (G_OBJECT (combo_box), "active-id");
+
+  return match;
 }
