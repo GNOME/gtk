@@ -226,21 +226,21 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                        P_("The type of animation used to transition"),
                        GTK_TYPE_REVEALER_TRANSITION_TYPE,
                        GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
-                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_TRANSITION_DURATION] =
     g_param_spec_uint ("transition-duration",
                        P_("Transition duration"),
                        P_("The animation duration, in milliseconds"),
                        0, G_MAXUINT, 250,
-                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_REVEAL_CHILD] =
     g_param_spec_boolean ("reveal-child",
                           P_("Reveal Child"),
                           P_("Whether the container should reveal the child"),
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_CHILD_REVEALED] =
     g_param_spec_boolean ("child-revealed",
