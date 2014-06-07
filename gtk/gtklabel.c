@@ -739,14 +739,14 @@ gtk_label_class_init (GtkLabelClass *class)
 							 P_("Use markup"),
 							 P_("The text of the label includes XML markup. See pango_parse_markup()"),
                                                         FALSE,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_USE_UNDERLINE,
                                    g_param_spec_boolean ("use-underline",
 							 P_("Use underline"),
 							 P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                                                         FALSE,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
 				   PROP_JUSTIFY,
@@ -755,7 +755,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                                       P_("The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkMisc::xalign for that"),
 						      GTK_TYPE_JUSTIFICATION,
 						      GTK_JUSTIFY_LEFT,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_PATTERN,
@@ -771,7 +771,8 @@ gtk_label_class_init (GtkLabelClass *class)
                                                         P_("Line wrap"),
                                                         P_("If set, wrap lines if the text becomes too wide"),
                                                         FALSE,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkLabel:wrap-mode:
    *
@@ -788,14 +789,14 @@ gtk_label_class_init (GtkLabelClass *class)
 						      P_("If wrap is set, controls how linewrapping is done"),
 						      PANGO_TYPE_WRAP_MODE,
 						      PANGO_WRAP_WORD,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_SELECTABLE,
                                    g_param_spec_boolean ("selectable",
                                                         P_("Selectable"),
                                                         P_("Whether the label text can be selected with the mouse"),
                                                         FALSE,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_MNEMONIC_KEYVAL,
                                    g_param_spec_uint ("mnemonic-keyval",
@@ -858,7 +859,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                                       P_("The preferred place to ellipsize the string, if the label does not have enough room to display the entire string"),
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkLabel:width-chars:
@@ -880,7 +881,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkLabel:single-line-mode:
@@ -899,7 +900,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                                         P_("Single Line Mode"),
                                                         P_("Whether the label is in single line mode"),
                                                         FALSE,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkLabel:angle:
@@ -919,7 +920,7 @@ gtk_label_class_init (GtkLabelClass *class)
 							0.0,
 							360.0,
 							0.0, 
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkLabel:max-width-chars:
@@ -941,7 +942,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkLabel:track-visited-links:
@@ -958,7 +959,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                                          P_("Track visited links"),
                                                          P_("Whether visited links should be tracked"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkLabel:lines:
@@ -978,7 +979,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /*
    * Key bindings
    */
