@@ -471,7 +471,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Year"),
                                                      P_("The selected year"),
                                                      0, G_MAXINT >> 9, 0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:month:
@@ -485,7 +485,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Month"),
                                                      P_("The selected month (as a number between 0 and 11)"),
                                                      0, 11, 0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:day:
@@ -500,7 +500,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Day"),
                                                      P_("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
                                                      0, 31, 0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkCalendar:show-heading:
@@ -515,7 +515,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          P_("Show Heading"),
                                                          P_("If TRUE, a heading is displayed"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkCalendar:show-day-names:
@@ -530,7 +530,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          P_("Show Day Names"),
                                                          P_("If TRUE, day names are displayed"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 /**
  * GtkCalendar:no-month-change:
  *
@@ -544,7 +544,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          P_("No Month Change"),
                                                          P_("If TRUE, the selected month cannot be changed"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkCalendar:show-week-numbers:
@@ -559,7 +559,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          P_("Show Week Numbers"),
                                                          P_("If TRUE, week numbers are displayed"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkCalendar:detail-width-chars:
@@ -575,7 +575,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Details Width"),
                                                      P_("Details width in characters"),
                                                      0, 127, 0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkCalendar:detail-height-rows:
@@ -591,7 +591,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Details Height"),
                                                      P_("Details height in rows"),
                                                      0, 127, 0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkCalendar:show-details:
@@ -608,7 +608,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          P_("Show Details"),
                                                          P_("If TRUE, details are shown"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -1439,20 +1439,27 @@ gtk_calendar_destroy (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_calendar_parent_class)->destroy (widget);
 }
 
-
-static void
+static gboolean
 calendar_set_display_option (GtkCalendar              *calendar,
                              GtkCalendarDisplayOptions flag,
                              gboolean                  setting)
 {
   GtkCalendarPrivate *priv = calendar->priv;
   GtkCalendarDisplayOptions flags;
+  gboolean old_setting;
+
+  old_setting = (priv->display_flags & flag) != 0;
+  if (old_setting == setting)
+    return FALSE;
 
   if (setting)
     flags = priv->display_flags | flag;
   else
     flags = priv->display_flags & ~flag;
+
   gtk_calendar_set_display_options (calendar, flags);
+
+  return TRUE;
 }
 
 static gboolean
@@ -1490,29 +1497,34 @@ gtk_calendar_set_property (GObject      *object,
                                g_value_get_int (value));
       break;
     case PROP_SHOW_HEADING:
-      calendar_set_display_option (calendar,
-                                   GTK_CALENDAR_SHOW_HEADING,
-                                   g_value_get_boolean (value));
+      if (calendar_set_display_option (calendar,
+                                       GTK_CALENDAR_SHOW_HEADING,
+                                       g_value_get_boolean (value)))
+        g_object_notify (object, "show-heading");
       break;
     case PROP_SHOW_DAY_NAMES:
-      calendar_set_display_option (calendar,
-                                   GTK_CALENDAR_SHOW_DAY_NAMES,
-                                   g_value_get_boolean (value));
+      if (calendar_set_display_option (calendar,
+                                       GTK_CALENDAR_SHOW_DAY_NAMES,
+                                       g_value_get_boolean (value)))
+        g_object_notify (object, "show-day-names");
       break;
     case PROP_NO_MONTH_CHANGE:
-      calendar_set_display_option (calendar,
-                                   GTK_CALENDAR_NO_MONTH_CHANGE,
-                                   g_value_get_boolean (value));
+      if (calendar_set_display_option (calendar,
+                                       GTK_CALENDAR_NO_MONTH_CHANGE,
+                                       g_value_get_boolean (value)))
+        g_object_notify (object, "no-month-change");
       break;
     case PROP_SHOW_WEEK_NUMBERS:
-      calendar_set_display_option (calendar,
-                                   GTK_CALENDAR_SHOW_WEEK_NUMBERS,
-                                   g_value_get_boolean (value));
+      if (calendar_set_display_option (calendar,
+                                       GTK_CALENDAR_SHOW_WEEK_NUMBERS,
+                                       g_value_get_boolean (value)))
+        g_object_notify (object, "show-week-numbers");
       break;
     case PROP_SHOW_DETAILS:
-      calendar_set_display_option (calendar,
-                                   GTK_CALENDAR_SHOW_DETAILS,
-                                   g_value_get_boolean (value));
+      if (calendar_set_display_option (calendar,
+                                       GTK_CALENDAR_SHOW_DETAILS,
+                                       g_value_get_boolean (value)))
+        g_object_notify (object, "show-details");
       break;
     case PROP_DETAIL_WIDTH_CHARS:
       gtk_calendar_set_detail_width_chars (calendar,
@@ -3682,20 +3694,25 @@ gtk_calendar_select_month (GtkCalendar *calendar,
 
   priv = calendar->priv;
 
-  priv->month = month;
-  priv->year  = year;
+  g_object_freeze_notify (G_OBJECT (calendar));
+
+  if (priv->month != month)
+    {
+      priv->month = month;
+      g_object_notify (G_OBJECT (calendar), "month");
+    }
+  if (priv->year != year)
+    {
+      priv->year  = year;
+      g_object_notify (G_OBJECT (calendar), "year");
+    }
 
   calendar_compute_days (calendar);
   calendar_queue_refresh (calendar);
 
-  g_object_freeze_notify (G_OBJECT (calendar));
-  g_object_notify (G_OBJECT (calendar), "month");
-  g_object_notify (G_OBJECT (calendar), "year");
   g_object_thaw_notify (G_OBJECT (calendar));
 
-  g_signal_emit (calendar,
-                 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
-                 0);
+  g_signal_emit (calendar, gtk_calendar_signals[MONTH_CHANGED_SIGNAL], 0);
 }
 
 /**
@@ -3717,31 +3734,29 @@ gtk_calendar_select_day (GtkCalendar *calendar,
 
   priv = calendar->priv;
 
-  /* Deselect the old day */
-  if (priv->selected_day > 0)
+  if (priv->selected_day != day)
     {
-      gint selected_day;
+      /* Deselect the old day */
+      if (priv->selected_day > 0)
+        {
+          if (gtk_widget_is_drawable (GTK_WIDGET (calendar)))
+            calendar_invalidate_day_num (calendar, priv->selected_day);
+          priv->selected_day = 0;
+        }
 
-      selected_day = priv->selected_day;
-      priv->selected_day = 0;
-      if (gtk_widget_is_drawable (GTK_WIDGET (calendar)))
-        calendar_invalidate_day_num (calendar, selected_day);
+      priv->selected_day = day;
+
+      /* Select the new day */
+      if (priv->selected_day > 0)
+        {
+          if (gtk_widget_is_drawable (GTK_WIDGET (calendar)))
+            calendar_invalidate_day_num (calendar, priv->selected_day);
+        }
+
+      g_object_notify (G_OBJECT (calendar), "day");
     }
 
-  priv->selected_day = day;
-
-  /* Select the new day */
-  if (day != 0)
-    {
-      if (gtk_widget_is_drawable (GTK_WIDGET (calendar)))
-        calendar_invalidate_day_num (calendar, day);
-    }
-
-  g_object_notify (G_OBJECT (calendar), "day");
-
-  g_signal_emit (calendar,
-                 gtk_calendar_signals[DAY_SELECTED_SIGNAL],
-                 0);
+  g_signal_emit (calendar, gtk_calendar_signals[DAY_SELECTED_SIGNAL], 0);
 }
 
 /**
