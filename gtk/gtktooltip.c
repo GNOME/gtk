@@ -188,6 +188,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   g_signal_connect (window, "hide",
                     G_CALLBACK (gtk_tooltip_window_hide), tooltip);
 
+  _gtk_window_request_csd (GTK_WINDOW (window));
   context = gtk_widget_get_style_context (window);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
 
