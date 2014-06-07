@@ -622,7 +622,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 						      P_("How to align the lines"),
 						      PANGO_TYPE_ALIGNMENT,
 						      PANGO_ALIGN_LEFT,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererText:placeholder-text:
@@ -1469,7 +1469,11 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;  
 
     case PROP_ALIGN:
-      priv->align = g_value_get_enum (value);
+      if (priv->align != g_value_get_enum (value))
+        {
+          priv->align = g_value_get_enum (value);
+          g_object_notify (object, "alignment");
+        }
       priv->align_set = TRUE;
       g_object_notify (object, "align-set");
       break;
