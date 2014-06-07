@@ -89,13 +89,16 @@ enum {
   PROP_XALIGN,
   PROP_YALIGN,
   PROP_IMAGE_POSITION,
+  PROP_ALWAYS_SHOW_IMAGE,
+
+  /* actionable properties */
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET,
-  PROP_ALWAYS_SHOW_IMAGE,
 
   /* activatable properties */
   PROP_ACTIVATABLE_RELATED_ACTION,
-  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
+  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE,
+  LAST_PROP = PROP_ACTION_NAME
 };
 
 
@@ -179,6 +182,7 @@ static void gtk_button_get_preferred_height_and_baseline_for_width (GtkWidget *w
 								    gint      *minimum_baseline,
 								    gint      *natural_baseline);
   
+static GParamSpec *props[LAST_PROP] = { NULL, };
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
@@ -237,51 +241,46 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->leave = gtk_button_update_state;
   klass->activate = gtk_real_button_activate;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL,
-                                   g_param_spec_string ("label",
-                                                        P_("Label"),
-                                                        P_("Text of the label widget inside the button, if the button contains a label widget"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  props[PROP_LABEL] =
+    g_param_spec_string ("label",
+                         P_("Label"),
+                         P_("Text of the label widget inside the button, if the button contains a label widget"),
+                         NULL,
+                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
   
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_UNDERLINE,
-                                   g_param_spec_boolean ("use-underline",
-							 P_("Use underline"),
-							 P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  props[PROP_USE_UNDERLINE] =
+    g_param_spec_boolean ("use-underline",
+                          P_("Use underline"),
+                          P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+                          FALSE,
+                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
   
   /**
    * GtkButton:use-stock:
    *
    * Deprecated: 3.10
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_STOCK,
-                                   g_param_spec_boolean ("use-stock",
-							 P_("Use stock"),
-							 P_("If set, the label is used to pick a stock item instead of being displayed"),
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED));
+  props[PROP_USE_STOCK] =
+    g_param_spec_boolean ("use-stock",
+                          P_("Use stock"),
+                          P_("If set, the label is used to pick a stock item instead of being displayed"),
+                          FALSE,
+                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED);
   
-  g_object_class_install_property (gobject_class,
-                                   PROP_FOCUS_ON_CLICK,
-                                   g_param_spec_boolean ("focus-on-click",
-							 P_("Focus on click"),
-							 P_("Whether the button grabs focus when it is clicked with the mouse"),
-							 TRUE,
-							 GTK_PARAM_READWRITE));
+  props[PROP_FOCUS_ON_CLICK] =
+    g_param_spec_boolean ("focus-on-click",
+                          P_("Focus on click"),
+                          P_("Whether the button grabs focus when it is clicked with the mouse"),
+                          TRUE,
+                          GTK_PARAM_READWRITE);
   
-  g_object_class_install_property (gobject_class,
-                                   PROP_RELIEF,
-                                   g_param_spec_enum ("relief",
-                                                      P_("Border relief"),
-                                                      P_("The border relief style"),
-                                                      GTK_TYPE_RELIEF_STYLE,
-                                                      GTK_RELIEF_NORMAL,
-                                                      GTK_PARAM_READWRITE));
+  props[PROP_RELIEF] =
+    g_param_spec_enum ("relief",
+                       P_("Border relief"),
+                       P_("The border relief style"),
+                       GTK_TYPE_RELIEF_STYLE,
+                       GTK_RELIEF_NORMAL,
+                       GTK_PARAM_READWRITE);
   
   /**
    * GtkButton:xalign:
@@ -295,15 +294,12 @@ gtk_button_class_init (GtkButtonClass *klass)
    * Deprecated: 3.14: Access the child widget directly if you need to control
    * its alignment.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_XALIGN,
-                                   g_param_spec_float ("xalign",
-                                                       P_("Horizontal alignment for child"),
-                                                       P_("Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"),
-                                                       0.0,
-                                                       1.0,
-                                                       0.5,
-                                                       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
+  props[PROP_XALIGN] =
+    g_param_spec_float ("xalign",
+                        P_("Horizontal alignment for child"),
+                        P_("Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"),
+                        0.0, 1.0, 0.5,
+                        GTK_PARAM_READWRITE|G_PARAM_DEPRECATED);
 
   /**
    * GtkButton:yalign:
@@ -317,15 +313,12 @@ gtk_button_class_init (GtkButtonClass *klass)
    * Deprecated: 3.14: Access the child widget directly if you need to control
    * its alignment.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_YALIGN,
-                                   g_param_spec_float ("yalign",
-                                                       P_("Vertical alignment for child"),
-                                                       P_("Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"),
-                                                       0.0,
-                                                       1.0,
-                                                       0.5,
-                                                       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
+  props[PROP_YALIGN] =
+    g_param_spec_float ("yalign",
+                        P_("Vertical alignment for child"),
+                        P_("Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"),
+                        0.0, 1.0, 0.5,
+                        GTK_PARAM_READWRITE|G_PARAM_DEPRECATED);
 
   /**
    * GtkButton:image:
@@ -334,13 +327,12 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_IMAGE,
-                                   g_param_spec_object ("image",
-                                                        P_("Image widget"),
-                                                        P_("Child widget to appear next to the button text"),
-                                                        GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_IMAGE] =
+    g_param_spec_object ("image",
+                         P_("Image widget"),
+                         P_("Child widget to appear next to the button text"),
+                         GTK_TYPE_WIDGET,
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkButton:image-position:
@@ -349,14 +341,13 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Since: 2.10
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_IMAGE_POSITION,
-                                   g_param_spec_enum ("image-position",
-                                            P_("Image position"),
-                                                      P_("The position of the image relative to the text"),
-                                                      GTK_TYPE_POSITION_TYPE,
-                                                      GTK_POS_LEFT,
-                                                      GTK_PARAM_READWRITE));
+  props[PROP_IMAGE_POSITION] =
+    g_param_spec_enum ("image-position",
+                       P_("Image position"),
+                       P_("The position of the image relative to the text"),
+                       GTK_TYPE_POSITION_TYPE,
+                       GTK_POS_LEFT,
+                       GTK_PARAM_READWRITE);
 
   /**
    * GtkButton:always-show-image:
@@ -369,13 +360,14 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Since: 3.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ALWAYS_SHOW_IMAGE,
-                                   g_param_spec_boolean ("always-show-image",
-                                                         P_("Always show image"),
-                                                         P_("Whether the image will always be shown"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  props[PROP_ALWAYS_SHOW_IMAGE] =
+     g_param_spec_boolean ("always-show-image",
+                           P_("Always show image"),
+                           P_("Whether the image will always be shown"),
+                           FALSE,
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
@@ -1512,7 +1504,7 @@ gtk_button_set_relief (GtkButton *button,
   if (newrelief != priv->relief)
     {
        priv->relief = newrelief;
-       g_object_notify (G_OBJECT (button), "relief");
+       g_object_notify_by_pspec (G_OBJECT (button), props[PROP_RELIEF]);
        gtk_widget_queue_draw (GTK_WIDGET (button));
     }
 }
@@ -2240,7 +2232,7 @@ gtk_button_set_label (GtkButton   *button,
 
   gtk_button_construct_child (button);
   
-  g_object_notify (G_OBJECT (button), "label");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_LABEL]);
 }
 
 /**
@@ -2290,7 +2282,7 @@ gtk_button_set_use_underline (GtkButton *button,
 
       gtk_button_construct_child (button);
       
-      g_object_notify (G_OBJECT (button), "use-underline");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_USE_UNDERLINE]);
     }
 }
 
@@ -2340,7 +2332,7 @@ gtk_button_set_use_stock (GtkButton *button,
 
       gtk_button_construct_child (button);
       
-      g_object_notify (G_OBJECT (button), "use-stock");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_USE_STOCK]);
     }
 }
 
@@ -2392,7 +2384,7 @@ gtk_button_set_focus_on_click (GtkButton *button,
     {
       priv->focus_on_click = focus_on_click;
       
-      g_object_notify (G_OBJECT (button), "focus-on-click");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_FOCUS_ON_CLICK]);
     }
 }
 
@@ -2450,8 +2442,8 @@ gtk_button_set_alignment (GtkButton *button,
   maybe_set_alignment (button, gtk_bin_get_child (GTK_BIN (button)));
 
   g_object_freeze_notify (G_OBJECT (button));
-  g_object_notify (G_OBJECT (button), "xalign");
-  g_object_notify (G_OBJECT (button), "yalign");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_XALIGN]);
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_YALIGN]);
   g_object_thaw_notify (G_OBJECT (button));
 }
 
@@ -2674,7 +2666,7 @@ gtk_button_set_image (GtkButton *button,
 
   gtk_button_construct_child (button);
 
-  g_object_notify (G_OBJECT (button), "image");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_IMAGE]);
 }
 
 /**
@@ -2724,7 +2716,7 @@ gtk_button_set_image_position (GtkButton       *button,
 
       gtk_button_construct_child (button);
 
-      g_object_notify (G_OBJECT (button), "image-position");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_IMAGE_POSITION]);
     }
 }
 
@@ -2782,7 +2774,7 @@ gtk_button_set_always_show_image (GtkButton *button,
             gtk_widget_hide (priv->image);
         }
 
-      g_object_notify (G_OBJECT (button), "always-show-image");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ALWAYS_SHOW_IMAGE]);
     }
 }
 
