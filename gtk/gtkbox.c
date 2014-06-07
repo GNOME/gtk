@@ -256,14 +256,14 @@ gtk_box_class_init (GtkBoxClass *class)
                       P_("Spacing"),
                       P_("The amount of space between children"),
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE);
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_HOMOGENEOUS] =
     g_param_spec_boolean ("homogeneous",
                           P_("Homogeneous"),
                           P_("Whether the children should all be the same size"),
                           FALSE,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_BASELINE_POSITION] =
     g_param_spec_enum ("baseline-position",
@@ -271,7 +271,7 @@ gtk_box_class_init (GtkBoxClass *class)
                        P_("The position of the baseline aligned widgets if extra space is available"),
                        GTK_TYPE_BASELINE_POSITION,
                        GTK_BASELINE_POSITION_CENTER,
-                       GTK_PARAM_READWRITE);
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
