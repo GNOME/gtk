@@ -125,7 +125,8 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                                          P_("Active"),
                                                          P_("Whether the spinner is active (ie. shown) in the cell"),
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkCellRendererSpinner:pulse:
    *
@@ -143,7 +144,8 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                                       P_("Pulse"),
                                                       P_("Pulse of the spinner"),
                                                       0, G_MAXUINT, 0,
-                                                      G_PARAM_READWRITE));
+                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkCellRendererSpinner:size:
    *
@@ -157,7 +159,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                                       P_("Size"),
                                                       P_("The GtkIconSize value that specifies the size of the rendered spinner"),
                                                       GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_MENU,
-                                                      G_PARAM_READWRITE));
+                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 }
 
@@ -239,14 +241,26 @@ gtk_cell_renderer_spinner_set_property (GObject      *object,
   switch (param_id)
     {
       case PROP_ACTIVE:
-        priv->active = g_value_get_boolean (value);
+        if (priv->active != g_value_get_boolean (value))
+          {
+            priv->active = g_value_get_boolean (value);
+            g_object_notify (object, "active");
+          }
         break;
       case PROP_PULSE:
-        priv->pulse = g_value_get_uint (value);
+        if (priv->pulse != g_value_get_uint (value))
+          {
+            priv->pulse = g_value_get_uint (value);
+            g_object_notify (object, "pulse");
+          }
         break;
       case PROP_SIZE:
-        priv->old_icon_size = priv->icon_size;
-        priv->icon_size = g_value_get_enum (value);
+        if (priv->icon_size != g_value_get_enum (value))
+          {
+            priv->old_icon_size = priv->icon_size;
+            priv->icon_size = g_value_get_enum (value);
+            g_object_notify (object, "size");
+          }
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
