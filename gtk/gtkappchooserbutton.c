@@ -332,7 +332,8 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
 
   if (self->priv->show_default_item)
     {
-      default_app = g_app_info_get_default_for_type (self->priv->content_type, FALSE);
+      if (self->priv->content_type)
+        default_app = g_app_info_get_default_for_type (self->priv->content_type, FALSE);
 
       if (default_app != NULL)
         {
