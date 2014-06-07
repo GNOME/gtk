@@ -779,7 +779,6 @@ gtk_about_dialog_set_property (GObject      *object,
                                GParamSpec   *pspec)
 {
   GtkAboutDialog *about = GTK_ABOUT_DIALOG (object);
-  GtkAboutDialogPrivate *priv = about->priv;
 
   switch (prop_id)
     {
@@ -826,7 +825,7 @@ gtk_about_dialog_set_property (GObject      *object,
       gtk_about_dialog_set_logo_icon_name (about, g_value_get_string (value));
       break;
     case PROP_WRAP_LICENSE:
-      priv->wrap_license = g_value_get_boolean (value);
+      gtk_about_dialog_set_wrap_license (about, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
