@@ -1315,6 +1315,9 @@ gtk_stack_set_transition_duration (GtkStack *stack,
 
   g_return_if_fail (GTK_IS_STACK (stack));
 
+  if (priv->transition_duration == duration)
+    return;
+
   priv->transition_duration = duration;
   g_object_notify_by_pspec (G_OBJECT (stack),
                             stack_props[PROP_TRANSITION_DURATION]);
@@ -1363,6 +1366,9 @@ gtk_stack_set_transition_type (GtkStack              *stack,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
   g_return_if_fail (GTK_IS_STACK (stack));
+
+  if (priv->transition_type == transition)
+    return;
 
   priv->transition_type = transition;
   g_object_notify_by_pspec (G_OBJECT (stack),
