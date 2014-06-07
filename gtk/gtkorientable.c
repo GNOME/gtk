@@ -62,7 +62,7 @@ gtk_orientable_default_init (GtkOrientableInterface *iface)
                                                           P_("The orientation of the orientable"),
                                                           GTK_TYPE_ORIENTATION,
                                                           GTK_ORIENTATION_HORIZONTAL,
-                                                          GTK_PARAM_READWRITE));
+                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 /**
