@@ -191,14 +191,14 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
                         P_("Accelerator Closure"),
                         P_("The closure to be monitored for accelerator changes"),
                         G_TYPE_CLOSURE,
-                        GTK_PARAM_READWRITE);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_ACCEL_WIDGET] =
     g_param_spec_object ("accel-widget",
                          P_("Accelerator Widget"),
                          P_("The widget to be monitored for accelerator changes"),
                          GTK_TYPE_WIDGET,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 }
