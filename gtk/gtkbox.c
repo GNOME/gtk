@@ -95,7 +95,8 @@ enum {
   PROP_BASELINE_POSITION,
 
   /* orientable */
-  PROP_ORIENTATION
+  PROP_ORIENTATION,
+  LAST_PROP = PROP_ORIENTATION
 };
 
 enum {
@@ -122,6 +123,8 @@ struct _GtkBoxPrivate
   guint           spacing_set    : 1;
   guint           baseline_pos   : 2;
 };
+
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 /*
  * GtkBoxChild:
@@ -248,32 +251,29 @@ gtk_box_class_init (GtkBoxClass *class)
                                     PROP_ORIENTATION,
                                     "orientation");
 
-  g_object_class_install_property (object_class,
-                                   PROP_SPACING,
-                                   g_param_spec_int ("spacing",
-                                                     P_("Spacing"),
-                                                     P_("The amount of space between children"),
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
+  props[PROP_SPACING] =
+    g_param_spec_int ("spacing",
+                      P_("Spacing"),
+                      P_("The amount of space between children"),
+                      0, G_MAXINT, 0,
+                      GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_HOMOGENEOUS,
-                                   g_param_spec_boolean ("homogeneous",
-							 P_("Homogeneous"),
-							 P_("Whether the children should all be the same size"),
-							 FALSE,
-							 GTK_PARAM_READWRITE));
+  props[PROP_HOMOGENEOUS] =
+    g_param_spec_boolean ("homogeneous",
+                          P_("Homogeneous"),
+                          P_("Whether the children should all be the same size"),
+                          FALSE,
+                          GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_BASELINE_POSITION,
-                                   g_param_spec_enum ("baseline-position",
-                                                     P_("Baseline position"),
-                                                     P_("The position of the baseline aligned widgets if extra space is available"),
-                                                     GTK_TYPE_BASELINE_POSITION,
-                                                     GTK_BASELINE_POSITION_CENTER,
-                                                     GTK_PARAM_READWRITE));
+  props[PROP_BASELINE_POSITION] =
+    g_param_spec_enum ("baseline-position",
+                       P_("Baseline position"),
+                       P_("The position of the baseline aligned widgets if extra space is available"),
+                       GTK_TYPE_BASELINE_POSITION,
+                       GTK_BASELINE_POSITION_CENTER,
+                       GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
    * GtkBox:expand:
@@ -374,9 +374,16 @@ gtk_box_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      private->orientation = g_value_get_enum (value);
-      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
-      gtk_widget_queue_resize (GTK_WIDGET (box));
+      {
+        GtkOrientation orientation = g_value_get_enum (value);
+        if (private->orientation != orientation)
+          {
+            private->orientation = orientation;
+            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
+            gtk_widget_queue_resize (GTK_WIDGET (box));
+            g_object_notify (object, "orientation");
+          }
+      }
       break;
     case PROP_SPACING:
       gtk_box_set_spacing (box, g_value_get_int (value));
@@ -2104,10 +2111,12 @@ gtk_box_set_homogeneous (GtkBox  *box,
 
   private = box->priv;
 
-  if ((homogeneous ? TRUE : FALSE) != private->homogeneous)
+  homogeneous = homogeneous != FALSE;
+
+  if (private->homogeneous != homogeneous)
     {
-      private->homogeneous = homogeneous ? TRUE : FALSE;
-      g_object_notify (G_OBJECT (box), "homogeneous");
+      private->homogeneous = homogeneous;
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_HOMOGENEOUS]);
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }
@@ -2147,12 +2156,12 @@ gtk_box_set_spacing (GtkBox *box,
 
   private = box->priv;
 
-  if (spacing != private->spacing)
+  if (private->spacing != spacing)
     {
       private->spacing = spacing;
       _gtk_box_set_spacing_set (box, TRUE);
 
-      g_object_notify (G_OBJECT (box), "spacing");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_SPACING]);
 
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
@@ -2198,11 +2207,11 @@ gtk_box_set_baseline_position (GtkBox             *box,
 
   private = box->priv;
 
-  if (position != private->baseline_pos)
+  if (private->baseline_pos != position)
     {
       private->baseline_pos = position;
 
-      g_object_notify (G_OBJECT (box), "baseline-position");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_BASELINE_POSITION]);
 
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
@@ -2219,7 +2228,7 @@ gtk_box_set_baseline_position (GtkBox             *box,
  * Since: 3.10
  **/
 GtkBaselinePosition
-gtk_box_get_baseline_position (GtkBox         *box)
+gtk_box_get_baseline_position (GtkBox *box)
 {
   g_return_val_if_fail (GTK_IS_BOX (box), GTK_BASELINE_POSITION_CENTER);
 
