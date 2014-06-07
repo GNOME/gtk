@@ -79,6 +79,10 @@ libgtkinspector_la_CFLAGS =		\
 	$(GTK_DEBUG_FLAGS)		\
 	$(AM_CFLAGS)
 
+if USE_QUARTZ
+libgtkinspector_la_CFLAGS += "-xobjective-c"
+endif # USE_QUARTZ
+
 libgtkinspector_la_LIBADD = 		\
 	$(GTK_DEP_LIBS)			\
 	$(INTLLIBS)
