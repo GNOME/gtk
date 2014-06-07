@@ -966,7 +966,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                                 P_("Show default app"),
                                 P_("Whether the widget should show the default application"),
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_DEFAULT, pspec);
 
   /**
@@ -981,7 +981,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                                 P_("Show recommended apps"),
                                 P_("Whether the widget should show recommended applications"),
                                 TRUE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_RECOMMENDED, pspec);
 
   /**
@@ -996,7 +996,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                                 P_("Show fallback apps"),
                                 P_("Whether the widget should show fallback applications"),
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_FALLBACK, pspec);
 
   /**
@@ -1009,7 +1009,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                                 P_("Show other apps"),
                                 P_("Whether the widget should show other applications"),
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_OTHER, pspec);
 
   /**
@@ -1023,7 +1023,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                                 P_("Show all apps"),
                                 P_("Whether the widget should show all applications"),
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_ALL, pspec);
 
   /**
@@ -1038,7 +1038,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                                P_("Widget's default text"),
                                P_("The default text appearing when there are no applications"),
                                NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_DEFAULT_TEXT, pspec);
 
   /**
