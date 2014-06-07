@@ -65,7 +65,8 @@ enum  {
   PROP_TRANSITION_TYPE,
   PROP_TRANSITION_DURATION,
   PROP_REVEAL_CHILD,
-  PROP_CHILD_REVEALED
+  PROP_CHILD_REVEALED,
+  LAST_PROP
 };
 
 typedef struct {
@@ -84,6 +85,7 @@ typedef struct {
   gint64 end_time;
 } GtkRevealerPrivate;
 
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 static void     gtk_revealer_real_realize                        (GtkWidget     *widget);
 static void     gtk_revealer_real_unrealize                      (GtkWidget     *widget);
@@ -218,38 +220,36 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
 
   container_class->add = gtk_revealer_real_add;
 
-  g_object_class_install_property (object_class,
-                                   PROP_TRANSITION_TYPE,
-                                   g_param_spec_enum ("transition-type",
-                                                      P_("Transition type"),
-                                                      P_("The type of animation used to transition"),
-                                                      GTK_TYPE_REVEALER_TRANSITION_TYPE,
-                                                      GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
-                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  props[PROP_TRANSITION_TYPE] =
+    g_param_spec_enum ("transition-type",
+                       P_("Transition type"),
+                       P_("The type of animation used to transition"),
+                       GTK_TYPE_REVEALER_TRANSITION_TYPE,
+                       GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
+                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
-  g_object_class_install_property (object_class,
-                                   PROP_TRANSITION_DURATION,
-                                   g_param_spec_uint ("transition-duration",
-                                                      P_("Transition duration"),
-                                                      P_("The animation duration, in milliseconds"),
-                                                      0, G_MAXUINT,
-                                                      250,
-                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
-  g_object_class_install_property (object_class,
-                                   PROP_REVEAL_CHILD,
-                                   g_param_spec_boolean ("reveal-child",
-                                                         P_("Reveal Child"),
-                                                         P_("Whether the container should reveal the child"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  props[PROP_TRANSITION_DURATION] =
+    g_param_spec_uint ("transition-duration",
+                       P_("Transition duration"),
+                       P_("The animation duration, in milliseconds"),
+                       0, G_MAXUINT, 250,
+                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
-  g_object_class_install_property (object_class,
-                                   PROP_CHILD_REVEALED,
-                                   g_param_spec_boolean ("child-revealed",
-                                                         P_("Child Revealed"),
-                                                         P_("Whether the child is revealed and the animation target reached"),
-                                                         FALSE,
-                                                         G_PARAM_READABLE));
+  props[PROP_REVEAL_CHILD] =
+    g_param_spec_boolean ("reveal-child",
+                          P_("Reveal Child"),
+                          P_("Whether the container should reveal the child"),
+                          FALSE,
+                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+
+  props[PROP_CHILD_REVEALED] =
+    g_param_spec_boolean ("child-revealed",
+                          P_("Child Revealed"),
+                          P_("Whether the child is revealed and the animation target reached"),
+                          FALSE,
+                          G_PARAM_READABLE);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 }
 
 /**
@@ -516,7 +516,7 @@ gtk_revealer_set_position (GtkRevealer *revealer,
     }
 
   if (priv->current_pos == priv->target_pos)
-    g_object_notify (G_OBJECT (revealer), "child-revealed");
+    g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
 }
 
 /* From clutter-easing.c, based on Robert Penner's
@@ -578,7 +578,7 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
     return;
 
   priv->target_pos = target;
-  g_object_notify (G_OBJECT (revealer), "reveal-child");
+  g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_REVEAL_CHILD]);
 
   transition = effective_transition (revealer);
   if (gtk_widget_get_mapped (widget) &&
@@ -875,8 +875,11 @@ gtk_revealer_set_transition_duration (GtkRevealer *revealer,
 
   g_return_if_fail (GTK_IS_REVEALER (revealer));
 
+  if (priv->transition_duration == value)
+    return;
+
   priv->transition_duration = value;
-  g_object_notify (G_OBJECT (revealer), "transition-duration");
+  g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_TRANSITION_DURATION]);
 }
 
 /**
@@ -919,7 +922,10 @@ gtk_revealer_set_transition_type (GtkRevealer               *revealer,
 
   g_return_if_fail (GTK_IS_REVEALER (revealer));
 
+  if (priv->transition_type == transition)
+    return;
+
   priv->transition_type = transition;
   gtk_widget_queue_resize (GTK_WIDGET (revealer));
-  g_object_notify (G_OBJECT (revealer), "transition-type");
+  g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_TRANSITION_TYPE]);
 }
