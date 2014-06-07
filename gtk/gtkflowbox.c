@@ -740,8 +740,11 @@ enum {
   PROP_ACTIVATE_ON_SINGLE_CLICK,
 
   /* orientable */
-  PROP_ORIENTATION
+  PROP_ORIENTATION,
+  LAST_PROP = PROP_ORIENTATION
 };
+
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 typedef struct _GtkFlowBoxPrivate GtkFlowBoxPrivate;
 struct _GtkFlowBoxPrivate {
@@ -3552,9 +3555,15 @@ gtk_flow_box_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      priv->orientation = g_value_get_enum (value);
-      /* Re-box the children in the new orientation */
-      gtk_widget_queue_resize (GTK_WIDGET (box));
+      {
+        GtkOrientation orientation = g_value_get_enum (value);
+        if (priv->orientation != orientation)
+          {
+            priv->orientation = orientation;
+            /* Re-box the children in the new orientation */
+            gtk_widget_queue_resize (GTK_WIDGET (box));
+          }
+      }
       break;
     case PROP_HOMOGENEOUS:
       gtk_flow_box_set_homogeneous (box, g_value_get_boolean (value));
@@ -3650,14 +3659,13 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    *
    * The selection mode used by the flow  box.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SELECTION_MODE,
-                                   g_param_spec_enum ("selection-mode",
-                                                      P_("Selection mode"),
-                                                      P_("The selection mode"),
-                                                      GTK_TYPE_SELECTION_MODE,
-                                                      GTK_SELECTION_SINGLE,
-                                                      G_PARAM_READWRITE));
+  props[PROP_SELECTION_MODE] = 
+    g_param_spec_enum ("selection-mode",
+                       P_("Selection mode"),
+                       P_("The selection mode"),
+                       GTK_TYPE_SELECTION_MODE,
+                       GTK_SELECTION_SINGLE,
+                       G_PARAM_READWRITE);
 
   /**
    * GtkFlowBox:activate-on-single-click:
@@ -3665,13 +3673,12 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * Determines whether children can be activated with a single
    * click, or require a double-click.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ACTIVATE_ON_SINGLE_CLICK,
-                                   g_param_spec_boolean ("activate-on-single-click",
-                                                         P_("Activate on Single Click"),
-                                                         P_("Activate row on a single click"),
-                                                         TRUE,
-                                                         G_PARAM_READWRITE));
+  props[PROP_ACTIVATE_ON_SINGLE_CLICK] =
+    g_param_spec_boolean ("activate-on-single-click",
+                          P_("Activate on Single Click"),
+                          P_("Activate row on a single click"),
+                          TRUE,
+                          G_PARAM_READWRITE);
 
   /**
    * GtkFlowBox:homogeneous:
@@ -3679,13 +3686,12 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * Determines whether all children should be allocated the
    * same size.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_HOMOGENEOUS,
-                                   g_param_spec_boolean ("homogeneous",
-                                                         P_("Homogeneous"),
-                                                         P_("Whether the children should all be the same size"),
-                                                         FALSE,
-                                                         G_PARAM_READWRITE));
+  props[PROP_HOMOGENEOUS] = 
+    g_param_spec_boolean ("homogeneous",
+                          P_("Homogeneous"),
+                          P_("Whether the children should all be the same size"),
+                          FALSE,
+                          G_PARAM_READWRITE);
 
   /**
    * GtkFlowBox:min-children-per-line:
@@ -3697,16 +3703,13 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * that a reasonably small height will be requested
    * for the overall minimum width of the box.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MIN_CHILDREN_PER_LINE,
-                                   g_param_spec_uint ("min-children-per-line",
-                                                      P_("Minimum Children Per Line"),
-                                                      P_("The minimum number of children to allocate "
-                                                         "consecutively in the given orientation."),
-                                                      0,
-                                                      G_MAXUINT,
-                                                      0,
-                                                      G_PARAM_READWRITE));
+  props[PROP_MIN_CHILDREN_PER_LINE] =
+    g_param_spec_uint ("min-children-per-line",
+                       P_("Minimum Children Per Line"),
+                       P_("The minimum number of children to allocate "
+                       "consecutively in the given orientation."),
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE);
 
   /**
    * GtkFlowBox:max-children-per-line:
@@ -3714,46 +3717,39 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * The maximum amount of children to request space for consecutively
    * in the given orientation.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MAX_CHILDREN_PER_LINE,
-                                   g_param_spec_uint ("max-children-per-line",
-                                                      P_("Maximum Children Per Line"),
-                                                      P_("The maximum amount of children to request space for "
-                                                         "consecutively in the given orientation."),
-                                                      0,
-                                                      G_MAXUINT,
-                                                      DEFAULT_MAX_CHILDREN_PER_LINE,
-                                                      G_PARAM_READWRITE));
+  props[PROP_MAX_CHILDREN_PER_LINE] =
+    g_param_spec_uint ("max-children-per-line",
+                       P_("Maximum Children Per Line"),
+                       P_("The maximum amount of children to request space for "
+                          "consecutively in the given orientation."),
+                       0, G_MAXUINT, DEFAULT_MAX_CHILDREN_PER_LINE,
+                       G_PARAM_READWRITE);
 
   /**
    * GtkFlowBox:row-spacing:
    *
    * The amount of vertical space between two children.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ROW_SPACING,
-                                   g_param_spec_uint ("row-spacing",
-                                                      P_("Vertical spacing"),
-                                                      P_("The amount of vertical space between two children"),
-                                                      0,
-                                                      G_MAXUINT,
-                                                      0,
-                                                      G_PARAM_READWRITE));
+  props[PROP_ROW_SPACING] =
+    g_param_spec_uint ("row-spacing",
+                       P_("Vertical spacing"),
+                       P_("The amount of vertical space between two children"),
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE);
 
   /**
    * GtkFlowBox:column-spacing:
    *
    * The amount of horizontal space between two children.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_COLUMN_SPACING,
-                                   g_param_spec_uint ("column-spacing",
-                                                      P_("Horizontal spacing"),
-                                                      P_("The amount of horizontal space between two children"),
-                                                      0,
-                                                      G_MAXUINT,
-                                                      0,
-                                                      G_PARAM_READWRITE));
+  props[PROP_COLUMN_SPACING] =
+    g_param_spec_uint ("column-spacing",
+                       P_("Horizontal spacing"),
+                       P_("The amount of horizontal space between two children"),
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
    * GtkFlowBox::child-activated:
@@ -4211,7 +4207,7 @@ gtk_flow_box_set_homogeneous (GtkFlowBox *box,
     {
       BOX_PRIV (box)->homogeneous = homogeneous;
 
-      g_object_notify (G_OBJECT (box), "homogeneous");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_HOMOGENEOUS]);
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }
@@ -4237,7 +4233,7 @@ gtk_flow_box_set_row_spacing (GtkFlowBox *box,
       BOX_PRIV (box)->row_spacing = spacing;
 
       gtk_widget_queue_resize (GTK_WIDGET (box));
-      g_object_notify (G_OBJECT (box), "row-spacing");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_ROW_SPACING]);
     }
 }
 
@@ -4280,7 +4276,7 @@ gtk_flow_box_set_column_spacing (GtkFlowBox *box,
       BOX_PRIV (box)->column_spacing = spacing;
 
       gtk_widget_queue_resize (GTK_WIDGET (box));
-      g_object_notify (G_OBJECT (box), "column-spacing");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_COLUMN_SPACING]);
     }
 }
 
@@ -4323,7 +4319,7 @@ gtk_flow_box_set_min_children_per_line (GtkFlowBox *box,
       BOX_PRIV (box)->min_children_per_line = n_children;
 
       gtk_widget_queue_resize (GTK_WIDGET (box));
-      g_object_notify (G_OBJECT (box), "min-children-per-line");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_MIN_CHILDREN_PER_LINE]);
     }
 }
 
@@ -4370,7 +4366,7 @@ gtk_flow_box_set_max_children_per_line (GtkFlowBox *box,
       BOX_PRIV (box)->max_children_per_line = n_children;
 
       gtk_widget_queue_resize (GTK_WIDGET (box));
-      g_object_notify (G_OBJECT (box), "max-children-per-line");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_MAX_CHILDREN_PER_LINE]);
     }
 }
 
@@ -4413,7 +4409,7 @@ gtk_flow_box_set_activate_on_single_click (GtkFlowBox *box,
   if (BOX_PRIV (box)->activate_on_single_click != single)
     {
       BOX_PRIV (box)->activate_on_single_click = single;
-      g_object_notify (G_OBJECT (box), "activate-on-single-click");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_ACTIVATE_ON_SINGLE_CLICK]);
     }
 }
 
@@ -4635,7 +4631,7 @@ gtk_flow_box_set_selection_mode (GtkFlowBox       *box,
 
   BOX_PRIV (box)->selection_mode = mode;
 
-  g_object_notify (G_OBJECT (box), "selection-mode");
+  g_object_notify_by_pspec (G_OBJECT (box), props[PROP_SELECTION_MODE]);
 
   if (dirty)
     g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
