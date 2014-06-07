@@ -396,14 +396,14 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                        P_("The selection mode"),
                        GTK_TYPE_SELECTION_MODE,
                        GTK_SELECTION_SINGLE,
-                       G_PARAM_READWRITE);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_ACTIVATE_ON_SINGLE_CLICK] =
     g_param_spec_boolean ("activate-on-single-click",
                           P_("Activate on Single Click"),
                           P_("Activate row on a single click"),
                           TRUE,
-                          G_PARAM_READWRITE);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
