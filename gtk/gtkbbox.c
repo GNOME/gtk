@@ -209,7 +209,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                       P_("How to lay out the buttons in the box. Possible values are: spread, edge, start and end"),
                                                       GTK_TYPE_BUTTON_BOX_STYLE,
                                                       DEFAULT_LAYOUT_STYLE,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_SECONDARY,
