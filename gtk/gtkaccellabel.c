@@ -94,7 +94,8 @@
 enum {
   PROP_0,
   PROP_ACCEL_CLOSURE,
-  PROP_ACCEL_WIDGET
+  PROP_ACCEL_WIDGET,
+  LAST_PROP
 };
 
 struct _GtkAccelLabelPrivate
@@ -109,6 +110,8 @@ struct _GtkAccelLabelPrivate
   guint           accel_key;         /* manual accel key specification if != 0 */
   GdkModifierType accel_mods;
 };
+
+GParamSpec *props[LAST_PROP] = { NULL, };
 
 static void         gtk_accel_label_set_property (GObject            *object,
 						  guint               prop_id,
@@ -183,20 +186,21 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
 #endif /* GDK_WINDOWING_QUARTZ */
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACCEL_CLOSURE,
-                                   g_param_spec_boxed ("accel-closure",
-						       P_("Accelerator Closure"),
-						       P_("The closure to be monitored for accelerator changes"),
-						       G_TYPE_CLOSURE,
-						       GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACCEL_WIDGET,
-                                   g_param_spec_object ("accel-widget",
-                                                        P_("Accelerator Widget"),
-                                                        P_("The widget to be monitored for accelerator changes"),
-                                                        GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE));
+  props[PROP_ACCEL_CLOSURE] =
+    g_param_spec_boxed ("accel-closure",
+                        P_("Accelerator Closure"),
+                        P_("The closure to be monitored for accelerator changes"),
+                        G_TYPE_CLOSURE,
+                        GTK_PARAM_READWRITE);
+
+  props[PROP_ACCEL_WIDGET] =
+    g_param_spec_object ("accel-widget",
+                         P_("Accelerator Widget"),
+                         P_("The widget to be monitored for accelerator changes"),
+                         GTK_TYPE_WIDGET,
+                         GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, props);
 }
 
 static void
@@ -485,7 +489,7 @@ accel_widget_weak_ref_cb (GtkAccelLabel *accel_label,
                                         refetch_widget_accel_closure,
                                         accel_label);
   accel_label->priv->accel_widget = NULL;
-  g_object_notify (G_OBJECT (accel_label), "accel-widget");
+  g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_ACCEL_WIDGET]);
 }
 
 /**
@@ -524,7 +528,7 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
                                    accel_label, G_CONNECT_SWAPPED);
           refetch_widget_accel_closure (accel_label);
         }
-      g_object_notify (G_OBJECT (accel_label), "accel-widget");
+      g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_ACCEL_WIDGET]);
     }
 }
 
@@ -587,7 +591,7 @@ gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 				   accel_label, 0);
 	}
       gtk_accel_label_reset (accel_label);
-      g_object_notify (G_OBJECT (accel_label), "accel-closure");
+      g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_ACCEL_CLOSURE]);
     }
 }
 
