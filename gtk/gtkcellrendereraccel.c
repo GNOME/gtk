@@ -148,7 +148,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkCellRendererAccel:accel-mods:
@@ -164,7 +164,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                                        P_("The modifier mask of the accelerator"),
                                                        GDK_TYPE_MODIFIER_TYPE,
                                                        0,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererAccel:keycode:
@@ -183,7 +183,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererAccel:accel-mode:
@@ -202,7 +202,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                                       P_("The type of accelerators"),
                                                       GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
                                                       GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkCellRendererAccel::accel-edited:
@@ -353,6 +353,7 @@ gtk_cell_renderer_accel_set_property  (GObject      *object,
           {
             priv->accel_key = accel_key;
             changed = TRUE;
+            g_object_notify (object, "accel-key");
           }
       }
       break;
@@ -365,6 +366,7 @@ gtk_cell_renderer_accel_set_property  (GObject      *object,
           {
             priv->accel_mods = accel_mods;
             changed = TRUE;
+            g_object_notify (object, "accel-mods");
           }
       }
       break;
@@ -376,12 +378,17 @@ gtk_cell_renderer_accel_set_property  (GObject      *object,
           {
             priv->keycode = keycode;
             changed = TRUE;
+            g_object_notify (object, "keycode");
           }
       }
       break;
 
     case PROP_ACCEL_MODE:
-      priv->accel_mode = g_value_get_enum (value);
+      if (priv->accel_mode != g_value_get_enum (value))
+        {
+          priv->accel_mode = g_value_get_enum (value);
+          g_object_notify (object, "accel-mode");
+        }
       break;
       
     default:
