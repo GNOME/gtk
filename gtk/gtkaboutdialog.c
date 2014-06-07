@@ -2442,7 +2442,7 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
   g_return_if_fail (license_type >= GTK_LICENSE_UNKNOWN &&
-                    license_type <= GTK_LICENSE_ARTISTIC);
+                    license_type <= GTK_LICENSE_LGPL_3_0_ONLY);
 
   priv = about->priv;
 
