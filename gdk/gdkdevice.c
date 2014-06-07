@@ -190,7 +190,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                                                       GDK_TYPE_INPUT_SOURCE,
                                                       GDK_SOURCE_MOUSE,
                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                      G_PARAM_STATIC_STRINGS));
+                                                      G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GdkDevice:input-mode:
    *
@@ -205,7 +205,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                                                       P_("Input mode for the device"),
                                                       GDK_TYPE_INPUT_MODE,
                                                       GDK_MODE_DISABLED,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GdkDevice:has-cursor:
    *
