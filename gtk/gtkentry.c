@@ -2345,7 +2345,11 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_POPULATE_ALL:
-      entry->priv->populate_all = g_value_get_boolean (value);
+      if (entry->priv->populate_all != g_value_get_boolean (value))
+        {
+          entry->priv->populate_all = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     case PROP_TABS:
