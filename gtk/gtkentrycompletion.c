@@ -334,7 +334,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkEntryCompletion:text-column:
    *
@@ -351,7 +351,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntryCompletion:inline-completion:
@@ -369,7 +369,8 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                          P_("Inline completion"),
                                                          P_("Whether the common prefix should be inserted automatically"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkEntryCompletion:popup-completion:
    *
@@ -384,7 +385,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                          P_("Popup completion"),
                                                          P_("Whether the completions should be shown in a popup window"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntryCompletion:popup-set-width:
@@ -400,7 +401,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                          P_("Popup set width"),
                                                          P_("If TRUE, the popup window will have the same size as the entry"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntryCompletion:popup-single-match:
@@ -418,7 +419,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                          P_("Popup single match"),
                                                          P_("If TRUE, the popup window will appear for a single match."),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkEntryCompletion:inline-selection:
    *
@@ -433,7 +434,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                          P_("Inline selection"),
                                                          P_("Your description here"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -653,7 +654,7 @@ gtk_entry_completion_set_property (GObject      *object,
         break;
 
       case PROP_TEXT_COLUMN:
-        priv->text_column = g_value_get_int (value);
+        gtk_entry_completion_set_text_column (completion, g_value_get_int (value));
         break;
 
       case PROP_INLINE_COMPLETION:
@@ -1407,6 +1408,9 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
 
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (column >= 0);
+
+  if (completion->priv->text_column == column)
+    return;
 
   completion->priv->text_column = column;
 
