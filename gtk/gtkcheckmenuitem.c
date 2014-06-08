@@ -122,7 +122,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          P_("Active"),
                                                          P_("Whether the menu item is checked"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_INCONSISTENT,
@@ -130,7 +130,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          P_("Inconsistent"),
                                                          P_("Whether to display an \"inconsistent\" state"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_AS_RADIO,
@@ -138,7 +138,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          P_("Draw as radio menu item"),
                                                          P_("Whether the menu item looks like a radio menu item"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("indicator-size",
@@ -649,7 +649,6 @@ gtk_check_menu_item_set_property (GObject      *object,
       break;
     }
 }
-
 
 /* Private */
 
