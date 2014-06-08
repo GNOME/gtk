@@ -185,7 +185,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 							 P_("Active"),
 							 P_("If the toggle button should be pressed in"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INCONSISTENT,
@@ -193,7 +193,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 							 P_("Inconsistent"),
 							 P_("If the toggle button is in an \"in between\" state"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_INDICATOR,
@@ -201,7 +201,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 							 P_("Draw Indicator"),
 							 P_("If the toggle part of the button is displayed"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkToggleButton::toggled:
@@ -478,7 +478,10 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
   is_active = is_active != FALSE;
 
   if (priv->active != is_active)
-    gtk_button_clicked (GTK_BUTTON (toggle_button));
+    {
+      gtk_button_clicked (GTK_BUTTON (toggle_button));
+      g_object_notify (G_OBJECT (toggle_button), "active");
+    }
 }
 
 void
