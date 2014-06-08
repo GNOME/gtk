@@ -277,7 +277,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                          P_("Single Paragraph Mode"),
                                                          P_("Whether to keep all text in a single paragraph"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   
   g_object_class_install_property (object_class,
@@ -519,7 +519,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							 "to display the entire string"),
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererText:width-chars:
@@ -538,7 +538,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
 
   /**
@@ -563,7 +563,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkCellRendererText:wrap-mode:
@@ -583,7 +583,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							 "to display the entire string"),
 						      PANGO_TYPE_WRAP_MODE,
 						      PANGO_WRAP_CHAR,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererText:wrap-width:
@@ -602,7 +602,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererText:alignment:
@@ -1230,7 +1230,11 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;
 
     case PROP_SINGLE_PARAGRAPH_MODE:
-      priv->single_paragraph = g_value_get_boolean (value);
+      if (priv->single_paragraph != g_value_get_boolean (value))
+        {
+          priv->single_paragraph = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
       
     case PROP_BACKGROUND:
@@ -1453,19 +1457,35 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;
       
     case PROP_WRAP_MODE:
-      priv->wrap_mode = g_value_get_enum (value);
+      if (priv->wrap_mode != g_value_get_enum (value))
+        {
+          priv->wrap_mode = g_value_get_enum (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
       
     case PROP_WRAP_WIDTH:
-      priv->wrap_width = g_value_get_int (value);
+      if (priv->wrap_width != g_value_get_int (value))
+        {
+          priv->wrap_width = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
             
     case PROP_WIDTH_CHARS:
-      priv->width_chars = g_value_get_int (value);
+      if (priv->width_chars != g_value_get_int (value))
+        {
+          priv->width_chars  = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;  
 
     case PROP_MAX_WIDTH_CHARS:
-      priv->max_width_chars = g_value_get_int (value);
+      if (priv->max_width_chars != g_value_get_int (value))
+        {
+          priv->max_width_chars  = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;  
 
     case PROP_ALIGN:
