@@ -166,8 +166,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                                                         P_("Label"),
                                                         P_("Text of the frame's label"),
                                                         NULL,
-                                                        GTK_PARAM_READABLE |
-							GTK_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL_XALIGN,
 				   g_param_spec_float ("label-xalign",
@@ -176,7 +175,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 						       0.0,
 						       1.0,
 						       0.0,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL_YALIGN,
 				   g_param_spec_float ("label-yalign",
@@ -185,7 +184,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow-type",
@@ -193,7 +192,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                                                       P_("Appearance of the frame border"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_ETCHED_IN,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL_WIDGET,
@@ -607,14 +606,12 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
     {
       widget = GTK_WIDGET (frame);
       priv->shadow_type = type;
-      g_object_notify (G_OBJECT (frame), "shadow-type");
 
       if (gtk_widget_is_drawable (widget))
-	{
-	  gtk_widget_queue_draw (widget);
-	}
+	gtk_widget_queue_draw (widget);
       
       gtk_widget_queue_resize (widget);
+      g_object_notify (G_OBJECT (frame), "shadow-type");
     }
 }
 
