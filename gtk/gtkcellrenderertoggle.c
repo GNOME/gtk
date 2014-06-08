@@ -137,7 +137,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 P_("Toggle state"),
 							 P_("The toggle state of the button"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 		                   PROP_INCONSISTENT,
@@ -145,7 +145,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 					                 P_("Inconsistent state"),
 							 P_("The inconsistent state of the button"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (object_class,
 				   PROP_ACTIVATABLE,
@@ -153,7 +153,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 P_("Activatable"),
 							 P_("The toggle button can be activated"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_RADIO,
@@ -161,7 +161,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 P_("Radio state"),
 							 P_("Draw the toggle button as a radio button"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_INDICATOR_SIZE,
@@ -171,7 +171,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 						     0,
 						     G_MAXINT,
 						     TOGGLE_WIDTH,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   
   /**
@@ -244,16 +244,50 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_ACTIVE:
-      priv->active = g_value_get_boolean (value);
+      if (priv->active != g_value_get_boolean (value))
+        {
+          priv->active = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_INCONSISTENT:
-      priv->inconsistent = g_value_get_boolean (value);
+      if (priv->inconsistent != g_value_get_boolean (value))
+        {
+          priv->inconsistent = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_ACTIVATABLE:
-      priv->activatable = g_value_get_boolean (value);
+      if (priv->activatable != g_value_get_boolean (value))
+        {
+          priv->activatable = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_RADIO:
-      priv->radio = g_value_get_boolean (value);
+      if (priv->radio != g_value_get_boolean (value))
+        {
+          priv->radio = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+    case PROP_INDICATOR_SIZE:
+      if (priv->indicator_size != g_value_get_int (value))
+        {
+          priv->indicator_size = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+/**
+ * gtk_cell_renderer_toggle_new:
+ *
+ * Creates a new #GtkCellRendererToggle. Adjust rendering
       break;
     case PROP_INDICATOR_SIZE:
       priv->indicator_size = g_value_get_int (value);
