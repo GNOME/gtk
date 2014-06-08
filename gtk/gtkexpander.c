@@ -267,7 +267,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          P_("Expanded"),
                                                          P_("Whether the expander has been opened to reveal the child widget"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL,
@@ -275,7 +275,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                         P_("Label"),
                                                         P_("Text of the expander's label"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (gobject_class,
                                    PROP_USE_UNDERLINE,
@@ -283,7 +283,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          P_("Use underline"),
                                                          P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_USE_MARKUP,
@@ -291,7 +291,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          P_("Use markup"),
                                                          P_("The text of the label includes XML markup. See pango_parse_markup()"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_SPACING,
@@ -301,7 +301,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL_WIDGET,
@@ -317,7 +317,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          P_("Label fill"),
                                                          P_("Whether the label widget should fill all available horizontal space"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkExpander:resize-toplevel:
@@ -333,7 +333,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          P_("Resize toplevel"),
                                                          P_("Whether the expander will resize the toplevel window upon expanding and collapsing"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("expander-size",
