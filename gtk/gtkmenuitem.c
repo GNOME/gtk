@@ -397,7 +397,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                          P_("Right Justified"),
                                                          P_("Sets whether the menu item appears justified at the right side of a menu bar"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   /**
    * GtkMenuItem:submenu:
@@ -461,7 +461,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                             "the next character should be used for the "
                                                             "mnemonic accelerator key"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
@@ -650,6 +650,7 @@ gtk_menu_item_do_set_right_justified (GtkMenuItem *menu_item,
     {
       priv->right_justify = right_justified;
       gtk_widget_queue_resize (GTK_WIDGET (menu_item));
+      g_object_notify (G_OBJECT (menu_item), "right-justified");
     }
 }
 
@@ -2573,10 +2574,10 @@ gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
   gtk_menu_item_ensure_label (menu_item);
 
   child = gtk_bin_get_child (GTK_BIN (menu_item));
-  if (GTK_IS_LABEL (child))
+  if (GTK_IS_LABEL (child) &&
+      gtk_label_get_use_underline (GTK_LABEL (child)) != setting)
     {
       gtk_label_set_use_underline (GTK_LABEL (child), setting);
-
       g_object_notify (G_OBJECT (menu_item), "use-underline");
     }
 }
