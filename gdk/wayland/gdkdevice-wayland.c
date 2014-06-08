@@ -1289,7 +1289,7 @@ _create_touch_event (GdkWaylandDeviceData *device,
   event->touch.time = time;
   event->touch.state = device->modifiers;
   gdk_event_set_screen (event, display->screen);
-  event->touch.sequence = GUINT_TO_POINTER (touch->id);
+  event->touch.sequence = GUINT_TO_POINTER (touch->id + 1);
 
   if (touch->initial_touch)
     {
