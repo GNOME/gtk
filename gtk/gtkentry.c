@@ -9328,6 +9328,9 @@ gtk_entry_set_icon_tooltip_markup (GtkEntry             *entry,
   icon_info->tooltip = g_strdup (tooltip);
 
   ensure_has_tooltip (entry);
+
+  g_object_notify (G_OBJECT (entry),
+                   icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-tooltip-markup" : "secondary-icon-tooltip-markup");
 }
 
 static gboolean
