@@ -104,7 +104,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           P_("Show preview text entry"),
                           P_("Whether the preview text entry is shown or not"),
                           TRUE,
-                          GTK_PARAM_READWRITE));
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkFontChooser::font-activated:
