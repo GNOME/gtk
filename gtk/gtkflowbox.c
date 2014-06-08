@@ -3555,15 +3555,13 @@ gtk_flow_box_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      {
-        GtkOrientation orientation = g_value_get_enum (value);
-        if (priv->orientation != orientation)
-          {
-            priv->orientation = orientation;
-            /* Re-box the children in the new orientation */
-            gtk_widget_queue_resize (GTK_WIDGET (box));
-          }
-      }
+      if (priv->orientation != g_value_get_enum (value))
+        {
+          priv->orientation = g_value_get_enum (value);
+          /* Re-box the children in the new orientation */
+          gtk_widget_queue_resize (GTK_WIDGET (box));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_HOMOGENEOUS:
       gtk_flow_box_set_homogeneous (box, g_value_get_boolean (value));
