@@ -185,7 +185,11 @@ gtk_color_chooser_dialog_set_property (GObject      *object,
       gtk_color_chooser_set_rgba (cc, g_value_get_boxed (value));
       break;
     case PROP_USE_ALPHA:
-      gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (cd->priv->chooser), g_value_get_boolean (value));
+      if (gtk_color_chooser_get_use_alpha (GTK_COLOR_CHOOSER (cd->priv->chooser)) != g_value_get_boolean (value))
+        {
+          gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (cd->priv->chooser), g_value_get_boolean (value));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_SHOW_EDITOR:
       g_object_set (cd->priv->chooser,
