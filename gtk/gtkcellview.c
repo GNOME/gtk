@@ -298,7 +298,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							  P_("Whether to force cells to be drawn in a "
 							     "sensitive state"),
 							  FALSE,
-							  GTK_PARAM_READWRITE));
+							  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellView:fit-model:
@@ -317,7 +317,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							  P_("Whether to request enough space for "
 							     "every row in the model"),
 							  FALSE,
-							  GTK_PARAM_READWRITE));
+							  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
