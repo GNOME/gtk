@@ -143,7 +143,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
 						      P_("Digits"),
 						      P_("The number of decimal places to display"),
 						      0, 20, 0,
-						      GTK_PARAM_READWRITE));  
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY)); 
 }
 
 static void
@@ -232,7 +232,11 @@ gtk_cell_renderer_spin_set_property (GObject      *object,
       priv->climb_rate = g_value_get_double (value);
       break;
     case PROP_DIGITS:
-      priv->digits = g_value_get_uint (value);
+      if (priv->digits != g_value_get_uint (value))
+        {
+          priv->digits = g_value_get_uint (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
