@@ -137,7 +137,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 						     P_("Value"),
 						     P_("Value of the progress bar"),
 						     0, 100, 0,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererProgress:text:
@@ -179,7 +179,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                                      P_("Pulse"),
                                                      P_("Set this to positive values to indicate that some progress is made, but you don't know how much."),
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererProgress:text-xalign:
@@ -225,7 +225,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                                          P_("Inverted"),
                                                          P_("Invert the direction in which the progress bar grows"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
@@ -280,9 +280,9 @@ gtk_cell_renderer_progress_finalize (GObject *object)
 }
 
 static void
-gtk_cell_renderer_progress_get_property (GObject *object,
-					 guint param_id,
-					 GValue *value,
+gtk_cell_renderer_progress_get_property (GObject    *object,
+					 guint       param_id,
+					 GValue     *value,
 					 GParamSpec *pspec)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (object);
@@ -317,8 +317,8 @@ gtk_cell_renderer_progress_get_property (GObject *object,
 }
 
 static void
-gtk_cell_renderer_progress_set_property (GObject *object,
-					 guint param_id,
+gtk_cell_renderer_progress_set_property (GObject      *object,
+					 guint         param_id,
 					 const GValue *value,
 					 GParamSpec   *pspec)
 {
@@ -346,10 +346,18 @@ gtk_cell_renderer_progress_set_property (GObject *object,
       priv->text_yalign = g_value_get_float (value);
       break;
     case PROP_ORIENTATION:
-      priv->orientation = g_value_get_enum (value);
+      if (priv->orientation != g_value_get_enum (value))
+        {
+          priv->orientation = g_value_get_enum (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_INVERTED:
-      priv->inverted = g_value_get_boolean (value);
+      if (priv->inverted != g_value_get_boolean (value))
+        {
+          priv->inverted = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -377,9 +385,12 @@ static void
 gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress, 
 				      gint                     value)
 {
-  cellprogress->priv->value = value;
-
-  recompute_label (cellprogress);
+  if (cellprogress->priv->value != value)
+    {
+      cellprogress->priv->value = value;
+      recompute_label (cellprogress);
+      g_object_notify (G_OBJECT (cellprogress), "value");
+    }
 }
 
 static void
@@ -391,27 +402,27 @@ gtk_cell_renderer_progress_set_text (GtkCellRendererProgress *cellprogress,
   new_text = g_strdup (text);
   g_free (cellprogress->priv->text);
   cellprogress->priv->text = new_text;
-
   recompute_label (cellprogress);
+  g_object_notify (G_OBJECT (cellprogress), "text");
 }
 
 static void
 gtk_cell_renderer_progress_set_pulse (GtkCellRendererProgress *cellprogress, 
 				      gint                     pulse)
 {
-   GtkCellRendererProgressPrivate *priv = cellprogress->priv;
+  GtkCellRendererProgressPrivate *priv = cellprogress->priv;
 
-   if (pulse != priv->pulse)
-     {
-       if (pulse <= 0)
-         priv->offset = 0;
-       else
-         priv->offset = pulse;
-     }
+  if (pulse != priv->pulse)
+    {
+      if (pulse <= 0)
+        priv->offset = 0;
+      else
+        priv->offset = pulse;
+      g_object_notify (G_OBJECT (cellprogress), "pulse");
+    }
 
-   priv->pulse = pulse;
-
-   recompute_label (cellprogress);
+  priv->pulse = pulse;
+  recompute_label (cellprogress);
 }
 
 static void
