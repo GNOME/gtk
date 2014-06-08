@@ -378,7 +378,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
                                                      P_("Maximum length"),
                                                      P_("Maximum number of characters for this entry. Zero if no maximum"),
                                    0, GTK_ENTRY_BUFFER_MAX_SIZE, 0,
-                                   GTK_PARAM_READWRITE));
+                                   GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEntryBuffer::inserted-text:
@@ -577,6 +577,9 @@ gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
   g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
 
   max_length = CLAMP (max_length, 0, GTK_ENTRY_BUFFER_MAX_SIZE);
+
+  if (buffer->priv->max_length == max_length)
+    return;
 
   if (max_length > 0 && gtk_entry_buffer_get_length (buffer) > max_length)
     gtk_entry_buffer_delete_text (buffer, max_length, -1);
