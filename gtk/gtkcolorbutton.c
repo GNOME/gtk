@@ -171,7 +171,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                    g_param_spec_boolean ("use-alpha", P_("Use alpha"),
                                                          P_("Whether to give the color an alpha value"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkColorButton:title:
