@@ -114,14 +114,14 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
                                                         P_("Visible Window"),
                                                         P_("Whether the event box is visible, as opposed to invisible and only used to trap events."),
                                                         TRUE,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_ABOVE_CHILD,
                                    g_param_spec_boolean ("above-child",
                                                         P_("Above child"),
                                                         P_("Whether the event-trapping window of the eventbox is above the window of the child widget as opposed to below it."),
                                                         FALSE,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
