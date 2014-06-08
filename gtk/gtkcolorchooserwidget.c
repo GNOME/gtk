@@ -228,6 +228,9 @@ gtk_color_chooser_widget_set_use_alpha (GtkColorChooserWidget *cc,
   GtkWidget *swatch;
   GtkWidget *grid;
 
+  if (cc->priv->use_alpha == use_alpha)
+    return;
+
   cc->priv->use_alpha = use_alpha;
   gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (cc->priv->editor), use_alpha);
 
@@ -250,6 +253,7 @@ gtk_color_chooser_widget_set_use_alpha (GtkColorChooserWidget *cc,
   g_list_free (palettes);
 
   gtk_widget_queue_draw (GTK_WIDGET (cc));
+  g_object_notify (G_OBJECT (cc), "use-alpha");
 }
 
 static void
