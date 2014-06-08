@@ -1050,11 +1050,13 @@ gtk_cell_area_box_set_property (GObject       *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      box->priv->orientation = g_value_get_enum (value);
-
-      /* Notify that size needs to be requested again */
-      reset_contexts (box);
-
+      if (box->priv->orientation != g_value_get_enum (value))
+        {
+          box->priv->orientation = g_value_get_enum (value);
+          /* Notify that size needs to be requested again */
+          reset_contexts (box);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_SPACING:
       gtk_cell_area_box_set_spacing (box, g_value_get_int (value));
