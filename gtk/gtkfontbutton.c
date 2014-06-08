@@ -441,8 +441,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                         P_("Title"),
                                                         P_("The title of the font chooser dialog"),
                                                         _("Pick a Font"),
-                                                        (GTK_PARAM_READABLE |
-                                                         GTK_PARAM_WRITABLE)));
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkFontButton:font-name:
@@ -457,8 +456,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                         P_("Font name"),
                                                         P_("The name of the selected font"),
                                                         P_("Sans 12"),
-                                                        (GTK_PARAM_READABLE |
-                                                         GTK_PARAM_WRITABLE)));
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkFontButton:use-font:
