@@ -286,7 +286,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      P_("Editable mode of the CellRenderer"),
 						      GTK_TYPE_CELL_RENDERER_MODE,
 						      GTK_CELL_RENDERER_MODE_INERT,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
@@ -294,14 +294,14 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 P_("visible"),
 							 P_("Display the cell"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
 							 P_("Sensitive"),
 							 P_("Display the cell sensitive"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_XALIGN,
@@ -311,7 +311,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_YALIGN,
@@ -321,7 +321,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_XPAD,
@@ -331,7 +331,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      0,
 						      G_MAXUINT,
 						      0,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_YPAD,
@@ -341,7 +341,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      0,
 						      G_MAXUINT,
 						      0,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_WIDTH,
@@ -351,7 +351,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_HEIGHT,
@@ -361,7 +361,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDER,
@@ -369,7 +369,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 P_("Is Expander"),
 							 P_("Row has children"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   g_object_class_install_property (object_class,
@@ -378,7 +378,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 P_("Is Expanded"),
 							 P_("Row is an expander row, and is expanded"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND,
@@ -402,7 +402,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 						       P_("Cell background color"),
 						       P_("Cell background color as a GdkColor"),
 						       GDK_TYPE_COLOR,
-						       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+						       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 G_GNUC_END_IGNORE_DEPRECATIONS
   /**
    * GtkCellRenderer:cell-background-rgba:
@@ -428,7 +428,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							 GTK_PARAM_READABLE));
 
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
+#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY))
 
   ADD_SET_PROP ("cell-background-set", PROP_CELL_BACKGROUND_SET,
                 P_("Cell background set"),
@@ -563,40 +563,81 @@ gtk_cell_renderer_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_MODE:
-      priv->mode = g_value_get_enum (value);
+      if (priv->mode != g_value_get_enum (value))
+        {
+          priv->mode = g_value_get_enum (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_VISIBLE:
-      priv->visible = g_value_get_boolean (value);
+      if (priv->visible != g_value_get_boolean (value))
+        {
+          priv->visible = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_SENSITIVE:
-      priv->sensitive = g_value_get_boolean (value);
-      break;
-    case PROP_EDITING:
-      priv->editing = g_value_get_boolean (value);
+      if (priv->sensitive != g_value_get_boolean (value))
+        {
+          priv->sensitive = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_XALIGN:
-      priv->xalign = g_value_get_float (value);
+      if (priv->xalign != g_value_get_float (value))
+        {
+          priv->xalign = g_value_get_float (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_YALIGN:
-      priv->yalign = g_value_get_float (value);
+      if (priv->yalign != g_value_get_float (value))
+        {
+          priv->yalign = g_value_get_float (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_XPAD:
-      priv->xpad = g_value_get_uint (value);
+      if (priv->xpad != g_value_get_uint (value))
+        {
+          priv->xpad = g_value_get_uint (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_YPAD:
-      priv->ypad = g_value_get_uint (value);
+      if (priv->ypad != g_value_get_uint (value))
+        {
+          priv->ypad = g_value_get_uint (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_WIDTH:
-      priv->width = g_value_get_int (value);
+      if (priv->width != g_value_get_int (value))
+        {
+          priv->width = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_HEIGHT:
-      priv->height = g_value_get_int (value);
+      if (priv->height != g_value_get_int (value))
+        {
+          priv->height = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_IS_EXPANDER:
-      priv->is_expander = g_value_get_boolean (value);
+      if (priv->is_expander != g_value_get_boolean (value))
+        {
+          priv->is_expander = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_IS_EXPANDED:
-      priv->is_expanded = g_value_get_boolean (value);
+      if (priv->is_expanded != g_value_get_boolean (value))
+        {
+          priv->is_expanded = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_CELL_BACKGROUND:
       {
@@ -609,7 +650,7 @@ gtk_cell_renderer_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (object, "cell-background-gdk");
+        g_object_notify (object, "cell-background");
       }
       break;
     case PROP_CELL_BACKGROUND_GDK:
@@ -632,13 +673,18 @@ gtk_cell_renderer_set_property (GObject      *object,
           {
             set_cell_bg_color (cell, NULL);
           }
+        g_object_notify (object, "cell-background-gdk");
       }
       break;
     case PROP_CELL_BACKGROUND_RGBA:
       set_cell_bg_color (cell, g_value_get_boxed (value));
       break;
     case PROP_CELL_BACKGROUND_SET:
-      priv->cell_background_set = g_value_get_boolean (value);
+      if (priv->cell_background_set != g_value_get_boolean (value))
+        {
+          priv->cell_background_set = g_value_get_boolean (value);
+          g_object_notify (object, "cell-background-set");
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -670,6 +716,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
 	  g_object_notify (G_OBJECT (cell), "cell-background-set");
 	}
     }
+  g_object_notify (G_OBJECT (cell), "cell-background-rgba");
 }
 
 /**
