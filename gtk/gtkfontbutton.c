@@ -272,10 +272,15 @@ gtk_font_button_set_show_preview_entry (GtkFontButton *font_button,
 {
   GtkFontButtonPrivate *priv = font_button->priv;
 
-  if (priv->font_dialog)
-    gtk_font_chooser_set_show_preview_entry (GTK_FONT_CHOOSER (priv->font_dialog), show);
-  else
-    priv->show_preview_entry = show != FALSE;
+  show = show != FALSE;
+
+  if (priv->show_preview_entry != show)
+    {
+      priv->show_preview_entry = show;
+      if (priv->font_dialog)
+        gtk_font_chooser_set_show_preview_entry (GTK_FONT_CHOOSER (priv->font_dialog), show);
+      g_object_notify (G_OBJECT (font_button), "show-preview-entry");
+    }
 }
 
 static PangoFontFamily *
