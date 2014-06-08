@@ -153,7 +153,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /** 
    * GtkCellRendererCombo:has-entry:
@@ -169,7 +169,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 							 P_("Has Entry"),
 							 P_("If FALSE, don't allow to enter strings other than the chosen ones"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -303,10 +303,18 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
         break;
       }
     case PROP_TEXT_COLUMN:
-      priv->text_column = g_value_get_int (value);
+      if (priv->text_column != g_value_get_int (value))
+        {
+          priv->text_column = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_HAS_ENTRY:
-      priv->has_entry = g_value_get_boolean (value);
+      if (priv->has_entry != g_value_get_boolean (value))
+        {
+          priv->has_entry = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
