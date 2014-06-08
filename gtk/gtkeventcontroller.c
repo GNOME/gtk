@@ -171,7 +171,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                       P_("Propagation phase at which this controller is run"),
                                                       GTK_TYPE_PROPAGATION_PHASE,
                                                       GTK_PHASE_NONE,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
