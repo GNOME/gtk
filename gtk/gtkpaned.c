@@ -331,22 +331,54 @@ gtk_paned_class_init (GtkPanedClass *class)
                                     "orientation");
 
   g_object_class_install_property (object_class,
-				   PROP_POSITION,
-				   g_param_spec_int ("position",
-						     P_("Position"),
-						     P_("Position of paned separator in pixels (0 means all the way to the left/top)"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   PROP_POSITION,
+                                   g_param_spec_int ("position",
+                                                     P_("Position"),
+                                                     P_("Position of paned separator in pixels (0 means all the way to the left/top)"),
+                                                     0, G_MAXINT, 0,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
-				   PROP_POSITION_SET,
-				   g_param_spec_boolean ("position-set",
-							 P_("Position Set"),
-							 P_("TRUE if the Position property should be used"),
-							 FALSE,
-							 GTK_PARAM_READWRITE));
+                                   PROP_POSITION_SET,
+                                   g_param_spec_boolean ("position-set",
+                                                         P_("Position Set"),
+                                                         P_("TRUE if the Position property should be used"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkPaned:min-position:
+   *
+   * The smallest possible value for the position property.
+   * This property is derived from the size and shrinkability
+   * of the widget's children.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_MIN_POSITION,
+                                   g_param_spec_int ("min-position",
+                                                     P_("Minimal Position"),
+                                                     P_("Smallest possible value for the \"position\" property"),
+                                                     0, G_MAXINT, 0,
+                                                     GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkPaned:max-position:
+   *
+   * The largest possible value for the position property.
+   * This property is derived from the size and shrinkability
+   * of the widget's children.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_MAX_POSITION,
+                                   g_param_spec_int ("max-position",
+                                                     P_("Maximal Position"),
+                                                     P_("Largest possible value for the \"position\" property"),
+                                                     0, G_MAXINT, G_MAXINT,
+                                                     GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("handle-size",
@@ -356,41 +388,6 @@ gtk_paned_class_init (GtkPanedClass *class)
 							     G_MAXINT,
 							     5,
 							     GTK_PARAM_READABLE));
-  /**
-   * GtkPaned:min-position:
-   *
-   * The smallest possible value for the position property. This property is derived from the
-   * size and shrinkability of the widget's children.
-   *
-   * Since: 2.4
-   */
-  g_object_class_install_property (object_class,
-				   PROP_MIN_POSITION,
-				   g_param_spec_int ("min-position",
-						     P_("Minimal Position"),
-						     P_("Smallest possible value for the \"position\" property"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READABLE));
-
-  /**
-   * GtkPaned:max-position:
-   *
-   * The largest possible value for the position property. This property is derived from the
-   * size and shrinkability of the widget's children.
-   *
-   * Since: 2.4
-   */
-  g_object_class_install_property (object_class,
-				   PROP_MAX_POSITION,
-				   g_param_spec_int ("max-position",
-						     P_("Maximal Position"),
-						     P_("Largest possible value for the \"position\" property"),
-						     0,
-						     G_MAXINT,
-						     G_MAXINT,
-						     GTK_PARAM_READABLE));
 
   /**
    * GtkPaned:resize:
@@ -818,32 +815,40 @@ gtk_paned_set_property (GObject        *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      priv->orientation = g_value_get_enum (value);
-      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
-
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (priv->orientation != g_value_get_enum (value))
         {
-          priv->cursor_type = GDK_SB_H_DOUBLE_ARROW;
-          gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                           GTK_ORIENTATION_HORIZONTAL);
-        }
-      else
-        {
-          priv->cursor_type = GDK_SB_V_DOUBLE_ARROW;
-          gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                           GTK_ORIENTATION_VERTICAL);
-        }
+          priv->orientation = g_value_get_enum (value);
+          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
 
-      /* state_flags_changed updates the cursor */
-      gtk_paned_state_flags_changed (GTK_WIDGET (paned), 0);
-      gtk_widget_queue_resize (GTK_WIDGET (paned));
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              priv->cursor_type = GDK_SB_H_DOUBLE_ARROW;
+              gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
+                                               GTK_ORIENTATION_HORIZONTAL);
+            }
+          else
+            {
+              priv->cursor_type = GDK_SB_V_DOUBLE_ARROW;
+              gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
+                                               GTK_ORIENTATION_VERTICAL);
+            }
+
+          /* state_flags_changed updates the cursor */
+          gtk_paned_state_flags_changed (GTK_WIDGET (paned), 0);
+          gtk_widget_queue_resize (GTK_WIDGET (paned));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_POSITION:
       gtk_paned_set_position (paned, g_value_get_int (value));
       break;
     case PROP_POSITION_SET:
-      priv->position_set = g_value_get_boolean (value);
-      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (paned));
+      if (priv->position_set != g_value_get_boolean (value))
+        {
+          priv->position_set = g_value_get_boolean (value);
+          gtk_widget_queue_resize_no_redraw (GTK_WIDGET (paned));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
