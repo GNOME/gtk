@@ -1378,11 +1378,6 @@ atk_editable_text_interface_init (AtkEditableTextIface *iface)
   iface->set_run_attributes = NULL;
 }
 
-/* We connect to GtkEditable::insert-text, since it carries
- * the information we need. But we delay emitting our own
- * text_changed::insert signal until the entry has update
- * all its internal state and emits GtkEntry::changed.
- */
 static void
 insert_text_cb (GtkEditable *editable,
                 gchar       *new_text,
