@@ -30,6 +30,7 @@
 #include "gtkentry.h"
 #include "gtkentryprivate.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtksearchbar.h"
 
@@ -406,7 +407,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                  P_("Search Mode Enabled"),
                                                                  P_("Whether the search mode is on and the search bar shown"),
                                                                  FALSE,
-                                                                 G_PARAM_READWRITE);
+                                                                 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkEntry:show-close-button:
@@ -417,7 +418,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                P_("Show Close Button"),
                                                                P_("Whether to show the close button in the toolbar"),
                                                                FALSE,
-                                                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                                                               GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, widget_props);
 
@@ -585,5 +586,11 @@ gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
 
   g_return_if_fail (GTK_IS_SEARCH_BAR (bar));
 
-  gtk_widget_set_visible (priv->close_button, visible);
+  visible = visible != FALSE;
+
+  if (gtk_widget_get_visible (priv->close_button) != visible)
+    {
+      gtk_widget_set_visible (priv->close_button, visible);
+      g_object_notify (G_OBJECT (bar), "show-close-button");
+    }
 }
