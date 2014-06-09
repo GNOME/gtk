@@ -246,7 +246,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							 P_("Use underline"),
 							 P_("If set, an underline in the label property indicates that the next character should be used for the mnemonic accelerator key in the overflow menu"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
 				   PROP_LABEL_WIDGET,
 				   g_param_spec_object ("label-widget",
@@ -308,7 +308,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							     0,
 							     G_MAXINT,
 							     3,
-							     GTK_PARAM_READWRITE));
+							     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkToolButton::clicked:
