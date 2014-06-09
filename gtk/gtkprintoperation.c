@@ -1152,7 +1152,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:current-page:
@@ -1174,7 +1174,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkPrintOperation:use-full-page:
@@ -1194,7 +1194,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("Use full page"),
 							 P_("TRUE if the origin of the context should be at the corner of the page and not the corner of the imageable area"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
 
   /**
@@ -1215,7 +1215,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("Track Print Status"),
 							 P_("TRUE if the print operation will continue to report on the print job status after the print data has been sent to the printer or print server."),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
 
   /**
@@ -1234,7 +1234,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						      P_("The unit in which distances can be measured in the context"),
 						      GTK_TYPE_UNIT,
 						      GTK_UNIT_NONE,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   
   /**
@@ -1251,7 +1251,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("Show Dialog"),
 							 P_("TRUE if a progress dialog is shown while printing."),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:allow-async:
@@ -1275,7 +1275,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("Allow Async"),
 							 P_("TRUE if print process may run asynchronous."),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkPrintOperation:export-filename:
@@ -1314,7 +1314,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						      P_("The status of the print operation"),
 						      GTK_TYPE_PRINT_STATUS,
 						      GTK_PRINT_STATUS_INITIAL,
-						      GTK_PARAM_READABLE));
+						      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkPrintOperation:status-string:
@@ -1369,7 +1369,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("Support Selection"),
 							 P_("TRUE if the print operation will support print of selection."),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:has-selection:
@@ -1386,7 +1386,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("Has Selection"),
 							 P_("TRUE if a selection exists."),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -1402,7 +1402,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("Embed Page Setup"),
 							 P_("TRUE if page setup combos are embedded in GtkPrintUnixDialog"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkPrintOperation:n-pages-to-print:
    *
@@ -1426,7 +1426,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READABLE));
+						     GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 /**
@@ -1626,7 +1626,7 @@ gtk_print_operation_set_n_pages (GtkPrintOperation *op,
 
   priv = op->priv;
   g_return_if_fail (priv->current_page == -1 || 
-		    priv->current_page < n_pages);
+                    priv->current_page < n_pages);
 
   if (priv->nr_of_pages != n_pages)
     {
