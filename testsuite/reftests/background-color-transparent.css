@@ -1,4 +1,15 @@
-* { background-image: none; background-color: purple; }
-GtkButton { background-color: blue; }
-.transparent { background-color: transparent; }
-.reference { background-color: purple; }
+* {
+  background-image: none;
+  border-radius: 0;
+  background-color: purple;
+}
+
+GtkButton {
+  background-color: blue;
+}
+.transparent {
+  background-color: transparent;
+}
+.reference {
+  background-color: purple;
+}
