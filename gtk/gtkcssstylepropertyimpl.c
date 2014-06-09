@@ -583,10 +583,17 @@ bindings_value_assign (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+box_shadow_value_parse (GtkCssStyleProperty *property,
+                        GtkCssParser        *parser)
+{
+  return _gtk_css_shadows_value_parse (parser, TRUE);
+}
+
+static GtkCssValue *
 shadow_value_parse (GtkCssStyleProperty *property,
                     GtkCssParser        *parser)
 {
-  return _gtk_css_shadows_value_parse (parser);
+  return _gtk_css_shadows_value_parse (parser, FALSE);
 }
 
 static GtkCssValue *
@@ -1014,7 +1021,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_BOX_SHADOW,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
-                                          shadow_value_parse,
+                                          box_shadow_value_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());

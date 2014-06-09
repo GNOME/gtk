@@ -32,7 +32,8 @@ G_BEGIN_DECLS
 
 GtkCssValue *   _gtk_css_shadow_value_new_for_transition (GtkCssValue           *target);
 
-GtkCssValue *   _gtk_css_shadow_value_parse           (GtkCssParser             *parser);
+GtkCssValue *   _gtk_css_shadow_value_parse           (GtkCssParser             *parser,
+                                                       gboolean                  box_shadow_mode);
 
 gboolean        _gtk_css_shadow_value_get_inset       (const GtkCssValue        *shadow);
 

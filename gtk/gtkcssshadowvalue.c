@@ -209,7 +209,8 @@ value_is_done_parsing (GtkCssParser *parser)
 }
 
 GtkCssValue *
-_gtk_css_shadow_value_parse (GtkCssParser *parser)
+_gtk_css_shadow_value_parse (GtkCssParser *parser,
+                             gboolean      box_shadow_mode)
 {
   enum {
     HOFFSET,
@@ -223,7 +224,8 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser)
   gboolean inset;
   guint i;
 
-  inset = _gtk_css_parser_try (parser, "inset", TRUE);
+  if (box_shadow_mode)
+    inset = _gtk_css_parser_try (parser, "inset", TRUE);
 
   do
   {
@@ -254,7 +256,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser)
         else
           values[RADIUS] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
                                                         
-        if (_gtk_css_parser_has_number (parser))
+        if (box_shadow_mode && _gtk_css_parser_has_number (parser))
           {
             values[SPREAD] = _gtk_css_number_value_parse (parser,
                                                           GTK_CSS_PARSE_LENGTH
@@ -265,7 +267,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser)
         else
           values[SPREAD] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
       }
-    else if (!inset && _gtk_css_parser_try (parser, "inset", TRUE))
+    else if (!inset && box_shadow_mode && _gtk_css_parser_try (parser, "inset", TRUE))
       {
         if (values[HOFFSET] == NULL)
           goto fail;

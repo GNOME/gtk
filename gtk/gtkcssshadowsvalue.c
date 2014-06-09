@@ -213,7 +213,8 @@ gtk_css_shadows_value_new (GtkCssValue **values,
 }
 
 GtkCssValue *
-_gtk_css_shadows_value_parse (GtkCssParser *parser)
+_gtk_css_shadows_value_parse (GtkCssParser *parser,
+                              gboolean      box_shadow_mode)
 {
   GtkCssValue *value, *result;
   GPtrArray *values;
@@ -224,7 +225,7 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser)
   values = g_ptr_array_new ();
 
   do {
-    value = _gtk_css_shadow_value_parse (parser);
+    value = _gtk_css_shadow_value_parse (parser, box_shadow_mode);
 
     if (value == NULL)
       {
