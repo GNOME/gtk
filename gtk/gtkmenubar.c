@@ -185,13 +185,13 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
    * Since: 2.8
    */
   g_object_class_install_property (gobject_class,
-				   PROP_PACK_DIRECTION,
-				   g_param_spec_enum ("pack-direction",
- 						      P_("Pack direction"),
- 						      P_("The pack direction of the menubar"),
- 						      GTK_TYPE_PACK_DIRECTION,
- 						      GTK_PACK_DIRECTION_LTR,
- 						      GTK_PARAM_READWRITE));
+                                   PROP_PACK_DIRECTION,
+                                   g_param_spec_enum ("pack-direction",
+                                                      P_("Pack direction"),
+                                                      P_("The pack direction of the menubar"),
+                                                      GTK_TYPE_PACK_DIRECTION,
+                                                      GTK_PACK_DIRECTION_LTR,
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkMenuBar:child-pack-direction:
@@ -202,13 +202,13 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
    * Since: 2.8
    */
   g_object_class_install_property (gobject_class,
-				   PROP_CHILD_PACK_DIRECTION,
-				   g_param_spec_enum ("child-pack-direction",
- 						      P_("Child Pack direction"),
- 						      P_("The child pack direction of the menubar"),
- 						      GTK_TYPE_PACK_DIRECTION,
- 						      GTK_PACK_DIRECTION_LTR,
- 						      GTK_PARAM_READWRITE));
+                                   PROP_CHILD_PACK_DIRECTION,
+                                   g_param_spec_enum ("child-pack-direction",
+                                                      P_("Child Pack direction"),
+                                                      P_("The child pack direction of the menubar"),
+                                                      GTK_TYPE_PACK_DIRECTION,
+                                                      GTK_PACK_DIRECTION_LTR,
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
 
   gtk_widget_class_install_style_property (widget_class,
