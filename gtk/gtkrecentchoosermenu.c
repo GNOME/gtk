@@ -167,9 +167,6 @@ static void              gtk_recent_chooser_menu_set_show_tips      (GtkRecentCh
 static void     set_recent_manager (GtkRecentChooserMenu *menu,
 				    GtkRecentManager     *manager);
 
-static void     chooser_set_sort_type (GtkRecentChooserMenu *menu,
-				       GtkRecentSortType     sort_type);
-
 static void     item_activate_cb   (GtkWidget        *widget,
 			            gpointer          user_data);
 static void     manager_changed_cb (GtkRecentManager *manager,
@@ -244,7 +241,7 @@ gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
 							 P_("Show Numbers"),
 							 P_("Whether the items should be displayed with a number"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
 
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
@@ -380,22 +377,38 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_SHOW_NUMBERS:
-      priv->show_numbers = g_value_get_boolean (value);
+      if (priv->show_numbers != g_value_get_boolean (value))
+        {
+          priv->show_numbers = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_RECENT_MANAGER:
       set_recent_manager (menu, g_value_get_object (value));
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_PRIVATE:
-      priv->show_private = g_value_get_boolean (value);
+      if (priv->show_private != g_value_get_boolean (value))
+        {
+          priv->show_private = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_NOT_FOUND:
-      priv->show_not_found = g_value_get_boolean (value);
+      if (priv->show_not_found != g_value_get_boolean (value))
+        {
+          priv->show_not_found = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_TIPS:
       gtk_recent_chooser_menu_set_show_tips (menu, g_value_get_boolean (value));
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_ICONS:
-      priv->show_icons = g_value_get_boolean (value);
+      if (priv->show_icons != g_value_get_boolean (value))
+        {
+          priv->show_icons = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
       g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
@@ -403,13 +416,25 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
                  G_OBJECT_TYPE_NAME (object));
       break;
     case GTK_RECENT_CHOOSER_PROP_LOCAL_ONLY:
-      priv->local_only = g_value_get_boolean (value);
+      if (priv->local_only != g_value_get_boolean (value))
+        {
+          priv->local_only = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_LIMIT:
-      priv->limit = g_value_get_int (value);
+      if (priv->limit != g_value_get_int (value))
+        {
+          priv->limit = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_SORT_TYPE:
-      chooser_set_sort_type (menu, g_value_get_enum (value));
+      if (priv->sort_type != g_value_get_enum (value))
+        {
+          priv->sort_type = g_value_get_enum (value);
+          g_object_notify_by_pspec (object, pspec);
+        } 
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       gtk_recent_chooser_menu_set_current_filter (menu, g_value_get_object (value));
@@ -636,17 +661,6 @@ gtk_recent_chooser_menu_set_sort_func (GtkRecentChooser  *chooser,
       priv->sort_data_destroy = data_destroy;
     }
 }
-
-static void
-chooser_set_sort_type (GtkRecentChooserMenu *menu,
-		       GtkRecentSortType     sort_type)
-{
-  if (menu->priv->sort_type == sort_type)
-    return;
-
-  menu->priv->sort_type = sort_type;
-}
-
 
 static GList *
 gtk_recent_chooser_menu_get_items (GtkRecentChooser *chooser)
@@ -1190,6 +1204,7 @@ gtk_recent_chooser_menu_set_show_tips (GtkRecentChooserMenu *menu,
   
   priv->show_tips = show_tips;
   gtk_container_foreach (GTK_CONTAINER (menu), foreach_set_shot_tips, menu);
+  g_object_notify (G_OBJECT (menu), "show-tips");
 }
 
 static void
