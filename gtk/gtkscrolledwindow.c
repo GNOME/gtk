@@ -359,27 +359,30 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   class->move_focus_out = gtk_scrolled_window_move_focus_out;
   
   g_object_class_install_property (gobject_class,
-				   PROP_HADJUSTMENT,
-				   g_param_spec_object ("hadjustment",
-							P_("Horizontal Adjustment"),
-							P_("The GtkAdjustment for the horizontal position"),
-							GTK_TYPE_ADJUSTMENT,
-							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                   PROP_HADJUSTMENT,
+                                   g_param_spec_object ("hadjustment",
+                                                        P_("Horizontal Adjustment"),
+                                                        P_("The GtkAdjustment for the horizontal position"),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT));
+
   g_object_class_install_property (gobject_class,
-				   PROP_VADJUSTMENT,
-				   g_param_spec_object ("vadjustment",
-							P_("Vertical Adjustment"),
-							P_("The GtkAdjustment for the vertical position"),
-							GTK_TYPE_ADJUSTMENT,
-							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                   PROP_VADJUSTMENT,
+                                   g_param_spec_object ("vadjustment",
+                                                        P_("Vertical Adjustment"),
+                                                        P_("The GtkAdjustment for the vertical position"),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT));
+
   g_object_class_install_property (gobject_class,
                                    PROP_HSCROLLBAR_POLICY,
                                    g_param_spec_enum ("hscrollbar-policy",
                                                       P_("Horizontal Scrollbar Policy"),
                                                       P_("When the horizontal scrollbar is displayed"),
-						      GTK_TYPE_POLICY_TYPE,
-						      GTK_POLICY_AUTOMATIC,
-                                                      GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
+                                                      GTK_TYPE_POLICY_TYPE,
+                                                      GTK_POLICY_AUTOMATIC,
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   g_object_class_install_property (gobject_class,
                                    PROP_VSCROLLBAR_POLICY,
                                    g_param_spec_enum ("vscrollbar-policy",
@@ -387,7 +390,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       P_("When the vertical scrollbar is displayed"),
 						      GTK_TYPE_POLICY_TYPE,
 						      GTK_POLICY_AUTOMATIC,
-                                                      GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_WINDOW_PLACEMENT,
@@ -396,7 +399,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       P_("Where the contents are located with respect to the scrollbars."),
 						      GTK_TYPE_CORNER_TYPE,
 						      GTK_CORNER_TOP_LEFT,
-                                                      GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkScrolledWindow:window-placement-set:
@@ -412,10 +415,11 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_WINDOW_PLACEMENT_SET,
                                    g_param_spec_boolean ("window-placement-set",
-					   		 P_("Window Placement Set"),
-							 P_("Whether \"window-placement\" should be used to determine the location of the contents with respect to the scrollbars."),
-							 TRUE,
-							 GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
+                                                         P_("Window Placement Set"),
+                                                         P_("Whether \"window-placement\" should be used to determine the location of the contents with respect to the scrollbars."),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow-type",
@@ -423,7 +427,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       P_("Style of bevel around the contents"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_NONE,
-                                                      GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkScrolledWindow:scrollbars-within-bevel:
@@ -461,7 +465,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                      P_("Minimum Content Width"),
                                                      P_("The minimum width that the scrolled window will allocate to its content"),
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkScrolledWindow:min-content-height:
@@ -476,7 +480,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                      P_("Minimum Content Height"),
                                                      P_("The minimum height that the scrolled window will allocate to its content"),
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkScrolledWindow:kinetic-scrolling:
@@ -492,8 +496,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                          P_("Kinetic Scrolling"),
                                                          P_("Kinetic scrolling mode."),
                                                          TRUE,
-                                                         GTK_PARAM_READABLE |
-                                                         GTK_PARAM_WRITABLE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkScrolledWindow::scroll-child:
    * @scrolled_window: a #GtkScrolledWindow
