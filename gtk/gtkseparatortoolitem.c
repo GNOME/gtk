@@ -144,7 +144,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
                                                          P_("Draw"),
                                                          P_("Whether the separator is drawn, or just blank"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
