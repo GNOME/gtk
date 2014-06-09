@@ -14,7 +14,7 @@ def gen_gdk_filelist(srcroot, subdir, dest):
     vars = read_vars_from_AM(os.path.join(srcroot, subdir, 'Makefile.am'),
                              vars = {},
                              conds = {},
-                             filters = ['gdk_public_h_sources', 'gdk_c_sources'])
+                             filters = ['gdk_h_sources', 'gdk_c_sources'])
 
     vars['gdk_enums'] = 'gdkenumtypes.c gdkenumtypes.h'
 
@@ -49,6 +49,7 @@ def gen_gtk_filelist(srcroot, subdir, dest):
                                       'USE_X11': False,
                                       'USE_EXTERNAL_ICON_CACHE': False},
                              filters = ['gtkinclude_HEADERS',
+                                        'a11yinclude_HEADERS',
                                         'deprecatedinclude_HEADERS',
                                         'gtk_base_c_sources',
                                         'gtk_clipboard_dnd_c_sources'])
@@ -56,6 +57,7 @@ def gen_gtk_filelist(srcroot, subdir, dest):
     vars['gtk_other_src'] = 'gtkprintoperation-win32.c gtktypebuiltins.h gtktypebuiltins.c'
 
     files = vars['gtkinclude_HEADERS'].split() + \
+            vars['a11yinclude_HEADERS'].split() + \
             vars['deprecatedinclude_HEADERS'].split() + \
             vars['gtk_base_c_sources'].split() + \
 			vars['gtk_clipboard_dnd_c_sources'].split() + \
