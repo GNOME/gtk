@@ -307,20 +307,18 @@ gtk_scale_class_init (GtkScaleClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_DIGITS,
                                    g_param_spec_int ("digits",
-						     P_("Digits"),
-						     P_("The number of decimal places that are displayed in the value"),
-						     -1,
-						     MAX_DIGITS,
-						     1,
-						     GTK_PARAM_READWRITE));
+                                                     P_("Digits"),
+                                                     P_("The number of decimal places that are displayed in the value"),
+                                                     -1, MAX_DIGITS, 1,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_VALUE,
                                    g_param_spec_boolean ("draw-value",
-							 P_("Draw Value"),
-							 P_("Whether the current value is displayed as a string next to the slider"),
-							 TRUE,
-							 GTK_PARAM_READWRITE));
+                                                         P_("Draw Value"),
+                                                         P_("Whether the current value is displayed as a string next to the slider"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_ORIGIN,
@@ -328,25 +326,23 @@ gtk_scale_class_init (GtkScaleClass *class)
                                                          P_("Has Origin"),
                                                          P_("Whether the scale has an origin"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_VALUE_POS,
                                    g_param_spec_enum ("value-pos",
-						      P_("Value Position"),
-						      P_("The position in which the current value is displayed"),
-						      GTK_TYPE_POSITION_TYPE,
-						      GTK_POS_TOP,
-						      GTK_PARAM_READWRITE));
+                                                      P_("Value Position"),
+                                                      P_("The position in which the current value is displayed"),
+                                                      GTK_TYPE_POSITION_TYPE,
+                                                      GTK_POS_TOP,
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("slider-length",
-							     P_("Slider Length"),
-							     P_("Length of scale's slider"),
-							     0,
-							     G_MAXINT,
-							     31,
-							     GTK_PARAM_READABLE));
+                                           g_param_spec_int ("slider-length",
+                                                             P_("Slider Length"),
+                                                             P_("Length of scale's slider"),
+                                                             0, G_MAXINT, 31,
+                                                             GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("value-spacing",
