@@ -33,6 +33,7 @@
 
 #include "gtkimage.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
@@ -118,7 +119,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
                                                          P_("Active"),
                                                          P_("Whether the spinner is active"),
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPINNER_ACCESSIBLE);
 }
