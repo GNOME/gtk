@@ -436,43 +436,70 @@ gtk_recent_chooser_default_set_property (GObject      *object,
       set_recent_manager (impl, g_value_get_object (value));
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_PRIVATE:
-      impl->priv->show_private = g_value_get_boolean (value);
-      if (impl->priv->recent_popup_menu_show_private_item)
-	{
-          GtkCheckMenuItem *item = GTK_CHECK_MENU_ITEM (impl->priv->recent_popup_menu_show_private_item);
-	  g_signal_handlers_block_by_func (item, G_CALLBACK (show_private_toggled_cb), impl);
-          gtk_check_menu_item_set_active (item, impl->priv->show_private);
-	  g_signal_handlers_unblock_by_func (item, G_CALLBACK (show_private_toggled_cb), impl);
+      if (impl->priv->show_private != g_value_get_boolean (value))
+        {
+          impl->priv->show_private = g_value_get_boolean (value);
+          if (impl->priv->recent_popup_menu_show_private_item)
+            {
+              GtkCheckMenuItem *item = GTK_CHECK_MENU_ITEM (impl->priv->recent_popup_menu_show_private_item);
+              g_signal_handlers_block_by_func (item, G_CALLBACK (show_private_toggled_cb), impl);
+              gtk_check_menu_item_set_active (item, impl->priv->show_private);
+              g_signal_handlers_unblock_by_func (item, G_CALLBACK (show_private_toggled_cb), impl);
+            }
+          reload_recent_items (impl);
+          g_object_notify_by_pspec (object, pspec);
         }
-      reload_recent_items (impl);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_NOT_FOUND:
-      impl->priv->show_not_found = g_value_get_boolean (value);
-      reload_recent_items (impl);
+      if (impl->priv->show_not_found != g_value_get_boolean (value))
+        {
+          impl->priv->show_not_found = g_value_get_boolean (value);
+          reload_recent_items (impl);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_TIPS:
-      impl->priv->show_tips = g_value_get_boolean (value);
+      if (impl->priv->show_tips != g_value_get_boolean (value))
+        {
+          impl->priv->show_tips = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_ICONS:
-      impl->priv->show_icons = g_value_get_boolean (value);
-      gtk_tree_view_column_set_visible (impl->priv->icon_column, impl->priv->show_icons);
+      if (impl->priv->show_icons != g_value_get_boolean (value))
+        {
+          impl->priv->show_icons = g_value_get_boolean (value);
+          gtk_tree_view_column_set_visible (impl->priv->icon_column, impl->priv->show_icons);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
-      impl->priv->select_multiple = g_value_get_boolean (value);
-      
-      if (impl->priv->select_multiple)
-        gtk_tree_selection_set_mode (impl->priv->selection, GTK_SELECTION_MULTIPLE);
-      else
-        gtk_tree_selection_set_mode (impl->priv->selection, GTK_SELECTION_SINGLE);
+      if (impl->priv->select_multiple != g_value_get_boolean (value))
+        {
+          impl->priv->select_multiple = g_value_get_boolean (value);
+          if (impl->priv->select_multiple)
+            gtk_tree_selection_set_mode (impl->priv->selection, GTK_SELECTION_MULTIPLE);
+          else
+            gtk_tree_selection_set_mode (impl->priv->selection, GTK_SELECTION_SINGLE);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_LOCAL_ONLY:
-      impl->priv->local_only = g_value_get_boolean (value);
-      reload_recent_items (impl);
+      if (impl->priv->local_only != g_value_get_boolean (value))
+        {
+          impl->priv->local_only = g_value_get_boolean (value);
+          reload_recent_items (impl);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_LIMIT:
-      impl->priv->limit = g_value_get_int (value);
-      impl->priv->limit_set = TRUE;
-      reload_recent_items (impl);
+      if (impl->priv->limit != g_value_get_int (value))
+        {
+          impl->priv->limit = g_value_get_int (value);
+          impl->priv->limit_set = TRUE;
+          reload_recent_items (impl);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case GTK_RECENT_CHOOSER_PROP_SORT_TYPE:
       chooser_set_sort_type (impl, g_value_get_enum (value));
@@ -718,7 +745,7 @@ load_recent_items (gpointer user_data)
       if (!impl->priv->recent_items)
         {
 	  impl->priv->load_state = LOAD_FINISHED;
-          
+          impl->priv->load_id = 0;
           return FALSE;
         }
         
@@ -791,7 +818,6 @@ cleanup_after_load (gpointer user_data)
       /* we have officialy finished loading all the items,
        * so we can reset the state machine
        */
-      g_source_remove (impl->priv->load_id);
       impl->priv->load_id = 0;
       impl->priv->load_state = LOAD_EMPTY;
     }
@@ -1308,7 +1334,6 @@ chooser_set_sort_type (GtkRecentChooserDefault *impl,
     {
       impl->priv->sort_type = sort_type;
       reload_recent_items (impl);
-
       g_object_notify (G_OBJECT (impl), "sort-type");
     }
 }
