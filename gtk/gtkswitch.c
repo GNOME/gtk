@@ -802,7 +802,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                           P_("Active"),
                           P_("Whether the switch is on or off"),
                           FALSE,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSwitch:state:
@@ -817,7 +817,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                           P_("State"),
                           P_("The backend state"),
                           FALSE,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   gobject_class->set_property = gtk_switch_set_property;
   gobject_class->get_property = gtk_switch_get_property;
