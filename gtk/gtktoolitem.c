@@ -179,21 +179,21 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 							 P_("Visible when horizontal"),
 							 P_("Whether the toolbar item is visible when the toolbar is in a horizontal orientation."),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE_VERTICAL,
 				   g_param_spec_boolean ("visible-vertical",
 							 P_("Visible when vertical"),
 							 P_("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
  				   PROP_IS_IMPORTANT,
  				   g_param_spec_boolean ("is-important",
  							 P_("Is important"),
  							 P_("Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_override_property (object_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
   g_object_class_override_property (object_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
