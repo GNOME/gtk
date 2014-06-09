@@ -237,7 +237,8 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                                                          P_("Whether the gesture handles"
                                                             " only touch events"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkGestureSingle:exclusive:
    *
@@ -252,7 +253,8 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                                                          P_("Whether the gesture is exclusive"),
                                                          P_("Whether the gesture is exclusive"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkGestureSingle:button:
    *
@@ -266,7 +268,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                                                       P_("Button number"),
                                                       P_("Button number to listen to"),
                                                       0, G_MAXUINT, 0,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
