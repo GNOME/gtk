@@ -2761,12 +2761,7 @@ gtk_window_set_modal (GtkWindow *window,
   
   /* adjust desired modality state */
   if (gtk_widget_get_realized (widget))
-    {
-      if (priv->modal)
-	gdk_window_set_modal_hint (gtk_widget_get_window (widget), TRUE);
-      else
-	gdk_window_set_modal_hint (gtk_widget_get_window (widget), FALSE);
-    }
+    gdk_window_set_modal_hint (gtk_widget_get_window (widget), priv->modal);
 
   if (gtk_widget_get_visible (widget))
     {
