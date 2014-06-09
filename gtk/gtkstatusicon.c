@@ -302,7 +302,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 							 P_("Visible"),
 							 P_("Whether the status icon is visible"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -362,7 +362,8 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
  							 P_("Has tooltip"),
  							 P_("Whether this tray icon has a tooltip"),
  							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkStatusIcon:tooltip-text:
    *
@@ -2374,6 +2375,7 @@ gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon,
 				 gboolean       has_tooltip)
 {
   GtkStatusIconPrivate *priv;
+  gboolean changed = FALSE;
 
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
 
@@ -2381,16 +2383,27 @@ gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon,
 
 #ifdef GDK_WINDOWING_X11
   if (priv->tray_icon)
-    gtk_widget_set_has_tooltip (priv->tray_icon, has_tooltip);
+    {
+      if (gtk_widget_get_has_tooltip (priv->tray_icon) != has_tooltip)
+        {
+          gtk_widget_set_has_tooltip (priv->tray_icon, has_tooltip);
+          changed = TRUE;
+        }
+    }
 #endif
 #ifdef GDK_WINDOWING_WIN32
+  changed = TRUE;
   if (!has_tooltip && priv->tooltip_text)
     gtk_status_icon_set_tooltip_text (status_icon, NULL);
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
+  changed = TRUE;
   if (!has_tooltip && priv->tooltip_text)
     gtk_status_icon_set_tooltip_text (status_icon, NULL);
 #endif
+
+  if (changed)
+    g_object_notify (G_OBJECT (status_icon), "has-tooltip");
 }
 
 /**
