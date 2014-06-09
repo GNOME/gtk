@@ -220,9 +220,23 @@ gdk_mir_pointer_init (GdkMirPointer *device)
 }
 
 static void
+gdk_mir_pointer_finalize (GObject *object)
+{
+  GdkMirPointer *p = GDK_MIR_POINTER (object);
+
+  if (p->over_window)
+    g_object_unref (p->over_window);
+
+  G_OBJECT_CLASS (gdk_mir_pointer_parent_class)->finalize (object);
+}
+
+static void
 gdk_mir_pointer_class_init (GdkMirPointerClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
+
+  object_class->finalize = gdk_mir_pointer_finalize;
 
   device_class->get_history = gdk_mir_pointer_get_history;
   device_class->get_state = gdk_mir_pointer_get_state;
