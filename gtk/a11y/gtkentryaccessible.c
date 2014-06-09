@@ -456,7 +456,7 @@ gtk_entry_accessible_initialize (AtkObject *obj,
   gtk_entry_accessible->priv->selection_bound = start_pos;
 
   /* Set up signal callbacks */
-  g_signal_connect (entry, "insert-text", G_CALLBACK (insert_text_cb), NULL);
+  g_signal_connect_after (entry, "insert-text", G_CALLBACK (insert_text_cb), NULL);
   g_signal_connect (entry, "delete-text", G_CALLBACK (delete_text_cb), NULL);
 
   if (gtk_entry_get_visibility (entry))
@@ -1390,16 +1390,18 @@ insert_text_cb (GtkEditable *editable,
                 gint        *position)
 {
   GtkEntryAccessible *accessible;
+  gint length;
 
   if (new_text_length == 0)
     return;
 
   accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
+  length = g_utf8_strlen (new_text, new_text_length);
 
   g_signal_emit_by_name (accessible,
                          "text-changed::insert",
-                         *position,
-                          g_utf8_strlen (new_text, new_text_length));
+                         *position - length,
+                          length);
 }
 
 /* We connect to GtkEditable::delete-text, since it carries
