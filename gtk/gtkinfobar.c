@@ -446,7 +446,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                       P_("The type of message"),
                                                       GTK_TYPE_MESSAGE_TYPE,
                                                       GTK_MESSAGE_INFO,
-                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkInfoBar:show-close-button:
@@ -461,7 +461,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                          P_("Show Close Button"),
                                                          P_("Whether to include a standard close button"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkInfoBar::response:
    * @info_bar: the object on which the signal is emitted
