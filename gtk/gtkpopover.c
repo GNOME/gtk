@@ -354,6 +354,9 @@ gtk_popover_apply_modality (GtkPopover *popover,
 {
   GtkPopoverPrivate *priv = popover->priv;
 
+  if (!priv->window)
+    return;
+
   if (modal)
     {
       GtkWidget *prev_focus;
@@ -1308,7 +1311,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                                                       P_("Position"),
                                                       P_("Position to place the bubble window"),
                                                       GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
-                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPopover:modal
@@ -1324,7 +1327,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                                                          P_("Modal"),
                                                          P_("Whether the popover is modal"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   signals[CLOSED] =
     g_signal_new (I_("closed"),
@@ -1665,8 +1668,11 @@ static void
 gtk_popover_update_preferred_position (GtkPopover      *popover,
                                        GtkPositionType  position)
 {
-  popover->priv->preferred_position = position;
-  g_object_notify (G_OBJECT (popover), "position");
+  if (popover->priv->preferred_position != position)
+    {
+      popover->priv->preferred_position = position;
+      g_object_notify (G_OBJECT (popover), "position");
+    }
 }
 
 /**
