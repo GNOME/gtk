@@ -503,7 +503,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                         P_("Popup"),
                                                         P_("The dropdown menu."),
                                                         GTK_TYPE_MENU,
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkMenuButton:menu-model:
@@ -523,7 +523,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                         P_("Menu model"),
                                                         P_("The model from which the popup is made."),
                                                         G_TYPE_MENU_MODEL,
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
   /**
    * GtkMenuButton:align-widget:
    *
@@ -537,7 +537,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                         P_("Align with"),
                                                         P_("The parent widget which the menu should align with."),
                                                         GTK_TYPE_CONTAINER,
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
   /**
    * GtkMenuButton:direction:
    *
@@ -553,7 +553,8 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                       P_("The direction the arrow should point."),
                                                       GTK_TYPE_ARROW_TYPE,
                                                       GTK_ARROW_DOWN,
-                                                      G_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkMenuButton:use-popover:
    *
@@ -568,7 +569,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                          P_("Use a popover"),
                                                          P_("Use a popover instead of a menu"),
                                                          TRUE,
-                                                         G_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkMenuButton:popover:
@@ -999,6 +1000,7 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
     return;
 
   priv->arrow_type = direction;
+  g_object_notify (G_OBJECT (menu_button), "direction");
 
   /* Is it custom content? We don't change that */
   child = gtk_bin_get_child (GTK_BIN (menu_button));
@@ -1006,7 +1008,6 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
     return;
 
   set_arrow_type (GTK_IMAGE (child), priv->arrow_type);
-
   update_popover_direction (menu_button);
 }
 
