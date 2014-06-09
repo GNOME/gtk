@@ -238,7 +238,8 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
                                                       P_("Allowed orientations"),
                                                       GTK_TYPE_ORIENTATION,
                                                       GTK_ORIENTATION_HORIZONTAL,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkGesturePan::pan:
    * @gesture: The object which received the signal
