@@ -491,7 +491,7 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       P_("Specify how resize events are handled"),
                                                       GTK_TYPE_RESIZE_MODE,
                                                       GTK_RESIZE_PARENT,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
   g_object_class_install_property (gobject_class,
                                    PROP_BORDER_WIDTH,
                                    g_param_spec_uint ("border-width",
