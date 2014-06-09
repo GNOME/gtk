@@ -4,17 +4,20 @@
     <Import Project="gtk-build-defines.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
+    <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
+    <InstalledDlls>$(BinDir)\$(GtkDllPrefix)gdk-win32(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gtk-win32(GtkDllSuffix).dll;$(BinDir)\libwimp.dll</InstalledDlls>
+    <InstalledBins>$(BinDir)\gtk-demo.exe</InstalledBins>
     <GtkDoInstall>
 mkdir $(CopyDir)\bin
 
-copy $(Configuration)\$(Platform)\bin\*-vs$(VSVer).dll $(CopyDir)\bin
+copy $(BinDir)\*-vs$(VSVer).dll $(CopyDir)\bin
 
-copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin
+copy $(BinDir)\*.exe $(CopyDir)\bin
 
 
 mkdir $(CopyDir)\lib
 
-copy $(Configuration)\$(Platform)\bin\*-$(ApiVersion).lib $(CopyDir)\lib
+copy $(BinDir)\*-$(ApiVersion).lib $(CopyDir)\lib
 
 
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk
@@ -533,11 +536,11 @@ copy ..\..\..\modules\other\gail\libgail-util\gailtextutil.h $(CopyDir)\include\
 copy ..\..\..\modules\other\gail\libgail-util\gail-util.h $(CopyDir)\include\gail-1.0\libgail-util
 
 
-copy $(Configuration)\$(Platform)\bin\*-$(ApiVersion).lib $(CopyDir)\lib
+copy $(BinDir)\*-$(ApiVersion).lib $(CopyDir)\lib
 
 mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
 
-copy $(Configuration)\$(Platform)\bin\libwimp.dll $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
+copy $(BinDir)\libwimp.dll $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
 
 
 mkdir $(CopyDir)\share\gtk-$(ApiVersion)\demo
@@ -579,6 +582,15 @@ copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-2.0\gtkrc
     <_PropertySheetDisplayName>gtkinstallprops</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemGroup>
+    <BuildMacro Include="BinDir">
+      <Value>$(BinDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledDlls">
+      <Value>$(InstalledDlls)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledBins">
+      <Value>$(InstalledBins)</Value>
+    </BuildMacro>
     <BuildMacro Include="GtkDoInstall">
       <Value>$(GtkDoInstall)</Value>
     </BuildMacro>
