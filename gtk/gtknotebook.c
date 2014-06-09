@@ -701,7 +701,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_TAB_POS,
                                    g_param_spec_enum ("tab-pos",
@@ -709,35 +709,35 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                       P_("Which side of the notebook holds the tabs"),
                                                       GTK_TYPE_POSITION_TYPE,
                                                       GTK_POS_TOP,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_TABS,
                                    g_param_spec_boolean ("show-tabs",
                                                          P_("Show Tabs"),
                                                          P_("Whether tabs should be shown"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_BORDER,
                                    g_param_spec_boolean ("show-border",
                                                          P_("Show Border"),
                                                          P_("Whether the border should be shown"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_SCROLLABLE,
                                    g_param_spec_boolean ("scrollable",
                                                          P_("Scrollable"),
                                                          P_("If TRUE, scroll arrows are added if there are too many tabs to fit"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_ENABLE_POPUP,
                                    g_param_spec_boolean ("enable-popup",
                                                          P_("Enable Popup"),
                                                          P_("If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkNotebook:group-name:
@@ -7334,6 +7334,8 @@ gtk_notebook_set_current_page (GtkNotebook *notebook,
   list = g_list_nth (priv->children, page_num);
   if (list)
     gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (list));
+
+  g_object_notify (G_OBJECT (notebook), "page");
 }
 
 /**
@@ -7560,9 +7562,9 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
       priv->tab_pos = pos;
       if (gtk_widget_get_visible (GTK_WIDGET (notebook)))
         gtk_widget_queue_resize (GTK_WIDGET (notebook));
-    }
 
-  g_object_notify (G_OBJECT (notebook), "tab-pos");
+      g_object_notify (G_OBJECT (notebook), "tab-pos");
+    }
 }
 
 /**
@@ -7723,7 +7725,7 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
  * Disables the popup menu.
  */
 void
-gtk_notebook_popup_disable  (GtkNotebook *notebook)
+gtk_notebook_popup_disable (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
 
