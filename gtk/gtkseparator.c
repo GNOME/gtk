@@ -70,9 +70,13 @@ gtk_separator_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      private->orientation = g_value_get_enum (value);
-      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
-      gtk_widget_queue_resize (GTK_WIDGET (object));
+      if (private->orientation != g_value_get_enum (value))
+        {
+          private->orientation = g_value_get_enum (value);
+          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
+          gtk_widget_queue_resize (GTK_WIDGET (object));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
