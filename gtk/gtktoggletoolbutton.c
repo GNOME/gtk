@@ -124,10 +124,10 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active",
-							 P_("Active"),
-							 P_("If the toggle button should be pressed in"),
-							 FALSE,
-							 GTK_PARAM_READWRITE));
+                                                         P_("Active"),
+                                                         P_("If the toggle button should be pressed in"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkToggleToolButton::toggled:
@@ -445,14 +445,17 @@ gtk_toggle_tool_button_new_from_stock (const gchar *stock_id)
  **/
 void
 gtk_toggle_tool_button_set_active (GtkToggleToolButton *button,
-				   gboolean is_active)
+                                   gboolean             is_active)
 {
   g_return_if_fail (GTK_IS_TOGGLE_TOOL_BUTTON (button));
 
   is_active = is_active != FALSE;
 
   if (button->priv->active != is_active)
-    gtk_button_clicked (GTK_BUTTON (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button))));
+    {
+      gtk_button_clicked (GTK_BUTTON (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button))));
+      g_object_notify (G_OBJECT (button), "active");
+    }
 }
 
 /**
