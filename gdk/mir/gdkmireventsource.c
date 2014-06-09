@@ -555,53 +555,59 @@ static void
 handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  gdouble x, y;
+  gboolean cursor_inside;
+  MirMotionButton button_state;
   guint modifier_state;
   GdkEventType event_type;
   MirMotionButton changed_button_state;
 
+  _gdk_mir_window_impl_get_cursor_state (impl, &x, &y, &cursor_inside, &button_state);
   if (event->pointer_count > 0)
     {
-      impl->x = event->pointer_coordinates[0].x;
-      impl->y = event->pointer_coordinates[0].y;
+      x = event->pointer_coordinates[0].x;
+      y = event->pointer_coordinates[0].y;
     }
   modifier_state = get_modifier_state (event->modifiers, event->button_state);
 
   /* The Mir events generate hover-exits even while inside the window so
      counteract this by always generating an enter notify on all other events */
-  if (!impl->cursor_inside && event->action != mir_motion_action_hover_exit)
+  if (!cursor_inside && event->action != mir_motion_action_hover_exit)
     {
-      impl->cursor_inside = TRUE;
-      generate_crossing_event (window, GDK_ENTER_NOTIFY, impl->x, impl->y);
+      cursor_inside = TRUE;
+      generate_crossing_event (window, GDK_ENTER_NOTIFY, x, y);
     }
 
   /* Update which window has focus */
-  _gdk_mir_pointer_set_location (get_pointer (window), impl->x, impl->y, window, modifier_state);
+  _gdk_mir_pointer_set_location (get_pointer (window), x, y, window, modifier_state);
   switch (event->action)
     {
     case mir_motion_action_down:
     case mir_motion_action_up:
       event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
-      changed_button_state = impl->button_state ^ event->button_state;
+      changed_button_state = button_state ^ event->button_state;
       if ((changed_button_state & mir_motion_button_primary) != 0)
-        generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_PRIMARY, modifier_state);
+        generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state);
       if ((changed_button_state & mir_motion_button_secondary) != 0)
-        generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_SECONDARY, modifier_state);
+        generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state);
       if ((changed_button_state & mir_motion_button_tertiary) != 0)
-        generate_button_event (window, event_type, impl->x, impl->y, GDK_BUTTON_MIDDLE, modifier_state);
-      impl->button_state = event->button_state;
+        generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state);
+      button_state = event->button_state;
       break;
     case mir_motion_action_scroll:
-      generate_scroll_event (window, impl->x, impl->y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state);
+      generate_scroll_event (window, x, y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state);
       break;
     case mir_motion_action_move: // move with button
     case mir_motion_action_hover_move: // move without button
-      generate_motion_event (window, impl->x, impl->y, modifier_state);
+      generate_motion_event (window, x, y, modifier_state);
       break;
     case mir_motion_action_hover_exit:
-      impl->cursor_inside = FALSE;
-      generate_crossing_event (window, GDK_LEAVE_NOTIFY, impl->x, impl->y);
+      cursor_inside = FALSE;
+      generate_crossing_event (window, GDK_LEAVE_NOTIFY, x, y);
       break;
     }
+
+  _gdk_mir_window_impl_set_cursor_state (impl, x, y, cursor_inside, button_state);
 }
 
 static void
@@ -614,7 +620,7 @@ handle_surface_event (GdkWindow *window, const MirSurfaceEvent *event)
     case mir_surface_attrib_type:
       break;
     case mir_surface_attrib_state:
-      impl->surface_state = event->value;
+      _gdk_mir_window_impl_set_surface_state (impl, event->value);
       // FIXME: notify
       break;
     case mir_surface_attrib_swapinterval:
