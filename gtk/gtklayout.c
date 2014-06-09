@@ -675,7 +675,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 						     0,
 						     G_MAXINT,
 						     100,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_HEIGHT,
 				   g_param_spec_uint ("height",
@@ -684,7 +684,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 						     0,
 						     G_MAXINT,
 						     100,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
   widget_class->map = gtk_layout_map;
@@ -752,20 +752,26 @@ gtk_layout_set_property (GObject      *object,
       gtk_layout_do_set_vadjustment (layout, g_value_get_object (value));
       break;
     case PROP_HSCROLL_POLICY:
-      priv->hscroll_policy = g_value_get_enum (value);
-      gtk_widget_queue_resize (GTK_WIDGET (layout));
+      if (priv->hscroll_policy != g_value_get_enum (value))
+        {
+          priv->hscroll_policy = g_value_get_enum (value);
+          gtk_widget_queue_resize (GTK_WIDGET (layout));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_VSCROLL_POLICY:
-      priv->vscroll_policy = g_value_get_enum (value);
-      gtk_widget_queue_resize (GTK_WIDGET (layout));
+      if (priv->vscroll_policy != g_value_get_enum (value))
+        {
+          priv->vscroll_policy = g_value_get_enum (value);
+          gtk_widget_queue_resize (GTK_WIDGET (layout));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_WIDTH:
-      gtk_layout_set_size (layout, g_value_get_uint (value),
-			   priv->height);
+      gtk_layout_set_size (layout, g_value_get_uint (value), priv->height);
       break;
     case PROP_HEIGHT:
-      gtk_layout_set_size (layout, priv->width,
-			   g_value_get_uint (value));
+      gtk_layout_set_size (layout, priv->width, g_value_get_uint (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
