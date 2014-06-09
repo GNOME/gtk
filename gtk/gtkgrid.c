@@ -1732,35 +1732,35 @@ gtk_grid_class_init (GtkGridClass *class)
                       P_("Row spacing"),
                       P_("The amount of space between two consecutive rows"),
                       0, G_MAXINT16, 0,
-                      GTK_PARAM_READWRITE);
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   obj_properties[PROP_COLUMN_SPACING] =
     g_param_spec_int ("column-spacing",
                       P_("Column spacing"),
                       P_("The amount of space between two consecutive columns"),
                       0, G_MAXINT16, 0,
-                      GTK_PARAM_READWRITE);
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   obj_properties[PROP_ROW_HOMOGENEOUS] =
     g_param_spec_boolean ("row-homogeneous",
                           P_("Row Homogeneous"),
                           P_("If TRUE, the rows are all the same height"),
                           FALSE,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   obj_properties[PROP_COLUMN_HOMOGENEOUS] =
     g_param_spec_boolean ("column-homogeneous",
                           P_("Column Homogeneous"),
                           P_("If TRUE, the columns are all the same width"),
                           FALSE,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   obj_properties[PROP_BASELINE_ROW] =
     g_param_spec_int ("baseline-row",
                       P_("Baseline Row"),
                       P_("The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"),
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE);
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class,
                                      N_PROPERTIES,
