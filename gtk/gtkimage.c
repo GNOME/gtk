@@ -284,7 +284,7 @@ gtk_image_class_init (GtkImageClass *class)
                                                      P_("Symbolic size to use for stock icon, icon set or named icon"),
                                                      0, G_MAXINT,
                                                      DEFAULT_ICON_SIZE,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkImage:pixel-size:
    *
@@ -301,7 +301,7 @@ gtk_image_class_init (GtkImageClass *class)
 						     P_("Pixel size to use for named icon"),
 						     -1, G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_PIXBUF_ANIMATION,
@@ -384,7 +384,7 @@ gtk_image_class_init (GtkImageClass *class)
                                                          P_("Use Fallback"),
                                                          P_("Whether to use icon names fallback"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_IMAGE_ACCESSIBLE);
 }
@@ -432,52 +432,47 @@ gtk_image_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_PIXBUF:
-      gtk_image_set_from_pixbuf (image,
-                                 g_value_get_object (value));
+      gtk_image_set_from_pixbuf (image, g_value_get_object (value));
       break;
     case PROP_SURFACE:
-      gtk_image_set_from_surface (image,
-				  g_value_get_boxed (value));
+      gtk_image_set_from_surface (image, g_value_get_boxed (value));
       break;
     case PROP_FILE:
       gtk_image_set_from_file (image, g_value_get_string (value));
       break;
     case PROP_STOCK:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_image_set_from_stock (image, g_value_get_string (value),
-                                icon_size);
+      gtk_image_set_from_stock (image, g_value_get_string (value), icon_size);
       G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_SET:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_image_set_from_icon_set (image, g_value_get_boxed (value),
-                                   icon_size);
+      gtk_image_set_from_icon_set (image, g_value_get_boxed (value), icon_size);
       G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_SIZE:
-      _gtk_icon_helper_set_icon_size (priv->icon_helper, g_value_get_int (value));
+      if (_gtk_icon_helper_set_icon_size (priv->icon_helper, g_value_get_int (value)))
+        g_object_notify_by_pspec (object, pspec);
       break;
     case PROP_PIXEL_SIZE:
       gtk_image_set_pixel_size (image, g_value_get_int (value));
       break;
     case PROP_PIXBUF_ANIMATION:
-      gtk_image_set_from_animation (image,
-                                    g_value_get_object (value));
+      gtk_image_set_from_animation (image, g_value_get_object (value));
       break;
     case PROP_ICON_NAME:
-      gtk_image_set_from_icon_name (image, g_value_get_string (value),
-				    icon_size);
+      gtk_image_set_from_icon_name (image, g_value_get_string (value), icon_size);
       break;
     case PROP_GICON:
-      gtk_image_set_from_gicon (image, g_value_get_object (value),
-				icon_size);
+      gtk_image_set_from_gicon (image, g_value_get_object (value), icon_size);
       break;
     case PROP_RESOURCE:
       gtk_image_set_from_resource (image, g_value_get_string (value));
       break;
 
     case PROP_USE_FALLBACK:
-      _gtk_icon_helper_set_use_fallback (priv->icon_helper, g_value_get_boolean (value));
+      if (_gtk_icon_helper_set_use_fallback (priv->icon_helper, g_value_get_boolean (value)))
+        g_object_notify_by_pspec (object, pspec);
       break;
 
     default:
@@ -1806,21 +1801,12 @@ void
 gtk_image_set_pixel_size (GtkImage *image,
 			  gint      pixel_size)
 {
-  GtkImagePrivate *priv;
-  gint old_pixel_size;
-
   g_return_if_fail (GTK_IS_IMAGE (image));
 
-  priv = image->priv;
-  old_pixel_size = gtk_image_get_pixel_size (image);
-
-  if (pixel_size != old_pixel_size)
+  if (_gtk_icon_helper_set_pixel_size (image->priv->icon_helper, pixel_size)) 
     {
-      _gtk_icon_helper_set_pixel_size (priv->icon_helper, pixel_size);
-
       if (gtk_widget_get_visible (GTK_WIDGET (image)))
         gtk_widget_queue_resize (GTK_WIDGET (image));
-
       g_object_notify (G_OBJECT (image), "pixel-size");
     }
 }
