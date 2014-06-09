@@ -649,7 +649,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                      P_("Monitor"),
                                                      P_("The monitor the menu will be popped up on"),
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkMenu:reserve-toggle-size:
@@ -670,7 +670,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                          P_("Reserve Toggle Size"),
                                                          P_("A boolean that indicates whether the menu reserves space for toggles and icons"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkMenu:horizontal-padding:
@@ -1942,7 +1942,7 @@ gtk_menu_get_active (GtkMenu *menu)
 /**
  * gtk_menu_set_active:
  * @menu: a #GtkMenu
- * @index: the index of the menu item to select.  Iindex values are
+ * @index: the index of the menu item to select.  Index values are
  *         from 0 to n-1
  *
  * Selects the specified menu item within the menu.  This is used by
@@ -1970,6 +1970,7 @@ gtk_menu_set_active (GtkMenu *menu,
           g_object_ref (priv->old_active_menu_item);
         }
     }
+  g_object_notify (G_OBJECT (menu), "active");
 }
 
 /**
@@ -5523,7 +5524,11 @@ gtk_menu_set_monitor (GtkMenu *menu,
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  priv->monitor_num = monitor_num;
+  if (priv->monitor_num != monitor_num)
+    {
+      priv->monitor_num = monitor_num;
+      g_object_notify (G_OBJECT (menu), "monitor");
+    }
 }
 
 /**
