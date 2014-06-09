@@ -788,15 +788,15 @@ gtk_level_bar_buildable_init (GtkBuildableIface *iface)
 }
 
 static void
-gtk_level_bar_set_orientation (GtkLevelBar *self,
-                                  GtkOrientation  orientation)
+gtk_level_bar_set_orientation (GtkLevelBar    *self,
+                               GtkOrientation  orientation)
 {
   if (self->priv->orientation != orientation)
     {
       self->priv->orientation = orientation;
       _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
-
       gtk_widget_queue_resize (GTK_WIDGET (self));
+      g_object_notify (G_OBJECT (self), "orientation");
     }
 }
 
@@ -931,7 +931,8 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          P_("Currently filled value level"),
                          P_("Currently filled value level of the level bar"),
                          0.0, G_MAXDOUBLE, 0.0,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkLevelBar:min-value:
    *
@@ -945,7 +946,8 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          P_("Minimum value level for the bar"),
                          P_("Minimum value level that can be displayed by the bar"),
                          0.0, G_MAXDOUBLE, 0.0,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkLevelBar:max-value:
    *
@@ -959,7 +961,8 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          P_("Maximum value level for the bar"),
                          P_("Maximum value level that can be displayed by the bar"),
                          0.0, G_MAXDOUBLE, 1.0,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkLevelBar:mode:
    *
@@ -980,7 +983,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                        P_("The mode of the value indicator displayed by the bar"),
                        GTK_TYPE_LEVEL_BAR_MODE,
                        GTK_LEVEL_BAR_MODE_CONTINUOUS,
-                       G_PARAM_READWRITE);
+                       G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLevelBar:inverted:
@@ -995,7 +998,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                           P_("Inverted"),
                           P_("Invert the direction in which the level bar grows"),
                           FALSE,
-                          G_PARAM_READWRITE);
+                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLevelBar:min-block-height:
@@ -1316,19 +1319,13 @@ void
 gtk_level_bar_set_inverted (GtkLevelBar *self,
                             gboolean     inverted)
 {
-  GtkLevelBarPrivate *priv;
-
   g_return_if_fail (GTK_IS_LEVEL_BAR (self));
 
-  priv = self->priv;
-
-  if (priv->inverted != inverted)
+  if (self->priv->inverted != inverted)
     {
-      priv->inverted = inverted;
-
+      self->priv->inverted = inverted;
       gtk_widget_queue_resize (GTK_WIDGET (self));
-
-      g_object_notify (G_OBJECT (self), "inverted");
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INVERTED]);
     }
 }
 
