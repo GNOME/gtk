@@ -617,13 +617,7 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
     {
       priv->shadow_type = type;
 
-      if (gtk_widget_is_drawable (widget))
-	{
-          gtk_widget_get_allocation (widget, &allocation);
-          gtk_widget_size_allocate (widget, &allocation);
-          gtk_widget_set_allocation (widget, &allocation);
-          gtk_widget_queue_draw (widget);
-	}
+      gtk_widget_queue_resize (widget);
 
       g_object_notify (G_OBJECT (viewport), "shadow-type");
     }
