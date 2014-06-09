@@ -82,6 +82,24 @@ static void	cb_value_changed (GtkVolumeButton *button,
 
 G_DEFINE_TYPE (GtkVolumeButton, gtk_volume_button, GTK_TYPE_SCALE_BUTTON)
 
+static gboolean
+get_symbolic (GtkScaleButton *button)
+{
+  gchar **icon_list;
+  gboolean ret;
+
+  g_object_get (button, "icons", &icon_list, NULL);
+  if (icon_list != NULL &&
+      icon_list[0] != NULL &&
+      g_str_equal (icon_list[0], icons_symbolic[0]))
+    ret = TRUE;
+  else
+    ret = FALSE;
+  g_strfreev (icon_list);
+
+  return ret;
+}
+
 static void
 gtk_volume_button_set_property (GObject       *object,
 				guint          prop_id,
@@ -93,10 +111,14 @@ gtk_volume_button_set_property (GObject       *object,
   switch (prop_id)
     {
     case PROP_SYMBOLIC:
-      if (g_value_get_boolean (value))
-        gtk_scale_button_set_icons (button, (const char **) icons_symbolic);
-      else
-	gtk_scale_button_set_icons (button, (const char **) icons);
+      if (get_symbolic (button) != g_value_get_boolean (value))
+        {
+          if (g_value_get_boolean (value))
+            gtk_scale_button_set_icons (button, (const char **) icons_symbolic);
+          else
+	    gtk_scale_button_set_icons (button, (const char **) icons);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -112,19 +134,9 @@ gtk_volume_button_get_property (GObject     *object,
 {
   switch (prop_id)
     {
-    case PROP_SYMBOLIC: {
-      char **icon_list;
-
-      g_object_get (object, "icons", &icon_list, NULL);
-      if (icon_list != NULL &&
-	  icon_list[0] != NULL &&
-      	  g_str_equal (icon_list[0], icons_symbolic[0]))
-        g_value_set_boolean (value, TRUE);
-      else
-        g_value_set_boolean (value, FALSE);
-      g_strfreev (icon_list);
+    case PROP_SYMBOLIC:
+      g_value_set_boolean (value, get_symbolic (GTK_SCALE_BUTTON (object)));
       break;
-    }
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -156,7 +168,7 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
                                                          P_("Use symbolic icons"),
                                                          P_("Whether to use symbolic icons"),
                                                          TRUE,
-                                                         G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
+                                                         G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /* Bind class to template
    */
