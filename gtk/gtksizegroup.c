@@ -318,13 +318,14 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
   gobject_class->get_property = gtk_size_group_get_property;
   
   g_object_class_install_property (gobject_class,
-				   PROP_MODE,
-				   g_param_spec_enum ("mode",
-						      P_("Mode"),
-						      P_("The directions in which the size group affects the requested sizes"
-							" of its component widgets"),
-						      GTK_TYPE_SIZE_GROUP_MODE,
-						      GTK_SIZE_GROUP_HORIZONTAL,						      GTK_PARAM_READWRITE));
+                                   PROP_MODE,
+                                   g_param_spec_enum ("mode",
+                                                      P_("Mode"),
+                                                      P_("The directions in which the size group affects the requested sizes"
+                                                         " of its component widgets"),
+                                                      GTK_TYPE_SIZE_GROUP_MODE,
+                                                      GTK_SIZE_GROUP_HORIZONTAL,
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkSizeGroup:ignore-hidden:
@@ -335,13 +336,13 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
    * Since: 2.8
    */
   g_object_class_install_property (gobject_class,
-				   PROP_IGNORE_HIDDEN,
-				   g_param_spec_boolean ("ignore-hidden",
-							 P_("Ignore hidden"),
-							 P_("If TRUE, unmapped widgets are ignored "
-							    "when determining the size of the group"),
-							 FALSE,
-							 GTK_PARAM_READWRITE));
+                                   PROP_IGNORE_HIDDEN,
+                                   g_param_spec_boolean ("ignore-hidden",
+                                                         P_("Ignore hidden"),
+                                                         P_("If TRUE, unmapped widgets are ignored "
+                                                            "when determining the size of the group"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
