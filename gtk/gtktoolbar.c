@@ -503,14 +503,14 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
  						      P_("How to draw the toolbar"),
  						      GTK_TYPE_TOOLBAR_STYLE,
  						      DEFAULT_TOOLBAR_STYLE,
- 						      GTK_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_ARROW,
 				   g_param_spec_boolean ("show-arrow",
 							 P_("Show Arrow"),
 							 P_("If an arrow should be shown if the toolbar doesn't fit"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkToolbar:icon-size:
@@ -532,7 +532,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                       P_("Size of icons in this toolbar"),
                                                       GTK_TYPE_ICON_SIZE,
                                                       DEFAULT_ICON_SIZE,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkToolbar:icon-size-set:
