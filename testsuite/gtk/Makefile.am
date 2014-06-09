@@ -45,6 +45,7 @@ TEST_PROGS += 			\
 	icontheme		\
 	keyhash			\
 	listbox			\
+	notify			\
 	no-gtk-init		\
 	object			\
 	objects-finalize	\
