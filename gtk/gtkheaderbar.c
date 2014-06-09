@@ -1403,8 +1403,12 @@ gtk_header_bar_set_property (GObject      *object,
       break;
 
     case PROP_SPACING:
-      priv->spacing = g_value_get_int (value);
-      gtk_widget_queue_resize (GTK_WIDGET (bar));
+      if (priv->spacing != g_value_get_int (value))
+        {
+          priv->spacing = g_value_get_int (value);
+          gtk_widget_queue_resize (GTK_WIDGET (bar));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     case PROP_SHOW_CLOSE_BUTTON:
@@ -1780,7 +1784,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                      P_("The amount of space between children"),
                                                      0, G_MAXINT,
                                                      DEFAULT_SPACING,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkHeaderBar:show-close-button:
@@ -1798,7 +1802,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                          P_("Show decorations"),
                                                          P_("Whether to show window decorations"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkHeaderBar:decoration-layout:
@@ -1849,7 +1853,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                          P_("Has Subtitle"),
                                                          P_("Whether to reserve space for a subtitle"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
 }
