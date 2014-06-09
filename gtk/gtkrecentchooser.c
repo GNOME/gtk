@@ -96,7 +96,7 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-   
+
   /**
    * GtkRecentChooser::item-activated:
    * @chooser: the object which received the signal
@@ -126,11 +126,12 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-  				       g_param_spec_object ("recent-manager",
-  				       			    P_("Recent Manager"),
-  				       			    P_("The RecentManager object to use"),
-  				       			    GTK_TYPE_RECENT_MANAGER,
-  				       			    GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+                                       g_param_spec_object ("recent-manager",
+                                                            P_("Recent Manager"),
+                                                            P_("The RecentManager object to use"),
+                                                            GTK_TYPE_RECENT_MANAGER,
+                                                            GTK_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
   /**
    * GtkRecentManager:show-private:
    *
@@ -141,11 +142,12 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-   				       g_param_spec_boolean ("show-private",
-   							     P_("Show Private"),
-   							     P_("Whether the private items should be displayed"),
-   							     FALSE,
-   							     GTK_PARAM_READWRITE));
+                                       g_param_spec_boolean ("show-private",
+                                                             P_("Show Private"),
+                                                             P_("Whether the private items should be displayed"),
+                                                             FALSE,
+                                                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkRecentChooser:show-tips:
    *
@@ -155,11 +157,12 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-  				       g_param_spec_boolean ("show-tips",
-  				       			     P_("Show Tooltips"),
-  				       			     P_("Whether there should be a tooltip on the item"),
-  				       			     FALSE,
-  				       			     GTK_PARAM_READWRITE));
+                                       g_param_spec_boolean ("show-tips",
+                                                             P_("Show Tooltips"),
+                                                             P_("Whether there should be a tooltip on the item"),
+                                                             FALSE,
+                                                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkRecentChooser:show-icons:
    *
@@ -168,11 +171,12 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-  				       g_param_spec_boolean ("show-icons",
-  				       			     P_("Show Icons"),
-  				       			     P_("Whether there should be an icon near the item"),
-  				       			     TRUE,
-  				       			     GTK_PARAM_READWRITE));
+                                       g_param_spec_boolean ("show-icons",
+                                                             P_("Show Icons"),
+                                                             P_("Whether there should be an icon near the item"),
+                                                             TRUE,
+                                                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkRecentChooser:show-not-found:
    *
@@ -184,11 +188,12 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-  				       g_param_spec_boolean ("show-not-found",
-  				       			     P_("Show Not Found"),
-  				       			     P_("Whether the items pointing to unavailable resources should be displayed"),
-  				       			     TRUE,
-  				       			     GTK_PARAM_READWRITE));
+                                       g_param_spec_boolean ("show-not-found",
+                                                             P_("Show Not Found"),
+                                                             P_("Whether the items pointing to unavailable resources should be displayed"),
+                                                             TRUE,
+                                                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkRecentChooser:select-multiple:
    *
@@ -197,11 +202,12 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-   				       g_param_spec_boolean ("select-multiple",
-   							     P_("Select Multiple"),
-   							     P_("Whether to allow multiple items to be selected"),
-   							     FALSE,
-   							     GTK_PARAM_READWRITE));
+                                       g_param_spec_boolean ("select-multiple",
+                                                             P_("Select Multiple"),
+                                                             P_("Whether to allow multiple items to be selected"),
+                                                             FALSE,
+                                                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkRecentChooser:local-only:
    *
@@ -211,11 +217,12 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-		  		       g_param_spec_boolean ("local-only",
-					       		     P_("Local only"),
-							     P_("Whether the selected resource(s) should be limited to local file: URIs"),
-							     TRUE,
-							     GTK_PARAM_READWRITE));
+                                       g_param_spec_boolean ("local-only",
+                                                             P_("Local only"),
+                                                             P_("Whether the selected resource(s) should be limited to local file: URIs"),
+                                                             TRUE,
+                                                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkRecentChooser:limit:
    *
@@ -225,13 +232,12 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-   				       g_param_spec_int ("limit",
-   							 P_("Limit"),
-   							 P_("The maximum number of items to be displayed"),
-   							 -1,
-   							 G_MAXINT,
-   							 50,
-   							 GTK_PARAM_READWRITE));
+                                       g_param_spec_int ("limit",
+                                                         P_("Limit"),
+                                                         P_("The maximum number of items to be displayed"),
+                                                         -1, G_MAXINT, 50,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkRecentChooser:sort-type:
    *
@@ -240,12 +246,13 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-		  		       g_param_spec_enum ("sort-type",
-					       		  P_("Sort Type"),
-							  P_("The sorting order of the items displayed"),
-							  GTK_TYPE_RECENT_SORT_TYPE,
-							  GTK_RECENT_SORT_NONE,
-							  GTK_PARAM_READWRITE));
+                                       g_param_spec_enum ("sort-type",
+                                                          P_("Sort Type"),
+                                                          P_("The sorting order of the items displayed"),
+                                                          GTK_TYPE_RECENT_SORT_TYPE,
+                                                          GTK_RECENT_SORT_NONE,
+                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkRecentChooser:filter:
    *
@@ -255,11 +262,11 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * Since: 2.10
    */
   g_object_interface_install_property (iface,
-  				       g_param_spec_object ("filter",
-  				       			    P_("Filter"),
-  				       			    P_("The current filter for selecting which resources are displayed"),
-  				       			    GTK_TYPE_RECENT_FILTER,
-  				       			    GTK_PARAM_READWRITE));
+                                       g_param_spec_object ("filter",
+                                                            P_("Filter"),
+                                                            P_("The current filter for selecting which resources are displayed"),
+                                                            GTK_TYPE_RECENT_FILTER,
+                                                            GTK_PARAM_READWRITE));
 }
 
 GQuark
