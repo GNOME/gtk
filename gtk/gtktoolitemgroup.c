@@ -1611,38 +1611,34 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                          P_("Collapsed"),
                                                          P_("Whether the group has been collapsed and items are hidden"),
                                                          DEFAULT_COLLAPSED,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (oclass, PROP_ELLIPSIZE,
                                    g_param_spec_enum ("ellipsize",
                                                       P_("ellipsize"),
                                                       P_("Ellipsize for item group headers"),
                                                       PANGO_TYPE_ELLIPSIZE_MODE, DEFAULT_ELLIPSIZE,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (oclass, PROP_RELIEF,
                                    g_param_spec_enum ("header-relief",
                                                       P_("Header Relief"),
                                                       P_("Relief of the group header button"),
                                                       GTK_TYPE_RELIEF_STYLE, GTK_RELIEF_NORMAL,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_install_style_property (wclass,
                                            g_param_spec_int ("expander-size",
                                                              P_("Expander Size"),
                                                              P_("Size of the expander arrow"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             DEFAULT_EXPANDER_SIZE,
+                                                             0, G_MAXINT, DEFAULT_EXPANDER_SIZE,
                                                              GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (wclass,
                                            g_param_spec_int ("header-spacing",
                                                              P_("Header Spacing"),
                                                              P_("Spacing between expander arrow and caption"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             DEFAULT_HEADER_SPACING,
+                                                             0, G_MAXINT, DEFAULT_HEADER_SPACING,
                                                              GTK_PARAM_READABLE));
 
   gtk_container_class_install_child_property (cclass, CHILD_PROP_HOMOGENEOUS,
@@ -1800,7 +1796,11 @@ gtk_tool_item_group_set_header_relief (GtkToolItemGroup *group,
 {
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
 
-  gtk_button_set_relief (GTK_BUTTON (group->priv->header), style);
+  if (gtk_button_get_relief (GTK_BUTTON (group->priv->header)) != style)
+    {
+      gtk_button_set_relief (GTK_BUTTON (group->priv->header), style);
+      g_object_notify (G_OBJECT (group), "header-relief");
+    }
 }
 
 static gint64
