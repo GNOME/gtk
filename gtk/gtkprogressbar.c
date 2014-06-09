@@ -155,7 +155,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                          P_("Inverted"),
                                                          P_("Invert the direction in which the progress bar grows"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_FRACTION,
@@ -163,7 +163,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                         P_("Fraction"),
                                                         P_("The fraction of total work that has been completed"),
                                                         0.0, 1.0, 0.0,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_PULSE_STEP,
@@ -171,7 +171,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                         P_("Pulse Step"),
                                                         P_("The fraction of total progress to move the bouncing block when pulsed"),
                                                         0.0, 1.0, 0.1,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_TEXT,
@@ -201,7 +201,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                          P_("Show text"),
                                                          P_("Whether the progress is shown as text."),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkProgressBar:ellipsize:
@@ -225,13 +225,15 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                          "does not have enough room to display the entire string, if at all."),
                                                       PANGO_TYPE_ELLIPSIZE_MODE,
                                                       PANGO_ELLIPSIZE_NONE,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("xspacing",
                                                              P_("X spacing"),
                                                              P_("Extra spacing applied to the width of a progress bar."),
                                                              0, G_MAXINT, 7,
                                                              G_PARAM_READWRITE));
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("yspacing",
                                                              P_("Y spacing"),
@@ -1250,8 +1252,8 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
     {
       priv->orientation = orientation;
       _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
-
       gtk_widget_queue_resize (GTK_WIDGET (pbar));
+      g_object_notify (G_OBJECT (pbar), "orientation");
     }
 }
 
