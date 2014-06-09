@@ -22,6 +22,7 @@
 #include "gtkrbtree.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
@@ -130,8 +131,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
                                              P_("Selection mode"),
                                              GTK_TYPE_SELECTION_MODE,
                                              GTK_SELECTION_SINGLE,
-                                             G_PARAM_READWRITE |
-                                             G_PARAM_STATIC_STRINGS);
+                                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /* Install all properties */
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
