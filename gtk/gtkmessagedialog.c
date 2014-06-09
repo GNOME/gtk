@@ -188,7 +188,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 						      P_("The type of message"),
 						      GTK_TYPE_MESSAGE_TYPE,
                                                       GTK_MESSAGE_INFO,
-                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_BUTTONS,
                                    g_param_spec_enum ("buttons",
@@ -196,7 +196,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 						      P_("The buttons shown in the message dialog"),
 						      GTK_TYPE_BUTTONS_TYPE,
                                                       GTK_BUTTONS_NONE,
-                                                      GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+                                                      GTK_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
   /**
    * GtkMessageDialog:text:
@@ -228,7 +228,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 							 P_("Use Markup"),
 							 P_("The primary text of the title includes Pango markup."),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   /**
    * GtkMessageDialog:secondary-text:
@@ -259,7 +259,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 							 P_("Use Markup in secondary"),
 							 P_("The secondary text includes Pango markup."),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkMessageDialog:image:
@@ -314,6 +314,7 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   priv->has_secondary_text = FALSE;
   priv->has_primary_markup = FALSE;
   priv->has_secondary_text = FALSE;
+  priv->message_type = GTK_MESSAGE_OTHER;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
   gtk_message_dialog_style_updated (GTK_WIDGET (dialog));
@@ -362,6 +363,9 @@ setup_type (GtkMessageDialog *dialog,
   const gchar *name = NULL;
   AtkObject *atk_obj;
 
+  if (priv->message_type == type)
+    return;
+
   priv->message_type = type;
 
   switch (type)
@@ -397,6 +401,8 @@ setup_type (GtkMessageDialog *dialog,
       if (name)
         atk_object_set_name (atk_obj, name);
     }
+
+  g_object_notify (G_OBJECT (dialog), "message-type");
 }
 
 static void 
@@ -425,10 +431,13 @@ gtk_message_dialog_set_property (GObject      *object,
 			    g_value_get_string (value));
       break;
     case PROP_USE_MARKUP:
-      priv->has_primary_markup = g_value_get_boolean (value) != FALSE;
-      gtk_label_set_use_markup (GTK_LABEL (priv->label),
-				priv->has_primary_markup);
-      setup_primary_label_font (dialog);
+      if (priv->has_primary_markup != g_value_get_boolean (value))
+        {
+          priv->has_primary_markup = g_value_get_boolean (value);
+          gtk_label_set_use_markup (GTK_LABEL (priv->label), priv->has_primary_markup);
+          g_object_notify_by_pspec (object, pspec);
+        }
+        setup_primary_label_font (dialog);
       break;
     case PROP_SECONDARY_TEXT:
       {
@@ -453,8 +462,11 @@ gtk_message_dialog_set_property (GObject      *object,
       }
       break;
     case PROP_SECONDARY_USE_MARKUP:
-      gtk_label_set_use_markup (GTK_LABEL (priv->secondary_label), 
-				g_value_get_boolean (value));
+      if (gtk_label_get_use_markup (GTK_LABEL (priv->secondary_label)) != g_value_get_boolean (value))
+        {
+          gtk_label_set_use_markup (GTK_LABEL (priv->secondary_label), g_value_get_boolean (value));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_IMAGE:
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
