@@ -415,7 +415,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                                                          P_("Take Focus"),
                                                          P_("A boolean that determines whether the menu grabs the keyboard focus"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_SHELL_ACCESSIBLE);
 }
