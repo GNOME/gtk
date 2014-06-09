@@ -513,10 +513,10 @@ gdk_mir_display_init (GdkMirDisplay *display)
 }
 
 static void
-gdk_mir_display_class_init (GdkMirDisplayClass * class)
+gdk_mir_display_class_init (GdkMirDisplayClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (klass);
 
   object_class->dispose = gdk_mir_display_dispose;
   object_class->finalize = gdk_mir_display_finalize;

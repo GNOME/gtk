@@ -14,22 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
-/* GDK - The GIMP Drawing Kit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
- */
 
 #ifndef __GDK_PRIVATE_MIR_H__
 #define __GDK_PRIVATE_MIR_H__
@@ -51,43 +35,6 @@ typedef struct _GdkMirEventSource GdkMirEventSource;
 #define GDK_MIR_WINDOW_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_MIR, GdkMirWindowImpl))
 #define GDK_IS_WINDOW_IMPL_MIR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_MIR))
 
-struct _GdkMirWindowImpl
-{
-  GdkWindowImpl parent_instance;
-
-  /* Window we are temporary for */
-  GdkWindow *transient_for;
-  GdkRectangle transient_size;
-
-  /* Child windows (e.g. tooltips) */
-  GList *transient_children;
-
-  /* Desired surface attributes */
-  MirSurfaceType surface_type; // FIXME
-  MirSurfaceState surface_state;
-
-  /* Pattern for background */
-  cairo_pattern_t *background;
-
-  /* Current button state for checking which buttons are being pressed / released */
-  gdouble x;
-  gdouble y;
-  MirMotionButton button_state;
-
-  /* Surface being rendered to (only exists when window visible) */
-  MirSurface *surface;
-
-  /* Cairo context for current frame */
-  cairo_surface_t *cairo_surface;
-
-  /* TRUE if the window can be seen */
-  gboolean visible;
-
-  /* TRUE if cursor is inside this window */
-  gboolean cursor_inside;
-};
-
-
 GdkDisplay *_gdk_mir_display_open (const gchar *display_name);
 
 GdkScreen *_gdk_mir_screen_new (GdkDisplay *display);
@@ -107,6 +54,12 @@ void _gdk_mir_pointer_set_location (GdkDevice *pointer, gdouble x, gdouble y, Gd
 GdkCursor *_gdk_mir_cursor_new (GdkDisplay *display, GdkCursorType type);
 
 GdkWindowImpl *_gdk_mir_window_impl_new (void);
+
+void _gdk_mir_window_impl_set_surface_state (GdkMirWindowImpl *impl, MirSurfaceState state);
+
+void _gdk_mir_window_impl_set_cursor_state (GdkMirWindowImpl *impl, gdouble x, gdouble y, gboolean cursor_inside, MirMotionButton button_state);
+
+void _gdk_mir_window_impl_get_cursor_state (GdkMirWindowImpl *impl, gdouble *x, gdouble *y, gboolean *cursor_inside, MirMotionButton *button_state);
 
 GdkMirEventSource *_gdk_mir_display_get_event_source (GdkDisplay *display);
 

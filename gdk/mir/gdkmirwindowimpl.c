@@ -34,6 +34,42 @@
 
 typedef struct _GdkMirWindowImplClass GdkMirWindowImplClass;
 
+struct _GdkMirWindowImpl
+{
+  GdkWindowImpl parent_instance;
+
+  /* Window we are temporary for */
+  GdkWindow *transient_for;
+  GdkRectangle transient_size;
+
+  /* Child windows (e.g. tooltips) */
+  GList *transient_children;
+
+  /* Desired surface attributes */
+  MirSurfaceType surface_type; // FIXME
+  MirSurfaceState surface_state;
+
+  /* Pattern for background */
+  cairo_pattern_t *background;
+
+  /* Current button state for checking which buttons are being pressed / released */
+  gdouble x;
+  gdouble y;
+  MirMotionButton button_state;
+
+  /* Surface being rendered to (only exists when window visible) */
+  MirSurface *surface;
+
+  /* Cairo context for current frame */
+  cairo_surface_t *cairo_surface;
+
+  /* TRUE if the window can be seen */
+  gboolean visible;
+
+  /* TRUE if cursor is inside this window */
+  gboolean cursor_inside;
+};
+
 struct _GdkMirWindowImplClass
 {
   GdkWindowImplClass parent_class;
@@ -49,6 +85,42 @@ _gdk_mir_window_impl_new (void)
   return g_object_new (GDK_TYPE_MIR_WINDOW_IMPL, NULL);
 }
 
+void
+_gdk_mir_window_impl_set_surface_state (GdkMirWindowImpl *impl, MirSurfaceState state)
+{
+  impl->surface_state = state;
+}
+
+void
+_gdk_mir_window_impl_set_cursor_state (GdkMirWindowImpl *impl,
+                                       gdouble x,
+                                       gdouble y,
+                                       gboolean cursor_inside,
+                                       MirMotionButton button_state)
+{
+  impl->x = x;
+  impl->y = y;
+  impl->cursor_inside = cursor_inside;
+  impl->button_state = button_state;
+}
+
+void
+_gdk_mir_window_impl_get_cursor_state (GdkMirWindowImpl *impl,
+                                       gdouble *x,
+                                       gdouble *y,
+                                       gboolean *cursor_inside,
+                                       MirMotionButton *button_state)
+{
+  if (x)
+    *x = impl->x;
+  if (y)
+    *y = impl->y;
+  if (cursor_inside)
+    *cursor_inside = impl->cursor_inside;
+  if (button_state)
+    *button_state = impl->button_state;
+}
+
 static void
 gdk_mir_window_impl_init (GdkMirWindowImpl *impl)
 {
@@ -61,7 +133,8 @@ get_connection (GdkWindow *window)
 }
 
 static void
-set_surface_state (GdkMirWindowImpl *impl, MirSurfaceState state)
+set_surface_state (GdkMirWindowImpl *impl,
+                   MirSurfaceState state)
 {
   impl->surface_state = state;
   if (impl->surface)
