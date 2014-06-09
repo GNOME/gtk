@@ -735,7 +735,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->focus = NULL;
   impl_class->set_type_hint = NULL;
   impl_class->get_type_hint = NULL;
-  impl_class->set_modal_hint = NULL;
+  impl_class->set_modal_hint = gdk_offscreen_window_set_boolean;
   impl_class->set_skip_taskbar_hint = gdk_offscreen_window_set_boolean;
   impl_class->set_skip_pager_hint = gdk_offscreen_window_set_boolean;
   impl_class->set_urgency_hint = gdk_offscreen_window_set_boolean;
@@ -746,7 +746,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->set_transient_for = gdk_offscreen_window_set_transient_for;
   impl_class->get_frame_extents = gdk_offscreen_window_get_frame_extents;
   impl_class->set_override_redirect = NULL;
-  impl_class->set_accept_focus = NULL;
+  impl_class->set_accept_focus = gdk_offscreen_window_set_boolean;
   impl_class->set_focus_on_map = gdk_offscreen_window_set_boolean;
   impl_class->set_icon_list = gdk_offscreen_window_set_list;
   impl_class->set_icon_name = gdk_offscreen_window_set_string;
