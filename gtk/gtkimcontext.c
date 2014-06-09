@@ -332,7 +332,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                          P_("Purpose of the text field"),
                          GTK_TYPE_INPUT_PURPOSE,
                          GTK_INPUT_PURPOSE_FREE_FORM,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_INPUT_HINTS] =
     g_param_spec_flags ("input-hints",
@@ -340,7 +340,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                          P_("Hints for the text field behaviour"),
                          GTK_TYPE_INPUT_HINTS,
                          GTK_INPUT_HINT_NONE,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 }
@@ -786,10 +786,18 @@ gtk_im_context_set_property (GObject      *obj,
   switch (property_id)
     {
     case PROP_INPUT_PURPOSE:
-      priv->purpose = g_value_get_enum (value);
+      if (priv->purpose != g_value_get_enum (value))
+        {
+          priv->purpose = g_value_get_enum (value);
+          g_object_notify_by_pspec (obj, pspec);
+        }
       break;
     case PROP_INPUT_HINTS:
-      priv->hints = g_value_get_flags (value);
+      if (priv->hints != g_value_get_flags (value))
+        {
+          priv->hints = g_value_get_flags (value);
+          g_object_notify_by_pspec (obj, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
