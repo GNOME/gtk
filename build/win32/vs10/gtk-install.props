@@ -68,6 +68,8 @@ mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32
 
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\deprecated
+
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
@@ -157,6 +159,8 @@ copy ..\..\..\gdk\gdkenumtypes.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy ..\..\..\gdk\gdkversionmacros.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 
 copy ..\..\..\gdk\gdkconfig.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
+
+copy ..\..\..\gdk\deprecated\gdkcolor.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\deprecated
 
 copy ..\..\..\gtk\a11y\gtkarrowaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
@@ -280,8 +284,6 @@ copy ..\..\..\gtk\gtkactionbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkadjustment.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
-copy ..\..\..\gtk\gtkalignment.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkappchooser.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkappchooserbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
@@ -293,8 +295,6 @@ copy ..\..\..\gtk\gtkappchooserwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 copy ..\..\..\gtk\gtkapplication.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkapplicationwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
-copy ..\..\..\gtk\gtkarrow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkaspectframe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
@@ -394,6 +394,8 @@ copy ..\..\..\gtk\gtkenums.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkeventbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
+copy ..\..\..\gtk\gtkeventcontroller.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
 copy ..\..\..\gtk\gtkexpander.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkfilechooser.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
@@ -419,6 +421,24 @@ copy ..\..\..\gtk\gtkfontchooserdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gt
 copy ..\..\..\gtk\gtkfontchooserwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkframe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgesture.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgesturedrag.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgesturelongpress.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgesturemultipress.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgesturepan.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgesturerotate.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgesturesingle.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgestureswipe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkgesturezoom.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkgrid.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
@@ -474,15 +494,11 @@ copy ..\..\..\gtk\gtkmenutoolbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkmessagedialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
-copy ..\..\..\gtk\gtkmisc.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmodules.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkmountoperation.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtknotebook.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
-copy ..\..\..\gtk\gtknumerableicon.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkoffscreenwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
@@ -658,6 +674,8 @@ copy ..\..\..\gtk\gtkwidgetpath.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
+copy ..\..\..\gtk\gtkwindowgroup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
 copy ..\..\..\gtk\gtktextlayout.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
@@ -669,6 +687,10 @@ copy ..\..\..\gtk\deprecated\gtkactivatable.h $(CopyDir)\include\gtk-$(ApiVersio
 copy ..\..\..\gtk\deprecated\gtkaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 
 copy ..\..\..\gtk\deprecated\gtkactiongroup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
+
+copy ..\..\..\gtk\deprecated\gtkalignment.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
+
+copy ..\..\..\gtk\deprecated\gtkarrow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 
 copy ..\..\..\gtk\deprecated\gtkcolorsel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 
@@ -697,6 +719,10 @@ copy ..\..\..\gtk\deprecated\gtkhsv.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\d
 copy ..\..\..\gtk\deprecated\gtkiconfactory.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 
 copy ..\..\..\gtk\deprecated\gtkimagemenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
+
+copy ..\..\..\gtk\deprecated\gtkmisc.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
+
+copy ..\..\..\gtk\deprecated\gtknumerableicon.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 
 copy ..\..\..\gtk\deprecated\gtkradioaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 
