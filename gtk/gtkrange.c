@@ -445,7 +445,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							P_("Inverted"),
 							P_("Invert direction slider moves to increase range value"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_LOWER_STEPPER_SENSITIVITY,
@@ -454,7 +454,7 @@ gtk_range_class_init (GtkRangeClass *class)
 						      P_("The sensitivity policy for the stepper that points to the adjustment's lower side"),
 						      GTK_TYPE_SENSITIVITY_TYPE,
 						      GTK_SENSITIVITY_AUTO,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_UPPER_STEPPER_SENSITIVITY,
@@ -463,7 +463,7 @@ gtk_range_class_init (GtkRangeClass *class)
 						      P_("The sensitivity policy for the stepper that points to the adjustment's upper side"),
 						      GTK_TYPE_SENSITIVITY_TYPE,
 						      GTK_SENSITIVITY_AUTO,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkRange:show-fill-level:
@@ -480,7 +480,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                                          P_("Show Fill Level"),
                                                          P_("Whether to display a fill level indicator graphics on trough."),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkRange:restrict-to-fill-level:
@@ -497,7 +497,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                                          P_("Restrict to Fill Level"),
                                                          P_("Whether to restrict the upper boundary to the fill level."),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkRange:fill-level:
@@ -515,7 +515,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
                                                         G_MAXDOUBLE,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkRange:round-digits:
@@ -530,10 +530,8 @@ gtk_range_class_init (GtkRangeClass *class)
                                    g_param_spec_int ("round-digits",
                                                      P_("Round Digits"),
                                                      P_("The number of digits to round the value to."),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider-width",
@@ -634,16 +632,20 @@ gtk_range_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      priv->orientation = g_value_get_enum (value);
+      if (priv->orientation != g_value_get_enum (value))
+        {
+          priv->orientation = g_value_get_enum (value);
 
-      priv->slider_detail_quark = 0;
-      priv->stepper_detail_quark[0] = 0;
-      priv->stepper_detail_quark[1] = 0;
-      priv->stepper_detail_quark[2] = 0;
-      priv->stepper_detail_quark[3] = 0;
+          priv->slider_detail_quark = 0;
+          priv->stepper_detail_quark[0] = 0;
+          priv->stepper_detail_quark[1] = 0;
+          priv->stepper_detail_quark[2] = 0;
+          priv->stepper_detail_quark[3] = 0;
 
-      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
-      gtk_widget_queue_resize (GTK_WIDGET (range));
+          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
+          gtk_widget_queue_resize (GTK_WIDGET (range));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_ADJUSTMENT:
       gtk_range_set_adjustment (range, g_value_get_object (value));
@@ -4241,9 +4243,11 @@ gtk_range_set_round_digits (GtkRange *range,
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (round_digits >= -1);
 
-  range->priv->round_digits = round_digits;
-
-  g_object_notify (G_OBJECT (range), "round-digits");
+  if (range->priv->round_digits != round_digits)
+    {
+      range->priv->round_digits = round_digits;
+      g_object_notify (G_OBJECT (range), "round-digits");
+    }
 }
 
 /**
