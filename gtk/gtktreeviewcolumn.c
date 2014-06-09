@@ -247,7 +247,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                         P_("Visible"),
                                                         P_("Whether to display the column"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (object_class,
                                    PROP_RESIZABLE,
@@ -255,7 +255,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 							 P_("Resizable"),
 							 P_("Column is user-resizable"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (object_class,
                                    PROP_X_OFFSET,
@@ -284,7 +284,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 						     0,
 						     G_MAXINT,
 						     0,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
                                    PROP_SIZING,
                                    g_param_spec_enum ("sizing",
@@ -292,37 +292,31 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                       P_("Resize mode of the column"),
                                                       GTK_TYPE_TREE_VIEW_COLUMN_SIZING,
                                                       GTK_TREE_VIEW_COLUMN_GROW_ONLY,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (object_class,
                                    PROP_FIXED_WIDTH,
                                    g_param_spec_int ("fixed-width",
                                                      P_("Fixed Width"),
                                                      P_("Current fixed width of the column"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_MIN_WIDTH,
                                    g_param_spec_int ("min-width",
                                                      P_("Minimum Width"),
                                                      P_("Minimum allowed width of the column"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_MAX_WIDTH,
                                    g_param_spec_int ("max-width",
                                                      P_("Maximum Width"),
                                                      P_("Maximum allowed width of the column"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_TITLE,
@@ -338,7 +332,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 							 P_("Expand"),
 							 P_("Column gets share of extra width allocated to the widget"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (object_class,
                                    PROP_CLICKABLE,
@@ -346,7 +340,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                         P_("Clickable"),
                                                         P_("Whether the header can be clicked"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
 
   g_object_class_install_property (object_class,
@@ -362,10 +356,8 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    g_param_spec_float ("alignment",
                                                        P_("Alignment"),
                                                        P_("X Alignment of the column header text or widget"),
-                                                       0.0,
-                                                       1.0,
-                                                       0.0,
-                                                       GTK_PARAM_READWRITE));
+                                                       0.0, 1.0, 0.0,
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_REORDERABLE,
@@ -373,7 +365,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 							 P_("Reorderable"),
 							 P_("Whether the column can be reordered around the headers"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_SORT_INDICATOR,
@@ -381,7 +373,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                         P_("Sort indicator"),
                                                         P_("Whether to show a sort indicator"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_SORT_ORDER,
@@ -390,7 +382,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                       P_("Sort direction the sort indicator should indicate"),
                                                       GTK_TYPE_SORT_TYPE,
                                                       GTK_SORT_ASCENDING,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTreeViewColumn:sort-column-id:
@@ -405,10 +397,8 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    g_param_spec_int ("sort-column-id",
                                                      P_("Sort column ID"),
                                                      P_("Logical sort column ID this column sorts on when selected for sorting"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTreeViewColumn:cell-area:
@@ -1881,10 +1871,13 @@ gtk_tree_view_column_set_spacing (GtkTreeViewColumn *tree_column,
 
   priv = tree_column->priv;
 
-  gtk_cell_area_box_set_spacing (GTK_CELL_AREA_BOX (priv->cell_area),
-                                 spacing);
-  if (priv->tree_view)
-    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+  if (gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (priv->cell_area)) != spacing)
+    {
+      gtk_cell_area_box_set_spacing (GTK_CELL_AREA_BOX (priv->cell_area), spacing);
+      if (priv->tree_view)
+        _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+      g_object_notify (G_OBJECT (tree_column), "spacing");
+    }
 }
 
 /**
@@ -2210,16 +2203,16 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
 
   priv = tree_column->priv;
 
-  priv->fixed_width = fixed_width;
-
-  if (priv->visible &&
-      priv->tree_view != NULL &&
-      gtk_widget_get_realized (priv->tree_view))
+  if (priv->fixed_width != fixed_width)
     {
-      gtk_widget_queue_resize (priv->tree_view);
-    }
+      priv->fixed_width = fixed_width;
+      if (priv->visible &&
+          priv->tree_view != NULL &&
+          gtk_widget_get_realized (priv->tree_view))
+        gtk_widget_queue_resize (priv->tree_view);
 
-  g_object_notify (G_OBJECT (tree_column), "fixed-width");
+      g_object_notify (G_OBJECT (tree_column), "fixed-width");
+    }
 }
 
 /**
