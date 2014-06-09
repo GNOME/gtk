@@ -903,37 +903,43 @@ _gtk_icon_helper_set_stock_id (GtkIconHelper *self,
     }
 }
 
-void 
+gboolean
 _gtk_icon_helper_set_icon_size (GtkIconHelper *self,
-                                GtkIconSize icon_size)
+                                GtkIconSize    icon_size)
 {
   if (self->priv->icon_size != icon_size)
     {
       self->priv->icon_size = icon_size;
       _gtk_icon_helper_invalidate (self);
+      return TRUE;
     }
+  return FALSE;
 }
 
-void 
+gboolean
 _gtk_icon_helper_set_pixel_size (GtkIconHelper *self,
-                                 gint pixel_size)
+                                 gint           pixel_size)
 {
   if (self->priv->pixel_size != pixel_size)
     {
       self->priv->pixel_size = pixel_size;
       _gtk_icon_helper_invalidate (self);
+      return TRUE;
     }
+  return FALSE;
 }
 
-void 
+gboolean
 _gtk_icon_helper_set_use_fallback (GtkIconHelper *self,
-                                   gboolean use_fallback)
+                                   gboolean       use_fallback)
 {
   if (self->priv->use_fallback != use_fallback)
     {
       self->priv->use_fallback = use_fallback;
       _gtk_icon_helper_invalidate (self);
+      return TRUE;
     }
+  return FALSE;
 }
 
 GtkImageType
