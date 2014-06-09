@@ -373,7 +373,8 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                       P_("Text direction"),
                                                       GTK_TYPE_TEXT_DIRECTION,
                                                       GTK_TEXT_DIR_LTR,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkStyleContext:parent:
    *
