@@ -400,7 +400,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						      P_("The selection mode"),
 						      GTK_TYPE_SELECTION_MODE,
 						      GTK_SELECTION_SINGLE,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:pixbuf-column:
@@ -418,7 +418,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Pixbuf column"),
 						     P_("Model column used to retrieve the icon pixbuf from"),
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:text-column:
@@ -436,7 +436,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Text column"),
 						     P_("Model column used to retrieve the text from"),
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   
   /**
@@ -456,7 +456,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Markup column"),
 						     P_("Model column used to retrieve the text if using Pango markup"),
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
   g_object_class_install_property (gobject_class,
                                    PROP_MODEL,
@@ -481,7 +481,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Number of columns"),
 						     P_("Number of columns to display"),
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   
 
   /**
@@ -499,7 +499,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Width for each item"),
 						     P_("The width used for each item"),
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE));  
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:spacing:
@@ -515,7 +515,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Spacing"),
 						     P_("Space which is inserted between cells of an item"),
 						     0, G_MAXINT, 0,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:row-spacing:
@@ -531,7 +531,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Row Spacing"),
 						     P_("Space which is inserted between grid rows"),
 						     0, G_MAXINT, 6,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:column-spacing:
@@ -547,7 +547,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Column Spacing"),
 						     P_("Space which is inserted between grid columns"),
 						     0, G_MAXINT, 6,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:margin:
@@ -563,7 +563,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Margin"),
 						     P_("Space which is inserted at the edges of the icon view"),
 						     0, G_MAXINT, 6,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:item-orientation:
@@ -580,7 +580,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						      P_("How the text and icon of each item are positioned relative to each other"),
 						      GTK_TYPE_ORIENTATION,
 						      GTK_ORIENTATION_VERTICAL,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:reorderable:
@@ -596,7 +596,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 							 P_("Reorderable"),
 							 P_("View is reorderable"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
     g_object_class_install_property (gobject_class,
                                      PROP_TOOLTIP_COLUMN,
@@ -606,7 +606,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                                        -1,
                                                        G_MAXINT,
                                                        -1,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:item-padding:
@@ -622,7 +622,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Item Padding"),
 						     P_("Padding around icon view items"),
 						     0, G_MAXINT, 6,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:cell-area:
@@ -656,7 +656,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 							 P_("Activate on Single Click"),
 							 P_("Activate row on a single click"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /* Scrollable interface properties */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
@@ -1135,12 +1135,20 @@ gtk_icon_view_set_property (GObject      *object,
       gtk_icon_view_set_vadjustment (icon_view, g_value_get_object (value));
       break;
     case PROP_HSCROLL_POLICY:
-      icon_view->priv->hscroll_policy = g_value_get_enum (value);
-      gtk_widget_queue_resize (GTK_WIDGET (icon_view));
+      if (icon_view->priv->hscroll_policy != g_value_get_enum (value))
+        {
+          icon_view->priv->hscroll_policy = g_value_get_enum (value);
+          gtk_widget_queue_resize (GTK_WIDGET (icon_view));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_VSCROLL_POLICY:
-      icon_view->priv->vscroll_policy = g_value_get_enum (value);
-      gtk_widget_queue_resize (GTK_WIDGET (icon_view));
+      if (icon_view->priv->vscroll_policy != g_value_get_enum (value))
+        {
+          icon_view->priv->vscroll_policy = g_value_get_enum (value);
+          gtk_widget_queue_resize (GTK_WIDGET (icon_view));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     default:
