@@ -179,7 +179,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 						      P_("Determines how the shadowed box around the viewport is drawn"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_IN,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
@@ -201,12 +201,20 @@ gtk_viewport_set_property (GObject         *object,
       viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, g_value_get_object (value));
       break;
     case PROP_HSCROLL_POLICY:
-      viewport->priv->hscroll_policy = g_value_get_enum (value);
-      gtk_widget_queue_resize (GTK_WIDGET (viewport));
+      if (viewport->priv->hscroll_policy != g_value_get_enum (value))
+        {
+          viewport->priv->hscroll_policy = g_value_get_enum (value);
+          gtk_widget_queue_resize (GTK_WIDGET (viewport));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_VSCROLL_POLICY:
-      viewport->priv->vscroll_policy = g_value_get_enum (value);
-      gtk_widget_queue_resize (GTK_WIDGET (viewport));
+      if (viewport->priv->vscroll_policy != g_value_get_enum (value))
+        {
+          viewport->priv->vscroll_policy = g_value_get_enum (value);
+          gtk_widget_queue_resize (GTK_WIDGET (viewport));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_SHADOW_TYPE:
       gtk_viewport_set_shadow_type (viewport, g_value_get_enum (value));
@@ -609,7 +617,7 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
     {
       priv->shadow_type = type;
 
-      if (gtk_widget_get_visible (widget))
+      if (gtk_widget_is_drawable (widget))
 	{
           gtk_widget_get_allocation (widget, &allocation);
           gtk_widget_size_allocate (widget, &allocation);
