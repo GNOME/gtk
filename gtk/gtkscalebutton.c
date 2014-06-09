@@ -196,7 +196,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
 				   PROP_SIZE,
@@ -205,7 +205,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 						      P_("The icon size"),
 						      GTK_TYPE_ICON_SIZE,
 						      GTK_ICON_SIZE_SMALL_TOOLBAR,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
@@ -401,15 +401,12 @@ gtk_scale_button_set_property (GObject       *object,
       gtk_scale_button_set_value (button, g_value_get_double (value));
       break;
     case PROP_SIZE:
-      {
-	GtkIconSize size;
-	size = g_value_get_enum (value);
-	if (button->priv->size != size)
-	  {
-	    button->priv->size = size;
-	    gtk_scale_button_update_icon (button);
-	  }
-      }
+      if (button->priv->size != g_value_get_enum (value))
+        {
+          button->priv->size = g_value_get_enum (value);
+          gtk_scale_button_update_icon (button);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_ADJUSTMENT:
       gtk_scale_button_set_adjustment (button, g_value_get_object (value));
@@ -582,6 +579,7 @@ gtk_scale_button_set_value (GtkScaleButton *button,
   priv = button->priv;
 
   gtk_range_set_value (GTK_RANGE (priv->scale), value);
+  g_object_notify (G_OBJECT (button), "value");
 }
 
 /**
