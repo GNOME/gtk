@@ -31,17 +31,7 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDisplayClass GdkDisplayClass;
 
-/* Tracks information about the keyboard grab on this display */
-typedef struct
-{
-  GdkWindow *window;
-  GdkWindow *native_window;
-  gulong serial;
-  gboolean owner_events;
-  guint32 time;
-} GdkKeyboardGrabInfo;
-
-/* Tracks information about the pointer grab on this display */
+/* Tracks information about the device grab on this display */
 typedef struct
 {
   GdkWindow *window;
