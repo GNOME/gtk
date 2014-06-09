@@ -4,6 +4,10 @@
     <Import Project="gtk-version-paths.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
+    <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
+    <InstalledDlls>$(BinDir)\$(GtkDllPrefix)gdk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gtk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gailutil(GtkDllSuffix).dll</InstalledDlls>
+    <InstalledBins>$(BinDir)\gtk3-demo.exe;$(BinDir)\gtk3-demo-application.exe</InstalledBins>
+    <InstalledBroadwayBins>$(BinDir)\broadwayd.exe</InstalledBroadwayBins>
     <GtkDoInstallBin>
 mkdir $(CopyDir)\bin
 
@@ -15,22 +19,22 @@ if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_BIN
 if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_BIN
 
 
-copy $(Configuration)\$(Platform)\bin\*.dll $(CopyDir)\bin
+copy $(BinDir)\*.dll $(CopyDir)\bin
 
-copy $(Configuration)\$(Platform)\bin\*-$(ApiVersion).lib $(CopyDir)\lib
+copy $(BinDir)\*-$(ApiVersion).lib $(CopyDir)\lib
 
-copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin
+copy $(BinDir)\*.exe $(CopyDir)\bin
 
 goto DONE_BIN
 
 
 :DO_BROADWAY_BIN
 
-copy $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll $(CopyDir)\bin
+copy $(BinDir)\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll $(CopyDir)\bin
 
-copy $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib $(CopyDir)\lib
+copy $(BinDir)\gdk-$(ApiVersion).lib $(CopyDir)\lib
 
-copy $(Configuration)\$(Platform)\bin\broadwayd.exe $(CopyDir)\bin
+copy $(BinDir)\broadwayd.exe $(CopyDir)\bin
 
 
 if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin
@@ -62,6 +66,18 @@ if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\*.exe $(C
     <_PropertySheetDisplayName>gtkinstallbinprops</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemGroup>
+    <BuildMacro Include="BinDir">
+      <Value>$(BinDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledDlls">
+      <Value>$(InstalledDlls)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledBins">
+      <Value>$(InstalledBins)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledBroadwayBins">
+      <Value>$(InstalledBroadwayBins)</Value>
+    </BuildMacro>
     <BuildMacro Include="GtkDoInstallBin">
       <Value>$(GtkDoInstallBin)</Value>
     </BuildMacro>
