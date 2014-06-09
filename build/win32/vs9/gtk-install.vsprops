@@ -230,7 +230,7 @@ copy ..\..\..\gtk\gtkgesturepan.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;
 copy ..\..\..\gtk\gtkgesturerotate.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkgesturesingle.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkgestureswipe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkgesturezoom.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+copy ..\..\..\gtk\gtkgesturezoom.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkgrid.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkheaderbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkicontheme.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
