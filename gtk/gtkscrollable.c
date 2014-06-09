@@ -112,7 +112,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
 			     P_("How the size of the content should be determined"),
 			     GTK_TYPE_SCROLLABLE_POLICY,
 			     GTK_SCROLL_MINIMUM,
-			     GTK_PARAM_READWRITE);
+			     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
   g_object_interface_install_property (iface, pspec);
 
   /**
@@ -128,7 +128,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
 			     P_("How the size of the content should be determined"),
 			     GTK_TYPE_SCROLLABLE_POLICY,
 			     GTK_SCROLL_MINIMUM,
-			     GTK_PARAM_READWRITE);
+			     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
   g_object_interface_install_property (iface, pspec);
 }
 
