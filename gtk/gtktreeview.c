@@ -16084,8 +16084,6 @@ void
 gtk_tree_view_set_show_expanders (GtkTreeView *tree_view,
 				  gboolean     enabled)
 {
-  gboolean was_enabled;
-
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   enabled = enabled != FALSE;
