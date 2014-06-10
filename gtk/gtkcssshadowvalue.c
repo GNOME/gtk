@@ -226,6 +226,8 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser,
 
   if (box_shadow_mode)
     inset = _gtk_css_parser_try (parser, "inset", TRUE);
+  else
+    inset = FALSE;
 
   do
   {
