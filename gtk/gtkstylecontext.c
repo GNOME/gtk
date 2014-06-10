@@ -260,7 +260,6 @@ struct GtkStyleInfo
 struct StyleData
 {
   GtkCssComputedValues *store;
-  GArray *property_cache;
   guint ref_count;
 };
 
@@ -276,6 +275,7 @@ struct _GtkStyleContextPrivate
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
   GtkStyleInfo *info;
+  GArray *property_cache;
   gint scale;
 
   guint frame_clock_update_id;
@@ -403,23 +403,20 @@ style_data_new (void)
 }
 
 static void
-clear_property_cache (StyleData *data)
+gtk_style_context_clear_property_cache (GtkStyleContext *context)
 {
+  GtkStyleContextPrivate *priv = context->priv;
   guint i;
 
-  if (!data->property_cache)
-    return;
-
-  for (i = 0; i < data->property_cache->len; i++)
+  for (i = 0; i < priv->property_cache->len; i++)
     {
-      PropertyValue *node = &g_array_index (data->property_cache, PropertyValue, i);
+      PropertyValue *node = &g_array_index (priv->property_cache, PropertyValue, i);
 
       g_param_spec_unref (node->pspec);
       g_value_unset (&node->value);
     }
 
-  g_array_free (data->property_cache, TRUE);
-  data->property_cache = NULL;
+  g_array_set_size (priv->property_cache, 0);
 }
 
 static StyleData *
@@ -439,7 +436,6 @@ style_data_unref (StyleData *data)
     return;
 
   g_object_unref (data->store);
-  clear_property_cache (data);
 
   g_slice_free (StyleData, data);
 }
@@ -640,6 +636,8 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv->info = style_info_new ();
   priv->info->state_flags = GTK_STATE_FLAG_DIR_LTR;
 
+  priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
+
   gtk_style_context_set_cascade (style_context,
                                  _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (priv->screen)));
 }
@@ -774,6 +772,9 @@ gtk_style_context_finalize (GObject *object)
 
   while (priv->info)
     priv->info = style_info_pop (priv->info);
+
+  gtk_style_context_clear_property_cache (style_context);
+  g_array_free (priv->property_cache, TRUE);
 
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
 }
@@ -2200,35 +2201,27 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   PropertyValue *pcache, key = { 0 };
-  StyleData *data;
   guint i;
 
   priv = context->priv;
-
-  data = style_data_lookup (context);
 
   key.widget_type = widget_type;
   key.pspec = pspec;
 
   /* need value cache array */
-  if (!data->property_cache)
-    data->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
-  else
-    {
-      pcache = bsearch (&key,
-                        data->property_cache->data, data->property_cache->len,
-                        sizeof (PropertyValue), style_property_values_cmp);
-      if (pcache)
-        return &pcache->value;
-    }
+  pcache = bsearch (&key,
+                    priv->property_cache->data, priv->property_cache->len,
+                    sizeof (PropertyValue), style_property_values_cmp);
+  if (pcache)
+    return &pcache->value;
 
   i = 0;
-  while (i < data->property_cache->len &&
-         style_property_values_cmp (&key, &g_array_index (data->property_cache, PropertyValue, i)) >= 0)
+  while (i < priv->property_cache->len &&
+         style_property_values_cmp (&key, &g_array_index (priv->property_cache, PropertyValue, i)) >= 0)
     i++;
 
-  g_array_insert_val (data->property_cache, i, key);
-  pcache = &g_array_index (data->property_cache, PropertyValue, i);
+  g_array_insert_val (priv->property_cache, i, key);
+  pcache = &g_array_index (priv->property_cache, PropertyValue, i);
 
   /* cache miss, initialize value type, then set contents */
   g_param_spec_ref (pcache->pspec);
@@ -2996,6 +2989,8 @@ gtk_style_context_clear_cache (GtkStyleContext *context)
       style_info_set_data (info, NULL);
     }
   g_hash_table_remove_all (priv->style_data);
+
+  gtk_style_context_clear_property_cache (context);
 }
 
 static void
@@ -3025,6 +3020,8 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
 
       _gtk_bitmask_free (changes);
     }
+
+  gtk_style_context_clear_property_cache (context);
 }
 
 static void
