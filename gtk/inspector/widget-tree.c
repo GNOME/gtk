@@ -25,6 +25,7 @@
 #include "prop-list.h"
 #include "widget-tree.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcomboboxprivate.h"
 #include <string.h>
 
 enum
@@ -341,6 +342,15 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
       submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (object));
       if (submenu)
         gtk_inspector_widget_tree_append_object (wt, G_OBJECT (submenu), &iter, "submenu");
+    }
+
+  if (GTK_IS_COMBO_BOX (object))
+    {
+      GtkWidget *popup;
+
+      popup = gtk_combo_box_get_popup (GTK_COMBO_BOX (object));
+      if (popup)
+        gtk_inspector_widget_tree_append_object (wt, G_OBJECT (popup), &iter, "popup");
     }
 
   if (GTK_IS_TREE_VIEW (object))
