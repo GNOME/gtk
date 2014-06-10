@@ -1674,6 +1674,9 @@ gtk_menu_item_draw (GtkWidget *widget,
       GtkTextDirection direction;
       gdouble angle;
 
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
+
       direction = gtk_widget_get_direction (widget);
       get_arrow_size (widget, child, &arrow_size, NULL);
 
@@ -1691,6 +1694,8 @@ gtk_menu_item_draw (GtkWidget *widget,
       arrow_y = y + (h - arrow_size) / 2;
 
       gtk_render_arrow (context, cr, angle, arrow_x, arrow_y, arrow_size);
+
+      gtk_style_context_restore (context);
     }
   else if (!child)
     {
