@@ -1153,7 +1153,7 @@ gtk_style_get_style_property (GtkStyle     *style,
   priv = GTK_STYLE_GET_PRIVATE (style);
   peek_value = _gtk_style_context_peek_style_property (priv->context,
                                                        widget_type,
-                                                       0, pspec);
+                                                       pspec);
 
   if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
     g_value_copy (peek_value, value);
@@ -1214,7 +1214,7 @@ gtk_style_get_valist (GtkStyle    *style,
         }
 
       peek_value = _gtk_style_context_peek_style_property (priv->context, widget_type,
-                                                           0, pspec);
+                                                           pspec);
       G_VALUE_LCOPY (peek_value, var_args, 0, &error);
       if (error)
         {

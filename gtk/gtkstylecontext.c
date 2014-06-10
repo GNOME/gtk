@@ -244,7 +244,6 @@ struct PropertyValue
 {
   GType       widget_type;
   GParamSpec *pspec;
-  GtkStateFlags state;
   GValue      value;
 };
 
@@ -2182,9 +2181,6 @@ style_property_values_cmp (gconstpointer bsearch_node1,
   if (val1->pspec != val2->pspec)
     return val1->pspec < val2->pspec ? -1 : 1;
 
-  if (val1->state != val2->state)
-    return val1->state < val2->state ? -1 : 1;
-
   return 0;
 }
 
@@ -2200,7 +2196,6 @@ _gtk_style_context_peek_property (GtkStyleContext *context,
 const GValue *
 _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                         GType            widget_type,
-                                        GtkStateFlags    state,
                                         GParamSpec      *pspec)
 {
   GtkStyleContextPrivate *priv;
@@ -2210,10 +2205,9 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
   priv = context->priv;
 
-  data = style_data_lookup_for_state (context, state);
+  data = style_data_lookup (context);
 
   key.widget_type = widget_type;
-  key.state = state;
   key.pspec = pspec;
 
   /* need value cache array */
@@ -2246,7 +2240,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
       if (gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (priv->cascade),
                                                  widget_path,
-                                                 state, pspec, &pcache->value))
+                                                 0, pspec, &pcache->value))
         {
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
@@ -2322,7 +2316,6 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkWidgetClass *widget_class;
-  GtkStateFlags state;
   GParamSpec *pspec;
   const GValue *peek_value;
   GType widget_type;
@@ -2366,9 +2359,7 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
       return;
     }
 
-  state = gtk_style_context_get_state (context);
-  peek_value = _gtk_style_context_peek_style_property (context, widget_type,
-                                                       state, pspec);
+  peek_value = _gtk_style_context_peek_style_property (context, widget_type, pspec);
 
   if (G_VALUE_TYPE (value) == G_VALUE_TYPE (peek_value))
     g_value_copy (peek_value, value);
@@ -2397,7 +2388,6 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   const gchar *prop_name;
-  GtkStateFlags state;
   GType widget_type;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -2425,8 +2415,6 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
         }
     }
 
-  state = gtk_style_context_get_state (context);
-
   while (prop_name)
     {
       GtkWidgetClass *widget_class;
@@ -2447,8 +2435,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
           break;
         }
 
-      peek_value = _gtk_style_context_peek_style_property (context, widget_type,
-                                                           state, pspec);
+      peek_value = _gtk_style_context_peek_style_property (context, widget_type, pspec);
 
       G_VALUE_LCOPY (peek_value, args, 0, &error);
 

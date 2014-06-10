@@ -36,7 +36,6 @@ GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *c
                                                               guint            property_id);
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
                                                               GType            widget_type,
-                                                              GtkStateFlags    state,
                                                               GParamSpec      *pspec);
 void           _gtk_style_context_validate                   (GtkStyleContext *context,
                                                               gint64           timestamp,
