@@ -319,33 +319,6 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
   g_free (address);
 
-  if (GTK_IS_WIDGET (object))
-    {
-      struct {
-        GtkPropagationPhase  phase;
-        const gchar         *name;
-      } phases[] = {
-        { GTK_PHASE_CAPTURE, "capture" },
-        { GTK_PHASE_TARGET,  "target" },
-        { GTK_PHASE_BUBBLE,  "bubble" },
-        { GTK_PHASE_NONE,    "" }
-      };
-      gint i;
-
-      for (i = 0; i < G_N_ELEMENTS (phases); i++)
-        {
-          GList *list, *l;
-
-          list = _gtk_widget_list_controllers (GTK_WIDGET (object), phases[i].phase);
-          for (l = list; l; l = l->next)
-            {
-              GObject *controller = l->data;
-              gtk_inspector_widget_tree_append_object (wt, controller, &iter, phases[i].name);
-            }
-          g_list_free (list);
-        }
-    }
-
   if (GTK_IS_CONTAINER (object))
     {
       FindAllData data;
@@ -361,6 +334,15 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
    * children in the GtkContainer sense, but which we still want
    * to show in the tree right away.
    */
+  if (GTK_IS_MENU_ITEM (object))
+    {
+      GtkWidget *submenu;
+
+      submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (object));
+      if (submenu)
+        gtk_inspector_widget_tree_append_object (wt, G_OBJECT (submenu), &iter, "submenu");
+    }
+
   if (GTK_IS_TREE_VIEW (object))
     {
       gint n_columns, i;
@@ -441,6 +423,34 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       gtk_text_tag_table_foreach (GTK_TEXT_TAG_TABLE (object), tag_callback, &data);
     }
+
+  if (GTK_IS_WIDGET (object))
+    {
+      struct {
+        GtkPropagationPhase  phase;
+        const gchar         *name;
+      } phases[] = {
+        { GTK_PHASE_CAPTURE, "capture" },
+        { GTK_PHASE_TARGET,  "target" },
+        { GTK_PHASE_BUBBLE,  "bubble" },
+        { GTK_PHASE_NONE,    "" }
+      };
+      gint i;
+
+      for (i = 0; i < G_N_ELEMENTS (phases); i++)
+        {
+          GList *list, *l;
+
+          list = _gtk_widget_list_controllers (GTK_WIDGET (object), phases[i].phase);
+          for (l = list; l; l = l->next)
+            {
+              GObject *controller = l->data;
+              gtk_inspector_widget_tree_append_object (wt, controller, &iter, phases[i].name);
+            }
+          g_list_free (list);
+        }
+    }
+
 }
 
 void
