@@ -401,7 +401,6 @@ create_search_bar (void)
 {
   GtkWidget *widget;
   GtkWidget *entry;
-  GtkWidget *align;
   WidgetInfo *info;
   GtkWidget *view;
   GtkWidget *box;
