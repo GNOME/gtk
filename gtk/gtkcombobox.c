@@ -44,6 +44,7 @@
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtkcomboboxprivate.h"
 
 #include <gobject/gvaluecollector.h>
 
@@ -5918,4 +5919,13 @@ gtk_combo_box_set_active_id (GtkComboBox *combo_box,
   g_object_notify (G_OBJECT (combo_box), "active-id");
 
   return match;
+}
+
+GtkWidget *
+gtk_combo_box_get_popup (GtkComboBox *combo)
+{
+  if (combo->priv->popup_window)
+    return combo->priv->popup_window;
+  else
+    return combo->priv->popup_widget;
 }
