@@ -232,7 +232,6 @@
 typedef struct GtkStyleInfo GtkStyleInfo;
 typedef struct GtkRegion GtkRegion;
 typedef struct PropertyValue PropertyValue;
-typedef struct StyleData StyleData;
 
 struct GtkRegion
 {
@@ -254,13 +253,7 @@ struct GtkStyleInfo
   GArray *regions;
   GtkJunctionSides junction_sides;
   GtkStateFlags state_flags;
-  StyleData *data;
-};
-
-struct StyleData
-{
-  GtkCssComputedValues *store;
-  guint ref_count;
+  GtkCssComputedValues *values;
 };
 
 struct _GtkStyleContextPrivate
@@ -273,7 +266,7 @@ struct _GtkStyleContextPrivate
   GSList *children;
   GtkWidget *widget;
   GtkWidgetPath *widget_path;
-  GHashTable *style_data;
+  GHashTable *style_values;
   GtkStyleInfo *info;
   GArray *property_cache;
   gint scale;
@@ -314,7 +307,7 @@ static void gtk_style_context_impl_get_property (GObject      *object,
                                                  guint         prop_id,
                                                  GValue       *value,
                                                  GParamSpec   *pspec);
-static StyleData *style_data_lookup             (GtkStyleContext *context);
+static GtkCssComputedValues *style_values_lookup(GtkStyleContext *context);
 
 
 static void gtk_style_context_disconnect_update (GtkStyleContext *context);
@@ -391,17 +384,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                         GTK_PARAM_READWRITE));
 }
 
-static StyleData *
-style_data_new (void)
-{
-  StyleData *data;
-
-  data = g_slice_new0 (StyleData);
-  data->ref_count = 1;
-
-  return data;
-}
-
 static void
 gtk_style_context_clear_property_cache (GtkStyleContext *context)
 {
@@ -419,33 +401,6 @@ gtk_style_context_clear_property_cache (GtkStyleContext *context)
   g_array_set_size (priv->property_cache, 0);
 }
 
-static StyleData *
-style_data_ref (StyleData *style_data)
-{
-  style_data->ref_count++;
-
-  return style_data;
-}
-
-static void
-style_data_unref (StyleData *data)
-{
-  data->ref_count--;
-
-  if (data->ref_count > 0)
-    return;
-
-  g_object_unref (data->store);
-
-  g_slice_free (StyleData, data);
-}
-
-static gboolean
-style_data_is_animating (StyleData *style_data)
-{
-  return !_gtk_css_computed_values_is_static (style_data->store);
-}
-
 static GtkStyleInfo *
 style_info_new (void)
 {
@@ -459,25 +414,26 @@ style_info_new (void)
 }
 
 static void
-style_info_set_data (GtkStyleInfo *info,
-                     StyleData    *data)
+style_info_set_values (GtkStyleInfo *info,
+                       GtkCssComputedValues *values)
 {
-  if (info->data == data)
+  if (info->values == values)
     return;
 
-  if (data)
-    style_data_ref (data);
+  if (values)
+    g_object_ref (values);
 
-  if (info->data)
-    style_data_unref (info->data);
+  if (info->values)
+    g_object_unref (info->values);
 
-  info->data = data;
+  info->values = values;
 }
 
 static void
 style_info_free (GtkStyleInfo *info)
 {
-  style_info_set_data (info, NULL);
+  if (info->values)
+    g_object_unref (info->values);
   g_array_free (info->style_classes, TRUE);
   g_array_free (info->regions, TRUE);
   g_slice_free (GtkStyleInfo, info);
@@ -510,7 +466,7 @@ style_info_copy (GtkStyleInfo *info)
   copy->next = info;
   copy->junction_sides = info->junction_sides;
   copy->state_flags = info->state_flags;
-  style_info_set_data (copy, info->data);
+  style_info_set_values (copy, info->values);
 
   return copy;
 }
@@ -624,10 +580,10 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv = style_context->priv =
     gtk_style_context_get_instance_private (style_context);
 
-  priv->style_data = g_hash_table_new_full (style_info_hash,
-                                            style_info_equal,
-                                            (GDestroyNotify) style_info_free,
-                                            (GDestroyNotify) style_data_unref);
+  priv->style_values = g_hash_table_new_full (style_info_hash,
+                                              style_info_equal,
+                                              (GDestroyNotify) style_info_free,
+                                              g_object_unref);
 
   priv->screen = gdk_screen_get_default ();
   priv->relevant_changes = GTK_CSS_CHANGE_ANY;
@@ -716,7 +672,7 @@ static gboolean
 gtk_style_context_should_animate (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  StyleData *data;
+  GtkCssComputedValues *values;
   gboolean animate;
 
   priv = context->priv;
@@ -727,8 +683,8 @@ gtk_style_context_should_animate (GtkStyleContext *context)
   if (!gtk_widget_get_mapped (priv->widget))
     return FALSE;
 
-  data = style_data_lookup (context);
-  if (!style_data_is_animating (data))
+  values = style_values_lookup (context);
+  if (_gtk_css_computed_values_is_static (values))
     return FALSE;
 
   g_object_get (gtk_widget_get_settings (context->priv->widget),
@@ -768,7 +724,7 @@ gtk_style_context_finalize (GObject *object)
   if (priv->widget_path)
     gtk_widget_path_free (priv->widget_path);
 
-  g_hash_table_destroy (priv->style_data);
+  g_hash_table_destroy (priv->style_values);
 
   while (priv->info)
     priv->info = style_info_pop (priv->info);
@@ -910,62 +866,61 @@ build_properties (GtkStyleContext      *context,
                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
 			   priv->scale,
                            values,
-                           priv->parent ? style_data_lookup (priv->parent)->store : NULL);
+                           priv->parent ? style_values_lookup (priv->parent) : NULL);
 
   _gtk_css_lookup_free (lookup);
   gtk_widget_path_free (path);
 }
 
-static StyleData *
-style_data_lookup (GtkStyleContext *context)
+static GtkCssComputedValues *
+style_values_lookup (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
+  GtkCssComputedValues *values;
   GtkStyleInfo *info;
-  StyleData *data;
 
   priv = context->priv;
   info = priv->info;
 
   /* Current data in use is cached, just return it */
-  if (info->data)
-    return info->data;
+  if (info->values)
+    return info->values;
 
   g_assert (priv->widget != NULL || priv->widget_path != NULL);
 
-  data = g_hash_table_lookup (priv->style_data, info);
-  if (data)
+  values = g_hash_table_lookup (priv->style_values, info);
+  if (values)
     {
-      style_info_set_data (info, data);
-      return data;
+      style_info_set_values (info, values);
+      return values;
     }
 
-  data = style_data_new ();
-  data->store = _gtk_css_computed_values_new ();
-  style_info_set_data (info, data);
-  g_hash_table_insert (priv->style_data,
+  values = _gtk_css_computed_values_new ();
+  style_info_set_values (info, values);
+  g_hash_table_insert (priv->style_values,
                        style_info_copy (info),
-                       data);
+                       values);
 
-  build_properties (context, data->store, info, NULL);
+  build_properties (context, values, info, NULL);
 
-  return data;
+  return values;
 }
 
-static StyleData *
-style_data_lookup_for_state (GtkStyleContext *context,
-                             GtkStateFlags    state)
+static GtkCssComputedValues *
+style_values_lookup_for_state (GtkStyleContext *context,
+                               GtkStateFlags    state)
 {
-  StyleData *data;
+  GtkCssComputedValues *values;
 
   if (context->priv->info->state_flags == state)
-    return style_data_lookup (context);
+    return style_values_lookup (context);
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
-  data = style_data_lookup (context);
+  values = style_values_lookup (context);
   gtk_style_context_restore (context);
 
-  return data;
+  return values;
 }
 
 static void
@@ -1012,7 +967,7 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
 
   if (gtk_style_context_is_saved (context))
     {
-      style_info_set_data (info, NULL);
+      style_info_set_values (info, NULL);
     }
   else
     {
@@ -1250,8 +1205,8 @@ gtk_style_context_get_section (GtkStyleContext *context,
                                const gchar     *property)
 {
   GtkStyleContextPrivate *priv;
+  GtkCssComputedValues *values;
   GtkStyleProperty *prop;
-  StyleData *data;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
   g_return_val_if_fail (property != NULL, NULL);
@@ -1263,8 +1218,8 @@ gtk_style_context_get_section (GtkStyleContext *context,
   if (!GTK_IS_CSS_STYLE_PROPERTY (prop))
     return NULL;
 
-  data = style_data_lookup (context);
-  return _gtk_css_computed_values_get_section (data->store, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
+  values = style_values_lookup (context);
+  return _gtk_css_computed_values_get_section (values, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
 }
 
 static GtkCssValue *
@@ -1295,8 +1250,8 @@ gtk_style_context_get_property (GtkStyleContext *context,
                                 GValue          *value)
 {
   GtkStyleContextPrivate *priv;
+  GtkCssComputedValues *values;
   GtkStyleProperty *prop;
-  StyleData *data;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (property != NULL);
@@ -1317,8 +1272,8 @@ gtk_style_context_get_property (GtkStyleContext *context,
       return;
     }
 
-  data = style_data_lookup_for_state (context, state);
-  _gtk_style_property_query (prop, value, gtk_style_context_query_func, data->store);
+  values = style_values_lookup_for_state (context, state);
+  _gtk_style_property_query (prop, value, gtk_style_context_query_func, values);
 }
 
 /**
@@ -1665,8 +1620,8 @@ gtk_style_context_save (GtkStyleContext *context)
   /* Need to unset animations here because we can not know what style
    * class potential transitions came from once we save().
    */
-  if (priv->info->data && style_data_is_animating (priv->info->data))
-    style_info_set_data (priv->info, NULL);
+  if (priv->info->values && !_gtk_css_computed_values_is_static (priv->info->values))
+    style_info_set_values (priv->info, NULL);
 }
 
 /**
@@ -2189,9 +2144,9 @@ GtkCssValue *
 _gtk_style_context_peek_property (GtkStyleContext *context,
                                   guint            property_id)
 {
-  StyleData *data = style_data_lookup (context);
+  GtkCssComputedValues *values = style_values_lookup (context);
 
-  return _gtk_css_computed_values_get_value (data->store, property_id);
+  return _gtk_css_computed_values_get_value (values, property_id);
 }
 
 const GValue *
@@ -2986,9 +2941,9 @@ gtk_style_context_clear_cache (GtkStyleContext *context)
 
   for (info = priv->info; info; info = info->next)
     {
-      style_info_set_data (info, NULL);
+      style_info_set_values (info, NULL);
     }
-  g_hash_table_remove_all (priv->style_data);
+  g_hash_table_remove_all (priv->style_values);
 
   gtk_style_context_clear_property_cache (context);
 }
@@ -3006,17 +2961,17 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
 
   priv = context->priv;
 
-  g_hash_table_iter_init (&iter, priv->style_data);
+  g_hash_table_iter_init (&iter, priv->style_values);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       GtkStyleInfo *info = key;
-      StyleData *data = value;
+      GtkCssComputedValues *values = value;
       GtkBitmask *changes;
 
-      changes = _gtk_css_computed_values_compute_dependencies (data->store, parent_changes);
+      changes = _gtk_css_computed_values_compute_dependencies (values, parent_changes);
 
       if (!_gtk_bitmask_is_empty (changes))
-	build_properties (context, data->store, info, changes);
+	build_properties (context, values, info, changes);
 
       _gtk_bitmask_free (changes);
     }
@@ -3050,14 +3005,13 @@ gtk_style_context_update_animations (GtkStyleContext *context,
                                      gint64           timestamp)
 {
   GtkBitmask *differences;
-  StyleData *style_data;
+  GtkCssComputedValues *values;
   
-  style_data = style_data_lookup (context);
+  values = style_values_lookup (context);
 
-  differences = _gtk_css_computed_values_advance (style_data->store,
-                                                  timestamp);
+  differences = _gtk_css_computed_values_advance (values, timestamp);
 
-  if (_gtk_css_computed_values_is_static (style_data->store))
+  if (_gtk_css_computed_values_is_static (values))
     _gtk_style_context_update_animating (context);
 
   return differences;
@@ -3132,7 +3086,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  StyleData *current;
+  GtkCssComputedValues *current;
   GtkBitmask *changes;
   GSList *list;
 
@@ -3164,8 +3118,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   gtk_style_context_set_invalid (context, FALSE);
 
   info = priv->info;
-  if (info->data)
-    current = style_data_ref (info->data);
+  if (info->values)
+    current = g_object_ref (info->values);
   else
     current = NULL;
 
@@ -3173,7 +3127,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (current == NULL ||
       gtk_style_context_needs_full_revalidate (context, change))
     {
-      StyleData *data;
+      GtkCssComputedValues *values;
 
       if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
         {
@@ -3182,18 +3136,18 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       else
         {
           gtk_style_context_update_cache (context, parent_changes);
-          style_info_set_data (info, NULL);
+          style_info_set_values (info, NULL);
         }
 
-      data = style_data_lookup (context);
+      values = style_values_lookup (context);
 
-      _gtk_css_computed_values_create_animations (data->store,
-                                                  priv->parent ? style_data_lookup (priv->parent)->store : NULL,
+      _gtk_css_computed_values_create_animations (values,
+                                                  priv->parent ? style_values_lookup (priv->parent) : NULL,
                                                   timestamp,
                                                   GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
 						  priv->scale,
-                                                  current && gtk_style_context_should_create_transitions (context) ? current->store : NULL);
-      if (_gtk_css_computed_values_is_static (data->store))
+                                                  gtk_style_context_should_create_transitions (context) ? current : NULL);
+      if (_gtk_css_computed_values_is_static (values))
         change &= ~GTK_CSS_CHANGE_ANIMATE;
       else
         change |= GTK_CSS_CHANGE_ANIMATE;
@@ -3201,10 +3155,10 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
       if (current)
         {
-          changes = _gtk_css_computed_values_get_difference (data->store, current->store);
+          changes = _gtk_css_computed_values_get_difference (values, current);
 
           /* In the case where we keep the cache, we want unanimated values */
-          _gtk_css_computed_values_cancel_animations (current->store);
+          _gtk_css_computed_values_cancel_animations (current);
         }
       else
         {
@@ -3214,13 +3168,13 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     }
   else
     {
-      changes = _gtk_css_computed_values_compute_dependencies (current->store, parent_changes);
+      changes = _gtk_css_computed_values_compute_dependencies (current, parent_changes);
 
       gtk_style_context_update_cache (context, parent_changes);
     }
 
   if (current)
-    style_data_unref (current);
+    g_object_unref (current);
 
   if (change & GTK_CSS_CHANGE_ANIMATE &&
       gtk_style_context_is_animating (context))
@@ -3574,7 +3528,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
                             GtkStateFlags    state)
 {
   GtkStyleContextPrivate *priv;
-  StyleData *data;
+  GtkCssComputedValues *values;
   PangoFontDescription *description, *previous;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
@@ -3582,13 +3536,13 @@ gtk_style_context_get_font (GtkStyleContext *context,
   priv = context->priv;
   g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
-  data = style_data_lookup_for_state (context, state);
+  values = style_values_lookup_for_state (context, state);
 
   /* Yuck, fonts are created on-demand but we don't return a ref.
    * Do bad things to achieve this requirement */
   gtk_style_context_get (context, state, "font", &description, NULL);
   
-  previous = g_object_get_data (G_OBJECT (data->store), "font-cache-for-get_font");
+  previous = g_object_get_data (G_OBJECT (values), "font-cache-for-get_font");
 
   if (previous)
     {
@@ -3598,7 +3552,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
     }
   else
     {
-      g_object_set_data_full (G_OBJECT (data->store),
+      g_object_set_data_full (G_OBJECT (values),
                               "font-cache-for-get_font",
                               description,
                               (GDestroyNotify) pango_font_description_free);
@@ -4845,8 +4799,8 @@ gtk_gradient_resolve_for_context (GtkGradient     *gradient,
 
   return _gtk_gradient_resolve_full (gradient,
                                      GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                     style_data_lookup (context)->store,
-                                     priv->parent ? style_data_lookup (priv->parent)->store : NULL,
+                                     style_values_lookup (context),
+                                     priv->parent ? style_values_lookup (priv->parent) : NULL,
                                      &ignored);
 }
 
