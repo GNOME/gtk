@@ -337,6 +337,7 @@ test_data = \
 	string-values.ref.css \
 	test.png \
 	text-shadow-invalid-but-worked-in-3.12.css \
+	text-shadow-invalid-but-worked-in-3.12.errors \
 	text-shadow-invalid-but-worked-in-3.12.ref.css \
 	transition.css \
 	transition.ref.css \
