@@ -605,7 +605,6 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 			      GtkShadowType  type)
 {
   GtkViewportPrivate *priv;
-  GtkAllocation allocation;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
