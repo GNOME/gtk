@@ -471,6 +471,9 @@ fontify (GtkTextBuffer *source_buffer)
   gchar *start_ptr, *end_ptr;
   gchar *tag;
 
+  gtk_text_buffer_get_bounds (source_buffer, &start_iter, &tmp_iter);
+  gtk_text_buffer_apply_tag_by_name (source_buffer, "source", &start_iter, &tmp_iter);
+
   state = STATE_NORMAL;
 
   gtk_text_buffer_get_iter_at_offset (source_buffer, &start_iter, 0);
@@ -626,6 +629,9 @@ load_file (const gchar *demoname,
                               NULL);
 
   source_buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_create_tag (source_buffer, "source",
+                              "font", "monospace",
+                              NULL);
   gtk_text_buffer_create_tag (source_buffer, "comment",
                               "foreground", "DodgerBlue",
                               NULL);
