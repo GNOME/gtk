@@ -288,20 +288,6 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
  * gtk_cell_renderer_toggle_new:
  *
  * Creates a new #GtkCellRendererToggle. Adjust rendering
-      break;
-    case PROP_INDICATOR_SIZE:
-      priv->indicator_size = g_value_get_int (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-      break;
-    }
-}
-
-/**
- * gtk_cell_renderer_toggle_new:
- *
- * Creates a new #GtkCellRendererToggle. Adjust rendering
  * parameters using object properties. Object properties can be set
  * globally (with g_object_set()). Also, with #GtkTreeViewColumn, you
  * can bind a property to a value in a #GtkTreeModel. For example, you
