@@ -395,6 +395,74 @@ create_info_bar (void)
 
   return info;
 }
+
+static WidgetInfo *
+create_search_bar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *entry;
+  GtkWidget *align;
+  WidgetInfo *info;
+  GtkWidget *view;
+  GtkWidget *box;
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  widget = gtk_search_bar_new ();
+
+  entry = gtk_search_entry_new ();
+  gtk_entry_set_text (GTK_ENTRY (entry), "Search Bar");
+  gtk_container_add (GTK_CONTAINER (widget), entry);
+  gtk_widget_show (entry);
+
+  gtk_search_bar_set_show_close_button (GTK_SEARCH_BAR (widget), TRUE);
+  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (widget), TRUE);
+
+  gtk_container_add (GTK_CONTAINER (box), widget);
+
+  view = gtk_text_view_new ();
+  gtk_widget_show (view);
+  gtk_box_pack_start (GTK_BOX (box), view, TRUE, TRUE, 0);
+
+  info = new_widget_info ("search-bar", box, SMALL);
+  gtk_container_set_border_width (GTK_CONTAINER (info->window), 0);
+
+  return info;
+}
+
+static WidgetInfo *
+create_action_bar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *button;
+  WidgetInfo *info;
+  GtkWidget *view;
+  GtkWidget *box;
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  view = gtk_text_view_new ();
+  gtk_widget_show (view);
+  gtk_box_pack_start (GTK_BOX (box), view, TRUE, TRUE, 0);
+
+  widget = gtk_action_bar_new ();
+
+  button = gtk_button_new_from_icon_name ("object-select-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (button);
+  gtk_container_add (GTK_CONTAINER (widget), button);
+  button = gtk_button_new_from_icon_name ("call-start-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (button);
+  gtk_container_add (GTK_CONTAINER (widget), button);
+  g_object_set (gtk_widget_get_parent (button), "margin", 6, "spacing", 6, NULL);
+
+  gtk_widget_show (widget);
+
+  gtk_container_add (GTK_CONTAINER (box), widget);
+
+  info = new_widget_info ("action-bar", box, SMALL);
+  gtk_container_set_border_width (GTK_CONTAINER (info->window), 0);
+
+  return info;
+}
+
 static WidgetInfo *
 create_recent_chooser_dialog (void)
 {
@@ -1409,6 +1477,8 @@ get_all_widgets (void)
 {
   GList *retval = NULL;
 
+  retval = g_list_prepend (retval, create_search_bar ());
+  retval = g_list_prepend (retval, create_action_bar ());
   retval = g_list_prepend (retval, create_list_box());
   retval = g_list_prepend (retval, create_flow_box());
   retval = g_list_prepend (retval, create_headerbar ());

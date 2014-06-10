@@ -300,6 +300,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-page-setup.png		\
 	$(srcdir)/images/aboutdialog.png				\
 	$(srcdir)/images/accel-label.png				\
+	$(srcdir)/images/action-bar.png					\
 	$(srcdir)/images/appchooserbutton.png				\
 	$(srcdir)/images/appchooserdialog.png				\
 	$(srcdir)/images/assistant.png					\
@@ -348,6 +349,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/scales.png					\
 	$(srcdir)/images/scrollbar.png					\
 	$(srcdir)/images/scrolledwindow.png				\
+	$(srcdir)/images/search-bar.png					\
 	$(srcdir)/images/search-entry.png				\
 	$(srcdir)/images/separator.png					\
 	$(srcdir)/images/spinbutton.png					\

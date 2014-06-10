@@ -123,6 +123,12 @@
     <link linkend="GtkHeaderBar">
       <inlinegraphic fileref="headerbar.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkSearchBar">
+      <inlinegraphic fileref="search-bar.png" format="PNG"></inlinegraphic>
+    </link>
+    <link linkend="GtkActionBar">
+      <inlinegraphic fileref="action-bar.png" format="PNG"></inlinegraphic>
+    </link>
     <link linkend="GtkListBox">
       <inlinegraphic fileref="list-box.png" format="PNG"></inlinegraphic>
     </link>
