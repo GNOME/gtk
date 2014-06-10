@@ -71,4 +71,16 @@ void _gdk_mir_window_reference_unref (GdkMirWindowReference *ref);
 
 void _gdk_mir_event_source_queue (GdkMirWindowReference *window_ref, const MirEvent *event);
 
+void _gdk_mir_print_modifiers (unsigned int modifiers);
+
+void _gdk_mir_print_key_event (const MirKeyEvent *event);
+
+void _gdk_mir_print_motion_event (const MirMotionEvent *event);
+
+void _gdk_mir_print_surface_event (const MirSurfaceEvent *event);
+
+void _gdk_mir_print_resize_event (const MirResizeEvent *event);
+
+void _gdk_mir_print_event (const MirEvent *event);
+
 #endif /* __GDK_PRIVATE_MIR_H__ */
