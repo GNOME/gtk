@@ -467,9 +467,19 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
         impl->transient_size.height = height;
     }
 
-  /* If resize requested then destroy surface */
+  /* If resize requested then rebuild surface */
   if (width >= 0)
-    ensure_no_surface (window);
+  {
+    /* We accept any resize */
+    window->width = width;
+    window->height = height;
+
+    if (impl->surface)
+      {
+        ensure_no_surface (window);
+        ensure_surface (window);
+      }
+  }
 }
 
 static void
