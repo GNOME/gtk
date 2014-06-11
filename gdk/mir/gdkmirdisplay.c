@@ -406,6 +406,7 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
                                     gint           attributes_mask)
 {
   g_printerr ("gdk_mir_display_create_window_impl");
+  g_printerr (" window=%p", window);
   g_printerr (" location=(%d, %d)", window->x, window->y);
   g_printerr (" size=(%d, %d)", window->width, window->height);
   g_printerr ("\n");
