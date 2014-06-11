@@ -6787,9 +6787,12 @@ get_shadow_width (GtkWidget *widget,
       shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
       _gtk_css_shadows_value_get_extents (shadows, &border);
 
-      /* ... and compare it to the margin size, which we use for resize grips */
-      gtk_style_context_get_margin (context, s, &margin);
-      max_borders (&border, &margin);
+      if (priv->type != GTK_WINDOW_POPUP)
+        {
+          /* ... and compare it to the margin size, which we use for resize grips */
+          gtk_style_context_get_margin (context, s, &margin);
+          max_borders (&border, &margin);
+        }
 
       sum_borders (&d, &border);
       max_borders (shadow_width, &d);
@@ -7039,7 +7042,9 @@ shape:
    * outside the border windows go through
    */
 
-  subtract_borders (&window_border, &border);
+  if (priv->type != GTK_WINDOW_POPUP)
+    subtract_borders (&window_border, &border);
+
   rect.x = window_border.left;
   rect.y = window_border.top;
   rect.width = gtk_widget_get_allocated_width (widget) - window_border.left - window_border.right;
