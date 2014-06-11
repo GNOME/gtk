@@ -830,8 +830,20 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
 
   /* Make sure the pointer can actually be on the widget returned. */
   gtk_widget_get_allocation (tmp, &allocation);
-  if (tx < 0 || tx >= allocation.width ||
-      ty < 0 || ty >= allocation.height)
+  allocation.x = 0;
+  allocation.y = 0;
+  if (GTK_IS_WINDOW (tmp))
+    {
+      GtkBorder border;
+      _gtk_window_get_shadow_width (GTK_WINDOW (tmp), &border);
+      allocation.x = border.left;
+      allocation.y = border.top;
+      allocation.width -= border.left + border.right;
+      allocation.height -= border.top + border.bottom;
+    }
+
+  if (tx < allocation.x || tx >= allocation.width ||
+      ty < allocation.y || ty >= allocation.height)
     return NULL;
 
   if (x)
@@ -938,6 +950,7 @@ get_bounding_box (GtkWidget    *widget,
                   GdkRectangle *bounds)
 {
   GtkAllocation allocation;
+  GtkBorder border = { 0, };
   GdkWindow *window;
   gint x, y;
   gint w, h;
@@ -951,10 +964,12 @@ get_bounding_box (GtkWidget    *widget,
     window = gtk_widget_get_window (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
-  x = allocation.x;
-  y = allocation.y;
-  w = allocation.width;
-  h = allocation.height;
+  if (GTK_IS_WINDOW (widget))
+    _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
+  x = allocation.x + border.left;
+  y = allocation.y + border.right;
+  w = allocation.width - border.left - border.right;
+  h = allocation.height - border.top - border.bottom;
 
   gdk_window_get_root_coords (window, x, y, &x1, &y1);
   gdk_window_get_root_coords (window, x + w, y, &x2, &y2);
@@ -1532,13 +1547,17 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 
 #ifdef DEBUG_TOOLTIP
   if (has_tooltip_widget)
+    {
+    GtkAllocation allocation;
+    gtk_widget_get_allocation (has_tooltip_widget, &allocation);
     g_print ("%p (%s) at (%d, %d) %dx%d     pointer: (%d, %d)\n",
 	     has_tooltip_widget, gtk_widget_get_name (has_tooltip_widget),
-	     has_tooltip_widget->allocation.x,
-	     has_tooltip_widget->allocation.y,
-	     has_tooltip_widget->allocation.width,
-	     has_tooltip_widget->allocation.height,
+	     allocation.x,
+	     allocation.y,
+	     allocation.width,
+	     allocation.height,
 	     x, y);
+    }
 #endif /* DEBUG_TOOLTIP */
 
   /* Always poll for a next motion event */
