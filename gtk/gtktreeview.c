@@ -328,10 +328,6 @@ struct _GtkTreeViewPrivate
   gint event_last_x;
   gint event_last_y;
 
-  guint last_button_time;
-  gint last_button_x;
-  gint last_button_y;
-
   GtkRBNode *prelight_node;
   GtkRBTree *prelight_tree;
 
@@ -1819,9 +1815,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->tooltip_column = -1;
 
   tree_view->priv->post_validation_flag = FALSE;
-
-  tree_view->priv->last_button_x = -1;
-  tree_view->priv->last_button_y = -1;
 
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
@@ -11415,8 +11408,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       tree_view->priv->fixed_height_check = 0;
       tree_view->priv->fixed_height = -1;
       tree_view->priv->dy = tree_view->priv->top_row_dy = 0;
-      tree_view->priv->last_button_x = -1;
-      tree_view->priv->last_button_y = -1;
     }
 
   tree_view->priv->model = model;
