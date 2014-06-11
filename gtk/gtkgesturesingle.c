@@ -131,6 +131,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   GdkDevice *source_device;
   GdkInputSource source;
   guint button = 0, i;
+  gboolean retval;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -204,11 +205,14 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
 
       priv->current_button = button;
     }
-  else if (sequence == priv->current_sequence &&
-           (event->type == GDK_BUTTON_RELEASE || event->type == GDK_TOUCH_END))
+
+  retval = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event);
+
+  if (sequence == priv->current_sequence &&
+      (event->type == GDK_BUTTON_RELEASE || event->type == GDK_TOUCH_END))
     priv->current_button = 0;
 
-  return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event);
+  return retval;
 }
 
 static void
