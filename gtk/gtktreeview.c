@@ -439,6 +439,7 @@ struct _GtkTreeViewPrivate
   /* Gestures */
   GtkGesture *multipress_gesture;
   GtkGesture *column_multipress_gesture;
+  GtkGesture *drag_gesture; /* Rubberbanding, row DnD */
   GtkGesture *column_drag_gesture; /* Column reordering, resizing */
 
   /* Tooltip support */
@@ -610,8 +611,6 @@ static gint     gtk_tree_view_focus                (GtkWidget        *widget,
 						    GtkDirectionType  direction);
 static void     gtk_tree_view_grab_focus           (GtkWidget        *widget);
 static void     gtk_tree_view_style_updated        (GtkWidget        *widget);
-static void     gtk_tree_view_grab_notify          (GtkWidget        *widget,
-						    gboolean          was_grabbed);
 static void     gtk_tree_view_state_flags_changed  (GtkWidget        *widget,
 						    GtkStateFlags     previous_state);
 
@@ -751,8 +750,7 @@ static void     gtk_tree_view_clamp_node_visible             (GtkTreeView       
 static void     gtk_tree_view_clamp_column_visible           (GtkTreeView        *tree_view,
 							      GtkTreeViewColumn  *column,
 							      gboolean            focus_to_cell);
-static gboolean gtk_tree_view_maybe_begin_dragging_row       (GtkTreeView        *tree_view,
-							      GdkEventMotion     *event);
+static gboolean gtk_tree_view_maybe_begin_dragging_row       (GtkTreeView        *tree_view);
 static void     gtk_tree_view_focus_to_cursor                (GtkTreeView        *tree_view);
 static void     gtk_tree_view_move_cursor_up_down            (GtkTreeView        *tree_view,
 							      gint                count);
@@ -910,6 +908,19 @@ static void gtk_tree_view_column_drag_gesture_end           (GtkGestureDrag *ges
                                                              gdouble         offset_y,
                                                              GtkTreeView    *tree_view);
 
+static void gtk_tree_view_drag_gesture_begin                (GtkGestureDrag *gesture,
+                                                             gdouble         start_x,
+                                                             gdouble         start_y,
+                                                             GtkTreeView    *tree_view);
+static void gtk_tree_view_drag_gesture_update               (GtkGestureDrag *gesture,
+                                                             gdouble         offset_x,
+                                                             gdouble         offset_y,
+                                                             GtkTreeView    *tree_view);
+static void gtk_tree_view_drag_gesture_end                  (GtkGestureDrag *gesture,
+                                                             gdouble         offset_x,
+                                                             gdouble         offset_y,
+                                                             GtkTreeView    *tree_view);
+
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 
 
@@ -972,7 +983,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->focus = gtk_tree_view_focus;
   widget_class->grab_focus = gtk_tree_view_grab_focus;
   widget_class->style_updated = gtk_tree_view_style_updated;
-  widget_class->grab_notify = gtk_tree_view_grab_notify;
   widget_class->state_flags_changed = gtk_tree_view_state_flags_changed;
   widget_class->queue_draw_region = gtk_tree_view_queue_draw_region;
 
@@ -1872,6 +1882,19 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->column_multipress_gesture),
                                               GTK_PHASE_CAPTURE);
 
+  tree_view->priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture),
+                                 GDK_BUTTON_PRIMARY);
+  g_signal_connect (tree_view->priv->drag_gesture, "drag-begin",
+                    G_CALLBACK (gtk_tree_view_drag_gesture_begin), tree_view);
+  g_signal_connect (tree_view->priv->drag_gesture, "drag-update",
+                    G_CALLBACK (gtk_tree_view_drag_gesture_update), tree_view);
+  g_signal_connect (tree_view->priv->drag_gesture, "drag-end",
+                    G_CALLBACK (gtk_tree_view_drag_gesture_end), tree_view);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->drag_gesture),
+                                              GTK_PHASE_CAPTURE);
+
   tree_view->priv->column_drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture),
@@ -2273,6 +2296,7 @@ gtk_tree_view_destroy (GtkWidget *widget)
   tree_view->priv->pixel_cache = NULL;
 
   g_clear_object (&tree_view->priv->multipress_gesture);
+  g_clear_object (&tree_view->priv->drag_gesture);
   g_clear_object (&tree_view->priv->column_multipress_gesture);
   g_clear_object (&tree_view->priv->column_drag_gesture);
 
@@ -2512,6 +2536,8 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   gtk_gesture_set_window (tree_view->priv->multipress_gesture,
                           tree_view->priv->bin_window);
+  gtk_gesture_set_window (tree_view->priv->drag_gesture,
+                          tree_view->priv->bin_window);
 }
 
 static void
@@ -2589,6 +2615,7 @@ gtk_tree_view_unrealize (GtkWidget *widget)
     }
 
   gtk_gesture_set_window (tree_view->priv->multipress_gesture, NULL);
+  gtk_gesture_set_window (tree_view->priv->drag_gesture, NULL);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
@@ -3045,6 +3072,56 @@ gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
 }
 
 static void
+get_current_selection_modifiers (GtkWidget *widget,
+                                 gboolean  *modify,
+                                 gboolean  *extend)
+{
+  GdkModifierType state = 0;
+  GdkModifierType mask;
+
+  *modify = FALSE;
+  *extend = FALSE;
+
+  if (gtk_get_current_event_state (&state))
+    {
+      mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+      if ((state & mask) == mask)
+        *modify = TRUE;
+      mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+      if ((state & mask) == mask)
+        *extend = TRUE;
+    }
+}
+
+static void
+gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
+                                  gdouble         start_x,
+                                  gdouble         start_y,
+                                  GtkTreeView    *tree_view)
+{
+  gint bin_x, bin_y;
+
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
+                                                     &bin_x, &bin_y);
+  tree_view->priv->press_start_x = tree_view->priv->rubber_band_x = bin_x;
+  tree_view->priv->press_start_y = tree_view->priv->rubber_band_y = bin_y;
+
+  if (tree_view->priv->rubber_banding_enable
+      && gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_MULTIPLE)
+    {
+      gboolean modify, extend;
+
+      tree_view->priv->press_start_y += tree_view->priv->dy;
+      tree_view->priv->rubber_band_y += tree_view->priv->dy;
+      tree_view->priv->rubber_band_status = RUBBER_BAND_MAYBE_START;
+
+      get_current_selection_modifiers (GTK_WIDGET (tree_view), &modify, &extend);
+      tree_view->priv->rubber_band_modify = modify;
+      tree_view->priv->rubber_band_extend = extend;
+    }
+}
+
+static void
 gtk_tree_view_column_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                                  gint                  n_press,
                                                  gdouble               x,
@@ -3174,12 +3251,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gint depth;
       gint new_y;
       gint y_offset;
-      gint dval;
-      gint pre_val, aft_val;
       GtkTreeViewColumn *column = NULL;
-      gint column_handled_click = FALSE;
       gboolean rtl;
-      gboolean node_selected;
       GdkModifierType extend_mod_mask;
       GdkModifierType modify_mod_mask;
 
@@ -3329,7 +3402,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 		      gtk_tree_path_free (anchor);
 		      return TRUE;
 		    }
-		  column_handled_click = TRUE;
 		}
 	    }
 	  if (anchor)
@@ -3341,10 +3413,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
       modify_mod_mask =
         gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-
-      /* select */
-      node_selected = GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED);
-      pre_val = gtk_adjustment_get_value (tree_view->priv->vadjustment);
 
       /* we only handle selection modifications on the first button press
        */
@@ -3388,42 +3456,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
           tree_view->priv->modify_selection_pressed = FALSE;
           tree_view->priv->extend_selection_pressed = FALSE;
-        }
-
-      /* the treeview may have been scrolled because of _set_cursor,
-       * correct here
-       */
-
-      aft_val = gtk_adjustment_get_value (tree_view->priv->vadjustment);
-      dval = pre_val - aft_val;
-
-      cell_area.y += dval;
-      background_area.y += dval;
-
-      /* Save press to possibly begin a drag
-       */
-      if (!column_handled_click &&
-	  !tree_view->priv->in_grab &&
-	  tree_view->priv->pressed_button < 0)
-        {
-          tree_view->priv->pressed_button = event->button;
-          tree_view->priv->press_start_x = event->x;
-          tree_view->priv->press_start_y = event->y;
-
-	  if (tree_view->priv->rubber_banding_enable
-	      && !node_selected
-	      && gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_MULTIPLE)
-	    {
-	      tree_view->priv->press_start_y += tree_view->priv->dy;
-	      tree_view->priv->rubber_band_x = event->x;
-	      tree_view->priv->rubber_band_y = event->y + tree_view->priv->dy;
-	      tree_view->priv->rubber_band_status = RUBBER_BAND_MAYBE_START;
-
-	      if ((event->state & modify_mod_mask) == modify_mod_mask)
-		tree_view->priv->rubber_band_modify = TRUE;
-	      if ((event->state & extend_mod_mask) == extend_mod_mask)
-		tree_view->priv->rubber_band_extend = TRUE;
-	    }
         }
 
       return TRUE;
@@ -3540,6 +3572,15 @@ gtk_tree_view_column_drag_gesture_end (GtkGestureDrag *gesture,
     gtk_tree_view_button_release_column_resize (tree_view);
 }
 
+static void
+gtk_tree_view_drag_gesture_end (GtkGestureDrag *gesture,
+                                gdouble         offset_x,
+                                gdouble         offset_y,
+                                GtkTreeView    *tree_view)
+{
+  gtk_tree_view_stop_rubber_band (tree_view);
+}
+
 static gboolean
 button_event_modifies_selection (GdkEventButton *event)
 {
@@ -3551,9 +3592,6 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-
-  if (tree_view->priv->rubber_band_status)
-    gtk_tree_view_stop_rubber_band (tree_view);
 
   if (tree_view->priv->pressed_button == event->button)
     tree_view->priv->pressed_button = -1;
@@ -4190,13 +4228,26 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
   gint y;
   gint offset;
 
-  gdk_window_get_device_position (tree_view->priv->bin_window,
-                                  gdk_device_manager_get_client_pointer (
-                                    gdk_display_get_device_manager (
-                                      gtk_widget_get_display (GTK_WIDGET (tree_view)))),
-                                  NULL, &y, NULL);
-  y += tree_view->priv->dy;
+  if (gtk_gesture_is_recognized (tree_view->priv->drag_gesture))
+    {
+      GdkEventSequence *sequence;
+      gdouble py;
 
+      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture));
+      gtk_gesture_get_point (tree_view->priv->drag_gesture, sequence, NULL, &py);
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, 0, py,
+                                                         NULL, &y);
+    }
+  else
+    {
+      gdk_window_get_device_position (tree_view->priv->bin_window,
+                                      gdk_device_manager_get_client_pointer (
+                                        gdk_display_get_device_manager (
+                                          gtk_widget_get_display (GTK_WIDGET (tree_view)))),
+                                      NULL, &y, NULL);
+    }
+
+  y += tree_view->priv->dy;
   gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
 
   /* see if we are near the edge. */
@@ -4417,9 +4468,22 @@ gtk_tree_view_update_rubber_band_selection (GtkTreeView *tree_view)
 {
   GtkRBTree *start_tree, *end_tree;
   GtkRBNode *start_node, *end_node;
+  gdouble start_y, offset_y;
+  gint bin_y;
 
-  _gtk_rbtree_find_offset (tree_view->priv->tree, MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y), &start_tree, &start_node);
-  _gtk_rbtree_find_offset (tree_view->priv->tree, MAX (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y), &end_tree, &end_node);
+  if (!gtk_gesture_is_active (tree_view->priv->drag_gesture))
+    return;
+
+  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
+                               NULL, &offset_y);
+  gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
+                                    NULL, &start_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, 0, start_y,
+                                                     NULL, &bin_y);
+  bin_y = MAX (0, bin_y + offset_y + tree_view->priv->dy);
+
+  _gtk_rbtree_find_offset (tree_view->priv->tree, MIN (tree_view->priv->press_start_y, bin_y), &start_tree, &start_node);
+  _gtk_rbtree_find_offset (tree_view->priv->tree, MAX (tree_view->priv->press_start_y, bin_y), &end_tree, &end_node);
 
   /* Handle the start area first */
   if (!tree_view->priv->rubber_band_start_node)
@@ -4520,25 +4584,31 @@ gtk_tree_view_update_rubber_band_selection (GtkTreeView *tree_view)
 static void
 gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
 {
-  gint x, y;
+  gdouble start_x, start_y, offset_x, offset_y, x, y;
   GdkRectangle old_area;
   GdkRectangle new_area;
   GdkRectangle common;
   cairo_region_t *invalid_region;
+  gint bin_x, bin_y;
+
+  if (!gtk_gesture_is_recognized (tree_view->priv->drag_gesture))
+    return;
 
   old_area.x = MIN (tree_view->priv->press_start_x, tree_view->priv->rubber_band_x);
   old_area.y = MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y) - tree_view->priv->dy;
   old_area.width = ABS (tree_view->priv->rubber_band_x - tree_view->priv->press_start_x) + 1;
   old_area.height = ABS (tree_view->priv->rubber_band_y - tree_view->priv->press_start_y) + 1;
 
-  gdk_window_get_device_position (tree_view->priv->bin_window,
-                                  gdk_device_manager_get_client_pointer (
-                                    gdk_display_get_device_manager (
-                                      gtk_widget_get_display (GTK_WIDGET (tree_view)))),
-                                  &x, &y, NULL);
+  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
+                               &offset_x, &offset_y);
+  gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
+                                    &start_x, &start_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
+                                                     &bin_x, &bin_y);
+  bin_y += tree_view->priv->dy;
 
-  x = MAX (x, 0);
-  y = MAX (y, 0) + tree_view->priv->dy;
+  x = MAX (bin_x + offset_x, 0);
+  y = MAX (bin_y + offset_y, 0);
 
   new_area.x = MIN (tree_view->priv->press_start_x, x);
   new_area.y = MIN (tree_view->priv->press_start_y, y) - tree_view->priv->dy;
@@ -4579,8 +4649,22 @@ static void
 gtk_tree_view_paint_rubber_band (GtkTreeView  *tree_view,
                                  cairo_t      *cr)
 {
+  gdouble start_x, start_y, offset_x, offset_y;
   GdkRectangle rect;
   GtkStyleContext *context;
+  gint bin_x, bin_y;
+
+  if (!gtk_gesture_is_recognized (tree_view->priv->drag_gesture))
+    return;
+
+  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
+                               &offset_x, &offset_y);
+  gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
+                                    &start_x, &start_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
+                                                     &bin_x, &bin_y);
+  bin_x = MAX (0, bin_x + offset_x);
+  bin_y = MAX (0, bin_y + offset_y + tree_view->priv->dy);
 
   cairo_save (cr);
 
@@ -4589,10 +4673,10 @@ gtk_tree_view_paint_rubber_band (GtkTreeView  *tree_view,
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_RUBBERBAND);
 
-  rect.x = MIN (tree_view->priv->press_start_x, tree_view->priv->rubber_band_x);
-  rect.y = MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y) - tree_view->priv->dy;
-  rect.width = ABS (tree_view->priv->press_start_x - tree_view->priv->rubber_band_x) + 1;
-  rect.height = ABS (tree_view->priv->press_start_y - tree_view->priv->rubber_band_y) + 1;
+  rect.x = MIN (tree_view->priv->press_start_x, bin_x);
+  rect.y = MIN (tree_view->priv->press_start_y, bin_y) - tree_view->priv->dy;
+  rect.width = ABS (tree_view->priv->press_start_x - bin_x) + 1;
+  rect.height = ABS (tree_view->priv->press_start_y - bin_y) + 1;
 
   gdk_cairo_rectangle (cr, &rect);
   cairo_clip (cr);
@@ -4632,9 +4716,41 @@ gtk_tree_view_column_drag_gesture_update (GtkGestureDrag *gesture,
     gtk_tree_view_motion_drag_column (tree_view, x, y);
 }
 
+static void
+gtk_tree_view_drag_gesture_update (GtkGestureDrag *gesture,
+                                   gdouble         offset_x,
+                                   gdouble         offset_y,
+                                   GtkTreeView    *tree_view)
+{
+  if (tree_view->priv->tree == NULL)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
+  if (tree_view->priv->rubber_band_status == RUBBER_BAND_MAYBE_START)
+    {
+      gtk_tree_view_update_rubber_band (tree_view);
+
+      tree_view->priv->rubber_band_status = RUBBER_BAND_ACTIVE;
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+    }
+  else if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
+    {
+      gtk_tree_view_update_rubber_band (tree_view);
+
+      add_scroll_timeout (tree_view);
+    }
+  else if (!tree_view->priv->rubber_band_status)
+    {
+      if (gtk_tree_view_maybe_begin_dragging_row (tree_view))
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+    }
+}
+
 static gboolean
-gtk_tree_view_motion_bin_window (GtkWidget      *widget,
-				 GdkEventMotion *event)
+gtk_tree_view_motion (GtkWidget      *widget,
+		      GdkEventMotion *event)
 {
   GtkTreeView *tree_view;
   GtkRBTree *tree;
@@ -4643,58 +4759,23 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
 
   tree_view = (GtkTreeView *) widget;
 
-  if (tree_view->priv->tree == NULL)
-    return FALSE;
-
-  if (tree_view->priv->rubber_band_status == RUBBER_BAND_MAYBE_START)
+  if (tree_view->priv->tree)
     {
-      gtk_tree_view_update_rubber_band (tree_view);
+      /* If we are currently pressing down a button, we don't want to prelight anything else. */
+      if (gtk_gesture_is_active (tree_view->priv->drag_gesture) ||
+          gtk_gesture_is_active (tree_view->priv->multipress_gesture))
+        node = NULL;
 
-      tree_view->priv->rubber_band_status = RUBBER_BAND_ACTIVE;
+      new_y = MAX (0, TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, event->y));
+
+      _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
+
+      tree_view->priv->event_last_x = event->x;
+      tree_view->priv->event_last_y = event->y;
+      prelight_or_select (tree_view, tree, node, event->x, event->y);
     }
-  else if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
-    {
-      gtk_tree_view_update_rubber_band (tree_view);
 
-      add_scroll_timeout (tree_view);
-    }
-
-  /* only check for an initiated drag when a button is pressed */
-  if (tree_view->priv->pressed_button >= 0
-      && !tree_view->priv->rubber_band_status)
-    gtk_tree_view_maybe_begin_dragging_row (tree_view, event);
-
-  new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, event->y);
-  if (new_y < 0)
-    new_y = 0;
-
-  _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
-
-  /* If we are currently pressing down a button, we don't want to prelight anything else. */
-  if ((tree_view->priv->button_pressed_node != NULL) &&
-      (tree_view->priv->button_pressed_node != node))
-    node = NULL;
-
-  tree_view->priv->event_last_x = event->x;
-  tree_view->priv->event_last_y = event->y;
-
-  prelight_or_select (tree_view, tree, node, event->x, event->y);
-
-  return TRUE;
-}
-
-static gboolean
-gtk_tree_view_motion (GtkWidget      *widget,
-		      GdkEventMotion *event)
-{
-  GtkTreeView *tree_view;
-
-  tree_view = (GtkTreeView *) widget;
-
-  if (event->window == tree_view->priv->bin_window)
-    return gtk_tree_view_motion_bin_window (widget, event);
-
-  return FALSE;
+  return GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->motion_notify_event (widget, event);
 }
 
 /* Invalidate the focus rectangle near the edge of the bin_window; used when
@@ -7659,31 +7740,34 @@ get_logical_dest_row (GtkTreeView *tree_view,
 }
 
 static gboolean
-gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
-                                        GdkEventMotion   *event)
+gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
 {
   GtkWidget *widget = GTK_WIDGET (tree_view);
+  gdouble start_x, start_y, offset_x, offset_y;
+  GdkEventSequence *sequence;
+  const GdkEvent *event;
   GdkDragContext *context;
   TreeViewDragInfo *di;
   GtkTreePath *path = NULL;
   gint button;
-  gint cell_x, cell_y;
-  gint drag_start_x, drag_start_y;
   GtkTreeModel *model;
   gboolean retval = FALSE;
+  gint bin_x, bin_y;
 
   di = get_info (tree_view);
 
   if (di == NULL || !di->source_set)
     goto out;
 
-  if (tree_view->priv->pressed_button < 0)
+  if (!gtk_gesture_is_recognized (tree_view->priv->drag_gesture))
     goto out;
 
-  if (!gtk_drag_check_threshold (widget,
-                                 tree_view->priv->press_start_x,
-                                 tree_view->priv->press_start_y,
-                                 event->x, event->y))
+  gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
+                                    &start_x, &start_y);
+  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
+                               &offset_x, &offset_y);
+
+  if (!gtk_drag_check_threshold (widget, 0, 0, offset_x, offset_y))
     goto out;
 
   model = gtk_tree_view_get_model (tree_view);
@@ -7691,16 +7775,16 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
   if (model == NULL)
     goto out;
 
-  button = tree_view->priv->pressed_button;
-  tree_view->priv->pressed_button = -1;
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture));
 
-  gtk_tree_view_get_path_at_pos (tree_view,
-                                 tree_view->priv->press_start_x,
-                                 tree_view->priv->press_start_y,
-                                 &path,
-                                 NULL,
-                                 &cell_x,
-                                 &cell_y);
+  /* Deny the multipress gesture */
+  gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->multipress_gesture),
+                         GTK_EVENT_SEQUENCE_DENIED);
+
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
+                                                     &bin_x, &bin_y);
+  gtk_tree_view_get_path_at_pos (tree_view, bin_x, bin_y, &path,
+                                 NULL, NULL, NULL);
 
   if (path == NULL)
     goto out;
@@ -7713,21 +7797,20 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
   if (!(GDK_BUTTON1_MASK << (button - 1) & di->start_button_mask))
     goto out;
 
-  /* Now we can begin the drag */
-
   retval = TRUE;
 
-  gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
-                                                     tree_view->priv->press_start_x,
-                                                     tree_view->priv->press_start_y,
-                                                     &drag_start_x, &drag_start_y);
+  /* Now we can begin the drag */
+  gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->drag_gesture),
+                         GTK_EVENT_SEQUENCE_CLAIMED);
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (tree_view->priv->drag_gesture), sequence);
 
   context = gtk_drag_begin_with_coordinates (widget,
                                              gtk_drag_source_get_target_list (widget),
                                              di->source_actions,
                                              button,
                                              (GdkEvent*)event,
-                                             drag_start_x, drag_start_y);
+                                             start_x, start_y);
 
   set_source_row (context, model, path);
 
@@ -12933,9 +13016,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   
   if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
     {
-      /* now that we've collapsed all rows, we want to try to set the prelight
-       * again. To do this, we fake a motion event and send it to ourselves. */
-
+      /* now that we've collapsed all rows, we want to try to set the prelight again */
       child = gdk_window_get_device_position (gdk_window_get_parent (tree_view->priv->bin_window),
                                               gdk_device_manager_get_client_pointer (
                                                 gdk_display_get_device_manager (
@@ -12943,19 +13024,10 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
                                               &x, &y, NULL);
       if (child == tree_view->priv->bin_window)
 	{
-	  GdkEventMotion event;
-	  gint child_x, child_y;
+          y = MAX (0, TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y));
 
-	  gdk_window_get_position (child, &child_x, &child_y);
-
-	  event.window = tree_view->priv->bin_window;
-	  event.x = x - child_x;
-	  event.y = y - child_y;
-
-	  /* despite the fact this isn't a real event, I'm almost positive it will
-	   * never trigger a drag event.  maybe_drag is the only function that uses
-	   * more than just event.x and event.y. */
-	  gtk_tree_view_motion_bin_window (GTK_WIDGET (tree_view), &event);
+          _gtk_rbtree_find_offset (tree_view->priv->tree, y, &tree, &node);
+          prelight_or_select (tree_view, tree_view->priv->tree, node, x, y);
 	}
     }
 
@@ -15867,24 +15939,6 @@ gtk_tree_view_set_row_separator_func (GtkTreeView                 *tree_view,
   /* Have the tree recalculate heights */
   _gtk_rbtree_mark_invalid (tree_view->priv->tree);
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-}
-
-  
-static void
-gtk_tree_view_grab_notify (GtkWidget *widget,
-			   gboolean   was_grabbed)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-
-  tree_view->priv->in_grab = !was_grabbed;
-
-  if (!was_grabbed)
-    {
-      tree_view->priv->pressed_button = -1;
-
-      if (tree_view->priv->rubber_band_status)
-	gtk_tree_view_stop_rubber_band (tree_view);
-    }
 }
 
 static void
