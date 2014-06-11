@@ -1827,8 +1827,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   tree_view->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->multipress_gesture), FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->multipress_gesture),
-                                 GDK_BUTTON_PRIMARY);
   g_signal_connect (tree_view->priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_multipress_gesture_pressed), tree_view);
   g_signal_connect (tree_view->priv->multipress_gesture, "released",
