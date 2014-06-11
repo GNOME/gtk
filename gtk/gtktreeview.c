@@ -438,6 +438,8 @@ struct _GtkTreeViewPrivate
 
   /* Gestures */
   GtkGesture *multipress_gesture;
+  GtkGesture *column_multipress_gesture;
+  GtkGesture *column_drag_gesture; /* Column reordering, resizing */
 
   /* Tooltip support */
   gint tooltip_column;
@@ -592,8 +594,6 @@ static gboolean gtk_tree_view_button_press         (GtkWidget        *widget,
 						    GdkEventButton   *event);
 static gboolean gtk_tree_view_button_release       (GtkWidget        *widget,
 						    GdkEventButton   *event);
-static gboolean gtk_tree_view_grab_broken          (GtkWidget          *widget,
-						    GdkEventGrabBroken *event);
 #if 0
 static gboolean gtk_tree_view_configure            (GtkWidget         *widget,
 						    GdkEventConfigure *event);
@@ -890,6 +890,26 @@ static void     remove_scroll_timeout                (GtkTreeView *tree_view);
 
 static void     grab_focus_and_unset_draw_keyfocus   (GtkTreeView *tree_view);
 
+/* Gestures */
+static void gtk_tree_view_column_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                                             gint                  n_press,
+                                                             gdouble               x,
+                                                             gdouble               y,
+                                                             GtkTreeView          *tree_view);
+
+static void gtk_tree_view_column_drag_gesture_begin         (GtkGestureDrag *gesture,
+                                                             gdouble         start_x,
+                                                             gdouble         start_y,
+                                                             GtkTreeView    *tree_view);
+static void gtk_tree_view_column_drag_gesture_update        (GtkGestureDrag *gesture,
+                                                             gdouble         offset_x,
+                                                             gdouble         offset_y,
+                                                             GtkTreeView    *tree_view);
+static void gtk_tree_view_column_drag_gesture_end           (GtkGestureDrag *gesture,
+                                                             gdouble         offset_x,
+                                                             gdouble         offset_y,
+                                                             GtkTreeView    *tree_view);
+
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 
 
@@ -933,7 +953,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->size_allocate = gtk_tree_view_size_allocate;
   widget_class->button_press_event = gtk_tree_view_button_press;
   widget_class->button_release_event = gtk_tree_view_button_release;
-  widget_class->grab_broken_event = gtk_tree_view_grab_broken;
   /*widget_class->configure_event = gtk_tree_view_configure;*/
   widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->draw = gtk_tree_view_draw;
@@ -1843,6 +1862,28 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                     G_CALLBACK (_tree_view_multipress_pressed), tree_view);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->multipress_gesture),
                                               GTK_PHASE_TARGET);
+
+  tree_view->priv->column_multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->column_multipress_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->column_multipress_gesture),
+                                 GDK_BUTTON_PRIMARY);
+  g_signal_connect (tree_view->priv->column_multipress_gesture, "pressed",
+                    G_CALLBACK (gtk_tree_view_column_multipress_gesture_pressed), tree_view);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->column_multipress_gesture),
+                                              GTK_PHASE_CAPTURE);
+
+  tree_view->priv->column_drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture),
+                                 GDK_BUTTON_PRIMARY);
+  g_signal_connect (tree_view->priv->column_drag_gesture, "drag-begin",
+                    G_CALLBACK (gtk_tree_view_column_drag_gesture_begin), tree_view);
+  g_signal_connect (tree_view->priv->column_drag_gesture, "drag-update",
+                    G_CALLBACK (gtk_tree_view_column_drag_gesture_update), tree_view);
+  g_signal_connect (tree_view->priv->column_drag_gesture, "drag-end",
+                    G_CALLBACK (gtk_tree_view_column_drag_gesture_end), tree_view);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->column_drag_gesture),
+                                              GTK_PHASE_CAPTURE);
 }
 
 
@@ -2232,6 +2273,8 @@ gtk_tree_view_destroy (GtkWidget *widget)
   tree_view->priv->pixel_cache = NULL;
 
   g_clear_object (&tree_view->priv->multipress_gesture);
+  g_clear_object (&tree_view->priv->column_multipress_gesture);
+  g_clear_object (&tree_view->priv->column_drag_gesture);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }
@@ -3001,22 +3044,114 @@ gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
   return expander_size + (horizontal_separator / 2);
 }
 
+static void
+gtk_tree_view_column_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                                 gint                  n_press,
+                                                 gdouble               x,
+                                                 gdouble               y,
+                                                 GtkTreeView          *tree_view)
+{
+  GdkEventSequence *sequence;
+  GtkTreeViewColumn *column;
+  const GdkEvent *event;
+  GList *list;
+  gint i;
+
+  if (n_press != 2)
+    return;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+
+  for (i = 0, list = tree_view->priv->columns; list; list = list->next, i++)
+    {
+      column = list->data;
+
+      if (event->any.window != _gtk_tree_view_column_get_window (column) ||
+	  !gtk_tree_view_column_get_resizable (column))
+        continue;
+
+      if (gtk_tree_view_column_get_sizing (column) != GTK_TREE_VIEW_COLUMN_AUTOSIZE)
+        {
+          gtk_tree_view_column_set_fixed_width (column, -1);
+          gtk_tree_view_column_set_expand (column, FALSE);
+          _gtk_tree_view_column_autosize (tree_view, column);
+        }
+
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      break;
+    }
+}
+
+static void
+gtk_tree_view_column_drag_gesture_begin (GtkGestureDrag *gesture,
+                                         gdouble         start_x,
+                                         gdouble         start_y,
+                                         GtkTreeView    *tree_view)
+{
+  GdkEventSequence *sequence;
+  GtkTreeViewColumn *column;
+  const GdkEvent *event;
+  GdkWindow *window;
+  gboolean rtl;
+  GList *list;
+  gint i;
+
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  window = event->any.window;
+
+  for (i = 0, list = tree_view->priv->columns; list; list = list->next, i++)
+    {
+      gpointer drag_data;
+      gint column_width;
+
+      column = list->data;
+
+      if (window != _gtk_tree_view_column_get_window (column))
+        continue;
+
+      if (!gtk_tree_view_column_get_resizable (column))
+        break;
+
+      tree_view->priv->in_column_resize = TRUE;
+
+      /* block attached dnd signal handler */
+      drag_data = g_object_get_data (G_OBJECT (tree_view), "gtk-site-data");
+      if (drag_data)
+        g_signal_handlers_block_matched (tree_view,
+                                         G_SIGNAL_MATCH_DATA,
+                                         0, 0, NULL, NULL,
+                                         drag_data);
+
+      column_width = gtk_tree_view_column_get_width (column);
+      gtk_tree_view_column_set_fixed_width (column, column_width);
+      gtk_tree_view_column_set_expand (column, FALSE);
+
+      tree_view->priv->drag_pos = i;
+      tree_view->priv->x_drag = start_x + (rtl ? column_width : -column_width);
+
+      if (!gtk_widget_has_focus (GTK_WIDGET (tree_view)))
+        gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      return;
+    }
+}
+
 static gboolean
 gtk_tree_view_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *list;
-  GtkTreeViewColumn *column = NULL;
-  gint i;
   GdkRectangle background_area;
   GdkRectangle cell_area;
   gint vertical_separator;
   gint horizontal_separator;
   gboolean path_is_selectable;
-  gboolean rtl;
 
-  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   gtk_tree_view_stop_editing (tree_view, FALSE);
   gtk_widget_style_get (widget,
 			"vertical-separator", &vertical_separator,
@@ -3294,87 +3429,19 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  /* We didn't click in the window.  Let's check to see if we clicked on a column resize window.
-   */
-  for (i = 0, list = tree_view->priv->columns; list; list = list->next, i++)
-    {
-      column = list->data;
-      if (event->window == _gtk_tree_view_column_get_window (column) &&
-	  gtk_tree_view_column_get_resizable (column) &&
-	  _gtk_tree_view_column_get_window (column))
-	{
-	  gpointer drag_data;
-	  gint column_width, x;
-
-	  if (event->type == GDK_2BUTTON_PRESS &&
-	      gtk_tree_view_column_get_sizing (column) != GTK_TREE_VIEW_COLUMN_AUTOSIZE)
-	    {
-	      gtk_tree_view_column_set_fixed_width (column, -1);
-	      gtk_tree_view_column_set_expand (column, FALSE);
-	      _gtk_tree_view_column_autosize (tree_view, column);
-	      return TRUE;
-	    }
-
-          if (gdk_device_grab (gdk_event_get_device ((GdkEvent*)event),
-                               _gtk_tree_view_column_get_window (column),
-                               GDK_OWNERSHIP_NONE,
-                               FALSE,
-                               GDK_POINTER_MOTION_HINT_MASK
-                                | GDK_BUTTON1_MOTION_MASK
-                                | GDK_BUTTON_RELEASE_MASK,
-                               NULL,
-                               event->time) != GDK_GRAB_SUCCESS)
-            return FALSE;
-
-          tree_view->priv->in_column_resize = TRUE;
-
-	  /* block attached dnd signal handler */
-	  drag_data = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
-	  if (drag_data)
-	    g_signal_handlers_block_matched (widget,
-					     G_SIGNAL_MATCH_DATA,
-					     0, 0, NULL, NULL,
-					     drag_data);
-
-	  column_width = gtk_tree_view_column_get_width (column);
-	  gtk_tree_view_column_set_fixed_width (column, column_width);
-	  gtk_tree_view_column_set_expand (column, FALSE);
-
-	  gdk_window_get_device_position (tree_view->priv->bin_window,
-					  gdk_event_get_device ((GdkEvent *) event),
-					  &x, NULL, NULL);
-
-	  tree_view->priv->drag_pos = i;
-	  tree_view->priv->x_drag = x + (rtl ? column_width : -column_width);
-
-	  if (!gtk_widget_has_focus (widget))
-	    gtk_widget_grab_focus (widget);
-
-	  return TRUE;
-	}
-    }
   return FALSE;
 }
 
-/* GtkWidget::button_release_event helper */
+/* column drag gesture helper */
 static gboolean
-gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
-					  GdkEventButton *event)
+gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
 {
-  GtkTreeView *tree_view;
-  GtkWidget *button;
+  GtkWidget *button, *widget = GTK_WIDGET (tree_view);
   GList *l;
   gboolean rtl;
-  GdkDevice *device, *other;
   GtkStyleContext *context;
 
-  tree_view = GTK_TREE_VIEW (widget);
-
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
-  device = gdk_event_get_device ((GdkEvent*)event);
-  other = gdk_device_get_associated_device (device);
-  gdk_device_ungrab (device, event->time);
-  gdk_device_ungrab (other, event->time);
 
   /* Move the button back */
   button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
@@ -3433,29 +3500,44 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   return TRUE;
 }
 
-/* GtkWidget::button_release_event helper */
+/* column drag gesture helper */
 static gboolean
-gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
-					    GdkEventButton *event)
+gtk_tree_view_button_release_column_resize (GtkTreeView *tree_view)
 {
-  GtkTreeView *tree_view;
   gpointer drag_data;
-
-  tree_view = GTK_TREE_VIEW (widget);
 
   tree_view->priv->drag_pos = -1;
 
   /* unblock attached dnd signal handler */
-  drag_data = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
+  drag_data = g_object_get_data (G_OBJECT (tree_view), "gtk-site-data");
   if (drag_data)
-    g_signal_handlers_unblock_matched (widget,
+    g_signal_handlers_unblock_matched (tree_view,
 				       G_SIGNAL_MATCH_DATA,
 				       0, 0, NULL, NULL,
 				       drag_data);
 
   tree_view->priv->in_column_resize = FALSE;
-  gdk_device_ungrab (gdk_event_get_device ((GdkEvent*)event), event->time);
   return TRUE;
+}
+
+static void
+gtk_tree_view_column_drag_gesture_end (GtkGestureDrag *gesture,
+                                       gdouble         offset_x,
+                                       gdouble         offset_y,
+                                       GtkTreeView    *tree_view)
+{
+  GdkEventSequence *sequence;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  /* Cancel reorder if the drag got cancelled */
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    tree_view->priv->cur_reorder = NULL;
+
+  if (tree_view->priv->in_column_drag)
+    gtk_tree_view_button_release_drag_column (tree_view);
+  else if (tree_view->priv->in_column_resize)
+    gtk_tree_view_button_release_column_resize (tree_view);
 }
 
 static gboolean
@@ -3470,17 +3552,11 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
 
-  if (tree_view->priv->in_column_drag)
-    return gtk_tree_view_button_release_drag_column (widget, event);
-
   if (tree_view->priv->rubber_band_status)
     gtk_tree_view_stop_rubber_band (tree_view);
 
   if (tree_view->priv->pressed_button == event->button)
     tree_view->priv->pressed_button = -1;
-
-  if (tree_view->priv->in_column_resize)
-    return gtk_tree_view_button_release_column_resize (widget, event);
 
   if (tree_view->priv->button_pressed_node == NULL)
     return FALSE;
@@ -3520,21 +3596,6 @@ gtk_tree_view_button_release (GtkWidget      *widget,
       tree_view->priv->button_pressed_tree = NULL;
       tree_view->priv->button_pressed_node = NULL;
     }
-
-  return TRUE;
-}
-
-static gboolean
-gtk_tree_view_grab_broken (GtkWidget          *widget,
-			   GdkEventGrabBroken *event)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-
-  if (tree_view->priv->in_column_drag)
-    gtk_tree_view_button_release_drag_column (widget, (GdkEventButton *)event);
-
-  if (tree_view->priv->in_column_resize)
-    gtk_tree_view_button_release_column_resize (widget, (GdkEventButton *)event);
 
   return TRUE;
 }
@@ -4077,53 +4138,46 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 }
 
 static gboolean
-gtk_tree_view_motion_resize_column (GtkWidget      *widget,
-				    GdkEventMotion *event)
+gtk_tree_view_motion_resize_column (GtkTreeView *tree_view,
+                                    gdouble      x,
+                                    gdouble      y)
 {
-  gint x;
   gint new_width;
   GtkTreeViewColumn *column;
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
 
   column = gtk_tree_view_get_column (tree_view, tree_view->priv->drag_pos);
 
-  gdk_window_get_device_position (tree_view->priv->bin_window,
-				  gdk_event_get_device ((GdkEvent *) event),
-				  &x, NULL, NULL);
- 
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+  if (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL)
     new_width = MAX (tree_view->priv->x_drag - x, 0);
   else
     new_width = MAX (x - tree_view->priv->x_drag, 0);
-  
+
   if (new_width != gtk_tree_view_column_get_fixed_width (column))
     gtk_tree_view_column_set_fixed_width (column, new_width);
 
   return FALSE;
 }
 
-
 static void
-gtk_tree_view_update_current_reorder (GtkTreeView *tree_view,
-                                      GdkEvent    *event)
+gtk_tree_view_update_current_reorder (GtkTreeView *tree_view)
 {
   GtkTreeViewColumnReorder *reorder = NULL;
+  GdkEventSequence *sequence;
   GList *list;
-  gint mouse_x;
+  gdouble x;
 
-  gdk_window_get_device_position (tree_view->priv->header_window,
-                                  gdk_event_get_device (event),
-                                  &mouse_x, NULL, NULL);
+  sequence = gtk_gesture_single_get_current_sequence
+    (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture));
+  gtk_gesture_get_point (tree_view->priv->column_drag_gesture,
+                         sequence, &x, NULL);
+
   for (list = tree_view->priv->column_drag_info; list; list = list->next)
     {
       reorder = (GtkTreeViewColumnReorder *) list->data;
-      if (mouse_x >= reorder->left_align && mouse_x < reorder->right_align)
+      if (x >= reorder->left_align && x < reorder->right_align)
 	break;
       reorder = NULL;
     }
-
-  /*  if (reorder && reorder == tree_view->priv->cur_reorder)
-      return;*/
 
   tree_view->priv->cur_reorder = reorder;
   gtk_tree_view_motion_draw_column_motion_arrow (tree_view);
@@ -4159,17 +4213,17 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 }
 
 static gboolean
-gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view,
-                                     GdkEvent    *event)
+gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
 {
+  GdkEventSequence *sequence;
   GdkRectangle visible_rect;
-  gint x;
+  gdouble x;
   gint offset;
 
-  gdk_window_get_device_position (tree_view->priv->bin_window,
-                                  gdk_event_get_device (event),
-                                  &x, NULL, NULL);
-
+  sequence = gtk_gesture_single_get_current_sequence
+    (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture));
+  gtk_gesture_get_point (tree_view->priv->column_drag_gesture,
+                         sequence, &x, NULL);
   gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
 
   /* See if we are near the edge. */
@@ -4190,34 +4244,30 @@ gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view,
 }
 
 static gboolean
-gtk_tree_view_motion_drag_column (GtkWidget      *widget,
-				  GdkEventMotion *event)
+gtk_tree_view_motion_drag_column (GtkTreeView *tree_view,
+                                  gdouble      x,
+                                  gdouble      y)
 {
   GtkAllocation allocation, button_allocation;
-  GtkTreeView *tree_view = (GtkTreeView *) widget;
   GtkTreeViewColumn *column = tree_view->priv->drag_column;
   GtkWidget *button;
-  gint x, y;
-
-  /* Sanity Check */
-  if ((column == NULL) ||
-      (event->window != tree_view->priv->drag_window))
-    return FALSE;
+  gint win_x, win_y;
 
   button = gtk_tree_view_column_get_button (column);
 
   /* Handle moving the header */
-  gdk_window_get_position (tree_view->priv->drag_window, &x, &y);
-  gtk_widget_get_allocation (widget, &allocation);
+  gdk_window_get_position (tree_view->priv->drag_window, &win_x, &win_y);
+  gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
   gtk_widget_get_allocation (button, &button_allocation);
-  x = CLAMP (x + (gint)event->x - _gtk_tree_view_column_get_drag_x (column), 0,
-	     MAX (tree_view->priv->width, allocation.width) - button_allocation.width);
-  gdk_window_move (tree_view->priv->drag_window, x, y);
-  
+  win_x = CLAMP (x - _gtk_tree_view_column_get_drag_x (column), 0,
+                 MAX (tree_view->priv->width, allocation.width) - button_allocation.width);
+  gdk_window_move (tree_view->priv->drag_window, win_x, win_y);
+  gdk_window_raise (tree_view->priv->drag_window);
+
   /* autoscroll, if needed */
-  gtk_tree_view_horizontal_autoscroll (tree_view, (GdkEvent *) event);
+  gtk_tree_view_horizontal_autoscroll (tree_view);
   /* Update the current reorder position and arrow; */
-  gtk_tree_view_update_current_reorder (tree_view, (GdkEvent *) event);
+  gtk_tree_view_update_current_reorder (tree_view);
 
   return TRUE;
 }
@@ -4558,6 +4608,30 @@ gtk_tree_view_paint_rubber_band (GtkTreeView  *tree_view,
   cairo_restore (cr);
 }
 
+static void
+gtk_tree_view_column_drag_gesture_update (GtkGestureDrag *gesture,
+                                          gdouble         offset_x,
+                                          gdouble         offset_y,
+                                          GtkTreeView    *tree_view)
+{
+  gdouble start_x, start_y, x, y;
+  GdkEventSequence *sequence;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (gtk_gesture_get_sequence_state (GTK_GESTURE (gesture), sequence) != GTK_EVENT_SEQUENCE_CLAIMED)
+    return;
+
+  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+  x = start_x + offset_x;
+  y = start_y + offset_y;
+
+  if (tree_view->priv->in_column_resize)
+    gtk_tree_view_motion_resize_column (tree_view, x, y);
+  else if (tree_view->priv->in_column_drag)
+    gtk_tree_view_motion_drag_column (tree_view, x, y);
+}
+
 static gboolean
 gtk_tree_view_motion_bin_window (GtkWidget      *widget,
 				 GdkEventMotion *event)
@@ -4617,15 +4691,6 @@ gtk_tree_view_motion (GtkWidget      *widget,
 
   tree_view = (GtkTreeView *) widget;
 
-  /* Resizing a column */
-  if (tree_view->priv->in_column_resize)
-    return gtk_tree_view_motion_resize_column (widget, event);
-
-  /* Drag column */
-  if (tree_view->priv->in_column_drag)
-    return gtk_tree_view_motion_drag_column (widget, event);
-
-  /* Sanity check it */
   if (event->window == tree_view->priv->bin_window)
     return gtk_tree_view_motion_bin_window (widget, event);
 
@@ -5783,10 +5848,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
   if (tree_view->priv->in_column_drag)
     {
       if (event->keyval == GDK_KEY_Escape)
-	{
-	  tree_view->priv->cur_reorder = NULL;
-	  gtk_tree_view_button_release_drag_column (widget, NULL);
-	}
+        gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->column_drag_gesture),
+                               GTK_EVENT_SEQUENCE_DENIED);
       return TRUE;
     }
 
@@ -9858,12 +9921,9 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 				  GtkTreeViewColumn *column,
                                   GdkDevice         *device)
 {
-  GdkEvent *send_event;
   GtkAllocation allocation;
   GtkAllocation button_allocation;
-  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
   GtkWidget *button;
-  GdkDevice *pointer, *keyboard;
   GdkWindowAttr attributes;
   guint attributes_mask;
   GtkStyleContext *context;
@@ -9899,47 +9959,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
                                                  attributes_mask);
   gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_window);
 
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      keyboard = device;
-      pointer = gdk_device_get_associated_device (device);
-    }
-  else
-    {
-      pointer = device;
-      keyboard = gdk_device_get_associated_device (device);
-    }
-
-  gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
-  gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
-
-  send_event = gdk_event_new (GDK_LEAVE_NOTIFY);
-  send_event->crossing.send_event = TRUE;
-  send_event->crossing.window = g_object_ref (gtk_button_get_event_window (GTK_BUTTON (button)));
-  send_event->crossing.subwindow = NULL;
-  send_event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-  send_event->crossing.time = GDK_CURRENT_TIME;
-  gdk_event_set_device (send_event, device);
-
-  gtk_propagate_event (button, send_event);
-  gdk_event_free (send_event);
-
-  send_event = gdk_event_new (GDK_BUTTON_RELEASE);
-  send_event->button.window = g_object_ref (gdk_screen_get_root_window (screen));
-  send_event->button.send_event = TRUE;
-  send_event->button.time = GDK_CURRENT_TIME;
-  send_event->button.x = -1;
-  send_event->button.y = -1;
-  send_event->button.axes = NULL;
-  send_event->button.state = 0;
-  send_event->button.button = GDK_BUTTON_PRIMARY;
-  send_event->button.x_root = 0;
-  send_event->button.y_root = 0;
-  gdk_event_set_device (send_event, device);
-
-  gtk_propagate_event (button, send_event);
-  gdk_event_free (send_event);
-
   /* Kids, don't try this at home */
   g_object_ref (button);
   gtk_container_remove (GTK_CONTAINER (tree_view), button);
@@ -9961,20 +9980,8 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   tree_view->priv->in_column_drag = TRUE;
 
-  gdk_device_grab (pointer,
-                   tree_view->priv->drag_window,
-                   GDK_OWNERSHIP_NONE,
-                   FALSE,
-                   GDK_POINTER_MOTION_MASK|GDK_BUTTON_RELEASE_MASK,
-                   NULL,
-                   GDK_CURRENT_TIME);
-  gdk_device_grab (keyboard,
-                   tree_view->priv->drag_window,
-                   GDK_OWNERSHIP_NONE,
-                   FALSE,
-                   GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK,
-                   NULL,
-                   GDK_CURRENT_TIME);
+  gtk_gesture_set_state (tree_view->priv->column_drag_gesture,
+                         GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
