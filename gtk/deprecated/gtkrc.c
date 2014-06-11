@@ -349,7 +349,7 @@
  *
  *          Sets the color used for the background of widgets displaying
  *          editable text. This color is used for the background
- *          of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkCList.
+ *          of, among others, #GtkTextView, #GtkEntry.
  *
  * * `text[state] =
  *       color`
