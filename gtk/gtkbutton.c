@@ -59,7 +59,7 @@
 #include "gtkapplicationprivate.h"
 #include "gtkactionhelper.h"
 
-static const GtkBorder default_default_border = { 1, 1, 1, 1 };
+static const GtkBorder default_default_border = { 0, 0, 0, 0 };
 static const GtkBorder default_default_outside_border = { 0, 0, 0, 0 };
 
 /* Time out before giving up on getting a key release when animating
