@@ -409,6 +409,8 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
   g_printerr (" location=(%d, %d)", window->x, window->y);
   g_printerr (" size=(%d, %d)", window->width, window->height);
   g_printerr ("\n");
+  if (attributes->wclass != GDK_INPUT_OUTPUT)
+    return;
   window->impl = _gdk_mir_window_impl_new ();
 }
 
