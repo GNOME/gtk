@@ -485,6 +485,8 @@ gtk_button_class_init (GtkButtonClass *klass)
    * The "default-border" style property defines the extra space to add
    * around a button that can become the default widget of its window.
    * For more information about default widgets, see gtk_widget_grab_default().
+   *
+   * Deprecated: 3.14: use CSS margins and padding instead.
    */
 
   gtk_widget_class_install_style_property (widget_class,
@@ -492,7 +494,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 							       P_("Default Spacing"),
 							       P_("Extra space to add for GTK_CAN_DEFAULT buttons"),
 							       GTK_TYPE_BORDER,
-							       GTK_PARAM_READABLE));
+							       GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkButton:default-outside-border:
@@ -501,13 +503,15 @@ gtk_button_class_init (GtkButtonClass *klass)
    * space to add around a button that can become the default widget of its
    * window. Extra outside space is always drawn outside the button border.
    * For more information about default widgets, see gtk_widget_grab_default().
+   *
+   * Deprecated: 3.14: use CSS margins and padding instead.
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("default-outside-border",
 							       P_("Default Outside Spacing"),
 							       P_("Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside the border"),
 							       GTK_TYPE_BORDER,
-							       GTK_PARAM_READABLE));
+							       GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child-displacement-x",
 							     P_("Child X Displacement"),
