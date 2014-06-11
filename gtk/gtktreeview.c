@@ -322,7 +322,6 @@ struct _GtkTreeViewPrivate
   GtkRBNode *button_pressed_node;
   GtkRBTree *button_pressed_tree;
 
-  gint pressed_button;
   gint press_start_x;
   gint press_start_y;
 
@@ -591,10 +590,6 @@ static gboolean gtk_tree_view_enter_notify         (GtkWidget        *widget,
 						    GdkEventCrossing *event);
 static gboolean gtk_tree_view_leave_notify         (GtkWidget        *widget,
 						    GdkEventCrossing *event);
-static gboolean gtk_tree_view_button_press         (GtkWidget        *widget,
-						    GdkEventButton   *event);
-static gboolean gtk_tree_view_button_release       (GtkWidget        *widget,
-						    GdkEventButton   *event);
 #if 0
 static gboolean gtk_tree_view_configure            (GtkWidget         *widget,
 						    GdkEventConfigure *event);
@@ -895,6 +890,17 @@ static void gtk_tree_view_column_multipress_gesture_pressed (GtkGestureMultiPres
                                                              gdouble               y,
                                                              GtkTreeView          *tree_view);
 
+static void gtk_tree_view_multipress_gesture_pressed        (GtkGestureMultiPress *gesture,
+                                                             gint                  n_press,
+                                                             gdouble               x,
+                                                             gdouble               y,
+                                                             GtkTreeView          *tree_view);
+static void gtk_tree_view_multipress_gesture_released       (GtkGestureMultiPress *gesture,
+                                                             gint                  n_press,
+                                                             gdouble               x,
+                                                             gdouble               y,
+                                                             GtkTreeView          *tree_view);
+
 static void gtk_tree_view_column_drag_gesture_begin         (GtkGestureDrag *gesture,
                                                              gdouble         start_x,
                                                              gdouble         start_y,
@@ -962,8 +968,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->get_preferred_width = gtk_tree_view_get_preferred_width;
   widget_class->get_preferred_height = gtk_tree_view_get_preferred_height;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
-  widget_class->button_press_event = gtk_tree_view_button_press;
-  widget_class->button_release_event = gtk_tree_view_button_release;
   /*widget_class->configure_event = gtk_tree_view_configure;*/
   widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->draw = gtk_tree_view_draw;
@@ -1762,41 +1766,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
-_tree_view_multipress_pressed (GtkGestureMultiPress *gesture,
-                               gint                  n_press,
-                               gdouble               x,
-                               gdouble               y,
-                               GtkTreeView          *tree_view)
-{
-  GtkTreeViewColumn *column;
-  GtkTreePath *path;
-  gint bin_x, bin_y;
-
-  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
-                                                     &bin_x, &bin_y);
-  gtk_tree_view_get_path_at_pos (tree_view, bin_x, bin_y,
-                                 &path, &column, NULL, NULL);
-
-  if (n_press == 2 || (n_press == 1 && tree_view->priv->activate_on_single_click))
-    {
-      gtk_tree_view_row_activated (tree_view, path, column);
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-    }
-  else
-    {
-      if (n_press == 1)
-        {
-          tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
-          tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
-        }
-
-      grab_focus_and_unset_draw_keyfocus (tree_view);
-    }
-
-  gtk_tree_path_free (path);
-}
-
-static void
 gtk_tree_view_init (GtkTreeView *tree_view)
 {
   tree_view->priv = gtk_tree_view_get_instance_private (tree_view);
@@ -1819,7 +1788,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->x_drag = 0;
   tree_view->priv->drag_pos = -1;
   tree_view->priv->header_has_focus = FALSE;
-  tree_view->priv->pressed_button = -1;
   tree_view->priv->press_start_x = -1;
   tree_view->priv->press_start_y = -1;
   tree_view->priv->reorderable = FALSE;
@@ -1869,9 +1837,11 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->multipress_gesture),
                                  GDK_BUTTON_PRIMARY);
   g_signal_connect (tree_view->priv->multipress_gesture, "pressed",
-                    G_CALLBACK (_tree_view_multipress_pressed), tree_view);
+                    G_CALLBACK (gtk_tree_view_multipress_gesture_pressed), tree_view);
+  g_signal_connect (tree_view->priv->multipress_gesture, "released",
+                    G_CALLBACK (gtk_tree_view_multipress_gesture_released), tree_view);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->multipress_gesture),
-                                              GTK_PHASE_TARGET);
+                                              GTK_PHASE_BUBBLE);
 
   tree_view->priv->column_multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->column_multipress_gesture), FALSE);
@@ -3094,6 +3064,263 @@ get_current_selection_modifiers (GtkWidget *widget,
 }
 
 static void
+gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                          gint                  n_press,
+                                          gdouble               x,
+                                          gdouble               y,
+                                          GtkTreeView          *tree_view)
+{
+  gint vertical_separator, horizontal_separator;
+  GtkWidget *widget = GTK_WIDGET (tree_view);
+  GdkRectangle background_area, cell_area;
+  GtkTreeViewColumn *column = NULL;
+  GdkEventSequence *sequence;
+  GdkModifierType modifiers;
+  const GdkEvent *event;
+  gint new_y, y_offset;
+  gint bin_x, bin_y;
+  GtkTreePath *path;
+  GtkRBNode *node;
+  GtkRBTree *tree;
+  gint depth;
+  guint button;
+  GList *list;
+  gboolean rtl;
+
+  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  gtk_tree_view_stop_editing (tree_view, FALSE);
+  gtk_widget_style_get (widget,
+			"vertical-separator", &vertical_separator,
+			"horizontal-separator", &horizontal_separator,
+			NULL);
+
+  /* Because grab_focus can cause reentrancy, we delay grab_focus until after
+   * we're done handling the button press.
+   */
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+                                                     &bin_x, &bin_y);
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+  if (n_press > 1)
+    gtk_gesture_set_state (tree_view->priv->drag_gesture,
+                           GTK_EVENT_SEQUENCE_DENIED);
+
+  /* Empty tree? */
+  if (tree_view->priv->tree == NULL)
+    {
+      grab_focus_and_unset_draw_keyfocus (tree_view);
+      return;
+    }
+
+  /* are we in an arrow? */
+  if (tree_view->priv->prelight_node &&
+      tree_view->priv->arrow_prelit &&
+      gtk_tree_view_draw_expanders (tree_view))
+    {
+      if (button == GDK_BUTTON_PRIMARY)
+        {
+          tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
+          tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
+          gtk_tree_view_queue_draw_arrow (tree_view,
+                                          tree_view->priv->prelight_tree,
+                                          tree_view->priv->prelight_node);
+        }
+
+      grab_focus_and_unset_draw_keyfocus (tree_view);
+      return;
+    }
+
+  /* find the node that was clicked */
+  new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, bin_y);
+  if (new_y < 0)
+    new_y = 0;
+  y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
+
+  if (node == NULL)
+    {
+      /* We clicked in dead space */
+      grab_focus_and_unset_draw_keyfocus (tree_view);
+      return;
+    }
+
+  /* Get the path and the node */
+  path = _gtk_tree_path_new_from_rbtree (tree, node);
+
+  if (row_is_separator (tree_view, NULL, path))
+    {
+      gtk_tree_path_free (path);
+      grab_focus_and_unset_draw_keyfocus (tree_view);
+      return;
+    }
+
+  depth = gtk_tree_path_get_depth (path);
+  background_area.y = y_offset + bin_y;
+  background_area.height = gtk_tree_view_get_row_height (tree_view, node);
+  background_area.x = 0;
+
+  /* Let the column have a chance at selecting it. */
+  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
+       list; list = (rtl ? list->prev : list->next))
+    {
+      GtkTreeViewColumn *candidate = list->data;
+
+      if (!gtk_tree_view_column_get_visible (candidate))
+        continue;
+
+      background_area.width = gtk_tree_view_column_get_width (candidate);
+      if ((background_area.x > bin_x) ||
+          (background_area.x + background_area.width <= bin_x))
+        {
+          background_area.x += background_area.width;
+          continue;
+        }
+
+      /* we found the focus column */
+      column = candidate;
+      cell_area = background_area;
+      cell_area.width -= horizontal_separator;
+      cell_area.height -= vertical_separator;
+      cell_area.x += horizontal_separator/2;
+      cell_area.y += vertical_separator/2;
+      if (gtk_tree_view_is_expander_column (tree_view, column))
+        {
+          if (!rtl)
+            cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
+          cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
+
+          if (gtk_tree_view_draw_expanders (tree_view))
+            {
+              gint expander_size = gtk_tree_view_get_expander_size (tree_view);
+              if (!rtl)
+                cell_area.x += depth * expander_size;
+              cell_area.width -= depth * expander_size;
+            }
+        }
+      break;
+    }
+
+  if (column == NULL)
+    {
+      gtk_tree_path_free (path);
+      grab_focus_and_unset_draw_keyfocus (tree_view);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
+  _gtk_tree_view_set_focus_column (tree_view, column);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  gdk_event_get_state (event, &modifiers);
+
+  /* decide if we edit */
+  if (button == GDK_BUTTON_PRIMARY &&
+      !(modifiers & gtk_accelerator_get_default_mod_mask ()))
+    {
+      GtkTreePath *anchor;
+      GtkTreeIter iter;
+
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+      gtk_tree_view_column_cell_set_cell_data (column,
+                                               tree_view->priv->model,
+                                               &iter,
+                                               GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
+                                               node->children?TRUE:FALSE);
+
+      if (tree_view->priv->anchor)
+        anchor = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
+      else
+        anchor = NULL;
+
+      if ((anchor && !gtk_tree_path_compare (anchor, path))
+          || !_gtk_tree_view_column_has_editable_cell (column))
+        {
+          GtkCellEditable *cell_editable = NULL;
+
+          /* FIXME: get the right flags */
+          guint flags = 0;
+
+          if (_gtk_tree_view_column_cell_event (column,
+                                                (GdkEvent *)event,
+                                                &cell_area, flags))
+            {
+              GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (column));
+              cell_editable = gtk_cell_area_get_edit_widget (area);
+
+              if (cell_editable != NULL)
+                {
+                  gtk_tree_path_free (path);
+                  gtk_tree_path_free (anchor);
+                  return;
+                }
+            }
+        }
+      if (anchor)
+        gtk_tree_path_free (anchor);
+    }
+
+  /* we only handle selection modifications on the first button press
+   */
+  if (n_press == 1)
+    {
+      GtkCellRenderer *focus_cell;
+      gboolean modify, extend;
+
+      get_current_selection_modifiers (widget, &modify, &extend);
+      tree_view->priv->modify_selection_pressed = modify;
+      tree_view->priv->extend_selection_pressed = extend;
+
+      /* We update the focus cell here, this is also needed if the
+       * column does not contain an editable cell.  In this case,
+       * GtkCellArea did not receive the event for processing (and
+       * could not update the focus cell).
+       */
+      focus_cell = _gtk_tree_view_column_get_cell_at_pos (column,
+                                                          &cell_area,
+                                                          &background_area,
+                                                          bin_x, bin_y);
+
+      if (focus_cell)
+        gtk_tree_view_column_focus_cell (column, focus_cell);
+
+      if (modify)
+        {
+          gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
+          gtk_tree_view_real_toggle_cursor_row (tree_view);
+        }
+      else if (extend)
+        {
+          gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
+          gtk_tree_view_real_select_cursor_row (tree_view, FALSE);
+        }
+      else
+        {
+          gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CLAMP_NODE);
+        }
+
+      tree_view->priv->modify_selection_pressed = FALSE;
+      tree_view->priv->extend_selection_pressed = FALSE;
+    }
+
+  if (n_press == 2 || (n_press == 1 && tree_view->priv->activate_on_single_click))
+    gtk_tree_view_row_activated (tree_view, path, column);
+  else
+    {
+      if (n_press == 1)
+        {
+          tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
+          tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
+        }
+
+      grab_focus_and_unset_draw_keyfocus (tree_view);
+    }
+
+  gtk_tree_path_free (path);
+}
+
+static void
 gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
                                   gdouble         start_x,
                                   gdouble         start_y,
@@ -3217,253 +3444,6 @@ gtk_tree_view_column_drag_gesture_begin (GtkGestureDrag *gesture,
     }
 }
 
-static gboolean
-gtk_tree_view_button_press (GtkWidget      *widget,
-			    GdkEventButton *event)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  GList *list;
-  GdkRectangle background_area;
-  GdkRectangle cell_area;
-  gint vertical_separator;
-  gint horizontal_separator;
-  gboolean path_is_selectable;
-
-  gtk_tree_view_stop_editing (tree_view, FALSE);
-  gtk_widget_style_get (widget,
-			"vertical-separator", &vertical_separator,
-			"horizontal-separator", &horizontal_separator,
-			NULL);
-
-  /* Don't handle extra mouse buttons events, let them bubble up */
-  if (event->button > 5)
-    return FALSE;
- 
-  /* Because grab_focus can cause reentrancy, we delay grab_focus until after
-   * we're done handling the button press.
-   */
-
-  if (event->window == tree_view->priv->bin_window)
-    {
-      GtkRBNode *node;
-      GtkRBTree *tree;
-      GtkTreePath *path;
-      gint depth;
-      gint new_y;
-      gint y_offset;
-      GtkTreeViewColumn *column = NULL;
-      gboolean rtl;
-      GdkModifierType extend_mod_mask;
-      GdkModifierType modify_mod_mask;
-
-      /* Empty tree? */
-      if (tree_view->priv->tree == NULL)
-	{
-	  grab_focus_and_unset_draw_keyfocus (tree_view);
-	  return TRUE;
-	}
-
-      /* are we in an arrow? */
-      if (tree_view->priv->prelight_node &&
-          tree_view->priv->arrow_prelit &&
-	  gtk_tree_view_draw_expanders (tree_view))
-	{
-	  if (event->button == GDK_BUTTON_PRIMARY)
-	    {
-	      tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
-	      tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
-	      gtk_tree_view_queue_draw_arrow (GTK_TREE_VIEW (widget),
-                                              tree_view->priv->prelight_tree,
-                                              tree_view->priv->prelight_node);
-	    }
-
-	  grab_focus_and_unset_draw_keyfocus (tree_view);
-	  return TRUE;
-	}
-
-      /* find the node that was clicked */
-      new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, event->y);
-      if (new_y < 0)
-	new_y = 0;
-      y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
-
-      if (node == NULL)
-	{
-	  /* We clicked in dead space */
-	  grab_focus_and_unset_draw_keyfocus (tree_view);
-	  return TRUE;
-	}
-
-      /* Get the path and the node */
-      path = _gtk_tree_path_new_from_rbtree (tree, node);
-      path_is_selectable = !row_is_separator (tree_view, NULL, path);
-
-      if (!path_is_selectable)
-	{
-	  gtk_tree_path_free (path);
-	  grab_focus_and_unset_draw_keyfocus (tree_view);
-	  return TRUE;
-	}
-
-      depth = gtk_tree_path_get_depth (path);
-      background_area.y = y_offset + event->y;
-      background_area.height = gtk_tree_view_get_row_height (tree_view, node);
-      background_area.x = 0;
-
-
-      /* Let the column have a chance at selecting it. */
-      rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
-      for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
-	   list; list = (rtl ? list->prev : list->next))
-	{
-	  GtkTreeViewColumn *candidate = list->data;
-
-	  if (!gtk_tree_view_column_get_visible (candidate))
-	    continue;
-
-	  background_area.width = gtk_tree_view_column_get_width (candidate);
-	  if ((background_area.x > (gint) event->x) ||
-	      (background_area.x + background_area.width <= (gint) event->x))
-	    {
-	      background_area.x += background_area.width;
-	      continue;
-	    }
-
-	  /* we found the focus column */
-	  column = candidate;
-	  cell_area = background_area;
-	  cell_area.width -= horizontal_separator;
-	  cell_area.height -= vertical_separator;
-	  cell_area.x += horizontal_separator/2;
-	  cell_area.y += vertical_separator/2;
-	  if (gtk_tree_view_is_expander_column (tree_view, column))
-	    {
-	      if (!rtl)
-		cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
-	      cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
-
-              if (gtk_tree_view_draw_expanders (tree_view))
-	        {
-                  gint expander_size = gtk_tree_view_get_expander_size (tree_view);
-		  if (!rtl)
-		    cell_area.x += depth * expander_size;
-	          cell_area.width -= depth * expander_size;
-		}
-	    }
-	  break;
-	}
-
-      if (column == NULL)
-	{
-	  gtk_tree_path_free (path);
-	  grab_focus_and_unset_draw_keyfocus (tree_view);
-	  return FALSE;
-	}
-
-      _gtk_tree_view_set_focus_column (tree_view, column);
-
-      /* decide if we edit */
-      if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_PRIMARY &&
-	  !(event->state & gtk_accelerator_get_default_mod_mask ()))
-	{
-	  GtkTreePath *anchor;
-	  GtkTreeIter iter;
-
-	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
-	  gtk_tree_view_column_cell_set_cell_data (column,
-						   tree_view->priv->model,
-						   &iter,
-						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
-						   node->children?TRUE:FALSE);
-
-	  if (tree_view->priv->anchor)
-	    anchor = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
-	  else
-	    anchor = NULL;
-
-	  if ((anchor && !gtk_tree_path_compare (anchor, path))
-	      || !_gtk_tree_view_column_has_editable_cell (column))
-	    {
-	      GtkCellEditable *cell_editable = NULL;
-
-	      /* FIXME: get the right flags */
-	      guint flags = 0;
-
-	      if (_gtk_tree_view_column_cell_event (column,
-						    (GdkEvent *)event,
-						    &cell_area, flags))
-		{
-		  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (column));
-                  cell_editable = gtk_cell_area_get_edit_widget (area);
-
-		  if (cell_editable != NULL)
-		    {
-		      gtk_tree_path_free (path);
-		      gtk_tree_path_free (anchor);
-		      return TRUE;
-		    }
-		}
-	    }
-	  if (anchor)
-	    gtk_tree_path_free (anchor);
-	}
-
-      extend_mod_mask =
-        gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-
-      modify_mod_mask =
-        gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-
-      /* we only handle selection modifications on the first button press
-       */
-      if (event->type == GDK_BUTTON_PRESS)
-        {
-          GtkCellRenderer *focus_cell;
-
-          if ((event->state & modify_mod_mask) == modify_mod_mask)
-            tree_view->priv->modify_selection_pressed = TRUE;
-          if ((event->state & extend_mod_mask) == extend_mod_mask)
-            tree_view->priv->extend_selection_pressed = TRUE;
-
-          /* We update the focus cell here, this is also needed if the
-           * column does not contain an editable cell.  In this case,
-           * GtkCellArea did not receive the event for processing (and
-           * could not update the focus cell).
-           */
-          focus_cell = _gtk_tree_view_column_get_cell_at_pos (column,
-                                                              &cell_area,
-                                                              &background_area,
-                                                              event->x,
-                                                              event->y);
-
-          if (focus_cell)
-            gtk_tree_view_column_focus_cell (column, focus_cell);
-
-          if (event->state & modify_mod_mask)
-            {
-              gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
-              gtk_tree_view_real_toggle_cursor_row (tree_view);
-            }
-          else if (event->state & extend_mod_mask)
-            {
-              gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
-              gtk_tree_view_real_select_cursor_row (tree_view, FALSE);
-            }
-          else
-            {
-              gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CLAMP_NODE);
-            }
-
-          tree_view->priv->modify_selection_pressed = FALSE;
-          tree_view->priv->extend_selection_pressed = FALSE;
-        }
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 /* column drag gesture helper */
 static gboolean
 gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
@@ -3581,61 +3561,55 @@ gtk_tree_view_drag_gesture_end (GtkGestureDrag *gesture,
   gtk_tree_view_stop_rubber_band (tree_view);
 }
 
-static gboolean
-button_event_modifies_selection (GdkEventButton *event)
+static void
+gtk_tree_view_multipress_gesture_released (GtkGestureMultiPress *gesture,
+                                           gint                  n_press,
+                                           gdouble               x,
+                                           gdouble               y,
+                                           GtkTreeView          *tree_view)
 {
-        return (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
-}
+  gboolean modify, extend;
+  guint button;
 
-static gboolean
-gtk_tree_view_button_release (GtkWidget      *widget,
-			      GdkEventButton *event)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
-  if (tree_view->priv->pressed_button == event->button)
-    tree_view->priv->pressed_button = -1;
+  if (button != GDK_BUTTON_PRIMARY ||
+      tree_view->priv->button_pressed_node == NULL ||
+      tree_view->priv->button_pressed_node != tree_view->priv->prelight_node)
+    return;
 
-  if (tree_view->priv->button_pressed_node == NULL)
-    return FALSE;
+  get_current_selection_modifiers (GTK_WIDGET (tree_view), &modify, &extend);
 
-  if (event->button == GDK_BUTTON_PRIMARY
-      && tree_view->priv->button_pressed_node == tree_view->priv->prelight_node)
+  if (tree_view->priv->arrow_prelit)
     {
-      if (tree_view->priv->arrow_prelit)
-	{
-	  GtkTreePath *path = NULL;
+      GtkTreePath *path = NULL;
 
-	  path = _gtk_tree_path_new_from_rbtree (tree_view->priv->button_pressed_tree,
-					         tree_view->priv->button_pressed_node);
-	  /* Actually activate the node */
-	  if (tree_view->priv->button_pressed_node->children == NULL)
-	    gtk_tree_view_real_expand_row (tree_view, path,
-					   tree_view->priv->button_pressed_tree,
-					   tree_view->priv->button_pressed_node,
-					   FALSE, TRUE);
-	  else
-	    gtk_tree_view_real_collapse_row (GTK_TREE_VIEW (widget), path,
-					     tree_view->priv->button_pressed_tree,
-					     tree_view->priv->button_pressed_node, TRUE);
-	  gtk_tree_path_free (path);
-	}
-      else if (tree_view->priv->activate_on_single_click
-               && !button_event_modifies_selection (event))
-        {
-          GtkTreePath *path = NULL;
+      path = _gtk_tree_path_new_from_rbtree (tree_view->priv->button_pressed_tree,
+                                             tree_view->priv->button_pressed_node);
+      /* Actually activate the node */
+      if (tree_view->priv->button_pressed_node->children == NULL)
+        gtk_tree_view_real_expand_row (tree_view, path,
+                                       tree_view->priv->button_pressed_tree,
+                                       tree_view->priv->button_pressed_node,
+                                       FALSE, TRUE);
+      else
+        gtk_tree_view_real_collapse_row (tree_view, path,
+                                         tree_view->priv->button_pressed_tree,
+                                         tree_view->priv->button_pressed_node, TRUE);
+      gtk_tree_path_free (path);
+    }
+  else if (tree_view->priv->activate_on_single_click && !modify && !extend)
+    {
+      GtkTreePath *path = NULL;
 
-          path = _gtk_tree_path_new_from_rbtree (tree_view->priv->button_pressed_tree,
-                                                 tree_view->priv->button_pressed_node);
-          gtk_tree_view_row_activated (tree_view, path, tree_view->priv->focus_column);
-          gtk_tree_path_free (path);
-        }
-
-      tree_view->priv->button_pressed_tree = NULL;
-      tree_view->priv->button_pressed_node = NULL;
+      path = _gtk_tree_path_new_from_rbtree (tree_view->priv->button_pressed_tree,
+                                             tree_view->priv->button_pressed_node);
+      gtk_tree_view_row_activated (tree_view, path, tree_view->priv->focus_column);
+      gtk_tree_path_free (path);
     }
 
-  return TRUE;
+  tree_view->priv->button_pressed_tree = NULL;
+  tree_view->priv->button_pressed_node = NULL;
 }
 
 #if 0
@@ -12992,8 +12966,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   selection_changed = gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children);
   
   /* Stop a pending double click */
-  tree_view->priv->last_button_x = -1;
-  tree_view->priv->last_button_y = -1;
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (tree_view->priv->multipress_gesture));
 
   _gtk_tree_view_accessible_remove (tree_view, node->children, NULL);
   _gtk_tree_view_accessible_remove_state (tree_view,
@@ -15235,9 +15208,6 @@ gtk_tree_view_search_button_press_event (GtkWidget *widget,
 
   keyb_device = gdk_device_get_associated_device (event->device);
   gtk_tree_view_search_dialog_hide (widget, tree_view, keyb_device);
-
-  if (event->window == tree_view->priv->bin_window)
-    gtk_tree_view_button_press (GTK_WIDGET (tree_view), event);
 
   return TRUE;
 }
