@@ -1095,11 +1095,8 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
       ((GdkEventButton *)event)->button == GDK_BUTTON_PRIMARY)
     {
       priv->maybe_reordered = TRUE;
-      gdk_window_get_device_position (gtk_button_get_event_window (GTK_BUTTON (widget)),
-                                      gdk_event_get_device (event),
-                                      &priv->drag_x,
-                                      &priv->drag_y,
-                                      NULL);
+      priv->drag_x = event->button.x;
+      priv->drag_y = event->button.y;
       gtk_widget_grab_focus (widget);
     }
 
