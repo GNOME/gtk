@@ -365,6 +365,8 @@ static gint gtk_text_view_focus_in_event       (GtkWidget        *widget,
                                                 GdkEventFocus    *event);
 static gint gtk_text_view_focus_out_event      (GtkWidget        *widget,
                                                 GdkEventFocus    *event);
+static gint gtk_text_view_motion_event         (GtkWidget        *widget,
+                                                GdkEventMotion   *event);
 static gint gtk_text_view_draw                 (GtkWidget        *widget,
                                                 cairo_t          *cr);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
@@ -678,6 +680,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->key_release_event = gtk_text_view_key_release_event;
   widget_class->focus_in_event = gtk_text_view_focus_in_event;
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
+  widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->draw = gtk_text_view_draw;
   widget_class->focus = gtk_text_view_focus;
   widget_class->drag_begin = gtk_text_view_drag_begin;
@@ -5258,6 +5261,16 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
     }
 
   return FALSE;
+}
+
+static gboolean
+gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  gtk_text_view_unobscure_mouse_cursor (text_view);
+
+  return GTK_WIDGET_CLASS (gtk_text_view_parent_class)->motion_notify_event (widget, event);
 }
 
 static void
