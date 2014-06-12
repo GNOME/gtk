@@ -1100,7 +1100,8 @@ gtk_menu_init (GtkMenu *menu)
   gtk_window_set_mnemonic_modifier (GTK_WINDOW (priv->toplevel), 0);
 
   _gtk_window_request_csd (GTK_WINDOW (priv->toplevel));
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->toplevel), "popup");
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->toplevel),
+                               GTK_STYLE_CLASS_POPUP);
 
   /* Refloat the menu, so that reference counting for the menu isn't
    * affected by it being a child of the toplevel

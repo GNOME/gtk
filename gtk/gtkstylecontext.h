@@ -799,6 +799,15 @@ struct _GtkStyleContextClass
 /* Predefined set of widget regions */
 
 /**
+ * GTK_STYLE_CLASS_POPUP:
+ *
+ * A CSS class that is added to the toplevel windows used for menus.
+ *
+ * Since: 3.14
+ */
+#define GTK_STYLE_CLASS_POPUP "popup"
+
+/**
  * GTK_STYLE_REGION_ROW:
  *
  * A widget region name to define a treeview row.
