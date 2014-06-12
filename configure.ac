@@ -190,7 +190,7 @@ m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
 AC_SYS_LARGEFILE
 
 AM_PROG_AS
-AC_PATH_PROG(NM, nm, nm)
+AC_PATH_TOOL(NM, nm, nm)
 
 dnl Initialize maintainer mode
 AM_MAINTAINER_MODE([enable])
@@ -1453,7 +1453,7 @@ AC_ARG_ENABLE(cups,
 if test "x$enable_cups" = "xno"; then
   AM_CONDITIONAL(HAVE_CUPS, false)
 else
-  AC_PATH_PROG(CUPS_CONFIG, cups-config, no)
+  AC_PATH_TOOL(CUPS_CONFIG, cups-config, no)
   if test "x$CUPS_CONFIG" = "xno"; then
     if test "x$enable_cups" = "xauto"; then
       AM_CONDITIONAL(HAVE_CUPS, false)
