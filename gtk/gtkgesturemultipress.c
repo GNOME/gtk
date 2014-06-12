@@ -279,6 +279,7 @@ gtk_gesture_multi_press_cancel (GtkGesture       *gesture,
                                 GdkEventSequence *sequence)
 {
   _gtk_gesture_multi_press_stop (GTK_GESTURE_MULTI_PRESS (gesture));
+  GTK_GESTURE_CLASS (gtk_gesture_multi_press_parent_class)->cancel (gesture, sequence);
 }
 
 static void

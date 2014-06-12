@@ -112,14 +112,15 @@ gtk_gesture_single_set_property (GObject      *object,
 }
 
 static void
-gtk_gesture_single_reset (GtkEventController *controller)
+gtk_gesture_single_cancel (GtkGesture       *gesture,
+                           GdkEventSequence *sequence)
 {
   GtkGestureSinglePrivate *priv;
 
-  priv = gtk_gesture_single_get_instance_private (GTK_GESTURE_SINGLE (controller));
-  priv->current_button = 0;
+  priv = gtk_gesture_single_get_instance_private (GTK_GESTURE_SINGLE (gesture));
 
-  GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->reset (controller);
+  if (sequence == priv->current_sequence)
+    priv->current_button = 0;
 }
 
 static gboolean
@@ -219,13 +220,15 @@ static void
 gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
 {
   GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
+  GtkGestureClass *gesture_class = GTK_GESTURE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->get_property = gtk_gesture_single_get_property;
   object_class->set_property = gtk_gesture_single_set_property;
 
-  controller_class->reset = gtk_gesture_single_reset;
   controller_class->handle_event = gtk_gesture_single_handle_event;
+
+  gesture_class->cancel = gtk_gesture_single_cancel;
 
   /**
    * GtkGestureSingle:touch-only:

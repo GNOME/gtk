@@ -176,6 +176,14 @@ gtk_gesture_long_press_end (GtkGesture       *gesture,
 }
 
 static void
+gtk_gesture_long_press_cancel (GtkGesture       *gesture,
+                               GdkEventSequence *sequence)
+{
+  gtk_gesture_long_press_end (gesture, sequence);
+  GTK_GESTURE_CLASS (gtk_gesture_long_press_parent_class)->cancel (gesture, sequence);
+}
+
+static void
 gtk_gesture_long_press_sequence_state_changed (GtkGesture            *gesture,
                                                GdkEventSequence      *sequence,
                                                GtkEventSequenceState  state)
@@ -209,7 +217,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
   gesture_class->begin = gtk_gesture_long_press_begin;
   gesture_class->update = gtk_gesture_long_press_update;
   gesture_class->end = gtk_gesture_long_press_end;
-  gesture_class->cancel = gtk_gesture_long_press_end;
+  gesture_class->cancel = gtk_gesture_long_press_cancel;
   gesture_class->sequence_state_changed =
     gtk_gesture_long_press_sequence_state_changed;
 
