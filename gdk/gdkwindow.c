@@ -1243,9 +1243,6 @@ gdk_window_new (GdkWindow     *parent,
 
   if (!parent)
     {
-      GDK_NOTE (MULTIHEAD,
-		g_warning ("gdk_window_new(): no parent specified reverting to parent = default root window"));
-
       screen = gdk_screen_get_default ();
       parent = gdk_screen_get_root_window (screen);
     }
@@ -6034,12 +6031,7 @@ gdk_window_get_geometry (GdkWindow *window,
   GdkWindowImplClass *impl_class;
 
   if (!window)
-    {
-      GDK_NOTE (MULTIHEAD,
-		g_message ("gdk_window_get_geometry(): Window needs "
-			   "to be non-NULL to be multi head safe"));
-      window = gdk_screen_get_root_window ((gdk_screen_get_default ()));
-    }
+    window = gdk_screen_get_root_window ((gdk_screen_get_default ()));
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 

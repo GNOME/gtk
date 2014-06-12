@@ -82,7 +82,6 @@ typedef enum
 GDK_AVAILABLE_IN_ALL
 GType         gdk_visual_get_type            (void) G_GNUC_CONST;
 
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 gint          gdk_visual_get_best_depth      (void);
 GDK_AVAILABLE_IN_ALL
@@ -108,7 +107,6 @@ void gdk_query_visual_types (GdkVisualType  **visual_types,
 
 GDK_AVAILABLE_IN_ALL
 GList* gdk_list_visuals (void);
-#endif
 
 GDK_AVAILABLE_IN_ALL
 GdkScreen    *gdk_visual_get_screen (GdkVisual *visual);

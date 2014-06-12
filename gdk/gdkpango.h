@@ -31,10 +31,8 @@ G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_ALL
 PangoContext *gdk_pango_context_get_for_screen (GdkScreen    *screen);
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 PangoContext *gdk_pango_context_get            (void);
-#endif
 
 
 /* Get a clip region to draw only part of a layout or

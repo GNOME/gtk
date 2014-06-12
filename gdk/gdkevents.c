@@ -479,11 +479,7 @@ gdk_event_put (const GdkEvent *event)
   if (event->any.window)
     display = gdk_window_get_display (event->any.window);
   else
-    {
-      GDK_NOTE (MULTIHEAD,
-		g_message ("Falling back to default display for gdk_event_put()"));
-      display = gdk_display_get_default ();
-    }
+    display = gdk_display_get_default ();
 
   gdk_display_put_event (display, event);
 }

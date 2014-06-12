@@ -80,10 +80,8 @@ struct _GdkKeymapKey
 GDK_AVAILABLE_IN_ALL
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 GdkKeymap* gdk_keymap_get_default     (void);
-#endif
 GDK_AVAILABLE_IN_ALL
 GdkKeymap* gdk_keymap_get_for_display (GdkDisplay *display);
 

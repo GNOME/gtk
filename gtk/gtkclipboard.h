@@ -186,10 +186,8 @@ GType         gtk_clipboard_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkClipboard *gtk_clipboard_get_for_display (GdkDisplay   *display,
 					     GdkAtom       selection);
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 GtkClipboard *gtk_clipboard_get             (GdkAtom       selection);
-#endif
 
 GDK_AVAILABLE_IN_ALL
 GdkDisplay   *gtk_clipboard_get_display     (GtkClipboard *clipboard);

@@ -163,10 +163,6 @@ additional environment variables.
       <listitem><para>Keybindings</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>multihead</term>
-      <listitem><para>Working on multiple displays</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>modules</term>
       <listitem><para>Loading of modules</para></listitem>
     </varlistentry>
@@ -394,10 +390,6 @@ nevertheless.
     <varlistentry>
       <term>nograbs</term>
       <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>multihead</term>
-      <listitem><para>Information related to multiple screens</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>xinerama</term>

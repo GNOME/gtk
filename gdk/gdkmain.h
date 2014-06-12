@@ -95,8 +95,6 @@ GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
                                       guint32       time_);
 #endif /* GDK_MULTIDEVICE_SAFE */
 
-#ifndef GDK_MULTIHEAD_SAFE
-
 #ifndef GDK_MULTIDEVICE_SAFE
 GDK_DEPRECATED_IN_3_0_FOR(gdk_device_ungrab)
 void          gdk_pointer_ungrab     (guint32       time_);
@@ -121,8 +119,6 @@ void gdk_set_double_click_time (guint msec);
 
 GDK_AVAILABLE_IN_ALL
 void gdk_beep (void);
-
-#endif /* GDK_MULTIHEAD_SAFE */
 
 GDK_AVAILABLE_IN_ALL
 void gdk_flush (void);

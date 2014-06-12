@@ -152,7 +152,6 @@ G_BEGIN_DECLS
 /* Selections
  */
 
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
 				    GdkAtom	  selection,
@@ -160,8 +159,6 @@ gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
 				    gboolean      send_event);
 GDK_AVAILABLE_IN_ALL
 GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
-#endif/* GDK_MULTIHEAD_SAFE */
-
 GDK_AVAILABLE_IN_ALL
 gboolean   gdk_selection_owner_set_for_display (GdkDisplay *display,
 						GdkWindow  *owner,

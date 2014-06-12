@@ -61,10 +61,8 @@ int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
 GDK_AVAILABLE_IN_ALL
 const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
 
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 gint     gdk_x11_get_default_screen       (void);
-#endif
 
 /**
  * GDK_SCREEN_XDISPLAY:

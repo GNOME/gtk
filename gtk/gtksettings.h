@@ -87,10 +87,8 @@ struct _GtkSettingsValue
 /* --- functions --- */
 GDK_AVAILABLE_IN_ALL
 GType           gtk_settings_get_type                (void) G_GNUC_CONST;
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_default             (void);
-#endif
 GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_for_screen          (GdkScreen *screen);
 

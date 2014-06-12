@@ -1305,13 +1305,9 @@ void	  gdk_set_show_events		(gboolean	 show_events);
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_get_show_events		(void);
 
-#ifndef GDK_MULTIHEAD_SAFE
-
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_setting_get                (const gchar    *name,
                                          GValue         *value);
-
-#endif /* GDK_MULTIHEAD_SAFE */
 
 G_END_DECLS
 

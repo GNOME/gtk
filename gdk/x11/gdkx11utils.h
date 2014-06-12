@@ -36,21 +36,17 @@
 
 G_BEGIN_DECLS
 
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 Window   gdk_x11_get_default_root_xwindow (void);
 GDK_AVAILABLE_IN_ALL
 Display *gdk_x11_get_default_xdisplay     (void);
-#endif
 
-#ifndef GDK_MULTIHEAD_SAFE
 /**
  * GDK_ROOT_WINDOW:
  *
  * Obtains the Xlib window id of the root window of the current screen.
  */
 #define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
-#endif
 
 /**
  * GDK_XID_TO_POINTER:
@@ -71,12 +67,10 @@ Display *gdk_x11_get_default_xdisplay     (void);
  */
 #define GDK_POINTER_TO_XID(pointer) GPOINTER_TO_UINT(pointer)
 
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_grab_server    (void);
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_ungrab_server  (void);
-#endif
 
 G_END_DECLS
 
