@@ -800,10 +800,8 @@ gtk_file_chooser_button_constructor (GType                  type,
     {
       priv->dialog = gtk_file_chooser_dialog_new (NULL, NULL,
 						  GTK_FILE_CHOOSER_ACTION_OPEN,
-						  _("_Cancel"),
-						  GTK_RESPONSE_CANCEL,
-						  _("_Open"),
-						  GTK_RESPONSE_ACCEPT,
+						  _("_Cancel"), GTK_RESPONSE_CANCEL,
+						  _("_Open"), GTK_RESPONSE_ACCEPT,
 						  NULL);
 
       gtk_dialog_set_default_response (GTK_DIALOG (priv->dialog),
