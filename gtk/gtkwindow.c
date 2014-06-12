@@ -1454,9 +1454,6 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
 
       break;
     }
-
-  gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                  sequence, GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
@@ -1483,6 +1480,8 @@ multipress_gesture_stopped_cb (GtkGestureMultiPress *gesture,
     {
       gdouble x_root, y_root;
 
+      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                      sequence, GTK_EVENT_SEQUENCE_CLAIMED);
       gdk_event_get_root_coords (event, &x_root, &y_root);
       gdk_window_begin_move_drag_for_device (gtk_widget_get_window (GTK_WIDGET (window)),
                                              gdk_event_get_device ((GdkEvent*) event),
