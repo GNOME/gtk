@@ -2465,23 +2465,26 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                     <child>
                                       <object class="GtkToolButton">
                                         <property name="visible">True</property>
-                                        <property name="label">New</property>
+                                        <property name="label" translatable="yes">New</property>
                                         <property name="icon-name">document-new</property>
+                                        <property name="tooltip-text" translatable="yes">Create a new document</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton">
                                         <property name="visible">True</property>
-                                        <property name="label">Save</property>
+                                        <property name="label" translatable="yes">Save</property>
                                         <property name="icon-name">document-save</property>
+                                        <property name="tooltip-text" translatable="yes">Save the current document</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton">
                                         <property name="visible">True</property>
-                                        <property name="label">Search</property>
+                                        <property name="label" translatable="yes">Search</property>
                                         <property name="icon-name">search</property>
                                         <property name="action-name">win.search</property>
+                                        <property name="tooltip-text" translatable="yes">Search for it</property>
                                       </object>
                                     </child>
                                   </object>
