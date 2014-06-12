@@ -130,6 +130,7 @@ keyhash_SOURCES	=					\
 
 test_icontheme =					\
 	icons/16x16/simple.png				\
+	icons/32x32/only32-symbolic.svg			\
 	icons/index.theme				\
 	icons/scalable/everything-justregular.svg	\
 	icons/scalable/everything-justrtl-rtl.svg	\

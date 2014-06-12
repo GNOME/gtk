@@ -3,11 +3,16 @@ Name=Icons
 Comment=Testing of the Icon theme code
 Example=16x16/simple.png
 
-Directories=16x16,scalable
+Directories=16x16,32x32,scalable
 
 [16x16]
 Context=16x16 icons
 Size=16
+Type=Fixed
+
+[32x32]
+Context=32x32 icons
+Size=32
 Type=Fixed
 
 [scalable]

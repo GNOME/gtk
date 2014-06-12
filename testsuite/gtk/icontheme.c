@@ -405,6 +405,25 @@ test_rtl (void)
                       "/icons/scalable/everything-justrtl-rtl.svg");
 }
 
+static void
+test_symbolic_single_size (void)
+{
+  /* Check we properly load a symbolic icon from a sized directory */
+  assert_icon_lookup ("only32-symbolic",
+                      32,
+                      0,
+                      "/icons/32x32/only32-symbolic.svg");
+  /* Check that we still properly load it even if a different size is requested */
+  assert_icon_lookup ("only32-symbolic",
+                      16,
+                      0,
+                      "/icons/32x32/only32-symbolic.svg");
+  assert_icon_lookup ("only32-symbolic",
+                      128,
+                      0,
+                      "/icons/32x32/only32-symbolic.svg");
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -416,6 +435,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/force-symbolic", test_force_symbolic);
   g_test_add_func ("/icontheme/force-regular", test_force_regular);
   g_test_add_func ("/icontheme/rtl", test_rtl);
+  g_test_add_func ("/icontheme/symbolic-single-size", test_symbolic_single_size);
 
   return g_test_run();
 }
