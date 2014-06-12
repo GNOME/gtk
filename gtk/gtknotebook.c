@@ -1987,6 +1987,29 @@ _gtk_notebook_get_tab_flags (GtkNotebook     *notebook,
   return flags;
 }
 
+static void
+add_tab_position_style_class (GtkStyleContext *context,
+                              gint             tab_pos)
+{
+  switch (tab_pos)
+    {
+    case GTK_POS_TOP:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+      break;
+    case GTK_POS_BOTTOM:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+      break;
+    case GTK_POS_LEFT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      break;
+    case GTK_POS_RIGHT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+      break;
+    default:
+      break;
+    }
+}
+
 static GtkStateFlags
 notebook_tab_prepare_style_context (GtkNotebook *notebook,
                                     GtkNotebookPage *page,
@@ -2013,24 +2036,7 @@ notebook_tab_prepare_style_context (GtkNotebook *notebook,
     flags = _gtk_notebook_get_tab_flags (notebook, page);
 
   gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, flags);
-
-  switch (tab_pos)
-    {
-    case GTK_POS_TOP:
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
-      break;
-    case GTK_POS_BOTTOM:
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
-      break;
-    case GTK_POS_LEFT:
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
-      break;
-    case GTK_POS_RIGHT:
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
-      break;
-    default:
-      break;
-    }
+  add_tab_position_style_class (context, tab_pos);
 
   return state;
 }
@@ -5277,29 +5283,26 @@ gtk_notebook_paint (GtkWidget    *widget,
   header_height = height;
 
   gtk_style_context_save (context);
+  add_tab_position_style_class (context, tab_pos);
 
   switch (tab_pos)
     {
     case GTK_POS_TOP:
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
       y += page->allocation.height;
       height -= page->allocation.height;
       header_height = page->allocation.height;
       break;
     case GTK_POS_BOTTOM:
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
       height -= page->allocation.height;
       header_y += height;
       header_height = page->allocation.height;
       break;
     case GTK_POS_LEFT:
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
       x += page->allocation.width;
       width -= page->allocation.width;
       header_width = page->allocation.width;
       break;
     case GTK_POS_RIGHT:
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
       width -= page->allocation.width;
       header_width = page->allocation.width;
       header_x += width;
@@ -5398,6 +5401,9 @@ gtk_notebook_paint (GtkWidget    *widget,
   gtk_widget_style_get (GTK_WIDGET (notebook),
                         "has-tab-gap", &has_tab_gap,
                         NULL);
+
+  if (priv->show_tabs)
+    add_tab_position_style_class (context, tab_pos);
 
   if (priv->show_border)
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
