@@ -808,6 +808,15 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_POPUP "popup"
 
 /**
+ * GTK_STYLE_CLASS_MESSAGE_DIALOG:
+ *
+ * A CSS class that is added to message dialogs.
+ *
+ * Since: 3.14
+ */
+#define GTK_STYLE_CLASS_MESSAGE_DIALOG "message-dialog"
+
+/**
  * GTK_STYLE_REGION_ROW:
  *
  * A widget region name to define a treeview row.

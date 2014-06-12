@@ -8,6 +8,9 @@
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
+    <style>
+      <class name="message-dialog"/>
+    </style>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="visible">True</property>
