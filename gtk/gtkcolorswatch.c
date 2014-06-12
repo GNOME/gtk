@@ -30,6 +30,7 @@
 #include "gtkmenushell.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkwidgetprivate.h"
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
 
@@ -632,6 +633,8 @@ swatch_size_allocate (GtkWidget *widget,
                             allocation->y,
                             allocation->width,
                             allocation->height);
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static gboolean
