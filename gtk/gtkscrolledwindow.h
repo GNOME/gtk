@@ -120,12 +120,15 @@ typedef enum
 
 /**
  * GtkPolicyType:
- * @GTK_POLICY_ALWAYS: The scrollbar is always visible.
- * @GTK_POLICY_AUTOMATIC: The scrollbar will appear and disappear as necessary. For example,
- *  when all of a #GtkTreeView can not be seen.
- * @GTK_POLICY_NEVER: The scrollbar will never appear.
+ * @GTK_POLICY_ALWAYS: The scrollbar is always visible. The view size is
+ *  independent of the content.
+ * @GTK_POLICY_AUTOMATIC: The scrollbar will appear and disappear as necessary.
+ *  For example, when all of a #GtkTreeView can not be seen.
+ * @GTK_POLICY_NEVER: The scrollbar should never appear. In this mode the
+ *  content determines the size.
  *
- * Determines when a scroll bar will be visible.
+ * Determines how the size should be computed to achieve the one of the
+ * visibility mode for the scrollbars.
  */
 typedef enum
 {
