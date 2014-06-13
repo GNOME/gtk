@@ -1384,6 +1384,8 @@ gtk.gresource.xml: Makefile.am
 	done; \
         echo -e "    <file alias=\"theme/Adwaita.css\">theme/Adwaita/gtk.css</file>" >> $@; \
         echo -e "    <file alias=\"theme/Adwaita-dark.css\">theme/Adwaita/gtk-dark.css</file>" >> $@; \
+        echo -e "    <file>theme/Adwaita/gtk-contained.css</file>" >> $@; \
+        echo -e "    <file>theme/Adwaita/gtk-contained-dark.css</file>" >> $@; \
         for f in $(srcdir)/resources/theme/Adwaita/assets/*; do \
           n=`basename $$f`; \
           echo -e "    <file preprocess=\"to-pixdata\">theme/Adwaita/assets/$$n</file>" >> $@; \
@@ -1410,8 +1412,8 @@ adwaita_sources = \
 	resources/theme/Adwaita/_colors.scss \
 	resources/theme/Adwaita/_common.scss \
 	resources/theme/Adwaita/_drawing.scss \
-	resources/theme/Adwaita/gtk.scss \
-	resources/theme/Adwaita/gtk-dark.scss \
+	resources/theme/Adwaita/gtk-contained.scss \
+	resources/theme/Adwaita/gtk-contained-dark.scss \
 	resources/theme/Adwaita/parse-sass.sh \
 	resources/theme/Adwaita/render-assets.sh \
 	resources/theme/Adwaita/render-borders.sh \
