@@ -1418,13 +1418,13 @@ adwaita_sources = \
 	resources/theme/Adwaita/assets.txt \
 	resources/theme/Adwaita/borders.txt
 
-resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(srcdir)/gtk.gresource.xml)
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(builddir)/gtk.gresource.xml)
 
 gtkresources.h: gtk.gresource.xml
-	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< \
 		--target=$@ --sourcedir=$(srcdir)/resources --c-name _gtk --generate-header --manual-register
 gtkresources.c: gtk.gresource.xml $(resource_files) $(template_headers)
-	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< \
 		--target=$@ --sourcedir=$(srcdir)/resources --c-name _gtk --generate-source --manual-register
 
 gtkprivatetypebuiltins.h: stamp-gtkprivatetypebuiltins.h
