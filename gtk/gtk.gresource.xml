@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gtk/libgtk">
-    <file alias="theme/Raleigh.css">theme/gtk-default.css</file>
-    <file>theme/gtk-win32.css</file>
-    <file>theme/gtk-win32-xp.css</file>
-    <file>theme/gtk-win32-base.css</file>
-    <file>theme/gtk-win32-classic.css</file>
+    <file alias="theme/Raleigh.css">theme/Raleigh/gtk-default.css</file>
+    <file alias="theme/gtk-win32.css">theme/win32/gtk-win32.css</file>
+    <file alias="theme/gtk-win32-xp.css">theme/win32/gtk-win32-xp.css</file>
+    <file alias="theme/gtk-win32-base.css">theme/win32/gtk-win32-base.css</file>
+    <file alias="theme/gtk-win32-classic.css">theme/win32/gtk-win32-classic.css</file>
     <file alias="cursor/dnd-ask.png">cursor/cursor_dnd_ask.png</file>
     <file alias="cursor/dnd-link.png">cursor/cursor_dnd_link.png</file>
     <file alias="cursor/dnd-none.png">cursor/cursor_dnd_none.png</file>
