@@ -1374,6 +1374,29 @@ gtktypebuiltins.c: $(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sour
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
+gtk.gresource.xml:
+	$(AM_V_GEN) echo -e "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $@; \
+	echo -e "<gresources>" >> $@; \
+	echo -e "  <gresource prefix=\"/org/gtk/libgtk\">" >> $@; \
+	for f in $(srcdir)/resources/theme/Raleigh/*.css; do \
+	  n=`basename $$f`; \
+	  echo -e "    <file alias=\"theme/Raleigh.css\">theme/Raleigh/$$n</file>" >> $@; \
+	done; \
+	for f in $(srcdir)/resources/theme/win32/*.css; do \
+	  n=`basename $$f`; \
+	  echo -e "    <file alias=\"theme/$$n\">theme/win32/$$n</file>" >> $@; \
+	done; \
+	for f in $(srcdir)/resources/cursor/*.png; do \
+	  n=`basename $$f`; \
+	  echo -e "    <file>cursor/$$n</file>" >> $@; \
+	done; \
+	for f in $(srcdir)/resources/ui/*.ui; do \
+	  n=`basename $$f`; \
+	  echo -e "    <file compressed=\"true\">ui/$$n</file>" >> $@; \
+	done; \
+	echo -e "  </gresource>" >> $@; \
+	echo -e "</gresources>" >> $@;
+
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(srcdir)/gtk.gresource.xml)
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
