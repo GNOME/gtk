@@ -1,0 +1,1756 @@
+@function gtkalpha($c,$a) {
+  @return unquote("alpha(#{$c},#{$a})");
+}
+
+* {
+  padding: 0;
+  -GtkToolButton-icon-spacing: 4;
+  -GtkTextView-error-underline-color: $error_color;
+  -GtkPaned-handle-size: 1;
+
+  -GtkCheckButton-indicator-size: 16;
+  -GtkCheckMenuItem-indicator-size: 16;
+
+  // The size for scrollbars. The slider is 2px smaller, but we keep it
+  // up so that the whole area is sensitive to button presses for the
+  // slider. The stepper button is larger in both directions, the slider
+  // only in the width
+
+  -GtkScrolledWindow-scrollbar-spacing: 0;
+  -GtkScrolledWindow-scrollbars-within-bevel: 1;
+
+  -GtkToolItemGroup-expander-size: 11;
+  -GtkExpander-expander-size: 16;
+  -GtkTreeView-expander-size: 11;
+
+  -GtkTreeView-horizontal-separator: 4;
+
+  -GtkMenu-horizontal-padding: 0;
+  -GtkMenu-vertical-padding: 0;
+
+  -GtkWidget-link-color: $link_color;
+  -GtkWidget-visited-link-color: $link_color;
+
+  -GtkWidget-focus-padding: 2;
+  -GtkWidget-focus-line-width: 1;
+  -GtkWindow-resize-grip-width: 0;
+  -GtkWindow-resize-grip-height: 0;
+
+  -GtkDialog-button-spacing: 4;
+  -GtkDialog-action-area-border: 0;
+
+  // We use the outline properties to signal the focus properties
+  // to the adwaita engine: using real CSS properties is faster,
+  // and we don't use any outlines for now.
+
+  outline-color: transparentize($fg_color, 0.7);
+  outline-style: dashed;
+  outline-offset: -3px;
+  outline-width: 1px;
+  outline-radius: 2px;
+
+}
+
+
+/***************
+ * Base States *
+ ***************/
+
+.background {
+    color: $fg_color;
+    background-color: $bg_color;
+}
+
+.background:backdrop {
+    text-shadow: none;
+    icon-shadow: none;
+
+    color: lighten($fg_color,10%);
+    background-color: $backdrop_bg_color;
+}
+
+/*
+   These wildcard seems unavoidable, need to investigate.
+   Wildcards are bad and troublesome, use them with care,
+   or better, just don't.
+   Everytime a wildcard is used a kitten dies, painfully.
+*/
+
+
+
+*:insensitive {
+    -gtk-image-effect: dim;
+}
+
+*:hover {
+    -gtk-image-effect: highlight;
+}
+
+.gtkstyle-fallback {
+  background-color: $bg_color;
+  color: $fg_color;
+  &:prelight {
+    background-color: lighten($bg_color, 10%);
+    color: $fg_color;
+  }
+  &:active {
+    background-color: darken($bg_color, 10%);
+    color: $fg_color;
+  }
+  &:insensitive {
+    background-color: $insensitive_bg_color;
+    color: $insensitive_fg_color;
+  }
+  &:selected {
+    background-color: $selected_bg_color;
+    color: $selected_fg_color;
+  }
+}
+
+.view {
+  color: $fg_color;
+  background-color: $base_color;
+  &:backdrop {
+    color: $backdrop_fg_color;
+    background-color: $backdrop_base_color;
+  }
+  &:selected,
+  &:selected:focus,
+  &:selected:hover {
+    @extend %selected_items;
+  }
+}
+
+/*********************
+ * Spinner Animation *
+ *********************/
+
+@keyframes spin {
+    to { -gtk-icon-transform: rotate(1turn); }
+}
+
+.spinner {
+  background-image: none;
+  background-color: blue;
+  opacity: 0; // non spinning spinner makes no sense
+  -gtk-icon-source: -gtk-icontheme('process-working-symbolic');
+  &:active {
+    opacity: 1;
+    animation: spin 1s linear infinite;
+    &:insensitive {
+      opacity: 0.5;
+    }
+  }
+}
+
+/****************
+ * Text Entries *
+ ****************/
+
+.entry {
+  padding: 4px;
+  border-radius: 3px;
+  transition: all 200ms ease-out;
+  @include entry(normal);
+  &:focus { @include entry(focus); }
+  &:insensitive { @include entry(insensitive); }
+  &:backdrop { @include entry(backdrop); }
+  &:backdrop:insensitive { @include entry(backdrop-insensitive); }
+  &:selected, &:backdrop:selected {
+    background-color: $selected_bg_color;
+    color: $selected_fg_color;
+  }
+  &:selected,
+  &:selected:focus {
+    @extend %selected_items;
+  }
+  &.progressbar {
+    margin: 1px;
+    border-radius: 0;
+    border-width: 0 0 2px;
+    border-color: $selected_bg_color;
+    border-style: solid;
+    background-image: none;
+    background-color: transparent;
+    box-shadow: none;
+    &:backdrop { background-color: transparent; }
+  }
+  .linked & {
+    &:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      &:dir(rtl) { border-right-style: none;}
+    }
+    &:last-child {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-left-style: none;
+      &:dir(rtl) { border-left-style: solid; }
+    }
+  }
+}
+
+/***********
+ * Buttons *
+ ***********/
+
+.button {
+  border-radius: 3px;
+  transition: all 200ms ease-out;
+  padding: 4px 6px;
+  @include button(normal);
+  &:hover {
+    @include button(hover);
+  }
+  &:active {
+    @include button(active);
+  }
+  &:backdrop {
+    @include button(backdrop);
+    &:active {
+      @include button(backdrop-active);
+    }
+    &:insensitive {
+      @include button(backdrop-insensitive);
+    }
+    &:insensitive:active {
+      @include button(backdrop-insensitive-active);
+    }
+  }
+  &:selected,
+  &:selected:focus {
+    @extend %selected_items;
+  }
+  &:insensitive {
+    @include button(insensitive);
+    &:active {
+      @include button(insensitive-active);
+    }
+  }
+  //overlay / OSD style
+  .osd & {
+    padding: 6px;
+    border-width: 1px;
+    @include button(osd);
+    @extend %linked_buttons;
+    &:hover {
+      @include button(osd-hover);
+      @extend %linked_buttons;
+    }
+    &:active {
+      @include button(osd-active);
+      @extend %linked_buttons;
+    }
+    &:insensitive {
+      @include button(osd-insensitive);
+      @extend %linked_buttons;
+    }
+    &:backdrop {
+      @include button(osd-backdrop);
+      @extend %linked_buttons;
+    }
+  }
+  // Suggested and Destructive Action buttons
+  @each $b_type, $b_color in (suggested-action, $selected_bg_color),
+                              (destructive-action, $destructive_color) {
+    &.#{$b_type} {
+      @include button(normal,$b_color, white);
+      &:hover {
+        @include button(hover,$b_color, white);
+      }
+      &:active {
+        @include button(active,$b_color, white);
+      }
+      &:backdrop {
+        @include button(backdrop,$b_color);
+        &:insensitive {
+          @include button(backdrop-insensitive);
+        }
+      }
+      &:insensitive {
+        @include button(insensitive);
+      }
+    }
+  }
+
+  // headerbar buttons
+  .header-bar & {
+    &.text-button {
+      padding: 6px 8px 5px; // due to font metrics the image buttons
+                            // are 1px shorter
+    }
+    &.image-button {
+      padding: 8px;
+    }
+  }
+
+  //inline-toolbar buttons
+  .inline-toolbar &, .inline-toolbar &:backdrop {
+    border-radius: 2px;
+    border-width: 1px;
+    @extend %linked_buttons;
+  }
+
+  .primary-toolbar & { icon-shadow: none; } // tango icons don't need added shadows
+  .linked &, .linked &:backdrop {
+    @extend %linked_buttons;
+  }
+}
+
+%linked_buttons {
+  border-radius: 0;
+  border-left-style: none;
+  &:dir(rtl) {
+    border-right-style: none;
+    border-left-style: solid
+  };
+  &:first-child {
+    border-radius: 3px 0 0 3px;
+    border-left-style: solid;
+  }
+  &:last-child {
+    border-radius: 0 3px 3px 0;
+    &:dir(rtl) { border-right-style: solid; }
+  }
+  &:only-child {
+    border-radius: 3px;
+    border-style: solid;
+  }
+}
+
+%undecorated_button {
+  border-color: transparent;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+/* menu buttons */
+.menuitem.button {
+  color: $fg_color;
+  background-color: transparent;
+  background-image: none;
+  border-color: transparent;
+  border-image: none;
+  border-style: none;
+  box-shadow: none;
+  &:insensitive,
+  &:active:insensitive {
+    @extend .menuitem.button; // override generic .button:*
+  }
+  &:active {
+    color: $selected_fg_color;
+    text-shadow: none;
+    icon-shadow: none;
+  }
+  &:backdrop,
+  &:hover:backdrop,
+  &:insensitive:backdrop,
+  &:active:insensitive:backdrop,
+  &:active:backdrop,
+  &:active:hover:backdrop,
+  &:active:selected:backdrop {
+      text-shadow: none;
+      icon-shadow: none;
+      color: $insensitive_fg_color;
+      background-image: linear-gradient(to bottom, $bg_color);
+      border: none;
+      box-shadow: none;
+  }
+}
+
+GtkColorButton.button { padding: 4px; } // Uniform padding on the GtkColorButton.button
+
+.inline-toolbar.toolbar GtkToolButton .button { @include button(normal); }
+
+/*********
+ * Links *
+ *********/
+
+GtkLinkButton.button {
+  color: $selected_bg_color; //FIXME use a proper color
+  @extend %undecorated_button;
+  text-shadow: none;
+  &:hover, &:active {
+    color: mix($fg_color, $selected_bg_color, 40%); //FIXME same here
+    @extend %undecorated_button;
+    text-shadow: none;
+  }
+  &:backdrop {
+    color: $selected_bg_color;
+    @extend %undecorated_button; //This shouldn't be needed but avoids
+                                 //a weird transition which for some reason
+                                 //makes borders blink on hover
+  }
+}
+
+/*****************
+ * GtkSpinButton *
+ *****************/
+
+.spinbutton {
+  .button {
+    background-image: none;
+    border-width: 0 0 0 1px;
+    border-color: transparentize($borders_color,0.7);
+    border-radius: 0;
+    box-shadow: none;
+  //  padding-left: 6px;
+  //  padding-right: 6px;
+    &:dir(rtl) { border-width: 0 1px 0 0; }
+    &:insensitive {
+      color: transparentize($insensitive_fg_color,0.7);
+    }
+    &:active {
+      box-shadow: inset 0 2px 3px -1px transparentize(black,0.8);
+    }
+    &:backdrop {
+      border-color: transparentize($backdrop_borders_color,0.7);
+    }
+    &:backdrop:insensitive {
+      color: transparentize($backdrop_insensitive_color,0.7);
+      border-width: 0 0 0 1px; // It is needed or it gets overridden
+      &:dir(rtl) { border-width: 0 1px 0 0; }
+    }
+  }
+  &.vertical {
+    .button {
+      &:first-child {
+        @extend %top_button;
+        @include button(normal, $noedge: true);
+        &:active {
+          @extend %top_button;
+          @include button(active, $noedge: true);
+        }
+        &:hover {
+          @extend %top_button;
+          @include button(hover, $noedge: true);
+        }
+        &:insensitive {
+          @extend %top_button;
+          @include button(insensitive, $noedge: true);
+        }
+      }
+      &:last-child {
+        @extend %bottom_button;
+        @include button(normal);
+        &:active {
+          @extend %bottom_button;
+          @include button(active);
+        }
+        &:hover {
+          @extend %bottom_button;
+          @include button(hover);
+        }
+        &:insensitive {
+          @extend %bottom_button;
+          @include button(insensitive);
+        }
+      }
+      &:backdrop {
+        @include button(backdrop);
+      }
+      &:backdrop:insensitive {
+        @include button(backdrop-insensitive);
+      }
+    }
+    &.entry {
+      // we should remove the bottom edge hilight here, but seems
+      // like buttons are on top of it so it doesn't show up
+      border-radius: 0;
+    }
+    %top_button {
+      border-radius: 3px 3px 0 0;
+      border-bottom-width: 0;
+    }
+    %bottom_button {
+      border-radius: 0 0 3px 3px;
+      border-top-width: 0;
+    }
+  }
+}
+
+/**************
+ * ComboBoxes *
+ **************/
+GtkComboBox {
+
+  //FIXME padding issue
+  padding: 0;
+
+  -GtkComboBox-arrow-scaling: 0.5;
+  -GtkComboBox-shadow-type: none;
+
+  box-shadow: 0 1px $borders_edge;
+
+  @include _button_text_shadow;
+
+  &:insensitive {
+    color: $insensitive_fg_color;
+    text-shadow: none;
+    icon-shadow: none;
+  }
+  &:backdrop {
+    color: $backdrop_fg_color;
+    text-shadow: none;
+    icon-shadow: none;
+  }
+  &:backdrop:insensitive {
+    color: $backdrop_insensitive_color;
+  }
+  .menuitem { text-shadow: none; }
+  .separator {
+    // always disable separators
+    -GtkWidget-wide-separators: true;
+    -GtkWidget-horizontal-separator: 0;
+    -GtkWidget-vertical-separator: 0;
+  }
+  &.combobox-entry .entry {
+    border-radius: 3px 0 0 3px;
+    &:dir(rtl) {
+      border-radius: 0 3px 3px 0;
+    }
+  }
+  &.combobox-entry .button, &.combobox-entry .button:backdrop {
+    // It is needed to specify the backdrop button or it gets overridden
+    border-radius: 0 3px 3px 0;
+    border-left-style: none;
+    &:dir(rtl) {
+      border-radius: 3px 0 0 3px;
+      border-left-style: solid;
+      border-right-style: none;
+    }
+  }
+}
+
+/************
+ * Toolbars *
+ ************/
+.toolbar { //FIXME: why is all this being ignored?
+  padding: 6px;
+  background-color: $bg_color;
+  &.osd {
+    background-color: $osd_bg_color;
+    border-radius: 6px;
+    padding: 12px;
+  }
+  //searchbar & inline-toolbar
+  &.inline-toolbar {
+    @extend %inset-bar;
+    border-width: 0 1px 1px;
+    padding: 3px;
+    border-radius: 0  0 4px 4px;
+  }
+  &.search-bar {
+    @extend %inset-bar;
+    border-width: 0 0 1px;
+    padding: 3px;
+  }
+}
+
+%inset-bar {
+  border-style: solid;
+  border-color: $borders_color;
+  $_bg: mix($bg_color, $borders_color, 70%);
+  background-color: $_bg;
+  box-shadow: inset 0 2px 3px -1px mix($borders_color, $_bg, 60%);
+  //FIXME edge would be nice, but doesn't work
+  &:backdrop {
+    border-color: $backdrop_borders_color;
+    background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
+    box-shadow: none;
+  }
+}
+
+.action-bar {
+  padding: 4px;
+}
+
+/***************
+ * Header bars *
+ ***************/
+
+.titlebar,
+.header-bar {
+  border-width: 0 0 1px;
+  border-style: solid;
+  border-color: $borders_color;
+  border-radius: 7px 7px 0 0;
+
+  background-color: transparent;
+  background-image: linear-gradient(to bottom,
+                                    lighten($bg_color,4%),
+                                    $bg_color);
+  box-shadow: inset 0 -1px mix($borders_color, $bg_color, 30%), // bottom shade
+              inset 0 1px $borders_edge; // top highlight
+  padding: 6px;
+
+  &:backdrop {
+    border-color: $backdrop_borders_color;
+    background-color: $bg_color;
+    background-image: none;
+    box-shadow: none;
+  }
+
+  .title {
+    font: Bold;
+    padding: 0px 12px;
+  }
+  .subtitle {
+    font-size: 80%;
+    padding: 0 12px;
+  }
+  .header-bar-separator,
+  & > GtkBox > .separator.vertical {
+    -GtkWidget-wide-separators: true;
+    -GtkWidget-separator-width: 1px;
+    border-width: 0 1px;
+    border-image: linear-gradient(to bottom,
+                                  transparentize($borders_color,1),
+                                  $borders_color 30%,
+                                  $borders_color 70%,
+                                  transparentize($borders_color,1) 100%)
+                  0 1 / 0 1px stretch; //FIXME use a proper color
+    &:backdrop {
+      border-image: linear-gradient(to bottom,
+                                    transparentize($backdrop_borders_color,
+                                                   0.5))
+                    0 1 / 1px 1px;  //FIXME use a proper color
+    }
+  }
+  &.selection-mode {
+    color: darken($selected_bg_color, 15%);
+    text-shadow: 0 1px transparentize(black, 0.5);
+    background-image: linear-gradient(to bottom,
+                                    lighten($selected_bg_color,5%),
+                                    lighten($selected_bg_color,2%));
+    box-shadow: inset 0 -1px mix($borders_color,$bg_color, 30%), //bottom shade
+                inset 0 1px mix($borders_edge,$selected_bg_color, 50%); //top highlight
+    .button {
+      @include button(normal, $selected_bg_color, $selected_fg_color, noedge);
+      &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, noedge); }
+      &:active { @include button(active, $selected_bg_color, $selected_fg_color, noedge); }
+      &:insensitive { @include button(insensitive, $selected_bg_color, $selected_fg_color, noedge); }
+      &:backdrop { @include button(backdrop, $selected_bg_color, $selected_fg_color, noedge); }
+      &:backdrop:insensitive { @include button(backdrop-insensitive, $selected_bg_color, $selected_fg_color, noedge); }
+      &.suggested-action {
+        @include button($t:normal, $noedge:true);
+        &:hover { @include button($t:hover,$noedge:true); }
+        &:active { @include button($t:active, $noedge:true); }
+        &:insensitive { @include button($t:insensitive, $noedge:true); }
+        &:backdrop { @include button($t:backdrop, $noedge:true); }
+        &:backdrop:insensitive { @include button($t:backdrop-insensitive, $noedge:true); }
+      }
+    }
+  }
+  .tiled &, .maximized & {
+    border-radius: 0; // squared corners when the window is max'd or tiled
+  }
+}
+
+/**************
+ * Tree Views *
+ **************/
+
+column-header { // FIXME: something better
+  .button,
+  .button:hover,
+  .button:active,
+  .button:backdrop {
+    border-width: 0 1px 1px 0;
+    border-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    border-image: linear-gradient(to top,
+                              mix($borders_color, $base_color, 50%),
+                              $base_color
+                              ) 0 1 1 0;
+    background-image: none;
+    background-color: $base_color;
+    color: mix($fg_color,$base_color,50%);
+    text-shadow: none;
+    font-weight: bold;
+  }
+}
+
+/*********
+ * Menus *
+ *********/
+.menubar {
+  padding: 0px;
+  background-color: mix($fg_color,$bg_color,5%); //Uhm?
+  &:backdrop { background-color: $backdrop_bg_color; }
+  & > .menuitem {
+    padding: 4px 8px;
+    &:hover { //Seems like it :hover even with keyboard focus
+      box-shadow: inset 0 -3px $selected_bg_color;
+      color: $selected_bg_color;
+    }
+    &:insensitive {
+      color: $insensitive_fg_color;
+      box-shadow: none;
+    }
+  }
+}
+
+.menu {
+  padding: 0px;
+  background-color: $base_color;
+  //border: 1px solid $borders_color;
+  .menuitem {
+    padding: 4px;
+    &:hover {
+      color: $selected_fg_color;
+      background-color: $selected_bg_color;
+    }
+    &:insensitive {
+      color: $insensitive_fg_color;
+      &:backdrop { color: $backdrop_insensitive_color; }
+    }
+    &:backdrop, &:backdrop:hover {
+      color: $backdrop_fg_color;
+      background-color: $backdrop_base_color;
+    }
+    //submenu indicators
+    &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
+  }
+}
+
+
+
+/***************
+ * Popovers   *
+ ***************/
+
+GtkPopover {
+  margin: 10px;
+  padding: 2px;
+  border-color: $borders-color;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  //background-clip: border-box;
+  background-color: $bg_color;
+
+  box-shadow: 0 2px 3px transparentize(black, 0.5);
+  &:backdrop {
+    box-shadow: none;
+  }
+  & > .list,
+  & > .view,
+  & > .toolbar {
+    background-color: transparent;
+  }
+  .separator {
+    font-size: 80%;
+    font-weight: bold;
+    color: mix($fg_color, $bg_color, 20%);
+    text-shadow: none;
+    background-color: transparent;
+    icon-shadow: none;
+    border: 0;
+  }
+  .button,
+  .button:hover {
+    text-shadow: none;
+    transition: none;
+  }
+  &.osd { // Also used for touch cutnpaste overlays
+          // FIXME Doesn't work
+    background-image: none;
+    background-color: $osd_bg_color;
+    border: 1px solid $borders_color;
+    color: $osd_fg_color;
+    .button {
+      color: white;
+      text-shadow: none;
+      @include button(osd);
+      &:hover { @include button(osd-hover); };
+      &:active { @include button(osd-active); };
+      &:insensitive { @include button(osd-insensitive); };
+    }
+  }
+}
+
+//touch selection handlebars for the Popover.osd above
+.cursor-handle {
+  background-color: transparent;
+  background-image: none;
+  &.top { -gtk-icon-source: -gtk-icontheme('selection-start-symbolic'); }
+  &.bottom { -gtk-icon-source: -gtk-icontheme('selection-end-symbolic'); }
+}
+
+/*****************
+ * Notebooks and *
+ * Tabs          *
+ *****************/
+
+.notebook {
+  // Through me you go to the grief wracked city;
+  // Through me you go to everlasting pain;
+  // Through me you go a pass among lost souls.
+  // ...
+  // Abandon all hope — Ye Who Enter Here
+  padding: 0;
+  background-color: $base_color;
+  -GtkNotebook-initial-gap: 10;
+  -GtkNotebook-arrow-spacing: 5;
+  -GtkNotebook-tab-curvature: 0;
+  -GtkNotebook-tab-overlap: 1;
+  -GtkNotebook-has-tab-gap: false;
+  -GtkWidget-focus-padding: 0;
+  -GtkWidget-focus-line-width: 0;
+  transition: all 200ms ease-out;
+  &:backdrop {
+    background-color: $backdrop_base_color;
+  }
+  &.frame {
+    border: 1px solid $borders_color;
+    // FIXME doesn't work
+    &.top { border-top-width: 0; }
+    &.bottom { border-bottom-width: 0; }
+    &.right { border-right-width: 0; }
+    &.left { border-left-width: 0; }
+    &:backdrop { border-color: $backdrop_borders_color; }
+  }
+  &.header {
+    // FIXME: double borders in some case, can't fix it w/o a class tho
+    // FIXME: doesn't work on dark var
+    background-color: mix($bg_color, $borders_color, 70%);
+
+    // this is the shading of the header behind the tabs
+    &.frame {
+      border: 1px solid $borders_color;
+      &.top { border-bottom-width: 0; }
+      &.bottom { border-top-width: 0; }
+      &.right { border-left-width: 0; }
+      &.left { border-right-width: 0; }
+      &:backdrop { border-color: $backdrop_borders_color; }
+    }
+
+    $_header_shade: inset 0 2px 3px -1px transparentize(black, 0.85);
+    &.top {
+      box-shadow: $_header_shade,
+                  inset 0 -1px $borders_color; // border
+      &:backdrop { box-shadow: inset 0 -1px $backdrop_borders_color; }
+    }
+    &.bottom {
+      box-shadow: $_header_shade,
+                  inset 0 1px $borders_color;
+      &:backdrop { box-shadow: inset 0 1px $backdrop_borders_color; }
+    }
+    &.right {
+      box-shadow: $_header_shade,
+                  inset 1px 0 $borders_color;
+      &:backdrop { box-shadow: inset 1px 0 $backdrop_borders_color; }
+    }
+    &.left {
+      box-shadow: $_header_shade,
+                  inset -1px 0 $borders_color;
+      &:backdrop { box-shadow: inset -1px 0 $backdrop_borders_color; }
+    }
+    &:backdrop {
+      // same color as backdrop pushed button
+      background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
+      box-shadow: none;
+    }
+  }
+  tab {
+    border-width: 0;
+    border-style: solid;
+    border-color: transparent;
+    background-color: transparent;
+
+    outline-offset: 0;
+
+    $tab_indicator_size: 3px;
+    //vertical tab sizing
+    $vt_vpadding: 8px;
+    $vt_hpadding: 20px;
+    // horizontal tab sizing
+    $ht_vpadding: 5px;
+    $ht_hpadding: 20px;
+
+    //FIXME: we get double border in some cases, not considering the broken
+    //notebook content frame...
+    &.top, &.bottom { padding: $vt_vpadding $vt_hpadding; }
+    &.left, &.right { padding: $ht_vpadding $ht_hpadding; }
+    &.top {
+      padding-bottom: ($vt_vpadding -$tab_indicator_size);
+      border-bottom-width: $tab_indicator_size;
+    }
+    &.bottom {
+      padding-top: ($vt_vpadding -$tab_indicator_size);
+      border-top-width: $tab_indicator_size;
+    }
+    &.left {
+      padding-right: ($ht_hpadding -$tab_indicator_size);
+      border-right-width: $tab_indicator_size;
+    }
+    &.right {
+      padding-left: ($ht_hpadding -$tab_indicator_size);
+      border-left-width: $tab_indicator_size;
+    }
+
+    //here's the interesting stuff
+    &:hover {
+      border-color: $borders_color;
+    }
+    &:active, &:backdrop:active {
+      border-color: $selected_bg_color;
+    }
+    &:backdrop {
+      background-color: transparent;
+      border-color: transparent;
+    }
+    &.reorderable-page {
+      border-color: transparent;
+      border-left: 1px solid transparent;
+      border-right: 1px solid transparent;
+      &:hover {
+        border-color: transparentize($borders_color,0.7);
+        border-bottom-color: transparentize($borders_color,0.7);
+        background-color: transparentize($bg_color,0.8);
+      }
+      &:active, &.active-page {
+        background-color: transparentize($bg_color,0.5);
+        border-color: transparentize($borders_color,0.5);
+        border-bottom-color: $selected_bg_color;
+        &:hover {
+          background-color: transparentize($bg_color,0.3);
+        }
+        &:backdrop {
+          border-left-color: $backdrop_borders_color;
+          border-right-color: $backdrop_borders_color;
+          background-color: $backdrop_bg_color;
+          border-bottom-color: $selected_bg_color;
+        }
+      }
+      &:backdrop {
+        border-color: transparent;
+        background-color: transparent;
+      }
+    }
+    GtkLabel { //tab text
+      // this doesn't affect labels on reorderable pages, not css fault.
+      padding: 0 2px; // needed for a nicer focus ring
+      font-weight: bold;
+      color: $insensitive_fg_color;
+
+      // prelight tab text
+      &.prelight-page {
+        color: mix($fg_color, $insensitive_fg_color, 50%);
+      }
+      // active tab text
+      &.active-page {
+        color: $fg_color;
+        &:backdrop { color: $backdrop_fg_color; }
+      }
+      &:backdrop {
+        color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
+      }
+    }
+    .button { //tab close button
+      border: 1px solid transparent;
+      @extend %undecorated_button;
+      icon-shadow: none;
+      transition: none;
+      color: inherit;
+      &:hover {
+        border-color: $borders_color;
+        text-shadow: none;
+      }
+      &:active {
+        box-shadow: inset 0 1px 1px transparentize(black,0.7);
+      }
+      & > GtkImage { // this is a hack which makes tabs grow
+        padding: 2px;
+      }
+    }
+  }
+}
+
+.notebook > .frame,
+.notebook > .view { border: none; }
+
+/**************
+ * Scrollbars *
+ **************/
+
+.scrollbar {
+  background-clip: padding-box;
+  background-image: none;
+  border-style: solid;
+  -GtkRange-trough-border: 0;
+  -GtkScrollbar-has-backward-stepper: false;
+  -GtkScrollbar-has-forward-stepper: false;
+  -GtkRange-slider-width: 13;
+  -GtkScrollbar-min-slider-length: 42; // minimum size for the slider.
+                                       // sadly can't be in '.slider'
+                                       // where it belongs
+
+  -GtkRange-stepper-spacing: 0;
+  -GtkRange-trough-under-steppers: 1;
+  .button {
+    border: none;
+  }
+  &.trough {
+    background-color: darken($bg_color, 5%);
+    &:backdrop {
+      background-color: transparent;
+    }
+  }
+  &.slider {
+    border-radius: 20px;
+    border: 3px solid transparent; //margin :/
+    background-color: mix($bg_color, $fg_color, 70%);
+    &:backdrop, &:insensitive {
+      background-color: mix($bg_color, $fg_color, 90%);
+    }
+    &:hover {
+      background-color: mix($bg_color, $fg_color, 50%);
+    }
+    &:prelight:active {
+      background-color: $selected_bg_color;
+    }
+    &.fine-tune {
+      border-width: 5px;
+      &:prelight:active {
+        background-color: $selected_bg_color;
+      }
+    }
+  }
+}
+
+/**********
+ * Switch *
+ **********/
+
+GtkSwitch {
+    // FIXME: backdrop insensinsitive slider on the dark variant
+    -GtkSwitch-slider-width: 47px;
+    font: bold condensed 9;
+    outline-offset: -4px;
+    &.trough {
+      // similar to the .scale
+      border-width: 1px;
+      border-style: solid;
+      border-radius: 3px;
+      border-color: $borders_color;
+      background-color: mix($bg_color,$borders_color,60%);
+      box-shadow: inset 0 1px transparentize(black, 0.9),
+                  $widget_edge;
+      text-shadow: 0 1px transparentize(black, 0.9);
+      &:active {
+        color: white;
+        border-color: $selected_borders_color;
+        background-color: $selected_bg_color;
+        box-shadow: $widget_edge;
+        text-shadow: 0 0 2px white;
+      }
+      &:insensitive {
+        color: $insensitive_fg_color;
+        border-color: $borders_color;
+        background-color: $insensitive_bg_color;
+        box-shadow: $widget_edge;
+        text-shadow: none;
+      }
+      &:backdrop {
+        color: $backdrop_fg_color;
+        border-color: $backdrop_borders_color;
+        background-color: $backdrop_bg_color;
+        box-shadow: none;
+        text-shadow: none;
+      }
+      &:backdrop:active {
+        color: $backdrop_bg_color;
+        border-color: $selected_bg_color;
+        background-color: $selected_bg_color;
+        box-shadow: none;
+      }
+      &:backdrop:insensitive {
+        color: $backdrop_insensitive_color;
+        border-color: $backdrop_insensitive_color;
+      }
+    }
+    &.slider {
+      border-radius: 3px;
+      @include button(normal, $noedge: true);
+      box-shadow: inset 0 1px if($variant=='light', white,
+                                 transparentize(white,0.85)),
+                  inset 0 -2px transparentize($bg_color,0.4),
+                  inset 0 -1px mix($bg_color,$borders_color,50%);
+      &:active { border: 1px solid $selected_borders_color; }
+      &:insensitive { @include button(insensitive, $noedge: true); }
+      &:backdrop { @include button(backdrop); }
+      &:backdrop:active{ border-color: $selected_bg_color; }
+      &:backdrop:insensitive { @include button(backdrop-insensitive); }
+    }
+}
+
+/*************************
+ * Check and Radio items *
+ *************************/
+
+// draw regular check and radio items using our PNG assets
+// all assets are rendered from assets.svg. never add pngs directly
+
+$asset_suffix: if($variant=='dark', '-dark', '');
+@each $w,$a in ('check', 'checkbox'),
+               ('radio','radio') {
+  @each $s,$as in ('','-unchecked'),
+                  (':hover', '-unchecked-hover'),
+                  (':selected', '-unchecked-active'),
+                  (':insensitive','-unchecked-insensitive'),
+                  (':backdrop', '-unchecked-backdrop'),
+                  (':backdrop:insensitive', '-unchecked-backdrop-insensitive'),
+                  (':inconsistent', '-mixed'),
+                  (':inconsistent:selected', '-mixed-active'),
+                  (':inconsistent:backdrop', '-mixed-backdrop'),
+                  (':inconsistent:insensitive', '-mixed-insensitive'),
+                  (':inconsistent:insensitive:backdrop', '-mixed-backdrop-insensitive'),
+                  (':active', '-checked'),
+                  (':active:insensitive','-checked-insensitive'),
+                  (':hover:active', '-checked-hover'),
+                  (':active:selected', '-checked-active'),
+                  (':backdrop:active', '-checked-backdrop'),
+                  (':backdrop:active:insensitive', '-checked-backdrop-insensitive') {
+    .#{$w}#{$s} {
+      background-image: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
+                                    url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  //menu
+  .menuitem.#{$w} {
+    color: transparentize($fg_color,0.9);
+    background-image: none;
+    -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
+    &:hover { color: transparentize($selected_fg_color,0.9); }
+    &:active {
+      color: $fg_color;
+      &:hover { color: $selected_fg_color; }
+      &:insensitive {
+        color: $insensitive_fg_color;
+        background-image: none;
+        &:backdrop { color: $backdrop_insensitive_color; };
+      }
+      &:backdrop { color: $backdrop_fg_color; }
+    }
+    &:insensitive {
+      color: transparentize($insensitive_fg_color,0.9);
+      &:backdrop { color: transparent; }
+    }
+    &:inconsistent {
+      -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
+    }
+  }
+
+  //treeview
+  GtkTreeView.view.#{$w} {
+    color: transparentize($fg_color,0.9);
+    background-image: none;
+    -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
+    &:active {
+    color: $fg_color;
+      &:insensitive {
+        color: $insensitive_fg_color;
+        &:backdrop { color: $backdrop_insensitive_color; }
+      }
+      &:backdrop { color: $backdrop_fg_color; }
+    }
+    &:insensitive {
+      color: transparentize($insensitive_fg_color,0.9);
+      &:backdrop { color: transparent; }
+    }
+    &:inconsistent {
+      -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
+    }
+    &:selected {
+      color: transparentize($selected_fg_color,0.9);
+      &:active {
+        color: $selected_fg_color;
+        &:backdrop { color: $backdrop_base_color; }
+      }
+      &:backdrop {
+        color: transparentize($backdrop_fg_color,0.9);
+      }
+    }
+  }
+
+  //popover
+  GtkPopover .button.#{$w} {
+    &:hover {
+      color: transparentize($fg_color,0.9);
+      &:active {
+        color: $fg_color;
+        &:selected { color: $selected_fg_color; }
+        &:backdrop { color: $backdrop_fg_color; }
+      }
+    }
+  }
+}
+
+
+
+GtkCheckButton.text-button:selected { background-color: transparent; }
+
+/************
+ * GtkScale *
+ ************/
+.scale {
+  -GtkScale-slider-length: 20;
+  -GtkRange-slider-width: 20;
+  -GtkRange-trough-border: 2;
+  outline-offset: -9px;
+  margin: 10px;
+  &.slider {
+    //FIXME: better gradient on the slider and hover state
+    @include button(normal);
+    border-radius: 50%;
+    border-color: darken($borders_color,3%);
+    box-shadow: inset 0 1px if($variant=='light', white,
+                               transparentize(white,0.85)),
+                inset 0 #{-2px} $bg_color,
+                inset 0 #{-1px} mix($bg_color,$borders_color,50%);
+    &:insensitive {
+      background-image: linear-gradient(to bottom, $insensitive_bg_color);
+      box-shadow: none;
+    }
+    &:backdrop {
+      border-color: darken($backdrop_borders_color,3%);
+      background-image: linear-gradient(to bottom, $backdrop_bg_color);
+      box-shadow: none;
+    }
+    &:backdrop:insensitive { @include button(backdrop-insensitive); }
+    //FIXME we need a better color for the dark variant
+    &:active { border: 1px solid darken($selected_borders_color, 3%); }
+    &.fine-tune:active { //FIXME: Lapo doesn't like the shrinkage. Bad for touch
+      border: 4px solid transparent; //margin
+      box-shadow: inset 0 2px $borders_edge,
+                  inset 0 0 0 1px darken($selected_borders_color,3%); //border
+    }
+  }
+  &.trough {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    border-color: $borders_color;
+    background-color: mix($bg_color,$borders_color,60%);
+    box-shadow: inset 1px 1px transparentize(black, 0.9),
+                $widget_edge;
+    &.highlight {
+      border-color: $selected_borders_color;
+      background-color: $selected_bg_color;
+      box-shadow: $widget_edge;
+      &:backdrop {
+         border-color: $selected_bg_color;
+         background-color: $selected_bg_color;
+         box-shadow: none;
+      }
+    }
+    &:insensitive, &.hilight:insensitive {
+      border-color: $insensitive_borders_color;
+      background-color: $insensitive_bg_color;
+      box-shadow: $widget_edge;
+    }
+    &:backdrop {
+      border-color: $backdrop_borders_color;
+      background-color: mix($backdrop_bg_color,$borders_color);
+      box-shadow: none;
+    }
+    &:backdrop:insensitive, .hilight:backdrop:insensitive {
+      border-color: $backdrop_insensitive_color;
+      background-color: $backdrop_bg_color;
+    }
+  }
+}
+
+
+/*****************
+ * Progress bars *
+ *****************/
+
+//FIXME it's a wip ok?
+
+GtkProgressBar {
+    padding: 0;
+    font-size: 83%;
+    color: transparentize($fg_color, 0.6);
+    &:backdrop {
+      color: $backdrop_insensitive_color;
+    }
+}
+
+// moving bit
+.progressbar {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  border-color: $selected_borders_color;
+  background-color: $selected_bg_color;
+  // I really prefer these flat w/o this shadow - Lapo
+  box-shadow: inset 0 1px 0 transparentize($borders_edge,0.8);
+  &.vertical {
+    box-shadow: inset 1px 0 0 transparentize($borders_edge,0.8);
+  }
+  &:backdrop {
+    border-color: $selected_bg_color;
+    background-color: $selected_bg_color;
+    box-shadow: none;
+  }
+  &.osd {
+    border-width: 0;
+    border-radius: 0;
+    -GtkProgressBar-xspacing: 0;
+    -GtkProgressBar-yspacing: 2px;
+    -GtkProgressBar-min-horizontal-bar-height: 2px; //FIXME still too tall
+  }
+}
+
+// background
+GtkProgressBar.trough {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  border-color: $borders_color;
+  background-color: mix($borders_color,$bg_color, 35%);
+  box-shadow: inset 1px 1px transparentize(black, 0.9),
+              $widget_edge;
+  &:backdrop{
+    border-color: $backdrop_borders_color;
+    background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
+    box-shadow: 0 1px transparentize(white,1);
+  }
+  &.osd {
+    background-color: transparent;
+    box-shadow: none;
+    border-width: 0;
+    //FIXME: there is a margin on top
+  }
+}
+
+/*************
+ * Level Bar *
+ *************/
+
+GtkLevelBar {
+  -GtkLevelBar-min-block-width: 34;
+  -GtkLevelBar-min-block-height: 3;
+}
+
+GtkLevelBar.vertical {
+  -GtkLevelBar-min-block-width: 3;
+  -GtkLevelBar-min-block-height: 34;
+}
+
+.level-bar {
+  &.trough {
+    // FIXME: outset not working
+    padding: 2px;
+    border-radius: 3px;
+    @include entry(normal);
+    &:backdrop {
+      @include entry(backdrop);
+    }
+  }
+  &.fill-block {
+    // FIXME: it would be nice to set make fill blocks bigger, but we'd need
+    // :nth-child working on discrete indicators
+    border-width: 1px;
+    border-style: solid;
+    border-color: if($variant=='light', darken($selected_bg_color,10%),
+                     darken($selected_bg_color,5%));
+    background-color: $selected_bg_color;
+    box-shadow: 0 1px transparentize(black, 0.9);
+    border-radius: 1px;
+    &:backdrop {
+      border-color: $selected_bg_color;
+      box-shadow: none;
+    }
+    &.indicator-discrete {
+      &.horizontal { margin: 0 1px; }
+      &.vertical { margin: 1px 0; }
+    }
+    &.level-high {
+      border-color: darken($success_color,10%);
+      background-color: $success_color;
+      &:backdrop { border-color: $success_color; }
+    }
+    &.level-low {
+      border-color: darken($warning_color,10%);
+      background-color: $warning_color;
+      &:backdrop { border-color: $warning_color; };
+    }
+    &.empty-fill-block {
+      background-color: transparent;
+      border-color: if($variant=='light', transparentize($fg_color,0.8),
+                       transparentize($fg_color,0.9));
+      box-shadow: none;
+      &:backdrop { border-color: transparentize($backdrop_fg_color,0.85); }
+    }
+  }
+}
+
+// catch all extend :)
+
+%selected_items {
+  background-color: $selected_bg_color;
+  color: $selected_fg_color;
+  &:backdrop { color: $backdrop_base_color; }
+}
+
+/**********
+ * Frames *
+ **********/
+.frame {
+  border: 1px solid $borders_color;
+  padding: 0;
+  &:backdrop { border-color: $backdrop_borders_color; }
+}
+
+GtkScrolledWindow {
+  .frame { border-radius: 2px; }
+  GtkViewport.frame { // avoid double borders when viewport inside scrolled window
+    border-style: none;
+  }
+}
+
+//vbox and hbox separators
+.separator {
+  // always disable separators
+  // -GtkWidget-wide-separators: true;
+  color: transparentize(black, 0.9);
+}
+
+/*********
+ * Lists *
+ *********/
+
+.list {
+  background-color: $base_color;
+  border-color: $borders_color;
+  &:backdrop {
+    background-color: $backdrop_base_color;
+    border-color: $backdrop_borders_color;
+  }
+}
+
+
+/*********************
+ * App Notifications *
+ *********************/
+
+.app-notification {
+  border-width: 0 1px 1px;
+  border-style: solid;
+  border-color: $borders_color;
+  border-radius: 0 0 6px 6px;
+  background-image: linear-gradient(to bottom, mix(black, $bg_color, 6%) 5%,
+                              mix(black, $bg_color, 4%));
+  // FIXME no space for outer shadow : box-shadow: 0 1px 1px rgba(0,0,0,.5);
+  padding: 0 4px;
+  .button { padding: 6px; }
+}
+
+/*************
+ * Expanders *
+ *************/
+
+GtkExpander {
+  -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+  &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
+  &:active { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+}
+
+/************
+ * Calendar *
+ ***********/
+
+GtkCalendar {
+  border: 1px solid $borders_color;
+  &.button {
+    padding: 0 4px;
+    color: mix($borders_color, $base_color, 50%); //we need a dimmed stuff var
+    background-image: none;
+    background-color: transparent;
+    &:hover {
+      background-image: none;
+      color: $fg_color;
+    }
+    &:backdrop, &:backdrop:hover {
+      color: mix($backdrop_borders_color, $backdrop_base_color, 50%);
+      background-image: none;
+    }
+  }
+}
+
+/***********
+ * Dialogs *
+ ***********/
+
+.message-dialog {
+  // no spacing in message dialogs and the likes
+  -GtkDialog-button-spacing: 0;
+}
+
+GtkMessageDialog .titlebar {
+  border-style: none;
+  box-shadow: inset 0 1px $borders_edge;
+}
+
+.dialog-action-area.linked {
+  & .button {
+    padding: 6px;
+    border-radius: 0;
+    @include button(normal, $noedge: true);
+    @extend %middle_button;
+    &:hover {
+      @include button(hover, $noedge: true);
+      @extend %middle_button;
+    }
+    &:active {
+      @include button(active, $noedge: true);
+      @extend %middle_button;
+    }
+    &:insensitive {
+      @include button(insensitive, $noedge: true);
+      @extend %middle_button;
+    }
+    &:backdrop {
+      @include button(backdrop, $noedge: true);
+      @extend %middle_button;
+    }
+    &:backdrop:insensitive {
+      @include button(backdrop-insensitive, $noedge: true);
+      @extend %middle_button;
+    }
+    &:first-child{ @extend %first_button; }
+  }
+  %middle_button {
+    border-style: solid none none solid;
+  }
+  %first_button { border-style: solid none none none; }
+}
+
+/***********
+ * Sidebar *
+ ***********/
+
+.sidebar,
+.sidebar .view {
+  border: none;
+  $_sidebar_bg: lighten($bg_color,5%);
+  background-color: $_sidebar_bg;
+  .scrollbar {
+    &.trough {
+      background-color: darken($bg_color,10%);
+      border-radius: 6px;
+      border-width: 2px;
+      border-color: transparent;
+    }
+    &.slider {
+      background-color: $_sidebar_bg;
+      &:hover { background-color: lighten($bg_color, 10%); }
+    }
+  }
+  &:selected {
+    background-color: $selected_bg_color;
+  }
+  &:backdrop {
+    background-color: lighten($backdrop_bg_color,5%);
+  }
+}
+
+GtkPaned {
+  // This is actually the invisible area of the paned separator, not a margin...
+  margin: 16px; //drag area of the separator
+}
+
+.pane-separator {
+  //FIXME abusing a background-image to get rid of the handle decoration
+  //I'd like something better...
+  background-image: linear-gradient(to bottom, $borders_color);
+  &:backdrop {
+    background-image: linear-gradient(to bottom, $backdrop_borders_color);
+  }
+}
+
+/**************
+ * GtkInfoBar *
+ **************/
+GtkInfoBar {
+  border-width: 0;
+  border-style: none;
+}
+
+.info,
+.question,
+.warning,
+.error {
+  background-color: $selected_bg_color;
+  color: $selected_fg_color;
+  text-shadow: 0 1px darken($selected_bg_color, 10%);
+  border-color: darken($selected_bg_color, 10%);
+  .button {
+    @include button(normal, $selected_bg_color, $selected_fg_color, noedge);
+    &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, noedge); }
+    &:active { @include button(active, $selected_bg_color, $selected_fg_color, noedge); }
+    &:insensitive { @include button(insensitive, $selected_bg_color, $selected_fg_color, noedge); }
+    &:backdrop { @include button(backdrop, $selected_bg_color, $selected_fg_color, noedge); }
+    &:backdrop:insensitive { @include button(backdrop-insensitive, $selected_bg_color, $selected_fg_color, noedge); }
+  }
+}
+
+/************
+ * Tooltips *
+ ************/
+
+.tooltip {
+  color: white;
+  padding: 4px; /* not working */
+  border-radius: 5px;
+  background-color: transparentize(black,0.2);  //FIXME proper color
+  text-shadow: 0 1px black;
+//  border: 2px solid $borders_color; gnome shell style?
+}
+
+.tooltip * { //Yeah this is ugly
+  padding: 4px;
+  background-color: transparent;
+}
+
+/*****************
+ * Color Chooser *
+ *****************/
+
+GtkColorSwatch {
+
+  border: 1px solid transparentize(black,0.7);
+  box-shadow: inset 0 1px 1px transparentize(black, 0.8);
+
+  &.color-light {
+    &:hover {
+      background-image: linear-gradient(to bottom,
+                                        transparentize(white, 1) 40%,
+                                        transparentize(white, 0.6));
+      &:backdrop { background-image: none; }
+    }
+  }
+  &.color-dark {
+    &:hover {
+       background-image: linear-gradient(to bottom,
+                                        transparentize(white, 1) 40%,
+                                        transparentize(white, 0.8));
+       &:backdrop { background-image: none; }
+    }
+  }
+
+  &:hover { border-color: transparentize(black, 0.5); }
+
+  &:backdrop { border-color: transparentize(black,0.8); box-shadow: none; }
+
+  &.top {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  &.bottom {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  &.left, &:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  &.right, &:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  &:only-child {
+    border-radius: 5px;
+  }
+  &.color-active-badge {
+    border-width: 2px;
+    &:hover { background-image: none; }
+    &.color-light, &.color-light:hover {
+      color: transparentize(black,0.7);
+      border-color: transparentize(black,0.7);
+    }
+    &.color-dark, &.color-dark:hover {
+      color: transparentize(white,0.5);
+      border-color: transparentize(white,0.5);
+    }
+  }
+}
+GtkColorChooserWidget #add-color-button {
+  border-color: mix($borders_color,$bg_color,50%);
+  background-color: mix($borders_color,$bg_color,50%);
+  color: $bg_color;
+  box-shadow: none;
+  &:hover {
+    border-color: $borders_color;
+    background-color: $borders_color;
+  }
+  &:backdrop {
+    border-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
+    background-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
+  }
+}
+
+/**********************
+ * Window Decorations *
+ *********************/
+
+.window-frame {
+  border-radius: 7px 7px 0 0;
+  // lamefun trick to get rounded borders regardless of CSD use
+  border-width: 0px;
+
+  // this needs to be transparent
+  // see bug #722563
+  $_wm_border: if($variant=='light', transparentize(black, 0.8), transparentize(black, 0.4));
+  box-shadow: 0 2px 10px 4px transparentize(black, 0.9),
+              0 0 0 1px $_wm_border; //doing borders with box-shadow
+
+  /* this is used for the resize cursor area */
+  margin: 10px;
+
+  &:backdrop {
+    box-shadow: 0 3px 6px 2px transparentize(black, 0.9),
+                0 0 0 1px transparentize(black,0.7);
+  }
+  &.tiled {
+    border-radius: 0;
+  }
+  &.csd {
+    &.popup {
+      border-radius: 0;
+      box-shadow: 0 1px 2px transparentize(black, 0.6),
+                  0 0 0 1px transparentize($_wm_border,0.1);
+    }
+    &.tooltip {
+      border-radius: 5px;
+      box-shadow: none;
+    }
+  }
+}
+
+// Window Close button
+.button.titlebutton {
+  padding: 8px;
+  border-color: transparent;
+  background-image: none;
+  transition-property: border, box-shadow, color;
+  box-shadow: inset 0 1px transparentize(white,1),
+              0 1px transparentize($borders_edge,1);
+  &:hover { @include button(normal); }
+  &:active { @include button(active); }
+  &:backdrop {
+    @include button(backdrop);
+    border-color: transparent;
+    transition-property: border, box-shadow, color;
+  }
+}
+

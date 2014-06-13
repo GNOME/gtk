@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="2"
+   height="24"
+   id="svg32934"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="pane-separator-grip.svg">
+  <defs
+     id="defs32936" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.313708"
+     inkscape:cx="-46.790574"
+     inkscape:cy="11.379732"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1021"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata32939">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,8)">
+    <path
+       sodipodi:type="arc"
+       style="fill:#595959;fill-opacity:1;stroke:none;display:inline;enable-background:new"
+       id="path5824"
+       sodipodi:cx="868.63647"
+       sodipodi:cy="617.14966"
+       sodipodi:rx="1.9003495"
+       sodipodi:ry="1.9003495"
+       d="m 870.53682,617.14966 a 1.9003495,1.9003495 0 1 1 -3.80069,0 1.9003495,1.9003495 0 1 1 3.80069,0 z"
+       transform="matrix(0.52621899,0,0,0.52621789,-456.09301,-320.75518)" />
+    <path
+       transform="matrix(0.52621899,0,0,0.52621789,-456.09301,-326.25519)"
+       d="m 870.53682,617.14966 a 1.9003495,1.9003495 0 1 1 -3.80069,0 1.9003495,1.9003495 0 1 1 3.80069,0 z"
+       sodipodi:ry="1.9003495"
+       sodipodi:rx="1.9003495"
+       sodipodi:cy="617.14966"
+       sodipodi:cx="868.63647"
+       id="path5828"
+       style="fill:#595959;fill-opacity:1;stroke:none;display:inline;enable-background:new"
+       sodipodi:type="arc" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#595959;fill-opacity:1;stroke:none;display:inline;enable-background:new"
+       id="path5830"
+       sodipodi:cx="868.63647"
+       sodipodi:cy="617.14966"
+       sodipodi:rx="1.9003495"
+       sodipodi:ry="1.9003495"
+       d="m 870.53682,617.14966 a 1.9003495,1.9003495 0 1 1 -3.80069,0 1.9003495,1.9003495 0 1 1 3.80069,0 z"
+       transform="matrix(0.52621899,0,0,0.52621789,-456.09301,-331.75519)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#595959;fill-opacity:1;stroke:none;display:inline;enable-background:new"
+       id="path5824-3"
+       sodipodi:cx="868.63647"
+       sodipodi:cy="617.14966"
+       sodipodi:rx="1.9003495"
+       sodipodi:ry="1.9003495"
+       d="m 870.53682,617.14966 c 0,1.04953 -0.85081,1.90035 -1.90035,1.90035 -1.04953,0 -1.90034,-0.85082 -1.90034,-1.90035 0,-1.04954 0.85081,-1.90035 1.90034,-1.90035 1.04954,0 1.90035,0.85081 1.90035,1.90035 z"
+       transform="matrix(0.52621899,0,0,0.52621789,-456.09301,-309.75517)" />
+    <path
+       transform="matrix(0.52621899,0,0,0.52621789,-456.09301,-315.25518)"
+       d="m 870.53682,617.14966 a 1.9003495,1.9003495 0 1 1 -3.80069,0 1.9003495,1.9003495 0 1 1 3.80069,0 z"
+       sodipodi:ry="1.9003495"
+       sodipodi:rx="1.9003495"
+       sodipodi:cy="617.14966"
+       sodipodi:cx="868.63647"
+       id="path5828-7"
+       style="fill:#595959;fill-opacity:1;stroke:none;display:inline;enable-background:new"
+       sodipodi:type="arc" />
+  </g>
+</svg>

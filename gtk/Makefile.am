@@ -1382,6 +1382,14 @@ gtk.gresource.xml:
 	  n=`basename $$f`; \
 	  echo -e "    <file alias=\"theme/Raleigh.css\">theme/Raleigh/$$n</file>" >> $@; \
 	done; \
+        echo -e "    <file alias=\"theme/Adwaita.css\">theme/Adwaita/gtk.css</file>" >> $@; \
+        echo -e "    <file alias=\"theme/Adwaita-dark.css\">theme/Adwaita/gtk-dark.css</file>" >> $@; \
+        echo -e "    <file>theme/Adwaita/gtk-contained.css</file>" >> $@; \
+        echo -e "    <file>theme/Adwaita/gtk-contained-dark.css</file>" >> $@; \
+        for f in $(srcdir)/resources/theme/Adwaita/assets/*; do \
+          n=`basename $$f`; \
+          echo -e "    <file preprocess=\"to-pixdata\">theme/Adwaita/assets/$$n</file>" >> $@; \
+        done; \
 	if test "$(win32_theme)" = "yes"; then \
 	  for f in $(srcdir)/resources/theme/win32/*.css; do \
 	    n=`basename $$f`; \
