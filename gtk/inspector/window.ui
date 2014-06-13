@@ -2,7 +2,7 @@
 <interface domain="gtk30">
   <object class="GtkImage" id="inspect_image">
     <property name="visible">True</property>
-    <property name="icon-name">edit-find-symbolic</property>
+    <property name="icon-name">find-location-symbolic</property>
     <property name="icon-size">4</property>
   </object>
   <object class="GtkMenu" id="widget_popup">
