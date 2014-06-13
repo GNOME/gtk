@@ -1382,10 +1382,12 @@ gtk.gresource.xml:
 	  n=`basename $$f`; \
 	  echo -e "    <file alias=\"theme/Raleigh.css\">theme/Raleigh/$$n</file>" >> $@; \
 	done; \
-	for f in $(srcdir)/resources/theme/win32/*.css; do \
-	  n=`basename $$f`; \
-	  echo -e "    <file alias=\"theme/$$n\">theme/win32/$$n</file>" >> $@; \
-	done; \
+	if test "$(win32_theme)" = "yes"; then \
+	  for f in $(srcdir)/resources/theme/win32/*.css; do \
+	    n=`basename $$f`; \
+	    echo -e "    <file alias=\"theme/$$n\">theme/win32/$$n</file>" >> $@; \
+	  done; \
+	fi; \
 	for f in $(srcdir)/resources/cursor/*.png; do \
 	  n=`basename $$f`; \
 	  echo -e "    <file>cursor/$$n</file>" >> $@; \
@@ -1452,6 +1454,7 @@ libgtk_3_la_LIBADD = $(libadd)
 libgtk_3_la_DEPENDENCIES = $(deps)
 
 if USE_WIN32
+win32_theme=yes
 libgtk_3_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
 libgtk_3_la_LDFLAGS += -Wl,-luuid
 libgtk_3_la_DEPENDENCIES += $(gtk_def) $(gtk_win32_res) $(deps)
