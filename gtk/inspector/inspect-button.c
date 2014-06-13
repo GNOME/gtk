@@ -263,6 +263,8 @@ property_query_event (GtkWidget *widget,
                       GdkEvent  *event,
                       gpointer   data)
 {
+  GtkInspectorWindow *iw = (GtkInspectorWindow *)data;
+
   if (event->type == GDK_BUTTON_RELEASE)
     {
       g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
@@ -273,6 +275,21 @@ property_query_event (GtkWidget *widget,
   else if (event->type == GDK_MOTION_NOTIFY)
     {
       on_highlight_widget (widget, event, data);
+    }
+  else if (event->type == GDK_KEY_PRESS)
+    {
+      GdkEventKey *ke = (GdkEventKey*)event;
+      GdkDevice *device;
+
+      if (ke->keyval == GDK_KEY_Escape)
+        {
+          g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
+          gtk_grab_remove (widget);
+          device = gdk_device_get_associated_device (gdk_event_get_device (event));
+          gdk_device_ungrab (device, GDK_CURRENT_TIME);
+          gdk_window_raise (gtk_widget_get_window (GTK_WIDGET (iw)));
+          clear_flash (iw);
+        }
     }
 
   return FALSE;
