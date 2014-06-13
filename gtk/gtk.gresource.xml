@@ -6,11 +6,11 @@
     <file alias="theme/gtk-win32-xp.css">theme/win32/gtk-win32-xp.css</file>
     <file alias="theme/gtk-win32-base.css">theme/win32/gtk-win32-base.css</file>
     <file alias="theme/gtk-win32-classic.css">theme/win32/gtk-win32-classic.css</file>
-    <file alias="cursor/dnd-ask.png">cursor/cursor_dnd_ask.png</file>
-    <file alias="cursor/dnd-link.png">cursor/cursor_dnd_link.png</file>
-    <file alias="cursor/dnd-none.png">cursor/cursor_dnd_none.png</file>
-    <file alias="cursor/dnd-move.png">cursor/cursor_dnd_move.png</file>
-    <file alias="cursor/dnd-copy.png">cursor/cursor_dnd_copy.png</file>
+    <file>cursor/dnd-ask.png</file>
+    <file>cursor/dnd-link.png</file>
+    <file>cursor/dnd-none.png</file>
+    <file>cursor/dnd-move.png</file>
+    <file>cursor/dnd-copy.png</file>
     <file compressed="true">ui/gtkaboutdialog.ui</file>
     <file compressed="true">ui/gtkactionbar.ui</file>
     <file compressed="true">ui/gtkappchooserdialog.ui</file>
