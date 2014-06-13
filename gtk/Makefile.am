@@ -1374,7 +1374,7 @@ gtktypebuiltins.c: $(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sour
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
-gtk.gresource.xml:
+gtk.gresource.xml: Makefile.am
 	$(AM_V_GEN) echo -e "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $@; \
 	echo -e "<gresources>" >> $@; \
 	echo -e "  <gresource prefix=\"/org/gtk/libgtk\">" >> $@; \
@@ -1382,6 +1382,12 @@ gtk.gresource.xml:
 	  n=`basename $$f`; \
 	  echo -e "    <file alias=\"theme/Raleigh.css\">theme/Raleigh/$$n</file>" >> $@; \
 	done; \
+        echo -e "    <file alias=\"theme/Adwaita.css\">theme/Adwaita/gtk.css</file>" >> $@; \
+        echo -e "    <file alias=\"theme/Adwaita-dark.css\">theme/Adwaita/gtk-dark.css</file>" >> $@; \
+        for f in $(srcdir)/resources/theme/Adwaita/assets/*; do \
+          n=`basename $$f`; \
+          echo -e "    <file preprocess=\"to-pixdata\">theme/Adwaita/assets/$$n</file>" >> $@; \
+        done; \
 	if test "$(win32_theme)" = "yes"; then \
 	  for f in $(srcdir)/resources/theme/win32/*.css; do \
 	    n=`basename $$f`; \
@@ -1399,7 +1405,21 @@ gtk.gresource.xml:
 	echo -e "  </gresource>" >> $@; \
 	echo -e "</gresources>" >> $@;
 
+adwaita_sources = \
+	resources/theme/Adwaita/assets.svg \
+	resources/theme/Adwaita/_colors.scss \
+	resources/theme/Adwaita/_common.scss \
+	resources/theme/Adwaita/_drawing.scss \
+	resources/theme/Adwaita/gtk.scss \
+	resources/theme/Adwaita/gtk-dark.scss \
+	resources/theme/Adwaita/parse-sass.sh \
+	resources/theme/Adwaita/render-assets.sh \
+	resources/theme/Adwaita/render-borders.sh \
+	resources/theme/Adwaita/assets.txt \
+	resources/theme/Adwaita/borders.txt
+
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(srcdir)/gtk.gresource.xml)
+
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir)/resources --c-name _gtk --generate-header --manual-register
@@ -1977,6 +1997,7 @@ gsettings_SCHEMAS = \
 
 EXTRA_DIST +=                   \
 	$(resource_files)	\
+	$(adwaita_sources)	\
 	$(STOCK_ICONS)		\
 	$(GENERATED_ICONS)	\
 	$(gsettings_SCHEMAS)	\
