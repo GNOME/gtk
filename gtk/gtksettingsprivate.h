@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define DEFAULT_THEME_NAME      "Raleigh"
+#define DEFAULT_THEME_NAME      "Adwaita"
 
 void                _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
                                                               const gchar            *name,
