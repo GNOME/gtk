@@ -1539,13 +1539,25 @@ GtkCheckButton.text-button:selected {
 /************
  * GtkScale *
  ************/
-.scale {
+.scale,
+.scale.scale-has-marks-above.scale-has-marks-below,
+.scale.vertical.scale-has-marks-above.scale-has-marks-below {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
   margin: 10px; }
-  .scale.slider {
+  .scale.fine-tune,
+  .scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
+  .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
+    margin: 8px; }
+    .scale.fine-tune.trough,
+    .scale.scale-has-marks-above.scale-has-marks-below.fine-tune.trough,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune.trough {
+      border-radius: 4px; }
+  .scale.slider,
+  .scale.scale-has-marks-above.scale-has-marks-below.slider,
+  .scale.vertical.scale-has-marks-above.scale-has-marks-below.slider {
     border-width: 1px;
     border-style: solid;
     color: #eeeeec;
@@ -1557,7 +1569,9 @@ GtkCheckButton.text-button:selected {
     border-radius: 50%;
     border-color: #151717;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px #393f3f, inset 0 -1px #2a2f2f; }
-    .scale.slider:hover {
+    .scale.slider:hover,
+    .scale.scale-has-marks-above.scale-has-marks-below.slider:hover,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.slider:hover {
       border-width: 1px;
       border-style: solid;
       color: #eeeeec;
@@ -1567,15 +1581,26 @@ GtkCheckButton.text-button:selected {
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
       border-color: #151717;
+      border-radius: 50%;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(255, 255, 255, 0.14), inset 0 -1px #303535; }
-    .scale.slider:insensitive {
+    .scale.slider:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below.slider:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.slider:insensitive {
+      border-style: solid;
+      border-radius: 50%;
       background-image: linear-gradient(to bottom, #323636);
       box-shadow: none; }
-    .scale.slider:backdrop {
+    .scale.slider:backdrop,
+    .scale.scale-has-marks-above.scale-has-marks-below.slider:backdrop,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.slider:backdrop {
+      border-style: solid;
+      border-radius: 50%;
       border-color: #171a1a;
       background-image: linear-gradient(to bottom, #393f3f);
       box-shadow: none; }
-    .scale.slider:backdrop:insensitive {
+    .scale.slider:backdrop:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below.slider:backdrop:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.slider:backdrop:insensitive {
       border-width: 1px;
       border-style: solid;
       color: #454c4c;
@@ -1583,37 +1608,284 @@ GtkCheckButton.text-button:selected {
       background-image: linear-gradient(to bottom, #393f3f);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       border-color: #454c4c; }
-    .scale.slider:active {
+    .scale.slider:active,
+    .scale.scale-has-marks-above.scale-has-marks-below.slider:active,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.slider:active {
       border: 1px solid #14375d; }
-    .scale.slider.fine-tune:active {
-      border: 4px solid transparent;
-      box-shadow: inset 0 2px rgba(238, 238, 236, 0.1), inset 0 0 0 1px #0c233b; }
-  .scale.trough {
+  .scale.trough,
+  .scale.scale-has-marks-above.scale-has-marks-below.trough,
+  .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough {
     border-width: 1px;
     border-style: solid;
     border-radius: 3px;
     border-color: #1c1f1f;
     background-color: #2d3232;
     box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
-    .scale.trough.highlight {
+    .scale.trough.highlight,
+    .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight {
       border-color: #0f2b48;
       background-color: #215d9c;
       box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
-      .scale.trough.highlight:backdrop {
+      .scale.trough.highlight:backdrop,
+      .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight:backdrop,
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight:backdrop {
         border-color: #215d9c;
         background-color: #215d9c;
         box-shadow: none; }
-    .scale.trough:insensitive, .scale.trough.hilight:insensitive {
+    .scale.trough:insensitive, .scale.trough.hilight:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below.trough:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below.trough.hilight:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.hilight:insensitive {
       border-color: #1c1f1f;
       background-color: #323636;
       box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
-    .scale.trough:backdrop {
+    .scale.trough:backdrop,
+    .scale.scale-has-marks-above.scale-has-marks-below.trough:backdrop,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough:backdrop {
       border-color: #1e2222;
       background-color: #2a2f2f;
       box-shadow: none; }
-    .scale.trough:backdrop:insensitive, .scale.trough .hilight:backdrop:insensitive {
+    .scale.trough:backdrop:insensitive, .scale.trough .hilight:backdrop:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below.trough:backdrop:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below.trough .hilight:backdrop:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough:backdrop:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough .hilight:backdrop:insensitive {
       border-color: #454c4c;
       background-color: #393f3f; }
+
+.scale.scale-has-marks-below {
+  -GtkScale-slider-length: 20;
+  -GtkRange-slider-width: 24;
+  -GtkRange-trough-border: 2; }
+  .scale.scale-has-marks-below.slider {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-dark.png"), url("assets/slider-horz-scale-has-marks-below-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-below.slider:hover {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-hover-dark.png"), url("assets/slider-horz-scale-has-marks-below-hover-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-below.slider:active {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-active-dark.png"), url("assets/slider-horz-scale-has-marks-below-active-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-below.slider:insensitive {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-below-insensitive-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-below.slider:backdrop {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-dark.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-below.slider:backdrop:insensitive {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+
+.scale.scale-has-marks-above {
+  -GtkScale-slider-length: 20;
+  -GtkRange-slider-width: 24;
+  -GtkRange-trough-border: 2; }
+  .scale.scale-has-marks-above.slider {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-dark.png"), url("assets/slider-horz-scale-has-marks-above-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-above.slider:hover {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover-dark.png"), url("assets/slider-horz-scale-has-marks-above-hover-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-above.slider:active {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active-dark.png"), url("assets/slider-horz-scale-has-marks-above-active-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-above.slider:insensitive {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-above-insensitive-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-above.slider:backdrop {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-dark.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.scale-has-marks-above.slider:backdrop:insensitive {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+
+.scale.vertical.scale-has-marks-below {
+  -GtkScale-slider-length: 20;
+  -GtkRange-slider-width: 24;
+  -GtkRange-trough-border: 2; }
+  .scale.vertical.scale-has-marks-below.slider {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-dark.png"), url("assets/slider-vert-scale-has-marks-below-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-below.slider:hover {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-hover-dark.png"), url("assets/slider-vert-scale-has-marks-below-hover-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-below.slider:active {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-active-dark.png"), url("assets/slider-vert-scale-has-marks-below-active-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-below.slider:insensitive {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-below-insensitive-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-below.slider:backdrop {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-dark.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-below.slider:backdrop:insensitive {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+
+.scale.vertical.scale-has-marks-above {
+  -GtkScale-slider-length: 20;
+  -GtkRange-slider-width: 24;
+  -GtkRange-trough-border: 2; }
+  .scale.vertical.scale-has-marks-above.slider {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-dark.png"), url("assets/slider-vert-scale-has-marks-above-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-above.slider:hover {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-hover-dark.png"), url("assets/slider-vert-scale-has-marks-above-hover-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-above.slider:active {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-active-dark.png"), url("assets/slider-vert-scale-has-marks-above-active-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-above.slider:insensitive {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-above-insensitive-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-above.slider:backdrop {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-dark.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+  .scale.vertical.scale-has-marks-above.slider:backdrop:insensitive {
+    border-style: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive-dark@2.png"));
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: none; }
+
+.scale.scale-has-marks-above {
+  margin: 14px 10px 10px; }
+  .fine-tune.scale.scale-has-marks-above {
+    margin: 12px 8px 8px; }
+
+.scale.scale-has-marks-below {
+  margin: 10px 10px 14px; }
+  .fine-tune.scale.scale-has-marks-below {
+    margin: 8px 8px 12px; }
+
+.scale.vertical.scale-has-marks-above {
+  margin: 10px 10px 10px 14px; }
+  .fine-tune.scale.vertical.scale-has-marks-above {
+    margin: 8px 8px 8px 12px; }
+
+.scale.vertical.scale-has-marks-below {
+  margin: 10px 14px 10px 10px; }
+  .fine-tune.scale.vertical.scale-has-marks-below {
+    margin: 8px 12px 8px 8px; }
 
 /*****************
  * Progress bars *
