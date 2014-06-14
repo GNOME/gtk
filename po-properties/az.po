@@ -1,28 +1,4 @@
 # translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.po to Azerbaijani Turkish
 # translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
 # Copyright (C) 2003, 2004 Free Software Foundation, Inc.
 # Vasif Ismailoglu MD <azerb_linux@hotmail.com>, 2000.
