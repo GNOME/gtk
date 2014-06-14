@@ -1541,6 +1541,11 @@ GtkMessageDialog .titlebar {
   %first_button { border-style: solid none none none; }
 }
 
+GtkFileChooserDialog .dialog-action-box {
+  border-top: 1px solid $borders_color;
+  &:backdrop { border-top-color: $backdrop_borders_color; }
+}
+
 /***********
  * Sidebar *
  ***********/
