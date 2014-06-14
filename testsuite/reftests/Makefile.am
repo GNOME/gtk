@@ -328,6 +328,9 @@ testdata = \
 	symbolic-icon-translucent-color.css \
 	symbolic-icon-translucent-color.ref.ui \
 	symbolic-icon-translucent-color.ui \
+	textview-margins.css \
+	textview-margins.ref.ui \
+	textview-margins.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
 	treeview-fixed-height.css \
