@@ -1090,12 +1090,31 @@ GtkPopover {
       border: 1px solid transparent;
       icon-shadow: none;
       transition: none;
-      color: inherit; }
+      color: rgba(238, 238, 236, 0.3); }
       .notebook tab .button:hover {
+        color: #eeeeec;
+        border-width: 1px;
+        border-style: solid;
+        color: #eeeeec;
         border-color: #1c1f1f;
-        text-shadow: none; }
+        background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
+        text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+        icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
+        background-image: none;
+        box-shadow: none; }
       .notebook tab .button:active {
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.3); }
+        border-width: 1px;
+        border-style: solid;
+        color: #eeeeec;
+        border-color: #1c1f1f;
+        background-image: linear-gradient(to bottom, #212424, #2d3232 3%);
+        text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+        icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+        box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
+      .notebook tab .button:backdrop {
+        color: rgba(201, 203, 201, 0.3);
+        border-color: transparent; }
       .notebook tab .button > GtkImage {
         padding: 2px; }
 
@@ -2076,11 +2095,3 @@ GtkColorChooserWidget #add-color-button {
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
     border-color: transparent;
     transition-property: border, box-shadow, color; }
-
-/*
- * Gedit
- */
-.gedit-search-slider {
-  border-radius: 0 0 6px 6px;
-  background-color: #393f3f;
-  padding: 6px; }
