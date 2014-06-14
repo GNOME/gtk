@@ -1659,6 +1659,7 @@ static GOptionEntry args[] = {
   { "force", 'f', 0, G_OPTION_ARG_NONE, &force_update, N_("Overwrite an existing cache, even if up to date"), NULL },
   { "ignore-theme-index", 't', 0, G_OPTION_ARG_NONE, &ignore_theme_index, N_("Don't check for the existence of index.theme"), NULL },
   { "index-only", 'i', 0, G_OPTION_ARG_NONE, &index_only, N_("Don't include image data in the cache"), NULL },
+  { "include-image-data", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &index_only, N_("Include image data in the cache"), NULL },
   { "source", 'c', 0, G_OPTION_ARG_STRING, &var_name, N_("Output a C header file"), "NAME" },
   { "quiet", 'q', 0, G_OPTION_ARG_NONE, &quiet, N_("Turn off verbose output"), NULL },
   { "validate", 'v', 0, G_OPTION_ARG_NONE, &validate, N_("Validate existing icon cache"), NULL },
