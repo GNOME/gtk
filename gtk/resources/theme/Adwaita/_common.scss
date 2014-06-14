@@ -1659,7 +1659,11 @@ GtkFileChooserDialog .dialog-action-box {
 
 GtkPaned {
   // This is actually the invisible area of the paned separator, not a margin...
-  margin: 16px; //drag area of the separator
+  margin: 0 16px 16px 0; //drag area of the separator
+  &:dir(rtl) {
+    margin-right: 0;
+    margin-left: 16px;
+  }
 }
 
 .pane-separator {
