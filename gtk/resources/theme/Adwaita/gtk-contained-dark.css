@@ -1552,10 +1552,21 @@ GtkCheckButton.text-button:selected {
     border-color: #1c1f1f;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     border-color: #151717;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px #393f3f, inset 0 -1px #2a2f2f; }
+    .scale.slider:hover {
+      border-width: 1px;
+      border-style: solid;
+      color: #eeeeec;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
+      border-color: #151717;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(255, 255, 255, 0.14), inset 0 -1px #303535; }
     .scale.slider:insensitive {
       background-image: linear-gradient(to bottom, #363a3a);
       box-shadow: none; }

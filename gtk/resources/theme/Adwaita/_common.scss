@@ -1214,13 +1214,22 @@ GtkCheckButton.text-button:selected { background-color: transparent; }
   margin: 10px;
   &.slider {
     //FIXME: better gradient on the slider and hover state
-    @include button(normal);
+    @include button(normal, $noedge: true);
     border-radius: 50%;
     border-color: darken($borders_color,3%);
     box-shadow: inset 0 1px if($variant=='light', white,
                                transparentize(white,0.85)),
                 inset 0 #{-2px} $bg_color,
                 inset 0 #{-1px} mix($bg_color,$borders_color,50%);
+    &:hover {
+      @include button(hover, $noedge: true);
+      border-color: darken($borders_color,3%);
+      box-shadow: inset 0 1px if($variant=='light', white,
+                                 transparentize(white,0.85)),
+                  inset 0 #{-2px} if($variant=='light', white,
+                                     transparentize(white,0.86)),
+                  inset 0 #{-1px} mix($bg_color,$borders_color,70%);
+    }
     &:insensitive {
       background-image: linear-gradient(to bottom, $insensitive_bg_color);
       box-shadow: none;
@@ -1235,6 +1244,7 @@ GtkCheckButton.text-button:selected { background-color: transparent; }
     &:active { border: 1px solid darken($selected_borders_color, 3%); }
     &.fine-tune:active { //FIXME: Lapo doesn't like the shrinkage. Bad for touch
       border: 4px solid transparent; //margin
+      //FIXME: there's a square background under the slider
       box-shadow: inset 0 2px $borders_edge,
                   inset 0 0 0 1px darken($selected_borders_color,3%); //border
     }
