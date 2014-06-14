@@ -1416,9 +1416,7 @@ adwaita_sources = \
 	resources/theme/Adwaita/gtk-contained-dark.scss \
 	resources/theme/Adwaita/parse-sass.sh \
 	resources/theme/Adwaita/render-assets.sh \
-	resources/theme/Adwaita/render-borders.sh \
-	resources/theme/Adwaita/assets.txt \
-	resources/theme/Adwaita/borders.txt
+	resources/theme/Adwaita/assets.txt
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(builddir)/gtk.gresource.xml)
 
