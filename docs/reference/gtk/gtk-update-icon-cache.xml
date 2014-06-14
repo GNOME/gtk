@@ -32,7 +32,10 @@
 <command>gtk-update-icon-cache</command>
 <arg choice="opt">--force</arg>
 <arg choice="opt">--ignore-theme-index</arg>
-<arg choice="opt">--index-only</arg>
+<group>
+  <arg choice="plain">--index-only</arg>
+  <arg choice="plain">--include-image-data</arg>
+</group>
 <arg choice="opt">--source <arg choice="plain"><replaceable>NAME</replaceable></arg></arg>
 <arg choice="opt">--quiet</arg>
 <arg choice="opt">--validate</arg>
@@ -84,6 +87,12 @@
     <term>--index-only</term>
     <term>-i</term>
     <listitem><para>Don't include image data in the cache.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>--include-image-data</term>
+    <listitem><para>Include image data in the cache.
     </para></listitem>
   </varlistentry>
 
