@@ -1584,7 +1584,7 @@ GtkCheckButton.text-button:selected {
       box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       border-color: #454c4c; }
     .scale.slider:active {
-      border: 1px solid #0c233b; }
+      border: 1px solid #14375d; }
     .scale.slider.fine-tune:active {
       border: 4px solid transparent;
       box-shadow: inset 0 2px rgba(238, 238, 236, 0.1), inset 0 0 0 1px #0c233b; }
