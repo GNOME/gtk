@@ -1546,11 +1546,14 @@ GtkCheckButton.text-button:selected {
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
+  outline-radius: 4px;
   margin: 10px; }
   .scale.fine-tune,
   .scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
   .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
-    margin: 8px; }
+    margin: 8px;
+    outline-offset: -7px;
+    outline-radius: 6px; }
     .scale.fine-tune.trough,
     .scale.scale-has-marks-above.scale-has-marks-below.fine-tune.trough,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune.trough {
