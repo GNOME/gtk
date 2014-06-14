@@ -1873,12 +1873,15 @@ GtkFileChooserDialog .dialog-action-box {
     .sidebar .scrollbar.slider:hover,
     .sidebar .view .scrollbar.slider:hover {
       background-color: white; }
-  .sidebar:selected,
-  .sidebar .view:selected {
-    background-color: #4a90d9; }
   .sidebar:backdrop,
   .sidebar .view:backdrop {
     background-color: #fafafa; }
+  .sidebar:selected,
+  .sidebar .view:selected {
+    background-color: #4a90d9; }
+  .sidebar .separator,
+  .sidebar .view .separator {
+    color: #dfdfdf; }
 
 GtkPaned {
   margin: 16px; }

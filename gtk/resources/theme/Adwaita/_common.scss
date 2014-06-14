@@ -1567,11 +1567,14 @@ GtkFileChooserDialog .dialog-action-box {
       &:hover { background-color: lighten($bg_color, 10%); }
     }
   }
+  &:backdrop {
+    background-color: lighten($backdrop_bg_color,5%);
+  }
   &:selected {
     background-color: $selected_bg_color;
   }
-  &:backdrop {
-    background-color: lighten($backdrop_bg_color,5%);
+ .separator {
+    color: mix($_sidebar_bg,$borders_color,70%);
   }
 }
 
