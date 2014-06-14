@@ -188,7 +188,7 @@ init_theme (GtkInspectorVisual *vis)
 #ifdef G_OS_WIN32
   g_hash_table_add (t, g_strdup ("gtk-win32"));
 #else
-  g_hash_table_add (t, g_strdup ("Raleigh"));
+  g_hash_table_add (t, g_strdup ("Adwaita"));
 #endif
 
   fill_gtk (themedir, t);
