@@ -3895,39 +3895,6 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
        }
     }
 
-  if (is_svg)
-    {
-      GInputStream *stream;
-
-      icon_info->scale = scaled_desired_size / 1000.;
-
-      if (scale_only)
-	return TRUE;
-
-      /* TODO: We should have a load_at_scale */
-      stream = g_loadable_icon_load (icon_info->loadable,
-                                     scaled_desired_size,
-                                     NULL, NULL,
-                                     &icon_info->load_error);
-      if (stream)
-        {
-          icon_info->pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                                   scaled_desired_size,
-                                                                   scaled_desired_size,
-                                                                   TRUE,
-                                                                   NULL,
-                                                                   &icon_info->load_error);
-          g_object_unref (stream);
-        }
-
-      if (!icon_info->pixbuf)
-        return FALSE;
-
-      apply_emblems (icon_info);
-        
-      return TRUE;
-    }
-
   /* In many cases, the scale can be determined without actual access
    * to the icon file. This is generally true when we have a size
    * for the directory where the icon is; the image size doesn't
@@ -3951,7 +3918,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
 	icon_info->scale = (gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale);
     }
 
-  if (icon_info->scale >= 0. && scale_only)
+  if (icon_info->scale >= 0. && scale_only && !is_svg)
     return TRUE;
 
   /* At this point, we need to actually get the icon; either from the
@@ -3971,9 +3938,20 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
                                      &icon_info->load_error);
       if (stream)
         {
-          source_pixbuf = gdk_pixbuf_new_from_stream (stream,
-                                                      NULL,
-                                                      &icon_info->load_error);
+          if (is_svg)
+            {
+              gint size = icon_info->dir_size * icon_info->dir_scale * icon_info->scale;
+              source_pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
+                                                                   size,
+                                                                   size,
+                                                                   TRUE,
+                                                                   NULL,
+                                                                   &icon_info->load_error);
+            }
+          else
+            source_pixbuf = gdk_pixbuf_new_from_stream (stream,
+                                                        NULL,
+                                                        &icon_info->load_error);
           g_object_unref (stream);
         }
     }
@@ -3986,7 +3964,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
   image_width = gdk_pixbuf_get_width (source_pixbuf);
   image_height = gdk_pixbuf_get_height (source_pixbuf);
 
-  if (icon_info->scale < 0.0)
+  if (is_svg)
+    { 
+      gint image_size = MAX (image_width, image_height);
+      icon_info->scale = image_size / 1000.;
+    }
+  else if (icon_info->scale < 0.0)
     {
       gint image_size = MAX (image_width, image_height);
       if (image_size > 0)
@@ -4006,7 +3989,9 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
    * extra complexity, we could keep the source pixbuf around
    * but not actually scale it until needed.
    */
-  if (icon_info->scale == 1.0)
+  if (is_svg)
+    icon_info->pixbuf = source_pixbuf;
+  else if (icon_info->scale == 1.0)
     icon_info->pixbuf = source_pixbuf;
   else
     {
