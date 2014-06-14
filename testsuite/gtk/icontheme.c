@@ -45,10 +45,11 @@ lookup_flags_to_string (GtkIconLookupFlags flags)
 }
 
 static void
-assert_icon_lookup (const char         *icon_name,
-                    gint                size,
-                    GtkIconLookupFlags  flags,
-                    const char         *filename)
+assert_icon_lookup_size (const char         *icon_name,
+                         gint                size,
+                         GtkIconLookupFlags  flags,
+                         const char         *filename,
+                         gint                pixbuf_size)
 {
   GtkIconInfo *info;
 
@@ -68,7 +69,27 @@ assert_icon_lookup (const char         *icon_name,
       return;
     }
 
+  if (pixbuf_size > 0)
+    {
+      GdkPixbuf *pixbuf;
+      GError *error = NULL;
+
+      pixbuf = gtk_icon_info_load_icon (info, &error);
+      g_assert_no_error (error);
+      g_assert_cmpint (gdk_pixbuf_get_width (pixbuf), ==, pixbuf_size);
+      g_object_unref (pixbuf);
+    }
+
   g_object_unref (info);
+}
+
+static void
+assert_icon_lookup (const char         *icon_name,
+                    gint                size,
+                    GtkIconLookupFlags  flags,
+                    const char         *filename)
+{
+  assert_icon_lookup_size (icon_name, size, flags, filename, -1);
 }
 
 static void
@@ -424,6 +445,29 @@ test_symbolic_single_size (void)
                       "/icons/32x32/only32-symbolic.svg");
 }
 
+static void
+test_svg_size (void)
+{
+   /* To understand these results, keep in mind that we never allow upscaling,
+   * and don't respect min/max size for scaling (though we do take it into
+   * account for choosing).
+   */
+  /* Check we properly load a svg icon from a sized directory */
+  assert_icon_lookup_size ("twosize-fixed", 48, 0, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 32, 0, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 20, 0, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 16, 0, "/icons/16x16/twosize-fixed.svg", 16);
+
+  /* Check that we still properly load it even if a different size is requested */
+  assert_icon_lookup_size ("twosize", 64, 0, "/icons/32x32s/twosize.svg", 64);
+  assert_icon_lookup_size ("twosize", 48, 0, "/icons/32x32s/twosize.svg", 48);
+  assert_icon_lookup_size ("twosize", 32, 0, "/icons/32x32s/twosize.svg", 32);
+  assert_icon_lookup_size ("twosize", 24, 0, "/icons/32x32s/twosize.svg", 24);
+  assert_icon_lookup_size ("twosize", 16, 0, "/icons/16x16s/twosize.svg", 16);
+  assert_icon_lookup_size ("twosize", 12, 0, "/icons/16x16s/twosize.svg", 12);
+  assert_icon_lookup_size ("twosize",  8, 0, "/icons/16x16s/twosize.svg",  8);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -436,6 +480,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/force-regular", test_force_regular);
   g_test_add_func ("/icontheme/rtl", test_rtl);
   g_test_add_func ("/icontheme/symbolic-single-size", test_symbolic_single_size);
+  g_test_add_func ("/icontheme/svg-size", test_svg_size);
 
   return g_test_run();
 }

@@ -3,7 +3,7 @@ Name=Icons
 Comment=Testing of the Icon theme code
 Example=16x16/simple.png
 
-Directories=16x16,32x32,scalable
+Directories=16x16,16x16s,32x32,32x32s,scalable
 
 [16x16]
 Context=16x16 icons
@@ -15,9 +15,23 @@ Context=32x32 icons
 Size=32
 Type=Fixed
 
+[16x16s]
+Context=scalable 16x16 icons
+Size=16
+MinSize=12
+MaxSize=24
+Type=Scalable
+
+[32x32s]
+Context=scalable 32x32 icons
+Size=32
+MinSize=24
+MaxSize=48
+Type=Scalable
+
 [scalable]
 Context=scalable icons
 Type=Scalable
 Size=128
-Min-Size=1
-Max-Size=256
+MinSize=1
+MaxSize=256
