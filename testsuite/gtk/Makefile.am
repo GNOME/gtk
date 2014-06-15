@@ -131,7 +131,7 @@ keyhash_SOURCES	=					\
 test_icontheme =					\
 	icons/index.theme				\
 	icons/16x16/simple.png				\
-	icons/16x16/twosize-fixed.png			\
+	icons/16x16/twosize-fixed.svg			\
 	icons/16x16s/twosize.png			\
 	icons/32x32/only32-symbolic.svg			\
 	icons/32x32/twosize-fixed.svg			\
