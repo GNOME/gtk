@@ -281,6 +281,9 @@ testdata = \
 	notebook-childproperties.css \
 	notebook-childproperties.ui \
 	notebook-childproperties.ref.ui \
+	notebook-tab-position.css \
+	notebook-tab-position.ui \
+	notebook-tab-position.ref.ui \
 	nth-child.css \
 	nth-child.ref.ui \
 	nth-child.ui \
