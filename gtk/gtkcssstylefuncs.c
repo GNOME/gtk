@@ -562,6 +562,8 @@ theming_engine_value_parse (GtkCssParser *parser,
   GtkThemingEngine *engine;
   char *str;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (_gtk_css_parser_try (parser, "none", TRUE))
     {
       g_value_set_object (value, gtk_theming_engine_load (NULL));
@@ -587,6 +589,8 @@ theming_engine_value_parse (GtkCssParser *parser,
   g_value_set_object (value, engine);
   g_free (str);
   return TRUE;
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -1021,10 +1025,16 @@ gtk_css_style_funcs_init (void)
                                 string_value_parse,
                                 string_value_print,
                                 NULL);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   register_conversion_function (GTK_TYPE_THEMING_ENGINE,
                                 theming_engine_value_parse,
                                 theming_engine_value_print,
                                 NULL);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
   register_conversion_function (GTK_TYPE_BORDER,
                                 border_value_parse,
                                 border_value_print,

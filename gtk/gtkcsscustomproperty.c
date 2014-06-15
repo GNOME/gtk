@@ -141,6 +141,8 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
 
   g_value_init (&value, pspec->value_type);
 
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (pspec->value_type == GTK_TYPE_THEMING_ENGINE)
     g_value_set_object (&value, gtk_theming_engine_load (NULL));
   else if (pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
@@ -153,11 +155,9 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
     }
   else if (pspec->value_type == g_type_from_name ("GdkColor"))
     {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       GdkColor color;
       gdk_color_parse ("pink", &color);
       g_value_set_boxed (&value, &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else if (pspec->value_type == GTK_TYPE_BORDER)
     {
@@ -165,6 +165,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else
     g_param_value_set_default (pspec, &value);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   result = _gtk_css_typed_value_new (&value);
   g_value_unset (&value);

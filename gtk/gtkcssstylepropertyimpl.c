@@ -830,8 +830,10 @@ engine_query (GtkCssStyleProperty *property,
               const GtkCssValue   *css_value,
               GValue              *value)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_value_init (value, GTK_TYPE_THEMING_ENGINE);
   g_value_set_object (value, _gtk_css_engine_value_get_engine (css_value));
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static GtkCssValue *
@@ -1507,6 +1509,7 @@ _gtk_css_style_property_init_properties (void)
 					  NULL,
 					  _gtk_css_image_effect_value_new (GTK_CSS_IMAGE_EFFECT_NONE));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_css_style_property_register        ("engine",
                                           GTK_CSS_PROPERTY_ENGINE,
                                           GTK_TYPE_THEMING_ENGINE,
@@ -1515,6 +1518,7 @@ _gtk_css_style_property_init_properties (void)
                                           engine_query,
                                           engine_assign,
                                           _gtk_css_engine_value_new (gtk_theming_engine_load (NULL)));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Private property holding the binding sets */
   gtk_css_style_property_register        ("gtk-key-bindings",

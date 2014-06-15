@@ -45,25 +45,23 @@
 
 #include "fallback-c89.c"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * SECTION:gtkthemingengine
  * @Short_description: Theming renderers
  * @Title: GtkThemingEngine
  * @See_also: #GtkStyleContext
  *
- * #GtkThemingEngine is the object used for rendering themed content
- * in GTK+ widgets. Even though GTK+ has a default implementation,
- * it can be overridden in CSS files by enforcing a #GtkThemingEngine
- * object to be loaded as a module.
+ * #GtkThemingEngine was the object used for rendering themed content
+ * in GTK+ widgets. It used to allow overriding GTK+'s default
+ * implementation of rendering functions by allowing engines to be
+ * loaded as modules.
  *
- * In order to implement a theming engine, a #GtkThemingEngine subclass
- * must be created, alongside the CSS file that will reference it, the
- * theming engine would be created as an .so library, and installed in
- * $(gtk-modules-dir)/theming-engines/.
- *
- * #GtkThemingEngines have limited access to the object they are
- * rendering, the #GtkThemingEngine API has read-only accessors to the
- * style information contained in the rendered object’s #GtkStyleContext.
+ * #GtkThemingEngine has been deprecated in GTK+ 3.14 and will be
+ * ignored for rendering. The advancements in CSS theming are good
+ * enough to allow themers to achieve their goals without the need
+ * to modify source code.
  */
 
 enum {
@@ -356,6 +354,8 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
  * to the currently rendered element.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_property (GtkThemingEngine *engine,
@@ -383,6 +383,8 @@ gtk_theming_engine_get_property (GtkThemingEngine *engine,
  * rendered element.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_valist (GtkThemingEngine *engine,
@@ -407,6 +409,8 @@ gtk_theming_engine_get_valist (GtkThemingEngine *engine,
  * rendered element.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get (GtkThemingEngine *engine,
@@ -435,6 +439,8 @@ gtk_theming_engine_get (GtkThemingEngine *engine,
  * Gets the value for a widget style property.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_style_property (GtkThemingEngine *engine,
@@ -459,6 +465,8 @@ gtk_theming_engine_get_style_property (GtkThemingEngine *engine,
  * currently rendered content’s style.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_style_valist (GtkThemingEngine *engine,
@@ -481,6 +489,8 @@ gtk_theming_engine_get_style_valist (GtkThemingEngine *engine,
  * to the currently rendered content’s style.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_style (GtkThemingEngine *engine,
@@ -507,6 +517,10 @@ gtk_theming_engine_get_style (GtkThemingEngine *engine,
  * Looks up and resolves a color name in the current style’s color map.
  *
  * Returns: %TRUE if @color_name was found and resolved, %FALSE otherwise
+ *
+ * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 gboolean
 gtk_theming_engine_lookup_color (GtkThemingEngine *engine,
@@ -531,6 +545,8 @@ gtk_theming_engine_lookup_color (GtkThemingEngine *engine,
  * Returns: the state flags
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 GtkStateFlags
 gtk_theming_engine_get_state (GtkThemingEngine *engine)
@@ -583,6 +599,8 @@ gtk_theming_engine_state_is_running (GtkThemingEngine *engine,
  * Returns: (transfer none): A #GtkWidgetPath
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 const GtkWidgetPath *
 gtk_theming_engine_get_path (GtkThemingEngine *engine)
@@ -606,6 +624,8 @@ gtk_theming_engine_get_path (GtkThemingEngine *engine)
  * Returns: %TRUE if @engine has @class_name defined
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 gboolean
 gtk_theming_engine_has_class (GtkThemingEngine *engine,
@@ -689,6 +709,8 @@ gtk_theming_engine_get_direction (GtkThemingEngine *engine)
  * Returns: the widget direction
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 GtkJunctionSides
 gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine)
@@ -710,6 +732,8 @@ gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine)
  * Gets the foreground color for a given state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_color (GtkThemingEngine *engine,
@@ -733,6 +757,8 @@ gtk_theming_engine_get_color (GtkThemingEngine *engine,
  * Gets the background color for a given state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_background_color (GtkThemingEngine *engine,
@@ -756,6 +782,8 @@ gtk_theming_engine_get_background_color (GtkThemingEngine *engine,
  * Gets the border color for a given state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_border_color (GtkThemingEngine *engine,
@@ -779,6 +807,8 @@ gtk_theming_engine_get_border_color (GtkThemingEngine *engine,
  * Gets the border for a given state as a #GtkBorder.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_border (GtkThemingEngine *engine,
@@ -802,6 +832,8 @@ gtk_theming_engine_get_border (GtkThemingEngine *engine,
  * Gets the padding for a given state as a #GtkBorder.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_padding (GtkThemingEngine *engine,
@@ -825,6 +857,8 @@ gtk_theming_engine_get_padding (GtkThemingEngine *engine,
  * Gets the margin for a given state as a #GtkBorder.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_theming_engine_get_margin (GtkThemingEngine *engine,
@@ -949,6 +983,8 @@ gtk_theming_module_init (GtkThemingModule *module)
  *
  * Returns: (transfer none): A theming engine, or %NULL if
  * the engine @name doesn’t exist.
+ *
+ * Deprecated: 3.14
  **/
 GtkThemingEngine *
 gtk_theming_engine_load (const gchar *name)
@@ -999,6 +1035,8 @@ gtk_theming_engine_load (const gchar *name)
  * Returns the #GdkScreen to which @engine currently rendering to.
  *
  * Returns: (transfer none): a #GdkScreen, or %NULL.
+ *
+ * Deprecated: 3.14
  **/
 GdkScreen *
 gtk_theming_engine_get_screen (GtkThemingEngine *engine)
@@ -2782,3 +2820,4 @@ gtk_theming_engine_render_icon_surface (GtkThemingEngine *engine,
   cairo_restore (cr);
 }
 
+G_GNUC_END_IGNORE_DEPRECATIONS
