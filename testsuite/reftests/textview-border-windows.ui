@@ -13,7 +13,6 @@
         <property name="can_focus">True</property>
         <property name="wrap_mode">word</property>
         <signal name="map" handler="reftest:add_border_windows" swapped="no"/>
-        <signal name="draw" handler="reftest:paint_border_windows" swapped="no"/>
       </object>
     </child>
   </object>

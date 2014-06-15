@@ -5326,6 +5326,38 @@ draw_text (cairo_t  *cr,
   gtk_text_view_paint (widget, cr);
 }
 
+static void
+paint_border_window (GtkTextView       *text_view,
+                     cairo_t           *cr,
+                     GtkTextWindowType  type,
+                     GtkStyleContext   *context,
+                     const char        *class)
+{
+  GdkWindow *window;
+
+  window = gtk_text_view_get_window (text_view, type);
+
+  if (window != NULL &&
+      gtk_cairo_should_draw_window (cr, window))
+    {
+      gint w, h;
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, class);
+
+      w = gdk_window_get_width (window);
+      h = gdk_window_get_height (window);
+
+      gtk_cairo_transform_to_window (cr, GTK_WIDGET (text_view), window);
+
+      cairo_save (cr);
+      gtk_render_background (context, cr, 0, 0, w, h);
+      cairo_restore (cr);
+
+      gtk_style_context_restore (context);
+    }
+}
+
 static gboolean
 gtk_text_view_draw (GtkWidget *widget,
                     cairo_t   *cr)
@@ -5377,6 +5409,11 @@ gtk_text_view_draw (GtkWidget *widget,
                              draw_text, widget);
       cairo_restore (cr);
     }
+
+  paint_border_window (GTK_TEXT_VIEW (widget), cr, GTK_TEXT_WINDOW_LEFT, context, GTK_STYLE_CLASS_LEFT);
+  paint_border_window (GTK_TEXT_VIEW (widget), cr, GTK_TEXT_WINDOW_RIGHT, context, GTK_STYLE_CLASS_RIGHT);
+  paint_border_window (GTK_TEXT_VIEW (widget), cr, GTK_TEXT_WINDOW_TOP, context, GTK_STYLE_CLASS_TOP);
+  paint_border_window (GTK_TEXT_VIEW (widget), cr, GTK_TEXT_WINDOW_BOTTOM, context, GTK_STYLE_CLASS_BOTTOM);
 
   /* Propagate exposes to all unanchored children. 
    * Anchored children are handled in gtk_text_view_paint(). 

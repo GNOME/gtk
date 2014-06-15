@@ -17,53 +17,6 @@
 
 #include <gtk/gtk.h>
 
-static void
-paint_border (GtkTextView       *text_view,
-              cairo_t           *cr,
-              GtkTextWindowType  type,
-              GtkStyleContext   *context,
-              const char        *class)
-{
-  GdkWindow *window;
-
-  window = gtk_text_view_get_window (text_view, type);
-
-  if (window != NULL &&
-      gtk_cairo_should_draw_window (cr, window))
-    {
-      gint w, h;
-
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, class);
-
-      w = gdk_window_get_width (window);
-      h = gdk_window_get_height (window);
-
-      gtk_cairo_transform_to_window (cr, GTK_WIDGET (text_view), window);
-
-      cairo_save (cr);
-      gtk_render_background (context, cr, 0, 0, w, h);
-      cairo_restore (cr);
-
-      gtk_style_context_restore (context);
-    }
-}
-
-G_MODULE_EXPORT gboolean
-paint_border_windows (GtkTextView *text_view,
-                      cairo_t     *cr)
-{
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
-
-  paint_border (text_view, cr, GTK_TEXT_WINDOW_LEFT, context, "left");
-  paint_border (text_view, cr, GTK_TEXT_WINDOW_RIGHT, context, "right");
-  paint_border (text_view, cr, GTK_TEXT_WINDOW_TOP, context, "top");
-  paint_border (text_view, cr, GTK_TEXT_WINDOW_BOTTOM, context, "bottom");
-
-  return FALSE;
-}
 
 G_MODULE_EXPORT void
 add_border_windows (GtkTextView *text_view)
