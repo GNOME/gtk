@@ -328,6 +328,9 @@ testdata = \
 	symbolic-icon-translucent-color.css \
 	symbolic-icon-translucent-color.ref.ui \
 	symbolic-icon-translucent-color.ui \
+	textview-border-windows.css \
+	textview-border-windows.ref.ui \
+	textview-border-windows.ui \
 	textview-margins.css \
 	textview-margins.ref.ui \
 	textview-margins.ui \
@@ -372,6 +375,7 @@ libreftest_la_LIBADD = $(gtk_reftest_LDADD)
 libreftest_la_SOURCES =			\
 	set-default-direction.c		\
 	expand-expander.c		\
+	textview-border-windows.c	\
 	$(NULL)
 
 substitutions = \
