@@ -81,6 +81,7 @@
 #include "gtkmarshalers.h"
 #include "gtktooltip.h"
 #include "gtkprivate.h"
+#include "gtkrender.h"
 
 #define TIMEOUT_INITIAL  500
 #define TIMEOUT_REPEAT    50

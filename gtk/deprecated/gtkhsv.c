@@ -37,6 +37,7 @@
 #include "gtkhsv.h"
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
+#include "gtkrender.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"

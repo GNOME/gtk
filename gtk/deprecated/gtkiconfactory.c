@@ -44,6 +44,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkstyle.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkrender.h"
 
 /**
  * SECTION:gtkiconfactory

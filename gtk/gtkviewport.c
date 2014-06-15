@@ -32,6 +32,7 @@
 #include "gtkpixelcacheprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
+#include "gtkrender.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 

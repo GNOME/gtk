@@ -27,9 +27,10 @@
 #include <stdlib.h>
 
 #include "gtkcellrendererprogress.h"
+#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkrender.h"
 
 
 /**

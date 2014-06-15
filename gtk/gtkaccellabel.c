@@ -30,10 +30,11 @@
 
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
-#include "gtkmain.h"
-#include "gtksizerequest.h"
-#include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
+#include "gtkprivate.h"
+#include "gtkrender.h"
+#include "gtksizerequest.h"
 
 /**
  * SECTION:gtkaccellabel

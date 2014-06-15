@@ -351,6 +351,7 @@
 #include "gtkcellareacontext.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkrender.h"
 
 #include <gobject/gvaluecollector.h>
 

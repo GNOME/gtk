@@ -41,7 +41,7 @@
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkdebug.h"
-#include "gtkspinner.h"
+#include "gtkrender.h"
 #include "gtkborder.h"
 #include "gtkwidgetpath.h"
 

@@ -32,13 +32,14 @@
 #include "gtkcolorswatchprivate.h"
 #include "gtkcolorutils.h"
 #include "gtkgrid.h"
+#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkentry.h"
 #include "gtkoverlay.h"
 #include "gtkadjustment.h"
 #include "gtklabel.h"
+#include "gtkrender.h"
 #include "gtkspinbutton.h"
-#include "gtkintl.h"
 #include "gtkstylecontext.h"
 
 #include <math.h>

@@ -24,10 +24,12 @@
 
 #include "config.h"
 
-#include "gtkorientableprivate.h"
 #include "gtkseparator.h"
-#include "gtkprivate.h"
+
+#include "gtkorientableprivate.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkrender.h"
 
 /**
  * SECTION:gtkseparator

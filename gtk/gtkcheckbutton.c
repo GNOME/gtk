@@ -31,6 +31,7 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkrender.h"
 #include "gtkwidgetprivate.h"
 
 

@@ -417,6 +417,7 @@ gtk_public_h_sources = 		\
 	gtkrecentchooserwidget.h \
 	gtkrecentfilter.h	\
 	gtkrecentmanager.h	\
+	gtkrender.h		\
 	gtkrevealer.h		\
 	gtkscale.h		\
 	gtkscalebutton.h	\
@@ -1011,6 +1012,7 @@ gtk_base_c_sources = 		\
 	gtkrecentchooser.c	\
 	gtkrecentfilter.c	\
 	gtkrecentmanager.c	\
+	gtkrender.c		\
 	gtkresources.c		\
 	gtkrevealer.c		\
 	gtkroundedbox.c		\
