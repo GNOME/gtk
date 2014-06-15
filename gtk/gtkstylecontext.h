@@ -1254,11 +1254,6 @@ void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
                                      GtkTextDirection    direction,
                                      gboolean            draw_arrow);
 
-/* Accessibility support */
-AtkAttributeSet *_gtk_style_context_get_attributes (AtkAttributeSet *attributes,
-                                                    GtkStyleContext *context,
-                                                    GtkStateFlags    flags);
-
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_H__ */

@@ -63,6 +63,11 @@ void           _gtk_style_context_get_icon_extents           (GtkStyleContext   
                                                               gint                height);
 GtkIconLookupFlags _gtk_style_context_get_icon_lookup_flags  (GtkStyleContext    *context);
 
+/* Accessibility support */
+AtkAttributeSet *_gtk_style_context_get_attributes           (AtkAttributeSet    *attributes,
+                                                              GtkStyleContext    *context,
+                                                              GtkStateFlags       flags);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_PRIVATE_H__ */

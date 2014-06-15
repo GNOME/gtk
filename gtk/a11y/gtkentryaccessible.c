@@ -24,6 +24,7 @@
 #include "gtkentryaccessible.h"
 #include "gtkentryprivate.h"
 #include "gtkcomboboxaccessible.h"
+#include "gtkstylecontextprivate.h"
 
 #define GTK_TYPE_ENTRY_ICON_ACCESSIBLE      (gtk_entry_icon_accessible_get_type ())
 #define GTK_ENTRY_ICON_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_ICON_ACCESSIBLE, GtkEntryIconAccessible))

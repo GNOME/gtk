@@ -25,6 +25,7 @@
 #include "gtklabelprivate.h"
 #include "gtklabelaccessible.h"
 #include "gtklabelaccessibleprivate.h"
+#include "gtkstylecontextprivate.h"
 
 struct _GtkLabelAccessiblePrivate
 {

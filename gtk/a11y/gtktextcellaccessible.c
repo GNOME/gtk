@@ -22,6 +22,7 @@
 #include "gtktextcellaccessible.h"
 #include "gtkcontainercellaccessible.h"
 #include "gtkcellaccessibleparent.h"
+#include "gtkstylecontextprivate.h"
 
 struct _GtkTextCellAccessiblePrivate
 {
