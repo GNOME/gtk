@@ -3483,6 +3483,8 @@ icon_info_dup (GtkIconInfo *icon_info)
   dup = icon_info_new (icon_info->dir_type, icon_info->dir_size, icon_info->dir_scale);
 
   dup->filename = g_strdup (icon_info->filename);
+  dup->is_svg = icon_info->is_svg;
+
   if (icon_info->icon_file)
     dup->icon_file = g_object_ref (icon_info->icon_file);
   if (icon_info->loadable)
