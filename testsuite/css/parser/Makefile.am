@@ -320,6 +320,9 @@ test_data = \
 	no-semicolon.ref.css \
 	nth-child.css \
 	nth-child.ref.css \
+	property-name-errors.css \
+	property-name-errors.errors \
+	property-name-errors.ref.css \
 	pseudo-classes-unknown.css \
 	pseudo-classes-unknown.errors \
 	pseudo-classes-unknown.ref.css \
