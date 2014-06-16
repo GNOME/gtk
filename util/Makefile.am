@@ -9,3 +9,5 @@ extract-strings$(EXEEXT): $(extract_strings_sources)
 	$(AM_V_CCLD)$(CC_FOR_BUILD) $(extract_strings_cppflags) $(CPPFLAGS_FOR_BUILD) $(extract_strings_cflags) $(CFLAGS_FOR_BUILD) $^ $(LDFLAGS_FOR_BUILD) $(extract_strings_ldadd) $(LIBS_FOR_BUILD) -o $@
 
 noinst_PROGRAMS = extract-strings
+
+-include $(top_srcdir)/git.mk
