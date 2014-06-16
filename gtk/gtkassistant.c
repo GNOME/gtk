@@ -1434,7 +1434,8 @@ gtk_assistant_add (GtkContainer *container,
    */
   if (!gtk_bin_get_child (GTK_BIN (container)))
     {
-      GTK_CONTAINER_CLASS (gtk_assistant_parent_class)->add (container, page);
+      gtk_widget_set_parent (page, GTK_WIDGET (container));
+      _gtk_bin_set_child (GTK_BIN (container), page);
       return;
     }
 

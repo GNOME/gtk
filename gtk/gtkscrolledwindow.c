@@ -2727,8 +2727,13 @@ gtk_scrolled_window_add (GtkContainer *container,
 {
   GtkScrolledWindowPrivate *priv;
   GtkScrolledWindow *scrolled_window;
-  GtkWidget *scrollable_child;
+  GtkBin *bin;
+  GtkWidget *child_widget, *scrollable_child;
   GtkAdjustment *hadj, *vadj;
+
+  bin = GTK_BIN (container);
+  child_widget = gtk_bin_get_child (bin);
+  g_return_if_fail (child_widget == NULL);
 
   scrolled_window = GTK_SCROLLED_WINDOW (container);
   priv = scrolled_window->priv;
@@ -2760,10 +2765,11 @@ gtk_scrolled_window_add (GtkContainer *container,
       gtk_container_add (GTK_CONTAINER (scrollable_child), child);
     }
 
-  if (gtk_widget_get_realized (GTK_WIDGET (container)))
+  if (gtk_widget_get_realized (GTK_WIDGET (bin)))
     gtk_widget_set_parent_window (scrollable_child, priv->overshoot_window);
 
-  GTK_CONTAINER_CLASS (gtk_scrolled_window_parent_class)->add (container, scrollable_child);
+  _gtk_bin_set_child (bin, scrollable_child);
+  gtk_widget_set_parent (scrollable_child, GTK_WIDGET (bin));
 
   g_object_set (scrollable_child, "hadjustment", hadj, "vadjustment", vadj, NULL);
 }

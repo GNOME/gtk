@@ -3723,8 +3723,7 @@ gtk_notebook_drag_end (GtkWidget      *widget,
   if (priv->detached_tab)
     gtk_notebook_switch_page (notebook, priv->detached_tab);
 
-  GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->remove (GTK_CONTAINER (priv->dnd_window),
-    gtk_bin_get_child (GTK_BIN (priv->dnd_window)));
+  _gtk_bin_set_child (GTK_BIN (priv->dnd_window), NULL);
   gtk_widget_destroy (priv->dnd_window);
   priv->dnd_window = NULL;
 
@@ -6911,8 +6910,8 @@ static void
 gtk_notebook_menu_label_unparent (GtkWidget *widget,
                                   gpointer  data)
 {
-  GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->remove (GTK_CONTAINER (widget),
-    gtk_bin_get_child (GTK_BIN (widget)));
+  gtk_widget_unparent (gtk_bin_get_child (GTK_BIN (widget)));
+  _gtk_bin_set_child (GTK_BIN (widget), NULL);
 }
 
 static void
