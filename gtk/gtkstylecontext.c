@@ -84,7 +84,6 @@
  * Widgets can add style classes to their context, which can be used
  * to associate different styles by class
  * (see [Selectors][gtkcssprovider-selectors]).
- * Theme engines can also use style classes to vary their rendering.
  *
  * # Style Regions
  *
@@ -112,7 +111,7 @@
  * render differently than standard components, you may need to add a
  * #GtkStyleProvider yourself with the %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK
  * priority, either a #GtkCssProvider or a custom object implementing the
- * #GtkStyleProvider interface. This way theming engines may still attempt
+ * #GtkStyleProvider interface. This way themes may still attempt
  * to style your UI elements in a different way if needed so.
  *
  * If you are using custom styling on an applications, you probably want then
@@ -122,11 +121,6 @@
  * `XDG_CONFIG_HOME/gtk-3.0/gtk.css` will
  * still take precedence over your changes, as it uses the
  * %GTK_STYLE_PROVIDER_PRIORITY_USER priority.
- *
- * If a custom theming engine is needed, you probably want to implement a
- * #GtkStyleProvider yourself so it points to your #GtkThemingEngine
- * implementation, as #GtkCssProvider uses gtk_theming_engine_load()
- * which loads the theming engine module from the standard paths.
  */
 
 /* When these change we do a full restyling. Otherwise we try to figure out
@@ -2600,7 +2594,7 @@ gtk_style_context_get_direction (GtkStyleContext *context)
  * gtk_render_frame()) will visually connect with other visual elements.
  *
  * This is merely a hint that may or may not be honored
- * by theming engines.
+ * by themes.
  *
  * Container widgets are expected to set junction hints as appropriate
  * for their children, so it should not normally be necessary to call
@@ -2823,7 +2817,7 @@ gtk_style_context_scroll_animations (GtkStyleContext *context,
  * and the current theme/style defines transition animations for state
  * changes.
  *
- * The @region_id used must be unique in @context so the theming engine
+ * The @region_id used must be unique in @context so the themes
  * can uniquely identify rendered elements subject to a state transition.
  *
  * Since: 3.0
