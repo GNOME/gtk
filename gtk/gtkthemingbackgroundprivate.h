@@ -24,8 +24,8 @@
 #include <cairo.h>
 
 #include "gtkcssimageprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkroundedboxprivate.h"
+#include "gtktypes.h"
 
 G_BEGIN_DECLS
 
@@ -44,20 +44,12 @@ struct _GtkThemingBackground {
 };
 
 void _gtk_theming_background_init (GtkThemingBackground *bg,
-                                   GtkThemingEngine     *engine,
+                                   GtkStyleContext      *context,
                                    gdouble               x,
                                    gdouble               y,
                                    gdouble               width,
                                    gdouble               height,
                                    GtkJunctionSides      junction);
-
-void _gtk_theming_background_init_from_context (GtkThemingBackground *bg,
-                                                GtkStyleContext      *context,
-                                                gdouble               x,
-                                                gdouble               y,
-                                                gdouble               width,
-                                                gdouble               height,
-                                                GtkJunctionSides      junction);
 
 void _gtk_theming_background_render (GtkThemingBackground *bg,
                                      cairo_t              *cr);

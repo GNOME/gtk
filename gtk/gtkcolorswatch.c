@@ -126,9 +126,9 @@ swatch_draw (GtkWidget *widget,
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
 
-  _gtk_theming_background_init_from_context (&background, context,
-                                             0, 0, width, height,
-                                             GTK_JUNCTION_NONE);
+  _gtk_theming_background_init (&background, context,
+                                0, 0, width, height,
+                                GTK_JUNCTION_NONE);
 
   if (swatch->priv->has_color)
     {
@@ -195,10 +195,10 @@ swatch_draw (GtkWidget *widget,
       GIcon *gicon;
 
       gtk_style_context_add_class (context, "color-active-badge");
-      _gtk_theming_background_init_from_context (&background, context,
-                                                 (width - 2 * ACTIVE_BADGE_RADIUS) / 2, (height - 2 * ACTIVE_BADGE_RADIUS) / 2,
-                                                 2 * ACTIVE_BADGE_RADIUS, 2* ACTIVE_BADGE_RADIUS,
-                                                 GTK_JUNCTION_NONE);
+      _gtk_theming_background_init (&background, context,
+                                    (width - 2 * ACTIVE_BADGE_RADIUS) / 2, (height - 2 * ACTIVE_BADGE_RADIUS) / 2,
+                                    2 * ACTIVE_BADGE_RADIUS, 2* ACTIVE_BADGE_RADIUS,
+                                    GTK_JUNCTION_NONE);
 
       if (_gtk_theming_background_has_background_image (&background))
         {

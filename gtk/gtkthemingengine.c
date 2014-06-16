@@ -20,7 +20,8 @@
 #include <math.h>
 #include <gtk/gtk.h>
 
-#include <gtk/gtkthemingengine.h>
+#include "gtkthemingengineprivate.h"
+
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkintl.h>
 
@@ -38,8 +39,8 @@
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkhslaprivate.h"
-#include "gtkthemingengineprivate.h"
 #include "gtkroundedboxprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkthemingbackgroundprivate.h"
 
 #include "fallback-c89.c"
@@ -1385,7 +1386,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
 {
   GtkThemingBackground bg;
 
-  _gtk_theming_background_init (&bg, engine,
+  _gtk_theming_background_init (&bg, engine->priv->context,
                                 x, y,
                                 width, height,
                                 gtk_theming_engine_get_junction_sides (engine));
@@ -2171,7 +2172,7 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
       break;
     }
 
-  _gtk_theming_background_init (&bg, engine, 
+  _gtk_theming_background_init (&bg, engine->priv->context, 
                                 x, y,
                                 width, height,
                                 junction);
@@ -2241,7 +2242,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   color_shade (&bg_color, 0.7, &darker);
   color_shade (&bg_color, 1.3, &lighter);
 
-  _gtk_theming_background_init (&bg, engine, x, y, width, height, sides);
+  _gtk_theming_background_init (&bg, engine->priv->context, x, y, width, height, sides);
   has_image = _gtk_theming_background_has_background_image (&bg);
   _gtk_theming_background_render (&bg, cr);
 

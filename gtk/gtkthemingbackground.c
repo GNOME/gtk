@@ -31,7 +31,7 @@
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkthemingengineprivate.h"
+#include "gtkstylecontextprivate.h"
 
 #include <math.h>
 
@@ -308,31 +308,12 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
 
 void
 _gtk_theming_background_init (GtkThemingBackground *bg,
-                              GtkThemingEngine     *engine,
+                              GtkStyleContext      *context,
                               gdouble               x,
                               gdouble               y,
                               gdouble               width,
                               gdouble               height,
                               GtkJunctionSides      junction)
-{
-  GtkStyleContext *context;
-
-  g_assert (bg != NULL);
-
-  context = _gtk_theming_engine_get_context (engine);
-  _gtk_theming_background_init_from_context (bg, context,
-                                             x, y, width, height,
-                                             junction);
-}
-
-void
-_gtk_theming_background_init_from_context (GtkThemingBackground *bg,
-                                           GtkStyleContext      *context,
-                                           gdouble               x,
-                                           gdouble               y,
-                                           gdouble               width,
-                                           gdouble               height,
-                                           GtkJunctionSides      junction)
 {
   g_assert (bg != NULL);
 
