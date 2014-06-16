@@ -20,6 +20,7 @@
  * - implement MULTIPLE
  * - implement INCR
  * - cache remote data and shortcut
+ * - what about clipboard managers / store ?
  */
 
 #include "config.h"
