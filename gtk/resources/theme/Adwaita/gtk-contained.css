@@ -2186,10 +2186,10 @@ GtkFileChooserDialog .dialog-action-box {
     color: #dfdfdf; }
 
 GtkPaned {
-  margin: 0 16px 16px 0; }
+  margin: 0 8px 8px 0; }
   GtkPaned:dir(rtl) {
     margin-right: 0;
-    margin-left: 16px; }
+    margin-left: 8x; }
 
 .pane-separator {
   background-image: linear-gradient(to bottom, #a1a1a1); }
