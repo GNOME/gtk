@@ -1248,6 +1248,7 @@ gtk_built_private_headers =			\
 
 gtk_built_sources =				\
 	gtkresources.c				\
+	gtk.gresource.xml			\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
 	gtkmarshalers.c				\
@@ -2009,7 +2010,6 @@ EXTRA_DIST +=                   \
 	gtkprint-win32.h	\
 	gtkprint-win32.c	\
 	gtksearchenginequartz.h \
-	gtk.gresource.xml	\
 	gtkdbusinterfaces.xml	\
 	gtk-keys.css.default	\
 	gtk-keys.css.emacs	\
