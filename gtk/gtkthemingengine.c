@@ -1776,7 +1776,7 @@ render_frame_internal (GtkThemingEngine *engine,
       colors[3] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius_for_engine (&border_box, engine, junction);
+      _gtk_rounded_box_apply_border_radius_for_context (&border_box, engine->priv->context, junction);
 
       render_border (cr, &border_box, border_width, hidden_side, colors, border_style);
     }
@@ -1941,7 +1941,7 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
                                - border_width[GTK_CSS_RIGHT] - offset,
                                - border_width[GTK_CSS_LEFT] - offset,
                                - border_width[GTK_CSS_BOTTOM] - offset);
-      _gtk_rounded_box_apply_outline_radius_for_engine (&border_box, engine, GTK_JUNCTION_NONE);
+      _gtk_rounded_box_apply_outline_radius_for_context (&border_box, engine->priv->context, GTK_JUNCTION_NONE);
 
       render_border (cr, &border_box, border_width, 0, colors, border_style);
     }
