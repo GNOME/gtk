@@ -46,7 +46,6 @@
 #include "gtksettings.h"
 #include "gtksettingsprivate.h"
 
-#include "deprecated/gtkthemingengineprivate.h"
 #include "deprecated/gtkgradientprivate.h"
 #include "deprecated/gtksymboliccolorprivate.h"
 

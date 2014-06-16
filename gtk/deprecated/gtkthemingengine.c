@@ -20,8 +20,6 @@
 #include <math.h>
 #include <gtk/gtk.h>
 
-#include "gtkthemingengineprivate.h"
-
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkintl.h>
 
@@ -30,7 +28,6 @@
 #include "gtkpango.h"
 #include "gtkrenderprivate.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkthemingengineprivate.h"
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
@@ -312,19 +309,6 @@ gtk_theming_engine_impl_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-void
-_gtk_theming_engine_set_context (GtkThemingEngine *engine,
-                                 GtkStyleContext  *context)
-{
-  GtkThemingEnginePrivate *priv;
-
-  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  priv = engine->priv;
-  priv->context = context;
 }
 
 /**
@@ -1044,7 +1028,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
                                  gdouble           width,
                                  gdouble           height)
 {
-  gtk_do_render_check (engine->priv->context, cr, x, y, width, height);
+  gtk_render_check (engine->priv->context, cr, x, y, width, height);
 }
 
 static void
@@ -1055,7 +1039,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
                                   gdouble           width,
                                   gdouble           height)
 {
-  gtk_do_render_option (engine->priv->context, cr, x, y, width, height);
+  gtk_render_option (engine->priv->context, cr, x, y, width, height);
 }
 
 static void
@@ -1066,7 +1050,7 @@ gtk_theming_engine_render_arrow (GtkThemingEngine *engine,
                                  gdouble           y,
                                  gdouble           size)
 {
-  gtk_do_render_arrow (engine->priv->context, cr, angle, x, y, size);
+  gtk_render_arrow (engine->priv->context, cr, angle, x, y, size);
 }
 
 static void
@@ -1077,7 +1061,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       gdouble           width,
                                       gdouble           height)
 {
-  gtk_do_render_background (engine->priv->context, cr, x, y, width, height);
+  gtk_render_background (engine->priv->context, cr, x, y, width, height);
 }
 
 static void
@@ -1088,7 +1072,7 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
                                  gdouble           width,
                                  gdouble           height)
 {
-  gtk_do_render_frame (engine->priv->context, cr, x, y, width, height);
+  gtk_render_frame (engine->priv->context, cr, x, y, width, height);
 }
 
 static void
@@ -1099,7 +1083,7 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
                                     gdouble           width,
                                     gdouble           height)
 {
-  gtk_do_render_expander (engine->priv->context, cr, x, y, width, height);
+  gtk_render_expander (engine->priv->context, cr, x, y, width, height);
 }
 
 static void
@@ -1110,7 +1094,7 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
                                  gdouble           width,
                                  gdouble           height)
 {
-  gtk_do_render_focus (engine->priv->context, cr, x, y, width, height);
+  gtk_render_focus (engine->priv->context, cr, x, y, width, height);
 }
 
 static void
@@ -1121,7 +1105,7 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
                                 gdouble           x1,
                                 gdouble           y1)
 {
-  gtk_do_render_line (engine->priv->context, cr, x0, y0, x1, y1);
+  gtk_render_line (engine->priv->context, cr, x0, y0, x1, y1);
 }
 
 static void
@@ -1131,7 +1115,7 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                                   gdouble           y,
                                   PangoLayout      *layout)
 {
-  gtk_do_render_layout (engine->priv->context, cr, x, y, layout);
+  gtk_render_layout (engine->priv->context, cr, x, y, layout);
 }
 
 static void
@@ -1143,7 +1127,7 @@ gtk_theming_engine_render_slider (GtkThemingEngine *engine,
                                   gdouble           height,
                                   GtkOrientation    orientation)
 {
-  gtk_do_render_slider (engine->priv->context, cr, x, y, width, height, orientation);
+  gtk_render_slider (engine->priv->context, cr, x, y, width, height, orientation);
 }
 
 static void
@@ -1157,7 +1141,7 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
                                      gdouble           xy0_gap,
                                      gdouble           xy1_gap)
 {
-  gtk_do_render_frame_gap (engine->priv->context, cr, x, y, width, height, gap_side, xy0_gap, xy1_gap);
+  gtk_render_frame_gap (engine->priv->context, cr, x, y, width, height, gap_side, xy0_gap, xy1_gap);
 }
 
 static void
@@ -1169,7 +1153,7 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
                                      gdouble           height,
                                      GtkPositionType   gap_side)
 {
-  gtk_do_render_extension (engine->priv->context, cr, x, y, width, height, gap_side);
+  gtk_render_extension (engine->priv->context, cr, x, y, width, height, gap_side);
 }
 
 static void
@@ -1180,7 +1164,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
                                   gdouble           width,
                                   gdouble           height)
 {
-  gtk_do_render_handle (engine->priv->context, cr, x, y, width, height);
+  gtk_render_handle (engine->priv->context, cr, x, y, width, height);
 }
 
 static void
@@ -1191,7 +1175,7 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                     gdouble           width,
                                     gdouble           height)
 {
-  gtk_do_render_activity (engine->priv->context, cr, x, y, width, height);
+  gtk_render_activity (engine->priv->context, cr, x, y, width, height);
 }
 
 static GdkPixbuf *
@@ -1199,7 +1183,7 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
                                        const GtkIconSource *source,
                                        GtkIconSize          size)
 {
-  return gtk_do_render_icon_pixbuf (engine->priv->context, source, size);
+  return gtk_render_icon_pixbuf (engine->priv->context, source, size);
 }
 
 static void
@@ -1209,7 +1193,7 @@ gtk_theming_engine_render_icon (GtkThemingEngine *engine,
                                 gdouble x,
                                 gdouble y)
 {
-  gtk_do_render_icon (engine->priv->context, cr, pixbuf, x, y);
+  gtk_render_icon (engine->priv->context, cr, pixbuf, x, y);
 }
 
 static void
@@ -1219,7 +1203,7 @@ gtk_theming_engine_render_icon_surface (GtkThemingEngine *engine,
 					gdouble x,
 					gdouble y)
 {
-  gtk_do_render_icon_surface (engine->priv->context, cr, surface, x, y);
+  gtk_render_icon_surface (engine->priv->context, cr, surface, x, y);
 }
 
 G_GNUC_END_IGNORE_DEPRECATIONS

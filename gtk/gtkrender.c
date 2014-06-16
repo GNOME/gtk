@@ -83,7 +83,7 @@ render_icon_image (GtkStyleContext *context,
   return TRUE;
 }
 
-void
+static void
 gtk_do_render_check (GtkStyleContext *context,
                      cairo_t         *cr,
                      gdouble          x,
@@ -240,7 +240,7 @@ gtk_render_check (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_option (GtkStyleContext *context,
                       cairo_t         *cr,
                       gdouble          x,
@@ -389,7 +389,7 @@ gtk_render_option (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_arrow (GtkStyleContext *context,
                      cairo_t         *cr,
                      gdouble          angle,
@@ -486,7 +486,7 @@ color_shade (const GdkRGBA *color,
   _gdk_rgba_init_from_hsla (color_return, &hsla);
 }
 
-void
+static void
 gtk_do_render_background (GtkStyleContext *context,
                           cairo_t         *cr,
                           gdouble          x,
@@ -932,7 +932,7 @@ render_frame_internal (GtkStyleContext  *context,
     }
 }
 
-void
+static void
 gtk_do_render_frame (GtkStyleContext *context,
                      cairo_t         *cr,
                      gdouble          x,
@@ -989,7 +989,7 @@ gtk_render_frame (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_expander (GtkStyleContext *context,
                         cairo_t         *cr,
                         gdouble          x,
@@ -1141,7 +1141,7 @@ gtk_render_expander (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_focus (GtkStyleContext *context,
                      cairo_t         *cr,
                      gdouble          x,
@@ -1242,7 +1242,7 @@ prepare_context_for_layout (cairo_t *cr,
     }
 }
 
-void
+static void
 gtk_do_render_layout (GtkStyleContext *context,
                       cairo_t         *cr,
                       gdouble          x,
@@ -1298,7 +1298,7 @@ gtk_render_layout (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_line (GtkStyleContext *context,
                     cairo_t         *cr,
                     gdouble          x0,
@@ -1358,7 +1358,7 @@ gtk_render_line (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_slider (GtkStyleContext *context,
                       cairo_t         *cr,
                       gdouble          x,
@@ -1414,7 +1414,7 @@ gtk_render_slider (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_frame_gap (GtkStyleContext *context,
                          cairo_t         *cr,
                          gdouble          x,
@@ -1573,7 +1573,7 @@ gtk_render_frame_gap (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_extension (GtkStyleContext *context,
                          cairo_t         *cr,
                          gdouble          x,
@@ -1716,7 +1716,7 @@ add_path_line (cairo_t        *cr,
   cairo_line_to (cr, x2, y2);
 }
 
-void
+static void
 gtk_do_render_handle (GtkStyleContext *context,
                       cairo_t         *cr,
                       gdouble          x,
@@ -2144,7 +2144,7 @@ render_spinner (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_activity (GtkStyleContext *context,
                         cairo_t         *cr,
                         gdouble          x,
@@ -2229,7 +2229,7 @@ scale_or_ref (GdkPixbuf *src,
                                     GDK_INTERP_BILINEAR);
 }
 
-GdkPixbuf *
+static GdkPixbuf *
 gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
                            const GtkIconSource *source,
                            GtkIconSize          size)
@@ -2353,7 +2353,7 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
   return gtk_do_render_icon_pixbuf (context, source, size);
 }
 
-void
+static void
 gtk_do_render_icon (GtkStyleContext *context,
                     cairo_t         *cr,
                     GdkPixbuf       *pixbuf,
@@ -2401,7 +2401,7 @@ gtk_render_icon (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
+static void
 gtk_do_render_icon_surface (GtkStyleContext *context,
                             cairo_t         *cr,
                             cairo_surface_t *surface,
