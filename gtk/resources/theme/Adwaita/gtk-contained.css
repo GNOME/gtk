@@ -843,20 +843,34 @@ GtkComboBox {
 /**************
  * Tree Views *
  **************/
-column-header .button,
-column-header .button:hover,
-column-header .button:active,
-column-header .button:backdrop {
-  border-width: 0 1px 1px 0;
-  border-color: transparent;
-  box-shadow: none;
-  border-radius: 0;
-  border-image: linear-gradient(to top, #d0d0d0, white) 0 1 1 0;
-  background-image: none;
-  background-color: white;
+column-header .button {
   color: #96999a;
+  font-weight: bold;
   text-shadow: none;
-  font-weight: bold; }
+  box-shadow: none; }
+  column-header .button:hover {
+    color: #626668;
+    box-shadow: none; }
+  column-header .button:active {
+    color: #2e3436; }
+column-header:last-child .button {
+  border-right-style: none; }
+
+column-header .button, column-header .button:hover, column-header .button:active {
+  border-width: 0 1px 1px 0;
+  border-radius: 0;
+  background-image: none;
+  border-color: #ededed;
+  text-shadow: none; }
+  column-header .button:insensitive {
+    border-color: #ededed;
+    background-image: none; }
+  column-header .button:backdrop {
+    border-color: #ededed;
+    background-image: none; }
+    column-header .button:backdrop:insensitive {
+      border-color: #ededed;
+      background-image: none; }
 
 /*********
  * Menus *
