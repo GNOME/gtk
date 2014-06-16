@@ -156,6 +156,8 @@ gdk_display_supports_input_shapes
 gdk_display_supports_composite
 gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
+gdk_display_get_clipboard
+gdk_display_get_primary
 
 <SUBSECTION Standard>
 GDK_DISPLAY
@@ -1272,4 +1274,29 @@ gdk_frame_timings_get_refresh_interval
 gdk_frame_timings_get_predicted_presentation_time
 <SUBSECTION Private>
 gdk_frame_get_type
+</SECTION>
+
+<SECTION>
+<TITLE>GdkClipboard</TITLE>
+<FILE>gdkclipboard</FILE>
+GdkClipboard
+gdk_clipboard_get_text_async
+gdk_clipboard_get_text_finish
+gdk_clipboard_set_text
+gdk_clipboard_text_available
+gdk_clipboard_get_image_async
+gdk_clipboard_get_image_finish
+gdk_clipboard_set_image
+gdk_clipboard_image_available
+gdk_clipboard_get_bytes_async
+gdk_clipboard_get_bytes_finish
+gdk_clipboard_set_bytes
+gdk_clipboard_get_data_async
+gdk_clipboard_get_data_finish
+gdk_clipboard_set_data
+gdk_clipboard_data_available
+gdk_clipboard_clear
+gdk_clipboard_get_content_types
+<SUBSECTION Private>
+gdk_clipboard_get_type
 </SECTION>
