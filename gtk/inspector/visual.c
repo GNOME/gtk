@@ -185,11 +185,7 @@ init_theme (GtkInspectorVisual *vis)
   gchar *themedir = get_data_path ("themes");
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-#ifdef G_OS_WIN32
-  g_hash_table_add (t, g_strdup ("gtk-win32"));
-#else
   g_hash_table_add (t, g_strdup ("Adwaita"));
-#endif
 
   fill_gtk (themedir, t);
 
