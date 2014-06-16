@@ -37,7 +37,6 @@
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
-#include "gdkclipboard-x11.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -887,7 +886,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("selection clear:\twindow: %ld",
 			   xevent->xproperty.window));
 
-      if (_gdk_x11_selection_filter_clear_event (&xevent->xselectionclear))
+      if (gdk_clipboard_x11_handle_selection_clear (display_x11->clipboard, &xevent->xselectionclear))
+        return_val = FALSE;
+      else if (gdk_clipboard_x11_handle_selection_clear (display_x11->primary, &xevent->xselectionclear))
+        return_val = FALSE;
+      else if (_gdk_x11_selection_filter_clear_event (&xevent->xselectionclear))
 	{
 	  event->selection.type = GDK_SELECTION_CLEAR;
 	  event->selection.window = window;
@@ -896,7 +899,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	}
       else
 	return_val = FALSE;
-
       break;
 
     case SelectionRequest:
@@ -904,18 +906,24 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("selection request:\twindow: %ld",
 			   xevent->xproperty.window));
 
-      event->selection.type = GDK_SELECTION_REQUEST;
-      event->selection.window = window;
-      event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.selection);
-      event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.target);
-      event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.property);
-      if (xevent->xselectionrequest.requestor != None)
-        event->selection.requestor = gdk_x11_window_foreign_new_for_display (display,
-                                                                             xevent->xselectionrequest.requestor);
+      if (gdk_clipboard_x11_handle_selection_request (display_x11->clipboard, &xevent->xselectionrequest))
+        return_val = FALSE;
+      else if (gdk_clipboard_x11_handle_selection_request (display_x11->primary, &xevent->xselectionrequest))
+        return_val = FALSE;
       else
-        event->selection.requestor = NULL;
-      event->selection.time = xevent->xselectionrequest.time;
-
+        {
+          event->selection.type = GDK_SELECTION_REQUEST;
+          event->selection.window = window;
+          event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.selection);
+          event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.target);
+          event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.property);
+          if (xevent->xselectionrequest.requestor != None)
+            event->selection.requestor = gdk_x11_window_foreign_new_for_display (display,
+                                                                                 xevent->xselectionrequest.requestor);
+          else
+            event->selection.requestor = NULL;
+          event->selection.time = xevent->xselectionrequest.time;
+        }
       break;
 
     case SelectionNotify:
@@ -923,16 +931,22 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("selection notify:\twindow: %ld",
 			   xevent->xproperty.window));
 
-      event->selection.type = GDK_SELECTION_NOTIFY;
-      event->selection.window = window;
-      event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.selection);
-      event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.target);
-      if (xevent->xselection.property == None)
-        event->selection.property = GDK_NONE;
+      if (gdk_clipboard_x11_handle_selection_notify (display_x11->clipboard, &xevent->xselection))
+        return_val = FALSE;
+      else if (gdk_clipboard_x11_handle_selection_notify (display_x11->primary, &xevent->xselection))
+        return_val = FALSE;
       else
-        event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.property);
-      event->selection.time = xevent->xselection.time;
-
+        {
+          event->selection.type = GDK_SELECTION_NOTIFY;
+          event->selection.window = window;
+          event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.selection);
+          event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.target);
+          if (xevent->xselection.property == None)
+            event->selection.property = GDK_NONE;
+          else
+            event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.property);
+          event->selection.time = xevent->xselection.time;
+        }
       break;
 
     case ColormapNotify:
@@ -971,6 +985,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  XFixesSelectionNotifyEvent *selection_notify = (XFixesSelectionNotifyEvent *)xevent;
 
 	  _gdk_x11_screen_process_owner_change (screen, xevent);
+          gdk_clipboard_x11_handle_selection_owner_change (display_x11->clipboard, xevent);
+          gdk_clipboard_x11_handle_selection_owner_change (display_x11->primary, xevent);
 	  
 	  event->owner_change.type = GDK_OWNER_CHANGE;
 	  event->owner_change.window = window;
@@ -1870,6 +1886,12 @@ static void
 gdk_x11_display_finalize (GObject *object)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (object);
+
+  /* Clipboards */
+  if (display_x11->clipboard)
+    g_object_unref (display_x11->clipboard);
+  if (display_x11->primary)
+    g_object_unref (display_x11->primary);
 
   /* Keymap */
   if (display_x11->keymap)
@@ -2851,13 +2873,27 @@ gdk_x11_display_get_keymap (GdkDisplay *display)
 static GdkClipboard *
 gdk_x11_display_get_clipboard (GdkDisplay *display)
 {
-  return GDK_CLIPBOARD (gdk_clipboard_x11_new (display, "CLIPBOARD"));
+  GdkX11Display *display_x11;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  display_x11 = GDK_X11_DISPLAY (display);
+
+  if (!display_x11->clipboard)
+    display_x11->clipboard = gdk_clipboard_x11_new (display, "CLIPBOARD");
+
+  return GDK_CLIPBOARD (display_x11->clipboard);
 }
 
 static GdkClipboard *
 gdk_x11_display_get_primary (GdkDisplay *display)
 {
-  return GDK_CLIPBOARD (gdk_clipboard_x11_new (display, "PRIMARY"));
+  GdkX11Display *display_x11;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  display_x11 = GDK_X11_DISPLAY (display);
+
+  if (!display_x11->primary)
+    display_x11->primary = gdk_clipboard_x11_new (display, "PRIMARY");
+
+  return GDK_CLIPBOARD (display_x11->primary);
 }
 
 static void

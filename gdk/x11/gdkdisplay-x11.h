@@ -27,6 +27,7 @@
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkmain.h"
+#include "gdkclipboard-x11.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -124,6 +125,9 @@ struct _GdkX11Display
   GSList *error_traps;
 
   gint wm_moveresize_button;
+
+  GdkClipboardX11 *clipboard;
+  GdkClipboardX11 *primary;
 };
 
 struct _GdkX11DisplayClass
