@@ -385,13 +385,15 @@ substitutions = \
 %.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
-DISTCLEANFILES = reftests.test
-
-testmetadir = $(datadir)/installed-tests/$(PACKAGE)
-testmeta_DATA = 		\
+built_tests = 			\
 	reftests.test		\
 	reftests-dark.test	\
 	reftests-hc.test
+
+DISTCLEANFILES = $(built_tests)
+
+testmetadir = $(datadir)/installed-tests/$(PACKAGE)
+testmeta_DATA = $(built_tests)
 endif
 
 -include $(top_srcdir)/git.mk

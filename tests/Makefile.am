@@ -512,5 +512,9 @@ EXTRA_DIST += 			\
 	mydialog2.ui		\
 	popover.ui
 
+CLEANFILES = 			\
+	autotestkeywords.log	\
+	autotestkeywords.trs	\
+	test-suite.log
 
 -include $(top_srcdir)/git.mk
