@@ -27,12 +27,8 @@ G_BEGIN_DECLS
 void _gtk_theming_engine_paint_spinner (cairo_t       *cr,
                                         gdouble        radius,
                                         gdouble        progress);
-
-GtkCssValue  *_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
-                                                 guint             property_id);
 void          _gtk_theming_engine_set_context   (GtkThemingEngine *engine,
                                                  GtkStyleContext  *context);
-GtkStyleContext *_gtk_theming_engine_get_context   (GtkThemingEngine *engine);
 
 G_END_DECLS
 

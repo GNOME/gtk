@@ -343,23 +343,6 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
   priv->context = context;
 }
 
-GtkStyleContext *
-_gtk_theming_engine_get_context (GtkThemingEngine *engine)
-{
-  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
-
-  return engine->priv->context;
-}
-
-GtkCssValue *
-_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
-                                   guint             property_id)
-{
-  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
-
-  return _gtk_style_context_peek_property (engine->priv->context, property_id);
-}
-
 /**
  * gtk_theming_engine_get_property:
  * @engine: a #GtkThemingEngine
