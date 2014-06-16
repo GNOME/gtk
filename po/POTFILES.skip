@@ -190,6 +190,8 @@ testsuite/reftests/nonresizable-size.ref.ui
 testsuite/reftests/nonresizable-size.ui
 testsuite/reftests/notebook-childproperties.ref.ui
 testsuite/reftests/notebook-childproperties.ui
+testsuite/reftests/notebook-tab-position.ref.ui
+testsuite/reftests/notebook-tab-position.ui
 testsuite/reftests/nth-child.ref.ui
 testsuite/reftests/nth-child.ui
 testsuite/reftests/quit-mnemonic.ref.ui
@@ -206,6 +208,8 @@ testsuite/reftests/sizegroups-evolution-identity-page.ref.ui
 testsuite/reftests/sizegroups-evolution-identity-page.ui
 testsuite/reftests/sizegroups-get-preferred-null.ref.ui
 testsuite/reftests/sizegroups-get-preferred-null.ui
+testsuite/reftests/textview-margins.ref.ui
+testsuite/reftests/textview-margins.ui
 testsuite/reftests/toplevel-vs-popup.ref.ui
 testsuite/reftests/toplevel-vs-popup.ui
 testsuite/reftests/treeview-fixed-height.ref.ui
