@@ -2342,6 +2342,18 @@ parse_selector_list (GtkCssScanner *scanner)
   return selectors;
 }
 
+static gboolean
+name_is_style_property (const char *name)
+{
+  if (name[0] != '-')
+    return FALSE;
+
+  if (g_str_has_prefix (name, "-gtk-"))
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 parse_declaration (GtkCssScanner *scanner,
                    GtkCssRuleset *ruleset)
@@ -2356,7 +2368,7 @@ parse_declaration (GtkCssScanner *scanner,
     goto check_for_semicolon;
 
   property = _gtk_style_property_lookup (name);
-  if (property == NULL && name[0] != '-')
+  if (property == NULL && !name_is_style_property (name))
     {
       gtk_css_provider_error (scanner->provider,
                               scanner,
@@ -2441,7 +2453,7 @@ parse_declaration (GtkCssScanner *scanner,
 
       gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
     }
-  else if (name[0] == '-')
+  else if (name_is_style_property (name))
     {
       char *value_str;
 
