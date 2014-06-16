@@ -15,6 +15,13 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* Open issues:
+ * - suppport other image formats
+ * - implement MULTIPLE
+ * - implement INCR
+ * - cache remote data and shortcut
+ */
+
 #include "config.h"
 
 #include "gdkclipboardprivate.h"
@@ -996,7 +1003,7 @@ gdk_clipboard_x11_handle_selection_owner_change (GdkClipboardX11 *cb,
   if (cb->xselection != event->selection)
    return FALSE;
 
-  if (event->owner != None && event->owner != cb->xowner)
+  if (event->owner != cb->xowner)
     {
       _gdk_clipboard_set_available_content (GDK_CLIPBOARD (cb), NO_CONTENT, NULL);
       gdk_clipboard_x11_get_targets_async (cb, NULL, targets_received, NULL);
