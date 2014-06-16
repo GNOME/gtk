@@ -2189,7 +2189,7 @@ GtkPaned {
   margin: 0 8px 8px 0; }
   GtkPaned:dir(rtl) {
     margin-right: 0;
-    margin-left: 8x; }
+    margin-left: 8px; }
 
 .pane-separator {
   background-image: linear-gradient(to bottom, #a1a1a1); }
