@@ -169,6 +169,8 @@ main (int argc, char *argv[])
   clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
