@@ -2035,12 +2035,18 @@ GtkScrolledWindow GtkViewport.frame {
 /*********
  * Lists *
  *********/
-.list {
+.list, .list-row {
   background-color: white;
   border-color: #a1a1a1; }
-  .list:backdrop {
+  .list:backdrop, .list-row:backdrop {
     background-color: #fcfcfc;
     border-color: #a8a8a8; }
+
+.list-row:selected {
+  background-color: #4a90d9;
+  color: white; }
+  .list-row:selected:backdrop {
+    color: #fcfcfc; }
 
 /*********************
  * App Notifications *

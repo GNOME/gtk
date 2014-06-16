@@ -1535,7 +1535,7 @@ GtkScrolledWindow {
  * Lists *
  *********/
 
-.list {
+.list, .list-row {
   background-color: $base_color;
   border-color: $borders_color;
   &:backdrop {
@@ -1544,6 +1544,11 @@ GtkScrolledWindow {
   }
 }
 
+.list-row:selected {
+  background-color: $selected_bg_color;
+  color: $selected_fg_color;
+  &:backdrop { color: $backdrop_base_color;}
+}
 
 /*********************
  * App Notifications *
