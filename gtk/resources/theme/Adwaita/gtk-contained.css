@@ -867,6 +867,8 @@ column-header .button, column-header .button:hover, column-header .button:active
     background-image: none; }
   column-header .button:backdrop {
     border-color: #ededed;
+    border-width: 0 1px 1px 0;
+    color: #a0a3a3;
     background-image: none; }
     column-header .button:backdrop:insensitive {
       border-color: #ededed;
