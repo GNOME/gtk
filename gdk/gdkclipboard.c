@@ -111,11 +111,20 @@ _gdk_clipboard_set_available_content (GdkClipboard        *clipboard,
                                       const gchar         **content_types)
 {
   GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+  const gchar *text_content_types[] = { "text/plain", NULL };
+  const gchar *image_content_types[] = { "image/png", NULL };
+
+  if (content_types == NULL)
+    {
+      if (content == TEXT_CONTENT)
+        content_types = text_content_types;
+      else if (content == IMAGE_CONTENT)
+        content_types = image_content_types;
+    }
 
   priv->content = content;
   g_strfreev (priv->content_types);
   priv->content_types = g_strdupv ((gchar **)content_types);
-  /* FIXME: should we automatically set text / image content types ? */
 
   g_signal_emit (clipboard, signals[CHANGED], 0);
 }
