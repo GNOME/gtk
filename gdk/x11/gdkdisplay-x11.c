@@ -2202,7 +2202,7 @@ gdk_x11_display_supports_selection_notification (GdkDisplay *display)
   return display_x11->have_xfixes;
 }
 
-static gboolean
+gboolean
 gdk_x11_display_request_selection_notification (GdkDisplay *display,
 						GdkAtom     selection)
 

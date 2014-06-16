@@ -321,6 +321,10 @@ cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
 extern const gint        _gdk_x11_event_mask_table[];
 extern const gint        _gdk_x11_event_mask_table_size;
 
+gboolean gdk_x11_display_request_selection_notification (GdkDisplay *display,
+                                                         GdkAtom     selection);
+
+
 #define GDK_SCREEN_DISPLAY(screen)    (GDK_X11_SCREEN (screen)->display)
 #define GDK_SCREEN_XROOTWIN(screen)   (GDK_X11_SCREEN (screen)->xroot_window)
 #define GDK_WINDOW_SCREEN(win)        (gdk_window_get_screen (win))
