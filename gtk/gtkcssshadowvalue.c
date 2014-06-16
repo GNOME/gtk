@@ -26,9 +26,8 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkrenderprivate.h"
 #include "gtkpango.h"
-
-#include "deprecated/gtkthemingengineprivate.h"
 
 #include <math.h>
 
@@ -457,7 +456,7 @@ _gtk_css_shadow_value_paint_spinner (const GtkCssValue *shadow,
   cairo_translate (cr,
                    _gtk_css_number_value_get (shadow->hoffset, 0),
                    _gtk_css_number_value_get (shadow->voffset, 0));
-  _gtk_theming_engine_paint_spinner (cr, radius, progress);
+  gtk_render_paint_spinner (cr, radius, progress);
 
   cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 

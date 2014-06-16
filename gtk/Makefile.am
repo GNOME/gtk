@@ -638,6 +638,7 @@ gtk_private_h_sources =		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
 	gtkrecentchooserutils.h	\
+	gtkrenderprivate.h	\
 	gtkresources.h		\
 	gtkroundedboxprivate.h	\
 	gtkscaleprivate.h	\

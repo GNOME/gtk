@@ -24,9 +24,6 @@
 
 G_BEGIN_DECLS
 
-void _gtk_theming_engine_paint_spinner (cairo_t       *cr,
-                                        gdouble        radius,
-                                        gdouble        progress);
 void          _gtk_theming_engine_set_context   (GtkThemingEngine *engine,
                                                  GtkStyleContext  *context);
 
