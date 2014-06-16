@@ -158,67 +158,77 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
-  GtkWidget *vbox;
-  GtkWidget *box;
+  GtkWidget *grid;
   GtkWidget *entry;
   GtkWidget *button;
   GtkWidget *image;
+  GtkWidget *label;
 
   gtk_init (NULL, NULL);
 
   clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+  g_object_set (grid, "margin", 10, NULL);
+  gtk_container_add (GTK_CONTAINER (window), grid);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
+  label = gtk_label_new ("Text");
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   entry = gtk_entry_new ();
-  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_widget_set_valign (entry, GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
   button = gtk_button_new_with_label ("Copy");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 0, 1, 1);
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (copy_text), entry);
   button = gtk_button_new_with_label ("Paste");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), button, 3, 0, 1, 1);
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (paste_text), entry);
   g_signal_connect_swapped (clipboard, "changed", G_CALLBACK (has_text), button);
-  button = gtk_button_new_with_label ("Clear");
-  gtk_container_add (GTK_CONTAINER (box), button);
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (clear), entry);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
+  label = gtk_label_new ("Image");
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
   image = gtk_image_new ();
+  gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
   if (argc > 1)
     gtk_image_set_from_file (GTK_IMAGE (image), argv[1]);
   else
     gtk_image_set_from_resource (GTK_IMAGE (image), "/org/gtk/libgtk/theme/Adwaita/assets/slider-vert-scale-has-marks-above@2.png");
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_grid_attach (GTK_GRID (grid), image, 1, 1, 1, 1);
   button = gtk_button_new_with_label ("Copy");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 1, 1, 1);
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (copy_image), image);
   button = gtk_button_new_with_label ("Paste");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), button, 3, 1, 1, 1);
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (paste_image), image);
   g_signal_connect_swapped (clipboard, "changed", G_CALLBACK (has_image), button);
-  button = gtk_button_new_with_label ("Clear");
-  gtk_container_add (GTK_CONTAINER (box), button);
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (clear), image);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
+  label = gtk_label_new ("Data");
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
   entry = gtk_entry_new ();
-  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_widget_set_valign (entry, GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, 2, 1, 1);
   button = gtk_button_new_with_label ("Copy");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 2, 1, 1);
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (copy_data), entry);
   button = gtk_button_new_with_label ("Paste");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), button, 3, 2, 1, 1);
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (paste_data), entry);
   g_signal_connect_swapped (clipboard, "changed", G_CALLBACK (has_data), button);
-  button = gtk_button_new_with_label ("Clear");
-  gtk_container_add (GTK_CONTAINER (box), button);
+
+  button = gtk_button_new_with_label ("Clear Clipboard");
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 3, 2, 1);
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (clear), entry);
 
   g_signal_emit_by_name (clipboard, "changed", 0);
