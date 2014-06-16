@@ -1360,6 +1360,8 @@ gtk_menu_shell_activate_item (GtkMenuShell *menu_shell,
 
       do
         {
+          parent_menu_shell->priv->selection_done_coming_soon = TRUE;
+
           g_object_ref (parent_menu_shell);
           shells = g_slist_prepend (shells, parent_menu_shell);
           parent_menu_shell = (GtkMenuShell*) parent_menu_shell->priv->parent_menu_shell;
@@ -1379,7 +1381,10 @@ gtk_menu_shell_activate_item (GtkMenuShell *menu_shell,
 
   for (slist = shells; slist; slist = slist->next)
     {
-      g_signal_emit (slist->data, menu_shell_signals[SELECTION_DONE], 0);
+      GtkMenuShell *parent_menu_shell = slist->data;
+
+      g_signal_emit (parent_menu_shell, menu_shell_signals[SELECTION_DONE], 0);
+      parent_menu_shell->priv->selection_done_coming_soon = FALSE;
       g_object_unref (slist->data);
     }
   g_slist_free (shells);
@@ -2010,7 +2015,18 @@ gtk_menu_shell_submenu_hidden (GtkWidget *submenu,
 {
   GtkMenuTrackerItem *item = user_data;
 
-  gtk_menu_tracker_item_request_submenu_shown (item, FALSE);
+  if (!GTK_MENU_SHELL (submenu)->priv->selection_done_coming_soon)
+    gtk_menu_tracker_item_request_submenu_shown (item, FALSE);
+}
+
+static void
+gtk_menu_shell_submenu_selection_done (GtkWidget *submenu,
+                                       gpointer   user_data)
+{
+  GtkMenuTrackerItem *item = user_data;
+
+  if (GTK_MENU_SHELL (submenu)->priv->selection_done_coming_soon)
+    gtk_menu_tracker_item_request_submenu_shown (item, FALSE);
 }
 
 static void
@@ -2091,6 +2107,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
            */
           g_signal_connect (submenu, "show", G_CALLBACK (gtk_menu_shell_submenu_shown), item);
           g_signal_connect (submenu, "hide", G_CALLBACK (gtk_menu_shell_submenu_hidden), item);
+          g_signal_connect (submenu, "selection-done", G_CALLBACK (gtk_menu_shell_submenu_selection_done), item);
         }
 
       gtk_widget_show (widget);

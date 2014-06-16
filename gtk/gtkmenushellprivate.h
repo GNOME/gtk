@@ -61,6 +61,11 @@ struct _GtkMenuShellPrivate
                                    * the user moves the mouse over
                                    * an unselectable menuitem.
                                    */
+
+  guint selection_done_coming_soon : 1; /* Set TRUE when a selection-done
+                                         * signal is coming soon (when checked
+                                         * from inside of a "hide" handler).
+                                         */
   GtkMnemonicHash *mnemonic_hash;
   GtkKeyHash *key_hash;
 
