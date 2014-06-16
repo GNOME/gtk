@@ -45,6 +45,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testcairo			\
 	testcalendar			\
 	testclipboard			\
+	testclipboard2			\
 	testcolorchooser		\
 	testcombo			\
 	testcombochange			\
@@ -189,6 +190,7 @@ testbuttons_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testclipboard_DEPENDENCIES = $(TEST_DEPS)
+testclipboard2_DEPENDENCIES = $(TEST_DEPS)
 testcolorchooser_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
