@@ -2226,6 +2226,18 @@ gdk_error_trap_pop (void)
   return gdk_error_trap_pop_internal (TRUE);
 }
 
+/**
+ * gdk_display_get_clipboard:
+ * @display: a #GdkDisplay
+ *
+ * Returns the #GdkClipboard for this display. This is a per-display
+ * singleton object and is backed by the system CLIPBOARD, if the
+ * platform supports it.
+ *
+ * Returns: (transfer none): the #GdkClipboard representing the system CLIPBOARD
+ *
+ * Since: 3.14
+ */
 GdkClipboard *
 gdk_display_get_clipboard (GdkDisplay *display)
 {
@@ -2234,6 +2246,19 @@ gdk_display_get_clipboard (GdkDisplay *display)
   return GDK_DISPLAY_GET_CLASS (display)->get_clipboard (display);
 }
 
+/**
+ * gdk_display_get_primary:
+ * @display: a #GdkDisplay
+ *
+ * Returns the 'primary' #GdkClipboard for this display. This is a
+ * per-display singleton object and is backed by the system PRIMARY clipboard,
+ * if the platform supports it.
+ *
+ * Returns: (transfer none): the #GdkClipboard representing the system
+ *     PRIMARY clipboard
+ *
+ * Since: 3.14
+ */
 GdkClipboard *
 gdk_display_get_primary (GdkDisplay *display)
 {
