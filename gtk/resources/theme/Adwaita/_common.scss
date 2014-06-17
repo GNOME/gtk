@@ -262,7 +262,7 @@
         @include button(active,$b_color, white);
       }
       &:backdrop {
-        @include button(backdrop,$b_color);
+        @include button(backdrop,$b_color,white);
         &:insensitive {
           @include button(backdrop-insensitive);
         }
@@ -631,7 +631,10 @@ GtkComboBox {
       &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, noedge); }
       &:active { @include button(active, $selected_bg_color, $selected_fg_color, noedge); }
       &:insensitive { @include button(insensitive, $selected_bg_color, $selected_fg_color, noedge); }
-      &:backdrop { @include button(backdrop, $selected_bg_color, $selected_fg_color, noedge); }
+      &:backdrop { 
+        @include button(backdrop, $selected_bg_color, $selected_fg_color, noedge);
+        border-color: darken($selected_bg_color, 15%);
+      }
       &:backdrop:insensitive { @include button(backdrop-insensitive, $selected_bg_color, $selected_fg_color, noedge); }
       &.suggested-action {
         @include button($t:normal, $noedge:true);

@@ -334,7 +334,7 @@
     .button.suggested-action:backdrop {
       border-width: 1px;
       border-style: solid;
-      color: #393f3f;
+      color: white;
       border-color: #215d9c;
       background-image: linear-gradient(to bottom, #215d9c);
       text-shadow: none;
@@ -386,7 +386,7 @@
     .button.destructive-action:backdrop {
       border-width: 1px;
       border-style: solid;
-      color: #393f3f;
+      color: white;
       border-color: #d51010;
       background-image: linear-gradient(to bottom, #d51010);
       text-shadow: none;
@@ -763,12 +763,13 @@ GtkComboBox {
       .header-bar.selection-mode .button:backdrop {
         border-width: 1px;
         border-style: solid;
-        color: #393f3f;
+        color: white;
         border-color: #215d9c;
         background-image: linear-gradient(to bottom, #215d9c);
         text-shadow: none;
         icon-shadow: none;
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
+        border-color: #14375d; }
       .titlebar.selection-mode .button:backdrop:insensitive,
       .header-bar.selection-mode .button:backdrop:insensitive {
         border-width: 1px;
@@ -2297,7 +2298,7 @@ GtkInfoBar {
     .error .button:backdrop {
       border-width: 1px;
       border-style: solid;
-      color: #393f3f;
+      color: white;
       border-color: #215d9c;
       background-image: linear-gradient(to bottom, #215d9c);
       text-shadow: none;
