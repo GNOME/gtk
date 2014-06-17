@@ -771,6 +771,16 @@ mkdir $(CopyDir)\share\icons\hicolor\16x16\apps
 copy ..\..\..\demos\gtk-demo\data\16x16\gtk3-demo.png $(CopyDir)\share\icons\hicolor\16x16\apps\
 
 
+mkdir $(CopyDir)\share\icons\hicolor\16x16\actions
+
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\16x16\actions\
+
+
+mkdir $(CopyDir)\share\icons\hicolor\20x20\actions
+
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\20x20\actions\
+
+
 mkdir $(CopyDir)\share\icons\hicolor\22x22\apps
 
 copy ..\..\..\demos\gtk-demo\data\22x22\gtk3-demo.png $(CopyDir)\share\icons\hicolor\22x22\apps\
@@ -781,14 +791,29 @@ mkdir $(CopyDir)\share\icons\hicolor\24x24\apps
 copy ..\..\..\demos\gtk-demo\data\24x24\gtk3-demo.png $(CopyDir)\share\icons\hicolor\24x24\apps\
 
 
+mkdir $(CopyDir)\share\icons\hicolor\24x24\actions
+
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\24x24\actions\
+
+
 mkdir $(CopyDir)\share\icons\hicolor\32x32\apps
 
 copy ..\..\..\demos\gtk-demo\data\32x32\gtk3-demo.png $(CopyDir)\share\icons\hicolor\32x32\apps\
 
 
+mkdir $(CopyDir)\share\icons\hicolor\32x32\actions
+
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\32x32\actions\
+
+
 mkdir $(CopyDir)\share\icons\hicolor\48x48\apps
 
 copy ..\..\..\demos\gtk-demo\data\48x48\gtk3-demo.png $(CopyDir)\share\icons\hicolor\48x48\apps\
+
+
+mkdir $(CopyDir)\share\icons\hicolor\48x48\actions
+
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\48x48\actions\
 
 
 mkdir $(CopyDir)\share\icons\hicolor\256x256\apps

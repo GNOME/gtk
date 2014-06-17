@@ -398,17 +398,32 @@ copy ..\..\..\libgail-util\gailtextutil.h $(CopyDir)\include\gail-$(ApiVersion)\
 mkdir $(CopyDir)\share\icons\hicolor\16x16\apps&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\data\16x16\gtk3-demo.png $(CopyDir)\share\icons\hicolor\16x16\apps\&#x0D;&#x0A;
 
+mkdir $(CopyDir)\share\icons\hicolor\16x16\actions&#x0D;&#x0A;
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\16x16\actions\&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\icons\hicolor\20x20\actions&#x0D;&#x0A;
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\20x20\actions\&#x0D;&#x0A;
+
 mkdir $(CopyDir)\share\icons\hicolor\22x22\apps&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\data\22x22\gtk3-demo.png $(CopyDir)\share\icons\hicolor\22x22\apps\&#x0D;&#x0A;
 
 mkdir $(CopyDir)\share\icons\hicolor\24x24\apps&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\data\24x24\gtk3-demo.png $(CopyDir)\share\icons\hicolor\24x24\apps\&#x0D;&#x0A;
 
+mkdir $(CopyDir)\share\icons\hicolor\24x24\actions&#x0D;&#x0A;
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\24x24\actions\&#x0D;&#x0A;
+
 mkdir $(CopyDir)\share\icons\hicolor\32x32\apps&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\data\32x32\gtk3-demo.png $(CopyDir)\share\icons\hicolor\32x32\apps\&#x0D;&#x0A;
 
+mkdir $(CopyDir)\share\icons\hicolor\32x32\actions&#x0D;&#x0A;
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\32x32\actions\&#x0D;&#x0A;
+
 mkdir $(CopyDir)\share\icons\hicolor\48x48\apps&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\data\48x48\gtk3-demo.png $(CopyDir)\share\icons\hicolor\48x48\apps\&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\icons\hicolor\48x48\actions&#x0D;&#x0A;
+copy ..\..\..\gtk\stock-icons\*.png $(CopyDir)\share\icons\hicolor\48x48\actions\&#x0D;&#x0A;
 
 mkdir $(CopyDir)\share\icons\hicolor\256x256\apps&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\data\256x256\gtk3-demo.png $(CopyDir)\share\icons\hicolor\256x256\apps\&#x0D;&#x0A;
