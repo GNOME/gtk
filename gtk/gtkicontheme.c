@@ -1756,12 +1756,12 @@ real_choose_icon (GtkIconTheme       *icon_theme,
 	icon_info->filename = g_strdup (unthemed_icon->no_svg_filename);
 
       icon_info->icon_file = g_file_new_for_path (icon_info->filename);
+      icon_info->is_svg = suffix_from_name (icon_info->filename) == ICON_SUFFIX_SVG;
     }
 
  out:
   if (icon_info)
     {
-      icon_info->is_svg = (suffix_from_name (icon_info->filename) == ICON_SUFFIX_SVG);
       icon_info->desired_size = size;
       icon_info->desired_scale = scale;
       icon_info->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
@@ -3030,6 +3030,7 @@ theme_lookup_icon (IconTheme          *theme,
           file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
           icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
           icon_info->icon_file = g_file_new_for_path (icon_info->filename);
+          icon_info->is_svg = suffix == ICON_SUFFIX_SVG;
           g_free (file);
         }
       else
@@ -3467,6 +3468,7 @@ icon_info_new (IconThemeDirType type, int dir_size, int dir_scale)
   icon_info->dir_size = dir_size;
   icon_info->dir_scale = dir_scale;
   icon_info->unscaled_scale = 1.0;
+  icon_info->is_svg = FALSE;
 
   return icon_info;
 }
@@ -5412,6 +5414,7 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
     {
       info = icon_info_new (ICON_THEME_DIR_UNTHEMED, size, 1);
       info->loadable = G_LOADABLE_ICON (g_object_ref (icon));
+      info->is_svg = FALSE;
 
       if (G_IS_FILE_ICON (icon))
         {
@@ -5420,6 +5423,7 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
             {
               info->icon_file = g_object_ref (file);
               info->filename = g_file_get_path (file);
+              info->is_svg = suffix_from_name (info->filename) == ICON_SUFFIX_SVG;
             }
         }
 
