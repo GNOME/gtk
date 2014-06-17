@@ -61,12 +61,19 @@ assert_icon_lookup_size (const char         *icon_name,
       return;
     }
 
-  if (!g_str_has_suffix (gtk_icon_info_get_filename (info), filename))
+  if (filename)
     {
-      g_error ("Icon for \"%s\" with flags %s at size %d should be \"...%s\" but is \"...%s\"",
-               icon_name, lookup_flags_to_string (flags), size,
-               filename, gtk_icon_info_get_filename (info) + strlen (g_get_current_dir ()));
-      return;
+      if (!g_str_has_suffix (gtk_icon_info_get_filename (info), filename))
+        {
+          g_error ("Icon for \"%s\" with flags %s at size %d should be \"...%s\" but is \"...%s\"",
+                   icon_name, lookup_flags_to_string (flags), size,
+                   filename, gtk_icon_info_get_filename (info) + strlen (g_get_current_dir ()));
+          return;
+        }
+    }
+  else
+    {
+      g_assert (gtk_icon_info_get_filename (info) == NULL);
     }
 
   if (pixbuf_size > 0)
@@ -468,6 +475,15 @@ test_svg_size (void)
   assert_icon_lookup_size ("twosize",  8, 0, "/icons/16x16s/twosize.svg",  8);
 }
 
+static void
+test_builtin (void)
+{
+  assert_icon_lookup_size ("gtk-color-picker", 16, GTK_ICON_LOOKUP_USE_BUILTIN, NULL, 16);
+  assert_icon_lookup_size ("gtk-color-picker", 20, GTK_ICON_LOOKUP_USE_BUILTIN, NULL, 20);
+  assert_icon_lookup_size ("gtk-color-picker", 24, GTK_ICON_LOOKUP_USE_BUILTIN, NULL, 24);
+  assert_icon_lookup_size ("gtk-caps-lock-warning", 30, GTK_ICON_LOOKUP_USE_BUILTIN, NULL, 30);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -481,6 +497,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/rtl", test_rtl);
   g_test_add_func ("/icontheme/symbolic-single-size", test_symbolic_single_size);
   g_test_add_func ("/icontheme/svg-size", test_svg_size);
+  g_test_add_func ("/icontheme/builtin", test_builtin);
 
   return g_test_run();
 }
