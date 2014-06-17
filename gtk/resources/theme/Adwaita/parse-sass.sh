@@ -1,3 +1,3 @@
-#! /usr/bin/which bash
+#!/usr/bin/bash
 
 sass --update .
