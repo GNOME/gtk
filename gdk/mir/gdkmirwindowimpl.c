@@ -580,7 +580,7 @@ gdk_mir_window_impl_get_geometry (GdkWindow *window,
     *height = window->height;
 }
 
-static gint
+static void
 gdk_mir_window_impl_get_root_coords (GdkWindow *window,
                                      gint       x,
                                      gint       y,
@@ -593,8 +593,6 @@ gdk_mir_window_impl_get_root_coords (GdkWindow *window,
     *root_x = x; // FIXME
   if (root_y)
     *root_y = y; // FIXME
-
-  return 1;
 }
 
 static gboolean
@@ -708,14 +706,14 @@ gdk_mir_window_impl_destroy_foreign (GdkWindow *window)
   g_printerr ("gdk_mir_window_impl_destroy_foreign window=%p\n", window);
 }
 
-static cairo_surface_t *
+static gboolean
 gdk_mir_window_impl_resize_cairo_surface (GdkWindow       *window,
                                           cairo_surface_t *surface,
                                           gint             width,
                                           gint             height)
 {
   g_printerr ("gdk_mir_window_impl_resize_cairo_surface window=%p\n", window);
-  return surface;
+  return FALSE;
 }
 
 static void
@@ -831,14 +829,6 @@ gdk_mir_window_impl_set_transient_for (GdkWindow *window,
 }
 
 static void
-gdk_mir_window_impl_get_root_origin (GdkWindow *window,
-                                     gint      *x,
-                                     gint      *y)
-{
-  g_printerr ("gdk_mir_window_impl_get_root_origin window=%p\n", window);
-}
-
-static void
 gdk_mir_window_impl_get_frame_extents (GdkWindow    *window,
                                        GdkRectangle *rect)
 {
@@ -930,6 +920,12 @@ gdk_mir_window_impl_fullscreen (GdkWindow *window)
 {
   //g_printerr ("gdk_mir_window_impl_fullscreen window=%p\n", window);
   set_surface_state (GDK_MIR_WINDOW_IMPL (window->impl), mir_surface_state_fullscreen);
+}
+
+static void
+gdk_mir_window_impl_apply_fullscreen_mode (GdkWindow *window)
+{
+  //g_printerr ("gdk_mir_window_impl_apply_fullscreen_mode window=%p\n", window);
 }
 
 static void
@@ -1170,6 +1166,16 @@ gdk_mir_window_impl_set_opaque_region (GdkWindow      *window,
 }
 
 static void
+gdk_mir_window_impl_set_shadow_width (GdkWindow *window,
+                                      gint       left,
+                                      gint       right,
+                                      gint       top,
+                                      gint       bottom)
+{
+  g_printerr ("gdk_mir_window_impl_set_shadow_width window=%p\n", window);
+}
+
+static void
 gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1218,7 +1224,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->set_role = gdk_mir_window_impl_set_role;
   impl_class->set_startup_id = gdk_mir_window_impl_set_startup_id;
   impl_class->set_transient_for = gdk_mir_window_impl_set_transient_for;
-  impl_class->get_root_origin = gdk_mir_window_impl_get_root_origin;
   impl_class->get_frame_extents = gdk_mir_window_impl_get_frame_extents;
   impl_class->set_override_redirect = gdk_mir_window_impl_set_override_redirect;
   impl_class->set_accept_focus = gdk_mir_window_impl_set_accept_focus;
@@ -1232,6 +1237,7 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->maximize = gdk_mir_window_impl_maximize;
   impl_class->unmaximize = gdk_mir_window_impl_unmaximize;
   impl_class->fullscreen = gdk_mir_window_impl_fullscreen;
+  impl_class->apply_fullscreen_mode = gdk_mir_window_impl_apply_fullscreen_mode;
   impl_class->unfullscreen = gdk_mir_window_impl_unfullscreen;
   impl_class->set_keep_above = gdk_mir_window_impl_set_keep_above;
   impl_class->set_keep_below = gdk_mir_window_impl_set_keep_below;
@@ -1259,4 +1265,5 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->delete_property = gdk_mir_window_impl_delete_property;
   impl_class->get_scale_factor = gdk_mir_window_impl_get_scale_factor;
   impl_class->set_opaque_region = gdk_mir_window_impl_set_opaque_region;
+  impl_class->set_shadow_width = gdk_mir_window_impl_set_shadow_width;
 }
