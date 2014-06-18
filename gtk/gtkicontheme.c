@@ -1766,9 +1766,10 @@ real_choose_icon (GtkIconTheme       *icon_theme,
       icon_info->desired_scale = scale;
       icon_info->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
 
-      /* In case we're not scaling the icon we want to reuse the exact same size
-       * as a scale==1 lookup would be, rather than not scaling at all and
-       * causing a different layout */
+      /* In case we're not scaling the icon we want to reuse the exact same
+       * size as a scale==1 lookup would be, rather than not scaling at all
+       * and causing a different layout
+       */
       icon_info->unscaled_scale = 1.0;
       if (scale != 1 && !icon_info->forced_size && theme != NULL)
         {
@@ -3922,7 +3923,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
         {
           if (icon_info->is_svg)
             {
-              gint size = icon_info->dir_size * icon_info->dir_scale * icon_info->scale;
+              gint size;
+
+              if (icon_info->forced_size)
+                size = scaled_desired_size;
+              else
+                size = icon_info->dir_size * icon_info->dir_scale * icon_info->scale;
               source_pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
                                                                    size,
                                                                    size,
