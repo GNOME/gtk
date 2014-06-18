@@ -435,7 +435,7 @@
     border-radius: 3px;
     border-style: solid; }
 
-.button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button {
+.button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -2194,15 +2194,11 @@ GtkCalendar {
   border: 1px solid #a1a1a1; }
   GtkCalendar.button {
     padding: 0 4px;
-    color: #d0d0d0;
-    background-image: none;
-    background-color: transparent; }
+    color: #abadae; }
     GtkCalendar.button:hover {
-      background-image: none;
       color: #2e3436; }
     GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover {
-      color: #d2d2d2;
-      background-image: none; }
+      color: #a8aaab; }
 
 /***********
  * Dialogs *

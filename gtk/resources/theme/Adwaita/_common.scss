@@ -1624,23 +1624,21 @@ GtkExpander {
 /************
  * Calendar *
  ***********/
-
-GtkCalendar {
-  border: 1px solid $borders_color;
-  &.button {
-    padding: 0 4px;
-    color: mix($borders_color, $base_color, 50%); //we need a dimmed stuff var
-    background-image: none;
-    background-color: transparent;
-    &:hover {
-      background-image: none;
-      color: $fg_color;
-    }
-    &:backdrop, &:backdrop:hover {
-      color: mix($backdrop_borders_color, $backdrop_base_color, 50%);
-      background-image: none;
-    }
-  }
+GtkCalendar { 
+  border: 1px solid $borders_color; 
+  &.button { 
+    @extend %undecorated_button; 
+    padding: 0 4px; 
+    color: mix($fg_color, $base_color, 40%); //we need a dimmed stuff var 
+    &:hover { 
+      @extend %undecorated_button; 
+      color: $fg_color; 
+    } 
+    &:backdrop, &:backdrop:hover { 
+      @extend %undecorated_button; 
+      color: mix($backdrop_fg_color, $backdrop_base_color, 50%); 
+    } 
+  } 
 }
 
 /***********
