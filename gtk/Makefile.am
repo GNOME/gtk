@@ -1402,6 +1402,12 @@ gtk.gresource.xml: Makefile.am
 	  n=`basename $$f`; \
 	  echo -e "    <file compressed=\"true\">ui/$$n</file>" >> $@; \
 	done; \
+	for s in 16x16 22x22 24x24 32x32; do \
+	  for f in $(srcdir)/resources/icons/hicolor/$$s/actions/*.png; do \
+	    n=`basename $$f`; \
+	    echo -e "    <file>icons/hicolor/$$s/actions/$$n</file>" >> $@; \
+	  done; \
+	done; \
 	echo -e "  </gresource>" >> $@; \
 	echo -e "</gresources>" >> $@;
 
