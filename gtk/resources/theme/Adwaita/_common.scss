@@ -1230,9 +1230,11 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 }
 
-
-
-GtkCheckButton.text-button:selected { background-color: transparent; }
+GtkCheckButton.text-button, GtkRadioButton.text-button {
+  // this is for a nice focus on check and radios text
+  padding: 1px;
+  outline-offset: 0;
+}
 
 /************
  * GtkScale *

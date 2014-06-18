@@ -1576,8 +1576,9 @@ GtkPopover .button.radio:hover {
     GtkPopover .button.radio:hover:active:backdrop {
       color: #c9cbc9; }
 
-GtkCheckButton.text-button:selected {
-  background-color: transparent; }
+GtkCheckButton.text-button, GtkRadioButton.text-button {
+  padding: 1px;
+  outline-offset: 0; }
 
 /************
  * GtkScale *
