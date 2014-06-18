@@ -360,20 +360,30 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the GtkColorButton
  * Links *
  *********/
 
-GtkLinkButton.button {
+*:link {
+  color: $selected_bg_color; //FIXME use a proper color
+  &:hover, &:active, &:visited {
+    color: mix($fg_color, $selected_bg_color, 40%); //FIXME same here
+  }
+  &:backdrop, &:backdrop:hover {
+    color: $selected_bg_color;
+  }
+}
+
+.button:link, .button:visited {
   color: $selected_bg_color; //FIXME use a proper color
   @extend %undecorated_button;
   text-shadow: none;
   &:hover, &:active {
-    color: mix($fg_color, $selected_bg_color, 40%); //FIXME same here
     @extend %undecorated_button;
+    color: mix($fg_color, $selected_bg_color, 40%); //FIXME same here
     text-shadow: none;
   }
   &:backdrop {
-    color: $selected_bg_color;
     @extend %undecorated_button; //This shouldn't be needed but avoids
                                  //a weird transition which for some reason
                                  //makes borders blink on hover
+    color: $selected_bg_color; //FIXME use a proper color
   }
 }
 

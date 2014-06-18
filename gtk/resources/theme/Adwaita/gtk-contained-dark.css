@@ -435,7 +435,7 @@
     border-radius: 3px;
     border-style: solid; }
 
-GtkLinkButton.button, GtkLinkButton.button:hover, GtkLinkButton.button:active, GtkLinkButton.button:backdrop, .notebook tab .button {
+.button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -478,13 +478,20 @@ GtkColorButton.button {
 /*********
  * Links *
  *********/
-GtkLinkButton.button {
+*:link {
+  color: #215d9c; }
+  *:link:hover, *:link:active, *:link:visited {
+    color: #7397bc; }
+  *:link:backdrop, *:link:backdrop:hover {
+    color: #215d9c; }
+
+.button:link, .button:visited {
   color: #215d9c;
   text-shadow: none; }
-  GtkLinkButton.button:hover, GtkLinkButton.button:active {
+  .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active {
     color: #7397bc;
     text-shadow: none; }
-  GtkLinkButton.button:backdrop {
+  .button:link:backdrop, .button:visited:backdrop {
     color: #215d9c; }
 
 /*****************
