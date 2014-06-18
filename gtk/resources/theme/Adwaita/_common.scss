@@ -1512,6 +1512,7 @@ GtkLevelBar.vertical {
 %selected_items {
   background-color: $selected_bg_color;
   color: $selected_fg_color;
+  outline-color: transparentize($selected_fg_color, 0.7);
   &:backdrop { color: $backdrop_base_color; }
 }
 

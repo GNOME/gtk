@@ -2041,7 +2041,8 @@ GtkLevelBar.vertical {
 
 .view:selected, .view:selected:focus, .view:selected:hover, .entry:selected, .entry:selected:focus, .button:selected, .button:selected:focus {
   background-color: #215d9c;
-  color: white; }
+  color: white;
+  outline-color: rgba(255, 255, 255, 0.3); }
   .view:backdrop:selected, .entry:backdrop:selected, .button:backdrop:selected {
     color: #2c2c2c; }
 
