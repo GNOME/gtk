@@ -82,10 +82,6 @@
     -gtk-image-effect: dim;
 }
 
-*:hover {
-    -gtk-image-effect: highlight;
-}
-
 .gtkstyle-fallback {
   background-color: $bg_color;
   color: $fg_color;
@@ -201,6 +197,7 @@
   @include button(normal);
   &:hover {
     @include button(hover);
+    -gtk-image-effect: hilight;
   }
   &:active {
     @include button(active);
