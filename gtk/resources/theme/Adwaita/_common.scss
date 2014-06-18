@@ -1874,16 +1874,18 @@ GtkColorChooserWidget #add-color-button {
 
   // this needs to be transparent
   // see bug #722563
-  $_wm_border: if($variant=='light', transparentize(black, 0.8), transparentize(black, 0.4));
-  box-shadow: 0 2px 10px 4px transparentize(black, 0.9),
+  $_wm_border: if($variant=='light', transparentize(black, 0.77), transparentize($borders_color, 0.1));
+  $_wm_border_backdrop: if($variant=='light', transparentize(black, 0.82), transparentize($borders_color, 0.1));
+
+  box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
               0 0 0 1px $_wm_border; //doing borders with box-shadow
 
   /* this is used for the resize cursor area */
   margin: 10px;
 
   &:backdrop {
-    box-shadow: 0 3px 6px 2px transparentize(black, 0.9),
-                0 0 0 1px transparentize(black,0.7);
+    box-shadow: 0 2px 6px 2px transparentize(black, 0.8),
+                0 0 0 1px $_wm_border_backdrop;
   }
   &.tiled {
     border-radius: 0;
@@ -1891,7 +1893,7 @@ GtkColorChooserWidget #add-color-button {
   &.csd {
     &.popup {
       border-radius: 0;
-      box-shadow: 0 1px 2px transparentize(black, 0.6),
+      box-shadow: 0 1px 2px transparentize(black, 0.8),
                   0 0 0 1px transparentize($_wm_border,0.1);
     }
     &.tooltip {
