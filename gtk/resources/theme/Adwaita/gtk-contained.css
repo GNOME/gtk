@@ -499,14 +499,19 @@ GtkColorButton.button {
   background-image: none;
   border-width: 0 0 0 1px;
   border-color: rgba(161, 161, 161, 0.3);
+  color: #383e40;
   border-radius: 0;
   box-shadow: none; }
   .spinbutton .button:dir(rtl) {
     border-width: 0 1px 0 0; }
+  .spinbutton .button:hover {
+    color: #2e3436;
+    background-color: rgba(0, 0, 0, 0.05); }
   .spinbutton .button:insensitive {
     color: rgba(141, 144, 145, 0.3); }
   .spinbutton .button:active {
-    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2); }
+    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1); }
   .spinbutton .button:backdrop {
     border-color: rgba(168, 168, 168, 0.3); }
   .spinbutton .button:backdrop:insensitive {
