@@ -1243,7 +1243,6 @@ gtk_built_public_sources =			\
 gtk_built_private_headers =			\
 	gtkresources.h				\
 	gtkmarshalers.h				\
-	gtkbuiltincache.h			\
 	gtkprivatetypebuiltins.h
 
 gtk_built_sources =				\
@@ -1287,7 +1286,6 @@ DISTCLEANFILES =
 EXTRA_HEADERS =
 EXTRA_DIST += $(gtk_all_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
-EXTRA_DIST += $(STOCK_ICONS)
 
 
 pkgdatadir=$(datadir)/gtk-$(GTK_API_VERSION)
@@ -1678,51 +1676,6 @@ files:
 	  echo $$p; \
 	done
 
-STOCK_ICONS = \
-	stock-icons/16/gtk-connect.png 			\
-	stock-icons/16/gtk-convert.png 			\
-	stock-icons/16/gtk-disconnect.png 		\
-	stock-icons/16/gtk-edit.png 			\
-	stock-icons/16/gtk-caps-lock-warning.png	\
-	stock-icons/16/gtk-color-picker.png		\
-	stock-icons/16/gtk-index.png 			\
-	stock-icons/16/gtk-orientation-landscape.png	\
-	stock-icons/16/gtk-orientation-portrait.png	\
-	stock-icons/16/gtk-orientation-reverse-landscape.png \
-	stock-icons/16/gtk-orientation-reverse-portrait.png \
-	stock-icons/16/gtk-page-setup.png 		\
-	stock-icons/16/gtk-preferences.png 		\
-	stock-icons/16/gtk-select-color.png 		\
-	stock-icons/16/gtk-select-font.png 		\
-	stock-icons/16/gtk-font.png 			\
-	stock-icons/16/gtk-undelete-ltr.png 		\
-	stock-icons/16/gtk-undelete-rtl.png 		\
-	stock-icons/20/gtk-apply.png  			\
-	stock-icons/20/gtk-cancel.png 			\
-	stock-icons/20/gtk-no.png 			\
-	stock-icons/20/gtk-ok.png 			\
-	stock-icons/20/gtk-yes.png 			\
-	stock-icons/24/gtk-caps-lock-warning.png	\
-	stock-icons/24/gtk-color-picker.png 		\
-	stock-icons/24/gtk-connect.png 			\
-	stock-icons/24/gtk-convert.png 			\
-	stock-icons/24/gtk-disconnect.png 		\
-	stock-icons/24/gtk-edit.png 			\
-	stock-icons/24/gtk-font.png 			\
-	stock-icons/24/gtk-index.png  			\
-	stock-icons/24/gtk-orientation-reverse-landscape.png \
-	stock-icons/24/gtk-orientation-landscape.png	\
-	stock-icons/24/gtk-orientation-reverse-portrait.png \
-	stock-icons/24/gtk-orientation-portrait.png	\
-	stock-icons/24/gtk-page-setup.png 		\
-	stock-icons/24/gtk-preferences.png 		\
-	stock-icons/24/gtk-select-font.png 		\
-	stock-icons/24/gtk-select-color.png   		\
-	stock-icons/24/gtk-undelete-ltr.png 		\
-	stock-icons/24/gtk-undelete-rtl.png 		\
-	stock-icons/32/gtk-dnd-multiple.png 		\
-	stock-icons/32/gtk-dnd.png
-
 if USE_EXTERNAL_ICON_CACHE
 gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
 else
@@ -1732,18 +1685,6 @@ else
 gtk_update_icon_cache_program = ./gtk-update-icon-cache$(EXEEXT)
 endif
 endif
-
-gtkbuiltincache.h:
-if !USE_EXTERNAL_ICON_CACHE
-if CROSS_COMPILING
-	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) -C native/
-else
-	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
-endif
-endif
-	$(AM_V_GEN) $(gtk_update_icon_cache_program) --quiet --force --ignore-theme-index --include-image-data \
-	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
-	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
 
 gsettings_SCHEMAS = \
 	org.gtk.Settings.FileChooser.gschema.xml \
@@ -1755,7 +1696,6 @@ gsettings_SCHEMAS = \
 EXTRA_DIST +=                   \
 	$(resource_files)	\
 	$(adwaita_sources)	\
-	$(STOCK_ICONS)		\
 	$(gsettings_SCHEMAS)	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\

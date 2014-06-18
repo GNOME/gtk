@@ -41,7 +41,6 @@
 #include "gtkdebug.h"
 #include "deprecated/gtkiconfactory.h"
 #include "gtkiconcache.h"
-#include "gtkbuiltincache.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "deprecated/gtknumerableiconprivate.h"
@@ -379,10 +378,6 @@ static void remove_from_lru_cache (GtkIconTheme *icon_theme,
 static guint signal_changed = 0;
 
 static GHashTable *icon_theme_builtin_icons;
-
-/* also used in gtkiconfactory.c */
-GtkIconCache *_builtin_cache = NULL;
-static GList *builtin_dirs = NULL;
 
 static guint
 icon_info_key_hash (gconstpointer _key)
@@ -1368,38 +1363,6 @@ load_themes (GtkIconTheme *icon_theme)
   });
 }
 
-void
-_gtk_icon_theme_ensure_builtin_cache (void)
-{
-  static gboolean initialized = FALSE;
-  IconThemeDir *dir;
-  static IconThemeDir dirs[5] = 
-    {
-      { ICON_THEME_DIR_THRESHOLD, 0, 16, 16, 16, 2, 1, NULL, "16", -1, NULL, NULL, NULL },
-      { ICON_THEME_DIR_THRESHOLD, 0, 20, 20, 20, 2, 1, NULL, "20", -1,  NULL, NULL, NULL },
-      { ICON_THEME_DIR_THRESHOLD, 0, 24, 24, 24, 2, 1, NULL, "24", -1, NULL, NULL, NULL },
-      { ICON_THEME_DIR_THRESHOLD, 0, 32, 32, 32, 2, 1, NULL, "32", -1, NULL, NULL, NULL },
-      { ICON_THEME_DIR_THRESHOLD, 0, 48, 48, 48, 2, 1, NULL, "48", -1, NULL, NULL, NULL }
-    };
-  gint i;
-
-  if (!initialized)
-    {
-      initialized = TRUE;
-
-      _builtin_cache = _gtk_icon_cache_new ((gchar *)builtin_icons);
-
-      for (i = 0; i < G_N_ELEMENTS (dirs); i++)
-	{
-	  dir = &(dirs[i]);
-	  dir->cache = _gtk_icon_cache_ref (_builtin_cache);
-          dir->subdir_index = _gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
-
-	  builtin_dirs = g_list_append (builtin_dirs, dir);
-	}
-    }
-}
-
 static void
 ensure_valid_themes (GtkIconTheme *icon_theme)
 {
@@ -1410,8 +1373,6 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
   if (priv->loading_themes)
     return;
   priv->loading_themes = TRUE;
-
-  _gtk_icon_theme_ensure_builtin_cache ();
 
   if (priv->themes_valid)
     {
@@ -2388,10 +2349,6 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
 				    icon_name, NULL, NULL))
     return TRUE;
 
-  if (_builtin_cache &&
-      _gtk_icon_cache_has_icon (_builtin_cache, icon_name))
-    return TRUE;
-
   if (icon_theme_builtin_icons &&
       g_hash_table_lookup_extended (icon_theme_builtin_icons,
 				    icon_name, NULL, NULL))
@@ -2465,23 +2422,6 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 	      else
 		g_hash_table_insert (sizes, GINT_TO_POINTER (dir->size), NULL);
 	    }
-	}
-    }
-
-  for (d = builtin_dirs; d; d = d->next)
-    {
-      IconThemeDir *dir = d->data;
-      
-      if (dir->type != ICON_THEME_DIR_SCALABLE && g_hash_table_lookup_extended (sizes, GINT_TO_POINTER (dir->size), NULL, NULL))
-        continue;
-
-      suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);	  
-      if (suffix != ICON_SUFFIX_NONE)
-	{
-	  if (suffix == ICON_SUFFIX_SVG)
-	    g_hash_table_insert (sizes, GINT_TO_POINTER (-1), NULL);
-	  else
-	    g_hash_table_insert (sizes, GINT_TO_POINTER (dir->size), NULL);
 	}
     }
 
@@ -2979,11 +2919,9 @@ theme_lookup_icon (IconTheme          *theme,
 
       if (min_difference == 0)
 	return icon_info_new_builtin (closest_builtin);
-
-      dirs = builtin_dirs;
     }
-  else
-    dirs = theme->dirs;
+
+  dirs = theme->dirs;
 
   l = dirs;
   while (l != NULL)
@@ -3007,12 +2945,6 @@ theme_lookup_icon (IconTheme          *theme,
         }
 
       l = l->next;
-
-      if (l == NULL && dirs == builtin_dirs)
-	{
-	  dirs = theme->dirs;
-	  l = dirs;
-	}
     }
 
   if (min_dir)

@@ -1454,8 +1454,6 @@ find_and_render_icon_source (GtkIconSet       *icon_set,
   return pixbuf;
 }
 
-extern GtkIconCache *_builtin_cache;
-
 static GdkPixbuf*
 render_fallback_image (GtkStyleContext   *context,
                        GtkTextDirection   direction,
@@ -1467,21 +1465,12 @@ render_fallback_image (GtkStyleContext   *context,
 
   if (fallback_source.type == GTK_ICON_SOURCE_EMPTY)
     {
-      gint index;
-      GdkPixbuf *pixbuf;
-
-      _gtk_icon_theme_ensure_builtin_cache ();
-
-      index = _gtk_icon_cache_get_directory_index (_builtin_cache, "24");
-      pixbuf = _gtk_icon_cache_get_icon (_builtin_cache, "image-missing", index);
-
-      g_return_val_if_fail(pixbuf != NULL, NULL);
-
-      gtk_icon_source_set_pixbuf (&fallback_source, pixbuf);
-      g_object_unref (pixbuf);
+      fallback_source.type = GTK_ICON_SOURCE_STATIC_ICON_NAME;
+      fallback_source.source.icon_name = (gchar *)"image-missing";
+      fallback_source.direction = GTK_TEXT_DIR_NONE;
     }
 
-  return gtk_render_icon_pixbuf (context, &fallback_source, size);
+  return render_icon_name_pixbuf (&fallback_source, context, size, 1);
 }
 
 static GdkPixbuf*
