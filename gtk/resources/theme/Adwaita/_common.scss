@@ -197,7 +197,7 @@
   @include button(normal);
   &:hover {
     @include button(hover);
-    -gtk-image-effect: hilight;
+    -gtk-image-effect: highlight;
   }
   &:active {
     @include button(active);
