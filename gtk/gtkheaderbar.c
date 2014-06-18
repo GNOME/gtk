@@ -204,6 +204,7 @@ create_title_box (const char *title,
   gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
   gtk_box_pack_start (GTK_BOX (label_box), subtitle_label, FALSE, FALSE, 0);
   gtk_widget_set_no_show_all (subtitle_label, TRUE);
+  gtk_widget_set_visible (subtitle_label, subtitle && subtitle[0]);
 
   if (ret_title_label)
     *ret_title_label = title_label;
