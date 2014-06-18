@@ -401,6 +401,7 @@ GtkLinkButton.button {
       border-color: transparentize($backdrop_borders_color,0.7);
     }
     &:backdrop:insensitive {
+      background-image: none;
       color: transparentize($backdrop_insensitive_color,0.7);
       border-width: 0 0 0 1px; // It is needed or it gets overridden
       &:dir(rtl) { border-width: 0 1px 0 0; }

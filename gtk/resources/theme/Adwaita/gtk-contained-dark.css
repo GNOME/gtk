@@ -505,6 +505,7 @@ GtkLinkButton.button {
   .spinbutton .button:backdrop {
     border-color: rgba(30, 34, 34, 0.3); }
   .spinbutton .button:backdrop:insensitive {
+    background-image: none;
     color: rgba(69, 76, 76, 0.3);
     border-width: 0 0 0 1px; }
     .spinbutton .button:backdrop:insensitive:dir(rtl) {
