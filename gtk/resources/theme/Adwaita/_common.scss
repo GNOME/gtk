@@ -273,16 +273,9 @@
     }
   }
 
-  // headerbar buttons
-  .header-bar & {
-    &.text-button {
-      padding: 6px 8px 5px; // due to font metrics the image buttons
-                            // are 1px shorter
-    }
-    &.image-button {
-      padding: 8px;
-    }
-  }
+  // buttons in header bars and action bars
+  &.image-button { padding: 8px; }
+  &.text-button { padding: 6px 8px 5px; } // due to font metrics
 
   //inline-toolbar buttons
   .inline-toolbar &, .inline-toolbar &:backdrop {
@@ -560,10 +553,6 @@ GtkComboBox {
     background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
     box-shadow: none;
   }
-}
-
-.action-bar {
-  padding: 4px;
 }
 
 /***************
@@ -1549,8 +1538,12 @@ GtkLevelBar.vertical {
  **********/
 .frame {
   border: 1px solid $borders_color;
-  padding: 0;
   &:backdrop { border-color: $backdrop_borders_color; }
+  padding: 0;
+  &.action-bar {
+    padding: 6px;
+    border-width: 1px 0 0;
+  }
 }
 
 GtkScrolledWindow {
