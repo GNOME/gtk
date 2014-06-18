@@ -2741,6 +2741,17 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="title" translatable="yes">Page 2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkSpinner">
+                <property name="visible">True</property>
+                <property name="active">True</property>
+                <property name="expand">True</property>
+              </object>
+              <packing>
+                <property name="name">page3</property>
+                <property name="title" translatable="yes">Page 3</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>
