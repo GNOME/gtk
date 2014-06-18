@@ -1356,7 +1356,7 @@ GtkStatusbar > GtkFrame {
 }
 
 /* Popovers */
-GtkPopover {
+.popover {
     border-radius: 3px;
     background-clip: border-box;
     background-color: @bg_color;
@@ -1369,9 +1369,9 @@ GtkPopover {
     margin: 10px;
     padding: 2px;
 }
-GtkPopover > .list,
-GtkPopover > .view,
-GtkPopover > .toolbar {
+.popover > .list,
+.popover > .view,
+.popover > .toolbar {
     background-color: transparent;
 }
 

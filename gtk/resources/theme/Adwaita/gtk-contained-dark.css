@@ -920,7 +920,7 @@ column-header .button, column-header .button:hover, column-header .button:active
 /***************
  * Popovers   *
  ***************/
-GtkPopover {
+.popover {
   margin: 10px;
   padding: 2px;
   border-color: #1c1f1f;
@@ -929,11 +929,11 @@ GtkPopover {
   border-radius: 5px;
   background-color: #393f3f;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
-  GtkPopover:backdrop {
+  .popover:backdrop {
     box-shadow: none; }
-  GtkPopover > .list, GtkPopover > .view, GtkPopover > .toolbar {
+  .popover > .list, .popover > .view, .popover > .toolbar {
     background-color: transparent; }
-  GtkPopover .separator {
+  .popover .separator {
     font-size: 80%;
     font-weight: bold;
     color: #5d6261;
@@ -941,16 +941,16 @@ GtkPopover {
     background-color: transparent;
     icon-shadow: none;
     border: 0; }
-  GtkPopover .button,
-  GtkPopover .button:hover {
+  .popover .button,
+  .popover .button:hover {
     text-shadow: none;
     transition: none; }
-  GtkPopover.osd {
+  .popover.osd {
     background-image: none;
     background-color: rgba(0, 0, 0, 0.8);
     border: 1px solid #1c1f1f;
     color: white; }
-    GtkPopover.osd .button {
+    .popover.osd .button {
       color: white;
       text-shadow: none;
       border-width: 1px;
@@ -958,19 +958,19 @@ GtkPopover {
       background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.01));
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-      GtkPopover.osd .button:hover {
+      .popover.osd .button:hover {
         border-width: 1px;
         border-style: solid;
         background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.01));
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      GtkPopover.osd .button:active {
+      .popover.osd .button:active {
         border-width: 1px;
         border-style: solid;
         background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      GtkPopover.osd .button:insensitive {
+      .popover.osd .button:insensitive {
         border-width: 1px;
         border-style: solid;
         background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8));
@@ -1487,13 +1487,13 @@ GtkIconView.content-view.cell.check {
     GtkIconView.content-view.cell.check:selected:backdrop {
       color: rgba(201, 203, 201, 0.1); }
 
-GtkPopover .button.check:hover {
+.popover .button.check:hover {
   color: rgba(238, 238, 236, 0.1); }
-  GtkPopover .button.check:hover:active {
+  .popover .button.check:hover:active {
     color: #eeeeec; }
-    GtkPopover .button.check:hover:active:selected {
+    .popover .button.check:hover:active:selected {
       color: white; }
-    GtkPopover .button.check:hover:active:backdrop {
+    .popover .button.check:hover:active:backdrop {
       color: #c9cbc9; }
 
 .radio {
@@ -1644,13 +1644,13 @@ GtkIconView.content-view.cell.radio {
     GtkIconView.content-view.cell.radio:selected:backdrop {
       color: rgba(201, 203, 201, 0.1); }
 
-GtkPopover .button.radio:hover {
+.popover .button.radio:hover {
   color: rgba(238, 238, 236, 0.1); }
-  GtkPopover .button.radio:hover:active {
+  .popover .button.radio:hover:active {
     color: #eeeeec; }
-    GtkPopover .button.radio:hover:active:selected {
+    .popover .button.radio:hover:active:selected {
       color: white; }
-    GtkPopover .button.radio:hover:active:backdrop {
+    .popover .button.radio:hover:active:backdrop {
       color: #c9cbc9; }
 
 GtkCheckButton.text-button, GtkRadioButton.text-button {

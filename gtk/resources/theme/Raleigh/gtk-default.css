@@ -28,12 +28,11 @@
   -GtkWindow-decoration-button-layout: 'icon:minimize,maximize,close';
 }
 
-GtkWindow, .button, .slider {
+.background, .button, .slider {
   background-color: @bg_color;
 }
 
-GtkPopover {
-  background-color: @bg_color;
+.popover {
   border-color: darker(@bg_color);
   border-width: 1px;
   border-style: solid;
