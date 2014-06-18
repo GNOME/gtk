@@ -423,6 +423,10 @@ GtkLinkButton.button {
           @extend %top_button;
           @include button(insensitive, $noedge: true);
         }
+        &:backdrop {
+          @extend %top_button;
+          @include button(backdrop);
+        }
       }
       &:last-child {
         @extend %bottom_button;
@@ -439,9 +443,10 @@ GtkLinkButton.button {
           @extend %bottom_button;
           @include button(insensitive);
         }
-      }
-      &:backdrop {
-        @include button(backdrop);
+        &:backdrop {
+          @extend %bottom_button;
+          @include button(backdrop);
+        }
       }
       &:backdrop:insensitive {
         @include button(backdrop-insensitive);
