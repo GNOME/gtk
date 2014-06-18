@@ -786,6 +786,15 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_DESTRUCTIVE_ACTION "destructive-action"
 
+/**
+ * GTK_STYLE_CLASS_POPOVER:
+ *
+ * A CSS class that matches popovers. Used by #GtkPopover.
+ *
+ * Since: 3.14
+ */
+#define GTK_STYLE_CLASS_POPOVER "popover"
+
 /* Predefined set of widget regions */
 
 /**

@@ -119,12 +119,17 @@ static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkWidget *widget;
+  GtkStyleContext *context;
 
   widget = GTK_WIDGET (popover);
   gtk_widget_set_has_window (widget, TRUE);
   popover->priv = gtk_popover_get_instance_private (popover);
   popover->priv->modal = TRUE;
   popover->priv->apply_shape = TRUE;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_POPOVER);
 }
 
 static void
