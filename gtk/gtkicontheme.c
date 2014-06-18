@@ -242,8 +242,6 @@ struct _GtkIconInfo
   /* Cache pixbuf (if there is any) */
   GdkPixbuf *cache_pixbuf;
 
-  GtkIconData *data;
-
   /* Information about the directory where
    * the source was found
    */
@@ -257,7 +255,6 @@ struct _GtkIconInfo
    */
   gint desired_size;
   gint desired_scale;
-  guint raw_coordinates : 1;
   guint forced_size     : 1;
   guint emblems_applied : 1;
   guint is_svg          : 1;
@@ -304,7 +301,6 @@ typedef struct
   GtkIconCache *cache;
   
   GHashTable *icons;
-  GHashTable *icon_data;
 } IconThemeDir;
 
 typedef struct
@@ -350,13 +346,6 @@ static void         do_theme_change   (GtkIconTheme     *icon_theme);
 
 static void     blow_themes               (GtkIconTheme    *icon_themes);
 static gboolean rescan_themes             (GtkIconTheme    *icon_themes);
-
-static GtkIconData *icon_data_dup      (GtkIconData     *icon_data);
-static GtkIconData *icon_data_ref      (GtkIconData     *icon_data);
-static void  icon_data_unref           (GtkIconData     *icon_data);
-static void load_icon_data             (IconThemeDir    *dir,
-			                const char      *path,
-			                const char      *name);
 
 static IconSuffix theme_dir_get_icon_suffix (IconThemeDir *dir,
 					     const gchar  *icon_name,
@@ -2703,8 +2692,6 @@ theme_dir_destroy (IconThemeDir *dir)
   else
     g_hash_table_destroy (dir->icons);
   
-  if (dir->icon_data)
-    g_hash_table_destroy (dir->icon_data);
   g_free (dir->dir);
   g_free (dir->subdir);
   g_free (dir);
@@ -2972,42 +2959,6 @@ theme_lookup_icon (IconTheme          *theme,
           icon_info->icon_file = NULL;
         }
 
-      if (min_dir->icon_data != NULL)
-        icon_info->data = icon_data_ref (g_hash_table_lookup (min_dir->icon_data, icon_name));
-
-      if (icon_info->data == NULL && min_dir->cache != NULL)
-	{
-	  icon_info->data = _gtk_icon_cache_get_icon_data (min_dir->cache, icon_name, min_dir->subdir_index);
-	  if (icon_info->data)
-	    {
-	      if (min_dir->icon_data == NULL)
-		min_dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
-							    g_free, (GDestroyNotify)icon_data_unref);
-
-	      g_hash_table_replace (min_dir->icon_data, g_strdup (icon_name), icon_data_ref (icon_info->data));
-	    }
-	}
-
-      if (icon_info->data == NULL && has_icon_file)
-	{
-	  gchar *icon_file_name, *icon_file_path;
-
-	  icon_file_name = g_strconcat (icon_name, ".icon", NULL);
-	  icon_file_path = g_build_filename (min_dir->dir, icon_file_name, NULL);
-
-	  if (g_file_test (icon_file_path, G_FILE_TEST_IS_REGULAR))
-	    {
-	      if (min_dir->icon_data == NULL)	
-		min_dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
-							    g_free, (GDestroyNotify)icon_data_unref);
-	      load_icon_data (min_dir, icon_file_path, icon_file_name);
-	      
-	      icon_info->data = icon_data_ref (g_hash_table_lookup (min_dir->icon_data, icon_name));
-	    }
-	  g_free (icon_file_name);
-	  g_free (icon_file_path);
-	}
-
       if (min_dir->cache)
 	{
 	  icon_info->cache_pixbuf = _gtk_icon_cache_get_icon (min_dir->cache, icon_name,
@@ -3076,89 +3027,6 @@ theme_list_contexts (IconTheme  *theme,
 }
 
 static void
-load_icon_data (IconThemeDir *dir, const char *path, const char *name)
-{
-  GKeyFile *icon_file;
-  char *base_name;
-  char **split;
-  gsize length;
-  char *str;
-  char *split_point;
-  int i;
-  gint *ivalues;
-  GError *error = NULL;
-  GtkIconData *data;
-
-  icon_file = g_key_file_new ();
-  g_key_file_set_list_separator (icon_file, ',');
-  g_key_file_load_from_file (icon_file, path, 0, &error);
-  if (error)
-    {
-      g_error_free (error);
-      g_key_file_free (icon_file);      
-      return;
-    }
-  else
-    {
-      base_name = strip_suffix (name);
-
-      data = g_slice_new0 (GtkIconData);
-      data->ref = 1;
-
-      /* takes ownership of base_name */
-      g_hash_table_replace (dir->icon_data, base_name, data);
-      
-      ivalues = g_key_file_get_integer_list (icon_file, 
-					     "Icon Data", "EmbeddedTextRectangle",
-					      &length, NULL);
-      if (ivalues)
-	{
-	  if (length == 4)
-	    {
-	      data->has_embedded_rect = TRUE;
-	      data->x0 = ivalues[0];
-	      data->y0 = ivalues[1];
-	      data->x1 = ivalues[2];
-	      data->y1 = ivalues[3];
-	    }
-	  
-	  g_free (ivalues);
-	}
-      
-      str = g_key_file_get_string (icon_file, "Icon Data", "AttachPoints", NULL);
-      if (str)
-	{
-	  split = g_strsplit (str, "|", -1);
-	  
-	  data->n_attach_points = g_strv_length (split);
-	  data->attach_points = g_new (GdkPoint, data->n_attach_points);
-
-	  i = 0;
-	  while (split[i] != NULL && i < data->n_attach_points)
-	    {
-	      split_point = strchr (split[i], ',');
-	      if (split_point)
-		{
-		  *split_point = 0;
-		  split_point++;
-		  data->attach_points[i].x = atoi (split[i]);
-		  data->attach_points[i].y = atoi (split_point);
-		}
-	      i++;
-	    }
-	  
-	  g_strfreev (split);
-	  g_free (str);
-	}
-      
-      data->display_name = g_key_file_get_locale_string (icon_file, 
-							 "Icon Data", "DisplayName",
-							 NULL, NULL);
-      g_key_file_free (icon_file);
-    }
-}
-
-static void
 scan_directory (GtkIconThemePrivate *icon_theme,
 		IconThemeDir *dir, char *full_dir)
 {
@@ -3177,24 +3045,8 @@ scan_directory (GtkIconThemePrivate *icon_theme,
 
   while ((name = g_dir_read_name (gdir)))
     {
-      char *path;
       char *base_name;
       IconSuffix suffix, hash_suffix;
-
-      if (g_str_has_suffix (name, ".icon"))
-	{
-	  if (dir->icon_data == NULL)
-	    dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
-						    g_free, (GDestroyNotify)icon_data_unref);
-	  
-	  path = g_build_filename (full_dir, name, NULL);
-	  if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
-	    load_icon_data (dir, path, name);
-	  
-	  g_free (path);
-	  
-	  continue;
-	}
 
       suffix = suffix_from_name (name);
       if (suffix == ICON_SUFFIX_NONE)
@@ -3309,7 +3161,6 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 	  dir->max_size = max_size;
 	  dir->threshold = threshold;
 	  dir->dir = full_dir;
-	  dir->icon_data = NULL;
 	  dir->subdir = g_strdup (subdir);
           dir->scale = scale;
 
@@ -3331,50 +3182,6 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 	g_free (full_dir);
     }
 }
-
-static GtkIconData *
-icon_data_ref (GtkIconData *icon_data)
-{
-  if (icon_data)
-    icon_data->ref++;
-  return icon_data;
-}
-
-static void
-icon_data_unref (GtkIconData *icon_data)
-{
-  if (icon_data)
-    {
-      icon_data->ref--;
-      if (icon_data->ref == 0)
-        {
-          g_free (icon_data->attach_points);
-          g_free (icon_data->display_name);
-          g_slice_free (GtkIconData, icon_data);
-        }
-    }
-}
-
-static GtkIconData *
-icon_data_dup (GtkIconData *icon_data)
-{
-  GtkIconData *dup = NULL;
-  if (icon_data)
-    {
-      dup = g_slice_new0 (GtkIconData);
-      dup->ref = 1;
-      *dup = *icon_data;
-      if (dup->n_attach_points > 0)
-	{
-	  dup->attach_points = g_memdup (dup->attach_points,
-					 sizeof (GdkPoint) * dup->n_attach_points);
-	}
-      dup->display_name = g_strdup (dup->display_name);
-    }
-
-  return dup;
-}
-
 
 /*
  * GtkIconInfo
@@ -3437,12 +3244,10 @@ icon_info_dup (GtkIconInfo *icon_info)
   if (icon_info->cache_pixbuf)
     dup->cache_pixbuf = g_object_ref (icon_info->cache_pixbuf);
 
-  dup->data = icon_data_dup (icon_info->data);
   dup->unscaled_scale = icon_info->unscaled_scale;
   dup->threshold = icon_info->threshold;
   dup->desired_size = icon_info->desired_size;
   dup->desired_scale = icon_info->desired_scale;
-  dup->raw_coordinates = icon_info->raw_coordinates;
   dup->forced_size = icon_info->forced_size;
   dup->emblems_applied = icon_info->emblems_applied;
 
@@ -3519,7 +3324,6 @@ gtk_icon_info_finalize (GObject *object)
   g_clear_object (&icon_info->cache_pixbuf);
   g_clear_error (&icon_info->load_error);
   g_clear_pointer (&icon_info->symbolic_pixbuf_size, gtk_requisition_free);
-  icon_data_unref (icon_info->data);
 
   symbolic_pixbuf_cache_free (icon_info->symbolic_pixbuf_cache);
 
@@ -4962,36 +4766,6 @@ void
 gtk_icon_info_set_raw_coordinates (GtkIconInfo *icon_info,
 				   gboolean     raw_coordinates)
 {
-  g_return_if_fail (icon_info != NULL);
-  
-  icon_info->raw_coordinates = raw_coordinates != FALSE;
-}
-
-/* Scale coordinates from the icon data prior to returning
- * them to the user.
- */
-static gboolean
-icon_info_scale_point (GtkIconInfo  *icon_info,
-		       gint          x,
-		       gint          y,
-		       gint         *x_out,
-		       gint         *y_out)
-{
-  if (icon_info->raw_coordinates)
-    {
-      *x_out = x;
-      *y_out = y;
-    }
-  else
-    {
-      if (!icon_info_ensure_scale_and_pixbuf (icon_info, TRUE))
-	return FALSE;
-
-      *x_out = 0.5 + x * icon_info->scale;
-      *y_out = 0.5 + y * icon_info->scale;
-    }
-
-  return TRUE;
 }
 
 /**
@@ -5001,13 +4775,9 @@ icon_info_scale_point (GtkIconInfo  *icon_info,
  *   rectangle coordinates; coordinates are only stored
  *   when this function returns %TRUE.
  *
- * Gets the coordinates of a rectangle within the icon
- * that can be used for display of information such
- * as a preview of the contents of a text file.
- * See gtk_icon_info_set_raw_coordinates() for further
- * information about the coordinate system.
+ * This function is deprecated and always returns %FALSE.
  * 
- * Returns: %TRUE if the icon has an embedded rectangle
+ * Returns: %FALSE
  *
  * Since: 2.4
  *
@@ -5017,33 +4787,7 @@ gboolean
 gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
 				 GdkRectangle *rectangle)
 {
-  g_return_val_if_fail (icon_info != NULL, FALSE);
-
-  if (icon_info->data && icon_info->data->has_embedded_rect &&
-      icon_info_ensure_scale_and_pixbuf (icon_info, TRUE))
-    {
-      gint scaled_x0, scaled_y0;
-      gint scaled_x1, scaled_y1;
-      
-      if (rectangle)
-	{
-	  icon_info_scale_point (icon_info,
-				 icon_info->data->x0, icon_info->data->y0,
-				 &scaled_x0, &scaled_y0);
-	  icon_info_scale_point (icon_info,
-				 icon_info->data->x1, icon_info->data->y1,
-				 &scaled_x1, &scaled_y1);
-	  
-	  rectangle->x = scaled_x0;
-	  rectangle->y = scaled_y0;
-	  rectangle->width = scaled_x1 - rectangle->x;
-	  rectangle->height = scaled_y1 - rectangle->y;
-	}
-
-      return TRUE;
-    }
-  else
-    return FALSE;
+  return FALSE;
 }
 
 /**
@@ -5053,11 +4797,9 @@ gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
  *          free the array of points with g_free().
  * @n_points: (allow-none): location to store the number of points in @points, or %NULL
  * 
- * Fetches the set of attach points for an icon. An attach point
- * is a location in the icon that can be used as anchor points for attaching
- * emblems or overlays to the icon.
+ * This function is deprecated and always returns %FALSE.
  * 
- * Returns: %TRUE if there are any attach points for the icon.
+ * Returns: %FALSE
  *
  * Since: 2.4
  *
@@ -5068,51 +4810,16 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
 				 GdkPoint   **points,
 				 gint        *n_points)
 {
-  g_return_val_if_fail (icon_info != NULL, FALSE);
-  
-  if (icon_info->data && icon_info->data->n_attach_points &&
-      icon_info_ensure_scale_and_pixbuf (icon_info, TRUE))
-    {
-      if (points)
-	{
-	  gint i;
-	  
-	  *points = g_new (GdkPoint, icon_info->data->n_attach_points);
-	  for (i = 0; i < icon_info->data->n_attach_points; i++)
-	    icon_info_scale_point (icon_info,
-				   icon_info->data->attach_points[i].x,
-				   icon_info->data->attach_points[i].y,
-				   &(*points)[i].x,
-				   &(*points)[i].y);
-	}
-	  
-      if (n_points)
-	*n_points = icon_info->data->n_attach_points;
-
-      return TRUE;
-    }
-  else
-    {
-      if (points)
-	*points = NULL;
-      if (n_points)
-	*n_points = 0;
-      
-      return FALSE;
-    }
+  return FALSE;
 }
 
 /**
  * gtk_icon_info_get_display_name:
  * @icon_info: a #GtkIconInfo
  * 
- * Gets the display name for an icon. A display name is a
- * string to be used in place of the icon name in a user
- * visible context like a list of icons.
+ * This function is deprecated and always returns %NULL.
  * 
- * Returns: the display name for the icon or %NULL, if
- *  the icon doesn’t have a specified display name. This value
- *  is owned @icon_info and must not be modified or free.
+ * Returns: %NULL
  *
  * Since: 2.4
  *
@@ -5121,12 +4828,7 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
 const gchar *
 gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
 {
-  g_return_val_if_fail (icon_info != NULL, NULL);
-
-  if (icon_info->data)
-    return icon_info->data->display_name;
-  else
-    return NULL;
+  return NULL;
 }
 
 /*
