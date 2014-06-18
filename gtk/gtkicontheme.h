@@ -352,18 +352,18 @@ GdkPixbuf *           gtk_icon_info_load_symbolic_for_style  (GtkIconInfo   *ico
                                                               GtkStateType   state,
                                                               gboolean      *was_symbolic,
                                                               GError       **error);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_icon_info_set_raw_coordinates (GtkIconInfo  *icon_info,
 							 gboolean      raw_coordinates);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean              gtk_icon_info_get_embedded_rect (GtkIconInfo    *icon_info,
 						       GdkRectangle   *rectangle);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean              gtk_icon_info_get_attach_points (GtkIconInfo    *icon_info,
 						       GdkPoint      **points,
 						       gint           *n_points);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 const gchar *         gtk_icon_info_get_display_name  (GtkIconInfo    *icon_info);
 
 G_END_DECLS

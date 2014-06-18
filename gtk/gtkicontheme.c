@@ -4955,6 +4955,8 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
  * for older API's, and is not expected to be useful for applications.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Embedded rectangles and attachment points are deprecated
  **/
 void
 gtk_icon_info_set_raw_coordinates (GtkIconInfo *icon_info,
@@ -5008,6 +5010,8 @@ icon_info_scale_point (GtkIconInfo  *icon_info,
  * Returns: %TRUE if the icon has an embedded rectangle
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Embedded rectangles are deprecated
  **/
 gboolean
 gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
@@ -5056,6 +5060,8 @@ gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
  * Returns: %TRUE if there are any attach points for the icon.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Attachment points are deprecated
  **/
 gboolean
 gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
@@ -5109,6 +5115,8 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
  *  is owned @icon_info and must not be modified or free.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Display names are deprecated
  **/
 const gchar *
 gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
