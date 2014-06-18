@@ -206,7 +206,7 @@
   border-width: 1px;
   border-style: solid;
   color: #2e3436;
-  background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+  background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
   border-color: #a1a1a1;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
@@ -308,7 +308,7 @@
     border-width: 1px;
     border-style: solid;
     color: white;
-    background-image: linear-gradient(to bottom, #89b7e6, #4a90d9 40%, #2a76c6);
+    background-image: linear-gradient(to bottom, #5f9ddd, #4a90d9 40%, #3583d5);
     border-color: #1c5187;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
@@ -360,7 +360,7 @@
     border-width: 1px;
     border-style: solid;
     color: white;
-    background-image: linear-gradient(to bottom, #f47070, #ef2929 40%, #d51010);
+    background-image: linear-gradient(to bottom, #f14141, #ef2929 40%, #ed1212);
     border-color: #8e0b0b;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
@@ -469,7 +469,7 @@ GtkColorButton.button {
   border-width: 1px;
   border-style: solid;
   color: #2e3436;
-  background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+  background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
   border-color: #a1a1a1;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
@@ -521,7 +521,7 @@ GtkColorButton.button {
   border-width: 1px;
   border-style: solid;
   color: #2e3436;
-  background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+  background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
   border-color: #a1a1a1;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
@@ -566,7 +566,7 @@ GtkColorButton.button {
   border-width: 1px;
   border-style: solid;
   color: #2e3436;
-  background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+  background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
   border-color: #a1a1a1;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
@@ -738,7 +738,7 @@ GtkComboBox {
       border-width: 1px;
       border-style: solid;
       color: white;
-      background-image: linear-gradient(to bottom, #89b7e6, #4a90d9 40%, #2a76c6);
+      background-image: linear-gradient(to bottom, #5f9ddd, #4a90d9 40%, #3583d5);
       border-color: #1c5187;
       text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
@@ -797,7 +797,7 @@ GtkComboBox {
         border-width: 1px;
         border-style: solid;
         color: #2e3436;
-        background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+        background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
         border-color: #a1a1a1;
         text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
         icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
@@ -1306,7 +1306,7 @@ GtkSwitch {
     border-width: 1px;
     border-style: solid;
     color: #2e3436;
-    background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+    background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
     border-color: #a1a1a1;
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
@@ -1691,7 +1691,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     border-width: 1px;
     border-style: solid;
     color: #2e3436;
-    background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+    background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
     border-color: #a1a1a1;
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
@@ -2220,7 +2220,7 @@ GtkMessageDialog .titlebar {
   border-width: 1px;
   border-style: solid;
   color: #2e3436;
-  background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+  background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
   border-color: #a1a1a1;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
@@ -2340,7 +2340,7 @@ GtkInfoBar {
     border-width: 1px;
     border-style: solid;
     color: white;
-    background-image: linear-gradient(to bottom, #89b7e6, #4a90d9 40%, #2a76c6);
+    background-image: linear-gradient(to bottom, #5f9ddd, #4a90d9 40%, #3583d5);
     border-color: #1c5187;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
@@ -2506,7 +2506,7 @@ GtkColorChooserWidget #add-color-button {
     border-width: 1px;
     border-style: solid;
     color: #2e3436;
-    background-image: linear-gradient(to bottom, white, #ededed 40%, lightgray);
+    background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
     border-color: #a1a1a1;
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);

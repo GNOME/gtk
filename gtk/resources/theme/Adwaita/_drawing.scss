@@ -124,20 +124,11 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   // normal button
   //
     color: $tc;
-    @if lightness($c) < 50% { //darker buttons need a less contrasty gradient
-      background-image: linear-gradient(to bottom,
+    background-image: linear-gradient(to bottom,
                                   lighten($c,5%),
                                   $c 40%,
                                   darken($c,5%)
                                   );
-    }
-    @else {
-      background-image: linear-gradient(to bottom,
-                                  lighten($c,15%),
-                                  $c 40%,
-                                  darken($c,10%)
-                                  );
-    }
 
     @if $c!=$bg_color { @include _button_border_color($c); }
     @else { border-color: $borders_color; }
