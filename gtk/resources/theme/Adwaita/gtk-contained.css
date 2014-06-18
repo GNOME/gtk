@@ -1062,7 +1062,7 @@ GtkPopover {
     .notebook tab.right {
       padding-left: 17px;
       border-left-width: 3px; }
-    .notebook tab:hover {
+    .notebook tab:hover, .notebook tab:prelight-page {
       border-color: #a1a1a1; }
     .notebook tab:active, .notebook tab:backdrop:active {
       border-color: #4a90d9; }
@@ -1073,7 +1073,7 @@ GtkPopover {
       border-color: transparent;
       border-left: 1px solid transparent;
       border-right: 1px solid transparent; }
-      .notebook tab.reorderable-page:hover {
+      .notebook tab.reorderable-page:hover, .notebook tab.reorderable-page.prelight-page {
         border-color: rgba(161, 161, 161, 0.3);
         border-bottom-color: rgba(161, 161, 161, 0.3);
         background-color: rgba(237, 237, 237, 0.2); }
@@ -1094,7 +1094,8 @@ GtkPopover {
     .notebook tab GtkLabel {
       padding: 0 2px;
       font-weight: bold;
-      color: #8d9091; }
+      color: #8d9091;
+      /* color: inherit doesn't work here */ }
       .notebook tab GtkLabel.prelight-page {
         color: #5d6263; }
       .notebook tab GtkLabel.active-page {
@@ -2327,7 +2328,8 @@ GtkInfoBar {
 
 .tooltip * {
   padding: 4px;
-  background-color: transparent; }
+  background-color: transparent;
+  color: inherit; }
 
 /*****************
  * Color Chooser *

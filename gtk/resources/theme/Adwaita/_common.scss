@@ -917,7 +917,7 @@ GtkPopover {
     }
 
     //here's the interesting stuff
-    &:hover {
+    &:hover, &:prelight-page {
       border-color: $borders_color;
     }
     &:active, &:backdrop:active {
@@ -931,7 +931,7 @@ GtkPopover {
       border-color: transparent;
       border-left: 1px solid transparent;
       border-right: 1px solid transparent;
-      &:hover {
+      &:hover, &.prelight-page {
         border-color: transparentize($borders_color,0.7);
         border-bottom-color: transparentize($borders_color,0.7);
         background-color: transparentize($bg_color,0.8);
@@ -959,7 +959,7 @@ GtkPopover {
       // this doesn't affect labels on reorderable pages, not css fault.
       padding: 0 2px; // needed for a nicer focus ring
       font-weight: bold;
-      color: $insensitive_fg_color;
+      color: $insensitive_fg_color; /* color: inherit doesn't work here */
 
       // prelight tab text
       &.prelight-page {
@@ -1748,6 +1748,7 @@ GtkInfoBar {
 .tooltip * { //Yeah this is ugly
   padding: 4px;
   background-color: transparent;
+  color: inherit; // just to be sure
 }
 
 /*****************
