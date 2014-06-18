@@ -1050,6 +1050,26 @@ GtkPopover {
       padding: 8px 20px; }
     .notebook tab.left, .notebook tab.right {
       padding: 5px 20px; }
+    .notebook tab.reorderable-page.top {
+      padding-top: 7px;
+      border-top-width: 1px;
+      border-left-width: 1px;
+      border-right-width: 1px; }
+    .notebook tab.reorderable-page.bottom {
+      padding-bottom: 7px;
+      border-bottom-width: 1px;
+      border-left-width: 1px;
+      border-right-width: 1px; }
+    .notebook tab.reorderable-page.left {
+      padding-left: 19px;
+      border-left-width: 1px;
+      border-top-width: 1px;
+      border-bottom-width: 1px; }
+    .notebook tab.reorderable-page.right {
+      padding-right: 19px;
+      border-right-width: 1px;
+      border-top-width: 1px;
+      border-bottom-width: 1px; }
     .notebook tab.top {
       padding-bottom: 5px;
       border-bottom-width: 3px; }
@@ -1069,26 +1089,80 @@ GtkPopover {
     .notebook tab:backdrop {
       background-color: transparent;
       border-color: transparent; }
-    .notebook tab.reorderable-page {
-      border-color: transparent;
-      border-left: 1px solid transparent;
-      border-right: 1px solid transparent; }
-      .notebook tab.reorderable-page:hover, .notebook tab.reorderable-page.prelight-page {
+    .notebook tab.reorderable-page.top {
+      border-color: transparent; }
+      .notebook tab.reorderable-page.top:hover, .notebook tab.reorderable-page.top.prelight-page {
         border-color: rgba(28, 31, 31, 0.3);
         border-bottom-color: rgba(28, 31, 31, 0.3);
         background-color: rgba(57, 63, 63, 0.2); }
-      .notebook tab.reorderable-page:active, .notebook tab.reorderable-page.active-page {
+      .notebook tab.reorderable-page.top:active, .notebook tab.reorderable-page.top.active-page {
         background-color: rgba(57, 63, 63, 0.5);
         border-color: rgba(28, 31, 31, 0.5);
         border-bottom-color: #215d9c; }
-        .notebook tab.reorderable-page:active:hover, .notebook tab.reorderable-page.active-page:hover {
+        .notebook tab.reorderable-page.top:active:hover, .notebook tab.reorderable-page.top.active-page:hover {
           background-color: rgba(57, 63, 63, 0.7); }
-        .notebook tab.reorderable-page:active:backdrop, .notebook tab.reorderable-page.active-page:backdrop {
-          border-left-color: #1e2222;
-          border-right-color: #1e2222;
+        .notebook tab.reorderable-page.top:active:backdrop, .notebook tab.reorderable-page.top.active-page:backdrop {
+          border-color: #1e2222;
           background-color: #393f3f;
           border-bottom-color: #215d9c; }
-      .notebook tab.reorderable-page:backdrop {
+      .notebook tab.reorderable-page.top:backdrop {
+        border-color: transparent;
+        background-color: transparent; }
+    .notebook tab.reorderable-page.bottom {
+      border-color: transparent; }
+      .notebook tab.reorderable-page.bottom:hover, .notebook tab.reorderable-page.bottom.prelight-page {
+        border-color: rgba(28, 31, 31, 0.3);
+        border-top-color: rgba(28, 31, 31, 0.3);
+        background-color: rgba(57, 63, 63, 0.2); }
+      .notebook tab.reorderable-page.bottom:active, .notebook tab.reorderable-page.bottom.active-page {
+        background-color: rgba(57, 63, 63, 0.5);
+        border-color: rgba(28, 31, 31, 0.5);
+        border-top-color: #215d9c; }
+        .notebook tab.reorderable-page.bottom:active:hover, .notebook tab.reorderable-page.bottom.active-page:hover {
+          background-color: rgba(57, 63, 63, 0.7); }
+        .notebook tab.reorderable-page.bottom:active:backdrop, .notebook tab.reorderable-page.bottom.active-page:backdrop {
+          border-color: #1e2222;
+          background-color: #393f3f;
+          border-top-color: #215d9c; }
+      .notebook tab.reorderable-page.bottom:backdrop {
+        border-color: transparent;
+        background-color: transparent; }
+    .notebook tab.reorderable-page.left {
+      border-color: transparent; }
+      .notebook tab.reorderable-page.left:hover, .notebook tab.reorderable-page.left.prelight-page {
+        border-color: rgba(28, 31, 31, 0.3);
+        border-right-color: rgba(28, 31, 31, 0.3);
+        background-color: rgba(57, 63, 63, 0.2); }
+      .notebook tab.reorderable-page.left:active, .notebook tab.reorderable-page.left.active-page {
+        background-color: rgba(57, 63, 63, 0.5);
+        border-color: rgba(28, 31, 31, 0.5);
+        border-right-color: #215d9c; }
+        .notebook tab.reorderable-page.left:active:hover, .notebook tab.reorderable-page.left.active-page:hover {
+          background-color: rgba(57, 63, 63, 0.7); }
+        .notebook tab.reorderable-page.left:active:backdrop, .notebook tab.reorderable-page.left.active-page:backdrop {
+          border-color: #1e2222;
+          background-color: #393f3f;
+          border-right-color: #215d9c; }
+      .notebook tab.reorderable-page.left:backdrop {
+        border-color: transparent;
+        background-color: transparent; }
+    .notebook tab.reorderable-page.right {
+      border-color: transparent; }
+      .notebook tab.reorderable-page.right:hover, .notebook tab.reorderable-page.right.prelight-page {
+        border-color: rgba(28, 31, 31, 0.3);
+        border-left-color: rgba(28, 31, 31, 0.3);
+        background-color: rgba(57, 63, 63, 0.2); }
+      .notebook tab.reorderable-page.right:active, .notebook tab.reorderable-page.right.active-page {
+        background-color: rgba(57, 63, 63, 0.5);
+        border-color: rgba(28, 31, 31, 0.5);
+        border-left-color: #215d9c; }
+        .notebook tab.reorderable-page.right:active:hover, .notebook tab.reorderable-page.right.active-page:hover {
+          background-color: rgba(57, 63, 63, 0.7); }
+        .notebook tab.reorderable-page.right:active:backdrop, .notebook tab.reorderable-page.right.active-page:backdrop {
+          border-color: #1e2222;
+          background-color: #393f3f;
+          border-left-color: #215d9c; }
+      .notebook tab.reorderable-page.right:backdrop {
         border-color: transparent;
         background-color: transparent; }
     .notebook tab GtkLabel {
@@ -1135,10 +1209,6 @@ GtkPopover {
         border-color: transparent; }
       .notebook tab .button > GtkImage {
         padding: 2px; }
-
-.notebook > .frame,
-.notebook > .view {
-  border: none; }
 
 /**************
  * Scrollbars *
