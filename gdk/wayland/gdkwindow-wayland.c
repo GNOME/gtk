@@ -1075,6 +1075,17 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
 
   if (impl->surface)
     {
+      if (impl->xdg_surface)
+        {
+          xdg_surface_destroy (impl->xdg_surface);
+          impl->xdg_surface = NULL;
+        }
+      else if (impl->xdg_popup)
+        {
+          xdg_popup_destroy (impl->xdg_popup);
+          impl->xdg_popup = NULL;
+        }
+
       if (!is_destroy)
         {
           wl_surface_attach (impl->surface, NULL, 0, 0);
@@ -1087,17 +1098,6 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
 
           g_slist_free (impl->outputs);
           impl->outputs = NULL;
-        }
-
-      if (impl->xdg_surface)
-        {
-          xdg_surface_destroy (impl->xdg_surface);
-          impl->xdg_surface = NULL;
-        }
-      else if (impl->xdg_popup)
-        {
-          xdg_popup_destroy (impl->xdg_popup);
-          impl->xdg_popup = NULL;
         }
     }
 
