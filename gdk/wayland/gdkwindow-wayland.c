@@ -1068,8 +1068,7 @@ gdk_wayland_window_show (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_hide_surface (GdkWindow *window,
-                                 gboolean   is_destroy)
+gdk_wayland_window_hide_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
@@ -1086,19 +1085,11 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
           impl->xdg_popup = NULL;
         }
 
-      if (!is_destroy)
-        {
-          wl_surface_attach (impl->surface, NULL, 0, 0);
-          wl_surface_commit (impl->surface);
-        }
-      else
-        {
-          wl_surface_destroy (impl->surface);
-          impl->surface = NULL;
+      wl_surface_destroy (impl->surface);
+      impl->surface = NULL;
 
-          g_slist_free (impl->outputs);
-          impl->outputs = NULL;
-        }
+      g_slist_free (impl->outputs);
+      impl->outputs = NULL;
     }
 
   impl->mapped = FALSE;
@@ -1107,7 +1098,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
 static void
 gdk_wayland_window_hide (GdkWindow *window)
 {
-  gdk_wayland_window_hide_surface (window, FALSE);
+  gdk_wayland_window_hide_surface (window);
   _gdk_window_clear_update_area (window);
 }
 
@@ -1121,7 +1112,7 @@ gdk_window_wayland_withdraw (GdkWindow *window)
 
       g_assert (!GDK_WINDOW_IS_MAPPED (window));
 
-      gdk_wayland_window_hide_surface (window, FALSE);
+      gdk_wayland_window_hide_surface (window);
     }
 }
 
@@ -1332,7 +1323,7 @@ gdk_wayland_window_destroy (GdkWindow *window,
    */
   g_return_if_fail (!foreign_destroy);
 
-  gdk_wayland_window_hide_surface (window, TRUE);
+  gdk_wayland_window_hide_surface (window);
 
   if (impl->cairo_surface)
     cairo_surface_finish (impl->cairo_surface);
