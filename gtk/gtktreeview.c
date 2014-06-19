@@ -4553,7 +4553,6 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
   gdouble start_x, start_y, offset_x, offset_y, x, y;
   GdkRectangle old_area;
   GdkRectangle new_area;
-  GdkRectangle common;
   cairo_region_t *invalid_region;
   gint bin_x, bin_y;
 
@@ -4583,23 +4582,6 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
 
   invalid_region = cairo_region_create_rectangle (&old_area);
   cairo_region_union_rectangle (invalid_region, &new_area);
-
-  gdk_rectangle_intersect (&old_area, &new_area, &common);
-  if (common.width > 2 && common.height > 2)
-    {
-      cairo_region_t *common_region;
-
-      /* make sure the border is invalidated */
-      common.x += 1;
-      common.y += 1;
-      common.width -= 2;
-      common.height -= 2;
-
-      common_region = cairo_region_create_rectangle (&common);
-
-      cairo_region_subtract (invalid_region, common_region);
-      cairo_region_destroy (common_region);
-    }
 
   gdk_window_invalidate_region (tree_view->priv->bin_window, invalid_region, TRUE);
 
