@@ -143,6 +143,10 @@ test_icontheme =					\
 	icons/scalable/everything-justsymbolic-symbolic.svg	\
 	icons/scalable/everything.svg			\
 	icons/scalable/everything-symbolic.svg		\
+	icons/15/size-test.png				\
+	icons/16-22/size-test.png			\
+	icons/25+/size-test.svg				\
+	icons/35+/size-test.svg				\
 	$(NULL)
 
 EXTRA_DIST +=				\
