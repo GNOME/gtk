@@ -105,6 +105,10 @@
     color: #c9cbc9;
     background-color: #2c2c2c; }
 
+.rubberband {
+  border: 1px solid #215d9c;
+  background-color: rgba(33, 93, 156, 0.2); }
+
 /*********************
  * Spinner Animation *
  *********************/
