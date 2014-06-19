@@ -596,11 +596,11 @@ gdk_wayland_window_configure (GdkWindow *window,
   GdkDisplay *display;
   GdkEvent *event;
 
+  if (window->width == width && window->height == height)
+    return;
+
   display = gdk_window_get_display (window);
 
-  /* TODO: Only generate a configure event if width/height/scale have actually
-   * changed?
-   */
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = window;
   event->configure.send_event = FALSE;
