@@ -5188,8 +5188,10 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
           gtk_style_context_set_state (context, state);
 
           gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_style_context_add_region (context, GTK_STYLE_REGION_ROW, row_flags);
           gtk_style_context_add_region (context, GTK_STYLE_REGION_COLUMN, column_flags);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 	  if (node == tree_view->priv->cursor_node && has_can_focus_cell
               && ((column == tree_view->priv->focus_column
@@ -14574,7 +14576,9 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_add_region (context, GTK_STYLE_REGION_COLUMN, 0);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_style_get (widget,
 			"allow-rules", &allow_rules,
@@ -14589,7 +14593,9 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       else
         row_flags = GTK_REGION_EVEN;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_style_context_add_region (context, GTK_STYLE_REGION_ROW, row_flags);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   is_separator = row_is_separator (tree_view, &iter, NULL);

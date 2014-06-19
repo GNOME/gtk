@@ -648,6 +648,8 @@ gtk_theming_engine_has_class (GtkThemingEngine *engine,
  * Returns: %TRUE if region is defined
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 gboolean
 gtk_theming_engine_has_region (GtkThemingEngine *engine,
@@ -662,7 +664,9 @@ gtk_theming_engine_has_region (GtkThemingEngine *engine,
   g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
 
   priv = engine->priv;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   return gtk_style_context_has_region (priv->context, style_region, flags);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**

@@ -232,7 +232,7 @@ const GtkWidgetPath * gtk_theming_engine_get_path (GtkThemingEngine *engine);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_theming_engine_has_class  (GtkThemingEngine *engine,
                                         const gchar      *style_class);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean gtk_theming_engine_has_region (GtkThemingEngine *engine,
                                         const gchar      *style_region,
                                         GtkRegionFlags   *flags);

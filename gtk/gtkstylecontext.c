@@ -79,14 +79,18 @@
  * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
  * widget.
  *
- * # Style Classes and Regions # {#gtkstylecontext-classes}
+ * # Style Classes # {#gtkstylecontext-classes}
  *
  * Widgets can add style classes to their context, which can be used
  * to associate different styles by class
  * (see [Selectors][gtkcssprovider-selectors]).
  * Theme engines can also use style classes to vary their rendering.
  *
- * Widgets can also add regions with flags to their context.
+ * # Style Regions
+ *
+ * Widgets can also add regions with flags to their context. This feature is
+ * deprecated and will be removed in a future GTK+ update. Please use style
+ * classes instead.
  *
  * The regions used by GTK+ widgets are:
  *
@@ -1823,6 +1827,8 @@ gtk_style_context_list_classes (GtkStyleContext *context)
  *          itself with g_list_free() when you are done with it.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 GList *
 gtk_style_context_list_regions (GtkStyleContext *context)
@@ -1902,6 +1908,8 @@ _gtk_style_context_check_region_name (const gchar *str)
  * and “-”, starting always with a lowercase letter.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_style_context_add_region (GtkStyleContext *context,
@@ -1943,6 +1951,8 @@ gtk_style_context_add_region (GtkStyleContext *context,
  * Removes a region from @context.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 void
 gtk_style_context_remove_region (GtkStyleContext *context,
@@ -1986,6 +1996,8 @@ gtk_style_context_remove_region (GtkStyleContext *context,
  * Returns: %TRUE if region is defined
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14
  **/
 gboolean
 gtk_style_context_has_region (GtkStyleContext *context,

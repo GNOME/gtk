@@ -939,17 +939,17 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_context_has_class    (GtkStyleContext *context,
                                          const gchar     *class_name);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GList *  gtk_style_context_list_regions (GtkStyleContext *context);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void     gtk_style_context_add_region    (GtkStyleContext    *context,
                                           const gchar        *region_name,
                                           GtkRegionFlags      flags);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void     gtk_style_context_remove_region (GtkStyleContext    *context,
                                           const gchar        *region_name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean gtk_style_context_has_region    (GtkStyleContext    *context,
                                           const gchar        *region_name,
                                           GtkRegionFlags     *flags_return);

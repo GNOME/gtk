@@ -2035,7 +2035,9 @@ notebook_tab_prepare_style_context (GtkNotebook *notebook,
   if (use_flags && (page != NULL))
     flags = _gtk_notebook_get_tab_flags (notebook, page);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, flags);
+G_GNUC_END_IGNORE_DEPRECATIONS
   add_tab_position_style_class (context, tab_pos);
 
   return state;
