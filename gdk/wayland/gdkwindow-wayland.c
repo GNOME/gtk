@@ -602,15 +602,13 @@ gdk_wayland_window_configure (GdkWindow *window,
   display = gdk_window_get_display (window);
 
   event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = window;
+  event->configure.window = g_object_ref (window);
   event->configure.send_event = FALSE;
   event->configure.width = width;
   event->configure.height = height;
 
   gdk_wayland_window_update_size (window, width, height);
   _gdk_window_update_size (window);
-
-  g_object_ref(window);
 
   _gdk_wayland_display_deliver_event (display, event);
 }
