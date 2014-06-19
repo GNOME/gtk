@@ -535,7 +535,7 @@ special_directory_get_gicon (GUserDirectory directory)
     ICON_CASE (VIDEOS);
 
     default:
-      return g_themed_icon_new_with_default_fallbacks ("folder-symbolic");
+      return g_themed_icon_new_with_default_fallbacks (ICON_NAME_FOLDER);
     }
 
 #undef ICON_CASE
