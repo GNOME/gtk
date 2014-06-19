@@ -2522,7 +2522,6 @@ gtk_icon_view_update_rubberband (gpointer data)
   gint x, y;
   GdkRectangle old_area;
   GdkRectangle new_area;
-  GdkRectangle common;
   cairo_region_t *invalid_region;
   
   icon_view = GTK_ICON_VIEW (data);
@@ -2551,23 +2550,6 @@ gtk_icon_view_update_rubberband (gpointer data)
   invalid_region = cairo_region_create_rectangle (&old_area);
   cairo_region_union_rectangle (invalid_region, &new_area);
 
-  gdk_rectangle_intersect (&old_area, &new_area, &common);
-  if (common.width > 2 && common.height > 2)
-    {
-      cairo_region_t *common_region;
-
-      /* make sure the border is invalidated */
-      common.x += 1;
-      common.y += 1;
-      common.width -= 2;
-      common.height -= 2;
-      
-      common_region = cairo_region_create_rectangle (&common);
-
-      cairo_region_subtract (invalid_region, common_region);
-      cairo_region_destroy (common_region);
-    }
-  
   gdk_window_invalidate_region (icon_view->priv->bin_window, invalid_region, TRUE);
     
   cairo_region_destroy (invalid_region);
