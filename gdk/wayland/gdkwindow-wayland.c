@@ -831,7 +831,7 @@ xdg_surface_close (void *data,
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DELETE);
-  event->any.window = window;
+  event->any.window = g_object_ref (window);
   event->any.send_event = TRUE;
 
   display = gdk_window_get_display (window);
