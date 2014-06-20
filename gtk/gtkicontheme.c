@@ -184,13 +184,7 @@ struct _GtkIconThemePrivate
   GList *themes;
   GHashTable *unthemed_icons;
 
-  /* Note: The keys of this hashtable are owned by the
-   * themedir and unthemed hashtables.
-   */
-  GHashTable *all_icons;
-
-  /* GdkScreen for the icon theme (may be NULL)
-   */
+  /* GdkScreen for the icon theme (may be NULL) */
   GdkScreen *screen;
 
   /* time when we last stat:ed for theme changes */
@@ -814,7 +808,6 @@ blow_themes (GtkIconTheme *icon_theme)
   
   if (priv->themes_valid)
     {
-      g_hash_table_destroy (priv->all_icons);
       g_list_free_full (priv->themes, (GDestroyNotify) theme_destroy);
       g_list_free_full (priv->dir_mtimes, (GDestroyNotify) free_dir_mtime);
       g_hash_table_destroy (priv->unthemed_icons);
@@ -822,7 +815,6 @@ blow_themes (GtkIconTheme *icon_theme)
   priv->themes = NULL;
   priv->unthemed_icons = NULL;
   priv->dir_mtimes = NULL;
-  priv->all_icons = NULL;
   priv->themes_valid = FALSE;
 }
 
@@ -1225,8 +1217,6 @@ load_themes (GtkIconTheme *icon_theme)
   
   priv = icon_theme->priv;
 
-  priv->all_icons = g_hash_table_new (g_str_hash, g_str_equal);
-  
   if (priv->current_theme)
     insert_theme (icon_theme, priv->current_theme);
 
@@ -1318,11 +1308,7 @@ load_themes (GtkIconTheme *icon_theme)
                     unthemed_icon->no_svg_filename = abs_file;
 
                   /* takes ownership of base_name */
-                  g_hash_table_replace (priv->unthemed_icons,
-                                        base_name,
-                                        unthemed_icon);
-                  g_hash_table_insert (priv->all_icons,
-                                       base_name, NULL);
+                  g_hash_table_replace (priv->unthemed_icons, base_name, unthemed_icon);
                 }
             }
         }
@@ -3068,7 +3054,6 @@ scan_directory (GtkIconThemePrivate *icon_theme,
       base_name = strip_suffix (name);
 
       hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
-      g_hash_table_replace (icon_theme->all_icons, base_name, NULL);
       /* takes ownership of base_name */
       g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
     }
