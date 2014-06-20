@@ -300,6 +300,48 @@ _gtk_icon_cache_get_icon_flags (GtkIconCache *cache,
   return GET_UINT16 (cache->buffer, image_offset + 2);
 }
 
+gboolean
+_gtk_icon_cache_has_icons (GtkIconCache *cache,
+			   const gchar  *directory)
+{
+  int directory_index;
+  guint32 hash_offset, n_buckets;
+  guint32 chain_offset;
+  guint32 image_list_offset, n_images;
+  int i, j;
+
+  directory_index = get_directory_index (cache, directory);
+
+  if (directory_index == -1)
+    return FALSE;
+
+  hash_offset = GET_UINT32 (cache->buffer, 4);
+  n_buckets = GET_UINT32 (cache->buffer, hash_offset);
+
+  for (i = 0; i < n_buckets; i++)
+    {
+      chain_offset = GET_UINT32 (cache->buffer, hash_offset + 4 + 4 * i);
+      while (chain_offset != 0xffffffff)
+	{
+	  guint32 name_offset = GET_UINT32 (cache->buffer, chain_offset + 4);
+
+	  image_list_offset = GET_UINT32 (cache->buffer, chain_offset + 8);
+	  n_images = GET_UINT32 (cache->buffer, image_list_offset);
+
+	  for (j = 0; j < n_images; j++)
+	    {
+	      if (GET_UINT16 (cache->buffer, image_list_offset + 4 + 8 * j) ==
+		  directory_index)
+		return TRUE;
+	    }
+
+	  chain_offset = GET_UINT32 (cache->buffer, chain_offset);
+	}
+    }
+
+  return FALSE;
+}
+
 void
 _gtk_icon_cache_add_icons (GtkIconCache *cache,
 			   const gchar  *directory,
