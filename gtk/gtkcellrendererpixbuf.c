@@ -109,6 +109,7 @@ gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
   priv = cellpixbuf->priv;
 
   priv->icon_helper = _gtk_icon_helper_new ();
+  _gtk_icon_helper_set_force_scale_pixbuf (priv->icon_helper, TRUE);
   priv->icon_size = GTK_ICON_SIZE_MENU;
 }
 
