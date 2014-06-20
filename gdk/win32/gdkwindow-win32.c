@@ -796,16 +796,6 @@ gdk_win32_window_destroy (GdkWindow *window,
     }
 }
 
-static gboolean
-gdk_win32_window_resize_cairo_surface (GdkWindow       *window,
-                                       cairo_surface_t *surface,
-                                       gint             width,
-                                       gint             height)
-{
-  /* XXX: Make Cairo surface use DC clip */
-  return FALSE;
-}
-
 static void
 gdk_win32_window_destroy_foreign (GdkWindow *window)
 {
@@ -3433,7 +3423,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->queue_antiexpose = _gdk_win32_window_queue_antiexpose;
   impl_class->destroy = gdk_win32_window_destroy;
   impl_class->destroy_foreign = gdk_win32_window_destroy_foreign;
-  impl_class->resize_cairo_surface = gdk_win32_window_resize_cairo_surface;
   impl_class->get_shape = gdk_win32_window_get_shape;
   //FIXME?: impl_class->get_input_shape = gdk_win32_window_get_input_shape;
 

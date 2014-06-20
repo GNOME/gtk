@@ -1350,16 +1350,6 @@ gdk_window_wayland_destroy_foreign (GdkWindow *window)
 {
 }
 
-static gboolean
-gdk_window_wayland_resize_cairo_surface (GdkWindow       *window,
-                                         cairo_surface_t *surface,
-                                         gint             width,
-                                         gint             height)
-{
-  /* cairo image surfaces cannot be resized */
-  return FALSE;
-}
-
 static cairo_region_t *
 gdk_wayland_window_get_shape (GdkWindow *window)
 {
@@ -1994,7 +1984,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->queue_antiexpose = gdk_wayland_window_queue_antiexpose;
   impl_class->destroy = gdk_wayland_window_destroy;
   impl_class->destroy_foreign = gdk_window_wayland_destroy_foreign;
-  impl_class->resize_cairo_surface = gdk_window_wayland_resize_cairo_surface;
   impl_class->get_shape = gdk_wayland_window_get_shape;
   impl_class->get_input_shape = gdk_wayland_window_get_input_shape;
   impl_class->begin_paint_region = gdk_window_impl_wayland_begin_paint_region;

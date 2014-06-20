@@ -151,11 +151,10 @@ struct _GdkWindowPaint
 {
   cairo_region_t *region;
   cairo_surface_t *surface;
+  gboolean surface_needs_composite;
 };
 
 /* Global info */
-
-static void             gdk_window_drop_cairo_surface (GdkWindow *private);
 
 static void gdk_window_free_paint_stack (GdkWindow *window);
 
@@ -476,8 +475,6 @@ gdk_window_finalize (GObject *object)
 	 */
 	_gdk_window_destroy (window, TRUE);
     }
-
-  gdk_window_drop_cairo_surface (window);
 
   if (window->impl)
     {
@@ -1002,18 +999,6 @@ recompute_visible_regions_internal (GdkWindow *private,
 					      FALSE);
 	}
     }
-
-  if (private->cairo_surface)
-    {
-      if (!gdk_window_has_impl (private) ||
-          !GDK_WINDOW_IMPL_GET_CLASS (private->impl)->resize_cairo_surface (private,
-                                                                            private->cairo_surface,
-                                                                            private->width,
-                                                                            private->height))
-        {
-          gdk_window_drop_cairo_surface (private);
-        }
-    }
 }
 
 /* Call this when private has changed in one or more of these ways:
@@ -1531,10 +1516,6 @@ gdk_window_reparent (GdkWindow *window,
   if (is_parent_of (window, new_parent))
     return;
 
-  /* This might be wrong in the new parent, e.g. for non-native surfaces.
-     To make sure we're ok, just wipe it. */
-  gdk_window_drop_cairo_surface (window);
-
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
   old_parent = window->parent;
 
@@ -1716,8 +1697,6 @@ gdk_window_ensure_native (GdkWindow *window)
 
   /* Need to create a native window */
 
-  gdk_window_drop_cairo_surface (window);
-
   screen = gdk_window_get_screen (window);
   display = gdk_screen_get_display (screen);
   parent = window->parent;
@@ -1889,7 +1868,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
   if (temp_window == window)
     g_object_set_qdata (G_OBJECT (screen), quark_pointer_window, NULL);
 
-
   switch (window->window_type)
     {
     case GDK_WINDOW_ROOT:
@@ -1986,8 +1964,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	    }
 
 	  _gdk_window_clear_update_area (window);
-
-	  gdk_window_drop_cairo_surface (window);
 
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
@@ -2780,6 +2756,12 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       cairo_surface_get_device_scale (paint->surface, &sx, &sy);
 #endif
       cairo_surface_set_device_offset (paint->surface, -clip_box.x*sx, -clip_box.y*sy);
+
+      paint->surface_needs_composite = TRUE;
+    }
+  else
+    {
+      paint->surface = gdk_window_ref_impl_surface (window);
     }
 
   for (list = window->paint_stack; list != NULL; list = list->next)
@@ -2794,6 +2776,23 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   if (!cairo_region_is_empty (paint->region))
     gdk_window_clear_backing_region (window,
 				     paint->region);
+}
+
+/* This returns either the current working surface on the paint stack
+ * or the actual impl surface of the window. This should not be used
+ * from very many places: be careful! */
+static cairo_surface_t *
+get_window_surface (GdkWindow *window)
+{
+  if (window->impl_window->paint_stack)
+    {
+      GdkWindowPaint *paint = window->impl_window->paint_stack->data;
+      return cairo_surface_reference (paint->surface);
+    }
+  else
+    {
+      return gdk_window_ref_impl_surface (window);
+    }
 }
 
 /**
@@ -2841,14 +2840,18 @@ gdk_window_end_paint (GdkWindow *window)
   window->paint_stack = g_slist_delete_link (window->paint_stack,
 					     window->paint_stack);
 
-
-  if (paint->surface != NULL)
+  if (paint->surface_needs_composite)
     {
+      cairo_surface_t *surface;
+
       cairo_region_get_extents (paint->region, &clip_box);
       full_clip = cairo_region_copy (window->clip_region);
       cairo_region_intersect (full_clip, paint->region);
 
-      cr = gdk_cairo_create (window);
+      surface = get_window_surface (window);
+      cr = cairo_create (surface);
+      cairo_surface_destroy (surface);
+
       cairo_set_source_surface (cr, paint->surface, 0, 0);
       gdk_cairo_region (cr, full_clip);
       cairo_clip (cr);
@@ -2866,9 +2869,9 @@ gdk_window_end_paint (GdkWindow *window)
 
       cairo_destroy (cr);
       cairo_region_destroy (full_clip);
-
-      cairo_surface_destroy (paint->surface);
     }
+
+  cairo_surface_destroy (paint->surface);
 
   cairo_region_destroy (paint->region);
   g_free (paint);
@@ -2908,8 +2911,7 @@ gdk_window_free_paint_stack (GdkWindow *window)
 	{
 	  GdkWindowPaint *paint = tmp_list->data;
 
-	  if (tmp_list == window->paint_stack &&
-	      paint->surface != NULL)
+	  if (tmp_list == window->paint_stack)
 	    cairo_surface_destroy (paint->surface);
 
 	  cairo_region_destroy (paint->region);
@@ -3012,7 +3014,7 @@ gdk_window_clear_backing_region (GdkWindow *window,
   int x_offset = 0, y_offset = 0;
   cairo_t *cr;
 
-  if (GDK_WINDOW_DESTROYED (window) || paint->surface == NULL)
+  if (GDK_WINDOW_DESTROYED (window))
     return;
 
   cr = cairo_create (paint->surface);
@@ -3047,88 +3049,23 @@ gdk_window_clear_backing_region (GdkWindow *window,
   cairo_region_destroy (clip);
 }
 
-static void
-gdk_window_drop_cairo_surface (GdkWindow *window)
-{
-  if (window->cairo_surface)
-    {
-      cairo_surface_finish (window->cairo_surface);
-      cairo_surface_set_user_data (window->cairo_surface, &gdk_window_cairo_key,
-				   NULL, NULL);
-      window->cairo_surface = NULL;
-    }
-}
-
-static void
-gdk_window_cairo_surface_destroy (void *data)
-{
-  GdkWindow *window = data;
-
-  window->cairo_surface = NULL;
-}
-
-static cairo_surface_t *
-gdk_window_create_cairo_surface (GdkWindow *window,
-				 int width,
-				 int height)
-{
-  cairo_surface_t *surface, *subsurface;
-
-  surface = gdk_window_ref_impl_surface (window);
-  if (gdk_window_has_impl (window))
-    return surface;
-
-  subsurface = cairo_surface_create_for_rectangle (surface,
-                                                   window->abs_x,
-                                                   window->abs_y,
-                                                   width,
-                                                   height);
-  cairo_surface_destroy (surface);
-  return subsurface;
-}
-
-
+/* This is used in places like gdk_cairo_set_source_window and
+ * other places to take "screenshots" of windows. Thus, we allow
+ * it to be used outside of a begin_paint / end_paint. */
 cairo_surface_t *
 _gdk_window_ref_cairo_surface (GdkWindow *window)
 {
   cairo_surface_t *surface;
-  GdkWindowPaint *paint;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  paint = NULL;
-  if (window->impl_window->paint_stack)
-    paint = window->impl_window->paint_stack->data;
+  surface = get_window_surface (window);
 
-  if (paint && paint->surface != NULL)
-    {
-      surface = cairo_surface_create_for_rectangle (paint->surface,
-						    window->abs_x,
-						    window->abs_y,
-						    window->width,
-						    window->height);
-    }
-  else
-    {
-      if (!window->cairo_surface)
-	{
-	  window->cairo_surface = gdk_window_create_cairo_surface (window,
-                                                                   window->width,
-                                                                   window->height);
-
-	  if (window->cairo_surface)
-	    {
-	      cairo_surface_set_user_data (window->cairo_surface, &gdk_window_cairo_key,
-					   window, gdk_window_cairo_surface_destroy);
-	    }
-	}
-      else
-	cairo_surface_reference (window->cairo_surface);
-
-      surface = window->cairo_surface;
-    }
-
-  return surface;
+  return cairo_surface_create_for_rectangle (surface,
+                                             window->abs_x,
+                                             window->abs_y,
+                                             window->width,
+                                             window->height);
 }
 
 /**
@@ -3149,30 +3086,34 @@ cairo_t *
 gdk_cairo_create (GdkWindow *window)
 {
   GdkWindowPaint *paint;
-  cairo_surface_t *surface;
   cairo_region_t *region;
   cairo_t *cr;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  surface = _gdk_window_ref_cairo_surface (window);
-  cr = cairo_create (surface);
-
-  if (window->impl_window->paint_stack)
+  if (window->impl_window->paint_stack == NULL)
     {
-      paint = window->impl_window->paint_stack->data;
+      cairo_surface_t *dummy_surface;
+      cairo_t *cr;
 
-      region = cairo_region_copy (paint->region);
-      cairo_region_translate (region, -window->abs_x, -window->abs_y);
-      gdk_cairo_region (cr, region);
-      cairo_region_destroy (region);
-   }
-  else
-    gdk_cairo_region (cr, window->clip_region);
+      g_warning ("gdk_cairo_create called from outside a paint. Make sure to call "
+                 "gdk_window_begin_paint_region before calling gdk_cairo_create!");
 
+      /* Return a dummy surface to keep apps from crashing. */
+      dummy_surface = cairo_image_surface_create (gdk_window_get_content (window), 0, 0);
+      cr = cairo_create (dummy_surface);
+      cairo_surface_destroy (dummy_surface);
+      return cr;
+    }
+
+  paint = window->impl_window->paint_stack->data;
+
+  cr = cairo_create (paint->surface);
+  region = cairo_region_copy (paint->region);
+  cairo_region_translate (region, -window->abs_x, -window->abs_y);
+  gdk_cairo_region (cr, region);
+  cairo_region_destroy (region);
   cairo_clip (cr);
-
-  cairo_surface_destroy (surface);
 
   return cr;
 }

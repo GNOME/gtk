@@ -1337,17 +1337,6 @@ gdk_x11_window_destroy (GdkWindow *window,
     XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
 }
 
-static gboolean
-gdk_window_x11_resize_cairo_surface (GdkWindow       *window,
-                                     cairo_surface_t *surface,
-                                     gint             width,
-                                     gint             height)
-{
-  cairo_xlib_surface_set_size (surface, width, height);
-
-  return TRUE;
-}
-
 static void
 gdk_x11_window_destroy_foreign (GdkWindow *window)
 {
@@ -5780,7 +5769,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
   impl_class->destroy = gdk_x11_window_destroy;
   impl_class->destroy_foreign = gdk_x11_window_destroy_foreign;
-  impl_class->resize_cairo_surface = gdk_window_x11_resize_cairo_surface;
   impl_class->get_shape = gdk_x11_window_get_shape;
   impl_class->get_input_shape = gdk_x11_window_get_input_shape;
   impl_class->beep = gdk_x11_window_beep;

@@ -549,18 +549,6 @@ gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
   return FALSE;
 }
 
-static gboolean
-gdk_offscreen_window_resize_cairo_surface (GdkWindow       *window,
-                                           cairo_surface_t *surface,
-                                           gint             width,
-                                           gint             height)
-{
-  /* No-op.  The surface gets resized in
-   * gdk_offscreen_window_move_resize_internal().
-   */
-  return TRUE;
-}
-
 /**
  * gdk_offscreen_window_set_embedder:
  * @window: a #GdkWindow
@@ -727,7 +715,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
   impl_class->destroy = gdk_offscreen_window_destroy;
   impl_class->destroy_foreign = NULL;
-  impl_class->resize_cairo_surface = gdk_offscreen_window_resize_cairo_surface;
   impl_class->get_shape = NULL;
   impl_class->get_input_shape = NULL;
   impl_class->beep = NULL;

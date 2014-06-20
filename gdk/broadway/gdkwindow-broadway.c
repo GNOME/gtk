@@ -368,16 +368,6 @@ _gdk_broadway_window_destroy (GdkWindow *window,
 				       impl->id);
 }
 
-static gboolean
-gdk_window_broadway_resize_cairo_surface (GdkWindow       *window,
-					  cairo_surface_t *surface,
-					  gint             width,
-					  gint             height)
-{
-  /* Image surfaces cannot be resized */
-  return FALSE;
-}
-
 static void
 gdk_broadway_window_destroy_foreign (GdkWindow *window)
 {
@@ -1552,7 +1542,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->queue_antiexpose = _gdk_broadway_window_queue_antiexpose;
   impl_class->destroy = _gdk_broadway_window_destroy;
   impl_class->destroy_foreign = gdk_broadway_window_destroy_foreign;
-  impl_class->resize_cairo_surface = gdk_window_broadway_resize_cairo_surface;
   impl_class->get_shape = gdk_broadway_window_get_shape;
   impl_class->get_input_shape = gdk_broadway_window_get_input_shape;
   impl_class->beep = gdk_broadway_window_beep;
