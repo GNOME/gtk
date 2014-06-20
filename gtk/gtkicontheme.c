@@ -735,6 +735,8 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   for (j = 0; xdg_data_dirs[j]; j++) 
     priv->search_path[i++] = g_build_filename (xdg_data_dirs[j], "pixmaps", NULL);
 
+  priv->resource_paths = g_list_append (NULL, g_strdup ("/org/gtk/libgtk/icons"));
+
   priv->themes_valid = FALSE;
   priv->themes = NULL;
   priv->unthemed_icons = NULL;
@@ -1058,6 +1060,24 @@ gtk_icon_theme_set_custom_theme (GtkIconTheme *icon_theme,
     }
 }
 
+static const gchar builtin_hicolor_index[] =
+"[Icon Theme]\n"
+"Name=Hicolor\n"
+"Hidden=True\n"
+"Directories=16x16/actions,22x22/actions,24x24/actions,32x32/actions\n"
+"[16x16/actions]\n"
+"Size=16\n"
+"Type=Threshold\n"
+"[22x22/actions]\n"
+"Size=22\n"
+"Type=Threshold\n"
+"[24x24/actions]\n"
+"Size=24\n"
+"Type=Threshold\n"
+"[32x32/actions]\n"
+"Size=32\n"
+"Type=Threshold\n";
+
 static void
 insert_theme (GtkIconTheme *icon_theme,
               const gchar  *theme_name)
@@ -1129,6 +1149,12 @@ insert_theme (GtkIconTheme *icon_theme,
       theme = g_new0 (IconTheme, 1);
       theme->name = g_strdup (theme_name);
       priv->themes = g_list_prepend (priv->themes, theme);
+      if (!theme_file)
+        {
+          theme_file = g_key_file_new ();
+          g_key_file_set_list_separator (theme_file, ',');
+          g_key_file_load_from_data (theme_file, builtin_hicolor_index, -1, 0, NULL);
+        }
     }
 
   if (theme_file == NULL)
