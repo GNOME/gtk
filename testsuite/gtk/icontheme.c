@@ -478,10 +478,10 @@ test_svg_size (void)
 static void
 test_builtin (void)
 {
-  assert_icon_lookup_size ("gtk-color-picker", 16, GTK_ICON_LOOKUP_USE_BUILTIN, NULL, 16);
-  assert_icon_lookup_size ("gtk-color-picker", 20, GTK_ICON_LOOKUP_USE_BUILTIN, NULL, 20);
-  assert_icon_lookup_size ("gtk-color-picker", 24, GTK_ICON_LOOKUP_USE_BUILTIN, NULL, 24);
-  assert_icon_lookup_size ("gtk-caps-lock-warning", 30, GTK_ICON_LOOKUP_USE_BUILTIN, NULL, 30);
+  assert_icon_lookup_size ("gtk-color-picker", 16, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/16x16/actions/gtk-color-picker.png", 16);
+  assert_icon_lookup_size ("gtk-color-picker", 20, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 20);
+  assert_icon_lookup_size ("gtk-color-picker", 24, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 24);
+  assert_icon_lookup_size ("gtk-color-picker", 30, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 30);
 }
 
 static void
@@ -538,6 +538,7 @@ test_list (void)
 
   theme = get_test_icontheme ();
   icons = gtk_icon_theme_list_icons (theme, NULL);
+
   g_assert (g_list_find_custom (icons, "size-test", (GCompareFunc)g_strcmp0));
   g_assert (g_list_find_custom (icons, "simple", (GCompareFunc)g_strcmp0));
   g_assert (g_list_find_custom (icons, "twosize-fixed", (GCompareFunc)g_strcmp0));
