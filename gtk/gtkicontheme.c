@@ -4096,15 +4096,6 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
   return gtk_icon_info_load_icon (icon_info, error);
 }
 
-static gchar *
-gdk_color_to_css (GdkColor *color)
-{
-  return g_strdup_printf ("rgb(%d,%d,%d)",
-                          color->red >> 8,
-                          color->green >> 8,
-                          color->blue >> 8);
-}
-
 static void
 proxy_symbolic_pixbuf_destroy (guchar   *pixels,
                                gpointer  data)
