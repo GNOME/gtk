@@ -466,22 +466,22 @@ test_svg_size (void)
   assert_icon_lookup_size ("twosize-fixed", 16, 0, "/icons/16x16/twosize-fixed.svg", 16);
 
   /* Check that we still properly load it even if a different size is requested */
-  assert_icon_lookup_size ("twosize", 64, 0, "/icons/32x32s/twosize.svg", 64);
+  assert_icon_lookup_size ("twosize", 64, 0, "/icons/32x32s/twosize.svg", 48);
   assert_icon_lookup_size ("twosize", 48, 0, "/icons/32x32s/twosize.svg", 48);
   assert_icon_lookup_size ("twosize", 32, 0, "/icons/32x32s/twosize.svg", 32);
   assert_icon_lookup_size ("twosize", 24, 0, "/icons/32x32s/twosize.svg", 24);
   assert_icon_lookup_size ("twosize", 16, 0, "/icons/16x16s/twosize.svg", 16);
   assert_icon_lookup_size ("twosize", 12, 0, "/icons/16x16s/twosize.svg", 12);
-  assert_icon_lookup_size ("twosize",  8, 0, "/icons/16x16s/twosize.svg",  8);
+  assert_icon_lookup_size ("twosize",  8, 0, "/icons/16x16s/twosize.svg", 12);
 }
 
 static void
 test_builtin (void)
 {
   assert_icon_lookup_size ("gtk-color-picker", 16, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/16x16/actions/gtk-color-picker.png", 16);
-  assert_icon_lookup_size ("gtk-color-picker", 20, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 20);
+  assert_icon_lookup_size ("gtk-color-picker", 20, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 24);
   assert_icon_lookup_size ("gtk-color-picker", 24, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 24);
-  assert_icon_lookup_size ("gtk-color-picker", 30, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 30);
+  assert_icon_lookup_size ("gtk-color-picker", 30, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 24);
 }
 
 static void
@@ -495,15 +495,19 @@ test_size (void)
   assert_icon_lookup_size ("size-test", 17, 0, "/icons/16-22/size-test.png", 19);
   assert_icon_lookup_size ("size-test", 18, 0, "/icons/16-22/size-test.png", 19);
   assert_icon_lookup_size ("size-test", 19, 0, "/icons/16-22/size-test.png", 19);
-  //assert_icon_lookup_size ("size-test", 20, 0, "/icons/16-22/size-test.png", 19);
-  //assert_icon_lookup_size ("size-test", 21, 0, "/icons/16-22/size-test.png", 19);
-  //assert_icon_lookup_size ("size-test", 22, 0, "/icons/16-22/size-test.png", 19);
-  assert_icon_lookup_size ("size-test", 23, 0, "/icons/25+/size-test.svg", 23);
-  assert_icon_lookup_size ("size-test", 24, 0, "/icons/25+/size-test.svg", 24);
+  /* the next 3 are because we never scale up */
+  assert_icon_lookup_size ("size-test", 20, 0, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 21, 0, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 22, 0, "/icons/25+/size-test.svg", 25);
+
+  assert_icon_lookup_size ("size-test", 23, 0, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 23, 0, "/icons/25+/size-test.svg", 25);
   assert_icon_lookup_size ("size-test", 25, 0, "/icons/25+/size-test.svg", 25);
   assert_icon_lookup_size ("size-test", 28, 0, "/icons/25+/size-test.svg", 28);
-  //assert_icon_lookup_size ("size-test", 31, 0, "/icons/25+/size-test.svg", 31);
-  //assert_icon_lookup_size ("size-test", 34, 0, "/icons/25+/size-test.svg", 34);
+  /* the next 2 are because we never scale up */
+  assert_icon_lookup_size ("size-test", 31, 0, "/icons/35+/size-test.svg", 35);
+  assert_icon_lookup_size ("size-test", 34, 0, "/icons/35+/size-test.svg", 35);
+
   assert_icon_lookup_size ("size-test", 37, 0, "/icons/35+/size-test.svg", 37);
   assert_icon_lookup_size ("size-test", 40, 0, "/icons/35+/size-test.svg", 40);
   assert_icon_lookup_size ("size-test", 45, 0, "/icons/35+/size-test.svg", 45);
