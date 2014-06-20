@@ -244,7 +244,6 @@ struct _GtkIconInfo
   gint dir_scale;
   gint min_size;
   gint max_size;
-  gint threshold;
   gdouble unscaled_scale;
 
   /* Parameters influencing the scaled icon
@@ -2963,7 +2962,6 @@ theme_lookup_icon (IconTheme   *theme,
       gboolean has_icon_file = FALSE;
 
       icon_info = icon_info_new (min_dir->type, min_dir->size, min_dir->scale);
-      icon_info->threshold = min_dir->threshold;
       icon_info->min_size = min_dir->min_size;
       icon_info->max_size = min_dir->max_size;
 
@@ -3358,7 +3356,6 @@ icon_info_dup (GtkIconInfo *icon_info)
     dup->cache_pixbuf = g_object_ref (icon_info->cache_pixbuf);
 
   dup->unscaled_scale = icon_info->unscaled_scale;
-  dup->threshold = icon_info->threshold;
   dup->desired_size = icon_info->desired_size;
   dup->desired_scale = icon_info->desired_scale;
   dup->forced_size = icon_info->forced_size;
@@ -3373,7 +3370,6 @@ icon_info_new_builtin (BuiltinIcon *icon)
   GtkIconInfo *icon_info = icon_info_new (ICON_THEME_DIR_THRESHOLD, icon->size, 1);
 
   icon_info->cache_pixbuf = g_object_ref (icon->pixbuf);
-  icon_info->threshold = 2;
 
   return icon_info;
 }
@@ -5172,7 +5168,6 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
 
       info->desired_size = size;
       info->desired_scale = scale;
-      info->threshold = 2;
       info->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
 
       return info;
