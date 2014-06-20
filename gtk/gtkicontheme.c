@@ -4156,13 +4156,13 @@ symbolic_cache_get_proxy (SymbolicPixbufCache *symbolic_cache,
 }
 
 static GdkPixbuf *
-_gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
-                                       const GdkRGBA  *fg,
-                                       const GdkRGBA  *success_color,
-                                       const GdkRGBA  *warning_color,
-                                       const GdkRGBA  *error_color,
-                                       gboolean        use_cache,
-                                       GError        **error)
+gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
+                                      const GdkRGBA  *fg,
+                                      const GdkRGBA  *success_color,
+                                      const GdkRGBA  *warning_color,
+                                      const GdkRGBA  *error_color,
+                                      gboolean        use_cache,
+                                      GError        **error)
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
@@ -4367,11 +4367,11 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
   if (!is_symbolic)
     return gtk_icon_info_load_icon (icon_info, error);
 
-  return _gtk_icon_info_load_symbolic_internal (icon_info,
-                                                fg, success_color,
-                                                warning_color, error_color,
-                                                TRUE,
-                                                error);
+  return gtk_icon_info_load_symbolic_internal (icon_info,
+                                               fg, success_color,
+                                               warning_color, error_color,
+                                               TRUE,
+                                               error);
 }
 
 /**
@@ -4448,11 +4448,11 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   if (gtk_style_context_lookup_color (context, "error_color", &error_color))
     error_colorp = &error_color;
 
-  return _gtk_icon_info_load_symbolic_internal (icon_info,
-                                                fgp, success_colorp,
-                                                warning_colorp, error_colorp,
-                                                TRUE,
-                                                error);
+  return gtk_icon_info_load_symbolic_internal (icon_info,
+                                               fgp, success_colorp,
+                                               warning_colorp, error_colorp,
+                                               TRUE,
+                                               error);
 }
 
 typedef struct {
@@ -4505,14 +4505,13 @@ load_symbolic_icon_thread  (GTask        *task,
   GdkPixbuf *pixbuf;
 
   error = NULL;
-  pixbuf =
-    _gtk_icon_info_load_symbolic_internal (data->dup,
-                                           data->fg_set ? &data->fg : NULL,
-                                           data->success_color_set ? &data->success_color : NULL,
-                                           data->warning_color_set ? &data->warning_color : NULL,
-                                           data->error_color_set ? &data->error_color : NULL,
-                                           FALSE,
-                                           &error);
+  pixbuf = gtk_icon_info_load_symbolic_internal (data->dup,
+                                                 data->fg_set ? &data->fg : NULL,
+                                                 data->success_color_set ? &data->success_color : NULL,
+                                                 data->warning_color_set ? &data->warning_color : NULL,
+                                                 data->error_color_set ? &data->error_color : NULL,
+                                                 FALSE,
+                                                 &error);
   if (pixbuf == NULL)
     g_task_return_error (task, error);
   else
@@ -4848,11 +4847,11 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   if (gtk_style_lookup_color (style, "error_color", &color))
     error_colorp = color_to_rgba (&color, &error_color);
 
-  return _gtk_icon_info_load_symbolic_internal (icon_info,
-                                                &fg, success_colorp,
-                                                warning_colorp, error_colorp,
-                                                TRUE,
-                                                error);
+  return gtk_icon_info_load_symbolic_internal (icon_info,
+                                               &fg, success_colorp,
+                                               warning_colorp, error_colorp,
+                                               TRUE,
+                                               error);
 }
 
 /**
