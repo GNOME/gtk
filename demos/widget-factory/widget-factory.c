@@ -39,20 +39,6 @@ change_theme_state (GSimpleAction *action,
 }
 
 static void
-change_toolbar_state (GSimpleAction *action,
-                      GVariant      *state,
-                      gpointer       user_data)
-{
-  GtkWidget *window = user_data;
-  GtkWidget *toolbar;
-
-  toolbar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "toolbar"));
-  gtk_widget_set_visible (toolbar, g_variant_get_boolean (state));
-
-  g_simple_action_set_state (action, state);
-}
-
-static void
 activate_search (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
@@ -291,7 +277,6 @@ activate (GApplication *app)
   GtkAdjustment *adj;
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_theme_state },
-    { "toolbar", NULL, NULL, "true", change_toolbar_state },
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL }
   };
@@ -312,9 +297,12 @@ activate (GApplication *app)
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "statusbar");
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "All systems are operating normally.");
-
   g_action_map_add_action (G_ACTION_MAP (window),
                            G_ACTION (g_property_action_new ("statusbar", widget, "visible")));
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbar");
+  g_action_map_add_action (G_ACTION_MAP (window),
+                           G_ACTION (g_property_action_new ("toolbar", widget, "visible")));
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar3");
   pulse_id = g_timeout_add (250, (GSourceFunc)pulse_it, widget);
