@@ -2929,21 +2929,11 @@ gdk_window_free_paint_stack (GdkWindow *window)
  * gdk_window_flush:
  * @window: a #GdkWindow
  *
- * Flush all outstanding cached operations on a window, leaving the
- * window in a state which reflects all that has been drawn before.
- *
- * Gdk uses multiple kinds of caching to get better performance and
- * nicer drawing. For instance, during exposes all paints to a window
- * using double buffered rendering are keep on a surface until the last
- * window has been exposed.
- *
- * Normally this should be completely invisible to applications, as
- * we automatically flush the windows when required, but this might
- * be needed if you for instance mix direct native drawing with
- * gdk drawing. For Gtk widgets that don’t use double buffering this
- * will be called automatically before sending the expose event.
+ * This function does nothing.
  *
  * Since: 2.18
+ *
+ * Deprecated: 3.14
  **/
 void
 gdk_window_flush (GdkWindow *window)

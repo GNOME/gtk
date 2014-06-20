@@ -740,7 +740,7 @@ void	      gdk_window_begin_paint_region (GdkWindow          *window,
 					     const cairo_region_t    *region);
 GDK_AVAILABLE_IN_ALL
 void	      gdk_window_end_paint          (GdkWindow          *window);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void	      gdk_window_flush             (GdkWindow          *window);
 
 GDK_AVAILABLE_IN_ALL
