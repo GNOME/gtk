@@ -568,7 +568,23 @@ gdk_window_impl_wayland_begin_paint_region (GdkWindow            *window,
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   gdk_wayland_window_ensure_cairo_surface (window);
-  return _gdk_wayland_shm_surface_get_busy (impl->cairo_surface);
+
+  if (_gdk_wayland_shm_surface_get_busy (impl->cairo_surface))
+    {
+      /* The surface is busy, so create a temporary surface which we paint
+       * to and hope that by the time we're done painting the surface isn't
+       * busy any more. */
+      return TRUE;
+    }
+  else
+    {
+      /* Returning FALSE from begin_paint_region says to use the native
+       * backing surface, which is our SHM surface. We need to make sure
+       * to clear it before the code tries to paint to it to prevent
+       * artifacts from the last paint. */
+      _gdk_wayland_shm_surface_clear (impl->cairo_surface);
+      return FALSE;
+    }
 }
 
 static void
