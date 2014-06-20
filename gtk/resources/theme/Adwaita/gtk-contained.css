@@ -1461,43 +1461,31 @@ GtkSwitch {
   .menuitem.check:inconsistent {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
 
-GtkTreeView.view.check,
-GtkIconView.content-view.cell.check {
+.view.check {
   color: rgba(46, 52, 54, 0.1);
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
-  GtkTreeView.view.check:active,
-  GtkIconView.content-view.cell.check:active {
+  .view.check:active {
     color: #2e3436; }
-    GtkTreeView.view.check:active:insensitive,
-    GtkIconView.content-view.cell.check:active:insensitive {
+    .view.check:active:insensitive {
       color: #8d9091; }
-      GtkTreeView.view.check:active:insensitive:backdrop,
-      GtkIconView.content-view.cell.check:active:insensitive:backdrop {
+      .view.check:active:insensitive:backdrop {
         color: #c7c7c7; }
-    GtkTreeView.view.check:active:backdrop,
-    GtkIconView.content-view.cell.check:active:backdrop {
+    .view.check:active:backdrop {
       color: #54595a; }
-  GtkTreeView.view.check:insensitive,
-  GtkIconView.content-view.cell.check:insensitive {
+  .view.check:insensitive {
     color: rgba(141, 144, 145, 0.1); }
-    GtkTreeView.view.check:insensitive:backdrop,
-    GtkIconView.content-view.cell.check:insensitive:backdrop {
+    .view.check:insensitive:backdrop {
       color: transparent; }
-  GtkTreeView.view.check:inconsistent,
-  GtkIconView.content-view.cell.check:inconsistent {
+  .view.check:inconsistent {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
-  GtkTreeView.view.check:selected,
-  GtkIconView.content-view.cell.check:selected {
+  .view.check:selected {
     color: rgba(255, 255, 255, 0.1); }
-    GtkTreeView.view.check:selected:active,
-    GtkIconView.content-view.cell.check:selected:active {
+    .view.check:selected:active {
       color: white; }
-      GtkTreeView.view.check:selected:active:backdrop,
-      GtkIconView.content-view.cell.check:selected:active:backdrop {
+      .view.check:selected:active:backdrop {
         color: #fcfcfc; }
-    GtkTreeView.view.check:selected:backdrop,
-    GtkIconView.content-view.cell.check:selected:backdrop {
+    .view.check:selected:backdrop {
       color: rgba(84, 89, 90, 0.1); }
 
 .popover .button.check:hover {
@@ -1618,43 +1606,31 @@ GtkIconView.content-view.cell.check {
   .menuitem.radio:inconsistent {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
 
-GtkTreeView.view.radio,
-GtkIconView.content-view.cell.radio {
+.view.radio {
   color: rgba(46, 52, 54, 0.1);
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
-  GtkTreeView.view.radio:active,
-  GtkIconView.content-view.cell.radio:active {
+  .view.radio:active {
     color: #2e3436; }
-    GtkTreeView.view.radio:active:insensitive,
-    GtkIconView.content-view.cell.radio:active:insensitive {
+    .view.radio:active:insensitive {
       color: #8d9091; }
-      GtkTreeView.view.radio:active:insensitive:backdrop,
-      GtkIconView.content-view.cell.radio:active:insensitive:backdrop {
+      .view.radio:active:insensitive:backdrop {
         color: #c7c7c7; }
-    GtkTreeView.view.radio:active:backdrop,
-    GtkIconView.content-view.cell.radio:active:backdrop {
+    .view.radio:active:backdrop {
       color: #54595a; }
-  GtkTreeView.view.radio:insensitive,
-  GtkIconView.content-view.cell.radio:insensitive {
+  .view.radio:insensitive {
     color: rgba(141, 144, 145, 0.1); }
-    GtkTreeView.view.radio:insensitive:backdrop,
-    GtkIconView.content-view.cell.radio:insensitive:backdrop {
+    .view.radio:insensitive:backdrop {
       color: transparent; }
-  GtkTreeView.view.radio:inconsistent,
-  GtkIconView.content-view.cell.radio:inconsistent {
+  .view.radio:inconsistent {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
-  GtkTreeView.view.radio:selected,
-  GtkIconView.content-view.cell.radio:selected {
+  .view.radio:selected {
     color: rgba(255, 255, 255, 0.1); }
-    GtkTreeView.view.radio:selected:active,
-    GtkIconView.content-view.cell.radio:selected:active {
+    .view.radio:selected:active {
       color: white; }
-      GtkTreeView.view.radio:selected:active:backdrop,
-      GtkIconView.content-view.cell.radio:selected:active:backdrop {
+      .view.radio:selected:active:backdrop {
         color: #fcfcfc; }
-    GtkTreeView.view.radio:selected:backdrop,
-    GtkIconView.content-view.cell.radio:selected:backdrop {
+    .view.radio:selected:backdrop {
       color: rgba(84, 89, 90, 0.1); }
 
 .popover .button.radio:hover {

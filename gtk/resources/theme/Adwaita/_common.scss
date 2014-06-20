@@ -1226,8 +1226,8 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 
   //treeview & selection mode icon view
-  GtkTreeView.view.#{$w},
-  GtkIconView.content-view.cell.#{$w} {
+  .view.#{$w} {
+    // FIXME .cell.check/.radio doesn't needs to be blue in bright var
     color: transparentize($fg_color,0.9);
     background-image: none;
     -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
