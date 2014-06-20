@@ -125,8 +125,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ADD:
  *
- * The “Add” item.
- * ![](list-add.png)
+ * The “Add” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;list-add&quot; or the label &quot;_Add&quot;.
  */
@@ -135,8 +134,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_APPLY:
  *
- * The “Apply” item.
- * ![](gtk-apply.png)
+ * The “Apply” item and icon.
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Apply&quot;.
  */
@@ -145,8 +143,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_BOLD:
  *
- * The “Bold” item.
- * ![](format-text-bold.png)
+ * The “Bold” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;format-text-bold&quot;.
  */
@@ -155,8 +152,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_CANCEL:
  *
- * The “Cancel” item.
- * ![](gtk-cancel.png)
+ * The “Cancel” item and icon.
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Cancel&quot;.
  */
@@ -166,7 +162,6 @@ typedef char * GtkStock;
  * GTK_STOCK_CAPS_LOCK_WARNING:
  *
  * The “Caps Lock Warning” icon.
- * ![](gtk-caps-lock-warning.png)
  *
  * Since: 2.16
  *
@@ -177,8 +172,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_CDROM:
  *
- * The “CD-Rom” item.
- * ![](media-optical.png)
+ * The “CD-Rom” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;media-optical&quot;.
  */
@@ -187,8 +181,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_CLEAR:
  *
- * The “Clear” item.
- * ![](edit-clear.png)
+ * The “Clear” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;edit-clear&quot;.
  */
@@ -197,8 +190,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_CLOSE:
  *
- * The “Close” item.
- * ![](window-close.png)
+ * The “Close” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;window-close&quot; or the label &quot;_Close&quot;.
  */
@@ -207,8 +199,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_COLOR_PICKER:
  *
- * The “Color Picker” item.
- * ![](gtk-color-picker.png)
+ * The “Color Picker” item and icon.
  *
  * Since: 2.2
  *
@@ -220,7 +211,6 @@ typedef char * GtkStock;
  * GTK_STOCK_CONNECT:
  *
  * The “Connect” icon.
- * ![](gtk-connect.png)
  *
  * Since: 2.6
  *
@@ -231,8 +221,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_CONVERT:
  *
- * The “Convert” item.
- * ![](gtk-convert.png)
+ * The “Convert” item and icon.
  *
  * Deprecated: 3.10
  */
@@ -241,8 +230,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_COPY:
  *
- * The “Copy” item.
- * ![](edit-copy.png)
+ * The “Copy” item and icon.
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Copy&quot;.
  */
@@ -251,8 +239,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_CUT:
  *
- * The “Cut” item.
- * ![](edit-cut.png)
+ * The “Cut” item and icon.
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;Cu_t&quot;.
  */
@@ -261,8 +248,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_DELETE:
  *
- * The “Delete” item.
- * ![](edit-delete.png)
+ * The “Delete” item and icon.
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Delete&quot;.
  */
@@ -271,8 +257,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_DIALOG_AUTHENTICATION:
  *
- * The “Authentication” item.
- * ![](dialog-password.png)
+ * The “Authentication” item and icon.
  *
  * Since: 2.4
  *
@@ -283,8 +268,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_DIALOG_INFO:
  *
- * The “Information” item.
- * ![](dialog-information.png)
+ * The “Information” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-information&quot;.
  */
@@ -293,8 +277,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_DIALOG_WARNING:
  *
- * The “Warning” item.
- * ![](dialog-warning.png)
+ * The “Warning” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-warning&quot;.
  */
@@ -303,8 +286,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_DIALOG_ERROR:
  *
- * The “Error” item.
- * ![](dialog-error.png)
+ * The “Error” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-error&quot;.
  */
@@ -313,8 +295,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_DIALOG_QUESTION:
  *
- * The “Question” item.
- * ![](dialog-question.png)
+ * The “Question” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-question&quot;.
  */
@@ -324,7 +305,6 @@ typedef char * GtkStock;
  * GTK_STOCK_DIRECTORY:
  *
  * The “Directory” icon.
- * ![](folder.png)
  *
  * Since: 2.6
  *
@@ -347,7 +327,6 @@ typedef char * GtkStock;
  * GTK_STOCK_DISCONNECT:
  *
  * The “Disconnect” icon.
- * ![](gtk-disconnect.png)
  *
  * Since: 2.6
  *
@@ -359,7 +338,6 @@ typedef char * GtkStock;
  * GTK_STOCK_DND:
  *
  * The “Drag-And-Drop” icon.
- * ![](gtk-dnd.png)
  *
  * Deprecated: 3.10
  */
@@ -369,7 +347,6 @@ typedef char * GtkStock;
  * GTK_STOCK_DND_MULTIPLE:
  *
  * The “Drag-And-Drop multiple” icon.
- * ![](gtk-dnd-multiple.png)
  *
  * Deprecated: 3.10
  */
@@ -378,8 +355,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_EDIT:
  *
- * The “Edit” item.
- * ![](gtk-edit.png)
+ * The “Edit” item and icon.
  *
  * Since: 2.6
  *
@@ -390,8 +366,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_EXECUTE:
  *
- * The “Execute” item.
- * ![](system-run.png)
+ * The “Execute” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;system-run&quot;.
  */
@@ -400,8 +375,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_FILE:
  *
- * The “File” item.
- * ![](text-x-generic.png)
+ * The “File” item and icon.
  *
  * Since 3.0, this item has a label, before it only had an icon.
  *
@@ -414,8 +388,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_FIND:
  *
- * The “Find” item.
- * ![](edit-find.png)
+ * The “Find” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;edit-find&quot;.
  */
@@ -424,8 +397,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_FIND_AND_REPLACE:
  *
- * The “Find and Replace” item.
- * ![](edit-find-replace.png)
+ * The “Find and Replace” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;edit-find-replace&quot;.
  */
@@ -434,8 +406,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_FLOPPY:
  *
- * The “Floppy” item.
- * ![](media-floppy.png)
+ * The “Floppy” item and icon.
  *
  * Deprecated: 3.10
  */
@@ -444,8 +415,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_FULLSCREEN:
  *
- * The “Fullscreen” item.
- * ![](view-fullscreen.png)
+ * The “Fullscreen” item and icon.
  *
  * Since: 2.8
  *
@@ -456,8 +426,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_GOTO_BOTTOM:
  *
- * The “Bottom” item.
- * ![](go-bottom.png)
+ * The “Bottom” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;go-bottom&quot;.
  */
@@ -466,10 +435,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_GOTO_FIRST:
  *
- * The “First” item.
- * ![](go-first-ltr.png)
- * RTL variant
- * ![](go-first-rtl.png)
+ * The “First” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10: Use named icon &quot;go-first&quot;.
  */
@@ -478,10 +444,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_GOTO_LAST:
  *
- * The “Last” item.
- * ![](go-last-ltr.png)
- * RTL variant
- * ![](go-last-rtl.png)
+ * The “Last” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10: Use named icon &quot;go-last&quot;.
  */
@@ -490,8 +453,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_GOTO_TOP:
  *
- * The “Top” item.
- * ![](go-top.png)
+ * The “Top” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;go-top&quot;.
  */
@@ -500,10 +462,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_GO_BACK:
  *
- * The “Back” item.
- * ![](go-previous-ltr.png)
- * RTL variant
- * ![](go-previous-rtl.png)
+ * The “Back” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10: Use named icon &quot;go-previous&quot;.
 */
@@ -512,8 +471,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_GO_DOWN:
  *
- * The “Down” item.
- * ![](go-down.png)
+ * The “Down” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;go-down&quot;.
  */
@@ -522,10 +480,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_GO_FORWARD:
  *
- * The “Forward” item.
- * ![](go-next-ltr.png)
- * RTL variant
- * ![](go-next-rtl.png)
+ * The “Forward” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10: Use named icon &quot;go-next&quot;.
  */
@@ -534,8 +489,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_GO_UP:
  *
- * The “Up” item.
- * ![](go-up.png)
+ * The “Up” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;go-up&quot;.
  */
@@ -544,8 +498,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_HARDDISK:
  *
- * The “Harddisk” item.
- * ![](drive-harddisk.png)
+ * The “Harddisk” item and icon.
  *
  * Since: 2.4
  *
@@ -556,8 +509,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_HELP:
  *
- * The “Help” item.
- * ![](help-contents.png)
+ * The “Help” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;help-browser&quot;.
  */
@@ -566,8 +518,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_HOME:
  *
- * The “Home” item.
- * ![](go-home.png)
+ * The “Home” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;go-home&quot;.
  */
@@ -576,8 +527,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_INDEX:
  *
- * The “Index” item.
- * ![](gtk-index.png)
+ * The “Index” item and icon.
  *
  * Deprecated: 3.10
  */
@@ -586,10 +536,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_INDENT:
  *
- * The “Indent” item.
- * ![](format-indent-more-ltr.png)
- * RTL variant
- * ![](format-indent-more-rtl.png)
+ * The “Indent” item and icon. The icon has an RTL variant.
  *
  * Since: 2.4
  *
@@ -600,8 +547,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_INFO:
  *
- * The “Info” item.
- * ![](dialog-information.png)
+ * The “Info” item and icon.
  *
  * Since: 2.8
  *
@@ -612,8 +558,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ITALIC:
  *
- * The “Italic” item.
- * ![](format-text-italic.png)
+ * The “Italic” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;format-text-italic&quot;.
  */
@@ -622,10 +567,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_JUMP_TO:
  *
- * The “Jump to” item.
- * ![](go-jump-ltr.png)
- * RTL-variant
- * ![](go-jump-rtl.png)
+ * The “Jump to” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10: Use named icon &quot;go-jump&quot;.
  */
@@ -634,8 +576,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_JUSTIFY_CENTER:
  *
- * The “Center” item.
- * ![](format-justify-center.png)
+ * The “Center” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;format-justify-center&quot;.
  */
@@ -644,8 +585,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_JUSTIFY_FILL:
  *
- * The “Fill” item.
- * ![](format-justify-fill.png)
+ * The “Fill” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;format-justify-fill&quot;.
  */
@@ -654,8 +594,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_JUSTIFY_LEFT:
  *
- * The “Left” item.
- * ![](format-justify-left.png)
+ * The “Left” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;format-justify-left&quot;.
  */
@@ -664,8 +603,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_JUSTIFY_RIGHT:
  *
- * The “Right” item.
- * ![](format-justify-right.png)
+ * The “Right” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;format-justify-right&quot;.
  */
@@ -674,8 +612,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_LEAVE_FULLSCREEN:
  *
- * The “Leave Fullscreen” item.
- * ![](view-restore.png)
+ * The “Leave Fullscreen” item and icon.
  *
  * Since: 2.8
  *
@@ -687,7 +624,6 @@ typedef char * GtkStock;
  * GTK_STOCK_MISSING_IMAGE:
  *
  * The “Missing image” icon.
- * ![](image-missing.png)
  *
  * Deprecated: 3.10: Use named icon &quot;image-missing&quot;.
  */
@@ -696,10 +632,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_MEDIA_FORWARD:
  *
- * The “Media Forward” item.
- * ![](media-seek-forward-ltr.png)
- * RTL variant
- * ![](media-seek-forward-rtl.png)
+ * The “Media Forward” item and icon. The icon has an RTL variant.
  *
  * Since: 2.6
  *
@@ -710,10 +643,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_MEDIA_NEXT:
  *
- * The “Media Next” item.
- * ![](media-skip-forward-ltr.png)
- * RTL variant
- * ![](media-skip-forward-rtl.png)
+ * The “Media Next” item and icon. The icon has an RTL variant.
  *
  * Since: 2.6
  *
@@ -724,8 +654,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_MEDIA_PAUSE:
  *
- * The “Media Pause” item.
- * ![](media-playback-pause.png)
+ * The “Media Pause” item and icon.
  *
  * Since: 2.6
  *
@@ -736,10 +665,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_MEDIA_PLAY:
  *
- * The “Media Play” item.
- * ![](media-playback-start-ltr.png)
- * RTL variant
- * ![](media-playback-start-rtl.png)
+ * The “Media Play” item and icon. The icon has an RTL variant.
  *
  * Since: 2.6
  *
@@ -750,10 +676,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_MEDIA_PREVIOUS:
  *
- * The “Media Previous” item.
- * ![](media-skip-backward-ltr.png)
- * RTL variant
- * ![](media-skip-backward-rtl.png)
+ * The “Media Previous” item and icon. The icon has an RTL variant.
  *
  * Since: 2.6
  *
@@ -764,8 +687,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_MEDIA_RECORD:
  *
- * The “Media Record” item.
- * ![](media-record.png)
+ * The “Media Record” item and icon.
  *
  * Since: 2.6
  *
@@ -776,10 +698,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_MEDIA_REWIND:
  *
- * The “Media Rewind” item.
- * ![](media-seek-backward-ltr.png)
- * RTL variant
- * ![](media-seek-backward-rtl.png)
+ * The “Media Rewind” item and icon. The icon has an RTL variant.
  *
  * Since: 2.6
  *
@@ -790,8 +709,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_MEDIA_STOP:
  *
- * The “Media Stop” item.
- * ![](media-playback-stop.png)
+ * The “Media Stop” item and icon.
  *
  * Since: 2.6
  *
@@ -802,8 +720,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_NETWORK:
  *
- * The “Network” item.
- * ![](network-idle.png)
+ * The “Network” item and icon.
  *
  * Since: 2.4
  *
@@ -814,8 +731,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_NEW:
  *
- * The “New” item.
- * ![](document-new.png)
+ * The “New” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;document-new&quot; or the label &quot;_New&quot;.
  */
@@ -824,8 +740,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_NO:
  *
- * The “No” item.
- * ![](gtk-no.png)
+ * The “No” item and icon.
  *
  * Deprecated: 3.10
  */
@@ -834,8 +749,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_OK:
  *
- * The “OK” item.
- * ![](gtk-ok.png)
+ * The “OK” item and icon.
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_OK&quot;.
  */
@@ -844,8 +758,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_OPEN:
  *
- * The “Open” item.
- * ![](document-open.png)
+ * The “Open” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;document-open&quot; or the label &quot;_Open&quot;.
  */
@@ -854,8 +767,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ORIENTATION_PORTRAIT:
  *
- * The “Portrait Orientation” item.
- * ![](gtk-orientation-portrait.png)
+ * The “Portrait Orientation” item and icon.
  *
  * Since: 2.10
  *
@@ -866,8 +778,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ORIENTATION_LANDSCAPE:
  *
- * The “Landscape Orientation” item.
- * ![](gtk-orientation-landscape.png)
+ * The “Landscape Orientation” item and icon.
  *
  * Since: 2.10
  *
@@ -878,8 +789,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE:
  *
- * The “Reverse Landscape Orientation” item.
- * ![](gtk-orientation-reverse-landscape.png)
+ * The “Reverse Landscape Orientation” item and icon.
  *
  * Since: 2.10
  *
@@ -890,8 +800,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT:
  *
- * The “Reverse Portrait Orientation” item.
- * ![](gtk-orientation-reverse-portrait.png)
+ * The “Reverse Portrait Orientation” item and icon.
  *
  * Since: 2.10
  *
@@ -902,8 +811,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_PAGE_SETUP:
  *
- * The “Page Setup” item.
- * ![](gtk-page-setup.png)
+ * The “Page Setup” item and icon.
  *
  * Since: 2.14
  *
@@ -914,8 +822,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_PASTE:
  *
- * The “Paste” item.
- * ![](edit-paste.png)
+ * The “Paste” item and icon.
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Paste&quot;.
  */
@@ -924,8 +831,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_PREFERENCES:
  *
- * The “Preferences” item.
- * ![](gtk-preferences.png)
+ * The “Preferences” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;preferences-system&quot; or the label &quot;_Preferences&quot;.
  */
@@ -934,8 +840,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_PRINT:
  *
- * The “Print” item.
- * ![](document-print.png)
+ * The “Print” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;document-print&quot; or the label &quot;_Print&quot;.
  */
@@ -945,7 +850,6 @@ typedef char * GtkStock;
  * GTK_STOCK_PRINT_ERROR:
  *
  * The “Print Error” icon.
- * ![](printer-error.png)
  *
  * Since: 2.14
  *
@@ -957,7 +861,6 @@ typedef char * GtkStock;
  * GTK_STOCK_PRINT_PAUSED:
  *
  * The “Print Paused” icon.
- * ![](printer-paused.png)
  *
  * Since: 2.14
  *
@@ -968,8 +871,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_PRINT_PREVIEW:
  *
- * The “Print Preview” item.
- * ![](document-print-preview.png)
+ * The “Print Preview” item and icon.
  *
  * Deprecated: 3.10: Use label &quot;Pre_view&quot;.
  */
@@ -979,7 +881,6 @@ typedef char * GtkStock;
  * GTK_STOCK_PRINT_REPORT:
  *
  * The “Print Report” icon.
- * ![](printer-info.png)
  *
  * Since: 2.14
  *
@@ -992,7 +893,6 @@ typedef char * GtkStock;
  * GTK_STOCK_PRINT_WARNING:
  *
  * The “Print Warning” icon.
- * ![](printer-warning.png)
  *
  * Since: 2.14
  *
@@ -1003,8 +903,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_PROPERTIES:
  *
- * The “Properties” item.
- * ![](document-properties.png)
+ * The “Properties” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;document-properties&quot; or the label &quot;_Properties&quot;.
  */
@@ -1013,8 +912,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_QUIT:
  *
- * The “Quit” item.
- * ![](application-exit.png)
+ * The “Quit” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;application-exit&quot; or the label &quot;_Quit&quot;.
  */
@@ -1023,10 +921,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_REDO:
  *
- * The “Redo” item.
- * ![](edit-redo-ltr.png)
- * RTL variant
- * ![](edit-redo-rtl.png)
+ * The “Redo” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10: Use named icon &quot;edit-redo&quot; or the label &quot;_Redo&quot;.
  */
@@ -1035,8 +930,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_REFRESH:
  *
- * The “Refresh” item.
- * ![](view-refresh.png)
+ * The “Refresh” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;view-refresh&quot; or the label &quot;_Refresh&quot;.
  */
@@ -1045,8 +939,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_REMOVE:
  *
- * The “Remove” item.
- * ![](list-remove.png)
+ * The “Remove” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;list-remove&quot; or the label &quot;_Remove&quot;.
  */
@@ -1055,10 +948,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_REVERT_TO_SAVED:
  *
- * The “Revert” item.
- * ![](document-revert-ltr.png)
- * RTL variant
- * ![](document-revert-rtl.png)
+ * The “Revert” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10: Use named icon &quot;document-revert&quot; or the label &quot;_Revert&quot;.
  */
@@ -1067,8 +957,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_SAVE:
  *
- * The “Save” item.
- * ![](document-save.png)
+ * The “Save” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;document-save&quot; or the label &quot;_Save&quot;.
  */
@@ -1077,8 +966,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_SAVE_AS:
  *
- * The “Save As” item.
- * ![](document-save-as.png)
+ * The “Save As” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;document-save-as&quot; or the label &quot;Save _As&quot;.
  */
@@ -1087,8 +975,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_SELECT_ALL:
  *
- * The “Select All” item.
- * ![](edit-select-all.png)
+ * The “Select All” item and icon.
  *
  * Since: 2.10
  *
@@ -1099,8 +986,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_SELECT_COLOR:
  *
- * The “Color” item.
- * ![](gtk-select-color.png)
+ * The “Color” item and icon.
  *
  * Deprecated: 3.10
  */
@@ -1109,8 +995,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_SELECT_FONT:
  *
- * The “Font” item.
- * ![](gtk-font.png)
+ * The “Font” item and icon.
  *
  * Deprecated: 3.10
  */
@@ -1119,8 +1004,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_SORT_ASCENDING:
  *
- * The “Ascending” item.
- * ![](view-sort-ascending.png)
+ * The “Ascending” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;view-sort-ascending&quot;.
  */
@@ -1129,8 +1013,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_SORT_DESCENDING:
  *
- * The “Descending” item.
- * ![](view-sort-descending.png)
+ * The “Descending” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;view-sort-descending&quot;.
  */
@@ -1139,8 +1022,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_SPELL_CHECK:
  *
- * The “Spell Check” item.
- * ![](tools-check-spelling.png)
+ * The “Spell Check” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;tools-check-spelling&quot;.
  */
@@ -1149,8 +1031,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_STOP:
  *
- * The “Stop” item.
- * ![](process-stop.png)
+ * The “Stop” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;process-stop&quot; or the label &quot;_Stop&quot;.
  */
@@ -1159,8 +1040,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_STRIKETHROUGH:
  *
- * The “Strikethrough” item.
- * ![](format-text-strikethrough.png)
+ * The “Strikethrough” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;format-text-strikethrough&quot; or the label &quot;_Strikethrough&quot;.
  */
@@ -1169,10 +1049,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_UNDELETE:
  *
- * The “Undelete” item.
- * ![](gtk-undelete-ltr.png)
- * RTL variant
- * ![](gtk-undelete-rtl.png)
+ * The “Undelete” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10
  */
@@ -1181,8 +1058,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_UNDERLINE:
  *
- * The “Underline” item.
- * ![](format-text-underline.png)
+ * The “Underline” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;format-text-underline&quot; or the label &quot;_Underline&quot;.
  */
@@ -1191,10 +1067,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_UNDO:
  *
- * The “Undo” item.
- * ![](edit-undo-ltr.png)
- * RTL variant
- * ![](edit-undo-rtl.png)
+ * The “Undo” item and icon. The icon has an RTL variant.
  *
  * Deprecated: 3.10: Use named icon &quot;edit-undo&quot; or the label &quot;_Undo&quot;.
  */
@@ -1203,10 +1076,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_UNINDENT:
  *
- * The “Unindent” item.
- * ![](format-indent-less-ltr.png)
- * RTL variant
- * ![](format-indent-less-rtl.png)
+ * The “Unindent” item and icon. The icon has an RTL variant.
  *
  * Since: 2.4
  *
@@ -1217,8 +1087,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_YES:
  *
- * The “Yes” item.
- * ![](gtk-yes.png)
+ * The “Yes” item and icon.
  *
  * Deprecated: 3.10
  */
@@ -1227,8 +1096,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ZOOM_100:
  *
- * The “Zoom 100%” item.
- * ![](zoom-original.png)
+ * The “Zoom 100%” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;zoom-original&quot; or the label &quot;_Normal Size&quot;.
  */
@@ -1237,8 +1105,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ZOOM_FIT:
  *
- * The “Zoom to Fit” item.
- * ![](zoom-fit-best.png)
+ * The “Zoom to Fit” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;zoom-fit-best&quot; or the label &quot;Best _Fit&quot;.
  */
@@ -1247,8 +1114,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ZOOM_IN:
  *
- * The “Zoom In” item.
- * ![](zoom-in.png)
+ * The “Zoom In” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;zoom-in&quot; or the label &quot;Zoom _In&quot;.
  */
@@ -1257,8 +1123,7 @@ typedef char * GtkStock;
 /**
  * GTK_STOCK_ZOOM_OUT:
  *
- * The “Zoom Out” item.
- * ![](zoom-out.png)
+ * The “Zoom Out” item and icon.
  *
  * Deprecated: 3.10: Use named icon &quot;zoom-out&quot; or the label &quot;Zoom _Out&quot;.
  */
