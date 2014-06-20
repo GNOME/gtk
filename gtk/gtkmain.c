@@ -1647,23 +1647,16 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_EXPOSE:
-      if (event->any.window && gtk_widget_get_double_buffered (event_widget))
+      /* We handle exposes only on native windows, relying on the
+       * draw() handler to propagate down to non-native windows.
+       * This is ok now that we child windows always are considered
+       * (semi)transparent.
+       */
+      if (event->any.window && gdk_window_has_native (event->expose.window))
         {
-	  /* We handle exposes only on native windows, relying on the
-	   * draw() handler to propagate down to non-native windows.
-	   * This is ok now that we child windows always are considered
-	   * (semi)transparent.
-	   */
-	  if (gdk_window_has_native (event->expose.window))
-	    {
-	      gdk_window_begin_paint_region (event->any.window, event->expose.region);
-	      gtk_widget_send_expose (event_widget, event);
-	      gdk_window_end_paint (event->any.window);
-	    }
-        }
-      else
-        {
+          gdk_window_begin_paint_region (event->any.window, event->expose.region);
           gtk_widget_send_expose (event_widget, event);
+          gdk_window_end_paint (event->any.window);
         }
       break;
 
