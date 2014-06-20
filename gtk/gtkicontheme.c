@@ -1001,6 +1001,25 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
   do_theme_change (icon_theme);
 }
 
+/**
+ * gtk_icon_theme_add_resource_path:
+ * @icon_theme: a #GtkIconTheme
+ * @path: a resource path
+ *
+ * Adds a resource path that will be looked at when looking
+ * for icons, similar to search paths.
+ *
+ * This function should be used to make application-specific icons
+ * available as part of the icon theme.
+ *
+ * The resources are considered as part of the hicolor icon theme
+ * and must be located in subdirectories that are defined in the
+ * hicolor icon theme, such as `@path/16x16/actions/run.png`.
+ * Icons that are directly placed in the resource path instead
+ * of a subdirectory are also considered as ultimate fallback.
+ *
+ * Since: 3.14
+ */
 void
 gtk_icon_theme_add_resource_path (GtkIconTheme *icon_theme,
                                   const gchar  *path)
