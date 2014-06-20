@@ -4157,7 +4157,7 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
   gchar *css_warning;
   gchar *css_error;
   gchar *data;
-  gchar *width, *height;
+  gchar *size;
   gchar *file_data, *escaped_file_data;
   gsize file_len;
   SymbolicPixbufCache *symbolic_cache;
@@ -4171,7 +4171,8 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
     }
 
   /* css_fg can't possibly have failed, otherwise
-   * that would mean we have a broken style */
+   * that would mean we have a broken style
+   */
   g_return_val_if_fail (fg != NULL, NULL);
 
   css_fg = gdk_rgba_to_string (fg);
@@ -4196,24 +4197,10 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
   if (!g_file_load_contents (icon_info->icon_file, NULL, &file_data, &file_len, NULL, error))
     return NULL;
 
-  if (!icon_info->symbolic_pixbuf_size)
-    {
-      /* Fetch size from the original icon */
-      stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
-      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
-      g_object_unref (stream);
+  if (!icon_info_ensure_scale_and_pixbuf (icon_info, FALSE))
+    return NULL;
 
-      if (!pixbuf)
-        return NULL;
-
-      icon_info->symbolic_pixbuf_size = gtk_requisition_new ();
-      icon_info->symbolic_pixbuf_size->width = gdk_pixbuf_get_width (pixbuf);
-      icon_info->symbolic_pixbuf_size->height = gdk_pixbuf_get_height (pixbuf);
-      g_object_unref (pixbuf);
-    }
-
-  width = g_strdup_printf ("%d", icon_info->symbolic_pixbuf_size->width);
-  height = g_strdup_printf ("%d", icon_info->symbolic_pixbuf_size->height);
+  size = g_strdup_printf ("%d", icon_info->dir_size * icon_info->dir_scale);
 
   escaped_file_data = g_markup_escape_text (file_data, file_len);
   g_free (file_data);
@@ -4222,8 +4209,8 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
                       "<svg version=\"1.1\"\n"
                       "     xmlns=\"http://www.w3.org/2000/svg\"\n"
                       "     xmlns:xi=\"http://www.w3.org/2001/XInclude\"\n"
-                      "     width=\"", width, "\"\n"
-                      "     height=\"", height, "\">\n"
+                      "     width=\"", size, "\"\n"
+                      "     height=\"", size, "\">\n"
                       "  <style type=\"text/css\">\n"
                       "    rect,path {\n"
                       "      fill: ", css_fg," !important;\n"
@@ -4246,13 +4233,12 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
   g_free (css_warning);
   g_free (css_error);
   g_free (css_success);
-  g_free (width);
-  g_free (height);
+  g_free (size);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                icon_info->desired_size * icon_info->desired_scale,
-                                                icon_info->desired_size * icon_info->desired_scale,
+                                                gdk_pixbuf_get_width (icon_info->pixbuf),
+                                                gdk_pixbuf_get_height (icon_info->pixbuf),
                                                 TRUE,
                                                 NULL,
                                                 error);
