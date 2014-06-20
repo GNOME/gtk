@@ -334,6 +334,8 @@ static GtkIconInfo *theme_lookup_icon         (IconTheme        *theme,
 static void         theme_list_icons          (IconTheme        *theme,
                                                GHashTable       *icons,
                                                GQuark            context);
+static gboolean     theme_has_icon            (IconTheme        *theme,
+                                               const gchar      *icon_name);
 static void         theme_list_contexts       (IconTheme        *theme,
                                                GHashTable       *contexts);
 static void         theme_subdir_load         (GtkIconTheme     *icon_theme,
@@ -2326,9 +2328,11 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
         return TRUE;
     }
 
-  if (g_hash_table_lookup_extended (priv->all_icons,
-                                    icon_name, NULL, NULL))
-    return TRUE;
+  for (l = priv->themes; l; l = l->next)
+    {
+      if (theme_has_icon (l->data, icon_name))
+        return TRUE;
+    }
 
   if (icon_theme_builtin_icons &&
       g_hash_table_lookup_extended (icon_theme_builtin_icons,
@@ -2988,6 +2992,31 @@ theme_list_icons (IconTheme  *theme,
         }
       l = l->next;
     }
+}
+
+static gboolean
+theme_has_icon (IconTheme   *theme,
+                const gchar *icon_name)
+{
+  GList *l;
+
+  for (l = theme->dirs; l; l = l->next)
+    {
+      IconThemeDir *dir = l->data;
+
+      if (dir->cache)
+        {
+          if (_gtk_icon_cache_has_icon (dir->cache, icon_name))
+            return TRUE;
+        }
+      else
+        {
+          if (g_hash_table_lookup (dir->icons, icon_name) != NULL)
+            return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 static void
