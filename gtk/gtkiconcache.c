@@ -323,8 +323,6 @@ _gtk_icon_cache_has_icons (GtkIconCache *cache,
       chain_offset = GET_UINT32 (cache->buffer, hash_offset + 4 + 4 * i);
       while (chain_offset != 0xffffffff)
 	{
-	  guint32 name_offset = GET_UINT32 (cache->buffer, chain_offset + 4);
-
 	  image_list_offset = GET_UINT32 (cache->buffer, chain_offset + 8);
 	  n_images = GET_UINT32 (cache->buffer, image_list_offset);
 
