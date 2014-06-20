@@ -2709,7 +2709,7 @@ theme_dir_destroy (IconThemeDir *dir)
 {
   if (dir->cache)
     _gtk_icon_cache_unref (dir->cache);
-  else
+  if (dir->icons)
     g_hash_table_destroy (dir->icons);
   
   g_free (dir->dir);
@@ -3063,7 +3063,7 @@ theme_list_contexts (IconTheme  *theme,
     }
 }
 
-static void
+static gboolean
 scan_directory (GtkIconThemePrivate *icon_theme,
                 IconThemeDir        *dir,
                 gchar               *full_dir)
@@ -3072,12 +3072,13 @@ scan_directory (GtkIconThemePrivate *icon_theme,
   const gchar *name;
 
   GTK_NOTE (ICONTHEME, g_print ("scanning directory %s\n", full_dir));
-  dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  
+
   gdir = g_dir_open (full_dir, 0, NULL);
 
   if (gdir == NULL)
-    return;
+    return FALSE;
+
+  dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   while ((name = g_dir_read_name (gdir)))
     {
@@ -3096,17 +3097,24 @@ scan_directory (GtkIconThemePrivate *icon_theme,
     }
   
   g_dir_close (gdir);
+
+  return g_hash_table_size (dir->icons) > 0;
 }
 
-static void
+static gboolean
 scan_resources (GtkIconThemePrivate  *icon_theme,
                 IconThemeDir         *dir,
-                gchar                *full_dir,
-                gchar               **children)
+                gchar                *full_dir)
 {
   gint i;
+  gchar **children;
 
   GTK_NOTE (ICONTHEME, g_print ("scanning resources %s\n", full_dir));
+
+  children = g_resources_enumerate_children (full_dir, 0, NULL);
+  if (!children)
+    return FALSE;
+
   dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   for (i = 0; children[i]; i++)
@@ -3124,6 +3132,9 @@ scan_resources (GtkIconThemePrivate  *icon_theme,
       /* takes ownership of base_name */
       g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
     }
+  g_strfreev (children);
+
+  return g_hash_table_size (dir->icons) > 0;
 }
 
 static void
@@ -3146,6 +3157,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
   GError *error = NULL;
   IconThemeDirMtime *dir_mtime;
   gint scale;
+  gboolean has_icons;
 
   size = g_key_file_get_integer (theme_file, subdir, "Size", &error);
   if (error)
@@ -3216,7 +3228,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
               dir_mtime->cache = _gtk_icon_cache_new_for_path (dir_mtime->dir);
             }
 
-          dir = g_new (IconThemeDir, 1);
+          dir = g_new0 (IconThemeDir, 1);
           dir->type = type;
           dir->is_resource = FALSE;
           dir->context = context;
@@ -3232,15 +3244,19 @@ theme_subdir_load (GtkIconTheme *icon_theme,
             {
               dir->cache = _gtk_icon_cache_ref (dir_mtime->cache);
               dir->subdir_index = _gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
+              has_icons = _gtk_icon_cache_has_icons (dir->cache, dir->subdir);
             }
           else
             {
               dir->cache = NULL;
               dir->subdir_index = -1;
-              scan_directory (icon_theme->priv, dir, full_dir);
+              has_icons = scan_directory (icon_theme->priv, dir, full_dir);
             }
 
-          theme->dirs = g_list_prepend (theme->dirs, dir);
+          if (has_icons)
+            theme->dirs = g_list_prepend (theme->dirs, dir);
+          else
+            theme_dir_destroy (dir);
         }
       else
         g_free (full_dir);
@@ -3248,36 +3264,25 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 
   for (d = icon_theme->priv->resource_paths; d; d = d->next)
     {
-      gchar **children;
-
       full_dir = g_build_filename ((const gchar *)d->data, theme->name, subdir, NULL);
-      children = g_resources_enumerate_children (full_dir, 0, NULL);
-      if (children)
-        {
-          dir = g_new (IconThemeDir, 1);
-          dir->type = type;
-          dir->is_resource = TRUE;
-          dir->context = context;
-          dir->size = size;
-          dir->min_size = min_size;
-          dir->max_size = max_size;
-          dir->threshold = threshold;
-          dir->dir = full_dir;
-          dir->subdir = g_strdup (subdir);
-          dir->scale = scale;
-          dir->cache = NULL;
-          dir->subdir_index = -1;
+      dir = g_new0 (IconThemeDir, 1);
+      dir->type = type;
+      dir->is_resource = TRUE;
+      dir->context = context;
+      dir->size = size;
+      dir->min_size = min_size;
+      dir->max_size = max_size;
+      dir->threshold = threshold;
+      dir->dir = full_dir;
+      dir->subdir = g_strdup (subdir);
+      dir->scale = scale;
+      dir->cache = NULL;
+      dir->subdir_index = -1;
 
-          scan_resources (icon_theme->priv, dir, full_dir, children);
-
-          theme->dirs = g_list_prepend (theme->dirs, dir);
-          g_strfreev (children);
-        }
+      if (scan_resources (icon_theme->priv, dir, full_dir))
+        theme->dirs = g_list_prepend (theme->dirs, dir);
       else
-        {
-          GTK_NOTE (ICONTHEME, g_print ("no resources at %s\n", full_dir));
-          g_free (full_dir);
-        }
+        theme_dir_destroy (dir);
     }
 }
 
