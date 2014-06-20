@@ -4194,28 +4194,18 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
 
   if (warning_color)
     css_warning = gdk_rgba_to_string (warning_color);
+  else
+    css_warning = g_strdup ("rgb(245,121,62)");
 
   if (error_color)
     css_error = gdk_rgba_to_string (error_color);
+  else
+    css_error = g_strdup ("rgb(204,0,0)");
 
   if (success_color)
     css_success = gdk_rgba_to_string (success_color);
-
-  if (!css_success)
-    {
-      GdkColor success_default_color = { 0, 0x4e00, 0x9a00, 0x0600 };
-      css_success = gdk_color_to_css (&success_default_color);
-    }
-  if (!css_warning)
-    {
-      GdkColor warning_default_color = { 0, 0xf500, 0x7900, 0x3e00 };
-      css_warning = gdk_color_to_css (&warning_default_color);
-    }
-  if (!css_error)
-    {
-      GdkColor error_default_color = { 0, 0xcc00, 0x0000, 0x0000 };
-      css_error = gdk_color_to_css (&error_default_color);
-    }
+  else
+    css_success = g_strdup ("rgb(78,154,6)");
 
   if (!g_file_load_contents (icon_info->icon_file, NULL, &file_data, &file_len, NULL, error))
     return NULL;
