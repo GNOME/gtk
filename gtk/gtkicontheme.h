@@ -270,7 +270,7 @@ char *        gtk_icon_theme_get_example_icon_name (GtkIconTheme                
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_icon_theme_rescan_if_needed      (GtkIconTheme                *icon_theme);
 
-GDK_DEPRECATED_IN_3_14_FOR(gtk_icon_theme_add_builtin_icon)
+GDK_AVAILABLE_IN_ALL
 void          gtk_icon_theme_add_builtin_icon      (const gchar *icon_name,
 					            gint         size,
 					            GdkPixbuf   *pixbuf);
@@ -292,7 +292,7 @@ GDK_AVAILABLE_IN_3_10
 gint                  gtk_icon_info_get_base_scale     (GtkIconInfo   *icon_info);
 GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *icon_info);
-GDK_DEPRECATED_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GdkPixbuf *           gtk_icon_info_get_builtin_pixbuf (GtkIconInfo   *icon_info);
 GDK_AVAILABLE_IN_3_12
 gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *icon_info);
