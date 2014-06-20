@@ -3542,6 +3542,8 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
  *     The returned image must not be modified.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: This function is deprecated.
  */
 GdkPixbuf *
 gtk_icon_info_get_builtin_pixbuf (GtkIconInfo *icon_info)
@@ -4989,6 +4991,9 @@ gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
  * via gdk_pixbuf_new_from_inline().
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Use gtk_icon_theme_add_resource_path() to add
+ *     application-specific icons to the icon theme.
  */
 void
 gtk_icon_theme_add_builtin_icon (const gchar *icon_name,
