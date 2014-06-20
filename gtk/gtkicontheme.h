@@ -187,10 +187,6 @@ GDK_AVAILABLE_IN_ALL
 void          gtk_icon_theme_prepend_search_path   (GtkIconTheme                *icon_theme,
 						    const gchar                 *path);
 
-GDK_AVAILABLE_IN_3_14
-void          gtk_icon_theme_add_resource_path     (GtkIconTheme                *icon_theme,
-                                                    const gchar                 *path);
-
 GDK_AVAILABLE_IN_ALL
 void          gtk_icon_theme_set_custom_theme      (GtkIconTheme                *icon_theme,
 						    const gchar                 *theme_name);
