@@ -310,6 +310,12 @@ activate (GApplication *app)
                                    win_entries, G_N_ELEMENTS (win_entries),
                                    window);
 
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "statusbar");
+  gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "All systems are operating normally.");
+
+  g_action_map_add_action (G_ACTION_MAP (window),
+                           G_ACTION (g_property_action_new ("statusbar", widget, "visible")));
+
   widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar3");
   pulse_id = g_timeout_add (250, (GSourceFunc)pulse_it, widget);
   g_signal_connect (gtk_builder_get_object (builder, "adjustment1"),

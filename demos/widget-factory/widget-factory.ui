@@ -2428,6 +2428,17 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                                 <property name="action_name">win.toolbar</property>
                                               </object>
                                             </child>
+                                            <child>
+                                              <object class="GtkCheckMenuItem" id="statusbarmenuitem">
+                                                <property name="label">_Statusbar</property>
+                                                <property name="visible">True</property>
+                                                <property name="active">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="use_action_appearance">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="action_name">win.statusbar</property>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
@@ -2528,6 +2539,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                         <property name="wrap_mode">2</property>
                                       </object>
                                     </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkStatusbar" id="statusbar">
+                                    <property name="visible">True</property>
+                                    <property name="no-show-all">True</property>
                                   </object>
                                 </child>
                               </object>
