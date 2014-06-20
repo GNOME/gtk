@@ -171,6 +171,7 @@ struct _GtkIconThemePrivate
   gchar *current_theme;
   gchar **search_path;
   gint search_path_len;
+  GList *resource_paths;
 
   guint custom_theme        : 1;
   guint is_screen_singleton : 1;
@@ -251,6 +252,7 @@ struct _GtkIconInfo
   guint forced_size     : 1;
   guint emblems_applied : 1;
   guint is_svg          : 1;
+  guint is_resource     : 1;
 
   /* Cached information if we go ahead and try to load
    * the icon.
@@ -286,6 +288,7 @@ typedef struct
   gint max_size;
   gint threshold;
   gint scale;
+  gboolean is_resource;
 
   gchar *dir;
   gchar *subdir;
@@ -312,7 +315,6 @@ typedef struct
 {
   gchar *dir;
   time_t mtime; /* 0 == not existing or not a dir */
-
   GtkIconCache *cache;
 } IconThemeDirMtime;
 
@@ -832,21 +834,17 @@ gtk_icon_theme_finalize (GObject *object)
   g_assert (priv->info_cache_lru == NULL);
 
   if (priv->theme_changed_idle)
-    {
-      g_source_remove (priv->theme_changed_idle);
-      priv->theme_changed_idle = 0;
-    }
+    g_source_remove (priv->theme_changed_idle);
 
   unset_screen (icon_theme);
 
   g_free (priv->current_theme);
-  priv->current_theme = NULL;
 
   for (i = 0; i < priv->search_path_len; i++)
     g_free (priv->search_path[i]);
-
   g_free (priv->search_path);
-  priv->search_path = NULL;
+
+  g_list_free_full (priv->resource_paths, g_free);
 
   blow_themes (icon_theme);
 
@@ -996,6 +994,20 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
     priv->search_path[i] = priv->search_path[i - 1];
   
   priv->search_path[0] = g_strdup (path);
+
+  do_theme_change (icon_theme);
+}
+
+void
+gtk_icon_theme_add_resource_path (GtkIconTheme *icon_theme,
+                                  const gchar  *path)
+{
+  GtkIconThemePrivate *priv = icon_theme->priv;
+
+  g_return_if_fail (GTK_IS_ICON_THEME (icon_theme));
+  g_return_if_fail (path != NULL);
+
+  priv->resource_paths = g_list_append (priv->resource_paths, g_strdup (path));
 
   do_theme_change (icon_theme);
 }
@@ -2933,6 +2945,7 @@ theme_lookup_icon (IconTheme   *theme,
           icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
           icon_info->icon_file = g_file_new_for_path (icon_info->filename);
           icon_info->is_svg = suffix == ICON_SUFFIX_SVG;
+          icon_info->is_resource = min_dir->is_resource;
           g_free (file);
         }
       else
@@ -3032,10 +3045,8 @@ scan_directory (GtkIconThemePrivate *icon_theme,
   GDir *gdir;
   const gchar *name;
 
-  GTK_NOTE (ICONTHEME, 
-            g_print ("scanning directory %s\n", full_dir));
-  dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                      g_free, NULL);
+  GTK_NOTE (ICONTHEME, g_print ("scanning directory %s\n", full_dir));
+  dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   
   gdir = g_dir_open (full_dir, 0, NULL);
 
@@ -3059,6 +3070,34 @@ scan_directory (GtkIconThemePrivate *icon_theme,
     }
   
   g_dir_close (gdir);
+}
+
+static void
+scan_resources (GtkIconThemePrivate  *icon_theme,
+                IconThemeDir         *dir,
+                gchar                *full_dir,
+                gchar               **children)
+{
+  gint i;
+
+  GTK_NOTE (ICONTHEME, g_print ("scanning resources %s\n", full_dir));
+  dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  for (i = 0; children[i]; i++)
+    {
+      gchar *base_name;
+      IconSuffix suffix, hash_suffix;
+
+      suffix = suffix_from_name (children[i]);
+      if (suffix == ICON_SUFFIX_NONE)
+        continue;
+
+      base_name = strip_suffix (children[i]);
+
+      hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
+      /* takes ownership of base_name */
+      g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
+    }
 }
 
 static void
@@ -3140,7 +3179,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
       if (dir_mtime->mtime == 0)
         continue; /* directory doesn't exist */
 
-       full_dir = g_build_filename (dir_mtime->dir, subdir, NULL);
+      full_dir = g_build_filename (dir_mtime->dir, subdir, NULL);
 
       /* First, see if we have a cache for the directory */
       if (dir_mtime->cache != NULL || g_file_test (full_dir, G_FILE_TEST_IS_DIR))
@@ -3153,6 +3192,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 
           dir = g_new (IconThemeDir, 1);
           dir->type = type;
+          dir->is_resource = FALSE;
           dir->context = context;
           dir->size = size;
           dir->min_size = min_size;
@@ -3178,6 +3218,40 @@ theme_subdir_load (GtkIconTheme *icon_theme,
         }
       else
         g_free (full_dir);
+    }
+
+  for (d = icon_theme->priv->resource_paths; d; d = d->next)
+    {
+      gchar **children;
+
+      full_dir = g_build_filename ((const gchar *)d->data, theme->name, subdir, NULL);
+      children = g_resources_enumerate_children (full_dir, 0, NULL);
+      if (children)
+        {
+          dir = g_new (IconThemeDir, 1);
+          dir->type = type;
+          dir->is_resource = TRUE;
+          dir->context = context;
+          dir->size = size;
+          dir->min_size = min_size;
+          dir->max_size = max_size;
+          dir->threshold = threshold;
+          dir->dir = full_dir;
+          dir->subdir = g_strdup (subdir);
+          dir->scale = scale;
+          dir->cache = NULL;
+          dir->subdir_index = -1;
+
+          scan_resources (icon_theme->priv, dir, full_dir, children);
+
+          theme->dirs = g_list_prepend (theme->dirs, dir);
+          g_strfreev (children);
+        }
+      else
+        {
+          GTK_NOTE (ICONTHEME, g_print ("no resources at %s\n", full_dir));
+          g_free (full_dir);
+        }
     }
 }
 
@@ -3209,6 +3283,7 @@ icon_info_new (IconThemeDirType type,
   icon_info->dir_scale = dir_scale;
   icon_info->unscaled_scale = 1.0;
   icon_info->is_svg = FALSE;
+  icon_info->is_resource = FALSE;
 
   return icon_info;
 }
@@ -3645,6 +3720,24 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
   source_pixbuf = NULL;
   if (icon_info->cache_pixbuf)
     source_pixbuf = g_object_ref (icon_info->cache_pixbuf);
+  else if (icon_info->is_resource)
+    {
+      if (icon_info->is_svg)
+        {
+          gint size;
+
+          if (icon_info->forced_size)
+            size = scaled_desired_size;
+          else
+            size = icon_info->dir_size * icon_info->dir_scale * icon_info->scale;
+          source_pixbuf = gdk_pixbuf_new_from_resource_at_scale (icon_info->filename,
+                                                                 size, size, TRUE,
+                                                                 &icon_info->load_error);
+        }
+      else
+        source_pixbuf = gdk_pixbuf_new_from_resource (icon_info->filename,
+                                                      &icon_info->load_error);
+    }
   else
     {
       GInputStream *stream;
@@ -3665,10 +3758,8 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
               else
                 size = icon_info->dir_size * icon_info->dir_scale * icon_info->scale;
               source_pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                                   size,
-                                                                   size,
-                                                                   TRUE,
-                                                                   NULL,
+                                                                   size, size,
+                                                                   TRUE, NULL,
                                                                    &icon_info->load_error);
             }
           else
