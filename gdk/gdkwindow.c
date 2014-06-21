@@ -3004,11 +3004,18 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
 
   surface = get_window_surface (window);
 
-  return cairo_surface_create_for_rectangle (surface,
-                                             window->abs_x,
-                                             window->abs_y,
-                                             window->width,
-                                             window->height);
+  if (gdk_window_has_impl (window))
+    {
+      return surface;
+    }
+  else
+    {
+      return cairo_surface_create_for_rectangle (surface,
+                                                 window->abs_x,
+                                                 window->abs_y,
+                                                 window->width,
+                                                 window->height);
+    }
 }
 
 /**
