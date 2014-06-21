@@ -327,7 +327,7 @@ frame_callback (void               *data,
 #endif
 }
 
-static const struct wl_callback_listener listener = {
+static const struct wl_callback_listener frame_listener = {
   frame_callback
 };
 
@@ -375,7 +375,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
 
   callback = wl_surface_frame (impl->surface);
-  wl_callback_add_listener (callback, &listener, window);
+  wl_callback_add_listener (callback, &frame_listener, window);
   _gdk_frame_clock_freeze (clock);
 
   wl_surface_commit (impl->surface);
