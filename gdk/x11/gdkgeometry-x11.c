@@ -212,16 +212,14 @@ gdk_window_queue (GdkWindow          *window,
   g_queue_push_tail (display_x11->translate_queue, item);
 }
 
-gboolean
+void
 _gdk_x11_window_queue_antiexpose (GdkWindow *window,
 				  cairo_region_t *area)
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
-  item->antiexpose_area = area;
+  item->antiexpose_area = cairo_region_reference (area);
 
   gdk_window_queue (window, item);
-
-  return TRUE;
 }
 
 void

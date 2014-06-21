@@ -126,12 +126,10 @@ struct _GdkWindowImplClass
 
   /* Called before processing updates for a window. This gives the windowing
    * layer a chance to save the region for later use in avoiding duplicate
-   * exposes. The return value indicates whether the function has a saved
-   * the region; if the result is TRUE, then the windowing layer is responsible
-   * for destroying the region later.
+   * exposes.
    */
-  gboolean     (* queue_antiexpose)     (GdkWindow       *window,
-					 cairo_region_t  *update_area);
+  void     (* queue_antiexpose)     (GdkWindow       *window,
+                                     cairo_region_t  *update_area);
 
 /* Called to do the windowing system specific part of gdk_window_destroy(),
  *

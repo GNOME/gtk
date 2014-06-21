@@ -1495,11 +1495,10 @@ _gdk_broadway_display_after_process_all_updates (GdkDisplay *display)
 {
 }
 
-static gboolean
+static void
 gdk_broadway_window_queue_antiexpose (GdkWindow *window,
                                       cairo_region_t *area)
 {
-  return FALSE;
 }
 
 guint32

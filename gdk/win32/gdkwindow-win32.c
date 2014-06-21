@@ -3238,9 +3238,9 @@ gdk_win32_window_get_shape (GdkWindow *window)
   return NULL;
 }
 
-static gboolean
+static void
 _gdk_win32_window_queue_antiexpose (GdkWindow *window,
-				    cairo_region_t *area)
+                                    cairo_region_t *area)
 {
   HRGN hrgn = cairo_region_to_hrgn (area, 0, 0);
 
@@ -3251,8 +3251,6 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
   ValidateRgn (GDK_WINDOW_HWND (window), hrgn);
 
   DeleteObject (hrgn);
-
-  return FALSE;
 }
 
 static void

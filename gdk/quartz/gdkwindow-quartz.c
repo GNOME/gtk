@@ -2057,11 +2057,10 @@ gdk_window_quartz_set_static_gravities (GdkWindow *window,
   return FALSE;
 }
 
-static gboolean
+static void
 gdk_quartz_window_queue_antiexpose (GdkWindow *window,
                                     cairo_region_t *area)
 {
-  return FALSE;
 }
 
 static void

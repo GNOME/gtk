@@ -542,11 +542,10 @@ gdk_offscreen_window_get_geometry (GdkWindow *window,
     }
 }
 
-static gboolean
+static void
 gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
 				       cairo_region_t *area)
 {
-  return FALSE;
 }
 
 /**

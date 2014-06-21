@@ -1335,11 +1335,10 @@ gdk_window_wayland_set_static_gravities (GdkWindow *window,
   return TRUE;
 }
 
-static gboolean
+static void
 gdk_wayland_window_queue_antiexpose (GdkWindow      *window,
                                      cairo_region_t *area)
 {
-  return FALSE;
 }
 
 static void

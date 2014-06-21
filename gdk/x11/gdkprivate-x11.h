@@ -126,7 +126,7 @@ void     _gdk_x11_window_change_property   (GdkWindow    *window,
 void     _gdk_x11_window_delete_property   (GdkWindow    *window,
                                             GdkAtom       property);
 
-gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
+void     _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
                                             cairo_region_t *area);
 void     _gdk_x11_window_translate         (GdkWindow *window,
                                             cairo_region_t *area,
