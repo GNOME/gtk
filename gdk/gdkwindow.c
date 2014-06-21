@@ -2830,17 +2830,18 @@ gdk_window_end_paint (GdkWindow *window)
       cairo_set_source_surface (cr, window->current_paint.surface, 0, 0);
       gdk_cairo_region (cr, full_clip);
       cairo_clip (cr);
+
       if (gdk_window_has_impl (window) ||
-	  window->alpha == 255)
-	{
-	  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-	  cairo_paint (cr);
-	}
+          window->alpha == 255)
+        {
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cairo_paint (cr);
+        }
       else
-	{
-	  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-	  cairo_paint_with_alpha (cr, window->alpha / 255.0);
-	}
+        {
+          cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+          cairo_paint_with_alpha (cr, window->alpha / 255.0);
+        }
 
       cairo_destroy (cr);
       cairo_region_destroy (full_clip);
