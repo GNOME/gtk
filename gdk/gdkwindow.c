@@ -3030,6 +3030,11 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
  * Note that calling cairo_reset_clip() on the resulting #cairo_t will
  * produce undefined results, so avoid it at all costs.
  *
+ * As of GTK+ 3.14, you need to wrap calls to this function with
+ * gdk_window_begin_paint_region() / gdk_window_begin_paint_rect() and
+ * gdk_window_end_paint(). Calling it outside of a "paint" will
+ * result in a warning printed and a dummy surface being returned.
+ *
  * Returns: A newly created Cairo context. Free with
  *  cairo_destroy() when you are done drawing.
  * 
