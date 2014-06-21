@@ -92,11 +92,6 @@
 
 static gboolean gdk_event_translate (MSG        *msg,
 				     gint       *ret_valp);
-static void     handle_wm_paint     (MSG        *msg,
-				     GdkWindow  *window,
-				     gboolean    return_exposes,
-				     GdkEvent  **event);
-
 static gboolean gdk_event_prepare  (GSource     *source,
 				    gint        *timeout);
 static gboolean gdk_event_check    (GSource     *source);
@@ -1517,9 +1512,7 @@ adjust_drag (LONG *drag,
 
 static void
 handle_wm_paint (MSG        *msg,
-		 GdkWindow  *window,
-		 gboolean    return_exposes,
-		 GdkEvent  **event)
+		 GdkWindow  *window)
 {
   HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
   HDC hdc;
@@ -1547,38 +1540,6 @@ handle_wm_paint (MSG        *msg,
       (paintstruct.rcPaint.bottom == paintstruct.rcPaint.top))
     {
       GDK_NOTE (EVENTS, g_print (" (empty paintstruct, ignored)"));
-      DeleteObject (hrgn);
-      return;
-    }
-
-  if (return_exposes)
-    {
-      if (!GDK_WINDOW_DESTROYED (window))
-	{
-	  GList *list = _gdk_display->queued_events;
-
-	  *event = gdk_event_new (GDK_EXPOSE);
-	  (*event)->expose.window = window;
-	  (*event)->expose.area.x = paintstruct.rcPaint.left;
-	  (*event)->expose.area.y = paintstruct.rcPaint.top;
-	  (*event)->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
-	  (*event)->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
-	  (*event)->expose.region = _gdk_win32_hrgn_to_region (hrgn);
-	  (*event)->expose.count = 0;
-
-	  while (list != NULL)
-	    {
-	      GdkEventPrivate *evp = list->data;
-
-	      if (evp->event.any.type == GDK_EXPOSE &&
-		  evp->event.any.window == window &&
-		  !(evp->flags & GDK_EVENT_PENDING))
-		evp->event.expose.count++;
-
-	      list = list->next;
-	    }
-	}
-
       DeleteObject (hrgn);
       return;
     }
@@ -2613,7 +2574,7 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_PAINT:
-      handle_wm_paint (msg, window, FALSE, NULL);
+      handle_wm_paint (msg, window);
       break;
 
     case WM_SETCURSOR:
