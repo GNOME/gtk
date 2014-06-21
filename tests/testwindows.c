@@ -837,7 +837,6 @@ main (int argc, char **argv)
   gtk_widget_show (frame);
 
   darea =  gtk_drawing_area_new ();
-  /*gtk_widget_set_double_buffered (darea, FALSE);*/
   gtk_widget_add_events (darea, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_size_request (darea, 500, 500);
   g_signal_connect (darea, "button_release_event", 
