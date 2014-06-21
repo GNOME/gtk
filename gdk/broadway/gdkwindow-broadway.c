@@ -1495,9 +1495,9 @@ _gdk_broadway_display_after_process_all_updates (GdkDisplay *display)
 {
 }
 
-gboolean
-_gdk_broadway_window_queue_antiexpose (GdkWindow *window,
-				       cairo_region_t *area)
+static gboolean
+gdk_broadway_window_queue_antiexpose (GdkWindow *window,
+                                      cairo_region_t *area)
 {
   return TRUE;
 }
@@ -1539,7 +1539,7 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->shape_combine_region = gdk_window_broadway_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_broadway_input_shape_combine_region;
   impl_class->set_static_gravities = gdk_window_broadway_set_static_gravities;
-  impl_class->queue_antiexpose = _gdk_broadway_window_queue_antiexpose;
+  impl_class->queue_antiexpose = gdk_broadway_window_queue_antiexpose;
   impl_class->destroy = _gdk_broadway_window_destroy;
   impl_class->destroy_foreign = gdk_broadway_window_destroy_foreign;
   impl_class->get_shape = gdk_broadway_window_get_shape;
