@@ -4603,10 +4603,12 @@ gtk_notebook_get_path_for_child (GtkContainer *container,
   if (!c)
     return path;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_path_iter_add_region (path, 
                                    gtk_widget_path_length (path) - 2,
                                    GTK_STYLE_REGION_TAB,
                                    _gtk_notebook_get_tab_flags (notebook, page));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return path;
 }
@@ -6680,6 +6682,7 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
         {
           GtkRegionFlags current_flags;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           /* FIXME: We should store these flags somewhere instead of poking
            * the widget's path */
           if (!gtk_widget_path_iter_has_region (gtk_widget_get_path (page->tab_label),
@@ -6688,6 +6691,7 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
                                                 &current_flags)
               || current_flags != _gtk_notebook_get_tab_flags (notebook, page))
             _gtk_widget_invalidate_style_context (page->tab_label, GTK_CSS_CHANGE_PARENT_STATE);
+G_GNUC_END_IGNORE_DEPRECATIONS
         }
     }
 }

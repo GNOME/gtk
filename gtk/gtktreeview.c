@@ -8751,7 +8751,9 @@ gtk_tree_view_get_path_for_child (GtkContainer *container,
       if (!list->next)
         flags |= GTK_REGION_LAST;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_widget_path_iter_add_region (path, gtk_widget_path_length (path) - 2, GTK_STYLE_REGION_COLUMN_HEADER, flags);
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     }
   g_list_free (visible_columns);

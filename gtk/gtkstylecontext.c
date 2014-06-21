@@ -730,9 +730,11 @@ create_query_path (GtkStyleContext *context,
       GtkRegion *region;
 
       region = &g_array_index (info->regions, GtkRegion, i);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_widget_path_iter_add_region (path, pos,
                                        g_quark_to_string (region->class_quark),
                                        region->flags);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   /* Set widget classes */

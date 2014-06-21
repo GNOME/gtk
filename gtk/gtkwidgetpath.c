@@ -981,6 +981,8 @@ gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
  * and “-”, starting always with a lowercase letter.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14: The use of regions is deprecated.
  **/
 void
 gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
@@ -1020,6 +1022,8 @@ gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
  * the hierarchy defined in @path.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14: The use of regions is deprecated.
  **/
 void
 gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
@@ -1056,6 +1060,8 @@ gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
  * hierarchy defined in @path.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14: The use of regions is deprecated.
  **/
 void
 gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
@@ -1089,6 +1095,8 @@ gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
  *          free the list itself.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14: The use of regions is deprecated.
  **/
 GSList *
 gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
@@ -1136,6 +1144,8 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
  * Returns: %TRUE if the widget at @pos has the region defined.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14: The use of regions is deprecated.
  **/
 gboolean
 gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
@@ -1182,6 +1192,8 @@ gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
  * Returns: %TRUE if the class @name is defined for the widget at @pos
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.14: The use of regions is deprecated.
  **/
 gboolean
 gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
@@ -1203,7 +1215,9 @@ gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
   if (qname == 0)
     return FALSE;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   return gtk_widget_path_iter_has_qregion (path, pos, qname, flags);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
