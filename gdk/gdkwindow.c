@@ -3374,7 +3374,10 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  cairo_region_get_extents (update_area, &clip_box);
 	  expose_region = cairo_region_copy (update_area);
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-	  impl_class->queue_antiexpose (window, update_area);
+
+          if (impl_class->queue_antiexpose)
+            impl_class->queue_antiexpose (window, update_area);
+
           impl_class->process_updates_recurse (window, expose_region);
 	  cairo_region_destroy (expose_region);
 	}

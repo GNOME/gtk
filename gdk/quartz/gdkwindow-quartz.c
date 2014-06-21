@@ -2058,12 +2058,6 @@ gdk_window_quartz_set_static_gravities (GdkWindow *window,
 }
 
 static void
-gdk_quartz_window_queue_antiexpose (GdkWindow *window,
-                                    cairo_region_t *area)
-{
-}
-
-static void
 gdk_quartz_window_set_focus_on_map (GdkWindow *window,
                                     gboolean focus_on_map)
 {
@@ -2894,7 +2888,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->shape_combine_region = gdk_window_quartz_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
   impl_class->set_static_gravities = gdk_window_quartz_set_static_gravities;
-  impl_class->queue_antiexpose = gdk_quartz_window_queue_antiexpose;
   impl_class->destroy = gdk_quartz_window_destroy;
   impl_class->destroy_foreign = gdk_quartz_window_destroy_foreign;
   impl_class->get_shape = gdk_quartz_window_get_shape;

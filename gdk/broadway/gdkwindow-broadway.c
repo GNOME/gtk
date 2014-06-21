@@ -1495,12 +1495,6 @@ _gdk_broadway_display_after_process_all_updates (GdkDisplay *display)
 {
 }
 
-static void
-gdk_broadway_window_queue_antiexpose (GdkWindow *window,
-                                      cairo_region_t *area)
-{
-}
-
 guint32
 gdk_broadway_get_last_seen_time (GdkWindow  *window)
 {
@@ -1538,7 +1532,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->shape_combine_region = gdk_window_broadway_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_broadway_input_shape_combine_region;
   impl_class->set_static_gravities = gdk_window_broadway_set_static_gravities;
-  impl_class->queue_antiexpose = gdk_broadway_window_queue_antiexpose;
   impl_class->destroy = _gdk_broadway_window_destroy;
   impl_class->destroy_foreign = gdk_broadway_window_destroy_foreign;
   impl_class->get_shape = gdk_broadway_window_get_shape;
