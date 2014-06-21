@@ -2818,6 +2818,7 @@ gdk_window_end_paint (GdkWindow *window)
   if (window->current_paint.surface_needs_composite)
     {
       cairo_surface_t *surface;
+      gboolean skip_alpha_blending;
 
       cairo_region_get_extents (window->current_paint.region, &clip_box);
       full_clip = cairo_region_copy (window->clip_region);
@@ -2831,8 +2832,12 @@ gdk_window_end_paint (GdkWindow *window)
       gdk_cairo_region (cr, full_clip);
       cairo_clip (cr);
 
-      if (gdk_window_has_impl (window) ||
-          window->alpha == 255)
+      /* We can skip alpha blending for a fast composite case
+       * if we have an impl window or we're a fully opaque window. */
+      skip_alpha_blending = (gdk_window_has_impl (window) ||
+                             window->alpha == 255);
+
+      if (skip_alpha_blending)
         {
           cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
           cairo_paint (cr);
