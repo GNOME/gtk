@@ -137,37 +137,6 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
   CGContextSaveGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
-  /* We'll emulate the clipping caused by double buffering here */
-  if (window_impl->begin_paint_count != 0)
-    {
-      CGRect rect;
-      CGRect *cg_rects;
-      gint n_rects, i;
-
-      n_rects = cairo_region_num_rectangles (window_impl->paint_clip_region);
-
-      if (n_rects == 1)
-	cg_rects = &rect;
-      else
-	cg_rects = g_new (CGRect, n_rects);
-
-      for (i = 0; i < n_rects; i++)
-	{
-          cairo_rectangle_int_t cairo_rect;
-          cairo_region_get_rectangle (window_impl->paint_clip_region,
-                                      i, &cairo_rect);
-	  cg_rects[i].origin.x = cairo_rect.x;
-	  cg_rects[i].origin.y = cairo_rect.y;
-	  cg_rects[i].size.width = cairo_rect.width;
-	  cg_rects[i].size.height = cairo_rect.height;
-	}
-
-      CGContextClipToRects (cg_context, cg_rects, n_rects);
-
-      if (cg_rects != &rect)
-        g_free (cg_rects);
-    }
-
   return cg_context;
 }
 
@@ -379,12 +348,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkWindow       *window,
   cairo_region_translate (clipped_and_offset_region,
                      window->abs_x, window->abs_y);
 
-  if (impl->begin_paint_count == 0)
-    impl->paint_clip_region = cairo_region_reference (clipped_and_offset_region);
-  else
-    cairo_region_union (impl->paint_clip_region, clipped_and_offset_region);
-
-  impl->begin_paint_count++;
+  impl->paint_clip_region = cairo_region_reference (clipped_and_offset_region);
 
   if (cairo_region_is_empty (clipped_and_offset_region))
     goto done;
@@ -423,13 +387,8 @@ gdk_window_impl_quartz_end_paint (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
-  impl->begin_paint_count--;
-
-  if (impl->begin_paint_count == 0)
-    {
-      cairo_region_destroy (impl->paint_clip_region);
-      impl->paint_clip_region = NULL;
-    }
+  cairo_region_destroy (impl->paint_clip_region);
+  impl->paint_clip_region = NULL;
 }
 
 static void

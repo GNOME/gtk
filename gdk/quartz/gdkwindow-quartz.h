@@ -51,7 +51,6 @@ struct _GdkWindowImplQuartz
   GdkWindowTypeHint type_hint;
 
   cairo_region_t *paint_clip_region;
-  gint begin_paint_count;
   gint in_paint_rect_count;
 
   GdkWindow *transient_for;

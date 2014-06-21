@@ -205,7 +205,11 @@ struct _GdkWindow
 
   cairo_pattern_t *background;
 
-  GSList *paint_stack;
+  struct {
+    cairo_region_t *region;
+    cairo_surface_t *surface;
+    gboolean surface_needs_composite;
+  } current_paint;
 
   cairo_region_t *update_area;
   guint update_freeze_count;
