@@ -2773,7 +2773,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
     }
 
   if (!cairo_region_is_empty (window->current_paint.region))
-    gdk_window_clear_backing_region (window, window->current_paint.region);
+    gdk_window_clear_backing_region (window);
 }
 
 /**
@@ -2942,10 +2942,8 @@ gdk_window_get_visible_region (GdkWindow *window)
 }
 
 static void
-gdk_window_clear_backing_region (GdkWindow *window,
-				 cairo_region_t *region)
+gdk_window_clear_backing_region (GdkWindow *window)
 {
-  cairo_region_t *clip;
   GdkWindow *bg_window;
   cairo_pattern_t *pattern = NULL;
   int x_offset = 0, y_offset = 0;
@@ -2975,15 +2973,10 @@ gdk_window_clear_backing_region (GdkWindow *window,
   else
     cairo_set_source_rgb (cr, 0, 0, 0);
 
-  clip = cairo_region_copy (window->current_paint.region);
-  cairo_region_intersect (clip, region);
-
-  gdk_cairo_region (cr, clip);
+  gdk_cairo_region (cr, window->current_paint.region);
   cairo_fill (cr);
 
   cairo_destroy (cr);
-
-  cairo_region_destroy (clip);
 }
 
 /* This returns either the current working surface on the paint stack
