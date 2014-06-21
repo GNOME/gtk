@@ -160,8 +160,7 @@ static void gdk_window_get_property (GObject      *object,
                                      GValue       *value,
                                      GParamSpec   *pspec);
 
-static void gdk_window_clear_backing_region (GdkWindow *window,
-					     cairo_region_t *region);
+static void gdk_window_clear_backing_region (GdkWindow *window);
 
 static void recompute_visible_regions   (GdkWindow *private,
 					 gboolean recalculate_children);
