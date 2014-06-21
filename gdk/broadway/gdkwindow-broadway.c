@@ -1499,7 +1499,7 @@ static gboolean
 gdk_broadway_window_queue_antiexpose (GdkWindow *window,
                                       cairo_region_t *area)
 {
-  return TRUE;
+  return FALSE;
 }
 
 guint32
