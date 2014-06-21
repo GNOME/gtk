@@ -588,6 +588,25 @@ gdk_window_impl_wayland_begin_paint_region (GdkWindow            *window,
 }
 
 static void
+gdk_window_impl_wayland_end_paint (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  cairo_rectangle_int_t rect;
+  int i, n;
+
+  gdk_wayland_window_attach_image (window);
+
+  n = cairo_region_num_rectangles (window->current_paint.region);
+  for (i = 0; i < n; i++)
+    {
+      cairo_region_get_rectangle (window->current_paint.region, i, &rect);
+      wl_surface_damage (impl->surface,
+                         rect.x, rect.y, rect.width, rect.height);
+      impl->pending_commit = TRUE;
+    }
+}
+
+static void
 gdk_window_impl_wayland_finalize (GObject *object)
 {
   GdkWindowImplWayland *impl;
@@ -1796,23 +1815,7 @@ static void
 gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
                                             cairo_region_t *region)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  cairo_rectangle_int_t rect;
-  int i, n;
-
-  gdk_wayland_window_ensure_cairo_surface (window);
-  gdk_wayland_window_attach_image (window);
-
   _gdk_window_process_updates_recurse (window, region);
-
-  n = cairo_region_num_rectangles (region);
-  for (i = 0; i < n; i++)
-    {
-      cairo_region_get_rectangle (region, i, &rect);
-      wl_surface_damage (impl->surface,
-                         rect.x, rect.y, rect.width, rect.height);
-      impl->pending_commit = TRUE;
-    }
 }
 
 static void
@@ -1987,6 +1990,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->get_shape = gdk_wayland_window_get_shape;
   impl_class->get_input_shape = gdk_wayland_window_get_input_shape;
   impl_class->begin_paint_region = gdk_window_impl_wayland_begin_paint_region;
+  impl_class->end_paint = gdk_window_impl_wayland_end_paint;
   /* impl_class->beep */
 
   impl_class->focus = gdk_wayland_window_focus;
