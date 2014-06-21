@@ -2984,7 +2984,7 @@ gdk_window_clear_backing_region (GdkWindow *window,
  * or the actual impl surface of the window. This should not be used
  * from very many places: be careful! */
 static cairo_surface_t *
-get_window_surface (GdkWindow *window)
+ref_window_surface (GdkWindow *window)
 {
   if (window->impl_window->current_paint.surface)
     return cairo_surface_reference (window->impl_window->current_paint.surface);
@@ -3002,7 +3002,7 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  surface = get_window_surface (window);
+  surface = ref_window_surface (window);
 
   if (gdk_window_has_impl (window))
     {
@@ -3010,11 +3010,14 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
     }
   else
     {
-      return cairo_surface_create_for_rectangle (surface,
-                                                 window->abs_x,
-                                                 window->abs_y,
-                                                 window->width,
-                                                 window->height);
+      cairo_surface_t *subsurface;
+      subsurface = cairo_surface_create_for_rectangle (surface,
+                                                       window->abs_x,
+                                                       window->abs_y,
+                                                       window->width,
+                                                       window->height);
+      cairo_surface_destroy (surface);
+      return subsurface;
     }
 }
 
