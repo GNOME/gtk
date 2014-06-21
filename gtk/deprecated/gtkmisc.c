@@ -45,7 +45,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * The horizontal and vertical alignment attributes enable the widget to be
  * positioned within its allocated area. Note that if the widget is added to
  * a container in such a way that it expands automatically to fill its
- * allocated area, the alignment settings will not alter the widgets position.
+ * allocated area, the alignment settings will not alter the widget's position.
  *
  * Note that the desired effect can in most cases be achieved by using the
  * #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties
