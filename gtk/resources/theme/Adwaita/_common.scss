@@ -358,6 +358,8 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the GtkColorButton
 
 .inline-toolbar.toolbar GtkToolButton .button { @include button(normal); }
 
+GtkCheckButton:hover { -gtk-image-effect: highlight; }
+
 /*********
  * Links *
  *********/
