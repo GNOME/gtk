@@ -9213,6 +9213,8 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
 				gboolean   double_buffered)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_warning ("gtk_widget_set_double_buffered is deprecated and does nothing.");
 }
 
 /**
