@@ -545,6 +545,10 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "tearoff-state"))
         continue;
 
+      if (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET) &&
+	  g_str_equal (pspec->name, "double-buffered"))
+        continue;
+
       /* Can only be set on window widgets */
       if (pspec->owner_type == GTK_TYPE_WIDGET &&
           g_str_equal (pspec->name, "events"))
