@@ -991,6 +991,13 @@ gdk_broadway_window_get_input_shape (GdkWindow *window)
   return NULL;
 }
 
+static void
+gdk_broadway_window_end_paint (GdkWindow *window)
+{
+  GdkWindowImplBroadway *impl;
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+  impl->dirty = TRUE;
+}
 
 static gboolean
 gdk_window_broadway_set_static_gravities (GdkWindow *window,
@@ -1477,12 +1484,7 @@ static void
 gdk_broadway_window_process_updates_recurse (GdkWindow *window,
 					     cairo_region_t *region)
 {
-  GdkWindowImplBroadway *impl;
-
   _gdk_window_process_updates_recurse (window, region);
-
-  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-  impl->dirty = TRUE;
 }
 
 void
@@ -1536,6 +1538,7 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->destroy_foreign = gdk_broadway_window_destroy_foreign;
   impl_class->get_shape = gdk_broadway_window_get_shape;
   impl_class->get_input_shape = gdk_broadway_window_get_input_shape;
+  impl_class->end_paint = gdk_broadway_window_end_paint;
   impl_class->beep = gdk_broadway_window_beep;
 
   impl_class->focus = gdk_broadway_window_focus;
