@@ -70,10 +70,9 @@
  * depending on what “icon theme” is selected
  * by the user. The operation of icon themes on Linux and Unix
  * follows the [Icon Theme Specification](http://www.freedesktop.org/Standards/icon-theme-spec)
- * There is a default icon theme,
- * named `hicolor` where applications should install
- * their icons, but more additional application themes can be
- * installed as operating system vendors and users choose.
+ * There is a fallback icon theme, named `hicolor`, where applications
+ * should install their icons, but additional icon themes can be installed
+ * as operating system vendors and users choose.
  *
  * Named icons are similar to the deprecated [Stock Items][gtkstock],
  * and the distinction between the two may be a bit confusing.
@@ -110,8 +109,7 @@
  * can create new #GtkIconTheme objects, but it’s much more
  * efficient to use the standard icon theme for the #GdkScreen
  * so that the icon information is shared with other people
- * looking up icons. In the case where the default screen is
- * being used, looking up an icon can be as simple as:
+ * looking up icons.
  * |[<!-- language="C" -->
  * GError *error = NULL;
  * GtkIconTheme *icon_theme;
@@ -432,9 +430,9 @@ gtk_icon_theme_new (void)
  * gtk_icon_theme_get_for_screen().
  *
  * Returns: (transfer none): A unique #GtkIconTheme associated with
- *  the default screen. This icon theme is associated with
- *  the screen and can be used as long as the screen
- *  is open. Do not ref or unref it.
+ *     the default screen. This icon theme is associated with
+ *     the screen and can be used as long as the screen
+ *     is open. Do not ref or unref it.
  *
  * Since: 2.4
  */
@@ -863,16 +861,16 @@ gtk_icon_theme_finalize (GObject *object)
  * Sets the search path for the icon theme object. When looking
  * for an icon theme, GTK+ will search for a subdirectory of
  * one or more of the directories in @path with the same name
- * as the icon theme. (Themes from multiple of the path elements
- * are combined to allow themes to be extended by adding icons
- * in the user’s home directory.)
+ * as the icon theme containing an index.theme file. (Themes from
+ * multiple of the path elements are combined to allow themes to be
+ * extended by adding icons in the user’s home directory.)
  *
  * In addition if an icon found isn’t found either in the current
  * icon theme or the default icon theme, and an image file with
  * the right name is found directly in one of the elements of
  * @path, then that image will be used for the icon name.
  * (This is legacy feature, and new icons should be put
- * into the default icon theme, which is called hicolor,
+ * into the fallback icon theme, which is called hicolor,
  * rather than directly on the icon path.)
  *
  * Since: 2.4
@@ -1258,10 +1256,10 @@ load_themes (GtkIconTheme *icon_theme)
   if (priv->current_theme)
     insert_theme (icon_theme, priv->current_theme);
 
-  /* Always look in the gnome and hicolor icon themes.
-   * Looking in hicolor is mandated by the spec, looking
-   * in gnome is a pragmatic solution to prevent missing
-   * icons in GTK+ applications when run under, e.g. KDE.
+  /* Always look in the Adwaita, gnome and hicolor icon themes.
+   * Looking in hicolor is mandated by the spec, looking in Adwaita
+   * and gnome is a pragmatic solution to prevent missing icons in
+   * GTK+ applications when run under, e.g. KDE.
    */
   insert_theme (icon_theme, "Adwaita");
   insert_theme (icon_theme, "gnome");
