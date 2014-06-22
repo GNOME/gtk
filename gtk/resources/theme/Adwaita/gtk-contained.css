@@ -933,6 +933,8 @@ column-header .button, column-header .button:hover, column-header .button:active
       background-color: #fcfcfc; }
     .menu .menuitem.arrow {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+    .menu .menuitem.arrow:dir(rtl) {
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
 /***************
  * Popovers   *
@@ -2168,6 +2170,8 @@ GtkScrolledWindow GtkViewport.frame {
  *************/
 GtkExpander {
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+  GtkExpander:dir(rtl) {
+    -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
   GtkExpander:hover {
     color: #748489; }
   GtkExpander:active {

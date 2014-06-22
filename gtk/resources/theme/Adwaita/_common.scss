@@ -752,6 +752,7 @@ column-header {
     }
     //submenu indicators
     &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
+    &.arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
   }
 }
 
@@ -1627,6 +1628,7 @@ GtkScrolledWindow {
 
 GtkExpander {
   -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+  &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
   &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
   &:active { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
 }
