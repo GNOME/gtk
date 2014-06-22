@@ -3370,12 +3370,12 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      g_usleep (70000);
 	    }
 
-	  expose_region = cairo_region_copy (update_area);
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
           if (impl_class->queue_antiexpose)
             impl_class->queue_antiexpose (window, update_area);
 
+	  expose_region = cairo_region_copy (update_area);
           impl_class->process_updates_recurse (window, expose_region);
 	  cairo_region_destroy (expose_region);
 	}
