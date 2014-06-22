@@ -1369,7 +1369,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 2.18
    *
-   * Deprecated: 3.14
+   * Deprecated: 3.14: Widgets are always double-buffered.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DOUBLE_BUFFERED,
@@ -9204,9 +9204,9 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @double_buffered: %TRUE to double-buffer a widget
  *
- * Widgets are always double-buffered. This function does nothing.
+ * This function does nothing.
  *
- * Deprecated: 3.14
+ * Deprecated: 3.14: Widgets are always double-buffered.
  **/
 void
 gtk_widget_set_double_buffered (GtkWidget *widget,
