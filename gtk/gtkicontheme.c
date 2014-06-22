@@ -244,7 +244,6 @@ struct _GtkIconInfo
   gint dir_scale;
   gint min_size;
   gint max_size;
-  gdouble unscaled_scale;
 
   /* Parameters influencing the scaled icon
    */
@@ -261,6 +260,7 @@ struct _GtkIconInfo
   GdkPixbuf *pixbuf;
   GdkPixbuf *proxy_pixbuf;
   GError *load_error;
+  gdouble unscaled_scale;
   gdouble scale;
 
   SymbolicPixbufCache *symbolic_pixbuf_cache;
