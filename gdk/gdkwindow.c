@@ -3333,7 +3333,6 @@ static void
 gdk_window_process_updates_internal (GdkWindow *window)
 {
   GdkWindowImplClass *impl_class;
-  GdkRectangle clip_box;
   GdkWindow *toplevel;
 
   toplevel = gdk_window_get_toplevel (window);
@@ -3371,7 +3370,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      g_usleep (70000);
 	    }
 
-	  cairo_region_get_extents (update_area, &clip_box);
 	  expose_region = cairo_region_copy (update_area);
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
