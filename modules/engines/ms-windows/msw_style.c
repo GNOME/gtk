@@ -2647,6 +2647,8 @@ draw_themed_tab_button (GtkStyle *style,
   cairo_paint (cr);
   cairo_destroy (cr);
 
+  g_object_unref (pixmap);
+
   return TRUE;
 }
 
