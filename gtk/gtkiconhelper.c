@@ -264,7 +264,7 @@ get_icon_lookup_flags (GtkIconHelper *self, GtkStyleContext *context)
 
   if (self->priv->use_fallback)
     flags |= GTK_ICON_LOOKUP_GENERIC_FALLBACK;
-  if (self->priv->pixel_size != -1)
+  if (self->priv->pixel_size != -1 || self->priv->force_scale_pixbuf)
     flags |= GTK_ICON_LOOKUP_FORCE_SIZE;
 
   flags |= _gtk_style_context_get_icon_lookup_flags (context);
