@@ -245,7 +245,10 @@ gtk_switch_enter (GtkWidget        *widget,
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
 
   if (event->window == priv->event_window)
-    priv->in_switch = TRUE;
+    {
+      priv->in_switch = TRUE;
+      gtk_widget_queue_draw (widget);
+    }
 
   return FALSE;
 }
@@ -257,7 +260,10 @@ gtk_switch_leave (GtkWidget        *widget,
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
 
   if (event->window == priv->event_window)
-    priv->in_switch = FALSE;
+    {
+      priv->in_switch = FALSE;
+      gtk_widget_queue_draw (widget);
+    }
 
   return FALSE;
 }
@@ -464,9 +470,14 @@ gtk_switch_paint_handle (GtkWidget    *widget,
                          cairo_t      *cr,
                          GdkRectangle *box)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  GtkStateFlags state = gtk_widget_get_state_flags (widget);
 
   gtk_style_context_save (context);
+  if (priv->in_switch)
+    state |= GTK_STATE_FLAG_PRELIGHT;
+  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
 
   gtk_render_slider (context, cr,
