@@ -3250,13 +3250,6 @@ gdk_win32_input_shape_combine_region (GdkWindow *window,
   gdk_win32_window_shape_combine_region (window, shape_region, offset_x, offset_y);
 }
 
-static void
-gdk_win32_window_process_updates_recurse (GdkWindow *window,
-					       cairo_region_t *region)
-{
-  _gdk_window_process_updates_recurse (window, region);
-}
-
 gboolean
 gdk_win32_window_is_win32 (GdkWindow *window)
 {
@@ -3452,7 +3445,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->get_drag_protocol = _gdk_win32_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_win32_window_register_dnd;
   impl_class->drag_begin = _gdk_win32_window_drag_begin;
-  impl_class->process_updates_recurse = gdk_win32_window_process_updates_recurse;
   //? impl_class->sync_rendering = _gdk_win32_window_sync_rendering;
   impl_class->simulate_key = _gdk_win32_window_simulate_key;
   impl_class->simulate_button = _gdk_win32_window_simulate_button;

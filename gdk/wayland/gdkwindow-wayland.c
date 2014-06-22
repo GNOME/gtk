@@ -1805,13 +1805,6 @@ gdk_wayland_window_destroy_notify (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
-                                            cairo_region_t *region)
-{
-  _gdk_window_process_updates_recurse (window, region);
-}
-
-static void
 gdk_wayland_window_sync_rendering (GdkWindow *window)
 {
 }
@@ -2026,7 +2019,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->get_drag_protocol = _gdk_wayland_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_wayland_window_register_dnd;
   impl_class->drag_begin = _gdk_wayland_window_drag_begin;
-  impl_class->process_updates_recurse = gdk_wayland_window_process_updates_recurse;
   impl_class->sync_rendering = gdk_wayland_window_sync_rendering;
   impl_class->simulate_key = gdk_wayland_window_simulate_key;
   impl_class->simulate_button = gdk_wayland_window_simulate_button;

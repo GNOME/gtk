@@ -40,9 +40,17 @@ gdk_window_impl_beep (GdkWindow *window)
 }
 
 static void
+gdk_window_impl_process_updates_recurse (GdkWindow      *window,
+                                         cairo_region_t *region)
+{
+  _gdk_window_process_updates_recurse (window, region);
+}
+
+static void
 gdk_window_impl_class_init (GdkWindowImplClass *impl_class)
 {
   impl_class->beep = gdk_window_impl_beep;
+  impl_class->process_updates_recurse = gdk_window_impl_process_updates_recurse;
 }
 
 static void

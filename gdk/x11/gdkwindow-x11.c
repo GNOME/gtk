@@ -5491,13 +5491,6 @@ gdk_x11_window_set_composited (GdkWindow *window,
 #endif
 }
 
-static void
-gdk_x11_window_process_updates_recurse (GdkWindow      *window,
-                                        cairo_region_t *region)
-{
-  _gdk_window_process_updates_recurse (window, region);
-}
-
 void
 _gdk_x11_display_before_process_all_updates (GdkDisplay *display)
 {
@@ -5816,7 +5809,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->get_drag_protocol = gdk_x11_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_x11_window_register_dnd;
   impl_class->drag_begin = _gdk_x11_window_drag_begin;
-  impl_class->process_updates_recurse = gdk_x11_window_process_updates_recurse;
   impl_class->sync_rendering = _gdk_x11_window_sync_rendering;
   impl_class->simulate_key = _gdk_x11_window_simulate_key;
   impl_class->simulate_button = _gdk_x11_window_simulate_button;

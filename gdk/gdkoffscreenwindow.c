@@ -652,13 +652,6 @@ gdk_offscreen_window_set_transient_for (GdkWindow *window,
 }
 
 static void
-gdk_offscreen_window_process_updates_recurse (GdkWindow *window,
-                                              cairo_region_t *region)
-{
-  _gdk_window_process_updates_recurse (window, region);
-}
-
-static void
 gdk_offscreen_window_get_frame_extents (GdkWindow    *window,
 					GdkRectangle *rect)
 {
@@ -760,7 +753,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->destroy_notify = NULL;
   impl_class->register_dnd = gdk_offscreen_window_do_nothing;
   impl_class->drag_begin = NULL;
-  impl_class->process_updates_recurse = gdk_offscreen_window_process_updates_recurse;
   impl_class->sync_rendering = NULL;
   impl_class->simulate_key = NULL;
   impl_class->simulate_button = NULL;
