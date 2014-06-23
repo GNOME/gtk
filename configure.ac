@@ -13,8 +13,8 @@ AC_PREREQ(2.62)
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [24])
-m4_define([gtk_micro_version], [23])
-m4_define([gtk_interface_age], [23])
+m4_define([gtk_micro_version], [24])
+m4_define([gtk_interface_age], [24])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
 m4_define([gtk_version],

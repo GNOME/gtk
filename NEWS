@@ -1,3 +1,27 @@
+Overview of Changes from GTK+ 2.24.23 to 2.24.24
+================================================
+
+* Bug fixes:
+ 686170 gdk/win32: VK_SNAPSHOT maps to GDK_Print
+ 693200 Printing via evince crashes badly when /tmp is not writable
+ 696232 win32: do not crash on invalid utf8 conversion
+ 711177 Print to file fails with default settings
+ 711553 gdk/win32: remove extra allocation for \r removal
+ 721895 Remove GtkIconCache
+ 723366 GtkFileChooser crashes due to a signal connection left behind...
+ 728745 win32: add more clipboard data checks to avoid crash
+ 731967 Pixmap leak with GtkNotebook under mingw 
+
+* Other changes:
+- This release changes the default behavior of gtk-update-icon-cache
+  to not include image data into the icon cache. Use the new
+  --include-image-data flag to get the old behavior back.
+
+* Translation updates:
+ Hebrew
+ Polish
+
+
 Overview of Changes from GTK+ 2.24.22 to 2.24.23
 ================================================
 
