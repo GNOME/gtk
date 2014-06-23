@@ -3028,11 +3028,6 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
  * Note that calling cairo_reset_clip() on the resulting #cairo_t will
  * produce undefined results, so avoid it at all costs.
  *
- * As of GTK+ 3.14, you need to wrap calls to this function with
- * gdk_window_begin_paint_region() / gdk_window_begin_paint_rect() and
- * gdk_window_end_paint(). Calling it outside of a "paint" will
- * result in a warning printed and a dummy surface being returned.
- *
  * Returns: A newly created Cairo context. Free with
  *  cairo_destroy() when you are done drawing.
  * 
@@ -3042,27 +3037,20 @@ cairo_t *
 gdk_cairo_create (GdkWindow *window)
 {
   cairo_region_t *region;
+  cairo_surface_t *surface;
   cairo_t *cr;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  if (window->impl_window->current_paint.surface == NULL)
-    {
-      cairo_surface_t *dummy_surface;
-      cairo_t *cr;
+  surface = _gdk_window_ref_cairo_surface (window);
 
-      g_warning ("gdk_cairo_create called from outside a paint. Make sure to call "
-                 "gdk_window_begin_paint_region before calling gdk_cairo_create!");
+  cr = cairo_create (surface);
 
-      /* Return a dummy surface to keep apps from crashing. */
-      dummy_surface = cairo_image_surface_create (gdk_window_get_content (window), 0, 0);
-      cr = cairo_create (dummy_surface);
-      cairo_surface_destroy (dummy_surface);
-      return cr;
-    }
+  if (window->impl_window->current_paint.region != NULL)
+    region = cairo_region_copy (window->impl_window->current_paint.region);
+  else
+    region = cairo_region_copy (window->clip_region);
 
-  cr = cairo_create (window->impl_window->current_paint.surface);
-  region = cairo_region_copy (window->impl_window->current_paint.region);
   cairo_region_translate (region, -window->abs_x, -window->abs_y);
   gdk_cairo_region (cr, region);
   cairo_region_destroy (region);
