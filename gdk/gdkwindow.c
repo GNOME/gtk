@@ -3236,11 +3236,27 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
   GdkWindow *child;
   cairo_region_t *clipped_expose_region;
   GList *l, *children;
+  gboolean send_expose_event;
 
   if (window->destroyed)
     return;
 
   if (window->alpha == 0 && !gdk_window_has_impl (window))
+    return;
+
+  /* While gtk+ no longer handles exposes on anything but native
+     window we still have to send them to all windows that have the
+     event mask set for backwards compat. We also need to send
+     it to all native windows, even if they don't specify the
+     expose mask, because they may have non-native children that do. */
+  send_expose_event = (gdk_window_has_impl (window) ||
+                       window->event_mask & GDK_EXPOSURE_MASK);
+
+  /* If we have no children, we aren't an offscreen window, and we aren't going
+   * to send an expose event, so fizzle out now. */
+  if (window->children == NULL &&
+      !gdk_window_is_offscreen (window) &&
+      !send_expose_event)
     return;
 
   clipped_expose_region = cairo_region_copy (expose_region);
@@ -3258,13 +3274,7 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
 
   /* Paint the window before the children, clipped to the window region */
 
-  /* While gtk+ no longer handles exposes on anything but native
-     window we still have to send them to all windows that have the
-     event mask set for backwards compat. We also need to send
-     it to all native windows, even if they don't specify the
-     expose mask, because they may have non-native children that do. */
-  if (gdk_window_has_impl (window) ||
-      window->event_mask & GDK_EXPOSURE_MASK)
+  if (send_expose_event)
     {
       GdkEvent event;
 
