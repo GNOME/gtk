@@ -1710,9 +1710,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
     {
       icon_info = icon_info_new (ICON_THEME_DIR_UNTHEMED, size, 1);
 
-      /* A SVG icon, when allowed, beats out a XPM icon, but not
-       * a PNG icon
-       */
+      /* A SVG icon, when allowed, beats out a XPM icon, but not a PNG icon */
       if (allow_svg &&
           unthemed_icon->svg_filename &&
           (!unthemed_icon->no_svg_filename ||
@@ -1911,7 +1909,6 @@ choose_icon (GtkIconTheme       *icon_theme,
 
   return icon_info;
 }
-
 
 /**
  * gtk_icon_theme_lookup_icon:
@@ -3704,9 +3701,6 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
   if (icon_info->load_error)
     return FALSE;
 
-  /* SVG icons are a special case - we just immediately scale them
-   * to the desired size
-   */
   if (icon_info->icon_file && !icon_info->loadable)
     icon_info->loadable = G_LOADABLE_ICON (g_file_icon_new (icon_info->icon_file));
 
@@ -3770,6 +3764,9 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
                                      &icon_info->load_error);
       if (stream)
         {
+          /* SVG icons are a special case - we just immediately scale them
+           * to the desired size
+           */
           if (icon_info->is_svg)
             {
               gint size;
