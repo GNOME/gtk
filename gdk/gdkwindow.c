@@ -3244,7 +3244,6 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
 {
   GdkWindow *child;
   cairo_region_t *clipped_expose_region;
-  GdkRectangle clip_box;
   GList *l, *children;
 
   clipped_expose_region = cairo_region_copy (expose_region);
@@ -3257,16 +3256,8 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
   if (gdk_window_is_offscreen (window))
     gdk_window_add_damage (window, clipped_expose_region);
 
-  if (window->alpha != 255 && !gdk_window_has_impl (window))
-    {
-      if (window->alpha == 0)
-        goto out;
-
-      cairo_region_get_extents (clipped_expose_region, &clip_box);
-      clip_box.x += window->abs_x;
-      clip_box.y += window->abs_y;
-      /* TODO: How do we now do subwindow alphas */
-    }
+  if (window->alpha == 0 && !gdk_window_has_impl (window))
+    goto out;
 
   /* Paint the window before the children, clipped to the window region */
 
