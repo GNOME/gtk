@@ -3246,18 +3246,21 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
   cairo_region_t *clipped_expose_region;
   GList *l, *children;
 
+  if (window->destroyed)
+    return;
+
+  if (window->alpha == 0 && !gdk_window_has_impl (window))
+    return;
+
   clipped_expose_region = cairo_region_copy (expose_region);
   cairo_region_translate (clipped_expose_region, dx, dy);
   cairo_region_intersect (clipped_expose_region, window->clip_region);
 
-  if (cairo_region_is_empty (clipped_expose_region) || window->destroyed)
+  if (cairo_region_is_empty (clipped_expose_region))
     goto out;
 
   if (gdk_window_is_offscreen (window))
     gdk_window_add_damage (window, clipped_expose_region);
-
-  if (window->alpha == 0 && !gdk_window_has_impl (window))
-    goto out;
 
   /* Paint the window before the children, clipped to the window region */
 
