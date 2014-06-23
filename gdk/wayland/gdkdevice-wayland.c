@@ -183,6 +183,10 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
 
   buffer = _gdk_wayland_cursor_get_buffer (wd->cursor, wd->cursor_image_index,
                                            &x, &y, &w, &h, &scale);
+
+  if (!wd->wl_pointer)
+    return FALSE;
+
   wl_pointer_set_cursor (wd->wl_pointer,
                          wd->enter_serial,
                          wd->pointer_surface,
