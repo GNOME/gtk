@@ -3223,11 +3223,16 @@ gdk_window_add_damage (GdkWindow *toplevel,
 {
   GdkDisplay *display;
   GdkEvent event = { 0, };
+
+  /* This function only makes sense for offscreen windows. */
+  g_assert (gdk_window_is_offscreen (toplevel));
+
   event.expose.type = GDK_DAMAGE;
   event.expose.window = toplevel;
   event.expose.send_event = FALSE;
   event.expose.region = damaged_region;
   cairo_region_get_extents (event.expose.region, &event.expose.area);
+
   display = gdk_window_get_display (event.expose.window);
   _gdk_event_queue_append (display, gdk_event_copy (&event));
 }
