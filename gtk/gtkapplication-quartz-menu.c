@@ -176,7 +176,7 @@ icon_loaded (GObject      *object,
       [self didChangeToggled];
       [self didChangeAccel];
 
-      if (gtk_menu_tracker_item_get_has_submenu (trackerItem))
+      if (gtk_menu_tracker_item_get_has_link (trackerItem, G_MENU_LINK_SUBMENU))
         [self setSubmenu:[[[GNSMenu alloc] initWithTitle:[self title] trackerItem:trackerItem] autorelease]];
     }
 
@@ -280,7 +280,7 @@ icon_loaded (GObject      *object,
 
 - (void)didChangeVisible
 {
-  [self setHidden:gtk_menu_tracker_item_get_visible (trackerItem) ? NO : YES];
+  [self setHidden:gtk_menu_tracker_item_get_is_visible (trackerItem) ? NO : YES];
 }
 
 - (void)didChangeToggled
@@ -370,7 +370,8 @@ menu_item_removed (gint     position,
     {
       tracker = gtk_menu_tracker_new (observable,
                                       model,
-                                      NO, NO,
+                                      NO,
+                                      YES,
                                       NULL,
                                       menu_item_inserted,
                                       menu_item_removed,
@@ -386,7 +387,9 @@ menu_item_removed (gint     position,
 
   if (self != nil)
     {
-      tracker = gtk_menu_tracker_new_for_item_submenu (trackerItem,
+      tracker = gtk_menu_tracker_new_for_item_link (trackerItem,
+                                                       G_MENU_LINK_SUBMENU,
+                                                       YES,
                                                        menu_item_inserted,
                                                        menu_item_removed,
                                                        self);
