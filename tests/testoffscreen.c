@@ -103,7 +103,6 @@ create_layout (GtkWidget *vbox)
   gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (layout), hadjustment);
   gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (layout), vadjustment);
 
-  gtk_widget_set_events (layout_widget, GDK_EXPOSURE_MASK);
   g_signal_connect (layout, "draw",
 		    G_CALLBACK (layout_draw_handler),
                     NULL);

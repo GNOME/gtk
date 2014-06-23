@@ -344,8 +344,7 @@ main (int argc, char *argv[])
   g_signal_connect (drawing_area, "proximity_out_event",
 		    G_CALLBACK (proximity_out_event), NULL);
 
-  event_mask = GDK_EXPOSURE_MASK |
-    GDK_LEAVE_NOTIFY_MASK |
+  event_mask = GDK_LEAVE_NOTIFY_MASK |
     GDK_BUTTON_PRESS_MASK |
     GDK_KEY_PRESS_MASK |
     GDK_POINTER_MOTION_MASK |

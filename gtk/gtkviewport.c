@@ -741,7 +741,7 @@ gtk_viewport_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
 
-  event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  event_mask = gtk_widget_get_events (widget);
 
   attributes.event_mask = event_mask | GDK_SCROLL_MASK | GDK_TOUCH_MASK | GDK_SMOOTH_SCROLL_MASK;
 

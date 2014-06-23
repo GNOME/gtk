@@ -1659,7 +1659,6 @@ palette_new (GtkColorSelection *colorsel)
   g_object_set_data (G_OBJECT (retval), I_("color_set"), GINT_TO_POINTER (0));
   gtk_widget_set_events (retval, GDK_BUTTON_PRESS_MASK
                          | GDK_BUTTON_RELEASE_MASK
-                         | GDK_EXPOSURE_MASK
                          | GDK_ENTER_NOTIFY_MASK
                          | GDK_LEAVE_NOTIFY_MASK);
 

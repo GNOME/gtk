@@ -174,7 +174,7 @@ gtk_offscreen_window_realize (GtkWidget *widget)
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_OFFSCREEN;
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes.event_mask = gtk_widget_get_events (widget);
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.wclass = GDK_INPUT_OUTPUT;
 

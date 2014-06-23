@@ -1232,7 +1232,7 @@ gtk_tool_item_group_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = gtk_widget_get_events (widget)
-                         | GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK
+                         | GDK_VISIBILITY_NOTIFY_MASK
                          | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
                          | GDK_BUTTON_MOTION_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;

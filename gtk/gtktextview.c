@@ -4241,7 +4241,7 @@ gtk_text_view_realize (GtkWidget *widget)
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK;
+  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
@@ -9290,8 +9290,7 @@ text_window_realize (GtkTextWindow *win,
   attributes.y = 0;
   attributes.width = win->allocation.width;
   attributes.height = win->allocation.height;
-  attributes.event_mask = (GDK_EXPOSURE_MASK            |
-                           GDK_SCROLL_MASK              |
+  attributes.event_mask = (GDK_SCROLL_MASK              |
                            GDK_SMOOTH_SCROLL_MASK       |
                            GDK_KEY_PRESS_MASK           |
                            GDK_BUTTON_PRESS_MASK        |

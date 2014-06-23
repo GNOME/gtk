@@ -1073,7 +1073,7 @@ gtk_spin_button_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK
+  attributes.event_mask |= GDK_BUTTON_PRESS_MASK
     | GDK_BUTTON_RELEASE_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_ENTER_NOTIFY_MASK
     | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK;
 

@@ -731,7 +731,7 @@ gtk_tool_palette_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = gtk_widget_get_events (widget)
-                         | GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK
+                         | GDK_VISIBILITY_NOTIFY_MASK
                          | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
                          | GDK_BUTTON_MOTION_MASK
                          | GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK

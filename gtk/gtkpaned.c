@@ -1508,7 +1508,7 @@ gtk_paned_create_child_window (GtkPaned  *paned,
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes.event_mask = gtk_widget_get_events (widget);
   attributes.visual = gtk_widget_get_visual (widget);
   if (child)
     {

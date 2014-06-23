@@ -368,7 +368,7 @@ gtk_fixed_realize (GtkWidget *widget)
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.visual = gtk_widget_get_visual (widget);
       attributes.event_mask = gtk_widget_get_events (widget);
-      attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK;
+      attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
 
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
