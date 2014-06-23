@@ -2706,7 +2706,9 @@ gdk_window_begin_paint_rect (GdkWindow          *window,
  * #GdkEventExpose has already been cleared to the window background,
  * is already set as the clip region, and already has a backing store.
  * Therefore in most cases, application code need not call
- * gdk_window_begin_paint_region().
+ * gdk_window_begin_paint_region(). (You can disable the automatic
+ * calls around expose events on a widget-by-widget basis by calling
+ * gtk_widget_set_double_buffered().)
  *
  * If you call this function multiple times before calling the
  * matching gdk_window_end_paint(), the backing stores are pushed onto

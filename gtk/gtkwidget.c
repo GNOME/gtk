@@ -432,6 +432,7 @@ struct _GtkWidgetPrivate
   guint shadowed              : 1;
   guint style_update_pending  : 1;
   guint app_paintable         : 1;
+  guint double_buffered       : 1;
   guint redraw_on_alloc       : 1;
   guint no_show_all           : 1;
   guint child_visible         : 1;
@@ -1369,7 +1370,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 2.18
    *
-   * Deprecated: 3.14: Widgets are always double-buffered.
+   * Deprecated: 3.14: Widgets should not use this property.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DOUBLE_BUFFERED,
@@ -3812,6 +3813,7 @@ gtk_widget_set_property (GObject         *object,
         gtk_widget_queue_tooltip_query (widget);
       break;
     case PROP_DOUBLE_BUFFERED:
+      gtk_widget_set_double_buffered (widget, g_value_get_boolean (value));
       break;
     case PROP_HALIGN:
       gtk_widget_set_halign (widget, g_value_get_enum (value));
@@ -3975,7 +3977,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_object (value, gtk_widget_get_window (widget));
       break;
     case PROP_DOUBLE_BUFFERED:
-      g_value_set_boolean (value, TRUE);
+      g_value_set_boolean (value, gtk_widget_get_double_buffered (widget));
       break;
     case PROP_HALIGN:
       g_value_set_enum (value, gtk_widget_get_halign (widget));
@@ -4377,6 +4379,7 @@ gtk_widget_init (GtkWidget *widget)
 
   priv->sensitive = TRUE;
   priv->composite_child = composite_child_stack != 0;
+  priv->double_buffered = TRUE;
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
    
@@ -6962,8 +6965,11 @@ _gtk_widget_draw_windows (GdkWindow *window,
     {
       gdk_window_get_user_data (window, (gpointer *) &widget);
 
+      /* Only clear bg if double bufferer. This is what we used
+	 to do before, where begin_paint() did the clearing. */
       pattern = gdk_window_get_background_pattern (window);
-      if (pattern != NULL)
+      if (pattern != NULL &&
+	  widget->priv->double_buffered)
 	{
 	  cairo_save (cr);
 	  cairo_set_source (cr, pattern);
@@ -9204,9 +9210,30 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @double_buffered: %TRUE to double-buffer a widget
  *
- * This function does nothing.
+ * Widgets are double buffered by default; you can use this function
+ * to turn off the buffering. “Double buffered” simply means that
+ * gdk_window_begin_paint_region() and gdk_window_end_paint() are called
+ * automatically around expose events sent to the
+ * widget. gdk_window_begin_paint_region() diverts all drawing to a widget's
+ * window to an offscreen buffer, and gdk_window_end_paint() draws the
+ * buffer to the screen. The result is that users see the window
+ * update in one smooth step, and don’t see individual graphics
+ * primitives being rendered.
  *
- * Deprecated: 3.14: Widgets are always double-buffered.
+ * In very simple terms, double buffered widgets don’t flicker,
+ * so you would only use this function to turn off double buffering
+ * if you had special needs and really knew what you were doing.
+ *
+ * Note: if you turn off double-buffering, you have to handle
+ * expose events, since even the clearing to the background color or
+ * pixmap will not happen automatically (as it is done in
+ * gdk_window_begin_paint_region()).
+ *
+ * Since 3.10 this function only works for widgets with native
+ * windows.
+ *
+ * Deprecated: 3.14: This does not work under non-X11 backends,
+ * and it should not be used in newly written code.
  **/
 void
 gtk_widget_set_double_buffered (GtkWidget *widget,
@@ -9214,7 +9241,14 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_warning ("gtk_widget_set_double_buffered is deprecated and does nothing.");
+  double_buffered = (double_buffered != FALSE);
+
+  if (widget->priv->double_buffered != double_buffered)
+    {
+      widget->priv->double_buffered = double_buffered;
+
+      g_object_notify (G_OBJECT (widget), "double-buffered");
+    }
 }
 
 /**
@@ -9234,7 +9268,7 @@ gtk_widget_get_double_buffered (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return TRUE;
+  return widget->priv->double_buffered;
 }
 
 /**
