@@ -1647,25 +1647,32 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_EXPOSE:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      if (event->any.window && gtk_widget_get_double_buffered (event_widget))
+      if (event->any.window)
         {
-	  /* We handle exposes only on native windows, relying on the
-	   * draw() handler to propagate down to non-native windows.
-	   * This is ok now that we child windows always are considered
-	   * (semi)transparent.
-	   */
-	  if (gdk_window_has_native (event->expose.window))
-	    {
-	      gdk_window_begin_paint_region (event->any.window, event->expose.region);
-	      gtk_widget_send_expose (event_widget, event);
-	      gdk_window_end_paint (event->any.window);
-	    }
-        }
-      else
-      G_GNUC_END_IGNORE_DEPRECATIONS
-        {
-          gtk_widget_send_expose (event_widget, event);
+          gboolean is_double_buffered;
+
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+          is_double_buffered = gtk_widget_get_double_buffered (event_widget);
+          G_GNUC_END_IGNORE_DEPRECATIONS;
+
+          if (is_double_buffered)
+            {
+              /* We handle exposes only on native windows, relying on the
+               * draw() handler to propagate down to non-native windows.
+               * This is ok now that we child windows always are considered
+               * (semi)transparent.
+               */
+              if (gdk_window_has_native (event->expose.window))
+                {
+                  gdk_window_begin_paint_region (event->any.window, event->expose.region);
+                  gtk_widget_send_expose (event_widget, event);
+                  gdk_window_end_paint (event->any.window);
+                }
+            }
+          else
+            {
+              gtk_widget_send_expose (event_widget, event);
+            }
         }
       break;
 
