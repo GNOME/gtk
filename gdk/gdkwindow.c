@@ -3239,8 +3239,7 @@ gdk_window_add_damage (GdkWindow *toplevel,
 
 static void
 _gdk_window_process_updates_recurse_helper (GdkWindow *window,
-                                            cairo_region_t *expose_region,
-                                            int dx, int dy)
+                                            cairo_region_t *expose_region)
 {
   GdkWindow *child;
   cairo_region_t *clipped_expose_region;
@@ -3253,7 +3252,10 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
     return;
 
   clipped_expose_region = cairo_region_copy (expose_region);
-  cairo_region_translate (clipped_expose_region, dx, dy);
+
+  if (!gdk_window_has_impl (window))
+    cairo_region_translate (clipped_expose_region, -window->x, -window->y);
+
   cairo_region_intersect (clipped_expose_region, window->clip_region);
 
   if (cairo_region_is_empty (clipped_expose_region))
@@ -3305,7 +3307,7 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
 
       /* Client side child, expose */
       if (child->impl == window->impl)
-        _gdk_window_process_updates_recurse_helper ((GdkWindow *)child, clipped_expose_region, -child->x, -child->y);
+        _gdk_window_process_updates_recurse_helper ((GdkWindow *)child, clipped_expose_region);
     }
 
   g_list_free_full (children, g_object_unref);
@@ -3318,7 +3320,7 @@ void
 _gdk_window_process_updates_recurse (GdkWindow *window,
                                      cairo_region_t *expose_region)
 {
-  _gdk_window_process_updates_recurse_helper (window, expose_region, 0, 0);
+  _gdk_window_process_updates_recurse_helper (window, expose_region);
 }
 
 
