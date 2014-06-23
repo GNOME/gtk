@@ -232,9 +232,6 @@ struct _GdkWindow
   guint shaped : 1;
   guint support_multidevice : 1;
   guint synthesize_crossing_event_queued : 1;
-  guint effective_visibility : 2;
-  guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
-  guint native_visibility : 2; /* the native visibility of a impl windows */
   guint viewable : 1; /* mapped and all parents mapped */
   guint applied_shape : 1;
   guint in_update : 1;
