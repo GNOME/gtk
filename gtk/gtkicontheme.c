@@ -3350,11 +3350,16 @@ icon_info_dup (GtkIconInfo *icon_info)
   if (icon_info->cache_pixbuf)
     dup->cache_pixbuf = g_object_ref (icon_info->cache_pixbuf);
 
+  dup->scale = icon_info->scale;
   dup->unscaled_scale = icon_info->unscaled_scale;
   dup->desired_size = icon_info->desired_size;
   dup->desired_scale = icon_info->desired_scale;
   dup->forced_size = icon_info->forced_size;
   dup->emblems_applied = icon_info->emblems_applied;
+  dup->is_resource = icon_info->is_resource;
+  dup->min_size = icon_info->min_size;
+  dup->max_size = icon_info->max_size;
+  dup->symbolic_size = icon_info->symbolic_size;
 
   return dup;
 }
