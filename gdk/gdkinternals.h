@@ -374,9 +374,6 @@ GdkWindow * _gdk_window_find_descendant_at (GdkWindow *toplevel,
                                             double *found_x,
                                             double *found_y);
 
-void _gdk_window_add_damage (GdkWindow *toplevel,
-                             cairo_region_t *damaged_region);
-
 GdkEvent * _gdk_make_event (GdkWindow    *window,
                             GdkEventType  type,
                             GdkEvent     *event_in_queue,

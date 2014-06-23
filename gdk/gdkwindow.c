@@ -3218,6 +3218,21 @@ gdk_window_schedule_update (GdkWindow *window)
 }
 
 static void
+gdk_window_add_damage (GdkWindow *toplevel,
+                       cairo_region_t *damaged_region)
+{
+  GdkDisplay *display;
+  GdkEvent event = { 0, };
+  event.expose.type = GDK_DAMAGE;
+  event.expose.window = toplevel;
+  event.expose.send_event = FALSE;
+  event.expose.region = damaged_region;
+  cairo_region_get_extents (event.expose.region, &event.expose.area);
+  display = gdk_window_get_display (event.expose.window);
+  _gdk_event_queue_append (display, gdk_event_copy (&event));
+}
+
+static void
 _gdk_window_process_updates_recurse_helper (GdkWindow *window,
                                             cairo_region_t *expose_region,
                                             int dx, int dy)
@@ -3236,7 +3251,7 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
 
   if (gdk_window_is_offscreen (window->impl_window) &&
       gdk_window_has_impl (window))
-    _gdk_window_add_damage ((GdkWindow *) window->impl_window, clipped_expose_region);
+    gdk_window_add_damage ((GdkWindow *) window->impl_window, clipped_expose_region);
 
   if (window->alpha != 255 && !gdk_window_has_impl (window))
     {
@@ -6670,21 +6685,6 @@ gdk_window_is_shaped (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   return window->shaped;
-}
-
-void
-_gdk_window_add_damage (GdkWindow *toplevel,
-			cairo_region_t *damaged_region)
-{
-  GdkDisplay *display;
-  GdkEvent event = { 0, };
-  event.expose.type = GDK_DAMAGE;
-  event.expose.window = toplevel;
-  event.expose.send_event = FALSE;
-  event.expose.region = damaged_region;
-  cairo_region_get_extents (event.expose.region, &event.expose.area);
-  display = gdk_window_get_display (event.expose.window);
-  _gdk_event_queue_append (display, gdk_event_copy (&event));
 }
 
 /* Gets the toplevel for a window as used for events,
