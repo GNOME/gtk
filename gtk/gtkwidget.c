@@ -3813,7 +3813,9 @@ gtk_widget_set_property (GObject         *object,
         gtk_widget_queue_tooltip_query (widget);
       break;
     case PROP_DOUBLE_BUFFERED:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_widget_set_double_buffered (widget, g_value_get_boolean (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_HALIGN:
       gtk_widget_set_halign (widget, g_value_get_enum (value));
@@ -3977,7 +3979,9 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_object (value, gtk_widget_get_window (widget));
       break;
     case PROP_DOUBLE_BUFFERED:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       g_value_set_boolean (value, gtk_widget_get_double_buffered (widget));
+      G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_HALIGN:
       g_value_set_enum (value, gtk_widget_get_halign (widget));

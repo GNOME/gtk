@@ -1647,6 +1647,7 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_EXPOSE:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       if (event->any.window && gtk_widget_get_double_buffered (event_widget))
         {
 	  /* We handle exposes only on native windows, relying on the
@@ -1662,6 +1663,7 @@ gtk_main_do_event (GdkEvent *event)
 	    }
         }
       else
+      G_GNUC_END_IGNORE_DEPRECATIONS
         {
           gtk_widget_send_expose (event_widget, event);
         }
