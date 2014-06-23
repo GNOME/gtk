@@ -3249,9 +3249,8 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
   if (cairo_region_is_empty (clipped_expose_region) || window->destroyed)
     goto out;
 
-  if (gdk_window_is_offscreen (window->impl_window) &&
-      gdk_window_has_impl (window))
-    gdk_window_add_damage ((GdkWindow *) window->impl_window, clipped_expose_region);
+  if (gdk_window_is_offscreen (window))
+    gdk_window_add_damage (window, clipped_expose_region);
 
   if (window->alpha != 255 && !gdk_window_has_impl (window))
     {
