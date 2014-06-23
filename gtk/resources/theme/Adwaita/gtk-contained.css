@@ -2275,6 +2275,10 @@ GtkScrolledWindow GtkViewport.frame {
 
 .separator {
   color: rgba(0, 0, 0, 0.1); }
+  GtkFileChooserButton .separator, GtkFontButton .separator {
+    -GtkWidget-wide-separators: true;
+    -GtkWidget-horizontal-separator: 0;
+    -GtkWidget-vertical-separator: 0; }
 
 /*********
  * Lists *
