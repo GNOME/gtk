@@ -262,6 +262,8 @@ struct _GtkIconInfo
   gdouble scale;
 
   SymbolicPixbufCache *symbolic_pixbuf_cache;
+
+  gint symbolic_size;
 };
 
 typedef struct
@@ -4192,7 +4194,30 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
   if (!icon_info_ensure_scale_and_pixbuf (icon_info, FALSE))
     return NULL;
 
-  size = g_strdup_printf ("%d", icon_info->dir_size * icon_info->dir_scale);
+  if (icon_info->symbolic_size == 0)
+    {
+      /* Fetch size from the original icon */
+      stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
+      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
+      g_object_unref (stream);
+
+      if (!pixbuf)
+        return NULL;
+
+      icon_info->symbolic_size = MAX (gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf));
+      g_object_unref (pixbuf);
+    }
+
+  if (icon_info->dir_type != ICON_THEME_DIR_SCALABLE)
+    g_warning ("Symbolic icon %s is not in a scalable icon theme directory",
+               icon_info->key.icon_names[0]);
+  else if (icon_info->dir_size * icon_info->dir_scale != icon_info->symbolic_size)
+    g_warning ("Symbolic icon %s of size %d is in an icon theme directory of size %d",
+               icon_info->key.icon_names[0],
+               icon_info->symbolic_size,
+               icon_info->dir_size * icon_info->dir_scale);
+
+  size = g_strdup_printf ("%d", icon_info->symbolic_size);
 
   escaped_file_data = g_markup_escape_text (file_data, file_len);
   g_free (file_data);
