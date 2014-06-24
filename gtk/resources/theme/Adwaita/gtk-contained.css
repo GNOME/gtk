@@ -1120,9 +1120,9 @@ column-header .button, column-header .button:hover, column-header .button:active
     .notebook tab.right {
       padding-left: 17px;
       border-left-width: 3px; }
-    .notebook tab:hover, .notebook tab:prelight-page {
+    .notebook tab:hover, .notebook tab.prelight-page {
       border-color: #a1a1a1; }
-    .notebook tab:active, .notebook tab:backdrop:active {
+    .notebook tab:active, .notebook tab.active-page, .notebook tab:backdrop:active {
       border-color: #4a90d9; }
     .notebook tab:backdrop {
       background-color: transparent;
@@ -1131,7 +1131,7 @@ column-header .button, column-header .button:hover, column-header .button:active
       border-color: transparent; }
       .notebook tab.reorderable-page.top:hover, .notebook tab.reorderable-page.top.prelight-page {
         border-color: rgba(161, 161, 161, 0.3);
-        border-bottom-color: rgba(161, 161, 161, 0.3);
+        border-bottom-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
       .notebook tab.reorderable-page.top:active, .notebook tab.reorderable-page.top.active-page {
         background-color: rgba(237, 237, 237, 0.5);
@@ -1150,7 +1150,7 @@ column-header .button, column-header .button:hover, column-header .button:active
       border-color: transparent; }
       .notebook tab.reorderable-page.bottom:hover, .notebook tab.reorderable-page.bottom.prelight-page {
         border-color: rgba(161, 161, 161, 0.3);
-        border-top-color: rgba(161, 161, 161, 0.3);
+        border-top-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
       .notebook tab.reorderable-page.bottom:active, .notebook tab.reorderable-page.bottom.active-page {
         background-color: rgba(237, 237, 237, 0.5);
@@ -1169,7 +1169,7 @@ column-header .button, column-header .button:hover, column-header .button:active
       border-color: transparent; }
       .notebook tab.reorderable-page.left:hover, .notebook tab.reorderable-page.left.prelight-page {
         border-color: rgba(161, 161, 161, 0.3);
-        border-right-color: rgba(161, 161, 161, 0.3);
+        border-right-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
       .notebook tab.reorderable-page.left:active, .notebook tab.reorderable-page.left.active-page {
         background-color: rgba(237, 237, 237, 0.5);
@@ -1188,7 +1188,7 @@ column-header .button, column-header .button:hover, column-header .button:active
       border-color: transparent; }
       .notebook tab.reorderable-page.right:hover, .notebook tab.reorderable-page.right.prelight-page {
         border-color: rgba(161, 161, 161, 0.3);
-        border-left-color: rgba(161, 161, 161, 0.3);
+        border-left-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
       .notebook tab.reorderable-page.right:active, .notebook tab.reorderable-page.right.active-page {
         background-color: rgba(237, 237, 237, 0.5);
@@ -1208,14 +1208,14 @@ column-header .button, column-header .button:hover, column-header .button:active
       font-weight: bold;
       color: #8d9091;
       /* color: inherit doesn't work here */ }
+      .notebook tab GtkLabel:backdrop {
+        color: #8d9090; }
       .notebook tab GtkLabel.prelight-page {
         color: #5d6263; }
       .notebook tab GtkLabel.active-page {
         color: #2e3436; }
         .notebook tab GtkLabel.active-page:backdrop {
           color: #54595a; }
-      .notebook tab GtkLabel:backdrop {
-        color: #8d9090; }
     .notebook tab .button {
       border: 1px solid transparent;
       icon-shadow: none;
