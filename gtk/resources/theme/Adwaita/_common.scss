@@ -287,10 +287,10 @@
   }
 
   .primary-toolbar & { icon-shadow: none; } // tango icons don't need added shadows
-  .separator {
-    -GtkWidget-wide-separators: true;
-    -GtkWidget-horizontal-separator: 0;
-   }
+//  .separator {
+//    -GtkWidget-wide-separators: true;
+//    -GtkWidget-horizontal-separator: 0;
+//   }
   .linked &, .linked &:backdrop {
     @extend %linked_buttons;
   }
