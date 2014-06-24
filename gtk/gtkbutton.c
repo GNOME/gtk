@@ -134,6 +134,7 @@ static void gtk_real_button_released (GtkButton * button);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_update_state   (GtkButton          *button);
+static void gtk_button_enter_leave    (GtkButton          *button);
 static void gtk_button_add            (GtkContainer       *container,
 			               GtkWidget          *widget);
 static GType gtk_button_child_type    (GtkContainer       *container);
@@ -237,8 +238,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->pressed = gtk_real_button_pressed;
   klass->released = gtk_real_button_released;
   klass->clicked = NULL;
-  klass->enter = gtk_button_update_state;
-  klass->leave = gtk_button_update_state;
+  klass->enter = gtk_button_enter_leave;
+  klass->leave = gtk_button_enter_leave;
   klass->activate = gtk_real_button_activate;
 
   props[PROP_LABEL] =
@@ -2505,6 +2506,13 @@ _gtk_button_set_depressed (GtkButton *button,
       priv->depressed = depressed;
       gtk_widget_queue_resize (widget);
     }
+}
+
+static void
+gtk_button_enter_leave (GtkButton *button)
+{
+  gtk_button_update_state (button);
+  gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
 static void
