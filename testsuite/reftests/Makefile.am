@@ -356,6 +356,8 @@ testdata = \
 
 EXTRA_DIST += 			\
 	$(testdata)		\
+	reftests-dark.test.in	\
+	reftests-hc.test.in	\
 	reftests.test.in	\
 	$(NULL)
 
