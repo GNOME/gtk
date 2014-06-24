@@ -1,3 +1,65 @@
+Overview of Changes in GTK+ 3.13.2 to 3.13.3
+============================================
+
+* GtkInspector:
+ - Support saving custom CSS
+ - Show GMenus and GActions
+ - Show combobox menus and submenus
+ - Lower the inspector window when picking
+ - Misc. navigation improvements
+
+* Gestures:
+ - Convert most widgets to use gestures internally
+
+* Theming:
+ - Use client-side shadows for menus and tooltips
+ - Include the Adwaita theme
+ - The default theme is now Adwaita
+ - Icon loading now respects limits specified in the icon theme,
+   unless GTK_ICON_LOOKUP_FORCE_SIZE is set
+ - Don't include image content in icon caches, to avoid huge caches
+ - GtkSwitch gained a hover state
+
+* Widget factory:
+ - Improve coverage of GTK+ features
+
+* Wayland:
+ - Support GNOME classic mode
+
+* Deprecations:
+ - Style regions
+ - Support for .icon files
+ - gdk_window_flush, drawing outside of begin/end paint
+
+* Bugs fixed:
+ 721895	Remove GtkIconCache
+ 729820	GMenuModel submenu-action set 'false' before item activation
+ 730615	a11y private library not included in GIR
+ 730745	Port annotations from Vala
+ 730767	Tab that's being dragged is not updated
+ 730833	RTL in the inspector does not change the icons
+ 730924	Setting a GtkScrolledWindow to visible in a template causes a segfault
+ 731016	Text Drag'n'Drop broken in GtkTextView
+ 731020	3.13.2: PlacesSidebar changes directories on right click
+ 731187	Use csd shadows for menus
+ 731273	minimise and maximise buttons not present in header bars in gnome classic
+ 731299	Wrong function name for gtk_selection_data_get_data
+ 731371	Gtk gets confused by wayland touch events
+ 731377	Add a redirect on the website for the old language bindings page
+ 731382	Current docs still mention GtkList and GtkCList
+ 731429	Incorrect text provided by AtkText text-insert signal for GtkEntry
+ 731602	GTK+ 3.13.2 won't build in Windows
+ 731658	icon theme: Respect directory types for svg icons
+ 731790	GtkHeaderBar subtitle not redisplayed after custom title
+ 731834	GtkPopover is referenced directly in theme css
+ 731866	New window shadows
+ 731908	placessidebar: Use symbolic name for symbolic icon 
+
+* Updated translations:
+ Hebrew
+ Spanish
+
+
 Overview of Changes in GTK+ 3.13.1 to 3.13.2
 ============================================
 
