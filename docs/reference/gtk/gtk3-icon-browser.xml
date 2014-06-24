@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk3-icon-browser">
+
+<refentryinfo>
+  <title>gtk3-icon-browser</title>
+  <productname>GTK+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Matthias</firstname>
+      <surname>Clasen</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
+<refmeta>
+  <refentrytitle>gtk3-icon-browser</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname>gtk3-icon-browser</refname>
+  <refpurpose>List themed icons</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtk3-icon-browser</command>
+<arg choice="opt">--help</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<command>gtk3-icon-browswer</command> is a utility to explore the icons
+in the current icon theme. It shows icons in various sizes, their symbolic
+variants where available, as well as a description of the icon and its context.
+</para>
+</refsect1>
+
+<refsect1><title>Options</title>
+  <para>The following options are understood:</para>
+  <variablelist>
+    <varlistentry>
+    <term><option>-h</option>, <option>--help</option></term>
+      <listitem><para>Show help options</para></listitem>
+    </varlistentry>
+  </variablelist>
+</refsect1>
+
+</refentry>

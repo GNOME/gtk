@@ -153,6 +153,7 @@ content_files =					\
 	x11.sgml				\
 	gtk3-demo.xml				\
 	gtk3-widget-factory.xml			\
+	gtk3-icon-browser.xml			\
 	gtk-query-immodules-3.0.xml		\
 	gtk-update-icon-cache.xml		\
 	gtk-launch.xml				\
@@ -335,6 +336,7 @@ man_MANS = 				\
 	gtk-launch.1			\
 	gtk3-demo.1			\
 	gtk3-widget-factory.1		\
+	gtk3-icon-browser.1		\
 	broadwayd.1
 
 if ENABLE_MAN
