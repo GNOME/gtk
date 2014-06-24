@@ -106,7 +106,8 @@ gtk_css_matcher_widget_path_has_regions (const GtkCssMatcher *matcher)
   const GtkWidgetPath *siblings;
   GSList *regions;
   gboolean result;
-  
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
     regions = gtk_widget_path_iter_list_regions (siblings, matcher->path.sibling_index);
@@ -116,6 +117,7 @@ gtk_css_matcher_widget_path_has_regions (const GtkCssMatcher *matcher)
   g_slist_free (regions);
 
   return result;
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static gboolean
@@ -126,6 +128,7 @@ gtk_css_matcher_widget_path_has_region (const GtkCssMatcher *matcher,
   const GtkWidgetPath *siblings;
   GtkRegionFlags region_flags;
   
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
     {
@@ -142,6 +145,7 @@ gtk_css_matcher_widget_path_has_region (const GtkCssMatcher *matcher,
     return FALSE;
 
   return TRUE;
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static gboolean
