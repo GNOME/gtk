@@ -1484,14 +1484,16 @@ GtkSwitch {
       color: transparent; }
   .view.check:inconsistent {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
-  .view.check:selected {
+  .view.check:selected, .view.check:selected:focus {
     color: rgba(255, 255, 255, 0.1); }
-    .view.check:selected:active {
+    .view.check:selected:active, .view.check:selected:focus:active {
       color: white; }
-      .view.check:selected:active:backdrop {
+      .view.check:selected:active:backdrop, .view.check:selected:focus:active:backdrop {
         color: #fcfcfc; }
-    .view.check:selected:backdrop {
-      color: rgba(84, 89, 90, 0.1); }
+  .view.check:backdrop {
+    color: rgba(84, 89, 90, 0.1); }
+    .view.check:backdrop:selected {
+      color: rgba(252, 252, 252, 0.1); }
 
 .popover .button.check:hover {
   color: rgba(46, 52, 54, 0.1); }
@@ -1629,14 +1631,16 @@ GtkSwitch {
       color: transparent; }
   .view.radio:inconsistent {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
-  .view.radio:selected {
+  .view.radio:selected, .view.radio:selected:focus {
     color: rgba(255, 255, 255, 0.1); }
-    .view.radio:selected:active {
+    .view.radio:selected:active, .view.radio:selected:focus:active {
       color: white; }
-      .view.radio:selected:active:backdrop {
+      .view.radio:selected:active:backdrop, .view.radio:selected:focus:active:backdrop {
         color: #fcfcfc; }
-    .view.radio:selected:backdrop {
-      color: rgba(84, 89, 90, 0.1); }
+  .view.radio:backdrop {
+    color: rgba(84, 89, 90, 0.1); }
+    .view.radio:backdrop:selected {
+      color: rgba(252, 252, 252, 0.1); }
 
 .popover .button.radio:hover {
   color: rgba(46, 52, 54, 0.1); }

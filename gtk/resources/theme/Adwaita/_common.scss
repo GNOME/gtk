@@ -1182,6 +1182,8 @@ GtkSwitch {
 $asset_suffix: if($variant=='dark', '-dark', '');
 @each $w,$a in ('check', 'checkbox'),
                ('radio','radio') {
+
+  //standard checks and radios
   @each $s,$as in ('','-unchecked'),
                   (':hover', '-unchecked-hover'),
                   (':selected', '-unchecked-active'),
@@ -1253,15 +1255,17 @@ $asset_suffix: if($variant=='dark', '-dark', '');
     &:inconsistent {
       -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
     }
-    &:selected {
+    &:selected, &:selected:focus {
+      // :selected:focus not to get overridden by .view style
       color: transparentize($selected_fg_color,0.9);
       &:active {
         color: $selected_fg_color;
         &:backdrop { color: $backdrop_base_color; }
       }
-      &:backdrop {
-        color: transparentize($backdrop_fg_color,0.9);
-      }
+    }
+    &:backdrop {
+      color: transparentize($backdrop_fg_color,0.9);
+      &:selected { color: transparentize($backdrop_base_color,0.9); }
     }
   }
 
@@ -1881,6 +1885,7 @@ GtkColorChooserWidget #add-color-button {
     background-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
   }
 }
+
 
 /**********************
  * Window Decorations *
