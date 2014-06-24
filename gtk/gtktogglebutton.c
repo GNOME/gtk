@@ -136,6 +136,7 @@ static void gtk_toggle_button_get_property  (GObject              *object,
 					     GValue               *value,
 					     GParamSpec           *pspec);
 static void gtk_toggle_button_update_state  (GtkButton            *button);
+static void gtk_toggle_button_enter_leave   (GtkButton            *button);
 
 
 static void gtk_toggle_button_activatable_interface_init (GtkActivatableIface  *iface);
@@ -174,8 +175,8 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   button_class->pressed = gtk_toggle_button_pressed;
   button_class->released = gtk_toggle_button_released;
   button_class->clicked = gtk_toggle_button_clicked;
-  button_class->enter = gtk_toggle_button_update_state;
-  button_class->leave = gtk_toggle_button_update_state;
+  button_class->enter = gtk_toggle_button_enter_leave;
+  button_class->leave = gtk_toggle_button_enter_leave;
 
   class->toggled = NULL;
 
@@ -636,6 +637,13 @@ gtk_toggle_button_clicked (GtkButton *button)
 
   if (GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked)
     GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked (button);
+}
+
+static void
+gtk_toggle_button_enter_leave (GtkButton *button)
+{
+  gtk_toggle_button_update_state (button);
+  gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
 static void
