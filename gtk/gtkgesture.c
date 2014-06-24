@@ -287,21 +287,29 @@ _gtk_gesture_do_check (GtkGesture *gesture)
 }
 
 static gboolean
-_gtk_gesture_check_recognized (GtkGesture       *gesture,
-                               GdkEventSequence *sequence)
+_gtk_gesture_has_matching_touchpoints (GtkGesture *gesture)
 {
   GtkGesturePrivate *priv = gtk_gesture_get_instance_private (gesture);
   guint current_n_points;
 
   current_n_points = _gtk_gesture_effective_n_points (gesture);
 
-  if (priv->recognized &&
-      (current_n_points != priv->n_points ||
-       g_hash_table_size (priv->points) != priv->n_points))
+  return (current_n_points == priv->n_points &&
+          g_hash_table_size (priv->points) == priv->n_points);
+}
+
+static gboolean
+_gtk_gesture_check_recognized (GtkGesture       *gesture,
+                               GdkEventSequence *sequence)
+{
+  GtkGesturePrivate *priv = gtk_gesture_get_instance_private (gesture);
+  gboolean has_matching_touchpoints;
+
+  has_matching_touchpoints = _gtk_gesture_has_matching_touchpoints (gesture);
+
+  if (priv->recognized && !has_matching_touchpoints)
     _gtk_gesture_set_recognized (gesture, FALSE, sequence);
-  else if (!priv->recognized &&
-           current_n_points == priv->n_points &&
-           g_hash_table_size (priv->points) == priv->n_points &&
+  else if (!priv->recognized && has_matching_touchpoints &&
            _gtk_gesture_do_check (gesture))
     _gtk_gesture_set_recognized (gesture, TRUE, sequence);
 
@@ -576,16 +584,31 @@ gtk_gesture_handle_event (GtkEventController *controller,
     {
     case GDK_BUTTON_PRESS:
     case GDK_TOUCH_BEGIN:
-      if (_gtk_gesture_update_point (gesture, event, TRUE) &&
-          _gtk_gesture_check_recognized (gesture, sequence))
+      if (_gtk_gesture_update_point (gesture, event, TRUE))
         {
-          PointData *data;
+          gboolean triggered_recognition;
 
-          data = g_hash_table_lookup (priv->points, sequence);
+          triggered_recognition =
+            !was_recognized && _gtk_gesture_has_matching_touchpoints (gesture);
 
-          /* If the sequence was claimed early, the press event will be consumed */
-          if (gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
-            data->press_handled = TRUE;
+          if (_gtk_gesture_check_recognized (gesture, sequence))
+            {
+              PointData *data;
+
+              data = g_hash_table_lookup (priv->points, sequence);
+
+              /* If the sequence was claimed early, the press event will be consumed */
+              if (gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
+                data->press_handled = TRUE;
+            }
+          else if (triggered_recognition && g_hash_table_size (priv->points) == 0)
+            {
+              /* Recognition was triggered, but the gesture reset during
+               * ::begin emission. Still, recognition was strictly triggered,
+               * so the event should be consumed.
+               */
+              return TRUE;
+            }
         }
 
       break;
