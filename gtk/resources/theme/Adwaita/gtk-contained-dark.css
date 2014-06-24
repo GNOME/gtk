@@ -1415,6 +1415,11 @@ GtkSwitch {
   background-repeat: no-repeat;
   background-position: center; }
 
+.check:inconsistent:hover {
+  background-image: -gtk-scaled(url("assets/checkbox-mixed-hover-dark.png"), url("assets/checkbox-mixed-hover-dark@2.png"));
+  background-repeat: no-repeat;
+  background-position: center; }
+
 .check:inconsistent:selected {
   background-image: -gtk-scaled(url("assets/checkbox-mixed-active-dark.png"), url("assets/checkbox-mixed-active-dark@2.png"));
   background-repeat: no-repeat;
@@ -1559,6 +1564,11 @@ GtkSwitch {
 
 .radio:inconsistent {
   background-image: -gtk-scaled(url("assets/radio-mixed-dark.png"), url("assets/radio-mixed-dark@2.png"));
+  background-repeat: no-repeat;
+  background-position: center; }
+
+.radio:inconsistent:hover {
+  background-image: -gtk-scaled(url("assets/radio-mixed-hover-dark.png"), url("assets/radio-mixed-hover-dark@2.png"));
   background-repeat: no-repeat;
   background-position: center; }
 
