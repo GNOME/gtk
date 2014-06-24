@@ -3058,6 +3058,8 @@ gdk_cairo_create (GdkWindow *window)
   cairo_region_destroy (region);
   cairo_clip (cr);
 
+  cairo_surface_destroy (surface);
+
   return cr;
 }
 
