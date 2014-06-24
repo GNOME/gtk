@@ -287,6 +287,10 @@
   }
 
   .primary-toolbar & { icon-shadow: none; } // tango icons don't need added shadows
+  .separator {
+    -GtkWidget-wide-separators: true;
+    -GtkWidget-horizontal-separator: 0;
+   }
   .linked &, .linked &:backdrop {
     @extend %linked_buttons;
   }
@@ -358,7 +362,7 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the GtkColorButton
 
 .inline-toolbar.toolbar GtkToolButton .button { @include button(normal); }
 
-GtkCheckButton:hover { -gtk-image-effect: highlight; }
+//GtkCheckButton:hover { -gtk-image-effect: highlight; }
 
 /*********
  * Links *

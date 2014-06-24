@@ -419,6 +419,9 @@
     border-width: 1px; }
   .primary-toolbar .button {
     icon-shadow: none; }
+  .button .separator {
+    -GtkWidget-wide-separators: true;
+    -GtkWidget-horizontal-separator: 0; }
 
 .osd .button, .osd .button:hover, .osd .button:active, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked .button, .linked .button:backdrop {
   border-radius: 0;
@@ -476,9 +479,6 @@ GtkColorButton.button {
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   box-shadow: inset 0 1px white, 0 1px white; }
-
-GtkCheckButton:hover {
-  -gtk-image-effect: highlight; }
 
 /*********
  * Links *
