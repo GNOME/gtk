@@ -1836,7 +1836,6 @@ po-properties/Makefile.in
 demos/Makefile
 demos/gtk-demo/Makefile
 demos/gtk-demo/geninclude.pl
-demos/pixbuf-demo/Makefile
 demos/widget-factory/Makefile
 examples/Makefile
 examples/application1/Makefile
