@@ -1068,31 +1068,46 @@ column-header .button, column-header .button:hover, column-header .button:active
     border-style: solid;
     border-color: transparent;
     background-color: transparent;
-    outline-offset: 0; }
+    outline-offset: 0;
+    /* works for testnotebookdnd, but there's a superfluous border
+       in gedit or web, commented out for now, needs gtk fixes
+    &.reorderable-page {
+      &.top {
+        padding-top: ($vt_vpadding - 1px);
+        border-top-width: 1px;
+        border-left-width: 1px;
+        border-right-width: 1px;
+      }
+      &.bottom {
+        padding-bottom: ($vt_vpadding - 1px);
+        border-bottom-width: 1px;
+        border-left-width: 1px;
+        border-right-width: 1px;
+      }
+      &.left {
+        padding-left: ($ht_hpadding - 1px);
+        border-left-width: 1px;
+        border-top-width: 1px;
+        border-bottom-width: 1px;
+      }
+      &.right {
+        padding-right: ($ht_hpadding - 1px);
+        border-right-width: 1px;
+        border-top-width: 1px;
+        border-bottom-width: 1px;
+      }
+    }
+    */ }
     .notebook tab.top, .notebook tab.bottom {
       padding: 8px 20px; }
     .notebook tab.left, .notebook tab.right {
       padding: 5px 20px; }
-    .notebook tab.reorderable-page.top {
-      padding-top: 7px;
-      border-top-width: 1px;
+    .notebook tab.reorderable-page.top, .notebook tab.reorderable-page.bottom {
       border-left-width: 1px;
       border-right-width: 1px; }
-    .notebook tab.reorderable-page.bottom {
-      padding-bottom: 7px;
+    .notebook tab.reorderable-page.left, .notebook tab.reorderable-page.right {
       border-bottom-width: 1px;
-      border-left-width: 1px;
-      border-right-width: 1px; }
-    .notebook tab.reorderable-page.left {
-      padding-left: 19px;
-      border-left-width: 1px;
-      border-top-width: 1px;
-      border-bottom-width: 1px; }
-    .notebook tab.reorderable-page.right {
-      padding-right: 19px;
-      border-right-width: 1px;
-      border-top-width: 1px;
-      border-bottom-width: 1px; }
+      border-top-width: 1px; }
     .notebook tab.top {
       padding-bottom: 5px;
       border-bottom-width: 3px; }

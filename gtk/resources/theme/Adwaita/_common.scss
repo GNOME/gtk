@@ -919,6 +919,9 @@ column-header {
     //notebook content frame...
     &.top, &.bottom { padding: $vt_vpadding $vt_hpadding; }
     &.left, &.right { padding: $ht_vpadding $ht_hpadding; }
+
+    /* works for testnotebookdnd, but there's a superfluous border
+       in gedit or web, commented out for now, needs gtk fixes
     &.reorderable-page {
       &.top {
         padding-top: ($vt_vpadding - 1px);
@@ -943,6 +946,17 @@ column-header {
         border-right-width: 1px;
         border-top-width: 1px;
         border-bottom-width: 1px;
+      }
+    }
+    */
+    &.reorderable-page {
+      &.top, &.bottom {
+        border-left-width: 1px;
+        border-right-width: 1px;
+      }
+      &.left, &.right {
+        border-bottom-width: 1px;
+        border-top-width: 1px;
       }
     }
     &.top {
