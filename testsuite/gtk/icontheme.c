@@ -5,10 +5,13 @@
 #define SCALABLE_IMAGE_SIZE (128)
 
 static GtkIconTheme *
-get_test_icontheme (void)
+get_test_icontheme (gboolean force_reload)
 {
   static GtkIconTheme *icon_theme = NULL;
   const char *current_dir;
+
+  if (force_reload)
+    g_clear_object (&icon_theme);
 
   if (icon_theme)
     return icon_theme;
@@ -53,7 +56,7 @@ assert_icon_lookup_size (const char         *icon_name,
 {
   GtkIconInfo *info;
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (), icon_name, size, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
   if (info == NULL)
     {
       g_error ("Could not look up an icon for \"%s\" with flags %s at size %d",
@@ -106,7 +109,7 @@ assert_icon_lookup_fails (const char         *icon_name,
 {
   GtkIconInfo *info;
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (), icon_name, size, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
 
   if (info != NULL)
     {
@@ -150,7 +153,7 @@ assert_lookup_order (const char         *icon_name,
 
   g_assert (lookups == NULL);
   
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (), icon_name, size, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
   if (info)
     g_object_unref (info);
   
@@ -540,7 +543,7 @@ test_list (void)
   GtkIconTheme *theme;
   GList *icons;
 
-  theme = get_test_icontheme ();
+  theme = get_test_icontheme (TRUE);
   icons = gtk_icon_theme_list_icons (theme, NULL);
 
   g_assert (g_list_find_custom (icons, "size-test", (GCompareFunc)g_strcmp0));
@@ -572,6 +575,88 @@ test_list (void)
   g_list_free_full (icons, g_free);
 }
 
+static gint loaded;
+
+static void
+load_icon (GObject      *source,
+           GAsyncResult *res,
+           gpointer      data)
+{
+  GtkIconInfo *info = (GtkIconInfo *)source;
+  GError *error = NULL;
+  GdkPixbuf *pixbuf;
+
+  pixbuf = gtk_icon_info_load_icon_finish (info, res, &error);
+  g_assert (pixbuf != NULL);
+  g_assert_no_error (error);
+  g_object_unref (pixbuf);
+
+  loaded++;
+}
+
+static void
+load_symbolic (GObject      *source,
+               GAsyncResult *res,
+               gpointer      data)
+{
+  GtkIconInfo *info = (GtkIconInfo *)source;
+  GError *error = NULL;
+  gboolean symbolic;
+  GdkPixbuf *pixbuf;
+
+  pixbuf = gtk_icon_info_load_symbolic_finish (info, res, &symbolic, &error);
+  g_assert (pixbuf != NULL);
+  g_assert_no_error (error);
+  g_object_unref (pixbuf);
+
+  loaded++;
+}
+
+static gboolean
+quit_loop (gpointer data)
+{
+  GMainLoop *loop = data;
+
+  if (loaded == 2)
+    {
+      g_main_loop_quit (loop);
+      return G_SOURCE_REMOVE;
+    }
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+test_async (void)
+{
+  GtkIconInfo *info1, *info2;
+  GtkIconTheme *theme;
+  GMainLoop *loop;
+  GdkRGBA fg, red, green, blue;
+
+  gdk_rgba_parse (&fg, "white");
+  gdk_rgba_parse (&red, "red");
+  gdk_rgba_parse (&green, "green");
+  gdk_rgba_parse (&blue, "blue");
+
+  loop = g_main_loop_new (NULL, FALSE);
+  g_idle_add_full (G_PRIORITY_LOW, quit_loop, loop, NULL);
+
+  theme = get_test_icontheme (TRUE);
+  info1 = gtk_icon_theme_lookup_icon (theme, "twosize-fixed", 32, 0);
+  info2 = gtk_icon_theme_lookup_icon (theme, "only32-symbolic", 32, 0);
+  g_assert (info1);
+  g_assert (info2);
+  gtk_icon_info_load_icon_async (info1, NULL, load_icon, NULL);
+  gtk_icon_info_load_symbolic_async (info2, &fg, &red, &green, &blue, NULL, load_symbolic, NULL);
+  g_object_unref (info1);
+  g_object_unref (info2);
+
+  g_main_loop_run (loop);
+  g_main_loop_unref (loop);  
+
+  g_assert (loaded == 2);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -588,6 +673,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/size", test_size);
   g_test_add_func ("/icontheme/builtin", test_builtin);
   g_test_add_func ("/icontheme/list", test_list);
+  g_test_add_func ("/icontheme/async", test_async);
 
   return g_test_run();
 }
