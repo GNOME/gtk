@@ -25,6 +25,8 @@ LDADD = \
 
 noinst_PROGRAMS = $(TEST_PROGS)
 
+TESTS_ENVIRONMENT = G_ENABLE_DIAGNOSTIC=0
+
 TEST_PROGS += 			\
 	accel			\
 	accessible		\

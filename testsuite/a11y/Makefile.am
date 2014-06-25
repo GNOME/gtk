@@ -20,7 +20,10 @@ LDADD = \
 
 # work around random file systems showing up in the file chooser,
 # breaking the 'pickers' test
-TESTS_ENVIRONMENT = GIO_USE_VOLUME_MONITOR=unix GSETTINGS_BACKEND=memory
+TESTS_ENVIRONMENT = 			\
+	GIO_USE_VOLUME_MONITOR=unix 	\
+	GSETTINGS_BACKEND=memory	\
+	G_ENABLE_DIAGNOSTIC=0
 
 TEST_PROGS += accessibility-dump
 

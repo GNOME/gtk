@@ -1,7 +1,9 @@
 include $(top_srcdir)/Makefile.decl
 NULL =
 
-TESTS_ENVIRONMENT = GSETTINGS_BACKEND=memory
+TESTS_ENVIRONMENT = 			\
+	GSETTINGS_BACKEND=memory	\
+	G_ENABLE_DIAGNOSTIC=0
 
 TEST_PROGS += gtk-reftest
 
