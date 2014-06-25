@@ -22,6 +22,8 @@ demos/gtk-demo/sizegroup.c
 demos/gtk-demo/spinner.c
 demos/gtk-demo/stack.ui
 demos/gtk-demo/theming.ui
+demos/icon-browser/app-menu.ui
+demos/icon-browser/window.ui
 demos/widget-factory/widget-factory.ui
 examples/application10/app-menu.ui
 examples/application10/gears-menu.ui
