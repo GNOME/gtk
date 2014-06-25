@@ -201,6 +201,18 @@ test_lookup_order (void)
                        "foo-bar",
                        "foo",
                        NULL);
+  assert_lookup_order ("foo-bar-baz", 16, GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_DIR_RTL,
+                       "foo-bar-baz-rtl",
+                       "foo-bar-baz",
+                       "foo-bar-rtl",
+                       "foo-bar",
+                       "foo-rtl",
+                       "foo",
+                       NULL);
+  assert_lookup_order ("foo-bar-baz", 16, GTK_ICON_LOOKUP_DIR_RTL,
+                       "foo-bar-baz-rtl",
+                       "foo-bar-baz",
+                       NULL);
   assert_lookup_order ("foo-bar-baz-symbolic", 16, GTK_ICON_LOOKUP_GENERIC_FALLBACK,
                        "foo-bar-baz-symbolic",
                        "foo-bar-symbolic",
