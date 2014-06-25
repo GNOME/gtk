@@ -604,7 +604,6 @@ populate (IconBrowserWindow *win)
   add_icon (win, "security-high", "The icon used to indicate that the security level of a connection is known to be secure, using strong encryption and a valid certificate.", "status");
   add_icon (win, "security-medium", "The icon used to indicate that the security level of a connection is presumed to be secure, using strong encryption, and a certificate that could not be automatically verified, but which the user has chosen to trust.", "status");
   add_icon (win, "security-low", "The icon used to indicate that the security level of a connection is presumed to be insecure, either by using weak encryption, or by using a certificate that the could not be automatically verified, and which the user has not chosent to trust.", "status");
-  add_icon (win, "small-progress", "", "status"); // missing from spec
   add_icon (win, "software-update-available", "The icon used when an update is available for software installed on the computing device, through the system software update program.", "status");
   add_icon (win, "software-update-urgent", "The icon used when an urgent update is available through the system software update program.", "status");
   add_icon (win, "sync-error", "The icon used when an error occurs while attempting to synchronize data from the computing device, to another device.", "status");
