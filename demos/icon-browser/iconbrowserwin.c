@@ -173,11 +173,9 @@ populate (IconBrowserWindow *win)
   add_icon (win, "address-book-new", "The icon used for the action to create a new address book.", "actions");
   add_icon (win, "application-exit", "The icon used for exiting an application. Typically this is seen in the application's menus as File->Quit.", "actions");
   add_icon (win, "appointment-new", "The icon used for the action to create a new appointment in a calendaring application.", "actions");
-  add_icon (win, "bookmark-add", "", "actions"); // missing from spec
   add_icon (win, "bookmark-new", "", "actions"); // missing from spec
   add_icon (win, "call-start", "The icon used for initiating or accepting a call. Should be similar to the standard cellular call pickup icon, a green handset with ear and mouth pieces facing upward.", "actions");
   add_icon (win, "call-stop", "The icon used for stopping a current call. Should be similar to the standard cellular call hangup icon, a red handset with ear and mouth pieces facing downward.", "actions");
-  add_icon (win, "call-end", "", "actions"); // missing from spec
   add_icon (win, "content-loading", "", "actions"); // missing from spec
   add_icon (win, "contact-new", "The icon used for the action to create a new contact in an address book application.", "actions");
   add_icon (win, "document-new", "The icon used for the action to create a new document.", "actions");
@@ -369,11 +367,8 @@ populate (IconBrowserWindow *win)
   add_icon (win, "drive-harddisk-ieee1394", "", "devices"); // missing from spec
   add_icon (win, "drive-harddisk-system", "", "devices"); // missing from spec
   add_icon (win, "drive-multidisk", "", "devices"); // missing from spec
-  add_icon (win, "drive-multidisk-alt", "", "devices"); // missing from spec
-  add_icon (win, "drive-multidisk-alt2", "", "devices"); // missing from spec
   add_icon (win, "drive-optical", "The icon used for optical media drives such as CD and DVD.", "devices");
   add_icon (win, "drive-removable-media", "The icon used for removable media drives.", "devices");
-  add_icon (win, "headphones", "", "devices"); // missing from spec
   add_icon (win, "input-dialpad", "", "devices"); // missing from spec
   add_icon (win, "input-gaming", "The icon used for the gaming input device.", "devices");
   add_icon (win, "input-keyboard", "The icon used for the keyboard input device.", "devices");
@@ -446,7 +441,6 @@ populate (IconBrowserWindow *win)
   add_icon (win, "face-smile-big", "The icon used for the :-D emote.", "emotes");
   add_icon (win, "face-smirk", "The icon used for the :-! emote.", "emotes");
   add_icon (win, "face-surprise", "The icon used for the :-0 emote.", "emotes");
-  add_icon (win, "face-surprised", "", "emotes"); // missing from spec
   add_icon (win, "face-tired", "The icon used for the |-) emote.", "emotes");
   add_icon (win, "face-uncertain", "The icon used for the :-/ emote.", "emotes");
   add_icon (win, "face-wink", "The icon used for the ;-) emote.", "emotes");
