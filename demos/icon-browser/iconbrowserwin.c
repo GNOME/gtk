@@ -459,7 +459,7 @@ populate (IconBrowserWindow *win)
   add_icon (win, "application-certificate", "", "mimetypes"); // missing from spec
   add_icon (win, "application-rss+xml", "", "mimetypes"); // missing from spec
   add_icon (win, "application-x-addon", "", "mimetypes"); // missing from spec
-  add_icon (win, "application-x-applicance", "", "mimetypes"); // missing from spec
+  add_icon (win, "application-x-appliance", "", "mimetypes"); // missing from spec
   add_icon (win, "application-x-executable", "The icon used for executable file types.", "mimetypes");
   add_icon (win, "audio-x-generic", "The icon used for generic audio file types.", "mimetypes");
   add_icon (win, "font-x-generic", "The icon used for generic font file types.", "mimetypes");
