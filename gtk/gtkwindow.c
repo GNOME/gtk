@@ -6175,6 +6175,19 @@ popover_realize (GtkWidget        *widget,
 }
 
 static void
+check_scale_changed (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GtkWidget *widget = GTK_WIDGET (window);
+  int old_scale;
+
+  old_scale = priv->scale;
+  priv->scale = gtk_widget_get_scale_factor (widget);
+  if (old_scale != priv->scale)
+    _gtk_widget_scale_changed (widget);
+}
+
+static void
 gtk_window_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
@@ -6185,7 +6198,6 @@ gtk_window_realize (GtkWidget *widget)
   gint attributes_mask;
   GtkWindowPrivate *priv;
   gint i;
-  int old_scale;
   GList *link;
 
   window = GTK_WINDOW (widget);
@@ -6434,10 +6446,7 @@ gtk_window_realize (GtkWidget *widget)
       popover_realize (popover->widget, popover, window);
     }
 
-  old_scale = priv->scale;
-  priv->scale = gtk_widget_get_scale_factor (widget);
-  if (old_scale != priv->scale)
-    _gtk_widget_scale_changed (widget);
+  check_scale_changed (window);
 }
 
 static void
@@ -7318,12 +7327,8 @@ gtk_window_configure_event (GtkWidget         *widget,
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   gboolean expected_reply = priv->configure_request_count > 0;
-  int old_scale;
 
-  old_scale = priv->scale;
-  priv->scale = gtk_widget_get_scale_factor (widget);
-  if (old_scale != priv->scale)
-    _gtk_widget_scale_changed (widget);
+  check_scale_changed (window);
 
   if (!gtk_widget_is_toplevel (widget))
     return FALSE;
@@ -10466,7 +10471,6 @@ gtk_window_set_screen (GtkWindow *window,
   GtkWidget *widget;
   GdkScreen *previous_screen;
   gboolean was_mapped;
-  int old_scale;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_SCREEN (screen));
@@ -10515,10 +10519,7 @@ gtk_window_set_screen (GtkWindow *window,
   if (was_mapped)
     gtk_widget_map (widget);
 
-  old_scale = priv->scale;
-  priv->scale = gtk_widget_get_scale_factor (widget);
-  if (old_scale != priv->scale)
-    _gtk_widget_scale_changed (widget);
+  check_scale_changed (window);
 }
 
 static void
