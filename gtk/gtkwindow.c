@@ -5575,13 +5575,12 @@ gtk_window_should_use_csd (GtkWindow *window)
     return TRUE;
 #endif
 
-  csd_env = g_getenv ("GTK_CSD");
-
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))) &&
-      g_strcmp0 (csd_env, "0") != 0)
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
     return TRUE;
 #endif
+
+  csd_env = g_getenv ("GTK_CSD");
 
   return (g_strcmp0 (csd_env, "1") == 0);
 }
