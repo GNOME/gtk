@@ -277,6 +277,7 @@ gtk_viewport_init (GtkViewport *viewport)
 
   priv->pixel_cache = _gtk_pixel_cache_new ();
 
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (viewport)), GTK_STYLE_CLASS_FRAME);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
 }
@@ -606,6 +607,7 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 {
   GtkViewportPrivate *priv;
   GtkWidget *widget;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
 
@@ -616,6 +618,12 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
     {
       priv->shadow_type = type;
 
+      context = gtk_widget_get_style_context (widget);
+      if (type != GTK_SHADOW_NONE)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+      else
+        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FRAME);
+ 
       gtk_widget_queue_resize (widget);
 
       g_object_notify (G_OBJECT (viewport), "shadow-type");
@@ -856,18 +864,10 @@ gtk_viewport_draw (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)) &&
-      priv->shadow_type != GTK_SHADOW_NONE)
-    {
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
-
-      gtk_render_frame (context, cr, 0, 0,
-                        gdk_window_get_width (gtk_widget_get_window (widget)),
-                        gdk_window_get_height (gtk_widget_get_window (widget)));
-
-      gtk_style_context_restore (context);
-    }
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
+    gtk_render_frame (context, cr, 0, 0,
+                      gdk_window_get_width (gtk_widget_get_window (widget)),
+                      gdk_window_get_height (gtk_widget_get_window (widget)));
 
   if (gtk_cairo_should_draw_window (cr, priv->bin_window))
     {
