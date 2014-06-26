@@ -9339,9 +9339,6 @@ gtk_window_move_resize (GtkWindow *window)
       /* gtk_window_configure_event() filled in widget->allocation */
       gtk_widget_size_allocate (widget, &allocation);
 
-      set_grip_position (window);
-      update_grip_visibility (window);
-
       /* If the configure request changed, it means that
        * we either:
        *   1) coincidentally changed hints or widget properties
