@@ -209,7 +209,6 @@ struct _GtkEntryPrivate
   guint         change_count            : 8;
   guint         cursor_visible          : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
-  guint         has_frame               : 1;
   guint         in_click                : 1; /* Flag so we don't select all when clicking in entry to focus in */
   guint         is_cell_renderer        : 1;
   guint         invisible_char_set      : 1;
@@ -2400,7 +2399,7 @@ gtk_entry_get_property (GObject         *object,
       break;
 
     case PROP_HAS_FRAME:
-      g_value_set_boolean (value, priv->has_frame);
+      g_value_set_boolean (value, gtk_entry_get_has_frame (entry));
       break;
 
     case PROP_INNER_BORDER:
@@ -2681,7 +2680,6 @@ gtk_entry_init (GtkEntry *entry)
   priv->max_width_chars = -1;
   priv->is_cell_renderer = FALSE;
   priv->editing_canceled = FALSE;
-  priv->has_frame = TRUE;
   priv->truncate_multiline = FALSE;
   priv->shadow_type = GTK_SHADOW_IN;
   priv->xalign = 0.0;
@@ -3383,27 +3381,22 @@ void
 _gtk_entry_get_borders (GtkEntry *entry,
                         GtkBorder *border_out)
 {
-  GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  GtkBorder tmp = { 0, 0, 0, 0 };
+  GtkBorder padding, border;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_padding (context, 0, &tmp);
 
-  if (priv->has_frame)
-    {
-      GtkBorder border;
-
-      gtk_style_context_get_border (context, 0, &border);
-      tmp.top += border.top;
-      tmp.right += border.right;
-      tmp.bottom += border.bottom;
-      tmp.left += border.left;
-    }
+  gtk_style_context_get_padding (context, 0, &padding);
+  gtk_style_context_get_border (context, 0, &border);
 
   if (border_out != NULL)
-    *border_out = tmp;
+    {
+      border_out->top = padding.top + border.top;
+      border_out->bottom = padding.bottom + border.bottom;
+      border_out->left = padding.left + border.left;
+      border_out->right = padding.right + border.right;
+    }
 }
 
 static void
@@ -3793,8 +3786,6 @@ gtk_entry_draw_frame (GtkWidget       *widget,
                       GtkStyleContext *context,
                       cairo_t         *cr)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEntryPrivate *priv = entry->priv;
   gint x = 0, y = 0, width, height;
   gint frame_x, frame_y;
 
@@ -3806,7 +3797,8 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 
   /* Fix a problem with some themes which assume that entry->text_area's
    * width equals widget->window's width
-   * http://bugzilla.gnome.org/show_bug.cgi?id=466000 */
+   * http://bugzilla.gnome.org/show_bug.cgi?id=466000
+   */
   if (GTK_IS_SPIN_BUTTON (widget))
     {
       GtkBorder borders;
@@ -3820,10 +3812,8 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 
   gtk_render_background (context, cr,
                          x, y, width, height);
-
-  if (priv->has_frame)
-    gtk_render_frame (context, cr,
-		      x, y, width, height);
+  gtk_render_frame (context, cr,
+		    x, y, width, height);
 
   gtk_entry_draw_progress (widget, context, cr);
 
@@ -8084,19 +8074,21 @@ void
 gtk_entry_set_has_frame (GtkEntry *entry,
                          gboolean  setting)
 {
-  GtkEntryPrivate *priv;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  priv = entry->priv;
-
   setting = (setting != FALSE);
 
-  if (priv->has_frame == setting)
+  if (setting == gtk_entry_get_has_frame (entry))
     return;
 
-  gtk_widget_queue_resize (GTK_WIDGET (entry));
-  priv->has_frame = setting;
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+  if (setting)
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FLAT);
+  else
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_FLAT);
+  gtk_widget_queue_draw (GTK_WIDGET (entry));
   g_object_notify (G_OBJECT (entry), "has-frame");
 }
 
@@ -8111,9 +8103,13 @@ gtk_entry_set_has_frame (GtkEntry *entry,
 gboolean
 gtk_entry_get_has_frame (GtkEntry *entry)
 {
+  GtkStyleContext *context;
+
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return entry->priv->has_frame;
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+
+  return !gtk_style_context_has_class (context, GTK_STYLE_CLASS_FLAT);
 }
 
 /**
