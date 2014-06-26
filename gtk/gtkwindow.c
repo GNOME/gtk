@@ -7384,8 +7384,6 @@ gtk_window_configure_event (GtkWidget         *widget,
   
   priv->configure_notify_received = TRUE;
 
-  gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE); // XXX - What was this for again?
-
   _gtk_container_queue_resize (GTK_CONTAINER (widget));
   
   return TRUE;
