@@ -9423,8 +9423,6 @@ gtk_window_move_resize (GtkWindow *window)
 
 	  gtk_widget_size_allocate (widget, &allocation);
 
-	  gdk_window_process_updates (gdk_window, TRUE);
-
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    gtk_widget_queue_draw (widget);
