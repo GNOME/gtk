@@ -611,7 +611,7 @@ get_default_icons (GtkIconFactory *factory)
   register_stock_icon (factory, GTK_STOCK_ZOOM_OUT, "zoom-out");
   register_stock_icon (factory, GTK_STOCK_ZOOM_FIT, "zoom-fit-best");
   register_stock_icon (factory, GTK_STOCK_SELECT_ALL, "edit-select-all");
-  register_stock_icon (factory, GTK_STOCK_CLEAR, "edit-clear");
+  register_bidi_stock_icon (factory, GTK_STOCK_CLEAR, "edit-clear");
   register_stock_icon (factory, GTK_STOCK_SELECT_COLOR, GTK_STOCK_SELECT_COLOR);
   register_stock_icon (factory, GTK_STOCK_COLOR_PICKER, GTK_STOCK_COLOR_PICKER);
 }
