@@ -586,11 +586,6 @@ static gboolean gtk_tree_view_enter_notify         (GtkWidget        *widget,
 						    GdkEventCrossing *event);
 static gboolean gtk_tree_view_leave_notify         (GtkWidget        *widget,
 						    GdkEventCrossing *event);
-#if 0
-static gboolean gtk_tree_view_configure            (GtkWidget         *widget,
-						    GdkEventConfigure *event);
-#endif
-
 static GtkWidgetPath * gtk_tree_view_get_path_for_child (GtkContainer *container,
                                                          GtkWidget    *child);
 
@@ -964,7 +959,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->get_preferred_width = gtk_tree_view_get_preferred_width;
   widget_class->get_preferred_height = gtk_tree_view_get_preferred_height;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
-  /*widget_class->configure_event = gtk_tree_view_configure;*/
   widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->draw = gtk_tree_view_draw;
   widget_class->key_press_event = gtk_tree_view_key_press;
@@ -3603,20 +3597,6 @@ gtk_tree_view_multipress_gesture_released (GtkGestureMultiPress *gesture,
   tree_view->priv->button_pressed_tree = NULL;
   tree_view->priv->button_pressed_node = NULL;
 }
-
-#if 0
-static gboolean
-gtk_tree_view_configure (GtkWidget *widget,
-			 GdkEventConfigure *event)
-{
-  GtkTreeView *tree_view;
-
-  tree_view = GTK_TREE_VIEW (widget);
-  tree_view->priv->search_position_func (tree_view, tree_view->priv->search_window);
-
-  return FALSE;
-}
-#endif
 
 /* GtkWidget::motion_event function set.
  */
