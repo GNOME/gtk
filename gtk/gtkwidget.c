@@ -360,6 +360,7 @@
  *     <child>
  *       <object class="GtkButton" id="hello_button">
  *         <property name="label">Hello World</property>
+ *         <signal name="clicked" handler="hello_button_clicked" object="FooWidget" swapped="yes"/>
  *       </object>
  *     </child>
  *     <child>
@@ -369,6 +370,85 @@
  *     </child>
  *   </template>
  * </interface>
+ * ]|
+ *
+ * Typically, you'll place the template fragment into a file that is
+ * bundled with your project, using #GResource. In order to load the
+ * template, you need to call gtk_widget_class_set_template_from_resource()
+ * from the class initialization of your #GtkWidget type:
+ *
+ * |[<!-- language="C" -->
+ * static void
+ * foo_widget_class_init (FooWidgetClass *klass)
+ * {
+ *   // ...
+ *
+ *   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
+ *                                                "/com/example/ui/foowidget.ui");
+ * }
+ * ]|
+ *
+ * You will also need to call gtk_widget_init_template() from the instance
+ * initialization function:
+ *
+ * |[<!-- language="C" -->
+ * static void
+ * foo_widget_init (FooWidget *self)
+ * {
+ *   // ...
+ *   gtk_widget_init_template (GTK_WIDGET (self));
+ * }
+ * ]|
+ *
+ * You can access widgets defined in the template using the
+ * gtk_widget_get_template_child() function, but you will typically declare
+ * a pointer in the instance private data structure of your type using the same
+ * name as the widget in the template definition, and call
+ * gtk_widget_class_bind_template_child_private() with that name, e.g.
+ *
+ * |[<!-- language="C" -->
+ * typedef struct {
+ *   GtkWidget *hello_button;
+ *   GtkWidget *goodbye_button;
+ * } FooWidgetPrivate;
+ *
+ * G_DEFINE_TYPE_WITH_PRIVATE (FooWidget, foo_widget, GTK_TYPE_BOX)
+ *
+ * static void
+ * foo_widget_class_init (FooWidgetClass *klass)
+ * {
+ *   // ...
+ *   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
+ *                                                "/com/example/ui/foowidget.ui");
+ *   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass),
+ *                                                 FooWidget, hello_button);
+ *   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass),
+ *                                                 FooWidget, goodbye_button);
+ * }
+ * ]|
+ *
+ * You can also use gtk_widget_class_bind_template_callback() to connect a signal
+ * callback defined in the template with a function visible in the scope of the
+ * class, e.g.
+ *
+ * |[<!-- language="C" -->
+ * // the signal handler has the instance and user data swapped
+ * // because of the swapped="yes" attribute in the template XML
+ * static void
+ * hello_button_clicked (FooWidget *self,
+ *                       GtkButton *button)
+ * {
+ *   g_print ("Hello, world!\n");
+ * }
+ *
+ * static void
+ * foo_widget_class_init (FooWidgetClass *klass)
+ * {
+ *   // ...
+ *   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
+ *                                                "/com/example/ui/foowidget.ui");
+ *   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (klass), hello_button_clicked);
+ * }
  * ]|
  */
 
