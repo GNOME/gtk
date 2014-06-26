@@ -400,9 +400,7 @@ enum {
 static void gtk_file_chooser_widget_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
 
-static GObject* gtk_file_chooser_widget_constructor  (GType                  type,
-						       guint                  n_construct_properties,
-						       GObjectConstructParam *construct_params);
+static void     gtk_file_chooser_widget_constructed  (GObject               *object);
 static void     gtk_file_chooser_widget_finalize     (GObject               *object);
 static void     gtk_file_chooser_widget_set_property (GObject               *object,
 						       guint                  prop_id,
@@ -2159,30 +2157,21 @@ location_toggle_popup_handler (GtkFileChooserWidget *impl)
     }
 }
 
-static GObject*
-gtk_file_chooser_widget_constructor (GType                  type,
-                                     guint                  n_construct_properties,
-                                     GObjectConstructParam *construct_params)
+static void
+gtk_file_chooser_widget_constructed (GObject *object)
 {
-  GtkFileChooserWidget *impl;
-  GtkFileChooserWidgetPrivate *priv;
-  GObject *object;
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (object);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   profile_start ("start", NULL);
 
-  object = G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->constructor (type,
-                                                                               n_construct_properties,
-                                                                               construct_params);
-  impl = GTK_FILE_CHOOSER_WIDGET (object);
-  priv = impl->priv;
+  G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->constructed (object);
 
   g_assert (priv->file_system);
 
   update_appearance (impl);
 
   profile_end ("end", NULL);
-
-  return object;
 }
 
 static void
@@ -6972,7 +6961,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   int i;
 
   gobject_class->finalize = gtk_file_chooser_widget_finalize;
-  gobject_class->constructor = gtk_file_chooser_widget_constructor;
+  gobject_class->constructed = gtk_file_chooser_widget_constructed;
   gobject_class->set_property = gtk_file_chooser_widget_set_property;
   gobject_class->get_property = gtk_file_chooser_widget_get_property;
   gobject_class->dispose = gtk_file_chooser_widget_dispose;

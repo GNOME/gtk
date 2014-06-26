@@ -522,21 +522,13 @@ add_action_widgets (GtkDialog *dialog)
     }
 }
 
-static GObject *
-gtk_dialog_constructor (GType                  type,
-                        guint                  n_construct_properties,
-                        GObjectConstructParam *construct_params)
+static void
+gtk_dialog_constructed (GObject *object)
 {
-  GObject *object;
-  GtkDialog *dialog;
-  GtkDialogPrivate *priv;
+  GtkDialog *dialog = GTK_DIALOG (object);
+  GtkDialogPrivate *priv = dialog->priv;
 
-  object = G_OBJECT_CLASS (gtk_dialog_parent_class)->constructor (type,
-                                                                  n_construct_properties,
-                                                                  construct_params);
-
-  dialog = GTK_DIALOG (object);
-  priv = dialog->priv;
+  G_OBJECT_CLASS (gtk_dialog_parent_class)->constructed (object);
 
   priv->constructed = TRUE;
   if (priv->use_header_bar == -1)
@@ -544,8 +536,6 @@ gtk_dialog_constructor (GType                  type,
 
   add_action_widgets (dialog);
   apply_use_header_bar (dialog);
-
-  return object;
 }
 
 static void
@@ -568,7 +558,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
 
-  gobject_class->constructor  = gtk_dialog_constructor;
+  gobject_class->constructed  = gtk_dialog_constructed;
   gobject_class->set_property = gtk_dialog_set_property;
   gobject_class->get_property = gtk_dialog_get_property;
   gobject_class->finalize = gtk_dialog_finalize;

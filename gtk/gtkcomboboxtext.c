@@ -92,16 +92,12 @@ G_DEFINE_TYPE_WITH_CODE (GtkComboBoxText, gtk_combo_box_text, GTK_TYPE_COMBO_BOX
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_combo_box_text_buildable_interface_init));
 
-static GObject *
-gtk_combo_box_text_constructor (GType                  type,
-                                guint                  n_construct_properties,
-                                GObjectConstructParam *construct_properties)
+static void
+gtk_combo_box_text_constructed (GObject *object)
 {
-  GObject    *object;
   const gint text_column = 0;
 
-  object = G_OBJECT_CLASS (gtk_combo_box_text_parent_class)->constructor
-    (type, n_construct_properties, construct_properties);
+  G_OBJECT_CLASS (gtk_combo_box_text_parent_class)->constructed (object);
 
   gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (object), text_column);
   gtk_combo_box_set_id_column (GTK_COMBO_BOX (object), 1);
@@ -116,8 +112,6 @@ gtk_combo_box_text_constructor (GType                  type,
                                       "text", text_column,
                                       NULL);
     }
-
-  return object;
 }
 
 static void
@@ -136,7 +130,7 @@ gtk_combo_box_text_class_init (GtkComboBoxTextClass *klass)
   GObjectClass *object_class;
 
   object_class = (GObjectClass *)klass;
-  object_class->constructor = gtk_combo_box_text_constructor;
+  object_class->constructed = gtk_combo_box_text_constructed;
 }
 
 static void

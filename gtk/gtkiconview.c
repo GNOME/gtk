@@ -117,9 +117,7 @@ enum
 /* GObject vfuncs */
 static void             gtk_icon_view_cell_layout_init          (GtkCellLayoutIface *iface);
 static void             gtk_icon_view_dispose                   (GObject            *object);
-static GObject         *gtk_icon_view_constructor               (GType               type,
-								 guint               n_construct_properties,
-								 GObjectConstructParam *construct_properties);
+static void             gtk_icon_view_constructed               (GObject            *object);
 static void             gtk_icon_view_set_property              (GObject            *object,
 								 guint               prop_id,
 								 const GValue       *value,
@@ -342,7 +340,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
 
-  gobject_class->constructor = gtk_icon_view_constructor;
+  gobject_class->constructed = gtk_icon_view_constructed;
   gobject_class->dispose = gtk_icon_view_dispose;
   gobject_class->set_property = gtk_icon_view_set_property;
   gobject_class->get_property = gtk_icon_view_get_property;
@@ -992,22 +990,15 @@ gtk_icon_view_init (GtkIconView *icon_view)
 }
 
 /* GObject methods */
-static GObject *
-gtk_icon_view_constructor (GType               type,
-			   guint               n_construct_properties,
-			   GObjectConstructParam *construct_properties)
+
+static void
+gtk_icon_view_constructed (GObject *object)
 {
-  GtkIconView        *icon_view;
-  GObject            *object;
+  GtkIconView *icon_view = GTK_ICON_VIEW (object);
 
-  object = G_OBJECT_CLASS (gtk_icon_view_parent_class)->constructor
-    (type, n_construct_properties, construct_properties);
-
-  icon_view = (GtkIconView *) object;
+  G_OBJECT_CLASS (gtk_icon_view_parent_class)->constructed (object);
 
   gtk_icon_view_ensure_cell_area (icon_view, NULL);
-
-  return object;
 }
 
 static void

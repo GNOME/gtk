@@ -118,9 +118,7 @@
 #define RULER_RADIUS 2
 
 
-static GObject *gtk_print_unix_dialog_constructor  (GType               type,
-                                                    guint               n_params,
-                                                    GObjectConstructParam *params);
+static void     gtk_print_unix_dialog_constructed  (GObject            *object);
 static void     gtk_print_unix_dialog_destroy      (GtkWidget          *widget);
 static void     gtk_print_unix_dialog_finalize     (GObject            *object);
 static void     gtk_print_unix_dialog_set_property (GObject            *object,
@@ -394,7 +392,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   object_class = (GObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
 
-  object_class->constructor = gtk_print_unix_dialog_constructor;
+  object_class->constructed = gtk_print_unix_dialog_constructed;
   object_class->finalize = gtk_print_unix_dialog_finalize;
   object_class->set_property = gtk_print_unix_dialog_set_property;
   object_class->get_property = gtk_print_unix_dialog_get_property;
@@ -792,15 +790,12 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   _gtk_print_load_custom_papers (priv->custom_paper_list);
 }
 
-static GObject *
-gtk_print_unix_dialog_constructor (GType                  type,
-                                   guint                  n_params,
-                                   GObjectConstructParam *params)
+static void
+gtk_print_unix_dialog_constructed (GObject *object)
 {
-  GObject *object;
   gboolean use_header;
 
-  object = G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->constructor (type, n_params, params);
+  G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->constructed (object);
 
   g_object_get (object, "use-header-bar", &use_header, NULL);
   if (use_header)
@@ -814,8 +809,6 @@ gtk_print_unix_dialog_constructor (GType                  type,
        gtk_header_bar_pack_end (GTK_HEADER_BAR (parent), button);
        g_object_unref (button);
     }
-
-  return object;
 }
 
 static void

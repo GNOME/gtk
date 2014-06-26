@@ -52,9 +52,7 @@
 #include "deprecated/gtktearoffmenuitem.h"
 
 /* GObjectClass */
-static GObject  *gtk_tree_menu_constructor                    (GType                  type,
-                                                               guint                  n_construct_properties,
-                                                               GObjectConstructParam *construct_properties);
+static void      gtk_tree_menu_constructed                    (GObject            *object);
 static void      gtk_tree_menu_dispose                        (GObject            *object);
 static void      gtk_tree_menu_finalize                       (GObject            *object);
 static void      gtk_tree_menu_set_property                   (GObject            *object,
@@ -227,7 +225,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
 
   tree_menu_path_quark = g_quark_from_static_string ("gtk-tree-menu-path");
 
-  object_class->constructor  = gtk_tree_menu_constructor;
+  object_class->constructed  = gtk_tree_menu_constructed;
   object_class->dispose      = gtk_tree_menu_dispose;
   object_class->finalize     = gtk_tree_menu_finalize;
   object_class->set_property = gtk_tree_menu_set_property;
@@ -397,20 +395,13 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
 /****************************************************************
  *                         GObjectClass                         *
  ****************************************************************/
-static GObject  *
-gtk_tree_menu_constructor (GType                  type,
-                           guint                  n_construct_properties,
-                           GObjectConstructParam *construct_properties)
+static void
+gtk_tree_menu_constructed (GObject *object)
 {
-  GObject            *object;
-  GtkTreeMenu        *menu;
-  GtkTreeMenuPrivate *priv;
+  GtkTreeMenu *menu = GTK_TREE_MENU (object);
+  GtkTreeMenuPrivate *priv = menu->priv;
 
-  object = G_OBJECT_CLASS (_gtk_tree_menu_parent_class)->constructor
-    (type, n_construct_properties, construct_properties);
-
-  menu = GTK_TREE_MENU (object);
-  priv = menu->priv;
+  G_OBJECT_CLASS (_gtk_tree_menu_parent_class)->constructed (object);
 
   if (!priv->area)
     {
@@ -424,8 +415,6 @@ gtk_tree_menu_constructor (GType                  type,
   priv->size_changed_id =
     g_signal_connect (priv->context, "notify",
                       G_CALLBACK (context_size_changed_cb), menu);
-
-  return object;
 }
 
 static void

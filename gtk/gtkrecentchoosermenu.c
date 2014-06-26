@@ -120,9 +120,7 @@ enum {
 
 static void     gtk_recent_chooser_menu_finalize    (GObject                   *object);
 static void     gtk_recent_chooser_menu_dispose     (GObject                   *object);
-static GObject *gtk_recent_chooser_menu_constructor (GType                      type,
-						     guint                      n_construct_properties,
-						     GObjectConstructParam     *construct_params);
+static void     gtk_recent_chooser_menu_constructed (GObject                   *object);
 
 static void gtk_recent_chooser_iface_init      (GtkRecentChooserIface     *iface);
 
@@ -219,7 +217,7 @@ gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->constructor = gtk_recent_chooser_menu_constructor;
+  gobject_class->constructed = gtk_recent_chooser_menu_constructed;
   gobject_class->dispose = gtk_recent_chooser_menu_dispose;
   gobject_class->finalize = gtk_recent_chooser_menu_finalize;
   gobject_class->set_property = gtk_recent_chooser_menu_set_property;
@@ -322,20 +320,13 @@ gtk_recent_chooser_menu_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class)->dispose (object);
 }
 
-static GObject *
-gtk_recent_chooser_menu_constructor (GType                  type,
-				     guint                  n_params,
-				     GObjectConstructParam *params)
+static void
+gtk_recent_chooser_menu_constructed (GObject *object)
 {
-  GtkRecentChooserMenu *menu;
-  GtkRecentChooserMenuPrivate *priv;
-  GObjectClass *parent_class;
-  GObject *object;
-  
-  parent_class = G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class);
-  object = parent_class->constructor (type, n_params, params);
-  menu = GTK_RECENT_CHOOSER_MENU (object);
-  priv = menu->priv;
+  GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (object);
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
+
+  G_OBJECT_CLASS (gtk_recent_chooser_menu_parent_class)->constructed (object);
   
   g_assert (priv->manager);
 
@@ -361,8 +352,6 @@ gtk_recent_chooser_menu_constructor (GType                  type,
 
   /* (re)populate the menu */
   gtk_recent_chooser_menu_populate (menu);
-
-  return object;
 }
 
 static void

@@ -92,9 +92,7 @@ static void gtk_recent_chooser_dialog_class_init (GtkRecentChooserDialogClass *k
 static void gtk_recent_chooser_dialog_init       (GtkRecentChooserDialog      *dialog);
 static void gtk_recent_chooser_dialog_finalize   (GObject                     *object);
 
-static GObject *gtk_recent_chooser_dialog_constructor (GType                  type,
-						       guint                  n_construct_properties,
-						       GObjectConstructParam *construct_params);
+static void gtk_recent_chooser_dialog_constructed (GObject *object);
 
 static void gtk_recent_chooser_dialog_set_property (GObject      *object,
 						    guint         prop_id,
@@ -119,7 +117,7 @@ gtk_recent_chooser_dialog_class_init (GtkRecentChooserDialogClass *klass)
   
   gobject_class->set_property = gtk_recent_chooser_dialog_set_property;
   gobject_class->get_property = gtk_recent_chooser_dialog_get_property;
-  gobject_class->constructor = gtk_recent_chooser_dialog_constructor;
+  gobject_class->constructed = gtk_recent_chooser_dialog_constructed;
   gobject_class->finalize = gtk_recent_chooser_dialog_finalize;
   
   _gtk_recent_chooser_install_properties (gobject_class);
@@ -193,20 +191,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_list_free (children);
 }
 
-static GObject *
-gtk_recent_chooser_dialog_constructor (GType                  type,
-				       guint                  n_construct_properties,
-				       GObjectConstructParam *construct_params)
+static void
+gtk_recent_chooser_dialog_constructed (GObject *object)
 {
   GtkRecentChooserDialogPrivate *priv;
   GtkWidget *content_area;
-  GObject *object;
 
-  object = G_OBJECT_CLASS (gtk_recent_chooser_dialog_parent_class)->constructor (type,
-		  							         n_construct_properties,
-										 construct_params);
+  G_OBJECT_CLASS (gtk_recent_chooser_dialog_parent_class)->constructed (object);
   priv = GTK_RECENT_CHOOSER_DIALOG_GET_PRIVATE (object);
-  
+
   if (priv->manager)
     priv->chooser = g_object_new (GTK_TYPE_RECENT_CHOOSER_WIDGET,
   				  "recent-manager", priv->manager,
@@ -227,8 +220,6 @@ gtk_recent_chooser_dialog_constructor (GType                  type,
   
   _gtk_recent_chooser_set_delegate (GTK_RECENT_CHOOSER (object),
   				    GTK_RECENT_CHOOSER (priv->chooser));
-  
-  return object;
 }
 
 static void

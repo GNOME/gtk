@@ -247,9 +247,7 @@ static gboolean gtk_file_chooser_button_remove_shortcut_folder  (GtkFileChooser 
 								 GError             **error);
 
 /* GObject Functions */
-static GObject *gtk_file_chooser_button_constructor        (GType             type,
-							    guint             n_params,
-							    GObjectConstructParam *params);
+static void     gtk_file_chooser_button_constructed        (GObject          *object);
 static void     gtk_file_chooser_button_set_property       (GObject          *object,
 							    guint             param_id,
 							    const GValue     *value,
@@ -369,7 +367,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
 
-  gobject_class->constructor = gtk_file_chooser_button_constructor;
+  gobject_class->constructed = gtk_file_chooser_button_constructed;
   gobject_class->set_property = gtk_file_chooser_button_set_property;
   gobject_class->get_property = gtk_file_chooser_button_get_property;
   gobject_class->finalize = gtk_file_chooser_button_finalize;
@@ -780,21 +778,14 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser  *chooser,
  *  GObject Functions  *
  * ******************* */
 
-static GObject *
-gtk_file_chooser_button_constructor (GType                  type,
-				     guint                  n_params,
-				     GObjectConstructParam *params)
+static void
+gtk_file_chooser_button_constructed (GObject *object)
 {
-  GObject *object;
-  GtkFileChooserButton *button;
-  GtkFileChooserButtonPrivate *priv;
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
+  GtkFileChooserButtonPrivate *priv = button->priv;
   GSList *list;
 
-  object = G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->constructor (type,
-									       n_params,
-									       params);
-  button = GTK_FILE_CHOOSER_BUTTON (object);
-  priv = button->priv;
+  G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->constructed (object);
 
   if (!priv->dialog)
     {
@@ -877,8 +868,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   update_label_and_image (button);
   update_combo_box (button);
-
-  return object;
 }
 
 static void

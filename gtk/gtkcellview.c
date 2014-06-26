@@ -49,10 +49,8 @@
  * they all share the same height but may have variable widths).
  */
 
-static GObject    *gtk_cell_view_constructor              (GType                  type,
-							   guint                  n_construct_properties,
-							   GObjectConstructParam *construct_properties);
-static void        gtk_cell_view_get_property             (GObject           *object,
+static void        gtk_cell_view_constructed              (GObject          *object);
+static void        gtk_cell_view_get_property             (GObject          *object,
                                                            guint             param_id,
                                                            GValue           *value,
                                                            GParamSpec       *pspec);
@@ -167,7 +165,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   GObjectClass   *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->constructor = gtk_cell_view_constructor;
+  gobject_class->constructed = gtk_cell_view_constructed;
   gobject_class->get_property = gtk_cell_view_get_property;
   gobject_class->set_property = gtk_cell_view_set_property;
   gobject_class->finalize = gtk_cell_view_finalize;
@@ -342,20 +340,13 @@ gtk_cell_view_cell_layout_init (GtkCellLayoutIface *iface)
   iface->get_area = gtk_cell_view_cell_layout_get_area;
 }
 
-static GObject *
-gtk_cell_view_constructor (GType                  type,
-			   guint                  n_construct_properties,
-			   GObjectConstructParam *construct_properties)
+static void
+gtk_cell_view_constructed (GObject *object)
 {
-  GObject            *object;
-  GtkCellView        *view;
-  GtkCellViewPrivate *priv;
+  GtkCellView *view = GTK_CELL_VIEW (object);
+  GtkCellViewPrivate *priv = view->priv;
 
-  object = G_OBJECT_CLASS (gtk_cell_view_parent_class)->constructor
-    (type, n_construct_properties, construct_properties);
-
-  view = GTK_CELL_VIEW (object);
-  priv = view->priv;
+  G_OBJECT_CLASS (gtk_cell_view_parent_class)->constructed (object);
 
   if (!priv->area)
     {
@@ -369,8 +360,6 @@ gtk_cell_view_constructor (GType                  type,
   priv->size_changed_id =
     g_signal_connect (priv->context, "notify",
 		      G_CALLBACK (context_size_changed_cb), view);
-
-  return object;
 }
 
 static void

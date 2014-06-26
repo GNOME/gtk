@@ -113,9 +113,7 @@ struct _GtkScaleButtonPrivate
   GtkAdjustment *adjustment; /* needed because it must be settable in init() */
 };
 
-static GObject* gtk_scale_button_constructor    (GType                  type,
-                                                 guint                  n_construct_properties,
-                                                 GObjectConstructParam *construct_params);
+static void     gtk_scale_button_constructed    (GObject             *object);
 static void	gtk_scale_button_dispose	(GObject             *object);
 static void     gtk_scale_button_finalize       (GObject             *object);
 static void	gtk_scale_button_set_property	(GObject             *object,
@@ -162,7 +160,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
   GtkBindingSet *binding_set;
 
-  gobject_class->constructor = gtk_scale_button_constructor;
+  gobject_class->constructed = gtk_scale_button_constructed;
   gobject_class->finalize = gtk_scale_button_finalize;
   gobject_class->dispose = gtk_scale_button_dispose;
   gobject_class->set_property = gtk_scale_button_set_property;
@@ -362,26 +360,17 @@ gtk_scale_button_init (GtkScaleButton *button)
   gtk_widget_add_events (GTK_WIDGET (button), GDK_SCROLL_MASK);
 }
 
-static GObject *
-gtk_scale_button_constructor (GType                  type,
-                              guint                  n_construct_properties,
-                              GObjectConstructParam *construct_params)
+static void
+gtk_scale_button_constructed (GObject *object)
 {
-  GObject *object;
-  GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
+  GtkScaleButton *button = GTK_SCALE_BUTTON (object);
+  GtkScaleButtonPrivate *priv = button->priv;
 
-  object = G_OBJECT_CLASS (gtk_scale_button_parent_class)->constructor (type, n_construct_properties, construct_params);
-
-  button = GTK_SCALE_BUTTON (object);
-
-  priv = button->priv;
+  G_OBJECT_CLASS (gtk_scale_button_parent_class)->constructed (object);
 
   /* set button text and size */
   priv->size = GTK_ICON_SIZE_SMALL_TOOLBAR;
   gtk_scale_button_update_icon (button);
-
-  return object;
 }
 
 static void

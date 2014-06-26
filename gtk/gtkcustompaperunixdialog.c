@@ -90,9 +90,7 @@ enum {
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCustomPaperUnixDialog, gtk_custom_paper_unix_dialog, GTK_TYPE_DIALOG)
 
 
-static GObject *gtk_custom_paper_unix_dialog_constructor (GType            type, 
-                                                          guint            n_params,
-                                                          GObjectConstructParam *params);
+static void gtk_custom_paper_unix_dialog_constructed (GObject *object);
 static void gtk_custom_paper_unix_dialog_finalize  (GObject                *object);
 static void populate_dialog                        (GtkCustomPaperUnixDialog *dialog);
 static void printer_added_cb                       (GtkPrintBackend        *backend,
@@ -273,7 +271,7 @@ _gtk_print_save_custom_papers (GtkListStore *store)
 static void
 gtk_custom_paper_unix_dialog_class_init (GtkCustomPaperUnixDialogClass *class)
 {
-  G_OBJECT_CLASS (class)->constructor = gtk_custom_paper_unix_dialog_constructor;
+  G_OBJECT_CLASS (class)->constructed = gtk_custom_paper_unix_dialog_constructed;
   G_OBJECT_CLASS (class)->finalize = gtk_custom_paper_unix_dialog_finalize;
 }
 
@@ -317,15 +315,12 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   g_signal_connect (dialog, "response", G_CALLBACK (custom_paper_dialog_response_cb), NULL);
 }
 
-static GObject *
-gtk_custom_paper_unix_dialog_constructor (GType            type, 
-                                          guint            n_params,
-                                          GObjectConstructParam *params)
+static void
+gtk_custom_paper_unix_dialog_constructed (GObject *object)
 {
-  GObject *object;
   gboolean use_header;
 
-  object = G_OBJECT_CLASS (gtk_custom_paper_unix_dialog_parent_class)->constructor (type, n_params, params);
+  G_OBJECT_CLASS (gtk_custom_paper_unix_dialog_parent_class)->constructed (object);
 
   g_object_get (object, "use-header-bar", &use_header, NULL);
   if (!use_header)
@@ -335,8 +330,6 @@ gtk_custom_paper_unix_dialog_constructor (GType            type,
                               NULL);
       gtk_dialog_set_default_response (GTK_DIALOG (object), GTK_RESPONSE_CLOSE);
     }
-
-  return object;
 }
 
 static void

@@ -71,9 +71,7 @@ static void gtk_tree_view_column_get_property                  (GObject         
 								GParamSpec              *pspec);
 static void gtk_tree_view_column_finalize                      (GObject                 *object);
 static void gtk_tree_view_column_dispose                       (GObject                 *object);
-static GObject *gtk_tree_view_column_constructor               (GType                    type,
-								guint                    n_construct_properties,
-								GObjectConstructParam   *construct_properties);
+static void gtk_tree_view_column_constructed                   (GObject                 *object);
 
 /* GtkCellLayout implementation */
 static void       gtk_tree_view_column_ensure_cell_area        (GtkTreeViewColumn      *column,
@@ -226,7 +224,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 
   class->clicked = NULL;
 
-  object_class->constructor = gtk_tree_view_column_constructor;
+  object_class->constructed = gtk_tree_view_column_constructed;
   object_class->finalize = gtk_tree_view_column_finalize;
   object_class->dispose = gtk_tree_view_column_dispose;
   object_class->set_property = gtk_tree_view_column_set_property;
@@ -476,22 +474,14 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   priv->title = g_strdup ("");
 }
 
-static GObject *
-gtk_tree_view_column_constructor (GType                  type,
-                                  guint                  n_construct_properties,
-                                  GObjectConstructParam *construct_properties)
+static void
+gtk_tree_view_column_constructed (GObject *object)
 {
-  GtkTreeViewColumn        *tree_column;
-  GObject                  *object;
+  GtkTreeViewColumn *tree_column = GTK_TREE_VIEW_COLUMN (object);
 
-  object = G_OBJECT_CLASS (gtk_tree_view_column_parent_class)->constructor
-    (type, n_construct_properties, construct_properties);
-
-  tree_column = (GtkTreeViewColumn *) object;
+  G_OBJECT_CLASS (gtk_tree_view_column_parent_class)->constructed (object);
 
   gtk_tree_view_column_ensure_cell_area (tree_column, NULL);
-
-  return object;
 }
 
 static void

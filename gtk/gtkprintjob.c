@@ -95,9 +95,7 @@ static void     gtk_print_job_get_property (GObject               *object,
 					    guint                  prop_id,
 					    GValue                *value,
 					    GParamSpec            *pspec);
-static GObject* gtk_print_job_constructor  (GType                  type,
-					    guint                  n_construct_properties,
-					    GObjectConstructParam *construct_params);
+static void     gtk_print_job_constructed  (GObject               *object);
 
 enum {
   STATUS_CHANGED,
@@ -124,7 +122,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
   object_class = (GObjectClass *) class;
 
   object_class->finalize = gtk_print_job_finalize;
-  object_class->constructor = gtk_print_job_constructor;
+  object_class->constructed = gtk_print_job_constructed;
   object_class->set_property = gtk_print_job_set_property;
   object_class->get_property = gtk_print_job_get_property;
 
@@ -228,23 +226,14 @@ gtk_print_job_init (GtkPrintJob *job)
 }
 
 
-static GObject*
-gtk_print_job_constructor (GType                  type,
-			   guint                  n_construct_properties,
-			   GObjectConstructParam *construct_params)
+static void
+gtk_print_job_constructed (GObject *object)
 {
-  GtkPrintJob *job;
-  GtkPrintJobPrivate *priv;
-  GObject *object;
+  GtkPrintJob *job = GTK_PRINT_JOB (object);
+  GtkPrintJobPrivate *priv = job->priv;
 
-  object =
-    G_OBJECT_CLASS (gtk_print_job_parent_class)->constructor (type,
-							      n_construct_properties,
-							      construct_params);
+  G_OBJECT_CLASS (gtk_print_job_parent_class)->constructed (object);
 
-  job = GTK_PRINT_JOB (object);
-
-  priv = job->priv;
   g_assert (priv->printer_set &&
 	    priv->settings_set &&
 	    priv->page_setup_set);
@@ -253,8 +242,6 @@ gtk_print_job_constructor (GType                  type,
 				  job,
 				  priv->settings,
 				  priv->page_setup);
-
-  return object;
 }
 
 

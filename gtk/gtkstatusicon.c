@@ -154,9 +154,7 @@ struct _GtkStatusIconPrivate
   guint          visible : 1;
 };
 
-static GObject* gtk_status_icon_constructor      (GType                  type,
-                                                  guint                  n_construct_properties,
-                                                  GObjectConstructParam *construct_params);
+static void     gtk_status_icon_constructed      (GObject        *object);
 static void     gtk_status_icon_finalize         (GObject        *object);
 static void     gtk_status_icon_set_property     (GObject        *object,
 						  guint           prop_id,
@@ -206,7 +204,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 {
   GObjectClass *gobject_class = (GObjectClass *) class;
 
-  gobject_class->constructor  = gtk_status_icon_constructor;
+  gobject_class->constructed  = gtk_status_icon_constructed;
   gobject_class->finalize     = gtk_status_icon_finalize;
   gobject_class->set_property = gtk_status_icon_set_property;
   gobject_class->get_property = gtk_status_icon_get_property;
@@ -959,30 +957,20 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 #endif 
 }
 
-static GObject*
-gtk_status_icon_constructor (GType                  type,
-                             guint                  n_construct_properties,
-                             GObjectConstructParam *construct_params)
+static void
+gtk_status_icon_constructed (GObject *object)
 {
-  GObject *object;
-#ifdef GDK_WINDOWING_X11
-  GtkStatusIcon *status_icon;
-  GtkStatusIconPrivate *priv;
-#endif
-
-  object = G_OBJECT_CLASS (gtk_status_icon_parent_class)->constructor (type,
-                                                                       n_construct_properties,
-                                                                       construct_params);
+  G_OBJECT_CLASS (gtk_status_icon_parent_class)->constructed (object);
 
 #ifdef GDK_WINDOWING_X11
-  status_icon = GTK_STATUS_ICON (object);
-  priv = status_icon->priv;
+  {
+    GtkStatusIcon *status_icon = GTK_STATUS_ICON (object);
+    GtkStatusIconPrivate *priv = status_icon->priv;
 
-  if (priv->visible && priv->tray_icon)
-    gtk_widget_show (priv->tray_icon);
+    if (priv->visible && priv->tray_icon)
+      gtk_widget_show (priv->tray_icon);
+  }
 #endif
-
-  return object;
 }
 
 static void

@@ -372,9 +372,7 @@ struct _GtkWindowGeometryInfo
 };
 
 
-static GObject *gtk_window_constructor    (GType                  type,
-                                           guint                  n_params,
-                                           GObjectConstructParam *params);
+static void gtk_window_constructed        (GObject           *object);
 static void gtk_window_dispose            (GObject           *object);
 static void gtk_window_finalize           (GObject           *object);
 static void gtk_window_destroy            (GtkWidget         *widget);
@@ -657,7 +655,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
   quark_gtk_buildable_accels = g_quark_from_static_string ("gtk-window-buildable-accels");
 
-  gobject_class->constructor = gtk_window_constructor;
+  gobject_class->constructed = gtk_window_constructed;
   gobject_class->dispose = gtk_window_dispose;
   gobject_class->finalize = gtk_window_finalize;
 
@@ -1565,17 +1563,14 @@ gtk_window_init (GtkWindow *window)
   priv->scale = gtk_widget_get_scale_factor (widget);
 }
 
-static GObject *
-gtk_window_constructor (GType                  type,
-                        guint                  n_params,
-                        GObjectConstructParam *params)
+static void
+gtk_window_constructed (GObject *object)
 {
-  GObject *object;
-  GtkWindowPrivate *priv;
+  GtkWindow *window = GTK_WINDOW (object);
+  GtkWindowPrivate *priv = window->priv;
 
-  object = G_OBJECT_CLASS (gtk_window_parent_class)->constructor (type, n_params, params);
+  G_OBJECT_CLASS (gtk_window_parent_class)->constructed (object);
 
-  priv = GTK_WINDOW (object)->priv;
   if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
       priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
@@ -1585,8 +1580,6 @@ gtk_window_constructor (GType                  type,
       g_signal_connect (priv->multipress_gesture, "stopped",
                         G_CALLBACK (multipress_gesture_stopped_cb), object);
     }
-
-  return object;
 }
 
 static void

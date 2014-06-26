@@ -141,9 +141,7 @@ static GType gtk_button_child_type    (GtkContainer       *container);
 static void gtk_button_finish_activate (GtkButton         *button,
 					gboolean           do_it);
 
-static GObject*	gtk_button_constructor (GType                  type,
-					guint                  n_construct_properties,
-					GObjectConstructParam *construct_params);
+static void gtk_button_constructed (GObject *object);
 static void gtk_button_construct_child (GtkButton             *button);
 static void gtk_button_state_changed   (GtkWidget             *widget,
 					GtkStateType           previous_state);
@@ -205,7 +203,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
-  gobject_class->constructor  = gtk_button_constructor;
+  gobject_class->constructed  = gtk_button_constructed;
   gobject_class->dispose      = gtk_button_dispose;
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
@@ -671,28 +669,18 @@ gtk_button_destroy (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_button_parent_class)->destroy (widget);
 }
 
-static GObject*
-gtk_button_constructor (GType                  type,
-			guint                  n_construct_properties,
-			GObjectConstructParam *construct_params)
+static void
+gtk_button_constructed (GObject *object)
 {
-  GObject *object;
-  GtkButton *button;
-  GtkButtonPrivate *priv;
+  GtkButton *button = GTK_BUTTON (object);
+  GtkButtonPrivate *priv = button->priv;
 
-  object = G_OBJECT_CLASS (gtk_button_parent_class)->constructor (type,
-                                                                  n_construct_properties,
-                                                                  construct_params);
-
-  button = GTK_BUTTON (object);
-  priv = button->priv;
+  G_OBJECT_CLASS (gtk_button_parent_class)->constructed (object);
 
   priv->constructed = TRUE;
 
   if (priv->label_text != NULL)
     gtk_button_construct_child (button);
-  
-  return object;
 }
 
 

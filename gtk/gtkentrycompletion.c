@@ -120,9 +120,7 @@ enum
 static void     gtk_entry_completion_cell_layout_init    (GtkCellLayoutIface      *iface);
 static GtkCellArea* gtk_entry_completion_get_area        (GtkCellLayout           *cell_layout);
 
-static GObject *gtk_entry_completion_constructor         (GType                    type,
-                                                          guint                    n_construct_properties,
-                                                          GObjectConstructParam   *construct_properties);
+static void     gtk_entry_completion_constructed         (GObject      *object);
 static void     gtk_entry_completion_set_property        (GObject      *object,
                                                           guint         prop_id,
                                                           const GValue *value,
@@ -204,7 +202,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
 
   object_class = (GObjectClass *)klass;
 
-  object_class->constructor = gtk_entry_completion_constructor;
+  object_class->constructed = gtk_entry_completion_constructed;
   object_class->set_property = gtk_entry_completion_set_property;
   object_class->get_property = gtk_entry_completion_get_property;
   object_class->dispose = gtk_entry_completion_dispose;
@@ -503,23 +501,16 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   priv->filter_model = NULL;
 }
 
-static GObject *
-gtk_entry_completion_constructor (GType                  type,
-                                  guint                  n_construct_properties,
-                                  GObjectConstructParam *construct_properties)
+static void
+gtk_entry_completion_constructed (GObject *object)
 {
-  GtkEntryCompletion        *completion;
-  GtkEntryCompletionPrivate *priv;
-  GObject                   *object;
+  GtkEntryCompletion        *completion = GTK_ENTRY_COMPLETION (object);
+  GtkEntryCompletionPrivate *priv = completion->priv;
   GtkCellRenderer           *cell;
   GtkTreeSelection          *sel;
   GtkWidget                 *popup_frame;
 
-  object = G_OBJECT_CLASS (gtk_entry_completion_parent_class)->constructor
-    (type, n_construct_properties, construct_properties);
-
-  completion = (GtkEntryCompletion *) object;
-  priv       = completion->priv;
+  G_OBJECT_CLASS (gtk_entry_completion_parent_class)->constructed (object);
 
   if (!priv->cell_area)
     {
@@ -626,8 +617,6 @@ gtk_entry_completion_constructor (GType                  type,
    * been inserted, so we pack the action treeview after the first
    * action has been added
    */
-
-  return object;
 }
 
 

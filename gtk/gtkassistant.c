@@ -349,21 +349,13 @@ add_action_widgets (GtkAssistant *assistant)
     }
 }
 
-static GObject *
-gtk_assistant_constructor (GType                  type,
-                           guint                  n_construct_properties,
-                           GObjectConstructParam *construct_params)
+static void
+gtk_assistant_constructed (GObject *object)
 {
-  GObject *object;
-  GtkAssistant *assistant;
-  GtkAssistantPrivate *priv;
+  GtkAssistant *assistant = GTK_ASSISTANT (object);
+  GtkAssistantPrivate *priv = assistant->priv;
 
-  object = G_OBJECT_CLASS (gtk_assistant_parent_class)->constructor (type,
-                                                                     n_construct_properties,
-                                                                     construct_params);
-
-  assistant = GTK_ASSISTANT (object);
-  priv = assistant->priv;
+  G_OBJECT_CLASS (gtk_assistant_parent_class)->constructed (object);
 
   priv->constructed = TRUE;
   if (priv->use_header_bar == -1)
@@ -371,8 +363,6 @@ gtk_assistant_constructor (GType                  type,
 
   add_action_widgets (assistant);
   apply_use_header_bar (assistant);
-
-  return object;
 }
 
 static void
@@ -386,7 +376,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   widget_class    = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
-  gobject_class->constructor  = gtk_assistant_constructor;
+  gobject_class->constructed  = gtk_assistant_constructed;
   gobject_class->set_property = gtk_assistant_set_property;
   gobject_class->get_property = gtk_assistant_get_property;
 

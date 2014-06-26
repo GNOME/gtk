@@ -254,9 +254,7 @@ static guint combo_box_signals[LAST_SIGNAL] = {0,};
 
 static void     gtk_combo_box_cell_layout_init     (GtkCellLayoutIface *iface);
 static void     gtk_combo_box_cell_editable_init   (GtkCellEditableIface *iface);
-static GObject *gtk_combo_box_constructor          (GType                  type,
-                                                    guint                  n_construct_properties,
-                                                    GObjectConstructParam *construct_properties);
+static void     gtk_combo_box_constructed          (GObject          *object);
 static void     gtk_combo_box_dispose              (GObject          *object);
 static void     gtk_combo_box_finalize             (GObject          *object);
 static void     gtk_combo_box_destroy              (GtkWidget        *widget);
@@ -514,7 +512,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->direction_changed = gtk_combo_box_direction_changed;
 
   object_class = (GObjectClass *)klass;
-  object_class->constructor = gtk_combo_box_constructor;
+  object_class->constructed = gtk_combo_box_constructed;
   object_class->dispose = gtk_combo_box_dispose;
   object_class->finalize = gtk_combo_box_finalize;
   object_class->set_property = gtk_combo_box_set_property;
@@ -4793,20 +4791,13 @@ gtk_combo_box_format_entry_text (GtkComboBox     *combo_box,
 }
 
 
-static GObject *
-gtk_combo_box_constructor (GType                  type,
-                           guint                  n_construct_properties,
-                           GObjectConstructParam *construct_properties)
+static void
+gtk_combo_box_constructed (GObject *object)
 {
-  GObject            *object;
-  GtkComboBox        *combo_box;
-  GtkComboBoxPrivate *priv;
+  GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+  GtkComboBoxPrivate *priv = combo_box->priv;
 
-  object = G_OBJECT_CLASS (gtk_combo_box_parent_class)->constructor
-    (type, n_construct_properties, construct_properties);
-
-  combo_box = GTK_COMBO_BOX (object);
-  priv      = combo_box->priv;
+  G_OBJECT_CLASS (gtk_combo_box_parent_class)->constructed (object);
 
   if (!priv->area)
     {
@@ -4844,8 +4835,6 @@ gtk_combo_box_constructor (GType                  type,
       g_signal_connect (combo_box, "changed",
                         G_CALLBACK (gtk_combo_box_entry_active_changed), NULL);
     }
-
-  return object;
 }
 
 
