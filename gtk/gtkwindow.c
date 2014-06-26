@@ -7449,16 +7449,12 @@ gtk_window_style_updated (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GdkRGBA transparent = { 0.0, 0.0, 0.0, 0.0 };
-  GdkRectangle rect;
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->style_updated (widget);
 
-  if (priv->grip_window != NULL && gtk_window_get_resize_grip_area (window, &rect))
+  if (priv->grip_window != NULL)
     {
-      gdk_window_move_resize (priv->grip_window,
-                              rect.x, rect.y,
-                              rect.width, rect.height);
-
+      set_grip_position (window);
       set_grip_shape (window);
     }
 
