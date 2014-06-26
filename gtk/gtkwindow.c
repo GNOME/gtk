@@ -7326,12 +7326,7 @@ gtk_window_configure_event (GtkWidget         *widget,
     _gtk_widget_scale_changed (widget);
 
   if (!gtk_widget_is_toplevel (widget))
-    {
-      if (GTK_WIDGET_CLASS (gtk_window_parent_class)->configure_event)
-  	return GTK_WIDGET_CLASS (gtk_window_parent_class)->configure_event (widget, event);
-
-      return FALSE;
-    }
+    return FALSE;
 
   /* priv->configure_request_count incremented for each
    * configure request, and decremented to a min of 0 for
