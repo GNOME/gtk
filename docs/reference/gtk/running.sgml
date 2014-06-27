@@ -372,20 +372,24 @@ nevertheless.
   to print out different types of debugging information.
   <variablelist>
     <varlistentry>
-      <term>misc</term>
-      <listitem><para>Miscellaneous information</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>events</term>
-      <listitem><para>Show all events received by GDK</para></listitem>
+      <term>cursor</term>
+      <listitem><para>Information about cursor objects (only win32)</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>dnd</term>
       <listitem><para>Information about drag-and-drop</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>xim</term>
-      <listitem><para>Information about XIM support</para></listitem>
+      <term>draw</term>
+      <listitem><para>Information about drawing operations (only win32)</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>eventloop</term>
+      <listitem><para>Information about event loop operation (mostly Quartz)</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>misc</term>
+      <listitem><para>Miscellaneous information</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>nograbs</term>
@@ -396,16 +400,8 @@ nevertheless.
       <listitem><para>Simulate a multi-monitor setup</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>cursor</term>
-      <listitem><para>Information about cursor objects (only win32)</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>draw</term>
-      <listitem><para>Information about drawing operations (only win32)</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>eventloop</term>
-      <listitem><para>Information about event loop operation (mostly Quartz)</para></listitem>
+      <term>xim</term>
+      <listitem><para>Information about XIM support</para></listitem>
     </varlistentry>
 
   </variablelist>
