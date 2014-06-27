@@ -139,12 +139,60 @@ additional environment variables.
   to print out different types of debugging information.
   <variablelist>
     <varlistentry>
+      <term>baselines</term>
+      <listitem><para>Baselines.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>builder</term>
+      <listitem><para>GtkBuilder support</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>geometry</term>
+      <listitem><para>Size allocation</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>icontheme</term>
+      <listitem><para>Icon themes</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>interactive</term>
+      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link>.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>keybindings</term>
+      <listitem><para>Keybindings</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>misc</term>
       <listitem><para>Miscellaneous information</para></listitem>
     </varlistentry>
     <varlistentry>
+      <term>modules</term>
+      <listitem><para>Loading of modules</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>no-css-cache</term>
+      <listitem><para>Bypass caching for CSS style properties.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>no-pixel-cache</term>
+      <listitem><para>Disable the pixel cache.</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>plugsocket</term>
       <listitem><para>Cross-process embedding</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>pixel-cache</term>
+      <listitem><para>Pixel cache.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>printing</term>
+      <listitem><para>Printing support</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>size-request</term>
+      <listitem><para>Size requests</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>text</term>
@@ -157,54 +205,6 @@ additional environment variables.
     <varlistentry>
       <term>updates</term>
       <listitem><para>Visual feedback about window updates</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>keybindings</term>
-      <listitem><para>Keybindings</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>modules</term>
-      <listitem><para>Loading of modules</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>geometry</term>
-      <listitem><para>Size allocation</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>icontheme</term>
-      <listitem><para>Icon themes</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>printing</term>
-      <listitem><para>Printing support</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>builder</term>
-      <listitem><para>GtkBuilder support</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>size-request</term>
-      <listitem><para>Size requests</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>no-css-cache</term>
-      <listitem><para>Bypass caching for CSS style properties.</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>baselines</term>
-      <listitem><para>Baselines.</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>pixel-cache</term>
-      <listitem><para>Pixel cache.</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>no-pixel-cache</term>
-      <listitem><para>Disable the pixel cache.</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>interactive</term>
-      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link>.</para></listitem>
     </varlistentry>
 
   </variablelist>
