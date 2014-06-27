@@ -153,6 +153,12 @@
   border-radius: 3px;
   transition: all 200ms ease-out;
   @include entry(normal);
+  &.flat, &.flat:focus {
+    padding: 2px;
+    @include entry(normal, $noedge:true);
+    border: none;
+    border-radius: 0;
+  }
   &:focus { @include entry(focus); }
   &:insensitive { @include entry(insensitive); }
   &:backdrop { @include entry(backdrop); }
@@ -494,6 +500,17 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the GtkColorButton
       border-top-width: 0;
     }
   }
+/* This is to fix spinbuttons in entries, but I feel like hiding code issues
+ * hence it's commented atm.
+ *  GtkTreeView & {
+ *   &.entry, &.entry:focus {
+ *     padding: 1px;
+ *     border-width: 1px 0;
+ *     border-color: $selected_bg_color;
+ *     border-radius: 0;
+ *     box-shadow: none;
+ *   }
+ * } */
 }
 
 /**************
