@@ -98,6 +98,7 @@ enum
   MATCH_SELECTED,
   ACTION_ACTIVATED,
   CURSOR_ON_MATCH,
+  NO_MATCHES,
   LAST_SIGNAL
 };
 
@@ -211,6 +212,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   klass->match_selected = gtk_entry_completion_match_selected;
   klass->insert_prefix = gtk_entry_completion_real_insert_prefix;
   klass->cursor_on_match = gtk_entry_completion_cursor_on_match;
+  klass->no_matches = NULL;
 
   /**
    * GtkEntryCompletion::insert-prefix:
@@ -297,6 +299,26 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_TREE_MODEL,
                   GTK_TYPE_TREE_ITER);
+
+  /**
+   * GtkEntryCompletion::no-matches:
+   * @widget: the object which received the signal
+   *
+   * Gets emitted when the filter model has zero
+   * number of rows in completion_complete method.
+   * (In other words when GtkEntryCompletion is out of
+   *  suggestions)
+   *
+   * Since: 3.14
+   */
+  entry_completion_signals[NO_MATCHES] =
+    g_signal_new (I_("no-matches"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkEntryCompletionClass, no_matches),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 
   /**
    * GtkEntryCompletion::action-activated:
@@ -1256,6 +1278,7 @@ void
 gtk_entry_completion_complete (GtkEntryCompletion *completion)
 {
   gchar *tmp;
+  GtkTreeIter iter;
 
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (GTK_IS_ENTRY (completion->priv->entry));
@@ -1271,6 +1294,9 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
   g_free (tmp);
 
   gtk_tree_model_filter_refilter (completion->priv->filter_model);
+
+  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (completion->priv->filter_model), &iter))
+    g_signal_emit (completion, entry_completion_signals[NO_MATCHES], 0);
 
   if (gtk_widget_get_visible (completion->priv->popup_window))
     _gtk_entry_completion_resize_popup (completion);
