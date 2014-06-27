@@ -19,7 +19,7 @@
 @define-color success_color #5aa411;
 @define-color wm_title shade(#eeeeec, 1.8);
 @define-color wm_unfocused_title #c9cbc9;
-@define-color wm_highlight rgba(238, 238, 236, 0.1);
+@define-color wm_highlight transparent;
 @define-color wm_borders_edge rgba(238, 238, 236, 0.1);
 @define-color wm_bg_a shade(#393f3f, 1.2);
 @define-color wm_bg_b #393f3f;

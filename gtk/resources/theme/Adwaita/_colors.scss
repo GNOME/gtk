@@ -59,9 +59,14 @@ $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
 //@define-color desctructive_color $destructive_color
 
 //WM
+
+$_wm_highlight: if($variant=='light', $borders_edge, // Sass gets mad if this is
+                  transparentize(black,1));          // done directly in the
+                                                     // color definition
+
 @define-color wm_title shade($fg_color, 1.8);
 @define-color wm_unfocused_title $backdrop_fg_color;
-@define-color wm_highlight $borders_edge;
+@define-color wm_highlight $_wm_highlight;
 @define-color wm_borders_edge $borders_edge;
 
 @define-color wm_bg_a shade($bg_color, 1.2);
