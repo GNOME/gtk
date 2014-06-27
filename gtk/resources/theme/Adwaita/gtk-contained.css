@@ -2181,6 +2181,8 @@ GtkLevelBar.vertical {
 .frame {
   border: 1px solid #a1a1a1;
   padding: 0; }
+  .frame.flat {
+    border-style: none; }
   .frame:backdrop {
     border-color: #a8a8a8; }
   .frame.action-bar {

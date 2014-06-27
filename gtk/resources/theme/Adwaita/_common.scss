@@ -1613,6 +1613,7 @@ GtkLevelBar.vertical {
  **********/
 .frame {
   border: 1px solid $borders_color;
+  &.flat { border-style: none; }
   &:backdrop { border-color: $backdrop_borders_color; }
   padding: 0;
   &.action-bar {
