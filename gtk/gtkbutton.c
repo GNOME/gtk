@@ -626,7 +626,6 @@ gtk_button_init (GtkButton *button)
   priv->constructed = FALSE;
   priv->in_button = FALSE;
   priv->button_down = FALSE;
-  priv->relief = GTK_RELIEF_NORMAL;
   priv->use_stock = FALSE;
   priv->use_underline = FALSE;
   priv->depressed = FALSE;
@@ -851,7 +850,7 @@ gtk_button_get_property (GObject         *object,
       g_value_set_boolean (value, gtk_button_get_always_show_image (button));
       break;
     case PROP_RELIEF:
-      g_value_set_enum (value, priv->relief);
+      g_value_set_enum (value, gtk_button_get_relief (button));
       break;
     case PROP_USE_UNDERLINE:
       g_value_set_boolean (value, priv->use_underline);
@@ -1477,28 +1476,35 @@ gtk_button_leave (GtkButton *button)
 
 /**
  * gtk_button_set_relief:
- * @button: The #GtkButton you want to set relief styles of.
- * @newstyle: The GtkReliefStyle as described above.
+ * @button: The #GtkButton you want to set relief styles of
+ * @relief: The GtkReliefStyle as described above
  *
  * Sets the relief style of the edges of the given #GtkButton widget.
- * Three styles exist, GTK_RELIEF_NORMAL, GTK_RELIEF_HALF, GTK_RELIEF_NONE.
- * The default style is, as one can guess, GTK_RELIEF_NORMAL.
+ * Two styles exist, %GTK_RELIEF_NORMAL and %GTK_RELIEF_NONE.
+ * The default style is, as one can guess, %GTK_RELIEF_NORMAL.
+ * The deprecated value %GTK_RELIEF_HALF behaves the same as
+ * %GTK_RELIEF_NORMAL.
  */
 void
-gtk_button_set_relief (GtkButton *button,
-		       GtkReliefStyle newrelief)
+gtk_button_set_relief (GtkButton      *button,
+		       GtkReliefStyle  relief)
 {
-  GtkButtonPrivate *priv;
+  GtkStyleContext *context;
+  GtkReliefStyle old_relief;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  priv = button->priv;
-
-  if (newrelief != priv->relief)
+  old_relief = gtk_button_get_relief (button);
+  if (old_relief != relief)
     {
-       priv->relief = newrelief;
-       g_object_notify_by_pspec (G_OBJECT (button), props[PROP_RELIEF]);
-       gtk_widget_queue_draw (GTK_WIDGET (button));
+      context = gtk_widget_get_style_context (GTK_WIDGET (button));
+      if (relief == GTK_RELIEF_NONE)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_FLAT);
+      else
+        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FLAT);
+
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_RELIEF]);
+      gtk_widget_queue_draw (GTK_WIDGET (button));
     }
 }
 
@@ -1513,9 +1519,15 @@ gtk_button_set_relief (GtkButton *button,
 GtkReliefStyle
 gtk_button_get_relief (GtkButton *button)
 {
+  GtkStyleContext *context;
+
   g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_RELIEF_NORMAL);
 
-  return button->priv->relief;
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_FLAT))
+    return GTK_RELIEF_NONE;
+  else
+    return GTK_RELIEF_NORMAL;
 }
 
 static void
@@ -1787,27 +1799,24 @@ gtk_button_draw (GtkWidget *widget,
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
   gint x, y;
+  gint width, height;
   GtkBorder default_border;
   GtkBorder default_outside_border;
-  GtkAllocation allocation;
   GtkStyleContext *context;
   GtkStateFlags state;
-  gboolean draw_focus;
-  gint width, height;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_style_context_get_state (context);
 
   gtk_button_get_props (button, &default_border, &default_outside_border, NULL, NULL);
-  gtk_widget_get_allocation (widget, &allocation);
 
   x = 0;
   y = 0;
-  width = allocation.width;
-  height = allocation.height;
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
   if (gtk_widget_has_default (widget) &&
-      priv->relief == GTK_RELIEF_NORMAL)
+      gtk_button_get_relief (button) == GTK_RELIEF_NORMAL)
     {
       x += default_border.left;
       y += default_border.top;
@@ -1822,18 +1831,10 @@ gtk_button_draw (GtkWidget *widget,
       height -= default_outside_border.top + default_outside_border.bottom;
     }
 
-  draw_focus = gtk_widget_has_visible_focus (widget);
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
 
-  if (priv->relief != GTK_RELIEF_NONE || priv->depressed ||
-      state & GTK_STATE_FLAG_PRELIGHT)
-    {
-      gtk_render_background (context, cr,
-			     x, y, width, height);
-      gtk_render_frame (context, cr,
-			x, y, width, height);
-    }
-
-  if (draw_focus)
+  if (gtk_widget_has_visible_focus (widget))
     {
       gint child_displacement_x;
       gint child_displacement_y;

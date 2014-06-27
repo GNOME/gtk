@@ -116,7 +116,7 @@ void           gtk_button_leave             (GtkButton      *button);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_relief         (GtkButton      *button,
-						     GtkReliefStyle  newstyle);
+						     GtkReliefStyle  relief);
 GDK_AVAILABLE_IN_ALL
 GtkReliefStyle        gtk_button_get_relief         (GtkButton      *button);
 GDK_AVAILABLE_IN_ALL

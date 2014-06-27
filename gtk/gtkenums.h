@@ -380,7 +380,7 @@ typedef enum
 /**
  * GtkReliefStyle:
  * @GTK_RELIEF_NORMAL: Draw a normal relief.
- * @GTK_RELIEF_HALF: A half relief.
+ * @GTK_RELIEF_HALF: A half relief. Deprecated in 3.14, does the same as @GTK_RELIEF_NORMAL
  * @GTK_RELIEF_NONE: No relief.
  *
  * Indicated the relief to be drawn around a #GtkButton.
