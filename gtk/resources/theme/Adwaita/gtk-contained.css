@@ -1302,6 +1302,7 @@ column-header .button, column-header .button:hover, column-header .button:active
         background-color: #4a90d9; }
 
 .scrollbars-junction, .scrollbar.trough {
+  border-style: none;
   background-color: #e0e0e0; }
   .scrollbars-junction:backdrop, .scrollbar.trough:backdrop {
     background-color: transparent; }

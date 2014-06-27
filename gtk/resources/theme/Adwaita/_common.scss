@@ -1127,6 +1127,7 @@ column-header {
 }
 
 .scrollbars-junction { // the small square between two scrollbars
+  border-style: none;
   background-color: darken($bg_color, 5%);
   &:backdrop { background-color: transparent; }
 }
