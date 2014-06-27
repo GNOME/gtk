@@ -174,6 +174,8 @@ static void
 gtk_inspector_window_constructed (GObject *object)
 {
   gtk_inspector_window_select_initially (GTK_INSPECTOR_WINDOW (object));
+
+  G_OBJECT_CLASS (gtk_inspector_window_parent_class)->constructed (object);
 }
 
 static void
