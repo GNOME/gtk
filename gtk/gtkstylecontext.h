@@ -826,6 +826,17 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_MESSAGE_DIALOG "message-dialog"
 
 /**
+ * GTK_STYLE_CLASS_FLAT:
+ *
+ * A CSS class that is added when widgets that usually have
+ * a frame or border (like buttons or entries) should appear
+ * without it.
+ *
+ * Since: 3.14
+ */
+#define GTK_STYLE_CLASS_FLAT "flat"
+
+/**
  * GTK_STYLE_REGION_ROW:
  *
  * A widget region name to define a treeview row.
