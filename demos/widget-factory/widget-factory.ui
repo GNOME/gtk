@@ -166,6 +166,55 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
  Spanish
  Uyghur</property>
   </object>
+  <object class="GtkListStore" id="iconsmodel">
+    <columns><column type="gchararray"/></columns>
+    <data>
+      <row><col id="0">audio-headphones-symbolic</col></row>
+      <row><col id="0">audio-speakers-symbolic</col></row>
+      <row><col id="0">audio-input-microphone-symbolic</col></row>
+      <row><col id="0">bookmark-new-symbolic</col></row>
+      <row><col id="0">call-start-symbolic</col></row>
+      <row><col id="0">call-stop-symbolic</col></row>
+      <row><col id="0">camera-photo-symbolic</col></row>
+      <row><col id="0">camera-video-symbolic</col></row>
+      <row><col id="0">camera-web-symbolic</col></row>
+      <row><col id="0">document-new-symbolic</col></row>
+      <row><col id="0">document-open-recent-symbolic</col></row>
+      <row><col id="0">document-open-symbolic</col></row>
+      <row><col id="0">drive-harddisk-symbolic</col></row>
+      <row><col id="0">drive-multidisk-symbolic</col></row>
+      <row><col id="0">drive-optical-symbolic</col></row>
+      <row><col id="0">edit-clear-all-symbolic</col></row>
+      <row><col id="0">edit-copy-symbolic</col></row>
+      <row><col id="0">edit-cut-symbolic</col></row>
+      <row><col id="0">edit-delete-symbolic</col></row>
+      <row><col id="0">find-location-symbolic</col></row>
+      <row><col id="0">format-indent-less-symbolic</col></row>
+      <row><col id="0">format-indent-more-symbolic</col></row>
+      <row><col id="0">format-justify-left-symbolic</col></row>
+      <row><col id="0">format-justify-center-symbolic</col></row>
+      <row><col id="0">format-justify-right-symbolic</col></row>
+      <row><col id="0">network-wired-symbolic</col></row>
+      <row><col id="0">network-wireless-symbolic</col></row>
+      <row><col id="0">phone-symbolic</col></row>
+      <row><col id="0">insert-image-symbolic</col></row>
+      <row><col id="0">insert-link-symbolic</col></row>
+      <row><col id="0">insert-object-symbolic</col></row>
+      <row><col id="0">view-continuous-symbolic</col></row>
+      <row><col id="0">view-dual-symbolic</col></row>
+      <row><col id="0">view-fullscreen-symbolic</col></row>
+      <row><col id="0">view-grid-symbolic</col></row>
+      <row><col id="0">view-list-symbolic</col></row>
+      <row><col id="0">view-paged-symbolic</col></row>
+      <row><col id="0">weather-clear-night-symbolic</col></row>
+      <row><col id="0">weather-few-clouds-night-symbolic</col></row>
+      <row><col id="0">weather-fog-symbolic</col></row>
+      <row><col id="0">weather-overcast-symbolic</col></row>
+      <row><col id="0">weather-severe-alert-symbolic</col></row>
+      <row><col id="0">weather-showers-symbolic</col></row>
+      <row><col id="0">weather-snow-symbolic</col></row>
+    </data>
+  </object>
   <object class="GtkApplicationWindow" id="window">
     <property name="can_focus">False</property>
     <property name="title">GTK+ Widget Factory</property>
@@ -2607,33 +2656,18 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="hscrollbar_policy">automatic</property>
                                 <property name="height_request">200</property>
                                 <child>
-                                  <object class="GtkViewport" id="viewport1">
+                                  <object class="GtkIconView" id="iconview1">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="selection_mode">multiple</property>
+                                    <property name="model">iconsmodel</property>
                                     <child>
-                                      <object class="GtkLabel" id="label20">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="wrap">True</property>
-                                        <property name="wrap_mode">word</property>
-                                        <property name="expand">False</property>
-                                        <property name="label" translatable="yes">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Nullam fringilla, est ut feugiat ultrices, elit lacus ultricies nibh, id commodo tortor nisi id elit.
-    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-    Morbi vel elit erat. Maecenas dignissim, dui et pharetra rutrum, tellus lectus rutrum mi, a convallis libero nisi quis tellus.
-    Nulla facilisi. Nullam eleifend lobortis nisl, in porttitor tellus malesuada vitae.
-    Aenean lacus tellus, pellentesque quis molestie quis, fringilla in arcu.
-    Duis elementum, tellus sed tristique semper, metus metus accumsan augue, et porttitor augue orci a libero.
-    Ut sed justo ac felis placerat laoreet sed id sem. Proin mattis tincidunt odio vitae tristique.
-    Morbi massa libero, congue vitae scelerisque vel, ultricies vel nisl.
-    Vestibulum in tortor diam, quis aliquet quam. Praesent ut justo neque, tempus rutrum est.
-    Duis eu lectus quam. Vivamus eget metus a mauris molestie venenatis pulvinar eleifend nisi.
-    Nulla facilisi. Pellentesque at dolor sit amet purus dapibus pulvinar molestie quis neque.
-    Suspendisse feugiat quam quis dolor accumsan cursus. </property>
-                                        <style>
-                                          <class name="view"/>
-                                        </style>
+                                      <object class="GtkCellRendererPixbuf" id="iconviewcell">
+                                        <property name="follow-state">True</property>
                                       </object>
+                                      <attributes>
+                                        <attribute name="icon-name">0</attribute>
+                                      </attributes>
                                     </child>
                                   </object>
                                 </child>
