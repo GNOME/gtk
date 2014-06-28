@@ -1578,7 +1578,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-decoration-layout",
                                                                   P_("Decoration Layout"),
                                                                    P_("The layout for window decorations"),
-                                                                   "menu:close", GTK_PARAM_READWRITE),
+                                                                   "menu:minimize,maximize,close", GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DECORATION_LAYOUT);
 
