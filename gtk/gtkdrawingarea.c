@@ -46,7 +46,7 @@
  *   when the widget is instantiated on a particular display.
  *   (Create GDK resources in response to this signal.)
  *
- * - The #GtkWidget::size-allocate signal to take any necessary
+ * - The #GtkWidget::configure-event signal to take any necessary
  *   actions when the widget changes size.
  *
  * - The #GtkWidget::draw signal to handle redrawing the

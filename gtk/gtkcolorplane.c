@@ -172,11 +172,12 @@ create_surface (GtkColorPlane *plane)
   g_free (data);
 }
 
-static void
-plane_size_allocate (GtkWidget     *widget,
-                     GtkAllocation *allocation)
+static gboolean
+plane_configure (GtkWidget         *widget,
+                 GdkEventConfigure *event)
 {
   create_surface (GTK_COLOR_PLANE (widget));
+  return TRUE;
 }
 
 static void
@@ -492,7 +493,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   object_class->set_property = plane_set_property;
 
   widget_class->draw = plane_draw;
-  widget_class->size_allocate = plane_size_allocate;
+  widget_class->configure_event = plane_configure;
   widget_class->key_press_event = plane_key_press;
 
   g_object_class_install_property (object_class,
