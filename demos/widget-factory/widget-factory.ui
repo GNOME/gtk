@@ -2172,13 +2172,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkImageMenuItem" id="togglesmenuitem">
+                                              <object class="GtkMenuItem" id="togglesmenuitem">
                                                 <property name="label">Checks &amp; Radios</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="use_action_appearance">False</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="use_stock">False</property>
                                                 <child type="submenu">
                                                   <object class="GtkMenu" id="togglessubmenu">
                                                     <property name="visible">True</property>
