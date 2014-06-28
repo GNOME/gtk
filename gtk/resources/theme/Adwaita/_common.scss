@@ -205,7 +205,7 @@
 
 .button {
   border-radius: 3px;
-  transition: all 200ms ease-out;
+//  transition: all 200ms ease-out;
   padding: 4px 6px;
   @include button(normal);
   &:hover, &.flat:hover {
@@ -227,10 +227,10 @@
       @include button(backdrop-insensitive-active);
     }
   }
-  &:selected, &.flat:selected,
-  &:selected:focus, &.flat:focus {
-    @extend %selected_items;
-  }
+  //&:selected, &.flat:selected,       Why this?
+  //&:selected:focus, &.flat:focus {
+  //  @extend %selected_items;
+  //}
   &:insensitive {
     @include button(insensitive);
     &:active, &.flat:active {
@@ -307,6 +307,45 @@
   }
 }
 
+// all the following is for the +|- buttons on inline toolbars, that way
+// should really be reprecated...
+.inline-toolbar GtkToolButton > .button { // redefining the button look is
+                                               // needed since those are flat...
+  @include button(normal, $noedge: true); // the box-shadow outset doesn't work
+                                          // in this case, hence $noedge
+  &:hover { @include button(hover, $noedge: true); }
+  &:active { @include button(active, $noedge:true); }
+  &:insensitive { @include button(insensitive, $noedge:true); }
+  &:insensitive:active { @include button(insensitive-active, $noedge:true); }
+  &:backdrop { @include button(backdrop); };
+  &:backdrop:active { @include button(backdrop-active); }
+  &:backdrop:insensitive { @include button(backdrop-insensitive); }
+  &:backdrop:insensitive:active { @include button(backdrop-insensitive-active);}
+}
+.inline-toolbar.toolbar GtkToolButton { // .inline-toolbar.toolbar here for
+                                        // higher specificity than the previous
+                                        // "button look" selector
+  & > .button.flat {
+    border-radius: 0;
+    border-left-style: none;
+  }
+  &:dir(rtl) > .button.flat {}
+  &:first-child > .button.flat {
+    border-radius: 3px 0 0 3px;
+    border-left-style: solid;
+  }
+  &:last-child > .button.flat {
+    border-radius: 0 3px 3px 0;
+  }
+  &:last-child:dir(rtl) > .button.flat {
+    border-right-style: solid;
+  }
+  &:only-child > .button.flat {
+    border-radius: 3px;
+    border-style: solid;
+  }
+}
+
 %linked_buttons {
   border-radius: 0;
   border-left-style: none;
@@ -369,11 +408,8 @@
   }
 }
 
-GtkColorButton.button { padding: 4px; } // Uniform padding on the GtkColorButton.button
-
-.inline-toolbar.toolbar GtkToolButton .button { @include button(normal); }
-
-//GtkCheckButton:hover { -gtk-image-effect: highlight; }
+GtkColorButton.button { padding: 4px; } // Uniform padding on the
+                                        // GtkColorButton.button
 
 /*********
  * Links *

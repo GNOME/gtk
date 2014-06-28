@@ -213,7 +213,6 @@
  ***********/
 .button {
   border-radius: 3px;
-  transition: all 200ms ease-out;
   padding: 4px 6px;
   border-width: 1px;
   border-style: solid;
@@ -431,6 +430,94 @@
   .primary-toolbar .button {
     icon-shadow: none; }
 
+.inline-toolbar GtkToolButton > .button {
+  border-width: 1px;
+  border-style: solid;
+  color: #2e3436;
+  background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
+  border-color: #a1a1a1;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+  icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+  box-shadow: inset 0 1px white; }
+  .inline-toolbar GtkToolButton > .button:hover {
+    border-width: 1px;
+    border-style: solid;
+    color: #2e3436;
+    border-color: #a1a1a1;
+    background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededed);
+    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    box-shadow: inset 0 1px white; }
+  .inline-toolbar GtkToolButton > .button:active {
+    border-width: 1px;
+    border-style: solid;
+    color: #2e3436;
+    border-color: #a1a1a1;
+    background-image: linear-gradient(to bottom, #c7c7c7, #d1d1d1 3%, lightgray);
+    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
+  .inline-toolbar GtkToolButton > .button:insensitive {
+    border-width: 1px;
+    border-style: solid;
+    color: #8d9091;
+    border-color: #a1a1a1;
+    background-image: linear-gradient(to bottom, #f4f4f4);
+    text-shadow: none;
+    icon-shadow: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+  .inline-toolbar GtkToolButton > .button:insensitive:active {
+    border-width: 1px;
+    border-style: solid;
+    color: #8d9091;
+    border-color: #a1a1a1;
+    background-image: linear-gradient(to bottom, #ebebeb);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+  .inline-toolbar GtkToolButton > .button:backdrop {
+    border-width: 1px;
+    border-style: solid;
+    color: #54595a;
+    border-color: #a8a8a8;
+    background-image: linear-gradient(to bottom, #ededed);
+    text-shadow: none;
+    icon-shadow: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+  .inline-toolbar GtkToolButton > .button:backdrop:active {
+    border-width: 1px;
+    border-style: solid;
+    color: #54595a;
+    border-color: #a8a8a8;
+    background-image: linear-gradient(to bottom, #d4d4d4);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+  .inline-toolbar GtkToolButton > .button:backdrop:insensitive {
+    border-width: 1px;
+    border-style: solid;
+    color: #c7c7c7;
+    border-color: #a8a8a8;
+    background-image: linear-gradient(to bottom, #ededed);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+  .inline-toolbar GtkToolButton > .button:backdrop:insensitive:active {
+    border-width: 1px;
+    border-style: solid;
+    color: #c7c7c7;
+    border-color: #a8a8a8;
+    background-image: linear-gradient(to bottom, #e7e7e7);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+
+.inline-toolbar.toolbar GtkToolButton > .button.flat {
+  border-radius: 0;
+  border-left-style: none; }
+.inline-toolbar.toolbar GtkToolButton:first-child > .button.flat {
+  border-radius: 3px 0 0 3px;
+  border-left-style: solid; }
+.inline-toolbar.toolbar GtkToolButton:last-child > .button.flat {
+  border-radius: 0 3px 3px 0; }
+.inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > .button.flat {
+  border-right-style: solid; }
+.inline-toolbar.toolbar GtkToolButton:only-child > .button.flat {
+  border-radius: 3px;
+  border-style: solid; }
+
 .osd .button, .osd .button:hover, .osd .button:active, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked .button, .linked .button:backdrop {
   border-radius: 0;
   border-left-style: none; }
@@ -477,16 +564,6 @@
 
 GtkColorButton.button {
   padding: 4px; }
-
-.inline-toolbar.toolbar GtkToolButton .button {
-  border-width: 1px;
-  border-style: solid;
-  color: #2e3436;
-  background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
-  border-color: #a1a1a1;
-  text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  box-shadow: inset 0 1px white, 0 1px white; }
 
 /*********
  * Links *
@@ -2169,11 +2246,11 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(84, 89, 90, 0.15); }
 
-.view:selected, .view:selected:focus, .view:selected:hover, .entry:selected, .entry:selected:focus, .button:selected, .button.flat:selected, .button:selected:focus, .button.flat:focus {
+.view:selected, .view:selected:focus, .view:selected:hover, .entry:selected, .entry:selected:focus {
   background-color: #4a90d9;
   color: white;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, .entry:backdrop:selected, .button:backdrop:selected, .button.flat:backdrop:focus {
+  .view:backdrop:selected, .entry:backdrop:selected {
     color: #fcfcfc; }
 
 /**********
