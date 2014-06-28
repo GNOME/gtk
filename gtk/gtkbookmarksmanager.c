@@ -160,7 +160,7 @@ save_bookmarks (GFile  *bookmarks_file,
     }
   if (!g_file_replace_contents (bookmarks_file,
 				contents->str,
-				strlen (contents->str),
+				contents->len,
 				NULL, FALSE, 0, NULL,
 				NULL, &error))
     goto out;
