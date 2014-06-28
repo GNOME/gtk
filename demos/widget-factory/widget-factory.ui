@@ -1159,14 +1159,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="label_xalign">0</property>
                             <property name="shadow_type">in</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="left_padding">12</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
+                              <placeholder/>
                             </child>
                             <child type="label">
                               <object class="GtkLabel" id="label1">
@@ -1190,14 +1183,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="label_xalign">0</property>
                             <property name="shadow_type">out</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="left_padding">12</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
+                              <placeholder/>
                             </child>
                             <child type="label">
                               <object class="GtkLabel" id="label2">
@@ -1220,14 +1206,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="can_focus">False</property>
                             <property name="label_xalign">0</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment3">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="left_padding">12</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
+                              <placeholder/>
                             </child>
                             <child type="label">
                               <object class="GtkLabel" id="label17">
@@ -1251,14 +1230,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="label_xalign">0</property>
                             <property name="shadow_type">etched-out</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment4">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="left_padding">12</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
+                              <placeholder/>
                             </child>
                             <child type="label">
                               <object class="GtkLabel" id="label18">
