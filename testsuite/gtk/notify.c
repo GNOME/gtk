@@ -486,6 +486,10 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "page"))
         continue;
 
+      if (g_type_is_a (pspec->owner_type, GTK_TYPE_TOGGLE_BUTTON) &&
+	  g_str_equal (pspec->name, "draw-indicator"))
+        continue;
+
       /* Not supported in subclass */
       if (g_str_equal (g_type_name (type), "GtkRecentAction") &&
 	  g_str_equal (pspec->name, "select-multiple"))
