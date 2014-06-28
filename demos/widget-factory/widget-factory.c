@@ -142,14 +142,20 @@ dismiss (GtkWidget *button)
 }
 
 static gint pulse_time = 250;
-static guint pulse_id = 0;
+static gint pulse_entry_mode = 0;
 
 static gboolean
 pulse_it (GtkWidget *widget)
 {
-  gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
+  guint pulse_id;
+
+  if (GTK_IS_ENTRY (widget))
+    gtk_entry_progress_pulse (GTK_ENTRY (widget));
+  else
+    gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
 
   pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+  g_object_set_data (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id));
 
   return G_SOURCE_REMOVE;
 }
@@ -158,33 +164,31 @@ static void
 update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
 {
   gdouble value;
+  guint pulse_id;
 
   value = gtk_adjustment_get_value (adjustment);
+
+  pulse_id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "pulse_id"));
 
   /* vary between 50 and 450 */
   pulse_time = 50 + 4 * value;
 
-  if (value == 100 && pulse_id != 0)
+  if (value == 100)
     {
-      g_source_remove (pulse_id);
-      pulse_id = 0;
+      if (pulse_id != 0)
+        {
+          g_source_remove (pulse_id);
+          g_object_set_data (G_OBJECT (widget), "pulse_id", NULL);
+        }
     }
-  else if (value < 100 && pulse_id == 0)
+  else if (value < 100)
     {
-      pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+      if (pulse_id == 0 && (GTK_IS_PROGRESS_BAR (widget) || pulse_entry_mode % 3 == 2))
+        {
+          pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+          g_object_set_data (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id));
+        }
     }
-}
-
-static guint pulse_entry_id = 0;
-
-static gboolean
-pulse_entry (GtkEntry *entry)
-{
-  gtk_entry_progress_pulse (entry);
-
-  pulse_entry_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_entry, entry);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -193,25 +197,32 @@ on_entry_icon_release (GtkEntry            *entry,
                        GdkEvent            *event,
                        gpointer             user_data)
 {
-  static int num = 0;
+  guint pulse_id;
 
   if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
     return;
 
-  num++;
+  pulse_entry_mode++;
 
-  if (num % 3 == 0)
+  if (pulse_entry_mode % 3 == 0)
     {
-      if (pulse_entry_id > 0)
-        g_source_remove (pulse_entry_id);
+      pulse_id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (entry), "pulse_id"));
+      if (pulse_id != 0)
+        {
+          g_source_remove (pulse_id);
+          g_object_set_data (G_OBJECT (entry), "pulse_id", NULL);
+        }
       gtk_entry_set_progress_fraction (entry, 0);
     }
-  else if (num % 3 == 1)
+  else if (pulse_entry_mode % 3 == 1)
     gtk_entry_set_progress_fraction (entry, 0.25);
-  else if (num % 3 == 2)
+  else if (pulse_entry_mode % 3 == 2)
     {
-      gtk_entry_set_progress_pulse_step (entry, 0.1);
-      pulse_entry (entry);
+      if (pulse_time - 50 < 400)
+        {
+          gtk_entry_set_progress_pulse_step (entry, 0.1);
+          pulse_it (GTK_WIDGET (entry));
+        }
     }
 
 }
@@ -304,11 +315,15 @@ activate (GApplication *app)
   g_action_map_add_action (G_ACTION_MAP (window),
                            G_ACTION (g_property_action_new ("toolbar", widget, "visible")));
 
+  adj = (GtkAdjustment *)gtk_builder_get_object (builder, "adjustment1");
+
   widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar3");
-  pulse_id = g_timeout_add (250, (GSourceFunc)pulse_it, widget);
-  g_signal_connect (gtk_builder_get_object (builder, "adjustment1"),
-                    "value-changed",
-                    G_CALLBACK (update_pulse_time), widget);
+  g_signal_connect (adj, "value-changed", G_CALLBACK (update_pulse_time), widget);
+  update_pulse_time (adj, widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "entry1");
+  g_signal_connect (adj, "value-changed", G_CALLBACK (update_pulse_time), widget);
+  update_pulse_time (adj, widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "page2dismiss");
   g_signal_connect (widget, "clicked", G_CALLBACK (dismiss), NULL);
