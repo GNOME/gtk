@@ -1,3 +1,3 @@
 [Test]
-Exec=/bin/sh -c "@libexecdir@/installed-tests/gtk+/gtk-reftest -k --verbose --output $(pwd) --directory @libexecdir@/installed-tests/gtk+/reftests"
+Exec=/bin/sh -c "env G_ENABLE_DIAGNOSTIC=0 @libexecdir@/installed-tests/gtk+/gtk-reftest -k --verbose --output $(pwd) --directory @libexecdir@/installed-tests/gtk+/reftests"
 Type=session-exclusive
