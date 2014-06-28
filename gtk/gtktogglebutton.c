@@ -202,7 +202,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 							 P_("Draw Indicator"),
 							 P_("If the toggle part of the button is displayed"),
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 GTK_PARAM_READWRITE));
 
   /**
    * GtkToggleButton::toggled:
