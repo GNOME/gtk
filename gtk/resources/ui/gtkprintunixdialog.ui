@@ -4,7 +4,7 @@
   <!-- interface-requires gtkprivate 3.10 -->
   <object class="GtkAdjustment" id="copies_spin_adjustment">
     <property name="lower">1</property>
-    <property name="upper">100</property>
+    <property name="upper">999</property>
     <property name="value">1</property>
     <property name="step_increment">1</property>
   </object>
