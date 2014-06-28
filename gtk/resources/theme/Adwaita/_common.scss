@@ -1187,8 +1187,7 @@ GtkSwitch {
       border-radius: 3px;
       border-color: $borders_color;
       background-color: mix($bg_color,$borders_color,60%);
-      box-shadow: inset 0 1px transparentize(black, 0.9),
-                  $widget_edge;
+      box-shadow: inset 0 1px transparentize(black, 0.9); /*outset not working*/
       text-shadow: 0 1px transparentize(black, 0.9);
       &:active {
         color: white;
@@ -1210,16 +1209,16 @@ GtkSwitch {
         background-color: $backdrop_bg_color;
         box-shadow: none;
         text-shadow: none;
-      }
-      &:backdrop:active {
-        color: $backdrop_bg_color;
-        border-color: $selected_bg_color;
-        background-color: $selected_bg_color;
-        box-shadow: none;
-      }
-      &:backdrop:insensitive {
-        color: $backdrop_insensitive_color;
-        border-color: $backdrop_insensitive_color;
+        &:active {
+          color: $backdrop_bg_color;
+          border-color: $selected_bg_color;
+          background-color: $selected_bg_color;
+          box-shadow: none;
+        }
+        &:insensitive {
+          color: $backdrop_insensitive_color;
+          border-color: $backdrop_insensitive_color;
+        }
       }
     }
     &.slider {
@@ -1238,12 +1237,13 @@ GtkSwitch {
       }
       &:active { border: 1px solid $selected_borders_color; }
       &:insensitive { @include button(insensitive, $noedge: true); }
-      &:backdrop { @include button(backdrop); }
-      &:backdrop:active{ border-color: $selected_bg_color; }
-      &:backdrop:insensitive {
-        @include button(backdrop-insensitive);
-        @if $variant=='dark' {
-          border-color: $backdrop_insensitive_color;
+      &:backdrop { @include button(backdrop);
+        &:active{ border-color: $selected_bg_color; }
+        &:insensitive {
+          @include button(backdrop-insensitive);
+          @if $variant=='dark' {
+            border-color: $backdrop_insensitive_color;
+          }
         }
       }
     }
@@ -1685,6 +1685,10 @@ GtkScrolledWindow {
     background-color: $backdrop_base_color;
     border-color: $backdrop_borders_color;
   }
+}
+
+.list-row {
+  padding: 2px;
 }
 
 .list-row:selected {
