@@ -50,7 +50,7 @@
  * as custom colors.
  *
  * To change the initially selected color, use gtk_color_chooser_set_rgba().
- * To get the selected font use gtk_color_chooser_get_rgba().
+ * To get the selected color use gtk_color_chooser_get_rgba().
  *
  * The #GtkColorChooserWidget is used in the #GtkColorChooserDialog
  * to provide a dialog for selecting colors.
