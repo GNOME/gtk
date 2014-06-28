@@ -54,6 +54,7 @@
   -GtkWindow-resize-grip-height: 0;
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
+  -GtkStatusbar-shadow-type: none;
   outline-color: rgba(238, 238, 236, 0.3);
   outline-style: dashed;
   outline-offset: -3px;
