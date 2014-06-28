@@ -182,7 +182,7 @@ pulse_entry (GtkEntry *entry)
 {
   gtk_entry_progress_pulse (entry);
 
-  pulse_entry_id = g_timeout_add (100, (GSourceFunc)pulse_entry, entry);
+  pulse_entry_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_entry, entry);
 
   return G_SOURCE_REMOVE;
 }
