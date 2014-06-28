@@ -645,6 +645,7 @@ main (int argc, char **argv)
   /* These must be set before before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
+  g_setenv ("G_ENABLE_DIAGNOSTIC", "0", TRUE);
 
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types();
