@@ -1,4 +1,4 @@
 [Test]
-Exec=/bin/sh -c "@libexecdir@/installed-tests/gtk+/value"
+Exec=/bin/sh -c "env G_ENABLE_DIAGNOSTIC=0 @libexecdir@/installed-tests/gtk+/value"
 Type=session
 

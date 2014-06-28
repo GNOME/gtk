@@ -1,4 +1,4 @@
 [Test]
-Exec=/bin/sh -c "@libexecdir@/installed-tests/gtk+/tree-relationships"
+Exec=/bin/sh -c "env G_ENABLE_DIAGNOSTIC=0 @libexecdir@/installed-tests/gtk+/tree-relationships"
 Type=session
 
