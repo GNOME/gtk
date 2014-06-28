@@ -291,12 +291,8 @@ activate (GApplication *app)
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL }
   };
-  GError *error = NULL;
 
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/ui/widget-factory.ui", &error);
-  if (error)
-    g_print ("error: %s\n", error->message);
+  builder = gtk_builder_new_from_resource ("/ui/widget-factory.ui");
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
   gtk_builder_connect_signals (builder, NULL);
 
