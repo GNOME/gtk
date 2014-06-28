@@ -807,7 +807,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
-                            <property name="color">#31316867a09f</property>
+                            <property name="rgba">#31316867a09f</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
