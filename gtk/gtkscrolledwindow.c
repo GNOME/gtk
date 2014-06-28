@@ -27,6 +27,7 @@
 #include "gtkscrolledwindow.h"
 
 #include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
 #include "gtkintl.h"
@@ -3123,11 +3124,39 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
 }
 
 static void
+gtk_scrolled_window_enable_animation (GtkScrolledWindow *sw)
+{
+  GtkAdjustment *adjustment;
+  GdkFrameClock *clock;
+
+  clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw)),
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (sw->priv->hscrollbar));
+  gtk_adjustment_enable_animation (adjustment, clock, 200);
+
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (sw->priv->vscrollbar));
+  gtk_adjustment_enable_animation (adjustment, clock, 200);
+}
+
+static void
+gtk_scrolled_window_disable_animation (GtkScrolledWindow *sw)
+{
+  GtkAdjustment *adjustment;
+
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (sw->priv->hscrollbar));
+  gtk_adjustment_enable_animation (adjustment, NULL, 0);
+
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (sw->priv->vscrollbar));
+  gtk_adjustment_enable_animation (adjustment, NULL, 0);
+}
+
+static void
 gtk_scrolled_window_map (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
 
   gdk_window_show (scrolled_window->priv->overshoot_window);
+
+  gtk_scrolled_window_enable_animation (scrolled_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->map (widget);
 }
@@ -3136,6 +3165,8 @@ static void
 gtk_scrolled_window_unmap (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+
+  gtk_scrolled_window_disable_animation (scrolled_window);
 
   gdk_window_hide (scrolled_window->priv->overshoot_window);
 
