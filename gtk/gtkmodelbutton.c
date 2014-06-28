@@ -171,17 +171,21 @@ static void
 gtk_model_button_set_iconic (GtkModelButton *button,
                              gboolean        iconic)
 {
+  GtkStyleContext *context;
+
   button->iconic = iconic;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
   if (iconic)
     {
-      gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (button)),
-                                      GTK_STYLE_CLASS_MENUITEM);
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_MENUITEM);
+      gtk_style_context_add_class (context, "image-button");
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NORMAL);
     }
   else
     {
-      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (button)),
-                                   GTK_STYLE_CLASS_MENUITEM);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUITEM);
+      gtk_style_context_remove_class (context, "image-button");
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
     }
 
@@ -727,6 +731,7 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_widget_set_halign (button->box, GTK_ALIGN_FILL);
   gtk_widget_show (button->box);
   button->image = gtk_image_new ();
+  g_object_set (button->image, "margin", 4, NULL);
   button->label = gtk_label_new ("");
   gtk_container_add (GTK_CONTAINER (button->box), button->image);
   gtk_container_add (GTK_CONTAINER (button->box), button->label);

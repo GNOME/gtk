@@ -91,6 +91,14 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
 
   gtk_container_foreach (GTK_CONTAINER (box->item_box), gtk_menu_section_box_sync_item, n_items);
 
+  if (box->iconic)
+    {
+      if (n_items_before > 0)
+        gtk_widget_set_margin_top (GTK_WIDGET (box->item_box), 10);
+      else
+        gtk_widget_set_margin_top (GTK_WIDGET (box->item_box), 0);
+    }
+
   if (box->separator == NULL)
     return;
 
