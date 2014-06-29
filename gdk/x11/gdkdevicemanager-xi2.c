@@ -1177,6 +1177,17 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkModifierType consumed, state;
         GdkDevice *device, *source_device;
 
+        GDK_NOTE (EVENTS,
+                  g_message ("key %s:\twindow %ld\n"
+                             "\tdevice:%u\n"
+                             "\tsource device:%u\n"
+                             "\tkey number: %u\n",
+                             (ev->evtype == XI_KeyPress) ? "press" : "release",
+                             xev->event,
+                             xev->deviceid,
+                             xev->sourceid,
+                             xev->detail));
+
         event->key.type = xev->evtype == XI_KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
 
         event->key.window = window;
