@@ -2309,8 +2309,8 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
 
 /**
  * gtk_cell_area_attribute_get_column:
- * @cell_layout: a #GtkCellLayout
- * @cell: a #GtkCellRenderer
+ * @area: a #GtkCellArea
+ * @renderer: a #GtkCellRenderer
  * @attribute: an attribute on the renderer
  *
  * Returns the model column that an attribute has been mapped to,
