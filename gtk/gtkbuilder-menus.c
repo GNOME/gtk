@@ -375,6 +375,7 @@ _gtk_builder_menu_start (ParserData   *parser_data,
       menu = g_menu_new ();
       _gtk_builder_add_object (state->parser_data->builder, id, G_OBJECT (menu));
       gtk_builder_menu_push_frame (state, menu, NULL);
+      g_object_unref (menu);
     }
 }
 
