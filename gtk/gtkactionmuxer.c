@@ -534,6 +534,8 @@ gtk_action_muxer_finalize (GObject *object)
   g_assert_cmpint (g_hash_table_size (muxer->observed_actions), ==, 0);
   g_hash_table_unref (muxer->observed_actions);
   g_hash_table_unref (muxer->groups);
+  if (muxer->primary_accels)
+    g_hash_table_unref (muxer->primary_accels);
 
   G_OBJECT_CLASS (gtk_action_muxer_parent_class)
     ->finalize (object);
