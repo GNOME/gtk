@@ -1227,12 +1227,16 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkDevice *source_device;
 
         GDK_NOTE (EVENTS,
-                  g_message ("button %s:\twindow %ld\n\tdevice:%u\n"
-                             "\tsource device:%u\n\tbutton number: %u\n"
+                  g_message ("button %s:\twindow %ld\n"
+                             "\tdevice:%u\n"
+                             "\tsource device:%u\n"
+                             "\tbutton number: %u\n"
                              "\tx,y: %.2f %.2f",
                              (ev->evtype == XI_ButtonPress) ? "press" : "release",
-                             xev->event, xev->detail,
-                             xev->deviceid, xev->sourceid,
+                             xev->event,
+                             xev->deviceid,
+                             xev->sourceid,
+                             xev->detail,
                              xev->event_x, xev->event_y));
 
         if (ev->evtype == XI_ButtonRelease &&
