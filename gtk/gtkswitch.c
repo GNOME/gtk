@@ -885,6 +885,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   /**
    * GtkSwitch::state-set:
    * @widget: the object on which the signal was emitted
+   * @state: the new state of the switch
    *
    * The ::state-set signal on GtkSwitch is emitted to change the underlying
    * state. It is emitted when the user changes the switch position. The
