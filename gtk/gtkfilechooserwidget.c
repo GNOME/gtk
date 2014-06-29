@@ -7466,10 +7466,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 
   set_file_system_backend (impl);
 
-  if (g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
-                                       "org.gnome.desktop.interface",
-                                       TRUE) != NULL)
-
   priv->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
 
   /* Setup various attributes and callbacks in the UI 
