@@ -1293,8 +1293,8 @@ gdk_window_new (GdkWindow     *parent,
       if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
 	g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
 		   "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
-    case GDK_WINDOW_CHILD:
       break;
+    case GDK_WINDOW_CHILD:
       break;
     default:
       g_warning (G_STRLOC "cannot make windows of type %d", window->window_type);
