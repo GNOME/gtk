@@ -3058,12 +3058,13 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
       values = style_values_lookup (context);
 
-      _gtk_css_computed_values_create_animations (values,
-                                                  priv->parent ? style_values_lookup (priv->parent) : NULL,
-                                                  timestamp,
-                                                  GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-						  priv->scale,
-                                                  gtk_style_context_should_create_transitions (context) ? current : NULL);
+      if (values != current)
+        _gtk_css_computed_values_create_animations (values,
+                                                    priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                                    timestamp,
+                                                    GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                                    priv->scale,
+                                                    gtk_style_context_should_create_transitions (context) ? current : NULL);
       if (_gtk_css_computed_values_is_static (values))
         change &= ~GTK_CSS_CHANGE_ANIMATE;
       else
@@ -3075,7 +3076,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
           changes = _gtk_css_computed_values_get_difference (values, current);
 
           /* In the case where we keep the cache, we want unanimated values */
-          _gtk_css_computed_values_cancel_animations (current);
+          if (values != current)
+            _gtk_css_computed_values_cancel_animations (current);
         }
       else
         {
