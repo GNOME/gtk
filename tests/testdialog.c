@@ -387,6 +387,12 @@ main (int argc, char *argv[])
   gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (vbox), button);
 
+  button = gtk_spinner_new ();
+  gtk_spinner_start (GTK_SPINNER (button));
+  gtk_widget_show (button);
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (vbox), button);
+
   gtk_widget_show (window);
   gtk_main ();
   
