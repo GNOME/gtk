@@ -164,10 +164,10 @@ gtk_menu_tracker_item_get_property (GObject    *object,
       g_value_set_string (value, gtk_menu_tracker_item_get_label (self));
       break;
     case PROP_ICON:
-      g_value_set_object (value, gtk_menu_tracker_item_get_icon (self));
+      g_value_take_object (value, gtk_menu_tracker_item_get_icon (self));
       break;
     case PROP_VERB_ICON:
-      g_value_set_object (value, gtk_menu_tracker_item_get_verb_icon (self));
+      g_value_take_object (value, gtk_menu_tracker_item_get_verb_icon (self));
       break;
     case PROP_SENSITIVE:
       g_value_set_boolean (value, gtk_menu_tracker_item_get_sensitive (self));
@@ -199,6 +199,7 @@ gtk_menu_tracker_item_finalize (GObject *object)
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (object);
 
   g_free (self->action_namespace);
+  g_free (self->action_and_target);
 
   if (self->observable)
     g_object_unref (self->observable);
