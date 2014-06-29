@@ -134,7 +134,7 @@ reference counting, not floating reference counting.
 </para>
 
 <para>
-To to get this, you must acquire a reference to the widget and drop the
+To get this, you must acquire a reference to the widget and drop the
 floating reference (<quote>ref and sink</quote> in GTK+ parlance) after
 creating it:
 <informalexample><programlisting>
@@ -437,7 +437,7 @@ gtk_image_new_from_file() <footnote><para> If the file load fails,
 gtk_image_new_from_file() will display no image graphic &mdash; to detect
 a failed load yourself, use gdk_pixbuf_new_from_file() directly, then
 gtk_image_new_from_pixbuf().</para></footnote>.
-To load an image for another purpose, use gdk_pixbuf_new_from_file(). To i
+To load an image for another purpose, use gdk_pixbuf_new_from_file(). To
 load an animation, use gdk_pixbuf_animation_new_from_file().
 gdk_pixbuf_animation_new_from_file() can also load non-animated images, so
 use it in combination with gdk_pixbuf_animation_is_static_image() to load a
