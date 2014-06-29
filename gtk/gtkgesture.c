@@ -208,7 +208,11 @@ gtk_gesture_set_property (GObject      *object,
 static void
 gtk_gesture_finalize (GObject *object)
 {
-  GtkGesturePrivate *priv = gtk_gesture_get_instance_private (GTK_GESTURE (object));
+  GtkGesture *gesture = GTK_GESTURE (object);
+  GtkGesturePrivate *priv = gtk_gesture_get_instance_private (gesture);
+
+  gtk_gesture_ungroup (gesture);
+  g_list_free (priv->group_link);
 
   g_hash_table_destroy (priv->points);
 
