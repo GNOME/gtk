@@ -155,7 +155,7 @@ gtk_css_image_icon_theme_compute (GtkCssImage             *image,
 
 static gboolean
 gtk_css_image_icon_theme_equal (GtkCssImage *image1,
-                            GtkCssImage *image2)
+                                GtkCssImage *image2)
 {
   GtkCssImageIconTheme *icon_theme1 = GTK_CSS_IMAGE_ICON_THEME (image1);
   GtkCssImageIconTheme *icon_theme2 = GTK_CSS_IMAGE_ICON_THEME (image2);
@@ -164,9 +164,21 @@ gtk_css_image_icon_theme_equal (GtkCssImage *image1,
 }
 
 static void
+gtk_css_image_icon_theme_dispose (GObject *object)
+{
+  GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (object);
+
+  g_free (icon_theme->name);
+  icon_theme->name = NULL;
+
+  G_OBJECT_CLASS (_gtk_css_image_icon_theme_parent_class)->dispose (object);
+}
+
+static void
 _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
 {
   GtkCssImageClass *image_class = GTK_CSS_IMAGE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   image_class->get_aspect_ratio = gtk_css_image_icon_theme_get_aspect_ratio;
   image_class->draw = gtk_css_image_icon_theme_draw;
@@ -174,6 +186,8 @@ _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
   image_class->print = gtk_css_image_icon_theme_print;
   image_class->compute = gtk_css_image_icon_theme_compute;
   image_class->equal = gtk_css_image_icon_theme_equal;
+
+  object_class->dispose = gtk_css_image_icon_theme_dispose;
 }
 
 static void
