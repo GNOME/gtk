@@ -62,16 +62,11 @@ main (int argc, char *argv[])
 {
   GtkIconTheme *icon_theme;
   GtkIconInfo *icon_info;
-  GdkRectangle embedded_rect;
-  GdkPoint *attach_points;
-  int n_attach_points;
-  const gchar *display_name;
   char *context;
   char *themename;
   GList *list;
   int size = 48;
   int scale = 1;
-  int i;
   
   gtk_init (&argc, &argv);
 
@@ -223,29 +218,6 @@ main (int argc, char *argv[])
               g_object_unref (pixbuf);
             }
 
-	  if (gtk_icon_info_get_embedded_rect (icon_info, &embedded_rect))
-	    {
-	      g_print ("Embedded rect: %d,%d %dx%d\n",
-		       embedded_rect.x, embedded_rect.y,
-		       embedded_rect.width, embedded_rect.height);
-	    }
-	  
-	  if (gtk_icon_info_get_attach_points (icon_info, &attach_points, &n_attach_points))
-	    {
-	      g_print ("Attach Points: ");
-	      for (i = 0; i < n_attach_points; i++)
-		g_print ("%d, %d; ",
-			 attach_points[i].x,
-			 attach_points[i].y);
-	      g_free (attach_points);
-	      g_print ("\n");
-	    }
-	  
-	  display_name = gtk_icon_info_get_display_name (icon_info);
-	  
-	  if (display_name)
-	    g_print ("Display name: %s\n", display_name);
-	  
 	  g_object_unref (icon_info);
 	}
     }
