@@ -128,6 +128,7 @@ gtk_builder_menu_start_element (GMarkupParseContext  *context,
 
               if (id != NULL)
                 _gtk_builder_add_object (state->parser_data->builder, id, G_OBJECT (menu));
+              g_object_unref (menu);
             }
 
           return;
@@ -148,6 +149,7 @@ gtk_builder_menu_start_element (GMarkupParseContext  *context,
 
               if (id != NULL)
                 _gtk_builder_add_object (state->parser_data->builder, id, G_OBJECT (menu));
+              g_object_unref (menu);
             }
 
           return;
@@ -204,6 +206,7 @@ gtk_builder_menu_start_element (GMarkupParseContext  *context,
 
               if (id != NULL)
                 _gtk_builder_add_object (state->parser_data->builder, id, G_OBJECT (menu));
+              g_object_unref (menu);
             }
 
           return;
