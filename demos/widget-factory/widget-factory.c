@@ -73,14 +73,17 @@ activate_about (GSimpleAction *action,
     "Cosimo Cecchi",
     NULL
   };
+  gchar *version;
+
+  version = g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+                             PACKAGE_VERSION,
+                             gtk_get_major_version (),
+                             gtk_get_minor_version (),
+                             gtk_get_micro_version ());
 
   gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
                          "program-name", "GTK+ Widget Factory",
-                         "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
-                                                     PACKAGE_VERSION,
-                                                     gtk_get_major_version (),
-                                                     gtk_get_minor_version (),
-                                                     gtk_get_micro_version ()),
+                         "version", version,
                          "copyright", "(C) 1997-2013 The GTK+ Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
@@ -89,6 +92,8 @@ activate_about (GSimpleAction *action,
                          "logo-icon-name", "gtk3-widget-factory",
                          "title", "About GTK+ Widget Factory",
                          NULL);
+
+  g_free (version);
 }
 
 static void
