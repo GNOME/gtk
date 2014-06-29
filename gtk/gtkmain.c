@@ -1747,11 +1747,6 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_ENTER_NOTIFY:
-      if (gtk_widget_is_sensitive (grab_widget) &&
-          !_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
-        gtk_widget_event (grab_widget, event);
-      break;
-
     case GDK_LEAVE_NOTIFY:
       if (gtk_widget_is_sensitive (grab_widget) &&
           !_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
