@@ -1693,15 +1693,6 @@ gtk_main_do_event (GdkEvent *event)
         gtk_widget_event (event_widget, event);
       break;
 
-    case GDK_SCROLL:
-    case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
-    case GDK_TOUCH_BEGIN:
-      if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
-        gtk_propagate_event (grab_widget, event);
-      break;
-
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
       if (gtk_invoke_key_snoopers (grab_widget, event))
@@ -1739,6 +1730,11 @@ gtk_main_do_event (GdkEvent *event)
             }
         }
       /* else fall through */
+    case GDK_SCROLL:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_TOUCH_BEGIN:
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_RELEASE:
     case GDK_PROXIMITY_IN:
