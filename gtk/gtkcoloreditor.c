@@ -245,6 +245,8 @@ get_child_position (GtkOverlay     *overlay,
 
   gtk_widget_get_preferred_size (widget, &req, NULL);
 
+  allocation->x = 0;
+  allocation->y = 0;
   allocation->width = req.width;
   allocation->height = req.height;
 
