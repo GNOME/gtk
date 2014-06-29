@@ -2349,7 +2349,8 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &delta_x, &delta_y))
     {
-      if (delta_x != 0.0)
+      if (delta_x != 0.0 &&
+          gtk_widget_get_visible (priv->hscrollbar))
         {
           GtkAdjustment *adj;
           gdouble new_value;
@@ -2370,7 +2371,8 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           handled = TRUE;
         }
 
-      if (delta_y != 0.0)
+      if (delta_y != 0.0 &&
+          gtk_widget_get_visible (priv->vscrollbar))
         {
           GtkAdjustment *adj;
           gdouble new_value;
@@ -2400,7 +2402,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
       else
         range = priv->hscrollbar;
 
-      if (range)
+      if (range && gtk_widget_get_visible (range))
         {
           GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (range));
           gdouble new_value;
