@@ -3265,7 +3265,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
     { 
       for (d = icon_theme->priv->resource_paths; d; d = d->next)
         {
-          full_dir = g_build_filename ((const gchar *)d->data, theme->name, subdir, NULL);
+          full_dir = g_build_filename ((const gchar *)d->data, subdir, NULL);
           dir = g_new0 (IconThemeDir, 1);
           dir->type = type;
           dir->is_resource = TRUE;
