@@ -278,47 +278,17 @@ add_cb (GtkContainer *container,
 }
 
 static void
-update_title (GObject    *dialog,
-              GParamSpec *pspec,
-              GtkWidget  *label)
-{
-  const gchar *title;
-
-  title = gtk_window_get_title (GTK_WINDOW (dialog));
-  gtk_label_set_label (GTK_LABEL (label), title);
-  gtk_widget_set_visible (label, title && title[0]);
-}
-
-static void
 apply_use_header_bar (GtkDialog *dialog)
 {
   GtkDialogPrivate *priv = dialog->priv;
 
   gtk_widget_set_visible (priv->action_box, !priv->use_header_bar);
   gtk_widget_set_visible (priv->headerbar, priv->use_header_bar);
-  if (!priv->use_header_bar)
-    {
-      GtkWidget *box = NULL;
-
-      if (gtk_window_get_type_hint (GTK_WINDOW (dialog)) == GDK_WINDOW_TYPE_HINT_DIALOG)
-        {
-          GtkWidget *label;
-
-          box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-          gtk_widget_show (box);
-          gtk_widget_set_size_request (box, -1, 16);
-          label = gtk_label_new ("");
-          gtk_widget_set_margin_top (label, 6);
-          gtk_widget_set_margin_bottom (label, 6);
-          gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
-          gtk_box_set_center_widget (GTK_BOX (box), label);
-          g_signal_connect_object (dialog, "notify::title", G_CALLBACK (update_title), label, 0);
-        }
-
-      gtk_window_set_titlebar (GTK_WINDOW (dialog), box);
-    }
   if (priv->use_header_bar)
-    g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
+    {
+      gtk_window_set_titlebar (GTK_WINDOW (dialog), priv->headerbar);
+      g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
+    }
 }
 
 static void
@@ -534,8 +504,8 @@ gtk_dialog_constructed (GObject *object)
   if (priv->use_header_bar == -1)
     priv->use_header_bar = FALSE;
 
-  add_action_widgets (dialog);
   apply_use_header_bar (dialog);
+  add_action_widgets (dialog);
 }
 
 static void
@@ -1911,12 +1881,22 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
                                 GObject       *child,
                                 const gchar   *type)
 {
-  if (!type)
+  GtkDialog *dialog = GTK_DIALOG (buildable);
+  GtkDialogPrivate *priv = dialog->priv;
+
+  if (type == NULL)
     gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+
+  /* Don't call gtk_window_set_titlebar() until we know whether we want
+   * traditional titlebars or header bars.
+   */
+  else if (g_str_equal (type, "titlebar"))
+    priv->headerbar = GTK_WIDGET (child);
   else if (g_strcmp0 (type, "action") == 0)
     gtk_dialog_add_action_widget (GTK_DIALOG (buildable), GTK_WIDGET (child), GTK_RESPONSE_NONE);
+
   else
-    parent_buildable_iface->add_child (buildable, builder, child, type);
+    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
 }
 
 /**
