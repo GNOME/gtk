@@ -3718,7 +3718,8 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
    * for the directory where the icon is; the image size doesn't
    * matter in that case.
    */
-  if (icon_info->forced_size)
+  if (icon_info->forced_size ||
+      icon_info->dir_type == ICON_THEME_DIR_UNTHEMED)
     icon_info->scale = -1;
   else if (icon_info->dir_type == ICON_THEME_DIR_FIXED ||
            icon_info->dir_type == ICON_THEME_DIR_THRESHOLD)
