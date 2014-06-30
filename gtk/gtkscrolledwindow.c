@@ -27,6 +27,7 @@
 #include "gtkscrolledwindow.h"
 
 #include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
 #include "gtkintl.h"
@@ -131,6 +132,9 @@
 #define MAX_OVERSHOOT_DISTANCE 50
 #define DECELERATION_FRICTION 4
 #define OVERSHOOT_FRICTION 20
+
+/* Animated scrolling */
+#define ANIMATION_DURATION 200
 
 struct _GtkScrolledWindowPrivate
 {
@@ -244,6 +248,7 @@ static void     gtk_scrolled_window_adjustment_changed (GtkAdjustment     *adjus
                                                         gpointer           data);
 static void     gtk_scrolled_window_adjustment_value_changed (GtkAdjustment     *adjustment,
                                                               gpointer           data);
+static gboolean gtk_scrolled_window_should_animate     (GtkScrolledWindow   *sw);
 
 static void  gtk_scrolled_window_get_preferred_width   (GtkWidget           *widget,
 							gint                *minimum_size,
@@ -894,16 +899,16 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
       g_signal_handlers_disconnect_by_func (old_adjustment,
 					    gtk_scrolled_window_adjustment_changed,
 					    scrolled_window);
-      gtk_range_set_adjustment (GTK_RANGE (priv->hscrollbar),
-				hadjustment);
+      gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
+      gtk_range_set_adjustment (GTK_RANGE (priv->hscrollbar), hadjustment);
     }
   hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   g_signal_connect (hadjustment,
-		    "changed",
+                    "changed",
 		    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
 		    scrolled_window);
   g_signal_connect (hadjustment,
-		    "value-changed",
+                    "value-changed",
 		    G_CALLBACK (gtk_scrolled_window_adjustment_value_changed),
 		    scrolled_window);
   gtk_scrolled_window_adjustment_changed (hadjustment, scrolled_window);
@@ -913,6 +918,8 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
   if (GTK_IS_SCROLLABLE (child))
     gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (child), hadjustment);
 
+  if (gtk_scrolled_window_should_animate (scrolled_window))
+    gtk_adjustment_enable_animation (hadjustment, gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window)), ANIMATION_DURATION);
   g_object_notify (G_OBJECT (scrolled_window), "hadjustment");
 }
 
@@ -959,16 +966,16 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
       g_signal_handlers_disconnect_by_func (old_adjustment,
 					    gtk_scrolled_window_adjustment_changed,
 					    scrolled_window);
-      gtk_range_set_adjustment (GTK_RANGE (priv->vscrollbar),
-				vadjustment);
+      gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
+      gtk_range_set_adjustment (GTK_RANGE (priv->vscrollbar), vadjustment);
     }
   vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
   g_signal_connect (vadjustment,
-		    "changed",
+                    "changed",
 		    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
 		    scrolled_window);
   g_signal_connect (vadjustment,
-		    "value-changed",
+                    "value-changed",
 		    G_CALLBACK (gtk_scrolled_window_adjustment_value_changed),
 		    scrolled_window);
   gtk_scrolled_window_adjustment_changed (vadjustment, scrolled_window);
@@ -977,6 +984,9 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
   child = gtk_bin_get_child (bin);
   if (GTK_IS_SCROLLABLE (child))
     gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (child), vadjustment);
+
+  if (gtk_scrolled_window_should_animate (scrolled_window))
+    gtk_adjustment_enable_animation (vadjustment, gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window)), ANIMATION_DURATION);
 
   g_object_notify (G_OBJECT (scrolled_window), "vadjustment");
 }
@@ -3122,6 +3132,41 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
 }
 
+static gboolean
+gtk_scrolled_window_should_animate (GtkScrolledWindow *sw)
+{
+  gboolean animate;
+
+  if (!gtk_widget_get_mapped (GTK_WIDGET (sw)))
+    return FALSE;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (sw)),
+                "gtk-enable-animations", &animate,
+                NULL);
+ 
+  return animate;
+}
+
+static void
+gtk_scrolled_window_update_animating (GtkScrolledWindow *sw)
+{
+  GtkAdjustment *adjustment;
+  GdkFrameClock *clock = NULL;
+  guint duration = 0;
+
+  if (gtk_scrolled_window_should_animate (sw))
+    {
+      clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw)),
+      duration = ANIMATION_DURATION;
+    }
+
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (sw->priv->hscrollbar));
+  gtk_adjustment_enable_animation (adjustment, clock, duration);
+
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (sw->priv->vscrollbar));
+  gtk_adjustment_enable_animation (adjustment, clock, duration);
+}
+
 static void
 gtk_scrolled_window_map (GtkWidget *widget)
 {
@@ -3130,6 +3175,8 @@ gtk_scrolled_window_map (GtkWidget *widget)
   gdk_window_show (scrolled_window->priv->overshoot_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->map (widget);
+
+  gtk_scrolled_window_update_animating (scrolled_window);
 }
 
 static void
@@ -3140,6 +3187,8 @@ gtk_scrolled_window_unmap (GtkWidget *widget)
   gdk_window_hide (scrolled_window->priv->overshoot_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
+
+  gtk_scrolled_window_update_animating (scrolled_window);
 }
 
 static void
