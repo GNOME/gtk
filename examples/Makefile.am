@@ -1,4 +1,5 @@
 SUBDIRS = \
+	bp \
 	application1 application2 application3 \
 	application4 application5 application6 \
 	application7 application8 application9 \
@@ -10,7 +11,6 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/gdk			\
 	-DGDK_DISABLE_DEPRECATED		\
 	-DGTK_DISABLE_DEPRECATED		\
-	-DSRCDIR=\"$(abs_srcdir)\"		\
 	$(GTK_DEBUG_FLAGS)			\
 	$(GTK_DEP_CFLAGS)
 
@@ -22,7 +22,6 @@ LDADD = \
 noinst_PROGRAMS = \
 	hello-world				\
 	window-default				\
-	bloatpad				\
 	plugman					\
 	sunny					\
 	action-namespace			\

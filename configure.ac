@@ -1839,6 +1839,7 @@ demos/gtk-demo/geninclude.pl
 demos/widget-factory/Makefile
 demos/icon-browser/Makefile
 examples/Makefile
+examples/bp/Makefile
 examples/application1/Makefile
 examples/application2/Makefile
 examples/application3/Makefile
