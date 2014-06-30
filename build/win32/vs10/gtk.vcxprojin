@@ -200,10 +200,6 @@
       <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f7}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="gtka11y.vcxproj">
-      <Project>{f756b0db-40a1-4e9f-be1f-8f02cb86ea46}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="gtk-inspector.vcxproj">
       <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073fd}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
