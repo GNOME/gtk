@@ -57,6 +57,15 @@ struct _GtkAdjustmentPrivate {
   gdouble step_increment;
   gdouble page_increment;
   gdouble page_size;
+
+  gdouble source;
+  gdouble target;
+
+  guint duration;
+  gint64 start_time;
+  gint64 end_time;
+  guint tick_id;
+  GdkFrameClock *clock;
 };
 
 enum
@@ -97,10 +106,25 @@ static guint64 adjustment_changed_stamp = 0; /* protected by global gdk lock */
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAdjustment, gtk_adjustment, G_TYPE_INITIALLY_UNOWNED)
 
 static void
+gtk_adjustment_finalize (GObject *object)
+{
+  GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
+  GtkAdjustmentPrivate *priv = adjustment->priv;
+
+  if (priv->tick_id)
+    g_signal_handler_disconnect (priv->clock, priv->tick_id);
+  if (priv->clock)
+    g_object_unref (priv->clock);
+
+  G_OBJECT_CLASS (gtk_adjustment_parent_class)->finalize (object);
+}
+
+static void
 gtk_adjustment_class_init (GtkAdjustmentClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
+  gobject_class->finalize                    = gtk_adjustment_finalize;
   gobject_class->set_property                = gtk_adjustment_set_property;
   gobject_class->get_property                = gtk_adjustment_get_property;
   gobject_class->dispatch_properties_changed = gtk_adjustment_dispatch_properties_changed;
@@ -404,6 +428,95 @@ gtk_adjustment_get_value (GtkAdjustment *adjustment)
   return adjustment->priv->value;
 }
 
+static void
+adjustment_set_value (GtkAdjustment *adjustment,
+                      gdouble        value)
+{
+  if (value != adjustment->priv->value)
+    {
+      adjustment->priv->value = value;
+      gtk_adjustment_value_changed (adjustment);
+    }
+}
+
+/* From clutter-easing.c, based on Robert Penner's
+ * infamous easing equations, MIT license.
+ */
+static gdouble
+ease_out_cubic (gdouble t)
+{
+  gdouble p = t - 1;
+
+  return p * p * p + 1;
+}
+
+static gboolean
+gtk_adjustment_animate_step (GtkAdjustment *adjustment,
+                             gint64         now)
+{
+  GtkAdjustmentPrivate *priv = adjustment->priv;
+
+  if (now < priv->end_time)
+    {
+      gdouble t;
+
+      t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
+      t = ease_out_cubic (t);
+      adjustment_set_value (adjustment, priv->source + t * (priv->target - priv->source));
+
+      return TRUE;
+    }
+  else
+    {
+      adjustment_set_value (adjustment, priv->target);
+
+      return FALSE;
+    }
+}
+
+static void
+gtk_adjustment_on_frame_clock_update (GdkFrameClock *clock, 
+                                      GtkAdjustment *adjustment)
+{
+  GtkAdjustmentPrivate *priv = adjustment->priv;
+  gint64 now;
+
+  now = gdk_frame_clock_get_frame_time (clock);
+  if (!gtk_adjustment_animate_step (adjustment, now))
+    {
+      g_signal_handler_disconnect (priv->clock, priv->tick_id);
+      priv->tick_id = 0;
+      gdk_frame_clock_end_updating (priv->clock);
+    }
+}
+
+static void
+gtk_adjustment_maybe_animate (GtkAdjustment *adjustment,
+                              gdouble        target)
+{
+  GtkAdjustmentPrivate *priv = adjustment->priv;
+
+  if (priv->target == target)
+    return;
+
+  priv->target = target;
+  
+  if (priv->duration != 0 && priv->clock != NULL)
+    {
+      priv->source = priv->value;
+      priv->start_time = gdk_frame_clock_get_frame_time (priv->clock);
+      priv->end_time = priv->start_time + 1000 * priv->duration;
+      if (priv->tick_id == 0)
+        {
+          priv->tick_id = g_signal_connect (priv->clock, "update",
+                                            G_CALLBACK (gtk_adjustment_on_frame_clock_update), adjustment);
+          gdk_frame_clock_begin_updating (priv->clock);
+        }
+    }
+  else
+    adjustment_set_value (adjustment, target);
+}
+
 /**
  * gtk_adjustment_set_value:
  * @adjustment: a #GtkAdjustment.
@@ -432,12 +545,7 @@ gtk_adjustment_set_value (GtkAdjustment *adjustment,
   value = MIN (value, priv->upper - priv->page_size);
   value = MAX (value, priv->lower);
 
-  if (value != priv->value)
-    {
-      priv->value = value;
-
-      gtk_adjustment_value_changed (adjustment);
-    }
+  gtk_adjustment_maybe_animate (adjustment, value);
 }
 
 /**
@@ -847,3 +955,32 @@ gtk_adjustment_get_minimum_increment (GtkAdjustment *adjustment)
   return minimum_increment;
 }
 
+void
+gtk_adjustment_enable_animation (GtkAdjustment *adjustment,
+                                 GdkFrameClock *clock,
+                                 guint          duration)
+{
+  GtkAdjustmentPrivate *priv = adjustment->priv;
+
+  if (priv->clock != clock)
+    {
+      if (priv->tick_id)
+        {
+          adjustment_set_value (adjustment, priv->target);
+
+          g_signal_handler_disconnect (priv->clock, priv->tick_id);
+          priv->tick_id = 0;
+          gdk_frame_clock_end_updating (priv->clock);
+        }
+
+      if (priv->clock)
+        g_object_unref (priv->clock);
+
+      priv->clock = clock;
+
+      if (priv->clock)
+        g_object_ref (priv->clock);
+    }
+
+  priv->duration = duration; 
+}

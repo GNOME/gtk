@@ -498,6 +498,7 @@ gtk_private_h_sources =		\
 	gtkactionmuxer.h	\
 	gtkactionobserver.h	\
 	gtkactionobservable.h	\
+	gtkadjustmentprivate.h	\
 	gtkapplicationprivate.h	\
 	gtkaccelgroupprivate.h	\
 	gtkaccelmapprivate.h	\
