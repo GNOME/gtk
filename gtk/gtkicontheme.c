@@ -3261,27 +3261,30 @@ theme_subdir_load (GtkIconTheme *icon_theme,
         g_free (full_dir);
     }
 
-  for (d = icon_theme->priv->resource_paths; d; d = d->next)
-    {
-      full_dir = g_build_filename ((const gchar *)d->data, theme->name, subdir, NULL);
-      dir = g_new0 (IconThemeDir, 1);
-      dir->type = type;
-      dir->is_resource = TRUE;
-      dir->context = context;
-      dir->size = size;
-      dir->min_size = min_size;
-      dir->max_size = max_size;
-      dir->threshold = threshold;
-      dir->dir = full_dir;
-      dir->subdir = g_strdup (subdir);
-      dir->scale = scale;
-      dir->cache = NULL;
-      dir->subdir_index = -1;
+  if (strcmp (theme->name, DEFAULT_THEME_NAME) == 0)
+    { 
+      for (d = icon_theme->priv->resource_paths; d; d = d->next)
+        {
+          full_dir = g_build_filename ((const gchar *)d->data, theme->name, subdir, NULL);
+          dir = g_new0 (IconThemeDir, 1);
+          dir->type = type;
+          dir->is_resource = TRUE;
+          dir->context = context;
+          dir->size = size;
+          dir->min_size = min_size;
+          dir->max_size = max_size;
+          dir->threshold = threshold;
+          dir->dir = full_dir;
+          dir->subdir = g_strdup (subdir);
+          dir->scale = scale;
+          dir->cache = NULL;
+          dir->subdir_index = -1;
 
-      if (scan_resources (icon_theme->priv, dir, full_dir))
-        theme->dirs = g_list_prepend (theme->dirs, dir);
-      else
-        theme_dir_destroy (dir);
+          if (scan_resources (icon_theme->priv, dir, full_dir))
+            theme->dirs = g_list_prepend (theme->dirs, dir);
+          else
+            theme_dir_destroy (dir);
+        }
     }
 }
 
