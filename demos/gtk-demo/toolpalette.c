@@ -668,7 +668,10 @@ load_icon_items (GtkToolPalette *palette)
           GtkToolItem *item;
           gchar *id = ll->data;
 
-          if (g_strcmp0 (id, "emblem-desktop") == 0)
+          if (g_str_equal (id, "emblem-desktop"))
+            continue;
+
+          if (g_str_has_suffix (id, "-symbolic"))
             continue;
 
           g_message ("Got id '%s'", id);
