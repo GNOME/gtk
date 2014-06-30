@@ -863,6 +863,16 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_READ_ONLY "read-only"
 
+/*
+ * GTK_STYLE_CLASS_OVERSHOOT:
+ * A CSS class that is added on the visual hints that happen
+ * when scrolling is attempted past the limits of a scrollable
+ * area.
+ *
+ * Since: 3.14
+ */
+#define GTK_STYLE_CLASS_OVERSHOOT "overshoot"
+
 /**
  * GTK_STYLE_REGION_ROW:
  *
