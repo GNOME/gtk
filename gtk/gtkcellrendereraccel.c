@@ -27,8 +27,8 @@
 #include "gtkmain.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
+#include "gtkinvisible.h"
 #include "gtkprivate.h"
-
 
 /**
  * SECTION:gtkcellrendereraccel
@@ -88,9 +88,9 @@ enum {
 struct _GtkCellRendererAccelPrivate
 {
   GtkWidget *edit_widget;
-  GtkWidget *grab_widget;
   GtkWidget *sizing_label;
 
+  GtkWidget *grab_invisible;
   GdkDevice *grab_keyboard;
   GdkDevice *grab_pointer;
 
@@ -526,7 +526,6 @@ grab_key_callback (GtkWidget            *widget,
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (priv->edit_widget));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (priv->edit_widget));
   priv->edit_widget = NULL;
-  priv->grab_widget = NULL;
   priv->grab_keyboard = NULL;
   priv->grab_pointer = NULL;
 
@@ -553,9 +552,8 @@ ungrab_stuff (GtkWidget            *widget,
   priv->grab_keyboard = NULL;
   priv->grab_pointer = NULL;
 
-  g_signal_handlers_disconnect_by_func (priv->grab_widget,
-                                        G_CALLBACK (grab_key_callback),
-                                        accel);
+  gtk_widget_destroy (priv->grab_invisible);
+  priv->grab_invisible = NULL;
 }
 
 static void
@@ -664,7 +662,6 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkWidget *label;
   GtkWidget *eventbox;
   GdkDevice *device, *keyb, *pointer;
-  GdkWindow *window;
   gboolean editable;
   guint32 time;
 
@@ -677,10 +674,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   if (editable == FALSE)
     return NULL;
 
-  window = gtk_widget_get_window (widget);
   context = gtk_widget_get_style_context (widget);
-
-  g_return_val_if_fail (window != NULL, NULL);
 
   if (event)
     device = gdk_event_get_device (event);
@@ -703,13 +697,16 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
 
   time = gdk_event_get_time (event);
 
-  if (gdk_device_grab (keyb, window,
+  priv->grab_invisible = gtk_invisible_new ();
+  gtk_widget_show (priv->grab_invisible);
+
+  if (gdk_device_grab (keyb, gtk_widget_get_window (priv->grab_invisible),
                        GDK_OWNERSHIP_WINDOW, FALSE,
                        GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
                        NULL, time) != GDK_GRAB_SUCCESS)
     return NULL;
 
-  if (gdk_device_grab (pointer, window,
+  if (gdk_device_grab (pointer, gtk_widget_get_window (priv->grab_invisible),
                        GDK_OWNERSHIP_WINDOW, FALSE,
                        GDK_BUTTON_PRESS_MASK,
                        NULL, time) != GDK_GRAB_SUCCESS)
@@ -720,9 +717,8 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
 
   priv->grab_keyboard = keyb;
   priv->grab_pointer = pointer;
-  priv->grab_widget = widget;
 
-  g_signal_connect (G_OBJECT (widget), "key-press-event",
+  g_signal_connect (G_OBJECT (priv->grab_invisible), "key-press-event",
                     G_CALLBACK (grab_key_callback),
                     accel);
 
