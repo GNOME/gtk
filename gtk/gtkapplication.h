@@ -151,6 +151,9 @@ void             gtk_application_set_accels_for_action           (GtkApplication
                                                                   const gchar          *detailed_action_name,
                                                                   const gchar * const  *accels);
 
+GDK_AVAILABLE_IN_3_14
+gboolean         gtk_application_prefers_app_menu                (GtkApplication       *application);
+
 G_END_DECLS
 
 #endif /* __GTK_APPLICATION_H__ */

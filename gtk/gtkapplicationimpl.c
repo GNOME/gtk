@@ -41,6 +41,7 @@ gtk_application_impl_init (GtkApplicationImpl *impl)
 }
 
 static guint do_nothing (void) { return 0; }
+static gboolean return_false (void) { return FALSE; }
 
 static void
 gtk_application_impl_class_init (GtkApplicationImplClass *class)
@@ -59,6 +60,7 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->inhibit = (gpointer) do_nothing;
   class->uninhibit = (gpointer) do_nothing;
   class->is_inhibited = (gpointer) do_nothing;
+  class->prefers_app_menu = (gpointer) return_false;
 }
 
 void
@@ -151,6 +153,12 @@ gtk_application_impl_is_inhibited (GtkApplicationImpl         *impl,
                                    GtkApplicationInhibitFlags  flags)
 {
   return GTK_APPLICATION_IMPL_GET_CLASS (impl)->is_inhibited (impl, flags);
+}
+
+gboolean
+gtk_application_impl_prefers_app_menu (GtkApplicationImpl *impl)
+{
+  return GTK_APPLICATION_IMPL_GET_CLASS (impl)->prefers_app_menu (impl);
 }
 
 GtkApplicationImpl *

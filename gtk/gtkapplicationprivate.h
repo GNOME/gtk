@@ -103,6 +103,8 @@ typedef struct
   gboolean    (* is_inhibited)              (GtkApplicationImpl          *impl,
                                              GtkApplicationInhibitFlags   flags);
 
+  gboolean    (* prefers_app_menu)          (GtkApplicationImpl          *impl);
+
 
 } GtkApplicationImplClass;
 
@@ -184,6 +186,8 @@ gboolean                gtk_application_impl_is_inhibited               (GtkAppl
 
 gchar *                 gtk_application_impl_dbus_get_window_path       (GtkApplicationImplDBus      *dbus,
                                                                          GtkWindow                   *window);
+gboolean                gtk_application_impl_prefers_app_menu           (GtkApplicationImpl          *impl);
+
 
 void                    gtk_application_impl_quartz_setup_menu          (GMenuModel                  *model,
                                                                          GtkActionMuxer              *muxer);

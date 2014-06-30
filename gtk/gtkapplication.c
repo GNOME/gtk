@@ -1139,6 +1139,57 @@ gtk_application_remove_accelerator (GtkApplication *application,
 }
 
 /**
+ * gtk_application_prefers_app_menu:
+ * @application: a #GtkApplication
+ *
+ * Determines if the desktop environment in which the application is
+ * running would prefer an application menu be shown.
+ *
+ * If this function returns %TRUE then the application should call
+ * gtk_application_set_app_menu() with the contents of an application
+ * menu, which will be shown by the desktop environment.  If it returns
+ * %FALSE then you should consider using an alternate approach, such as
+ * a menubar.
+ *
+ * The value returned by this function is purely advisory and you are
+ * free to ignore it.  If you call gtk_application_set_app_menu() even
+ * if the desktop environment doesn't support app menus, then a fallback
+ * will be provided.
+ *
+ * Applications are similarly free not to set an app menu even if the
+ * desktop environment wants to show one.  In that case, a fallback will
+ * also be created by the desktop environment (GNOME, for example, uses
+ * a menu with only a "Quit" item in it).
+ *
+ * The value returned by this function never changes.  Once it returns a
+ * particular value, it is guaranteed to always return the same value.
+ *
+ * You may only call this function after the application has been
+ * registered and after the base startup handler has run.  You're most
+ * likely to want to use this from your own startup handler.  It may
+ * also make sense to consult this function while constructing UI (in
+ * activate, open or an action activation handler) in order to determine
+ * if you should show a gear menu or not.
+ *
+ * This function will return %FALSE on Mac OS and a default app menu
+ * will be created automatically with the "usual" contents of that menu
+ * typical to most Mac OS applications.  If you call
+ * gtk_application_set_app_menu() anyway, then this menu will be
+ * replaced with your own.
+ *
+ * Returns: %TRUE if you should set an app menu
+ *
+ * Since: 3.14
+ **/
+gboolean
+gtk_application_prefers_app_menu (GtkApplication *application)
+{
+  g_return_val_if_fail (application->priv->impl != NULL, FALSE);
+
+  return gtk_application_impl_prefers_app_menu (application->priv->impl);
+}
+
+/**
  * gtk_application_set_app_menu:
  * @application: a #GtkApplication
  * @app_menu: (allow-none): a #GMenuModel, or %NULL
