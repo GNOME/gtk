@@ -24,7 +24,7 @@
         <child>
           <object class="GtkToolButton">
             <property name="visible">True</property>
-            <property name="icon-name">document-revert</property>
+            <property name="icon-name">edit-undo-symbolic</property>
             <property name="tooltip-text" translatable="yes">Restore defaults for this widget</property>
             <signal name="clicked" handler="restore_defaults_clicked"/>
           </object>
