@@ -302,6 +302,7 @@ typedef struct
 {
   gchar *svg_filename;
   gchar *no_svg_filename;
+  gboolean is_resource;
 } UnthemedIcon;
 
 typedef struct
@@ -1240,6 +1241,72 @@ strip_suffix (const gchar *filename)
 }
 
 static void
+add_unthemed_icon (GtkIconTheme *icon_theme,
+                   const gchar  *dir,
+                   const gchar  *file,
+                   gboolean      is_resource)
+{
+  GtkIconThemePrivate *priv = icon_theme->priv;
+  IconSuffix new_suffix, old_suffix;
+  gchar *abs_file;
+  gchar *base_name;
+  UnthemedIcon *unthemed_icon;
+
+  new_suffix = suffix_from_name (file);
+
+  if (new_suffix == ICON_SUFFIX_NONE)
+    return;
+
+  abs_file = g_build_filename (dir, file, NULL);
+  base_name = strip_suffix (file);
+
+  unthemed_icon = g_hash_table_lookup (priv->unthemed_icons, base_name);
+
+  if (unthemed_icon)
+    {
+      if (new_suffix == ICON_SUFFIX_SVG)
+        {
+          if (unthemed_icon->svg_filename)
+            g_free (abs_file);
+          else
+            unthemed_icon->svg_filename = abs_file;
+        }
+      else
+        {
+          if (unthemed_icon->no_svg_filename)
+            {
+              old_suffix = suffix_from_name (unthemed_icon->no_svg_filename);
+              if (new_suffix > old_suffix)
+                {
+                  g_free (unthemed_icon->no_svg_filename);
+                  unthemed_icon->no_svg_filename = abs_file;
+                }
+              else
+                g_free (abs_file);
+            }
+          else
+            unthemed_icon->no_svg_filename = abs_file;
+        }
+
+      g_free (base_name);
+    }
+  else
+    {
+      unthemed_icon = g_slice_new0 (UnthemedIcon);
+
+      unthemed_icon->is_resource = is_resource;
+
+      if (new_suffix == ICON_SUFFIX_SVG)
+        unthemed_icon->svg_filename = abs_file;
+      else
+        unthemed_icon->no_svg_filename = abs_file;
+
+      /* takes ownership of base_name */
+      g_hash_table_replace (priv->unthemed_icons, base_name, unthemed_icon);
+    }
+}
+
+static void
 load_themes (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv;
@@ -1247,11 +1314,10 @@ load_themes (GtkIconTheme *icon_theme)
   gint base;
   gchar *dir;
   const gchar *file;
-  UnthemedIcon *unthemed_icon;
-  IconSuffix old_suffix, new_suffix;
   GTimeVal tv;
   IconThemeDirMtime *dir_mtime;
   GStatBuf stat_buf;
+  GList *d;
   
   priv = icon_theme->priv;
 
@@ -1296,61 +1362,25 @@ load_themes (GtkIconTheme *icon_theme)
         continue;
 
       while ((file = g_dir_read_name (gdir)))
-        {
-          new_suffix = suffix_from_name (file);
+        add_unthemed_icon (icon_theme, dir, file, FALSE);
 
-          if (new_suffix != ICON_SUFFIX_NONE)
-            {
-              char *abs_file;
-              char *base_name;
-
-              abs_file = g_build_filename (dir, file, NULL);
-              base_name = strip_suffix (file);
-
-              if ((unthemed_icon = g_hash_table_lookup (priv->unthemed_icons,
-                                                        base_name)))
-                {
-                  if (new_suffix == ICON_SUFFIX_SVG)
-                    {
-                      if (unthemed_icon->svg_filename)
-                        g_free (abs_file);
-                      else
-                        unthemed_icon->svg_filename = abs_file;
-                    }
-                  else
-                    {
-                      if (unthemed_icon->no_svg_filename)
-                        {
-                          old_suffix = suffix_from_name (unthemed_icon->no_svg_filename);
-                          if (new_suffix > old_suffix)
-                            {
-                              g_free (unthemed_icon->no_svg_filename);
-                              unthemed_icon->no_svg_filename = abs_file;
-                            }
-                          else
-                            g_free (abs_file);
-                        }
-                      else
-                        unthemed_icon->no_svg_filename = abs_file;
-                    }
-
-                  g_free (base_name);
-                }
-              else
-                {
-                  unthemed_icon = g_slice_new0 (UnthemedIcon);
-
-                  if (new_suffix == ICON_SUFFIX_SVG)
-                    unthemed_icon->svg_filename = abs_file;
-                  else
-                    unthemed_icon->no_svg_filename = abs_file;
-
-                  /* takes ownership of base_name */
-                  g_hash_table_replace (priv->unthemed_icons, base_name, unthemed_icon);
-                }
-            }
-        }
       g_dir_close (gdir);
+    }
+
+  for (d = priv->resource_paths; d; d = d->next)
+    {
+      gchar **children;
+      gint i;
+
+      dir = d->data;
+      children = g_resources_enumerate_children (dir, 0, NULL);
+      if (!children)
+        continue;
+
+      for (i = 0; children[i]; i++)
+        add_unthemed_icon (icon_theme, dir, children[i], TRUE);
+
+      g_strfreev (children);
     }
 
   priv->themes_valid = TRUE;
@@ -1723,6 +1753,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
 
       icon_info->icon_file = g_file_new_for_path (icon_info->filename);
       icon_info->is_svg = suffix_from_name (icon_info->filename) == ICON_SUFFIX_SVG;
+      icon_info->is_resource = unthemed_icon->is_resource;
     }
 
  out:
