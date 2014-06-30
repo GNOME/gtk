@@ -354,7 +354,7 @@ static BuiltinIcon *find_builtin_icon         (const gchar      *icon_name,
                                                gint             *min_difference_p);
 static void         remove_from_lru_cache     (GtkIconTheme     *icon_theme,
                                                GtkIconInfo      *icon_info);
-static gboolean     icon_info_ensure_scale_and_pixbuf (GtkIconInfo*, gboolean);
+static gboolean     icon_info_ensure_scale_and_pixbuf (GtkIconInfo* icon_info);
 
 static guint signal_changed = 0;
 
@@ -3592,7 +3592,7 @@ apply_emblems_to_pixbuf (GdkPixbuf   *pixbuf,
     {
       GtkIconInfo *emblem_info = l->data;
 
-      if (icon_info_ensure_scale_and_pixbuf (emblem_info, FALSE))
+      if (icon_info_ensure_scale_and_pixbuf (emblem_info))
         {
           GdkPixbuf *emblem = emblem_info->pixbuf;
           gint ew, eh;
@@ -3688,16 +3688,11 @@ icon_info_get_pixbuf_ready (GtkIconInfo *icon_info)
  * that size.
  */
 static gboolean
-icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
-                                   gboolean     scale_only)
+icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
 {
   gint image_width, image_height, image_size;
   gint scaled_desired_size;
   GdkPixbuf *source_pixbuf;
-
-  /* First check if we already have the necessary information */
-  if (scale_only && icon_info->scale >= 0)
-    return TRUE;
 
   if (icon_info->pixbuf)
     {
@@ -3733,9 +3728,6 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
       else
         icon_info->scale = (gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale);
     }
-
-  if (icon_info->scale >= 0. && scale_only && !icon_info->is_svg)
-    return TRUE;
 
   /* At this point, we need to actually get the icon; either from the
    * builtin image or by loading the file
@@ -3819,13 +3811,6 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
         icon_info->scale = MIN (icon_info->scale, 1.0);
     }
 
-  /* We don't short-circuit out here for scale_only, since, now
-   * we've loaded the icon, we might as well go ahead and finish
-   * the job. This is a bit of a waste when we scale here and
-   * never get the final pixbuf; at the cost of a bit of extra
-   * complexity, we could keep the source pixbuf around but
-   * not actually scale it until needed.
-   */
   if (icon_info->is_svg)
     icon_info->pixbuf = source_pixbuf;
   else if (icon_info->scale == 1.0)
@@ -3892,7 +3877,7 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
   g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  if (!icon_info_ensure_scale_and_pixbuf (icon_info, FALSE))
+  if (!icon_info_ensure_scale_and_pixbuf (icon_info))
     {
       if (icon_info->load_error)
         {
@@ -3988,7 +3973,7 @@ load_icon_thread  (GTask        *task,
 {
   GtkIconInfo *dup = task_data;
 
-  icon_info_ensure_scale_and_pixbuf (dup, FALSE);
+  icon_info_ensure_scale_and_pixbuf (dup);
   g_task_return_pointer (task, NULL, NULL);
 }
 
@@ -4197,7 +4182,7 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
   if (!g_file_load_contents (icon_info->icon_file, NULL, &file_data, &file_len, NULL, error))
     return NULL;
 
-  if (!icon_info_ensure_scale_and_pixbuf (icon_info, FALSE))
+  if (!icon_info_ensure_scale_and_pixbuf (icon_info))
     return NULL;
 
   if (icon_info->symbolic_size == 0)
