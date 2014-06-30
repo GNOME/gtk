@@ -2477,7 +2477,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                       <object class="GtkToolButton">
                                         <property name="visible">True</property>
                                         <property name="label" translatable="yes">Search</property>
-                                        <property name="icon-name">search</property>
+                                        <property name="icon-name">edit-find</property>
                                         <property name="action-name">win.search</property>
                                         <property name="tooltip-text" translatable="yes">Search for it</property>
                                       </object>
