@@ -962,13 +962,25 @@ gtk_adjustment_enable_animation (GtkAdjustment *adjustment,
 {
   GtkAdjustmentPrivate *priv = adjustment->priv;
 
-  if (priv->clock)
-    g_object_unref (priv->clock);
+  if (priv->clock != clock)
+    {
+      if (priv->tick_id)
+        {
+          adjustment_set_value (adjustment, priv->target);
 
-  priv->clock = clock;
+          g_signal_handler_disconnect (priv->clock, priv->tick_id);
+          priv->tick_id = 0;
+          gdk_frame_clock_end_updating (priv->clock);
+        }
 
-  if (priv->clock)
-    g_object_ref (priv->clock);
+      if (priv->clock)
+        g_object_unref (priv->clock);
+
+      priv->clock = clock;
+
+      if (priv->clock)
+        g_object_ref (priv->clock);
+    }
 
   priv->duration = duration; 
 }
