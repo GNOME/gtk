@@ -758,7 +758,10 @@ column-header {
       color: $fg_color;
     }
   }
-  &:last-child .button { border-right-style: none;  }
+  &:last-child .button,
+  &:last-child.button { //treeview-like derived widgets in Banshee and Evolution
+    border-right-style: none;
+  }
 }
 
 %column_header_button {
