@@ -10,14 +10,14 @@
     <GtkDoInstall>
 mkdir $(CopyDir)\bin
 
-copy $(BinDir)\*-vs$(VSVer).dll $(CopyDir)\bin
+copy "$(BinDir)\*-vs$(VSVer).dll" $(CopyDir)\bin
 
-copy $(BinDir)\*.exe $(CopyDir)\bin
+copy "$(BinDir)\*.exe" $(CopyDir)\bin
 
 
 mkdir $(CopyDir)\lib
 
-copy $(BinDir)\*-$(ApiVersion).lib $(CopyDir)\lib
+copy "$(BinDir)\*-$(ApiVersion).lib" $(CopyDir)\lib
 
 
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk
@@ -536,11 +536,11 @@ copy ..\..\..\modules\other\gail\libgail-util\gailtextutil.h $(CopyDir)\include\
 copy ..\..\..\modules\other\gail\libgail-util\gail-util.h $(CopyDir)\include\gail-1.0\libgail-util
 
 
-copy $(BinDir)\*-$(ApiVersion).lib $(CopyDir)\lib
+copy "$(BinDir)\*-$(ApiVersion).lib" $(CopyDir)\lib
 
 mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
 
-copy $(BinDir)\libwimp.dll $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
+copy "$(BinDir)\libwimp.dll" $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
 
 
 mkdir $(CopyDir)\share\gtk-$(ApiVersion)\demo
