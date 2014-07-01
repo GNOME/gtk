@@ -31,10 +31,6 @@ setgirbuildnev:
 	@set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
 	@set LIB=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(LIB)
 
-win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib: win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\gdk-$(APIVERSION).lib
-	@-echo Copying win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib from win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\gdk-$(APIVERSION).lib...
-	@-copy /b win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\gdk-$(APIVERSION).lib win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib
-
 Gdk-$(APIVERSION).gir: gdk_list
 	@-echo Generating Gdk-$(APIVERSION).gir...
 	$(PYTHON2) $(G_IR_SCANNER) --verbose -I.. -I..\gdk	\
@@ -50,7 +46,7 @@ Gdk-$(APIVERSION).gir: gdk_list
 	-DG_LOG_DOMAIN=\"Gdk\" -DGDK_COMPILATION	\
 	--filelist=gdk_list	-o $@
 
-GdkWin32-$(APIVERSION).gir: gdkwin32_list win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib
+GdkWin32-$(APIVERSION).gir: gdkwin32_list
 	@-echo Generating GdkWin32-$(APIVERSION).gir...
 	$(PYTHON2) $(G_IR_SCANNER) --verbose -I.. -I..\gdk	\
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include	\
@@ -105,7 +101,6 @@ all:
 clean:
 	@-del /f/q *.typelib
 	@-del /f/q *.gir
-	@-del /f/q win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\GdkWin32-$(APIVERSION).lib
 	@-del /f/q gtk_list
 	@-del /f/q gdkwin32_list
 	@-del /f/q gdk_list
