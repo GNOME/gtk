@@ -18,7 +18,7 @@ def gen_gdk_filelist(srcroot, subdir, dest):
 
     vars['gdk_enums'] = 'gdkenumtypes.c gdkenumtypes.h'
 
-    files = vars['gdk_public_h_sources'].split() + \
+    files = vars['gdk_h_sources'].split() + \
             vars['gdk_c_sources'].split() + \
             vars['gdk_enums'].split()
 
