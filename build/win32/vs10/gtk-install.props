@@ -19,22 +19,22 @@ if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_BIN
 if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_BIN
 
 
-copy $(BinDir)\*.dll $(CopyDir)\bin
+copy "$(BinDir)\*.dll" $(CopyDir)\bin
 
-copy $(BinDir)\*-$(ApiVersion).lib $(CopyDir)\lib
+copy "$(BinDir)\*-$(ApiVersion).lib" $(CopyDir)\lib
 
-copy $(BinDir)\*.exe $(CopyDir)\bin
+copy "$(BinDir)\*.exe" $(CopyDir)\bin
 
 goto DONE_BIN
 
 
 :DO_BROADWAY_BIN
 
-copy $(BinDir)\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll" $(CopyDir)\bin
 
-copy $(BinDir)\gdk-$(ApiVersion).lib $(CopyDir)\lib
+copy "$(BinDir)\gdk-$(ApiVersion).lib" $(CopyDir)\lib
 
-copy $(BinDir)\broadwayd.exe $(CopyDir)\bin
+copy "$(BinDir)\broadwayd.exe" $(CopyDir)\bin
 
 
 if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin
