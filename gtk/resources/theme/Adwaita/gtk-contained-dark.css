@@ -2338,6 +2338,11 @@ GtkCalendar {
       color: #eeeeec; }
     GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover {
       color: #7a7b7a; }
+  GtkCalendar.view {
+    border-radius: 2px; }
+  GtkCalendar.header {
+    background: linear-gradient(to bottom, #3e4444, #343a3a);
+    border-bottom-color: #2a2f2f; }
 
 /***********
  * Dialogs *

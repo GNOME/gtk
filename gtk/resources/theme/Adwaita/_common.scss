@@ -1747,11 +1747,11 @@ GtkExpander {
  ***********/
 GtkCalendar { 
   border: 1px solid $borders_color; 
-  &.button { 
+  &.button {
     @extend %undecorated_button; 
-    padding: 0 4px; 
+    padding: 0 4px; //FIXME no effect on these pseudobuttons
     color: mix($fg_color, $base_color, 40%); //we need a dimmed stuff var 
-    &:hover { 
+    &:hover {
       @extend %undecorated_button; 
       color: $fg_color; 
     } 
@@ -1759,7 +1759,14 @@ GtkCalendar {
       @extend %undecorated_button; 
       color: mix($backdrop_fg_color, $backdrop_base_color, 50%); 
     } 
-  } 
+  }
+  &.view { border-radius: 2px; }
+  &.header {
+    background: linear-gradient(to bottom,
+                                lighten($bg_color,2%),
+                                darken($bg_color,2%));
+    border-bottom-color: mix($borders_color,$bg_color,50%);
+  }
 }
 
 /***********
