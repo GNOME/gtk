@@ -110,8 +110,9 @@ struct _GtkMessageDialogPrivate
   guint          message_type       : 3;
 };
 
-static void gtk_message_dialog_style_updated (GtkWidget             *widget);
+static void gtk_message_dialog_style_updated (GtkWidget       *widget);
 
+static void gtk_message_dialog_constructed  (GObject          *object);
 static void gtk_message_dialog_set_property (GObject          *object,
 					     guint             prop_id,
 					     const GValue     *value,
@@ -164,6 +165,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ALERT);
 
+  gobject_class->constructed = gtk_message_dialog_constructed;
   gobject_class->set_property = gtk_message_dialog_set_property;
   gobject_class->get_property = gtk_message_dialog_get_property;
   
@@ -405,6 +407,49 @@ setup_type (GtkMessageDialog *dialog,
   g_object_notify (G_OBJECT (dialog), "message-type");
 }
 
+static void
+update_title (GObject    *dialog,
+              GParamSpec *pspec,
+              GtkWidget  *label)
+{
+  const gchar *title;
+
+  title = gtk_window_get_title (GTK_WINDOW (dialog));
+  gtk_label_set_label (GTK_LABEL (label), title);
+  gtk_widget_set_visible (label, title && title[0]);
+}
+
+static void
+gtk_message_dialog_constructed (GObject *object)
+{
+  GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG (object);
+  gboolean use_header;
+
+  G_OBJECT_CLASS (gtk_message_dialog_parent_class)->constructed (object);
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (dialog)),
+                "gtk-dialogs-use-header", &use_header,
+                NULL);
+
+  if (use_header)
+    {
+      GtkWidget *box;
+      GtkWidget *label;
+
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_widget_show (box);
+      gtk_widget_set_size_request (box, -1, 16);
+      label = gtk_label_new ("");
+      gtk_widget_set_margin_top (label, 6);
+      gtk_widget_set_margin_bottom (label, 6);
+      gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
+      gtk_box_set_center_widget (GTK_BOX (box), label);
+      g_signal_connect_object (dialog, "notify::title", G_CALLBACK (update_title), label, 0);
+
+      gtk_window_set_titlebar (GTK_WINDOW (dialog), box);
+    }
+}
+
 static void 
 gtk_message_dialog_set_property (GObject      *object,
 				 guint         prop_id,
@@ -559,7 +604,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
   widget = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
-			 "use-header-bar", FALSE,
+                         "use-header-bar", FALSE,
 			 "message-type", type,
 			 "buttons", buttons,
 			 NULL);
@@ -571,15 +616,13 @@ gtk_message_dialog_new (GtkWindow     *parent,
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_label_set_text (GTK_LABEL (GTK_MESSAGE_DIALOG (widget)->priv->label),
-                          msg);
+      gtk_label_set_text (GTK_LABEL (GTK_MESSAGE_DIALOG (widget)->priv->label), msg);
 
       g_free (msg);
     }
 
   if (parent != NULL)
-    gtk_window_set_transient_for (GTK_WINDOW (widget),
-                                  GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (widget), GTK_WINDOW (parent));
   
   if (flags & GTK_DIALOG_MODAL)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
