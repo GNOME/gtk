@@ -618,9 +618,14 @@ gtk_shell_handle_capabilities (void             *data,
 			       struct gtk_shell *shell,
 			       uint32_t          capabilities)
 {
-  GdkWaylandScreen *screen_wayland = data;
+  GdkScreen *screen = data;
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (data);
 
   screen_wayland->shell_capabilities = capabilities;
+
+  notify_setting (screen, "gtk-shell-shows-app-menu");
+  notify_setting (screen, "gtk-shell-shows-menubar");
+  notify_setting (screen, "gtk-shell-shows-desktop");
 }
 
 struct gtk_shell_listener gdk_screen_gtk_shell_listener = {
