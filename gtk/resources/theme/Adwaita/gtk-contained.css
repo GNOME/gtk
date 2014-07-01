@@ -213,6 +213,7 @@
  ***********/
 .button {
   border-radius: 3px;
+  transition: all 200ms ease-out;
   padding: 4px 6px;
   border-width: 1px;
   border-style: solid;
@@ -240,7 +241,8 @@
     background-image: linear-gradient(to bottom, #c7c7c7, #d1d1d1 3%, lightgray);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3), 0 1px white; }
+    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3), 0 1px white;
+    transition-duration: 50ms; }
   .button:backdrop, .button.flat:backdrop {
     border-width: 1px;
     border-style: solid;

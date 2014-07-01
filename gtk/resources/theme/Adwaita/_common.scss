@@ -214,7 +214,7 @@ GtkLabel {
 
 .button {
   border-radius: 3px;
-//  transition: all 200ms ease-out;
+  transition: all 200ms ease-out;
   padding: 4px 6px;
   @include button(normal);
   &:hover, &.flat:hover {
@@ -223,6 +223,7 @@ GtkLabel {
   }
   &:active, &.flat:active {
     @include button(active);
+    transition-duration: 50ms;
   }
   &:backdrop, &.flat:backdrop {
     @include button(backdrop);
