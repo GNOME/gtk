@@ -7332,9 +7332,8 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
   
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
-      if (!gtk_clipboard_set_with_owner (clipboard, targets, n_targets,
-					 primary_get_cb, primary_clear_cb, G_OBJECT (entry)))
-	primary_clear_cb (clipboard, entry);
+      gtk_clipboard_set_with_owner (clipboard, targets, n_targets,
+                                    primary_get_cb, primary_clear_cb, G_OBJECT (entry));
     }
   else
     {
