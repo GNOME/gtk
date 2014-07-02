@@ -324,7 +324,6 @@ int main (int argc, char *argv[])
     what = "check";
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_has_resize_grip (GTK_WINDOW (window), FALSE);
   ebox = gtk_event_box_new ();
   gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), TRUE);
   gtk_container_add (GTK_CONTAINER (window), ebox);

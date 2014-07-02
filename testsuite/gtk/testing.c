@@ -227,8 +227,6 @@ test_spin_button_arrows (void)
   gboolean simsuccess;
   double oldval, newval;
 
-  gtk_window_set_has_resize_grip (GTK_WINDOW (window), FALSE);
-
   child = gtk_bin_get_child (GTK_BIN (window));
   gtk_container_add (GTK_CONTAINER (child), spinner);
   gtk_widget_show (spinner);

@@ -35,7 +35,6 @@ new_widget_info (const char *name,
   else
     {
       info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_has_resize_grip (GTK_WINDOW (info->window), FALSE);
       gtk_container_set_border_width (GTK_CONTAINER (info->window), 12);
       info->include_decorations = FALSE;
       gtk_widget_show_all (widget);

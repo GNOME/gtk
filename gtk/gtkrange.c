@@ -206,8 +206,6 @@ static void gtk_range_get_preferred_height
                                       gint             *natural);
 static void gtk_range_size_allocate  (GtkWidget        *widget,
                                       GtkAllocation    *allocation);
-static void gtk_range_hierarchy_changed (GtkWidget     *widget,
-                                         GtkWidget     *previous_toplevel);
 static void gtk_range_realize        (GtkWidget        *widget);
 static void gtk_range_unrealize      (GtkWidget        *widget);
 static void gtk_range_map            (GtkWidget        *widget);
@@ -322,7 +320,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->get_preferred_width = gtk_range_get_preferred_width;
   widget_class->get_preferred_height = gtk_range_get_preferred_height;
   widget_class->size_allocate = gtk_range_size_allocate;
-  widget_class->hierarchy_changed = gtk_range_hierarchy_changed;
   widget_class->realize = gtk_range_realize;
   widget_class->unrealize = gtk_range_unrealize;
   widget_class->map = gtk_range_map;
@@ -1623,81 +1620,6 @@ gtk_range_get_preferred_height (GtkWidget *widget,
   *minimum = *natural = range_rect.height + border.top + border.bottom;
 }
 
-static gboolean
-modify_allocation_for_window_grip (GtkWidget     *widget,
-                                   GtkAllocation *allocation)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-  GtkWidget *window, *parent;
-  GdkRectangle grip_rect;
-  GdkRectangle translated_rect;
-  gint x;
-  gint y;
-
-  window = gtk_widget_get_toplevel (widget);
-  if (!GTK_IS_WINDOW (window))
-    return FALSE;
-
-  if (!gtk_window_resize_grip_is_visible (GTK_WINDOW (window)))
-    return FALSE;
-
-  /* Get the area of the window's corner grip */
-  gtk_window_get_resize_grip_area (GTK_WINDOW (window), &grip_rect);
-
-  x = 0;
-  y = 0;
-
-  /* Translate the stepper's area into window coords.
-   * This is slightly tricky. We can't just use
-   * gtk_widget_translate_coordinates (widget, window, 0, 0, &x, &y)
-   * since that translates wrt to the _current_ allocation
-   * and will lead to alternating between overlap and nonoverlap
-   * for successive allocations.
-   * Therefore, we find the window-widget to whose window allocation
-   * is relative, and translate from there upwards.
-   */
-  parent = widget;
-  while (gtk_widget_get_window (parent) == gtk_widget_get_window (widget) &&
-         parent != window)
-    {
-      parent = gtk_widget_get_parent (parent);
-    }
-
-  if (parent == window)
-    translated_rect = *allocation;
-  else
-    {
-      gtk_widget_translate_coordinates (parent,
-                                        window,
-                                        allocation->x, allocation->y,
-                                        &x, &y);
-      translated_rect.x = x;
-      translated_rect.y = y;
-      translated_rect.width = allocation->width;
-      translated_rect.height = allocation->height;
-    }
-
-  /* If the stepper button intersects the window resize grip.. */
-  if (gdk_rectangle_intersect (&grip_rect, &translated_rect, &grip_rect))
-    {
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          allocation->width -= grip_rect.width;
-          if (gtk_widget_get_direction (window) == GTK_TEXT_DIR_RTL)
-            allocation->x += grip_rect.width;
-        }
-      else
-        {
-          allocation->height -= grip_rect.height;
-        }
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
 gtk_range_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
@@ -1705,7 +1627,6 @@ gtk_range_size_allocate (GtkWidget     *widget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
 
-  modify_allocation_for_window_grip (widget, allocation);
   gtk_widget_set_allocation (widget, allocation);
 
   priv->recalc_marks = TRUE;
@@ -1717,30 +1638,6 @@ gtk_range_size_allocate (GtkWidget     *widget,
     gdk_window_move_resize (priv->event_window,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
-}
-
-static void
-resize_grip_visible_changed (GObject    *object,
-                             GParamSpec *pspec,
-                             gpointer    user_data)
-{
-  gtk_widget_queue_resize (GTK_WIDGET (user_data));
-}
-
-static void
-gtk_range_hierarchy_changed (GtkWidget *widget,
-                             GtkWidget *previous_toplevel)
-{
-  GtkWidget *window;
-
-  if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel,
-                                          G_CALLBACK (resize_grip_visible_changed),
-                                          widget);
-  window = gtk_widget_get_toplevel (widget);
-  if (gtk_widget_is_toplevel (window))
-    g_signal_connect (window, "notify::resize-grip-visible",
-                      G_CALLBACK (resize_grip_visible_changed), widget);
 }
 
 static void
@@ -1762,8 +1659,6 @@ gtk_range_realize (GtkWidget *widget)
   g_object_ref (window);
 
   gtk_widget_get_allocation (widget, &allocation);
-  if (modify_allocation_for_window_grip (widget, &allocation))
-    gtk_widget_set_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = allocation.x;
