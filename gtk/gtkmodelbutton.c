@@ -134,11 +134,14 @@ gtk_model_button_set_accel (GtkModelButton *button,
   /* ignore */
 }
 
+static void gtk_model_button_update_state (GtkModelButton *button);
+
 static void
 gtk_model_button_set_toggled (GtkModelButton *button,
                               gboolean        toggled)
 {
   button->toggled = toggled;
+  gtk_model_button_update_state (button);
   gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
@@ -566,6 +569,12 @@ get_button_state (GtkModelButton *model_button)
   return state;
 }
 
+static void
+gtk_model_button_update_state (GtkModelButton *button)
+{
+  gtk_widget_set_state_flags (GTK_WIDGET (button), get_button_state (button), TRUE);
+}
+
 static gint
 gtk_model_button_draw (GtkWidget *widget,
                        cairo_t   *cr)
@@ -668,10 +677,39 @@ out:
 }
 
 static void
+gtk_model_button_pressed (GtkButton *button)
+{
+  button->priv->button_down = TRUE;
+  gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
+  gtk_widget_queue_draw (GTK_WIDGET (button));
+}
+
+static void
+gtk_model_button_released (GtkButton *button)
+{
+  if (button->priv->button_down)
+    {
+      button->priv->button_down = FALSE;
+      if (button->priv->in_button)
+        gtk_button_clicked (button);
+      gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
+      gtk_widget_queue_draw (GTK_WIDGET (button));
+    }
+}
+
+static void
+gtk_model_button_enter_leave (GtkButton *button)
+{
+  gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
+  gtk_widget_queue_draw (GTK_WIDGET (button));
+}
+
+static void
 gtk_model_button_class_init (GtkModelButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkButtonClass *button_class = GTK_BUTTON_CLASS (class);
 
   object_class->set_property = gtk_model_button_set_property;
 
@@ -682,6 +720,11 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->get_preferred_height_and_baseline_for_width = gtk_model_button_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_model_button_size_allocate;
   widget_class->draw = gtk_model_button_draw;
+
+  button_class->pressed = gtk_model_button_pressed;
+  button_class->released = gtk_model_button_released;
+  button_class->enter = gtk_model_button_enter_leave;
+  button_class->leave = gtk_model_button_enter_leave;
 
   g_object_class_install_property (object_class, PROP_ACTION_ROLE,
                                    g_param_spec_enum ("action-role", "", "",
