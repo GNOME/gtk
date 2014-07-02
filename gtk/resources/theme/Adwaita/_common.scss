@@ -1770,6 +1770,10 @@ GtkCalendar {
                                 lighten($bg_color,2%),
                                 darken($bg_color,2%));
     border-bottom-color: mix($borders_color,$bg_color,50%);
+    &:backdrop { 
+      background-image: linear-gradient(to bottom, $backdrop_bg_color); 
+      border-bottom-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
+    }
   }
 }
 

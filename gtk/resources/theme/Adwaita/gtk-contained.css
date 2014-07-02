@@ -2343,6 +2343,9 @@ GtkCalendar {
   GtkCalendar.header {
     background: linear-gradient(to bottom, #f2f2f2, #e8e8e8);
     border-bottom-color: #c7c7c7; }
+    GtkCalendar.header:backdrop {
+      background-image: linear-gradient(to bottom, #ededed);
+      border-bottom-color: #cacaca; }
 
 /***********
  * Dialogs *
