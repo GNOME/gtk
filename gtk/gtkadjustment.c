@@ -432,10 +432,39 @@ static void
 adjustment_set_value (GtkAdjustment *adjustment,
                       gdouble        value)
 {
-  if (value != adjustment->priv->value)
+  if (adjustment->priv->value != value)
     {
       adjustment->priv->value = value;
       gtk_adjustment_value_changed (adjustment);
+    }
+}
+
+static void gtk_adjustment_on_frame_clock_update (GdkFrameClock *clock, 
+                                                  GtkAdjustment *adjustment);
+
+static void
+gtk_adjustment_begin_updating (GtkAdjustment *adjustment)
+{
+  GtkAdjustmentPrivate *priv = adjustment->priv;
+
+  if (priv->tick_id == 0)
+    {
+      priv->tick_id = g_signal_connect (priv->clock, "update",
+                                        G_CALLBACK (gtk_adjustment_on_frame_clock_update), adjustment);
+      gdk_frame_clock_begin_updating (priv->clock);
+    }
+}
+
+static void
+gtk_adjustment_end_updating (GtkAdjustment *adjustment)
+{
+  GtkAdjustmentPrivate *priv = adjustment->priv;
+
+  if (priv->tick_id != 0)
+    {
+      g_signal_handler_disconnect (priv->clock, priv->tick_id);
+      priv->tick_id = 0;
+      gdk_frame_clock_end_updating (priv->clock);
     }
 }
 
@@ -450,30 +479,6 @@ ease_out_cubic (gdouble t)
   return p * p * p + 1;
 }
 
-static gboolean
-gtk_adjustment_animate_step (GtkAdjustment *adjustment,
-                             gint64         now)
-{
-  GtkAdjustmentPrivate *priv = adjustment->priv;
-
-  if (now < priv->end_time)
-    {
-      gdouble t;
-
-      t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
-      t = ease_out_cubic (t);
-      adjustment_set_value (adjustment, priv->source + t * (priv->target - priv->source));
-
-      return TRUE;
-    }
-  else
-    {
-      adjustment_set_value (adjustment, priv->target);
-
-      return FALSE;
-    }
-}
-
 static void
 gtk_adjustment_on_frame_clock_update (GdkFrameClock *clock, 
                                       GtkAdjustment *adjustment)
@@ -482,39 +487,51 @@ gtk_adjustment_on_frame_clock_update (GdkFrameClock *clock,
   gint64 now;
 
   now = gdk_frame_clock_get_frame_time (clock);
-  if (!gtk_adjustment_animate_step (adjustment, now))
+
+  if (now < priv->end_time)
     {
-      g_signal_handler_disconnect (priv->clock, priv->tick_id);
-      priv->tick_id = 0;
-      gdk_frame_clock_end_updating (priv->clock);
+      gdouble t;
+
+      t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
+      t = ease_out_cubic (t);
+      adjustment_set_value (adjustment, priv->source + t * (priv->target - priv->source));
+    }
+  else
+    {
+      adjustment_set_value (adjustment, priv->target);
+      gtk_adjustment_end_updating (adjustment);
     }
 }
 
 static void
-gtk_adjustment_maybe_animate (GtkAdjustment *adjustment,
-                              gdouble        target)
+gtk_adjustment_set_value_internal (GtkAdjustment *adjustment,
+                                   gdouble        value,
+                                   gboolean       animate)
 {
   GtkAdjustmentPrivate *priv = adjustment->priv;
 
-  if (priv->target == target)
-    return;
+  /* don't use CLAMP() so we don't end up below lower if upper - page_size
+   * is smaller than lower
+   */
+  value = MIN (value, priv->upper - priv->page_size);
+  value = MAX (value, priv->lower);
 
-  priv->target = target;
-  
-  if (priv->duration != 0 && priv->clock != NULL)
+  if (animate && priv->duration != 0 && priv->clock != NULL)
     {
+      if (priv->target == value)
+        return;
+
       priv->source = priv->value;
+      priv->target = value;
       priv->start_time = gdk_frame_clock_get_frame_time (priv->clock);
       priv->end_time = priv->start_time + 1000 * priv->duration;
-      if (priv->tick_id == 0)
-        {
-          priv->tick_id = g_signal_connect (priv->clock, "update",
-                                            G_CALLBACK (gtk_adjustment_on_frame_clock_update), adjustment);
-          gdk_frame_clock_begin_updating (priv->clock);
-        }
+      gtk_adjustment_begin_updating (adjustment);
     }
   else
-    adjustment_set_value (adjustment, target);
+    {
+      gtk_adjustment_end_updating (adjustment);
+      adjustment_set_value (adjustment, value);
+    }
 }
 
 /**
@@ -533,19 +550,18 @@ void
 gtk_adjustment_set_value (GtkAdjustment *adjustment,
 			  gdouble        value)
 {
-  GtkAdjustmentPrivate *priv;
-  
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  priv = adjustment->priv;
+  gtk_adjustment_set_value_internal (adjustment, value, FALSE);
+}
 
-  /* don't use CLAMP() so we don't end up below lower if upper - page_size
-   * is smaller than lower
-   */
-  value = MIN (value, priv->upper - priv->page_size);
-  value = MAX (value, priv->lower);
+void
+gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
+			         gdouble        value)
+{
+  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  gtk_adjustment_maybe_animate (adjustment, value);
+  gtk_adjustment_set_value_internal (adjustment, value, TRUE);
 }
 
 /**

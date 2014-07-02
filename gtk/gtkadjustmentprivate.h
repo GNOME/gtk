@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 void gtk_adjustment_enable_animation (GtkAdjustment *adjustment,
                                       GdkFrameClock *clock,
                                       guint          duration);
+void gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
+                                      gdouble        value);
 
 G_END_DECLS
 
