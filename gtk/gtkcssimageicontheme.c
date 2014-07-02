@@ -75,10 +75,12 @@ gtk_css_image_icon_theme_draw (GtkCssImage        *image,
       return;
     }
 
+  cairo_translate (cr, width / 2.0, height / 2.0);
+  cairo_scale (cr, 1.0 / icon_theme->scale, 1.0 / icon_theme->scale);
   gdk_cairo_set_source_pixbuf (cr,
                                pixbuf,
-                               (width - gdk_pixbuf_get_width (pixbuf)) / 2.0,
-                               (height - gdk_pixbuf_get_height (pixbuf)) / 2.0);
+                               - gdk_pixbuf_get_width (pixbuf) / 2.0,
+                               - gdk_pixbuf_get_height (pixbuf) / 2.0);
   cairo_paint (cr);
 
   g_object_unref (pixbuf);
