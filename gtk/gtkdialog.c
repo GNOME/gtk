@@ -274,7 +274,7 @@ add_cb (GtkContainer *container,
   if (priv->use_header_bar)
     g_warning ("Content added to the action area of a dialog using header bars");
 
-  gtk_widget_show (GTK_WIDGET (container));
+  gtk_widget_show (GTK_WIDGET (priv->action_box));
 }
 
 static void
