@@ -890,7 +890,7 @@ column-header {
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
   -GtkNotebook-tab-curvature: 0;
-  -GtkNotebook-tab-overlap: 1;
+  -GtkNotebook-tab-overlap: -8;
   -GtkNotebook-has-tab-gap: false;
   -GtkWidget-focus-padding: 0;
   -GtkWidget-focus-line-width: 0;
@@ -969,6 +969,7 @@ column-header {
     //notebook content frame...
     &.top, &.bottom { padding: $vt_vpadding $vt_hpadding; }
     &.left, &.right { padding: $ht_vpadding $ht_hpadding; }
+
 
     /* works for testnotebookdnd, but there's a superfluous border
        in gedit or web, commented out for now, needs gtk fixes
@@ -1066,22 +1067,21 @@ column-header {
       }
     }
     GtkLabel { //tab text
-      // this doesn't affect labels on reorderable pages, not css fault.
       padding: 0 2px; // needed for a nicer focus ring
       font-weight: bold;
       color: $insensitive_fg_color; /* color: inherit doesn't work here */
-       &:backdrop {
+      &:backdrop, &.prelight-page:backdrop {
         color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
       }
+    }
+    &.prelight-page GtkLabel, GtkLabel.prelight-page {
       // prelight tab text
-      &.prelight-page {
-        color: mix($fg_color, $insensitive_fg_color, 50%);
-      }
+      color: mix($fg_color, $insensitive_fg_color, 50%);
+    }
+    &.active-page GtkLabel, GtkLabel.active-page {
       // active tab text
-      &.active-page {
-        color: $fg_color;
-        &:backdrop { color: $backdrop_fg_color; }
-      }
+      color: $fg_color;
+      &:backdrop { color: $backdrop_fg_color; }
     }
     .button { //tab close button
       border: 1px solid transparent;

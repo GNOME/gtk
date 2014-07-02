@@ -1100,7 +1100,7 @@ column-header .button, column-header .button:hover, column-header .button:active
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
   -GtkNotebook-tab-curvature: 0;
-  -GtkNotebook-tab-overlap: 1;
+  -GtkNotebook-tab-overlap: -8;
   -GtkNotebook-has-tab-gap: false;
   -GtkWidget-focus-padding: 0;
   -GtkWidget-focus-line-width: 0;
@@ -1297,14 +1297,14 @@ column-header .button, column-header .button:hover, column-header .button:active
       font-weight: bold;
       color: #939695;
       /* color: inherit doesn't work here */ }
-      .notebook tab GtkLabel:backdrop {
+      .notebook tab GtkLabel:backdrop, .notebook tab GtkLabel.prelight-page:backdrop {
         color: #878b8a; }
-      .notebook tab GtkLabel.prelight-page {
-        color: #c0c2c0; }
-      .notebook tab GtkLabel.active-page {
-        color: #eeeeec; }
-        .notebook tab GtkLabel.active-page:backdrop {
-          color: #c9cbc9; }
+    .notebook tab.prelight-page GtkLabel, .notebook tab GtkLabel.prelight-page {
+      color: #c0c2c0; }
+    .notebook tab.active-page GtkLabel, .notebook tab GtkLabel.active-page {
+      color: #eeeeec; }
+      .notebook tab.active-page GtkLabel:backdrop, .notebook tab GtkLabel.active-page:backdrop {
+        color: #c9cbc9; }
     .notebook tab .button {
       border: 1px solid transparent;
       icon-shadow: none;
