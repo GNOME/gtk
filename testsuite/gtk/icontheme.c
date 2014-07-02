@@ -493,10 +493,10 @@ test_svg_size (void)
 static void
 test_builtin (void)
 {
-  assert_icon_lookup_size ("gtk-color-picker", 16, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/16x16/actions/gtk-color-picker.png", 16);
-  assert_icon_lookup_size ("gtk-color-picker", 20, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 24);
-  assert_icon_lookup_size ("gtk-color-picker", 24, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 24);
-  assert_icon_lookup_size ("gtk-color-picker", 30, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/hicolor/24x24/actions/gtk-color-picker.png", 24);
+  assert_icon_lookup_size ("gtk-color-picker", 16, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/16x16/actions/gtk-color-picker.png", 16);
+  assert_icon_lookup_size ("gtk-color-picker", 20, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/24x24/actions/gtk-color-picker.png", 24);
+  assert_icon_lookup_size ("gtk-color-picker", 24, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/24x24/actions/gtk-color-picker.png", 24);
+  assert_icon_lookup_size ("gtk-color-picker", 30, GTK_ICON_LOOKUP_USE_BUILTIN, "/org/gtk/libgtk/icons/24x24/actions/gtk-color-picker.png", 24);
 }
 
 static void
