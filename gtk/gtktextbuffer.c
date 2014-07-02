@@ -3656,13 +3656,12 @@ update_selection_clipboards (GtkTextBuffer *buffer)
 	  /* Even if we already have the selection, we need to update our
 	   * timestamp.
 	   */
-	  if (!gtk_clipboard_set_with_owner (clipboard,
-                                             priv->copy_target_entries,
-                                             priv->n_copy_target_entries,
-					     clipboard_get_selection_cb,
-					     clipboard_clear_selection_cb,
-					     G_OBJECT (buffer)))
-	    clipboard_clear_selection_cb (clipboard, buffer);
+          gtk_clipboard_set_with_owner (clipboard,
+                                        priv->copy_target_entries,
+                                        priv->n_copy_target_entries,
+                                        clipboard_get_selection_cb,
+                                        clipboard_clear_selection_cb,
+                                        G_OBJECT (buffer));
 	}
 
       tmp_list = tmp_list->next;
