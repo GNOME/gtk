@@ -393,7 +393,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Cursor Blink"),
                                                                    P_("Whether the cursor should blink"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
+                                                                   GTK_PARAM_READWRITE ),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK);
   result = settings_install_property_parser (class,
@@ -401,7 +401,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Cursor Blink Time"),
                                                                P_("Length of the cursor blink cycle, in milliseconds"),
                                                                100, G_MAXINT, 1200,
-                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
+                                                               GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIME);
 
@@ -421,7 +421,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Cursor Blink Timeout"),
                                                                P_("Time after which the cursor stops blinking, in seconds"),
                                                                1, G_MAXINT, 10,
-                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
+                                                               GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIMEOUT);
   result = settings_install_property_parser (class,
