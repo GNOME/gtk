@@ -5355,6 +5355,11 @@ gdk_window_move_resize_internal (GdkWindow *window,
       return;
     }
 
+  if (width == 0)
+    width = 1;
+  if (height == 0)
+    height = 1;
+
   /* Bail early if no change */
   if (window->width == width &&
       window->height == height &&
@@ -5386,11 +5391,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
     }
   if (!(width < 0 && height < 0))
     {
-      if (width < 1)
-	width = 1;
       window->width = width;
-      if (height < 1)
-	height = 1;
       window->height = height;
     }
 
