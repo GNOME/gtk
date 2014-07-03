@@ -11872,6 +11872,7 @@ warn_response (GtkDialog *dialog,
                gint       response)
 {
   gtk_widget_destroy (GTK_WIDGET (dialog));
+  g_object_set_data (inspector_window, "warning_dialog", NULL);
   if (response == GTK_RESPONSE_NO)
     {
       gtk_widget_destroy (inspector_window);
@@ -11913,8 +11914,11 @@ gtk_window_set_debugging (gboolean enable,
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);
           g_signal_connect (dialog, "response", G_CALLBACK (warn_response), NULL);
+          g_object_set_data (inspector_window, "warning_dialog", dialog);
         }
     }
+
+  dialog = g_object_get_data (inspector_window, "warning_dialog");
 
   if (enable)
     {
@@ -11923,7 +11927,11 @@ gtk_window_set_debugging (gboolean enable,
         g_timeout_add (200, show_dialog, dialog);
     }
   else
-    gtk_widget_hide (inspector_window);
+    {
+      if (dialog)
+        gtk_widget_hide (dialog);
+      gtk_widget_hide (inspector_window);
+    }
 }
 
 /**
