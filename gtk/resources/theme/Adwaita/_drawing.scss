@@ -17,11 +17,12 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
 
 // entries
 
-@mixin entry($t, $noedge:false) {
+@mixin entry($t, $fc:$selected_bg_color, $noedge:false) {
 //
 // Entries drawing function
 //
 // $t: entry type
+// $fc: focus color
 // $noedge: set to true not to draw the bottom edge hilight
 //
 // possible $t values:
@@ -43,15 +44,17 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   }
   @if $t==focus {
     @if $variant == 'light' {
-      border-color: $selected_bg_color;
+      border-color: $fc;
       @include _shadows(inset 0 2px 2px -2px mix(black, $base_color, 50%),
-                      inset 0 0 2px 1px mix($selected_bg_color,$base_color,20%),
+                      inset 0 0 2px 1px mix($fc,$base_color,20%),
                         $_entry_edge);
     }
     @else {
-      border-color: $selected_borders_color;
+      border-color: if($fc==$selected_bg_color,
+                       $selected_borders_color,
+                       darken($fc,35%));
       @include _shadows(inset 0 2px 2px -2px mix(black, $base_color, 50%),
-                        inset 0 0 1px 1px $selected_bg_color,
+                        inset 0 0 1px 1px $fc,
                         $_entry_edge);
     }
   }

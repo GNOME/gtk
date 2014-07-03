@@ -206,6 +206,30 @@ GtkLabel {
       &:dir(rtl) { border-left-style: solid; }
     }
   }
+  &.error {
+    color: $error_color;
+    border-color: $error_color;
+    &:focus { @include entry(focus, $error_color); }
+    &:selected, &:selected:focus {
+      background-color: $error_color;
+    }
+    @if $variant == 'dark' {
+      &:selected:focus { color: $base_color; }
+      &:selected:backdrop { color: $backdrop_base_color; }
+    }
+  }
+  &.warning {
+    color: $warning_color;
+    border-color: $warning_color;
+    &:focus { @include entry(focus, $warning_color); }
+    &:selected, &:selected:focus {
+      background-color: $warning_color;
+    }
+    @if $variant == 'dark' {
+      &:selected:focus { color: $base_color; }
+      &:selected:backdrop { color: $backdrop_base_color; }
+    }
+  }
 }
 
 /***********
