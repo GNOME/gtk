@@ -970,6 +970,11 @@ GtkComboBox {
           border-color: #a8a8a8;
           background-image: linear-gradient(to bottom, #ededed);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+    .titlebar.selection-mode .selection-menu,
+    .header-bar.selection-mode .selection-menu {
+      border-width: 0;
+      background-image: none;
+      box-shadow: none; }
   .tiled .titlebar, .maximized .titlebar, .tiled
   .header-bar, .maximized
   .header-bar {

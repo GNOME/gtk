@@ -735,6 +735,11 @@ GtkComboBox {
         &:backdrop:insensitive { @include button($t:backdrop-insensitive, $noedge:true); }
       }
     }
+    .selection-menu {
+      border-width: 0;
+      background-image: none;
+      box-shadow: none;
+    }
   }
   .tiled &, .maximized & {
     border-radius: 0; // squared corners when the window is max'd or tiled
