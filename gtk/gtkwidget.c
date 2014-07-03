@@ -1541,7 +1541,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   /**
    * GtkWidget:margin-start:
    *
-   * Margin on start of widget.
+   * Margin on start of widget, horizontally. This property supports
+   * left-to-right and right-to-left text directions.
    *
    * This property adds margin outside of the widget's normal size
    * request, the margin will be added in addition to the size from
@@ -1562,7 +1563,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   /**
    * GtkWidget:margin-end:
    *
-   * Margin on end of widget.
+   * Margin on end of widget, horizontally. This property supports
+   * left-to-right and right-to-left text directions.
    *
    * This property adds margin outside of the widget's normal size
    * request, the margin will be added in addition to the size from
