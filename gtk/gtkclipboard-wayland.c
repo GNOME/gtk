@@ -283,6 +283,24 @@ gtk_clipboard_wayland_request_contents (GtkClipboard            *gtkclipboard,
   device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
   device = gdk_device_manager_get_client_pointer (device_manager);
 
+  if (target == gdk_atom_intern_static_string ("TARGETS"))
+    {
+      GtkSelectionData selection_data;
+      int n_atoms;
+      GdkAtom *atoms;
+
+      selection_data.selection = GDK_NONE;
+      selection_data.format = 32;
+      selection_data.type = GDK_SELECTION_TYPE_ATOM;
+
+      n_atoms = gdk_wayland_device_get_selection_type_atoms (device, &atoms);
+      selection_data.length = n_atoms;
+      selection_data.data = atoms;
+
+      callback (gtkclipboard, &selection_data, user_data);
+      return;
+    }
+
   /* When GTK+ requests text, it tries UTF8_STRING first and then
    * falls back to COMPOUND_TEXT and then STRING.  We rewrite
    * UTF8_STRING to text/plain;charset=utf-8, and if that doesn't

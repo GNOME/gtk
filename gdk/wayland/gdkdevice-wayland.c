@@ -1770,6 +1770,15 @@ _gdk_wayland_device_get_button_press_serial (GdkWaylandDeviceData *device)
   return device->button_press_serial;
 }
 
+static GdkAtom
+mime_type_to_gdk_atom (char *mime_type)
+{
+  if (strcmp (mime_type, "text/plain;charset=utf8"))
+    return gdk_atom_intern_static_string ("UTF8_STRING");
+
+  return GDK_NONE;
+}
+
 gint
 gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
                                              GdkAtom   **atoms_out)
@@ -1793,13 +1802,7 @@ gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
 
   /* Convert list of targets to atoms */
   for (i = 0; i < device->selection_offer->types->len; i++)
-    {
-      atoms[i] = gdk_atom_intern (device->selection_offer->types->pdata[i],
-                                  FALSE);
-      GDK_NOTE (MISC,
-                g_message (G_STRLOC ": Adding atom for %s",
-                           (char *)device->selection_offer->types->pdata[i]));
-    }
+    atoms[i] = mime_type_to_gdk_atom (device->selection_offer->types->pdata[i]);
 
   *atoms_out = atoms;
   return device->selection_offer->types->len;
