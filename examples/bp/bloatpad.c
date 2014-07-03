@@ -537,89 +537,7 @@ bloat_pad_startup (GApplication *application)
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries, G_N_ELEMENTS (app_entries), application);
 
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_string (builder,
-                               "<interface>"
-                               "  <menu id='app-menu'>"
-                               "    <section>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_New Window</attribute>"
-                               "        <attribute name='action'>app.new</attribute>"
-                               "      </item>"
-                               "    </section>"
-                               "    <section>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_About Bloatpad</attribute>"
-                               "        <attribute name='action'>app.about</attribute>"
-                               "      </item>"
-                               "    </section>"
-                               "    <section>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_Quit</attribute>"
-                               "        <attribute name='action'>app.quit</attribute>"
-                               "      </item>"
-                               "    </section>"
-                               "  </menu>"
-                               "  <menu id='menubar'>"
-                               "    <submenu>"
-                               "      <attribute name='label' translatable='yes'>_Edit</attribute>"
-                               "      <section>"
-                               "        <item>"
-                               "          <attribute name='label' translatable='yes'>_Copy</attribute>"
-                               "          <attribute name='action'>win.copy</attribute>"
-                               "        </item>"
-                               "        <item>"
-                               "          <attribute name='label' translatable='yes'>_Paste</attribute>"
-                               "          <attribute name='action'>win.paste</attribute>"
-                               "        </item>"
-                               "      </section>"
-                               "      <section>"
-                               "        <item>"
-                               "          <attribute name='label'>Clear (always shown)</attribute>"
-                               "          <attribute name='action'>win.clear</attribute>"
-                                                   /* action should never be missing (so always shown) */
-                               "          <attribute name='hidden-when'>action-missing</attribute>"
-                               "        </item>"
-                               "        <item>"
-                               "          <attribute name='label'>Clear (hidden when no text)</attribute>"
-                               "          <attribute name='hidden-when'>action-disabled</attribute>"
-                               "          <attribute name='action'>win.clear</attribute>"
-                               "        </item>"
-                               "        <item>"
-                               "          <attribute name='label'>Spell check (does nothing, hides)</attribute>"
-                               "          <attribute name='hidden-when'>action-missing</attribute>"
-                               "          <attribute name='action'>win.spell-check</attribute>"
-                               "        </item>"
-                               "      </section>"
-                               "      <section>"
-                               "        <item>"
-                               "          <attribute name='label' translatable='yes'>Accelerators...</attribute>"
-                               "          <attribute name='action'>app.edit-accels</attribute>"
-                               "        </item>"
-                               "      </section>"
-                               "    </submenu>"
-                               "    <submenu>"
-                               "      <attribute name='label' translatable='yes'>_View</attribute>"
-                               "      <section>"
-                               "        <item>"
-                               "          <attribute name='label' translatable='yes'>_Fullscreen</attribute>"
-                               "          <attribute name='action'>win.fullscreen</attribute>"
-                               "        </item>"
-                               "        <item>"
-                               "          <attribute name='label' translatable='yes'>_Look Busy</attribute>"
-                               "          <attribute name='action'>win.busy</attribute>"
-                               "        </item>"
-                               "      </section>"
-                               "    </submenu>"
-                               "    <submenu id='icon-menu'>"
-                               "      <attribute name='label' translatable='yes'>_Icons</attribute>"
-                               "    </submenu>"
-                               "    <submenu id='time-menu'>"
-                               "      <attribute name='label' translatable='yes'>Time</attribute>"
-                               "      <attribute name='submenu-action'>app.time-active</attribute>"
-                               "    </submenu>"
-                               "  </menu>"
-                               "</interface>", -1, NULL);
+  builder = gtk_builder_new_from_resource ("/org/gtk/bloatpad/menus.ui");
   gtk_application_set_app_menu (app, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   gtk_application_set_menubar (app, G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
   for (i = 0; i < G_N_ELEMENTS (accels); i++)
@@ -738,7 +656,7 @@ bloat_pad_new (void)
   g_set_application_name ("Bloatpad");
 
   bloat_pad = g_object_new (bloat_pad_get_type (),
-                            "application-id", "org.gtk.Test.bloatpad",
+                            "application-id", "org.gtk.bloatpad",
                             "flags", G_APPLICATION_HANDLES_OPEN,
                             "inactivity-timeout", 30000,
                             "register-session", TRUE,

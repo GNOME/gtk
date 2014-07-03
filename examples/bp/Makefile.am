@@ -13,4 +13,17 @@ LDADD = \
 
 noinst_PROGRAMS = bloatpad
 
+
+bloatpad_SOURCES = bloatpad.c
+nodist_bloatpad_SOURCES = bloatpad-gresources.c
+
+resource_files = \
+	bloatpad.gresources.xml		\
+	menus.ui
+
+bloatpad-gresources.c: $(resource_files)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $<
+
+CLEANFILES = bloatpad-gresources.c
+
 -include $(top_srcdir)/git.mk
