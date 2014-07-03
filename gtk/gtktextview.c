@@ -28,6 +28,7 @@
 #include <string.h>
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
 #include "gtkintl.h"
@@ -2209,13 +2210,9 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
            || (current_x_scroll != gtk_adjustment_get_value (text_view->priv->hadjustment));
 
   if (retval)
-    {
-      DV(g_print (">Actually scrolled ("G_STRLOC")\n"));
-    }
+    DV(g_print (">Actually scrolled ("G_STRLOC")\n"));
   else
-    {
-      DV(g_print (">Didn't end up scrolling ("G_STRLOC")\n"));
-    }
+    DV(g_print (">Didn't end up scrolling ("G_STRLOC")\n"));
   
   return retval;
 }
@@ -6102,7 +6099,7 @@ gtk_text_view_move_viewport (GtkTextView     *text_view,
       break;
     }
 
-  gtk_adjustment_set_value (adjustment, gtk_adjustment_get_value (adjustment) + count * increment);
+  gtk_adjustment_animate_to_value (adjustment, gtk_adjustment_get_value (adjustment) + count * increment);
 }
 
 static void
@@ -6193,7 +6190,7 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
       newval += count * gtk_adjustment_get_page_increment (adjustment);
 
-      gtk_adjustment_set_value (adjustment, newval);
+      gtk_adjustment_animate_to_value (adjustment, newval);
       cursor_y_pos += gtk_adjustment_get_value (adjustment) - oldval;
 
       gtk_text_layout_get_iter_at_pixel (priv->layout, &new_insert, cursor_x_pos, cursor_y_pos);
@@ -6277,7 +6274,7 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
 
       newval += count * gtk_adjustment_get_page_increment (adjustment);
 
-      gtk_adjustment_set_value (adjustment, newval);
+      gtk_adjustment_animate_to_value (adjustment, newval);
       cursor_x_pos += gtk_adjustment_get_value (adjustment) - oldval;
 
       gtk_text_layout_get_iter_at_pixel (priv->layout, &new_insert, cursor_x_pos, cursor_y_pos);
