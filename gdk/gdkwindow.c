@@ -4446,7 +4446,7 @@ get_all_native_children (GdkWindow *window,
 }
 
 
-static inline void
+static gboolean
 gdk_window_raise_internal (GdkWindow *window)
 {
   GdkWindow *parent = window->parent;
@@ -4454,11 +4454,13 @@ gdk_window_raise_internal (GdkWindow *window)
   GList *native_children;
   GList *l, listhead;
   GdkWindowImplClass *impl_class;
+  gboolean did_raise = FALSE;
 
-  if (parent)
+  if (parent && parent->children->data != window)
     {
       parent->children = g_list_remove (parent->children, window);
       parent->children = g_list_prepend (parent->children, window);
+      did_raise = TRUE;
     }
 
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
@@ -4506,8 +4508,9 @@ gdk_window_raise_internal (GdkWindow *window)
 
 	  g_list_free (native_children);
 	}
-
     }
+
+  return did_raise;
 }
 
 /* Returns TRUE If the native window was mapped or unmapped */
@@ -4598,7 +4601,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
 {
   GdkWindowImplClass *impl_class;
   gboolean was_mapped, was_viewable;
-  gboolean did_show;
+  gboolean did_show, did_raise = FALSE;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -4609,8 +4612,10 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
   was_viewable = window->viewable;
 
   if (raise)
-    /* Keep children in (reverse) stacking order */
-    gdk_window_raise_internal (window);
+    {
+      /* Keep children in (reverse) stacking order */
+      did_raise = gdk_window_raise_internal (window);
+    }
 
   if (gdk_window_has_impl (window))
     {
@@ -4646,7 +4651,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
 	_gdk_make_event (window, GDK_MAP, NULL, FALSE);
     }
 
-  if (!was_mapped || raise)
+  if (!was_mapped || did_raise)
     {
       recompute_visible_regions (window, FALSE);
 
@@ -4694,15 +4699,18 @@ gdk_window_show_unraised (GdkWindow *window)
 void
 gdk_window_raise (GdkWindow *window)
 {
+  gboolean did_raise;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (window->destroyed)
     return;
 
   /* Keep children in (reverse) stacking order */
-  gdk_window_raise_internal (window);
+  did_raise = gdk_window_raise_internal (window);
 
-  if (!gdk_window_is_toplevel (window) &&
+  if (did_raise &&
+      !gdk_window_is_toplevel (window) &&
       gdk_window_is_viewable (window) &&
       !window->input_only)
     gdk_window_invalidate_region_full (window, window->clip_region, TRUE);
