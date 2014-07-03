@@ -1236,22 +1236,20 @@ GtkTreeView.view.progressbar {
     .notebook tab.left, .notebook tab.right {
       padding: 5px 20px; }
     .notebook tab.reorderable-page.top, .notebook tab.reorderable-page.bottom {
+      padding-left: 12px;
+      padding-right: 12px;
       border-left-width: 1px;
       border-right-width: 1px; }
     .notebook tab.reorderable-page.left, .notebook tab.reorderable-page.right {
       border-bottom-width: 1px;
       border-top-width: 1px; }
     .notebook tab.top {
-      padding-bottom: 5px;
       border-bottom-width: 3px; }
     .notebook tab.bottom {
-      padding-top: 5px;
       border-top-width: 3px; }
     .notebook tab.left {
-      padding-right: 17px;
       border-right-width: 3px; }
     .notebook tab.right {
-      padding-left: 17px;
       border-left-width: 3px; }
     .notebook tab:hover, .notebook tab.prelight-page {
       border-color: #a1a1a1; }

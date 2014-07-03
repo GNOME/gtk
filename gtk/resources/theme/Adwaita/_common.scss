@@ -1056,6 +1056,8 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     */
     &.reorderable-page {
       &.top, &.bottom {
+        padding-left: 12px;  // for a nicer close button
+        padding-right: 12px; // placement
         border-left-width: 1px;
         border-right-width: 1px;
       }
@@ -1065,19 +1067,19 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       }
     }
     &.top {
-      padding-bottom: ($vt_vpadding -$tab_indicator_size);
+      //padding-bottom: ($vt_vpadding -$tab_indicator_size);
       border-bottom-width: $tab_indicator_size;
     }
     &.bottom {
-      padding-top: ($vt_vpadding -$tab_indicator_size);
+      //padding-top: ($vt_vpadding -$tab_indicator_size);
       border-top-width: $tab_indicator_size;
     }
     &.left {
-      padding-right: ($ht_hpadding -$tab_indicator_size);
+      //padding-right: ($ht_hpadding -$tab_indicator_size);
       border-right-width: $tab_indicator_size;
     }
     &.right {
-      padding-left: ($ht_hpadding -$tab_indicator_size);
+      //padding-left: ($ht_hpadding -$tab_indicator_size);
       border-left-width: $tab_indicator_size;
     }
 
