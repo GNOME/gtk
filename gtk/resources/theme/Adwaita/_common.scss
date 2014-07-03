@@ -1182,7 +1182,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
 }
 
 .scrollbars-junction { // the small square between two scrollbars
-  border-style: none;
+  border-color: transparent;
   background-color: darken($bg_color, 5%);
   &:backdrop { background-color: transparent; }
 }
