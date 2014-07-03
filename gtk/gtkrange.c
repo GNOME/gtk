@@ -31,7 +31,7 @@
 #include "gtkrange.h"
 #include "gtkrangeprivate.h"
 
-#include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkcolorscaleprivate.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -4070,9 +4070,9 @@ gtk_range_calc_marks (GtkRange *range)
 }
 
 static gboolean
-gtk_range_real_change_value (GtkRange     *range,
-                             GtkScrollType scroll,
-                             gdouble       value)
+gtk_range_real_change_value (GtkRange      *range,
+                             GtkScrollType  scroll,
+                             gdouble        value)
 {
   GtkRangePrivate *priv = range->priv;
 
@@ -4104,9 +4104,9 @@ gtk_range_real_change_value (GtkRange     *range,
       priv->need_recalc = TRUE;
 
       gtk_widget_queue_draw (GTK_WIDGET (range));
-
-      gtk_adjustment_set_value (priv->adjustment, value);
+      gtk_adjustment_animate_to_value (priv->adjustment, value);
     }
+
   return FALSE;
 }
 
