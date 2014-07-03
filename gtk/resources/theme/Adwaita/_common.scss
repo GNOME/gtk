@@ -765,6 +765,31 @@ column-header {
     }
   }
 }
+GtkTreeView.view.progressbar { //Progressbar in treeview cells
+  @if $variant == 'light' { color: $base_color; }
+  border-radius: 4px;
+  background-image: linear-gradient(to bottom,
+                                    $selected_bg_color,
+                                    darken($selected_bg_color,10%));
+  &:selected {
+    @if $variant == 'light' { color: $selected_bg_color; }
+    @else { border-color: $selected_bg_color; }
+    background-image: linear-gradient(to bottom,
+                                     $base_color,
+                                     darken($base_color,10%));
+    &:backdrop {
+      @if $variant == 'light' { color: $selected_bg_color; }
+      @else { border-color: $selected_bg_color; }
+      background-image: none;
+      background-color: $backdrop_base_color;
+    }
+  }
+  &:backdrop {
+    @if $variant == 'light' { color: $backdrop_base_color; }
+    @else { border-color: $backdrop_base_color; }
+    background-image: none;
+  }
+}
 
 /*********
  * Menus *
@@ -1637,8 +1662,13 @@ GtkLevelBar.vertical {
 %selected_items {
   background-color: $selected_bg_color;
   color: $selected_fg_color;
-  outline-color: transparentize($selected_fg_color, 0.7);
-  &:backdrop { color: $backdrop_base_color; }
+  @if $variant == 'light' {
+    outline-color: transparentize($selected_fg_color, 0.7);
+  }
+  &:backdrop {
+    @if $variant == 'light' { color: $backdrop_base_color; }
+    @else { color: $backdrop_fg_color; };
+  }
 }
 
 /**********

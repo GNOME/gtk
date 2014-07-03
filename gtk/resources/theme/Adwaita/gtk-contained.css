@@ -985,6 +985,21 @@ column-header .button, column-header .button:hover, column-header .button:active
       border-color: #ededed;
       background-image: none; }
 
+GtkTreeView.view.progressbar {
+  color: white;
+  border-radius: 4px;
+  background-image: linear-gradient(to bottom, #4a90d9, #2a76c6); }
+  GtkTreeView.view.progressbar:selected {
+    color: #4a90d9;
+    background-image: linear-gradient(to bottom, white, #e6e6e6); }
+    GtkTreeView.view.progressbar:selected:backdrop {
+      color: #4a90d9;
+      background-image: none;
+      background-color: #fcfcfc; }
+  GtkTreeView.view.progressbar:backdrop {
+    color: #fcfcfc;
+    background-image: none; }
+
 /*********
  * Menus *
  *********/

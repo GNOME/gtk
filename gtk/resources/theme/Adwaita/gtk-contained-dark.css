@@ -985,6 +985,20 @@ column-header .button, column-header .button:hover, column-header .button:active
       border-color: #393f3f;
       background-image: none; }
 
+GtkTreeView.view.progressbar {
+  border-radius: 4px;
+  background-image: linear-gradient(to bottom, #215d9c, #184472); }
+  GtkTreeView.view.progressbar:selected {
+    border-color: #215d9c;
+    background-image: linear-gradient(to bottom, #292929, #101010); }
+    GtkTreeView.view.progressbar:selected:backdrop {
+      border-color: #215d9c;
+      background-image: none;
+      background-color: #2c2c2c; }
+  GtkTreeView.view.progressbar:backdrop {
+    border-color: #2c2c2c;
+    background-image: none; }
+
 /*********
  * Menus *
  *********/
@@ -2244,10 +2258,9 @@ GtkLevelBar.vertical {
 
 .view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, GtkLabel:backdrop:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected {
   background-color: #215d9c;
-  color: white;
-  outline-color: rgba(255, 255, 255, 0.3); }
+  color: white; }
   .view:backdrop:selected, GtkLabel:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected {
-    color: #2c2c2c; }
+    color: #c9cbc9; }
 
 /**********
  * Frames *
