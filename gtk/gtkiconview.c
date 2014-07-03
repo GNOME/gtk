@@ -22,7 +22,7 @@
 #include "gtkiconview.h"
 #include "gtkiconviewprivate.h"
 
-#include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderer.h"
 #include "gtkcellareabox.h"
@@ -4246,22 +4246,22 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
   vadj = icon_view->priv->vadjustment;
 
   if (y + item_area.y < 0)
-    gtk_adjustment_set_value (vadj,
-                              gtk_adjustment_get_value (vadj)
-                                + y + item_area.y);
+    gtk_adjustment_animate_to_value (vadj,
+                                     gtk_adjustment_get_value (vadj)
+                                     + y + item_area.y);
   else if (y + item_area.y + item_area.height > allocation.height)
-    gtk_adjustment_set_value (vadj,
-                              gtk_adjustment_get_value (vadj)
-                                + y + item_area.y + item_area.height - allocation.height);
+    gtk_adjustment_animate_to_value (vadj,
+                                     gtk_adjustment_get_value (vadj)
+                                     + y + item_area.y + item_area.height - allocation.height);
 
   if (x + item_area.x < 0)
-    gtk_adjustment_set_value (hadj,
-                              gtk_adjustment_get_value (hadj)
-                                + x + item_area.x);
+    gtk_adjustment_animate_to_value (hadj,
+                                     gtk_adjustment_get_value (hadj)
+                                     + x + item_area.x);
   else if (x + item_area.x + item_area.width > allocation.width)
-    gtk_adjustment_set_value (hadj,
-                              gtk_adjustment_get_value (hadj)
-                                + x + item_area.x + item_area.width - allocation.width);
+    gtk_adjustment_animate_to_value (hadj,
+                                     gtk_adjustment_get_value (hadj)
+                                     + x + item_area.x + item_area.width - allocation.width);
 
   gtk_adjustment_changed (hadj);
   gtk_adjustment_changed (vadj);
