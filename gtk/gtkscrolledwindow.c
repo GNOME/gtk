@@ -1745,13 +1745,9 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
     return FALSE;
 
   if (horizontal)
-    {
-      adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
-    }
+    adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   else
-    {
-      adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
-    }
+    adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
 
   if (adjustment)
     {
@@ -1782,7 +1778,7 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
 	  break;
 	}
 
-      gtk_adjustment_set_value (adjustment, value);
+      gtk_adjustment_animate_to_value (adjustment, value);
 
       return TRUE;
     }
