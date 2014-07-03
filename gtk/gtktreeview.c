@@ -23,7 +23,7 @@
 
 #include "gtktreeview.h"
 
-#include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkrbtree.h"
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"
@@ -12406,9 +12406,9 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
   vadj = tree_view->priv->vadjustment;
 
   if (tree_x != -1)
-    gtk_adjustment_set_value (hadj, tree_x);
+    gtk_adjustment_animate_to_value (hadj, tree_x);
   if (tree_y != -1)
-    gtk_adjustment_set_value (vadj, tree_y);
+    gtk_adjustment_animate_to_value (vadj, tree_y);
 }
 
 /**
