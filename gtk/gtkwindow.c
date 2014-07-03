@@ -987,7 +987,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    g_param_spec_boolean ("has-resize-grip",
                                                          P_("Resize grip"),
                                                          P_("Specifies whether the window should have a resize grip"),
-                                                         TRUE,
+                                                         FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   /**
