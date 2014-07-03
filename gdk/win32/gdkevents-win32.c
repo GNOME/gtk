@@ -1528,11 +1528,10 @@ handle_wm_paint (MSG        *msg,
 
   hdc = BeginPaint (msg->hwnd, &paintstruct);
 
-  GDK_NOTE (EVENTS, g_print (" %s %s dc %p%s",
+  GDK_NOTE (EVENTS, g_print (" %s %s dc %p",
 			     _gdk_win32_rect_to_string (&paintstruct.rcPaint),
 			     (paintstruct.fErase ? "erase" : ""),
-			     hdc,
-			     (return_exposes ? " return_exposes" : "")));
+			     hdc));
 
   EndPaint (msg->hwnd, &paintstruct);
 
