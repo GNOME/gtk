@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "gtkadjustmentprivate.h"
 #include "gtklistbox.h"
 #include "gtkwidget.h"
 #include "gtkmarshalers.h"
@@ -2730,9 +2731,9 @@ gtk_list_box_move_cursor (GtkListBox      *box,
             }
           end_y = ROW_PRIV (row)->y;
           if (end_y != start_y && priv->adjustment != NULL)
-            gtk_adjustment_set_value (priv->adjustment,
-                                      gtk_adjustment_get_value (priv->adjustment) +
-                                      end_y - start_y);
+            gtk_adjustment_animate_to_value (priv->adjustment,
+                                             gtk_adjustment_get_value (priv->adjustment) +
+                                             end_y - start_y);
         }
       break;
     default:
