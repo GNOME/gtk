@@ -70,20 +70,25 @@
  * associated with #GtkApplicationWindow and to the “activate” and
  * 'open' #GApplication methods.
  *
- * To set an application menu for a GtkApplication, use
- * gtk_application_set_app_menu(). The #GMenuModel that this function
- * expects is usually constructed using #GtkBuilder, as seen in the
- * following example. To specify a menubar that will be shown by
- * #GtkApplicationWindows, use gtk_application_set_menubar(). Use the base
- * #GActionMap interface to add actions, to respond to the user
- * selecting these menu items.
+ * #GtkApplication will automatically load menus from the #GtkBuilder
+ * file located at "gtk/menus.ui", relative to the application's
+ * resource base path (see g_application_set_resource_base_path()).  The
+ * menu with the ID "app-menu" is taken as the application's app menu
+ * and the menu with the ID "menubar" is taken as the application's
+ * menubar.  Additional menus (most interesting submenus) can be named
+ * and accessed via gtk_application_get_menu_by_id() which allows for
+ * dynamic population of a part of the menu structure.
  *
- * GTK+ displays these menus as expected, depending on the platform
- * the application is running on.
+ * If the files "gtk/menus-appmenu.ui" or "gtk/menus-traditional.ui" are
+ * present then these files will be used in preference, depending on the
+ * value of gtk_application_prefers_app_menu().
+ *
+ * It is also possible to provide the menus manually using
+ * gtk_application_set_app_menu() and gtk_application_set_menubar().
  *
  * ## A simple application ## {#gtkapplication}
  *
- * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/bloatpad.c)
+ * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/bp/bloatpad.c)
  *
  * GtkApplication optionally registers with a session manager
  * of the users session (if you set the #GtkApplication:register-session
@@ -460,6 +465,7 @@ struct _GtkApplicationPrivate
 
   gboolean register_session;
   GtkActionMuxer  *muxer;
+  GtkBuilder      *menus_builder;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -499,6 +505,56 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
 }
 
 static void
+gtk_application_load_resources (GtkApplication *application)
+{
+  const gchar *base_path;
+
+  base_path = g_application_get_resource_base_path (G_APPLICATION (application));
+
+  if (base_path == NULL)
+    return;
+
+  /* Load the menus */
+  {
+    gchar *menuspath;
+
+    /* If the user has given a specific file for the variant of menu
+     * that we are looking for, use it with preference.
+     */
+    if (gtk_application_prefers_app_menu (application))
+      menuspath = g_strconcat (base_path, "/gtk/menus-appmenu.ui", NULL);
+    else
+      menuspath = g_strconcat (base_path, "/gtk/menus-traditional.ui", NULL);
+
+    if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
+      application->priv->menus_builder = gtk_builder_new_from_resource (menuspath);
+    g_free (menuspath);
+
+    /* If we didn't get the specific file, fall back. */
+    if (application->priv->menus_builder == NULL)
+      {
+        menuspath = g_strconcat (base_path, "/gtk/menus.ui", NULL);
+        if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
+          application->priv->menus_builder = gtk_builder_new_from_resource (menuspath);
+        g_free (menuspath);
+      }
+
+    if (application->priv->menus_builder)
+      {
+        GObject *menu;
+
+        menu = gtk_builder_get_object (application->priv->menus_builder, "app-menu");
+        if (menu != NULL && G_IS_MENU_MODEL (menu))
+          gtk_application_set_app_menu (application, G_MENU_MODEL (menu));
+        menu = gtk_builder_get_object (application->priv->menus_builder, "menubar");
+        if (menu != NULL && G_IS_MENU_MODEL (menu))
+          gtk_application_set_menubar (application, G_MENU_MODEL (menu));
+      }
+  }
+}
+
+
+static void
 gtk_application_startup (GApplication *g_application)
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
@@ -512,6 +568,8 @@ gtk_application_startup (GApplication *g_application)
 
   application->priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
   gtk_application_impl_startup (application->priv->impl, application->priv->register_session);
+
+  gtk_application_load_resources (application);
 }
 
 static void
@@ -767,6 +825,7 @@ gtk_application_finalize (GObject *object)
 {
   GtkApplication *application = GTK_APPLICATION (object);
 
+  g_clear_object (&application->priv->menus_builder);
   g_clear_object (&application->priv->app_menu);
   g_clear_object (&application->priv->menubar);
   g_clear_object (&application->priv->muxer);
@@ -1626,4 +1685,21 @@ gtk_application_handle_window_map (GtkApplication *application,
                                    GtkWindow      *window)
 {
   gtk_application_impl_handle_window_map (application->priv->impl, window);
+}
+
+GMenu *
+gtk_application_get_menu_by_id (GtkApplication *application,
+                                const gchar    *id)
+{
+  GObject *object;
+
+  if (!application->priv->menus_builder)
+    return NULL;
+
+  object = gtk_builder_get_object (application->priv->menus_builder, id);
+
+  if (!object || !G_IS_MENU (object))
+    return NULL;
+
+  return G_MENU (object);
 }

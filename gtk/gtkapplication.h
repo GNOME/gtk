@@ -154,6 +154,10 @@ void             gtk_application_set_accels_for_action           (GtkApplication
 GDK_AVAILABLE_IN_3_14
 gboolean         gtk_application_prefers_app_menu                (GtkApplication       *application);
 
+GDK_AVAILABLE_IN_3_14
+GMenu *          gtk_application_get_menu_by_id                  (GtkApplication       *application,
+                                                                  const gchar          *id);
+
 G_END_DECLS
 
 #endif /* __GTK_APPLICATION_H__ */
