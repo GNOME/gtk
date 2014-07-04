@@ -765,6 +765,26 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_TITLEBAR "titlebar"
 
 /**
+ * GTK_STYLE_CLASS_TITLE:
+ *
+ * A CSS class used for the title label in a titlebar in
+ * a toplevel window.
+ *
+ * Since: 3.14
+ */
+#define GTK_STYLE_CLASS_TITLE "title"
+
+/**
+ * GTK_STYLE_CLASS_SUBTITLE:
+ *
+ * A CSS class used for the subtitle label in a titlebar in
+ * a toplevel window.
+ *
+ * Since: 3.14
+ */
+#define GTK_STYLE_CLASS_SUBTITLE "subtitle"
+
+/**
  * GTK_STYLE_CLASS_NEEDS_ATTENTION:
  *
  * A CSS class used when an element needs the user attention,
