@@ -54,6 +54,7 @@
 #include "gtkscale.h"
 #include "gtkbox.h"
 #include "gtkwindow.h"
+#include "gtkwindowprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 #include "a11y/gtkscalebuttonaccessible.h"
@@ -105,6 +106,7 @@ struct _GtkScaleButtonPrivate
 
   GtkIconSize size;
   GtkOrientation orientation;
+  GtkOrientation applied_orientation;
 
   guint click_id;
 
@@ -350,6 +352,7 @@ gtk_scale_button_init (GtkScaleButton *button)
 
   priv->click_id = 0;
   priv->orientation = GTK_ORIENTATION_VERTICAL;
+  priv->applied_orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_widget_init_template (GTK_WIDGET (button));
   gtk_popover_set_relative_to (GTK_POPOVER (priv->dock), GTK_WIDGET (button));
@@ -709,17 +712,15 @@ gtk_scale_button_get_popup (GtkScaleButton *button)
 }
 
 static void
-gtk_scale_button_set_orientation_private (GtkScaleButton *button,
-                                          GtkOrientation  orientation)
+apply_orientation (GtkScaleButton *button,
+                   GtkOrientation  orientation)
 {
   GtkScaleButtonPrivate *priv = button->priv;
 
-  if (orientation != priv->orientation)
+  if (priv->applied_orientation != orientation)
     {
-      priv->orientation = orientation;
-
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box),
-                                      orientation);
+      priv->applied_orientation = orientation;
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), orientation);
       gtk_container_child_set (GTK_CONTAINER (priv->box),
                                priv->plus_button,
                                "pack-type",
@@ -733,22 +734,30 @@ gtk_scale_button_set_orientation_private (GtkScaleButton *button,
                                GTK_PACK_END : GTK_PACK_START,
                                NULL);
 
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->scale),
-                                      orientation);
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->scale), orientation);
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
         {
-          gtk_widget_set_size_request (GTK_WIDGET (priv->scale),
-                                       -1, SCALE_SIZE);
+          gtk_widget_set_size_request (GTK_WIDGET (priv->scale), -1, SCALE_SIZE);
           gtk_range_set_inverted (GTK_RANGE (priv->scale), TRUE);
         }
       else
         {
-          gtk_widget_set_size_request (GTK_WIDGET (priv->scale),
-                                       SCALE_SIZE, -1);
+          gtk_widget_set_size_request (GTK_WIDGET (priv->scale), SCALE_SIZE, -1);
           gtk_range_set_inverted (GTK_RANGE (priv->scale), FALSE);
         }
+    }
+}
 
+static void
+gtk_scale_button_set_orientation_private (GtkScaleButton *button,
+                                          GtkOrientation  orientation)
+{
+  GtkScaleButtonPrivate *priv = button->priv;
+
+  if (priv->orientation != orientation)
+    {
+      priv->orientation = orientation;
       g_object_notify (G_OBJECT (button), "orientation");
     }
 }
@@ -796,8 +805,27 @@ gtk_scale_popup (GtkWidget *widget)
 {
   GtkScaleButton *button = GTK_SCALE_BUTTON (widget);
   GtkScaleButtonPrivate *priv = button->priv;
+  GtkWidget *toplevel;
+  GtkBorder border;
+  GtkRequisition req;
+  gint w, h;
+  gint size;
 
   gtk_widget_show (priv->dock);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  _gtk_window_get_shadow_width (GTK_WINDOW (toplevel), &border);
+  w = gtk_widget_get_allocated_width (toplevel) - border.left - border.right;
+  h = gtk_widget_get_allocated_height (toplevel) - border.top - border.bottom;
+  gtk_widget_get_preferred_size (priv->dock, NULL, &req);
+  size = MAX (req.width, req.height);
+
+  if (size > w)
+    apply_orientation (button, GTK_ORIENTATION_VERTICAL);
+  else if (size > h)
+    apply_orientation (button, GTK_ORIENTATION_HORIZONTAL);
+  else
+    apply_orientation (button, priv->orientation);
 
   return TRUE;
 }
