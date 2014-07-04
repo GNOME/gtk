@@ -19,7 +19,7 @@ nodist_bloatpad_SOURCES = bloatpad-gresources.c
 
 resource_files = \
 	bloatpad.gresources.xml		\
-	menus.ui
+	gtk/menus.ui
 
 bloatpad-gresources.c: $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $<

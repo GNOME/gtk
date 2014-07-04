@@ -2,6 +2,6 @@
 
 <gresources>
   <gresource prefix="/org/gtk/bloatpad">
-    <file preprocess="xml-stripblanks">menus.ui</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
   </gresource>
 </gresources>

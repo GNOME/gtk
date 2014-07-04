@@ -509,7 +509,6 @@ bloat_pad_startup (GApplication *application)
 {
   BloatPad *bloatpad = (BloatPad*) application;
   GtkApplication *app = GTK_APPLICATION (application);
-  GtkBuilder *builder;
   GMenu *menu;
   GMenuItem *item;
   GIcon *icon;
@@ -537,13 +536,10 @@ bloat_pad_startup (GApplication *application)
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries, G_N_ELEMENTS (app_entries), application);
 
-  builder = gtk_builder_new_from_resource ("/org/gtk/bloatpad/menus.ui");
-  gtk_application_set_app_menu (app, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-  gtk_application_set_menubar (app, G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
   for (i = 0; i < G_N_ELEMENTS (accels); i++)
     gtk_application_set_accels_for_action (app, accels[i].action_and_target, accels[i].accelerators);
 
-  menu = G_MENU (gtk_builder_get_object (builder, "icon-menu"));
+  menu = gtk_application_get_menu_by_id (GTK_APPLICATION (application), "icon-menu");
 
   file = g_file_new_for_path (SRCDIR "/../gtk/stock-icons/16/help-about.png");
   icon = g_file_icon_new (file);
@@ -609,8 +605,7 @@ bloat_pad_startup (GApplication *application)
 
   dump_accels (GTK_APPLICATION (application));
   //gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-  bloatpad->time = G_MENU (gtk_builder_get_object (builder, "time-menu"));
-  g_object_unref (builder);
+  bloatpad->time = gtk_application_get_menu_by_id (GTK_APPLICATION (application), "time-menu");
 }
 
 static void
