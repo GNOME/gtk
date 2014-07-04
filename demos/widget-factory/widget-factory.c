@@ -75,7 +75,7 @@ activate_about (GSimpleAction *action,
   };
   gchar *version;
 
-  version = g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+  version = g_strdup_printf ("%s\nRunning against GTK+ %d.%d.%d",
                              PACKAGE_VERSION,
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
@@ -283,12 +283,32 @@ close_dialog (GtkWidget *dialog)
   gtk_widget_hide (dialog);
 }
 
+static gboolean
+demand_attention (gpointer page)
+{
+  GtkWidget *stack;
+
+  stack = gtk_widget_get_parent (page);
+  gtk_container_child_set (GTK_CONTAINER (stack), page,
+                           "needs-attention", TRUE,
+                           NULL);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+action_dialog_button_clicked (GtkButton *button, GtkWidget *page)
+{
+  g_timeout_add (1000, demand_attention, page);
+}
+
 static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
   GtkWindow *window;
   GtkWidget *widget;
+  GtkWidget *page;
   GtkWidget *dialog;
   GtkAdjustment *adj;
   static GActionEntry win_entries[] = {
@@ -355,6 +375,10 @@ activate (GApplication *app)
   g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "action_dialog_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "act_action_dialog");
+  page = (GtkWidget *)gtk_builder_get_object (builder, "page3_content");
+  g_signal_connect (widget, "clicked", G_CALLBACK (action_dialog_button_clicked), page);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog");
   g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
