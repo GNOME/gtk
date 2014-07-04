@@ -283,15 +283,24 @@ close_dialog (GtkWidget *dialog)
   gtk_widget_hide (dialog);
 }
 
-static gboolean
-demand_attention (gpointer page)
+static void
+set_needs_attention (GtkWidget *page, gboolean needs_attention)
 {
   GtkWidget *stack;
 
   stack = gtk_widget_get_parent (page);
   gtk_container_child_set (GTK_CONTAINER (stack), page,
-                           "needs-attention", TRUE,
+                           "needs-attention", needs_attention,
                            NULL);
+}
+
+static gboolean
+demand_attention (gpointer stack)
+{
+  GtkWidget *page;
+
+  page = gtk_stack_get_child_by_name (GTK_STACK (stack), "page3");
+  set_needs_attention (page, TRUE);
 
   return G_SOURCE_REMOVE;
 }
@@ -303,12 +312,26 @@ action_dialog_button_clicked (GtkButton *button, GtkWidget *page)
 }
 
 static void
+page_changed_cb (GtkWidget *stack, GParamSpec *pspec, gpointer data)
+{
+  const gchar *name;
+  GtkWidget *page;
+
+  name = gtk_stack_get_visible_child_name (GTK_STACK (stack));
+  if (g_str_equal (name, "page3"))
+    {
+      page = gtk_stack_get_visible_child (GTK_STACK (stack));
+      set_needs_attention (GTK_WIDGET (page), FALSE);
+    }
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
   GtkWindow *window;
   GtkWidget *widget;
-  GtkWidget *page;
+  GtkWidget *stack;
   GtkWidget *dialog;
   GtkAdjustment *adj;
   static GActionEntry win_entries[] = {
@@ -377,8 +400,9 @@ activate (GApplication *app)
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "act_action_dialog");
-  page = (GtkWidget *)gtk_builder_get_object (builder, "page3_content");
-  g_signal_connect (widget, "clicked", G_CALLBACK (action_dialog_button_clicked), page);
+  stack = (GtkWidget *)gtk_builder_get_object (builder, "toplevel_stack");
+  g_signal_connect (widget, "clicked", G_CALLBACK (action_dialog_button_clicked), stack);
+  g_signal_connect (stack, "notify::visible-child-name", G_CALLBACK (page_changed_cb), NULL);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog");
   g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);

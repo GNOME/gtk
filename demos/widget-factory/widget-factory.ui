@@ -2727,7 +2727,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinner" id="page3_content">
+              <object class="GtkSpinner">
                 <property name="visible">True</property>
                 <property name="active">True</property>
                 <property name="expand">True</property>
