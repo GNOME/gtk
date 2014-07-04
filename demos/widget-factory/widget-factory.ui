@@ -2701,19 +2701,22 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <child>
                           <object class="GtkButton" id="info_dialog_button">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Inform</property>
+                            <property name="label" translatable="yes">_Inform</property>
+                            <property name="use_underline">True</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="action_dialog_button">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Act</property>
+                            <property name="label" translatable="yes">_Act</property>
+                            <property name="use_underline">True</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="preference_dialog_button">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Configure</property>
+                            <property name="label" translatable="yes">_Configure</property>
+                            <property name="use_underline">True</property>
                           </object>
                         </child>
                       </object>
@@ -2752,13 +2755,15 @@ bad things might happen.</property>
     <child type="action">
       <object class="GtkButton" id="cancel_info_dialog">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Cancel</property>
+        <property name="label" translatable="yes">_Cancel</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="doit_info_dialog">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Do It</property>
+        <property name="label" translatable="yes">_Do It</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
     <action-widgets>
@@ -2786,7 +2791,8 @@ bad things might happen.</property>
     <child type="action">
       <object class="GtkButton" id="cancel_action_dialog">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Cancel</property>
+        <property name="label" translatable="yes">_Cancel</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
     <child type="action">
@@ -2794,7 +2800,8 @@ bad things might happen.</property>
         <property name="visible">True</property>
         <property name="can-default">True</property>
         <property name="has-default">True</property>
-        <property name="label" translatable="yes">Action</property>
+        <property name="label" translatable="yes">_Act</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
     <action-widgets>
