@@ -98,8 +98,8 @@ gdk_screen_class_init (GdkScreenClass *klass)
 				   g_param_spec_double ("resolution",
 							P_("Font resolution"),
 							P_("The resolution for fonts on the screen"),
-							-G_MAXDOUBLE,
-							G_MAXDOUBLE,
+							-1.0,
+							10000.0,
 							-1.0,
 							G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
 							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
