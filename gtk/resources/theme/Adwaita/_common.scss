@@ -334,7 +334,10 @@ GtkLabel {
 //    -GtkWidget-wide-separators: true;
 //    -GtkWidget-horizontal-separator: 0;
 //   }
-  .linked &, .linked &:backdrop {
+  .linked &,
+  .linked &:hover,
+  .linked &:active,
+  .linked &:backdrop {
     @extend %linked_buttons;
   }
 }
@@ -1857,6 +1860,33 @@ GtkCalendar {
       &:backdrop:insensitive {
         @include button(backdrop-insensitive, $noedge: true);
         @extend %middle_button;
+      }
+      @each $b_type, $b_color in (suggested-action, $selected_bg_color),
+                                 (destructive-action, $destructive_color) {
+        &.#{$b_type} {
+          @include button(normal, $b_color, white, $noedge: true);
+          @extend %middle_button;
+          &:hover {
+            @include button(hover, $b_color, white, $noedge: true);
+            @extend %middle_button;
+          }
+          &:active {
+            @include button(active, $b_color, white, $noedge: true);
+            @extend %middle_button;
+          }
+          &:backdrop {
+            @include button(backdrop, $b_color, white);
+            @extend %middle_button;
+            &:insensitive {
+              @include button(backdrop-insensitive);
+              @extend %middle_button;
+            }
+          }
+          &:insensitive {
+            @include button(insensitive);
+            @extend %middle_button;
+          }
+        }
       }
       &:first-child{ @extend %first_button; }
       &:last-child { @extend %last_button; }

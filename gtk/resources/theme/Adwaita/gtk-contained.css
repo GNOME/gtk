@@ -542,7 +542,7 @@
   border-radius: 3px;
   border-style: solid; }
 
-.osd .button, .osd .button:hover, .osd .button:active, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked .button, .linked .button:backdrop {
+.osd .button, .osd .button:hover, .osd .button:active, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked .button, .linked .button:hover, .linked .button:active, .linked .button:backdrop {
   border-radius: 0;
   border-left-style: none; }
   .osd .button:dir(rtl), .inline-toolbar .button:dir(rtl), .linked .button:dir(rtl) {
@@ -2443,7 +2443,111 @@ GtkCalendar {
       border-color: #a8a8a8;
       background-image: linear-gradient(to bottom, #ededed);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-  .message-dialog.csd .dialog-action-area .button, .message-dialog.csd .dialog-action-area .button:hover, .message-dialog.csd .dialog-action-area .button:active, .message-dialog.csd .dialog-action-area .button:insensitive, .message-dialog.csd .dialog-action-area .button:backdrop, .message-dialog.csd .dialog-action-area .button:backdrop:insensitive {
+    .message-dialog.csd .dialog-action-area .button.suggested-action {
+      border-width: 1px;
+      border-style: solid;
+      color: white;
+      background-image: linear-gradient(to bottom, #5f9ddd, #4a90d9 40%, #3583d5);
+      border-color: #1c5187;
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      .message-dialog.csd .dialog-action-area .button.suggested-action:hover {
+        border-width: 1px;
+        border-style: solid;
+        color: white;
+        border-color: #1c5187;
+        background-image: linear-gradient(to bottom, #85b4e5, #5b9add 40%, #4a90d9);
+        text-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
+        icon-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      .message-dialog.csd .dialog-action-area .button.suggested-action:active {
+        border-width: 1px;
+        border-style: solid;
+        color: white;
+        border-color: #1c5187;
+        background-image: linear-gradient(to bottom, #256ab1, #2974c2 3%, #2a76c6);
+        text-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
+        icon-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
+        box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
+      .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop {
+        border-width: 1px;
+        border-style: solid;
+        color: white;
+        border-color: #4a90d9;
+        background-image: linear-gradient(to bottom, #4a90d9);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+        .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop:insensitive {
+          border-width: 1px;
+          border-style: solid;
+          color: #c7c7c7;
+          border-color: #a8a8a8;
+          background-image: linear-gradient(to bottom, #ededed);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+      .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive {
+        border-width: 1px;
+        border-style: solid;
+        color: #8d9091;
+        border-color: #a1a1a1;
+        background-image: linear-gradient(to bottom, #f4f4f4);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
+    .message-dialog.csd .dialog-action-area .button.destructive-action {
+      border-width: 1px;
+      border-style: solid;
+      color: white;
+      background-image: linear-gradient(to bottom, #f14141, #ef2929 40%, #ed1212);
+      border-color: #8e0b0b;
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      .message-dialog.csd .dialog-action-area .button.destructive-action:hover {
+        border-width: 1px;
+        border-style: solid;
+        color: white;
+        border-color: #8e0b0b;
+        background-image: linear-gradient(to bottom, #f46b6b, #f03c3c 40%, #ef2929);
+        text-shadow: 0 -1px rgba(0, 0, 0, 0.52878);
+        icon-shadow: 0 -1px rgba(0, 0, 0, 0.52878);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      .message-dialog.csd .dialog-action-area .button.destructive-action:active {
+        border-width: 1px;
+        border-style: solid;
+        color: white;
+        border-color: #8e0b0b;
+        background-image: linear-gradient(to bottom, #bd0e0e, #d01010 3%, #d51010);
+        text-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
+        icon-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
+        box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
+      .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop {
+        border-width: 1px;
+        border-style: solid;
+        color: white;
+        border-color: #ef2929;
+        background-image: linear-gradient(to bottom, #ef2929);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+        .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop:insensitive {
+          border-width: 1px;
+          border-style: solid;
+          color: #c7c7c7;
+          border-color: #a8a8a8;
+          background-image: linear-gradient(to bottom, #ededed);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+      .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive {
+        border-width: 1px;
+        border-style: solid;
+        color: #8d9091;
+        border-color: #a1a1a1;
+        background-image: linear-gradient(to bottom, #f4f4f4);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
+  .message-dialog.csd .dialog-action-area .button, .message-dialog.csd .dialog-action-area .button:hover, .message-dialog.csd .dialog-action-area .button:active, .message-dialog.csd .dialog-action-area .button:insensitive, .message-dialog.csd .dialog-action-area .button:backdrop, .message-dialog.csd .dialog-action-area .button:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.suggested-action, .message-dialog.csd .dialog-action-area .button.suggested-action:hover, .message-dialog.csd .dialog-action-area .button.suggested-action:active, .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop, .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive, .message-dialog.csd .dialog-action-area .button.destructive-action, .message-dialog.csd .dialog-action-area .button.destructive-action:hover, .message-dialog.csd .dialog-action-area .button.destructive-action:active, .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop, .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive {
     border-right-style: none;
     border-bottom-style: none; }
   .message-dialog.csd .dialog-action-area .button:last-child {

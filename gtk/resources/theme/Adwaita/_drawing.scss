@@ -46,7 +46,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     @if $variant == 'light' {
       border-color: $fc;
       @include _shadows(inset 0 2px 2px -2px mix(black, $base_color, 50%),
-                      inset 0 0 2px 1px mix($fc,$base_color,20%),
+                        inset 0 0 2px 1px mix($fc,$base_color,20%),
                         $_entry_edge);
     }
     @else {
