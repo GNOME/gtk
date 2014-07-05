@@ -2391,69 +2391,74 @@ GtkCalendar {
  ***********/
 .message-dialog {
   -GtkDialog-button-spacing: 0; }
-
-GtkMessageDialog .titlebar {
-  border-style: none;
-  box-shadow: inset 0 1px rgba(238, 238, 236, 0.1); }
-
-.dialog-action-area.linked .button {
-  padding: 6px;
-  border-radius: 0;
-  border-width: 1px;
-  border-style: solid;
-  color: #eeeeec;
-  background-image: linear-gradient(to bottom, #454c4c, #393f3f 40%, #2d3232);
-  border-color: #1c1f1f;
-  text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
-  icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
-  .dialog-action-area.linked .button:hover {
+  .message-dialog .titlebar {
+    border-style: none;
+    box-shadow: inset 0 1px rgba(238, 238, 236, 0.1); }
+  .message-dialog.csd.background {
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px; }
+  .message-dialog.csd .dialog-action-area .button {
+    padding: 8px;
+    border-radius: 0;
     border-width: 1px;
     border-style: solid;
     color: #eeeeec;
+    background-image: linear-gradient(to bottom, #454c4c, #393f3f 40%, #2d3232);
     border-color: #1c1f1f;
-    background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
-    icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
-  .dialog-action-area.linked .button:active {
-    border-width: 1px;
-    border-style: solid;
-    color: #eeeeec;
-    border-color: #1c1f1f;
-    background-image: linear-gradient(to bottom, #212424, #2d3232 3%);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
-  .dialog-action-area.linked .button:insensitive {
-    border-width: 1px;
-    border-style: solid;
-    color: #939695;
-    border-color: #1c1f1f;
-    background-image: linear-gradient(to bottom, #323636);
-    text-shadow: none;
-    icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-  .dialog-action-area.linked .button:backdrop {
-    border-width: 1px;
-    border-style: solid;
-    color: #c9cbc9;
-    border-color: #1e2222;
-    background-image: linear-gradient(to bottom, #393f3f);
-    text-shadow: none;
-    icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-  .dialog-action-area.linked .button:backdrop:insensitive {
-    border-width: 1px;
-    border-style: solid;
-    color: #454c4c;
-    border-color: #1e2222;
-    background-image: linear-gradient(to bottom, #393f3f);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-.dialog-action-area.linked .button, .dialog-action-area.linked .button:hover, .dialog-action-area.linked .button:active, .dialog-action-area.linked .button:insensitive, .dialog-action-area.linked .button:backdrop, .dialog-action-area.linked .button:backdrop:insensitive {
-  border-style: solid none none solid; }
-.dialog-action-area.linked .button:first-child {
-  border-style: solid none none none; }
+    .message-dialog.csd .dialog-action-area .button:hover {
+      border-width: 1px;
+      border-style: solid;
+      color: #eeeeec;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+    .message-dialog.csd .dialog-action-area .button:active {
+      border-width: 1px;
+      border-style: solid;
+      color: #eeeeec;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #212424, #2d3232 3%);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+      box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
+    .message-dialog.csd .dialog-action-area .button:insensitive {
+      border-width: 1px;
+      border-style: solid;
+      color: #939695;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #323636);
+      text-shadow: none;
+      icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+    .message-dialog.csd .dialog-action-area .button:backdrop {
+      border-width: 1px;
+      border-style: solid;
+      color: #c9cbc9;
+      border-color: #1e2222;
+      background-image: linear-gradient(to bottom, #393f3f);
+      text-shadow: none;
+      icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+    .message-dialog.csd .dialog-action-area .button:backdrop:insensitive {
+      border-width: 1px;
+      border-style: solid;
+      color: #454c4c;
+      border-color: #1e2222;
+      background-image: linear-gradient(to bottom, #393f3f);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+  .message-dialog.csd .dialog-action-area .button, .message-dialog.csd .dialog-action-area .button:hover, .message-dialog.csd .dialog-action-area .button:active, .message-dialog.csd .dialog-action-area .button:insensitive, .message-dialog.csd .dialog-action-area .button:backdrop, .message-dialog.csd .dialog-action-area .button:backdrop:insensitive {
+    border-right-style: none;
+    border-bottom-style: none; }
+  .message-dialog.csd .dialog-action-area .button:last-child {
+    border-bottom-right-radius: 7px; }
+  .message-dialog.csd .dialog-action-area .button:first-child {
+    border-left-style: none;
+    border-bottom-left-radius: 7px; }
 
 GtkFileChooserDialog .dialog-action-box {
   border-top: 1px solid #1c1f1f; }
@@ -2677,6 +2682,8 @@ GtkColorChooserWidget #add-color-button {
   .window-frame.csd.tooltip {
     border-radius: 5px;
     box-shadow: none; }
+  .window-frame.csd.message-dialog {
+    border-radius: 7px; }
 
 .button.titlebutton {
   padding: 8px;

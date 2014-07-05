@@ -1822,48 +1822,55 @@ GtkCalendar {
  * Dialogs *
  ***********/
 
-.message-dialog {
-  // no spacing in message dialogs and the likes
+.message-dialog { // Message Dialog styling
   -GtkDialog-button-spacing: 0;
-}
-
-GtkMessageDialog .titlebar {
-  border-style: none;
-  box-shadow: inset 0 1px $borders_edge;
-}
-
-.dialog-action-area.linked {
-  & .button {
-    padding: 6px;
-    border-radius: 0;
-    @include button(normal, $noedge: true);
-    @extend %middle_button;
-    &:hover {
-      @include button(hover, $noedge: true);
-      @extend %middle_button;
-    }
-    &:active {
-      @include button(active, $noedge: true);
-      @extend %middle_button;
-    }
-    &:insensitive {
-      @include button(insensitive, $noedge: true);
-      @extend %middle_button;
-    }
-    &:backdrop {
-      @include button(backdrop, $noedge: true);
-      @extend %middle_button;
-    }
-    &:backdrop:insensitive {
-      @include button(backdrop-insensitive, $noedge: true);
-      @extend %middle_button;
-    }
-    &:first-child{ @extend %first_button; }
+  .titlebar {
+    border-style: none;
+    box-shadow: inset 0 1px $borders_edge;
   }
-  %middle_button {
-    border-style: solid none none solid;
+  &.csd { // rounded bottom border styling for csd version
+    &.background {
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+    }
+    .dialog-action-area .button {
+      padding: 8px;
+      border-radius: 0;
+      @include button(normal, $noedge: true);
+      @extend %middle_button;
+      &:hover {
+        @include button(hover, $noedge: true);
+        @extend %middle_button;
+      }
+      &:active {
+        @include button(active, $noedge: true);
+        @extend %middle_button;
+      }
+      &:insensitive {
+        @include button(insensitive, $noedge: true);
+        @extend %middle_button;
+      }
+      &:backdrop {
+        @include button(backdrop, $noedge: true);
+        @extend %middle_button;
+      }
+      &:backdrop:insensitive {
+        @include button(backdrop-insensitive, $noedge: true);
+        @extend %middle_button;
+      }
+      &:first-child{ @extend %first_button; }
+      &:last-child { @extend %last_button; }
+    }
+    %middle_button {
+      border-right-style: none;
+      border-bottom-style: none;
+    }
+    %last_button { border-bottom-right-radius: 7px; }
+    %first_button {
+      border-left-style: none;
+      border-bottom-left-radius: 7px;
+    }
   }
-  %first_button { border-style: solid none none none; }
 }
 
 GtkFileChooserDialog .dialog-action-box {
@@ -2080,6 +2087,9 @@ GtkColorChooserWidget #add-color-button {
     &.tooltip {
       border-radius: 5px;
       box-shadow: none;
+    }
+    &.message-dialog {
+      border-radius: 7px;
     }
   }
 }
