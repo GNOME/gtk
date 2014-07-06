@@ -246,8 +246,6 @@ static void update_slider_position   (GtkRange	       *range,
 				      gint              mouse_x,
 				      gint              mouse_y);
 static void stop_scrolling           (GtkRange         *range);
-static gboolean modify_allocation_for_window_grip (GtkWidget     *widget,
-                                                   GtkAllocation *allocation);
 
 /* Range methods */
 
