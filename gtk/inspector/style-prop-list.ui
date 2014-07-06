@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <object class="GtkListStore" id="model">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gint"/>
+    </columns>
+  </object>
+  <template class="GtkInspectorStylePropList" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="expand">True</property>
+        <property name="hscrollbar-policy">automatic</property>
+        <property name="vscrollbar-policy">always</property>
+        <property name="shadow-type">in</property>
+        <property name="width-request">250</property>
+        <child>
+          <object class="GtkTreeView" id="tree">
+            <property name="visible">True</property>
+            <property name="model">model</property>
+            <property name="activate-on-single-click">True</property>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Property</property>
+                <property name="resizable">True</property>
+                <property name="sort-column-id">0</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Value</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                    <property name="editable">False</property>
+                    <property name="width-chars">20</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Location</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                    <property name="editable">False</property>
+                    <property name="width-chars">20</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">2</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

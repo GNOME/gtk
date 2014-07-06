@@ -183,6 +183,20 @@
                       </object>
                     </child> 
                     <child>
+                      <object class="GtkInspectorStylePropList" id="style_prop_list">
+                      </object>
+                      <packing>
+                        <property name="tab_expand">True</property>
+                        <property name="tab_fill">True</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Style Properties</property>
+                      </object>
+                    </child> 
+                    <child>
                       <object class="GtkInspectorCssEditor" id="widget_css_editor">
                         <property name="global">False</property>
                       </object>

@@ -38,6 +38,7 @@
 #include "resources.h"
 #include "signals-list.h"
 #include "size-groups.h"
+#include "style-prop-list.h"
 #include "visual.h"
 #include "widget-tree.h"
 #include "window.h"
@@ -64,6 +65,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_PYTHON_SHELL);
   g_type_ensure (GTK_TYPE_INSPECTOR_RESOURCE_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);
+  g_type_ensure (GTK_TYPE_INSPECTOR_STYLE_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIZE_GROUPS);
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_WIDGET_TREE);
