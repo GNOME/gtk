@@ -1,5 +1,4 @@
-/* widget-factory: a collection of widgets in a single page, for easy
- *                 theming
+/* widget-factory: a collection of widgets, for easy theme testing
  *
  * Copyright (C) 2011 Canonical Ltd
  *
@@ -17,7 +16,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  *
  * Authored by Andrea Cimitan <andrea.cimitan@canonical.com>
- *
  */
 
 #include "config.h"
@@ -317,6 +315,9 @@ page_changed_cb (GtkWidget *stack, GParamSpec *pspec, gpointer data)
   const gchar *name;
   GtkWidget *page;
 
+  if (gtk_widget_in_destruction (stack))
+    return;
+
   name = gtk_stack_get_visible_child_name (GTK_STACK (stack));
   if (g_str_equal (name, "page3"))
     {
@@ -421,14 +422,12 @@ main (int argc, char *argv[])
   static GActionEntry app_entries[] = {
     { "about", activate_about, NULL, NULL, NULL },
     { "quit", activate_quit, NULL, NULL, NULL },
-
     { "main", NULL, "s", "'steak'", NULL },
     { "wine", NULL, NULL, "false", NULL },
     { "beer", NULL, NULL, "false", NULL },
     { "water", NULL, NULL, "true", NULL },
     { "dessert", NULL, "s", "'bars'", NULL },
     { "pay", NULL, "s", NULL, NULL }
-
   };
   gint status;
 
