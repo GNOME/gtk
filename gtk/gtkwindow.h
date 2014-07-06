@@ -80,7 +80,8 @@ struct _GtkWindowClass
   void     (* activate_focus)   (GtkWindow *window);
   void     (* activate_default) (GtkWindow *window);
   void	   (* keys_changed)     (GtkWindow *window);
-  void	   (* toggle_debugging) (GtkWindow *window);
+  void	   (* enable_debugging) (GtkWindow *window,
+                                 gboolean   toggle);
 
   /*< private >*/
 
