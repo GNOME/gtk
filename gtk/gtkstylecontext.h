@@ -857,6 +857,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_FLAT "flat"
 
 /**
+ * GTK_STYLE_CLASS_READ_ONLY:
+ *
+ * A CSS class used to indicate a read-only state.
+ */
+#define GTK_STYLE_CLASS_READ_ONLY "read-only"
+
+/**
  * GTK_STYLE_REGION_ROW:
  *
  * A widget region name to define a treeview row.
@@ -1022,13 +1029,6 @@ void           gtk_style_context_set_frame_clock (GtkStyleContext *context,
                                                   GdkFrameClock   *frame_clock);
 GDK_AVAILABLE_IN_3_8
 GdkFrameClock *gtk_style_context_get_frame_clock (GtkStyleContext *context);
-
-/**
- * GTK_STYLE_CLASS_READ_ONLY:
- *
- * A CSS class used to indicate a read-only state.
- */
-#define GTK_STYLE_CLASS_READ_ONLY "read-only"
 
 GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_set_state)
 void             gtk_style_context_set_direction (GtkStyleContext  *context,
