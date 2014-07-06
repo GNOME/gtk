@@ -1244,13 +1244,22 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
     }
 }
 
+/* This is exported privately for use in GtkInspector.
+ * It is the callers responsibility to reparse the current theme.
+ */
+void
+gtk_css_provider_set_keep_css_sections (void)
+{
+  gtk_keep_css_sections = TRUE;
+}
+
 static void
 gtk_css_provider_class_init (GtkCssProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   if (g_getenv ("GTK_CSS_DEBUG"))
-    gtk_keep_css_sections = TRUE;
+    gtk_css_provider_set_keep_css_sections ();
 
   /**
    * GtkCssProvider::parsing-error:
