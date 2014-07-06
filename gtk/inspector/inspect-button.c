@@ -201,6 +201,21 @@ start_flash (GtkInspectorWindow *iw,
 }
 
 static void
+select_widget (GtkInspectorWindow *iw,
+               GtkWidget          *widget)
+{
+  iw->selected_widget = widget;
+
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (iw->top_notebook), 0);
+
+  gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
+                                  gtk_widget_get_toplevel (widget));
+
+  gtk_inspector_widget_tree_select_object (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
+                                           G_OBJECT (widget));
+}
+
+static void
 on_inspect_widget (GtkWidget          *button,
                    GdkEvent           *event,
                    GtkInspectorWindow *iw)
@@ -213,18 +228,8 @@ on_inspect_widget (GtkWidget          *button,
 
   widget = find_widget_at_pointer (gdk_event_get_device (event));
 
-  if (widget == NULL)
-    return;
-
-  iw->selected_widget = widget;
-
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (iw->top_notebook), 0);
-
-  gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
-                                  gtk_widget_get_toplevel (widget));
-
-  gtk_inspector_widget_tree_select_object (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
-                                           G_OBJECT (widget));
+  if (widget)
+    select_widget (iw, widget);
 }
 
 static void
@@ -399,6 +404,24 @@ gtk_inspector_stop_highlight (GtkWidget *widget)
 {
   g_signal_handlers_disconnect_by_func (widget, draw_flash, NULL);
   gtk_widget_queue_draw (widget);
+}
+
+void
+gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow *iw)
+{
+  GdkDisplay *display;
+  GdkDeviceManager *dm;
+  GdkDevice *device;
+  GtkWidget *widget;
+
+  display = gtk_widget_get_display (GTK_WIDGET (iw));
+  dm = gdk_display_get_device_manager (display);
+  device = gdk_device_manager_get_client_pointer (dm);
+
+  widget = find_widget_at_pointer (device);
+
+  if (widget)
+    select_widget (iw, widget);
 }
 
 /* vim: set et sw=2 ts=2: */
