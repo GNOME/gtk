@@ -71,6 +71,8 @@
  * associated with #GtkApplicationWindow and to the “activate” and
  * 'open' #GApplication methods.
  *
+ * ## Automatic resources ## {#automatic-resources}
+ *
  * #GtkApplication will automatically load menus from the #GtkBuilder
  * file located at "gtk/menus.ui", relative to the application's
  * resource base path (see g_application_set_resource_base_path()).  The
@@ -1705,6 +1707,20 @@ gtk_application_handle_window_map (GtkApplication *application,
   gtk_application_impl_handle_window_map (application->priv->impl, window);
 }
 
+/**
+ * gtk_application_get_menu_by_id:
+ * @application: a #GtkApplication
+ * @id: the id of the menu to look up
+ *
+ * Gets a menu from automatically loaded resources.
+ * See [Automatic resources][automatic-resources]
+ * for more information.
+ *
+ * Returns: (transfer full): Gets the menu with the
+ *     given id from the automatically loaded resources
+ *
+ * Since: 3.14
+ */
 GMenu *
 gtk_application_get_menu_by_id (GtkApplication *application,
                                 const gchar    *id)

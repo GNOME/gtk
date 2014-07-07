@@ -7398,6 +7398,7 @@ gtk_application_get_app_menu
 gtk_application_set_app_menu
 gtk_application_get_menubar
 gtk_application_set_menubar
+gtk_application_get_menu_by_id
 
 gtk_application_add_accelerator
 gtk_application_remove_accelerator
