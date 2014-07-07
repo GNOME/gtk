@@ -766,21 +766,19 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
                  GtkCssParser             *parser)
 {
   GtkCssValue *step_values[7];
-  GPtrArray *arrays[6];
+  GPtrArray *arrays[7];
   guint i;
 
-  for (i = 0; i < 6; i++)
+  for (i = 0; i < 7; i++)
     {
       arrays[i] = g_ptr_array_new ();
       step_values[i] = NULL;
     }
   
-  step_values[6] = NULL;
-
   do {
     if (!parse_one_animation (shorthand, step_values, parser))
       {
-        for (i = 0; i < 6; i++)
+        for (i = 0; i < 7; i++)
           {
             g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
             g_ptr_array_unref (arrays[i]);
@@ -788,7 +786,7 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
         return FALSE;
       }
 
-      for (i = 0; i < 6; i++)
+      for (i = 0; i < 7; i++)
         {
           if (step_values[i] == NULL)
             {
@@ -802,13 +800,11 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
         }
   } while (_gtk_css_parser_try (parser, ",", TRUE));
 
-  for (i = 0; i < 6; i++)
+  for (i = 0; i < 7; i++)
     {
       values[i] = _gtk_css_array_value_new_from_array ((GtkCssValue **) arrays[i]->pdata, arrays[i]->len);
       g_ptr_array_unref (arrays[i]);
     }
-
-  values[6] = step_values[6];
 
   return TRUE;
 }
