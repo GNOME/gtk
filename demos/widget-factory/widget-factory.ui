@@ -1359,6 +1359,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <child>
                                   <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                                     <property name="title" translatable="yes">Icon</property>
+                                    <property name="reorderable">True</property>
                                     <child>
                                       <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1">
                                         <property name="follow_state">true</property>
@@ -1373,6 +1374,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                                     <property name="title" translatable="yes">Name</property>
                                     <property name="resizable">True</property>
+                                    <property name="reorderable">True</property>
                                     <property name="sort-indicator">True</property>
                                     <property name="sort-column-id">2</property>
                                     <child>
@@ -1389,6 +1391,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                   <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                                     <property name="title" translatable="yes">Nick</property>
                                     <property name="resizable">True</property>
+                                    <property name="reorderable">True</property>
                                     <property name="sort-indicator">True</property>
                                     <property name="sort-column-id">3</property>
                                     <child>
