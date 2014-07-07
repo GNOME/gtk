@@ -20,8 +20,8 @@ $success_color: if($variant =='light', #73d216, darken(#73d216,10%));
 $destructive_color: if($variant =='light', #ef2929, darken(#ef2929,10%));
 
 $osd_fg_color: #fff;
-$osd_bg_color: transparentize(#000,0.2);
-$osd_borders_color: transparentize(#fff,0.8);
+$osd_bg_color: transparentize(#000,0.4);
+$osd_borders_color: transparentize(#666,0.2);
 
 //insensitive state derived colors
 $insensitive_fg_color: mix($fg_color, $bg_color, 50%);

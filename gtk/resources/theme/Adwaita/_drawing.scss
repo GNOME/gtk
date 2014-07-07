@@ -117,15 +117,16 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
 // normal, hover, active, insensitive, insensitive-active,
 // backdrop, backdrop-active, backdrop-insensitive, backdrop-insensitive-active
 //
-  border-width: 1px;
   border-style: solid;
 
   $_top_hilight: if(lightness($c)> 70%, white, transparentize(white,0.9)); //not just dark/light but colored buttons
 
   @if $t==normal {
+  
   //
   // normal button
   //
+    border-width: 1px;
     color: $tc;
     background-image: linear-gradient(to bottom,
                                   lighten($c,5%),
@@ -280,10 +281,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   //
   // normal osd button
   //
-    background-image: linear-gradient(to bottom,
-                                  transparentize(#fff,0.9),
-                                  transparentize(#fff,0.95),
-                                  transparentize(#000,0.99));
+    background-image: linear-gradient(to bottom, $osd_bg_color);
     border-color: $osd_borders_color;
     box-shadow: none;
   }
@@ -291,10 +289,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   //
   // active osd button
   //
-    background-image: linear-gradient(to bottom,
-                                  transparentize(#fff,0.85),
-                                  transparentize(#fff,0.9),
-                                  transparentize(#000,0.99));
+    background-image: linear-gradient(to bottom, lighten($osd_bg_color,10%));
     border-color: $osd_borders_color;
     box-shadow: none;
   }
@@ -302,10 +297,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   //
   // active osd button
   //
-    background-image: linear-gradient(to bottom,
-                                  transparentize(#000,0.95),
-                                  transparentize(#fff,0.95),
-                                  transparentize(#fff,0.9));
+    background-image: linear-gradient(to bottom, lighten($osd_bg_color,20%));
     border-color: $osd_borders_color;
     box-shadow: none;
   }
@@ -313,8 +305,6 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   //
   // insensitive osd button
   //
-    background-image: linear-gradient(to bottom,
-                      $osd_bg_color);
     border-color: $osd_borders_color;
     color: $insensitive_fg_color;
   }
