@@ -50,6 +50,9 @@ testdata = \
 	alignment-props.css \
 	alignment-props.ref.ui \
 	alignment-props.ui \
+	animation-direction.css \
+	animation-direction.ref.ui \
+	animation-direction.ui \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
