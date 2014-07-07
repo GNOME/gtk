@@ -132,7 +132,8 @@ GtkLabel {
 }
 
 .dim-label {
-  color: gtkalpha(currentColor, 0.55);
+  opacity: 0.55;
+  text-shadow: none;
 }
 
 /*********************

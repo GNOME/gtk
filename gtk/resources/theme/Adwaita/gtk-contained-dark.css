@@ -109,7 +109,8 @@
   background-color: rgba(33, 93, 156, 0.2); }
 
 .dim-label {
-  color: alpha(currentColor,0.55); }
+  opacity: 0.55;
+  text-shadow: none; }
 
 /*********************
  * Spinner Animation *
