@@ -49,7 +49,8 @@ examples/application9/app-menu.ui
 examples/application9/gears-menu.ui
 examples/application9/prefs.ui
 examples/application9/window.ui
-examples/bloatpad.c
+examples/bp/bloatpad.c
+examples/bp/menus.ui
 examples/plugman.c
 gtk/inspector/actions.ui
 gtk/inspector/actions.ui.h
@@ -73,6 +74,8 @@ gtk/inspector/resource-list.ui
 gtk/inspector/resource-list.ui.h
 gtk/inspector/signals-list.ui
 gtk/inspector/signals-list.ui.h
+gtk/inspector/style-prop-list.ui
+gtk/inspector/style-prop-list.ui.h
 gtk/inspector/visual.ui
 gtk/inspector/visual.ui.h
 gtk/inspector/widget-tree.ui
