@@ -2318,7 +2318,8 @@ GtkScrolledWindow GtkViewport.frame {
     background-color: #fcfcfc;
     border-color: #a8a8a8; }
 
-.list-row {
+.list-row,
+.grid-child {
   padding: 2px; }
 
 .list-row:selected {

@@ -1782,7 +1782,8 @@ GtkScrolledWindow {
   }
 }
 
-.list-row {
+.list-row,
+.grid-child {
   padding: 2px;
 }
 
