@@ -295,7 +295,7 @@ gtk_clipboard_wayland_request_contents (GtkClipboard            *gtkclipboard,
 
       n_atoms = gdk_wayland_device_get_selection_type_atoms (device, &atoms);
       selection_data.length = n_atoms;
-      selection_data.data = atoms;
+      selection_data.data = (guchar *) atoms;
 
       callback (gtkclipboard, &selection_data, user_data);
       return;
