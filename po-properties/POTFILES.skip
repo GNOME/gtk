@@ -50,7 +50,7 @@ examples/application9/gears-menu.ui
 examples/application9/prefs.ui
 examples/application9/window.ui
 examples/bp/bloatpad.c
-examples/bp/menus.ui
+examples/bp/gtk/menus.ui
 examples/plugman.c
 gtk/inspector/actions.ui
 gtk/inspector/actions.ui.h
