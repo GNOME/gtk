@@ -108,6 +108,9 @@
   border: 1px solid #215d9c;
   background-color: rgba(33, 93, 156, 0.2); }
 
+.dim-label {
+  color: alpha(currentColor,0.55); }
+
 /*********************
  * Spinner Animation *
  *********************/

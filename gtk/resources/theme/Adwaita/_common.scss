@@ -131,6 +131,10 @@ GtkLabel {
   }
 }
 
+.dim-label {
+  color: gtkalpha(currentColor, 0.55);
+}
+
 /*********************
  * Spinner Animation *
  *********************/
