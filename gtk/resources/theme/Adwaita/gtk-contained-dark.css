@@ -2391,10 +2391,10 @@ GtkCalendar {
     border-style: none;
     box-shadow: inset 0 1px rgba(238, 238, 236, 0.1); }
   .message-dialog.csd.background {
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px; }
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px; }
   .message-dialog.csd .dialog-action-area .button {
-    padding: 8px;
+    padding: 12px;
     border-radius: 0;
     border-style: solid;
     border-width: 1px;
@@ -2763,7 +2763,8 @@ GtkColorChooserWidget #add-color-button {
     border-radius: 5px;
     box-shadow: none; }
   .window-frame.csd.message-dialog {
-    border-radius: 7px; }
+    border-radius: 7px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(28, 31, 31, 0.8); }
 
 .button.titlebutton {
   padding: 8px;

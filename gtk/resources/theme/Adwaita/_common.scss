@@ -1863,11 +1863,12 @@ GtkCalendar {
   }
   &.csd { // rounded bottom border styling for csd version
     &.background {
-      border-bottom-left-radius: 7px;
-      border-bottom-right-radius: 7px;
+      // bigger radius for better antialiasing
+      border-bottom-left-radius: 9px;
+      border-bottom-right-radius: 9px;
     }
     .dialog-action-area .button {
-      padding: 8px;
+      padding: 12px;
       border-radius: 0;
       @include button(normal, $noedge: true);
       @extend %middle_button;
@@ -2150,6 +2151,8 @@ GtkColorChooserWidget #add-color-button {
     }
     &.message-dialog {
       border-radius: 7px;
+      box-shadow: 0 1px 2px transparentize(black, 0.8),
+                  0 0 0 1px transparentize($_wm_border,0.1);
     }
   }
 }
