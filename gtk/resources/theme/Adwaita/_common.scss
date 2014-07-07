@@ -701,6 +701,7 @@ GtkComboBox {
   .subtitle {
     font-size: 80%;
     padding: 0 12px;
+    @extend .dim-label;
   }
   .header-bar-separator,
   & > GtkBox > .separator.vertical {
