@@ -1855,6 +1855,10 @@ GtkCalendar {
  * Dialogs *
  ***********/
 
+.message-dialog .dialog-action-area .button {
+  padding: 8px;
+}
+
 .message-dialog { // Message Dialog styling
   -GtkDialog-button-spacing: 0;
   .titlebar {
