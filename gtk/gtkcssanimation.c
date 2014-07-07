@@ -87,15 +87,15 @@ gtk_css_animation_get_progress_from_iteration (GtkCssAnimation *animation,
     case GTK_CSS_DIRECTION_ALTERNATE:
       d = floor (iteration);
       if (fmod (d, 2))
-        return iteration - d;
-      else
         return 1 + d - iteration;
+      else
+        return iteration - d;
     case GTK_CSS_DIRECTION_ALTERNATE_REVERSE:
       d = floor (iteration);
       if (fmod (d, 2))
-        return 1 + d - iteration;
-      else
         return iteration - d;
+      else
+        return 1 + d - iteration;
     default:
       g_return_val_if_reached (0);
     }
