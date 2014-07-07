@@ -444,9 +444,9 @@
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-  .button.image-button {
+  .header-bar .button.image-button, .action-bar .button.image-button {
     padding: 8px; }
-  .button.text-button {
+  .header-bar .button.text-button, .action-bar .button.text-button {
     padding: 6px 8px 5px; }
   .inline-toolbar .button, .inline-toolbar .button:backdrop {
     border-radius: 2px;
@@ -745,12 +745,14 @@ GtkColorButton.button {
  * ComboBoxes *
  **************/
 GtkComboBox {
-  padding: 0;
   -GtkComboBox-arrow-scaling: 0.5;
   -GtkComboBox-shadow-type: none;
   box-shadow: 0 1px white;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
+  GtkComboBox > .button {
+    padding-top: 2px;
+    padding-bottom: 2px; }
   GtkComboBox:insensitive {
     color: #8d9091;
     text-shadow: none;

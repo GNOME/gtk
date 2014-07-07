@@ -319,8 +319,10 @@ GtkLabel {
   }
 
   // buttons in header bars and action bars
-  &.image-button { padding: 8px; }
-  &.text-button { padding: 6px 8px 5px; } // due to font metrics
+  .header-bar &.image-button,
+  .action-bar &.image-button { padding: 8px; }
+  .header-bar &.text-button,
+  .action-bar &.text-button { padding: 6px 8px 5px; } // due to font metrics
 
   //inline-toolbar buttons
   .inline-toolbar &, .inline-toolbar &:backdrop {
@@ -569,10 +571,9 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
  * ComboBoxes *
  **************/
 GtkComboBox {
-
-  //FIXME padding issue
-  padding: 0;
-
+  > .button { padding-top: 2px; padding-bottom: 2px; } // Otherwise combos
+                                                       // are bigger then
+                                                       // buttons
   -GtkComboBox-arrow-scaling: 0.5;
   -GtkComboBox-shadow-type: none;
 
