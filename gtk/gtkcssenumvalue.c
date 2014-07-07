@@ -524,11 +524,14 @@ _gtk_css_direction_value_new (GtkCssDirection direction)
 GtkCssValue *
 _gtk_css_direction_value_try_parse (GtkCssParser *parser)
 {
-  guint i;
+  int i;
 
   g_return_val_if_fail (parser != NULL, NULL);
 
-  for (i = 0; i < G_N_ELEMENTS (direction_values); i++)
+  /* need to parse backwards here, otherwise "alternate" will also match "alternate-reverse".
+   * Our parser rocks!
+   */
+  for (i = G_N_ELEMENTS (direction_values) - 1; i >= 0; i--)
     {
       if (_gtk_css_parser_try (parser, direction_values[i].name, TRUE))
         return _gtk_css_value_ref (&direction_values[i]);
