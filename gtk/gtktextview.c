@@ -2209,10 +2209,7 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   retval = (current_y_scroll != gtk_adjustment_get_value (text_view->priv->vadjustment))
            || (current_x_scroll != gtk_adjustment_get_value (text_view->priv->hadjustment));
 
-  if (retval)
-    DV(g_print (">Actually scrolled ("G_STRLOC")\n"));
-  else
-    DV(g_print (">Didn't end up scrolling ("G_STRLOC")\n"));
+  DV(g_print (">%s ("G_STRLOC")\n", retval ? "Actually scrolled" : "Didn't end up scrolling"));
   
   return retval;
 }
