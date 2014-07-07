@@ -297,7 +297,6 @@ typedef enum
   GTK_WINDOW_REGION_EDGE_SE,
   GTK_WINDOW_REGION_CONTENT,
   GTK_WINDOW_REGION_TITLE,
-  GTK_WINDOW_REGION_EDGE
 } GtkWindowRegion;
 
 typedef struct
@@ -1408,8 +1407,6 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
     case GTK_WINDOW_REGION_TITLE:
       if (n_press == 2)
         _gtk_window_toggle_maximized (window);
-      /* fall thru */
-    case GTK_WINDOW_REGION_EDGE:
       if (n_press == 1)
         priv->drag_possible = TRUE;
       break;
