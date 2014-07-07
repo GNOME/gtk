@@ -11,8 +11,9 @@ $selected_bg_color: if($variant =='light', #4a90d9, darken(#4a90d9,20%));
 $selected_borders_color: if($variant == 'light', darken($selected_bg_color, 30%), darken($selected_bg_color,20%));
                          // FIXME dark variant color
 $borders_color: if($variant =='light', darken($bg_color,30%), darken($bg_color,12%));
-$borders_edge: if($variant =='light', white, transparentize($fg_color,.9));
+$borders_edge: if($variant =='light', white, transparentize($fg_color, 0.9));
 $link_color: darken($selected_bg_color,10%);
+$top_hilight: if($variant =='light', white, transparentize($fg_color, 0.9));
 
 $warning_color: #f57900;
 $error_color: #cc0000;
@@ -60,7 +61,7 @@ $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
 
 //WM
 
-$_wm_highlight: if($variant=='light', $borders_edge, // Sass gets mad if this is
+$_wm_highlight: if($variant=='light', $top_hilight,  // Sass gets mad if this is
                   transparentize(black,1));          // done directly in the
                                                      // color definition
 
