@@ -34,13 +34,23 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   background-image: linear-gradient(to bottom,
                                     darken($base_color,3%),
                                     $base_color 90%);
+  // we need to match the same shadow types (inset/outset) in various states
+  // hence transparent shadows istead of resetting them when not needed
+  $_blank_inner_shadows: inset 0 2px 2px -2px transparentize(
+                                                mix(black, $base_color, 50%),1),
+                         inset 0 0 2px 1px transparentize(
+                                             mix($fc,$base_color),1);
+  $_blank_edge: if($noedge, none, 0 1px transparentize(white,1));
+
   $_entry_edge: $widget_edge;
   @if $noedge { $_entry_edge: none; }
   
   @if $t==normal {
     border-color: $borders_color;
     @include _shadows(inset 0 2px 2px -2px mix(black, $base_color, 50%),
+                      inset 0 0 2px 1px transparentize(mix($fc,$base_color),1),
                       $_entry_edge);
+    // the second transparent shadow is needed for the transition to work
   }
   @if $t==focus {
     @if $variant == 'light' {
@@ -62,17 +72,18 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     color: $insensitive_fg_color;
     border-color: $borders_color;
     background-image: linear-gradient(to bottom, $insensitive_bg_color);
-    @include _shadows($_entry_edge);
+    @include _shadows($_blank_inner_shadows, $_entry_edge);
+
   }
   @if $t==backdrop {
     color: $backdrop_fg_color;
     background-image: linear-gradient(to bottom, $backdrop_base_color);
-    box-shadow: 0 1px transparentize(white,1);
+    @include _shadows($_blank_inner_shadows, $_blank_edge);
   }
   @if $t==backdrop-insensitive {
     color: $backdrop_insensitive_color;
     background-image: linear-gradient(to bottom, $backdrop_bg_color);
-    box-shadow: 0 1px transparentize(white,1);
+    @include _shadows($_blank_inner_shadows, $_blank_edge);
   }
 }
 
