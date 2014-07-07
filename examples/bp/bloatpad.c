@@ -541,7 +541,7 @@ bloat_pad_startup (GApplication *application)
 
   menu = gtk_application_get_menu_by_id (GTK_APPLICATION (application), "icon-menu");
 
-  file = g_file_new_for_path (SRCDIR "/../gtk/stock-icons/16/help-about.png");
+  file = g_file_new_for_path (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-select-color.png");
   icon = g_file_icon_new (file);
   item = g_menu_item_new ("File Icon", NULL);
   g_menu_item_set_icon (item, icon);
@@ -557,7 +557,7 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (item);
   g_object_unref (icon);
 
-  if (g_file_get_contents (SRCDIR "/../gtk/stock-icons/16/list-add.png", &data, &size, NULL))
+  if (g_file_get_contents (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-select-font.png", &data, &size, NULL))
     {
       GBytes *bytes = g_bytes_new_take (data, size);
       icon = g_bytes_icon_new (bytes);
@@ -569,19 +569,19 @@ bloat_pad_startup (GApplication *application)
       g_bytes_unref (bytes);
     }
 
-  icon = G_ICON (gdk_pixbuf_new_from_file (SRCDIR "/../gtk/stock-icons/16/gtk-preferences.png", NULL));
+  icon = G_ICON (gdk_pixbuf_new_from_file (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-preferences.png", NULL));
   item = g_menu_item_new ("Pixbuf", NULL);
   g_menu_item_set_icon (item, icon);
   g_menu_append_item (menu, item);
   g_object_unref (item);
   g_object_unref (icon);
 
-  file = g_file_new_for_path (SRCDIR "/../gtk/stock-icons/16/edit-paste.png");
+  file = g_file_new_for_path (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-page-setup.png");
   icon = g_file_icon_new (file);
   emblem = g_emblem_new (icon);
   g_object_unref (icon);
   g_object_unref (file);
-  file = g_file_new_for_path (SRCDIR "/../gtk/stock-icons/16/edit-copy.png");
+  file = g_file_new_for_path (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-orientation-reverse-portrait.png");
   icon2 = g_file_icon_new (file);
   icon = g_emblemed_icon_new (icon2, emblem);
   item = g_menu_item_new ("Emblemed Icon", NULL);
