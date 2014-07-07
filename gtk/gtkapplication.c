@@ -87,6 +87,12 @@
  * It is also possible to provide the menus manually using
  * gtk_application_set_app_menu() and gtk_application_set_menubar().
  *
+ * #GtkApplication will also automatically setup an icon search path for
+ * the default icon theme by appending "icons" to the resource base
+ * path.  This allows your application to easily store its icons as
+ * resources.  See gtk_icon_theme_add_resource_path() for more
+ * information.
+ *
  * ## A simple application ## {#gtkapplication}
  *
  * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/bp/bloatpad.c)
