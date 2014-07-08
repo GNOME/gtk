@@ -428,6 +428,17 @@ gtk_adjustment_get_value (GtkAdjustment *adjustment)
   return adjustment->priv->value;
 }
 
+gdouble
+gtk_adjustment_get_target_value (GtkAdjustment *adjustment)
+{
+  g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
+
+  if (adjustment->priv->tick_id)
+    return adjustment->priv->target;
+  else
+    return adjustment->priv->value;
+}
+
 static void
 adjustment_set_value (GtkAdjustment *adjustment,
                       gdouble        value)
