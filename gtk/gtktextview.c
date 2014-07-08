@@ -2163,8 +2163,8 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   
   if (scroll_inc != 0)
     {
-      gtk_adjustment_set_value (text_view->priv->vadjustment,
-                                current_y_scroll + scroll_inc);
+      gtk_adjustment_animate_to_value (text_view->priv->vadjustment,
+				       current_y_scroll + scroll_inc);
 
       DV (g_print (" vert increment %d\n", scroll_inc));
     }
@@ -2200,8 +2200,8 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   
   if (scroll_inc != 0)
     {
-      gtk_adjustment_set_value (text_view->priv->hadjustment,
-                                current_x_scroll + scroll_inc);
+      gtk_adjustment_animate_to_value (text_view->priv->hadjustment,
+				       current_x_scroll + scroll_inc);
 
       DV (g_print (" horiz increment %d\n", scroll_inc));
     }
