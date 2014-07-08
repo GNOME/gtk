@@ -254,6 +254,7 @@ GtkLabel {
   }
   &:backdrop, &.flat:backdrop {
     @include button(backdrop);
+    -gtk-image-effect: none;
     &:active {
       @include button(backdrop-active);
     }
