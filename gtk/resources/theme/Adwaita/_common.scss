@@ -1204,6 +1204,20 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       }
     }
   }
+  &.arrow {
+    color: $insensitive_fg_color;
+    &:hover { color: mix($fg_color, $insensitive_fg_color, 50%); }
+    &:active { color: $fg_color; }
+    &:insensitive {
+      color: transparentize($insensitive_fg_color,0.7);
+    }
+    &:backdrop {
+      color: transparentize($backdrop_fg_color,0.6);
+      &:insensitive {
+        color: $backdrop_insensitive_color;
+      }
+    }
+  }
 }
 
 //.notebook > .frame,

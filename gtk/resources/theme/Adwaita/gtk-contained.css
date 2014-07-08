@@ -1366,6 +1366,18 @@ GtkTreeView.view.progressbar {
         border-color: transparent; }
       .notebook tab .button > GtkImage {
         padding: 2px; }
+  .notebook.arrow {
+    color: #8d9091; }
+    .notebook.arrow:hover {
+      color: #5d6263; }
+    .notebook.arrow:active {
+      color: #2e3436; }
+    .notebook.arrow:insensitive {
+      color: rgba(141, 144, 145, 0.3); }
+    .notebook.arrow:backdrop {
+      color: rgba(84, 89, 90, 0.4); }
+      .notebook.arrow:backdrop:insensitive {
+        color: #c7c7c7; }
 
 /**************
  * Scrollbars *
