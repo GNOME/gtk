@@ -6183,16 +6183,14 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
     {
       gtk_text_view_get_virtual_cursor_pos (text_view, NULL, &cursor_x_pos, &cursor_y_pos);
 
-      oldval = gtk_adjustment_get_value (adjustment);
-      newval = gtk_adjustment_get_value (adjustment);
-
+      oldval = newval = gtk_adjustment_get_target_value (adjustment);
       newval += count * gtk_adjustment_get_page_increment (adjustment);
 
       gtk_adjustment_animate_to_value (adjustment, newval);
-      cursor_y_pos += gtk_adjustment_get_value (adjustment) - oldval;
+      cursor_y_pos += newval - oldval;
 
       gtk_text_layout_get_iter_at_pixel (priv->layout, &new_insert, cursor_x_pos, cursor_y_pos);
-      clamp_iter_onscreen (text_view, &new_insert);
+
       move_cursor (text_view, &new_insert, extend_selection);
 
       gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
@@ -6202,7 +6200,6 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
    * only guarantees 1 pixel onscreen.
    */
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
-  gtk_text_view_scroll_mark_onscreen (text_view, insert_mark);
 
   return !gtk_text_iter_equal (&old_insert, &new_insert);
 }
@@ -6267,16 +6264,13 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
     {
       gtk_text_view_get_virtual_cursor_pos (text_view, NULL, &cursor_x_pos, &cursor_y_pos);
 
-      oldval = gtk_adjustment_get_value (adjustment);
-      newval = gtk_adjustment_get_value (adjustment);
-
+      oldval = newval = gtk_adjustment_get_target_value (adjustment);
       newval += count * gtk_adjustment_get_page_increment (adjustment);
 
       gtk_adjustment_animate_to_value (adjustment, newval);
-      cursor_x_pos += gtk_adjustment_get_value (adjustment) - oldval;
+      cursor_x_pos += newval - oldval;
 
       gtk_text_layout_get_iter_at_pixel (priv->layout, &new_insert, cursor_x_pos, cursor_y_pos);
-      clamp_iter_onscreen (text_view, &new_insert);
       move_cursor (text_view, &new_insert, extend_selection);
 
       gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
@@ -6292,7 +6286,6 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
    * only guarantees 1 pixel onscreen.
    */
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
-  gtk_text_view_scroll_mark_onscreen (text_view, insert_mark);
 
   return !gtk_text_iter_equal (&old_insert, &new_insert);
 }
