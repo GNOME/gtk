@@ -856,8 +856,8 @@ GtkComboBox {
     color: #14375d;
     text-shadow: 0 1px rgba(0, 0, 0, 0.5);
     border-color: #0f2b48;
-    background-image: linear-gradient(to bottom, #256ab1, #2362a5);
-    box-shadow: inset 0 -1px #1b4e82, inset 0 1px rgba(55, 108, 164, 0.37); }
+    background-image: linear-gradient(to bottom, #256ab1, #215d9c);
+    box-shadow: inset 0 -1px #1a4b7e, inset 0 1px rgba(48, 103, 161, 0.46); }
     .titlebar.selection-mode:backdrop,
     .header-bar.selection-mode:backdrop {
       background-image: linear-gradient(to bottom, #215d9c);
@@ -975,18 +975,23 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #393f3f);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0);
           border-color: #0f2b48; }
-    .titlebar.selection-mode .selection-menu, .titlebar.selection-mode .selection-menu:backdrop, .titlebar.selection-mode .selection-menu:backdrop:hover,
+    .titlebar.selection-mode .selection-menu, .titlebar.selection-mode .selection-menu:backdrop,
     .header-bar.selection-mode .selection-menu,
-    .header-bar.selection-mode .selection-menu:backdrop,
-    .header-bar.selection-mode .selection-menu:backdrop:hover {
+    .header-bar.selection-mode .selection-menu:backdrop {
       border-color: rgba(33, 93, 156, 0);
       background-image: linear-gradient(to bottom, rgba(33, 93, 156, 0));
-      box-shadow: none; }
-      .titlebar.selection-mode .selection-menu:hover,
-      .header-bar.selection-mode .selection-menu:hover {
-        border-color: #2974c2;
-        background-image: linear-gradient(to bottom, #2974c2);
-        box-shadow: 0 1px rgba(0, 0, 0, 0.15); }
+      box-shadow: none;
+      padding-left: 10px;
+      padding-right: 10px; }
+      .titlebar.selection-mode .selection-menu GtkArrow, .titlebar.selection-mode .selection-menu:backdrop GtkArrow,
+      .header-bar.selection-mode .selection-menu GtkArrow,
+      .header-bar.selection-mode .selection-menu:backdrop GtkArrow {
+        -GtkArrow-arrow-scaling: 1; }
+      .titlebar.selection-mode .selection-menu .arrow,
+      .header-bar.selection-mode .selection-menu .arrow {
+        -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+        color: rgba(255, 255, 255, 0.5);
+        icon-shadow: none; }
   .tiled .titlebar, .maximized .titlebar, .tiled
   .header-bar, .maximized
   .header-bar {
