@@ -777,9 +777,16 @@ GtkComboBox {
       }
     }
     .selection-menu {
-      border-width: 0;
-      background-image: none;
+      border-color: transparentize($selected_bg_color,1);
+      background-image: linear-gradient(to bottom, transparentize($selected_bg_color,1));
       box-shadow: none;
+      &:hover {
+        $_hover_color: lighten($selected_bg_color,9%);
+        border-color: $_hover_color;
+        background-image: linear-gradient(to bottom, $_hover_color);
+        box-shadow: 0 1px transparentize(black,0.85);
+      }
+      &:backdrop, &:backdrop:hover { @extend .selection-menu };
     }
   }
   .tiled &, .maximized & {
@@ -1219,9 +1226,6 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     }
   }
 }
-
-//.notebook > .frame,
-//.notebook > .view { border: none; }
 
 /**************
  * Scrollbars *

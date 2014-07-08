@@ -965,11 +965,18 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #ededed);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0);
           border-color: #184472; }
-    .titlebar.selection-mode .selection-menu,
-    .header-bar.selection-mode .selection-menu {
-      border-width: 0;
-      background-image: none;
+    .titlebar.selection-mode .selection-menu, .titlebar.selection-mode .selection-menu:backdrop, .titlebar.selection-mode .selection-menu:backdrop:hover,
+    .header-bar.selection-mode .selection-menu,
+    .header-bar.selection-mode .selection-menu:backdrop,
+    .header-bar.selection-mode .selection-menu:backdrop:hover {
+      border-color: rgba(74, 144, 217, 0);
+      background-image: linear-gradient(to bottom, rgba(74, 144, 217, 0));
       box-shadow: none; }
+      .titlebar.selection-mode .selection-menu:hover,
+      .header-bar.selection-mode .selection-menu:hover {
+        border-color: #70a7e1;
+        background-image: linear-gradient(to bottom, #70a7e1);
+        box-shadow: 0 1px rgba(0, 0, 0, 0.15); }
   .tiled .titlebar, .maximized .titlebar, .tiled
   .header-bar, .maximized
   .header-bar {
