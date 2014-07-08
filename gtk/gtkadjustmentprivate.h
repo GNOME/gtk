@@ -29,6 +29,7 @@ void gtk_adjustment_enable_animation (GtkAdjustment *adjustment,
                                       guint          duration);
 void gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
                                       gdouble        value);
+gdouble gtk_adjustment_get_target_value (GtkAdjustment *adjustment);
 
 G_END_DECLS
 
