@@ -1007,11 +1007,18 @@ column-header .button {
   box-shadow: none; }
   column-header .button:hover {
     color: #bcbcbb;
-    box-shadow: none; }
+    box-shadow: none;
+    transition: none; }
   column-header .button:active {
-    color: #eeeeec; }
+    color: #eeeeec;
+    transition: none; }
 column-header:last-child .button, column-header:last-child.button {
   border-right-style: none; }
+
+column-header.button.dnd, column-header .button.dnd, column-header.button.dnd:active, column-header.button.dnd:selected, column-header.button.dnd:hover {
+  transition: none;
+  color: #215d9c;
+  box-shadow: inset 1px 1px 0 1px #215d9c, inset -1px 0 0 1px #215d9c, inset 1px 1px #292929, inset -1px 0 #292929; }
 
 column-header .button, column-header .button:hover, column-header .button:active {
   border-width: 0 1px 1px 0;

@@ -999,11 +999,18 @@ column-header .button {
   box-shadow: none; }
   column-header .button:hover {
     color: #626668;
-    box-shadow: none; }
+    box-shadow: none;
+    transition: none; }
   column-header .button:active {
-    color: #2e3436; }
+    color: #2e3436;
+    transition: none; }
 column-header:last-child .button, column-header:last-child.button {
   border-right-style: none; }
+
+column-header.button.dnd, column-header .button.dnd, column-header.button.dnd:active, column-header.button.dnd:selected, column-header.button.dnd:hover {
+  transition: none;
+  color: #4a90d9;
+  box-shadow: inset 1px 1px 0 1px #4a90d9, inset -1px 0 0 1px #4a90d9, inset 1px 1px white, inset -1px 0 white; }
 
 column-header .button, column-header .button:hover, column-header .button:active {
   border-width: 0 1px 1px 0;

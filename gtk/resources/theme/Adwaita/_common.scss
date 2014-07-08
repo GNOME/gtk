@@ -815,16 +815,32 @@ column-header {
       @extend %column_header_button;
       color: mix($_column_header_color,$fg_color,50%);
       box-shadow: none;
+      transition: none; //I shouldn't need this
     }
     &:active {
       @extend %column_header_button;
       color: $fg_color;
+      transition: none; //I shouldn't need this
+    }
+    &.dnd {
+      @extend column-header.button.dnd;
     }
   }
   &:last-child .button,
   &:last-child.button { //treeview-like derived widgets in Banshee and Evolution
     border-right-style: none;
   }
+}
+
+column-header.button.dnd { // for treeview-like derive widgets
+  transition: none;
+  color: $selected_bg_color;
+  box-shadow: inset 1px 1px 0 1px $selected_bg_color,
+              inset -1px 0 0 1px $selected_bg_color,
+              inset 1px 1px $base_color, inset -1px 0 $base_color;;
+  &:active { @extend column-header.button.dnd; }
+  &:selected { @extend column-header.button.dnd; }
+  &:hover { @extend column-header.button.dnd; }
 }
 
 %column_header_button {
