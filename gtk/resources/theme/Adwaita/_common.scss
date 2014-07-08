@@ -917,6 +917,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   background-color: $base_color;
   //border: 1px solid $borders_color;
   .menuitem {
+    text-shadow: none;
     padding: 4px;
     &:hover {
       color: $selected_fg_color;
@@ -932,7 +933,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     }
     //submenu indicators
     &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
-    &.arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
+    &.arrow:dir(rtl) {-gtk-icon-source:-gtk-icontheme('pan-end-symbolic-rtl'); }
   }
 }
 
@@ -2190,7 +2191,7 @@ GtkColorChooserWidget #add-color-button {
  * Misc *
  ********/
 
-.scale-popup .button { 
+.scale-popup .button { // +/- buttons on GtkVolumeButton popup
   padding: 6px;
   &:hover {
     @extend %undecorated_button;
@@ -2201,6 +2202,8 @@ GtkColorChooserWidget #add-color-button {
   &:backdrop:hover,
   &:backdrop:insensitive { @extend %undecorated_button; }
 }
+
+GtkVolumeButton.button { padding: 8px; }
 
 /**********************
  * Window Decorations *

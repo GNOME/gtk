@@ -1075,6 +1075,7 @@ GtkTreeView.view.progressbar {
   padding: 0px;
   background-color: #292929; }
   .menu .menuitem {
+    text-shadow: none;
     padding: 4px; }
     .menu .menuitem:hover {
       color: white;
@@ -2799,6 +2800,9 @@ GtkColorChooserWidget #add-color-button {
   .scale-popup .button:hover {
     background-color: rgba(238, 238, 236, 0.1);
     border-radius: 4px; }
+
+GtkVolumeButton.button {
+  padding: 8px; }
 
 /**********************
  * Window Decorations *
