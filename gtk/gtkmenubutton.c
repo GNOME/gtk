@@ -597,6 +597,8 @@ set_arrow_type (GtkImage     *image,
   switch (arrow_type)
     {
     case GTK_ARROW_NONE:
+      gtk_image_set_from_icon_name (image, "view-context-menu-symbolic", GTK_ICON_SIZE_BUTTON);
+      break;
     case GTK_ARROW_DOWN:
       gtk_image_set_from_icon_name (image, "pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
       break;
