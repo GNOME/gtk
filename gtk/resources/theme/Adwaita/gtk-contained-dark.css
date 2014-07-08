@@ -571,7 +571,7 @@
     border-radius: 3px;
     border-style: solid; }
 
-.button.flat, .button.flat:backdrop, .menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover {
+.button.flat, .button.flat:backdrop, .menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -2790,6 +2790,15 @@ GtkColorChooserWidget #add-color-button {
   GtkColorChooserWidget #add-color-button:backdrop {
     border-color: #2b3030;
     background-color: #2b3030; }
+
+/********
+ * Misc *
+ ********/
+.scale-popup .button {
+  padding: 6px; }
+  .scale-popup .button:hover {
+    background-color: rgba(238, 238, 236, 0.1);
+    border-radius: 4px; }
 
 /**********************
  * Window Decorations *
