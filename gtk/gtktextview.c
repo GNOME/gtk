@@ -8153,82 +8153,20 @@ gtk_text_view_set_vadjustment_values (GtkTextView *text_view)
     gtk_adjustment_set_value (priv->vadjustment, new_value);
  }
 
-
-/* FIXME this adjust_allocation is a big cut-and-paste from
- * GtkCList, needs to be some “official” way to do this
- * factored out.
- */
-typedef struct
-{
-  GdkWindow *window;
-  int dx;
-  int dy;
-} ScrollData;
-
-/* The window to which widget->window is relative */
-#define ALLOCATION_WINDOW(widget)		\
-   (!gtk_widget_get_has_window (widget) ?		    \
-    gtk_widget_get_window (widget) :                        \
-    gdk_window_get_parent (gtk_widget_get_window (widget)))
-
-static void
-adjust_allocation_recurse (GtkWidget *widget,
-			   gpointer   data)
-{
-  GtkAllocation allocation;
-  ScrollData *scroll_data = data;
-
-  /* Need to really size allocate instead of just poking
-   * into widget->allocation if the widget is not realized.
-   * FIXME someone figure out why this was.
-   */
-  gtk_widget_get_allocation (widget, &allocation);
-
-  if (!gtk_widget_get_realized (widget))
-    {
-      if (gtk_widget_get_visible (widget))
-	{
-	  GdkRectangle tmp_rectangle;
-
-          tmp_rectangle = allocation;
-	  tmp_rectangle.x += scroll_data->dx;
-          tmp_rectangle.y += scroll_data->dy;
-          
-	  gtk_widget_size_allocate (widget, &tmp_rectangle);
-	}
-    }
-  else
-    {
-      if (ALLOCATION_WINDOW (widget) == scroll_data->window)
-	{
-	  allocation.x += scroll_data->dx;
-          allocation.y += scroll_data->dy;
-          gtk_widget_set_allocation (widget, &allocation);
-
-	  if (GTK_IS_CONTAINER (widget))
-	    gtk_container_forall (GTK_CONTAINER (widget),
-				  adjust_allocation_recurse,
-				  data);
-	}
-    }
-}
-
 static void
 adjust_allocation (GtkWidget *widget,
-		   int        dx,
+                   int        dx,
                    int        dy)
 {
-  ScrollData scroll_data;
+  GtkAllocation allocation;
 
-  if (gtk_widget_get_realized (widget))
-    scroll_data.window = ALLOCATION_WINDOW (widget);
-  else
-    scroll_data.window = NULL;
-    
-  scroll_data.dx = dx;
-  scroll_data.dy = dy;
-  
-  adjust_allocation_recurse (widget, &scroll_data);
+  if (!gtk_widget_is_drawable (widget))
+    return;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  allocation.x += dx;
+  allocation.y += dy;
+  gtk_widget_size_allocate (widget, &allocation);
 }
 
 static void
