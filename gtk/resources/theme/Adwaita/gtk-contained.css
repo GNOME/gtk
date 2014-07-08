@@ -531,17 +531,17 @@
     background-image: linear-gradient(to bottom, #e7e7e7);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
 
-.inline-toolbar.toolbar GtkToolButton > .button.flat {
+.inline-toolbar.toolbar GtkToolButton > .button.flat, .inline-toolbar GtkToolButton > .button.flat {
   border-radius: 0;
   border-left-style: none; }
-.inline-toolbar.toolbar GtkToolButton:first-child > .button.flat {
+.inline-toolbar.toolbar GtkToolButton:first-child > .button.flat, .inline-toolbar GtkToolButton:first-child > .button.flat {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-.inline-toolbar.toolbar GtkToolButton:last-child > .button.flat {
+.inline-toolbar.toolbar GtkToolButton:last-child > .button.flat, .inline-toolbar GtkToolButton:last-child > .button.flat {
   border-radius: 0 3px 3px 0; }
-.inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > .button.flat {
+.inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > .button.flat, .inline-toolbar GtkToolButton:last-child:dir(rtl) > .button.flat {
   border-right-style: solid; }
-.inline-toolbar.toolbar GtkToolButton:only-child > .button.flat {
+.inline-toolbar.toolbar GtkToolButton:only-child > .button.flat, .inline-toolbar GtkToolButton:only-child > .button.flat {
   border-radius: 3px;
   border-style: solid; }
 
@@ -778,27 +778,29 @@ GtkComboBox {
 /************
  * Toolbars *
  ************/
-.toolbar {
+.toolbar, .inline-toolbar, .search-bar {
   padding: 6px;
   background-color: #ededed; }
-  .toolbar.osd {
+  .toolbar.osd, .osd.inline-toolbar, .osd.search-bar {
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 6px;
     padding: 12px; }
-  .toolbar.inline-toolbar {
-    border-width: 0 1px 1px;
-    padding: 3px;
-    border-radius: 0  0 4px 4px; }
-  .toolbar.search-bar {
-    border-width: 0 0 1px;
-    padding: 3px; }
 
-.toolbar.inline-toolbar, .toolbar.search-bar {
+.inline-toolbar {
+  border-width: 0 1px 1px;
+  padding: 3px;
+  border-radius: 0  0 4px 4px; }
+
+.search-bar {
+  border-width: 0 0 1px;
+  padding: 3px; }
+
+.inline-toolbar, .search-bar {
   border-style: solid;
   border-color: #a1a1a1;
   background-color: #d6d6d6;
   box-shadow: inset 0 2px 3px -1px #b6b6b6; }
-  .toolbar.inline-toolbar:backdrop, .toolbar.search-bar:backdrop {
+  .inline-toolbar:backdrop, .search-bar:backdrop {
     border-color: #a8a8a8;
     background-color: #d4d4d4;
     box-shadow: none; }
@@ -1082,7 +1084,7 @@ GtkTreeView.view.progressbar {
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
   .popover:backdrop {
     box-shadow: none; }
-  .popover > .list, .popover > .view, .popover > .toolbar {
+  .popover > .list, .popover > .view, .popover > .toolbar, .popover > .inline-toolbar, .popover > .search-bar {
     background-color: transparent; }
   .popover .separator {
     font-size: 80%;

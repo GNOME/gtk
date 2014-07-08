@@ -640,18 +640,21 @@ GtkComboBox {
     border-radius: 6px;
     padding: 12px;
   }
-  //searchbar & inline-toolbar
-  &.inline-toolbar {
-    @extend %inset-bar;
-    border-width: 0 1px 1px;
-    padding: 3px;
-    border-radius: 0  0 4px 4px;
-  }
-  &.search-bar {
-    @extend %inset-bar;
-    border-width: 0 0 1px;
-    padding: 3px;
-  }
+}
+
+//searchbar & inline-toolbar
+.inline-toolbar {
+  @extend .toolbar;
+  @extend %inset-bar;
+  border-width: 0 1px 1px;
+  padding: 3px;
+  border-radius: 0  0 4px 4px;
+}
+.search-bar {
+  @extend .toolbar;
+  @extend %inset-bar;
+  border-width: 0 0 1px;
+  padding: 3px;
 }
 
 %inset-bar {
