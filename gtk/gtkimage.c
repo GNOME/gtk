@@ -649,6 +649,8 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
  * #GtkImage will add its own reference rather than adopting yours.
  * 
  * Returns: a new #GtkImage
+ *
+ * Since: 3.10
  **/
 GtkWidget*
 gtk_image_new_from_surface (cairo_surface_t *surface)

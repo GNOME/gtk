@@ -1923,6 +1923,7 @@ gtk_image_new_from_animation
 gtk_image_new_from_icon_name
 gtk_image_new_from_gicon
 gtk_image_new_from_resource
+gtk_image_new_from_surface
 gtk_image_set_from_file
 gtk_image_set_from_icon_set
 gtk_image_set_from_pixbuf
@@ -1931,6 +1932,7 @@ gtk_image_set_from_animation
 gtk_image_set_from_icon_name
 gtk_image_set_from_gicon
 gtk_image_set_from_resource
+gtk_image_set_from_surface
 gtk_image_clear
 gtk_image_new
 gtk_image_set_pixel_size
