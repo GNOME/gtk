@@ -1166,16 +1166,16 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     GtkLabel { //tab text
       padding: 0 2px; // needed for a nicer focus ring
       font-weight: bold;
-      color: $insensitive_fg_color; /* color: inherit doesn't work here */
+      color: $insensitive_fg_color;
       &:backdrop, &.prelight-page:backdrop {
         color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
       }
     }
-    &.prelight-page GtkLabel, GtkLabel.prelight-page {
+    .prelight-page GtkLabel, GtkLabel.prelight-page {
       // prelight tab text
       color: mix($fg_color, $insensitive_fg_color, 50%);
     }
-    &.active-page GtkLabel, GtkLabel.active-page {
+    .active-page GtkLabel, GtkLabel.active-page {
       // active tab text
       color: $fg_color;
       &:backdrop { color: $backdrop_fg_color; }

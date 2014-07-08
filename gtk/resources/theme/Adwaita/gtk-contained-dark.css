@@ -1334,15 +1334,14 @@ GtkTreeView.view.progressbar {
     .notebook tab GtkLabel {
       padding: 0 2px;
       font-weight: bold;
-      color: #939695;
-      /* color: inherit doesn't work here */ }
+      color: #939695; }
       .notebook tab GtkLabel:backdrop, .notebook tab GtkLabel.prelight-page:backdrop {
         color: #878b8a; }
-    .notebook tab.prelight-page GtkLabel, .notebook tab GtkLabel.prelight-page {
+    .notebook tab .prelight-page GtkLabel, .notebook tab GtkLabel.prelight-page {
       color: #c0c2c0; }
-    .notebook tab.active-page GtkLabel, .notebook tab GtkLabel.active-page {
+    .notebook tab .active-page GtkLabel, .notebook tab GtkLabel.active-page {
       color: #eeeeec; }
-      .notebook tab.active-page GtkLabel:backdrop, .notebook tab GtkLabel.active-page:backdrop {
+      .notebook tab .active-page GtkLabel:backdrop, .notebook tab GtkLabel.active-page:backdrop {
         color: #c9cbc9; }
     .notebook tab .button {
       border: 1px solid transparent;
