@@ -5858,10 +5858,11 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
           break;
 	}
 
-      old_xpos = priv->xoffset;
-      old_ypos = priv->yoffset;
+      old_xpos = gtk_adjustment_get_value (priv->hadjustment);
+      old_ypos = gtk_adjustment_get_value (priv->vadjustment);
       gtk_text_view_move_viewport (text_view, scroll_step, count);
-      if ((old_xpos == priv->xoffset && old_ypos == priv->yoffset) &&
+      if ((old_xpos == gtk_adjustment_get_target_value (priv->hadjustment) &&
+           old_ypos == gtk_adjustment_get_target_value (priv->vadjustment)) &&
           leave_direction != -1 &&
           !gtk_widget_keynav_failed (GTK_WIDGET (text_view),
                                      leave_direction))
