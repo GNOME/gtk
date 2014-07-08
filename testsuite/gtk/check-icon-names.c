@@ -132,6 +132,7 @@ static char *icon_names[] = {
   "pan-up-symbolic",
   "user-trash-full-symbolic",
   "user-trash-symbolic",
+  "view-context-menu-symbolic",
   "window-close-symbolic",
   "window-maximize-symbolic",
   "window-minimize-symbolic",
