@@ -23,6 +23,9 @@
   </object>
   <object class="GtkPopover" id="dock">
     <signal name="map" handler="cb_popup_mapped" swapped="no"/>
+    <style>
+      <class name="scale-popup"/>
+    </style>
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
