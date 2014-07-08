@@ -65,7 +65,7 @@
                 <child>
                   <object class="GtkImage" id="gears-icon">
                     <property name="visible">True</property>
-                    <property name="icon-name">emblem-system-symbolic</property>
+                    <property name="icon-name">view-context-menu-symbolic</property>
                     <property name="icon-size">1</property>
                   </object>
                 </child>
