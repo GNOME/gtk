@@ -104,6 +104,7 @@ templates = 				\
 	prop-list.ui 			\
 	resource-list.ui		\
 	signals-list.ui			\
+	style-prop-list.ui		\
 	visual.ui			\
 	widget-tree.ui 			\
 	window.ui

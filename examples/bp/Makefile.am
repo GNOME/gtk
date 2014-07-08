@@ -26,4 +26,6 @@ bloatpad-gresources.c: $(resource_files)
 
 CLEANFILES = bloatpad-gresources.c
 
+EXTRA_DIST = $(resource_files)
+
 -include $(top_srcdir)/git.mk
