@@ -1275,9 +1275,6 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     border-radius: 20px;
     border: 3px solid transparent; //margin :/
     background-color: mix($bg_color, $fg_color, 70%);
-    &:backdrop, &:insensitive {
-      background-color: mix($bg_color, $fg_color, 90%);
-    }
     &:hover {
       background-color: mix($bg_color, $fg_color, 50%);
     }
@@ -1289,6 +1286,9 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       &:prelight:active {
         background-color: $selected_bg_color;
       }
+    }
+    &:backdrop, &:insensitive {
+      background-color: mix($bg_color, $fg_color, 90%);
     }
   }
 }

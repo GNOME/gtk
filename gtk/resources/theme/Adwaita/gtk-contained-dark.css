@@ -1426,8 +1426,6 @@ GtkTreeView.view.progressbar {
     border-radius: 20px;
     border: 3px solid transparent;
     background-color: #6f7372; }
-    .scrollbar.slider:backdrop, .scrollbar.slider:insensitive {
-      background-color: #4b5050; }
     .scrollbar.slider:hover {
       background-color: #939695; }
     .scrollbar.slider:prelight:active {
@@ -1436,6 +1434,8 @@ GtkTreeView.view.progressbar {
       border-width: 5px; }
       .scrollbar.slider.fine-tune:prelight:active {
         background-color: #215d9c; }
+    .scrollbar.slider:backdrop, .scrollbar.slider:insensitive {
+      background-color: #4b5050; }
 
 .scrollbars-junction, .scrollbar.trough {
   border-color: transparent;
