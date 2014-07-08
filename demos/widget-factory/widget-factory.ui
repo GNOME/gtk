@@ -2778,7 +2778,7 @@ bad things might happen.</property>
     <property name="transient-for">window</property>
     <property name="modal">True</property>
     <property name="use-header-bar">1</property>
-    <property name="title" translatable="yes">Action</property>
+    <property name="title" translatable="yes">Zelda</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
     <child internal-child="vbox">
       <object class="GtkBox">
@@ -2786,7 +2786,7 @@ bad things might happen.</property>
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="margin">20</property>
-            <property name="label" translatable="yes">Bla bla bla</property>
+            <property name="label" translatable="yes">To free the princess, you have to slay the dragon.</property>
           </object>
         </child>
       </object>
@@ -2794,7 +2794,7 @@ bad things might happen.</property>
     <child type="action">
       <object class="GtkButton" id="cancel_action_dialog">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">_Cancel</property>
+        <property name="label" translatable="yes">_Run</property>
         <property name="use_underline">True</property>
       </object>
     </child>
