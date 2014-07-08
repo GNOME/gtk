@@ -497,6 +497,7 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
     }
     &:backdrop {
       border-color: transparentize($backdrop_borders_color,0.7);
+      background-color: transparent;
     }
     &:backdrop:insensitive {
       background-image: none;
