@@ -1040,10 +1040,16 @@ cb_scale_value_changed (GtkRange *range,
 {
   GtkScaleButton *button = user_data;
   gdouble value;
+  gdouble upper, lower;
 
   value = gtk_range_get_value (range);
+  upper = gtk_adjustment_get_upper (button->priv->adjustment);
+  lower = gtk_adjustment_get_lower (button->priv->adjustment);
 
   gtk_scale_button_update_icon (button);
+
+  gtk_widget_set_sensitive (button->priv->plus_button, value < upper);
+  gtk_widget_set_sensitive (button->priv->minus_button, lower < value);
 
   g_signal_emit (button, signals[VALUE_CHANGED], 0, value);
   g_object_notify (G_OBJECT (button), "value");
