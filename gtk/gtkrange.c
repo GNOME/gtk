@@ -156,6 +156,9 @@ struct _GtkRangePrivate
   /* Fill level */
   guint show_fill_level        : 1;
   guint restrict_to_fill_level : 1;
+
+  /* Whether dragging is ongoing */
+  guint in_drag                : 1;
 };
 
 
@@ -2909,6 +2912,7 @@ gtk_range_drag_gesture_update (GtkGestureDrag *gesture,
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
   priv->mouse_x = start_x + offset_x;
   priv->mouse_y = start_y + offset_y;
+  priv->in_drag = TRUE;
 
   update_autoscroll_mode (range);
 
@@ -2922,6 +2926,7 @@ gtk_range_drag_gesture_end (GtkGestureDrag       *gesture,
                             gdouble               offset_y,
                             GtkRange             *range)
 {
+  range->priv->in_drag = FALSE;
   stop_scrolling (range);
 }
 
@@ -3997,7 +4002,11 @@ gtk_range_real_change_value (GtkRange      *range,
       priv->need_recalc = TRUE;
 
       gtk_widget_queue_draw (GTK_WIDGET (range));
-      gtk_adjustment_animate_to_value (priv->adjustment, value);
+
+      if (priv->in_drag)
+        gtk_adjustment_set_value (priv->adjustment, value);
+      else
+        gtk_adjustment_animate_to_value (priv->adjustment, value);
     }
 
   return FALSE;
