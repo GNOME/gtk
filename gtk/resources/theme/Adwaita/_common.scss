@@ -350,9 +350,13 @@ GtkLabel {
   .linked &,
   .linked &:hover,
   .linked &:active,
-  .linked &:backdrop {
-    @extend %linked_buttons;
-  }
+  .linked &:backdrop { @extend %linked_buttons; }
+
+  .linked.vertical &,
+  .linked.vertical &:hover,
+  .linked.vertical &:active,
+  .linked.vertical &:backdrop { @extend %linked_buttons_vertical; }
+
 }
 
 // all the following is for the +|- buttons on inline toolbars, that way
@@ -408,6 +412,22 @@ GtkLabel {
   &:last-child {
     border-radius: 0 3px 3px 0;
     &:dir(rtl) { border-right-style: solid; }
+  }
+  &:only-child {
+    border-radius: 3px;
+    border-style: solid;
+  }
+}
+
+%linked_buttons_vertical{
+  border-left-style: solid;
+  border-top-style: none;
+  &:first-child {
+    border-style: solid;
+    border-radius: 3px 3px 0 0;
+  }
+  &:last-child {
+    border-radius: 0 0 3px 3px;
   }
   &:only-child {
     border-radius: 3px;

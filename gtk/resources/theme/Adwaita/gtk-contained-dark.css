@@ -571,6 +571,18 @@
     border-radius: 3px;
     border-style: solid; }
 
+.linked.vertical .button, .linked.vertical .button:hover, .linked.vertical .button:active, .linked.vertical .button:backdrop {
+  border-left-style: solid;
+  border-top-style: none; }
+  .linked.vertical .button:first-child {
+    border-style: solid;
+    border-radius: 3px 3px 0 0; }
+  .linked.vertical .button:last-child {
+    border-radius: 0 0 3px 3px; }
+  .linked.vertical .button:only-child {
+    border-radius: 3px;
+    border-style: solid; }
+
 .button.flat, .button.flat:backdrop, .menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
   border-color: transparent;
   background-color: transparent;
