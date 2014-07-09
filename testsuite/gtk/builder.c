@@ -1007,6 +1007,7 @@ test_children (void)
   const gchar buffer2[] =
     "<interface>"
     "  <object class=\"GtkDialog\" id=\"dialog1\">"
+    "    <property name=\"use_header_bar\">1</property>"
     "    <child internal-child=\"vbox\">"
     "      <object class=\"GtkVBox\" id=\"dialog1-vbox\">"
     "        <property name=\"border-width\">10</property>"
@@ -1042,7 +1043,7 @@ test_children (void)
   g_assert (dialog != NULL);
   g_assert (GTK_IS_DIALOG (dialog));
   children = gtk_container_get_children (GTK_CONTAINER (dialog));
-  g_assert (g_list_length (children) == 2);
+  g_assert_cmpint (g_list_length (children), ==, 2);
   g_list_free (children);
   
   vbox = gtk_builder_get_object (builder, "dialog1-vbox");
