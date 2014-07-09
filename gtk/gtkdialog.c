@@ -265,33 +265,6 @@ gtk_dialog_set_use_header_bar_from_setting (GtkDialog *dialog)
 }
 
 static void
-add_cb (GtkContainer *container,
-        GtkWidget    *widget,
-        GtkDialog    *dialog)
-{
-  GtkDialogPrivate *priv = dialog->priv;
-
-  if (priv->use_header_bar)
-    g_warning ("Content added to the action area of a dialog using header bars");
-
-  gtk_widget_show (GTK_WIDGET (priv->action_box));
-}
-
-static void
-apply_use_header_bar (GtkDialog *dialog)
-{
-  GtkDialogPrivate *priv = dialog->priv;
-
-  gtk_widget_set_visible (priv->action_box, !priv->use_header_bar);
-  gtk_widget_set_visible (priv->headerbar, priv->use_header_bar);
-  if (priv->use_header_bar)
-    {
-      gtk_window_set_titlebar (GTK_WINDOW (dialog), priv->headerbar);
-      g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
-    }
-}
-
-static void
 gtk_dialog_set_property (GObject      *object,
                          guint         prop_id,
                          const GValue *value,
@@ -458,14 +431,36 @@ update_suggested_action (GtkDialog *dialog)
 }
 
 static void
-add_action_widgets (GtkDialog *dialog)
+add_cb (GtkContainer *container,
+        GtkWidget    *widget,
+        GtkDialog    *dialog)
 {
   GtkDialogPrivate *priv = dialog->priv;
-  GList *children;
-  GList *l;
+
+  if (priv->use_header_bar)
+    g_warning ("Content added to the action area of a dialog using header bars");
+
+  gtk_widget_show (GTK_WIDGET (priv->action_box));
+}
+
+static void
+gtk_dialog_constructed (GObject *object)
+{
+  GtkDialog *dialog = GTK_DIALOG (object);
+  GtkDialogPrivate *priv = dialog->priv;
+
+  G_OBJECT_CLASS (gtk_dialog_parent_class)->constructed (object);
+
+  priv->constructed = TRUE;
+  if (priv->use_header_bar == -1)
+    priv->use_header_bar = FALSE;
 
   if (priv->use_header_bar)
     {
+      GList *children, *l;
+
+      gtk_window_set_titlebar (GTK_WINDOW (dialog), priv->headerbar);
+
       children = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
       for (l = children; l != NULL; l = l->next)
         {
@@ -489,23 +484,12 @@ add_action_widgets (GtkDialog *dialog)
       g_list_free (children);
 
       update_suggested_action (dialog);
+
+      g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
     }
-}
 
-static void
-gtk_dialog_constructed (GObject *object)
-{
-  GtkDialog *dialog = GTK_DIALOG (object);
-  GtkDialogPrivate *priv = dialog->priv;
-
-  G_OBJECT_CLASS (gtk_dialog_parent_class)->constructed (object);
-
-  priv->constructed = TRUE;
-  if (priv->use_header_bar == -1)
-    priv->use_header_bar = FALSE;
-
-  apply_use_header_bar (dialog);
-  add_action_widgets (dialog);
+  gtk_widget_set_visible (priv->headerbar, priv->use_header_bar);
+  gtk_widget_set_visible (priv->action_box, !priv->use_header_bar);
 }
 
 static void
@@ -1894,7 +1878,6 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
     priv->headerbar = GTK_WIDGET (child);
   else if (g_strcmp0 (type, "action") == 0)
     gtk_dialog_add_action_widget (GTK_DIALOG (buildable), GTK_WIDGET (child), GTK_RESPONSE_NONE);
-
   else
     GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
 }
