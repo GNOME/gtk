@@ -106,11 +106,6 @@ gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
 
   gtk_widget_init_template (GTK_WIDGET (cc));
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (cc));
-  gtk_dialog_add_buttons (GTK_DIALOG (cc),
-                          _("_Cancel"), GTK_RESPONSE_CANCEL,
-                          _("_Select"), GTK_RESPONSE_OK,
-                          NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (cc), GTK_RESPONSE_OK);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (cc),
@@ -130,7 +125,8 @@ gtk_color_chooser_dialog_map (GtkWidget *widget)
    * even if it was showing the editor the last time it was used.
    */
   g_object_set (GTK_COLOR_CHOOSER_DIALOG (widget)->priv->chooser,
-                "show-editor", FALSE, NULL);
+                "show-editor", FALSE,
+                NULL);
 
   GTK_WIDGET_CLASS (gtk_color_chooser_dialog_parent_class)->map (widget);
 }
