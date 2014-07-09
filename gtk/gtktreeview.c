@@ -3533,7 +3533,11 @@ gtk_tree_view_column_drag_gesture_end (GtkGestureDrag *gesture,
     tree_view->priv->cur_reorder = NULL;
 
   if (tree_view->priv->in_column_drag)
-    gtk_tree_view_button_release_drag_column (tree_view);
+    {
+      gtk_tree_view_button_release_drag_column (tree_view);
+      gdk_device_ungrab (gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                         GDK_CURRENT_TIME);
+    }
   else if (tree_view->priv->in_column_resize)
     gtk_tree_view_button_release_column_resize (tree_view);
 }
@@ -9998,6 +10002,19 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 
   tree_view->priv->in_column_drag = TRUE;
+
+  /* Widget reparenting above unmaps and indirectly breaks
+   * the implicit grab, replace it with an active one.
+   */
+  gdk_device_grab (device,
+                   tree_view->priv->drag_window,
+                   GDK_OWNERSHIP_NONE,
+                   FALSE,
+                   GDK_TOUCH_MASK |
+                   GDK_POINTER_MOTION_MASK |
+                   GDK_BUTTON_RELEASE_MASK,
+                   NULL,
+                   GDK_CURRENT_TIME);
 
   gtk_gesture_set_state (tree_view->priv->column_drag_gesture,
                          GTK_EVENT_SEQUENCE_CLAIMED);
