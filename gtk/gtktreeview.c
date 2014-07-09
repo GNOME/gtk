@@ -4154,6 +4154,7 @@ gtk_tree_view_update_current_reorder (GtkTreeView *tree_view)
     (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture));
   gtk_gesture_get_point (tree_view->priv->column_drag_gesture,
                          sequence, &x, NULL);
+  x += gtk_adjustment_get_value (tree_view->priv->hadjustment);
 
   for (list = tree_view->priv->column_drag_info; list; list = list->next)
     {
@@ -4223,6 +4224,8 @@ gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
                          sequence, &x, NULL);
   gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
 
+  x += gtk_adjustment_get_value (tree_view->priv->hadjustment);
+
   /* See if we are near the edge. */
   offset = x - (visible_rect.x + SCROLL_EDGE_SIZE);
   if (offset > 0)
@@ -4251,6 +4254,7 @@ gtk_tree_view_motion_drag_column (GtkTreeView *tree_view,
   gint win_x, win_y;
 
   button = gtk_tree_view_column_get_button (column);
+  x += gtk_adjustment_get_value (tree_view->priv->hadjustment);
 
   /* Handle moving the header */
   gdk_window_get_position (tree_view->priv->drag_window, &win_x, &win_y);
