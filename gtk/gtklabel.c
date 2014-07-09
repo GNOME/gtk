@@ -5198,7 +5198,7 @@ gtk_label_create_window (GtkLabel *label)
     GDK_POINTER_MOTION_MASK      |
     GDK_POINTER_MOTION_HINT_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
-  if (gtk_widget_is_sensitive (widget))
+  if (gtk_widget_is_sensitive (widget) && priv->select_info && priv->select_info->selectable)
     {
       attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 						      GDK_XTERM);
