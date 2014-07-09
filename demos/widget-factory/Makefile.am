@@ -60,6 +60,7 @@ uninstall-update-icon-cache:
 
 EXTRA_DIST += \
 	widget-factory.ui \
+	menus.ui \
 	widget-factory.gresource.xml
 
 -include $(top_srcdir)/git.mk

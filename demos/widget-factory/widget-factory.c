@@ -231,22 +231,6 @@ on_entry_icon_release (GtkEntry            *entry,
 }
 
 static void
-startup (GApplication *app)
-{
-  GtkBuilder *builder;
-  GMenuModel *appmenu;
-
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/ui/widget-factory.ui", NULL);
-
-  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
-
-  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
-
-  g_object_unref (builder);
-}
-
-static void
 update_header (GtkListBoxRow *row,
                GtkListBoxRow *before,
                gpointer       data)
@@ -437,7 +421,6 @@ main (int argc, char *argv[])
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
 
-  g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
   status = g_application_run (G_APPLICATION (app), argc, argv);
