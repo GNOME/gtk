@@ -95,7 +95,7 @@ do_button_box (GtkWidget *do_widget)
                         TRUE, TRUE, 5);
 
     gtk_box_pack_start (GTK_BOX (vbox),
-                        create_bbox (TRUE, "Expand", 40, GTK_BUTTONBOX_EXPAND),
+                        create_bbox (TRUE, "Expand", 0, GTK_BUTTONBOX_EXPAND),
                         TRUE, TRUE, 5);
 
     frame_vert = gtk_frame_new ("Vertical Button Boxes");
@@ -124,7 +124,7 @@ do_button_box (GtkWidget *do_widget)
                         create_bbox (FALSE, "Center", 10, GTK_BUTTONBOX_CENTER),
                         TRUE, TRUE, 5);
     gtk_box_pack_start (GTK_BOX (hbox),
-                        create_bbox (FALSE, "Expand", 10, GTK_BUTTONBOX_EXPAND),
+                        create_bbox (FALSE, "Expand", 0, GTK_BUTTONBOX_EXPAND),
                         TRUE, TRUE, 5);
   }
 
