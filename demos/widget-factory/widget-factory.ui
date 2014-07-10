@@ -2832,6 +2832,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="visible">True</property>
                         <property name="enable-grid-lines">vertical</property>
                         <property name="enable-tree-lines">True</property>
+                        <property name="rules-hint">True</property>
                         <property name="rubber-banding">True</property>
                         <property name="model">charlemodel</property>
                         <child internal-child="selection">
