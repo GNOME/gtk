@@ -829,6 +829,28 @@ GtkComboBox {
 /**************
  * Tree Views *
  **************/
+
+GtkTreeView.view { // all this mess is to theme the treeview grid lines
+                   // which reacts to "color", hope to be able to axe this
+                   // one day
+  -GtkTreeView-grid-line-width: 1;
+  -GtkTreeView-grid-line-pattern: '';
+  color: $bg_color; // this is actually the line color
+  &:selected { color: $base_color; };
+  &:backdrop {
+    color: $backdrop_bg_color;
+    &:selected { color: $backdrop_base_color; }
+  }
+  column { // this is to override the previously set color...
+    color: $fg_color;
+    &:selected { color: $selected_fg_color; }
+    &:backdrop {
+      color: $backdrop_fg_color;
+      &:selected { color: $backdrop_base_color; };
+    }
+  }
+}
+
 column-header {
   .button {
     @extend %column_header_button;

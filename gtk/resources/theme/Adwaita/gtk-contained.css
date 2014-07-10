@@ -1009,6 +1009,25 @@ GtkComboBox {
 /**************
  * Tree Views *
  **************/
+GtkTreeView.view {
+  -GtkTreeView-grid-line-width: 1;
+  -GtkTreeView-grid-line-pattern: '';
+  color: #ededed; }
+  GtkTreeView.view:selected {
+    color: white; }
+  GtkTreeView.view:backdrop {
+    color: #ededed; }
+    GtkTreeView.view:backdrop:selected {
+      color: #fcfcfc; }
+  GtkTreeView.view column {
+    color: #2e3436; }
+    GtkTreeView.view column:selected {
+      color: white; }
+    GtkTreeView.view column:backdrop {
+      color: #54595a; }
+      GtkTreeView.view column:backdrop:selected {
+        color: #fcfcfc; }
+
 column-header .button {
   color: #96999a;
   font-weight: bold;
