@@ -122,6 +122,11 @@
   background-color: transparentize($selected_bg_color,0.8);
 }
 
+/* This is used by GtkScrolledWindow, when rendering the edge
+ * gradient shown when content is touch-dragged past boundaries.
+ * The color is used as a base for such gradient, which is then
+ * stretched/modified as a direct result of user interaction.
+ */
 .overshoot {
   background-color: transparentize($selected_bg_color,0.8);
 }

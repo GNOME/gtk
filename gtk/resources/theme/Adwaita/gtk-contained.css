@@ -108,6 +108,11 @@
   border: 1px solid #4a90d9;
   background-color: rgba(74, 144, 217, 0.2); }
 
+/* This is used by GtkScrolledWindow, when rendering the edge
+ * gradient shown when content is touch-dragged past boundaries.
+ * The color is used as a base for such gradient, which is then
+ * stretched/modified as a direct result of user interaction.
+ */
 .overshoot {
   background-color: rgba(74, 144, 217, 0.2); }
 
