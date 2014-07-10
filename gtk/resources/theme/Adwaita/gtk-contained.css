@@ -1077,6 +1077,7 @@ column-header .button, column-header .button:hover, column-header .button:active
 GtkTreeView.view.progressbar {
   color: white;
   border-radius: 4px;
+  border-color: #184472;
   background-image: linear-gradient(to bottom, #4a90d9, #2a76c6); }
   GtkTreeView.view.progressbar:selected {
     color: #4a90d9;

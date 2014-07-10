@@ -922,6 +922,7 @@ column-header.button.dnd { // for treeview-like derive widgets
 GtkTreeView.view.progressbar { //Progressbar in treeview cells
   @if $variant == 'light' { color: $base_color; }
   border-radius: 4px;
+  border-color: $selected_borders_color;
   background-image: linear-gradient(to bottom,
                                     $selected_bg_color,
                                     darken($selected_bg_color,10%));
