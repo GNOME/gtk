@@ -35,8 +35,8 @@
 #include "gtkcolorchooser.h"
 #include "gtkcolorchooserprivate.h"
 #include "gtkcolorchooserdialog.h"
+#include "gtkcolorswatchprivate.h"
 #include "gtkdnd.h"
-#include "gtkdrawingarea.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -54,14 +54,9 @@
  */
 
 
-/* Size of checks and gray levels for alpha compositing checkerboard */
-#define CHECK_SIZE  4
-#define CHECK_DARK  (1.0 / 3.0)
-#define CHECK_LIGHT (2.0 / 3.0)
-
 struct _GtkColorButtonPrivate
 {
-  GtkWidget *draw_area; /* Widget where we draw the color sample */
+  GtkWidget *swatch;    /* Widget where we draw the color sample */
   GtkWidget *cs_dialog; /* Color selection dialog */
 
   gchar *title;         /* Title for the color selection window */
@@ -261,62 +256,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                   G_TYPE_NONE, 0);
 }
 
-static gboolean
-gtk_color_button_has_alpha (GtkColorButton *button)
-{
-  return button->priv->use_alpha && button->priv->rgba.alpha < 1;
-}
-
-/* Handle exposure events for the color picker's drawing area */
-static gint
-gtk_color_button_draw_cb (GtkWidget *widget,
-                          cairo_t   *cr,
-                          gpointer   data)
-{
-  GtkColorButton *button = GTK_COLOR_BUTTON (data);
-  cairo_pattern_t *checkered;
-
-  if (gtk_color_button_has_alpha (button))
-    {
-      cairo_set_source_rgb (cr, CHECK_DARK, CHECK_DARK, CHECK_DARK);
-      cairo_paint (cr);
-
-      cairo_set_source_rgb (cr, CHECK_LIGHT, CHECK_LIGHT, CHECK_LIGHT);
-      cairo_scale (cr, CHECK_SIZE, CHECK_SIZE);
-
-      checkered = _gtk_color_chooser_get_checkered_pattern ();
-      cairo_mask (cr, checkered);
-      cairo_pattern_destroy (checkered);
-
-      gdk_cairo_set_source_rgba (cr, &button->priv->rgba);
-    }
-  else
-    {
-      cairo_set_source_rgb (cr,
-                            button->priv->rgba.red,
-                            button->priv->rgba.green,
-                            button->priv->rgba.blue);
-    }
-
-  cairo_paint (cr);
-
-  if (!gtk_widget_is_sensitive (GTK_WIDGET (button)))
-    {
-      GtkStyleContext *context;
-      GdkRGBA color;
-
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_get_background_color (context, GTK_STATE_FLAG_INSENSITIVE, &color);
-
-      gdk_cairo_set_source_rgba (cr, &color);
-      checkered = _gtk_color_chooser_get_checkered_pattern ();
-      cairo_mask (cr, checkered);
-      cairo_pattern_destroy (checkered);
-    }
-
-  return FALSE;
-}
-
 static void
 gtk_color_button_state_changed (GtkWidget   *widget,
                                 GtkStateType previous_state)
@@ -359,7 +298,8 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
   button->priv->rgba.blue = dropped[2] / 65535.;
   button->priv->rgba.alpha = dropped[3] / 65535.;
 
-  gtk_widget_queue_draw (button->priv->draw_area);
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (button->priv->swatch),
+                             &button->priv->rgba);
 
   g_signal_emit (button, color_button_signals[COLOR_SET], 0);
 
@@ -377,8 +317,7 @@ set_color_icon (GdkDragContext *context,
   cairo_surface_t *surface;
   cairo_t *cr;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
-                                        48, 32);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, 48, 32);
   cr = cairo_create (surface);
 
   gdk_cairo_set_source_rgba (cr, rgba);
@@ -429,18 +368,15 @@ gtk_color_button_init (GtkColorButton *button)
   /* Create the widgets */
   button->priv = gtk_color_button_get_instance_private (button);
 
-  button->priv->draw_area = gtk_drawing_area_new ();
+  button->priv->swatch = gtk_color_swatch_new ();
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");
   pango_layout_get_pixel_extents (layout, NULL, &rect);
   g_object_unref (layout);
 
-  gtk_widget_set_size_request (button->priv->draw_area, 
-                               rect.width, rect.height);
+  gtk_widget_set_size_request (button->priv->swatch, rect.width, rect.height);
 
-  g_signal_connect (button->priv->draw_area, "draw",
-                    G_CALLBACK (gtk_color_button_draw_cb), button);
-  gtk_container_add (GTK_CONTAINER (button), button->priv->draw_area);
-  gtk_widget_show (button->priv->draw_area);
+  gtk_container_add (GTK_CONTAINER (button), button->priv->swatch);
+  gtk_widget_show (button->priv->swatch);
 
   button->priv->title = g_strdup (_("Pick a Color")); /* default title */
 
@@ -563,10 +499,10 @@ dialog_response (GtkDialog *dialog,
 
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog),
                                   &button->priv->rgba);
+      gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (button->priv->swatch),
+                                 &button->priv->rgba);
 
       gtk_widget_hide (GTK_WIDGET (dialog));
-
-      gtk_widget_queue_draw (button->priv->draw_area);
 
       g_object_ref (button);
       g_signal_emit (button, color_button_signals[COLOR_SET], 0);
@@ -599,7 +535,7 @@ ensure_dialog (GtkColorButton *button)
       gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
     gtk_window_set_modal (GTK_WINDOW (dialog),
-                            gtk_window_get_modal (GTK_WINDOW (parent)));
+                          gtk_window_get_modal (GTK_WINDOW (parent)));
   }
 
   g_signal_connect (dialog, "response",
@@ -648,7 +584,8 @@ gtk_color_button_set_color (GtkColorButton *button,
   button->priv->rgba.green = color->green / 65535.;
   button->priv->rgba.blue = color->blue / 65535.;
 
-  gtk_widget_queue_draw (button->priv->draw_area);
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (button->priv->swatch),
+                             &button->priv->rgba);
 
   g_object_notify (G_OBJECT (button), "color");
   g_object_notify (G_OBJECT (button), "rgba");
@@ -674,7 +611,8 @@ gtk_color_button_set_alpha (GtkColorButton *button,
 
   button->priv->rgba.alpha = alpha / 65535.;
 
-  gtk_widget_queue_draw (button->priv->draw_area);
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (button->priv->swatch),
+                             &button->priv->rgba);
 
   g_object_notify (G_OBJECT (button), "alpha");
   g_object_notify (G_OBJECT (button), "rgba");
@@ -741,7 +679,8 @@ gtk_color_button_set_rgba (GtkColorButton *button,
   g_return_if_fail (rgba != NULL);
 
   button->priv->rgba = *rgba;
-  gtk_widget_queue_draw (button->priv->draw_area);
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (button->priv->swatch),
+                             &button->priv->rgba);
 
   g_object_notify (G_OBJECT (button), "color");
   g_object_notify (G_OBJECT (button), "alpha");
@@ -778,7 +717,7 @@ set_use_alpha (GtkColorButton *button, gboolean use_alpha)
     {
       button->priv->use_alpha = use_alpha;
 
-      gtk_widget_queue_draw (button->priv->draw_area);
+      gtk_color_swatch_set_use_alpha (GTK_COLOR_SWATCH (button->priv->swatch), use_alpha);
 
       g_object_notify (G_OBJECT (button), "use-alpha");
     }
