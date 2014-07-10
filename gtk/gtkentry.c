@@ -34,6 +34,7 @@
 #include "gtkbindings.h"
 #include "gtkcelleditable.h"
 #include "gtkclipboard.h"
+#include "gtkdebug.h"
 #include "gtkdnd.h"
 #include "gtkentry.h"
 #include "gtkentrybuffer.h"
@@ -4419,6 +4420,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
       source = gdk_event_get_source_device (event);
       is_touchscreen = test_touchscreen ||
+        (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
         gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
 
       if (is_touchscreen)
@@ -4701,7 +4703,9 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
         gtk_entry_set_positions (entry, tmp_pos, -1);
 
       /* Update touch handles' position */
-      if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
+      if (test_touchscreen ||
+          (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
+          input_source == GDK_SOURCE_TOUCHSCREEN)
         {
           gtk_entry_ensure_text_handles (entry);
           gtk_entry_update_handles (entry,
@@ -4742,6 +4746,7 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   source = gdk_event_get_source_device (event);
   is_touchscreen = (test_touchscreen ||
+                    (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
                     gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN);
 
   if (priv->selection_bubble &&

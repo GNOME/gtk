@@ -31,6 +31,7 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
+#include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -5091,6 +5092,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
   device = gdk_event_get_source_device ((GdkEvent *) event);
   is_touchscreen = test_touchscreen ||
+                   (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
                    gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if (n_press == 1)
@@ -6999,6 +7001,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   device = gdk_event_get_source_device (event);
 
   is_touchscreen = test_touchscreen ||
+                   (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
                    gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if (data->granularity == SELECT_CHARACTERS)
@@ -7095,6 +7098,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   device = gdk_event_get_source_device (event);
   is_touchscreen = test_touchscreen ||
+    (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
     gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if (priv->selection_bubble &&

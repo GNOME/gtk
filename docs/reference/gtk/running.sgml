@@ -199,6 +199,10 @@ additional environment variables.
       <listitem><para>Text widget internals</para></listitem>
     </varlistentry>
     <varlistentry>
+      <term>touchscreen</term>
+      <listitem><para>Pretend the pointer is a touchscreen device</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>tree</term>
       <listitem><para>Tree widget internals</para></listitem>
     </varlistentry>

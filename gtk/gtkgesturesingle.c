@@ -39,6 +39,7 @@
 #include "gtkgesturesingleprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkdebug.h"
 
 typedef struct _GtkGestureSinglePrivate GtkGestureSinglePrivate;
 
@@ -301,7 +302,8 @@ gtk_gesture_single_init (GtkGestureSingle *gesture)
 
   priv = gtk_gesture_single_get_instance_private (gesture);
 
-  if (g_getenv ("GTK_TEST_TOUCHSCREEN"))
+  if (g_getenv ("GTK_TEST_TOUCHSCREEN") ||
+      (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0)
     priv->touch_only = FALSE;
   else
     priv->touch_only = TRUE;

@@ -177,7 +177,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"baselines", GTK_DEBUG_BASELINES},
   {"pixel-cache", GTK_DEBUG_PIXEL_CACHE},
   {"no-pixel-cache", GTK_DEBUG_NO_PIXEL_CACHE},
-  {"interactive", GTK_DEBUG_INTERACTIVE}
+  {"interactive", GTK_DEBUG_INTERACTIVE},
+  {"touchscreen", GTK_DEBUG_TOUCHSCREEN}
 };
 #endif /* G_ENABLE_DEBUG */
 
