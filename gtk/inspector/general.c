@@ -51,6 +51,7 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gtk_path;
   GtkWidget *gtk_exe_prefix;
   GtkWidget *gtk_data_prefix;
+  GtkWidget *touchscreen_switch;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_BOX)
@@ -136,12 +137,36 @@ init_env (GtkInspectorGeneral *gen)
 }
 
 static void
+update_touchscreen (GtkSwitch *sw, GParamSpec *pspec, GtkInspectorGeneral *gen)
+{
+  GtkDebugFlag flags;
+
+  flags = gtk_get_debug_flags ();
+
+  if (gtk_switch_get_active (sw))
+    flags |= GTK_DEBUG_TOUCHSCREEN;
+  else
+    flags &= ~GTK_DEBUG_TOUCHSCREEN;
+
+  gtk_set_debug_flags (flags);
+}
+
+static void
+init_touch (GtkInspectorGeneral *gen)
+{
+  gtk_switch_set_active (GTK_SWITCH (gen->priv->touchscreen_switch), (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0);
+  g_signal_connect (gen->priv->touchscreen_switch, "notify::active",
+                    G_CALLBACK (update_touchscreen), gen);
+}
+
+static void
 gtk_inspector_general_init (GtkInspectorGeneral *gen)
 {
   gen->priv = gtk_inspector_general_get_instance_private (gen);
   gtk_widget_init_template (GTK_WIDGET (gen));
   init_version (gen);
   init_env (gen);
+  init_touch (gen);
 }
 
 static void
@@ -158,6 +183,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_path);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_exe_prefix);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_data_prefix);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, touchscreen_switch);
 }
 
 // vim: set et sw=2 ts=2:
