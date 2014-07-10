@@ -819,33 +819,6 @@ gtk_tree_view_column_cell_layout_get_area (GtkCellLayout   *cell_layout)
 /* Button handling code
  */
 static void
-maybe_hide_arrow (GtkWidget         *arrow,
-                  GtkAllocation     *allocation,
-                  GtkTreeViewColumn *col)
-{
-  GtkAllocation a;
-  gboolean overlap;
-
-  gtk_widget_get_allocation (col->priv->alignment, &a);
-
-  /* resizable columns can be shrunk all the way; in that case
-   * we don't want to render the sort indicator on top of the
-   * label, but just hide it.
-   */
-  if ((a.x <= allocation->x && allocation->x < a.x + a.width) ||
-      (allocation->x <= a.x && a.x < allocation->x + allocation->width))
-    overlap = TRUE;
-  else
-    overlap = FALSE;
-
-  if (col->priv->show_sort_indicator && !overlap)
-    gtk_widget_set_opacity (arrow, 1);
-  else
-    gtk_widget_set_opacity (arrow, 0);
-}
-
-
-static void
 gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 {
   GtkTreeViewColumnPrivate *priv = tree_column->priv;
@@ -896,17 +869,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		    tree_column);
 
   if (priv->xalign <= 0.5)
-    gtk_box_pack_end (GTK_BOX (hbox), priv->arrow, FALSE, FALSE, 0);
+    {
+      gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE, 0);
+    }
   else
-    gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE, 0);
+    {
+      gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE, 0);
+    }
 
-  gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE, 0);
-        
   gtk_container_add (GTK_CONTAINER (priv->alignment), child);
   gtk_container_add (GTK_CONTAINER (priv->button), hbox);
-
-  g_signal_connect (priv->arrow, "size-allocate",
-                    G_CALLBACK (maybe_hide_arrow), tree_column);
 
   gtk_widget_show (hbox);
   gtk_widget_show (priv->alignment);
@@ -1015,20 +989,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * left otherwise; do this by packing boxes, so flipping text direction will
    * reverse things
    */
-  g_object_ref (arrow);
-  gtk_container_remove (GTK_CONTAINER (hbox), arrow);
-
   if (priv->xalign <= 0.5)
-    {
-      gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
-    }
+    gtk_box_reorder_child (GTK_BOX (hbox), arrow, 1);
   else
-    {
-      gtk_box_pack_start (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
-      /* move it to the front */
-      gtk_box_reorder_child (GTK_BOX (hbox), arrow, 0);
-    }
-  g_object_unref (arrow);
+    gtk_box_reorder_child (GTK_BOX (hbox), arrow, 0);
 
   if (priv->show_sort_indicator
       || (GTK_IS_TREE_SORTABLE (model) && priv->sort_column_id >= 0))
