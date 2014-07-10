@@ -353,7 +353,14 @@ swatch_get_preferred_width (GtkWidget *widget,
                             gint      *min,
                             gint      *nat)
 {
-  *min = *nat = 48;
+  gint w, h;
+
+  gtk_widget_get_size_request (widget, &w, &h);
+
+  if (w < 0)
+    w = 48;
+
+  *min = *nat = w;
 }
 
 static void
@@ -361,7 +368,14 @@ swatch_get_preferred_height (GtkWidget *widget,
                              gint      *min,
                              gint      *nat)
 {
-  *min = *nat = 32;
+  gint w, h;
+
+  gtk_widget_get_size_request (widget, &w, &h);
+
+  if (h < 0)
+    h = 32;
+
+  *min = *nat = h;
 }
 
 static gboolean
