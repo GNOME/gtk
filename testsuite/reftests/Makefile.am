@@ -244,6 +244,9 @@ testdata = \
 	label-attribute-preference.css \
 	label-attribute-preference.ref.ui \
 	label-attribute-preference.ui \
+	label-clipping.css \
+	label-clipping.ref.ui \
+	label-clipping.ui \
 	label-ellipsize-small.ref.ui \
 	label-ellipsize-small.ui \
 	label-ellipsize-with-big.ref.ui \
