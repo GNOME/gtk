@@ -15,6 +15,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
 #include "visual.h"
 
 #include "gtkprivate.h"
@@ -211,6 +213,13 @@ init_theme (GtkInspectorVisual *vis)
   g_hash_table_destroy (t);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (vis->priv->theme_combo), pos);
+
+  if (g_getenv ("GTK_THEME") != NULL)
+    {
+      /* theme is hardcoded, nothing we can do */
+      gtk_widget_set_sensitive (vis->priv->theme_combo, FALSE);
+      gtk_widget_set_tooltip_text (vis->priv->theme_combo , _("Theme is hardcoded by GTK_THEME"));
+    }
 }
 
 static void
@@ -230,6 +239,13 @@ init_dark (GtkInspectorVisual *vis)
   g_object_bind_property (vis->priv->dark_switch, "active",
                           gtk_settings_get_default (), "gtk-application-prefer-dark-theme",
                           G_BINDING_BIDIRECTIONAL);
+
+  if (g_getenv ("GTK_THEME") != NULL)
+    {
+      /* theme is hardcoded, nothing we can do */
+      gtk_widget_set_sensitive (vis->priv->dark_switch, FALSE);
+      gtk_widget_set_tooltip_text (vis->priv->dark_switch, _("Theme is hardcoded by GTK_THEME"));
+    }
 }
 
 static void

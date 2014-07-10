@@ -15,6 +15,9 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
+
 #include "general.h"
 
 #include "gtkprivate.h"
@@ -157,6 +160,14 @@ init_touch (GtkInspectorGeneral *gen)
   gtk_switch_set_active (GTK_SWITCH (gen->priv->touchscreen_switch), (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0);
   g_signal_connect (gen->priv->touchscreen_switch, "notify::active",
                     G_CALLBACK (update_touchscreen), gen);
+
+  if (g_getenv ("GTK_TEST_TOUCHSCREEN") != 0)
+    {
+      /* hardcoded, nothing we can do */
+      gtk_switch_set_active (GTK_SWITCH (gen->priv->touchscreen_switch), TRUE);
+      gtk_widget_set_sensitive (gen->priv->touchscreen_switch, FALSE);
+      gtk_widget_set_tooltip_text (gen->priv->touchscreen_switch, _("Setting is hardcoded by GTK_TEST_TOUCHSCREEN"));
+    }
 }
 
 static void
