@@ -3875,6 +3875,87 @@ gtk_label_get_preferred_height_for_width (GtkWidget *widget,
 }
 
 static void
+get_layout_location (GtkLabel  *label,
+                     gint      *xp,
+                     gint      *yp)
+{
+  GtkAllocation allocation;
+  GtkWidget *widget;
+  GtkLabelPrivate *priv;
+  GtkBorder border;
+  gint req_width, x, y;
+  gint req_height;
+  gfloat xalign, yalign;
+  PangoRectangle logical;
+  gint baseline, layout_baseline, baseline_offset;
+
+  widget = GTK_WIDGET (label);
+  priv   = label->priv;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_alignment (GTK_MISC (label), &xalign, &yalign);
+  _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
+  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+    xalign = 1.0 - xalign;
+
+  pango_layout_get_extents (priv->layout, NULL, &logical);
+
+  if (priv->have_transform)
+    {
+      PangoContext *context = gtk_widget_get_pango_context (widget);
+      const PangoMatrix *matrix = pango_context_get_matrix (context);
+      pango_matrix_transform_rectangle (matrix, &logical);
+    }
+
+  pango_extents_to_pixels (&logical, NULL);
+
+  req_width  = logical.width;
+  req_height = logical.height;
+
+  req_width  += border.left + border.right;
+  req_height += border.top + border.bottom;
+
+  gtk_widget_get_allocation (widget, &allocation);
+
+  x = floor (allocation.x + border.left + xalign * (allocation.width - req_width) - logical.x);
+
+  baseline_offset = 0;
+  baseline = gtk_widget_get_allocated_baseline (widget);
+  if (baseline != -1 && !priv->have_transform)
+    {
+      layout_baseline = pango_layout_get_baseline (priv->layout) / PANGO_SCALE;
+      baseline_offset = baseline - layout_baseline;
+      yalign = 0.0; /* Can't support yalign while baseline aligning */
+    }
+
+  /* bgo#315462 - For single-line labels, *do* align the requisition with
+   * respect to the allocation, even if we are under-allocated.  For multi-line
+   * labels, always show the top of the text when they are under-allocated.  The
+   * rationale is this:
+   *
+   * - Single-line labels appear in GtkButtons, and it is very easy to get them
+   *   to be smaller than their requisition.  The button may clip the label, but
+   *   the label will still be able to show most of itself and the focus
+   *   rectangle.  Also, it is fairly easy to read a single line of clipped text.
+   *
+   * - Multi-line labels should not be clipped to showing "something in the
+   *   middle".  You want to read the first line, at least, to get some context.
+   */
+  if (pango_layout_get_line_count (priv->layout) == 1)
+    y = floor (allocation.y + border.top + (allocation.height - req_height) * yalign) - logical.y + baseline_offset;
+  else
+    y = floor (allocation.y + border.top + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y + baseline_offset;
+
+  if (xp)
+    *xp = x;
+
+  if (yp)
+    *yp = y;
+}
+
+static void
 gtk_label_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
@@ -3962,87 +4043,6 @@ gtk_label_style_updated (GtkWidget *widget)
 
   if (priv->select_info && priv->select_info->links)
     gtk_label_update_layout_attributes (label);
-}
-
-static void
-get_layout_location (GtkLabel  *label,
-                     gint      *xp,
-                     gint      *yp)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  GtkLabelPrivate *priv;
-  GtkBorder border;
-  gint req_width, x, y;
-  gint req_height;
-  gfloat xalign, yalign;
-  PangoRectangle logical;
-  gint baseline, layout_baseline, baseline_offset;
-
-  widget = GTK_WIDGET (label);
-  priv   = label->priv;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_misc_get_alignment (GTK_MISC (label), &xalign, &yalign);
-  _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
-    xalign = 1.0 - xalign;
-
-  pango_layout_get_extents (priv->layout, NULL, &logical);
-
-  if (priv->have_transform)
-    {
-      PangoContext *context = gtk_widget_get_pango_context (widget);
-      const PangoMatrix *matrix = pango_context_get_matrix (context);
-      pango_matrix_transform_rectangle (matrix, &logical);
-    }
-
-  pango_extents_to_pixels (&logical, NULL);
-
-  req_width  = logical.width;
-  req_height = logical.height;
-
-  req_width  += border.left + border.right;
-  req_height += border.top + border.bottom;
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  x = floor (allocation.x + border.left + xalign * (allocation.width - req_width) - logical.x);
-
-  baseline_offset = 0;
-  baseline = gtk_widget_get_allocated_baseline (widget);
-  if (baseline != -1 && !priv->have_transform)
-    {
-      layout_baseline = pango_layout_get_baseline (priv->layout) / PANGO_SCALE;
-      baseline_offset = baseline - layout_baseline;
-      yalign = 0.0; /* Can't support yalign while baseline aligning */
-    }
-
-  /* bgo#315462 - For single-line labels, *do* align the requisition with
-   * respect to the allocation, even if we are under-allocated.  For multi-line
-   * labels, always show the top of the text when they are under-allocated.  The
-   * rationale is this:
-   *
-   * - Single-line labels appear in GtkButtons, and it is very easy to get them
-   *   to be smaller than their requisition.  The button may clip the label, but
-   *   the label will still be able to show most of itself and the focus
-   *   rectangle.  Also, it is fairly easy to read a single line of clipped text.
-   *
-   * - Multi-line labels should not be clipped to showing "something in the
-   *   middle".  You want to read the first line, at least, to get some context.
-   */
-  if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor (allocation.y + border.top + (allocation.height - req_height) * yalign) - logical.y + baseline_offset;
-  else
-    y = floor (allocation.y + border.top + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y + baseline_offset;
-
-  if (xp)
-    *xp = x;
-
-  if (yp)
-    *yp = y;
 }
 
 static PangoDirection
