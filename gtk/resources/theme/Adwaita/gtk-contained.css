@@ -1012,21 +1012,29 @@ GtkComboBox {
 GtkTreeView.view {
   -GtkTreeView-grid-line-width: 1;
   -GtkTreeView-grid-line-pattern: '';
-  color: #ededed; }
-  GtkTreeView.view:selected {
-    color: white; }
+  -GtkTreeView-tree-line-width: 1;
+  -GtkTreeView-tree-line-pattern: '';
+  -GtkTreeView-expander-size: 16;
+  border-color: #ededed; }
   GtkTreeView.view:backdrop {
-    color: #ededed; }
-    GtkTreeView.view:backdrop:selected {
-      color: #fcfcfc; }
-  GtkTreeView.view column {
-    color: #2e3436; }
-    GtkTreeView.view column:selected {
-      color: white; }
-    GtkTreeView.view column:backdrop {
-      color: #54595a; }
-      GtkTreeView.view column:backdrop:selected {
-        color: #fcfcfc; }
+    border-color: #ededed; }
+  GtkTreeView.view.expander {
+    -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+    color: #6c7072; }
+    GtkTreeView.view.expander:dir(rtl) {
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+    GtkTreeView.view.expander:hover {
+      color: #2e3436; }
+    GtkTreeView.view.expander:selected {
+      color: #c8ddf3; }
+      GtkTreeView.view.expander:selected:hover {
+        color: white; }
+      GtkTreeView.view.expander:selected:backdrop {
+        color: #c6dbf1; }
+    GtkTreeView.view.expander:active {
+      -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+    GtkTreeView.view.expander:backdrop {
+      color: #86898a; }
 
 column-header .button {
   color: #96999a;

@@ -829,25 +829,32 @@ GtkComboBox {
 /**************
  * Tree Views *
  **************/
-
-GtkTreeView.view { // all this mess is to theme the treeview grid lines
-                   // which reacts to "color", hope to be able to axe this
-                   // one day
+GtkTreeView.view { // treeview grid lines and expanders, unfortunatelly
+                   // the tree lines color can't be set
   -GtkTreeView-grid-line-width: 1;
   -GtkTreeView-grid-line-pattern: '';
-  color: $bg_color; // this is actually the line color
-  &:selected { color: $base_color; };
+  -GtkTreeView-tree-line-width: 1;
+  -GtkTreeView-tree-line-pattern: '';
+  -GtkTreeView-expander-size: 16;
+  border-color: $bg_color; // this is actually the line color
+  // :selected is ignored hence no style for it
   &:backdrop {
-    color: $backdrop_bg_color;
-    &:selected { color: $backdrop_base_color; }
+    border-color: $backdrop_bg_color;
   }
-  column { // this is to override the previously set color...
-    color: $fg_color;
-    &:selected { color: $selected_fg_color; }
-    &:backdrop {
-      color: $backdrop_fg_color;
-      &:selected { color: $backdrop_base_color; };
+  &.expander {
+    -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+    &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
+    color: mix($fg_color, $base_color, 70%);
+    &:hover { color: $fg_color; }
+    &:selected {
+      color: mix($selected_fg_color, $selected_bg_color, 70%);
+      &:hover { color: $selected_fg_color; }
+      &:backdrop { color: mix($backdrop_base_color, $selected_bg_color, 70%); }
     }
+    &:active {
+      -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    }
+    &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 70%); }
   }
 }
 
