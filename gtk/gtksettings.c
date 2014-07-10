@@ -449,7 +449,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-icon-theme-name",
                                                                   P_("Icon Theme Name"),
                                                                   P_("Name of icon theme to use"),
-                                                                  "Adwaita",
+                                                                  DEFAULT_ICON_THEME,
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ICON_THEME_NAME);

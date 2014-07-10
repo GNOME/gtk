@@ -44,7 +44,7 @@
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "deprecated/gtknumerableiconprivate.h"
-#include "gtksettings.h"
+#include "gtksettingsprivate.h"
 #include "gtkprivate.h"
 
 #undef GDK_DEPRECATED
@@ -1348,7 +1348,7 @@ load_themes (GtkIconTheme *icon_theme)
    * and gnome is a pragmatic solution to prevent missing icons in
    * GTK+ applications when run under, e.g. KDE.
    */
-  insert_theme (icon_theme, "Adwaita");
+  insert_theme (icon_theme, DEFAULT_ICON_THEME);
   insert_theme (icon_theme, "gnome");
   insert_theme (icon_theme, FALLBACK_ICON_THEME);
   priv->themes = g_list_reverse (priv->themes);
