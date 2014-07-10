@@ -102,7 +102,7 @@ gtk_printer_cloudprint_get_type (void)
  * implements the #GtkPrinter interface and stores a reference to the
  * #GtkCloudprintAccount object and the printer-id to use
  *
- * Return value: the new #GtkPrinterCloudprint object
+ * Returns: the new #GtkPrinterCloudprint object
  **/
 GtkPrinterCloudprint *
 gtk_printer_cloudprint_new (const char *name,

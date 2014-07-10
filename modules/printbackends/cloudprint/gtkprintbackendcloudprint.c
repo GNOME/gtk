@@ -163,7 +163,7 @@ gtk_print_backend_cloudprint_get_type (void)
  * object. #GtkPrintBackendCloudprint implements the #GtkPrintBackend
  * interface using REST API calls to the Google Cloud Print service.
  *
- * Return value: the new #GtkPrintBackendCloudprint object
+ * Returns: the new #GtkPrintBackendCloudprint object
  **/
 GtkPrintBackend *
 gtk_print_backend_cloudprint_new (void)

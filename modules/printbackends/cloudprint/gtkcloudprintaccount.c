@@ -97,7 +97,7 @@ gtk_cloudprint_account_get_type (void)
  * Creates a new #GtkCloudprintAccount object, representing a Google
  * Cloud Print account and its state data.
  *
- * Return value: the new #GtkCloudprintAccount object
+ * Returns: the new #GtkCloudprintAccount object
  **/
 GtkCloudprintAccount *
 gtk_cloudprint_account_new (const gchar *id,

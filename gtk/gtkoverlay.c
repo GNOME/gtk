@@ -576,7 +576,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * #GtkScrolledWindow, the overlays are placed relative
    * to its contents.
    *
-   * Return: %TRUE if the @allocation has been filled
+   * Returns: %TRUE if the @allocation has been filled
    */
   signals[GET_CHILD_POSITION] =
     g_signal_new (I_("get-child-position"),

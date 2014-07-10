@@ -299,7 +299,7 @@ gtk_gesture_pan_new (GtkWidget      *widget,
  *
  * Returns the orientation of the pan gestures that this @gesture expects.
  *
- * Return value: the expected orientation for pan gestures
+ * Returns: the expected orientation for pan gestures
  *
  * Since: 3.14
  */
