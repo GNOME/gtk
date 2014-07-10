@@ -202,8 +202,10 @@ main (int argc, char *argv[])
 	scale = atoi (argv[5]);
 
       icon_info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, argv[3], size, scale, GTK_ICON_LOOKUP_USE_BUILTIN);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
 	       icon_info ? (gtk_icon_info_get_builtin_pixbuf (icon_info) ? "<builtin>" : gtk_icon_info_get_filename (icon_info)) : "<none>");
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (icon_info)
 	{
