@@ -436,11 +436,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-theme-name",
                                                                    P_("Theme Name"),
                                                                    P_("Name of theme to load"),
-#ifdef G_OS_WIN32
-								  _gtk_win32_theme_get_default (),
-#else
                                                                   DEFAULT_THEME_NAME,
-#endif
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_THEME_NAME);
