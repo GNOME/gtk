@@ -311,6 +311,106 @@ page_changed_cb (GtkWidget *stack, GParamSpec *pspec, gpointer data)
 }
 
 static void
+populate_model (GtkTreeStore *store)
+{
+  GtkTreeIter iter, parent0, parent1, parent2, parent3;
+
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_set (store, &iter,
+                      0, "Charlemagne",
+                      1, "742",
+                      2, "814",
+                      -1);
+  parent0 = iter;
+  gtk_tree_store_append (store, &iter, &parent0);
+  gtk_tree_store_set (store, &iter,
+                      0, "Pepin the Short",
+                      1, "714",
+                      2, "768",
+                      -1);
+  parent1 = iter;
+  gtk_tree_store_append (store, &iter, &parent1);
+  gtk_tree_store_set (store, &iter,
+                      0, "Charles Martel",
+                      1, "688",
+                      2, "741",
+                      -1);
+  parent2 = iter;
+  gtk_tree_store_append (store, &iter, &parent2);
+  gtk_tree_store_set (store, &iter,
+                      0, "Pepin of Herstal",
+                      1, "635",
+                      2, "714",
+                      -1);
+  parent3 = iter;
+  gtk_tree_store_append (store, &iter, &parent3);
+  gtk_tree_store_set (store, &iter,
+                      0, "Ansegisel",
+                      1, "602 or 610",
+                      2, "murdered before 679",
+                      -1);
+  gtk_tree_store_append (store, &iter, &parent3);
+  gtk_tree_store_set (store, &iter,
+                      0, "Begga",
+                      1, "615",
+                      2, "693",
+                      -1);
+  gtk_tree_store_append (store, &iter, &parent2);
+  gtk_tree_store_set (store, &iter,
+                      0, "Alpaida",
+                      -1);
+  gtk_tree_store_append (store, &iter, &parent1);
+  gtk_tree_store_set (store, &iter,
+                      0, "Rotrude",
+                      -1);
+  parent2 = iter;
+  gtk_tree_store_append (store, &iter, &parent2);
+  gtk_tree_store_set (store, &iter,
+                      0, "Liévin de Trèves",
+                      -1);
+  parent3 = iter;
+  gtk_tree_store_append (store, &iter, &parent3);
+  gtk_tree_store_set (store, &iter,
+                      0, "Guérin",
+                      -1);
+  gtk_tree_store_append (store, &iter, &parent3);
+  gtk_tree_store_set (store, &iter,
+                      0, "Gunza",
+                      -1);
+  gtk_tree_store_append (store, &iter, &parent2);
+  gtk_tree_store_set (store, &iter,
+                      0, "Willigarde de Bavière",
+                      -1);
+  gtk_tree_store_append (store, &iter, &parent0);
+  gtk_tree_store_set (store, &iter,
+                      0, "Bertrada of Laon",
+                      1, "710",
+                      2, "783",
+                      -1);
+  parent1 = iter;
+  gtk_tree_store_append (store, &iter, &parent1);
+  gtk_tree_store_set (store, &iter,
+                      0, "Caribert of Laon",
+                      2, "before 762",
+                      -1);
+  parent2 = iter;
+  gtk_tree_store_append (store, &iter, &parent2);
+  gtk_tree_store_set (store, &iter,
+                      0, "Unknown",
+                      -1);
+  gtk_tree_store_append (store, &iter, &parent2);
+  gtk_tree_store_set (store, &iter,
+                      0, "Bertrada of Prüm",
+                      1, "ca. 670",
+                      2, "after 721",
+                      -1);
+  gtk_tree_store_append (store, &iter, &parent1);
+  gtk_tree_store_set (store, &iter,
+                      0, "Gisele of Aquitaine",
+                      -1);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -393,6 +493,10 @@ activate (GApplication *app)
   g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "charletree");
+  populate_model ((GtkTreeStore *)gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (widget));
 
   gtk_widget_show_all (GTK_WIDGET (window));
 

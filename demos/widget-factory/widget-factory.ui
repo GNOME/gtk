@@ -158,53 +158,150 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
  Uyghur</property>
   </object>
   <object class="GtkListStore" id="iconsmodel">
-    <columns><column type="gchararray"/></columns>
+    <columns>
+      <column type="gchararray"/>
+    </columns>
     <data>
-      <row><col id="0">audio-headphones-symbolic</col></row>
-      <row><col id="0">audio-speakers-symbolic</col></row>
-      <row><col id="0">audio-input-microphone-symbolic</col></row>
-      <row><col id="0">bookmark-new-symbolic</col></row>
-      <row><col id="0">call-start-symbolic</col></row>
-      <row><col id="0">call-stop-symbolic</col></row>
-      <row><col id="0">camera-photo-symbolic</col></row>
-      <row><col id="0">camera-video-symbolic</col></row>
-      <row><col id="0">camera-web-symbolic</col></row>
-      <row><col id="0">document-new-symbolic</col></row>
-      <row><col id="0">document-open-recent-symbolic</col></row>
-      <row><col id="0">document-open-symbolic</col></row>
-      <row><col id="0">drive-harddisk-symbolic</col></row>
-      <row><col id="0">drive-multidisk-symbolic</col></row>
-      <row><col id="0">drive-optical-symbolic</col></row>
-      <row><col id="0">edit-clear-all-symbolic</col></row>
-      <row><col id="0">edit-copy-symbolic</col></row>
-      <row><col id="0">edit-cut-symbolic</col></row>
-      <row><col id="0">edit-delete-symbolic</col></row>
-      <row><col id="0">find-location-symbolic</col></row>
-      <row><col id="0">format-indent-less-symbolic</col></row>
-      <row><col id="0">format-indent-more-symbolic</col></row>
-      <row><col id="0">format-justify-left-symbolic</col></row>
-      <row><col id="0">format-justify-center-symbolic</col></row>
-      <row><col id="0">format-justify-right-symbolic</col></row>
-      <row><col id="0">network-wired-symbolic</col></row>
-      <row><col id="0">network-wireless-symbolic</col></row>
-      <row><col id="0">phone-symbolic</col></row>
-      <row><col id="0">insert-image-symbolic</col></row>
-      <row><col id="0">insert-link-symbolic</col></row>
-      <row><col id="0">insert-object-symbolic</col></row>
-      <row><col id="0">view-continuous-symbolic</col></row>
-      <row><col id="0">view-dual-symbolic</col></row>
-      <row><col id="0">view-fullscreen-symbolic</col></row>
-      <row><col id="0">view-grid-symbolic</col></row>
-      <row><col id="0">view-list-symbolic</col></row>
-      <row><col id="0">view-paged-symbolic</col></row>
-      <row><col id="0">weather-clear-night-symbolic</col></row>
-      <row><col id="0">weather-few-clouds-night-symbolic</col></row>
-      <row><col id="0">weather-fog-symbolic</col></row>
-      <row><col id="0">weather-overcast-symbolic</col></row>
-      <row><col id="0">weather-severe-alert-symbolic</col></row>
-      <row><col id="0">weather-showers-symbolic</col></row>
-      <row><col id="0">weather-snow-symbolic</col></row>
+      <row>
+        <col id="0">audio-headphones-symbolic</col>
+      </row>
+      <row>
+        <col id="0">audio-speakers-symbolic</col>
+      </row>
+      <row>
+        <col id="0">audio-input-microphone-symbolic</col>
+      </row>
+      <row>
+        <col id="0">bookmark-new-symbolic</col>
+      </row>
+      <row>
+        <col id="0">call-start-symbolic</col>
+      </row>
+      <row>
+        <col id="0">call-stop-symbolic</col>
+      </row>
+      <row>
+        <col id="0">camera-photo-symbolic</col>
+      </row>
+      <row>
+        <col id="0">camera-video-symbolic</col>
+      </row>
+      <row>
+        <col id="0">camera-web-symbolic</col>
+      </row>
+      <row>
+        <col id="0">document-new-symbolic</col>
+      </row>
+      <row>
+        <col id="0">document-open-recent-symbolic</col>
+      </row>
+      <row>
+        <col id="0">document-open-symbolic</col>
+      </row>
+      <row>
+        <col id="0">drive-harddisk-symbolic</col>
+      </row>
+      <row>
+        <col id="0">drive-multidisk-symbolic</col>
+      </row>
+      <row>
+        <col id="0">drive-optical-symbolic</col>
+      </row>
+      <row>
+        <col id="0">edit-clear-all-symbolic</col>
+      </row>
+      <row>
+        <col id="0">edit-copy-symbolic</col>
+      </row>
+      <row>
+        <col id="0">edit-cut-symbolic</col>
+      </row>
+      <row>
+        <col id="0">edit-delete-symbolic</col>
+      </row>
+      <row>
+        <col id="0">find-location-symbolic</col>
+      </row>
+      <row>
+        <col id="0">format-indent-less-symbolic</col>
+      </row>
+      <row>
+        <col id="0">format-indent-more-symbolic</col>
+      </row>
+      <row>
+        <col id="0">format-justify-left-symbolic</col>
+      </row>
+      <row>
+        <col id="0">format-justify-center-symbolic</col>
+      </row>
+      <row>
+        <col id="0">format-justify-right-symbolic</col>
+      </row>
+      <row>
+        <col id="0">network-wired-symbolic</col>
+      </row>
+      <row>
+        <col id="0">network-wireless-symbolic</col>
+      </row>
+      <row>
+        <col id="0">phone-symbolic</col>
+      </row>
+      <row>
+        <col id="0">insert-image-symbolic</col>
+      </row>
+      <row>
+        <col id="0">insert-link-symbolic</col>
+      </row>
+      <row>
+        <col id="0">insert-object-symbolic</col>
+      </row>
+      <row>
+        <col id="0">view-continuous-symbolic</col>
+      </row>
+      <row>
+        <col id="0">view-dual-symbolic</col>
+      </row>
+      <row>
+        <col id="0">view-fullscreen-symbolic</col>
+      </row>
+      <row>
+        <col id="0">view-grid-symbolic</col>
+      </row>
+      <row>
+        <col id="0">view-list-symbolic</col>
+      </row>
+      <row>
+        <col id="0">view-paged-symbolic</col>
+      </row>
+      <row>
+        <col id="0">weather-clear-night-symbolic</col>
+      </row>
+      <row>
+        <col id="0">weather-few-clouds-night-symbolic</col>
+      </row>
+      <row>
+        <col id="0">weather-fog-symbolic</col>
+      </row>
+      <row>
+        <col id="0">weather-overcast-symbolic</col>
+      </row>
+      <row>
+        <col id="0">weather-severe-alert-symbolic</col>
+      </row>
+      <row>
+        <col id="0">weather-showers-symbolic</col>
+      </row>
+      <row>
+        <col id="0">weather-snow-symbolic</col>
+      </row>
     </data>
+  </object>
+  <object class="GtkTreeStore" id="charlemodel">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkApplicationWindow" id="window">
     <property name="can_focus">False</property>
@@ -2718,10 +2815,77 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinner">
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="active">True</property>
-                <property name="expand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">always</property>
+                    <property name="height-request">300</property>
+                    <property name="halign">start</property>
+                    <property name="shadow-type">in</property>
+                    <property name="margin">10</property>
+                    <child>
+                      <object class="GtkTreeView" id="charletree">
+                        <property name="visible">True</property>
+                        <property name="enable-grid-lines">vertical</property>
+                        <property name="enable-tree-lines">True</property>
+                        <property name="rubber-banding">True</property>
+                        <property name="model">charlemodel</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection">
+                            <property name="mode">multiple</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="visible">True</property>
+                            <property name="title" translatable="yes">Name</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="visible">True</property>
+                            <property name="title" translatable="yes">Birth</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="visible">True</property>
+                            <property name="title" translatable="yes">Death</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">2</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSpinner">
+                    <property name="visible">True</property>
+                    <property name="active">True</property>
+                    <property name="expand">True</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="name">page3</property>
