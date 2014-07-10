@@ -467,6 +467,10 @@ typedef enum
  * @GTK_SHADOW_ETCHED_OUT: The outline has a raised 3d appearance.
  *
  * Used to change the appearance of an outline typically provided by a #GtkFrame.
+ *
+ * Note that many themes do not differentiate the appearance of the
+ * various shadow types: Either their is no visible shadow (@GTK_SHADOW_NONE),
+ * or there is (any other value).
  */
 typedef enum
 {
