@@ -1043,6 +1043,7 @@ GtkTreeView.view {
 
 column-header .button {
   color: #96999a;
+  background-color: white;
   font-weight: bold;
   text-shadow: none;
   box-shadow: none; }

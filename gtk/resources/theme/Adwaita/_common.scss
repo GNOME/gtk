@@ -868,6 +868,7 @@ column-header {
     @extend %column_header_button;
     $_column_header_color: mix($fg_color,$base_color,50%);
     color: $_column_header_color;
+    background-color: $base_color;
     font-weight: bold;
     text-shadow: none;
     box-shadow: none;
