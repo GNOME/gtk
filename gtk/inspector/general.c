@@ -54,6 +54,7 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gtk_path;
   GtkWidget *gtk_exe_prefix;
   GtkWidget *gtk_data_prefix;
+  GtkWidget *gsettings_schema_dir;
   GtkWidget *touchscreen_switch;
 };
 
@@ -137,6 +138,7 @@ init_env (GtkInspectorGeneral *gen)
   set_path_label (gen->priv->gtk_path, "GTK_PATH");
   set_path_label (gen->priv->gtk_exe_prefix, "GTK_EXE_PREFIX");
   set_path_label (gen->priv->gtk_data_prefix, "GTK_DATA_PREFIX");
+  set_path_label (gen->priv->gsettings_schema_dir, "GSETTINGS_SCHEMA_DIR");
 }
 
 static void
@@ -194,6 +196,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_path);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_exe_prefix);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_data_prefix);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gsettings_schema_dir);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, touchscreen_switch);
 }
 
