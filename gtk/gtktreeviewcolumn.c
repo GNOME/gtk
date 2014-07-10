@@ -819,6 +819,33 @@ gtk_tree_view_column_cell_layout_get_area (GtkCellLayout   *cell_layout)
 /* Button handling code
  */
 static void
+maybe_hide_arrow (GtkWidget         *arrow,
+                  GtkAllocation     *allocation,
+                  GtkTreeViewColumn *col)
+{
+  GtkAllocation a;
+  gboolean overlap;
+
+  gtk_widget_get_allocation (col->priv->alignment, &a);
+
+  /* resizable columns can be shrunk all the way; in that case
+   * we don't want to render the sort indicator on top of the
+   * label, but just hide it.
+   */
+  if ((a.x <= allocation->x && allocation->x < a.x + a.width) ||
+      (allocation->x <= a.x && a.x < allocation->x + allocation->width))
+    overlap = TRUE;
+  else
+    overlap = FALSE;
+
+  if (col->priv->show_sort_indicator && !overlap)
+    gtk_widget_set_opacity (arrow, 1);
+  else
+    gtk_widget_set_opacity (arrow, 0);
+}
+
+
+static void
 gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 {
   GtkTreeViewColumnPrivate *priv = tree_column->priv;
@@ -877,6 +904,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         
   gtk_container_add (GTK_CONTAINER (priv->alignment), child);
   gtk_container_add (GTK_CONTAINER (priv->button), hbox);
+
+  g_signal_connect (priv->arrow, "size-allocate",
+                    G_CALLBACK (maybe_hide_arrow), tree_column);
 
   gtk_widget_show (hbox);
   gtk_widget_show (priv->alignment);
