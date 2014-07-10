@@ -3956,11 +3956,30 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
+gtk_label_get_ink_rect (GtkLabel     *label,
+                        GdkRectangle *rect)
+{
+  GtkLabelPrivate *priv = label->priv;
+  PangoRectangle ink_rect;
+  int x, y;
+
+  gtk_label_ensure_layout (label);
+  get_layout_location (label, &x, &y);
+  pango_layout_get_pixel_extents (priv->layout, &ink_rect, NULL);
+
+  rect->x = x + ink_rect.x;
+  rect->width = ink_rect.width;
+  rect->y = y + ink_rect.y;
+  rect->height = ink_rect.height;
+}
+
+static void
 gtk_label_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
+  GdkRectangle clip_rect;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
 
@@ -3975,6 +3994,9 @@ gtk_label_size_allocate (GtkWidget     *widget,
                               allocation->width,
                               allocation->height);
     }
+
+  gtk_label_get_ink_rect (label, &clip_rect);
+  gtk_widget_set_clip (widget, &clip_rect);
 }
 
 static void
