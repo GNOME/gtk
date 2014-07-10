@@ -2694,7 +2694,7 @@ gdk_x11_display_error_trap_pop_internal (GdkDisplay *display,
  */
 void
 gdk_x11_display_set_window_scale (GdkDisplay *display,
-                                  gint scale)
+                                  gint        scale)
 {
   GdkX11Screen *x11_screen;
   gboolean need_reread_settings = FALSE;
@@ -2715,7 +2715,8 @@ gdk_x11_display_set_window_scale (GdkDisplay *display,
       x11_screen->fixed_window_scale = TRUE;
 
       /* We treat screens with a window scale set differently when
-       * reading xsettings, so we need to reread */
+       * reading xsettings, so we need to reread
+       */
       need_reread_settings = TRUE;
     }
 

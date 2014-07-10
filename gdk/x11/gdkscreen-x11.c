@@ -1122,7 +1122,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
 
 void
 _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
-				  int scale)
+				  gint          scale)
 {
   GList *toplevels, *l;
   GdkWindow *root;
