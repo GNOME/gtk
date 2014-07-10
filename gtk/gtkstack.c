@@ -1772,7 +1772,13 @@ gtk_stack_draw (GtkWidget *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkStyleContext *context;
+  GtkAllocation allocation;
   cairo_t *pattern_cr;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
 
   if (priv->visible_child)
     {
@@ -1830,7 +1836,7 @@ gtk_stack_draw (GtkWidget *widget,
                                       cr);
     }
 
-  return TRUE;
+  return GTK_WIDGET_CLASS (gtk_stack_parent_class)->draw (widget, cr);
 }
 
 static void
