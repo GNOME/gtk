@@ -279,6 +279,7 @@ gtk/inspector/classes-list.ui.h
 gtk/inspector/css-editor.c
 gtk/inspector/css-editor.ui.h
 gtk/inspector/data-list.ui.h
+gtk/inspector/general.c
 gtk/inspector/general.ui.h
 gtk/inspector/gestures.c
 gtk/inspector/inspect-button.c
@@ -292,6 +293,7 @@ gtk/inspector/signals-list.c
 gtk/inspector/signals-list.ui.h
 gtk/inspector/size-groups.c
 gtk/inspector/style-prop-list.ui.h
+gtk/inspector/visual.c
 gtk/inspector/visual.ui.h
 gtk/inspector/widget-tree.ui.h
 gtk/inspector/window.c

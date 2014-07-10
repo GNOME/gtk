@@ -24,6 +24,7 @@ demos/gtk-demo/stack.ui
 demos/gtk-demo/theming.ui
 demos/icon-browser/app-menu.ui
 demos/icon-browser/window.ui
+demos/widget-factory/menus.ui
 demos/widget-factory/widget-factory.ui
 examples/application10/app-menu.ui
 examples/application10/gears-menu.ui
@@ -168,6 +169,8 @@ testsuite/reftests/inherit-and-initial.ref.ui
 testsuite/reftests/inherit-and-initial.ui
 testsuite/reftests/label-attribute-preference.ref.ui
 testsuite/reftests/label-attribute-preference.ui
+testsuite/reftests/label-clipping.ref.ui
+testsuite/reftests/label-clipping.ui
 testsuite/reftests/label-ellipsize-small.ref.ui
 testsuite/reftests/label-ellipsize-small.ui
 testsuite/reftests/label-ellipsize-with-big.ref.ui
