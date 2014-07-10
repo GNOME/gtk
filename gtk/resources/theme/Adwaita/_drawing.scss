@@ -151,10 +151,8 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     @else { border-color: $borders_color; }
 
     @include _button_text_shadow($tc,$c);
-    @if $noedge { box-shadow: inset 0 1px $_top_hilight; }
-    @else {
-      @include _shadows(inset 0 1px $_top_hilight, $widget_edge);
-    }
+    $_outsets: if($noedge, none, $widget_edge);
+    @include _shadows(inset 0 1px $_top_hilight, $_outsets);
   }
 
   @else if $t==hover {
@@ -170,10 +168,8 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
                                       $c);
 
     @include _button_text_shadow($tc,lighten($c,4%));
-    @if $noedge { box-shadow: inset 0 1px $_top_hilight; }
-    @else {
-      @include _shadows(inset 0 1px $_top_hilight, $widget_edge);
-    }
+    $_outsets: if($noedge, none, $widget_edge);
+    @include _shadows(inset 0 1px $_top_hilight, $_outsets);
   }
 
   @else if $t==active {
@@ -195,13 +191,8 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
                                         darken($c,5%) 3%);
     }
     @include _button_text_shadow($tc,darken($c,10%));
-    @if $noedge {
-      box-shadow: inset 0 2px 3px -1px transparentize(black,0.7);
-    }
-    @else {
-      @include _shadows(inset 0 2px 3px -1px transparentize(black,0.7),
-                        $widget_edge);
-    }
+    $_outsets: if($noedge, none, $widget_edge);
+    @include _shadows(inset 0 2px 3px -1px transparentize(black,0.7),$_outsets);
   }
   @else if $t==insensitive {
   //
@@ -212,15 +203,10 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     background-image: linear-gradient(to bottom, $insensitive_bg_color);
     text-shadow: none;
     icon-shadow: none;
-    @if $noedge {
-      // white with 0 alpha to avoid an ugly transition, since no color means
-      // black with 0 alpha
-      box-shadow: inset 0 1px transparentize(white,1);
-    }
-    @else {
-      @include _shadows(inset 0 1px transparentize(white,1),
-                        $widget_edge);
-    }
+    $_outsets: if($noedge, none, $widget_edge);
+    // white with 0 alpha to avoid an ugly transition, since no color means
+    // black with 0 alpha
+    @include _shadows(inset 0 1px transparentize(white,1), $_outsets);
   }
   @else if $t==insensitive-active {
   //
@@ -231,15 +217,10 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     background-image: linear-gradient(to bottom,
                         mix($insensitive_borders_color,
                             $insensitive_bg_color, 10%));
-    @if $noedge {
-      // white with 0 alpha to avoid an ugly transition, since no color means
-      // black with 0 alpha
-      box-shadow: inset 0 1px transparentize(white,1);
-    }
-    @else {
-      @include _shadows(inset 0 1px transparentize(white,1),
-                        $widget_edge);
-    }
+    $_outsets: if($noedge, none, $widget_edge);
+    // white with 0 alpha to avoid an ugly transition, since no color means
+    // black with 0 alpha
+    @include _shadows(inset 0 1px transparentize(white,1), $_outsets);
   }
 
   @else if $t==backdrop {
@@ -253,7 +234,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     text-shadow: none;
     icon-shadow: none;
     @include _shadows(inset 0 1px transparentize(white,1),
-                      0 1px transparentize(white,1));
+                            0 1px transparentize(white,1));
   }
 
   @else if $t==backdrop-active {
@@ -264,8 +245,8 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom,
                         mix($backdrop_borders_color,$backdrop_bg_color, 35%));
-    @include _shadows(inset 0 1px transparentize(white,1),
-                      0 1px transparentize(white,1));
+    box-shadow: inset 0 1px transparentize(white,1),
+                0 1px transparentize(white,1);
   }
 
   @else if $t==backdrop-insensitive {
@@ -275,7 +256,8 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     color: $backdrop_insensitive_color;
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $backdrop_bg_color);
-    box-shadow: inset 0 1px transparentize(white,1);
+    box-shadow: inset 0 1px transparentize(white,1),
+                0 1px transparentize(white,1);
   }
 
   @else if $t==backdrop-insensitive-active {
@@ -286,8 +268,8 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom,
                         mix($backdrop_borders_color,$backdrop_bg_color, 8%));
-    @include _shadows(inset 0 1px transparentize(white,1),
-                      0 1px transparentize(white,1));
+    box-shadow: inset 0 1px transparentize(white,1),
+                0 1px transparentize(white,1);
   }
   
   @else if $t==osd {
