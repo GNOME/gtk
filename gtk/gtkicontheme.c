@@ -134,7 +134,7 @@
  * ]|
  */
 
-#define DEFAULT_THEME_NAME "hicolor"
+#define FALLBACK_ICON_THEME "hicolor"
 
 typedef enum
 {
@@ -1164,7 +1164,7 @@ insert_theme (GtkIconTheme *icon_theme,
       g_free (path);
     }
 
-  if (theme_file || strcmp (theme_name, DEFAULT_THEME_NAME) == 0)
+  if (theme_file || strcmp (theme_name, FALLBACK_ICON_THEME) == 0)
     {
       theme = g_new0 (IconTheme, 1);
       theme->name = g_strdup (theme_name);
@@ -1350,7 +1350,7 @@ load_themes (GtkIconTheme *icon_theme)
    */
   insert_theme (icon_theme, "Adwaita");
   insert_theme (icon_theme, "gnome");
-  insert_theme (icon_theme, DEFAULT_THEME_NAME);
+  insert_theme (icon_theme, FALLBACK_ICON_THEME);
   priv->themes = g_list_reverse (priv->themes);
 
 
@@ -1830,7 +1830,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
           for (i = 0; !found && i < priv->search_path_len; i++)
             {
               default_theme_path = g_build_filename (priv->search_path[i],
-                                                     DEFAULT_THEME_NAME,
+                                                     FALLBACK_ICON_THEME,
                                                      "index.theme",
                                                      NULL);
               found = g_file_test (default_theme_path, G_FILE_TEST_IS_REGULAR);
@@ -1843,7 +1843,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
                          "was not found either, perhaps you need to install it.\n"
                          "You can get a copy from:\n"
                          "\t%s",
-                         icon_names[0], DEFAULT_THEME_NAME, "http://icon-theme.freedesktop.org/releases");
+                         icon_names[0], FALLBACK_ICON_THEME, "http://icon-theme.freedesktop.org/releases");
             }
         }
     }
@@ -2971,7 +2971,7 @@ theme_lookup_icon (IconTheme   *theme,
   /* Builtin icons are logically part of the default theme and
    * are searched before other subdirectories of the default theme.
    */
-  if (use_builtin && strcmp (theme->name, DEFAULT_THEME_NAME) == 0)
+  if (use_builtin && strcmp (theme->name, FALLBACK_ICON_THEME) == 0)
     {
       closest_builtin = find_builtin_icon (icon_name, 
                                            size, scale,
@@ -3324,7 +3324,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
         g_free (full_dir);
     }
 
-  if (strcmp (theme->name, DEFAULT_THEME_NAME) == 0)
+  if (strcmp (theme->name, FALLBACK_ICON_THEME) == 0)
     { 
       for (d = icon_theme->priv->resource_paths; d; d = d->next)
         {
