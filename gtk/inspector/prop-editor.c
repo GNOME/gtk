@@ -1301,6 +1301,113 @@ action_editor (GObject                *object,
 }
 
 static void
+binding_object_properties (GtkButton *button, GtkInspectorPropEditor *editor)
+{
+  GObject *obj;
+
+  obj = (GObject *)g_object_get_data (G_OBJECT (button), "object");
+  if (G_IS_OBJECT (obj))
+    g_signal_emit (editor, signals[SHOW_OBJECT], 0, obj, NULL, "properties");
+}
+
+static void
+add_binding_info (GtkInspectorPropEditor *editor)
+{
+  GObject *object;
+  const gchar *name;
+  GHashTable *bindings;
+  GHashTableIter iter;
+  GBinding *binding;
+  GtkWidget *row;
+  GtkWidget *button;
+  gchar *str;
+  GObject *other;
+  const gchar *property;
+  const gchar *direction;
+  const gchar *tip;
+  GtkWidget *label;
+
+  object = editor->priv->object;
+  name = editor->priv->name;
+
+  bindings = (GHashTable *)g_object_get_data (G_OBJECT (object), "g-binding");
+  if (!bindings)
+    return;
+
+  g_hash_table_iter_init (&iter, bindings);
+  while (g_hash_table_iter_next (&iter, (gpointer*)&binding, NULL))
+    {
+      if (g_binding_get_source (binding) == object &&
+          g_str_equal (g_binding_get_source_property (binding), name))
+        {
+          other = g_binding_get_target (binding);
+          property = g_binding_get_target_property (binding);
+          if (g_binding_get_flags (binding) & G_BINDING_INVERT_BOOLEAN)
+            {
+              direction = "↛";
+              tip = _("inverted");
+            }
+          else
+            {
+              direction = "→";
+              tip = NULL;
+            }
+        }
+      else if (g_binding_get_target (binding) == object &&
+               g_str_equal (g_binding_get_target_property (binding), name))
+        {
+          other = g_binding_get_source (binding);
+          property = g_binding_get_source_property (binding);
+          if (g_binding_get_flags (binding) & G_BINDING_INVERT_BOOLEAN)
+            {
+              direction = "↚";
+              tip = _("inverted");
+            }
+          else
+            {
+              direction = "←";
+              tip = NULL;
+            }
+        }
+      else
+        continue;
+     
+      if (g_binding_get_flags (binding) & G_BINDING_BIDIRECTIONAL)
+        {
+          if (g_binding_get_flags (binding) & G_BINDING_INVERT_BOOLEAN)
+            {
+              direction = "↮";
+              tip = _("bidirectional, inverted");
+            }
+          else
+            {
+              direction = "↔";
+              tip = _("bidirectional");
+            }
+        }
+
+      row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Binding:")));
+      label = gtk_label_new (direction);
+      if (tip)
+        gtk_widget_set_tooltip_text (label, tip);
+      gtk_container_add (GTK_CONTAINER (row), label);
+      str = g_strdup_printf ("%p :: %s", other, property);
+      label = gtk_label_new (str);
+      gtk_container_add (GTK_CONTAINER (row), label);
+      g_free (str);
+      button = gtk_button_new_with_label (_("Properties"));
+      g_object_set_data (G_OBJECT (button), "object", other);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (binding_object_properties), editor);
+      gtk_container_add (GTK_CONTAINER (row), button);
+
+       gtk_widget_show_all (row);
+       gtk_container_add (GTK_CONTAINER (editor), row);
+    }
+}
+
+static void
 constructed (GObject *object)
 {
   GtkInspectorPropEditor *editor = GTK_INSPECTOR_PROP_EDITOR (object);
@@ -1332,7 +1439,8 @@ constructed (GObject *object)
       g_strcmp0 (editor->priv->name, "action-name") == 0)
     gtk_container_add (GTK_CONTAINER (editor),
                        action_editor (editor->priv->object, editor));
-    
+
+  add_binding_info (editor);
 }
 
 static void
