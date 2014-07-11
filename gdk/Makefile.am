@@ -194,8 +194,8 @@ endif # USE_QUARTZ
 if USE_WIN32
 libgdk_3_la_SOURCES += gdkkeynames.c
 libgdk_3_la_LIBADD += win32/libgdk-win32.la
-libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o
-libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o
+libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
+libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
 endif # USE_WIN32
 
 if USE_BROADWAY
@@ -345,11 +345,22 @@ CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
 endif # HAVE_INTROSPECTION
 
+if OS_WIN32
+install-def-file: gdk.def
+	mkdir -p $(DESTDIR)$(libdir)
+	$(INSTALL) $(srcdir)/gdk.def $(DESTDIR)$(libdir)/gdk-win32-3.0.def
+uninstall-def-file:
+	-rm $(DESTDIR)$(libdir)/gdk-win32-3.0.def
+else
+install-def-file:
+uninstall-def-file:
+endif
+
 if MS_LIB_AVAILABLE
 noinst_DATA = gdk-win32-$(GTK_API_VERSION).lib
 
-gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la
-	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -out:$@
+gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la gdk.def
+	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
 
 install-ms-lib:
 	mkdir -p $(DESTDIR)$(libdir)
@@ -446,9 +457,9 @@ dist-hook: ../build/win32/vs9/gdk.vcproj ../build/win32/vs10/gdk.vcxproj ../buil
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 
-install-data-local: install-ms-lib
+install-data-local: install-ms-lib install-def-file
 
-uninstall-local: uninstall-ms-lib
+uninstall-local: uninstall-ms-lib uninstall-def-file
 	rm -f $(DESTDIR)$(configexecincludedir)/gdkconfig.h
 
 # if srcdir!=builddir, clean out maintainer-clean files from builddir
