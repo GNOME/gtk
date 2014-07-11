@@ -3206,15 +3206,20 @@ gtk_drag_set_icon_window (GdkDragContext *context,
  * gtk_drag_set_icon_widget: (method)
  * @context: the context for a drag. (This must be called 
           with a  context for the source side of a drag)
- * @widget: a toplevel window to use as an icon.
- * @hot_x: the X offset within @widget of the hotspot.
- * @hot_y: the Y offset within @widget of the hotspot.
+ * @widget: a toplevel window to use as an icon
+ * @hot_x: the X offset within @widget of the hotspot
+ * @hot_y: the Y offset within @widget of the hotspot
  * 
- * Changes the icon for a widget to a given widget. GTK+
- * will not destroy the icon, so if you don’t want
+ * Changes the icon for a widget to a given widget.
+ * GTK+ will not destroy the icon, so if you don’t want
  * it to persist, you should connect to the “drag-end” 
  * signal and destroy it yourself.
- **/
+ *
+ * GTK+ will, however, change the opacity and position of
+ * the window as part of the drag animation. If you want
+ * to reuse the window, you have to restore these to
+ * the values you need after each drag operation.
+ */
 void 
 gtk_drag_set_icon_widget (GdkDragContext    *context,
 			  GtkWidget         *widget,
