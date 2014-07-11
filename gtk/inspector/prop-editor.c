@@ -1407,6 +1407,109 @@ add_binding_info (GtkInspectorPropEditor *editor)
     }
 }
 
+struct _GSettingsSchemaKey
+{
+  GSettingsSchema *schema;
+  const gchar *name;
+
+  guint is_flags : 1;
+  guint is_enum  : 1;
+
+  const guint32 *strinfo;
+  gsize strinfo_length;
+
+  const gchar *unparsed;
+  gchar lc_char;
+
+  const GVariantType *type;
+  GVariant *minimum, *maximum;
+  GVariant *default_value;
+
+  gint ref_count;
+};
+
+typedef struct
+{
+  GSettingsSchemaKey key;
+  GSettings *settings;
+  GObject *object;
+
+  GSettingsBindGetMapping get_mapping;
+  GSettingsBindSetMapping set_mapping;
+  gpointer user_data;
+  GDestroyNotify destroy;
+
+  guint writable_handler_id;
+  guint property_handler_id;
+  const GParamSpec *property;
+  guint key_handler_id;
+
+  /* prevent recursion */
+  gboolean running;
+} GSettingsBinding;
+
+static void
+add_settings_info (GtkInspectorPropEditor *editor)
+{
+  gchar *key;
+  GSettingsBinding *binding;
+  GObject *object;
+  const gchar *name;
+  const gchar *direction;
+  const gchar *tip;
+  GtkWidget *row;
+  GtkWidget *label;
+  gchar *str;
+
+  object = editor->priv->object;
+  name = editor->priv->name;
+
+  key = g_strconcat ("gsettingsbinding-", name, NULL);
+  binding = (GSettingsBinding *)g_object_get_data (object, key);
+  g_free (key);
+
+  if (!binding)
+    return;
+
+  if (binding->key_handler_id && binding->property_handler_id)
+    {
+      direction = "↔";
+      tip = _("bidirectional");
+    }
+  else if (binding->key_handler_id)
+    {
+      direction = "←";
+      tip = NULL;
+    }
+  else if (binding->property_handler_id)
+    {
+      direction = "→";
+      tip = NULL;
+    }
+  else
+    {
+      direction = "?";
+      tip = NULL;
+    }
+
+  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Setting:")));
+  label = gtk_label_new (direction);
+  if (tip)
+    gtk_widget_set_tooltip_text (label, tip);
+  gtk_container_add (GTK_CONTAINER (row), label);
+  
+  str = g_strdup_printf ("%s %s",
+                         g_settings_schema_get_id (binding->key.schema),
+                         binding->key.name);
+  label = gtk_label_new (str);
+  gtk_container_add (GTK_CONTAINER (row), label);
+  g_free (str);
+
+  gtk_widget_show_all (row);
+  gtk_container_add (GTK_CONTAINER (editor), row);
+}
+
 static void
 constructed (GObject *object)
 {
@@ -1441,6 +1544,7 @@ constructed (GObject *object)
                        action_editor (editor->priv->object, editor));
 
   add_binding_info (editor);
+  add_settings_info (editor);
 }
 
 static void
