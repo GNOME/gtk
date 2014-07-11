@@ -1330,6 +1330,9 @@ add_binding_info (GtkInspectorPropEditor *editor)
   object = editor->priv->object;
   name = editor->priv->name;
 
+  /* Note: this is accessing private GBinding details, so keep it
+   * in sync with the implementation in GObject
+   */
   bindings = (GHashTable *)g_object_get_data (G_OBJECT (object), "g-binding");
   if (!bindings)
     return;
@@ -1407,6 +1410,10 @@ add_binding_info (GtkInspectorPropEditor *editor)
     }
 }
 
+/* Note: Slightly nasty that we have to poke at the
+ * GSettingsSchemaKey internals here. Keep this in
+ * sync with the implementation in GIO!
+ */
 struct _GSettingsSchemaKey
 {
   GSettingsSchema *schema;
