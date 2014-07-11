@@ -75,8 +75,8 @@ gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
   NSScreen *nsscreen;
 
   nsscreen = [[NSScreen screens] objectAtIndex:0];
-  gdk_screen_set_resolution (screen,
-                             72.0 * [nsscreen userSpaceScaleFactor]);
+  _gdk_screen_set_resolution (screen,
+                              72.0 * [nsscreen userSpaceScaleFactor]);
 
   gdk_quartz_screen_calculate_layout (quartz_screen);
 

@@ -2944,24 +2944,31 @@ settings_update_resolution (GtkSettings *settings)
   const char *scale_env;
   double scale;
 
-  g_object_get (settings,
-                "gtk-xft-dpi", &dpi_int,
-                NULL);
-
-  if (dpi_int > 0)
-    dpi = dpi_int / 1024.;
-  else
-    dpi = -1.;
-
-  scale_env = g_getenv ("GDK_DPI_SCALE");
-  if (scale_env)
+  /* We handle this here in the case that the dpi was set on the GtkSettings
+   * object by the application. Other cases are handled in
+   * xsettings-client.c:read-settings(). See comment there for the rationale.
+   */
+  if (priv->property_values[PROP_XFT_DPI - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
     {
-      scale = g_ascii_strtod (scale_env, NULL);
-      if (scale != 0 && dpi > 0)
-	dpi *= scale;
-    }
+      g_object_get (settings,
+                    "gtk-xft-dpi", &dpi_int,
+                    NULL);
 
-  gdk_screen_set_resolution (priv->screen, dpi);
+      if (dpi_int > 0)
+        dpi = dpi_int / 1024.;
+      else
+        dpi = -1.;
+
+      scale_env = g_getenv ("GDK_DPI_SCALE");
+      if (scale_env)
+        {
+          scale = g_ascii_strtod (scale_env, NULL);
+          if (scale != 0 && dpi > 0)
+            dpi *= scale;
+        }
+
+      gdk_screen_set_resolution (priv->screen, dpi);
+    }
 }
 
 static void

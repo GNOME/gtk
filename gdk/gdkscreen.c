@@ -462,6 +462,31 @@ gdk_screen_set_resolution (GdkScreen *screen,
   if (dpi < 0)
     dpi = -1.0;
 
+  screen->resolution_set = TRUE;
+
+  if (screen->resolution != dpi)
+    {
+      screen->resolution = dpi;
+
+      g_object_notify (G_OBJECT (screen), "resolution");
+    }
+}
+
+/* Just like gdk_screen_set_resolution(), but doesn't change
+ * screen->resolution. This is us to allow us to distinguish
+ * resolution changes that the backend picks up from resolution
+ * changes made through the public API - perhaps using
+ * g_object_set(<GtkSetting>, "gtk-xft-dpi", ...);
+ */
+void
+_gdk_screen_set_resolution (GdkScreen *screen,
+                            gdouble    dpi)
+{
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+
+  if (dpi < 0)
+    dpi = -1.0;
+
   if (screen->resolution != dpi)
     {
       screen->resolution = dpi;

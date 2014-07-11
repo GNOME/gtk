@@ -345,6 +345,8 @@ gboolean   _gdk_window_update_viewable   (GdkWindow      *window);
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 cairo_region_t *expose_region);
 
+void       _gdk_screen_set_resolution    (GdkScreen      *screen,
+                                          gdouble         dpi);
 void       _gdk_screen_close             (GdkScreen      *screen);
 
 /*****************************************

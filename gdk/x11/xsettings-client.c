@@ -402,6 +402,8 @@ static void
 read_settings (GdkX11Screen *x11_screen,
                gboolean      do_notify)
 {
+  GdkScreen *screen = GDK_SCREEN (x11_screen);
+
   Atom type;
   int format;
   unsigned long n_items;
@@ -466,6 +468,41 @@ read_settings (GdkX11Screen *x11_screen,
     g_hash_table_unref (old_list);
 
   g_value_init (&value, G_TYPE_INT);
+
+  if (!screen->resolution_set)
+    {
+      /* This code is duplicated with gtksettings.c:settings_update_resolution().
+       * The update of the screen resolution needs to happen immediately when
+       * gdk_x11_display_set_window_scale() is called, and not wait for events
+       * to be processed, so we can't always handling it in gtksettings.c.
+       * But we can't always handle it here because the DPI can be set through
+       * GtkSettings, which we don't have access to.
+       */
+      int dpi_int = 0;
+      double dpi;
+      const char *scale_env;
+      double scale;
+
+      if (gdk_screen_get_setting (GDK_SCREEN (x11_screen),
+                                  "gtk-xft-dpi", &value))
+        dpi_int = g_value_get_int (&value);
+
+      if (dpi_int > 0)
+        dpi = dpi_int / 1024.;
+      else
+        dpi = -1.;
+
+      scale_env = g_getenv ("GDK_DPI_SCALE");
+      if (scale_env)
+        {
+          scale = g_ascii_strtod (scale_env, NULL);
+          if (scale != 0 && dpi > 0)
+            dpi *= scale;
+        }
+
+      _gdk_screen_set_resolution (screen, dpi);
+    }
+
   if (!x11_screen->fixed_window_scale &&
       gdk_screen_get_setting (GDK_SCREEN (x11_screen),
 			      "gdk-window-scaling-factor", &value))
