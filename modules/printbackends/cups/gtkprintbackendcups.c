@@ -3528,7 +3528,7 @@ cups_get_printer_list (GtkPrintBackend *backend)
   cups_backend = GTK_PRINT_BACKEND_CUPS (backend);
 
   if (cups_backend->cups_connection_test == NULL)
-    cups_backend->cups_connection_test = gtk_cups_connection_test_new (NULL);
+    cups_backend->cups_connection_test = gtk_cups_connection_test_new (NULL, -1);
 
   if (cups_backend->list_printers_poll == 0)
     {
@@ -3931,7 +3931,7 @@ cups_get_default_printer (GtkPrintBackendCups *backend)
   cups_backend = backend;
 
   if (cups_backend->cups_connection_test == NULL)
-    cups_backend->cups_connection_test = gtk_cups_connection_test_new (NULL);
+    cups_backend->cups_connection_test = gtk_cups_connection_test_new (NULL, -1);
 
   if (cups_backend->default_printer_poll == 0)
     {
@@ -4073,7 +4073,9 @@ cups_printer_request_details (GtkPrinter *printer)
         {
           if (cups_printer->get_remote_ppd_poll == 0)
             {
-              cups_printer->remote_cups_connection_test = gtk_cups_connection_test_new (cups_printer->hostname);
+              cups_printer->remote_cups_connection_test =
+                gtk_cups_connection_test_new (cups_printer->hostname,
+                                              cups_printer->port);
 
               if (cups_request_ppd (printer))
                 {
