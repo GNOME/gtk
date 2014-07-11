@@ -1522,14 +1522,18 @@ gtk_cups_result_get_error_string (GtkCupsResult *result)
  * a socket for communication with a CUPS server 'server'.
  */
 GtkCupsConnectionTest *
-gtk_cups_connection_test_new (const char *server)
+gtk_cups_connection_test_new (const char *server,
+                              const int   port)
 {
   GtkCupsConnectionTest *result = NULL;
   gchar                 *port_str = NULL;
 
   result = g_new (GtkCupsConnectionTest, 1);
 
-  port_str = g_strdup_printf ("%d", ippPort ());
+  if (port >= 0)
+    port_str = g_strdup_printf ("%d", port);
+  else
+    port_str = g_strdup_printf ("%d", ippPort ());
 
   if (server != NULL)
     result->addrlist = httpAddrGetList (server, AF_UNSPEC, port_str);
