@@ -187,7 +187,8 @@ GtkCupsErrorType        gtk_cups_result_get_error_type     (GtkCupsResult      *
 int                     gtk_cups_result_get_error_status   (GtkCupsResult      *result);
 int                     gtk_cups_result_get_error_code     (GtkCupsResult      *result);
 const char            * gtk_cups_result_get_error_string   (GtkCupsResult      *result);
-GtkCupsConnectionTest * gtk_cups_connection_test_new       (const char            *server);
+GtkCupsConnectionTest * gtk_cups_connection_test_new       (const char         *server,
+                                                            const int           port);
 GtkCupsConnectionState  gtk_cups_connection_test_get_state (GtkCupsConnectionTest *test);
 void                    gtk_cups_connection_test_free      (GtkCupsConnectionTest *test);
 
