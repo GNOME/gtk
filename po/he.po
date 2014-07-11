@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-08 12:48+0300\n"
-"PO-Revision-Date: 2014-07-08 12:54+0300\n"
+"POT-Creation-Date: 2014-07-11 11:54+0300\n"
+"PO-Revision-Date: 2014-07-11 11:59+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -78,7 +78,7 @@ msgstr "GDK debugging flags to set"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:224 ../gdk/gdk.c:227 ../gtk/gtkmain.c:458 ../gtk/gtkmain.c:461
+#: ../gdk/gdk.c:224 ../gdk/gdk.c:227 ../gtk/gtkmain.c:459 ../gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1162,21 +1162,25 @@ msgstr ""
 "לגרור פיסת צבע לכאן או ללחוץ לחיצה ימנית ולבחור ב־\"שמור צבע כאן\"."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
-#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:706
-#: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5202 ../gtk/gtkfontchooserdialog.c:155
-#: ../gtk/gtkmessagedialog.c:944 ../gtk/gtkmessagedialog.c:957
-#: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
-#: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
-#: ../gtk/gtkprintunixdialog.c:665 ../gtk/gtkprintunixdialog.c:733
-#: ../gtk/gtkwindow.c:11511 ../gtk/inspector/css-editor.c:186
+#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
+#: ../gtk/gtkfilechooserwidget.c:5202 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
+#: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:747
+#: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11511
+#: ../gtk/inspector/css-editor.c:186
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
+#: ../gtk/resources/ui/gtkcolorchooserdialog.ui.h:2
+#: ../gtk/resources/ui/gtkfontchooserdialog.ui.h:2
 msgid "_Cancel"
 msgstr "_ביטול"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:707
-#: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:156
+#: ../gtk/deprecated/gtkcolorseldialog.c:195
 #: ../gtk/gtkprinteroptionwidget.c:546
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
+#: ../gtk/resources/ui/gtkcolorchooserdialog.ui.h:3
+#: ../gtk/resources/ui/gtkfontchooserdialog.ui.h:3
 msgid "_Select"
 msgstr "ב_חירה"
 
@@ -1848,7 +1852,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:445
+#: ../gtk/gtkcolorbutton.c:183 ../gtk/gtkcolorbutton.c:383
 msgid "Pick a Color"
 msgstr "בחירת צבע"
 
@@ -2079,7 +2083,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "שקיפות"
 
-#: ../gtk/gtkcolorswatch.c:472
+#: ../gtk/gtkcolorswatch.c:486
 msgid "_Customize"
 msgstr "ה_תאמה אישית"
 
@@ -2152,30 +2156,30 @@ msgstr "_ימין:"
 msgid "Paper Margins"
 msgstr "שולי נייר"
 
-#: ../gtk/gtkentry.c:9515 ../gtk/gtkentry.c:9668 ../gtk/gtklabel.c:6358
-#: ../gtk/gtktextview.c:8897 ../gtk/gtktextview.c:9085
+#: ../gtk/gtkentry.c:9520 ../gtk/gtkentry.c:9673 ../gtk/gtklabel.c:6380
+#: ../gtk/gtktextview.c:8833 ../gtk/gtktextview.c:9021
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: ../gtk/gtkentry.c:9519 ../gtk/gtkentry.c:9671 ../gtk/gtklabel.c:6359
-#: ../gtk/gtktextview.c:8901 ../gtk/gtktextview.c:9089
+#: ../gtk/gtkentry.c:9524 ../gtk/gtkentry.c:9676 ../gtk/gtklabel.c:6381
+#: ../gtk/gtktextview.c:8837 ../gtk/gtktextview.c:9025
 msgid "_Copy"
 msgstr "ה_עתקה"
 
-#: ../gtk/gtkentry.c:9523 ../gtk/gtkentry.c:9674 ../gtk/gtklabel.c:6360
-#: ../gtk/gtktextview.c:8903 ../gtk/gtktextview.c:9091
+#: ../gtk/gtkentry.c:9528 ../gtk/gtkentry.c:9679 ../gtk/gtklabel.c:6382
+#: ../gtk/gtktextview.c:8839 ../gtk/gtktextview.c:9027
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: ../gtk/gtkentry.c:9526 ../gtk/gtklabel.c:6362 ../gtk/gtktextview.c:8906
+#: ../gtk/gtkentry.c:9531 ../gtk/gtklabel.c:6384 ../gtk/gtktextview.c:8842
 msgid "_Delete"
 msgstr "מ_חיקה"
 
-#: ../gtk/gtkentry.c:9537 ../gtk/gtklabel.c:6371 ../gtk/gtktextview.c:8920
+#: ../gtk/gtkentry.c:9542 ../gtk/gtklabel.c:6393 ../gtk/gtktextview.c:8856
 msgid "Select _All"
 msgstr "בחירת ה_כול"
 
-#: ../gtk/gtkentry.c:10729
+#: ../gtk/gtkentry.c:10734
 msgid "Caps Lock is on"
 msgstr "ה־Caps Lock פעיל"
 
@@ -2418,12 +2422,12 @@ msgstr "תפריט יישום"
 msgid "Close"
 msgstr "סגירה"
 
-#: ../gtk/gtkicontheme.c:2292 ../gtk/gtkicontheme.c:2356
+#: ../gtk/gtkicontheme.c:2298 ../gtk/gtkicontheme.c:2362
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "הסמל '%s' לא קיים בערכת הנושא"
 
-#: ../gtk/gtkicontheme.c:3948
+#: ../gtk/gtkicontheme.c:3961
 msgid "Failed to load icon"
 msgstr "טעינת הסמל נכשלה"
 
@@ -2466,12 +2470,12 @@ msgid "Error"
 msgstr "שגיאה"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6339
+#: ../gtk/gtklabel.c:6361
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6348
+#: ../gtk/gtklabel.c:6370
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
@@ -2566,40 +2570,40 @@ msgstr ""
 "נא ליצור קשר עם מנהל המערכת."
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:451
+#: ../gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "Load additional GTK+ modules"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:454
+#: ../gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "Make all warnings fatal"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:457
+#: ../gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ debugging flags to set"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:460
+#: ../gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ debugging flags to unset"
 
-#: ../gtk/gtkmain.c:762
+#: ../gtk/gtkmain.c:763
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Cannot open display: %s"
 
-#: ../gtk/gtkmain.c:828
+#: ../gtk/gtkmain.c:829
 msgid "GTK+ Options"
 msgstr "GTK+ Options"
 
-#: ../gtk/gtkmain.c:828
+#: ../gtk/gtkmain.c:829
 msgid "Show GTK+ Options"
 msgstr "Show GTK+ Options"
 
@@ -2608,11 +2612,11 @@ msgstr "Show GTK+ Options"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1152
+#: ../gtk/gtkmain.c:1153
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmenubutton.c:644 ../gtk/inspector/window.ui.h:13
+#: ../gtk/gtkmenubutton.c:646 ../gtk/inspector/window.ui.h:13
 msgid "Menu"
 msgstr "תפריט"
 
@@ -3583,6 +3587,15 @@ msgstr "שמירת CSS נוכחי"
 msgid "Show data"
 msgstr "הצגת מידע"
 
+#: ../gtk/inspector/general.c:196
+msgid "Backend does not support window scaling"
+msgstr ""
+
+#: ../gtk/inspector/general.c:208
+msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
+msgstr ""
+
+#. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/general.ui.h:1
 msgid "GTK+ Version"
 msgstr "גרסת GTK+‎"
@@ -3669,7 +3682,8 @@ msgid "Object: %p (%s)"
 msgstr "עצם: %p ‏(%s)"
 
 #: ../gtk/inspector/prop-editor.c:984 ../gtk/inspector/prop-editor.c:1164
-#: ../gtk/inspector/prop-editor.c:1291 ../gtk/inspector/window.ui.h:3
+#: ../gtk/inspector/prop-editor.c:1291 ../gtk/inspector/prop-editor.c:1399
+#: ../gtk/inspector/window.ui.h:3
 msgid "Properties"
 msgstr "מאפיינים"
 
@@ -3699,6 +3713,26 @@ msgstr "עמודה:"
 #, c-format
 msgid "Defined at: %p (%s)"
 msgstr "הוגדר ב: %p ‏(%s)"
+
+#: ../gtk/inspector/prop-editor.c:1348 ../gtk/inspector/prop-editor.c:1364
+msgid "inverted"
+msgstr "היפוך"
+
+#: ../gtk/inspector/prop-editor.c:1380
+msgid "bidirectional, inverted"
+msgstr "דו כיווני, היפוך"
+
+#: ../gtk/inspector/prop-editor.c:1385 ../gtk/inspector/prop-editor.c:1477
+msgid "bidirectional"
+msgstr "דו כיווני"
+
+#: ../gtk/inspector/prop-editor.c:1390
+msgid "Binding:"
+msgstr "קשר:"
+
+#: ../gtk/inspector/prop-editor.c:1496
+msgid "Setting:"
+msgstr "הגדרה:"
 
 #. vim: set et:
 #. vim: set et sw=2 ts=2:
@@ -3778,6 +3812,11 @@ msgstr "שניהם"
 msgid "Location"
 msgstr "מיקום"
 
+#: ../gtk/inspector/visual.c:221 ../gtk/inspector/visual.c:247
+msgid "Theme is hardcoded by GTK_THEME"
+msgstr "ערכת נושא קשיחה בקוד על ידי GTK_THEME"
+
+#. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
 msgid "Text Direction"
 msgstr "כיוון טקסט"
@@ -5353,11 +5392,11 @@ msgstr "תודות"
 msgid "label"
 msgstr "תווית"
 
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:5
 msgid "_View All Applications"
 msgstr "ה_צגת כל היישומים"
 
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
+#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:6
 msgid "_Find New Applications"
 msgstr "_חיפוש יישומים חדשים"
 
