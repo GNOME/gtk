@@ -121,7 +121,7 @@
                 <child>
                   <object class="GtkLabel" id="xdg_data_home_label">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">XDG_DATA_HOME</property>
+                    <property name="label">XDG_DATA_HOME</property>
                     <property name="halign">start</property>
                     <property name="valign">baseline</property>
                     <property name="xalign">0.0</property>
@@ -149,7 +149,7 @@
                 <child>
                   <object class="GtkLabel" id="xdg_data_dirs_label">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">XDG_DATA_DIRS</property>
+                    <property name="label">XDG_DATA_DIRS</property>
                     <property name="halign">start</property>
                     <property name="valign">baseline</property>
                     <property name="xalign">0.0</property>
@@ -177,7 +177,7 @@
                 <child>
                   <object class="GtkLabel" id="gtk_path_label">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">GTK_PATH</property>
+                    <property name="label">GTK_PATH</property>
                     <property name="halign">start</property>
                     <property name="valign">baseline</property>
                     <property name="xalign">0.0</property>
@@ -205,7 +205,7 @@
                 <child>
                   <object class="GtkLabel" id="gtk_exe_prefix_label">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">GTK_EXE_PREFIX</property>
+                    <property name="label">GTK_EXE_PREFIX</property>
                     <property name="halign">start</property>
                     <property name="valign">baseline</property>
                     <property name="xalign">0.0</property>
@@ -233,7 +233,7 @@
                 <child>
                   <object class="GtkLabel" id="gtk_data_prefix_label">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">GTK_DATA_PREFIX</property>
+                    <property name="label">GTK_DATA_PREFIX</property>
                     <property name="halign">start</property>
                     <property name="valign">baseline</property>
                     <property name="xalign">0.0</property>
@@ -261,7 +261,7 @@
                 <child>
                   <object class="GtkLabel" id="gsettings_schema_dir_label">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">GSETTINGS_SCHEMA_DIR</property>
+                    <property name="label">GSETTINGS_SCHEMA_DIR</property>
                     <property name="halign">start</property>
                     <property name="valign">baseline</property>
                     <property name="xalign">0.0</property>
