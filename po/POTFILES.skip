@@ -169,6 +169,8 @@ testsuite/reftests/inherit-and-initial.ref.ui
 testsuite/reftests/inherit-and-initial.ui
 testsuite/reftests/label-attribute-preference.ref.ui
 testsuite/reftests/label-attribute-preference.ui
+testsuite/reftests/label-background.ref.ui
+testsuite/reftests/label-background.ui
 testsuite/reftests/label-clipping.ref.ui
 testsuite/reftests/label-clipping.ui
 testsuite/reftests/label-ellipsize-small.ref.ui
