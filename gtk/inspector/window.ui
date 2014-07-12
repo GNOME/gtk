@@ -299,7 +299,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkInspectorVisual">
+          <object class="GtkInspectorResourceList">
             <property name="visible">True</property>
           </object>
           <packing>
@@ -310,7 +310,7 @@
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">Visual</property>
+            <property name="label" translatable="yes">Resources</property>
           </object>
         </child>
         <child>
@@ -330,7 +330,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkInspectorResourceList">
+          <object class="GtkInspectorVisual">
             <property name="visible">True</property>
           </object>
           <packing>
@@ -341,7 +341,7 @@
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">Resources</property>
+            <property name="label" translatable="yes">Visual</property>
           </object>
         </child>
         <child>
