@@ -1048,7 +1048,7 @@ gtk_list_box_set_filter_func (GtkListBox           *box,
  *
  * Note that you may get many calls @update_header to this for a particular row when e.g.
  * changing things that don’t affect the header. In this case it is important for performance
- * to not blindly replace an exisiting header widh an identical one.
+ * to not blindly replace an existing header with an identical one.
  *
  * The @update_header function will be called for each row after the call, and it will
  * continue to be called each time a row changes (via gtk_list_box_row_changed()) and when
