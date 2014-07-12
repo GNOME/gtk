@@ -34,6 +34,7 @@
 #include "gtkprivate.h"
 #include "gtksocketprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtkxembed.h"
 

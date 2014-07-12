@@ -36,7 +36,7 @@
 #include <gdk/gdkx.h>
 
 #include <gtk/gtksocket.h>
-
+#include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
 

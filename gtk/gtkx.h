@@ -20,6 +20,8 @@
 
 #define __GTKX_H_INSIDE__
 
+#include <gtk/gtk.h>
+
 #include <gtk/gtksocket.h>
 #include <gtk/gtkplug.h>
 

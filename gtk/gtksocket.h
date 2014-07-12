@@ -29,11 +29,11 @@
 #error "Only <gtk/gtkx.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
-
 #ifdef GDK_WINDOWING_X11
 
 #include <gdk/gdkx.h>
+
+#include <gtk/gtkcontainer.h>
 
 G_BEGIN_DECLS
 
