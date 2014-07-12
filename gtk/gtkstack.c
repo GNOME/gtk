@@ -1774,6 +1774,18 @@ gtk_stack_draw (GtkWidget *widget,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   cairo_t *pattern_cr;
 
+  if (gtk_cairo_should_draw_window (cr, priv->view_window))
+    {
+      GtkStyleContext *context;
+          
+      context = gtk_widget_get_style_context (widget);
+      gtk_render_background (context,
+                             cr,
+                             0, 0,
+                             gtk_widget_get_allocated_width (widget),
+                             gtk_widget_get_allocated_height (widget));
+    }
+
   if (priv->visible_child)
     {
       if (priv->transition_pos < 1.0)
