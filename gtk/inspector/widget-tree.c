@@ -39,6 +39,7 @@
 #include "gtkmenuitem.h"
 #include "gtksettings.h"
 #include "gtktextview.h"
+#include "gtktreeselection.h"
 #include "gtktreestore.h"
 #include "gtkwidgetprivate.h"
 

@@ -20,7 +20,10 @@
 
 #include "general.h"
 
+#include "gtkadjustment.h"
 #include "gtkdebug.h"
+#include "gtklabel.h"
+#include "gtkscale.h"
 #include "gtkswitch.h"
 #include "gtklistbox.h"
 #include "gtkprivate.h"

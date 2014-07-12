@@ -44,6 +44,8 @@
 #include "menu.h"
 #include "gestures.h"
 
+#include "gtknotebook.h"
+#include "gtkwindowgroup.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 

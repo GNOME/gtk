@@ -20,6 +20,8 @@
 
 #include "resource-list.h"
 
+#include "gtklabel.h"
+#include "gtkstack.h"
 #include "gtktextbuffer.h"
 #include "gtktreestore.h"
 #include "gtktreeselection.h"

@@ -25,8 +25,9 @@
 
 #include "object-hierarchy.h"
 
-#include "gtktreeview.h"
+#include "gtktreeselection.h"
 #include "gtktreestore.h"
+#include "gtktreeview.h"
 
 
 enum
