@@ -19,6 +19,89 @@
                 <property name="margin">10</property>
                 <property name="spacing">40</property>
                 <child>
+                  <object class="GtkLabel" id="theme_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">GTK+ Theme</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="theme_combo">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                    <signal name="changed" handler="theme_changed"/>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="dark_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Dark variant</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="dark_switch">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
+                  <object class="GtkLabel" id="icon_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Icon Theme</property>
+                    <property name="halign">start</property>
+                    <property name="valign">baseline</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="icon_combo">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                    <signal name="changed" handler="icons_changed"/>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">10</property>
+                <property name="spacing">40</property>
+                <child>
                   <object class="GtkLabel" id="direction_label">
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">Text Direction</property>
@@ -44,6 +127,18 @@
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkFrame" id="debug_frame">
+        <property name="visible">True</property>
+        <property name="halign">center</property>
+        <child>
+          <object class="GtkListBox">
+            <property name="visible">True</property>
+            <property name="selection-mode">none</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -132,119 +227,24 @@
         </child>
       </object>
     </child>
-    <child>
-      <object class="GtkFrame" id="theme_frame">
-        <property name="visible">True</property>
-        <property name="halign">center</property>
-        <child>
-          <object class="GtkListBox">
-            <property name="visible">True</property>
-            <property name="selection-mode">none</property>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="margin">10</property>
-                <property name="spacing">40</property>
-                <child>
-                  <object class="GtkLabel" id="theme_label">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">GTK+ Theme</property>
-                    <property name="halign">start</property>
-                    <property name="valign">baseline</property>
-                    <property name="xalign">0.0</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="theme_combo">
-                    <property name="visible">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">baseline</property>
-                    <signal name="changed" handler="theme_changed"/>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="margin">10</property>
-                <property name="spacing">40</property>
-                <child>
-                  <object class="GtkLabel" id="dark_label">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">Dark variant</property>
-                    <property name="halign">start</property>
-                    <property name="valign">baseline</property>
-                    <property name="xalign">0.0</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="dark_switch">
-                    <property name="visible">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">baseline</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="margin">10</property>
-                <property name="spacing">40</property>
-                <child>
-                  <object class="GtkLabel" id="icon_label">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">Icon Theme</property>
-                    <property name="halign">start</property>
-                    <property name="valign">baseline</property>
-                    <property name="xalign">0.0</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="icon_combo">
-                    <property name="visible">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">baseline</property>
-                    <signal name="changed" handler="icons_changed"/>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
   </template>
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <widgets>
+      <widget name="theme_label"/>
+      <widget name="dark_label"/>
+      <widget name="icon_label"/>
       <widget name="direction_label"/>
       <widget name="updates_label"/>
       <widget name="baselines_label"/>
       <widget name="pixelcache_label"/>
-      <widget name="theme_label"/>
-      <widget name="dark_label"/>
-      <widget name="icon_label"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <widgets>
       <widget name="visual_frame"/>
-      <widget name="theme_frame"/>
+      <widget name="debug_frame"/>
     </widgets>
   </object>
 -->
