@@ -1572,7 +1572,7 @@ if HAVE_INTROSPECTION
 # introspection. Rather than copy the annotations over from the
 # regular files, exclude the quartz ones:
 introspection_files = \
-    $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS)) \
+    $(filter-out %private.h gtktextdisplay.h gtktextlayout.h gtkx.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS)) \
     $(filter-out  gtkclipboard-quartz.c gtkdnd-quartz.c, \
     $(gtk_base_c_sources)) \
     gtkprintoperation-unix.c \
@@ -1601,7 +1601,6 @@ if USE_X11
 Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
 Gtk_3_0_gir_INCLUDES += xlib-2.0
 endif
-Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtkx.h"
 Gtk_3_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
