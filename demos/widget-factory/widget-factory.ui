@@ -1895,10 +1895,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <child>
                           <object class="GtkBox" id="page2box">
                             <property name="visible">True</property>
-                            <property name="margin-top">10</property>
-                            <property name="margin-bottom">10</property>
-                            <property name="margin-start">10</property>
-                            <property name="margin-end">10</property>
+                            <property name="margin">10</property>
                             <property name="spacing">20</property>
                             <child>
                               <object class="GtkLabel" id="page2note">
@@ -2811,63 +2808,109 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="margin">10</property>
+                <property name="orientation">horizontal</property>
+                <property name="border-width">16</property>
+                <property name="spacing">10</property>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="vscrollbar-policy">always</property>
-                    <property name="height-request">300</property>
-                    <property name="halign">start</property>
-                    <property name="shadow-type">in</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">10</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">4</property>
                     <child>
-                      <object class="GtkTreeView" id="charletree">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="enable-grid-lines">vertical</property>
-                        <property name="enable-tree-lines">True</property>
-                        <property name="rules-hint">True</property>
-                        <property name="rubber-banding">True</property>
-                        <property name="model">charlemodel</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection">
-                            <property name="mode">multiple</property>
-                          </object>
-                        </child>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="height-request">300</property>
+                        <property name="halign">start</property>
+                        <property name="shadow-type">in</property>
                         <child>
-                          <object class="GtkTreeViewColumn">
+                          <object class="GtkTreeView" id="charletree">
                             <property name="visible">True</property>
-                            <property name="title" translatable="yes">Name</property>
+                            <property name="enable-grid-lines">vertical</property>
+                            <property name="enable-tree-lines">True</property>
+                            <property name="rules-hint">True</property>
+                            <property name="rubber-banding">True</property>
+                            <property name="model">charlemodel</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection">
+                                <property name="mode">multiple</property>
+                              </object>
+                            </child>
                             <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
+                              <object class="GtkTreeViewColumn">
+                                <property name="visible">True</property>
+                                <property name="title" translatable="yes">Name</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="visible">True</property>
+                                <property name="title" translatable="yes">Birth</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="visible">True</property>
+                                <property name="title" translatable="yes">Death</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
                             </child>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="selectable">True</property>
+                        <property name="halign">start</property>
+                        <property name="use-markup">True</property>
+                        <property name="label" translatable="True"><![CDATA[<small>Data source: <a href="http://en.wikipedia.org/wiki/Charlemagne#Ancestry">Wikipedia</a></small>]]></property>
+                      </object>
+                    </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="halign">fill</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow-type">in</property>
                         <child>
-                          <object class="GtkTreeViewColumn">
+                          <object class="GtkListBox" id="munsell">
                             <property name="visible">True</property>
-                            <property name="title" translatable="yes">Birth</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="visible">True</property>
-                            <property name="title" translatable="yes">Death</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">2</attribute>
-                              </attributes>
-                            </child>
+                            <property name="selection-mode">single</property>
                           </object>
                         </child>
                       </object>
@@ -2875,13 +2918,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkSeparator">
                     <property name="visible">True</property>
-                    <property name="selectable">True</property>
-                    <property name="halign">start</property>
-                    <property name="margin-top">6</property>
-                    <property name="use-markup">True</property>
-                    <property name="label" translatable="True"><![CDATA[<small>Data source: <a href="http://en.wikipedia.org/wiki/Charlemagne#Ancestry">Wikipedia</a></small>]]></property>
+                    <property name="orientation">vertical</property>
                   </object>
                 </child>
                 <child>

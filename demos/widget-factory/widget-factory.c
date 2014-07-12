@@ -411,6 +411,83 @@ populate_model (GtkTreeStore *store)
 }
 
 static void
+populate_colors (GtkWidget *widget)
+{
+  struct { const gchar *name; const gchar *color; } colors[] = {
+    { "Red 2.5", "#C8828C" },
+    { "Red 5", "#C98286" },
+    { "Red 7.5", "#C9827F" },
+    { "Red 10", "#C98376" },
+    { "Red/Yellow 2.5", "#C8856D" },
+    { "Red/Yellow 5", "#C58764" },
+    { "Red/Yellow 7.5", "#C1895E" },
+    { "Red/Yellow 10", "#BB8C56" },
+    { "Yellow 2.5", "#B58F4F" },
+    { "Yellow 5", "#AD924B" },
+    { "Yellow 7.5", "#A79548" },
+    { "Yellow 10", "#A09749" },
+    { "Yellow/Green 2.5", "#979A4E" },
+    { "Yellow/Green 5", "#8D9C55" },
+    { "Yellow/Green 7.5", "#7F9F62" },
+    { "Yellow/Green 10", "#73A06E" },
+    { "Geen 2.5", "#65A27C" },
+    { "Green 5", "#5CA386" },
+    { "Green 7.5", "#57A38D" },
+    { "Green 10", "#52A394" },
+    { "Green/Blue 2.5", "#4EA39A" },
+    { "Green/Blue 5", "#49A3A2" },
+    { "Green/Blue 7.5", "#46A2AA" },
+    { "Green/Blue 10", "#46A1B1" },
+    { "Blue 2.5", "#49A0B8" },
+    { "Blue 5", "#529EBD" },
+    { "Blue 7.5", "#5D9CC1" },
+    { "Blue 10", "#689AC3" },
+    { "Blue/Purple 2.5", "#7597C5" },
+    { "Blue/Purple 5", "#8095C6" },
+    { "Blue/Purple 7.5", "#8D91C6" },
+    { "Blue/Purple 10", "#988EC4" },
+    { "Purple 2.5", "#A08CC1" },
+    { "Purple 5", "#A88ABD" },
+    { "Purple 7.5", "#B187B6" },
+    { "Purple 10", "#B786B0" },
+    { "Purple/Red 2.5", "#BC84A9" },
+    { "Purple/Red 5", "#C183A0" },
+    { "Purple/Red 7.5", "#C48299" },
+    { "Purple/Red 10", "#C68292" }
+  };
+  gint i;
+  GtkWidget *row, *box, *label, *swatch;
+  GdkRGBA rgba;
+
+  for (i = 0; i < G_N_ELEMENTS (colors); i++)
+    {
+      row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
+      label = gtk_label_new (colors[i].name);
+      g_object_set (label,
+                    "halign", GTK_ALIGN_START,
+                    "valign", GTK_ALIGN_CENTER,
+                    "margin", 6,
+                    "xalign", 0,
+                    NULL);
+      gtk_box_pack_start (GTK_BOX (row), label, TRUE, TRUE, 0);
+      gdk_rgba_parse (&rgba, colors[i].color);
+      swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
+                             "rgba", &rgba,
+                             "selectable", FALSE,
+                             "halign", GTK_ALIGN_END,
+                             "valign", GTK_ALIGN_CENTER,
+                             "margin", 6,
+                             "height-request", 24,
+                             NULL);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_container_add (GTK_CONTAINER (box), swatch);
+      gtk_box_pack_start (GTK_BOX (row), box, FALSE, FALSE, 0);
+      gtk_widget_show_all (row);
+      gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
+    }
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -497,6 +574,8 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "charletree");
   populate_model ((GtkTreeStore *)gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
   gtk_tree_view_expand_all (GTK_TREE_VIEW (widget));
+
+  populate_colors ((GtkWidget *)gtk_builder_get_object (builder, "munsell"));
 
   gtk_widget_show_all (GTK_WIDGET (window));
 
