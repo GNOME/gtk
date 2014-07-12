@@ -308,10 +308,11 @@ void
 gtk_inspector_style_prop_list_set_object (GtkInspectorStylePropList *self,
                                           GObject                   *object)
 {
-  gtk_widget_hide (GTK_WIDGET (self));
-
   if (self->priv->widget == (GtkWidget *)object)
-    return;
+    {
+      gtk_widget_hide (GTK_WIDGET (self));
+      return;
+    }
 
  if (self->priv->widget)
     {
@@ -321,7 +322,10 @@ gtk_inspector_style_prop_list_set_object (GtkInspectorStylePropList *self,
     }
 
   if (!GTK_IS_WIDGET (object))
-    return;
+    {
+      gtk_widget_hide (GTK_WIDGET (self));
+      return;
+    }
 
   self->priv->widget = (GtkWidget *)object;
   g_object_weak_ref (G_OBJECT (self), disconnect_each_other, object);

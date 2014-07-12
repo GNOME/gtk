@@ -271,19 +271,21 @@ gtk_inspector_size_groups_set_object (GtkInspectorSizeGroups *sl,
                                       GObject                *object)
 {
   clear_view (sl);
-  gtk_widget_hide (GTK_WIDGET (sl));
 
-  if (GTK_IS_WIDGET (object))
+  if (!GTK_IS_WIDGET (object))
     {
-      GSList *groups, *l;
+      gtk_widget_hide (GTK_WIDGET (sl));
+      return;
+    }
 
-      gtk_widget_show (GTK_WIDGET (sl));
-      groups = _gtk_widget_get_sizegroups (GTK_WIDGET (object));
-      for (l = groups; l; l = l->next)
-        {
-          GtkSizeGroup *group = l->data;
-          add_size_group (sl, group);
-        }
+  GSList *groups, *l;
+
+  gtk_widget_show (GTK_WIDGET (sl));
+  groups = _gtk_widget_get_sizegroups (GTK_WIDGET (object));
+  for (l = groups; l; l = l->next)
+    {
+      GtkSizeGroup *group = l->data;
+      add_size_group (sl, group);
     }
 }
 

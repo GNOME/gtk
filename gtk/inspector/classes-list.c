@@ -235,7 +235,6 @@ cleanup_context (GtkInspectorClassesList *cl)
 
   gtk_list_store_clear (cl->priv->model);
   cl->priv->context = NULL;
-  gtk_widget_hide (GTK_WIDGET (cl));
 }
 
 static void
@@ -245,6 +244,7 @@ remove_dead_object (gpointer data, GObject *dead_object)
 
   cl->priv->context = NULL;
   cleanup_context (cl);
+  gtk_widget_hide (GTK_WIDGET (cl));
 }
 
 void
@@ -258,7 +258,10 @@ gtk_inspector_classes_list_set_object (GtkInspectorClassesList *cl,
   cleanup_context (cl);
 
   if (!GTK_IS_WIDGET (object))
-    return;
+    {
+      gtk_widget_hide (GTK_WIDGET (cl));
+      return;
+    }
 
   gtk_widget_show (GTK_WIDGET (cl));
 
