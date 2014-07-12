@@ -27,14 +27,14 @@
 #include <stdlib.h>
 
 #include <gdk/gdk.h>
-#include <gtk/gtkx.h>
+#include <gtk/gtkcombobox.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
+#include <gtk/gtksocket.h>
 #include <gtk/gtktogglebutton.h>
-#include <gtk/gtkcombobox.h>
 #include <gtk/gtkaccessible.h>
 
 #ifdef GDK_WINDOWING_X11
