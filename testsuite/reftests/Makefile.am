@@ -244,6 +244,9 @@ testdata = \
 	label-attribute-preference.css \
 	label-attribute-preference.ref.ui \
 	label-attribute-preference.ui \
+	label-background.css \
+	label-background.ref.ui \
+	label-background.ui \
 	label-clipping.css \
 	label-clipping.ref.ui \
 	label-clipping.ui \

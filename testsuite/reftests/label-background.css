@@ -1,0 +1,11 @@
+GtkWindow {
+  background: darkred; /* should never be seen */
+}
+
+GtkBox {
+  background: red; /* should also never be seen */
+}
+
+GtkLabel {
+  background: green;
+}
