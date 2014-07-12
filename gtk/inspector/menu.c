@@ -17,7 +17,10 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "menu.h"
+
+#include "gtktreestore.h"
 #include "gtkwidgetprivate.h"
 
 enum

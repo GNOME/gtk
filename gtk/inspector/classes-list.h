@@ -23,7 +23,7 @@
 #ifndef _GTK_INSPECTOR_CLASSES_LIST_H_
 #define _GTK_INSPECTOR_CLASSES_LIST_H_
 
-#include <gtk/gtk.h>
+#include <gtk/gtkbox.h>
 
 #define GTK_TYPE_INSPECTOR_CLASSES_LIST            (gtk_inspector_classes_list_get_type())
 #define GTK_INSPECTOR_CLASSES_LIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_CLASSES_LIST, GtkInspectorClassesList))

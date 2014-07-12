@@ -20,6 +20,9 @@
 
 #include "general.h"
 
+#include "gtkdebug.h"
+#include "gtkswitch.h"
+#include "gtklistbox.h"
 #include "gtkprivate.h"
 
 #ifdef GDK_WINDOWING_X11

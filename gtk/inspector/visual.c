@@ -17,9 +17,15 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "visual.h"
 
+#include "gtkcomboboxtext.h"
+#include "gtkdebug.h"
 #include "gtkprivate.h"
+#include "gtksettings.h"
+#include "gtkswitch.h"
+#include "gtkwindow.h"
 
 struct _GtkInspectorVisualPrivate
 {

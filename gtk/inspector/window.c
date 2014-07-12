@@ -24,7 +24,9 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include <stdlib.h>
+
 #include "window.h"
 #include "prop-list.h"
 #include "classes-list.h"

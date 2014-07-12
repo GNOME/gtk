@@ -17,7 +17,12 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "resource-list.h"
+
+#include "gtktextbuffer.h"
+#include "gtktreestore.h"
+#include "gtktreeselection.h"
 
 enum
 {

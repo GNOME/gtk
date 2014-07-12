@@ -20,9 +20,15 @@
  * THE SOFTWARE.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
+
 #include "style-prop-list.h"
+
 #include "gtkcssproviderprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkliststore.h"
+#include "gtksettings.h"
 
 enum
 {

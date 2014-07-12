@@ -23,8 +23,12 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "window.h"
 #include "widget-tree.h"
+
+#include "gtknotebook.h"
+#include "gtkmain.h"
 
 typedef struct
 {

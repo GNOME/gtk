@@ -22,11 +22,25 @@
  * THE SOFTWARE.
  */
 
-#include "prop-list.h"
-#include "widget-tree.h"
-#include "gtkwidgetprivate.h"
-#include "gtkcomboboxprivate.h"
+#include "config.h"
+#include <glib/gi18n-lib.h>
+
 #include <string.h>
+
+#include "widget-tree.h"
+#include "prop-list.h"
+
+#include "gtkbuildable.h"
+#include "gtkbutton.h"
+#include "gtkcelllayout.h"
+#include "gtkcomboboxprivate.h"
+#include "gtkiconview.h"
+#include "gtklabel.h"
+#include "gtkmenuitem.h"
+#include "gtksettings.h"
+#include "gtktextview.h"
+#include "gtktreestore.h"
+#include "gtkwidgetprivate.h"
 
 enum
 {

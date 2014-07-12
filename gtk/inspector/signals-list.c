@@ -17,7 +17,14 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "signals-list.h"
+
+#include "gtkcellrenderer.h"
+#include "gtkliststore.h"
+#include "gtktextbuffer.h"
+#include "gtktoggletoolbutton.h"
+#include "gtktreeviewcolumn.h"
 
 enum
 {

@@ -20,11 +20,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include "config.h"
+#include <glib/gi18n-lib.h>
+
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
 
 #include "python-hooks.h"
 #include "python-shell.h"
+
+#include "gtkscrolledwindow.h"
+#include "gtktextview.h"
 
 #define MAX_HISTORY_LENGTH 20
 

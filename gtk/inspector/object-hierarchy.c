@@ -20,7 +20,14 @@
  * THE SOFTWARE.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
+
 #include "object-hierarchy.h"
+
+#include "gtktreeview.h"
+#include "gtktreestore.h"
+
 
 enum
 {

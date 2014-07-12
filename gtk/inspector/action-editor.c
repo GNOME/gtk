@@ -17,7 +17,14 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "action-editor.h"
+
+#include "gtksizegroup.h"
+#include "gtktogglebutton.h"
+#include "gtkentry.h"
+#include "gtkbin.h"
+#include "gtklabel.h"
 
 struct _GtkInspectorActionEditorPrivate
 {

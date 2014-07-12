@@ -17,8 +17,28 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "prop-editor.h"
 #include "widget-tree.h"
+
+#include "gtkactionable.h"
+#include "gtkadjustment.h"
+#include "gtkapplicationwindow.h"
+#include "gtkcelllayout.h"
+#include "gtkcellrenderertext.h"
+#include "gtkcolorbutton.h"
+#include "gtkcolorchooser.h"
+#include "gtkcolorchooserwidget.h"
+#include "gtkcombobox.h"
+#include "gtkfontchooser.h"
+#include "gtkfontchooserwidget.h"
+#include "gtkiconview.h"
+#include "gtklabel.h"
+#include "gtkpopover.h"
+#include "gtkradiobutton.h"
+#include "gtkscrolledwindow.h"
+#include "gtkspinbutton.h"
+#include "gtktogglebutton.h"
 #include "gtkwidgetprivate.h"
 
 struct _GtkInspectorPropEditorPrivate

@@ -21,10 +21,16 @@
  * THE SOFTWARE.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
+
 #include "prop-list.h"
+
 #include "prop-editor.h"
 #include "widget-tree.h"
 
+#include "gtkcelllayout.h"
+#include "gtkpopover.h"
 
 enum
 {

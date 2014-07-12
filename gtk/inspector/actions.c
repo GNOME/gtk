@@ -17,9 +17,16 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "actions.h"
 #include "action-editor.h"
+
+#include "gtkapplication.h"
+#include "gtkapplicationwindow.h"
+#include "gtktreeview.h"
+#include "gtkliststore.h"
 #include "gtkwidgetprivate.h"
+#include "gtkpopover.h"
 
 enum
 {

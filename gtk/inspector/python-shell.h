@@ -27,7 +27,7 @@ typedef struct _GtkInspectorPythonShell         GtkInspectorPythonShell;
 typedef struct _GtkInspectorPythonShellClass    GtkInspectorPythonShellClass;
 typedef struct _GtkInspectorPythonShellPrivate  GtkInspectorPythonShellPrivate;
 
-#include <gtk/gtk.h>
+#include <gtk/gtkbox.h>
 
 #define GTK_TYPE_INSPECTOR_PYTHON_SHELL (gtk_inspector_python_shell_get_type())
 #define GTK_INSPECTOR_PYTHON_SHELL(obj) \

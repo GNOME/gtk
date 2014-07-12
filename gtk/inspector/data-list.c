@@ -17,7 +17,12 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "data-list.h"
+
+#include "gtktreeview.h"
+#include "gtkcellrenderertext.h"
+#include "gtktoggletoolbutton.h"
 
 struct _GtkInspectorDataListPrivate
 {

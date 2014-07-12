@@ -18,7 +18,7 @@
 #ifndef _GTK_INSPECTOR_GESTURES_H_
 #define _GTK_INSPECTOR_GESTURES_H_
 
-#include <gtk/gtk.h>
+#include <gtk/gtkbox.h>
 
 #define GTK_TYPE_INSPECTOR_GESTURES            (gtk_inspector_gestures_get_type())
 #define GTK_INSPECTOR_GESTURES(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_GESTURES, GtkInspectorGestures))

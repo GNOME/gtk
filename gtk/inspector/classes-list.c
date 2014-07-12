@@ -22,7 +22,15 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "classes-list.h"
+
+#include "gtkliststore.h"
+#include "gtktreeview.h"
+#include "gtkcellrenderertoggle.h"
+#include "gtkbutton.h"
+#include "gtkdialog.h"
+#include "gtkstylecontext.h"
 
 enum
 {

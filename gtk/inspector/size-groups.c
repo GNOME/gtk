@@ -17,8 +17,16 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "size-groups.h"
 #include "window.h"
+
+#include "gtkcomboboxtext.h"
+#include "gtkframe.h"
+#include "gtklabel.h"
+#include "gtklistbox.h"
+#include "gtksizegroup.h"
+#include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
 
 

@@ -22,8 +22,7 @@
 #ifndef _GTK_INSPECTOR_STYLE_PROP_LIST_H_
 #define _GTK_INSPECTOR_STYLE_PROP_LIST_H_
 
-
-#include <gtk/gtk.h>
+#include <gtk/gtkbox.h>
 
 #define GTK_TYPE_INSPECTOR_STYLE_PROP_LIST            (gtk_inspector_style_prop_list_get_type())
 #define GTK_INSPECTOR_STYLE_PROP_LIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_STYLE_PROP_LIST, GtkInspectorStylePropList))

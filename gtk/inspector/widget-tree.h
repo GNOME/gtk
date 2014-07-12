@@ -23,9 +23,7 @@
 #ifndef _GTK_INSPECTOR_WIDGET_TREE_H_
 #define _GTK_INSPECTOR_WIDGET_TREE_H_
 
-
-#include <gtk/gtk.h>
-
+#include <gtk/gtktreeview.h>
 
 #define GTK_TYPE_INSPECTOR_WIDGET_TREE            (gtk_inspector_widget_tree_get_type())
 #define GTK_INSPECTOR_WIDGET_TREE(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_WIDGET_TREE, GtkInspectorWidgetTree))

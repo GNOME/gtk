@@ -17,10 +17,17 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+
 #include "gestures.h"
-#include "gtkwidgetprivate.h"
 #include "widget-tree.h"
 
+#include "gtksizegroup.h"
+#include "gtkcomboboxtext.h"
+#include "gtklistbox.h"
+#include "gtkgesture.h"
+#include "gtklabel.h"
+#include "gtkframe.h"
+#include "gtkwidgetprivate.h"
 
 enum
 {

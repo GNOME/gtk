@@ -21,8 +21,17 @@
  */
 
 #include "config.h"
-#include "css-editor.h"
 #include <glib/gi18n-lib.h>
+
+#include "css-editor.h"
+
+#include "gtkcssprovider.h"
+#include "gtkstyleprovider.h"
+#include "gtkstylecontext.h"
+#include "gtktextview.h"
+#include "gtkmessagedialog.h"
+#include "gtkfilechooserdialog.h"
+#include "gtktoggletoolbutton.h"
 
 #define GTK_INSPECTOR_CSS_EDITOR_TEXT "inspector-css-editor-text"
 #define GTK_INSPECTOR_CSS_EDITOR_PROVIDER "inspector-css-editor-provider"

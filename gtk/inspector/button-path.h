@@ -23,7 +23,7 @@
 #define _GTK_INSPECTOR_BUTTON_PATH_H_
 
 
-#include <gtk/gtk.h>
+#include <gtk/gtkbox.h>
 
 #define GTK_TYPE_INSPECTOR_BUTTON_PATH            (gtk_inspector_button_path_get_type())
 #define GTK_INSPECTOR_BUTTON_PATH(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_BUTTON_PATH, GtkInspectorButtonPath))

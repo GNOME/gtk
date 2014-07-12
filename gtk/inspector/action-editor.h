@@ -19,7 +19,7 @@
 #define _GTK_INSPECTOR_ACTION_EDITOR_H_
 
 
-#include <gtk/gtk.h>
+#include <gtk/gtkbox.h>
 
 
 #define GTK_TYPE_INSPECTOR_ACTION_EDITOR            (gtk_inspector_action_editor_get_type())

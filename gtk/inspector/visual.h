@@ -18,7 +18,7 @@
 #ifndef _GTK_INSPECTOR_VISUAL_H_
 #define _GTK_INSPECTOR_VISUAL_H_
 
-#include <gtk/gtk.h>
+#include <gtk/gtkbox.h>
 
 #define GTK_TYPE_INSPECTOR_VISUAL            (gtk_inspector_visual_get_type())
 #define GTK_INSPECTOR_VISUAL(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_VISUAL, GtkInspectorVisual))

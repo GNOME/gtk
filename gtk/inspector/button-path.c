@@ -20,7 +20,13 @@
  * THE SOFTWARE.
  */
 
+#include "config.h"
+#include <glib/gi18n-lib.h>
+
 #include "button-path.h"
+
+#include "gtkbutton.h"
+#include "gtkwidgetpath.h"
 
 struct _GtkInspectorButtonPathPrivate
 {
