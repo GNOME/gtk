@@ -2110,6 +2110,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                         <property name="visible">True</property>
                                         <property name="label" translatable="yes">Row 1</property>
                                         <property name="halign">start</property>
+                                        <property name="valign">enter</property>
                                         <property name="margin">6</property>
                                       </object>
                                       <packing>
@@ -2119,7 +2120,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                     <child>
                                       <object class="GtkSwitch">
                                         <property name="visible">True</property>
-                                        <property name="margin">6</property>
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
                                       </object>
                                     </child>
                                   </object>
@@ -2133,6 +2139,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                         <property name="visible">True</property>
                                         <property name="label" translatable="yes">Row 2</property>
                                         <property name="halign">start</property>
+                                        <property name="valign">center</property>
                                         <property name="margin">6</property>
                                       </object>
                                       <packing>
@@ -2143,7 +2150,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                       <object class="GtkScale">
                                         <property name="orientation">horizontal</property>
                                         <property name="visible">True</property>
-                                        <property name="margin">6</property>
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
                                         <property name="draw-value">False</property>
                                         <property name="width-request">150</property>
                                         <property name="adjustment">adjustment1</property>
@@ -2172,9 +2184,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                         <property name="visible">True</property>
                                         <property name="icon-name">object-select-symbolic</property>
                                         <property name="icon-size">1</property>
-                                        <property name="margin">6</property>
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
                                         <property name="opacity">0</property>
                                       </object>
                                     </child>
@@ -2201,9 +2216,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                         <property name="visible">True</property>
                                         <property name="icon-name">object-select-symbolic</property>
                                         <property name="icon-size">1</property>
-                                        <property name="margin">6</property>
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-end">12</property>
                                         <property name="opacity">0</property>
                                       </object>
                                     </child>

@@ -429,6 +429,8 @@ update_title_header (GtkListBoxRow *row,
       gtk_widget_set_halign (header, GTK_ALIGN_START);
       gtk_widget_set_margin_top (header, 12);
       gtk_widget_set_margin_start (header, 6);
+      gtk_widget_set_margin_end (header, 6);
+      gtk_widget_set_margin_bottom (header, 6);
       gtk_widget_show (header);
 
       gtk_list_box_row_set_header (row, header);
