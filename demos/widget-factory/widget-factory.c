@@ -524,18 +524,25 @@ populate_colors (GtkWidget *widget)
 }
 
 static void
-activate_row3 (GtkListBoxRow *row, GtkWidget *image)
+row_activated (GtkListBox *box, GtkListBoxRow *row)
 {
-  if (gtk_widget_get_opacity (image) > 0)
-    gtk_widget_set_opacity (image, 0);
-  else
-    gtk_widget_set_opacity (image, 1);
-}
+  GtkWidget *image;
+  GtkWidget *dialog;
 
-static void
-activate_row4 (GtkListBoxRow *row, GtkWidget *dialog)
-{
-  gtk_window_present (GTK_WINDOW (dialog));
+  image = (GtkWidget *)g_object_get_data (G_OBJECT (row), "image");
+  dialog = (GtkWidget *)g_object_get_data (G_OBJECT (row), "dialog");
+
+  if (image)
+    {
+      if (gtk_widget_get_opacity (image) > 0)
+        gtk_widget_set_opacity (image, 0);
+      else
+        gtk_widget_set_opacity (image, 1);
+    }
+  else if (dialog)
+    {
+      gtk_window_present (GTK_WINDOW (dialog));
+    }
 }
 
 static void
@@ -592,14 +599,15 @@ activate (GApplication *app)
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "listbox");
   gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_header, NULL, NULL);
+  g_signal_connect (widget, "row-activated", G_CALLBACK (row_activated), NULL);
+
   widget = gtk_widget_get_parent ((GtkWidget *)gtk_builder_get_object (builder, "listboxrow3"));
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow3image");
-  g_signal_connect (widget, "activate",
-                    G_CALLBACK (activate_row3), widget2);
+  g_object_set_data (G_OBJECT (widget), "image", widget2);
+
   widget = gtk_widget_get_parent ((GtkWidget *)gtk_builder_get_object (builder, "listboxrow4"));
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "info_dialog");
-  g_signal_connect (widget, "activate",
-                    G_CALLBACK (activate_row4), widget2);
+  g_object_set_data (G_OBJECT (widget), "dialog", widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbar");
   g_object_set_data (G_OBJECT (window), "toolbar", widget);
