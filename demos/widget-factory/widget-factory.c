@@ -467,7 +467,7 @@ populate_colors (GtkWidget *widget)
                     "halign", GTK_ALIGN_START,
                     "valign", GTK_ALIGN_CENTER,
                     "margin", 6,
-                    "xalign", 0,
+                    "xalign", 0.0,
                     NULL);
       gtk_box_pack_start (GTK_BOX (row), label, TRUE, TRUE, 0);
       gdk_rgba_parse (&rgba, colors[i].color);
