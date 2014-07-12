@@ -2658,22 +2658,19 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                       <object class="GtkPaned">
                                         <property name="visible">True</property>
                                         <property name="orientation">horizontal</property>
+                                        <style>
+                                          <class name="view"/>
+                                        </style>
                                         <child>
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="label">Left</property>
-                                            <style>
-                                              <class name="view"/>
-                                            </style>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="label">Right</property>
-                                            <style>
-                                              <class name="view"/>
-                                            </style>
                                           </object>
                                         </child>
                                       </object>
@@ -2688,22 +2685,19 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                       <object class="GtkPaned">
                                         <property name="visible">True</property>
                                         <property name="orientation">vertical</property>
+                                        <style>
+                                          <class name="view"/>
+                                        </style>
                                         <child>
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="label">Top</property>
-                                            <style>
-                                              <class name="view"/>
-                                            </style>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="label">Bottom</property>
-                                            <style>
-                                              <class name="view"/>
-                                            </style>
                                           </object>
                                         </child>
                                       </object>
