@@ -20,6 +20,8 @@
 
 #include "visual.h"
 
+#include "gtkadjustment.h"
+#include "gtkbox.h"
 #include "gtkcomboboxtext.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
@@ -27,19 +29,30 @@
 #include "gtkswitch.h"
 #include "gtkwindow.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
 struct _GtkInspectorVisualPrivate
 {
-  GtkWidget *direction_combo;
-  GtkWidget *updates_switch;
-  GtkWidget *baselines_switch;
-  GtkWidget *pixelcache_switch;
-
+  GtkWidget *visual_box;
   GtkWidget *theme_combo;
   GtkWidget *dark_switch;
   GtkWidget *icon_combo;
+  GtkWidget *direction_combo;
+  GtkWidget *hidpi_spin;
+  GtkAdjustment *scale_adjustment;
+
+  GtkWidget *debug_box;
+  GtkWidget *updates_switch;
+  GtkWidget *baselines_switch;
+  GtkWidget *pixelcache_switch;
+  GtkWidget *touchscreen_switch;
+
+  GtkAdjustment *focus_adjustment;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_SCROLLED_WINDOW)
 
 static void
 fix_direction_recurse (GtkWidget *widget,
@@ -325,6 +338,116 @@ icons_changed (GtkComboBox        *c,
   g_free (theme);
 }
 
+#if defined (GDK_WINDOWING_X11) && defined (HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE)
+static void
+scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
+{
+  GdkDisplay *display;
+  gint scale;
+
+  scale = gtk_adjustment_get_value (adjustment);
+  display = gtk_widget_get_display (GTK_WIDGET (vis));
+  gdk_x11_display_set_window_scale (display, scale);
+}
+#endif
+
+static void
+init_scale (GtkInspectorVisual *vis)
+{
+#if defined (GDK_WINDOWING_X11) && defined (HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE)
+  GdkScreen *screen;
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (vis));
+  if (GDK_IS_X11_SCREEN (screen))
+    {
+      gdouble scale;
+
+      scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+      gtk_adjustment_set_value (vis->priv->scale_adjustment, scale);
+      g_signal_connect (vis->priv->scale_adjustment, "value-changed",
+                        G_CALLBACK (scale_changed), vis);
+    }
+  else
+#endif
+    {
+      gtk_adjustment_set_value (vis->priv->scale_adjustment, 1);
+      gtk_widget_set_sensitive (vis->priv->hidpi_spin, FALSE);
+      gtk_widget_set_tooltip_text (vis->priv->hidpi_spin,
+                                   _("Backend does not support window scaling"));
+    }
+}
+
+static void
+update_touchscreen (GtkSwitch *sw)
+{
+  GtkDebugFlag flags;
+
+  flags = gtk_get_debug_flags ();
+
+  if (gtk_switch_get_active (sw))
+    flags |= GTK_DEBUG_TOUCHSCREEN;
+  else
+    flags &= ~GTK_DEBUG_TOUCHSCREEN;
+
+  gtk_set_debug_flags (flags);
+}
+
+static void
+init_touchscreen (GtkInspectorVisual *vis)
+{
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->touchscreen_switch), (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0);
+  g_signal_connect (vis->priv->touchscreen_switch, "notify::active",
+                    G_CALLBACK (update_touchscreen), NULL);
+
+  if (g_getenv ("GTK_TEST_TOUCHSCREEN") != 0)
+    {
+      /* hardcoded, nothing we can do */
+      gtk_switch_set_active (GTK_SWITCH (vis->priv->touchscreen_switch), TRUE);
+      gtk_widget_set_sensitive (vis->priv->touchscreen_switch, FALSE);
+      gtk_widget_set_tooltip_text (vis->priv->touchscreen_switch, _("Setting is hardcoded by GTK_TEST_TOUCHSCREEN"));
+    }
+}
+
+static gboolean
+keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual *vis)
+{
+  GtkWidget *next;
+  gdouble value, lower, upper, page;
+
+  if (direction == GTK_DIR_DOWN &&
+      widget == vis->priv->visual_box)
+    next = vis->priv->debug_box;
+  else if (direction == GTK_DIR_UP &&
+           widget == vis->priv->debug_box)
+    next = vis->priv->visual_box;
+  else 
+    next = NULL;
+
+  if (next)
+    {
+      gtk_widget_child_focus (next, direction);
+      return TRUE;
+    }
+
+  value = gtk_adjustment_get_value (vis->priv->focus_adjustment);
+  lower = gtk_adjustment_get_lower (vis->priv->focus_adjustment);
+  upper = gtk_adjustment_get_upper (vis->priv->focus_adjustment);
+  page  = gtk_adjustment_get_page_size (vis->priv->focus_adjustment);
+
+  if (direction == GTK_DIR_UP && value > lower)
+    {
+      gtk_adjustment_set_value (vis->priv->focus_adjustment, lower);
+      return TRUE;
+    }
+  else if (direction == GTK_DIR_DOWN && value < upper - page)
+    {
+      gtk_adjustment_set_value (vis->priv->focus_adjustment, upper - page);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_inspector_visual_init (GtkInspectorVisual *vis)
 {
@@ -334,12 +457,32 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_theme (vis);
   init_dark (vis);
   init_icons (vis);
+  init_scale (vis);
+  init_touchscreen (vis);
+}
+
+static void
+gtk_inspector_visual_constructed (GObject *object)
+{
+  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
+
+  G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->constructed (object);
+
+  vis->priv->focus_adjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (vis));
+  gtk_container_set_focus_vadjustment (GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (vis))),
+                                       vis->priv->focus_adjustment);
+
+   g_signal_connect (vis->priv->visual_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
+   g_signal_connect (vis->priv->debug_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
 }
 
 static void
 gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->constructed = gtk_inspector_visual_constructed;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/visual.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
@@ -349,6 +492,11 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, icon_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, hidpi_spin);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, scale_adjustment);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, touchscreen_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, visual_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, debug_box);
 
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
@@ -356,7 +504,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, pixelcache_activate);
   gtk_widget_class_bind_template_callback (widget_class, theme_changed);
   gtk_widget_class_bind_template_callback (widget_class, icons_changed);
-
 }
 
 // vim: set et sw=2 ts=2:

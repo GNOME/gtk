@@ -18,7 +18,7 @@
 #ifndef _GTK_INSPECTOR_VISUAL_H_
 #define _GTK_INSPECTOR_VISUAL_H_
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkscrolledwindow.h>
 
 #define GTK_TYPE_INSPECTOR_VISUAL            (gtk_inspector_visual_get_type())
 #define GTK_INSPECTOR_VISUAL(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_VISUAL, GtkInspectorVisual))
@@ -32,13 +32,13 @@ typedef struct _GtkInspectorVisualPrivate GtkInspectorVisualPrivate;
 
 typedef struct _GtkInspectorVisual
 {
-  GtkBox parent;
+  GtkScrolledWindow parent;
   GtkInspectorVisualPrivate *priv;
 } GtkInspectorVisual;
 
 typedef struct _GtkInspectorVisualClass
 {
-  GtkBoxClass parent;
+  GtkScrolledWindowClass parent;
 } GtkInspectorVisualClass;
 
 G_BEGIN_DECLS

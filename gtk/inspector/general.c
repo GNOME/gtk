@@ -20,7 +20,6 @@
 
 #include "general.h"
 
-#include "gtkadjustment.h"
 #include "gtkdebug.h"
 #include "gtklabel.h"
 #include "gtkscale.h"
@@ -61,9 +60,6 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gtk_exe_prefix;
   GtkWidget *gtk_data_prefix;
   GtkWidget *gsettings_schema_dir;
-  GtkWidget *hidpi_spin;
-  GtkWidget *touchscreen_switch;
-  GtkAdjustment *scale_adjustment;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_BOX)
@@ -150,79 +146,12 @@ init_env (GtkInspectorGeneral *gen)
 }
 
 static void
-update_touchscreen (GtkSwitch *sw, GParamSpec *pspec, GtkInspectorGeneral *gen)
-{
-  GtkDebugFlag flags;
-
-  flags = gtk_get_debug_flags ();
-
-  if (gtk_switch_get_active (sw))
-    flags |= GTK_DEBUG_TOUCHSCREEN;
-  else
-    flags &= ~GTK_DEBUG_TOUCHSCREEN;
-
-  gtk_set_debug_flags (flags);
-}
-
-#if defined (GDK_WINDOWING_X11) && defined (HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE)
-static void
-scale_changed (GtkAdjustment *adjustment, GtkInspectorGeneral *gen)
-{
-  GdkDisplay *display;
-  gint scale;
-
-  scale = gtk_adjustment_get_value (adjustment);
-  display = gtk_widget_get_display (GTK_WIDGET (gen));
-  gdk_x11_display_set_window_scale (display, scale);
-}
-#endif
-
-static void
-init_settings (GtkInspectorGeneral *gen)
-{
-#if defined (GDK_WINDOWING_X11) && defined (HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE)
-  GdkScreen *screen;
-
-  screen = gtk_widget_get_screen (GTK_WIDGET (gen));
-  if (GDK_IS_X11_SCREEN (screen))
-    {
-      gdouble scale;
-
-      scale = gdk_screen_get_monitor_scale_factor (screen, 0);
-      gtk_adjustment_set_value (gen->priv->scale_adjustment, scale);
-      g_signal_connect (gen->priv->scale_adjustment, "value-changed",
-                        G_CALLBACK (scale_changed), gen);
-    }
-  else
-#endif
-    {
-      gtk_adjustment_set_value (gen->priv->scale_adjustment, 1);
-      gtk_widget_set_sensitive (gen->priv->hidpi_spin, FALSE);
-      gtk_widget_set_tooltip_text (gen->priv->hidpi_spin,
-                                   _("Backend does not support window scaling"));
-    }
-
-  gtk_switch_set_active (GTK_SWITCH (gen->priv->touchscreen_switch), (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0);
-  g_signal_connect (gen->priv->touchscreen_switch, "notify::active",
-                    G_CALLBACK (update_touchscreen), gen);
-
-  if (g_getenv ("GTK_TEST_TOUCHSCREEN") != 0)
-    {
-      /* hardcoded, nothing we can do */
-      gtk_switch_set_active (GTK_SWITCH (gen->priv->touchscreen_switch), TRUE);
-      gtk_widget_set_sensitive (gen->priv->touchscreen_switch, FALSE);
-      gtk_widget_set_tooltip_text (gen->priv->touchscreen_switch, _("Setting is hardcoded by GTK_TEST_TOUCHSCREEN"));
-    }
-}
-
-static void
 gtk_inspector_general_init (GtkInspectorGeneral *gen)
 {
   gen->priv = gtk_inspector_general_get_instance_private (gen);
   gtk_widget_init_template (GTK_WIDGET (gen));
   init_version (gen);
   init_env (gen);
-  init_settings (gen);
 }
 
 static void
@@ -240,9 +169,6 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_exe_prefix);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_data_prefix);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gsettings_schema_dir);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, hidpi_spin);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, scale_adjustment);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, touchscreen_switch);
 }
 
 // vim: set et sw=2 ts=2:

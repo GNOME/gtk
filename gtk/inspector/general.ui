@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
-  <object class="GtkAdjustment" id="scale_adjustment">
-    <property name="lower">1</property>
-    <property name="upper">2</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">1</property>
-  </object>
   <template class="GtkInspectorGeneral" parent="GtkBox">
     <property name="orientation">vertical</property>
     <property name="margin">60</property>
@@ -284,74 +278,6 @@
         </child>
       </object>
     </child>
-    <child>
-      <object class="GtkFrame" id="settings_frame">
-        <property name="visible">True</property>
-        <property name="halign">center</property>
-        <child>
-          <object class="GtkListBox">
-            <property name="visible">True</property>
-            <property name="selection-mode">none</property>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="margin">10</property>
-                <property name="spacing">40</property>
-                <child>
-                  <object class="GtkLabel" id="hidpi_label">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">Window scaling</property>
-                    <property name="halign">start</property>
-                    <property name="valign">baseline</property>
-                    <property name="xalign">0.0</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="hidpi_spin">
-                    <property name="visible">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">baseline</property>
-                    <property name="adjustment">scale_adjustment</property>
-                    <property name="snap-to-ticks">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="margin">10</property>
-                <property name="spacing">40</property>
-                <child>
-                  <object class="GtkLabel" id="touchscreen_label">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">Simulate touchscreen</property>
-                    <property name="halign">start</property>
-                    <property name="valign">baseline</property>
-                    <property name="xalign">0.0</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="touchscreen_switch">
-                    <property name="visible">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">baseline</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
   </template>
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
@@ -365,7 +291,6 @@
       <widget name="gtk_exe_prefix_label"/>
       <widget name="gtk_data_prefix_label"/>
       <widget name="gsettings_schema_dir_label"/>
-      <widget name="touchscreen_label"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
@@ -373,7 +298,6 @@
     <widgets>
       <widget name="version_frame"/>
       <widget name="env_frame"/>
-      <widget name="settings_frame"/>
     </widgets>
   </object>
 </interface>
