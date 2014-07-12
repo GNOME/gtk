@@ -411,54 +411,83 @@ populate_model (GtkTreeStore *store)
 }
 
 static void
+update_title_header (GtkListBoxRow *row,
+                     GtkListBoxRow *before,
+                     gpointer       data)
+{
+  GtkWidget *header;
+  gchar *title;
+
+  header = gtk_list_box_row_get_header (row);
+  title = (gchar *)g_object_get_data (G_OBJECT (row), "title");
+  if (!header && title)
+    {
+      title = g_strdup_printf ("<b>%s</b>", title);
+
+      header = gtk_label_new (title);
+      gtk_label_set_use_markup (GTK_LABEL (header), TRUE);
+      gtk_widget_set_halign (header, GTK_ALIGN_START);
+      gtk_widget_set_margin_top (header, 12);
+      gtk_widget_set_margin_start (header, 6);
+      gtk_widget_show (header);
+
+      gtk_list_box_row_set_header (row, header);
+
+      g_free (title);
+    }
+}
+
+static void
 populate_colors (GtkWidget *widget)
 {
-  struct { const gchar *name; const gchar *color; } colors[] = {
-    { "Red 2.5", "#C8828C" },
-    { "Red 5", "#C98286" },
-    { "Red 7.5", "#C9827F" },
-    { "Red 10", "#C98376" },
-    { "Red/Yellow 2.5", "#C8856D" },
-    { "Red/Yellow 5", "#C58764" },
-    { "Red/Yellow 7.5", "#C1895E" },
-    { "Red/Yellow 10", "#BB8C56" },
-    { "Yellow 2.5", "#B58F4F" },
-    { "Yellow 5", "#AD924B" },
-    { "Yellow 7.5", "#A79548" },
-    { "Yellow 10", "#A09749" },
-    { "Yellow/Green 2.5", "#979A4E" },
-    { "Yellow/Green 5", "#8D9C55" },
-    { "Yellow/Green 7.5", "#7F9F62" },
-    { "Yellow/Green 10", "#73A06E" },
-    { "Geen 2.5", "#65A27C" },
-    { "Green 5", "#5CA386" },
-    { "Green 7.5", "#57A38D" },
-    { "Green 10", "#52A394" },
-    { "Green/Blue 2.5", "#4EA39A" },
-    { "Green/Blue 5", "#49A3A2" },
-    { "Green/Blue 7.5", "#46A2AA" },
-    { "Green/Blue 10", "#46A1B1" },
-    { "Blue 2.5", "#49A0B8" },
-    { "Blue 5", "#529EBD" },
-    { "Blue 7.5", "#5D9CC1" },
-    { "Blue 10", "#689AC3" },
-    { "Blue/Purple 2.5", "#7597C5" },
-    { "Blue/Purple 5", "#8095C6" },
-    { "Blue/Purple 7.5", "#8D91C6" },
-    { "Blue/Purple 10", "#988EC4" },
-    { "Purple 2.5", "#A08CC1" },
-    { "Purple 5", "#A88ABD" },
-    { "Purple 7.5", "#B187B6" },
-    { "Purple 10", "#B786B0" },
-    { "Purple/Red 2.5", "#BC84A9" },
-    { "Purple/Red 5", "#C183A0" },
-    { "Purple/Red 7.5", "#C48299" },
-    { "Purple/Red 10", "#C68292" }
+  struct { const gchar *name; const gchar *color; const gchar *title; } colors[] = {
+    { "2.5", "#C8828C", "Red" },
+    { "5", "#C98286", NULL },
+    { "7.5", "#C9827F", NULL },
+    { "10", "#C98376", NULL },
+    { "2.5", "#C8856D", "Red/Yellow" },
+    { "5", "#C58764", NULL },
+    { "7.5", "#C1895E", NULL },
+    { "10", "#BB8C56", NULL },
+    { "2.5", "#B58F4F", "Yellow" },
+    { "5", "#AD924B", NULL },
+    { "7.5", "#A79548", NULL },
+    { "10", "#A09749", NULL },
+    { "2.5", "#979A4E", "Yellow/Green" },
+    { "5", "#8D9C55", NULL },
+    { "7.5", "#7F9F62", NULL },
+    { "10", "#73A06E", NULL },
+    { "2.5", "#65A27C", "Green" },
+    { "5", "#5CA386", NULL },
+    { "7.5", "#57A38D", NULL },
+    { "10", "#52A394", NULL },
+    { "2.5", "#4EA39A", "Green/Blue" },
+    { "5", "#49A3A2", NULL },
+    { "7.5", "#46A2AA", NULL },
+    { "10", "#46A1B1", NULL },
+    { "2.5", "#49A0B8", "Blue" },
+    { "5", "#529EBD", NULL },
+    { "7.5", "#5D9CC1", NULL },
+    { "10", "#689AC3", NULL },
+    { "2.5", "#7597C5", "Blue/Purple" },
+    { "5", "#8095C6", NULL },
+    { "7.5", "#8D91C6", NULL },
+    { "10", "#988EC4", NULL },
+    { "2.5", "#A08CC1", "Purple" },
+    { "5", "#A88ABD", NULL },
+    { "7.5", "#B187B6", NULL },
+    { "10", "#B786B0", NULL },
+    { "2.5", "#BC84A9", "Purple/Red" },
+    { "5", "#C183A0", NULL },
+    { "7.5", "#C48299", NULL },
+    { "10", "#C68292", NULL }
   };
   gint i;
   GtkWidget *row, *box, *label, *swatch;
   GdkRGBA rgba;
 
+  gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_title_header, NULL, NULL);
+                             
   for (i = 0; i < G_N_ELEMENTS (colors); i++)
     {
       row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
@@ -484,7 +513,14 @@ populate_colors (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (row), box, FALSE, FALSE, 0);
       gtk_widget_show_all (row);
       gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
+      if (colors[i].title)
+        {
+          row = gtk_widget_get_parent (row);
+          g_object_set_data (G_OBJECT (row), "title", (gpointer)colors[i].title);
+        }
     }
+
+  gtk_list_box_invalidate_headers (GTK_LIST_BOX (widget));
 }
 
 static void
