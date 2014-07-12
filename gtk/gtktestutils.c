@@ -19,7 +19,6 @@
 
 #include "config.h"
 
-#include <gtk/gtkx.h>
 #include "gtkspinbutton.h"
 #include "gtkmain.h"
 #include "gtkbox.h"
@@ -32,6 +31,14 @@
 #include <string.h>
 #include <math.h>
 
+/* This is a hack.
+ * We want to include the same headers as gtktypefuncs.c but we are not
+ * allowed to include gtkx.h directly during GTK compilation.
+ * So....
+ */
+#undef GTK_COMPILATION
+#include <gtk/gtkx.h>
+#define GTK_COMPILATION
 
 /**
  * SECTION:gtktesting
