@@ -3996,6 +3996,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
     }
 
   gtk_label_get_ink_rect (label, &clip_rect);
+  gdk_rectangle_union (&clip_rect, allocation, &clip_rect);
   gtk_widget_set_clip (widget, &clip_rect);
 }
 
