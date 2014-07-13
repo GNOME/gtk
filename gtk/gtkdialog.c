@@ -460,6 +460,7 @@ gtk_dialog_constructed (GObject *object)
       GList *children, *l;
 
       gtk_window_set_titlebar (GTK_WINDOW (dialog), priv->headerbar);
+      gtk_window_set_title (GTK_WINDOW (dialog), gtk_window_get_title (GTK_WINDOW (dialog)));
 
       children = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
       for (l = children; l != NULL; l = l->next)
