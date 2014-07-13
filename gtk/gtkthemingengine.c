@@ -2252,6 +2252,9 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   gint xx, yy;
   gboolean has_image;
 
+  if (render_icon_image (engine, cr, x, y, width, height))
+    return;
+
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
