@@ -3028,7 +3028,7 @@ gtk_list_box_row_get_preferred_width (GtkWidget *widget,
                                       &child_min, &child_natural);
 
   *minimum_width_out = full_border.left + child_min + full_border.right;
-  *natural_width_out = full_border.left + child_natural + full_border.bottom;
+  *natural_width_out = full_border.left + child_natural + full_border.right;
 }
 
 static void
