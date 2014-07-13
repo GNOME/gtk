@@ -1054,9 +1054,12 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
 }
 
 //touch selection handlebars for the Popover.osd above
+.entry.cursor-handle,
 .cursor-handle {
   background-color: transparent;
   background-image: none;
+  box-shadow: none;
+  border-style: none;
   &.top { -gtk-icon-source: -gtk-icontheme('selection-start-symbolic'); }
   &.bottom { -gtk-icon-source: -gtk-icontheme('selection-end-symbolic'); }
 }

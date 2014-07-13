@@ -1196,11 +1196,16 @@ GtkTreeView.view.progressbar {
         border-color: rgba(102, 102, 102, 0.8);
         color: #939695; }
 
+.entry.cursor-handle,
 .cursor-handle {
   background-color: transparent;
-  background-image: none; }
+  background-image: none;
+  box-shadow: none;
+  border-style: none; }
+  .entry.cursor-handle.top,
   .cursor-handle.top {
     -gtk-icon-source: -gtk-icontheme("selection-start-symbolic"); }
+  .entry.cursor-handle.bottom,
   .cursor-handle.bottom {
     -gtk-icon-source: -gtk-icontheme("selection-end-symbolic"); }
 
