@@ -1335,6 +1335,9 @@ ensure_row_visible (GtkListBox    *box,
   GtkWidget *widget;
   GtkAllocation allocation;
 
+  if (!priv->adjustment)
+    return;
+
   /* If the row has a header, we want to ensure that it is visible as well. */
   header = ROW_PRIV (row)->header;
   if (GTK_IS_WIDGET (header) && gtk_widget_is_drawable (header))
