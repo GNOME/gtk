@@ -1913,11 +1913,21 @@ GtkScrolledWindow {
   }
 }
 
+.list-row.button,
 .list-row,
 .grid-child {
+  background-image: none;
+  border-style: none;
+  box-shadow: none;
+  border-width: 0;
   padding: 2px;
 }
 
+.list-row.button:hover {
+  background-color: darken($base_color, 10%);
+}
+
+.list-row.button:selected,
 .list-row:selected {
   background-color: $selected_bg_color;
   color: $selected_fg_color;

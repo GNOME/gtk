@@ -2413,13 +2413,23 @@ GtkScrolledWindow GtkViewport.frame {
     background-color: #fcfcfc;
     border-color: #a8a8a8; }
 
+.list-row.button,
 .list-row,
 .grid-child {
+  background-image: none;
+  border-style: none;
+  box-shadow: none;
+  border-width: 0;
   padding: 2px; }
 
+.list-row.button:hover {
+  background-color: #e6e6e6; }
+
+.list-row.button:selected,
 .list-row:selected {
   background-color: #4a90d9;
   color: white; }
+  .list-row.button:selected:backdrop,
   .list-row:selected:backdrop {
     color: #fcfcfc; }
 
