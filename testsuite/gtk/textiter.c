@@ -586,6 +586,90 @@ test_visible_cursor_positions (void)
   g_object_unref (buffer);
 }
 
+static void
+check_sentence_boundaries (const gchar *buffer_text,
+                           gint         offset,
+                           gboolean     starts_sentence,
+                           gboolean     ends_sentence,
+                           gboolean     inside_sentence)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
+
+  g_assert_cmpint (starts_sentence, ==, gtk_text_iter_starts_sentence (&iter));
+  g_assert_cmpint (ends_sentence, ==, gtk_text_iter_ends_sentence (&iter));
+  g_assert_cmpint (inside_sentence, ==, gtk_text_iter_inside_sentence (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
+check_forward_sentence_end (const gchar *buffer_text,
+                            gint         initial_offset,
+                            gint         result_offset,
+                            gboolean     ret)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  g_assert_cmpint (ret, ==, gtk_text_iter_forward_sentence_end (&iter));
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
+check_backward_sentence_start (const gchar *buffer_text,
+                               gint         initial_offset,
+                               gint         result_offset,
+                               gboolean     ret)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  g_assert_cmpint (ret, ==, gtk_text_iter_backward_sentence_start (&iter));
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
+test_sentence_boundaries (void)
+{
+  check_sentence_boundaries ("Hi. ", 0, TRUE, FALSE, TRUE);
+  check_sentence_boundaries ("Hi. ", 1, FALSE, FALSE, TRUE);
+  check_sentence_boundaries ("Hi. ", 2, FALSE, FALSE, TRUE);
+  check_sentence_boundaries ("Hi. ", 3, FALSE, TRUE, FALSE);
+  check_sentence_boundaries ("Hi. ", 4, FALSE, FALSE, FALSE);
+
+  check_forward_sentence_end ("Hi. ", 0, 3, TRUE);
+  check_forward_sentence_end ("Hi. ", 1, 3, TRUE);
+  check_forward_sentence_end ("Hi. ", 2, 3, TRUE);
+  check_forward_sentence_end ("Hi. ", 3, 4, FALSE); /* FIXME result_offset should be 3 */
+  check_forward_sentence_end ("Hi. ", 4, 4, FALSE);
+
+  check_backward_sentence_start (" Hi.", 4, 1, TRUE);
+  check_backward_sentence_start (" Hi.", 3, 1, TRUE);
+  check_backward_sentence_start (" Hi.", 2, 1, TRUE);
+  check_backward_sentence_start (" Hi.", 1, 1, FALSE);
+  check_backward_sentence_start (" Hi.", 0, 0, FALSE);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -600,6 +684,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextIter/Visible Word Boundaries", test_visible_word_boundaries);
   g_test_add_func ("/TextIter/Cursor Positions", test_cursor_positions);
   g_test_add_func ("/TextIter/Visible Cursor Positions", test_visible_cursor_positions);
+  g_test_add_func ("/TextIter/Sentence Boundaries", test_sentence_boundaries);
 
   return g_test_run();
 }
