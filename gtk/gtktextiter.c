@@ -3097,54 +3097,55 @@ find_line_log_attrs (const GtkTextIter *iter,
 }
 
 static gboolean
-find_by_log_attrs (GtkTextIter     *iter,
+find_by_log_attrs (GtkTextIter     *arg_iter,
                    FindLogAttrFunc  func,
                    gboolean         forward)
 {
-  GtkTextIter orig;
+  GtkTextIter iter;
   gboolean already_moved_initially = FALSE;
 
-  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (arg_iter != NULL, FALSE);
 
-  orig = *iter;
+  iter = *arg_iter;
 
   while (TRUE)
     {
       gint offset = 0;
       gboolean found;
 
-      found = find_line_log_attrs (iter, func, &offset, already_moved_initially);
+      found = find_line_log_attrs (&iter, func, &offset, already_moved_initially);
 
       if (found)
         {
-          gtk_text_iter_set_line_offset (iter, offset);
+          gboolean moved;
 
-          return !gtk_text_iter_equal (iter, &orig) && !gtk_text_iter_is_end (iter);
+          gtk_text_iter_set_line_offset (&iter, offset);
+
+          moved = !gtk_text_iter_equal (&iter, arg_iter);
+
+          *arg_iter = iter;
+          return moved && !gtk_text_iter_is_end (arg_iter);
         }
 
       if (forward)
         {
-          if (!gtk_text_iter_forward_line (iter))
+          if (!gtk_text_iter_forward_line (&iter))
             return FALSE;
 
           already_moved_initially = TRUE;
         }
       else
         {
-          GtkTextIter tmp_iter = *iter;
-
           /* Go to end of previous line. First go to the current line offset 0,
            * because backward_line() snaps to start of line 0 if iter is already
            * on line 0.
            */
-          gtk_text_iter_set_line_offset (&tmp_iter, 0);
+          gtk_text_iter_set_line_offset (&iter, 0);
 
-          if (gtk_text_iter_backward_line (&tmp_iter))
+          if (gtk_text_iter_backward_line (&iter))
             {
-              *iter = tmp_iter;
-
-              if (!gtk_text_iter_ends_line (iter))
-                gtk_text_iter_forward_to_line_end (iter);
+              if (!gtk_text_iter_ends_line (&iter))
+                gtk_text_iter_forward_to_line_end (&iter);
 
               already_moved_initially = TRUE;
             }

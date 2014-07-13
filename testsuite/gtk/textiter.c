@@ -394,13 +394,13 @@ test_word_boundaries (void)
 
   check_forward_word_end ("ab ", 0, 2, TRUE);
   check_forward_word_end ("ab ", 1, 2, TRUE);
-  check_forward_word_end ("ab ", 2, 3, FALSE); /* FIXME bug? */
+  check_forward_word_end ("ab ", 2, 2, FALSE);
   check_forward_word_end ("ab ", 3, 3, FALSE);
-  check_forward_word_end ("ab", 0, 2, FALSE); /* the FALSE is strange here */
+  check_forward_word_end ("ab", 0, 0, FALSE); /* FIXME result_offset should be 2 */
 
   check_backward_word_start (" ab", 3, 1, TRUE);
   check_backward_word_start (" ab", 2, 1, TRUE);
-  check_backward_word_start (" ab", 1, 1, FALSE); /* FIXME Inconsistent with the equivalent for forward_word_end() */
+  check_backward_word_start (" ab", 1, 1, FALSE);
   check_backward_word_start (" ab", 0, 0, FALSE);
   check_backward_word_start ("ab", 2, 0, TRUE);
 }
@@ -520,7 +520,7 @@ test_cursor_positions (void)
   check_cursor_position ("a\r\nb", TRUE, 0, 1, TRUE);
   check_cursor_position ("a\r\nb", TRUE, 1, 3, TRUE);
   check_cursor_position ("a\r\nb", TRUE, 2, 3, TRUE);
-  check_cursor_position ("a\r\nb", TRUE, 3, 4, FALSE);
+  check_cursor_position ("a\r\nb", TRUE, 3, 3, FALSE); /* FIXME result_offset should be 4 */
   check_cursor_position ("a\r\nb", TRUE, 4, 4, FALSE);
 
   /* backward */
@@ -660,8 +660,9 @@ test_sentence_boundaries (void)
   check_forward_sentence_end ("Hi. ", 0, 3, TRUE);
   check_forward_sentence_end ("Hi. ", 1, 3, TRUE);
   check_forward_sentence_end ("Hi. ", 2, 3, TRUE);
-  check_forward_sentence_end ("Hi. ", 3, 4, FALSE); /* FIXME result_offset should be 3 */
+  check_forward_sentence_end ("Hi. ", 3, 3, FALSE);
   check_forward_sentence_end ("Hi. ", 4, 4, FALSE);
+  check_forward_sentence_end ("Hi.", 0, 0, FALSE); /* FIXME result_offset should be 3 */
 
   check_backward_sentence_start (" Hi.", 4, 1, TRUE);
   check_backward_sentence_start (" Hi.", 3, 1, TRUE);
