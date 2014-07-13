@@ -122,11 +122,17 @@ enum {
   ROW__LAST_SIGNAL
 };
 
-enum  {
+enum {
   PROP_0,
   PROP_SELECTION_MODE,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
   LAST_PROPERTY
+};
+
+enum {
+  ROW_PROP_0,
+  ROW_PROP_ACTIVATABLE,
+  LAST_ROW_PROPERTY
 };
 
 #define BOX_PRIV(box) ((GtkListBoxPrivate*)gtk_list_box_get_instance_private ((GtkListBox*)(box)))
@@ -238,6 +244,7 @@ static void gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gest
 
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
+static GParamSpec *row_properties[LAST_ROW_PROPERTY] = { NULL, };
 static guint row_signals[ROW__LAST_SIGNAL] = { 0 };
 
 /**
@@ -1531,6 +1538,14 @@ gtk_list_box_update_selection (GtkListBox    *box,
 }
 
 static void
+gtk_list_box_activate (GtkListBox    *box,
+                       GtkListBoxRow *row)
+{
+  if (gtk_list_box_row_get_activatable (row))
+    g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
+}
+
+static void
 gtk_list_box_select_and_activate (GtkListBox    *box,
                                   GtkListBoxRow *row)
 {
@@ -1538,7 +1553,7 @@ gtk_list_box_select_and_activate (GtkListBox    *box,
     {
       gtk_list_box_select_row_internal (box, row);
       gtk_list_box_update_cursor (box, row);
-      g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
+      gtk_list_box_activate (box, row);
     }
 }
 
@@ -1690,7 +1705,7 @@ gtk_list_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       gtk_widget_queue_draw (GTK_WIDGET (box));
 
       if (n_press == 2 && !priv->activate_single_click)
-        g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
+        gtk_list_box_activate (box, row);
     }
 }
 
@@ -2792,6 +2807,7 @@ gtk_list_box_row_init (GtkListBoxRow *row)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (row));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST_ROW);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
 }
 
 static void
@@ -3183,6 +3199,99 @@ gtk_list_box_row_is_selected (GtkListBoxRow *row)
   return ROW_PRIV (row)->selected;
 }
 
+/**
+ * gtk_list_box_row_set_activatable:
+ * @row: a #GTkListBoxrow
+ * @activatable: %TRUE to make the row as activatable
+ *
+ * Set the #GtkListBoxRow:activatable property for this row.
+ *
+ * Since: 3.14
+ */
+void
+gtk_list_box_row_set_activatable (GtkListBoxRow *row,
+                                  gboolean       activatable)
+{
+  GtkStyleContext *context;
+
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+
+  activatable = activatable != FALSE;
+
+  if (activatable == gtk_list_box_row_get_activatable (row))
+    return;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (row));
+
+  if (activatable)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BUTTON);
+
+  g_object_notify (G_OBJECT (row), "activatable");
+}
+
+/**
+ * gtk_list_box_row_get_activatable:
+ * @row: a #GtkListBoxRow
+ *
+ * Gets the value of the #GtkListBoxRow:activatable property
+ * for this row.
+ *
+ * Returns: %TRUE fi the row is activatable
+ *
+ * Since: 3.14
+ */
+gboolean
+gtk_list_box_row_get_activatable (GtkListBoxRow *row)
+{
+  GtkStyleContext *context;
+
+  g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), TRUE);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (row));
+
+  return gtk_style_context_has_class (context, GTK_STYLE_CLASS_BUTTON);
+}
+
+static void
+gtk_list_box_row_get_property (GObject    *obj,
+                               guint       property_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (obj);
+
+  switch (property_id)
+    {
+    case ROW_PROP_ACTIVATABLE:
+      g_value_set_boolean (value, gtk_list_box_row_get_activatable (row));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_list_box_row_set_property (GObject      *obj,
+                               guint         property_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (obj);
+
+  switch (property_id)
+    {
+    case ROW_PROP_ACTIVATABLE:
+      gtk_list_box_row_set_activatable (row, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
+      break;
+    }
+}
+
 static void
 gtk_list_box_row_finalize (GObject *obj)
 {
@@ -3199,6 +3308,8 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LIST_BOX_ROW_ACCESSIBLE);
 
+  object_class->get_property = gtk_list_box_row_get_property;
+  object_class->set_property = gtk_list_box_row_set_property;
   object_class->finalize = gtk_list_box_row_finalize;
 
   widget_class->show = gtk_list_box_row_show;
@@ -3221,5 +3332,24 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
   widget_class->activate_signal = row_signals[ROW__ACTIVATE];
+
+  /**
+   * GtkListBoxRow:activatable:
+   *
+   * The property determines whether the #GtkListBox::row-activated
+   * signal will be emitted for this row.
+   *
+   * Since: 3.14
+   */
+  row_properties[ROW_PROP_ACTIVATABLE] =
+    g_param_spec_boolean ("activatable",
+                          P_("Activatable"),
+                          P_("Whether this row can be activated"),
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
+
 }

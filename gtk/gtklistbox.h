@@ -183,6 +183,12 @@ void       gtk_list_box_row_changed       (GtkListBoxRow *row);
 GDK_AVAILABLE_IN_3_14
 gboolean   gtk_list_box_row_is_selected   (GtkListBoxRow *row);
 
+GDK_AVAILABLE_IN_3_14
+void       gtk_list_box_row_set_activatable (GtkListBoxRow *row,
+                                             gboolean       activatable);
+GDK_AVAILABLE_IN_3_14
+gboolean   gtk_list_box_row_get_activatable (GtkListBoxRow *row);
+
 GDK_AVAILABLE_IN_3_10
 GType          gtk_list_box_get_type                     (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_10
