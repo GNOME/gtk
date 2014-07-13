@@ -603,11 +603,11 @@ activate (GApplication *app)
   gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_header, NULL, NULL);
   g_signal_connect (widget, "row-activated", G_CALLBACK (row_activated), NULL);
 
-  widget = gtk_widget_get_parent ((GtkWidget *)gtk_builder_get_object (builder, "listboxrow3"));
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow3");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow3image");
   g_object_set_data (G_OBJECT (widget), "image", widget2);
 
-  widget = gtk_widget_get_parent ((GtkWidget *)gtk_builder_get_object (builder, "listboxrow4"));
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow4");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "info_dialog");
   g_object_set_data (G_OBJECT (widget), "dialog", widget2);
 
