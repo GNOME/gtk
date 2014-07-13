@@ -34,6 +34,7 @@
                     <child>
                       <object class="GtkLabel" id="gtk_version">
                         <property name="visible">True</property>
+                        <property name="selectable">True</property>
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                       </object>
@@ -67,6 +68,7 @@
                     <child>
                       <object class="GtkLabel" id="gdk_backend">
                         <property name="visible">True</property>
+                        <property name="selectable">True</property>
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                       </object>
@@ -112,6 +114,7 @@
                     <child>
                       <object class="GtkLabel" id="prefix">
                         <property name="visible">True</property>
+                        <property name="selectable">True</property>
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <property name="ellipsize">end</property>
@@ -146,6 +149,7 @@
                     <child>
                       <object class="GtkLabel" id="xdg_data_home">
                         <property name="visible">True</property>
+                        <property name="selectable">True</property>
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <property name="ellipsize">end</property>
@@ -159,30 +163,37 @@
               </object>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkListBoxRow">
                 <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="margin">10</property>
-                <property name="spacing">40</property>
+                <property name="activatable">False</property>
                 <child>
-                  <object class="GtkLabel" id="xdg_data_dirs_label">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="label">XDG_DATA_DIRS</property>
-                    <property name="halign">start</property>
-                    <property name="valign">baseline</property>
-                    <property name="xalign">0.0</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="margin">10</property>
+                    <property name="spacing">40</property>
+                    <child>
+                      <object class="GtkLabel" id="xdg_data_dirs_label">
+                        <property name="visible">True</property>
+                        <property name="label">XDG_DATA_DIRS</property>
+                        <property name="halign">start</property>
+                        <property name="valign">baseline</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="xdg_data_dirs">
+                        <property name="visible">True</property>
+                        <property name="selectable">True</property>
+                        <property name="halign">end</property>
+                        <property name="valign">baseline</property>
+                        <property name="ellipsize">end</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                      </packing>
+                    </child>
                   </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="xdg_data_dirs">
-                    <property name="visible">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">baseline</property>
-                    <property name="ellipsize">end</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
                 </child>
               </object>
             </child>
@@ -208,6 +219,7 @@
                     <child>
                       <object class="GtkLabel" id="gtk_path">
                         <property name="visible">True</property>
+                        <property name="selectable">True</property>
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <property name="ellipsize">end</property>
@@ -242,6 +254,7 @@
                     <child>
                       <object class="GtkLabel" id="gtk_exe_prefix">
                         <property name="visible">True</property>
+                        <property name="selectable">True</property>
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <property name="ellipsize">end</property>
@@ -276,6 +289,7 @@
                     <child>
                       <object class="GtkLabel" id="gtk_data_prefix">
                         <property name="visible">True</property>
+                        <property name="selectable">True</property>
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <property name="ellipsize">end</property>
@@ -310,6 +324,7 @@
                     <child>
                       <object class="GtkLabel" id="gsettings_schema_dir">
                         <property name="visible">True</property>
+                        <property name="selectable">True</property>
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <property name="ellipsize">end</property>
