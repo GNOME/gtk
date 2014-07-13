@@ -1327,10 +1327,31 @@ gtk_list_box_add_move_binding (GtkBindingSet   *binding_set,
 }
 
 static void
+ensure_row_visible (GtkListBox    *box,
+                    GtkListBoxRow *row)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GtkWidget *header;
+  GtkWidget *widget;
+  GtkAllocation allocation;
+
+  /* If the row has a header, we want to ensure that it is visible as well. */
+  header = ROW_PRIV (row)->header;
+  if (GTK_IS_WIDGET (header) && gtk_widget_is_drawable (header))
+    widget = header;
+  else
+    widget = GTK_WIDGET (row);
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_adjustment_clamp_page (priv->adjustment, allocation.y, allocation.y + allocation.height);
+}
+
+static void
 gtk_list_box_update_cursor (GtkListBox    *box,
                             GtkListBoxRow *row)
 {
   BOX_PRIV (box)->cursor_row = row;
+  ensure_row_visible (box, row); 
   gtk_widget_grab_focus (GTK_WIDGET (row));
   gtk_widget_queue_draw (GTK_WIDGET (row));
   _gtk_list_box_accessible_update_cursor (box, row);
@@ -2682,7 +2703,8 @@ gtk_list_box_move_cursor (GtkListBox      *box,
     case GTK_MOVEMENT_DISPLAY_LINES:
       if (priv->cursor_row != NULL)
         {
-          int i = count;
+          gint i = count;
+
           iter = ROW_PRIV (priv->cursor_row)->iter;
 
           while (i < 0  && iter != NULL)
