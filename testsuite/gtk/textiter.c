@@ -406,6 +406,89 @@ test_word_boundaries (void)
 }
 
 static void
+check_forward_visible_word_end (GtkTextBuffer *buffer,
+                                gint           initial_offset,
+                                gint           result_offset,
+                                gboolean       ret)
+{
+  GtkTextIter iter;
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  g_assert_cmpint (ret, ==, gtk_text_iter_forward_visible_word_end (&iter));
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+}
+
+static void
+check_backward_visible_word_start (GtkTextBuffer *buffer,
+                                   gint           initial_offset,
+                                   gint           result_offset,
+                                   gboolean       ret)
+{
+  GtkTextIter iter;
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  g_assert_cmpint (ret, ==, gtk_text_iter_backward_visible_word_start (&iter));
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+}
+
+static void
+test_visible_word_boundaries (void)
+{
+  /* Test with trivial content. The word boundaries are anyway determined by
+   * Pango and can change in the future for corner cases.
+   */
+
+  GtkTextBuffer *buffer;
+  GtkTextTag *invisible_tag;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  invisible_tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                              "invisible", TRUE,
+                                              NULL);
+
+  /* Buffer contents: " a b c " with " b " invisible */
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, " a", -1);
+  gtk_text_buffer_insert_with_tags (buffer, &iter, " b ", -1, invisible_tag, NULL);
+  gtk_text_buffer_insert (buffer, &iter, "c ", -1);
+
+  check_forward_visible_word_end (buffer, 0, 6, TRUE);
+  check_forward_visible_word_end (buffer, 1, 6, TRUE);
+  check_forward_visible_word_end (buffer, 2, 6, TRUE);
+  check_forward_visible_word_end (buffer, 3, 6, TRUE);
+  check_forward_visible_word_end (buffer, 4, 6, TRUE);
+  check_forward_visible_word_end (buffer, 5, 6, TRUE);
+  check_forward_visible_word_end (buffer, 6, 6, FALSE);
+  check_forward_visible_word_end (buffer, 7, 7, FALSE);
+
+  check_backward_visible_word_start (buffer, 7, 5, TRUE); /* FIXME result_offset should be 1 */
+  check_backward_visible_word_start (buffer, 6, 5, TRUE); /* FIXME result_offset should be 1 */
+  check_backward_visible_word_start (buffer, 5, 1, TRUE);
+  check_backward_visible_word_start (buffer, 4, 1, TRUE);
+  check_backward_visible_word_start (buffer, 3, 1, TRUE);
+  check_backward_visible_word_start (buffer, 2, 1, TRUE);
+  check_backward_visible_word_start (buffer, 1, 1, FALSE);
+  check_backward_visible_word_start (buffer, 0, 0, FALSE);
+
+  gtk_text_buffer_set_text (buffer, "ab", -1);
+  check_forward_visible_word_end (buffer, 0, 0, FALSE); /* FIXME result_offset should be 2 */
+
+  /* Buffer contents: "b c " with "b" invisible */
+  gtk_text_buffer_set_text (buffer, "", -1);
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  gtk_text_buffer_insert_with_tags (buffer, &iter, "b", -1, invisible_tag, NULL);
+  gtk_text_buffer_insert (buffer, &iter, " c ", -1);
+
+  check_forward_visible_word_end (buffer, 0, 1, TRUE); /* FIXME result_offset should be 3 */
+
+  g_object_unref (buffer);
+}
+
+static void
 check_cursor_position (const gchar *buffer_text,
                        gboolean     forward,
                        gint         initial_offset,
@@ -514,6 +597,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextIter/Search Caseless", test_search_caseless);
   g_test_add_func ("/TextIter/Forward To Tag Toggle", test_forward_to_tag_toggle);
   g_test_add_func ("/TextIter/Word Boundaries", test_word_boundaries);
+  g_test_add_func ("/TextIter/Visible Word Boundaries", test_visible_word_boundaries);
   g_test_add_func ("/TextIter/Cursor Positions", test_cursor_positions);
   g_test_add_func ("/TextIter/Visible Cursor Positions", test_visible_cursor_positions);
 
