@@ -2114,7 +2114,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                             <property name="visible">True</property>
                                             <property name="label" translatable="yes">Row 1</property>
                                             <property name="halign">start</property>
-                                            <property name="valign">enter</property>
+                                            <property name="valign">center</property>
                                             <property name="margin">6</property>
                                           </object>
                                           <packing>
