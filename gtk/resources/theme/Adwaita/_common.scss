@@ -666,7 +666,7 @@ GtkComboBox {
 .toolbar { //FIXME: why is all this being ignored?
   padding: 6px;
   background-color: $bg_color;
-  &.osd {
+  .osd & {
     background-color: $osd_bg_color;
     border-radius: 6px;
     padding: 12px;
@@ -1019,7 +1019,9 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   }
   & > .list,
   & > .view,
-  & > .toolbar {
+  & > .toolbar
+  &.osd > .toolbar {
+    border-style: none;
     background-color: transparent;
   }
   .separator {
@@ -1036,7 +1038,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     text-shadow: none;
     transition: none;
   }
-  &.osd { // Also used for touch cutnpaste overlays
+  &.osd { // Also used for touch cut'n'paste overlays
           // FIXME Doesn't work
     background-image: none;
     background-color: $osd_bg_color;
