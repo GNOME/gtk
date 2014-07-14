@@ -948,8 +948,6 @@ gtk_list_box_parent_set (GtkWidget *widget,
  * Sets how selection works in the listbox.
  * See #GtkSelectionMode for details.
  *
- * Note: #GtkListBox does not support @GTK_SELECTION_MULTIPLE.
- *
  * Since: 3.10
  */
 void
