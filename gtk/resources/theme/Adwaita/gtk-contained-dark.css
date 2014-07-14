@@ -591,7 +591,7 @@
     border-radius: 3px;
     border-style: solid; }
 
-.button.flat, .button.flat:backdrop, .menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
+.button.flat, .button.flat:backdrop, .menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .list-row.button, .list-row.button:backdrop:hover, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -2436,26 +2436,37 @@ GtkScrolledWindow GtkViewport.frame {
     background-color: #2c2c2c;
     border-color: #1e2222; }
 
-.list-row.button,
 .list-row,
 .grid-child {
-  background-image: none;
-  border-style: none;
-  box-shadow: none;
-  border-width: 0;
   padding: 2px; }
 
-.list-row.button:hover {
-  background-color: #101010; }
+.list-row.button {
+  background-color: rgba(41, 41, 41, 0);
+  border-style: none;
+  border-radius: 0;
+  box-shadow: none; }
+  .list-row.button:hover {
+    background-color: #323232; }
+  .list-row.button:active {
+    color: #215d9c;
+    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
+  .button.list-row:active:selected {
+    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
+  .button.list-row:hover:selected {
+    background-color: #376da5; }
 
-.list-row.button:selected,
-.list-row:selected {
-  background-color: #215d9c;
-  color: white; }
-  .list-row.button:selected:backdrop,
+.list-row:selected, .list-row.button:selected {
+  color: white;
+  background-color: #215d9c; }
   .list-row:selected:backdrop {
     color: #2c2c2c; }
 
+/*.list-row.button:selected,
+.list-row:selected {
+  background-color: $selected_bg_color;
+  color: $selected_fg_color;
+  &:backdrop { color: $backdrop_base_color;}
+}*/
 /*********************
  * App Notifications *
  *********************/
