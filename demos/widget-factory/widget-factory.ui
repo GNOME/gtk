@@ -2995,6 +2995,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           <object class="GtkListBox" id="munsell">
                             <property name="visible">True</property>
                             <property name="selection-mode">multiple</property>
+                            <property name="activate-on-single-click">False</property>
                           </object>
                         </child>
                       </object>
