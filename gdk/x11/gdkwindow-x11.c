@@ -3615,7 +3615,7 @@ gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
 
   if (hide_titlebar_when_maximized)
     {
-      guint32 hide = 1;
+      gulong hide = 1;
       XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
                        GDK_WINDOW_XID (window),
                        gdk_x11_get_xatom_by_name_for_display (display, "_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"),
@@ -5431,7 +5431,7 @@ gdk_x11_window_set_opacity (GdkWindow *window,
 			    gdouble    opacity)
 {
   GdkDisplay *display;
-  guint32 cardinal;
+  gulong cardinal;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
