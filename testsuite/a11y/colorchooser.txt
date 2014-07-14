@@ -1,6 +1,7 @@
 window1
   "dialog"
   index: 0
+  name: 
   state: enabled sensitive showing visible
   toolkit: gtk
   <AtkComponent>
