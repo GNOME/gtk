@@ -1759,7 +1759,6 @@ real_choose_icon (GtkIconTheme       *icon_theme,
 
   if (unthemed_icon)
     {
-      gchar *uri;
       icon_info = icon_info_new (ICON_THEME_DIR_UNTHEMED, size, 1);
 
       /* A SVG icon, when allowed, beats out a XPM icon, but not a PNG icon */
@@ -1772,13 +1771,17 @@ real_choose_icon (GtkIconTheme       *icon_theme,
         icon_info->filename = g_strdup (unthemed_icon->no_svg_filename);
 
       if (unthemed_icon->is_resource)
-        uri = g_strconcat ("resource://", icon_info->filename, NULL);
+        {
+          gchar *uri;
+          uri = g_strconcat ("resource://", icon_info->filename, NULL);
+          icon_info->icon_file = g_file_new_for_uri (uri);
+          g_free (uri);
+        }
       else
-        uri = g_strconcat ("file://", icon_info->filename, NULL);
-      icon_info->icon_file = g_file_new_for_uri (uri);
+        icon_info->icon_file = g_file_new_for_path (icon_info->filename);
+
       icon_info->is_svg = suffix_from_name (icon_info->filename) == ICON_SUFFIX_SVG;
       icon_info->is_resource = unthemed_icon->is_resource;
-      g_free (uri);
     }
 
  out:
