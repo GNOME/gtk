@@ -2974,6 +2974,7 @@ gdk_window_clear_backing_region (GdkWindow *window)
   else
     cairo_set_source_rgb (cr, 0, 0, 0);
 
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   gdk_cairo_region (cr, window->current_paint.region);
   cairo_fill (cr);
 
