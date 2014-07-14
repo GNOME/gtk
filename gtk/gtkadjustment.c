@@ -1011,3 +1011,9 @@ gtk_adjustment_enable_animation (GtkAdjustment *adjustment,
 
   priv->duration = duration; 
 }
+
+void
+gtk_adjustment_get_animation_duration (GtkAdjustment *adjustment)
+{
+  return adjustment->priv->duration;
+}
