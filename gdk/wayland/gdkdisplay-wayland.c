@@ -889,10 +889,3 @@ _gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface)
   GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
   return data->busy;
 }
-
-void
-_gdk_wayland_shm_surface_clear (cairo_surface_t *surface)
-{
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
-  memset (data->buf, 0, data->buf_length);
-}
