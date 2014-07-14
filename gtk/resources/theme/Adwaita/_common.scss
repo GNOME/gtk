@@ -522,7 +522,7 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
     }
     &:active {
       box-shadow: inset 0 2px 3px -1px transparentize(black,0.8);
-      background-color: transparentize(black,0.9);
+      background-color: transparentize($fg_color,0.9);
     }
     &:backdrop {
       border-color: transparentize($backdrop_borders_color,0.7);
