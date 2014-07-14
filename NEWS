@@ -1,3 +1,106 @@
+Overview of Changes in GTK+ 3.13.3 to 3.13.4
+============================================
+
+* Theming:
+ - Adwaita is much more complete
+ - Shadows, reliefs and frames in GtkScrolledWindow, GtkViewport,
+   GtkButton, GtkEntry, GtkFrame, etc are now translated to style
+   classes and themed
+
+* GtkApplication:
+ - gtk_application_prefers_app_menu is a new function to facility
+   adapting UIs to platform expectations
+ - GtkApplication now tries to load menus from resources in the
+   resource path that is defined by GApplication
+ - GtkApplication set up a resource path for loading icons as well
+
+* GtkScrolledWindow:
+ - Scrolling in response to user input (scrollbar clicks, keynav)
+   is now animated
+ - The displacement animation has been replaced edge gradients
+
+* GtkScaleButton:
+ - The orientation is now changed on the fly to make the popup
+   fit into small windows
+
+* GtkEntry:
+ - Activity mode progress is now smooth
+
+* Client-side decorations
+ - The default button layout includes minimize and maximize again
+ - Dialogs are no longer using client-side decorations when
+   use-header-bar is unset
+
+* GTK+ now ships a simple icon theme browser, gtk3-icon-browser
+
+* GtkInspector:
+ - Can change hi-dpi scale on the fly
+ - Can simulate touchscreen at runtime
+ - Shows style properties
+ - Ctrl-Shift-I selects the widget under the pointer
+ - Property editors show property and settings bindings
+
+* Wayland:
+ - Always use CSD under Wayland
+ - Avoid a crash on pointer-less systems
+ - Context menus work now
+
+* Deprecations, removals:
+ - GtkWindow no longer supports resize grips
+ - builtin icons have been deprecated in favor of loading icons
+   from resources
+
+* Bugs fixed:
+ 484640 Improve double click handling in GtkIconView
+ 618852 gtk_text_iter_forward_visible_cursor_position does not move to end...
+ 629129 gtk_text_iter_forward_visible_cursor_position is VERY slow
+ 672676 evince doesn't permit to print more than 100 copies at once
+ 680885 GtkColorButton color swatch suboptimal when color ~= background color
+ 710449 Invalid memory access in "gdk_x11_window_set_opacity" on 64bit pla...
+ 722092 Add GtkApplication resources support
+ 722633 Remove separators from font chooser and file chooser
+ 724084 Provide .error .warning .question classes for GtkEntry (not legibl...
+ 726566 GtkEntryCompletion should emit signal for "no-suggestions" case.
+ 729620 De-uglify GtkCalendar
+ 730730 scrolling is broken when sharing adjustments
+ 730893 Dialogs use headerbars even when DialogsUseHeader is unset
+ 731158 gtkbookmarksmanager.c: save_bookmarks, silly strlen
+ 731297 Get rid of overshooting window/animation
+ 731463 Styling of last column header does not apply to treeview-like cust...
+ 731711 GtkLabel forwards button-press-event after showing a context menu
+ 732134 consider using an alternate durations for transitions of button pr...
+ 732206 wayland: crash with touch but no pointer
+ 732229 Buttons in menus in popovers - alignment and spacing issues
+ 732256 Add a flat style class and use it for flat buttons
+ 732298 adwaita -- progress bars indistinguishable from selected list row
+ 732330 Sort *_DEBUG values alphabetically
+ 732433 Typos in common questions
+ 732441 Selected text background is nearly transparent
+ 732443 Inspector hide and seek
+ 732454 Build error: return_exposes not defined in gdkevents-win32.c due t...
+ 732494 issues active buttons in popovers
+ 732667 cursor blink settings not fully undeprecated
+ 732681 Docs: make GtkWidget:margin-start and margin-end clearer
+ 732861 GtkImage surface documentation incomplete
+ 732894 icontheme: Use correct URI for icons in resource paths
+ 732900 textview calls gtk_widget_set_allocation() on children out of ::si...
+ 732933 horizontal autoscrolling broken
+ 732970 Unselectable GtkLabels with links get the wrong initial cursor
+ 732991 gtk_drag_anim_timeout change the user widget and never restore it
+ 733027 GtkStack doesn't render a background
+ 733076 Handle resolution changes in the GDK backend code
+ 733092 inspector: Do not accidentally change tab in the object notebook
+ 733099 Regression: gtk_window_set_title() no longer sets header bar title
+ 733112 GtkListBox: Add a ::activatable property for rows 
+
+* Translation updates:
+ Hebrew
+ Lithuanian
+ Russian
+ Scottish Gaelic
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.13.2 to 3.13.3
 ============================================
 
@@ -33,7 +136,7 @@ Overview of Changes in GTK+ 3.13.2 to 3.13.3
 
 * Bugs fixed:
  721895	Remove GtkIconCache
- 729820	GMenuModel submenu-action set 'false' before item activation
+729820	GMenuModel submenu-action set 'false' before item activation
  730615	a11y private library not included in GIR
  730745	Port annotations from Vala
  730767	Tab that's being dragged is not updated
