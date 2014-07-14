@@ -6919,31 +6919,11 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
   return retval;
 }
 
-static void
-disable_adjustment_animation (GtkTreeView *tree_view)
-{
-  gtk_adjustment_enable_animation (tree_view->priv->vadjustment,
-                                   NULL,
-                                   gtk_adjustment_get_animation_duration (tree_view->priv->vadjustment));
-}
-
-static void
-maybe_reenable_adjustment_animation (GtkTreeView *tree_view)
-{
-  if (tree_view->priv->presize_handler_tick_cb != 0 ||
-      tree_view->priv->validate_rows_timer != 0)
-    return;
-
-  gtk_adjustment_enable_animation (tree_view->priv->vadjustment,
-                                   gtk_widget_get_frame_clock (GTK_WIDGET (tree_view)),
-                                   gtk_adjustment_get_animation_duration (tree_view->priv->vadjustment));
-}
-
 static gboolean
 do_presize_handler (GtkTreeView *tree_view)
 {
   if (tree_view->priv->mark_rows_col_dirty)
-   {
+    {
       if (tree_view->priv->tree)
 	_gtk_rbtree_column_invalid (tree_view->priv->tree);
       tree_view->priv->mark_rows_col_dirty = FALSE;
@@ -6968,9 +6948,7 @@ do_presize_handler (GtkTreeView *tree_view)
                                 MAX (gtk_adjustment_get_upper (tree_view->priv->vadjustment), requisition.height));
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
-
-  maybe_reenable_adjustment_animation (tree_view);
-
+		   
   return FALSE;
 }
 
@@ -7001,7 +6979,6 @@ validate_rows (GtkTreeView *tree_view)
     {
       g_source_remove (tree_view->priv->validate_rows_timer);
       tree_view->priv->validate_rows_timer = 0;
-      maybe_reenable_adjustment_animation (tree_view);
     }
 
   return retval;
@@ -7012,8 +6989,6 @@ install_presize_handler (GtkTreeView *tree_view)
 {
   if (! gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     return;
-
-  disable_adjustment_animation (tree_view);
 
   if (! tree_view->priv->presize_handler_tick_cb)
     {
