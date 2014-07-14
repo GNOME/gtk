@@ -125,10 +125,7 @@
   gchar *prev_str;
   markedRange = selectedRange = NSMakeRange (NSNotFound, 0);
 
-  prev_str = g_object_get_data (G_OBJECT (gdk_window), TIC_MARKED_TEXT);
-  if (prev_str)
-    g_free (prev_str);
-  g_object_set_data (G_OBJECT (gdk_window), TIC_MARKED_TEXT, NULL);
+  g_object_set_data_full (G_OBJECT (gdk_window), TIC_MARKED_TEXT, NULL, g_free);
 }
 
 -(void)setMarkedText: (id)aString selectedRange: (NSRange)newSelection replacementRange: (NSRange)replacementRange
@@ -155,10 +152,7 @@
       str = [aString UTF8String];
     }
 
-  prev_str = g_object_get_data (G_OBJECT (gdk_window), TIC_MARKED_TEXT);
-  if (prev_str)
-    g_free (prev_str);
-  g_object_set_data (G_OBJECT (gdk_window), TIC_MARKED_TEXT, g_strdup (str));
+  g_object_set_data_full (G_OBJECT (gdk_window), TIC_MARKED_TEXT, g_strdup (str), g_free);
   g_object_set_data (G_OBJECT (gdk_window), TIC_SELECTED_POS,
 		     GUINT_TO_POINTER (selectedRange.location));
   g_object_set_data (G_OBJECT (gdk_window), TIC_SELECTED_LEN,
@@ -214,10 +208,7 @@
       str = [string UTF8String];
    }
 
-  prev_str = g_object_get_data (G_OBJECT (gdk_window), TIC_INSERT_TEXT);
-  if (prev_str)
-    g_free (prev_str);
-  g_object_set_data (G_OBJECT (gdk_window), TIC_INSERT_TEXT, g_strdup (str));
+  g_object_set_data_full (G_OBJECT (gdk_window), TIC_INSERT_TEXT, g_strdup (str), g_free);
   GDK_NOTE (EVENTS, g_print ("insertText: set %s (%p, nsview %p): %s\n",
 			     TIC_INSERT_TEXT, gdk_window, self,
 			     str ? str : "(empty)"));

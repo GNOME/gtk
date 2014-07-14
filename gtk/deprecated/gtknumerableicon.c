@@ -902,11 +902,7 @@ gtk_numerable_icon_set_background_gicon (GtkNumerableIcon *self,
 
   g_return_if_fail (GTK_IS_NUMERABLE_ICON (self));
 
-  if (self->priv->background_icon_name != NULL)
-    {
-      g_free (self->priv->background_icon_name);
-      self->priv->background_icon_name = NULL;
-    }
+  g_clear_pointer (&self->priv->background_icon_name, g_free);
 
   res = real_set_background_icon (self, icon);
 

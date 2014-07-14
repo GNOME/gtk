@@ -107,12 +107,7 @@ static void
 gdk_quartz_screen_screen_rects_free (GdkQuartzScreen *screen)
 {
   screen->n_screens = 0;
-
-  if (screen->screen_rects)
-    {
-      g_free (screen->screen_rects);
-      screen->screen_rects = NULL;
-    }
+  g_clear_pointer (&screen->screen_rects, g_free);
 }
 
 static void

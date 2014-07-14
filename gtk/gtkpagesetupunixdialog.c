@@ -661,11 +661,7 @@ printer_changed_callback (GtkComboBox            *combo_box,
   /* If we're waiting for a specific printer but the user changed
    * to another printer, cancel that wait.
    */
-  if (priv->waiting_for_printer)
-    {
-      g_free (priv->waiting_for_printer);
-      priv->waiting_for_printer = NULL;
-    }
+  g_clear_pointer (&priv->waiting_for_printer, g_free);
 
   if (priv->request_details_tag)
     {

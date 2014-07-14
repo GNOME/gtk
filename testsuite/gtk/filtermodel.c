@@ -6205,8 +6205,7 @@ specific_bug_621076_visible_func (GtkTreeModel *model,
         }
     }
 
-  if (str)
-    g_free (str);
+  g_free (str);
 
   return visible;
 }

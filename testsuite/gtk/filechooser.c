@@ -170,8 +170,7 @@ compare_filename_cb (GtkFileChooser *chooser, gpointer data)
 
   g_assert_cmpstr (out_filename, ==, filename);
 
-  if (out_filename)
-    g_free (out_filename);
+  g_free (out_filename);
 }
 
 typedef struct

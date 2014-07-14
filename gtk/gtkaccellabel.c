@@ -531,11 +531,7 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 static void
 gtk_accel_label_reset (GtkAccelLabel *accel_label)
 {
-  if (accel_label->priv->accel_string)
-    {
-      g_free (accel_label->priv->accel_string);
-      accel_label->priv->accel_string = NULL;
-    }
+  g_clear_pointer (&accel_label->priv->accel_string, g_free);
   
   gtk_widget_queue_resize (GTK_WIDGET (accel_label));
 }
@@ -893,11 +889,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
-  if (accel_label->priv->accel_string)
-    {
-      g_free (accel_label->priv->accel_string);
-      accel_label->priv->accel_string = NULL;
-    }
+  g_clear_pointer (&accel_label->priv->accel_string, g_free);
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (accel_label)),
                 "gtk-enable-accels", &enable_accels,

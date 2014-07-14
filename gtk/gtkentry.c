@@ -9280,8 +9280,7 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
   if ((icon_info = priv->icons[icon_pos]) == NULL)
     icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
-  if (icon_info->tooltip)
-    g_free (icon_info->tooltip);
+  g_free (icon_info->tooltip);
 
   /* Treat an empty string as a NULL string,
    * because an empty string would be useless for a tooltip:
@@ -9363,8 +9362,7 @@ gtk_entry_set_icon_tooltip_markup (GtkEntry             *entry,
   if ((icon_info = priv->icons[icon_pos]) == NULL)
     icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
-  if (icon_info->tooltip)
-    g_free (icon_info->tooltip);
+  g_free (icon_info->tooltip);
 
   /* Treat an empty string as a NULL string,
    * because an empty string would be useless for a tooltip:

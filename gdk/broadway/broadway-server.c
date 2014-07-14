@@ -1387,8 +1387,7 @@ broadway_server_destroy_window (BroadwayServer *server,
       g_hash_table_remove (server->id_ht,
 			   GINT_TO_POINTER (id));
 
-      if (window->cached_surface_name != NULL)
-	g_free (window->cached_surface_name);
+      g_free (window->cached_surface_name);
       if (window->cached_surface != NULL)
 	cairo_surface_destroy (window->cached_surface);
 
@@ -1748,8 +1747,7 @@ broadway_server_open_surface (BroadwayServer *server,
   cairo_surface_set_user_data (surface, &shm_cairo_key,
 			       data, shm_data_unmap);
 
-  if (window->cached_surface_name != NULL)
-    g_free (window->cached_surface_name);
+  g_free (window->cached_surface_name);
   window->cached_surface_name = g_strdup (name);
 
   if (window->cached_surface != NULL)

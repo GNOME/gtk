@@ -3781,8 +3781,7 @@ cups_parse_user_default_printer (const char  *filename,
 
       *lineptr = '\0';
 
-      if (*printer_name != NULL)
-        g_free (*printer_name);
+      g_free (*printer_name);
 
       *printer_name = g_strdup (defname);
     }

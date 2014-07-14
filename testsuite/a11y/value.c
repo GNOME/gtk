@@ -51,8 +51,7 @@ notify_cb (GObject    *obj,
            GParamSpec *pspec, NotifyData *data)
 {
   data->count++;
-  if (data->last_name)
-    g_free (data->last_name);
+  g_free (data->last_name);
   data->last_name = g_strdup (pspec->name);
 }
 

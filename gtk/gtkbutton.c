@@ -692,11 +692,7 @@ gtk_button_destroy (GtkWidget *widget)
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
 
-  if (priv->label_text)
-    {
-      g_free (priv->label_text);
-      priv->label_text = NULL;
-    }
+  g_clear_pointer (&priv->label_text, g_free);
 
   g_clear_object (&priv->gesture);
 

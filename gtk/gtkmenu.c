@@ -1133,8 +1133,7 @@ gtk_menu_destroy (GtkWidget *widget)
 
   gtk_menu_stop_navigating_submenu (menu);
 
-  if (priv->old_active_menu_item)
-    g_clear_object (&priv->old_active_menu_item);
+  g_clear_object (&priv->old_active_menu_item);
 
   /* Add back the reference count for being a child */
   if (priv->needs_destruction_ref)
@@ -1143,8 +1142,7 @@ gtk_menu_destroy (GtkWidget *widget)
       g_object_ref (widget);
     }
 
-  if (priv->accel_group)
-    g_clear_object (&priv->accel_group);
+  g_clear_object (&priv->accel_group);
 
   if (priv->toplevel)
     gtk_widget_destroy (priv->toplevel);
@@ -1152,17 +1150,9 @@ gtk_menu_destroy (GtkWidget *widget)
   if (priv->tearoff_window)
     gtk_widget_destroy (priv->tearoff_window);
 
-  if (priv->heights)
-    {
-      g_free (priv->heights);
-      priv->heights = NULL;
-    }
+  g_clear_pointer (&priv->heights, g_free);
 
-  if (priv->title)
-    {
-      g_free (priv->title);
-      priv->title = NULL;
-    }
+  g_clear_pointer (&priv->title, g_free);
 
   if (priv->position_func_data_destroy)
     {

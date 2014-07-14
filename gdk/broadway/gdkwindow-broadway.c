@@ -1129,12 +1129,7 @@ finish_drag (MoveResizeData *mv_resize)
   mv_resize->moveresize_emulation_window = NULL;
   g_object_unref (mv_resize->moveresize_window);
   mv_resize->moveresize_window = NULL;
-
-  if (mv_resize->moveresize_pending_event)
-    {
-      g_free (mv_resize->moveresize_pending_event);
-      mv_resize->moveresize_pending_event = NULL;
-    }
+  g_clear_pointer (&mv_resize->moveresize_pending_event, g_free);
 }
 
 static gboolean

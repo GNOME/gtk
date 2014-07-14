@@ -4977,12 +4977,7 @@ finish_drag (MoveResizeData *mv_resize)
   mv_resize->moveresize_emulation_window = NULL;
   g_object_unref (mv_resize->moveresize_window);
   mv_resize->moveresize_window = NULL;
-
-  if (mv_resize->moveresize_pending_event)
-    {
-      g_free (mv_resize->moveresize_pending_event);
-      mv_resize->moveresize_pending_event = NULL;
-    }
+  g_clear_pointer (&mv_resize->moveresize_pending_event, g_free);
 }
 
 static int
@@ -5677,8 +5672,7 @@ gdk_x11_window_set_opaque_region (GdkWindow      *window,
                    XA_CARDINAL, 32, PropModeReplace,
                    (guchar *) data, nitems);
 
-  if (data != NULL)
-    g_free (data);
+  g_free (data);
 }
 
 static gboolean

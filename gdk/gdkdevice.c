@@ -313,8 +313,7 @@ gdk_device_set_property (GObject      *object,
       device->manager = g_value_get_object (value);
       break;
     case PROP_NAME:
-      if (device->name)
-        g_free (device->name);
+      g_free (device->name);
 
       device->name = g_value_dup_string (value);
       break;
@@ -1477,8 +1476,7 @@ void
 _gdk_device_set_keys (GdkDevice *device,
                       guint      num_keys)
 {
-  if (device->keys)
-    g_free (device->keys);
+  g_free (device->keys);
 
   device->num_keys = num_keys;
   device->keys = g_new0 (GdkDeviceKey, num_keys);
