@@ -7155,13 +7155,14 @@ gtk_window_configure_event (GtkWidget         *widget,
       priv->configure_request_count -= 1;
       gdk_window_thaw_toplevel_updates_libgtk_only (gtk_widget_get_window (widget));
     }
-  
-  /* As an optimization, we avoid a resize when possible.
+
+  /* If this is a gratuitous ConfigureNotify that's already
+   * the same as our allocation, then we can fizzle it out.
+   * This is the case for dragging windows around.
    *
-   * The only times we can avoid a resize are:
-   *   - we know only the position changed, not the size
-   *   - we know we have made more requests and so will get more
-   *     notifies and can wait to resize when we get them
+   * We can't do this for a ConfigureRequest, since it might
+   * have been a queued resize from child widgets, and so we
+   * need to reallocate our children in case *they* changed.
    */
   gtk_widget_get_allocation (widget, &allocation);
   if (!expected_reply &&
