@@ -1420,6 +1420,8 @@ GtkTreeView.view.progressbar {
         color: #8d9090; }
     .notebook tab .prelight-page GtkLabel, .notebook tab GtkLabel.prelight-page {
       color: #5d6263; }
+      .notebook tab .prelight-page GtkLabel:backdrop, .notebook tab GtkLabel.prelight-page:backdrop {
+        color: #8d9090; }
     .notebook tab .active-page GtkLabel, .notebook tab GtkLabel.active-page {
       color: #2e3436; }
       .notebook tab .active-page GtkLabel:backdrop, .notebook tab GtkLabel.active-page:backdrop {

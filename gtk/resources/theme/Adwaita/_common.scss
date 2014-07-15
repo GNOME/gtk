@@ -1271,6 +1271,9 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     .prelight-page GtkLabel, GtkLabel.prelight-page {
       // prelight tab text
       color: mix($fg_color, $insensitive_fg_color, 50%);
+      &:backdrop { // FIXME, it's the same as GtkLabel:backdrop up here
+        color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
+      }
     }
     .active-page GtkLabel, GtkLabel.active-page {
       // active tab text
