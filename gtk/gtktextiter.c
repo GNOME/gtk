@@ -2895,12 +2895,18 @@ find_word_end_func (const PangoLogAttr *attrs,
     ++offset;
 
   /* Find end of next word */
-  while (offset < len && !attrs[offset].is_word_end)
-    ++offset;
+  while (offset < len)
+    {
+      if (attrs[offset].is_word_end)
+        {
+          *found_offset = offset;
+          return TRUE;
+        }
 
-  *found_offset = offset;
+      ++offset;
+    }
 
-  return offset < len;
+  return FALSE;
 }
 
 static gboolean
@@ -2923,12 +2929,18 @@ find_word_start_func (const PangoLogAttr *attrs,
     --offset;
 
   /* Find start of prev word */
-  while (offset >= 0 && !attrs[offset].is_word_start)
-    --offset;
+  while (offset >= 0)
+    {
+      if (attrs[offset].is_word_start)
+        {
+          *found_offset = offset;
+          return TRUE;
+        }
 
-  *found_offset = offset;
+      --offset;
+    }
 
-  return offset >= 0;
+  return FALSE;
 }
 
 static gboolean
@@ -2970,12 +2982,18 @@ find_sentence_end_func (const PangoLogAttr *attrs,
     ++offset;
 
   /* Find end of next sentence */
-  while (offset < len && !attrs[offset].is_sentence_end)
-    ++offset;
+  while (offset < len)
+    {
+      if (attrs[offset].is_sentence_end)
+        {
+          *found_offset = offset;
+          return TRUE;
+        }
 
-  *found_offset = offset;
+      ++offset;
+    }
 
-  return offset < len;
+  return FALSE;
 }
 
 static gboolean
@@ -2998,12 +3016,18 @@ find_sentence_start_func (const PangoLogAttr *attrs,
     --offset;
 
   /* Find start of prev sentence */
-  while (offset >= 0 && !attrs[offset].is_sentence_start)
-    --offset;
+  while (offset >= 0)
+    {
+      if (attrs[offset].is_sentence_start)
+        {
+          *found_offset = offset;
+          return TRUE;
+        }
 
-  *found_offset = offset;
+      --offset;
+    }
 
-  return offset >= 0;
+  return FALSE;
 }
 
 static gboolean
@@ -3556,12 +3580,18 @@ find_forward_cursor_pos_func (const PangoLogAttr *attrs,
   if (!already_moved_initially)
     ++offset;
 
-  while (offset < len && !attrs[offset].is_cursor_position)
-    ++offset;
+  while (offset < len)
+    {
+      if (attrs[offset].is_cursor_position)
+        {
+          *found_offset = offset;
+          return TRUE;
+        }
 
-  *found_offset = offset;
+      ++offset;
+    }
 
-  return offset < len;
+  return FALSE;
 }
 
 static gboolean
@@ -3574,12 +3604,18 @@ find_backward_cursor_pos_func (const PangoLogAttr *attrs,
   if (!already_moved_initially)
     --offset;
 
-  while (offset > 0 && !attrs[offset].is_cursor_position)
-    --offset;
+  while (offset >= 0)
+    {
+      if (attrs[offset].is_cursor_position)
+        {
+          *found_offset = offset;
+          return TRUE;
+        }
 
-  *found_offset = offset;
+      --offset;
+    }
 
-  return offset >= 0;
+  return FALSE;
 }
 
 static gboolean
