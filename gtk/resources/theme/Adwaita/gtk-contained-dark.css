@@ -653,12 +653,12 @@ GtkColorButton.button {
       border-width: 0 1px 0 0; }
     .spinbutton .button:hover {
       color: #eeeeec;
-      background-color: rgba(238, 238, 236, 0.07); }
+      background-color: rgba(0, 0, 0, 0.05); }
     .spinbutton .button:insensitive {
       color: rgba(147, 150, 149, 0.3); }
     .spinbutton .button:active {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2);
-      background-color: rgba(238, 238, 236, 0.1); }
+      background-color: rgba(0, 0, 0, 0.1); }
     .spinbutton .button:backdrop {
       border-color: rgba(30, 34, 34, 0.3);
       background-color: transparent; }
@@ -2446,14 +2446,14 @@ GtkScrolledWindow GtkViewport.frame {
   border-radius: 0;
   box-shadow: none; }
   .list-row.button:hover {
-    background-color: #323232; }
+    background-color: #262626; }
   .list-row.button:active {
     color: #215d9c;
     box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
   .button.list-row:active:selected {
     box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
   .button.list-row:hover:selected {
-    background-color: #376da5; }
+    background-color: #1d538c; }
 
 .list-row:selected, .list-row.button:selected {
   color: white;
