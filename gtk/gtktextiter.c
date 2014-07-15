@@ -2873,7 +2873,6 @@ gtk_text_iter_backward_visible_lines (GtkTextIter *iter,
 
 typedef gboolean (* FindLogAttrFunc) (const PangoLogAttr *attrs,
                                       gint                offset,
-                                      gint                min_offset,
                                       gint                len,
                                       gint               *found_offset,
                                       gboolean            already_moved_initially);
@@ -2887,23 +2886,21 @@ typedef gboolean (* TestLogAttrFunc) (const PangoLogAttr *attrs,
 
 static gboolean
 find_word_end_func (const PangoLogAttr *attrs,
-                    gint          offset,
-                    gint          min_offset,
-                    gint          len,
-                    gint         *found_offset,
-                    gboolean      already_moved_initially)
+                    gint                offset,
+                    gint                len,
+                    gint               *found_offset,
+                    gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
     ++offset;
 
   /* Find end of next word */
-  while (offset < min_offset + len &&
-         !attrs[offset].is_word_end)
+  while (offset < len && !attrs[offset].is_word_end)
     ++offset;
 
   *found_offset = offset;
 
-  return offset < min_offset + len;
+  return offset < len;
 }
 
 static gboolean
@@ -2917,23 +2914,21 @@ is_word_end_func (const PangoLogAttr *attrs,
 
 static gboolean
 find_word_start_func (const PangoLogAttr *attrs,
-                      gint          offset,
-                      gint          min_offset,
-                      gint          len,
-                      gint         *found_offset,
-                      gboolean      already_moved_initially)
+                      gint                offset,
+                      gint                len,
+                      gint               *found_offset,
+                      gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
     --offset;
 
   /* Find start of prev word */
-  while (offset >= min_offset &&
-         !attrs[offset].is_word_start)
+  while (offset >= 0 && !attrs[offset].is_word_start)
     --offset;
 
   *found_offset = offset;
 
-  return offset >= min_offset;
+  return offset >= 0;
 }
 
 static gboolean
@@ -2966,23 +2961,21 @@ inside_word_func (const PangoLogAttr *attrs,
 
 static gboolean
 find_sentence_end_func (const PangoLogAttr *attrs,
-                        gint          offset,
-                        gint          min_offset,
-                        gint          len,
-                        gint         *found_offset,
-                        gboolean      already_moved_initially)
+                        gint                offset,
+                        gint                len,
+                        gint               *found_offset,
+                        gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
     ++offset;
 
   /* Find end of next sentence */
-  while (offset < min_offset + len &&
-         !attrs[offset].is_sentence_end)
+  while (offset < len && !attrs[offset].is_sentence_end)
     ++offset;
 
   *found_offset = offset;
 
-  return offset < min_offset + len;
+  return offset < len;
 }
 
 static gboolean
@@ -2996,23 +2989,21 @@ is_sentence_end_func (const PangoLogAttr *attrs,
 
 static gboolean
 find_sentence_start_func (const PangoLogAttr *attrs,
-                          gint          offset,
-                          gint          min_offset,
-                          gint          len,
-                          gint         *found_offset,
-                          gboolean      already_moved_initially)
+                          gint                offset,
+                          gint                len,
+                          gint               *found_offset,
+                          gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
     --offset;
 
   /* Find start of prev sentence */
-  while (offset >= min_offset &&
-         !attrs[offset].is_sentence_start)
+  while (offset >= 0 && !attrs[offset].is_sentence_start)
     --offset;
 
   *found_offset = offset;
 
-  return offset >= min_offset;
+  return offset >= 0;
 }
 
 static gboolean
@@ -3090,7 +3081,7 @@ find_line_log_attrs (const GtkTextIter *iter,
    */
   
   if (attrs)
-    result = (* func) (attrs, offset, 0, char_len, found_offset,
+    result = (* func) (attrs, offset, char_len, found_offset,
                        already_moved_initially);
 
   return result;
@@ -3245,7 +3236,7 @@ gtk_text_iter_forward_word_end (GtkTextIter *iter)
  * Returns: %TRUE if @iter moved and is not the end iterator 
  **/
 gboolean
-gtk_text_iter_backward_word_start (GtkTextIter      *iter)
+gtk_text_iter_backward_word_start (GtkTextIter *iter)
 {
   return find_by_log_attrs (iter, find_word_start_func, FALSE);
 }
@@ -3507,7 +3498,7 @@ gtk_text_iter_forward_sentence_end (GtkTextIter *iter)
  * Returns: %TRUE if @iter moved and is not the end iterator
  **/
 gboolean
-gtk_text_iter_backward_sentence_start (GtkTextIter      *iter)
+gtk_text_iter_backward_sentence_start (GtkTextIter *iter)
 {
   return find_by_log_attrs (iter, find_sentence_start_func, FALSE);
 }
@@ -3547,8 +3538,8 @@ gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
  * Returns: %TRUE if @iter moved and is not the end iterator
  **/
 gboolean
-gtk_text_iter_backward_sentence_starts (GtkTextIter      *iter,
-                                        gint               count)
+gtk_text_iter_backward_sentence_starts (GtkTextIter *iter,
+                                        gint         count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_backward_sentence_start,
@@ -3557,42 +3548,38 @@ gtk_text_iter_backward_sentence_starts (GtkTextIter      *iter,
 
 static gboolean
 find_forward_cursor_pos_func (const PangoLogAttr *attrs,
-                              gint          offset,
-                              gint          min_offset,
-                              gint          len,
-                              gint         *found_offset,
-                              gboolean      already_moved_initially)
+                              gint                offset,
+                              gint                len,
+                              gint               *found_offset,
+                              gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
     ++offset;
 
-  while (offset < (min_offset + len) &&
-         !attrs[offset].is_cursor_position)
+  while (offset < len && !attrs[offset].is_cursor_position)
     ++offset;
 
   *found_offset = offset;
 
-  return offset < (min_offset + len);
+  return offset < len;
 }
 
 static gboolean
 find_backward_cursor_pos_func (const PangoLogAttr *attrs,
-                               gint          offset,
-                               gint          min_offset,
-                               gint          len,
-                               gint         *found_offset,
-                               gboolean      already_moved_initially)
-{  
+                               gint                offset,
+                               gint                len,
+                               gint               *found_offset,
+                               gboolean            already_moved_initially)
+{
   if (!already_moved_initially)
     --offset;
 
-  while (offset > min_offset &&
-         !attrs[offset].is_cursor_position)
+  while (offset > 0 && !attrs[offset].is_cursor_position)
     --offset;
 
   *found_offset = offset;
-  
-  return offset >= min_offset;
+
+  return offset >= 0;
 }
 
 static gboolean
