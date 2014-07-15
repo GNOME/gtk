@@ -284,7 +284,7 @@ GtkLabel {
       @include button(insensitive-active);
     }
   }
-  &.flat, &.flat:backdrop {
+  &.flat, &.flat:backdrop, &.flat:backdrop:insensitive {
     @extend %undecorated_button;
   }
   // big standalone buttons like in Documents pager
@@ -371,7 +371,7 @@ GtkLabel {
 // all the following is for the +|- buttons on inline toolbars, that way
 // should really be reprecated...
 .inline-toolbar GtkToolButton > .button { // redefining the button look is
-                                               // needed since those are flat...
+                                          // needed since those are flat...
   @include button(normal, $noedge: true); // the box-shadow outset doesn't work
                                           // in this case, hence $noedge
   &:hover { @include button(hover, $noedge: true); }
