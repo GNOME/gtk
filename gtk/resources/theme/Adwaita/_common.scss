@@ -2114,9 +2114,20 @@ GtkCalendar {
   }
 }
 
-GtkFileChooserDialog .dialog-action-box {
-  border-top: 1px solid $borders_color;
-  &:backdrop { border-top-color: $backdrop_borders_color; }
+GtkFileChooserDialog {
+  .search-bar {
+    background-color: $base_color;
+    border-color: $bg_color;
+    box-shadow: none;
+    &:backdrop {
+      background-color: $backdrop_base_color;
+      border-color: $backdrop_bg_color;
+    }
+  }
+  .dialog-action-box {
+    border-top: 1px solid $borders_color;
+    &:backdrop { border-top-color: $backdrop_borders_color; }
+  }
 }
 
 /***********

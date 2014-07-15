@@ -2682,6 +2682,13 @@ GtkCalendar {
     border-left-style: none;
     border-bottom-left-radius: 7px; }
 
+GtkFileChooserDialog .search-bar {
+  background-color: #292929;
+  border-color: #393f3f;
+  box-shadow: none; }
+  GtkFileChooserDialog .search-bar:backdrop {
+    background-color: #2c2c2c;
+    border-color: #393f3f; }
 GtkFileChooserDialog .dialog-action-box {
   border-top: 1px solid #1c1f1f; }
   GtkFileChooserDialog .dialog-action-box:backdrop {
