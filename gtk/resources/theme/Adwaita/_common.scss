@@ -919,6 +919,7 @@ column-header.button.dnd { // for treeview-like derive widgets
     border-width: 0 1px 1px 0;
     color: mix($backdrop_fg_color, $backdrop_bg_color,50%);
     background-image: none;
+    background-color: $backdrop_base_color;
     &:insensitive {
       border-color: $backdrop_bg_color;
       background-image: none;

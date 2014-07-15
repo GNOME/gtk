@@ -1083,7 +1083,8 @@ column-header .button, column-header .button:hover, column-header .button:active
     border-color: #393f3f;
     border-width: 0 1px 1px 0;
     color: #818584;
-    background-image: none; }
+    background-image: none;
+    background-color: #2c2c2c; }
     column-header .button:backdrop:insensitive {
       border-color: #393f3f;
       background-image: none; }

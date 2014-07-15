@@ -1075,7 +1075,8 @@ column-header .button, column-header .button:hover, column-header .button:active
     border-color: #ededed;
     border-width: 0 1px 1px 0;
     color: #a0a3a3;
-    background-image: none; }
+    background-image: none;
+    background-color: #fcfcfc; }
     column-header .button:backdrop:insensitive {
       border-color: #ededed;
       background-image: none; }
