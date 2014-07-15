@@ -2895,7 +2895,7 @@ find_word_end_func (const PangoLogAttr *attrs,
     ++offset;
 
   /* Find end of next word */
-  while (offset < len)
+  while (offset <= len)
     {
       if (attrs[offset].is_word_end)
         {
@@ -2982,7 +2982,7 @@ find_sentence_end_func (const PangoLogAttr *attrs,
     ++offset;
 
   /* Find end of next sentence */
-  while (offset < len)
+  while (offset <= len)
     {
       if (attrs[offset].is_sentence_end)
         {
@@ -3580,7 +3580,7 @@ find_forward_cursor_pos_func (const PangoLogAttr *attrs,
   if (!already_moved_initially)
     ++offset;
 
-  while (offset < len)
+  while (offset <= len)
     {
       if (attrs[offset].is_cursor_position)
         {
