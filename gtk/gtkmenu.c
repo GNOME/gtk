@@ -4494,8 +4494,8 @@ gtk_menu_position (GtkMenu  *menu,
 
   _gtk_window_get_shadow_width (GTK_WINDOW (priv->toplevel), &border);
 
-  requisition.width = gtk_widget_get_allocated_width (widget)- border.left - border.right;
-  requisition.height = gtk_widget_get_allocated_height (widget) - border.top - border.bottom;
+  requisition.width = gtk_widget_get_allocated_width (widget);
+  requisition.height = gtk_widget_get_allocated_height (widget);
 
   if (pointer_screen != screen)
     {
