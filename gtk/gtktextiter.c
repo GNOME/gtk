@@ -3183,12 +3183,19 @@ find_visible_by_log_attrs (GtkTextIter     *iter,
 
   pos = *iter;
 
-  while (find_by_log_attrs (&pos, func, forward))
+  while (TRUE)
     {
+      GtkTextIter pos_before = pos;
+
+      find_by_log_attrs (&pos, func, forward);
+
+      if (gtk_text_iter_equal (&pos_before, &pos))
+        break;
+
       if (!_gtk_text_btree_char_is_invisible (&pos))
 	{
 	  *iter = pos;
-	  return TRUE;
+	  return !gtk_text_iter_is_end (iter);
 	}
     }
 

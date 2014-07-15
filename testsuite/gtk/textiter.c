@@ -475,7 +475,7 @@ test_visible_word_boundaries (void)
   check_backward_visible_word_start (buffer, 0, 0, FALSE);
 
   gtk_text_buffer_set_text (buffer, "ab", -1);
-  check_forward_visible_word_end (buffer, 0, 0, FALSE); /* FIXME result_offset should be 2 */
+  check_forward_visible_word_end (buffer, 0, 2, FALSE);
 
   /* Buffer contents: "b c " with "b" invisible */
   gtk_text_buffer_set_text (buffer, "", -1);
@@ -573,7 +573,7 @@ test_visible_cursor_positions (void)
   check_visible_cursor_position (buffer, TRUE, 0, 3, TRUE);
   check_visible_cursor_position (buffer, TRUE, 1, 3, TRUE);
   check_visible_cursor_position (buffer, TRUE, 2, 3, TRUE);
-  check_visible_cursor_position (buffer, TRUE, 3, 3, FALSE); /* FIXME result offset should be 4, not 3 */
+  check_visible_cursor_position (buffer, TRUE, 3, 4, FALSE);
   check_visible_cursor_position (buffer, TRUE, 4, 4, FALSE);
 
   /* backward */
