@@ -7131,12 +7131,27 @@ gtk_window_configure_event (GtkWidget         *widget,
   GtkAllocation allocation;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
-  gboolean expected_reply = priv->configure_request_count > 0;
 
   check_scale_changed (window);
 
   if (!gtk_widget_is_toplevel (widget))
     return FALSE;
+
+  /* If this is a gratuitous ConfigureNotify that's already
+   * the same as our allocation, then we can fizzle it out.
+   * This is the case for dragging windows around.
+   *
+   * We can't do this for a ConfigureRequest, since it might
+   * have been a queued resize from child widgets, and so we
+   * need to reallocate our children in case *they* changed.
+   */
+  gtk_widget_get_allocation (widget, &allocation);
+  if (priv->configure_request_count == 0 &&
+      (allocation.width == event->width &&
+       allocation.height == event->height))
+    {
+      return TRUE;
+    }
 
   /* priv->configure_request_count incremented for each
    * configure request, and decremented to a min of 0 for
@@ -7154,22 +7169,6 @@ gtk_window_configure_event (GtkWidget         *widget,
     {
       priv->configure_request_count -= 1;
       gdk_window_thaw_toplevel_updates_libgtk_only (gtk_widget_get_window (widget));
-    }
-
-  /* If this is a gratuitous ConfigureNotify that's already
-   * the same as our allocation, then we can fizzle it out.
-   * This is the case for dragging windows around.
-   *
-   * We can't do this for a ConfigureRequest, since it might
-   * have been a queued resize from child widgets, and so we
-   * need to reallocate our children in case *they* changed.
-   */
-  gtk_widget_get_allocation (widget, &allocation);
-  if (!expected_reply &&
-      (allocation.width == event->width &&
-       allocation.height == event->height))
-    {
-      return TRUE;
     }
 
   /*
