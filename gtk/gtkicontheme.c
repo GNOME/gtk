@@ -3025,18 +3025,21 @@ theme_lookup_icon (IconTheme   *theme,
 
       if (min_dir->dir)
         {
-          gchar *uri;
-
           file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
           icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
+
           if (min_dir->is_resource)
-            uri = g_strconcat ("resource://", icon_info->filename, NULL);
+            {
+              gchar *uri;
+              uri = g_strconcat ("resource://", icon_info->filename, NULL);
+              icon_info->icon_file = g_file_new_for_uri (uri);
+              g_free (uri);
+            }
           else
-            uri = g_strconcat ("file://", icon_info->filename, NULL);
-          icon_info->icon_file = g_file_new_for_uri (uri);
+            icon_info->icon_file = g_file_new_for_path (icon_info->filename);
+
           icon_info->is_svg = suffix == ICON_SUFFIX_SVG;
           icon_info->is_resource = min_dir->is_resource;
-          g_free (uri);
           g_free (file);
         }
       else
