@@ -549,7 +549,11 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 
   /* No path is set; we don't have to allocate anything. */
   if (path_bar->priv->button_list == NULL)
-    return;
+    {
+      _gtk_widget_set_simple_clip (widget);
+
+      return;
+    }
 
   direction = gtk_widget_get_direction (widget);
   allocation_width = allocation->width;
@@ -767,6 +771,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 
   if (needs_reorder)
     child_ordering_changed (path_bar);
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static void
