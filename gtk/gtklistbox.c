@@ -104,6 +104,7 @@ typedef struct
   guint visible     :1;
   guint selected    :1;
   guint activatable :1;
+  guint selectable  :1;
 } GtkListBoxRowPrivate;
 
 enum {
@@ -133,6 +134,7 @@ enum {
 enum {
   ROW_PROP_0,
   ROW_PROP_ACTIVATABLE,
+  ROW_PROP_SELECTABLE,
   LAST_ROW_PROPERTY
 };
 
@@ -2830,6 +2832,7 @@ gtk_list_box_row_init (GtkListBoxRow *row)
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (row), TRUE);
 
   ROW_PRIV (row)->activatable = TRUE;
+  ROW_PRIV (row)->selectable = TRUE;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (row));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST_ROW);
@@ -3282,6 +3285,54 @@ gtk_list_box_row_get_activatable (GtkListBoxRow *row)
   return ROW_PRIV (row)->activatable;
 }
 
+/**
+ * gtk_list_box_row_set_selectable:
+ * @row: a #GTkListBoxrow
+ * @selectable: %TRUE to mark the row as selectable
+ *
+ * Set the #GtkListBoxRow:selectable property for this row.
+ *
+ * Since: 3.14
+ */
+void
+gtk_list_box_row_set_selectable (GtkListBoxRow *row,
+                                 gboolean       selectable)
+{
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+
+  selectable = selectable != FALSE;
+
+  if (ROW_PRIV (row)->selectable != selectable)
+    {
+      if (!selectable)
+        gtk_list_box_row_set_selected (row, FALSE);
+ 
+      ROW_PRIV (row)->selectable = selectable;
+
+      update_row_style (row);
+      g_object_notify (G_OBJECT (row), "selectable");
+    }
+}
+
+/**
+ * gtk_list_box_row_get_selectable:
+ * @row: a #GtkListBoxRow
+ *
+ * Gets the value of the #GtkListBoxRow:selectable property
+ * for this row.
+ *
+ * Returns: %TRUE if the row is selectable
+ *
+ * Since: 3.14
+ */
+gboolean
+gtk_list_box_row_get_selectable (GtkListBoxRow *row)
+{
+  g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), TRUE);
+
+  return ROW_PRIV (row)->selectable;
+}
+
 static void
 gtk_list_box_row_get_property (GObject    *obj,
                                guint       property_id,
@@ -3294,6 +3345,9 @@ gtk_list_box_row_get_property (GObject    *obj,
     {
     case ROW_PROP_ACTIVATABLE:
       g_value_set_boolean (value, gtk_list_box_row_get_activatable (row));
+      break;
+    case ROW_PROP_SELECTABLE:
+      g_value_set_boolean (value, gtk_list_box_row_get_selectable (row));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -3313,6 +3367,9 @@ gtk_list_box_row_set_property (GObject      *obj,
     {
     case ROW_PROP_ACTIVATABLE:
       gtk_list_box_row_set_activatable (row, g_value_get_boolean (value));
+      break;
+    case ROW_PROP_SELECTABLE:
+      gtk_list_box_row_set_selectable (row, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -3375,6 +3432,20 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
     g_param_spec_boolean ("activatable",
                           P_("Activatable"),
                           P_("Whether this row can be activated"),
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkListBoxRow:selectable
+   *
+   * The property determines whether this row can be selected.
+   *
+   * Since: 3.14
+   */
+  row_properties[ROW_PROP_SELECTABLE] =
+    g_param_spec_boolean ("selectable",
+                          P_("Selectable"),
+                          P_("Whether this row can be selected"),
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

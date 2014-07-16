@@ -184,6 +184,13 @@ GDK_AVAILABLE_IN_3_14
 gboolean   gtk_list_box_row_is_selected   (GtkListBoxRow *row);
 
 GDK_AVAILABLE_IN_3_14
+void       gtk_list_box_row_set_selectable (GtkListBoxRow *row,
+                                            gboolean       selectable);
+GDK_AVAILABLE_IN_3_14
+gboolean   gtk_list_box_row_get_selectable (GtkListBoxRow *row);
+
+
+GDK_AVAILABLE_IN_3_14
 void       gtk_list_box_row_set_activatable (GtkListBoxRow *row,
                                              gboolean       activatable);
 GDK_AVAILABLE_IN_3_14

@@ -560,6 +560,8 @@ gtk_list_box_row_set_header
 gtk_list_box_row_get_index
 gtk_list_box_row_set_activatable
 gtk_list_box_row_get_activatable
+gtk_list_box_row_set_selectable
+gtk_list_box_row_get_selectable
 
 <SUBSECTION Standard>
 GTK_IS_LIST_BOX
