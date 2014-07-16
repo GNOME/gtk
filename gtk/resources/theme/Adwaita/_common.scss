@@ -364,6 +364,11 @@ GtkLabel {
     // GtkImage itself to fit the circle
     padding: 5px 2px;
   }
+  .action-bar .stack-switcher &.text-button,
+  .header-bar .stack-switcher &.text-button {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
   .stack-switcher > & {
     padding-left: 0;  // subtract the padding which will be added to the
     padding-right: 0; // GtkLabel
@@ -398,7 +403,7 @@ GtkLabel {
   .header-bar &.image-button,
   .action-bar &.image-button { padding: 8px; }
   .header-bar &.text-button,
-  .action-bar &.text-button { padding: 6px 8px 5px; } // due to font metrics
+  .action-bar &.text-button { padding: 6px 16px 5px; } // due to font metrics
 
   //inline-toolbar buttons
   .inline-toolbar &, .inline-toolbar &:backdrop {

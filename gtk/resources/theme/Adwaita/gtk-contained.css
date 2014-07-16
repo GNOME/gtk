@@ -472,6 +472,9 @@
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
   .action-bar .stack-switcher .button.image-button, .header-bar .stack-switcher .button.image-button {
     padding: 5px 2px; }
+  .action-bar .stack-switcher .button.text-button, .header-bar .stack-switcher .button.text-button {
+    padding-left: 10px;
+    padding-right: 10px; }
   .stack-switcher > .button {
     padding-left: 0;
     padding-right: 0; }
@@ -491,7 +494,7 @@
   .header-bar .button.image-button, .action-bar .button.image-button {
     padding: 8px; }
   .header-bar .button.text-button, .action-bar .button.text-button {
-    padding: 6px 8px 5px; }
+    padding: 6px 16px 5px; }
   .inline-toolbar .button, .inline-toolbar .button:backdrop {
     border-radius: 2px;
     border-width: 1px; }
