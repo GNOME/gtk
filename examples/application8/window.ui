@@ -41,17 +41,11 @@
             <child>
               <object class="GtkMenuButton" id="gears">
                 <property name="visible">True</property>
+                <property name="direction">none</property>
                 <property name="use-popover">True</property>
                 <style>
                   <class name="image-button"/>
                 </style>
-                <child>
-                  <object class="GtkImage" id="gears-icon">
-                    <property name="visible">True</property>
-                    <property name="icon-name">view-context-menu-symbolic</property>
-                    <property name="icon-size">1</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="pack-type">end</property>
