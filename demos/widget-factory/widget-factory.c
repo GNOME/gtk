@@ -515,11 +515,10 @@ populate_colors (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (row), box, FALSE, FALSE, 0);
       gtk_widget_show_all (row);
       gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
+      row = gtk_widget_get_parent (row);
+      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
       if (colors[i].title)
-        {
-          row = gtk_widget_get_parent (row);
-          g_object_set_data (G_OBJECT (row), "title", (gpointer)colors[i].title);
-        }
+        g_object_set_data (G_OBJECT (row), "title", (gpointer)colors[i].title);
     }
 
   gtk_list_box_invalidate_headers (GTK_LIST_BOX (widget));
