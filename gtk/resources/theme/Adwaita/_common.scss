@@ -248,6 +248,25 @@ GtkLabel {
  * Buttons *
  ***********/
 
+@keyframes needs_attention {
+  from {
+    //background-size: 0 0, 0 0;
+    background-image: -gtk-gradient(radial,
+                                    center center, 0,
+                                    center center, 0.01,
+                                    to($selected_bg_color),
+                                    to(transparent));
+  }
+  to {
+    //background-size: 6px 6px, 6px 6px;
+    background-image: -gtk-gradient(radial,
+                                    center center, 0,
+                                    center center, 0.5,
+                                    to($selected_bg_color),
+                                    to(transparent));
+  }
+}
+
 .button {
   border-radius: 3px;
   transition: all 200ms ease-out;
@@ -335,6 +354,43 @@ GtkLabel {
       &:insensitive {
         @include button(insensitive);
       }
+    }
+  }
+
+  // stack switcher buttons
+  .action-bar .stack-switcher &.image-button,
+  .header-bar .stack-switcher &.image-button {
+    // override the padding since we need to add some padding on the
+    // GtkImage itself to fit the circle
+    padding: 5px 2px;
+  }
+  .stack-switcher > & {
+    padding-left: 0;  // subtract the padding which will be added to the
+    padding-right: 0; // GtkLabel
+    > GtkLabel {
+      padding-left: 6px;  // label padding
+      padding-right: 6px; //
+    }
+    > GtkImage {
+      padding: 3px 6px; // image padding
+    }
+    &.needs-attention > GtkLabel,
+    &.needs-attention > GtkImage {
+      animation: needs_attention 150ms ease-in;
+      background-image: -gtk-gradient(radial,
+                                      center center, 0,
+                                      center center, 0.5,
+                                      to($selected_bg_color),
+                                      to(transparent)),
+                        -gtk-gradient(radial,
+                                      center center, 0,
+                                      center center, 0.5,
+                                      to(white),
+                                      to(transparent));
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      background-position: right 2px, right 3px;
+      &:backdrop { background-size: 6px 6px, 0 0;}
     }
   }
 
