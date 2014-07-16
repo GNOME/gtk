@@ -244,6 +244,9 @@ static void gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gest
                                                       gdouble               y,
                                                       GtkListBox           *box);
 
+static void gtk_list_box_update_row_styles (GtkListBox    *box);
+static void gtk_list_box_update_row_style  (GtkListBox    *box,
+                                            GtkListBoxRow *row);
 
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -973,6 +976,8 @@ gtk_list_box_set_selection_mode (GtkListBox       *box,
     }
 
   priv->selection_mode = mode;
+
+  gtk_list_box_update_row_styles (box);
 
   g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_SELECTION_MODE]);
 
@@ -2587,6 +2592,7 @@ gtk_list_box_insert (GtkListBox *box,
   if (ROW_PRIV (row)->visible)
     list_box_add_visible_rows (box, 1);
   gtk_list_box_apply_filter (box, row);
+  gtk_list_box_update_row_style (box, row);
   if (gtk_widget_get_visible (GTK_WIDGET (box)))
     {
       gtk_list_box_update_header (box, ROW_PRIV (row)->iter);
@@ -3229,15 +3235,38 @@ gtk_list_box_row_is_selected (GtkListBoxRow *row)
 }
 
 static void
-update_row_style (GtkListBoxRow *row)
+gtk_list_box_update_row_style (GtkListBox    *box,
+                               GtkListBoxRow *row)
 {
   GtkStyleContext *context;
+  gboolean can_select;
+
+  if (box && BOX_PRIV (box)->selection_mode != GTK_SELECTION_NONE)
+    can_select = TRUE;
+  else
+    can_select = FALSE;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (row));
-  if (ROW_PRIV (row)->activatable)
+  if (ROW_PRIV (row)->activatable ||
+      (ROW_PRIV (row)->selectable && can_select))
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
   else
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BUTTON);
+}
+
+static void
+gtk_list_box_update_row_styles (GtkListBox *box)
+{
+  GSequenceIter *iter;
+  GtkListBoxRow *row;
+
+  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      gtk_list_box_update_row_style (box, row);
+    }
 }
 
 /**
@@ -3261,7 +3290,7 @@ gtk_list_box_row_set_activatable (GtkListBoxRow *row,
     {
       ROW_PRIV (row)->activatable = activatable;
 
-      update_row_style (row);
+      gtk_list_box_update_row_style (gtk_list_box_row_get_box (row), row);
       g_object_notify (G_OBJECT (row), "activatable");
     }
 }
@@ -3309,7 +3338,7 @@ gtk_list_box_row_set_selectable (GtkListBoxRow *row,
  
       ROW_PRIV (row)->selectable = selectable;
 
-      update_row_style (row);
+      gtk_list_box_update_row_style (gtk_list_box_row_get_box (row), row);
       g_object_notify (G_OBJECT (row), "selectable");
     }
 }
