@@ -3240,7 +3240,7 @@ update_row_style (GtkListBoxRow *row)
 /**
  * gtk_list_box_row_set_activatable:
  * @row: a #GTkListBoxrow
- * @activatable: %TRUE to make the row as activatable
+ * @activatable: %TRUE to mark the row as activatable
  *
  * Set the #GtkListBoxRow:activatable property for this row.
  *
@@ -3270,7 +3270,7 @@ gtk_list_box_row_set_activatable (GtkListBoxRow *row,
  * Gets the value of the #GtkListBoxRow:activatable property
  * for this row.
  *
- * Returns: %TRUE fi the row is activatable
+ * Returns: %TRUE if the row is activatable
  *
  * Since: 3.14
  */
