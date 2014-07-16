@@ -137,6 +137,7 @@ rebuild_child (GtkWidget   *self,
 
   if (button_child)
     {
+      gtk_widget_set_halign (GTK_WIDGET (button_child), GTK_ALIGN_CENTER);
       gtk_widget_show_all (button_child);
       gtk_container_add (GTK_CONTAINER (self), button_child);
     }
