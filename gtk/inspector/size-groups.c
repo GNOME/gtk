@@ -270,6 +270,8 @@ void
 gtk_inspector_size_groups_set_object (GtkInspectorSizeGroups *sl,
                                       GObject                *object)
 {
+  GSList *groups, *l;
+
   clear_view (sl);
 
   if (!GTK_IS_WIDGET (object))
@@ -277,8 +279,6 @@ gtk_inspector_size_groups_set_object (GtkInspectorSizeGroups *sl,
       gtk_widget_hide (GTK_WIDGET (sl));
       return;
     }
-
-  GSList *groups, *l;
 
   gtk_widget_show (GTK_WIDGET (sl));
   groups = _gtk_widget_get_sizegroups (GTK_WIDGET (object));
