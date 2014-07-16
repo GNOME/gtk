@@ -1122,6 +1122,7 @@ GtkTreeView.view.progressbar {
       box-shadow: none; }
 
 .menu {
+  margin: 4px;
   padding: 0px;
   background-color: #292929; }
   .menu .menuitem {
