@@ -63,7 +63,11 @@ def gen_gtk_filelist(srcroot, subdir, dest):
 			vars['gtk_clipboard_dnd_c_sources'].split() + \
             vars['gtk_other_src'].split()
 
-    sources = [i for i in files if not (i.endswith('private.h')) and i != 'gtktextdisplay.h' and i != 'gtktextlayout.h']
+    sources = [i for i in files \
+               if not (i.endswith('private.h')) \
+               and i != 'gtktextdisplay.h' \
+               and i != 'gtktextlayout.h' \
+               and i != 'gtkx.h']
 
     with open(dest, 'w') as d:
         for i in sources:
