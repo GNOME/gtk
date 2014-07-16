@@ -52,6 +52,11 @@
  * add any kind of widget to it via gtk_container_add(), and a #GtkListBoxRow
  * widget will automatically be inserted between the list and the widget.
  *
+ * #GtkListBoxRows can be marked as activatable or selectable. If a row
+ * is activatable, #GtkListBox::row-activated will be emitted for it when
+ * the user tries to activate it. If it is selectable, the row will be marked
+ * as selected when the user tries to select it.
+ *
  * The GtkListBox widget was added in GTK+ 3.10.
  */
 
