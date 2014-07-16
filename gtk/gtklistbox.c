@@ -101,8 +101,9 @@ typedef struct
   GtkWidget *header;
   gint y;
   gint height;
-  gboolean visible;
-  gboolean selected;
+  guint visible     :1;
+  guint selected    :1;
+  guint activatable :1;
 } GtkListBoxRowPrivate;
 
 enum {
@@ -2828,6 +2829,8 @@ gtk_list_box_row_init (GtkListBoxRow *row)
   gtk_widget_set_can_focus (GTK_WIDGET (row), TRUE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (row), TRUE);
 
+  ROW_PRIV (row)->activatable = TRUE;
+
   context = gtk_widget_get_style_context (GTK_WIDGET (row));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST_ROW);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
@@ -3222,6 +3225,18 @@ gtk_list_box_row_is_selected (GtkListBoxRow *row)
   return ROW_PRIV (row)->selected;
 }
 
+static void
+update_row_style (GtkListBoxRow *row)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (row));
+  if (ROW_PRIV (row)->activatable)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BUTTON);
+}
+
 /**
  * gtk_list_box_row_set_activatable:
  * @row: a #GTkListBoxrow
@@ -3235,23 +3250,17 @@ void
 gtk_list_box_row_set_activatable (GtkListBoxRow *row,
                                   gboolean       activatable)
 {
-  GtkStyleContext *context;
-
   g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
 
   activatable = activatable != FALSE;
 
-  if (activatable == gtk_list_box_row_get_activatable (row))
-    return;
+  if (ROW_PRIV (row)->activatable != activatable)
+    {
+      ROW_PRIV (row)->activatable = activatable;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (row));
-
-  if (activatable)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
-  else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BUTTON);
-
-  g_object_notify (G_OBJECT (row), "activatable");
+      update_row_style (row);
+      g_object_notify (G_OBJECT (row), "activatable");
+    }
 }
 
 /**
@@ -3268,13 +3277,9 @@ gtk_list_box_row_set_activatable (GtkListBoxRow *row,
 gboolean
 gtk_list_box_row_get_activatable (GtkListBoxRow *row)
 {
-  GtkStyleContext *context;
-
   g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), TRUE);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (row));
-
-  return gtk_style_context_has_class (context, GTK_STYLE_CLASS_BUTTON);
+  return ROW_PRIV (row)->activatable;
 }
 
 static void
