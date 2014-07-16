@@ -1388,6 +1388,9 @@ static gboolean
 gtk_list_box_row_set_selected (GtkListBoxRow *row,
                                gboolean       selected)
 {
+  if (!ROW_PRIV (row)->selectable)
+    return FALSE;
+
   if (ROW_PRIV (row)->selected != selected)
     {
       ROW_PRIV (row)->selected = selected;
@@ -1448,11 +1451,15 @@ static void
 gtk_list_box_select_row_internal (GtkListBox    *box,
                                   GtkListBoxRow *row)
 {
+  if (!ROW_PRIV (row)->selectable)
+    return;
+
   if (ROW_PRIV (row)->selected)
     return;
 
   if (BOX_PRIV (box)->selection_mode == GTK_SELECTION_NONE)
     return;
+
   if (BOX_PRIV (box)->selection_mode != GTK_SELECTION_MULTIPLE)
     gtk_list_box_unselect_all_internal (box);
 
@@ -1519,6 +1526,9 @@ gtk_list_box_update_selection (GtkListBox    *box,
   gtk_list_box_update_cursor (box, row);
 
   if (priv->selection_mode == GTK_SELECTION_NONE)
+    return;
+
+  if (!ROW_PRIV (row)->selectable)
     return;
 
   if (priv->selection_mode == GTK_SELECTION_BROWSE)
