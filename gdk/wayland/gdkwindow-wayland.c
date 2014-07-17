@@ -678,11 +678,19 @@ gdk_wayland_window_sync_margin (GdkWindow *window)
   if (!impl->xdg_surface)
     return;
 
+  /* XXX: xdg_surface now has xdg_surface_set_window_geometry.
+   *
+   * We need to have a GdkToplevel or some other class in order
+   * to make this work correctly. For now, don't do anything with
+   * the shadow widths.
+   */
+#if 0
   xdg_surface_set_margin (impl->xdg_surface,
                           impl->margin_left,
                           impl->margin_right,
                           impl->margin_top,
                           impl->margin_bottom);
+#endif
 }
 
 static struct wl_region *
