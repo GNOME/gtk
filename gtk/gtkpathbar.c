@@ -202,6 +202,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (path_bar), FALSE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (path_bar));
+  gtk_style_context_add_class (context, "path-bar");
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   path_bar->priv->get_info_cancellable = NULL;
