@@ -445,7 +445,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 
   /**
    * GtkSpinButton::output:
-   * @spin_button: the object which received the signal
+   * @spin_button: the object on which the signal was emitted
    *
    * The ::output signal can be used to change to formatting
    * of the value that is displayed in the spin buttons entry.
@@ -480,6 +480,13 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
 
+  /**
+   * GtkSpinButton::value-changed:
+   * @spin_button: the object on which the signal was emitted
+   *
+   * The ::value-changed signal is emitted when the value represented by
+   * @spinbutton changes. Also see the #GtkSpinButton::output signal.
+   */
   spinbutton_signals[VALUE_CHANGED] =
     g_signal_new (I_("value-changed"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -491,9 +498,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 
   /**
    * GtkSpinButton::wrapped:
-   * @spinbutton: the object which received the signal
+   * @spin_button: the object on which the signal was emitted
    *
-   * The wrapped signal is emitted right after the spinbutton wraps
+   * The ::wrapped signal is emitted right after the spinbutton wraps
    * from its maximum to minimum value or vice-versa.
    *
    * Since: 2.10
@@ -508,6 +515,20 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   G_TYPE_NONE, 0);
 
   /* Action signals */
+  /**
+   * GtkSpinButton::change-value:
+   * @spin_button: the object on which the signal was emitted
+   * @scroll: a #GtkScrollType to specify the speed and amount of change
+   *
+   * The ::change-value signal is a [keybinding signal][GtkBindingSignal] 
+   * which gets emitted when the user initiates a value change. 
+   *
+   * Applications should not connect to it, but may emit it with 
+   * g_signal_emit_by_name() if they need to control the cursor
+   * programmatically.
+   *
+   * The default bindings for this signal are Up/Down and PageUp and/PageDown.
+   */
   spinbutton_signals[CHANGE_VALUE] =
     g_signal_new (I_("change-value"),
                   G_TYPE_FROM_CLASS (gobject_class),
