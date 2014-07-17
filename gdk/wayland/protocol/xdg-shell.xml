@@ -146,32 +146,6 @@
       <arg name="parent" type="object" interface="wl_surface" allow-null="true"/>
     </request>
 
-    <request name="set_margin">
-      <description summary="set the visible frame boundaries">
-        This tells the compositor what the visible size of the window
-        should be, so it can use it to determine what borders to use for
-        constrainment and alignment.
-
-        CSD often has invisible areas for decoration purposes, like drop
-        shadows. These "shadow" drawings need to be subtracted out of the
-        normal boundaries of the window when computing where to place
-        windows (e.g. to set this window so it's centered on top of another,
-        or to put it to the left or right of the screen.)
-
-        This value should change as little as possible at runtime, to
-        prevent flicker.
-
-        This value is also ignored when the window is maximized or
-        fullscreen, and assumed to be 0.
-
-        If never called, this value is assumed to be 0.
-      </description>
-      <arg name="left_margin" type="int"/>
-      <arg name="right_margin" type="int"/>
-      <arg name="top_margin" type="int"/>
-      <arg name="bottom_margin" type="int"/>
-    </request>
-
     <request name="set_title">
       <description summary="set surface title">
 	Set a short title for the surface.
@@ -304,11 +278,11 @@
     </enum>
 
     <event name="configure">
-      <description summary="suggest a surface chnage">
+      <description summary="suggest a surface change">
 	The configure event asks the client to resize its surface.
 
 	The width and height arguments specify a hint to the window
-        about how its surface should be resized in surface local
+        about how its surface should be resized in window geometry
         coordinates. The states listed in the event specify how the
         width/height arguments should be interpreted.
 
@@ -337,6 +311,29 @@
         contain the buffer drawn for the configure event you are acking.
       </description>
       <arg name="serial" type="uint" summary="a serial to configure for"/>
+    </request>
+
+    <request name="set_window_geometry">
+      <description summary="set the new window geometry">
+        The window geometry of a window is its "visible bounds" from the
+        user's perspective. Client-side decorations often have invisible
+        portions like drop-shadows which should be ignored for the
+        purposes of aligning, placing and constraining windows.
+
+        The default value is the full bounds of the surface, including any
+        subsurfaces. Once the window geometry of the surface is set once,
+        it is not possible to unset it, and it will remain the same until
+        set_window_geometry is called again, even if a new subsurface or
+        buffer is attached.
+
+        If responding to a configure event, the window geometry in here
+        must respect the sizing negotiations specified by the states in
+        the configure event.
+      </description>
+      <arg name="x" type="int"/>
+      <arg name="y" type="int"/>
+      <arg name="width" type="int"/>
+      <arg name="height" type="int"/>
     </request>
 
     <request name="set_maximized" />
