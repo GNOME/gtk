@@ -177,6 +177,21 @@ show_dialog_with_header_buttons (GtkWindow *parent)
   gtk_widget_destroy (dialog);
 }
 
+static void
+show_dialog_with_header_buttons2 (GtkWindow *parent)
+{
+  GtkBuilder *builder;
+  GtkWidget *dialog;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_file (builder, "dialog.ui", NULL);
+  dialog = (GtkWidget *)gtk_builder_get_object (builder, "dialog");
+  g_object_unref (builder);
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
 typedef struct {
   GtkDialog parent;
 } MyDialog;
@@ -364,6 +379,12 @@ main (int argc, char *argv[])
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (box), button);
 
+  button = gtk_button_new_with_label ("Header & Buttons & Builder");
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (show_dialog_with_header_buttons2), window);
+  gtk_widget_show (button);
+  gtk_container_add (GTK_CONTAINER (box), button);
+
+  button = gtk_button_new_with_label ("Template");
   button = gtk_button_new_with_label ("Template");
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (show_dialog_from_template), window);
   gtk_widget_show (button);
