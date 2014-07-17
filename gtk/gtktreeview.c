@@ -1042,13 +1042,20 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkTreeView:rules-hint:
+   *
+   * Sets a hint to the theme to draw rows in alternating colors.
+   *
+   * Deprecated: 3.14
+   */
   g_object_class_install_property (o_class,
                                    PROP_RULES_HINT,
                                    g_param_spec_boolean ("rules-hint",
                                                          P_("Rules Hint"),
                                                          P_("Set a hint to the theme engine to draw rows in alternating colors"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED));
 
   g_object_class_install_property (o_class,
                                    PROP_ENABLE_SEARCH,
@@ -11843,20 +11850,24 @@ gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view)
  * @tree_view: a #GtkTreeView
  * @setting: %TRUE if the tree requires reading across rows
  *
- * This function tells GTK+ that the user interface for your
+ * Sets a hint for the theme to draw even/odd rows in the @tree_view
+ * with different colors, also known as "zebra striping".
+ *
+ * This function tells the GTK+ theme that the user interface for your
  * application requires users to read across tree rows and associate
- * cells with one another. By default, GTK+ will then render the tree
- * with alternating row colors. Do not use it
- * just because you prefer the appearance of the ruled tree; that’s a
- * question for the theme. Some themes will draw tree rows in
- * alternating colors even when rules are turned off, and users who
- * prefer that appearance all the time can choose those themes. You
- * should call this function only as a semantic
- * hint to the theme engine that your tree makes alternating colors
- * useful from a functional standpoint (since it has lots of columns,
+ * cells with one another.
+ *
+ * Do not use it just because you prefer the appearance of the ruled
+ * tree; that’s a question for the theme. Some themes will draw tree
+ * rows in alternating colors even when rules are turned off, and
+ * users who prefer that appearance all the time can choose those
+ * themes. You should call this function only as a semantic hint to
+ * the theme engine that your tree makes alternating colors useful
+ * from a functional standpoint (since it has lots of columns,
  * generally).
  *
- **/
+ * Deprecated: 3.14
+ */
 void
 gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
                               gboolean      setting)
@@ -11879,8 +11890,10 @@ gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
  *
  * Gets the setting set by gtk_tree_view_set_rules_hint().
  *
- * Returns: %TRUE if rules are useful for the user of this tree
- **/
+ * Returns: %TRUE if the hint is set
+ *
+ * Deprecated: 3.14
+ */
 gboolean
 gtk_tree_view_get_rules_hint (GtkTreeView  *tree_view)
 {
