@@ -8940,7 +8940,6 @@ gtk_window_move_resize (GtkWindow *window)
        */
       priv->configure_notify_received = FALSE;
 
-      /* gtk_window_configure_event() filled in widget->allocation */
       gtk_widget_size_allocate (widget, &allocation);
 
       /* If the configure request changed, it means that
