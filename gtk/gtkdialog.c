@@ -356,6 +356,8 @@ apply_response_for_header_bar (GtkDialog *dialog,
   GtkDialogPrivate *priv = dialog->priv;
   GtkPackType pack;
 
+  g_assert (gtk_widget_get_parent (child) == priv->headerbar);
+
   if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_HELP)
     pack = GTK_PACK_START;
   else
@@ -389,6 +391,8 @@ apply_response_for_action_area (GtkDialog *dialog,
                                 gint       response_id)
 {
   GtkDialogPrivate *priv = dialog->priv;
+
+  g_assert (gtk_widget_get_parent (child) == priv->action_area);
 
   if (response_id == GTK_RESPONSE_HELP)
     gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area), child, TRUE);
@@ -1786,6 +1790,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 				      gpointer      user_data)
 {
   GtkDialog *dialog = GTK_DIALOG (buildable);
+  GtkDialogPrivate *priv = dialog->priv;
   GSList *l;
   ActionWidgetsSubParserData *parser_data;
   GObject *object;
@@ -1843,9 +1848,9 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 
       if (is_action)
         {
-          if (GTK_IS_HEADER_BAR (gtk_widget_get_parent (GTK_WIDGET (object))))
+          if (gtk_widget_get_parent (GTK_WIDGET (object)) == priv->headerbar)
             apply_response_for_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
-          else
+          else if (gtk_widget_get_parent (GTK_WIDGET (object)) == priv->action_area)
             apply_response_for_action_area (dialog, GTK_WIDGET (object), ad->response_id);
         }
 
