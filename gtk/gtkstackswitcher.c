@@ -156,7 +156,7 @@ update_needs_attention (GtkWidget *widget, GtkWidget *button, gpointer data)
                            NULL);
 
   context = gtk_widget_get_style_context (button);
-  if (needs_attention && !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+  if (needs_attention)
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
   else
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
