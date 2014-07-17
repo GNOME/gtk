@@ -8730,7 +8730,6 @@ gtk_window_move_resize (GtkWindow *window)
    *   the position request to be centered.
    */
   GtkWindowPrivate *priv = window->priv;
-  GtkAllocation allocation;
   GtkWidget *widget;
   GtkContainer *container;
   GtkWindowGeometryInfo *info;
@@ -8742,7 +8741,8 @@ gtk_window_move_resize (GtkWindow *window)
   gboolean configure_request_pos_changed;
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
-  
+  int current_width, current_height;
+
   widget = GTK_WIDGET (window);
 
   gdk_window = gtk_widget_get_window (widget);
@@ -8918,15 +8918,15 @@ gtk_window_move_resize (GtkWindow *window)
 				   &new_geometry,
 				   new_flags);
 
-  allocation.x = 0;
-  allocation.y = 0;
-  allocation.width = gdk_window_get_width (gdk_window);
-  allocation.height = gdk_window_get_height (gdk_window);
+  current_width = gdk_window_get_width (gdk_window);
+  current_height = gdk_window_get_height (gdk_window);
 
   /* handle resizing/moving and widget tree allocation
    */
   if (priv->configure_notify_received)
     { 
+      GtkAllocation allocation;
+
       /* If we have received a configure event since
        * the last time in this function, we need to
        * accept our new size and size_allocate child widgets.
@@ -8939,6 +8939,11 @@ gtk_window_move_resize (GtkWindow *window)
        *
        */
       priv->configure_notify_received = FALSE;
+
+      allocation.x = 0;
+      allocation.y = 0;
+      allocation.width = current_width;
+      allocation.height = current_height;
 
       gtk_widget_size_allocate (widget, &allocation);
 
@@ -8983,8 +8988,7 @@ gtk_window_move_resize (GtkWindow *window)
       return;			/* Bail out, we didn't really process the move/resize */
     }
   else if ((configure_request_size_changed || hints_changed) &&
-           (allocation.width != new_request.width || allocation.height != new_request.height))
-
+           (current_width != new_request.width || current_height != new_request.height))
     {
       /* We are in one of the following situations:
        * A. configure_request_size_changed
@@ -9063,6 +9067,8 @@ gtk_window_move_resize (GtkWindow *window)
     }
   else
     {
+      GtkAllocation allocation;
+
       /* Handle any position changes.
        */
       if (configure_request_pos_changed)
@@ -9071,8 +9077,14 @@ gtk_window_move_resize (GtkWindow *window)
                            new_request.x, new_request.y);
         }
 
-      /* And run the resize queue.
-       */
+      /* Our configure request didn't change size, but maybe some of
+       * our child widgets have. Run a size allocate with our current
+       * size to make sure that we re-layout our child widgets. */
+      allocation.x = 0;
+      allocation.y = 0;
+      allocation.width = current_width;
+      allocation.height = current_height;
+
       gtk_widget_size_allocate (widget, &allocation);
     }
   
