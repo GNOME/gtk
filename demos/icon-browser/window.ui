@@ -12,6 +12,7 @@
     <property name="title" translatable="yes">Icon Browser</property>
     <property name="default-width">600</property>
     <property name="default-height">800</property>
+    <property name="border-width">10</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <property name="visible">True</property>
@@ -58,6 +59,7 @@
             <property name="expand">True</property>
             <property name="hscrollbar-policy">never</property>
             <property name="vscrollbar-policy">automatic</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="list">
                 <property name="visible">True</property>
