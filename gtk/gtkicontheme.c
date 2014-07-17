@@ -3768,6 +3768,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
   gint image_width, image_height, image_size;
   gint scaled_desired_size;
   GdkPixbuf *source_pixbuf;
+  gdouble dir_scale;
 
   if (icon_info->pixbuf)
     {
@@ -3783,6 +3784,8 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
 
   scaled_desired_size = icon_info->desired_size * icon_info->desired_scale;
 
+  dir_scale = icon_info->dir_scale;
+
   /* In many cases, the scale can be determined without actual access
    * to the icon file. This is generally true when we have a size
    * for the directory where the icon is; the image size doesn't
@@ -3796,12 +3799,20 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
     icon_info->scale = icon_info->unscaled_scale;
   else if (icon_info->dir_type == ICON_THEME_DIR_SCALABLE)
     {
-      if (scaled_desired_size < icon_info->min_size * icon_info->dir_scale)
+      /* For svg icons, treat scalable directories as if they had
+       * a Scale=<desired_scale> entry. In particular, this means
+       * spinners that are restriced to size 32 will loaded at size
+       * up to 64 with Scale=2.
+       */
+      if (icon_info->is_svg)
+        dir_scale = icon_info->desired_scale;
+
+      if (scaled_desired_size < icon_info->min_size * dir_scale)
         icon_info->scale = (gdouble) icon_info->min_size / (gdouble) icon_info->dir_size;
-      else if (scaled_desired_size > icon_info->max_size * icon_info->dir_scale)
+      else if (scaled_desired_size > icon_info->max_size * dir_scale)
         icon_info->scale = (gdouble) icon_info->max_size / (gdouble) icon_info->dir_size;
       else
-        icon_info->scale = (gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale);
+        icon_info->scale = (gdouble) scaled_desired_size / (icon_info->dir_size * dir_scale);
     }
 
   /* At this point, we need to actually get the icon; either from the
@@ -3819,7 +3830,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
           if (icon_info->forced_size)
             size = scaled_desired_size;
           else
-            size = icon_info->dir_size * icon_info->dir_scale * icon_info->scale;
+            size = icon_info->dir_size * dir_scale * icon_info->scale;
           source_pixbuf = gdk_pixbuf_new_from_resource_at_scale (icon_info->filename,
                                                                  size, size, TRUE,
                                                                  &icon_info->load_error);
@@ -3849,7 +3860,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
               if (icon_info->forced_size)
                 size = scaled_desired_size;
               else
-                size = icon_info->dir_size * icon_info->dir_scale * icon_info->scale;
+                size = icon_info->dir_size * dir_scale * icon_info->scale;
               source_pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
                                                                    size, size,
                                                                    TRUE, NULL,
