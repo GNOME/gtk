@@ -88,6 +88,7 @@ struct GtkPathElement
 {
   GType type;
   GQuark name;
+  GtkStateFlags state;
   guint sibling_index;
   GHashTable *regions;
   GArray *classes;
@@ -570,6 +571,80 @@ gtk_widget_path_iter_set_object_type (GtkWidgetPath *path,
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
   elem->type = type;
+}
+
+/**
+ * gtk_widget_path_iter_get_state:
+ * @path: a #GtkWidgetPath
+ * @pos: position to get the state for, -1 for the path head
+ *
+ * Returns the state flags corresponding to the widget found at
+ * the position @pos in the widget hierarchy defined by
+ * @path
+ *
+ * Returns: The state flags
+ *
+ * Since: 3.14
+ **/
+GtkStateFlags
+gtk_widget_path_iter_get_state (const GtkWidgetPath *path,
+                                gint                 pos)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (path->elems->len != 0, 0);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  return elem->state;
+}
+
+/**
+ * gtk_widget_path_iter_set_state:
+ * @path: a #GtkWidgetPath
+ * @pos: position to modify, -1 for the path head
+ * @state: state flags
+ *
+ * Sets the widget name for the widget found at position @pos
+ * in the widget hierarchy defined by @path.
+ *
+ * If you want to update just a single state flag, you need to do
+ * this manually, as this function updates all state flags.
+ *
+ * ## Setting a flag
+ *
+ * |[<!-- language="C" -->
+ * gtk_widget_path_iter_set_state (path, pos, gtk_widget_path_iter_get_state (path, pos) | flag);
+ * ]|
+ *
+ * ## Unsetting a flag
+ *
+ * |[<!-- language="C" -->
+ * gtk_widget_path_iter_set_state (path, pos, gtk_widget_path_iter_get_state (path, pos) & ~flag);
+ * ]|
+ *
+ *
+ * Since: 3.14
+ **/
+void
+gtk_widget_path_iter_set_state (GtkWidgetPath *path,
+                                gint           pos,
+                                GtkStateFlags  state)
+{
+  GtkPathElement *elem;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (path->elems->len != 0);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  elem->state = state;
 }
 
 /**
