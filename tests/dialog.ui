@@ -253,8 +253,6 @@
     </child>
     <action-widgets>
       <action-widget response="-6">cancel_button</action-widget>
-    </action-widgets>
-    <action-widgets>
       <action-widget response="apply">confirm_button</action-widget>
     </action-widgets>
   </object>
