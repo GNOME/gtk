@@ -360,6 +360,8 @@ gtk_box_init (GtkBox *box)
   private->spacing = 0;
   private->spacing_set = FALSE;
   private->baseline_pos = GTK_BASELINE_POSITION_CENTER;
+
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
 }
 
 static void
