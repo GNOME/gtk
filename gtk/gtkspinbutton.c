@@ -700,6 +700,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (spin_button));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SPINBUTTON);
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (spin_button));
 
   gtk_widget_add_events (GTK_WIDGET (spin_button), GDK_SCROLL_MASK);
 
