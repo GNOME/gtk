@@ -689,6 +689,8 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   priv->icon_size = DEFAULT_ICON_SIZE;
   priv->animation = DEFAULT_ANIMATION_STATE;
 
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (toolbar));
+
   priv->arrow_button = gtk_toggle_button_new ();
   g_signal_connect (priv->arrow_button, "button-press-event",
 		    G_CALLBACK (gtk_toolbar_arrow_button_press), toolbar);
