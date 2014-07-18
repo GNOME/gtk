@@ -51,6 +51,7 @@
 #include "gtkactionable.h"
 #include "a11y/gtkswitchaccessible.h"
 #include "gtkactionhelper.h"
+#include "gtkwidgetprivate.h"
 
 #include <math.h>
 
@@ -388,6 +389,8 @@ gtk_switch_size_allocate (GtkWidget     *widget,
                             allocation->y,
                             allocation->width,
                             allocation->height);
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static void
