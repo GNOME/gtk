@@ -747,6 +747,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                       g_quark_to_string (quark));
     }
 
+  /* Set widget state */
+  gtk_widget_path_iter_set_state (path, pos,
+                                  gtk_widget_path_iter_get_state (path, pos) | info->state_flags);
+
   return path;
 }
 
