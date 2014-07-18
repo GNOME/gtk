@@ -1443,6 +1443,9 @@ GtkSwitch {
   -GtkSwitch-slider-width: 47px;
   font: bold condensed 9;
   outline-offset: -4px;
+  box-shadow: inset 0 1px transparentize(black, 0.9), // needs to be set here
+              $widget_edge;                           // otherwise it gets
+                                                      // clipped
   &.trough {
     // similar to the .scale
     border-width: 1px;
@@ -1450,7 +1453,6 @@ GtkSwitch {
     border-radius: 3px;
     border-color: $borders_color;
     background-color: mix($bg_color,$borders_color,60%);
-    box-shadow: inset 0 1px transparentize(black, 0.9); /*outset not working*/
     text-shadow: 0 1px transparentize(black, 0.9);
     &:active {
       color: white;
@@ -1805,6 +1807,9 @@ GtkProgressBar {
     padding: 0;
     font-size: 83%;
     color: transparentize($fg_color, 0.6);
+    box-shadow: inset 1px 1px transparentize(black, 0.9), // needs to be set
+                $widget_edge;                             // here ot it gets
+                                                          // clipped
     &:backdrop {
       color: $backdrop_insensitive_color;
     }
@@ -1817,11 +1822,8 @@ GtkProgressBar {
   border-radius: 3px;
   border-color: $selected_borders_color;
   background-color: $selected_bg_color;
-  // I really prefer these flat w/o this shadow - Lapo
-  box-shadow: inset 0 1px 0 transparentize($borders_edge,0.8);
-  &.vertical {
-    box-shadow: inset 1px 0 0 transparentize($borders_edge,0.8);
-  }
+  box-shadow: none;
+//  box-shadow: inset 1px 1px transparentize($borders_edge,0.8);
   &:backdrop {
     border-color: $selected_bg_color;
     background-color: $selected_bg_color;
@@ -1843,8 +1845,8 @@ GtkProgressBar.trough {
   border-radius: 3px;
   border-color: $borders_color;
   background-color: mix($borders_color,$bg_color, 35%);
-  box-shadow: inset 1px 1px transparentize(black, 0.9),
-              $widget_edge;
+//  box-shadow: inset 1px 1px transparentize(black, 0.9),
+//              $widget_edge;
   &:backdrop{
     border-color: $backdrop_borders_color;
     background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);

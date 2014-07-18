@@ -1540,15 +1540,14 @@ GtkTreeView.view.progressbar {
 GtkSwitch {
   -GtkSwitch-slider-width: 47px;
   font: bold condensed 9;
-  outline-offset: -4px; }
+  outline-offset: -4px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px white; }
   GtkSwitch.trough {
     border-width: 1px;
     border-style: solid;
     border-radius: 3px;
     border-color: #a1a1a1;
     background-color: #cecece;
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
-    /*outset not working*/
     text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
     GtkSwitch.trough:active {
       color: white;
@@ -2317,7 +2316,8 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
 GtkProgressBar {
   padding: 0;
   font-size: 83%;
-  color: rgba(46, 52, 54, 0.4); }
+  color: rgba(46, 52, 54, 0.4);
+  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
   GtkProgressBar:backdrop {
     color: #c7c7c7; }
 
@@ -2327,9 +2327,7 @@ GtkProgressBar {
   border-radius: 3px;
   border-color: #184472;
   background-color: #4a90d9;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2); }
-  .progressbar.vertical {
-    box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.2); }
+  box-shadow: none; }
   .progressbar:backdrop {
     border-color: #4a90d9;
     background-color: #4a90d9;
@@ -2346,8 +2344,7 @@ GtkProgressBar.trough {
   border-style: solid;
   border-radius: 3px;
   border-color: #a1a1a1;
-  background-color: #d2d2d2;
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
+  background-color: #d2d2d2; }
   GtkProgressBar.trough:backdrop {
     border-color: #a8a8a8;
     background-color: #d4d4d4;
