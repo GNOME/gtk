@@ -754,6 +754,8 @@ gtk_range_init (GtkRange *range)
   priv->fill_level = G_MAXDOUBLE;
   priv->timer = NULL;
 
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
+
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (range));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
                                      FALSE);
