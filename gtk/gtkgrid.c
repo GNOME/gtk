@@ -397,6 +397,8 @@ gtk_grid_init (GtkGrid *grid)
 
   priv->linedata[0].homogeneous = FALSE;
   priv->linedata[1].homogeneous = FALSE;
+
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (grid));
 }
 
 static void
