@@ -789,6 +789,8 @@ gtk_paned_init (GtkPaned *paned)
   priv->handle_pos.x = -1;
   priv->handle_pos.y = -1;
 
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
+
   gesture = gtk_gesture_pan_new (GTK_WIDGET (paned),
                                  GTK_ORIENTATION_HORIZONTAL);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
