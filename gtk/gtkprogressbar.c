@@ -322,6 +322,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   priv->fraction = 0.0;
 
   gtk_widget_set_has_window (GTK_WIDGET (pbar), FALSE);
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
 }
 
 static void
