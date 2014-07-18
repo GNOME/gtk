@@ -28,6 +28,7 @@
 
 #include "gtkprogressbar.h"
 #include "gtkorientableprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -111,6 +112,8 @@ static void gtk_progress_bar_get_property         (GObject        *object,
                                                    guint           prop_id,
                                                    GValue         *value,
                                                    GParamSpec     *pspec);
+static void gtk_progress_bar_size_allocate        (GtkWidget      *widget,
+                                                   GtkAllocation  *allocation);
 static void gtk_progress_bar_get_preferred_width  (GtkWidget      *widget,
                                                    gint           *minimum,
                                                    gint           *natural);
@@ -144,6 +147,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   gobject_class->finalize = gtk_progress_bar_finalize;
 
   widget_class->draw = gtk_progress_bar_draw;
+  widget_class->size_allocate = gtk_progress_bar_size_allocate;
   widget_class->get_preferred_width = gtk_progress_bar_get_preferred_width;
   widget_class->get_preferred_height = gtk_progress_bar_get_preferred_height;
 
@@ -437,6 +441,15 @@ get_current_text (GtkProgressBar *pbar)
     return g_strdup (priv->text);
   else
     return g_strdup_printf ("%.0f %%", priv->fraction * 100.0);
+}
+
+static void
+gtk_progress_bar_size_allocate (GtkWidget     *widget,
+                                GtkAllocation *allocation)
+{
+  GTK_WIDGET_CLASS (gtk_progress_bar_parent_class)->size_allocate (widget, allocation);
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 static void
