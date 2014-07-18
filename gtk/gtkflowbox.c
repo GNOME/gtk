@@ -3558,6 +3558,7 @@ gtk_flow_box_set_property (GObject      *object,
       if (priv->orientation != g_value_get_enum (value))
         {
           priv->orientation = g_value_get_enum (value);
+          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
           /* Re-box the children in the new orientation */
           gtk_widget_queue_resize (GTK_WIDGET (box));
           g_object_notify_by_pspec (object, pspec);
@@ -3953,6 +3954,8 @@ gtk_flow_box_init (GtkFlowBox *box)
   priv->column_spacing = 0;
   priv->row_spacing = 0;
   priv->activate_on_single_click = TRUE;
+
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
 
   priv->children = g_sequence_new (NULL);
 
