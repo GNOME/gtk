@@ -212,6 +212,7 @@ gtk_separator_init (GtkSeparator *separator)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (separator));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (separator));
 }
 
 static void
