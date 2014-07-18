@@ -98,6 +98,7 @@
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -575,6 +576,15 @@ gtk_level_bar_get_preferred_height (GtkWidget *widget,
 }
 
 static void
+gtk_level_bar_size_allocate (GtkWidget     *widget,
+                             GtkAllocation *allocation)
+{
+  GTK_WIDGET_CLASS (gtk_level_bar_parent_class)->size_allocate (widget, allocation);
+
+  _gtk_widget_set_simple_clip (widget);
+}
+
+static void
 gtk_level_bar_update_mode_style_classes (GtkLevelBar *self)
 {
   GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (self));
@@ -889,6 +899,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   oclass->finalize = gtk_level_bar_finalize;
 
   wclass->draw = gtk_level_bar_draw;
+  wclass->size_allocate = gtk_level_bar_size_allocate;
   wclass->get_preferred_width = gtk_level_bar_get_preferred_width;
   wclass->get_preferred_height = gtk_level_bar_get_preferred_height;
 
