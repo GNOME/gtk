@@ -2340,20 +2340,29 @@ GtkProgressBar {
 .progressbar {
   border-width: 1px;
   border-style: solid;
-  border-radius: 3px;
+  border-radius: 1.5px;
   border-color: #0f2b48;
   background-color: #215d9c;
   box-shadow: 1px 0 rgba(0, 0, 0, 0.1), -1px 0 rgba(0, 0, 0, 0.1); }
   .progressbar.left {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
     box-shadow: 1px 0 rgba(0, 0, 0, 0.1); }
   .progressbar.right {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
     box-shadow: -1px 0 rgba(0, 0, 0, 0.1); }
   .progressbar.left.right {
     box-shadow: none; }
   .progressbar.vertical {
     box-shadow: 0 1px rgba(0, 0, 0, 0.1); }
     .progressbar.vertical.bottom {
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
       box-shadow: none; }
+    .progressbar.vertical.top {
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px; }
   .progressbar:backdrop {
     border-color: #0f2b48;
     background-color: #215d9c;
