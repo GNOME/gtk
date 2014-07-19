@@ -138,6 +138,39 @@
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
+                          <object class="GtkLabel" id="font_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Font</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkFontButton" id="font_button">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
                           <object class="GtkLabel" id="direction_label">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">Text Direction</property>
@@ -360,12 +393,22 @@
       <widget name="theme_label"/>
       <widget name="dark_label"/>
       <widget name="icon_label"/>
+      <widget name="font_label"/>
       <widget name="direction_label"/>
       <widget name="hidpi_label"/>
       <widget name="updates_label"/>
       <widget name="baselines_label"/>
       <widget name="pixelcache_label"/>
       <widget name="touchscreen_label"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="theme_combo"/>
+      <widget name="icon_combo"/>
+      <widget name="font_button"/>
+      <widget name="direction_combo"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">

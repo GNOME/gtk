@@ -40,6 +40,7 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *dark_switch;
   GtkWidget *icon_combo;
   GtkWidget *direction_combo;
+  GtkWidget *font_button;
   GtkWidget *hidpi_spin;
   GtkAdjustment *scale_adjustment;
 
@@ -338,6 +339,14 @@ icons_changed (GtkComboBox        *c,
   g_free (theme);
 }
 
+static void
+init_font (GtkInspectorVisual *vis)
+{
+  g_object_bind_property (gtk_settings_get_default (), "gtk-font-name",
+                          vis->priv->font_button, "font-name",
+                          G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
+}
+
 #if defined (GDK_WINDOWING_X11) && defined (HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE)
 static void
 scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
@@ -457,6 +466,7 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_theme (vis);
   init_dark (vis);
   init_icons (vis);
+  init_font (vis);
   init_scale (vis);
   init_touchscreen (vis);
 }
@@ -497,6 +507,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, touchscreen_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, visual_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, debug_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_button);
 
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
