@@ -1140,7 +1140,7 @@ parse_apply_tag_element (GMarkupParseContext  *context,
       int_id = atoi (pixbuf_id);
       pixbuf = get_pixbuf_from_headers (info->headers, int_id, error);
 
-      span = g_new0 (TextSpan, 1);
+      span = g_slice_new0 (TextSpan);
       span->pixbuf = pixbuf;
       span->tags = NULL;
 
@@ -1505,7 +1505,7 @@ end_element_handler (GMarkupParseContext  *context,
 	  TextTagPrio *prio;
 
 	  /* add the tag to the list */
-	  prio = g_new0 (TextTagPrio, 1);
+	  prio = g_slice_new0 (TextTagPrio);
 	  prio->prio = info->current_tag_prio;
 	  prio->tag = info->current_tag;
 
@@ -1596,7 +1596,7 @@ text_handler (GMarkupParseContext  *context,
       if (text_len == 0)
 	return;
 
-      span = g_new0 (TextSpan, 1);
+      span = g_slice_new0 (TextSpan);
       span->text = g_strndup (text, text_len);
       span->tags = g_slist_copy (info->tag_stack);
 
@@ -1637,7 +1637,7 @@ text_span_free (TextSpan *span)
 {
   g_free (span->text);
   g_slist_free (span->tags);
-  g_free (span);
+  g_slice_free (TextSpan, span);
 }
 
 static void
@@ -1670,7 +1670,7 @@ parse_info_free (ParseInfo *info)
 
       if (prio->tag)
 	g_object_unref (prio->tag);
-      g_free (prio);
+      g_slice_free (TextTagPrio, prio);
 
       list = list->next;
     }
@@ -1758,6 +1758,7 @@ read_headers (const gchar *start,
   int section_len;
   Header *header;
   GList *headers = NULL;
+  GList *l;
 
   while (i < len)
     {
@@ -1772,7 +1773,7 @@ read_headers (const gchar *start,
 	  if (i + 30 + section_len > len)
 	    goto error;
 
-	  header = g_new0 (Header, 1);
+	  header = g_slice_new0 (Header);
 	  header->id = start + i;
 	  header->length = section_len;
 	  header->start = start + i + 30;
@@ -1788,7 +1789,13 @@ read_headers (const gchar *start,
   return g_list_reverse (headers);
 
  error:
-  g_list_free_full (headers, g_free);
+  for (l = headers; l != NULL; l = l->next)
+    {
+      header = l->data;
+      g_slice_free (Header, header);
+    }
+
+  g_list_free (headers);
 
   g_set_error_literal (error,
                        G_MARKUP_ERROR,
@@ -1857,6 +1864,7 @@ _gtk_text_buffer_deserialize_rich_text (GtkTextBuffer *register_buffer,
                                         GError       **error)
 {
   GList *headers;
+  GList *l;
   Header *header;
   gboolean retval;
 
@@ -1882,7 +1890,13 @@ _gtk_text_buffer_deserialize_rich_text (GtkTextBuffer *register_buffer,
 			     create_tags, error, headers->next);
 
  out:
-  g_list_free_full (headers, g_free);
+  for (l = headers; l != NULL; l = l->next)
+    {
+      header = l->data;
+      g_slice_free (Header, header);
+    }
+
+  g_list_free (headers);
 
   return retval;
 }

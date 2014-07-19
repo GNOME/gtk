@@ -728,7 +728,7 @@ register_format (GList          *formats,
 
   formats = unregister_format (formats, *atom);
 
-  format = g_new0 (GtkRichTextFormat, 1);
+  format = g_slice_new0 (GtkRichTextFormat);
 
   format->mime_type         = g_strdup (mime_type);
   format->can_create_tags   = FALSE;
@@ -789,7 +789,7 @@ free_format (GtkRichTextFormat *format)
     format->user_data_destroy (format->user_data);
 
   g_free (format->mime_type);
-  g_free (format);
+  g_slice_free (GtkRichTextFormat, format);
 }
 
 static void

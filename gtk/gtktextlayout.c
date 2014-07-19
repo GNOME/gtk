@@ -964,7 +964,7 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
 {
   gtk_text_layout_invalidate_cache (layout, line, FALSE);
 
-  g_free (line_data);
+  g_slice_free (GtkTextLineData, line_data);
 }
 
 /**

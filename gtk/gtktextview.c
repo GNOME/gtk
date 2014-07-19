@@ -2222,7 +2222,7 @@ free_pending_scroll (GtkTextPendingScroll *scroll)
     gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (scroll->mark),
                                  scroll->mark);
   g_object_unref (scroll->mark);
-  g_free (scroll);
+  g_slice_free (GtkTextPendingScroll, scroll);
 }
 
 static void
@@ -2248,7 +2248,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
 
   DV(g_print(G_STRLOC"\n"));
   
-  scroll = g_new (GtkTextPendingScroll, 1);
+  scroll = g_slice_new (GtkTextPendingScroll);
 
   scroll->within_margin = within_margin;
   scroll->use_align = use_align;
@@ -6923,7 +6923,7 @@ selection_data_free (SelectionData *data)
   if (data->orig_end != NULL)
     gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (data->orig_end),
                                  data->orig_end);
-  g_free (data);
+  g_slice_free (SelectionData, data);
 }
 
 static gboolean
@@ -7147,7 +7147,7 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
   GdkModifierType state;
 
   priv = text_view->priv;
-  data = g_new0 (SelectionData, 1);
+  data = g_slice_new0 (SelectionData);
   data->granularity = granularity;
 
   buffer = get_buffer (text_view);
@@ -8878,14 +8878,14 @@ popup_targets_received (GtkClipboard     *clipboard,
     }
 
   g_object_unref (text_view);
-  g_free (info);
+  g_slice_free (PopupInfo, info);
 }
 
 static void
 gtk_text_view_do_popup (GtkTextView    *text_view,
                         const GdkEvent *event)
 {
-  PopupInfo *info = g_new (PopupInfo, 1);
+  PopupInfo *info = g_slice_new (PopupInfo);
 
   /* In order to know what entries we should make sensitive, we
    * ask for the current targets of the clipboard, and when
@@ -9099,7 +9099,7 @@ text_window_new (GtkTextWindowType  type,
 {
   GtkTextWindow *win;
 
-  win = g_new (GtkTextWindow, 1);
+  win = g_slice_new (GtkTextWindow);
 
   win->type = type;
   win->widget = widget;
@@ -9121,7 +9121,7 @@ text_window_free (GtkTextWindow *win)
   if (win->window)
     text_window_unrealize (win);
 
-  g_free (win);
+  g_slice_free (GtkTextWindow, win);
 }
 
 static void
@@ -10065,7 +10065,7 @@ text_view_child_new_anchored (GtkWidget          *child,
 {
   GtkTextViewChild *vc;
 
-  vc = g_new (GtkTextViewChild, 1);
+  vc = g_slice_new (GtkTextViewChild);
 
   vc->type = GTK_TEXT_WINDOW_PRIVATE;
   vc->widget = child;
@@ -10094,7 +10094,7 @@ text_view_child_new_window (GtkWidget          *child,
 {
   GtkTextViewChild *vc;
 
-  vc = g_new (GtkTextViewChild, 1);
+  vc = g_slice_new (GtkTextViewChild);
 
   vc->widget = child;
   vc->anchor = NULL;
@@ -10130,7 +10130,7 @@ text_view_child_free (GtkTextViewChild *child)
 
   g_object_unref (child->widget);
 
-  g_free (child);
+  g_slice_free (GtkTextViewChild, child);
 }
 
 static void

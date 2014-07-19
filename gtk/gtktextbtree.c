@@ -409,7 +409,7 @@ _gtk_text_btree_new (GtkTextTagTable *table,
 
   /* Create the tree itself */
 
-  tree = g_new0(GtkTextBTree, 1);
+  tree = g_slice_new0 (GtkTextBTree);
   tree->root_node = root_node;
   tree->table = table;
   tree->views = NULL;
@@ -527,7 +527,7 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
       g_object_unref (tree->selection_bound_mark);
       tree->selection_bound_mark = NULL;
 
-      g_free (tree);
+      g_slice_free (GtkTextBTree, tree);
     }
 }
 
@@ -1549,7 +1549,7 @@ _gtk_text_btree_add_view (GtkTextBTree *tree,
 
   g_return_if_fail (tree != NULL);
   
-  view = g_new (BTreeView, 1);
+  view = g_slice_new (BTreeView);
 
   view->view_id = layout;
   view->layout = layout;
@@ -1571,7 +1571,7 @@ _gtk_text_btree_add_view (GtkTextBTree *tree,
    */
   last_line = get_last_line (tree);
 
-  line_data = g_new (GtkTextLineData, 1);
+  line_data = g_slice_new (GtkTextLineData);
   line_data->view_id = layout;
   line_data->next = NULL;
   line_data->width = 0;
@@ -1617,14 +1617,14 @@ _gtk_text_btree_remove_view (GtkTextBTree *tree,
    */
   last_line = get_last_line (tree);
   line_data = _gtk_text_line_remove_data (last_line, view_id);
-  g_free (line_data);
+  g_slice_free (GtkTextLineData, line_data);
 
   gtk_text_btree_node_remove_view (view, tree->root_node, view_id);
 
   view->layout = (gpointer) 0xdeadbeef;
   view->view_id = (gpointer) 0xdeadbeef;
-  
-  g_free (view);
+
+  g_slice_free (BTreeView, view);
 }
 
 void
@@ -3595,7 +3595,7 @@ _gtk_text_line_data_new (GtkTextLayout *layout,
 {
   GtkTextLineData *line_data;
 
-  line_data = g_new (GtkTextLineData, 1);
+  line_data = g_slice_new (GtkTextLineData);
 
   line_data->view_id = layout;
   line_data->next = NULL;
