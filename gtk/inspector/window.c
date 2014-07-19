@@ -42,6 +42,7 @@
 #include "signals-list.h"
 #include "actions.h"
 #include "menu.h"
+#include "misc-info.h"
 #include "gestures.h"
 
 #include "gtknotebook.h"
@@ -79,6 +80,7 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
   gtk_inspector_style_prop_list_set_object (GTK_INSPECTOR_STYLE_PROP_LIST (iw->style_prop_list), selected);
   gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
   gtk_inspector_object_hierarchy_set_object (GTK_INSPECTOR_OBJECT_HIERARCHY (iw->object_hierarchy), selected);
+  gtk_inspector_misc_info_set_object (GTK_INSPECTOR_MISC_INFO (iw->misc_info), selected);
   gtk_inspector_button_path_set_object (GTK_INSPECTOR_BUTTON_PATH (iw->button_path), selected);
   gtk_inspector_classes_list_set_object (GTK_INSPECTOR_CLASSES_LIST (iw->classes_list), selected);
   gtk_inspector_css_editor_set_object (GTK_INSPECTOR_CSS_EDITOR (iw->widget_css_editor), selected);
@@ -210,6 +212,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, data_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, actions);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, menu);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, misc_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, gestures);
 
   gtk_widget_class_bind_template_callback (widget_class, on_inspect);

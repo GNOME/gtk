@@ -30,6 +30,7 @@
 #include "general.h"
 #include "gestures.h"
 #include "menu.h"
+#include "misc-info.h"
 #include "object-hierarchy.h"
 #include "prop-list.h"
 #include "python-hooks.h"
@@ -60,6 +61,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_GENERAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_GESTURES);
   g_type_ensure (GTK_TYPE_INSPECTOR_MENU);
+  g_type_ensure (GTK_TYPE_INSPECTOR_MISC_INFO);
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY);
   g_type_ensure (GTK_TYPE_INSPECTOR_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_PYTHON_SHELL);

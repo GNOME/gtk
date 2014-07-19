@@ -285,6 +285,8 @@ gtk/inspector/gestures.c
 gtk/inspector/inspect-button.c
 gtk/inspector/menu.c
 gtk/inspector/menu.ui.h
+gtk/inspector/misc-info.c
+gtk/inspector/misc-info.ui.h
 gtk/inspector/object-hierarchy.ui.h
 gtk/inspector/prop-editor.c
 gtk/inspector/prop-list.ui.h

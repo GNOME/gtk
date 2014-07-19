@@ -37,6 +37,8 @@ libgtkinspector_la_SOURCES = 		\
 	inspect-button.c		\
 	menu.h				\
 	menu.c				\
+	misc-info.h			\
+	misc-info.c			\
 	object-hierarchy.h		\
 	object-hierarchy.c		\
 	prop-editor.h			\
@@ -100,6 +102,7 @@ templates = 				\
 	data-list.ui 			\
 	general.ui 			\
 	menu.ui				\
+	misc-info.ui			\
 	object-hierarchy.ui 		\
 	prop-list.ui 			\
 	resource-list.ui		\

@@ -56,6 +56,7 @@ typedef struct
   GtkWidget *data_list;
   GtkWidget *actions;
   GtkWidget *menu;
+  GtkWidget *misc_info;
   GtkWidget *gestures;
 
   GtkWidget *widget_popup;

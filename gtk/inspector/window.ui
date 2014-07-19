@@ -106,6 +106,22 @@
                     <property name="show-border">False</property>
                     <property name="scrollable">True</property>
                     <child>
+                      <object class="GtkInspectorMiscInfo" id="misc_info">
+                        <property name="visible">True</property>
+                        <property name="widget-tree">widget_tree</property>
+                      </object>
+                      <packing>
+                        <property name="tab_expand">True</property>
+                        <property name="tab_fill">True</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Miscellaneous</property>
+                      </object>
+                    </child> 
+                    <child>
                       <object class="GtkInspectorPropList" id="prop_list">
                         <property name="visible">True</property>
                         <property name="child-properties">False</property>
