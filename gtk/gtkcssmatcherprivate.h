@@ -56,7 +56,6 @@ struct _GtkCssMatcherClass {
 struct _GtkCssMatcherWidgetPath {
   const GtkCssMatcherClass *klass;
   const GtkWidgetPath      *path;
-  GtkStateFlags             state_flags;
   guint                     index;
   guint                     sibling_index;
 };
@@ -74,8 +73,7 @@ union _GtkCssMatcher {
 };
 
 gboolean          _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
-                                                   const GtkWidgetPath    *path,
-                                                   GtkStateFlags           state) G_GNUC_WARN_UNUSED_RESULT;
+                                                   const GtkWidgetPath    *path) G_GNUC_WARN_UNUSED_RESULT;
 void              _gtk_css_matcher_any_init       (GtkCssMatcher          *matcher);
 void              _gtk_css_matcher_superset_init  (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *subset,

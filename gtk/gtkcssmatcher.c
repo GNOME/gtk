@@ -32,7 +32,6 @@ gtk_css_matcher_widget_path_get_parent (GtkCssMatcher       *matcher,
 
   matcher->path.klass = child->path.klass;
   matcher->path.path = child->path.path;
-  matcher->path.state_flags = 0;
   matcher->path.index = child->path.index - 1;
   matcher->path.sibling_index = gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index);
 
@@ -48,7 +47,6 @@ gtk_css_matcher_widget_path_get_previous (GtkCssMatcher       *matcher,
 
   matcher->path.klass = next->path.klass;
   matcher->path.path = next->path.path;
-  matcher->path.state_flags = 0;
   matcher->path.index = next->path.index;
   matcher->path.sibling_index = next->path.sibling_index - 1;
 
@@ -58,7 +56,7 @@ gtk_css_matcher_widget_path_get_previous (GtkCssMatcher       *matcher,
 static GtkStateFlags
 gtk_css_matcher_widget_path_get_state (const GtkCssMatcher *matcher)
 {
-  return matcher->path.state_flags;
+  return gtk_widget_path_iter_get_state (matcher->path.path, matcher->path.index);
 }
 
 static gboolean
@@ -192,15 +190,13 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
 
 gboolean
 _gtk_css_matcher_init (GtkCssMatcher       *matcher,
-                       const GtkWidgetPath *path,
-                       GtkStateFlags        state)
+                       const GtkWidgetPath *path)
 {
   if (gtk_widget_path_length (path) == 0)
     return FALSE;
 
   matcher->path.klass = &GTK_CSS_MATCHER_WIDGET_PATH;
   matcher->path.path = path;
-  matcher->path.state_flags = state;
   matcher->path.index = gtk_widget_path_length (path) - 1;
   matcher->path.sibling_index = gtk_widget_path_iter_get_sibling_index (path, matcher->path.index);
 

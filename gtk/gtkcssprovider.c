@@ -40,6 +40,7 @@
 #include "gtkstylepropertiesprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtkwidgetpath.h"
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -1668,8 +1669,21 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
   gchar *prop_name;
   gint i;
 
-  if (!_gtk_css_matcher_init (&matcher, path, state))
-    return FALSE;
+  if (state == gtk_widget_path_iter_get_state (path, -1))
+    {
+      gtk_widget_path_ref (path);
+    }
+  else
+    {
+      path = gtk_widget_path_copy (path);
+      gtk_widget_path_iter_set_state (path, -1, state);
+    }
+
+  if (!_gtk_css_matcher_init (&matcher, path))
+    {
+      gtk_widget_path_unref (path);
+      return FALSE;
+    }
 
   tree_rules = _gtk_css_selector_tree_match_all (priv->tree, &matcher);
   verify_tree_match_results (css_provider, &matcher, tree_rules);
@@ -1712,6 +1726,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 
   g_free (prop_name);
   g_ptr_array_free (tree_rules, TRUE);
+  gtk_widget_path_unref (path);
 
   return found;
 }

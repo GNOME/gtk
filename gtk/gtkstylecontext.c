@@ -748,8 +748,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   /* Set widget state */
-  gtk_widget_path_iter_set_state (path, pos,
-                                  gtk_widget_path_iter_get_state (path, pos) | info->state_flags);
+  gtk_widget_path_iter_set_state (path, pos, info->state_flags);
 
   return path;
 }
@@ -770,7 +769,7 @@ build_properties (GtkStyleContext      *context,
   path = create_query_path (context, info);
   lookup = _gtk_css_lookup_new (relevant_changes);
 
-  if (_gtk_css_matcher_init (&matcher, path, info->state_flags))
+  if (_gtk_css_matcher_init (&matcher, path))
     _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                         &matcher,
                                         lookup);
@@ -2957,7 +2956,7 @@ gtk_style_context_needs_full_revalidate (GtkStyleContext  *context,
           GtkCssMatcher matcher, superset;
 
           path = create_query_path (context, priv->info);
-          if (_gtk_css_matcher_init (&matcher, path, priv->info->state_flags))
+          if (_gtk_css_matcher_init (&matcher, path))
             {
               _gtk_css_matcher_superset_init (&superset, &matcher, GTK_STYLE_CONTEXT_RADICAL_CHANGE & ~GTK_CSS_CHANGE_SOURCE);
               priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
