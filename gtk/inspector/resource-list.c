@@ -29,7 +29,9 @@
 enum
 {
   COLUMN_NAME,
-  COLUMN_PATH
+  COLUMN_PATH,
+  COLUMN_COUNT,
+  COLUMN_SIZE
 };
 
 struct _GtkInspectorResourceListPrivate
@@ -38,7 +40,10 @@ struct _GtkInspectorResourceListPrivate
   GtkTextBuffer *buffer;
   GtkWidget *image;
   GtkWidget *content;
+  GtkWidget *type;
   GtkWidget *type_label;
+  GtkWidget *count;
+  GtkWidget *count_label;
   GtkWidget *size_label;
   GtkWidget *info_grid;
 };
@@ -48,7 +53,9 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorResourceList, gtk_inspector_resource_lis
 static void
 load_resources_recurse (GtkInspectorResourceList *sl,
                         GtkTreeIter              *parent,
-                        const gchar              *path)
+                        const gchar              *path,
+                        gint                     *count_out,
+                        gsize                    *size_out)
 {
   gchar **names;
   gint i;
@@ -60,6 +67,8 @@ load_resources_recurse (GtkInspectorResourceList *sl,
       gint len;
       gchar *p;
       gboolean has_slash;
+      gint count;
+      gsize size;
 
       p = g_strconcat (path, names[i], NULL);
 
@@ -75,8 +84,25 @@ load_resources_recurse (GtkInspectorResourceList *sl,
                           COLUMN_PATH, p,
                           -1);
 
+      count = 0;
+      size = 0;
+
       if (has_slash)
-        load_resources_recurse (sl, &iter, p);
+        {
+          load_resources_recurse (sl, &iter, p, &count, &size);
+        }
+      else
+        {
+          count = 1;
+          g_resources_get_info (p, 0, &size, NULL, NULL);
+        }
+
+      gtk_tree_store_set (sl->priv->model, &iter,
+                          COLUMN_COUNT, count,
+                          COLUMN_SIZE, size,
+                          -1);
+      *count_out += count;
+      *size_out += size;
 
       g_free (p);
     }
@@ -97,6 +123,7 @@ selection_changed (GtkTreeSelection         *selection,
       GBytes *bytes;
       gchar *type;
       gconstpointer data;
+      gint count;
       gsize size;
       GError *error = NULL;
 
@@ -105,10 +132,28 @@ selection_changed (GtkTreeSelection         *selection,
       gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
                           COLUMN_PATH, &path,
                           COLUMN_NAME, &name,
+                          COLUMN_COUNT, &count,
+                          COLUMN_SIZE, &size,
                           -1);
 
       if (g_str_has_suffix (path, "/"))
         {
+          gchar *text;
+
+          text = g_strdup_printf ("%d", count);
+          gtk_label_set_text (GTK_LABEL (rl->priv->count_label), text);
+          g_free (text);
+
+          text = g_format_size (size);
+          gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
+          g_free (text);
+       
+          gtk_widget_hide (rl->priv->type);
+          gtk_widget_hide (rl->priv->type_label);
+          gtk_widget_show (rl->priv->count);
+          gtk_widget_show (rl->priv->count_label);
+          gtk_widget_show (rl->priv->info_grid);
+
           gtk_text_buffer_set_text (rl->priv->buffer, "", -1);
           gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
           goto out;
@@ -135,6 +180,10 @@ selection_changed (GtkTreeSelection         *selection,
           gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
           g_free (text);
        
+          gtk_widget_show (rl->priv->type);
+          gtk_widget_show (rl->priv->type_label);
+          gtk_widget_hide (rl->priv->count);
+          gtk_widget_hide (rl->priv->count_label);
           gtk_widget_show (rl->priv->info_grid);
           
           if (g_content_type_is_a (type, "text/*"))
@@ -170,8 +219,10 @@ out:
 static void
 load_resources (GtkInspectorResourceList *sl)
 {
+  gint count = 0;
+  gsize size = 0;
 
-  load_resources_recurse (sl, NULL, "/");
+  load_resources_recurse (sl, NULL, "/", &count, &size);
 }
 
 static void
@@ -193,6 +244,9 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, content);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, image);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, type_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, type);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, info_grid);
 
