@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/ui">
+  <gresource prefix="/org/gtk/WidgetFactory">
     <file preprocess="xml-stripblanks">widget-factory.ui</file>
   </gresource>
   <gresource prefix="/org/gtk/WidgetFactory/gtk">

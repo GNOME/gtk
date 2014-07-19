@@ -562,7 +562,7 @@ activate (GApplication *app)
     { "delete", activate_delete, NULL, NULL, NULL }
   };
 
-  builder = gtk_builder_new_from_resource ("/ui/widget-factory.ui");
+  builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory/widget-factory.ui");
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
   gtk_builder_connect_signals (builder, NULL);
 
