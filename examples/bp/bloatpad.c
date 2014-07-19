@@ -383,6 +383,12 @@ response (GtkDialog *dialog,
   const gchar *str;
   gchar **accels;
 
+  if (response_id == GTK_RESPONSE_CLOSE)
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+      return;
+    }
+
   action = gtk_combo_box_get_active_id (combo);
 
   if (!action)
@@ -417,6 +423,7 @@ edit_accels (GSimpleAction *action,
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
   entry = gtk_entry_new ();
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), "Close", GTK_RESPONSE_CLOSE);
   gtk_dialog_add_button (GTK_DIALOG (dialog), "Set", GTK_RESPONSE_APPLY);
   g_signal_connect (dialog, "response", G_CALLBACK (response), dialog);
   g_object_set_data (G_OBJECT (dialog), "combo", combo);
