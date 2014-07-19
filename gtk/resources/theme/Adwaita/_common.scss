@@ -1496,8 +1496,8 @@ GtkSwitch {
       }
       &:insensitive {
         color: $backdrop_insensitive_color;
-        border-color: $backdrop_insensitive_color;
-        background-color: $backdrop_bg_color;
+        border-color: $backdrop_borders_color;
+        background-color: $insensitive_bg_color;
       }
     }
   }
@@ -1521,9 +1521,6 @@ GtkSwitch {
       &:active{ border-color: $selected_bg_color; }
       &:insensitive {
         @include button(backdrop-insensitive);
-        @if $variant=='dark' {
-          border-color: $backdrop_insensitive_color;
-        }
       }
     }
   }
@@ -1699,10 +1696,8 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       background-image: linear-gradient(to bottom, $backdrop_bg_color);
       box-shadow: none;
     }
-    &:backdrop:insensitive { @include button(backdrop-insensitive);
-      @if $variant=='dark' {
-        border-color: $backdrop_insensitive_color;
-      }
+    &:backdrop:insensitive {
+      @include button(backdrop-insensitive);
     }
     &:active {
       border: 1px solid if($variant=='light',darken($selected_borders_color,3%),
@@ -1732,7 +1727,8 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       background-color: $selected_bg_color;
       box-shadow: $widget_edge;
       &:backdrop {
-         border-color: $selected_bg_color;
+         border-color: if($variant=='light', $selected_bg_color,
+                                             $selected_borders_color);
          background-color: $selected_bg_color;
          box-shadow: none;
       }
@@ -1748,8 +1744,8 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       box-shadow: none;
     }
     &:backdrop:insensitive, .hilight:backdrop:insensitive {
-      border-color: $backdrop_insensitive_color;
-      background-color: $backdrop_bg_color;
+      border-color: $backdrop_borders_color;
+      background-color: $insensitive_bg_color;
     }
     //OSD troughs
     .osd & {
@@ -1849,7 +1845,8 @@ GtkProgressBar {
   }
 //  box-shadow: inset 1px 1px transparentize($borders_edge,0.8);
   &:backdrop {
-    border-color: $selected_bg_color;
+    border-color: if($variant=='light', $selected_bg_color,
+                                        $selected_borders_color);
     background-color: $selected_bg_color;
     box-shadow: none;
   }

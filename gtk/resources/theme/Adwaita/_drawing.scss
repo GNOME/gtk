@@ -77,12 +77,14 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   }
   @if $t==backdrop {
     color: $backdrop_fg_color;
+    border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $backdrop_base_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);
   }
   @if $t==backdrop-insensitive {
     color: $backdrop_insensitive_color;
-    background-image: linear-gradient(to bottom, $backdrop_bg_color);
+    border-color: $backdrop_borders_color;
+    background-image: linear-gradient(to bottom, $insensitive_bg_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);
   }
 }
@@ -244,7 +246,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   //
     color: $backdrop_insensitive_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom, $backdrop_bg_color);
+    background-image: linear-gradient(to bottom, $insensitive_bg_color);
     box-shadow: inset 0 1px transparentize(white,1),
                 0 1px transparentize(white,1);
   }
@@ -256,7 +258,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     color: $backdrop_insensitive_color;
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom,
-                        mix($backdrop_borders_color,$backdrop_bg_color, 8%));
+                        mix($backdrop_borders_color,$insensitive_bg_color, 8%));
     box-shadow: inset 0 1px transparentize(white,1),
                 0 1px transparentize(white,1);
   }
