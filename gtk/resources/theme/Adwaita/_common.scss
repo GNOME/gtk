@@ -1874,6 +1874,7 @@ GtkProgressBar.trough {
 GtkLevelBar {
   -GtkLevelBar-min-block-width: 34;
   -GtkLevelBar-min-block-height: 3;
+  box-shadow: $widget_edge; // needs to be set here to avoid clipping
 }
 
 GtkLevelBar.vertical {
