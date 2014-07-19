@@ -759,22 +759,30 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
   state = gtk_widget_get_state_flags (widget);
   gtk_style_context_get_padding (context, state, &padding);
 
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
+
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       gtk_progress_bar_get_activity (pbar, orientation, &area.x, &area.width);
       area.y = y + padding.top;
       area.height = height - padding.top - padding.bottom;
+      if (pbar->priv->activity_pos <= 0.0)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      else if (pbar->priv->activity_pos >= 1.0)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
     }
   else
     {
       gtk_progress_bar_get_activity (pbar, orientation, &area.y, &area.height);
       area.x = x + padding.left;
       area.width = width - padding.left - padding.right;
+      if (pbar->priv->activity_pos <= 0.0)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+      else if (pbar->priv->activity_pos >= 1.0)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
     }
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
 
   gtk_render_activity (context, cr, area.x, area.y, area.width, area.height);
 
@@ -805,6 +813,9 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
   state = gtk_widget_get_state_flags (widget);
   gtk_style_context_get_padding (context, state, &padding);
 
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       area.width = amount;
@@ -815,6 +826,11 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
         area.x = x + padding.left;
       else
         area.x = width - amount - padding.right;
+
+      if (!inverted || gtk_progress_bar_get_fraction (pbar) == 1.0)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      if (inverted || gtk_progress_bar_get_fraction (pbar) == 1.0)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
     }
   else
     {
@@ -826,10 +842,12 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
         area.y = y + padding.top;
       else
         area.y = height - amount - padding.bottom;
-    }
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+      if (!inverted || gtk_progress_bar_get_fraction (pbar) == 1.0)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+      if (inverted || gtk_progress_bar_get_fraction (pbar) == 1.0)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+    }
 
   gtk_render_activity (context, cr, area.x, area.y, area.width, area.height);
 

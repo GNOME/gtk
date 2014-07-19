@@ -170,8 +170,7 @@ swatch_draw (GtkWidget *widget,
   else
     _gtk_theming_background_render (&background, cr);
 
-  gtk_render_frame (context, cr,
-                    0, 0, width, height);
+  gtk_render_frame (context, cr, 0, 0, width, height);
 
   if (gtk_widget_has_visible_focus (widget))
     {
