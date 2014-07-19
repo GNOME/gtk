@@ -332,7 +332,7 @@ GtkLabel {
     &:hover { @include button(osd-hover); @extend %linked_buttons; }
     &:active { @include button(osd-active); @extend %linked_buttons; }
     &:insensitive { @include button(osd-insensitive); @extend %linked_buttons; }
-    &:backdrop { @include button(osd-backdrop); @extend %linked_buttons; }  
+    &:backdrop { @include button(osd-backdrop); @extend %linked_buttons; }
   }
   // Suggested and Destructive Action buttons
   @each $b_type, $b_color in (suggested-action, $selected_bg_color),
@@ -525,7 +525,7 @@ GtkLabel {
   }
 }
 
-GtkColorButton.button { 
+GtkColorButton.button {
   padding: 4px; // Uniform padding on the GtkColorButton
   GtkColorSwatch {
     border-radius: 1.5px;
@@ -765,7 +765,7 @@ GtkComboBox {
   //FIXME edge would be nice, but doesn't work
   &:backdrop {
     border-color: $backdrop_borders_color;
-    background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
+    background-color: $backdrop_dark_fill;
     box-shadow: none;
   }
 }
@@ -842,16 +842,16 @@ GtkComboBox {
       &:hover { @include button(hover, $selected_bg_color, $selected_fg_color,
                                 $noedge: true); }
       &:active { @include button(active, $selected_bg_color, $selected_fg_color,                                 $noedge: true); }
-      &:insensitive { @include button(insensitive, $selected_bg_color, 
+      &:insensitive { @include button(insensitive, $selected_bg_color,
                                       $selected_fg_color, $noedge: true); }
-      &:backdrop { 
-        @include button(backdrop, $selected_bg_color, $selected_fg_color, 
+      &:backdrop {
+        @include button(backdrop, $selected_bg_color, $selected_fg_color,
                         $noedge: true);
         border-color: $selected_borders_color;
       }
-      &:backdrop:insensitive { 
-        @include button(backdrop-insensitive, $selected_bg_color, 
-                        $selected_fg_color, $noedge: true); 
+      &:backdrop:insensitive {
+        @include button(backdrop-insensitive, $selected_bg_color,
+                        $selected_fg_color, $noedge: true);
       }
       &.suggested-action {
         @include button($t:normal, $noedge:true);
@@ -1214,7 +1214,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     }
     &:backdrop {
       // same color as backdrop pushed button
-      background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
+      background-color: $backdrop_dark_fill;
       box-shadow: none;
     }
   }
@@ -1485,7 +1485,7 @@ GtkSwitch {
     &:backdrop {
       color: $backdrop_fg_color;
       border-color: $backdrop_borders_color;
-      background-color: $backdrop_bg_color;
+      background-color: $backdrop_dark_fill;
       box-shadow: none;
       text-shadow: none;
       &:active {
@@ -1497,6 +1497,7 @@ GtkSwitch {
       &:insensitive {
         color: $backdrop_insensitive_color;
         border-color: $backdrop_insensitive_color;
+        background-color: $backdrop_bg_color;
       }
     }
   }
@@ -1589,7 +1590,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
     &:inconsistent {
       -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
     }
-    &:backdrop, &:backdrop:hover { 
+    &:backdrop, &:backdrop:hover {
       color: transparentize($backdrop_fg_color,0.9);
     }
   }
@@ -1703,9 +1704,9 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
         border-color: $backdrop_insensitive_color;
       }
     }
-    &:active { 
+    &:active {
       border: 1px solid if($variant=='light',darken($selected_borders_color,3%),
-                           darken($selected_bg_color,15%)); 
+                           darken($selected_bg_color,15%));
     }
     //OSD sliders
     .osd & {
@@ -1759,7 +1760,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     }
   }
 }
- 
+
 $asset_suffix: if($variant=='dark', '-dark', '');
 @each $d,$dn in ('', 'horz'),
                 ('.vertical', 'vert') {
@@ -1769,7 +1770,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
       -GtkScale-slider-length: 20;
       -GtkRange-slider-width: 24;
       -GtkRange-trough-border: 2;
- 
+
       @extend %#{$we}_#{$dn};
 
       @each $s,$as in ('',''),
@@ -1872,7 +1873,7 @@ GtkProgressBar.trough {
 //              $widget_edge;
   &:backdrop{
     border-color: $backdrop_borders_color;
-    background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
+    background-color: $backdrop_dark_fill;
     box-shadow: 0 1px transparentize(white,1);
   }
   &.osd {
@@ -2087,20 +2088,20 @@ GtkExpander {
 /************
  * Calendar *
  ***********/
-GtkCalendar { 
-  border: 1px solid $borders_color; 
+GtkCalendar {
+  border: 1px solid $borders_color;
   &.button {
-    @extend %undecorated_button; 
+    @extend %undecorated_button;
     padding: 0 4px; //FIXME no effect on these pseudobuttons
-    color: mix($fg_color, $base_color, 40%); //we need a dimmed stuff var 
+    color: mix($fg_color, $base_color, 40%); //we need a dimmed stuff var
     &:hover {
-      @extend %undecorated_button; 
-      color: $fg_color; 
-    } 
-    &:backdrop, &:backdrop:hover { 
-      @extend %undecorated_button; 
-      color: mix($backdrop_fg_color, $backdrop_base_color, 50%); 
-    } 
+      @extend %undecorated_button;
+      color: $fg_color;
+    }
+    &:backdrop, &:backdrop:hover {
+      @extend %undecorated_button;
+      color: mix($backdrop_fg_color, $backdrop_base_color, 50%);
+    }
   }
   &.view { border-radius: 2px; }
   &.header {
@@ -2108,8 +2109,8 @@ GtkCalendar {
                                 lighten($bg_color,2%),
                                 darken($bg_color,2%));
     border-bottom-color: mix($borders_color,$bg_color,50%);
-    &:backdrop { 
-      background-image: linear-gradient(to bottom, $backdrop_bg_color); 
+    &:backdrop {
+      background-image: linear-gradient(to bottom, $backdrop_bg_color);
       border-bottom-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
     }
   }
