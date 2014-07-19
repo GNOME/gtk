@@ -2343,6 +2343,7 @@ GtkProgressBar {
   border-radius: 1.5px;
   border-color: #0f2b48;
   background-color: #215d9c;
+  background-image: linear-gradient(to bottom, #215d9c 2px, #266cb5);
   box-shadow: 1px 0 rgba(0, 0, 0, 0.1), -1px 0 rgba(0, 0, 0, 0.1); }
   .progressbar.left {
     border-top-left-radius: 3px;
@@ -2355,6 +2356,7 @@ GtkProgressBar {
   .progressbar.left.right {
     box-shadow: none; }
   .progressbar.vertical {
+    background-image: linear-gradient(to right, #215d9c 2px, #276fba);
     box-shadow: 0 1px rgba(0, 0, 0, 0.1); }
     .progressbar.vertical.bottom {
       border-bottom-left-radius: 3px;
@@ -2365,6 +2367,7 @@ GtkProgressBar {
       border-top-right-radius: 3px; }
   .progressbar:backdrop {
     border-color: #0f2b48;
+    background-image: none;
     background-color: #215d9c;
     box-shadow: none; }
   .progressbar.osd {
