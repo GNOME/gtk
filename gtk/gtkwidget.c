@@ -16220,6 +16220,8 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
   if (widget->priv->name)
     gtk_widget_path_iter_set_name (path, pos, widget->priv->name);
 
+  gtk_widget_path_iter_set_state (path, pos, widget->priv->state_flags);
+
   if (widget->priv->context)
     {
       GList *classes, *l;
