@@ -58,6 +58,7 @@
 #include "gtkflowbox.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkorientableprivate.h"
 #include "gtkintl.h"
 
 #include "a11y/gtkflowboxaccessibleprivate.h"
