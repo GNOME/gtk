@@ -4999,7 +4999,6 @@ gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
                                      page->mnemonic_activate_signal);
       page->mnemonic_activate_signal = 0;
 
-      gtk_widget_set_state_flags (page->tab_label, 0, TRUE);
       if (gtk_widget_get_window (page->tab_label) != gtk_widget_get_window (GTK_WIDGET (notebook)) ||
           !NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page))
         {
