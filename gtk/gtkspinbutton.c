@@ -295,7 +295,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_ENTRY,
 
 #define add_spin_binding(binding_set, keyval, mask, scroll)            \
   gtk_binding_entry_add_signal (binding_set, keyval, mask,             \
-                                "change_value", 1,                     \
+                                "change-value", 1,                     \
                                 GTK_TYPE_SCROLL_TYPE, scroll)
 
 static void
