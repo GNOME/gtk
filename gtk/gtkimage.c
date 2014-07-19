@@ -817,6 +817,95 @@ gtk_image_new_from_gicon (GIcon *icon,
   return GTK_WIDGET (image);
 }
 
+typedef struct {
+  GtkImage *image;
+  gint scale_factor;
+} LoaderData;
+
+static void
+on_loader_size_prepared (GdkPixbufLoader *loader,
+			 gint             width,
+			 gint             height,
+			 gpointer         user_data)
+{
+  LoaderData *loader_data = user_data;
+  gint scale_factor;
+  GdkPixbufFormat *format;
+
+  /* Let the regular icon helper code path handle non-scalable images */
+  format = gdk_pixbuf_loader_get_format (loader);
+  if (!gdk_pixbuf_format_is_scalable (format))
+    {
+      loader_data->scale_factor = 1;
+      return;
+    }
+
+  scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (loader_data->image));
+  gdk_pixbuf_loader_set_size (loader, width * scale_factor, height * scale_factor);
+  loader_data->scale_factor = scale_factor;
+}
+
+static GdkPixbufAnimation *
+load_scalable_with_loader (GtkImage    *image,
+			   const gchar *file_path,
+			   const gchar *resource_path,
+			   gint        *scale_factor_out)
+{
+  GdkPixbufLoader *loader;
+  GBytes *bytes;
+  char *contents;
+  gsize length;
+  gboolean res;
+  GdkPixbufAnimation *animation;
+  LoaderData loader_data;
+
+  animation = NULL;
+  bytes = NULL;
+
+  loader = gdk_pixbuf_loader_new ();
+  loader_data.image = image;
+
+  g_signal_connect (loader, "size-prepared", G_CALLBACK (on_loader_size_prepared), &loader_data);
+
+  if (resource_path != NULL)
+    {
+      bytes = g_resources_lookup_data (resource_path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+    }
+  else if (file_path != NULL)
+    {
+      res = g_file_get_contents (file_path, &contents, &length, NULL);
+      if (res)
+	bytes = g_bytes_new_take (contents, length);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  if (!bytes)
+    goto out;
+
+  if (!gdk_pixbuf_loader_write_bytes (loader, bytes, NULL))
+    goto out;
+
+  if (!gdk_pixbuf_loader_close (loader, NULL))
+    goto out;
+
+  animation = gdk_pixbuf_loader_get_animation (loader);
+  if (animation != NULL)
+    {
+      g_object_ref (animation);
+      if (scale_factor_out != NULL)
+	*scale_factor_out = loader_data.scale_factor;
+    }
+
+ out:
+  g_object_unref (loader);
+  g_bytes_unref (bytes);
+
+  return animation;
+}
+
 /**
  * gtk_image_set_from_file:
  * @image: a #GtkImage
@@ -830,6 +919,7 @@ gtk_image_set_from_file   (GtkImage    *image,
 {
   GtkImagePrivate *priv;
   GdkPixbufAnimation *anim;
+  gint scale_factor;
   
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -846,7 +936,7 @@ gtk_image_set_from_file   (GtkImage    *image,
       return;
     }
 
-  anim = gdk_pixbuf_animation_new_from_file (filename, NULL);
+  anim = load_scalable_with_loader (image, filename, NULL, &scale_factor);
 
   if (anim == NULL)
     {
@@ -868,6 +958,8 @@ gtk_image_set_from_file   (GtkImage    *image,
   else
     gtk_image_set_from_animation (image, anim);
 
+  _gtk_icon_helper_set_pixbuf_scale (priv->icon_helper, scale_factor);
+
   g_object_unref (anim);
 
   priv->filename = g_strdup (filename);
@@ -888,6 +980,7 @@ gtk_image_set_from_resource (GtkImage    *image,
 {
   GtkImagePrivate *priv;
   GdkPixbufAnimation *animation;
+  gint scale_factor;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -903,7 +996,7 @@ gtk_image_set_from_resource (GtkImage    *image,
       return;
     }
 
-  animation = gdk_pixbuf_animation_new_from_resource (resource_path, NULL);
+  animation = load_scalable_with_loader (image, NULL, resource_path, &scale_factor);
 
   if (animation == NULL)
     {
@@ -920,6 +1013,8 @@ gtk_image_set_from_resource (GtkImage    *image,
     gtk_image_set_from_pixbuf (image, gdk_pixbuf_animation_get_static_image (animation));
   else
     gtk_image_set_from_animation (image, animation);
+
+  _gtk_icon_helper_set_pixbuf_scale (priv->icon_helper, scale_factor);
 
   g_object_notify (G_OBJECT (image), "resource");
 
