@@ -878,8 +878,6 @@ gtk_text_buffer_set_text (GtkTextBuffer *buffer,
       gtk_text_buffer_get_iter_at_offset (buffer, &start, 0);
       gtk_text_buffer_insert (buffer, &start, text, len);
     }
-  
-  g_object_notify (G_OBJECT (buffer), "text");
 }
 
  
@@ -2545,6 +2543,8 @@ static void
 gtk_text_buffer_real_changed (GtkTextBuffer *buffer)
 {
   gtk_text_buffer_set_modified (buffer, TRUE);
+
+  g_object_notify (G_OBJECT (buffer), "text");
 }
 
 static void
