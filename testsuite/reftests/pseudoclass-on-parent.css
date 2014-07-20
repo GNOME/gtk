@@ -1,0 +1,7 @@
+:active {
+  color: blue;
+}
+
+:active * {
+  color: red;
+}

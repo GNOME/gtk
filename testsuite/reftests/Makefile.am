@@ -305,6 +305,9 @@ testdata = \
 	paned-undersized.css \
 	paned-undersized.ref.ui \
 	paned-undersized.ui \
+	pseudoclass-on-parent.css \
+	pseudoclass-on-parent.ref.ui \
+	pseudoclass-on-parent.ui \
 	quit-mnemonic.css \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
