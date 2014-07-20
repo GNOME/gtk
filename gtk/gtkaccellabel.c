@@ -418,9 +418,7 @@ gtk_accel_label_draw (GtkWidget *widget,
       
       allocation.width -= ac_width;
       gtk_widget_set_allocation (widget, &allocation);
-      if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw)
-        GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget,
-                                                               cr);
+      GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
       allocation.width += ac_width;
       gtk_widget_set_allocation (widget, &allocation);
       if (gtk_label_get_ellipsize (label))
@@ -443,7 +441,6 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_ACCELERATOR);
-
       gtk_render_layout (context, cr, x, y, accel_layout);
       gtk_style_context_restore (context);
 
@@ -451,8 +448,7 @@ gtk_accel_label_draw (GtkWidget *widget,
     }
   else
     {
-      if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw)
-        GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
+      GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
     }
   
   return FALSE;
