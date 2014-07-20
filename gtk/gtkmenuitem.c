@@ -2510,8 +2510,8 @@ gtk_menu_item_ensure_label (GtkMenuItem *menu_item)
 
   if (!gtk_bin_get_child (GTK_BIN (menu_item)))
     {
-      accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
-      gtk_widget_set_halign (accel_label, GTK_ALIGN_START);
+      accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, "xalign", 0.0, NULL);
+      gtk_widget_set_halign (accel_label, GTK_ALIGN_FILL);
       gtk_widget_set_valign (accel_label, GTK_ALIGN_CENTER);
 
       gtk_container_add (GTK_CONTAINER (menu_item), accel_label);
