@@ -122,6 +122,7 @@ gtk_model_menu_item_set_action_role (GtkModelMenuItem       *item,
     }
 
   atk_object_set_role (accessible, a11y_role);
+  g_object_notify (G_OBJECT (item), "action-role");
 }
 
 static void
@@ -166,11 +167,12 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
           children = g_list_delete_link (children, children);
         }
     }
-
-  /* If it is not a box, put it into a box, at the end */
-  if (!GTK_IS_BOX (child))
+  else
     {
       GtkWidget *box;
+
+      if (icon == NULL)
+        return;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -200,6 +202,34 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
       gtk_box_pack_start (GTK_BOX (child), image, FALSE, FALSE, 0);
       gtk_widget_show (image);
     }
+
+  g_object_notify (G_OBJECT (item), "icon");
+}
+
+static GIcon *
+gtk_model_menu_item_get_icon (GtkModelMenuItem *item)
+{
+  GtkWidget *child;
+  GIcon *icon = NULL;
+
+  child = gtk_bin_get_child (GTK_BIN (item));
+  if (GTK_IS_BOX (child))
+    {
+      GList *children, *l;
+
+      children = gtk_container_get_children (GTK_CONTAINER (child));
+      for (l = children; l; l = l->next)
+        {
+          if (GTK_IS_IMAGE (l->data))
+            {
+              gtk_image_get_gicon (GTK_IMAGE (l->data), &icon, NULL);
+              break;
+            }
+        }
+      g_list_free (children);
+    }
+
+  return icon;
 }
 
 static void
@@ -235,6 +265,40 @@ gtk_model_menu_item_set_text (GtkModelMenuItem *item,
 
       children = g_list_delete_link (children, children);
     }
+
+  g_object_notify (G_OBJECT (item), "text");
+}
+
+static const gchar *
+gtk_model_menu_item_get_text (GtkModelMenuItem *item)
+{
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (item));
+
+  if (GTK_IS_LABEL (child))
+    return gtk_label_get_text (GTK_LABEL (child));
+
+  if (GTK_IS_CONTAINER (child))
+    {
+      GList *children, *l;
+      const gchar *text = NULL;
+
+      children = gtk_container_get_children (GTK_CONTAINER (child));
+      for (l = children; l; l = l->next)
+        {
+          if (GTK_IS_LABEL (l->data))
+            {
+              text = gtk_label_get_text (GTK_LABEL (l->data));
+              break;
+            }
+        }
+      g_list_free (children);
+
+      return text;
+    }
+
+  return NULL;
 }
 
 static void
@@ -266,7 +330,7 @@ gtk_model_menu_item_set_accel (GtkModelMenuItem *item,
       g_assert (GTK_IS_LABEL (child));
     }
 
-  if (GTK_IS_LABEL (child))
+  if (GTK_IS_ACCEL_LABEL (child))
     {
       gtk_accel_label_set_accel (GTK_ACCEL_LABEL (child), key, modifiers);
       return;
@@ -286,9 +350,84 @@ gtk_model_menu_item_set_accel (GtkModelMenuItem *item,
     }
 }
 
+static gchar *
+gtk_model_menu_item_get_accel (GtkModelMenuItem *item)
+{
+  GtkWidget *child;
+  GtkWidget *accel_label = NULL;
+
+  child = gtk_bin_get_child (GTK_BIN (item));
+
+  if (GTK_IS_ACCEL_LABEL (child))
+    accel_label = child;
+  else if (GTK_IS_CONTAINER (child))
+    {
+      GList *children, *l;
+
+      children = gtk_container_get_children (GTK_CONTAINER (child));
+      for (l = children; l; l = l->next)
+        {
+          if (GTK_IS_ACCEL_LABEL (l->data))
+            {
+              accel_label = GTK_WIDGET (l->data);
+              break;
+            }
+        }
+      g_list_free (children);
+    }
+
+  if (accel_label)
+    {
+      guint key;
+      GdkModifierType mods;
+
+      gtk_accel_label_get_accel (GTK_ACCEL_LABEL (accel_label), &key, &mods);
+
+      return gtk_accelerator_name (key, mods);
+    }
+
+  return NULL;
+}
+
 void
-gtk_model_menu_item_set_property (GObject *object, guint prop_id,
-                                  const GValue *value, GParamSpec *pspec)
+gtk_model_menu_item_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GtkModelMenuItem *item = GTK_MODEL_MENU_ITEM (object);
+
+  switch (prop_id)
+    {
+    case PROP_ACTION_ROLE:
+      g_value_set_enum (value, item->role);
+      break;
+
+    case PROP_ICON:
+      g_value_set_object (value, gtk_model_menu_item_get_icon (item));
+      break;
+
+    case PROP_TEXT:
+      g_value_set_string (value, gtk_model_menu_item_get_text (item));
+      break;
+
+    case PROP_TOGGLED:
+      g_value_set_boolean (value, gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (item)));
+      break;
+
+    case PROP_ACCEL:
+      g_value_take_string (value, gtk_model_menu_item_get_accel (item));
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+void
+gtk_model_menu_item_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
   GtkModelMenuItem *item = GTK_MODEL_MENU_ITEM (object);
 
@@ -337,25 +476,26 @@ gtk_model_menu_item_class_init (GtkModelMenuItemClass *class)
   item_class->toggle_size_request = gtk_model_menu_item_toggle_size_request;
   item_class->activate = gtk_model_menu_item_activate;
 
+  object_class->get_property = gtk_model_menu_item_get_property;
   object_class->set_property = gtk_model_menu_item_set_property;
 
   g_object_class_install_property (object_class, PROP_ACTION_ROLE,
                                    g_param_spec_enum ("action-role", "action role", "action role",
                                                       GTK_TYPE_MENU_TRACKER_ITEM_ROLE,
                                                       GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
-                                                      G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class, PROP_ICON,
                                    g_param_spec_object ("icon", "icon", "icon", G_TYPE_ICON,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class, PROP_TEXT,
                                    g_param_spec_string ("text", "text", "text", NULL,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class, PROP_TOGGLED,
                                    g_param_spec_boolean ("toggled", "toggled", "toggled", FALSE,
-                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class, PROP_ACCEL,
                                    g_param_spec_string ("accel", "accel", "accel", NULL,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_MENU_ITEM);
 }
