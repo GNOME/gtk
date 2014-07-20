@@ -29,7 +29,10 @@
  *
  * The #GtkMenuButton widget can hold any valid child widget. That is, it
  * can hold almost any other standard #GtkWidget. The most commonly used
- * child is the provided #GtkArrow.
+ * child is #GtkImage. If no widget is explicitely added to the #GtkMenuButton,
+ * a #GtkImage is automatically created, using an arrow image oriented
+ * according to #GtkMenuButton:direction or the generic "view-context-menu"
+ * icon if the direction is not set.
  *
  * The positioning of the popup is determined by the #GtkMenuButton:direction
  * property of the menu button.
