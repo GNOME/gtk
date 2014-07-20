@@ -561,6 +561,15 @@ activate (GApplication *app)
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL }
   };
+  struct {
+    const gchar *action_and_target;
+    const gchar *accelerators[2];
+  } accels[] = {
+    { "win.dark", { "<Primary>d", NULL } },
+    { "win.search", { "<Primary>s", NULL } },
+    { "win.delete", { "Delete", NULL } }
+  };
+  gint i;
 
   builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory/widget-factory.ui");
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
@@ -571,6 +580,9 @@ activate (GApplication *app)
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
                                    window);
+
+  for (i = 0; i < G_N_ELEMENTS (accels); i++)
+    gtk_application_set_accels_for_action (GTK_APPLICATION (app), accels[i].action_and_target, accels[i].accelerators);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "statusbar");
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "All systems are operating normally.");
@@ -665,6 +677,14 @@ main (int argc, char *argv[])
     { "dessert", NULL, "s", "'bars'", NULL },
     { "pay", NULL, "s", NULL, NULL }
   };
+  struct {
+    const gchar *action_and_target;
+    const gchar *accelerators[2];
+  } accels[] = {
+    { "app.about", { "F1", NULL } },
+    { "app.quit", { "<Primary>q", NULL } },
+  };
+  gint i;
   gint status;
 
   app = gtk_application_new ("org.gtk.WidgetFactory", G_APPLICATION_NON_UNIQUE);
@@ -672,6 +692,8 @@ main (int argc, char *argv[])
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
+  for (i = 0; i < G_N_ELEMENTS (accels); i++)
+    gtk_application_set_accels_for_action (GTK_APPLICATION (app), accels[i].action_and_target, accels[i].accelerators);
 
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
