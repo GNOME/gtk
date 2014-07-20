@@ -93,6 +93,7 @@ gtk/resources/ui/gtkrecentchooserdefault.ui
 gtk/resources/ui/gtkscalebutton.ui
 gtk/resources/ui/gtkstatusbar.ui
 gtk/resources/ui/gtkvolumebutton.ui
+tests/dialog.ui
 tests/testfilechooser.c
 testsuite/a11y/accessible-name.ui
 testsuite/a11y/assistant.ui
