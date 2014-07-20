@@ -444,7 +444,8 @@ add_cb (GtkContainer *container,
   if (priv->use_header_bar)
     g_warning ("Content added to the action area of a dialog using header bars");
 
-  gtk_widget_show (GTK_WIDGET (priv->action_box));
+  gtk_widget_set_visible (priv->action_box, TRUE);
+  gtk_widget_set_no_show_all (priv->action_box, FALSE);
 }
 
 static void
@@ -496,6 +497,7 @@ gtk_dialog_constructed (GObject *object)
     }
 
   gtk_widget_set_visible (priv->action_box, !priv->use_header_bar);
+  gtk_widget_set_no_show_all (priv->action_box, priv->use_header_bar);
 }
 
 static void

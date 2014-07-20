@@ -25,7 +25,6 @@
         <child>
           <object class="GtkBox" id="action_box">
             <property name="visible">True</property>
-            <property name="no-show-all">True</property>
             <property name="can_focus">False</property>
             <style>
               <class name="dialog-action-box"/>
