@@ -2333,7 +2333,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkMenuItem" id="menuitem105">
+                                              <object class="GtkMenuItem" id="quitmenuitem">
                                                 <property name="label" translatable="yes">_Quit</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -2385,7 +2385,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkMenuItem" id="menuitem109">
+                                              <object class="GtkMenuItem" id="deletemenuitem">
                                                 <property name="label" translatable="yes">_Delete</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
