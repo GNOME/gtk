@@ -125,7 +125,7 @@ struct _GtkMenuButtonPrivate
   gpointer user_data;
 
   GtkWidget *align_widget;
-  gpointer arrow_widget;
+  GtkWidget *arrow_widget;
   GtkArrowType arrow_type;
   gboolean use_popover;
 };
