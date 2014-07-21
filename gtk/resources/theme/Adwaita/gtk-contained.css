@@ -142,7 +142,7 @@
  * Text Entries *
  ****************/
 .entry {
-  padding: 4px;
+  padding: 5px 8px 6px;
   border-radius: 3px;
   transition: all 200ms ease-out;
   background-color: transparent;
@@ -257,7 +257,7 @@
 .button {
   border-radius: 3px;
   transition: all 200ms ease-out;
-  padding: 4px 6px;
+  padding: 5px 8px 6px;
   border-style: solid;
   border-width: 1px;
   color: #2e3436;
@@ -472,15 +472,18 @@
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-  .header-bar .button.button, .action-bar .button.button, .header-bar .button.text-button, .action-bar .button.text-button {
-    padding: 6px 16px 5px; }
-  .header-bar .button.image-button, .action-bar .button.image-button {
+  .button.image-button, .button.image-button {
     padding: 8px; }
+  .button.text-button {
+    padding-left: 16px;
+    padding-right: 16px; }
   .action-bar .stack-switcher .button.image-button, .header-bar .stack-switcher .button.image-button {
     padding: 5px 2px; }
   .action-bar .stack-switcher .button.text-button, .header-bar .stack-switcher .button.text-button {
     padding-left: 10px;
-    padding-right: 10px; }
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 6px; }
   .stack-switcher > .button {
     padding-left: 0;
     padding-right: 0; }
@@ -694,96 +697,101 @@ GtkColorButton.button {
       border-width: 0 0 0 1px; }
       .spinbutton .button:backdrop:insensitive:dir(rtl) {
         border-width: 0 1px 0 0; }
-  .spinbutton.vertical .button:first-child {
-    border-style: solid;
-    border-width: 1px;
-    color: #2e3436;
-    background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
-    border-color: #a1a1a1;
-    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white; }
-    .spinbutton.vertical .button:first-child:active {
+  .spinbutton.vertical .button {
+    padding-top: 8px;
+    padding-bottom: 8px; }
+    .spinbutton.vertical .button:first-child {
       border-style: solid;
+      border-width: 1px;
       color: #2e3436;
+      background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
       border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, #d6d6d6, #e0e0e0);
-      text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-    .spinbutton.vertical .button:first-child:hover {
-      border-style: solid;
-      color: #2e3436;
-      border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededed);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       box-shadow: inset 0 1px white; }
-    .spinbutton.vertical .button:first-child:insensitive {
+      .spinbutton.vertical .button:first-child:active {
+        border-style: solid;
+        color: #2e3436;
+        border-color: #a1a1a1;
+        background-image: linear-gradient(to bottom, #d6d6d6, #e0e0e0);
+        text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+        icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+      .spinbutton.vertical .button:first-child:hover {
+        border-style: solid;
+        color: #2e3436;
+        border-color: #a1a1a1;
+        background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededed);
+        text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+        icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+        box-shadow: inset 0 1px white; }
+      .spinbutton.vertical .button:first-child:insensitive {
+        border-style: solid;
+        color: #8d9091;
+        border-color: #a1a1a1;
+        background-image: linear-gradient(to bottom, #f4f4f4);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+      .spinbutton.vertical .button:first-child:backdrop {
+        border-style: solid;
+        color: #54595a;
+        border-color: #a8a8a8;
+        background-image: linear-gradient(to bottom, #ededed);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+    .spinbutton.vertical .button:last-child {
       border-style: solid;
-      color: #8d9091;
-      border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, #f4f4f4);
-      text-shadow: none;
-      icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    .spinbutton.vertical .button:first-child:backdrop {
-      border-style: solid;
-      color: #54595a;
-      border-color: #a8a8a8;
-      background-image: linear-gradient(to bottom, #ededed);
-      text-shadow: none;
-      icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-  .spinbutton.vertical .button:last-child {
-    border-style: solid;
-    border-width: 1px;
-    color: #2e3436;
-    background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
-    border-color: #a1a1a1;
-    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white, 0 1px white; }
-    .spinbutton.vertical .button:last-child:active {
-      border-style: solid;
+      border-width: 1px;
       color: #2e3436;
+      background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
       border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, #d6d6d6, #e0e0e0);
-      text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px white; }
-    .spinbutton.vertical .button:last-child:hover {
-      border-style: solid;
-      color: #2e3436;
-      border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededed);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       box-shadow: inset 0 1px white, 0 1px white; }
-    .spinbutton.vertical .button:last-child:insensitive {
+      .spinbutton.vertical .button:last-child:active {
+        border-style: solid;
+        color: #2e3436;
+        border-color: #a1a1a1;
+        background-image: linear-gradient(to bottom, #d6d6d6, #e0e0e0);
+        text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+        icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px white; }
+      .spinbutton.vertical .button:last-child:hover {
+        border-style: solid;
+        color: #2e3436;
+        border-color: #a1a1a1;
+        background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededed);
+        text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+        icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+        box-shadow: inset 0 1px white, 0 1px white; }
+      .spinbutton.vertical .button:last-child:insensitive {
+        border-style: solid;
+        color: #8d9091;
+        border-color: #a1a1a1;
+        background-image: linear-gradient(to bottom, #f4f4f4);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
+      .spinbutton.vertical .button:last-child:backdrop {
+        border-style: solid;
+        color: #54595a;
+        border-color: #a8a8a8;
+        background-image: linear-gradient(to bottom, #ededed);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+    .spinbutton.vertical .button:backdrop:insensitive {
       border-style: solid;
-      color: #8d9091;
-      border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, #f4f4f4);
-      text-shadow: none;
-      icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-    .spinbutton.vertical .button:last-child:backdrop {
-      border-style: solid;
-      color: #54595a;
+      color: #c7c7c7;
       border-color: #a8a8a8;
-      background-image: linear-gradient(to bottom, #ededed);
-      text-shadow: none;
-      icon-shadow: none;
+      background-image: linear-gradient(to bottom, #f4f4f4);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-  .spinbutton.vertical .button:backdrop:insensitive {
-    border-style: solid;
-    color: #c7c7c7;
-    border-color: #a8a8a8;
-    background-image: linear-gradient(to bottom, #f4f4f4);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
   .spinbutton.vertical.entry {
-    border-radius: 0; }
+    border-radius: 0;
+    padding-left: 3px;
+    padding-right: 3px; }
   .spinbutton.vertical .button:first-child, .spinbutton.vertical .button:first-child:active, .spinbutton.vertical .button:first-child:hover, .spinbutton.vertical .button:first-child:insensitive, .spinbutton.vertical .button:first-child:backdrop {
     border-radius: 3px 3px 0 0;
     border-bottom-width: 0; }
@@ -801,8 +809,8 @@ GtkComboBox {
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
   GtkComboBox > .button {
-    padding-top: 2px;
-    padding-bottom: 2px; }
+    padding-top: 3px;
+    padding-bottom: 4px; }
   GtkComboBox:insensitive {
     color: #8d9091;
     text-shadow: none;
@@ -1638,92 +1646,92 @@ GtkSwitch {
 .check {
   background-image: -gtk-scaled(url("assets/checkbox-unchecked.png"), url("assets/checkbox-unchecked@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:hover {
   background-image: -gtk-scaled(url("assets/checkbox-unchecked-hover.png"), url("assets/checkbox-unchecked-hover@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:selected {
   background-image: -gtk-scaled(url("assets/checkbox-unchecked-active.png"), url("assets/checkbox-unchecked-active@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:insensitive {
   background-image: -gtk-scaled(url("assets/checkbox-unchecked-insensitive.png"), url("assets/checkbox-unchecked-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:backdrop {
   background-image: -gtk-scaled(url("assets/checkbox-unchecked-backdrop.png"), url("assets/checkbox-unchecked-backdrop@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:backdrop:insensitive {
   background-image: -gtk-scaled(url("assets/checkbox-unchecked-backdrop-insensitive.png"), url("assets/checkbox-unchecked-backdrop-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:inconsistent {
   background-image: -gtk-scaled(url("assets/checkbox-mixed.png"), url("assets/checkbox-mixed@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:inconsistent:hover {
   background-image: -gtk-scaled(url("assets/checkbox-mixed-hover.png"), url("assets/checkbox-mixed-hover@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:inconsistent:selected {
   background-image: -gtk-scaled(url("assets/checkbox-mixed-active.png"), url("assets/checkbox-mixed-active@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:inconsistent:backdrop {
   background-image: -gtk-scaled(url("assets/checkbox-mixed-backdrop.png"), url("assets/checkbox-mixed-backdrop@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:inconsistent:insensitive {
   background-image: -gtk-scaled(url("assets/checkbox-mixed-insensitive.png"), url("assets/checkbox-mixed-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:inconsistent:insensitive:backdrop {
   background-image: -gtk-scaled(url("assets/checkbox-mixed-backdrop-insensitive.png"), url("assets/checkbox-mixed-backdrop-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:active {
   background-image: -gtk-scaled(url("assets/checkbox-checked.png"), url("assets/checkbox-checked@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:active:insensitive {
   background-image: -gtk-scaled(url("assets/checkbox-checked-insensitive.png"), url("assets/checkbox-checked-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:hover:active {
   background-image: -gtk-scaled(url("assets/checkbox-checked-hover.png"), url("assets/checkbox-checked-hover@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:active:selected {
   background-image: -gtk-scaled(url("assets/checkbox-checked-active.png"), url("assets/checkbox-checked-active@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:backdrop:active {
   background-image: -gtk-scaled(url("assets/checkbox-checked-backdrop.png"), url("assets/checkbox-checked-backdrop@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .check:backdrop:active:insensitive {
   background-image: -gtk-scaled(url("assets/checkbox-checked-backdrop-insensitive.png"), url("assets/checkbox-checked-backdrop-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .menuitem.check {
   color: rgba(46, 52, 54, 0.1);
@@ -1792,92 +1800,92 @@ GtkSwitch {
 .radio {
   background-image: -gtk-scaled(url("assets/radio-unchecked.png"), url("assets/radio-unchecked@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:hover {
   background-image: -gtk-scaled(url("assets/radio-unchecked-hover.png"), url("assets/radio-unchecked-hover@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:selected {
   background-image: -gtk-scaled(url("assets/radio-unchecked-active.png"), url("assets/radio-unchecked-active@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:insensitive {
   background-image: -gtk-scaled(url("assets/radio-unchecked-insensitive.png"), url("assets/radio-unchecked-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:backdrop {
   background-image: -gtk-scaled(url("assets/radio-unchecked-backdrop.png"), url("assets/radio-unchecked-backdrop@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:backdrop:insensitive {
   background-image: -gtk-scaled(url("assets/radio-unchecked-backdrop-insensitive.png"), url("assets/radio-unchecked-backdrop-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:inconsistent {
   background-image: -gtk-scaled(url("assets/radio-mixed.png"), url("assets/radio-mixed@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:inconsistent:hover {
   background-image: -gtk-scaled(url("assets/radio-mixed-hover.png"), url("assets/radio-mixed-hover@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:inconsistent:selected {
   background-image: -gtk-scaled(url("assets/radio-mixed-active.png"), url("assets/radio-mixed-active@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:inconsistent:backdrop {
   background-image: -gtk-scaled(url("assets/radio-mixed-backdrop.png"), url("assets/radio-mixed-backdrop@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:inconsistent:insensitive {
   background-image: -gtk-scaled(url("assets/radio-mixed-insensitive.png"), url("assets/radio-mixed-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:inconsistent:insensitive:backdrop {
   background-image: -gtk-scaled(url("assets/radio-mixed-backdrop-insensitive.png"), url("assets/radio-mixed-backdrop-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:active {
   background-image: -gtk-scaled(url("assets/radio-checked.png"), url("assets/radio-checked@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:active:insensitive {
   background-image: -gtk-scaled(url("assets/radio-checked-insensitive.png"), url("assets/radio-checked-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:hover:active {
   background-image: -gtk-scaled(url("assets/radio-checked-hover.png"), url("assets/radio-checked-hover@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:active:selected {
   background-image: -gtk-scaled(url("assets/radio-checked-active.png"), url("assets/radio-checked-active@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:backdrop:active {
   background-image: -gtk-scaled(url("assets/radio-checked-backdrop.png"), url("assets/radio-checked-backdrop@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .radio:backdrop:active:insensitive {
   background-image: -gtk-scaled(url("assets/radio-checked-backdrop-insensitive.png"), url("assets/radio-checked-backdrop-insensitive@2.png"));
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center center; }
 
 .menuitem.radio {
   color: rgba(46, 52, 54, 0.1);
@@ -1944,7 +1952,7 @@ GtkSwitch {
       color: #54595a; }
 
 GtkCheckButton.text-button, GtkRadioButton.text-button {
-  padding: 1px;
+  padding: 1px 2px 4px;
   outline-offset: 0; }
 
 /************

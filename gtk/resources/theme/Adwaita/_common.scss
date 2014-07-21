@@ -172,7 +172,7 @@ GtkLabel {
  ****************/
 
 .entry {
-  padding: 4px;
+  padding: 5px 8px 6px;
   border-radius: 3px;
   transition: all 200ms ease-out;
   @include entry(normal);
@@ -270,7 +270,7 @@ GtkLabel {
 .button {
   border-radius: 3px;
   transition: all 200ms ease-out;
-  padding: 4px 6px;
+  padding: 5px 8px 6px;
   @include button(normal);
   &:hover, &.flat:hover {
     @include button(hover);
@@ -356,14 +356,13 @@ GtkLabel {
       }
     }
   }
-  // buttons in header bars and action bars
-  .header-bar &.button,
-  .action-bar &.button,
-  .header-bar &.text-button,
-  .action-bar &.text-button { padding: 6px 16px 5px; } // due to font metrics
-  .header-bar &.image-button,
-  .action-bar &.image-button { padding: 8px; }
+  &.image-button,
+  &.image-button { padding: 8px; }
 
+  &.text-button {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 
   // stack switcher buttons
   .action-bar .stack-switcher &.image-button,
@@ -376,6 +375,8 @@ GtkLabel {
   .header-bar .stack-switcher &.text-button {
     padding-left: 10px;
     padding-right: 10px;
+    padding-top: 5px;    // I need these two to not get overridden by radio
+    padding-bottom: 6px; // button style
   }
   .stack-switcher > & {
     padding-left: 0;  // subtract the padding which will be added to the
@@ -607,6 +608,8 @@ GtkColorButton.button {
   }
   &.vertical {
     .button {
+      padding-top: 8px;    //  Same vertical padding as image-buttons
+      padding-bottom: 8px; //
       &:first-child {
         @extend %top_button;
         @include button(normal, $noedge: true);
@@ -655,6 +658,8 @@ GtkColorButton.button {
       // we should remove the bottom edge hilight here, but seems
       // like buttons are on top of it so it doesn't show up
       border-radius: 0;
+      padding-left: 3px;
+      padding-right: 3px;
     }
     %top_button {
       border-radius: 3px 3px 0 0;
@@ -682,7 +687,7 @@ GtkColorButton.button {
  * ComboBoxes *
  **************/
 GtkComboBox {
-  > .button { padding-top: 2px; padding-bottom: 2px; } // Otherwise combos
+  > .button { padding-top: 3px; padding-bottom: 4px; } // Otherwise combos
                                                        // are bigger then
                                                        // buttons
   -GtkComboBox-arrow-scaling: 0.5;
@@ -1456,7 +1461,8 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
 
 GtkSwitch {
   // FIXME: backdrop insensinsitive slider on the dark variant
-  -GtkSwitch-slider-width: 47px;
+  -GtkSwitch-slider-width: 47px; // 57px is the right value to make it as tall
+                                 // as buttons, not doing that for now
   font: bold condensed 9;
   outline-offset: -4px;
   box-shadow: inset 0 1px transparentize(black, 0.9), // needs to be set here
@@ -1562,7 +1568,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
       background-image: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
                                     url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));
       background-repeat: no-repeat;
-      background-position: center;
+      background-position: center center;
     }
   }
 
@@ -1644,7 +1650,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
 
 GtkCheckButton.text-button, GtkRadioButton.text-button {
   // this is for a nice focus on check and radios text
-  padding: 1px;
+  padding: 1px 2px 4px;
   outline-offset: 0;
 }
 
