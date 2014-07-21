@@ -376,12 +376,14 @@ GtkLabel {
   .header-bar .stack-switcher &.text-button {
     padding-left: 10px;
     padding-right: 10px;
-    padding-top: 5px;    // I need these two to not get overridden by radio
-    padding-bottom: 6px; // button style
+    padding-top: 5px;     // I need these to not get overridden by radio
+    padding-bottom: 6px;  // button style
+    outline-offset: -3px; //
+
   }
   .stack-switcher > & {
-    padding-left: 0;  // subtract the padding which will be added to the
-    padding-right: 0; // GtkLabel
+    padding-left: 2px;  // subtract the padding which will be added to the
+    padding-right: 2px; // GtkLabel
     > GtkLabel {
       padding-left: 6px;  // label padding
       padding-right: 6px; //

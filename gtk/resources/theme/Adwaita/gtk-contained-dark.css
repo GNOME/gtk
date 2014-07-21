@@ -493,10 +493,11 @@
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
-    padding-bottom: 6px; }
+    padding-bottom: 6px;
+    outline-offset: -3px; }
   .stack-switcher > .button {
-    padding-left: 0;
-    padding-right: 0; }
+    padding-left: 2px;
+    padding-right: 2px; }
     .stack-switcher > .button > GtkLabel {
       padding-left: 6px;
       padding-right: 6px; }
