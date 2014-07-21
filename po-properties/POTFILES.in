@@ -275,6 +275,7 @@ gtk/inspector/css-editor.c
 gtk/inspector/general.c
 gtk/inspector/gestures.c
 gtk/inspector/menu.c
+gtk/inspector/misc-info.c
 gtk/inspector/prop-editor.c
 gtk/inspector/signals-list.c
 gtk/inspector/size-groups.c
