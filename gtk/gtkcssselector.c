@@ -1109,7 +1109,9 @@ gtk_css_selector_pseudoclass_state_print (const GtkCssSelector *selector,
     "focus",
     "backdrop",
     "dir(ltr)",
-    "dir(rtl)"
+    "dir(rtl)",
+    "link",
+    "visited"
   };
   guint i, state;
 
