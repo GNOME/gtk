@@ -2199,26 +2199,26 @@ _gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree *tree,
 
 #ifdef PRINT_TREE
 static void
-_gtk_css_selector_tree_print (GtkCssSelectorTree *tree, GString *str, char *prefix)
+_gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char *prefix)
 {
   gboolean first = TRUE;
   int len, i;
 
-  for (; tree != NULL; tree = tree->siblings, first = FALSE)
+  for (; tree != NULL; tree = gtk_css_selector_tree_get_sibling (tree), first = FALSE)
     {
       if (!first)
 	g_string_append (str, prefix);
 
       if (first)
 	{
-	  if (tree->siblings)
+	  if (gtk_css_selector_tree_get_sibling (tree))
 	    g_string_append (str, "─┬─");
 	  else
 	    g_string_append (str, "───");
 	}
       else
 	{
-	  if (tree->siblings)
+	  if (gtk_css_selector_tree_get_sibling (tree))
 	    g_string_append (str, " ├─");
 	  else
 	    g_string_append (str, " └─");
@@ -2232,7 +2232,7 @@ _gtk_css_selector_tree_print (GtkCssSelectorTree *tree, GString *str, char *pref
 	{
 	  GString *prefix2 = g_string_new (prefix);
 
-	  if (tree->siblings)
+	  if (gtk_css_selector_tree_get_sibling (tree))
 	    g_string_append (prefix2, " │ ");
 	  else
 	    g_string_append (prefix2, "   ");
