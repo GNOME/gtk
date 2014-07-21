@@ -3887,8 +3887,10 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   gtk_text_view_allocate_children (text_view);
 
   /* Update adjustments */
-  gtk_text_view_set_hadjustment_values (text_view);
-  gtk_text_view_set_vadjustment_values (text_view);
+  if (!gtk_adjustment_is_animating (priv->hadjustment))
+    gtk_text_view_set_hadjustment_values (text_view);
+  if (!gtk_adjustment_is_animating (priv->vadjustment))
+    gtk_text_view_set_vadjustment_values (text_view);
 
   /* The GTK resize loop processes all the pending exposes right
    * after doing the resize stuff, so the idle sizer won't have a

@@ -1017,3 +1017,9 @@ gtk_adjustment_get_animation_duration (GtkAdjustment *adjustment)
 {
   return adjustment->priv->duration;
 }
+
+gboolean
+gtk_adjustment_is_animating (GtkAdjustment *adjustment)
+{
+  return adjustment->priv->tick_id != 0;
+}
