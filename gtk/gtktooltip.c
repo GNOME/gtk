@@ -1465,7 +1465,6 @@ _gtk_tooltip_toggle_keyboard_mode (GtkWidget *widget)
 void
 _gtk_tooltip_hide (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
   GdkDisplay *display;
   GtkTooltip *tooltip;
 
@@ -1475,8 +1474,6 @@ _gtk_tooltip_hide (GtkWidget *widget)
 
   if (!tooltip || !GTK_TOOLTIP_VISIBLE (tooltip) || !tooltip->tooltip_widget)
     return;
-
-  toplevel = gtk_widget_get_toplevel (widget);
 
   if (widget == tooltip->tooltip_widget)
     gtk_tooltip_hide_tooltip (tooltip);
