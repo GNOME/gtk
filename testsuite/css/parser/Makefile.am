@@ -325,6 +325,7 @@ test_data = \
 	property-name-errors.css \
 	property-name-errors.errors \
 	property-name-errors.ref.css \
+	pseudo-classes-known.css \
 	pseudo-classes-unknown.css \
 	pseudo-classes-unknown.errors \
 	pseudo-classes-unknown.ref.css \

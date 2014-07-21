@@ -1,0 +1,51 @@
+:active {
+  color: red;
+}
+
+:prelight {
+  color: red;
+}
+
+:hover {
+  color: red;
+}
+
+:selected {
+  color: red;
+}
+
+:insensitive {
+  color: red;
+}
+
+:inconsistent {
+  color: red;
+}
+
+:focused {
+  color: red;
+}
+
+:focus {
+  color: red;
+}
+
+:backdrop {
+  color: red;
+}
+
+:dir(ltr) {
+  color: red;
+}
+
+:dir(rtl) {
+  color: red;
+}
+
+:link {
+  color: red;
+}
+
+:visited {
+  color: red;
+}
