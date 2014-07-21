@@ -339,6 +339,7 @@ GtkLabel {
                               (destructive-action, $destructive_color) {
     &.#{$b_type} {
       @include button(normal,$b_color, white);
+      outline-color: transparentize($selected_fg_color, 0.7);
       &:hover {
         @include button(hover,$b_color, white);
       }
