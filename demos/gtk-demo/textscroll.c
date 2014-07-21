@@ -16,6 +16,7 @@ scroll_to_end (GtkTextView *textview)
   GtkTextIter iter;
   GtkTextMark *mark;
   char *spaces;
+  char *text;
   static int count;
 
   buffer = gtk_text_view_get_buffer (textview);
@@ -32,11 +33,11 @@ scroll_to_end (GtkTextView *textview)
   spaces = g_strnfill (count++, ' ');
   gtk_text_buffer_insert (buffer, &iter, "\n", -1);
   gtk_text_buffer_insert (buffer, &iter, spaces, -1);
-  gtk_text_buffer_insert (buffer, &iter,
-                          "Scroll to end scroll to end scroll "
-                          "to end scroll to end ",
-                          -1);
+  text = g_strdup_printf ("Scroll to end scroll to end scroll "
+                          "to end scroll to end %d", count);
+  gtk_text_buffer_insert (buffer, &iter, text, -1);
   g_free (spaces);
+  g_free (text);
 
   /* Now scroll the end mark onscreen.
    */
@@ -60,6 +61,7 @@ scroll_to_bottom (GtkTextView *textview)
   GtkTextIter iter;
   GtkTextMark *mark;
   char *spaces;
+  char *text;
   static int count;
 
   buffer = gtk_text_view_get_buffer (textview);
@@ -73,11 +75,11 @@ scroll_to_bottom (GtkTextView *textview)
   spaces = g_strnfill (count++, ' ');
   gtk_text_buffer_insert (buffer, &iter, "\n", -1);
   gtk_text_buffer_insert (buffer, &iter, spaces, -1);
-  gtk_text_buffer_insert (buffer, &iter,
-                          "Scroll to bottom scroll to bottom scroll "
-                          "to bottom scroll to bottom",
-                          -1);
+  text = g_strdup_printf ("Scroll to bottom scroll to bottom scroll "
+                          "to bottom scroll to bottom %d", count);
+  gtk_text_buffer_insert (buffer, &iter, text, -1);
   g_free (spaces);
+  g_free (text);
 
   /* Move the iterator to the beginning of line, so we don't scroll
    * in horizontal direction
