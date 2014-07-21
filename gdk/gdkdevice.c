@@ -748,6 +748,10 @@ gdk_device_get_mode (GdkDevice *device)
  * device is active and whether the device’s range is mapped to the
  * entire screen or to a single window.
  *
+ * Note: This is only meaningful for floating devices, master devices (and
+ * slaves connected to these) drive the pointer cursor, which is not limited
+ * by the input mode.
+ *
  * Returns: %TRUE if the mode was successfully changed.
  **/
 gboolean
