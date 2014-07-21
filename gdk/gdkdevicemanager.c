@@ -110,6 +110,17 @@
  * it is possible to get the source (slave) device that the event originated
  * from via gdk_event_get_source_device().
  *
+ * On a standard session, all physical devices are connected by default to
+ * the "Virtual Core Pointer/Keyboard" master devices, hence routing all events
+ * through these. This behavior is only modified by device grabs, where the
+ * slave device is temporarily detached for as long as the grab is held, and
+ * more permanently by user modifications to the device hierarchy.
+ *
+ * On certain application specific setups, it may make sense
+ * to detach a physical device from its master pointer, and mapping it to
+ * an specific window. This can be achieved by the combination of
+ * gdk_device_grab() and gdk_device_set_mode().
+ *
  * In order to listen for events coming from devices
  * other than a virtual device, gdk_window_set_device_events() must be
  * called. Generally, this function can be used to modify the event mask
