@@ -1,7 +1,7 @@
 window1
   "dialog"
   index: 0
-  name: 
+  name: Select a Color
   state: enabled sensitive showing visible
   toolkit: gtk
   <AtkComponent>
