@@ -109,7 +109,6 @@ struct _GtkTooltip
   GtkWidget *keyboard_widget;
 
   GtkWidget *tooltip_widget;
-  GdkWindow *toplevel_window;
 
   gdouble last_x;
   gdouble last_y;
@@ -178,7 +177,6 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   tooltip->keyboard_widget = NULL;
 
   tooltip->tooltip_widget = NULL;
-  tooltip->toplevel_window = NULL;
 
   tooltip->last_window = NULL;
 
@@ -1480,8 +1478,7 @@ _gtk_tooltip_hide (GtkWidget *widget)
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (widget == tooltip->tooltip_widget
-      || gtk_widget_get_window (toplevel) == tooltip->toplevel_window)
+  if (widget == tooltip->tooltip_widget)
     gtk_tooltip_hide_tooltip (tooltip);
 }
 
