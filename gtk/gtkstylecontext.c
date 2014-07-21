@@ -718,11 +718,14 @@ create_query_path (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkWidgetPath *path;
-  guint i, pos;
+  guint i, pos, length;
 
   priv = context->priv;
   path = priv->widget ? _gtk_widget_create_path (priv->widget) : gtk_widget_path_copy (priv->widget_path);
-  pos = gtk_widget_path_length (path) - 1;
+  length = gtk_widget_path_length (path);
+  if (length == 0)
+    return path;
+  pos = length - 1;
 
   /* Set widget regions */
   for (i = 0; i < info->regions->len; i++)
