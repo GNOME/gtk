@@ -1688,6 +1688,13 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   // this is for a nice focus on check and radios text
   padding: 1px 2px 4px;
   outline-offset: 0;
+  &:insensitive,
+  &:insensitive:active,
+  &:insensitive:inconsistent {
+    // set insensitive color, which is overriden otherwise
+    color: $insensitive_fg_color;
+    &:backdrop { color: $backdrop_insensitive_color; }
+  }
 }
 
 /************

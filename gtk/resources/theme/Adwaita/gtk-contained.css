@@ -1979,6 +1979,10 @@ GtkSwitch {
 GtkCheckButton.text-button, GtkRadioButton.text-button {
   padding: 1px 2px 4px;
   outline-offset: 0; }
+  GtkCheckButton.text-button:insensitive, GtkCheckButton.text-button:insensitive:active, GtkCheckButton.text-button:insensitive:inconsistent, GtkRadioButton.text-button:insensitive, GtkRadioButton.text-button:insensitive:active, GtkRadioButton.text-button:insensitive:inconsistent {
+    color: #8d9091; }
+    GtkCheckButton.text-button:insensitive:backdrop, GtkCheckButton.text-button:insensitive:active:backdrop, GtkCheckButton.text-button:insensitive:inconsistent:backdrop, GtkRadioButton.text-button:insensitive:backdrop, GtkRadioButton.text-button:insensitive:active:backdrop, GtkRadioButton.text-button:insensitive:inconsistent:backdrop {
+      color: #c7c7c7; }
 
 /************
  * GtkScale *
