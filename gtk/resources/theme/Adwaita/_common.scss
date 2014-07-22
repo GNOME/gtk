@@ -1518,7 +1518,12 @@ GtkSwitch {
       }
     }
   }
-  &.slider {
+  .list-row:selected & {
+    box-shadow: 0 0 0 1px $selected_fg_color;
+    &:backdrop { box-shadow: 0 0 0 1px $backdrop_base_color; }
+  }
+  &.slider,
+  .list-row:selected &.slider {
     border-radius: 3px;
     @include button(normal, $noedge: true);
     box-shadow: inset 0 1px if($variant=='light', white,

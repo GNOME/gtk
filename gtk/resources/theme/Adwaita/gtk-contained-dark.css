@@ -1606,7 +1606,11 @@ GtkSwitch {
         color: #454c4c;
         border-color: #1e2222;
         background-color: #323636; }
-  GtkSwitch.slider {
+  .list-row:selected GtkSwitch {
+    box-shadow: 0 0 0 1px white; }
+    .list-row:selected GtkSwitch:backdrop {
+      box-shadow: 0 0 0 1px #2c2c2c; }
+  GtkSwitch.slider, .list-row:selected GtkSwitch.slider {
     border-radius: 3px;
     border-style: solid;
     border-width: 1px;
@@ -1617,7 +1621,7 @@ GtkSwitch {
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2a2f2f; }
-    GtkSwitch.slider:hover {
+    GtkSwitch.slider:hover, .list-row:selected GtkSwitch.slider:hover {
       border-style: solid;
       color: #eeeeec;
       border-color: #1c1f1f;
@@ -1626,9 +1630,9 @@ GtkSwitch {
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2a2f2f; }
-    GtkSwitch.slider:active {
+    GtkSwitch.slider:active, .list-row:selected GtkSwitch.slider:active {
       border: 1px solid #0f2b48; }
-    GtkSwitch.slider:insensitive {
+    GtkSwitch.slider:insensitive, .list-row:selected GtkSwitch.slider:insensitive {
       border-style: solid;
       color: #939695;
       border-color: #1c1f1f;
@@ -1636,7 +1640,7 @@ GtkSwitch {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    GtkSwitch.slider:backdrop {
+    GtkSwitch.slider:backdrop, .list-row:selected GtkSwitch.slider:backdrop {
       border-style: solid;
       color: #c9cbc9;
       border-color: #1e2222;
@@ -1644,9 +1648,9 @@ GtkSwitch {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-      GtkSwitch.slider:backdrop:active {
+      GtkSwitch.slider:backdrop:active, .list-row:selected GtkSwitch.slider:backdrop:active {
         border-color: #215d9c; }
-      GtkSwitch.slider:backdrop:insensitive {
+      GtkSwitch.slider:backdrop:insensitive, .list-row:selected GtkSwitch.slider:backdrop:insensitive {
         border-style: solid;
         color: #454c4c;
         border-color: #1e2222;
