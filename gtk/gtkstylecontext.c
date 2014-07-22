@@ -2111,7 +2111,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
       if (gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (priv->cascade),
                                                  widget_path,
-                                                 0, pspec, &pcache->value))
+                                                 gtk_widget_path_iter_get_state (widget_path, -1),
+                                                 pspec, &pcache->value))
         {
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
