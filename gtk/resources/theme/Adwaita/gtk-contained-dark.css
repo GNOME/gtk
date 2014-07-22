@@ -2522,17 +2522,16 @@ GtkScrolledWindow GtkViewport.frame {
   .list-row.button:hover {
     background-color: #262626; }
   .list-row.button:active {
-    color: #215d9c;
-    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.3); }
-  .button.list-row:active:selected {
+    box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
+  .list-row.button:selected:active {
     box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
-  .button.list-row:hover:selected {
+  .list-row.button:selected:hover {
     background-color: #1d538c; }
 
-.list-row:selected, .list-row.button:selected, .list-row.button:selected:hover {
+.list-row:selected {
   color: white;
   background-color: #215d9c; }
-  .list-row:selected:backdrop, .list-row.button:backdrop:selected:hover {
+  .list-row:selected:backdrop {
     color: #2c2c2c; }
 
 /*.list-row.button:selected,
