@@ -3078,13 +3078,19 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 			"vertical-separator", &vertical_separator,
 			"horizontal-separator", &horizontal_separator,
 			NULL);
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (button > 3)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
 
   /* Because grab_focus can cause reentrancy, we delay grab_focus until after
    * we're done handling the button press.
    */
   gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
                                                      &bin_x, &bin_y);
-  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   if (n_press > 1)
