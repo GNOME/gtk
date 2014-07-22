@@ -305,6 +305,9 @@ testdata = \
 	paned-undersized.css \
 	paned-undersized.ref.ui \
 	paned-undersized.ui \
+	pseudoclass-on-box.css \
+	pseudoclass-on-box.ref.ui \
+	pseudoclass-on-box.ui \
 	pseudoclass-on-parent.css \
 	pseudoclass-on-parent.ref.ui \
 	pseudoclass-on-parent.ui \
