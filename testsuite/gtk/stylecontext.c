@@ -162,6 +162,7 @@ test_match (void)
   gtk_widget_path_append_type (path, GTK_TYPE_BUTTON);
   gtk_widget_path_iter_set_name (path, 0, "mywindow");
   gtk_widget_path_iter_add_class (path, 2, "button");
+  gtk_widget_path_iter_set_state (path, 0, GTK_STATE_FLAG_ACTIVE);
   gtk_style_context_set_path (context, path);
   gtk_widget_path_free (path);
 
@@ -240,6 +241,15 @@ test_match (void)
   data = "* { color: #f00 }\n"
          "GtkWindow .button { color: #000 }\n"
          "GObject .button { color: #fff }";
+  gtk_css_provider_load_from_data (provider, data, -1, &error);
+  g_assert_no_error (error);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
+
+  data = "* { color: #f00 }\n"
+         "GtkWindow:backdrop .button { color: #000 }\n"
+         "GtkWindow .button { color: #111 }\n"
+         "GtkWindow:active .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
