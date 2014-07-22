@@ -1512,13 +1512,12 @@ gtk_scrolled_window_draw_scrollbars_junction (GtkScrolledWindow *scrolled_window
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
-  GtkAllocation wid_allocation, hscr_allocation, vscr_allocation;
+  GtkAllocation hscr_allocation, vscr_allocation;
   GtkStyleContext *context;
   GdkRectangle junction_rect;
   gboolean is_rtl, scrollbars_within_bevel;
 
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-  gtk_widget_get_allocation (widget, &wid_allocation);
   gtk_widget_get_allocation (GTK_WIDGET (priv->hscrollbar), &hscr_allocation);
   gtk_widget_get_allocation (GTK_WIDGET (priv->vscrollbar), &vscr_allocation);
 
