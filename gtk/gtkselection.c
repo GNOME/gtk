@@ -1361,14 +1361,15 @@ selection_set_compound_text (GtkSelectionData *selection_data,
 			     const gchar      *str,
 			     gint              len)
 {
+  gboolean result = FALSE;
+
+#ifdef GDK_WINDOWING_X11
   gchar *tmp;
   guchar *text;
   GdkAtom encoding;
   gint format;
   gint new_length;
-  gboolean result = FALSE;
 
-#ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (selection_data->display))
     {
       tmp = g_strndup (str, len);
