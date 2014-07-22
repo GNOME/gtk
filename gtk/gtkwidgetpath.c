@@ -132,6 +132,7 @@ gtk_path_element_copy (GtkPathElement       *dest,
 
   dest->type = src->type;
   dest->name = src->name;
+  dest->state = src->state;
   if (src->siblings)
     dest->siblings = gtk_widget_path_ref (src->siblings);
   dest->sibling_index = src->sibling_index;
