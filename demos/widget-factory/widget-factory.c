@@ -586,6 +586,8 @@ activate (GApplication *app)
     const gchar *action_and_target;
     const gchar *accelerators[2];
   } accels[] = {
+    { "app.about", { "F1", NULL } },
+    { "app.quit", { "<Primary>q", NULL } },
     { "win.dark", { "<Primary>d", NULL } },
     { "win.search", { "<Primary>s", NULL } },
     { "win.delete", { "Delete", NULL } }
@@ -704,14 +706,6 @@ main (int argc, char *argv[])
     { "dessert", NULL, "s", "'bars'", NULL },
     { "pay", NULL, "s", NULL, NULL }
   };
-  struct {
-    const gchar *action_and_target;
-    const gchar *accelerators[2];
-  } accels[] = {
-    { "app.about", { "F1", NULL } },
-    { "app.quit", { "<Primary>q", NULL } },
-  };
-  gint i;
   gint status;
 
   app = gtk_application_new ("org.gtk.WidgetFactory", G_APPLICATION_NON_UNIQUE);
@@ -719,8 +713,6 @@ main (int argc, char *argv[])
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
-  for (i = 0; i < G_N_ELEMENTS (accels); i++)
-    gtk_application_set_accels_for_action (GTK_APPLICATION (app), accels[i].action_and_target, accels[i].accelerators);
 
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
