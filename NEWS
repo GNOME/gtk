@@ -1,3 +1,48 @@
+Overview of Changes in GTK+ 3.13.4 to 3.13.5
+============================================
+
+* Adwaita:
+ - Many improvements in details
+ - Style .needs-attention in GtkStackSwitcher
+
+* CSS:
+ - Selectors can now match state pseudo classes on
+   all elements
+
+* GtkListBox:
+ - Rows now have a selectable property and will be
+   styled accordingly
+
+* Inspector:
+ - Add an easy way to change the font
+ - Show widget state and other misc. info
+
+* Wayland:
+ - Fix repaint artifacts
+ - Update xdg-shell
+
+* Windows:
+ - Fix icon theme loading
+
+* Bugs fxed:
+ 591258 Easy to accidentally select first option in popup menus
+ 618852 gtk_text_iter_forward_visible_cursor_position does not move...
+ 707153 Add style for stack switcher items with the needs-attention...
+ 731582 Please use AC_PATH_TOOL to improve cross-compile & multilib...
+ 733099 Regression: gtk_window_set_title() no longer sets header ba...
+ 733174 Missing documentation for GtkSpinButton::change-value and ...
+ 733189 Careless URI construction in GTK+
+ 733321 Tooltips disappear when a new GtkMenu is created
+ 733360 GtkSwitch: css, make box-shadow outsets work for the switch...
+ 733361 GtkProgressBar: css, make box-shadow outsets work for the p...
+ 733407 GtkTextView: use GSlice
+ 733431 Regression: Button not added to action area of dialog
+ 733441 do not mention GtkArrow in the GtkMenuButton docs 
+
+* Translation updates:
+ Greek
+
+
 Overview of Changes in GTK+ 3.13.3 to 3.13.4
 ============================================
 
