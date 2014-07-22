@@ -713,10 +713,10 @@ GtkColorButton.button {
       border-width: 0 0 0 1px; }
       .spinbutton .button:backdrop:insensitive:dir(rtl) {
         border-width: 0 1px 0 0; }
-  .spinbutton.vertical .button {
+  .spinbutton.vertical .button, .spinbutton.vertical:dir(rtl) .button {
     padding-top: 8px;
     padding-bottom: 8px; }
-    .spinbutton.vertical .button:first-child {
+    .spinbutton.vertical .button:first-child, .spinbutton.vertical:dir(rtl) .button:first-child {
       border-style: solid;
       border-width: 1px;
       color: #eeeeec;
@@ -725,7 +725,7 @@ GtkColorButton.button {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
-      .spinbutton.vertical .button:first-child:active {
+      .spinbutton.vertical .button:first-child:active, .spinbutton.vertical:dir(rtl) .button:first-child:active {
         border-style: solid;
         color: #eeeeec;
         border-color: #1c1f1f;
@@ -733,7 +733,7 @@ GtkColorButton.button {
         text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-      .spinbutton.vertical .button:first-child:hover {
+      .spinbutton.vertical .button:first-child:hover, .spinbutton.vertical:dir(rtl) .button:first-child:hover {
         border-style: solid;
         color: #eeeeec;
         border-color: #1c1f1f;
@@ -741,7 +741,7 @@ GtkColorButton.button {
         text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
-      .spinbutton.vertical .button:first-child:insensitive {
+      .spinbutton.vertical .button:first-child:insensitive, .spinbutton.vertical:dir(rtl) .button:first-child:insensitive {
         border-style: solid;
         color: #939695;
         border-color: #1c1f1f;
@@ -749,7 +749,7 @@ GtkColorButton.button {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .spinbutton.vertical .button:first-child:backdrop {
+      .spinbutton.vertical .button:first-child:backdrop, .spinbutton.vertical:dir(rtl) .button:first-child:backdrop {
         border-style: solid;
         color: #c9cbc9;
         border-color: #1e2222;
@@ -757,7 +757,7 @@ GtkColorButton.button {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-    .spinbutton.vertical .button:last-child {
+    .spinbutton.vertical .button:last-child, .spinbutton.vertical:dir(rtl) .button:last-child {
       border-style: solid;
       border-width: 1px;
       color: #eeeeec;
@@ -766,7 +766,7 @@ GtkColorButton.button {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
-      .spinbutton.vertical .button:last-child:active {
+      .spinbutton.vertical .button:last-child:active, .spinbutton.vertical:dir(rtl) .button:last-child:active {
         border-style: solid;
         color: #eeeeec;
         border-color: #1c1f1f;
@@ -774,7 +774,7 @@ GtkColorButton.button {
         text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
-      .spinbutton.vertical .button:last-child:hover {
+      .spinbutton.vertical .button:last-child:hover, .spinbutton.vertical:dir(rtl) .button:last-child:hover {
         border-style: solid;
         color: #eeeeec;
         border-color: #1c1f1f;
@@ -782,7 +782,7 @@ GtkColorButton.button {
         text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
-      .spinbutton.vertical .button:last-child:insensitive {
+      .spinbutton.vertical .button:last-child:insensitive, .spinbutton.vertical:dir(rtl) .button:last-child:insensitive {
         border-style: solid;
         color: #939695;
         border-color: #1c1f1f;
@@ -790,7 +790,7 @@ GtkColorButton.button {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0.1); }
-      .spinbutton.vertical .button:last-child:backdrop {
+      .spinbutton.vertical .button:last-child:backdrop, .spinbutton.vertical:dir(rtl) .button:last-child:backdrop {
         border-style: solid;
         color: #c9cbc9;
         border-color: #1e2222;
@@ -798,20 +798,20 @@ GtkColorButton.button {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-    .spinbutton.vertical .button:backdrop:insensitive {
+    .spinbutton.vertical .button:backdrop:insensitive, .spinbutton.vertical:dir(rtl) .button:backdrop:insensitive {
       border-style: solid;
       color: #454c4c;
       border-color: #1e2222;
       background-image: linear-gradient(to bottom, #323636);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-  .spinbutton.vertical.entry {
+  .spinbutton.vertical.entry, .spinbutton.vertical:dir(rtl).entry {
     border-radius: 0;
     padding-left: 3px;
     padding-right: 3px; }
-  .spinbutton.vertical .button:first-child, .spinbutton.vertical .button:first-child:active, .spinbutton.vertical .button:first-child:hover, .spinbutton.vertical .button:first-child:insensitive, .spinbutton.vertical .button:first-child:backdrop {
+  .spinbutton.vertical .button:first-child, .spinbutton.vertical:dir(rtl) .button:first-child, .spinbutton.vertical .button:first-child:active, .spinbutton.vertical:dir(rtl) .button:first-child:active, .spinbutton.vertical .button:first-child:hover, .spinbutton.vertical:dir(rtl) .button:first-child:hover, .spinbutton.vertical .button:first-child:insensitive, .spinbutton.vertical:dir(rtl) .button:first-child:insensitive, .spinbutton.vertical .button:first-child:backdrop, .spinbutton.vertical:dir(rtl) .button:first-child:backdrop, .spinbutton.vertical:dir(rtl) .button:first-child, .spinbutton.vertical:dir(rtl) .button:first-child:active, .spinbutton.vertical:dir(rtl) .button:first-child:hover, .spinbutton.vertical:dir(rtl) .button:first-child:insensitive, .spinbutton.vertical:dir(rtl) .button:first-child:backdrop {
     border-radius: 3px 3px 0 0;
     border-bottom-width: 0; }
-  .spinbutton.vertical .button:last-child, .spinbutton.vertical .button:last-child:active, .spinbutton.vertical .button:last-child:hover, .spinbutton.vertical .button:last-child:insensitive, .spinbutton.vertical .button:last-child:backdrop {
+  .spinbutton.vertical .button:last-child, .spinbutton.vertical:dir(rtl) .button:last-child, .spinbutton.vertical .button:last-child:active, .spinbutton.vertical:dir(rtl) .button:last-child:active, .spinbutton.vertical .button:last-child:hover, .spinbutton.vertical:dir(rtl) .button:last-child:hover, .spinbutton.vertical .button:last-child:insensitive, .spinbutton.vertical:dir(rtl) .button:last-child:insensitive, .spinbutton.vertical .button:last-child:backdrop, .spinbutton.vertical:dir(rtl) .button:last-child:backdrop, .spinbutton.vertical:dir(rtl) .button:last-child, .spinbutton.vertical:dir(rtl) .button:last-child:active, .spinbutton.vertical:dir(rtl) .button:last-child:hover, .spinbutton.vertical:dir(rtl) .button:last-child:insensitive, .spinbutton.vertical:dir(rtl) .button:last-child:backdrop {
     border-radius: 0 0 3px 3px;
     border-top-width: 0; }
 

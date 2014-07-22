@@ -623,7 +623,7 @@ GtkColorButton.button {
       &:dir(rtl) { border-width: 0 1px 0 0; }
     }
   }
-  &.vertical {
+  &.vertical, &.vertical:dir(rtl) {
     .button {
       padding-top: 8px;    //  Same vertical padding as image-buttons
       padding-bottom: 8px; //
