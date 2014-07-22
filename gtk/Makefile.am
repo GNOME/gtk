@@ -1414,6 +1414,12 @@ gtk.gresource.xml: Makefile.am
 	echo -e "  </gresource>" >> $@; \
 	echo -e "</gresources>" >> $@;
 
+win32_theme_sources = \
+	resources/theme/win32/gtk-win32.css \
+	resources/theme/win32/gtk-win32-base.css \
+	resources/theme/win32/gtk-win32-classic.css \
+	resources/theme/win32/gtk-win32-xp.css
+
 adwaita_sources = \
 	resources/theme/Adwaita/assets.svg \
 	resources/theme/Adwaita/_colors.scss \
@@ -1700,6 +1706,7 @@ gsettings_SCHEMAS = \
 EXTRA_DIST +=                   \
 	$(resource_files)	\
 	$(adwaita_sources)	\
+	$(win32_theme_sources)	\
 	$(gsettings_SCHEMAS)	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
