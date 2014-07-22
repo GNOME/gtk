@@ -503,6 +503,8 @@
       background-position: right 3px, right 4px; }
       .stack-switcher > .button.needs-attention > GtkLabel:backdrop, .stack-switcher > .button.needs-attention > GtkImage:backdrop {
         background-size: 6px 6px, 0 0; }
+      .stack-switcher > .button.needs-attention > GtkLabel:dir(rtl), .stack-switcher > .button.needs-attention > GtkImage:dir(rtl) {
+        background-position: left 3px, left 4px; }
     .stack-switcher > .button.needs-attention:active > GtkLabel, .stack-switcher > .button.needs-attention:active > GtkImage {
       animation: none;
       background-image: none; }

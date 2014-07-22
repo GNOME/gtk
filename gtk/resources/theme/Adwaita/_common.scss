@@ -253,7 +253,6 @@ $_dot_color: if($variant=='light', $selected_bg_color,
                                    lighten($selected_bg_color,15%));
 @keyframes needs_attention {
   from {
-    //background-size: 0 0, 0 0;
     background-image: -gtk-gradient(radial,
                                     center center, 0,
                                     center center, 0.01,
@@ -261,7 +260,6 @@ $_dot_color: if($variant=='light', $selected_bg_color,
                                     to(transparent));
   }
   to {
-    //background-size: 6px 6px, 6px 6px;
     background-image: -gtk-gradient(radial,
                                     center center, 0,
                                     center center, 0.5,
@@ -415,6 +413,10 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       @if $variant == 'light' { background-position: right 3px, right 4px; }
       @else { background-position: right 3px, right 2px; }
       &:backdrop { background-size: 6px 6px, 0 0;}
+      &:dir(rtl) {
+        @if $variant == 'light' { background-position: left 3px, left 4px; }
+        @else { background-position: left 3px, left 2px; }
+      }
     }
     &.needs-attention:active > GtkLabel,
     &.needs-attention:active > GtkImage {
