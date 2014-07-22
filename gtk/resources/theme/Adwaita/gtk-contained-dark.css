@@ -1119,6 +1119,7 @@ column-header.button.dnd, column-header .button.dnd, column-header.button.dnd:ac
   box-shadow: inset 1px 1px 0 1px #215d9c, inset -1px 0 0 1px #215d9c, inset 1px 1px #292929, inset -1px 0 #292929; }
 
 column-header .button, column-header .button:hover, column-header .button:active {
+  padding: 3px 6px;
   border-width: 0 1px 1px 0;
   border-radius: 0;
   background-image: none;
