@@ -258,7 +258,7 @@
  ***********/
 @keyframes needs_attention {
   from {
-    background-image: -gtk-gradient(radial, center center, 0, center center, 0.01, to(#215d9c), to(transparent)); }
+    background-image: -gtk-gradient(radial, center center, 0, center center, 0.01, to(#3583d5), to(transparent)); }
 
   to {
     background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#215d9c), to(transparent)); } }
@@ -505,10 +505,10 @@
       padding: 3px 6px; }
     .stack-switcher > .button.needs-attention > GtkLabel, .stack-switcher > .button.needs-attention > GtkImage {
       animation: needs_attention 150ms ease-in;
-      background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#215d9c), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(white), to(transparent));
+      background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#3583d5), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.45, to(rgba(0, 0, 0, 0.81176)), to(transparent));
       background-size: 6px 6px, 6px 6px;
       background-repeat: no-repeat;
-      background-position: right 3px, right 4px; }
+      background-position: right 3px, right 2px; }
       .stack-switcher > .button.needs-attention > GtkLabel:backdrop, .stack-switcher > .button.needs-attention > GtkImage:backdrop {
         background-size: 6px 6px, 0 0; }
     .stack-switcher > .button.needs-attention:active > GtkLabel, .stack-switcher > .button.needs-attention:active > GtkImage {

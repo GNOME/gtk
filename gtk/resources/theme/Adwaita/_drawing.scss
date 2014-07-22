@@ -93,6 +93,18 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
 
 @function _border_color ($c) { @return darken($c,25%); } // colored buttons want the border form the base color
 
+@function _text_shadow_color ($tc:$fg_color, $bg:$bg_color) {
+//
+// calculate the color of text shadows
+//
+// $tc is the text color
+// $bg is the background color
+//
+  $_lbg: lightness($bg)/100%;
+  @if lightness($tc)<50% { @return transparentize(white,1-$_lbg/($_lbg*1.3)); }
+  @else { @return transparentize(black,$_lbg*0.8); }
+}
+
 @mixin _button_text_shadow ($tc:$fg_color, $bg:$bg_color) {
 //
 // helper function for the text emboss effect
@@ -102,18 +114,15 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
 // TODO: this functions needs a way to deal with special cases
 //
 
-  $_lbg: lightness($bg)/100%;
+  $_shadow: _text_shadow_color($tc, $bg);
 
-  $_dark: transparentize(black,$_lbg*0.8);
-  $_bright: transparentize(white,1-$_lbg/($_lbg*1.3));
-
-  @if lightness($tc) < 50% {
-    text-shadow: 0 1px $_bright;
-    icon-shadow: 0 1px $_bright;
+  @if lightness($tc)<50% {
+    text-shadow: 0 1px $_shadow;
+    icon-shadow: 0 1px $_shadow;
   }
   @else {
-    text-shadow: 0 -1px $_dark;
-    icon-shadow: 0 -1px $_dark;
+    text-shadow: 0 -1px $_shadow;
+    icon-shadow: 0 -1px $_shadow;
   }
 }
 
