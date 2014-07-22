@@ -508,9 +508,12 @@
       background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#215d9c), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(white), to(transparent));
       background-size: 6px 6px, 6px 6px;
       background-repeat: no-repeat;
-      background-position: right 2px, right 3px; }
+      background-position: right 3px, right 4px; }
       .stack-switcher > .button.needs-attention > GtkLabel:backdrop, .stack-switcher > .button.needs-attention > GtkImage:backdrop {
         background-size: 6px 6px, 0 0; }
+    .stack-switcher > .button.needs-attention:active > GtkLabel, .stack-switcher > .button.needs-attention:active > GtkImage {
+      animation: none;
+      background-image: none; }
   .inline-toolbar .button, .inline-toolbar .button:backdrop {
     border-radius: 2px;
     border-width: 1px; }

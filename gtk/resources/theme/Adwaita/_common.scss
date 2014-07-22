@@ -406,8 +406,13 @@ GtkLabel {
                                       to(transparent));
       background-size: 6px 6px, 6px 6px;
       background-repeat: no-repeat;
-      background-position: right 2px, right 3px;
+      background-position: right 3px, right 4px;
       &:backdrop { background-size: 6px 6px, 0 0;}
+    }
+    &.needs-attention:active > GtkLabel,
+    &.needs-attention:active > GtkImage {
+      animation: none;
+      background-image: none;
     }
   }
 
