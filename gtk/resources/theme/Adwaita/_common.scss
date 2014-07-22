@@ -914,6 +914,21 @@ GtkComboBox {
   }
 }
 
+/************
+ * Pathbars *
+ ************/
+
+.path-bar .button {
+  padding-left: 4px;
+  padding-right: 4px;
+  &:first-child { padding-left: 8px; }
+  &:last-child { padding-right: 8px; }
+  &:only-child {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
 /**************
  * Tree Views *
  **************/
