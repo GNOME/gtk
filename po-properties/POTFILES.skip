@@ -238,6 +238,8 @@ testsuite/reftests/notebook-tab-position.ref.ui
 testsuite/reftests/notebook-tab-position.ui
 testsuite/reftests/nth-child.ref.ui
 testsuite/reftests/nth-child.ui
+testsuite/reftests/pseudoclass-on-box.ref.ui
+testsuite/reftests/pseudoclass-on-box.ui
 testsuite/reftests/pseudoclass-on-parent.ref.ui
 testsuite/reftests/pseudoclass-on-parent.ui
 testsuite/reftests/quit-mnemonic.ref.ui
