@@ -1209,6 +1209,9 @@ GtkTreeView.view.progressbar {
     .menu .menuitem.arrow:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
+.menuitem .accelerator {
+  color: alpha(currentColor,0.55); }
+
 /***************
  * Popovers   *
  ***************/
