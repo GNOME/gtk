@@ -713,24 +713,35 @@ get_surface_from_gicon (GIcon      *icon,
   GdkScreen *screen;
   GtkIconTheme *icon_theme;
   GtkIconInfo *icon_info;
+  GdkPixbuf *pixbuf;
   cairo_surface_t *surface;
 
   screen = gtk_widget_get_screen (GTK_WIDGET (widget));
   icon_theme = gtk_icon_theme_get_for_screen (screen);
 
   icon_info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
-							icon,
-							icon_size,
-							gtk_widget_get_scale_factor (widget),
-							GTK_ICON_LOOKUP_USE_BUILTIN);
+                                                        icon,
+                                                        icon_size,
+                                                        gtk_widget_get_scale_factor (widget),
+                                                        GTK_ICON_LOOKUP_USE_BUILTIN);
 
   if (!icon_info)
     return NULL;
 
-  surface = gtk_icon_info_load_surface (icon_info,
-					gtk_widget_get_window (widget), error);
+  pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info,
+                                                    gtk_widget_get_style_context (widget),
+                                                    NULL,
+                                                    error);
 
   g_object_unref (icon_info);
+
+  if (pixbuf == NULL)
+    return NULL;
+
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf,
+                                                  gtk_widget_get_scale_factor (widget),
+					          gtk_widget_get_window (widget));
+  g_object_unref (pixbuf);
 
   return surface;
 }
@@ -744,8 +755,6 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   GIcon *icon = NULL;
   cairo_surface_t *surface;
 
-  DEBUG ("volume_get_icon_name");
-
   if (IS_ROOT_VOLUME (volume))
     icon = g_themed_icon_new ("drive-harddisk");
   else if (G_IS_DRIVE (volume))
@@ -754,6 +763,34 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
     icon = g_volume_get_icon (G_VOLUME (volume));
   else if (G_IS_MOUNT (volume))
     icon = g_mount_get_icon (G_MOUNT (volume));
+
+  if (!icon)
+    return NULL;
+
+  surface = get_surface_from_gicon (icon, widget, icon_size, error);
+
+  g_object_unref (icon);
+
+  return surface;
+}
+
+cairo_surface_t *
+_gtk_file_system_volume_render_symbolic_icon (GtkFileSystemVolume  *volume,
+				              GtkWidget            *widget,
+				              gint                  icon_size,
+				              GError              **error)
+{
+  GIcon *icon = NULL;
+  cairo_surface_t *surface;
+
+  if (IS_ROOT_VOLUME (volume))
+    icon = g_themed_icon_new ("drive-harddisk-symbolic");
+  else if (G_IS_DRIVE (volume))
+    icon = g_drive_get_symbolic_icon (G_DRIVE (volume));
+  else if (G_IS_VOLUME (volume))
+    icon = g_volume_get_symbolic_icon (G_VOLUME (volume));
+  else if (G_IS_MOUNT (volume))
+    icon = g_mount_get_symbolic_icon (G_MOUNT (volume));
 
   if (!icon)
     return NULL;
@@ -794,9 +831,10 @@ _gtk_file_system_volume_unref (GtkFileSystemVolume *volume)
 
 /* GFileInfo helper functions */
 cairo_surface_t *
-_gtk_file_info_render_icon (GFileInfo *info,
-			    GtkWidget *widget,
-			    gint       icon_size)
+_gtk_file_info_render_icon_internal (GFileInfo *info,
+			             GtkWidget *widget,
+			             gint       icon_size,
+                                     gboolean   symbolic)
 {
   GIcon *icon;
   GdkPixbuf *pixbuf;
@@ -823,7 +861,10 @@ _gtk_file_info_render_icon (GFileInfo *info,
 
   if (!surface)
     {
-      icon = g_file_info_get_icon (info);
+      if (symbolic)
+        icon = g_file_info_get_symbolic_icon (info);
+      else
+        icon = g_file_info_get_icon (info);
 
       if (icon)
 	surface = get_surface_from_gicon (icon, widget, icon_size, NULL);
@@ -831,13 +872,32 @@ _gtk_file_info_render_icon (GFileInfo *info,
       if (!surface)
 	{
 	   /* Use general fallback for all files without icon */
-	  icon = g_themed_icon_new ("text-x-generic");
+          if (symbolic)
+	    icon = g_themed_icon_new ("text-x-generic-symbolic");
+          else
+	    icon = g_themed_icon_new ("text-x-generic");
 	  surface = get_surface_from_gicon (icon, widget, icon_size, NULL);
 	  g_object_unref (icon);
 	}
     }
 
   return surface;
+}
+
+cairo_surface_t *
+_gtk_file_info_render_icon (GFileInfo *info,
+			    GtkWidget *widget,
+			    gint       icon_size)
+{
+  return _gtk_file_info_render_icon_internal (info, widget, icon_size, FALSE);
+}
+
+cairo_surface_t *
+_gtk_file_info_render_symbolic_icon (GFileInfo *info,
+			             GtkWidget *widget,
+			             gint       icon_size)
+{
+  return _gtk_file_info_render_icon_internal (info, widget, icon_size, TRUE);
 }
 
 gboolean
