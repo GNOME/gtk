@@ -1199,8 +1199,6 @@ static void
 gdk_win32_window_move (GdkWindow *window,
 		       gint x, gint y)
 {
-  GdkWindowImplWin32 *impl;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -1208,8 +1206,6 @@ gdk_win32_window_move (GdkWindow *window,
 
   GDK_NOTE (MISC, g_print ("gdk_win32_window_move: %p: %+d%+d\n",
                            GDK_WINDOW_HWND (window), x, y));
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
     return;
@@ -1245,8 +1241,6 @@ static void
 gdk_win32_window_resize (GdkWindow *window,
 			 gint width, gint height)
 {
-  GdkWindowImplWin32 *impl;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -1259,8 +1253,6 @@ gdk_win32_window_resize (GdkWindow *window,
 
   GDK_NOTE (MISC, g_print ("gdk_win32_window_resize: %p: %dx%d\n",
                            GDK_WINDOW_HWND (window), width, height));
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
     return;
@@ -1297,8 +1289,6 @@ gdk_win32_window_move_resize_internal (GdkWindow *window,
 				       gint       width,
 				       gint       height)
 {
-  GdkWindowImplWin32 *impl;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -1308,8 +1298,6 @@ gdk_win32_window_move_resize_internal (GdkWindow *window,
     width = 1;
   if (height < 1)
     height = 1;
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
     return;
@@ -2224,7 +2212,6 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
   gint dw, dh, diff;
   HICON small_hicon, big_hicon;
   GdkWindowImplWin32 *impl;
-  gint i, big_i, small_i;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -2244,7 +2231,6 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
   small_pixbuf = NULL;
   big_diff = 0;
   small_diff = 0;
-  i = 0;
   while (pixbufs)
     {
       pixbuf = (GdkPixbuf*) pixbufs->data;
@@ -2258,7 +2244,6 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
 	{
 	  big_pixbuf = pixbuf;
 	  big_diff = diff;
-	  big_i = i;
 	}
 
       dw = ABS (w - small_w);
@@ -2268,11 +2253,9 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
 	{
 	  small_pixbuf = pixbuf;
 	  small_diff = diff;
-	  small_i = i;
 	}
 
       pixbufs = g_list_next (pixbufs);
-      i++;
     }
 
   /* Create the icons */
