@@ -173,6 +173,10 @@ GtkLabel {
 
 .entry {
   padding: 5px 8px 6px;
+  &.image { // icons inside the entry
+    &.left { padding-left: 0; }
+    &.right { padding-right: 0; }
+  }
   border-radius: 3px;
   transition: all 200ms ease-out;
   @include entry(normal);

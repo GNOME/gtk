@@ -151,6 +151,10 @@
   background-image: linear-gradient(to bottom, #212121, #292929 90%);
   border-color: #1c1f1f;
   box-shadow: inset 0 2px 2px -2px #141414, inset 0 0 2px 1px rgba(39, 51, 64, 0), 0 1px rgba(238, 238, 236, 0.1); }
+  .entry.image.left {
+    padding-left: 0; }
+  .entry.image.right {
+    padding-right: 0; }
   .entry.flat, .entry.flat:focus {
     padding: 2px;
     background-color: transparent;
