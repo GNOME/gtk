@@ -124,6 +124,7 @@ RESOURCES=	$(demos)			\
 		revealer.ui			\
 		theming.ui			\
 		listbox.ui			\
+		popover.ui			\
 		alphatest.png			\
 		apple-red.png			\
 		brick.png			\
