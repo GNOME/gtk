@@ -320,30 +320,32 @@ _gtk_css_image_get_concrete_size (GtkCssImage *image,
               *concrete_height = default_width / image_aspect;
             }
         }
-
-      /* Otherwise, the width and height of the concrete object
-       * size is the same as the object's intrinsic width and
-       * intrinsic height, if they exist.
-       * If the concrete object size is still missing a width or
-       * height, and the object has an intrinsic aspect ratio,
-       * the missing dimension is calculated from the present
-       * dimension and the intrinsic aspect ratio.
-       * Otherwise, the missing dimension is taken from the default
-       * object size. 
-       */
-      if (image_width)
-        *concrete_width = image_width;
-      else if (image_aspect)
-        *concrete_width = image_height * image_aspect;
       else
-        *concrete_width = default_width;
+        {
+          /* Otherwise, the width and height of the concrete object
+           * size is the same as the object's intrinsic width and
+           * intrinsic height, if they exist.
+           * If the concrete object size is still missing a width or
+           * height, and the object has an intrinsic aspect ratio,
+           * the missing dimension is calculated from the present
+           * dimension and the intrinsic aspect ratio.
+           * Otherwise, the missing dimension is taken from the default
+           * object size. 
+           */
+          if (image_width)
+            *concrete_width = image_width;
+          else if (image_aspect)
+            *concrete_width = image_height * image_aspect;
+          else
+            *concrete_width = default_width;
 
-      if (image_height)
-        *concrete_height = image_height;
-      else if (image_aspect)
-        *concrete_height = image_width / image_aspect;
-      else
-        *concrete_height = default_height;
+          if (image_height)
+            *concrete_height = image_height;
+          else if (image_aspect)
+            *concrete_height = image_width / image_aspect;
+          else
+            *concrete_height = default_height;
+        }
 
       return;
     }
