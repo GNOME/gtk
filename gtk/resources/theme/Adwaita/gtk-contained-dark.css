@@ -256,6 +256,14 @@
       color: #292929; }
     .entry.warning:selected:backdrop {
       color: #2c2c2c; }
+  .entry.image {
+    color: #c6c6c5; }
+    .entry.image:hover {
+      color: #eeeeec; }
+    .entry.image:active {
+      color: #215d9c; }
+    .entry.image:backdrop {
+      color: #a9aba9; }
 
 /***********
  * Buttons *
@@ -702,7 +710,7 @@ GtkColorButton.button {
       border-width: 0 1px 0 0; }
     .spinbutton .button:hover {
       color: #eeeeec;
-      background-color: rgba(0, 0, 0, 0.05); }
+      background-color: rgba(238, 238, 236, 0.05); }
     .spinbutton .button:insensitive {
       color: rgba(147, 150, 149, 0.3); }
     .spinbutton .button:active {

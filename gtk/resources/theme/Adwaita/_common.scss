@@ -246,6 +246,12 @@ GtkLabel {
       &:selected:backdrop { color: $backdrop_base_color; }
     }
   }
+  &.image { // entry icons colors
+    color: mix($fg_color,$base_color,80%);
+    &:hover { color: $fg_color; }
+    &:active { color: $selected_bg_color; }
+    &:backdrop { color: mix($backdrop_fg_color,$backdrop_base_color,80%); }
+  }
 }
 
 /***********
@@ -607,7 +613,7 @@ GtkColorButton.button {
     &:dir(rtl) { border-width: 0 1px 0 0; }
     &:hover {
       color: $fg_color;
-      background-color: transparentize(black,0.95);
+      background-color: transparentize($fg_color,0.95);
     }
     &:insensitive {
       color: transparentize($insensitive_fg_color,0.7);
