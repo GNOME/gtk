@@ -83,6 +83,7 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
   self->priv->last_rendered_state = GTK_STATE_FLAG_NORMAL;
   self->priv->last_surface_state = GTK_STATE_FLAG_NORMAL;
   self->priv->last_surface_scale = 0;
+  self->priv->orig_pixbuf_scale = 1;
 }
 
 void
