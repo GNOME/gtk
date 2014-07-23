@@ -16,11 +16,15 @@
     <signal name="focus-out-event" handler="gtk_path_bar_slider_down_defocus" swapped="no"/>
     <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
     <child>
-      <object class="GtkArrow" id="arrow2">
+      <object class="GtkImage">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="icon-name">pan-end-symbolic</property>
+        <property name="icon-size">1</property>
       </object>
     </child>
+    <style>
+      <class name="image-button"/>
+    </style>
   </object>
   <object class="GtkButton" id="up_slider_button">
     <property name="visible">True</property>
@@ -37,11 +41,14 @@
     <signal name="focus-out-event" handler="gtk_path_bar_slider_up_defocus" swapped="no"/>
     <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
     <child>
-      <object class="GtkArrow" id="arrow1">
+      <object class="GtkImage">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="arrow_type">left</property>
+        <property name="icon-name">pan-start-symbolic</property>
+        <property name="icon-size">1</property>
       </object>
     </child>
+    <style>
+      <class name="image-button"/>
+    </style>
   </object>
 </interface>
