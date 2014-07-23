@@ -1390,8 +1390,9 @@ set_button_image_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  surface = _gtk_file_info_render_icon (info, GTK_WIDGET (data->path_bar),
-			 	       data->path_bar->priv->icon_size);
+  surface = _gtk_file_info_render_symbolic_icon (info,
+                                                 GTK_WIDGET (data->path_bar),
+			 	                 data->path_bar->priv->icon_size);
   gtk_image_set_from_surface (GTK_IMAGE (data->button_data->image), surface);
 
   switch (data->button_data->type)
@@ -1440,10 +1441,10 @@ set_button_image (GtkPathBar *path_bar,
       if (volume == NULL)
 	return;
 
-      path_bar->priv->root_icon = _gtk_file_system_volume_render_icon (volume,
-								       GTK_WIDGET (path_bar),
-								       path_bar->priv->icon_size,
-								       NULL);
+      path_bar->priv->root_icon = _gtk_file_system_volume_render_symbolic_icon (volume,
+								                GTK_WIDGET (path_bar),
+								                path_bar->priv->icon_size,
+								                NULL);
       _gtk_file_system_volume_unref (volume);
 
       gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
@@ -1466,7 +1467,7 @@ set_button_image (GtkPathBar *path_bar,
       button_data->cancellable =
         _gtk_file_system_get_info (path_bar->priv->file_system,
 				   path_bar->priv->home_file,
-				   "standard::icon",
+				   "standard::symbolic-icon",
 				   set_button_image_get_info_cb,
 				   data);
       break;
@@ -1488,7 +1489,7 @@ set_button_image (GtkPathBar *path_bar,
       button_data->cancellable =
         _gtk_file_system_get_info (path_bar->priv->file_system,
 				   path_bar->priv->desktop_file,
-				   "standard::icon",
+				   "standard::symbolic-icon",
 				   set_button_image_get_info_cb,
 				   data);
       break;
