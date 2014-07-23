@@ -1527,15 +1527,25 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 				       gboolean    current_dir)
 {
   const gchar *dir_name = get_dir_name (button_data);
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (button_data->button);
+
+  gtk_style_context_remove_class (context, "text-button");
+  gtk_style_context_remove_class (context, "image-button");
 
   if (button_data->label != NULL)
     {
       gtk_label_set_text (GTK_LABEL (button_data->label), dir_name);
+      if (button_data->image == NULL)
+        gtk_style_context_add_class (context, "text-button");
     }
 
   if (button_data->image != NULL)
     {
       set_button_image (path_bar, button_data);
+      if (button_data->label == NULL)
+        gtk_style_context_add_class (context, "image-button");
     }
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_data->button)) != current_dir)
