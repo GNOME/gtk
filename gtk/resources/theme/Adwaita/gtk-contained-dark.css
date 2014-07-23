@@ -1818,7 +1818,7 @@ GtkSwitch {
     .view.check:selected:active, .view.check:selected:focus:active {
       color: white; }
       .view.check:selected:active:backdrop, .view.check:selected:focus:active:backdrop {
-        color: #2c2c2c; }
+        color: #c9cbc9; }
   .view.check:backdrop {
     color: rgba(201, 203, 201, 0.1); }
     .view.check:backdrop:selected {
@@ -1972,7 +1972,7 @@ GtkSwitch {
     .view.radio:selected:active, .view.radio:selected:focus:active {
       color: white; }
       .view.radio:selected:active:backdrop, .view.radio:selected:focus:active:backdrop {
-        color: #2c2c2c; }
+        color: #c9cbc9; }
   .view.radio:backdrop {
     color: rgba(201, 203, 201, 0.1); }
     .view.radio:backdrop:selected {
