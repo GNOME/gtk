@@ -24,6 +24,7 @@
 
 #include "gtktypebuiltins.h"
 #include "gtktreeview.h"
+#include "gtkbuildable.h"
 #include "gtklabel.h"
 #include "gtkframe.h"
 
@@ -34,6 +35,8 @@ struct _GtkInspectorMiscInfoPrivate {
 
   GtkWidget *state_row;
   GtkWidget *state;
+  GtkWidget *buildable_id_row;
+  GtkWidget *buildable_id;
   GtkWidget *default_widget_row;
   GtkWidget *default_widget;
   GtkWidget *default_widget_button;
@@ -211,7 +214,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       sl->priv->object = NULL;
     }
 
-  if (!GTK_IS_WIDGET (object))
+  if (!GTK_IS_WIDGET (object) && !GTK_IS_BUILDABLE (object))
     {
       gtk_widget_hide (GTK_WIDGET (sl));
       return;
@@ -232,6 +235,17 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   else
     {
       gtk_widget_hide (sl->priv->state_row);
+    }
+
+  if (GTK_IS_BUILDABLE (object))
+    {
+      gtk_label_set_text (GTK_LABEL (sl->priv->buildable_id),
+                          gtk_buildable_get_name (GTK_BUILDABLE (object)));
+      gtk_widget_show (sl->priv->buildable_id_row);
+    }
+  else
+    {
+      gtk_widget_hide (sl->priv->buildable_id_row);
     }
 
   if (GTK_IS_WINDOW (object))
@@ -314,6 +328,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/misc-info.ui");
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state_row);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, buildable_id_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, buildable_id);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_row);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_button);

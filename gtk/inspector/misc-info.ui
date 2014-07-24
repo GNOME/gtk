@@ -47,6 +47,40 @@
               </object>
             </child>
             <child>
+              <object class="GtkListBoxRow" id="buildable_id_row">
+                <property name="visible">True</property>
+                <property name="activatable">False</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="margin">10</property>
+                    <property name="spacing">40</property>
+                    <child>
+                      <object class="GtkLabel" id="buildable_id_label">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Buildable ID</property>
+                        <property name="halign">start</property>
+                        <property name="valign">baseline</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="buildable_id">
+                        <property name="visible">True</property>
+                        <property name="selectable">True</property>
+                        <property name="halign">end</property>
+                        <property name="valign">baseline</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="GtkListBoxRow" id="default_widget_row">
                 <property name="visible">True</property>
                 <property name="activatable">False</property>
@@ -140,6 +174,7 @@
     <property name="mode">horizontal</property>
     <widgets>
       <widget name="state_label"/>
+      <widget namel="buildable_id_label"/>
       <widget name="default_widget_label"/>
       <widget name="focus_widget_label"/>
     </widgets>
