@@ -3227,9 +3227,8 @@ gdk_win32_input_shape_combine_region (GdkWindow *window,
 				      gint offset_x,
 				      gint offset_y)
 {
-  /* Input shapes are not supported: input shape is always the same as
-   * the window shape; pixels with alpha == 0 are usually not clickable,
-   * clickability can be overriden by handling WM_NCHITTEST.
+  /* Partial input shape support is implemented by handling the
+   * WM_NCHITTEST message.
    */
 }
 

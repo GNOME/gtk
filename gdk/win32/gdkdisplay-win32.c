@@ -533,11 +533,8 @@ gdk_win32_display_supports_input_shapes (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  /* Not yet implemented. See comment in
-   * gdk_window_input_shape_combine_mask().
-   */
-
-  return FALSE;
+  /* Partially supported, see WM_NCHITTEST handler. */
+  return TRUE;
 }
 
 static gboolean

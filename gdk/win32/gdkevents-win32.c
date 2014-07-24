@@ -1616,6 +1616,45 @@ handle_display_change (void)
   g_signal_emit_by_name (_gdk_screen, "size_changed");
 }
 
+static gboolean
+handle_nchittest (HWND hwnd,
+                  GdkWindow *window,
+                  gint16 screen_x,
+                  gint16 screen_y,
+                  gint *ret_valp)
+{
+  RECT rect;
+  LONG style;
+
+  if (window == NULL || window->input_shape == NULL)
+    return FALSE;
+
+  style = GetWindowLong (hwnd, GWL_STYLE);
+
+  /* Assume that these styles are incompatible with CSD,
+   * so there's no reason for us to override the defaults.
+   */
+  if (style & (WS_BORDER | WS_THICKFRAME))
+    return FALSE;
+
+  if (!GetWindowRect (hwnd, &rect))
+    return FALSE;
+
+  rect.left = screen_x - rect.left;
+  rect.top = screen_y - rect.top;
+
+  /* If it's inside the rect, return FALSE and let DefWindowProc() handle it */
+  if (cairo_region_contains_point (window->input_shape, rect.left, rect.top))
+    return FALSE;
+
+  /* Otherwise override DefWindowProc() and tell WM that the point is not
+   * within the window
+   */
+  *ret_valp = HTNOWHERE;
+  return TRUE;
+}
+
+
 static void
 generate_button_event (GdkEventType      type,
                        gint              button,
@@ -3235,6 +3274,12 @@ gdk_event_translate (MSG  *msg,
 				 (gint64) msg->lParam));
       if (msg->wParam && GDK_WINDOW_IS_MAPPED (window))
 	ensure_stacking_on_activate_app (msg, window);
+      break;
+    case WM_NCHITTEST:
+      /* TODO: pass all messages to DwmDefWindowProc() first! */
+      return_val = handle_nchittest (msg->hwnd, window,
+                                     GET_X_LPARAM (msg->lParam),
+                                     GET_Y_LPARAM (msg->lParam), ret_valp);
       break;
 
       /* Handle WINTAB events here, as we know that gdkinput.c will
