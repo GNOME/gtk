@@ -3227,10 +3227,10 @@ gdk_win32_input_shape_combine_region (GdkWindow *window,
 				      gint offset_x,
 				      gint offset_y)
 {
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-  /* CHECK: are these really supposed to be the same? */
-  gdk_win32_window_shape_combine_region (window, shape_region, offset_x, offset_y);
+  /* Input shapes are not supported: input shape is always the same as
+   * the window shape; pixels with alpha == 0 are usually not clickable,
+   * clickability can be overriden by handling WM_NCHITTEST.
+   */
 }
 
 gboolean
