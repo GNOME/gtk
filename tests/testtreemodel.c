@@ -212,7 +212,10 @@ test_run (gchar        *title,
   gint i, k, d, items;
   GTimer *timer;
   gdouble elapsed;
-  int uordblks_before = 0, memused;
+  int memused;
+#ifdef HAVE_MALLINFO
+  int uordblks_before = 0;
+#endif
 
   g_print ("%s (average over %d runs, time in milliseconds)\n"
 	   "items \ttime      \ttime/item \tused memory\n", title, repeats);
