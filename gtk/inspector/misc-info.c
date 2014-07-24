@@ -30,8 +30,9 @@
 struct _GtkInspectorMiscInfoPrivate {
   GtkInspectorWidgetTree *widget_tree;
 
-  GtkWidget *widget;
+  GObject *object;
 
+  GtkWidget *state_row;
   GtkWidget *state;
   GtkWidget *default_widget_row;
   GtkWidget *default_widget;
@@ -95,7 +96,7 @@ disconnect_each_other (gpointer  still_alive,
   if (GTK_INSPECTOR_IS_MISC_INFO (still_alive))
     {
       GtkInspectorMiscInfo *self = GTK_INSPECTOR_MISC_INFO (still_alive);
-      self->priv->widget = NULL;
+      self->priv->object = NULL;
     }
 
   g_signal_handlers_disconnect_matched (still_alive, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, for_science);
@@ -103,27 +104,28 @@ disconnect_each_other (gpointer  still_alive,
 }
 
 static void
-show_widget (GtkInspectorMiscInfo *sl,
-             GtkWidget            *widget,
+show_object (GtkInspectorMiscInfo *sl,
+             GObject              *object,
              const gchar          *name,
              const gchar          *tab)
 {
   GtkTreeIter iter;
 
   g_object_set_data (G_OBJECT (sl->priv->widget_tree), "next-tab", (gpointer)tab);
-  if (gtk_inspector_widget_tree_find_object (sl->priv->widget_tree, G_OBJECT (widget), &iter))
+  if (gtk_inspector_widget_tree_find_object (sl->priv->widget_tree, object, &iter))
     {
-      gtk_inspector_widget_tree_select_object (sl->priv->widget_tree, G_OBJECT (widget));
+      gtk_inspector_widget_tree_select_object (sl->priv->widget_tree, object);
     }
-  else if (gtk_inspector_widget_tree_find_object (sl->priv->widget_tree, G_OBJECT (gtk_widget_get_parent (widget)), &iter))
+  else if (GTK_IS_WIDGET (object) &&
+           gtk_inspector_widget_tree_find_object (sl->priv->widget_tree, G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object))), &iter))
 
     {
-      gtk_inspector_widget_tree_append_object (sl->priv->widget_tree, G_OBJECT (widget), &iter, name);
-      gtk_inspector_widget_tree_select_object (sl->priv->widget_tree, G_OBJECT (widget));
+      gtk_inspector_widget_tree_append_object (sl->priv->widget_tree, object, &iter, name);
+      gtk_inspector_widget_tree_select_object (sl->priv->widget_tree, object);
     }
   else
     {
-      g_warning ("GtkInspector: couldn't find the widget in the tree");
+      g_warning ("GtkInspector: couldn't find the object in the tree");
     }
 }
 
@@ -132,7 +134,7 @@ update_default_widget (GtkInspectorMiscInfo *sl)
 {
   GtkWidget *widget;
 
-  widget = gtk_window_get_default_widget (GTK_WINDOW (sl->priv->widget));
+  widget = gtk_window_get_default_widget (GTK_WINDOW (sl->priv->object));
   if (widget)
     {
       gchar *tmp;
@@ -154,9 +156,9 @@ show_default_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
   GtkWidget *widget;
 
   update_default_widget (sl);
-  widget = gtk_window_get_default_widget (GTK_WINDOW (sl->priv->widget));
+  widget = gtk_window_get_default_widget (GTK_WINDOW (sl->priv->object));
   if (widget)
-    show_widget (sl, widget, NULL, "properties"); 
+    show_object (sl, G_OBJECT (widget), NULL, "properties"); 
 }
 
 static void
@@ -164,7 +166,7 @@ update_focus_widget (GtkInspectorMiscInfo *sl)
 {
   GtkWidget *widget;
 
-  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->widget));
+  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
   if (widget)
     {
       gchar *tmp;
@@ -191,22 +193,22 @@ show_focus_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
   GtkWidget *widget;
 
-  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->widget));
+  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
   if (widget)
-    show_widget (sl, widget, NULL, "properties"); 
+    show_object (sl, G_OBJECT (widget), NULL, "properties"); 
 }
 
 void
 gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
                                     GObject              *object)
 {
-  if (sl->priv->widget)
+  if (sl->priv->object)
     {
-      g_signal_handlers_disconnect_by_func (sl->priv->widget, state_flags_changed, sl);
-      g_signal_handlers_disconnect_by_func (sl->priv->widget, set_focus_cb, sl);
-      disconnect_each_other (sl->priv->widget, G_OBJECT (sl));
-      disconnect_each_other (sl, G_OBJECT (sl->priv->widget));
-      sl->priv->widget = NULL;
+      g_signal_handlers_disconnect_by_func (sl->priv->object, state_flags_changed, sl);
+      g_signal_handlers_disconnect_by_func (sl->priv->object, set_focus_cb, sl);
+      disconnect_each_other (sl->priv->object, G_OBJECT (sl));
+      disconnect_each_other (sl, sl->priv->object);
+      sl->priv->object = NULL;
     }
 
   if (!GTK_IS_WIDGET (object))
@@ -217,12 +219,20 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
 
   gtk_widget_show (GTK_WIDGET (sl));
 
-  sl->priv->widget = GTK_WIDGET (object);
+  sl->priv->object = object;
   g_object_weak_ref (G_OBJECT (sl), disconnect_each_other, object);
-  g_object_weak_ref (G_OBJECT (object), disconnect_each_other, sl);
+  g_object_weak_ref (object, disconnect_each_other, sl);
 
-  g_signal_connect_object (object, "state-flags-changed", G_CALLBACK (state_flags_changed), sl, 0);
-  state_flags_changed (sl->priv->widget, 0, sl);
+  if (GTK_IS_WIDGET (object))
+    {
+      gtk_widget_show (sl->priv->state_row);
+      g_signal_connect_object (object, "state-flags-changed", G_CALLBACK (state_flags_changed), sl, 0);
+      state_flags_changed (GTK_WIDGET (sl->priv->object), 0, sl);
+    }
+  else
+    {
+      gtk_widget_hide (sl->priv->state_row);
+    }
 
   if (GTK_IS_WINDOW (object))
     {
@@ -302,6 +312,7 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/misc-info.ui");
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state_row);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_row);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget);
