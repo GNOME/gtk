@@ -1084,6 +1084,26 @@ translate_keyboard_string (GdkEventKey *event)
     }
 }
 
+static GSettings *
+get_keyboard_settings (GdkWaylandDeviceData *device)
+{
+  if (!device->keyboard_settings)
+    {
+      GSettingsSchemaSource *source;
+      GSettingsSchema *schema;
+
+      source = g_settings_schema_source_get_default ();
+      schema = g_settings_schema_source_lookup (source, "org.gnome.settings-daemon.peripherals.keyboard", FALSE);
+      if (schema != NULL)
+        {
+          device->keyboard_settings = g_settings_new_full (schema, NULL, NULL);
+          g_settings_schema_unref (schema);
+        }
+    }
+
+  return device->keyboard_settings;
+}
+
 static gboolean
 get_key_repeat (GdkWaylandDeviceData *device,
                 guint                *delay,
@@ -1091,11 +1111,13 @@ get_key_repeat (GdkWaylandDeviceData *device,
 {
   gboolean repeat;
 
-  if (device->keyboard_settings)
+  GSettings *keyboard_settings = get_keyboard_settings (device);
+
+  if (keyboard_settings)
     {
-      repeat = g_settings_get_boolean (device->keyboard_settings, "repeat");
-      *delay = g_settings_get_uint (device->keyboard_settings, "delay");
-      *interval = g_settings_get_uint (device->keyboard_settings, "repeat-interval");
+      repeat = g_settings_get_boolean (keyboard_settings, "repeat");
+      *delay = g_settings_get_uint (keyboard_settings, "delay");
+      *interval = g_settings_get_uint (keyboard_settings, "repeat-interval");
     }
   else
     {
@@ -1566,21 +1588,6 @@ static const struct wl_seat_listener seat_listener = {
 };
 
 static void
-init_settings (GdkWaylandDeviceData *device)
-{
-  GSettingsSchemaSource *source;
-  GSettingsSchema *schema;
-
-  source = g_settings_schema_source_get_default ();
-  schema = g_settings_schema_source_lookup (source, "org.gnome.settings-daemon.peripherals.keyboard", FALSE);
-  if (schema != NULL)
-    {
-      device->keyboard_settings = g_settings_new_full (schema, NULL, NULL);
-      g_settings_schema_unref (schema);
-    }
-}
-
-static void
 init_devices (GdkWaylandDeviceData *device)
 {
   GdkWaylandDeviceManager *device_manager =
@@ -1657,7 +1664,6 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
     wl_compositor_create_surface (display_wayland->compositor);
 
   init_devices (device);
-  init_settings (device);
 }
 
 void
