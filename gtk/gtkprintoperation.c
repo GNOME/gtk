@@ -3239,6 +3239,9 @@ gtk_print_operation_run (GtkPrintOperation        *op,
 								 &do_print);
     }
 
+  /* To ensure that priv is still valid after print_pages () */
+  g_object_ref (op);
+
   if (run_print_pages)
     print_pages (op, parent, do_print, result);
 
@@ -3250,6 +3253,7 @@ gtk_print_operation_run (GtkPrintOperation        *op,
   else if (priv->cancelled)
     result = GTK_PRINT_OPERATION_RESULT_CANCEL;
  
+  g_object_unref (op);
   return result;
 }
 
