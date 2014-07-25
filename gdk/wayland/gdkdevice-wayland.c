@@ -1496,7 +1496,7 @@ seat_handle_capabilities (void                    *data,
     }
   else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && device->wl_pointer)
     {
-      wl_pointer_destroy (device->wl_pointer);
+      wl_pointer_release (device->wl_pointer);
       device->wl_pointer = NULL;
       _gdk_device_set_associated_device (device->pointer, NULL);
 
@@ -1533,7 +1533,7 @@ seat_handle_capabilities (void                    *data,
     }
   else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD) && device->wl_keyboard)
     {
-      wl_keyboard_destroy (device->wl_keyboard);
+      wl_keyboard_release (device->wl_keyboard);
       device->wl_keyboard = NULL;
       _gdk_device_set_associated_device (device->keyboard, NULL);
 
@@ -1570,7 +1570,7 @@ seat_handle_capabilities (void                    *data,
     }
   else if (!(caps & WL_SEAT_CAPABILITY_TOUCH) && device->wl_touch)
     {
-      wl_touch_destroy (device->wl_touch);
+      wl_touch_release (device->wl_touch);
       device->wl_touch = NULL;
       _gdk_device_set_associated_device (device->touch, NULL);
 
