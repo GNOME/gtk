@@ -1583,8 +1583,17 @@ seat_handle_capabilities (void                    *data,
     }
 }
 
+static void
+seat_handle_name (void                    *data,
+                  struct wl_seat          *seat,
+                  const char              *name)
+{
+  /* We don't care about the name. */
+}
+
 static const struct wl_seat_listener seat_listener = {
   seat_handle_capabilities,
+  seat_handle_name,
 };
 
 static void
