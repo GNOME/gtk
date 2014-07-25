@@ -3175,9 +3175,8 @@ gdk_win32_window_set_opacity (GdkWindow *window,
   PFN_SetLayeredWindowAttributes setLayeredWindowAttributes = NULL;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (!WINDOW_IS_TOPLEVEL (window) || GDK_WINDOW_DESTROYED (window))
     return;
 
   if (opacity < 0)
