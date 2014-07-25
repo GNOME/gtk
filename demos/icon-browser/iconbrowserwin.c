@@ -262,6 +262,7 @@ populate (IconBrowserWindow *win)
   add_icon (win, "object-rotate-left", "The icon for the rotate left action performed on an object.", "actions");
   add_icon (win, "object-rotate-right", "The icon for the rotate rigt action performed on an object.", "actions");
   add_icon (win, "object-select", "", "actions"); // missing from spec
+  add_icon (win, "open-menu", "", "actions"); // missing from spec
   add_icon (win, "pan-down", "", "actions"); // missing from spec
   add_icon (win, "pan-end", "", "actions"); // missing from spec
   add_icon (win, "pan-start", "", "actions"); // missing from spec
