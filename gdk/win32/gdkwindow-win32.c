@@ -742,6 +742,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
   window->viewable = TRUE;
 
   window->depth = gdk_visual_get_system ()->depth;
+  GDK_WINDOW_HWND (window) = anid;
 
   g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
