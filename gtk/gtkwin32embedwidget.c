@@ -136,7 +136,6 @@ gtk_win32_embed_widget_unrealize (GtkWidget *widget)
   
   if (embed_widget->parent_window != NULL)
     {
-      gtk_widget_unregister_window (widget, embed_widget->parent_window);
       g_object_unref (embed_widget->parent_window);
       embed_widget->parent_window = NULL;
     }
