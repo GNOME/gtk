@@ -82,6 +82,9 @@ struct _GdkWaylandDeviceData
   uint32_t button_press_serial;
   GdkWindow *pointer_grab_window;
   uint32_t pointer_grab_time;
+  gboolean have_server_repeat;
+  uint32_t server_repeat_rate;
+  uint32_t server_repeat_delay;
   guint32 repeat_timer;
   guint32 repeat_key;
   guint32 repeat_count;
@@ -1111,19 +1114,35 @@ get_key_repeat (GdkWaylandDeviceData *device,
 {
   gboolean repeat;
 
-  GSettings *keyboard_settings = get_keyboard_settings (device);
-
-  if (keyboard_settings)
+  if (device->have_server_repeat)
     {
-      repeat = g_settings_get_boolean (keyboard_settings, "repeat");
-      *delay = g_settings_get_uint (keyboard_settings, "delay");
-      *interval = g_settings_get_uint (keyboard_settings, "repeat-interval");
+      if (device->server_repeat_rate > 0)
+        {
+          repeat = TRUE;
+          *delay = device->server_repeat_delay;
+          *interval = (1000 / device->server_repeat_rate);
+        }
+      else
+        {
+          repeat = FALSE;
+        }
     }
   else
     {
-      repeat = TRUE;
-      *delay = 400;
-      *interval = 80;
+      GSettings *keyboard_settings = get_keyboard_settings (device);
+
+      if (keyboard_settings)
+        {
+          repeat = g_settings_get_boolean (keyboard_settings, "repeat");
+          *delay = g_settings_get_uint (keyboard_settings, "delay");
+          *interval = g_settings_get_uint (keyboard_settings, "repeat-interval");
+        }
+      else
+        {
+          repeat = TRUE;
+          *delay = 400;
+          *interval = 80;
+        }
     }
 
   return repeat;
@@ -1268,6 +1287,19 @@ keyboard_handle_modifiers (void               *data,
   g_signal_emit_by_name (keymap, "state-changed");
   if (direction != gdk_keymap_get_direction (keymap))
     g_signal_emit_by_name (keymap, "direction-changed");
+}
+
+static void
+keyboard_handle_repeat_info (void               *data,
+                             struct wl_keyboard *keyboard,
+                             uint32_t            rate,
+                             uint32_t            delay)
+{
+  GdkWaylandDeviceData *device = data;
+
+  device->have_server_repeat = TRUE;
+  device->server_repeat_rate = rate;
+  device->server_repeat_delay = delay;
 }
 
 static GdkWaylandTouchData *
@@ -1452,6 +1484,7 @@ static const struct wl_keyboard_listener keyboard_listener = {
   keyboard_handle_leave,
   keyboard_handle_key,
   keyboard_handle_modifiers,
+  keyboard_handle_repeat_info,
 };
 
 static const struct wl_touch_listener touch_listener = {
