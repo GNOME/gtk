@@ -930,10 +930,10 @@ pointer_handle_axis (void              *data,
 
 static void
 keyboard_handle_keymap (void               *data,
-                       struct wl_keyboard *keyboard,
-                       uint32_t            format,
-                       int                 fd,
-                       uint32_t            size)
+                        struct wl_keyboard *keyboard,
+                        uint32_t            format,
+                        int                 fd,
+                        uint32_t            size)
 {
   GdkWaylandDeviceData *device = data;
 
@@ -1168,26 +1168,29 @@ deliver_key_event (GdkWaylandDeviceData *device,
         }
       return FALSE;
     }
-  else switch (device->repeat_count)
+  else
     {
-    case 1:
-      if (device->repeat_timer)
+      switch (device->repeat_count)
         {
-          g_source_remove (device->repeat_timer);
-          device->repeat_timer = 0;
-        }
+        case 1:
+          if (device->repeat_timer)
+            {
+              g_source_remove (device->repeat_timer);
+              device->repeat_timer = 0;
+            }
 
-      device->repeat_timer =
-        gdk_threads_add_timeout (delay, keyboard_repeat, device);
-      g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
-      return TRUE;
-    case 2:
-      device->repeat_timer =
-        gdk_threads_add_timeout (interval, keyboard_repeat, device);
-      g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
-      return FALSE;
-    default:
-      return TRUE;
+          device->repeat_timer =
+            gdk_threads_add_timeout (delay, keyboard_repeat, device);
+          g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
+          return TRUE;
+        case 2:
+          device->repeat_timer =
+            gdk_threads_add_timeout (interval, keyboard_repeat, device);
+          g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
+          return FALSE;
+        default:
+          return TRUE;
+        }
     }
 }
 
@@ -1414,19 +1417,19 @@ touch_handle_cancel (void            *data,
 }
 
 static const struct wl_pointer_listener pointer_listener = {
-    pointer_handle_enter,
-    pointer_handle_leave,
-    pointer_handle_motion,
-    pointer_handle_button,
-    pointer_handle_axis,
+  pointer_handle_enter,
+  pointer_handle_leave,
+  pointer_handle_motion,
+  pointer_handle_button,
+  pointer_handle_axis,
 };
 
 static const struct wl_keyboard_listener keyboard_listener = {
-    keyboard_handle_keymap,
-    keyboard_handle_enter,
-    keyboard_handle_leave,
-    keyboard_handle_key,
-    keyboard_handle_modifiers,
+  keyboard_handle_keymap,
+  keyboard_handle_enter,
+  keyboard_handle_leave,
+  keyboard_handle_key,
+  keyboard_handle_modifiers,
 };
 
 static const struct wl_touch_listener touch_listener = {
@@ -1559,7 +1562,7 @@ seat_handle_capabilities (void                    *data,
 }
 
 static const struct wl_seat_listener seat_listener = {
-    seat_handle_capabilities,
+  seat_handle_capabilities,
 };
 
 static void
@@ -1870,7 +1873,7 @@ gdk_wayland_device_request_selection_content (GdkDevice                         
   device = GDK_WAYLAND_DEVICE (gdk_device)->device;
 
   if (!device->selection_offer)
-      return FALSE;
+    return FALSE;
 
   /* TODO: Check mimetypes */
 
@@ -1905,7 +1908,7 @@ gdk_wayland_device_request_selection_content (GdkDevice                         
 
   return TRUE;
 
-error:
+ error:
   data_offer_unref (closure->offer);
   g_io_channel_unref (closure->channel);
   close (pipe_fd[1]);
@@ -1957,7 +1960,7 @@ data_source_send (void                  *data,
   g_free (buf);
 
   return;
-error:
+ error:
 
   g_warning (G_STRLOC ": Error writing data to client: %s",
              g_strerror (errno));
@@ -1975,9 +1978,9 @@ data_source_cancelled (void                  *data,
 }
 
 static const struct wl_data_source_listener data_source_listener = {
-    data_source_target,
-    data_source_send,
-    data_source_cancelled
+  data_source_target,
+  data_source_send,
+  data_source_cancelled
 };
 
 static guint32
