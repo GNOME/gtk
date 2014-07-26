@@ -1292,8 +1292,8 @@ keyboard_handle_modifiers (void               *data,
 static void
 keyboard_handle_repeat_info (void               *data,
                              struct wl_keyboard *keyboard,
-                             uint32_t            rate,
-                             uint32_t            delay)
+                             int32_t             rate,
+                             int32_t             delay)
 {
   GdkWaylandDeviceData *device = data;
 
