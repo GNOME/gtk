@@ -51,6 +51,7 @@ gtk_list_box_row_accessible_ref_state_set (AtkObject *obj)
     {
       parent = gtk_widget_get_parent (widget);
       if (parent != NULL && 
+          GTK_IS_LIST_BOX (parent) &&
           gtk_list_box_get_selection_mode (GTK_LIST_BOX (parent)) != GTK_SELECTION_NONE)
         atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
 
