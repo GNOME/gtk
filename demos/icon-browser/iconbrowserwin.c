@@ -23,27 +23,17 @@ struct _IconBrowserWindow
 
   GtkListStore *store;
   GtkCellRenderer *cell;
+  GtkCellRenderer *text_cell;
   GtkWidget *search;
   GtkWidget *searchbar;
   GtkWidget *searchentry;
   GtkWidget *list;
-  GtkWidget *images;
   GtkWidget *image1;
   GtkWidget *image2;
   GtkWidget *image3;
   GtkWidget *image4;
   GtkWidget *image5;
-  GtkWidget *symbolic_eventbox;
-  GtkWidget *symbolic_images;
-  GtkWidget *symbolic_image1;
-  GtkWidget *symbolic_image2;
-  GtkWidget *symbolic_image3;
-  GtkWidget *symbolic_image4;
-  GtkWidget *symbolic_image5;
-  GtkWidget *name;
   GtkWidget *description;
-  GtkWidget *context;
-  GtkWidget *context_description;
 };
 
 struct _IconBrowserWindowClass
@@ -89,73 +79,37 @@ item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *wi
   GtkTreeIter iter;
   gchar *name;
   gchar *description;
-  gchar *context_id;
-  gchar *symbolic_name;
-  Context *context;
+  gint column;
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (win->filter_model), &iter, path);
 
+  if (win->symbolic)
+    column = SYMBOLIC_NAME_COLUMN;
+  else
+    column = NAME_COLUMN;
   gtk_tree_model_get (GTK_TREE_MODEL (win->filter_model), &iter,
-                      NAME_COLUMN, &name,
-                      SYMBOLIC_NAME_COLUMN, &symbolic_name,
+                      column, &name,
                       DESCRIPTION_COLUMN, &description,
-                      CONTEXT_COLUMN, &context_id,
                       -1);
       
-  if (name != NULL && gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name))
+  if (name == NULL || !gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name))
     {
-      gtk_widget_show (win->images);
-
-      set_image (win->image1, name, 16);
-      set_image (win->image2, name, 24);
-      set_image (win->image3, name, 32);
-      set_image (win->image4, name, 48);
-      set_image (win->image5, name, 64);
-    }
-  else
-    {
-      gtk_widget_hide (win->images);
+      g_free (description);
+      return;
     }
 
-  context = (Context*)g_hash_table_lookup (win->contexts, context_id);
-
-  gtk_label_set_label (GTK_LABEL (win->description), description);
-  gtk_label_set_label (GTK_LABEL (win->context), context->name);
-  gtk_label_set_label (GTK_LABEL (win->context_description), context->description);
-
-  if (symbolic_name != NULL && gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), symbolic_name))
-    {
-      gtk_widget_show (win->symbolic_images);
-
-      set_image (win->symbolic_image1, symbolic_name, 16);
-      set_image (win->symbolic_image2, symbolic_name, 24);
-      set_image (win->symbolic_image3, symbolic_name, 32);
-      set_image (win->symbolic_image4, symbolic_name, 48);
-      set_image (win->symbolic_image5, symbolic_name, 64);
-
-      if (gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name))
-        {
-          gchar *tmp;
-          tmp = g_strconcat (name, " / ", symbolic_name, NULL);
-          gtk_label_set_label (GTK_LABEL (win->name), tmp);
-          g_free (tmp);
-        }
-      else
-        gtk_label_set_label (GTK_LABEL (win->name), symbolic_name);
-    }
-  else
-    {
-      gtk_widget_hide (win->symbolic_images);
-
-      gtk_label_set_label (GTK_LABEL (win->name), name);
-    }
+  gtk_window_set_title (GTK_WINDOW (win->details), name);
+  set_image (win->image1, name, 16);
+  set_image (win->image2, name, 24);
+  set_image (win->image3, name, 32);
+  set_image (win->image4, name, 48);
+  set_image (win->image5, name, 64);
+  gtk_label_set_text (GTK_LABEL (win->description), description);
 
   gtk_window_present (GTK_WINDOW (win->details));
 
   g_free (name);
   g_free (description);
-  g_free (context_id);
-  g_free (symbolic_name);
 }
 
 static void
@@ -701,58 +655,6 @@ key_press_event_cb (GtkWidget    *widget,
   return gtk_search_bar_handle_event (bar, event);
 }
 
-static void
-symbolic_enter_cb (GtkWidget         *widget,
-                   GdkEvent          *event,
-                   IconBrowserWindow *win)
-{
-  gtk_style_context_add_class (gtk_widget_get_style_context (win->symbolic_images), "warning");
-  gtk_style_context_add_class (gtk_widget_get_style_context (win->symbolic_image1), "warning");
-  gtk_style_context_add_class (gtk_widget_get_style_context (win->symbolic_image2), "warning");
-  gtk_style_context_add_class (gtk_widget_get_style_context (win->symbolic_image3), "warning");
-  gtk_style_context_add_class (gtk_widget_get_style_context (win->symbolic_image4), "warning");
-  gtk_style_context_add_class (gtk_widget_get_style_context (win->symbolic_image5), "warning");
-}
-
-static void
-symbolic_leave_cb (GtkWidget         *widget,
-                   GdkEvent          *event,
-                   IconBrowserWindow *win)
-{
-  gtk_style_context_remove_class (gtk_widget_get_style_context (win->symbolic_images), "warning");
-  gtk_style_context_remove_class (gtk_widget_get_style_context (win->symbolic_image1), "warning");
-  gtk_style_context_remove_class (gtk_widget_get_style_context (win->symbolic_image2), "warning");
-  gtk_style_context_remove_class (gtk_widget_get_style_context (win->symbolic_image3), "warning");
-  gtk_style_context_remove_class (gtk_widget_get_style_context (win->symbolic_image4), "warning");
-  gtk_style_context_remove_class (gtk_widget_get_style_context (win->symbolic_image5), "warning");
-}
-
-static void
-set_icon (GtkCellLayout   *cell_layout,
-          GtkCellRenderer *cell,
-          GtkTreeModel    *model,
-          GtkTreeIter     *iter,
-          gpointer         data)
-{
-  IconBrowserWindow *win = data;
-  gchar *name;
-  gint column;
-
-  if (win->symbolic)
-    column = SYMBOLIC_NAME_COLUMN;
-  else
-    column = NAME_COLUMN;
-
-  gtk_tree_model_get (model, iter, 
-                      column, &name,
-                      -1);
-
-  if (name)
-    g_object_set (cell, "icon-name", name, NULL);
-
-  g_free (name);
-}
-
 static gboolean
 icon_visible_func (GtkTreeModel *model,
                    GtkTreeIter  *iter,
@@ -774,7 +676,7 @@ icon_visible_func (GtkTreeModel *model,
                       CONTEXT_COLUMN, &context,
                       -1);
 
-  visible = name != NULL && g_strcmp0 (context, win->current_context->id) == 0;
+  visible = name != NULL && win->current_context != NULL && g_strcmp0 (context, win->current_context->id) == 0;
 
   g_free (name);
   g_free (context);
@@ -785,7 +687,18 @@ icon_visible_func (GtkTreeModel *model,
 static void
 symbolic_toggled (GtkToggleButton *toggle, IconBrowserWindow *win)
 {
+  gint column;
+
   win->symbolic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle));
+
+  if (win->symbolic)
+    column = SYMBOLIC_NAME_COLUMN;
+  else
+    column = NAME_COLUMN;
+
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (win->list), win->cell, "icon-name", column, NULL);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (win->list), win->text_cell, "text", column, NULL);
+  
   gtk_tree_model_filter_refilter (win->filter_model);
   gtk_widget_queue_draw (win->list);
 }
@@ -801,14 +714,13 @@ icon_browser_window_init (IconBrowserWindow *win)
                           win->searchbar, "search-mode-enabled",
                           G_BINDING_BIDIRECTIONAL);
 
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (win->list), win->cell, set_icon, win, NULL);
 //  gtk_tree_view_set_search_entry (GTK_TREE_VIEW (win->list), GTK_ENTRY (win->searchentry));
   g_signal_connect (win, "key-press-event", G_CALLBACK (key_press_event_cb), win->searchbar);
-  g_signal_connect (win->symbolic_eventbox, "enter-notify-event", G_CALLBACK (symbolic_enter_cb), win);
-  g_signal_connect (win->symbolic_eventbox, "leave-notify-event", G_CALLBACK (symbolic_leave_cb), win);
 
   gtk_tree_model_filter_set_visible_func (win->filter_model, icon_visible_func, win, NULL);
   gtk_window_set_transient_for (GTK_WINDOW (win->details), GTK_WINDOW (win));
+
+  symbolic_toggled (GTK_TOGGLE_BUTTON (win->symbolic_radio), win);
 
   populate (win);
 }
@@ -826,27 +738,17 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
 
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, store);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, cell);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, text_cell);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, search);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, searchbar);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, searchentry);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, list);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, images);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image1);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image2);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image3);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image4);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image5);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, description);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, context);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, name);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, context_description);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_eventbox);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_images);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_image1);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_image2);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_image3);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_image4);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_image5);
 
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), search_text_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), selection_changed);

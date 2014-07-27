@@ -110,9 +110,13 @@
                         <property name="ypad">10</property>
                         <property name="stock-size">5</property>
                       </object>
-                      <attributes>
-                        <attribute name="icon-name">0</attribute>
-                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererText" id="text_cell">
+                        <property name="xpad">10</property>
+                        <property name="ypad">10</property>
+                        <property name="xalign">0.5</property>
+                      </object>
                     </child>
                   </object>
                 </child>
@@ -134,6 +138,7 @@
   <object class="GtkDialog" id="details">
     <property name="modal">True</property>
     <property name="use-header-bar">1</property>
+    <property name="resizable">False</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
     <child internal-child="vbox">
       <object class="GtkBox">
@@ -144,107 +149,17 @@
             <property name="row-spacing">10</property>
             <property name="column-spacing">10</property>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Name</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="name">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-                <property name="width">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Description</property>
-                <property name="xalign">0</property>
-                <property name="valign">start</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="description">
-                <property name="visible">True</property>
-                <property name="wrap">True</property>
-                <property name="xalign">0</property>
-                <property name="valign">start</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-                <property name="width">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Context</property>
-                <property name="xalign">0</property>
-                <property name="valign">start</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="context">
-                <property name="visible">True</property>
-                <property name="wrap">True</property>
-                <property name="xalign">0</property>
-                <property name="valign">start</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-                <property name="width">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="context_description">
-                <property name="visible">True</property>
-                <property name="wrap">True</property>
-                <property name="xalign">0</property>
-                <property name="valign">start</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
-                <property name="width">4</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox" id="images">
-            <property name="orientation">horizontal</property>
-            <property name="hexpand">True</property>
-            <property name="homogeneous">True</property>
-            <property name="spacing">10</property>
-            <property name="margin">10</property>
-            <child>
               <object class="GtkImage" id="image1">
                 <property name="visible">True</property>
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="tooltip-text">16</property>
+                <property name="valign">end</property>
               </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image2">
@@ -252,8 +167,12 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="tooltip-text">24</property>
+                <property name="valign">end</property>
               </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image3">
@@ -261,8 +180,12 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="tooltip-text">32</property>
+                <property name="valign">end</property>
               </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">1</property>
+              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image4">
@@ -270,8 +193,12 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="tooltip-text">48</property>
+                <property name="valign">end</property>
               </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">1</property>
+              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image5">
@@ -279,68 +206,112 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="tooltip-text">64</property>
+                <property name="valign">end</property>
               </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">1</property>
+              </packing>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkEventBox" id="symbolic_eventbox">
-            <property name="visible">True</property>
-            <property name="above-child">True</property>
+
             <child>
-              <object class="GtkBox" id="symbolic_images">
-                <property name="orientation">horizontal</property>
-                <property name="hexpand">True</property>
-                <property name="homogeneous">True</property>
-                <property name="spacing">10</property>
-                <property name="margin">10</property>
-                <child>
-                  <object class="GtkImage" id="symbolic_image1">
-                    <property name="visible">True</property>
-                    <property name="xpad">4</property>
-                    <property name="ypad">4</property>
-                    <property name="halign">center</property>
-                    <property name="tooltip-text">16</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="symbolic_image2">
-                    <property name="visible">True</property>
-                    <property name="xpad">4</property>
-                    <property name="ypad">4</property>
-                    <property name="halign">center</property>
-                    <property name="tooltip-text">24</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="symbolic_image3">
-                    <property name="visible">True</property>
-                    <property name="xpad">4</property>
-                    <property name="ypad">4</property>
-                    <property name="halign">center</property>
-                    <property name="tooltip-text">32</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="symbolic_image4">
-                    <property name="visible">True</property>
-                    <property name="xpad">4</property>
-                    <property name="ypad">4</property>
-                    <property name="halign">center</property>
-                    <property name="tooltip-text">48</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="symbolic_image5">
-                    <property name="visible">True</property>
-                    <property name="xpad">4</property>
-                    <property name="ypad">4</property>
-                    <property name="halign">center</property>
-                    <property name="tooltip-text">64</property>
-                  </object>
-                </child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="xpad">4</property>
+                <property name="ypad">4</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="label">16x16</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
               </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="xpad">4</property>
+                <property name="ypad">4</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="label">24x24</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="xpad">4</property>
+                <property name="ypad">4</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="label">32x32</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="xpad">4</property>
+                <property name="ypad">4</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="label">48x48</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label5">
+                <property name="visible">True</property>
+                <property name="xpad">4</property>
+                <property name="ypad">4</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="label">64x64</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="description">
+                <property name="visible">True</property>
+                <property name="wrap">True</property>
+                <property name="max-width-chars">60</property>
+                <property name="xalign">0</property>
+                <property name="valign">start</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+                <property name="width">5</property>
+              </packing>
             </child>
           </object>
         </child>
