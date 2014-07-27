@@ -1901,18 +1901,14 @@ GtkProgressBar {
   background-color: $selected_bg_color;
   background-image: linear-gradient(to bottom, $selected_bg_color 2px,
                                                lighten($selected_bg_color,6%));
-  $_shadow: if($variant=='light', transparentize(black,0.75),
-                                  transparentize(black,0.9));
-  box-shadow: 1px 0 $_shadow, -1px 0 $_shadow;
+  box-shadow: none; //needed for clipping
   &.left {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
-    box-shadow: 1px 0 $_shadow;
   }
   &.right {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
-    box-shadow: -1px 0 $_shadow;
   }
   &.left.right {
     box-shadow: none;
@@ -1920,7 +1916,6 @@ GtkProgressBar {
   &.vertical {
     background-image: linear-gradient(to right, $selected_bg_color 2px,
                                       lighten($selected_bg_color,7%));
-    box-shadow: 0 1px $_shadow;
     &.bottom {
       border-bottom-left-radius: 3px;
       border-bottom-right-radius: 3px;
@@ -1931,7 +1926,6 @@ GtkProgressBar {
       border-top-right-radius: 3px;
     }
   }
-//  box-shadow: inset 1px 1px transparentize($borders_edge,0.8);
   &:backdrop {
     border-color: if($variant=='light', $selected_bg_color,
                                         $selected_borders_color);

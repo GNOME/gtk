@@ -2398,20 +2398,17 @@ GtkProgressBar {
   border-color: #0f2b48;
   background-color: #215d9c;
   background-image: linear-gradient(to bottom, #215d9c 2px, #266cb5);
-  box-shadow: 1px 0 rgba(0, 0, 0, 0.1), -1px 0 rgba(0, 0, 0, 0.1); }
+  box-shadow: none; }
   .progressbar.left {
     border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    box-shadow: 1px 0 rgba(0, 0, 0, 0.1); }
+    border-bottom-left-radius: 3px; }
   .progressbar.right {
     border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    box-shadow: -1px 0 rgba(0, 0, 0, 0.1); }
+    border-bottom-right-radius: 3px; }
   .progressbar.left.right {
     box-shadow: none; }
   .progressbar.vertical {
-    background-image: linear-gradient(to right, #215d9c 2px, #276fba);
-    box-shadow: 0 1px rgba(0, 0, 0, 0.1); }
+    background-image: linear-gradient(to right, #215d9c 2px, #276fba); }
     .progressbar.vertical.bottom {
       border-bottom-left-radius: 3px;
       border-bottom-right-radius: 3px;
