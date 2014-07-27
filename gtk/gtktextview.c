@@ -1491,13 +1491,6 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->pixel_cache = _gtk_pixel_cache_new ();
 
-  /* Widgets inheriting from GtkTextView (like GtkSourceView) rely on being able to
-     paint before chaining up to GtkTextView.draw() and having that be visible, that
-     doesn't work unless we have alpha in the textview pixelcache. This is slightly
-     suboptimal, as it means drawing the cache is slower (and OVER operation) rather
-     than a pure blit, but is required for backwards compat. */
-  _gtk_pixel_cache_set_content (priv->pixel_cache, CAIRO_CONTENT_COLOR_ALPHA);
-
   /* Set up default style */
   priv->wrap_mode = GTK_WRAP_NONE;
   priv->pixels_above_lines = 0;
@@ -5318,6 +5311,18 @@ draw_text (cairo_t  *cr,
            gpointer  user_data)
 {
   GtkWidget *widget = user_data;
+  GtkStyleContext *context;
+  GdkRectangle bg_rect;
+
+  gdk_cairo_get_clip_rectangle (cr, &bg_rect);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_render_background (context, cr,
+                         bg_rect.x, bg_rect.y,
+                         bg_rect.width, bg_rect.height);
+  gtk_style_context_restore (context);
 
   gtk_text_view_paint (widget, cr);
 }
