@@ -601,6 +601,53 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
 }
 
 static void
+gtk_scrolled_window_invalidate_overshoot (GtkScrolledWindow *scrolled_window)
+{
+  GtkAllocation child_allocation, allocation;
+  gint overshoot_x, overshoot_y;
+  GdkRectangle rect;
+
+  if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
+    return;
+
+  gtk_widget_get_allocation (GTK_WIDGET (scrolled_window), &allocation);
+  gtk_scrolled_window_relative_allocation (GTK_WIDGET (scrolled_window),
+                                           &child_allocation);
+  child_allocation.x += allocation.x;
+  child_allocation.y += allocation.y;
+
+  if (overshoot_x != 0)
+    {
+      if (overshoot_x < 0)
+        rect.x = child_allocation.x;
+      else
+        rect.x = child_allocation.x + child_allocation.width - MAX_OVERSHOOT_DISTANCE;
+
+      rect.y = child_allocation.y;
+      rect.width = MAX_OVERSHOOT_DISTANCE;
+      rect.height = child_allocation.height;
+
+      gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (scrolled_window)),
+                                  &rect, TRUE);
+    }
+
+  if (overshoot_y != 0)
+    {
+      if (overshoot_y < 0)
+        rect.y = child_allocation.y;
+      else
+        rect.y = child_allocation.y + child_allocation.height - MAX_OVERSHOOT_DISTANCE;
+
+      rect.x = child_allocation.x;
+      rect.width = child_allocation.width;
+      rect.height = MAX_OVERSHOOT_DISTANCE;
+
+      gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (scrolled_window)),
+                                  &rect, TRUE);
+    }
+}
+
+static void
 scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
                                 gdouble            offset_x,
                                 gdouble            offset_y,
@@ -610,6 +657,8 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
   gdouble dx, dy;
+
+  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
   if (!priv->capture_button_press)
     {
@@ -636,8 +685,7 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
                                                  dy, TRUE, FALSE);
     }
 
-  gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (scrolled_window)),
-                              NULL, FALSE);
+  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 }
 
 static void
@@ -2501,6 +2549,8 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
   hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
 
+  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
+
   if (data->hscrolling &&
       gtk_kinetic_scrolling_tick (data->hscrolling, elapsed, &position))
     {
@@ -2525,7 +2575,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
       return G_SOURCE_REMOVE;
     }
 
-  gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE);
+  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
   return G_SOURCE_CONTINUE;
 }
