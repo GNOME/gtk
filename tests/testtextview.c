@@ -3,6 +3,36 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
+typedef struct {
+  GtkTextView parent;
+} MyTextView;
+
+typedef struct {
+  GtkTextViewClass parent_class;
+} MyTextViewClass;
+
+G_DEFINE_TYPE (MyTextView, my_text_view, GTK_TYPE_TEXT_VIEW);
+
+static void draw_background (GtkWidget *widget, cairo_t *cr);
+
+static void
+my_text_view_init (MyTextView *text_view)
+{
+}
+
+static void my_text_view_draw_layer (GtkWidget         *widget,
+				     GtkTextViewLayer   layer,
+				     cairo_t           *cr)
+{
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW)
+    draw_background (widget, cr);
+}
+
+static void
+my_text_view_class_init (MyTextViewClass *klass)
+{
+  GTK_TEXT_VIEW_CLASS (klass)->draw_layer = my_text_view_draw_layer;
+}
 
 static void
 create_tags (GtkTextBuffer *buffer)
@@ -138,9 +168,13 @@ get_checkered (void)
 static void
 draw_background (GtkWidget *widget, cairo_t *cr)
 {
+  GdkRectangle visible_rect;
   cairo_pattern_t *pat;
 
   cairo_save (cr);
+
+  gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (widget), &visible_rect);
+  cairo_translate (cr, -visible_rect.x, -visible_rect.y);
 
   cairo_set_source_rgb (cr, CHECK_DARK, CHECK_DARK, CHECK_DARK);
   cairo_paint (cr);
@@ -166,7 +200,7 @@ main (int argc, char **argv)
 
   window   = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   sw       = gtk_scrolled_window_new (NULL, NULL);
-  textview = gtk_text_view_new ();
+  textview = g_object_new (my_text_view_get_type (), NULL);
   buffer   = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
   button   = gtk_button_new_with_label ("Fixed Child");
   button2   = gtk_button_new_with_label ("Flowed Child");
@@ -194,9 +228,6 @@ main (int argc, char **argv)
 
   gtk_text_view_add_child_at_anchor (GTK_TEXT_VIEW (textview),
                                      button2, anchor);
-
-  g_signal_connect (textview, "draw",
-		    G_CALLBACK (draw_background), NULL);
 
   gtk_widget_show (window);
 
