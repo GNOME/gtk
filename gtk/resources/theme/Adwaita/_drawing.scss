@@ -235,7 +235,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   //
     @if $c!=$bg_color {
       color: $tc;
-      border_color: if($variant=='light',$c,_border_color($c));
+      border-color: if($variant=='light',$c,_border_color($c));
     }
     @else {
       color: $backdrop_fg_color;

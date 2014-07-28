@@ -423,7 +423,7 @@
     .button.suggested-action:backdrop {
       border-style: solid;
       color: white;
-      border_color: #4a90d9;
+      border-color: #4a90d9;
       background-image: linear-gradient(to bottom, #4a90d9);
       text-shadow: none;
       icon-shadow: none;
@@ -473,7 +473,7 @@
     .button.destructive-action:backdrop {
       border-style: solid;
       color: white;
-      border_color: #ef2929;
+      border-color: #ef2929;
       background-image: linear-gradient(to bottom, #ef2929);
       text-shadow: none;
       icon-shadow: none;
@@ -993,7 +993,7 @@ GtkComboBox {
       .header-bar.selection-mode .button:backdrop {
         border-style: solid;
         color: white;
-        border_color: #4a90d9;
+        border-color: #4a90d9;
         background-image: linear-gradient(to bottom, #4a90d9);
         text-shadow: none;
         icon-shadow: none;
@@ -2739,7 +2739,7 @@ GtkCalendar {
       .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop {
         border-style: solid;
         color: white;
-        border_color: #4a90d9;
+        border-color: #4a90d9;
         background-image: linear-gradient(to bottom, #4a90d9);
         text-shadow: none;
         icon-shadow: none;
@@ -2788,7 +2788,7 @@ GtkCalendar {
       .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop {
         border-style: solid;
         color: white;
-        border_color: #ef2929;
+        border-color: #ef2929;
         background-image: linear-gradient(to bottom, #ef2929);
         text-shadow: none;
         icon-shadow: none;
@@ -2936,7 +2936,7 @@ GtkInfoBar {
     .error .button:backdrop {
       border-style: solid;
       color: white;
-      border_color: #4a90d9;
+      border-color: #4a90d9;
       background-image: linear-gradient(to bottom, #4a90d9);
       text-shadow: none;
       icon-shadow: none;
