@@ -316,6 +316,8 @@
       color: #c7c7c7;
       border-color: #a8a8a8;
       background-image: linear-gradient(to bottom, #f4f4f4);
+      text-shadow: none;
+      icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     .button:backdrop:insensitive:active {
       border-style: solid;
@@ -335,7 +337,9 @@
       border-style: solid;
       color: #8d9091;
       border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, #ebebeb);
+      color: #8d9091;
+      border-color: #a1a1a1;
+      background-image: linear-gradient(to bottom, #ebebeb, #f4f4f4);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
   .button.osd {
     border-radius: 6px;
@@ -419,7 +423,7 @@
     .button.suggested-action:backdrop {
       border-style: solid;
       color: white;
-      border-color: #4a90d9;
+      border_color: #4a90d9;
       background-image: linear-gradient(to bottom, #4a90d9);
       text-shadow: none;
       icon-shadow: none;
@@ -429,6 +433,8 @@
         color: #c7c7c7;
         border-color: #a8a8a8;
         background-image: linear-gradient(to bottom, #f4f4f4);
+        text-shadow: none;
+        icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     .button.suggested-action:insensitive {
       border-style: solid;
@@ -467,7 +473,7 @@
     .button.destructive-action:backdrop {
       border-style: solid;
       color: white;
-      border-color: #ef2929;
+      border_color: #ef2929;
       background-image: linear-gradient(to bottom, #ef2929);
       text-shadow: none;
       icon-shadow: none;
@@ -477,6 +483,8 @@
         color: #c7c7c7;
         border-color: #a8a8a8;
         background-image: linear-gradient(to bottom, #f4f4f4);
+        text-shadow: none;
+        icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     .button.destructive-action:insensitive {
       border-style: solid;
@@ -563,7 +571,9 @@
     border-style: solid;
     color: #8d9091;
     border-color: #a1a1a1;
-    background-image: linear-gradient(to bottom, #ebebeb);
+    color: #8d9091;
+    border-color: #a1a1a1;
+    background-image: linear-gradient(to bottom, #ebebeb, #f4f4f4);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
   .inline-toolbar GtkToolButton > .button:backdrop {
     border-style: solid;
@@ -584,6 +594,8 @@
     color: #c7c7c7;
     border-color: #a8a8a8;
     background-image: linear-gradient(to bottom, #f4f4f4);
+    text-shadow: none;
+    icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
   .inline-toolbar GtkToolButton > .button:backdrop:insensitive:active {
     border-style: solid;
@@ -807,6 +819,8 @@ GtkColorButton.button {
       color: #c7c7c7;
       border-color: #a8a8a8;
       background-image: linear-gradient(to bottom, #f4f4f4);
+      text-shadow: none;
+      icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
   .spinbutton.vertical.entry, .spinbutton.vertical:dir(rtl).entry {
     border-radius: 0;
@@ -969,9 +983,9 @@ GtkComboBox {
       .titlebar.selection-mode .button:insensitive, GtkCalendar.selection-mode.header .button:insensitive,
       .header-bar.selection-mode .button:insensitive {
         border-style: solid;
-        color: #8d9091;
-        border-color: #a1a1a1;
-        background-image: linear-gradient(to bottom, #f4f4f4);
+        color: #c1d9f1;
+        border-color: #1c5187;
+        background-image: linear-gradient(to bottom, #65a0de);
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
@@ -979,7 +993,7 @@ GtkComboBox {
       .header-bar.selection-mode .button:backdrop {
         border-style: solid;
         color: white;
-        border-color: #4a90d9;
+        border_color: #4a90d9;
         background-image: linear-gradient(to bottom, #4a90d9);
         text-shadow: none;
         icon-shadow: none;
@@ -988,9 +1002,11 @@ GtkComboBox {
       .titlebar.selection-mode .button:backdrop:insensitive, GtkCalendar.selection-mode.header .button:backdrop:insensitive,
       .header-bar.selection-mode .button:backdrop:insensitive {
         border-style: solid;
-        color: #c7c7c7;
-        border-color: #a8a8a8;
-        background-image: linear-gradient(to bottom, #f4f4f4);
+        color: #9ac1e9;
+        border-color: #1c5187;
+        background-image: linear-gradient(to bottom, #65a0de);
+        text-shadow: none;
+        icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       .titlebar.selection-mode .button.suggested-action, GtkCalendar.selection-mode.header .button.suggested-action,
       .header-bar.selection-mode .button.suggested-action {
@@ -1049,6 +1065,8 @@ GtkComboBox {
           color: #c7c7c7;
           border-color: #a8a8a8;
           background-image: linear-gradient(to bottom, #f4f4f4);
+          text-shadow: none;
+          icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
           border-color: #184472; }
     .titlebar.selection-mode .selection-menu, GtkCalendar.selection-mode.header .selection-menu, .titlebar.selection-mode .selection-menu:backdrop, GtkCalendar.selection-mode.header .selection-menu:backdrop,
@@ -1680,6 +1698,8 @@ GtkSwitch {
         color: #c7c7c7;
         border-color: #a8a8a8;
         background-image: linear-gradient(to bottom, #f4f4f4);
+        text-shadow: none;
+        icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
 
 /*************************
@@ -2072,6 +2092,8 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       color: #c7c7c7;
       border-color: #a8a8a8;
       background-image: linear-gradient(to bottom, #f4f4f4);
+      text-shadow: none;
+      icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     .scale.slider:active,
     .scale.scale-has-marks-above.scale-has-marks-below.slider:active,
@@ -2686,6 +2708,8 @@ GtkCalendar {
       color: #c7c7c7;
       border-color: #a8a8a8;
       background-image: linear-gradient(to bottom, #f4f4f4);
+      text-shadow: none;
+      icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     .message-dialog.csd .dialog-action-area .button.suggested-action {
       border-style: solid;
@@ -2715,7 +2739,7 @@ GtkCalendar {
       .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop {
         border-style: solid;
         color: white;
-        border-color: #4a90d9;
+        border_color: #4a90d9;
         background-image: linear-gradient(to bottom, #4a90d9);
         text-shadow: none;
         icon-shadow: none;
@@ -2725,6 +2749,8 @@ GtkCalendar {
           color: #c7c7c7;
           border-color: #a8a8a8;
           background-image: linear-gradient(to bottom, #f4f4f4);
+          text-shadow: none;
+          icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive {
         border-style: solid;
@@ -2762,7 +2788,7 @@ GtkCalendar {
       .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop {
         border-style: solid;
         color: white;
-        border-color: #ef2929;
+        border_color: #ef2929;
         background-image: linear-gradient(to bottom, #ef2929);
         text-shadow: none;
         icon-shadow: none;
@@ -2772,6 +2798,8 @@ GtkCalendar {
           color: #c7c7c7;
           border-color: #a8a8a8;
           background-image: linear-gradient(to bottom, #f4f4f4);
+          text-shadow: none;
+          icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive {
         border-style: solid;
@@ -2896,9 +2924,9 @@ GtkInfoBar {
     .warning .button:insensitive,
     .error .button:insensitive {
       border-style: solid;
-      color: #8d9091;
-      border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, #f4f4f4);
+      color: #c1d9f1;
+      border-color: #1c5187;
+      background-image: linear-gradient(to bottom, #65a0de);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
@@ -2908,20 +2936,24 @@ GtkInfoBar {
     .error .button:backdrop {
       border-style: solid;
       color: white;
-      border-color: #4a90d9;
+      border_color: #4a90d9;
       background-image: linear-gradient(to bottom, #4a90d9);
       text-shadow: none;
       icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-    .info .button:backdrop:insensitive,
-    .question .button:backdrop:insensitive,
-    .warning .button:backdrop:insensitive,
-    .error .button:backdrop:insensitive {
-      border-style: solid;
-      color: #c7c7c7;
-      border-color: #a8a8a8;
-      background-image: linear-gradient(to bottom, #f4f4f4);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
+      border-color: #1c5187; }
+      .info .button:backdrop:insensitive,
+      .question .button:backdrop:insensitive,
+      .warning .button:backdrop:insensitive,
+      .error .button:backdrop:insensitive {
+        border-style: solid;
+        color: #9ac1e9;
+        border-color: #1c5187;
+        background-image: linear-gradient(to bottom, #65a0de);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
+        border-color: #1c5187; }
 
 /************
  * Tooltips *

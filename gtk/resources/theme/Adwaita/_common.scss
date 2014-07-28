@@ -2367,12 +2367,21 @@ GtkInfoBar {
   text-shadow: 0 1px darken($selected_bg_color, 10%);
   border-color: darken($selected_bg_color, 10%);
   .button {
-    @include button(normal, $selected_bg_color, $selected_fg_color, noedge);
-    &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, noedge); }
-    &:active { @include button(active, $selected_bg_color, $selected_fg_color, noedge); }
-    &:insensitive { @include button(insensitive, $selected_bg_color, $selected_fg_color, noedge); }
-    &:backdrop { @include button(backdrop, $selected_bg_color, $selected_fg_color, noedge); }
-    &:backdrop:insensitive { @include button(backdrop-insensitive, $selected_bg_color, $selected_fg_color, noedge); }
+    @include button(normal, $selected_bg_color, $selected_fg_color, $noedge: true);
+    &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, $noedge: true); }
+    &:active { @include button(active, $selected_bg_color, $selected_fg_color, $noedge: true); }
+    &:insensitive {
+      @include button(insensitive, $selected_bg_color, $selected_fg_color, $noedge: true);
+    }
+    &:backdrop {
+      @include button(backdrop, $selected_bg_color, $selected_fg_color);
+      border-color: _border_color($selected_bg_color);
+      &:insensitive {
+        @include button(backdrop-insensitive, $selected_bg_color,
+                                              $selected_fg_color, $noedge: True);
+        border-color: _border_color($selected_bg_color);
+      }
+    }
   }
 }
 
