@@ -366,8 +366,8 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
   /* Blur the surface. */
   _gtk_cairo_blur_surface (surface, radius);
 
-  cairo_set_source_surface (original_cr, surface, 0, 0);
-  cairo_paint (original_cr);
+  gdk_cairo_set_source_rgba (original_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+  cairo_mask_surface (original_cr, surface, 0, 0);
 
   cairo_destroy (cr);
   cairo_surface_destroy (surface);
