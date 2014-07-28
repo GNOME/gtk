@@ -5311,6 +5311,7 @@ draw_text (cairo_t  *cr,
            gpointer  user_data)
 {
   GtkWidget *widget = user_data;
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkStyleContext *context;
   GdkRectangle bg_rect;
 
@@ -5324,7 +5325,13 @@ draw_text (cairo_t  *cr,
                          bg_rect.width, bg_rect.height);
   gtk_style_context_restore (context);
 
+  if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
+    GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (widget, GTK_TEXT_VIEW_LAYER_BELOW, cr);
+
   gtk_text_view_paint (widget, cr);
+
+  if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
+    GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (widget, GTK_TEXT_VIEW_LAYER_ABOVE, cr);
 }
 
 static void

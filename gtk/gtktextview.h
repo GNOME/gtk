@@ -68,6 +68,19 @@ typedef enum
 } GtkTextWindowType;
 
 /**
+ * GtkTextViewLayer:
+ * @GTK_TEXT_VIEW_LAYER_BELOW: The layer rendered below the text (but above the background).
+ * @GTK_TEXT_VIEW_LAYER_ABOVE: The layer rendered above the text.
+ *
+ * Used to reference the parts of #GtkTextView.
+ */
+typedef enum
+{
+  GTK_TEXT_VIEW_LAYER_BELOW,
+  GTK_TEXT_VIEW_LAYER_ABOVE
+} GtkTextViewLayer;
+
+/**
  * GTK_TEXT_VIEW_PRIORITY_VALIDATE:
  *
  * The priority at which the text view validates onscreen lines
@@ -86,6 +99,11 @@ struct _GtkTextView
   GtkTextViewPrivate *priv;
 };
 
+/**
+ * GtkTextViewClass:
+ * @parent_class: The object class structure needs to be the first
+ * @draw_layer: Draw layers below and above the text in the text window.
+ */
 struct _GtkTextViewClass
 {
   GtkContainerClass parent_class;
@@ -121,6 +139,10 @@ struct _GtkTextViewClass
 
   GtkTextBuffer * (* create_buffer) (GtkTextView *text_view);
 
+  void (* draw_layer)       (GtkWidget        *widget,
+			     GtkTextViewLayer layer,
+			     cairo_t          *cr);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -128,7 +150,6 @@ struct _GtkTextViewClass
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
 };
 
 GDK_AVAILABLE_IN_ALL
