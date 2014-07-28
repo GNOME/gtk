@@ -125,6 +125,11 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
   object_class->set_property = gtk_text_mark_set_property;
   object_class->get_property = gtk_text_mark_get_property;
 
+  /**
+   * GtkTextMark:name:
+   *
+   * The name of the mark or %NULL if the mark is anonymous.
+   */
   g_object_class_install_property (object_class,
                                    PROP_NAME,
                                    g_param_spec_string ("name",
@@ -133,6 +138,13 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
                                                         NULL,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * GtkTextMark:left-gravity:
+   *
+   * Whether the mark has left gravity. When text is inserted at the mark’s
+   * current location, if the mark has left gravity it will be moved
+   * to the left of the newly-inserted text, otherwise to the right.
+   */
   g_object_class_install_property (object_class,
                                    PROP_LEFT_GRAVITY,
                                    g_param_spec_boolean ("left-gravity",
