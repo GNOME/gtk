@@ -330,7 +330,7 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   clip_radius = _gtk_cairo_blur_compute_pixels (radius);
 
   /* Create a larger surface to center the blur. */
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+  surface = cairo_image_surface_create (CAIRO_FORMAT_A8,
                                         clip_rect.width + 2 * clip_radius,
                                         clip_rect.height + 2 * clip_radius);
   cairo_surface_set_device_offset (surface, clip_radius - clip_rect.x, clip_radius - clip_rect.y);

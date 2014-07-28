@@ -31,33 +31,16 @@
  */
 static inline void
 _blurinner (guchar* pixel,
-            gint   *zR,
-            gint   *zG,
-            gint   *zB,
             gint   *zA,
             gint    alpha,
             gint    aprec,
             gint    zprec)
 {
-  gint R;
-  gint G;
-  gint B;
   guchar A;
 
-  R = *pixel;
-  G = *(pixel + 1);
-  B = *(pixel + 2);
-  A = *(pixel + 3);
-
-  *zR += (alpha * ((R << zprec) - *zR)) >> aprec;
-  *zG += (alpha * ((G << zprec) - *zG)) >> aprec;
-  *zB += (alpha * ((B << zprec) - *zB)) >> aprec;
+  A = *pixel;
   *zA += (alpha * ((A << zprec) - *zA)) >> aprec;
-
-  *pixel       = *zR >> zprec;
-  *(pixel + 1) = *zG >> zprec;
-  *(pixel + 2) = *zB >> zprec;
-  *(pixel + 3) = *zA >> zprec;
+  *pixel = *zA >> zprec;
 } 
 
 static inline void
@@ -65,41 +48,28 @@ _blurrow (guchar* pixels,
           gint    width,
           gint    height,
           gint    rowstride,
-          gint    channels,
           gint    line,
           gint    alpha,
           gint    aprec,
           gint    zprec)
 {
-  gint    zR;
-  gint    zG;
-  gint    zB;
   gint    zA;
   gint    index;
   guchar* scanline;
 
   scanline = &pixels[line * rowstride];
 
-  zR = *scanline << zprec;
-  zG = *(scanline + 1) << zprec;
-  zB = *(scanline + 2) << zprec;
-  zA = *(scanline + 3) << zprec;
+  zA = *scanline << zprec;
 
   for (index = 0; index < width; index ++)
-    _blurinner (&scanline[index * channels],
-                &zR,
-                &zG,
-                &zB,
+    _blurinner (&scanline[index],
                 &zA,
                 alpha,
                 aprec,
                 zprec);
 
   for (index = width - 2; index >= 0; index--)
-    _blurinner (&scanline[index * channels],
-                &zR,
-                &zG,
-                &zB,
+    _blurinner (&scanline[index],
                 &zA,
                 alpha,
                 aprec,
@@ -111,33 +81,23 @@ _blurcol (guchar* pixels,
           gint    width,
           gint    height,
           gint    rowstride,
-          gint    channels,
           gint    x,
           gint    alpha,
           gint    aprec,
           gint    zprec)
 {
-  gint zR;
-  gint zG;
-  gint zB;
   gint zA;
   gint index;
   guchar* ptr;
 
   ptr = pixels;
-  
-  ptr += x * channels;
 
-  zR = *((guchar*) ptr    ) << zprec;
-  zG = *((guchar*) ptr + 1) << zprec;
-  zB = *((guchar*) ptr + 2) << zprec;
-  zA = *((guchar*) ptr + 3) << zprec;
+  ptr += x;
+
+  zA = *ptr << zprec;
 
   for (index = 0; index < height; index++)
     _blurinner (&ptr[index * rowstride],
-                &zR,
-                &zG,
-                &zB,
                 &zA,
                 alpha,
                 aprec,
@@ -145,9 +105,6 @@ _blurcol (guchar* pixels,
 
   for (index = height - 2; index >= 0; index--)
     _blurinner (&ptr[index * rowstride],
-                &zR,
-                &zG,
-                &zB,
                 &zA,
                 alpha,
                 aprec,
@@ -160,7 +117,6 @@ _blurcol (guchar* pixels,
  * @width: image width
  * @height: image height
  * @rowstride: image rowstride
- * @channels: image channels
  * @radius: kernel radius
  * @aprec: precision of alpha parameter in fixed-point format 0.aprec
  * @zprec: precision of state parameters zR,zG,zB and zA in fp format 8.zprec
@@ -176,7 +132,6 @@ _expblur (guchar* pixels,
           gint    width,
           gint    height,
           gint    rowstride,
-          gint    channels,
           double  radius,
           gint    aprec,
           gint    zprec)
@@ -194,7 +149,6 @@ _expblur (guchar* pixels,
               width,
               height,
               rowstride,
-              channels,
               row,
               alpha,
               aprec,
@@ -205,7 +159,6 @@ _expblur (guchar* pixels,
               width,
               height,
               rowstride,
-              channels,
               col,
               alpha,
               aprec,
@@ -230,8 +183,7 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   g_return_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE);
 
   format = cairo_image_surface_get_format (surface);
-  g_return_if_fail (format == CAIRO_FORMAT_RGB24 ||
-                    format == CAIRO_FORMAT_ARGB32);
+  g_return_if_fail (format == CAIRO_FORMAT_A8);
 
   if (radius == 0)
     return;
@@ -243,7 +195,6 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
             cairo_image_surface_get_width (surface),
             cairo_image_surface_get_height (surface),
             cairo_image_surface_get_stride (surface),
-            4,
             radius,
             16,
             7);
