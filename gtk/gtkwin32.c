@@ -30,7 +30,14 @@
 
 #define STRICT
 #include <windows.h>
+#include <commctrl.h>
 #undef STRICT
+
+/* In practice, resulting DLL will have manifest resource under index 2.
+ * Fall back to that value if we can't find resource index programmatically.
+ */
+#define EMPIRIC_MANIFEST_RESOURCE_INDEX 2
+
 
 static HMODULE gtk_dll;
 
@@ -47,6 +54,89 @@ DllMain (HINSTANCE hinstDLL,
     }
 
   return TRUE;
+}
+
+static BOOL CALLBACK
+find_first_manifest (HMODULE  module_handle,
+                     LPCSTR   resource_type,
+                     LPSTR    resource_name,
+                     LONG_PTR user_data)
+{
+  LPSTR *result_name = (LPSTR *) user_data;
+
+  if (resource_type == RT_MANIFEST)
+    {
+      if (IS_INTRESOURCE (resource_name))
+        *result_name = resource_name;
+      else
+        *result_name = g_strdup (resource_name);
+      return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Grabs the first manifest it finds in libgtk3 (which is expected to be the
+ * common-controls-6.0.0.0 manifest we embedded to enable visual styles),
+ * uses it to create a process-default activation context, activates that
+ * context, loads up the library passed in @dllname, then deactivates and
+ * releases the context.
+ *
+ * In practice this is used to force system DLLs (like comdlg32) to be
+ * loaded as if the application had the same manifest as libgtk3
+ * (otherwise libgtk3 manifest only affests libgtk3 itself).
+ * This way application does not need to have a manifest or to link
+ * against comctl32.
+ *
+ * Note that loaded library handle leaks, so only use this function in
+ * g_once_init_enter (leaking once is OK, Windows will clean up after us).
+ */
+void
+_gtk_load_dll_with_libgtk3_manifest (const gchar *dll_name)
+{
+  HANDLE activation_ctx_handle;
+  ACTCTXA activation_ctx_descriptor;
+  ULONG_PTR activation_cookie;
+  LPSTR resource_name;
+  BOOL activated;
+
+  resource_name = NULL;
+  EnumResourceNames (gtk_dll, RT_MANIFEST, find_first_manifest,
+                     (LONG_PTR) &resource_name);
+
+  if (resource_name == NULL)
+    resource_name = MAKEINTRESOURCEA (EMPIRIC_MANIFEST_RESOURCE_INDEX);
+
+  memset (&activation_ctx_descriptor, 0, sizeof (activation_ctx_descriptor));
+  activation_ctx_descriptor.cbSize = sizeof (activation_ctx_descriptor);
+  activation_ctx_descriptor.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID |
+                                      ACTCTX_FLAG_HMODULE_VALID |
+                                      ACTCTX_FLAG_SET_PROCESS_DEFAULT;
+  activation_ctx_descriptor.hModule = gtk_dll;
+  activation_ctx_descriptor.lpResourceName = resource_name;
+  activation_ctx_handle = CreateActCtx (&activation_ctx_descriptor);
+
+  if (activation_ctx_handle == INVALID_HANDLE_VALUE)
+    g_warning ("Failed to CreateActCtx for module %p, resource %p: %lu\n",
+               gtk_dll, resource_name, GetLastError ());
+  else
+    {
+      activation_cookie = 0;
+      activated = ActivateActCtx (activation_ctx_handle, &activation_cookie);
+
+      if (!activated)
+        g_warning ("Failed to ActivateActCtx: %lu\n", GetLastError ());
+
+      LoadLibraryA (dll_name);
+
+      if (activated && !DeactivateActCtx (0, activation_cookie))
+        g_warning ("Failed to DeactivateActCtx: %lu\n", GetLastError ());
+
+      ReleaseActCtx (activation_ctx_handle);
+    }
+
+  if (!IS_INTRESOURCE (resource_name))
+    g_free (resource_name);
 }
 
 const gchar *

@@ -90,7 +90,7 @@ gtk_win32_symbols = -export-symbols $(srcdir)/gtk.def
 gtk_win32_res = gtk-win32-res.o
 gtk_win32_res_ldflag = -Wl,gtk-win32-res.o
 
-gtk-win32-res.o : gtk-win32.rc
+gtk-win32-res.o : gtk-win32.rc libgtk3.manifest
 	$(WINDRES) gtk-win32.rc $@
 
 gtk.def: libgtk-3.la
@@ -1726,6 +1726,7 @@ EXTRA_DIST +=                   \
 	$(adwaita_sources)	\
 	$(win32_theme_sources)	\
 	$(gsettings_SCHEMAS)	\
+	libgtk3.manifest.in	\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
 	gtkwin32embedwidget.h	\

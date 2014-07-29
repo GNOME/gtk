@@ -1657,6 +1657,25 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
   GtkPrintOperationPrivate *priv;
   IPrintDialogCallback *callback;
   HPROPSHEETPAGE prop_page;
+  static volatile gsize common_controls_initialized = 0;
+
+  if (g_once_init_enter (&common_controls_initialized))
+    {
+      BOOL initialized;
+      INITCOMMONCONTROLSEX icc;
+
+      memset (&icc, 0, sizeof (icc));
+      icc.dwSize = sizeof (icc);
+      icc.dwICC = ICC_WIN95_CLASSES;
+
+      initialized = InitCommonControlsEx (&icc);
+      if (!initialized)
+        g_warning ("Failed to InitCommonControlsEx: %lu\n", GetLastError ());
+
+      _gtk_load_dll_with_libgtk3_manifest ("comdlg32.dll");
+
+      g_once_init_leave (&common_controls_initialized, initialized ? 1 : 0);
+    }
   
   *do_print = FALSE;
 

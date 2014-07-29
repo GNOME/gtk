@@ -91,6 +91,10 @@ gboolean        _gtk_propagate_captured_event  (GtkWidget       *widget,
                                                 GdkEvent        *event,
                                                 GtkWidget       *topmost);
 
+#ifdef G_OS_WIN32
+void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
+#endif
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
