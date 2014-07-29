@@ -109,6 +109,7 @@
                         <property name="xpad">10</property>
                         <property name="ypad">10</property>
                         <property name="stock-size">5</property>
+                        <property name="follow-state">True</property>
                       </object>
                     </child>
                     <child>
