@@ -104,7 +104,15 @@ item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *wi
   set_image (win->image3, name, 32);
   set_image (win->image4, name, 48);
   set_image (win->image5, name, 64);
-  gtk_label_set_text (GTK_LABEL (win->description), description);
+  if (description && description[0])
+    {
+      gtk_label_set_text (GTK_LABEL (win->description), description);
+      gtk_widget_show (win->description);
+    }
+  else
+    {
+      gtk_widget_hide (win->description);
+    }
 
   gtk_window_present (GTK_WINDOW (win->details));
 
