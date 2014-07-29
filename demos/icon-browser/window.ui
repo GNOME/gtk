@@ -47,7 +47,7 @@
         </child>
         <child>
           <object class="GtkToggleButton" id="search">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <style>
               <class name="image-button"/>
             </style>
