@@ -176,6 +176,9 @@ selected_context_changed (GtkListBox *list, IconBrowserWindow *win)
   GtkWidget *label;
 
   row = GTK_WIDGET (gtk_list_box_get_selected_row (list));
+  if (row == NULL)
+    return;
+
   label = gtk_bin_get_child (GTK_BIN (row));
   win->current_context = g_object_get_data (G_OBJECT (label), "context");
   gtk_tree_model_filter_refilter (win->filter_model);
