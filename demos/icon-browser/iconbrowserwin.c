@@ -314,9 +314,6 @@ populate (IconBrowserWindow *win)
   add_icon (win, "zoom-original", "The icon used for the “Original Size” item in the application's “View” menu.", "actions");
   add_icon (win, "zoom-out", "The icon used for the “Zoom Out” item in the application's “View” menu. ", "actions");
 
-  add_context (win, "animations", "Animations", "Animated images used to represent loading web sites, or other background processing which may be less suited to more verbose progress reporting in the user interface.");
-  add_icon (win, "process-working", "This is the standard spinner animation for web browsers and file managers to show that the location is loading.", "animations");
-
   add_context (win, "apps", "Applications", "Icons that describe what an application is, for use in the Programs menu, window decorations, and the task list.");
   add_icon (win, "accessories-calculator", "The icon used for the desktop's calculator accessory program.", "apps"); 
   add_icon (win, "accessories-character-map", "The icon used for the desktop's international and extended text character accessory program.", "apps");
@@ -463,8 +460,6 @@ populate (IconBrowserWindow *win)
   add_icon (win, "face-wink", "The icon used for the ;-) emote.", "emotes");
   add_icon (win, "face-worried", "The icon used for the :-S emote.", "emotes");
   add_icon (win, "face-yawn", "", "emotes"); // missing from spec
-
-  add_context (win, "intl", "International", "Icons for international denominations such as flags.");
 
   add_context (win, "mimetypes", "Mime Types", "Icons for different types of data, such as audio or image files.");
   add_icon (win, "application-certificate", "", "mimetypes"); // missing from spec
