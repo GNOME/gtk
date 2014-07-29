@@ -559,6 +559,20 @@ gtk_application_load_resources (GtkApplication *application)
         g_free (menuspath);
       }
 
+    /* Always load from -common as well, if we have it */
+    menuspath = g_strconcat (base_path, "/gtk/menus-common.ui", NULL);
+    if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
+      {
+        GError *error = NULL;
+
+        if (application->priv->menus_builder == NULL)
+          application->priv->menus_builder = gtk_builder_new ();
+
+        if (!gtk_builder_add_from_resource (application->priv->menus_builder, menuspath, &error))
+          g_error ("failed to load menus-common.ui: %s", error->message);
+      }
+    g_free (menuspath);
+
     if (application->priv->menus_builder)
       {
         GObject *menu;
