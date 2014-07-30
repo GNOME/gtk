@@ -900,6 +900,7 @@ load_scalable_with_loader (GtkImage    *image,
     }
 
  out:
+  gdk_pixbuf_loader_close (loader, NULL);
   g_object_unref (loader);
   g_bytes_unref (bytes);
 
