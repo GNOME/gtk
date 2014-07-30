@@ -61,6 +61,13 @@ popover_update_relative_to (AtkObject  *obj,
 
   if (widget)
     {
+      AtkObject *parent;
+
+      parent = gtk_widget_get_accessible (widget);
+
+      if (parent)
+        atk_object_set_parent (obj, parent);
+
       g_object_add_weak_pointer (G_OBJECT (priv->widget),
                                  (gpointer*) &priv->widget);
       widget_accessible = gtk_widget_get_accessible (widget);
@@ -97,17 +104,9 @@ static void
 gtk_popover_accessible_initialize (AtkObject *obj,
                                    gpointer   data)
 {
-  GtkPopover *popover;
-  AtkObject *parent;
+  GtkPopover *popover = GTK_POPOVER (data);
 
   ATK_OBJECT_CLASS (gtk_popover_accessible_parent_class)->initialize (obj, data);
-
-  popover = GTK_POPOVER (data);
-
-  parent = gtk_widget_get_accessible (gtk_popover_get_relative_to (popover));
-
-  if (parent)
-    atk_object_set_parent (obj, parent);
 
   g_signal_connect (popover, "notify",
                     G_CALLBACK (popover_notify_cb), obj);
