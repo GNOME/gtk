@@ -37,6 +37,8 @@ TEST_PROGS += derive
 
 TEST_PROGS += value
 
+TEST_PROGS += misc
+
 # the focus test has no chance of working until
 # all the idle handlers in gail are gone
 #
@@ -95,6 +97,7 @@ test_in_files = \
 	a11yderive.test.in \
 	a11ytext.test.in \
 	a11yutil.test.in \
+	a11ymisc.test.in \
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(testdata)
