@@ -30,6 +30,9 @@ clean-local:
 	rm $(builddir)/*.out.css || true
 
 test_data = \
+	animation-crash-3.12.css \
+	animation-crash-3.12.errors \
+	animation-crash-3.12.ref.css \
 	animation-shorthand-crash.css \
 	animation-shorthand-crash.ref.css \
 	at-invalid-01.css \
