@@ -33,7 +33,7 @@ any license fees or royalties.</description>
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-i18n-list" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-perl-list" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/language-bindings" />
-  <category rdf:resource="http://api.gnome.org/doap-extensions#platform" />
+  <category rdf:resource="http://api.gnome.org/doap-extensions#core" />
 
   <programming-language>C</programming-language>
 
