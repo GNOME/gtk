@@ -178,6 +178,9 @@ test_data = \
 	border.ref.css \
 	border-color-currentcolor.css \
 	border-color-currentcolor.ref.css \
+	border-infloop-3.12.css \
+	border-infloop-3.12.errors \
+	border-infloop-3.12.ref.css \
 	border-radius.css \
 	border-radius.errors \
 	border-radius.ref.css \

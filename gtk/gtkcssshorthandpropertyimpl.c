@@ -353,6 +353,13 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
         if (values[2] == NULL)
           return FALSE;
       }
+    else
+      {
+        /* We parsed and there's still stuff left?
+         * Pretend we didn't notice and let the normal code produce
+         * a 'junk at end of value' error */
+        break;
+      }
   }
   while (!value_is_done_parsing (parser));
 
