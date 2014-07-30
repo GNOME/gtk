@@ -1,0 +1,20 @@
+<interface>
+  <object class='GtkWindow' id='window1'>
+    <property name='visible'>True</property>
+    <child>
+      <object class='GtkEntry' id='entry1'>
+        <property name='visible'>True</property>
+        <property name='text'>entry1</property>
+      </object>
+    </child>
+  </object>
+  <object class='GtkWindow' id='window2'>
+    <property name='visible'>True</property>
+    <child>
+      <object class='GtkEntry' id='entry2'>
+        <property name='visible'>True</property>
+        <property name='text'>entry2</property>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -1858,6 +1858,7 @@ tests/Makefile
 tests/visuals/Makefile
 testsuite/Makefile
 testsuite/a11y/Makefile
+testsuite/a11y/state/Makefile
 testsuite/css/Makefile
 testsuite/css/parser/Makefile
 testsuite/gdk/Makefile

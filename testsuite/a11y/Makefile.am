@@ -1,6 +1,8 @@
 include $(top_srcdir)/Makefile.decl
 NULL =
 
+SUBDIRS = state
+
 check_PROGRAMS = $(TEST_PROGS)
 
 AM_CPPFLAGS =				\
@@ -38,11 +40,6 @@ TEST_PROGS += derive
 TEST_PROGS += value
 
 TEST_PROGS += misc
-
-# the focus test has no chance of working until
-# all the idle handlers in gail are gone
-#
-# TEST_PROGS += focus
 
 TEST_PROGS += tree-relationships
 

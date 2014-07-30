@@ -1,0 +1,9 @@
+record entry1 entry2 window1 window2
+states focused active
+show window1
+show window2
+focus entry1
+wait
+focus entry2
+wait
+destroy window1 window2
