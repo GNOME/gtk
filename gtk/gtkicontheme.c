@@ -151,7 +151,8 @@ typedef enum
   ICON_SUFFIX_XPM = 1 << 0,
   ICON_SUFFIX_SVG = 1 << 1,
   ICON_SUFFIX_PNG = 1 << 2,
-  HAS_ICON_FILE = 1 << 3
+  HAS_ICON_FILE = 1 << 3,
+  ICON_SUFFIX_SYMBOLIC_PNG = 1 << 4
 } IconSuffix;
 
 #define INFO_CACHE_LRU_SIZE 32
@@ -1251,6 +1252,9 @@ strip_suffix (const gchar *filename)
 {
   const gchar *dot;
 
+  if (g_str_has_suffix (filename, ".symbolic.png"))
+    return g_strndup (filename, strlen(filename)-13);
+
   dot = strrchr (filename, '.');
 
   if (dot == NULL)
@@ -1633,7 +1637,8 @@ icon_uri_is_symbolic (const gchar *icon_name)
 {
   return g_str_has_suffix (icon_name, "-symbolic.svg")
       || g_str_has_suffix (icon_name, "-symbolic-ltr.svg")
-      || g_str_has_suffix (icon_name, "-symbolic-rtl.svg");
+      || g_str_has_suffix (icon_name, "-symbolic-rtl.svg")
+      || g_str_has_suffix (icon_name, ".symbolic.png");
 }
 
 static GtkIconInfo *
@@ -1765,7 +1770,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
       if (allow_svg &&
           unthemed_icon->svg_filename &&
           (!unthemed_icon->no_svg_filename ||
-           suffix_from_name (unthemed_icon->no_svg_filename) != ICON_SUFFIX_PNG))
+           suffix_from_name (unthemed_icon->no_svg_filename) < ICON_SUFFIX_PNG))
         icon_info->filename = g_strdup (unthemed_icon->svg_filename);
       else if (unthemed_icon->no_svg_filename)
         icon_info->filename = g_strdup (unthemed_icon->no_svg_filename);
@@ -2824,6 +2829,8 @@ string_from_suffix (IconSuffix suffix)
       return ".svg";
     case ICON_SUFFIX_PNG:
       return ".png";
+    case ICON_SUFFIX_SYMBOLIC_PNG:
+      return ".symbolic.png";
     default:
       g_assert_not_reached();
     }
@@ -2835,7 +2842,9 @@ suffix_from_name (const gchar *name)
 {
   IconSuffix retval;
 
-  if (g_str_has_suffix (name, ".png"))
+  if (g_str_has_suffix (name, ".symbolic.png"))
+    retval = ICON_SUFFIX_SYMBOLIC_PNG;
+  else if (g_str_has_suffix (name, ".png"))
     retval = ICON_SUFFIX_PNG;
   else if (g_str_has_suffix (name, ".svg"))
     retval = ICON_SUFFIX_SVG;
@@ -2851,7 +2860,9 @@ static IconSuffix
 best_suffix (IconSuffix suffix,
              gboolean   allow_svg)
 {
-  if ((suffix & ICON_SUFFIX_PNG) != 0)
+  if ((suffix & ICON_SUFFIX_SYMBOLIC_PNG) != 0)
+    return ICON_SUFFIX_SYMBOLIC_PNG;
+  else if ((suffix & ICON_SUFFIX_PNG) != 0)
     return ICON_SUFFIX_PNG;
   else if (allow_svg && ((suffix & ICON_SUFFIX_SVG) != 0))
     return ICON_SUFFIX_SVG;
@@ -2866,13 +2877,26 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
                            const gchar  *icon_name,
                            gboolean     *has_icon_file)
 {
-  IconSuffix suffix;
+  IconSuffix suffix, symbolic_suffix;
 
   if (dir->cache)
     {
       suffix = (IconSuffix)_gtk_icon_cache_get_icon_flags (dir->cache,
                                                            icon_name,
                                                            dir->subdir_index);
+
+      if (icon_name_is_symbolic (icon_name))
+        {
+          /* Look for foo-symbolic.symbolic.png, as the cache only stores the ".png" suffix */
+          char *icon_name_with_prefix = g_strconcat (icon_name, ".symbolic", NULL);
+          symbolic_suffix = (IconSuffix)_gtk_icon_cache_get_icon_flags (dir->cache,
+                                                                        icon_name_with_prefix,
+                                                                        dir->subdir_index);
+          g_free (icon_name_with_prefix);
+
+          if (symbolic_suffix & ICON_SUFFIX_PNG)
+            suffix = ICON_SUFFIX_SYMBOLIC_PNG;
+        }
 
       if (has_icon_file)
         *has_icon_file = suffix & HAS_ICON_FILE;
@@ -4211,15 +4235,142 @@ symbolic_cache_get_proxy (SymbolicPixbufCache *symbolic_cache,
 
   return symbolic_cache->proxy_pixbuf;
 }
+static void
+rgba_to_pixel(const GdkRGBA  *rgba,
+	      guint8 pixel[4])
+{
+  pixel[0] = rgba->red * 255;
+  pixel[1] = rgba->green * 255;
+  pixel[2] = rgba->blue * 255;
+  pixel[3] = rgba->alpha * 255;
+}
 
 static GdkPixbuf *
-gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
-                                      const GdkRGBA  *fg,
-                                      const GdkRGBA  *success_color,
-                                      const GdkRGBA  *warning_color,
-                                      const GdkRGBA  *error_color,
-                                      gboolean        use_cache,
-                                      GError        **error)
+color_symbolic_pixbuf (GdkPixbuf *symbolic,
+                       const GdkRGBA  *fg_color,
+                       const GdkRGBA  *success_color,
+                       const GdkRGBA  *warning_color,
+                       const GdkRGBA  *error_color)
+{
+  int width, height, x, y, src_stride, dst_stride;
+  guchar *src_data, *dst_data;
+  guchar *src_row, *dst_row;
+  GdkPixbuf *colored;
+  guint8 fg_pixel[4], success_pixel[4], warning_pixel[4], error_pixel[4];
+
+  rgba_to_pixel (fg_color, fg_pixel);
+  rgba_to_pixel (success_color, success_pixel);
+  rgba_to_pixel (warning_color, warning_pixel);
+  rgba_to_pixel (error_color, error_pixel);
+
+  width = gdk_pixbuf_get_width (symbolic);
+  height = gdk_pixbuf_get_height (symbolic);
+
+  colored = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, width, height);
+
+  src_stride = gdk_pixbuf_get_rowstride (symbolic);
+  src_data = gdk_pixbuf_get_pixels (symbolic);
+
+  dst_data = gdk_pixbuf_get_pixels (colored);
+  dst_stride = gdk_pixbuf_get_rowstride (colored);
+
+  for (y = 0; y < height; y++)
+    {
+      src_row = src_data + src_stride * y;
+      dst_row = dst_data + dst_stride * y;
+      for (x = 0; x < width; x++)
+        {
+          guint r, g, b, a;
+          int c1, c2, c3, c4;
+
+          a = src_row[3];
+          dst_row[3] = a;
+
+          if (a == 0)
+            {
+              dst_row[0] = 0;
+              dst_row[1] = 0;
+              dst_row[2] = 0;
+            }
+          else
+            {
+              c2 = src_row[0];
+              c3 = src_row[1];
+              c4 = src_row[2];
+
+              if (c2 == 0 && c3 == 0 && c4 == 0)
+                {
+                  dst_row[0] = fg_pixel[0];
+                  dst_row[1] = fg_pixel[1];
+                  dst_row[2] = fg_pixel[2];
+                }
+              else
+                {
+                  c1 = 255 - c2 - c3 - c4;
+
+                  r = fg_pixel[0] * c1 + success_pixel[0] * c2 +  warning_pixel[0] * c3 +  error_pixel[0] * c4;
+                  g = fg_pixel[1] * c1 + success_pixel[1] * c2 +  warning_pixel[1] * c3 +  error_pixel[1] * c4;
+                  b = fg_pixel[2] * c1 + success_pixel[2] * c2 +  warning_pixel[2] * c3 +  error_pixel[2] * c4;
+
+                  dst_row[0] = r / 255;
+                  dst_row[1] = g / 255;
+                  dst_row[2] = b / 255;
+                }
+            }
+
+          src_row += 4;
+          dst_row += 4;
+        }
+    }
+
+  return colored;
+}
+
+static GdkPixbuf *
+gtk_icon_info_load_symbolic_png (GtkIconInfo    *icon_info,
+                                 const GdkRGBA  *fg,
+                                 const GdkRGBA  *success_color,
+                                 const GdkRGBA  *warning_color,
+                                 const GdkRGBA  *error_color,
+                                 GError        **error)
+{
+  GdkRGBA fg_default = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0};
+  GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0};
+  GdkRGBA warning_default = {0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 };
+  GdkRGBA error_default = { 0.796887159533074, 0 ,0, 1.0 };
+
+  if (!icon_info_ensure_scale_and_pixbuf (icon_info))
+    {
+      if (icon_info->load_error)
+        {
+          if (error)
+            *error = g_error_copy (icon_info->load_error);
+        }
+      else
+        {
+          g_set_error_literal (error,
+                               GTK_ICON_THEME_ERROR,
+                               GTK_ICON_THEME_NOT_FOUND,
+                               _("Failed to load icon"));
+        }
+
+      return NULL;
+    }
+
+  return color_symbolic_pixbuf (icon_info->pixbuf,
+                                fg ? fg : &fg_default,
+                                success_color ? success_color : &success_default,
+                                warning_color ? warning_color : &warning_default,
+                                error_color ? error_color : &error_default);
+}
+
+static GdkPixbuf *
+gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
+                                 const GdkRGBA  *fg,
+                                 const GdkRGBA  *success_color,
+                                 const GdkRGBA  *warning_color,
+                                 const GdkRGBA  *error_color,
+                                 GError        **error)
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
@@ -4231,20 +4382,6 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
   gchar *size;
   gchar *file_data, *escaped_file_data;
   gsize file_len;
-  SymbolicPixbufCache *symbolic_cache;
-
-  if (use_cache)
-    {
-      symbolic_cache = symbolic_pixbuf_cache_matches (icon_info->symbolic_pixbuf_cache,
-                                                      fg, success_color, warning_color, error_color);
-      if (symbolic_cache)
-        return symbolic_cache_get_proxy (symbolic_cache, icon_info);
-    }
-
-  /* css_fg can't possibly have failed, otherwise
-   * that would mean we have a broken style
-   */
-  g_return_val_if_fail (fg != NULL, NULL);
 
   css_fg = gdk_rgba_to_string (fg);
 
@@ -4337,6 +4474,45 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
                                                 NULL,
                                                 error);
   g_object_unref (stream);
+
+  return pixbuf;
+}
+
+
+
+static GdkPixbuf *
+gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
+				      const GdkRGBA  *fg,
+				      const GdkRGBA  *success_color,
+				      const GdkRGBA  *warning_color,
+				      const GdkRGBA  *error_color,
+				      gboolean        use_cache,
+				      GError        **error)
+{
+  GdkPixbuf *pixbuf;
+  SymbolicPixbufCache *symbolic_cache;
+  char *icon_uri;
+
+  if (use_cache)
+    {
+      symbolic_cache = symbolic_pixbuf_cache_matches (icon_info->symbolic_pixbuf_cache,
+						      fg, success_color, warning_color, error_color);
+      if (symbolic_cache)
+	return symbolic_cache_get_proxy (symbolic_cache, icon_info);
+    }
+
+  /* css_fg can't possibly have failed, otherwise
+   * that would mean we have a broken style
+   */
+  g_return_val_if_fail (fg != NULL, NULL);
+
+  icon_uri = g_file_get_uri (icon_info->icon_file);
+  if (g_str_has_suffix (icon_uri, ".symbolic.png"))
+    pixbuf = gtk_icon_info_load_symbolic_png (icon_info, fg, success_color, warning_color, error_color, error);
+  else
+    pixbuf = gtk_icon_info_load_symbolic_svg (icon_info, fg, success_color, warning_color, error_color, error);
+
+  g_free (icon_uri);
 
   if (pixbuf != NULL)
     {
