@@ -1253,22 +1253,20 @@ find_action_owner (GtkActionable *actionable)
   if (g_strcmp0 (prefix, "win") == 0)
     {
       if (G_IS_OBJECT (win))
-      return (GObject *)win;
+        return (GObject *)win;
     }
   else if (g_strcmp0 (prefix, "app") == 0)
     {  
       if (GTK_IS_WINDOW (win))
         return (GObject *)gtk_window_get_application (GTK_WINDOW (win));
     }
-  else
+
+  while (widget != NULL)
     {
-      while (widget != NULL)
-        {
-          group = _gtk_widget_get_action_group (widget, prefix);
-          if (group && g_action_group_has_action (group, name))
-            return (GObject *)widget;
-          widget = action_ancestor (widget);
-        }
+      group = _gtk_widget_get_action_group (widget, prefix);
+      if (group && g_action_group_has_action (group, name))
+        return (GObject *)widget;
+      widget = action_ancestor (widget);
     }
 
   return NULL;  
