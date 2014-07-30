@@ -22,6 +22,7 @@
 
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
+#include "gtkdebug.h"
 
 #include <string.h>
 
@@ -121,15 +122,28 @@ gtk_action_helper_action_added (GtkActionHelper    *helper,
                                 GVariant           *state,
                                 gboolean            should_emit_signals)
 {
+  GTK_NOTE(ACTIONS, g_message("actionhelper: %s added", helper->action_name));
+
   /* we can only activate if we have the correct type of parameter */
   helper->can_activate = (helper->target == NULL && parameter_type == NULL) ||
                           (helper->target != NULL && parameter_type != NULL &&
                           g_variant_is_of_type (helper->target, parameter_type));
 
   if (!helper->can_activate)
-    return;
+    {
+      GTK_NOTE(ACTIONS, g_message("actionhelper: %s found, but disabled due to parameter type mismatch",
+                                  helper->action_name));
+      return;
+    }
+
+  GTK_NOTE(ACTIONS, g_message ("actionhelper: %s can be activated", helper->action_name));
 
   helper->enabled = enabled;
+
+  if (!enabled)
+    GTK_NOTE(ACTIONS, g_message("actionhelper: %s found, but disabled due to disabled action", helper->action_name));
+  else
+    GTK_NOTE(ACTIONS, g_message("actionhelper: %s found and enabled", helper->action_name));
 
   if (helper->target != NULL && state != NULL)
     helper->active = g_variant_equal (state, helper->target);
@@ -150,6 +164,8 @@ gtk_action_helper_action_added (GtkActionHelper    *helper,
 static void
 gtk_action_helper_action_removed (GtkActionHelper *helper)
 {
+  GTK_NOTE(ACTIONS, g_message ("actionhelper: %s was removed", helper->action_name));
+
   if (!helper->can_activate)
     return;
 
@@ -172,6 +188,8 @@ static void
 gtk_action_helper_action_enabled_changed (GtkActionHelper *helper,
                                           gboolean         enabled)
 {
+  GTK_NOTE(ACTIONS, g_message ("actionhelper: %s enabled changed: %d", helper->action_name, enabled));
+
   if (!helper->can_activate)
     return;
 
@@ -187,6 +205,8 @@ gtk_action_helper_action_state_changed (GtkActionHelper *helper,
                                         GVariant        *new_state)
 {
   gboolean was_active;
+
+  GTK_NOTE(ACTIONS, g_message ("actionhelper: %s state changed", helper->action_name));
 
   if (!helper->can_activate)
     return;
@@ -359,6 +379,11 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
   if (g_strcmp0 (action_name, helper->action_name) == 0)
     return;
 
+  GTK_NOTE(ACTIONS,
+           if (!strchr (action_name, '.'))
+             g_message ("actionhelper: action name %s doesn't look like 'app.' or 'win.' "
+                        "which means that it will probably not work properly.", action_name));
+
   if (helper->action_name)
     {
       gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
@@ -382,13 +407,18 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
   if (g_action_group_query_action (G_ACTION_GROUP (helper->action_context), helper->action_name,
                                    &enabled, &parameter_type, NULL, NULL, &state))
     {
+      GTK_NOTE(ACTIONS, g_message ("actionhelper: %s existed from the start", helper->action_name));
+
       gtk_action_helper_action_added (helper, enabled, parameter_type, state, FALSE);
 
       if (state)
         g_variant_unref (state);
     }
   else
-    helper->enabled = FALSE;
+    {
+      GTK_NOTE(ACTIONS, g_message ("actionhelper: %s missing from the start", helper->action_name));
+      helper->enabled = FALSE;
+    }
 
   /* Send the notifies for the properties that changed.
    *
