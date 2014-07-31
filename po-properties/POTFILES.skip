@@ -216,6 +216,8 @@ testsuite/reftests/label-sizing.ref.ui
 testsuite/reftests/label-sizing.ui
 testsuite/reftests/label-small-ellipsized.ref.ui
 testsuite/reftests/label-small-ellipsized.ui
+testsuite/reftests/label-text-shadow-clipping.ref.ui
+testsuite/reftests/label-text-shadow-clipping.ui
 testsuite/reftests/label-width-chars-dont-shrink.ref.ui
 testsuite/reftests/label-width-chars-dont-shrink.ui
 testsuite/reftests/label-wrap-justify.ref.ui
