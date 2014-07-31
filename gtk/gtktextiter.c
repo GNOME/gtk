@@ -4641,13 +4641,16 @@ utf8_strrcasestr (const gchar *haystack,
   p = g_utf8_offset_to_pointer (caseless_haystack, i);
   needle_len = strlen (needle);
 
-  while (p >= caseless_haystack)
+  while (TRUE)
     {
       if (exact_prefix_cmp (p, needle, needle_len))
         {
           ret = pointer_from_offset_skipping_decomp (haystack, i);
-          goto finally;
+          break;
         }
+
+      if (p == caseless_haystack)
+        break;
 
       p = g_utf8_prev_char (p);
       i--;
