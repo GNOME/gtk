@@ -1048,15 +1048,14 @@ if OS_WIN32
 
 # Workaround for UAC silliness: programs with "update" in their name
 # are believed to be installers and require elevated privileges to be
-# used... Use a manifest file to tell Windows that
+# used... Embed a manifest file into executable to tell Windows that
 # gtk-update-icon-cache.exe doesn't require any special privileges.
 
 GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache.exe.manifest
+GTK_UPDATE_ICON_CACHE_RC = gtk-update-icon-cache.rc
+GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT = gtk-update-icon-cache_manifest.o
 
-bin_SCRIPTS += \
-	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
-
-gtk-update-icon-cache.exe.manifest:
+$(GTK_UPDATE_ICON_CACHE_MANIFEST):
 	(echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' ; \
 	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
 	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
@@ -1075,13 +1074,20 @@ gtk-update-icon-cache.exe.manifest:
 	 echo '  </trustInfo>' ; \
 	 echo '</assembly>' ) >$@
 
+$(GTK_UPDATE_ICON_CACHE_RC):
+	(echo 'CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST '$(GTK_UPDATE_ICON_CACHE_MANIFEST)) >$@
+
+$(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT): $(GTK_UPDATE_ICON_CACHE_RC) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+	$(WINDRES) --input $< --output $@ --output-format=coff
+
 endif
 
 gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_2_0_LDADD = $(LDADDS) $(GMODULE_LIBS)
 gtk_query_immodules_2_0_SOURCES = queryimmodules.c
 
-gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
+gtk_update_icon_cache_DEPENDENCIES = $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT)
+gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS) $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT)
 gtk_update_icon_cache_SOURCES = updateiconcache.c 
 
 .PHONY: files test test-debug
@@ -1392,7 +1398,7 @@ gtk_update_icon_cache_program =							\
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
-	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
 	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
 	   --include-image-data							\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
