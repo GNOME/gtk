@@ -26,8 +26,7 @@ G_BEGIN_DECLS
 
 void _gtk_theming_engine_paint_spinner (cairo_t       *cr,
                                         gdouble        radius,
-                                        gdouble        progress,
-                                        const GdkRGBA *color);
+                                        gdouble        progress);
 
 GtkCssValue  *_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
                                                  guint             property_id);

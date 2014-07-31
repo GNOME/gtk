@@ -2546,8 +2546,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 void
 _gtk_theming_engine_paint_spinner (cairo_t       *cr,
                                    gdouble        radius,
-                                   gdouble        progress,
-                                   const GdkRGBA *color)
+                                   gdouble        progress)
 {
   guint num_steps, step;
   gdouble half;
@@ -2576,11 +2575,7 @@ _gtk_theming_engine_paint_spinner (cairo_t       *cr,
       gdouble xscale = - sin (i * G_PI / half);
       gdouble yscale = - cos (i * G_PI / half);
 
-      cairo_set_source_rgba (cr,
-                             color->red,
-                             color->green,
-                             color->blue,
-                             color->alpha * t);
+      cairo_push_group (cr);
 
       cairo_move_to (cr,
                      (radius - inset) * xscale,
@@ -2590,6 +2585,9 @@ _gtk_theming_engine_paint_spinner (cairo_t       *cr,
                      radius * yscale);
 
       cairo_stroke (cr);
+
+      cairo_pop_group_to_source (cr);
+      cairo_paint_with_alpha (cr, t);
     }
 
   cairo_restore (cr);
@@ -2620,10 +2618,8 @@ render_spinner (GtkThemingEngine *engine,
                                         radius,
                                         -1);
 
-  _gtk_theming_engine_paint_spinner (cr,
-                                     radius,
-                                     -1,
-                                     &color);
+  gdk_cairo_set_source_rgba (cr, &color);
+  _gtk_theming_engine_paint_spinner (cr, radius, -1);
 
   cairo_restore (cr);
 }
