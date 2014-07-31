@@ -30,6 +30,7 @@
 #include "gtklabel.h"
 #include "gtklabelprivate.h"
 #include "gtkaccellabel.h"
+#include "gtkcssshadowsvalueprivate.h"
 #include "gtkdnd.h"
 #include "gtkmarshalers.h"
 #include "gtkpango.h"
@@ -46,6 +47,7 @@
 #include "gtkbuildable.h"
 #include "gtkimage.h"
 #include "gtkshow.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
@@ -3960,17 +3962,21 @@ gtk_label_get_ink_rect (GtkLabel     *label,
                         GdkRectangle *rect)
 {
   GtkLabelPrivate *priv = label->priv;
+  GtkStyleContext *context;
   PangoRectangle ink_rect;
+  GtkBorder extents;
   int x, y;
 
   gtk_label_ensure_layout (label);
   get_layout_location (label, &x, &y);
   pango_layout_get_pixel_extents (priv->layout, &ink_rect, NULL);
+  context = gtk_widget_get_style_context (GTK_WIDGET (label));
+  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW), &extents);
 
-  rect->x = x + ink_rect.x;
-  rect->width = ink_rect.width;
-  rect->y = y + ink_rect.y;
-  rect->height = ink_rect.height;
+  rect->x = x + ink_rect.x - extents.left;
+  rect->width = ink_rect.width + extents.left + extents.right;
+  rect->y = y + ink_rect.y - extents.top;
+  rect->height = ink_rect.height + extents.top + extents.bottom;
 }
 
 static void
