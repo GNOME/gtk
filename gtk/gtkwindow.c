@@ -11489,6 +11489,7 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
                                   GtkPositionType              pos,
                                   const cairo_rectangle_int_t *rect)
 {
+  gboolean need_resize = TRUE;
   GtkWindowPopover *data;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -11507,7 +11508,7 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
     {
       if (data->pos == pos &&
           memcmp (&data->rect, rect, sizeof (cairo_rectangle_int_t)) == 0)
-        return;
+        need_resize = FALSE;
     }
 
   data->rect = *rect;
@@ -11524,7 +11525,8 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
         gdk_window_raise (data->window);
     }
 
-  gtk_widget_queue_resize (popover);
+  if (need_resize)
+    gtk_widget_queue_resize (popover);
 }
 
 void
