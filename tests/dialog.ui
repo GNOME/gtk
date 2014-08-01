@@ -255,5 +255,6 @@
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="apply">confirm_button</action-widget>
     </action-widgets>
+    <initial-focus name="name_entry"/>
   </object>
 </interface>
