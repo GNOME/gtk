@@ -1708,7 +1708,6 @@ EXTRA_DIST +=                   \
 	$(adwaita_sources)	\
 	$(win32_theme_sources)	\
 	$(gsettings_SCHEMAS)	\
-	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
 	gtkwin32embedwidget.h	\
