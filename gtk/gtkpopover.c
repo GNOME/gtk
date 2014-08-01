@@ -44,6 +44,7 @@
 #include <gdk/gdk.h>
 #include <cairo-gobject.h>
 #include "gtkpopover.h"
+#include "gtkpopoverprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 #include "gtkwindowprivate.h"
@@ -109,7 +110,6 @@ struct _GtkPopoverPrivate
 static GQuark quark_widget_popovers = 0;
 static guint signals[N_SIGNALS] = { 0 };
 
-static void gtk_popover_update_position    (GtkPopover *popover);
 static void gtk_popover_update_relative_to (GtkPopover *popover,
                                             GtkWidget  *relative_to);
 
@@ -725,7 +725,7 @@ opposite_position (GtkPositionType pos)
     }
 }
 
-static void
+void
 gtk_popover_update_position (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = popover->priv;

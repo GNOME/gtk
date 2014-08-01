@@ -525,6 +525,7 @@ gtk_private_h_sources =		\
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkpressandholdprivate.h \
+	gtkpopoverprivate.h	\
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
 	gtkprivate.h		\
