@@ -56,6 +56,7 @@
 #include "gtkbutton.h"
 #include "gtkheaderbar.h"
 #include "gtkheaderbarprivate.h"
+#include "gtkpopoverprivate.h"
 #include "a11y/gtkwindowaccessible.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
 #include "gtkapplicationprivate.h"
@@ -7164,6 +7165,9 @@ popover_size_allocate (GtkWidget        *widget,
 
   if (!popover->window)
     return;
+
+  if (GTK_IS_POPOVER (popover->widget))
+    gtk_popover_update_position (GTK_POPOVER (popover->widget));
 
   popover_get_rect (popover, window, &rect);
   gdk_window_move_resize (popover->window, rect.x, rect.y,
