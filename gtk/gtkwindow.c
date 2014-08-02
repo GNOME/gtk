@@ -95,12 +95,17 @@
  * elements representing the #GtkAccelGroup objects you want to add to
  * your window (synonymous with gtk_window_add_accel_group().
  *
+ * It also supports the <initial-focus> element, whose name property names
+ * the widget to receive the focus when the window is mapped. See
+ * gtk_window_set_initial_focus().
+ *
  * An example of a UI definition fragment with accel groups:
  * |[
  * <object class="GtkWindow">
  *   <accel-groups>
  *     <group name="accelgroup1"/>
  *   </accel-groups>
+ *   <initial-focus name="thunderclap"/>
  * </object>
  * 
  * ...
@@ -1907,6 +1912,39 @@ static const GMarkupParser window_parser =
     window_start_element
   };
 
+typedef struct {
+  GObject *object;
+  gchar *name;
+} NameSubParserData;
+
+static void
+focus_start_element (GMarkupParseContext  *context,
+                     const gchar          *element_name,
+                     const gchar         **names,
+                     const gchar         **values,
+                     gpointer              user_data,
+                     GError              **error)
+{
+  guint i;
+  NameSubParserData *data = (NameSubParserData*)user_data;
+
+  if (strcmp (element_name, "initial-focus") == 0)
+    {
+      for (i = 0; names[i]; i++)
+	{
+	  if (strcmp (names[i], "name") == 0)
+	    data->name = g_strdup (values[i]);
+	}
+    }
+  else
+    g_warning ("Unsupported tag type for GtkWindow: %s\n", element_name);
+}
+
+static const GMarkupParser focus_parser =
+{
+  focus_start_element
+};
+
 static gboolean
 gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
 				       GtkBuilder    *builder,
@@ -1915,14 +1953,14 @@ gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
 				       GMarkupParser *parser,
 				       gpointer      *data)
 {
-  GSListSubParserData *parser_data;
-
   if (parent_buildable_iface->custom_tag_start (buildable, builder, child, 
 						tagname, parser, data))
     return TRUE;
 
   if (strcmp (tagname, "accel-groups") == 0)
     {
+      GSListSubParserData *parser_data;
+
       parser_data = g_slice_new0 (GSListSubParserData);
       parser_data->items = NULL;
       parser_data->object = G_OBJECT (buildable);
@@ -1932,30 +1970,57 @@ gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
       return TRUE;
     }
 
+  if (strcmp (tagname, "initial-focus") == 0)
+    {
+      NameSubParserData *parser_data;
+
+      parser_data = g_slice_new0 (NameSubParserData);
+      parser_data->name = NULL;
+      parser_data->object = G_OBJECT (buildable);
+
+      *parser = focus_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
   return FALSE;
 }
 
 static void
 gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
-					  GtkBuilder    *builder,
-					  GObject       *child,
-					  const gchar   *tagname,
-					  gpointer       user_data)
+                                      GtkBuilder    *builder,
+                                      GObject       *child,
+                                      const gchar   *tagname,
+                                      gpointer       user_data)
 {
-  GSListSubParserData *data;
-
   parent_buildable_iface->custom_finished (buildable, builder, child, 
 					   tagname, user_data);
 
-  if (strcmp (tagname, "accel-groups") != 0)
-    return;
-  
-  data = (GSListSubParserData*)user_data;
+  if (strcmp (tagname, "accel-groups") == 0)
+    {
+      GSListSubParserData *data = (GSListSubParserData*)user_data;
 
-  g_object_set_qdata_full (G_OBJECT (buildable), quark_gtk_buildable_accels, 
-			   data->items, (GDestroyNotify) g_slist_free);
+      g_object_set_qdata_full (G_OBJECT (buildable), quark_gtk_buildable_accels,
+                               data->items, (GDestroyNotify) g_slist_free);
 
-  g_slice_free (GSListSubParserData, data);
+      g_slice_free (GSListSubParserData, data);
+    }
+
+  if (strcmp (tagname, "initial-focus") == 0)
+    {
+      NameSubParserData *data = (NameSubParserData*)user_data;
+
+      if (data->name)
+        {
+          GObject *object;
+
+          object = gtk_builder_get_object (builder, data->name);
+          gtk_window_set_focus (GTK_WINDOW (buildable), GTK_WIDGET (object));
+          g_free (data->name);
+        }
+
+      g_slice_free (NameSubParserData, data);
+    }
 }
 
 /**
