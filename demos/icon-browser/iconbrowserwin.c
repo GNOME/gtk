@@ -173,6 +173,10 @@ add_context (IconBrowserWindow *win,
 
   gtk_list_box_insert (GTK_LIST_BOX (win->context_list), row, -1);
 
+  /* set the tooltip on the list box row */
+  row = gtk_widget_get_parent (row);
+  gtk_widget_set_tooltip_text (row, description);
+
   if (win->current_context == NULL)
     win->current_context = c;
 }
