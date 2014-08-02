@@ -56,7 +56,7 @@ blur_xspan (guchar *row,
    * be well predicted and there are enough different possibilities
    * that trying to write this as a series of unconditional loops
    * is hard and not an obvious win. The main slow down here seems
-   * to be the integer division for pixel; one possible optimization
+   * to be the integer division per pixel; one possible optimization
    * would be to accumulate into two 16-bit integer buffers and
    * only divide down after all three passes. (SSE parallel implementation
    * of the divide step is possible.)
@@ -95,7 +95,7 @@ blur_rows (guchar *dst_buffer,
        * equally far to the left and right. If d is odd that happens
        * naturally, but for d even, we approximate by using a blur
        * on either side and then a centered blur of size d + 1.
-       * (techique also from the SVG specification)
+       * (technique also from the SVG specification)
        */
       if (d % 2 == 1)
         {
@@ -112,9 +112,7 @@ blur_rows (guchar *dst_buffer,
     }
 }
 
-/* Swaps width and height. Either swaps in-place and returns the original
- * buffer or allocates a new buffer, frees the original buffer and returns
- * the new buffer.
+/* Swaps width and height.
  */
 static void
 flip_buffer (guchar *dst_buffer,
@@ -123,7 +121,8 @@ flip_buffer (guchar *dst_buffer,
              int     height)
 {
   /* Working in blocks increases cache efficiency, compared to reading
-   * or writing an entire column at once */
+   * or writing an entire column at once
+   */
 #define BLOCK_SIZE 16
 
   int i0, j0;
@@ -190,7 +189,7 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   if (radius == 0)
     return;
 
-  /* Before we mess with the surface execute any pending drawing. */
+  /* Before we mess with the surface, execute any pending drawing. */
   cairo_surface_flush (surface);
 
   _boxblur (cairo_image_surface_get_data (surface),
@@ -198,11 +197,11 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
             cairo_image_surface_get_height (surface),
             radius);
 
-  /* Inform cairo we altered the surfaces contents. */
+  /* Inform cairo we altered the surface contents. */
   cairo_surface_mark_dirty (surface);
 }
 
-/**
+/*
  * _gtk_cairo_blur_compute_pixels:
  * @radius: the radius to compute the pixels for
  *
