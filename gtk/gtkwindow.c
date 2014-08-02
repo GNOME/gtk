@@ -132,6 +132,7 @@ struct _GtkWindowPrivate
 
   GtkWidget             *attach_widget;
   GtkWidget             *default_widget;
+  GtkWidget             *initial_focus;
   GtkWidget             *focus_widget;
   GtkWindow             *transient_parent;
   GtkWindowGeometryInfo *geometry_info;
@@ -2261,7 +2262,12 @@ gtk_window_set_focus (GtkWindow *window,
     }
 
   if (focus)
-    gtk_widget_grab_focus (focus);
+    {
+      if (!gtk_widget_get_visible (GTK_WIDGET (window)))
+        priv->initial_focus = focus;
+      else
+        gtk_widget_grab_focus (focus);
+    }
   else
     {
       /* Clear the existing focus chain, so that when we focus into
@@ -2291,6 +2297,7 @@ _gtk_window_internal_set_focus (GtkWindow *window,
 
   priv = window->priv;
 
+  priv->initial_focus = NULL;
   if ((priv->focus_widget != focus) ||
       (focus && !gtk_widget_has_focus (focus)))
     g_signal_emit (window, window_signals[SET_FOCUS], 0, focus);
@@ -2662,9 +2669,16 @@ gtk_window_activate_focus (GtkWindow *window)
 GtkWidget *
 gtk_window_get_focus (GtkWindow *window)
 {
+  GtkWindowPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
-  return window->priv->focus_widget;
+  priv = window->priv;
+
+  if (priv->initial_focus)
+    return priv->initial_focus;
+  else
+    return priv->focus_widget;
 }
 
 /**
@@ -5669,7 +5683,12 @@ gtk_window_show (GtkWidget *widget)
   is_plug = FALSE;
 #endif
   if (!priv->focus_widget && !is_plug)
-    gtk_window_move_focus (widget, GTK_DIR_TAB_FORWARD);
+    {
+      if (priv->initial_focus)
+        gtk_window_set_focus (window, priv->initial_focus);
+      else
+        gtk_window_move_focus (widget, GTK_DIR_TAB_FORWARD);
+    }
   
   if (priv->modal)
     gtk_grab_add (widget);
