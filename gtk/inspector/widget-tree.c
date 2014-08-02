@@ -377,6 +377,10 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
       if (child)
         gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
 
+      child = G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "selection");
+
       n_columns = gtk_tree_view_get_n_columns (GTK_TREE_VIEW (object));
       for (i = 0; i < n_columns; i++)
         {
