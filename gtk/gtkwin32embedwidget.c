@@ -134,11 +134,7 @@ gtk_win32_embed_widget_unrealize (GtkWidget *widget)
 
   embed_widget->old_window_procedure = NULL;
   
-  if (embed_widget->parent_window != NULL)
-    {
-      g_object_unref (embed_widget->parent_window);
-      embed_widget->parent_window = NULL;
-    }
+  g_clear_object (&embed_widget->parent_window);
 
   GTK_WIDGET_CLASS (gtk_win32_embed_widget_parent_class)->unrealize (widget);
 }
