@@ -1741,6 +1741,8 @@ gdk_win32_window_set_transient_for (GdkWindow *window,
 			      GdkWindow *parent)
 {
   HWND window_id, parent_id;
+  LONG_PTR old_ptr;
+  DWORD w32_error;
   GdkWindowImplWin32 *window_impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   GdkWindowImplWin32 *parent_impl = NULL;
   GSList *item;
@@ -1799,14 +1801,28 @@ gdk_win32_window_set_transient_for (GdkWindow *window,
       g_object_ref (G_OBJECT (parent));
     }
 
+  SetLastError (0);
+  old_ptr = GetWindowLongPtr (window_id, GWLP_HWNDPARENT);
+  w32_error = GetLastError ();
+
+  /* Don't re-set GWLP_HWNDPARENT to the same value */
+  if (old_ptr == parent_id && w32_error == NO_ERROR)
+    return;
+
+  /* Don't return if it failed, try SetWindowLongPtr() anyway */
+  if (old_ptr == 0 && w32_error != NO_ERROR)
+    WIN32_API_FAILED ("GetWindowLongPtr");
+
   /* This changes the *owner* of the window, despite the misleading
    * name. (Owner and parent are unrelated concepts.) At least that's
    * what people who seem to know what they talk about say on
    * USENET. Search on Google.
    */
   SetLastError (0);
-  if (SetWindowLongPtr (window_id, GWLP_HWNDPARENT, (LONG_PTR) parent_id) == 0 &&
-      GetLastError () != 0)
+  old_ptr = SetWindowLongPtr (window_id, GWLP_HWNDPARENT, (LONG_PTR) parent_id);
+  w32_error = GetLastError ();
+
+  if (old_ptr == 0 && w32_error != NO_ERROR)
     WIN32_API_FAILED ("SetWindowLongPtr");
 }
 
