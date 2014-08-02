@@ -42,6 +42,7 @@ TEST_PROGS += 			\
 	expander		\
 	firefox-stylecontext	\
 	floating		\
+	focus			\
 	gestures		\
 	grid			\
 	gtkmenu			\
