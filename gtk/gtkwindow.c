@@ -96,8 +96,7 @@
  * your window (synonymous with gtk_window_add_accel_group().
  *
  * It also supports the <initial-focus> element, whose name property names
- * the widget to receive the focus when the window is mapped. See
- * gtk_window_set_initial_focus().
+ * the widget to receive the focus when the window is mapped.
  *
  * An example of a UI definition fragment with accel groups:
  * |[
