@@ -139,6 +139,10 @@ additional environment variables.
   to print out different types of debugging information.
   <variablelist>
     <varlistentry>
+      <term>actions</term>
+      <listitem><para>Actions and menu models.</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>baselines</term>
       <listitem><para>Baselines.</para></listitem>
     </varlistentry>
