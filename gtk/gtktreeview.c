@@ -1055,7 +1055,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                          P_("Rules Hint"),
                                                          P_("Set a hint to the theme engine to draw rows in alternating colors"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (o_class,
                                    PROP_ENABLE_SEARCH,
@@ -1926,7 +1926,9 @@ gtk_tree_view_set_property (GObject         *object,
       gtk_tree_view_set_reorderable (tree_view, g_value_get_boolean (value));
       break;
     case PROP_RULES_HINT:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_tree_view_set_rules_hint (tree_view, g_value_get_boolean (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_ENABLE_SEARCH:
       gtk_tree_view_set_enable_search (tree_view, g_value_get_boolean (value));
