@@ -147,9 +147,6 @@ gtk_switch_multipress_gesture_released (GtkGestureMultiPress *gesture,
 {
   GtkSwitchPrivate *priv = sw->priv;
   GdkEventSequence *sequence;
-  GtkAllocation allocation;
-
-  gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
