@@ -124,6 +124,10 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GSimpleActionGroup *gtkinternal;
   GMenuModel *app_menu;
+  const gchar *pref_accel[] = {"<Primary>comma", NULL};
+  const gchar *hide_others_accel[] = {"<Primary><Alt>h", NULL};
+  const gchar *hide_accel[] = {"<Primary>h", NULL};
+  const gchar *quit_accel[] = {"<Primary>q", NULL};
 
   if (register_session)
     {
@@ -135,10 +139,10 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
 
   /* Add the default accels */
-  gtk_application_add_accelerator (impl->application, "<Primary>comma", "app.preferences", NULL);
-  gtk_application_add_accelerator (impl->application, "<Primary><Alt>h", "gtkinternal.hide-others", NULL);
-  gtk_application_add_accelerator (impl->application, "<Primary>h", "gtkinternal.hide", NULL);
-  gtk_application_add_accelerator (impl->application, "<Primary>q", "app.quit", NULL);
+  gtk_application_set_accels_for_action (impl->application, "app.preferences", pref_accel);
+  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide-others", hide_others_accel);
+  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide", hide_accel);
+  gtk_application_set_accels_for_action (impl->application, "app.quit", quit_accel);
 
   /* and put code behind the 'special' accels */
   gtkinternal = g_simple_action_group_new ();
