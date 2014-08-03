@@ -1689,7 +1689,7 @@ gtk_update_icon_cache_DEPENDENCIES = $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT)
 gtk_update_icon_cache_SOURCES = updateiconcache.c
 endif
 
-gtk_encode_symbolic_svg_LDADD = $(GDK_PIXBUF_LIBS) $(top_builddir)/gdk/libgdk-3.la
+gtk_encode_symbolic_svg_LDADD = $(GDK_PIXBUF_LIBS) $(top_builddir)/gdk/libgdk-3.la $(GTK_DEP_LIBS)
 gtk_encode_symbolic_svg_SOURCES = encodesymbolic.c
 
 
