@@ -446,6 +446,13 @@ accels_get_accels_for_action (Accels      *accels,
   return result;
 }
 
+static const gchar * const *
+accels_get_actions_for_accel (Accels         *accels,
+                              const AccelKey *accel_key)
+{
+  return g_hash_table_lookup (accels->accel_to_actions, accel_key);
+}
+
 static void
 accels_init (Accels *accels)
 {
@@ -1689,6 +1696,74 @@ gtk_application_get_accels_for_action (GtkApplication *application,
   g_free (action_and_target);
 
   return accels;
+}
+
+/**
+ * gtk_application_get_actions_for_accel:
+ * @application: a #GtkApplication
+ * @accel: an accelerator that can be parsed by gtk_accelerator_parse()
+ *
+ * Returns the list of actions (possibly empty) that @accel maps to.
+ * Each item in the list is a detailed action name in the usual form.
+ *
+ * This might be useful to discover if an accel already exists in
+ * order to prevent installation of a conflicting accelerator (from
+ * an accelerator editor or a plugin system, for example). Note that
+ * having more than one action per accelerator may not be a bad thing
+ * and might make sense in cases where the actions never appear in the
+ * same context.
+ *
+ * In case there are no actions for a given accelerator, an empty array
+ * is returned.  %NULL is never returned.
+ *
+ * It is a programmer error to pass an invalid accelerator string.
+ * If you are unsure, check it with gtk_accelerator_parse() first.
+ *
+ * Returns: (transfer full): a %NULL-terminated array of actions for @accel
+ *
+ * Since: 3.14
+ */
+gchar **
+gtk_application_get_actions_for_accel (GtkApplication *application,
+                                       const gchar    *accel)
+{
+  const gchar * const *actions_and_targets;
+  gchar **detailed_actions;
+  AccelKey accel_key;
+  guint i, n;
+
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+  g_return_val_if_fail (accel != NULL, NULL);
+
+  gtk_accelerator_parse (accel, &accel_key.key, &accel_key.modifier);
+
+  if (accel_key.key == 0)
+    {
+      g_critical ("invalid accelerator string '%s'", accel);
+      g_return_val_if_fail (accel_key.key != 0, NULL);
+    }
+
+  actions_and_targets = accels_get_actions_for_accel (&application->priv->accels, &accel_key);
+  n = actions_and_targets ? g_strv_length ((gchar **) actions_and_targets) : 0;
+
+  detailed_actions = g_new0 (gchar *, n + 1);
+
+  for (i = 0; i < n; i++)
+    {
+      const gchar *action_and_target = actions_and_targets[i];
+      const gchar *sep;
+      GVariant *target;
+
+      sep = strrchr (action_and_target, '|');
+      target = g_variant_parse (NULL, action_and_target, sep, NULL, NULL);
+      detailed_actions[i] = g_action_print_detailed_name (sep + 1, target);
+      if (target)
+        g_variant_unref (target);
+    }
+
+  detailed_actions[n] = NULL;
+
+  return detailed_actions;
 }
 
 GtkActionMuxer *

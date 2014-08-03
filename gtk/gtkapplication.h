@@ -145,6 +145,10 @@ gchar **         gtk_application_list_action_descriptions        (GtkApplication
 GDK_AVAILABLE_IN_3_12
 gchar **         gtk_application_get_accels_for_action           (GtkApplication       *application,
                                                                   const gchar          *detailed_action_name);
+GDK_AVAILABLE_IN_3_14
+gchar **         gtk_application_get_actions_for_accel           (GtkApplication       *application,
+                                                                  const gchar          *accel);
+
 
 GDK_AVAILABLE_IN_3_12
 void             gtk_application_set_accels_for_action           (GtkApplication       *application,
