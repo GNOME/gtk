@@ -30,6 +30,7 @@
 #endif
 #include <errno.h>
 #include <stdlib.h>
+#include <locale.h>
 
 static gchar *output_dir = NULL;
 
