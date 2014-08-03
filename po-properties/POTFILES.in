@@ -50,6 +50,7 @@ gtk/deprecated/gtkstyle.c
 gtk/deprecated/gtktable.c
 gtk/deprecated/gtktoggleaction.c
 gtk/deprecated/gtkuimanager.c
+gtk/encodesymbolic.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
 gtk/gtkaccellabel.c
