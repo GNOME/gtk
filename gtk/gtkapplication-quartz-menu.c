@@ -370,7 +370,7 @@ menu_item_removed (gint     position,
     {
       tracker = gtk_menu_tracker_new (observable,
                                       model,
-                                      NO,
+                                      NO, NO,
                                       NULL,
                                       menu_item_inserted,
                                       menu_item_removed,
