@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk-encode-symbolic-svg">
+
+<refentryinfo>
+  <title>gtk-encode-symbolic-svg</title>
+  <productname>GTK+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Alexander</firstname>
+      <surname>Larsson</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
+<refmeta>
+  <refentrytitle>gtk-encode-symbolic-svg</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname>gtk-encode-symbolic-svg</refname>
+  <refpurpose>Symbolic icon conversion utility</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtk-encode-symbolic-svg</command>
+<arg choice="opt">OPTION...</arg>
+<arg choice="plain"><replaceable>PATH</replaceable></arg>
+<arg choice="plain"><replaceable>WIDTH</replaceable>x<replaceable>HEIGHT</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+  <command>gtk-encode-symbolic-svg</command> converts symbolic svg icons into
+  specially prepared png files. GTK+ can load and recolor these pngs, just like
+  original svgs, but loading them is much faster.
+</para>
+<para>
+  <replaceable>PATH</replaceable> is the name of a symbolic svg file,
+  <replaceable>WIDTH</replaceable>x<replaceable>HEIGHT</replaceable> are the
+  desired dimensions for the generated png file.
+</para>
+<para>
+  To distinguish them from ordinary pngs, the generated files have the extension
+  <filename>.symbolic.png</filename>.
+</para>
+</refsect1>
+
+<refsect1><title>Options</title>
+<variablelist>
+  <varlistentry>
+    <term>-o <replaceable>DIRECTORY</replaceable></term>
+    <term>--output <replaceable>DIRECTORY</replaceable></term>
+    <listitem><para>Write png files to <replaceable>DIRECTORY</replaceable>
+         instead of the current working directory.</para></listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+</refentry>

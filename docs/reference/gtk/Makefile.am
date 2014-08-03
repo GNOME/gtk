@@ -156,6 +156,7 @@ content_files =					\
 	gtk3-icon-browser.xml			\
 	gtk-query-immodules-3.0.xml		\
 	gtk-update-icon-cache.xml		\
+	gtk-encode-symbolic-svg.xml		\
 	gtk-launch.xml				\
 	broadwayd.xml				\
 	input-handling.xml			\
@@ -333,6 +334,7 @@ EXTRA_DIST += version.xml.in gtk3.types.in
 man_MANS = 				\
 	gtk-query-immodules-3.0.1	\
 	gtk-update-icon-cache.1		\
+	gtk-encode-symbolic-svg.1	\
 	gtk-launch.1			\
 	gtk3-demo.1			\
 	gtk3-widget-factory.1		\
