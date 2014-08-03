@@ -22,7 +22,7 @@ SUBDIRS = inspector native .
 if OS_DARWIN
   ECHO="echo"
 else
-  ECHO="echo -e"
+  ECHO=echo -e
 endif
 
 if HAVE_CLOUDPRINT
