@@ -184,6 +184,9 @@ case $host in
   *-*-linux*)
     os_linux=yes
     ;;
+  *-*-darwin*)
+    os_darwin=yes
+    ;;
 esac
 
 dnl
@@ -245,6 +248,7 @@ AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
 AM_CONDITIONAL(OS_UNIX, test "$os_win32" != "yes")
 AM_CONDITIONAL(OS_LINUX, test "$os_linux" = "yes")
+AM_CONDITIONAL(OS_DARWIN, test "$os_darwin" = "yes")
 
 if test "$os_win32" = "yes"; then
   AC_CHECK_TOOL(WINDRES, windres, no)
