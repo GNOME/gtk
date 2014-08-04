@@ -160,7 +160,6 @@ gtk_switch_on_frame_clock_update (GdkFrameClock *clock,
     }
   else
     {
-      gtk_switch_end_toggle_animation (sw);
       gtk_switch_set_active (sw, !priv->is_active);
       priv->handle_x = priv->dest_offset;
     }
@@ -1074,6 +1073,8 @@ gtk_switch_set_active (GtkSwitch *sw,
   GtkSwitchPrivate *priv;
 
   g_return_if_fail (GTK_IS_SWITCH (sw));
+
+  gtk_switch_end_toggle_animation (sw);
 
   is_active = !!is_active;
 
