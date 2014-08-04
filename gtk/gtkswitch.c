@@ -474,6 +474,11 @@ gtk_switch_size_allocate (GtkWidget     *widget,
                             allocation->width,
                             allocation->height);
 
+  if (priv->is_active)
+    priv->handle_x = gtk_widget_get_allocated_width (widget) / 2;
+  else
+    priv->handle_x = 0;
+
   _gtk_widget_set_simple_clip (widget);
 }
 
