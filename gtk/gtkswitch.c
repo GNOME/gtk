@@ -188,6 +188,7 @@ gtk_switch_begin_toggle_animation (GtkSwitch *sw)
       GdkFrameClock *clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw));
       priv->start_time = gdk_frame_clock_get_frame_time (clock);
       priv->end_time = priv->start_time + 1000 * ANIMATION_DURATION;
+      priv->offset = priv->handle_x;
       if (priv->tick_id == 0)
         {
           priv->tick_id = g_signal_connect (clock, "update",
