@@ -196,8 +196,6 @@ main (int argc, char *argv[])
   ssmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (smodel));
   g_object_unref (model);
 
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
-
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("First Word", renderer,
 						     "text", WORD_COLUMN_1,
@@ -268,8 +266,6 @@ main (int argc, char *argv[])
       
       
       tree_view2 = gtk_tree_view_new_with_model (smodel);
-      gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view2), TRUE);
-      
       
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes ("First Word", renderer,
@@ -340,7 +336,6 @@ main (int argc, char *argv[])
       
       
       tree_view3 = gtk_tree_view_new_with_model (ssmodel);
-      gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view3), TRUE);
       
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes ("First Word", renderer,

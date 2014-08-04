@@ -252,7 +252,6 @@ main (gint argc, gchar **argv)
   tree_model = create_model ();
   tree_view = gtk_tree_view_new_with_model (tree_model);
   g_signal_connect (tree_view, "button_press_event", G_CALLBACK (button_press_event), NULL);
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), TRUE);
 
   column = gtk_tree_view_column_new ();
