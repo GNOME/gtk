@@ -363,9 +363,7 @@ gtk_switch_leave (GtkWidget        *widget,
 static void
 gtk_switch_activate (GtkSwitch *sw)
 {
-  GtkSwitchPrivate *priv = sw->priv;
-
-  gtk_switch_set_active (sw, !priv->is_active);
+  gtk_switch_begin_toggle_animation (sw);
 }
 
 static void
