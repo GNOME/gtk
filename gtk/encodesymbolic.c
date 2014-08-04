@@ -247,7 +247,7 @@ main (int argc, char **argv)
 
   if (argc < 3)
     {
-      g_printerr (g_option_context_get_help (context, FALSE, NULL));
+      g_printerr ("%s\n", g_option_context_get_help (context, FALSE, NULL));
       return 1;
     }
 
