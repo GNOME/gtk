@@ -42,6 +42,7 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *direction_combo;
   GtkWidget *font_button;
   GtkWidget *hidpi_spin;
+  GtkWidget *animation_switch;
   GtkAdjustment *scale_adjustment;
 
   GtkWidget *debug_box;
@@ -388,6 +389,14 @@ init_scale (GtkInspectorVisual *vis)
 }
 
 static void
+init_animation (GtkInspectorVisual *vis)
+{
+  g_object_bind_property (gtk_settings_get_default (), "gtk-enable-animations",
+                          vis->priv->animation_switch, "active",
+                          G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
+}
+
+static void
 update_touchscreen (GtkSwitch *sw)
 {
   GtkDebugFlag flags;
@@ -469,6 +478,7 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_icons (vis);
   init_font (vis);
   init_scale (vis);
+  init_animation (vis);
   init_touchscreen (vis);
 }
 
@@ -504,6 +514,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, icon_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, hidpi_spin);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, animation_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, scale_adjustment);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, touchscreen_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, visual_box);
