@@ -852,6 +852,14 @@ gtk_switch_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_switch_parent_class)->dispose (object);
 }
 
+static void
+gtk_switch_finalize (GObject *object)
+{
+  gtk_switch_end_toggle_animation (GTK_SWITCH (object));
+
+  G_OBJECT_CLASS (gtk_switch_parent_class)->finalize (object);
+}
+
 static gboolean
 state_set (GtkSwitch *sw, gboolean state)
 {
@@ -919,6 +927,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   gobject_class->set_property = gtk_switch_set_property;
   gobject_class->get_property = gtk_switch_get_property;
   gobject_class->dispose = gtk_switch_dispose;
+  gobject_class->finalize = gtk_switch_finalize;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, switch_props);
 
