@@ -68,7 +68,6 @@ struct _GtkSwitchPrivate
 
   gint handle_x;
   gint offset;
-  gint dest_offset;
   gint drag_start;
   gint drag_threshold;
   gint64 start_time;
@@ -153,15 +152,20 @@ gtk_switch_on_frame_clock_update (GdkFrameClock *clock,
   if (now < priv->end_time)
     {
       gdouble t;
+      gint dest_offset;
+
+      if (priv->is_active)
+        dest_offset = 0;
+      else
+        dest_offset = gtk_widget_get_allocated_width (GTK_WIDGET (sw)) / 2;
 
       t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
       t = ease_out_cubic (t);
-      priv->handle_x = priv->offset + t * (priv->dest_offset - priv->offset);
+      priv->handle_x = priv->offset + t * (dest_offset - priv->offset);
     }
   else
     {
       gtk_switch_set_active (sw, !priv->is_active);
-      priv->handle_x = priv->dest_offset;
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (sw));
@@ -173,14 +177,7 @@ static void
 gtk_switch_begin_toggle_animation (GtkSwitch *sw)
 {
   GtkSwitchPrivate *priv = sw->priv;
-  GtkAllocation allocation;
   gboolean animate;
-
-  gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
-  if (priv->is_active)
-    priv->dest_offset = 0;
-  else
-    priv->dest_offset = allocation.width / 2;
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (sw)),
                 "gtk-enable-animations", &animate,
@@ -201,7 +198,6 @@ gtk_switch_begin_toggle_animation (GtkSwitch *sw)
   else
     {
       gtk_switch_set_active (sw, !priv->is_active);
-      priv->handle_x = priv->dest_offset;
     }
 }
 
@@ -1095,6 +1091,11 @@ gtk_switch_set_active (GtkSwitch *sw,
       gboolean handled;
 
       priv->is_active = is_active;
+
+      if (priv->is_active)
+        priv->handle_x = gtk_widget_get_allocated_width (GTK_WIDGET (sw)) / 2;
+      else
+        priv->handle_x = 0;
 
       g_object_notify_by_pspec (G_OBJECT (sw), switch_props[PROP_ACTIVE]);
 
