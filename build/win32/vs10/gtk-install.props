@@ -6,7 +6,7 @@
   <PropertyGroup Label="UserMacros">
     <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
     <InstalledDlls>$(BinDir)\$(GtkDllPrefix)gdk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gtk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gailutil(GtkDllSuffix).dll</InstalledDlls>
-    <InstalledBins>$(BinDir)\gtk3-demo.exe;$(BinDir)\gtk3-demo-application.exe</InstalledBins>
+    <InstalledBins>$(BinDir)\gtk3-demo.exe;$(BinDir)\gtk3-demo-application.exe;$(BinDir)\gtk-encode-symbolic-svg.exe</InstalledBins>
     <InstalledBroadwayBins>$(BinDir)\broadwayd.exe</InstalledBroadwayBins>
     <GtkDoInstallBin>
 mkdir $(CopyDir)\bin

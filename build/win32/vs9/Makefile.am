@@ -9,6 +9,7 @@ EXTRA_DIST +=	\
 	gdk.vcprojin	\
 	gtk.vcproj	\
 	gtk.vcprojin	\
+	gtk-encode-symbolic-svg.vcproj	\
 	gtk3-demo.vcproj	\
 	gtk3-demo-application.vcproj	\
 	gtk-inspector.vcproj	\

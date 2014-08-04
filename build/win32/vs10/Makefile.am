@@ -14,6 +14,8 @@ EXTRA_DIST +=	\
 	gtk.vcxprojin	\
 	gtk.vcxproj.filters	\
 	gtk.vcxproj.filtersin	\
+	gtk-encode-symbolic-svg.vcxproj	\
+	gtk-encode-symbolic-svg.vcxproj.filters	\
 	gtk3-demo.vcxproj	\
 	gtk3-demo.vcxproj.filters	\
 	gtk3-demo-application.vcxproj	\

@@ -207,6 +207,10 @@
       <Project>{3281202a-cd26-4c67-b892-eb34bdbc6130}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="gtk-encode-symbolic-svg.vcxproj">
+      <Project>{3281202a-cd26-4c67-b892-eb34bdbc6131}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
