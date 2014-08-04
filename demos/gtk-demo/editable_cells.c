@@ -351,7 +351,6 @@ do_editable_cells (GtkWidget *do_widget)
 
       /* create tree view */
       treeview = gtk_tree_view_new_with_model (items_model);
-      gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview), TRUE);
       gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview)),
                                    GTK_SELECTION_SINGLE);
 
