@@ -2204,6 +2204,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                         <child>
                                           <object class="GtkSwitch">
                                             <property name="visible">True</property>
+                                            <property name="active">True</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="margin-top">6</property>
