@@ -58,14 +58,13 @@ echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)
 :DONE_GDKCONFIG_H
     </GenGdkConfigHBroadway>
     <GenerateGtkDbusBuiltSources>
-set PATH=$(PATH);$(PythonPath)
-
 cd ..\..\..\gtk
 
-python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml
+$(PythonPath)\python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml
 
 cd $(SolutionDir)
     </GenerateGtkDbusBuiltSources>
+    <GenerateGtkWin32RC>$(PythonPath)\python ..\process-in-win32.py --gtkwin32rc</GenerateGtkWin32RC>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtkgensrcsprops</_PropertySheetDisplayName>
@@ -82,6 +81,9 @@ cd $(SolutionDir)
     </BuildMacro>
     <BuildMacro Include="GenerateGtkDbusBuiltSources">
       <Value>$(GenerateGtkDbusBuiltSources)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkWin32RC">
+      <Value>$(GenerateGtkWin32RC)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

@@ -57,11 +57,13 @@ echo $(ConfigurationName) &gt; ..\..\..\MSVC_$(ConfigurationName)&#x0D;&#x0A;
 	<UserMacro
 		Name="GenerateGtkDbusBuiltSources"
 		Value="
-set PATH=$(PATH);$(PythonPath)&#x0D;&#x0A;
-
 cd ..\..\..\gtk&#x0D;&#x0A;
-python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml&#x0D;&#x0A;
+$(PythonPath)\python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml&#x0D;&#x0A;
 cd $(SolutionDir)&#x0D;&#x0A;
 		      "
+	/>
+	<UserMacro
+		Name="GenerateGtkWin32RC"
+		Value="$(PythonPath)\python ..\process-in-win32.py --gtkwin32rc"
 	/>
 </VisualStudioPropertySheet>

@@ -7,4 +7,6 @@ SUBDIRS =	\
 	vs11	\
 	vs12
 
+EXTRA_DIST += process-in-win32.py
+
 -include $(top_srcdir)/git.mk

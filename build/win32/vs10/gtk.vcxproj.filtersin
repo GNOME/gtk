@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\gtk\gtkdbusinterfaces.xml"><Filter>Resource Files</Filter></CustomBuild>
+    <CustomBuild Include="..\..\..\gtk\gtk-win32.rc.in"><Filter>Resource Files</Filter></CustomBuild>
   </ItemGroup>
   <ItemGroup>
 #include "libgtk.vs10.sourcefiles.filters"
