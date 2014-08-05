@@ -1255,7 +1255,7 @@ msgstr "Uporabi vrstico glave"
 
 #: ../gtk/gtkassistant.c:505 ../gtk/gtkdialog.c:645
 msgid "Use Header Bar for actions."
-msgstr "Za dejanja uporabi naslovno vrstico."
+msgstr "Za dejanja uporabi vrstico glave."
 
 #: ../gtk/gtkassistant.c:511
 msgid "Header Padding"
@@ -3074,7 +3074,7 @@ msgstr "Število znakov vnosnega prostora, za katere naj se pusti prostor"
 
 #: ../gtk/gtkentry.c:865
 msgid "Maximum width in characters"
-msgstr "Največja širina (v znakih)"
+msgstr "Največja širina (v številu znakov)"
 
 #: ../gtk/gtkentry.c:866
 msgid "The desired maximum width of the entry, in characters"
@@ -3691,8 +3691,8 @@ msgid ""
 "The minimum number of children to allocate consecutively in the given "
 "orientation."
 msgstr ""
-"Najmanjše število podrejenih predmetov, ki so rezervirani zaporedno v dani "
-"usmeritvi."
+"Najmanjše število podrejenih elementov, ki zaporedno zahtevajo prostor v "
+"dani usmeritvi."
 
 #: ../gtk/gtkflowbox.c:3711
 msgid "Maximum Children Per Line"
@@ -3703,12 +3703,12 @@ msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
 msgstr ""
-"Največje število podrejenih predmetov, ki zahtevajo zaporedni prostor "
-"zaporedno v dani usmeritvi."
+"Največje število podrejenih elementov, ki zaporedno zahtevajo prostor v dani "
+"usmeritvi."
 
 #: ../gtk/gtkflowbox.c:3727
 msgid "Vertical spacing"
-msgstr "Navpični razmik"
+msgstr "Navpičen razmik"
 
 #: ../gtk/gtkflowbox.c:3728
 msgid "The amount of vertical space between two children"
@@ -3716,7 +3716,7 @@ msgstr "Količina navpičnega prostora med podrejenimi predmeti"
 
 #: ../gtk/gtkflowbox.c:3742
 msgid "Horizontal spacing"
-msgstr "Vodoravni razmik"
+msgstr "Vodoraven razmik"
 
 #: ../gtk/gtkflowbox.c:3743
 msgid "The amount of horizontal space between two children"
@@ -3882,7 +3882,7 @@ msgstr "Pokaži okraske"
 
 #: ../gtk/gtkheaderbar.c:1807
 msgid "Whether to show window decorations"
-msgstr "Ali naj bodo prikazani okraski okna"
+msgstr "Ali naj bodo okraski okna prikazani"
 
 #: ../gtk/gtkheaderbar.c:1826 ../gtk/gtksettings.c:1577
 msgid "Decoration Layout"
@@ -3890,16 +3890,15 @@ msgstr "Postavitev okraskov"
 
 #: ../gtk/gtkheaderbar.c:1827 ../gtk/gtksettings.c:1578
 msgid "The layout for window decorations"
-msgstr "Postavitev za okraske okna"
+msgstr "Postavitev okenskih okraskov"
 
 #: ../gtk/gtkheaderbar.c:1841
-#, fuzzy
 msgid "Decoration Layout Set"
 msgstr "Postavitev okraskov določena"
 
 #: ../gtk/gtkheaderbar.c:1842
 msgid "Whether the decoration-layout property has been set"
-msgstr "Ali je določena lastnost postavitve okraskov"
+msgstr "Ali je določena lastnost decoration-layout (za postavitev okraskov)"
 
 #: ../gtk/gtkheaderbar.c:1857
 msgid "Has Subtitle"
@@ -3907,7 +3906,7 @@ msgstr "Ima podpis"
 
 #: ../gtk/gtkheaderbar.c:1858
 msgid "Whether to reserve space for a subtitle"
-msgstr "Ali naj bo rezerviran prostor za podnapis"
+msgstr "Ali naj bo prihranjen prostor za podnapis"
 
 #: ../gtk/gtkiconview.c:418
 msgid "Pixbuf column"
@@ -4392,7 +4391,7 @@ msgstr ""
 
 #: ../gtk/gtkmagnifier.c:132
 msgid "Inspected"
-msgstr "Proučen"
+msgstr "Proučeni"
 
 #: ../gtk/gtkmagnifier.c:133
 msgid "Inspected widget"
@@ -4440,11 +4439,11 @@ msgstr "Spustni meni."
 
 #: ../gtk/gtkmenubutton.c:524
 msgid "Menu model"
-msgstr "Model menija"
+msgstr "Model Menu"
 
 #: ../gtk/gtkmenubutton.c:525
 msgid "The model from which the popup is made."
-msgstr "Model, iz katerega je narejeno pojavno okno."
+msgstr "Model, iz katerega je izdelano pojavno okno."
 
 #: ../gtk/gtkmenubutton.c:538
 msgid "Align with"
@@ -4464,19 +4463,19 @@ msgstr "Smer, v katero naj kaže puščica."
 
 #: ../gtk/gtkmenubutton.c:569
 msgid "Use a popover"
-msgstr ""
+msgstr "Uporabi pojavnik"
 
 #: ../gtk/gtkmenubutton.c:570
 msgid "Use a popover instead of a menu"
-msgstr ""
+msgstr "Uporabi pojavnik namesto menija"
 
 #: ../gtk/gtkmenubutton.c:584
 msgid "Popover"
-msgstr ""
+msgstr "Pojavnik"
 
 #: ../gtk/gtkmenubutton.c:585
 msgid "The popover"
-msgstr ""
+msgstr "Pojavnik"
 
 #: ../gtk/gtkmenu.c:555
 msgid "The currently selected menu item"
@@ -4968,7 +4967,7 @@ msgstr "Začetni zamik pred prvim zavihkom"
 
 #: ../gtk/gtknotebook.c:949
 msgid "Tab gap"
-msgstr "Presledek med zavihki"
+msgstr "Razmik med zavihki"
 
 #: ../gtk/gtknotebook.c:950
 msgid "Active tab is drawn with a gap at the bottom"
@@ -5166,7 +5165,7 @@ msgstr "Modalni"
 
 #: ../gtk/gtkpopover.c:1342
 msgid "Whether the popover is modal"
-msgstr ""
+msgstr "Ali je pojavnik modalen"
 
 #: ../gtk/gtkpressandhold.c:147
 msgid "Hold Time"
@@ -6734,24 +6733,22 @@ msgid "Desktop environment shows the desktop folder"
 msgstr "Okolje namizja prikazuje mapo namizja"
 
 #: ../gtk/gtksettings.c:1542
-#, fuzzy
 msgid ""
 "Set to TRUE if the desktop environment is displaying the desktop folder, "
 "FALSE if not."
 msgstr ""
-"Izbrana možnost omogoča, da okolje namizja prikaže namizno mapo, sicer ne."
+"Izbrana možnost omogoča, da okolje namizja prikaže mapo namizja, sicer ga ne."
 
 #: ../gtk/gtksettings.c:1597
 msgid "Dialogs use header bar"
 msgstr "Pogovorna okna imajo nazivno vrstico"
 
 #: ../gtk/gtksettings.c:1598
-#, fuzzy
 msgid ""
 "Whether builtin GTK+ dialogs should use a header bar instead of an action "
 "area."
 msgstr ""
-"Ali naj vgrajena pogovorna okna GTK+ uporabljajo naslovno vrstico namesto "
+"Ali naj vgrajena pogovorna okna GTK+ uporabljajo nazivno vrstico namesto "
 "območja dejanj."
 
 #: ../gtk/gtksettings.c:1614
@@ -6873,14 +6870,12 @@ msgid "The name of the widget currently visible in the stack"
 msgstr "Ime gradnika, ki je trenutno viden v skladu"
 
 #: ../gtk/gtkstack.c:402
-#, fuzzy
 msgid "Transition running"
-msgstr "Prehod je v teku"
+msgstr "Prehod se odvija"
 
 #: ../gtk/gtkstack.c:403
-#, fuzzy
 msgid "Whether or not the transition is currently running"
-msgstr "Ali prehod trenutno v poteka"
+msgstr "Ali se prehod trenutno izvaja"
 
 #: ../gtk/gtkstack.c:412
 msgid "The name of the child page"
@@ -8350,8 +8345,8 @@ msgid ""
 "Dash pattern used to draw the focus indicator. The character values are "
 "interpreted as pixel widths of alternating on and off segments of the line."
 msgstr ""
-"Črtkan vzorec za risanje pokazatelja pozornosti. Znakovne vrednosti se "
-"interpretirajo kot širine slikovnih točk izmenjujoče vidnih in nevidnih "
+"Črtkan vzorec za izris pokazatelja pozornosti. Znakovne vrednosti se "
+"tolmačijo kot širine slikovnih točk izmenjujočih se vključenih/izključenih "
 "odsekov črte."
 
 #: ../gtk/gtkwidget.c:3467
@@ -8733,7 +8728,6 @@ msgid "The GtkApplication for the window"
 msgstr "GtkApplication za okno"
 
 #: ../modules/printbackends/cloudprint/gtkprintercloudprint.c:137
-#, fuzzy
 msgid "Cloud Print account"
 msgstr "Račun za tiskanje v oblaku"
 
@@ -8746,7 +8740,6 @@ msgid "Printer ID"
 msgstr "ID tiskalnika"
 
 #: ../modules/printbackends/cloudprint/gtkprintercloudprint.c:148
-#, fuzzy
 msgid "Cloud Print printer ID"
 msgstr "ID tiskalnika v oblaku"
 
