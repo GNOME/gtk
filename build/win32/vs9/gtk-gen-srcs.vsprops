@@ -64,6 +64,6 @@ cd $(SolutionDir)&#x0D;&#x0A;
 	/>
 	<UserMacro
 		Name="GenerateGtkWin32RC"
-		Value="$(PythonPath)\python ..\process-in-win32.py --gtkwin32rc"
+		Value="$(PythonPath)\python ..\process-in-win32.py --gtkwin32rc --gtk3manifest"
 	/>
 </VisualStudioPropertySheet>

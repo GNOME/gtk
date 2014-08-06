@@ -39,4 +39,7 @@
     <ClCompile Include="..\..\..\modules\input\imviqr.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\modules\input\thai-charprop.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\..\gtk\libgtk3.manifest"><Filter>Resource Files</Filter></Manifest>
+  </ItemGroup>
 </Project>

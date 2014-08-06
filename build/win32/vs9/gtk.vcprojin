@@ -197,32 +197,33 @@
 				<Tool Name="VCCustomBuildTool"
 						Description="Generating GTK+ Win32 Version Resource..."
 						CommandLine="$(GenerateGtkWin32RC)"
-						Outputs="..\..\..\gtk\gtk-win32.rc"
+						Outputs="..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|Win32">
 					<Tool Name="VCCustomBuildTool"
 						Description="Generating GTK+ Win32 Version Resource..."
 						CommandLine="$(GenerateGtkWin32RC)"
-						Outputs="..\..\..\gtk\gtk-win32.rc"
+						Outputs="..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Debug|x64">
 					<Tool Name="VCCustomBuildTool"
 						Description="Generating GTK+ Win32 Version Resource..."
 						CommandLine="$(GenerateGtkWin32RC)"
-						Outputs="..\..\..\gtk\gtk-win32.rc"
+						Outputs="..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|x64">
 					<Tool Name="VCCustomBuildTool"
 						Description="Generating GTK+ Win32 Version Resource..."
 						CommandLine="$(GenerateGtkWin32RC)"
-						Outputs="..\..\..\gtk\gtk-win32.rc"
+						Outputs="..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest"
 					/>
 				</FileConfiguration>
 			</File>
 			<File RelativePath="..\..\..\gtk\gtk-win32.rc" />
+			<File RelativePath="..\..\..\gtk\libgtk3.manifest"/>
 		</Filter>
 		<Filter
 			Name="Source Files"

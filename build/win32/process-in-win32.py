@@ -69,7 +69,7 @@ def main(argv):
 
     parser.add_argument('--gtk3manifest', dest='gtk3manifest', action='store_const',
                    const=1,
-                   help='Generate libgtk3.manifest (Not used now)')
+                   help='Generate libgtk3.manifest')
 
     args = parser.parse_args()
     no_args = True
@@ -85,12 +85,11 @@ def main(argv):
         no_args = False
 
     if args.gtk3manifest is not None:
-        print('Not Used... Will add once gtk/libgtk3.manifest.in is added')
-        #manifest = {}
-        #manifest['EXE_MANIFEST_ARCHITECTURE'] = '*'
-        #process_in(os.path.join(srcroot, 'gtk', 'libgtk3.manifest.in',
-        #           os.path.join(srcroot, 'gtk', 'libgtk3.manifest',
-        #           manifest)
+        manifest = {}
+        manifest['EXE_MANIFEST_ARCHITECTURE'] = '*'
+        process_in(os.path.join(srcroot, 'gtk', 'libgtk3.manifest.in'),
+                   os.path.join(srcroot, 'gtk', 'libgtk3.manifest'),
+                   manifest)
         no_args = False
 
     if no_args is True:
