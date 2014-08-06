@@ -762,6 +762,36 @@ GtkComboBox {
   }
 }
 
+
+//FIXME: we need a better general solution for button linking
+
+.linked > GtkComboBox > .button {
+  // the combo is a composite widget so the way we do button linkind doesn't
+  // work, special case needed. See
+  // https://bugzilla.gnome.org/show_bug.cgi?id=733979
+
+  &:dir(ltr), &:dir(rtl) { // needed to increase specificity
+    border-radius: 0;
+    border-left-style: none;
+  }
+  &:dir(rtl) {
+    border-right-style: none;
+    border-left-style: solid
+  }
+}
+.linked > GtkComboBox:first-child > .button {
+  border-radius: 3px 0 0 3px;
+  border-left-style: solid;
+}
+.linked > GtkComboBox:last-child > .button {
+  border-radius: 0 3px 3px 0;
+  &:dir(rtl) { border-right-style: solid; }
+}
+.linked > GtkComboBox:only-child > .button {
+  border-radius: 3px;
+  border-style: solid;
+}
+
 /************
  * Toolbars *
  ************/

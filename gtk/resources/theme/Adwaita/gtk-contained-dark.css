@@ -881,6 +881,26 @@ GtkComboBox {
       border-left-style: solid;
       border-right-style: none; }
 
+.linked > GtkComboBox > .button:dir(ltr), .linked > GtkComboBox > .button:dir(rtl) {
+  border-radius: 0;
+  border-left-style: none; }
+.linked > GtkComboBox > .button:dir(rtl) {
+  border-right-style: none;
+  border-left-style: solid; }
+
+.linked > GtkComboBox:first-child > .button {
+  border-radius: 3px 0 0 3px;
+  border-left-style: solid; }
+
+.linked > GtkComboBox:last-child > .button {
+  border-radius: 0 3px 3px 0; }
+  .linked > GtkComboBox:last-child > .button:dir(rtl) {
+    border-right-style: solid; }
+
+.linked > GtkComboBox:only-child > .button {
+  border-radius: 3px;
+  border-style: solid; }
+
 /************
  * Toolbars *
  ************/
