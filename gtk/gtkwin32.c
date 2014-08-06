@@ -99,6 +99,7 @@ _gtk_load_dll_with_libgtk3_manifest (const gchar *dll_name)
   ULONG_PTR activation_cookie;
   LPSTR resource_name;
   BOOL activated;
+  DWORD error_code;
 
   resource_name = NULL;
   EnumResourceNames (gtk_dll, RT_MANIFEST, find_first_manifest,
@@ -115,11 +116,13 @@ _gtk_load_dll_with_libgtk3_manifest (const gchar *dll_name)
   activation_ctx_descriptor.hModule = gtk_dll;
   activation_ctx_descriptor.lpResourceName = resource_name;
   activation_ctx_handle = CreateActCtx (&activation_ctx_descriptor);
+  error_code = GetLastError ();
 
-  if (activation_ctx_handle == INVALID_HANDLE_VALUE)
+  if (activation_ctx_handle == INVALID_HANDLE_VALUE &&
+      error_code != ERROR_SXS_PROCESS_DEFAULT_ALREADY_SET)
     g_warning ("Failed to CreateActCtx for module %p, resource %p: %lu\n",
                gtk_dll, resource_name, GetLastError ());
-  else
+  else if (error_code != ERROR_SXS_PROCESS_DEFAULT_ALREADY_SET)
     {
       activation_cookie = 0;
       activated = ActivateActCtx (activation_ctx_handle, &activation_cookie);
