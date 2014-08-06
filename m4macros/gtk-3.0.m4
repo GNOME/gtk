@@ -199,7 +199,7 @@ dnl GTK_CHECK_BACKEND(BACKEND-NAME [, MINIMUM-VERSION [, ACTION-IF-FOUND [, ACTI
 dnl   Tests for BACKEND-NAME in the GTK targets list
 dnl
 AC_DEFUN([GTK_CHECK_BACKEND],
-[
+[m4_warn([obsolete], [GTK_CHECK_BACKEND is deprecated, use PKG_CHECK_MODULES([GTK_X11], [gtk+-x11-3.0]) or similar instead])
   pkg_config_args=ifelse([$1],,gtk+-3.0, gtk+-$1-3.0)
   min_gtk_version=ifelse([$2],,3.0.0,$2)
   pkg_config_args="$pkg_config_args >= $min_gtk_version"
