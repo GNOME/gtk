@@ -852,6 +852,9 @@ GtkComboBox {
   .header-bar-separator,
   & > GtkBox > .separator.vertical {
     -GtkWidget-wide-separators: true;
+    -GtkWidget-separator-width: 0;
+    /*
+    -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
     border-image: linear-gradient(to bottom,
@@ -866,6 +869,7 @@ GtkComboBox {
                                                    0.5))
                     0 1 / 1px 1px;  //FIXME use a proper color
     }
+    */
   }
   &.selection-mode {
     color: darken($selected_bg_color, 15%);
