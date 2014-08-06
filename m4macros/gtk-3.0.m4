@@ -6,7 +6,7 @@ dnl Test for GTK+, and define GTK_CFLAGS and GTK_LIBS, if gthread is specified i
 dnl pass to pkg-config
 dnl
 AC_DEFUN([AM_PATH_GTK_3_0],
-[dnl 
+[m4_warn([obsolete], [AM_PATH_GTK_3_0 is deprecated, use PKG_CHECK_MODULES([GTK], [gtk+-3.0]) instead])
 dnl Get the cflags and libraries from pkg-config
 dnl
 AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run a test GTK+ program],
