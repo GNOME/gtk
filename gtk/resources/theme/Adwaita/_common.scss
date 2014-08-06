@@ -209,7 +209,7 @@ GtkLabel {
     box-shadow: none;
     &:backdrop { background-color: transparent; }
   }
-  .linked & {
+  .linked & { //FIXME: use same buttons linking logic and template
     &:first-child {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
@@ -340,11 +340,23 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     @include button(osd);
     text-shadow: none;
     icon-shadow: none;
-    @extend %linked_buttons;
-    &:hover { @include button(osd-hover); @extend %linked_buttons; }
-    &:active { @include button(osd-active); @extend %linked_buttons; }
-    &:insensitive { @include button(osd-insensitive); @extend %linked_buttons; }
-    &:backdrop { @include button(osd-backdrop); @extend %linked_buttons; }
+    @extend %linked;
+    &:hover {
+      @include button(osd-hover);
+      @extend %linked;
+    }
+    &:active {
+      @include button(osd-active);
+      @extend %linked;
+    }
+    &:insensitive {
+      @include button(osd-insensitive);
+      @extend %linked;
+    }
+    &:backdrop {
+      @include button(osd-backdrop);
+      @extend %linked;
+    }
   }
   // Suggested and Destructive Action buttons
   @each $b_type, $b_color in (suggested-action, $selected_bg_color),
@@ -439,7 +451,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   .inline-toolbar &, .inline-toolbar &:backdrop {
     border-radius: 2px;
     border-width: 1px;
-    @extend %linked_buttons;
+    @extend %linked;
   }
 
   .primary-toolbar & { icon-shadow: none; } // tango icons don't need added shadows
@@ -450,12 +462,12 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   .linked &,
   .linked &:hover,
   .linked &:active,
-  .linked &:backdrop { @extend %linked_buttons; }
+  .linked &:backdrop { @extend %linked; }
 
   .linked.vertical &,
   .linked.vertical &:hover,
   .linked.vertical &:active,
-  .linked.vertical &:backdrop { @extend %linked_buttons_vertical; }
+  .linked.vertical &:backdrop { @extend %linked_vertical; }
 
 }
 
@@ -477,34 +489,26 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 .inline-toolbar.toolbar GtkToolButton { // .inline-toolbar.toolbar here for
                                         // higher specificity than the previous
                                         // "button look" selector
-  & > .button.flat {
-    border-radius: 0;
-    border-left-style: none;
-  }
-  &:dir(rtl) > .button.flat {}
-  &:first-child > .button.flat {
-    border-radius: 3px 0 0 3px;
-    border-left-style: solid;
-  }
-  &:last-child > .button.flat {
-    border-radius: 0 3px 3px 0;
-  }
-  &:last-child:dir(rtl) > .button.flat {
-    border-right-style: solid;
-  }
-  &:only-child > .button.flat {
-    border-radius: 3px;
-    border-style: solid;
-  }
+  & > .button.flat { @extend %linked_middle; }
+  &:dir(rtl) > .button.flat { @extend %linked_middle:dir(rtl); }
+  &:first-child > .button.flat { @extend %linked:first-child; }
+  &:last-child > .button.flat { @extend %linked:last-child; }
+  &:last-child:dir(rtl) > .button.flat { @extend %linked:last-child:dir(rtl); }
+  &:only-child > .button.flat { @extend %linked; }
 }
 
-%linked_buttons {
+%linked_middle {
   border-radius: 0;
   border-left-style: none;
   &:dir(rtl) {
+    border-radius: 0; // needed when including %linked_middle:dir(rtl)
     border-right-style: none;
     border-left-style: solid
-  };
+  }
+}
+
+%linked {
+  @extend %linked_middle;
   &:first-child {
     border-radius: 3px 0 0 3px;
     border-left-style: solid;
@@ -519,7 +523,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
 }
 
-%linked_buttons_vertical{
+%linked_vertical{
   border-left-style: solid;
   border-top-style: none;
   &:first-child {
@@ -744,52 +748,28 @@ GtkComboBox {
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0;
   }
-  &.combobox-entry .entry {
-    border-radius: 3px 0 0 3px;
-    &:dir(rtl) {
-      border-radius: 0 3px 3px 0;
-    }
-  }
+  &.combobox-entry .entry { @extend %linked; }
   &.combobox-entry .button, &.combobox-entry .button:backdrop {
     // It is needed to specify the backdrop button or it gets overridden
-    border-radius: 0 3px 3px 0;
-    border-left-style: none;
-    &:dir(rtl) {
-      border-radius: 3px 0 0 3px;
-      border-left-style: solid;
-      border-right-style: none;
-    }
+    @extend %linked;
   }
 }
-
-
-//FIXME: we need a better general solution for button linking
 
 .linked > GtkComboBox > .button {
   // the combo is a composite widget so the way we do button linkind doesn't
   // work, special case needed. See
   // https://bugzilla.gnome.org/show_bug.cgi?id=733979
-
-  &:dir(ltr), &:dir(rtl) { // needed to increase specificity
-    border-radius: 0;
-    border-left-style: none;
-  }
-  &:dir(rtl) {
-    border-right-style: none;
-    border-left-style: solid
-  }
+  &:dir(ltr) { @extend %linked_middle; } // specificity bump
+  &:dir(rtl) { @extend %linked_middle:dir(rtl); }
 }
 .linked > GtkComboBox:first-child > .button {
-  border-radius: 3px 0 0 3px;
-  border-left-style: solid;
+  @extend %linked:first-child;
 }
 .linked > GtkComboBox:last-child > .button {
-  border-radius: 0 3px 3px 0;
-  &:dir(rtl) { border-right-style: solid; }
+  @extend %linked:last-child;
 }
 .linked > GtkComboBox:only-child > .button {
-  border-radius: 3px;
-  border-style: solid;
+  @extend %linked:only-child;
 }
 
 /************
