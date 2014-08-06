@@ -40,6 +40,7 @@
 #include "gtkplug.h"
 #include "gtk.h"
 #include "gtkwin32embedwidget.h"
+#include "gtkprivate.h"
 
 #define MAX_PAGE_RANGES 20
 #define STATUS_POLLING_TIME 2000
