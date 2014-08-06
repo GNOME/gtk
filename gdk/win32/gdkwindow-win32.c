@@ -1807,7 +1807,7 @@ gdk_win32_window_set_transient_for (GdkWindow *window,
   w32_error = GetLastError ();
 
   /* Don't re-set GWLP_HWNDPARENT to the same value */
-  if (old_ptr == parent_id && w32_error == NO_ERROR)
+  if ((HWND) old_ptr == parent_id && w32_error == NO_ERROR)
     return;
 
   /* Don't return if it failed, try SetWindowLongPtr() anyway */
