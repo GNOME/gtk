@@ -1088,21 +1088,9 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   GtkBorderStyle border_style;
   GtkBorder border;
   gint border_width;
-  GtkThemingBackground bg;
 
   if (render_icon_image (engine, cr, x, y, width, height))
     return;
-
-  _gtk_theming_background_init (&bg, engine, 
-                                x, y,
-                                width, height,
-                                gtk_theming_engine_get_junction_sides (engine));
-
-  if (_gtk_theming_background_has_background_image (&bg))
-    {
-      _gtk_theming_background_render (&bg, cr);
-      return;
-    }
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1213,21 +1201,9 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gint exterior_size, interior_size, pad, thickness, border_width;
   GtkBorderStyle border_style;
   GtkBorder border;
-  GtkThemingBackground bg;
 
   if (render_icon_image (engine, cr, x, y, width, height))
     return;
-
-  _gtk_theming_background_init (&bg, engine, 
-                                x, y,
-                                width, height,
-                                gtk_theming_engine_get_junction_sides (engine));
-
-  if (_gtk_theming_background_has_background_image (&bg))
-    {
-      _gtk_theming_background_render (&bg, cr);
-      return;
-    }
 
   flags = gtk_theming_engine_get_state (engine);
 
@@ -2632,23 +2608,10 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                     gdouble           width,
                                     gdouble           height)
 {
-  GtkThemingBackground bg;
-  
   if (render_icon_image (engine, cr, x, y, width, height))
     return;
 
-  _gtk_theming_background_init (&bg, engine, x, y, width, height, 0);
-  
-  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER) &&
-      !_gtk_theming_background_has_background_image (&bg))
-    {
-      render_spinner (engine, cr, x, y, width, height);
-    }
-  else
-    {
-      _gtk_theming_background_render (&bg, cr);
-      gtk_theming_engine_render_frame (engine, cr, x, y, width, height);
-    }
+  render_spinner (engine, cr, x, y, width, height);
 }
 
 static GdkPixbuf *
