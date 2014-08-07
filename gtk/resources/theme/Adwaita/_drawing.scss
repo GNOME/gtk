@@ -361,3 +361,9 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   }
   @else { box-shadow: none; }
 }
+
+@mixin progressbar_fill($d:horizontal) {
+  $dir: if($d==vertical,right,bottom);
+  background-image: linear-gradient(to $dir, $selected_bg_color 2px,
+                                             lighten($selected_bg_color,6%));
+}

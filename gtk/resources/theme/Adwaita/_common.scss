@@ -1803,9 +1803,10 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     box-shadow: inset 1px 1px transparentize(black, 0.9),
                 $widget_edge;
     &.highlight {
+      @include progressbar_fill;
       border-color: $selected_borders_color;
-      background-color: $selected_bg_color;
       box-shadow: $widget_edge;
+      &.vertical { @include progressbar_fill(vertical); }
       &:backdrop {
          border-color: if($variant=='light', $selected_bg_color,
                                              $selected_borders_color);
@@ -1813,8 +1814,9 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
          box-shadow: none;
       }
     }
-    &:insensitive, &.hilight:insensitive {
+    &:insensitive, &.vertical:insensitive {
       border-color: $insensitive_borders_color;
+      background-image: none;
       background-color: $insensitive_bg_color;
       box-shadow: $widget_edge;
     }
@@ -1908,13 +1910,11 @@ GtkProgressBar {
 
 // moving bit
 .progressbar {
+  @include progressbar_fill;
   border-width: 1px;
   border-style: solid;
   border-radius: 1.5px;
   border-color: $selected_borders_color;
-  background-color: $selected_bg_color;
-  background-image: linear-gradient(to bottom, $selected_bg_color 2px,
-                                               lighten($selected_bg_color,6%));
   box-shadow: none; //needed for clipping
   &.left {
     border-top-left-radius: 3px;
@@ -1928,8 +1928,7 @@ GtkProgressBar {
     box-shadow: none;
   }
   &.vertical {
-    background-image: linear-gradient(to right, $selected_bg_color 2px,
-                                      lighten($selected_bg_color,7%));
+    @include progressbar_fill(vertical);
     &.bottom {
       border-bottom-left-radius: 3px;
       border-bottom-right-radius: 3px;

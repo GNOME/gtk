@@ -2115,21 +2115,26 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     .scale.trough.highlight,
     .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight {
+      background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
       border-color: #184472;
-      background-color: #4a90d9;
       box-shadow: 0 1px white; }
+      .scale.trough.highlight.vertical,
+      .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight.vertical,
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight.vertical {
+        background-image: linear-gradient(to right, #4a90d9 2px, #63a0de); }
       .scale.trough.highlight:backdrop,
       .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight:backdrop,
       .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight:backdrop {
         border-color: #4a90d9;
         background-color: #4a90d9;
         box-shadow: none; }
-    .scale.trough:insensitive, .scale.trough.hilight:insensitive,
+    .scale.trough:insensitive, .scale.trough.vertical:insensitive,
     .scale.scale-has-marks-above.scale-has-marks-below.trough:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below.trough.hilight:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below.trough.vertical:insensitive,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.hilight:insensitive {
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.vertical:insensitive {
       border-color: #a1a1a1;
+      background-image: none;
       background-color: #f4f4f4;
       box-shadow: 0 1px white; }
     .scale.trough:backdrop,
@@ -2396,12 +2401,11 @@ GtkProgressBar {
     color: #c7c7c7; }
 
 .progressbar {
+  background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
   border-width: 1px;
   border-style: solid;
   border-radius: 1.5px;
   border-color: #184472;
-  background-color: #4a90d9;
-  background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
   box-shadow: none; }
   .progressbar.left {
     border-top-left-radius: 3px;
@@ -2412,7 +2416,7 @@ GtkProgressBar {
   .progressbar.left.right {
     box-shadow: none; }
   .progressbar.vertical {
-    background-image: linear-gradient(to right, #4a90d9 2px, #68a2df); }
+    background-image: linear-gradient(to right, #4a90d9 2px, #63a0de); }
     .progressbar.vertical.bottom {
       border-bottom-left-radius: 3px;
       border-bottom-right-radius: 3px;
