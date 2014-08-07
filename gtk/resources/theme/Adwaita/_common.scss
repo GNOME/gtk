@@ -1642,10 +1642,8 @@ $asset_suffix: if($variant=='dark', '-dark', '');
                   (':backdrop:active', '-checked-backdrop'),
                   (':backdrop:active:insensitive', '-checked-backdrop-insensitive') {
     .#{$w}#{$s} {
-      background-image: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
+      -gtk-icon-source: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
                                     url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));
-      background-repeat: no-repeat;
-      background-position: center center;
     }
   }
 
