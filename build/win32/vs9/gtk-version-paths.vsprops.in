@@ -21,6 +21,10 @@
 		Value="3.0"
 	/>
 	<UserMacro
+		Name="GtkVersion"
+		Value="@GTK_VERSION@"
+	/>
+	<UserMacro
 		Name="GtkLibtoolCompatibleDllPrefix"
 		Value="lib"
 	/>

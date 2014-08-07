@@ -23,6 +23,7 @@ EXTRA_DIST +=	\
 	gtk-gen-srcs.vsprops	\
 	gtk-ignore-broadway.vsprops	\
 	gtk-install.vsprops	\
+	gtk-version-paths.vsprops.in	\
 	gtk-version-paths.vsprops
 
 -include $(top_srcdir)/git.mk

@@ -74,7 +74,7 @@ Gtk-$(APIVERSION).gir: gtk_list
 	--pkg-export gtk+-3.0 --warn-all --c-include="gtk/gtkx.h"	\
 	-DG_LOG_DOMAIN=\"Gtk\" -DGTK_LIBDIR=\"/dummy/lib\"	\
 	$(TIME_T_DEFINE) -DGTK_DATADIR=\"/dummy/share\" -DGTK_DATA_PREFIX=\"/dummy\"	\
-	-DGTK_SYSCONFDIR=\"/dummy/etc\" -DGTK_VERSION=\"3.12.0\"	\
+	-DGTK_SYSCONFDIR=\"/dummy/etc\" -DGTK_VERSION=\"@GTK_VERSION@\"	\
 	-DGTK_BINARY_VERSION=\"3.0.0\" -DGTK_HOST=\"i686-pc-vs$(VSVER)\"	\
 	-DGTK_COMPILATION -DGTK_PRINT_BACKENDS=\"file\"	\
 	-DGTK_PRINT_PREVIEW_COMMAND=\"undefined-gtk-print-preview-command\"	\

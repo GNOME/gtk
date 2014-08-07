@@ -36,6 +36,7 @@ EXTRA_DIST +=	\
 	gtk-gen-srcs.props	\
 	gtk-ignore-broadway.props	\
 	gtk-install.props	\
+	gtk-version-paths.props.in	\
 	gtk-version-paths.props
 
 -include $(top_srcdir)/git.mk

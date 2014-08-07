@@ -5,6 +5,7 @@
     <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
     <CopyDir>..\..\..\..\vs$(VSVer)\$(Platform)</CopyDir>
     <ApiVersion>3.0</ApiVersion>
+    <GtkVersion>@GTK_VERSION@</GtkVersion>
     <GtkLibtoolCompatibleDllPrefix>lib</GtkLibtoolCompatibleDllPrefix>
     <GtkLibtoolCompatibleDllSuffix>-$(ApiVersion)-0</GtkLibtoolCompatibleDllSuffix>
     <GtkSeparateVSDllPrefix />
@@ -28,6 +29,9 @@
     </BuildMacro>
     <BuildMacro Include="ApiVersion">
       <Value>$(ApiVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkVersion">
+      <Value>$(GtkVersion)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkLibtoolCompatibleDllPrefix">
       <Value>$(GtkLibtoolCompatibleDllPrefix)</Value>
