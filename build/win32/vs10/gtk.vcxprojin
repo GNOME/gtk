@@ -176,16 +176,16 @@
     <CustomBuild Include="..\..\..\gtk\gtk-win32.rc.in">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GTK+ Win32 Version Resource...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenerateGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating GTK+ Win32 Version Resource...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenerateGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating GTK+ Win32 Version Resource...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenerateGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating GTK+ Win32 Version Resource...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenerateGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +210,9 @@
     <ClCompile Include="..\..\..\modules\input\thai-charprop.c" />
   </ItemGroup>
   <ItemGroup>
+    <Manifest Include="..\..\..\gtk\libgtk3.manifest" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="gdk.vcxproj">
       <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f7}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -218,9 +221,6 @@
       <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073fd}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Manifest Include="..\..\..\gtk\libgtk3.manifest" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

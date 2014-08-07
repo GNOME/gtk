@@ -223,7 +223,7 @@
 				</FileConfiguration>
 			</File>
 			<File RelativePath="..\..\..\gtk\gtk-win32.rc" />
-			<File RelativePath="..\..\..\gtk\libgtk3.manifest"/>
+			<File RelativePath="..\..\..\gtk\libgtk3.manifest" />
 		</Filter>
 		<Filter
 			Name="Source Files"

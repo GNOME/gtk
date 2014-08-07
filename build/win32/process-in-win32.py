@@ -79,9 +79,19 @@ def main(argv):
 
         ver = get_version(srcroot)
 
+        target = os.path.join(srcroot, 'gtk', 'gtk-win32.rc')
         process_in(os.path.join(srcroot, 'gtk', 'gtk-win32.rc.in'),
-                   os.path.join(srcroot, 'gtk', 'gtk-win32.rc'),
+                   target + '.intermediate',
                    ver)
+        fp_r = open_compat(target + '.intermediate', 'r')
+        lines = fp_r.readlines()
+        fp_r.close()
+        fp_w = open_compat(target, 'w')
+        fp_w.writelines([item for item in lines[:-1]])
+
+        fp_w.close()
+        os.unlink(target + '.intermediate')
+
         no_args = False
 
     if args.gtk3manifest is not None:

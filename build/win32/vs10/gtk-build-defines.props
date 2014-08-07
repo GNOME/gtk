@@ -9,7 +9,7 @@
     <GtkPrefixDefine>GTK_PREFIX=\"$(GtkDummyPrefix)\"</GtkPrefixDefine>
     <GdkDefines>GDK_COMPILATION;G_LOG_DOMAIN="Gdk"</GdkDefines>
     <GtkIncludedImmodulesDefines>INCLUDE_IM_am_et;INCLUDE_IM_cedilla;INCLUDE_IM_cyrillic_translit;INCLUDE_IM_ime;INCLUDE_IM_inuktitut;INCLUDE_IM_ipa;INCLUDE_IM_multipress;INCLUDE_IM_thai;INCLUDE_IM_ti_er;INCLUDE_IM_ti_et;INCLUDE_IM_viqr</GtkIncludedImmodulesDefines>
-    <GtkDefines>GTK_COMPILATION;G_LOG_DOMAIN="Gtk";GTK_HOST="i686-pc-vs$(VSVer)";GTK_PRINT_BACKENDS="file";GTK_PRINT_PREVIEW_COMMAND="undefined-gtk-print-preview-command";$(GtkIncludedImmodulesDefines);GTK_LIBDIR="$(GtkDummyPrefix)/lib";GTK_DATADIR="$(GtkDummyPrefix)/share";GTK_DATA_PREFIX="$(GtkDummyPrefix)";GTK_SYSCONFDIR="$(GtkDummyPrefix)/etc";MULTIPRESS_CONFDIR="$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)";MULTIPRESS_LOCALEDIR="$(GtkDummyPrefix)/share/locale";GTK_VERSION="$(GtkVersion)/etc";GTK_BINARY_VERSION="$(GtkBinaryVersion)/etc";GDK_DISABLE_DEPRECATED</GtkDefines>
+    <GtkDefines>GTK_COMPILATION;G_LOG_DOMAIN="Gtk";GTK_HOST="i686-pc-vs$(VSVer)";GTK_PRINT_BACKENDS="file";GTK_PRINT_PREVIEW_COMMAND="undefined-gtk-print-preview-command";$(GtkIncludedImmodulesDefines);GTK_LIBDIR="$(GtkDummyPrefix)/lib";GTK_DATADIR="$(GtkDummyPrefix)/share";GTK_DATA_PREFIX="$(GtkDummyPrefix)";GTK_SYSCONFDIR="$(GtkDummyPrefix)/etc";MULTIPRESS_CONFDIR="$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)";MULTIPRESS_LOCALEDIR="$(GtkDummyPrefix)/share/locale";GTK_VERSION="$(GtkVersion)/etc";GTK_BINARY_VERSION="$(GtkBinaryVersion)/etc";GDK_DISABLE_DEPRECATED;ISOLATION_AWARE_ENABLED</GtkDefines>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtkbuilddefinesprops</_PropertySheetDisplayName>
