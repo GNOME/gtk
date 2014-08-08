@@ -302,7 +302,7 @@
     background-image: linear-gradient(to bottom, #232727, #2d3232);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1);
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1);
     transition-duration: 50ms; }
   .button:backdrop {
     border-style: solid;
@@ -427,7 +427,7 @@
       background-image: linear-gradient(to bottom, #194776, #1c5187);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
     .button.suggested-action:backdrop {
       border-style: solid;
       color: white;
@@ -477,7 +477,7 @@
       background-image: linear-gradient(to bottom, #aa0d0d, #bd0e0e);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
     .button.destructive-action:backdrop {
       border-style: solid;
       color: white;
@@ -566,7 +566,7 @@
     background-image: linear-gradient(to bottom, #232727, #2d3232);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
   .inline-toolbar GtkToolButton > .button:insensitive {
     border-style: solid;
     color: #939695;
@@ -744,7 +744,7 @@ GtkColorButton.button {
         background-image: linear-gradient(to bottom, #232727, #2d3232);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
       .spinbutton.vertical .button:first-child:hover, .spinbutton.vertical:dir(rtl) .button:first-child:hover {
         border-style: solid;
         color: #eeeeec;
@@ -785,7 +785,7 @@ GtkColorButton.button {
         background-image: linear-gradient(to bottom, #232727, #2d3232);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
       .spinbutton.vertical .button:last-child:hover, .spinbutton.vertical:dir(rtl) .button:last-child:hover {
         border-style: solid;
         color: #eeeeec;
@@ -975,7 +975,7 @@ GtkComboBox {
         background-image: linear-gradient(to bottom, #194776, #1c5187);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
       .titlebar.selection-mode .button:insensitive, GtkCalendar.selection-mode.header .button:insensitive,
       .header-bar.selection-mode .button:insensitive {
         border-style: solid;
@@ -1033,7 +1033,7 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #232727, #2d3232);
           text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
           icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-          box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+          box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
           border-color: #0f2b48; }
         .titlebar.selection-mode .button.suggested-action:insensitive, GtkCalendar.selection-mode.header .button.suggested-action:insensitive,
         .header-bar.selection-mode .button.suggested-action:insensitive {
@@ -1545,7 +1545,7 @@ GtkTreeView.view.progressbar {
         background-image: linear-gradient(to bottom, #232727, #2d3232);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
       .notebook tab .button:backdrop {
         color: rgba(201, 203, 201, 0.3);
         border-color: transparent; }
@@ -2683,7 +2683,7 @@ GtkCalendar {
       background-image: linear-gradient(to bottom, #232727, #2d3232);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
     .message-dialog.csd .dialog-action-area .button:insensitive {
       border-style: solid;
       color: #939695;
@@ -2732,7 +2732,7 @@ GtkCalendar {
         background-image: linear-gradient(to bottom, #194776, #1c5187);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
       .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop {
         border-style: solid;
         color: white;
@@ -2781,7 +2781,7 @@ GtkCalendar {
         background-image: linear-gradient(to bottom, #aa0d0d, #bd0e0e);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
       .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop {
         border-style: solid;
         color: white;
@@ -2915,7 +2915,7 @@ GtkInfoBar {
       background-image: linear-gradient(to bottom, #194776, #1c5187);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
     .info .button:insensitive,
     .question .button:insensitive,
     .warning .button:insensitive,
@@ -3089,7 +3089,7 @@ GtkCalendar.header .button.titlebutton {
     background-image: linear-gradient(to bottom, #232727, #2d3232);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
   .header-bar .button.titlebutton:backdrop,
   .titlebar .button.titlebutton:backdrop,
   GtkCalendar.header .button.titlebutton:backdrop {
