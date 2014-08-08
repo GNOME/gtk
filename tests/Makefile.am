@@ -98,6 +98,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testrichtext			\
 	testscale			\
 	testselection			\
+	testselectionmode		\
 	$(testsocket_programs)		\
 	testspinbutton			\
 	teststatusicon			\
