@@ -1515,7 +1515,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
 
 GtkSwitch {
   // FIXME: backdrop insensinsitive slider on the dark variant
-  -GtkSwitch-slider-width: 47px; // 57px is the right value to make it as tall
+  -GtkSwitch-slider-width: 45px; // 55px is the right value to make it as tall
                                  // as buttons, not doing that for now
   font: bold condensed 9;
   outline-offset: -4px;
@@ -1531,15 +1531,18 @@ GtkSwitch {
     background-color: mix($bg_color,$borders_color,60%);
     text-shadow: 0 1px transparentize(black, 0.9);
     &:active {
+      @include progressbar_fill;
       color: white;
       border-color: $selected_borders_color;
-      background-color: $selected_bg_color;
       box-shadow: $widget_edge;
-      text-shadow: 0 0 2px white;
+      //text-shadow: 0 1px transparentize($selected_borders_color,0.5);
+      text-shadow: 0 1px transparentize($selected_borders_color,0.5),
+                   0 0 2px transparentize(white,0.4);
     }
     &:insensitive {
       color: $insensitive_fg_color;
       border-color: $borders_color;
+      background-image: none;
       background-color: $insensitive_bg_color;
       box-shadow: $widget_edge;
       text-shadow: none;
@@ -1547,6 +1550,7 @@ GtkSwitch {
     &:backdrop {
       color: $backdrop_fg_color;
       border-color: $backdrop_borders_color;
+      background-image: none;
       background-color: $backdrop_dark_fill;
       box-shadow: none;
       text-shadow: none;
