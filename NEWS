@@ -1,3 +1,81 @@
+Overview of Changes in GTK+ 3.13.5 to 3.13.6
+============================================
+
+* Theme
+ - Many Adwaita improvements in details
+ - Much faster blur implementation for shadows
+ - Support symbolic, recolorable pngs
+
+* GtkFileChooser
+ - Fix editing of bookmarks
+ - Use symbolic icons in the path bar
+
+* GtkTextView
+ - Add a vfunc to allow subclasses to draw above/below text
+
+* GtkImage
+ - Support scale factor when loading from resources
+
+* Inspector
+ - Show some widget states and buildable ids
+ - Add GtkTreeSelection to object tree
+
+* Wayland
+ - Support newer protocol versions
+
+* Windows:
+ - Fix handling of input shapes
+ - Support font scaling
+ - Dialog theming fixes
+ - Several crash fixes
+
+* Bugs fixed:
+ 624791	GtkTextBuffer doesn't emit signal "notify" on change of property "text"
+ 638709	utf8_strrcasestr in GtkTextIter makes an invalid read
+ 705054	Embed manifest into gtk-update-icon-cache.exe
+ 715176	object:state-changed:focused event missing when a text widget regains...
+ 721367	Add gtk_application_get_actions_for_accel()
+ 726224	W32: GDK tries to set GWLP_HWNDPARENT to NULL when it's NULL already
+ 729140	popovers can't always track the widget
+ 729636	Only show title button separator when there is something to separate...
+ 729809	listbox: Add missing ::row-selected emissions
+ 729924	Crash while trying to print
+ 730450	Support non-svg symbolic icons
+ 732137	Fix building quartz backend
+ 733312	Deprecate GtkTreeView:rules-hint
+ 733406	gtk_text_view_scroll_mark_onscreen() not working any more
+ 733416	image: support scale factor when loading from GResource
+ 733610 g_object_unref exceptions using GtkNotebook
+ 733671 W32: Non-CSDed windows have unthemed titlebar
+ 733679 GDK does not handle WM_NCHITTEST
+ 733766 W32: gedit crashes when closing a print dialogue
+ 733767 GtkPrintOperation does not keep itself alive through callbacks
+ 733768 W32: Widgets can't be embedded into foreign windows
+ 733769 W32: Critical error when GTK tries to set opacity for embedded windows
+ 733773 GTK implicitly uses native W32 widgets in some cases, but lacks ICC...
+ 733782 GtkListBoxRowAccessible expects the parent to be a GtkListBox
+ 733923 gtk_widget_get_accessible() fails for an unparented GtkPopover
+ 733925 GtkApplication: load gtk/menus-common.ui resource
+ 733965 Add a way to debug GActions
+ 733979 Combobox is styled like the last child if linked class applied, even...
+ 734033 Avoid initial keyboard focus heuristic selecting labels
+ 734038 GTK does not respect system font scaling
+ 734053 gtkcairoblur: Replace our exponential blur with the box blur from mutter
+ 734129 Popover sometimes fails to get raised above contents
+ 734213 GtkSwitch showing up with "mixed" state when setting it active before...
+ 734292 drag: add missing introspection annotations
+ 734485 Switches are too big, glow effect makes it hard to read "ON"
+
+* Translation updates:
+ Arabic
+ Basque
+ Brazilian Portuguese
+ Greek
+ Lithuanian
+ Slovenian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.13.4 to 3.13.5
 ============================================
 
