@@ -1398,11 +1398,7 @@ gtk_container_destroy (GtkWidget *widget)
   if (priv->restyle_pending)
     priv->restyle_pending = FALSE;
 
-  if (priv->focus_child)
-    {
-      g_object_unref (priv->focus_child);
-      priv->focus_child = NULL;
-    }
+  g_clear_object (&priv->focus_child);
 
   /* do this before walking child widgets, to avoid
    * removing children from focus chain one by one.

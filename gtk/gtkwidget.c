@@ -12140,8 +12140,7 @@ gtk_widget_finalize (GObject *object)
 
   gtk_grab_remove (widget);
 
-  g_object_unref (priv->style);
-  priv->style = NULL;
+  g_clear_object (&priv->style);
 
   g_free (priv->name);
 
