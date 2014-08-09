@@ -11,8 +11,9 @@ dnl Get the cflags and libraries from pkg-config
 dnl
 AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run a test GTK+ program],
 		    , enable_gtktest=yes)
+  min_gtk_version=ifelse([$1], [], [3.0.0], [$1])
 
-  pkg_config_args=gtk+-3.0
+  pkg_config_args="gtk+-3.0 >= $min_gtk_version"
   for module in . $4
   do
       case "$module" in
@@ -38,7 +39,6 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
     no_gtk=yes
   fi
 
-  min_gtk_version=ifelse([$1], ,3.0.0,$1)
   AC_MSG_CHECKING(for GTK+ - version >= $min_gtk_version)
 
   if test x$PKG_CONFIG != xno ; then
@@ -48,7 +48,7 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
 	  enable_gtktest=no
     fi
 
-    if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args; then
+    if $PKG_CONFIG $pkg_config_args; then
 	  :
     else
 	  no_gtk=yes
@@ -202,10 +202,11 @@ AC_DEFUN([GTK_CHECK_BACKEND],
 [
   pkg_config_args=ifelse([$1],,gtk+-3.0, gtk+-$1-3.0)
   min_gtk_version=ifelse([$2],,3.0.0,$2)
+  pkg_config_args="$pkg_config_args >= $min_gtk_version"
 
   AC_PATH_PROG(PKG_CONFIG, [pkg-config], [AC_MSG_ERROR([No pkg-config found])])
 
-  if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args ; then
+  if $PKG_CONFIG $pkg_config_args ; then
     target_found=yes
   else
     target_found=no
