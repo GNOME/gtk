@@ -22,7 +22,7 @@ TESTS_ENVIRONMENT =                     \
         GSETTINGS_BACKEND=memory        \
         G_ENABLE_DIAGNOSTIC=0
 
-TEST_PROGS += state-record
+test_programs = state-record
 
 testdata = \
 	focus1.ui focus1.in focus1.out \
@@ -32,7 +32,7 @@ EXTRA_DIST += $(testdata)
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir = $(libexecdir)/installed-tests/$(PACKAGE)
-insttest_PROGRAMS = $(TEST_PROGS)
+insttest_PROGRAMS = $(test_programs)
 
 statetestdir = $(insttestdir)/state
 statetest_DATA = $(testdata)
