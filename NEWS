@@ -32,6 +32,7 @@ Overview of Changes in GTK+ 3.13.5 to 3.13.6
 * Bugs fixed:
  624791	GtkTextBuffer doesn't emit signal "notify" on change of property "text"
  638709	utf8_strrcasestr in GtkTextIter makes an invalid read
+ 641638 Avoid pkg-config --atleast-version
  705054	Embed manifest into gtk-update-icon-cache.exe
  715176	object:state-changed:focused event missing when a text widget regains...
  721367	Add gtk_application_get_actions_for_accel()
@@ -65,6 +66,7 @@ Overview of Changes in GTK+ 3.13.5 to 3.13.6
  734213 GtkSwitch showing up with "mixed" state when setting it active before...
  734292 drag: add missing introspection annotations
  734485 Switches are too big, glow effect makes it hard to read "ON"
+ 734526 GtkToolbar: Implement clip
 
 * Translation updates:
  Arabic
