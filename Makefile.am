@@ -123,11 +123,11 @@ snapshot:
 	$(MAKE) dist distdir=$(PACKAGE)-snap`date +"%Y%m%d"`
 
 DISTCHECK_CONFIGURE_FLAGS =		\
-		--enable-gtk-doc 	\
-		--enable-man 		\
-		--disable-rebuilds 	\
-		--disable-maintainer-mode \
-		--enable-introspection
+	--enable-gtk-doc 		\
+	--enable-man 			\
+	--disable-maintainer-mode 	\
+	--enable-introspection  	\
+	--enable-installed-tests
 
 GITIGNOREFILES = \
 	po-properties/Makefile.in.in \
