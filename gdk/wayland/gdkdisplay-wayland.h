@@ -64,7 +64,7 @@ struct _GdkWaylandDisplay
   struct wl_data_device_manager *data_device_manager;
 
   struct wl_cursor_theme *cursor_theme;
-  GSList *cursor_cache;
+  GHashTable *cursor_cache;
 
   GSource *event_source;
 

@@ -68,66 +68,16 @@ struct _GdkWaylandCursorClass
 
 G_DEFINE_TYPE (GdkWaylandCursor, _gdk_wayland_cursor, GDK_TYPE_CURSOR)
 
-struct cursor_cache_key
+void
+_gdk_wayland_display_init_cursors (GdkWaylandDisplay *display)
 {
-  GdkCursorType type;
-  const char *name;
-};
-
-static void
-add_to_cache (GdkWaylandDisplay *display, GdkWaylandCursor *cursor)
-{
-  display->cursor_cache = g_slist_prepend (display->cursor_cache, cursor);
-
-  g_object_ref (cursor);
+  display->cursor_cache = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
 }
 
-static gint
-cache_compare_func (gconstpointer listelem,
-                    gconstpointer target)
-{
-  GdkWaylandCursor *cursor = (GdkWaylandCursor *) listelem;
-  struct cursor_cache_key* key = (struct cursor_cache_key *) target;
-
-  if (cursor->cursor.type != key->type)
-    return 1; /* No match */
-
-  /* Elements marked as pixmap must be named cursors
-   * (since we don't store normal pixmap cursors
-   */
-  if (key->type == GDK_CURSOR_IS_PIXMAP)
-    return strcmp (key->name, cursor->name);
-
-  return 0; /* Match */
-}
-
-static GdkWaylandCursor*
-find_in_cache (GdkWaylandDisplay *display,
-               GdkCursorType      type,
-               const char        *name)
-{
-  GSList* res;
-  struct cursor_cache_key key;
-
-  key.type = type;
-  key.name = name;
-
-  res = g_slist_find_custom (display->cursor_cache, &key, cache_compare_func);
-
-  if (res)
-    return (GdkWaylandCursor *) res->data;
-
-  return NULL;
-}
-
-/* Called by gdk_wayland_display_finalize to flush any cached cursors
- * for a dead display.
- */
 void
 _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display)
 {
-  g_slist_foreach (display->cursor_cache, (GFunc) g_object_unref, NULL);
-  g_slist_free (display->cursor_cache);
+  g_hash_table_destroy (display->cursor_cache);
 }
 
 static gboolean
@@ -156,7 +106,14 @@ void
 _gdk_wayland_display_update_cursors (GdkWaylandDisplay      *display,
                                      struct wl_cursor_theme *theme)
 {
-  g_slist_foreach (display->cursor_cache, (GFunc) set_cursor_from_theme, theme);
+  GHashTableIter iter;
+  const char *name;
+  GdkWaylandCursor *cursor;
+
+  g_hash_table_iter_init (&iter, display->cursor_cache);
+
+  while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer *) &cursor))
+    set_cursor_from_theme (cursor, theme);
 }
 
 static void
@@ -302,14 +259,9 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  private = find_in_cache (wayland_display, GDK_CURSOR_IS_PIXMAP, name);
+  private = g_hash_table_lookup (wayland_display->cursor_cache, name);
   if (private)
-    {
-      /* Cache had it, add a ref for this user */
-      g_object_ref (private);
-
-      return (GdkCursor*) private;
-    }
+    return GDK_CURSOR (g_object_ref (private));
 
   private = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
                           "cursor-type", GDK_CURSOR_IS_PIXMAP,
@@ -325,8 +277,8 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
   if (!set_cursor_from_theme (private, wayland_display->cursor_theme))
     return GDK_CURSOR (private);
 
-  add_to_cache (wayland_display, private);
-
+  /* Insert into cache. */
+  g_hash_table_insert (wayland_display->cursor_cache, private->name, g_object_ref (private));
   return GDK_CURSOR (private);
 }
 

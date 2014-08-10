@@ -232,6 +232,7 @@ _gdk_wayland_display_open (const gchar *display_name)
   /* Wait until the dust has settled during init... */
   wl_display_roundtrip (display_wayland->wl_display);
 
+  _gdk_wayland_display_init_cursors (display_wayland);
   gdk_input_init (display);
 
   g_signal_emit_by_name (display, "opened");
