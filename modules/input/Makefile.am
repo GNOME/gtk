@@ -203,7 +203,7 @@ install-data-hook:
 	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
 	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
 	  echo "$(DESTDOR)$(bindir)/gtk-query-immodules-2.0 > $(DESTDIR)$(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules.cache" ; \
-	  $(DESTDIR)/$(bindir)/gtk-query-immodules-2.0 > $(DESTDIR)$(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules.cache ; \
+	  $(DESTDIR)$(bindir)/gtk-query-immodules-2.0 > $(DESTDIR)$(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules.cache ; \
 	else \
 	  echo "***" ; \
 	  echo "*** Warning: immodules.cache not built" ; \
