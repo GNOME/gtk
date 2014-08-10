@@ -99,7 +99,7 @@ reftest_module_new (const char *directory,
   if (module == NULL)
     {
       /* libtool hack */
-      char *libtool_dir = g_build_path (directory, ".libs", NULL);
+      char *libtool_dir = g_build_filename (directory, ".libs", NULL);
 
       g_free (full_path);
       full_path = g_module_build_path (libtool_dir, module_name);

@@ -381,10 +381,12 @@ connect_signals (GtkBuilder    *builder,
         }
       break;
     case 2:
+      if (g_getenv ("REFTEST_MODULE_DIR"))
+        directory = g_getenv ("REFTEST_MODULE_DIR");
       module = reftest_module_new (directory, split[0]);
       if (module == NULL)
         {
-          g_error ("Could not load module '%s' when looking up '%s'", split[0], handler_name);
+          g_error ("Could not load module '%s' from '%s' when looking up '%s'", split[0], directory, handler_name);
           return;
         }
       func = reftest_module_lookup (module, split[1]);
@@ -438,6 +440,7 @@ snapshot_ui_file (const char *ui_file)
   gtk_builder_connect_signals_full (builder, connect_signals, directory);
   window = builder_get_toplevel (builder);
   g_object_unref (builder);
+  g_free (directory);
   g_assert (window);
 
   gtk_widget_show (window);

@@ -2,6 +2,7 @@ include $(top_srcdir)/Makefile.decl
 NULL =
 
 TESTS_ENVIRONMENT = 				\
+	REFTEST_MODULE_DIR=$(abs_builddir)	\
 	GTK_IM_MODULE=gtk-im-context-simple 	\
 	GSETTINGS_BACKEND=memory		\
 	G_ENABLE_DIAGNOSTIC=0
