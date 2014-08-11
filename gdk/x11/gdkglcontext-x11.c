@@ -444,6 +444,31 @@ out:
   return retval;
 }
 
+static void
+update_pixel_format (GdkDisplay       *display,
+                     GdkGLPixelFormat *format,
+                     GLXFBConfig       config)
+{
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+  int value = 0;
+
+  glXGetFBConfigAttrib (dpy, config, GLX_DOUBLEBUFFER, &format->double_buffer);
+
+  glXGetFBConfigAttrib (dpy, config, GLX_RED_SIZE, &value);
+  format->color_size = value;
+
+  glXGetFBConfigAttrib (dpy, config, GLX_GREEN_SIZE, &value);
+  format->color_size = MAX (format->color_size, value);
+
+  glXGetFBConfigAttrib (dpy, config, GLX_BLUE_SIZE, &value);
+  format->color_size = MAX (format->color_size, value);
+
+  glXGetFBConfigAttrib (dpy, config, GLX_ALPHA_SIZE, &format->alpha_size);
+  glXGetFBConfigAttrib (dpy, config, GLX_AUX_BUFFERS, &format->aux_buffers);
+  glXGetFBConfigAttrib (dpy, config, GLX_DEPTH_SIZE, &format->depth_size);
+  glXGetFBConfigAttrib (dpy, config, GLX_STENCIL_SIZE, &format->stencil_size);
+}
+
 static GLXContext
 create_gl3_context (GdkDisplay   *display,
                     GLXFBConfig   config,
@@ -720,6 +745,8 @@ gdk_x11_display_validate_gl_pixel_format (GdkDisplay        *display,
                                           GdkGLPixelFormat  *format,
                                           GError           **error)
 {
+  GLXFBConfig config;
+
   if (!gdk_x11_display_init_gl (display))
     {
       g_set_error_literal (error, GDK_GL_PIXEL_FORMAT_ERROR,
@@ -741,8 +768,13 @@ gdk_x11_display_validate_gl_pixel_format (GdkDisplay        *display,
         }
     }
 
-  if (!find_fbconfig_for_pixel_format (display, format, NULL, NULL, error))
+  if (!find_fbconfig_for_pixel_format (display, format, &config, NULL, error))
     return FALSE;
+
+  /* update the pixel format with the values of the
+   * configuration we found
+   */
+  update_pixel_format (display, format, config);
 
   return TRUE;
 }
