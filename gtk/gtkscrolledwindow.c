@@ -761,7 +761,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->min_content_height = -1;
 
   priv->drag_gesture = gtk_gesture_drag_new (widget);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 1);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
   g_signal_connect_swapped (priv->drag_gesture, "drag-begin",
                             G_CALLBACK (scrolled_window_drag_begin_cb),
                             scrolled_window);
@@ -774,17 +774,17 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
   priv->pan_gesture = gtk_gesture_pan_new (widget, GTK_ORIENTATION_VERTICAL);
   gtk_gesture_group (priv->pan_gesture, priv->drag_gesture);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->pan_gesture), 1);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->pan_gesture), TRUE);
 
   priv->swipe_gesture = gtk_gesture_swipe_new (widget);
   gtk_gesture_group (priv->swipe_gesture, priv->drag_gesture);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->swipe_gesture), 1);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->swipe_gesture), TRUE);
   g_signal_connect_swapped (priv->swipe_gesture, "swipe",
                             G_CALLBACK (scrolled_window_swipe_cb),
                             scrolled_window);
   priv->long_press_gesture = gtk_gesture_long_press_new (widget);
   gtk_gesture_group (priv->long_press_gesture, priv->drag_gesture);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->long_press_gesture), 1);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->long_press_gesture), TRUE);
   g_signal_connect_swapped (priv->long_press_gesture, "pressed",
                             G_CALLBACK (scrolled_window_long_press_cb),
                             scrolled_window);
