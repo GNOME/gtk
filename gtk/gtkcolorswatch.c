@@ -89,17 +89,15 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   gtk_widget_set_has_window (GTK_WIDGET (swatch), FALSE);
 
   swatch->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (swatch));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (swatch->priv->long_press_gesture),
+                                     TRUE);
   g_signal_connect (swatch->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), swatch);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (swatch->priv->long_press_gesture),
-                                              GTK_PHASE_BUBBLE);
 
   swatch->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (swatch));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), 0);
   g_signal_connect (swatch->priv->multipress_gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (swatch->priv->multipress_gesture),
-                                              GTK_PHASE_BUBBLE);
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
