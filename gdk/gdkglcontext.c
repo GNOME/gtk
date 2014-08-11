@@ -38,6 +38,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkglpixelformat.h"
 #include "gdkvisual.h"
+#include "gdkinternals.h"
 
 #include "gdkintl.h"
 
@@ -393,15 +394,21 @@ gdk_gl_context_set_window (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
+  g_return_if_fail (window == NULL || (GDK_IS_WINDOW (window) && !GDK_WINDOW_DESTROYED (window)));
 
   if (priv->window == window)
     return;
 
+  if (priv->window != NULL)
+    gdk_window_set_gl_context (priv->window, NULL);
+
   g_clear_object (&priv->window);
 
   if (window != NULL)
-    priv->window = g_object_ref (window);
+    {
+      priv->window = g_object_ref (window);
+      gdk_window_set_gl_context (window, context);
+    }
 
   GDK_GL_CONTEXT_GET_CLASS (context)->set_window (context, window);
 }
@@ -489,4 +496,23 @@ gdk_gl_context_get_swap_interval (GdkGLContext *context)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   return priv->swap_interval;
+}
+
+gboolean
+gdk_window_has_gl_context (GdkWindow *window)
+{
+  return g_object_get_data (G_OBJECT (window), "-gdk-gl-context") != NULL;
+}
+
+void
+gdk_window_set_gl_context (GdkWindow    *window,
+                           GdkGLContext *context)
+{
+  g_object_set_data (G_OBJECT (window), "-gdk-gl-context", context);
+}
+
+GdkGLContext *
+gdk_window_get_gl_context (GdkWindow *window)
+{
+  return g_object_get_data (G_OBJECT (window), "-gdk-gl-context");
 }

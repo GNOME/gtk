@@ -407,6 +407,11 @@ void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_win
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
 
+gboolean        gdk_window_has_gl_context       (GdkWindow    *window);
+void            gdk_window_set_gl_context       (GdkWindow    *window,
+                                                 GdkGLContext *context);
+GdkGLContext *  gdk_window_get_gl_context       (GdkWindow    *window);
+
 /*****************************
  * offscreen window routines *
  *****************************/
