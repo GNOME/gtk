@@ -1988,6 +1988,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <child>
                               <object class="GtkButton" id="page2dismiss">
                                 <property name="visible">True</property>
+                                <property name="focus-on-click">False</property>
                                 <property name="relief">none</property>
                                 <child>
                                   <object class="GtkImage" id="page2dismissi">
