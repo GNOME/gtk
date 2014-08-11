@@ -2799,6 +2799,8 @@ gtk_drag_source_set (GtkWidget            *widget,
       site = g_slice_new0 (GtkDragSourceSite);
       site->icon_helper = _gtk_icon_helper_new ();
       site->drag_gesture = gtk_gesture_drag_new (widget);
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (site->drag_gesture),
+                                                  GTK_PHASE_NONE);
       gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (site->drag_gesture),
                                          FALSE);
 
