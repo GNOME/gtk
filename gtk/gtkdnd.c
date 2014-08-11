@@ -2801,8 +2801,7 @@ gtk_drag_source_set (GtkWidget            *widget,
       site->drag_gesture = gtk_gesture_drag_new (widget);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (site->drag_gesture),
                                                   GTK_PHASE_NONE);
-      gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (site->drag_gesture),
-                                         FALSE);
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (site->drag_gesture), 0);
 
       g_signal_connect (widget, "button-press-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
