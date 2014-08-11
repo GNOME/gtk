@@ -21,15 +21,20 @@
 /**
  * SECTION:gdkglcontext
  * @Title: GdkGLContext
- * @Short_description: GL contexts
+ * @Short_description: OpenGL context
  *
  * #GdkGLContext is an object representing the platform-specific
- * GL drawing context.
+ * OpenGL drawing context.
  *
  * #GdkGLContexts are created via a #GdkDisplay by specifying a
- * #GdkGLPixelFormat to be used by the GL context.
+ * #GdkGLPixelFormat to be used by the OpenGL context.
  *
- * Support for #GdkGLContext is platform specific.
+ * Support for #GdkGLContext is platform specific; in order to
+ * discover if the platform supports OpenGL, you should use the
+ * #GdkGLPixelFormat class.
+ *
+ * A #GdkGLContext has to be associated with a #GdkWindow and
+ * made "current", otherwise any OpenGL call will be ignored.
  */
 
 #include "config.h"
@@ -172,7 +177,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:display:
    *
-   * The #GdkDisplay used by the GL context.
+   * The #GdkDisplay used by the context.
    *
    * Since: 3.14
    */
@@ -188,7 +193,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:pixel-format:
    *
-   * The #GdkGLPixelFormat used to create the GL context.
+   * The #GdkGLPixelFormat used to create the context.
    *
    * Since: 3.14
    */
@@ -204,7 +209,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:window:
    *
-   * The #GdkWindow currently bound to the GL context.
+   * The #GdkWindow currently bound to the context.
    *
    * You typically need to bind a #GdkWindow to a #GdkGLContext prior
    * to calling gdk_gl_context_make_current().
@@ -222,7 +227,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:visual:
    *
-   * The #GdkVisual used by the GL context.
+   * The #GdkVisual used by the context.
    *
    * Since: 3.14
    */
@@ -238,7 +243,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:swap-interval:
    *
-   * The swap interval of the GL context.
+   * The swap interval of the context.
    *
    * If set to %TRUE (the default), buffers will be flushed only during
    * the vertical refresh of the display.
@@ -440,6 +445,9 @@ gdk_gl_context_get_window (GdkGLContext *context)
  * Updates the @context when the #GdkWindow used to display the
  * rendering changes size or position.
  *
+ * Typically, you will call this function after calling
+ * gdk_window_resize() or gdk_window_move_resize().
+ *
  * Since: 3.14
  */
 void
@@ -454,6 +462,9 @@ gdk_gl_context_update (GdkGLContext *context)
  * gdk_gl_context_clear_current:
  *
  * Clears the current #GdkGLContext.
+ *
+ * Any OpenGL call after this function returns will be ignored
+ * until gdk_gl_context_make_current() is called.
  *
  * Since: 3.14
  */
