@@ -410,16 +410,13 @@ gtk_color_plane_init (GtkColorPlane *plane)
 		    G_CALLBACK (plane_drag_gesture_update), plane);
   g_signal_connect (plane->priv->drag_gesture, "drag-end",
 		    G_CALLBACK (plane_drag_gesture_end), plane);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (plane->priv->drag_gesture),
-                                              GTK_PHASE_BUBBLE);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (plane->priv->drag_gesture),
-                                     FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (plane->priv->drag_gesture), 0);
 
   plane->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (plane));
   g_signal_connect (plane->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), plane);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (plane->priv->long_press_gesture),
-                                              GTK_PHASE_BUBBLE);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (plane->priv->drag_gesture),
+                                     TRUE);
 }
 
 static void
