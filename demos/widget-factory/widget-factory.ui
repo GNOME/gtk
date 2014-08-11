@@ -89,7 +89,7 @@
   <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">1000</property>
     <property name="lower">1</property>
-    <property name="value">42</property>
+    <property name="value">50</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -1983,6 +1983,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="hexpand">True</property>
                                 <property name="halign">start</property>
                                 <property name="label">NEWS!</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="page2reset">
+                                <property name="visible">True</property>
+                                <property name="valign">center</property>
+                                <property name="label" translatable="yes">Reset</property>
                               </object>
                             </child>
                             <child>

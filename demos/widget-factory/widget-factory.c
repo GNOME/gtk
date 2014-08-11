@@ -144,6 +144,13 @@ dismiss (GtkWidget *button)
   gtk_revealer_set_reveal_child (GTK_REVEALER (w), FALSE);
 }
 
+static void
+spin_value_reset (GtkWidget *button, GtkAdjustment *adjustment)
+{
+  gtk_adjustment_set_value (adjustment, 50.0);
+  dismiss (button);
+}
+
 static gint pulse_time = 250;
 static gint pulse_entry_mode = 0;
 
@@ -625,6 +632,10 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "entry1");
   g_signal_connect (adj, "value-changed", G_CALLBACK (update_pulse_time), widget);
   update_pulse_time (adj, widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "page2reset");
+  adj = (GtkAdjustment *) gtk_builder_get_object (builder, "adjustment2");
+  g_signal_connect (widget, "clicked", G_CALLBACK (spin_value_reset), adj);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "page2dismiss");
   g_signal_connect (widget, "clicked", G_CALLBACK (dismiss), NULL);
