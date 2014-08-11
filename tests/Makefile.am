@@ -511,7 +511,8 @@ EXTRA_DIST += 			\
 	makefile.msc		\
 	mydialog.ui		\
 	mydialog2.ui		\
-	popover.ui
+	popover.ui		\
+	selectionmode.ui
 
 CLEANFILES = 			\
 	autotestkeywords.log	\
