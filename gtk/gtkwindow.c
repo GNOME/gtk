@@ -1553,7 +1553,7 @@ gtk_window_constructed (GObject *object)
   if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
       priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
-      gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
                                                   GTK_PHASE_NONE);
       g_signal_connect (priv->multipress_gesture, "pressed",
