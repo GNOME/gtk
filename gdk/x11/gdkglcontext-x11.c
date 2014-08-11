@@ -307,14 +307,12 @@ get_glx_attributes_for_pixel_format (GdkDisplay       *display,
     }
   else
     {
-      int channel_size = format->color_size / 4;
-
       attrs[i++] = GLX_RED_SIZE;
-      attrs[i++] = channel_size;
+      attrs[i++] = format->color_size;
       attrs[i++] = GLX_GREEN_SIZE;
-      attrs[i++] = channel_size;
+      attrs[i++] = format->color_size;
       attrs[i++] = GLX_BLUE_SIZE;
-      attrs[i++] = channel_size;
+      attrs[i++] = format->color_size;
     }
 
   if (format->alpha_size < 0)
@@ -362,7 +360,7 @@ get_glx_attributes_for_pixel_format (GdkDisplay       *display,
       attrs[i++] = format->sample_buffers > 0 ? format->sample_buffers : 1;
 
       attrs[i++] = GLX_SAMPLES;
-      attrs[i++] = format->samples;
+      attrs[i++] = format->samples > 0 ? format->samples : 1;
     }
 
   attrs[i++] = None;
