@@ -170,13 +170,17 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                                                       P_("Propagation phase"),
                                                       P_("Propagation phase at which this controller is run"),
                                                       GTK_TYPE_PROPAGATION_PHASE,
-                                                      GTK_PHASE_NONE,
+                                                      GTK_PHASE_BUBBLE,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
 gtk_event_controller_init (GtkEventController *controller)
 {
+  GtkEventControllerPrivate *priv;
+
+  priv = gtk_event_controller_get_instance_private (controller);
+  priv->phase = GTK_PHASE_BUBBLE;
 }
 
 /**
