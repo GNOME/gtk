@@ -90,6 +90,7 @@ gdk_x11_gl_context_set_window (GdkGLContext *context,
                                     context_x11->glx_config,
                                     gdk_x11_window_get_xid (window),
                                     NULL);
+  info->last_frame_counter = 0;
 
   gdk_x11_display_error_trap_pop_ignored (display);
 
