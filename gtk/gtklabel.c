@@ -1284,21 +1284,15 @@ gtk_label_init (GtkLabel *label)
                     G_CALLBACK (gtk_label_drag_gesture_begin), label);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_label_drag_gesture_update), label);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), GDK_BUTTON_PRIMARY);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                              GTK_PHASE_BUBBLE);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (label));
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_label_multipress_gesture_pressed), label);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_label_multipress_gesture_released), label);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->multipress_gesture), TRUE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                              GTK_PHASE_BUBBLE);
 }
 
 
