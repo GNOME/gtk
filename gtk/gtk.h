@@ -114,6 +114,7 @@
 #include <gtk/gtkgesturesingle.h>
 #include <gtk/gtkgestureswipe.h>
 #include <gtk/gtkgesturezoom.h>
+#include <gtk/gtkglarea.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkheaderbar.h>
 #include <gtk/gtkicontheme.h>
