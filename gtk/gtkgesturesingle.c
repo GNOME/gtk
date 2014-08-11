@@ -29,9 +29,12 @@
  * is accessible through gtk_gesture_single_get_current_sequence() while the
  * gesture is being interacted with.
  *
- * By default gestures only react to touch events, gtk_gesture_single_set_touch_only()
- * can be used to change this default behavior. Callers may also specify
- * a mouse button number to interact with through gtk_gesture_single_set_button().
+ * By default gestures react to both %GDK_BUTTON_PRIMARY and touch
+ * events, gtk_gesture_single_set_touch_only() can be used to change the
+ * touch behavior. Callers may also specify a different mouse button number
+ * to interact with through gtk_gesture_single_set_button(), or react to any
+ * mouse button by setting 0. While the gesture is active, the button being
+ * currently pressed can be known through gtk_gesture_single_get_current_button().
  */
 
 #include "config.h"
@@ -133,7 +136,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   GdkDevice *source_device;
   GdkInputSource source;
   guint button = 0, i;
-  gboolean retval;
+  gboolean retval, test_touchscreen = FALSE;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -142,6 +145,10 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
 
   priv = gtk_gesture_single_get_instance_private (GTK_GESTURE_SINGLE (controller));
   source = gdk_device_get_source (source_device);
+
+  if (source != GDK_SOURCE_TOUCHSCREEN)
+    test_touchscreen = ((gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
+                        g_getenv ("GTK_TEST_TOUCHSCREEN"));
 
   switch (event->type)
     {
@@ -156,13 +163,13 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      if (priv->touch_only && source != GDK_SOURCE_TOUCHSCREEN)
+      if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
 
       button = event->button.button;
       break;
     case GDK_MOTION_NOTIFY:
-      if (priv->touch_only && source != GDK_SOURCE_TOUCHSCREEN)
+      if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
 
       if (priv->current_button > 0 && priv->current_button <= 5 &&
@@ -288,7 +295,8 @@ _gtk_gesture_single_update_evmask (GtkGestureSingle *gesture)
   priv = gtk_gesture_single_get_instance_private (gesture);
   evmask = GDK_TOUCH_MASK;
 
-  if (!priv->touch_only)
+  if (!priv->touch_only || g_getenv ("GTK_TEST_TOUCHSCREEN") ||
+      (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0)
     evmask |= GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
       GDK_BUTTON_MOTION_MASK;
 
@@ -301,13 +309,8 @@ gtk_gesture_single_init (GtkGestureSingle *gesture)
   GtkGestureSinglePrivate *priv;
 
   priv = gtk_gesture_single_get_instance_private (gesture);
-
-  if (g_getenv ("GTK_TEST_TOUCHSCREEN") ||
-      (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0)
-    priv->touch_only = FALSE;
-  else
-    priv->touch_only = TRUE;
-
+  priv->touch_only = FALSE;
+  priv->button = GDK_BUTTON_PRIMARY;
   _gtk_gesture_single_update_evmask (gesture);
 }
 
