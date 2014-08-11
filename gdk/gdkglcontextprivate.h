@@ -46,7 +46,7 @@ struct _GdkGLContextClass
   void (* flush_buffer) (GdkGLContext *context);
 };
 
-guint   gdk_gl_context_get_swap_interval        (GdkGLContext *context);
+gboolean        gdk_gl_context_get_swap_interval        (GdkGLContext *context);
 
 G_END_DECLS
 

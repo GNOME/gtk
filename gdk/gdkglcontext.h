@@ -39,9 +39,10 @@ GType gdk_gl_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_14
 GdkDisplay *            gdk_gl_context_get_display      (GdkGLContext *context);
-
 GDK_AVAILABLE_IN_3_14
 GdkGLPixelFormat *      gdk_gl_context_get_pixel_format (GdkGLContext *context);
+GDK_AVAILABLE_IN_3_14
+GdkVisual *             gdk_gl_context_get_visual       (GdkGLContext *context);
 
 GDK_AVAILABLE_IN_3_14
 void                    gdk_gl_context_clear_window     (GdkGLContext *context);

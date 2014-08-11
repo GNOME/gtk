@@ -22,6 +22,8 @@ typedef struct {
   GdkDisplay *display;
   GdkGLContext *context;
   GdkWindow *window;
+
+  guint32 last_frame_counter;
 } DrawableInfo;
 
 static void
@@ -111,10 +113,37 @@ gdk_x11_gl_context_update (GdkGLContext *context)
 }
 
 static void
+maybe_wait_for_vblank (GdkDisplay  *display,
+                       GLXDrawable  drawable)
+{
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+
+  if (display_x11->has_glx_sync_control)
+    {
+      gint64 ust, msc, sbc;
+
+      glXGetSyncValuesOML (dpy, drawable, &ust, &msc, &sbc);
+      glXWaitForMscOML (dpy, drawable,
+                        0, 2, (msc + 1) % 2,
+                        &ust, &msc, &sbc);
+    }
+  else if (display_x11->has_glx_video_sync)
+    {
+      guint32 current_count;
+
+      glXGetVideoSyncSGI (&current_count);
+      glXWaitVideoSyncSGI (2, (current_count + 1) % 2, &current_count);
+    }
+}
+
+static void
 gdk_x11_gl_context_flush_buffer (GdkGLContext *context)
 {
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkWindow *window = gdk_gl_context_get_window (context);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   DrawableInfo *info;
   GLXDrawable drawable;
 
@@ -129,9 +158,43 @@ gdk_x11_gl_context_flush_buffer (GdkGLContext *context)
 
   GDK_NOTE (OPENGL, g_print ("Flushing GLX buffers for %lu\n", (unsigned long) drawable));
 
-  glFinish ();
+  /* if we are going to wait for the vertical refresh manually
+   * we need to flush pending redraws, and we also need to wait
+   * for that to finish, otherwise we are going to tear.
+   *
+   * obviously, this condition should not be hit if we have
+   * GLX_SGI_swap_control, and we ask the driver to do the right
+   * thing.
+   */
+  {
+    guint32 end_frame_counter = 0;
+    gboolean has_counter = display_x11->has_glx_video_sync;
+    gboolean can_wait = display_x11->has_glx_video_sync ||
+                        display_x11->has_glx_sync_control;
 
-  glXSwapBuffers (gdk_x11_display_get_xdisplay (display), drawable);
+    if (display_x11->has_glx_video_sync)
+      glXGetVideoSyncSGI (&end_frame_counter);
+
+    if (!display_x11->has_glx_swap_interval)
+      {
+        glFinish ();
+
+        if (has_counter && can_wait)
+          {
+            guint32 last_counter = info != NULL ? info->last_frame_counter : 0;
+
+            if (last_counter == end_frame_counter)
+              maybe_wait_for_vblank (display, drawable);
+          }
+        else if (can_wait)
+          maybe_wait_for_vblank (display, drawable);
+      }
+  }
+
+  glXSwapBuffers (dpy, drawable);
+
+  if (info != NULL && display_x11->has_glx_video_sync)
+    glXGetVideoSyncSGI (&info->last_frame_counter);
 }
 
 static void
@@ -214,7 +277,8 @@ gdk_x11_display_init_gl (GdkDisplay *display)
 #define MAX_GLX_ATTRS   30
 
 static void
-get_glx_attributes_for_pixel_format (GdkGLPixelFormat *format,
+get_glx_attributes_for_pixel_format (GdkDisplay       *display,
+                                     GdkGLPixelFormat *format,
                                      int              *attrs)
 {
   GdkX11Display *display_x11;
@@ -291,7 +355,7 @@ get_glx_attributes_for_pixel_format (GdkGLPixelFormat *format,
       attrs[i++] = format->stencil_size;
     }
 
-  display_x11 = GDK_X11_DISPLAY (format->display);
+  display_x11 = GDK_X11_DISPLAY (display);
   if (display_x11->glx_version >= 14 && format->multi_sample)
     {
       attrs[i++] = GLX_SAMPLE_BUFFERS;
@@ -321,10 +385,7 @@ find_fbconfig_for_pixel_format (GdkDisplay        *display,
   gboolean use_rgba;
   gboolean retval = FALSE;
 
-  if (format->display == NULL)
-    return retval;
-
-  get_glx_attributes_for_pixel_format (format, attrs);
+  get_glx_attributes_for_pixel_format (display, format, attrs);
 
   use_rgba = format->alpha_size != 0;
 
@@ -427,9 +488,10 @@ create_gl_context (GdkDisplay   *display,
 }
 
 GdkGLContext *
-gdk_x11_display_create_gl_context (GdkDisplay       *display,
-                                   GdkGLPixelFormat *format,
-                                   GdkGLContext     *share)
+gdk_x11_display_create_gl_context (GdkDisplay        *display,
+                                   GdkGLPixelFormat  *format,
+                                   GdkGLContext      *share,
+                                   GError           **error)
 {
   GdkX11GLContext *context;
   GdkVisual *gdk_visual;
@@ -443,46 +505,35 @@ gdk_x11_display_create_gl_context (GdkDisplay       *display,
   XSetWindowAttributes attrs;
   unsigned long mask;
   Display *dpy;
-  GError *error;
 
-  if (!gdk_x11_display_init_gl (display))
+  if (!gdk_x11_display_validate_gl_pixel_format (display, format, error))
     return NULL;
 
-  if (G_UNLIKELY (!format->is_validated))
-    {
-      /* force a validation */
-      format->is_valid = gdk_x11_display_validate_gl_pixel_format (display, format, NULL);
-      format->is_validated = TRUE;
-    }
-
-  if (!format->is_valid)
-    {
-      g_critical ("The GdkGLPixelFormat is not valid.");
-      return NULL;
-    }
+  /* if validation succeeded, then we don't need to check for the result
+   * here
+   */
+  find_fbconfig_for_pixel_format (display, format, &config, &xvisinfo, NULL);
 
   dpy = gdk_x11_display_get_xdisplay (display);
 
-  error = NULL;
-  find_fbconfig_for_pixel_format (display, format, &config, &xvisinfo, &error);
-  if (error != NULL)
-    {
-      g_critical ("%s", error->message);
-      g_error_free (error);
-      return NULL;
-    }
-
   /* we check for the GLX_ARB_create_context_profile extension
-   * while validating the PixelFormat
+   * while validating the PixelFormat.
    */
   if (format->profile == GDK_GL_PIXEL_FORMAT_PROFILE_3_2_CORE)
     glx_context = create_gl3_context (display, config, share);
   else
-    glx_context = create_gl_context (display, config, share);
+    {
+      /* GDK_GL_PIXEL_FORMAT_PROFILE_DEFAULT is currently
+       * equivalent to the LEGACY profile
+       */
+      glx_context = create_gl_context (display, config, share);
+    }
 
   if (glx_context == NULL)
     {
-      g_critical ("Unable to create a GLX context");
+      g_set_error_literal (error, GDK_GL_PIXEL_FORMAT_ERROR,
+                           GDK_GL_PIXEL_FORMAT_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
       return NULL;
     }
 
@@ -529,7 +580,20 @@ gdk_x11_display_create_gl_context (GdkDisplay       *display,
   XFree (xvisinfo);
 
   if (gdk_x11_display_error_trap_pop (display))
-    return NULL;
+    {
+      g_set_error_literal (error, GDK_GL_PIXEL_FORMAT_ERROR,
+                           GDK_GL_PIXEL_FORMAT_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
+
+      glXDestroyContext (dpy, glx_context);
+
+      if (dummy_xwin)
+        XDestroyWindow (dpy, dummy_xwin);
+      if (dummy_glx)
+        glXDestroyWindow (dpy, dummy_glx);
+
+      return NULL;
+    }
 
   GDK_NOTE (OPENGL,
             g_print ("Created GLX context[%p], %s, dummy drawable: %lu\n",
@@ -632,6 +696,14 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
                          drawable, drawable,
                          context_x11->glx_context);
 
+  if (GDK_X11_DISPLAY (display)->has_glx_swap_interval)
+    {
+      if (gdk_gl_context_get_swap_interval (context))
+        glXSwapIntervalSGI (1);
+      else
+        glXSwapIntervalSGI (0);
+    }
+
   XSync (gdk_x11_display_get_xdisplay (display), False);
 
   if (gdk_x11_display_error_trap_pop (display))
@@ -650,19 +722,6 @@ gdk_x11_display_validate_gl_pixel_format (GdkDisplay        *display,
                                           GdkGLPixelFormat  *format,
                                           GError           **error)
 {
-  /* shortcut in case we already validated this PixelFormat */
-  if (format->is_validated)
-    {
-      if (!format->is_valid)
-        {
-          g_set_error_literal (error, GDK_GL_PIXEL_FORMAT_ERROR,
-                               GDK_GL_PIXEL_FORMAT_ERROR_INVALID_FORMAT,
-                               _("Invalid pixel format"));
-        }
-
-      return format->is_valid;
-    }
-
   if (!gdk_x11_display_init_gl (display))
     {
       g_set_error_literal (error, GDK_GL_PIXEL_FORMAT_ERROR,

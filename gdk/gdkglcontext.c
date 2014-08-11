@@ -47,7 +47,7 @@ typedef struct {
   GdkWindow *window;
   GdkVisual *visual;
 
-  guint swap_interval;
+  gboolean swap_interval;
 } GdkGLContextPrivate;
 
 enum {
@@ -120,7 +120,7 @@ gdk_gl_context_set_property (GObject      *gobject,
       break;
 
     case PROP_SWAP_INTERVAL:
-      priv->swap_interval = g_value_get_uint (value);
+      priv->swap_interval = g_value_get_boolean (value);
       break;
 
     default:
@@ -155,7 +155,7 @@ gdk_gl_context_get_property (GObject    *gobject,
       break;
 
     case PROP_SWAP_INTERVAL:
-      g_value_set_uint (value, priv->swap_interval);
+      g_value_set_boolean (value, priv->swap_interval);
       break;
 
     default:
@@ -239,21 +239,21 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    *
    * The swap interval of the GL context.
    *
-   * If set to 0 (the default), gdk_gl_context_flush_buffer() will execute
-   * the buffer flush as soon as possible.
+   * If set to %TRUE (the default), buffers will be flushed only during
+   * the vertical refresh of the display.
    *
-   * If set to 1, calls buffers will be flushed only during the vertical
-   * refresh of the display.
+   * If set to %FALSE, gdk_gl_context_flush_buffer() will execute
+   * the buffer flush as soon as possible.
    *
    * Since: 3.14
    */
   obj_pspecs[PROP_SWAP_INTERVAL] =
-    g_param_spec_uint ("swap-interval",
-                       P_("Swap Interval"),
-                       P_("The swap interval of the GL context"),
-                       0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE |
-                       G_PARAM_STATIC_STRINGS);
+    g_param_spec_boolean ("swap-interval",
+                          P_("Swap Interval"),
+                          P_("The swap interval of the GL context"),
+                          TRUE,
+                          G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS);
 
   gobject_class->set_property = gdk_gl_context_set_property;
   gobject_class->get_property = gdk_gl_context_get_property;
@@ -265,6 +265,9 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
 static void
 gdk_gl_context_init (GdkGLContext *self)
 {
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  priv->swap_interval = TRUE;
 }
 
 /**
@@ -480,7 +483,7 @@ gdk_gl_context_get_current (void)
  *
  * Returns: the swap interval
  */
-guint
+gboolean
 gdk_gl_context_get_swap_interval (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);

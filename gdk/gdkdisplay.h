@@ -172,9 +172,14 @@ GDK_AVAILABLE_IN_ALL
 GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_3_14
-GdkGLContext *gdk_display_get_gl_context (GdkDisplay       *display,
-                                          GdkGLPixelFormat *format,
-                                          GdkGLContext     *share);
+gboolean        gdk_display_validate_gl_pixel_format    (GdkDisplay        *display,
+                                                         GdkGLPixelFormat  *format,
+                                                         GError           **error);
+GDK_AVAILABLE_IN_3_14
+GdkGLContext *  gdk_display_get_gl_context              (GdkDisplay        *display,
+                                                         GdkGLPixelFormat  *format,
+                                                         GdkGLContext      *share,
+                                                         GError           **error);
 
 G_END_DECLS
 

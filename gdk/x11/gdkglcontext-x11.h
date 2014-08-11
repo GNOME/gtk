@@ -44,7 +44,8 @@ gboolean        gdk_x11_display_validate_gl_pixel_format        (GdkDisplay     
                                                                  GError           **error);
 GdkGLContext *  gdk_x11_display_create_gl_context               (GdkDisplay        *display,
                                                                  GdkGLPixelFormat  *format,
-                                                                 GdkGLContext      *share);
+                                                                 GdkGLContext      *share,
+                                                                 GError           **error);
 void            gdk_x11_display_destroy_gl_context              (GdkDisplay        *display,
                                                                  GdkGLContext      *context);
 gboolean        gdk_x11_display_make_gl_context_current         (GdkDisplay        *display,

@@ -26,29 +26,6 @@
  * The #GdkGLPixelFormat class is used to specify the types and sizes of
  * buffers to be used by a #GdkGLContext, as well as other configuration
  * parameters.
- *
- * You should typically try to create a #GdkGLPixelFormat for a given
- * configuration, and if the creation fails, you can either opt to
- * show an error, or change the configuration until you find a suitable
- * pixel format.
- *
- * For instance, the following example creates a #GdkGLPixelFormat with
- * double buffering enabled, and a 32-bit depth buffer:
- *
- * |[<!-- language="C" -->
- *   GdkGLPixelFormat *format;
- *   GError *error = NULL;
- *
- *   format = gdk_gl_pixel_format_new (&error,
- *                                     "double-buffer", TRUE,
- *                                     "depth-size", 32,
- *                                     NULL);
- *   if (format == NULL)
- *     {
- *       // creation failed; try again with a different set
- *       // of attributes
- *     }
- * ]|
  */
 
 #include "config.h"
@@ -64,8 +41,6 @@
 
 enum {
   PROP_0,
-
-  PROP_DISPLAY,
 
   /* bool */
   PROP_DOUBLE_BUFFER,
@@ -89,46 +64,9 @@ enum {
 
 static GParamSpec *obj_props[LAST_PROP] = { NULL, };
 
-static void initable_iface_init (GInitableIface *init);
-
 G_DEFINE_QUARK (gdk-gl-pixel-format-error-quark, gdk_gl_pixel_format_error)
 
-G_DEFINE_TYPE_WITH_CODE (GdkGLPixelFormat, gdk_gl_pixel_format, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
-                                                initable_iface_init))
-
-static gboolean
-gdk_gl_pixel_format_init_internal (GInitable     *initable,
-                                   GCancellable  *cancellable,
-                                   GError       **error)
-{
-  GdkGLPixelFormat *self = GDK_GL_PIXEL_FORMAT (initable);
-
-  /* use the default display */
-  if (self->display == NULL)
-    self->display = g_object_ref (gdk_display_get_default ());
-
-  self->is_valid = gdk_display_validate_gl_pixel_format (self->display, self, error);
-  self->is_validated = TRUE;
-
-  return self->is_valid;
-}
-
-static void
-initable_iface_init (GInitableIface *iface)
-{
-  iface->init = gdk_gl_pixel_format_init_internal;
-}
-
-static void
-gdk_gl_pixel_format_dispose (GObject *gobject)
-{
-  GdkGLPixelFormat *self = GDK_GL_PIXEL_FORMAT (gobject);
-
-  g_clear_object (&self->display);
-
-  G_OBJECT_CLASS (gdk_gl_pixel_format_parent_class)->dispose (gobject);
-}
+G_DEFINE_TYPE (GdkGLPixelFormat, gdk_gl_pixel_format, G_TYPE_OBJECT)
 
 static void
 gdk_gl_pixel_format_set_property (GObject      *gobject,
@@ -140,15 +78,6 @@ gdk_gl_pixel_format_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
-      {
-        GdkDisplay *display = g_value_get_object (value);
-
-        if (display != NULL)
-          self->display = g_object_ref (display);
-      }
-      break;
-
     case PROP_DOUBLE_BUFFER:
       self->double_buffer = g_value_get_boolean (value);
       break;
@@ -208,10 +137,6 @@ gdk_gl_pixel_format_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
-      g_value_set_object (value, self->display);
-      break;
-
     case PROP_DOUBLE_BUFFER:
       g_value_set_boolean (value, self->double_buffer);
       break;
@@ -268,16 +193,6 @@ gdk_gl_pixel_format_class_init (GdkGLPixelFormatClass *klass)
 
   gobject_class->set_property = gdk_gl_pixel_format_set_property;
   gobject_class->get_property = gdk_gl_pixel_format_get_property;
-  gobject_class->dispose = gdk_gl_pixel_format_dispose;
-
-  obj_props[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         P_("Display"),
-                         P_("The GDK display associated with the pixel format"),
-                         GDK_TYPE_DISPLAY,
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
 
   obj_props[PROP_DOUBLE_BUFFER] =
     g_param_spec_boolean ("double-buffer",
@@ -389,51 +304,28 @@ gdk_gl_pixel_format_init (GdkGLPixelFormat *self)
 
 /**
  * gdk_gl_pixel_format_new:
- * @error: return location for a #GError, or %NULL
  * @first_property: the first property to set
  * @...: the value of the @first_property, followed by a %NULL terminated
  *   set of property, value pairs
  *
  * Creates a new #GdkGLPixelFormat with the given list of properties.
  *
- * If the pixel format is not valid, then this function will return
- * a %NULL value, and @error will be set.
- *
- * Returns: the newly created #GdkGLPixelFormat, or %NULL
+ * Returns: the newly created #GdkGLPixelFormat
  *
  * Since: 3.14
  */
 GdkGLPixelFormat *
-gdk_gl_pixel_format_new (GError     **error,
-                         const char  *first_property,
+gdk_gl_pixel_format_new (const char *first_property,
                          ...)
 {
-  gpointer res;
+  GdkGLPixelFormat *res;
   va_list args;
 
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
   va_start (args, first_property);
-  res = g_initable_new_valist (GDK_TYPE_GL_PIXEL_FORMAT, first_property, args, NULL, error);
+
+  res = (GdkGLPixelFormat *) g_object_new_valist (GDK_TYPE_GL_PIXEL_FORMAT, first_property, args);
+
   va_end (args);
 
   return res;
-}
-
-/**
- * gdk_gl_pixel_format_get_display:
- * @format: a #GdkGLPixelFormat
- *
- * Retrieves the #GdkDisplay used to validate the pixel format.
- *
- * Returns: (transfer none): the #GdkDisplay
- *
- * Since: 3.14
- */
-GdkDisplay *
-gdk_gl_pixel_format_get_display (GdkGLPixelFormat *format)
-{
-  g_return_val_if_fail (GDK_IS_GL_PIXEL_FORMAT (format), NULL);
-
-  return format->display;
 }

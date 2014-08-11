@@ -44,12 +44,8 @@ GDK_AVAILABLE_IN_3_14
 GQuark gdk_gl_pixel_format_error_quark (void);
 
 GDK_AVAILABLE_IN_3_14
-GdkGLPixelFormat *      gdk_gl_pixel_format_new         (GError **error,
-                                                         const char *first_property,
+GdkGLPixelFormat *      gdk_gl_pixel_format_new         (const char *first_property,
                                                          ...);
-GDK_AVAILABLE_IN_3_14
-GdkDisplay *            gdk_gl_pixel_format_get_display (GdkGLPixelFormat *format);
-
 G_END_DECLS
 
 #endif /* __GDK_GL_PIXEL_FORMAT_H__ */

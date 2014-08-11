@@ -13,11 +13,6 @@ struct _GdkGLPixelFormat
 {
   GObject parent_instance;
 
-  gboolean is_validated;
-  gboolean is_valid;
-
-  GdkDisplay *display;
-
   gboolean double_buffer;
   gboolean multi_sample;
 
