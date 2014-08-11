@@ -3328,13 +3328,18 @@ gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
                                   GtkTreeView    *tree_view)
 {
   gint bin_x, bin_y;
+  GtkRBTree *tree;
+  GtkRBNode *node;
 
   gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
                                                      &bin_x, &bin_y);
   tree_view->priv->press_start_x = tree_view->priv->rubber_band_x = bin_x;
   tree_view->priv->press_start_y = tree_view->priv->rubber_band_y = bin_y;
+  _gtk_rbtree_find_offset (tree_view->priv->tree, bin_y + tree_view->priv->dy,
+                           &tree, &node);
 
   if (tree_view->priv->rubber_banding_enable
+      && !GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED)
       && gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_MULTIPLE)
     {
       gboolean modify, extend;
