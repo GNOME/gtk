@@ -11522,6 +11522,11 @@ gtk_widget_get_settings (GtkWidget *widget)
  * from the #GdkEventMask enumeration). These are the events that the widget
  * will receive.
  *
+ * Note: Internally, the widget event mask will be the logical OR of the event
+ * mask set through gtk_widget_set_events() or gtk_widget_add_events(), and the
+ * event mask necessary to cater for every #GtkEventController created for the
+ * widget.
+ *
  * Returns: event mask for @widget
  **/
 gint
@@ -11529,7 +11534,8 @@ gtk_widget_get_events (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
+  return GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask)) |
+    _gtk_widget_get_controllers_evmask (widget);
 }
 
 /**
