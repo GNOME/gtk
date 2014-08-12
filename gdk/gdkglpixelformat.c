@@ -491,3 +491,42 @@ gdk_gl_pixel_format_new (const char *first_property,
 
   return res;
 }
+
+#define GDK_GL_PIXEL_FORMAT_GET(CType,FieldName,DefaultValue) \
+CType \
+gdk_gl_pixel_format_get_ ## FieldName (GdkGLPixelFormat *format) \
+{ \
+  g_return_val_if_fail (GDK_IS_GL_PIXEL_FORMAT (format), DefaultValue); \
+\
+  return format->FieldName; \
+}
+
+/**
+ * gdk_gl_pixel_format_get_double_buffer:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:double-buffer property.
+ *
+ * Returns: %TRUE if the pixel format is double buffered
+ *
+ * Since: 3.14
+ */
+GDK_GL_PIXEL_FORMAT_GET (gboolean, double_buffer, FALSE)
+
+GDK_GL_PIXEL_FORMAT_GET (gboolean, multi_sample, FALSE)
+
+GDK_GL_PIXEL_FORMAT_GET (gint, color_size, 0)
+
+GDK_GL_PIXEL_FORMAT_GET (gint, alpha_size, 0)
+
+GDK_GL_PIXEL_FORMAT_GET (gint, depth_size, 0)
+
+GDK_GL_PIXEL_FORMAT_GET (gint, stencil_size, 0)
+
+GDK_GL_PIXEL_FORMAT_GET (gint, accum_size, 0)
+
+GDK_GL_PIXEL_FORMAT_GET (gint, sample_buffers, 0)
+
+GDK_GL_PIXEL_FORMAT_GET (gint, samples, 0)
+
+#undef GDK_GL_PIXEL_FORMAT_GET

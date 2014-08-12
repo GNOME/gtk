@@ -44,8 +44,30 @@ GDK_AVAILABLE_IN_3_14
 GQuark gdk_gl_pixel_format_error_quark (void);
 
 GDK_AVAILABLE_IN_3_14
-GdkGLPixelFormat *      gdk_gl_pixel_format_new         (const char *first_property,
-                                                         ...);
+GdkGLPixelFormat *      gdk_gl_pixel_format_new                 (const char *first_property,
+                                                                 ...);
+
+GDK_AVAILABLE_IN_3_14
+gboolean                gdk_gl_pixel_format_get_double_buffer   (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gboolean                gdk_gl_pixel_format_get_multi_sample    (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gint                    gdk_gl_pixel_format_get_color_size      (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gint                    gdk_gl_pixel_format_get_alpha_size      (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gint                    gdk_gl_pixel_format_get_depth_size      (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gint                    gdk_gl_pixel_format_get_stencil_size    (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gint                    gdk_gl_pixel_format_get_accum_size      (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gint                    gdk_gl_pixel_format_get_aux_buffers     (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gint                    gdk_gl_pixel_format_get_sample_buffers  (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
+gint                    gdk_gl_pixel_format_get_samples         (GdkGLPixelFormat *format);
+
 G_END_DECLS
 
 #endif /* __GDK_GL_PIXEL_FORMAT_H__ */
