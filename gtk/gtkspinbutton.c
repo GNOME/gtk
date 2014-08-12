@@ -268,6 +268,7 @@ static void gtk_spin_button_get_frame_size (GtkEntry *entry,
                                             gint     *y,
                                             gint     *width,
                                             gint     *height);
+static void gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button);
 static void gtk_spin_button_set_orientation (GtkSpinButton     *spin_button,
                                              GtkOrientation     orientation);
 static void gtk_spin_button_snap           (GtkSpinButton      *spin_button,
@@ -740,7 +741,7 @@ gtk_spin_button_finalize (GObject *object)
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
   GtkSpinButtonPrivate *priv = spin_button->priv;
 
-  gtk_spin_button_set_adjustment (spin_button, NULL);
+  gtk_spin_button_unset_adjustment (spin_button);
 
   if (priv->down_panel_context)
     g_object_unref (priv->down_panel_context);
@@ -1156,6 +1157,37 @@ gtk_spin_button_unrealize (GtkWidget *widget)
       gtk_widget_unregister_window (widget, priv->up_panel);
       gdk_window_destroy (priv->up_panel);
       priv->up_panel = NULL;
+    }
+}
+
+/* Callback used when the spin button's adjustment changes.
+ * We need to redraw the arrows when the adjustment’s range
+ * changes, and reevaluate our size request.
+ */
+static void
+adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
+{
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (data);
+  GtkSpinButtonPrivate *priv = spin_button->priv;
+
+  priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
+  gtk_widget_queue_resize (GTK_WIDGET (spin_button));
+}
+
+static void
+gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button)
+{
+  GtkSpinButtonPrivate *priv = spin_button->priv;
+
+  if (priv->adjustment)
+    {
+      g_signal_handlers_disconnect_by_func (priv->adjustment,
+                                            gtk_spin_button_value_changed,
+                                            spin_button);
+      g_signal_handlers_disconnect_by_func (priv->adjustment,
+                                            adjustment_changed_cb,
+                                            spin_button);
+      g_clear_object (&priv->adjustment);
     }
 }
 
@@ -2106,12 +2138,28 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
 
   priv = spin_button->priv;
 
-  if (adjustment)
-    gtk_spin_button_set_adjustment (spin_button, adjustment);
-  else
+  if (!adjustment)
     adjustment = priv->adjustment;
 
   g_object_freeze_notify (G_OBJECT (spin_button));
+  if (priv->adjustment != adjustment)
+    {
+      gtk_spin_button_unset_adjustment (spin_button);
+
+      priv->adjustment = adjustment;
+      g_object_ref_sink (adjustment);
+      g_signal_connect (adjustment, "value-changed",
+                        G_CALLBACK (gtk_spin_button_value_changed),
+                        spin_button);
+      g_signal_connect (adjustment, "changed",
+                        G_CALLBACK (adjustment_changed_cb),
+                        spin_button);
+      priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
+
+      g_object_notify (G_OBJECT (spin_button), "adjustment");
+      gtk_widget_queue_resize (GTK_WIDGET (spin_button));
+    }
+
   if (priv->digits != digits)
     {
       priv->digits = digits;
@@ -2206,20 +2254,6 @@ gtk_spin_button_new_with_range (gdouble min,
   return GTK_WIDGET (spin);
 }
 
-/* Callback used when the spin button's adjustment changes.
- * We need to redraw the arrows when the adjustment’s range
- * changes, and reevaluate our size request.
- */
-static void
-adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
-{
-  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (data);
-  GtkSpinButtonPrivate *priv = spin_button->priv;
-
-  priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
-  gtk_widget_queue_resize (GTK_WIDGET (spin_button));
-}
-
 /**
  * gtk_spin_button_set_adjustment:
  * @spin_button: a #GtkSpinButton
@@ -2237,34 +2271,10 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 
   priv = spin_button->priv;
 
-  if (priv->adjustment != adjustment)
-    {
-      if (priv->adjustment)
-        {
-          g_signal_handlers_disconnect_by_func (priv->adjustment,
-                                                gtk_spin_button_value_changed,
-                                                spin_button);
-          g_signal_handlers_disconnect_by_func (priv->adjustment,
-                                                adjustment_changed_cb,
-                                                spin_button);
-          g_object_unref (priv->adjustment);
-        }
-      priv->adjustment = adjustment;
-      if (adjustment)
-        {
-          g_object_ref_sink (adjustment);
-          g_signal_connect (adjustment, "value-changed",
-                            G_CALLBACK (gtk_spin_button_value_changed),
-                            spin_button);
-          g_signal_connect (adjustment, "changed",
-                            G_CALLBACK (adjustment_changed_cb),
-                            spin_button);
-          priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
-        }
-
-      g_object_notify (G_OBJECT (spin_button), "adjustment");
-      gtk_widget_queue_resize (GTK_WIDGET (spin_button));
-    }
+  gtk_spin_button_configure (spin_button,
+                             adjustment,
+                             priv->climb_rate,
+                             priv->digits);
 }
 
 /**
