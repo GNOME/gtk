@@ -2262,10 +2262,9 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
           priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
         }
 
+      g_object_notify (G_OBJECT (spin_button), "adjustment");
       gtk_widget_queue_resize (GTK_WIDGET (spin_button));
     }
-
-  g_object_notify (G_OBJECT (spin_button), "adjustment");
 }
 
 /**
