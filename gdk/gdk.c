@@ -148,7 +148,8 @@ static const GDebugKey gdk_debug_keys[] = {
   {"draw",          GDK_DEBUG_DRAW},
   {"eventloop",     GDK_DEBUG_EVENTLOOP},
   {"frames",        GDK_DEBUG_FRAMES},
-  {"settings",      GDK_DEBUG_SETTINGS}
+  {"settings",      GDK_DEBUG_SETTINGS},
+  {"opengl",        GDK_DEBUG_OPENGL},
 };
 
 static gboolean
