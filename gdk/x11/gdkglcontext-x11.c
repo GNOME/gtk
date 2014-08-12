@@ -482,10 +482,10 @@ update_pixel_format (GdkDisplay       *display,
   format->color_size = value;
 
   glXGetFBConfigAttrib (dpy, config, GLX_GREEN_SIZE, &value);
-  format->color_size = MAX (format->color_size, value);
+  format->color_size = MIN (format->color_size, value);
 
   glXGetFBConfigAttrib (dpy, config, GLX_BLUE_SIZE, &value);
-  format->color_size = MAX (format->color_size, value);
+  format->color_size = MIN (format->color_size, value);
 
   glXGetFBConfigAttrib (dpy, config, GLX_ALPHA_SIZE, &format->alpha_size);
   glXGetFBConfigAttrib (dpy, config, GLX_AUX_BUFFERS, &format->aux_buffers);
