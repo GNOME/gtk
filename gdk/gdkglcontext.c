@@ -351,7 +351,9 @@ gdk_gl_context_get_visual (GdkGLContext *context)
  * the copy may take place during the vertical refresh of the display
  * rather than immediately.
  *
- * This function calls `glFlush()` implicitly before returning.
+ * This function may call `glFlush()` implicitly before returning; it
+ * is not recommended to call `glFlush()` explicitly before calling
+ * this function.
  *
  * Since: 3.14
  */
@@ -552,12 +554,29 @@ gdk_gl_context_get_swap_interval (GdkGLContext *context)
   return priv->swap_interval;
 }
 
+/*< private >
+ * gdk_window_has_gl_context:
+ * @window: a #GdkWindow
+ *
+ * Checks whether a #GdkWindow has a #GdkGLContext associated to it.
+ *
+ * Returns: %TRUE if the window has a GL context
+ */
 gboolean
 gdk_window_has_gl_context (GdkWindow *window)
 {
   return g_object_get_data (G_OBJECT (window), "-gdk-gl-context") != NULL;
 }
 
+/*< private >
+ * gdk_window_set_gl_context:
+ * @window: a #GdkWindow
+ * @context: a #GdkGLContext
+ *
+ * Sets a back pointer to a #GdkGLContext on @window.
+ *
+ * This function should only be called by gdk_gl_context_set_window().
+ */
 void
 gdk_window_set_gl_context (GdkWindow    *window,
                            GdkGLContext *context)
@@ -565,6 +584,15 @@ gdk_window_set_gl_context (GdkWindow    *window,
   g_object_set_data (G_OBJECT (window), "-gdk-gl-context", context);
 }
 
+/*< private >
+ * gdk_window_get_gl_context:
+ * @window: a #GdkWindow
+ *
+ * Retrieves a pointer to the #GdkGLContext associated to
+ * the @window.
+ *
+ * Returns: (transfer none): a #GdkGLContext, or %NULL
+ */
 GdkGLContext *
 gdk_window_get_gl_context (GdkWindow *window)
 {
