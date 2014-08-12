@@ -10,6 +10,8 @@
 #include "gdkx11window.h"
 #include "gdkx11visual.h"
 
+#include "gdkinternals.h"
+
 #include "gdkintl.h"
 
 #include <GL/glx.h>
@@ -98,18 +100,13 @@ gdk_x11_gl_context_set_window (GdkGLContext *context,
 }
 
 static void
-gdk_x11_gl_context_update (GdkGLContext *context)
+gdk_x11_gl_context_update_viewport (GdkGLContext *context,
+                                    GdkWindow    *window,
+                                    int           width,
+                                    int           height)
 {
-  GdkWindow *window = gdk_gl_context_get_window (context);
-  int x, y, width, height;
+  GDK_NOTE (OPENGL, g_print ("Updating viewport to { 0, 0, %d, %d }\n", width, height));
 
-  if (window == NULL)
-    return;
-
-  if (!gdk_gl_context_make_current (context))
-    return;
-
-  gdk_window_get_geometry (window, &x, &y, &width, &height);
   glViewport (0, 0, width, height);
 }
 
@@ -157,7 +154,11 @@ gdk_x11_gl_context_flush_buffer (GdkGLContext *context)
   else
     drawable = gdk_x11_window_get_xid (window);
 
-  GDK_NOTE (OPENGL, g_print ("Flushing GLX buffers for %lu\n", (unsigned long) drawable));
+  GDK_NOTE (OPENGL,
+            g_print ("Flushing GLX buffers for %s drawable %lu (window: %lu)\n",
+                     drawable == info->drawable ? "GLX" : "X11",
+                     (unsigned long) drawable,
+                     (unsigned long) gdk_x11_window_get_xid (window)));
 
   /* if we are going to wait for the vertical refresh manually
    * we need to flush pending redraws, and we also need to wait
@@ -204,7 +205,7 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
 
   context_class->set_window = gdk_x11_gl_context_set_window;
-  context_class->update = gdk_x11_gl_context_update;
+  context_class->update_viewport = gdk_x11_gl_context_update_viewport;
   context_class->flush_buffer = gdk_x11_gl_context_flush_buffer;
 }
 

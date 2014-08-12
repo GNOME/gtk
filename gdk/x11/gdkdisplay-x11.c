@@ -798,7 +798,16 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             {
               GdkGLContext *context = gdk_window_get_gl_context (window);
 
-              gdk_gl_context_update (context);
+              /* only update the viewport if the context asked for it */
+              if (gdk_gl_context_needs_update (context))
+                {
+                  GDK_NOTE (OPENGL,
+                            g_print ("Updating viewport after a ConfigureNotify on window %lu\n",
+                                     (unsigned long) xevent->xconfigure.window));
+                  gdk_gl_context_update_viewport (context, window,
+                                                  xevent->xconfigure.width,
+                                                  xevent->xconfigure.height);
+                }
             }
 
           return_val = FALSE;

@@ -40,13 +40,21 @@ struct _GdkGLContextClass
 {
   GObjectClass parent_class;
 
-  void (* set_window)   (GdkGLContext *context,
-                         GdkWindow    *window);
-  void (* update)       (GdkGLContext *context);
-  void (* flush_buffer) (GdkGLContext *context);
+  void (* set_window)      (GdkGLContext *context,
+                            GdkWindow    *window);
+  void (* update_viewport) (GdkGLContext *context,
+                            GdkWindow    *window,
+                            int           width,
+                            int           height);
+  void (* flush_buffer)    (GdkGLContext *context);
 };
 
 gboolean        gdk_gl_context_get_swap_interval        (GdkGLContext *context);
+gboolean        gdk_gl_context_needs_update             (GdkGLContext *context);
+void            gdk_gl_context_update_viewport          (GdkGLContext *context,
+                                                         GdkWindow    *window,
+                                                         int           width,
+                                                         int           height);
 
 G_END_DECLS
 

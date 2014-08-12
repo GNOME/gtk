@@ -54,6 +54,8 @@ typedef struct {
   GdkVisual *visual;
 
   gboolean swap_interval;
+
+  gboolean needs_update;
 } GdkGLContextPrivate;
 
 enum {
@@ -453,9 +455,50 @@ gdk_gl_context_get_window (GdkGLContext *context)
 void
 gdk_gl_context_update (GdkGLContext *context)
 {
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  GDK_GL_CONTEXT_GET_CLASS (context)->update (context);
+  if (priv->needs_update)
+    return;
+
+  priv->needs_update = TRUE;
+}
+
+/*< private >
+ * gdk_gl_context_needs_update:
+ * @context: a #GdkGLContext
+ *
+ * Checks whether gdk_gl_context_update() was called on @context.
+ *
+ * Platform-specific code may need to be executed to update the
+ * viewport in case the context requested an update.
+ */
+gboolean
+gdk_gl_context_needs_update (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->needs_update;
+}
+
+/*< private >*
+ * gdk_gl_context_update_viewport:
+ * @context: a #GdkGLContext
+ * @window: a #GdkWindow
+ * @width: width of the viewport
+ * @height: height of the viewport
+ *
+ * Updates the viewport of @context in response to a size change
+ * of the given @window.
+ */
+void
+gdk_gl_context_update_viewport (GdkGLContext *context,
+                                GdkWindow    *window,
+                                int           width,
+                                int           height)
+{
+  GDK_GL_CONTEXT_GET_CLASS (context)->update_viewport (context, window, width, height);
 }
 
 /**
