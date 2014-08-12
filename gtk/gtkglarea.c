@@ -189,17 +189,11 @@ gtk_gl_area_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private ((GtkGLArea *) widget);
-  GtkAllocation old_alloc;
-  gboolean same_size;
 
-  gtk_widget_get_allocation (widget, &old_alloc);
   gtk_widget_set_allocation (widget, allocation);
 
   if (!gtk_widget_get_realized (widget))
     return;
-
-  same_size = old_alloc.width == allocation->width &&
-              old_alloc.height == allocation->height;
 
   gdk_window_move_resize (gtk_widget_get_window (widget),
                           allocation->x,
@@ -207,8 +201,7 @@ gtk_gl_area_size_allocate (GtkWidget     *widget,
                           allocation->width,
                           allocation->height);
 
-  /* no need to reset the viewport if the size of the window did not change */
-  if (priv->context != NULL && !same_size)
+  if (priv->context != NULL)
     gdk_gl_context_update (priv->context);
 }
 
