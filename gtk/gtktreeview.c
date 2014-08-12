@@ -1827,27 +1827,19 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                                GTK_STYLE_CLASS_VIEW);
 
   tree_view->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->multipress_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->multipress_gesture), 0);
   g_signal_connect (tree_view->priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_multipress_gesture_pressed), tree_view);
   g_signal_connect (tree_view->priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_tree_view_multipress_gesture_released), tree_view);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->multipress_gesture),
-                                              GTK_PHASE_BUBBLE);
 
   tree_view->priv->column_multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->column_multipress_gesture), FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->column_multipress_gesture),
-                                 GDK_BUTTON_PRIMARY);
   g_signal_connect (tree_view->priv->column_multipress_gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_column_multipress_gesture_pressed), tree_view);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->column_multipress_gesture),
                                               GTK_PHASE_CAPTURE);
 
   tree_view->priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture), FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture),
-                                 GDK_BUTTON_PRIMARY);
   g_signal_connect (tree_view->priv->drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_tree_view_drag_gesture_begin), tree_view);
   g_signal_connect (tree_view->priv->drag_gesture, "drag-update",
@@ -1858,9 +1850,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                                               GTK_PHASE_CAPTURE);
 
   tree_view->priv->column_drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture), FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->column_drag_gesture),
-                                 GDK_BUTTON_PRIMARY);
   g_signal_connect (tree_view->priv->column_drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_tree_view_column_drag_gesture_begin), tree_view);
   g_signal_connect (tree_view->priv->column_drag_gesture, "drag-update",
