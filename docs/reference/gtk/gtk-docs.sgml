@@ -243,6 +243,7 @@
       <xi:include href="xml/gtkadjustment.xml" />
       <xi:include href="xml/gtkcalendar.xml" />
       <xi:include href="xml/gtkdrawingarea.xml" />
+      <xi:include href="xml/gtkglarea.xml" />
       <xi:include href="xml/gtkeventbox.xml" />
       <xi:include href="xml/gtkhandlebox.xml" />
       <xi:include href="xml/gtkimcontextsimple.xml" />

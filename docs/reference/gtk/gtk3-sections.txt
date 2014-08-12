@@ -8153,3 +8153,22 @@ GTK_GESTURE_ZOOM_GET_CLASS
 <SUBSECTION Private>
 gtk_gesture_zoom_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkglarea</FILE>
+GtkGLArea
+GtkGLAreaClass
+gtk_gl_area_new
+gtk_gl_area_get_context
+<SUBSECTION>
+gtk_gl_area_make_current
+gtk_gl_area_flush_buffer
+<SUBSECTION Standard>
+GTK_TYPE_GL_AREA
+GTK_GL_AREA
+GTK_GL_AREA_CLASS
+GTK_IS_GL_AREA
+GTK_IS_GL_AREA_CLASS
+<SUBSECTION Private>
+gtk_gl_area_get_type
+</SECTION>
