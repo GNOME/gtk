@@ -9,7 +9,7 @@
       <object class="GtkImage" id="image1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="icon_name">window-close-symbolic</property>
+        <property name="icon_name">media-playback-stop-symbolic</property>
       </object>
     </child>
   </object>
