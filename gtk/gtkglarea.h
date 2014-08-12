@@ -39,12 +39,28 @@ G_BEGIN_DECLS
 typedef struct _GtkGLArea               GtkGLArea;
 typedef struct _GtkGLAreaClass          GtkGLAreaClass;
 
+/**
+ * GtkGLArea:
+ *
+ * A #GtkWidget used for drawing with OpenGL.
+ *
+ * Since: 3.14
+ */
 struct _GtkGLArea
 {
   /*< private >*/
   GtkWidget parent_instance;
 };
 
+/**
+ * GtkGLAreaClass:
+ * @create_context: class closure for the #GtkGLArea::create-context signal
+ * @render: class closure for the #GtkGLArea::render signal
+ *
+ * The `GtkGLAreaClass` structure contains only private data.
+ *
+ * Since: 3.14
+ */
 struct _GtkGLAreaClass
 {
   /*< private >*/

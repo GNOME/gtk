@@ -1,3 +1,23 @@
+/* GTK - The GIMP Toolkit
+ *
+ * gtkglarea.c: A GL drawing area
+ *
+ * Copyright © 2014  Emmanuele Bassi
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "config.h"
 
 #include "config.h"
@@ -17,13 +37,120 @@
  * #GtkGLArea can set up its own #GdkGLContext using a provided
  * #GdkGLPixelFormat, or can use a given #GdkGLContext.
  *
- * In order to draw, you have to connect to the #GtkGLArea::draw-with-context
- * signal, or subclass #GtkGLArea and override the @GtkGLAreaClass.draw_with_context
- * virtual function.
+ * In order to draw, you have to connect to the #GtkGLArea::render signal,
+ * or subclass #GtkGLArea and override the @GtkGLAreaClass.render() virtual
+ * function.
  *
- * The #GtkGLArea widget ensures that the #GdkGLContext is associated with the
- * widget's drawing area, and it is kept updated when the size and position of
- * the drawing area changes.
+ * The #GtkGLArea widget ensures that the #GdkGLContext is associated with
+ * the widget's drawing area, and it is kept updated when the size and
+ * position of the drawing area changes.
+ *
+ * ## Drawing with GtkGLArea ##
+ *
+ * The simplest way to draw using OpenGL commands in a #GtkGLArea is to
+ * create a widget instance and connect to the #GtkGLArea::render signal:
+ *
+ * |[<!-- language="C" -->
+ *   // create a double buffered pixel format
+ *   GdkGLPixelFormat *format =
+ *     gdk_gl_pixel_format_new ("double-buffer", TRUE);
+ *
+ *   // create a GtkGLArea instance
+ *   GtkWidget *gl_area = gtk_gl_area_new (format);
+ *
+ *   // the GtkGLArea now owns the GdkGLPixelFormat
+ *   g_object_unref (format);
+ *
+ *   // connect to the "render" signal
+ *   g_signal_connect (gl_area, "render", G_CALLBACK (render), NULL);
+ * ]|
+ *
+ * The `render()` function will be called when the #GtkGLArea is ready
+ * for you to draw its content:
+ *
+ * |[<!-- language="C" -->
+ *   static gboolean
+ *   render (GtkGLArea *area, GdkGLContext *context)
+ *   {
+ *     // inside this function it's safe to use GL; the given
+ *     // #GdkGLContext has been made current to the drawable
+ *     // surface used by the #GtkGLArea and the viewport has
+ *     // already been set to be the size of the allocation
+ *
+ *     // we can start by clearing the buffer
+ *     glClearColor (0, 0, 0, 0);
+ *     glClear (GL_COLOR_BUFFER_BIT);
+ *
+ *     // draw your object
+ *     draw_an_object ();
+ *
+ *     // we completed our drawing; the draw commands will be
+ *     // flushed at the end of the signal emission chain, and
+ *     // the buffers swapped if needed
+ *     return TRUE;
+ *   }
+ * ]|
+ *
+ * The `draw_an_object()` function draws a 2D, gold-colored
+ * triangle:
+ *
+ * |[<!-- language="C" -->
+ *   static void
+ *   draw_an_object (void)
+ *   {
+ *     // set the color
+ *     glColor3f (1.0f, 0.85f, 0.35f);
+ *
+ *     // draw our triangle
+ *     glBegin (GL_TRIANGLES);
+ *     {
+ *       glVertex3f ( 0.0f,  0.6f,  0.0f);
+ *       glVertex3f (-0.2f, -0.3f,  0.0f);
+ *       glVertex3f ( 0.2f, -0.3f,  0.0f);
+ *     }
+ *     glEnd ();
+ *   }
+ * ]|
+ *
+ * This is an extremely simple example; in a real-world application you
+ * would probably replace the immediate mode drawing with persistent
+ * geometry primitives, like a Vertex Buffer Object, and only redraw what
+ * changed in your scene.
+ *
+ * ## Using different OpenGL contexts with GtkGLArea ##
+ *
+ * The #GtkGLArea widget will create a #GdkGLContext for the given
+ * pixel format passed on creation. It is possible, however, to change
+ * this default behavior by connecting to the #GtkGLArea::create-context
+ * signal, or by overriding the #GtkGLAreaClass.create_context() virtual
+ * function on a #GtkGLArea subclass.
+ *
+ * If you need to let a #GtkGLArea create a #GdkGLContext with shared
+ * data with another context you can use the #GtkGLArea::create-context
+ * to override the creation of the widget-specific OpenGL context:
+ *
+ * |[<!-- language="C" -->
+ *   static GdkGLContext *
+ *   create_shared_context (GtkGLArea        *area,
+ *                          GdkGLPixelFormat *format,
+ *                          GdkGLContext     *shared_context)
+ *   {
+ *     GdkDisplay *display;
+ *
+ *     display = gtk_widget_get_display (GTK_WIDGET (area));
+ *     if (display == NULL)
+ *       display = gdk_display_get_default ();
+ *
+ *     // create a GdkGLContext that has shared texture namespace
+ *     // and display lists with a given context
+ *     return gdk_display_get_gl_context (display, format,
+ *                                        shared_context,
+ *                                        NULL);
+ *   }
+ * ]|
+ *
+ * The #GtkGLArea will take ownership of the #GdkGLContext returned
+ * by the #GtkGLArea::create-context signal.
  */
 
 typedef struct {
@@ -287,6 +414,14 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 
+  /**
+   * GtkGLArea:pixel-format:
+   *
+   * The #GdkGLPixelFormat used for creating the #GdkGLContext
+   * to be used by the #GtkGLArea widget.
+   *
+   * Since: 3.14
+   */
   obj_props[PROP_PIXEL_FORMAT] =
     g_param_spec_object ("pixel-format",
                          P_("Pixel Format"),
@@ -296,6 +431,17 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkGLArea:context:
+   *
+   * The #GdkGLContext used by the #GtkGLArea widget.
+   *
+   * The #GtkGLArea widget is responsible for creating the #GdkGLContext
+   * instance. See the #GtkGLArea::create-context signal on how to
+   * override the default behavior.
+   *
+   * Since: 3.14
+   */
   obj_props[PROP_CONTEXT] =
     g_param_spec_object ("context",
                          P_("Context"),
@@ -310,6 +456,29 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_props);
 
+  /**
+   * GtkGLArea::create-context:
+   * @area: the #GtkGLArea that emitted the signal
+   * @format: the #GdkGLPixelFormat for the OpenGL context
+   *
+   * The ::create-context signal is emitted each time a #GtkGLArea needs
+   * to create a #GdkGLContext for the given pixel format.
+   *
+   * Widgets can change #GdkDisplay, #GdkScreen, or #GdkVisual; this
+   * implies that a valid pixel format for a specific #GdkDisplay may
+   * not be valid any more after a change in those objects.
+   *
+   * The #GtkGLArea widget will presently emit the ::create-context
+   * signal when:
+   *
+   *   - the #GtkWidget::screen-changed signal is emitted
+   *   - the #GtkWidget::realize signal is emitted
+   *
+   * Returns: (transfer full): a newly created #GdkGLContext; the
+   *   #GtkGLArea widget will take ownership of the returned value.
+   *
+   * Since: 3.14
+   */
   area_signals[CREATE_CONTEXT] =
     g_signal_new (I_("create-context"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -422,8 +591,8 @@ gtk_gl_area_get_context (GtkGLArea *area)
  * the #GtkGLArea.
  *
  * This function is automatically called before emitting the
- * #GtkGLArea::draw-with-context signal, and should not be called
- * by application code.
+ * #GtkGLArea::render signal, and should not be called by
+ * application code.
  *
  * Returns: %TRUE if the context was associated successfully with
  *  the widget
@@ -456,8 +625,8 @@ gtk_gl_area_make_current (GtkGLArea *area)
  * Flushes the buffer associated with @area.
  *
  * This function is automatically called after emitting
- * the #GtkGLArea::draw-with-context signal, and should not
- * be called by application code.
+ * the #GtkGLArea::render signal, and should not be called
+ * by application code.
  *
  * Since: 3.14
  */
