@@ -4235,6 +4235,18 @@ symbolic_cache_get_proxy (SymbolicPixbufCache *symbolic_cache,
 
   return symbolic_cache->proxy_pixbuf;
 }
+
+static gchar *
+rgba_to_string_noalpha (const GdkRGBA *rgba)
+{
+  GdkRGBA color;
+
+  color = *rgba;
+  color.alpha = 1.0;
+
+  return gdk_rgba_to_string (&color);
+}
+
 static void
 rgba_to_pixel(const GdkRGBA  *rgba,
 	      guint8 pixel[4])
@@ -4242,7 +4254,7 @@ rgba_to_pixel(const GdkRGBA  *rgba,
   pixel[0] = rgba->red * 255;
   pixel[1] = rgba->green * 255;
   pixel[2] = rgba->blue * 255;
-  pixel[3] = rgba->alpha * 255;
+  pixel[3] = 255;
 }
 
 static GdkPixbuf *
@@ -4255,8 +4267,11 @@ color_symbolic_pixbuf (GdkPixbuf *symbolic,
   int width, height, x, y, src_stride, dst_stride;
   guchar *src_data, *dst_data;
   guchar *src_row, *dst_row;
+  int alpha;
   GdkPixbuf *colored;
   guint8 fg_pixel[4], success_pixel[4], warning_pixel[4], error_pixel[4];
+
+  alpha = fg_color->alpha * 255;
 
   rgba_to_pixel (fg_color, fg_pixel);
   rgba_to_pixel (success_color, success_pixel);
@@ -4284,7 +4299,7 @@ color_symbolic_pixbuf (GdkPixbuf *symbolic,
           int c1, c2, c3, c4;
 
           a = src_row[3];
-          dst_row[3] = a;
+          dst_row[3] = a * alpha / 255;
 
           if (a == 0)
             {
@@ -4382,23 +4397,27 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   gchar *size;
   gchar *file_data, *escaped_file_data;
   gsize file_len;
+  double alpha;
+  gchar alphastr[G_ASCII_DTOSTR_BUF_SIZE];
 
-  css_fg = gdk_rgba_to_string (fg);
+  alpha = fg->alpha;
+
+  css_fg = rgba_to_string_noalpha (fg);
 
   css_success = css_warning = css_error = NULL;
 
   if (warning_color)
-    css_warning = gdk_rgba_to_string (warning_color);
+    css_warning = rgba_to_string_noalpha (warning_color);
   else
     css_warning = g_strdup ("rgb(245,121,62)");
 
   if (error_color)
-    css_error = gdk_rgba_to_string (error_color);
+    css_error = rgba_to_string_noalpha (error_color);
   else
     css_error = g_strdup ("rgb(204,0,0)");
 
   if (success_color)
-    css_success = gdk_rgba_to_string (success_color);
+    css_success = rgba_to_string_noalpha (success_color);
   else
     css_success = g_strdup ("rgb(78,154,6)");
 
@@ -4436,6 +4455,8 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   escaped_file_data = g_markup_escape_text (file_data, file_len);
   g_free (file_data);
 
+  g_ascii_dtostr (alphastr, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (alpha, 0, 1));
+
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
                       "     xmlns=\"http://www.w3.org/2000/svg\"\n"
@@ -4456,7 +4477,7 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
                       "      fill: ", css_success, " !important;\n"
                       "    }\n"
                       "  </style>\n"
-                      "  <xi:include href=\"data:text/xml,", escaped_file_data, "\"/>\n"
+                      "  <g opacity=\"", alphastr, "\" ><xi:include href=\"data:text/xml,", escaped_file_data, "\"/></g>\n"
                       "</svg>",
                       NULL);
   g_free (escaped_file_data);
