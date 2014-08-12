@@ -1540,21 +1540,12 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_widget_set_redraw_on_allocate (widget, FALSE);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
-                                     FALSE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                              GTK_PHASE_BUBBLE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_text_view_multipress_gesture_pressed),
                     widget);
 
   priv->drag_gesture = gtk_gesture_drag_new (widget);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture),
-                                     FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture),
-                                 GDK_BUTTON_PRIMARY);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                              GTK_PHASE_BUBBLE);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_text_view_drag_gesture_update),
                     widget);
