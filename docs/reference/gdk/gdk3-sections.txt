@@ -156,6 +156,8 @@ gdk_display_supports_input_shapes
 gdk_display_supports_composite
 gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
+gdk_display_validate_gl_pixel_format
+gdk_display_get_gl_context
 
 <SUBSECTION Standard>
 GDK_DISPLAY
@@ -1004,6 +1006,7 @@ gdk_x11_display_error_trap_pop
 gdk_x11_display_error_trap_pop_ignored
 gdk_x11_display_set_cursor_theme
 gdk_x11_display_set_window_scale
+gdk_x11_display_get_glx_version
 gdk_x11_register_standard_event_type
 gdk_x11_screen_get_screen_number
 gdk_x11_screen_get_xscreen
@@ -1123,6 +1126,11 @@ GDK_X11_KEYMAP_CLASS
 GDK_IS_X11_KEYMAP
 GDK_IS_X11_KEYMAP_CLASS
 GDK_X11_KEYMAP_GET_CLASS
+GDK_TYPE_X11_GL_CONTEXT
+GDK_X11_GL_CONTEXT
+GDK_X11_GL_CONTEXT_CLASS
+GDK_IS_X11_GL_CONTEXT
+GDK_IS_X11_GL_CONTEXT_CLASS
 GDK_TYPE_X11_SCREEN
 GDK_X11_SCREEN
 GDK_X11_SCREEN_CLASS
@@ -1272,4 +1280,39 @@ gdk_frame_timings_get_refresh_interval
 gdk_frame_timings_get_predicted_presentation_time
 <SUBSECTION Private>
 gdk_frame_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gdkglcontext</FILE>
+GdkGLContext
+gdk_gl_context_get_display
+gdk_gl_context_get_pixel_format
+gdk_gl_context_get_visual
+gdk_gl_context_set_window
+gdk_gl_context_get_window
+gdk_gl_context_make_current
+gdk_gl_context_flush_buffer
+gdk_gl_context_update
+gdk_gl_context_clear_current
+gdk_gl_context_get_current
+<SUBSECTION Standard>
+GDK_GL_CONTEXT
+GDK_IS_GL_CONTEXT
+GDK_TYPE_GL_CONTEXT
+gdk_gl_context_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gdkglpixelformat</FILE>
+GdkGLPixelFormat
+GdkGLPixelFormatProfile
+gdk_gl_pixel_format_new
+GDK_GL_PIXEL_FORMAT_ERROR
+GdkGLPixelFormatError
+<SUBSECTION Standard>
+GDK_GL_PIXEL_FORMAT
+GDK_IS_GL_PIXEL_FORMAT
+GDK_TYPE_GL_PIXEL_FORMAT
+gdk_gl_pixel_format_error_quark
+gdk_gl_pixel_format_get_type
 </SECTION>

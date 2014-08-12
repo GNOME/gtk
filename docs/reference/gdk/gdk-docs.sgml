@@ -32,6 +32,8 @@
     <xi:include href="xml/windows.xml" />
     <xi:include href="xml/gdkframeclock.xml" />
     <xi:include href="xml/gdkframetimings.xml" />
+    <xi:include href="xml/gdkglcontext.xml" />
+    <xi:include href="xml/gdkglpixelformat.xml" />
     <xi:include href="xml/events.xml" />
     <xi:include href="xml/event_structs.xml" />
     <xi:include href="xml/keys.xml" />
