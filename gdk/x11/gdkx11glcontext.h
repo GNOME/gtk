@@ -19,6 +19,11 @@ typedef struct _GdkX11GLContextClass	GdkX11GLContextClass;
 GDK_AVAILABLE_IN_3_14
 GType gdk_x11_gl_context_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_14
+gboolean        gdk_x11_display_get_glx_version (GdkDisplay *display,
+                                                 int        *major,
+                                                 int        *minor);
+
 G_END_DECLS
 
 #endif /* __GDK_X11_GL_CONTEXT_H__ */

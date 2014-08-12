@@ -780,3 +780,36 @@ gdk_x11_display_validate_gl_pixel_format (GdkDisplay        *display,
 
   return TRUE;
 }
+
+/**
+ * gdk_x11_display_get_glx_version:
+ * @display: a #GdkDisplay
+ * @major: (out): return location for the GLX major version
+ * @minor: (out): return location for the GLX minor version
+ *
+ * Retrieves the version of the GLX implementation.
+ *
+ * Returns: %TRUE if GLX is available
+ *
+ * Since: 3.14
+ */
+gboolean
+gdk_x11_display_get_glx_version (GdkDisplay *display,
+                                 int        *major,
+                                 int        *minor)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  if (!GDK_IS_X11_DISPLAY (display))
+    return FALSE;
+
+  if (!gdk_x11_display_init_gl (display))
+    return FALSE;
+
+  if (major != NULL)
+    *major = GDK_X11_DISPLAY (display)->glx_version / 10;
+  if (minor != NULL)
+    *minor = GDK_X11_DISPLAY (display)->glx_version % 10;
+
+  return TRUE;
+}
