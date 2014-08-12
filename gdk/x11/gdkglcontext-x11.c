@@ -454,6 +454,8 @@ find_fbconfig_for_pixel_format (GdkDisplay        *display,
           retval = TRUE;
           goto out;
         }
+
+      XFree (visinfo);
     }
     
   g_set_error (error, GDK_GL_PIXEL_FORMAT_ERROR,
