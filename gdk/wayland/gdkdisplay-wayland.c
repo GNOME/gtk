@@ -225,6 +225,7 @@ _gdk_wayland_display_open (const gchar *display_name)
   display_wayland->wl_display = wl_display;
   display_wayland->screen = _gdk_wayland_screen_new (display);
   display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
+  _gdk_wayland_display_init_cursors (display_wayland);
 
   display_wayland->wl_registry = wl_display_get_registry(display_wayland->wl_display);
   wl_registry_add_listener(display_wayland->wl_registry, &registry_listener, display_wayland);
@@ -232,7 +233,6 @@ _gdk_wayland_display_open (const gchar *display_name)
   /* Wait until the dust has settled during init... */
   wl_display_roundtrip (display_wayland->wl_display);
 
-  _gdk_wayland_display_init_cursors (display_wayland);
   gdk_input_init (display);
 
   g_signal_emit_by_name (display, "opened");
