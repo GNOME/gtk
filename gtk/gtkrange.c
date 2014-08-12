@@ -757,22 +757,13 @@ gtk_range_init (GtkRange *range)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (range));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
-                                     FALSE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                              GTK_PHASE_BUBBLE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_range_multipress_gesture_pressed), range);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_range_multipress_gesture_released), range);
 
   priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (range));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture),
-                                     FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture),
-                                 GDK_BUTTON_PRIMARY);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                              GTK_PHASE_BUBBLE);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_range_drag_gesture_update), range);
   g_signal_connect (priv->drag_gesture, "drag-end",
@@ -780,12 +771,6 @@ gtk_range_init (GtkRange *range)
 
   priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (range));
   gtk_gesture_group (priv->drag_gesture, priv->long_press_gesture);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->long_press_gesture),
-                                     FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->long_press_gesture),
-                                 GDK_BUTTON_PRIMARY);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->long_press_gesture),
-                                              GTK_PHASE_BUBBLE);
   g_signal_connect (priv->long_press_gesture, "pressed",
                     G_CALLBACK (gtk_range_long_press_gesture_pressed), range);
 }
