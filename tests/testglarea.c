@@ -19,8 +19,6 @@ render (GtkGLArea    *area,
   }
   glEnd ();
 
-  glFlush ();
-
   return TRUE;
 }
 
