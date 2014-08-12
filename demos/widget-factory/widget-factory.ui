@@ -3116,6 +3116,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
   </object>
   <object class="GtkMessageDialog" id="info_dialog">
     <property name="transient-for">window</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="text" translatable="yes">Do something?</property>
     <property name="secondary-text" translatable="yes">If you do something,
@@ -3142,6 +3143,7 @@ bad things might happen.</property>
   </object>
   <object class="GtkDialog" id="action_dialog">
     <property name="transient-for">window</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Zelda</property>
