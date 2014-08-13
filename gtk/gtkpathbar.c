@@ -1277,6 +1277,7 @@ change_icon_theme (GtkPathBar *path_bar)
 
   reload_icons (path_bar);
 }
+
 /* Callback used when a GtkSettings value changes */
 static void
 settings_notify_cb (GObject    *object,
@@ -1294,13 +1295,14 @@ settings_notify_cb (GObject    *object,
 static void
 gtk_path_bar_check_icon_theme (GtkPathBar *path_bar)
 {
-  GtkSettings *settings;
+  if (path_bar->priv->settings_signal_id == 0)
+    {
+      GtkSettings *settings;
 
-  if (path_bar->priv->settings_signal_id)
-    return;
-
-  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (path_bar)));
-  path_bar->priv->settings_signal_id = g_signal_connect (settings, "notify", G_CALLBACK (settings_notify_cb), path_bar);
+      settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (path_bar)));
+      path_bar->priv->settings_signal_id = g_signal_connect (settings, "notify",
+                                                             G_CALLBACK (settings_notify_cb), path_bar);
+    }
 
   change_icon_theme (path_bar);
 }
