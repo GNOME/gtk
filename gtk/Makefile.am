@@ -1704,16 +1704,6 @@ files:
 	  echo $$p; \
 	done
 
-if USE_EXTERNAL_ICON_CACHE
-gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
-else
-if CROSS_COMPILING
-gtk_update_icon_cache_program = ./native/native-update-icon-cache
-else
-gtk_update_icon_cache_program = ./gtk-update-icon-cache$(EXEEXT)
-endif
-endif
-
 gsettings_SCHEMAS = \
 	org.gtk.Settings.FileChooser.gschema.xml \
 	org.gtk.Settings.ColorChooser.gschema.xml \

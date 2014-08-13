@@ -936,7 +936,9 @@ AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 AS_IF([test "x$enable_gtk2_dependency" = xyes],
       [AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
        if test x$GTK_UPDATE_ICON_CACHE = xno; then
-         REBUILD_PNGS=#
+         AC_MSG_ERROR([
+*** --enable-gtk2-dependency has been set but no existing
+*** `gtk-update-icon-cache` has been found in the path.])
        fi],
 
       [test "x$cross_compiling" = xyes],
@@ -954,21 +956,22 @@ AS_IF([test "x$enable_gtk2_dependency" = xyes],
 
        NATIVE_GDKPIXBUF_CFLAGS=`$PKG_CONFIG_FOR_BUILD --cflags gdk-pixbuf-2.0`
        NATIVE_GDKPIXBUF_LIBS=`$PKG_CONFIG_FOR_BUILD --libs gdk-pixbuf-2.0`
+       # This is the native gtk-update-icon-cache which will be used at
+       # build time, NOT the one installed on the target host.
+       GTK_UPDATE_ICON_CACHE="`cd $srcdir && pwd`/gtk/native/native-update-icon-cache$BUILD_EXEEXT"
        AC_SUBST(NATIVE_GDKPIXBUF_CFLAGS)
-       AC_SUBST(NATIVE_GDKPIXBUF_LIBS)]
+       AC_SUBST(NATIVE_GDKPIXBUF_LIBS)
+       AC_SUBST(GTK_UPDATE_ICON_CACHE)],
+
+      [# In native compiling case, the gtk-update-icon-cache installed
+       # is the same as the one used during build.
+       GTK_UPDATE_ICON_CACHE="`cd $srcdir && pwd`/gtk/gtk/gtk-update-icon-cache$EXEEXT"
+       AC_SUBST(GTK_UPDATE_ICON_CACHE)]
 )
 
 AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$enable_gtk2_dependency" = xyes])
 
 AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
-
-if test ! -f $srcdir/gtk/gtkbuiltincache.h &&
-   test "x$REBUILD_PNGS" = "x#" ; then
-     AC_MSG_ERROR([
-*** gtkbuiltincache.h is not in the tree, and cannot be built
-*** because you don't have libpng, or (when cross-compiling) you
-*** don't have a prebuilt gtk-update-icon-cache on the build system.])
-fi
 
 ########################################
 # Windowing system checks
