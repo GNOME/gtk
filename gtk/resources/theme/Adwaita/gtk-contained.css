@@ -2523,7 +2523,9 @@ GtkScrolledWindow GtkViewport.frame {
   border-color: #a1a1a1;
   border-radius: 0 0 6px 6px;
   background-image: linear-gradient(to bottom, #dedede 5%, #e3e3e3);
-  padding: 4px; }
+  padding: 0 4px; }
+  .app-notification .button {
+    padding: 6px; }
 
 /*************
  * Expanders *

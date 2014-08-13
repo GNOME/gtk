@@ -2172,8 +2172,8 @@ GtkScrolledWindow {
   background-image: linear-gradient(to bottom, mix(black, $bg_color, 6%) 5%,
                               mix(black, $bg_color, 4%));
   // FIXME no space for outer shadow : box-shadow: 0 1px 1px rgba(0,0,0,.5);
-  padding: 4px;
- // .button { padding: 6px; }
+  padding: 0 4px;
+  .button { padding: 6px; }
 }
 
 /*************
