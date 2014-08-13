@@ -47,6 +47,7 @@ struct _GdkWaylandTouchData
   gdouble x;
   gdouble y;
   GdkWindow *window;
+  uint32_t touch_down_serial;
   guint initial_touch : 1;
 };
 
@@ -1389,6 +1390,7 @@ touch_handle_down (void              *data,
   touch = gdk_wayland_device_add_touch (device, id, wl_surface);
   touch->x = wl_fixed_to_double (x);
   touch->y = wl_fixed_to_double (y);
+  touch->touch_down_serial = serial;
 
   event = _create_touch_event (device, touch, GDK_TOUCH_BEGIN, time);
 
