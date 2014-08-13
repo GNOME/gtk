@@ -1176,7 +1176,7 @@ GtkTreeView.view.progressbar {
  *********/
 .menubar {
   padding: 0px;
-  background-color: #e3e3e3; }
+  box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1); }
   .menubar:backdrop {
     background-color: #ededed; }
   .menubar > .menuitem {
@@ -2585,9 +2585,7 @@ GtkScrolledWindow GtkViewport.frame {
   border-color: #a1a1a1;
   border-radius: 0 0 6px 6px;
   background-image: linear-gradient(to bottom, #dedede 5%, #e3e3e3);
-  padding: 0 4px; }
-  .app-notification .button {
-    padding: 6px; }
+  padding: 4px; }
 
 /*************
  * Expanders *
