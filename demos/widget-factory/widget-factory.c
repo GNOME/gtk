@@ -679,7 +679,9 @@ my_text_view_init (MyTextView *tv)
 }
 
 static void
-my_tv_draw_layer (GtkWidget *widget, GtkTextViewLayer layer, cairo_t *cr)
+my_tv_draw_layer (GtkTextView      *widget,
+                  GtkTextViewLayer  layer,
+                  cairo_t          *cr)
 {
   MyTextView *tv = (MyTextView *)widget;
 
