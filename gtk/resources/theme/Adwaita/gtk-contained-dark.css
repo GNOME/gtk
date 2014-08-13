@@ -882,7 +882,7 @@ GtkComboBox {
   border-style: solid;
   border-color: #1c1f1f;
   background-color: #303535;
-  box-shadow: inset 0 2px 3px -1px #242727; }
+  box-shadow: inset 0 2px 3px -1px #242727, 0 1px rgba(238, 238, 236, 0.1); }
   .inline-toolbar:backdrop, .search-bar:backdrop {
     border-color: #1e2222;
     background-color: #2f3434;
