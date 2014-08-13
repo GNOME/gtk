@@ -2545,16 +2545,17 @@ void
 gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
 				    const gchar   *markup)
 {
+#ifdef GDK_WINDOWING_X11
   GtkStatusIconPrivate *priv;
-#ifndef GDK_WINDOWING_X11
+#else
   gchar *text = NULL;
 #endif
 
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
 
+#ifdef GDK_WINDOWING_X11
   priv = status_icon->priv;
 
-#ifdef GDK_WINDOWING_X11
   if (priv->tray_icon)
     gtk_widget_set_tooltip_markup (priv->tray_icon, markup);
 #endif
@@ -2732,13 +2733,15 @@ void
 gtk_status_icon_set_name (GtkStatusIcon *status_icon,
                           const gchar   *name)
 {
+#ifdef GDK_WINDOWING_X11
   GtkStatusIconPrivate *priv;
+#endif
 
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
 
+#ifdef GDK_WINDOWING_X11
   priv = status_icon->priv;
 
-#ifdef GDK_WINDOWING_X11
   if (priv->tray_icon)
     {
       if (gtk_widget_get_realized (priv->tray_icon))

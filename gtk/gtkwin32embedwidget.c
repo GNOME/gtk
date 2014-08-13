@@ -81,10 +81,6 @@ gtk_win32_embed_widget_class_init (GtkWin32EmbedWidgetClass *class)
 static void
 gtk_win32_embed_widget_init (GtkWin32EmbedWidget *embed_widget)
 {
-  GtkWindow *window;
-
-  window = GTK_WINDOW (embed_widget);
-
   _gtk_widget_set_is_toplevel (GTK_WIDGET (embed_widget), TRUE);
   gtk_container_set_resize_mode (GTK_CONTAINER (embed_widget), GTK_RESIZE_QUEUE);
 }

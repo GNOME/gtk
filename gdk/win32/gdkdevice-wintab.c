@@ -91,9 +91,6 @@ gdk_device_wintab_class_init (GdkDeviceWintabClass *klass)
 static void
 gdk_device_wintab_init (GdkDeviceWintab *device_wintab)
 {
-  GdkDevice *device;
-
-  device = GDK_DEVICE (device_wintab);
 }
 
 static gboolean

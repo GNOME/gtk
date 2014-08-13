@@ -6,11 +6,11 @@
 static void
 test_to_text_list (void)
 {
+#ifdef GDK_WINDOWING_X11
   GdkDisplay *display;
 
   display = gdk_display_get_default ();
 
-#ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
     {
       GdkAtom encoding;

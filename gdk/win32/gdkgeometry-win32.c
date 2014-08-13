@@ -56,12 +56,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       width,
 			       gint       height)
 {
-  GdkWindowImplWin32 *impl;
-
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   GDK_NOTE (MISC, g_print ("_gdk_window_move_resize_child: %s@%+d%+d %dx%d@%+d%+d\n",
 			   _gdk_win32_window_description (window),

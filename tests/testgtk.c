@@ -4925,8 +4925,10 @@ create_cursors (GtkWidget *widget)
   GtkWidget *label;
   GtkWidget *any;
   GtkAdjustment *adjustment;
+#ifdef GDK_WINDOWING_X11
   GtkWidget *entry;
   GtkWidget *size;  
+#endif
 
   if (!window)
     {

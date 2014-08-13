@@ -1852,7 +1852,7 @@ gdk_event_translate (MSG  *msg,
   GdkWindow *window = NULL;
   GdkWindowImplWin32 *impl;
 
-  GdkWindow *orig_window, *new_window;
+  GdkWindow *new_window;
 
   GdkDeviceManager *device_manager;
   GdkDeviceManagerWin32 *device_manager_win32;
@@ -1884,7 +1884,6 @@ gdk_event_translate (MSG  *msg,
     }
 
   window = gdk_win32_handle_table_lookup (msg->hwnd);
-  orig_window = window;
 
   if (window == NULL)
     {

@@ -92,10 +92,6 @@ gdk_device_virtual_class_init (GdkDeviceVirtualClass *klass)
 static void
 gdk_device_virtual_init (GdkDeviceVirtual *device_virtual)
 {
-  GdkDevice *device;
-
-  device = GDK_DEVICE (device_virtual);
-
 }
 
 void

@@ -263,7 +263,6 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
   } bmi;
   HDC hdc;
   guchar *pixels, *bits;
-  gchar buf[32];
   gint rowstride, x, y, w, h;
 
   if (!GDI_CALL (GetIconInfo, (hicon, &ii)))

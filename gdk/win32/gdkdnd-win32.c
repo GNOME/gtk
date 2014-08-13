@@ -825,7 +825,6 @@ idataobject_getdata (LPDATAOBJECT This,
 		     LPSTGMEDIUM  pMedium)
 {
   data_object *ctx = (data_object *) This;
-  GdkAtom target;
   HRESULT hr;
   GdkEvent e;
 
@@ -843,8 +842,6 @@ idataobject_getdata (LPDATAOBJECT This,
 
   active_pFormatEtc = pFormatEtc;
   active_pMedium = pMedium;
-
-  target = GDK_TARGET_STRING;
 
   e.type = GDK_SELECTION_REQUEST;
   e.selection.window = ctx->context->source_window;

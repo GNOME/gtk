@@ -882,7 +882,6 @@ _gdk_input_other_event (GdkEvent  *event,
                         GdkWindow *window)
 {
   GdkDeviceManagerWin32 *device_manager;
-  GdkDisplay *display;
   GdkDeviceWintab *source_device = NULL;
   GdkDeviceGrabInfo *last_grab;
   GdkDevice *device = NULL;
@@ -914,7 +913,6 @@ _gdk_input_other_event (GdkEvent  *event,
     window = _gdk_root;
 
   g_object_ref (window);
-  display = gdk_window_get_display (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
 	    g_print ("_gdk_input_other_event: window=%p %+d%+d\n",

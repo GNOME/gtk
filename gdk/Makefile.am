@@ -192,7 +192,6 @@ libgdk_3_la_LIBADD += quartz/libgdk-quartz.la
 endif # USE_QUARTZ
 
 if USE_WIN32
-libgdk_3_la_SOURCES += gdkkeynames.c
 libgdk_3_la_LIBADD += win32/libgdk-win32.la
 libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o
 libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o

@@ -657,7 +657,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
   GdkWindow *toplevel;
   GtkWidget *widget = NULL;
-  HWND hwnd, top_hwnd;
+  HWND hwnd;
   HIMC himc;
 
   if (!GDK_IS_WINDOW (context_ime->client_window))
@@ -676,8 +676,6 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
     {
       gdk_window_add_filter (toplevel,
                              gtk_im_context_ime_message_filter, context_ime);
-      top_hwnd = gdk_win32_window_get_impl_hwnd (toplevel);
-
       context_ime->toplevel = toplevel;
     }
   else
@@ -730,7 +728,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
   GdkWindow *toplevel;
   GtkWidget *widget = NULL;
-  HWND hwnd, top_hwnd;
+  HWND hwnd;
   HIMC himc;
 
   if (!GDK_IS_WINDOW (context_ime->client_window))
@@ -801,8 +799,6 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
       gdk_window_remove_filter (toplevel,
                                 gtk_im_context_ime_message_filter,
                                 context_ime);
-      top_hwnd = gdk_win32_window_get_impl_hwnd (toplevel);
-
       context_ime->toplevel = NULL;
     }
   else

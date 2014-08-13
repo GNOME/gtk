@@ -122,6 +122,7 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   return data;
 }
 
+#ifdef HAVE_FTW_H
 static void 
 search_thread_data_free (SearchThreadData *data)
 {
@@ -152,7 +153,6 @@ typedef struct
   GList *uris;
   SearchThreadData *thread_data;
 } SearchHits;
-
 
 static gboolean
 search_thread_add_hits_idle (gpointer user_data)
@@ -197,7 +197,6 @@ send_batch (SearchThreadData *data)
 
 static GPrivate search_thread_data;
 
-#ifdef HAVE_FTW_H
 static int
 search_visit_func (const char        *fpath,
 		   const struct stat *sb,
@@ -272,9 +271,8 @@ search_visit_func (const char        *fpath,
 static gpointer 
 search_thread_func (gpointer user_data)
 {
-  guint id;
-
 #ifdef HAVE_FTW_H
+  guint id;
   SearchThreadData *data;
   
   data = user_data;

@@ -2799,7 +2799,9 @@ settings_update_cursor_theme (GtkSettings *settings)
 {
   gchar *theme = NULL;
   gint size = 0;
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
   GdkDisplay *display = gdk_screen_get_display (settings->priv->screen);
+#endif
 
   g_object_get (settings,
                 "gtk-cursor-theme-name", &theme,
