@@ -23,6 +23,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkwidgetprivate.h"
 
 #include <float.h>
 #include <math.h>
@@ -3135,6 +3136,8 @@ gtk_list_box_row_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
+
+  _gtk_widget_set_simple_clip (widget);
 }
 
 /**
