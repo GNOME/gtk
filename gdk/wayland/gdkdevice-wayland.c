@@ -1305,9 +1305,9 @@ keyboard_handle_repeat_info (void               *data,
 }
 
 static GdkWaylandTouchData *
-_device_manager_add_touch (GdkWaylandDeviceData *device,
-                           uint32_t              id,
-                           struct wl_surface    *surface)
+gdk_wayland_device_add_touch (GdkWaylandDeviceData *device,
+                              uint32_t              id,
+                              struct wl_surface    *surface)
 {
   GdkWaylandTouchData *touch;
 
@@ -1322,15 +1322,15 @@ _device_manager_add_touch (GdkWaylandDeviceData *device,
 }
 
 static GdkWaylandTouchData *
-_device_manager_get_touch (GdkWaylandDeviceData *device,
-                           uint32_t              id)
+gdk_wayland_device_get_touch (GdkWaylandDeviceData *device,
+                              uint32_t              id)
 {
   return g_hash_table_lookup (device->touches, GUINT_TO_POINTER (id));
 }
 
 static void
-_device_manager_remove_touch (GdkWaylandDeviceData *device,
-                              uint32_t              id)
+gdk_wayland_device_remove_touch (GdkWaylandDeviceData *device,
+                                 uint32_t              id)
 {
   g_hash_table_remove (device->touches, GUINT_TO_POINTER (id));
 }
@@ -1386,7 +1386,7 @@ touch_handle_down (void              *data,
   GdkWaylandTouchData *touch;
   GdkEvent *event;
 
-  touch = _device_manager_add_touch (device, id, wl_surface);
+  touch = gdk_wayland_device_add_touch (device, id, wl_surface);
   touch->x = wl_fixed_to_double (x);
   touch->y = wl_fixed_to_double (y);
 
@@ -1409,14 +1409,14 @@ touch_handle_up (void            *data,
   GdkWaylandTouchData *touch;
   GdkEvent *event;
 
-  touch = _device_manager_get_touch (device, id);
+  touch = gdk_wayland_device_get_touch (device, id);
   event = _create_touch_event (device, touch, GDK_TOUCH_END, time);
 
   GDK_NOTE (EVENTS,
             g_message ("touch end %f %f", event->touch.x, event->touch.y));
 
   _gdk_wayland_display_deliver_event (device->display, event);
-  _device_manager_remove_touch (device, id);
+  gdk_wayland_device_remove_touch (device, id);
 }
 
 static void
@@ -1431,7 +1431,7 @@ touch_handle_motion (void            *data,
   GdkWaylandTouchData *touch;
   GdkEvent *event;
 
-  touch = _device_manager_get_touch (device, id);
+  touch = gdk_wayland_device_get_touch (device, id);
   touch->x = wl_fixed_to_double (x);
   touch->y = wl_fixed_to_double (y);
 
