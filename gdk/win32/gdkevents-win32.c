@@ -287,7 +287,7 @@ _gdk_win32_window_procedure (HWND   hwnd,
   retval = inner_window_procedure (hwnd, message, wparam, lparam);
   debug_indent -= 2;
 
-  GDK_NOTE (EVENTS, g_print (" => %I64d%s", (gint64) retval, (debug_indent == 0 ? "\n" : "")));
+  GDK_NOTE (EVENTS, g_print (" => %" G_GINT64_FORMAT "%s", (gint64) retval, (debug_indent == 0 ? "\n" : "")));
 
   return retval;
 }
@@ -3268,7 +3268,7 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_ACTIVATEAPP:
-      GDK_NOTE (EVENTS, g_print (" %s thread: %I64d",
+      GDK_NOTE (EVENTS, g_print (" %s thread: %" G_GINT64_FORMAT,
 				 msg->wParam ? "YES" : "NO",
 				 (gint64) msg->lParam));
       if (msg->wParam && GDK_WINDOW_IS_MAPPED (window))
