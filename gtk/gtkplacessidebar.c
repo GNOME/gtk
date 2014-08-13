@@ -97,8 +97,8 @@
  * location.
  */
 
-#define EJECT_BUTTON_XPAD 6
-#define ICON_CELL_XPAD 6
+#define EJECT_BUTTON_XPAD 8
+#define ICON_CELL_XPAD 8
 #define TIMEOUT_EXPAND 500
 
 /* These are used when a destination-side DND operation is taking place.
@@ -3751,6 +3751,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   /* tree view */
   tree_view = GTK_TREE_VIEW (gtk_tree_view_new ());
   gtk_tree_view_set_headers_visible (tree_view, FALSE);
+  gtk_widget_set_margin_top (GTK_WIDGET (tree_view), 4);
 
   gtk_tree_view_set_row_separator_func (tree_view,
                                         row_separator_func,
@@ -3763,7 +3764,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   cell = gtk_cell_renderer_pixbuf_new ();
   g_object_set (cell,
                 "xpad", 10,
-                "ypad", 6,
+                "ypad", 8,
                 "follow-state", TRUE,
                 NULL);
   gtk_tree_view_column_pack_start (col, cell, FALSE);
