@@ -2919,7 +2919,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="can_focus">True</property>
                                 <property name="shadow_type">in</property>
                                 <property name="hscrollbar_policy">automatic</property>
-                                <property name="height_request">200</property>
+                                <property name="margin-top">6</property>
+                                <property name="height_request">226</property>
                                 <child>
                                   <object class="GtkIconView" id="iconview1">
                                     <property name="visible">True</property>
@@ -2965,6 +2966,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           <object class="GtkButton" id="preference_dialog_button">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">_Configure</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="selection_dialog_button">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">_Select</property>
                             <property name="use_underline">True</property>
                           </object>
                         </child>
@@ -3322,6 +3330,55 @@ bad things might happen.</property>
       </object>
     </child>
   </object>
+  <object class="GtkDialog" id="selection_dialog">
+    <property name="transient-for">window</property>
+    <property name="modal">True</property>
+    <property name="use-header-bar">1</property>
+    <property name="title" translatable="yes">Choose one</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">never</property>
+            <child>
+              <object class="GtkFlowBox" id="selection_flowbox">
+                <property name="visible">True</property>
+                <property name="selection-mode">single</property>
+                <property name="row-spacing">10</property>
+                <property name="column-spacing">10</property>
+                <property name="margin">10</property>
+                <property name="min-children-per-line">3</property>
+                <property name="max-children-per-line">9</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="cancel_selection_dialog">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Cancel</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="select_selection_dialog">
+        <property name="visible">True</property>
+        <property name="can-default">True</property>
+        <property name="has-default">True</property>
+        <property name="label" translatable="yes">_Select</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">cancel_selection_dialog</action-widget>
+      <action-widget response="ok" default="true">select_selection_dialog</action-widget>
+    </action-widgets>
+  </object>    
   <object class="GtkSizeGroup">
     <property name="mode">vertical</property>
     <widgets>

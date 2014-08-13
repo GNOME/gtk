@@ -532,6 +532,75 @@ populate_colors (GtkWidget *widget)
 }
 
 static void
+background_loaded_cb (GObject      *source,
+                      GAsyncResult *res,
+                      gpointer      data)
+{
+  GtkWidget *flowbox = data;
+  GtkWidget *child;
+  GdkPixbuf *pixbuf;
+  GError *error = NULL;
+
+  pixbuf = gdk_pixbuf_new_from_stream_finish (res, &error);
+  if (error)
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  child = gtk_image_new_from_pixbuf (pixbuf);
+  gtk_widget_show (child);
+  gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
+}
+
+static void
+populate_flowbox (GtkWidget *button, GtkWidget *flowbox)
+{
+  const gchar *location;
+  GDir *dir;
+  GError *error = NULL;
+  const gchar *name;
+  gchar *filename;
+  GFile *file;
+  GInputStream *stream;
+
+  g_signal_handlers_disconnect_by_func (button, populate_flowbox, flowbox);
+
+  location = "/usr/share/backgrounds/gnome";
+  dir = g_dir_open (location, 0, &error);
+  if (error)
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  while ((name = g_dir_read_name (dir)) != NULL)
+    {
+      filename = g_build_filename (location, name, NULL);
+      file = g_file_new_for_path (filename);
+      stream = G_INPUT_STREAM (g_file_read (file, NULL, &error));
+      if (error)
+        {
+          g_warning ("%s", error->message);
+          g_clear_error (&error);
+        }
+      else
+        {
+          gdk_pixbuf_new_from_stream_at_scale_async (stream, 110, 110, TRUE, NULL, 
+                                                     background_loaded_cb, flowbox);
+        }
+
+      g_object_unref (file);
+      g_object_unref (stream);
+      g_free (filename); 
+    }
+
+  g_dir_close (dir);
+}
+
+static void
 row_activated (GtkListBox *box, GtkListBoxRow *row)
 {
   GtkWidget *image;
@@ -685,6 +754,14 @@ activate (GApplication *app)
   g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+
+  dialog = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog");
+  g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog_button");
+  g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "selection_flowbox");
+  g_signal_connect (widget, "clicked", G_CALLBACK (populate_flowbox), widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "charletree");
   populate_model ((GtkTreeStore *)gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
