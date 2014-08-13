@@ -1791,12 +1791,13 @@ gdk_wayland_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
 
   wayland_device_manager = (GdkWaylandDeviceManager *) device_manager;
 
-  /* Find the first pointer device */
+  /* Find the first master pointer device */
   for (l = wayland_device_manager->devices; l != NULL; l = l->next)
     {
       GdkDevice *device = l->data;
 
-      if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE)
+      if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE &&
+          gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER)
         return device;
     }
 
