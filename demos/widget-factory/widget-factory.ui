@@ -1998,6 +1998,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="focus-on-click">False</property>
                                 <property name="relief">none</property>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
                                 <child>
                                   <object class="GtkImage" id="page2dismissi">
                                     <property name="visible">True</property>
