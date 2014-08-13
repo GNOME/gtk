@@ -1597,7 +1597,7 @@ GtkSwitch {
     border-style: solid;
     border-radius: 3px;
     border-color: #a1a1a1;
-    background-color: #cecece;
+    background-image: linear-gradient(to bottom, #cecece);
     text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
     GtkSwitch.trough:active {
       background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
@@ -1615,18 +1615,18 @@ GtkSwitch {
     GtkSwitch.trough:backdrop {
       color: #54595a;
       border-color: #a8a8a8;
-      background-image: none;
-      background-color: #d4d4d4;
+      background-image: linear-gradient(to bottom, #d4d4d4);
       box-shadow: none;
       text-shadow: none; }
       GtkSwitch.trough:backdrop:active {
         color: #ededed;
         border-color: #4a90d9;
-        background-color: #4a90d9;
+        background-image: linear-gradient(to bottom, #4a90d9);
         box-shadow: none; }
       GtkSwitch.trough:backdrop:insensitive {
         color: #c7c7c7;
         border-color: #a8a8a8;
+        background-image: none;
         background-color: #f4f4f4; }
   .list-row:selected GtkSwitch {
     box-shadow: 0 0 0 1px white; }

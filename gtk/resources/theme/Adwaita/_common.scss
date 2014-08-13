@@ -1530,7 +1530,8 @@ GtkSwitch {
     border-style: solid;
     border-radius: 3px;
     border-color: $borders_color;
-    background-color: mix($bg_color,$borders_color,60%);
+    background-image: linear-gradient(to bottom,
+                                      mix($bg_color,$borders_color,60%));
     text-shadow: 0 1px transparentize(black, 0.9);
     &:active {
       @include progressbar_fill;
@@ -1552,19 +1553,20 @@ GtkSwitch {
     &:backdrop {
       color: $backdrop_fg_color;
       border-color: $backdrop_borders_color;
-      background-image: none;
-      background-color: $backdrop_dark_fill;
+      background-image: linear-gradient(to bottom, $backdrop_dark_fill);
       box-shadow: none;
       text-shadow: none;
       &:active {
-        color: $backdrop_bg_color;
-        border-color: $selected_bg_color;
-        background-color: $selected_bg_color;
+        @if $variant == 'light' { color: $backdrop_bg_color; }
+        border-color: if($variant == 'light', $selected_bg_color,
+                                              $selected_borders_color);
+        background-image: linear-gradient(to bottom, $selected_bg_color);
         box-shadow: none;
       }
       &:insensitive {
         color: $backdrop_insensitive_color;
         border-color: $backdrop_borders_color;
+        background-image: none;
         background-color: $insensitive_bg_color;
       }
     }
@@ -1591,7 +1593,10 @@ GtkSwitch {
     &:active { border: 1px solid $selected_borders_color; }
     &:insensitive { @include button(insensitive, $noedge: true); }
     &:backdrop { @include button(backdrop);
-      &:active{ border-color: $selected_bg_color; }
+      &:active{
+        border-color: if($variant == 'light', $selected_bg_color,
+                                              $selected_borders_color);
+      }
       &:insensitive {
         @include button(backdrop-insensitive);
       }
