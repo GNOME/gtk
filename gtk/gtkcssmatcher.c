@@ -56,7 +56,13 @@ gtk_css_matcher_widget_path_get_previous (GtkCssMatcher       *matcher,
 static GtkStateFlags
 gtk_css_matcher_widget_path_get_state (const GtkCssMatcher *matcher)
 {
-  return gtk_widget_path_iter_get_state (matcher->path.path, matcher->path.index);
+  const GtkWidgetPath *siblings;
+  
+  siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
+  if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
+    return gtk_widget_path_iter_get_state (siblings, matcher->path.sibling_index);
+  else
+    return gtk_widget_path_iter_get_state (matcher->path.path, matcher->path.index);
 }
 
 static gboolean

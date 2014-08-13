@@ -334,6 +334,9 @@ testdata = \
 	shorthand-entry-border.css \
 	shorthand-entry-border.ref.ui \
 	shorthand-entry-border.ui \
+	sibling-pseudoclasses.css \
+	sibling-pseudoclasses.ref.ui \
+	sibling-pseudoclasses.ui \
 	simple.ref.ui \
 	simple.ui \
 	sizegroups-basics.css \
