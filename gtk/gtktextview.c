@@ -5328,12 +5328,12 @@ draw_text (cairo_t  *cr,
   gtk_style_context_restore (context);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
-    GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (widget, GTK_TEXT_VIEW_LAYER_BELOW, cr);
+    GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW, cr);
 
   gtk_text_view_paint (widget, cr);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
-    GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (widget, GTK_TEXT_VIEW_LAYER_ABOVE, cr);
+    GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE, cr);
 }
 
 static void

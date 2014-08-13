@@ -139,8 +139,8 @@ struct _GtkTextViewClass
 
   GtkTextBuffer * (* create_buffer) (GtkTextView *text_view);
 
-  void (* draw_layer)       (GtkWidget        *widget,
-			     GtkTextViewLayer layer,
+  void (* draw_layer)       (GtkTextView      *text_view,
+			     GtkTextViewLayer  layer,
 			     cairo_t          *cr);
 
   /* Padding for future expansion */
