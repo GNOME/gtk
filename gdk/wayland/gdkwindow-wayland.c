@@ -1031,11 +1031,24 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
   return NULL;
 }
 
+static gboolean
+should_be_mapped (GdkWindow *window)
+{
+  /* Don't map crazy temp that GTK+ uses for internal X11 shenanigans. */
+  if (window->window_type == GDK_WINDOW_TEMP && window->x < 0 && window->y < 0)
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 gdk_wayland_window_map (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindow *transient_for;
+
+  if (!should_be_mapped (window))
+    return;
 
   if (!impl->mapped && !impl->use_custom_surface)
     {
