@@ -531,12 +531,17 @@ populate_colors (GtkWidget *widget)
   gtk_list_box_invalidate_headers (GTK_LIST_BOX (widget));
 }
 
+typedef struct {
+  GtkWidget *flowbox;
+  gchar *filename;
+} BackgroundData;
+
 static void
 background_loaded_cb (GObject      *source,
                       GAsyncResult *res,
                       gpointer      data)
 {
-  GtkWidget *flowbox = data;
+  BackgroundData *bd = data;
   GtkWidget *child;
   GdkPixbuf *pixbuf;
   GError *error = NULL;
@@ -551,7 +556,10 @@ background_loaded_cb (GObject      *source,
 
   child = gtk_image_new_from_pixbuf (pixbuf);
   gtk_widget_show (child);
-  gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
+  gtk_flow_box_insert (GTK_FLOW_BOX (bd->flowbox), child, -1);
+  child = gtk_widget_get_parent (child);
+  g_object_set_data_full (G_OBJECT (child), "filename", bd->filename, g_free);
+  g_free (bd);
 }
 
 static void
@@ -564,8 +572,17 @@ populate_flowbox (GtkWidget *button, GtkWidget *flowbox)
   gchar *filename;
   GFile *file;
   GInputStream *stream;
+  BackgroundData *bd;
+  GdkPixbuf *pixbuf;
+  GtkWidget *child;
 
   g_signal_handlers_disconnect_by_func (button, populate_flowbox, flowbox);
+
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 110, 70);
+  gdk_pixbuf_fill (pixbuf, 0xffffffff);
+  child = gtk_image_new_from_pixbuf (pixbuf);
+  gtk_widget_show (child);
+  gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
 
   location = "/usr/share/backgrounds/gnome";
   dir = g_dir_open (location, 0, &error);
@@ -585,16 +602,19 @@ populate_flowbox (GtkWidget *button, GtkWidget *flowbox)
         {
           g_warning ("%s", error->message);
           g_clear_error (&error);
+          g_free (filename); 
         }
       else
         {
+          bd = g_new (BackgroundData, 1);
+          bd->flowbox = flowbox;
+          bd->filename = filename;
           gdk_pixbuf_new_from_stream_at_scale_async (stream, 110, 110, TRUE, NULL, 
-                                                     background_loaded_cb, flowbox);
+                                                     background_loaded_cb, bd);
         }
 
       g_object_unref (file);
       g_object_unref (stream);
-      g_free (filename); 
     }
 
   g_dir_close (dir);
@@ -643,6 +663,116 @@ set_accel (GtkApplication *app, GtkWidget *widget)
   g_strfreev (accels);
 }
 
+typedef struct
+{
+  GtkTextView tv;
+  cairo_surface_t *surface;
+} MyTextView;
+
+typedef GtkTextViewClass MyTextViewClass;
+
+G_DEFINE_TYPE (MyTextView, my_text_view, GTK_TYPE_TEXT_VIEW)
+
+static void
+my_text_view_init (MyTextView *tv)
+{
+}
+
+static void
+my_tv_draw_layer (GtkWidget *widget, GtkTextViewLayer layer, cairo_t *cr)
+{
+  MyTextView *tv = (MyTextView *)widget;
+
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW && tv->surface)
+    {
+      cairo_save (cr);
+      cairo_set_source_surface (cr, tv->surface, 0.0, 0.0);
+      cairo_paint_with_alpha (cr, 0.333);
+      cairo_restore (cr);
+    }
+}
+
+static void
+my_tv_finalize (GObject *object)
+{
+  MyTextView *tv = (MyTextView *)object;
+
+  if (tv->surface)
+    cairo_surface_destroy (tv->surface);
+
+  G_OBJECT_CLASS (my_text_view_parent_class)->finalize (object);
+}
+
+static void
+my_text_view_class_init (MyTextViewClass *class)
+{
+  GtkTextViewClass *tv_class = GTK_TEXT_VIEW_CLASS (class);
+  GObjectClass *o_class = G_OBJECT_CLASS (class);
+
+  o_class->finalize = my_tv_finalize;
+  tv_class->draw_layer = my_tv_draw_layer;
+}
+
+static void
+my_text_view_set_background (MyTextView *tv, const gchar *filename)
+{
+  GdkPixbuf *pixbuf;
+  GError *error = NULL;
+
+  if (tv->surface)
+    cairo_surface_destroy (tv->surface);
+
+  tv->surface = NULL;
+
+  if (filename == NULL)
+    return;
+
+  pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+  if (error)
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  tv->surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+
+  g_object_unref (pixbuf);
+
+  gtk_widget_queue_draw (GTK_WIDGET (tv));
+}
+
+static void
+close_selection_dialog (GtkWidget *dialog, gint response, GtkWidget *tv)
+{
+  GtkWidget *box;
+  GtkWidget *child;
+  GList *children;
+  const gchar *filename;
+
+  gtk_widget_hide (dialog);
+
+  if (response == GTK_RESPONSE_CANCEL)
+    return;
+
+  box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  children = gtk_container_get_children (GTK_CONTAINER (box));
+  box = children->data;
+  g_list_free (children);
+  g_assert (GTK_IS_FLOW_BOX (box));
+  children = gtk_flow_box_get_selected_children (GTK_FLOW_BOX (box));
+
+  if (!children)
+    return;
+
+  child = children->data;
+  filename = (const gchar *)g_object_get_data (G_OBJECT (child), "filename");
+
+  g_list_free (children);
+
+  my_text_view_set_background ((MyTextView *)tv, filename);
+}
+
 static void
 activate (GApplication *app)
 {
@@ -669,6 +799,8 @@ activate (GApplication *app)
     { "win.delete", { "Delete", NULL } }
   };
   gint i;
+
+  g_type_ensure (my_text_view_get_type ());
 
   builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory/widget-factory.ui");
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
@@ -756,7 +888,8 @@ activate (GApplication *app)
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog");
-  g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "text3");
+  g_signal_connect (dialog, "response", G_CALLBACK (close_selection_dialog), widget);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
 
