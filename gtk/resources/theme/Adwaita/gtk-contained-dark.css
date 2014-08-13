@@ -1762,6 +1762,7 @@ GtkSwitch {
   .menuitem.check:active {
     color: #eeeeec; }
     .menuitem.check:active:hover {
+      -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
       color: white; }
     .menuitem.check:active:insensitive {
       color: #939695;
@@ -1769,6 +1770,7 @@ GtkSwitch {
       .menuitem.check:active:insensitive:backdrop {
         color: #5d6767; }
     .menuitem.check:active:backdrop {
+      -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
       color: #c9cbc9; }
   .menuitem.check:insensitive {
     color: rgba(147, 150, 149, 0.1); }
@@ -1783,6 +1785,8 @@ GtkSwitch {
   color: rgba(238, 238, 236, 0.1);
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
+  .view.check:hover {
+    -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
   .view.check:active {
     color: #eeeeec; }
     .view.check:active:insensitive {
@@ -1798,12 +1802,14 @@ GtkSwitch {
   .view.check:inconsistent {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
   .view.check:selected, .view.check:selected:focus {
+    -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
     color: rgba(255, 255, 255, 0.1); }
     .view.check:selected:active, .view.check:selected:focus:active {
       color: white; }
       .view.check:selected:active:backdrop, .view.check:selected:focus:active:backdrop {
         color: #c9cbc9; }
   .view.check:backdrop {
+    -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
     color: rgba(201, 203, 201, 0.1); }
     .view.check:backdrop:selected {
       color: rgba(44, 44, 44, 0.1); }
@@ -1880,6 +1886,7 @@ GtkSwitch {
   .menuitem.radio:active {
     color: #eeeeec; }
     .menuitem.radio:active:hover {
+      -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
       color: white; }
     .menuitem.radio:active:insensitive {
       color: #939695;
@@ -1887,6 +1894,7 @@ GtkSwitch {
       .menuitem.radio:active:insensitive:backdrop {
         color: #5d6767; }
     .menuitem.radio:active:backdrop {
+      -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
       color: #c9cbc9; }
   .menuitem.radio:insensitive {
     color: rgba(147, 150, 149, 0.1); }
@@ -1901,6 +1909,8 @@ GtkSwitch {
   color: rgba(238, 238, 236, 0.1);
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
+  .view.radio:hover {
+    -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
   .view.radio:active {
     color: #eeeeec; }
     .view.radio:active:insensitive {
@@ -1916,12 +1926,14 @@ GtkSwitch {
   .view.radio:inconsistent {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
   .view.radio:selected, .view.radio:selected:focus {
+    -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
     color: rgba(255, 255, 255, 0.1); }
     .view.radio:selected:active, .view.radio:selected:focus:active {
       color: white; }
       .view.radio:selected:active:backdrop, .view.radio:selected:focus:active:backdrop {
         color: #c9cbc9; }
   .view.radio:backdrop {
+    -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
     color: rgba(201, 203, 201, 0.1); }
     .view.radio:backdrop:selected {
       color: rgba(44, 44, 44, 0.1); }
