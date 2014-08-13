@@ -1082,6 +1082,16 @@ GtkComboBox {
     padding-left: 12px;
     padding-right: 12px; }
 
+.path-bar .button GtkLabel:last-child {
+  padding-left: 2px; }
+
+.path-bar .button GtkLabel:first-child {
+  padding-right: 2px; }
+
+.path-bar .button GtkLabel:only-child {
+  padding-right: 0;
+  padding-left: 0; }
+
 /**************
  * Tree Views *
  **************/
