@@ -114,7 +114,7 @@ templates = 				\
 
 template_headers = $(templates:.ui=.ui.h)
 
-extract_strings = $(top_builddir)/util/extract-strings
+extract_strings = $(top_builddir)/util/extract-strings$(BUILD_EXEEXT)
 
 %.ui.h : %.ui 
 	$(AM_V_GEN) $(extract_strings) $< > $@

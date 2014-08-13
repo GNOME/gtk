@@ -4,10 +4,10 @@ extract_strings_cppflags =
 extract_strings_cflags = $(GLIB_CFLAGS_FOR_BUILD)
 extract_strings_ldadd = $(GLIB_LIBS_FOR_BUILD)
 
-extract-strings$(EXEEXT): $(extract_strings_sources)
-	@rm -f extract-strings
+extract-strings$(BUILD_EXEEXT): $(extract_strings_sources)
+	@rm -f extract-strings$(BUILD_EXEEXT)
 	$(AM_V_CCLD)$(CC_FOR_BUILD) $(extract_strings_cppflags) $(CPPFLAGS_FOR_BUILD) $(extract_strings_cflags) $(CFLAGS_FOR_BUILD) $^ $(LDFLAGS_FOR_BUILD) $(extract_strings_ldadd) $(LIBS_FOR_BUILD) -o $@
 
-noinst_PROGRAMS = extract-strings
+all-local: extract-strings$(BUILD_EXEEXT)
 
 -include $(top_srcdir)/git.mk
