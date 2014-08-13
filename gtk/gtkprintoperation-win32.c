@@ -17,8 +17,12 @@
  */
 
 #ifndef _MSC_VER
+#ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
+#endif
+#ifndef WINVER
 #define WINVER _WIN32_WINNT
+#endif
 #endif
 
 #define COBJMACROS
@@ -680,7 +684,7 @@ devmode_to_settings (GtkPrintSettings *settings,
 			      devmode->dmDriverVersion);
   if (devmode->dmDriverExtra != 0)
     {
-      char *extra = g_base64_encode (((char *)devmode) + sizeof (DEVMODEW),
+      char *extra = g_base64_encode (((const guchar *)devmode) + sizeof (DEVMODEW),
 				     devmode->dmDriverExtra);
       gtk_print_settings_set (settings,
 			      GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA,
@@ -935,10 +939,10 @@ devmode_from_settings (GtkPrintSettings *settings,
 {
   HANDLE hDevMode;
   LPDEVMODEW devmode;
-  char *extras;
+  guchar *extras;
   GtkPaperSize *paper_size;
   const char *extras_base64;
-  int extras_len;
+  gsize extras_len;
   const char *val;
 
   extras = NULL;

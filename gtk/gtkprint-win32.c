@@ -17,8 +17,12 @@
  */
 
 #ifndef _MSC_VER
+#ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
+#endif
+#ifndef WINVER
 #define WINVER _WIN32_WINNT
+#endif
 #endif
 
 #include "config.h"

@@ -531,7 +531,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
       if ((hdata = GetClipboardData (CF_UNICODETEXT)) != NULL)
 	{
 	  wchar_t *ptr, *p, *q;
-	  guchar *data;
+	  gchar *data;
 	  glong length, wclen;
 
 	  if ((ptr = GlobalLock (hdata)) != NULL)
@@ -559,7 +559,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 
 	      if (data)
 		selection_property_store (requestor, _utf8_string, 8,
-					  data, strlen (data) + 1);
+					  (guchar *) data, strlen (data) + 1);
 	      GlobalUnlock (hdata);
 	    }
 	}
@@ -940,7 +940,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
     
   g_get_charset (&charset);
 
-  result = g_convert (text, length, charset, source_charset,
+  result = g_convert ((const gchar *) text, length, charset, source_charset,
 		      NULL, NULL, NULL);
   g_free (source_charset);
 

@@ -415,7 +415,7 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
        */
       if (!GetVersionEx (&info) ||
           info.dwMajorVersion > 6 ||
-          info.dwMajorVersion == 6 && info.dwMinorVersion >= 2)
+          (info.dwMajorVersion == 6 && info.dwMinorVersion >= 2))
         return FALSE;
 
       /* check whether the system default ANSI codepage matches the
