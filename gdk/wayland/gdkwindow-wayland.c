@@ -999,7 +999,8 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *parent_impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
-  GdkWaylandDeviceData *device;
+  GdkDeviceManager *device_manager;
+  GdkWaylandDevice *device;
   int x, y;
   int parent_x, parent_y;
 
@@ -1009,7 +1010,8 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
   if (!parent_impl->surface)
     return;
 
-  device = wl_seat_get_user_data (seat);
+  device_manager = gdk_display_get_device_manager (GDK_DISPLAY (display_wayland));
+  device = GDK_WAYLAND_DEVICE (gdk_device_manager_get_client_pointer (device_manager));
 
   gdk_wayland_window_get_fake_root_coords (parent, &parent_x, &parent_y);
 
@@ -1020,7 +1022,7 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
                                              impl->surface,
                                              parent_impl->surface,
                                              seat,
-                                             _gdk_wayland_device_get_button_press_serial (device),
+                                             _gdk_wayland_device_get_last_implicit_grab_serial (device, NULL),
                                              x, y, flags);
 
   xdg_popup_add_listener (impl->xdg_popup, &xdg_popup_listener, window);
@@ -1987,15 +1989,16 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
                                      GdkEvent  *event)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkEventButton *event_button = (GdkEventButton *) event;
   struct wl_seat *seat;
+  GdkWaylandDevice *device;
   double x, y;
-  GdkWaylandDeviceData *device;
 
   switch (event->type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_END:
       break;
     default:
       return FALSE;
@@ -2004,14 +2007,13 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
   if (!impl->xdg_surface)
     return FALSE;
 
-  seat = gdk_wayland_device_get_wl_seat (event_button->device);
-  device = wl_seat_get_user_data (seat);
-
+  device = GDK_WAYLAND_DEVICE (gdk_event_get_device (event));
+  seat = gdk_wayland_device_get_wl_seat (GDK_DEVICE (device));
   gdk_event_get_coords (event, &x, &y);
 
   xdg_surface_show_window_menu (impl->xdg_surface,
                                 seat,
-                                _gdk_wayland_device_get_button_press_serial (device),
+                                _gdk_wayland_device_get_implicit_grab_serial (device, event),
                                 x, y);
   return TRUE;
 }

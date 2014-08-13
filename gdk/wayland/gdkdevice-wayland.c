@@ -1820,9 +1820,51 @@ _gdk_wayland_device_manager_new (GdkDisplay *display)
 }
 
 uint32_t
-_gdk_wayland_device_get_button_press_serial (GdkWaylandDeviceData *device)
+_gdk_wayland_device_get_implicit_grab_serial (GdkWaylandDevice *device,
+                                              const GdkEvent   *event)
 {
-  return device->button_press_serial;
+  GdkEventSequence *sequence = NULL;
+  GdkWaylandTouchData *touch = NULL;
+
+  if (event)
+    sequence = gdk_event_get_event_sequence (event);
+
+  if (sequence)
+    touch = gdk_wayland_device_get_touch (device->device,
+                                          GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
+  if (touch)
+    return touch->touch_down_serial;
+  else
+    return device->device->button_press_serial;
+}
+
+uint32_t
+_gdk_wayland_device_get_last_implicit_grab_serial (GdkWaylandDevice  *device,
+                                                   GdkEventSequence **sequence)
+{
+  GdkWaylandTouchData *touch;
+  GHashTableIter iter;
+  uint32_t serial = 0;
+
+  g_hash_table_iter_init (&iter, device->device->touches);
+
+  if (sequence)
+    *sequence = NULL;
+
+  if (device->device->button_press_serial > serial)
+    serial = device->device->button_press_serial;
+
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch))
+    {
+      if (touch->touch_down_serial > serial)
+        {
+          if (sequence)
+            *sequence = GDK_SLOT_TO_EVENT_SEQUENCE (touch->id);
+          serial = touch->touch_down_serial;
+        }
+    }
+
+  return serial;
 }
 
 static GdkAtom

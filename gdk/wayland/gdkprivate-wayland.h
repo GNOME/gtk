@@ -143,7 +143,10 @@ void              _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *dev
 typedef struct _GdkWaylandDeviceData GdkWaylandDeviceData;
 
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
-uint32_t _gdk_wayland_device_get_button_press_serial(GdkWaylandDeviceData *device);
+uint32_t _gdk_wayland_device_get_implicit_grab_serial(GdkWaylandDevice *device,
+                                                      const GdkEvent   *event);
+uint32_t _gdk_wayland_device_get_last_implicit_grab_serial (GdkWaylandDevice  *device,
+                                                            GdkEventSequence **seqence);
 
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);
 GSource *_gdk_wayland_display_event_source_new (GdkDisplay *display);
