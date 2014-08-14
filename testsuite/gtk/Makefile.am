@@ -57,6 +57,7 @@ TEST_PROGS += 			\
 	rbtree			\
 	recentmanager		\
 	regression-tests	\
+	spinbutton		\
 	stylecontext		\
 	templates		\
 	textbuffer		\
