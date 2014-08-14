@@ -271,10 +271,10 @@ gtk_gl_area_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
+  context = gtk_gl_area_create_context (GTK_GL_AREA (widget));
+
   gtk_widget_set_realized (widget, TRUE);
   gtk_widget_get_allocation (widget, &allocation);
-
-  context = gtk_gl_area_create_context (GTK_GL_AREA (widget));
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = allocation.x;
@@ -524,6 +524,7 @@ static void
 gtk_gl_area_init (GtkGLArea *self)
 {
   gtk_widget_set_has_window (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_app_paintable (GTK_WIDGET (self), TRUE);
 }
 
 /**
