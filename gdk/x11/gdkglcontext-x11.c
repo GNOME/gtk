@@ -375,6 +375,18 @@ get_glx_attributes_for_pixel_format (GdkDisplay       *display,
       attrs[i++] = format->stencil_size;
     }
 
+  if (format->accum_size > 0)
+    {
+      attrs[i++] = GLX_ACCUM_RED_SIZE;
+      attrs[i++] = format->accum_size;
+      attrs[i++] = GLX_ACCUM_GREEN_SIZE;
+      attrs[i++] = format->accum_size;
+      attrs[i++] = GLX_ACCUM_BLUE_SIZE;
+      attrs[i++] = format->accum_size;
+      attrs[i++] = GLX_ACCUM_ALPHA_SIZE;
+      attrs[i++] = format->accum_size;
+    }
+
   display_x11 = GDK_X11_DISPLAY (display);
   if (display_x11->glx_version >= 14 && format->multi_sample)
     {
@@ -480,17 +492,25 @@ update_pixel_format (GdkDisplay       *display,
 
   glXGetFBConfigAttrib (dpy, config, GLX_RED_SIZE, &value);
   format->color_size = value;
-
   glXGetFBConfigAttrib (dpy, config, GLX_GREEN_SIZE, &value);
   format->color_size = MIN (format->color_size, value);
-
   glXGetFBConfigAttrib (dpy, config, GLX_BLUE_SIZE, &value);
   format->color_size = MIN (format->color_size, value);
 
   glXGetFBConfigAttrib (dpy, config, GLX_ALPHA_SIZE, &format->alpha_size);
+
   glXGetFBConfigAttrib (dpy, config, GLX_AUX_BUFFERS, &format->aux_buffers);
   glXGetFBConfigAttrib (dpy, config, GLX_DEPTH_SIZE, &format->depth_size);
   glXGetFBConfigAttrib (dpy, config, GLX_STENCIL_SIZE, &format->stencil_size);
+
+  glXGetFBConfigAttrib (dpy, config, GLX_ACCUM_RED_SIZE, &value);
+  format->accum_size = value;
+  glXGetFBConfigAttrib (dpy, config, GLX_ACCUM_GREEN_SIZE, &value);
+  format->accum_size = MIN (format->accum_size, value);
+  glXGetFBConfigAttrib (dpy, config, GLX_ACCUM_BLUE_SIZE, &value);
+  format->accum_size = MIN (format->accum_size, value);
+  glXGetFBConfigAttrib (dpy, config, GLX_ACCUM_ALPHA_SIZE, &value);
+  format->accum_size = MIN (format->accum_size, value);
 }
 
 static GLXContext
