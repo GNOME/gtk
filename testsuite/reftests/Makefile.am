@@ -346,6 +346,8 @@ testdata = \
 	sizegroups-evolution-identity-page.ref.ui \
 	sizegroups-get-preferred-null.ui \
 	sizegroups-get-preferred-null.ref.ui \
+	statusbar-remove-all.ref.ui \
+	statusbar-remove-all.ui \
 	style-properties-nth-child.css \
 	style-properties-nth-child.ref.ui \
 	style-properties-nth-child.ui \
@@ -402,8 +404,9 @@ libreftest_la_LDFLAGS = -rpath $(reftestdir) -avoid-version -module $(no_undefin
 libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
 libreftest_la_LIBADD = $(gtk_reftest_LDADD)
 libreftest_la_SOURCES =			\
-	set-default-direction.c		\
 	expand-expander.c		\
+	set-default-direction.c		\
+	statusbar-remove-all.c		\
 	textview-border-windows.c	\
 	$(NULL)
 
