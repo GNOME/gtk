@@ -628,7 +628,6 @@ gtk_button_init (GtkButton *button)
   priv->button_down = FALSE;
   priv->use_stock = FALSE;
   priv->use_underline = FALSE;
-  priv->depress_on_activate = TRUE;
   priv->focus_on_click = TRUE;
 
   priv->xalign = 0.5;
@@ -2458,7 +2457,7 @@ gtk_button_update_state (GtkButton *button)
   gboolean depressed;
 
   if (priv->activate_timeout)
-    depressed = priv->depress_on_activate;
+    depressed = TRUE;
   else
     depressed = priv->in_button && priv->button_down;
 

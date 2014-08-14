@@ -229,8 +229,6 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
   toggle_button->priv = gtk_toggle_button_get_instance_private (toggle_button);
   toggle_button->priv->active = FALSE;
   toggle_button->priv->draw_indicator = FALSE;
-
-  GTK_BUTTON (toggle_button)->priv->depress_on_activate = TRUE;
 }
 
 static void
@@ -419,7 +417,6 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
       GtkStyleContext *context;
 
       priv->draw_indicator = draw_indicator;
-      GTK_BUTTON (toggle_button)->priv->depress_on_activate = !draw_indicator;
 
       if (gtk_widget_get_visible (GTK_WIDGET (toggle_button)))
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));

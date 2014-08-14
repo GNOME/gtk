@@ -208,8 +208,6 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 
   _gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), TRUE);
 
-  GTK_BUTTON (radio_button)->priv->depress_on_activate = FALSE;
-
   priv->group = g_slist_prepend (NULL, radio_button);
 
   gtk_widget_set_state_flags (GTK_WIDGET (radio_button), GTK_STATE_FLAG_CHECKED, TRUE);
