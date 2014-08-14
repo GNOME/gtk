@@ -390,7 +390,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
 
   if (priv->inconsistent)
     state |= GTK_STATE_FLAG_INCONSISTENT;
-  else if (priv->active)
+  
+  if (priv->active)
     state |= GTK_STATE_FLAG_CHECKED;
 
   cairo_save (cr);

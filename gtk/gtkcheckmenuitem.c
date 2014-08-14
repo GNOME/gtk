@@ -575,7 +575,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       if (priv->inconsistent)
         state |= GTK_STATE_FLAG_INCONSISTENT;
-      else if (priv->active)
+      if (priv->active)
         state |= GTK_STATE_FLAG_CHECKED;
 
       gtk_style_context_set_state (context, state);

@@ -661,7 +661,8 @@ gtk_toggle_button_update_state (GtkButton *button)
 
   if (priv->inconsistent)
     new_state |= GTK_STATE_FLAG_INCONSISTENT;
-  else if (priv->active)
+  
+  if (priv->active)
     new_state |= GTK_STATE_FLAG_CHECKED;
 
   if (button->priv->in_button && button->priv->button_down)

@@ -873,7 +873,8 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
     state |= GTK_STATE_FLAG_INCONSISTENT;
-  else if (gtk_toggle_button_get_active (toggle_button))
+  
+  if (gtk_toggle_button_get_active (toggle_button))
     state |= GTK_STATE_FLAG_CHECKED;
 
   if (button->priv->activate_timeout ||
