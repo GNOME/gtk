@@ -20,12 +20,12 @@ my_text_view_init (MyTextView *text_view)
 {
 }
 
-static void my_text_view_draw_layer (GtkWidget         *widget,
+static void my_text_view_draw_layer (GtkTextView       *textview,
 				     GtkTextViewLayer   layer,
 				     cairo_t           *cr)
 {
   if (layer == GTK_TEXT_VIEW_LAYER_BELOW)
-    draw_background (widget, cr);
+    draw_background (GTK_WIDGET (textview), cr);
 }
 
 static void
