@@ -104,6 +104,7 @@ enum {
   /* bool */
   PROP_DOUBLE_BUFFER,
   PROP_MULTI_SAMPLE,
+  PROP_STEREO,
 
   /* uint */
   PROP_AUX_BUFFERS,
@@ -143,6 +144,10 @@ gdk_gl_pixel_format_set_property (GObject      *gobject,
 
     case PROP_MULTI_SAMPLE:
       self->multi_sample = g_value_get_boolean (value);
+      break;
+
+    case PROP_STEREO:
+      self->stereo = g_value_get_boolean (value);
       break;
 
     case PROP_AUX_BUFFERS:
@@ -202,6 +207,10 @@ gdk_gl_pixel_format_get_property (GObject    *gobject,
 
     case PROP_MULTI_SAMPLE:
       g_value_set_boolean (value, self->multi_sample);
+      break;
+
+    case PROP_STEREO:
+      g_value_set_boolean (value, self->stereo);
       break;
 
     case PROP_AUX_BUFFERS:
@@ -283,6 +292,22 @@ gdk_gl_pixel_format_class_init (GdkGLPixelFormatClass *klass)
     g_param_spec_boolean ("multi-sample",
                           P_("Multi Sample"),
                           P_("Whether the pixel format should enable multi-sampling"),
+                          FALSE,
+                          G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkGLPixelFormat:stereo:
+   *
+   * Whether the pixel format should support stereoscopic buffers.
+   *
+   * Since: 3.14
+   */
+  obj_props[PROP_STEREO] =
+    g_param_spec_boolean ("stereo",
+                          P_("Stereo"),
+                          P_("Whether the pixel format should support stereoscopic buffers"),
                           FALSE,
                           G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -517,6 +542,8 @@ gdk_gl_pixel_format_get_ ## FieldName (GdkGLPixelFormat *format) \
 GDK_GL_PIXEL_FORMAT_GET (gboolean, double_buffer, FALSE)
 
 GDK_GL_PIXEL_FORMAT_GET (gboolean, multi_sample, FALSE)
+
+GDK_GL_PIXEL_FORMAT_GET (gboolean, stereo, FALSE)
 
 GDK_GL_PIXEL_FORMAT_GET (gint, color_size, 0)
 

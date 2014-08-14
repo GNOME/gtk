@@ -35,6 +35,7 @@ struct _GdkGLPixelFormat
 
   gboolean double_buffer;
   gboolean multi_sample;
+  gboolean stereo;
 
   int aux_buffers;
   int color_size;

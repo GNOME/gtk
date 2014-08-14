@@ -318,6 +318,12 @@ get_glx_attributes_for_pixel_format (GdkDisplay       *display,
       attrs[i++] = GL_TRUE;
     }
 
+  if (format->stereo)
+    {
+      attrs[i++] = GLX_STEREO;
+      attrs[i++] = GL_TRUE;
+    }
+
   if (format->color_size < 0)
     {
       attrs[i++] = GLX_RED_SIZE;
