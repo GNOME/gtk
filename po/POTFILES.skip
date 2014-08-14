@@ -221,6 +221,8 @@ testsuite/reftests/revealer-wrappable-contents.ref.ui
 testsuite/reftests/revealer-wrappable-contents.ui
 testsuite/reftests/rotated-layout.ref.ui
 testsuite/reftests/rotated-layout.ui
+testsuite/reftests/sibling-pseudoclasses.ref.ui
+testsuite/reftests/sibling-pseudoclasses.ui
 testsuite/reftests/sizegroups-basics.ref.ui
 testsuite/reftests/sizegroups-basics.ui
 testsuite/reftests/sizegroups-evolution-identity-page.ref.ui
