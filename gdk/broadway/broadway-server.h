@@ -22,6 +22,8 @@ typedef struct _BroadwayServerClass BroadwayServerClass;
 BroadwayServer     *broadway_server_new                      (char             *address,
 							      int               port,
 							      GError          **error);
+BroadwayServer     *broadway_server_on_unix_socket_new       (char             *address,
+							      GError          **error);
 gboolean            broadway_server_has_client               (BroadwayServer   *server);
 void                broadway_server_flush                    (BroadwayServer   *server);
 void                broadway_server_sync                     (BroadwayServer   *server);

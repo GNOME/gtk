@@ -417,12 +417,16 @@ main (int argc, char *argv[])
   GSocketService *listener;
   char *path, *basename;
   char *http_address = NULL;
+  char *unixsocket_address = NULL;
   int http_port = 0;
   char *display;
   int port = 0;
   const GOptionEntry entries[] = {
     { "port", 'p', 0, G_OPTION_ARG_INT, &http_port, "Httpd port", "PORT" },
     { "address", 'a', 0, G_OPTION_ARG_STRING, &http_address, "Ip address to bind to ", "ADDRESS" },
+#ifdef G_OS_UNIX
+    { "unixsocket", 'u', 0, G_OPTION_ARG_STRING, &unixsocket_address, "Unix domain socket address", "ADDRESS" },
+#endif
     { NULL }
   };
 
@@ -486,7 +490,11 @@ main (int argc, char *argv[])
   if (http_port == 0)
     http_port = 8080 + port;
 
-  server = broadway_server_new (http_address, http_port, &error);
+  if (unixsocket_address != NULL)
+    server = broadway_server_on_unix_socket_new (unixsocket_address, &error);
+  else
+    server = broadway_server_new (http_address, http_port, &error);
+
   if (server == NULL)
     {
       g_printerr ("%s\n", error->message);

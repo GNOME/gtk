@@ -1270,6 +1270,52 @@ broadway_server_new (char *address, int port, GError **error)
   return server;
 }
 
+BroadwayServer *
+broadway_server_on_unix_socket_new (char *address, GError **error)
+{
+  BroadwayServer *server;
+  GSocketAddress *socket_address;
+
+  server = g_object_new (BROADWAY_TYPE_SERVER, NULL);
+  server->port = -1;
+  server->address = g_strdup (address);
+
+  if (address == NULL)
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "Unspecified unix domain socket address");
+      g_object_unref (server);
+      return NULL;
+    }
+  else
+    {
+      socket_address = g_unix_socket_address_new (address);
+      if (socket_address == NULL)
+	{
+	  g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "Invalid unix domain socket address %s: ", address);
+	  g_object_unref (server);
+	  return NULL;
+	}
+      if (!g_socket_listener_add_address (G_SOCKET_LISTENER (server->service),
+					  socket_address,
+					  G_SOCKET_TYPE_STREAM,
+					  G_SOCKET_PROTOCOL_DEFAULT,
+					  G_OBJECT (server),
+					  NULL,
+					  error))
+	{
+	  g_prefix_error (error, "Unable to listen to %s: ", server->address);
+	  g_object_unref (socket_address);
+	  g_object_unref (server);
+	  return NULL;
+	}
+      g_object_unref (socket_address);
+    }
+
+  g_signal_connect (server->service, "incoming",
+		    G_CALLBACK (handle_incoming_connection), NULL);
+  return server;
+}
+
 guint32
 broadway_server_get_last_seen_time (BroadwayServer *server)
 {

@@ -32,6 +32,7 @@
 <command>broadwayd</command>
 <arg choice="opt">--port <replaceable>PORT</replaceable></arg>
 <arg choice="opt">--address <replaceable>ADDRESS</replaceable></arg>
+<arg choice="opt">--unixsocket <replaceable>ADDRESS</replaceable></arg>
 <arg choice="opt"><replaceable>:DISPLAY</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -78,6 +79,13 @@ openssl passwd -1  > ~/.config/broadway.passwd
     <term>--address</term>
     <listitem><para>Use <replaceable>ADDRESS</replaceable> as the HTTP
       address, instead of the default <literal>http://127.0.0.1:<replaceable>PORT</replaceable></literal>.
+      </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>--unixsocket</term>
+    <listitem><para>Use <replaceable>ADDRESS</replaceable> as the unix domain socket
+      address. This option overrides <literal>--address</literal> and <literal>--port</literal>.
+      It is available only on Unix-like systems.
       </para></listitem>
   </varlistentry>
 </variablelist>
