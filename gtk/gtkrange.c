@@ -2159,9 +2159,8 @@ gtk_range_draw (GtkWidget *widget,
                 fill_y += priv->trough.height - fill_height;
             }
 
-          gtk_render_activity (context, cr,
-                               fill_x, fill_y,
-                               fill_width, fill_height);
+          gtk_render_background (context, cr, fill_x, fill_y, fill_width, fill_height);
+          gtk_render_frame (context, cr, fill_x, fill_y, fill_width, fill_height);
 
           gtk_style_context_restore (context);
         }

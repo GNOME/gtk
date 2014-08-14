@@ -2045,15 +2045,10 @@ gtk_default_draw_box (GtkStyle      *style,
 
   cairo_save (cr);
 
-  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PROGRESSBAR))
-    gtk_render_activity (context, cr, x, y, width, height);
-  else
-    {
-      gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_background (context, cr, x, y, width, height);
 
-      if (shadow_type != GTK_SHADOW_NONE)
-	gtk_render_frame (context, cr, x, y, width, height);
-    }
+  if (shadow_type != GTK_SHADOW_NONE)
+    gtk_render_frame (context, cr, x, y, width, height);
 
   cairo_restore (cr);
   gtk_style_context_restore (context);

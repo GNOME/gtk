@@ -3937,8 +3937,8 @@ gtk_entry_draw_progress (GtkWidget       *widget,
     return;
  
   gtk_entry_prepare_context_for_progress (entry, context);
-  gtk_render_activity (context, cr,
-                       x, y, width, height);
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
 
   gtk_style_context_restore (context);
 }

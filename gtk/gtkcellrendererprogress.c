@@ -626,15 +626,16 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       clip.y = bar_position;
     }
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
-
   if (bar_size > 0)
-    gtk_render_activity (context, cr,
-                         clip.x, clip.y,
-                         clip.width, clip.height);
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
 
-  gtk_style_context_restore (context);
+      gtk_render_background (context, cr, clip.x, clip.y, clip.width, clip.height);
+      gtk_render_frame (context, cr, clip.x, clip.y, clip.width, clip.height);
+
+      gtk_style_context_restore (context);
+    }
 
   if (priv->label)
     {
