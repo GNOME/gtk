@@ -213,7 +213,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
   priv->group = g_slist_prepend (NULL, radio_button);
 
   _gtk_button_set_depressed (GTK_BUTTON (radio_button), TRUE);
-  gtk_widget_set_state_flags (GTK_WIDGET (radio_button), GTK_STATE_FLAG_ACTIVE, TRUE);
+  gtk_widget_set_state_flags (GTK_WIDGET (radio_button), GTK_STATE_FLAG_CHECKED, TRUE);
 }
 
 static void
@@ -765,7 +765,6 @@ gtk_radio_button_clicked (GtkButton *button)
   GtkRadioButtonPrivate *priv = radio_button->priv;
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButton *tmp_button;
-  GtkStateFlags new_state = 0;
   GSList *tmp_list;
   gint toggled;
   gboolean depressed;
@@ -773,10 +772,6 @@ gtk_radio_button_clicked (GtkButton *button)
   toggled = FALSE;
 
   g_object_ref (GTK_WIDGET (button));
-
-  new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) &
-    ~(GTK_STATE_FLAG_PRELIGHT |
-      GTK_STATE_FLAG_ACTIVE);
 
   if (gtk_toggle_button_get_active (toggle_button))
     {
@@ -795,21 +790,11 @@ gtk_radio_button_clicked (GtkButton *button)
 	  tmp_button = NULL;
 	}
 
-      if (!tmp_button)
-	{
-          if (button->priv->in_button)
-            new_state |= GTK_STATE_FLAG_PRELIGHT;
-
-	  new_state |= GTK_STATE_FLAG_ACTIVE;
-	}
-      else
+      if (tmp_button)
 	{
 	  toggled = TRUE;
           _gtk_toggle_button_set_active (toggle_button,
                                          !gtk_toggle_button_get_active (toggle_button));
-
-	  if (button->priv->in_button)
-	    new_state |= GTK_STATE_FLAG_PRELIGHT;
 	}
     }
   else
@@ -830,11 +815,6 @@ gtk_radio_button_clicked (GtkButton *button)
 	      break;
 	    }
 	}
-
-      if (button->priv->in_button)
-        new_state |= GTK_STATE_FLAG_PRELIGHT;
-
-      new_state |= GTK_STATE_FLAG_ACTIVE;
     }
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
@@ -844,11 +824,13 @@ gtk_radio_button_clicked (GtkButton *button)
   else
     depressed = gtk_toggle_button_get_active (toggle_button);
 
-  if (gtk_widget_get_state_flags (GTK_WIDGET (button)) != new_state)
-    gtk_widget_set_state_flags (GTK_WIDGET (button), new_state, TRUE);
-
   if (toggled)
     {
+      if (gtk_toggle_button_get_active (toggle_button))
+        gtk_widget_set_state_flags (GTK_WIDGET (button), GTK_STATE_FLAG_CHECKED, FALSE);
+      else
+        gtk_widget_unset_state_flags (GTK_WIDGET (button), GTK_STATE_FLAG_CHECKED);
+
       gtk_toggle_button_toggled (toggle_button);
 
       g_object_notify (G_OBJECT (toggle_button), "active");
@@ -897,17 +879,17 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
   state &= ~(GTK_STATE_FLAG_INCONSISTENT |
              GTK_STATE_FLAG_ACTIVE |
-             GTK_STATE_FLAG_SELECTED |
+             GTK_STATE_FLAG_CHECKED |
              GTK_STATE_FLAG_PRELIGHT);
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
     state |= GTK_STATE_FLAG_INCONSISTENT;
   else if (gtk_toggle_button_get_active (toggle_button))
-    state |= GTK_STATE_FLAG_ACTIVE;
+    state |= GTK_STATE_FLAG_CHECKED;
 
   if (button->priv->activate_timeout ||
       (button->priv->button_down && button->priv->in_button))
-    state |= GTK_STATE_FLAG_SELECTED;
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   if (button->priv->in_button && !(state & GTK_STATE_FLAG_INSENSITIVE))
     state |= GTK_STATE_FLAG_PRELIGHT;

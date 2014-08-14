@@ -288,20 +288,21 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     @include button(hover);
     -gtk-image-effect: highlight;
   }
-  &:active, &.flat:active {
+  &:active, &.flat:active,
+  &:checked, &.flat:checked {
     @include button(active);
     transition-duration: 50ms;
   }
   &:backdrop {
     @include button(backdrop);
     -gtk-image-effect: none;
-    &:active {
+    &:active, &:checked {
       @include button(backdrop-active);
     }
     &:insensitive {
       @include button(backdrop-insensitive);
     }
-    &:insensitive:active {
+    &:insensitive:active, &:insensitive:checked {
       @include button(backdrop-insensitive-active);
     }
   }
@@ -311,7 +312,8 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   //}
   &:insensitive {
     @include button(insensitive);
-    &:active, &.flat:active {
+    &:active, &.flat:active,
+    &:checked, &.flat:checked {
       @include button(insensitive-active);
     }
   }
@@ -328,7 +330,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     icon-shadow: none;
     @include button(osd);
     &:hover { @include button(osd-hover); }
-    &:active { @include button(osd-active); }
+    &:active, &:checked { @include button(osd-active); }
     &:insensitive { @include button(osd-insensitive); }
     &:backdrop { @include button(osd-backdrop); }
   }
@@ -345,7 +347,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       @include button(osd-hover);
       @extend %linked;
     }
-    &:active {
+    &:active, &:checked {
       @include button(osd-active);
       @extend %linked;
     }
@@ -367,7 +369,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       &:hover {
         @include button(hover,$b_color, white);
       }
-      &:active {
+      &:active, &:checked {
         @include button(active,$b_color, white);
       }
       &:backdrop {
@@ -441,7 +443,9 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       }
     }
     &.needs-attention:active > GtkLabel,
-    &.needs-attention:active > GtkImage {
+    &.needs-attention:active > GtkImage,
+    &.needs-attention:checked > GtkLabel,
+    &.needs-attention:checked > GtkImage {
       animation: none;
       background-image: none;
     }
@@ -462,11 +466,13 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   .linked &,
   .linked &:hover,
   .linked &:active,
+  .linked &:checked,
   .linked &:backdrop { @extend %linked; }
 
   .linked.vertical &,
   .linked.vertical &:hover,
   .linked.vertical &:active,
+  .linked.vertical &:checked,
   .linked.vertical &:backdrop { @extend %linked_vertical; }
 
 }
@@ -479,12 +485,16 @@ $_dot_color: if($variant=='light', $selected_bg_color,
                                           // in this case, hence $noedge
   &:hover { @include button(hover, $noedge: true); }
   &:active { @include button(active, $noedge:true); }
+  &:checked{ @include button(active, $noedge:true); }
   &:insensitive { @include button(insensitive, $noedge:true); }
   &:insensitive:active { @include button(insensitive-active, $noedge:true); }
+  &:insensitive:checked { @include button(insensitive-active, $noedge:true); }
   &:backdrop { @include button(backdrop); };
   &:backdrop:active { @include button(backdrop-active); }
+  &:backdrop:checked { @include button(backdrop-active); }
   &:backdrop:insensitive { @include button(backdrop-insensitive); }
   &:backdrop:insensitive:active { @include button(backdrop-insensitive-active);}
+  &:backdrop:insensitive:checked { @include button(backdrop-insensitive-active);}
 }
 .inline-toolbar.toolbar GtkToolButton { // .inline-toolbar.toolbar here for
                                         // higher specificity than the previous
@@ -587,7 +597,7 @@ GtkColorButton.button {
   color: $selected_bg_color; //FIXME use a proper color
   @extend %undecorated_button;
   text-shadow: none;
-  &:hover, &:active {
+  &:hover, &:active, &:checked {
     @extend %undecorated_button;
     color: mix($fg_color, $selected_bg_color, 40%); //FIXME same here
     text-shadow: none;
@@ -1625,7 +1635,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   //standard checks and radios
   @each $s,$as in ('','-unchecked'),
                   (':hover', '-unchecked-hover'),
-                  (':selected', '-unchecked-active'),
+                  (':active', '-unchecked-active'),
                   (':insensitive','-unchecked-insensitive'),
                   (':backdrop', '-unchecked-backdrop'),
                   (':backdrop:insensitive', '-unchecked-backdrop-insensitive'),
@@ -1635,12 +1645,12 @@ $asset_suffix: if($variant=='dark', '-dark', '');
                   (':inconsistent:backdrop', '-mixed-backdrop'),
                   (':inconsistent:insensitive', '-mixed-insensitive'),
                   (':inconsistent:insensitive:backdrop', '-mixed-backdrop-insensitive'),
-                  (':active', '-checked'),
-                  (':active:insensitive','-checked-insensitive'),
-                  (':hover:active', '-checked-hover'),
-                  (':active:selected', '-checked-active'),
-                  (':backdrop:active', '-checked-backdrop'),
-                  (':backdrop:active:insensitive', '-checked-backdrop-insensitive') {
+                  (':checked', '-checked'),
+                  (':checked:insensitive','-checked-insensitive'),
+                  (':checked:hover', '-checked-hover'),
+                  (':checked:active', '-checked-active'),
+                  (':backdrop:checked', '-checked-backdrop'),
+                  (':backdrop:checked:insensitive', '-checked-backdrop-insensitive') {
     .#{$w}#{$s} {
       -gtk-icon-source: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
                                     url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));

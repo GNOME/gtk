@@ -549,22 +549,18 @@ get_button_state (GtkModelButton *model_button)
 
   state &= ~(GTK_STATE_FLAG_INCONSISTENT |
              GTK_STATE_FLAG_ACTIVE |
-             GTK_STATE_FLAG_SELECTED |
+             GTK_STATE_FLAG_CHECKED |
              GTK_STATE_FLAG_PRELIGHT);
 
-  if (model_button->toggled ||
-      (button->priv->button_down && button->priv->in_button))
-    state |= GTK_STATE_FLAG_ACTIVE;
+  if (model_button->toggled && !model_button->has_submenu)
+    state |= GTK_STATE_FLAG_CHECKED;
 
   if (button->priv->activate_timeout ||
       (button->priv->button_down && button->priv->in_button))
-    state |= GTK_STATE_FLAG_SELECTED;
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   if (button->priv->in_button)
     state |= GTK_STATE_FLAG_PRELIGHT;
-
-  if (model_button->has_submenu)
-    state &= ~GTK_STATE_FLAG_ACTIVE;
 
   return state;
 }

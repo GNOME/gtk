@@ -561,17 +561,16 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 
   state &= ~(GTK_STATE_FLAG_INCONSISTENT |
              GTK_STATE_FLAG_ACTIVE |
-             GTK_STATE_FLAG_SELECTED |
+             GTK_STATE_FLAG_CHECKED |
              GTK_STATE_FLAG_PRELIGHT);
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
     state |= GTK_STATE_FLAG_INCONSISTENT;
-  else if (gtk_toggle_button_get_active (toggle_button) ||
-           (button->priv->button_down && button->priv->in_button))
-    state |= GTK_STATE_FLAG_ACTIVE;
+  else if (gtk_toggle_button_get_active (toggle_button))
+    state |= GTK_STATE_FLAG_CHECKED;
 
   if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
-    state |= GTK_STATE_FLAG_SELECTED;
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   if (button->priv->in_button)
     state |= GTK_STATE_FLAG_PRELIGHT;

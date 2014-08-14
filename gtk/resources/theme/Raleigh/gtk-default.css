@@ -157,7 +157,7 @@ GtkTreeView.dnd {
   border-width: 2px;
 }
 
-.button:active {
+.button:active, .button:checked {
   background-color: shade (@bg_color, 0.7);
   border-style: inset;
 }
@@ -239,20 +239,20 @@ GtkRadioButton:selected {
   border-color: @fg_color;
 }
 
-.check:active, .radio:active,
+.check:checked, .radio:checked,
 .check:hover, .radio:hover {
   background-color: @base_color;
   border-color: @fg_color;
   color: @text_color;
 }
 
-.check:selected, .radio:selected {
+.check:active, .radio:active {
   background-color: darker (@bg_color);
   color: @selected_fg_color;
   border-color: @selected_fg_color;
 }
 
-.check:selected:focused, .radio:selected:focused {
+.check:active:focused, .radio:active:focused {
   background-color: @selected_bg_color;
 }
 

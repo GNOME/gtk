@@ -386,12 +386,12 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   if (!priv->activatable)
     state |= GTK_STATE_FLAG_INSENSITIVE;
 
-  state &= ~(GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_ACTIVE);
+  state &= ~(GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_CHECKED);
 
   if (priv->inconsistent)
     state |= GTK_STATE_FLAG_INCONSISTENT;
   else if (priv->active)
-    state |= GTK_STATE_FLAG_ACTIVE;
+    state |= GTK_STATE_FLAG_CHECKED;
 
   cairo_save (cr);
 
