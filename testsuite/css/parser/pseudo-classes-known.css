@@ -49,3 +49,7 @@
 :visited {
   color: red;
 }
+
+:checked {
+  color: red;
+}

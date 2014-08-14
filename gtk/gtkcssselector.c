@@ -1111,7 +1111,8 @@ gtk_css_selector_pseudoclass_state_print (const GtkCssSelector *selector,
     "dir(ltr)",
     "dir(rtl)",
     "link",
-    "visited"
+    "visited",
+    "checked"
   };
   guint i, state;
 
@@ -1831,7 +1832,8 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "dir(ltr)",     GTK_STATE_FLAG_DIR_LTR, },
     { "dir(rtl)",     GTK_STATE_FLAG_DIR_RTL, },
     { "link",         GTK_STATE_FLAG_LINK, },
-    { "visited",      GTK_STATE_FLAG_VISITED, }
+    { "visited",      GTK_STATE_FLAG_VISITED, },
+    { "checked",      GTK_STATE_FLAG_CHECKED, }
   };
   guint i;
 

@@ -856,6 +856,7 @@ typedef enum
  * @GTK_STATE_FLAG_DIR_RTL: Widget is in right-to-left text direction. Since 3.8
  * @GTK_STATE_FLAG_LINK: Widget is a link. Since 3.12
  * @GTK_STATE_FLAG_VISITED: The location the widget points to has already been visited. Since 3.12
+ * @GTK_STATE_FLAG_CHECKED: Widget is checked. Since 3.14
  *
  * Describes a widget state. Widget states are used to match the widget
  * against CSS pseudo-classes. Note that GTK extends the regular CSS
@@ -874,7 +875,8 @@ typedef enum
   GTK_STATE_FLAG_DIR_LTR      = 1 << 7,
   GTK_STATE_FLAG_DIR_RTL      = 1 << 8,
   GTK_STATE_FLAG_LINK         = 1 << 9,
-  GTK_STATE_FLAG_VISITED      = 1 << 10
+  GTK_STATE_FLAG_VISITED      = 1 << 10,
+  GTK_STATE_FLAG_CHECKED      = 1 << 11
 } GtkStateFlags;
 
 /**
