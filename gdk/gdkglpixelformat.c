@@ -541,22 +541,124 @@ gdk_gl_pixel_format_get_ ## FieldName (GdkGLPixelFormat *format) \
  */
 GDK_GL_PIXEL_FORMAT_GET (gboolean, double_buffer, FALSE)
 
+/**
+ * gdk_gl_pixel_format_get_multi_sample:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:multi-sample property.
+ *
+ * Returns: %TRUE if the pixel format supports multi-sampling
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gboolean, multi_sample, FALSE)
 
+/**
+ * gdk_gl_pixel_format_get_stereo:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:stereo property.
+ *
+ * Returns: %TRUE if the pixel format supports stereoscopic buffers
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gboolean, stereo, FALSE)
 
+/**
+ * gdk_gl_pixel_format_get_color_size:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:color-size property.
+ *
+ * Returns: the size of the RGB components of the color buffer
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gint, color_size, 0)
 
+/**
+ * gdk_gl_pixel_format_get_alpha_size:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:alpha-size property.
+ *
+ * Returns: the size of the alpha component of the color buffer
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gint, alpha_size, 0)
 
+/**
+ * gdk_gl_pixel_format_get_depth_size:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:depth-size property.
+ *
+ * Returns: the size of the depth buffer
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gint, depth_size, 0)
 
+/**
+ * gdk_gl_pixel_format_get_stencil_size:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:stencil-size property.
+ *
+ * Returns: the size of the stencil buffer
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gint, stencil_size, 0)
 
+/**
+ * gdk_gl_pixel_format_get_aux_buffers:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:aux-buffers property.
+ *
+ * Returns: the number of auxiliary buffers.
+ *
+ * Since: 3.14
+ */
+GDK_GL_PIXEL_FORMAT_GET (gint, aux_buffers, 0);
+
+/**
+ * gdk_gl_pixel_format_get_accum_size:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:accum-size property.
+ *
+ * Returns: the size of the accumulation buffers
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gint, accum_size, 0)
 
+/**
+ * gdk_gl_pixel_format_get_sample_buffers:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:sample-buffers property.
+ *
+ * Returns: the number of multi-sample buffers
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gint, sample_buffers, 0)
 
+/**
+ * gdk_gl_pixel_format_get_samples:
+ * @format: a #GdkGLPixelFormat
+ *
+ * Retrieves the value of the #GdkGLPixelFormat:samples property.
+ *
+ * Returns: the number of samples for each multi-sample buffer
+ *
+ * Since: 3.14
+ */
 GDK_GL_PIXEL_FORMAT_GET (gint, samples, 0)
 
 #undef GDK_GL_PIXEL_FORMAT_GET
