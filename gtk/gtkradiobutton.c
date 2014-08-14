@@ -212,7 +212,6 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 
   priv->group = g_slist_prepend (NULL, radio_button);
 
-  _gtk_button_set_depressed (GTK_BUTTON (radio_button), TRUE);
   gtk_widget_set_state_flags (GTK_WIDGET (radio_button), GTK_STATE_FLAG_CHECKED, TRUE);
 }
 
@@ -767,7 +766,6 @@ gtk_radio_button_clicked (GtkButton *button)
   GtkToggleButton *tmp_button;
   GSList *tmp_list;
   gint toggled;
-  gboolean depressed;
 
   toggled = FALSE;
 
@@ -817,13 +815,6 @@ gtk_radio_button_clicked (GtkButton *button)
 	}
     }
 
-  if (gtk_toggle_button_get_inconsistent (toggle_button))
-    depressed = FALSE;
-  else if (button->priv->in_button && button->priv->button_down)
-    depressed = !gtk_toggle_button_get_active (toggle_button);
-  else
-    depressed = gtk_toggle_button_get_active (toggle_button);
-
   if (toggled)
     {
       if (gtk_toggle_button_get_active (toggle_button))
@@ -835,8 +826,6 @@ gtk_radio_button_clicked (GtkButton *button)
 
       g_object_notify (G_OBJECT (toggle_button), "active");
     }
-
-  _gtk_button_set_depressed (button, depressed);
 
   gtk_widget_queue_draw (GTK_WIDGET (button));
 

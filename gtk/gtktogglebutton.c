@@ -651,7 +651,6 @@ gtk_toggle_button_update_state (GtkButton *button)
 {
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButtonPrivate *priv = toggle_button->priv;
-  gboolean depressed;
   GtkStateFlags new_state = 0;
 
   new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) &
@@ -671,13 +670,5 @@ gtk_toggle_button_update_state (GtkButton *button)
   if (button->priv->in_button)
     new_state |= GTK_STATE_FLAG_PRELIGHT;
 
-  if (priv->inconsistent)
-    depressed = FALSE;
-  else if (button->priv->in_button && button->priv->button_down)
-    depressed = TRUE;
-  else
-    depressed = priv->active;
-
-  _gtk_button_set_depressed (button, depressed);
   gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), new_state, TRUE);
 }

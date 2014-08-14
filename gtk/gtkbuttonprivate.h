@@ -53,7 +53,6 @@ struct _GtkButtonPrivate
   guint          align_set             : 1;
   guint          button_down           : 1;
   guint          constructed           : 1;
-  guint          depressed             : 1;
   guint          depress_on_activate   : 1;
   guint          focus_on_click        : 1;
   guint          image_is_stock        : 1;
@@ -63,9 +62,6 @@ struct _GtkButtonPrivate
   guint          use_underline         : 1;
   guint          always_show_image     : 1;
 };
-
-void _gtk_button_set_depressed             (GtkButton          *button,
-                                            gboolean            depressed);
 
 
 G_END_DECLS

@@ -628,7 +628,6 @@ gtk_button_init (GtkButton *button)
   priv->button_down = FALSE;
   priv->use_stock = FALSE;
   priv->use_underline = FALSE;
-  priv->depressed = FALSE;
   priv->depress_on_activate = TRUE;
   priv->focus_on_click = TRUE;
 
@@ -1784,7 +1783,6 @@ gtk_button_draw (GtkWidget *widget,
 		 cairo_t   *cr)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
   gint x, y;
   gint width, height;
   GtkBorder default_border;
@@ -2445,31 +2443,6 @@ gtk_button_get_alignment (GtkButton *button,
     *yalign = priv->yalign;
 }
 
-/**
- * _gtk_button_set_depressed:
- * @button: a #GtkButton
- * @depressed: %TRUE if the button should be drawn with a recessed shadow.
- *
- * Sets whether the button is currently drawn as down or not. This is 
- * purely a visual setting, and is meant only for use by derived widgets
- * such as #GtkToggleButton.
- **/
-void
-_gtk_button_set_depressed (GtkButton *button,
-			   gboolean   depressed)
-{
-  GtkWidget *widget = GTK_WIDGET (button);
-  GtkButtonPrivate *priv = button->priv;
-
-  depressed = depressed != FALSE;
-
-  if (depressed != priv->depressed)
-    {
-      priv->depressed = depressed;
-      gtk_widget_queue_resize (widget);
-    }
-}
-
 static void
 gtk_button_enter_leave (GtkButton *button)
 {
@@ -2498,7 +2471,6 @@ gtk_button_update_state (GtkButton *button)
   if (depressed)
     new_state |= GTK_STATE_FLAG_ACTIVE;
 
-  _gtk_button_set_depressed (button, depressed);
   gtk_widget_set_state_flags (GTK_WIDGET (button), new_state, TRUE);
 }
 
