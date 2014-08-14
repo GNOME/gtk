@@ -35,6 +35,92 @@
  *
  * A #GdkGLContext has to be associated with a #GdkWindow and
  * made "current", otherwise any OpenGL call will be ignored.
+ *
+ * ## Creating a new OpenGL context ##
+ *
+ * In order to create a new #GdkGLContext instance you need a
+ * #GdkGLPixelFormat instance and a #GdkDisplay.
+ *
+ * The #GdkGLPixelFormat class contains configuration option that
+ * you require from the windowing system to be available on the
+ * #GdkGLContext.
+ *
+ * |[<!-- language="C" -->
+ *   GdkGLPixelFormat *format;
+ *
+ *   format = gdk_gl_pixel_format_new ("double-buffer", TRUE,
+ *                                     "depth-size", 32,
+ *                                     NULL);
+ * ]|
+ *
+ * The example above will create a pixel format with double buffering
+ * and a depth buffer size of 32 bits.
+ *
+ * You can either choose to validate the pixel format, in case you
+ * have the ability to change your drawing code depending on it, or
+ * just ask the #GdkDisplay to create the #GdkGLContext with it, which
+ * will implicitly validate the pixel format and return an error if it
+ * could not find an OpenGL context that satisfied the requirements
+ * of the pixel format:
+ *
+ * |[<!-- language="C" -->
+ *   GError *error = NULL;
+ *
+ *   // the "display" variable has been set elsewhere
+ *   GdkGLContext *context =
+ *     gdk_display_create_gl_context (display, format, &error);
+ *
+ *   if (error != NULL)
+ *     {
+ *       // handle error condition
+ *     }
+ *
+ *   // you can release the reference on the pixel format at
+ *   // this point
+ *   g_object_unref (format);
+ * ]|
+ *
+ * ## Using a GdkGLContext ##
+ *
+ * In order to use a #GdkGLContext to draw with OpenGL commands
+ * on a #GdkWindow, it's necessary to bind the context to the
+ * window:
+ *
+ * |[<!-- language="C" -->
+ *   // associates the window to the context
+ *   gdk_gl_context_set_window (context, window);
+ * ]|
+ *
+ * This ensures that the #GdkGLContext can refer to the #GdkWindow,
+ * as well as the #GdkWindow can present the result of the OpenGL
+ * commands.
+ *
+ * You will also need to make the #GdkGLContext the current context
+ * before issuing OpenGL calls; the system sends OpenGL commands to
+ * whichever context is current. It is possible to have multiple
+ * contexts, so you always need to ensure that the one which you
+ * want to draw with is the current one before issuing commands:
+ *
+ * |[<!-- language="C" -->
+ *   gdk_gl_context_make_current (context);
+ * ]|
+ *
+ * You can now perform your drawing using OpenGL commands.
+ *
+ * Once you finished drawing your frame, and you want to present the
+ * result on the window bound to the #GdkGLContext, you should call
+ * gdk_gl_context_flush_buffer().
+ *
+ * If the #GdkWindow bound to the #GdkGLContext changes size, you
+ * will need to call gdk_gl_context_update() to ensure that the OpenGL
+ * viewport is kept in sync with the size of the window.
+ *
+ * You can detach the currently bound #GdkWindow from a #GdkGLContext
+ * by using gdk_gl_context_set_window() with a %NULL argument.
+ *
+ * You can check which #GdkGLContext is the current one by using
+ * gdk_gl_context_get_current(); you can also unset any #GdkGLContext
+ * that is currently set by calling gdk_gl_context_clear_current().
  */
 
 #include "config.h"
@@ -229,7 +315,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:visual:
    *
-   * The #GdkVisual used by the context.
+   * The #GdkVisual matching the #GdkGLPixelFormat used by the context.
    *
    * Since: 3.14
    */

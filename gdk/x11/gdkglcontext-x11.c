@@ -540,6 +540,7 @@ gdk_x11_display_create_gl_context (GdkDisplay        *display,
                                    GdkGLContext      *share,
                                    GError           **error)
 {
+  GdkGLPixelFormat *valid_format;
   GdkX11GLContext *context;
   GdkVisual *gdk_visual;
   GLXFBConfig config;
@@ -553,11 +554,11 @@ gdk_x11_display_create_gl_context (GdkDisplay        *display,
   unsigned long mask;
   Display *dpy;
 
-  if (!gdk_x11_display_validate_gl_pixel_format (display, format, error))
+  if (!gdk_x11_display_validate_gl_pixel_format (display, format, NULL, error))
     return NULL;
 
-  /* if validation succeeded, then we don't need to check for the result
-   * here
+  /* if validation succeeded, then we don't need to check for the
+   * result here: we know the pixel format has a valid GLXFBConfig
    */
   find_fbconfig_for_pixel_format (display, format, &config, &xvisinfo, NULL);
 
@@ -648,9 +649,17 @@ gdk_x11_display_create_gl_context (GdkDisplay        *display,
                      is_direct ? "direct" : "indirect",
                      (unsigned long) dummy_xwin));
 
+  /* the GdkGLContext holds a reference on the pixel format
+   * that is used to create it, not the one that the user
+   * passed; this allows the user to query the pixel format
+   * attributes
+   */
+  valid_format = g_object_new (GDK_TYPE_GL_PIXEL_FORMAT, NULL);
+  update_pixel_format (display, valid_format, config);
+
   context = g_object_new (GDK_X11_TYPE_GL_CONTEXT,
                           "display", display,
-                          "pixel-format", format,
+                          "pixel-format", valid_format,
                           "visual", gdk_visual,
                           NULL);
 
@@ -767,6 +776,7 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
 gboolean
 gdk_x11_display_validate_gl_pixel_format (GdkDisplay        *display,
                                           GdkGLPixelFormat  *format,
+                                          GdkGLPixelFormat **validated_format,
                                           GError           **error)
 {
   GLXFBConfig config;
@@ -795,10 +805,17 @@ gdk_x11_display_validate_gl_pixel_format (GdkDisplay        *display,
   if (!find_fbconfig_for_pixel_format (display, format, &config, NULL, error))
     return FALSE;
 
-  /* update the pixel format with the values of the
-   * configuration we found
-   */
-  update_pixel_format (display, format, config);
+  if (validated_format != NULL)
+    {
+      GdkGLPixelFormat *valid = g_object_new (GDK_TYPE_GL_PIXEL_FORMAT, NULL);
+
+      /* update the pixel format with the values of the
+       * configuration we found
+       */
+      update_pixel_format (display, valid, config);
+
+      *validated_format = valid;
+    }
 
   return TRUE;
 }

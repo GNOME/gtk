@@ -56,10 +56,11 @@
  *
  * |[<!-- language="C" -->
  *   GError *error = NULL;
+ *   GdkGLPixelFormat *valid = NULL;
  *
  *   // The "display" variable is set elsewhere.
  *   // The "format" variable is the one we set previously.
- *   if (!gdk_display_validate_gl_pixel_format (display, format, &error))
+ *   if (!gdk_display_validate_gl_pixel_format (display, format, &valid, &error))
  *     {
  *       // print "error" or create a new pixel format to validate
  *     }
@@ -72,11 +73,13 @@
  *   GdkGLContext *context;
  *   GError *error = NULL;
  *
- *   context = gdk_display_get_gl_context (display, format, NULL, &error);
+ *   context = gdk_display_create_gl_context (display, format, &error);
  *   if (error != NULL)
  *     {
  *       // print error
  *     }
+ *
+ *   g_object_unref (format);
  * ]|
  *
  * Once a #GdkGLContext has been created with a #GdkGLPixelFormat, the

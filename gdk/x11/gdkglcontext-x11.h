@@ -61,6 +61,7 @@ struct _GdkX11GLContextClass
 gboolean        gdk_x11_display_init_gl                         (GdkDisplay        *display);
 gboolean        gdk_x11_display_validate_gl_pixel_format        (GdkDisplay        *display,
                                                                  GdkGLPixelFormat  *format,
+                                                                 GdkGLPixelFormat **validated_format,
                                                                  GError           **error);
 GdkGLContext *  gdk_x11_display_create_gl_context               (GdkDisplay        *display,
                                                                  GdkGLPixelFormat  *format,

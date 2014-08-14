@@ -236,6 +236,7 @@ struct _GdkDisplayClass
                                                      GdkGLContext      *context);
   gboolean              (*validate_gl_pixel_format) (GdkDisplay        *display,
                                                      GdkGLPixelFormat  *format,
+                                                     GdkGLPixelFormat **valid_format,
                                                      GError           **error);
 
   /* Signals */
@@ -318,10 +319,7 @@ GdkWindow *         _gdk_display_create_window        (GdkDisplay       *display
 
 gboolean            gdk_display_validate_gl_pixel_format (GdkDisplay        *display,
                                                           GdkGLPixelFormat  *format,
-                                                          GError           **error);
-GdkGLContext *      gdk_display_create_gl_context        (GdkDisplay        *display,
-                                                          GdkGLPixelFormat  *format,
-                                                          GdkGLContext      *share,
+                                                          GdkGLPixelFormat **validated_format,
                                                           GError           **error);
 void                gdk_display_destroy_gl_context       (GdkDisplay        *display,
                                                           GdkGLContext      *context);

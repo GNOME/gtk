@@ -143,9 +143,9 @@
  *
  *     // create a GdkGLContext that has shared texture namespace
  *     // and display lists with a given context
- *     return gdk_display_get_gl_context (display, format,
- *                                        shared_context,
- *                                        NULL);
+ *     return gdk_display_create_shared_gl_context (display, format,
+ *                                                  shared_context,
+ *                                                  NULL);
  *   }
  * ]|
  *
@@ -375,7 +375,7 @@ gtk_gl_area_real_create_context (GtkGLArea        *area,
   if (display == NULL)
     display = gdk_display_get_default ();
 
-  retval = gdk_display_get_gl_context (display, format, NULL, &error);
+  retval = gdk_display_create_gl_context (display, format, &error);
   if (error != NULL)
     {
       g_critical ("Unable to create a GdkGLContext: %s", error->message);
@@ -419,6 +419,10 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * The #GdkGLPixelFormat used for creating the #GdkGLContext
    * to be used by the #GtkGLArea widget.
+   *
+   * If you want to query the effective pixel format used by
+   * the #GdkGLContext, you should get the #GtkGLArea:context and
+   * call gdk_gl_context_get_pixel_format().
    *
    * Since: 3.14
    */

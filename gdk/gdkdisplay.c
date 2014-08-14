@@ -2227,27 +2227,6 @@ gdk_error_trap_pop (void)
 }
 
 /*< private >
- * gdk_display_create_gl_context:
- * @display: a #GdkDisplay
- * @format: a #GdkGLPixelFormat
- * @share: (optional): an optional shared #GdkGLContext
- * @error: return location for a #GError
- *
- * Creates a new platform-specific #GdkGLContext for the
- * given @display and @format.
- *
- * Returns: (transfer full): the newly created #GdkGLContext
- */
-GdkGLContext *
-gdk_display_create_gl_context (GdkDisplay        *display,
-                               GdkGLPixelFormat  *format,
-                               GdkGLContext      *share,
-                               GError           **error)
-{
-  return GDK_DISPLAY_GET_CLASS (display)->create_gl_context (display, format, share, error);
-}
-
-/*< private >
  * gdk_display_destroy_gl_context:
  * @display: a #GdkDisplay
  * @context: a #GdkGLContext
@@ -2313,9 +2292,14 @@ gdk_display_get_current_gl_context (GdkDisplay *display)
  * gdk_display_validate_gl_pixel_format:
  * @display: a #GdkDisplay
  * @format: a #GdkGLPixelFormat
+ * @validated_format: (out callee-allocates) (transfer full) (optional): return location for
+ *   the validated #GdkGLPixelFormat
  * @error: return location for a #GError
  *
  * Validates a #GdkGLPixelFormat for the given display.
+ *
+ * If the pixel format is valid, and @validated_format is not %NULL, the
+ * validated pixel format will be stored into @validated_format.
  *
  * If the pixel format is invalid, @error will be set.
  *
@@ -2326,23 +2310,26 @@ gdk_display_get_current_gl_context (GdkDisplay *display)
 gboolean
 gdk_display_validate_gl_pixel_format (GdkDisplay        *display,
                                       GdkGLPixelFormat  *format,
+                                      GdkGLPixelFormat **validated_format,
                                       GError           **error)
 {
-  return GDK_DISPLAY_GET_CLASS (display)->validate_gl_pixel_format (display, format, error);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (GDK_IS_GL_PIXEL_FORMAT (format), FALSE);
+  g_return_val_if_fail (validated_format == NULL || *validated_format == NULL, FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->validate_gl_pixel_format (display,
+                                                                    format, validated_format,
+                                                                    error);
 }
 
 /**
- * gdk_display_get_gl_context:
+ * gdk_display_create_gl_context:
  * @display: a #GdkDisplay
  * @format: a #GdkGLPixelFormat
- * @share: (optional): a shared #GdkGLContext, or %NULL
  * @error: return location for a #GError
  *
  * Creates a new #GdkGLContext for the given display, with the given
  * pixel format.
- *
- * If @share is not %NULL then the newly created #GdkGLContext will
- * share resources with it.
  *
  * If the @format is invalid, or in case the creation of the #GdkGLContext
  * failed, @error will be set.
@@ -2353,15 +2340,48 @@ gdk_display_validate_gl_pixel_format (GdkDisplay        *display,
  * Since: 3.14
  */
 GdkGLContext *
-gdk_display_get_gl_context (GdkDisplay        *display,
-                            GdkGLPixelFormat  *format,
-                            GdkGLContext      *share,
-                            GError           **error)
+gdk_display_create_gl_context (GdkDisplay        *display,
+                               GdkGLPixelFormat  *format,
+                               GError           **error)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_GL_PIXEL_FORMAT (format), NULL);
-  g_return_val_if_fail (share == NULL || GDK_IS_GL_CONTEXT (share), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return gdk_display_create_gl_context (display, format, share, error);
+  return GDK_DISPLAY_GET_CLASS (display)->create_gl_context (display, format, NULL, error);
+}
+
+/**
+ * gdk_display_create_shared_gl_context:
+ * @display: a #GdkDisplay
+ * @format: a #GdkGLPixelFormat
+ * @shared_context: shared #GdkGLContext
+ * @error: return location for a #GError
+ *
+ * Creates a new #GdkGLContext for the given display, with the given
+ * pixel format; the newly created #GdkGLContext will share resources
+ * like the texture namespace and display lists with @shared_context.
+ *
+ * If the @format is invalid, or in case the creation of the #GdkGLContext
+ * failed, @error will be set.
+ *
+ * Returns: (transfer full): the newly created #GdkGLContext, or
+ *   %NULL on error
+ *
+ * Since: 3.14
+ */
+GdkGLContext *
+gdk_display_create_shared_gl_context (GdkDisplay        *display,
+                                      GdkGLPixelFormat  *format,
+                                      GdkGLContext      *shared_context,
+                                      GError           **error)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_GL_PIXEL_FORMAT (format), NULL);
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (shared_context), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->create_gl_context (display, format,
+                                                             shared_context,
+                                                             error);
 }
