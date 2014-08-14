@@ -346,13 +346,15 @@ connect_signals (GtkBuilder    *builder,
                  const gchar   *handler_name,
                  GObject       *connect_object,
                  GConnectFlags  flags,
-                 gpointer       directory)
+                 gpointer       user_data)
 {
   ReftestModule *module;
+  const char *directory;
   GCallback func;
   GClosure *closure;
   char **split;
 
+  directory = user_data;
   split = g_strsplit (handler_name, ":", -1);
 
   switch (g_strv_length (split))
