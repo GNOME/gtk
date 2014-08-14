@@ -1240,6 +1240,7 @@ broadway_server_new (char *address, int port, GError **error)
 					    error))
 	{
 	  g_prefix_error (error, "Unable to listen to port %d: ", server->port);
+	  g_object_unref (server);
 	  return NULL;
 	}
     }
@@ -1249,6 +1250,7 @@ broadway_server_new (char *address, int port, GError **error)
       if (inet_address == NULL)
 	{
 	  g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "Invalid ip address %s: ", address);
+	  g_object_unref (server);
 	  return NULL;
 	}
       socket_address = g_inet_socket_address_new (inet_address, port);
@@ -1263,6 +1265,7 @@ broadway_server_new (char *address, int port, GError **error)
 	{
 	  g_prefix_error (error, "Unable to listen to %s:%d: ", server->address, server->port);
 	  g_object_unref (socket_address);
+	  g_object_unref (server);
 	  return NULL;
 	}
       g_object_unref (socket_address);
