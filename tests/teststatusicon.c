@@ -19,6 +19,7 @@
  *	Mark McLoughlin <mark@skynet.ie>
  */
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
 #include <gtk/gtk.h>
 #include <stdlib.h>
 

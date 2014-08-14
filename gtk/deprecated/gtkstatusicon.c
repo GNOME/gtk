@@ -30,6 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
 #include "gtkstatusicon.h"
 
 #include "gtkintl.h"
@@ -81,6 +82,9 @@
  * Note that a GtkStatusIcon is not a widget, but just
  * a #GObject. Making it a widget would be impractical, since the system tray
  * on Win32 doesn’t allow to embed arbitrary widgets.
+ *
+ * GtkStatusIcon has been deprecated in 3.16. You should consider using
+ * notifications or more modern platform-specific APIs instead.
  */
 
 
@@ -1055,9 +1059,7 @@ gtk_status_icon_set_property (GObject      *object,
       gtk_status_icon_set_from_file (status_icon, g_value_get_string (value));
       break;
     case PROP_STOCK:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_status_icon_set_from_stock (status_icon, g_value_get_string (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_NAME:
       gtk_status_icon_set_from_icon_name (status_icon, g_value_get_string (value));
@@ -1103,9 +1105,7 @@ gtk_status_icon_get_property (GObject    *object,
       g_value_set_object (value, gtk_status_icon_get_pixbuf (status_icon));
       break;
     case PROP_STOCK:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_string (value, gtk_status_icon_get_stock (status_icon));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_status_icon_get_icon_name (status_icon));
@@ -1165,6 +1165,8 @@ gtk_status_icon_get_property (GObject    *object,
  * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 GtkStatusIcon *
 gtk_status_icon_new (void)
@@ -1184,6 +1186,8 @@ gtk_status_icon_new (void)
  * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 GtkStatusIcon *
 gtk_status_icon_new_from_pixbuf (GdkPixbuf *pixbuf)
@@ -1205,6 +1209,8 @@ gtk_status_icon_new_from_pixbuf (GdkPixbuf *pixbuf)
  * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 GtkStatusIcon *
 gtk_status_icon_new_from_file (const gchar *filename)
@@ -1248,6 +1254,8 @@ gtk_status_icon_new_from_stock (const gchar *stock_id)
  * Returns: a new #GtkStatusIcon
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 GtkStatusIcon *
 gtk_status_icon_new_from_icon_name (const gchar *icon_name)
@@ -1267,6 +1275,8 @@ gtk_status_icon_new_from_icon_name (const gchar *icon_name)
  * Returns: a new #GtkStatusIcon
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 GtkStatusIcon *
 gtk_status_icon_new_from_gicon (GIcon *icon)
@@ -1725,6 +1735,8 @@ gtk_status_icon_set_image (GtkStatusIcon *status_icon,
  * See gtk_status_icon_new_from_pixbuf() for details.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 void
 gtk_status_icon_set_from_pixbuf (GtkStatusIcon *status_icon,
@@ -1746,6 +1758,8 @@ gtk_status_icon_set_from_pixbuf (GtkStatusIcon *status_icon,
  * See gtk_status_icon_new_from_file() for details.
  *
  * Since: 2.10 
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 void
 gtk_status_icon_set_from_file (GtkStatusIcon *status_icon,
@@ -1757,7 +1771,7 @@ gtk_status_icon_set_from_file (GtkStatusIcon *status_icon,
   g_return_if_fail (filename != NULL);
   
   pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-  
+ 
   gtk_status_icon_set_from_pixbuf (status_icon, pixbuf);
   
   if (pixbuf)
@@ -1797,6 +1811,8 @@ gtk_status_icon_set_from_stock (GtkStatusIcon *status_icon,
  * See gtk_status_icon_new_from_icon_name() for details.
  *
  * Since: 2.10 
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 void
 gtk_status_icon_set_from_icon_name (GtkStatusIcon *status_icon,
@@ -1818,6 +1834,8 @@ gtk_status_icon_set_from_icon_name (GtkStatusIcon *status_icon,
  * See gtk_status_icon_new_from_gicon() for details.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 void
 gtk_status_icon_set_from_gicon (GtkStatusIcon *status_icon,
@@ -1841,6 +1859,8 @@ gtk_status_icon_set_from_gicon (GtkStatusIcon *status_icon,
  * Returns: the image representation being used
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 GtkImageType
 gtk_status_icon_get_storage_type (GtkStatusIcon *status_icon)
@@ -1863,6 +1883,8 @@ gtk_status_icon_get_storage_type (GtkStatusIcon *status_icon)
  *     or %NULL if the image is empty.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 GdkPixbuf *
 gtk_status_icon_get_pixbuf (GtkStatusIcon *status_icon)
@@ -1918,6 +1940,8 @@ gtk_status_icon_get_stock (GtkStatusIcon *status_icon)
  * Returns: name of the displayed icon, or %NULL if the image is empty.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 const gchar *
 gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
@@ -1946,6 +1970,8 @@ gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
  * Returns: (transfer none): the displayed icon, or %NULL if the image is empty
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 GIcon *
 gtk_status_icon_get_gicon (GtkStatusIcon *status_icon)
@@ -1975,6 +2001,8 @@ gtk_status_icon_get_gicon (GtkStatusIcon *status_icon)
  * Returns: the size that is available for the image
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 gint
 gtk_status_icon_get_size (GtkStatusIcon *status_icon)
@@ -1994,6 +2022,8 @@ gtk_status_icon_get_size (GtkStatusIcon *status_icon)
  * then remapped on the new screen.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.14: Use notifications
  */
 void
 gtk_status_icon_set_screen (GtkStatusIcon *status_icon,
@@ -2016,6 +2046,8 @@ gtk_status_icon_set_screen (GtkStatusIcon *status_icon,
  * Returns: (transfer none): a #GdkScreen.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.14: Use notifications
  */
 GdkScreen *
 gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
@@ -2038,6 +2070,8 @@ gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
  * Shows or hides a status icon.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 void
 gtk_status_icon_set_visible (GtkStatusIcon *status_icon,
@@ -2097,6 +2131,8 @@ gtk_status_icon_set_visible (GtkStatusIcon *status_icon,
  * Returns: %TRUE if the status icon is visible
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 gboolean
 gtk_status_icon_get_visible (GtkStatusIcon *status_icon)
@@ -2117,6 +2153,8 @@ gtk_status_icon_get_visible (GtkStatusIcon *status_icon)
  *   a notification area.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 gboolean
 gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
@@ -2152,6 +2190,8 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
  * to position @menu aligned to the status icon @user_data.
  * 
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  **/
 void
 gtk_status_icon_position_menu (GtkMenu  *menu,
@@ -2304,6 +2344,8 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
  *               been filled in
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.14: Use notifications
  */
 gboolean
 gtk_status_icon_get_geometry (GtkStatusIcon    *status_icon,
@@ -2357,6 +2399,8 @@ gtk_status_icon_get_geometry (GtkStatusIcon    *status_icon,
  * See #GtkStatusIcon:has-tooltip for more information.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.14: Use notifications
  */
 void
 gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon,
@@ -2404,6 +2448,8 @@ gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon,
  * Returns: current value of has-tooltip on @status_icon.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.14: Use notifications
  */
 gboolean
 gtk_status_icon_get_has_tooltip (GtkStatusIcon *status_icon)
@@ -2444,6 +2490,8 @@ gtk_status_icon_get_has_tooltip (GtkStatusIcon *status_icon)
  * gtk_tooltip_set_text().
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.14: Use notifications
  */
 void
 gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
@@ -2498,6 +2546,8 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
  *   returned string with g_free() when done.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.14: Use notifications
  */
 gchar *
 gtk_status_icon_get_tooltip_text (GtkStatusIcon *status_icon)
@@ -2540,6 +2590,8 @@ gtk_status_icon_get_tooltip_text (GtkStatusIcon *status_icon)
  * gtk_tooltip_set_markup().
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.14: Use notifications
  */
 void
 gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
@@ -2583,6 +2635,8 @@ gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
  *   returned string with g_free() when done.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.14: Use notifications
  */
 gchar *
 gtk_status_icon_get_tooltip_markup (GtkStatusIcon *status_icon)
@@ -2629,6 +2683,8 @@ gtk_status_icon_get_tooltip_markup (GtkStatusIcon *status_icon)
  * underlying X11 Window
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.14: Use notifications
  */
 guint32
 gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon)
@@ -2655,6 +2711,8 @@ gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon)
  * readers to render the tray icon.
  *
  * Since: 2.18
+ *
+ * Deprecated: 3.14: Use notifications
  */
 void
 gtk_status_icon_set_title (GtkStatusIcon *status_icon,
@@ -2691,6 +2749,8 @@ gtk_status_icon_set_title (GtkStatusIcon *status_icon,
  * Returns: the title of the status icon
  *
  * Since: 2.18
+ *
+ * Deprecated: 3.14: Use notifications
  */
 const gchar *
 gtk_status_icon_get_title (GtkStatusIcon *status_icon)
@@ -2728,6 +2788,8 @@ gtk_status_icon_get_title (GtkStatusIcon *status_icon)
  * the user.
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.14: Use notifications
  */
 void
 gtk_status_icon_set_name (GtkStatusIcon *status_icon,

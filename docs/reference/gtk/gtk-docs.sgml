@@ -100,7 +100,6 @@
       <xi:include href="xml/gtklevelbar.xml" />
       <xi:include href="xml/gtkstatusbar.xml" />
       <xi:include href="xml/gtkaccellabel.xml" />
-      <xi:include href="xml/gtkstatusicon.xml" />
     </chapter>
 
     <chapter id="ButtonWidgets">
@@ -339,6 +338,7 @@
       <xi:include href="xml/gtkiconfactory.xml" />
       <xi:include href="xml/gtknumerableicon.xml" />
       <xi:include href="xml/gtkarrow.xml" />
+      <xi:include href="xml/gtkstatusicon.xml" />
     </chapter>
 
   </part>

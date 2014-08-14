@@ -80,101 +80,101 @@ struct _GtkStatusIconClass
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GtkStatusIcon        *gtk_status_icon_new                (void);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GtkStatusIcon        *gtk_status_icon_new_from_pixbuf    (GdkPixbuf          *pixbuf);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GtkStatusIcon        *gtk_status_icon_new_from_file      (const gchar        *filename);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_status_icon_new_from_icon_name)
 GtkStatusIcon        *gtk_status_icon_new_from_stock     (const gchar        *stock_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GtkStatusIcon        *gtk_status_icon_new_from_icon_name (const gchar        *icon_name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GtkStatusIcon        *gtk_status_icon_new_from_gicon     (GIcon              *icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_from_pixbuf    (GtkStatusIcon      *status_icon,
 							  GdkPixbuf          *pixbuf);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_from_file      (GtkStatusIcon      *status_icon,
 							  const gchar        *filename);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_status_icon_set_from_icon_name)
 void                  gtk_status_icon_set_from_stock     (GtkStatusIcon      *status_icon,
 							  const gchar        *stock_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_from_icon_name (GtkStatusIcon      *status_icon,
 							  const gchar        *icon_name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_from_gicon     (GtkStatusIcon      *status_icon,
                                                           GIcon              *icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GtkImageType          gtk_status_icon_get_storage_type   (GtkStatusIcon      *status_icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GdkPixbuf            *gtk_status_icon_get_pixbuf         (GtkStatusIcon      *status_icon);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_status_icon_get_icon_name)
 const gchar *         gtk_status_icon_get_stock          (GtkStatusIcon      *status_icon);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 const gchar *         gtk_status_icon_get_icon_name      (GtkStatusIcon      *status_icon);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GIcon                *gtk_status_icon_get_gicon          (GtkStatusIcon      *status_icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gint                  gtk_status_icon_get_size           (GtkStatusIcon      *status_icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_screen         (GtkStatusIcon      *status_icon,
                                                           GdkScreen          *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 GdkScreen            *gtk_status_icon_get_screen         (GtkStatusIcon      *status_icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_has_tooltip    (GtkStatusIcon      *status_icon,
                                                           gboolean            has_tooltip);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_tooltip_text   (GtkStatusIcon      *status_icon,
                                                           const gchar        *text);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_tooltip_markup (GtkStatusIcon      *status_icon,
                                                           const gchar        *markup);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_title          (GtkStatusIcon      *status_icon,
                                                           const gchar        *title);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 const gchar *         gtk_status_icon_get_title          (GtkStatusIcon      *status_icon);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_name           (GtkStatusIcon      *status_icon,
                                                           const gchar        *name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_set_visible        (GtkStatusIcon      *status_icon,
 							  gboolean            visible);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean              gtk_status_icon_get_visible        (GtkStatusIcon      *status_icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean              gtk_status_icon_is_embedded        (GtkStatusIcon      *status_icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 void                  gtk_status_icon_position_menu      (GtkMenu            *menu,
 							  gint               *x,
 							  gint               *y,
 							  gboolean           *push_in,
 							  gpointer            user_data);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean              gtk_status_icon_get_geometry       (GtkStatusIcon      *status_icon,
 							  GdkScreen         **screen,
 							  GdkRectangle       *area,
 							  GtkOrientation     *orientation);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gboolean              gtk_status_icon_get_has_tooltip    (GtkStatusIcon      *status_icon);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gchar                *gtk_status_icon_get_tooltip_text   (GtkStatusIcon      *status_icon);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 gchar                *gtk_status_icon_get_tooltip_markup (GtkStatusIcon      *status_icon);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_14
 guint32               gtk_status_icon_get_x11_window_id  (GtkStatusIcon      *status_icon);
 
 G_END_DECLS

@@ -240,13 +240,14 @@ deprecated_h_sources = 			\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrc.h		\
 	deprecated/gtkrecentaction.h	\
+	deprecated/gtkstatusicon.h	\
 	deprecated/gtkstock.h		\
 	deprecated/gtkstyle.h		\
 	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
 	deprecated/gtktearoffmenuitem.h	\
 	deprecated/gtktoggleaction.h	\
-	deprecated/gtkuimanager.h		\
+	deprecated/gtkuimanager.h	\
 	deprecated/gtkvbbox.h		\
 	deprecated/gtkvbox.h		\
 	deprecated/gtkvscale.h		\
@@ -441,7 +442,6 @@ gtk_public_h_sources = 		\
 	gtkstack.h		\
 	gtkstackswitcher.h	\
 	gtkstatusbar.h		\
-	gtkstatusicon.h		\
 	gtkstylecontext.h	\
 	gtkstyleproperties.h	\
 	gtkstyleprovider.h	\
@@ -763,6 +763,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrc.c		\
 	deprecated/gtkrecentaction.c	\
+	deprecated/gtkstatusicon.c	\
 	deprecated/gtkstock.c		\
 	deprecated/gtkstyle.c		\
 	deprecated/gtksymboliccolor.c	\
@@ -1035,7 +1036,6 @@ gtk_base_c_sources = 		\
 	gtkstack.c		\
 	gtkstackswitcher.c	\
 	gtkstatusbar.c		\
-	gtkstatusicon.c		\
 	gtkstyleanimation.c	\
 	gtkstylecascade.c	\
 	gtkstylecontext.c	\
@@ -1150,7 +1150,7 @@ gtk_use_x11_c_sources = 	\
 	gtkplug.c		\
 	gtksocket.c		\
 	gtkxembed.c		\
-	gtktrayicon-x11.c	\
+	deprecated/gtktrayicon-x11.c	\
 	gtkapplication-x11.c	\
 	gtkmountoperation-x11.c
 
@@ -1175,7 +1175,7 @@ gtk_use_stub_c_sources = 	\
 gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_quartz_c_sources) $(gtk_use_stub_c_sources)
 gtk_use_x11_private_h_sources = 	\
 	gtkxembed.h		\
-	gtktrayicon.h		\
+	deprecated/gtktrayicon.h	\
 	xembed.h
 if USE_X11
 gtk_c_sources += $(gtk_use_x11_c_sources)
@@ -1279,7 +1279,7 @@ gtk_extra_sources =				\
 	paper_names.c				\
 	paper_names_offsets.c			\
 	gen-paper-names.c			\
-	gtkstatusicon-quartz.c			\
+	deprecated/gtkstatusicon-quartz.c	\
 	gtkversion.h.in				\
 	gtkmarshalers.list			\
 	fallback-c89.c
