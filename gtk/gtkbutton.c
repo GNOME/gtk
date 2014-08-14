@@ -518,7 +518,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     G_MININT,
 							     G_MAXINT,
 							     0,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child-displacement-y",
 							     P_("Child Y Displacement"),
@@ -526,7 +526,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     G_MININT,
 							     G_MAXINT,
 							     0,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkButton:displace-focus:
@@ -541,7 +541,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 								 P_("Displace focus"),
 								 P_("Whether the child_displacement_x/_y properties should also affect the focus rectangle"),
 								 FALSE,
-								 GTK_PARAM_READABLE));
+								 GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkButton:inner-border:
@@ -1770,21 +1770,6 @@ gtk_button_size_allocate (GtkWidget     *widget,
       if (baseline != -1)
 	baseline -= border.top;
 
-      if (priv->depressed)
-	{
-	  gint child_displacement_x;
-	  gint child_displacement_y;
-
-          gtk_style_context_get_style (gtk_widget_get_style_context (GTK_WIDGET (button)),
-                                       "child-displacement-x", &child_displacement_x,
-                                       "child-displacement-y", &child_displacement_y,
-                                       NULL);
-	  child_allocation.x += child_displacement_x;
-	  child_allocation.y += child_displacement_y;
-          if (baseline != -1)
-            baseline -= child_displacement_y;
-	}
-
       child_allocation.width  = MAX (1, child_allocation.width);
       child_allocation.height = MAX (1, child_allocation.height);
 
@@ -1838,28 +1823,14 @@ gtk_button_draw (GtkWidget *widget,
 
   if (gtk_widget_has_visible_focus (widget))
     {
-      gint child_displacement_x;
-      gint child_displacement_y;
-      gboolean displace_focus;
       GtkBorder border;
 
-      gtk_style_context_get_style (context,
-                                   "child-displacement-y", &child_displacement_y,
-                                   "child-displacement-x", &child_displacement_x,
-                                   "displace-focus", &displace_focus,
-                                   NULL);
       gtk_style_context_get_border (context, state, &border);
 
       x += border.left;
       y += border.top;
       width -= border.left + border.right;
       height -= border.top + border.bottom;
-
-      if (priv->depressed && displace_focus)
-        {
-          x += child_displacement_x;
-          y += child_displacement_y;
-        }
 
       gtk_render_focus (context, cr, x, y, width, height);
     }
