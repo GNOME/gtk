@@ -565,36 +565,36 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
 
 static void
 gdk_x11_device_core_select_window_events (GdkDevice    *device,
-                                         GdkWindow    *window,
-                                         GdkEventMask  event_mask)
+                                          GdkWindow    *window,
+                                          GdkEventMask  event_mask)
 {
   GdkEventMask filter_mask, window_mask;
   guint xmask = 0;
   gint i;
 
   window_mask = gdk_window_get_events (window);
-  filter_mask = (GDK_POINTER_MOTION_MASK &
-                 GDK_POINTER_MOTION_HINT_MASK &
-                 GDK_BUTTON_MOTION_MASK &
-                 GDK_BUTTON1_MOTION_MASK &
-                 GDK_BUTTON2_MOTION_MASK &
-                 GDK_BUTTON3_MOTION_MASK &
-                 GDK_BUTTON_PRESS_MASK &
-                 GDK_BUTTON_RELEASE_MASK &
-                 GDK_KEY_PRESS_MASK &
-                 GDK_KEY_RELEASE_MASK &
-                 GDK_ENTER_NOTIFY_MASK &
-                 GDK_LEAVE_NOTIFY_MASK &
-                 GDK_FOCUS_CHANGE_MASK &
-                 GDK_PROXIMITY_IN_MASK &
-                 GDK_PROXIMITY_OUT_MASK &
-                 GDK_SCROLL_MASK);
+  filter_mask = GDK_POINTER_MOTION_MASK
+                | GDK_POINTER_MOTION_HINT_MASK
+                | GDK_BUTTON_MOTION_MASK
+                | GDK_BUTTON1_MOTION_MASK
+                | GDK_BUTTON2_MOTION_MASK
+                | GDK_BUTTON3_MOTION_MASK
+                | GDK_BUTTON_PRESS_MASK
+                | GDK_BUTTON_RELEASE_MASK
+                | GDK_KEY_PRESS_MASK
+                | GDK_KEY_RELEASE_MASK
+                | GDK_ENTER_NOTIFY_MASK
+                | GDK_LEAVE_NOTIFY_MASK
+                | GDK_FOCUS_CHANGE_MASK
+                | GDK_PROXIMITY_IN_MASK
+                | GDK_PROXIMITY_OUT_MASK
+                | GDK_SCROLL_MASK;
 
   /* Filter out non-device events */
   event_mask &= filter_mask;
 
   /* Unset device events on window mask */
-  window_mask &= ~(filter_mask);
+  window_mask &= ~filter_mask;
 
   /* Combine masks */
   event_mask |= window_mask;
