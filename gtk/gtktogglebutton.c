@@ -133,8 +133,6 @@ static void gtk_toggle_button_get_property  (GObject              *object,
 					     guint                 prop_id,
 					     GValue               *value,
 					     GParamSpec           *pspec);
-static void gtk_toggle_button_update_state  (GtkButton            *button);
-static void gtk_toggle_button_enter_leave   (GtkButton            *button);
 
 
 static void gtk_toggle_button_activatable_interface_init (GtkActivatableIface  *iface);
@@ -171,8 +169,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   widget_class->mnemonic_activate = gtk_toggle_button_mnemonic_activate;
 
   button_class->clicked = gtk_toggle_button_clicked;
-  button_class->enter = gtk_toggle_button_enter_leave;
-  button_class->leave = gtk_toggle_button_enter_leave;
 
   class->toggled = NULL;
 
@@ -608,36 +604,9 @@ gtk_toggle_button_clicked (GtkButton *button)
 
   gtk_toggle_button_toggled (toggle_button);
 
-  gtk_toggle_button_update_state (button);
-
   g_object_notify (G_OBJECT (toggle_button), "active");
 
   if (GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked)
     GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked (button);
 }
 
-static void
-gtk_toggle_button_enter_leave (GtkButton *button)
-{
-  gtk_toggle_button_update_state (button);
-  gtk_widget_queue_draw (GTK_WIDGET (button));
-}
-
-static void
-gtk_toggle_button_update_state (GtkButton *button)
-{
-  GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
-  GtkStateFlags new_state = 0;
-
-  new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) &
-    ~(GTK_STATE_FLAG_PRELIGHT |
-      GTK_STATE_FLAG_ACTIVE);
-
-  if (button->priv->in_button && button->priv->button_down)
-    new_state |= GTK_STATE_FLAG_ACTIVE;
-
-  if (button->priv->in_button)
-    new_state |= GTK_STATE_FLAG_PRELIGHT;
-
-  gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), new_state, TRUE);
-}
