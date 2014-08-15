@@ -529,7 +529,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 {
   GtkWidget *widget;
   GtkButton *button;
-  GtkToggleButton *toggle_button;
   GtkStateFlags state = 0;
   gint x, y;
   gint indicator_size;
@@ -541,7 +540,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 
   widget = GTK_WIDGET (check_button);
   button = GTK_BUTTON (check_button);
-  toggle_button = GTK_TOGGLE_BUTTON (check_button);
 
   gtk_widget_get_allocation (widget, &allocation);
   baseline = gtk_widget_get_allocated_baseline (widget);
@@ -559,13 +557,9 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
     y = CLAMP (baseline - indicator_size * button->priv->baseline_align,
 	       0, allocation.height - indicator_size);
 
-  state &= ~(GTK_STATE_FLAG_INCONSISTENT |
-             GTK_STATE_FLAG_ACTIVE |
+  state &= ~(GTK_STATE_FLAG_ACTIVE |
              GTK_STATE_FLAG_PRELIGHT);
 
-  if (gtk_toggle_button_get_inconsistent (toggle_button))
-    state |= GTK_STATE_FLAG_INCONSISTENT;
-  
   if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
     state |= GTK_STATE_FLAG_ACTIVE;
 

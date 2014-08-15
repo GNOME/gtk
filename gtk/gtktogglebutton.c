@@ -559,8 +559,10 @@ gtk_toggle_button_set_inconsistent (GtkToggleButton *toggle_button,
     {
       priv->inconsistent = setting;
 
-      gtk_toggle_button_update_state (GTK_BUTTON (toggle_button));
-      gtk_widget_queue_draw (GTK_WIDGET (toggle_button));
+      if (setting)
+        gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_INCONSISTENT, FALSE);
+      else
+        gtk_widget_unset_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_INCONSISTENT);
 
       g_object_notify (G_OBJECT (toggle_button), "inconsistent");      
     }
@@ -653,17 +655,12 @@ static void
 gtk_toggle_button_update_state (GtkButton *button)
 {
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
-  GtkToggleButtonPrivate *priv = toggle_button->priv;
   GtkStateFlags new_state = 0;
 
   new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) &
-    ~(GTK_STATE_FLAG_INCONSISTENT |
-      GTK_STATE_FLAG_PRELIGHT |
+    ~(GTK_STATE_FLAG_PRELIGHT |
       GTK_STATE_FLAG_ACTIVE);
 
-  if (priv->inconsistent)
-    new_state |= GTK_STATE_FLAG_INCONSISTENT;
-  
   if (button->priv->in_button && button->priv->button_down)
     new_state |= GTK_STATE_FLAG_ACTIVE;
 
