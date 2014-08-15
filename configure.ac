@@ -744,9 +744,6 @@ LIBS="$LIBS $GLIB_LIBS"
 AC_CHECK_FUNCS(bind_textdomain_codeset)
 LIBS=$gtk_save_LIBS
 
-AC_CHECK_HEADERS(pwd.h,
-                 AC_DEFINE(HAVE_PWD_H, 1,
-                           [Define to 1 if pwd.h is available]))
 AC_CHECK_HEADERS(sys/mman.h,
                  AC_DEFINE(HAVE_SYS_MMAN_H, 1,
                            [Define to 1 if mman.h is available]))
