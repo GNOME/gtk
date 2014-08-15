@@ -971,8 +971,6 @@ AS_IF([test "x$enable_gtk2_dependency" = xyes],
 
 AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$enable_gtk2_dependency" = xyes])
 
-AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
-
 ########################################
 # Windowing system checks
 ########################################
