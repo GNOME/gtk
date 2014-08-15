@@ -4180,9 +4180,9 @@ gtk_render_handle (GtkStyleContext *context,
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders an activity area (Such as in #GtkSpinner or the
- * fill line in #GtkRange), the state %GTK_STATE_FLAG_ACTIVE
- * determines whether there is activity going on.
+ * Renders an activity indicator (such as in #GtkSpinner).
+ * The state %GTK_STATE_FLAG_ACTIVE determines whether there is
+ * activity going on.
  *
  * Since: 3.0
  **/
