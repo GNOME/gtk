@@ -251,7 +251,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                                                          P_("Handle only touch events"),
                                                          P_("Whether the gesture handles"
                                                             " only touch events"),
-                                                         TRUE,
+                                                         FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
@@ -282,7 +282,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                                    g_param_spec_uint ("button",
                                                       P_("Button number"),
                                                       P_("Button number to listen to"),
-                                                      0, G_MAXUINT, 0,
+                                                      0, G_MAXUINT, GDK_BUTTON_PRIMARY,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
