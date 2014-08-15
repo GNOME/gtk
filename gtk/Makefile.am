@@ -1566,7 +1566,7 @@ distclean-local:
 	if test $(srcdir) != .; then \
 	  rm -f $(MAINTAINERCLEANFILES); \
 	  rm -rf stock-icons; \
-	  rm -f extract-strings$(BUILD_EXEEXT); \
+	  rm -f extract-strings$(EXEEXT); \
 	  rm -f $(template_headers); \
 	fi
 
