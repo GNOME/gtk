@@ -229,7 +229,7 @@ generate_grab_broken_event (GdkDeviceManager *device_manager,
   event->grab_broken.implicit = FALSE;
   event->grab_broken.grab_window = grab_window;
   gdk_event_set_device (event, device);
-  gdk_event_set_source_device (event, device);
+  gdk_event_set_source_device (event, source_device);
 
   _gdk_win32_append_event (event);
 }
