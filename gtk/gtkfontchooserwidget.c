@@ -540,6 +540,7 @@ static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv;
+  PangoAttrList *attrs;
 
   fontchooser->priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   priv = fontchooser->priv;
@@ -552,8 +553,14 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   priv->font_desc = pango_font_description_new ();
 
   /* Set default preview text */
-  gtk_entry_set_text (GTK_ENTRY (priv->preview),
-                      pango_language_get_sample_string (NULL));
+  gtk_entry_set_text (GTK_ENTRY (priv->preview), priv->preview_text);
+
+  /* Prevent font fallback */
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_fallback_new (FALSE));
+  gtk_entry_set_attributes (GTK_ENTRY (priv->preview), attrs);
+  pango_attr_list_unref (attrs);
+
   gtk_widget_add_events (priv->preview, GDK_SCROLL_MASK);
 
   /* Set the upper values of the spin/scale with G_MAXINT / PANGO_SCALE */
