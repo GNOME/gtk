@@ -124,8 +124,6 @@ enum {
 
 static gboolean gtk_toggle_button_mnemonic_activate  (GtkWidget            *widget,
                                                       gboolean              group_cycling);
-static void gtk_toggle_button_pressed       (GtkButton            *button);
-static void gtk_toggle_button_released      (GtkButton            *button);
 static void gtk_toggle_button_clicked       (GtkButton            *button);
 static void gtk_toggle_button_set_property  (GObject              *object,
 					     guint                 prop_id,
@@ -172,8 +170,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 
   widget_class->mnemonic_activate = gtk_toggle_button_mnemonic_activate;
 
-  button_class->pressed = gtk_toggle_button_pressed;
-  button_class->released = gtk_toggle_button_released;
   button_class->clicked = gtk_toggle_button_clicked;
   button_class->enter = gtk_toggle_button_enter_leave;
   button_class->leave = gtk_toggle_button_enter_leave;
@@ -600,30 +596,6 @@ gtk_toggle_button_mnemonic_activate (GtkWidget *widget,
     gtk_widget_activate (widget);
 
   return TRUE;
-}
-
-static void
-gtk_toggle_button_pressed (GtkButton *button)
-{
-  button->priv->button_down = TRUE;
-
-  gtk_toggle_button_update_state (button);
-  gtk_widget_queue_draw (GTK_WIDGET (button));
-}
-
-static void
-gtk_toggle_button_released (GtkButton *button)
-{
-  if (button->priv->button_down)
-    {
-      button->priv->button_down = FALSE;
-
-      if (button->priv->in_button)
-	gtk_button_clicked (button);
-
-      gtk_toggle_button_update_state (button);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
-    }
 }
 
 static void
