@@ -862,7 +862,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       (button->priv->button_down && button->priv->in_button))
     state |= GTK_STATE_FLAG_ACTIVE;
 
-  if (button->priv->in_button && !(state & GTK_STATE_FLAG_INSENSITIVE))
+  if (button->priv->in_button)
     state |= GTK_STATE_FLAG_PRELIGHT;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
