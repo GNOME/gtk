@@ -487,6 +487,12 @@ _gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
                                gboolean         is_active)
 {
   toggle_button->priv->active = is_active;
+
+  if (is_active)
+    gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_CHECKED, FALSE);
+  else
+    gtk_widget_unset_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_CHECKED);
+
 }
 
 /**
@@ -624,7 +630,7 @@ gtk_toggle_button_clicked (GtkButton *button)
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButtonPrivate *priv = toggle_button->priv;
 
-  priv->active = !priv->active;
+  _gtk_toggle_button_set_active (toggle_button, !priv->active);
 
   gtk_toggle_button_toggled (toggle_button);
 
@@ -653,15 +659,11 @@ gtk_toggle_button_update_state (GtkButton *button)
   new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) &
     ~(GTK_STATE_FLAG_INCONSISTENT |
       GTK_STATE_FLAG_PRELIGHT |
-      GTK_STATE_FLAG_CHECKED |
       GTK_STATE_FLAG_ACTIVE);
 
   if (priv->inconsistent)
     new_state |= GTK_STATE_FLAG_INCONSISTENT;
   
-  if (priv->active)
-    new_state |= GTK_STATE_FLAG_CHECKED;
-
   if (button->priv->in_button && button->priv->button_down)
     new_state |= GTK_STATE_FLAG_ACTIVE;
 
