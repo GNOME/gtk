@@ -27,6 +27,9 @@
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #endif
+#ifdef HAVE_GIO_UNIX
+#include <gio/gunixsocketaddress.h>
+#endif
 #ifdef G_OS_WIN32
 #include <windows.h>
 #include <string.h>
@@ -1274,7 +1277,7 @@ BroadwayServer *
 broadway_server_on_unix_socket_new (char *address, GError **error)
 {
   BroadwayServer *server;
-  GSocketAddress *socket_address;
+  GSocketAddress *socket_address = NULL;
 
   server = g_object_new (BROADWAY_TYPE_SERVER, NULL);
   server->port = -1;
@@ -1288,7 +1291,9 @@ broadway_server_on_unix_socket_new (char *address, GError **error)
     }
   else
     {
+#ifdef HAVE_GIO_UNIX
       socket_address = g_unix_socket_address_new (address);
+#endif
       if (socket_address == NULL)
 	{
 	  g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "Invalid unix domain socket address %s: ", address);
