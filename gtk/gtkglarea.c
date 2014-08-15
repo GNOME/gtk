@@ -283,7 +283,9 @@ gtk_gl_area_realize (GtkWidget *widget)
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes.event_mask = gtk_widget_get_events (widget) |
+                          GDK_EXPOSURE_MASK |
+                          GDK_STRUCTURE_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
@@ -294,10 +296,7 @@ gtk_gl_area_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
 
   if (context != NULL)
-    {
-      gdk_gl_context_set_window (context, gtk_widget_get_window (widget));
-      gdk_gl_context_update (context);
-    }
+    gdk_gl_context_set_window (context, gtk_widget_get_window (widget));
 }
 
 static void
