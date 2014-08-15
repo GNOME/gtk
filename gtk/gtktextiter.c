@@ -5202,7 +5202,7 @@ lines_window_back (LinesWindow *win)
     }
 
   /* Move lines to make room for first line. */
-  g_memmove (win->lines + 1, win->lines, win->n_lines * sizeof (gchar*));
+  memmove (win->lines + 1, win->lines, win->n_lines * sizeof (gchar*));
 
   *win->lines = line_text;
 

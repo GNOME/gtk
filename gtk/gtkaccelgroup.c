@@ -500,8 +500,8 @@ quick_accel_add (GtkAccelGroup   *accel_group,
 
   /* insert at position, ref closure */
   accel_group->priv->priv_accels = g_renew (GtkAccelGroupEntry, accel_group->priv->priv_accels, accel_group->priv->n_accels);
-  g_memmove (accel_group->priv->priv_accels + pos + 1, accel_group->priv->priv_accels + pos,
-             (i - pos) * sizeof (accel_group->priv->priv_accels[0]));
+  memmove (accel_group->priv->priv_accels + pos + 1, accel_group->priv->priv_accels + pos,
+           (i - pos) * sizeof (accel_group->priv->priv_accels[0]));
   accel_group->priv->priv_accels[pos].key.accel_key = accel_key;
   accel_group->priv->priv_accels[pos].key.accel_mods = accel_mods;
   accel_group->priv->priv_accels[pos].key.accel_flags = accel_flags;
@@ -564,8 +564,8 @@ quick_accel_remove (GtkAccelGroup *accel_group,
 
   /* physically remove */
   accel_group->priv->n_accels -= 1;
-  g_memmove (entry, entry + 1,
-             (accel_group->priv->n_accels - pos) * sizeof (accel_group->priv->priv_accels[0]));
+  memmove (entry, entry + 1,
+           (accel_group->priv->n_accels - pos) * sizeof (accel_group->priv->priv_accels[0]));
 
   /* and notify */
   if (accel_quark)
