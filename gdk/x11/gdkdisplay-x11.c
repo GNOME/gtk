@@ -784,32 +784,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       if (!window ||
           xevent->xconfigure.event != xevent->xconfigure.window ||
-          GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
+          GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT ||
+          GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
         {
-          return_val = FALSE;
-        }
-      else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
-        {
-          /* on X11 we need to wait until a ConfigureNotify before
-           * updating the GL viewport, otherwise the GLX drawable
-           * and the X drawable will go out of sync.
-           */
-          if (gdk_window_has_gl_context (window))
-            {
-              GdkGLContext *context = gdk_window_get_gl_context (window);
-
-              /* only update the viewport if the context asked for it */
-              if (gdk_gl_context_needs_update (context))
-                {
-                  GDK_NOTE (OPENGL,
-                            g_print ("Updating viewport after a ConfigureNotify on window %lu\n",
-                                     (unsigned long) xevent->xconfigure.window));
-                  gdk_gl_context_update_viewport (context, window,
-                                                  xevent->xconfigure.width,
-                                                  xevent->xconfigure.height);
-                }
-            }
-
           return_val = FALSE;
         }
       else

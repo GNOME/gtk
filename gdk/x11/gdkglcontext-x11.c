@@ -120,12 +120,22 @@ gdk_x11_gl_context_set_window (GdkGLContext *context,
 }
 
 static void
-gdk_x11_gl_context_update_viewport (GdkGLContext *context,
-                                    GdkWindow    *window,
-                                    int           width,
-                                    int           height)
+gdk_x11_gl_context_update (GdkGLContext *context,
+                           GdkWindow    *window)
 {
-  GDK_NOTE (OPENGL, g_print ("Updating viewport to { 0, 0, %d, %d }\n", width, height));
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  int width, height;
+
+  if (!gdk_x11_display_make_gl_context_current (display, context, window))
+    return;
+
+  width = gdk_window_get_width (window);
+  height = gdk_window_get_height (window);
+
+  GDK_NOTE (OPENGL, g_print ("Updating GL viewport size to { %d, %d } for window %lu (context: %p)\n",
+                             width, height,
+                             (unsigned long) gdk_x11_window_get_xid (window),
+                             context));
 
   glViewport (0, 0, width, height);
 }
@@ -167,6 +177,8 @@ gdk_x11_gl_context_flush_buffer (GdkGLContext *context)
 
   if (window == NULL)
     return;
+
+  gdk_x11_display_make_gl_context_current (display, context, window);
 
   info = get_glx_drawable_info (window);
   if (info != NULL && info->drawable != None)
@@ -225,7 +237,7 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
 
   context_class->set_window = gdk_x11_gl_context_set_window;
-  context_class->update_viewport = gdk_x11_gl_context_update_viewport;
+  context_class->update = gdk_x11_gl_context_update;
   context_class->flush_buffer = gdk_x11_gl_context_flush_buffer;
 }
 
@@ -766,13 +778,13 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
   if (G_UNLIKELY (drawable == None))
     return FALSE;
 
+  if (drawable == context_x11->current_drawable)
+    return TRUE;
+
   GDK_NOTE (OPENGL,
             g_print ("Making GLX context current to drawable %lu (dummy: %s)\n",
                      (unsigned long) drawable,
                      drawable == context_x11->dummy_drawable ? "yes" : "no"));
-
-  if (drawable == context_x11->current_drawable)
-    return TRUE;
 
   gdk_x11_display_error_trap_push (display);
 
@@ -832,6 +844,27 @@ gdk_x11_display_validate_gl_pixel_format (GdkDisplay        *display,
 
   if (!find_fbconfig_for_pixel_format (display, format, &config, NULL, error))
     return FALSE;
+
+  GDK_NOTE (OPENGL,
+            g_print ("Found GLX config for requested pixel format:\n"
+                     " - double-buffer: %s\n"
+                     " - multi-sample: %s\n"
+                     " - stereo: %s\n"
+                     " - color-size: %d, alpha-size: %d\n"
+                     " - depth-size: %d\n"
+                     " - stencil-size: %d\n"
+                     " - aux-buffers: %d\n"
+                     " - accum-size: %d\n"
+                     " - sample-buffers: %d, samples: %d\n",
+                     format->double_buffer ? "yes" : "no",
+                     format->multi_sample ? "yes" : "no",
+                     format->stereo ? "yes" : "no",
+                     format->color_size, format->alpha_size,
+                     format->depth_size,
+                     format->stencil_size,
+                     format->aux_buffers,
+                     format->accum_size,
+                     format->sample_buffers, format->samples));
 
   if (validated_format != NULL)
     {
