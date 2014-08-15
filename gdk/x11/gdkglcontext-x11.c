@@ -696,6 +696,8 @@ gdk_x11_display_create_gl_context (GdkDisplay        *display,
   context->current_drawable = dummy_drawable;
   context->is_direct = is_direct;
 
+  g_object_unref (valid_format);
+
   return GDK_GL_CONTEXT (context);
 }
 
