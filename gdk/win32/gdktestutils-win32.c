@@ -30,9 +30,86 @@ _gdk_win32_window_simulate_key (GdkWindow      *window,
                        GdkModifierType modifiers,
                        GdkEventType    key_pressrelease)
 {
+  gboolean      success = FALSE;
+  GdkKeymapKey *keys    = NULL;
+  gint          n_keys  = 0;
+  INPUT         ip;
+  gint          i;
+
   g_return_val_if_fail (key_pressrelease == GDK_KEY_PRESS || key_pressrelease == GDK_KEY_RELEASE, FALSE);
   g_return_val_if_fail (window != NULL, FALSE);
-  return FALSE;
+
+  ip.type = INPUT_KEYBOARD;
+  ip.ki.wScan = 0;
+  ip.ki.time = 0;
+  ip.ki.dwExtraInfo = 0;
+
+  switch (key_pressrelease)
+    {
+    case GDK_KEY_PRESS:
+      ip.ki.dwFlags = 0;
+      break;
+    case GDK_KEY_RELEASE:
+      ip.ki.dwFlags = KEYEVENTF_KEYUP;
+      break;
+    default:
+      /* Not a key event. */
+      return FALSE;
+    }
+  if (gdk_keymap_get_entries_for_keyval (gdk_keymap_get_default (), keyval, &keys, &n_keys))
+    {
+      for (i = 0; i < n_keys; i++)
+        {
+          if (key_pressrelease == GDK_KEY_PRESS)
+            {
+              /* AltGr press. */
+              if (keys[i].group)
+                {
+                  /* According to some virtualbox code I found, AltGr is
+                   * simulated on win32 with LCtrl+RAlt */
+                  ip.ki.wVk = VK_CONTROL;
+                  SendInput(1, &ip, sizeof(INPUT));
+                  ip.ki.wVk = VK_MENU;
+                  SendInput(1, &ip, sizeof(INPUT));
+                }
+              /* Shift press. */
+              if (keys[i].level || (modifiers & GDK_SHIFT_MASK))
+                {
+                  ip.ki.wVk = VK_SHIFT;
+                  SendInput(1, &ip, sizeof(INPUT));
+                }
+            }
+
+          /* Key pressed/released. */
+          ip.ki.wVk = keys[i].keycode;
+          SendInput(1, &ip, sizeof(INPUT));
+
+          if (key_pressrelease == GDK_KEY_RELEASE)
+            {
+              /* Shift release. */
+              if (keys[i].level || (modifiers & GDK_SHIFT_MASK))
+                {
+                  ip.ki.wVk = VK_SHIFT;
+                  SendInput(1, &ip, sizeof(INPUT));
+                }
+              /* AltrGr release. */
+              if (keys[i].group)
+                {
+                  ip.ki.wVk = VK_MENU;
+                  SendInput(1, &ip, sizeof(INPUT));
+                  ip.ki.wVk = VK_CONTROL;
+                  SendInput(1, &ip, sizeof(INPUT));
+                }
+            }
+
+          /* No need to loop for alternative keycodes. We want only one
+           * key generated. */
+          success = TRUE;
+          break;
+        }
+      g_free (keys);
+    }
+  return success;
 }
 
 gboolean
