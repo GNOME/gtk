@@ -1336,7 +1336,7 @@ template_headers = $(COMPOSITE_TEMPLATES:.ui=.ui.h)
 
 %.ui.h: %.ui
 	$(AM_V_GEN) mkdir -p $(dir $@) \
-	&& $(top_builddir)/util/extract-strings$(BUILD_EXEEXT) $< > $@
+	&& $(top_builddir)/util/extract-strings$(EXEEXT) $< > $@
 
 #
 # rules to generate built sources
@@ -1566,7 +1566,6 @@ distclean-local:
 	if test $(srcdir) != .; then \
 	  rm -f $(MAINTAINERCLEANFILES); \
 	  rm -rf stock-icons; \
-	  rm -f extract-strings$(EXEEXT); \
 	  rm -f $(template_headers); \
 	fi
 

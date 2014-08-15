@@ -114,10 +114,8 @@ templates = 				\
 
 template_headers = $(templates:.ui=.ui.h)
 
-extract_strings = $(top_builddir)/util/extract-strings
-
 %.ui.h : %.ui 
-	$(AM_V_GEN) $(extract_strings) $< > $@
+	$(AM_V_GEN) $(top_builddir)/util/extract-strings$(EXEEXT) $< > $@
 
 EXTRA_DIST += 				\
 	inspector.gresource.xml 	\
