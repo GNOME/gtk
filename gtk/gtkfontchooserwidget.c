@@ -262,6 +262,23 @@ size_change_cb (GtkAdjustment *adjustment,
   gtk_font_chooser_widget_take_font_desc (fontchooser, font_desc);
 }
 
+static gboolean
+output_cb (GtkSpinButton *spin,
+           gpointer       data)
+{
+  GtkAdjustment *adjustment;
+  gchar *text;
+  gdouble value;
+
+  adjustment = gtk_spin_button_get_adjustment (spin);
+  value = gtk_adjustment_get_value (adjustment);
+  text = g_strdup_printf ("%2.4g", value);
+  gtk_entry_set_text (GTK_ENTRY (spin), text);
+  g_free (text);
+
+  return TRUE;
+}
+
 static void
 gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *fontchooser)
 {
@@ -516,6 +533,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, row_inserted_cb);
   gtk_widget_class_bind_template_callback (widget_class, row_deleted_cb);
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
+  gtk_widget_class_bind_template_callback (widget_class, output_cb);
 }
 
 static void

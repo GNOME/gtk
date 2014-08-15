@@ -155,8 +155,8 @@
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="adjustment">slider_adjustment</property>
-            <property name="digits">0</property>
             <property name="draw_value">False</property>
+            <property name="round-digits">0</property>
             <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
           </object>
           <packing>
@@ -172,6 +172,7 @@
             <property name="can_focus">True</property>
             <property name="invisible_char">•</property>
             <property name="adjustment">spin_adjustment</property>
+            <signal name="output" handler="output_cb"/>
           </object>
           <packing>
             <property name="left_attach">1</property>
