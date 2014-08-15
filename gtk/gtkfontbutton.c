@@ -1146,8 +1146,14 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   const gchar *face_name;
   gchar *family_style;
 
-  fam_name = pango_font_family_get_name (priv->font_family);
-  face_name = pango_font_face_get_face_name (priv->font_face);
+  if (priv->font_family)
+    fam_name = pango_font_family_get_name (priv->font_family);
+  else
+    fam_name = _("None");
+  if (priv->font_face)
+    face_name = pango_font_face_get_face_name (priv->font_face);
+  else
+    face_name = "";
 
   if (priv->show_style)
     family_style = g_strconcat (fam_name, " ", face_name, NULL);
