@@ -45,10 +45,12 @@ gtk/deprecated/gtkmisc.c
 gtk/deprecated/gtknumerableicon.c
 gtk/deprecated/gtkradioaction.c
 gtk/deprecated/gtkrecentaction.c
+gtk/deprecated/gtkstatusicon.c
 gtk/deprecated/gtkstock.c
 gtk/deprecated/gtkstyle.c
 gtk/deprecated/gtktable.c
 gtk/deprecated/gtktoggleaction.c
+gtk/deprecated/gtktrayicon-x11.c
 gtk/deprecated/gtkuimanager.c
 gtk/encodesymbolic.c
 gtk/gtkaboutdialog.c
@@ -226,7 +228,6 @@ gtk/gtkspinner.c
 gtk/gtkstack.c
 gtk/gtkstackswitcher.c
 gtk/gtkstatusbar.c
-gtk/gtkstatusicon.c
 gtk/gtkstylecontext.c
 gtk/gtkstyleproperty.c
 gtk/gtkstyleprovider.c
@@ -255,7 +256,6 @@ gtk/gtktoolitemgroup.c
 gtk/gtktoolpalette.c
 gtk/gtktoolshell.c
 gtk/gtktrashmonitor.c
-gtk/gtktrayicon-x11.c
 gtk/gtktreednd.c
 gtk/gtktreemenu.c
 gtk/gtktreemodel.c
