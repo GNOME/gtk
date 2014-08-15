@@ -1142,20 +1142,17 @@ static void
 gtk_font_button_update_font_info (GtkFontButton *font_button)
 {
   GtkFontButtonPrivate *priv = font_button->priv;
+  const gchar *fam_name;
+  const gchar *face_name;
   gchar *family_style;
 
-  g_assert (priv->font_desc != NULL);
+  fam_name = pango_font_family_get_name (priv->font_family);
+  face_name = pango_font_face_get_face_name (priv->font_face);
 
   if (priv->show_style)
-    {
-      PangoFontDescription *desc = pango_font_description_copy_static (priv->font_desc);
-
-      pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
-      family_style = pango_font_description_to_string (desc);
-      pango_font_description_free (desc);
-    }
+    family_style = g_strconcat (fam_name, " ", face_name, NULL);
   else
-    family_style = g_strdup (pango_font_description_get_family (priv->font_desc));
+    family_style = g_strdup (fam_name);
 
   gtk_label_set_text (GTK_LABEL (font_button->priv->font_label), family_style);
   g_free (family_style);
