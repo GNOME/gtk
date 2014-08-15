@@ -52,6 +52,8 @@ gboolean                gdk_gl_pixel_format_get_double_buffer   (GdkGLPixelForma
 GDK_AVAILABLE_IN_3_14
 gboolean                gdk_gl_pixel_format_get_multi_sample    (GdkGLPixelFormat *format);
 GDK_AVAILABLE_IN_3_14
+gboolean                gdk_gl_pixel_format_get_stereo          (GdkGLPixelFormat *format);
+GDK_AVAILABLE_IN_3_14
 gint                    gdk_gl_pixel_format_get_color_size      (GdkGLPixelFormat *format);
 GDK_AVAILABLE_IN_3_14
 gint                    gdk_gl_pixel_format_get_alpha_size      (GdkGLPixelFormat *format);
