@@ -8790,6 +8790,7 @@ gtk_widget_set_state_flags (GtkWidget     *widget,
 #define ALLOWED_FLAGS (~(GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL))
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (flags < (1 << GTK_STATE_FLAGS_BITS));
 
   if ((!clear && (widget->priv->state_flags & flags) == flags) ||
       (clear && widget->priv->state_flags == flags))
@@ -8819,6 +8820,7 @@ gtk_widget_unset_state_flags (GtkWidget     *widget,
                               GtkStateFlags  flags)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (flags < (1 << GTK_STATE_FLAGS_BITS));
 
   if ((widget->priv->state_flags & flags) == 0)
     return;
