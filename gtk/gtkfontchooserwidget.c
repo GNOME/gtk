@@ -770,16 +770,18 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
   GtkFontChooserWidget *fontchooser = user_data;
   PangoFontDescription *font_desc;
   PangoAttrList *attrs;
-  char *to_string, *text;
+  char *preview_title, *text;
   gsize first_line_len;
 
   font_desc = tree_model_get_font_description (tree_model, iter);
 
-  to_string = pango_font_description_to_string (font_desc);
+  gtk_tree_model_get (tree_model, iter,
+                      PREVIEW_TITLE_COLUMN, &preview_title,
+                      -1);
 
-  text = g_strconcat (to_string, "\n", fontchooser->priv->preview_text, NULL);
-  first_line_len = strlen (to_string) + 1;
-  
+  text = g_strconcat (preview_title, "\n", fontchooser->priv->preview_text, NULL);
+  first_line_len = strlen (preview_title) + 1;
+
   attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser, 
                                                           font_desc,
                                                           first_line_len);
@@ -791,7 +793,6 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
 
   pango_font_description_free (font_desc);
   pango_attr_list_unref (attrs);
-  g_free (to_string);
   g_free (text);
 }
 
