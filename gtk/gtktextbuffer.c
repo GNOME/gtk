@@ -40,7 +40,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-
 /**
  * SECTION:gtktextbuffer
  * @Short_description: Stores attributed text for display in a GtkTextView
@@ -52,7 +51,6 @@
  * which gives an overview of all the objects and data
  * types related to the text widget and how they work together.
  */
-
 
 typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
 
@@ -80,7 +78,6 @@ struct _GtkTextBufferPrivate
   guint modified : 1;
   guint has_selection : 1;
 };
-
 
 typedef struct _ClipboardRequest ClipboardRequest;
 
@@ -161,8 +158,6 @@ static GtkTextBuffer *create_clipboard_contents_buffer (GtkTextBuffer *buffer);
 
 static void gtk_text_buffer_free_target_lists     (GtkTextBuffer *buffer);
 
-static guint signals[LAST_SIGNAL] = { 0 };
-
 static void gtk_text_buffer_set_property (GObject         *object,
 				          guint            prop_id,
 				          const GValue    *value,
@@ -173,6 +168,8 @@ static void gtk_text_buffer_get_property (GObject         *object,
 				          GParamSpec      *pspec);
 static void gtk_text_buffer_notify       (GObject         *object,
                                           GParamSpec      *pspec);
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkTextBuffer, gtk_text_buffer, G_TYPE_OBJECT)
 
@@ -3892,7 +3889,6 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
   GtkTextIter end;
   gboolean retval = FALSE;
   const PangoLogAttr *attrs;
-  int offset;
   gboolean backspace_deletes_character;
 
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
@@ -3906,9 +3902,9 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
   /* For no good reason, attrs is NULL for the empty last line in
    * a buffer. Special case that here. (#156164)
    */
-  if (attrs)
+  if (attrs != NULL)
     {
-      offset = gtk_text_iter_get_line_offset (&start);
+      gint offset = gtk_text_iter_get_line_offset (&start);
       backspace_deletes_character = attrs[offset].backspace_deletes_character;
     }
   else
@@ -4289,24 +4285,23 @@ struct _GtkTextLogAttrCache
 static void
 free_log_attr_cache (GtkTextLogAttrCache *cache)
 {
-  gint i = 0;
-  while (i < ATTR_CACHE_SIZE)
-    {
-      g_free (cache->entries[i].attrs);
-      ++i;
-    }
+  gint i;
+
+  for (i = 0; i < ATTR_CACHE_SIZE; i++)
+    g_free (cache->entries[i].attrs);
+
   g_slice_free (GtkTextLogAttrCache, cache);
 }
 
 static void
 clear_log_attr_cache (GtkTextLogAttrCache *cache)
 {
-  gint i = 0;
-  while (i < ATTR_CACHE_SIZE)
+  gint i;
+
+  for (i = 0; i < ATTR_CACHE_SIZE; i++)
     {
       g_free (cache->entries[i].attrs);
       cache->entries[i].attrs = NULL;
-      ++i;
     }
 }
 
@@ -4332,9 +4327,9 @@ compute_log_attrs (const GtkTextIter *iter,
 
   g_assert (char_len > 0);
 
-  if (char_lenp)
+  if (char_lenp != NULL)
     *char_lenp = char_len;
-  
+
   attrs = g_new (PangoLogAttr, char_len + 1);
 
   /* FIXME we need to follow PangoLayout and allow different language
@@ -4352,7 +4347,7 @@ compute_log_attrs (const GtkTextIter *iter,
 
 /* The return value from this is valid until you call this a second time.
  */
-const PangoLogAttr*
+const PangoLogAttr *
 _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
                                      const GtkTextIter *anywhere_in_line,
                                      gint              *char_len)
@@ -4371,7 +4366,7 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   if (gtk_text_iter_is_end (anywhere_in_line) &&
       gtk_text_iter_get_line_offset (anywhere_in_line) == 0)
     {
-      if (char_len)
+      if (char_len != NULL)
         *char_len = 0;
       return NULL;
     }
@@ -4395,19 +4390,17 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   cache = priv->log_attr_cache;
   line = gtk_text_iter_get_line (anywhere_in_line);
 
-  i = 0;
-  while (i < ATTR_CACHE_SIZE)
+  for (i = 0; i < ATTR_CACHE_SIZE; i++)
     {
-      if (cache->entries[i].attrs &&
+      if (cache->entries[i].attrs != NULL &&
           cache->entries[i].line == line)
         {
-          if (char_len)
+          if (char_len != NULL)
             *char_len = cache->entries[i].char_len;
           return cache->entries[i].attrs;
         }
-      ++i;
     }
-  
+
   /* Not in cache; open up the first cache entry */
   g_free (cache->entries[ATTR_CACHE_SIZE-1].attrs);
 
@@ -4418,9 +4411,9 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   cache->entries[0].attrs = compute_log_attrs (anywhere_in_line,
                                                &cache->entries[0].char_len);
 
-  if (char_len)
+  if (char_len != NULL)
     *char_len = cache->entries[0].char_len;
-  
+
   return cache->entries[0].attrs;
 }
 
