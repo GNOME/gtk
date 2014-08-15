@@ -1160,7 +1160,7 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   if (font_button->priv->show_size) 
     {
       /* mirror Pango, which doesn't translate this either */
-      gchar *size = g_strdup_printf ("%g%s",
+      gchar *size = g_strdup_printf ("%2.4g%s",
                                      pango_font_description_get_size (priv->font_desc) / (double)PANGO_SCALE,
                                      pango_font_description_get_size_is_absolute (priv->font_desc) ? "px" : "");
       
