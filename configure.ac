@@ -962,7 +962,7 @@ AS_IF([test "x$enable_gtk2_dependency" = xyes],
 
       [# In native compiling case, the gtk-update-icon-cache installed
        # is the same as the one used during build.
-       GTK_UPDATE_ICON_CACHE="`cd $srcdir && pwd`/gtk/gtk/gtk-update-icon-cache$EXEEXT"
+       GTK_UPDATE_ICON_CACHE="`cd $srcdir && pwd`/gtk/gtk-update-icon-cache$EXEEXT"
        AC_SUBST(GTK_UPDATE_ICON_CACHE)]
 )
 
