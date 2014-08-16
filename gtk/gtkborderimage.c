@@ -39,15 +39,15 @@
 
 gboolean
 _gtk_border_image_init (GtkBorderImage   *image,
-                        GtkThemingEngine *engine)
+                        GtkStyleContext  *context)
 {
-  image->source = _gtk_css_image_value_get_image (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE));
+  image->source = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE));
   if (image->source == NULL)
     return FALSE;
 
-  image->slice = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE);
-  image->width = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH);
-  image->repeat = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT);
+  image->slice = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE);
+  image->width = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH);
+  image->repeat = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT);
 
   return TRUE;
 }

@@ -25,7 +25,6 @@
 #include "gtkborder.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssvalueprivate.h"
-#include "gtkthemingengine.h"
 
 G_BEGIN_DECLS
 
@@ -40,7 +39,7 @@ struct _GtkBorderImage {
 };
 
 gboolean          _gtk_border_image_init             (GtkBorderImage       *image,
-                                                      GtkThemingEngine     *engine);
+                                                      GtkStyleContext      *context);
 
 void              _gtk_border_image_render           (GtkBorderImage       *image,
                                                       const double          border_width[4],

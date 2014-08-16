@@ -1766,7 +1766,7 @@ render_frame_internal (GtkThemingEngine *engine,
 
   gtk_theming_engine_hide_border_sides (border_width, border_style, hidden_side);
 
-  if (_gtk_border_image_init (&border_image, engine))
+  if (_gtk_border_image_init (&border_image, engine->priv->context))
     _gtk_border_image_render (&border_image, border_width, cr, x, y, width, height);
   else
     {
