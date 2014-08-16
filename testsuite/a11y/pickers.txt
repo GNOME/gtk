@@ -19,7 +19,7 @@ window1
       "push button"
       parent: grid1
       index: 0
-      name: Sans
+      name: Sans Regular
       state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
