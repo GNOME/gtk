@@ -1,6 +1,12 @@
 Overview of Changes in GTK+ 3.13.6 to 3.13.7
 ============================================
 
+* To align better with css, button and menuitem subclasses now use a
+  :checked state to indicate their checkedness, instead of :active or
+  :selected.
+
+* Deprecations: GtkStatusIcon
+
 * Bugs fixed:
  724281 Statusbar displays removed message
  731013 Cross-compilation from Linux to Windows broken...
@@ -19,6 +25,13 @@ Overview of Changes in GTK+ 3.13.6 to 3.13.7
  734736 GCC warns about wront format strings when building GTK+ on W32
  734737 GCC warns about various things when building GTK+ on W32
  734778 Object leaks in broadway_server_new() constructor 
+ 570414 Disable font fallback in the font dialog preview panel
+ 665711 Font size cannot be changed to floating point / non-integer...
+ 724996 Font Button too many decimal places
+ 733832 Improve fontchooser widgets display text
+ 733967 provide proper pseudostates for radios and checkboxes
+ 734738 Possible bug in W32 input grabbing
+ 734826 Deprecate GtkStatusIcon 
 
 * Translation updates:
  Greek
