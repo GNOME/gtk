@@ -104,6 +104,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	teststatusicon			\
 	teststockbuttonmenu		\
 	testtoolbar			\
+	testtoolbar2			\
 	stresstest-toolbar		\
 	testtreechanging                \
 	testtreeedit			\
