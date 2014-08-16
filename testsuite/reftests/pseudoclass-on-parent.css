@@ -1,7 +1,7 @@
-:active {
+:checked {
   color: blue;
 }
 
-:active * {
+:checked * {
   color: red;
 }
