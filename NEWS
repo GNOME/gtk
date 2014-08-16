@@ -5,7 +5,7 @@ Overview of Changes in GTK+ 3.13.6 to 3.13.7
   :checked state to indicate their checkedness, instead of :active or
   :selected.
 
-* Deprecations: GtkStatusIcon
+* Deprecations: GtkStatusIcon, GtkThemingEngine
 
 * Bugs fixed:
  724281 Statusbar displays removed message
