@@ -871,11 +871,10 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
 
-  if (state & GTK_STATE_FLAG_PRELIGHT)
-    gtk_render_background (context, cr,
-                           border_width, border_width,
-                           allocation.width - (2 * border_width),
-                           allocation.height - (2 * border_width));
+  gtk_render_background (context, cr,
+                         border_width, border_width,
+                         allocation.width - (2 * border_width),
+                         allocation.height - (2 * border_width));
 
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
 
