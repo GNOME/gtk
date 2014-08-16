@@ -339,6 +339,7 @@
       <xi:include href="xml/gtknumerableicon.xml" />
       <xi:include href="xml/gtkarrow.xml" />
       <xi:include href="xml/gtkstatusicon.xml" />
+      <xi:include href="xml/gtkthemingengine.xml" />
     </chapter>
 
   </part>
@@ -365,7 +366,6 @@
     <xi:include href="xml/gtkcssprovider.xml" />
     <xi:include href="xml/gtkstyleprovider.xml" />
     <xi:include href="xml/gtkstyleproperties.xml" />
-    <xi:include href="xml/gtkthemingengine.xml" />
     <xi:include href="xml/gtkwidgetpath.xml" />
     <xi:include href="xml/gtkicontheme.xml" />
   </part>
