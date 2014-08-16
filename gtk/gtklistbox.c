@@ -3501,7 +3501,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListBoxRow:selectable
+   * GtkListBoxRow:selectable:
    *
    * The property determines whether this row can be selected.
    *

@@ -52,11 +52,14 @@ struct _GtkListBox
 /**
  * GtkListBoxClass:
  * @parent_class: The parent class.
- * @row_selected: Signal emitted when a new row is selected.
- * @row_activated: Signal emitted when a row has been activated by the user.
- * @activate_cursor_row: 
- * @toggle_cursor_row: 
- * @move_cursor: 
+ * @row_selected: Class handler for the #GtkListBox::row-selected signal
+ * @row_activated: Class handler for the #GtkListBox::row-activated signal
+ * @activate_cursor_row: Class handler for the #GtkListBox::activate-cursor-row signal
+ * @toggle_cursor_row: Class handler for the #GtkListBox::activate-cursor-row signal
+ * @move_cursor: Class handler for the #GtkListBox::move-cursor signal
+ * @selected_rows_changed: Class handler for the #GtkListBox::selected-rows-changed signal
+ * @select_all: Class handler for the #GtkListBox::select-all signal
+ * @unselect_all: Class handler for the #GtkListBox::unselect-all signal
  */
 struct _GtkListBoxClass
 {
