@@ -31,7 +31,7 @@ window1
         name: Page 1
         member-of: unnamed-GtkRadioButtonAccessible-1
                    unnamed-GtkRadioButtonAccessible-0
-        state: armed checked enabled focusable sensitive showing visible
+        state: checked enabled focusable sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget

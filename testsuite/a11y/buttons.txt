@@ -113,7 +113,7 @@ window1
       name: Hello World!
       member-of: button4
                  button3
-      state: armed checked enabled focusable sensitive showing visible
+      state: checked enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -145,7 +145,7 @@ window1
       parent: grid1
       index: 8
       name: Hello World!
-      state: armed checked enabled focusable sensitive showing visible
+      state: checked enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
