@@ -1029,7 +1029,7 @@ gtk_theming_engine_get_screen (GtkThemingEngine *engine)
 }
 
 static gboolean
-render_icon_image (GtkThemingEngine *engine,
+render_icon_image (GtkStyleContext  *context,
                    cairo_t          *cr,
                    double            x,
                    double            y,
@@ -1040,15 +1040,15 @@ render_icon_image (GtkThemingEngine *engine,
   cairo_matrix_t matrix, transform_matrix;
   GtkCssImage *image;
 
-  image = _gtk_css_image_value_get_image (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SOURCE));
+  image = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE));
   if (image == NULL)
     return FALSE;
 
-  shadows = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW);
+  shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SHADOW);
 
   cairo_translate (cr, x, y);
 
-  if (_gtk_css_transform_value_get_matrix (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
+  if (_gtk_css_transform_value_get_matrix (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
     {
       /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
       cairo_matrix_init_translate (&matrix, width / 2, height / 2);
@@ -1085,12 +1085,15 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
 {
   GdkRGBA fg_color, bg_color;
   GtkStateFlags flags;
+  GtkStyleContext *context;
   gint exterior_size, interior_size, thickness, pad;
   GtkBorderStyle border_style;
   GtkBorder border;
   gint border_width;
 
-  if (render_icon_image (engine, cr, x, y, width, height))
+  context = engine->priv->context;
+
+  if (render_icon_image (context, cr, x, y, width, height))
     return;
 
   flags = gtk_theming_engine_get_state (engine);
@@ -1100,7 +1103,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
   gtk_theming_engine_get_border (engine, flags, &border);
   border_style = _gtk_css_border_style_value_get 
-    (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -1200,10 +1203,13 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   GtkStateFlags flags;
   GdkRGBA fg_color, bg_color;
   gint exterior_size, interior_size, pad, thickness, border_width;
+  GtkStyleContext *context;
   GtkBorderStyle border_style;
   GtkBorder border;
 
-  if (render_icon_image (engine, cr, x, y, width, height))
+  context = engine->priv->context;
+
+  if (render_icon_image (context, cr, x, y, width, height))
     return;
 
   flags = gtk_theming_engine_get_state (engine);
@@ -1214,7 +1220,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
   gtk_theming_engine_get_border (engine, flags, &border);
   border_style = _gtk_css_border_style_value_get 
-    (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
 
   exterior_size = MIN (width, height);
   border_width = MIN (MIN (border.top, border.bottom),
@@ -1309,7 +1315,7 @@ gtk_theming_engine_render_arrow (GtkThemingEngine *engine,
   GtkStateFlags state;
   GdkRGBA color;
 
-  if (render_icon_image (engine, cr, x, y, size, size))
+  if (render_icon_image (engine->priv->context, cr, x, y, size, size))
     return;
 
   cairo_save (cr);
@@ -1739,7 +1745,7 @@ render_border (cairo_t       *cr,
 }
 
 static void
-render_frame_internal (GtkThemingEngine *engine,
+render_frame_internal (GtkStyleContext  *context,
                        cairo_t          *cr,
                        gdouble           x,
                        gdouble           y,
@@ -1754,29 +1760,29 @@ render_frame_internal (GtkThemingEngine *engine,
   double border_width[4];
   GdkRGBA colors[4];
 
-  border_width[0] = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border_width[1] = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border_width[2] = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border_width[3] = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+  border_width[0] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  border_width[1] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  border_width[2] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+  border_width[3] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
-  border_style[0] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  border_style[1] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
-  border_style[2] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
-  border_style[3] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
+  border_style[0] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+  border_style[1] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
+  border_style[2] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
+  border_style[3] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
 
   gtk_theming_engine_hide_border_sides (border_width, border_style, hidden_side);
 
-  if (_gtk_border_image_init (&border_image, engine->priv->context))
+  if (_gtk_border_image_init (&border_image, context))
     _gtk_border_image_render (&border_image, border_width, cr, x, y, width, height);
   else
     {
-      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-      colors[1] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
-      colors[2] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
-      colors[3] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
+      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+      colors[1] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
+      colors[2] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
+      colors[3] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius_for_context (&border_box, engine->priv->context, junction);
+      _gtk_rounded_box_apply_border_radius_for_context (&border_box, context, junction);
 
       render_border (cr, &border_box, border_width, hidden_side, colors, border_style);
     }
@@ -1794,7 +1800,7 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
 
   junction = gtk_theming_engine_get_junction_sides (engine);
 
-  render_frame_internal (engine, cr,
+  render_frame_internal (engine->priv->context, cr,
                          x, y, width, height,
                          0, junction);
 }
@@ -1821,7 +1827,7 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   gboolean is_rtl;
   gdouble progress;
 
-  if (render_icon_image (engine, cr, x, y, width, height))
+  if (render_icon_image (engine->priv->context, cr, x, y, width, height))
     return;
 
   cairo_save (cr);
@@ -1920,20 +1926,21 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
 {
   GtkBorderStyle border_style[4];
   GtkRoundedBox border_box;
+  GtkStyleContext *context = engine->priv->context;
   double border_width[4];
   GdkRGBA colors[4];
 
-  border_style[0] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_STYLE));
+  border_style[0] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_STYLE));
   if (border_style[0] != GTK_BORDER_STYLE_NONE)
     {
       int offset;
 
       border_style[1] = border_style[2] = border_style[3] = border_style[0];
-      border_width[0] = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
+      border_width[0] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
       border_width[3] = border_width[2] = border_width[1] = border_width[0];
-      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_COLOR));
+      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_COLOR));
       colors[3] = colors[2] = colors[1] = colors[0];
-      offset = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
+      offset = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
       _gtk_rounded_box_shrink (&border_box,
@@ -2016,7 +2023,7 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 
   prepare_context_for_layout (cr, x, y, layout);
 
-  _gtk_css_shadows_value_paint_layout (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_TEXT_SHADOW),
+  _gtk_css_shadows_value_paint_layout (_gtk_style_context_peek_property (engine->priv->context, GTK_CSS_PROPERTY_TEXT_SHADOW),
                                        cr, layout);
 
   gdk_cairo_set_source_rgba (cr, &fg_color);
@@ -2051,19 +2058,21 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
 {
   GtkJunctionSides junction;
   GtkStateFlags state;
+  GtkStyleContext *context;
   gint border_width;
   GtkCssValue *corner[4];
   gdouble x0, y0, x1, y1, xc = 0.0, yc = 0.0, wc = 0.0, hc = 0.0;
   GtkBorder border;
 
+  context = engine->priv->context;
   state = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
 
   gtk_theming_engine_get_border (engine, state, &border);
-  corner[GTK_CSS_TOP_LEFT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
-  corner[GTK_CSS_TOP_RIGHT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
-  corner[GTK_CSS_BOTTOM_LEFT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
-  corner[GTK_CSS_BOTTOM_RIGHT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
+  corner[GTK_CSS_TOP_LEFT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
+  corner[GTK_CSS_TOP_RIGHT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
+  corner[GTK_CSS_BOTTOM_LEFT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
+  corner[GTK_CSS_BOTTOM_RIGHT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -2132,7 +2141,7 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   cairo_rectangle (cr, x0, yc + hc, x1 - x0, y1 - (yc + hc));
   cairo_clip (cr);
 
-  render_frame_internal (engine, cr,
+  render_frame_internal (context, cr,
                          x, y, width, height,
                          0, junction);
 
@@ -2178,7 +2187,7 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
                                 junction);
   _gtk_theming_background_render (&bg, cr);
 
-  render_frame_internal (engine, cr,
+  render_frame_internal (engine->priv->context, cr,
                          x, y, width, height,
                          hidden_side, junction);
 }
@@ -2229,7 +2238,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   gint xx, yy;
   gboolean has_image;
 
-  if (render_icon_image (engine, cr, x, y, width, height))
+  if (render_icon_image (engine->priv->context, cr, x, y, width, height))
     return;
 
   cairo_save (cr);
@@ -2590,7 +2599,7 @@ render_spinner (GtkThemingEngine *engine,
   cairo_save (cr);
   cairo_translate (cr, x + width / 2, y + height / 2);
 
-  _gtk_css_shadows_value_paint_spinner (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW),
+  _gtk_css_shadows_value_paint_spinner (_gtk_style_context_peek_property (engine->priv->context, GTK_CSS_PROPERTY_ICON_SHADOW),
                                         cr,
                                         radius,
                                         -1);
@@ -2609,7 +2618,7 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                     gdouble           width,
                                     gdouble           height)
 {
-  if (render_icon_image (engine, cr, x, y, width, height))
+  if (render_icon_image (engine->priv->context, cr, x, y, width, height))
     return;
 
   render_spinner (engine, cr, x, y, width, height);
@@ -2709,7 +2718,7 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
     return scaled;
 
   image_effect = _gtk_css_image_effect_value_get
-    (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT));
+    (_gtk_style_context_peek_property (engine->priv->context, GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT));
 
   if (image_effect == GTK_CSS_IMAGE_EFFECT_DIM ||
       state & GTK_STATE_FLAG_INSENSITIVE)
@@ -2765,7 +2774,7 @@ gtk_theming_engine_render_icon (GtkThemingEngine *engine,
 
   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 
-  _gtk_css_shadows_value_paint_icon (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
+  _gtk_css_shadows_value_paint_icon (_gtk_style_context_peek_property (engine->priv->context, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
 
   cairo_paint (cr);
 
@@ -2783,7 +2792,7 @@ gtk_theming_engine_render_icon_surface (GtkThemingEngine *engine,
 
   cairo_set_source_surface (cr, surface, x, y);
 
-  _gtk_css_shadows_value_paint_icon (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
+  _gtk_css_shadows_value_paint_icon (_gtk_style_context_peek_property (engine->priv->context, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
 
   cairo_paint (cr);
 
