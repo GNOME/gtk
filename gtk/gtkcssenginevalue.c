@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
 #include "gtkcssenginevalueprivate.h"
 
 #include "gtkstylepropertyprivate.h"
