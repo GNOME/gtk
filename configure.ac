@@ -955,14 +955,14 @@ AS_IF([test "x$enable_gtk2_dependency" = xyes],
        NATIVE_GDKPIXBUF_LIBS=`$PKG_CONFIG_FOR_BUILD --libs gdk-pixbuf-2.0`
        # This is the native gtk-update-icon-cache which will be used at
        # build time, NOT the one installed on the target host.
-       GTK_UPDATE_ICON_CACHE="`cd $srcdir && pwd`/gtk/native/native-update-icon-cache$BUILD_EXEEXT"
+       GTK_UPDATE_ICON_CACHE="`cd $builddir && pwd`/gtk/native/native-update-icon-cache$BUILD_EXEEXT"
        AC_SUBST(NATIVE_GDKPIXBUF_CFLAGS)
        AC_SUBST(NATIVE_GDKPIXBUF_LIBS)
        AC_SUBST(GTK_UPDATE_ICON_CACHE)],
 
       [# In native compiling case, the gtk-update-icon-cache installed
        # is the same as the one used during build.
-       GTK_UPDATE_ICON_CACHE="`cd $srcdir && pwd`/gtk/gtk-update-icon-cache$EXEEXT"
+       GTK_UPDATE_ICON_CACHE="\$(abs_top_builddir)/gtk/gtk-update-icon-cache$EXEEXT"
        AC_SUBST(GTK_UPDATE_ICON_CACHE)]
 )
 
