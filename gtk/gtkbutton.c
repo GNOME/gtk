@@ -1504,7 +1504,6 @@ gtk_button_set_relief (GtkButton      *button,
         gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FLAT);
 
       g_object_notify_by_pspec (G_OBJECT (button), props[PROP_RELIEF]);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
     }
 }
 
@@ -2034,7 +2033,6 @@ gtk_real_button_activate (GtkButton *button)
       g_source_set_name_by_id (priv->activate_timeout, "[gtk+] button_activate_timeout");
       priv->button_down = TRUE;
       gtk_button_update_state (button);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
     }
 }
 
@@ -2058,7 +2056,6 @@ gtk_button_finish_activate (GtkButton *button,
   priv->button_down = FALSE;
 
   gtk_button_update_state (button);
-  gtk_widget_queue_draw (GTK_WIDGET (button));
 
   if (do_it)
     gtk_button_clicked (button);
@@ -2446,7 +2443,6 @@ static void
 gtk_button_enter_leave (GtkButton *button)
 {
   gtk_button_update_state (button);
-  gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
 static void
