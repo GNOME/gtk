@@ -529,7 +529,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 {
   GtkWidget *widget;
   GtkButton *button;
-  GtkStateFlags state = 0;
   gint x, y;
   gint indicator_size;
   gint indicator_spacing;
@@ -544,7 +543,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   gtk_widget_get_allocation (widget, &allocation);
   baseline = gtk_widget_get_allocated_baseline (widget);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
 
@@ -557,20 +555,10 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
     y = CLAMP (baseline - indicator_size * button->priv->baseline_align,
 	       0, allocation.height - indicator_size);
 
-  state &= ~(GTK_STATE_FLAG_ACTIVE |
-             GTK_STATE_FLAG_PRELIGHT);
-
-  if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
-    state |= GTK_STATE_FLAG_ACTIVE;
-
-  if (button->priv->in_button)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr,
                          border_width, border_width,

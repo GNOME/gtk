@@ -831,7 +831,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GtkWidget *widget;
   GtkButton *button;
   GtkStyleContext *context;
-  GtkStateFlags state = 0;
   gint x, y;
   gint indicator_size, indicator_spacing;
   gint baseline;
@@ -840,7 +839,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   widget = GTK_WIDGET (check_button);
   button = GTK_BUTTON (check_button);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
@@ -855,21 +853,10 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
     y = CLAMP (baseline - indicator_size * button->priv->baseline_align,
 	       0, allocation.height - indicator_size);
 
-  state &= ~(GTK_STATE_FLAG_ACTIVE |
-             GTK_STATE_FLAG_PRELIGHT);
-
-  if (button->priv->activate_timeout ||
-      (button->priv->button_down && button->priv->in_button))
-    state |= GTK_STATE_FLAG_ACTIVE;
-
-  if (button->priv->in_button)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr,
                          border_width, border_width,
