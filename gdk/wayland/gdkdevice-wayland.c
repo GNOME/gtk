@@ -15,7 +15,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _GNU_SOURCE
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>

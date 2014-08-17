@@ -227,6 +227,8 @@ LT_INIT([disable-static win32-dll])
 # Create libtool early, because it's used in configure
 LT_OUTPUT
 
+# Define _GNU_SOURCE etc. where appropriate, e.g. for strptime() on glibc
+AC_USE_SYSTEM_EXTENSIONS
 # Make sure we use 64-bit versions of various file stuff.
 AC_SYS_LARGEFILE
 

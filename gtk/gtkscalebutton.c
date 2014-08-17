@@ -36,9 +36,6 @@
 
 #include "gtkscalebutton.h"
 
-#ifndef _WIN32
-#define _GNU_SOURCE
-#endif
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>

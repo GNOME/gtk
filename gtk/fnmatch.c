@@ -35,13 +35,6 @@
 
 #include <glib.h>
 
-/* We need to make sure that all constants are defined
- * to properly compile this file
- */
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
-
 static gunichar
 get_char (const char **str)
 {

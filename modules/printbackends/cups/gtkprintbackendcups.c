@@ -17,10 +17,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef __linux__
-#define _GNU_SOURCE
-#endif
-
 #include "config.h"
 #include <ctype.h>
 #include <unistd.h>
