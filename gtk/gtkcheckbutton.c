@@ -87,6 +87,25 @@ static void gtk_real_check_button_draw_indicator (GtkCheckButton      *check_but
 G_DEFINE_TYPE (GtkCheckButton, gtk_check_button, GTK_TYPE_TOGGLE_BUTTON)
 
 static void
+gtk_check_button_state_flags_changed (GtkWidget     *widget,
+				      GtkStateFlags  previous_state_flags)
+{
+  /* FIXME
+   * This is a hack to get around the optimizations done by the CSS engine.
+   *
+   * The CSS engine will notice that no CSS properties changed on the
+   * widget itself when going from one state to another and not queue
+   * a redraw.
+   * And the reason for no properties changing will be that only the
+   * checkmark itself changes, but that is hidden behind a
+   * gtk_style_context_save()/_restore() pair, so it won't be caught.
+   */
+  gtk_widget_queue_draw (widget);
+
+  GTK_WIDGET_CLASS (gtk_check_button_parent_class)->state_flags_changed (widget, previous_state_flags);
+}
+
+static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
   GtkWidgetClass *widget_class;
@@ -100,6 +119,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   widget_class->get_preferred_height_and_baseline_for_width = gtk_check_button_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_check_button_size_allocate;
   widget_class->draw = gtk_check_button_draw;
+  widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
 
   class->draw_indicator = gtk_real_check_button_draw_indicator;
 
