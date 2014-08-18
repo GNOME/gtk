@@ -34,7 +34,7 @@
 
 G_BEGIN_DECLS
 
-/**
+/*
  * GtkTranslateFunc:
  * @path: The id of the message. In #GtkActionGroup this will be a label
  *   or tooltip from a #GtkActionEntry.

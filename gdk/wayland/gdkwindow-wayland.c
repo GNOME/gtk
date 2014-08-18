@@ -141,7 +141,7 @@ _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
   impl->scale = 1;
 }
 
-/**
+/*
  * gdk_wayland_window_update_size:
  * @drawable: a #GdkDrawableImplWayland.
  *

@@ -12381,7 +12381,7 @@ is_my_window (GtkWidget *widget,
   return (user_data == widget);
 }
 
-/**
+/*
  * _gtk_widget_get_device_window:
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
@@ -12429,7 +12429,7 @@ list_devices (GtkWidget        *widget,
   g_list_free (devices);
 }
 
-/**
+/*
  * _gtk_widget_list_devices:
  * @widget: a #GtkWidget
  *
@@ -12499,7 +12499,7 @@ synth_crossing (GtkWidget       *widget,
   gdk_event_free (event);
 }
 
-/**
+/*
  * _gtk_widget_synthesize_crossing:
  * @from: the #GtkWidget the virtual pointer is leaving.
  * @to: the #GtkWidget the virtual pointer is moving to.
@@ -12806,7 +12806,7 @@ static const GtkWidgetAuxInfo default_aux_info = {
   { 0, 0, 0, 0 }
 };
 
-/**
+/*
  * gtk_widget_get_aux_info:
  * @widget: a #GtkWidget
  * @create: if %TRUE, create the #GtkWidgetAuxInfo-struct if it doesn’t exist
@@ -15545,7 +15545,7 @@ union_with_clip (GtkWidget *widget,
   gdk_rectangle_union (&widget_clip, clip, clip);
 }
 
-/**
+/*
  * _gtk_widget_set_simple_clip:
  * @widget: a #GtkWidget
  *
