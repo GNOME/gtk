@@ -296,7 +296,10 @@ gtk_gl_area_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
 
   if (context != NULL)
-    gdk_gl_context_set_window (context, gtk_widget_get_window (widget));
+    {
+      gdk_gl_context_set_window (context, window);
+      gdk_gl_context_update (context);
+    }
 }
 
 static void
