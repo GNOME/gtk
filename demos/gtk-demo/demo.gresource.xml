@@ -95,6 +95,7 @@
     <file>expander.c</file>
     <file>flowbox.c</file>
     <file>gestures.c</file>
+    <file>glarea.c</file>
     <file>headerbar.c</file>
     <file>hypertext.c</file>
     <file>iconview.c</file>

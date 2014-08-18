@@ -25,6 +25,7 @@ demos =						\
 	event_axes.c				\
 	expander.c  				\
 	gestures.c				\
+	glarea.c				\
 	headerbar.c				\
 	hypertext.c				\
 	iconview.c				\
