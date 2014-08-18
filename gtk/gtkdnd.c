@@ -3272,7 +3272,7 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
   screen = gdk_colormap_get_screen (colormap);
   
   g_return_if_fail (gdk_drawable_get_screen (pixmap) == screen);
-  g_return_if_fail (!mask || gdk_window_get_screen (mask) == screen);
+  g_return_if_fail (!mask || gdk_drawable_get_screen (mask) == screen);
 
   gdk_drawable_get_size (pixmap, &width, &height);
 
