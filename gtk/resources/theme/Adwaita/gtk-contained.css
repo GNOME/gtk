@@ -1779,20 +1779,21 @@ GtkSwitch {
 .menu .menuitem.check {
   color: rgba(46, 52, 54, 0.1);
   background-image: none;
-  -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
+  -gtk-icon-source: -gtk-icontheme("checkbox-symbolic"); }
   .menu .menuitem.check:hover {
     color: rgba(255, 255, 255, 0.1); }
-  .menu .menuitem.check:checked {
-    color: #2e3436; }
-    .menu .menuitem.check:checked:hover {
+  .menu .menuitem.check:active, .menu .menuitem.check:checked {
+    color: #2e3436;
+    -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
+    .menu .menuitem.check:active:hover, .menu .menuitem.check:checked:hover {
       -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
       color: white; }
-    .menu .menuitem.check:checked:insensitive {
+    .menu .menuitem.check:active:insensitive, .menu .menuitem.check:checked:insensitive {
       color: #8d9091;
       background-image: none; }
-      .menu .menuitem.check:checked:insensitive:backdrop {
+      .menu .menuitem.check:active:insensitive:backdrop, .menu .menuitem.check:checked:insensitive:backdrop {
         color: #c7c7c7; }
-    .menu .menuitem.check:checked:backdrop {
+    .menu .menuitem.check:active:backdrop, .menu .menuitem.check:checked:backdrop {
       -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
       color: #54595a; }
   .menu .menuitem.check:insensitive {
@@ -1861,20 +1862,21 @@ GtkSwitch {
 .menu .menuitem.radio {
   color: rgba(46, 52, 54, 0.1);
   background-image: none;
-  -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
+  -gtk-icon-source: -gtk-icontheme("radio-symbolic"); }
   .menu .menuitem.radio:hover {
     color: rgba(255, 255, 255, 0.1); }
-  .menu .menuitem.radio:checked {
-    color: #2e3436; }
-    .menu .menuitem.radio:checked:hover {
+  .menu .menuitem.radio:active, .menu .menuitem.radio:checked {
+    color: #2e3436;
+    -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
+    .menu .menuitem.radio:active:hover, .menu .menuitem.radio:checked:hover {
       -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
       color: white; }
-    .menu .menuitem.radio:checked:insensitive {
+    .menu .menuitem.radio:active:insensitive, .menu .menuitem.radio:checked:insensitive {
       color: #8d9091;
       background-image: none; }
-      .menu .menuitem.radio:checked:insensitive:backdrop {
+      .menu .menuitem.radio:active:insensitive:backdrop, .menu .menuitem.radio:checked:insensitive:backdrop {
         color: #c7c7c7; }
-    .menu .menuitem.radio:checked:backdrop {
+    .menu .menuitem.radio:active:backdrop, .menu .menuitem.radio:checked:backdrop {
       -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
       color: #54595a; }
   .menu .menuitem.radio:insensitive {

@@ -1661,12 +1661,13 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   .menu .menuitem.#{$w} {
     color: transparentize($fg_color,0.9);
     background-image: none;
-    -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
+    -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
     &:hover { color: transparentize($selected_fg_color,0.9); }
-    &:checked {
+    &:active, &:checked {
       color: $fg_color;
+      -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
       &:hover {
-        -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
+        -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic'); //specificity workaround
         color: $selected_fg_color;
       }
       &:insensitive {
@@ -1675,7 +1676,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
         &:backdrop { color: $backdrop_insensitive_color; };
       }
       &:backdrop {
-        -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
+        -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic'); //specificity workaround
         color: $backdrop_fg_color;
       }
     }
