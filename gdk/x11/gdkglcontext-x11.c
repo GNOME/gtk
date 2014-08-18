@@ -53,7 +53,12 @@ drawable_info_free (gpointer data_)
 {
   DrawableInfo *data = data_;
 
-  glXDestroyWindow (gdk_x11_display_get_xdisplay (data->display), data->drawable);
+  gdk_x11_display_error_trap_push (data->display);
+
+  if (data->drawable)
+    glXDestroyWindow (gdk_x11_display_get_xdisplay (data->display), data->drawable);
+
+  gdk_x11_display_error_trap_pop_ignored (data->display);
 
   g_slice_free (DrawableInfo, data);
 }
