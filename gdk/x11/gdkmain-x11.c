@@ -137,7 +137,7 @@ _gdk_x11_convert_grab_status (gint status)
   return 0;
 }
 
-/*
+/**
  * _gdk_x11_window_grab_check_unmap:
  * @window: a #GdkWindow
  * @serial: serial from Unmap event (or from NextRequest(display)
@@ -169,7 +169,7 @@ _gdk_x11_window_grab_check_unmap (GdkWindow *window,
   g_list_free (devices);
 }
 
-/*
+/**
  * _gdk_x11_window_grab_check_destroy:
  * @window: a #GdkWindow
  * 

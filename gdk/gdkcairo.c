@@ -378,7 +378,7 @@ gdk_cairo_set_source_window (cairo_t   *cr,
   cairo_surface_destroy (surface);
 }
 
-/*
+/**
  * _gdk_cairo_surface_extents:
  * @surface: surface to measure
  * @extents: (out): rectangle to put the extents
