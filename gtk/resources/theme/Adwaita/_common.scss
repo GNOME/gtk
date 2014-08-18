@@ -1658,12 +1658,12 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 
   //menu
-  .menuitem.#{$w} {
+  .menu .menuitem.#{$w} {
     color: transparentize($fg_color,0.9);
     background-image: none;
     -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
     &:hover { color: transparentize($selected_fg_color,0.9); }
-    &:active {
+    &:checked {
       color: $fg_color;
       &:hover {
         -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
@@ -1688,60 +1688,6 @@ $asset_suffix: if($variant=='dark', '-dark', '');
     }
     &:backdrop, &:backdrop:hover {
       color: transparentize($backdrop_fg_color,0.9);
-    }
-  }
-
-  //treeview & selection mode icon view
-  .view.#{$w} {
-    // FIXME .cell.check/.radio doesn't needs to be blue in bright var
-    color: transparentize($fg_color,0.9);
-    background-image: none;
-    -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
-    &:hover { -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic'); }
-    &:active {
-    color: $fg_color;
-      &:insensitive {
-        color: $insensitive_fg_color;
-        &:backdrop { color: $backdrop_insensitive_color; }
-      }
-      &:backdrop { color: $backdrop_fg_color; }
-    }
-    &:insensitive {
-      color: transparentize($insensitive_fg_color,0.9);
-      &:backdrop { color: transparent; }
-    }
-    &:inconsistent {
-      -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
-    }
-    &:selected, &:selected:focus {
-      // -gtk-icon-source needed it gets overridden
-      -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
-      // :selected:focus not to get overridden by .view style
-      color: transparentize($selected_fg_color,0.9);
-      &:active {
-        color: $selected_fg_color;
-        &:backdrop {
-          color: if($variant=='light',$backdrop_base_color,$backdrop_fg_color);
-        }
-      }
-    }
-    &:backdrop {
-      // -gtk-icon-source needed it gets overridden
-      -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
-      color: transparentize($backdrop_fg_color,0.9);
-      &:selected { color: transparentize($backdrop_base_color,0.9); }
-    }
-  }
-
-  //popover
-  .popover .button.#{$w} {
-    &:hover {
-      color: transparentize($fg_color,0.9);
-      &:active {
-        color: $fg_color;
-        &:selected { color: $selected_fg_color; }
-        &:backdrop { color: $backdrop_fg_color; }
-      }
     }
   }
 }
