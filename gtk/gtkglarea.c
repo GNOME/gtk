@@ -347,6 +347,9 @@ gtk_gl_area_draw (GtkWidget *widget,
 
   g_signal_emit (self, area_signals[RENDER], 0, priv->context, &unused);
 
+  /* XXX: this will go away once gdk_window_end_paint() knows about
+   * GdkGLContext and calls it implicitly when needed
+   */
   gtk_gl_area_flush_buffer (self);
 
   return TRUE;
@@ -524,6 +527,18 @@ gtk_gl_area_init (GtkGLArea *self)
 {
   gtk_widget_set_has_window (GTK_WIDGET (self), TRUE);
   gtk_widget_set_app_paintable (GTK_WIDGET (self), TRUE);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  /* FIXME: we need this because double buffering inside GDK will
+   * clear the GL drawable we use, which means flickering. the
+   * proper way to fix this is to make GDK understand that a GDK
+   * window backed by a native window with a GL context will draw
+   * on the window itself, and that all the other drawing should
+   * happen on a seperate surface, which will then get blended via
+   * GL.
+   */
+  gtk_widget_set_double_buffered (GTK_WIDGET (self), FALSE);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
