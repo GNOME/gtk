@@ -1323,7 +1323,7 @@ gtk_style_context_set_scale (GtkStyleContext *context,
 
   context->priv->scale = scale;
 
-  gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_SOURCE);
+  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_SOURCE);
 }
 
 /**
