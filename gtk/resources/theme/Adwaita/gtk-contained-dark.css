@@ -890,6 +890,7 @@ GtkComboBox {
  * Toolbars *
  ************/
 .toolbar, .inline-toolbar, .search-bar {
+  -GtkWidget-window-dragging: true;
   padding: 4px;
   background-color: #393f3f; }
   .osd .toolbar, .osd .inline-toolbar, .osd .search-bar {
@@ -1219,6 +1220,7 @@ GtkTreeView.view.progressbar {
  * Menus *
  *********/
 .menubar {
+  -GtkWidget-window-dragging: true;
   padding: 0px;
   box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1); }
   .menubar:backdrop {
