@@ -29,12 +29,14 @@ backend_LTLIBRARIES = libprintbackend-cups.la
 libprintbackend_cups_la_SOURCES =	\
 	gtkprintbackendcups.c		\
 	gtkprintercups.c		\
-	gtkcupsutils.c
+	gtkcupsutils.c			\
+	gtkcupssecretsutils.c
 
 noinst_HEADERS =			\
 	gtkprintbackendcups.h		\
 	gtkprintercups.h		\
-	gtkcupsutils.h
+	gtkcupsutils.h			\
+	gtkcupssecretsutils.h
 
 libprintbackend_cups_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libprintbackend_cups_la_LIBADD = $(LDADDS) $(CUPS_LIBS)
