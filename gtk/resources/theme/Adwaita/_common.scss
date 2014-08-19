@@ -785,8 +785,8 @@ GtkComboBox {
 /************
  * Toolbars *
  ************/
-.toolbar { //FIXME: why is all this being ignored?
-  padding: 6px;
+.toolbar {
+  padding: 4px;
   background-color: $bg_color;
   .osd & {
     background-color: $osd_bg_color;

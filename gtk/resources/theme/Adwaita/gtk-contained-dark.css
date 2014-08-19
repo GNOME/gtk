@@ -890,7 +890,7 @@ GtkComboBox {
  * Toolbars *
  ************/
 .toolbar, .inline-toolbar, .search-bar {
-  padding: 6px;
+  padding: 4px;
   background-color: #393f3f; }
   .osd .toolbar, .osd .inline-toolbar, .osd .search-bar {
     background-color: rgba(0, 0, 0, 0.6);
