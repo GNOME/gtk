@@ -1805,7 +1805,7 @@ gtk_application_handle_window_map (GtkApplication *application,
  * See [Automatic resources][automatic-resources]
  * for more information.
  *
- * Returns: (transfer full): Gets the menu with the
+ * Returns: (transfer none): Gets the menu with the
  *     given id from the automatically loaded resources
  *
  * Since: 3.14
