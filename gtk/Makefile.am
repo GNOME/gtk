@@ -1779,13 +1779,8 @@ else
 	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
 endif
 endif
-	$(AM_V_GEN) $(gtk_update_icon_cache_program) 	\
-		--quiet					\
-		--force					\
-		--ignore-theme-index			\
-		--include-image-data			\
-		--source builtin_icons stock-icons 	\
-			> gtkbuiltincache.h.tmp &&	\
+	$(AM_V_GEN) $(gtk_update_icon_cache_program) --quiet --force --ignore-theme-index		\
+	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
 
 EXTRA_DIST +=                   \
