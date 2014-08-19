@@ -1893,6 +1893,38 @@ GtkSwitch {
   .menu .menuitem.radio:backdrop, .menu .menuitem.radio:backdrop:hover {
     color: rgba(201, 203, 201, 0.1); }
 
+GtkIconView.view.check,
+GtkFlowBox.view.check {
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png")); }
+
+GtkIconView.view.check:hover,
+GtkFlowBox.view.check:hover {
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-hover-selectionmode.png"), url("assets/checkbox-hover-selectionmode@2.png")); }
+
+GtkIconView.view.check:active,
+GtkFlowBox.view.check:active {
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-active-selectionmode.png"), url("assets/checkbox-active-selectionmode@2.png")); }
+
+GtkIconView.view.check:backdrop,
+GtkFlowBox.view.check:backdrop {
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-backdrop-selectionmode.png"), url("assets/checkbox-backdrop-selectionmode@2.png")); }
+
+GtkIconView.view.check:checked,
+GtkFlowBox.view.check:checked {
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-selectionmode.png"), url("assets/checkbox-checked-selectionmode@2.png")); }
+
+GtkIconView.view.check:checked:hover,
+GtkFlowBox.view.check:checked:hover {
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-selectionmode.png"), url("assets/checkbox-checked-hover-selectionmode@2.png")); }
+
+GtkIconView.view.check:checked:active,
+GtkFlowBox.view.check:checked:active {
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-selectionmode.png"), url("assets/checkbox-checked-active-selectionmode@2.png")); }
+
+GtkIconView.view.check:backdrop:checked,
+GtkFlowBox.view.check:backdrop:checked {
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-selectionmode.png"), url("assets/checkbox-checked-backdrop-selectionmode@2.png")); }
+
 GtkCheckButton.text-button, GtkRadioButton.text-button {
   padding: 1px 2px 4px;
   outline-offset: 0; }

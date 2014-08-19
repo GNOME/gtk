@@ -46,6 +46,14 @@ checkbox-unchecked-active-dark
 checkbox-unchecked-insensitive-dark
 checkbox-unchecked-backdrop-dark
 checkbox-unchecked-backdrop-insensitive-dark
+checkbox-selectionmode
+checkbox-hover-selectionmode
+checkbox-active-selectionmode
+checkbox-backdrop-selectionmode
+checkbox-checked-selectionmode
+checkbox-checked-hover-selectionmode
+checkbox-checked-active-selectionmode
+checkbox-checked-backdrop-selectionmode
 checkbox-mixed-dark
 checkbox-mixed-hover-dark
 checkbox-mixed-active-dark
