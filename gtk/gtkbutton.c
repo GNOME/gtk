@@ -592,6 +592,7 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
   if (priv->focus_on_click && !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
+  priv->in_button = TRUE;
   g_signal_emit (button, button_signals[PRESSED], 0);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
@@ -604,8 +605,42 @@ multipress_released_cb (GtkGestureMultiPress *gesture,
                         GtkWidget            *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
+  GtkButtonPrivate *priv = button->priv;
+  GdkEventSequence *sequence;
+  GdkDevice *source;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  source = gdk_event_get_source_device (gtk_gesture_get_last_event (GTK_GESTURE (gesture),
+                                                                    sequence));
+  if (gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
+    priv->in_button = FALSE;
 
   g_signal_emit (button, button_signals[RELEASED], 0);
+}
+
+static void
+multipress_gesture_update_cb (GtkGesture       *gesture,
+                              GdkEventSequence *sequence,
+                              GtkButton        *button)
+{
+  GtkButtonPrivate *priv = button->priv;
+  GtkAllocation allocation;
+  gboolean in_button;
+  gdouble x, y;
+
+  if (sequence != gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)))
+    return;
+
+  gtk_widget_get_allocation (GTK_WIDGET (button), &allocation);
+  gtk_gesture_get_point (gesture, sequence, &x, &y);
+
+  in_button = (x >= 0 && y >= 0 && x < allocation.width && y < allocation.height);
+
+  if (priv->in_button != in_button)
+    {
+      priv->in_button = in_button;
+      gtk_button_update_state (button);
+    }
 }
 
 static void
@@ -646,6 +681,7 @@ gtk_button_init (GtkButton *button)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
   g_signal_connect (priv->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), button);
   g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
+  g_signal_connect (priv->gesture, "update", G_CALLBACK (multipress_gesture_update_cb), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_BUBBLE);
 }
 
