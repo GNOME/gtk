@@ -947,6 +947,28 @@ test_backspace (void)
   g_assert_cmpint (0, ==, gtk_text_iter_get_line (&iter));
   g_assert_cmpint (8, ==, gtk_text_buffer_get_char_count (buffer));
 
+  /* test empty last line */
+  gtk_text_buffer_set_text (buffer, "", -1);
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
+  g_assert (!ret);
+  g_assert_cmpint (0, ==, gtk_text_iter_get_offset (&iter));
+  g_assert_cmpint (0, ==, gtk_text_buffer_get_char_count (buffer));
+
+  gtk_text_buffer_set_text (buffer, "foo\n", -1);
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
+  g_assert (ret);
+  g_assert_cmpint (3, ==, gtk_text_iter_get_offset (&iter));
+  g_assert_cmpint (3, ==, gtk_text_buffer_get_char_count (buffer));
+
+  gtk_text_buffer_set_text (buffer, "foo\r\n", -1);
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
+  g_assert (ret);
+  g_assert_cmpint (3, ==, gtk_text_iter_get_offset (&iter));
+  g_assert_cmpint (3, ==, gtk_text_buffer_get_char_count (buffer));
+
   g_object_unref (buffer);
 }
 

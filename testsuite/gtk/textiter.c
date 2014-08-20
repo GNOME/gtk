@@ -391,12 +391,14 @@ test_word_boundaries (void)
   check_word_boundaries ("ab ", 1, FALSE, FALSE, TRUE);
   check_word_boundaries ("ab ", 2, FALSE, TRUE, FALSE);
   check_word_boundaries ("ab ", 3, FALSE, FALSE, FALSE);
+  check_word_boundaries ("", 0, FALSE, FALSE, FALSE);
 
   check_forward_word_end ("ab ", 0, 2, TRUE);
   check_forward_word_end ("ab ", 1, 2, TRUE);
   check_forward_word_end ("ab ", 2, 2, FALSE);
   check_forward_word_end ("ab ", 3, 3, FALSE);
   check_forward_word_end ("ab", 0, 2, FALSE);
+  check_forward_word_end ("ab\n", 2, 2, FALSE);
 
   check_backward_word_start (" ab", 3, 1, TRUE);
   check_backward_word_start (" ab", 2, 1, TRUE);
@@ -489,6 +491,23 @@ test_visible_word_boundaries (void)
 }
 
 static void
+check_is_cursor_position (const gchar *buffer_text,
+                          gint         offset,
+                          gboolean     ret)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
+  g_assert_cmpint (ret, ==, gtk_text_iter_is_cursor_position (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
 check_cursor_position (const gchar *buffer_text,
                        gboolean     forward,
                        gint         initial_offset,
@@ -516,12 +535,19 @@ check_cursor_position (const gchar *buffer_text,
 static void
 test_cursor_positions (void)
 {
+  check_is_cursor_position ("a\r\n", 0, TRUE);
+  check_is_cursor_position ("a\r\n", 1, TRUE);
+  check_is_cursor_position ("a\r\n", 2, FALSE);
+  check_is_cursor_position ("a\r\n", 3, FALSE); /* FIXME should be TRUE */
+  check_is_cursor_position ("", 0, FALSE);      /* FIXME should be TRUE */
+
   /* forward */
   check_cursor_position ("a\r\nb", TRUE, 0, 1, TRUE);
   check_cursor_position ("a\r\nb", TRUE, 1, 3, TRUE);
   check_cursor_position ("a\r\nb", TRUE, 2, 3, TRUE);
   check_cursor_position ("a\r\nb", TRUE, 3, 4, FALSE);
   check_cursor_position ("a\r\nb", TRUE, 4, 4, FALSE);
+  check_cursor_position ("a\n", TRUE, 1, 2, FALSE);
 
   /* backward */
   check_cursor_position ("a\r\nb", FALSE, 4, 3, TRUE);
@@ -656,6 +682,7 @@ test_sentence_boundaries (void)
   check_sentence_boundaries ("Hi. ", 2, FALSE, FALSE, TRUE);
   check_sentence_boundaries ("Hi. ", 3, FALSE, TRUE, FALSE);
   check_sentence_boundaries ("Hi. ", 4, FALSE, FALSE, FALSE);
+  check_sentence_boundaries ("", 0, FALSE, FALSE, FALSE);
 
   check_forward_sentence_end ("Hi. ", 0, 3, TRUE);
   check_forward_sentence_end ("Hi. ", 1, 3, TRUE);
@@ -663,6 +690,7 @@ test_sentence_boundaries (void)
   check_forward_sentence_end ("Hi. ", 3, 3, FALSE);
   check_forward_sentence_end ("Hi. ", 4, 4, FALSE);
   check_forward_sentence_end ("Hi.", 0, 3, FALSE);
+  check_forward_sentence_end ("Hi.\n", 3, 3, FALSE);
 
   check_backward_sentence_start (" Hi.", 4, 1, TRUE);
   check_backward_sentence_start (" Hi.", 3, 1, TRUE);
