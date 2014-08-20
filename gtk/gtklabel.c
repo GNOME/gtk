@@ -30,28 +30,28 @@
 #include "gtklabel.h"
 #include "gtklabelprivate.h"
 #include "gtkaccellabel.h"
+#include "gtkbindings.h"
+#include "gtkbuildable.h"
+#include "gtkclipboard.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkdnd.h"
-#include "gtkmarshalers.h"
-#include "gtkpango.h"
-#include "gtkwindow.h"
-#include "gtkclipboard.h"
+#include "gtkimage.h"
 #include "gtkintl.h"
-#include "gtkseparatormenuitem.h"
-#include "gtktextutil.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
 #include "gtkmenushellprivate.h"
 #include "gtknotebook.h"
-#include "gtkbindings.h"
-#include "gtkbuildable.h"
-#include "gtkimage.h"
+#include "gtkpango.h"
+#include "gtkprivate.h"
+#include "gtkseparatormenuitem.h"
 #include "gtkshow.h"
 #include "gtkstylecontextprivate.h"
+#include "gtktextutil.h"
 #include "gtktooltip.h"
-#include "gtkprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkmain.h"
+#include "gtkwidgetprivate.h"
+#include "gtkwindow.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
 
@@ -3997,7 +3997,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
 
   gtk_label_get_ink_rect (label, &clip_rect);
   gdk_rectangle_union (&clip_rect, allocation, &clip_rect);
-  gtk_widget_set_clip (widget, &clip_rect);
+  _gtk_widget_set_simple_clip (widget, &clip_rect);
 }
 
 static void

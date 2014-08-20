@@ -252,6 +252,9 @@ testdata = \
 	label-background.css \
 	label-background.ref.ui \
 	label-background.ui \
+	label-box-shadow-clip.css \
+	label-box-shadow-clip.ref.ui \
+	label-box-shadow-clip.ui \
 	label-clipping.css \
 	label-clipping.ref.ui \
 	label-clipping.ui \
