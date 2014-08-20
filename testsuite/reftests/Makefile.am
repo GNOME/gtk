@@ -337,6 +337,9 @@ testdata = \
 	separator-size.ui \
 	set-default-direction.ui \
 	set-default-direction.ref.ui \
+	shadow-clip-rounding.css \
+	shadow-clip-rounding.ref.ui \
+	shadow-clip-rounding.ui \
 	shorthand-entry-border.css \
 	shorthand-entry-border.ref.ui \
 	shorthand-entry-border.ui \
