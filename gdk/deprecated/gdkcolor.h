@@ -48,6 +48,8 @@ G_BEGIN_DECLS
  *
  * A #GdkColor is used to describe a color,
  * similar to the XColor struct used in the X11 drawing API.
+ *
+ * Deprecated: 3.14: Use #GdkRGBA
  */
 struct _GdkColor
 {
