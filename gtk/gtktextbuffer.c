@@ -3889,6 +3889,7 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
   GtkTextIter end;
   gboolean retval = FALSE;
   const PangoLogAttr *attrs;
+  gint offset;
   gboolean backspace_deletes_character;
 
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
@@ -3898,17 +3899,8 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
   end = *iter;
 
   attrs = _gtk_text_buffer_get_line_log_attrs (buffer, &start, NULL);
-
-  /* For no good reason, attrs is NULL for the empty last line in
-   * a buffer. Special case that here. (#156164)
-   */
-  if (attrs != NULL)
-    {
-      gint offset = gtk_text_iter_get_line_offset (&start);
-      backspace_deletes_character = attrs[offset].backspace_deletes_character;
-    }
-  else
-    backspace_deletes_character = FALSE;
+  offset = gtk_text_iter_get_line_offset (&start);
+  backspace_deletes_character = attrs[offset].backspace_deletes_character;
 
   gtk_text_iter_backward_cursor_position (&start);
 
@@ -4325,8 +4317,6 @@ compute_log_attrs (const GtkTextIter *iter,
   char_len = g_utf8_strlen (paragraph, -1);
   byte_len = strlen (paragraph);
 
-  g_assert (char_len > 0);
-
   if (char_lenp != NULL)
     *char_lenp = char_len;
 
@@ -4346,6 +4336,7 @@ compute_log_attrs (const GtkTextIter *iter,
 }
 
 /* The return value from this is valid until you call this a second time.
+ * Returns (char_len + 1) PangoLogAttr's, one for each text position.
  */
 const PangoLogAttr *
 _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
@@ -4362,15 +4353,6 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
 
   priv = buffer->priv;
 
-  /* special-case for empty last line in buffer */
-  if (gtk_text_iter_is_end (anywhere_in_line) &&
-      gtk_text_iter_get_line_offset (anywhere_in_line) == 0)
-    {
-      if (char_len != NULL)
-        *char_len = 0;
-      return NULL;
-    }
-  
   /* FIXME we also need to recompute log attrs if the language tag at
    * the start of a paragraph changes
    */

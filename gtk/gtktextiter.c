@@ -3060,7 +3060,6 @@ test_log_attrs (const GtkTextIter *iter,
   gint char_len;
   const PangoLogAttr *attrs;
   gint offset;
-  gboolean result = FALSE;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -3069,16 +3068,9 @@ test_log_attrs (const GtkTextIter *iter,
 
   offset = gtk_text_iter_get_line_offset (iter);
 
-  /* char_len may be 0 and attrs will be NULL if so, if
-   * iter is the end iter and the last line is empty.
-   *
-   * offset may be equal to char_len, since attrs contains an entry
-   * for one past the end.
-   */
-  if (attrs != NULL && offset <= char_len)
-    result = (* func) (attrs, offset, 0, char_len);
+  g_assert (offset <= char_len);
 
-  return result;
+  return (* func) (attrs, offset, 0, char_len);
 }
 
 static gboolean
@@ -3090,7 +3082,6 @@ find_line_log_attrs (const GtkTextIter *iter,
   gint char_len;
   const PangoLogAttr *attrs;
   gint offset;
-  gboolean result = FALSE;
 
   g_return_val_if_fail (iter != NULL, FALSE);
   
@@ -3098,15 +3089,12 @@ find_line_log_attrs (const GtkTextIter *iter,
                                                iter, &char_len);      
 
   offset = gtk_text_iter_get_line_offset (iter);
-  
-  /* char_len may be 0 and attrs will be NULL if so, if
-   * iter is the end iter and the last line is empty.
-   */
-  if (attrs != NULL)
-    result = (* func) (attrs, offset, char_len, found_offset,
-                       already_moved_initially);
 
-  return result;
+  return (* func) (attrs,
+                   offset,
+                   char_len,
+                   found_offset,
+                   already_moved_initially);
 }
 
 static gboolean

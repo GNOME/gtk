@@ -538,8 +538,8 @@ test_cursor_positions (void)
   check_is_cursor_position ("a\r\n", 0, TRUE);
   check_is_cursor_position ("a\r\n", 1, TRUE);
   check_is_cursor_position ("a\r\n", 2, FALSE);
-  check_is_cursor_position ("a\r\n", 3, FALSE); /* FIXME should be TRUE */
-  check_is_cursor_position ("", 0, FALSE);      /* FIXME should be TRUE */
+  check_is_cursor_position ("a\r\n", 3, TRUE);
+  check_is_cursor_position ("", 0, TRUE);
 
   /* forward */
   check_cursor_position ("a\r\nb", TRUE, 0, 1, TRUE);
