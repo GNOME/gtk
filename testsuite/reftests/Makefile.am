@@ -143,6 +143,9 @@ testdata = \
 	box-shadow-spec-inset.css \
 	box-shadow-spec-inset.ref.ui \
 	box-shadow-spec-inset.ui \
+	box-shadow-spread.css \
+	box-shadow-spread.ref.ui \
+	box-shadow-spread.ui \
 	button-wrapping.ui \
 	button-wrapping.ref.ui \
 	cellrenderer-pixbuf-stock-rtl.css \

@@ -149,8 +149,10 @@ gtk_css_border_radius_grow (GtkRoundedBoxCorner *corner,
                             double               horizontal,
                             double               vertical)
 {
-  corner->horizontal += horizontal;
-  corner->vertical += vertical;
+  if (corner->horizontal)
+    corner->horizontal += horizontal;
+  if (corner->vertical)
+    corner->vertical += vertical;
 
   if (corner->horizontal <= 0 || corner->vertical <= 0)
     {
