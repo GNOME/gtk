@@ -451,7 +451,6 @@ GdkAtom
 gdk_drag_get_selection (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
-  g_return_val_if_fail (context->source_window != NULL, GDK_NONE);
 
   return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_selection (context);
 }
