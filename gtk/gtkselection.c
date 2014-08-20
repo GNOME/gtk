@@ -104,10 +104,12 @@
    our buffers */
 #ifdef GDK_WINDOWING_X11
 #define GTK_SELECTION_MAX_SIZE(display)                                 \
+  GDK_IS_X11_DISPLAY (display) ?                                        \
   MIN(262144,                                                           \
       XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) == 0     \
        ? XMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100         \
-       : XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100)
+       : XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100)\
+  : G_MAXINT
 #else
 /* No chunks on Win32 */
 #define GTK_SELECTION_MAX_SIZE(display) G_MAXINT
