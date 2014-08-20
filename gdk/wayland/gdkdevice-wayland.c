@@ -1384,8 +1384,12 @@ touch_handle_down (void              *data,
                    wl_fixed_t         y)
 {
   GdkWaylandDeviceData *device = data;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (device->display);
   GdkWaylandTouchData *touch;
   GdkEvent *event;
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
 
   touch = gdk_wayland_device_add_touch (device, id, wl_surface);
   touch->x = wl_fixed_to_double (x);
@@ -1408,8 +1412,12 @@ touch_handle_up (void            *data,
                  int32_t          id)
 {
   GdkWaylandDeviceData *device = data;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (device->display);
   GdkWaylandTouchData *touch;
   GdkEvent *event;
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
 
   touch = gdk_wayland_device_get_touch (device, id);
   event = _create_touch_event (device, touch, GDK_TOUCH_END, time);
