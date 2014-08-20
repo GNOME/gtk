@@ -89,7 +89,7 @@ tracker_item_changed (GObject    *object,
         [item didChangeLabel];
       else if (g_str_equal (name, "icon"))
         [item didChangeIcon];
-      else if (g_str_equal (name, "visible"))
+      else if (g_str_equal (name, "is-visible"))
         [item didChangeVisible];
       else if (g_str_equal (name, "toggled"))
         [item didChangeToggled];
