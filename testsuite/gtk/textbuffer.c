@@ -633,37 +633,44 @@ static void
 fill_buffer (GtkTextBuffer *buffer)
 {
   GtkTextTag *tag;
-  GdkColor color, color2;
+  GdkRGBA color;
+  GdkRGBA color2;
   GtkTextIter iter;
   GtkTextIter iter2;
   GdkPixbuf *pixbuf;
   int i;
 
-  color.red = color.green = 0;
-  color.blue = 0xffff;
-  color2.red = 0xfff;
-  color2.blue = 0x0;
-  color2.green = 0;
-  
+  color.red = 0.0;
+  color.green = 0.0;
+  color.blue = 1.0;
+  color.alpha = 1.0;
+
+  color2.red = 1.0;
+  color2.green = 0.0;
+  color2.blue = 0.0;
+  color2.alpha = 1.0;
+
   gtk_text_buffer_create_tag (buffer, "fg_blue",
-                              "foreground_gdk", &color,
-                              "background_gdk", &color2,
+                              "foreground_rgba", &color,
+                              "background_rgba", &color2,
                               "font", "-*-courier-bold-r-*-*-30-*-*-*-*-*-*-*",
                               NULL);
 
-  color.blue = color.green = 0;
-  color.red = 0xffff;
-  
+  color.red = 1.0;
+  color.green = 0.0;
+  color.blue = 0.0;
+
   gtk_text_buffer_create_tag (buffer, "fg_red",
                               "rise", -4,
-                              "foreground_gdk", &color,
+                              "foreground_rgba", &color,
                               NULL);
 
-  color.blue = color.red = 0;
-  color.green = 0xffff;
-  
+  color.red = 0.0;
+  color.green = 1.0;
+  color.blue = 0.0;
+
   gtk_text_buffer_create_tag (buffer, "bg_green",
-                              "background_gdk", &color,
+                              "background_rgba", &color,
                               "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
                               NULL);
 
@@ -671,8 +678,7 @@ fill_buffer (GtkTextBuffer *buffer)
 
   g_assert (pixbuf != NULL);
 
-  i = 0;
-  while (i < 10)
+  for (i = 0; i < 10; i++)
     {
       gchar *str;
 
@@ -752,8 +758,6 @@ fill_buffer (GtkTextBuffer *buffer)
 
       gtk_text_buffer_remove_tag_by_name (buffer, "fg_red", &iter, &iter2);
       gtk_text_buffer_remove_tag_by_name (buffer, "fg_blue", &iter, &iter2);
-
-      ++i;
     }
 
   /* Put in tags that are just at the beginning, and just near the end,
