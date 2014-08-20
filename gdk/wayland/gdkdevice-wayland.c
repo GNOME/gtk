@@ -2158,3 +2158,17 @@ gdk_wayland_device_clear_selection_content (GdkDevice *gdk_device)
 
   return TRUE;
 }
+
+void
+gdk_wayland_device_unset_touch_grab (GdkDevice        *gdk_device,
+                                     GdkEventSequence *sequence)
+{
+  GdkWaylandDeviceData *device;
+
+  g_return_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device));
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
+
+  gdk_wayland_device_remove_touch (device, GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
+  _gdk_display_end_touch_grab (gdk_device_get_display (gdk_device),
+                               gdk_device, sequence);
+}

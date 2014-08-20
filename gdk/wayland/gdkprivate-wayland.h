@@ -148,6 +148,9 @@ uint32_t _gdk_wayland_device_get_implicit_grab_serial(GdkWaylandDevice *device,
 uint32_t _gdk_wayland_device_get_last_implicit_grab_serial (GdkWaylandDevice  *device,
                                                             GdkEventSequence **seqence);
 
+void gdk_wayland_device_unset_touch_grab (GdkDevice        *device,
+                                          GdkEventSequence *sequence);
+
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);
 GSource *_gdk_wayland_display_event_source_new (GdkDisplay *display);
 void     _gdk_wayland_display_queue_events (GdkDisplay *display);
