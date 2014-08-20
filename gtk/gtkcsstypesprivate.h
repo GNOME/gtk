@@ -50,7 +50,6 @@ typedef enum { /*< skip >*/
   /* add more */
   GTK_CSS_CHANGE_SOURCE                   = (1 << 16),
   GTK_CSS_CHANGE_ANIMATE                  = (1 << 17),
-  GTK_CSS_CHANGE_FORCE_INVALIDATE         = (1 << 18),
 
   GTK_CSS_CHANGE_RESERVED_BIT             = (1 << 31) /* Used internally in gtkcssselector.c */
 } GtkCssChange;
