@@ -15548,6 +15548,8 @@ union_with_clip (GtkWidget *widget,
 /*
  * _gtk_widget_set_simple_clip:
  * @widget: a #GtkWidget
+ * @content_clip: Clipping area of the contents or %NULL, if the contents
+ *     do not extent the allocation.
  *
  * This is a convenience function for gtk_widget_set_clip(), if you
  * just want to set the clip for @widget based on its allocation,
@@ -15562,7 +15564,8 @@ union_with_clip (GtkWidget *widget,
  * function and must call gtk_widget_set_clip() yourself.
  **/
 void
-_gtk_widget_set_simple_clip (GtkWidget *widget)
+_gtk_widget_set_simple_clip (GtkWidget     *widget,
+                             GtkAllocation *content_clip)
 {
   GtkStyleContext *context;
   GtkAllocation clip;
@@ -15579,6 +15582,9 @@ _gtk_widget_set_simple_clip (GtkWidget *widget)
   clip.y -= extents.top;
   clip.width += extents.left + extents.right;
   clip.height += extents.top + extents.bottom;
+
+  if (content_clip)
+  gdk_rectangle_union (content_clip, &clip, &clip);
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget), union_with_clip, &clip);

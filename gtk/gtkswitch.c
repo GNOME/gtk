@@ -480,7 +480,7 @@ gtk_switch_size_allocate (GtkWidget     *widget,
   else
     priv->handle_x = 0;
 
-  _gtk_widget_set_simple_clip (widget);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static void

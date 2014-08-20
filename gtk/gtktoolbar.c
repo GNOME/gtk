@@ -1835,7 +1835,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   g_free (allocations);
   g_free (new_states);
 
-  _gtk_widget_set_simple_clip (widget);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static void

@@ -450,7 +450,7 @@ gtk_progress_bar_size_allocate (GtkWidget     *widget,
 {
   GTK_WIDGET_CLASS (gtk_progress_bar_parent_class)->size_allocate (widget, allocation);
 
-  _gtk_widget_set_simple_clip (widget);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static void

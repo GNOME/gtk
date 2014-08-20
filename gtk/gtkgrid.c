@@ -1681,7 +1681,7 @@ gtk_grid_size_allocate (GtkWidget     *widget,
 
   gtk_grid_request_allocate_children (&request);
 
-  _gtk_widget_set_simple_clip (widget);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static gboolean

@@ -645,7 +645,7 @@ swatch_size_allocate (GtkWidget *widget,
                             allocation->width,
                             allocation->height);
 
-  _gtk_widget_set_simple_clip (widget);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static gboolean

@@ -3715,7 +3715,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
         _gtk_entry_completion_resize_popup (completion);
     }
 
-  _gtk_widget_set_simple_clip (widget);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static gboolean

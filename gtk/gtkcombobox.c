@@ -2768,7 +2768,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (child_widget, &child);
     }
 
-  _gtk_widget_set_simple_clip (widget);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 #undef GTK_COMBO_BOX_ALLOCATE_BUTTON

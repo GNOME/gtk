@@ -3137,7 +3137,7 @@ gtk_list_box_row_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (child, &child_allocation);
     }
 
-  _gtk_widget_set_simple_clip (widget);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 /**
