@@ -1760,10 +1760,8 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
                                       guint32        timestamp)
 {
   GdkWindowImplWayland *impl;
-  GdkWaylandDisplay *wayland_display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-
-  uint32_t resize_edges;
+  GdkEventSequence *sequence;
+  uint32_t resize_edges, serial;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -1813,10 +1811,15 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   if (!impl->xdg_surface)
     return;
 
+  serial = _gdk_wayland_device_get_last_implicit_grab_serial (GDK_WAYLAND_DEVICE (device),
+                                                              &sequence);
+
   xdg_surface_resize (impl->xdg_surface,
                       gdk_wayland_device_get_wl_seat (device),
-                      _gdk_wayland_display_get_serial (wayland_display),
-                      resize_edges);
+                      serial, resize_edges);
+
+  if (sequence)
+    gdk_wayland_device_unset_touch_grab (device, sequence);
 
   /* This is needed since Wayland will absorb all the pointer events after the
    * above function - FIXME: Is this always safe..?
@@ -1833,8 +1836,8 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
                                     guint32    timestamp)
 {
   GdkWindowImplWayland *impl;
-  GdkWaylandDisplay *wayland_display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkEventSequence *sequence;
+  uint32_t serial;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
@@ -1845,9 +1848,13 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
   if (!impl->xdg_surface)
     return;
 
+  serial = _gdk_wayland_device_get_last_implicit_grab_serial (GDK_WAYLAND_DEVICE (device),
+                                                              &sequence);
   xdg_surface_move (impl->xdg_surface,
                     gdk_wayland_device_get_wl_seat (device),
-                    _gdk_wayland_display_get_serial (wayland_display));
+                    serial);
+  if (sequence)
+    gdk_wayland_device_unset_touch_grab (device, sequence);
 
   /* This is needed since Wayland will absorb all the pointer events after the
    * above function - FIXME: Is this always safe..?
