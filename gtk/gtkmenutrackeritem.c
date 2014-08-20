@@ -548,9 +548,8 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
       else
         {
           GTK_NOTE(ACTIONS, g_message ("menutracker: %s missing from the start", action_name));
-          gtk_menu_tracker_item_action_removed (GTK_ACTION_OBSERVER (self), observable, NULL);
+          gtk_menu_tracker_item_update_visibility (self);
         }
-
 
       if (state)
         g_variant_unref (state);
