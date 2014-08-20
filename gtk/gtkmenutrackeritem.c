@@ -556,7 +556,10 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
         g_variant_unref (state);
     }
   else
-    self->sensitive = TRUE;
+    {
+      gtk_menu_tracker_item_update_visibility (self);
+      self->sensitive = TRUE;
+    }
 
   return self;
 }
