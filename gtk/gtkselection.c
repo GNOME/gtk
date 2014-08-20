@@ -1597,7 +1597,7 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
  * 
  * Gets the contents of the selection data as a UTF-8 string.
  * 
- * Returns: (type utf8): if the selection data contained a
+ * Returns: (type utf8) (nullable) (transfer full): if the selection data contained a
  *   recognized text type and it could be converted to UTF-8, a newly
  *   allocated string containing the converted text, otherwise %NULL.
  *   If the result is non-%NULL it must be freed with g_free().
