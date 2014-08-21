@@ -1788,6 +1788,16 @@ test_value_from_string (void)
   g_assert (g_value_get_uint (&value) == 2345);
   g_value_unset (&value);
 
+  g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_INT64, "-2345", &value, &error));
+  g_assert (G_VALUE_HOLDS_INT64 (&value));
+  g_assert (g_value_get_int64 (&value) == -2345);
+  g_value_unset (&value);
+
+  g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_UINT64, "2345", &value, &error));
+  g_assert (G_VALUE_HOLDS_UINT64 (&value));
+  g_assert (g_value_get_uint64 (&value) == 2345);
+  g_value_unset (&value);
+
   g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_FLOAT, "1.454", &value, &error));
   g_assert (G_VALUE_HOLDS_FLOAT (&value));
   g_assert (fabs (g_value_get_float (&value) - 1.454) < 0.00001);
