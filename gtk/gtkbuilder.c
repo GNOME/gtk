@@ -1869,9 +1869,11 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       }
     case G_TYPE_INT:
     case G_TYPE_LONG:
+    case G_TYPE_INT64:
       {
-        long l;
+        gint64 l;
         gchar *endptr = NULL;
+
         errno = 0;
         l = g_ascii_strtoll (string, &endptr, 0);
         if (errno || endptr == string)
@@ -1886,14 +1888,17 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           }
         if (G_VALUE_HOLDS_INT (value))
           g_value_set_int (value, l);
-        else
+        else if (G_VALUE_HOLDS_LONG (value))
           g_value_set_long (value, l);
+        else
+          g_value_set_int64 (value, l);
         break;
       }
     case G_TYPE_UINT:
     case G_TYPE_ULONG:
+    case G_TYPE_UINT64:
       {
-        gulong ul;
+        guint64 ul;
         gchar *endptr = NULL;
         errno = 0;
         ul = g_ascii_strtoull (string, &endptr, 0);
@@ -1909,8 +1914,10 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           }
         if (G_VALUE_HOLDS_UINT (value))
           g_value_set_uint (value, ul);
-        else 
+        else if (G_VALUE_HOLDS_ULONG (value))
           g_value_set_ulong (value, ul);
+        else 
+          g_value_set_uint64 (value, ul);
         break;
       }
     case G_TYPE_ENUM:
