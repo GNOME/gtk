@@ -1656,11 +1656,13 @@ $asset_suffix: if($variant=='dark', '-dark', '');
     .#{$w}#{$s} {
       -gtk-icon-source: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
                                     url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));
+      icon-shadow: 0 1px 0 $borders_edge;
     }
   }
 
   //menu
   .menu .menuitem.#{$w} {
+    icon-shadow: none;
     color: transparentize($fg_color,0.9);
     background-image: none;
     -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
@@ -1695,6 +1697,12 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 }
 
+//treeview
+GtkTreeView.view.check, GtkTreeView.view.radio {
+  icon-shadow: none;
+  &:selected { icon-shadow: none; }
+}
+
 //selection-mode
 @each $s,$as in ('','-selectionmode'),
                   (':hover', '-hover-selectionmode'),
@@ -1706,6 +1714,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
                   (':backdrop:checked', '-checked-backdrop-selectionmode') {
   GtkIconView.view.check#{$s},
   GtkFlowBox.view.check#{$s} {
+    icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"),
                                     url("assets/checkbox#{$as}@2.png"));
   }
