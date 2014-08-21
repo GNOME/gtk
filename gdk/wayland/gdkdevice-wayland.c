@@ -574,8 +574,8 @@ data_device_enter (void                  *data,
                    struct wl_data_device *data_device,
                    uint32_t               serial,
                    struct wl_surface     *surface,
-                   int32_t                x,
-                   int32_t                y,
+                   wl_fixed_t             x,
+                   wl_fixed_t             y,
                    struct wl_data_offer  *offer)
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
@@ -607,8 +607,8 @@ static void
 data_device_motion (void                  *data,
                     struct wl_data_device *data_device,
                     uint32_t               time,
-                    int32_t                x,
-                    int32_t                y)
+                    wl_fixed_t             x,
+                    wl_fixed_t             y)
 {
   g_debug (G_STRLOC ": %s data_device = %p, time = %d, x = %d, y = %d",
            G_STRFUNC, data_device, time, x, y);
