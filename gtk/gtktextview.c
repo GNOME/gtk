@@ -9051,8 +9051,6 @@ bubble_targets_received (GtkClipboard     *clipboard,
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->selection_bubble), &rect);
   gtk_widget_show (priv->selection_bubble);
-
-  priv->selection_bubble_timeout_id = 0;
 }
 
 static gboolean
@@ -9064,6 +9062,7 @@ gtk_text_view_selection_bubble_popup_cb (gpointer user_data)
 				  gdk_atom_intern_static_string ("TARGETS"),
 				  bubble_targets_received,
 				  text_view);
+  text_view->priv->selection_bubble_timeout_id = 0;
 
   return G_SOURCE_REMOVE;
 }
