@@ -523,7 +523,7 @@ data_device_enter (void                  *data,
                    struct wl_data_offer  *offer)
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
-  GdkWindow *dest_window;
+  GdkWindow *dest_window, *dnd_owner;
 
   dest_window = wl_surface_get_user_data (surface);
 
@@ -539,6 +539,12 @@ data_device_enter (void                  *data,
   device->surface_y = wl_fixed_to_double (y);
 
   gdk_wayland_drop_context_update_targets (device->drop_context);
+
+  dnd_owner = gdk_selection_owner_get (gdk_drag_get_selection (device->drop_context));
+
+  if (dnd_owner)
+    _gdk_wayland_drag_context_set_source_window (device->drop_context, dnd_owner);
+
   _gdk_wayland_drag_context_set_dest_window (device->drop_context,
                                              dest_window, serial);
   _gdk_wayland_drag_context_set_coords (device->drop_context,
@@ -601,9 +607,20 @@ data_device_drop (void                  *data,
                   struct wl_data_device *data_device)
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
+  GdkWindow *local_dnd_owner;
 
   g_debug (G_STRLOC ": %s data_device = %p",
            G_STRFUNC, data_device);
+
+  local_dnd_owner = gdk_selection_owner_get (gdk_drag_get_selection (device->drop_context));
+
+  if (local_dnd_owner)
+    {
+      GdkDragContext *source_context;
+
+      source_context = gdk_wayland_drag_context_lookup_by_source_window (local_dnd_owner);
+      gdk_wayland_drag_context_undo_grab (source_context);
+    }
 
   _gdk_wayland_drag_context_emit_event (device->drop_context,
                                         GDK_DROP_START, GDK_CURRENT_TIME);

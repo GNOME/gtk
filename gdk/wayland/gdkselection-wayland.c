@@ -500,17 +500,32 @@ data_source_target (void                  *data,
                     const char            *mime_type)
 {
   GdkWaylandSelection *wayland_selection = data;
-  GdkDragContext *context;
+  GdkDragContext *context = NULL;
   GdkWindow *window;
 
   g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
            G_STRFUNC, source, mime_type);
 
+  context = gdk_wayland_drag_context_lookup_by_data_source (source);
+
   if (!mime_type)
-    return;
+    {
+      if (context)
+        {
+          gdk_wayland_drag_context_set_action (context, 0);
+          _gdk_wayland_drag_context_emit_event (context, GDK_DRAG_STATUS,
+                                                GDK_CURRENT_TIME);
+        }
+      return;
+    }
 
   if (source == wayland_selection->dnd_source)
-    window = wayland_selection->dnd_owner;
+    {
+      window = wayland_selection->dnd_owner;
+      gdk_wayland_drag_context_set_action (context, GDK_ACTION_COPY);
+      _gdk_wayland_drag_context_emit_event (context, GDK_DRAG_STATUS,
+                                            GDK_CURRENT_TIME);
+    }
   else if (source == wayland_selection->clipboard_source)
     window = wayland_selection->clipboard_owner;
   else
@@ -528,6 +543,7 @@ data_source_send (void                  *data,
                   int32_t                fd)
 {
   GdkWaylandSelection *wayland_selection = data;
+  GdkDragContext *context;
   GdkWindow *window;
 
   g_debug (G_STRLOC ": %s source = %p, mime_type = %s, fd = %d",
@@ -535,6 +551,8 @@ data_source_send (void                  *data,
 
   if (!mime_type)
     return;
+
+  context = gdk_wayland_drag_context_lookup_by_data_source (source);
 
   if (source == wayland_selection->dnd_source)
     window = wayland_selection->dnd_owner;
@@ -548,6 +566,13 @@ data_source_send (void                  *data,
                                              fd))
     gdk_wayland_selection_check_write (wayland_selection);
 
+  if (context)
+    {
+      gdk_wayland_drag_context_undo_grab (context);
+      _gdk_wayland_drag_context_emit_event (context, GDK_DROP_FINISHED,
+                                            GDK_CURRENT_TIME);
+    }
+
   wayland_selection->source_requested_target = GDK_NONE;
 }
 
@@ -556,14 +581,20 @@ data_source_cancelled (void                  *data,
                        struct wl_data_source *source)
 {
   GdkWaylandSelection *wayland_selection = data;
+  GdkDragContext *context;
 
   g_debug (G_STRLOC ": %s source = %p",
            G_STRFUNC, source);
+
+  context = gdk_wayland_drag_context_lookup_by_data_source (source);
 
   if (source == wayland_selection->dnd_source)
     gdk_wayland_selection_unset_data_source (atoms[ATOM_DND]);
   else if (source == wayland_selection->clipboard_source)
     gdk_wayland_selection_unset_data_source (atoms[ATOM_CLIPBOARD]);
+
+  if (context)
+    gdk_wayland_drag_context_undo_grab (context);
 }
 
 static const struct wl_data_source_listener data_source_listener = {

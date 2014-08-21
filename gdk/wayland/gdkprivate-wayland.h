@@ -109,6 +109,12 @@ void _gdk_wayland_drag_context_set_coords (GdkDragContext *context,
 void gdk_wayland_drag_context_set_action (GdkDragContext *context,
                                           GdkDragAction   action);
 
+GdkDragContext * gdk_wayland_drag_context_lookup_by_data_source   (struct wl_data_source *source);
+GdkDragContext * gdk_wayland_drag_context_lookup_by_source_window (GdkWindow *window);
+struct wl_data_source * gdk_wayland_drag_context_get_data_source  (GdkDragContext *context);
+
+void gdk_wayland_drag_context_undo_grab (GdkDragContext *context);
+
 void gdk_wayland_drop_context_update_targets (GdkDragContext *context);
 
 void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,

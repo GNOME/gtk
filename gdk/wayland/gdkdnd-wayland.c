@@ -40,6 +40,9 @@ typedef struct _GdkWaylandDragContextClass GdkWaylandDragContextClass;
 struct _GdkWaylandDragContext
 {
   GdkDragContext context;
+  GdkWindow *dnd_window;
+  struct wl_surface *dnd_surface;
+  struct wl_data_source *data_source;
   struct wl_data_offer *offer;
   uint32_t serial;
   gdouble x;
@@ -62,6 +65,10 @@ gdk_wayland_drag_context_finalize (GObject *object)
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
 
   contexts = g_list_remove (contexts, context);
+
+  if (context->is_source &&
+      gdk_selection_owner_get (gdk_drag_get_selection (context)) == context->source_window)
+    gdk_wayland_selection_unset_data_source (gdk_drag_get_selection (context));
 
   if (wayland_context->data_source)
     wl_data_source_destroy (wayland_context->data_source);
@@ -232,6 +239,8 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
 				      gboolean        success,
 				      guint32         time)
 {
+  if (gdk_selection_owner_get (gdk_drag_get_selection (context)))
+    gdk_wayland_selection_unset_data_source (gdk_drag_get_selection (context));
 }
 
 static gboolean
@@ -289,18 +298,63 @@ _gdk_wayland_window_register_dnd (GdkWindow *window)
 {
 }
 
+static GdkWindow *
+create_dnd_window (void)
+{
+  GdkWindowAttr attrs;
+  GdkScreen *screen;
+  guint mask;
+
+  screen = gdk_display_get_default_screen (gdk_display_get_default ());
+
+  attrs.x = attrs.y = 0;
+  attrs.width = attrs.height = 100;
+  attrs.wclass = GDK_INPUT_OUTPUT;
+  attrs.window_type = GDK_WINDOW_TEMP;
+  attrs.type_hint = GDK_WINDOW_TYPE_HINT_DND;
+  attrs.visual = gdk_screen_get_system_visual (screen);
+
+  mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
+
+  return gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
+}
+
 GdkDragContext *
 _gdk_wayland_window_drag_begin (GdkWindow *window,
 				GdkDevice *device,
 				GList     *targets)
 {
+  GdkWaylandDragContext *context_wayland;
+  GdkWaylandDisplay *display_wayland;
   GdkDragContext *context;
+  GdkWindow *toplevel;
+  GList *l;
 
-  context = (GdkDragContext *) g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
-  context->source_window = window;
+  toplevel = gdk_device_get_window_at_position (device, NULL, NULL);
+
+  context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
+  context = GDK_DRAG_CONTEXT (context_wayland);
+  context->source_window = g_object_ref (window);
   context->is_source = TRUE;
+  context->targets = g_list_copy (targets);
 
   gdk_drag_context_set_device (context, device);
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
+
+  context_wayland->dnd_window = create_dnd_window ();
+  context_wayland->dnd_surface = gdk_wayland_window_get_wl_surface (context_wayland->dnd_window);
+  context_wayland->data_source =
+    gdk_wayland_selection_get_data_source (window,
+                                           gdk_wayland_drag_context_get_selection (context));
+
+  for (l = context->targets; l; l = l->next)
+    wl_data_source_offer (context_wayland->data_source, gdk_atom_name (l->data));
+
+  wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
+                             context_wayland->data_source,
+                             gdk_wayland_window_get_wl_surface (toplevel),
+			     context_wayland->dnd_surface,
+                             _gdk_wayland_display_get_serial (display_wayland));
 
   return context;
 }
@@ -358,4 +412,93 @@ _gdk_wayland_drag_context_set_dest_window (GdkDragContext *context,
   context->dest_window = dest_window ? g_object_ref (dest_window) : NULL;
   GDK_WAYLAND_DRAG_CONTEXT (context)->serial = serial;
   gdk_wayland_drop_context_update_targets (context);
+}
+
+GdkDragContext *
+gdk_wayland_drag_context_lookup_by_data_source (struct wl_data_source *source)
+{
+  GList *l;
+
+  for (l = contexts; l; l = l->next)
+    {
+      GdkWaylandDragContext *wayland_context = l->data;
+
+      if (wayland_context->data_source == source)
+        return l->data;
+    }
+
+  return NULL;
+}
+
+GdkDragContext *
+gdk_wayland_drag_context_lookup_by_source_window (GdkWindow *window)
+{
+  GList *l;
+
+  for (l = contexts; l; l = l->next)
+    {
+      if (window == gdk_drag_context_get_source_window (l->data))
+        return l->data;
+    }
+
+  return NULL;
+}
+
+struct wl_data_source *
+gdk_wayland_drag_context_get_data_source (GdkDragContext *context)
+{
+  return GDK_WAYLAND_DRAG_CONTEXT (context)->data_source;
+}
+
+void
+gdk_wayland_drag_context_undo_grab (GdkDragContext *context)
+{
+  GdkEventSequence *sequence;
+  GdkModifierType state;
+  GdkDevice *device;
+  GdkEvent *event;
+  guint button;
+  gdouble x, y;
+
+  device = gdk_drag_context_get_device (context);
+  _gdk_wayland_device_get_last_implicit_grab_serial (GDK_WAYLAND_DEVICE (device), &sequence);
+  gdk_window_get_device_position_double (gdk_drag_context_get_source_window (context),
+                                         device, &x, &y, &state);
+
+  if (sequence)
+    {
+      event = gdk_event_new (GDK_TOUCH_END);
+      event->touch.window = g_object_ref (gdk_drag_context_get_source_window (context));
+      event->touch.send_event = TRUE;
+      event->touch.sequence = sequence;
+      event->touch.time = GDK_CURRENT_TIME;
+      event->touch.x = event->touch.x_root = x;
+      event->touch.y = event->touch.y_root = y;
+    }
+  else if (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK))
+    {
+      if (state & GDK_BUTTON1_MASK)
+        button = 1;
+      else if (state & GDK_BUTTON2_MASK)
+        button = 2;
+      else if (state & GDK_BUTTON3_MASK)
+        button = 3;
+      else
+        return;
+
+      event = gdk_event_new (GDK_BUTTON_RELEASE);
+      event->button.window = g_object_ref (gdk_drag_context_get_source_window (context));
+      event->button.send_event = TRUE;
+      event->button.button = button;
+      event->button.time = GDK_CURRENT_TIME;
+      event->button.x = event->button.x_root = x;
+      event->button.y = event->button.x_root = y;
+    }
+  else
+    return;
+
+  gdk_event_set_device (event, device);
+  gdk_event_set_source_device (event, device);
+
+  _gdk_wayland_display_deliver_event (gdk_device_get_display (device), event);
 }
