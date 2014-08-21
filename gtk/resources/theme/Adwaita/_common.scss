@@ -496,15 +496,16 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   &:backdrop:insensitive:active { @include button(backdrop-insensitive-active);}
   &:backdrop:insensitive:checked { @include button(backdrop-insensitive-active);}
 }
-.inline-toolbar.toolbar GtkToolButton { // .inline-toolbar.toolbar here for
-                                        // higher specificity than the previous
-                                        // "button look" selector
+.inline-toolbar.toolbar GtkToolButton,
+.inline-toolbar.toolbar GtkToolButton:backdrop { // .inline-toolbar.toolbar here for
+                                                 // higher specificity than the
+                                                 // previous "button look" selector
   & > .button.flat { @extend %linked_middle; }
   &:dir(rtl) > .button.flat { @extend %linked_middle:dir(rtl); }
   &:first-child > .button.flat { @extend %linked:first-child; }
   &:last-child > .button.flat { @extend %linked:last-child; }
   &:last-child:dir(rtl) > .button.flat { @extend %linked:last-child:dir(rtl); }
-  &:only-child > .button.flat { @extend %linked; }
+  &:only-child > .button.flat { @extend %linked:only-child; }
 }
 
 %linked_middle {
