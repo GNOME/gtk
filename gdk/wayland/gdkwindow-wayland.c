@@ -1205,8 +1205,12 @@ gdk_window_wayland_move_resize (GdkWindow *window,
 {
   if (with_move)
     {
-      window->x = x;
-      window->y = y;
+      /* Each toplevel has in its own "root" coordinate system */
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TOPLEVEL)
+        {
+          window->x = x;
+          window->y = y;
+        }
     }
 
   /* If this function is called with width and height = -1 then that means
