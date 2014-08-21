@@ -134,6 +134,8 @@ testsuite/reftests/border-image-url.ui
 testsuite/reftests/box-packing.ui
 testsuite/reftests/box-pseudo-classes.ref.ui
 testsuite/reftests/box-pseudo-classes.ui
+testsuite/reftests/box-shadow-spread.ref.ui
+testsuite/reftests/box-shadow-spread.ui
 testsuite/reftests/button-wrapping.ref.ui
 testsuite/reftests/button-wrapping.ui
 testsuite/reftests/css-match-import.ref.ui
@@ -173,6 +175,8 @@ testsuite/reftests/label-attribute-preference.ref.ui
 testsuite/reftests/label-attribute-preference.ui
 testsuite/reftests/label-background.ref.ui
 testsuite/reftests/label-background.ui
+testsuite/reftests/label-box-shadow-clip.ref.ui
+testsuite/reftests/label-box-shadow-clip.ui
 testsuite/reftests/label-clipping.ref.ui
 testsuite/reftests/label-clipping.ui
 testsuite/reftests/label-ellipsize-small.ref.ui
@@ -221,6 +225,8 @@ testsuite/reftests/revealer-wrappable-contents.ref.ui
 testsuite/reftests/revealer-wrappable-contents.ui
 testsuite/reftests/rotated-layout.ref.ui
 testsuite/reftests/rotated-layout.ui
+testsuite/reftests/shadow-clip-rounding.ref.ui
+testsuite/reftests/shadow-clip-rounding.ui
 testsuite/reftests/sibling-pseudoclasses.ref.ui
 testsuite/reftests/sibling-pseudoclasses.ui
 testsuite/reftests/sizegroups-basics.ref.ui
