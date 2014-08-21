@@ -1949,6 +1949,8 @@ gdk_wayland_window_change_property (GdkWindow    *window,
                                     const guchar *data,
                                     gint          nelements)
 {
+  if (property == gdk_atom_intern_static_string ("GDK_SELECTION"))
+    gdk_wayland_selection_store (window, type, mode, data, nelements * (format / 8));
 }
 
 static void

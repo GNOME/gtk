@@ -60,6 +60,13 @@ struct _DataSourceData
   GdkAtom selection;
 };
 
+enum {
+  ATOM_CLIPBOARD,
+  ATOM_DND
+};
+
+static GdkAtom atoms[2] = { 0 };
+
 struct _GdkWaylandSelection
 {
   /* Destination-side data */
@@ -245,6 +252,10 @@ gdk_wayland_selection_new (void)
 {
   GdkWaylandSelection *selection;
 
+  /* init atoms */
+  atoms[ATOM_CLIPBOARD] = gdk_atom_intern_static_string ("CLIPBOARD");
+  atoms[ATOM_DND] = gdk_atom_intern_static_string ("GdkWaylandSelection");
+
   selection = g_new0 (GdkWaylandSelection, 1);
   selection->selection_buffers = g_hash_table_new_full (NULL, NULL, NULL,
                                                         (GDestroyNotify) selection_buffer_cancel_and_unref);
@@ -335,6 +346,103 @@ gdk_wayland_selection_get_targets (void)
   return selection->targets;
 }
 
+void
+gdk_wayland_selection_emit_request (GdkWindow *window,
+                                    GdkAtom    selection,
+                                    GdkAtom    target)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_SELECTION_REQUEST);
+  event->selection.window = g_object_ref (window);
+  event->selection.send_event = FALSE;
+  event->selection.selection = selection;
+  event->selection.target = target;
+  event->selection.property = gdk_atom_intern_static_string ("GDK_SELECTION");
+  event->selection.time = GDK_CURRENT_TIME;
+  event->selection.requestor = g_object_ref (window);
+
+  gdk_event_put (event);
+  gdk_event_free (event);
+}
+
+gboolean
+gdk_wayland_selection_check_write (GdkWaylandSelection *selection)
+{
+  gssize len, bytes_written = 0;
+  gchar *buf;
+
+  if (selection->stored_selection.fd < 0 ||
+      selection->stored_selection.data_len == 0)
+    return FALSE;
+
+  len = selection->stored_selection.data_len;
+  buf = (gchar *) selection->stored_selection.data;
+
+  while (len > 0)
+    {
+      bytes_written += write (selection->stored_selection.fd,
+                              buf + bytes_written, len);
+
+      if (bytes_written < 0)
+        break;
+
+      len -= bytes_written;
+    }
+
+  close (selection->stored_selection.fd);
+  selection->stored_selection.fd = -1;
+
+  return bytes_written != 0;
+}
+
+void
+gdk_wayland_selection_store (GdkWindow    *window,
+                             GdkAtom       type,
+                             GdkPropMode   mode,
+                             const guchar *data,
+                             gint          len)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
+  GArray *array;
+
+  array = g_array_new (TRUE, FALSE, sizeof (guchar));
+  g_array_append_vals (array, data, len);
+
+  if (selection->stored_selection.data)
+    {
+      if (mode != GDK_PROP_MODE_REPLACE &&
+          type != selection->stored_selection.type)
+        {
+          g_warning (G_STRLOC ": Attempted to append/prepend selection data with "
+                     "type %s into the current selection with type %s",
+                     gdk_atom_name (type),
+                     gdk_atom_name (selection->stored_selection.type));
+          return;
+        }
+
+      /* In these cases we also replace the stored data, so we
+       * apply the inverse operation into the just given data.
+       */
+      if (mode == GDK_PROP_MODE_APPEND)
+        g_array_prepend_vals (array, selection->stored_selection.data,
+                              selection->stored_selection.data_len - 1);
+      else if (mode == GDK_PROP_MODE_PREPEND)
+        g_array_append_vals (array, selection->stored_selection.data,
+                             selection->stored_selection.data_len - 1);
+
+      g_free (selection->stored_selection.data);
+    }
+
+  selection->stored_selection.source = window;
+  selection->stored_selection.data_len = array->len;
+  selection->stored_selection.data = (guchar *) g_array_free (array, FALSE);
+  selection->stored_selection.type = type;
+
+  gdk_wayland_selection_check_write (selection);
+}
+
 static SelectionBuffer *
 gdk_wayland_selection_lookup_requestor_buffer (GdkWindow *requestor)
 {
@@ -352,6 +460,205 @@ gdk_wayland_selection_lookup_requestor_buffer (GdkWindow *requestor)
     }
 
   return NULL;
+}
+
+static gboolean
+gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
+                                      GdkWindow           *window,
+                                      GdkAtom              target,
+                                      gint                 fd)
+{
+  GdkAtom selection;
+
+  if (wayland_selection->clipboard_owner == window)
+    selection = atoms[ATOM_CLIPBOARD];
+  else if (wayland_selection->dnd_owner == window)
+    selection = atoms[ATOM_DND];
+  else
+    return FALSE;
+
+  if (fd >= 0)
+    wayland_selection->stored_selection.fd = fd;
+
+  if (wayland_selection->source_requested_target == target)
+    return FALSE;
+
+  wayland_selection->source_requested_target = target;
+
+  if (window && target != GDK_NONE)
+    {
+      gdk_wayland_selection_emit_request (window, selection, target);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+data_source_target (void                  *data,
+                    struct wl_data_source *source,
+                    const char            *mime_type)
+{
+  GdkWaylandSelection *wayland_selection = data;
+  GdkDragContext *context;
+  GdkWindow *window;
+
+  g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
+           G_STRFUNC, source, mime_type);
+
+  if (!mime_type)
+    return;
+
+  if (source == wayland_selection->dnd_source)
+    window = wayland_selection->dnd_owner;
+  else if (source == wayland_selection->clipboard_source)
+    window = wayland_selection->clipboard_owner;
+  else
+    return;
+
+  gdk_wayland_selection_request_target (wayland_selection, window,
+                                        gdk_atom_intern (mime_type, FALSE),
+                                        -1);
+}
+
+static void
+data_source_send (void                  *data,
+                  struct wl_data_source *source,
+                  const char            *mime_type,
+                  int32_t                fd)
+{
+  GdkWaylandSelection *wayland_selection = data;
+  GdkWindow *window;
+
+  g_debug (G_STRLOC ": %s source = %p, mime_type = %s, fd = %d",
+           G_STRFUNC, source, mime_type, fd);
+
+  if (!mime_type)
+    return;
+
+  if (source == wayland_selection->dnd_source)
+    window = wayland_selection->dnd_owner;
+  else if (source == wayland_selection->clipboard_source)
+    window = wayland_selection->clipboard_owner;
+  else
+    return;
+
+  if (!gdk_wayland_selection_request_target (wayland_selection, window,
+                                             gdk_atom_intern (mime_type, FALSE),
+                                             fd))
+    gdk_wayland_selection_check_write (wayland_selection);
+
+  wayland_selection->source_requested_target = GDK_NONE;
+}
+
+static void
+data_source_cancelled (void                  *data,
+                       struct wl_data_source *source)
+{
+  GdkWaylandSelection *wayland_selection = data;
+
+  g_debug (G_STRLOC ": %s source = %p",
+           G_STRFUNC, source);
+
+  if (source == wayland_selection->dnd_source)
+    gdk_wayland_selection_unset_data_source (atoms[ATOM_DND]);
+  else if (source == wayland_selection->clipboard_source)
+    gdk_wayland_selection_unset_data_source (atoms[ATOM_CLIPBOARD]);
+}
+
+static const struct wl_data_source_listener data_source_listener = {
+  data_source_target,
+  data_source_send,
+  data_source_cancelled
+};
+
+struct wl_data_source *
+gdk_wayland_selection_get_data_source (GdkWindow *owner,
+                                       GdkAtom    selection)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
+  struct wl_data_source *source = NULL;
+  GdkWaylandDisplay *display_wayland;
+  gboolean is_clipboard = FALSE;
+
+  if (selection == atoms[ATOM_DND])
+    {
+      if (wayland_selection->dnd_source &&
+          (!owner || owner == wayland_selection->dnd_owner))
+        return wayland_selection->dnd_source;
+    }
+  else if (selection == atoms[ATOM_CLIPBOARD])
+    {
+      if (wayland_selection->clipboard_source &&
+          (!owner || owner == wayland_selection->clipboard_owner))
+        return wayland_selection->clipboard_source;
+
+      if (wayland_selection->clipboard_source)
+        {
+          wl_data_source_destroy (wayland_selection->clipboard_source);
+          wayland_selection->clipboard_source = NULL;
+        }
+
+      is_clipboard = TRUE;
+    }
+  else
+    return NULL;
+
+  if (!owner)
+    return NULL;
+
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (owner));
+
+  source = wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
+  wl_data_source_add_listener (source,
+                               &data_source_listener,
+                               wayland_selection);
+
+  if (is_clipboard)
+    {
+      wayland_selection->clipboard_source = source;
+      wayland_selection->clipboard_owner = owner;
+    }
+  else
+    {
+      wayland_selection->dnd_source = source;
+      wayland_selection->dnd_owner = owner;
+    }
+
+  return source;
+}
+
+void
+gdk_wayland_selection_unset_data_source (GdkAtom selection)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
+
+  if (selection == atoms[ATOM_CLIPBOARD])
+    {
+      GdkDeviceManager *device_manager;
+      GdkDisplay *display;
+      GdkDevice *device;
+
+      display = gdk_display_get_default ();
+      device_manager = gdk_display_get_device_manager (display);
+      device = gdk_device_manager_get_client_pointer (device_manager);
+
+      gdk_wayland_device_set_selection (device, NULL);
+      wayland_selection->clipboard_owner = NULL;
+
+      if (wayland_selection->clipboard_source)
+        {
+          wl_data_source_destroy (wayland_selection->clipboard_source);
+          wayland_selection->clipboard_source = NULL;
+        }
+    }
+  else if (selection == atoms[ATOM_DND])
+    {
+      wayland_selection->dnd_owner = NULL;
+      wayland_selection->dnd_source = NULL;
+    }
 }
 
 GdkWindow *
@@ -375,7 +682,20 @@ _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
 					  guint32     time,
 					  gboolean    send_event)
 {
-  return TRUE;
+  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
+
+  if (selection == atoms[ATOM_CLIPBOARD])
+    {
+      wayland_selection->clipboard_owner = owner;
+      return TRUE;
+    }
+  else if (selection == atoms[ATOM_DND])
+    {
+      wayland_selection->dnd_owner = owner;
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 void

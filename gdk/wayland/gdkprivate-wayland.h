@@ -147,6 +147,9 @@ uint32_t _gdk_wayland_device_get_implicit_grab_serial(GdkWaylandDevice *device,
                                                       const GdkEvent   *event);
 uint32_t _gdk_wayland_device_get_last_implicit_grab_serial (GdkWaylandDevice  *device,
                                                             GdkEventSequence **seqence);
+struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_device);
+void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
+                                       struct wl_data_source *source);
 
 void gdk_wayland_device_unset_touch_grab (GdkDevice        *device,
                                           GdkEventSequence *sequence);
@@ -200,5 +203,15 @@ void gdk_wayland_selection_free (GdkWaylandSelection *selection);
 void gdk_wayland_selection_set_offer (struct wl_data_offer *offer);
 struct wl_data_offer * gdk_wayland_selection_get_offer (void);
 GList * gdk_wayland_selection_get_targets (void);
+
+void     gdk_wayland_selection_store   (GdkWindow    *window,
+                                        GdkAtom       type,
+                                        GdkPropMode   mode,
+                                        const guchar *data,
+                                        gint          len);
+struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner,
+                                                               GdkAtom    selection);
+void gdk_wayland_selection_unset_data_source (GdkAtom selection);
+
 
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */

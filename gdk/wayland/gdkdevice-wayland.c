@@ -2173,3 +2173,29 @@ gdk_wayland_device_unset_touch_grab (GdkDevice        *gdk_device,
   _gdk_display_end_touch_grab (gdk_device_get_display (gdk_device),
                                gdk_device, sequence);
 }
+
+struct wl_data_device *
+gdk_wayland_device_get_data_device (GdkDevice *gdk_device)
+{
+  GdkWaylandDeviceData *device;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), NULL);
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
+
+  return device->data_device;
+}
+
+void
+gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
+                                  struct wl_data_source *source)
+{
+  GdkWaylandDeviceData *device;
+  GdkWaylandDisplay *display_wayland;
+
+  g_return_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device));
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (gdk_device));
+
+  wl_data_device_set_selection (device->data_device, source,
+                                _gdk_wayland_display_get_serial (display_wayland));
+}
