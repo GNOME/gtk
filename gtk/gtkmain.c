@@ -1174,7 +1174,7 @@ gtk_get_locale_direction (void)
  * This function is equivalent to pango_language_get_default().
  * See that function for details.
  *
- * Returns: the default language as a #PangoLanguage,
+ * Returns: (transfer none): the default language as a #PangoLanguage,
  *     must not be freed
  */
 PangoLanguage *
