@@ -150,7 +150,7 @@
   border-width: 1px;
   background-image: linear-gradient(to bottom, #212121, #292929 90%);
   border-color: #1c1f1f;
-  box-shadow: inset 0 2px 2px -2px #141414, inset 0 0 2px 1px rgba(39, 51, 64, 0), 0 1px rgba(238, 238, 236, 0.1); }
+  box-shadow: inset 0 3px #202020, inset 0 1px #1a1a1a, inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0.1); }
   .entry.image.left {
     padding-left: 0; }
   .entry.image.right {
@@ -162,7 +162,7 @@
     border-width: 1px;
     background-image: linear-gradient(to bottom, #212121, #292929 90%);
     border-color: #1c1f1f;
-    box-shadow: inset 0 2px 2px -2px #141414, inset 0 0 2px 1px rgba(39, 51, 64, 0);
+    box-shadow: inset 0 3px #202020, inset 0 1px #1a1a1a, inset 0 0 0 1px rgba(33, 93, 156, 0);
     border: none;
     border-radius: 0; }
   .entry:focus {
@@ -170,8 +170,8 @@
     border-style: solid;
     border-width: 1px;
     background-image: linear-gradient(to bottom, #212121, #292929 90%);
-    border-color: #0f2b48;
-    box-shadow: inset 0 2px 2px -2px #141414, inset 0 0 1px 1px #215d9c, 0 1px rgba(238, 238, 236, 0.1); }
+    box-shadow: inset 0 3px #202020, inset 0 1px #1a1a1a, inset 0 0 0 1px rgba(33, 93, 156, 0.7), 0 1px rgba(238, 238, 236, 0.1);
+    border-color: #0f2b48; }
   .entry:insensitive {
     background-color: transparent;
     border-style: solid;
@@ -180,7 +180,7 @@
     color: #939695;
     border-color: #1c1f1f;
     background-image: linear-gradient(to bottom, #323636);
-    box-shadow: inset 0 2px 2px -2px rgba(20, 20, 20, 0), inset 0 0 2px 1px rgba(39, 51, 64, 0), 0 1px rgba(238, 238, 236, 0.1); }
+    box-shadow: inset 0 2px rgba(38, 38, 38, 0), inset 0 1px rgba(33, 33, 33, 0), 0 1px rgba(238, 238, 236, 0.1); }
   .entry:backdrop {
     background-color: transparent;
     border-style: solid;
@@ -189,7 +189,7 @@
     color: #c9cbc9;
     border-color: #1e2222;
     background-image: linear-gradient(to bottom, #2c2c2c);
-    box-shadow: inset 0 2px 2px -2px rgba(20, 20, 20, 0), inset 0 0 2px 1px rgba(39, 51, 64, 0), 0 1px rgba(255, 255, 255, 0); }
+    box-shadow: inset 0 2px rgba(38, 38, 38, 0), inset 0 1px rgba(33, 33, 33, 0), 0 1px rgba(255, 255, 255, 0); }
   .entry:backdrop:insensitive {
     background-color: transparent;
     border-style: solid;
@@ -198,7 +198,7 @@
     color: #5d6767;
     border-color: #1e2222;
     background-image: linear-gradient(to bottom, #323636);
-    box-shadow: inset 0 2px 2px -2px rgba(20, 20, 20, 0), inset 0 0 2px 1px rgba(39, 51, 64, 0), 0 1px rgba(255, 255, 255, 0); }
+    box-shadow: inset 0 2px rgba(38, 38, 38, 0), inset 0 1px rgba(33, 33, 33, 0), 0 1px rgba(255, 255, 255, 0); }
   .entry:selected, .entry:backdrop:selected {
     background-color: #215d9c;
     color: white; }
@@ -232,8 +232,8 @@
       border-style: solid;
       border-width: 1px;
       background-image: linear-gradient(to bottom, #212121, #292929 90%);
-      border-color: #1a0000;
-      box-shadow: inset 0 2px 2px -2px #141414, inset 0 0 1px 1px #cc0000, 0 1px rgba(238, 238, 236, 0.1); }
+      box-shadow: inset 0 3px #202020, inset 0 1px #1a1a1a, inset 0 0 0 1px rgba(204, 0, 0, 0.7), 0 1px rgba(238, 238, 236, 0.1);
+      border-color: #1a0000; }
     .entry.error:selected, .entry.error:selected:focus {
       background-color: #cc0000; }
     .entry.error:selected:focus {
@@ -248,8 +248,8 @@
       border-style: solid;
       border-width: 1px;
       background-image: linear-gradient(to bottom, #212121, #292929 90%);
-      border-color: #432100;
-      box-shadow: inset 0 2px 2px -2px #141414, inset 0 0 1px 1px #f57900, 0 1px rgba(238, 238, 236, 0.1); }
+      box-shadow: inset 0 3px #202020, inset 0 1px #1a1a1a, inset 0 0 0 1px rgba(245, 121, 0, 0.7), 0 1px rgba(238, 238, 236, 0.1);
+      border-color: #432100; }
     .entry.warning:selected, .entry.warning:selected:focus {
       background-color: #f57900; }
     .entry.warning:selected:focus {
@@ -2459,7 +2459,7 @@ GtkLevelBar.vertical {
   border-width: 1px;
   background-image: linear-gradient(to bottom, #212121, #292929 90%);
   border-color: #1c1f1f;
-  box-shadow: inset 0 2px 2px -2px #141414, inset 0 0 2px 1px rgba(39, 51, 64, 0), 0 1px rgba(238, 238, 236, 0.1); }
+  box-shadow: inset 0 3px #202020, inset 0 1px #1a1a1a, inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0.1); }
   .level-bar.trough:backdrop {
     background-color: transparent;
     border-style: solid;
@@ -2468,7 +2468,7 @@ GtkLevelBar.vertical {
     color: #c9cbc9;
     border-color: #1e2222;
     background-image: linear-gradient(to bottom, #2c2c2c);
-    box-shadow: inset 0 2px 2px -2px rgba(20, 20, 20, 0), inset 0 0 2px 1px rgba(39, 51, 64, 0), 0 1px rgba(255, 255, 255, 0); }
+    box-shadow: inset 0 2px rgba(38, 38, 38, 0), inset 0 1px rgba(33, 33, 33, 0), 0 1px rgba(255, 255, 255, 0); }
 .level-bar.fill-block {
   border-width: 1px;
   border-style: solid;
