@@ -77,7 +77,37 @@ _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,
 						 gint           length,
 						 gchar       ***list)
 {
-  return 0;
+  GPtrArray *array;
+  const gchar *ptr;
+  gsize chunk_len;
+  gchar *copy;
+  guint nitems;
+
+  ptr = (const gchar *) text;
+  array = g_ptr_array_new ();
+
+  while (ptr < (const gchar *) &text[length])
+    {
+      chunk_len = strlen (ptr);
+
+      if (g_utf8_validate (ptr, chunk_len, NULL))
+        {
+          copy = g_strndup (ptr, chunk_len);
+          g_ptr_array_add (array, copy);
+        }
+
+      ptr = &ptr[chunk_len + 1];
+    }
+
+  nitems = array->len;
+  g_ptr_array_add (array, NULL);
+
+  if (list)
+    *list = (gchar **) g_ptr_array_free (array, FALSE);
+  else
+    g_ptr_array_free (array, TRUE);
+
+  return nitems;
 }
 
 gchar *
