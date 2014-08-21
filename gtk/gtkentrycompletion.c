@@ -85,6 +85,7 @@
 #include "gtkmarshalers.h"
 
 #include "gtkprivate.h"
+#include "gtkwindowprivate.h"
 
 #include <string.h>
 
@@ -609,9 +610,11 @@ gtk_entry_completion_constructed (GObject *object)
 
   /* pack it all */
   priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_use_subsurface (GTK_WINDOW (priv->popup_window), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
   gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window),
                             GDK_WINDOW_TYPE_HINT_COMBO);
+
   g_signal_connect (priv->popup_window, "key-press-event",
                     G_CALLBACK (gtk_entry_completion_popup_key_event),
                     completion);
@@ -2708,6 +2711,8 @@ _gtk_entry_completion_disconnect (GtkEntryCompletion *completion)
   gtk_window_set_attached_to (GTK_WINDOW (completion->priv->popup_window),
                               NULL);
 
+  gtk_window_set_transient_for (GTK_WINDOW (completion->priv->popup_window), NULL);
+
   completion->priv->entry = NULL;
 }
 
@@ -2715,6 +2720,9 @@ void
 _gtk_entry_completion_connect (GtkEntryCompletion *completion,
                                GtkEntry           *entry)
 {
+  GtkEntryCompletionPrivate *priv = completion->priv;
+  GtkWidget *toplevel;
+
   completion->priv->entry = GTK_WIDGET (entry);
 
   set_accessible_relation (completion->priv->popup_window,
@@ -2723,4 +2731,10 @@ _gtk_entry_completion_connect (GtkEntryCompletion *completion,
                               completion->priv->entry);
 
   connect_completion_signals (completion);
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
+
+  if (gtk_widget_is_toplevel (toplevel))
+    gtk_window_set_transient_for (GTK_WINDOW (priv->popup_window),
+                                  GTK_WINDOW (toplevel));
 }
