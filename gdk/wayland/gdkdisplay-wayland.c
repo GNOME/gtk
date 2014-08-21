@@ -177,6 +177,10 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
       display_wayland->data_device_manager =
         wl_registry_bind(display_wayland->wl_registry, id,
 					&wl_data_device_manager_interface, 1);
+  } else if (strcmp (interface, "wl_subcompositor") == 0) {
+    display_wayland->subcompositor =
+      wl_registry_bind (display_wayland->wl_registry, id,
+                        &wl_subcompositor_interface, 1);
   }
 }
 

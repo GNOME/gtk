@@ -62,6 +62,7 @@ struct _GdkWaylandDisplay
   struct gtk_shell *gtk_shell;
   struct wl_input_device *input_device;
   struct wl_data_device_manager *data_device_manager;
+  struct wl_subcompositor *subcompositor;
 
   struct wl_cursor_theme *cursor_theme;
   GHashTable *cursor_cache;
