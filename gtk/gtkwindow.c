@@ -229,6 +229,8 @@ struct _GtkWindowPrivate
 
   guint    drag_possible             : 1;
 
+  guint    use_subsurface            : 1;
+
   GtkGesture *multipress_gesture;
 };
 
@@ -6337,6 +6339,12 @@ gtk_window_realize (GtkWidget *widget)
       break;
     }
 
+#ifdef GDK_WINDOWING_WAYLAND
+  if (priv->use_subsurface &&
+      GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    attributes.window_type = GDK_WINDOW_SUBSURFACE;
+#endif
+
   attributes.title = priv->title;
   attributes.wmclass_name = priv->wmclass_name;
   attributes.wmclass_class = priv->wmclass_class;
@@ -11696,4 +11704,16 @@ gtk_window_enable_debugging (GtkWindow *window,
     }
   else
     gtk_window_set_debugging (TRUE, TRUE, warn);
+}
+
+void
+gtk_window_set_use_subsurface (GtkWindow *window,
+                               gboolean   use_subsurface)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (window)));
+
+  priv->use_subsurface = use_subsurface;
 }

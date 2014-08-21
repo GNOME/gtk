@@ -119,6 +119,9 @@ void    _gtk_window_get_popover_position (GtkWindow                   *window,
 GdkPixbuf *gtk_window_get_icon_for_size (GtkWindow *window,
                                          gint       size);
 
+void       gtk_window_set_use_subsurface (GtkWindow *window,
+                                          gboolean   use_subsurface);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */
