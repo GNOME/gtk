@@ -45,6 +45,10 @@
 /* for the use of round() */
 #include "fallback-c89.c"
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include "wayland/gdkwayland.h"
+#endif
+
 #undef DEBUG_WINDOW_PRINTING
 
 
@@ -1293,6 +1297,15 @@ gdk_window_new (GdkWindow     *parent,
       if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
 	g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
 		   "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
+      break;
+    case GDK_WINDOW_SUBSURFACE:
+#ifdef GDK_WINDOWING_WAYLAND
+      if (!GDK_IS_WAYLAND_DISPLAY (display))
+        {
+          g_warning (G_STRLOC "Subsurface windows can only be used on Wayland");
+          return NULL;
+        }
+#endif
       break;
     case GDK_WINDOW_CHILD:
       break;

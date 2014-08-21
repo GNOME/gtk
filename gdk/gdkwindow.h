@@ -68,6 +68,9 @@ typedef enum
  * @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
  * @GDK_WINDOW_OFFSCREEN: offscreen window (see
  *  [Offscreen Windows][OFFSCREEN-WINDOWS]). Since 2.18
+ * @GDK_WINDOW_SUBSURFACE: subsurface-based window; This window is visually
+ *  tied to a toplevel, and is moved/stacked with it. Currently this window
+ *  type is only implemented in Wayland. Since 3.14
  *
  * Describes the kind of window.
  */
@@ -78,7 +81,8 @@ typedef enum
   GDK_WINDOW_CHILD,
   GDK_WINDOW_TEMP,
   GDK_WINDOW_FOREIGN,
-  GDK_WINDOW_OFFSCREEN
+  GDK_WINDOW_OFFSCREEN,
+  GDK_WINDOW_SUBSURFACE
 } GdkWindowType;
 
 /**
