@@ -89,6 +89,7 @@ struct _GdkWaylandDeviceData
   guint cursor_timeout_id;
   guint cursor_image_index;
 
+  GdkDragContext *drop_context;
 
   struct wl_surface *pointer_surface;
 };
@@ -522,21 +523,50 @@ data_device_enter (void                  *data,
                    struct wl_data_offer  *offer)
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
+  GdkWindow *dest_window;
+
+  dest_window = wl_surface_get_user_data (surface);
+
+  if (!GDK_IS_WINDOW (dest_window))
+    return;
 
   g_debug (G_STRLOC ": %s data_device = %p serial = %u, surface = %p, x = %d y = %d, offer = %p",
            G_STRFUNC, data_device, serial, surface, x, y, offer);
 
+  /* Update pointer state, so device state queries work during DnD */
+  device->pointer_focus = g_object_ref (dest_window);
+  device->surface_x = wl_fixed_to_double (x);
+  device->surface_y = wl_fixed_to_double (y);
+
+  gdk_wayland_drop_context_update_targets (device->drop_context);
+  _gdk_wayland_drag_context_set_dest_window (device->drop_context,
+                                             dest_window, serial);
+  _gdk_wayland_drag_context_set_coords (device->drop_context,
+                                        wl_fixed_to_double (x),
+                                        wl_fixed_to_double (y));
+  _gdk_wayland_drag_context_emit_event (device->drop_context, GDK_DRAG_ENTER,
+                                        GDK_CURRENT_TIME);
+  gdk_wayland_selection_set_offer (offer);
 }
 
 static void
 data_device_leave (void                  *data,
                    struct wl_data_device *data_device)
 {
-  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
 
   g_debug (G_STRLOC ": %s data_device = %p",
            G_STRFUNC, data_device);
 
+  if (!gdk_drag_context_get_dest_window (device->drop_context))
+    return;
+
+  device->pointer_focus = NULL;
+
+  _gdk_wayland_drag_context_set_coords (device->drop_context, -1, -1);
+  _gdk_wayland_drag_context_emit_event (device->drop_context, GDK_DRAG_LEAVE,
+                                        GDK_CURRENT_TIME);
+  _gdk_wayland_drag_context_set_dest_window (device->drop_context, NULL, 0);
 }
 
 static void
@@ -546,16 +576,37 @@ data_device_motion (void                  *data,
                     wl_fixed_t             x,
                     wl_fixed_t             y)
 {
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
+
   g_debug (G_STRLOC ": %s data_device = %p, time = %d, x = %d, y = %d",
            G_STRFUNC, data_device, time, x, y);
+
+  if (!gdk_drag_context_get_dest_window (device->drop_context))
+    return;
+
+  /* Update pointer state, so device state queries work during DnD */
+  device->surface_x = wl_fixed_to_double (x);
+  device->surface_y = wl_fixed_to_double (y);
+
+  gdk_wayland_drop_context_update_targets (device->drop_context);
+  _gdk_wayland_drag_context_set_coords (device->drop_context,
+                                        wl_fixed_to_double (x),
+                                        wl_fixed_to_double (y));
+  _gdk_wayland_drag_context_emit_event (device->drop_context,
+                                        GDK_DRAG_MOTION, time);
 }
 
 static void
 data_device_drop (void                  *data,
                   struct wl_data_device *data_device)
 {
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
+
   g_debug (G_STRLOC ": %s data_device = %p",
            G_STRFUNC, data_device);
+
+  _gdk_wayland_drag_context_emit_event (device->drop_context,
+                                        GDK_DROP_START, GDK_CURRENT_TIME);
 }
 
 static void
@@ -1450,6 +1501,9 @@ seat_handle_capabilities (void                    *data,
       device_manager->devices =
         g_list_prepend (device_manager->devices, device->pointer);
 
+      device->drop_context = _gdk_wayland_drop_context_new (device->pointer,
+                                                            device->data_device);
+
       g_signal_emit_by_name (device_manager, "device-added", device->pointer);
     }
   else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && device->wl_pointer)
@@ -1460,6 +1514,8 @@ seat_handle_capabilities (void                    *data,
 
       device_manager->devices =
         g_list_remove (device_manager->devices, device->pointer);
+
+      g_clear_object (&device->drop_context);
 
       g_signal_emit_by_name (device_manager, "device-removed", device->pointer);
       g_object_unref (device->pointer);

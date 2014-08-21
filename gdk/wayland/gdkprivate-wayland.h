@@ -92,6 +92,24 @@ void            _gdk_wayland_window_register_dnd (GdkWindow *window);
 GdkDragContext *_gdk_wayland_window_drag_begin (GdkWindow *window,
 						GdkDevice *device,
 						GList     *targets);
+GdkDragContext * _gdk_wayland_drop_context_new (GdkDevice             *device,
+                                                struct wl_data_device *data_device);
+void _gdk_wayland_drag_context_set_source_window (GdkDragContext *context,
+                                                  GdkWindow      *window);
+void _gdk_wayland_drag_context_set_dest_window (GdkDragContext *context,
+                                                GdkWindow      *dest_window,
+                                                uint32_t        serial);
+void _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
+                                           GdkEventType    type,
+                                           guint32         time_);
+void _gdk_wayland_drag_context_set_coords (GdkDragContext *context,
+                                           gdouble         x,
+                                           gdouble         y);
+
+void gdk_wayland_drag_context_set_action (GdkDragContext *context,
+                                          GdkDragAction   action);
+
+void gdk_wayland_drop_context_update_targets (GdkDragContext *context);
 
 void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					      GdkWindow     *window,
