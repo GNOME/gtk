@@ -1758,11 +1758,11 @@ GtkSwitch {
 
 .check:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-backdrop-dark.png"), url("assets/checkbox-unchecked-backdrop-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .check:backdrop:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-backdrop-insensitive-dark.png"), url("assets/checkbox-unchecked-backdrop-insensitive-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .check:inconsistent {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-dark.png"), url("assets/checkbox-mixed-dark@2.png"));
@@ -1778,7 +1778,7 @@ GtkSwitch {
 
 .check:inconsistent:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-backdrop-dark.png"), url("assets/checkbox-mixed-backdrop-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .check:inconsistent:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-insensitive-dark.png"), url("assets/checkbox-mixed-insensitive-dark@2.png"));
@@ -1786,7 +1786,7 @@ GtkSwitch {
 
 .check:inconsistent:insensitive:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-backdrop-insensitive-dark.png"), url("assets/checkbox-mixed-backdrop-insensitive-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .check:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-dark.png"), url("assets/checkbox-checked-dark@2.png"));
@@ -1806,11 +1806,11 @@ GtkSwitch {
 
 .check:backdrop:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-dark.png"), url("assets/checkbox-checked-backdrop-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .check:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-insensitive-dark.png"), url("assets/checkbox-checked-backdrop-insensitive-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .menu .menuitem.check {
   icon-shadow: none;
@@ -1860,11 +1860,11 @@ GtkSwitch {
 
 .radio:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-backdrop-dark.png"), url("assets/radio-unchecked-backdrop-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .radio:backdrop:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-backdrop-insensitive-dark.png"), url("assets/radio-unchecked-backdrop-insensitive-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .radio:inconsistent {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-dark.png"), url("assets/radio-mixed-dark@2.png"));
@@ -1880,7 +1880,7 @@ GtkSwitch {
 
 .radio:inconsistent:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-backdrop-dark.png"), url("assets/radio-mixed-backdrop-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .radio:inconsistent:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-insensitive-dark.png"), url("assets/radio-mixed-insensitive-dark@2.png"));
@@ -1888,7 +1888,7 @@ GtkSwitch {
 
 .radio:inconsistent:insensitive:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-backdrop-insensitive-dark.png"), url("assets/radio-mixed-backdrop-insensitive-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .radio:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-dark.png"), url("assets/radio-checked-dark@2.png"));
@@ -1908,11 +1908,11 @@ GtkSwitch {
 
 .radio:backdrop:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-backdrop-dark.png"), url("assets/radio-checked-backdrop-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .radio:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-backdrop-insensitive-dark.png"), url("assets/radio-checked-backdrop-insensitive-dark@2.png"));
-  icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.1); }
+  icon-shadow: none; }
 
 .menu .menuitem.radio {
   icon-shadow: none;

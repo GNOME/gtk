@@ -1656,7 +1656,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
     .#{$w}#{$s} {
       -gtk-icon-source: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
                                     url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));
-      icon-shadow: 0 1px 0 $borders_edge;
+      icon-shadow: if(str-index($s,"backdrop"), none, 0 1px 0 $borders_edge); //no edge highlight for :backdrop
     }
   }
 
