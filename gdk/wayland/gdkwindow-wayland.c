@@ -95,6 +95,8 @@ struct _GdkWindowImplWayland
   struct xdg_popup   *xdg_popup;
   struct gtk_surface *gtk_surface;
 
+  struct wl_subsurface *subsurface;
+
   unsigned int mapped : 1;
   unsigned int use_custom_surface : 1;
   unsigned int pending_commit : 1;
@@ -785,6 +787,37 @@ static const struct wl_surface_listener surface_listener = {
 };
 
 static void
+gdk_wayland_window_create_subsurface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl, *parent_impl = NULL;
+  GdkWaylandDisplay *display_wayland;
+
+  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_SUBSURFACE)
+    return;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!impl->surface)
+    return; /* Bail out, surface and subsurface will be created later when shown */
+
+  if (impl->subsurface)
+    return;
+
+  if (impl->transient_for)
+    parent_impl = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+
+  if (parent_impl)
+    {
+      display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+      impl->subsurface =
+        wl_subcompositor_get_subsurface (display_wayland->subcompositor,
+                                         impl->surface, parent_impl->surface);
+      wl_subsurface_set_position (impl->subsurface, window->x, window->y);
+      wl_subsurface_set_desync (impl->subsurface);
+    }
+}
+
+static void
 gdk_wayland_window_create_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
@@ -796,6 +829,9 @@ gdk_wayland_window_create_surface (GdkWindow *window)
 
   gdk_wayland_window_sync_opaque_region (window);
   gdk_wayland_window_sync_input_region (window);
+
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
+    gdk_wayland_window_create_subsurface (window);
 }
 
 static void
@@ -1070,7 +1106,8 @@ gdk_wayland_window_map (GdkWindow *window)
       else
         transient_for = impl->transient_for;
 
-      if (transient_for)
+      if (transient_for &&
+          GDK_WINDOW_TYPE (window) != GDK_WINDOW_SUBSURFACE)
         {
           struct wl_seat *grab_input_seat = find_grab_input_seat (window, transient_for);
           if (grab_input_seat &&
@@ -1083,7 +1120,8 @@ gdk_wayland_window_map (GdkWindow *window)
             }
         }
 
-      gdk_wayland_window_create_xdg_surface (window);
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_SUBSURFACE)
+        gdk_wayland_window_create_xdg_surface (window);
 
     mapped:
       impl->mapped = TRUE;
@@ -1098,6 +1136,9 @@ gdk_wayland_window_show (GdkWindow *window,
 
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
+
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
+    gdk_wayland_window_create_subsurface (window);
 
   gdk_wayland_window_map (window);
 
@@ -1123,6 +1164,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
         {
           xdg_popup_destroy (impl->xdg_popup);
           impl->xdg_popup = NULL;
+        }
+
+      if (impl->subsurface)
+        {
+          wl_subsurface_destroy (impl->subsurface);
+          impl->subsurface = NULL;
         }
 
       wl_surface_destroy (impl->surface);
@@ -1205,11 +1252,18 @@ gdk_window_wayland_move_resize (GdkWindow *window,
 {
   if (with_move)
     {
+      GdkWindowImplWayland *impl;
+
+      impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
       /* Each toplevel has in its own "root" coordinate system */
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TOPLEVEL)
         {
           window->x = x;
           window->y = y;
+
+          if (impl->subsurface)
+            wl_subsurface_set_position (impl->subsurface, x, y);
         }
     }
 
@@ -1502,6 +1556,18 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
   impl->transient_for = parent;
 
   gdk_wayland_window_sync_parent (window);
+
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
+    {
+      if (impl->subsurface)
+        {
+          wl_subsurface_destroy (impl->subsurface);
+          impl->subsurface = NULL;
+        }
+
+      if (parent)
+        gdk_wayland_window_create_subsurface (window);
+    }
 }
 
 static void
