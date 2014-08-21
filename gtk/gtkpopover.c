@@ -771,7 +771,7 @@ gtk_popover_update_position (GtkPopover *popover)
   GtkRequisition req;
   GtkPositionType pos;
   gint overshoot[4];
-  gint i;
+  gint i, j;
   gint best;
 
   if (!priv->window)
@@ -791,11 +791,11 @@ gtk_popover_update_position (GtkPopover *popover)
 
   if (overshoot[pos] <= 0)
     {
-      priv->final_position = pos;
+      priv->final_position = priv->preferred_position;
     }
   else if (overshoot[opposite_position (pos)] <= 0)
     {
-      priv->final_position = opposite_position (pos);
+      priv->final_position = opposite_position (priv->preferred_position);
     }
   else
     {
@@ -803,10 +803,11 @@ gtk_popover_update_position (GtkPopover *popover)
       pos = 0;
       for (i = 0; i < 4; i++)
         {
-          if (overshoot[i] < best)
+          j = get_effective_position (popover, i);
+          if (overshoot[j] < best)
             {
               pos = i;
-              best = overshoot[i];
+              best = overshoot[j];
             }
         }
       priv->final_position = pos;
