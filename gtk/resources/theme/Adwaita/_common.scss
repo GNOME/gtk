@@ -971,7 +971,7 @@ GtkComboBox {
   }
 }
 
-// the followind is for spacing the icon and the label inside the home button
+// the following is for spacing the icon and the label inside the home button
 .path-bar .button GtkLabel:last-child { padding-left: 2px; }
 .path-bar .button GtkLabel:first-child { padding-right: 2px; }
 .path-bar .button GtkLabel:only-child { padding-right: 0; padding-left: 0; }
@@ -1184,15 +1184,14 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     border-style: none;
     background-color: transparent;
   }
-  .separator {
-    font-size: 80%;
-    font-weight: bold;
-    color: mix($fg_color, $bg_color, 20%);
-    text-shadow: none;
-    background-color: transparent;
-    icon-shadow: none;
-    border: 0;
-  }
+//  .separator {                         Those props doesn't seem to do anything
+//    font-size: 80%;                    I'll comment these out for now and I'll
+//    font-weight: bold;                 delete if nobody blames me :-)
+//    text-shadow: none;
+//    background-color: transparent;
+//    icon-shadow: none;
+//    border: 0;
+//  }
   .button.flat,
   .button.flat:hover {
     text-shadow: none;
@@ -2339,9 +2338,7 @@ GtkFileChooserDialog {
   &:selected {
     background-color: $selected_bg_color;
   }
- .separator {
-    color: mix($_sidebar_bg,$borders_color,70%);
-  }
+  .separator:backdrop { @extend .separator; } // overriden w/o this
 }
 
 GtkPaned {

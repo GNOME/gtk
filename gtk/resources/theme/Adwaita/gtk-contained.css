@@ -887,7 +887,9 @@ GtkComboBox {
     color: #c7c7c7; }
   GtkComboBox .menuitem {
     text-shadow: none; }
-  GtkComboBox .separator {
+  GtkComboBox .separator, GtkComboBox .sidebar .separator:backdrop, .sidebar GtkComboBox .separator:backdrop,
+  GtkComboBox .sidebar .view .separator:backdrop,
+  .sidebar .view GtkComboBox .separator:backdrop {
     -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0; }
@@ -951,8 +953,11 @@ GtkComboBox {
     font-size: 80%;
     padding: 0 12px; }
   .titlebar .header-bar-separator, GtkCalendar.header .header-bar-separator, .titlebar > GtkBox > .separator.vertical, GtkCalendar.header > GtkBox > .separator.vertical,
+  .sidebar .view .titlebar > GtkBox > .vertical.separator:backdrop,
+  .sidebar .view GtkCalendar.header > GtkBox > .vertical.separator:backdrop,
   .header-bar .header-bar-separator,
-  .header-bar > GtkBox > .separator.vertical {
+  .header-bar > GtkBox > .separator.vertical,
+  .sidebar .view .header-bar > GtkBox > .vertical.separator:backdrop {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
@@ -1293,14 +1298,6 @@ GtkTreeView.view.progressbar {
   .popover.osd > .search-bar {
     border-style: none;
     background-color: transparent; }
-  .popover .separator {
-    font-size: 80%;
-    font-weight: bold;
-    color: #c6c8c8;
-    text-shadow: none;
-    background-color: transparent;
-    icon-shadow: none;
-    border: 0; }
   .popover .button.flat,
   .popover .button.flat:hover {
     text-shadow: none;
@@ -2473,9 +2470,14 @@ GtkScrolledWindow .frame {
 GtkScrolledWindow GtkViewport.frame {
   border-style: none; }
 
-.separator {
+.separator, .sidebar .separator:backdrop,
+.sidebar .view .separator:backdrop {
   color: rgba(0, 0, 0, 0.1); }
-  GtkFileChooserButton .separator, GtkFontButton .separator {
+  GtkFileChooserButton .separator, GtkFileChooserButton .sidebar .separator:backdrop, .sidebar GtkFileChooserButton .separator:backdrop,
+  GtkFileChooserButton .sidebar .view .separator:backdrop,
+  .sidebar .view GtkFileChooserButton .separator:backdrop, GtkFontButton .separator, GtkFontButton .sidebar .separator:backdrop, .sidebar GtkFontButton .separator:backdrop,
+  GtkFontButton .sidebar .view .separator:backdrop,
+  .sidebar .view GtkFontButton .separator:backdrop {
     -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0; }
@@ -2782,9 +2784,6 @@ GtkFileChooserDialog .dialog-action-box {
   .sidebar:selected,
   .sidebar .view:selected {
     background-color: #4a90d9; }
-  .sidebar .separator,
-  .sidebar .view .separator {
-    color: #dfdfdf; }
 
 GtkPaned {
   margin: 0 8px 8px 0; }
