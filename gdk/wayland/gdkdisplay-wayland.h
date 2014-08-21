@@ -39,6 +39,8 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkWaylandSelection GdkWaylandSelection;
+
 struct _GdkWaylandDisplay
 {
   GdkDisplay parent_instance;
@@ -72,6 +74,8 @@ struct _GdkWaylandDisplay
   int compositor_version;
 
   struct xkb_context *xkb_context;
+
+  GdkWaylandSelection *selection;
 };
 
 struct _GdkWaylandDisplayClass

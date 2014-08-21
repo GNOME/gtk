@@ -239,6 +239,8 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   gdk_input_init (display);
 
+  display_wayland->selection = gdk_wayland_selection_new ();
+
   g_signal_emit_by_name (display, "opened");
 
   return display;
@@ -259,6 +261,12 @@ gdk_wayland_display_dispose (GObject *object)
       g_source_destroy (display_wayland->event_source);
       g_source_unref (display_wayland->event_source);
       display_wayland->event_source = NULL;
+    }
+
+  if (display_wayland->selection)
+    {
+      gdk_wayland_selection_free (display_wayland->selection);
+      display_wayland->selection = NULL;
     }
 
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->dispose (object);
@@ -893,4 +901,12 @@ _gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface)
 {
   GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
   return data->busy;
+}
+
+GdkWaylandSelection *
+gdk_wayland_display_get_selection (GdkDisplay *display)
+{
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+
+  return wayland_display->selection;
 }
