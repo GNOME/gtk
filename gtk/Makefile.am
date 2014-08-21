@@ -526,7 +526,6 @@ gtk_private_h_sources =		\
 	gtkcairoblurprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
 	gtkclipboardprivate.h		\
-	gtkclipboard-waylandprivate.h	\
 	gtkcolorswatchprivate.h	\
 	gtkcoloreditorprivate.h	\
 	gtkcolorplaneprivate.h	\
@@ -1237,7 +1236,6 @@ else
 # No wayland gtkdnd-wayland.c yet
 gtk_clipboard_dnd_c_sources = 	\
 	gtkclipboard.c \
-	gtkclipboard-wayland.c \
 	gtkdnd.c
 endif
 

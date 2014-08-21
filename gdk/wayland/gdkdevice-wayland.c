@@ -35,10 +35,6 @@
 #include <sys/time.h>
 #include <sys/mman.h>
 
-typedef struct _DataOffer DataOffer;
-
-typedef struct _GdkWaylandSelectionOffer GdkWaylandSelectionOffer;
-
 typedef struct _GdkWaylandTouchData GdkWaylandTouchData;
 
 struct _GdkWaylandTouchData
@@ -93,10 +89,6 @@ struct _GdkWaylandDeviceData
   guint cursor_timeout_id;
   guint cursor_image_index;
 
-  DataOffer *drag_offer;
-  DataOffer *selection_offer;
-
-  GdkWaylandSelectionOffer *selection_offer_out;
 
   struct wl_surface *pointer_surface;
 };
@@ -512,61 +504,12 @@ _gdk_wayland_device_get_keymap (GdkDevice *device)
   return GDK_WAYLAND_DEVICE (device)->device->keymap;
 }
 
-struct _DataOffer {
-  struct wl_data_offer *offer;
-  gint ref_count;
-  GPtrArray *types;
-};
-
-static void
-data_offer_offer (void                 *data,
-                  struct wl_data_offer *wl_data_offer,
-                  const char           *type)
-{
-  DataOffer *offer = (DataOffer *)data;
-  g_debug (G_STRLOC ": %s wl_data_offer = %p type = %s",
-           G_STRFUNC, wl_data_offer, type);
-
-  g_ptr_array_add (offer->types, g_strdup (type));
-}
-
-static void
-data_offer_unref (DataOffer *offer)
-{
-  offer->ref_count--;
-
-  if (offer->ref_count == 0)
-    {
-      g_ptr_array_free (offer->types, TRUE);
-      g_free (offer);
-    }
-}
-
-static const struct wl_data_offer_listener data_offer_listener = {
-  data_offer_offer,
-};
-
 static void
 data_device_data_offer (void                  *data,
                         struct wl_data_device *data_device,
                         struct wl_data_offer  *_offer)
 {
-  DataOffer *offer;
-
-  /* This structure is reference counted to handle the case where you get a
-   * leave but are in the middle of transferring data
-   */
-  offer = g_new0 (DataOffer, 1);
-  offer->ref_count = 1;
-  offer->types = g_ptr_array_new_with_free_func (g_free);
-  offer->offer = _offer;
-
-  /* The DataOffer structure is then retrieved later since this sets the user
-   * data.
-   */
-  wl_data_offer_add_listener (offer->offer,
-                              &data_offer_listener,
-                              offer);
+  gdk_wayland_selection_set_offer (_offer);
 }
 
 static void
@@ -583,11 +526,6 @@ data_device_enter (void                  *data,
   g_debug (G_STRLOC ": %s data_device = %p serial = %u, surface = %p, x = %d y = %d, offer = %p",
            G_STRFUNC, data_device, serial, surface, x, y, offer);
 
-  /* Retrieve the DataOffer associated with with the wl_data_offer - this
-   * association is made when the listener is attached.
-   */
-  g_assert (device->drag_offer == NULL);
-  device->drag_offer = wl_data_offer_get_user_data (offer);
 }
 
 static void
@@ -599,8 +537,6 @@ data_device_leave (void                  *data,
   g_debug (G_STRLOC ": %s data_device = %p",
            G_STRFUNC, data_device);
 
-  data_offer_unref (device->drag_offer);
-  device->drag_offer = NULL;
 }
 
 static void
@@ -627,33 +563,10 @@ data_device_selection (void                  *data,
                        struct wl_data_device *wl_data_device,
                        struct wl_data_offer  *offer)
 {
-  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
-
   g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
            G_STRFUNC, wl_data_device, offer);
 
-  if (!offer)
-    {
-      if (device->selection_offer)
-        {
-          data_offer_unref (device->selection_offer);
-          device->selection_offer = NULL;
-        }
-
-      return;
-    }
-
-  if (device->selection_offer)
-    {
-      data_offer_unref (device->selection_offer);
-      device->selection_offer = NULL;
-    }
-
-  /* Retrieve the DataOffer associated with with the wl_data_offer -
-   * this association is made when the listener is attached.
-   */
-  g_assert (device->selection_offer == NULL);
-  device->selection_offer = wl_data_offer_get_user_data (offer);
+  gdk_wayland_selection_set_offer (offer);
 }
 
 static const struct wl_data_device_listener data_device_listener = {
@@ -1874,290 +1787,6 @@ _gdk_wayland_device_get_last_implicit_grab_serial (GdkWaylandDevice  *device,
     }
 
   return serial;
-}
-
-static GdkAtom
-mime_type_to_gdk_atom (char *mime_type)
-{
-  if (strcmp (mime_type, "text/plain;charset=utf8"))
-    return gdk_atom_intern_static_string ("UTF8_STRING");
-
-  return GDK_NONE;
-}
-
-gint
-gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
-                                             GdkAtom   **atoms_out)
-{
-  gint i;
-  GdkAtom *atoms;
-  GdkWaylandDeviceData *device;
-
-  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), 0);
-  g_return_val_if_fail (atoms_out != NULL, 0);
-
-  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
-
-  if (!device->selection_offer || device->selection_offer->types->len == 0)
-    {
-      *atoms_out = NULL;
-      return 0;
-    }
-
-  atoms = g_new0 (GdkAtom, device->selection_offer->types->len);
-
-  /* Convert list of targets to atoms */
-  for (i = 0; i < device->selection_offer->types->len; i++)
-    atoms[i] = mime_type_to_gdk_atom (device->selection_offer->types->pdata[i]);
-
-  *atoms_out = atoms;
-  return device->selection_offer->types->len;
-}
-
-typedef struct
-{
-  GdkWaylandDeviceData *device;
-  DataOffer *offer;
-  GIOChannel *channel;
-  GdkDeviceWaylandRequestContentCallback cb;
-  gpointer userdata;
-} RequestContentClosure;
-
-static gboolean
-_request_content_io_func (GIOChannel   *channel,
-                          GIOCondition  condition,
-                          gpointer      userdata)
-{
-  RequestContentClosure *closure = (RequestContentClosure *)userdata;
-  gchar *data = NULL;
-  gsize len = 0;
-  GError *error = NULL;
-
-  /* FIXME: We probably want to do something better than this
-   * to avoid blocking on the transfer of large pieces of data:
-   * call the callback multiple times I should think.
-   */
-  if (g_io_channel_read_to_end (channel, &data, &len, &error) != G_IO_STATUS_NORMAL)
-    {
-      g_warning (G_STRLOC ": Error reading content from pipe: %s", error->message);
-      g_clear_error (&error);
-    }
-
-  /* Since we use _read_to_end we've got a guaranteed EOF and thus can go
-   * ahead and close the fd
-   */
-  g_io_channel_shutdown (channel, TRUE, NULL);
-
-  closure->cb (closure->device->pointer, data, len, closure->userdata);
-
-  g_free (data);
-  data_offer_unref (closure->offer);
-  g_io_channel_unref (channel);
-  g_free (closure);
-
-  return FALSE;
-}
-
-gboolean
-gdk_wayland_device_request_selection_content (GdkDevice                              *gdk_device,
-                                              const gchar                            *requested_mime_type,
-                                              GdkDeviceWaylandRequestContentCallback  cb,
-                                              gpointer                                userdata)
-{
-  int pipe_fd[2];
-  RequestContentClosure *closure;
-  GdkWaylandDeviceData *device;
-  GError *error = NULL;
-
-  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), FALSE);
-  g_return_val_if_fail (requested_mime_type != NULL, FALSE);
-  g_return_val_if_fail (cb != NULL, FALSE);
-
-  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
-
-  if (!device->selection_offer)
-    return FALSE;
-
-  /* TODO: Check mimetypes */
-
-  closure = g_new0 (RequestContentClosure, 1);
-
-  device->selection_offer->ref_count++;
-
-  pipe2 (pipe_fd, O_CLOEXEC);
-  wl_data_offer_receive (device->selection_offer->offer,
-                         requested_mime_type,
-                         pipe_fd[1]);
-  close (pipe_fd[1]);
-
-  closure->device = device;
-  closure->offer = device->selection_offer;
-  closure->channel = g_io_channel_unix_new (pipe_fd[0]);
-  closure->cb = cb;
-  closure->userdata = userdata;
-
-  if (!g_io_channel_set_encoding (closure->channel, NULL, &error))
-    {
-      g_warning (G_STRLOC ": Error setting encoding on channel: %s",
-                 error->message);
-      g_clear_error (&error);
-      goto error;
-    }
-
-  g_io_add_watch (closure->channel,
-                  G_IO_IN,
-                  _request_content_io_func,
-                  closure);
-
-  return TRUE;
-
- error:
-  data_offer_unref (closure->offer);
-  g_io_channel_unref (closure->channel);
-  close (pipe_fd[1]);
-  g_free (closure);
-
-  return FALSE;
-}
-
-struct _GdkWaylandSelectionOffer {
-  GdkDeviceWaylandOfferContentCallback cb;
-  gpointer userdata;
-  struct wl_data_source *source;
-  GdkWaylandDeviceData *device;
-};
-
-static void
-data_source_target (void                  *data,
-                    struct wl_data_source *source,
-                    const char            *mime_type)
-{
-  g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
-           G_STRFUNC, source, mime_type);
-}
-
-static void
-data_source_send (void                  *data,
-                  struct wl_data_source *source,
-                  const char            *mime_type,
-                  int32_t                fd)
-{
-  GdkWaylandSelectionOffer *offer = (GdkWaylandSelectionOffer *)data;
-  gchar *buf;
-  gssize len, bytes_written = 0;
-
-  g_debug (G_STRLOC ": %s source = %p, mime_type = %s fd = %d",
-           G_STRFUNC, source, mime_type, fd);
-
-  buf = offer->cb (offer->device->pointer, mime_type, &len, offer->userdata);
-
-  while (len > 0)
-    {
-      bytes_written += write (fd, buf + bytes_written, len);
-      if (bytes_written == -1)
-        goto error;
-      len -= bytes_written;
-    }
-
-  close (fd);
-  g_free (buf);
-
-  return;
- error:
-
-  g_warning (G_STRLOC ": Error writing data to client: %s",
-             g_strerror (errno));
-
-  close (fd);
-  g_free (buf);
-}
-
-static void
-data_source_cancelled (void                  *data,
-                       struct wl_data_source *source)
-{
-  g_debug (G_STRLOC ": %s source = %p",
-           G_STRFUNC, source);
-}
-
-static const struct wl_data_source_listener data_source_listener = {
-  data_source_target,
-  data_source_send,
-  data_source_cancelled
-};
-
-static guint32
-_wl_time_now (void)
-{
-  struct timeval tv;
-
-  gettimeofday (&tv, NULL);
-
-  return tv.tv_sec * 1000 + tv.tv_usec / 1000;
-}
-
-gboolean
-gdk_wayland_device_offer_selection_content (GdkDevice                             *gdk_device,
-                                            const gchar                          **mime_types,
-                                            gint                                   nr_mime_types,
-                                            GdkDeviceWaylandOfferContentCallback   cb,
-                                            gpointer                               userdata)
-{
-  GdkDisplay *display;
-  GdkWaylandDisplay *display_wayland;
-  GdkWaylandSelectionOffer *offer;
-  GdkWaylandDeviceData *device;
-  gint i;
-
-  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), 0);
-  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
-
-  display = device->display;
-  display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  offer = g_new0 (GdkWaylandSelectionOffer, 1);
-  offer->cb = cb;
-  offer->userdata = userdata;
-  offer->source =
-    wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
-  offer->device = device;
-
-  for (i = 0; i < nr_mime_types; i++)
-    wl_data_source_offer (offer->source, mime_types[i]);
-
-  wl_data_source_add_listener (offer->source,
-                               &data_source_listener,
-                               offer);
-
-  wl_data_device_set_selection (device->data_device,
-                                offer->source,
-                                _gdk_wayland_display_get_serial (display_wayland));
-
-  device->selection_offer_out = offer;
-
-  return TRUE;
-}
-
-gboolean
-gdk_wayland_device_clear_selection_content (GdkDevice *gdk_device)
-{
-  GdkWaylandDeviceData *device;
-
-  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), 0);
-  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
-
-  if (!device->selection_offer_out)
-    return FALSE;
-
-  wl_data_device_set_selection (device->data_device,
-                                NULL,
-                                _wl_time_now ());
-
-  wl_data_source_destroy (device->selection_offer_out->source);
-  g_free (device->selection_offer_out);
-  device->selection_offer_out = NULL;
-
-  return TRUE;
 }
 
 void

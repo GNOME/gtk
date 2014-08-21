@@ -23,9 +23,6 @@
 
 #include "gtkclipboard.h"
 #include "gtkclipboardprivate.h"
-#ifdef GDK_WINDOWING_WAYLAND
-#include "gtkclipboard-waylandprivate.h"
-#endif
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -1917,12 +1914,7 @@ clipboard_peek (GdkDisplay *display,
 
   if (!tmp_list && !only_if_exists)
     {
-#ifdef GDK_WINDOWING_WAYLAND
-      if (GDK_IS_WAYLAND_DISPLAY (display))
-        clipboard = g_object_new (GTK_TYPE_CLIPBOARD_WAYLAND, NULL);
-      else
-#endif
-        clipboard = g_object_new (GTK_TYPE_CLIPBOARD, NULL);
+      clipboard = g_object_new (GTK_TYPE_CLIPBOARD, NULL);
 
       clipboard->selection = selection;
       clipboard->display = display;

@@ -886,3 +886,41 @@ _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
 {
   return NULL;
 }
+
+void
+gdk_wayland_selection_add_targets (GdkWindow *window,
+                                   GdkAtom    selection,
+                                   guint      ntargets,
+                                   GdkAtom   *targets)
+{
+  struct wl_data_source *data_source;
+  guint i;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  data_source = gdk_wayland_selection_get_data_source (window, selection);
+
+  if (!data_source)
+    return;
+
+  for (i = 0; i < ntargets; i++)
+    wl_data_source_offer (data_source, gdk_atom_name (targets[i]));
+
+  if (selection == atoms[ATOM_CLIPBOARD])
+    {
+      GdkDeviceManager *device_manager;
+      GdkDisplay *display;
+      GdkDevice *device;
+
+      display = gdk_display_get_default ();
+      device_manager = gdk_display_get_device_manager (display);
+      device = gdk_device_manager_get_client_pointer (device_manager);
+      gdk_wayland_device_set_selection (device, data_source);
+    }
+}
+
+void
+gdk_wayland_selection_clear_targets (GdkAtom selection)
+{
+  gdk_wayland_selection_unset_data_source (selection);
+}
