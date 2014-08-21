@@ -143,7 +143,7 @@ static const gchar common_paper_sizes[][16] = {
   "iso_dl",
   "jpn_chou3",
   "na_ledger",
-  "iso_a3",
+  "iso_a3"
 };
 
 
@@ -818,7 +818,7 @@ paper_size_changed (GtkComboBox            *combo_box,
                             unit);
       h = double_to_string (gtk_page_setup_get_paper_height (page_setup, unit),
                             unit);
-      str = g_strdup_printf ("%s x %s %s", w, h, unit_str);
+      str = g_strdup_printf ("%s × %s %s", w, h, unit_str);
       g_free (w);
       g_free (h);
 
