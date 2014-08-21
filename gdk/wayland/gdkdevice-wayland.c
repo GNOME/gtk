@@ -15,11 +15,11 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-
-#include "config.h"
 
 #include <string.h>
 #include <gdk/gdkwindow.h>
