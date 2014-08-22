@@ -282,7 +282,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Specify one or more page ranges,
- e.g. 1-3,7,11</property>
+ e.g. 1–3, 7, 11</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="active">True</property>
@@ -303,14 +303,14 @@
                                     <property name="sensitive">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Specify one or more page ranges,
- e.g. 1-3,7,11</property>
+ e.g. 1–3, 7, 11</property>
                                     <property name="invisible_char">•</property>
                                     <property name="activates_default">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="page_range_entry-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes">Pages</property>
                                         <property name="AtkObject::accessible-description" translatable="yes">Specify one or more page ranges,
- e.g. 1-3,7,11</property>
+ e.g. 1–3, 7, 11</property>
                                       </object>
                                     </child>
                                   </object>

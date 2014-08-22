@@ -11,12 +11,12 @@ N_("C_urrent Page");
 N_("Se_lection");
 N_("Pag_es:");
 N_("Specify one or more page ranges,\n"
-   " e.g. 1-3,7,11");
+   " e.g. 1?3, 7, 11");
 N_("Specify one or more page ranges,\n"
-   " e.g. 1-3,7,11");
+   " e.g. 1?3, 7, 11");
 N_("Pages");
 N_("Specify one or more page ranges,\n"
-   " e.g. 1-3,7,11");
+   " e.g. 1?3, 7, 11");
 N_("Copies");
 N_("Copie_s:");
 N_("C_ollate");
@@ -53,20 +53,20 @@ N_("_Now");
 /* this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time. */
 N_("A_t:");
 N_("Specify the time of print,\n"
-   " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm");
+   " e.g. 15?30, 2?35 pm, 14?15?20, 11?46?30 am, 4 pm");
 
 /* Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported. */
 N_("Specify the time of print,\n"
-   " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm");
+   " e.g. 15?30, 2?35 pm, 14?15?20, 11?46?30 am, 4 pm");
 N_("Specify the time of print,\n"
-   " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm");
+   " e.g. 15?30, 2?35 pm, 14?15?20, 11?46?30 am, 4 pm");
 
 /* Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported. */
 N_("Specify the time of print,\n"
-   " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm");
+   " e.g. 15?30, 2?35 pm, 14?15?20, 11?46?30 am, 4 pm");
 N_("Time of print");
 N_("Specify the time of print,\n"
-   " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm");
+   " e.g. 15?30, 2?35 pm, 14?15?20, 11?46?30 am, 4 pm");
 
 /* this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'. */
 N_("On _hold");
