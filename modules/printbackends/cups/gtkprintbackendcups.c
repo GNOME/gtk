@@ -5114,7 +5114,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 	       * the width and height in points. E.g: "Custom
 	       * 230.4x142.9"
                */
-	      custom_name = g_strdup_printf (_("Custom %sx%s"), width, height);
+	      custom_name = g_strdup_printf (_("Custom %s×%s"), width, height);
 	      strncpy (option->defchoice, custom_name, PPD_MAX_NAME);
 	      g_free (custom_name);
 	    }
