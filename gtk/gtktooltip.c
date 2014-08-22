@@ -183,6 +183,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_TOOLTIP);
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+  gtk_window_set_use_subsurface (GTK_WINDOW (window), TRUE);
   g_signal_connect (window, "hide",
                     G_CALLBACK (gtk_tooltip_window_hide), tooltip);
 
@@ -881,6 +882,8 @@ static void
 gtk_tooltip_set_last_window (GtkTooltip *tooltip,
 			     GdkWindow  *window)
 {
+  GtkWidget *window_widget = NULL;
+
   if (tooltip->last_window == window)
     return;
 
@@ -893,6 +896,20 @@ gtk_tooltip_set_last_window (GtkTooltip *tooltip,
   if (window)
     g_object_add_weak_pointer (G_OBJECT (tooltip->last_window),
 			       (gpointer *) &tooltip->last_window);
+
+  if (window)
+    gdk_window_get_user_data (window, (gpointer *) &window_widget);
+
+  if (window_widget)
+    window_widget = gtk_widget_get_toplevel (window_widget);
+
+  if (window_widget &&
+      window_widget != tooltip->window &&
+      gtk_widget_is_toplevel (window_widget))
+    gtk_window_set_transient_for (GTK_WINDOW (tooltip->window),
+                                  GTK_WINDOW (window_widget));
+  else
+    gtk_window_set_transient_for (GTK_WINDOW (tooltip->window), NULL);
 }
 
 static gboolean
