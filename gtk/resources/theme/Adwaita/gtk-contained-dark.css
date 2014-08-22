@@ -391,7 +391,7 @@ GtkAssistant .sidebar GtkLabel.highlight {
       border-style: solid;
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, #215d9c);
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
       box-shadow: none;
       text-shadow: none;
       icon-shadow: none;
@@ -435,7 +435,7 @@ GtkAssistant .sidebar GtkLabel.highlight {
       border-style: solid;
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, #215d9c);
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
       box-shadow: none;
       text-shadow: none;
       icon-shadow: none; }
@@ -1467,7 +1467,7 @@ GtkTreeView.view.progressbar {
         border-style: solid;
         color: white;
         border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, #215d9c);
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
         box-shadow: none;
         text-shadow: none;
         icon-shadow: none; }
@@ -2245,7 +2245,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
         border-style: solid;
         color: white;
         border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, #215d9c);
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
         box-shadow: none;
         text-shadow: none;
         icon-shadow: none; }
@@ -3277,5 +3277,3 @@ GtkCalendar.header .button.titlebutton {
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
     border-color: transparent;
     transition-property: border, box-shadow, color; }
-
-/*# sourceMappingURL=gtk-contained-dark.css.map */

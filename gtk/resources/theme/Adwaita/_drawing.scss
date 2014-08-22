@@ -324,7 +324,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   //
   // active osd button
   //
-    $_bg: if($c!=$bg_color, $c, $selected_bg_color);
+    $_bg: if($c!=$bg_color, $c, $osd_borders_color);
     color: white;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
