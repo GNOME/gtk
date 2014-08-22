@@ -98,16 +98,16 @@
  * the “Close” button returns the #GTK_RESPONSE_CANCEL response id.
  */
 
-/* Translators: this is the license preamble; the string at the end
- * contains the name of the license as link text.
- */
-static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY.\nSee the <a href=\"%s\">%s</a> for details.");
-
 typedef struct
 {
   const gchar *name;
   const gchar *url;
 } LicenseInfo;
+
+/* Translators: this is the license preamble; the string at the end
+ * contains the name of the license as link text.
+ */
+static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY.\nSee the <a href=\"%s\">%s</a> for details.");
 
 /* LicenseInfo for each GtkLicense type; keep in the same order as the enumeration */
 static const LicenseInfo gtk_license_info [] = {
