@@ -1122,7 +1122,8 @@ gdk_wayland_window_map (GdkWindow *window)
             }
         }
 
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_SUBSURFACE)
+      if (impl->hint != GDK_WINDOW_TYPE_HINT_DND &&
+          GDK_WINDOW_TYPE (window) != GDK_WINDOW_SUBSURFACE)
         gdk_wayland_window_create_xdg_surface (window);
 
     mapped:
