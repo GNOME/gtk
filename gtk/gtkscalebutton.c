@@ -357,7 +357,7 @@ gtk_scale_button_init (GtkScaleButton *button)
   /* Need a local reference to the adjustment */
   g_object_ref (priv->adjustment);
 
-  gtk_widget_add_events (GTK_WIDGET (button), GDK_SCROLL_MASK);
+  gtk_widget_add_events (GTK_WIDGET (button), GDK_SMOOTH_SCROLL_MASK);
 }
 
 static void
@@ -786,11 +786,17 @@ gtk_scale_button_scroll (GtkWidget      *widget,
       if (d > gtk_adjustment_get_upper (adjustment))
 	d = gtk_adjustment_get_upper (adjustment);
     }
-  else
+  else if (event->direction == GDK_SCROLL_DOWN)
     {
       d -= gtk_adjustment_get_step_increment (adjustment);
       if (d < gtk_adjustment_get_lower (adjustment))
 	d = gtk_adjustment_get_lower (adjustment);
+    }
+  else if (event->direction == GDK_SCROLL_SMOOTH)
+    {
+      d += event->delta_y * gtk_adjustment_get_step_increment (adjustment);
+      d = CLAMP (d, gtk_adjustment_get_lower (adjustment),
+                 gtk_adjustment_get_upper (adjustment));
     }
   gtk_scale_button_set_value (button, d);
 
