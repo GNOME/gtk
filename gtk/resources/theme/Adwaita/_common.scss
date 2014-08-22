@@ -138,6 +138,9 @@ GtkLabel {
   &:backdrop:selected {
     @extend %selected_items;
   }
+  &:insensitive {
+    color: $insensitive_fg_color;
+  }
 }
 
 .dim-label {
