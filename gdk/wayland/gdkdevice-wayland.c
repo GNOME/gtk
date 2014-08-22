@@ -120,6 +120,9 @@ G_DEFINE_TYPE (GdkWaylandDevice, gdk_wayland_device, GDK_TYPE_DEVICE)
 #define GDK_IS_WAYLAND_DEVICE_MANAGER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_WAYLAND_DEVICE_MANAGER))
 #define GDK_WAYLAND_DEVICE_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_WAYLAND_DEVICE_MANAGER, GdkWaylandDeviceManagerClass))
 
+#define GDK_SLOT_TO_EVENT_SEQUENCE(s) ((GdkEventSequence *) GUINT_TO_POINTER((s) + 1))
+#define GDK_EVENT_SEQUENCE_TO_SLOT(s) (GPOINTER_TO_UINT(s) - 1)
+
 typedef struct _GdkWaylandDeviceManager GdkWaylandDeviceManager;
 typedef struct _GdkWaylandDeviceManagerClass GdkWaylandDeviceManagerClass;
 
@@ -1349,7 +1352,7 @@ _create_touch_event (GdkWaylandDeviceData *device,
   event->touch.time = time;
   event->touch.state = device->modifiers;
   gdk_event_set_screen (event, display->screen);
-  event->touch.sequence = GUINT_TO_POINTER (touch->id + 1);
+  event->touch.sequence = GDK_SLOT_TO_EVENT_SEQUENCE (touch->id);
 
   if (touch->initial_touch)
     {
