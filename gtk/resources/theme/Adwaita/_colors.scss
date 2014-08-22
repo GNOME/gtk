@@ -2,11 +2,11 @@
 // it gets @if ed depending on $variant
 
 
-$base_color: if($variant =='light', #fff, #292929);
+$base_color: if($variant =='light', #ffffff, #292929);
 $bg_color: if($variant =='light', #ededed, #393f3f);
 $fg_color: if($variant =='light', #2e3436, #eeeeec);
 
-$selected_fg_color: #fff;
+$selected_fg_color: #ffffff;
 $selected_bg_color: if($variant =='light', #4a90d9, darken(#4a90d9,20%));
 $selected_borders_color: if($variant == 'light', darken($selected_bg_color, 30%), darken($selected_bg_color,20%));
                          // FIXME dark variant color
@@ -38,28 +38,31 @@ $backdrop_insensitive_color: if($variant =='light', darken($backdrop_bg_color,15
 $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
 $backdrop_dark_fill: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
 
+
 //apps rely on some named colors to be exported
 /* GTK NAMED COLORS */
-@define-color theme_fg_color $fg_color;
-@define-color theme_bg_color $bg_color;
-@define-color theme_base_color $base_color;
-@define-color theme_selected_bg_color $selected_bg_color;
-@define-color theme_selected_fg_color $selected_fg_color;
-@define-color insensitive_bg_color $insensitive_bg_color;
-@define-color insensitive_fg_color $insensitive_fg_color;
-@define-color insensitive_base_color $base_color;
-@define-color theme_unfocused_fg_color $backdrop_fg_color;
-@define-color theme_unfocused_bg_color $backdrop_bg_color;
-@define-color theme_unfocused_base_color $backdrop_base_color;
-@define-color theme_unfocused_selected_bg_color $selected_bg_color;
-@define-color theme_unfocused_selected_fg_color $selected_fg_color;
-@define-color borders $borders_color;
-@define-color unfocused_borders $backdrop_borders_color;
+// Sass thinks we're using the colors in the variables as strings and may shoot
+// warning, it's innocuous and can be defeated by using "" + $var
+@define-color theme_fg_color #{$fg_color};
+@define-color theme_bg_color #{$bg_color};
+@define-color theme_base_color #{"" + $base_color};
+@define-color theme_selected_bg_color #{$selected_bg_color};
+@define-color theme_selected_fg_color #{"" + $selected_fg_color};
+@define-color insensitive_bg_color #{$insensitive_bg_color};
+@define-color insensitive_fg_color #{$insensitive_fg_color};
+@define-color insensitive_base_color #{"" + $base_color};
+@define-color theme_unfocused_fg_color #{$backdrop_fg_color};
+@define-color theme_unfocused_bg_color #{$backdrop_bg_color};
+@define-color theme_unfocused_base_color #{$backdrop_base_color};
+@define-color theme_unfocused_selected_bg_color #{$selected_bg_color};
+@define-color theme_unfocused_selected_fg_color #{"" + $selected_fg_color};
+@define-color borders #{$borders_color};
+@define-color unfocused_borders #{$backdrop_borders_color};
 
-@define-color warning_color $warning_color;
-@define-color error_color $error_color;
-@define-color success_color $success_color;
-//@define-color desctructive_color $destructive_color
+@define-color warning_color #{$warning_color};
+@define-color error_color #{$error_color};
+@define-color success_color #{$success_color};
+//@define-color desctructive_color #{$destructive_color}
 
 //WM
 
@@ -67,24 +70,24 @@ $_wm_highlight: if($variant=='light', $top_hilight,  // Sass gets mad if this is
                   transparentize(black,1));          // done directly in the
                                                      // color definition
 
-@define-color wm_title shade($fg_color, 1.8);
-@define-color wm_unfocused_title $backdrop_fg_color;
-@define-color wm_highlight $_wm_highlight;
-@define-color wm_borders_edge $borders_edge;
+@define-color wm_title shade(#{$fg_color}, 1.8);
+@define-color wm_unfocused_title #{$backdrop_fg_color};
+@define-color wm_highlight #{"" + $_wm_highlight};
+@define-color wm_borders_edge #{"" + $borders_edge};
 
-@define-color wm_bg_a shade($bg_color, 1.2);
-@define-color wm_bg_b $bg_color;
+@define-color wm_bg_a shade(#{$bg_color}, 1.2);
+@define-color wm_bg_b #{$bg_color};
 
 @define-color wm_shadow alpha(black, 0.35);
 @define-color wm_border alpha(black, 0.18);
 
-@define-color wm_button_hover_color_a shade($bg_color, 1.3);
-@define-color wm_button_hover_color_b $bg_color;
-@define-color wm_button_active_color_a shade($bg_color, 0.85);
-@define-color wm_button_active_color_b shade($bg_color, 0.89);
-@define-color wm_button_active_color_c shade($bg_color, 0.9);
+@define-color wm_button_hover_color_a shade(#{$bg_color}, 1.3);
+@define-color wm_button_hover_color_b #{$bg_color};
+@define-color wm_button_active_color_a shade(#{$bg_color}, 0.85);
+@define-color wm_button_active_color_b shade(#{$bg_color}, 0.89);
+@define-color wm_button_active_color_c shade(#{$bg_color}, 0.9);
 
 //FIXME this is really an API
 
-@define-color content_view_bg $base_color;
+@define-color content_view_bg #{"" + $base_color};
 
