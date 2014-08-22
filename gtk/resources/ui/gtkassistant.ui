@@ -24,7 +24,6 @@
             <style>
               <class name="sidebar"/>
             </style>
-            <signal name="draw" handler="assistant_sidebar_draw_cb" swapped="no"/>
             <child>
               <object class="GtkBox" id="sidebar">
                 <property name="visible">True</property>

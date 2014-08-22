@@ -171,9 +171,6 @@ static void       gtk_assistant_do_set_page_side_image       (GtkAssistant  *ass
                                                               GtkWidget     *page,
                                                               GdkPixbuf     *pixbuf);
 
-static gboolean   assistant_sidebar_draw_cb                  (GtkWidget     *widget,
-							      cairo_t       *cr,
-							      gpointer       user_data);
 static void       on_assistant_close                         (GtkWidget     *widget,
 							      GtkAssistant  *assistant);
 static void       on_assistant_apply                         (GtkWidget     *widget,
@@ -615,7 +612,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, button_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, title_size_group);
 
-  gtk_widget_class_bind_template_callback (widget_class, assistant_sidebar_draw_cb);
   gtk_widget_class_bind_template_callback (widget_class, assistant_remove_page_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_close);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_apply);
@@ -1067,23 +1063,6 @@ alternative_button_order (GtkAssistant *assistant)
                 "gtk-alternative-button-order", &result,
                 NULL);
   return result;
-}
-
-static gboolean
-assistant_sidebar_draw_cb (GtkWidget *widget,
-                           cairo_t *cr,
-                           gpointer user_data)
-{
-  gint width, height;
-  GtkStyleContext *context;
-
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_render_background (context, cr, 0, 0, width, height);
-
-  return FALSE;
 }
 
 static void
