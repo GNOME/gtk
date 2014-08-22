@@ -1051,7 +1051,7 @@ update_places (GtkPlacesSidebar *sidebar)
                    */
                   icon = g_volume_get_symbolic_icon (volume);
                   name = g_volume_get_name (volume);
-                  tooltip = g_strdup_printf (_("Mount and open %s"), name);
+                  tooltip = g_strdup_printf (_("Mount and open “%s”"), name);
 
                   add_place (sidebar, PLACES_MOUNTED_VOLUME,
                              SECTION_DEVICES,
@@ -1079,7 +1079,7 @@ update_places (GtkPlacesSidebar *sidebar)
                */
               icon = g_drive_get_symbolic_icon (drive);
               name = g_drive_get_name (drive);
-              tooltip = g_strdup_printf (_("Mount and open %s"), name);
+              tooltip = g_strdup_printf (_("Mount and open “%s”"), name);
 
               add_place (sidebar, PLACES_BUILT_IN,
                          SECTION_DEVICES,
@@ -1287,7 +1287,7 @@ update_places (GtkPlacesSidebar *sidebar)
             {
               icon = g_volume_get_symbolic_icon (volume);
               name = g_volume_get_name (volume);
-              tooltip = g_strdup_printf (_("Mount and open %s"), name);
+              tooltip = g_strdup_printf (_("Mount and open “%s”"), name);
 
               add_place (sidebar, PLACES_MOUNTED_VOLUME,
                          SECTION_NETWORK,
@@ -2281,7 +2281,7 @@ drive_start_from_bookmark_cb (GObject      *source_object,
       if (error->code != G_IO_ERROR_FAILED_HANDLED)
         {
           name = g_drive_get_name (G_DRIVE (source_object));
-          primary = g_strdup_printf (_("Unable to start %s"), name);
+          primary = g_strdup_printf (_("Unable to start “%s”"), name);
           g_free (name);
           emit_show_error_message (sidebar, primary, error->message);
           g_free (primary);
@@ -2621,7 +2621,7 @@ unmount_mount_cb (GObject      *source_object,
           gchar *primary;
 
           name = g_mount_get_name (mount);
-          primary = g_strdup_printf (_("Unable to unmount %s"), name);
+          primary = g_strdup_printf (_("Unable to unmount “%s”"), name);
           g_free (name);
           emit_show_error_message (sidebar, primary, error->message);
           g_free (primary);
@@ -2747,7 +2747,7 @@ drive_stop_cb (GObject      *source_object,
       if (error->code != G_IO_ERROR_FAILED_HANDLED)
         {
           name = g_drive_get_name (G_DRIVE (source_object));
-          primary = g_strdup_printf (_("Unable to stop %s"), name);
+          primary = g_strdup_printf (_("Unable to stop “%s”"), name);
           g_free (name);
           emit_show_error_message (sidebar, primary, error->message);
           g_free (primary);
@@ -2776,7 +2776,7 @@ drive_eject_cb (GObject      *source_object,
       if (error->code != G_IO_ERROR_FAILED_HANDLED)
         {
           name = g_drive_get_name (G_DRIVE (source_object));
-          primary = g_strdup_printf (_("Unable to eject %s"), name);
+          primary = g_strdup_printf (_("Unable to eject “%s”"), name);
           g_free (name);
           emit_show_error_message (sidebar, primary, error->message);
           g_free (primary);
@@ -2980,7 +2980,7 @@ drive_poll_for_media_cb (GObject      *source_object,
       if (error->code != G_IO_ERROR_FAILED_HANDLED)
         {
           name = g_drive_get_name (G_DRIVE (source_object));
-          primary = g_strdup_printf (_("Unable to poll %s for media changes"), name);
+          primary = g_strdup_printf (_("Unable to poll “%s” for media changes"), name);
           g_free (name);
           emit_show_error_message (sidebar, primary, error->message);
           g_free (primary);
@@ -3030,7 +3030,7 @@ drive_start_cb (GObject      *source_object,
       if (error->code != G_IO_ERROR_FAILED_HANDLED)
         {
           name = g_drive_get_name (G_DRIVE (source_object));
-          primary = g_strdup_printf (_("Unable to start %s"), name);
+          primary = g_strdup_printf (_("Unable to start “%s”"), name);
           g_free (name);
           emit_show_error_message (sidebar, primary, error->message);
           g_free (primary);
