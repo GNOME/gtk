@@ -415,7 +415,7 @@ gtk_color_plane_init (GtkColorPlane *plane)
   plane->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (plane));
   g_signal_connect (plane->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), plane);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (plane->priv->drag_gesture),
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (plane->priv->long_press_gesture),
                                      TRUE);
 }
 
