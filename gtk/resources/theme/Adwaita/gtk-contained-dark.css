@@ -2329,7 +2329,6 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       .scale.scale-has-marks-above.scale-has-marks-below.trough:backdrop, .osd
       .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough:backdrop {
         border-color: rgba(0, 0, 0, 0.7);
-        background-color: none;
         background-image: none; }
 
 .scale.scale-has-marks-below {

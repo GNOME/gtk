@@ -1899,7 +1899,6 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       }
       &:backdrop {
         border-color: $osd_borders_color;
-        background-color: none;
         background-image: none;
       }
     }
