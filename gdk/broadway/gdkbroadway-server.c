@@ -140,7 +140,7 @@ _gdk_broadway_server_new (const char *display, GError **error)
   else
     {
       g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-		   _("broadway display type not supported '%s'"), display);
+		   _("Broadway display type not supported: %s"), display);
       return NULL;
     }
 
