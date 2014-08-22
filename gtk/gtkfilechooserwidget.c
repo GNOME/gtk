@@ -6045,7 +6045,7 @@ search_error_could_not_create_client (GtkFileChooserWidget *impl)
   error_message (impl,
 		 _("Could not start the search process"),
 		 _("The program was not able to create a connection to the indexer "
-		   "daemon.  Please make sure it is running."));
+		   "daemon. Please make sure it is running."));
 }
 
 static void
