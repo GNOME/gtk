@@ -441,7 +441,7 @@ get_current_text (GtkProgressBar *pbar)
   if (priv->text)
     return g_strdup (priv->text);
   else
-    return g_strdup_printf ("%.0f %%", priv->fraction * 100.0);
+    return g_strdup_printf (C_("progress bar label", "%.0f %%"), priv->fraction * 100.0);
 }
 
 static void
