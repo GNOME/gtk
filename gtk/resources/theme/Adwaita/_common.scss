@@ -135,11 +135,11 @@ GtkLabel {
   &:selected,
   &:selected:focus,
   &:selected:hover,
-  &:backdrop:selected {
-    @extend %selected_items;
-  }
   &:insensitive {
     color: $insensitive_fg_color;
+  }
+  &:backdrop:selected {
+    @extend %selected_items;
   }
 }
 
@@ -160,6 +160,11 @@ GtkAssistant {
   }
 }
 
+.osd {
+  color: $osd_fg_color;
+  text-shadow: 0 1px black;
+  &:backdrop { text-shadow: none; }
+}
 
 /*********************
  * Spinner Animation *
@@ -322,10 +327,6 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       @include button(backdrop-insensitive-active);
     }
   }
-  //&:selected, &.flat:selected,       Why this?
-  //&:selected:focus, &.flat:focus {
-  //  @extend %selected_items;
-  //}
   &:insensitive {
     @include button(insensitive);
     &:active, &.flat:active,
@@ -338,36 +339,52 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
   // big standalone buttons like in Documents pager
   &.osd {
-    border-radius: 6px;
-    padding: 12px;
-    border-width: 1px 1px 2px 1px;
+    &.image-button { padding: 13px; }
     color: $osd_fg_color;
-    text-shadow: none;
-    icon-shadow: none;
+    border-radius: 6px;
+    outline-color: transparentize($osd_fg_color, 0.8);
     @include button(osd);
-    &:hover { @include button(osd-hover); }
-    &:active, &:checked { @include button(osd-active); }
-    &:insensitive { @include button(osd-insensitive); }
-    &:backdrop { @include button(osd-backdrop); }
+    border-color: $osd_outer_borders_color;
+    box-shadow: none;
+    &:hover {
+      @include button(osd-hover);
+      border-color: $osd_outer_borders_color;
+      box-shadow: none;
+    }
+    &:active, &:checked {
+      @include button(osd-active);
+      border-color: $osd_outer_borders_color;
+      box-shadow: none
+    }
+    &:insensitive, &:backdrop:insensitive {
+      @include button(osd-insensitive);
+      border-color: $osd_outer_borders_color;
+      // FIXME: if this state actually exists we should probably make the button
+      //        disappear
+    }
+    &:backdrop {
+      @include button(osd-backdrop);
+      border-color: $osd_outer_borders_color;
+    }
   }
   //overlay / OSD style
   .osd & {
-    padding: 6px;
-    border-width: 1px 1px 2px 1px;
+    // FIXME: for some reason I can't figure out the bookmark button in gnome documents
+    //        gets borders radius 0, when they get backdrop and another state
+    border-width: 1px;
     color: $osd_fg_color;
+    outline-color: transparentize($osd_fg_color, 0.8);
     @include button(osd);
-    text-shadow: none;
-    icon-shadow: none;
     @extend %linked;
     &:hover {
       @include button(osd-hover);
       @extend %linked;
     }
-    &:active, &:checked {
+    &:active, &:checked, &:backdrop:active, &:backdrop:checked {
       @include button(osd-active);
       @extend %linked;
     }
-    &:insensitive {
+    &:insensitive, &:backdrop:insensitive {
       @include button(osd-insensitive);
       @extend %linked;
     }
@@ -396,6 +413,26 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       }
       &:insensitive {
         @include button(insensitive);
+      }
+      .osd & {
+        @include button(osd, $b_color);
+        @extend %linked;
+        &:hover {
+          @include button(osd-hover, $b_color);
+          @extend %linked;
+        }
+        &:active, &:checked, &:backdrop:active, &:backdrop:checked {
+          @include button(osd-active, $b_color);
+          @extend %linked;
+        }
+        &:insensitive, &:backdrop:insensitive {
+          @include button(osd-insensitive, $b_color);
+          @extend %linked;
+        }
+        &:backdrop {
+          @include button(osd-backdrop, $b_color);
+          @extend %linked;
+        }
       }
     }
   }
@@ -490,7 +527,6 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   .linked.vertical &:active,
   .linked.vertical &:checked,
   .linked.vertical &:backdrop { @extend %linked_vertical; }
-
 }
 
 // all the following is for the +|- buttons on inline toolbars, that way
@@ -806,10 +842,12 @@ GtkComboBox {
   -GtkWidget-window-dragging: true;
   padding: 4px;
   background-color: $bg_color;
-  .osd & {
-    background-color: $osd_bg_color;
+  .osd &, &.osd {
+    padding: 13px;
+    border: $osd_outer_borders_color;
     border-radius: 6px;
-    padding: 12px;
+    background-color: transparentize($osd_bg_color, 0.3);
+    background-clip: padding-box;
   }
 }
 
@@ -1200,14 +1238,6 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     border-style: none;
     background-color: transparent;
   }
-//  .separator {                         Those props doesn't seem to do anything
-//    font-size: 80%;                    I'll comment these out for now and I'll
-//    font-weight: bold;                 delete if nobody blames me :-)
-//    text-shadow: none;
-//    background-color: transparent;
-//    icon-shadow: none;
-//    border: 0;
-//  }
   .button.flat,
   .button.flat:hover {
     text-shadow: none;
@@ -1808,13 +1838,11 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     }
     //OSD sliders
     .osd & {
-      background-image: none;
-      background-color: opacify($osd_borders_color,1);
-      border-width: 1px;
-      box-shadow: none;
-      border-color: $osd_borders_color;
-      &:hover { border-color: lighten($osd_borders_color,10%); }
-      &:active { border-color: lighten($osd_borders_color,30%); }
+      @include button(osd);
+      background-color: $osd_bg_color;
+      &:hover { @include button(osd-hover); }
+      &:active { @include button(osd-active); }
+      &:backdrop { @include button(osd-backdrop); }
     }
   }
   &.trough {
@@ -1848,16 +1876,32 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       background-color: mix($backdrop_bg_color,$borders_color);
       box-shadow: none;
     }
-    &:backdrop:insensitive, .hilight:backdrop:insensitive {
+    &:backdrop:insensitive, .highlight:backdrop:insensitive {
       border-color: $backdrop_borders_color;
       background-color: $insensitive_bg_color;
     }
     //OSD troughs
     .osd & {
-      background-image: none;
-      border-width: 0;
-      //background-color: $osd_borders_color;
+      border-color: $osd_borders_color;
       box-shadow: none;
+      margin: 9px;
+      &.fine-tune { margin: 7px; }
+      background-color: transparentize($osd_borders_color, 0.2);
+      outline-color: transparentize($osd_fg_color, 0.8);
+      outline-offset: -8px;
+      &.highlight {
+        background-image: none;
+        background-color: $selected_bg_color;
+      }
+      &:insensitive, &:backdrop:insensitive {
+        border-color: transparent;
+        background-color: transparent;
+      }
+      &:backdrop {
+        border-color: $osd_borders_color;
+        background-color: none;
+        background-image: none;
+      }
     }
   }
 }
