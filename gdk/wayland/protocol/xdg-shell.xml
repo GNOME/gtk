@@ -45,7 +45,7 @@
 	they implement using static_assert to ensure the protocol and
 	implementation versions match.
       </description>
-      <entry name="current" value="3" summary="Always the latest version"/>
+      <entry name="current" value="4" summary="Always the latest version"/>
     </enum>
 
 
@@ -239,8 +239,8 @@
       <description summary="types of state on the surface">
         The different state values used on the surface. This is designed for
         state values like maximized, fullscreen. It is paired with the
-        request_change_state event to ensure that both the client and the
-        compositor setting the state can be synchronized.
+        configure event to ensure that both the client and the compositor
+        setting the state can be synchronized.
 
         States set in this way are double-buffered. They will get applied on
         the next commit.
