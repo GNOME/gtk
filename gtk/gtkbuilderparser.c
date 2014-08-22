@@ -337,7 +337,7 @@ parse_object (GMarkupParseContext  *context,
               g_markup_parse_context_get_position (context, &line, NULL);
               g_set_error (error, GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_INVALID_VALUE,
-                           _("Invalid object type `%s' on line %d"),
+                           _("Invalid object type '%s' on line %d"),
                            values[i], line);
               return;
             }
@@ -772,7 +772,7 @@ parse_signal (ParserData   *data,
               g_markup_parse_context_get_position (data->ctx, &line, NULL);
               g_set_error (error, GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_INVALID_SIGNAL,
-                           _("Invalid signal `%s' for type `%s' on line %d"),
+                           _("Invalid signal '%s' for type '%s' on line %d"),
                            values[i], g_type_name (object_info->type), line);
               return;
             }
@@ -1064,7 +1064,7 @@ start_element (GMarkupParseContext *context,
     {
       g_set_error (error, GTK_BUILDER_ERROR, 
 		   GTK_BUILDER_ERROR_UNHANDLED_TAG,
-		   _("Invalid root element: '%s'"),
+		   _("Invalid root element: <%s>"),
 		   element_name);
       return;
     }
@@ -1107,7 +1107,7 @@ start_element (GMarkupParseContext *context,
 		       data, error))
       g_set_error (error, GTK_BUILDER_ERROR, 
 		   GTK_BUILDER_ERROR_UNHANDLED_TAG,
-		   _("Unhandled tag: '%s'"),
+		   _("Unhandled tag: <%s>"),
 		   element_name);
 }
 

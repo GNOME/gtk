@@ -314,7 +314,7 @@ gtk_builder_menu_text (GMarkupParseContext  *context,
 
         else
           g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       _("text may not appear inside <%s>"),
+                       _("Text may not appear inside <%s>"),
                        g_markup_parse_context_get_element (context));
         break;
       }
