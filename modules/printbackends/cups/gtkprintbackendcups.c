@@ -1079,13 +1079,13 @@ request_password (gpointer data)
         {
           case IPP_PRINT_JOB:
             if (job_title != NULL && printer_name != NULL)
-              prompt = g_strdup_printf ( _("Authentication is required to print document '%s' on printer %s"), job_title, printer_name);
+              prompt = g_strdup_printf ( _("Authentication is required to print document “%s” on printer %s"), job_title, printer_name);
             else
               prompt = g_strdup_printf ( _("Authentication is required to print a document on %s"), hostname);
             break;
           case IPP_GET_JOB_ATTRIBUTES:
             if (job_title != NULL)
-              prompt = g_strdup_printf ( _("Authentication is required to get attributes of job '%s'"), job_title);
+              prompt = g_strdup_printf ( _("Authentication is required to get attributes of job “%s”"), job_title);
             else
               prompt = g_strdup ( _("Authentication is required to get attributes of a job"));
             break;
@@ -1370,9 +1370,9 @@ request_auth_info (gpointer user_data)
   if (job_title != NULL)
     {
       if (printer_name != NULL)
-        prompt = g_strdup_printf ( _("Authentication is required to print document '%s' on printer %s"), job_title, printer_name);
+        prompt = g_strdup_printf ( _("Authentication is required to print document “%s” on printer %s"), job_title, printer_name);
       else
-        prompt = g_strdup_printf ( _("Authentication is required to print document '%s'"), job_title);
+        prompt = g_strdup_printf ( _("Authentication is required to print document “%s”"), job_title);
     }
   else
     {
@@ -1942,22 +1942,22 @@ static const char * const printer_messages[] =
 /* Our translatable versions of the printer messages */
 static const char * printer_strings[] =
   {
-    N_("Printer '%s' is low on toner."),
-    N_("Printer '%s' has no toner left."),
+    N_("Printer “%s” is low on toner."),
+    N_("Printer “%s” has no toner left."),
     /* Translators: "Developer" like on photo development context */
-    N_("Printer '%s' is low on developer."),
+    N_("Printer “%s” is low on developer."),
     /* Translators: "Developer" like on photo development context */
-    N_("Printer '%s' is out of developer."),
+    N_("Printer “%s” is out of developer."),
     /* Translators: "marker" is one color bin of the printer */
-    N_("Printer '%s' is low on at least one marker supply."),
+    N_("Printer “%s” is low on at least one marker supply."),
     /* Translators: "marker" is one color bin of the printer */
-    N_("Printer '%s' is out of at least one marker supply."),
-    N_("The cover is open on printer '%s'."),
-    N_("The door is open on printer '%s'."),
-    N_("Printer '%s' is low on paper."),
-    N_("Printer '%s' is out of paper."),
-    N_("Printer '%s' is currently offline."),
-    N_("There is a problem on printer '%s'.")
+    N_("Printer “%s” is out of at least one marker supply."),
+    N_("The cover is open on printer “%s”."),
+    N_("The door is open on printer “%s”."),
+    N_("Printer “%s” is low on paper."),
+    N_("Printer “%s” is out of paper."),
+    N_("Printer “%s” is currently offline."),
+    N_("There is a problem on printer “%s”.")
   };
 
 /* Attributes we're interested in for printers */
