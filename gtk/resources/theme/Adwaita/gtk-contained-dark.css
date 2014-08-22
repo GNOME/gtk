@@ -832,7 +832,7 @@ GtkAssistant .sidebar GtkLabel.highlight {
     border-radius: 3px;
     border-style: solid; }
 
-.button.flat, .button.flat:backdrop, .button.flat:backdrop:insensitive, .menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .list-row.button, .list-row.button:backdrop:hover, GtkCalendar.button, GtkCalendar.button:hover, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
+.button.flat, .button.flat:backdrop, .button.flat:backdrop:insensitive, .menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .list-row.button, .list-row.button:backdrop:hover, .app-notification .button.flat, .app-notification .button.flat:backdrop, .app-notification .button.flat:backdrop:insensitive, GtkCalendar.button, GtkCalendar.button:hover, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -2787,14 +2787,55 @@ GtkScrolledWindow GtkViewport.frame {
  * App Notifications *
  *********************/
 .app-notification {
+  color: white;
+  icon-shadow: none;
   border-width: 0 1px 1px;
   border-style: solid;
-  border-color: #1c1f1f;
+  border-color: rgba(255, 255, 255, 0.1);
   border-radius: 0 0 6px 6px;
-  background-image: linear-gradient(to bottom, #353b3b 5%, #363c3c);
+  background-color: rgba(46, 52, 54, 0.7);
+  background-clip: padding-box;
   padding: 0 4px; }
   .app-notification .button {
-    padding: 6px; }
+    border-width: 1px;
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.2);
+    border-style: solid;
+    background-color: transparent;
+    background-clip: padding-box;
+    background-image: linear-gradient(to bottom, rgba(46, 52, 54, 0.7));
+    border-color: rgba(0, 0, 0, 0.7);
+    box-shadow: inset 0 -1px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.1);
+    text-shadow: 0 1px black;
+    icon-shadow: 0 1px black; }
+    .app-notification .button:hover {
+      border-style: solid;
+      color: white;
+      border-color: rgba(0, 0, 0, 0.7);
+      background-image: linear-gradient(to bottom, rgba(93, 105, 109, 0.7)); }
+    .app-notification .button:active, .app-notification .button:checked, .app-notification .button:backdrop:active, .app-notification .button:backdrop:checked {
+      border-style: solid;
+      color: white;
+      border-color: rgba(0, 0, 0, 0.7);
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
+      box-shadow: none;
+      text-shadow: none;
+      icon-shadow: none; }
+    .app-notification .button:insensitive, .app-notification .button:backdrop:insensitive {
+      border-style: solid;
+      color: #939695;
+      border-color: rgba(0, 0, 0, 0.7);
+      background-image: linear-gradient(to bottom, rgba(66, 71, 73, 0.7));
+      box-shadow: none;
+      text-shadow: none;
+      icon-shadow: none; }
+    .app-notification .button:backdrop {
+      border-style: solid;
+      background-image: linear-gradient(to bottom, rgba(46, 52, 54, 0.7));
+      background-clip: padding-box;
+      box-shadow: none;
+      text-shadow: none;
+      icon-shadow: none; }
 
 /*************
  * Expanders *
@@ -3292,3 +3333,5 @@ GtkCalendar.header .button.titlebutton {
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
     border-color: transparent;
     transition-property: border, box-shadow, color; }
+
+/*# sourceMappingURL=gtk-contained-dark.css.map */
