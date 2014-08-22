@@ -99,10 +99,10 @@
  *  Private Macros  *
  * **************** */
 
+#define FALLBACK_ICON_SIZE	16
 #define DEFAULT_TITLE		N_("Select a File")
 #define DESKTOP_DISPLAY_NAME	N_("Desktop")
 #define FALLBACK_DISPLAY_NAME	N_("(None)") /* this string is used in gtk+/gtk/tests/filechooser.c - change it there if you change it here */
-#define FALLBACK_ICON_SIZE	16
 
 
 /* ********************** *
