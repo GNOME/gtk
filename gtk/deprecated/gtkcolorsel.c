@@ -512,7 +512,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   gtk_widget_set_tooltip_text (priv->hex_entry,
                         _("You can enter an HTML-style hexadecimal color "
-                          "value, or simply a color name such as 'orange' "
+                          "value, or simply a color name such as “orange” "
                           "in this entry."));
 
   gtk_entry_set_width_chars (GTK_ENTRY (priv->hex_entry), 7);
@@ -1068,22 +1068,22 @@ update_tooltips (GtkColorSelection *colorsel)
     {
       gtk_widget_set_tooltip_text (priv->old_sample,
         _("The previously-selected color, for comparison to the color "
-          "you're selecting now. You can drag this color to a palette "
+          "you’re selecting now. You can drag this color to a palette "
           "entry, or select this color as current by dragging it to the "
           "other color swatch alongside."));
 
       gtk_widget_set_tooltip_text (priv->cur_sample,
-        _("The color you've chosen. You can drag this color to a palette "
+        _("The color you’ve chosen. You can drag this color to a palette "
           "entry to save it for use in the future."));
     }
   else
     {
       gtk_widget_set_tooltip_text (priv->old_sample,
         _("The previously-selected color, for comparison to the color "
-          "you're selecting now."));
+          "you’re selecting now."));
 
       gtk_widget_set_tooltip_text (priv->cur_sample,
-        _("The color you've chosen."));
+        _("The color you’ve chosen."));
     }
 }
 
@@ -1693,7 +1693,7 @@ palette_new (GtkColorSelection *colorsel)
   gtk_widget_set_tooltip_text (retval,
     _("Click this palette entry to make it the current color. "
       "To change this entry, drag a color swatch here or right-click "
-      "it and select \"Save color here.\""));
+      "it and select “Save color here.”"));
   return retval;
 }
 
