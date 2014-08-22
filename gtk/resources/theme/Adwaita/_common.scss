@@ -145,6 +145,19 @@ GtkLabel {
   text-shadow: none;
 }
 
+GtkAssistant {
+  & .sidebar {
+    background-color: $base_color;
+  }
+  & .sidebar GtkLabel {
+    padding: 6px;
+  }
+  & .sidebar GtkLabel.highlight {
+    background-color: darken($bg_color, 10%);
+  }
+}
+
+
 /*********************
  * Spinner Animation *
  *********************/
