@@ -1206,9 +1206,9 @@
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_markup" translatable="yes">Specify the time of print,
- e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm</property>
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                 <property name="tooltip_text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
- e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm</property>
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -1230,16 +1230,16 @@
                                 <property name="can_focus">True</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_markup" translatable="yes">Specify the time of print,
- e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm</property>
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                 <property name="tooltip_text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
- e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm</property>
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                 <property name="invisible_char">•</property>
                                 <property name="invisible_char_set">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="print_at_entry-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Time of print</property>
                                     <property name="AtkObject::accessible-description" translatable="yes">Specify the time of print,
- e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm</property>
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                   </object>
                                 </child>
                                 <signal name="changed" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
