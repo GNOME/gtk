@@ -48,6 +48,7 @@ demos =						\
 	rotated_text.c				\
 	search_entry.c				\
 	search_entry2.c				\
+	sidebar.c				\
 	sizegroup.c				\
 	spinner.c				\
 	stack.c					\

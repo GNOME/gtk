@@ -141,6 +141,9 @@
     <link linkend="GtkStackSwitcher">
       <inlinegraphic fileref="stackswitcher.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkSidebar">
+      <inlinegraphic fileref="sidebar.png" format="PNG"></inlinegraphic>
+    </link>
     <link linkend="GtkTreeView">
       <inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic>
     </link>

@@ -2,6 +2,7 @@
 
 GtkWidget *stack;
 GtkWidget *switcher;
+GtkWidget *sidebar;
 GtkWidget *w1;
 
 static void
@@ -99,7 +100,7 @@ gint
 main (gint argc,
       gchar ** argv)
 {
-  GtkWidget *window, *box, *button, *hbox, *combo;
+  GtkWidget *window, *box, *button, *hbox, *combo, *layout;
   GtkWidget *w2, *w3;
   GtkListStore* store;
   GtkWidget *tree_view;
@@ -127,7 +128,15 @@ main (gint argc,
   gtk_stack_set_transition_duration (GTK_STACK (stack), 1500);
 
   gtk_widget_set_halign (stack, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (box), stack);
+
+  /* Add sidebar before stack */
+  sidebar = gtk_sidebar_new ();
+  gtk_sidebar_set_stack (GTK_SIDEBAR (sidebar), GTK_STACK (stack));
+  layout = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_pack_start (GTK_BOX (layout), sidebar, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (layout), stack, TRUE, TRUE, 0);
+
+  gtk_container_add (GTK_CONTAINER (box), layout);
 
   gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
 

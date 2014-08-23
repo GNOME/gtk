@@ -76,6 +76,7 @@
       <xi:include href="xml/gtkflowbox.xml" />
       <xi:include href="xml/gtkstack.xml" />
       <xi:include href="xml/gtkstackswitcher.xml" />
+      <xi:include href="xml/gtksidebar.xml" />
       <xi:include href="xml/gtkactionbar.xml" />
       <xi:include href="xml/gtkheaderbar.xml" />
       <xi:include href="xml/gtkoverlay.xml" />

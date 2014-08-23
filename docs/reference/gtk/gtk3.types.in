@@ -170,6 +170,7 @@ gtk_separator_get_type
 gtk_separator_menu_item_get_type
 gtk_separator_tool_item_get_type
 gtk_settings_get_type
+gtk_sidebar_get_type
 gtk_size_group_get_type
 @ENABLE_ON_X11@gtk_socket_get_type
 gtk_spin_button_get_type

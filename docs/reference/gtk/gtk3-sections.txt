@@ -8157,3 +8157,23 @@ GTK_GESTURE_ZOOM_GET_CLASS
 <SUBSECTION Private>
 gtk_gesture_zoom_get_type
 </SECTION>
+
+
+<SECTION>
+<FILE>gtksidebar</FILE>
+GtkSidebar
+GtkSidebarClass
+gtk_sidebar_new
+
+<SUBSECTION Standard>
+GTK_TYPE_SIDEBAR
+GTK_SIDEBAR
+GTK_SIDEBAR_CLASS
+GTK_IS_SIDEBAR
+GTK_IS_SIDEBAR_CLASS
+GTK_SIDEBAR_GET_CLASS
+
+<SUBSECTION Private>
+GtkSidebarPrivate
+gtk_sidebar_get_type
+</SECTION>
