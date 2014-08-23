@@ -73,6 +73,28 @@ Patches should be in unified diff form. (The -up option to GNU diff)
 Even better are git-formatted patches. (Use git format-patch)
 
 
+Release notes for 3.14
+======================
+
+* A new state, GTK_STATE_FLAG_CHECKED, has been added for checked states
+  of radio and check buttons and menuitems. Applications that are using
+  GTK+ styles without widgets will need adjustments.
+
+* Adwaita is now the default theme on all platforms.
+
+* The icon theme code has become a little pickier about sizes and is not
+  automatically scaling icons beyond the limits defined in the icon theme
+  unless explicitly asked to do so with GTK_ICON_LOOKUP_FORCE_SIZE.
+
+* GTK+ now includes an interactive debugger which can be activated with
+  the keyboard shortcuts Ctrl-Shift-d or Ctrl-Shift-i. If these shortcuts
+  interfere with application keybindings, they can be disabled with the
+  setting org.gtk.Settings.Debug.enable-inspector-keybinding.
+
+* Most widgets have been ported to use the new gesture framework internally
+  for event handling. Traditional event handlers in derived widgets are still
+  being called.
+
 Release notes for 3.12
 ======================
 
@@ -212,7 +234,6 @@ Release notes for 3.4
 * Excessive dependencies have been culled from Requires: lines
   in .pc files. Dependent modules may have to declare dependencies
   that there were getting 'for free' in the past.
-
 
 Release notes for 3.2
 =====================
