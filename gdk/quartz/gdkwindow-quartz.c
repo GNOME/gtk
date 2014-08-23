@@ -29,6 +29,7 @@
 #include "gdkquartzcursor.h"
 
 #include <Carbon/Carbon.h>
+#include <AvailabilityMacros.h>
 
 #include <sys/time.h>
 #include <cairo-quartz.h>
@@ -43,6 +44,10 @@ static GSList *main_window_stack;
 
 void _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl);
 
+#ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
+#endif
+
 #define FULLSCREEN_DATA "fullscreen-data"
 
 typedef struct
@@ -55,8 +60,6 @@ typedef struct
 
 static void update_toplevel_order (void);
 static void clear_toplevel_order  (void);
-
-static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
 
 #define WINDOW_IS_TOPLEVEL(window)		     \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
@@ -1170,8 +1173,10 @@ gdk_window_quartz_hide (GdkWindow *window)
   GdkWindowImplQuartz *impl;
 
   /* Make sure we're not stuck in fullscreen mode. */
+#ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
   if (get_fullscreen_geometry (window))
     SetSystemUIMode (kUIModeNormal, 0);
+#endif
 
   check_grab_unmap (window);
 
@@ -2635,6 +2640,66 @@ gdk_quartz_window_deiconify (GdkWindow *window)
     }
 }
 
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+
+static gboolean
+window_is_fullscreen (GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  return ([impl->toplevel styleMask] & NSFullScreenWindowMask) != 0;
+}
+
+static void
+gdk_quartz_window_fullscreen (GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl;
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  if (!window_is_fullscreen (window))
+    [impl->toplevel toggleFullScreen:nil];
+}
+
+static void
+gdk_quartz_window_unfullscreen (GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl;
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  if (window_is_fullscreen (window))
+    [impl->toplevel toggleFullScreen:nil];
+}
+
+void
+_gdk_quartz_window_update_fullscreen_state (GdkWindow *window)
+{
+  gboolean is_fullscreen;
+  gboolean was_fullscreen;
+
+  is_fullscreen = window_is_fullscreen (window);
+  was_fullscreen = (gdk_window_get_state (window) & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+
+  if (is_fullscreen != was_fullscreen)
+    {
+      if (is_fullscreen)
+        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+      else
+        gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+    }
+}
+
+#else
+
 static FullscreenSavedGeometry *
 get_fullscreen_geometry (GdkWindow *window)
 {
@@ -2717,6 +2782,8 @@ gdk_quartz_window_unfullscreen (GdkWindow *window)
       gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
     }
 }
+
+#endif
 
 static void
 gdk_quartz_window_set_keep_above (GdkWindow *window,

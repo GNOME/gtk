@@ -42,6 +42,7 @@
 -(BOOL)trackManualResize;
 -(void)showAndMakeKey:(BOOL)makeKey;
 -(void)hide;
+-(void)setStyleMask:(NSUInteger)styleMask;
 
 @end
 

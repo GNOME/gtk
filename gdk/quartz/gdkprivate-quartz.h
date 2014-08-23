@@ -216,7 +216,7 @@ void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
                                                      gint       number);
 
 void       _gdk_quartz_window_update_position           (GdkWindow    *window);
-
+void       _gdk_quartz_window_update_fullscreen_state   (GdkWindow    *window);
 
 /* Window methods - testing */
 void     _gdk_quartz_window_sync_rendering    (GdkWindow       *window);
