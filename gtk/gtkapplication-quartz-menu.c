@@ -249,7 +249,7 @@ icon_loaded (GObject      *object,
 
       GtkIconTheme *theme;
       GtkIconInfo *info;
-      gint scale;
+      gint scale = 1;
 
       if (!parsed)
         {
@@ -262,7 +262,14 @@ icon_loaded (GObject      *object,
         }
 
       theme = gtk_icon_theme_get_default ();
-      scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
+
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+       /* we need a run-time check for the backingScaleFactor selector because we
+        * may be compiling on a 10.7 framework, but targeting a 10.6 one
+        */
+      if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)])
+        scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
+#endif
       info = gtk_icon_theme_lookup_by_gicon_for_scale (theme, icon, ICON_SIZE, scale, GTK_ICON_LOOKUP_USE_BUILTIN);
 
       if (info != NULL)
