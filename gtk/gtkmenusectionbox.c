@@ -145,11 +145,24 @@ gtk_popover_item_activate (GtkWidget *button,
                            gpointer   user_data)
 {
   GtkMenuTrackerItem *item = user_data;
+  GtkWidget *popover = NULL;
+
+  if (gtk_menu_tracker_item_get_role (item) == GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+    {
+      /* Activating the item could cause the popover
+       * to be free'd, for example if it is a Quit item
+       */
+      popover = g_object_ref (gtk_widget_get_ancestor (button,
+                                                       GTK_TYPE_POPOVER));
+    }
 
   gtk_menu_tracker_item_activated (item);
 
-  if (gtk_menu_tracker_item_get_role (item) == GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
-    gtk_widget_hide (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER));
+  if (popover != NULL)
+    {
+      gtk_widget_hide (popover);
+      g_object_unref (popover);
+    }
 }
 
 static void
