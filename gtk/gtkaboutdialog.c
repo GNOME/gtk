@@ -241,9 +241,6 @@ static gboolean             text_view_event_after           (GtkWidget          
 static gboolean             text_view_motion_notify_event   (GtkWidget          *text_view,
 							     GdkEventMotion     *event,
 							     GtkAboutDialog     *about);
-static gboolean             text_view_visibility_notify_event(GtkWidget          *text_view,
-							      GdkEventVisibility *event,
-							      GtkAboutDialog     *about);
 static void                 toggle_credits                  (GtkToggleButton    *button,
                                                              gpointer            user_data);
 static void                 toggle_license                  (GtkToggleButton    *button,
@@ -599,7 +596,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, emit_activate_link);
   gtk_widget_class_bind_template_callback (widget_class, text_view_event_after);
   gtk_widget_class_bind_template_callback (widget_class, text_view_key_press_event);
-  gtk_widget_class_bind_template_callback (widget_class, text_view_visibility_notify_event);
   gtk_widget_class_bind_template_callback (widget_class, text_view_motion_notify_event);
   gtk_widget_class_bind_template_callback (widget_class, stack_visible_child_notify);
 }
@@ -2053,43 +2049,6 @@ text_view_motion_notify_event (GtkWidget *text_view,
   set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), event->device, x, y);
 
   gdk_event_request_motions (event);
-
-  return FALSE;
-}
-
-
-static gboolean
-text_view_visibility_notify_event (GtkWidget          *text_view,
-                                   GdkEventVisibility *event,
-                                   GtkAboutDialog     *about)
-{
-  GdkDeviceManager *device_manager;
-  GdkDisplay *display;
-  GList *devices, *d;
-  gint wx, wy, bx, by;
-
-  display = gdk_window_get_display (event->window);
-  device_manager = gdk_display_get_device_manager (display);
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-
-  for (d = devices; d; d = d->next)
-    {
-      GdkDevice *dev = d->data;
-
-      if (gdk_device_get_source (dev) == GDK_SOURCE_KEYBOARD)
-        continue;
-
-      gdk_window_get_device_position (gtk_widget_get_window (text_view), dev,
-                                      &wx, &wy, NULL);
-
-      gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
-                                             GTK_TEXT_WINDOW_WIDGET,
-                                             wx, wy, &bx, &by);
-
-      set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), dev, bx, by);
-    }
-
-  g_list_free (devices);
 
   return FALSE;
 }
