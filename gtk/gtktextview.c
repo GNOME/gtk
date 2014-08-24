@@ -4232,11 +4232,7 @@ gtk_text_view_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, window);
 
   context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
   gtk_style_context_set_background (context, window);
-  gtk_style_context_restore (context);
 
   text_window_realize (priv->text_window, widget);
 
@@ -4346,43 +4342,43 @@ gtk_text_view_unmap (GtkWidget *widget)
 }
 
 static void
+text_window_set_background (GtkStyleContext *context,
+                            GtkTextWindow   *window,
+                            const gchar     *class)
+{
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, class);
+  gtk_style_context_set_background (context, window->bin_window);
+  gtk_style_context_restore (context);
+}
+
+static void
 gtk_text_view_set_background (GtkTextView *text_view)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkWidget *widget;
   GtkTextViewPrivate *priv;
-  GdkRGBA color;
 
   widget = GTK_WIDGET (text_view);
   priv = text_view->priv;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  /* Set bin window background */
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-
-  gtk_style_context_set_background (context, priv->text_window->bin_window);
   gtk_style_context_set_background (context, gtk_widget_get_window (widget));
 
-  gtk_style_context_restore (context);
-
-  /* Set lateral panes background */
-  gtk_style_context_get_background_color (context, state, &color);
+  text_window_set_background (context, priv->text_window, GTK_STYLE_CLASS_VIEW);
 
   if (priv->left_window)
-    gdk_window_set_background_rgba (priv->left_window->bin_window, &color);
+    text_window_set_background (context, priv->left_window, GTK_STYLE_CLASS_LEFT);
 
   if (priv->right_window)
-    gdk_window_set_background_rgba (priv->right_window->bin_window, &color);
+    text_window_set_background (context, priv->right_window, GTK_STYLE_CLASS_RIGHT);
 
   if (priv->top_window)
-    gdk_window_set_background_rgba (priv->top_window->bin_window, &color);
+    text_window_set_background (context, priv->top_window, GTK_STYLE_CLASS_TOP);
 
   if (priv->bottom_window)
-    gdk_window_set_background_rgba (priv->bottom_window->bin_window, &color);
+    text_window_set_background (context, priv->bottom_window, GTK_STYLE_CLASS_BOTTOM);
 }
 
 static void
@@ -5381,7 +5377,6 @@ gtk_text_view_draw (GtkWidget *widget,
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
       gtk_render_background (context, cr,
 			     0, 0,
 			     gtk_widget_get_allocated_width (widget),
@@ -9201,12 +9196,10 @@ text_window_realize (GtkTextWindow *win,
                      GtkWidget     *widget)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkCursor *cursor;
-  GdkRGBA color;
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = win->allocation.x;
@@ -9255,15 +9248,15 @@ text_window_realize (GtkTextWindow *win,
   gdk_window_show (win->bin_window);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  if (win->type == GTK_TEXT_WINDOW_TEXT)
+  switch (win->type)
     {
+    case GTK_TEXT_WINDOW_TEXT:
       if (gtk_widget_is_sensitive (widget))
         {
           /* I-beam cursor */
           cursor = gdk_cursor_new_for_display (gdk_window_get_display (window),
-					       GDK_XTERM);
+                                               GDK_XTERM);
           gdk_window_set_cursor (win->bin_window, cursor);
           g_object_unref (cursor);
         } 
@@ -9271,18 +9264,23 @@ text_window_realize (GtkTextWindow *win,
       gtk_im_context_set_client_window (GTK_TEXT_VIEW (widget)->priv->im_context,
                                         win->window);
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+      text_window_set_background (context, win, GTK_STYLE_CLASS_VIEW);
+      break;
 
-      gtk_style_context_get_background_color (context, state, &color);
-      gdk_window_set_background_rgba (win->bin_window, &color);
-
-      gtk_style_context_restore (context);
-    }
-  else
-    {
-      gtk_style_context_get_background_color (context, state, &color);
-      gdk_window_set_background_rgba (win->bin_window, &color);
+    case GTK_TEXT_WINDOW_LEFT:
+      text_window_set_background (context, win, GTK_STYLE_CLASS_LEFT);
+      break;
+    case GTK_TEXT_WINDOW_RIGHT:
+      text_window_set_background (context, win, GTK_STYLE_CLASS_RIGHT);
+      break;
+    case GTK_TEXT_WINDOW_TOP:
+      text_window_set_background (context, win, GTK_STYLE_CLASS_TOP);
+      break;
+    case GTK_TEXT_WINDOW_BOTTOM:
+      text_window_set_background (context, win, GTK_STYLE_CLASS_BOTTOM);
+      break;
+    default:
+      break;
     }
 
   g_object_set_qdata (G_OBJECT (win->window),
