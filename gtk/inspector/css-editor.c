@@ -259,6 +259,27 @@ text_changed (GtkTextBuffer         *buffer,
   ce->priv->timeout = g_timeout_add (100, update_timeout, ce); 
 }
 
+/* Safe version of gtk_text_buffer_get_iter_at_line_index(). */
+static void
+safe_get_iter_at_line_index (GtkTextBuffer *buffer,
+                             GtkTextIter   *iter,
+                             gint           line_number,
+                             gint           byte_index)
+{
+  if (line_number >= gtk_text_buffer_get_line_count (buffer))
+    {
+      gtk_text_buffer_get_end_iter (buffer, iter);
+      return;
+    }
+
+  gtk_text_buffer_get_iter_at_line (buffer, iter, line_number);
+
+  if (byte_index < gtk_text_iter_get_bytes_in_line (iter))
+    gtk_text_iter_set_line_index (iter, byte_index);
+  else
+    gtk_text_iter_forward_to_line_end (iter);
+}
+
 static void
 show_parsing_error (GtkCssProvider        *provider,
                     GtkCssSection         *section,
@@ -269,14 +290,14 @@ show_parsing_error (GtkCssProvider        *provider,
   const char *tag_name;
   GtkTextBuffer *buffer = GTK_TEXT_BUFFER (ce->priv->text);
 
-  gtk_text_buffer_get_iter_at_line_index (buffer,
-                                          &start,
-                                          gtk_css_section_get_start_line (section),
-                                          gtk_css_section_get_start_position (section));
-  gtk_text_buffer_get_iter_at_line_index (buffer,
-                                          &end,
-                                          gtk_css_section_get_end_line (section),
-                                          gtk_css_section_get_end_position (section));
+  safe_get_iter_at_line_index (buffer,
+                               &start,
+                               gtk_css_section_get_start_line (section),
+                               gtk_css_section_get_start_position (section));
+  safe_get_iter_at_line_index (buffer,
+                               &end,
+                               gtk_css_section_get_end_line (section),
+                               gtk_css_section_get_end_position (section));
 
   if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
     tag_name = "warning";
