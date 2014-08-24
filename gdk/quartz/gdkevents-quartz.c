@@ -1638,10 +1638,12 @@ _gdk_quartz_screen_get_setting (GdkScreen   *screen,
     {
       NSString *name;
       char *str;
+      gint size;
 
       GDK_QUARTZ_ALLOC_POOL;
 
       name = [[NSFont systemFontOfSize:0] familyName];
+      size = (gint)[[NSFont userFontOfSize:0] pointSize];
 
       /* Let's try to use the "views" font size (12pt) by default. This is
        * used for lists/text/other "content" which is the largest parts of
@@ -1652,7 +1654,7 @@ _gdk_quartz_screen_get_setting (GdkScreen   *screen,
       /* The size has to be hardcoded as there doesn't seem to be a way to
        * get the views font size programmatically.
        */
-      str = g_strdup_printf ("%s 12", [name UTF8String]);
+      str = g_strdup_printf ("%s %d", [name UTF8String], size);
       g_value_set_string (value, str);
       g_free (str);
 
