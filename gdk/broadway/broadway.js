@@ -2401,7 +2401,7 @@ function handleKeyPress(e) {
 
     keysym = getKeysym(ev);
 
-    // Modify the the which attribute in the depressed keys list so
+    // Modify the which attribute in the depressed keys list so
     // that the keyUp event will be able to have the character code
     // translation available.
     if (kdlen > 0) {

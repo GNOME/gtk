@@ -20,7 +20,7 @@
 
 /**
  * SECTION:gtkgesturesingle
- * @Short_description: Base class for for mouse/single-touch gestures
+ * @Short_description: Base class for mouse/single-touch gestures
  * @Title: GtkGestureSingle
  *
  * #GtkGestureSingle is a subclass of #GtkGesture, optimized (although

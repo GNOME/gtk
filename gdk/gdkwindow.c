@@ -408,7 +408,7 @@ gdk_window_class_init (GdkWindowClass *klass)
    * @height: the height of the offscreen surface to create
    *
    * The ::create-surface signal is emitted when an offscreen window
-   * needs its surface (re)created, which happens either when the the
+   * needs its surface (re)created, which happens either when the
    * window is first drawn to, or when the window is being
    * resized. The first signal handler that returns a non-%NULL
    * surface will stop any further signal emission, and its surface

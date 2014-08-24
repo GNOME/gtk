@@ -102,7 +102,7 @@ How to compile GTK+ itself
       is used in a similar fashion for the linker. Finally the
       <envar>PKG_CONFIG_PATH</envar> environment variable contains
       a search path that <command>pkg-config</command> (see below)
-      uses when looking for for file describing how to compile
+      uses when looking for files describing how to compile
       programs using different libraries. If you were installing GTK+
       and it's dependencies into <filename>/opt/gtk</filename>, you
       might want to set these variables as:
