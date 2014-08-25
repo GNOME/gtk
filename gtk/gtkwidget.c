@@ -9584,13 +9584,6 @@ gtk_widget_get_parent (GtkWidget *widget)
   return widget->priv->parent;
 }
 
-static void
-modifier_style_changed (GtkModifierStyle *style,
-                        GtkWidget        *widget)
-{
-  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_ANY);
-}
-
 static GtkModifierStyle *
 _gtk_widget_get_modifier_properties (GtkWidget *widget)
 {
@@ -9607,9 +9600,6 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
                                quark_modifier_style,
                                style,
                                (GDestroyNotify) g_object_unref);
-
-      g_signal_connect (style, "changed",
-                        G_CALLBACK (modifier_style_changed), widget);
 
       context = gtk_widget_get_style_context (widget);
 
