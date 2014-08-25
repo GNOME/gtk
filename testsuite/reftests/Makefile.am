@@ -409,16 +409,6 @@ reftest_LTLIBRARIES =			\
 	libreftest.la			\
 	$(NULL)
 
-libreftest_la_LDFLAGS = -rpath $(reftestdir) -avoid-version -module $(no_undefined)
-libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
-libreftest_la_LIBADD = $(gtk_reftest_LDADD)
-libreftest_la_SOURCES =			\
-	expand-expander.c		\
-	set-default-direction.c		\
-	statusbar-remove-all.c		\
-	textview-border-windows.c	\
-	$(NULL)
-
 substitutions = \
 	-e s,@libexecdir\@,$(libexecdir),g \
 	$(NULL)
@@ -435,6 +425,20 @@ DISTCLEANFILES = $(built_tests)
 
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = $(built_tests)
+else
+noinst_LTLIBRARIES =			\
+	libreftest.la			\
+	$(NULL)
 endif
+
+libreftest_la_LDFLAGS = -rpath $(reftestdir) -avoid-version -module $(no_undefined)
+libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
+libreftest_la_LIBADD = $(gtk_reftest_LDADD)
+libreftest_la_SOURCES =			\
+	expand-expander.c		\
+	set-default-direction.c		\
+	statusbar-remove-all.c		\
+	textview-border-windows.c	\
+	$(NULL)
 
 -include $(top_srcdir)/git.mk
