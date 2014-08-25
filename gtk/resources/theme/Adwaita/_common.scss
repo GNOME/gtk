@@ -874,7 +874,7 @@ GtkComboBox {
   }
 }
 
-//searchbar & inline-toolbar
+//searchbar, location-bar & inline-toolbar
 .inline-toolbar {
   @extend .toolbar;
   @extend %inset-bar;
@@ -882,7 +882,7 @@ GtkComboBox {
   padding: 3px;
   border-radius: 0  0 4px 4px;
 }
-.search-bar {
+.search-bar, .location-bar {
   @extend .toolbar;
   @extend %inset-bar;
   border-width: 0 0 1px;
