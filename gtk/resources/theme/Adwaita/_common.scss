@@ -975,7 +975,8 @@ GtkComboBox {
       @include button(normal, $selected_bg_color, $selected_fg_color, noedge);
       &:hover { @include button(hover, $selected_bg_color, $selected_fg_color,
                                 $noedge: true); }
-      &:active { @include button(active, $selected_bg_color, $selected_fg_color,                                 $noedge: true); }
+      &:active, &:checked { @include button(active, $selected_bg_color, $selected_fg_color,
+                                            $noedge: true); }
       &:insensitive { @include button(insensitive, $selected_bg_color,
                                       $selected_fg_color, $noedge: true); }
       &:backdrop {
