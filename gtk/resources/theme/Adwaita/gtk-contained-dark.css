@@ -116,7 +116,7 @@
 .overshoot {
   background-color: rgba(33, 93, 156, 0.2); }
 
-GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, GtkLabel:insensitive {
+GtkLabel:insensitive {
   color: #939695; }
 
 .dim-label, .titlebar .subtitle, GtkCalendar.header .subtitle,
@@ -2706,7 +2706,7 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(201, 203, 201, 0.15); }
 
-.view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:backdrop:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected {
+.view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, GtkLabel:backdrop:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected {
   background-color: #215d9c;
   color: #ffffff; }
   .view:backdrop:selected, GtkLabel:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected {

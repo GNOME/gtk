@@ -135,11 +135,11 @@ GtkLabel {
   &:selected,
   &:selected:focus,
   &:selected:hover,
-  &:insensitive {
-    color: $insensitive_fg_color;
-  }
   &:backdrop:selected {
     @extend %selected_items;
+  }
+  &:insensitive {
+    color: $insensitive_fg_color;
   }
 }
 
