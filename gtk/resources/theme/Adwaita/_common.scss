@@ -958,7 +958,7 @@ GtkComboBox {
     }
   }
   &.selection-mode {
-    color: darken($selected_bg_color, 15%);
+    color: $selected_fg_color;
     text-shadow: 0 1px transparentize(black, 0.5);
     border-color: $selected_borders_color;
     background-image: linear-gradient(to bottom,

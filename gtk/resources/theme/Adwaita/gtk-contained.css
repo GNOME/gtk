@@ -1117,7 +1117,7 @@ GtkComboBox {
       border-image: linear-gradient(to bottom, rgba(168, 168, 168, 0.5)) 0 1/1px 1px; }
   .titlebar.selection-mode, GtkCalendar.selection-mode.header,
   .header-bar.selection-mode {
-    color: #256ab1;
+    color: #ffffff;
     text-shadow: 0 1px rgba(0, 0, 0, 0.5);
     border-color: #184472;
     background-image: linear-gradient(to bottom, #5f9ddd, #4a90d9);
