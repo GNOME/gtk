@@ -487,6 +487,7 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
 {
   GdkWaylandKeymap *keymap_wayland = GDK_WAYLAND_KEYMAP (keymap);
   struct xkb_context *context;
+  struct xkb_keymap *xkb_keymap;
   char *map_str;
 
   context = xkb_context_new (0);
@@ -498,10 +499,19 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
       return;
   }
 
-  xkb_keymap_unref (keymap_wayland->xkb_keymap);
-  keymap_wayland->xkb_keymap = xkb_keymap_new_from_string (context, map_str, format, 0);
+  xkb_keymap = xkb_keymap_new_from_string (context, map_str, format, 0);
   munmap (map_str, size);
   close (fd);
+
+  if (!xkb_keymap)
+    {
+      g_warning ("Got invalid keymap from compositor, keeping previous/default one");
+      xkb_context_unref (context);
+      return;
+    }
+
+  xkb_keymap_unref (keymap_wayland->xkb_keymap);
+  keymap_wayland->xkb_keymap = xkb_keymap;
 
   xkb_state_unref (keymap_wayland->xkb_state);
   keymap_wayland->xkb_state = xkb_state_new (keymap_wayland->xkb_keymap);
