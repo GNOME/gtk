@@ -1528,7 +1528,7 @@ GtkTreeView.view.progressbar {
  *****************/
 .notebook {
   padding: 0;
-  background-color: #393f3f;
+  background-color: #292929;
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
   -GtkNotebook-tab-curvature: 0;

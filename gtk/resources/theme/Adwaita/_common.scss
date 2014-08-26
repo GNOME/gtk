@@ -1307,7 +1307,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   // ...
   // Abandon all hope — Ye Who Enter Here
   padding: 0;
-  background-color: $bg_color;
+  background-color: $base_color;
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
   -GtkNotebook-tab-curvature: 0;
