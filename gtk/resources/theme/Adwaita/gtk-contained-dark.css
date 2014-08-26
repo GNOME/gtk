@@ -143,6 +143,11 @@ GtkAssistant .sidebar GtkLabel {
 GtkAssistant .sidebar GtkLabel.highlight {
   background-color: #5d6261; }
 
+GtkTextView {
+  background-color: #313434; }
+  GtkTextView:backdrop {
+    background-color: #323535; }
+
 .app-notification.frame, .osd {
   color: #eeeeec;
   text-shadow: 0 1px black;

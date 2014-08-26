@@ -168,6 +168,12 @@ GtkAssistant {
   }
 }
 
+GtkTextView { // This will get overridden by .view, needed by gedit line numbers
+  background-color: mix($bg_color, $base_color, 50%);
+  &:backdrop { background-color: mix($backdrop_bg_color,
+                                     $backdrop_base_color, 50%); }
+}
+
 %osd, .osd {
   color: $osd_fg_color;
   text-shadow: 0 1px black;
