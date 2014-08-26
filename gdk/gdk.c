@@ -555,6 +555,26 @@ gdk_threads_impl_lock (void)
 static void
 gdk_threads_impl_unlock (void)
 {
+  /* we need a trylock() here because trying to unlock a mutex
+   * that hasn't been locked yet is:
+   *
+   *  a) not portable
+   *  b) fail on GLib ≥ 2.41
+   *
+   * trylock() will either succeed because nothing is holding the
+   * GDK mutex, and will be unlocked right afterwards; or it's
+   * going to fail because the mutex is locked already, in which
+   * case we unlock it as expected.
+   *
+   * this is needed in the case somebody called gdk_threads_init()
+   * without calling gdk_threads_enter() before calling gtk_main().
+   * in theory, we could just say that this is undefined behaviour,
+   * but our documentation has always been *less* than explicit as
+   * to what the behaviour should actually be.
+   *
+   * see bug: https://bugzilla.gnome.org/show_bug.cgi?id=735428
+   */
+  g_mutex_trylock (&gdk_threads_mutex);
   g_mutex_unlock (&gdk_threads_mutex);
 }
 
