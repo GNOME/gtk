@@ -126,8 +126,11 @@ GtkLabel:insensitive {
 
 GtkAssistant .sidebar {
   background-color: #ffffff;
-  border-right: 1px solid #a1a1a1;
   border-top: 1px solid #a1a1a1; }
+  GtkAssistant .sidebar:dir(ltr) {
+    border-right: 1px solid #a1a1a1; }
+  GtkAssistant .sidebar:dir(rtl) {
+    border-left: 1px solid #a1a1a1; }
   GtkAssistant .sidebar:backdrop {
     background-color: #fcfcfc;
     border-color: #a8a8a8; }

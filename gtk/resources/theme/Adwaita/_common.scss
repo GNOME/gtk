@@ -151,8 +151,9 @@ GtkLabel {
 GtkAssistant {
   .sidebar {
     background-color: $base_color;
-    border-right: 1px solid $borders_color;
     border-top: 1px solid $borders_color;
+    &:dir(ltr) { border-right: 1px solid $borders_color; }
+    &:dir(rtl) { border-left: 1px solid $borders_color; }
     &:backdrop {
       background-color: $backdrop_base_color;
       border-color: $backdrop_borders_color;
