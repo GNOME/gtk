@@ -2136,7 +2136,7 @@ GtkSwitch {
 
 GtkTreeView.view.check, GtkTreeView.view.radio {
   icon-shadow: none; }
-  GtkTreeView.view.check:selected, GtkTreeView.view.radio:selected {
+  GtkTreeView.view.check:selected, GtkTreeView.view.check:hover, GtkTreeView.view.radio:selected, GtkTreeView.view.radio:hover {
     icon-shadow: none; }
 
 GtkIconView.view.check,
