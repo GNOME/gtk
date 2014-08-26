@@ -149,14 +149,21 @@ GtkLabel {
 }
 
 GtkAssistant {
-  & .sidebar {
+  .sidebar {
     background-color: $base_color;
+    border-right: 1px solid $borders_color;
+    border-top: 1px solid $borders_color;
+    &:backdrop {
+      background-color: $backdrop_base_color;
+      border-color: $backdrop_borders_color;
+    }
   }
-  & .sidebar GtkLabel {
-    padding: 6px;
+  &.csd .sidebar { border-top-style: none; }
+  .sidebar GtkLabel {
+    padding: 6px 12px;
   }
-  & .sidebar GtkLabel.highlight {
-    background-color: darken($bg_color, 10%);
+  .sidebar GtkLabel.highlight {
+    background-color: mix($bg_color, $fg_color, 80%);
   }
 }
 

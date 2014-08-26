@@ -125,11 +125,18 @@ GtkLabel:insensitive {
   text-shadow: none; }
 
 GtkAssistant .sidebar {
-  background-color: #292929; }
+  background-color: #292929;
+  border-right: 1px solid #1c1f1f;
+  border-top: 1px solid #1c1f1f; }
+  GtkAssistant .sidebar:backdrop {
+    background-color: #2c2c2c;
+    border-color: #1e2222; }
+GtkAssistant.csd .sidebar {
+  border-top-style: none; }
 GtkAssistant .sidebar GtkLabel {
-  padding: 6px; }
+  padding: 6px 12px; }
 GtkAssistant .sidebar GtkLabel.highlight {
-  background-color: #212424; }
+  background-color: #5d6261; }
 
 .app-notification.frame, .osd {
   color: #eeeeec;
