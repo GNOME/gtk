@@ -3320,6 +3320,12 @@ gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
   GtkRBTree *tree;
   GtkRBNode *node;
 
+  if (tree_view->priv->tree == NULL)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
   gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
                                                      &bin_x, &bin_y);
   tree_view->priv->press_start_x = tree_view->priv->rubber_band_x = bin_x;
