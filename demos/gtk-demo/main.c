@@ -516,9 +516,8 @@ static GtkWidget *create_text (GtkWidget **text_view, gboolean is_source);
 static void
 add_data_tab (const gchar *demoname)
 {
-  gchar *resource_dir, *resource_name, *content_type, *content_mime;
+  gchar *resource_dir, *resource_name;
   gchar **resources;
-  GBytes *bytes;
   GtkWidget *widget, *label;
   guint i;
 
@@ -533,41 +532,40 @@ add_data_tab (const gchar *demoname)
   for (i = 0; resources[i]; i++)
     {
       resource_name = g_strconcat (resource_dir, "/", resources[i], NULL);
-      bytes = g_resources_lookup_data (resource_name, 0, NULL);
-      g_assert (bytes);
 
-      content_type = g_content_type_guess (resource_name,
-                                           g_bytes_get_data (bytes, NULL),
-                                           g_bytes_get_size (bytes),
-                                           NULL);
-      content_mime = g_content_type_get_mime_type (content_type);
-
-      /* In theory we should look at all the mime types gdk-pixbuf supports
-       * and go from there, but we know what file types we've added.
-       */
-      if (g_content_type_is_a (content_mime, "image/png") ||
-          g_content_type_is_a (content_mime, "image/gif") ||
-          g_content_type_is_a (content_mime, "image/jpeg"))
+      widget = gtk_image_new_from_resource (resource_name);
+      if (gtk_image_get_pixbuf (GTK_IMAGE (widget)) == NULL &&
+          gtk_image_get_animation (GTK_IMAGE (widget)) == NULL)
         {
-          widget = gtk_image_new_from_resource (resource_name);
-        }
-      else if (g_content_type_is_a (content_mime, "text/plain") ||
-               g_content_type_is_a (content_mime, "application/x-ext-ui") ||
-               g_content_type_is_a (content_mime, "text/css"))
-        {
-          GtkTextBuffer *buffer;
-          GtkWidget *textview;
+          GBytes *bytes;
 
-          widget = create_text (&textview, FALSE);
-          buffer = gtk_text_buffer_new (NULL);
-          gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
-          gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
-        }
-      else
-        {
+          /* So we've used the best API available to figure out it's
+           * not an image. Let's try something else then.
+           */
+          g_object_ref_sink (widget);
+          gtk_widget_destroy (widget);
 
-          g_warning ("Don't know how to display resource '%s' of type '%s'\n", resource_name, content_mime);
-          widget = NULL;
+          bytes = g_resources_lookup_data (resource_name, 0, NULL);
+          g_assert (bytes);
+
+          if (g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
+            {
+              /* Looks like it parses as text. Dump it into a textview then! */
+              GtkTextBuffer *buffer;
+              GtkWidget *textview;
+
+              widget = create_text (&textview, FALSE);
+              buffer = gtk_text_buffer_new (NULL);
+              gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+              gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
+            }
+          else
+            {
+              g_warning ("Don't know how to display resource '%s'\n", resource_name);
+              widget = NULL;
+            }
+
+          g_bytes_unref (bytes);
         }
 
       gtk_widget_show_all (widget);
@@ -579,10 +577,7 @@ add_data_tab (const gchar *demoname)
                                "tab-expand", TRUE,
                                NULL);
 
-      g_free (content_mime);
-      g_free (content_type);
       g_free (resource_name);
-      g_bytes_unref (bytes);
     }
 
   g_strfreev (resources);
