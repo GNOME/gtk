@@ -408,23 +408,28 @@ gtk_menu_button_toggled (GtkToggleButton *button)
 {
   GtkMenuButton *menu_button = GTK_MENU_BUTTON (button);
   GtkMenuButtonPrivate *priv = menu_button->priv;
+  gboolean active;
 
-  if (!gtk_toggle_button_get_active (button))
-    return;
+  active = gtk_toggle_button_get_active (button);
 
   if (priv->menu)
-    {  
-      if (!gtk_widget_get_visible (priv->menu))
+    {
+      if (active)
         {
-          /* we get here only when the menu is activated by a key
-           * press, so that we can select the first menu item
-           */
-          popup_menu (menu_button, NULL);
-          gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
+          if (!gtk_widget_get_visible (priv->menu))
+            {
+              /* we get here only when the menu is activated by a key
+               * press, so that we can select the first menu item
+               */
+              popup_menu (menu_button, NULL);
+              gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
+            }
         }
+      else
+        gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
     }
   else if (priv->popover)
-    gtk_widget_show (priv->popover); 
+    gtk_widget_set_visible (priv->popover, active);
 }
 
 static gboolean
