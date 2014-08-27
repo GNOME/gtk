@@ -3308,6 +3308,9 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
     }
 
   gtk_tree_path_free (path);
+
+  if (n_press >= 2)
+    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
 
 static void
