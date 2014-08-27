@@ -1265,7 +1265,17 @@ gdk_window_wayland_move_resize (GdkWindow *window,
           window->y = y;
 
           if (impl->subsurface)
-            wl_subsurface_set_position (impl->subsurface, x, y);
+            {
+              GdkWindowImplWayland *parent_impl;
+
+              wl_subsurface_set_position (impl->subsurface, x, y);
+
+              g_assert (impl->transient_for != NULL);
+              parent_impl = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+
+              if (parent_impl->surface && !parent_impl->pending_commit)
+                wl_surface_commit (parent_impl->surface);
+            }
         }
     }
 
