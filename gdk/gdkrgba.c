@@ -166,6 +166,9 @@ gdk_rgba_parse (GdkRGBA     *rgba,
   gchar *str = (gchar *) spec;
   gchar *p;
 
+  g_return_val_if_fail (spec != NULL, FALSE);
+
+
   if (strncmp (str, "rgba", 4) == 0)
     {
       has_alpha = TRUE;
