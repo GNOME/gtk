@@ -409,6 +409,8 @@ reftest_LTLIBRARIES =			\
 	libreftest.la			\
 	$(NULL)
 
+libreftest_la_LDFLAGS = -rpath $(reftestdir)
+
 substitutions = \
 	-e s,@libexecdir\@,$(libexecdir),g \
 	$(NULL)
@@ -429,9 +431,12 @@ else
 noinst_LTLIBRARIES =			\
 	libreftest.la			\
 	$(NULL)
+
+libreftest_la_LDFLAGS = -rpath /iHaveNoIdeaWhatImDoing
+
 endif
 
-libreftest_la_LDFLAGS = -rpath $(reftestdir) -avoid-version -module $(no_undefined)
+libreftest_la_LDFLAGS += -avoid-version -module $(no_undefined)
 libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
 libreftest_la_LIBADD = $(gtk_reftest_LDADD)
 libreftest_la_SOURCES =			\
