@@ -10279,9 +10279,9 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   state = gtk_cell_renderer_get_state (NULL, widget, flags);
 
   if (node->children != NULL)
-    state |= GTK_STATE_FLAG_ACTIVE;
+    state |= GTK_STATE_FLAG_CHECKED;
   else
-    state &= ~(GTK_STATE_FLAG_ACTIVE);
+    state &= ~(GTK_STATE_FLAG_CHECKED);
 
   gtk_style_context_save (context);
 

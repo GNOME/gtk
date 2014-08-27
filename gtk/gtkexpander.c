@@ -888,9 +888,9 @@ gtk_expander_paint (GtkExpander *expander,
 
   /* Set active flag as per the expanded state */
   if (priv->expanded)
-    state |= GTK_STATE_FLAG_ACTIVE;
+    state |= GTK_STATE_FLAG_CHECKED;
   else
-    state &= ~(GTK_STATE_FLAG_ACTIVE);
+    state &= ~(GTK_STATE_FLAG_CHECKED);
 
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);

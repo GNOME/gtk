@@ -282,7 +282,7 @@ gtk_tool_item_group_header_draw_cb (GtkWidget *widget,
   state = gtk_widget_get_state_flags (widget);
 
   if (!priv->collapsed)
-    state |= GTK_STATE_FLAG_ACTIVE;
+    state |= GTK_STATE_FLAG_CHECKED;
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);

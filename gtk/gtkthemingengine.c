@@ -1859,7 +1859,7 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
 
   is_rtl = (gtk_theming_engine_get_state (engine) & GTK_STATE_FLAG_DIR_RTL);
   line_width = 1;
-  progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
+  progress = (flags & GTK_STATE_FLAG_CHECKED) ? 1 : 0;
 
   if (!gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_HORIZONTAL))
     {
