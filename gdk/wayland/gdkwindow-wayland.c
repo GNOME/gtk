@@ -1473,7 +1473,14 @@ gdk_wayland_window_set_type_hint (GdkWindow         *window,
 static GdkWindowTypeHint
 gdk_wayland_window_get_type_hint (GdkWindow *window)
 {
-  return GDK_WINDOW_TYPE_HINT_NORMAL;
+  GdkWindowImplWayland *impl;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return GDK_WINDOW_TYPE_HINT_NORMAL;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return impl->hint;
 }
 
 void
