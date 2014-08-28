@@ -950,7 +950,7 @@ GtkComboBox {
     padding: 0px 12px;
   }
   .subtitle {
-    font-size: 80%;
+    font-size: 82%;
     padding: 0 12px;
     @extend .dim-label;
   }
@@ -1623,7 +1623,8 @@ GtkSwitch {
   // FIXME: backdrop insensinsitive slider on the dark variant
   -GtkSwitch-slider-width: 45px; // 55px is the right value to make it as tall
                                  // as buttons, not doing that for now
-  font: bold condensed 9;
+  font-weight: bold;
+  font-size: 82%;
   outline-offset: -4px;
   box-shadow: inset 0 1px transparentize(black, 0.9), // needs to be set here
               $widget_edge;                           // otherwise it gets
@@ -1980,7 +1981,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
 
 GtkProgressBar {
     padding: 0;
-    font-size: 83%;
+    font-size: 82%;
     color: transparentize($fg_color, 0.6);
     box-shadow: inset 1px 1px transparentize(black, 0.9), // needs to be set
                 $widget_edge;                             // here ot it gets
