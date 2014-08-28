@@ -1911,11 +1911,16 @@ GtkSwitch {
 
 .menu .menuitem.check {
   -gtk-icon-source: -gtk-icontheme("checkbox-symbolic");
+  color: #a5a8a6;
   icon-shadow: none; }
   .menu .menuitem.check:active, .menu .menuitem.check:checked {
     -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
   .menu .menuitem.check:inconsistent {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
+  .menu .menuitem.check:hover {
+    color: #ffffff; }
+  .menu .menuitem.check:insensitive {
+    color: #666a6a; }
 
 .radio {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-dark.png"), url("assets/radio-unchecked-dark@2.png"));
@@ -2027,11 +2032,16 @@ GtkSwitch {
 
 .menu .menuitem.radio {
   -gtk-icon-source: -gtk-icontheme("radio-symbolic");
+  color: #a5a8a6;
   icon-shadow: none; }
   .menu .menuitem.radio:active, .menu .menuitem.radio:checked {
     -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
   .menu .menuitem.radio:inconsistent {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
+  .menu .menuitem.radio:hover {
+    color: #ffffff; }
+  .menu .menuitem.radio:insensitive {
+    color: #666a6a; }
 
 GtkTreeView.view.check, GtkTreeView.view.radio {
   icon-shadow: none; }
