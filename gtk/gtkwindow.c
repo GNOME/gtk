@@ -232,6 +232,8 @@ struct _GtkWindowPrivate
   guint    use_subsurface            : 1;
 
   GtkGesture *multipress_gesture;
+
+  GdkWindow *hardcoded_window;
 };
 
 enum {
@@ -6326,60 +6328,70 @@ gtk_window_realize (GtkWidget *widget)
       g_return_if_fail (!gtk_widget_get_realized (widget));
     }
 
-  switch (priv->type)
+  if (priv->hardcoded_window)
     {
-    case GTK_WINDOW_TOPLEVEL:
-      attributes.window_type = GDK_WINDOW_TOPLEVEL;
-      break;
-    case GTK_WINDOW_POPUP:
-      attributes.window_type = GDK_WINDOW_TEMP;
-      break;
-    default:
-      g_warning (G_STRLOC": Unknown window type %d!", priv->type);
-      break;
+      gdk_window = priv->hardcoded_window;
+      gtk_widget_get_allocation (widget, &allocation);
+      gdk_window_resize (gdk_window, allocation.width, allocation.height);
     }
+  else
+    {
+      switch (priv->type)
+        {
+        case GTK_WINDOW_TOPLEVEL:
+          attributes.window_type = GDK_WINDOW_TOPLEVEL;
+          break;
+        case GTK_WINDOW_POPUP:
+          attributes.window_type = GDK_WINDOW_TEMP;
+          break;
+        default:
+          g_warning (G_STRLOC": Unknown window type %d!", priv->type);
+          break;
+        }
 
 #ifdef GDK_WINDOWING_WAYLAND
-  if (priv->use_subsurface &&
-      GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    attributes.window_type = GDK_WINDOW_SUBSURFACE;
+      if (priv->use_subsurface &&
+          GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+        attributes.window_type = GDK_WINDOW_SUBSURFACE;
 #endif
 
-  attributes.title = priv->title;
-  attributes.wmclass_name = priv->wmclass_name;
-  attributes.wmclass_class = priv->wmclass_class;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
+      attributes.title = priv->title;
+      attributes.wmclass_name = priv->wmclass_name;
+      attributes.wmclass_class = priv->wmclass_class;
+      attributes.wclass = GDK_INPUT_OUTPUT;
+      attributes.visual = gtk_widget_get_visual (widget);
 
-  attributes_mask = 0;
-  parent_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
+      attributes_mask = 0;
+      parent_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
-  gtk_widget_get_allocation (widget, &allocation);
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_EXPOSURE_MASK |
-			    GDK_BUTTON_PRESS_MASK |
-			    GDK_BUTTON_RELEASE_MASK |
-			    GDK_BUTTON_MOTION_MASK |
-			    GDK_KEY_PRESS_MASK |
-			    GDK_KEY_RELEASE_MASK |
-			    GDK_ENTER_NOTIFY_MASK |
-			    GDK_LEAVE_NOTIFY_MASK |
-			    GDK_FOCUS_CHANGE_MASK |
-			    GDK_STRUCTURE_MASK);
+      gtk_widget_get_allocation (widget, &allocation);
+      attributes.width = allocation.width;
+      attributes.height = allocation.height;
+      attributes.event_mask = gtk_widget_get_events (widget);
+      attributes.event_mask |= (GDK_EXPOSURE_MASK |
+                                GDK_BUTTON_PRESS_MASK |
+                                GDK_BUTTON_RELEASE_MASK |
+                                GDK_BUTTON_MOTION_MASK |
+                                GDK_KEY_PRESS_MASK |
+                                GDK_KEY_RELEASE_MASK |
+                                GDK_ENTER_NOTIFY_MASK |
+                                GDK_LEAVE_NOTIFY_MASK |
+                                GDK_FOCUS_CHANGE_MASK |
+                                GDK_STRUCTURE_MASK);
 
-  if (priv->decorated &&
-      (priv->client_decorated || priv->custom_title))
-    attributes.event_mask |= GDK_POINTER_MOTION_MASK;
+      if (priv->decorated &&
+          (priv->client_decorated || priv->custom_title))
+        attributes.event_mask |= GDK_POINTER_MOTION_MASK;
 
-  attributes.type_hint = priv->type_hint;
+      attributes.type_hint = priv->type_hint;
 
-  attributes_mask |= GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
-  attributes_mask |= (priv->title ? GDK_WA_TITLE : 0);
-  attributes_mask |= (priv->wmclass_name ? GDK_WA_WMCLASS : 0);
+      attributes_mask |= GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
+      attributes_mask |= (priv->title ? GDK_WA_TITLE : 0);
+      attributes_mask |= (priv->wmclass_name ? GDK_WA_WMCLASS : 0);
 
-  gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
+      gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
+    }
+
   gtk_widget_set_window (widget, gdk_window);
   gtk_widget_register_window (widget, gdk_window);
   gtk_widget_set_realized (widget, TRUE);
@@ -6579,6 +6591,8 @@ gtk_window_unrealize (GtkWidget *widget)
     }
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
+
+  priv->hardcoded_window = NULL;
 }
 
 static void
@@ -11716,4 +11730,22 @@ gtk_window_set_use_subsurface (GtkWindow *window,
   g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (window)));
 
   priv->use_subsurface = use_subsurface;
+}
+
+void
+gtk_window_set_hardcoded_window (GtkWindow *window,
+                                 GdkWindow *gdk_window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (window)));
+
+  if (priv->hardcoded_window)
+    g_object_unref (priv->hardcoded_window);
+
+  priv->hardcoded_window = gdk_window;
+
+  if (gdk_window)
+    g_object_ref (gdk_window);
 }
