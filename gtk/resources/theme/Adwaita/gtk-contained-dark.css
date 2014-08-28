@@ -1134,7 +1134,7 @@ GtkComboBox {
     box-shadow: inset 0 1px rgba(238, 238, 236, 0.1); }
   .titlebar .title, GtkCalendar.header .title,
   .header-bar .title {
-    font: Bold;
+    font-weight: bold;
     padding: 0px 12px; }
   .titlebar .subtitle, GtkCalendar.header .subtitle,
   .header-bar .subtitle {
