@@ -502,3 +502,12 @@ gdk_wayland_drag_context_undo_grab (GdkDragContext *context)
 
   _gdk_wayland_display_deliver_event (gdk_device_get_display (device), event);
 }
+
+GdkWindow *
+gdk_wayland_drag_context_get_dnd_window (GdkDragContext *context)
+{
+  GdkWaylandDragContext *wayland_context;
+
+  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
+  return wayland_context->dnd_window;
+}
