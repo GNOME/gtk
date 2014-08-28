@@ -1096,7 +1096,7 @@ GtkTreeView.view { // treeview grid lines and expanders, unfortunatelly
       &:hover { color: $selected_fg_color; }
       &:backdrop { color: mix($backdrop_base_color, $selected_bg_color, 70%); }
     }
-    &:active {
+    &:checked {
       -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
     }
     &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 70%); }
@@ -2278,7 +2278,7 @@ GtkExpander {
   -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
   &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
   &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
-  &:active { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+  &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
 }
 
 /************
