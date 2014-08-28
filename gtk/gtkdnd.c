@@ -39,6 +39,10 @@
 #endif
 #endif
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/wayland/gdkwayland.h>
+#endif
+
 #include "gtkdnd.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
@@ -49,6 +53,7 @@
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtkselectionprivate.h"
+#include "gtkwindowprivate.h"
 
 
 /**
@@ -3293,6 +3298,12 @@ set_icon_helper (GdkDragContext *context,
                              gtk_widget_get_style_context (window),
                              &width, &height);
 
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    gtk_window_set_hardcoded_window (GTK_WINDOW (window),
+                                     gdk_wayland_drag_context_get_dnd_window (context));
+#endif
+
   if (!force_window &&
       gtk_drag_can_use_rgba_cursor (display, width + 2, height + 2))
     {
@@ -3462,6 +3473,12 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
   gtk_window_set_screen (GTK_WINDOW (window), screen);
   set_can_change_screen (window, TRUE);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gdk_screen_get_display (screen)))
+    gtk_window_set_hardcoded_window (GTK_WINDOW (window),
+                                     gdk_wayland_drag_context_get_dnd_window (context));
+#endif
 
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_app_paintable (window, TRUE);
