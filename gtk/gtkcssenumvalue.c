@@ -436,6 +436,60 @@ _gtk_css_font_weight_value_get (const GtkCssValue *value)
   return value->value;
 }
 
+/* PangoStretch */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_STRETCH = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_stretch_values[] = {
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_ULTRA_CONDENSED, "ultra-condensed" },
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_EXTRA_CONDENSED, "extra-condensed" },
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_CONDENSED, "condensed" },
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_SEMI_CONDENSED, "semi-condensed" },
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_SEMI_EXPANDED, "semi-expanded" },
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_EXPANDED, "expanded" },
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_EXTRA_EXPANDED, "extra-expanded" },
+  { &GTK_CSS_VALUE_FONT_STRETCH, 1, PANGO_STRETCH_ULTRA_EXPANDED, "ultra-expanded" },
+};
+
+GtkCssValue *
+_gtk_css_font_stretch_value_new (PangoStretch font_stretch)
+{
+  g_return_val_if_fail (font_stretch < G_N_ELEMENTS (font_stretch_values), NULL);
+
+  return _gtk_css_value_ref (&font_stretch_values[font_stretch]);
+}
+
+GtkCssValue *
+_gtk_css_font_stretch_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_stretch_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_stretch_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_stretch_values[i]);
+    }
+
+  return NULL;
+}
+
+PangoStretch
+_gtk_css_font_stretch_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_STRETCH, PANGO_STRETCH_NORMAL);
+
+  return value->value;
+}
+
 /* GtkCssArea */
 
 static const GtkCssValueClass GTK_CSS_VALUE_AREA = {

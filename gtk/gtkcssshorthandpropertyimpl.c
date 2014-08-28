@@ -453,9 +453,13 @@ parse_font (GtkCssShorthandProperty  *shorthand,
     {
       values[3] = _gtk_css_font_weight_value_new (pango_font_description_get_weight (desc));
     }
+  if (mask & PANGO_FONT_MASK_STRETCH)
+    {
+      values[4] = _gtk_css_font_stretch_value_new (pango_font_description_get_stretch (desc));
+    }
   if (mask & PANGO_FONT_MASK_SIZE)
     {
-      values[4] = _gtk_css_number_value_new ((double) pango_font_description_get_size (desc) / PANGO_SCALE, GTK_CSS_PX);
+      values[5] = _gtk_css_number_value_new ((double) pango_font_description_get_size (desc) / PANGO_SCALE, GTK_CSS_PX);
     }
 
   pango_font_description_free (desc);
@@ -996,6 +1000,16 @@ unpack_font_description (GtkCssShorthandProperty *shorthand,
       g_value_unset (&v);
     }
 
+  if (mask & PANGO_FONT_MASK_STRETCH)
+    {
+      g_value_init (&v, PANGO_TYPE_STRETCH);
+      g_value_set_enum (&v, pango_font_description_get_stretch (description));
+
+      prop = _gtk_style_property_lookup ("font-stretch");
+      _gtk_style_property_assign (prop, props, state, &v);
+      g_value_unset (&v);
+    }
+
   if (mask & PANGO_FONT_MASK_SIZE)
     {
       g_value_init (&v, G_TYPE_DOUBLE);
@@ -1040,6 +1054,10 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-weight"))), query_data);
   if (v)
     pango_font_description_set_weight (description, _gtk_css_font_weight_value_get (v));
+
+  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-stretch"))), query_data);
+  if (v)
+    pango_font_description_set_stretch (description, _gtk_css_font_stretch_value_get (v));
 
   g_value_init (value, PANGO_TYPE_FONT_DESCRIPTION);
   g_value_take_boxed (value, description);
@@ -1127,7 +1145,7 @@ void
 _gtk_css_shorthand_property_init_properties (void)
 {
   /* The order is important here, be careful when changing it */
-  const char *font_subproperties[] = { "font-family", "font-style", "font-variant", "font-weight", "font-size", NULL };
+  const char *font_subproperties[] = { "font-family", "font-style", "font-variant", "font-weight", "font-stretch", "font-size", NULL };
   const char *margin_subproperties[] = { "margin-top", "margin-right", "margin-bottom", "margin-left", NULL };
   const char *padding_subproperties[] = { "padding-top", "padding-right", "padding-bottom", "padding-left", NULL };
   const char *border_width_subproperties[] = { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width", NULL };

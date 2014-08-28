@@ -358,6 +358,34 @@ assign_pango_variant (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_pango_stretch (GtkCssStyleProperty *property,
+                     GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_font_stretch_value_try_parse (parser);
+
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static void
+query_pango_stretch (GtkCssStyleProperty *property,
+                     const GtkCssValue   *css_value,
+                     GValue              *value)
+{
+  g_value_init (value, PANGO_TYPE_STRETCH);
+  g_value_set_enum (value, _gtk_css_font_stretch_value_get (css_value));
+}
+
+static GtkCssValue *
+assign_pango_stretch (GtkCssStyleProperty *property,
+                      const GValue        *value)
+{
+  return _gtk_css_font_stretch_value_new (g_value_get_enum (value));
+}
+
+static GtkCssValue *
 parse_border_style (GtkCssStyleProperty *property,
                     GtkCssParser        *parser)
 {
@@ -976,6 +1004,14 @@ _gtk_css_style_property_init_properties (void)
                                           query_pango_weight,
                                           assign_pango_weight,
                                           _gtk_css_font_weight_value_new (PANGO_WEIGHT_NORMAL));
+  gtk_css_style_property_register        ("font-stretch",
+                                          GTK_CSS_PROPERTY_FONT_STRETCH,
+                                          PANGO_TYPE_STRETCH,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_AFFECTS_FONT,
+                                          parse_pango_stretch,
+                                          query_pango_stretch,
+                                          assign_pango_stretch,
+                                          _gtk_css_font_stretch_value_new (PANGO_STRETCH_NORMAL));
 
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,

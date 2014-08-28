@@ -48,6 +48,10 @@ GtkCssValue *   _gtk_css_font_weight_value_new        (PangoWeight        weight
 GtkCssValue *   _gtk_css_font_weight_value_try_parse  (GtkCssParser      *parser);
 PangoWeight     _gtk_css_font_weight_value_get        (const GtkCssValue *value);
 
+GtkCssValue *   _gtk_css_font_stretch_value_new       (PangoStretch       stretch);
+GtkCssValue *   _gtk_css_font_stretch_value_try_parse (GtkCssParser      *parser);
+PangoStretch    _gtk_css_font_stretch_value_get       (const GtkCssValue *value);
+
 GtkCssValue *   _gtk_css_area_value_new               (GtkCssArea         area);
 GtkCssValue *   _gtk_css_area_value_try_parse         (GtkCssParser      *parser);
 GtkCssArea      _gtk_css_area_value_get               (const GtkCssValue *value);
