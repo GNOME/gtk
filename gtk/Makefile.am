@@ -1429,6 +1429,7 @@ win32_theme_sources = \
 adwaita_sources = \
 	resources/theme/Adwaita/assets.svg \
 	resources/theme/Adwaita/_colors.scss \
+	resources/theme/Adwaita/_colors-public.scss \
 	resources/theme/Adwaita/_common.scss \
 	resources/theme/Adwaita/_drawing.scss \
 	resources/theme/Adwaita/gtk-contained.scss \

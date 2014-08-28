@@ -1,36 +1,3 @@
-/* GTK NAMED COLORS */
-@define-color theme_fg_color #2e3436;
-@define-color theme_bg_color #ededed;
-@define-color theme_base_color #ffffff;
-@define-color theme_selected_bg_color #4a90d9;
-@define-color theme_selected_fg_color #ffffff;
-@define-color insensitive_bg_color #f4f4f4;
-@define-color insensitive_fg_color #8d9091;
-@define-color insensitive_base_color #ffffff;
-@define-color theme_unfocused_fg_color #54595a;
-@define-color theme_unfocused_bg_color #ededed;
-@define-color theme_unfocused_base_color #fcfcfc;
-@define-color theme_unfocused_selected_bg_color #4a90d9;
-@define-color theme_unfocused_selected_fg_color #ffffff;
-@define-color borders #a1a1a1;
-@define-color unfocused_borders #a8a8a8;
-@define-color warning_color #f57900;
-@define-color error_color #cc0000;
-@define-color success_color #73d216;
-@define-color wm_title shade(#2e3436, 1.8);
-@define-color wm_unfocused_title #54595a;
-@define-color wm_highlight white;
-@define-color wm_borders_edge white;
-@define-color wm_bg_a shade(#ededed, 1.2);
-@define-color wm_bg_b #ededed;
-@define-color wm_shadow alpha(black, 0.35);
-@define-color wm_border alpha(black, 0.18);
-@define-color wm_button_hover_color_a shade(#ededed, 1.3);
-@define-color wm_button_hover_color_b #ededed;
-@define-color wm_button_active_color_a shade(#ededed, 0.85);
-@define-color wm_button_active_color_b shade(#ededed, 0.89);
-@define-color wm_button_active_color_c shade(#ededed, 0.9);
-@define-color content_view_bg #ffffff;
 * {
   padding: 0;
   -GtkToolButton-icon-spacing: 4;
@@ -3415,5 +3382,39 @@ GtkCalendar.header .button.titlebutton {
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
     border-color: transparent;
     transition-property: border, box-shadow, color; }
+
+/* GTK NAMED COLORS */
+@define-color theme_fg_color #2e3436;
+@define-color theme_bg_color #ededed;
+@define-color theme_base_color #ffffff;
+@define-color theme_selected_bg_color #4a90d9;
+@define-color theme_selected_fg_color #ffffff;
+@define-color insensitive_bg_color #f4f4f4;
+@define-color insensitive_fg_color #8d9091;
+@define-color insensitive_base_color #ffffff;
+@define-color theme_unfocused_fg_color #54595a;
+@define-color theme_unfocused_bg_color #ededed;
+@define-color theme_unfocused_base_color #fcfcfc;
+@define-color theme_unfocused_selected_bg_color #4a90d9;
+@define-color theme_unfocused_selected_fg_color #ffffff;
+@define-color borders #a1a1a1;
+@define-color unfocused_borders #a8a8a8;
+@define-color warning_color #f57900;
+@define-color error_color #cc0000;
+@define-color success_color #73d216;
+@define-color wm_title shade(#2e3436, 1.8);
+@define-color wm_unfocused_title #54595a;
+@define-color wm_highlight white;
+@define-color wm_borders_edge white;
+@define-color wm_bg_a shade(#ededed, 1.2);
+@define-color wm_bg_b #ededed;
+@define-color wm_shadow alpha(black, 0.35);
+@define-color wm_border alpha(black, 0.18);
+@define-color wm_button_hover_color_a shade(#ededed, 1.3);
+@define-color wm_button_hover_color_b #ededed;
+@define-color wm_button_active_color_a shade(#ededed, 0.85);
+@define-color wm_button_active_color_b shade(#ededed, 0.89);
+@define-color wm_button_active_color_c shade(#ededed, 0.9);
+@define-color content_view_bg #ffffff;
 
 /*# sourceMappingURL=gtk-contained.css.map */
