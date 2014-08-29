@@ -1011,26 +1011,26 @@ GtkComboBox {
                         $selected_fg_color, $noedge: true);
       }
       &.suggested-action {
-        @include button($t:normal, $noedge:true);
+        @include button(normal, $noedge:true);
         border-color: $selected_borders_color;
         &:hover {
-          @include button($t:hover, $noedge: true);
+          @include button(hover, $noedge: true);
           border-color: $selected_borders_color;
         }
         &:active {
-          @include button($t:active, $noedge: true);
+          @include button(active, $noedge: true);
           border-color: $selected_borders_color;
         }
         &:insensitive {
-          @include button($t:insensitive, $noedge: true);
+          @include button(insensitive, $noedge: true);
           border-color: $selected_borders_color;
         }
         &:backdrop {
-          @include button($t:backdrop, $noedge: true);
+          @include button(backdrop, $noedge: true);
           border-color: $selected_borders_color;
         }
         &:backdrop:insensitive {
-          @include button($t:backdrop-insensitive, $noedge: true);
+          @include button(backdrop-insensitive, $noedge: true);
           border-color: $selected_borders_color;
         }
       }
@@ -1764,8 +1764,9 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 }
 
-//treeview
-GtkTreeView.view.check, GtkTreeView.view.radio {
+//treeview and list-rows
+GtkTreeView.view.check, GtkTreeView.view.radio,
+.list-row .check, list-row .radio {
   icon-shadow: none;
   &:selected, &:hover { icon-shadow: none; }
 }
