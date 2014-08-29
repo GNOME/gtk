@@ -311,6 +311,16 @@ fail:
   return NULL;
 }
 
+static gboolean
+needs_blur (const GtkCssValue *shadow)
+{
+  double radius = _gtk_css_number_value_get (shadow->radius, 0);
+  if (radius == 0.0)
+    return FALSE;
+
+  return TRUE;
+}
+
 static const cairo_user_data_key_t original_cr_key;
 
 static cairo_t *
@@ -322,12 +332,12 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   cairo_t *blur_cr;
   gdouble radius, clip_radius;
 
-  radius = _gtk_css_number_value_get (shadow->radius, 0);
-  if (radius == 0.0)
+  if (!needs_blur (shadow))
     return cr;
 
   gdk_cairo_get_clip_rectangle (cr, &clip_rect);
 
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
   clip_radius = _gtk_cairo_blur_compute_pixels (radius);
 
   /* Create a larger surface to center the blur. */
@@ -358,14 +368,14 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
   cairo_t *original_cr;
   cairo_surface_t *surface;
 
-  radius = _gtk_css_number_value_get (shadow->radius, 0);
-  if (radius == 0.0)
+  if (!needs_blur (shadow))
     return cr;
 
-  surface = cairo_get_target (cr);
   original_cr = cairo_get_user_data (cr, &original_cr_key);
 
   /* Blur the surface. */
+  surface = cairo_get_target (cr);
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
   _gtk_cairo_blur_surface (surface, radius);
 
   gdk_cairo_set_source_rgba (original_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
@@ -570,7 +580,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
   clip_box = *padding_box;
   _gtk_rounded_box_shrink (&clip_box, -clip_radius, -clip_radius, -clip_radius, -clip_radius);
 
-  if (radius == 0)
+  if (!needs_blur (shadow))
     draw_shadow (shadow, cr, &box, &clip_box, FALSE);
   else
     {
