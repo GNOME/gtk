@@ -387,6 +387,35 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
   return original_cr;
 }
 
+static const cairo_user_data_key_t radius_key;
+static const cairo_user_data_key_t layout_serial_key;
+
+G_DEFINE_QUARK (GtkCssShadowValue pango_cached_blurred_surface, pango_cached_blurred_surface)
+
+static cairo_surface_t *
+get_cached_surface (PangoLayout       *layout,
+                    const GtkCssValue *shadow)
+{
+  cairo_surface_t *cached_surface = g_object_get_qdata (G_OBJECT (layout), pango_cached_blurred_surface_quark ());
+  guint cached_radius, cached_serial;
+  guint radius, serial;
+
+  if (!cached_surface)
+    return NULL;
+
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  cached_radius = GPOINTER_TO_UINT (cairo_surface_get_user_data (cached_surface, &radius_key));
+  if (radius != cached_radius)
+    return NULL;
+
+  serial = pango_layout_get_serial (layout);
+  cached_serial = GPOINTER_TO_UINT (cairo_surface_get_user_data (cached_surface, &layout_serial_key));
+  if (serial != cached_serial)
+    return NULL;
+
+  return cached_surface;
+}
+
 void
 _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
                                     cairo_t           *cr,
@@ -396,20 +425,55 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
 
   cairo_save (cr);
 
-  cairo_rel_move_to (cr,
-                     _gtk_css_number_value_get (shadow->hoffset, 0),
-                     _gtk_css_number_value_get (shadow->voffset, 0));
+  if (needs_blur (shadow))
+    {
+      cairo_surface_t *cached_surface = get_cached_surface (layout, shadow);
+      if (cached_surface)
+        {
+          cairo_translate (cr,
+                           _gtk_css_number_value_get (shadow->hoffset, 0),
+                           _gtk_css_number_value_get (shadow->voffset, 0));
+          gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+          cairo_mask_surface (cr, cached_surface, 0, 0);
+        }
+      else
+        {
+          guint radius, serial;
 
-  gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
-  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+          cairo_rel_move_to (cr,
+                             _gtk_css_number_value_get (shadow->hoffset, 0),
+                             _gtk_css_number_value_get (shadow->voffset, 0));
+          gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+          cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+          _gtk_pango_fill_layout (cr, layout);
+          cached_surface = cairo_get_target (cr);
+          g_object_set_qdata_full (G_OBJECT (layout), pango_cached_blurred_surface_quark (),
+                                   cairo_surface_reference (cached_surface),
+                                   (GDestroyNotify) cairo_surface_destroy);
+          cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
+          cairo_rel_move_to (cr,
+                             - _gtk_css_number_value_get (shadow->hoffset, 0),
+                             - _gtk_css_number_value_get (shadow->voffset, 0));
 
-  _gtk_pango_fill_layout (cr, layout);
+          radius = _gtk_css_number_value_get (shadow->radius, 0);
+          cairo_surface_set_user_data (cached_surface, &radius_key, GUINT_TO_POINTER (radius), NULL);
 
-  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
+          serial = pango_layout_get_serial (layout);
+          cairo_surface_set_user_data (cached_surface, &layout_serial_key, GUINT_TO_POINTER (serial), NULL);
+        }
+    }
+  else
+    {
+      cairo_rel_move_to (cr,
+                         _gtk_css_number_value_get (shadow->hoffset, 0),
+                         _gtk_css_number_value_get (shadow->voffset, 0));
+      gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+      _gtk_pango_fill_layout (cr, layout);
+      cairo_rel_move_to (cr,
+                         - _gtk_css_number_value_get (shadow->hoffset, 0),
+                         - _gtk_css_number_value_get (shadow->voffset, 0));
+    }
 
-  cairo_rel_move_to (cr,
-                     - _gtk_css_number_value_get (shadow->hoffset, 0),
-                     - _gtk_css_number_value_get (shadow->voffset, 0));
   cairo_restore (cr);
 }
 
