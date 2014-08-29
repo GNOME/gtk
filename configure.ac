@@ -47,7 +47,7 @@ m4_define([atk_required_version], [2.12.0])
 m4_define([cairo_required_version], [1.12.0])
 m4_define([gdk_pixbuf_required_version], [2.30.0])
 m4_define([introspection_required_version], [1.39.0])
-m4_define([wayland_required_version], [1.3.90])
+m4_define([wayland_required_version], [1.5.91])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
 ATK_REQUIRED_VERSION=atk_required_version
