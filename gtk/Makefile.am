@@ -246,6 +246,7 @@ deprecated_h_sources = 			\
 	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
 	deprecated/gtktearoffmenuitem.h	\
+	deprecated/gtkthemingengine.h	\
 	deprecated/gtktoggleaction.h	\
 	deprecated/gtkuimanager.h	\
 	deprecated/gtkvbbox.h		\
@@ -457,7 +458,6 @@ gtk_public_h_sources = 		\
 	gtktexttag.h		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
-	gtkthemingengine.h	\
 	gtktogglebutton.h	\
 	gtktoggletoolbutton.h	\
 	gtktoolbar.h		\
@@ -668,7 +668,7 @@ gtk_private_h_sources =		\
 	gtktexttypes.h		\
 	gtktextutil.h		\
 	gtkthemingbackgroundprivate.h \
-	gtkthemingengineprivate.h \
+	deprecated/gtkthemingengineprivate.h \
 	gtktrashmonitor.h	\
 	gtktoolbarprivate.h	\
 	gtktoolpaletteprivate.h	\
@@ -769,6 +769,7 @@ deprecated_c_sources = 			\
 	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktable.c		\
 	deprecated/gtktearoffmenuitem.c	\
+	deprecated/gtkthemingengine.c	\
 	deprecated/gtktoggleaction.c	\
 	deprecated/gtkuimanager.c	\
 	deprecated/gtkvbbox.c		\
@@ -1063,7 +1064,6 @@ gtk_base_c_sources = 		\
 	gtktextutil.c		\
 	gtktextview.c		\
 	gtkthemingbackground.c  \
-	gtkthemingengine.c	\
 	gtktogglebutton.c	\
 	gtktoggletoolbutton.c	\
 	gtktoolbar.c		\

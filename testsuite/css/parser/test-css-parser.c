@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>

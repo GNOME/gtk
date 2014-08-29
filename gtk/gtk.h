@@ -200,7 +200,6 @@
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextview.h>
-#include <gtk/gtkthemingengine.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoggletoolbutton.h>
 #include <gtk/gtktoolbar.h>
@@ -261,6 +260,7 @@
 #include <gtk/deprecated/gtksymboliccolor.h>
 #include <gtk/deprecated/gtktable.h>
 #include <gtk/deprecated/gtktearoffmenuitem.h>
+#include <gtk/deprecated/gtkthemingengine.h>
 #include <gtk/deprecated/gtktoggleaction.h>
 #include <gtk/deprecated/gtkuimanager.h>
 #include <gtk/deprecated/gtkvbbox.h>

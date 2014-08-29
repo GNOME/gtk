@@ -26,8 +26,9 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkthemingengineprivate.h"
 #include "gtkpango.h"
+
+#include "deprecated/gtkthemingengineprivate.h"
 
 #include <math.h>
 

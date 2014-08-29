@@ -19,7 +19,7 @@
 #define __GTK_THEMING_ENGINE_PRIVATE_H__
 
 #include <gdk/gdk.h>
-#include "gtk/gtkthemingengine.h"
+#include "gtk/deprecated/gtkthemingengine.h"
 #include "gtk/gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS

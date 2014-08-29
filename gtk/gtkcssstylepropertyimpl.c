@@ -58,9 +58,10 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
-#include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 #include "gtkwin32themeprivate.h"
+
+#include "deprecated/gtkthemingengine.h"
 
 /*** REGISTRATION ***/
 

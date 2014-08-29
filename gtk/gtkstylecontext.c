@@ -36,7 +36,6 @@
 #include "gtkdebug.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkthemingengineprivate.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
@@ -48,6 +47,7 @@
 #include "gtksettings.h"
 #include "gtksettingsprivate.h"
 
+#include "deprecated/gtkthemingengineprivate.h"
 #include "deprecated/gtkgradientprivate.h"
 #include "deprecated/gtksymboliccolorprivate.h"
 

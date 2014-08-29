@@ -22,7 +22,7 @@
 
 #include "gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"
-#include "gtkthemingengine.h"
+#include "deprecated/gtkthemingengine.h"
 
 G_BEGIN_DECLS
 

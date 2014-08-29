@@ -26,7 +26,8 @@
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypedvalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
-#include "gtkthemingengine.h"
+
+#include "deprecated/gtkthemingengine.h"
 
 #include "deprecated/gtksymboliccolor.h"
 
