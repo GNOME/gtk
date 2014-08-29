@@ -199,7 +199,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   // insensitive button
   //
     $_bg: if($c!=$bg_color, mix($c,$base_color,85%), $insensitive_bg_color);
-    color: if($c!=$bg_color, mix($tc,$_bg,60%), $insensitive_fg_color);
+    color: if($c!=$bg_color, mix($tc,$_bg,50%), $insensitive_fg_color);
     border-color: if($c!=$bg_color, _border_color($c),
                                     $insensitive_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
@@ -209,6 +209,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white,1), $_outsets);
+    > GtkLabel { color: inherit; }
   }
   @else if $t==insensitive-active {
   //
@@ -225,7 +226,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white,1), $_outsets);
-    //FIXME make it clearer
+    > GtkLabel { color: inherit; }
   }
 
   @else if $t==backdrop {
@@ -277,6 +278,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white,1),
                             0 1px transparentize(white,1));
+    > GtkLabel { color: inherit; }
   }
 
   @else if $t==backdrop-insensitive-active {
@@ -289,6 +291,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
                         mix($backdrop_borders_color,$insensitive_bg_color, 8%));
     box-shadow: inset 0 1px transparentize(white,1),
                 0 1px transparentize(white,1);
+    > GtkLabel { color: inherit; }
   }
 
   @else if $t==osd {
