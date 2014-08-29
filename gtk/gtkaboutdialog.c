@@ -68,13 +68,17 @@
  * a program like its logo, name, copyright, website and license. It is
  * also possible to give credits to the authors, documenters, translators
  * and artists who have worked on the program. An about dialog is typically
- * opened when the user selects the `About` option from
- * the `Help` menu. All parts of the dialog are optional.
+ * opened when the user selects the `About` option from the `Help` menu.
+ * All parts of the dialog are optional.
  *
  * About dialogs often contain links and email addresses. GtkAboutDialog
  * displays these as clickable links. By default, it calls gtk_show_uri()
  * when a user clicks one. The behaviour can be overridden with the
  * #GtkAboutDialog::activate-link signal.
+ *
+ * To specify a person with an email address, use a string like
+ * "Edgar Allan Poe <edgar@poe.com>". To specify a website with a title,
+ * use a string like "GTK+ team http://www.gtk.org".
  *
  * To make constructing a GtkAboutDialog as convenient as possible, you can
  * use the function gtk_show_about_dialog() which constructs and shows a dialog
