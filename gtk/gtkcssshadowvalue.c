@@ -183,7 +183,7 @@ gtk_css_shadow_value_new (GtkCssValue *hoffset,
   retval->color = color;
 
   return retval;
-}                  
+}
 
 GtkCssValue *
 _gtk_css_shadow_value_new_for_transition (GtkCssValue *target)
@@ -258,7 +258,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser,
           }
         else
           values[RADIUS] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
-                                                        
+
         if (box_shadow_mode && _gtk_css_parser_has_number (parser))
           {
             values[SPREAD] = _gtk_css_number_value_parse (parser,
@@ -341,7 +341,7 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   if (cairo_has_current_point (cr))
     {
       double x, y;
-      
+
       cairo_get_current_point (cr, &x, &y);
       cairo_move_to (blur_cr, x, y);
     }
@@ -388,7 +388,7 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
 
   cairo_save (cr);
 
-  cairo_rel_move_to (cr, 
+  cairo_rel_move_to (cr,
                      _gtk_css_number_value_get (shadow->hoffset, 0),
                      _gtk_css_number_value_get (shadow->voffset, 0));
 
