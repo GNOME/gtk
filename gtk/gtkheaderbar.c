@@ -1473,6 +1473,14 @@ gtk_header_bar_set_property (GObject      *object,
 }
 
 static void
+notify_child_cb (GObject      *child,
+                 GParamSpec   *pspec,
+                 GtkHeaderBar *bar)
+{
+  _gtk_header_bar_update_separator_visibility (bar);
+}
+
+static void
 gtk_header_bar_pack (GtkHeaderBar *bar,
                      GtkWidget    *widget,
                      GtkPackType   pack_type)
@@ -1490,6 +1498,7 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
 
   gtk_widget_freeze_child_notify (widget);
   gtk_widget_set_parent (widget, GTK_WIDGET (bar));
+  g_signal_connect (widget, "notify::visible", G_CALLBACK (notify_child_cb), bar);
   gtk_widget_child_notify (widget, "pack-type");
   gtk_widget_child_notify (widget, "position");
   gtk_widget_thaw_child_notify (widget);
@@ -1535,6 +1544,7 @@ gtk_header_bar_remove (GtkContainer *container,
   if (l)
     {
       child = l->data;
+      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_widget_unparent (child->widget);
       priv->children = g_list_delete_link (priv->children, l);
       g_free (child);
@@ -1635,16 +1645,18 @@ gtk_header_bar_set_child_property (GtkContainer *container,
                                    const GValue *value,
                                    GParamSpec   *pspec)
 {
+  GtkHeaderBar *bar = GTK_HEADER_BAR (container);
   GList *l;
   Child *child;
 
-  l = find_child_link (GTK_HEADER_BAR (container), widget);
+  l = find_child_link (bar, widget);
   child = l->data;
 
   switch (property_id)
     {
     case CHILD_PROP_PACK_TYPE:
       child->pack_type = g_value_get_enum (value);
+      _gtk_header_bar_update_separator_visibility (bar);
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
