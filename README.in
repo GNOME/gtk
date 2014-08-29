@@ -95,6 +95,10 @@ Release notes for 3.14
   for event handling. Traditional event handlers in derived widgets are still
   being called.
 
+* Using GTK+ under X11 without the X Render extension has been observed
+  to be problematic. This combination is using code paths in cairo and
+  graphics drivers which are rarely tested and likely buggy.
+
 Release notes for 3.12
 ======================
 
