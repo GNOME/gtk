@@ -131,6 +131,11 @@
 }
 
 GtkLabel {
+  &.separator {
+    color: $fg_color;
+    @extend .dim-label;
+    &:backdrop { color: $backdrop_fg_color; }
+  }
   &:selected,
   &:selected:focus,
   &:selected:hover {

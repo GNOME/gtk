@@ -83,12 +83,19 @@
 .overshoot {
   background-color: rgba(74, 144, 217, 0.2); }
 
+GtkLabel.separator, .sidebar GtkLabel.separator:backdrop,
+.sidebar .view GtkLabel.separator:backdrop {
+  color: #2e3436; }
+  GtkLabel.separator:backdrop, .sidebar GtkLabel.separator:backdrop,
+  .sidebar .view GtkLabel.separator:backdrop {
+    color: #54595a; }
 GtkLabel:insensitive {
   color: #8d9091; }
   GtkLabel:insensitive:backdrop {
     color: #c7c7c7; }
 
-.dim-label, .titlebar .subtitle, GtkCalendar.header .subtitle,
+.dim-label, GtkLabel.separator, .sidebar GtkLabel.separator:backdrop,
+.sidebar .view GtkLabel.separator:backdrop, .titlebar .subtitle, GtkCalendar.header .subtitle,
 .header-bar .subtitle {
   opacity: 0.55;
   text-shadow: none; }
