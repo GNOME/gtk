@@ -2949,6 +2949,7 @@ GtkCalendar {
     border-right-style: none;
     border-bottom-style: none; }
   .message-dialog.csd .dialog-action-area .button:last-child {
+    border-left-style: solid;
     border-bottom-right-radius: 7px; }
   .message-dialog.csd .dialog-action-area .button:first-child {
     border-left-style: none;
@@ -3259,3 +3260,5 @@ GtkCalendar.header .button.titlebutton {
 @define-color wm_button_active_color_b shade(#393f3f, 0.89);
 @define-color wm_button_active_color_c shade(#393f3f, 0.9);
 @define-color content_view_bg #292929;
+
+/*# sourceMappingURL=gtk-contained-dark.css.map */

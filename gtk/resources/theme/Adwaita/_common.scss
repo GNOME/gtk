@@ -2388,7 +2388,10 @@ GtkCalendar {
       border-right-style: none;
       border-bottom-style: none;
     }
-    %last_button { border-bottom-right-radius: 7px; }
+    %last_button { 
+      border-left-style: solid;
+      border-bottom-right-radius: 7px; 
+    }
     %first_button {
       border-left-style: none;
       border-bottom-left-radius: 7px;
