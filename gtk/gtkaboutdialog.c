@@ -2081,6 +2081,9 @@ text_buffer_new (GtkAboutDialog  *about,
           q1 = strchr (q0, '<');
           q2 = q1 ? strchr (q1, '>') : NULL;
           r1 = strstr (q0, "http://");
+          r2 = strstr (q0, "https://");
+          if (!r1 || (r1 && r2 && r2 < r1))
+            r1 = r2;
           if (r1)
             {
               r2 = strpbrk (r1, " \n\t>");
@@ -2206,6 +2209,9 @@ add_credits_section (GtkAboutDialog *about,
           q1 = strchr (q0, '<');
           q2 = q1 ? strchr (q1, '>') : NULL;
           r1 = strstr (q0, "http://");
+          r2 = strstr (q0, "https://");
+          if (!r1 || (r1 && r2 && r2 < r1))
+            r1 = r2;
           if (r1)
             {
               r2 = strpbrk (r1, " \n\t");
