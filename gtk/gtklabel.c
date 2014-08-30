@@ -3865,9 +3865,9 @@ gtk_label_get_preferred_height_for_width (GtkWidget *widget,
                                           gint      *minimum_height,
                                           gint      *natural_height)
 {
-  return gtk_label_get_preferred_height_and_baseline_for_width (widget, width,
-								minimum_height, natural_height,
-								NULL, NULL);
+  gtk_label_get_preferred_height_and_baseline_for_width (widget, width,
+                                                         minimum_height, natural_height,
+                                                         NULL, NULL);
 }
 
 static void
