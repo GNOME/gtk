@@ -236,6 +236,59 @@ test_row_separator_height (void)
   gtk_widget_destroy (tree_view);
 }
 
+static void
+test_selection_count (void)
+{
+  GtkTreePath *path;
+  GtkListStore *list_store;
+  GtkTreeSelection *selection;
+  GtkWidget *view;
+
+  g_test_bug ("702957");
+
+  list_store = gtk_list_store_new (1, G_TYPE_STRING);
+  view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
+
+  gtk_list_store_insert_with_values (list_store, NULL, 0, 0, "One", -1);
+  gtk_list_store_insert_with_values (list_store, NULL, 1, 0, "Two", -1);
+  gtk_list_store_insert_with_values (list_store, NULL, 2, 0, "Tree", -1);
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+
+  g_assert_cmpint (gtk_tree_selection_count_selected_rows (selection), ==, 0);
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_path_free (path);
+
+  g_assert_cmpint (gtk_tree_selection_count_selected_rows (selection), ==, 1);
+
+  path = gtk_tree_path_new_from_indices (2, -1);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_path_free (path);
+
+  g_assert_cmpint (gtk_tree_selection_count_selected_rows (selection), ==, 2);
+
+  path = gtk_tree_path_new_from_indices (2, -1);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_path_free (path);
+
+  g_assert_cmpint (gtk_tree_selection_count_selected_rows (selection), ==, 2);
+
+  path = gtk_tree_path_new_from_indices (1, -1);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_path_free (path);
+
+  g_assert_cmpint (gtk_tree_selection_count_selected_rows (selection), ==, 3);
+
+  gtk_tree_selection_unselect_all (selection);
+
+  g_assert_cmpint (gtk_tree_selection_count_selected_rows (selection), ==, 0);
+
+  gtk_widget_destroy (view);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -249,6 +302,7 @@ main (int    argc,
                    test_select_collapsed_row);
   g_test_add_func ("/TreeView/sizing/row-separator-height",
                    test_row_separator_height);
+  g_test_add_func ("/TreeView/selection/count", test_selection_count);
 
   return g_test_run ();
 }
