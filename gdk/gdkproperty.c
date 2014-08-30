@@ -160,7 +160,8 @@ ensure_atom_tables (void)
 }
 
 static GdkAtom
-intern_atom_internal (const gchar *atom_name, gboolean allocate)
+intern_atom_internal (const gchar *atom_name,
+                      gboolean     allocate)
 {
   gpointer result;
   gchar *name;
@@ -172,8 +173,8 @@ intern_atom_internal (const gchar *atom_name, gboolean allocate)
   
   result = GINT_TO_POINTER (atoms_to_names->len);
   name = allocate ? g_strdup (atom_name) : (gchar *)atom_name;
-  g_hash_table_insert(names_to_atoms, name, result);
-  g_ptr_array_add(atoms_to_names, name);
+  g_hash_table_insert (names_to_atoms, name, result);
+  g_ptr_array_add (atoms_to_names, name);
   
   return result;  
 }
