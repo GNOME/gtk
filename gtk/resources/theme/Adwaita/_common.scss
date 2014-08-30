@@ -1746,6 +1746,16 @@ $asset_suffix: if($variant=='dark', '-dark', '');
       icon-shadow: if(str-index($s,"backdrop"), none, 0 1px 0 $borders_edge); //no edge highlight for :backdrop
       &.button.flat { icon-shadow: none; }
     }
+    @if $variant == 'light' {
+      // the borders of the light variant versions of checks and radios are
+      // too similar in luminosity to the selected background color, hence
+      // we need special casing.
+      GtkTreeView.view.#{$w}#{$s}:selected,
+      .list-row:selected .#{$w}#{$s} {
+        -gtk-icon-source: -gtk-scaled(url("assets/selected-#{$a}#{$as}#{$asset_suffix}.png"),
+                                      url("assets/selected-#{$a}#{$as}#{$asset_suffix}@2.png"));
+      }
+    }
   }
 
   //menu
