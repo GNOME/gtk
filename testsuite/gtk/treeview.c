@@ -67,6 +67,8 @@ test_bug_546005 (void)
   gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path,
                             NULL, FALSE);
   gtk_tree_path_free (path);
+
+  gtk_widget_destroy (view);
 }
 
 static void
@@ -96,6 +98,8 @@ test_bug_539377 (void)
                                            NULL, NULL, NULL) == FALSE);
   g_assert (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
                                                &path, NULL) == FALSE);
+
+  gtk_widget_destroy (view);
 }
 
 static void
@@ -150,6 +154,8 @@ test_select_collapsed_row (void)
   g_return_if_fail (gtk_tree_selection_count_selected_rows (selection) == 1);
 
   gtk_tree_path_free (path);
+
+  gtk_widget_destroy (view);
 }
 
 static gboolean
