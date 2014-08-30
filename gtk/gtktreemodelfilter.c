@@ -2929,7 +2929,7 @@ gtk_tree_model_filter_get_n_columns (GtkTreeModel *model)
   if (filter->priv->child_model == NULL)
     return 0;
 
-  /* so we can't modify the modify func after this ... */
+  /* so we can't set the modify func after this ... */
   filter->priv->modify_func_set = TRUE;
 
   if (filter->priv->modify_n_columns > 0)
@@ -2947,7 +2947,7 @@ gtk_tree_model_filter_get_column_type (GtkTreeModel *model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), G_TYPE_INVALID);
   g_return_val_if_fail (filter->priv->child_model != NULL, G_TYPE_INVALID);
 
-  /* so we can't modify the modify func after this ... */
+  /* so we can't set the modify func after this ... */
   filter->priv->modify_func_set = TRUE;
 
   if (filter->priv->modify_types)
@@ -3150,10 +3150,8 @@ gtk_tree_model_filter_real_modify (GtkTreeModelFilter *self,
 
       g_value_init (value, self->priv->modify_types[column]);
       self->priv->modify_func (GTK_TREE_MODEL (self),
-                           iter,
-                           value,
-                           column,
-                           self->priv->modify_data);
+                               iter, value, column,
+                               self->priv->modify_data);
     }
   else
     {
@@ -3806,22 +3804,22 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
 
 /**
  * gtk_tree_model_filter_set_visible_func:
- * @filter: A #GtkTreeModelFilter.
- * @func: A #GtkTreeModelFilterVisibleFunc, the visible function.
- * @data: (allow-none): User data to pass to the visible function, or %NULL.
- * @destroy: (allow-none): Destroy notifier of @data, or %NULL.
+ * @filter: A #GtkTreeModelFilter
+ * @func: A #GtkTreeModelFilterVisibleFunc, the visible function
+ * @data: (allow-none): User data to pass to the visible function, or %NULL
+ * @destroy: (allow-none): Destroy notifier of @data, or %NULL
  *
- * Sets the visible function used when filtering the @filter to be @func. The
- * function should return %TRUE if the given row should be visible and
+ * Sets the visible function used when filtering the @filter to be @func.
+ * The function should return %TRUE if the given row should be visible and
  * %FALSE otherwise.
  *
- * If the condition calculated by the function changes over time (e.g. because
- * it depends on some global parameters), you must call 
- * gtk_tree_model_filter_refilter() to keep the visibility information of 
- * the model uptodate.
+ * If the condition calculated by the function changes over time (e.g.
+ * because it depends on some global parameters), you must call 
+ * gtk_tree_model_filter_refilter() to keep the visibility information
+ * of the model up-to-date.
  *
- * Note that @func is called whenever a row is inserted, when it may still be
- * empty. The visible function should therefore take special care of empty
+ * Note that @func is called whenever a row is inserted, when it may still
+ * be empty. The visible function should therefore take special care of empty
  * rows, like in the example below.
  *
  * |[<!-- language="C" -->
@@ -3842,6 +3840,10 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  *   return visible;
  * }
  * ]|
+ *
+ * Note that gtk_tree_model_filter_set_visible_func() or
+ * gtk_tree_model_filter_set_visible_column() can only be called
+ * once for a given filter model.
  *
  * Since: 2.4
  */
@@ -3879,6 +3881,9 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
  * should be displayed at the location specified using the parameters of the 
  * modify function.
  *
+ * Note that gtk_tree_model_filter_set_modify_func()
+ * can only be called once for a given filter model.
+ *
  * Since: 2.4
  */
 void
@@ -3893,14 +3898,6 @@ gtk_tree_model_filter_set_modify_func (GtkTreeModelFilter           *filter,
   g_return_if_fail (func != NULL);
   g_return_if_fail (filter->priv->modify_func_set == FALSE);
 
-  if (filter->priv->modify_destroy)
-    {
-      GDestroyNotify d = filter->priv->modify_destroy;
-
-      filter->priv->modify_destroy = NULL;
-      d (filter->priv->modify_data);
-    }
-
   filter->priv->modify_n_columns = n_columns;
   filter->priv->modify_types = g_new0 (GType, n_columns);
   memcpy (filter->priv->modify_types, types, sizeof (GType) * n_columns);
@@ -3913,13 +3910,17 @@ gtk_tree_model_filter_set_modify_func (GtkTreeModelFilter           *filter,
 
 /**
  * gtk_tree_model_filter_set_visible_column:
- * @filter: A #GtkTreeModelFilter.
- * @column: A #gint which is the column containing the visible information.
+ * @filter: A #GtkTreeModelFilter
+ * @column: A #gint which is the column containing the visible information
  *
  * Sets @column of the child_model to be the column where @filter should
  * look for visibility information. @columns should be a column of type
  * %G_TYPE_BOOLEAN, where %TRUE means that a row is visible, and %FALSE
  * if not.
+ *
+ * Note that gtk_tree_model_filter_set_visible_func() or
+ * gtk_tree_model_filter_set_visible_column() can only be called
+ * once for a given filter model.
  *
  * Since: 2.4
  */
