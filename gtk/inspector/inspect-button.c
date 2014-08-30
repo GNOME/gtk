@@ -301,7 +301,7 @@ property_query_event (GtkWidget *widget,
         }
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 void
