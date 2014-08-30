@@ -26,6 +26,8 @@ test_bug_546005 (void)
   GtkListStore *list_store;
   GtkWidget *view;
 
+  g_test_bug ("546005");
+
   /* Tests provided by Bjorn Lindqvist, Paul Pogonyshev */
   view = gtk_tree_view_new ();
 
@@ -73,6 +75,8 @@ test_bug_539377 (void)
   GtkWidget *view;
   GtkTreePath *path;
   GtkListStore *list_store;
+
+  g_test_bug ("539377");
 
   /* Test provided by Bjorn Lindqvist */
 
@@ -231,6 +235,7 @@ main (int    argc,
       char **argv)
 {
   gtk_test_init (&argc, &argv, NULL);
+  g_test_bug_base ("http://bugzilla.gnome.org/");
 
   g_test_add_func ("/TreeView/cursor/bug-546005", test_bug_546005);
   g_test_add_func ("/TreeView/cursor/bug-539377", test_bug_539377);
