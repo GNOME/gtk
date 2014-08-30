@@ -4790,49 +4790,54 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
                          int                  x2,
                          int                  y2)
 {
+  GtkStyleContext *context;
+
   cairo_save (cr);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
 
   switch (type)
     {
     case GTK_TREE_VIEW_TREE_LINE:
-      cairo_set_source_rgb (cr, 0, 0, 0);
-      cairo_set_line_width (cr, tree_view->priv->tree_line_width);
-      if (tree_view->priv->tree_line_dashes[0])
-        cairo_set_dash (cr, 
-                        tree_view->priv->tree_line_dashes,
-                        2, 0.5);
+      {
+        const GdkRGBA *color;
+
+        color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
+
+        gdk_cairo_set_source_rgba (cr, color);
+        cairo_set_line_width (cr, tree_view->priv->tree_line_width);
+        if (tree_view->priv->tree_line_dashes[0])
+          cairo_set_dash (cr, tree_view->priv->tree_line_dashes, 2, 0.5);
+      }
       break;
+
     case GTK_TREE_VIEW_GRID_LINE:
       {
-        GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-        const GdkRGBA *color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+        const GdkRGBA *color;
+
+        color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
 
         gdk_cairo_set_source_rgba (cr, color);
         cairo_set_line_width (cr, tree_view->priv->grid_line_width);
         if (tree_view->priv->grid_line_dashes[0])
-          cairo_set_dash (cr,
-                          tree_view->priv->grid_line_dashes,
-                          2, 0.5);
+          cairo_set_dash (cr, tree_view->priv->grid_line_dashes, 2, 0.5);
+      }
+      break;
+
+    case GTK_TREE_VIEW_FOREGROUND_LINE:
+      {
+        GtkStateFlags state;
+        GdkRGBA color;
+
+        state = gtk_widget_get_state_flags (GTK_WIDGET (tree_view));
+        cairo_set_line_width (cr, 1.0);
+        gtk_style_context_get_color (context, state, &color);
+        gdk_cairo_set_source_rgba (cr, &color);
       }
       break;
 
     default:
       g_assert_not_reached ();
-      /* fall through */
-    case GTK_TREE_VIEW_FOREGROUND_LINE:
-      {
-        GtkStyleContext *context;
-        GtkStateFlags state;
-        GdkRGBA color;
-
-        context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-        state = gtk_widget_get_state_flags (GTK_WIDGET (tree_view));
-
-        cairo_set_line_width (cr, 1.0);
-        gtk_style_context_get_color (context, state, &color);
-        gdk_cairo_set_source_rgba (cr, &color);
-      }
-
       break;
     }
 
