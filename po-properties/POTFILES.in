@@ -49,6 +49,7 @@ gtk/deprecated/gtkstatusicon.c
 gtk/deprecated/gtkstock.c
 gtk/deprecated/gtkstyle.c
 gtk/deprecated/gtktable.c
+gtk/deprecated/gtkthemingengine.c
 gtk/deprecated/gtktoggleaction.c
 gtk/deprecated/gtktrayicon-x11.c
 gtk/deprecated/gtkuimanager.c
@@ -246,7 +247,6 @@ gtk/gtktexttag.c
 gtk/gtktexttagtable.c
 gtk/gtktextutil.c
 gtk/gtktextview.c
-gtk/gtkthemingengine.c
 gtk/gtktogglebutton.c
 gtk/gtktoggletoolbutton.c
 gtk/gtktoolbar.c
