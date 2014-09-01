@@ -179,6 +179,8 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
       *h = wayland_cursor->surface.height / wayland_cursor->surface.scale;
       *scale = wayland_cursor->surface.scale;
 
+      cairo_surface_reference (wayland_cursor->surface.cairo_surface);
+
       if (wayland_cursor->surface.cairo_surface)
         return _gdk_wayland_shm_surface_get_wl_buffer (wayland_cursor->surface.cairo_surface);
       else
