@@ -684,6 +684,8 @@ pointer_handle_enter (void              *data,
   event->crossing.focus = TRUE;
   event->crossing.state = 0;
 
+  gdk_wayland_device_update_window_cursor (device);
+
   get_coordinates (device,
                    &event->crossing.x,
                    &event->crossing.y,
@@ -728,6 +730,8 @@ pointer_handle_leave (void              *data,
   event->crossing.focus = TRUE;
   event->crossing.state = 0;
 
+  gdk_wayland_device_update_window_cursor (device);
+
   get_coordinates (device,
                    &event->crossing.x,
                    &event->crossing.y,
@@ -742,11 +746,7 @@ pointer_handle_leave (void              *data,
 
   g_object_unref(device->pointer_focus);
   if (device->cursor)
-    {
-      gdk_wayland_device_stop_window_cursor_animation (device);
-      g_object_unref (device->cursor);
-      device->cursor = NULL;
-    }
+    gdk_wayland_device_stop_window_cursor_animation (device);
 
   device->pointer_focus = NULL;
 }
