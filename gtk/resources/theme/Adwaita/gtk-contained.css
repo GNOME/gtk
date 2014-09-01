@@ -1148,14 +1148,14 @@ GtkComboBox {
  ***************/
 .titlebar, GtkCalendar.header,
 .header-bar {
+  padding: 6px;
   border-width: 0 0 1px;
   border-style: solid;
   border-color: #a1a1a1;
   border-radius: 7px 7px 0 0;
   background-color: transparent;
   background-image: linear-gradient(to bottom, #f7f7f7, #ededed);
-  box-shadow: inset 0 -1px #d6d6d6, inset 0 1px white;
-  padding: 6px; }
+  box-shadow: inset 0 -1px #d6d6d6, inset 0 1px white; }
   .titlebar:backdrop, GtkCalendar.header:backdrop,
   .header-bar:backdrop {
     border-color: #a8a8a8;
