@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
 				PreprocessorDefinitions="$(GtkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
 				PreprocessorDefinitions="$(GtkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
