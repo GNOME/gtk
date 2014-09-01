@@ -101,7 +101,6 @@ gtk/gtkcheckbutton.c
 gtk/gtkcheckmenuitem.c
 gtk/gtkclipboard.c
 gtk/gtkclipboard-quartz.c
-gtk/gtkclipboard-wayland.c
 gtk/gtkcolorbutton.c
 gtk/gtkcolorchooser.c
 gtk/gtkcolorchooserdialog.c
