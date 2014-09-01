@@ -931,21 +931,23 @@ GtkColorButton.button {
 /*********
  * Links *
  *********/
-*:link {
+*:link, .button:link, .button:visited {
   color: #4a90d9; }
-  *:link:hover, *:link:active, *:link:visited {
+  *:link:hover, .button:hover:link, .button:hover:visited, *:link:active, .button:active:link, .button:active:visited, *:link:visited, .button:visited {
     color: #3e6b97; }
-  *:link:backdrop, *:link:backdrop:hover {
+    *:selected *:link:hover, *:selected .button:hover:link, *:selected .button:hover:visited, *:selected *:link:active, *:selected .button:active:link, *:selected .button:active:visited, *:selected *:link:visited, *:selected .button:visited {
+      color: #dae8f7; }
+  *:link:backdrop, .button:backdrop:link, .button:backdrop:visited, *:link:backdrop:hover, .button:backdrop:hover:link, .button:backdrop:hover:visited, *:link:backdrop:hover:selected, .button:backdrop:hover:selected:link, .button:backdrop:hover:selected:visited, .titlebar.selection-mode .subtitle:backdrop:hover:link, GtkCalendar.selection-mode.header .subtitle:backdrop:hover:link,
+  .header-bar.selection-mode .subtitle:backdrop:hover:link {
     color: #4a90d9; }
+  *:link:selected, .button:selected:link, .button:selected:visited, .titlebar.selection-mode .subtitle:link, GtkCalendar.selection-mode.header .subtitle:link,
+  .header-bar.selection-mode .subtitle:link, *:selected *:link, *:selected .button:link, *:selected .button:visited {
+    color: #ffffff; }
 
 .button:link, .button:visited {
-  color: #4a90d9;
   text-shadow: none; }
   .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked {
-    color: #3e6b97;
     text-shadow: none; }
-  .button:link:backdrop, .button:visited:backdrop {
-    color: #4a90d9; }
 
 /*****************
  * GtkSpinButton *
