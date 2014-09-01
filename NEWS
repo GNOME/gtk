@@ -1,3 +1,62 @@
+Overview of Changes in GTK+ 3.13.7 to 3.13.8
+============================================
+
+* Wayland:
+ - Implement Drag-and-Drop
+ - Use subsurfaces for entry completion popups
+ - Use subsurfaces for tooltips
+
+* Bugs fixed:
+ 156164 Fix _gtk_text_buffer_get_line_log_attrs for last line
+ 346886 GtkTreeModelFilter doesn't allow multiple calls to set_visible_func
+ 415415 tree lines drawn in black
+ 602443 Can't use .glade with GtkListStore, gint64/guint64 and design-time data
+ 641638 Remove AM_PATH_GTK_3_0 macro
+ 658722 Drag and Drop sometimes stops working
+ 674264 Credentials from gnome-keyring is not used while printing
+ 680067 Credits in About dialog don't support https
+ 695504 gtk-demo: entry completion doesn't work
+ 697855 Implement DnD in wayland
+ 720269 ScaleButton: scrolling on the button doesn't do anything
+ 729215 Please implement Wayland subsurfaces
+ 731380 gtk3-demo button box works badly with a touch screen under wayland
+ 733967 provide proper pseudostates for radios and checkboxes
+ 734290 Checkbox inconsistency / usability issues in gtk3-3.13.5-2
+ 734374 wl_touch serials are ignored
+ 734753 Path bar - buttons don't have enough padding
+ 734961 GtkAboutDialog uses deprecated property
+ 735012 Toolbars take too much space
+ 735014 GtkPopover smart positioning broken in RTL
+ 735034 application_get_menu_by_id should either ref or be transfer none
+ 735119 inconsistent order of close/help buttons
+ 735223 Touch scrolling invalidates more than intended
+ 735226 Avoid NULL surface access if a window is shown/hidden within a frame 
+ 735253 GTK+ requires symbols not available in specified gdk-pixbuf version
+ 735294 No widgets visible in simple applications with gtk+ 3.13.3 and later
+ 735300 clicking on Actions tab in inspector causes abort
+ 735301 Duplication of words in comments (for for, the the)
+ 735310 GtkLabel selection background missing with Adwaita
+ 735321 Get the default gkt-font-name font size from user font
+ 735337 Crash in inspector, in the CSS editor
+ 735353 GtkTreeView::row-activated not emitted sometimes
+ 735368 try to tidy up the TextView background rendering
+ 735389 client crashes if it gets an invalid keymap from the compositor
+ 735401	make check fails on 3.13.7 without --enable-installed-tests
+ 735428	gtk_main() tries to unlock an unlocked mutex
+ 735531	Make tooltips use subsurfaces on wayland
+ 735545	MenuButton: dismiss menu/popover when toggling programmatically
+ 735593	Implement CSS font-stretch property
+ 735830	Pixmap based cursors get surface destroyed after first use
+ 735831	Change current cursor on grabs
+
+* Translation updates:
+ Assamese
+ Finnish
+ Greek
+ Hebrew
+ Japanese
+
+
 Overview of Changes in GTK+ 3.13.6 to 3.13.7
 ============================================
 
