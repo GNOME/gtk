@@ -86,6 +86,7 @@ struct _GdkWaylandDeviceData
   guint32 repeat_count;
   GSettings *keyboard_settings;
 
+  GdkCursor *grab_cursor;
   guint cursor_timeout_id;
   guint cursor_image_index;
 
@@ -180,8 +181,21 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
   int x, y, w, h, scale;
   guint next_image_index, next_image_delay;
 
-  buffer = _gdk_wayland_cursor_get_buffer (wd->cursor, wd->cursor_image_index,
-                                           &x, &y, &w, &h, &scale);
+  if (wd->grab_cursor)
+    {
+      buffer = _gdk_wayland_cursor_get_buffer (wd->grab_cursor, 0,
+                                               &x, &y, &w, &h, &scale);
+    }
+  else if (wd->cursor)
+    {
+      buffer = _gdk_wayland_cursor_get_buffer (wd->cursor, wd->cursor_image_index,
+                                               &x, &y, &w, &h, &scale);
+    }
+  else
+    {
+      wd->cursor_timeout_id = 0;
+      return TRUE;
+    }
 
   if (!wd->wl_pointer)
     return FALSE;
@@ -194,6 +208,13 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
   wl_surface_set_buffer_scale (wd->pointer_surface, scale);
   wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
   wl_surface_commit (wd->pointer_surface);
+
+  if (wd->grab_cursor)
+    {
+      /* We admit only static icons during drags so far */
+      gdk_wayland_device_stop_window_cursor_animation (wd);
+      return TRUE;
+    }
 
   next_image_index =
     _gdk_wayland_cursor_get_next_image_index (wd->cursor,
@@ -356,6 +377,13 @@ gdk_wayland_device_grab (GdkDevice    *device,
                                               device,
                                               wayland_device->wl_seat,
                                               time_);
+
+      g_clear_object (&wayland_device->grab_cursor);
+
+      if (cursor)
+        wayland_device->grab_cursor = g_object_ref (cursor);
+
+      gdk_wayland_device_update_window_cursor (wayland_device);
     }
 
   return GDK_GRAB_SUCCESS;
@@ -382,6 +410,9 @@ gdk_wayland_device_ungrab (GdkDevice *device,
 
       if (grab)
         grab->serial_end = grab->serial_start;
+
+      g_clear_object (&wayland_device->grab_cursor);
+      gdk_wayland_device_update_window_cursor (wayland_device);
 
       if (wayland_device->pointer_grab_window)
         _gdk_wayland_window_set_device_grabbed (wayland_device->pointer_grab_window,
