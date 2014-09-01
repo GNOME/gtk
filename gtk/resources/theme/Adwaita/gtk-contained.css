@@ -122,6 +122,12 @@ GtkTextView {
   GtkTextView:backdrop {
     background-color: #f4f4f4; }
 
+GtkFlowBox .grid-child {
+  padding: 3px;
+  border-radius: 3px; }
+  GtkFlowBox .grid-child:selected {
+    outline-offset: -2px; }
+
 .app-notification.frame, .osd {
   color: #eeeeec;
   text-shadow: 0 1px black;
@@ -3025,13 +3031,13 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(84, 89, 90, 0.15); }
 
-.view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .header-bar .menuitem.button.titlebutton:selected,
+.view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, GtkFlowBox .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .header-bar .menuitem.button.titlebutton:selected,
 .titlebar .menuitem.button.titlebutton:selected,
 GtkCalendar.header .menuitem.button.titlebutton:selected {
   background-color: #4a90d9;
   color: #ffffff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, GtkLabel:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.button.titlebutton:backdrop:selected,
+  .view:backdrop:selected, GtkLabel:backdrop:selected, GtkFlowBox .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.button.titlebutton:backdrop:selected,
   .titlebar .menuitem.button.titlebutton:backdrop:selected,
   GtkCalendar.header .menuitem.button.titlebutton:backdrop:selected {
     color: #fcfcfc; }

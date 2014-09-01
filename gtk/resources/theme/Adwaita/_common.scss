@@ -178,6 +178,15 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
                                      $backdrop_base_color, 50%); }
 }
 
+GtkFlowBox .grid-child {
+  padding: 3px;
+  border-radius: 3px;
+  &:selected {
+    @extend %selected_items;
+    outline-offset: -2px;
+  }
+}
+
 %osd, .osd {
   color: $osd_fg_color;
   text-shadow: 0 1px black;
