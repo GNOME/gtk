@@ -1804,6 +1804,7 @@ GtkTreeView.view.progressbar {
       .notebook tab .active-page GtkLabel:backdrop, .notebook tab GtkLabel.active-page:backdrop {
         color: #c9cbc9; }
     .notebook tab .button {
+      padding: 0;
       border: 1px solid transparent;
       icon-shadow: none;
       transition: none;

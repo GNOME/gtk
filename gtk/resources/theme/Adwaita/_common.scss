@@ -1528,6 +1528,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       &:backdrop { color: $backdrop_fg_color; }
     }
     .button { //tab close button
+      padding: 0;
       border: 1px solid transparent;
       @extend %undecorated_button;
       icon-shadow: none;
