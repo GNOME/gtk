@@ -1182,6 +1182,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
       impl->outputs = NULL;
     }
 
+  impl->pending_commit = FALSE;
   impl->mapped = FALSE;
 }
 
