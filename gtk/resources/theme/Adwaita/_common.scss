@@ -2136,19 +2136,6 @@ GtkLevelBar.vertical {
   }
 }
 
-// catch all extend :)
-
-%selected_items {
-  background-color: $selected_bg_color;
-  color: $selected_fg_color;
-  @if $variant == 'light' {
-    outline-color: transparentize($selected_fg_color, 0.7);
-  }
-  &:backdrop {
-    @if $variant == 'light' { color: $backdrop_base_color; }
-    @else { color: $backdrop_fg_color; };
-  }
-}
 
 /**********
  * Frames *
@@ -2230,11 +2217,7 @@ GtkScrolledWindow {
 }
 
 .list-row:selected {
-  color: $selected_fg_color;
-  background-color: $selected_bg_color;
-  &:backdrop {
-    color: $backdrop_base_color;
-  }
+  @extend %selected_items;
   .button {
     @include button(normal, $noedge:true);
     @if $variant == 'light' { border-color: $selected_borders_color; }
@@ -2733,5 +2716,20 @@ GtkVolumeButton.button { padding: 8px; }
 .titlebar .button.titlebutton {
   @extend .button.flat;
   @extend .image-button;
+}
+
+
+// catch all extend :)
+
+%selected_items {
+  background-color: $selected_bg_color;
+  color: $selected_fg_color;
+  @if $variant == 'light' {
+    outline-color: transparentize($selected_fg_color, 0.7);
+  }
+  &:backdrop {
+    @if $variant == 'light' { color: $backdrop_base_color; }
+    @else { color: $backdrop_fg_color; };
+  }
 }
 
