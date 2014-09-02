@@ -4936,10 +4936,9 @@ create_cursors (GtkWidget *widget)
   GtkWidget *label;
   GtkWidget *any;
   GtkAdjustment *adjustment;
-#ifdef GDK_WINDOWING_X11
   GtkWidget *entry;
   GtkWidget *size;  
-#endif
+  gboolean cursor_demo = FALSE;
 
   if (!window)
     {
@@ -4967,7 +4966,16 @@ create_cursors (GtkWidget *widget)
 			"GtkWidget::visible", TRUE,
 			NULL);
 
-      if (1 || GDK_IS_X11_DISPLAY (gtk_widget_get_display (vbox)))
+#ifdef GDK_WINDOWING_WAYLAND
+      if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (vbox)))
+        cursor_demo = TRUE;
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+      if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (vbox)))
+        cursor_demo = TRUE;
+#endif
+
+    if (cursor_demo)
         {
           hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
           gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
