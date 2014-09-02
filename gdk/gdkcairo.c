@@ -477,6 +477,9 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
   else
     image = cairo_surface_reference (surface);
 
+  /* Flush the surface to make sure that the rendering is up to date. */
+  cairo_surface_flush (image);
+
   data = cairo_image_surface_get_data (image);
   stride = cairo_image_surface_get_stride (image);
 
