@@ -6,14 +6,13 @@ resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --gener
 resources.h: inspector.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/inspector.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name gtk_inspector --generate-header --manual-register
-resources.c: inspector.gresource.xml $(resource_files)
+resources.c: inspector.gresource.xml $(resource_files) $(template_headers)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/inspector.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name gtk_inspector --generate-source --manual-register
 
 BUILT_SOURCES = 			\
 	resources.h			\
-	resources.c			\
-	$(template_headers)
+	resources.c
 
 libgtkinspector_la_SOURCES = 		\
 	action-editor.h			\
@@ -124,12 +123,12 @@ EXTRA_DIST += 				\
 
 MAINTAINERCLEANFILES =			\
 	resources.c			\
-	resources.h			\
-	$(template_headers)
+	resources.h
 
 distclean-local:
 	if test $(srcdir) != .; then \
 	  rm -f $(MAINTAINERCLEANFILES); \
+	  rm -f $(template_headers); \
 	fi
 
 dist-hook: $(top_builddir)/build/win32/vs9/gtk-inspector.vcproj $(top_builddir)/build/win32/vs10/gtk-inspector.vcxproj $(top_builddir)/build/win32/vs10/gtk-inspector.vcxproj.filters
