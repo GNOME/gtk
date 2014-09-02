@@ -3762,23 +3762,18 @@ invalidate_impl_subwindows (GdkWindow            *window,
 	  if (gdk_window_has_impl (child))
 	    {
 	      cairo_region_t *tmp = cairo_region_copy (region);
-	      cairo_region_translate (tmp, -dx, -dy);
+	      cairo_region_translate (tmp, -dx - child->x, -dy - child->y);
 	      gdk_window_invalidate_maybe_recurse_full (child,
 							tmp, child_func, user_data);
 	      cairo_region_destroy (tmp);
 	    }
 	  else
 	    {
-	      dx += child->x;
-	      dy += child->y;
 	      invalidate_impl_subwindows (child,
 					  region,
 					  child_func, user_data,
-					  dx, dy);
-	      dx -= child->x;
-	      dy -= child->y;
+					  dx + child->x, dy + child->y);
 	    }
-
 	}
     }
 }
