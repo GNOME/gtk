@@ -902,7 +902,15 @@ GtkCalendar.header .button.titlebutton, .button.flat:backdrop, .button.flat:back
 .titlebar .button.titlebutton:backdrop:insensitive,
 GtkCalendar.header .button.titlebutton:backdrop:insensitive, .menuitem.button.flat, .menuitem.button.flat:backdrop, .header-bar .menuitem.button.titlebutton:backdrop,
 .titlebar .menuitem.button.titlebutton:backdrop,
-GtkCalendar.header .menuitem.button.titlebutton:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .list-row.button, .list-row.button:backdrop:hover, .app-notification.frame .button.flat, .app-notification.frame .header-bar .button.titlebutton, .header-bar .app-notification.frame .button.titlebutton,
+GtkCalendar.header .menuitem.button.titlebutton:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .list-row.button, .list-row.button:backdrop:hover, .list-row:selected .button.flat, .list-row:selected .header-bar .button.titlebutton, .header-bar .list-row:selected .button.titlebutton,
+.list-row:selected .titlebar .button.titlebutton,
+.titlebar .list-row:selected .button.titlebutton,
+.list-row:selected GtkCalendar.header .button.titlebutton,
+GtkCalendar.header .list-row:selected .button.titlebutton, .list-row:selected .button.flat:backdrop, .list-row:selected .button.flat:backdrop:insensitive, .list-row:selected .header-bar .button.titlebutton:backdrop:insensitive, .header-bar .list-row:selected .button.titlebutton:backdrop:insensitive,
+.list-row:selected .titlebar .button.titlebutton:backdrop:insensitive,
+.titlebar .list-row:selected .button.titlebutton:backdrop:insensitive,
+.list-row:selected GtkCalendar.header .button.titlebutton:backdrop:insensitive,
+GtkCalendar.header .list-row:selected .button.titlebutton:backdrop:insensitive, .app-notification.frame .button.flat, .app-notification.frame .header-bar .button.titlebutton, .header-bar .app-notification.frame .button.titlebutton,
 .app-notification.frame .titlebar .button.titlebutton,
 .titlebar .app-notification.frame .button.titlebutton,
 .app-notification.frame GtkCalendar.header .button.titlebutton,
@@ -2968,6 +2976,76 @@ GtkScrolledWindow GtkViewport.frame {
   background-color: #215d9c; }
   .list-row:selected:backdrop {
     color: #2c2c2c; }
+  .list-row:selected .button {
+    color: #eeeeec;
+    background-image: linear-gradient(to bottom, #454c4c, #393f3f 40%, #2d3232);
+    border-color: #1c1f1f;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+    .list-row:selected .button:hover, .list-row:selected .button.flat:hover, .list-row:selected .header-bar .button.titlebutton:hover, .header-bar .list-row:selected .button.titlebutton:hover,
+    .list-row:selected .titlebar .button.titlebutton:hover,
+    .titlebar .list-row:selected .button.titlebutton:hover,
+    .list-row:selected GtkCalendar.header .button.titlebutton:hover,
+    GtkCalendar.header .list-row:selected .button.titlebutton:hover {
+      color: #eeeeec;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+    .list-row:selected .button:active, .list-row:selected .button.flat:active, .list-row:selected .header-bar .button.titlebutton:active, .header-bar .list-row:selected .button.titlebutton:active,
+    .list-row:selected .titlebar .button.titlebutton:active,
+    .titlebar .list-row:selected .button.titlebutton:active,
+    .list-row:selected GtkCalendar.header .button.titlebutton:active,
+    GtkCalendar.header .list-row:selected .button.titlebutton:active, .list-row:selected .button:checked, .list-row:selected .button.flat:checked, .list-row:selected .header-bar .button.titlebutton:checked, .header-bar .list-row:selected .button.titlebutton:checked,
+    .list-row:selected .titlebar .button.titlebutton:checked,
+    .titlebar .list-row:selected .button.titlebutton:checked,
+    .list-row:selected GtkCalendar.header .button.titlebutton:checked,
+    GtkCalendar.header .list-row:selected .button.titlebutton:checked {
+      color: #eeeeec;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #232727, #2d3232);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+    .list-row:selected .button:backdrop {
+      color: #c9cbc9;
+      border-color: #1e2222;
+      background-image: linear-gradient(to bottom, #393f3f);
+      text-shadow: none;
+      icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+      .list-row:selected .button:backdrop:active, .list-row:selected .button:backdrop:checked {
+        color: #c9cbc9;
+        border-color: #1e2222;
+        background-image: linear-gradient(to bottom, #2f3434);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+      .list-row:selected .button:backdrop:insensitive {
+        color: #5d6767;
+        border-color: #1e2222;
+        background-image: linear-gradient(to bottom, #323636);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+        .list-row:selected .button:backdrop:insensitive > GtkLabel {
+          color: inherit; }
+      .list-row:selected .button:backdrop:insensitive:active {
+        color: #5d6767;
+        border-color: #1e2222;
+        background-image: linear-gradient(to bottom, #303434);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+        .list-row:selected .button:backdrop:insensitive:active > GtkLabel {
+          color: inherit; }
+    .list-row:selected .button:insensitive {
+      color: #939695;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #323636);
+      text-shadow: none;
+      icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+      .list-row:selected .button:insensitive > GtkLabel {
+        color: inherit; }
 
 /*.list-row.button:selected,
 .list-row:selected {

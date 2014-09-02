@@ -2230,11 +2230,48 @@ GtkScrolledWindow {
 }
 
 .list-row:selected {
-  //FIXME %selected_items needs to be a mixin
   color: $selected_fg_color;
   background-color: $selected_bg_color;
   &:backdrop {
     color: $backdrop_base_color;
+  }
+  .button {
+    @include button(normal, $noedge:true);
+    @if $variant == 'light' { border-color: $selected_borders_color; }
+    &:hover, &.flat:hover {
+      @include button(hover, $noedge:true);
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+    }
+    &:active, &.flat:active,
+    &:checked, &.flat:checked {
+      @include button(active, $noedge:true);
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+    }
+    &:backdrop {
+      @include button(backdrop, $noedge:true);
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+      &:active, &:checked {
+        @include button(backdrop-active, $noedge:true);
+        @if $variant == 'light' { border-color: $selected_borders_color; }
+      }
+      &:insensitive {
+        @include button(backdrop-insensitive, $noedge:true);
+        @if $variant == 'light' { border-color: $selected_borders_color; }
+      }
+      &:insensitive:active {
+        @include button(backdrop-insensitive-active, $noedge:true);
+        @if $variant == 'light' { border-color: $selected_borders_color; }
+      }
+    }
+    &:insensitive {
+      @include button(insensitive, $noedge:true);
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+    }
+    &.flat, &.flat:backdrop, &.flat:backdrop:insensitive {
+      @extend %undecorated_button;
+    }
+    //FIXME: make placeholder with buttons w/o edge to be extended around
+    // istead of repeating everytime this stuff.
   }
 }
 
