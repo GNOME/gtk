@@ -2,8 +2,10 @@
 
 // generic drawing of more complex things
 
-$widget_edge: 0 1px $borders_edge; //outer hilight "used" on
-                                   //most widgets
+@function widget_edge($c:$borders_edge) {
+  // outer highlight "used" on most widgets
+  @return 0 1px $c;
+}
 
 @mixin _shadows($shadow1, $shadow2:none, $shadow3:none, $shadow4:none) {
 //
@@ -35,7 +37,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
   background-color: transparent;
   background-image: entry_gradient($base_color);
   $_blank_edge: if($noedge, none, 0 1px transparentize(white,1));
-  $_entry_edge: if($noedge, none, $widget_edge);
+  $_entry_edge: if($noedge, none, widget_edge());
   $_inner_shadows: inset 0 3px mix(black, $base_color, 3%),
                    inset 0 1px mix(black, $base_color, 18%);
   @if $variant == 'dark' {
@@ -159,7 +161,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     @else { border-color: $borders_color; }
 
     @include _button_text_shadow($tc,$c);
-    $_outsets: if($noedge, none, $widget_edge);
+    $_outsets: if($noedge, none, widget_edge());
     @include _shadows(inset 0 1px $_top_hilight, $_outsets);
   }
 
@@ -176,7 +178,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
                                       $c);
 
     @include _button_text_shadow($tc,lighten($c,4%));
-    $_outsets: if($noedge, none, $widget_edge);
+    $_outsets: if($noedge, none, widget_edge());
     @include _shadows(inset 0 1px $_top_hilight, $_outsets);
   }
 
@@ -191,7 +193,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
                                       darken($c,9%),
                                       darken($c,5%));
     @include _button_text_shadow($tc,darken($c,10%));
-    $_outsets: if($noedge, none, $widget_edge);
+    $_outsets: if($noedge, none, widget_edge());
     @include _shadows(inset 0 1px transparentize(black, 0.93),
                       inset 0 2px 1px -2px transparentize(black,0.4),
                       $_outsets);
@@ -207,7 +209,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     background-image: linear-gradient(to bottom, $_bg);
     text-shadow: none;
     icon-shadow: none;
-    $_outsets: if($noedge, none, $widget_edge);
+    $_outsets: if($noedge, none, widget_edge());
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white,1), $_outsets);
@@ -224,7 +226,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
     color: $insensitive_fg_color;
     border-color: $insensitive_borders_color;
     background-image: linear-gradient(to bottom, mix($_bc, $_bg, 10%), $_bg);
-    $_outsets: if($noedge, none, $widget_edge);
+    $_outsets: if($noedge, none, widget_edge());
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white,1), $_outsets);
