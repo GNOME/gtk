@@ -1,0 +1,13 @@
+N_("GTK+ Theme");
+N_("Dark variant");
+N_("Icon Theme");
+N_("Font");
+N_("Text Direction");
+N_("Left-to-Right");
+N_("Right-to-Left");
+N_("Window scaling");
+N_("Animations");
+N_("Show Graphic Updates");
+N_("Show Baselines");
+N_("Show Pixel Cache");
+N_("Simulate touchscreen");
