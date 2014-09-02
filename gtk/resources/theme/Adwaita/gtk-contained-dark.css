@@ -3293,10 +3293,10 @@ GtkCalendar {
         .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive > GtkLabel {
           color: inherit; }
   .message-dialog.csd .dialog-action-area .button, .message-dialog.csd .dialog-action-area .button:hover, .message-dialog.csd .dialog-action-area .button:active, .message-dialog.csd .dialog-action-area .button:insensitive, .message-dialog.csd .dialog-action-area .button:backdrop, .message-dialog.csd .dialog-action-area .button:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.suggested-action, .message-dialog.csd .dialog-action-area .button.suggested-action:hover, .message-dialog.csd .dialog-action-area .button.suggested-action:active, .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop, .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive, .message-dialog.csd .dialog-action-area .button.destructive-action, .message-dialog.csd .dialog-action-area .button.destructive-action:hover, .message-dialog.csd .dialog-action-area .button.destructive-action:active, .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop, .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive {
+    border-left-style: solid;
     border-right-style: none;
     border-bottom-style: none; }
   .message-dialog.csd .dialog-action-area .button:last-child {
-    border-left-style: solid;
     border-bottom-right-radius: 7px; }
   .message-dialog.csd .dialog-action-area .button:first-child {
     border-left-style: none;

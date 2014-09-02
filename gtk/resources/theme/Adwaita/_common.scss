@@ -2427,11 +2427,11 @@ GtkCalendar {
       &:last-child { @extend %last_button; }
     }
     %middle_button {
+      border-left-style: solid;
       border-right-style: none;
       border-bottom-style: none;
     }
     %last_button { 
-      border-left-style: solid;
       border-bottom-right-radius: 7px; 
     }
     %first_button {
