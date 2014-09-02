@@ -17,6 +17,10 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
 
 // entries
 
+@function entry_gradient($c) {
+  @return linear-gradient(to bottom, darken($c,3%), $c 90%);
+}
+
 @mixin entry($t, $fc:$selected_bg_color, $noedge:false) {
 //
 // Entries drawing function
@@ -29,9 +33,7 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
 // normal, focus, insensitive, backdrop, backdrop-insensitive;
 //
   background-color: transparent;
-  background-image: linear-gradient(to bottom,
-                                    darken($base_color,3%),
-                                    $base_color 90%);
+  background-image: entry_gradient($base_color);
   $_blank_edge: if($noedge, none, 0 1px transparentize(white,1));
   $_entry_edge: if($noedge, none, $widget_edge);
   $_inner_shadows: inset 0 3px mix(black, $base_color, 3%),
@@ -405,10 +407,13 @@ $widget_edge: 0 1px $borders_edge; //outer hilight "used" on
                                              lighten($selected_bg_color,6%));
 }
 
+@function headerbar_gradient($c) {
+  @return linear-gradient(to bottom, lighten($c,4%), $c);
+}
+
 @mixin headerbar_fill($c:$bg_color) {
-  background-image: linear-gradient(to bottom,
-                                    lighten($c,4%),
-                                    $c);
+  background-image: headerbar_gradient($c);
   box-shadow: inset 0 -1px mix($borders_color, $c, 30%), // bottom shade
               inset 0 1px $top_hilight; // top highlight
+
 }
