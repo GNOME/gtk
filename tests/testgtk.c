@@ -4889,6 +4889,10 @@ cursor_event (GtkWidget          *widget,
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+#include "wayland/gdkwayland.h"
+#endif
 
 static void
 change_cursor_theme (GtkWidget *widget,
@@ -4897,6 +4901,7 @@ change_cursor_theme (GtkWidget *widget,
   const gchar *theme;
   gint size;
   GList *children;
+  GdkDisplay *display;
 
   children = gtk_container_get_children (GTK_CONTAINER (data));
 
@@ -4905,10 +4910,16 @@ change_cursor_theme (GtkWidget *widget,
 
   g_list_free (children);
 
-  gdk_x11_display_set_cursor_theme (gtk_widget_get_display (widget),
-				    theme, size);
-}
+  display = gtk_widget_get_display (widget);
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (display))
+    gdk_x11_display_set_cursor_theme (display, theme, size);
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    gdk_wayland_display_set_cursor_theme (display, theme, size);
+#endif
+}
 
 
 static void
@@ -4956,8 +4967,7 @@ create_cursors (GtkWidget *widget)
 			"GtkWidget::visible", TRUE,
 			NULL);
 
-#ifdef GDK_WINDOWING_X11
-      if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (vbox)))
+      if (1 || GDK_IS_X11_DISPLAY (gtk_widget_get_display (vbox)))
         {
           hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
           gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
@@ -4981,7 +4991,6 @@ create_cursors (GtkWidget *widget)
           g_signal_connect (size, "changed", 
                             G_CALLBACK (change_cursor_theme), hbox);
         }
-#endif
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
