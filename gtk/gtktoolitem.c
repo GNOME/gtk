@@ -31,7 +31,7 @@
 #include "deprecated/gtkactivatable.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtktoolitem
@@ -531,6 +531,8 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
       
       gtk_widget_size_allocate (child, &child_allocation);
     }
+
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 gboolean
