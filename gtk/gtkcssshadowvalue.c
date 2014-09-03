@@ -421,29 +421,32 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
                                     cairo_t           *cr,
                                     PangoLayout       *layout)
 {
+  double x, y;
+
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   cairo_save (cr);
+
+  cairo_get_current_point (cr, &x, &y);
+  cairo_translate (cr, x, y);
+  cairo_new_sub_path (cr);
+
+  cairo_translate (cr,
+                   _gtk_css_number_value_get (shadow->hoffset, 0),
+                   _gtk_css_number_value_get (shadow->voffset, 0));
+  gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
 
   if (needs_blur (shadow))
     {
       cairo_surface_t *cached_surface = get_cached_surface (layout, shadow);
       if (cached_surface)
         {
-          cairo_translate (cr,
-                           _gtk_css_number_value_get (shadow->hoffset, 0),
-                           _gtk_css_number_value_get (shadow->voffset, 0));
-          gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
           cairo_mask_surface (cr, cached_surface, 0, 0);
         }
       else
         {
           guint radius, serial;
 
-          cairo_rel_move_to (cr,
-                             _gtk_css_number_value_get (shadow->hoffset, 0),
-                             _gtk_css_number_value_get (shadow->voffset, 0));
-          gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
           cr = gtk_css_shadow_value_start_drawing (shadow, cr);
           _gtk_pango_fill_layout (cr, layout);
           cached_surface = cairo_get_target (cr);
@@ -451,9 +454,6 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
                                    cairo_surface_reference (cached_surface),
                                    (GDestroyNotify) cairo_surface_destroy);
           cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
-          cairo_rel_move_to (cr,
-                             - _gtk_css_number_value_get (shadow->hoffset, 0),
-                             - _gtk_css_number_value_get (shadow->voffset, 0));
 
           radius = _gtk_css_number_value_get (shadow->radius, 0);
           cairo_surface_set_user_data (cached_surface, &radius_key, GUINT_TO_POINTER (radius), NULL);
@@ -464,17 +464,14 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
     }
   else
     {
-      cairo_rel_move_to (cr,
-                         _gtk_css_number_value_get (shadow->hoffset, 0),
-                         _gtk_css_number_value_get (shadow->voffset, 0));
-      gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
       _gtk_pango_fill_layout (cr, layout);
-      cairo_rel_move_to (cr,
-                         - _gtk_css_number_value_get (shadow->hoffset, 0),
-                         - _gtk_css_number_value_get (shadow->voffset, 0));
     }
 
   cairo_restore (cr);
+
+  /* Put the current point back where it was. */
+  cairo_new_sub_path (cr);
+  cairo_move_to (cr, x, y);
 }
 
 void
