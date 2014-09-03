@@ -348,14 +348,7 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   cairo_surface_set_device_offset (surface, clip_radius - clip_rect.x, clip_radius - clip_rect.y);
   blur_cr = cairo_create (surface);
   cairo_set_user_data (blur_cr, &original_cr_key, cairo_reference (cr), (cairo_destroy_func_t) cairo_destroy);
-
-  if (cairo_has_current_point (cr))
-    {
-      double x, y;
-
-      cairo_get_current_point (cr, &x, &y);
-      cairo_move_to (blur_cr, x, y);
-    }
+  cairo_new_sub_path (blur_cr);
 
   return blur_cr;
 }
@@ -422,6 +415,7 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
                                     PangoLayout       *layout)
 {
   double x, y;
+  PangoRectangle ink_rect;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
@@ -430,6 +424,10 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
   cairo_get_current_point (cr, &x, &y);
   cairo_translate (cr, x, y);
   cairo_new_sub_path (cr);
+
+  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+  cairo_rectangle (cr, ink_rect.x, ink_rect.y, ink_rect.width, ink_rect.height);
+  cairo_clip (cr);
 
   cairo_translate (cr,
                    _gtk_css_number_value_get (shadow->hoffset, 0),
