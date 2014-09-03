@@ -586,21 +586,23 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 // should really be deprecated...
 .inline-toolbar GtkToolButton > .button { // redefining the button look is
                                           // needed since those are flat...
-  @include button(normal, $noedge: true); // the box-shadow outset doesn't work
-                                          // in this case, hence $noedge
-  &:hover { @include button(hover, $noedge: true); }
-  &:active { @include button(active, $noedge:true); }
-  &:checked{ @include button(active, $noedge:true); }
-  &:insensitive { @include button(insensitive, $noedge:true); }
-  &:insensitive:active { @include button(insensitive-active, $noedge:true); }
-  &:insensitive:checked { @include button(insensitive-active, $noedge:true); }
-  &:backdrop { @include button(backdrop); };
-  &:backdrop:active { @include button(backdrop-active); }
-  &:backdrop:checked { @include button(backdrop-active); }
-  &:backdrop:insensitive { @include button(backdrop-insensitive); }
-  &:backdrop:insensitive:active { @include button(backdrop-insensitive-active);}
-  &:backdrop:insensitive:checked { @include button(backdrop-insensitive-active);}
-}
+  @include button(normal, $edge:none);    // the box-shadow outset doesn't work
+                                          // in this case, hence $edge: none
+  &:hover { @include button(hover, $edge:none); }
+  &:active { @include button(active, $edge:none); }
+  &:checked{ @include button(active, $edge:none); }
+  &:insensitive { @include button(insensitive, $edge:none); }
+  &:insensitive:active { @include button(insensitive-active, $edge:none); }
+  &:insensitive:checked { @include button(insensitive-active, $edge:none); }
+  &:backdrop { @include button(backdrop, $edge:none); };
+  &:backdrop:active { @include button(backdrop-active, $edge:none); }
+  &:backdrop:checked { @include button(backdrop-active, $edge:none); }
+  &:backdrop:insensitive { @include button(backdrop-insensitive, $edge:none); }
+  &:backdrop:insensitive:active {
+    @include button(backdrop-insensitive-active, $edge:none); }
+  &:backdrop:insensitive:checked {
+    @include button(backdrop-insensitive-active, $edge:none); }
+} 
 .inline-toolbar.toolbar GtkToolButton,
 .inline-toolbar.toolbar GtkToolButton:backdrop { // .inline-toolbar.toolbar here for
                                                  // higher specificity than the
@@ -760,22 +762,22 @@ GtkColorButton.button {
       padding-bottom: 8px; //
       &:first-child {
         @extend %top_button;
-        @include button(normal, $noedge: true);
+        @include button(normal, $edge:none);
         &:active {
           @extend %top_button;
-          @include button(active, $noedge: true);
+          @include button(active, $edge:none);
         }
         &:hover {
           @extend %top_button;
-          @include button(hover, $noedge: true);
+          @include button(hover, $edge:none);
         }
         &:insensitive {
           @extend %top_button;
-          @include button(insensitive, $noedge: true);
+          @include button(insensitive, $edge:none);
         }
         &:backdrop {
           @extend %top_button;
-          @include button(backdrop);
+          @include button(backdrop, $edge:none);
         }
       }
       &:last-child {
@@ -1000,43 +1002,43 @@ GtkComboBox {
     }
     .subtitle:link { @extend *:link:selected;  }
     .button {
-      @include button(normal, $selected_bg_color, $selected_fg_color, noedge);
+      @include button(normal, $selected_bg_color, $selected_fg_color, none);
       &:hover { @include button(hover, $selected_bg_color, $selected_fg_color,
-                                $noedge: true); }
-      &:active, &:checked { @include button(active, $selected_bg_color, $selected_fg_color,
-                                            $noedge: true); }
+                                none); }
+      &:active,
+      &:checked { @include button(active, $selected_bg_color,
+                                  $selected_fg_color, none); }
       &:insensitive { @include button(insensitive, $selected_bg_color,
-                                      $selected_fg_color, $noedge: true); }
+                                      $selected_fg_color, none); }
       &:backdrop {
-        @include button(backdrop, $selected_bg_color, $selected_fg_color,
-                        $noedge: true);
+        @include button(backdrop, $selected_bg_color, $selected_fg_color, none);
         border-color: $selected_borders_color;
       }
       &:backdrop:insensitive {
         @include button(backdrop-insensitive, $selected_bg_color,
-                        $selected_fg_color, $noedge: true);
+                        $selected_fg_color, none);
       }
       &.suggested-action {
-        @include button(normal, $noedge:true);
+        @include button(normal, $edge:none);
         border-color: $selected_borders_color;
         &:hover {
-          @include button(hover, $noedge: true);
+          @include button(hover, $edge:none);
           border-color: $selected_borders_color;
         }
         &:active {
-          @include button(active, $noedge: true);
+          @include button(active, $edge:none);
           border-color: $selected_borders_color;
         }
         &:insensitive {
-          @include button(insensitive, $noedge: true);
+          @include button(insensitive, $edge:none);
           border-color: $selected_borders_color;
         }
         &:backdrop {
-          @include button(backdrop, $noedge: true);
+          @include button(backdrop, $edge:none);
           border-color: $selected_borders_color;
         }
         &:backdrop:insensitive {
-          @include button(backdrop-insensitive, $noedge: true);
+          @include button(backdrop-insensitive, $edge:none);
           border-color: $selected_borders_color;
         }
       }
@@ -1542,12 +1544,12 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       color: transparentize($fg_color,0.7);
       &:hover {
         color:  $fg_color;
-        @include button(hover, $noedge: true);
+        @include button(hover, $edge:none);
         background-image: none;
         box-shadow: none;
       }
       &:active {
-        @include button(active, $noedge: true);
+        @include button(active, $edge:none);
       }
       &:backdrop {
         color: transparentize($backdrop_fg_color,0.7);
@@ -1691,27 +1693,30 @@ GtkSwitch {
   .list-row:selected &.slider {
     border: 1px solid;
     border-radius: 3px;
-    @include button(normal, $noedge: true);
+    @include button(normal);
     box-shadow: inset 0 1px if($variant=='light', white,
                                transparentize(white,0.85)),
                 inset 0 -2px transparentize($bg_color,0.4),
                 inset 0 -1px mix($bg_color,$borders_color,50%);
     &:hover {
-      @include button(hover, $noedge: true);
+      @include button(hover);
       box-shadow: inset 0 1px if($variant=='light', white,
                                  transparentize(white,0.85)),
                   inset 0 -2px transparentize($bg_color,0.4),
                   inset 0 -1px mix($bg_color,$borders_color,50%);
     }
     &:active { border: 1px solid $selected_borders_color; }
-    &:insensitive { @include button(insensitive, $noedge: true); }
-    &:backdrop { @include button(backdrop);
+    &:insensitive { @include button(insensitive, $edge:none); }
+    &:backdrop {
+      @include button(backdrop);
+      box-shadow: none;
       &:active{
         border-color: if($variant == 'light', $selected_bg_color,
                                               $selected_borders_color);
       }
       &:insensitive {
         @include button(backdrop-insensitive);
+        box-shadow: none;
       }
     }
   }
@@ -1838,7 +1843,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   }
   &.slider {
     //FIXME: better gradient on the slider and hover state
-    @include button(normal, $noedge: true);
+    @include button(normal);
     border: 1px solid;
     border-radius: 50%;
     border-color: darken($borders_color,3%);
@@ -1847,7 +1852,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
                 inset 0 #{-2px} $bg_color,
                 inset 0 #{-1px} mix($bg_color,$borders_color,50%);
     &:hover {
-      @include button(hover, $noedge: true);
+      @include button(hover);
       border-color: darken($borders_color,3%);
       border-radius: 50%; // needed for double marks scales
       box-shadow: inset 0 1px if($variant=='light', white,
@@ -2219,42 +2224,42 @@ GtkScrolledWindow {
 .list-row:selected {
   @extend %selected_items;
   .button {
-    @include button(normal, $noedge:true);
+    @include button(normal, $edge:none);
     @if $variant == 'light' { border-color: $selected_borders_color; }
     &:hover, &.flat:hover {
-      @include button(hover, $noedge:true);
+      @include button(hover, $edge:none);
       @if $variant == 'light' { border-color: $selected_borders_color; }
     }
     &:active, &.flat:active,
     &:checked, &.flat:checked {
-      @include button(active, $noedge:true);
+      @include button(active, $edge:none);
       @if $variant == 'light' { border-color: $selected_borders_color; }
     }
     &:backdrop {
-      @include button(backdrop, $noedge:true);
+      @include button(backdrop, $edge:none);
       @if $variant == 'light' { border-color: $selected_borders_color; }
       &:active, &:checked {
-        @include button(backdrop-active, $noedge:true);
+        @include button(backdrop-active, $edge:none);
         @if $variant == 'light' { border-color: $selected_borders_color; }
       }
       &:insensitive {
-        @include button(backdrop-insensitive, $noedge:true);
+        @include button(backdrop-insensitive, $edge:none);
         @if $variant == 'light' { border-color: $selected_borders_color; }
       }
       &:insensitive:active {
-        @include button(backdrop-insensitive-active, $noedge:true);
+        @include button(backdrop-insensitive-active, $edge:none);
         @if $variant == 'light' { border-color: $selected_borders_color; }
       }
     }
     &:insensitive {
-      @include button(insensitive, $noedge:true);
+      @include button(insensitive, $edge:none);
       @if $variant == 'light' { border-color: $selected_borders_color; }
     }
     &.flat, &.flat:backdrop, &.flat:backdrop:insensitive {
       @extend %undecorated_button;
     }
     //FIXME: make placeholder with buttons w/o edge to be extended around
-    // istead of repeating everytime this stuff.
+    //       istead of repeating everytime this stuff.
   }
 }
 
@@ -2374,51 +2379,51 @@ GtkCalendar {
     .dialog-action-area .button {
       padding: 12px;
       border-radius: 0;
-      @include button(normal, $noedge: true);
+      @include button(normal, $edge:none);
       @extend %middle_button;
       &:hover {
-        @include button(hover, $noedge: true);
+        @include button(hover, $edge:none);
         @extend %middle_button;
       }
       &:active {
-        @include button(active, $noedge: true);
+        @include button(active, $edge:none);
         @extend %middle_button;
       }
       &:insensitive {
-        @include button(insensitive, $noedge: true);
+        @include button(insensitive, $edge:none);
         @extend %middle_button;
       }
       &:backdrop {
-        @include button(backdrop, $noedge: true);
+        @include button(backdrop, $edge:none);
         @extend %middle_button;
       }
       &:backdrop:insensitive {
-        @include button(backdrop-insensitive, $noedge: true);
+        @include button(backdrop-insensitive, $edge:none);
         @extend %middle_button;
       }
       @each $b_type, $b_color in (suggested-action, $selected_bg_color),
                                  (destructive-action, $destructive_color) {
         &.#{$b_type} {
-          @include button(normal, $b_color, white, $noedge: true);
+          @include button(normal, $b_color, white, $edge:none);
           @extend %middle_button;
           &:hover {
-            @include button(hover, $b_color, white, $noedge: true);
+            @include button(hover, $b_color, white, $edge:none);
             @extend %middle_button;
           }
           &:active {
-            @include button(active, $b_color, white, $noedge: true);
+            @include button(active, $b_color, white, $edge:none);
             @extend %middle_button;
           }
           &:backdrop {
-            @include button(backdrop, $b_color, white);
+            @include button(backdrop, $b_color, white, $edge:none);
             @extend %middle_button;
             &:insensitive {
-              @include button(backdrop-insensitive);
+              @include button(backdrop-insensitive, $edge:none);
               @extend %middle_button;
             }
           }
           &:insensitive {
-            @include button(insensitive);
+            @include button(insensitive, $edge:none);
             @extend %middle_button;
           }
         }
@@ -2432,7 +2437,7 @@ GtkCalendar {
       border-bottom-style: none;
     }
     %last_button { 
-      border-bottom-right-radius: 7px; 
+      border-bottom-right-radius: 7px;
     }
     %first_button {
       border-left-style: none;
@@ -2521,18 +2526,19 @@ GtkInfoBar {
   text-shadow: 0 1px darken($selected_bg_color, 10%);
   border-color: darken($selected_bg_color, 10%);
   .button {
-    @include button(normal, $selected_bg_color, $selected_fg_color, $noedge: true);
-    &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, $noedge: true); }
-    &:active { @include button(active, $selected_bg_color, $selected_fg_color, $noedge: true); }
+    @include button(normal, $selected_bg_color, $selected_fg_color, none);
+    &:hover {
+      @include button(hover, $selected_bg_color, $selected_fg_color, none); }
+    &:active {
+      @include button(active, $selected_bg_color, $selected_fg_color, none); }
     &:insensitive {
-      @include button(insensitive, $selected_bg_color, $selected_fg_color, $noedge: true);
-    }
+      @include button(insensitive,$selected_bg_color,$selected_fg_color,none); }
     &:backdrop {
-      @include button(backdrop, $selected_bg_color, $selected_fg_color);
+      @include button(backdrop, $selected_bg_color, $selected_fg_color, none);
       border-color: _border_color($selected_bg_color);
       &:insensitive {
         @include button(backdrop-insensitive, $selected_bg_color,
-                                              $selected_fg_color, $noedge: True);
+                        $selected_fg_color, none);
         border-color: _border_color($selected_bg_color);
       }
     }
