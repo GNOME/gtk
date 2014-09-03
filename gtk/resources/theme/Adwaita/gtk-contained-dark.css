@@ -1192,7 +1192,7 @@ GtkComboBox {
     padding: 0px 12px; }
   .titlebar .subtitle, GtkCalendar.header .subtitle,
   .header-bar .subtitle {
-    font-size: 82%;
+    font-size: smaller;
     padding: 0 12px; }
   .titlebar .header-bar-separator, GtkCalendar.header .header-bar-separator, .titlebar > GtkBox > .separator.vertical, GtkCalendar.header > GtkBox > .separator.vertical,
   .sidebar .view .titlebar > GtkBox > .vertical.separator:backdrop,
@@ -1903,7 +1903,7 @@ GtkTreeView.view.progressbar {
 GtkSwitch {
   -GtkSwitch-slider-width: 45px;
   font-weight: bold;
-  font-size: 82%;
+  font-size: smaller;
   outline-offset: -4px;
   box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
   GtkSwitch.trough {
@@ -2795,7 +2795,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
  *****************/
 GtkProgressBar {
   padding: 0;
-  font-size: 82%;
+  font-size: smaller;
   color: rgba(238, 238, 236, 0.4);
   box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
   GtkProgressBar:backdrop {
