@@ -1361,7 +1361,7 @@ GtkComboBox {
  * Pathbars *
  ************/
 .path-bar .button {
-  padding: 7px 6px 5px; }
+  padding: 5px 6px 6px; }
   .path-bar .button:first-child {
     padding-left: 8px; }
   .path-bar .button:last-child {
@@ -3591,3 +3591,5 @@ GtkCalendar.header .menuitem.button.titlebutton:selected, .list-row:selected {
 @define-color wm_button_active_color_b shade(#393f3f, 0.89);
 @define-color wm_button_active_color_c shade(#393f3f, 0.9);
 @define-color content_view_bg #292929;
+
+/*# sourceMappingURL=gtk-contained-dark.css.map */
