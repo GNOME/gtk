@@ -7,13 +7,13 @@ $bg_color: if($variant =='light', #ededed, #393f3f);
 $fg_color: if($variant =='light', #2e3436, #eeeeec);
 
 $selected_fg_color: #ffffff;
-$selected_bg_color: if($variant =='light', #4a90d9, darken(#4a90d9,20%));
-$selected_borders_color: if($variant == 'light', darken($selected_bg_color, 30%), darken($selected_bg_color,20%));
-                         // FIXME dark variant color
+$selected_bg_color: if($variant == 'light', #4a90d9, darken(#4a90d9,20%));
+$selected_borders_color: if($variant=='light', darken($selected_bg_color, 30%),
+                                               darken($selected_bg_color, 20%));
 $borders_color: if($variant =='light', darken($bg_color,30%), darken($bg_color,12%));
 $borders_edge: if($variant =='light', white, transparentize($fg_color, 0.9));
 $link_color: darken($selected_bg_color,10%);
-$top_hilight: if($variant =='light', white, transparentize($fg_color, 0.9));
+$top_hilight: $borders_edge;
 
 $warning_color: #f57900;
 $error_color: #cc0000;

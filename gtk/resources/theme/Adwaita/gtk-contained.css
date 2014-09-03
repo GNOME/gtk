@@ -461,7 +461,7 @@ GtkFlowBox .grid-child {
     border-color: #1c5187;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px white;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px white;
     outline-color: rgba(255, 255, 255, 0.3); }
     .button.suggested-action:hover {
       color: white;
@@ -469,7 +469,7 @@ GtkFlowBox .grid-child {
       background-image: linear-gradient(to bottom, #85b4e5, #5b9add 40%, #4a90d9);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px white; }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px white; }
     .button.suggested-action:active, .button.suggested-action:checked {
       color: white;
       border-color: #1c5187;
@@ -543,7 +543,7 @@ GtkFlowBox .grid-child {
     border-color: #8e0b0b;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px white;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px white;
     outline-color: rgba(255, 255, 255, 0.3); }
     .button.destructive-action:hover {
       color: white;
@@ -551,7 +551,7 @@ GtkFlowBox .grid-child {
       background-image: linear-gradient(to bottom, #f46b6b, #f03c3c 40%, #ef2929);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.52878);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.52878);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px white; }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px white; }
     .button.destructive-action:active, .button.destructive-action:checked {
       color: white;
       border-color: #8e0b0b;
@@ -1218,7 +1218,7 @@ GtkComboBox {
       border-color: #1c5187;
       text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
       .titlebar.selection-mode .button:hover, GtkCalendar.selection-mode.header .button:hover,
       .header-bar.selection-mode .button:hover {
         color: #ffffff;
@@ -1226,7 +1226,7 @@ GtkComboBox {
         background-image: linear-gradient(to bottom, #85b4e5, #5b9add 40%, #4a90d9);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
       .titlebar.selection-mode .button:active, GtkCalendar.selection-mode.header .button:active, .titlebar.selection-mode .button:checked, GtkCalendar.selection-mode.header .button:checked,
       .header-bar.selection-mode .button:active,
       .header-bar.selection-mode .button:checked {
@@ -3355,14 +3355,14 @@ GtkCalendar {
       border-color: #1c5187;
       text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
       .message-dialog.csd .dialog-action-area .button.suggested-action:hover {
         color: white;
         border-color: #1c5187;
         background-image: linear-gradient(to bottom, #85b4e5, #5b9add 40%, #4a90d9);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
       .message-dialog.csd .dialog-action-area .button.suggested-action:active {
         color: white;
         border-color: #1c5187;
@@ -3401,14 +3401,14 @@ GtkCalendar {
       border-color: #8e0b0b;
       text-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
       .message-dialog.csd .dialog-action-area .button.destructive-action:hover {
         color: white;
         border-color: #8e0b0b;
         background-image: linear-gradient(to bottom, #f46b6b, #f03c3c 40%, #ef2929);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.52878);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.52878);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
       .message-dialog.csd .dialog-action-area .button.destructive-action:active {
         color: white;
         border-color: #8e0b0b;
@@ -3523,7 +3523,7 @@ GtkInfoBar {
     border-color: #1c5187;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
     .info .button:hover,
     .question .button:hover,
     .warning .button:hover,
@@ -3533,7 +3533,7 @@ GtkInfoBar {
       background-image: linear-gradient(to bottom, #85b4e5, #5b9add 40%, #4a90d9);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.51153);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
     .info .button:active,
     .question .button:active,
     .warning .button:active,

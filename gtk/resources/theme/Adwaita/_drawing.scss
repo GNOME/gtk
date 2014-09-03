@@ -110,6 +110,19 @@
   @else { @return transparentize(black,$_lbg*0.8); }
 }
 
+@function _button_hilight_color($c) {
+//
+// calculate the right top hilight color for buttons
+//
+// $c: base color;
+//
+  @if lightness($c)>90% { @return white; }
+  @else if lightness($c)>80% { @return transparentize(white, 0.3); }
+  @else if lightness($c)>50% { @return transparentize(white, 0.5); }
+  @else if lightness($c)>40% { @return transparentize(white, 0.7); }
+  @else { @return transparentize(white, 0.9); }
+}
+
 @mixin _button_text_shadow ($tc:$fg_color, $bg:$bg_color) {
 //
 // helper function for the text emboss effect
@@ -147,8 +160,7 @@
 // osd, osd-hover, osd-active, osd-insensitive, osd-backdrop, undecorated
 //
 
-  $_top_hilight: if(lightness($c)> 70%, white, transparentize(white,0.9)); //not just dark/light but colored buttons
-
+  $_hilight_color: _button_hilight_color($c);
   $_button_edge: if($edge == none, none, _widget_edge($edge));
   $_blank_edge: if($edge == none, none, _widget_edge(transparentize($edge,1)));
 
@@ -167,7 +179,7 @@
     @else { border-color: $borders_color; }
 
     @include _button_text_shadow($tc,$c);
-    @include _shadows(inset 0 1px $_top_hilight, $_button_edge);
+    @include _shadows(inset 0 1px $_hilight_color, $_button_edge);
   }
 
   @else if $t==hover {
@@ -183,7 +195,7 @@
                                       $c);
 
     @include _button_text_shadow($tc,lighten($c,4%));
-    @include _shadows(inset 0 1px $_top_hilight, $_button_edge);
+    @include _shadows(inset 0 1px $_hilight_color, $_button_edge);
   }
 
   @else if $t==active {
