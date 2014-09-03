@@ -2274,7 +2274,7 @@ GtkScrolledWindow {
  * App Notifications *
  *********************/
 
-.app-notification.frame {
+.app-notification {
   @extend %osd;
   border-width: 0 1px 1px;
   border-style: solid;

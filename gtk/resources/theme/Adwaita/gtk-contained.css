@@ -128,11 +128,11 @@ GtkFlowBox .grid-child {
   GtkFlowBox .grid-child:selected {
     outline-offset: -2px; }
 
-.app-notification.frame, .osd {
+.app-notification, .osd {
   color: #eeeeec;
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black; }
-  .app-notification.frame:backdrop, .osd:backdrop {
+  .app-notification:backdrop, .osd:backdrop {
     text-shadow: none; }
 
 /*********************
@@ -902,15 +902,15 @@ GtkCalendar.header .list-row:selected .button.titlebutton, .list-row:selected .b
 .list-row:selected .titlebar .button.titlebutton:backdrop:insensitive,
 .titlebar .list-row:selected .button.titlebutton:backdrop:insensitive,
 .list-row:selected GtkCalendar.header .button.titlebutton:backdrop:insensitive,
-GtkCalendar.header .list-row:selected .button.titlebutton:backdrop:insensitive, .app-notification.frame .button.flat, .app-notification.frame .header-bar .button.titlebutton, .header-bar .app-notification.frame .button.titlebutton,
-.app-notification.frame .titlebar .button.titlebutton,
-.titlebar .app-notification.frame .button.titlebutton,
-.app-notification.frame GtkCalendar.header .button.titlebutton,
-GtkCalendar.header .app-notification.frame .button.titlebutton, .app-notification.frame .button.flat:backdrop, .app-notification.frame .button.flat:insensitive, .app-notification.frame .button.flat:backdrop:insensitive, .app-notification.frame .header-bar .button.titlebutton:backdrop:insensitive, .header-bar .app-notification.frame .button.titlebutton:backdrop:insensitive,
-.app-notification.frame .titlebar .button.titlebutton:backdrop:insensitive,
-.titlebar .app-notification.frame .button.titlebutton:backdrop:insensitive,
-.app-notification.frame GtkCalendar.header .button.titlebutton:backdrop:insensitive,
-GtkCalendar.header .app-notification.frame .button.titlebutton:backdrop:insensitive, GtkCalendar.button, GtkCalendar.button:hover, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
+GtkCalendar.header .list-row:selected .button.titlebutton:backdrop:insensitive, .app-notification .button.flat, .app-notification .button.flat:backdrop, .app-notification .header-bar .button.titlebutton:backdrop, .header-bar .app-notification .button.titlebutton:backdrop,
+.app-notification .titlebar .button.titlebutton:backdrop,
+.titlebar .app-notification .button.titlebutton:backdrop,
+.app-notification GtkCalendar.header .button.titlebutton:backdrop,
+GtkCalendar.header .app-notification .button.titlebutton:backdrop, .app-notification .button.flat:insensitive, .app-notification .header-bar .button.titlebutton:insensitive, .header-bar .app-notification .button.titlebutton:insensitive,
+.app-notification .titlebar .button.titlebutton:insensitive,
+.titlebar .app-notification .button.titlebutton:insensitive,
+.app-notification GtkCalendar.header .button.titlebutton:insensitive,
+GtkCalendar.header .app-notification .button.titlebutton:insensitive, .app-notification .button.flat:backdrop:insensitive, GtkCalendar.button, GtkCalendar.button:hover, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -3190,7 +3190,7 @@ GtkScrolledWindow GtkViewport.frame {
 /*********************
  * App Notifications *
  *********************/
-.app-notification.frame {
+.app-notification {
   border-width: 0 1px 1px;
   border-style: solid;
   border-color: rgba(255, 255, 255, 0.1);
@@ -3199,9 +3199,9 @@ GtkScrolledWindow GtkViewport.frame {
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 2px);
   background-clip: padding-box;
   padding: 0 4px; }
-  .app-notification.frame:backdrop {
+  .app-notification:backdrop {
     background-image: none; }
-  .app-notification.frame .button {
+  .app-notification .button {
     border: 1px solid;
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.2);
@@ -3212,35 +3212,35 @@ GtkScrolledWindow GtkViewport.frame {
     box-shadow: inset 0 -1px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.1);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black; }
-    .app-notification.frame .button.flat, .app-notification.frame .header-bar .button.titlebutton, .header-bar .app-notification.frame .button.titlebutton,
-    .app-notification.frame .titlebar .button.titlebutton,
-    .titlebar .app-notification.frame .button.titlebutton,
-    .app-notification.frame GtkCalendar.header .button.titlebutton,
-    GtkCalendar.header .app-notification.frame .button.titlebutton {
+    .app-notification .button.flat, .app-notification .header-bar .button.titlebutton, .header-bar .app-notification .button.titlebutton,
+    .app-notification .titlebar .button.titlebutton,
+    .titlebar .app-notification .button.titlebutton,
+    .app-notification GtkCalendar.header .button.titlebutton,
+    GtkCalendar.header .app-notification .button.titlebutton {
       icon-shadow: 0 1px black;
       text-shadow: 0 1px black; }
-    .app-notification.frame .button:hover {
+    .app-notification .button:hover {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(74, 84, 87, 0.7));
       box-shadow: inset 0 -1px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.1);
       text-shadow: 0 1px black;
       icon-shadow: 0 1px black; }
-    .app-notification.frame .button:active, .app-notification.frame .button:checked, .app-notification.frame .button:backdrop:active, .app-notification.frame .button:backdrop:checked {
+    .app-notification .button:active, .app-notification .button:checked, .app-notification .button:backdrop:active, .app-notification .button:backdrop:checked {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
       box-shadow: none;
       text-shadow: none;
       icon-shadow: none; }
-    .app-notification.frame .button:insensitive, .app-notification.frame .button:backdrop:insensitive {
+    .app-notification .button:insensitive, .app-notification .button:backdrop:insensitive {
       color: #8d9091;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(65, 70, 72, 0.7));
       box-shadow: none;
       text-shadow: none;
       icon-shadow: none; }
-    .app-notification.frame .button:backdrop {
+    .app-notification .button:backdrop {
       background-image: linear-gradient(to bottom, rgba(46, 52, 54, 0.7));
       background-clip: padding-box;
       box-shadow: none;
