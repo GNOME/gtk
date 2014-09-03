@@ -2,7 +2,7 @@
 
 // generic drawing of more complex things
 
-@function widget_edge($c:$borders_edge) {
+@function _widget_edge($c:$borders_edge) {
   // outer highlight "used" on most widgets
   @return 0 1px $c;
 }
@@ -38,7 +38,7 @@
   background-color: transparent;
   background-image: entry_gradient($base_color);
   $_blank_edge: if($edge == none, none, 0 1px transparentize($edge,1));
-  $_entry_edge: if($edge == none, none, widget_edge($edge));
+  $_entry_edge: if($edge == none, none, _widget_edge($edge));
   $_inner_shadows: inset 0 3px mix(black, $base_color, 3%),
                    inset 0 1px mix(black, $base_color, 18%);
   @if $variant == 'dark' {
@@ -148,8 +148,8 @@
 
   $_top_hilight: if(lightness($c)> 70%, white, transparentize(white,0.9)); //not just dark/light but colored buttons
 
-  $_button_edge: if($edge == none, none, widget_edge($edge));
-  $_blank_edge: if($edge == none, none, widget_edge(transparentize($edge,1)));
+  $_button_edge: if($edge == none, none, _widget_edge($edge));
+  $_blank_edge: if($edge == none, none, _widget_edge(transparentize($edge,1)));
 
   @if $t==normal {
   //

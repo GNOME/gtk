@@ -683,7 +683,7 @@ GtkColorButton.button {
   GtkColorSwatch {
     border-radius: 1.5px;
     box-shadow: inset 0 1px 1px transparentize(black, 0.8),
-                widget_edge();
+                _widget_edge();
     &:backdrop { box-shadow: none; }
   }
 }
@@ -928,7 +928,7 @@ GtkComboBox {
   $_bg: mix($bg_color, $borders_color, 70%);
   background-color: $_bg;
   box-shadow: inset 0 2px 3px -1px mix($borders_color, $_bg, 60%),
-              widget_edge();
+              _widget_edge();
   //FIXME edge would be nice, but doesn't work
   &:backdrop {
     border-color: $backdrop_borders_color;
@@ -1638,7 +1638,7 @@ GtkSwitch {
   font-size: 82%;
   outline-offset: -4px;
   box-shadow: inset 0 1px transparentize(black, 0.9), // needs to be set here
-              widget_edge();                          // otherwise it gets
+              _widget_edge();                         // otherwise it gets
                                                       // clipped
   &.trough {
     // similar to the .scale
@@ -1651,7 +1651,7 @@ GtkSwitch {
       @include progressbar_fill;
       color: white;
       border-color: $selected_borders_color;
-      box-shadow: widget_edge();
+      box-shadow: _widget_edge();
       //text-shadow: 0 1px transparentize($selected_borders_color,0.5);
       text-shadow: 0 1px transparentize($selected_borders_color,0.5),
                    0 0 2px transparentize(white,0.4);
@@ -1661,7 +1661,7 @@ GtkSwitch {
       border-color: $borders_color;
       background-image: none;
       background-color: $insensitive_bg_color;
-      box-shadow: widget_edge();
+      box-shadow: _widget_edge();
       text-shadow: none;
     }
     &:backdrop {
@@ -1895,11 +1895,11 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     border-radius: 3px;
     background-color: mix($bg_color,$borders_color,60%);
     box-shadow: inset 1px 1px transparentize(black, 0.9),
-                widget_edge();
+                _widget_edge();
     &.highlight {
       @include progressbar_fill;
       border-color: $selected_borders_color;
-      box-shadow: widget_edge();
+      box-shadow: _widget_edge();
       &.vertical { @include progressbar_fill(vertical); }
       &:backdrop {
          border-color: if($variant=='light', $selected_bg_color,
@@ -1912,7 +1912,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       border-color: $insensitive_borders_color;
       background-image: none;
       background-color: $insensitive_bg_color;
-      box-shadow: widget_edge();
+      box-shadow: _widget_edge();
     }
     &:backdrop {
       border-color: $backdrop_borders_color;
@@ -2010,7 +2010,7 @@ GtkProgressBar {
     font-size: 82%;
     color: transparentize($fg_color, 0.6);
     box-shadow: inset 1px 1px transparentize(black, 0.9), // needs to be set
-                widget_edge();                            // here ot it gets
+                _widget_edge();                           // here ot it gets
                                                           // clipped
     &:backdrop {
       color: $backdrop_insensitive_color;
@@ -2087,7 +2087,7 @@ GtkProgressBar.trough {
 GtkLevelBar {
   -GtkLevelBar-min-block-width: 34;
   -GtkLevelBar-min-block-height: 3;
-  box-shadow: widget_edge(); // needs to be set here to avoid clipping
+  box-shadow: _widget_edge(); // needs to be set here to avoid clipping
 }
 
 GtkLevelBar.vertical {
