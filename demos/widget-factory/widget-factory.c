@@ -776,6 +776,19 @@ close_selection_dialog (GtkWidget *dialog, gint response, GtkWidget *tv)
 }
 
 static void
+toggle_selection_mode (GtkSwitch  *sw,
+                       GParamSpec *pspec,
+                       GtkListBox *listbox)
+{
+  if (gtk_switch_get_active (sw))
+    gtk_list_box_set_selection_mode (listbox, GTK_SELECTION_SINGLE);
+  else
+    gtk_list_box_set_selection_mode (listbox, GTK_SELECTION_NONE);
+
+  gtk_list_box_set_activate_on_single_click (listbox, !gtk_switch_get_active (sw));
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -851,6 +864,9 @@ activate (GApplication *app)
   gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_header, NULL, NULL);
   g_signal_connect (widget, "row-activated", G_CALLBACK (row_activated), NULL);
 
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow1switch");
+  g_signal_connect (widget2, "notify::active", G_CALLBACK (toggle_selection_mode), widget);
+
   widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow3");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow3image");
   g_object_set_data (G_OBJECT (widget), "image", widget2);
@@ -858,6 +874,10 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow4");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "info_dialog");
   g_object_set_data (G_OBJECT (widget), "dialog", widget2);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow5button");
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "action_dialog");
+  g_signal_connect_swapped (widget, "clicked", G_CALLBACK (gtk_window_present), widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbar");
   g_object_set_data (G_OBJECT (window), "toolbar", widget);

@@ -2186,8 +2186,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkFrame">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
+                            <property name="shadow-type">in</property>
+                            <property name="hscrollbar-policy">never</property>
+                            <property name="vscrollbar-policy">automatic</property>
+                            <property name="min-content-height">200</property>
                             <child>
                               <object class="GtkListBox" id="listbox">
                                 <property name="visible">True</property>
@@ -2197,6 +2201,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                   <object class="GtkListBoxRow" id="listboxrow1">
                                     <property name="visible">True</property>
                                     <property name="activatable">False</property>
+                                    <property name="selectable">False</property>
                                     <child>
                                       <object class="GtkBox">
                                         <property name="visible">True</property>
@@ -2214,9 +2219,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkSwitch">
+                                          <object class="GtkSwitch" id="listboxrow1switch">
                                             <property name="visible">True</property>
-                                            <property name="active">True</property>
+                                            <property name="active">False</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="margin-top">6</property>
@@ -2338,6 +2343,86 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                             <property name="margin-start">12</property>
                                             <property name="margin-end">12</property>
                                             <property name="opacity">0</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkListBoxRow" id="listboxrow5">
+                                    <property name="visible">True</property>
+                                    <property name="activatable">False</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Row 5</property>
+                                            <property name="halign">start</property>
+                                            <property name="valign">center</property>
+                                            <property name="margin">6</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkButton" id="listboxrow5button">
+                                            <property name="visible">True</property>
+                                            <property name="halign">end</property>
+                                            <property name="valign">center</property>
+                                            <property name="margin-top">6</property>
+                                            <property name="margin-bottom">6</property>
+                                            <property name="margin-start">12</property>
+                                            <property name="margin-end">12</property>
+                                            <style>
+                                              <class name="image-button"/>
+                                            </style>
+                                            <child>
+                                              <object class="GtkImage">
+                                                <property name="visible">True</property>
+                                                <property name="icon-size">1</property>
+                                                <property name="icon-name">appointment-soon-symbolic</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkListBoxRow" id="listboxrow6">
+                                    <property name="visible">True</property>
+                                    <property name="activatable">False</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Row 6</property>
+                                            <property name="halign">start</property>
+                                            <property name="valign">center</property>
+                                            <property name="margin">6</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCheckButton">
+                                            <property name="visible">True</property>
+                                            <property name="halign">end</property>
+                                            <property name="valign">center</property>
+                                            <property name="margin-top">6</property>
+                                            <property name="margin-bottom">6</property>
+                                            <property name="margin-start">12</property>
+                                            <property name="margin-end">12</property>
                                           </object>
                                         </child>
                                       </object>
@@ -3383,6 +3468,8 @@ bad things might happen.</property>
       <widget name="listboxrow2"/>
       <widget name="listboxrow3"/>
       <widget name="listboxrow4"/>
+      <widget name="listboxrow5"/>
+      <widget name="listboxrow6"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
