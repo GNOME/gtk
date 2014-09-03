@@ -23,21 +23,22 @@
   @return linear-gradient(to bottom, darken($c,3%), $c 90%);
 }
 
-@mixin entry($t, $fc:$selected_bg_color, $noedge:false) {
+@mixin entry($t, $fc:$selected_bg_color, $edge: $borders_edge) {
 //
 // Entries drawing function
 //
 // $t: entry type
 // $fc: focus color
-// $noedge: set to true not to draw the bottom edge hilight
+// $edge: set to none to not draw the bottom edge or specify a color to not
+//        use the default one
 //
 // possible $t values:
 // normal, focus, insensitive, backdrop, backdrop-insensitive;
 //
   background-color: transparent;
   background-image: entry_gradient($base_color);
-  $_blank_edge: if($noedge, none, 0 1px transparentize(white,1));
-  $_entry_edge: if($noedge, none, widget_edge());
+  $_blank_edge: if($edge == none, none, 0 1px transparentize($edge,1));
+  $_entry_edge: if($edge == none, none, widget_edge($edge));
   $_inner_shadows: inset 0 3px mix(black, $base_color, 3%),
                    inset 0 1px mix(black, $base_color, 18%);
   @if $variant == 'dark' {

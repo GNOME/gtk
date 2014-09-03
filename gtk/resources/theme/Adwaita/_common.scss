@@ -232,7 +232,7 @@ GtkFlowBox .grid-child {
   @include entry(normal);
   &.flat, &.flat:focus {
     padding: 2px;
-    @include entry(normal, $noedge:true);
+    @include entry(normal, $edge:none);
     border: none;
     border-radius: 0;
   }
