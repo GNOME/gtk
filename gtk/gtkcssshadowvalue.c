@@ -393,8 +393,7 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
 {
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
-  if (!cairo_has_current_point (cr))
-    cairo_move_to (cr, 0, 0);
+  g_assert (cairo_has_current_point (cr));
 
   cairo_save (cr);
 
