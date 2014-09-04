@@ -124,6 +124,7 @@ snapshot:
 
 DISTCHECK_CONFIGURE_FLAGS =		\
 	--enable-gtk-doc 		\
+	--disable-doc-cross-references  \
 	--enable-man 			\
 	--disable-maintainer-mode 	\
 	--enable-introspection  	\

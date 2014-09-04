@@ -315,6 +315,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/flow-box.png					\
 	$(srcdir)/images/inspector.png
 
+if ENABLE_DOC_CROSS_REFERENCES
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject \
@@ -323,6 +324,7 @@ FIXXREF_OPTIONS=--extra-dir=../gdk/html \
 	--extra-dir=$(ATK_PREFIX)/share/gtk-doc/html/atk \
 	--extra-dir=$(PANGO_PREFIX)/share/gtk-doc/html/pango \
 	--extra-dir=$(CAIRO_PREFIX)/share/gtk-doc/html/cairo
+endif
 
 include $(top_srcdir)/gtk-doc.make
 
