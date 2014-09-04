@@ -75,8 +75,6 @@
    Everytime a wildcard is used a kitten dies, painfully.
 */
 
-
-
 *:insensitive {
   -gtk-image-effect: dim;
 }
@@ -121,11 +119,10 @@
   background-color: transparentize($selected_bg_color,0.8);
 }
 
-/* This is used by GtkScrolledWindow, when rendering the edge
- * gradient shown when content is touch-dragged past boundaries.
- * The color is used as a base for such gradient, which is then
- * stretched/modified as a direct result of user interaction.
- */
+// This is used by GtkScrolledWindow, when rendering the edge
+// gradient shown when content is touch-dragged past boundaries.
+// The color is used as a base for such gradient, which is then
+// stretched/modified as a direct result of user interaction.
 .overshoot {
   background-color: transparentize($selected_bg_color,0.8);
 }
@@ -189,6 +186,7 @@ GtkFlowBox .grid-child {
 
 %osd, .osd {
   color: $osd_fg_color;
+  outline-color: transparentize($osd_fg_color, 0.7);
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black;
   &:backdrop { text-shadow: none; }
@@ -335,16 +333,16 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   transition: all 200ms ease-out;
   padding: 5px 8px 6px;
   @include button(normal);
-  &:hover, &.flat:hover {
+  &.flat { @include button(undecorated); }
+  &:hover {
     @include button(hover);
     -gtk-image-effect: highlight;
   }
-  &:active, &.flat:active,
-  &:checked, &.flat:checked {
+  &:active, &:checked {
     @include button(active);
     transition-duration: 50ms;
   }
-  &:backdrop {
+  &:backdrop, &.flat:backdrop {
     @include button(backdrop);
     -gtk-image-effect: none;
     &:active, &:checked {
@@ -357,15 +355,14 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       @include button(backdrop-insensitive-active);
     }
   }
+  &.flat:backdrop {
+    @include button(undecorated);
+  }
   &:insensitive {
     @include button(insensitive);
-    &:active, &.flat:active,
-    &:checked, &.flat:checked {
+    &:active, &:checked {
       @include button(insensitive-active);
     }
-  }
-  &.flat, &.flat:backdrop, &.flat:backdrop:insensitive {
-    @extend %undecorated_button;
   }
   // big standalone buttons like in Documents pager
   &.osd {
@@ -399,14 +396,13 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
   //overlay / OSD style
   .osd & {
-    // FIXME: for some reason I can't figure out the bookmark button in gnome documents
-    //        gets borders radius 0, when they get backdrop and another state
-    color: $osd_fg_color;
-    outline-color: transparentize($osd_fg_color, 0.8);
+    // FIXME: for some reason I can't figure out the bookmark button in gnome
+    //        documents gets borders radius 0, when they get backdrop and
+    //        another state
     @include button(osd);
-    // there's a problem with sass which prevents it to extend the linked placeholder
-    // as expected, it should just be "@extend %linked;", the placeholder is basically
-    // replicated here
+    // there's a problem with sass which prevents it to extend the linked
+    // placeholder as expected, it should just be "@extend %linked;", the
+    // placeholder is basically replicated here
     //
     // Workaround START
     border-radius: 0;
@@ -446,26 +442,31 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       @extend %linked;
     }
   }
+
   // Suggested and Destructive Action buttons
   @each $b_type, $b_color in (suggested-action, $selected_bg_color),
                               (destructive-action, $destructive_color) {
     &.#{$b_type} {
-      @include button(normal,$b_color, white);
-      outline-color: transparentize($selected_fg_color, 0.7);
-      &:hover {
-        @include button(hover,$b_color, white);
-      }
-      &:active, &:checked {
-        @include button(active,$b_color, white);
-      }
+      @include button(normal, $b_color, white);
+      &:hover { @include button(hover, $b_color, white); }
+      &:active, &:checked { @include button(active, $b_color, white); }
       &:backdrop {
-        @include button(backdrop,$b_color,white);
+        @include button(backdrop, $b_color, white);
+        &:active, &:checked {
+          @include button(backdrop-active, $b_color, white);
+        }
         &:insensitive {
-          @include button(backdrop-insensitive);
+          @include button(backdrop-insensitive, $b_color,white);
+          &:active, &:checked {
+            @include button(backdrop-insensitive-active, $b_color, white);
+          }
         }
       }
       &:insensitive {
-        @include button(insensitive);
+        @include button(insensitive, $b_color, white);
+        &:active, &:checked {
+          @include button(insensitive-active, $b_color, white);
+        }
       }
       .osd & {
         @include button(osd, $b_color);
@@ -489,7 +490,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       }
     }
   }
-  &.image-button,
+
   &.image-button { padding: 8px; }
 
   &.text-button {
@@ -564,11 +565,8 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     @extend %linked;
   }
 
-  .primary-toolbar & { icon-shadow: none; } // tango icons don't need added shadows
-//  .separator {
-//    -GtkWidget-wide-separators: true;
-//    -GtkWidget-horizontal-separator: 0;
-//   }
+  .primary-toolbar & { icon-shadow: none; } // tango icons don't need shadows
+
   .linked &,
   .linked &:hover,
   .linked &:active,
@@ -582,31 +580,9 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   .linked.vertical &:backdrop { @extend %linked_vertical; }
 }
 
-// all the following is for the +|- buttons on inline toolbars, that way
-// should really be deprecated...
-.inline-toolbar GtkToolButton > .button { // redefining the button look is
-                                          // needed since those are flat...
-  @include button(normal, $edge:none);    // the box-shadow outset doesn't work
-                                          // in this case, hence $edge: none
-  &:hover { @include button(hover, $edge:none); }
-  &:active { @include button(active, $edge:none); }
-  &:checked{ @include button(active, $edge:none); }
-  &:insensitive { @include button(insensitive, $edge:none); }
-  &:insensitive:active { @include button(insensitive-active, $edge:none); }
-  &:insensitive:checked { @include button(insensitive-active, $edge:none); }
-  &:backdrop { @include button(backdrop, $edge:none); };
-  &:backdrop:active { @include button(backdrop-active, $edge:none); }
-  &:backdrop:checked { @include button(backdrop-active, $edge:none); }
-  &:backdrop:insensitive { @include button(backdrop-insensitive, $edge:none); }
-  &:backdrop:insensitive:active {
-    @include button(backdrop-insensitive-active, $edge:none); }
-  &:backdrop:insensitive:checked {
-    @include button(backdrop-insensitive-active, $edge:none); }
-} 
+// More inline toolbar buttons
 .inline-toolbar.toolbar GtkToolButton,
-.inline-toolbar.toolbar GtkToolButton:backdrop { // .inline-toolbar.toolbar here for
-                                                 // higher specificity than the
-                                                 // previous "button look" selector
+.inline-toolbar.toolbar GtkToolButton:backdrop {
   & > .button.flat { @extend %linked_middle; }
   &:dir(rtl) > .button.flat { @extend %linked_middle:dir(rtl); }
   &:first-child > .button.flat { @extend %linked:first-child; }
@@ -1003,20 +979,41 @@ GtkComboBox {
     .subtitle:link { @extend *:link:selected;  }
     .button {
       @include button(normal, $selected_bg_color, $selected_fg_color, none);
+      &.flat { @include button(undecorated); }
       &:hover { @include button(hover, $selected_bg_color, $selected_fg_color,
                                 none); }
-      &:active,
-      &:checked { @include button(active, $selected_bg_color,
-                                  $selected_fg_color, none); }
-      &:insensitive { @include button(insensitive, $selected_bg_color,
-                                      $selected_fg_color, none); }
-      &:backdrop {
+      &:active, &:checked { @include button(active, $selected_bg_color,
+                                            $selected_fg_color, none); }
+      &:backdrop, &.flat:backdrop {
         @include button(backdrop, $selected_bg_color, $selected_fg_color, none);
+        -gtk-image-effect: none;
         border-color: $selected_borders_color;
+        &:active, &:checked {
+          @include button(backdrop-active, $selected_bg_color,
+                          $selected_fg_color, none);
+          border-color: $selected_borders_color;
+        }
+        &:insensitive {
+          @include button(backdrop-insensitive, $selected_bg_color,
+                          $selected_fg_color, none);
+          border-color: $selected_borders_color;
+        }
+        &:insensitive:active, &:insensitive:checked {
+          @include button(backdrop-insensitive-active, $selected_bg_color,
+                          $selected_fg_color, none);
+          border-color: $selected_borders_color;
+        }
       }
-      &:backdrop:insensitive {
-        @include button(backdrop-insensitive, $selected_bg_color,
-                        $selected_fg_color, none);
+      &.flat:backdrop {
+        @include button(undecorated);
+      }
+      &:insensitive {
+        @include button(insensitive, $selected_bg_color, $selected_fg_color,
+                        none);
+        &:active, &:checked {
+          @include button(insensitive-active, $selected_bg_color,
+                          $selected_fg_color, none);
+        }
       }
       &.suggested-action {
         @include button(normal, $edge:none);
@@ -2224,16 +2221,16 @@ GtkScrolledWindow {
   .button {
     @include button(normal, $edge:none);
     @if $variant == 'light' { border-color: $selected_borders_color; }
-    &:hover, &.flat:hover {
+    &.flat { @include button(undecorated, $edge:none); }
+    &:hover {
       @include button(hover, $edge:none);
       @if $variant == 'light' { border-color: $selected_borders_color; }
     }
-    &:active, &.flat:active,
-    &:checked, &.flat:checked {
+    &:active, &:checked {
       @include button(active, $edge:none);
       @if $variant == 'light' { border-color: $selected_borders_color; }
     }
-    &:backdrop {
+    &:backdrop, &.flat:backdrop {
       @include button(backdrop, $edge:none);
       @if $variant == 'light' { border-color: $selected_borders_color; }
       &:active, &:checked {
@@ -2243,30 +2240,22 @@ GtkScrolledWindow {
       &:insensitive {
         @include button(backdrop-insensitive, $edge:none);
         @if $variant == 'light' { border-color: $selected_borders_color; }
-      }
-      &:insensitive:active {
-        @include button(backdrop-insensitive-active, $edge:none);
-        @if $variant == 'light' { border-color: $selected_borders_color; }
+        &:active, &:checked {
+          @include button(backdrop-insensitive-active, $edge:none);
+          @if $variant == 'light' { border-color: $selected_borders_color; }
+        }
       }
     }
+    &.flat:backdrop { @include button(undecorated); }
     &:insensitive {
       @include button(insensitive, $edge:none);
       @if $variant == 'light' { border-color: $selected_borders_color; }
-    }
-    &.flat, &.flat:backdrop, &.flat:backdrop:insensitive {
-      @extend %undecorated_button;
+      &:active, &:checked { @include button(insensitive-active, $edge:none); }
     }
     //FIXME: make placeholder with buttons w/o edge to be extended around
     //       istead of repeating everytime this stuff.
   }
 }
-
-/*.list-row.button:selected,
-.list-row:selected {
-  background-color: $selected_bg_color;
-  color: $selected_fg_color;
-  &:backdrop { color: $backdrop_base_color;}
-}*/
 
 /*********************
  * App Notifications *
@@ -2434,7 +2423,7 @@ GtkCalendar {
       border-right-style: none;
       border-bottom-style: none;
     }
-    %last_button { 
+    %last_button {
       border-bottom-right-radius: 7px;
     }
     %first_button {
@@ -2524,6 +2513,7 @@ GtkInfoBar {
   text-shadow: 0 1px darken($selected_bg_color, 10%);
   border-color: darken($selected_bg_color, 10%);
   .button {
+    // FIXME: extend selection mode buttons
     @include button(normal, $selected_bg_color, $selected_fg_color, none);
     &:hover {
       @include button(hover, $selected_bg_color, $selected_fg_color, none); }
@@ -2718,8 +2708,17 @@ GtkVolumeButton.button { padding: 8px; }
 // Window Close button
 .header-bar .button.titlebutton,
 .titlebar .button.titlebutton {
+  @extend .button;
   @extend .button.flat;
   @extend .image-button;
+  @include _button_text_shadow;
+  &:backdrop { icon-shadow: none; }
+}
+
+.header-bar.selection-mode .button.titlebutton,
+.titlebar.selection-mode .button.titlebutton {
+  @include _button_text_shadow(white, $selected_bg_color);
+  &:backdrop { icon-shadow: none; }
 }
 
 
