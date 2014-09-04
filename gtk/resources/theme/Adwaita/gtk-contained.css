@@ -537,9 +537,9 @@ GtkCalendar.header .button.titlebutton {
         background-image: linear-gradient(to bottom, #2a76c6);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       .button.suggested-action:backdrop:insensitive {
-        color: #9ac1e9;
-        border-color: #65a0de;
-        background-image: linear-gradient(to bottom, #65a0de);
+        color: #c7c7c7;
+        border-color: #a8a8a8;
+        background-image: linear-gradient(to bottom, #f4f4f4);
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
@@ -553,9 +553,9 @@ GtkCalendar.header .button.titlebutton {
           .button.suggested-action:backdrop:insensitive:active > GtkLabel, .button.suggested-action:backdrop:insensitive:checked > GtkLabel {
             color: inherit; }
     .button.suggested-action:insensitive {
-      color: #b2cfee;
-      border-color: #1c5187;
-      background-image: linear-gradient(to bottom, #65a0de);
+      color: #8d9091;
+      border-color: #a1a1a1;
+      background-image: linear-gradient(to bottom, #f4f4f4);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
@@ -645,9 +645,9 @@ GtkCalendar.header .button.titlebutton {
         background-image: linear-gradient(to bottom, #d51010);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       .button.destructive-action:backdrop:insensitive {
-        color: #f58888;
-        border-color: #f14949;
-        background-image: linear-gradient(to bottom, #f14949);
+        color: #c7c7c7;
+        border-color: #a8a8a8;
+        background-image: linear-gradient(to bottom, #f4f4f4);
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
@@ -661,9 +661,9 @@ GtkCalendar.header .button.titlebutton {
           .button.destructive-action:backdrop:insensitive:active > GtkLabel, .button.destructive-action:backdrop:insensitive:checked > GtkLabel {
             color: inherit; }
     .button.destructive-action:insensitive {
-      color: #f8a4a4;
-      border-color: #8e0b0b;
-      background-image: linear-gradient(to bottom, #f14949);
+      color: #8d9091;
+      border-color: #a1a1a1;
+      background-image: linear-gradient(to bottom, #f4f4f4);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }

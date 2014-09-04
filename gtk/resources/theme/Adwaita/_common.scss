@@ -456,14 +456,14 @@ $_dot_color: if($variant=='light', $selected_bg_color,
           @include button(backdrop-active, $b_color, white);
         }
         &:insensitive {
-          @include button(backdrop-insensitive, $b_color,white);
+          @include button(backdrop-insensitive);
           &:active, &:checked {
             @include button(backdrop-insensitive-active, $b_color, white);
           }
         }
       }
       &:insensitive {
-        @include button(insensitive, $b_color, white);
+        @include button(insensitive);
         &:active, &:checked {
           @include button(insensitive-active, $b_color, white);
         }
