@@ -250,6 +250,9 @@ static void gtk_drag_cancel                    (GtkDragSourceInfo *info,
                                                 GtkDragResult      result,
                                                 guint32            time);
 
+static void gtk_drag_source_gesture_begin      (GtkGesture       *gesture,
+                                                GdkEventSequence *sequence,
+                                                gpointer          data);
 static gboolean gtk_drag_source_event_cb       (GtkWidget         *widget,
                                                 GdkEvent          *event,
                                                 gpointer           data);
@@ -2783,6 +2786,9 @@ gtk_drag_source_set (GtkWidget            *widget,
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (site->drag_gesture),
                                                   GTK_PHASE_NONE);
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (site->drag_gesture), 0);
+      g_signal_connect (site->drag_gesture, "begin",
+                        G_CALLBACK (gtk_drag_source_gesture_begin),
+                        site);
 
       g_signal_connect (widget, "button-press-event",
                         G_CALLBACK (gtk_drag_source_event_cb),
@@ -3867,6 +3873,23 @@ gtk_drag_drop (GtkDragSourceInfo *info,
 /*
  * Source side callbacks.
  */
+static void
+gtk_drag_source_gesture_begin (GtkGesture       *gesture,
+                               GdkEventSequence *sequence,
+                               gpointer          data)
+{
+  GtkDragSourceSite *site = data;
+  guint button;
+
+  if (gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)))
+    button = 1;
+  else
+    button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (!site->start_button_mask ||
+      !(site->start_button_mask & (GDK_BUTTON1_MASK << (button - 1))))
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+}
 
 static gboolean
 gtk_drag_source_event_cb (GtkWidget *widget,
