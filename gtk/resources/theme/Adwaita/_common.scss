@@ -2269,8 +2269,10 @@ GtkScrolledWindow {
  * App Notifications *
  *********************/
 
-.app-notification {
+.app-notification,
+.app-notification.frame {
   @extend %osd;
+  padding: 10px;
   border-width: 0 1px 1px;
   border-style: solid;
   border-color: $osd_outer_borders_color;
@@ -2279,7 +2281,6 @@ GtkScrolledWindow {
   background-image: linear-gradient(to bottom, transparentize(black, 0.8),
                                                transparent 2px);
   background-clip: padding-box;
-  padding: 0 4px;
   &:backdrop { background-image: none; }
   .button {
     border: 1px solid;
