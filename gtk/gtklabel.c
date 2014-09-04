@@ -4561,6 +4561,53 @@ get_layout_index (GtkLabel *label,
   return inside;
 }
 
+static gboolean
+range_is_in_ellipsis (GtkLabel *label,
+                      gint      start,
+                      gint      end)
+{
+  GtkLabelPrivate *priv = label->priv;
+  PangoLayoutIter *iter;
+  gboolean in_ellipsis;
+
+  if (!priv->ellipsize)
+    return FALSE;
+
+  gtk_label_ensure_layout (label);
+
+  if (!pango_layout_is_ellipsized (priv->layout))
+    return FALSE;
+
+  iter = pango_layout_get_iter (priv->layout);
+
+  in_ellipsis = FALSE;
+
+  do {
+    PangoLayoutRun *run;
+
+    run = pango_layout_iter_get_run_readonly (iter);
+    if (run)
+      {
+        PangoItem *item;
+
+        item = ((PangoGlyphItem*)run)->item;
+
+        if (item->offset <= start && end <= item->offset + item->length)
+          {
+            if (item->analysis.flags & PANGO_ANALYSIS_FLAG_IS_ELLIPSIS)
+              in_ellipsis = TRUE;
+            break;
+          }
+        else if (item->offset + item->length >= end)
+          break;
+      }
+  } while (pango_layout_iter_next_run (iter));
+
+  pango_layout_iter_free (iter);
+
+  return in_ellipsis;
+}
+
 static void
 gtk_label_select_word (GtkLabel *label)
 {
@@ -4588,6 +4635,7 @@ gtk_label_grab_focus (GtkWidget *widget)
   GtkLabelPrivate *priv = label->priv;
   gboolean select_on_focus;
   GtkLabelLink *link;
+  GList *l;
 
   if (priv->select_info == NULL)
     return;
@@ -4608,10 +4656,17 @@ gtk_label_grab_focus (GtkWidget *widget)
     {
       if (priv->select_info->links && !priv->in_click)
         {
-          link = priv->select_info->links->data;
-          priv->select_info->selection_anchor = link->start;
-          priv->select_info->selection_end = link->start;
-          _gtk_label_accessible_focus_link_changed (label);
+          for (l = priv->select_info->links; l; l = l->next)
+            {
+              link = l->data;
+              if (!range_is_in_ellipsis (label, link->start, link->end))
+                {
+                  priv->select_info->selection_anchor = link->start;
+                  priv->select_info->selection_end = link->start;
+                  _gtk_label_accessible_focus_link_changed (label);
+                  break;
+                }
+            }
         }
     }
 }
@@ -4634,11 +4689,16 @@ gtk_label_focus (GtkWidget        *widget,
           focus_link = gtk_label_get_focus_link (label);
           if (focus_link && direction == GTK_DIR_TAB_BACKWARD)
             {
-              l = g_list_last (info->links);
-              focus_link = l->data;
-              info->selection_anchor = focus_link->start;
-              info->selection_end = focus_link->start;
-              _gtk_label_accessible_focus_link_changed (label);
+              for (l = g_list_last (info->links); l; l = l->prev)
+                {
+                  focus_link = l->data;
+                  if (!range_is_in_ellipsis (label, focus_link->start, focus_link->end))
+                    {
+                      info->selection_anchor = focus_link->start;
+                      info->selection_end = focus_link->start;
+                      _gtk_label_accessible_focus_link_changed (label);
+                    }
+                }
             }
         }
 
@@ -4664,9 +4724,12 @@ gtk_label_focus (GtkWidget        *widget,
 
             if (link->start > index)
               {
-                gtk_label_select_region_index (label, link->start, link->start);
-                _gtk_label_accessible_focus_link_changed (label);
-                return TRUE;
+                if (!range_is_in_ellipsis (label, link->start, link->end))
+                  {
+                    gtk_label_select_region_index (label, link->start, link->start);
+                    _gtk_label_accessible_focus_link_changed (label);
+                    return TRUE;
+                  }
               }
           }
       else if (direction == GTK_DIR_TAB_BACKWARD)
@@ -4676,9 +4739,12 @@ gtk_label_focus (GtkWidget        *widget,
 
             if (link->end < index)
               {
-                gtk_label_select_region_index (label, link->start, link->start);
-                _gtk_label_accessible_focus_link_changed (label);
-                return TRUE;
+                if (!range_is_in_ellipsis (label, link->start, link->end))
+                  {
+                    gtk_label_select_region_index (label, link->start, link->start);
+                    _gtk_label_accessible_focus_link_changed (label);
+                    return TRUE;
+                  }
               }
           }
 
@@ -4697,6 +4763,12 @@ gtk_label_focus (GtkWidget        *widget,
             }
           else
             l = info->links;
+          for (; l; l = l->next)
+            {
+              GtkLabelLink *link = l->data;
+              if (!range_is_in_ellipsis (label, link->start, link->end))
+                break;
+            }
           break;
 
         case GTK_DIR_TAB_BACKWARD:
@@ -4707,6 +4779,12 @@ gtk_label_focus (GtkWidget        *widget,
             }
           else
             l = g_list_last (info->links);
+          for (; l; l = l->prev)
+            {
+              GtkLabelLink *link = l->data;
+              if (!range_is_in_ellipsis (label, link->start, link->end))
+                break;
+            }
           break;
 
         default:
@@ -5114,7 +5192,8 @@ gtk_label_motion (GtkWidget      *widget,
                   link = l->data;
                   if (index >= link->start && index <= link->end)
                     {
-                      found = TRUE;
+                      if (!range_is_in_ellipsis (label, link->start, link->end))
+                        found = TRUE;
                       break;
                     }
                 }
