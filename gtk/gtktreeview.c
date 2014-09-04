@@ -1846,8 +1846,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                     G_CALLBACK (gtk_tree_view_drag_gesture_update), tree_view);
   g_signal_connect (tree_view->priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_tree_view_drag_gesture_end), tree_view);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->drag_gesture),
-                                              GTK_PHASE_CAPTURE);
 
   tree_view->priv->column_drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
   g_signal_connect (tree_view->priv->column_drag_gesture, "drag-begin",
