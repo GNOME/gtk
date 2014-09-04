@@ -4562,9 +4562,11 @@ get_layout_index (GtkLabel *label,
 }
 
 static gboolean
-range_is_in_ellipsis (GtkLabel *label,
-                      gint      start,
-                      gint      end)
+range_is_in_ellipsis_full (GtkLabel *label,
+                           gint      range_start,
+                           gint      range_end,
+                           gint     *ellipsis_start,
+                           gint     *ellipsis_end)
 {
   GtkLabelPrivate *priv = label->priv;
   PangoLayoutIter *iter;
@@ -4592,13 +4594,19 @@ range_is_in_ellipsis (GtkLabel *label,
 
         item = ((PangoGlyphItem*)run)->item;
 
-        if (item->offset <= start && end <= item->offset + item->length)
+        if (item->offset <= range_start && range_end <= item->offset + item->length)
           {
             if (item->analysis.flags & PANGO_ANALYSIS_FLAG_IS_ELLIPSIS)
-              in_ellipsis = TRUE;
+              {
+                if (ellipsis_start)
+                  *ellipsis_start = item->offset;
+                if (ellipsis_end)
+                  *ellipsis_end = item->offset + item->length;
+                in_ellipsis = TRUE;
+              }
             break;
           }
-        else if (item->offset + item->length >= end)
+        else if (item->offset + item->length >= range_end)
           break;
       }
   } while (pango_layout_iter_next_run (iter));
@@ -4606,6 +4614,14 @@ range_is_in_ellipsis (GtkLabel *label,
   pango_layout_iter_free (iter);
 
   return in_ellipsis;
+}
+
+static gboolean
+range_is_in_ellipsis (GtkLabel *label,
+                      gint      range_start,
+                      gint      range_end)
+{
+  return range_is_in_ellipsis_full (label, range_start, range_end, NULL, NULL);
 }
 
 static void
