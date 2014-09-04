@@ -448,9 +448,13 @@ $_dot_color: if($variant=='light', $selected_bg_color,
                               (destructive-action, $destructive_color) {
     &.#{$b_type} {
       @include button(normal, $b_color, white);
+      &.flat {
+        @include button(undecorated);
+        color: $b_color; //FIXME: does it work on the dark variant?
+      }
       &:hover { @include button(hover, $b_color, white); }
       &:active, &:checked { @include button(active, $b_color, white); }
-      &:backdrop {
+      &:backdrop, &.flat:backdrop {
         @include button(backdrop, $b_color, white);
         &:active, &:checked {
           @include button(backdrop-active, $b_color, white);
@@ -461,6 +465,10 @@ $_dot_color: if($variant=='light', $selected_bg_color,
             @include button(backdrop-insensitive-active, $b_color, white);
           }
         }
+      }
+      &.flat:backdrop {
+        @include button(undecorated);
+        color: transparentize($b_color, 0.2);
       }
       &:insensitive {
         @include button(insensitive);
