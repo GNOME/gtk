@@ -98,29 +98,7 @@ dist-hook:
 	     && cp INSTALL README $(distdir) ; \
 	fi
 
-.PHONY: files release sanity snapshot ChangeLog
-
-files:
-	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
-	  echo $$p; \
-	done
-	@for subdir in $(SUBDIRS); do \
-	  files=`cd $$subdir; $(MAKE) files | grep -v "make\[[1-9]\]"`; \
-	  for file in $$files; do \
-	    echo $$subdir/$$file; \
-	  done; \
-	done
-
-release:
-	rm -rf .deps */.deps
-	$(MAKE) distcheck
-
-sanity:
-	./sanity_check $(VERSION)
-
-
-snapshot:
-	$(MAKE) dist distdir=$(PACKAGE)-snap`date +"%Y%m%d"`
+.PHONY: ChangeLog
 
 DISTCHECK_CONFIGURE_FLAGS =		\
 	--enable-gtk-doc 		\
