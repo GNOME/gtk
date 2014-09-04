@@ -2551,7 +2551,9 @@ GtkInfoBar {
   color: white;
   padding: 4px; /* not working */
   border-radius: 5px;
-  background-color: transparentize(black,0.2);  //FIXME proper color
+  background-color: transparentize(black, 0.5); // FIXME: I think this is not
+                                                //        what I get, it looks
+                                                //        more solid.
   text-shadow: 0 1px black;
 }
 
