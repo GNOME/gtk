@@ -433,6 +433,7 @@ GtkCalendar.header .button.titlebutton {
       icon-shadow: none;
       border-color: rgba(255, 255, 255, 0.1); }
     .button.osd:backdrop {
+      color: #eeeeec;
       background-image: linear-gradient(to bottom, rgba(46, 52, 54, 0.7));
       background-clip: padding-box;
       box-shadow: none;
@@ -491,6 +492,7 @@ GtkCalendar.header .button.titlebutton {
       text-shadow: none;
       icon-shadow: none; }
     .osd .button:backdrop {
+      color: #eeeeec;
       background-image: linear-gradient(to bottom, rgba(46, 52, 54, 0.7));
       background-clip: padding-box;
       box-shadow: none;
@@ -598,6 +600,7 @@ GtkCalendar.header .button.titlebutton {
         text-shadow: none;
         icon-shadow: none; }
       .osd .button.suggested-action:backdrop {
+        color: #eeeeec;
         background-image: linear-gradient(to bottom, rgba(74, 144, 217, 0.5));
         background-clip: padding-box;
         box-shadow: none;
@@ -705,6 +708,7 @@ GtkCalendar.header .button.titlebutton {
         text-shadow: none;
         icon-shadow: none; }
       .osd .button.destructive-action:backdrop {
+        color: #eeeeec;
         background-image: linear-gradient(to bottom, rgba(239, 41, 41, 0.5));
         background-clip: padding-box;
         box-shadow: none;
@@ -2824,6 +2828,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       .osd .scale.slider:backdrop, .osd
       .scale.scale-has-marks-above.scale-has-marks-below.slider:backdrop, .osd
       .scale.vertical.scale-has-marks-above.scale-has-marks-below.slider:backdrop {
+        color: #eeeeec;
         background-image: linear-gradient(to bottom, rgba(46, 52, 54, 0.7));
         background-clip: padding-box;
         box-shadow: none;
@@ -3507,6 +3512,7 @@ GtkCalendar.header .list-row.button.titlebutton {
       text-shadow: none;
       icon-shadow: none; }
     .app-notification .button:backdrop {
+      color: #eeeeec;
       background-image: linear-gradient(to bottom, rgba(46, 52, 54, 0.7));
       background-clip: padding-box;
       box-shadow: none;

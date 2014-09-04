@@ -351,6 +351,7 @@
   // active osd button
   //
     $_bg: if($c!=$bg_color, $c, $osd_borders_color);
+
     color: white;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
@@ -363,6 +364,7 @@
   // insensitive osd button
   //
     $_bg: transparentize(mix($insensitive_fg_color,$osd_bg_color,20%),0.3);
+
     color: $insensitive_fg_color;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
@@ -376,6 +378,8 @@
   //
     $_bg: if($c!=$bg_color, transparentize($c, 0.5),
                             transparentize($osd_bg_color, 0.3));
+
+    color: $osd_fg_color;
     background-image: linear-gradient(to bottom, $_bg);
     background-clip: padding-box;
     box-shadow: none;
