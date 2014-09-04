@@ -861,6 +861,106 @@ GtkCalendar.header .button.titlebutton {
   GtkCalendar.header .primary-toolbar .button.titlebutton {
     icon-shadow: none; }
 
+.inline-toolbar GtkToolButton > .button, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton, .header-bar .inline-toolbar GtkToolButton > .button.titlebutton,
+.inline-toolbar .titlebar GtkToolButton > .button.titlebutton,
+.titlebar .inline-toolbar GtkToolButton > .button.titlebutton,
+.inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton,
+GtkCalendar.header .inline-toolbar GtkToolButton > .button.titlebutton {
+  color: #eeeeec;
+  outline-color: rgba(238, 238, 236, 0.3);
+  border-color: #1c1f1f;
+  background-image: linear-gradient(to bottom, #454c4c, #393f3f 40%, #2d3232);
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+  icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
+  .inline-toolbar GtkToolButton > .button:hover {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+    icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
+  .inline-toolbar GtkToolButton > .button:active {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #232727, #2d3232);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+    icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
+  .inline-toolbar GtkToolButton > .button:checked {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #232727, #2d3232);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+    icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
+  .inline-toolbar GtkToolButton > .button:insensitive {
+    color: #939695;
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #323636);
+    text-shadow: none;
+    icon-shadow: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0.1); }
+    .inline-toolbar GtkToolButton > .button:insensitive > GtkLabel {
+      color: inherit; }
+  .inline-toolbar GtkToolButton > .button:insensitive:active {
+    color: #939695;
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #2f3333, #323636);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0.1); }
+    .inline-toolbar GtkToolButton > .button:insensitive:active > GtkLabel {
+      color: inherit; }
+  .inline-toolbar GtkToolButton > .button:insensitive:checked {
+    color: #939695;
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #2f3333, #323636);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0.1); }
+    .inline-toolbar GtkToolButton > .button:insensitive:checked > GtkLabel {
+      color: inherit; }
+  .inline-toolbar GtkToolButton > .button:backdrop {
+    color: #c9cbc9;
+    border-color: #1e2222;
+    background-image: linear-gradient(to bottom, #393f3f);
+    text-shadow: none;
+    icon-shadow: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
+  .inline-toolbar GtkToolButton > .button:backdrop:active {
+    color: #c9cbc9;
+    border-color: #1e2222;
+    background-image: linear-gradient(to bottom, #2f3434);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
+  .inline-toolbar GtkToolButton > .button:backdrop:checked {
+    color: #c9cbc9;
+    border-color: #1e2222;
+    background-image: linear-gradient(to bottom, #2f3434);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
+  .inline-toolbar GtkToolButton > .button:backdrop:insensitive {
+    color: #5d6767;
+    border-color: #1e2222;
+    background-image: linear-gradient(to bottom, #323636);
+    text-shadow: none;
+    icon-shadow: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
+    .inline-toolbar GtkToolButton > .button:backdrop:insensitive > GtkLabel {
+      color: inherit; }
+  .inline-toolbar GtkToolButton > .button:backdrop:insensitive:active {
+    color: #5d6767;
+    border-color: #1e2222;
+    background-image: linear-gradient(to bottom, #262929);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
+    .inline-toolbar GtkToolButton > .button:backdrop:insensitive:active > GtkLabel {
+      color: inherit; }
+  .inline-toolbar GtkToolButton > .button:backdrop:insensitive:checked {
+    color: #5d6767;
+    border-color: #1e2222;
+    background-image: linear-gradient(to bottom, #262929);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
+    .inline-toolbar GtkToolButton > .button:backdrop:insensitive:checked > GtkLabel {
+      color: inherit; }
+
 .inline-toolbar.toolbar GtkToolButton > .button.flat, .inline-toolbar GtkToolButton > .button.flat, .inline-toolbar.search-bar GtkToolButton > .button.flat, .inline-toolbar.location-bar GtkToolButton > .button.flat, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton, .header-bar .inline-toolbar GtkToolButton > .button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton > .button.titlebutton,
 .titlebar .inline-toolbar GtkToolButton > .button.titlebutton,
@@ -4064,3 +4164,5 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 @define-color wm_button_active_color_b shade(#393f3f, 0.89);
 @define-color wm_button_active_color_c shade(#393f3f, 0.9);
 @define-color content_view_bg #292929;
+
+/*# sourceMappingURL=gtk-contained-dark.css.map */

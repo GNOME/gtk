@@ -588,6 +588,27 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   .linked.vertical &:backdrop { @extend %linked_vertical; }
 }
 
+// all the following is for the +|- buttons on inline toolbars, that way
+// should really be deprecated...
+.inline-toolbar GtkToolButton > .button { // redefining the button look is
+  // needed since those are flat...
+  @include button(normal);
+  &:hover { @include button(hover); }
+  &:active { @include button(active); }
+  &:checked{ @include button(active); }
+  &:insensitive { @include button(insensitive); }
+  &:insensitive:active { @include button(insensitive-active); }
+  &:insensitive:checked { @include button(insensitive-active); }
+  &:backdrop { @include button(backdrop); };
+  &:backdrop:active { @include button(backdrop-active); }
+  &:backdrop:checked { @include button(backdrop-active); }
+  &:backdrop:insensitive { @include button(backdrop-insensitive); }
+  &:backdrop:insensitive:active {
+  @include button(backdrop-insensitive-active); }
+  &:backdrop:insensitive:checked {
+  @include button(backdrop-insensitive-active); }
+}
+
 // More inline toolbar buttons
 .inline-toolbar.toolbar GtkToolButton,
 .inline-toolbar.toolbar GtkToolButton:backdrop {
