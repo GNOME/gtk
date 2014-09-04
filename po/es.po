@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-03 09:04+0000\n"
-"PO-Revision-Date: 2014-09-03 14:10+0200\n"
+"POT-Creation-Date: 2014-09-04 09:03+0000\n"
+"PO-Revision-Date: 2014-09-04 11:58+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -1370,13 +1370,13 @@ msgstr "Vacío"
 
 #: ../gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr ""
+msgstr "Salida a esta carpeta en lugar de a cwd"
 
 #: ../gtk/encodesymbolic.c:266
-#, fuzzy, c-format
+#, c-format
 #| msgid "Invalid file name"
 msgid "Invalid size %s\n"
-msgstr "Nombre de archivo no válido"
+msgstr "Tamaño %s no válido\n"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -1387,8 +1387,8 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
-"Este programa viene SIN NINGUNA GARANTÍA;\n"
-"para obtener más detalles visite <a href=\"%s\">%s</a>"
+"Este programa viene SIN NINGUNA GARANTÍA.\n"
+"Consulte la <a href=\"%s\">%s</a> para obtener más detalles."
 
 #: ../gtk/gtkaboutdialog.c:118 ../gtk/gtkaboutdialog.c:408
 #: ../gtk/resources/ui/gtkaboutdialog.ui.h:3
@@ -2089,26 +2089,26 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:9516 ../gtk/gtkentry.c:9669 ../gtk/gtklabel.c:6381
+#: ../gtk/gtkentry.c:9516 ../gtk/gtkentry.c:9669 ../gtk/gtklabel.c:6530
 #: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9029
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: ../gtk/gtkentry.c:9520 ../gtk/gtkentry.c:9672 ../gtk/gtklabel.c:6382
+#: ../gtk/gtkentry.c:9520 ../gtk/gtkentry.c:9672 ../gtk/gtklabel.c:6531
 #: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9033
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../gtk/gtkentry.c:9524 ../gtk/gtkentry.c:9675 ../gtk/gtklabel.c:6383
+#: ../gtk/gtkentry.c:9524 ../gtk/gtkentry.c:9675 ../gtk/gtklabel.c:6532
 #: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9035
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9527 ../gtk/gtklabel.c:6385 ../gtk/gtktextview.c:8850
+#: ../gtk/gtkentry.c:9527 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkentry.c:9538 ../gtk/gtklabel.c:6394 ../gtk/gtktextview.c:8864
+#: ../gtk/gtkentry.c:9538 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2120,7 +2120,7 @@ msgstr "Bloq Mayús está activado"
 msgid "Select a File"
 msgstr "Seleccionar un archivo"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:878
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:956
 msgid "Desktop"
 msgstr "Escritorio"
 
@@ -2130,7 +2130,7 @@ msgstr "Escritorio"
 msgid "(None)"
 msgstr "(Ninguno)"
 
-#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3221
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3269
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2377,12 +2377,12 @@ msgid "Error"
 msgstr "Error"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6362
+#: ../gtk/gtklabel.c:6511
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6371
+#: ../gtk/gtklabel.c:6520
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -2667,195 +2667,195 @@ msgstr "Configuración de página"
 msgid "File System Root"
 msgstr "Sistema de archivos raíz"
 
-#: ../gtk/gtkplacessidebar.c:453
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: ../gtk/gtkplacessidebar.c:461
+#: ../gtk/gtkplacessidebar.c:462
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: ../gtk/gtkplacessidebar.c:852
+#: ../gtk/gtkplacessidebar.c:930
 msgid "Recent"
 msgstr "Recientes"
 
-#: ../gtk/gtkplacessidebar.c:854
+#: ../gtk/gtkplacessidebar.c:932
 msgid "Recent files"
 msgstr "Archivos recientes"
 
-#: ../gtk/gtkplacessidebar.c:863
+#: ../gtk/gtkplacessidebar.c:941
 msgid "Home"
 msgstr "Carpeta personal"
 
-#: ../gtk/gtkplacessidebar.c:865
+#: ../gtk/gtkplacessidebar.c:943
 msgid "Open your personal folder"
 msgstr "Abrir su carpeta personal"
 
-#: ../gtk/gtkplacessidebar.c:880
+#: ../gtk/gtkplacessidebar.c:958
 msgid "Open the contents of your desktop in a folder"
 msgstr "Abrir el contenido de su escritorio en una carpeta"
 
-#: ../gtk/gtkplacessidebar.c:894
+#: ../gtk/gtkplacessidebar.c:972
 msgid "Enter Location"
 msgstr "Introducir ubicación"
 
-#: ../gtk/gtkplacessidebar.c:896
+#: ../gtk/gtkplacessidebar.c:974
 msgid "Manually enter a location"
 msgstr "Introducir manualmente una ubicación"
 
-#: ../gtk/gtkplacessidebar.c:907
+#: ../gtk/gtkplacessidebar.c:985
 msgid "Trash"
 msgstr "Papelera"
 
-#: ../gtk/gtkplacessidebar.c:909
+#: ../gtk/gtkplacessidebar.c:987
 msgid "Open the trash"
 msgstr "Abrir la papelera"
 
-#: ../gtk/gtkplacessidebar.c:972 ../gtk/gtkplacessidebar.c:1000
-#: ../gtk/gtkplacessidebar.c:1238
+#: ../gtk/gtkplacessidebar.c:1050 ../gtk/gtkplacessidebar.c:1078
+#: ../gtk/gtkplacessidebar.c:1286
 #, c-format
 msgid "Mount and open %s"
 msgstr "Montar y abrir %s"
 
-#: ../gtk/gtkplacessidebar.c:1081
+#: ../gtk/gtkplacessidebar.c:1159
 msgid "Open the contents of the file system"
 msgstr "Abrir el contenido del sistema de archivos"
 
-#: ../gtk/gtkplacessidebar.c:1201
+#: ../gtk/gtkplacessidebar.c:1249
 msgid "Network"
 msgstr "Red"
 
-#: ../gtk/gtkplacessidebar.c:1207
+#: ../gtk/gtkplacessidebar.c:1255
 msgid "Browse Network"
 msgstr "Examinar red"
 
-#: ../gtk/gtkplacessidebar.c:1209
+#: ../gtk/gtkplacessidebar.c:1257
 msgid "Browse the contents of the network"
 msgstr "Examinar el contenido de la red"
 
-#: ../gtk/gtkplacessidebar.c:1217
+#: ../gtk/gtkplacessidebar.c:1265
 msgid "Connect to Server"
 msgstr "Conectar al servidor"
 
-#: ../gtk/gtkplacessidebar.c:1219
+#: ../gtk/gtkplacessidebar.c:1267
 msgid "Connect to a network server address"
 msgstr "Conectar a una dirección de servidor en red"
 
-#: ../gtk/gtkplacessidebar.c:1621
+#: ../gtk/gtkplacessidebar.c:1669
 msgid "New bookmark"
 msgstr "Marcado nuevo"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2178 ../gtk/gtkplacessidebar.c:3299
+#: ../gtk/gtkplacessidebar.c:2226 ../gtk/gtkplacessidebar.c:3347
 msgid "_Start"
 msgstr "_Iniciar"
 
-#: ../gtk/gtkplacessidebar.c:2179 ../gtk/gtkplacessidebar.c:3306
+#: ../gtk/gtkplacessidebar.c:2227 ../gtk/gtkplacessidebar.c:3354
 msgid "_Stop"
 msgstr "_Detener"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2186
+#: ../gtk/gtkplacessidebar.c:2234
 msgid "_Power On"
 msgstr "_Encender"
 
-#: ../gtk/gtkplacessidebar.c:2187
+#: ../gtk/gtkplacessidebar.c:2235
 msgid "_Safely Remove Drive"
 msgstr "_Quitar unidad con seguridad"
 
-#: ../gtk/gtkplacessidebar.c:2191
+#: ../gtk/gtkplacessidebar.c:2239
 msgid "_Connect Drive"
 msgstr "_Conectar unidad"
 
-#: ../gtk/gtkplacessidebar.c:2192
+#: ../gtk/gtkplacessidebar.c:2240
 msgid "_Disconnect Drive"
 msgstr "_Desconectar unidad"
 
-#: ../gtk/gtkplacessidebar.c:2196
+#: ../gtk/gtkplacessidebar.c:2244
 msgid "_Start Multi-disk Device"
 msgstr "_Iniciar dispositivo multidisco"
 
-#: ../gtk/gtkplacessidebar.c:2197
+#: ../gtk/gtkplacessidebar.c:2245
 msgid "_Stop Multi-disk Device"
 msgstr "_Detener dispositivo multidisco"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2202
+#: ../gtk/gtkplacessidebar.c:2250
 msgid "_Unlock Drive"
 msgstr "_Desbloquear unidad"
 
-#: ../gtk/gtkplacessidebar.c:2203
+#: ../gtk/gtkplacessidebar.c:2251
 msgid "_Lock Drive"
 msgstr "_Bloquear unidad"
 
-#: ../gtk/gtkplacessidebar.c:2232 ../gtk/gtkplacessidebar.c:2981
+#: ../gtk/gtkplacessidebar.c:2280 ../gtk/gtkplacessidebar.c:3029
 #, c-format
 msgid "Unable to start %s"
 msgstr "No se pudo iniciar %s"
 
-#: ../gtk/gtkplacessidebar.c:2262
+#: ../gtk/gtkplacessidebar.c:2310
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "No se puede acceder a «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2572
+#: ../gtk/gtkplacessidebar.c:2620
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "No se puede desmontar %s"
 
-#: ../gtk/gtkplacessidebar.c:2698
+#: ../gtk/gtkplacessidebar.c:2746
 #, c-format
 msgid "Unable to stop %s"
 msgstr "No se pudo detener %s"
 
-#: ../gtk/gtkplacessidebar.c:2727 ../gtk/gtkplacessidebar.c:2756
-#: ../gtk/gtkplacessidebar.c:2785
+#: ../gtk/gtkplacessidebar.c:2775 ../gtk/gtkplacessidebar.c:2804
+#: ../gtk/gtkplacessidebar.c:2833
 #, c-format
 msgid "Unable to eject %s"
 msgstr "No se pudo expulsar %s"
 
-#: ../gtk/gtkplacessidebar.c:2931
+#: ../gtk/gtkplacessidebar.c:2979
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "No se puede consultar a %s si hay cambios en el medio"
 
-#: ../gtk/gtkplacessidebar.c:3229
+#: ../gtk/gtkplacessidebar.c:3277
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: ../gtk/gtkplacessidebar.c:3238
+#: ../gtk/gtkplacessidebar.c:3286
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
-#: ../gtk/gtkplacessidebar.c:3247
+#: ../gtk/gtkplacessidebar.c:3295
 msgid "_Add Bookmark"
 msgstr "_Añadir marcador"
 
-#: ../gtk/gtkplacessidebar.c:3253
+#: ../gtk/gtkplacessidebar.c:3301
 msgid "Remove"
 msgstr "Quitar"
 
-#: ../gtk/gtkplacessidebar.c:3260
+#: ../gtk/gtkplacessidebar.c:3308
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: ../gtk/gtkplacessidebar.c:3271
+#: ../gtk/gtkplacessidebar.c:3319
 msgid "_Mount"
 msgstr "_Montar"
 
-#: ../gtk/gtkplacessidebar.c:3278
+#: ../gtk/gtkplacessidebar.c:3326
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: ../gtk/gtkplacessidebar.c:3285
+#: ../gtk/gtkplacessidebar.c:3333
 msgid "_Eject"
 msgstr "_Expulsar"
 
-#: ../gtk/gtkplacessidebar.c:3292
+#: ../gtk/gtkplacessidebar.c:3340
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: ../gtk/gtkplacessidebar.c:3896
+#: ../gtk/gtkplacessidebar.c:3946
 msgid "Computer"
 msgstr "Equipo"
 
@@ -2864,7 +2864,6 @@ msgid "Authentication"
 msgstr "Autenticación"
 
 #: ../gtk/gtkprintbackend.c:833
-#| msgid "Remember password until you _logout"
 msgid "_Remember password"
 msgstr "_Recordar la contraseña"
 
@@ -3401,7 +3400,7 @@ msgstr "%d %%"
 
 #: ../gtk/gtkwindow.c:11630
 msgid "Do you want to use GTK+ Inspector?"
-msgstr ""
+msgstr "¿Quiere usar el inspector de GTK+?"
 
 #: ../gtk/gtkwindow.c:11632
 msgid ""
@@ -3409,17 +3408,17 @@ msgid ""
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
+"El inspector de GTK+ es un depurador interactivo que le permite explorar y "
+"modificar los aspectos internos de cualquier aplicación de GTK+. Al usarlo "
+"puede hacer que la aplicación falle o se cierre."
 
 #: ../gtk/inspector/action-editor.c:281
-#| msgctxt "Action name"
-#| msgid "Activate"
 msgid "Activate"
 msgstr "Activar"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
 #: ../gtk/inspector/misc-info.ui.h:1
-#| msgid "Status"
 msgid "State"
 msgstr "Estado"
 
@@ -3434,30 +3433,26 @@ msgid "Name"
 msgstr "Nombre"
 
 #: ../gtk/inspector/actions.ui.h:3
-#| msgid "Disabled"
 msgid "Enabled"
 msgstr "Activada"
 
 #: ../gtk/inspector/actions.ui.h:4
-#| msgid "Paper Type"
 msgid "Parameter Type"
 msgstr "Tipo de parámetro"
 
 #: ../gtk/inspector/button-path.ui.h:1
 msgid "Choose a widget through the inspector"
-msgstr ""
+msgstr "Elegir un widget mediante el inspector"
 
 #: ../gtk/inspector/classes-list.c:122
 msgid "New class"
 msgstr "Clase nueva"
 
 #: ../gtk/inspector/classes-list.c:126
-#| msgid "_Cancel"
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: ../gtk/inspector/classes-list.c:133
-#| msgid "Color _name:"
 msgid "Class name"
 msgstr "Nombre de la clase"
 
@@ -3468,40 +3463,42 @@ msgstr "Añadir una clase"
 
 #: ../gtk/inspector/classes-list.ui.h:2
 msgid "Restore defaults for this widget"
-msgstr ""
+msgstr "Restaurar los valores predeterminados para este widget"
 
 #: ../gtk/inspector/css-editor.c:86 ../gtk/inspector/css-editor.c:92
 msgid "You can type here any CSS rule recognized by GTK+."
-msgstr ""
+msgstr "Aquí puede escribir reglas de CSS reconocidas por GTK+."
 
 #: ../gtk/inspector/css-editor.c:87 ../gtk/inspector/css-editor.c:93
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the \"Pause\" "
 "button above."
 msgstr ""
+"Puede desactivar temporalmente este CSS personalizado pulsando el botón "
+"«Pausa» de más arriba."
 
 #: ../gtk/inspector/css-editor.c:88
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr ""
+"Los cambios se aplican instantánea y globalmente para toda la aplicación."
 
 #: ../gtk/inspector/css-editor.c:94
 msgid "Changes are applied instantly, only for this selected widget."
 msgstr ""
+"Los cambios se aplican instantáneamente, sólo para el widget seleccionado."
 
 #: ../gtk/inspector/css-editor.c:156
 msgid "Saving CSS failed"
 msgstr "Falló al guardar el CSS "
 
 #: ../gtk/inspector/css-editor.c:196
-#| msgctxt "Stock label"
-#| msgid "_Save"
 msgid "_Save"
 msgstr "_Guardar"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/css-editor.ui.h:1
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "Desactivar este CSS personalizado"
 
 #: ../gtk/inspector/css-editor.ui.h:2
 msgid "Save the current CSS"
@@ -3513,15 +3510,13 @@ msgstr "Mostrar los datos"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/general.ui.h:1
-#| msgid "GTK+ Options"
 msgid "GTK+ Version"
 msgstr "Versión de GTK+"
 
 #: ../gtk/inspector/general.ui.h:2
-#, fuzzy
 #| msgid "Go _Back"
 msgid "GDK Backend"
-msgstr "A_trás"
+msgstr "«Backend» de GDK"
 
 #: ../gtk/inspector/gestures.c:128
 msgid "Capture"
@@ -3541,12 +3536,10 @@ msgstr "Sección sin nombre"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/widget-tree.ui.h:3
-#| msgid "label"
 msgid "Label"
 msgstr "Etiqueta"
 
 #: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1301
-#| msgid "Location"
 msgid "Action"
 msgstr "Acción"
 
@@ -3559,7 +3552,6 @@ msgid "Buildable ID"
 msgstr "ID que se puede construir"
 
 #: ../gtk/inspector/misc-info.ui.h:3
-#| msgid "Default Application"
 msgid "Default Widget"
 msgstr "Widget predeterminada"
 
@@ -3567,27 +3559,23 @@ msgstr "Widget predeterminada"
 #: ../gtk/inspector/prop-editor.c:1004 ../gtk/inspector/prop-editor.c:1184
 #: ../gtk/inspector/prop-editor.c:1309 ../gtk/inspector/prop-editor.c:1420
 #: ../gtk/inspector/window.ui.h:4
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Properties"
 msgstr "Propiedades"
 
 #: ../gtk/inspector/misc-info.ui.h:5
 msgid "Focus Widget"
-msgstr ""
+msgstr "Dar el foco al widget"
 
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
-msgstr ""
+msgstr "Jerarquía de objetos"
 
 #: ../gtk/inspector/prop-editor.c:616
 #, c-format
-#| msgid "Printer"
 msgid "Pointer: %p"
 msgstr "Puntero: %p"
 
 #: ../gtk/inspector/prop-editor.c:631
-#| msgid "Unknown"
 msgctxt "type name"
 msgid "Unknown"
 msgstr "Desconocido"
@@ -3598,17 +3586,16 @@ msgid "Object: %p (%s)"
 msgstr "Objeto: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1057
-#, fuzzy, c-format
+#, c-format
 #| msgid "Unable to stop %s"
 msgid "Uneditable property type: %s"
-msgstr "No se pudo detener %s"
+msgstr "Tipo de propiedad no editable %s"
 
 #: ../gtk/inspector/prop-editor.c:1175
 msgid "Attribute mapping"
-msgstr ""
+msgstr "Mapeado de atributos"
 
 #: ../gtk/inspector/prop-editor.c:1180
-#| msgid "_Mode:"
 msgid "Model:"
 msgstr "Modelo:"
 
@@ -3618,7 +3605,6 @@ msgid "%p (%s)"
 msgstr "%p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1191
-#| msgid "Volume"
 msgid "Column:"
 msgstr "Columna:"
 
@@ -3628,15 +3614,14 @@ msgid "Defined at: %p (%s)"
 msgstr "Definida en: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1369 ../gtk/inspector/prop-editor.c:1385
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Convert"
 msgid "inverted"
-msgstr "_Convertir"
+msgstr "invertida"
 
 #: ../gtk/inspector/prop-editor.c:1401
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "bidireccional, invertida"
 
 #: ../gtk/inspector/prop-editor.c:1406 ../gtk/inspector/prop-editor.c:1502
 msgid "bidirectional"
@@ -3644,19 +3629,16 @@ msgstr "bidireccional"
 
 #: ../gtk/inspector/prop-editor.c:1411
 msgid "Binding:"
-msgstr ""
+msgstr "Vinculación:"
 
 #: ../gtk/inspector/prop-editor.c:1521
-#, fuzzy
 #| msgid "Starting %s"
 msgid "Setting:"
-msgstr "Iniciando %s"
+msgstr "Configuración:"
 
 #. vim: set et:
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Property"
 msgstr "Propiedad"
 
@@ -3674,7 +3656,6 @@ msgid "Defined At"
 msgstr "Definida en"
 
 #: ../gtk/inspector/resource-list.ui.h:1
-#| msgid "Up Path"
 msgid "Path"
 msgstr "Ruta"
 
@@ -3683,49 +3664,41 @@ msgid "Type:"
 msgstr "Tipo:"
 
 #: ../gtk/inspector/resource-list.ui.h:3
-#, fuzzy
 #| msgid "_Mount"
 msgid "Count:"
-msgstr "_Montar"
+msgstr "Cuenta:"
 
 #: ../gtk/inspector/resource-list.ui.h:4
-#| msgid "Size"
 msgid "Size:"
 msgstr "Tamaño:"
 
 #: ../gtk/inspector/signals-list.c:109
-#| msgid "_Yes"
 msgid "Yes"
 msgstr "Sí"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/signals-list.ui.h:1
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "Rastrear las señales emitidas por este objeto"
 
 #: ../gtk/inspector/signals-list.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgid "Clear log"
 msgstr "Limpiar el registro"
 
 #: ../gtk/inspector/signals-list.ui.h:4
-#| msgid "Co_nnect"
 msgid "Connected"
 msgstr "Conectada"
 
 #: ../gtk/inspector/signals-list.ui.h:5
-#, fuzzy
 #| msgid "_Mount"
 msgid "Count"
-msgstr "_Montar"
+msgstr "Cuenta"
 
 #: ../gtk/inspector/size-groups.c:221
 msgid "Ignore hidden"
-msgstr ""
+msgstr "Ignorar ocultas"
 
 #: ../gtk/inspector/size-groups.c:239
-#| msgid "_Mode:"
 msgid "Mode"
 msgstr "Modo"
 
@@ -3749,15 +3722,15 @@ msgstr "Lugar"
 
 #: ../gtk/inspector/visual.c:243 ../gtk/inspector/visual.c:269
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "El tema está codificado en GTK_THEME"
 
 #: ../gtk/inspector/visual.c:387
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "El «backend» no soporta el escalado de ventanas"
 
 #: ../gtk/inspector/visual.c:426
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "La configuración está codificada en GTK_TEST_TOUCHSCREEN"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
@@ -3765,11 +3738,10 @@ msgid "GTK+ Theme"
 msgstr "Tema de GTK+"
 
 #: ../gtk/inspector/visual.ui.h:2
-#, fuzzy
 #| msgctxt "Color name"
 #| msgid "Dark Orange"
 msgid "Dark variant"
-msgstr "Naranja oscuro"
+msgstr "Variante oscura"
 
 #: ../gtk/inspector/visual.ui.h:3
 msgid "Icon Theme"
@@ -3784,67 +3756,59 @@ msgid "Text Direction"
 msgstr "Dirección del texto"
 
 #: ../gtk/inspector/visual.ui.h:6
-#| msgid "Left to right"
 msgid "Left-to-Right"
 msgstr "Izquierda a derecha"
 
 #: ../gtk/inspector/visual.ui.h:7
-#| msgid "Right to left"
 msgid "Right-to-Left"
 msgstr "Derecha a izquierda"
 
 #: ../gtk/inspector/visual.ui.h:8
-#| msgid "Window"
 msgid "Window scaling"
 msgstr "Escalado de la ventana"
 
 #: ../gtk/inspector/visual.ui.h:9
-#| msgid "Information"
 msgid "Animations"
 msgstr "Animaciones"
 
 #: ../gtk/inspector/visual.ui.h:10
 msgid "Show Graphic Updates"
-msgstr ""
+msgstr "Mostrar actualizaciones de gráficos"
 
 #: ../gtk/inspector/visual.ui.h:11
 msgid "Show Baselines"
-msgstr ""
+msgstr "Mostrar líneas base"
 
 #: ../gtk/inspector/visual.ui.h:12
 msgid "Show Pixel Cache"
-msgstr ""
+msgstr "Mostrar la caché de píxeles"
 
 #: ../gtk/inspector/visual.ui.h:13
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "Simular pantalla táctil"
 
 #: ../gtk/inspector/widget-tree.ui.h:1
-#| msgid "_Eject"
 msgid "Object"
 msgstr "Objeto"
 
 #: ../gtk/inspector/widget-tree.ui.h:4
-#| msgctxt "Action name"
-#| msgid "Press"
 msgid "Address"
 msgstr "Dirección"
 
 #: ../gtk/inspector/window.c:145
 #, c-format
 msgid "GTK+ Inspector — %s"
-msgstr ""
+msgstr "Inspector de GTK+: %s"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/window.ui.h:1
 msgid "Send Widget to Shell"
-msgstr ""
+msgstr "Enviar widget a la Shell"
 
 #: ../gtk/inspector/window.ui.h:2
-#, fuzzy
 #| msgid "Select a File"
 msgid "Select an Object"
-msgstr "Seleccionar un archivo"
+msgstr "Seleccionar un objeto"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
@@ -3858,13 +3822,10 @@ msgid "Signals"
 msgstr "Señales"
 
 #: ../gtk/inspector/window.ui.h:6
-#| msgid "Search"
 msgid "Hierarchy"
 msgstr "Jerarquía"
 
 #: ../gtk/inspector/window.ui.h:7
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Child Properties"
 msgstr "Propiedades del hijo"
 
@@ -3873,26 +3834,22 @@ msgid "CSS Classes"
 msgstr "Clases CSS"
 
 #: ../gtk/inspector/window.ui.h:9
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Style Properties"
 msgstr "Propiedades del estilo"
 
 #: ../gtk/inspector/window.ui.h:10 ../gtk/inspector/window.ui.h:18
-#| msgid "Custom"
 msgid "Custom CSS"
 msgstr "CSS personalizado"
 
 #: ../gtk/inspector/window.ui.h:11
 msgid "Size Groups"
-msgstr ""
+msgstr "Tamaño de los grupos"
 
 #: ../gtk/inspector/window.ui.h:12
 msgid "Data"
 msgstr "Datos"
 
 #: ../gtk/inspector/window.ui.h:13
-#| msgid "Application"
 msgid "Actions"
 msgstr "Acciones"
 
@@ -3901,12 +3858,10 @@ msgid "Gestures"
 msgstr "Gestos"
 
 #: ../gtk/inspector/window.ui.h:16
-#| msgid "_Eject"
 msgid "Objects"
 msgstr "Objetos"
 
 #: ../gtk/inspector/window.ui.h:17
-#| msgid "Paper _source:"
 msgid "Resources"
 msgstr "Recursos"
 
@@ -4804,13 +4759,12 @@ msgstr "No comprobar la existencia de index.theme"
 
 #: ../gtk/updateiconcache.c:1654
 msgid "Don't include image data in the cache"
-msgstr "No incluir los datos de la imagen en el caché"
+msgstr "No incluir los datos de la imagen en la caché"
 
 #: ../gtk/updateiconcache.c:1655
-#, fuzzy
 #| msgid "Don't include image data in the cache"
 msgid "Include image data in the cache"
-msgstr "No incluir los datos de la imagen en el caché"
+msgstr "Incluir los datos de la imagen en la caché"
 
 #: ../gtk/updateiconcache.c:1656
 msgid "Output a C header file"
