@@ -1384,7 +1384,7 @@ GtkComboBox {
     text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
     border-color: #0f2b48;
     background-image: linear-gradient(to bottom, #256ab1, #215d9c);
-    box-shadow: inset 0 -1px #1a4b7e, inset 0 1px rgba(48, 103, 161, 0.46); }
+    box-shadow: inset 0 -1px #1a4b7e, inset 0 1px rgba(43, 100, 160, 0.55); }
     .titlebar.selection-mode:backdrop, GtkCalendar.selection-mode.header:backdrop,
     .header-bar.selection-mode:backdrop {
       background-image: linear-gradient(to bottom, #215d9c);
@@ -1397,7 +1397,7 @@ GtkComboBox {
       background-image: linear-gradient(to bottom, #256ab1, #215d9c 40%, #1c5187);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(43, 100, 160, 0.55); }
       .titlebar.selection-mode .button.flat, GtkCalendar.selection-mode.header .button.flat,
       .titlebar.selection-mode .titlebutton.button,
       GtkCalendar.selection-mode.header .titlebutton.button,
@@ -1417,7 +1417,7 @@ GtkComboBox {
         background-image: linear-gradient(to bottom, #3180d4, #2467ad 40%, #215d9c);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.67153);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.67153);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(43, 100, 160, 0.55); }
       .titlebar.selection-mode .button:active, GtkCalendar.selection-mode.header .button:active, .titlebar.selection-mode .button:checked, GtkCalendar.selection-mode.header .button:checked,
       .header-bar.selection-mode .button:active,
       .header-bar.selection-mode .button:checked {
@@ -1427,7 +1427,7 @@ GtkComboBox {
         background-image: linear-gradient(to bottom, #194776, #1c5187);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(43, 100, 160, 0.55); }
       .titlebar.selection-mode .button:backdrop, GtkCalendar.selection-mode.header .button:backdrop, .titlebar.selection-mode .button.flat:backdrop, GtkCalendar.selection-mode.header .button.flat:backdrop,
       .titlebar.selection-mode .titlebutton.button:backdrop,
       GtkCalendar.selection-mode.header .titlebutton.button:backdrop,
@@ -1439,7 +1439,7 @@ GtkComboBox {
         background-image: linear-gradient(to bottom, #215d9c);
         text-shadow: none;
         icon-shadow: none;
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0);
         -gtk-image-effect: none;
         border-color: #0f2b48; }
         .titlebar.selection-mode .button:backdrop:active, GtkCalendar.selection-mode.header .button:backdrop:active, .titlebar.selection-mode .button:backdrop:checked, GtkCalendar.selection-mode.header .button:backdrop:checked, .titlebar.selection-mode .button.flat:backdrop:active, GtkCalendar.selection-mode.header .button.flat:backdrop:active,
@@ -1456,7 +1456,7 @@ GtkComboBox {
           color: #d0d9e2;
           border-color: #0b1e33;
           background-image: linear-gradient(to bottom, #184472);
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0);
           border-color: #0f2b48; }
         .titlebar.selection-mode .button:backdrop:insensitive, GtkCalendar.selection-mode.header .button:backdrop:insensitive, .titlebar.selection-mode .button.flat:backdrop:insensitive, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive,
         .titlebar.selection-mode .titlebutton.button:backdrop:insensitive,
@@ -1469,7 +1469,7 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #22558a);
           text-shadow: none;
           icon-shadow: none;
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0);
           border-color: #0f2b48; }
           .titlebar.selection-mode .button:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive > GtkLabel, .titlebar.selection-mode .button.flat:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive > GtkLabel,
           .titlebar.selection-mode .titlebutton.button:backdrop:insensitive > GtkLabel,
@@ -1492,7 +1492,7 @@ GtkComboBox {
           color: #6c88a5;
           border-color: #0b1e33;
           background-image: linear-gradient(to bottom, #1d4876);
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0);
           border-color: #0f2b48; }
           .titlebar.selection-mode .button:backdrop:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive:active > GtkLabel, .titlebar.selection-mode .button:backdrop:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive:checked > GtkLabel, .titlebar.selection-mode .button.flat:backdrop:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive:active > GtkLabel,
           .titlebar.selection-mode .titlebutton.button:backdrop:insensitive:active > GtkLabel,
@@ -1524,7 +1524,7 @@ GtkComboBox {
         background-image: linear-gradient(to bottom, #22558a);
         text-shadow: none;
         icon-shadow: none;
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0.55); }
         .titlebar.selection-mode .button:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive > GtkLabel,
         .header-bar.selection-mode .button:insensitive > GtkLabel {
           color: inherit; }
@@ -1534,7 +1534,7 @@ GtkComboBox {
           color: #a4b5c8;
           border-color: #0b1e33;
           background-image: linear-gradient(to bottom, #1b436f, #1d4876);
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0.55); }
           .titlebar.selection-mode .button:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive:active > GtkLabel, .titlebar.selection-mode .button:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive:checked > GtkLabel,
           .header-bar.selection-mode .button:insensitive:active > GtkLabel,
           .header-bar.selection-mode .button:insensitive:checked > GtkLabel {
@@ -1547,7 +1547,7 @@ GtkComboBox {
         background-image: linear-gradient(to bottom, #454c4c, #393f3f 40%, #2d3232);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(43, 100, 160, 0.55);
         border-color: #0f2b48; }
         .titlebar.selection-mode .button.suggested-action:hover, GtkCalendar.selection-mode.header .button.suggested-action:hover,
         .header-bar.selection-mode .button.suggested-action:hover {
@@ -1557,7 +1557,7 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
           text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
           icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(43, 100, 160, 0.55);
           border-color: #0f2b48; }
         .titlebar.selection-mode .button.suggested-action:active, GtkCalendar.selection-mode.header .button.suggested-action:active,
         .header-bar.selection-mode .button.suggested-action:active {
@@ -1567,7 +1567,7 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #232727, #2d3232);
           text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
           icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-          box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+          box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(43, 100, 160, 0.55);
           border-color: #0f2b48; }
         .titlebar.selection-mode .button.suggested-action:insensitive, GtkCalendar.selection-mode.header .button.suggested-action:insensitive,
         .header-bar.selection-mode .button.suggested-action:insensitive {
@@ -1576,7 +1576,7 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #323636);
           text-shadow: none;
           icon-shadow: none;
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0.55);
           border-color: #0f2b48; }
           .titlebar.selection-mode .button.suggested-action:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.suggested-action:insensitive > GtkLabel,
           .header-bar.selection-mode .button.suggested-action:insensitive > GtkLabel {
@@ -1588,7 +1588,7 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #393f3f);
           text-shadow: none;
           icon-shadow: none;
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0);
           border-color: #0f2b48; }
         .titlebar.selection-mode .button.suggested-action:backdrop:insensitive, GtkCalendar.selection-mode.header .button.suggested-action:backdrop:insensitive,
         .header-bar.selection-mode .button.suggested-action:backdrop:insensitive {
@@ -1597,7 +1597,7 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #323636);
           text-shadow: none;
           icon-shadow: none;
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(43, 100, 160, 0);
           border-color: #0f2b48; }
           .titlebar.selection-mode .button.suggested-action:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.suggested-action:backdrop:insensitive > GtkLabel,
           .header-bar.selection-mode .button.suggested-action:backdrop:insensitive > GtkLabel {
