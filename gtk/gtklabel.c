@@ -5578,6 +5578,60 @@ gtk_label_select_region_index (GtkLabel *label,
   if (priv->select_info && priv->select_info->selectable)
     {
       GtkClipboard *clipboard;
+      gint s, e;
+
+      /* Ensure that we treat an ellipsized region like a single
+       * character with respect to selection.
+       */
+      if (anchor_index < end_index)
+        {
+          if (range_is_in_ellipsis_full (label, anchor_index, anchor_index + 1, &s, &e))
+            {
+              if (priv->select_info->selection_anchor == s)
+                anchor_index = e;
+              else
+                anchor_index = s;
+            }
+          if (range_is_in_ellipsis_full (label, end_index - 1, end_index, &s, &e))
+            {
+              if (priv->select_info->selection_end == e)
+                end_index = s;
+              else
+                end_index = e;
+            }
+        }
+      else if (end_index < anchor_index)
+        {
+          if (range_is_in_ellipsis_full (label, end_index, end_index + 1, &s, &e))
+            {
+              if (priv->select_info->selection_end == s)
+                end_index = e;
+              else
+                end_index = s;
+            }
+          if (range_is_in_ellipsis_full (label, anchor_index - 1, anchor_index, &s, &e))
+            {
+              if (priv->select_info->selection_anchor == e)
+                anchor_index = s;
+              else
+                anchor_index = e;
+            }
+        }
+      else
+        {
+          if (range_is_in_ellipsis_full (label, anchor_index, anchor_index, &s, &e))
+            {
+              if (priv->select_info->selection_anchor == s)
+                anchor_index = e;
+              else if (priv->select_info->selection_anchor == e)
+                anchor_index = s;
+              else if (anchor_index - s < e - anchor_index)
+                anchor_index = s;
+              else
+                anchor_index = e;
+              end_index = anchor_index;
+            }
+        }
 
       if (priv->select_info->selection_anchor == anchor_index &&
           priv->select_info->selection_end == end_index)
