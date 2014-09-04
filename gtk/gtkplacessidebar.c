@@ -144,6 +144,7 @@ struct _GtkPlacesSidebar {
 
   /* volume mounting - delayed open process */
   GtkPlacesOpenFlags go_to_after_mount_open_flags;
+  GCancellable *cancellable;
 
   GtkWidget *popup_menu;
   GSList *shortcuts;
@@ -806,7 +807,7 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
                                "standard::display-name,standard::symbolic-icon",
                                G_FILE_QUERY_INFO_NONE,
                                G_PRIORITY_DEFAULT,
-                               NULL,
+                               sidebar->cancellable,
                                on_app_shortcuts_query_complete,
                                sidebar);
     }
@@ -1234,7 +1235,7 @@ update_places (GtkPlacesSidebar *sidebar)
                                "standard::display-name,standard::symbolic-icon",
                                G_FILE_QUERY_INFO_NONE,
                                G_PRIORITY_DEFAULT,
-                               NULL,
+                               sidebar->cancellable,
                                on_bookmark_query_info_complete,
                                clos);
     }
@@ -3771,6 +3772,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (sidebar)), GTK_STYLE_CLASS_SIDEBAR);
 
+  sidebar->cancellable = g_cancellable_new ();
+
   create_volume_monitor (sidebar);
 
   sidebar->open_flags = GTK_PLACES_OPEN_NORMAL;
@@ -4052,6 +4055,13 @@ gtk_places_sidebar_dispose (GObject *object)
   GtkPlacesSidebar *sidebar;
 
   sidebar = GTK_PLACES_SIDEBAR (object);
+
+  if (sidebar->cancellable)
+    {
+      g_cancellable_cancel (sidebar->cancellable);
+      g_object_unref (sidebar->cancellable);
+      sidebar->cancellable = NULL;
+    }
 
   sidebar->tree_view = NULL;
 
