@@ -1976,7 +1976,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <child>
                           <object class="GtkBox" id="page2box">
                             <property name="visible">True</property>
-                            <property name="margin">10</property>
                             <property name="spacing">20</property>
                             <child>
                               <object class="GtkLabel" id="page2note">
