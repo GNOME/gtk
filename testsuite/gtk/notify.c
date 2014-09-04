@@ -465,6 +465,10 @@ test_type (gconstpointer data)
       if (type == GTK_TYPE_SETTINGS)
         continue;
 
+      if (g_type_is_a (pspec->owner_type, GTK_TYPE_ENTRY_COMPLETION) &&
+          g_str_equal (pspec->name, "text-column"))
+        continue;
+
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_MENU_ITEM) &&
 	  g_str_equal (pspec->name, "accel-path"))
         continue;
