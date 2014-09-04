@@ -174,7 +174,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="rules_hint">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="browse_files_tree_view-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes">Files</property>
