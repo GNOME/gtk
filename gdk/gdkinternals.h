@@ -257,12 +257,6 @@ struct _GdkWindow
      that is fully or partially (i.e. semi transparently) visible in
      the window hierarchy from the toplevel and down */
   cairo_region_t *clip_region;
-  /* This is the clip region, with additionally all the opaque
-     child windows removed */
-  cairo_region_t *clip_region_with_children;
-  /* The layered region is the subset of clip_region that
-     is covered by non-opaque sibling or ancestor sibling window. */
-  cairo_region_t *layered_region;
 
   GdkCursor *cursor;
   GHashTable *device_cursor;
