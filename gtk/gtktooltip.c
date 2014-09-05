@@ -905,7 +905,8 @@ gtk_tooltip_set_last_window (GtkTooltip *tooltip,
 
   if (window_widget &&
       window_widget != tooltip->window &&
-      gtk_widget_is_toplevel (window_widget))
+      gtk_widget_is_toplevel (window_widget) &&
+      GTK_IS_WINDOW (window_widget))
     gtk_window_set_transient_for (GTK_WINDOW (tooltip->window),
                                   GTK_WINDOW (window_widget));
   else
