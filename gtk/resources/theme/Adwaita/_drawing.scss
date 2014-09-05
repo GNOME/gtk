@@ -39,17 +39,15 @@
   background-image: entry_gradient($base_color);
   $_blank_edge: if($edge == none, none, 0 1px transparentize($edge,1));
   $_entry_edge: if($edge == none, none, _widget_edge($edge));
-  $_inner_shadows: inset 0 3px mix(black, $base_color, 3%),
-                   inset 0 1px mix(black, $base_color, 18%);
-  @if $variant == 'dark' {
-    $_inner_shadows: inset 0 3px mix(black, $base_color, 20%),
-                     inset 0 1px mix(black, $base_color, 35%);
-  }
+  $_inner_shadows: inset 0 3px transparentize(black, 0.98),
+                   inset 0 2px transparentize(black, 0.97),
+                   inset 0 1px transparentize(black, 0.92);
 
   // we need to match the same shadow types (inset/outset) in various states
   // hence transparent shadows istead of resetting them when not needed
-  $_blank_inner_shadows: inset 0 2px transparentize(mix(black, $base_color, 5%),1),
-                         inset 0 1px transparentize(mix(black, $base_color, 18%),1);
+  $_blank_inner_shadows: inset 0 3px transparentize(black, 1),
+                         inset 0 2px transparentize(black, 1),
+                         inset 0 1px transparentize(black, 1);
   $_focus_glow_color: if($variant=='light', transparentize($fc,0.85),
                                             transparentize($fc,0.3));
 
