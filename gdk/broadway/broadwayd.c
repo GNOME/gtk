@@ -124,7 +124,7 @@ send_reply (BroadwayClient *client,
     }
 }
 
-void
+static void
 add_client_serial_mapping (BroadwayClient *client,
 			   guint32 client_serial,
 			   guint32 daemon_serial)
@@ -154,7 +154,7 @@ add_client_serial_mapping (BroadwayClient *client,
 
 /* Returns the latest seen client serial at the time we sent
    a daemon request to the browser with a specific daemon serial */
-guint32
+static guint32
 get_client_serial (BroadwayClient *client, guint32 daemon_serial)
 {
   BroadwaySerialMapping *map;

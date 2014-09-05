@@ -258,7 +258,7 @@ encode_pixel (struct encoder *encoder, guint32 color, guint32 prev_color)
     }
 }
 
-void
+static void
 encoder_flush (struct encoder *encoder)
 {
   encode_run (encoder);

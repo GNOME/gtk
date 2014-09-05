@@ -53,6 +53,8 @@ struct _GdkBroadwayServerClass
 
 static gboolean input_available_cb (gpointer stream, gpointer user_data);
 
+static GType gdk_broadway_server_get_type (void);
+
 G_DEFINE_TYPE (GdkBroadwayServer, gdk_broadway_server, G_TYPE_OBJECT)
 
 static void

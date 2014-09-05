@@ -120,6 +120,8 @@ struct BroadwayWindow {
 
 static void broadway_server_resync_windows (BroadwayServer *server);
 
+static GType broadway_server_get_type (void);
+
 G_DEFINE_TYPE (BroadwayServer, broadway_server, G_TYPE_OBJECT)
 
 static void
@@ -752,16 +754,10 @@ broadway_server_flush (BroadwayServer *server)
     }
 }
 
-void
-broadway_server_sync (BroadwayServer *server)
-{
-  broadway_server_flush (server);
-}
-
-
+#if 0
 /* TODO: This is not used atm, is it needed? */
 /* Note: This may be called while handling a message (i.e. sorta recursively) */
-BroadwayInputMsg *
+static BroadwayInputMsg *
 broadway_server_block_for_input (BroadwayServer *server, char op,
 				 guint32 serial, gboolean remove_message)
 {
@@ -814,6 +810,7 @@ broadway_server_block_for_input (BroadwayServer *server, char op,
     queue_process_input_at_idle (server);
   }
 }
+#endif
 
 static void *
 map_named_shm (char *name, gsize size)

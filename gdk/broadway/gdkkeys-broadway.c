@@ -46,6 +46,8 @@ typedef struct _GdkKeymapClass GdkBroadwayKeymapClass;
 #define GDK_BROADWAY_KEYMAP(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_KEYMAP, GdkBroadwayKeymap))
 #define GDK_IS_BROADWAY_KEYMAP(object)    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_KEYMAP))
 
+static GType gdk_broadway_keymap_get_type (void);
+
 typedef struct _DirectionCacheEntry DirectionCacheEntry;
 
 struct _GdkBroadwayKeymap

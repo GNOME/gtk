@@ -662,18 +662,6 @@ gdk_window_broadway_set_device_cursor (GdkWindow *window,
     GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
 }
 
-GdkCursor *
-_gdk_broadway_window_get_cursor (GdkWindow *window)
-{
-  GdkWindowImplBroadway *impl;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-
-  return impl->cursor;
-}
-
 static void
 gdk_window_broadway_get_geometry (GdkWindow *window,
 				  gint      *x,

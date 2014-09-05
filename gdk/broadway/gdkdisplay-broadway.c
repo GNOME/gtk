@@ -260,11 +260,6 @@ gdk_broadway_display_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_broadway_display_parent_class)->finalize (object);
 }
 
-void
-_gdk_broadway_display_make_default (GdkDisplay *display)
-{
-}
-
 static void
 gdk_broadway_display_notify_startup_complete (GdkDisplay  *display,
 					      const gchar *startup_id)

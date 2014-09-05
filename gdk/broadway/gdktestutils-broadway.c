@@ -19,6 +19,7 @@
 #include <gdk/gdktestutils.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkinternals.h>
+#include "gdkprivate-broadway.h"
 
 void
 _gdk_broadway_window_sync_rendering (GdkWindow *window)
