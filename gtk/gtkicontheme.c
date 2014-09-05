@@ -2840,18 +2840,19 @@ string_from_suffix (IconSuffix suffix)
 static IconSuffix
 suffix_from_name (const gchar *name)
 {
-  IconSuffix retval;
+  IconSuffix retval = ICON_SUFFIX_NONE;
 
-  if (g_str_has_suffix (name, ".symbolic.png"))
-    retval = ICON_SUFFIX_SYMBOLIC_PNG;
-  else if (g_str_has_suffix (name, ".png"))
-    retval = ICON_SUFFIX_PNG;
-  else if (g_str_has_suffix (name, ".svg"))
-    retval = ICON_SUFFIX_SVG;
-  else if (g_str_has_suffix (name, ".xpm"))
-    retval = ICON_SUFFIX_XPM;
-  else
-    retval = ICON_SUFFIX_NONE;
+  if (name != NULL)
+    {
+      if (g_str_has_suffix (name, ".symbolic.png"))
+        retval = ICON_SUFFIX_SYMBOLIC_PNG;
+      else if (g_str_has_suffix (name, ".png"))
+        retval = ICON_SUFFIX_PNG;
+      else if (g_str_has_suffix (name, ".svg"))
+        retval = ICON_SUFFIX_SVG;
+      else if (g_str_has_suffix (name, ".xpm"))
+        retval = ICON_SUFFIX_XPM;
+    }
 
   return retval;
 }
