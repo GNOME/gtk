@@ -514,7 +514,7 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
   for (l = list; l; l = l->next)
     {
       GdkDevice *device;
-      device = list->data;
+      device = l->data;
 
       if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
 	continue;
