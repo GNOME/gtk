@@ -534,7 +534,8 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
   if (core_keyboard)
     return _gdk_wayland_device_get_keymap (core_keyboard);
 
-  tmp_keymap = _gdk_wayland_keymap_new ();
+  if (!tmp_keymap)
+    tmp_keymap = _gdk_wayland_keymap_new ();
 
   return tmp_keymap;
 }
