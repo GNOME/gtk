@@ -3969,6 +3969,7 @@ GtkInfoBar {
   /* not working */
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: none;
   text-shadow: 0 1px black; }
 
 .tooltip * {

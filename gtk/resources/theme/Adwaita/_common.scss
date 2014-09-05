@@ -2574,7 +2574,9 @@ GtkInfoBar {
   background-color: transparentize(black, 0.5); // FIXME: I think this is not
                                                 //        what I get, it looks
                                                 //        more solid.
+  box-shadow: none; // otherwise it gets inherited by windowframe.csd
   text-shadow: 0 1px black;
+  // FIXME: we need a border or tooltips vanish on black background.
 }
 
 .tooltip * { //Yeah this is ugly
