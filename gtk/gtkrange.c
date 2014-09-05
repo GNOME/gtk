@@ -2806,6 +2806,10 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &dx, &dy))
     {
+#ifdef GDK_WINDOWING_QUARTZ
+      scroll_unit = 1;
+#endif
+
       if (dx != 0 &&
           gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
         delta = dx * scroll_unit;

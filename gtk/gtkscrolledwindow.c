@@ -2425,7 +2425,12 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
           adj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
           page_size = gtk_adjustment_get_page_size (adj);
+
+#ifdef GDK_WINDOWING_QUARTZ
+          scroll_unit = 1;
+#else
           scroll_unit = pow (page_size, 2.0 / 3.0);
+#endif
 
           new_value = CLAMP (gtk_adjustment_get_value (adj) + delta_x * scroll_unit,
                              gtk_adjustment_get_lower (adj),
@@ -2447,7 +2452,12 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
           adj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
           page_size = gtk_adjustment_get_page_size (adj);
+
+#ifdef GDK_WINDOWING_QUARTZ
+          scroll_unit = 1;
+#else
           scroll_unit = pow (page_size, 2.0 / 3.0);
+#endif
 
           new_value = CLAMP (gtk_adjustment_get_value (adj) + delta_y * scroll_unit,
                              gtk_adjustment_get_lower (adj),
