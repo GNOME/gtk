@@ -10,8 +10,8 @@
 # Yuri Kozlov <yuray@komyakino.ru>, 2010, 2011, 2012.
 #
 # Dmitriy S. Seregin <dseregin@59.ru>, 2013.
-# Yuri Myasoedov <omerta13@yandex.ru>, 2012, 2013.
 # Stas Solovey <whats_up@tut.by>, 2013, 2014.
+# Yuri Myasoedov <ymyasoedov@yandex.ru>, 2012, 2013, 2014.
 #
 msgid ""
 msgstr ""
@@ -19,16 +19,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2014-07-07 09:02+0000\n"
-"PO-Revision-Date: 2014-07-07 17:04+0400\n"
+"PO-Revision-Date: 2014-09-05 11:36+0400\n"
 "Last-Translator: Yuri Myasoedov <ymyasoedov@yandex.ru>\n"
-"Language-Team: Русский <gnome-cyr@gnome.org>\n"
+"Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.6.5\n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../gdk/gdkapplaunchcontext.c:127 ../gdk/gdkcursor.c:139
 #: ../gdk/gdkdevicemanager.c:170
@@ -3921,14 +3921,13 @@ msgid "Number of points"
 msgstr "Количество точек"
 
 #: ../gtk/gtkgesture.c:696
-#, fuzzy
 #| msgid "Number of jobs queued in the printer"
 msgid "Number of points needed to trigger the gesture"
 msgstr "Количество точек, необходимых для срабатывания жеста"
 
 #: ../gtk/gtkgesture.c:712 ../gtk/gtkgesture.c:713
 msgid "GdkWindow to receive events about"
-msgstr ""
+msgstr "Окно, от которого принимаются события"
 
 #: ../gtk/gtkgesturepan.c:237 ../gtk/gtkorientable.c:61
 #: ../gtk/gtkstatusicon.c:332 ../gtk/gtktrayicon-x11.c:126
@@ -3942,18 +3941,17 @@ msgstr "Разрешённые ориентации"
 
 #: ../gtk/gtkgesturesingle.c:243
 msgid "Handle only touch events"
-msgstr ""
+msgstr "Обрабатывать только события нажатий"
 
 #: ../gtk/gtkgesturesingle.c:244
-#, fuzzy
 #| msgid "Whether the widget responds to input"
 msgid "Whether the gesture handles only touch events"
-msgstr "Обрабатывает ли жест только события "
+msgstr "Обрабатывает ли жест только события нажатий"
 
 #: ../gtk/gtkgesturesingle.c:260 ../gtk/gtkgesturesingle.c:261
 #| msgid "Whether the spinner is active"
 msgid "Whether the gesture is exclusive"
-msgstr ""
+msgstr "Является ли жест уникальным"
 
 #: ../gtk/gtkgesturesingle.c:275
 #| msgid "Button relief"
@@ -3961,13 +3959,12 @@ msgid "Button number"
 msgstr "Номер кнопки"
 
 #: ../gtk/gtkgesturesingle.c:276
-#, fuzzy
 msgid "Button number to listen to"
-msgstr "Номер кнопки"
+msgstr "Номер обрабатываемой кнопки"
 
 #: ../gtk/gtkgrid.c:1746
 msgid "Row Homogeneous"
-msgstr "Гомогенность строки"
+msgstr "Гомогенность строк"
 
 #: ../gtk/gtkgrid.c:1747
 msgid "If TRUE, the rows are all the same height"
@@ -3975,7 +3972,7 @@ msgstr "Если установлено, то строки имеют одина
 
 #: ../gtk/gtkgrid.c:1753
 msgid "Column Homogeneous"
-msgstr "Гомогенность столбца"
+msgstr "Гомогенность столбцов"
 
 #: ../gtk/gtkgrid.c:1754
 msgid "If TRUE, the columns are all the same width"
@@ -4040,28 +4037,24 @@ msgid "Whether to show window decorations"
 msgstr "Показывать ли декорации окна"
 
 #: ../gtk/gtkheaderbar.c:1821 ../gtk/gtksettings.c:1579
-#, fuzzy
 #| msgid "Decorated button layout"
 msgid "Decoration Layout"
-msgstr "Расположение оформленной кнопки"
+msgstr "Расположение декораций"
 
 #: ../gtk/gtkheaderbar.c:1822 ../gtk/gtksettings.c:1580
-#, fuzzy
 #| msgid "Whether to show window decorations"
 msgid "The layout for window decorations"
-msgstr "Показывать ли декорации окна"
+msgstr "Расположение декораций окна"
 
 #: ../gtk/gtkheaderbar.c:1836
-#, fuzzy
 #| msgid "Decorated button layout"
 msgid "Decoration Layout Set"
-msgstr "Расположение оформленной кнопки"
+msgstr "Установлено расположение декораций"
 
 #: ../gtk/gtkheaderbar.c:1837
-#, fuzzy
 #| msgid "Whether the icon-size property has been set"
 msgid "Whether the decoration-layout property has been set"
-msgstr "Установлено ли свойство размера значка"
+msgstr "Установлено ли свойство «decoration-layout»"
 
 #: ../gtk/gtkheaderbar.c:1852
 #| msgid "Subitle"
@@ -4565,13 +4558,12 @@ msgstr "Подсказка, когда пользователь не может 
 
 #: ../gtk/gtkmagnifier.c:132
 msgid "Inspected"
-msgstr ""
+msgstr "Исследуемый"
 
 #: ../gtk/gtkmagnifier.c:133
-#, fuzzy
 #| msgid "Icon widget"
 msgid "Inspected widget"
-msgstr "Виджет значка"
+msgstr "Исследуемый виджет"
 
 #: ../gtk/gtkmagnifier.c:139 ../gtk/gtkmagnifier.c:140
 #, fuzzy
@@ -6892,19 +6884,20 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1599
 msgid "Dialogs use header bar"
-msgstr ""
+msgstr "Диалоговые окна используют панель заголовка"
 
 #: ../gtk/gtksettings.c:1600
-#, fuzzy
 #| msgid "Whether buttons in dialogs should use the alternative button order"
 msgid ""
 "Whether builtin GTK+ dialogs should use a header bar instead of an action "
 "area."
-msgstr "Использовать ли альтернативный порядок кнопок в диалогах"
+msgstr ""
+"Должны ли встроенные диалоговые окна GTK+ использовать панель заголовка "
+"вместо области действий."
 
 #: ../gtk/gtksettings.c:1616
 msgid "Enable primary paste"
-msgstr "Включить основную вставку"
+msgstr "Включить вставку из основного буфера обмена"
 
 #: ../gtk/gtksettings.c:1617
 msgid ""
@@ -6916,26 +6909,25 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1633
 msgid "Recent Files Enabled"
-msgstr "Последние файлы включены"
+msgstr "Запоминать последние файлы"
 
 #: ../gtk/gtksettings.c:1634
 msgid "Whether GTK+ remembers recent files"
-msgstr "Должен ли GTK+ запоминать последние файлы"
+msgstr "Запоминает ли GTK+ последние файлы"
 
 #: ../gtk/gtksettings.c:1649
 msgid "Long press time"
-msgstr ""
+msgstr "Время длительного нажатия"
 
 #: ../gtk/gtksettings.c:1650
-#, fuzzy
 #| msgid ""
 #| "Maximum time allowed between two clicks for them to be considered a "
 #| "double click (in milliseconds)"
 msgid ""
 "Time for a button/touch press to be considered a long press (in milliseconds)"
 msgstr ""
-"Максимальное время между двумя щелчками, при котором они считаются двойным "
-"щелчком (в миллисекундах)"
+"Время нажатия на кнопку или экран, которое будет считаться длительным (в "
+"миллисекундах)"
 
 #: ../gtk/gtksizegroup.c:323 ../gtk/gtktreeselection.c:130
 msgid "Mode"
@@ -6946,8 +6938,8 @@ msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
 msgstr ""
-"Направления, в которых «группа по размеру» влияет на заданные размеры "
-"входящих в неё элементов управления"
+"Направления, в которых группа выравнивания влияет на запрашиваемые её "
+"виджетами размеры"
 
 #: ../gtk/gtksizegroup.c:341
 msgid "Ignore hidden"
@@ -6957,8 +6949,8 @@ msgstr "Игнорировать скрытые"
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
-"Если этот параметр установлен, скрытые элементы игнорируются при определении "
-"размера группы"
+"Если этот параметр установлен, скрытые элементы будут игнорироваться при "
+"определении размера группы"
 
 #: ../gtk/gtkspinbutton.c:354
 msgid "Climb Rate"
@@ -8940,42 +8932,3 @@ msgstr "Заголовок цветового профиля"
 #: ../modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Заголовок используемого цветового профиля"
-
-#~ msgid "Hold Time"
-#~ msgstr "Время удержания"
-
-#~ msgid "Hold Time (in milliseconds)"
-#~ msgstr "Время удержания (в миллисекундах)"
-
-#~ msgid "Drag Threshold"
-#~ msgstr "Порог перетаскивания"
-
-#~ msgid "Drag Threshold (in pixels)"
-#~ msgstr "Порог перетаскивания (в пикселах)"
-
-#~ msgid "Width of resize grip"
-#~ msgstr "Ширина уголка изменения размера"
-
-#~ msgid "Height of resize grip"
-#~ msgstr "Высота уголка изменения размера"
-
-#~ msgid "menu-model"
-#~ msgstr "модель меню"
-
-#~ msgid "The dropdown menu's model."
-#~ msgstr "Модель выпадающего меню."
-
-#~ msgid "align-widget"
-#~ msgstr "виджет-выравниватель"
-
-#~ msgid "direction"
-#~ msgstr "направление"
-
-#~ msgid "Window the coordinates are based upon"
-#~ msgstr "Окно, относительно которого считаются координаты"
-
-#~ msgid "Dash pattern used to draw the focus indicator"
-#~ msgstr "Образец штрихов для отображения линии-индикатора фокуса ввода"
-
-#~ msgid "Show Close button"
-#~ msgstr "Показывать кнопку закрытия"
