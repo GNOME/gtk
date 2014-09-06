@@ -305,8 +305,8 @@ property_query_event (GtkWidget *widget,
 }
 
 void
-on_inspect (GtkWidget          *button,
-            GtkInspectorWindow *iw)
+gtk_inspector_on_inspect (GtkWidget          *button,
+                          GtkInspectorWindow *iw)
 {
   GdkDisplay *display;
   GdkDevice *device;

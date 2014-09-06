@@ -1081,7 +1081,7 @@ gtk_inspector_prop_editor_init (GtkInspectorPropEditor *editor)
                 NULL);
 }
 
-GtkTreeModel *
+static GtkTreeModel *
 gtk_cell_layout_get_model (GtkCellLayout *layout)
 {
   if (GTK_IS_TREE_VIEW_COLUMN (layout))
@@ -1094,7 +1094,7 @@ gtk_cell_layout_get_model (GtkCellLayout *layout)
     return NULL;
 }
 
-GtkWidget *
+static GtkWidget *
 gtk_cell_layout_get_widget (GtkCellLayout *layout)
 {
   if (GTK_IS_TREE_VIEW_COLUMN (layout))

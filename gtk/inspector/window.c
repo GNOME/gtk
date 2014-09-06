@@ -50,8 +50,6 @@
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
-extern void on_inspect (GtkWidget *button, GtkInspectorWindow *iw);
-
 static gboolean
 on_widget_tree_button_press (GtkInspectorWidgetTree *wt,
                              GdkEventButton         *event,
@@ -215,7 +213,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, misc_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, gestures);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_inspect);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_widget_tree_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_send_widget_to_shell_activate);
 }

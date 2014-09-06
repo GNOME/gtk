@@ -164,7 +164,7 @@ variant_editor_set_value (GtkWidget *editor,
   g_signal_handlers_unblock_by_func (editor, variant_editor_changed_cb, data);
 }
 
-GVariant *
+static GVariant *
 variant_editor_get_value (GtkWidget *editor)
 {
   const GVariantType *type;

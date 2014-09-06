@@ -117,7 +117,7 @@ redraw_everything (void)
   g_list_free (toplevels);
 }
 
-void
+static void
 updates_activate (GtkSwitch *sw)
 {
   gdk_window_set_debug_updates (gtk_switch_get_active (sw));

@@ -22,6 +22,8 @@
  */
 #include <glib.h>
 
+#include "init.h"
+
 #include "actions.h"
 #include "button-path.h"
 #include "classes-list.h"

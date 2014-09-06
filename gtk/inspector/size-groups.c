@@ -46,6 +46,8 @@ enum {
 
 GParamSpec *properties[LAST_PROPERTY] = { NULL };
 
+GType size_group_row_get_type (void);
+
 G_DEFINE_TYPE (SizeGroupRow, size_group_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void

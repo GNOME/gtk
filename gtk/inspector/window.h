@@ -85,6 +85,9 @@ void       gtk_inspector_flash_widget       (GtkInspectorWindow *iw,
 void       gtk_inspector_start_highlight    (GtkWidget          *widget);
 void       gtk_inspector_stop_highlight     (GtkWidget          *widget);
 
+void       gtk_inspector_on_inspect         (GtkWidget          *widget,
+                                             GtkInspectorWindow *iw);
+
 void       gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow *iw);
 
                                             
