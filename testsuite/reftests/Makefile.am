@@ -314,6 +314,9 @@ testdata = \
 	opacity.css \
 	opacity.ui \
 	opacity.ref.ui \
+	opacity-initial.css \
+	opacity-initial.ref.ui \
+	opacity-initial.ui \
 	overlay-no-main-widget.ref.ui \
 	overlay-no-main-widget.ui \
 	paned-undersized.css \

@@ -5527,9 +5527,7 @@ gtk_widget_realize (GtkWidget *widget)
       _gtk_widget_enable_device_events (widget);
       gtk_widget_update_devices_mask (widget, TRUE);
 
-      if (gtk_widget_is_toplevel (widget))
-	gdk_window_set_opacity (priv->window,
-				priv->alpha / 255.0);
+      gtk_widget_update_alpha (widget);
 
       if (priv->context)
 	gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
@@ -15913,6 +15911,7 @@ static void
 gtk_widget_update_alpha (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
+  GtkStyleContext *context;
   gdouble opacity;
   guint8 alpha;
 
@@ -15920,15 +15919,13 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
   alpha = priv->user_alpha;
 
-  if (priv->context)
-    {
-      opacity =
-	_gtk_css_number_value_get (_gtk_style_context_peek_property (priv->context,
-								     GTK_CSS_PROPERTY_OPACITY),
-				   100);
-      opacity = CLAMP (opacity, 0.0, 1.0);
-      alpha = round (priv->user_alpha * opacity);
-    }
+  context = gtk_widget_get_style_context (widget);
+  opacity =
+    _gtk_css_number_value_get (_gtk_style_context_peek_property (context,
+                                                                 GTK_CSS_PROPERTY_OPACITY),
+                               100);
+  opacity = CLAMP (opacity, 0.0, 1.0);
+  alpha = round (priv->user_alpha * opacity);
 
   if (alpha == priv->alpha)
     return;
