@@ -25,6 +25,8 @@ $osd_bg_color: #2e3436;
 $osd_borders_color: transparentize(black, 0.3);
 $osd_outer_borders_color: transparentize(white, 0.9);
 
+$tooltip_borders_color: $osd_outer_borders_color;
+
 //insensitive state derived colors
 $insensitive_fg_color: mix($fg_color, $bg_color, 50%);
 $insensitive_bg_color: mix($bg_color, $base_color, 60%);
