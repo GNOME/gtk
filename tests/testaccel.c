@@ -64,13 +64,17 @@ key_test (void)
 	GtkTreeViewColumn *column;
 	GtkCellRenderer *rend;
 	gint i;
+        GtkWidget *box, *entry;
 
 	/* create window */
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
+        gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
 	sw = gtk_scrolled_window_new (NULL, NULL);
-	gtk_container_add (GTK_CONTAINER (window), sw);
+        box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+        gtk_widget_show (box);
+	gtk_container_add (GTK_CONTAINER (window), box);
+        gtk_box_pack_start (GTK_BOX (box), sw, TRUE, TRUE, 0);
 
 	store = gtk_list_store_new (3, G_TYPE_INT, G_TYPE_UINT, G_TYPE_UINT);
 	tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
@@ -105,8 +109,10 @@ key_test (void)
 		gtk_list_store_append (store, &iter);
 	}
 
-	/* done */
-
+        entry = gtk_entry_new ();
+        gtk_widget_show (entry);
+        gtk_container_add (GTK_CONTAINER (box), entry);
+ 
 	return window;
 }
 
