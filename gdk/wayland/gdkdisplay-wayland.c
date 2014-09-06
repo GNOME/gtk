@@ -418,73 +418,10 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
   return ++serial;
 }
 
-/**
- * gdk_wayland_display_broadcast_startup_message:
- * @display: a #GdkDisplay
- * @message_type: startup notification message type ("new", "change",
- * or "remove")
- * @...: a list of key/value pairs (as strings), terminated by a
- * %NULL key. (A %NULL value for a key will cause that key to be
- * skipped in the output.)
- *
- * Sends a startup notification message of type @message_type to
- * @display. 
- *
- * This is a convenience function for use by code that implements the
- * freedesktop startup notification specification. Applications should
- * not normally need to call it directly. See the 
- * [Startup Notification Protocol specification](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt)
- * for definitions of the message types and keys that can be used.
- *
- * Since: 2.12
- **/
-void
-gdk_wayland_display_broadcast_startup_message (GdkDisplay *display,
-					       const char *message_type,
-					       ...)
-{
-  GString *message;
-  va_list ap;
-  const char *key, *value, *p;
-
-  message = g_string_new (message_type);
-  g_string_append_c (message, ':');
-
-  va_start (ap, message_type);
-  while ((key = va_arg (ap, const char *)))
-    {
-      value = va_arg (ap, const char *);
-      if (!value)
-	continue;
-
-      g_string_append_printf (message, " %s=\"", key);
-      for (p = value; *p; p++)
-	{
-	  switch (*p)
-	    {
-	    case ' ':
-	    case '"':
-	    case '\\':
-	      g_string_append_c (message, '\\');
-	      break;
-	    }
-
-	  g_string_append_c (message, *p);
-	}
-      g_string_append_c (message, '\"');
-    }
-  va_end (ap);
-
-  g_string_free (message, TRUE);
-}
-
 static void
 gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 					     const gchar *startup_id)
 {
-  gdk_wayland_display_broadcast_startup_message (display, "remove",
-						 "ID", startup_id,
-						 NULL);
 }
 
 static void
@@ -500,7 +437,7 @@ gdk_wayland_display_event_data_free (GdkDisplay *display,
 {
 }
 
-GdkKeymap *
+static GdkKeymap *
 _gdk_wayland_display_get_keymap (GdkDisplay *display)
 {
   GdkDeviceManager *device_manager;
@@ -764,7 +701,7 @@ static const struct wl_buffer_listener buffer_listener = {
   buffer_release_callback
 };
 
-struct wl_shm_pool *
+static struct wl_shm_pool *
 create_shm_pool (struct wl_shm  *shm,
                  int             width,
                  int             height,

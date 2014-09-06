@@ -98,6 +98,8 @@ struct _GdkWaylandMonitor
   gint          scale;
 };
 
+GType _gdk_wayland_screen_get_type (void);
+
 G_DEFINE_TYPE (GdkWaylandScreen, _gdk_wayland_screen, GDK_TYPE_SCREEN)
 
 static void
@@ -804,6 +806,8 @@ struct _GdkWaylandVisualClass
 {
   GdkVisualClass parent_class;
 };
+
+GType _gdk_wayland_visual_get_type (void);
 
 G_DEFINE_TYPE (GdkWaylandVisual, _gdk_wayland_visual, GDK_TYPE_VISUAL)
 

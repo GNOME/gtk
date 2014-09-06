@@ -59,6 +59,8 @@ struct _GdkWaylandAppLaunchContextClass
   GdkAppLaunchContextClass base_class;
 };
 
+GType gdk_wayland_app_launch_context_get_type (void);
+
 G_DEFINE_TYPE (GdkWaylandAppLaunchContext, gdk_wayland_app_launch_context, GDK_TYPE_APP_LAUNCH_CONTEXT)
 
 static void

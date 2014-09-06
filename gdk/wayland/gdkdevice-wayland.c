@@ -132,6 +132,8 @@ struct _GdkWaylandDeviceManagerClass
   GdkDeviceManagerClass parent_class;
 };
 
+GType gdk_wayland_device_manager_get_type (void);
+
 G_DEFINE_TYPE (GdkWaylandDeviceManager,
 	       gdk_wayland_device_manager, GDK_TYPE_DEVICE_MANAGER)
 

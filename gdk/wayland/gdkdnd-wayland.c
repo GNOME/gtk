@@ -56,6 +56,8 @@ struct _GdkWaylandDragContextClass
 
 static GList *contexts;
 
+GType gdk_wayland_drag_context_get_type (void);
+
 G_DEFINE_TYPE (GdkWaylandDragContext, gdk_wayland_drag_context, GDK_TYPE_DRAG_CONTEXT)
 
 static void

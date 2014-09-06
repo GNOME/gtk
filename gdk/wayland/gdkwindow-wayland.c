@@ -135,6 +135,8 @@ static void gdk_wayland_window_configure (GdkWindow *window,
                                           int        width,
                                           int        height);
 
+GType _gdk_window_impl_wayland_get_type (void);
+
 G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_IMPL)
 
 static void
@@ -1484,7 +1486,7 @@ gdk_wayland_window_get_type_hint (GdkWindow *window)
   return impl->hint;
 }
 
-void
+static void
 gdk_wayland_window_set_modal_hint (GdkWindow *window,
                                    gboolean   modal)
 {

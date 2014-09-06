@@ -66,6 +66,8 @@ struct _GdkWaylandCursorClass
   GdkCursorClass cursor_class;
 };
 
+GType _gdk_wayland_cursor_get_type (void);
+
 G_DEFINE_TYPE (GdkWaylandCursor, _gdk_wayland_cursor, GDK_TYPE_CURSOR)
 
 void

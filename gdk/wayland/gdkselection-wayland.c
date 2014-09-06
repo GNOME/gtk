@@ -346,7 +346,7 @@ gdk_wayland_selection_get_targets (void)
   return selection->targets;
 }
 
-void
+static void
 gdk_wayland_selection_emit_request (GdkWindow *window,
                                     GdkAtom    selection,
                                     GdkAtom    target)
@@ -366,7 +366,7 @@ gdk_wayland_selection_emit_request (GdkWindow *window,
   gdk_event_free (event);
 }
 
-gboolean
+static gboolean
 gdk_wayland_selection_check_write (GdkWaylandSelection *selection)
 {
   gssize len, bytes_written = 0;
