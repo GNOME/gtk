@@ -17056,7 +17056,7 @@ event_controller_sequence_state_changed (GtkGesture            *gesture,
     }
 }
 
-EventControllerData *
+static EventControllerData *
 _gtk_widget_has_controller (GtkWidget          *widget,
                             GtkEventController *controller)
 {

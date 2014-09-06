@@ -22,6 +22,7 @@
 #include <math.h>
 #include <string.h>
 
+#include "gtkcsstransformvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 
 typedef union _GtkCssTransform GtkCssTransform;

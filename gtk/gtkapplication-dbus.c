@@ -206,6 +206,8 @@ gtk_application_impl_dbus_shutdown (GtkApplicationImpl *impl)
 {
 }
 
+GQuark gtk_application_impl_dbus_export_id_quark (void);
+
 G_DEFINE_QUARK (GtkApplicationImplDBus export id, gtk_application_impl_dbus_export_id)
 
 static void

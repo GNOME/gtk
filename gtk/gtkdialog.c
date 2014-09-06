@@ -29,6 +29,7 @@
 
 #include "gtkbutton.h"
 #include "gtkdialog.h"
+#include "gtkdialogprivate.h"
 #include "gtkheaderbar.h"
 #include "gtkbbox.h"
 #include "gtklabel.h"

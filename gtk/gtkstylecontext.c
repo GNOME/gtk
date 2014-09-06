@@ -4531,7 +4531,7 @@ _gtk_style_context_get_changes (GtkStyleContext *context)
   return context->priv->invalidating_context;
 }
 
-void
+static void
 gtk_cairo_rectangle_transform (cairo_rectangle_int_t       *dest,
                                const cairo_rectangle_int_t *src,
                                const cairo_matrix_t        *matrix)

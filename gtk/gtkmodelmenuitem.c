@@ -389,7 +389,7 @@ gtk_model_menu_item_get_accel (GtkModelMenuItem *item)
   return NULL;
 }
 
-void
+static void
 gtk_model_menu_item_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
@@ -423,7 +423,8 @@ gtk_model_menu_item_get_property (GObject    *object,
       g_assert_not_reached ();
     }
 }
-void
+
+static void
 gtk_model_menu_item_set_property (GObject      *object,
                                   guint         prop_id,
                                   const GValue *value,

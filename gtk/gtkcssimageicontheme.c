@@ -29,7 +29,7 @@
 
 G_DEFINE_TYPE (GtkCssImageIconTheme, _gtk_css_image_icon_theme, GTK_TYPE_CSS_IMAGE)
 
-double
+static double
 gtk_css_image_icon_theme_get_aspect_ratio (GtkCssImage *image)
 {
   /* icon theme icons only take a single size when requesting, so we insist on being square */

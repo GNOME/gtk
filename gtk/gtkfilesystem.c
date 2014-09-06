@@ -830,7 +830,7 @@ _gtk_file_system_volume_unref (GtkFileSystemVolume *volume)
 }
 
 /* GFileInfo helper functions */
-cairo_surface_t *
+static cairo_surface_t *
 _gtk_file_info_render_icon_internal (GFileInfo *info,
 			             GtkWidget *widget,
 			             gint       icon_size,

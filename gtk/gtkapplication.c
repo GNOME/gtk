@@ -423,7 +423,7 @@ accels_set_accels_for_action (Accels              *accels,
     g_hash_table_remove (accels->action_to_accels, action_and_target);
 }
 
-gchar **
+static gchar **
 accels_get_accels_for_action (Accels      *accels,
                               const gchar *action_and_target)
 {
@@ -485,18 +485,6 @@ struct _GtkApplicationPrivate
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
-
-const gchar *
-gtk_application_get_app_menu_object_path (GtkApplication *application)
-{
-  g_assert_not_reached (); /* XXX */
-}
-
-const gchar *
-gtk_application_get_menubar_object_path (GtkApplication *application)
-{
-  g_assert_not_reached (); /* XXX */
-}
 
 static gboolean
 gtk_application_focus_in_event_cb (GtkWindow      *window,
@@ -1612,7 +1600,7 @@ gtk_application_list_action_descriptions (GtkApplication *application)
   return result;
 }
 
-gchar *
+static gchar *
 normalise_detailed_name (const gchar *detailed_action_name)
 {
   GError *error = NULL;

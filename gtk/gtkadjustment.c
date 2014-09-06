@@ -24,6 +24,7 @@
 
 #include "config.h"
 #include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
