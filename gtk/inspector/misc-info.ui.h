@@ -4,3 +4,4 @@ N_("Default Widget");
 N_("Properties");
 N_("Focus Widget");
 N_("Properties");
+N_("Allocated size");

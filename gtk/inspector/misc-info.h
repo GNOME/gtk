@@ -18,7 +18,7 @@
 #ifndef _GTK_INSPECTOR_MISC_INFO_H_
 #define _GTK_INSPECTOR_MISC_INFO_H_
 
-#include <gtk/gtkbox.h>
+#include "gtkscrolledwindow.h"
 
 #define GTK_TYPE_INSPECTOR_MISC_INFO            (gtk_inspector_misc_info_get_type())
 #define GTK_INSPECTOR_MISC_INFO(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_MISC_INFO, GtkInspectorMiscInfo))
@@ -32,13 +32,13 @@ typedef struct _GtkInspectorMiscInfoPrivate GtkInspectorMiscInfoPrivate;
 
 typedef struct _GtkInspectorMiscInfo
 {
-  GtkBox parent;
+  GtkScrolledWindow parent;
   GtkInspectorMiscInfoPrivate *priv;
 } GtkInspectorMiscInfo;
 
 typedef struct _GtkInspectorMiscInfoClass
 {
-  GtkBoxClass parent;
+  GtkScrolledWindowClass parent;
 } GtkInspectorMiscInfoClass;
 
 G_BEGIN_DECLS

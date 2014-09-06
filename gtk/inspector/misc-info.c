@@ -43,6 +43,8 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *focus_widget_row;
   GtkWidget *focus_widget;
   GtkWidget *focus_widget_button;
+  GtkWidget *allocated_size_row;
+  GtkWidget *allocated_size;
 };
 
 enum
@@ -50,8 +52,8 @@ enum
   PROP_0,
   PROP_WIDGET_TREE
 };
- 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorMiscInfo, gtk_inspector_misc_info, GTK_TYPE_BOX)
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorMiscInfo, gtk_inspector_misc_info, GTK_TYPE_SCROLLED_WINDOW)
 
 static gchar *
 format_state_flags (GtkStateFlags state)
@@ -90,6 +92,17 @@ state_flags_changed (GtkWidget *w, GtkStateFlags old_flags, GtkInspectorMiscInfo
   s = format_state_flags (gtk_widget_get_state_flags (w));
   gtk_label_set_label (GTK_LABEL (sl->priv->state), s);
   g_free (s);
+}
+
+static void
+allocation_changed (GtkWidget *w, GdkRectangle *allocation, GtkInspectorMiscInfo *sl)
+{
+  gchar *size_label = g_strdup_printf ("%d × %d",
+                                       gtk_widget_get_allocated_width (w),
+                                       gtk_widget_get_allocated_height (w));
+
+  gtk_label_set_label (GTK_LABEL (sl->priv->allocated_size), size_label);
+  g_free (size_label);
 }
 
 static void
@@ -209,6 +222,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
     {
       g_signal_handlers_disconnect_by_func (sl->priv->object, state_flags_changed, sl);
       g_signal_handlers_disconnect_by_func (sl->priv->object, set_focus_cb, sl);
+      g_signal_handlers_disconnect_by_func (sl->priv->object, allocation_changed, sl);
       disconnect_each_other (sl->priv->object, G_OBJECT (sl));
       disconnect_each_other (sl, sl->priv->object);
       sl->priv->object = NULL;
@@ -231,10 +245,15 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_show (sl->priv->state_row);
       g_signal_connect_object (object, "state-flags-changed", G_CALLBACK (state_flags_changed), sl, 0);
       state_flags_changed (GTK_WIDGET (sl->priv->object), 0, sl);
+
+      allocation_changed (GTK_WIDGET (sl->priv->object), NULL, sl);
+      gtk_widget_show (sl->priv->allocated_size_row);
+      g_signal_connect_object (object, "size-allocate", G_CALLBACK (allocation_changed), sl, 0);
     }
   else
     {
       gtk_widget_hide (sl->priv->state_row);
+      gtk_widget_hide (sl->priv->allocated_size_row);
     }
 
   if (GTK_IS_BUILDABLE (object))
@@ -336,6 +355,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_row);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_button);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size);
 
   gtk_widget_class_bind_template_callback (widget_class, show_default_widget);
   gtk_widget_class_bind_template_callback (widget_class, show_focus_widget);

@@ -1,168 +1,210 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
-  <template class="GtkInspectorMiscInfo" parent="GtkBox">
-    <property name="orientation">vertical</property>
-    <property name="margin">60</property>
-    <property name="spacing">10</property>
+  <template class="GtkInspectorMiscInfo" parent="GtkScrolledWindow">
+
     <child>
-      <object class="GtkFrame">
-        <property name="visible">True</property>
-        <property name="halign">center</property>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="orientation">vertical</property>
+        <property name="margin">60</property>
+        <property name="spacing">10</property>
+
         <child>
-          <object class="GtkListBox">
+          <object class="GtkFrame">
             <property name="visible">True</property>
-            <property name="selection-mode">none</property>
+            <property name="halign">center</property>
             <child>
-              <object class="GtkListBoxRow" id="state_row">
+              <object class="GtkListBox">
                 <property name="visible">True</property>
-                <property name="activatable">False</property>
+                <property name="selection-mode">none</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkListBoxRow" id="state_row">
                     <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="margin">10</property>
-                    <property name="spacing">40</property>
+                    <property name="activatable">False</property>
                     <child>
-                      <object class="GtkLabel" id="state_label">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">State</property>
-                        <property name="halign">start</property>
-                        <property name="valign">baseline</property>
-                        <property name="xalign">0.0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="state">
-                        <property name="visible">True</property>
-                        <property name="selectable">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">baseline</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="state_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">State</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="state">
+                            <property name="visible">True</property>
+                            <property name="selectable">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBoxRow" id="buildable_id_row">
-                <property name="visible">True</property>
-                <property name="activatable">False</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkListBoxRow" id="buildable_id_row">
                     <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="margin">10</property>
-                    <property name="spacing">40</property>
+                    <property name="activatable">False</property>
                     <child>
-                      <object class="GtkLabel" id="buildable_id_label">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Buildable ID</property>
-                        <property name="halign">start</property>
-                        <property name="valign">baseline</property>
-                        <property name="xalign">0.0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="buildable_id">
-                        <property name="visible">True</property>
-                        <property name="selectable">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">baseline</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="buildable_id_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Buildable ID</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="buildable_id">
+                            <property name="visible">True</property>
+                            <property name="selectable">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBoxRow" id="default_widget_row">
-                <property name="visible">True</property>
-                <property name="activatable">False</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkListBoxRow" id="default_widget_row">
                     <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="margin">10</property>
-                    <property name="spacing">40</property>
+                    <property name="activatable">False</property>
                     <child>
-                      <object class="GtkLabel" id="default_widget_label">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Default Widget</property>
-                        <property name="halign">start</property>
-                        <property name="valign">baseline</property>
-                        <property name="xalign">0.0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="default_widget">
-                        <property name="visible">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">baseline</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="default_widget_button">
-                        <property name="visible">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">baseline</property>
-                        <property name="label" translatable="yes">Properties</property>
-                        <signal name="clicked" handler="show_default_widget"/>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="default_widget_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Default Widget</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="default_widget">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="default_widget_button">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="label" translatable="yes">Properties</property>
+                            <signal name="clicked" handler="show_default_widget"/>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBoxRow" id="focus_widget_row">
-                <property name="visible">True</property>
-                <property name="activatable">False</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkListBoxRow" id="focus_widget_row">
                     <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="margin">10</property>
-                    <property name="spacing">40</property>
+                    <property name="activatable">False</property>
                     <child>
-                      <object class="GtkLabel" id="focus_widget_label">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Focus Widget</property>
-                        <property name="halign">start</property>
-                        <property name="valign">baseline</property>
-                        <property name="xalign">0.0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="focus_widget">
-                        <property name="visible">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">baseline</property>
-                        <property name="ellipsize">end</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="focus_widget_button">
-                        <property name="visible">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">baseline</property>
-                        <property name="label" translatable="yes">Properties</property>
-                        <signal name="clicked" handler="show_focus_widget"/>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="focus_widget_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Focus Widget</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="focus_widget">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="focus_widget_button">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="label" translatable="yes">Properties</property>
+                            <signal name="clicked" handler="show_focus_widget"/>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
+
+                <child>
+                  <object class="GtkListBoxRow" id="allocated_size_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Allocated size</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="allocated_size">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
               </object>
             </child>
           </object>
