@@ -46,7 +46,6 @@
 #include "gtkdnd.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
-#include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtkplug.h"
 #include "gtktooltip.h"
