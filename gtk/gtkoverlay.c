@@ -214,8 +214,8 @@ gtk_overlay_get_main_widget_allocation (GtkOverlay *overlay,
     {
       main_alloc.x = 0;
       main_alloc.y = 0;
-      main_alloc.width = 1;
-      main_alloc.height = 1;
+      main_alloc.width = gtk_widget_get_allocated_width (GTK_WIDGET (overlay));
+      main_alloc.height = gtk_widget_get_allocated_height (GTK_WIDGET (overlay));
     }
 
   if (main_alloc_out)
@@ -325,10 +325,8 @@ gtk_overlay_size_allocate (GtkWidget     *widget,
   GTK_WIDGET_CLASS (gtk_overlay_parent_class)->size_allocate (widget, allocation);
 
   main_widget = gtk_bin_get_child (GTK_BIN (overlay));
-  if (!main_widget || !gtk_widget_get_visible (main_widget))
-    return;
-
-  gtk_widget_size_allocate (main_widget, allocation);
+  if (main_widget && gtk_widget_get_visible (main_widget))
+    gtk_widget_size_allocate (main_widget, allocation);
 
   for (children = priv->children; children; children = children->next)
     gtk_overlay_child_allocate (overlay, children->data);
