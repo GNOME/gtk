@@ -1453,16 +1453,10 @@ append_uri_to_urilist (GtkTreeModel *model,
 		       gpointer      user_data)
 {
   DragData *drag_data = (DragData *) user_data;
-  GtkTreeModel *child_model;
-  GtkTreeIter child_iter;
   gchar *uri = NULL;
   gsize pos;
 
-  child_model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model),
-  						    &child_iter,
-  						    iter);
-  gtk_tree_model_get (child_model, &child_iter,
+  gtk_tree_model_get (model, iter,
   		      RECENT_URI_COLUMN, &uri,
   		      -1);
   g_assert (uri != NULL);
