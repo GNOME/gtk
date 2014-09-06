@@ -6763,6 +6763,9 @@ update_border_windows (GtkWindow *window)
   GtkStyleContext *context;
   GtkStateFlags state;
 
+  if (!priv->client_decorated)
+    return;
+
   state = gtk_widget_get_state_flags (widget);
   context = gtk_widget_get_style_context (widget);
 
