@@ -660,7 +660,6 @@ gtk_cell_editable_event_box_key_press_event (GtkWidget   *widget,
 
  out:
   gtk_cell_renderer_accel_ungrab (GTK_CELL_RENDERER_ACCEL (box->cell));
-
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (widget));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (widget));
 
@@ -681,6 +680,19 @@ gtk_cell_editable_event_box_unrealize (GtkWidget *widget)
   gtk_cell_renderer_accel_ungrab (GTK_CELL_RENDERER_ACCEL (box->cell));
   
   GTK_WIDGET_CLASS (gtk_cell_editable_event_box_parent_class)->unrealize (widget); 
+}
+
+static gboolean
+gtk_cell_editable_event_box_focus_out (GtkWidget     *widget,
+                                       GdkEventFocus *event)
+{
+  GtkCellEditableEventBox *box = (GtkCellEditableEventBox*)widget;
+
+  gtk_cell_renderer_accel_ungrab (GTK_CELL_RENDERER_ACCEL (box->cell));
+  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (widget));
+  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (widget));
+
+  return FALSE;
 }
 
 static void
@@ -755,6 +767,7 @@ gtk_cell_editable_event_box_class_init (GtkCellEditableEventBoxClass *class)
 
   widget_class->key_press_event = gtk_cell_editable_event_box_key_press_event;
   widget_class->unrealize = gtk_cell_editable_event_box_unrealize;
+  widget_class->focus_out_event = gtk_cell_editable_event_box_focus_out;
 
   g_object_class_override_property (object_class,
                                     PROP_EDITING_CANCELED,
