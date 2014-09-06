@@ -2305,6 +2305,7 @@ GtkSwitch {
   GtkSwitch.trough {
     border: 1px solid #1c1f1f;
     border-radius: 3px;
+    color: #eeeeec;
     background-image: linear-gradient(to bottom, #2d3232);
     text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
     GtkSwitch.trough:active {
@@ -2335,11 +2336,7 @@ GtkSwitch {
         border-color: #1e2222;
         background-image: none;
         background-color: #323636; }
-  .list-row:selected GtkSwitch {
-    box-shadow: 0 0 0 1px #ffffff; }
-    .list-row:selected GtkSwitch:backdrop {
-      box-shadow: 0 0 0 1px #2c2c2c; }
-  GtkSwitch.slider, .list-row:selected GtkSwitch.slider {
+  GtkSwitch.slider {
     border: 1px solid;
     border-radius: 3px;
     color: #eeeeec;
@@ -2350,7 +2347,7 @@ GtkSwitch {
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2a2f2f; }
-    GtkSwitch.slider:hover, .list-row:selected GtkSwitch.slider:hover {
+    GtkSwitch.slider:hover {
       color: #eeeeec;
       outline-color: rgba(238, 238, 236, 0.3);
       border-color: #1c1f1f;
@@ -2359,18 +2356,18 @@ GtkSwitch {
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2a2f2f; }
-    GtkSwitch.slider:active, .list-row:selected GtkSwitch.slider:active {
+    GtkSwitch.slider:active {
       border: 1px solid #0f2b48; }
-    GtkSwitch.slider:insensitive, .list-row:selected GtkSwitch.slider:insensitive {
+    GtkSwitch.slider:insensitive {
       color: #939695;
       border-color: #1c1f1f;
       background-image: linear-gradient(to bottom, #323636);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      GtkSwitch.slider:insensitive > GtkLabel, .list-row:selected GtkSwitch.slider:insensitive > GtkLabel {
+      GtkSwitch.slider:insensitive > GtkLabel {
         color: inherit; }
-    GtkSwitch.slider:backdrop, .list-row:selected GtkSwitch.slider:backdrop {
+    GtkSwitch.slider:backdrop {
       color: #c9cbc9;
       border-color: #1e2222;
       background-image: linear-gradient(to bottom, #393f3f);
@@ -2378,9 +2375,9 @@ GtkSwitch {
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
       box-shadow: none; }
-      GtkSwitch.slider:backdrop:active, .list-row:selected GtkSwitch.slider:backdrop:active {
+      GtkSwitch.slider:backdrop:active {
         border-color: #0f2b48; }
-      GtkSwitch.slider:backdrop:insensitive, .list-row:selected GtkSwitch.slider:backdrop:insensitive {
+      GtkSwitch.slider:backdrop:insensitive {
         color: #5d6767;
         border-color: #1e2222;
         background-image: linear-gradient(to bottom, #323636);
@@ -2388,7 +2385,7 @@ GtkSwitch {
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
         box-shadow: none; }
-        GtkSwitch.slider:backdrop:insensitive > GtkLabel, .list-row:selected GtkSwitch.slider:backdrop:insensitive > GtkLabel {
+        GtkSwitch.slider:backdrop:insensitive > GtkLabel {
           color: inherit; }
 
 /*************************

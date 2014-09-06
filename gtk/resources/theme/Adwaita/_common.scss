@@ -1670,6 +1670,7 @@ GtkSwitch {
     // similar to the .scale
     border: 1px solid $borders_color;
     border-radius: 3px;
+    color: $fg_color;
     background-image: linear-gradient(to bottom,
                                       mix($bg_color,$borders_color,60%));
     text-shadow: 0 1px transparentize(black, 0.9);
@@ -1678,7 +1679,6 @@ GtkSwitch {
       color: white;
       border-color: $selected_borders_color;
       box-shadow: _widget_edge();
-      //text-shadow: 0 1px transparentize($selected_borders_color,0.5);
       text-shadow: 0 1px transparentize($selected_borders_color,0.5),
                    0 0 2px transparentize(white,0.4);
     }
@@ -1711,12 +1711,7 @@ GtkSwitch {
       }
     }
   }
-  .list-row:selected & {
-    box-shadow: 0 0 0 1px $selected_fg_color;
-    &:backdrop { box-shadow: 0 0 0 1px $backdrop_base_color; }
-  }
-  &.slider,
-  .list-row:selected &.slider {
+  &.slider {
     border: 1px solid;
     border-radius: 3px;
     @include button(normal);
@@ -1746,6 +1741,18 @@ GtkSwitch {
       }
     }
   }
+  .list-row:selected & {
+    @if $variant == 'light' {
+      box-shadow: none;
+      border-color: $selected_borders_color;
+      &:backdrop { border-color: $selected_borders_color; }
+      &.slider:dir(rtl) { border-left-color: $borders_color; }
+      &.slider:dir(ltr) { border-right-color: $borders_color; }
+      &.slider,
+      &.slider:active { border-color: $selected_borders_color; }
+    }
+  }
+
 }
 
 /*************************
