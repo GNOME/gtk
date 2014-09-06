@@ -2246,6 +2246,7 @@ GtkScrolledWindow {
     &:hover {
       background-color: mix(black, $selected_bg_color, 10%);
     }
+    &:backdrop { background-color: $selected_bg_color; }
   }
   &:backdrop:hover {
     @extend %undecorated_button;
