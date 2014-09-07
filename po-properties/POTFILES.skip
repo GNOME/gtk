@@ -244,6 +244,9 @@ testsuite/reftests/notebook-tab-position.ref.ui
 testsuite/reftests/notebook-tab-position.ui
 testsuite/reftests/nth-child.ref.ui
 testsuite/reftests/nth-child.ui
+testsuite/reftests/opacity-initial.ui
+testsuite/reftests/overlay-no-main-widget.ref.ui
+testsuite/reftests/overlay-no-main-widget.ui
 testsuite/reftests/pseudoclass-on-box.ref.ui
 testsuite/reftests/pseudoclass-on-box.ui
 testsuite/reftests/pseudoclass-on-parent.ref.ui
