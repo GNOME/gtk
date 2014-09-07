@@ -40,7 +40,9 @@
  * may be in the top 8 bits of the pixel, or may be in the lower 4 bits.
  *
  * There are several standard visuals. The visual returned by
- * gdk_screen_get_system_visual() is the system’s default visual.
+ * gdk_screen_get_system_visual() is the system’s default visual, and
+ * the visual returned by gdk_screen_get_rgba_visual() should be used for
+ * creating windows with an alpha channel.
  *
  * A number of functions are provided for determining the “best” available
  * visual. For the purposes of making this determination, higher bit depths
