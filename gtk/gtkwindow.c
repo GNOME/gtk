@@ -6963,6 +6963,35 @@ update_opaque_region (GtkWindow           *window,
   cairo_region_destroy (opaque_region);
 }
 
+static void
+popover_size_allocate (GtkWidget        *widget,
+                       GtkWindowPopover *popover,
+                       GtkWindow        *window)
+{
+  cairo_rectangle_int_t rect;
+
+  if (!popover->window)
+    return;
+
+  if (GTK_IS_POPOVER (popover->widget))
+    gtk_popover_update_position (GTK_POPOVER (popover->widget));
+
+  popover_get_rect (popover, window, &rect);
+  gdk_window_move_resize (popover->window, rect.x, rect.y,
+                          rect.width, rect.height);
+  rect.x = rect.y = 0;
+  gtk_widget_size_allocate (widget, &rect);
+
+  if (gtk_widget_is_drawable (GTK_WIDGET (window)) &&
+      gtk_widget_is_visible (widget))
+    {
+      if (!gdk_window_is_visible (popover->window))
+        gdk_window_show (popover->window);
+    }
+  else if (gdk_window_is_visible (popover->window))
+    gdk_window_hide (popover->window);
+}
+
 /* _gtk_window_set_allocation:
  * @window: a #GtkWindow
  * @allocation: the original allocation for the window
@@ -6992,6 +7021,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
   GtkAllocation child_allocation;
   gint border_width;
   GtkBorder window_border = { 0 };
+  GList *link;
 
   g_assert (allocation != NULL);
   g_assert (allocation_out != NULL);
@@ -7072,35 +7102,15 @@ _gtk_window_set_allocation (GtkWindow           *window,
   child_allocation.height = MAX (1, child_allocation.height - border_width * 2);
 
   *allocation_out = child_allocation;
-}
 
-static void
-popover_size_allocate (GtkWidget        *widget,
-                       GtkWindowPopover *popover,
-                       GtkWindow        *window)
-{
-  cairo_rectangle_int_t rect;
-
-  if (!popover->window)
-    return;
-
-  if (GTK_IS_POPOVER (popover->widget))
-    gtk_popover_update_position (GTK_POPOVER (popover->widget));
-
-  popover_get_rect (popover, window, &rect);
-  gdk_window_move_resize (popover->window, rect.x, rect.y,
-                          rect.width, rect.height);
-  rect.x = rect.y = 0;
-  gtk_widget_size_allocate (widget, &rect);
-
-  if (gtk_widget_is_drawable (GTK_WIDGET (window)) &&
-      gtk_widget_is_visible (widget))
+  link = priv->popovers;
+  while (link)
     {
-      if (!gdk_window_is_visible (popover->window))
-        gdk_window_show (popover->window);
+      GtkWindowPopover *popover = link->data;
+      link = link->next;
+      popover_size_allocate (popover->widget, popover, window);
     }
-  else if (gdk_window_is_visible (popover->window))
-    gdk_window_hide (popover->window);
+
 }
 
 static void
@@ -7108,25 +7118,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
                           GtkAllocation *allocation)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = window->priv;
   GtkWidget *child;
   GtkAllocation child_allocation;
-  GList *link;
 
   _gtk_window_set_allocation (window, allocation, &child_allocation);
 
   child = gtk_bin_get_child (GTK_BIN (window));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate (child, &child_allocation);
-
-  link = priv->popovers;
-
-  while (link)
-    {
-      GtkWindowPopover *popover = link->data;
-      link = link->next;
-      popover_size_allocate (popover->widget, popover, window);
-    }
 }
 
 static gint
