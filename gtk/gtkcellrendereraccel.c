@@ -659,7 +659,7 @@ gtk_cell_editable_event_box_key_press_event (GtkWidget   *widget,
   edited = TRUE;
 
  out:
-  gtk_grab_remove (box);
+  gtk_grab_remove (widget);
   gtk_cell_renderer_accel_ungrab (GTK_CELL_RENDERER_ACCEL (box->cell));
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (widget));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (widget));
@@ -678,7 +678,7 @@ gtk_cell_editable_event_box_unrealize (GtkWidget *widget)
 {
   GtkCellEditableEventBox *box = (GtkCellEditableEventBox*)widget;
 
-  gtk_grab_remove (box);
+  gtk_grab_remove (widget);
   gtk_cell_renderer_accel_ungrab (GTK_CELL_RENDERER_ACCEL (box->cell));
   
   GTK_WIDGET_CLASS (gtk_cell_editable_event_box_parent_class)->unrealize (widget); 
