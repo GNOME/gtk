@@ -503,25 +503,35 @@ create_tree_view (void)
 {
   GtkWidget *widget;
   GtkWidget *tree_view;
-  GtkListStore *list_store;
+  GtkTreeStore *store;
   GtkTreeIter iter;
   WidgetInfo *info;
 
   widget = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
-  list_store = gtk_list_store_new (1, G_TYPE_STRING);
-  gtk_list_store_append (list_store, &iter);
-  gtk_list_store_set (list_store, &iter, 0, "Line One", -1);
-  gtk_list_store_append (list_store, &iter);
-  gtk_list_store_set (list_store, &iter, 0, "Line Two", -1);
-  gtk_list_store_append (list_store, &iter);
-  gtk_list_store_set (list_store, &iter, 0, "Line Three", -1);
+  store = gtk_tree_store_new (3, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING);
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_set (store, &iter, 0, "Line One", 1, FALSE, 2, "A", -1);
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_set (store, &iter, 0, "Line Two", 1, TRUE, 2, "B", -1);
+  gtk_tree_store_append (store, &iter, &iter);
+  gtk_tree_store_set (store, &iter, 0, "Line Three", 1, FALSE, 2, "C", -1);
 
-  tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
+  tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+  gtk_tree_view_set_enable_tree_lines (GTK_TREE_VIEW (tree_view), TRUE);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
-					       0, "List and Tree",
+					       0, "List",
 					       gtk_cell_renderer_text_new (),
 					       "text", 0, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
+					       1, "and",
+					       gtk_cell_renderer_toggle_new (),
+                                               "active", 1, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
+					       2, "Tree",
+					       g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, "xalign", 0.5, NULL),
+					       "text", 2, NULL);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
   gtk_container_add (GTK_CONTAINER (widget), tree_view);
 
   info = new_widget_info ("list-and-tree", widget, MEDIUM);
