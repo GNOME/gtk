@@ -705,6 +705,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
   window = _gdk_display_create_window (display);
   window->visual = gdk_screen_get_system_visual (_gdk_screen);
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
+  window->impl_window = window;
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   impl->wrapper = window;
   parent = GetParent (anid);
