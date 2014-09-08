@@ -1,4 +1,4 @@
-—/* gtktreemodel.c
+/* gtktreemodel.c
  * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
