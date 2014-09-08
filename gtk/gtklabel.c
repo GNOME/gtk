@@ -169,9 +169,9 @@
  * Labels can be made selectable with gtk_label_set_selectable().
  * Selectable labels allow the user to copy the label contents to
  * the clipboard. Only labels that contain useful-to-copy information
- * &mdash; such as error messages &mdash; should be made selectable.
+ * — such as error messages — should be made selectable.
  *
- * # Text layout
+ * # Text layout # {#label-text-layout}
  *
  * A label can contain any number of paragraphs, but will have
  * performance problems if it contains more than a small number.
