@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# compose-parse.py, version 1.3
+# compose-parse.py, version 1.4
 #
 # multifunction script that helps manage the compose sequence table in GTK+ (gtk/gtkimcontextsimple.c)
 # the script produces statistics and information about the whole process, run with --help for more.
@@ -279,7 +279,7 @@ def process_gdkkeysymsh():
 	""" Patch up the keysymdb with some of our own stuff """
 
 	""" This is for a missing keysym from the currently upstream file """
-	keysymdb['dead_stroke'] = 0x338
+	###keysymdb['dead_stroke'] = 0x338
 
 	""" This is for a missing keysym from the currently upstream file """
 	###keysymdb['dead_belowring'] = 0x323
@@ -335,12 +335,12 @@ def process_keysymstxt():
 
 	""" Patch up the keysymdb with some of our own stuff """
 	""" This is for a missing keysym from the currently upstream file """
-	###keysymdb['dead_belowring'] = 0x323
-	###keysymdb['dead_belowmacron'] = 0x331
-	###keysymdb['dead_belowcircumflex'] = 0x32d
-	###keysymdb['dead_belowtilde'] = 0x330
-	###keysymdb['dead_belowbreve'] = 0x32e
-	###keysymdb['dead_belowdiaeresis'] = 0x324
+	keysymdb['dead_belowring'] = 0x323
+	keysymdb['dead_belowmacron'] = 0x331
+	keysymdb['dead_belowcircumflex'] = 0x32d
+	keysymdb['dead_belowtilde'] = 0x330
+	keysymdb['dead_belowbreve'] = 0x32e
+	keysymdb['dead_belowdiaeresis'] = 0x324
 
 	""" This is preferential treatment for Greek """
 	""" => we get more savings if used for Greek """
@@ -375,6 +375,8 @@ def process_keysymstxt():
         keysymdb['ninesubscript'] = 0x2089
         keysymdb['dead_doublegrave'] = 0x030F
         keysymdb['dead_invertedbreve'] = 0x0311
+        keysymdb['dead_belowcomma'] = 0xfe6e
+        keysymdb['dead_currency'] = 0xfe6f
         keysymdb['dead_greek'] = 0xfe8c
 
 	return keysymdb
@@ -550,14 +552,9 @@ for line in xorg_compose_sequences_raw:
 		"0x0342" in sequence or \
 		"0x0314" in sequence:
 		continue
-	if "dead_belowring" in sequence or\
-                "dead_currency" in sequence or\
-		"dead_belowcomma" in sequence or\
-		"dead_belowmacron" in sequence or\
-		"dead_belowtilde" in sequence or\
-		"dead_belowbreve" in sequence or\
-		"dead_belowdiaeresis" in sequence or\
-		"dead_belowcircumflex" in sequence:
+	if codepoint > 0xFFFF:
+                if opt_verbose:
+		    print "Ignore the line greater than guint16:\n%s" % line
 		continue
 	#for i in range(len(sequence)):
 	#	if sequence[i] == "0x0342":
