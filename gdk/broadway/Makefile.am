@@ -15,7 +15,7 @@ AM_CPPFLAGS =				\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GDK_DEP_CFLAGS)
 
-LDADDS = $(GDK_DEP_LIBS)
+LDADDS = $(GDK_DEP_LIBS) -lrt
 
 noinst_LTLIBRARIES = libgdk-broadway.la
 
