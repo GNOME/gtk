@@ -3950,25 +3950,11 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           gtk_widget_get_allocation (button, &drag_allocation);
 	  width = attributes.width = drag_allocation.width;
 	  height = attributes.height = drag_allocation.height;
-	  attributes.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
+	  attributes.visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
 	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 	  tree_view->priv->drag_highlight_window = gdk_window_new (tree_view->priv->header_window, &attributes, attributes_mask);
 	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
-
-	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
-          cr = cairo_create (mask_image);
-
-          cairo_rectangle (cr, 1, 1, width - 2, height - 2);
-          cairo_stroke (cr);
-          cairo_destroy (cr);
-
-          mask_region = gdk_cairo_region_create_from_surface (mask_image);
-	  gdk_window_shape_combine_region (tree_view->priv->drag_highlight_window,
-					   mask_region, 0, 0);
-
-          cairo_region_destroy (mask_region);
-          cairo_surface_destroy (mask_image);
 
 	  tree_view->priv->drag_column_window_state = DRAG_COLUMN_WINDOW_STATE_ORIGINAL;
 	}
@@ -5602,6 +5588,29 @@ gtk_tree_view_draw (GtkWidget *widget,
       _gtk_pixel_cache_draw (tree_view->priv->pixel_cache, cr, tree_view->priv->bin_window,
 			     &view_rect, &canvas_rect,
 			     draw_bin, widget);
+    }
+  else if (tree_view->priv->drag_highlight_window &&
+           gtk_cairo_should_draw_window (cr, tree_view->priv->drag_highlight_window))
+    {
+      cairo_save (cr);
+      gtk_cairo_transform_to_window (cr, GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
+      if (tree_view->priv->drag_column_window_state == DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
+        {
+          cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.0);
+          cairo_paint (cr);
+          cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+          cairo_rectangle (cr,
+                           1, 1,
+                           gdk_window_get_width (tree_view->priv->drag_highlight_window) - 2,
+                           gdk_window_get_height (tree_view->priv->drag_highlight_window) - 2);
+          cairo_stroke (cr);
+        }
+      else
+        {
+          cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+          cairo_paint (cr);
+        }
+      cairo_restore (cr);
     }
   else
     {
