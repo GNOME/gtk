@@ -530,7 +530,7 @@ gtk_adjustment_set_value_internal (GtkAdjustment *adjustment,
 
   if (animate && priv->duration != 0 && priv->clock != NULL)
     {
-      if (priv->target == value)
+      if (priv->tick_id && priv->target == value)
         return;
 
       priv->source = priv->value;
