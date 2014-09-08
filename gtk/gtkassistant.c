@@ -205,6 +205,7 @@ enum
   PREPARE,
   APPLY,
   CLOSE,
+  ESCAPE,
   LAST_SIGNAL
 };
 
@@ -363,11 +364,27 @@ gtk_assistant_constructed (GObject *object)
 }
 
 static void
+escape_cb (GtkAssistant *assistant)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+
+  /* Do not allow cancelling in the middle of a progress page */
+  if (priv->current_page &&
+      (priv->current_page->type != GTK_ASSISTANT_PAGE_PROGRESS ||
+       priv->current_page->complete))
+    g_signal_emit (assistant, signals [CANCEL], 0, NULL);
+
+  /* don't run any user handlers - this is not a public signal */
+  g_signal_stop_emission (assistant, signals[ESCAPE], 0);
+}
+
+static void
 gtk_assistant_class_init (GtkAssistantClass *class)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
+  GtkBindingSet *binding_set;
 
   gobject_class   = (GObjectClass *) class;
   widget_class    = (GtkWidgetClass *) class;
@@ -473,6 +490,18 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  signals[ESCAPE] =
+    g_signal_new_class_handler (I_("escape"),
+                                G_TYPE_FROM_CLASS (gobject_class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (escape_cb),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  binding_set = gtk_binding_set_by_class (class);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "escape", 0);
 
   /**
    * GtkAssistant:use-header-bar:
