@@ -184,7 +184,7 @@
  *
  * This is because #GtkFileChooserDialog must intercept responses
  * and switch to folders if appropriate, rather than letting the
- * dialog terminate &mdash; the implementation uses these known
+ * dialog terminate — the implementation uses these known
  * response codes to know which responses can be blocked if
  * appropriate.
  *

@@ -716,7 +716,7 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * dialog for which you already have a file name to which
  * the user may save.  For example, when the user opens an existing file and
  * then does Save As... to save a copy or
- * a modified version.  If you don’t have a file name already &mdash; for
+ * a modified version.  If you don’t have a file name already — for
  * example, if the user just created a new file and is saving it for the first
  * time, do not call this function.  Instead, use something similar to this:
  * |[<!-- language="C" -->
@@ -1068,7 +1068,7 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * dialog for which you already have a file name to which
  * the user may save.  For example, when the user opens an existing file and then
  * does Save As... to save a copy or a
- * modified version.  If you don’t have a file name already &mdash; for example,
+ * modified version.  If you don’t have a file name already — for example,
  * if the user just created a new file and is saving it for the first time, do
  * not call this function.  Instead, use something similar to this:
  * |[<!-- language="C" -->
@@ -1434,7 +1434,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * you should use this function if you already have a file name to which the
  * user may save; for example, when the user opens an existing file and then
  * does Save As...  If you don’t have
- * a file name already &mdash; for example, if the user just created a new
+ * a file name already — for example, if the user just created a new
  * file and is saving it for the first time, do not call this function.
  * Instead, use something similar to this:
  * |[<!-- language="C" -->

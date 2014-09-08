@@ -1,4 +1,4 @@
-/* gtktreemodel.c
+—/* gtktreemodel.c
  * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@
  *
  * In order to make life simpler for programmers who do not need to
  * write their own specialized model, two generic models are provided
- * &mdash; the #GtkTreeStore and the #GtkListStore. To use these, the
+ * — the #GtkTreeStore and the #GtkListStore. To use these, the
  * developer simply pushes data into these models as necessary. These
  * models provide the data structure as well as all appropriate tree
  * interfaces. As a result, implementing drag and drop, sorting, and
