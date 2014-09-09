@@ -26,6 +26,10 @@ SKIP_GDKTARGET = \
 	echo "Gtk+Tests:INFO: Skipping GUI tests for non-X11 target."
 endif
 
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+endif
+
 XVFB_START = \
 	${XVFB} -help 2>/dev/null 1>&2 \
 	&& XID=`for id in $(XIDS) ; do test -e /tmp/.X$$id-lock || { echo $$id; exit 0; }; done; exit 1` \

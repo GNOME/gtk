@@ -1,9 +1,5 @@
 include $(top_srcdir)/Makefile.decl
 
-if PLATFORM_WIN32
-no_undefined = -no-undefined
-endif
-
 AM_CPPFLAGS = \
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gtk				\

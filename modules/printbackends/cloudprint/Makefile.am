@@ -1,9 +1,5 @@
 include $(top_srcdir)/Makefile.decl
 
-if PLATFORM_WIN32
-no_undefined = -no-undefined
-endif
-
 backenddir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/printbackends
 
 backend_LTLIBRARIES = libprintbackend-cloudprint.la

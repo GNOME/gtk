@@ -42,10 +42,6 @@ AM_CPPFLAGS = 				\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GDK_DEP_CFLAGS)
 
-if PLATFORM_WIN32
-no_undefined = -no-undefined
-endif
-
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here

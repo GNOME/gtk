@@ -79,10 +79,6 @@ AM_CPPFLAGS =						\
 	$(GTK_DEP_CFLAGS)				\
 	$(INCLUDED_IMMODULE_DEFINE)
 
-if PLATFORM_WIN32
-no_undefined = -no-undefined
-endif
-
 if OS_WIN32
 gtk_def = gtk.def
 gtk_win32_symbols = -export-symbols $(srcdir)/gtk.def
