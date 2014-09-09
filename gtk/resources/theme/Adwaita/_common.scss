@@ -355,7 +355,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       @include button(backdrop-insensitive-active);
     }
   }
-  &.flat:backdrop {
+  &.flat:backdrop, &.flat:insensitive, &.flat:backdrop:insensitive {
     @include button(undecorated);
   }
   &:insensitive {
@@ -466,7 +466,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
           }
         }
       }
-      &.flat:backdrop {
+      &.flat:backdrop, &.flat:insensitive, &.flat:backdrop:insensitive {
         @include button(undecorated);
         color: transparentize($b_color, 0.2);
       }
@@ -1033,7 +1033,7 @@ GtkComboBox {
           border-color: $selected_borders_color;
         }
       }
-      &.flat:backdrop {
+      &.flat:backdrop, &.flat:insensitive, &.flat:insensitive:backdrop {
         @include button(undecorated);
       }
       &:insensitive {

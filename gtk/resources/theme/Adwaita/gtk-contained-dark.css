@@ -367,7 +367,11 @@ GtkCalendar.header .button.titlebutton {
         color: inherit; }
   .button.flat:backdrop, .header-bar .titlebutton.button:backdrop,
   .titlebar .titlebutton.button:backdrop,
-  GtkCalendar.header .titlebutton.button:backdrop {
+  GtkCalendar.header .titlebutton.button:backdrop, .button.flat:insensitive, .header-bar .titlebutton.button:insensitive,
+  .titlebar .titlebutton.button:insensitive,
+  GtkCalendar.header .titlebutton.button:insensitive, .button.flat:backdrop:insensitive, .header-bar .titlebutton.button:backdrop:insensitive,
+  .titlebar .titlebutton.button:backdrop:insensitive,
+  GtkCalendar.header .titlebutton.button:backdrop:insensitive {
     border-color: transparent;
     background-color: transparent;
     background-image: none;
@@ -591,7 +595,11 @@ GtkCalendar.header .button.titlebutton {
             color: inherit; }
     .button.suggested-action.flat:backdrop, .header-bar .suggested-action.titlebutton.button:backdrop,
     .titlebar .suggested-action.titlebutton.button:backdrop,
-    GtkCalendar.header .suggested-action.titlebutton.button:backdrop {
+    GtkCalendar.header .suggested-action.titlebutton.button:backdrop, .button.suggested-action.flat:insensitive, .header-bar .suggested-action.titlebutton.button:insensitive,
+    .titlebar .suggested-action.titlebutton.button:insensitive,
+    GtkCalendar.header .suggested-action.titlebutton.button:insensitive, .button.suggested-action.flat:backdrop:insensitive, .header-bar .suggested-action.titlebutton.button:backdrop:insensitive,
+    .titlebar .suggested-action.titlebutton.button:backdrop:insensitive,
+    GtkCalendar.header .suggested-action.titlebutton.button:backdrop:insensitive {
       border-color: transparent;
       background-color: transparent;
       background-image: none;
@@ -737,7 +745,11 @@ GtkCalendar.header .button.titlebutton {
             color: inherit; }
     .button.destructive-action.flat:backdrop, .header-bar .destructive-action.titlebutton.button:backdrop,
     .titlebar .destructive-action.titlebutton.button:backdrop,
-    GtkCalendar.header .destructive-action.titlebutton.button:backdrop {
+    GtkCalendar.header .destructive-action.titlebutton.button:backdrop, .button.destructive-action.flat:insensitive, .header-bar .destructive-action.titlebutton.button:insensitive,
+    .titlebar .destructive-action.titlebutton.button:insensitive,
+    GtkCalendar.header .destructive-action.titlebutton.button:insensitive, .button.destructive-action.flat:backdrop:insensitive, .header-bar .destructive-action.titlebutton.button:backdrop:insensitive,
+    .titlebar .destructive-action.titlebutton.button:backdrop:insensitive,
+    GtkCalendar.header .destructive-action.titlebutton.button:backdrop:insensitive {
       border-color: transparent;
       background-color: transparent;
       background-image: none;
@@ -1581,9 +1593,17 @@ GtkComboBox {
             color: inherit; }
       .titlebar.selection-mode .button.flat:backdrop, GtkCalendar.selection-mode.header .button.flat:backdrop,
       .titlebar.selection-mode .titlebutton.button:backdrop,
-      GtkCalendar.selection-mode.header .titlebutton.button:backdrop,
+      GtkCalendar.selection-mode.header .titlebutton.button:backdrop, .titlebar.selection-mode .button.flat:insensitive, GtkCalendar.selection-mode.header .button.flat:insensitive,
+      .titlebar.selection-mode .titlebutton.button:insensitive,
+      GtkCalendar.selection-mode.header .titlebutton.button:insensitive, .titlebar.selection-mode .button.flat:insensitive:backdrop, GtkCalendar.selection-mode.header .button.flat:insensitive:backdrop,
+      .titlebar.selection-mode .titlebutton.button:insensitive:backdrop,
+      GtkCalendar.selection-mode.header .titlebutton.button:insensitive:backdrop,
       .header-bar.selection-mode .button.flat:backdrop,
-      .header-bar.selection-mode .titlebutton.button:backdrop {
+      .header-bar.selection-mode .titlebutton.button:backdrop,
+      .header-bar.selection-mode .button.flat:insensitive,
+      .header-bar.selection-mode .titlebutton.button:insensitive,
+      .header-bar.selection-mode .button.flat:insensitive:backdrop,
+      .header-bar.selection-mode .titlebutton.button:insensitive:backdrop {
         border-color: transparent;
         background-color: transparent;
         background-image: none;
