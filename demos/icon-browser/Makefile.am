@@ -30,6 +30,7 @@ resources.c: iconbrowser.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourc
 		--target=$@ --sourcedir=$(srcdir) --generate-source
 
 EXTRA_DIST = \
+	app-menu.ui \
 	iconbrowser.gresource.xml \
 	window.ui
 
