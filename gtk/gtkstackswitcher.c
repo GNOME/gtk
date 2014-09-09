@@ -330,6 +330,11 @@ on_stack_child_removed (GtkContainer     *container,
   GtkStackSwitcherPrivate *priv;
 
   priv = gtk_stack_switcher_get_instance_private (self);
+
+  g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, self);
+  g_signal_handlers_disconnect_by_func (widget, on_position_updated, self);
+  g_signal_handlers_disconnect_by_func (widget, on_needs_attention_updated, self);
+
   button = g_hash_table_lookup (priv->buttons, widget);
   gtk_container_remove (GTK_CONTAINER (self), button);
   g_hash_table_remove (priv->buttons, widget);
