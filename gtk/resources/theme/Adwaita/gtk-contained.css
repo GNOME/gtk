@@ -2886,42 +2886,50 @@ GtkTreeView.view.check, GtkTreeView.view.radio,
 GtkIconView.view.check,
 GtkFlowBox.view.check {
   icon-shadow: none;
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png")); }
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png"));
+  background-color: transparent; }
 
 GtkIconView.view.check:hover,
 GtkFlowBox.view.check:hover {
   icon-shadow: none;
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-hover-selectionmode.png"), url("assets/checkbox-hover-selectionmode@2.png")); }
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-hover-selectionmode.png"), url("assets/checkbox-hover-selectionmode@2.png"));
+  background-color: transparent; }
 
 GtkIconView.view.check:active,
 GtkFlowBox.view.check:active {
   icon-shadow: none;
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-active-selectionmode.png"), url("assets/checkbox-active-selectionmode@2.png")); }
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-active-selectionmode.png"), url("assets/checkbox-active-selectionmode@2.png"));
+  background-color: transparent; }
 
 GtkIconView.view.check:backdrop,
 GtkFlowBox.view.check:backdrop {
   icon-shadow: none;
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-backdrop-selectionmode.png"), url("assets/checkbox-backdrop-selectionmode@2.png")); }
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-backdrop-selectionmode.png"), url("assets/checkbox-backdrop-selectionmode@2.png"));
+  background-color: transparent; }
 
 GtkIconView.view.check:checked,
 GtkFlowBox.view.check:checked {
   icon-shadow: none;
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-selectionmode.png"), url("assets/checkbox-checked-selectionmode@2.png")); }
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-selectionmode.png"), url("assets/checkbox-checked-selectionmode@2.png"));
+  background-color: transparent; }
 
 GtkIconView.view.check:checked:hover,
 GtkFlowBox.view.check:checked:hover {
   icon-shadow: none;
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-selectionmode.png"), url("assets/checkbox-checked-hover-selectionmode@2.png")); }
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-selectionmode.png"), url("assets/checkbox-checked-hover-selectionmode@2.png"));
+  background-color: transparent; }
 
 GtkIconView.view.check:checked:active,
 GtkFlowBox.view.check:checked:active {
   icon-shadow: none;
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-selectionmode.png"), url("assets/checkbox-checked-active-selectionmode@2.png")); }
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-selectionmode.png"), url("assets/checkbox-checked-active-selectionmode@2.png"));
+  background-color: transparent; }
 
 GtkIconView.view.check:backdrop:checked,
 GtkFlowBox.view.check:backdrop:checked {
   icon-shadow: none;
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-selectionmode.png"), url("assets/checkbox-checked-backdrop-selectionmode@2.png")); }
+  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-selectionmode.png"), url("assets/checkbox-checked-backdrop-selectionmode@2.png"));
+  background-color: transparent; }
 
 GtkCheckButton.text-button, GtkRadioButton.text-button {
   padding: 1px 2px 4px;

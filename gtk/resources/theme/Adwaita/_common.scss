@@ -1840,6 +1840,7 @@ GtkTreeView.view.check, GtkTreeView.view.radio,
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"),
                                     url("assets/checkbox#{$as}@2.png"));
+    background-color: transparent;
   }
 }
 
