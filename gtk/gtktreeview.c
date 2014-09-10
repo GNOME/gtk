@@ -8767,6 +8767,11 @@ gtk_tree_view_get_path_for_child (GtkContainer *container,
 
       if (gtk_tree_view_column_get_visible (column))
         visible_columns = g_list_prepend (visible_columns, column);
+      else if (gtk_tree_view_column_get_widget (column) == child ||
+               gtk_tree_view_column_get_button (column) == child)
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+        gtk_widget_path_iter_add_region (path, gtk_widget_path_length (path) - 2, GTK_STYLE_REGION_COLUMN_HEADER, 0);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   if (!rtl)
