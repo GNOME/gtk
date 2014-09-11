@@ -754,7 +754,7 @@ on_app_shortcuts_query_complete (GObject      *source,
 
   info = g_file_query_info_finish (file, result, NULL);
 
-  if (info == NULL)
+  if (info)
     {
       gchar *uri;
       gchar *tooltip;
