@@ -3679,7 +3679,10 @@ hostname_proxy_new_cb (GObject      *source_object,
 
   proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
   if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    return;
+    {
+      g_error_free (error);
+      return;
+    }
 
   sidebar->hostnamed_proxy = proxy;
   g_clear_object (&sidebar->hostnamed_cancellable);
