@@ -282,7 +282,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   /**
    * GtkMessageDialog:message-area:
    *
-   * The #GtkVBox that corresponds to the message area of this dialog.  See
+   * The #GtkBox that corresponds to the message area of this dialog.  See
    * gtk_message_dialog_get_message_area() for a detailed description of this
    * area.
    *
