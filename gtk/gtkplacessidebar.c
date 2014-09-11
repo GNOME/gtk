@@ -838,13 +838,16 @@ on_bookmark_query_info_complete (GObject *source,
   BookmarkQueryClosure *clos = data;
   GtkPlacesSidebar *sidebar = clos->sidebar;
   GFile *root = G_FILE (source);
+  GError *error = NULL;
   GFileInfo *info;
   gchar *bookmark_name;
   gchar *mount_uri;
   gchar *tooltip;
   GIcon *icon;
 
-  info = g_file_query_info_finish (root, result, NULL);
+  info = g_file_query_info_finish (root, result, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    goto out;
 
   bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (sidebar->bookmarks_manager, root);
   if (bookmark_name == NULL && info != NULL)
@@ -880,6 +883,7 @@ on_bookmark_query_info_complete (GObject *source,
 
 out:
   g_clear_object (&info);
+  g_clear_error (&error);
   g_slice_free (BookmarkQueryClosure, clos);
 }
 
