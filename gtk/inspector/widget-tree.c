@@ -486,11 +486,30 @@ void
 gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
                                 GtkWidget              *window)
 {
+  GtkWidget *inspector_win;
+  GList *toplevels, *l;
+
   gtk_tree_store_clear (wt->priv->model);
   g_hash_table_remove_all (wt->priv->iters);
   gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
   if (g_application_get_default ())
     gtk_inspector_widget_tree_append_object (wt, G_OBJECT (g_application_get_default ()), NULL, NULL);
+
+  inspector_win = gtk_widget_get_toplevel (GTK_WIDGET (wt));
+  toplevels = gtk_window_list_toplevels ();
+  for (l = toplevels; l; l = l->next)
+    {
+      if (GTK_IS_WINDOW (l->data) &&
+          gtk_window_get_window_type (l->data) == GTK_WINDOW_TOPLEVEL &&
+          l->data != window &&
+          l->data != inspector_win)
+        {
+          g_message ("adding %s", gtk_window_get_title (l->data));
+          gtk_inspector_widget_tree_append_object (wt, G_OBJECT (l->data), NULL, NULL);
+        }
+    }
+  g_list_free (toplevels);
+
   gtk_inspector_widget_tree_append_object (wt, G_OBJECT (window), NULL, NULL);
 
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (wt));
