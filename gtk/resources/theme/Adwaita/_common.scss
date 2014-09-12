@@ -1091,7 +1091,7 @@ GtkComboBox {
  ************/
 
 .path-bar .button {
-  padding: 6px;
+  padding: 5px 6px 6px;
   &:first-child { padding-left: 8px; }
   &:last-child { padding-right: 8px; }
   &:only-child {

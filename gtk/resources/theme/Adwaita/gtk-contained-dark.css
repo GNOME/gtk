@@ -1717,7 +1717,7 @@ GtkComboBox {
 .titlebar .path-bar .button.titlebutton,
 .path-bar GtkCalendar.header .button.titlebutton,
 GtkCalendar.header .path-bar .button.titlebutton {
-  padding: 6px; }
+  padding: 5px 6px 6px; }
   .path-bar .button:first-child {
     padding-left: 8px; }
   .path-bar .button:last-child {
