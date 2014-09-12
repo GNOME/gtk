@@ -78,12 +78,6 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 }
 
 static void
-clear_switcher (GtkStackSwitcher *self)
-{
-  gtk_container_foreach (GTK_CONTAINER (self), (GtkCallback) gtk_widget_destroy, self);
-}
-
-static void
 on_button_clicked (GtkWidget        *widget,
                    GtkStackSwitcher *self)
 {
@@ -242,8 +236,8 @@ on_needs_attention_updated (GtkWidget        *widget,
 }
 
 static void
-add_child (GtkStackSwitcher *self,
-           GtkWidget        *widget)
+add_child (GtkWidget        *widget,
+           GtkStackSwitcher *self)
 {
   GtkWidget *button;
   GList *group;
@@ -277,10 +271,21 @@ add_child (GtkStackSwitcher *self,
 }
 
 static void
-foreach_stack (GtkWidget        *widget,
-               GtkStackSwitcher *self)
+remove_child (GtkWidget        *widget,
+              GtkStackSwitcher *self)
 {
-  add_child (self, widget);
+  GtkWidget *button;
+  GtkStackSwitcherPrivate *priv;
+
+  priv = gtk_stack_switcher_get_instance_private (self);
+
+  g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, self);
+  g_signal_handlers_disconnect_by_func (widget, on_position_updated, self);
+  g_signal_handlers_disconnect_by_func (widget, on_needs_attention_updated, self);
+
+  button = g_hash_table_lookup (priv->buttons, widget);
+  gtk_container_remove (GTK_CONTAINER (self), button);
+  g_hash_table_remove (priv->buttons, widget);
 }
 
 static void
@@ -289,7 +294,16 @@ populate_switcher (GtkStackSwitcher *self)
   GtkStackSwitcherPrivate *priv;
 
   priv = gtk_stack_switcher_get_instance_private (self);
-  gtk_container_foreach (GTK_CONTAINER (priv->stack), (GtkCallback)foreach_stack, self);
+  gtk_container_foreach (GTK_CONTAINER (priv->stack), (GtkCallback)add_child, self);
+}
+
+static void
+clear_switcher (GtkStackSwitcher *self)
+{
+  GtkStackSwitcherPrivate *priv;
+
+  priv = gtk_stack_switcher_get_instance_private (self);
+  gtk_container_foreach (GTK_CONTAINER (priv->stack), (GtkCallback)remove_child, self);
 }
 
 static void
@@ -318,7 +332,7 @@ on_stack_child_added (GtkContainer     *container,
                       GtkWidget        *widget,
                       GtkStackSwitcher *self)
 {
-  add_child (self, widget);
+  add_child (widget, self);
 }
 
 static void
@@ -326,18 +340,7 @@ on_stack_child_removed (GtkContainer     *container,
                         GtkWidget        *widget,
                         GtkStackSwitcher *self)
 {
-  GtkWidget *button;
-  GtkStackSwitcherPrivate *priv;
-
-  priv = gtk_stack_switcher_get_instance_private (self);
-
-  g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, self);
-  g_signal_handlers_disconnect_by_func (widget, on_position_updated, self);
-  g_signal_handlers_disconnect_by_func (widget, on_needs_attention_updated, self);
-
-  button = g_hash_table_lookup (priv->buttons, widget);
-  gtk_container_remove (GTK_CONTAINER (self), button);
-  g_hash_table_remove (priv->buttons, widget);
+  remove_child (widget, self);
 }
 
 static void
@@ -397,7 +400,6 @@ gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
       clear_switcher (switcher);
       g_clear_object (&priv->stack);
     }
-
   if (stack)
     {
       priv->stack = g_object_ref (stack);
