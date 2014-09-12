@@ -1095,21 +1095,20 @@ GtkComboBox {
  ************/
 
 .path-bar .button {
-  padding: 5px 6px 6px;
+  padding: 6px;
   &:first-child { padding-left: 8px; }
   &:last-child { padding-right: 8px; }
   &:only-child {
     padding-left: 12px;
     padding-right: 12px;
   }
+  
+  // the following is for spacing the icon and the label inside the home button
+  GtkLabel:last-child { padding-left: 2px; }
+  GtkLabel:first-child { padding-right: 2px; }
+  GtkLabel:only-child { padding-right: 0; padding-left: 0; }
+  GtkImage { padding-top: 1px; }
 }
-
-// the following is for spacing the icon and the label inside the home button
-.path-bar .button GtkLabel:last-child { padding-left: 2px; }
-.path-bar .button GtkLabel:first-child { padding-right: 2px; }
-.path-bar .button GtkLabel:only-child { padding-right: 0; padding-left: 0; }
-
-
 
 /**************
  * Tree Views *

@@ -1725,7 +1725,7 @@ GtkComboBox {
 .titlebar .path-bar .button.titlebutton,
 .path-bar GtkCalendar.header .button.titlebutton,
 GtkCalendar.header .path-bar .button.titlebutton {
-  padding: 5px 6px 6px; }
+  padding: 6px; }
   .path-bar .button:first-child {
     padding-left: 8px; }
   .path-bar .button:last-child {
@@ -1733,16 +1733,19 @@ GtkCalendar.header .path-bar .button.titlebutton {
   .path-bar .button:only-child {
     padding-left: 12px;
     padding-right: 12px; }
-
-.path-bar .button GtkLabel:last-child {
-  padding-left: 2px; }
-
-.path-bar .button GtkLabel:first-child {
-  padding-right: 2px; }
-
-.path-bar .button GtkLabel:only-child {
-  padding-right: 0;
-  padding-left: 0; }
+  .path-bar .button GtkLabel:last-child {
+    padding-left: 2px; }
+  .path-bar .button GtkLabel:first-child {
+    padding-right: 2px; }
+  .path-bar .button GtkLabel:only-child {
+    padding-right: 0;
+    padding-left: 0; }
+  .path-bar .button GtkImage, .path-bar .header-bar .button.titlebutton GtkImage, .header-bar .path-bar .button.titlebutton GtkImage,
+  .path-bar .titlebar .button.titlebutton GtkImage,
+  .titlebar .path-bar .button.titlebutton GtkImage,
+  .path-bar GtkCalendar.header .button.titlebutton GtkImage,
+  GtkCalendar.header .path-bar .button.titlebutton GtkImage {
+    padding-top: 1px; }
 
 /**************
  * Tree Views *
@@ -4172,3 +4175,5 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 @define-color wm_button_active_color_b shade(#393f3f, 0.89);
 @define-color wm_button_active_color_c shade(#393f3f, 0.9);
 @define-color content_view_bg #292929;
+
+/*# sourceMappingURL=gtk-contained-dark.css.map */
