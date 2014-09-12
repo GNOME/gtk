@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-05 21:04+0000\n"
-"PO-Revision-Date: 2014-09-06 18:01+0900\n"
+"POT-Creation-Date: 2014-09-11 20:58+0000\n"
+"PO-Revision-Date: 2014-09-12 13:54+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: Korean\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 # broadway - HTML5 백엔드 이름
-#: ../gdk/broadway/gdkbroadway-server.c:141
+#: ../gdk/broadway/gdkbroadway-server.c:143
 #, c-format
 msgid "broadway display type not supported '%s'"
 msgstr "브로드웨이 디스플레이 종류를 지원하지 않습니다 %s"
@@ -1192,7 +1192,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11635
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11637
 #: ../gtk/inspector/css-editor.c:195
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1247,7 +1247,7 @@ msgstr "적용(_A)"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11636 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11638 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "확인(_O)"
 
@@ -1768,7 +1768,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:278
+#: ../gtk/gtkcellrendereraccel.c:274
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "사용 안 함"
@@ -1777,7 +1777,7 @@ msgstr "사용 안 함"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:288
+#: ../gtk/gtkcellrendereraccel.c:284
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "올바르지 않음"
@@ -1786,7 +1786,7 @@ msgstr "올바르지 않음"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:419 ../gtk/gtkcellrendereraccel.c:744
+#: ../gtk/gtkcellrendereraccel.c:415 ../gtk/gtkcellrendereraccel.c:517
 msgid "New accelerator…"
 msgstr "새 단축키…"
 
@@ -2325,7 +2325,7 @@ msgstr "글꼴 고르기"
 #. * pages that the printing system may support.
 #.
 #: ../gtk/gtkfontbutton.c:1152 ../gtk/inspector/gestures.c:127
-#: ../gtk/inspector/prop-editor.c:1201 ../gtk/inspector/size-groups.c:249
+#: ../gtk/inspector/prop-editor.c:1201 ../gtk/inspector/size-groups.c:251
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
 msgid "None"
 msgstr "없음"
@@ -2334,7 +2334,7 @@ msgstr "없음"
 msgid "Application menu"
 msgstr "프로그램 메뉴"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8356
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8358
 msgid "Close"
 msgstr "닫기"
 
@@ -3121,27 +3121,27 @@ msgstr "'%s' URI에 대한 항목이 없습니다"
 msgid "Untitled filter"
 msgstr "제목없는 필터"
 
-#: ../gtk/gtkrecentchooserdefault.c:1570
+#: ../gtk/gtkrecentchooserdefault.c:1564
 msgid "Could not remove item"
 msgstr "항목을 지울 수 없습니다"
 
-#: ../gtk/gtkrecentchooserdefault.c:1614
+#: ../gtk/gtkrecentchooserdefault.c:1608
 msgid "Could not clear list"
 msgstr "목록을 비울 수 없습니다"
 
-#: ../gtk/gtkrecentchooserdefault.c:1698
+#: ../gtk/gtkrecentchooserdefault.c:1692
 msgid "Copy _Location"
 msgstr "위치 복사(_L)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1709
+#: ../gtk/gtkrecentchooserdefault.c:1703
 msgid "_Remove From List"
 msgstr "목록에서 제거(_R)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1716
+#: ../gtk/gtkrecentchooserdefault.c:1710
 msgid "_Clear List"
 msgstr "목록 지우기(_C)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1728
+#: ../gtk/gtkrecentchooserdefault.c:1722
 msgid "Show _Private Resources"
 msgstr "개인 리소스 표시(_P)"
 
@@ -3409,16 +3409,19 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11630
+#: ../gtk/gtkwindow.c:11632
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ 인스펙터를 사용하시겠습니까?"
 
-#: ../gtk/gtkwindow.c:11632
+#: ../gtk/gtkwindow.c:11634
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
-msgstr "GTK+ 인스펙터는 디버깅 프로그램으로, GTK+ 인스펙터를 이용해서 모든 GTK+ 프로그램의 내부 구조를 살펴 보거나 수정할 수 있습니다. GTK+ 인스펙터를 사용했을 때 프로그램이 멈추거나 이상 동작으로 중지할 수도 있습니다."
+msgstr ""
+"GTK+ 인스펙터는 디버깅 프로그램으로, GTK+ 인스펙터를 이용해서 모든 GTK+ 프로"
+"그램의 내부 구조를 살펴 보거나 수정할 수 있습니다. GTK+ 인스펙터를 사용했을 "
+"때 프로그램이 멈추거나 이상 동작으로 중지할 수도 있습니다."
 
 #: ../gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3481,7 +3484,9 @@ msgstr "GTK+에서 인식하는 모든 CSS 규칙을 여기 입력할 수 있습
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the \"Pause\" "
 "button above."
-msgstr "위의 \"일시 중지\" 단추를 누르면 사용자 설정 CSS를 일시적으로 사용 중지할 수 있습니다."
+msgstr ""
+"위의 \"일시 중지\" 단추를 누르면 사용자 설정 CSS를 일시적으로 사용 중지할 수 "
+"있습니다."
 
 #: ../gtk/inspector/css-editor.c:88
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3571,6 +3576,10 @@ msgstr "속성"
 #: ../gtk/inspector/misc-info.ui.h:5
 msgid "Focus Widget"
 msgstr "위젯 포커스"
+
+#: ../gtk/inspector/misc-info.ui.h:7
+msgid "Allocated size"
+msgstr "할당 크기"
 
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
@@ -3694,23 +3703,23 @@ msgstr "연결됨"
 msgid "Count"
 msgstr "개수"
 
-#: ../gtk/inspector/size-groups.c:221
+#: ../gtk/inspector/size-groups.c:223
 msgid "Ignore hidden"
 msgstr "숨김 무시"
 
-#: ../gtk/inspector/size-groups.c:239
+#: ../gtk/inspector/size-groups.c:241
 msgid "Mode"
 msgstr "모드"
 
-#: ../gtk/inspector/size-groups.c:250
+#: ../gtk/inspector/size-groups.c:252
 msgid "Horizontal"
 msgstr "가로"
 
-#: ../gtk/inspector/size-groups.c:251
+#: ../gtk/inspector/size-groups.c:253
 msgid "Vertical"
 msgstr "세로"
 
-#: ../gtk/inspector/size-groups.c:252
+#: ../gtk/inspector/size-groups.c:254
 msgid "Both"
 msgstr "모두"
 
@@ -3793,7 +3802,7 @@ msgstr "오브젝트"
 msgid "Address"
 msgstr "주소"
 
-#: ../gtk/inspector/window.c:145
+#: ../gtk/inspector/window.c:143
 #, c-format
 msgid "GTK+ Inspector — %s"
 msgstr "GTK+ 인스펙터 — %s"
