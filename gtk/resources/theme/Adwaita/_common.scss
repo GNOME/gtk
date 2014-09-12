@@ -506,31 +506,27 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     padding-right: 16px;
   }
 
-  // stack switcher buttons
-  .action-bar .stack-switcher &.image-button,
-  .header-bar .stack-switcher &.image-button {
-    // override the padding since we need to add some padding on the
-    // GtkImage itself to fit the circle
-    padding: 5px 2px;
-  }
-  .action-bar .stack-switcher &.text-button,
-  .header-bar .stack-switcher &.text-button {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;     // I need these to not get overridden by radio
-    padding-bottom: 6px;  // button style
-    outline-offset: -3px; //
-
-  }
   .stack-switcher > & {
-    padding-left: 2px;  // subtract the padding which will be added to the
-    padding-right: 2px; // GtkLabel
+    // to position the needs attention dot, padding is added to the button
+    // child, a label needs just lateral padding while an icon needs vertical
+    // padding added too.
     > GtkLabel {
       padding-left: 6px;  // label padding
       padding-right: 6px; //
     }
     > GtkImage {
-      padding: 3px 6px; // image padding
+      padding-left: 6px;   // image padding
+      padding-right: 6px;  //
+      padding-top: 3px;    //
+      padding-bottom: 3px; //
+    }
+    &.text-button {
+      padding: 5px 10px 6px; // needed or it will get overridden
+    }
+    &.image-button {
+      // we want image buttons to have a 1:1 aspect ratio, so compensation
+      // of the padding added to the GtkImage is needed
+      padding: 5px 2px;
     }
     &.needs-attention > GtkLabel,
     &.needs-attention > GtkImage {
