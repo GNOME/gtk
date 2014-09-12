@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-sass --update .
+sass --update --sourcemap=none .
