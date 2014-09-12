@@ -299,9 +299,7 @@ GtkCalendar.header .button.titlebutton {
   .titlebar .button.titlebutton:active,
   GtkCalendar.header .button.titlebutton:active, .button:checked, .header-bar .button.titlebutton:checked,
   .titlebar .button.titlebutton:checked,
-  GtkCalendar.header .button.titlebutton:checked, .button.active-menu, .header-bar .active-menu.button.titlebutton,
-  .titlebar .active-menu.button.titlebutton,
-  GtkCalendar.header .active-menu.button.titlebutton {
+  GtkCalendar.header .button.titlebutton:checked {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #a1a1a1;
@@ -4328,3 +4326,5 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 @define-color wm_button_active_color_b shade(#ededed, 0.89);
 @define-color wm_button_active_color_c shade(#ededed, 0.9);
 @define-color content_view_bg #ffffff;
+
+/*# sourceMappingURL=gtk-contained.css.map */
