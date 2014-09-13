@@ -79,7 +79,6 @@
       <xi:include href="xml/gtkactionbar.xml" />
       <xi:include href="xml/gtkheaderbar.xml" />
       <xi:include href="xml/gtkoverlay.xml" />
-      <xi:include href="xml/gtkalignment.xml" />
       <xi:include href="xml/gtkbbox.xml" />
       <xi:include href="xml/gtkpaned.xml" />
       <xi:include href="xml/gtklayout.xml" />
@@ -340,6 +339,7 @@
       <xi:include href="xml/gtkarrow.xml" />
       <xi:include href="xml/gtkstatusicon.xml" />
       <xi:include href="xml/gtkthemingengine.xml" />
+      <xi:include href="xml/gtkalignment.xml" />
     </chapter>
 
   </part>

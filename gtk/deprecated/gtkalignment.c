@@ -40,9 +40,10 @@
  * Of course, if the scale settings are both set to 1, the alignment settings
  * have no effect.
  *
- * Note that the desired effect can in most cases be achieved by using the
- * #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties
- * on the child widget, so #GtkAlignment should not be used in new code.
+ * GtkAlignment has been deprecated in 3.14 and should not be used in
+ * newly-written code. The desired effect can be achieved by using the
+ * #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties on the
+ * child widget.
  */
 
 #include "config.h"
@@ -143,7 +144,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.0,
                                                       1.0,
                                                       0.5,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
    
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
