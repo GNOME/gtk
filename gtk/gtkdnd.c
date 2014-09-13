@@ -468,14 +468,6 @@ grab_dnd_keys (GtkWidget *widget,
   unsigned char mask[(XI_LASTEVENT + 7)/8];
   gboolean using_xi2;
 
-  deviceid = gdk_x11_device_get_id (device);
-
-  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (gtk_widget_get_display (widget))))
-    using_xi2 = TRUE;
-  else
-    using_xi2 = FALSE;
-#endif
-
   window = gtk_widget_get_window (widget);
   if (!GDK_IS_X11_WINDOW (window))
     {
@@ -487,6 +479,13 @@ grab_dnd_keys (GtkWidget *widget,
       return;
     }
 
+  deviceid = gdk_x11_device_get_id (device);
+
+  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (gtk_widget_get_display (widget))))
+    using_xi2 = TRUE;
+  else
+    using_xi2 = FALSE;
+#endif
 
   root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
@@ -553,19 +552,20 @@ ungrab_dnd_keys (GtkWidget *widget,
   gint deviceid;
   gboolean using_xi2;
 
-  deviceid = gdk_x11_device_get_id (device);
-  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (gtk_widget_get_display (widget))))
-    using_xi2 = TRUE;
-  else
-    using_xi2 = FALSE;
-#endif
-
   window = gtk_widget_get_window (widget);
   if (!GDK_IS_X11_WINDOW (window))
     {
       gdk_device_ungrab (device, time);
       return;
     }
+
+  deviceid = gdk_x11_device_get_id (device);
+
+  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (gtk_widget_get_display (widget))))
+    using_xi2 = TRUE;
+  else
+    using_xi2 = FALSE;
+#endif
 
   root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
@@ -626,7 +626,6 @@ ungrab_dnd_keys (GtkWidget *widget,
 }
 
 #endif /* GDK_WINDOWING_X11 */
-
 
 /*
  * gtk_drag_release_ipc_widget:
