@@ -757,7 +757,6 @@ gtk_drag_get_event_actions (const GdkEvent *event,
                   *suggested_action = GDK_ACTION_COPY;
                   *possible_actions = GDK_ACTION_COPY;
                 }
-              return;
             }
           else
             {
@@ -766,7 +765,6 @@ gtk_drag_get_event_actions (const GdkEvent *event,
                   *suggested_action = GDK_ACTION_MOVE;
                   *possible_actions = GDK_ACTION_MOVE;
                 }
-              return;
             }
         }
       else
