@@ -820,6 +820,18 @@ GtkCalendar.header .button.titlebutton {
   GtkCalendar.header .text-button.button.titlebutton {
     padding-left: 16px;
     padding-right: 16px; }
+  .button.text-button.image-button, .header-bar .text-button.titlebutton.button,
+  .titlebar .text-button.titlebutton.button,
+  GtkCalendar.header .text-button.titlebutton.button {
+    padding: 5px 8px 6px; }
+    .button.text-button.image-button GtkLabel:first-child, .header-bar .text-button.titlebutton.button GtkLabel:first-child,
+    .titlebar .text-button.titlebutton.button GtkLabel:first-child,
+    GtkCalendar.header .text-button.titlebutton.button GtkLabel:first-child {
+      padding-left: 8px; }
+    .button.text-button.image-button GtkLabel:last-child, .header-bar .text-button.titlebutton.button GtkLabel:last-child,
+    .titlebar .text-button.titlebutton.button GtkLabel:last-child,
+    GtkCalendar.header .text-button.titlebutton.button GtkLabel:last-child {
+      padding-right: 8px; }
   .stack-switcher > .button > GtkLabel, .header-bar .stack-switcher > .button.titlebutton > GtkLabel,
   .titlebar .stack-switcher > .button.titlebutton > GtkLabel,
   GtkCalendar.header .stack-switcher > .button.titlebutton > GtkLabel {
@@ -4167,5 +4179,3 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 @define-color wm_button_active_color_b shade(#393f3f, 0.89);
 @define-color wm_button_active_color_c shade(#393f3f, 0.9);
 @define-color content_view_bg #292929;
-
-/*# sourceMappingURL=gtk-contained-dark.css.map */

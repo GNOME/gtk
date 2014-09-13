@@ -506,6 +506,16 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     padding-right: 16px;
   }
 
+  &.text-button.image-button {
+    // those buttons needs uneven horizontal padding, we want the icon side
+    // to have the image-button padding, while the text side the text-button
+    // one, so we're adding the missing padding to the label depending on
+    // its position inside the button
+    padding: 5px 8px 6px; // same as .button
+    GtkLabel:first-child { padding-left: 8px; }
+    GtkLabel:last-child { padding-right: 8px; }
+  }
+
   .stack-switcher > & {
     // to position the needs attention dot, padding is added to the button
     // child, a label needs just lateral padding while an icon needs vertical
