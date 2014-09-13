@@ -2043,15 +2043,20 @@ $asset_suffix: if($variant=='dark', '-dark', '');
  *****************/
 
 GtkProgressBar {
-    padding: 0;
-    font-size: smaller;
-    color: transparentize($fg_color, 0.6);
-    box-shadow: inset 1px 1px transparentize(black, 0.9), // needs to be set
-                _widget_edge();                           // here ot it gets
-                                                          // clipped
-    &:backdrop {
-      color: $backdrop_insensitive_color;
-    }
+  padding: 0;
+  font-size: smaller;
+  color: transparentize($fg_color, 0.6);
+  box-shadow: inset 1px 1px transparentize(black, 0.9), // needs to be set
+              _widget_edge();                           // here ot it gets
+                                                        // clipped
+  &:backdrop {
+    color: $backdrop_insensitive_color;
+  }
+  &.osd {
+    -GtkProgressBar-xspacing: 0;
+    -GtkProgressBar-yspacing: 0;
+    -GtkProgressBar-min-horizontal-bar-height: 3;
+  }
 }
 
 // moving bit
@@ -2091,11 +2096,10 @@ GtkProgressBar {
     box-shadow: none;
   }
   &.osd {
+    background-image: none;
+    background-color: $selected_bg_color;
     border-style: none;
     border-radius: 0;
-    -GtkProgressBar-xspacing: 0;
-    -GtkProgressBar-yspacing: 2px;
-    -GtkProgressBar-min-horizontal-bar-height: 2px; //FIXME still too tall
   }
 }
 
