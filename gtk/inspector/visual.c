@@ -258,9 +258,9 @@ theme_changed (GtkComboBox        *c,
 static void
 init_dark (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (vis->priv->dark_switch, "active",
-                          gtk_settings_get_default (), "gtk-application-prefer-dark-theme",
-                          G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (gtk_settings_get_default (), "gtk-application-prefer-dark-theme",
+                          vis->priv->dark_switch, "active",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
   if (g_getenv ("GTK_THEME") != NULL)
     {
