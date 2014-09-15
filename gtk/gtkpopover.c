@@ -1455,7 +1455,7 @@ _gtk_popover_parent_size_allocate (GtkWidget     *widget,
 static void
 _unmanage_popover (GObject *object)
 {
-  g_object_run_dispose (object);
+  gtk_popover_update_relative_to (GTK_POPOVER (object), NULL);
   g_object_unref (object);
 }
 
@@ -1576,6 +1576,8 @@ gtk_popover_update_relative_to (GtkPopover *popover,
       _gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
       priv->window = NULL;
     }
+
+  g_clear_object (&priv->prev_focus_widget);
 
   if (priv->widget)
     {
