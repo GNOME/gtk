@@ -2038,21 +2038,23 @@ gtk_icon_view_motion (GtkWidget      *widget,
                                                FALSE,
                                                &cell);
 
-      if (item != NULL)
+      if (item != last_prelight_item)
         {
-          item->prelight = TRUE;
-          gtk_icon_view_queue_draw_item (icon_view, item);
-        }
+          if (item != NULL)
+            {
+              item->prelight = TRUE;
+              gtk_icon_view_queue_draw_item (icon_view, item);
+            }
 
-      if (last_prelight_item != NULL &&
-          last_prelight_item != item)
-        {
-          last_prelight_item->prelight = FALSE;
-          gtk_icon_view_queue_draw_item (icon_view,
-                                         icon_view->priv->last_prelight);
-        }
+          if (last_prelight_item != NULL)
+            {
+              last_prelight_item->prelight = FALSE;
+              gtk_icon_view_queue_draw_item (icon_view,
+                                             icon_view->priv->last_prelight);
+            }
 
-      icon_view->priv->last_prelight = item;
+          icon_view->priv->last_prelight = item;
+        }
     }
   
   return TRUE;
