@@ -1,3 +1,72 @@
+Overview of Changes in GTK+ 3.13.8 to 3.13.9
+============================================
+
+* Adwaita:
+ - Use sass functions more
+ - Theme .app-notification instead of .app-notification.frame
+ - Lots of button fine-tuning
+ - Avoid double background rendering in tooltips
+
+* Inspector:
+ - Show widget allocations
+ - Show hidden windows
+ - Fix initial state of dark switch
+
+* Bug fixes:
+ 328449 selecting selectable ellipsized GtkLabel labels is (slightly) broken
+ 528800 Widget Gallery has non-intuitive Image for GtkTreeView
+ 579625 Cancel button on Gtk.Assistant should have Esc as accelerator
+ 668258 Topic ellipsis acts as a link when omitted text contains a link
+ 698031 Cannot link libgdk (-lrt required)
+ 732916 treeview: column drop target visualization broken
+ 735240 Labels in list rows don't get their dim-label class applied until...
+ 735953 GtkPlacesSidebar blocks on g_file_query_info()
+ 735959 osd progressbar gap
+ 735965 rubberband selection broken
+ 736004 touch support for icon activation
+ 736056 GtkFontChooserButton's contents are not baseline aligned
+ 736064 Openbox title bar strange behaviour
+ 736121 gdk smooth scroll event unit inconsistencies between backends
+ 736131 tooltip: Fix warning with GtkCellRendererAccel
+ 736155 gtk_window_draw draws background twice and breaks with translucent...
+ 736173 a program clashes when drag-and-drop items in a GtkRecentChooserWidget
+ 736178 gtk_tree_view_scroll_to_cell() only works the first time
+ 736191 Inspector could show widget allocation
+ 736201 g_object_weak_unref assertion failures when closing the inspector
+ 736203 [regression] GtkCellRendererAccel doesn't work in modal dialogues
+ 736205 GtkMenuButton with popover breaks with GtkApplicationWindow's buil...
+ 736250 Need to sort gtk_compose_seqs_compact[] table in the descending order
+ 736269 GTK crashes when gdk_window_get_root_coords() is called on a forei...
+ 736307 GtkStackSwitcher doesn't like removing children from stack
+ 736512 Segfault in GtkPlacesSidebar when used with Nautilus
+ 736535 Vertical alignment of text labels is off
+ 736557 inspector: Show hidden windows in the inspector 
+
+* Translation updates:
+ Assamese
+ Brazilian Portuguese
+ Czech
+ Finnish
+ French
+ Galician
+ German
+ Greek
+ Gujarati
+ Hebrew
+ Indonesian
+ Kannada
+ Korean
+ Latvian
+ Lithuanian
+ Korean
+ Polish
+ Punjabi
+ Russian
+ Spanish
+ Swedish
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.13.7 to 3.13.8
 ============================================
 
