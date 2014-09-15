@@ -31,13 +31,14 @@
 #  include "gtkprinteroptionwidget.h"
 #endif
 
+_GDK_EXTERN
 void gtk_glade_catalog_init (const gchar *catalog_name);
 
 /* This function is referred to in gtk/glade/gtk-private-widgets.xml
  * and is used to ensure the private types for use in Glade while
  * editing UI files that define GTK+’s various composite widget classes.
  */
-_GDK_EXTERN void
+void
 gtk_glade_catalog_init (const gchar *catalog_name)
 {
   g_type_ensure (GTK_TYPE_PATH_BAR);
