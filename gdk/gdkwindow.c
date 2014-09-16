@@ -7623,7 +7623,8 @@ get_pointer_window (GdkDisplay *display,
   grab = _gdk_display_has_device_grab (display, device, serial);
   if (grab != NULL &&
       !grab->owner_events &&
-      pointer_window != grab->window)
+      pointer_window != grab->window &&
+      !gdk_window_is_ancestor (pointer_window, grab->window))
     pointer_window = NULL;
 
   return pointer_window;
