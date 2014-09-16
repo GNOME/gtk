@@ -7654,6 +7654,14 @@ _gtk_window_check_handle_wm_event (GdkEvent *event)
   if (!GTK_IS_WINDOW (widget))
     return GDK_EVENT_PROPAGATE;
 
+  if (event->type != GDK_BUTTON_PRESS && event->type != GDK_BUTTON_RELEASE &&
+      event->type != GDK_MOTION_NOTIFY && event->type != GDK_TOUCH_BEGIN &&
+      event->type != GDK_TOUCH_END && event->type != GDK_TOUCH_UPDATE)
+    return GDK_EVENT_PROPAGATE;
+
+  if (gtk_widget_event (widget, event))
+    return GDK_EVENT_STOP;
+
   return gtk_window_handle_wm_event (GTK_WINDOW (widget), event);
 }
 
