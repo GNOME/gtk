@@ -213,6 +213,19 @@ void         gtk_label_set_track_visited_links  (GtkLabel *label,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_label_get_track_visited_links  (GtkLabel *label);
 
+GDK_AVAILABLE_IN_3_16
+void         gtk_label_set_xalign (GtkLabel *label,
+                                   gfloat    xalign);
+
+GDK_AVAILABLE_IN_3_16
+gfloat       gtk_label_get_xalign (GtkLabel *label);
+
+GDK_AVAILABLE_IN_3_16
+void         gtk_label_set_yalign (GtkLabel *label,
+                                   gfloat    xalign);
+
+GDK_AVAILABLE_IN_3_16
+gfloat       gtk_label_get_yalign (GtkLabel *label);
 
 G_END_DECLS
 

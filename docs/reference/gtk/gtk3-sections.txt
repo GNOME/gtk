@@ -2085,6 +2085,8 @@ gtk_label_set_markup
 gtk_label_set_markup_with_mnemonic
 gtk_label_set_pattern
 gtk_label_set_justify
+gtk_label_set_xalign
+gtk_label_set_yalign
 gtk_label_set_ellipsize
 gtk_label_set_width_chars
 gtk_label_set_max_width_chars
@@ -2102,6 +2104,8 @@ gtk_label_set_selectable
 gtk_label_set_text_with_mnemonic
 gtk_label_get_attributes
 gtk_label_get_justify
+gtk_label_get_xalign
+gtk_label_get_yalign
 gtk_label_get_ellipsize
 gtk_label_get_width_chars
 gtk_label_get_max_width_chars
