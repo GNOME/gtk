@@ -156,6 +156,8 @@ static gboolean         gtk_icon_view_draw                      (GtkWidget      
                                                                  cairo_t            *cr);
 static gboolean         gtk_icon_view_motion                    (GtkWidget          *widget,
 								 GdkEventMotion     *event);
+static gboolean         gtk_icon_view_leave                     (GtkWidget          *widget,
+								 GdkEventCrossing   *event);
 static gboolean         gtk_icon_view_button_press              (GtkWidget          *widget,
 								 GdkEventButton     *event);
 static gboolean         gtk_icon_view_button_release            (GtkWidget          *widget,
@@ -357,6 +359,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->draw = gtk_icon_view_draw;
   widget_class->motion_notify_event = gtk_icon_view_motion;
+  widget_class->leave_notify_event = gtk_icon_view_leave;
   widget_class->button_press_event = gtk_icon_view_button_press;
   widget_class->button_release_event = gtk_icon_view_button_release;
   widget_class->key_press_event = gtk_icon_view_key_press;
@@ -1307,6 +1310,7 @@ gtk_icon_view_realize (GtkWidget *widget)
                            GDK_SCROLL_MASK |
                            GDK_SMOOTH_SCROLL_MASK |
                            GDK_POINTER_MOTION_MASK |
+                           GDK_LEAVE_NOTIFY_MASK |
                            GDK_BUTTON_PRESS_MASK |
                            GDK_BUTTON_RELEASE_MASK |
                            GDK_KEY_PRESS_MASK |
@@ -2056,6 +2060,25 @@ gtk_icon_view_motion (GtkWidget      *widget,
     }
   
   return TRUE;
+}
+
+static gboolean
+gtk_icon_view_leave (GtkWidget        *widget,
+                     GdkEventCrossing *event)
+{
+  GtkIconView *icon_view;
+  GtkIconViewPrivate *priv;
+
+  icon_view = GTK_ICON_VIEW (widget);
+  priv = icon_view->priv;
+
+  if (priv->last_prelight)
+    {
+      gtk_icon_view_queue_draw_item (icon_view, priv->last_prelight);
+      priv->last_prelight = NULL;
+    }
+
+  return FALSE;
 }
 
 static void
