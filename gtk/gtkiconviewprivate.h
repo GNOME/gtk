@@ -29,7 +29,6 @@ struct _GtkIconViewItem
   
   gint row, col;
 
-  guint prelight : 1;
   guint selected : 1;
   guint selected_before_rubberbanding : 1;
 

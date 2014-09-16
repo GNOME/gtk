@@ -2042,13 +2042,11 @@ gtk_icon_view_motion (GtkWidget      *widget,
         {
           if (item != NULL)
             {
-              item->prelight = TRUE;
               gtk_icon_view_queue_draw_item (icon_view, item);
             }
 
           if (last_prelight_item != NULL)
             {
-              last_prelight_item->prelight = FALSE;
               gtk_icon_view_queue_draw_item (icon_view,
                                              icon_view->priv->last_prelight);
             }
@@ -3107,7 +3105,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
       flags |= GTK_CELL_RENDERER_SELECTED;
     }
 
-  if (item->prelight)
+  if (item == priv->last_prelight)
     {
       state |= GTK_STATE_FLAG_PRELIGHT;
       flags |= GTK_CELL_RENDERER_PRELIT;
