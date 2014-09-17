@@ -83,7 +83,7 @@
  * a #GObject. Making it a widget would be impractical, since the system tray
  * on Win32 doesn’t allow to embed arbitrary widgets.
  *
- * GtkStatusIcon has been deprecated in 3.16. You should consider using
+ * GtkStatusIcon has been deprecated in 3.14. You should consider using
  * notifications or more modern platform-specific APIs instead.
  */
 
