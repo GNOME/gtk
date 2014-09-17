@@ -2,70 +2,71 @@
 # Translation of GTK+ to Bengali India
 # This file is distributed under the same license as the GTK+ package.
 # Copyright (C) 2003-2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
-#
+# 
 # Sayamindu Dasgupta <unmadindu@Softhome.net>, 2004.
 # Progga <progga@BengaLinux.Org>, 2004, 2005.
 # Runa Bhattacharjee <runabh@gmail.com>, 2007.
 # Runa Bhattacharjee <runab@redhat.com>, 2008, 2009, 2010, 2011, 2012.
+# sray <sray@redhat.com>, 2013. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: bn_IN\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product="
+"gtk%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-09-18 11:52+0000\n"
-"PO-Revision-Date: 2012-09-20 19:47+0530\n"
-"Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
+"PO-Revision-Date: 2013-09-23 05:50-0400\n"
+"Last-Translator: sray <sray@redhat.com>\n"
 "Language-Team: Bengali (India) <anubad@lists.ankur.org.in>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: bn-IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Zanata 3.1.2\n"
 
-#: ../gdk/gdk.c:155
+#: ../gdk/gdk.c:157
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "--gdk-debug বিকল্পটি পার্স করতে সমস্যা"
 
-#: ../gdk/gdk.c:175
+#: ../gdk/gdk.c:177
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "--gdk-no-debug বিকল্প পার্স করতে সমস্যা"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:203
+#: ../gdk/gdk.c:205
 msgid "Program class as used by the window manager"
 msgstr "উইন্ডো পরিচালনব্যবস্থা দ্বারা ব্যবহৃত প্রোগ্রাম-ক্লাস"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:204
+#: ../gdk/gdk.c:206
 msgid "CLASS"
 msgstr "CLASS"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:208
 msgid "Program name as used by the window manager"
 msgstr "উইন্ডো পরিচালনব্যবস্থা দ্বারা ব্যবহৃত প্রোগ্রামের নাম"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:209
 msgid "NAME"
 msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:209
+#: ../gdk/gdk.c:211
 msgid "X display to use"
 msgstr "ব্যবহারের উদ্দেশ্যে চিহ্নিত X ডিসপ্লে"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:210
+#: ../gdk/gdk.c:212
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:213
+#: ../gdk/gdk.c:215
 msgid "GDK debugging flags to set"
 msgstr "নির্ধারণের উদ্দেশ্যে চিহ্নিত GTK+ ডিবাগিং ফ্ল্যাগ"
 
@@ -73,16 +74,18 @@ msgstr "নির্ধারণের উদ্দেশ্যে চিহ্�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
+#: ../gdk/gdk.c:216
+#: ../gdk/gdk.c:219
+#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:216
+#: ../gdk/gdk.c:218
 msgid "GDK debugging flags to unset"
 msgstr "মুছে ফেলার উদ্দেশ্যে চিহ্নিত GTK+ ডিবাগিং ফ্ল্যাগ"
 
-#.
 #. * Translators, the strings in the 'keyboard label' context are
 #. * display names for keyboard keys. Some of them have prefixes like
 #. * XF86 or ISO_ - these should be removed in the translation. Similarly,
@@ -93,7 +96,6 @@ msgstr "মুছে ফেলার উদ্দেশ্যে চিহ্ন
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
 #. * Page_Up       - Page up
-#.
 #: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "BackSpace"
@@ -283,133 +285,133 @@ msgstr "Delete"
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
-msgid "MonBrightnessUp"
-msgstr "MonBrightnessUp"
+msgid "XF86MonBrightnessUp"
+msgstr "XF86MonBrightnessUp"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
-msgid "MonBrightnessDown"
-msgstr "MonBrightnessDown"
+msgid "XF86MonBrightnessDown"
+msgstr "XF86MonBrightnessDown"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
-msgid "AudioMute"
-msgstr "AudioMute"
+msgid "XF86AudioMute"
+msgstr "XF86AudioMute"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
-msgid "AudioLowerVolume"
-msgstr "AudioLowerVolume"
+msgid "XF86AudioLowerVolume"
+msgstr "XF86AudioLowerVolume"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
-msgid "AudioRaiseVolume"
-msgstr "AudioRaiseVolume"
+msgid "XF86AudioRaiseVolume"
+msgstr "XF86AudioRaiseVolume"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
-msgid "AudioPlay"
-msgstr "AudioPlay"
+msgid "XF86AudioPlay"
+msgstr "XF86AudioPlay"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
-msgid "AudioStop"
-msgstr "AudioStop"
+msgid "XF86AudioStop"
+msgstr "XF86AudioStop"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
-msgid "AudioNext"
-msgstr "AudioNext"
+msgid "XF86AudioNext"
+msgstr "XF86AudioNext"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
-msgid "AudioPrev"
-msgstr "AudioPrev"
+msgid "XF86AudioPrev"
+msgstr "XF86AudioPrev"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
-msgid "AudioRecord"
-msgstr "AudioRecord"
+msgid "XF86AudioRecord"
+msgstr "XF86AudioRecord"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
-msgid "AudioPause"
-msgstr "AudioPause"
+msgid "XF86AudioPause"
+msgstr "XF86AudioPause"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
-msgid "AudioRewind"
-msgstr "AudioRewind"
+msgid "XF86AudioRewind"
+msgstr "XF86AudioRewind"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
-msgid "AudioMedia"
-msgstr "AudioMedia"
+msgid "XF86AudioMedia"
+msgstr "XF86AudioMedia"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
-msgid "ScreenSaver"
-msgstr "ScreenSaver"
+msgid "XF86ScreenSaver"
+msgstr "XF86ScreenSaver"
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
-msgid "Battery"
-msgstr "Battery"
+msgid "XF86Battery"
+msgstr "XF86Battery"
 
 #: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
-msgid "Launch1"
-msgstr "Launch1"
+msgid "XF86Launch1"
+msgstr "XF86Launch1"
 
 #: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
-msgid "Forward"
-msgstr "Forward"
+msgid "XF86Forward"
+msgstr "XF86Forward"
 
 #: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
-msgid "Back"
-msgstr "Back"
+msgid "XF86Back"
+msgstr "XF86Back"
 
 #: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
-msgid "Sleep"
-msgstr "Sleep"
+msgid "XF86Sleep"
+msgstr "XF86Sleep"
 
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
-msgid "Hibernate"
-msgstr "Hibernate"
+msgid "XF86Hibernate"
+msgstr "XF86Hibernate"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
-msgid "WLAN"
-msgstr "WLAN"
+msgid "XF86WLAN"
+msgstr "XF86WLAN"
 
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
-msgid "WebCam"
-msgstr "WebCam"
+msgid "XF86WebCam"
+msgstr "XF86WebCam"
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
-msgid "Display"
-msgstr "Display"
+msgid "XF86Display"
+msgstr "XF86Display"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
-msgid "TouchpadToggle"
-msgstr "TouchpadToggle"
+msgid "XF86TouchpadToggle"
+msgstr "XF86TouchpadToggle"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
-msgid "WakeUp"
-msgstr "WakeUp"
+msgid "XF86WakeUp"
+msgstr "XF86WakeUp"
 
 #: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
-msgid "Suspend"
-msgstr "Suspend"
+msgid "XF86Suspend"
+msgstr "XF86Suspend"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -458,12 +460,137 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d-টি সামগ্রী খোলা হচ্ছে"
 msgstr[1] "%d-টি সামগ্রী খোলা হচ্ছে"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:40
+#: ../gtk/a11y/gtkbooleancellaccessible.c:43
+msgctxt "Action description"
+msgid "Toggles the cell"
+msgstr "সেল অদলবদল করে"
+
+#: ../gtk/a11y/gtkbooleancellaccessible.c:63
+#: ../gtk/a11y/gtkswitchaccessible.c:101
+msgctxt "Action name"
+msgid "Toggle"
+msgstr "অদলবদল করুন"
+
+#: ../gtk/a11y/gtkbuttonaccessible.c:341
+#: ../gtk/a11y/gtkmenuitemaccessible.c:436
+msgctxt "Action name"
+msgid "Click"
+msgstr "ক্লিক করুন"
+
+#: ../gtk/a11y/gtkbuttonaccessible.c:350
+msgctxt "Action description"
+msgid "Clicks the button"
+msgstr "বোতামে ক্লিক করে"
+
+#: ../gtk/a11y/gtkcellaccessible.c:258
+msgctxt "Action name"
+msgid "Expand or contract"
+msgstr "মেলুন বা গোটান"
+
+#: ../gtk/a11y/gtkcellaccessible.c:260
+msgctxt "Action name"
+msgid "Edit"
+msgstr "সম্পাদনা"
+
+#: ../gtk/a11y/gtkcellaccessible.c:262
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:72
+#: ../gtk/a11y/gtkentryaccessible.c:1557
+#: ../gtk/a11y/gtkexpanderaccessible.c:281
+msgctxt "Action name"
+msgid "Activate"
+msgstr "সক্রিয় করুন"
+
+#: ../gtk/a11y/gtkcellaccessible.c:275
+msgctxt "Action description"
+msgid "Expands or contracts the row in the tree view containing this cell"
+msgstr "এই সেল বিশিষ্ট সারি ট্রি ভিউতে মেলে ধরে বা গোটায়"
+
+#: ../gtk/a11y/gtkcellaccessible.c:277
+msgctxt "Action description"
+msgid "Creates a widget in which the contents of the cell can be edited"
+msgstr "একটি উইজেট প্রস্তুত করে যেখানে সেলের বিষয়বস্তু সম্পাদনা করা যেতে পারে"
+
+#: ../gtk/a11y/gtkcellaccessible.c:279
+msgctxt "Action description"
+msgid "Activates the cell"
+msgstr "সেল সক্রিয় করে"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:71
+msgctxt "Action name"
+msgid "Select"
+msgstr "নির্বাচন করুন"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:73
+msgctxt "Action name"
+msgid "Customize"
+msgstr "স্বনির্ধারিত"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:84
+msgctxt "Action description"
+msgid "Selects the color"
+msgstr "রঙটি নির্বাচন করে"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:85
+msgctxt "Action description"
+msgid "Activates the color"
+msgstr "রঙটি সক্রিয় করে"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:86
+msgctxt "Action description"
+msgid "Customizes the color"
+msgstr "রঙ স্বনির্ধারিত করে"
+
+#: ../gtk/a11y/gtkcomboboxaccessible.c:313
+msgctxt "Action name"
+msgid "Press"
+msgstr "টিপুন"
+
+#: ../gtk/a11y/gtkcomboboxaccessible.c:322
+msgctxt "Action description"
+msgid "Presses the combobox"
+msgstr "কম্বো-বক্স টেপা হয়"
+
+#: ../gtk/a11y/gtkentryaccessible.c:1566
+msgctxt "Action description"
+msgid "Activates the entry"
+msgstr "এন্ট্রি সক্রিয় করে"
+
+#: ../gtk/a11y/gtkexpanderaccessible.c:290
+msgctxt "Action description"
+msgid "Activates the expander"
+msgstr "বিস্তৃতকারী সক্রিয় করে"
+
+#: ../gtk/a11y/gtkmenuitemaccessible.c:445
+msgctxt "Action description"
+msgid "Clicks the menuitem"
+msgstr "মেনু অাইটেম ক্লিক করে"
+
+#: ../gtk/a11y/gtkscalebuttonaccessible.c:140
+msgctxt "Action description"
+msgid "Pops up the slider"
+msgstr "স্লাইডার পপ-অাপ করে"
+
+#: ../gtk/a11y/gtkscalebuttonaccessible.c:142
+msgctxt "Action description"
+msgid "Dismisses the slider"
+msgstr "স্লাইডার বাতিল করে"
+
+#: ../gtk/a11y/gtkscalebuttonaccessible.c:170
+msgctxt "Action name"
+msgid "Popup"
+msgstr "পপ অাপ"
+
+#: ../gtk/a11y/gtkscalebuttonaccessible.c:172
+msgctxt "Action name"
+msgid "Dismiss"
+msgstr "বাতিল"
+
+#: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "স্পিনার"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:41
+#: ../gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
 msgstr "কর্মের প্রগতির মাত্রার দৃশ্যমান ইঙ্গিত"
 
@@ -476,23 +603,26 @@ msgstr "পরিবর্তন"
 msgid "Switches between on and off states"
 msgstr "চালু ও বন্ধ অবস্থার মধ্যে পরিবর্তন করা হয়"
 
+#: ../gtk/a11y/gtkswitchaccessible.c:110
+msgctxt "Action description"
+msgid "Toggles the switch"
+msgstr "স্যুইচ অদলবদল করে"
+
 #: ../gtk/deprecated/gtkcolorsel.c:425
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 "বাহির বৃত্তের মধ্যে উপস্থিত রঙগুলি থেকে প্রযোজ্য রঙ নির্বাচন করুন। মধ্যে "
-"স্থিত ত্রিকোণ "
-"প্রয়োগ করে রঙ হালকা অথবা গাঢ় করুন।"
+"স্থিত ত্রিকোণ প্রয়োগ করে রঙ হালকা অথবা গাঢ় করুন।"
 
 #: ../gtk/deprecated/gtkcolorsel.c:451
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"আই-ড্রপার ক্লিক করুন ও পর্দার মধ্যে প্রদর্শিত কোনো পছন্দসই রঙের উপর ক্লিক করে "
-"সেটি "
-"ব্যবহারের জন্য নির্বাচন করুন।"
+"আই-ড্রপার ক্লিক করুন ও পর্দার মধ্যে প্রদর্শিত কোনো পছন্দসই রঙের উপর ক্লিক "
+"করে সেটি ব্যবহারের জন্য নির্বাচন করুন।"
 
 #: ../gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -503,7 +633,6 @@ msgid "Position on the color wheel."
 msgstr "রং প্রদর্শনকারী চাকতির অবস্থান।"
 
 #: ../gtk/deprecated/gtkcolorsel.c:464
-#| msgid "_Saturation:"
 msgid "S_aturation:"
 msgstr "ঘনত্ব: (_a)"
 
@@ -547,7 +676,8 @@ msgstr "রঙের মধ্যে নীল আলোর পরিমাণ�
 msgid "Op_acity:"
 msgstr "স্বচ্ছতা: (_a)"
 
-#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
+#: ../gtk/deprecated/gtkcolorsel.c:484
+#: ../gtk/deprecated/gtkcolorsel.c:494
 msgid "Transparency of the color."
 msgstr "রঙের স্বচ্ছতা।"
 
@@ -561,8 +691,7 @@ msgid ""
 "such as 'orange' in this entry."
 msgstr ""
 "রঙ চিহ্ন করতে এইখানে, HTML-বিন্যাসের হেক্সা-ডেসিমেল মান লিখুন অথবা কোনো রঙের "
-"নাম "
-"যেমন 'orange' লিখুন।"
+"নাম যেমন 'orange' লিখুন।"
 
 #: ../gtk/deprecated/gtkcolorsel.c:548
 msgid "_Palette:"
@@ -579,9 +708,8 @@ msgid ""
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 "বর্তমানে নির্বাচিত রঙের সাথে পূর্ব নির্বাচিত রঙ তূলনা করুন। এই রঙটি প্যালেটে "
-"টেনে "
-"আনুন অথবা পার্শ্ববর্তী রঙ ধারণ ক্ষেত্রে টেনে এনে বর্তমান নির্বাচন রূপে স্থাপন "
-"করুন।"
+"টেনে আনুন অথবা পার্শ্ববর্তী রঙ ধারণ ক্ষেত্রে টেনে এনে বর্তমান নির্বাচন রূপে "
+"স্থাপন করুন।"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1078
 msgid ""
@@ -589,8 +717,7 @@ msgid ""
 "it for use in the future."
 msgstr ""
 "নির্বাচিত রঙ। ভবিষ্যতে ব্যবহারের উদ্দেশ্যে এই রঙটি টেনে এনে একটি প্যালেটে "
-"স্থাপন "
-"করা যাবে।"
+"স্থাপন করা যাবে।"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1084
 msgid ""
@@ -613,17 +740,17 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"বর্তমানের ব্যবহৃত রঙ হিসাবে প্রয়োগের উদ্দেশ্যে এই প্যালেটের রঙ ক্লিক করুন। এই "
-"রঙটি "
-"পরিবর্তন করার জন্য একটি রঙ টেনে আনুন অথবা সেটির উপর ক্লিক করে  \"এই স্থান রঙ "
-"সংরক্ষণ করুন\" নির্বাচন করুন।"
+"বর্তমানের ব্যবহৃত রঙ হিসাবে প্রয়োগের উদ্দেশ্যে এই প্যালেটের রঙ ক্লিক করুন। "
+"এই রঙটি পরিবর্তন করার জন্য একটি রঙ টেনে আনুন অথবা সেটির উপর ক্লিক করে  \"এই "
+"স্থান রঙ সংরক্ষণ করুন\" নির্বাচন করুন।"
 
 #. We emit the response for the Select button manually,
 #. * since we want to save the color first
-#.
-#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
-#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
-#: ../gtk/gtkprinteroptionwidget.c:550
+#: ../gtk/deprecated/gtkcolorseldialog.c:201
+#: ../gtk/gtkappchooserdialog.c:509
+#: ../gtk/gtkcolorchooserdialog.c:149
+#: ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/gtkprinteroptionwidget.c:552
 msgid "_Select"
 msgstr "নির্বাচন করুন (_S)"
 
@@ -654,18 +781,15 @@ msgstr "মাপ:(_z)"
 msgid "_Preview:"
 msgstr "পূর্বপ্রদর্শন:(_P)"
 
-#: ../gtk/deprecated/gtkfontsel.c:1720 ../gtk/gtkfontchooserdialog.c:183
+#: ../gtk/deprecated/gtkfontsel.c:1720
+#: ../gtk/gtkfontchooserdialog.c:183
 msgid "Font Selection"
 msgstr "ফন্ট নির্বাচন"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
-#.
 #: ../gtk/gtkaboutdialog.c:104
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a "
-#| "href=\"%s\">%s</a>"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
@@ -696,27 +820,27 @@ msgid "Could not show link"
 msgstr "লিংক প্রদর্শন করতে ব্যর্থ"
 
 #: ../gtk/gtkaboutdialog.c:1017
-msgid "Homepage"
-msgstr "হোম-পেজ"
+msgid "Website"
+msgstr "ওয়েবসাইট"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
 msgid "About %s"
 msgstr "%s পরিচিতি"
 
-#: ../gtk/gtkaboutdialog.c:2399
+#: ../gtk/gtkaboutdialog.c:2398
 msgid "Created by"
 msgstr "নির্মাতা"
 
-#: ../gtk/gtkaboutdialog.c:2402
+#: ../gtk/gtkaboutdialog.c:2401
 msgid "Documented by"
 msgstr "সহায়িকা লিখেছেন"
 
-#: ../gtk/gtkaboutdialog.c:2412
+#: ../gtk/gtkaboutdialog.c:2411
 msgid "Translated by"
 msgstr "অনুবাদক"
 
-#: ../gtk/gtkaboutdialog.c:2417
+#: ../gtk/gtkaboutdialog.c:2416
 msgid "Artwork by"
 msgstr "শিল্পী"
 
@@ -724,7 +848,6 @@ msgstr "শিল্পী"
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: ../gtk/gtkaccellabel.c:159
 msgctxt "keyboard label"
 msgid "Shift"
@@ -734,7 +857,6 @@ msgstr "Shift"
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: ../gtk/gtkaccellabel.c:165
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -744,7 +866,6 @@ msgstr "Ctrl"
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: ../gtk/gtkaccellabel.c:171
 msgctxt "keyboard label"
 msgid "Alt"
@@ -754,7 +875,6 @@ msgstr "Alt"
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: ../gtk/gtkaccellabel.c:805
 msgctxt "keyboard label"
 msgid "Super"
@@ -764,7 +884,6 @@ msgstr "Super"
 #. * that use the hyper key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: ../gtk/gtkaccellabel.c:818
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -774,147 +893,123 @@ msgstr "Hyper"
 #. * that use the meta key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:849
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:851
+#: ../gtk/gtkaccellabel.c:852
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
 #: ../gtk/gtkappchooserbutton.c:290
-msgid "Other application..."
-msgstr "অন্যান্য অ্যাপ্লিকেশন..."
+msgid "Other application…"
+msgstr "অন্যান্য অ্যাপ্লিকেশন…"
 
 #: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
 msgstr "অনলাইন অ্যাপ্লিকেশন অনুসন্ধান করতে ব্যর্থ"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#| msgid "Find applications online"
 msgid "_Find applications online"
 msgstr "অনলাইন অ্যাপ্লিকেশন অনুসন্ধান করুন (_F)"
 
-#: ../gtk/gtkappchooserdialog.c:247
-msgid "Could not run application"
-msgstr "অ্যাপ্লিকেশন সঞ্চালন করতে ব্যর্থ"
-
-#: ../gtk/gtkappchooserdialog.c:260
-#, c-format
-msgid "Could not find '%s'"
-msgstr "'%s' সন্ধান করতে ব্যর্থ"
-
-#: ../gtk/gtkappchooserdialog.c:263
-msgid "Could not find application"
-msgstr "অ্যাপ্লিকেশন সন্ধান করতে ব্যর্থ"
-
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:397
+#: ../gtk/gtkappchooserdialog.c:332
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "\"%s\" খোলার জন্য একটি অ্যাপ্লিকেশন নির্বাচন করুন"
 
-#: ../gtk/gtkappchooserdialog.c:398 ../gtk/gtkappchooserwidget.c:654
+#: ../gtk/gtkappchooserdialog.c:333
+#: ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "\"%s\" খোলার জন্য কোনো অ্যাপ্লিকেশন উপলব্ধ নেই"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:404
+#: ../gtk/gtkappchooserdialog.c:339
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "\"%s\" ফাইলের জন্য একটি অ্যাপ্লিকেশন নির্বাচন করুন"
 
-#: ../gtk/gtkappchooserdialog.c:406
+#: ../gtk/gtkappchooserdialog.c:341
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "\"%s\" ফাইল খোলার জন্য কোনো অ্যাপ্লিকেশন উপলব্ধ নয়"
 
-#: ../gtk/gtkappchooserdialog.c:422
+#: ../gtk/gtkappchooserdialog.c:357
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
 "অতিরিক্ত বিকল্পগুলি প্রাপ্ত করার জন্য \"অন্যান্য অ্যাপ্লিকেশন\" ক্লিক করুন। "
-"নতুন "
-"অ্যাপ্লিকেশন ইনস্টল করার জন্য \"অনলাইন অ্যাপ্লিকেশন অনুসন্ধান করুন\" ক্লিক "
-"করুন।"
+"নতুন অ্যাপ্লিকেশন ইনস্টল করার জন্য \"অনলাইন অ্যাপ্লিকেশন অনুসন্ধান করুন\" "
+"ক্লিক করুন।"
 
-#: ../gtk/gtkappchooserdialog.c:492
+#: ../gtk/gtkappchooserdialog.c:427
 msgid "Forget association"
 msgstr "যোগাযোগ মনে রাখা হবে না"
 
-#: ../gtk/gtkappchooserdialog.c:558
+#: ../gtk/gtkappchooserdialog.c:493
 msgid "Show other applications"
 msgstr "অন্যান্য অ্যাপ্লিকেশন"
 
-#: ../gtk/gtkappchooserwidget.c:603
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "ডিফল্ট অ্যাপ্লিকেশন"
 
-#: ../gtk/gtkappchooserwidget.c:741
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "প্রস্তাবিত অ্যাপ্লিকেশন"
 
-#: ../gtk/gtkappchooserwidget.c:756
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "যুক্ত অ্যাপ্লিকেশন"
 
-#: ../gtk/gtkappchooserwidget.c:770
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "অন্যান্য অ্যাপ্লিকেশন"
 
-#: ../gtk/gtkapplication.c:1558
+#: ../gtk/gtkapplication.c:1565
 #, c-format
-msgid ""
-"%s cannot quit at this time:\n"
+msgid "%s cannot quit at this time:\n"
 "\n"
 "%s"
-msgstr ""
-"এই মুহূর্তে %s থেকে প্রস্থান করা যাবে না:\n"
+msgstr "এই মুহূর্তে %s থেকে প্রস্থান করা যাবে না:\n"
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:334
+#: ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "অ্যাপ্লিকেশন"
 
 #: ../gtk/gtkassistant.c:1008
-#| msgctxt "Stock label"
-#| msgid "C_onnect"
 msgid "C_ontinue"
 msgstr "এগিয়ে চলুন (_o)"
 
 #: ../gtk/gtkassistant.c:1011
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgid "Go _Back"
 msgstr "পূর্ববর্তী (_B)"
 
 #: ../gtk/gtkassistant.c:1015
-#| msgctxt "print operation status"
-#| msgid "Finished"
 msgid "_Finish"
 msgstr "সমাপ্তি (_F)"
 
 #: ../gtk/gtkbuilder-menus.c:220
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "<%s> স্বত্বাটি <%s>-র নীচে ব্যবহার করা যাবে না"
 
 #: ../gtk/gtkbuilder-menus.c:225
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed at toplevel"
 msgstr "<%s> স্বত্বাটি সর্বোচ্চ স্তরে ব্যবহার করা যাবে না"
 
@@ -932,8 +1027,8 @@ msgstr "%d পংক্তিতে উপস্থিত ফাংশানে�
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr ""
-"'%s' অবজেক্ট ID %d পংক্তির মধ্যে দ্বিতীয়বার উল্লিখিত হয়েছে (%d পংক্তিতে প্রথম "
-"উপস্থিতি)"
+"'%s' অবজেক্ট ID %d পংক্তির মধ্যে দ্বিতীয়বার উল্লিখিত হয়েছে (%d পংক্তিতে "
+"প্রথম উপস্থিতি)"
 
 #: ../gtk/gtkbuilderparser.c:865
 #, c-format
@@ -954,7 +1049,6 @@ msgstr "ট্যাগের ব্যবস্থাপনা হয়নি: '%
 #. * further influenced by BIDI ordering. Thus, if you have a default
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
-#.
 #: ../gtk/gtkcalendar.c:872
 msgid "calendar:MY"
 msgstr "calendar:MY"
@@ -962,7 +1056,6 @@ msgstr "calendar:MY"
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
-#.
 #: ../gtk/gtkcalendar.c:910
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
@@ -971,7 +1064,6 @@ msgstr "calendar:week_start:0"
 #. * Translate it to the widest year text
 #. *
 #. * If you don't understand this, leave it as "2000"
-#.
 #: ../gtk/gtkcalendar.c:1910
 msgctxt "year measurement template"
 msgid "2000"
@@ -986,8 +1078,8 @@ msgstr "2000"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#.
-#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2633
+#: ../gtk/gtkcalendar.c:1941
+#: ../gtk/gtkcalendar.c:2633
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1002,8 +1094,8 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#.
-#: ../gtk/gtkcalendar.c:1973 ../gtk/gtkcalendar.c:2499
+#: ../gtk/gtkcalendar.c:1973
+#: ../gtk/gtkcalendar.c:2499
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1018,7 +1110,6 @@ msgstr "%d"
 #. * msgid.
 #. *
 #. * "%Y" is appropriate for most locales.
-#.
 #: ../gtk/gtkcalendar.c:2268
 msgctxt "calendar year format"
 msgid "%Y"
@@ -1026,7 +1117,6 @@ msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
-#.
 #: ../gtk/gtkcellrendereraccel.c:282
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1035,7 +1125,6 @@ msgstr "নিষ্ক্রিয়"
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
-#.
 #: ../gtk/gtkcellrendereraccel.c:292
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1044,23 +1133,24 @@ msgstr "অবৈধ"
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
-#.
-#: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:745
-msgid "New accelerator..."
-msgstr "নতুন গতিবর্ধক..."
+#: ../gtk/gtkcellrendereraccel.c:416
+#: ../gtk/gtkcellrendereraccel.c:747
+msgid "New accelerator…"
+msgstr "নতুন অ্যাকসেলেরেটর..."
 
-#: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
+#: ../gtk/gtkcellrendererprogress.c:372
+#: ../gtk/gtkcellrendererprogress.c:462
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:449
+#: ../gtk/gtkcolorbutton.c:188
+#: ../gtk/gtkcolorbutton.c:449
 msgid "Pick a Color"
 msgstr "একটি রং বেছে নিন"
 
-#: ../gtk/gtkcolorchooserdialog.c:164
-#| msgid "Select a folder"
+#: ../gtk/gtkcolorchooserdialog.c:162
 msgid "Select a Color"
 msgstr "একটি রং নির্বাচন করুন"
 
@@ -1074,225 +1164,215 @@ msgstr "লাল %d%%, সবুজ %d%%,নীল %d%%, আল্ফা %d%%"
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "লাল %d%%, সবুজ %d%%, নীল %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:360
+#: ../gtk/gtkcolorchooserwidget.c:364
 #, c-format
-#| msgid "Color"
 msgid "Color: %s"
 msgstr "রং: %s"
 
-#: ../gtk/gtkcolorchooserwidget.c:419
+#: ../gtk/gtkcolorchooserwidget.c:423
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "হালকা কটকটে লাল"
 
-#: ../gtk/gtkcolorchooserwidget.c:420
+#: ../gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "কটকটে লাল"
 
-#: ../gtk/gtkcolorchooserwidget.c:421
+#: ../gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "গাঢ় কটকটে লাল"
 
-#: ../gtk/gtkcolorchooserwidget.c:422
+#: ../gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "হালকা কমলা"
 
-#: ../gtk/gtkcolorchooserwidget.c:423
-#| msgid "Range"
+#: ../gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Orange"
 msgstr "কমলা"
 
-#: ../gtk/gtkcolorchooserwidget.c:424
+#: ../gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "গাঢ় কমলা"
 
-#: ../gtk/gtkcolorchooserwidget.c:425
+#: ../gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "হালকা ঘীয়ে রং"
 
-#: ../gtk/gtkcolorchooserwidget.c:426
+#: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Butter"
 msgstr "ঘীয়ে রং"
 
-#: ../gtk/gtkcolorchooserwidget.c:427
+#: ../gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "গাঢ় ঘীয়ে রং"
 
-#: ../gtk/gtkcolorchooserwidget.c:428
+#: ../gtk/gtkcolorchooserwidget.c:432
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "হালকা ক্যামেলিয়ন"
 
-#: ../gtk/gtkcolorchooserwidget.c:429
+#: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "ক্যামেলিয়ন"
 
-#: ../gtk/gtkcolorchooserwidget.c:430
+#: ../gtk/gtkcolorchooserwidget.c:434
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "গাঢ় ক্যামেলিয়ন"
 
-#: ../gtk/gtkcolorchooserwidget.c:431
+#: ../gtk/gtkcolorchooserwidget.c:435
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "হালকা আকাশী"
 
-#: ../gtk/gtkcolorchooserwidget.c:432
+#: ../gtk/gtkcolorchooserwidget.c:436
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "আকাশী"
 
-#: ../gtk/gtkcolorchooserwidget.c:433
+#: ../gtk/gtkcolorchooserwidget.c:437
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "গাঢ় আকাশী"
 
-#: ../gtk/gtkcolorchooserwidget.c:434
+#: ../gtk/gtkcolorchooserwidget.c:438
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "হালকা প্লাম"
 
-#: ../gtk/gtkcolorchooserwidget.c:435
+#: ../gtk/gtkcolorchooserwidget.c:439
 msgctxt "Color name"
 msgid "Plum"
 msgstr "প্লাম"
 
-#: ../gtk/gtkcolorchooserwidget.c:436
+#: ../gtk/gtkcolorchooserwidget.c:440
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "গাঢ় প্লাম"
 
-#: ../gtk/gtkcolorchooserwidget.c:437
+#: ../gtk/gtkcolorchooserwidget.c:441
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "হালকা চকোলেট"
 
-#: ../gtk/gtkcolorchooserwidget.c:438
-#| msgid "C_ollate"
+#: ../gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "চকোলেট"
 
-#: ../gtk/gtkcolorchooserwidget.c:439
+#: ../gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "গাঢ় চকোলেট"
 
-#: ../gtk/gtkcolorchooserwidget.c:440
+#: ../gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "হালকা অ্যালুমিনিয়াম ১"
 
-#: ../gtk/gtkcolorchooserwidget.c:441
+#: ../gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "অ্যালুমিনিয়াম ১"
 
-#: ../gtk/gtkcolorchooserwidget.c:442
+#: ../gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "গাঢ় অ্যালুমিনিয়াম ১"
 
-#: ../gtk/gtkcolorchooserwidget.c:443
+#: ../gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "হালকা অ্যালুমিনিয়াম ২"
 
-#: ../gtk/gtkcolorchooserwidget.c:444
+#: ../gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "অ্যালুমিনিয়াম ২"
 
-#: ../gtk/gtkcolorchooserwidget.c:445
+#: ../gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "গাঢ় অ্যালুমিনিয়াম ২"
 
-#: ../gtk/gtkcolorchooserwidget.c:459
+#: ../gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Black"
 msgstr "কালো"
 
-#: ../gtk/gtkcolorchooserwidget.c:460
+#: ../gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "অতি গাঢ় ধূসর"
 
-#: ../gtk/gtkcolorchooserwidget.c:461
+#: ../gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "গাঢ়তর ধূসর"
 
-#: ../gtk/gtkcolorchooserwidget.c:462
+#: ../gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "গাঢ় ধূসর"
 
-#: ../gtk/gtkcolorchooserwidget.c:463
-#| msgid "Medium"
+#: ../gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "মাঝারি ধূসর"
 
-#: ../gtk/gtkcolorchooserwidget.c:464
+#: ../gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "হালকা ধূসর"
 
-#: ../gtk/gtkcolorchooserwidget.c:465
+#: ../gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "হালকাতর ধূসর"
 
-#: ../gtk/gtkcolorchooserwidget.c:466
+#: ../gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "অতি হালকা ধূসর"
 
-#: ../gtk/gtkcolorchooserwidget.c:467
+#: ../gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "White"
 msgstr "সাদা"
 
 #. translators: label for the custom section in the color chooser
-#: ../gtk/gtkcolorchooserwidget.c:516
-#| msgid "Custom size"
+#: ../gtk/gtkcolorchooserwidget.c:520
 msgid "Custom"
 msgstr "স্বনির্ধারিত"
 
-#: ../gtk/gtkcolorchooserwidget.c:524
-#| msgid "Create Fo_lder"
+#: ../gtk/gtkcolorchooserwidget.c:528
 msgid "Create custom color"
 msgstr "স্বনির্ধারিত রং নির্মাণ করুন"
 
-#: ../gtk/gtkcolorchooserwidget.c:543
+#: ../gtk/gtkcolorchooserwidget.c:546
 #, c-format
-#| msgid "Custom %sx%s"
 msgid "Custom color %d: %s"
 msgstr "স্বনির্ধারিত রং %d: %s"
 
 #: ../gtk/gtkcoloreditor.c:412
-#| msgid "Color _name:"
 msgid "Color Name"
 msgstr "রঙের নাম"
 
 #: ../gtk/gtkcoloreditor.c:457
-#| msgid "_Saturation:"
 msgctxt "Color channel"
 msgid "Saturation"
 msgstr "ঘনত্ব"
 
 #: ../gtk/gtkcoloreditor.c:463
-#| msgid "_Value:"
 msgctxt "Color channel"
 msgid "Value"
 msgstr "মান"
@@ -1307,8 +1387,8 @@ msgctxt "Color channel"
 msgid "V"
 msgstr "V"
 
-#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:301
-#| msgid "_Hue:"
+#: ../gtk/gtkcoloreditor.c:481
+#: ../gtk/gtkcolorscale.c:301
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "হিউ"
@@ -1318,25 +1398,22 @@ msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:303
+#: ../gtk/gtkcoloreditor.c:496
+#: ../gtk/gtkcolorscale.c:303
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "আলফা"
 
 #: ../gtk/gtkcoloreditor.c:503
-#| msgctxt "paper size"
-#| msgid "A0"
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
 #: ../gtk/gtkcolorplane.c:438
-#| msgid "Color _name:"
 msgid "Color Plane"
 msgstr "রঙের সমতা"
 
 #: ../gtk/gtkcolorswatch.c:447
-#| msgid "Custom size"
 msgid "_Customize"
 msgstr "স্বনির্ধারিত (_C)"
 
@@ -1345,27 +1422,29 @@ msgstr "স্বনির্ধারিত (_C)"
 #. * want inches, otherwise translate to default:mm.
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
-#.
 #: ../gtk/gtkcustompaperunixdialog.c:115
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
+#: ../gtk/gtkcustompaperunixdialog.c:397
+#: ../gtk/gtkprintunixdialog.c:3275
 msgid "Manage Custom Sizes"
 msgstr "স্বনির্বাচিত মাপ পরিচালনা করুন"
 
-#: ../gtk/gtkcustompaperunixdialog.c:558 ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:558
+#: ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
 msgstr "inch"
 
-#: ../gtk/gtkcustompaperunixdialog.c:560 ../gtk/gtkpagesetupunixdialog.c:776
+#: ../gtk/gtkcustompaperunixdialog.c:560
+#: ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
 msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-msgid "Margins from Printer..."
-msgstr "প্রিন্টার থেকে প্রান্তের মাপ..."
+msgid "Margins from Printer…"
+msgstr "প্রিন্টার থেকে মার্জিন…"
 
 #: ../gtk/gtkcustompaperunixdialog.c:771
 #, c-format
@@ -1404,15 +1483,17 @@ msgstr "ডানদিকে:(_R)"
 msgid "Paper Margins"
 msgstr "কাগজের প্রান্ত"
 
-#: ../gtk/gtkentry.c:9140 ../gtk/gtktextview.c:8583
+#: ../gtk/gtkentry.c:9205
+#: ../gtk/gtktextview.c:8685
 msgid "Input _Methods"
 msgstr "ইনপুট পদ্ধতি (_M)"
 
-#: ../gtk/gtkentry.c:9154 ../gtk/gtktextview.c:8597
+#: ../gtk/gtkentry.c:9219
+#: ../gtk/gtktextview.c:8699
 msgid "_Insert Unicode Control Character"
 msgstr "ইউনিকোডের কন্ট্রোল অক্ষর সন্নিবেশ করুন (_I)"
 
-#: ../gtk/gtkentry.c:10107
+#: ../gtk/gtkentry.c:10317
 msgid "Caps Lock is on"
 msgstr "ক্যাপ্স-লক কি সক্রিয় আছে"
 
@@ -1453,7 +1534,6 @@ msgstr "ক্যাপ্স-লক কি সক্রিয় আছে"
 #. * gtk_file_chooser_button_set_width_chars(), or pack the button in
 #. * such a way that other interface elements give space to the widget.
 #. * </important>
-#.
 #. **************** *
 #. *  Private Macros  *
 #. * ****************
@@ -1461,7 +1541,8 @@ msgstr "ক্যাপ্স-লক কি সক্রিয় আছে"
 msgid "Select a File"
 msgstr "একটি ফাইল নির্বাচন করুন"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1817
+#: ../gtk/gtkfilechooserbutton.c:105
+#: ../gtk/gtkfilechooserdefault.c:1825
 msgid "Desktop"
 msgstr "ডেস্কটপ"
 
@@ -1469,290 +1550,292 @@ msgstr "ডেস্কটপ"
 msgid "(None)"
 msgstr "(শূণ্য)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
-msgid "Other..."
+#: ../gtk/gtkfilechooserbutton.c:2198
+msgid "Other…"
 msgstr "অন্যান্য..."
 
 #: ../gtk/gtkfilechooserdefault.c:152
 msgid "Type name of new folder"
 msgstr "নতুন ফোল্ডারের নাম লিখুন"
 
-#: ../gtk/gtkfilechooserdefault.c:968
+#: ../gtk/gtkfilechooserdefault.c:954
 msgid "Could not retrieve information about the file"
 msgstr "ফাইল সম্পর্কিত তথ্য প্রাপ্ত করতে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:979
+#: ../gtk/gtkfilechooserdefault.c:965
 msgid "Could not add a bookmark"
 msgstr "বুকমার্ক যোগ করতে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:990
+#: ../gtk/gtkfilechooserdefault.c:976
 msgid "Could not remove bookmark"
 msgstr "বুকমার্ক মুছে ফেলতে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:1001
+#: ../gtk/gtkfilechooserdefault.c:987
 msgid "The folder could not be created"
 msgstr "ফোল্ডার নির্মাণ করতে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:1014
+#: ../gtk/gtkfilechooserdefault.c:1000
 msgid ""
-"The folder could not be created, as a file with the same name already "
-"exists.  Try using a different name for the folder, or rename the file first."
+"The folder could not be created, as a file with the same name already exists."
+"  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"এক নামের একটি ফাইল বর্তমানে উপস্থিত থাকার ফলে ফোল্ডারটি নির্মাণ করতে ব্যর্থ।  "
-"ফোল্ডারের জন্য পৃথক নাম ব্যবহার করুন অথবা উপস্থিত ফাইলের নাম পরিবর্তন করুন।"
+"এক নামের একটি ফাইল বর্তমানে উপস্থিত থাকার ফলে ফোল্ডারটি নির্মাণ করতে ব্যর্থ। "
+" ফোল্ডারের জন্য পৃথক নাম ব্যবহার করুন অথবা উপস্থিত ফাইলের নাম পরিবর্তন করুন।"
 
-#: ../gtk/gtkfilechooserdefault.c:1028
+#: ../gtk/gtkfilechooserdefault.c:1014
 msgid "You need to choose a valid filename."
 msgstr "একটি বৈধ ফাইলের নাম নির্বাচন করা আবশ্যক।"
 
-#: ../gtk/gtkfilechooserdefault.c:1031
+#: ../gtk/gtkfilechooserdefault.c:1017
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr " %s ফোল্ডার না হওয়ার ফলে এটি অধীন ফাইল প্রস্তুত করা সম্ভব নয়"
 
-#: ../gtk/gtkfilechooserdefault.c:1043
+#: ../gtk/gtkfilechooserdefault.c:1029
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
-"শুধুমাত্র ফোল্ডার নির্বাচন করা যাবে। নির্বাচিত সামগ্রী ফোল্ডার নয়; ভিন্ন কোনো "
-"সামগ্রী "
-"ব্যবহারের চেষ্টা করুন।"
+"শুধুমাত্র ফোল্ডার নির্বাচন করা যাবে। নির্বাচিত সামগ্রী ফোল্ডার নয়; ভিন্ন "
+"কোনো সামগ্রী ব্যবহারের চেষ্টা করুন।"
 
-#: ../gtk/gtkfilechooserdefault.c:1053
+#: ../gtk/gtkfilechooserdefault.c:1039
 msgid "Invalid file name"
 msgstr "ফাইলের নাম বৈধ নয়"
 
-#: ../gtk/gtkfilechooserdefault.c:1063
+#: ../gtk/gtkfilechooserdefault.c:1049
 msgid "The folder contents could not be displayed"
 msgstr "ফোল্ডারে বিষয়বস্তু প্রদর্শন করতে ব্যর্থ"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
-#.
-#: ../gtk/gtkfilechooserdefault.c:1589
+#: ../gtk/gtkfilechooserdefault.c:1575
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s'র উপর"
 
-#: ../gtk/gtkfilechooserdefault.c:1738
+#: ../gtk/gtkfilechooserdefault.c:1724
 msgid "Search"
 msgstr "অনুসন্ধান"
 
-#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4988
+#: ../gtk/gtkfilechooserdefault.c:1768
+#: ../gtk/gtkfilechooserdefault.c:5000
 msgid "Recently Used"
 msgstr "সম্প্রতি ব্যবহৃত"
 
-#: ../gtk/gtkfilechooserdefault.c:2361
+#: ../gtk/gtkfilechooserdefault.c:2369
 msgid "Select which types of files are shown"
 msgstr "প্রদর্শনের উদ্দেশ্যে বিভিন্ন ফাইলের বিন্যাস নির্বাচন করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2720
+#: ../gtk/gtkfilechooserdefault.c:2728
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' নামক ফোল্ডারটি বুকমার্কের মধ্যে যোগ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2764
+#: ../gtk/gtkfilechooserdefault.c:2772
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "বর্তমান ফোল্ডারটি বুকমার্কে যোগ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2766
+#: ../gtk/gtkfilechooserdefault.c:2774
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "নির্বাচিত ফোল্ডারগুলি বুকমার্কে যোগ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2804
+#: ../gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' নামক বুকমার্কটি মুছে ফেলুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2806
+#: ../gtk/gtkfilechooserdefault.c:2814
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "'%s' বুকমার্ক মুছে ফেলা সম্ভব নয়"
 
-#: ../gtk/gtkfilechooserdefault.c:2813 ../gtk/gtkfilechooserdefault.c:3699
+#: ../gtk/gtkfilechooserdefault.c:2821
+#: ../gtk/gtkfilechooserdefault.c:3707
 msgid "Remove the selected bookmark"
 msgstr "নির্বাচিত বুকমার্ক মুছে ফেলুন"
 
-#: ../gtk/gtkfilechooserdefault.c:3377
+#: ../gtk/gtkfilechooserdefault.c:3385
 msgid "Remove"
 msgstr "মুছে ফেলুন"
 
-#: ../gtk/gtkfilechooserdefault.c:3386
-msgid "Rename..."
+#: ../gtk/gtkfilechooserdefault.c:3394
+msgid "Rename…"
 msgstr "নাম পরিবর্তন..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3550
+#: ../gtk/gtkfilechooserdefault.c:3558
 msgid "Places"
 msgstr "অবস্থান"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3607
+#: ../gtk/gtkfilechooserdefault.c:3615
 msgid "_Places"
 msgstr "অবস্থান (_P)"
 
-#: ../gtk/gtkfilechooserdefault.c:3687
+#: ../gtk/gtkfilechooserdefault.c:3695
 msgid "Add the selected folder to the Bookmarks"
 msgstr "নির্বাচিত ফোল্ডারটি বুকমার্কে যোগ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:3948
+#: ../gtk/gtkfilechooserdefault.c:3956
 msgid "Could not select file"
 msgstr "ফাইল নির্বাচন করতে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:4173
+#: ../gtk/gtkfilechooserdefault.c:4185
 msgid "_Visit this file"
 msgstr "চিহ্নিত ফাইল পরিদর্শন করুন (_V)"
 
-#: ../gtk/gtkfilechooserdefault.c:4176
-#| msgid "Copy _Location"
+#: ../gtk/gtkfilechooserdefault.c:4188
 msgid "_Copy file’s location"
 msgstr "ফাইলের অবস্থান কপি করুন (_C)"
 
-#: ../gtk/gtkfilechooserdefault.c:4179
+#: ../gtk/gtkfilechooserdefault.c:4191
 msgid "_Add to Bookmarks"
 msgstr "বুকমার্ক তালিকায় যোগ করুন(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4186
+#: ../gtk/gtkfilechooserdefault.c:4198
 msgid "Show _Hidden Files"
 msgstr "লুকোনো ফাইল প্রদর্শন করা হবে (_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4189
+#: ../gtk/gtkfilechooserdefault.c:4201
 msgid "Show _Size Column"
 msgstr "মাপ শীর্ষক কলাম প্রদর্শিত হবে (_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4414
+#: ../gtk/gtkfilechooserdefault.c:4426
 msgid "Files"
 msgstr "ফাইল"
 
-#: ../gtk/gtkfilechooserdefault.c:4465
+#: ../gtk/gtkfilechooserdefault.c:4477
 msgid "Name"
 msgstr "নাম"
 
-#: ../gtk/gtkfilechooserdefault.c:4488
+#: ../gtk/gtkfilechooserdefault.c:4500
 msgid "Size"
 msgstr "মাপ"
 
-#: ../gtk/gtkfilechooserdefault.c:4502
+#: ../gtk/gtkfilechooserdefault.c:4514
 msgid "Modified"
 msgstr "সর্বশেষ পরিবর্তন"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595
+#: ../gtk/gtkfilechooserdefault.c:4607
 msgid "_Name:"
 msgstr "নাম:(_N)"
 
-#: ../gtk/gtkfilechooserdefault.c:4826
+#: ../gtk/gtkfilechooserdefault.c:4838
 msgid "Type a file name"
 msgstr "ফাইলের নাম টাইপ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:4873 ../gtk/gtkfilechooserdefault.c:4884
-#| msgid "Select a folder"
+#: ../gtk/gtkfilechooserdefault.c:4885
+#: ../gtk/gtkfilechooserdefault.c:4896
 msgid "Please select a folder below"
 msgstr "অনুগ্রহ করে নীচে একটি ফোল্ডার নির্বাচন করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:4879
-#| msgid "Type a file name"
+#: ../gtk/gtkfilechooserdefault.c:4891
 msgid "Please type a file name"
 msgstr "অনুগ্রহ করে একটি ফাইলের নাম টাইপ করুন"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4950
+#: ../gtk/gtkfilechooserdefault.c:4962
 msgid "Create Fo_lder"
 msgstr "ফোল্ডার নির্মাণ করুন (_l)"
 
-#: ../gtk/gtkfilechooserdefault.c:4998
+#: ../gtk/gtkfilechooserdefault.c:5010
 msgid "Search:"
 msgstr "অনুসন্ধান:"
 
-#: ../gtk/gtkfilechooserdefault.c:5049
+#: ../gtk/gtkfilechooserdefault.c:5061
 msgid "_Location:"
 msgstr "অবস্থান :(_L)"
 
-#: ../gtk/gtkfilechooserdefault.c:5500
+#: ../gtk/gtkfilechooserdefault.c:5511
 msgid "Save in _folder:"
 msgstr "চিহ্নিত ফোল্ডারে সংরক্ষণ করুন:(_f)"
 
-#: ../gtk/gtkfilechooserdefault.c:5502
+#: ../gtk/gtkfilechooserdefault.c:5513
 msgid "Create in _folder:"
 msgstr "চিহ্নিত ফোল্ডারে নির্মাণ করা করুন:(_f)"
 
-#: ../gtk/gtkfilechooserdefault.c:6589
+#: ../gtk/gtkfilechooserdefault.c:6534
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s-র বিষয়বস্তু পড়তে ব্যর্থ"
 
 # FIXME
-#: ../gtk/gtkfilechooserdefault.c:6593
+#: ../gtk/gtkfilechooserdefault.c:6538
 msgid "Could not read the contents of the folder"
 msgstr "ফোল্ডারের বিষয়বস্তু পড়তে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:6686 ../gtk/gtkfilechooserdefault.c:6754
-#: ../gtk/gtkfilechooserdefault.c:6934
+#: ../gtk/gtkfilechooserdefault.c:6631
+#: ../gtk/gtkfilechooserdefault.c:6699
+#: ../gtk/gtkfilechooserdefault.c:6879
 msgid "Unknown"
 msgstr "অজানা"
 
-#: ../gtk/gtkfilechooserdefault.c:6701
+#: ../gtk/gtkfilechooserdefault.c:6646
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6703
+#: ../gtk/gtkfilechooserdefault.c:6648
 msgid "Yesterday at %H:%M"
 msgstr "গতকাল %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7405
+#: ../gtk/gtkfilechooserdefault.c:7350
 msgid "Cannot change to folder because it is not local"
 msgstr "স্থানীয় অবস্থানে না হওয়ার ফলে ফোল্ডার পরিবর্তন করতে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:8009 ../gtk/gtkfilechooserdefault.c:8030
+#: ../gtk/gtkfilechooserdefault.c:7947
+#: ../gtk/gtkfilechooserdefault.c:7968
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s শর্টকাট বর্তমানে উপস্থিত রয়েছে"
 
-#: ../gtk/gtkfilechooserdefault.c:8120
+#: ../gtk/gtkfilechooserdefault.c:8058
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s শর্টকাট বর্তমানে অনুপস্থিত"
 
-#: ../gtk/gtkfilechooserdefault.c:8366 ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8305
+#: ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" নামক ফাইল বর্তমানে উপস্থিত রয়েছে। প্রতিস্থাপন করা হবে কি?"
 
-#: ../gtk/gtkfilechooserdefault.c:8369 ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8308
+#: ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+""
 msgstr ""
 "ফাইল \"%s\"'র মধ্যে বর্তমানে উপস্থিত রয়েছে। নতুন ফাইল দ্বারা প্রতিস্থাপন করা "
-"হলে "
-"পূর্ববর্তী ফাইলের বিষয়বস্তু মুছে যাবে।"
+"হলে পূর্ববর্তী ফাইলের বিষয়বস্তু মুছে যাবে।"
 
-#: ../gtk/gtkfilechooserdefault.c:8374 ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8313
+#: ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "প্রতিস্থাপন (_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:9181
+#: ../gtk/gtkfilechooserdefault.c:9120
 msgid "Could not start the search process"
 msgstr "অনুসন্ধান আরম্ভ করতে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:9182
+#: ../gtk/gtkfilechooserdefault.c:9121
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "প্রোগ্রাম দ্বারা indexer ডেমনের সাথে সংযোগ স্থাপন করতে ব্যর্থ। অনুগ্রহ করে "
-"নিশ্চিত "
-"করুন এটি চলছে কি না।"
+"নিশ্চিত করুন এটি চলছে কি না।"
 
-#: ../gtk/gtkfilechooserdefault.c:9196
+#: ../gtk/gtkfilechooserdefault.c:9135
 msgid "Could not send the search request"
 msgstr "অনুসন্ধানের অনুরোধ পাঠাতে ব্যর্থ"
 
-#: ../gtk/gtkfilechooserdefault.c:9806
+#: ../gtk/gtkfilechooserdefault.c:9745
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s মাউন্ট করতে ব্যর্থ"
@@ -1761,7 +1844,6 @@ msgstr "%s মাউন্ট করতে ব্যর্থ"
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
-#.
 #: ../gtk/gtkfilesystem.c:47
 msgid "File System"
 msgstr "ফাইল-সিস্টেম"
@@ -1770,7 +1852,8 @@ msgstr "ফাইল-সিস্টেম"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkfontbutton.c:563
+#: ../gtk/gtkfontbutton.c:436
+#: ../gtk/gtkfontbutton.c:563
 msgid "Pick a Font"
 msgstr "একটি ফন্ট নির্বাচন করুন"
 
@@ -1779,7 +1862,8 @@ msgid "Font"
 msgstr "ফন্ট"
 
 #: ../gtk/gtkfontchooserwidget.c:110
-msgid "No fonts matched your search. You can revise your search and try again."
+msgid ""
+"No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "আপনার সন্ধান করা নামের সাথে মিলিয়ে কোনো ফন্ট পাওয়া যায়নি। অনুগ্রহ করে "
 "অনুসন্ধান পরিবর্তন করে পুনরায় প্রয়াস করুন।"
@@ -1789,16 +1873,15 @@ msgid "Search font name"
 msgstr "ফন্টের নাম সন্ধান করুন"
 
 #: ../gtk/gtkfontchooserwidget.c:891
-#| msgid "_Family:"
 msgid "Font Family"
 msgstr "ফন্ট সংকলন"
 
-#: ../gtk/gtkicontheme.c:1627
+#: ../gtk/gtkicontheme.c:1943
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "থিমের মধ্যে আইকন '%s' অনুপস্থিত"
 
-#: ../gtk/gtkicontheme.c:3137
+#: ../gtk/gtkicontheme.c:3565
 msgid "Failed to load icon"
 msgstr "আইকন লোড করতে ব্যর্থ"
 
@@ -1823,22 +1906,22 @@ msgid "System (%s)"
 msgstr "সিস্টেম (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6224
+#: ../gtk/gtklabel.c:6167
 msgid "_Open Link"
 msgstr "লিংক খুলুন (_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6236
+#: ../gtk/gtklabel.c:6179
 msgid "Copy _Link Address"
 msgstr "লিংকের ঠিকানা কপি করুন (_L)"
 
-#: ../gtk/gtk-launch.c:69
-msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
-msgstr "APPLICATION [URI...] - URI সহযোগে একটি APPLICATION আরম্ভ করুন।"
+#: ../gtk/gtk-launch.c:71
+msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
+msgstr "APPLICATION [URI…] — URI সমেত একটি অ্যাপ্লিকেশন লঞ্চ করুন।"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
-#: ../gtk/gtk-launch.c:73
+#: ../gtk/gtk-launch.c:75
 msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
@@ -1846,38 +1929,41 @@ msgstr ""
 "ডেস্কটপ ফাইলের তথ্য সহযোগে একটি অ্যাপ্লিকেশন আরম্ভ করুন\n"
 "প্রয়োজনে আর্গুমেন্ট রূপে URI তালিকা লিখুন।"
 
-#: ../gtk/gtk-launch.c:85
+#: ../gtk/gtk-launch.c:87
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "Error parsing commandline options: %s\n"
 msgstr "কমান্ড-লাইন বিকল্প পার্স করতে সমস্যা: %s\n"
 
-#: ../gtk/gtk-launch.c:87 ../gtk/gtk-launch.c:100
+#: ../gtk/gtk-launch.c:89
+#: ../gtk/gtk-launch.c:102
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "অধিক বিবরণের জন্য \"%s --help\" লিখুন।"
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
-#: ../gtk/gtk-launch.c:98
+#: ../gtk/gtk-launch.c:100
 #, c-format
-#| msgid "Find applications online"
 msgid "%s: missing application name"
 msgstr "%s: অ্যাপ্লিকেশনের নাম অনুপস্থিত"
 
+#: ../gtk/gtk-launch.c:121
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr ""
+"অাইডি থেকে AppInfo তৈরি করা নন-উইনিক্স অপারেটিং সিস্টেমে সমর্থন করে না"
+
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
-#: ../gtk/gtk-launch.c:122
+#: ../gtk/gtk-launch.c:129
 #, c-format
-#| msgid "Could not run application"
 msgid "%s: no such application %s"
 msgstr "%s: %s ধরনের কোনো অ্যাপ্লিকেশন নেই"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
-#: ../gtk/gtk-launch.c:140
+#: ../gtk/gtk-launch.c:147
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: অ্যাপ্লিকেশন আরম্ভ করে সমস্যা: %s\n"
 
@@ -1890,8 +1976,6 @@ msgid "Invalid URI"
 msgstr "অবৈধ URI"
 
 #: ../gtk/gtklockbutton.c:290
-#| msgctxt "keyboard label"
-#| msgid "Num_Lock"
 msgid "Lock"
 msgstr "লক করুন"
 
@@ -1900,24 +1984,19 @@ msgid "Unlock"
 msgstr "আন-লক করুন"
 
 #: ../gtk/gtklockbutton.c:308
-msgid ""
-"Dialog is unlocked.\n"
+msgid "Dialog is unlocked.\n"
 "Click to prevent further changes"
-msgstr ""
-"ডায়লগ আন-লক করা আছে।\n"
+msgstr "ডায়লগ আন-লক করা আছে।\n"
 "অতিরিক্ত পরিবর্তন প্রতিরোধ করার জন্য ক্লিক করুন"
 
 #: ../gtk/gtklockbutton.c:317
-msgid ""
-"Dialog is locked.\n"
+msgid "Dialog is locked.\n"
 "Click to make changes"
-msgstr ""
-"ডায়লগ লক করা আছে।\n"
+msgstr "ডায়লগ লক করা আছে।\n"
 "পরিবর্তন করার জন্য ক্লিক করুন"
 
 #: ../gtk/gtklockbutton.c:326
-msgid ""
-"System policy prevents changes.\n"
+msgid "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
 "সিস্টেমের নীতি অনুযায়ী পরিবর্তন প্রতিরোধ করা হবে।\n"
@@ -1952,79 +2031,73 @@ msgstr "মান মুছে ফেলার উদ্দেশ্যে চ�
 #. * to be RTL, otherwise translate to default:LTR.
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
-#.
-#: ../gtk/gtkmain.c:707
+#: ../gtk/gtkmain.c:703
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:775
+#: ../gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ডিসপ্লে খুলতে ব্যর্থ: %s"
 
-#: ../gtk/gtkmain.c:841
+#: ../gtk/gtkmain.c:834
 msgid "GTK+ Options"
 msgstr "GTK+ সংক্রান্ত বিকল্প"
 
-#: ../gtk/gtkmain.c:841
+#: ../gtk/gtkmain.c:834
 msgid "Show GTK+ Options"
 msgstr "GTK+ সংক্রান্ত বিকল্প প্রদর্শন করা হবে"
 
-#: ../gtk/gtkmountoperation.c:532
+#: ../gtk/gtkmountoperation.c:535
 msgid "Co_nnect"
 msgstr "সংযোগ করুন (_n)"
 
-#: ../gtk/gtkmountoperation.c:606
-#| msgid "Co_nnect"
+#: ../gtk/gtkmountoperation.c:609
 msgid "Connect As"
 msgstr "চিহ্নিত রূপে সংযোগ করুন"
 
-#: ../gtk/gtkmountoperation.c:615
-#| msgid "Connect _anonymously"
+#: ../gtk/gtkmountoperation.c:618
 msgid "_Anonymous"
 msgstr "পরিচয়বিহীন (_A)"
 
-#: ../gtk/gtkmountoperation.c:624
+#: ../gtk/gtkmountoperation.c:627
 msgid "Registered U_ser"
 msgstr "নিবন্ধিত ব্যবহারকারী (_s)"
 
-#: ../gtk/gtkmountoperation.c:635
-#| msgid "_Username:"
+#: ../gtk/gtkmountoperation.c:638
 msgid "_Username"
 msgstr "ব্যবহারকারীর নাম (_U)"
 
-#: ../gtk/gtkmountoperation.c:640
-#| msgid "_Domain:"
+#: ../gtk/gtkmountoperation.c:643
 msgid "_Domain"
 msgstr "ডোমেইন (_D)"
 
-#: ../gtk/gtkmountoperation.c:646
-#| msgid "_Password:"
+#: ../gtk/gtkmountoperation.c:649
 msgid "_Password"
 msgstr "পাসওয়ার্ড (_P)"
 
-#: ../gtk/gtkmountoperation.c:668
+#: ../gtk/gtkmountoperation.c:671
 msgid "Forget password _immediately"
 msgstr "পাসওয়ার্ড তৎক্ষনাৎ মুছে ফেলা হবে (_i)"
 
-#: ../gtk/gtkmountoperation.c:678
+#: ../gtk/gtkmountoperation.c:681
 msgid "Remember password until you _logout"
 msgstr "লগ-আউট না করা অবধি পাসওয়ার্ড সংরক্ষণ করা হবে (_l)"
 
-#: ../gtk/gtkmountoperation.c:688
+#: ../gtk/gtkmountoperation.c:691
 msgid "Remember _forever"
 msgstr "পাসওয়ার্ড স্থায়ীরূপে সংরক্ষণ করা হবে ( _f)"
 
-#: ../gtk/gtkmountoperation.c:1077
+#: ../gtk/gtkmountoperation.c:1080
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "অজানা অ্যাপ্লিকেশন (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1260
+#: ../gtk/gtkmountoperation.c:1263
 msgid "Unable to end process"
 msgstr "প্রসেস সমাপ্ত করতে ব্যর্থ"
 
-#: ../gtk/gtkmountoperation.c:1297
+#: ../gtk/gtkmountoperation.c:1300
 msgid "_End Process"
 msgstr "প্রসেস সমাপ্তি (_E)"
 
@@ -2060,22 +2133,23 @@ msgstr "Z শেল"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d বিশিষ্ট প্রসেস বন্ধ করতে ব্যর্থ: %s"
 
-#: ../gtk/gtknotebook.c:5051 ../gtk/gtknotebook.c:7705
+#: ../gtk/gtknotebook.c:5069
+#: ../gtk/gtknotebook.c:7723
 #, c-format
 msgid "Page %u"
 msgstr "পৃষ্ঠা %u"
 
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
-#.
-#: ../gtk/gtknumerableicon.c:481
+#: ../gtk/gtknumerableicon.c:482
 #, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:846
-#: ../gtk/gtkpapersize.c:886
+#: ../gtk/gtkpagesetup.c:646
+#: ../gtk/gtkpapersize.c:848
+#: ../gtk/gtkpapersize.c:888
 msgid "Not a valid page setup file"
 msgstr "বৈধ পৃষ্ঠা প্রস্তুতি ফাইল নয়"
 
@@ -2089,28 +2163,28 @@ msgstr "স্থানান্তরযোগ্য নথিপত্রে�
 
 #: ../gtk/gtkpagesetupunixdialog.c:796
 #, c-format
-msgid ""
-"Margins:\n"
+msgid "Margins:\n"
 " Left: %s %s\n"
 " Right: %s %s\n"
 " Top: %s %s\n"
 " Bottom: %s %s"
-msgstr ""
-"প্রান্ত:\n"
+msgstr "প্রান্ত:\n"
 " বাঁদিক: %s %s\n"
 " ডানদিক: %s %s\n"
 " উপর: %s %s\n"
 " নীচে: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-msgid "Manage Custom Sizes..."
-msgstr "স্বনির্বাচিত মাপ পরিচালনা..."
+#: ../gtk/gtkpagesetupunixdialog.c:845
+#: ../gtk/gtkprintunixdialog.c:3329
+msgid "Manage Custom Sizes…"
+msgstr "স্বনির্বাচিত মাপ পরিচালনা করুন..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:896
 msgid "_Format for:"
 msgstr "বিন্যাস করা হবে: (_F)"
 
-#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3477
+#: ../gtk/gtkpagesetupunixdialog.c:917
+#: ../gtk/gtkprintunixdialog.c:3477
 msgid "_Paper size:"
 msgstr "কাগজের মাপ:(_P)"
 
@@ -2118,7 +2192,8 @@ msgstr "কাগজের মাপ:(_P)"
 msgid "_Orientation:"
 msgstr "দিশা:(_O)"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3531
+#: ../gtk/gtkpagesetupunixdialog.c:1006
+#: ../gtk/gtkprintunixdialog.c:3531
 msgid "Page Setup"
 msgstr "পৃষ্ঠার বৈশিষ্ট্য"
 
@@ -2134,23 +2209,21 @@ msgstr "নীচের পাথ"
 msgid "File System Root"
 msgstr "ফাইল-সিস্টেমের Root"
 
-#: ../gtk/gtkprintbackend.c:748
+#: ../gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "অনুমোদন ব্যবস্থা"
 
-#: ../gtk/gtkprinteroptionwidget.c:546
-#| msgid "Select a File"
+#: ../gtk/gtkprinteroptionwidget.c:548
 msgid "Select a filename"
 msgstr "একটি ফাইলের নাম নির্বাচন করুন"
 
-#: ../gtk/gtkprinteroptionwidget.c:770
+#: ../gtk/gtkprinteroptionwidget.c:772
 msgid "Not available"
 msgstr "উপলব্ধ নেই"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
-#.
 #: ../gtk/gtkprintoperation.c:260
 #, c-format
 msgid "%s job #%d"
@@ -2206,7 +2279,8 @@ msgstr "ত্রুটিসহ কর্ম সমাপ্ত"
 msgid "Preparing %d"
 msgstr "%d প্রস্তুত করা হচ্ছে"
 
-#: ../gtk/gtkprintoperation.c:2351 ../gtk/gtkprintoperation.c:2983
+#: ../gtk/gtkprintoperation.c:2351
+#: ../gtk/gtkprintoperation.c:2983
 msgid "Preparing"
 msgstr "প্রস্তুতি"
 
@@ -2220,7 +2294,8 @@ msgid "Error creating print preview"
 msgstr "প্রিন্টের পূর্বরূপ প্রদর্শন আরম্ভ করতে সমস্যা"
 
 #: ../gtk/gtkprintoperation.c:3016
-msgid "The most probable reason is that a temporary file could not be created."
+msgid ""
+"The most probable reason is that a temporary file could not be created."
 msgstr "সম্ভবত অস্থায়ী ফাইল নির্মিত না হওয়া ফলে এটি হয়েছে"
 
 #: ../gtk/gtkprintoperation-unix.c:307
@@ -2237,7 +2312,7 @@ msgstr "কাগজ ফুরিয়ে গেছে"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:613
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2126
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2288
 msgid "Paused"
 msgstr "স্থগিত"
 
@@ -2257,11 +2332,13 @@ msgstr "কোনো প্রিন্টার পাওয়া যায়নি
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDC-র ক্ষেত্রে অবৈধ আর্গুমেন্ট প্রেরিত"
 
-#: ../gtk/gtkprintoperation-win32.c:1600 ../gtk/gtkprintoperation-win32.c:1827
+#: ../gtk/gtkprintoperation-win32.c:1600
+#: ../gtk/gtkprintoperation-win32.c:1827
 msgid "Error from StartDoc"
 msgstr "StartDoc'এ উত্‌পন্ন সমস্যা"
 
-#: ../gtk/gtkprintoperation-win32.c:1682 ../gtk/gtkprintoperation-win32.c:1705
+#: ../gtk/gtkprintoperation-win32.c:1682
+#: ../gtk/gtkprintoperation-win32.c:1705
 #: ../gtk/gtkprintoperation-win32.c:1753
 msgid "Not enough free memory"
 msgstr "পর্যাপ্ত মেমরি অবশিষ্ট নেই"
@@ -2287,7 +2364,7 @@ msgid "Getting printer information failed"
 msgstr "প্রিন্টার সংক্রান্ত তথ্য প্রাপ্ত করতে পড়তে"
 
 #: ../gtk/gtkprintunixdialog.c:1916
-msgid "Getting printer information..."
+msgid "Getting printer information…"
 msgstr "প্রিন্টার সংক্রান্ত তথ্য প্রাপ্ত করা হচ্ছে..."
 
 #: ../gtk/gtkprintunixdialog.c:2184
@@ -2325,11 +2402,9 @@ msgid "Pag_es:"
 msgstr "পৃষ্ঠা: (_e)"
 
 #: ../gtk/gtkprintunixdialog.c:2255
-msgid ""
-"Specify one or more page ranges,\n"
+msgid "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
-msgstr ""
-"এক অথবা অধিক পৃষ্ঠার সীমা উল্লেখ করুন,\n"
+msgstr "এক অথবা অধিক পৃষ্ঠার সীমা উল্লেখ করুন,\n"
 " উদাহরণস্বরূপ. 1-3,7,11"
 
 #: ../gtk/gtkprintunixdialog.c:2264
@@ -2359,55 +2434,53 @@ msgstr "সাধারণ"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
-#.
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
-#.
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, top to bottom"
 msgstr "বাঁদিক থেকে ডানদিকে, উপর থেকে নীচে"
 
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, bottom to top"
 msgstr "বাঁদিক থেকে ডানদিকে, নীচে থেকে উপরে"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, top to bottom"
 msgstr "ডানদিক থেকে বাঁদিকে, উপর থেকে নীচে"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, bottom to top"
 msgstr "ডানদিক থেকে বাঁদিকে, নীচে থেকে উপরে"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, left to right"
 msgstr "উপর থেকে নীচে, বাঁদিক থেকে ডানদিকে"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, right to left"
 msgstr "উপর থেকে নীচে, ডানদিক থেকে বাঁদিকে"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, left to right"
 msgstr "নীচে থেকে উপরে, বাঁদিক থেকে ডানদিকে"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, right to left"
 msgstr "নীচে থেকে উপরে, ডানদিক থেকে বাঁদিকে"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
-#.
-#: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
+#: ../gtk/gtkprintunixdialog.c:3065
+#: ../gtk/gtkprintunixdialog.c:3078
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgid "Page Ordering"
 msgstr "পৃষ্ঠার অনুক্রম"
 
@@ -2519,7 +2592,6 @@ msgstr "নথি প্রিন্ট করুন"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
-#.
 #: ../gtk/gtkprintunixdialog.c:3594
 msgid "_Now"
 msgstr "এই মুহূর্তে(_N)"
@@ -2531,7 +2603,6 @@ msgstr "চিহ্নিত সময়ে:(_t)"
 #. Translators: Ability to parse the am/pm format depends on actual locale.
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
-#.
 #: ../gtk/gtkprintunixdialog.c:3609
 msgid ""
 "Specify the time of print,\n"
@@ -2558,50 +2629,47 @@ msgstr "প্রচ্ছদ পৃষ্ঠা সন্নিবেশ কর
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
-#.
 #: ../gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
 msgstr "চিহ্নিত পৃষ্ঠার পূর্বে:(_f)"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
-#.
 #: ../gtk/gtkprintunixdialog.c:3672
 msgid "_After:"
 msgstr "চিহ্নিত পৃষ্ঠার পরে:(_A)"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
-#.
 #: ../gtk/gtkprintunixdialog.c:3687
 msgid "Job"
 msgstr "কর্ম"
 
-#: ../gtk/gtkprintunixdialog.c:3753
+#: ../gtk/gtkprintunixdialog.c:3751
 msgid "Advanced"
 msgstr "উন্নত বৈশিষ্ট্য"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3791
+#: ../gtk/gtkprintunixdialog.c:3789
 msgid "Image Quality"
 msgstr "ছবির গুণমান"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3795
+#: ../gtk/gtkprintunixdialog.c:3793
 msgid "Color"
 msgstr "রং"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3800
+#: ../gtk/gtkprintunixdialog.c:3798
 msgid "Finishing"
 msgstr "সমাপ্তি"
 
-#: ../gtk/gtkprintunixdialog.c:3810
+#: ../gtk/gtkprintunixdialog.c:3808
 msgid "Some of the settings in the dialog conflict"
 msgstr "ডায়লগ বক্সে নির্বাচিত কিছু মান পারস্পরবিরোধী"
 
-#: ../gtk/gtkprintunixdialog.c:3836
+#: ../gtk/gtkprintunixdialog.c:3834
 msgid "Print"
 msgstr "প্রিন্ট করুন"
 
@@ -2609,36 +2677,37 @@ msgstr "প্রিন্ট করুন"
 msgid "Select which type of documents are shown"
 msgstr "প্রদর্শনের উদ্দেশ্যে বিভিন্ন ডকুমেন্টের বিন্যাস নির্বাচন করুন"
 
-#: ../gtk/gtkrecentchooserdefault.c:1130 ../gtk/gtkrecentchooserdefault.c:1167
+#: ../gtk/gtkrecentchooserdefault.c:1129
+#: ../gtk/gtkrecentchooserdefault.c:1166
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s'-র কোনো বস্তু পাওয়া যায়নি"
 
-#: ../gtk/gtkrecentchooserdefault.c:1294
+#: ../gtk/gtkrecentchooserdefault.c:1293
 msgid "Untitled filter"
 msgstr "নামবিহীন ফিল্টার"
 
-#: ../gtk/gtkrecentchooserdefault.c:1647
+#: ../gtk/gtkrecentchooserdefault.c:1646
 msgid "Could not remove item"
 msgstr "বস্তু মুছে ফেলতে ব্যর্থ"
 
-#: ../gtk/gtkrecentchooserdefault.c:1691
+#: ../gtk/gtkrecentchooserdefault.c:1690
 msgid "Could not clear list"
 msgstr "তালিকা পরিশ্রুত করতে ব্যর্থ"
 
-#: ../gtk/gtkrecentchooserdefault.c:1775
+#: ../gtk/gtkrecentchooserdefault.c:1774
 msgid "Copy _Location"
 msgstr "অবস্থান কপি করুন (_L)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1788
+#: ../gtk/gtkrecentchooserdefault.c:1787
 msgid "_Remove From List"
 msgstr "তালিকা থেকে মুছে ফেলুন (_R)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1797
+#: ../gtk/gtkrecentchooserdefault.c:1796
 msgid "_Clear List"
 msgstr "তালিকা পরিশ্রুত করুন (_C)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1811
+#: ../gtk/gtkrecentchooserdefault.c:1810
 msgid "Show _Private Resources"
 msgstr "ব্যক্তিগত রিসোর্স প্রদর্শন করা হবে (_P)"
 
@@ -2651,12 +2720,12 @@ msgstr "ব্যক্তিগত রিসোর্স প্রদর্শ�
 #. * right place when idly populating the menu in case the
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
-#.
 #: ../gtk/gtkrecentchoosermenu.c:360
 msgid "No items found"
 msgstr "কোনো বস্তু পাওয়া যায়নি"
 
-#: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
+#: ../gtk/gtkrecentchoosermenu.c:526
+#: ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI `%s''র সাথে সম্প্রতি ব্যবহৃথ কোনো রিসোর্স চিহ্নিত করা যায়নি"
@@ -2674,7 +2743,6 @@ msgstr "অজানা বস্তু"
 #. * in a recent files menu. The %d is the number of the item,
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
-#.
 #: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
 msgctxt "recent menu label"
@@ -2683,22 +2751,24 @@ msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
-#.
 #: ../gtk/gtkrecentchoosermenu.c:838
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1010 ../gtk/gtkrecentmanager.c:1023
-#: ../gtk/gtkrecentmanager.c:1160 ../gtk/gtkrecentmanager.c:1170
-#: ../gtk/gtkrecentmanager.c:1222 ../gtk/gtkrecentmanager.c:1231
-#: ../gtk/gtkrecentmanager.c:1246
+#: ../gtk/gtkrecentmanager.c:1035
+#: ../gtk/gtkrecentmanager.c:1048
+#: ../gtk/gtkrecentmanager.c:1185
+#: ../gtk/gtkrecentmanager.c:1195
+#: ../gtk/gtkrecentmanager.c:1247
+#: ../gtk/gtkrecentmanager.c:1256
+#: ../gtk/gtkrecentmanager.c:1271
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' সহ কোনো বস্তু অনুসন্ধানে ব্যর্থ"
 
-#: ../gtk/gtkrecentmanager.c:2446
+#: ../gtk/gtkrecentmanager.c:2471
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
@@ -2727,7 +2797,6 @@ msgstr "প্রশ্ন"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
-#.
 #: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "_About"
@@ -3212,16 +3281,18 @@ msgstr "ছোট করে প্রদর্শন (_O)"
 #. Translators: if the "on" state label requires more than three
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
-#.
-#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
+#: ../gtk/gtkswitch.c:337
+#: ../gtk/gtkswitch.c:392
+#: ../gtk/gtkswitch.c:583
 msgctxt "switch"
 msgid "ON"
 msgstr "চালু"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-#.
-#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
+#: ../gtk/gtkswitch.c:345
+#: ../gtk/gtkswitch.c:393
+#: ../gtk/gtkswitch.c:598
 msgctxt "switch"
 msgid "OFF"
 msgstr "বন্ধ"
@@ -3236,12 +3307,14 @@ msgstr "%s ডি-সিরিয়েলাইজ করতে অজানা �
 msgid "No deserialize function found for format %s"
 msgstr "%s বিন্যাসের জন্য ডি-সিরিয়েলাইজ ফাংশান পাওয়া যায়নি"
 
-#: ../gtk/gtktextbufferserialize.c:798 ../gtk/gtktextbufferserialize.c:824
+#: ../gtk/gtktextbufferserialize.c:798
+#: ../gtk/gtktextbufferserialize.c:824
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "<%s> স্বত্বার মধ্যে \"id\" ও \"name\" উভয় উপস্থিত রয়েছে"
 
-#: ../gtk/gtktextbufferserialize.c:808 ../gtk/gtktextbufferserialize.c:834
+#: ../gtk/gtktextbufferserialize.c:808
+#: ../gtk/gtktextbufferserialize.c:834
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "\"%s\" নামক বৈশিষ্ট্য <%s> স্বত্বার মধ্যে দুইবার উপস্থিত রয়েছে"
@@ -3261,7 +3334,8 @@ msgstr "<%s> স্বত্বার মধ্যে \"name\" ও \"id\" অন
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "\"%s\" নামক বৈশিষ্ট্য <%s> স্বত্বার মধ্যে দুইবার উপস্থিত রয়েছে"
 
-#: ../gtk/gtktextbufferserialize.c:965 ../gtk/gtktextbufferserialize.c:990
+#: ../gtk/gtktextbufferserialize.c:965
+#: ../gtk/gtktextbufferserialize.c:990
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "এই প্রসঙ্গে \"%s\" বৈশিষ্ট্য <%s> স্বত্বার জন্য বৈধ নয়"
@@ -3281,8 +3355,10 @@ msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "\"%s\" নামক ট্যাত বাফারের মধ্যে অনুপস্থিত এবং ট্যাগ নির্মাণ করা সম্ভব নয়।"
 
-#: ../gtk/gtktextbufferserialize.c:1151 ../gtk/gtktextbufferserialize.c:1226
-#: ../gtk/gtktextbufferserialize.c:1331 ../gtk/gtktextbufferserialize.c:1405
+#: ../gtk/gtktextbufferserialize.c:1151
+#: ../gtk/gtktextbufferserialize.c:1226
+#: ../gtk/gtktextbufferserialize.c:1331
+#: ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "<%s> স্বত্বাটি <%s>'র নীচে ব্যবহার করা যাবে না"
@@ -3299,8 +3375,7 @@ msgstr "\"%s\" বৈশিষ্ট্যের বৈধ নাম নয়"
 
 #: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "\"%s\" রূপান্তর করে \"%s\" ধরনের মানে পরিবর্তন করা সম্ভব হয়নি। \"%s\" "
 "অ্যাট্রিবিউটের ক্ষেত্রে"
@@ -3325,10 +3400,10 @@ msgstr "\"%s\" ট্যাগে অবৈধ গুরুত্বের অ�
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
 "টেক্সেটর সর্বাধিক বহিস্থিত প্রান্তে <text_view_markup> সত্ত্বা ব্যবহার করা "
-"আবশ্যক, <"
-"%s> নয়।"
+"আবশ্যক, <%s> নয়।"
 
-#: ../gtk/gtktextbufferserialize.c:1369 ../gtk/gtktextbufferserialize.c:1385
+#: ../gtk/gtktextbufferserialize.c:1369
+#: ../gtk/gtktextbufferserialize.c:1385
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "একটি <%s> স্বত্বা পূর্বে উল্লিখিত হয়েছে"
@@ -3388,18 +3463,18 @@ msgstr "ZWJ শূণ্য মাপের সংযোজক (_j)"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ শূণ্য মাপের বিভাজক (_n)"
 
-#: ../gtk/gtkuimanager.c:1781
+#: ../gtk/gtkuimanager.c:1780
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "অপ্রত্যাশিত প্রারম্ভিক ট্যাগ '%s', %d পংক্তির  %d অক্ষরে উপস্থিত"
 
 # FIXME
-#: ../gtk/gtkuimanager.c:1871
+#: ../gtk/gtkuimanager.c:1870
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d পংক্তির  %d অক্ষরে অপ্রত্যাশিত অক্ষরবিশিষ্ট তথ্য"
 
-#: ../gtk/gtkuimanager.c:2738
+#: ../gtk/gtkuimanager.c:2693
 msgid "Empty"
 msgstr "ফাঁকা"
 
@@ -3415,7 +3490,8 @@ msgstr "আওয়াজ কম অথবা বেশি করতে ব্য�
 msgid "Adjusts the volume"
 msgstr "আওয়াজ পরিবর্তন করতে ব্যবহৃত"
 
-#: ../gtk/gtkvolumebutton.c:180 ../gtk/gtkvolumebutton.c:183
+#: ../gtk/gtkvolumebutton.c:180
+#: ../gtk/gtkvolumebutton.c:183
 msgid "Volume Down"
 msgstr "আওয়াজ হ্রাস"
 
@@ -3423,7 +3499,8 @@ msgstr "আওয়াজ হ্রাস"
 msgid "Decreases the volume"
 msgstr "আওয়াজ কম করতে ব্যবহৃত"
 
-#: ../gtk/gtkvolumebutton.c:186 ../gtk/gtkvolumebutton.c:189
+#: ../gtk/gtkvolumebutton.c:186
+#: ../gtk/gtkvolumebutton.c:189
 msgid "Volume Up"
 msgstr "আওয়াজ বৃদ্ধি"
 
@@ -3443,7 +3520,6 @@ msgstr "সর্বাধিক আওয়াজ"
 #. * as used in the tooltip, eg. "49 %".
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
-#.
 #: ../gtk/gtkvolumebutton.c:263
 #, c-format
 msgctxt "volume percentage"
@@ -3905,7 +3981,8 @@ msgctxt "paper size"
 msgid "10x14"
 msgstr "১০x১৪"
 
-#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
+#: ../gtk/paper_names_offsets.c:95
+#: ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
 msgstr "১০x১৫"
@@ -4270,101 +4347,102 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: ../gtk/updateiconcache.c:1368
+#: ../gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write header\n"
 msgstr "হেডার লিখতে ব্যর্থ\n"
 
-#: ../gtk/updateiconcache.c:1374
+#: ../gtk/updateiconcache.c:1392
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "হ্যাশ টেবিল লিখতে ব্যর্থ\n"
 
-#: ../gtk/updateiconcache.c:1380
+#: ../gtk/updateiconcache.c:1398
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "ফোল্ডার ইন্ডেক্স লিখতে ব্যর্থ\n"
 
-#: ../gtk/updateiconcache.c:1388
+#: ../gtk/updateiconcache.c:1406
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "হেডার পুনরায় লিখতে ব্যর্থ\n"
 
-#: ../gtk/updateiconcache.c:1482
+#: ../gtk/updateiconcache.c:1500
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "%s ফাইল খুলতে ব্যর্থ : %s\n"
 
-#: ../gtk/updateiconcache.c:1490 ../gtk/updateiconcache.c:1520
+#: ../gtk/updateiconcache.c:1508
+#: ../gtk/updateiconcache.c:1538
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "ক্যাশে ফাইল লিখতে ব্যর্থ: %s\n"
 
-#: ../gtk/updateiconcache.c:1530
+#: ../gtk/updateiconcache.c:1548
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "নির্মিত ক্যাশে বৈধ নয়।\n"
 
-#: ../gtk/updateiconcache.c:1544
+#: ../gtk/updateiconcache.c:1562
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s'র নাম %s'এ পরিবর্তন করতে ব্যর্থ: %s, %s মুছে ফেলা হচ্ছে।\n"
 
-#: ../gtk/updateiconcache.c:1558
+#: ../gtk/updateiconcache.c:1576
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s'র নাম %s'এ পরিবর্তন করতে ব্যর্থ: %s\n"
 
-#: ../gtk/updateiconcache.c:1568
+#: ../gtk/updateiconcache.c:1586
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s-র নাম %s-এ প্রত্যাবর্তন করতে ব্যর্থ: %s।\n"
 
-#: ../gtk/updateiconcache.c:1595
+#: ../gtk/updateiconcache.c:1613
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "ক্যাশে ফাইল সাফল্যের সাথে নির্মিত হয়েছে।\n"
 
-#: ../gtk/updateiconcache.c:1634
+#: ../gtk/updateiconcache.c:1652
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "সাম্প্রতিক তথ্য ধারণ করলেও, উপস্থিত ক্যাশে মুছে নতুন করে লিখুন।"
 
-#: ../gtk/updateiconcache.c:1635
+#: ../gtk/updateiconcache.c:1653
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme'র উপস্থিতি পরীক্ষা করা হবে না"
 
-#: ../gtk/updateiconcache.c:1636
+#: ../gtk/updateiconcache.c:1654
 msgid "Don't include image data in the cache"
 msgstr "ক্যাশের মধ্যে ছবির তথ্য অন্তর্ভুক্ত করা হবে না"
 
-#: ../gtk/updateiconcache.c:1637
+#: ../gtk/updateiconcache.c:1655
 msgid "Output a C header file"
 msgstr "একটি C হেডার ফাইল প্রস্তুত করা হবে"
 
-#: ../gtk/updateiconcache.c:1638
+#: ../gtk/updateiconcache.c:1656
 msgid "Turn off verbose output"
 msgstr "ভারবোস আউটপুট বন্ধ করা হবে"
 
-#: ../gtk/updateiconcache.c:1639
+#: ../gtk/updateiconcache.c:1657
 msgid "Validate existing icon cache"
 msgstr "উপস্থিত আইকন ক্যাশে পরীক্ষা করুন"
 
-#: ../gtk/updateiconcache.c:1706
+#: ../gtk/updateiconcache.c:1724
 #, c-format
 msgid "File not found: %s\n"
 msgstr "ফাইল পাওয়া যায়নি: %s\n"
 
-#: ../gtk/updateiconcache.c:1712
+#: ../gtk/updateiconcache.c:1730
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "বৈধ আইকন ক্যাশে নয়: %s\n"
 
-#: ../gtk/updateiconcache.c:1725
+#: ../gtk/updateiconcache.c:1743
 #, c-format
 msgid "No theme index file.\n"
 msgstr "কোনো থিম ইন্ডেক্স ফাইল উপস্থিত নেই।\n"
 
-#: ../gtk/updateiconcache.c:1729
+#: ../gtk/updateiconcache.c:1747
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4429,409 +4507,400 @@ msgstr "ভিয়েতনামিস (VIQR)"
 msgid "X Input Method"
 msgstr "X ইনপুট পদ্ধতি"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:858
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1073
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1004
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1219
 msgid "Username:"
 msgstr "ব্যবহারকারীর নাম:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:859
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1005
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1228
 msgid "Password:"
 msgstr "পাসওয়ার্ড:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:898
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1095
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1241
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "'%s' নথিটি %s প্রিন্টারের মধ্যে প্রিন্ট করার জন্য অনুমোদিত হওয়া আবশ্যক"
+msgstr ""
+"'%s' নথিটি %s প্রিন্টারের মধ্যে প্রিন্ট করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:900
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1046
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s-র মধ্যে নথিপত্র প্রিন্ট করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:904
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1050
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "'%s' কর্মের বৈশিষ্ট্য প্রাপ্ত করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:906
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1052
 msgid "Authentication is required to get attributes of a job"
 msgstr "কর্মের বৈশিষ্ট্য প্রাপ্ত করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:910
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1056
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "'%s' প্রিন্টারের বৈশিষ্ট্য প্রাপ্ত করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:912
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1058
 msgid "Authentication is required to get attributes of a printer"
 msgstr "প্রিন্টারের বৈশিষ্ট্য প্রাপ্ত করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1061
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 "%s-র ডিফল্ট প্রিন্টার সংক্রান্ত তথ্য প্রাপ্ত করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:918
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1064
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s-র প্রিন্টার সংক্রান্ত তথ্য প্রাপ্ত করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:923
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1069
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s থেকে ফাইল প্রাপ্ত করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:925
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1071
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s-র ক্ষেত্রে অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1067
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1213
 msgid "Domain:"
 msgstr "ডোমেইন:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1097
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1243
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "'%s' নথিটি প্রিন্ট করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1248
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "%s প্রিন্টারের মধ্যে এই নথিটি প্রিন্ট করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1250
 msgid "Authentication is required to print this document"
 msgstr "এই নথিটি প্রিন্ট করার জন্য অনুমোদিত হওয়া আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1666
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1812
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "'%s' প্রিন্টারে টোনারের মাত্রা হ্রাস হয়েছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1667
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1813
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "'%s' প্রিন্টারে টোনার শেষ হয়ে গেছে।"
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1669
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1815
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "'%s' প্রিন্টারে ডিভেলপর সামগ্রীর মাত্রা হ্রাস হয়েছে।"
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1671
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1817
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "'%s' প্রিন্টারে ডিভেলপর সামগ্রী শেষ হয়ে গেছে।"
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1819
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 "'%s' প্রিন্টারে অন্তত একটি মার্কার ধারণস্থলের সামগ্রীর মাত্রা হ্রাস হয়েছে।"
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1821
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "'%s' প্রিন্টারে অন্তত একটি মার্কার ধারণস্থলের সামগ্রী শেষ হয়ে গেছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1676
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1822
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "'%s' প্রিন্টারের ঢাকনা খোলা।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1823
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "'%s' প্রিন্টারের দরজা খোলা।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1678
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "'%s' প্রিন্টারে কাগজের পরিমাণ হ্রাস হয়েছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1679
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "'%s' প্রিন্টারে কাগজ শেষ হয়েছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1826
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "প্রিন্টার '%s' বর্তমান অফলাইন অবস্থায় রয়েছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1827
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "'%s' প্রিন্টারে কিছু সমস্যা দেখা দিয়েছে।"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2285
 msgid "Paused; Rejecting Jobs"
 msgstr "স্থগিত ; কাজ প্রত্যাখ্যান করা হচ্ছে"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2291
 msgid "Rejecting Jobs"
 msgstr "কাজ প্রত্যাখ্যান করা হচ্ছে"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2909
+#. Translators: this string connects multiple printer states together.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2333
+msgid "; "
+msgstr "; "
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3857
 msgid "Two Sided"
 msgstr "উভয়পৃষ্ঠ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2910
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3858
 msgid "Paper Type"
 msgstr "কাগজের ধরন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2911
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3859
 msgid "Paper Source"
 msgstr "কাগজের সংগ্রহস্থল"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2912
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3860
 msgid "Output Tray"
 msgstr "আউটপুট-ট্রে"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2913
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3861
 msgid "Resolution"
 msgstr "রেসলোলিউশন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2914
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3862
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript প্রি-ফিল্টারিং"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2923
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3871
 msgid "One Sided"
 msgstr "এক পৃষ্ঠ"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2925
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3873
 msgid "Long Edge (Standard)"
 msgstr "দীর্ঘ প্রান্ত (প্রমিত মান)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2927
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3875
 msgid "Short Edge (Flip)"
 msgstr "ক্ষুদ্র প্রান্ত (উলট)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2929
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2939
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3877
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3879
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3887
 msgid "Auto Select"
 msgstr "স্বয়ংক্রিয় নির্বাচন"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2933
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2935
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2937
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2941
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3429
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3881
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3883
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3885
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3889
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4377
 msgid "Printer Default"
 msgstr "প্রিন্টারের ডিফল্ট মান"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2943
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3891
 msgid "Embed GhostScript fonts only"
 msgstr "শুধুমাত্র GhostScript ফন্ট এমবেড করা হবে"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3893
 msgid "Convert to PS level 1"
 msgstr "PS লেভেল ১-এ রূপান্তর করা হবে"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3895
 msgid "Convert to PS level 2"
 msgstr "PS লেভেল ২-এ রূপান্তর করা হবে"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2949
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3897
 msgid "No pre-filtering"
 msgstr "প্রি-ফিল্টারিং বিহীন"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3906
 msgid "Miscellaneous"
 msgstr "বিবিধ বৈশিষ্ট্য"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
 msgid "Urgent"
 msgstr "জরুরী"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
 msgid "High"
 msgstr "উচ্চ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
 msgid "Medium"
 msgstr "মাঝারি"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
 msgid "Low"
 msgstr "নিম্ন"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3711
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4659
 msgid "Job Priority"
 msgstr "কাজের গুরুত্ব"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3722
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4670
 msgid "Billing Info"
 msgstr "বিল সংক্রান্ত তথ্য"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgid "None"
 msgstr "(শূণ্য)"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgid "Classified"
 msgstr "শ্রেণীবদ্ধ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgid "Confidential"
 msgstr "গোপনীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgid "Secret"
 msgstr "গোপনীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgid "Standard"
 msgstr "প্রমিত মান"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgid "Top Secret"
 msgstr "অতিমাত্রায় গোপনীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgid "Unclassified"
 msgstr "শ্রেণীবিহীন"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3748
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4696
 msgid "Pages per Sheet"
 msgstr "প্রতি পাতায় পৃষ্ঠা সংখ্যা"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3808
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4756
 msgid "Before"
 msgstr "প্রচ্ছদ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3823
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4771
 msgid "After"
 msgstr "অন্তিম পৃষ্ঠ"
 
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3843
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4791
 msgid "Print at"
 msgstr "প্রিন্ট করা হবে"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3854
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4802
 msgid "Print at time"
 msgstr "চিহ্নিত সময়ে প্রিন্ট করা হবে"
 
 #. Translators: this format is used to display a custom paper
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3889
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4837
 #, c-format
 msgid "Custom %sx%s"
 msgstr "স্বনির্ধারিত %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3970
-#| msgid "Printer offline"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4918
 msgid "Printer Profile"
 msgstr "প্রিন্টারের প্রোফাইল"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3977
-#| msgid "Not available"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4925
 msgid "Unavailable"
 msgstr "উপলব্ধ নেই"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:221
+#: ../modules/printbackends/cups/gtkprintercups.c:241
 msgid "Color management unavailable"
 msgstr "রং পরিচালনা ব্যবস্থা অনুপস্থিত"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:233
-#| msgid "Not available"
+#: ../modules/printbackends/cups/gtkprintercups.c:253
 msgid "No profile available"
 msgstr "কোনো প্রোফাইল উপলব্ধ নেই"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:244
-#| msgid "Unspecified error"
+#: ../modules/printbackends/cups/gtkprintercups.c:264
 msgid "Unspecified profile"
 msgstr "অনির্ধারিত প্রোফাইল"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
-#| msgid "output.%s"
 msgid "output"
 msgstr "আউটপুট"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:521
+#: ../modules/printbackends/file/gtkprintbackendfile.c:527
 msgid "Print to File"
 msgstr "ফাইলে প্রিন্ট করুন"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:647
+#: ../modules/printbackends/file/gtkprintbackendfile.c:653
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:647
+#: ../modules/printbackends/file/gtkprintbackendfile.c:653
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:647
+#: ../modules/printbackends/file/gtkprintbackendfile.c:653
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:660
+#: ../modules/printbackends/file/gtkprintbackendfile.c:666
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "প্রতি পাতায় পৃষ্ঠার সংখ্যা:(_s)"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:719
+#: ../modules/printbackends/file/gtkprintbackendfile.c:725
 msgid "File"
 msgstr "ফাইল"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:729
+#: ../modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "_Output format"
 msgstr "আউটপুটের বিন্যাস (_O)"
 
@@ -4881,922 +4950,3 @@ msgstr "test-output.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "পরীক্ষামূলক প্রিন্টারে প্রিন্ট করুন"
-
-#~ msgid "Received invalid color data\n"
-#~ msgstr "রং সম্পর্কে অবৈধ তথ্য প্রাপ্ত\n"
-
-#~ msgid "Caps Lock and Num Lock are on"
-#~ msgstr "ক্যাপ্স-লক ও নাম-লক সক্রিয় আছে"
-
-#~ msgid "Num Lock is on"
-#~ msgstr "নাম-লক কি সক্রিয় আছে"
-
-# FIXME
-#~ msgid "_Browse for other folders"
-#~ msgstr "অন্যান্য ফোল্ডার অনুসন্ধানের জন্য ব্রাউজ করুন (_B)"
-
-#~ msgid "Invalid path"
-#~ msgstr "অবৈধ পাথ"
-
-#~ msgid "No match"
-#~ msgstr "মিল পাওয়া যায়নি"
-
-#~ msgid "Sole completion"
-#~ msgstr "একটি মিল"
-
-#~ msgid "Complete, but not unique"
-#~ msgstr "মিল, কিন্তু সম্পূর্ণ নয়"
-
-#~ msgid "Completing..."
-#~ msgstr "সম্পূর্ণ মিল অনুসন্ধান..."
-
-#~ msgid "Only local files may be selected"
-#~ msgstr "শুধুমাত্র স্থানীয় অবস্থানে উপস্থিত ফাইল নির্বাচন করা যাবে"
-
-#~ msgid "Incomplete hostname; end it with '/'"
-#~ msgstr "হোস্ট-নেম সম্পূর্ণ করা হয়নি; অন্তে '/' চিহ্ন থাকা আবশ্যক"
-
-#~ msgid "Path does not exist"
-#~ msgstr "পাথ বর্তমানে অনুপস্থিত"
-
-#~ msgid ""
-#~ "Could not find the icon '%s'. The '%s' theme\n"
-#~ "was not found either, perhaps you need to install it.\n"
-#~ "You can get a copy from:\n"
-#~ "\t%s"
-#~ msgstr ""
-#~ "'%s' আইকন সনাক্ত করতে ব্যর্থ। '%s' থিমটিও\n"
-#~ "পাওয়া যায়নি। সম্ভবত এটি ইনস্টল করা আবশ্যক।\n"
-#~ "নিম্নলিখিত স্থান থেকে এটি প্রাপ্ত করা যাবে:\n"
-#~ "\t%s"
-
-#~ msgid "Connect as u_ser:"
-#~ msgstr "ব্যবহারকারীরূপে সংযোগ করুন: (_s)"
-
-#~ msgid "_Save in folder:"
-#~ msgstr "চিহ্নিত ফোল্ডারে সংরক্ষণ করুন:(_S)"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\""
-#~ msgstr "pixmap_path'এ ছবির ফাইল সনাক্ত করতে ব্যর্থ: \"%s\""
-
-#~ msgid "This function is not implemented for widgets of class '%s'"
-#~ msgstr "'%s' ক্লাসের উইজেটের জন্য এই ফাংশান কার্যকর করা হয়নি"
-
-#~ msgid "different idatas found for symlinked '%s' and '%s'\n"
-#~ msgstr "সিম-লিঙ্ক করা '%s' ও '%s'-র জন্য ভিন্ন idata সনাক্ত করা হয়েছে\n"
-
-# FIXME
-#~ msgid "Could not get information for file '%s': %s"
-#~ msgstr "'%s' ফাইল সম্পর্কিত তথ্য প্রাপ্ত করতে ব্যর্থ: %s"
-
-#~ msgid "Failed to open file '%s': %s"
-#~ msgstr "'%s' ফাইল খুলতে ব্যর্থ: %s"
-
-#~ msgid ""
-#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
-#~ msgstr ""
-#~ "'%s' ছবির ফাইল লোড করতে ব্যর্থ: কারণ অজানা, সম্ভবত ছবির ফাইলটি ক্ষতিগ্রস্ত"
-
-#~ msgid "X screen to use"
-#~ msgstr "ব্যবহারের উদ্দেশ্যে চিহ্নিত X পর্দা"
-
-#~ msgid "SCREEN"
-#~ msgstr "SCREEN"
-
-#~ msgid "Make X calls synchronous"
-#~ msgstr "X'র কল সুসংগতরূপে (সিঙ্ক্রোনাস) করা হবে"
-
-#~ msgid "Credits"
-#~ msgstr "স্বীকৃতি"
-
-#~ msgid "Written by"
-#~ msgstr "লেখক"
-
-#~ msgid "_Add"
-#~ msgstr "যোগ করুন (_A)"
-
-#~ msgid "_Remove"
-#~ msgstr "মুছে ফেলুন (_R)"
-
-#~ msgid "Error creating folder '%s': %s"
-#~ msgstr "'%s' ফোল্ডার নির্মাণে সমস্যা: %s"
-
-#~ msgid "Unable to find include file: \"%s\""
-#~ msgstr "include ফাইল সনাক্ত করতে ব্যর্থ: \"%s\""
-
-#~ msgid "Unable to locate theme engine in module_path: \"%s\","
-#~ msgstr "module_path'র মধ্যে থিম ইঞ্জিন সনাক্ত করতে ব্যর্থ: \"%s\","
-
-#~ msgid "Gdk debugging flags to set"
-#~ msgstr "মান নির্ধারণের উদ্দেশ্যে চিহ্নিত Gdk ডিবাগিং ফ্ল্যাগ"
-
-#~ msgid "Gdk debugging flags to unset"
-#~ msgstr "মান মুছে ফেলার উদ্দেশ্যে চিহ্নিত Gdk ডিবাগিং ফ্ল্যাগ"
-
-#~ msgid "Image file '%s' contains no data"
-#~ msgstr "'%s' নামক ছবির ফাইলে তথ্য অনুপস্থিত"
-
-#~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt "
-#~ "animation file"
-#~ msgstr ""
-#~ "'%s' অ্যানিমেশন লোড করতে ব্যর্থ: কারণ অজানা, সম্ভবত অ্যানিমেশন ফাইল ক্ষতিগ্রস্ত"
-
-#~ msgid "Unable to load image-loading module: %s: %s"
-#~ msgstr "ছবি লোড করতে ব্যবহৃত মডিউল লোড করতে ব্যর্থ: %s: %s"
-
-#~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
-#~ msgstr ""
-#~ "ছবি লোড করতে ব্যবহৃত %s নামক মডিউল সঠিক প্রেক্ষাপট এক্সপোর্ট করতে বিফল; সম্ভবত "
-#~ "এটি পৃথক GTK সংস্করণের অংশ?"
-
-#~ msgid "Image type '%s' is not supported"
-#~ msgstr "'%s' প্রকৃতির ছবি সমর্থিত নয়"
-
-#~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "'%s' নামক ফাইলের ছবির ফাইলের বিন্যাস সনাক্ত করতে ব্যর্থ"
-
-#~ msgid "Unrecognized image file format"
-#~ msgstr "ছবির ফাইলের বিন্যাস অজানা"
-
-#~ msgid "Failed to load image '%s': %s"
-#~ msgstr "'%s' ছবির লোড করতে ব্যর্থ: %s"
-
-#~ msgid "Error writing to image file: %s"
-#~ msgstr "ছবির ফাইলে লিখতে সমস্যা: %s"
-
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr ""
-#~ "gdk-pixbuf'র বর্তমান বিল্ডের দ্বারা চিহ্নিত বিন্যাসের ছবি সংরক্ষণ সমর্থন করা হয় "
-#~ "না: %s"
-
-#~ msgid "Insufficient memory to save image to callback"
-#~ msgstr "callback'এ ছবি সংরক্ষণের জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "Failed to open temporary file"
-#~ msgstr "অস্থায়ী ফাইল খুলতে ব্যর্থ"
-
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "অস্থায়ী ফাইল থেকে পড়তে ব্যর্থ"
-
-#~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "লেখার উদ্দেশ্যে '%s' খুলতে ব্যর্থ: %s"
-
-#~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been "
-#~ "saved: %s"
-#~ msgstr "ছবি লেখার সময় '%s' বন্ধ করতে ব্যর্থ, সম্ভবত সব তথ্য সংরক্ষিত হয়নি: %s"
-
-#~ msgid "Insufficient memory to save image into a buffer"
-#~ msgstr "বাফারে ছবি সংরক্ষণের উদ্দেশ্যে পর্যাপ্ত মেমরি উপস্থিত নেই"
-
-#~ msgid "Error writing to image stream"
-#~ msgstr "ছবির স্ট্রিমে লিখতে সমস্যা"
-
-#~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, "
-#~ "but didn't give a reason for the failure"
-#~ msgstr ""
-#~ "অভ্যন্তরীণ সমস্যা: ছবি লোড করতে ব্যবহৃত মডিউল '%s' কর্ম সমাপ্ত করতে ব্যর্থ, কিন্তু "
-#~ "ব্যর্থতার কারণ দর্শানো হয়নি। "
-
-#~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "বর্ধিতক্রমে '%s' প্রকৃতির ছবি লোড করার বৈশিষ্ট্য সমর্থিত নয়"
-
-#~ msgid "Image header corrupt"
-#~ msgstr "ছবির হেডার ক্ষতিগ্রস্ত"
-
-#~ msgid "Image format unknown"
-#~ msgstr "ছবির বিন্যাস অজানা"
-
-#~ msgid "Image pixel data corrupt"
-#~ msgstr "ছবির পিক্সেল সংক্রান্ত তথ্য ক্ষতিগ্রস্ত"
-
-#, fuzzy
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "ফাইল পড়ার বাফারের জন্য %d বাইট বরাদ্দ করতে ব্যর্থ"
-#~ msgstr[1] "ফাইল পড়ার বাফারের জন্য %d বাইট বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "অ্যানিমেশনের মধ্যে অপ্রত্যাশিত আইকনের অংশ"
-
-#~ msgid "Unsupported animation type"
-#~ msgstr "অসমর্থিত বিন্যাসের অ্যানিমেশন"
-
-#~ msgid "Invalid header in animation"
-#~ msgstr "অ্যানিমেশনের মধ্যে অবৈধ হেডার তথ্য"
-
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "অ্যানিমেশন লোড করার উদ্দেশ্যে পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "অ্যানিমেশনের মধ্যে ত্রুটিযুক্ত অংশ"
-
-#~ msgid "The ANI image format"
-#~ msgstr "ANI ছবির বিন্যাস"
-
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "BMP ছবির মধ্যে ভুয়ো হেডার তথ্য"
-
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "বিটম্যাপ ছবি লোড করার উদ্দেশ্যে পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "BMP ছবির হেডারের মাপ অনুপস্থিত"
-
-#~ msgid "Topdown BMP images cannot be compressed"
-#~ msgstr "Topdown BMP ছবি সংকুচন করা সম্ভব নয়"
-
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "অপ্রত্যাশিত স্থানে ফাইলের অন্তিম অংশ প্রাপ্ত হয়েছে"
-
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "BMP ফাইল সংরক্ষণের উদ্দেশ্যে মেমরি বরাদ্দ করা যায়নি"
-
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "BMP ফাইলে লিখতে ব্যর্থ"
-
-#~ msgid "The BMP image format"
-#~ msgstr "BMP ছবির বিন্যাস"
-
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "GIF পড়তে ব্যর্থ: %s"
-
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr ""
-#~ "GIF ফাইলের কিছু তথ্য অনুপস্থিত (সম্ভবত কোনো কারণে এটির কিছু অংশ মুছে ফেলা হয়েছে?)"
-
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "GIF লোড ব্যবস্থায় অভ্যন্তরীণ সমস্যা (%s)"
-
-#~ msgid "Stack overflow"
-#~ msgstr "স্ট্যাক-ওভারফ্লো"
-
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "GIF ছবি লোড ব্যবস্থার দ্বারা এই ছবিটি বোধগম্য নয়।"
-
-#~ msgid "Bad code encountered"
-#~ msgstr "ভুল কোডের সম্মুখীন"
-
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "GIF ফাইলের মধ্যে বৃত্তাকার টেবিলের তথ্য উপস্থিত রয়েছে"
-
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "GIF ফাইল লোড করার উদ্দেশ্যে পর্যাপ্ত মেমরি অনুপস্থিত"
-
-# FIXME: Composite
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "GIF ফাইলের মধ্যে ফ্রেম অন্তর্ভুক্ত করার উদ্দেশ্যে পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "GIF ছবি ক্ষতিগ্রস্ত (LZW সংকুচন সঠিক নয়)"
-
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "ফাইলটি সম্ভবত GIF বিন্যাসে নয়"
-
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "GIF ফাইল বিন্যাসের %s সংস্করণ সমর্থিত নয়"
-
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "GIF ছবির মধ্যে কোনো গ্লোবাল colormap উপস্থিত নেই এবং এর মধ্যে অন্তর্ভুক্ত ফ্রেমে "
-#~ "স্থানীয় colormap উপস্থিত নেই।"
-
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "GIF ছবির তথ্য মুছে ফেলা হয়েছে অথবা অসম্পূর্ণ।"
-
-#~ msgid "The GIF image format"
-#~ msgstr "GIF ছবির বিন্যাস"
-
-#~ msgid "Invalid header in icon"
-#~ msgstr "আইকনে অবৈধ হেডার"
-
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "আইকন লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "Icon has zero width"
-#~ msgstr "আইকনের প্রস্থের মাপ শূণ্য"
-
-#~ msgid "Icon has zero height"
-#~ msgstr "আইকনের দৈর্ঘ্যের মাপ শূন্য"
-
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "সংকুচিত আইকনের ব্যবহার অসমর্থিত"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "অসমর্থিত আইকনের বিন্যাস"
-
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "ICO ফাইল লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "ICO ফাইল রূপে সংরক্ষণের জন্য ফাইলের মাপ অত্যাধিক বড়"
-
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "কার্সারের হট-স্পট ছবির বাইরে"
-
-# FIXME
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "আইকন ফাইলে অসমর্থিত গভীরতা: %d"
-
-#~ msgid "The ICO image format"
-#~ msgstr "ICO ছবির বিন্যাস"
-
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "ICNS ছবির ফাইল পড়তে সমস্যা: %s"
-
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "ICNS ফাইল ডি-কোড করতে ব্যর্থ"
-
-#~ msgid "The ICNS image format"
-#~ msgstr "ICNS ছবির বিন্যাস"
-
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "স্ট্রিমের জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Couldn't decode image"
-#~ msgstr "ছবি ডি-কোড করতে ব্যর্থ"
-
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "রূপান্তরিত JPEG2000-র প্রস্থ অথবা দৈর্ঘ্যের মাপ শূণ্য।"
-
-#~ msgid "Image type currently not supported"
-#~ msgstr "চিহ্নিত প্রকৃতির ছবি সমর্থিত নয়"
-
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "রঙের প্রোফাইলের জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "JPEG 2000 ফাইল খোলার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-# FIXME
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "ছবি সংক্রান্ত তথ্য বাফার করার জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "JPEG 2000 ছবির বিন্যাস"
-
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "JPEG ছবির ফাইল ব্যাখ্যা করতে সমস্যা (%s)"
-
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "ছবি লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত, মেমরি ফাঁকা করার জন্য কয়েকটি "
-#~ "অ্যাপ্লিকেশন বন্ধ করার প্রচেষ্টা করুন"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "অসমর্থিত JPEG কালার-স্পেস (%s)"
-
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "JPEG ফাইল লোড করার জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "রূপান্তরিত JPEG'র প্রস্থ অথবা দৈর্ঘ্যের মাপ শূণ্য।"
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "JPEG'র গুণমানের মাত্রা 0(০) থেকে 100(১০০)'র মধ্যে হওয়া আবশ্যক; '%s' মান পার্স "
-#~ "করতে ব্যর্থ।"
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "JPEG'র গুণমানের মাত্রা 0(০) থেকে 100(১০০)'র মধ্যে হওয়া আবশ্যক; '%d' মান "
-#~ "গ্রহণযোগ্য নয়।"
-
-#~ msgid "The JPEG image format"
-#~ msgstr "JPEG ছবির বিন্যাস"
-
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "হেডারের জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "কনটেক্সট-বাফারের জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "ছবির প্রস্থ এবং/অথবা দৈর্ঘ্যের মাপ বৈধ নয়"
-
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "ছবির মধ্যে অসমর্থিত মাপের bpp উপস্থিত"
-
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "ছবির মধ্যে উপস্থিত %d-বিট প্লেইনের সংখ্যা সমর্থিত নয়"
-
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "নতুন pixbuf তৈরি করতে ব্যর্থ"
-
-# FIXME
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "রেখা সংক্রান্ত তথ্যের জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "প্যালেট করা তথ্যের জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Didn't get all lines of PCX image"
-#~ msgstr "PCX ছবির জন্য সমস্ত রেখা প্রাপ্ত করা যায়নি"
-
-#~ msgid "No palette found at end of PCX data"
-#~ msgstr "PCX তথ্যের অন্তে কোনো প্যালেট সনাক্ত করা যায়নি"
-
-#~ msgid "The PCX image format"
-#~ msgstr "PCX ছবির বিন্যাস"
-
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "PNG ছবির প্রতি চ্যানেল বিট সংখ্যা বৈধ নয়।"
-
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "রূপান্তরিত PNG'র প্রস্থ অথবা দৈর্ঘ্যের মাপ শূণ্য।"
-
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "রূপান্তরিত PNG'র প্রতি চ্যানেলের বিট সংখ্যা ৮ নয়।"
-
-# FIXME
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "রূপান্তরিত PNG, RGB অথবা RGBA বিন্যাসে নয়।"
-
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr ""
-#~ "রূপান্তরিত PNG'র মধ্যে অসমর্থিত চ্যানেল সংখ্যা, এই সংখ্যা ৩ অথবা ৪ হওয়া আবশ্যক।"
-
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "PNG ছবির ফাইলে গুরুতর সমস্যা: %s"
-
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "PNG ফাইল লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "%ld গুণ %ld আকারের ছবি সংরক্ষণের জন্য পর্যাপ্ত মেমরি অনুপস্থিত;  কয়েকটি "
-#~ "অ্যাপ্লিকেশন বন্ধ করে মেমরির ব্যবহার হ্রাস করে পুনরায় প্রচেষ্টা করুন"
-
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "PNG ছবির ফাইল পড়তে গুরুতর সমস্যা"
-
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "PNG ছবির ফাইল পড়তে গুরুতর সমস্যা: %s"
-
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr ""
-#~ "PNG টেক্সট অংশের কি (key) নূন্যতম ১ ও সর্বাধিক ৭৯-টি অক্ষর বিশিষ্ট হওয়া আবশ্যক।"
-
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "PNG টেক্সট অংশের কি (key) ASCII অক্ষরবিশিষ্ট হওয়া আবশ্যক।"
-
-#~ msgid "Color profile has invalid length %d."
-#~ msgstr "অবৈধ দৈর্ঘ্য %d-র ক্ষেত্রে রঙের প্রোফাইল।"
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr "PNG সংকুচনের মাত্রা ০ ও ৯'র মধ্যে হওয়া আবশ্যক; '%s' মান পার্স করতে ব্যর্থ।"
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr "PNG সংকুচনের মাত্রা ০ ও ৯'র মধ্যে হওয়া আবশ্যক; '%d' মান গ্রহণযোগ্য নয়।"
-
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr "PNG টেক্সট অংশ %s'র ক্ষেত্রে ISO-8859-1 এনকোডিং'এ পরিবর্তন করা সম্ভব নয়।"
-
-#~ msgid "The PNG image format"
-#~ msgstr "PNG ছবির বিন্যাস"
-
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "PNM লোডারের দ্বারা পূর্ণসংখ্যা মান প্রত্যাশিত, কিন্তু প্রাপ্ত করা যায়নি"
-
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "PNM ফাইলের প্রারম্ভিক বাইট সঠিক নয়"
-
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr "PNM ফাইল পরিচিত PNM সাব-ফরম্যাট বিন্যাসে নেই"
-
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "PNM ফাইলের ছবির প্রস্থের মাপ ০"
-
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "PNM ফাইলের ছবির দৈর্ঘ্যের মাপ ০"
-
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "PNM ফাইলে সর্বোচ্চ রং'র মাপ ০"
-
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "PNM ফাইলে সর্বোচ্চ রং'র মাপ অত্যাধিক বড়"
-
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "Raw PNM ছবির বিন্যাস বৈধ নয়"
-
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "PNM ছবি লোড ব্যবস্থার দ্বারা চিহ্নিত PNM সাব-ফরম্যাট সমর্থিত নয়"
-
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr ""
-#~ "Raw PNM বিন্যাসে নমূণা তথ্যের পূর্বে শুধুমাত্র একটি শূণ্যস্থান উপস্থিত থাকা আবশ্যক"
-
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "PNM বিন্যাসের ছবি লোড করার জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "PNM context struct লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "PNM ছবির তথ্যে অপ্রত্যাশিতরূপে সমাপ্ত"
-
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "PNM ফাইল লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "PNM/PBM/PGM/PPM ছবির বিন্যাসের সংকলন"
-
-#~ msgid "Input file descriptor is NULL."
-#~ msgstr "ইনপুট ফাইল ডেস্ক্রিপটরের মান NULL।"
-
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "QTIF হেডার পড়তে ব্যর্থ"
-
-#~ msgid "QTIF atom size too large (%d bytes)"
-#~ msgstr "QTIF অ্যাটমের মাপ অত্যাধিক বড় (%d বাইট)"
-
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "ফাইল পড়ার বাফারের জন্য %d বাইট বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "QTIF অ্যাটম পড়াকালে ফাইল সংক্রান্ত ত্রুটি দেখা দিয়েছে: %s"
-
-#~ msgid "Failed to skip the next %d bytes with seek()."
-#~ msgstr "seek() সহযোগে পরবর্তী %d বাইট উপেক্ষা করতে ব্যর্থ।"
-
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "QTIF কনটেক্সট স্ট্রাকচারের জন্য মেমরি বরাদ্দ করতে ব্যর্থ।"
-
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "GdkPixbufLoader অবজেক্ট নির্মাণ করতে ব্যর্থ।"
-
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "ছবির তথ্যের অ্যাটম সন্ধান করতে ব্যর্থ"
-
-#~ msgid "The QTIF image format"
-#~ msgstr "QTIF ছবির বিন্যাস"
-
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "RAS ছবির হেডারে ভুয়ো তথ্য"
-
-#~ msgid "RAS image has unknown type"
-#~ msgstr "RAS ছবির প্রকৃতি অজানা"
-
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "RAS ছবির পরিবর্তন সমর্থিত নয়"
-
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "RAS ছবি লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "The Sun raster image format"
-#~ msgstr "Sun রেসটার ছবির বিন্যাস"
-
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "IOBuffer struct'র জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "IOBuffer তথ্যের জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "IOBuffer তথ্য পুনরায় বরাদ্দ (realloc) করতে ব্যর্থ"
-
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "অস্থায়ী IOBuffer তথ্য বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "নতুন pixbuf বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "ছবিটি ক্ষতিগ্রস্ত অথবা সেটি ছাঁটাই করা হয়েছে"
-
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "colormap structure বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "colormap এন্ট্রি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "colormap এন্ট্রির ক্ষেত্রে অপ্রত্যাশিত bitdepth'র মাত্রা"
-
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "TGA হেডার মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "TGA ছবির দিকমাত্রা বৈধ নয়"
-
-#~ msgid "TGA image type not supported"
-#~ msgstr "TGA বিন্যাসের ছবি সমর্থিত নয়"
-
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "TGA context struct'র জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Excess data in file"
-#~ msgstr "ফাইলে প্রয়োজনাতিরিক্ত তথ্য"
-
-#~ msgid "The Targa image format"
-#~ msgstr "Targa ছবির বিন্যাস"
-
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "ছবির প্রস্থ প্রাপ্ত করতে ব্যর্থ (TIFF ফাইল সঠিক নয়)"
-
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "ছবির দৈর্ঘ্য প্রাপ্ত করতে ব্যর্থ (TIFF ফাইল সঠিক নয়)"
-
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "TIFF ছবির প্রস্থ অথবা দৈর্ঘ্যের মাপ শূণ্য"
-
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "TIFF ছবির দিকমাত্রা অত্যাধিক বড়"
-
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "TIFF ফাইল খোলার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "TIFF ফাইল থেকে RGB সংক্রান্ত তথ্য লোড করতে ব্যর্থ"
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "TIFF ছবি খুলতে ব্যর্থ"
-
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "TIFFClose কর্ম সঞ্চালনে ব্যর্থ"
-
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "TIFF ছবি লোড করতে ব্যর্থ"
-
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "TIFF ছবি সংরক্ষণে ব্যর্থ"
-
-#~ msgid "TIFF compression doesn't refer to a valid codec."
-#~ msgstr "TIFF কম্প্রেশন দ্বারা বৈধ codec উল্লেখ করা হয় না।"
-
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "TIFF তথ্য লিখতে ব্যর্থ"
-
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "TIFF ফাইলে লিখতে ব্যর্থ"
-
-#~ msgid "The TIFF image format"
-#~ msgstr "TIFF ছবির বিন্যাস"
-
-#~ msgid "Image has zero width"
-#~ msgstr "ছবির প্রস্থের মাপ শূণ্য"
-
-#~ msgid "Image has zero height"
-#~ msgstr "ছবির দৈর্ঘ্যের মাপ শূণ্য"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "ছবি লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "Couldn't save the rest"
-#~ msgstr "অবশিষ্ট অংশ সংরক্ষণ করতে ব্যর্থ"
-
-#~ msgid "The WBMP image format"
-#~ msgstr "WBMP ছবির বিন্যাস"
-
-#~ msgid "Invalid XBM file"
-#~ msgstr "অবৈধ XBM ফাইল"
-
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "XBM ছবির ফাইল লোড করার জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
-
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "XBM ছবি লোড করার সময় অস্থায়ী ফাইলে লিখতে ব্যর্থ"
-
-#~ msgid "The XBM image format"
-#~ msgstr "XBM ছবির বিন্যাস"
-
-#~ msgid "No XPM header found"
-#~ msgstr "XPM হেডার পাওয়া যায়নি"
-
-#~ msgid "Invalid XPM header"
-#~ msgstr "অবৈধ XPM হেডার"
-
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "XPM ফাইলের ছবির প্রস্থের মাপ <= ০"
-
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "XPM ফাইলের ছবির দৈর্ঘ্যের মাপ <= ০"
-
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM'র মধ্যে প্রতি পিক্সেলে chars সংখ্যা অবৈধ"
-
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "XPM ফাইলের মধ্যে অবৈধ রং'র সংখ্যা"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "XPM ছবি লোড করার জন্য মেমরি বরাদ্দ করতে ব্যর্থ"
-
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "XPM colormap পড়তে ব্যর্থ"
-
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "XPM ছবি লোড করার সময় অস্থায়ী ফাইলে লিখতে ব্যর্থ"
-
-#~ msgid "The XPM image format"
-#~ msgstr "XPM বিন্যাসের ছবি"
-
-#~ msgid "The EMF image format"
-#~ msgstr "EMF ছবির বিন্যাস"
-
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "মেমরি বরাদ্দ করতে ব্যর্থ: %s"
-
-#~ msgid "Could not create stream: %s"
-#~ msgstr "স্ট্রিম নির্মাণ করতে ব্যর্থ: %s"
-
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "Could not seek stream: %s"
-
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "স্ট্রিম থেকে পড়তে ব্যর্থ: %s"
-
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "বিট-ম্যাপ লোড করতে ব্যর্থ"
-
-#~ msgid "Couldn't load metafile"
-#~ msgstr "মিটা-ফাইল লোড করতে ব্যর্থ"
-
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "GDI+-র জন্য ছবির বিন্যাস সমর্থিত নয়"
-
-#~ msgid "Couldn't save"
-#~ msgstr "সংরক্ষণ করতে ব্যর্থ"
-
-#~ msgid "The WMF image format"
-#~ msgstr "WMF ছবির বিন্যাস"
-
-#~ msgid "\"Deepness\" of the color."
-#~ msgstr "রঙের \"গাঢ়তা\"।"
-
-#~ msgid "Error printing"
-#~ msgstr "প্রিন্ট করতে সমস্যা"
-
-#~ msgid "Printer '%s' may not be connected."
-#~ msgstr "প্রিন্টার '%s' সম্ভবত সংযুক্ত নয়।"
-
-#~ msgid "Folders"
-#~ msgstr "ফোল্ডার"
-
-#~ msgid "Fol_ders"
-#~ msgstr "ফোল্ডার(_d)"
-
-#~ msgid "Folder unreadable: %s"
-#~ msgstr "ফোল্ডার পাঠযোগ্য নয়:%s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "\"%s\" ফাইলটি একটি পৃথক মেশিনের (%s নামাঙ্কিত) মধ্যে উপস্থিত এবং এই প্রোগ্রামের "
-#~ "ব্যবহারের জন্য উপলব্ধ না হতে পারে।\n"
-#~ "আপনি কি নিশ্চিতরূপে এটি নির্বাচন করতে ইচ্ছুক?"
-
-#~ msgid "_New Folder"
-#~ msgstr "নতুন ফোল্ডার (_N)"
-
-#~ msgid "De_lete File"
-#~ msgstr "ফাইল মুছে ফেলুন (_l)"
-
-#~ msgid "_Rename File"
-#~ msgstr "ফাইলের নাম পরিবর্তন করুন (_R)"
-
-#~ msgid ""
-#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "\"%s\" ফোল্ডারের নামের মধ্যে কিছু চিহ্ন ব্যবহৃত হয়েছে যেগুলি গ্রহণযোগ্য নয়"
-
-#~ msgid "New Folder"
-#~ msgstr "নতুন ফোল্ডার"
-
-#~ msgid "_Folder name:"
-#~ msgstr "ফোল্ডারের নাম:(_F)"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "\"%s\" ফাইলের নামের মধ্যে কিছু চিহ্ন ব্যবহৃত হয়েছে যেগুলি গ্রহণযোগ্য নয়"
-
-#~ msgid "Error deleting file '%s': %s"
-#~ msgstr "'%s' ফাইল মুছে ফেলতে সমস্যা: %s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "\"%s\" ফাইলটি নিশ্চিতরূপে মুছে ফেলা হবে কি?"
-
-#~ msgid "Delete File"
-#~ msgstr "ফাইল মুছে ফেলুন"
-
-#~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr "ফাইলের নাম \"%s\"'এ পরিবর্তনে সমস্যা: %s"
-
-#~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr "\"%s\" ফাইলের নাম পরিবর্তন করতে সমস্যা: %s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "\"%s\" নামক ফাইলের নাম \"%s\"'এ পরিবর্তন করতে ব্যর্থ: %s"
-
-#~ msgid "Rename File"
-#~ msgstr "ফাইলের নাম পরিবর্তন করুন"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "\"%s\" নামক ফাইল চিহ্নিত নামে পরিবর্তন করুন:"
-
-#~ msgid "_Rename"
-#~ msgstr "নাম পরিবর্তন করুন (_R)"
-
-#~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-#~ "environment variable G_FILENAME_ENCODING): %s"
-#~ msgstr ""
-#~ "\"%s\" ফাইলের নাম UTF-8 বিন্যাসে রূপান্তর করতে ব্যর্থ। (এনভায়রনমেন্ট ভেরিয়েবল "
-#~ "G_FILENAME_ENCODING-র মান নির্ধারণের প্রচেষ্টা করুন): %s"
-
-#~ msgid "Invalid UTF-8"
-#~ msgstr "অবৈধ UTF-8"
-
-#~ msgid "Name too long"
-#~ msgstr "নাম অত্যাধিক লম্বা"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "ফাইলের নাম রূপান্তর করতে ব্যর্থ"
-
-#~ msgid "Gamma"
-#~ msgstr "গামা"
-
-#~ msgid "_Gamma value"
-#~ msgstr "গামা মান (_G)"
-
-#~ msgid "Input"
-#~ msgstr "ইনপুট"
-
-#~ msgid "No extended input devices"
-#~ msgstr "অতিরিক্ত ইনপুট ডিভাইস উপস্থিত নেই"
-
-#~ msgid "_Device:"
-#~ msgstr "ডিভাইস:(_D)"
-
-#~ msgid "Disabled"
-#~ msgstr "নিষ্ক্রিয়"
-
-#~ msgid "Screen"
-#~ msgstr "পর্দা"
-
-#~ msgid "Window"
-#~ msgstr "উইন্ডো"
-
-#~ msgid "_Mode:"
-#~ msgstr "মোড:(_M)"
-
-#~ msgid "Axes"
-#~ msgstr "অক্ষ"
-
-#~ msgid "Keys"
-#~ msgstr "কি"
-
-#~ msgid "_X:"
-#~ msgstr "_X:"
-
-#~ msgid "_Y:"
-#~ msgstr "_Y:"
-
-#~ msgid "_Pressure:"
-#~ msgstr "চাপ: (_P)"
-
-# FIXME
-#~ msgid "X _tilt:"
-#~ msgstr "X _tilt:"
-
-# FIXME
-#~ msgid "Y t_ilt:"
-#~ msgstr "Y t_ilt:"
-
-#~ msgid "_Wheel:"
-#~ msgstr "চক্র:(_W)"
-
-#~ msgid "none"
-#~ msgstr "শূণ্য"
-
-#~ msgid "(disabled)"
-#~ msgstr "(নিষ্ক্রিয়)"
-
-#~ msgid "(unknown)"
-#~ msgstr "(অজানা)"
-
-#~ msgid "Cl_ear"
-#~ msgstr "পরিশ্রুত করুন (_e)"
-
-#~ msgid "--- No Tip ---"
-#~ msgstr "--- ইঙ্গিত অনুপস্থিত ---"
