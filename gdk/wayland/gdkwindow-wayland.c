@@ -1155,9 +1155,6 @@ gdk_wayland_window_show (GdkWindow *window,
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
 
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
-    gdk_wayland_window_create_subsurface (window);
-
   gdk_wayland_window_map (window);
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
