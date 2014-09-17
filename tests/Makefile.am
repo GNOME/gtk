@@ -25,6 +25,7 @@ testsocket_programs = testsocket testsocket_child
 endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
+	subsurface			\
 	animated-resizing		\
 	motion-compression		\
 	scrolling-performance		\
