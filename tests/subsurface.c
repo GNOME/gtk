@@ -89,19 +89,26 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *label, *box, *widget;
+  GtkWidget *stack, *switcher;
 
   gtk_init (NULL, NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-
   gtk_container_add (GTK_CONTAINER (window), box);
+
+  stack = gtk_stack_new ();
+  switcher = gtk_stack_switcher_new ();
+  gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
+  gtk_container_add (GTK_CONTAINER (box), switcher);
+  gtk_container_add (GTK_CONTAINER (box), stack);
+
   label = gtk_label_new ("Test test");
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_stack_add_titled (GTK_STACK (stack), label, "1", "One");
   widget = da_new ();
   gtk_widget_set_size_request (widget, 100, 100);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_stack_add_titled (GTK_STACK (stack), widget, "2", "Two");
   gtk_widget_show_all (window);
 
   gtk_main ();
