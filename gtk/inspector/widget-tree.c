@@ -505,10 +505,7 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
           gtk_window_get_window_type (l->data) == GTK_WINDOW_TOPLEVEL &&
           l->data != window &&
           l->data != inspector_win)
-        {
-          g_message ("adding %s", gtk_window_get_title (l->data));
-          gtk_inspector_widget_tree_append_object (wt, G_OBJECT (l->data), NULL, NULL);
-        }
+        gtk_inspector_widget_tree_append_object (wt, G_OBJECT (l->data), NULL, NULL);
     }
   g_list_free (toplevels);
 
