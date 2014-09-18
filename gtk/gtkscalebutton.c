@@ -794,7 +794,7 @@ gtk_scale_button_scroll (GtkWidget      *widget,
     }
   else if (event->direction == GDK_SCROLL_SMOOTH)
     {
-      d += event->delta_y * gtk_adjustment_get_step_increment (adjustment);
+      d -= event->delta_y * gtk_adjustment_get_step_increment (adjustment);
       d = CLAMP (d, gtk_adjustment_get_lower (adjustment),
                  gtk_adjustment_get_upper (adjustment));
     }
