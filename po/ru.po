@@ -23,19 +23,19 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-04 21:03+0000\n"
-"PO-Revision-Date: 2014-09-05 10:57+0400\n"
-"Last-Translator: Yuri Myasoedov <ymyasoedov@yandex.ru>\n"
+"POT-Creation-Date: 2014-09-18 09:08+0000\n"
+"PO-Revision-Date: 2014-09-18 16:02+0300\n"
+"Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.5.4\n"
 
-#: ../gdk/broadway/gdkbroadway-server.c:141
+#: ../gdk/broadway/gdkbroadway-server.c:143
 #, c-format
 msgid "broadway display type not supported '%s'"
 msgstr "Тип дисплея broadway не поддерживается «%s»"
@@ -1177,7 +1177,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11635
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11637
 #: ../gtk/inspector/css-editor.c:195
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1232,7 +1232,7 @@ msgstr "_Применить"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11636 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11638 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_OK"
 
@@ -1373,7 +1373,6 @@ msgstr "Записывать в этот каталог вместо текущ�
 
 #: ../gtk/encodesymbolic.c:266
 #, c-format
-#| msgid "Invalid file name"
 msgid "Invalid size %s\n"
 msgstr "Недопустимый размер %s\n"
 
@@ -1755,7 +1754,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:278
+#: ../gtk/gtkcellrendereraccel.c:274
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Выключен"
@@ -1764,7 +1763,7 @@ msgstr "Выключен"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:288
+#: ../gtk/gtkcellrendereraccel.c:284
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Неверный"
@@ -1773,7 +1772,7 @@ msgstr "Неверный"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:419 ../gtk/gtkcellrendereraccel.c:744
+#: ../gtk/gtkcellrendereraccel.c:415 ../gtk/gtkcellrendereraccel.c:517
 msgid "New accelerator…"
 msgstr "Создать ускоритель…"
 
@@ -2118,7 +2117,7 @@ msgstr "Включён режим Caps Lock"
 msgid "Select a File"
 msgstr "Выберите файл"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:956
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:960
 msgid "Desktop"
 msgstr "Рабочий стол"
 
@@ -2127,7 +2126,7 @@ msgstr "Рабочий стол"
 msgid "(None)"
 msgstr "(Нет)"
 
-#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3269
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3273
 msgid "_Open"
 msgstr "_Открыть"
 
@@ -2311,7 +2310,7 @@ msgstr "Выберите шрифт"
 #. * pages that the printing system may support.
 #.
 #: ../gtk/gtkfontbutton.c:1152 ../gtk/inspector/gestures.c:127
-#: ../gtk/inspector/prop-editor.c:1201 ../gtk/inspector/size-groups.c:249
+#: ../gtk/inspector/prop-editor.c:1201 ../gtk/inspector/size-groups.c:251
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
 msgid "None"
 msgstr "Нет"
@@ -2320,7 +2319,7 @@ msgstr "Нет"
 msgid "Application menu"
 msgstr "Меню приложения"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8356
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8358
 msgid "Close"
 msgstr "Закрыть"
 
@@ -2329,7 +2328,7 @@ msgstr "Закрыть"
 msgid "Icon '%s' not present in theme"
 msgstr "Значок «%s» не присутствует в теме"
 
-#: ../gtk/gtkicontheme.c:4002 ../gtk/gtkicontheme.c:4369
+#: ../gtk/gtkicontheme.c:4003 ../gtk/gtkicontheme.c:4370
 msgid "Failed to load icon"
 msgstr "Не удалось загрузить значок"
 
@@ -2667,188 +2666,188 @@ msgstr "Устройства"
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: ../gtk/gtkplacessidebar.c:930
+#: ../gtk/gtkplacessidebar.c:934
 msgid "Recent"
 msgstr "Недавние"
 
-#: ../gtk/gtkplacessidebar.c:932
+#: ../gtk/gtkplacessidebar.c:936
 msgid "Recent files"
 msgstr "Недавние файлы"
 
-#: ../gtk/gtkplacessidebar.c:941
+#: ../gtk/gtkplacessidebar.c:945
 msgid "Home"
 msgstr "Домашняя папка"
 
-#: ../gtk/gtkplacessidebar.c:943
+#: ../gtk/gtkplacessidebar.c:947
 msgid "Open your personal folder"
 msgstr "Открыть личную папку"
 
-#: ../gtk/gtkplacessidebar.c:958
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of your desktop in a folder"
 msgstr "Открыть содержимое рабочего стола в папке"
 
-#: ../gtk/gtkplacessidebar.c:972
+#: ../gtk/gtkplacessidebar.c:976
 msgid "Enter Location"
 msgstr "Введите расположение"
 
-#: ../gtk/gtkplacessidebar.c:974
+#: ../gtk/gtkplacessidebar.c:978
 msgid "Manually enter a location"
 msgstr "Введите расположение вручную"
 
-#: ../gtk/gtkplacessidebar.c:985
+#: ../gtk/gtkplacessidebar.c:989
 msgid "Trash"
 msgstr "Корзина"
 
-#: ../gtk/gtkplacessidebar.c:987
+#: ../gtk/gtkplacessidebar.c:991
 msgid "Open the trash"
 msgstr "Открыть корзину"
 
-#: ../gtk/gtkplacessidebar.c:1050 ../gtk/gtkplacessidebar.c:1078
-#: ../gtk/gtkplacessidebar.c:1286
+#: ../gtk/gtkplacessidebar.c:1054 ../gtk/gtkplacessidebar.c:1082
+#: ../gtk/gtkplacessidebar.c:1290
 #, c-format
 msgid "Mount and open %s"
 msgstr "Смонтировать и открыть %s"
 
-#: ../gtk/gtkplacessidebar.c:1159
+#: ../gtk/gtkplacessidebar.c:1163
 msgid "Open the contents of the file system"
 msgstr "Открыть содержимое файловой системы"
 
-#: ../gtk/gtkplacessidebar.c:1249
+#: ../gtk/gtkplacessidebar.c:1253
 msgid "Network"
 msgstr "Сеть"
 
-#: ../gtk/gtkplacessidebar.c:1255
+#: ../gtk/gtkplacessidebar.c:1259
 msgid "Browse Network"
 msgstr "Обзор сети"
 
-#: ../gtk/gtkplacessidebar.c:1257
+#: ../gtk/gtkplacessidebar.c:1261
 msgid "Browse the contents of the network"
 msgstr "Обзор содержимого сети"
 
 # кнопка, вызывает диалоговое окно. перевод сокращен, иначе не влазит в строку
-#: ../gtk/gtkplacessidebar.c:1265
+#: ../gtk/gtkplacessidebar.c:1269
 msgid "Connect to Server"
 msgstr "Подключиться…"
 
-#: ../gtk/gtkplacessidebar.c:1267
+#: ../gtk/gtkplacessidebar.c:1271
 msgid "Connect to a network server address"
 msgstr "Подключение к серверу по сетевому адресу"
 
-#: ../gtk/gtkplacessidebar.c:1669
+#: ../gtk/gtkplacessidebar.c:1673
 msgid "New bookmark"
 msgstr "Создать закладку"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2226 ../gtk/gtkplacessidebar.c:3347
+#: ../gtk/gtkplacessidebar.c:2230 ../gtk/gtkplacessidebar.c:3351
 msgid "_Start"
 msgstr "_Запустить"
 
-#: ../gtk/gtkplacessidebar.c:2227 ../gtk/gtkplacessidebar.c:3354
+#: ../gtk/gtkplacessidebar.c:2231 ../gtk/gtkplacessidebar.c:3358
 msgid "_Stop"
 msgstr "_Остановить"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2234
+#: ../gtk/gtkplacessidebar.c:2238
 msgid "_Power On"
 msgstr "_Включить"
 
-#: ../gtk/gtkplacessidebar.c:2235
+#: ../gtk/gtkplacessidebar.c:2239
 msgid "_Safely Remove Drive"
 msgstr "_Безопасное извлечение устройства"
 
-#: ../gtk/gtkplacessidebar.c:2239
+#: ../gtk/gtkplacessidebar.c:2243
 msgid "_Connect Drive"
 msgstr "_Подключить диск"
 
-#: ../gtk/gtkplacessidebar.c:2240
+#: ../gtk/gtkplacessidebar.c:2244
 msgid "_Disconnect Drive"
 msgstr "О_тключить диск"
 
-#: ../gtk/gtkplacessidebar.c:2244
+#: ../gtk/gtkplacessidebar.c:2248
 msgid "_Start Multi-disk Device"
 msgstr "_Запустить многодисковое устройство"
 
-#: ../gtk/gtkplacessidebar.c:2245
+#: ../gtk/gtkplacessidebar.c:2249
 msgid "_Stop Multi-disk Device"
 msgstr "_Остановить многодисковое устройство"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2250
+#: ../gtk/gtkplacessidebar.c:2254
 msgid "_Unlock Drive"
 msgstr "_Разблокировать диск"
 
-#: ../gtk/gtkplacessidebar.c:2251
+#: ../gtk/gtkplacessidebar.c:2255
 msgid "_Lock Drive"
 msgstr "_Заблокировать диск"
 
-#: ../gtk/gtkplacessidebar.c:2280 ../gtk/gtkplacessidebar.c:3029
+#: ../gtk/gtkplacessidebar.c:2284 ../gtk/gtkplacessidebar.c:3033
 #, c-format
 msgid "Unable to start %s"
 msgstr "Не удалось запустить %s"
 
-#: ../gtk/gtkplacessidebar.c:2310
+#: ../gtk/gtkplacessidebar.c:2314
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Не удалось получить доступ к «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2620
+#: ../gtk/gtkplacessidebar.c:2624
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "Не удалось размонтировать %s"
 
-#: ../gtk/gtkplacessidebar.c:2746
+#: ../gtk/gtkplacessidebar.c:2750
 #, c-format
 msgid "Unable to stop %s"
 msgstr "Не удалось остановить %s"
 
-#: ../gtk/gtkplacessidebar.c:2775 ../gtk/gtkplacessidebar.c:2804
-#: ../gtk/gtkplacessidebar.c:2833
+#: ../gtk/gtkplacessidebar.c:2779 ../gtk/gtkplacessidebar.c:2808
+#: ../gtk/gtkplacessidebar.c:2837
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Не удалось извлечь %s"
 
-#: ../gtk/gtkplacessidebar.c:2979
+#: ../gtk/gtkplacessidebar.c:2983
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "Не удалось опросить %s об изменении носителей"
 
-#: ../gtk/gtkplacessidebar.c:3277
+#: ../gtk/gtkplacessidebar.c:3281
 msgid "Open in New _Tab"
 msgstr "Открыть в новой _вкладке"
 
-#: ../gtk/gtkplacessidebar.c:3286
+#: ../gtk/gtkplacessidebar.c:3290
 msgid "Open in New _Window"
 msgstr "Открыть в новом _окне"
 
-#: ../gtk/gtkplacessidebar.c:3295
+#: ../gtk/gtkplacessidebar.c:3299
 msgid "_Add Bookmark"
 msgstr "_Добавить в закладки"
 
-#: ../gtk/gtkplacessidebar.c:3301
+#: ../gtk/gtkplacessidebar.c:3305
 msgid "Remove"
 msgstr "Удалить"
 
-#: ../gtk/gtkplacessidebar.c:3308
+#: ../gtk/gtkplacessidebar.c:3312
 msgid "Rename…"
 msgstr "Переименовать…"
 
-#: ../gtk/gtkplacessidebar.c:3319
+#: ../gtk/gtkplacessidebar.c:3323
 msgid "_Mount"
 msgstr "_Монтировать"
 
-#: ../gtk/gtkplacessidebar.c:3326
+#: ../gtk/gtkplacessidebar.c:3330
 msgid "_Unmount"
 msgstr "_Размонтировать"
 
-#: ../gtk/gtkplacessidebar.c:3333
+#: ../gtk/gtkplacessidebar.c:3337
 msgid "_Eject"
 msgstr "_Извлечь"
 
-#: ../gtk/gtkplacessidebar.c:3340
+#: ../gtk/gtkplacessidebar.c:3344
 msgid "_Detect Media"
 msgstr "Определить _носитель"
 
-#: ../gtk/gtkplacessidebar.c:3946
+#: ../gtk/gtkplacessidebar.c:3953
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -2857,7 +2856,6 @@ msgid "Authentication"
 msgstr "Проверка доступа"
 
 #: ../gtk/gtkprintbackend.c:833
-#| msgid "Remember password until you _logout"
 msgid "_Remember password"
 msgstr "_Запомнить пароль"
 
@@ -3103,27 +3101,27 @@ msgstr "Не найден элемент для URI «%s»"
 msgid "Untitled filter"
 msgstr "Неозаглавленный фильтр"
 
-#: ../gtk/gtkrecentchooserdefault.c:1570
+#: ../gtk/gtkrecentchooserdefault.c:1564
 msgid "Could not remove item"
 msgstr "Не удалось удалить элемент"
 
-#: ../gtk/gtkrecentchooserdefault.c:1614
+#: ../gtk/gtkrecentchooserdefault.c:1608
 msgid "Could not clear list"
 msgstr "Не удалось очистить список"
 
-#: ../gtk/gtkrecentchooserdefault.c:1698
+#: ../gtk/gtkrecentchooserdefault.c:1692
 msgid "Copy _Location"
 msgstr "Копировать _адрес"
 
-#: ../gtk/gtkrecentchooserdefault.c:1709
+#: ../gtk/gtkrecentchooserdefault.c:1703
 msgid "_Remove From List"
 msgstr "_Удалить из списка"
 
-#: ../gtk/gtkrecentchooserdefault.c:1716
+#: ../gtk/gtkrecentchooserdefault.c:1710
 msgid "_Clear List"
 msgstr "О_чистить список"
 
-#: ../gtk/gtkrecentchooserdefault.c:1728
+#: ../gtk/gtkrecentchooserdefault.c:1722
 msgid "Show _Private Resources"
 msgstr "_Показать личные ресурсы"
 
@@ -3393,11 +3391,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11630
+#: ../gtk/gtkwindow.c:11632
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Хотите использовать инспектор GTK+?"
 
-#: ../gtk/gtkwindow.c:11632
+#: ../gtk/gtkwindow.c:11634
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3408,15 +3406,12 @@ msgstr ""
 "может привести к зависанию или аварийному завершению приложения."
 
 #: ../gtk/inspector/action-editor.c:281
-#| msgctxt "Action name"
-#| msgid "Activate"
 msgid "Activate"
 msgstr "Включить"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
 #: ../gtk/inspector/misc-info.ui.h:1
-#| msgid "Status"
 msgid "State"
 msgstr "Состояние"
 
@@ -3431,13 +3426,10 @@ msgid "Name"
 msgstr "Имя"
 
 #: ../gtk/inspector/actions.ui.h:3
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgid "Enabled"
 msgstr "Включён"
 
 #: ../gtk/inspector/actions.ui.h:4
-#| msgid "Paper Type"
 msgid "Parameter Type"
 msgstr "Тип параметры"
 
@@ -3450,12 +3442,10 @@ msgid "New class"
 msgstr "Создать класс"
 
 #: ../gtk/inspector/classes-list.c:126
-#| msgid "_Cancel"
 msgid "Cancel"
 msgstr "Отмена"
 
 #: ../gtk/inspector/classes-list.c:133
-#| msgid "Color _name:"
 msgid "Class name"
 msgstr "Имя класса"
 
@@ -3491,8 +3481,6 @@ msgid "Saving CSS failed"
 msgstr "Сбой при сохранении CSS"
 
 #: ../gtk/inspector/css-editor.c:196
-#| msgctxt "Stock label"
-#| msgid "_Save"
 msgid "_Save"
 msgstr "_Сохранить"
 
@@ -3511,7 +3499,6 @@ msgstr "Показать данные"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/general.ui.h:1
-#| msgid "GTK+ Options"
 msgid "GTK+ Version"
 msgstr "Версия GTK+"
 
@@ -3519,17 +3506,20 @@ msgstr "Версия GTK+"
 msgid "GDK Backend"
 msgstr "Движок GDK"
 
+# Этап передачи событий
 #: ../gtk/inspector/gestures.c:128
 msgid "Capture"
-msgstr ""
+msgstr "Нисходящий"
 
+# Этап передачи событий
 #: ../gtk/inspector/gestures.c:129
 msgid "Bubble"
-msgstr ""
+msgstr "Восходящий"
 
+# Этап передачи событий
 #: ../gtk/inspector/gestures.c:130 ../gtk/inspector/menu.ui.h:3
 msgid "Target"
-msgstr ""
+msgstr "Целевой"
 
 #: ../gtk/inspector/menu.c:90
 msgid "Unnamed section"
@@ -3537,12 +3527,10 @@ msgstr "Безымянный раздел"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/widget-tree.ui.h:3
-#| msgid "label"
 msgid "Label"
 msgstr "Метка"
 
 #: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1301
-#| msgid "Location"
 msgid "Action"
 msgstr "Действие"
 
@@ -3552,10 +3540,9 @@ msgstr "Значок"
 
 #: ../gtk/inspector/misc-info.ui.h:2
 msgid "Buildable ID"
-msgstr ""
+msgstr "Идентификатор"
 
 #: ../gtk/inspector/misc-info.ui.h:3
-#| msgid "Default Application"
 msgid "Default Widget"
 msgstr "Виджет по умолчанию"
 
@@ -3563,8 +3550,6 @@ msgstr "Виджет по умолчанию"
 #: ../gtk/inspector/prop-editor.c:1004 ../gtk/inspector/prop-editor.c:1184
 #: ../gtk/inspector/prop-editor.c:1309 ../gtk/inspector/prop-editor.c:1420
 #: ../gtk/inspector/window.ui.h:4
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Properties"
 msgstr "Свойства"
 
@@ -3572,22 +3557,24 @@ msgstr "Свойства"
 msgid "Focus Widget"
 msgstr "Фокусный виджет"
 
+#: ../gtk/inspector/misc-info.ui.h:7
+msgid "Allocated size"
+msgstr "Занимаемый размер"
+
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
 msgstr "Иерархия объектов"
 
 #: ../gtk/inspector/prop-editor.c:616
 #, c-format
-#| msgid "Printer"
 msgid "Pointer: %p"
 msgstr "Указатель: %p"
 
 #: ../gtk/inspector/prop-editor.c:631
-#, fuzzy
 #| msgid "Unknown"
 msgctxt "type name"
 msgid "Unknown"
-msgstr "Неизвестен"
+msgstr "Неизвестный тип"
 
 #: ../gtk/inspector/prop-editor.c:632
 #, c-format
@@ -3596,13 +3583,12 @@ msgstr "Объект: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1057
 #, c-format
-#| msgid "Unable to stop %s"
 msgid "Uneditable property type: %s"
 msgstr "Нередактируемое свойство: %s"
 
 #: ../gtk/inspector/prop-editor.c:1175
 msgid "Attribute mapping"
-msgstr ""
+msgstr "Соответствие атрибутов"
 
 #: ../gtk/inspector/prop-editor.c:1180
 msgid "Model:"
@@ -3614,44 +3600,43 @@ msgid "%p (%s)"
 msgstr "%p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1191
-#| msgid "Volume"
 msgid "Column:"
 msgstr "Столбец:"
 
 #: ../gtk/inspector/prop-editor.c:1305
 #, c-format
 msgid "Defined at: %p (%s)"
-msgstr ""
+msgstr "Определено в: %p (%s)"
 
+# Привязка свойств
 #: ../gtk/inspector/prop-editor.c:1369 ../gtk/inspector/prop-editor.c:1385
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Convert"
 msgid "inverted"
-msgstr "П_реобразовать"
+msgstr "обратная"
 
+# Привязка свойств
 #: ../gtk/inspector/prop-editor.c:1401
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "двунаправленная, обратная"
 
+# Привязка свойств
 #: ../gtk/inspector/prop-editor.c:1406 ../gtk/inspector/prop-editor.c:1502
 msgid "bidirectional"
-msgstr ""
+msgstr "двунаправленная"
 
+# Привязка свойств
 #: ../gtk/inspector/prop-editor.c:1411
 msgid "Binding:"
-msgstr ""
+msgstr "Привязка:"
 
 #: ../gtk/inspector/prop-editor.c:1521
-#| msgid "Starting %s"
 msgid "Setting:"
 msgstr "Параметр:"
 
 #. vim: set et:
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Property"
 msgstr "Свойство"
 
@@ -3666,10 +3651,9 @@ msgstr "Атрибут"
 
 #: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
 msgid "Defined At"
-msgstr ""
+msgstr "Определён в"
 
 #: ../gtk/inspector/resource-list.ui.h:1
-#| msgid "Up Path"
 msgid "Path"
 msgstr "Путь"
 
@@ -3678,18 +3662,15 @@ msgid "Type:"
 msgstr "Тип:"
 
 #: ../gtk/inspector/resource-list.ui.h:3
-#, fuzzy
 #| msgid "_Mount"
 msgid "Count:"
-msgstr "_Монтировать"
+msgstr "Счётчик:"
 
 #: ../gtk/inspector/resource-list.ui.h:4
-#| msgid "Size"
 msgid "Size:"
 msgstr "Размер:"
 
 #: ../gtk/inspector/signals-list.c:109
-#| msgid "_Yes"
 msgid "Yes"
 msgstr "Да"
 
@@ -3699,39 +3680,35 @@ msgid "Trace signal emissions on this object"
 msgstr "Трассировать сигналы этого объекта"
 
 #: ../gtk/inspector/signals-list.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgid "Clear log"
 msgstr "Очистить журнал"
 
 #: ../gtk/inspector/signals-list.ui.h:4
-#| msgid "Co_nnect"
 msgid "Connected"
 msgstr "Подключён"
 
 #: ../gtk/inspector/signals-list.ui.h:5
-#, fuzzy
 #| msgid "_Mount"
 msgid "Count"
-msgstr "_Монтировать"
+msgstr "Счётчик"
 
-#: ../gtk/inspector/size-groups.c:221
+#: ../gtk/inspector/size-groups.c:223
 msgid "Ignore hidden"
 msgstr "Игнорировать скрытые"
 
-#: ../gtk/inspector/size-groups.c:239
+#: ../gtk/inspector/size-groups.c:241
 msgid "Mode"
 msgstr "Режим"
 
-#: ../gtk/inspector/size-groups.c:250
+#: ../gtk/inspector/size-groups.c:252
 msgid "Horizontal"
 msgstr "Горизонтальный"
 
-#: ../gtk/inspector/size-groups.c:251
+#: ../gtk/inspector/size-groups.c:253
 msgid "Vertical"
 msgstr "Вертикальный"
 
-#: ../gtk/inspector/size-groups.c:252
+#: ../gtk/inspector/size-groups.c:254
 msgid "Both"
 msgstr "Оба"
 
@@ -3759,8 +3736,6 @@ msgid "GTK+ Theme"
 msgstr "Тема GTK+"
 
 #: ../gtk/inspector/visual.ui.h:2
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgid "Dark variant"
 msgstr "Тёмный вариант"
 
@@ -3777,12 +3752,10 @@ msgid "Text Direction"
 msgstr "Направление текста"
 
 #: ../gtk/inspector/visual.ui.h:6
-#| msgid "Left to right"
 msgid "Left-to-Right"
 msgstr "Слева направо"
 
 #: ../gtk/inspector/visual.ui.h:7
-#| msgid "Right to left"
 msgid "Right-to-Left"
 msgstr "Справа налево"
 
@@ -3791,38 +3764,34 @@ msgid "Window scaling"
 msgstr "Масштабирование окна"
 
 #: ../gtk/inspector/visual.ui.h:9
-#| msgid "Information"
 msgid "Animations"
 msgstr "Анимации"
 
 #: ../gtk/inspector/visual.ui.h:10
 msgid "Show Graphic Updates"
-msgstr ""
+msgstr "Показывать графические обновления"
 
 #: ../gtk/inspector/visual.ui.h:11
 msgid "Show Baselines"
-msgstr ""
+msgstr "Показывать базовые линии"
 
 #: ../gtk/inspector/visual.ui.h:12
 msgid "Show Pixel Cache"
-msgstr ""
+msgstr "Показывать пикселный кэш"
 
 #: ../gtk/inspector/visual.ui.h:13
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "Эмулировать сенсорный экран"
 
 #: ../gtk/inspector/widget-tree.ui.h:1
-#| msgid "_Eject"
 msgid "Object"
 msgstr "Объект"
 
 #: ../gtk/inspector/widget-tree.ui.h:4
-#| msgctxt "Action name"
-#| msgid "Press"
 msgid "Address"
 msgstr "Адрес"
 
-#: ../gtk/inspector/window.c:145
+#: ../gtk/inspector/window.c:143
 #, c-format
 msgid "GTK+ Inspector — %s"
 msgstr "Инспектор GTK+ — %s"
@@ -3830,10 +3799,9 @@ msgstr "Инспектор GTK+ — %s"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/window.ui.h:1
 msgid "Send Widget to Shell"
-msgstr ""
+msgstr "Отправить виджет в оболочку"
 
 #: ../gtk/inspector/window.ui.h:2
-#| msgid "Select a File"
 msgid "Select an Object"
 msgstr "Выбрать объект"
 
@@ -3849,13 +3817,10 @@ msgid "Signals"
 msgstr "Сигналы"
 
 #: ../gtk/inspector/window.ui.h:6
-#| msgid "Search"
 msgid "Hierarchy"
 msgstr "Иерархия"
 
 #: ../gtk/inspector/window.ui.h:7
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Child Properties"
 msgstr "Дочерние свойства"
 
@@ -3864,13 +3829,10 @@ msgid "CSS Classes"
 msgstr "CSS-классы"
 
 #: ../gtk/inspector/window.ui.h:9
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Style Properties"
 msgstr "Свойства стиля"
 
 #: ../gtk/inspector/window.ui.h:10 ../gtk/inspector/window.ui.h:18
-#| msgid "Custom"
 msgid "Custom CSS"
 msgstr "Собственный CSS"
 
@@ -3883,7 +3845,6 @@ msgid "Data"
 msgstr "Данные"
 
 #: ../gtk/inspector/window.ui.h:13
-#| msgid "Application"
 msgid "Actions"
 msgstr "Действия"
 
@@ -3892,18 +3853,16 @@ msgid "Gestures"
 msgstr "Жесты"
 
 #: ../gtk/inspector/window.ui.h:16
-#| msgid "_Eject"
 msgid "Objects"
 msgstr "Объекты"
 
 #: ../gtk/inspector/window.ui.h:17
-#| msgid "Paper _source:"
 msgid "Resources"
 msgstr "Ресурсы"
 
 #: ../gtk/inspector/window.ui.h:19
 msgid "Visual"
-msgstr ""
+msgstr "Внешний вид"
 
 #: ../gtk/inspector/window.ui.h:20
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
@@ -4798,7 +4757,6 @@ msgid "Don't include image data in the cache"
 msgstr "Не включать изображения в кэш"
 
 #: ../gtk/updateiconcache.c:1655
-#| msgid "Don't include image data in the cache"
 msgid "Include image data in the cache"
 msgstr "Включить изображения в кэш"
 
