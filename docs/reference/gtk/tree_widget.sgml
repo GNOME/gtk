@@ -164,7 +164,7 @@ tree = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
       </para>
       <para>
         Cell renderers are used to draw the data in the tree model in a
-        way.  There are a number of cell renderers that come with GTK+ 2.x,
+        way.  There are a number of cell renderers that come with GTK+,
         including the #GtkCellRendererText, #GtkCellRendererPixbuf and
         the #GtkCellRendererToggle.
         It is relatively easy to write a custom renderer.
