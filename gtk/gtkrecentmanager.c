@@ -919,7 +919,7 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
   if (!data->mime_type)
     {
       g_warning ("Attempting to add `%s' to the list of recently used "
-		 "resources, but not MIME type was defined",
+		 "resources, but no MIME type was defined",
 		 uri);
       return FALSE;
     }
