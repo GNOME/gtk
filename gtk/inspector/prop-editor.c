@@ -38,6 +38,7 @@
 #include "gtkradiobutton.h"
 #include "gtkscrolledwindow.h"
 #include "gtkspinbutton.h"
+#include "gtksettingsprivate.h"
 #include "gtktogglebutton.h"
 #include "gtkwidgetprivate.h"
 
@@ -1536,6 +1537,48 @@ add_settings_info (GtkInspectorPropEditor *editor)
 }
 
 static void
+add_gtk_settings_info (GtkInspectorPropEditor *editor)
+{
+  GObject *object;
+  const gchar *name;
+  GtkWidget *row;
+  GtkWidget *label;
+  const gchar *source;
+
+  object = editor->priv->object;
+  name = editor->priv->name;
+
+  if (!GTK_IS_SETTINGS (object))
+    return;
+
+  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Source:")));
+
+  switch (_gtk_settings_get_setting_source (GTK_SETTINGS (object), name))
+    {
+    case GTK_SETTINGS_SOURCE_DEFAULT:
+      source = _("Default");
+      break;
+    case GTK_SETTINGS_SOURCE_THEME:
+      source = _("Theme");
+      break;
+    case GTK_SETTINGS_SOURCE_XSETTING:
+      source = _("XSettings");
+      break;
+    case GTK_SETTINGS_SOURCE_APPLICATION:
+      source = _("Application");
+      break;
+    default:
+      source = _("Unknown");
+      break;
+    }
+  gtk_container_add (GTK_CONTAINER (row), gtk_label_new (source));
+
+  gtk_widget_show_all (row);
+  gtk_container_add (GTK_CONTAINER (editor), row);
+}
+
+static void
 constructed (GObject *object)
 {
   GtkInspectorPropEditor *editor = GTK_INSPECTOR_PROP_EDITOR (object);
@@ -1570,6 +1613,7 @@ constructed (GObject *object)
 
   add_binding_info (editor);
   add_settings_info (editor);
+  add_gtk_settings_info (editor);
 }
 
 static void
