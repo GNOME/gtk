@@ -120,14 +120,6 @@ struct _GtkSettingsPrivate
   GtkCssProvider *key_theme_provider;
 };
 
-typedef enum
-{
-  GTK_SETTINGS_SOURCE_DEFAULT,
-  GTK_SETTINGS_SOURCE_THEME,
-  GTK_SETTINGS_SOURCE_XSETTING,
-  GTK_SETTINGS_SOURCE_APPLICATION
-} GtkSettingsSource;
-
 struct _GtkSettingsValuePrivate
 {
   GtkSettingsValue public;
@@ -3212,4 +3204,33 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
  out:
   g_strfreev (keys);
   g_key_file_free (keyfile);
+}
+
+GtkSettingsSource
+_gtk_settings_get_setting_source (GtkSettings *settings,
+                                  const gchar *name)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+  GParamSpec *pspec;
+  GValue val = G_VALUE_INIT;
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
+  if (!pspec)
+    return GTK_SETTINGS_SOURCE_DEFAULT;
+
+  if (priv->property_values[pspec->param_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
+    return GTK_SETTINGS_SOURCE_APPLICATION;
+
+  /* We never actually store GTK_SETTINGS_SOURCE_XSETTING as a source
+   * value in the property_values array - we just try to load the xsetting,
+   * and use it when available. Do the same here.
+   */
+  g_value_init (&val, G_TYPE_STRING);
+  if (gdk_screen_get_setting (priv->screen, pspec->name, &val))
+    {
+      g_value_unset (&val);
+      return GTK_SETTINGS_SOURCE_XSETTING; 
+    }
+
+  return priv->property_values[pspec->param_id - 1].source;  
 }

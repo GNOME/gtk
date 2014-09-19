@@ -40,6 +40,16 @@ gboolean            _gtk_settings_parse_convert              (GtkRcPropertyParse
 GdkScreen          *_gtk_settings_get_screen                 (GtkSettings            *settings);
 GtkStyleCascade    *_gtk_settings_get_style_cascade          (GtkSettings            *settings);
 
+typedef enum
+{
+  GTK_SETTINGS_SOURCE_DEFAULT,
+  GTK_SETTINGS_SOURCE_THEME,
+  GTK_SETTINGS_SOURCE_XSETTING,
+  GTK_SETTINGS_SOURCE_APPLICATION
+} GtkSettingsSource;
+
+GtkSettingsSource  _gtk_settings_get_setting_source (GtkSettings *settings,
+                                                     const gchar *name);
 
 G_END_DECLS
 
