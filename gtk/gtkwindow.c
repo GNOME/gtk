@@ -11703,7 +11703,8 @@ inspector_keybinding_enabled (gboolean *warn)
 
   schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
                                             "org.gtk.Settings.Debug",
-                                            FALSE);
+                                            TRUE);
+
   if (schema)
     {
       settings = g_settings_new_full (schema, NULL, NULL);
