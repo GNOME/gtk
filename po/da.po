@@ -36,8 +36,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-18 19:44+0200\n"
-"PO-Revision-Date: 2014-09-18 01:53+0200\n"
+"POT-Creation-Date: 2014-09-20 10:05+0200\n"
+"PO-Revision-Date: 2014-09-19 01:54+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Dansk <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -1197,7 +1197,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11637
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11652
 #: ../gtk/inspector/css-editor.c:195
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1253,7 +1253,7 @@ msgstr "_Anvend"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11638 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11653 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_O.k."
 
@@ -1390,7 +1390,7 @@ msgstr "Tom"
 
 #: ../gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr "Udskriv til dette katalog frem for arbejdskataloget, cwd"
+msgstr "Skriv til dette katalog frem for arbejdskataloget, cwd"
 
 #: ../gtk/encodesymbolic.c:266
 #, c-format
@@ -2341,7 +2341,7 @@ msgstr "Ingen"
 msgid "Application menu"
 msgstr "Programmenu"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8358
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8373
 msgid "Close"
 msgstr "Luk"
 
@@ -3421,11 +3421,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11632
+#: ../gtk/gtkwindow.c:11647
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vil du bruge GTK+-inspektøren?"
 
-#: ../gtk/gtkwindow.c:11634
+#: ../gtk/gtkwindow.c:11649
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
