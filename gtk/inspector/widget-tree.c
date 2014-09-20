@@ -165,6 +165,8 @@ gtk_inspector_widget_tree_finalize (GObject *object)
   GtkInspectorWidgetTree *wt = GTK_INSPECTOR_WIDGET_TREE (object);
   guint signal_id;
 
+  g_hash_table_unref (wt->priv->iters);
+
   signal_id = g_signal_lookup ("map", GTK_TYPE_WIDGET);
   g_signal_remove_emission_hook (signal_id, wt->priv->map_hook);
   signal_id = g_signal_lookup ("unmap", GTK_TYPE_WIDGET);
