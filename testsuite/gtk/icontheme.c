@@ -669,6 +669,35 @@ test_async (void)
   g_assert (loaded == 2);
 }
 
+static void
+test_inherit (void)
+{
+  assert_icon_lookup ("one-two-three",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      "/icons/scalable/one-two.svg");
+  assert_icon_lookup ("one-two-three",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_RTL,
+                      "/icons/scalable/one-two-rtl.svg");
+  assert_icon_lookup ("one-two-three-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      "/icons2/scalable/one-two-three-symbolic.svg");
+  assert_icon_lookup ("one-two-three-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_RTL,
+                      "/icons2/scalable/one-two-three-symbolic.svg");
+  assert_icon_lookup ("one-two-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      "/icons2/scalable/one-two-symbolic.svg");
+  assert_icon_lookup ("one-two-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_RTL,
+                      "/icons2/scalable/one-two-symbolic-rtl.svg");
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -686,6 +715,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/builtin", test_builtin);
   g_test_add_func ("/icontheme/list", test_list);
   g_test_add_func ("/icontheme/async", test_async);
+  g_test_add_func ("/icontheme/inherit", test_inherit);
 
   return g_test_run();
 }

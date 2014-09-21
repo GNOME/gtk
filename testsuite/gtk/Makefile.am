@@ -152,6 +152,12 @@ test_icontheme =					\
 	icons/16-22/size-test.png			\
 	icons/25+/size-test.svg				\
 	icons/35+/size-test.svg				\
+	icons/scalable/one-two.svg			\
+	icons/scalable/one-two-rtl.svg			\
+	icons2/scalable/one-two-three-symbolic.svg	\
+	icons2/scalable/one-two-symbolic.svg		\
+	icons2/scalable/one-two-symbolic-rtl.svg	\
+	icons2/index.theme				\
 	$(NULL)
 
 EXTRA_DIST +=				\

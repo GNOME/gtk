@@ -2,6 +2,7 @@
 Name=Icons
 Comment=Testing of the Icon theme code
 Example=16x16/simple.png
+Inherits=icons2
 
 Directories=16x16,16x16s,32x32,32x32s,scalable,15,16-22,25+,35+
 
