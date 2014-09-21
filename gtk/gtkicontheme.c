@@ -1698,18 +1698,20 @@ real_choose_icon (GtkIconTheme       *icon_theme,
             for (i = 0; icon_names[i]; i++)
               g_print ("\tlookup name: %s\n", icon_names[i]));
 
-  /* for symbolic icons, do a search in all registered themes first;
+  /* For symbolic icons, do a search in all registered themes first;
    * a theme that inherits them from a parent theme might provide
    * an alternative full-color version, but still expect the symbolic icon
    * to show up instead.
+   *
+   * In other words: We prefer symbolic icons in inherited themes over
+   * generic icons in the theme.
    */
-  if (icon_names[0] &&
-      icon_name_is_symbolic (icon_names[0]))
+  for (l = priv->themes; l; l = l->next)
     {
-      for (l = priv->themes; l; l = l->next)
+      theme = l->data;
+      for (i = 0; icon_names[i] && icon_name_is_symbolic (icon_names[i]); i++)
         {
-          theme = l->data;
-          icon_name = icon_names[0];
+          icon_name = icon_names[i];
           icon_info = theme_lookup_icon (theme, icon_name, size, scale, allow_svg, use_builtin);
           if (icon_info)
             goto out;
