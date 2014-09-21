@@ -1,3 +1,39 @@
+Overview of Changes in GTK+ 3.13.9 to 3.14.0
+============================================
+
+* GtkMisc::xalign has been undeprecated for now, it is still needed
+
+* GtkIconView
+ - Always draw cell background
+ - Fix handling of prelight items
+
+* GtkWindow
+ - Fix growing nautilus windows
+
+* Bugs fixed:
+ 736338 GTK+ reftests can't be built on W32
+ 736622 Better mark GtkAlignment as deprecated
+ 736927 Reference documentation refers to GTK 2
+ 737000 Some icon themes broken on 3.13.92
+ 737026 gtkinspector crashes app when selecting 'cancel' on initial prompt
+ 737027 gtkinspector doesn't run if custom GSETTINGS_SCHEMA_DIR specified 
+
+* Translation updates:
+ Bengali (India)
+ Catalan
+ Catalan (Valencian)
+ Danish
+ German
+ Greek
+ Hebrew
+ Hindi
+ Hungarian
+ Marathi
+ Russian
+ Slovak
+ Swedish
+
+
 Overview of Changes in GTK+ 3.13.8 to 3.13.9
 ============================================
 
