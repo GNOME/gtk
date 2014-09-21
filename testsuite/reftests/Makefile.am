@@ -34,6 +34,8 @@ gtk_reftest_SOURCES = \
 	reftest-compare.h		\
 	reftest-module.c		\
 	reftest-module.h		\
+	reftest-snapshot.c		\
+	reftest-snapshot.h		\
 	gtk-reftest.c			\
 	gtk-reftest.h
 

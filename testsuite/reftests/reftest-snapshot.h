@@ -15,15 +15,15 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_REFTEST_H__
-#define __GTK_REFTEST_H__
+#ifndef __REFTEST_SNAPSHOT_H__
+#define __REFTEST_SNAPSHOT_H__
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-/* reftest-snapshot.c */
-void reftest_inhibit_snapshot   (void);
-void reftest_uninhibit_snapshot (void);
+cairo_surface_t *       reftest_snapshot_ui_file                (const char     *ui_file);
 
 G_END_DECLS
 
-#endif /* __GTK_REFTEST_H__ */
+#endif /* __REFTEST_SNAPSHOT_H__ */
