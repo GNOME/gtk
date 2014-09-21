@@ -23,19 +23,35 @@ gtk_reftest_CFLAGS = \
 	$(NULL)
 
 gtk_reftest_LDADD = \
+	libgtkreftestprivate.la		\
 	$(top_builddir)/gdk/libgdk-3.la \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)			\
 	$(GMODULE_LIBS)			\
 	$(NULL)
 
-gtk_reftest_SOURCES = \
+noinst_LTLIBRARIES =		\
+	libgtkreftestprivate.la	\
+	$(NULL)
+
+libgtkreftestprivate_la_CFLAGS = $(gtk_reftest_CFLAGS)
+libgtkreftestprivate_la_LIBADD =	\
+	$(top_builddir)/gdk/libgdk-3.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(GTK_DEP_LIBS)			\
+	$(GMODULE_LIBS)			\
+	$(NULL)
+
+libgtkreftestprivate_la_SOURCES =	\
 	reftest-compare.c		\
 	reftest-compare.h		\
 	reftest-module.c		\
 	reftest-module.h		\
 	reftest-snapshot.c		\
 	reftest-snapshot.h		\
+	$(NULL)
+
+gtk_reftest_SOURCES = \
 	gtk-reftest.c			\
 	gtk-reftest.h
 
@@ -437,7 +453,7 @@ DISTCLEANFILES = $(built_tests)
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = $(built_tests)
 else
-noinst_LTLIBRARIES =			\
+noinst_LTLIBRARIES +=			\
 	libreftest.la			\
 	$(NULL)
 
