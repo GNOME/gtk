@@ -1700,7 +1700,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
 
   /* for symbolic icons, do a search in all registered themes first;
    * a theme that inherits them from a parent theme might provide
-   * an alternative highcolor version, but still expect the symbolic icon
+   * an alternative full-color version, but still expect the symbolic icon
    * to show up instead.
    */
   if (icon_names[0] &&
