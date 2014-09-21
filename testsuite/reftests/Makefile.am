@@ -30,6 +30,8 @@ gtk_reftest_LDADD = \
 	$(NULL)
 
 gtk_reftest_SOURCES = \
+	reftest-compare.c		\
+	reftest-compare.h		\
 	reftest-module.c		\
 	reftest-module.h		\
 	gtk-reftest.c			\
