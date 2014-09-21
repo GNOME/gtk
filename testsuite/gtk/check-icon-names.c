@@ -164,8 +164,13 @@ main (int argc, char *argv[])
 {
   guint i;
   char *test_name;
+  char *theme;
 
   gtk_test_init (&argc, &argv);
+
+  g_object_get (gtk_settings_get_default (), "gtk-icon-theme-name", &theme, NULL);
+  g_test_message ("Testing icon theme: %s", theme);
+  g_free (theme);
 
   for (i = 0; i < G_N_ELEMENTS (icon_names); i++)
     {
