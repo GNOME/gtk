@@ -464,7 +464,7 @@ Overview of Changes in GTK+ 3.13.2 to 3.13.3
 
 * Bugs fixed:
  721895	Remove GtkIconCache
-729820	GMenuModel submenu-action set 'false' before item activation
+ 729820	GMenuModel submenu-action set 'false' before item activation
  730615	a11y private library not included in GIR
  730745	Port annotations from Vala
  730767	Tab that's being dragged is not updated
