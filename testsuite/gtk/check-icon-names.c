@@ -7,13 +7,13 @@ static char *icon_names[] = {
   "dialog-information",
   "dialog-question",
   "dialog-warning",
-  /* "gtk-dnd", */
-  /* "gtk-dnd-multiple", */
-  /* "gtk-apply", */
-  /* "gtk-cancel", */
-  /* "gtk-no", */
-  /* "gtk-ok", */
-  /* "gtk-yes", */
+  "gtk-dnd", /* internal icon */
+  "gtk-dnd-multiple", /* internal icon */
+  "gtk-apply", /* deprecated stock id */
+  "gtk-cancel", /* deprecated stock id */
+  "gtk-no", /* deprecated stock id */
+  "gtk-ok", /* deprecated stock id */
+  "gtk-yes", /* deprecated stock id */
   "window-close",
   "list-add",
   "format-justify-center",
@@ -22,14 +22,14 @@ static char *icon_names[] = {
   "format-justify-right",
   "go-bottom",
   "media-optical",
-  /* "gtk-convert", */
+  "gtk-convert", /* deprecated stock id */
   "edit-copy",
   "edit-cut",
   "go-down",
   "system-run",
   "application-exit",
   "go-first",
-  /* "gtk-select-font", */
+  "gtk-select-font", /* deprecated stock id */
   "view-fullscreen",
   "view-restore",
   "drive-harddisk",
@@ -43,17 +43,17 @@ static char *icon_names[] = {
   "network-idle",
   "document-new",
   "document-open",
-  /* "gtk-orientation-portrait", */
-  /* "gtk-orientation-landscape", */
-  /* "gtk-orientation-reverse-portrait", */
-  /* "gtk-orientation-reverse-landscape", */
-  /* "gtk-page-setup", */
+  "gtk-orientation-portrait", /* internal icon */
+  "gtk-orientation-landscape", /* internal icon */
+  "gtk-orientation-reverse-portrait", /* internal icon */
+  "gtk-orientation-reverse-landscape", /* internal icon */
+  "gtk-page-setup", /* internal icon */
   "edit-paste",
-  /* "gtk-preferences", */
+  "gtk-preferences", /* deprecated stock id */
   "document-print",
+  "document-print-preview",
   "printer-error",
   /* "printer-paused", */
-  "document-print-preview",
   /* "printer-info", */
   /* "printer-warning", */
   "document-properties",
@@ -79,16 +79,16 @@ static char *icon_names[] = {
   "format-indent-less",
   "go-top",
   "edit-delete",
-  /* "gtk-undelete", */
+  "gtk-undelete", /* deprecated stock id */
   "edit-undo",
   "go-up",
   "text-x-generic",
   "folder",
   "help-about",
-  /* "gtk-connect", */
-  /* "gtk-disconnect", */
-  /* "gtk-edit", */
-  /* "gtk-caps-lock-warning", */
+  "gtk-connect", /* deprecated stock id */
+  "gtk-disconnect", /* deprecated stock id */
+  "gtk-edit", /* deprecated stock id */
+  "gtk-caps-lock-warning", /* internal icon */
   "media-seek-forward",
   "media-skip-forward",
   "media-playback-pause",
@@ -97,15 +97,15 @@ static char *icon_names[] = {
   "media-record",
   "media-seek-backward",
   "media-playback-stop",
-  /* "gtk-index", */
+  "gtk-index", /* deprecated stock id */
   "zoom-original",
   "zoom-in",
   "zoom-out",
   "zoom-fit-best",
   "edit-select-all",
   "edit-clear",
-  /* "gtk-select-color", */
-  /* "gtk-color-picker" */
+  "gtk-select-color", /* deprecated stock id */
+  "gtk-color-picker", /* deprecated stock id */
 
   /*** Icons used in code or templates, sorted alphabetically ***/
   "audio-volume-high",
@@ -148,7 +148,7 @@ test_icon_existence (gconstpointer icon_name)
    * icon theme.
    * The icon size is randomly chosen.
    */
-  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), icon_name, 16, 0);
+  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), icon_name, 16, GTK_ICON_LOOKUP_DIR_LTR);
   if (info == NULL)
     {
       g_test_message ("Failed to look up icon for \"%s\"", (char *) icon_name);
