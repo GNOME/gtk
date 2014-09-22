@@ -22,6 +22,7 @@
 
 #include "reftest-compare.h"
 #include "reftest-module.h"
+#include "reftest-snapshot.h"
 
 #include <string.h>
 #include <glib/gstdio.h>
