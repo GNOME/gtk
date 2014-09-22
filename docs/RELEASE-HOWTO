@@ -49,10 +49,10 @@ Make sure that gtk-doc is the latest released version.
     * forgotten source files
     * new symbols missing from .symbols files
     * symbols that are exported by should be private (static or _-prefixed)
-    * symbols that cause PLT entries. This is either caused by using
-      a in the same library function without including the header or by
-      using a function from a different library, which is not yet allowed
-      by the filter in pltcheck.sh
+    * symbols that cause PLT entries. This is either caused by using a function
+      in the same library function without including the header or by using a
+      function from a different library, which is not yet allowed by the filter
+      in pltcheck.sh
 
  7) If this is a devel release, make sure that the docs for new symbols
     are in good shape. Look at the -unused.txt files and add stuff found
