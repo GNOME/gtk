@@ -30,11 +30,19 @@ gtk_reftest_LDADD = \
 	$(GMODULE_LIBS)			\
 	$(NULL)
 
+if PLATFORM_WIN32
+noinst_LTLIBRARIES =
+lib_LTLIBRARIES =		\
+	libgtkreftestprivate.la	\
+	$(NULL)
+else
 noinst_LTLIBRARIES =		\
 	libgtkreftestprivate.la	\
 	$(NULL)
+endif
 
 libgtkreftestprivate_la_CFLAGS = $(gtk_reftest_CFLAGS)
+libgtkreftestprivate_la_LDLAGS = $(no_undefined)
 libgtkreftestprivate_la_LIBADD =	\
 	$(top_builddir)/gdk/libgdk-3.la \
 	$(top_builddir)/gtk/libgtk-3.la \
