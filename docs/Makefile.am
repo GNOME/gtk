@@ -8,8 +8,6 @@ EXTRA_DIST += \
 	developers.txt			\
 	dnd_internals.txt		\
 	focus_tracking.txt		\
-	gtkdocs_fix			\
-	make-todo			\
 	RELEASE-HOWTO			\
 	sizing-test.txt			\
 	styles.txt			\
