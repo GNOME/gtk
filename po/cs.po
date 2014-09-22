@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-08 09:03+0000\n"
-"PO-Revision-Date: 2014-03-23 16:38+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-09-22 09:04+0000\n"
+"PO-Revision-Date: 2014-09-22 16:42+0200\n"
 "Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1170,7 +1170,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11637
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11652
 #: ../gtk/inspector/css-editor.c:195
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1225,7 +1225,7 @@ msgstr "_Použít"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11638 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11653 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -1362,13 +1362,13 @@ msgstr "Prázdný"
 
 #: ../gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr ""
+msgstr "Výstup do tohoto adresáře namísto cwd"
 
 #: ../gtk/encodesymbolic.c:266
-#, fuzzy, c-format
+#, c-format
 #| msgid "Invalid file name"
 msgid "Invalid size %s\n"
-msgstr "Neplatný název souboru"
+msgstr "Neplatná velikost %s\n"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -2110,7 +2110,7 @@ msgstr "Funkce Caps Lock je zapnuta"
 msgid "Select a File"
 msgstr "Vyberte soubor"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:956
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:960
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
@@ -2119,7 +2119,7 @@ msgstr "Pracovní plocha"
 msgid "(None)"
 msgstr "(žádný)"
 
-#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3269
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3273
 msgid "_Open"
 msgstr "_Otevřít"
 
@@ -2312,16 +2312,16 @@ msgstr "Žádné"
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8358
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8373
 msgid "Close"
 msgstr "Zavřít"
 
-#: ../gtk/gtkicontheme.c:2306 ../gtk/gtkicontheme.c:2370
+#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "V motivu není obsažena ikona „%s“"
 
-#: ../gtk/gtkicontheme.c:4003 ../gtk/gtkicontheme.c:4370
+#: ../gtk/gtkicontheme.c:4005 ../gtk/gtkicontheme.c:4372
 msgid "Failed to load icon"
 msgstr "Nelze načíst ikonu"
 
@@ -2660,189 +2660,188 @@ msgstr "Zařízení"
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: ../gtk/gtkplacessidebar.c:930
+#: ../gtk/gtkplacessidebar.c:934
 msgid "Recent"
 msgstr "Naposledy použité"
 
-#: ../gtk/gtkplacessidebar.c:932
+#: ../gtk/gtkplacessidebar.c:936
 msgid "Recent files"
 msgstr "Naposledy použité soubory"
 
-#: ../gtk/gtkplacessidebar.c:941
+#: ../gtk/gtkplacessidebar.c:945
 msgid "Home"
 msgstr "Domů"
 
-#: ../gtk/gtkplacessidebar.c:943
+#: ../gtk/gtkplacessidebar.c:947
 msgid "Open your personal folder"
 msgstr "Otevřít osobní složku"
 
-#: ../gtk/gtkplacessidebar.c:958
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of your desktop in a folder"
 msgstr "Otevřít obsah vaší plochy ve složce"
 
-#: ../gtk/gtkplacessidebar.c:972
-#, fuzzy
+#: ../gtk/gtkplacessidebar.c:976
 #| msgid "Location"
 msgid "Enter Location"
-msgstr "Umístění"
+msgstr "Zadat umístění"
 
-#: ../gtk/gtkplacessidebar.c:974
+#: ../gtk/gtkplacessidebar.c:978
 msgid "Manually enter a location"
-msgstr ""
+msgstr "Vložit umístění ručně"
 
-#: ../gtk/gtkplacessidebar.c:985
+#: ../gtk/gtkplacessidebar.c:989
 msgid "Trash"
 msgstr "Koš"
 
-#: ../gtk/gtkplacessidebar.c:987
+#: ../gtk/gtkplacessidebar.c:991
 msgid "Open the trash"
 msgstr "Otevřít koš"
 
-#: ../gtk/gtkplacessidebar.c:1050 ../gtk/gtkplacessidebar.c:1078
-#: ../gtk/gtkplacessidebar.c:1286
+#: ../gtk/gtkplacessidebar.c:1054 ../gtk/gtkplacessidebar.c:1082
+#: ../gtk/gtkplacessidebar.c:1290
 #, c-format
 msgid "Mount and open %s"
 msgstr "Připojit a otevřít %s"
 
-#: ../gtk/gtkplacessidebar.c:1159
+#: ../gtk/gtkplacessidebar.c:1163
 msgid "Open the contents of the file system"
 msgstr "Otevřít obsah systému souborů"
 
-#: ../gtk/gtkplacessidebar.c:1249
+#: ../gtk/gtkplacessidebar.c:1253
 msgid "Network"
 msgstr "Síť"
 
-#: ../gtk/gtkplacessidebar.c:1255
+#: ../gtk/gtkplacessidebar.c:1259
 msgid "Browse Network"
 msgstr "Procházet síť"
 
-#: ../gtk/gtkplacessidebar.c:1257
+#: ../gtk/gtkplacessidebar.c:1261
 msgid "Browse the contents of the network"
 msgstr "Procházet obsah na síti"
 
-#: ../gtk/gtkplacessidebar.c:1265
+#: ../gtk/gtkplacessidebar.c:1269
 msgid "Connect to Server"
 msgstr "Připojit k serveru"
 
-#: ../gtk/gtkplacessidebar.c:1267
+#: ../gtk/gtkplacessidebar.c:1271
 msgid "Connect to a network server address"
 msgstr "Připojit k síťové adrese serveru"
 
-#: ../gtk/gtkplacessidebar.c:1669
+#: ../gtk/gtkplacessidebar.c:1673
 msgid "New bookmark"
 msgstr "Nová záložka"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2226 ../gtk/gtkplacessidebar.c:3347
+#: ../gtk/gtkplacessidebar.c:2230 ../gtk/gtkplacessidebar.c:3351
 msgid "_Start"
 msgstr "_Spustit"
 
-#: ../gtk/gtkplacessidebar.c:2227 ../gtk/gtkplacessidebar.c:3354
+#: ../gtk/gtkplacessidebar.c:2231 ../gtk/gtkplacessidebar.c:3358
 msgid "_Stop"
 msgstr "_Zastavit"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2234
+#: ../gtk/gtkplacessidebar.c:2238
 msgid "_Power On"
 msgstr "_Zapnout"
 
-#: ../gtk/gtkplacessidebar.c:2235
+#: ../gtk/gtkplacessidebar.c:2239
 msgid "_Safely Remove Drive"
 msgstr "_Bezpečně odebrat jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2239
+#: ../gtk/gtkplacessidebar.c:2243
 msgid "_Connect Drive"
 msgstr "_Připojit jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2240
+#: ../gtk/gtkplacessidebar.c:2244
 msgid "_Disconnect Drive"
 msgstr "_Odpojit jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2244
+#: ../gtk/gtkplacessidebar.c:2248
 msgid "_Start Multi-disk Device"
 msgstr "_Spustit zařízení s více disky"
 
-#: ../gtk/gtkplacessidebar.c:2245
+#: ../gtk/gtkplacessidebar.c:2249
 msgid "_Stop Multi-disk Device"
 msgstr "_Zastavit zařízení s více disky"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2250
+#: ../gtk/gtkplacessidebar.c:2254
 msgid "_Unlock Drive"
 msgstr "_Odemknout jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2251
+#: ../gtk/gtkplacessidebar.c:2255
 msgid "_Lock Drive"
 msgstr "_Uzamknout jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2280 ../gtk/gtkplacessidebar.c:3029
+#: ../gtk/gtkplacessidebar.c:2284 ../gtk/gtkplacessidebar.c:3033
 #, c-format
 msgid "Unable to start %s"
 msgstr "Nezdařilo se spustit %s"
 
-#: ../gtk/gtkplacessidebar.c:2310
+#: ../gtk/gtkplacessidebar.c:2314
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Nezdařilo se přistoupit k „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2620
+#: ../gtk/gtkplacessidebar.c:2624
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "Nezdařilo se odpojit %s"
 
-#: ../gtk/gtkplacessidebar.c:2746
+#: ../gtk/gtkplacessidebar.c:2750
 #, c-format
 msgid "Unable to stop %s"
 msgstr "Nezdařilo se zastavit %s"
 
-#: ../gtk/gtkplacessidebar.c:2775 ../gtk/gtkplacessidebar.c:2804
-#: ../gtk/gtkplacessidebar.c:2833
+#: ../gtk/gtkplacessidebar.c:2779 ../gtk/gtkplacessidebar.c:2808
+#: ../gtk/gtkplacessidebar.c:2837
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nezdařilo se vysunout %s"
 
-#: ../gtk/gtkplacessidebar.c:2979
+#: ../gtk/gtkplacessidebar.c:2983
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "Nezdařilo se zkontrolovat %s na změnu média"
 
-#: ../gtk/gtkplacessidebar.c:3277
+#: ../gtk/gtkplacessidebar.c:3281
 msgid "Open in New _Tab"
 msgstr "Otevřít v nové kar_tě"
 
-#: ../gtk/gtkplacessidebar.c:3286
+#: ../gtk/gtkplacessidebar.c:3290
 msgid "Open in New _Window"
 msgstr "Otevřít v no_vém okně"
 
-#: ../gtk/gtkplacessidebar.c:3295
+#: ../gtk/gtkplacessidebar.c:3299
 msgid "_Add Bookmark"
 msgstr "_Přidat záložku"
 
-#: ../gtk/gtkplacessidebar.c:3301
+#: ../gtk/gtkplacessidebar.c:3305
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../gtk/gtkplacessidebar.c:3308
+#: ../gtk/gtkplacessidebar.c:3312
 msgid "Rename…"
 msgstr "Přejmenovat…"
 
-#: ../gtk/gtkplacessidebar.c:3319
+#: ../gtk/gtkplacessidebar.c:3323
 msgid "_Mount"
 msgstr "_Připojit"
 
-#: ../gtk/gtkplacessidebar.c:3326
+#: ../gtk/gtkplacessidebar.c:3330
 msgid "_Unmount"
 msgstr "_Odpojit"
 
-#: ../gtk/gtkplacessidebar.c:3333
+#: ../gtk/gtkplacessidebar.c:3337
 msgid "_Eject"
 msgstr "V_ysunout"
 
-#: ../gtk/gtkplacessidebar.c:3340
+#: ../gtk/gtkplacessidebar.c:3344
 msgid "_Detect Media"
 msgstr "_Rozpoznat médium"
 
-#: ../gtk/gtkplacessidebar.c:3946
+#: ../gtk/gtkplacessidebar.c:3953
 msgid "Computer"
 msgstr "Počítač"
 
@@ -2851,10 +2850,9 @@ msgid "Authentication"
 msgstr "Ověření"
 
 #: ../gtk/gtkprintbackend.c:833
-#, fuzzy
 #| msgid "Remember password until you _logout"
 msgid "_Remember password"
-msgstr "Pamat_ovat si heslo až do odhlášení"
+msgstr "Pamat_ovat si heslo"
 
 #: ../gtk/gtkprinteroptionwidget.c:542
 msgid "Select a filename"
@@ -3384,19 +3382,21 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11632
+#: ../gtk/gtkwindow.c:11647
 msgid "Do you want to use GTK+ Inspector?"
-msgstr ""
+msgstr "Chcete použít GTK+ Inspector?"
 
-#: ../gtk/gtkwindow.c:11634
+#: ../gtk/gtkwindow.c:11649
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
+"GTK+ Inspektor je interaktivní ladicí program, který umožňuje prozkoumat a "
+"změnit vnitřní strukturu jakékoliv aplikace GTK+. Použití tohoto programu "
+"může vést k přerušení běhu nebo pádu aplikace."
 
 #: ../gtk/inspector/action-editor.c:281
-#, fuzzy
 #| msgctxt "Action name"
 #| msgid "Activate"
 msgid "Activate"
@@ -3405,14 +3405,13 @@ msgstr "Aktivovat"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
 #: ../gtk/inspector/misc-info.ui.h:1
-#, fuzzy
 #| msgid "Status"
 msgid "State"
 msgstr "Stav"
 
 #: ../gtk/inspector/actions.ui.h:1 ../gtk/inspector/general.ui.h:3
 msgid "Prefix"
-msgstr ""
+msgstr "Předpona"
 
 #: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
 #: ../gtk/inspector/signals-list.ui.h:3 ../gtk/inspector/widget-tree.ui.h:2
@@ -3421,50 +3420,46 @@ msgid "Name"
 msgstr "Název"
 
 #: ../gtk/inspector/actions.ui.h:3
-#, fuzzy
 #| msgctxt "Accelerator"
 #| msgid "Disabled"
 msgid "Enabled"
-msgstr "Vypnuto"
+msgstr "Zapnuto"
 
 #: ../gtk/inspector/actions.ui.h:4
-#, fuzzy
 #| msgid "Paper Type"
 msgid "Parameter Type"
-msgstr "Typ papíru"
+msgstr "Typ parametru"
 
 #: ../gtk/inspector/button-path.ui.h:1
 msgid "Choose a widget through the inspector"
-msgstr ""
+msgstr "Vybrat widget přes Inspector"
 
 #: ../gtk/inspector/classes-list.c:122
 msgid "New class"
-msgstr ""
+msgstr "Nová třída"
 
 #: ../gtk/inspector/classes-list.c:126
-#, fuzzy
 #| msgid "_Cancel"
 msgid "Cancel"
-msgstr "_Zrušit"
+msgstr "Zrušit"
 
 #: ../gtk/inspector/classes-list.c:133
-#, fuzzy
 #| msgid "Color _name:"
 msgid "Class name"
-msgstr "_Název barvy:"
+msgstr "Název třídy"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/classes-list.ui.h:1
 msgid "Add a class"
-msgstr ""
+msgstr "Přidat třídu"
 
 #: ../gtk/inspector/classes-list.ui.h:2
 msgid "Restore defaults for this widget"
-msgstr ""
+msgstr "Obnovit výchozí hodnoty pro tento widget"
 
 #: ../gtk/inspector/css-editor.c:86 ../gtk/inspector/css-editor.c:92
 msgid "You can type here any CSS rule recognized by GTK+."
-msgstr ""
+msgstr "Zde můžete napsat jakékoliv pravidlo CSS podporované v GTK+."
 
 #: ../gtk/inspector/css-editor.c:87 ../gtk/inspector/css-editor.c:93
 msgid ""
@@ -3476,15 +3471,15 @@ msgstr ""
 
 #: ../gtk/inspector/css-editor.c:88
 msgid "Changes are applied instantly and globally, for the whole application."
-msgstr ""
+msgstr "Změny jsou požity okamžitě a globálně, pro celou aplikaci."
 
 #: ../gtk/inspector/css-editor.c:94
 msgid "Changes are applied instantly, only for this selected widget."
-msgstr ""
+msgstr "Změny jsou použity okamžitě, pouze pro tento vybraný widget."
 
 #: ../gtk/inspector/css-editor.c:156
 msgid "Saving CSS failed"
-msgstr ""
+msgstr "Ukládání CSS selhalo"
 
 #: ../gtk/inspector/css-editor.c:196
 msgid "_Save"
@@ -3493,100 +3488,94 @@ msgstr "_Uložit"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/css-editor.ui.h:1
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "Vypnout toto vlastní CSS"
 
 #: ../gtk/inspector/css-editor.ui.h:2
 msgid "Save the current CSS"
-msgstr ""
+msgstr "Uložit aktuální CSS"
 
 #: ../gtk/inspector/data-list.ui.h:1
 msgid "Show data"
-msgstr ""
+msgstr "Zobrazit data"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/general.ui.h:1
-#, fuzzy
 #| msgid "GTK+ Options"
 msgid "GTK+ Version"
-msgstr "Přepínače GTK+"
+msgstr "Verze GTK+"
 
 #: ../gtk/inspector/general.ui.h:2
 msgid "GDK Backend"
-msgstr ""
+msgstr "Podpůrná vrstva GDK"
 
 #: ../gtk/inspector/gestures.c:128
 msgid "Capture"
-msgstr ""
+msgstr "Zachytit"
 
 #: ../gtk/inspector/gestures.c:129
 msgid "Bubble"
-msgstr ""
+msgstr "Bublina"
 
 #: ../gtk/inspector/gestures.c:130 ../gtk/inspector/menu.ui.h:3
 msgid "Target"
-msgstr ""
+msgstr "Cíl"
 
 #: ../gtk/inspector/menu.c:90
 msgid "Unnamed section"
-msgstr ""
+msgstr "Sekce bez názvu"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/widget-tree.ui.h:3
-#, fuzzy
 #| msgid "label"
 msgid "Label"
-msgstr "popisek"
+msgstr "Popisek"
 
 #: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1301
-#, fuzzy
 #| msgid "Location"
 msgid "Action"
-msgstr "Umístění"
+msgstr "Akce"
 
 #: ../gtk/inspector/menu.ui.h:4
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: ../gtk/inspector/misc-info.ui.h:2
 msgid "Buildable ID"
-msgstr ""
+msgstr "Sestavitelné ID"
 
 #: ../gtk/inspector/misc-info.ui.h:3
-#, fuzzy
 #| msgid "Default Application"
 msgid "Default Widget"
-msgstr "Výchozí aplikace"
+msgstr "Výchozí widget"
 
 #: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
 #: ../gtk/inspector/prop-editor.c:1004 ../gtk/inspector/prop-editor.c:1184
 #: ../gtk/inspector/prop-editor.c:1309 ../gtk/inspector/prop-editor.c:1420
 #: ../gtk/inspector/window.ui.h:4
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Properties"
 msgid "Properties"
-msgstr "_Vlastnosti"
+msgstr "Vlastnosti"
 
 #: ../gtk/inspector/misc-info.ui.h:5
 msgid "Focus Widget"
-msgstr ""
+msgstr "Widget zaměření"
 
 #: ../gtk/inspector/misc-info.ui.h:7
 msgid "Allocated size"
-msgstr ""
+msgstr "Alokovaná velikost"
 
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
-msgstr ""
+msgstr "Hierarchie objektu"
 
 #: ../gtk/inspector/prop-editor.c:616
-#, fuzzy, c-format
+#, c-format
 #| msgid "Printer"
 msgid "Pointer: %p"
-msgstr "Tiskárna"
+msgstr "Ukazatel: %p"
 
 #: ../gtk/inspector/prop-editor.c:631
-#, fuzzy
 #| msgid "Unknown"
 msgctxt "type name"
 msgid "Unknown"
@@ -3595,71 +3584,67 @@ msgstr "Neznámé"
 #: ../gtk/inspector/prop-editor.c:632
 #, c-format
 msgid "Object: %p (%s)"
-msgstr ""
+msgstr "Objekt: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1057
-#, fuzzy, c-format
+#, c-format
 #| msgid "Unable to stop %s"
 msgid "Uneditable property type: %s"
-msgstr "Nezdařilo se zastavit %s"
+msgstr "Neupravitelný typ vlastnosti: %s"
 
 #: ../gtk/inspector/prop-editor.c:1175
 msgid "Attribute mapping"
-msgstr ""
+msgstr "Mapování atributů"
 
 #: ../gtk/inspector/prop-editor.c:1180
 msgid "Model:"
-msgstr ""
+msgstr "Model:"
 
 #: ../gtk/inspector/prop-editor.c:1181
 #, c-format
 msgid "%p (%s)"
-msgstr ""
+msgstr "%p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1191
-#, fuzzy
 #| msgid "Volume"
 msgid "Column:"
-msgstr "Hlasitost"
+msgstr "Sloupec:"
 
 #: ../gtk/inspector/prop-editor.c:1305
 #, c-format
 msgid "Defined at: %p (%s)"
-msgstr ""
+msgstr "Definováno na: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1369 ../gtk/inspector/prop-editor.c:1385
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Convert"
 msgid "inverted"
-msgstr "_Převést"
+msgstr "obrácené"
 
 #: ../gtk/inspector/prop-editor.c:1401
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "obousměrné, obrácené"
 
 #: ../gtk/inspector/prop-editor.c:1406 ../gtk/inspector/prop-editor.c:1502
 msgid "bidirectional"
-msgstr ""
+msgstr "obousměrné"
 
 #: ../gtk/inspector/prop-editor.c:1411
 msgid "Binding:"
-msgstr ""
+msgstr "Vazba:"
 
 #: ../gtk/inspector/prop-editor.c:1521
-#, fuzzy
 #| msgid "Starting %s"
 msgid "Setting:"
-msgstr "Spouští se %s"
+msgstr "Nastavení:"
 
 #. vim: set et:
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Properties"
 msgid "Property"
-msgstr "_Vlastnosti"
+msgstr "Vlastnost"
 
 #: ../gtk/inspector/prop-list.ui.h:2 ../gtk/inspector/style-prop-list.ui.h:2
 #: ../gtk/resources/ui/gtkcoloreditor.ui.h:9
@@ -3668,83 +3653,76 @@ msgstr "Hodnota"
 
 #: ../gtk/inspector/prop-list.ui.h:3
 msgid "Attribute"
-msgstr ""
+msgstr "Atribut"
 
 #: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
 msgid "Defined At"
-msgstr ""
+msgstr "Definováno na"
 
 #: ../gtk/inspector/resource-list.ui.h:1
-#, fuzzy
 #| msgid "Up Path"
 msgid "Path"
-msgstr "Nahoru v cestě"
+msgstr "Cesta"
 
 #: ../gtk/inspector/resource-list.ui.h:2
 msgid "Type:"
-msgstr ""
+msgstr "Typ:"
 
 #: ../gtk/inspector/resource-list.ui.h:3
-#, fuzzy
 #| msgid "_Mount"
 msgid "Count:"
-msgstr "_Připojit"
+msgstr "Počet:"
 
 #: ../gtk/inspector/resource-list.ui.h:4
-#, fuzzy
 #| msgid "Size"
 msgid "Size:"
-msgstr "Velikost"
+msgstr "Velikost:"
 
 #: ../gtk/inspector/signals-list.c:109
-#, fuzzy
 #| msgid "_Yes"
 msgid "Yes"
-msgstr "_Ano"
+msgstr "Ano"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/signals-list.ui.h:1
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "Sledovat vysílání signálu na tomto objektu"
 
 #: ../gtk/inspector/signals-list.ui.h:2
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Clear"
 msgid "Clear log"
-msgstr "Vy_mazat"
+msgstr "Vymazat protokol"
 
 #: ../gtk/inspector/signals-list.ui.h:4
-#, fuzzy
 #| msgid "Co_nnect"
 msgid "Connected"
-msgstr "_Připojit"
+msgstr "Připojeno"
 
 #: ../gtk/inspector/signals-list.ui.h:5
-#, fuzzy
 #| msgid "_Mount"
 msgid "Count"
-msgstr "_Připojit"
+msgstr "Počet"
 
 #: ../gtk/inspector/size-groups.c:223
 msgid "Ignore hidden"
-msgstr ""
+msgstr "Ignorovat skryté"
 
 #: ../gtk/inspector/size-groups.c:241
 msgid "Mode"
-msgstr ""
+msgstr "Režim"
 
 #: ../gtk/inspector/size-groups.c:252
 msgid "Horizontal"
-msgstr ""
+msgstr "Vodorovný"
 
 #: ../gtk/inspector/size-groups.c:253
 msgid "Vertical"
-msgstr ""
+msgstr "Svislý"
 
 #: ../gtk/inspector/size-groups.c:254
 msgid "Both"
-msgstr ""
+msgstr "Obojí"
 
 #. this is the header for the location column in the print dialog
 #: ../gtk/inspector/style-prop-list.ui.h:3
@@ -3754,31 +3732,30 @@ msgstr "Umístění"
 
 #: ../gtk/inspector/visual.c:243 ../gtk/inspector/visual.c:269
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "Motiv je napevno nastaven pomocí GTK_THEME"
 
 #: ../gtk/inspector/visual.c:387
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "Podpůrná vrstva nepodporuje škálování oken"
 
 #: ../gtk/inspector/visual.c:426
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "Nastavení je napevno zadáno pomocí GTK_TEST_TOUCHSCREEN"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
 msgid "GTK+ Theme"
-msgstr ""
+msgstr "Motiv GTK+"
 
 #: ../gtk/inspector/visual.ui.h:2
-#, fuzzy
 #| msgctxt "Color name"
 #| msgid "Dark Orange"
 msgid "Dark variant"
-msgstr "tmavě oranžová"
+msgstr "Tmavá varianta"
 
 #: ../gtk/inspector/visual.ui.h:3
 msgid "Icon Theme"
-msgstr ""
+msgstr "Motiv ikon"
 
 #: ../gtk/inspector/visual.ui.h:4 ../gtk/resources/ui/gtkfontbutton.ui.h:1
 msgid "Font"
@@ -3786,74 +3763,68 @@ msgstr "Písmo"
 
 #: ../gtk/inspector/visual.ui.h:5
 msgid "Text Direction"
-msgstr ""
+msgstr "Směr textu"
 
 #: ../gtk/inspector/visual.ui.h:6
-#, fuzzy
 #| msgid "Left to right"
 msgid "Left-to-Right"
 msgstr "Zleva doprava"
 
 #: ../gtk/inspector/visual.ui.h:7
-#, fuzzy
 #| msgid "Right to left"
 msgid "Right-to-Left"
 msgstr "Zprava doleva"
 
 #: ../gtk/inspector/visual.ui.h:8
 msgid "Window scaling"
-msgstr ""
+msgstr "Škálování oken"
 
 #: ../gtk/inspector/visual.ui.h:9
-#, fuzzy
 #| msgid "Information"
 msgid "Animations"
-msgstr "Informace"
+msgstr "Animace"
 
 #: ../gtk/inspector/visual.ui.h:10
 msgid "Show Graphic Updates"
-msgstr ""
+msgstr "Zobrazit grafické aktualizace"
 
 #: ../gtk/inspector/visual.ui.h:11
 msgid "Show Baselines"
-msgstr ""
+msgstr "Zobrazit účaří"
 
 #: ../gtk/inspector/visual.ui.h:12
 msgid "Show Pixel Cache"
-msgstr ""
+msgstr "Zobrazit pixelovou mezipaměť"
 
 #: ../gtk/inspector/visual.ui.h:13
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "Simulace dotykové obrazovky"
 
 #: ../gtk/inspector/widget-tree.ui.h:1
-#, fuzzy
 #| msgid "_Eject"
 msgid "Object"
-msgstr "V_ysunout"
+msgstr "Objekt"
 
 #: ../gtk/inspector/widget-tree.ui.h:4
-#, fuzzy
 #| msgctxt "Action name"
 #| msgid "Press"
 msgid "Address"
-msgstr "Stisknout"
+msgstr "Adresa"
 
 #: ../gtk/inspector/window.c:143
 #, c-format
 msgid "GTK+ Inspector — %s"
-msgstr ""
+msgstr "GTK+ Inspector — %s"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/window.ui.h:1
 msgid "Send Widget to Shell"
-msgstr ""
+msgstr "Odeslat widget na Shell"
 
 #: ../gtk/inspector/window.ui.h:2
-#, fuzzy
 #| msgid "Select a File"
 msgid "Select an Object"
-msgstr "Vyberte soubor"
+msgstr "Vyberte objekt"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
@@ -3864,71 +3835,64 @@ msgstr "Různé"
 
 #: ../gtk/inspector/window.ui.h:5
 msgid "Signals"
-msgstr ""
+msgstr "Signály"
 
 #: ../gtk/inspector/window.ui.h:6
-#, fuzzy
 #| msgid "Search"
 msgid "Hierarchy"
-msgstr "Hledat"
+msgstr "Hierarchie"
 
 #: ../gtk/inspector/window.ui.h:7
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Properties"
 msgid "Child Properties"
-msgstr "_Vlastnosti"
+msgstr "Vlastnosti potomka"
 
 #: ../gtk/inspector/window.ui.h:8
 msgid "CSS Classes"
-msgstr ""
+msgstr "Třídy CSS"
 
 #: ../gtk/inspector/window.ui.h:9
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Properties"
 msgid "Style Properties"
-msgstr "_Vlastnosti"
+msgstr "Vlastnosti stylu"
 
 #: ../gtk/inspector/window.ui.h:10 ../gtk/inspector/window.ui.h:18
-#, fuzzy
 #| msgid "Custom"
 msgid "Custom CSS"
-msgstr "Vlastní"
+msgstr "Vlastní CSS"
 
 #: ../gtk/inspector/window.ui.h:11
 msgid "Size Groups"
-msgstr ""
+msgstr "Skupiny velikostí"
 
 #: ../gtk/inspector/window.ui.h:12
 msgid "Data"
-msgstr ""
+msgstr "Data"
 
 #: ../gtk/inspector/window.ui.h:13
-#, fuzzy
 #| msgid "Application"
 msgid "Actions"
-msgstr "Aplikace"
+msgstr "Akce"
 
 #: ../gtk/inspector/window.ui.h:15
 msgid "Gestures"
-msgstr ""
+msgstr "Gesta"
 
 #: ../gtk/inspector/window.ui.h:16
-#, fuzzy
 #| msgid "_Eject"
 msgid "Objects"
-msgstr "V_ysunout"
+msgstr "Objekty"
 
 #: ../gtk/inspector/window.ui.h:17
-#, fuzzy
 #| msgid "Paper _source:"
 msgid "Resources"
-msgstr "Z_droj papíru:"
+msgstr "Zdroje"
 
 #: ../gtk/inspector/window.ui.h:19
 msgid "Visual"
-msgstr ""
+msgstr "Vizuální"
 
 #: ../gtk/inspector/window.ui.h:20
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
@@ -4823,10 +4787,9 @@ msgid "Don't include image data in the cache"
 msgstr "Nezahrnout do vyrovnávací paměti obrazová data"
 
 #: ../gtk/updateiconcache.c:1655
-#, fuzzy
 #| msgid "Don't include image data in the cache"
 msgid "Include image data in the cache"
-msgstr "Nezahrnout do vyrovnávací paměti obrazová data"
+msgstr "Zahrnout do vyrovnávací paměti obrazová data"
 
 #: ../gtk/updateiconcache.c:1656
 msgid "Output a C header file"
