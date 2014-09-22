@@ -9,7 +9,6 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 EXTRA_DIST +=			\
 	autogen.sh		\
 	HACKING			\
-	makecopyright		\
 	NEWS.pre-1-0		\
 	README.commits	\
 	README.win32		\
