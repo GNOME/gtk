@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-14 09:04+0000\n"
-"PO-Revision-Date: 2014-09-14 15:42+0200\n"
+"POT-Creation-Date: 2014-09-23 04:46+0000\n"
+"PO-Revision-Date: 2014-09-23 10:12+0200\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
@@ -1176,7 +1176,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11637
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11660
 #: ../gtk/inspector/css-editor.c:195
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1231,7 +1231,7 @@ msgstr "_Εφαρμογή"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11638 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11661 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_Εντάξει"
 
@@ -1606,7 +1606,7 @@ msgid "Other Applications"
 msgstr "Άλλες εφαρμογές"
 
 #: ../gtk/gtkapplicationwindow.c:322 ../gtk/gtkprintoperation-unix.c:481
-#: ../gtk/gtkprintoperation-win32.c:1452
+#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1569
 msgid "Application"
 msgstr "Εφαρμογή"
 
@@ -2251,7 +2251,7 @@ msgstr "Χθες, στις %-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3960
+#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1572
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Άγνωστο"
@@ -2314,7 +2314,7 @@ msgstr "Επιλογή γραμματοσειράς"
 #. * pages that the printing system may support.
 #.
 #: ../gtk/gtkfontbutton.c:1152 ../gtk/inspector/gestures.c:127
-#: ../gtk/inspector/prop-editor.c:1201 ../gtk/inspector/size-groups.c:251
+#: ../gtk/inspector/prop-editor.c:1202 ../gtk/inspector/size-groups.c:251
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
 msgid "None"
 msgstr "Κανένα"
@@ -2323,16 +2323,16 @@ msgstr "Κανένα"
 msgid "Application menu"
 msgstr "Μενού εφαρμογής"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8358
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8381
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: ../gtk/gtkicontheme.c:2306 ../gtk/gtkicontheme.c:2370
+#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Το εικονίδιο '%s' δεν περιέχεται στο θέμα"
 
-#: ../gtk/gtkicontheme.c:4003 ../gtk/gtkicontheme.c:4370
+#: ../gtk/gtkicontheme.c:4005 ../gtk/gtkicontheme.c:4372
 msgid "Failed to load icon"
 msgstr "Αποτυχία φόρτωσης εικονιδίου"
 
@@ -3402,11 +3402,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11632
+#: ../gtk/gtkwindow.c:11655
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Θέλετε να χρησιμοποιήσετε τον επόπτη GTK+;"
 
-#: ../gtk/gtkwindow.c:11634
+#: ../gtk/gtkwindow.c:11657
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3542,7 +3542,7 @@ msgstr "Ανώνυμη ενότητα"
 msgid "Label"
 msgstr "Ετικέτα"
 
-#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1301
+#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1302
 msgid "Action"
 msgstr "Ενέργεια"
 
@@ -3559,8 +3559,8 @@ msgid "Default Widget"
 msgstr "Προεπιλεγμένο γραφικό στοιχείο"
 
 #: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
-#: ../gtk/inspector/prop-editor.c:1004 ../gtk/inspector/prop-editor.c:1184
-#: ../gtk/inspector/prop-editor.c:1309 ../gtk/inspector/prop-editor.c:1420
+#: ../gtk/inspector/prop-editor.c:1005 ../gtk/inspector/prop-editor.c:1185
+#: ../gtk/inspector/prop-editor.c:1310 ../gtk/inspector/prop-editor.c:1421
 #: ../gtk/inspector/window.ui.h:4
 msgid "Properties"
 msgstr "Ιδιότητες "
@@ -3577,67 +3577,83 @@ msgstr "Διαθέσιμο μέγεθος"
 msgid "Object Hierarchy"
 msgstr "Ιεραρχία αντικειμένου"
 
-#: ../gtk/inspector/prop-editor.c:616
+#: ../gtk/inspector/prop-editor.c:617
 #, c-format
 msgid "Pointer: %p"
 msgstr "Δείκτης: %p"
 
-#: ../gtk/inspector/prop-editor.c:631
+#: ../gtk/inspector/prop-editor.c:632
 msgctxt "type name"
 msgid "Unknown"
 msgstr "Άγνωστος"
 
-#: ../gtk/inspector/prop-editor.c:632
+#: ../gtk/inspector/prop-editor.c:633
 #, c-format
 msgid "Object: %p (%s)"
 msgstr "Αντικείμενο: %p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1057
+#: ../gtk/inspector/prop-editor.c:1058
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Μη επεξεργάσιμος τύπος ιδιότητας: %s"
 
-#: ../gtk/inspector/prop-editor.c:1175
+#: ../gtk/inspector/prop-editor.c:1176
 msgid "Attribute mapping"
 msgstr "Απεικόνιση γνωρίσματος"
 
-#: ../gtk/inspector/prop-editor.c:1180
+#: ../gtk/inspector/prop-editor.c:1181
 msgid "Model:"
 msgstr "Μοντέλο:"
 
-#: ../gtk/inspector/prop-editor.c:1181
+#: ../gtk/inspector/prop-editor.c:1182
 #, c-format
 msgid "%p (%s)"
 msgstr "%p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1191
+#: ../gtk/inspector/prop-editor.c:1192
 msgid "Column:"
 msgstr "Στήλη:"
 
-#: ../gtk/inspector/prop-editor.c:1305
+#: ../gtk/inspector/prop-editor.c:1306
 #, c-format
 msgid "Defined at: %p (%s)"
 msgstr "Ορίζεται στο: %p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1369 ../gtk/inspector/prop-editor.c:1385
+#: ../gtk/inspector/prop-editor.c:1370 ../gtk/inspector/prop-editor.c:1386
 msgid "inverted"
 msgstr "αντεστραμμένα"
 
-#: ../gtk/inspector/prop-editor.c:1401
+#: ../gtk/inspector/prop-editor.c:1402
 msgid "bidirectional, inverted"
 msgstr "αμφίδρομα, αντεστραμμένα"
 
-#: ../gtk/inspector/prop-editor.c:1406 ../gtk/inspector/prop-editor.c:1502
+#: ../gtk/inspector/prop-editor.c:1407 ../gtk/inspector/prop-editor.c:1503
 msgid "bidirectional"
 msgstr "αμφίδρομα"
 
-#: ../gtk/inspector/prop-editor.c:1411
+#: ../gtk/inspector/prop-editor.c:1412
 msgid "Binding:"
 msgstr "Συνδυασμός:"
 
-#: ../gtk/inspector/prop-editor.c:1521
+#: ../gtk/inspector/prop-editor.c:1522
 msgid "Setting:"
 msgstr "Ρύθμιση:"
+
+#: ../gtk/inspector/prop-editor.c:1555
+msgid "Source:"
+msgstr "Πηγή:"
+
+#: ../gtk/inspector/prop-editor.c:1560
+msgid "Default"
+msgstr "Προεπιλεγμένο"
+
+#: ../gtk/inspector/prop-editor.c:1563
+msgid "Theme"
+msgstr "Θέμα"
+
+#: ../gtk/inspector/prop-editor.c:1566
+msgid "XSettings"
+msgstr "XSettings"
 
 #. vim: set et:
 #. vim: set et sw=2 ts=2:
