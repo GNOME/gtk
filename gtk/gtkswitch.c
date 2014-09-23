@@ -133,17 +133,17 @@ gtk_switch_end_toggle_animation (GtkSwitch *sw)
 
   if (priv->tick_id != 0)
     {
-      GdkFrameClock *clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw));
-      g_signal_handler_disconnect (clock, priv->tick_id);
+      gtk_widget_remove_tick_callback (GTK_WIDGET (sw), priv->tick_id);
       priv->tick_id = 0;
-      gdk_frame_clock_end_updating (clock);
     }
 }
 
-static void
-gtk_switch_on_frame_clock_update (GdkFrameClock *clock,
-                                  GtkSwitch     *sw)
+static gboolean
+gtk_switch_on_frame_clock_update (GtkWidget     *widget,
+                                  GdkFrameClock *clock,
+                                  gpointer       user_data)
 {
+  GtkSwitch *sw = GTK_SWITCH (widget);
   GtkSwitchPrivate *priv = sw->priv;
   gint64 now;
 
@@ -169,6 +169,8 @@ gtk_switch_on_frame_clock_update (GdkFrameClock *clock,
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (sw));
+
+  return G_SOURCE_CONTINUE;
 }
 
 #define ANIMATION_DURATION 100
@@ -190,11 +192,9 @@ gtk_switch_begin_toggle_animation (GtkSwitch *sw)
       priv->end_time = priv->start_time + 1000 * ANIMATION_DURATION;
       priv->offset = priv->handle_x;
       if (priv->tick_id == 0)
-        {
-          priv->tick_id = g_signal_connect (clock, "update",
-                                            G_CALLBACK (gtk_switch_on_frame_clock_update), sw);
-          gdk_frame_clock_begin_updating (clock);
-        }
+        priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (sw),
+                                                      gtk_switch_on_frame_clock_update,
+                                                      NULL, NULL);
     }
   else
     {
