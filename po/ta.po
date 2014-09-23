@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master.ta\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-14 09:04+0000\n"
-"PO-Revision-Date: 2014-09-15 00:41+0630\n"
+"POT-Creation-Date: 2014-09-23 09:06+0000\n"
+"PO-Revision-Date: 2014-09-23 16:38+0530\n"
 "Last-Translator: Shantha kumar <shkumar@redhat.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -1180,7 +1180,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11637
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11660
 #: ../gtk/inspector/css-editor.c:195
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1235,7 +1235,7 @@ msgstr "செயல்படுத்து (_A)"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11638 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11661 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "சரி (_O)"
 
@@ -1376,7 +1376,6 @@ msgstr "cwd கோப்பகத்திற்கு பதில் இந்
 
 #: ../gtk/encodesymbolic.c:266
 #, c-format
-#| msgid "Invalid file name"
 msgid "Invalid size %s\n"
 msgstr "தவறான அளவு %s\n"
 
@@ -1385,9 +1384,6 @@ msgstr "தவறான அளவு %s\n"
 #.
 #: ../gtk/gtkaboutdialog.c:114
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY;\n"
-#| "for details, visit <a href=\"%s\">%s</a>"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "See the <a href=\"%s\">%s</a> for details."
@@ -1401,7 +1397,6 @@ msgid "License"
 msgstr "உரிமம்"
 
 #: ../gtk/gtkaboutdialog.c:119
-#| msgid "Custom size"
 msgid "Custom License"
 msgstr "தனிப்பயன் உரிமம்"
 
@@ -1560,33 +1555,28 @@ msgstr "மற்ற பயன்பாடு..."
 #: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
 #: ../gtk/gtkappchooserdialog.c:227
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
-#| msgid "Default Application"
 msgid "Select Application"
 msgstr "பயன்பாட்டை தேர்வு செய்க"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:205
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s”."
 msgstr "“%s\" ஐ திறக்கிறது."
 
 #: ../gtk/gtkappchooserdialog.c:206
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications found for “%s”"
 msgstr "\"%s\" க்கு பயன்பாடு ஏதும் இல்லை"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:212
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s” files."
 msgstr "\"%s\" கோப்புகளைத் திறக்கிறது."
 
 #: ../gtk/gtkappchooserdialog.c:214
 #, c-format
-#| msgid "Select an application for “%s” files"
 msgid "No applications found for “%s” files"
 msgstr "\"%s\" கோப்புகளுக்கு பயன்பாடுகள் ஏதும் இல்லை"
 
@@ -1604,7 +1594,6 @@ msgstr "முன்னிருப்பு பயன்பாடு"
 
 #: ../gtk/gtkappchooserwidget.c:672
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications found for “%s”."
 msgstr "“%s” க்கு பயன்பாடு ஏதும்  இல்லை."
 
@@ -1621,7 +1610,7 @@ msgid "Other Applications"
 msgstr "மற்ற பயன்பாடுகள்"
 
 #: ../gtk/gtkapplicationwindow.c:322 ../gtk/gtkprintoperation-unix.c:481
-#: ../gtk/gtkprintoperation-win32.c:1452
+#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1569
 msgid "Application"
 msgstr "பயன்பாடு"
 
@@ -1652,7 +1641,6 @@ msgstr "<%s> க்கு உள்ளே உரை இருக்கக்க�
 
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
-#| msgid "Invalid type function on line %d: '%s'"
 msgid "Invalid object type `%s' on line %d"
 msgstr "வரி %2$d இல் தவறான பொருள் வகை `%1$s'"
 
@@ -1668,7 +1656,6 @@ msgstr "போலி பொருள் ID '%s' ஆன்லைன் %d (மு
 
 #: ../gtk/gtkbuilderparser.c:652
 #, c-format
-#| msgid "Invalid type function on line %d: '%s'"
 msgid "Invalid property: %s.%s on line %d"
 msgstr "%3$d வரியில் தவறான பண்பு: %1$s.%2$s"
 
@@ -2002,12 +1989,10 @@ msgid "Custom"
 msgstr "தனிப்பயன்"
 
 #: ../gtk/gtkcolorchooserwidget.c:546
-#| msgid "Custom color %d: %s"
 msgid "Custom color"
 msgstr "தனிப்பயன் வண்ணம்"
 
 #: ../gtk/gtkcolorchooserwidget.c:547
-#| msgid "Create custom color"
 msgid "Create a custom color"
 msgstr "தனிப்பயன் நிறத்தை உருவாக்கு"
 
@@ -2263,13 +2248,12 @@ msgid "Yesterday at %H:%M"
 msgstr "நேற்று இந்நேரத்தில்  %H:%M"
 
 #: ../gtk/gtkfilechooserwidget.c:3761
-#| msgid "Yesterday at %H:%M"
 msgid "Yesterday at %-I:%M %P"
 msgstr "நேற்று %-I:%M %P க்கு"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3960
+#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1572
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "தெரியாதது"
@@ -2335,7 +2319,7 @@ msgstr "எழுத்துரு தேர்ந்தெடுக"
 #. * pages that the printing system may support.
 #.
 #: ../gtk/gtkfontbutton.c:1152 ../gtk/inspector/gestures.c:127
-#: ../gtk/inspector/prop-editor.c:1201 ../gtk/inspector/size-groups.c:251
+#: ../gtk/inspector/prop-editor.c:1202 ../gtk/inspector/size-groups.c:251
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
 msgid "None"
 msgstr "ஒன்றுமில்லை"
@@ -2344,16 +2328,16 @@ msgstr "ஒன்றுமில்லை"
 msgid "Application menu"
 msgstr "பயன்பாடு மெனு"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8358
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8381
 msgid "Close"
 msgstr "மூடு"
 
-#: ../gtk/gtkicontheme.c:2306 ../gtk/gtkicontheme.c:2370
+#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "திட்டத்தில் சின்னம் '%s' இல்லை"
 
-#: ../gtk/gtkicontheme.c:4003 ../gtk/gtkicontheme.c:4370
+#: ../gtk/gtkicontheme.c:4005 ../gtk/gtkicontheme.c:4372
 msgid "Failed to load icon"
 msgstr "உருவத்தை ஏற்றத்தில் தோல்வியுற்றது"
 
@@ -2715,12 +2699,10 @@ msgid "Open the contents of your desktop in a folder"
 msgstr "உங்கள் பணிமேசை உள்ளடக்கத்தை ஒரு கோப்புறையில் திறக்கவும்"
 
 #: ../gtk/gtkplacessidebar.c:976
-#| msgid "Location"
 msgid "Enter Location"
 msgstr "இருப்பிடத்தை உள்ளிடவும்"
 
 #: ../gtk/gtkplacessidebar.c:978
-#| msgid "Could not run application"
 msgid "Manually enter a location"
 msgstr "ஒரு இருப்பிடத்தை நீங்களே உள்ளிடவும்"
 
@@ -2885,7 +2867,6 @@ msgid "Authentication"
 msgstr "அங்கீகாரம்"
 
 #: ../gtk/gtkprintbackend.c:833
-#| msgid "Remember password until you _logout"
 msgid "_Remember password"
 msgstr "கடவுச்சொல்லை நினைவில் கொள் (_R)"
 
@@ -3422,30 +3403,29 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11632
+#: ../gtk/gtkwindow.c:11655
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ ஆய்வியைப் பயன்படுத்த விரும்புகிறீர்களா?"
 
-#: ../gtk/gtkwindow.c:11634
+#: ../gtk/gtkwindow.c:11657
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
 "GTK+ ஆய்வி தொடர்புத் தன்மை கொண்ட ஒரு வழுத்திருத்தியாகும். இதைக் கொண்டு "
-"நீங்கள் எந்த ஒரு GTK+ பயன்பாட்டின் அக அம்சங்களையும் ஆராய்ந்து மாற்றங்களும் "
-"செய்யலாம். இதைப் பயன்படுத்துவதால் பயன்பாடு செயலிழக்கவோ பழுதாகவோ வாய்ப்புள்ளது."
+"நீங்கள் எந்த ஒரு GTK"
+"+ பயன்பாட்டின் அக அம்சங்களையும் ஆராய்ந்து மாற்றங்களும் செய்யலாம். இதைப் "
+"பயன்படுத்துவதால் "
+"பயன்பாடு செயலிழக்கவோ பழுதாகவோ வாய்ப்புள்ளது."
 
 #: ../gtk/inspector/action-editor.c:281
-#| msgctxt "Action name"
-#| msgid "Activate"
 msgid "Activate"
 msgstr "செயல்படுத்து"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
 #: ../gtk/inspector/misc-info.ui.h:1
-#| msgid "Status"
 msgid "State"
 msgstr "நிலை"
 
@@ -3460,12 +3440,10 @@ msgid "Name"
 msgstr "பெயர்"
 
 #: ../gtk/inspector/actions.ui.h:3
-#| msgid "Disabled"
 msgid "Enabled"
 msgstr "செயல்படுத்தப்பட்டது"
 
 #: ../gtk/inspector/actions.ui.h:4
-#| msgid "Paper Type"
 msgid "Parameter Type"
 msgstr "அளவுரு வகை"
 
@@ -3478,12 +3456,10 @@ msgid "New class"
 msgstr "புதிய வகுப்பு"
 
 #: ../gtk/inspector/classes-list.c:126
-#| msgid "_Cancel"
 msgid "Cancel"
 msgstr "ரத்துசெய்"
 
 #: ../gtk/inspector/classes-list.c:133
-#| msgid "Color _name:"
 msgid "Class name"
 msgstr "வகுப்பு பெயர்"
 
@@ -3507,7 +3483,8 @@ msgid ""
 "button above."
 msgstr ""
 "மேலுள்ள \"இடைநிறுத்து\" பொத்தானைச் சொடுக்கி இந்தத் தனிப்பயன் CSS ஐ "
-"தற்காலிகமாக நீங்கள் முடக்க முடியும்."
+"தற்காலிகமாக நீங்கள் "
+"முடக்க முடியும்."
 
 #: ../gtk/inspector/css-editor.c:88
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3526,8 +3503,6 @@ msgid "Saving CSS failed"
 msgstr "CSS ஐச் சேமித்தல் தோல்வியடைந்தது"
 
 #: ../gtk/inspector/css-editor.c:196
-#| msgctxt "Stock label"
-#| msgid "_Save"
 msgid "_Save"
 msgstr "சேமி (_S)"
 
@@ -3546,12 +3521,10 @@ msgstr "தரவைக் காட்டு "
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/general.ui.h:1
-#| msgid "GTK+ Options"
 msgid "GTK+ Version"
 msgstr "GTK+ பதிப்பு"
 
 #: ../gtk/inspector/general.ui.h:2
-#| msgid "Go _Back"
 msgid "GDK Backend"
 msgstr "GDK பின்புல அமைப்பு"
 
@@ -3573,12 +3546,10 @@ msgstr "பெயரில்லா பிரிவு"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/widget-tree.ui.h:3
-#| msgid "label"
 msgid "Label"
 msgstr "லேபிள்"
 
-#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1301
-#| msgid "Location"
+#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1302
 msgid "Action"
 msgstr "செயல்"
 
@@ -3591,16 +3562,13 @@ msgid "Buildable ID"
 msgstr "கட்டமைக்கத்தக்க ID"
 
 #: ../gtk/inspector/misc-info.ui.h:3
-#| msgid "Default Application"
 msgid "Default Widget"
 msgstr "முன்னிருப்பு விட்ஜெட்"
 
 #: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
-#: ../gtk/inspector/prop-editor.c:1004 ../gtk/inspector/prop-editor.c:1184
-#: ../gtk/inspector/prop-editor.c:1309 ../gtk/inspector/prop-editor.c:1420
+#: ../gtk/inspector/prop-editor.c:1005 ../gtk/inspector/prop-editor.c:1185
+#: ../gtk/inspector/prop-editor.c:1310 ../gtk/inspector/prop-editor.c:1421
 #: ../gtk/inspector/window.ui.h:4
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Properties"
 msgstr "பண்புகள்"
 
@@ -3616,81 +3584,91 @@ msgstr "ஒதுக்கப்பட்ட அளவு"
 msgid "Object Hierarchy"
 msgstr "பொருள் அடுக்கமைப்பு நிலை"
 
-#: ../gtk/inspector/prop-editor.c:616
+#: ../gtk/inspector/prop-editor.c:617
 #, c-format
-#| msgid "Printer"
 msgid "Pointer: %p"
 msgstr "சுட்டி: %p"
 
-#: ../gtk/inspector/prop-editor.c:631
-#| msgid "Unknown"
+#: ../gtk/inspector/prop-editor.c:632
 msgctxt "type name"
 msgid "Unknown"
 msgstr "தெரியாதது"
 
-#: ../gtk/inspector/prop-editor.c:632
+#: ../gtk/inspector/prop-editor.c:633
 #, c-format
 msgid "Object: %p (%s)"
 msgstr "பொருள்: %p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1057
+#: ../gtk/inspector/prop-editor.c:1058
 #, c-format
-#| msgid "Unable to stop %s"
 msgid "Uneditable property type: %s"
 msgstr "திருத்த முடியாத பண்பு வகை: %s"
 
-#: ../gtk/inspector/prop-editor.c:1175
+#: ../gtk/inspector/prop-editor.c:1176
 msgid "Attribute mapping"
 msgstr "பண்புக்கூறு மேப்பிங்"
 
-#: ../gtk/inspector/prop-editor.c:1180
-#| msgid "_Mode:"
+#: ../gtk/inspector/prop-editor.c:1181
 msgid "Model:"
 msgstr "மாதிரி:"
 
-#: ../gtk/inspector/prop-editor.c:1181
+#: ../gtk/inspector/prop-editor.c:1182
 #, c-format
 msgid "%p (%s)"
 msgstr "%p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1191
-#| msgid "Volume"
+#: ../gtk/inspector/prop-editor.c:1192
 msgid "Column:"
 msgstr "நெடுவரிசை:"
 
-#: ../gtk/inspector/prop-editor.c:1305
+#: ../gtk/inspector/prop-editor.c:1306
 #, c-format
 msgid "Defined at: %p (%s)"
 msgstr "இங்கு வரையறுக்கப்பட்டது: %p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1369 ../gtk/inspector/prop-editor.c:1385
-#| msgctxt "Stock label"
-#| msgid "_Convert"
+#: ../gtk/inspector/prop-editor.c:1370 ../gtk/inspector/prop-editor.c:1386
 msgid "inverted"
 msgstr "தலைகீழ்"
 
-#: ../gtk/inspector/prop-editor.c:1401
+#: ../gtk/inspector/prop-editor.c:1402
 msgid "bidirectional, inverted"
 msgstr "இருதிசை கொண்டது, தலைகீழானது"
 
-#: ../gtk/inspector/prop-editor.c:1406 ../gtk/inspector/prop-editor.c:1502
+#: ../gtk/inspector/prop-editor.c:1407 ../gtk/inspector/prop-editor.c:1503
 msgid "bidirectional"
 msgstr "இருதிசை கொண்டது"
 
-#: ../gtk/inspector/prop-editor.c:1411
+#: ../gtk/inspector/prop-editor.c:1412
 msgid "Binding:"
 msgstr "பிணைப்பாக்கம்:"
 
-#: ../gtk/inspector/prop-editor.c:1521
-#| msgid "Starting %s"
+#: ../gtk/inspector/prop-editor.c:1522
 msgid "Setting:"
 msgstr "அமைவு:"
+
+#: ../gtk/inspector/prop-editor.c:1555
+#| msgid "Paper Source"
+msgid "Source:"
+msgstr "மூலம்:"
+
+#: ../gtk/inspector/prop-editor.c:1560
+#| msgid "default:mm"
+msgid "Default"
+msgstr "முன்னிருப்பு"
+
+#: ../gtk/inspector/prop-editor.c:1563
+#| msgid "GTK+ Theme"
+msgid "Theme"
+msgstr "தீம்"
+
+#: ../gtk/inspector/prop-editor.c:1566
+#| msgid "Setting:"
+msgid "XSettings"
+msgstr "XSettings"
 
 #. vim: set et:
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Property"
 msgstr "பண்பு"
 
@@ -3708,7 +3686,6 @@ msgid "Defined At"
 msgstr "இங்கு வரையறுக்கப்பட்டது"
 
 #: ../gtk/inspector/resource-list.ui.h:1
-#| msgid "Up Path"
 msgid "Path"
 msgstr "பாதை"
 
@@ -3717,17 +3694,14 @@ msgid "Type:"
 msgstr "வகை:"
 
 #: ../gtk/inspector/resource-list.ui.h:3
-#| msgid "_Mount"
 msgid "Count:"
 msgstr "எண்ணிக்கை:"
 
 #: ../gtk/inspector/resource-list.ui.h:4
-#| msgid "Size"
 msgid "Size:"
 msgstr "அளவு:"
 
 #: ../gtk/inspector/signals-list.c:109
-#| msgid "_Yes"
 msgid "Yes"
 msgstr "ஆம்"
 
@@ -3737,18 +3711,14 @@ msgid "Trace signal emissions on this object"
 msgstr "இந்தப் பொருளின் மீதான சமிக்ஞை உமிழ்வுகளைத் தடமறி"
 
 #: ../gtk/inspector/signals-list.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgid "Clear log"
 msgstr "பதிவை நீக்கு"
 
 #: ../gtk/inspector/signals-list.ui.h:4
-#| msgid "Co_nnect"
 msgid "Connected"
 msgstr "இணைக்கப்பட்டது"
 
 #: ../gtk/inspector/signals-list.ui.h:5
-#| msgid "_Mount"
 msgid "Count"
 msgstr "எண்ணிக்கை"
 
@@ -3757,7 +3727,6 @@ msgid "Ignore hidden"
 msgstr "மறைந்தவற்றைத் தவிர்"
 
 #: ../gtk/inspector/size-groups.c:241
-#| msgid "_Mode:"
 msgid "Mode"
 msgstr "முறை"
 
@@ -3797,8 +3766,6 @@ msgid "GTK+ Theme"
 msgstr "GTK+ தீம்"
 
 #: ../gtk/inspector/visual.ui.h:2
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgid "Dark variant"
 msgstr "டார்க் வகை"
 
@@ -3815,22 +3782,18 @@ msgid "Text Direction"
 msgstr "உரை திசை"
 
 #: ../gtk/inspector/visual.ui.h:6
-#| msgid "Left to right"
 msgid "Left-to-Right"
 msgstr "இடமிருந்து வலம்"
 
 #: ../gtk/inspector/visual.ui.h:7
-#| msgid "Right to left"
 msgid "Right-to-Left"
 msgstr "வலமிருந்து இடம்"
 
 #: ../gtk/inspector/visual.ui.h:8
-#| msgid "Window"
 msgid "Window scaling"
 msgstr "சாளர மறுஅளவீடு"
 
 #: ../gtk/inspector/visual.ui.h:9
-#| msgid "Information"
 msgid "Animations"
 msgstr "அசைவூட்டங்கள்"
 
@@ -3851,13 +3814,10 @@ msgid "Simulate touchscreen"
 msgstr "தொடுதிரை மறுவுருவாக்கு"
 
 #: ../gtk/inspector/widget-tree.ui.h:1
-#| msgid "_Eject"
 msgid "Object"
 msgstr "பொருள்"
 
 #: ../gtk/inspector/widget-tree.ui.h:4
-#| msgctxt "Action name"
-#| msgid "Press"
 msgid "Address"
 msgstr "முகவரி"
 
@@ -3872,7 +3832,6 @@ msgid "Send Widget to Shell"
 msgstr "விட்ஜெட்டை ஷெல்லுக்கு அனுப்பு"
 
 #: ../gtk/inspector/window.ui.h:2
-#| msgid "Select a File"
 msgid "Select an Object"
 msgstr "ஒரு பொருளைத் தேர்ந்தெடுக்கவும்"
 
@@ -3888,13 +3847,10 @@ msgid "Signals"
 msgstr "சமிக்ஞைகள்"
 
 #: ../gtk/inspector/window.ui.h:6
-#| msgid "Search"
 msgid "Hierarchy"
 msgstr "அடுக்கமைவு"
 
 #: ../gtk/inspector/window.ui.h:7
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Child Properties"
 msgstr "சேய் பண்புகள்"
 
@@ -3903,13 +3859,10 @@ msgid "CSS Classes"
 msgstr "CSS வகுப்புகள்"
 
 #: ../gtk/inspector/window.ui.h:9
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Style Properties"
 msgstr "பாணி பண்புகள்"
 
 #: ../gtk/inspector/window.ui.h:10 ../gtk/inspector/window.ui.h:18
-#| msgid "Custom"
 msgid "Custom CSS"
 msgstr "தனிப்பயன் CSS"
 
@@ -3922,7 +3875,6 @@ msgid "Data"
 msgstr "தரவு"
 
 #: ../gtk/inspector/window.ui.h:13
-#| msgid "Application"
 msgid "Actions"
 msgstr "செயல்கள்"
 
@@ -3931,12 +3883,10 @@ msgid "Gestures"
 msgstr "சைகைகள்"
 
 #: ../gtk/inspector/window.ui.h:16
-#| msgid "_Eject"
 msgid "Objects"
 msgstr "பொருள்கள்"
 
 #: ../gtk/inspector/window.ui.h:17
-#| msgid "Paper _source:"
 msgid "Resources"
 msgstr "வளங்கள்"
 
@@ -4838,7 +4788,6 @@ msgid "Don't include image data in the cache"
 msgstr "இடமாற்றில் உரு தரவினை சேர்க்க வேண்டாம்"
 
 #: ../gtk/updateiconcache.c:1655
-#| msgid "Don't include image data in the cache"
 msgid "Include image data in the cache"
 msgstr "தேக்ககத்தில் படத் தரவினைச் சேர்க்கவும்"
 
@@ -4938,8 +4887,6 @@ msgstr "X உள்ளீட்டு முறை"
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
-#| msgctxt "Stock label"
-#| msgid "_Underline"
 msgid "Online"
 msgstr "ஆன்லைன்"
 
@@ -5398,8 +5345,6 @@ msgid "Print to Test Printer"
 msgstr "அச்சடிப்பிலிருந்து சோதனை அச்சடிப்பிக்கு"
 
 #: ../gtk/resources/ui/gtkaboutdialog.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_About"
 msgid "About"
 msgstr "அறிமுகம்"
 
@@ -5408,28 +5353,22 @@ msgid "Credits"
 msgstr "சன்மானங்கள்"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
-#| msgid "Related Applications"
 msgid "_View All Applications"
 msgstr "அனைத்து பயன்பாடுகளையும் காட்டு (_V)"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:5
-#| msgid "_Find applications online"
 msgid "_Find New Applications"
 msgstr "புதிய பயன்பாடுகளைக் கண்டுபிடு (_F)"
 
 #: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
-#| msgid "_Find applications online"
 msgid "No applications found."
 msgstr "பயன்பாடுகள் ஏதும் காணப்படவில்லை."
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Preferences"
 msgid "Preferences"
 msgstr "முன்னுரிமைகள்"
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:3
-#| msgid "Devices"
 msgid "Services"
 msgstr "சேவைகள்"
 
@@ -5448,19 +5387,14 @@ msgstr "அனைத்தும் காட்டு"
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:7
 #, c-format
-#| msgid "About %s"
 msgid "Quit %s"
 msgstr "%s இலிருந்து வெளியேறு"
 
 #: ../gtk/resources/ui/gtkassistant.ui.h:2
-#| msgctxt "Stock label, media"
-#| msgid "_Next"
 msgid "_Next"
 msgstr "அடுத்து (_N)"
 
 #: ../gtk/resources/ui/gtkassistant.ui.h:3
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgid "_Back"
 msgstr "பின்னால் (_B)"
 
@@ -5533,7 +5467,6 @@ msgid "Select which types of files are shown"
 msgstr "எந்த வகையான கோப்புகளை காட்ட வேண்டும் என்பதை தேர்ந்தெடு"
 
 #: ../gtk/resources/ui/gtkfontchooserdialog.ui.h:1
-#| msgid "Se_lection"
 msgid "Select Font"
 msgstr "எழுத்துருவைத் தேர்ந்தெடு"
 
