@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2014-09-19 21:08+0000\n"
-"PO-Revision-Date: 2014-09-20 11:01+0630\n"
+"PO-Revision-Date: 2014-09-23 16:28+0630\n"
 "Last-Translator: rajesh <rajesh>\n"
 "Language-Team: Hindi <kde-i18n-doc@kde.org>\n"
 "Language: hi\n"
@@ -33,7 +33,7 @@ msgstr ""
 #: ../gdk/broadway/gdkbroadway-server.c:143
 #, c-format
 msgid "broadway display type not supported '%s'"
-msgstr ""
+msgstr "ब्राडवे डिसप्ले किस्म समर्थित नहीं '%s'"
 
 #: ../gdk/gdk.c:165
 #, c-format
@@ -1388,7 +1388,7 @@ msgstr "रिक्त"
 
 #: ../gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr ""
+msgstr "cwd के बजायय इस निर्देशिका का आउटपुट"
 
 #: ../gtk/encodesymbolic.c:266
 #, c-format
@@ -3531,6 +3531,9 @@ msgid ""
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
+"GTK+ इंस्पेक्टर अंतःक्रियात्मक डिबगर है जो किसी GTK+ अनुप्रयोग के आंतरिक को "
+"देखने और बदलने देता है. इसे उपयोग करना अनुप्रयोग के ब्रेक करने या क्रैश का "
+"कारण है."
 
 #: ../gtk/inspector/action-editor.c:281
 #| msgctxt "Action name"
@@ -3568,7 +3571,7 @@ msgstr "पैरामीटर प्रकार"
 
 #: ../gtk/inspector/button-path.ui.h:1
 msgid "Choose a widget through the inspector"
-msgstr ""
+msgstr "इंस्पेक्टर से होकर विजेट चुनें"
 
 #: ../gtk/inspector/classes-list.c:122
 msgid "New class"
@@ -3592,29 +3595,30 @@ msgstr "वर्ग जोड़ें"
 
 #: ../gtk/inspector/classes-list.ui.h:2
 msgid "Restore defaults for this widget"
-msgstr ""
+msgstr "इस विजेट के लिए तयशुदा वापस करें"
 
 #: ../gtk/inspector/css-editor.c:86 ../gtk/inspector/css-editor.c:92
 msgid "You can type here any CSS rule recognized by GTK+."
-msgstr ""
+msgstr "आप कोई CSS नियम को टाइप कर सकते हैं जो GTK+ के द्वारा पहचाना जाता है."
 
 #: ../gtk/inspector/css-editor.c:87 ../gtk/inspector/css-editor.c:93
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the \"Pause\" "
 "button above."
 msgstr ""
+"आप इस मनपसंद CSS को \"Pause\" बटन को ऊपर क्लिक करके निष्क्रिय कर सकते हैं."
 
 #: ../gtk/inspector/css-editor.c:88
 msgid "Changes are applied instantly and globally, for the whole application."
-msgstr ""
+msgstr "परिवर्तन तत्काल और वैश्विक रूप से लागू होते हैं पूरे अनुप्रयोग के लिए."
 
 #: ../gtk/inspector/css-editor.c:94
 msgid "Changes are applied instantly, only for this selected widget."
-msgstr ""
+msgstr "बदलाव तत्काल लागू नहीं होता है, केवल चयनित विजेट के लिए."
 
 #: ../gtk/inspector/css-editor.c:156
 msgid "Saving CSS failed"
-msgstr ""
+msgstr "CSS सहेजना विफल"
 
 #: ../gtk/inspector/css-editor.c:196
 #| msgctxt "Stock label"
@@ -3625,7 +3629,7 @@ msgstr "सहेजें (_S)"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/css-editor.ui.h:1
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "इस पसंदीदा CSS निष्क्रिय करें"
 
 #: ../gtk/inspector/css-editor.ui.h:2
 msgid "Save the current CSS"
@@ -3824,7 +3828,7 @@ msgstr "हाँ"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/signals-list.ui.h:1
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "इस वस्तु पर संकेत निष्कर्षण ट्रेस करें"
 
 #: ../gtk/inspector/signals-list.ui.h:2
 #| msgctxt "Stock label"
@@ -3869,15 +3873,15 @@ msgstr "स्थान"
 
 #: ../gtk/inspector/visual.c:243 ../gtk/inspector/visual.c:269
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "थीम GTK_THEME के द्वारा हार्डकोडेड है"
 
 #: ../gtk/inspector/visual.c:387
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "बैकेंड विंडो स्केलिंग का समर्थन नहीं करता है"
 
 #: ../gtk/inspector/visual.c:426
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "संकेत GTK_TEST_TOUCHSCREEN के द्वारा हार्डकोडेड है"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
